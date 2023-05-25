@@ -2,260 +2,515 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52C271072E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735A5710732
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239233AbjEYIT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
+        id S239517AbjEYITr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjEYIT0 (ORCPT
+        with ESMTP id S238860AbjEYITm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:19:26 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FFEE44;
-        Thu, 25 May 2023 01:19:17 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230525081912euoutp01d5f4fb60178b69f801cb177fbc394bd9~iVROGwMBV0448504485euoutp01D;
-        Thu, 25 May 2023 08:19:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230525081912euoutp01d5f4fb60178b69f801cb177fbc394bd9~iVROGwMBV0448504485euoutp01D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1685002752;
-        bh=f9fcQC7PEyGgRLe4Ita8t7S6+I39+aoehkVzcsRbnfI=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=MVOaLfn3oQF1RQBE3W87B4z42V3N3UzWF5CeinutLfKQ1lLZwi7VgorRDRCT3PVBe
-         HcC1G6HPS2Fy/1wsJC+VpaywUkL3PppMJi0BDvt54AAl7RGJP4LC5aICmC6G4f6mgD
-         6QvXO0cil9heLDaTnoHSaZzsVKIu3NSsGaSPVFeM=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230525081912eucas1p1b68f3b87d7ecea082a2ca105c4399413~iVRN3mDqK0556205562eucas1p1w;
-        Thu, 25 May 2023 08:19:12 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 28.E8.11320.00A1F646; Thu, 25
-        May 2023 09:19:12 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230525081912eucas1p24062878f24235930402dab922d5215a7~iVRNY-nDH1056910569eucas1p2O;
-        Thu, 25 May 2023 08:19:12 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230525081912eusmtrp2faedeafcd15cf836dd38b43e03263928~iVRNYJicy0871308713eusmtrp2g;
-        Thu, 25 May 2023 08:19:12 +0000 (GMT)
-X-AuditID: cbfec7f4-993ff70000022c38-a0-646f1a00003c
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 27.30.14344.FF91F646; Thu, 25
-        May 2023 09:19:12 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230525081911eusmtip26353ce7c14a164bfd559540f09b3e93b~iVRNJh7gz1761617616eusmtip2u;
-        Thu, 25 May 2023 08:19:11 +0000 (GMT)
-Received: from localhost (106.210.248.84) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 25 May 2023 09:19:11 +0100
-Date:   Thu, 25 May 2023 10:19:09 +0200
-From:   Joel Granados <j.granados@samsung.com>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-CC:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        LTP List <ltp@lists.linux.it>,
-        open list <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <lkft-triage@lists.linaro.org>,
-        chrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: LTP: syscalls: statx06.c:138: TFAIL: Modified time > after_time
-Message-ID: <20230525081909.4c3qb32dbruhnfgv@localhost>
+        Thu, 25 May 2023 04:19:42 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E147019D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:19:32 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f601c57d8dso1994035e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1685002771; x=1687594771;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T8BQ0ijjr0iOasmCzXyOrqwr9O5V89iPeWO2EWJCCS0=;
+        b=PoqoyhvY9tT3IHh3dCGn09kw84eFrvsEiCW06j6LFvYmauymAqwTltNcK3jjTWn0CG
+         L2DbVXfnrUliFWo5wCjnKj6qRZzd/0mmIJxHzEYy6hk7m2p0i7hvcnpBIcvTz3ICN5Kv
+         R+AcYfU6ZkQv6QFgk3NIutdRex1TLx9isxQ9JvBIFj50zC0loBnzGJm3dqNw4ZUfR/Ms
+         LZXROusvYQ+yG0h94A+6Fgb0HQzJYdrSmbuGk1Q/T3xH6OfCXYsnnPLre/6qbJkoRGN3
+         PP/Xj/2pN4pvy5YymYS4fI751sV/r46V7Fl9T/5GHQuDRYhNldInbORReb+DEJP12gfz
+         ktsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685002771; x=1687594771;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T8BQ0ijjr0iOasmCzXyOrqwr9O5V89iPeWO2EWJCCS0=;
+        b=ZNecXpwM/MeNenG1vKFLomRGsp0Wx/UgCr1P0VIA8QwhNTDtIB5/P9nfrwU4xxadGm
+         0KlBdaRjG2aRIT1FSLiyrgGxwABsQW1mf0tQ0WroFt3xU5HtapteTlAytOj8hTNZm8FP
+         +SY+PvRlDrgH3HijRhcfPncgc78Czgig4j1dauB5+S8nf8vi7NwrUAlVJWkcZVo5bva1
+         8URlz9qbkZNqVbcDazQ5PVRQwMIzxUUB/wj/2Y4LcyxrUYZwZGryU8nSp5vQSkzyjz5C
+         5FDymcctVoD3mRMUony9XKlJQ5aPv1G35pL764TXDwTEyfRfxPA7SehGy315IdU/ARt9
+         X8aw==
+X-Gm-Message-State: AC+VfDwiVZ+Ibra3osIncuVH2JkBWD9bbVn6uLg5BfsVjkBu8FlDPkRj
+        9hF4I0VUIQr0e2SbSELgUYjuDA==
+X-Google-Smtp-Source: ACHHUZ76ADQETGq5g1/xjKEDpI80ssfm0Gs89CfXIjUwQhnPnLRwWMo0Rew0gLtyiQp4tTRhumIkgg==
+X-Received: by 2002:a05:600c:601a:b0:3f6:80:aa60 with SMTP id az26-20020a05600c601a00b003f60080aa60mr1427889wmb.8.1685002771240;
+        Thu, 25 May 2023 01:19:31 -0700 (PDT)
+Received: from algol.lan (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c214700b003f4f89bc48dsm4960399wml.15.2023.05.25.01.19.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 01:19:30 -0700 (PDT)
+From:   Lorenz Bauer <lmb@isovalent.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Joe Stringer <joe@wand.net.nz>
+Cc:     Lorenz Bauer <lmb@isovalent.com>, Joe Stringer <joe@cilium.io>,
+        Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next 1/2] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+Date:   Thu, 25 May 2023 09:19:22 +0100
+Message-Id: <20230525081923.8596-1-lmb@isovalent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="e3447msvdpt5chjl"
-Content-Disposition: inline
-In-Reply-To: <784b9a90-9d56-4e53-8f92-676e76e49665@kili.mountain>
-X-Originating-IP: [106.210.248.84]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrGKsWRmVeSWpSXmKPExsWy7djP87oMUvkpBpu2KFncmvKbyeLvpGPs
-        Fq8Pf2K0mP7iKJvFh3mt7BZ79p5ksbi8aw6bxdZ709gtVnzfwWhx6xO/xY9bN1gszv89zurA
-        4/H71yRGj02rOtk87lzbw+Zx+99jZo99v9exepxZcITd4/MmOY9NT94yBXBEcdmkpOZklqUW
-        6dslcGWs/feFqeCIVsX5rlbGBsatKl2MnBwSAiYSc9tmMXUxcnEICaxglHhxZxcjhPOFUeL0
-        reVQmc+MEh8nP2aDaXnUtoANIrGcUWLW3mcIVeuPH2WBcLYwSvQ3HWMBaWERUJVY/egYE4jN
-        JqAjcf7NHWYQWwTI/vd3MlgDs0Afs8TrpmdgO4QFfCSuz/nCDmLzCphLrH3bxwJhC0qcnPkE
-        zGYWqJC4uecckM0BZEtLLP/HARLmFHCU+DF1NhPEqUoSuz80Qtm1Eqe23IKyL3FK7DnvAmG7
-        SOz5Mo8RwhaWeHV8CzuELSPxf+d8sM8kBCYzSuz/94EdwlnNKLGs8SvUJGuJlitPoDocJb5M
-        +sgIcpCEAJ/EjbeCEHfySUzaNp0ZIswr0dEmBFGtJrH63huWCYzKs5B8NgvJZ7MQPoMI60gs
-        2P2JDUNYW2LZwtfMELatxLp171kWMLKvYhRPLS3OTU8tNspLLdcrTswtLs1L10vOz93ECEyO
-        p/8d/7KDcfmrj3qHGJk4GA8xqgA1P9qw+gKjFEtefl6qkgjvifLsFCHelMTKqtSi/Pii0pzU
-        4kOM0hwsSuK82rYnk4UE0hNLUrNTUwtSi2CyTBycUg1M095fX8TS1Syr+MfjyeKDh74eMLM5
-        ZHpMlpv7oZXmJKkzLyV2HmB67fq+jtd6h3j1h7zZlqZcIvlKOmobU9b9aFS/tZD3tPPelcEL
-        v65WMQ28cmtDicTaqIi5ieVvTklULL3kf+jKnWjug21mbE2bVp1Q13zHkue0UPcow3p7Zp4J
-        L40dbHx6veRK1UI+3T8UHc6gwM76rPjiGePqT7+0duQs4zL5O+2X9/+T+39aZfNsu7jx5xyF
-        5/+Vnjpd+Ki65OC5bInpx9n+fuu28NN4+nd5qUrap/BgjY8ZCeuOvWEKXBc6e3HEP5t7j4IM
-        v8x0alyten7F42DT9MyUiYzPxT2zrnUEJVy4G28e82uriBJLcUaioRZzUXEiABaRGccJBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAKsWRmVeSWpSXmKPExsVy+t/xe7oMUvkpBqvXMVncmvKbyeLvpGPs
-        Fq8Pf2K0mP7iKJvFh3mt7BZ79p5ksbi8aw6bxdZ709gtVnzfwWhx6xO/xY9bN1gszv89zurA
-        4/H71yRGj02rOtk87lzbw+Zx+99jZo99v9exepxZcITd4/MmOY9NT94yBXBE6dkU5ZeWpCpk
-        5BeX2CpFG1oY6RlaWugZmVjqGRqbx1oZmSrp29mkpOZklqUW6dsl6GV8fXKcseCQVkX/1r/M
-        DYybVboYOTkkBEwkHrUtYAOxhQSWMkp865KGiMtIbPxylRXCFpb4c60LqIYLqOYjo8SUs8+Z
-        IZwtjBLdJ/cxgVSxCKhKrH50DMxmE9CROP/mDjOILQJk//s7mQWkgVmgj1li3akjYAlhAR+J
-        63O+sIPYvALmEmvf9rFATL3NKPHh4A5miISgxMmZT4ASHEDdZRJzJhRAmNISy/9xgFRwCjhK
-        /Jg6mwniUiWJ3R8aoexaic9/nzFOYBSehWTQLIRBsxAGgVQwC2hJ3Pj3kglDWFti2cLXzBC2
-        rcS6de9ZFjCyr2IUSS0tzk3PLTbSK07MLS7NS9dLzs/dxAhMDtuO/dyyg3Hlq496hxiZOBgP
-        MaoAdT7asPoCoxRLXn5eqpII74ny7BQh3pTEyqrUovz4otKc1OJDjKbAQJzILCWanA9MW3kl
-        8YZmBqaGJmaWBqaWZsZK4ryeBR2JQgLpiSWp2ampBalFMH1MHJxSDUwzMk1O/5pz9Bx7SrmG
-        xGbV7Ybyb6wjmfb4sQr23Yq5aqMitX6LYOnm0xuX2YSua9rofW/2jDSR1xmb8nXN5DZ0y963
-        5lz1bEbil/aT1pGfDlSrKrrJrp6x8Zu+yofIlFld/qfPuWtsuS/uyemSv0ilb5Hr1I2PLDsj
-        jiXIzfxTVrmU98b0G2LbJ1mv52EWrVxlyj194iSP8/a3ow0WK5ytu55fFOMrYhke25I8MXVu
-        +7Un6/o3cT4v5V9g/nSfy4+y2K2MyxyufMso1mNLOn2vOWaeSNGsznML7n3fW9t4cvrxzUnW
-        aRP7L4ZKvrl6plxYfKKIKdPLKx0dtyWEpj9lUBJxDK7cFlLl2heqd02JpTgj0VCLuag4EQB3
-        Q2RNowMAAA==
-X-CMS-MailID: 20230525081912eucas1p24062878f24235930402dab922d5215a7
-X-Msg-Generator: CA
-X-RootMTR: 20230524112328eucas1p1a0de123f5b54245bfe167308352de194
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230524112328eucas1p1a0de123f5b54245bfe167308352de194
-References: <CA+G9fYvGM6a3wct+_o0z-B=k1ZBg1FuBBpfLH71ULihnTo5RrQ@mail.gmail.com>
-        <CGME20230524112328eucas1p1a0de123f5b54245bfe167308352de194@eucas1p1.samsung.com>
-        <784b9a90-9d56-4e53-8f92-676e76e49665@kili.mountain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---e3447msvdpt5chjl
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Currently the bpf_sk_assign helper in tc BPF context refuses SO_REUSEPORT
+sockets. This means we can't use the helper to steer traffic to Envoy, which
+configures SO_REUSEPORT on its sockets. In turn, we're blocked from removing
+TPROXY from our setup.
 
-On Wed, May 24, 2023 at 02:23:16PM +0300, Dan Carpenter wrote:
-> I am pretty sure this is caused by commit 7eec88986dce ("sysctl:
-> Refactor base paths registrations").  Add Joel to the CC list.
->=20
-> Before we used to use register_sysctl_table() to register that table.
->=20
-> regards,
-> dan carpenter
->=20
-> On Wed, May 24, 2023 at 04:18:42PM +0530, Naresh Kamboju wrote:
-> > LTP syscalls statx06 fails on NFS mounted devices using external hard d=
-rives
-> > for testing and running on Linux next 6.4.0-rc3-next-20230524.
-> >=20
-> > Test case fails on x86_64, i386 and arm64 Juno-r2.
-> >=20
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >=20
-> >=20
-> > Linux version 6.4.0-rc3-next-20230524 (tuxmake@tuxmake)
-> > (x86_64-linux-gnu-gcc (Debian 11.3.0-12) 11.3.0, GNU ld (GNU Binutils
-> > for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC @1684908723
-> > ...
-> >=20
-> > [    1.396191] Mountpoint-cache hash table entries: 32768 (order: 6,
-> > 262144 bytes, linear)
-> > [    1.397234] sysctl table check failed: kernel/usermodehelper Not a f=
-ile
-> > [    1.398166] sysctl table check failed: kernel/usermodehelper No proc=
-_handler
-> > [    1.399165] sysctl table check failed: kernel/usermodehelper bogus .=
-mode 0555
-> > [    1.400166] sysctl table check failed: kernel/keys Not a file
-> > [    1.401165] sysctl table check failed: kernel/keys No proc_handler
-> > [    1.402165] sysctl table check failed: kernel/keys bogus .mode 0555
-This should all be fixed with
-https://lore.kernel.org/all/20230523122220.1610825-1-j.granados@samsung.com/
+The reason that bpf_sk_assign refuses such sockets is that the bpf_sk_lookup
+helpers don't execute SK_REUSEPORT programs. Instead, one of the
+reuseport sockets is selected by hash. This could cause dispatch to the
+"wrong" socket:
 
-> > [    1.403166] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
-> > 6.4.0-rc3-next-20230524 #1
-> > [    1.404165] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-> > 2.5 11/26/2020
-> > [    1.404165] Call Trace:
-> > [    1.404165]  <TASK>
-> > [    1.404165]  dump_stack_lvl+0x72/0x90
-> > [    1.404165]  dump_stack+0x14/0x20
-> > [    1.404165]  __register_sysctl_table+0x570/0x840
-> > [    1.404165]  __register_sysctl_init+0x29/0x60
-> > [    1.404165]  sysctl_init_bases+0x27/0x80
-> > [    1.404165]  proc_sys_init+0x37/0x40
-> > [    1.404165]  proc_root_init+0x7b/0x90
-> > [    1.404165]  start_kernel+0x403/0x6a0
-> > [    1.404165]  x86_64_start_reservations+0x1c/0x30
-> > [    1.404165]  x86_64_start_kernel+0xcb/0xe0
-> > [    1.404165]  secondary_startup_64_no_verify+0x179/0x17b
-> > [    1.404165]  </TASK>
-> > [    1.404165] failed when register_sysctl kern_table to kernel
-> >=20
-> > ....
-> > ./runltp -f syscalls -d /scratch
-> >=20
-> > ...
-> >=20
-> > [ 1192.088987] loop0: detected capacity change from 0 to 614400
-> > tst_device.c:93: TINFO: Found free device 0 '/dev/loop0'
-> > tst_test.c:1093: TINFO: Formatting /dev/loop0 with ext4 opts=3D'-I 256'
-> > extra opts=3D''
-> > mke2fs 1.46.5 (30-Dec-2021)
-> > [ 1192.337350] EXT4-fs (loop0): mounted filesystem
-> > dfe9283c-5d2f-43f8-840e-a2bbbff5b202 r/w with ordered data mode. Quota
-> > mode: none.
-> > tst_test.c:1558: TINFO: Timeout per run is 0h 05m 00s
-> >=20
-> > statx06.c:140: TPASS: Birth time Passed
-> > statx06.c:138: TFAIL: Modified time > after_time
-> > statx06.c:140: TPASS: Access time Passed
-> > statx06.c:140: TPASS: Change time Passed
-> >=20
-> >=20
-> > links,
-> >  - https://protect2.fireeye.com/v1/url?k=3Dcdaccb27-acd761af-cdad4068-7=
-4fe4860018a-69c3d7b272f81ebe&q=3D1&e=3D6d71a9ab-f4cd-4235-b09a-35fa9af4bdc2=
-&u=3Dhttps%3A%2F%2Fqa-reports.linaro.org%2Flkft%2Flinux-next-master%2Fbuild=
-%2Fnext-20230524%2Ftestrun%2F17171892%2Fsuite%2Fltp-syscalls%2Ftest%2Fstatx=
-06%2Flog
-> >  - https://protect2.fireeye.com/v1/url?k=3D04c58bbf-65be2137-04c400f0-7=
-4fe4860018a-ee117eefec304706&q=3D1&e=3D6d71a9ab-f4cd-4235-b09a-35fa9af4bdc2=
-&u=3Dhttps%3A%2F%2Fqa-reports.linaro.org%2Flkft%2Flinux-next-master%2Fbuild=
-%2Fnext-20230524%2Ftestrun%2F17171892%2Fsuite%2Fltp-syscalls%2Ftest%2Fstatx=
-06%2Fhistory%2F
-> >  - https://protect2.fireeye.com/v1/url?k=3Db2e23b58-d39991d0-b2e3b017-7=
-4fe4860018a-6ee7cd6348bd7aa8&q=3D1&e=3D6d71a9ab-f4cd-4235-b09a-35fa9af4bdc2=
-&u=3Dhttps%3A%2F%2Fqa-reports.linaro.org%2Flkft%2Flinux-next-master%2Fbuild=
-%2Fnext-20230524%2Ftestrun%2F17171892%2Fsuite%2Fltp-syscalls%2Ftest%2Fstatx=
-06%2Fdetails%2F
-> >=20
-> >=20
-> > --
-> > Linaro LKFT
-> > https://protect2.fireeye.com/v1/url?k=3Df45a98bf-95213237-f45b13f0-74fe=
-4860018a-bc1dde58624c2012&q=3D1&e=3D6d71a9ab-f4cd-4235-b09a-35fa9af4bdc2&u=
-=3Dhttps%3A%2F%2Flkft.linaro.org%2F
+    sk = bpf_sk_lookup_tcp(...) // select SO_REUSEPORT by hash
+    bpf_sk_assign(skb, sk) // SK_REUSEPORT wasn't executed
 
---=20
+Fixing this isn't as simple as invoking SK_REUSEPORT from the lookup
+helpers unfortunately. In the tc context, L2 headers are at the start
+of the skb, while SK_REUSEPORT expects L3 headers instead.
 
-Joel Granados
+Instead, we execute the SK_REUSEPORT program when the assigned socket
+is pulled out of the skb, further up the stack. This creates some
+trickiness with regards to refcounting as bpf_sk_assign will put both
+refcounted and RCU freed sockets in skb->sk. reuseport sockets are RCU
+freed. We can infer that the sk_assigned socket is RCU freed if the
+reuseport lookup succeeds, but convincing yourself of this fact isn't
+straight forward. Therefore we defensively check refcounting on the
+sk_assign sock even though it's probably not required in practice.
 
---e3447msvdpt5chjl
-Content-Type: application/pgp-signature; name="signature.asc"
+Fixes: 8e368dc ("bpf: Fix use of sk->sk_reuseport from sk_assign")
+Fixes: cf7fbe6 ("bpf: Add socket assign support")
+Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+Cc: Joe Stringer <joe@cilium.io>
+Link: https://lore.kernel.org/bpf/CACAyw98+qycmpQzKupquhkxbvWK4OFyDuuLMBNROnfWMZxUWeA@mail.gmail.com/
+---
+ include/net/inet6_hashtables.h | 36 +++++++++++++++++++++++++++++-----
+ include/net/inet_hashtables.h  | 27 +++++++++++++++++++++++--
+ include/net/sock.h             |  7 +++++--
+ include/uapi/linux/bpf.h       |  3 ---
+ net/core/filter.c              |  2 --
+ net/ipv4/inet_hashtables.c     | 15 +++++++-------
+ net/ipv4/udp.c                 | 23 +++++++++++++++++++---
+ net/ipv6/inet6_hashtables.c    | 19 +++++++++---------
+ net/ipv6/udp.c                 | 23 +++++++++++++++++++---
+ tools/include/uapi/linux/bpf.h |  3 ---
+ 10 files changed, 119 insertions(+), 39 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+index 56f1286583d3..3ba4dc2703da 100644
+--- a/include/net/inet6_hashtables.h
++++ b/include/net/inet6_hashtables.h
+@@ -48,6 +48,13 @@ struct sock *__inet6_lookup_established(struct net *net,
+ 					const u16 hnum, const int dif,
+ 					const int sdif);
+ 
++struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
++				    struct sk_buff *skb, int doff,
++				    const struct in6_addr *saddr,
++				    __be16 sport,
++				    const struct in6_addr *daddr,
++				    unsigned short hnum);
++
+ struct sock *inet6_lookup_listener(struct net *net,
+ 				   struct inet_hashinfo *hashinfo,
+ 				   struct sk_buff *skb, int doff,
+@@ -85,14 +92,33 @@ static inline struct sock *__inet6_lookup_skb(struct inet_hashinfo *hashinfo,
+ 					      int iif, int sdif,
+ 					      bool *refcounted)
+ {
+-	struct sock *sk = skb_steal_sock(skb, refcounted);
+-
++	bool prefetched;
++	struct sock *sk = skb_steal_sock(skb, refcounted, &prefetched);
++	struct net *net = dev_net(skb_dst(skb)->dev);
++	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
++
++	if (prefetched) {
++		struct sock *reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
++							       &ip6h->saddr, sport,
++							       &ip6h->daddr, ntohs(dport));
++		if (reuse_sk) {
++			if (reuse_sk != sk) {
++				if (*refcounted) {
++					sock_put(sk);
++					*refcounted = false;
++				}
++				if (IS_ERR(reuse_sk))
++					return NULL;
++			}
++			return reuse_sk;
++		}
++	}
+ 	if (sk)
+ 		return sk;
+ 
+-	return __inet6_lookup(dev_net(skb_dst(skb)->dev), hashinfo, skb,
+-			      doff, &ipv6_hdr(skb)->saddr, sport,
+-			      &ipv6_hdr(skb)->daddr, ntohs(dport),
++	return __inet6_lookup(net, hashinfo, skb,
++			      doff, &ip6h->saddr, sport,
++			      &ip6h->daddr, ntohs(dport),
+ 			      iif, sdif, refcounted);
+ }
+ 
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+index 99bd823e97f6..c2af195ca71f 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -379,6 +379,11 @@ struct sock *__inet_lookup_established(struct net *net,
+ 				       const __be32 daddr, const u16 hnum,
+ 				       const int dif, const int sdif);
+ 
++struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
++				   struct sk_buff *skb, int doff,
++				   __be32 saddr, __be16 sport,
++				   __be32 daddr, unsigned short hnum);
++
+ static inline struct sock *
+ 	inet_lookup_established(struct net *net, struct inet_hashinfo *hashinfo,
+ 				const __be32 saddr, const __be16 sport,
+@@ -436,13 +441,31 @@ static inline struct sock *__inet_lookup_skb(struct inet_hashinfo *hashinfo,
+ 					     const int sdif,
+ 					     bool *refcounted)
+ {
+-	struct sock *sk = skb_steal_sock(skb, refcounted);
++	bool prefetched;
++	struct sock *sk = skb_steal_sock(skb, refcounted, &prefetched);
++	struct net *net = dev_net(skb_dst(skb)->dev);
+ 	const struct iphdr *iph = ip_hdr(skb);
+ 
++	if (prefetched) {
++		struct sock *reuse_sk = inet_lookup_reuseport(net, sk, skb, doff,
++							      iph->saddr, sport,
++							      iph->daddr, ntohs(dport));
++		if (reuse_sk) {
++			if (reuse_sk != sk) {
++				if (*refcounted) {
++					sock_put(sk);
++					*refcounted = false;
++				}
++				if (IS_ERR(reuse_sk))
++					return NULL;
++			}
++			return reuse_sk;
++		}
++	}
+ 	if (sk)
+ 		return sk;
+ 
+-	return __inet_lookup(dev_net(skb_dst(skb)->dev), hashinfo, skb,
++	return __inet_lookup(net, hashinfo, skb,
+ 			     doff, iph->saddr, sport,
+ 			     iph->daddr, dport, inet_iif(skb), sdif,
+ 			     refcounted);
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 656ea89f60ff..5645570c2a64 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -2806,20 +2806,23 @@ sk_is_refcounted(struct sock *sk)
+  * skb_steal_sock - steal a socket from an sk_buff
+  * @skb: sk_buff to steal the socket from
+  * @refcounted: is set to true if the socket is reference-counted
++ * @prefetched: is set to true if the socket was assigned from bpf
+  */
+ static inline struct sock *
+-skb_steal_sock(struct sk_buff *skb, bool *refcounted)
++skb_steal_sock(struct sk_buff *skb, bool *refcounted, bool *prefetched)
+ {
+ 	if (skb->sk) {
+ 		struct sock *sk = skb->sk;
+ 
+ 		*refcounted = true;
+-		if (skb_sk_is_prefetched(skb))
++		*prefetched = skb_sk_is_prefetched(skb);
++		if (*prefetched)
+ 			*refcounted = sk_is_refcounted(sk);
+ 		skb->destructor = NULL;
+ 		skb->sk = NULL;
+ 		return sk;
+ 	}
++	*prefetched = false;
+ 	*refcounted = false;
+ 	return NULL;
+ }
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 1bb11a6ee667..2af606a525db 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4144,9 +4144,6 @@ union bpf_attr {
+  *		**-EOPNOTSUPP** if the operation is not supported, for example
+  *		a call from outside of TC ingress.
+  *
+- *		**-ESOCKTNOSUPPORT** if the socket type is not supported
+- *		(reuseport).
+- *
+  * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
+  *	Description
+  *		Helper is overloaded depending on BPF program type. This
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 968139f4a1ac..5f451260849b 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7265,8 +7265,6 @@ BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
+ 		return -EOPNOTSUPP;
+ 	if (unlikely(dev_net(skb->dev) != sock_net(sk)))
+ 		return -ENETUNREACH;
+-	if (unlikely(sk_fullsock(sk) && sk->sk_reuseport))
+-		return -ESOCKTNOSUPPORT;
+ 	if (sk_is_refcounted(sk) &&
+ 	    unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
+ 		return -ENOENT;
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index e7391bf310a7..920131e4a65d 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -332,10 +332,10 @@ static inline int compute_score(struct sock *sk, struct net *net,
+ 	return score;
+ }
+ 
+-static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+-					    struct sk_buff *skb, int doff,
+-					    __be32 saddr, __be16 sport,
+-					    __be32 daddr, unsigned short hnum)
++struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
++				   struct sk_buff *skb, int doff,
++				   __be32 saddr, __be16 sport,
++				   __be32 daddr, unsigned short hnum)
+ {
+ 	struct sock *reuse_sk = NULL;
+ 	u32 phash;
+@@ -346,6 +346,7 @@ static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+ 	}
+ 	return reuse_sk;
+ }
++EXPORT_SYMBOL_GPL(inet_lookup_reuseport);
+ 
+ /*
+  * Here are some nice properties to exploit here. The BSD API
+@@ -369,8 +370,8 @@ static struct sock *inet_lhash2_lookup(struct net *net,
+ 	sk_nulls_for_each_rcu(sk, node, &ilb2->nulls_head) {
+ 		score = compute_score(sk, net, hnum, daddr, dif, sdif);
+ 		if (score > hiscore) {
+-			result = lookup_reuseport(net, sk, skb, doff,
+-						  saddr, sport, daddr, hnum);
++			result = inet_lookup_reuseport(net, sk, skb, doff,
++						       saddr, sport, daddr, hnum);
+ 			if (result)
+ 				return result;
+ 
+@@ -399,7 +400,7 @@ static inline struct sock *inet_lookup_run_bpf(struct net *net,
+ 	if (no_reuseport || IS_ERR_OR_NULL(sk))
+ 		return sk;
+ 
+-	reuse_sk = lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
++	reuse_sk = inet_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
+ 	if (reuse_sk)
+ 		sk = reuse_sk;
+ 	return sk;
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 6893fb867529..c67253386a38 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -2426,7 +2426,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 	struct rtable *rt = skb_rtable(skb);
+ 	__be32 saddr, daddr;
+ 	struct net *net = dev_net(skb->dev);
+-	bool refcounted;
++	bool refcounted, prefetched;
+ 	int drop_reason;
+ 
+ 	drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
+@@ -2455,11 +2455,28 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 	if (udp4_csum_init(skb, uh, proto))
+ 		goto csum_error;
+ 
+-	sk = skb_steal_sock(skb, &refcounted);
++	sk = skb_steal_sock(skb, &refcounted, &prefetched);
+ 	if (sk) {
+ 		struct dst_entry *dst = skb_dst(skb);
+ 		int ret;
+ 
++		if (prefetched) {
++			struct sock *reuse_sk = lookup_reuseport(net, sk, skb,
++								 saddr, uh->source,
++								 daddr, ntohs(uh->dest));
++			if (reuse_sk) {
++				if (reuse_sk != sk) {
++					if (refcounted) {
++						sock_put(sk);
++						refcounted = false;
++					}
++					if (IS_ERR(reuse_sk))
++						goto no_sk;
++				}
++				sk = reuse_sk;
++			}
++		}
++
+ 		if (unlikely(rcu_dereference(sk->sk_rx_dst) != dst))
+ 			udp_sk_rx_dst_set(sk, dst);
+ 
+@@ -2476,7 +2493,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 	sk = __udp4_lib_lookup_skb(skb, uh->source, uh->dest, udptable);
+ 	if (sk)
+ 		return udp_unicast_rcv_skb(sk, skb, uh);
+-
++no_sk:
+ 	if (!xfrm4_policy_check(NULL, XFRM_POLICY_IN, skb))
+ 		goto drop;
+ 	nf_reset_ct(skb);
+diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+index b64b49012655..b7c56867314e 100644
+--- a/net/ipv6/inet6_hashtables.c
++++ b/net/ipv6/inet6_hashtables.c
+@@ -111,12 +111,12 @@ static inline int compute_score(struct sock *sk, struct net *net,
+ 	return score;
+ }
+ 
+-static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+-					    struct sk_buff *skb, int doff,
+-					    const struct in6_addr *saddr,
+-					    __be16 sport,
+-					    const struct in6_addr *daddr,
+-					    unsigned short hnum)
++struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
++				    struct sk_buff *skb, int doff,
++				    const struct in6_addr *saddr,
++				    __be16 sport,
++				    const struct in6_addr *daddr,
++				    unsigned short hnum)
+ {
+ 	struct sock *reuse_sk = NULL;
+ 	u32 phash;
+@@ -127,6 +127,7 @@ static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
+ 	}
+ 	return reuse_sk;
+ }
++EXPORT_SYMBOL_GPL(inet6_lookup_reuseport);
+ 
+ /* called with rcu_read_lock() */
+ static struct sock *inet6_lhash2_lookup(struct net *net,
+@@ -143,8 +144,8 @@ static struct sock *inet6_lhash2_lookup(struct net *net,
+ 	sk_nulls_for_each_rcu(sk, node, &ilb2->nulls_head) {
+ 		score = compute_score(sk, net, hnum, daddr, dif, sdif);
+ 		if (score > hiscore) {
+-			result = lookup_reuseport(net, sk, skb, doff,
+-						  saddr, sport, daddr, hnum);
++			result = inet6_lookup_reuseport(net, sk, skb, doff,
++							saddr, sport, daddr, hnum);
+ 			if (result)
+ 				return result;
+ 
+@@ -175,7 +176,7 @@ static inline struct sock *inet6_lookup_run_bpf(struct net *net,
+ 	if (no_reuseport || IS_ERR_OR_NULL(sk))
+ 		return sk;
+ 
+-	reuse_sk = lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
++	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
+ 	if (reuse_sk)
+ 		sk = reuse_sk;
+ 	return sk;
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index e5a337e6b970..3fede8ec95c4 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -949,7 +949,7 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 	struct net *net = dev_net(skb->dev);
+ 	struct udphdr *uh;
+ 	struct sock *sk;
+-	bool refcounted;
++	bool refcounted, prefetched;
+ 	u32 ulen = 0;
+ 
+ 	if (!pskb_may_pull(skb, sizeof(struct udphdr)))
+@@ -986,11 +986,28 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 		goto csum_error;
+ 
+ 	/* Check if the socket is already available, e.g. due to early demux */
+-	sk = skb_steal_sock(skb, &refcounted);
++	sk = skb_steal_sock(skb, &refcounted, &prefetched);
+ 	if (sk) {
+ 		struct dst_entry *dst = skb_dst(skb);
+ 		int ret;
+ 
++		if (prefetched) {
++			struct sock *reuse_sk = lookup_reuseport(net, sk, skb,
++								 saddr, uh->source,
++								 daddr, ntohs(uh->dest));
++			if (reuse_sk) {
++				if (reuse_sk != sk) {
++					if (refcounted) {
++						sock_put(sk);
++						refcounted = false;
++					}
++					if (IS_ERR(reuse_sk))
++						goto no_sk;
++				}
++				sk = reuse_sk;
++			}
++		}
++
+ 		if (unlikely(rcu_dereference(sk->sk_rx_dst) != dst))
+ 			udp6_sk_rx_dst_set(sk, dst);
+ 
+@@ -1020,7 +1037,7 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 			goto report_csum_error;
+ 		return udp6_unicast_rcv_skb(sk, skb, uh);
+ 	}
+-
++no_sk:
+ 	reason = SKB_DROP_REASON_NO_SOCKET;
+ 
+ 	if (!uh->check)
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 1bb11a6ee667..2af606a525db 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4144,9 +4144,6 @@ union bpf_attr {
+  *		**-EOPNOTSUPP** if the operation is not supported, for example
+  *		a call from outside of TC ingress.
+  *
+- *		**-ESOCKTNOSUPPORT** if the socket type is not supported
+- *		(reuseport).
+- *
+  * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
+  *	Description
+  *		Helper is overloaded depending on BPF program type. This
+-- 
+2.40.1
 
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmRvGfsACgkQupfNUreW
-QU9Aegv/WC6bHh+3MHVye5XXDiIY3ko3R5fL51wZZV0H7jAosMVDqIny+vQCDtM6
-porYKQSr3kwLAEkiobUPkf/zb2VboFsmMdHn/+3x347QhiotMjNtJu5m7h3Q6SZx
-f6zKZ9WT46mTawbS/LMMe7nFU6sNGcvBwolZvlEmHKzroOzlwoXVHc5eMclglzL6
-vCn+eUFYiD5UaMAPgL3qkRaalh1mnCEnkhmtcoUc0KBbsmLn4qSg0HJwCdi8QRW2
-lGX2fjR/gtqH3uur2I3hKw9U8iZxZfOhZTPxAYM3J1Y3QolNZXQ8PAi7JbR6U77Y
-odsBIS/JhGX2EQAVwvUkHXYF0wf73CX5c3XF57gDgTicrglfj/UZmxfridhNqKs8
-cZTw6nvh0Ktczk/hVH2hF7y5qUkKUpzgDDO9aJO36y8s14v8ok6WpBo5qQIbEIQe
-i48IUamgShFK7FOQnsVfj+rb6hzu/LgRLHOIzua6deRNov1lmaYSaxCwaFXxw0fo
-z6dGzCRf
-=iaM3
------END PGP SIGNATURE-----
-
---e3447msvdpt5chjl--
