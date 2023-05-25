@@ -2,96 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0776B71174D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A537117AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243691AbjEYTWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 15:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S242081AbjEYTwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 15:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243688AbjEYTWP (ORCPT
+        with ESMTP id S242162AbjEYTwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 15:22:15 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A59E1992;
-        Thu, 25 May 2023 12:18:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685042322; x=1716578322;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KuUKj4ttsJlL4wLcdbKLyn7tabEwUjXKipzD5i05Y4s=;
-  b=lSK2/2k5bTLauJYJFdjo/h5/32Aq64DEwMlaZk5y8WtRZHN4LK+GYOQU
-   VlXnGW+S8VUITO0yMQDxVys4r4C3th3olPteqQh7D011MZxOApJn+IGfH
-   a1lCtmYOkaQDCC4zfFYGdnseJGw+3s3JLaBVkPtQBPW5IbtsVwC3mulG9
-   CXsQhDV5VEiJSCVT1fnskdHc9CqPzzvabittgc90aYpzdKClg3gGUAam5
-   OD9gvlkcCMBPDrCjTk/mXk5sr7iHUygc93NyUMlU0zexWzETrvkT/+6ej
-   rhOjbLWjNDY9V77WBBrSY+Tu5r1d9W7d1t7S73y94w7Awrbw7NOY5N/pM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="356378002"
-X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
-   d="scan'208";a="356378002"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 12:18:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="794777026"
-X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
-   d="scan'208";a="794777026"
-Received: from shuklaas-mobl1.amr.corp.intel.com (HELO [10.212.186.148]) ([10.212.186.148])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 12:18:35 -0700
-Message-ID: <05bbef94-686e-e3cc-40d3-95acfbf45a5d@intel.com>
-Date:   Thu, 25 May 2023 12:18:34 -0700
+        Thu, 25 May 2023 15:52:08 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22119E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:51:53 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-973bf581759so151576866b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:51:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685044312; x=1687636312;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aoD/n1LUOMZuC7QwFFlSHT9qZ41E43vFB9Zm2dcYyWo=;
+        b=sPQmUv1Je1bmEo6XULN86x/XoD8yjy6k+RNMxZdKV8yI9Z674EhsXNZ+JcS4t+bpFj
+         VufFm7o/0qJYzxgh5yU5Htg6Z9gpr3aGWVcCw9u5jIwdqSyZyHuwbxyXnvYQxWo8S4vb
+         d6rLuO/sGFE3D2mUM8kWPbL3oaq9ArHU/U1fsu8rmlZ84dDveBPXsBBcwbtffSoRPJ43
+         MmZBnp8OmPpeaHm1WuyuVG98rucKHEsasNNDKZLTdeFR3wyuN0gn0DGINxK0aTaJoxTD
+         xU9y+0J4fNBYoBIaATdT2VDif5UD6Cp1HTs/2hA/Ew9g1mzZOhoeSvxfuB5WT1WPYwQj
+         6UhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685044312; x=1687636312;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aoD/n1LUOMZuC7QwFFlSHT9qZ41E43vFB9Zm2dcYyWo=;
+        b=PlR4PYqTkio6abd6eo+tIYf0SdyNQtRwCRlKEagJ/NpcaXC4GvBrTRNWwOfQ1ltbRC
+         Uiyiwd88aARopqOMmJpRybF+LtUkiC2O7OXClZQcYJnJA0MUnI8Mn0E7EBof8+hH65b/
+         ZNnJ+vh6sUgTzdnhKL+pOxPxe3QeeO/bK3eNkYG3smItU2zQjMMErjdC4jTPSDr30rM1
+         br3+HcWz6jep79Wn52oo3awlhjgipSYEO7rkLk9EfFy7sckd8vxFBNTpQDrFyO2ycjtk
+         c5RvM6dyOfoFuXE9n1tX3PZxcxi1z3D18anZks3/7tikG6aUNE9qH3bZJ9mTUmqx3mA2
+         kZlw==
+X-Gm-Message-State: AC+VfDxm+elk8aedXbHydXoZxZwHccrO8wFXTxC7/hev0iPmXC1WWVR2
+        lsfzLPHyma4YlcTZxVN9ZsEeGinW02PPZ7ZcME4=
+X-Google-Smtp-Source: ACHHUZ65q4evaGSOSEF/09uQoh6l5DEscOWbzXzS8I/99s1jYQLlQ89FPR8wLnKgWZYOq2oWLVwvNQ==
+X-Received: by 2002:a05:600c:230d:b0:3f6:ae3:5948 with SMTP id 13-20020a05600c230d00b003f60ae35948mr2883855wmo.33.1685042356717;
+        Thu, 25 May 2023 12:19:16 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id c3-20020a05600c0ac300b003f50e88ffc1sm6675515wmr.0.2023.05.25.12.19.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 12:19:15 -0700 (PDT)
+Date:   Thu, 25 May 2023 22:19:02 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     andy.shevchenko@gmail.com,
+        Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        Wells Lu <wellslutw@gmail.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] pinctrl:sunplus: Add check for kmalloc
+Message-ID: <9f937bde-c908-4941-b65c-e4c303d3acae@kili.mountain>
+References: <1684836688-9204-1-git-send-email-wellslutw@gmail.com>
+ <ZGztCHNr1jmpFq0A@surfacebook>
+ <1560e9c0e5154802ab020b9da846d65f@sphcmbx02.sunplus.com.tw>
+ <ZG0V6_bUaz3Thy0q@surfacebook>
+ <b9207257-b04f-ee2e-7025-015b0f22358a@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 2/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     kirill.shutemov@linux.intel.com, Dexuan Cui <decui@microsoft.com>,
-        ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com
-References: <20230504225351.10765-1-decui@microsoft.com>
- <20230504225351.10765-3-decui@microsoft.com>
- <9e466079-ff27-f928-b470-eb5ef157f048@intel.com>
- <20230523223750.botogigv6ht7p2zg@box.shutemov.name>
- <2d96a23f-a16a-50e1-7960-a2d4998ce52f@intel.com>
- <20230523232851.a3djqxmpjyfghbvc@box.shutemov.name>
- <20230525190812.bz5hg5k3uaibtcys@box>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230525190812.bz5hg5k3uaibtcys@box>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b9207257-b04f-ee2e-7025-015b0f22358a@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/23 12:08, Kirill A. Shutemov wrote:
-> Shared->Private conversion is rare. I only see one call total during the
-> boot in my setup. Worth fixing anyway.
-...
-> Any comments?
+On Tue, May 23, 2023 at 10:05:49PM +0200, Christophe JAILLET wrote:
+> Le 23/05/2023 à 21:37, andy.shevchenko@gmail.com a écrit :
+> > Tue, May 23, 2023 at 05:39:51PM +0000, Wells Lu 呂芳騰 kirjoitti:
+> > > > > Fix Smatch static checker warning:
+> > > > > potential null dereference 'configs'. (kmalloc returns null)
+> > 
+> > ...
+> > 
+> > > > >   			configs = kmalloc(sizeof(*configs), GFP_KERNEL);
+> > > > > +			if (!configs)
+> > > > 
+> > > > > +				return -ENOMEM;
+> > > > 
+> > > > "Fixing" by adding a memory leak is not probably a good approach.
+> > > 
+> > > Do you mean I need to free all memory which are allocated in this subroutine before
+> > > return -ENOMEM?
+> > 
+> > This is my understanding of the code. But as I said... (see below)
+> > 
+> > ...
+> > 
+> > > > >   			configs = kmalloc(sizeof(*configs), GFP_KERNEL);
+> > > > > +			if (!configs)
+> > > > > +				return -ENOMEM;
+> > > > 
+> > > > Ditto.
+> > 
+> > ...
+> > 
+> > > > It might be that I'm mistaken. In this case please add an explanation why in the commit
+> > > > message.
+> > 
+> > ^^^
+> > 
+> 
+> Hmmm, not so sure.
+> 
+> Should be looked at more carefully, but
+>   dt_to_map_one_config		(in /drivers/pinctrl/devicetree.c)
+>     .dt_node_to_map
+>       --> sppctl_dt_node_to_map
+> 
+> Should dt_to_map_one_config() fail, pinctrl_dt_free_maps() is called
+> (see https://elixir.bootlin.com/linux/v6.4-rc1/source/drivers/pinctrl/devicetree.c#L281)
 
-So the rules are:
+Thanks for this call tree, I don't have this file enabled in my build
+so it's not easy for me to find how sppctl_dt_node_to_map() was called.
 
- * Shared mapping of a private page: BAD
- * Private mapping of a shared page: OK
+drivers/pinctrl/devicetree.c
+   160                  dev_err(p->dev, "pctldev %s doesn't support DT\n",
+   161                          dev_name(pctldev->dev));
+   162                  return -ENODEV;
+   163          }
+   164          ret = ops->dt_node_to_map(pctldev, np_config, &map, &num_maps);
+                                                              ^^^^
+"map" isn't stored anywhere so it will be leaked.  I guess kmemleak
+already figured this out.
 
-?
+   165          if (ret < 0)
+   166                  return ret;
+   167          else if (num_maps == 0) {
+   168                  /*
 
-The patch seems OK, other than having zero comments in it.
+> 
+> pinctrl_dt_free_maps() calls dt_free_map(), which calls .dt_free_map, so
+> pinctrl_utils_free_map()
+> (see https://elixir.bootlin.com/linux/v6.4-rc1/source/drivers/pinctrl/sunplus/sppctl.c#L978)
+> 
+> Finally the needed kfree seem to be called from here.
+> (see https://elixir.bootlin.com/linux/v6.4-rc1/source/drivers/pinctrl/pinctrl-utils.c#L119)
+> 
+> 
+> *This should obviously be double checked*, but looks safe to me.
+> 
+> 
+> BUT, in the same function, the of_get_parent() should be undone in case of
+> error, as done at the end of the function, in the normal path.
+> This one seems to be missing, should a memory allocation error occur.
+> 
+
+Yes.  There are some missing calls to of_node_put(parent); in
+sppctl_dt_node_to_map().
+
+regards,
+dan carpenter
+
