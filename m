@@ -2,130 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C38B7117CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FA27117CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbjEYUD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 16:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
+        id S241383AbjEYUEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 16:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239074AbjEYUD5 (ORCPT
+        with ESMTP id S239074AbjEYUEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 16:03:57 -0400
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785DBBC
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:03:55 -0700 (PDT)
-Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-331632be774so21863425ab.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:03:55 -0700 (PDT)
+        Thu, 25 May 2023 16:04:32 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA95E7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:04:25 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5112cae8d82so4384269a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685045064; x=1687637064;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7GenWYLPOmh/DxUR71oJ2OvVJUeCOFtnm9yoLhzSJ/E=;
+        b=NKPfoDYrdLeFmk2aRdYPxqPS5pW5Nof94OU1LE1k7d3n4+RuYbf3dtZX81FOmgTzK/
+         sLqfSBI/22EKUNuB9g5jJppihQiMCTHpCAjwXsmhXtkj7d+i9yGG1LSsR6AgbrBB5UXT
+         e0zmsgoIEjRNkt2fkd4ya7KKCjNLr9lg8cN+F2jG/l1XD59r5DafHGcOQ51T9kbH5vkY
+         mj2noB7t5Dc2KaLxoFwmA9wSI1RWdtvYDd6NF50EgdGVbU5BpSTgKMATR8gkiK1H/GOe
+         Ti89wsXJSop7ACz+Fo5qcA5ZcWuH8SO+wbchq1LkFwAqIwPAdo6dkpOPQubVVV5qemGi
+         fH5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685045034; x=1687637034;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rOyGkFoZn20LeX23mewfkZotpLoPgdrgq2gxJUVaJOY=;
-        b=SVKBfuTaBUKtJtfzziuo618tb9ovZHwEMsvBzPyOgOIO1Hw42uotRvalEe5gQqGaaK
-         bFX1Onm4y6K1CsLv76qQcU/GaiByrBf6vB9kocEczKOiMFMXKam6CH/xipisXshKnxzq
-         TjNjqjkXkeEmaUImq1f5ZJCaV3Ana1jBXxf1PvFTmaL3dR4qhJVuNc5uS4/mYDQJxvHy
-         DX/sNDjeJapWItfPhJF1xXyiOmr5WzpY9DzCArOyeOaPnNzrlB/r7wBiAGDq0afjlo0l
-         dNPbdVA2OXD2dToqGG5/ufdQUVHdyEJzUxv9SOd/vF1B8zrORVOzSpZjEp7VHkOmiVb/
-         weAA==
-X-Gm-Message-State: AC+VfDzlYAOruT16Qw6n1TIfyTyxraEhDUjaSRihEDkikLcMAqBFL9GW
-        XvmMjM8IV04goo+cPLILOwbfK/Zh6MWRySA65zNbTdgFYhFC
-X-Google-Smtp-Source: ACHHUZ6bwwg8XrzxjTSNmRHCXa4VcYcD2IJ9cqOt3fnT0Ni8umAcO3F7rGvp0rNy82hjWA7mm1FUHbzmvrI3Otgpvn69c87jJ0e9
+        d=1e100.net; s=20221208; t=1685045064; x=1687637064;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7GenWYLPOmh/DxUR71oJ2OvVJUeCOFtnm9yoLhzSJ/E=;
+        b=YvCNxSXNC9BD5uF8gOjm8JQOiJHQ6RxNrRMTIxVzwZDLMsNZfV0qD/uNNudJZhC06o
+         gcSK7uefVuaRWm23iwCv67U9YuOYJow4pGEjbhA1QC7r/FIbaqmfqrNcLhMFooSQLX9l
+         gHq8s6igv2kUbQRvC8I3BHB/GxROqtOIfX/NVSe9P8ln0Q25//GKpEsdD8JN8IVJBfa6
+         UgqY2DEO+GEWnlbq0B5sz7M+B0dPBgX6dzlpsu/WJ5IcGeSHULuGs6BrEm7ockRvLXeR
+         lMxniqJJb7mK+oNza3QyvgGfrxv3pI/uCDnaectfr1LBf9XhW5pJ4EVY+wzbclYWsTQO
+         K+FQ==
+X-Gm-Message-State: AC+VfDyBje/C7uXtmf3jYre1YbS26m+UQERkBH+FV4CSeAhdUTLioib+
+        YMtn9424X4QTJI+0cpkhD40ETkAjGmRv0Y5Hp+iM+xXJ9mc=
+X-Google-Smtp-Source: ACHHUZ4fIXNm9bRQLhHZGBF1EIJH0qiIX6N+tTNSqcp/PEm4yQlaqSucY+RtlrFXB1XPuhcL8aIs5zRM9ZqVQLiLwhc=
+X-Received: by 2002:aa7:cd79:0:b0:513:53f7:8ca2 with SMTP id
+ ca25-20020aa7cd79000000b0051353f78ca2mr6245246edb.9.1685045063476; Thu, 25
+ May 2023 13:04:23 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b2f:b0:32b:fc:52b1 with SMTP id
- e15-20020a056e020b2f00b0032b00fc52b1mr3353775ilu.0.1685045034755; Thu, 25 May
- 2023 13:03:54 -0700 (PDT)
-Date:   Thu, 25 May 2023 13:03:54 -0700
-In-Reply-To: <0000000000005cf71b05f9818cc2@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ba2ea605fc8a1e3e@google.com>
-Subject: Re: [syzbot] [hfs?] KASAN: wild-memory-access Read in hfsplus_bnode_dump
-From:   syzbot <syzbot+f687659f3c2acfa34201@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20230524082424.10022-1-lstoakes@gmail.com>
+In-Reply-To: <20230524082424.10022-1-lstoakes@gmail.com>
+From:   Uladzislau Rezki <urezki@gmail.com>
+Date:   Thu, 25 May 2023 22:04:11 +0200
+Message-ID: <CA+KHdyVSD=vHh-WQxS_PrJ8GnBQZGFPgcS5AkmkyoUxpe_ziEw@mail.gmail.com>
+Subject: Re: [PATCH] lib/test_vmalloc.c: avoid garbage in page array
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Wed, May 24, 2023 at 10:24=E2=80=AFAM Lorenzo Stoakes <lstoakes@gmail.co=
+m> wrote:
+>
+> It turns out that alloc_pages_bulk_array() does not treat the page_array
+> parameter as an output parameter, but rather reads the array and skips an=
+y
+> entries that have already been allocated.
+>
+> This is somewhat unexpected and breaks this test, as we allocate the page=
+s
+> array uninitialised on the assumption it will be overwritten.
+>
+> As a result, the test was referencing uninitialised data and causing the
+> PFN to not be valid and thus a WARN_ON() followed by a null pointer deref
+> and panic.
+>
+> In addition, this is an array of pointers not of struct page objects, so =
+we
+> need only allocate an array with elements of pointer size.
+>
+> We solve both problems by simply using kcalloc() and referencing
+> sizeof(struct page *) rather than sizeof(struct page).
+>
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> ---
+>  lib/test_vmalloc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/lib/test_vmalloc.c b/lib/test_vmalloc.c
+> index 9dd9745d365f..3718d9886407 100644
+> --- a/lib/test_vmalloc.c
+> +++ b/lib/test_vmalloc.c
+> @@ -369,7 +369,7 @@ vm_map_ram_test(void)
+>         int i;
+>
+>         map_nr_pages =3D nr_pages > 0 ? nr_pages:1;
+> -       pages =3D kmalloc(map_nr_pages * sizeof(struct page), GFP_KERNEL)=
+;
+> +       pages =3D kcalloc(map_nr_pages, sizeof(struct page *), GFP_KERNEL=
+);
+>         if (!pages)
+>                 return -1;
+>
+> --
+> 2.40.1
+>
+Uh.. :)
 
-HEAD commit:    933174ae28ba Merge tag 'spi-fix-v6.4-rc3' of git://git.ker..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1716f189280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
-dashboard link: https://syzkaller.appspot.com/bug?extid=f687659f3c2acfa34201
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13582a4d280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e6d339280000
+Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/189d556c105e/disk-933174ae.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/498458304963/vmlinux-933174ae.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/68bcd9d7c04c/bzImage-933174ae.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/a584867d6b9f/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f687659f3c2acfa34201@syzkaller.appspotmail.com
-
-memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=4993 'syz-executor106'
-loop0: detected capacity change from 0 to 1024
-hfsplus: request for non-existent node 32768 in B*Tree
-hfsplus: request for non-existent node 32768 in B*Tree
-==================================================================
-BUG: KASAN: wild-memory-access in memcpy_from_page include/linux/highmem.h:417 [inline]
-BUG: KASAN: wild-memory-access in hfsplus_bnode_read fs/hfsplus/bnode.c:32 [inline]
-BUG: KASAN: wild-memory-access in hfsplus_bnode_read_u16 fs/hfsplus/bnode.c:45 [inline]
-BUG: KASAN: wild-memory-access in hfsplus_bnode_dump+0x403/0xba0 fs/hfsplus/bnode.c:305
-Read of size 2 at addr 000508800000103e by task syz-executor106/4993
-
-CPU: 0 PID: 4993 Comm: syz-executor106 Not tainted 6.4.0-rc3-syzkaller-00032-g933174ae28ba #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/16/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_report+0xe6/0x540 mm/kasan/report.c:465
- kasan_report+0x176/0x1b0 mm/kasan/report.c:572
- kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
- __asan_memcpy+0x29/0x70 mm/kasan/shadow.c:105
- memcpy_from_page include/linux/highmem.h:417 [inline]
- hfsplus_bnode_read fs/hfsplus/bnode.c:32 [inline]
- hfsplus_bnode_read_u16 fs/hfsplus/bnode.c:45 [inline]
- hfsplus_bnode_dump+0x403/0xba0 fs/hfsplus/bnode.c:305
- hfsplus_brec_remove+0x42c/0x4f0 fs/hfsplus/brec.c:229
- __hfsplus_delete_attr+0x275/0x450 fs/hfsplus/attributes.c:299
- hfsplus_delete_all_attrs+0x26b/0x3c0 fs/hfsplus/attributes.c:378
- hfsplus_delete_cat+0xb87/0xfc0 fs/hfsplus/catalog.c:425
- hfsplus_unlink+0x363/0x7f0 fs/hfsplus/dir.c:385
- vfs_unlink+0x35d/0x5f0 fs/namei.c:4327
- do_unlinkat+0x4a7/0x950 fs/namei.c:4393
- __do_sys_unlink fs/namei.c:4441 [inline]
- __se_sys_unlink fs/namei.c:4439 [inline]
- __x64_sys_unlink+0x49/0x50 fs/namei.c:4439
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5196975789
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc9b401ce8 EFLAGS: 00000246 ORIG_RAX: 0000000000000057
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f5196975789
-RDX: 00007f5196933e03 RSI: 0000000000000000 RDI: 0000000020000140
-RBP: 00007f5196935020 R08: 0000000000000640 R09: 0000000000000000
-R10: 00007ffc9b401bb0 R11: 0000000000000246 R12: 00007f51969350b0
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-==================================================================
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+--
+Uladzislau Rezki
