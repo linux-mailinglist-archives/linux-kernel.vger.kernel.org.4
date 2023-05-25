@@ -2,101 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2194710D97
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200C9710DA0
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241396AbjEYNvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        id S241157AbjEYNvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240966AbjEYNvO (ORCPT
+        with ESMTP id S241225AbjEYNvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:51:14 -0400
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E03186
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:51:10 -0700 (PDT)
-Date:   Thu, 25 May 2023 13:50:57 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=5aoyqs344fhubkfvtkwrcry4xi.protonmail; t=1685022668; x=1685281868;
-        bh=6YZpbdH442xI5ahkra+Rj8DusW4wlxrFG6pdXqv769o=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=cic8tsuMcaYjh0AMhivCkzsA+0kzurdnfjqVM765he8bkT8tkQgrvp089nwYJM+CV
-         d+5g0t8hYTSg+UVnh9GdmI8mJLILcuAojija4H84jbglWtt0EBe2Vn9aJKC/O+ndFc
-         enZU/AhuEDoBcJU1vjw3OcCmojJcjBzMj+SXv9FUe37Ha7+TUNuxFXiTj3g76iXmsX
-         rLbrf1JqGnl8uRanlVDMT5auqTdYbAvMWVpo1jB5AL8AKyijOWa7Wca+tgus1dozq4
-         krlOwEsJagjMUrOKP6xRyLSc607E20mjjNLUrOSJXWGbY4wyx0NkWBlEbrQbv1Mbcn
-         hz7mlX575i33w==
-To:     Alice Ryhl <aliceryhl@google.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev,
-        Wedson Almeida Filho <walmeida@microsoft.com>
-Subject: Re: [PATCH v1 2/2] rust: sync: implement `AsRef<T>` for `Arc<T>`
-Message-ID: <DT_8UBvti_dML0vOrXVfUwNnTjhHlhBsioFDBIudjzzxjJl1SCTHU6cn5qjmZj3wTt7r8R1PFDStDv2C2IAjMj4Ubbpy5r587LkyfJEa4VY=@proton.me>
-In-Reply-To: <20230517200814.3157916-2-aliceryhl@google.com>
-References: <20230517200814.3157916-1-aliceryhl@google.com> <20230517200814.3157916-2-aliceryhl@google.com>
-Feedback-ID: 71780778:user:proton
+        Thu, 25 May 2023 09:51:40 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2061A6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:51:36 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-783eb14ae3cso714165241.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:51:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685022696; x=1687614696;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n19tabLNtFp1Iz9K9pxIJD1OumeleMtFy/K7WnzgIfg=;
+        b=sdx1I3H43CqY0+7VjcSBTZyBmaYW73mvbcH9NIAIuik6vBNGrDhItHXEkqI+Y3O65w
+         IXmiIBFCzLj249aZ+DwxEGpozd5ptsurxC8lwyRrA4UUvWb8FWcEvDDyKU9WERlAC5KW
+         Fyi/AsQb2yEuUyC1GLSLsMjTZ6IlXOc1gCbfCXPpgmCCaG52xCb901LcHQ6eRnBBA8pL
+         Py1MzKDCP9+Qor6Wq/3uDyE9jreXmHQWET7nBZoGHdMM1iBPwqeKsXNMBeZXhIvgGDu0
+         biNTEtWFtWMhtNBDmGrgsNaYPBZH3Rb8RKHYxv0KGG1A9G6Sr3+NY09m2h+5WeIU7OSY
+         wB4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685022696; x=1687614696;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n19tabLNtFp1Iz9K9pxIJD1OumeleMtFy/K7WnzgIfg=;
+        b=bAAZGn5/SdqP8dO162awjSVL+8EGJcEsn7wkBl1Y5DEnD9XNRfrpBHyo32C0BTpXdl
+         dbdtwR8QstfdiN07oLoQcSxHJBcAqxXNUXboqx13BPcKlEcUAbVIcdnv4bvLQ7vgyjEg
+         4B57nA1jSBDR4ZW/7dbN20JwQL8kes5lh+Jk8UNrEUEfYi9YFMjPUJiEafpSK7oH/PcF
+         d//Ut3miQFU5r7p6MM4oOgJ2y4xY2wL40JihYR4MYbTfMGSTTrtu197vhp+8+TeUwDnW
+         7uF5Q1mEIpV9tazeU/R1obPtksvjaMQQ6bZxCOG1vwWoEjz4OFtLzoV3Qk3Xc85tmXjG
+         82kw==
+X-Gm-Message-State: AC+VfDydPFfeeCUOtmpOBXHdXGgxXUHE/y9BXfxowMFkwt7sF7V7TNzo
+        psoe6ma+U9jXFaMKBuUxp0oEeV3MVqyBQDIkecsP8Q==
+X-Google-Smtp-Source: ACHHUZ45iqVUZWAxmYQp90u1RQkVeX/4NHZY3Nm3bCxxSaV1E/EC64hFIztI5ZcN0+eOub/1YGI6qrhg3cAjP/LsJPI=
+X-Received: by 2002:a05:6102:2856:b0:42c:78e4:ef23 with SMTP id
+ az22-20020a056102285600b0042c78e4ef23mr5714739vsb.31.1685022695691; Thu, 25
+ May 2023 06:51:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
+ <b4bfd69f-2092-4d15-b7ce-b814f5f10ff2@sirena.org.uk>
+In-Reply-To: <b4bfd69f-2092-4d15-b7ce-b814f5f10ff2@sirena.org.uk>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 25 May 2023 19:21:24 +0530
+Message-ID: <CA+G9fYv=uyQaJs0JLMmZWLeLH0G5FF7WGcTa7y0bi0nCDfoi+A@mail.gmail.com>
+Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in fpsimd_release_task
+To:     Mark Brown <broonie@kernel.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/23 22:08, Alice Ryhl wrote:
-> This trait lets you use `Arc<T>` in code that is generic over smart
-> pointer types.
->=20
-> The `AsRef` trait should be implemented on all smart pointers. The
-> standard library also implements it on the ordinary `Arc`.
->=20
-> Co-developed-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+On Tue, 23 May 2023 at 03:42, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
+>
+> > # To install tuxrun on your system globally:
+> > # sudo pip3 install -U tuxrun=3D=3D0.42.0
+>
+> I'm not thrilled about the idea of installing some Python package
+> outside of my distro package manager, especially not running as root,
+> but I *do* have a checked out copy of tuxrun which normally seems to do
+> something...
+>
+> > #
+> > # See https://tuxrun.org/ for complete documentation.
+> >
+> > tuxrun   \
+> >  --runtime podman   \
+> >  --device fvp-aemva   \
+> >  --boot-args rw   \
+> >  --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5Nv=
+LiBcWRMuy6lXftDVQMvca/Image.gz
+> >   \
+> >  --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5N=
+vLiBcWRMuy6lXftDVQMvca/modules.tar.xz
+> >   \
+> >  --rootfs https://storage.tuxboot.com/debian/bookworm/arm64/rootfs.ext4=
+.xz   \
+> >  --parameters SKIPFILE=3Dskipfile-lkft.yaml   \
+> >  --parameters KSELFTEST=3Dhttps://storage.tuxsuite.com/public/linaro/lk=
+ft/builds/2Pq5NvLiBcWRMuy6lXftDVQMvca/kselftest.tar.xz
+> >   \
+> >  --image tuxrun:fvp   \
+> >  --tests kselftest-arm64   \
+> >  --timeouts boot=3D60 kselftest-arm64=3D60
+>
+> This command does not work for me, after fixing up the fact that
+> multiple lines have continuation characters that are nonfunctional due
+> to being wrapped onto the next line I get:
+>
+> | Error: error getting default registries to try: short-name "tuxrun:fvp"=
+ did not resolve to an alias and no unqualified-search registries are defin=
+ed in "/etc/containers/registries.conf"
+>
+> Trying tip of tree tuxrun gives the same result.  Grovelling around in
+> the documentation I see there's a need to manually build some containers
+> for the FVP so I was able to get the above command to boot with the
+> --image option removed and switching to docker as the runtime but after
+> faffing for a very large amount of time even by the standards of the
+> model it appeared to just shut down the model without starting
+> kselftest, possibly due to having mounted some of the filesystems read
+> only:
+>
+> 2023-05-22T21:03:43 Using a character delay of 50 (ms)
+> 2023-05-22T21:03:43 #=E2=8F=8E
+> 2023-05-22T21:03:43 [?2004l[?2004hroot@runner-pqlayms-project-40964107-co=
+ncurrent-5:~# #
+> 2023-05-22T21:03:43 lava-test-shell: Wait for prompt ['root@(.*):[/~]#'] =
+(timeout 01:00:00)
+> 2023-05-22T21:03:43 #
+> 2023-05-22T21:03:43 Using /lava-1
+> 2023-05-22T21:03:43 Sending with 50 millisecond of delay
+> 2023-05-22T21:03:43 export SHELL=3D/bin/sh=E2=8F=8E
+> 2023-05-22T21:03:45 [?2004l[?2004hroot@runner-pqlayms-project-40964107-co=
+ncurrent-5:~# export SHELL=3D/bin/sh
+> 2023-05-22T21:03:45 export SHELL=3D/bin/sh
+> 2023-05-22T21:03:45 Sending with 50 millisecond of delay
+> 2023-05-22T21:03:45 . /lava-1/environment=E2=8F=8E
+> 2023-05-22T21:03:47 [?2004l[?2004hroot@runner-pqlayms-project-40964107-co=
+ncurrent-5:~# . /lava-1/environment
+> 2023-05-22T21:03:47 . /lava-1/environment
+> 2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_1' for 1 seco=
+nd
+> 2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_2' for 1 seco=
+nd
+> 2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_3' for 1 seco=
+nd
+> 2023-05-22T21:03:47 Sending with 50 millisecond of delay
+> 2023-05-22T21:03:47 /lava-1/bin/lava-test-runner /lava-1/0=E2=8F=8E
+> 2023-05-22T21:03:51 [?2004l[?2004hroot@runner-pqlayms-project-40964107-co=
+ncurrent-5:~# /lava-1/bin/lava-test-runner /lava-1/0
+> 2023-05-22T21:03:51 Test shell timeout: 10s (minimum of the action and co=
+nnection timeout)
+> 2023-05-22T21:03:51 /lava-1/bin/lava-test-runne r /lava-1/0
+> 2023-05-22T21:03:52 [?2004lmkdir: cannot create directory =E2=80=98/lava-=
+1/0/results=E2=80=99: Read-only file system
+> 2023-05-22T21:03:53 mv: cannot move '/lava-1/0/lava-test-runner.conf' to =
+'/lava-1/0/lava-test-runner.conf-1684789015': Read-only file system
+> 2023-05-22T21:03:54 cat: /lava-1/0/lava-test-runner.conf-1684789015: No s=
+uch file or directory
+> 2023-05-22T21:03:55 ok: lava_test_shell seems to have completed
+> 2023-05-22T21:03:55 end: 3.1 lava-test-shell (duration 00:00:12) [common]
+> 2023-05-22T21:03:55 end: 3 lava-test-retry (duration 00:00:12) [common]
+> 2023-05-22T21:03:55 start: 4 finalize (timeout 00:10:00) [common]
+> 2023-05-22T21:03:55 start: 4.1 power-off (timeout 00:01:00) [common]
+> 2023-05-22T21:03:55 end: 4.1 power-off (duration 00:00:00) [common]
+> 2023-05-22T21:03:55 start: 4.2 read-feedback (timeout 00:10:00) [common]
+>
+> Attempting to use podman as the runtime as your command said had various
+> problems:
+>
+> 2023-05-22T21:07:01 start: 2.1.1 check-fvp-version (timeout 01:00:00) [co=
+mmon]
+> 2023-05-22T21:07:01 sh -c docker run --rm fvp:aemva-11.21.15 /opt/model/F=
+VP_AEMvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version
+> 2023-05-22T21:07:01 Parsed command exited 1.
+> 2023-05-22T21:07:01 action: check-fvp-version
+> command: ['sh', '-c', 'docker run --rm fvp:aemva-11.21.15 /opt/model/FVP_=
+AEMvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version']
+> message: Command '['sh', '-c', 'docker run --rm fvp:aemva-11.21.15 /opt/m=
+odel/FVP_AEMvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version']' re=
+turned non-zero exit status 1.
+> output: Missing runtime '/usr/bin/podman'
+> return code: 1
+>
+> (I do have podman installed though I rarely use it, this looks to be in
+> the LAVA container though)
+>
+> > Test log links:
+> > =3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build=
+/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/test/chec=
+k-kernel-kfence/log
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build=
+/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/tests/
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build=
+/v6.1.28-240-gb82733c0ff99/testrun/17007268/suite/kselftest-arm64/tests/
+> >
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build=
+/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/test/check=
+-kernel-bug/log
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build=
+/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/tests/
+> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build=
+/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/kselftest-arm64/tests/
+>
+> None of these seem to provide me with information like what kernel
+> config was used but I did manage to find
+>
+>   https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLiBcWRMuy6=
+lXftDVQMvca/config
+>
+> which might be it?  Or one of them?  However even trying to use that I'm
+> unable to reproduce issues with either the FVP or qemu.
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+You got the right config file which we are using for testing
+FVP selftests.
 
-> ---
->   rust/kernel/sync/arc.rs | 6 ++++++
->   1 file changed, 6 insertions(+)
->=20
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index 274febe3bb06..9ec911e4a0c7 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -264,6 +264,12 @@ impl<T: ?Sized> Deref for Arc<T> {
->       }
->   }
->=20
-> +impl<T: ?Sized> AsRef<T> for Arc<T> {
-> +    fn as_ref(&self) -> &T {
-> +        self.deref()
-> +    }
-> +}
-> +
->   impl<T: ?Sized> Clone for Arc<T> {
->       fn clone(&self) -> Self {
->           // INVARIANT: C `refcount_inc` saturates the refcount, so it ca=
-nnot overflow to zero.
-> --
-> 2.40.1.606.ga4b1b128d6-goog
->=20
+Since it is intermittent it is not easy to reproduce always.
+You are right ! that, you may have to try with full sub set run
 
---=20
-Cheers,
-Benno
+./run_kselftest.sh -c arm64
+
+- Naresh
