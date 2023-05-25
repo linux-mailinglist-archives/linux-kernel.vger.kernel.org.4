@@ -2,112 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F847101DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 02:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2817101E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 02:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235866AbjEYADO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 20:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S236057AbjEYAEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 20:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjEYADN (ORCPT
+        with ESMTP id S229955AbjEYAEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 20:03:13 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6195199;
-        Wed, 24 May 2023 17:03:12 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d41763796so1151293b3a.2;
-        Wed, 24 May 2023 17:03:12 -0700 (PDT)
+        Wed, 24 May 2023 20:04:23 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ACBB3
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:04:22 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1ae3f6df1afso7973375ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:04:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684972992; x=1687564992;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=P/sfaSxrjpDVpW6nx9Gv6nwA0nMjU7/ydrxlKetNdAs=;
-        b=LJE1lyDS4tz8fl5KK7DnLYDf6ibmmArWDPYukL3kmmDJKmSbSPBU6oC4kbecjg8NPa
-         Af8rVyeur9e5XJbLTI36UvqhvINzz0EWOK0fjr4W70XXKiLzK+njPsbYeVCA42fZWN+W
-         bQVbZdz+HKzgMqunb2NDd0A2O8fxr4z1cu19NNvgfDWSrljotg4+0LSxVgIP4ppeMlwD
-         afQEWxMzBqqyCJEGhZ+h5kDZ5JVysrtCZlIzmJCoEoyK2AVHEKRuxu9a+MUrC6pfd+Jo
-         KXBeAMp234fJe17M/dUH/Sy1OQX9Hj5kj9kzuN2fvAIZqD9KFY5GIN0Ty816WtIl3L1I
-         rUNQ==
+        d=google.com; s=20221208; t=1684973062; x=1687565062;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JxmNnYgfaOtAwG3k7PZVh3xrHSOh7px0pgm2Rioiw6o=;
+        b=Zj/fw8nmn6hoYdeGZf06QX+F1CudDEYVZTfIJKpBptP+hQz+AZfbDSs7kYyL9lhaFA
+         FXHGJ5L0Q9h2//2gGs1HpTjxvAE6PdCxlUoHz/4QXOWjMeAV1rbvHhvbLPiIuJ1YeIFE
+         KHbnV8A6PvqAovc8k8Ow1+C1zdzBh9oFFbirPuZQQHMW2/PFRTtpPSFlztSli9AdsFYw
+         zWLU8dzks5nY9Ls9UASK0kWl0olJjSKCPycJ3LkGw2YTh+So7V7pSa/nWKz+gshuPSHB
+         jn26lgjzx6kWOCz1yUE5C9ERczfnh3iquHaWH9PKXTkPEZVat7p0W/nI8FiQ1KjumdYd
+         a1jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684972992; x=1687564992;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P/sfaSxrjpDVpW6nx9Gv6nwA0nMjU7/ydrxlKetNdAs=;
-        b=SJbcwM1kbyugrDYGqLKnIphyDGBMD8uHsfDkPU1RSR+DMlLdX5wLIXrlvyToRWqIHg
-         kRNdzlOQilsS4qKcGckjrqlRCuMObzdqVKYAyrovIRL6WEfdxMVeOdg58UwKMoM/HUgu
-         rfBUT1n9kw8BYnhBm7FZ6scIqC7WanMnHvBs6X16Ur6mN2nAW1u99+urmlMmyI0AAfUW
-         UcubEPEr1azBuDbrPb2XrgAzSxw8eL5xJ6dBi+1zT+JY+OcJUjzBEl9USAPcp1v5tVns
-         HHkO/31hFIdQDHVI06MM8LCMQ4rIs0PwfrRkA2s5OKZKUXxSAF9z0jTJJIadd48jCgGL
-         spUg==
-X-Gm-Message-State: AC+VfDw6nTXdm0xfGid0fkn1nYMVOrQR29YmVuxV+we2MzcZFlgjHzmy
-        O/GHBUdIi9ljpqX1P8ptwKw=
-X-Google-Smtp-Source: ACHHUZ5jvp151opjVnOUx9o1pqEdym6iwvISEVh98WTz1GiRxLPg7DqkyxKMOdNUkD4mOTcQKpKfBg==
-X-Received: by 2002:a05:6a00:1a53:b0:63d:260d:f9dd with SMTP id h19-20020a056a001a5300b0063d260df9ddmr6068460pfv.33.1684972991630;
-        Wed, 24 May 2023 17:03:11 -0700 (PDT)
-Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:121:f908:b42d:c399])
-        by smtp.gmail.com with ESMTPSA id u17-20020aa78491000000b0064cca73d911sm22276pfn.103.2023.05.24.17.03.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 17:03:10 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
-        bpf@vger.kernel.org
-Subject: [PATCH] perf bpf filter: Fix a broken perf sample data naming in BPF
-Date:   Wed, 24 May 2023 17:03:07 -0700
-Message-ID: <20230525000307.3202449-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1684973062; x=1687565062;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JxmNnYgfaOtAwG3k7PZVh3xrHSOh7px0pgm2Rioiw6o=;
+        b=gDqodg9PaLSyP19RJVabNrc4Dl8KsjuxrjDC8NMwnE7LVnsU55Bsa6zVnM2VgJBi5X
+         H+mnGfe2G/y8OwUBjxDcfHzey6ng3hp6HHRWCoj45H7h4KS8382wfVciVAlSjnnR2n+u
+         3uYt+TE40BdW7aRQvrgnYaVmR4PdkggQ26SqPqwirKIs4vsZfmp7/v8AHbBZHzoeirx3
+         5RW00LMmRgrmeRcn0WjEYKeXIySazVCPDwKCnlEkXv9JmtafiDBcHDLj7Glke2or2To4
+         eA/1y/JiwvR45it+F5c4nQiRBK1x1gyNppY5GJ6bDtC2xW3tK8SaH8xr2SZy/LElVGFb
+         w6sg==
+X-Gm-Message-State: AC+VfDxEasaCgzxJmAMGOTSkQOxLWz8jmdFrMXz69Sn9ghLnevDI5fT1
+        mMqcD71SefUAjBgxAyfXMW94pNJtHKWy
+X-Google-Smtp-Source: ACHHUZ6hpmN3QjzofQnR261iNpNAsxsI9fXdPsPI51ofRYxGfFB1NDraSuymfcJxH3lVr8U4UxXo3bTULABm
+X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
+ (user=jiangzp job=sendgmr) by 2002:a17:902:7587:b0:1ae:5f7e:c115 with SMTP id
+ j7-20020a170902758700b001ae5f7ec115mr4392038pll.11.1684973061937; Wed, 24 May
+ 2023 17:04:21 -0700 (PDT)
+Date:   Wed, 24 May 2023 17:04:15 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+Message-ID: <20230524170415.kernel.v1.1.I575ec21daa35ebba038fe38e164df60b6121c633@changeid>
+Subject: [kernel PATCH v1] Bluetooth: L2CAP: Fix use-after-free
+From:   Zhengping Jiang <jiangzp@google.com>
+To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        luiz.dentz@gmail.com
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        Zhengping Jiang <jiangzp@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BPF CO-RE requires 3 underscores for the ignored suffix rule but it
-mistakenly used only 2.  Let's fix it.
+Fix potential use-after-free in l2cap_le_command_rej.
 
-Fixes: 3a8b8fc31748 ("perf bpf filter: Support pre-5.16 kernels where 'mem_hops' isn't in 'union perf_mem_data_src'")
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Zhengping Jiang <jiangzp@google.com>
 ---
- tools/perf/util/bpf_skel/sample_filter.bpf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-index cffe493af1ed..fb94f5280626 100644
---- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
-+++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-@@ -25,7 +25,7 @@ struct perf_sample_data___new {
- } __attribute__((preserve_access_index));
+Changes in v1:
+- Use l2cap_chan_hold_unless_zero to prevent adding refcnt when it is
+  already 0.
+
+ net/bluetooth/l2cap_core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 376b523c7b26..19b0b1f7ffed 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -6361,9 +6361,14 @@ static inline int l2cap_le_command_rej(struct l2cap_conn *conn,
+ 	if (!chan)
+ 		goto done;
  
- /* new kernel perf_mem_data_src definition */
--union perf_mem_data_src__new {
-+union perf_mem_data_src___new {
- 	__u64 val;
- 	struct {
- 		__u64   mem_op:5,	/* type of opcode */
-@@ -108,7 +108,7 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
- 		if (entry->part == 7)
- 			return kctx->data->data_src.mem_blk;
- 		if (entry->part == 8) {
--			union perf_mem_data_src__new *data = (void *)&kctx->data->data_src;
-+			union perf_mem_data_src___new *data = (void *)&kctx->data->data_src;
++	chan = l2cap_chan_hold_unless_zero(chan);
++	if (!chan)
++		goto done;
++
+ 	l2cap_chan_lock(chan);
+ 	l2cap_chan_del(chan, ECONNREFUSED);
+ 	l2cap_chan_unlock(chan);
++	l2cap_chan_put(chan);
  
- 			if (bpf_core_field_exists(data->mem_hops))
- 				return data->mem_hops;
+ done:
+ 	mutex_unlock(&conn->chan_lock);
 -- 
-2.41.0.rc0.172.g3f132b7071-goog
+2.40.1.698.g37aff9b760-goog
 
