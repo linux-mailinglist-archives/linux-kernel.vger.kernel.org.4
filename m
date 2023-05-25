@@ -2,114 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0FF711315
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57E1711338
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241200AbjEYSDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S233020AbjEYSJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240639AbjEYSDL (ORCPT
+        with ESMTP id S240679AbjEYSJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:03:11 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C122CE70
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:02:57 -0700 (PDT)
-Received: (qmail 260359 invoked by uid 1000); 25 May 2023 14:02:56 -0400
-Date:   Thu, 25 May 2023 14:02:56 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Roy Luo <royluo@google.com>
-Cc:     raychi@google.com, badhri@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bastien Nocera <hadess@hadess.net>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Douglas Anderson <dianders@chromium.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH v1] usb: core: add sysfs entry for usb device state
-Message-ID: <408575c0-2967-4cdb-92c7-1b2845038d20@rowland.harvard.edu>
-References: <20230525173818.219633-1-royluo@google.com>
+        Thu, 25 May 2023 14:09:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D620A125
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:07:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685038013;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/STt3uYUF/eA3pcGXeIfU31ic0BPqfIYsBRnvLLrcA8=;
+        b=U/5JZCPOk7HsIixAs+LgAAt1Tp04HId8HXxB5wZVJopHNKQLWC/q247KLyJy0M3dqaw5Zg
+        BjVdpxh/ICoPJevn0q+Gc75X1Ho+TPIgajRuETFwUoG6HSWg19cVv6AT3vdORrpDSe8oMM
+        lhNbOKoWC0itthdNwMQ30D4xGcpRWRI=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-85-9fP8AxyrNFCnaNGB2CS_7Q-1; Thu, 25 May 2023 14:06:52 -0400
+X-MC-Unique: 9fP8AxyrNFCnaNGB2CS_7Q-1
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3387d718f4eso44374985ab.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:06:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685038011; x=1687630011;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/STt3uYUF/eA3pcGXeIfU31ic0BPqfIYsBRnvLLrcA8=;
+        b=SBgGVvWxwAdfCnKbjL65i+zcke/K/5ipHieNee9laqDXb44gE2iRBXbKa9ua5+jt5G
+         G9xoAeaJ+AnklXt/zRFzinkceTYgpmQO2Tw3KrOqv/7RZGu9mV27OwZ3LaoezKc7fEpE
+         FVEKiXtTeROp4mXOY5OphCmAMP+5rzVaymEIfMExdH1OVj9HRyLU1TaGmwG+3TTRjUta
+         wPj52eCuPU3AwB4K1jWzNtzUPVQGCJfqVmA02aV2P/+VTiIE6IDrxTmF3PSKqRfti6gE
+         AAd6o8Qo4k5ps1XJlaYPfHGWRcnx6D3UrzrTIfUKEVNqd135xgdQvId6gBdEffcEmvX9
+         Cfkw==
+X-Gm-Message-State: AC+VfDzIFc2tkhwrqHD0LtmQRl9ZA+RMIlrjWCoFE5oIoqfNJYxNrMu/
+        HAg1wplCaHsXoUjGPnCxRHejfjM44dOePu1m+/QtpF4DrAs304jcwU5ZRkKJtAFezl+TsnuxGzD
+        KmkZoFjk1R1H7f5HWQILfrdXQ
+X-Received: by 2002:a92:cc92:0:b0:332:dd0a:c6df with SMTP id x18-20020a92cc92000000b00332dd0ac6dfmr15399945ilo.22.1685038011243;
+        Thu, 25 May 2023 11:06:51 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5f0lXAJzyZMLgAAku3HttSAaB/9PyTut5L0+yIVgNcAGnDpm9J3odo9mu57GJnqdXcMVWWew==
+X-Received: by 2002:a92:cc92:0:b0:332:dd0a:c6df with SMTP id x18-20020a92cc92000000b00332dd0ac6dfmr15399922ilo.22.1685038011006;
+        Thu, 25 May 2023 11:06:51 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id v18-20020a056638359200b004145ebbf193sm559419jal.51.2023.05.25.11.06.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 11:06:50 -0700 (PDT)
+Date:   Thu, 25 May 2023 12:06:48 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v3 00/10] Add Intel VT-d nested translation
+Message-ID: <20230525120648.70d954fb.alex.williamson@redhat.com>
+In-Reply-To: <BN9PR11MB52765FA8255FB8F8A1A6F11B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230511145110.27707-1-yi.l.liu@intel.com>
+        <BN9PR11MB52765FA8255FB8F8A1A6F11B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525173818.219633-1-royluo@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 05:38:18PM +0000, Roy Luo wrote:
-> Expose usb device state to userland as the information is useful in
-> detecting non-compliant setups and diagnosing enumeration failures.
-> For example:
-> - End-to-end signal integrity issues: the device would fail port reset
->   repeatedly and thus be stuck in POWERED state.
-> - Charge-only cables (missing D+/D- lines): the device would never enter
->   POWERED state as the HC would not see any pullup.
-> 
-> What's the status quo?
-> We do have error logs such as "Cannot enable. Maybe the USB cable is bad?"
-> to flag potential setup issues, but there's no good way to expose them to
-> userspace.
-> 
-> Why add a sysfs entry in struct usb_port instead of struct usb_device?
-> The struct usb_device is not device_add() to the system until it's in
-> ADDRESS state hence we would miss the first two states. The struct
-> usb_port is a better place to keep the information because its life
-> cycle is longer than the struct usb_device that is attached to the port.
-> 
-> Signed-off-by: Roy Luo <royluo@google.com>
-> ---
+On Wed, 24 May 2023 08:59:43 +0000
+"Tian, Kevin" <kevin.tian@intel.com> wrote:
 
-> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-> index e23833562e4f..110143568c77 100644
-> --- a/drivers/usb/core/hub.h
-> +++ b/drivers/usb/core/hub.h
-> @@ -84,8 +84,10 @@ struct usb_hub {
->   * @peer: related usb2 and usb3 ports (share the same connector)
->   * @req: default pm qos request for hubs without port power control
->   * @connect_type: port's connect type
-> + * @state: device state of the usb device attached to the port
+> > From: Liu, Yi L <yi.l.liu@intel.com>
+> > Sent: Thursday, May 11, 2023 10:51 PM
+> >=20
+> > The first Intel platform supporting nested translation is Sapphire
+> > Rapids which, unfortunately, has a hardware errata [2] requiring special
+> > treatment. This errata happens when a stage-1 page table page (either
+> > level) is located in a stage-2 read-only region. In that case the IOMMU
+> > hardware may ignore the stage-2 RO permission and still set the A/D bit
+> > in stage-1 page table entries during page table walking.
+> >=20
+> > A flag IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 is introduced to
+> > report
+> > this errata to userspace. With that restriction the user should either
+> > disable nested translation to favor RO stage-2 mappings or ensure no
+> > RO stage-2 mapping to enable nested translation.
+> >=20
+> > Intel-iommu driver is armed with necessary checks to prevent such mix
+> > in patch10 of this series.
+> >=20
+> > Qemu currently does add RO mappings though. The vfio agent in Qemu
+> > simply maps all valid regions in the GPA address space which certainly
+> > includes RO regions e.g. vbios.
+> >=20
+> > In reality we don't know a usage relying on DMA reads from the BIOS
+> > region. Hence finding a way to allow user opt-out RO mappings in
+> > Qemu might be an acceptable tradeoff. But how to achieve it cleanly
+> > needs more discussion in Qemu community. For now we just hacked Qemu
+> > to test.
+> >  =20
+>=20
+> Hi, Alex,
+>=20
+> Want to touch base on your thoughts about this errata before we
+> actually go to discuss how to handle it in Qemu.
+>=20
+> Overall it affects all Sapphire Rapids platforms. Fully disabling nested
+> translation in the kernel just for this rare vulnerability sounds an over=
+kill.
+>=20
+> So we decide to enforce the exclusive check (RO in stage-2 vs. nesting)
+> in the kernel and expose the restriction to userspace so the VMM can
+> choose which one to enable based on its own requirement.
+>=20
+> At least this looks a reasonable tradeoff to some proprietary VMMs
+> which never adds RO mappings in stage-2 today.
+>=20
+> But we do want to get Qemu support nested translation on those
+> platform as the widely-used reference VMM!
+>=20
+> Do you see any major oversight before pursuing such change in Qemu
+> e.g. having a way for the user to opt-out adding RO mappings in stage-2? =
+=F0=9F=98=8A
 
-This member is essentially a duplicate of the .child member of the 
-usb_port structure.  That is, it points to the .state member of the 
-child device instead of to the child device itself, but this is pretty 
-much the same thing.  You could replace *(port_dev->state) with 
-port_dev->child->state.
+I don't feel like I have enough info to know what common scenarios are
+going to make use of 2-stage and nested configurations and how likely a
+user is to need such an opt-out.  If it's likely that a user is going
+to encounter this configuration, an opt-out is at best a workaround.
+It's a significant support issue if a user needs to generate a failure
+in QEMU, notice and decipher any log messages that failure may have
+generated, and take action to introduce specific changes in their VM
+configuration to support a usage restriction.
 
-> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-> index 06a8f1f84f6f..7f3430170115 100644
-> --- a/drivers/usb/core/port.c
-> +++ b/drivers/usb/core/port.c
-> @@ -160,6 +160,19 @@ static ssize_t connect_type_show(struct device *dev,
->  }
->  static DEVICE_ATTR_RO(connect_type);
->  
-> +static ssize_t state_show(struct device *dev,
-> +			  struct device_attribute *attr, char *buf)
-> +{
-> +	struct usb_port *port_dev = to_usb_port(dev);
-> +	enum usb_device_state state = USB_STATE_NOTATTACHED;
-> +
-> +	if (port_dev->state)
-> +		state = *port_dev->state;
-> +
-> +	return sprintf(buf, "%s\n",  usb_state_string(state));
+For QEMU I might lean more towards an effort to better filter the
+mappings we create to avoid these read-only ranges that likely don't
+require DMA mappings anyway.
 
-This races with device addition and removal (and with device state 
-changes).  To prevent these races, you have to hold the 
-device_state_lock spinlock while accessing the child device and its 
-state.
+How much does this affect arbitrary userspace vfio drivers?  For
+example are there scenarios where running in a VM with a vIOMMU
+introduces nested support that's unknown to the user which now prevents
+this usage?  An example might be running an L2 guest with a version of
+QEMU that does create read-only mappings.  If necessary, how would lack
+of read-only mapping support be conveyed to those nested use cases?
+Thanks,
 
-Unfortunately that spinlock is private to hub.c, so you will have to 
-make it public before you can use it here.
+Alex
 
-Alan Stern
