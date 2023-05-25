@@ -2,186 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38056711A6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06A2711A5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjEYXBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 19:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
+        id S240603AbjEYW6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 18:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjEYXBb (ORCPT
+        with ESMTP id S229583AbjEYW6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 19:01:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7570194;
-        Thu, 25 May 2023 16:01:28 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 25 May 2023 18:58:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FBFD9;
+        Thu, 25 May 2023 15:58:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E675166032BE;
-        Fri, 26 May 2023 00:01:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685055687;
-        bh=4Mji/tVJEhy+99y3+UaKpEsXd7MFjzEF3KJK23IqH+Y=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ED4161537;
+        Thu, 25 May 2023 22:58:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8E8C433D2;
+        Thu, 25 May 2023 22:58:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685055524;
+        bh=3NA4xWfe42k5VF2JCyfY8nIZbbUJE+uM1+1PJqK1n7A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LHnBw0KSuRmKkHfn3/DJzQgi12/tpWjyDflZfhOKKDqW4NYpYxKK21V08eJnOKiWn
-         e0g5AnapXrVDEIES/nTWZBsZ9BI0bHcZQiJhNa62rOBCKCuo59d4kHTj9oVu1cwIE7
-         BwDJMi9Nwat4GG0l8Ruew000sxjy9Unyp2K3F3UGD9hwjQ7uU1vnhl9SODlO/06hXg
-         sWVssv8OEhuvI6j65fLC31ram1m+SYHtRuc1MRx9ED5zQ4v1ehaYanXjX5OwOjY6QG
-         D/DBm5HXgcajHnBbnicXUjiT+f7ud0Bm3pL39Tl1VrKYLWn8JmsDYuwyafT03hRtaJ
-         e3AB95Qk5wHhg==
-Received: by mercury (Postfix, from userid 1000)
-        id B43181060A3F; Fri, 26 May 2023 01:01:24 +0200 (CEST)
-Date:   Fri, 26 May 2023 01:01:24 +0200
-From:   'Sebastian Reichel' <sebastian.reichel@collabora.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@collabora.com" <kernel@collabora.com>
-Subject: Re: [PATCH v1 2/2] clk: divider: Properly handle rates exceeding
- UINT_MAX
-Message-ID: <20230525230124.zj5frkpynnnfecw6@mercury.elektranox.org>
-References: <20230519190522.194729-1-sebastian.reichel@collabora.com>
- <20230519190522.194729-3-sebastian.reichel@collabora.com>
- <1b74d2ea2c3a458694c4c74f2381fcab@AcuMS.aculab.com>
+        b=r07wOPWf+yS1iDUqmnwF+SHXctz3eK+mTSSWmEg8kkghm+PRS4vlsJVCvI5pJelCc
+         LqTmTNI4CDiS6UnvWTDB7WDiNtvNa/9TndsFILrv1+nX5k0lC3muG2/B4jDjkZDQtZ
+         gzlZceGVnZW0MDBynt9LZDq2BhmZ1Txszpr7iUJ4BUgoiFm7OFTp6E1zjXyLFedx9w
+         2RZUCOHzooPLu92Lc7j4rUyTA5PkkpvEaJLDv2G9jGgwev7mTeh41wMEjUUwhH5fY6
+         ce5cG9+tdwbPtLYVyJ4PG5MbSL2z798quGnLUtlpf2/5RHCk2Q9koTwEm5zcTuLwAj
+         ohldjn8hSCq1Q==
+Date:   Thu, 25 May 2023 16:02:33 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     agross@kernel.org, Rohit Agarwal <quic_rohiagar@quicinc.com>,
+        robh@kernel.org, bhelgaas@google.com, lpieralisi@kernel.org,
+        conor+dt@kernel.org, kw@linux.com,
+        manivannan.sadhasivam@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, mani@kernel.org,
+        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v6 0/5] Add PCIe EP support for SDX65
+Message-ID: <20230525230233.3hdldkmesgustkv4@ripper>
+References: <168499048186.3998961.9705003317556607760.b4-ty@kernel.org>
+ <ZG/dh8s6mrzhRTE9@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kza6lpa52hxd2e5z"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1b74d2ea2c3a458694c4c74f2381fcab@AcuMS.aculab.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZG/dh8s6mrzhRTE9@bhelgaas>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 25, 2023 at 05:13:27PM -0500, Bjorn Helgaas wrote:
+> On Wed, May 24, 2023 at 09:54:38PM -0700, Bjorn Andersson wrote:
+> > On Thu, 18 May 2023 23:17:48 +0530, Rohit Agarwal wrote:
+> > > Changes in v6:
+> > >  - Rebased on top of 6.4-rc2.
+> > > 
+> > > Changes in v5:
+> > >  - Addressed some minor comments from Konrad
+> > >  - Rebased on top of 6.3-rc5.
+> > > 
+> > > [...]
+> > 
+> > Applied, thanks!
+> > 
+> > [1/5] dt-bindings: PCI: qcom: Add SDX65 SoC
+> >       (no commit info)
+> 
+> For clarification, I guess this means you did *not* apply [1/5], and
+> you'd like Lorenzo to apply it?
+> 
 
---kza6lpa52hxd2e5z
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That is correct, sorry for the confusion.
 
-Hi,
+Thanks,
+Bjorn
 
-On Mon, May 22, 2023 at 08:18:53AM +0000, David Laight wrote:
-> From: Sebastian Reichel
-> > Sent: 19 May 2023 20:05
-> >=20
-> > Requesting rates exceeding UINT_MAX (so roughly 4.3 GHz) results
-> > in very small rate being chosen instead of very high ones, since
-> > DIV_ROUND_UP_ULL takes a 32 bit integer as second argument.
-> >=20
-> > Correct this by using DIV64_U64_ROUND_UP instead, which takes proper
-> > 64 bit values for dividend and divisor.
->=20
-> This doesn't look right on 32-bit architectures.
-> While you really don't want to be doing full 64bit divides
-> there is also the problem that any input values over 4.3Ghz
-> have already been masked.
-> In the values can be over 4.3GHz then the function arguments
-> need to be 64bit - not long.
-
-The common clock framework uses 'unsigned long' for clock rates
-everywhere, so it's limited to ~4.3 GHz on 32-bit. I guess it does
-not really matter - at least I don't expect new 32-bit platforms
-with such high clock rates. Considering Intel and AMD already reach
-5 GHz boost rates nowadays this is definetly not true for 64-bit.
-
-The current function does (u64 / u32), so it's wrong on 32-bit
-(rate can never be bigger than u32, so the u64 is useless) and
-also wrong on 64-bit architectures (second argument may be bigger
-than u32).
-
-I will prepare a v2 using DIV_ROUND_UP(), which should improve the
-performance on 32-bit and fix the bug on 64-bit architectures.
-
--- Sebastian
-
-> 	David
->=20
-> > Note, that this is usually not an issue. ULONG_MAX sets the lower
-> > 32 bits and thus effectively requests UINT_MAX. On most platforms
-> > that is good enough. To trigger a real bug one of the following
-> > conditions must be met:
-> >=20
-> >  * A parent clock with more than 8.5 GHz is available
-> >  * Instead of ULONG_MAX a specific frequency like 4.3 GHz is
-> >    requested. That would end up becoming 5 MHz instead :)
-> >=20
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > ---
-> >  drivers/clk/clk-divider.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
-> > index a2c2b5203b0a..dddaaf0f9d25 100644
-> > --- a/drivers/clk/clk-divider.c
-> > +++ b/drivers/clk/clk-divider.c
-> > @@ -220,7 +220,7 @@ static int _div_round_up(const struct clk_div_table=
- *table,
-> >  			 unsigned long parent_rate, unsigned long rate,
-> >  			 unsigned long flags)
-> >  {
-> > -	int div =3D DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-> > +	int div =3D DIV64_U64_ROUND_UP(parent_rate, rate);
-> >=20
-> >  	if (flags & CLK_DIVIDER_POWER_OF_TWO)
-> >  		div =3D __roundup_pow_of_two(div);
-> > @@ -237,7 +237,7 @@ static int _div_round_closest(const struct clk_div_=
-table *table,
-> >  	int up, down;
-> >  	unsigned long up_rate, down_rate;
-> >=20
-> > -	up =3D DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-> > +	up =3D DIV64_U64_ROUND_UP(parent_rate, rate);
-> >  	down =3D parent_rate / rate;
-> >=20
-> >  	if (flags & CLK_DIVIDER_POWER_OF_TWO) {
-> > @@ -473,7 +473,7 @@ int divider_get_val(unsigned long rate, unsigned lo=
-ng parent_rate,
-> >  {
-> >  	unsigned int div, value;
-> >=20
-> > -	div =3D DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-> > +	div =3D DIV64_U64_ROUND_UP(parent_rate, rate);
-> >=20
-> >  	if (!_is_valid_div(table, div, flags))
-> >  		return -EINVAL;
-> > --
-> > 2.39.2
->=20
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
- 1PT, UK
-> Registration No: 1397386 (Wales)
->=20
-
---kza6lpa52hxd2e5z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRv6LoACgkQ2O7X88g7
-+pqBZxAAo2Mt27gtCMiHbEGUAHvFcYxWyZPbVO4t2h8B6fg1RcAIM+4sUTZlIxlC
-XvMFFpCgcO2r3F/0zSPZK70i1/vGtOKFSyxJjR20V9koOwTfG808wuO5gIccFxVL
-6FMJiGYQNXMT/+ByYfoEt39PQmpv9PsEuoL89eVuOjim9CUh/9qJiuQhMPOlDyiz
-isxsFusZ4yqA+67bIvyPEBnsRTabntSUtNjAuc8TjCAHtF/YuBSaxipG1bnwj7jM
-lR6oiImd9TNTLcoPoSYoz4iEAT+MmZ40U95DOcJVGx4DoFtLZMwzBbdiRErjqEBq
-XGRVZJWHTRyCQyeb69xn0lbpIDo1aWqb2jsJmtgUW52AqvIzN96pHkEhTZi+iBn9
-yKUvwnmMlZo7acsL/NmCG4IZq/Orqe0f+llPYUg6DSFb79ibUkrwDLyuDDbE73hV
-LE2TcHJChv5DBlB4gvFH6xHV8zYomlYFvTgh4milqsZNN31CmpIG8CdmzNP/1kV2
-LwjTW9gfG3YrYR2B1oad8n36HR7bEYf6zEPB1NqJjrUm1eydDFAkumsEms+v4CRF
-3G1gc3r8yRCEhitslqBv9WapU7vQHColzCvMD2z7Cl3YqrqrExpyuiQSPMcRM3yi
-PjtdcCudTwuE+sJylbYupDc8YnoLZStMbOJUY1WgVOaVrFrtRfU=
-=nRAl
------END PGP SIGNATURE-----
-
---kza6lpa52hxd2e5z--
+> > [2/5] ARM: dts: qcom: sdx65: Add support for PCIe PHY
+> >       commit: 92543a1ef22d0270425a4dfe8efe4ab30c4a8a5e
+> > [3/5] ARM: dts: qcom: sdx65: Add support for PCIe EP
+> >       commit: 91dfb64ba70bab4d3517f4e7cb2e4cc8f5a8f81a
+> > [4/5] ARM: dts: qcom: sdx65-mtp: Enable PCIe PHY
+> >       commit: 07bb20f207cb5868a47217681e4843f566843d29
+> > [5/5] ARM: dts: qcom: sdx65-mtp: Enable PCIe EP
+> >       commit: e110dea61ff3f35e6d15e8c5009fb0e876a7d8ae
