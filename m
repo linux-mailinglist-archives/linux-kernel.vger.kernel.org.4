@@ -2,172 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B480710AC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A005D710AC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240878AbjEYLVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
+        id S240915AbjEYLV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234092AbjEYLVQ (ORCPT
+        with ESMTP id S240923AbjEYLVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:21:16 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E001B4;
-        Thu, 25 May 2023 04:21:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685013667; x=1716549667;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=Vaf8hbEzW0GiP9VSR1Vgme7i6rbC6bI7GrB1LsNCkw8=;
-  b=hJ5CC3sYRS+kYaMST9e2Q64sL4Jygrlrq1dTlYoLy3scNNvTR9VTLufI
-   bobd5kceytGSPOr0Z7NadE8QNIMtosJl8ZJhKzmyfwbxTMWSyTS8NN/x2
-   tMP60BMcvp2Y2ME+nutFCdoAtzX1fQ+LFN9I5LvldK9hGGVjxDdnUrjLa
-   vSCzPHZwrEI3RkCWhpPiZCeWKVSrbQVX396J+zKg9jZPAgEJKxJPHUOpQ
-   pxHuehLCkd0bx/qujAeQD1FU3FYrd8KVSxE8OAVfVhYvnmFHOwMwF54IM
-   KP2TP3z6N/4CROA/VzLQhVYusSFHCFOthQ4s3T4efH/JlyhwKL+B+4n9A
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="338434389"
-X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
-   d="scan'208";a="338434389"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 04:21:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="849164264"
-X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
-   d="scan'208";a="849164264"
-Received: from aghiriba-mobl.ger.corp.intel.com ([10.249.40.17])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 04:21:02 -0700
-Date:   Thu, 25 May 2023 14:20:59 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        jringle@gridpoint.com, tomasz.mon@camlingroup.com,
-        l.perczak@camlintechnologies.com,
-        linux-serial <linux-serial@vger.kernel.org>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 05/11] serial: sc16is7xx: fix broken port 0 uart
- init
-In-Reply-To: <20230525040324.3773741-6-hugo@hugovil.com>
-Message-ID: <2936e18f-44ea-faed-9fa0-2ddefe7c3194@linux.intel.com>
-References: <20230525040324.3773741-1-hugo@hugovil.com> <20230525040324.3773741-6-hugo@hugovil.com>
+        Thu, 25 May 2023 07:21:18 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED92A10B;
+        Thu, 25 May 2023 04:21:09 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P7DZkw025224;
+        Thu, 25 May 2023 11:21:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=MooyYDAvUXB80RnYai+sdhsfLxypM4HoagMpzLxnROc=;
+ b=SkxNKFq9rACtbN1/c3m9ji9InCrHQPhBX+FmmauSPDNm2WdKFD80GvGT/ejINk452ZI3
+ imswCYZGRBSGf1ud4lD3Kpxw9uctDNa4izU7SZfb2OGh9l4ep7JHKyRBBNeK4rYo1WIU
+ DfKAp09b18gHx5Arujpn9fYcJycUCxSHmLJ6lgDmaJnL+LrnwvsfAJDtY9jtDvxf3jTd
+ gvrxzAiFyJWb5TbxobdUMJn6xe+UlJ+1e3ZDUAFulDCi0BCSfB9z31Uo1d7LvHkmJejb
+ Klv/y6xYtgq5X2I2Kox+hp7RxcoVLjK4Zqu4ymhFqalYyQJExDeUdGaZ5z9Fh6b2q8pm Gw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt27n0jk3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 11:21:06 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PBL5KV030217
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 11:21:05 GMT
+Received: from [10.216.30.6] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
+ 2023 04:21:02 -0700
+Message-ID: <feeb18db-2d7f-5e3b-bc28-57291e2d4255@quicinc.com>
+Date:   Thu, 25 May 2023 16:50:59 +0530
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-497861732-1685013436=:1738"
-Content-ID: <7ba46da5-da4e-341e-382e-cd7cf39b5cd@linux.intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH][next] media: venus: Replace one-element arrays with
+ flexible-array members
+Content-Language: en-US
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>
+References: <ZGPk3PpvYzjD1+0/@work>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <ZGPk3PpvYzjD1+0/@work>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4aB8-jSm9D0D8usGY7eJcUsfEfQMTYYd
+X-Proofpoint-GUID: 4aB8-jSm9D0D8usGY7eJcUsfEfQMTYYd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_06,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ mlxlogscore=999 adultscore=0 priorityscore=1501 suspectscore=0
+ clxscore=1011 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250094
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-497861732-1685013436=:1738
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <b5e661ae-85b6-6dfc-28d2-ef1d35c850b0@linux.intel.com>
 
-On Thu, 25 May 2023, Hugo Villeneuve wrote:
-
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On 5/17/2023 1:47 AM, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element arrays with flexible-array
+> members in multiple structures, and refactor the rest of the code,
+> accordingly.
 > 
-> While experimenting with rs485 configuration on a SC16IS752 dual UART,
-
-You can remove this intro, it's not necessary.
-
-> I found that the sc16is7xx_config_rs485() function was called only for
-> the second port (index 1, channel B), causing initialization problems
-> for the first port.
-
-Just start with:
-
-sc16is7xx_config_rs485() function is called only for ...
-
-> For the sc16is7xx driver, port->membase and port->mapbase are not set,
-> and their default values are 0. And we set port->iobase to the device
-> index. This means that when the first device is registered using the
-> uart_add_one_port() function, the following values will be in the port
-> structure:
->     port->membase = 0
->     port->mapbase = 0
->     port->iobase  = 0
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
 > 
-> Therefore, the function uart_configure_port() in serial_core.c will
-> exit early because of the following check:
-> 	/*
-> 	 * If there isn't a port here, don't do anything further.
-> 	 */
-> 	if (!port->iobase && !port->mapbase && !port->membase)
-> 		return;
+> This results in no differences in binary output.
 > 
-> Typically, I2C and SPI drivers do not set port->membase and
-> port->mapbase. But I found that the max310x driver sets
-> port->membase to ~0 (all ones).
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/291
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-The max310x driver sets port->membase to ~0 (all ones) to solve the same 
-problem.
+The patch looks good to me. It would be nice if we can combine all the patches
+related to flexible array handling in video driver in a single patch series. At
+the moment, there are multiple patches with similar subject.
 
-> By implementing the same change in our
-> driver, uart_configure_port() is now correctly executed.
-
-our driver -> this driver
-
-This changelog was really well describing the problem! :-)
-
-> Fixes: dfeae619d781 ("serial: sc16is7xx")
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > ---
-> I am not sure if this change is the best long-term solution to this
-> problem, and maybe uart_configure_port() itself could be modified to
-> take into account the fact that some devices have all three *base
-> values set to zero?
-
-Yeah, some other solution should be devised. Maybe we should add another 
-.iotype for thse kind of devices. But I'm fine with this for this fix.
-After editing the changelog, feel free to add:
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
-> Also, many drivers use port->iobase as an index, is it the correct way
-> to use it?
-
-"Many" for this and max310x? Besides that, uartlite.c has a comment which 
-says "mark port in use".
-
--- 
- i.
-
-
-> For example, for our driver, there was
-> commit 5da6b1c079e6 ("sc16is7xx: Set iobase to device index") with the
-> following explanation:
->     "Set the .iobase value to the relative index within the device to allow
->     infering the order through sysfs."
+>  drivers/media/platform/qcom/venus/hfi_msgs.c |  4 ++--
+>  drivers/media/platform/qcom/venus/hfi_msgs.h | 14 +++++++-------
+>  2 files changed, 9 insertions(+), 9 deletions(-)
 > 
->  drivers/tty/serial/sc16is7xx.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-> index af7e66db54b4..8a2fc6f89d36 100644
-> --- a/drivers/tty/serial/sc16is7xx.c
-> +++ b/drivers/tty/serial/sc16is7xx.c
-> @@ -1443,6 +1443,7 @@ static int sc16is7xx_probe(struct device *dev,
->  		s->p[i].port.fifosize	= SC16IS7XX_FIFO_SIZE;
->  		s->p[i].port.flags	= UPF_FIXED_TYPE | UPF_LOW_LATENCY;
->  		s->p[i].port.iobase	= i;
-> +		s->p[i].port.membase	= (void __iomem *)~0;
->  		s->p[i].port.iotype	= UPIO_PORT;
->  		s->p[i].port.uartclk	= freq;
->  		s->p[i].port.rs485_config = sc16is7xx_config_rs485;
-> 
---8323329-497861732-1685013436=:1738--
+> diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.c b/drivers/media/platform/qcom/venus/hfi_msgs.c
+> index df96db3761a7..6efd78606d9b 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_msgs.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_msgs.c
+> @@ -233,7 +233,7 @@ static void hfi_sys_init_done(struct venus_core *core, struct venus_inst *inst,
+>  		goto done;
+>  	}
+>  
+> -	rem_bytes = pkt->hdr.size - sizeof(*pkt) + sizeof(u32);
+> +	rem_bytes = pkt->hdr.size - sizeof(*pkt);
+>  	if (rem_bytes <= 0) {
+>  		/* missing property data */
+>  		error = HFI_ERR_SYS_INSUFFICIENT_RESOURCES;
+> @@ -434,7 +434,7 @@ static void hfi_session_init_done(struct venus_core *core,
+>  	if (!IS_V1(core))
+>  		goto done;
+>  
+> -	rem_bytes = pkt->shdr.hdr.size - sizeof(*pkt) + sizeof(u32);
+> +	rem_bytes = pkt->shdr.hdr.size - sizeof(*pkt);
+>  	if (rem_bytes <= 0) {
+>  		error = HFI_ERR_SESSION_INSUFFICIENT_RESOURCES;
+>  		goto done;
+> diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.h b/drivers/media/platform/qcom/venus/hfi_msgs.h
+> index 510513697335..8c2e17b0d36f 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_msgs.h
+> +++ b/drivers/media/platform/qcom/venus/hfi_msgs.h
+> @@ -50,7 +50,7 @@ struct hfi_msg_event_notify_pkt {
+>  	u32 event_id;
+>  	u32 event_data1;
+>  	u32 event_data2;
+> -	u32 ext_event_data[1];
+> +	u32 ext_event_data[];
+>  };
+>  
+>  struct hfi_msg_event_release_buffer_ref_pkt {
+> @@ -63,7 +63,7 @@ struct hfi_msg_sys_init_done_pkt {
+>  	struct hfi_pkt_hdr hdr;
+>  	u32 error_type;
+>  	u32 num_properties;
+> -	u32 data[1];
+> +	u32 data[];
+>  };
+>  
+>  struct hfi_msg_sys_pc_prep_done_pkt {
+> @@ -81,7 +81,7 @@ struct hfi_msg_session_init_done_pkt {
+>  	struct hfi_session_hdr_pkt shdr;
+>  	u32 error_type;
+>  	u32 num_properties;
+> -	u32 data[1];
+> +	u32 data[];
+>  };
+>  
+>  struct hfi_msg_session_end_done_pkt {
+> @@ -228,7 +228,7 @@ struct hfi_msg_session_parse_sequence_header_done_pkt {
+>  	struct hfi_session_hdr_pkt shdr;
+>  	u32 error_type;
+>  	u32 num_properties;
+> -	u32 data[1];
+> +	u32 data[];
+>  };
+>  
+>  struct hfi_msg_session_property_info_pkt {
+> @@ -247,7 +247,7 @@ struct hfi_msg_session_release_buffers_done_pkt {
+>  	struct hfi_session_hdr_pkt shdr;
+>  	u32 error_type;
+>  	u32 num_buffers;
+> -	u32 buffer_info[1];
+> +	u32 buffer_info[];
+>  };
+>  
+>  struct hfi_msg_sys_debug_pkt {
+> @@ -256,7 +256,7 @@ struct hfi_msg_sys_debug_pkt {
+>  	u32 msg_size;
+>  	u32 time_stamp_hi;
+>  	u32 time_stamp_lo;
+> -	u8 msg_data[1];
+> +	u8 msg_data[];
+>  };
+>  
+>  struct hfi_msg_sys_coverage_pkt {
+> @@ -264,7 +264,7 @@ struct hfi_msg_sys_coverage_pkt {
+>  	u32 msg_size;
+>  	u32 time_stamp_hi;
+>  	u32 time_stamp_lo;
+> -	u8 msg_data[1];
+> +	u8 msg_data[];
+>  };
+>  
+>  struct venus_core;
