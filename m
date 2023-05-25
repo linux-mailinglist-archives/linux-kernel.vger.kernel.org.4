@@ -2,125 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416C2710DCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1912710DD5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241484AbjEYOAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40358 "EHLO
+        id S241024AbjEYOB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241463AbjEYOAn (ORCPT
+        with ESMTP id S241401AbjEYOBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:00:43 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67897197;
-        Thu, 25 May 2023 07:00:29 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QRqSk6hDHz4f3kpH;
-        Thu, 25 May 2023 22:00:22 +0800 (CST)
-Received: from [10.174.179.247] (unknown [10.174.179.247])
-        by APP4 (Coremail) with SMTP id gCh0CgAHvbD3aW9k48jAKA--.54760S3;
-        Thu, 25 May 2023 22:00:24 +0800 (CST)
-Message-ID: <10e164cc-149f-baf6-de52-0b7d3c9468f6@huaweicloud.com>
-Date:   Thu, 25 May 2023 22:00:23 +0800
+        Thu, 25 May 2023 10:01:50 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3403E186;
+        Thu, 25 May 2023 07:01:12 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 9CC4D5FD51;
+        Thu, 25 May 2023 17:01:02 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1685023262;
+        bh=bpPitjV95L3ioVshJeARXDTfhB1q4NXomIjqNtoVQq0=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=g542J5yIh9b82dadzQ8Wzl6DX57oGV8BuX0mh2ze4Lxm+6swAF021XvoO8GlwxhT6
+         Pq7nf95oLmZnAL7nbuuLJrlbpPy+Ls62/SpbtMjJ1+zYrgZRm+mv6c9jEW7PG11L7K
+         MWOZeU+48k2eWJJPd5jBSlocvi6aBbF883AvvL3TtR5N3LA9lLGt0Mgy6Vufx4y4v0
+         UZeg7QdcWiUFvEEKDnq6/udXmN2PqmQeLhV2nI8+vkeOpEFcvawVE/FCbXyq4nxnEJ
+         tTtWSfufJTfkg06kJ5qH2vEyV2UYNmOpwFKsXlspxbSAfqDIQtzzNyjs8AnRfB8Y2s
+         AWQ3QJod3p4IA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 25 May 2023 17:01:01 +0300 (MSK)
+Date:   Thu, 25 May 2023 17:01:00 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor@kernel.org>, <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH v16 5/6] dt-bindings: clock: meson: add A1 Peripherals
+ clock controller bindings
+Message-ID: <20230525140100.mdzuhyfhxxkf4mx7@CAB-WSD-L081021>
+References: <20230523135351.19133-1-ddrokosov@sberdevices.ru>
+ <20230523135351.19133-6-ddrokosov@sberdevices.ru>
+ <20230525093736.naztwqlhvskujsoa@CAB-WSD-L081021>
+ <20230525-connected-skipper-442c6d0b52c1@wendy>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/3] md/raid10: fix incorrect done of recovery
-To:     Yu Kuai <yukuai1@huaweicloud.com>, linan666@huaweicloud.com,
-        song@kernel.org, shli@fb.com, allenpeng@synology.com,
-        alexwu@synology.com, bingjingc@synology.com, neilb@suse.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230522115449.2203939-1-linan666@huaweicloud.com>
- <20230522115449.2203939-3-linan666@huaweicloud.com>
- <801a3a11-9a2c-dca2-cec4-4a9c71d3afb6@huaweicloud.com>
-From:   Li Nan <linan666@huaweicloud.com>
-In-Reply-To: <801a3a11-9a2c-dca2-cec4-4a9c71d3afb6@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHvbD3aW9k48jAKA--.54760S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF48Xr13Gr48KF18tr4Dtwb_yoW8urykpw
-        s7JF9xX34UC3s3Aw1DAryUAFy5try8ta4UKr1xWa4aqry5XryqqFW8XF40gFyDXr4rtF4j
-        qw1jqrW3uFy7KaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
-        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v
-        4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x
-        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
-        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-        04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUFYFADUUUU
-X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230525-connected-skipper-442c6d0b52c1@wendy>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/25 11:25:00 #21349968
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Conor,
 
+Thank you for quick reply!
 
-在 2023/5/22 21:54, Yu Kuai 写道:
-> Hi,
+On Thu, May 25, 2023 at 02:16:02PM +0100, Conor Dooley wrote:
+> On Thu, May 25, 2023 at 12:37:36PM +0300, Dmitry Rokosov wrote:
+> > Hello Rob, Krzysztof and Conor,
+> > 
+> > Could you please take a look at this patch version? Before Rob marked
+> > this patchset with RvB at v13 -
+> > https://lore.kernel.org/linux-amlogic/168130720431.2218249.7671061964988064525.robh@kernel.org/
+> > 
+> > However, due to several comments from other maintainers, unfortunately,
+> > I had to rename the 'a1-clkc' controller to 'a1-peripherals-clkc' and
+> > remove Rob's RvB.
 > 
-> 在 2023/05/22 19:54, linan666@huaweicloud.com 写道:
->> From: Li Nan <linan122@huawei.com>
->>
->> Recovery will go to giveup and let chunks_skipped++ in
->> raid10_sync_request() if there are some bad_blocks, and it will return
->> max_sector when chunks_skipped >= geo.raid_disks. Now, recovery fail and
->> data is inconsistent but user think recovery is done, it is wrong.
->>
->> Fix it by set mirror's recovery_disabled and spare device shouln't be
->> added to here.
->>
->> Signed-off-by: Li Nan <linan122@huawei.com>
->> ---
->>   drivers/md/raid10.c | 16 +++++++++++++++-
->>   1 file changed, 15 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
->> index e21502c03b45..70cc87c7ee57 100644
->> --- a/drivers/md/raid10.c
->> +++ b/drivers/md/raid10.c
->> @@ -3303,6 +3303,7 @@ static sector_t raid10_sync_request(struct mddev 
->> *mddev, sector_t sector_nr,
->>       int chunks_skipped = 0;
->>       sector_t chunk_mask = conf->geo.chunk_mask;
->>       int page_idx = 0;
->> +    int error_disk = -1;
->>       /*
->>        * Allow skipping a full rebuild for incremental assembly
->> @@ -3386,7 +3387,18 @@ static sector_t raid10_sync_request(struct 
->> mddev *mddev, sector_t sector_nr,
->>           return reshape_request(mddev, sector_nr, skipped);
->>       if (chunks_skipped >= conf->geo.raid_disks) {
->> -        /* if there has been nothing to do on any drive,
->> +        pr_err("md/raid10:%s: %s fail\n", mdname(mddev),
->> +            test_bit(MD_RECOVERY_SYNC, &mddev->recovery) ?  "resync" 
->> : "recovery");
+> I dunno if the compatible change is worth dropping the tag for tbh.
+> That seems to be the only change, so I guess you can have my R-b instead
+> of Rob's...
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 > 
-> Line exceed 80 columns, and following.
->> +        if (error_disk >= 0 && !test_bit(MD_RECOVERY_SYNC, 
->> &mddev->recovery)) {
-> 
-> Resync has the same problem, right?
-> 
+> Cheers,
+> Conor.
 
-Yes. But I have no idea to fix it. md_error disk nor set 
-recovery_disabled is a good solution. So, just print error message now.
-Do you have any ideas?
+I was unaware of the official policy regarding the removal of RvB during
+renaming changes. I took a cautious approach to the situation :)
+
 -- 
-Thanks,
-Nan
-
+Thank you,
+Dmitry
