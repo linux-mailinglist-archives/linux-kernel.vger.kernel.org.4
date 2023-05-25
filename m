@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3AD710231
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 03:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973CB710235
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 03:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbjEYBJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 21:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
+        id S229652AbjEYBJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 21:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233370AbjEYBJ2 (ORCPT
+        with ESMTP id S236055AbjEYBJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 21:09:28 -0400
+        Wed, 24 May 2023 21:09:53 -0400
 Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B90212B;
-        Wed, 24 May 2023 18:09:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D946195;
+        Wed, 24 May 2023 18:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=9d6+XEpsXz1iSbOIpQ0TAWr8mqTs2ADpccgDRm6N8ao=; b=dgiCj6cqvvyR2Bd1CtNT4gL5Fo
-        A3ae7YYNjjeXYj4R6zlN6X2TkWlRE9/Ce7EDlWSSjazyEPLlUWY08V+dXGRVY0shDm//2wGGu1fmX
-        ka+NdCivPbTNAwMze/wWvS8fE8jjrDDyD6kSG9eL5y9xdyU4UZPWQhCvjp5aRel3kh/A=;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=1twlln04iUJCd1RnFHrTqmCDFam+o1/kIj+SDc7WV1c=; b=pT
+        BSYaS7GJdDpwhaQe0V/DNlowvBPndI3cCOv05bsMg28b10rZJ3wsKoa9NGYku7RHihqy5JuFUCFJm
+        fpyZvt20nQVI/xAohUFbV4a4KM4kX93k0XWMp2+ZF9fD9WemyagoxzG2G6rFHkKI7i3sU5xoroQT3
+        pj008PC1k2F1PTg=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
         (envelope-from <andrew@lunn.ch>)
-        id 1q1zTk-00DqwL-4J; Thu, 25 May 2023 03:09:20 +0200
-Date:   Thu, 25 May 2023 03:09:20 +0200
+        id 1q1zU4-00DqxB-ID; Thu, 25 May 2023 03:09:40 +0200
+Date:   Thu, 25 May 2023 03:09:40 +0200
 From:   Andrew Lunn <andrew@lunn.ch>
 To:     Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
 Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
@@ -35,15 +36,16 @@ Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
         ramon.nordin.rodriguez@ferroamp.se, horatiu.vultur@microchip.com,
         Woojung.Huh@microchip.com, Nicolas.Ferre@microchip.com,
         Thorsten.Kummermehr@microchip.com
-Subject: Re: [PATCH net-next v3 4/6] net: phy: microchip_t1s: fix reset
- complete status handling
-Message-ID: <b55f2483-8d8b-4eae-b224-7852c1f0ecdd@lunn.ch>
+Subject: Re: [PATCH net-next v3 6/6] net: phy: microchip_t1s: add support for
+ Microchip LAN865x Rev.B0 PHYs
+Message-ID: <45ca543c-b0ec-4c32-a942-72da31b29fc7@lunn.ch>
 References: <20230524144539.62618-1-Parthiban.Veerasooran@microchip.com>
- <20230524144539.62618-5-Parthiban.Veerasooran@microchip.com>
+ <20230524144539.62618-7-Parthiban.Veerasooran@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230524144539.62618-5-Parthiban.Veerasooran@microchip.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230524144539.62618-7-Parthiban.Veerasooran@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -54,11 +56,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:15:37PM +0530, Parthiban Veerasooran wrote:
-> As per the datasheet DS-LAN8670-1-2-60001573C.pdf, the Reset Complete
-> status bit in the STS2 register has to be checked before proceeding to
-> the initial configuration. Reading STS2 register will also clear the
-> Reset Complete interrupt which is non-maskable.
+On Wed, May 24, 2023 at 08:15:39PM +0530, Parthiban Veerasooran wrote:
+> Add support for the Microchip LAN865x Rev.B0 10BASE-T1S Internal PHYs
+> (LAN8650/1). The LAN865x combines a Media Access Controller (MAC) and an
+> internal 10BASE-T1S Ethernet PHY to access 10BASE‑T1S networks. As
+> LAN867X and LAN865X are using the same function for the read_status,
+> rename the function as lan86xx_read_status.
 > 
 > Signed-off-by: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
 
