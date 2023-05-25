@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE36A71039B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A628E71039D
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjEYECv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S237435AbjEYEDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjEYECs (ORCPT
+        with ESMTP id S237470AbjEYEDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:02:48 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54649135
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:02:47 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64d24136685so413506b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:02:47 -0700 (PDT)
+        Thu, 25 May 2023 00:03:09 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B403189
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:03:04 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d3e5e5980so1966418b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 21:03:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1684987367; x=1687579367;
+        d=shopee.com; s=shopee.com; t=1684987384; x=1687579384;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ANsIwyslEqWqt/AnM3EiaC6NohGcLnN3qIazUJUVzP4=;
-        b=NQJaaIdzuOmU2ZfoUS/HfLXDpN2lpDz6rxgmnio+kZPpgUMm8yFkHv0hT8FTIcZdVt
-         Ro2TjOvsYI8Sjxrlcl9/rf95KDbQVHMgA1b5mYpT8p72lDYlZA1C5tZy72BZcjaAxdWv
-         5LloYVYAxTGN2gD10YUAommoIjdIy/149C79MorSY1AtC/EmTjZy/5Hg0tgXhtqZ/Adr
-         CiNne8GdcsARkuTNHNT6MOFjZ+iM6Ydix0MCy/3hqzvExsAklMKN0t5GFNMkV3NW//HI
-         n07UXJRmrOF6W2ZNXMqSbRAxdQBg4fDRbECDjakujwM97aOUZD9iU/igqiVV9oKC9mxF
-         Ghjg==
+        bh=WOXFBlEjJcJ6V9YFOI8yptpCpDKRZLgBqb3BFNypKaI=;
+        b=VO447nLYcNslTB95FdoOTJFuskVQk5jMcKcrP02WXeDjykcP5O7h70FE25NHPd1yFv
+         V4lah2jbdvfrDYCxZH9TSktvenzbogw/teitAJ6Hd43cc2hQAZYnrAzlFxSOaTCqcZEY
+         DE9HcPswNSY/ZvpSIXfcZEEA/RDdMPVCTj3R3LVLJ2T7g66Bh/OftP86auFWO43QYn0x
+         9c8fP4xxNH9Yg69myVOoct77jVdwhD3mOs4qiY1whhlIA9PIqoV5lxOJ2OkQOyIH1uXp
+         UrrmDHERBpGc/UpuyXoMe5tVDKr3DH9Rbn21GdqzSaujFFDFbRjBt4LQxuR02H04bcKR
+         PtUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684987367; x=1687579367;
+        d=1e100.net; s=20221208; t=1684987384; x=1687579384;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ANsIwyslEqWqt/AnM3EiaC6NohGcLnN3qIazUJUVzP4=;
-        b=V3nxlHfZg+9F8m+NXlsjC0Szs6tR/e8rgBtt1KauIlgRnHPb9s73vge3AcwwUXKZcq
-         kDZnuNMH78yH/VzvrZ+rpOjOE/pBK9fwRVc9pq2MuMcYjC70xMoRmPVCB1F45w//exul
-         bEbbS0suDj28zNGeanUS0fSI6v7+a5w8pJcCEYHqJQxyCTr6ED5p4Hf57pfh09BhoVEm
-         3rdV9aZAnFgzQWaQBnbB8oYTusCRvPxIzvQXYH4FoLjDIIxzsXb5OGOBY6aD1sMhk/GD
-         JmXBrNGDIvCVaSxIRGAW9Qw6o6+kOBkkvbZpoD5zmwdvrXC8at+5+laDt+mRkfePzyRo
-         DSMw==
-X-Gm-Message-State: AC+VfDwFgKCziULzV2w/Q8bnvC51xc1ktgPSeclSu6a+wTKISLUR93qN
-        7gQ/t1BDbjo0E0D5T80aeueaIB2HVLlHgaqLdUktl63A
-X-Google-Smtp-Source: ACHHUZ4M33VfkiEYeZxyk70nhvhOVHqK3x9PsgMDApROp+V/I6KHRI3r1n/c1Qap5fKrlvpfXIq1fA==
-X-Received: by 2002:a05:6a20:748e:b0:10c:b9ed:6a3f with SMTP id p14-20020a056a20748e00b0010cb9ed6a3fmr1539402pzd.7.1684987366781;
-        Wed, 24 May 2023 21:02:46 -0700 (PDT)
+        bh=WOXFBlEjJcJ6V9YFOI8yptpCpDKRZLgBqb3BFNypKaI=;
+        b=LqZ0d49cqdBwqxfQVmwQCPcdo/2fAXCUWb44MAB2oRYJR1a1pgMe59YHkOWW9ICuVL
+         MmEsJ7RN/3rkXbF1cy49bVcuTaPUCJUESea+CbCuvuGNZFNF5uOQyzLVvngmoO8HxIr6
+         CRUVZ2tzMCCa0d5fqTZ7oqYPxBQiqsfo9vrvPNcC0Af7lf9VCX+uvKLbYV3MEVuDEQNj
+         gPxjzITgu/cbT1PbpL9+E6PlIxc+0yGZdFW2khNrS1/F3cFJDRVQ/C9T6XMrQjnMaGPv
+         MTe4t+eJ7WvKY/xeY0cp2QSnkIHCU5YdCdhC2ZRMee2x8liZF9tuyOMqQb7p3iIS9886
+         6Vew==
+X-Gm-Message-State: AC+VfDw546u+jS1XaQJtKINdUJksswbCu+MJBYq38i6bVNbqbHsZ+szH
+        0SrIKWLIAsrFXfcVdvYPuKzotQ==
+X-Google-Smtp-Source: ACHHUZ5KDLvsnPMttA35NNkIYcWPtfzYRaU6CCRv6/FNJJk83SuplTOTM88OJQEdxRwdyk+G+FcUBA==
+X-Received: by 2002:a05:6a20:a115:b0:100:b137:3563 with SMTP id q21-20020a056a20a11500b00100b1373563mr19314283pzk.32.1684987384404;
+        Wed, 24 May 2023 21:03:04 -0700 (PDT)
 Received: from ubuntu-hf2.default.svc.cluster.local ([101.127.248.173])
-        by smtp.gmail.com with ESMTPSA id i11-20020aa7908b000000b0064c56d04316sm189916pfa.193.2023.05.24.21.02.45
+        by smtp.gmail.com with ESMTPSA id i11-20020aa7908b000000b0064c56d04316sm189916pfa.193.2023.05.24.21.03.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 May 2023 21:02:46 -0700 (PDT)
+        Wed, 24 May 2023 21:03:04 -0700 (PDT)
 From:   Haifeng Xu <haifeng.xu@shopee.com>
 To:     akpm@linux-foundation.org
 Cc:     mhocko@suse.com, david@redhat.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
-Subject: [PATCH 1/3] mm/mm_init.c: remove comments in zone_spanned_pages_in_node() and zone_absent_pages_in_node()
-Date:   Thu, 25 May 2023 04:01:48 +0000
-Message-Id: <20230525040150.1588-1-haifeng.xu@shopee.com>
+Subject: [PATCH 2/3] mm/mm_init.c: account absent_page only if spanned_page is non-zero
+Date:   Thu, 25 May 2023 04:01:49 +0000
+Message-Id: <20230525040150.1588-2-haifeng.xu@shopee.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -69,35 +69,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 03e85f9d5f1f ("mm/page_alloc: Introduce free_area_init_core_hotplug"),
-free_area_init_node() doesn't get called in hotplug path anymore, so
-remove the comments related to it.
+If spanned_page is zero, it's pointless to calculate the number of
+absent_page. Also, the real size can be assigned to zero directly.
 
 Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
 ---
- mm/mm_init.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ mm/mm_init.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
 diff --git a/mm/mm_init.c b/mm/mm_init.c
-index 7f7f9c677854..cf55bba04b23 100644
+index cf55bba04b23..898af4eb9ce2 100644
 --- a/mm/mm_init.c
 +++ b/mm/mm_init.c
-@@ -1174,7 +1174,6 @@ static unsigned long __init zone_absent_pages_in_node(int nid,
- 	unsigned long zone_start_pfn, zone_end_pfn;
- 	unsigned long nr_absent;
+@@ -1260,31 +1260,30 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
+ 		struct zone *zone = pgdat->node_zones + i;
+ 		unsigned long zone_start_pfn, zone_end_pfn;
+ 		unsigned long spanned, absent;
+-		unsigned long size, real_size;
++		unsigned long real_size;
  
--	/* When hotadd a new node from cpu_up(), the node should be empty */
- 	if (!node_start_pfn && !node_end_pfn)
- 		return 0;
+ 		spanned = zone_spanned_pages_in_node(pgdat->node_id, i,
+ 						     node_start_pfn,
+ 						     node_end_pfn,
+ 						     &zone_start_pfn,
+ 						     &zone_end_pfn);
+-		absent = zone_absent_pages_in_node(pgdat->node_id, i,
+-						   node_start_pfn,
+-						   node_end_pfn);
+-
+-		size = spanned;
+-		real_size = size - absent;
+-
+-		if (size)
++		if (spanned) {
++			absent = zone_absent_pages_in_node(pgdat->node_id, i,
++							   node_start_pfn,
++							   node_end_pfn);
++			real_size = spanned - absent;
+ 			zone->zone_start_pfn = zone_start_pfn;
+-		else
++		} else {
++			real_size = 0;
+ 			zone->zone_start_pfn = 0;
+-		zone->spanned_pages = size;
++		}
++		zone->spanned_pages = spanned;
+ 		zone->present_pages = real_size;
+ #if defined(CONFIG_MEMORY_HOTPLUG)
+ 		zone->present_early_pages = real_size;
+ #endif
  
-@@ -1227,7 +1226,7 @@ static unsigned long __init zone_spanned_pages_in_node(int nid,
- {
- 	unsigned long zone_low = arch_zone_lowest_possible_pfn[zone_type];
- 	unsigned long zone_high = arch_zone_highest_possible_pfn[zone_type];
--	/* When hotadd a new node from cpu_up(), the node should be empty */
-+
- 	if (!node_start_pfn && !node_end_pfn)
- 		return 0;
+-		totalpages += size;
++		totalpages += spanned;
+ 		realtotalpages += real_size;
+ 	}
  
 -- 
 2.25.1
