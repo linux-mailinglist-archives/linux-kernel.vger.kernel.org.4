@@ -2,155 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E137112F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9757112F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234226AbjEYR4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S239472AbjEYR55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbjEYR4R (ORCPT
+        with ESMTP id S232561AbjEYR54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:56:17 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E40BB6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:56:15 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-2536e522b5cso8086a91.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685037375; x=1687629375;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XbZfqBItcXzKLk1nfsDlp5Oogh2CcWLWMFdBRAuDk8A=;
-        b=1Fu2PdpCfqH0lSpeQe9fNQSos+bXML3EY2SUDzAa3hOINxqpZBiwx+MKgAXVqSW3Mf
-         MW7fpm4nqWSK2vXx3qvWinUTBWg7a9vccLx5zjdoUU4QTqUpXQq0Cx8SEyyWG85HYd/y
-         5kl7Y7yefIzp6JZhL1XHcqCn/84W0wDSnSG7xOdPYS6bKI1jZQBfUCkWFKeCtb5Kmdr4
-         8HY43RvH5ZpeqfR3AFXcThEpJ516hVdsT60gZ/C+0wXpjuO0XBywIqv8zs6gikrGO+VE
-         VATFnSylOGmFtIWVBMuC8HB7mydZsgzQ0yFx5WAscXShL+wBFMj8nK1l28M7hlQG4HXl
-         e99w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685037375; x=1687629375;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XbZfqBItcXzKLk1nfsDlp5Oogh2CcWLWMFdBRAuDk8A=;
-        b=b4eQ/Y7oqg+hFySi20lCfsBl5fCO8tM9qCQClOaNEdU1XZS3hEJTHKjzwIn9vvl/ye
-         G0KoiTr4POR8u5Wd3MMg5X+AAxWTSRg/UD6CaeruTlX2JTlL2+48Ba6HmfWHP6ocxLGM
-         Pudg5w5uyTzusyTJmjOcStVWLf7FHIxZkXWodhswdS9eSSQn06eMAphF972EKTxequv3
-         NhZ8OpzkVfcVCgplIN2dVqddGnDszUB9SArtrzprTRlShTWzDyx3ceFx8rdFni754bi3
-         BXL6kW2FhXR8xDnsZOcoJq7sxt2cdM+6kMlbLCgxry4QrktDW28p7zLICf01z7Opb3Gm
-         uaQg==
-X-Gm-Message-State: AC+VfDzFFMEBznH21QqVbdi1x1ZVeNmhlpaIJfvhsCH0VyBZZHOFxWtd
-        sbWJNWTA2uvRw3lreMXD8o9vBJEWrgg=
-X-Google-Smtp-Source: ACHHUZ4JHey+mOcsGiVcMsGqCzw8ThMYj8C/n07M15B/TbYvFT//nOZBrO0Oqn5wlK0fWMOwcq0sWS2EXSo=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:fc4:b0:24d:fb1d:106d with SMTP id
- gd4-20020a17090b0fc400b0024dfb1d106dmr537997pjb.2.1685037374878; Thu, 25 May
- 2023 10:56:14 -0700 (PDT)
-Date:   Thu, 25 May 2023 10:56:13 -0700
-In-Reply-To: <20230420104622.12504-5-ljrcore@126.com>
-Mime-Version: 1.0
-References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-5-ljrcore@126.com>
-Message-ID: <ZG+hPaVxYcBq8S5o@google.com>
-Subject: Re: [PATCH v2 4/7] KVM: x86/pmu: Add documentation for fixed ctr on
- PMU filter
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jinrong Liang <ljr.kernel@gmail.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 13:57:56 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99410194;
+        Thu, 25 May 2023 10:57:54 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PG0EXt019837;
+        Thu, 25 May 2023 17:57:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=zqLmtibLKU7869PGFrgjEJRIXzWm6C1SWM2UnNl/rDs=;
+ b=hbvENCXCI1I4YJ+Nr98RcWYketC7X6uPMRkQa8mvU0H02Tx4+xd6POkEikroNmb/KSlH
+ LhVUSEXIaVdVAy/v+EXdqbwdUatPp5mhcxifCCKMaWSiTeJa3BR8afcSUCJqVFM8NrNT
+ j1gl4UM7WB1RS49Ko+iuh3nJ8xrhOjv/Ro4cO4ki2lp6UjOfryJwIEmYp3MYF/BXI80Y
+ TwQjCCTAIoihU1206g7BtaXzC6qyZize5utTfDLc3CSChYHOwna8aWXZ2GjtVC9G0Jqv
+ 2ZfOcZBUvjzR3+OyqBhXnGRtr+RKru79QhIdr1TjdD/yilX5Wk1l1kW8Td2XQSoUTbUI mQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt47es6ag-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 17:57:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PHvGMT027813
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 17:57:16 GMT
+Received: from [10.71.110.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
+ 2023 10:57:16 -0700
+Message-ID: <7deff127-4c6d-1f59-33a8-f44eea86bacd@quicinc.com>
+Date:   Thu, 25 May 2023 10:57:15 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Freedreno] [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
+Content-Language: en-US
+To:     Leonard Lausen <leonard@lausen.nl>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>
+CC:     <freedreno@lists.freedesktop.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        <regressions@lists.linux.dev>, David Airlie <airlied@gmail.com>,
+        "Nikita Travkin" <nikita@trvn.ru>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>, <linux-arm-msm@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Johan Hovold <johan+linaro@kernel.org>
+References: <e547edf4-1b48-5d12-1600-45f78e7cab49@quicinc.com>
+ <1345a125-f745-4fe3-0f5e-bfe84225958d@quicinc.com>
+ <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
+ <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
+ <20230508021536.txtamifw2vkfncnx@ripper>
+ <3802269cd54ce105ef6dece03b1b9af575b4fa06@lausen.nl>
+ <ad351c02-1c29-3601-53e8-f8cdeca2ac63@linaro.org>
+ <49d175ec16e3f65a18265063e51092ee8d0d79c1@lausen.nl>
+ <f2d1bb37-ea83-4d5d-6ef5-ae84c26d6ac1@quicinc.com>
+ <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tvNJ97bIjRQRLiNJT5nPHuQUXfBH6D4N
+X-Proofpoint-ORIG-GUID: tvNJ97bIjRQRLiNJT5nPHuQUXfBH6D4N
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_10,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ suspectscore=0 clxscore=1015 adultscore=0 bulkscore=0 malwarescore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250150
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023, Jinrong Liang wrote:
-> From: Jinrong Liang <cloudliang@tencent.com>
-> 
-> From: Jinrong Liang <cloudliang@tencent.com>
-> 
-> Update the documentation for the KVM_SET_PMU_EVENT_FILTER ioctl
-> to include a detailed description of how fixed performance events
-> are handled in the pmu filter. The action and fixed_counter_bitmap
-> members of the pmu filter to determine whether fixed performance
-> events can be programmed by the guest. This information is helpful
-> for correctly configuring the fixed_counter_bitmap and action fields
-> to filter fixed performance events.
-> 
-> Suggested-by: Like Xu <likexu@tencent.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304150850.rx4UDDsB-lkp@intel.com
-> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
-> ---
 
-Please post this separately from the selftests changes.
-
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index a69e91088d76..b5836767e0e7 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -5122,6 +5122,27 @@ Valid values for 'action'::
->    #define KVM_PMU_EVENT_ALLOW 0
->    #define KVM_PMU_EVENT_DENY 1
->  
-> +Via this API, KVM userspace can also control the behavior of the VM's fixed
-> +counters (if any) by configuring the "action" and "fixed_counter_bitmap" fields.
-> +
-> +Specifically, KVM follows the following pseudo-code when determining whether to
-> +allow the guest FixCtr[i] to count its pre-defined fixed event::
-> +
-> +  FixCtr[i]_is_allowed = (action == ALLOW) && (bitmap & BIT(i)) ||
-> +    (action == DENY) && !(bitmap & BIT(i));
-> +  FixCtr[i]_is_denied = !FixCtr[i]_is_allowed;
-> +
-> +Note once this API interface is called, the default zero value of the field
-
-No, there is no "default" value.  Userspace provides the exact value.  The KVM
-*selftest* clears fixed_counter_bitmap in all cases, but there is no default
-anywhere.
-
-> +"fixed_counter_bitmap" will implicitly affect all fixed counters, even if it's
-
-There is no implicit behavior, userspace very explicitly provides fixed_counter_bitmap.
-
-> +expected to be used only to control the events on generic counters.
-
-I would rather phrase this as:
-
----
-KVM always consumes fixed_counter_bitmap, it's userspace's responsibility to
-ensure fixed_counter_bitmap is set correctly, e.g. if userspace wants to define
-a filter that only affects general purpose counters.
----
-
-> +In addition, pre-defined performance events on the fixed counters already have
-> +event_select and unit_mask values defined, which means userspace can also
-> +control fixed counters by configuring "action"+ "events" fields.
+On 5/24/2023 5:58 AM, Leonard Lausen wrote:
+>>>>>>> [  275.025497] [drm:dpu_encoder_phys_vid_wait_for_commit_done:488]
+>>>>>>> [dpu error]vblank timeout
+>>>>>>> [  275.025514] [drm:dpu_kms_wait_for_commit_done:510] [dpu error]wait
+>>>>>>> for commit done returned -110
+>>>>>>> [  275.064141] [drm:dpu_encoder_frame_done_timeout:2382] [dpu
+>>>>>>> error]enc33 frame done timeout
+>>>>> This is a different crash but the root-cause of both the issues is the
+>>>>> bridge hpd_enable/disable series.
+>>>>>
+>>>>> https://patchwork.freedesktop.org/patch/514414/
+>>> Yes, the new patch to fix this issue is here
+>>>
+>>> https://patchwork.freedesktop.org/patch/538601/?series=118148&rev=3
+>>>
+>>> Apologies if you were not CCed on this, if a next version is CCed,
+>>> will ask kuogee to cc you.
+>>>
+>>> Meanwhile, will be great if you can verify if it works for you and
+>>> provide Tested-by tags.
+>> Hi Leonard,
+>>
+>> I had  cc you with v5 patches.
+>>
+>> Would you please verify it.
+> Hi Kuogee,
 >
-> +When there is a contradiction between these two polices, the fixed performance
-> +counter will only follow the rule of the pseudo-code above.
+> thank you. Verified the v6 patch fixes the regression when ported to
+> 6.3.3. One non-fatal issue remains: Suspending and resuming the system
+> while USB-C DP monitor is connected triggers an error, though the system
+> recovers within a second without the need to unplug the cable.
+>
+> [drm:drm_mode_config_helper_resume] *ERROR* Failed to resume (-107)
+>
+>
+> dmesg snippet related to the suspend below
+>
+>
+> [  197.845110] usb 2-1.4.4: reset SuperSpeed USB device number 12 using xhci-hcd
+> [  198.235191] [drm:drm_mode_config_helper_resume] *ERROR* Failed to resume (-107)
 
-This is unnecessary vague.  I think what you're saying is, with a slight reword
-of the first paragraph too:
+Hi Leonard,
 
----
-Note, the "events" field also applies to fixed counters' hardcoded event_select
-and unit_mask values.  "fixed_counter_bitmap" has higher priority than "events"
-if there is a contradiction between the two.
----
+I did not see this problem at my setup (Kodiak) during suspend/resume.
+
+Will investigate more on Trogdor device.
+
+Thanks,
+
+
+> [  198.528638] OOM killer enabled.
+> [  198.531866] Restarting tasks ...
+> [  198.531994] usb 1-1.4.4.1: USB disconnect, device number 27
+> [  198.532223] usb 1-1.4.3: USB disconnect, device number 23
+> [  198.532509] usb 1-1.4.2.1: USB disconnect, device number 29
+> [  198.534805] r8152-cfgselector 2-1.4.4.2: USB disconnect, device number 13
+> [  198.535444] done.
+> [  198.535536] usb 1-1.1: USB disconnect, device number 15
+> [  198.567811] random: crng reseeded on system resumption
+> [  198.583431] PM: suspend exit
