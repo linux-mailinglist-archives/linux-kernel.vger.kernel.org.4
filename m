@@ -2,147 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAE7710A6F
+	by mail.lfdr.de (Postfix) with ESMTP id 9B920710A70
 	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240710AbjEYLAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        id S240845AbjEYLA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234095AbjEYLA1 (ORCPT
+        with ESMTP id S240334AbjEYLAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:00:27 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFB990;
-        Thu, 25 May 2023 04:00:25 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id D04E3C01E; Thu, 25 May 2023 13:00:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1685012423; bh=JQDvJGpr01tErYOWTD112V7qZmWwoz3rxBUiJkx/XY0=;
+        Thu, 25 May 2023 07:00:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0A7C5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:00:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D09EC61382
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:00:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0617C433EF;
+        Thu, 25 May 2023 11:00:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685012431;
+        bh=oJ6QgPbGXWqRoqlX01O23tO6hItbrjZO+12l/zxII90=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XVbiXntQJQAB9jBeMjoIxh15L/J9no3h7Q5iaUpPiL7SdjGK9UM4ESTVUMkA7m7n1
-         H7luhdpum0LXIg+4aePf2w/UaRRCnHRBn0/eCCadCPsfLjY4BgphNuvGkRAieuDB9i
-         U0Q1op1WOleHf/aeIs5LWJdU9ZJAmHv96g+DAGDZco+NFcLaVJKRxF0k5SsENjK9fw
-         384xheiykSYqUuT1nTXpxIDNq/EEEbPDYdNH5TpSzF2UDke10p6GlnEVLWOlzDn6rG
-         TZSToZV6Tx0ToBvVsdvOCoVbG15iNvmrtAxiCChY0QtrH1L/SvUwSxeU7BNz8RQ8L+
-         hYgh/Rn6F/QZQ==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 1D5D8C009;
-        Thu, 25 May 2023 13:00:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1685012422; bh=JQDvJGpr01tErYOWTD112V7qZmWwoz3rxBUiJkx/XY0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=23R92lXpFU6Ei2o2sHaoHlMJu0YJRpJSoXlNQHKa+MEW3T1Ie4+5Jq9f0f3lTVfpf
-         tw08T6kgwMKrNb8+qMJaMIUNFGn9sd+0mxYcu/9cxdzUCT+R77I96oIH8lqO1dCQzq
-         Q/sxi/RRwQsTB567v50h0701MhoiIHoPqpwV4Wznu1JmkaK2cc2o83Ui6AnJ3MFFw0
-         mu1QBwVe1vALHgwB6gC9vqTbu4rQ6ajxRFiak5NP/uEhtfJS1M3LbQ5+XD52kDu7GU
-         CBpk5myFtJzFM0Jd1lCStsajpiSqLHyeQpesSqC8LafounMb/XaNOTjulaSDf/Tr/P
-         FMy4Xq8L9m5yg==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id fb0c6ca8;
-        Thu, 25 May 2023 11:00:17 +0000 (UTC)
-Date:   Thu, 25 May 2023 20:00:02 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] fs: split off vfs_getdents function of getdents64
- syscall
-Message-ID: <ZG8_su9Pq1oI-t5s@codewreck.org>
-References: <ZG0slV2BhSZkRL_y@codewreck.org>
- <ZG0qgniV1DzIbbzi@codewreck.org>
- <20230524-monolog-punkband-4ed95d8ea852@brauner>
- <ZG6DUfdbTHS-e5P7@codewreck.org>
- <20230525-funkanstalt-ertasten-a43443d045c8@brauner>
+        b=q+2qRjDKb+rSiGR3JP9GLEgCuUic1R3fHUdw1ErP/R+PcPkw1BFOyuIe6pyFnh/p2
+         P79a5BXsNGnn4BoYpKbmmv+uVomwIaKbx1B/ds4oolpFWgHHvNClzloWoZ7GTH6uQr
+         p/gA8KRJEP2g3pICPKA38Y+NwSSCVvLfQzFBGgQrEm1wojL2MGrJQ2T+m7PdgAcXSr
+         ie81kGfM/a+N6LQw/r3DNaR7bZ7cEQds8+UMTRUSOJPcHcsbARIlnpS1q1ysWE7WqF
+         uUTH8S5I5kBFo+on3XK6HNqOHkZMeS1fQTAgc4rUHgaPMeNpc7c99xmU39nXPG4lV1
+         tOBH9NN9be7Ig==
+Date:   Thu, 25 May 2023 12:00:26 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Milo Spadacini <milo.spadacini@gmail.com>
+Cc:     heiko@sntech.de, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] driver: mfd: admit rk805 driver registration without
+ interrupt support
+Message-ID: <20230525110026.GG9691@google.com>
+References: <20230525070011.23761-1-milo.spadacini@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230525-funkanstalt-ertasten-a43443d045c8@brauner>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230525070011.23761-1-milo.spadacini@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Brauner wrote on Thu, May 25, 2023 at 11:22:08AM +0200:
-> > What was confusing is that default_llseek updates f_pos under the
-> > inode_lock (write), and getdents also takes that lock (for read only in
-> > shared implem), so I assumed getdents also was just protected by this
-> > read lock, but I guess that was a bad assumption (as I kept pointing
-> > out, a shared read lock isn't good enough, we definitely agree there)
-> > 
-> > 
-> > In practice, in the non-registered file case io_uring is also calling
-> > fdget, so the lock is held exactly the same as the syscall and I wasn't
+Do you mean "Omit"?
+
+On Thu, 25 May 2023, Milo Spadacini wrote:
+
+> rk805 use interrupt only for "rk808-rtc" and "rk805-pwrkey" drivers.
+
+RK805 only uses interrupts for ...
+
+> On custom board these drivers could be not used and the irq gpio
+
+"boards"
+"IRQ GPIQs"
+
+> could be not connected.
+
+"are not connected"
+
+> Force the usage of a not used gpio, that could be floating, could cause
+> spurious interrupt.
+
+Please rephrase this.  I can't quite make it out to make suggestions.
+
+> Signed-off-by: Milo Spadacini <milo.spadacini@gmail.com>
+> ---
+>  drivers/mfd/rk808.c | 39 +++++++++++++++++++++++++++------------
+>  1 file changed, 27 insertions(+), 12 deletions(-)
 > 
-> No, it really isn't. fdget() doesn't take f_pos_lock at all:
+> diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk808.c
+> index e00da7c7e3b1..ae33be90b312 100644
+> --- a/drivers/mfd/rk808.c
+> +++ b/drivers/mfd/rk808.c
+> @@ -643,6 +643,7 @@ MODULE_DEVICE_TABLE(of, rk808_of_match);
+>  static int rk808_probe(struct i2c_client *client,
+>  		       const struct i2c_device_id *id)
+>  {
+> +	struct irq_domain * rk808_irq_domain = NULL;
+
+Drop the ' ' after the '*'.
+
+>  	struct device_node *np = client->dev.of_node;
+>  	struct rk808 *rk808;
+>  	const struct rk808_reg_data *pre_init_reg;
+> @@ -692,7 +693,11 @@ static int rk808_probe(struct i2c_client *client,
+>  		pre_init_reg = rk805_pre_init_reg;
+>  		nr_pre_init_regs = ARRAY_SIZE(rk805_pre_init_reg);
+>  		cells = rk805s;
+> -		nr_cells = ARRAY_SIZE(rk805s);
+> +		if (client->irq)
+> +			nr_cells = ARRAY_SIZE(rk805s);
+> +		else
+> +			nr_cells = ARRAY_SIZE(rk805s) - 2;
+
+What's 2?  Please define it.
+
+Does this rely on the ordering of rk805s?  Seems fragile.
+
+> +
+>  		break;
+>  	case RK808_ID:
+>  		rk808->regmap_cfg = &rk808_regmap_config;
+> @@ -734,19 +739,28 @@ static int rk808_probe(struct i2c_client *client,
+>  		return PTR_ERR(rk808->regmap);
+>  	}
+>  
+> -	if (!client->irq) {
+> +	if (client->irq) {
+> +
+> +		ret = regmap_add_irq_chip(rk808->regmap, client->irq,
+> +					  IRQF_ONESHOT, -1,
+> +					  rk808->regmap_irq_chip, &rk808->irq_data);
+> +		if (ret) {
+> +			dev_err(&client->dev, "Failed to add irq_chip %d\n", ret);
+> +			return ret;
+> +		}
+> +
+> +		rk808_irq_domain = regmap_irq_get_domain(rk808->irq_data);
+> +	}
+> +	else if (rk808->variant == RK805_ID)
+
+else goes on the line above.
+> +	{
+> +		dev_warn(&client->dev, "Skip interrupt support, no core IRQ\n");
+> +	}
+> +	else
+> +	{
+>  		dev_err(&client->dev, "No interrupt support, no core IRQ\n");
+>  		return -EINVAL;
+>  	}
+>  
+> -	ret = regmap_add_irq_chip(rk808->regmap, client->irq,
+> -				  IRQF_ONESHOT, -1,
+> -				  rk808->regmap_irq_chip, &rk808->irq_data);
+> -	if (ret) {
+> -		dev_err(&client->dev, "Failed to add irq_chip %d\n", ret);
+> -		return ret;
+> -	}
+> -
+>  	for (i = 0; i < nr_pre_init_regs; i++) {
+>  		ret = regmap_update_bits(rk808->regmap,
+>  					pre_init_reg[i].addr,
+> @@ -762,7 +776,7 @@ static int rk808_probe(struct i2c_client *client,
+>  
+>  	ret = devm_mfd_add_devices(&client->dev, PLATFORM_DEVID_NONE,
+>  			      cells, nr_cells, NULL, 0,
+> -			      regmap_irq_get_domain(rk808->irq_data));
+> +			      rk808_irq_domain);
+>  	if (ret) {
+>  		dev_err(&client->dev, "failed to add MFD devices %d\n", ret);
+>  		goto err_irq;
+> @@ -796,7 +810,8 @@ static void rk808_remove(struct i2c_client *client)
+>  {
+>  	struct rk808 *rk808 = i2c_get_clientdata(client);
+>  
+> -	regmap_del_irq_chip(client->irq, rk808->irq_data);
+> +	if (client->irq)
+> +		regmap_del_irq_chip(client->irq, rk808->irq_data);
+>  
+>  	/**
+>  	 * pm_power_off may points to a function from another module.
+> -- 
+> 2.34.1
 > 
-> fdget()
-> -> __fdget()
->    -> __fget_light()
->       -> __fget()
->          -> __fget_files()
->             -> __fget_files_rcu()
-
-Ugh, I managed to not notice that I was looking at fdget_pos and that
-it's not the same as fdget by the time I wrote two paragraphs... These
-functions all have too many wrappers and too similar names for a quick
-look before work.
-
-> If that were true then any system call that passes an fd and uses
-> fdget() would try to acquire a mutex on f_pos_lock. We'd be serializing
-> every *at based system call on f_pos_lock whenever we have multiple fds
-> referring to the same file trying to operate on it concurrently.
-> 
-> We do have fdget_pos() and fdput_pos() as a special purpose fdget() for
-> a select group of system calls that require this synchronization.
-
-Right, that makes sense, and invalidates everything I said after that
-anyway but it's not like looking stupid ever killed anyone.
-
-Ok so it would require adding a new wrapper from struct file to struct
-fd that'd eventually take the lock and set FDPUT_POS_UNLOCK for... not
-fdput_pos but another function for that stopping short of fdput...
-Then just call that around both vfs_llseek and vfs_getdents calls; which
-is the easy part.
-
-(Or possibly call mutex_lock directly like Dylan did in [1]...)
-[1] https://lore.kernel.org/all/20220222105504.3331010-1-dylany@fb.com/T/#m3609dc8057d0bc8e41ceab643e4d630f7b91bde6
-
-
-
-I'll be honest though I'm thankful for your explanations but I think
-I'll just do like Stefan and stop trying for now: the only reason I've
-started this was because I wanted to play with io_uring for a new toy
-project and it felt awkward without a getdents for crawling a tree; and
-I'm long past the point where I should have thrown the towel and just
-make that a sequential walk.
-There's too many "conditional patches" (NOWAIT, end of dir indicator)
-that I don't care about and require additional work to rebase
-continuously so I'll just leave it up to someone else who does care.
-
-So to that someone: feel free to continue from these branches (I've
-included the fix for kernfs_fop_readdir that Dan Carpenter reported):
-https://github.com/martinetd/linux/commits/io_uring_getdents
-https://github.com/martinetd/liburing/commits/getdents
-
-Or just start over, there's not that much code now hopefully the
-baseline requirements have gotten a little bit clearer.
-
-
-Sorry for stirring the mess and leaving halfway, if nobody does continue
-I might send a v3 when I have more time/energy in a few months, but it
-won't be quick.
 
 -- 
-Dominique
+Lee Jones [李琼斯]
