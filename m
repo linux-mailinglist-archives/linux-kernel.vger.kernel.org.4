@@ -2,152 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3635D710638
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C92710640
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238999AbjEYHX4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 03:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S238646AbjEYHZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 03:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbjEYHXx (ORCPT
+        with ESMTP id S233805AbjEYHZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 03:23:53 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC766D3;
-        Thu, 25 May 2023 00:23:49 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-ba8a0500f4aso182452276.3;
-        Thu, 25 May 2023 00:23:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684999429; x=1687591429;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qwHaEVHj9rR3QnH3LqNeVcZHACKl1jAO9NgdI/o7VUY=;
-        b=HTI0Np4oLo8WUbJxOIHCs7pGc5dZaTlz1SrD2wAt6v98gBwBcpt+rasA5IT0UmHfXX
-         JqZ5USAhVWwL47gyaV6u1hd/HTrURU8tH7sIQgMITySEV/XO5rKE0fPbY7I32iybrr9Z
-         qDLAR4NhqHI25lZ5Oqvov1uDJyXt7Bv0d2jvT11ZHK8swH4DwT3/mYgXOROsk0Vq15UH
-         kUalDtzEJ2Kl4F+iSLkWyTZhGBRboPRyc4QD3kIVl8K15NrI4drEhV3c5j9RskgvR6Ie
-         UtooJvh33Nd55mNg9bCqKkK6Q0Cbcq0/XwHAwXQocMwKDsmQgqSkFzBJBeFNv37eNvfb
-         cGUQ==
-X-Gm-Message-State: AC+VfDykid+nEgQAzYzRZ8dJhZ5+rAe42YiC1xvQqICn90xED23XRmyR
-        nTYm/60ZV9Tz5MrIkOK/If3gyA6TDtrQmg==
-X-Google-Smtp-Source: ACHHUZ54iX6ByHspeRy4y89lehIiKcfj174gK6lAM3bvSLC0jQ0x94WGI/binv6kXIZRlnKTo3eZbA==
-X-Received: by 2002:a25:b08b:0:b0:ba8:1ef7:7175 with SMTP id f11-20020a25b08b000000b00ba81ef77175mr2559068ybj.54.1684999428682;
-        Thu, 25 May 2023 00:23:48 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id b124-20020a256782000000b00ba1a0346360sm149766ybc.13.2023.05.25.00.23.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 00:23:48 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-561e5014336so2004777b3.1;
-        Thu, 25 May 2023 00:23:47 -0700 (PDT)
-X-Received: by 2002:a81:a1ca:0:b0:561:d7d8:aa22 with SMTP id
- y193-20020a81a1ca000000b00561d7d8aa22mr21197961ywg.36.1684999427385; Thu, 25
- May 2023 00:23:47 -0700 (PDT)
+        Thu, 25 May 2023 03:25:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14841BD;
+        Thu, 25 May 2023 00:25:26 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P7MZUR027615;
+        Thu, 25 May 2023 07:24:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=55klH+MHDRtIEEtWGbvAfPxNnN6EmMw4scwT5+fq3XI=;
+ b=RCtuVZMVyLY0xGNcOr1uNeKOK8ntfwHROTFHQ4+AHlf2PWmk9UMR5C1PwZzqTymLhX3F
+ YS8x9sdj4rnAtSDt7d3OIlvETB4UqOoJw503GtHvkqIIk34L6d4qe/5QAfXKoRiw8KQ3
+ q2vN+VSVcbXRkWC9E/KmFqhp4J9Uk1or/sNjytHkFA/FLMsoMkRIv3iKpmsDaSpOHta9
+ CUHKBISpNyljOYab0uO1Fpi++beo28ogb584RD8aDiv+J9GeRUJVo/dWdX2F0D18x38T
+ iFptJIA55GKyv/jWO+T8QXxUyFt7k1uiwhkDKMXzQji2/r8sTbD6T9TT2CpRLV4sxd42 RQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qt32yg93r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 07:24:01 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34P7CWdL024922;
+        Thu, 25 May 2023 07:24:00 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qt32yg92j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 07:24:00 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34P4rUxB029511;
+        Thu, 25 May 2023 07:23:57 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qppcuaahq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 07:23:57 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34P7NrqW22610506
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 May 2023 07:23:53 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B0BFA20043;
+        Thu, 25 May 2023 07:23:53 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0955820040;
+        Thu, 25 May 2023 07:23:53 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.66])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 25 May 2023 07:23:52 +0000 (GMT)
+Date:   Thu, 25 May 2023 09:23:51 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 15/23] s390: allow pte_offset_map_lock() to fail
+Message-ID: <20230525092351.7671f2a4@p-imbrenda>
+In-Reply-To: <b64cd153-18e8-81a6-b852-c04d8b1381d@google.com>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+        <94aec8fe-383f-892-dcbf-d4c14e460a7@google.com>
+        <20230517123546.672fb9b0@p-imbrenda>
+        <4a15dbaa-1614-ce-ce1f-f73959cef895@google.com>
+        <20230523140056.55b664b1@p-imbrenda>
+        <b64cd153-18e8-81a6-b852-c04d8b1381d@google.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <ZFAF6pJxMu1z6k4w@makrotopia.org>
-In-Reply-To: <ZFAF6pJxMu1z6k4w@makrotopia.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 25 May 2023 09:23:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWnpu0TE465Ed=Z5iBw2w7pQwzd1ueDRuE5qXFJfztECQ@mail.gmail.com>
-Message-ID: <CAMuHMdWnpu0TE465Ed=Z5iBw2w7pQwzd1ueDRuE5qXFJfztECQ@mail.gmail.com>
-Subject: Re: [PATCH] spi: mt65xx: make sure operations completed before unloading
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Leilk Liu <leilk.liu@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qRLyp44GLiE9zXh3PageqjkrZmyh07xV
+X-Proofpoint-GUID: uXGxTdAMLt8o-nI3lVA1NmtMWFctokRx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_03,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ spamscore=0 clxscore=1015 lowpriorityscore=0 mlxlogscore=999
+ impostorscore=0 bulkscore=0 suspectscore=0 malwarescore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250057
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Tue, 23 May 2023 18:49:14 -0700 (PDT)
+Hugh Dickins <hughd@google.com> wrote:
 
-On Mon, May 1, 2023 at 8:37 PM Daniel Golle <daniel@makrotopia.org> wrote:
-> When unloading the spi-mt65xx kernel module during an ongoing spi-mem
-> operation the kernel will Oops shortly after unloading the module.
-> This is because wait_for_completion_timeout was still running and
-> returning into the no longer loaded module:
->
-> Internal error: Oops: 0000000096000005 [#1] SMP
-> Modules linked in: [many, but spi-mt65xx is no longer there]
-> CPU: 0 PID: 2578 Comm: block Tainted: G        W  O       6.3.0-next-20230428+ #0
-> Hardware name: Bananapi BPI-R3 (DT)
-> pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : __lock_acquire+0x18c/0x20e8
-> lr : __lock_acquire+0x9b8/0x20e8
-> sp : ffffffc009ec3400
-> x29: ffffffc009ec3400 x28: 0000000000000001 x27: 0000000000000004
-> x26: ffffff80082888c8 x25: 0000000000000000 x24: 0000000000000000
-> x23: ffffffc009609da8 x22: ffffff8008288000 x21: ffffff8008288968
-> x20: 00000000000003c2 x19: ffffff8008be7990 x18: 00000000000002af
-> x17: 0000000000000000 x16: 0000000000000000 x15: ffffffc008d78970
-> x14: 000000000000080d x13: 00000000000002af x12: 00000000ffffffea
-> x11: 00000000ffffefff x10: ffffffc008dd0970 x9 : ffffffc008d78918
-> x8 : 0000000000017fe8 x7 : 0000000000000001 x6 : 0000000000000000
-> x5 : ffffff807fb53910 x4 : 0000000000000000 x3 : 0000000000000027
-> x2 : 0000000000000027 x1 : 0000000000000000 x0 : 00000000000c03c2
-> Call trace:
->  __lock_acquire+0x18c/0x20e8
->  lock_acquire+0x100/0x2a4
->  _raw_spin_lock_irq+0x58/0x74
->  __wait_for_common+0xe0/0x1b4
->  wait_for_completion_timeout+0x1c/0x24
->  0xffffffc000acc8a4 <--- used to be mtk_spi_transfer_wait
->  spi_mem_exec_op+0x390/0x3ec
->  spi_mem_no_dirmap_read+0x6c/0x88
->  spi_mem_dirmap_read+0xcc/0x12c
->  spinand_read_page+0xf8/0x1dc
->  spinand_mtd_read+0x1b4/0x2fc
->  mtd_read_oob_std+0x58/0x7c
->  mtd_read_oob+0x8c/0x148
->  mtd_read+0x50/0x6c
->  ...
->
-> Prevent this by completing in mtk_spi_remove if needed.
->
-> Fixes: 9f763fd20da7 ("spi: mediatek: add spi memory support for ipm design")
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> On Tue, 23 May 2023, Claudio Imbrenda wrote:
+> > 
+> > so if I understand the above correctly, pte_offset_map_lock will only
+> > fail if the whole page table has disappeared, and in that case, it will
+> > never reappear with zero pages, therefore we can safely skip (in that
+> > case just break). if we were to do a continue instead of a break, we
+> > would most likely fail again anyway.  
+> 
+> Yes, that's the most likely; and you hold mmap_write_lock() there,
+> and VM_NOHUGEPAGE on all vmas, so I think it's the only foreseeable
+> possibility.
+> 
+> > 
+> > in that case I would still like a small change in your patch: please
+> > write a short (2~3 lines max) comment about why it's ok to do things
+> > that way  
+> 
+> Sure.
+> 
+> But I now see that I've disobeyed you, and gone to 4 lines (but in the
+> comment above the function, so as not to distract from the code itself):
+> is this good wording to you?  I needed to research how they were stopped
+> from coming in afterwards, so wanted to put something greppable in there.
+> 
+> And, unless I'm misunderstanding, that "after THP was enabled" was
+> always supposed to say "after THP was disabled" (because splitting a
+> huge zero page pmd inserts a a page table full of little zero ptes).
 
-Thanks for your patch, which is now commit 4be47a5d59cbc939 ("spi:
-mt65xx: make sure operations completed before unloading") in spi/for-next.
+indeed, thanks for noticing and fixing it
 
-> --- a/drivers/spi/spi-mt65xx.c
-> +++ b/drivers/spi/spi-mt65xx.c
-> @@ -1275,6 +1275,9 @@ static int mtk_spi_remove(struct platform_device *pdev)
->         struct mtk_spi *mdata = spi_master_get_devdata(master);
->         int ret;
->
-> +       if (mdata->use_spimem && !completion_done(&mdata->spimem_done))
-> +               complete(&mdata->spimem_done);
+> 
+> Or would you prefer the comment in the commit message instead,
+> or down just above the pte_offset_map_lock() line?
+> 
+> It would much better if I could find one place at the mm end, to
+> enforce its end of the contract; but cannot think how to do that.
+> 
+> Hugh
+> 
+> --- a/arch/s390/mm/gmap.c
+> +++ b/arch/s390/mm/gmap.c
+> @@ -2537,7 +2537,12 @@ static inline void thp_split_mm(struct mm_struct *mm)
+>   * Remove all empty zero pages from the mapping for lazy refaulting
+>   * - This must be called after mm->context.has_pgste is set, to avoid
+>   *   future creation of zero pages
+> - * - This must be called after THP was enabled
+> + * - This must be called after THP was disabled.
+> + *
+> + * mm contracts with s390, that even if mm were to remove a page table,
+> + * racing with the loop below and so causing pte_offset_map_lock() to fail,
+> + * it will never insert a page table containing empty zero pages once
+> + * mm_forbids_zeropage(mm) i.e. mm->context.has_pgste is set.
+>   */
+>  static int __zap_zero_pages(pmd_t *pmd, unsigned long start,
+>  			   unsigned long end, struct mm_walk *walk)
 
-I'm afraid that is not sufficient, as the code that was waiting on the
-completion accesses hardware registers and driver-private data after
-that, and there is no guarantee all of that has completed by the time
-mtk_spi_remove() finishes.
-
-> +
->         ret = pm_runtime_resume_and_get(&pdev->dev);
->         if (ret < 0)
->                 return ret;
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+looks good, thanks
