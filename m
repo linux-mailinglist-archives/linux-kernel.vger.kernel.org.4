@@ -2,112 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF69710EEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 832F0710EFF
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241064AbjEYPBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S241401AbjEYPDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240847AbjEYPBB (ORCPT
+        with ESMTP id S241195AbjEYPDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:01:01 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A971B3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:00:59 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-25359e411ceso967003a91.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685026859; x=1687618859;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2rgc5wNBzRwTZsiTn0J0WHKeSrzO5GwJcVsGE/2GYBg=;
-        b=AyY7s5NO6ZYMxx+nAp8os1iSmL+QUh0+NNNS14PW8xDvfy14jeBv20Cn+/xySm0GS+
-         7JLXIMsPgorL07xkxMYRmcSAp/H90WQnq5m0O4W/mOE9Um4tYYNOk5Bgg/ZJeGjjUE0E
-         tAU2NRyk6rNg0Sd0lXD/e5OJdMa3n3EpMDS/xks/N183FlGxRzVW1SsHC/8+k8/JX/Y1
-         af3OGWtTx7YIOKwNAEi/VswrUDCEvN2lluN+Bpsy/lCDUbo55Rx4891gHCjPsU2SUtSS
-         8uNw0kEDQBwtNMS9jtoCWLNl9mVDch8QqvuUftQh8EZpQMLUC3PrWXy31Dy4aOSm5rUq
-         vuZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685026859; x=1687618859;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2rgc5wNBzRwTZsiTn0J0WHKeSrzO5GwJcVsGE/2GYBg=;
-        b=lYxxzchpWxEKwqvWLOx+huVr3zI9gXQpYjKb+HnXhz2DJJJIWeNywjbFo3C6pvxorm
-         lO6TCK+L4DYcrMPa6VfWKSPt7niLD3Nlwl9NR8VMKla2ifsWziPSJIH2ug4nwrj6D9LR
-         gmC4prTFNv9DxI8Cg4opDJ1hLqzRHnBu/kVk/WuQc30rA6J3md5Mw+n/nfmF9I31HDIS
-         T4ALvUVqjiLm7dS8D7eeDHqpfiO0lxs6puldLOdnIdgUdaJJDq9mY+0oPBP1ftNHR0SD
-         a/yZ3jAaaBm/YxdkBfe9mrmVK9Qc7uf0/seXGcGs4K3bbRM8T6gVTYFkeJq9OQIS7G8X
-         tfug==
-X-Gm-Message-State: AC+VfDwiQ5Gt13Or86NpI0Ip525ly6cevfQ2Opdbkkug36G8wXbZFLkw
-        2qUM/bLlWkBB0UI3ND7TL0beceJhh3I=
-X-Google-Smtp-Source: ACHHUZ7RT45qInXgmU/+XvDTNZGc1dzAPlp7OuPf32BVGX9UmDt71fsVlzRmkTnl1/mPDEQCJf1xczlIfmM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:9304:b0:250:a6c1:b843 with SMTP id
- p4-20020a17090a930400b00250a6c1b843mr436712pjo.9.1685026859534; Thu, 25 May
- 2023 08:00:59 -0700 (PDT)
-Date:   Thu, 25 May 2023 08:00:58 -0700
-In-Reply-To: <393b16f7-8359-5d77-7d5d-8942de987331@gmail.com>
+        Thu, 25 May 2023 11:03:07 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA1F18D;
+        Thu, 25 May 2023 08:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=3aiLXOZs4J8vLwjD9tm8yL///nMM3TFDYH2UjhnUtjA=; b=yeV6kVRGXgdBBkEgy9EOOpxSPe
+        U+QULcnfTnUjO3ghZ8C1PF3MJEiRYw5xoR6uAGepJbiMXyepzp3VmSQ1+yf8OaWb1D1a6PgUQ5mpf
+        /5yqRdQm0EjfJxAneB/r2NOmoT8qBmUbFNcT3d757NHI6MdUUeZW57U409ER6ThVHIv4=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:52768 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q2CUR-0000BG-UZ; Thu, 25 May 2023 11:02:56 -0400
+Date:   Thu, 25 May 2023 11:02:55 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     andy.shevchenko@gmail.com
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230525110255.6ffe0a0c3f88ae03c3fc5f25@hugovil.com>
+In-Reply-To: <ZG9EWEwb077qyBIi@surfacebook>
+References: <20230525040324.3773741-1-hugo@hugovil.com>
+        <20230525040324.3773741-9-hugo@hugovil.com>
+        <ZG9EWEwb077qyBIi@surfacebook>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-References: <20230509134825.1523-1-yan.y.zhao@intel.com> <20230509135300.1855-1-yan.y.zhao@intel.com>
- <3f09e751-33fd-7d60-78cd-6857d113e8bd@gmail.com> <ZGxbat2mM6AfOOVv@yzhao56-desk.sh.intel.com>
- <393b16f7-8359-5d77-7d5d-8942de987331@gmail.com>
-Message-ID: <ZG94Kmb8jMZKhtJW@google.com>
-Subject: Re: [PATCH v2 5/6] KVM: x86: Keep a per-VM MTRR state
-From:   Sean Christopherson <seanjc@google.com>
-To:     Robert Hoo <robert.hoo.linux@gmail.com>
-Cc:     Yan Zhao <yan.y.zhao@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 08/11] serial: sc16is7xx: fix regression with GPIO
+ configuration
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023, Robert Hoo wrote:
-> On 5/23/2023 2:21 PM, Yan Zhao wrote:
-> IIUC, your saving comes from skips the intermediate state during boot, when
-> APs goes through setting MTRR, which would cause SPTE zap before your this
-> patch set.
-> 
-> MHO was, now that your ignores other vCPU's MTRR settings (unless it is
-> different from BP's MTRR?), why not let each vCPU's MTRR set/update directly
-> set to the per-VM MTRR states (if differs from current value). It's guest
-> OS/BIOS's responsibility to keep the consistency anyway. And even if the
-> malfunction caused by the inconsistency might differ from that of native,
-> SDM doesn't clearly state how the malfunction should be, does it?
-> that's to say, anyone knows, when inconsistency happens, does it cause that
-> logical processor malfunction or in fact it impacts the global MTRR
-> settings? If the latter, I think leaving only the per-VM MTRR state aligns
-> with native.
+On Thu, 25 May 2023 14:19:52 +0300
+andy.shevchenko@gmail.com wrote:
 
-The MTRRs are not system wide or per-package though, they are per logical CPU.
-Yes, they "need" to be consistent with respect to one another, but only when the
-CPU is actually accessing memory.  This is a big reason why trying to track MTRRs
-as a per-VM asset in KVM is so difficult/messy.  Software doesn't rendezvous all
-CPUs and then do the write on just one CPU, each CPU does its own writes more or
-less independently.
+> Thu, May 25, 2023 at 12:03:22AM -0400, Hugo Villeneuve kirjoitti:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
+> > and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+> > changed the function of the GPIOs pins to act as modem control
+> > lines without any possibility of selecting GPIO function.
+> > 
+> > As a consequence, applications that depends on GPIO lines configured
+> > by default as GPIO pins no longer work as expected.
+> > 
+> > Also, the change to select modem control lines function was done only
+> > for channel A of dual UART variants (752/762). This was not documented
+> > in the log message.
+> 
+> > This new patch allows to specify GPIO or modem control line function
+> > in the device tree, and for each of the ports (A or B).
+> 
+> Imperative mood as stated in documentation, please.
+> Like "Allow to specify...".
+> 
+> > This is done by using the new device-tree property named
+> > "modem-control-line-ports" (property added in separate patch).
+> > 
+> > We also now reduce the number of exported GPIOs according to the
+> > modem-status-line-port DT property.
 
-> BTW, with regard to KVM_X86_QUIRK_CD_NW_CLEARED, I see svm honors it while
-> vmx doesn't before it clear CR0.CD/NW.
-> 
-> svm_set_cr0():
-> 
-> 	if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
-> 		hcr0 &= ~(X86_CR0_CD | X86_CR0_NW);
-> 
-> 
-> vmx_set_cr0():
-> 
-> 	hw_cr0 = (cr0 & ~KVM_VM_CR0_ALWAYS_OFF);
-> 
-> Perhaps vmx side can be fixed passingly?
+Just noticed a mistake:
+s/modem-status-line-port/modem-control-line-ports
 
-Sadly, no.  SVM and VMX manage guest memtype completely differently.  VMX doesn't
-allow CR0.CD=1 when VMX is enabled, and so KVM needs to emulate CR0.CD via the EPT
-memtype.
+> > 
+> > Boards that need to have GPIOS configured as modem control lines
+> > should add that property to their device tree. Here is a list of
+> > boards using the sc16is7xx driver in their device tree and that may
+> > need to be modified:
+> >     arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
+> >     mips/boot/dts/ingenic/cu1830-neo.dts
+> >     mips/boot/dts/ingenic/cu1000-neo.dts
+> 
+> ...
+> 
+> > +#ifdef CONFIG_GPIOLIB
+> 
+> I'm wondering if we can avoid adding new ifdefferies...
+
+I am simply following waht was already done in the existing driver.
+
+Are you suggesting that we need to remove all these #defines? If not, what exactly do you suggest?
+
+
+> > +	s->gpio_configured = devtype->nr_gpio;
+> 
+> The name of the variable is a bit vague WRT its content.
+> Shouldn't be as simple as the rvalue, i.e. s->nr_gpio?
+
+Maybe the name could be improved (and/or comments).
+
+devtype->nr_gpio is the maximum "theoretical" number of GPIOs supported by the chip.
+
+s->gpio_configured is the number of GPIOs that are configured or requested according to the presence (or not) of the modem-control-line-ports property.
+
+I wanted to avoid using the same name to avoid potential confusion.
+
+Maybe devtype->nr_gpio could be renamed to devtype->nr_gpio_max and s->gpio_configured to s->nr_gpio_requested or s->nr_gpio_configured?
+
+
+> > +#endif /* CONFIG_GPIOLIB */
+> 
+> ...
+> 
+> > +		of_property_for_each_u32(dev->of_node, "nxp,modem-control-line-ports",
+> > +					 prop, p, u)
+> 
+> The driver so far is agnostic to property provider. Please keep it that way,
+> i.e. no of_ APIs.
+
+The driver, before my patches, was already using the exact same function of_property_for_each_u32() to process the irda-mode-ports property, so I don't understand your comment.
+
+But what do you suggest instead of of_property_for_each_u32()? And do we need to change it also for processing the irda-mode-ports property?
+
+
+> > +			if (u < devtype->nr_uart) {
+> 
+> Hmm... What other can it be?
+
+Again, this is similar to the handling of the irda-mode-ports property.
+
+But I am not sure I understand your question/concern?
+
+I think this check is important, because if someone puts the following property in a DT:
+
+    nxp,modem-control-line-ports = <0 1>;
+
+but the variant only supports 1 port, then the check is usefull, no?
+
+
+> 
+> > +				/* Use GPIO lines as modem control lines */
+> > +				if (u == 0)
+> > +					val |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
+> > +				else if (u == 1)
+> > +					val |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
+> > +
+> > +#ifdef CONFIG_GPIOLIB
+> > +				if (s->gpio_configured >=
+> > +				    SC16IS7XX_GPIOS_PER_BANK)
+> 
+> On one line it will be better to read. Esp. taking into account the above remark.
+
+Fixed.
+
+ 
+> > +					s->gpio_configured -=
+> > +						SC16IS7XX_GPIOS_PER_BANK;
+> 
+> Ditto.
+
+Fixed.
+
+> 
+> > +#endif /* CONFIG_GPIOLIB */
+> > +			}
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
+> 
