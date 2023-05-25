@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACDC710466
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB1971046B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239257AbjEYEw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
+        id S239276AbjEYEw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239056AbjEYEv4 (ORCPT
+        with ESMTP id S239077AbjEYEv7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:51:56 -0400
+        Thu, 25 May 2023 00:51:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE0DE69;
-        Wed, 24 May 2023 21:51:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B44E6E;
+        Wed, 24 May 2023 21:51:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B0BF63C35;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA8C064203;
         Thu, 25 May 2023 04:51:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C67BEC433B0;
-        Thu, 25 May 2023 04:51:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B7DC4339E;
+        Thu, 25 May 2023 04:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684990274;
-        bh=RIfi/iTTcYW7sLyzymuTkDgbF9dWHV9h80/MQWAd3ec=;
+        s=k20201202; t=1684990275;
+        bh=XJEw+Vg8PW+q4MCQGbKmTRrVC7neOCFkArsx5Is1BYs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K6w+tFQAF39f9atIW0OuZ4ODb32YUuEK4ORUQj3E2SkudjbRmeC9rp2rvvA5tWYQT
-         ukMVrHmKXpUrWcK9AhoUe0YUmp97De5VaRu8z+K1Mqe6T7dGKCWFNHnyZ+KN/NO/3J
-         IujoxR63ObAJbq6C/+ww0ELb4lwsgVYPDkezPAsQdxWawEVMmKfKrkocm9pBfxgIQh
-         W9TCxa40b9ShhrqcktZSSIP8tUj83vyMmvf5RazyrOuuzS59GNn5KNLXOUl+FK/PSv
-         NbEO/ivcxYb4DRcfImLPKPglygyvcy8pCgZH2lTmKOBKGVuir3bR4/NlX1M3yKwInk
-         qGpAeRWSYL0Lw==
+        b=Ud1isFvFddY7CRbVZyy16F4JQVfTCUEanArputivBJqe/B3t0PjVmjyCA9SuVbTaU
+         XlhYFhZWa8W/026noNfpCaaaNo8t03tlWvZedp301sA50mYKb3kfLI8WZj/Zgd2rHm
+         nZAPSbBh0JIxDe/2dZUYm2nwzSzX2iwI4txP7XR7ZzYlKHG3onEe2LoO5iOv/5v5p3
+         Ob/ZWTAUSQF4FAXXlOZlNWVjRA3scaSBYySGRf2LqTwLBneLS8gUbkYVHmqlQJOtBn
+         ONJQ31/llvwLhHS7CV4TbsN+PLy6VJpZQX/UlHoyTAqZiyLXRJ+eukGqhz5S9WXtce
+         nafjmmO6OA9mQ==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -40,12 +40,12 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org,
         Marijn Suijten <marijn.suijten@somainline.org>
-Subject: Re: [PATCH] arm64: dts: qcom: msm8996-tone: Enable LPG LEDs
-Date:   Wed, 24 May 2023 21:53:54 -0700
-Message-Id: <168499048183.3998961.1831208063916493266.b4-ty@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sm8250-edo: Enable Venus
+Date:   Wed, 24 May 2023 21:53:55 -0700
+Message-Id: <168499048183.3998961.3568230232045585620.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230413-tone_led-v1-1-bc3c73393bfa@linaro.org>
-References: <20230413-tone_led-v1-1-bc3c73393bfa@linaro.org>
+In-Reply-To: <20230412-edo_venus-v1-1-bcfc82e0efc3@linaro.org>
+References: <20230412-edo_venus-v1-1-bcfc82e0efc3@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,15 +59,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Apr 2023 02:37:36 +0200, Konrad Dybcio wrote:
-> Enable the notification LED(s) wired up to the PMI8994(6) LPG.
+On Wed, 12 Apr 2023 22:24:51 +0200, Konrad Dybcio wrote:
+> Enable Venus on Edo phones. The firmware is signed, as per usual.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: msm8996-tone: Enable LPG LEDs
-      commit: 3e459be2a315dd017cbed6a86c23e636987b493f
+[1/1] arm64: dts: qcom: sm8250-edo: Enable Venus
+      commit: 6ce42cb4b7dc67fdb670930cc72732fa3fc8df2e
 
 Best regards,
 -- 
