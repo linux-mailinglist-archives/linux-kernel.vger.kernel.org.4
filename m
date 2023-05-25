@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698E67115EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB91711604
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242901AbjEYSs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S243102AbjEYSuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242774AbjEYSpZ (ORCPT
+        with ESMTP id S242781AbjEYSp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:45:25 -0400
+        Thu, 25 May 2023 14:45:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5E93A85;
-        Thu, 25 May 2023 11:41:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF7D3C14;
+        Thu, 25 May 2023 11:41:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D0B460BEC;
-        Thu, 25 May 2023 18:40:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D328C4339C;
-        Thu, 25 May 2023 18:40:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AAB1647F9;
+        Thu, 25 May 2023 18:40:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D71CC433D2;
+        Thu, 25 May 2023 18:40:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040049;
-        bh=W7cDmmMskAmQKOeAEBTMMtSUHQeSM063tf6xjoDLGpQ=;
+        s=k20201202; t=1685040053;
+        bh=awLwyRpuLvxzkYp1+BuQee70cH6x2ekPPiLJGmfacb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JzdcfOid6x06z3HWw0UZSqWfBnF9mBZniu74xxl/AA4m+Fi4tTfK7j8Rju1STJQQb
-         vYZDro03Yp/QrC15CyeSo4/OXpQU/yipCBS/jCbWy8bnbT7Ea4yXooMmJC4qJRa3Gk
-         nBnzeIHHfkRX+ShOMU7CJ2151T38XJtCy3BeixHE0M42nY1v4tzWPrNNu02sMpSUbf
-         qzXaFz90GIkMVkyz50mAYuyJRLhxJxkbWZy2o8s0xdeBlHTnV7EybcL8pToSlV4xiV
-         5DDeoi2mxvwojtAFJdpzRR5N/SGiXC5kLxnv8aRgeYYOJkImK5G93O00A8worZTO06
-         HOJYIEimdNJhw==
+        b=V35mJ8O1WAh2jvNk7oHtQcW5szBoWnZGNovu8FXtOd4UXYUp3k9mOf5hwYgEpJTRx
+         tpryILjMsHlv8LBMul/90T5WQPDp5Xgsa4+/iOhn0qwMId4CzEMUhmKeL0LcSE/9gq
+         JiWGyuts9psnrwSnC+qMfJCh2AUQw+QIg5C4f9SGc5Qm8GKc2GXtiw8mFAyDzo6VVj
+         TOUxHWJR13OLO4dPpdueEGrgHeMTdILRc6asdeYIwoarxmVx+wYbXCnPXObsa7pJe3
+         6uZ3S3ReaPjBfQoVCwc4icPwHN7q3ZhyJ9fEg2fEikfBi+e0WGzMCUwbjlFG4LUf5z
+         kSo7Ir7C9dsHg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, airlied@gmail.com, daniel@ffwll.ch,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.15 39/43] drm/msm: Be more shouty if per-process pgtables aren't working
-Date:   Thu, 25 May 2023 14:38:50 -0400
-Message-Id: <20230525183854.1855431-39-sashal@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 40/43] atm: hide unused procfs functions
+Date:   Thu, 25 May 2023 14:38:51 -0400
+Message-Id: <20230525183854.1855431-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183854.1855431-1-sashal@kernel.org>
 References: <20230525183854.1855431-1-sashal@kernel.org>
@@ -52,48 +49,53 @@ X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 5c054db54c43a5fcb5cc81012361f5e3fac37637 ]
+[ Upstream commit fb1b7be9b16c1f4626969ba4e95a97da2a452b41 ]
 
-Otherwise it is not always obvious if a dt or iommu change is causing us
-to fall back to global pgtable.
+When CONFIG_PROC_FS is disabled, the function declarations for some
+procfs functions are hidden, but the definitions are still build,
+as shown by this compiler warning:
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/537359/
-Link: https://lore.kernel.org/r/20230516222039.907690-2-robdclark@gmail.com
+net/atm/resources.c:403:7: error: no previous prototype for 'atm_dev_seq_start' [-Werror=missing-prototypes]
+net/atm/resources.c:409:6: error: no previous prototype for 'atm_dev_seq_stop' [-Werror=missing-prototypes]
+net/atm/resources.c:414:7: error: no previous prototype for 'atm_dev_seq_next' [-Werror=missing-prototypes]
+
+Add another #ifdef to leave these out of the build.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20230516194625.549249-2-arnd@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/msm_iommu.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ net/atm/resources.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/msm_iommu.c b/drivers/gpu/drm/msm/msm_iommu.c
-index a54ed354578b5..ef4da3f0cd22d 100644
---- a/drivers/gpu/drm/msm/msm_iommu.c
-+++ b/drivers/gpu/drm/msm/msm_iommu.c
-@@ -157,7 +157,12 @@ struct msm_mmu *msm_iommu_pagetable_create(struct msm_mmu *parent)
- 	/* Get the pagetable configuration from the domain */
- 	if (adreno_smmu->cookie)
- 		ttbr1_cfg = adreno_smmu->get_ttbr1_cfg(adreno_smmu->cookie);
--	if (!ttbr1_cfg)
-+
-+	/*
-+	 * If you hit this WARN_ONCE() you are probably missing an entry in
-+	 * qcom_smmu_impl_of_match[] in arm-smmu-qcom.c
-+	 */
-+	if (WARN_ONCE(!ttbr1_cfg, "No per-process page tables"))
- 		return ERR_PTR(-ENODEV);
+diff --git a/net/atm/resources.c b/net/atm/resources.c
+index 2b2d33eeaf200..995d29e7fb138 100644
+--- a/net/atm/resources.c
++++ b/net/atm/resources.c
+@@ -400,6 +400,7 @@ int atm_dev_ioctl(unsigned int cmd, void __user *buf, int __user *sioc_len,
+ 	return error;
+ }
  
- 	/*
++#ifdef CONFIG_PROC_FS
+ void *atm_dev_seq_start(struct seq_file *seq, loff_t *pos)
+ {
+ 	mutex_lock(&atm_dev_mutex);
+@@ -415,3 +416,4 @@ void *atm_dev_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+ {
+ 	return seq_list_next(v, &atm_devs, pos);
+ }
++#endif
 -- 
 2.39.2
 
