@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283787115FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B042A7115FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242971AbjEYStf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S242965AbjEYStd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242988AbjEYSps (ORCPT
+        with ESMTP id S243000AbjEYSpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:45:48 -0400
+        Thu, 25 May 2023 14:45:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9D01706;
-        Thu, 25 May 2023 11:42:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B286A1BDD;
+        Thu, 25 May 2023 11:42:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 031966422B;
-        Thu, 25 May 2023 18:42:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D57C433D2;
-        Thu, 25 May 2023 18:42:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DE086111E;
+        Thu, 25 May 2023 18:42:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEBC6C4339C;
+        Thu, 25 May 2023 18:42:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040128;
-        bh=vR3gdLk2lwQFpq5DKF6oeHeq/xHoQob/o2RETl2k0ow=;
+        s=k20201202; t=1685040129;
+        bh=To+/848u00AfJY53Dp+pSL23SLoi4XLGAx5FUa01JSg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TMtmGX41SOtjnW4SYD4bVoBcZvd3iE3c/0A4vXKoU7CyuWN99CWBmFTVnv9sDF+ns
-         rZ9p6xZ9jscaZJv/6UTdETDCnbAXIMCGg2OMgrnsjlVtZLwRXTORY/98HAkK69rvM/
-         tihN8KCNUdMQinn/AMIreui6fjKq8Slyv6OBcKckgGh5vb+K4/0JOeqHBfLAQWLQ4B
-         GHJTrB5xsCFuA5xwrrBiefY3hP268Yggyak8HP5usYJ5vRDxyy6lXY9kgJODcKxXNN
-         qgVFnw6XBZEuymUwmTg+LH9AiG/AE1bEEgIjHXNkmXvtHalPbXz5FYpwWpxYBYRDHc
-         pkpvoUh3V2nCQ==
+        b=JkCWr80FIMjHnkOIc2fsqaoos4ZaQX37FRomtnCnbEfZAB6Bi+mzpHS1IjICsZKtv
+         oMmgGQlzm1ZQekR8LaWrEykduYQ4VxTkthmY6cvYKevzA0D/YRb2Gz3iZNENcnn3d3
+         oGY7ougA8bY0WkDfG2fr7nFg8+gpyPa93xxqu+apYRPdrKEgjw08Tc0TS2hK01uHrG
+         J+98lu4Tly1W/kZOiL3HF8bOr+sm1/HXEKKoATXDjk1QPEOTa1O5A1xFlR2LsKKl3b
+         q0zlBy4GMnIfWYvzq8Nx7JR5jvJwCNyTY6qinC1Sy+rhypN0vj+Fa8qQyaOJ5En/4k
+         09PoCmX5ju+ZQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Holger Dengler <dengler@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>, hca@linux.ibm.com,
-        gor@linux.ibm.com, linux-s390@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 20/31] s390/pkey: zeroize key blobs
-Date:   Thu, 25 May 2023 14:40:51 -0400
-Message-Id: <20230525184105.1909399-20-sashal@kernel.org>
+Cc:     Yun Lu <luyun@kylinos.cn>, Kalle Valo <kvalo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, Jes.Sorensen@gmail.com,
+        linux-wireless@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 21/31] wifi: rtl8xxxu: fix authentication timeout due to incorrect RCR value
+Date:   Thu, 25 May 2023 14:40:52 -0400
+Message-Id: <20230525184105.1909399-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
 References: <20230525184105.1909399-1-sashal@kernel.org>
@@ -59,50 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Holger Dengler <dengler@linux.ibm.com>
+From: Yun Lu <luyun@kylinos.cn>
 
-[ Upstream commit 844cf829e5f33e00b279230470c8c93b58b8c16f ]
+[ Upstream commit 20429444e653ee8242dfbf815c0c37866beb371b ]
 
-Key blobs for the IOCTLs PKEY_KBLOB2PROTK[23] may contain clear key
-material. Zeroize the copies of these keys in kernel memory after
-creating the protected key.
+When using rtl8192cu with rtl8xxxu driver to connect wifi, there is a
+probability of failure, which shows "authentication with ... timed out".
+Through debugging, it was found that the RCR register has been inexplicably
+modified to an incorrect value, resulting in the nic not being able to
+receive authenticated frames.
 
-Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
-Signed-off-by: Holger Dengler <dengler@linux.ibm.com>
-Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+To fix this problem, add regrcr in rtl8xxxu_priv struct, and store
+the RCR value every time the register is written, and use it the next
+time the register need to be modified.
+
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+Link: https://lore.kernel.org/all/20230427020512.1221062-1-luyun_611@163.com
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20230512012055.2990472-1-luyun_611@163.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/s390/crypto/pkey_api.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.h      | 1 +
+ drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/s390/crypto/pkey_api.c b/drivers/s390/crypto/pkey_api.c
-index dd84995049b91..870e00effe439 100644
---- a/drivers/s390/crypto/pkey_api.c
-+++ b/drivers/s390/crypto/pkey_api.c
-@@ -1271,6 +1271,7 @@ static long pkey_unlocked_ioctl(struct file *filp, unsigned int cmd,
- 			return PTR_ERR(kkey);
- 		rc = pkey_keyblob2pkey(kkey, ktp.keylen, &ktp.protkey);
- 		DEBUG_DBG("%s pkey_keyblob2pkey()=%d\n", __func__, rc);
-+		memzero_explicit(kkey, ktp.keylen);
- 		kfree(kkey);
- 		if (rc)
- 			break;
-@@ -1404,6 +1405,7 @@ static long pkey_unlocked_ioctl(struct file *filp, unsigned int cmd,
- 					kkey, ktp.keylen, &ktp.protkey);
- 		DEBUG_DBG("%s pkey_keyblob2pkey2()=%d\n", __func__, rc);
- 		kfree(apqns);
-+		memzero_explicit(kkey, ktp.keylen);
- 		kfree(kkey);
- 		if (rc)
- 			break;
-@@ -1530,6 +1532,7 @@ static long pkey_unlocked_ioctl(struct file *filp, unsigned int cmd,
- 					protkey, &protkeylen);
- 		DEBUG_DBG("%s pkey_keyblob2pkey3()=%d\n", __func__, rc);
- 		kfree(apqns);
-+		memzero_explicit(kkey, ktp.keylen);
- 		kfree(kkey);
- 		if (rc) {
- 			kfree(protkey);
+diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.h b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.h
+index 0ed4d67308d78..fe1e4c4c17c42 100644
+--- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.h
++++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.h
+@@ -1346,6 +1346,7 @@ struct rtl8xxxu_priv {
+ 	u32 rege9c;
+ 	u32 regeb4;
+ 	u32 regebc;
++	u32 regrcr;
+ 	int next_mbox;
+ 	int nr_out_eps;
+ 
+diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+index deef1c09de319..004778faf3d07 100644
+--- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
++++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+@@ -4045,6 +4045,7 @@ static int rtl8xxxu_init_device(struct ieee80211_hw *hw)
+ 		RCR_ACCEPT_MGMT_FRAME | RCR_HTC_LOC_CTRL |
+ 		RCR_APPEND_PHYSTAT | RCR_APPEND_ICV | RCR_APPEND_MIC;
+ 	rtl8xxxu_write32(priv, REG_RCR, val32);
++	priv->regrcr = val32;
+ 
+ 	/*
+ 	 * Accept all multicast
+@@ -5999,7 +6000,7 @@ static void rtl8xxxu_configure_filter(struct ieee80211_hw *hw,
+ 				      unsigned int *total_flags, u64 multicast)
+ {
+ 	struct rtl8xxxu_priv *priv = hw->priv;
+-	u32 rcr = rtl8xxxu_read32(priv, REG_RCR);
++	u32 rcr = priv->regrcr;
+ 
+ 	dev_dbg(&priv->udev->dev, "%s: changed_flags %08x, total_flags %08x\n",
+ 		__func__, changed_flags, *total_flags);
+@@ -6045,6 +6046,7 @@ static void rtl8xxxu_configure_filter(struct ieee80211_hw *hw,
+ 	 */
+ 
+ 	rtl8xxxu_write32(priv, REG_RCR, rcr);
++	priv->regrcr = rcr;
+ 
+ 	*total_flags &= (FIF_ALLMULTI | FIF_FCSFAIL | FIF_BCN_PRBRESP_PROMISC |
+ 			 FIF_CONTROL | FIF_OTHER_BSS | FIF_PSPOLL |
 -- 
 2.39.2
 
