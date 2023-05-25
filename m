@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBDA711208
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1C1711203
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241071AbjEYRWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
+        id S235070AbjEYRWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241020AbjEYRWg (ORCPT
+        with ESMTP id S233470AbjEYRWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:22:36 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D5F1A6;
-        Thu, 25 May 2023 10:22:34 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PFAVtw003248;
+        Thu, 25 May 2023 13:22:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939E8189;
+        Thu, 25 May 2023 10:22:32 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PGiqSQ023932;
         Thu, 25 May 2023 17:22:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=nrRSSJ8NU19A27YpBFEOJEaiGMyqCuDwrh5X/NaRWu0=;
- b=avXuMYROx0fWQg5gEwaL0gcNVtjGYwnvoKx+eHt7/TG6ykT+07xY6orpeEV2L281fDHT
- 4J9pyvvJomQLLDn+vexw9DoXE+QB3dtK0QlphtHeOJ2G69vX6Iqeosmm2FGx9pximPO9
- 1pxkRCTUnNFN7y9rkUPsAuIEyBaMSd6FsI6ZTVCcxodRcVQqVxx6UfUIaOh86I11p0Y4
- hv/IY0EScDg8VI2ZTtYWQ59SYvnGKqUhU5wouXC1ukbxUZFTBNMBiO/JdtwBNXi7thUj
- w2GiBioR1DRTiLD91JjVew7fa7lbadyP0wum6rrLc7w/r1W/zQTfipDH4GxBtisU33bW 4g== 
+ bh=/zufWKsA1MqbTnMWec/9SKZnDTzI/ixiZmFaCTIQyoE=;
+ b=l4AzVXbCOp9Jv1PYIz7ACPxnWEv34KTfEcH1eDBcxiX+15/EojbuzTUHdiar0Jtcw8ek
+ K7KjTL67485BBFAy9rfPmZzmurkqqjqIeR8nd4pCpAQ98+NEYbpkGhmXuXTNF2dXBDka
+ gbpGejcAvA3KW1AGRMWB5u6hK4euqOD7hUsG/aSSYAusn1gNWL/CRJvKwMl6t4AOvUbs
+ fcWTjoLgNaAXFAOwRemc96+V2AIt4iLP4JhFfZ/9C8YdlHqoxNrFuSXGqS2szTHpK1/W
+ q1SW8JeSo3JrfMzo1ul/jdF+g66V8KT+o89SQIn4PlLU/WuCqFte8s+Bc8TOAKcGoOIV IA== 
 Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt1tqsfgg-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsuc226t6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 25 May 2023 17:22:29 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PHM8Ci021031
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PHM8Cj021031
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 25 May 2023 17:22:28 GMT
 Received: from hu-jkona-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 25 May 2023 10:22:04 -0700
+ 15.2.986.42; Thu, 25 May 2023 10:22:10 -0700
 From:   Jagadeesh Kona <quic_jkona@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -56,9 +56,9 @@ CC:     Bjorn Andersson <andersson@kernel.org>,
         "Satya Priya Kakitapalli" <quic_skakitap@quicinc.com>,
         Imran Shaik <quic_imrashai@quicinc.com>,
         Ajit Pandey <quic_ajipan@quicinc.com>
-Subject: [PATCH V2 1/6] dt-bindings: clock: qcom: Add SM8550 camera clock controller
-Date:   Thu, 25 May 2023 22:51:37 +0530
-Message-ID: <20230525172142.9039-2-quic_jkona@quicinc.com>
+Subject: [PATCH V2 2/6] clk: qcom: Update l value configuration for lucid ole and evo plls
+Date:   Thu, 25 May 2023 22:51:38 +0530
+Message-ID: <20230525172142.9039-3-quic_jkona@quicinc.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230525172142.9039-1-quic_jkona@quicinc.com>
 References: <20230525172142.9039-1-quic_jkona@quicinc.com>
@@ -70,255 +70,208 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: kFMGYOJaOjuNYQscKEGjXAZHsDl4T4q7
-X-Proofpoint-GUID: kFMGYOJaOjuNYQscKEGjXAZHsDl4T4q7
+X-Proofpoint-ORIG-GUID: O4lQhXM0uonknpHWYPbJtUfIQjXfWFUx
+X-Proofpoint-GUID: O4lQhXM0uonknpHWYPbJtUfIQjXfWFUx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-05-25_10,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 adultscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
- spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 mlxscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 adultscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2304280000 definitions=main-2305250144
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree bindings for the camera clock controller on
-Qualcomm SM8550 platform.
+For lucid evo and ole pll's the CAL_L, RING_OSC_CAL_L and L_VAL
+are part of the same register, hence update the l configuration
+value to include these fields across all the chipsets.
 
 Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
 Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
 ---
 Changes since V1:
- - Removed new YAML file and reused SM8450 CAMCC YAML file for SM8550
+ - Newly added.
 
- .../bindings/clock/qcom,sm8450-camcc.yaml     |   8 +-
- include/dt-bindings/clock/qcom,sm8550-camcc.h | 187 ++++++++++++++++++
- 2 files changed, 193 insertions(+), 2 deletions(-)
- create mode 100644 include/dt-bindings/clock/qcom,sm8550-camcc.h
+ drivers/clk/qcom/camcc-sm8450.c  | 24 ++++++++++++++++--------
+ drivers/clk/qcom/dispcc-sm8450.c | 10 ++++++----
+ drivers/clk/qcom/dispcc-sm8550.c |  6 ++++--
+ drivers/clk/qcom/gpucc-sa8775p.c |  6 ++++--
+ 4 files changed, 30 insertions(+), 16 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml
-index 87ae74166807..8dbc9004202f 100644
---- a/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml
-@@ -13,11 +13,15 @@ description: |
-   Qualcomm camera clock control module provides the clocks, resets and power
-   domains on SM8450.
+diff --git a/drivers/clk/qcom/camcc-sm8450.c b/drivers/clk/qcom/camcc-sm8450.c
+index 51338a2884d2..6a5a08f88598 100644
+--- a/drivers/clk/qcom/camcc-sm8450.c
++++ b/drivers/clk/qcom/camcc-sm8450.c
+@@ -57,7 +57,8 @@ static const struct pll_vco rivian_evo_vco[] = {
+ static const struct clk_parent_data pll_parent_data_tcxo = { .index = DT_BI_TCXO };
  
--  See also:: include/dt-bindings/clock/qcom,sm8450-camcc.h
-+  See also::
-+    include/dt-bindings/clock/qcom,sm8450-camcc.h
-+    include/dt-bindings/clock/qcom,sm8550-camcc.h
+ static const struct alpha_pll_config cam_cc_pll0_config = {
+-	.l = 0x3e,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x0044003e,
+ 	.alpha = 0x8000,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+@@ -128,7 +129,8 @@ static struct clk_alpha_pll_postdiv cam_cc_pll0_out_odd = {
+ };
  
- properties:
-   compatible:
--    const: qcom,sm8450-camcc
-+    enum:
-+      - qcom,sm8450-camcc
-+      - qcom,sm8550-camcc
+ static const struct alpha_pll_config cam_cc_pll1_config = {
+-	.l = 0x25,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x00440025,
+ 	.alpha = 0xeaaa,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+@@ -199,7 +201,8 @@ static struct clk_alpha_pll cam_cc_pll2 = {
+ };
  
-   clocks:
-     items:
-diff --git a/include/dt-bindings/clock/qcom,sm8550-camcc.h b/include/dt-bindings/clock/qcom,sm8550-camcc.h
-new file mode 100644
-index 000000000000..a2a256691c2b
---- /dev/null
-+++ b/include/dt-bindings/clock/qcom,sm8550-camcc.h
-@@ -0,0 +1,187 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
-+ * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef _DT_BINDINGS_CLK_QCOM_CAM_CC_SM8550_H
-+#define _DT_BINDINGS_CLK_QCOM_CAM_CC_SM8550_H
-+
-+/* CAM_CC clocks */
-+#define CAM_CC_BPS_AHB_CLK					0
-+#define CAM_CC_BPS_CLK						1
-+#define CAM_CC_BPS_CLK_SRC					2
-+#define CAM_CC_BPS_FAST_AHB_CLK					3
-+#define CAM_CC_CAMNOC_AXI_CLK					4
-+#define CAM_CC_CAMNOC_AXI_CLK_SRC				5
-+#define CAM_CC_CAMNOC_DCD_XO_CLK				6
-+#define CAM_CC_CAMNOC_XO_CLK					7
-+#define CAM_CC_CCI_0_CLK					8
-+#define CAM_CC_CCI_0_CLK_SRC					9
-+#define CAM_CC_CCI_1_CLK					10
-+#define CAM_CC_CCI_1_CLK_SRC					11
-+#define CAM_CC_CCI_2_CLK					12
-+#define CAM_CC_CCI_2_CLK_SRC					13
-+#define CAM_CC_CORE_AHB_CLK					14
-+#define CAM_CC_CPAS_AHB_CLK					15
-+#define CAM_CC_CPAS_BPS_CLK					16
-+#define CAM_CC_CPAS_CRE_CLK					17
-+#define CAM_CC_CPAS_FAST_AHB_CLK				18
-+#define CAM_CC_CPAS_IFE_0_CLK					19
-+#define CAM_CC_CPAS_IFE_1_CLK					20
-+#define CAM_CC_CPAS_IFE_2_CLK					21
-+#define CAM_CC_CPAS_IFE_LITE_CLK				22
-+#define CAM_CC_CPAS_IPE_NPS_CLK					23
-+#define CAM_CC_CPAS_SBI_CLK					24
-+#define CAM_CC_CPAS_SFE_0_CLK					25
-+#define CAM_CC_CPAS_SFE_1_CLK					26
-+#define CAM_CC_CPHY_RX_CLK_SRC					27
-+#define CAM_CC_CRE_AHB_CLK					28
-+#define CAM_CC_CRE_CLK						29
-+#define CAM_CC_CRE_CLK_SRC					30
-+#define CAM_CC_CSI0PHYTIMER_CLK					31
-+#define CAM_CC_CSI0PHYTIMER_CLK_SRC				32
-+#define CAM_CC_CSI1PHYTIMER_CLK					33
-+#define CAM_CC_CSI1PHYTIMER_CLK_SRC				34
-+#define CAM_CC_CSI2PHYTIMER_CLK					35
-+#define CAM_CC_CSI2PHYTIMER_CLK_SRC				36
-+#define CAM_CC_CSI3PHYTIMER_CLK					37
-+#define CAM_CC_CSI3PHYTIMER_CLK_SRC				38
-+#define CAM_CC_CSI4PHYTIMER_CLK					39
-+#define CAM_CC_CSI4PHYTIMER_CLK_SRC				40
-+#define CAM_CC_CSI5PHYTIMER_CLK					41
-+#define CAM_CC_CSI5PHYTIMER_CLK_SRC				42
-+#define CAM_CC_CSI6PHYTIMER_CLK					43
-+#define CAM_CC_CSI6PHYTIMER_CLK_SRC				44
-+#define CAM_CC_CSI7PHYTIMER_CLK					45
-+#define CAM_CC_CSI7PHYTIMER_CLK_SRC				46
-+#define CAM_CC_CSID_CLK						47
-+#define CAM_CC_CSID_CLK_SRC					48
-+#define CAM_CC_CSID_CSIPHY_RX_CLK				49
-+#define CAM_CC_CSIPHY0_CLK					50
-+#define CAM_CC_CSIPHY1_CLK					51
-+#define CAM_CC_CSIPHY2_CLK					52
-+#define CAM_CC_CSIPHY3_CLK					53
-+#define CAM_CC_CSIPHY4_CLK					54
-+#define CAM_CC_CSIPHY5_CLK					55
-+#define CAM_CC_CSIPHY6_CLK					56
-+#define CAM_CC_CSIPHY7_CLK					57
-+#define CAM_CC_DRV_AHB_CLK					58
-+#define CAM_CC_DRV_XO_CLK					59
-+#define CAM_CC_FAST_AHB_CLK_SRC					60
-+#define CAM_CC_GDSC_CLK						61
-+#define CAM_CC_ICP_AHB_CLK					62
-+#define CAM_CC_ICP_CLK						63
-+#define CAM_CC_ICP_CLK_SRC					64
-+#define CAM_CC_IFE_0_CLK					65
-+#define CAM_CC_IFE_0_CLK_SRC					66
-+#define CAM_CC_IFE_0_DSP_CLK					67
-+#define CAM_CC_IFE_0_DSP_CLK_SRC				68
-+#define CAM_CC_IFE_0_FAST_AHB_CLK				69
-+#define CAM_CC_IFE_1_CLK					70
-+#define CAM_CC_IFE_1_CLK_SRC					71
-+#define CAM_CC_IFE_1_DSP_CLK					72
-+#define CAM_CC_IFE_1_DSP_CLK_SRC				73
-+#define CAM_CC_IFE_1_FAST_AHB_CLK				74
-+#define CAM_CC_IFE_2_CLK					75
-+#define CAM_CC_IFE_2_CLK_SRC					76
-+#define CAM_CC_IFE_2_DSP_CLK					77
-+#define CAM_CC_IFE_2_DSP_CLK_SRC				78
-+#define CAM_CC_IFE_2_FAST_AHB_CLK				79
-+#define CAM_CC_IFE_LITE_AHB_CLK					80
-+#define CAM_CC_IFE_LITE_CLK					81
-+#define CAM_CC_IFE_LITE_CLK_SRC					82
-+#define CAM_CC_IFE_LITE_CPHY_RX_CLK				83
-+#define CAM_CC_IFE_LITE_CSID_CLK				84
-+#define CAM_CC_IFE_LITE_CSID_CLK_SRC				85
-+#define CAM_CC_IPE_NPS_AHB_CLK					86
-+#define CAM_CC_IPE_NPS_CLK					87
-+#define CAM_CC_IPE_NPS_CLK_SRC					88
-+#define CAM_CC_IPE_NPS_FAST_AHB_CLK				89
-+#define CAM_CC_IPE_PPS_CLK					90
-+#define CAM_CC_IPE_PPS_FAST_AHB_CLK				91
-+#define CAM_CC_JPEG_1_CLK					92
-+#define CAM_CC_JPEG_CLK						93
-+#define CAM_CC_JPEG_CLK_SRC					94
-+#define CAM_CC_MCLK0_CLK					95
-+#define CAM_CC_MCLK0_CLK_SRC					96
-+#define CAM_CC_MCLK1_CLK					97
-+#define CAM_CC_MCLK1_CLK_SRC					98
-+#define CAM_CC_MCLK2_CLK					99
-+#define CAM_CC_MCLK2_CLK_SRC					100
-+#define CAM_CC_MCLK3_CLK					101
-+#define CAM_CC_MCLK3_CLK_SRC					102
-+#define CAM_CC_MCLK4_CLK					103
-+#define CAM_CC_MCLK4_CLK_SRC					104
-+#define CAM_CC_MCLK5_CLK					105
-+#define CAM_CC_MCLK5_CLK_SRC					106
-+#define CAM_CC_MCLK6_CLK					107
-+#define CAM_CC_MCLK6_CLK_SRC					108
-+#define CAM_CC_MCLK7_CLK					109
-+#define CAM_CC_MCLK7_CLK_SRC					110
-+#define CAM_CC_PLL0						111
-+#define CAM_CC_PLL0_OUT_EVEN					112
-+#define CAM_CC_PLL0_OUT_ODD					113
-+#define CAM_CC_PLL1						114
-+#define CAM_CC_PLL1_OUT_EVEN					115
-+#define CAM_CC_PLL2						116
-+#define CAM_CC_PLL3						117
-+#define CAM_CC_PLL3_OUT_EVEN					118
-+#define CAM_CC_PLL4						119
-+#define CAM_CC_PLL4_OUT_EVEN					120
-+#define CAM_CC_PLL5						121
-+#define CAM_CC_PLL5_OUT_EVEN					122
-+#define CAM_CC_PLL6						123
-+#define CAM_CC_PLL6_OUT_EVEN					124
-+#define CAM_CC_PLL7						125
-+#define CAM_CC_PLL7_OUT_EVEN					126
-+#define CAM_CC_PLL8						127
-+#define CAM_CC_PLL8_OUT_EVEN					128
-+#define CAM_CC_PLL9						129
-+#define CAM_CC_PLL9_OUT_EVEN					130
-+#define CAM_CC_PLL10						131
-+#define CAM_CC_PLL10_OUT_EVEN					132
-+#define CAM_CC_PLL11						133
-+#define CAM_CC_PLL11_OUT_EVEN					134
-+#define CAM_CC_PLL12						135
-+#define CAM_CC_PLL12_OUT_EVEN					136
-+#define CAM_CC_QDSS_DEBUG_CLK					137
-+#define CAM_CC_QDSS_DEBUG_CLK_SRC				138
-+#define CAM_CC_QDSS_DEBUG_XO_CLK				139
-+#define CAM_CC_SBI_CLK						140
-+#define CAM_CC_SBI_FAST_AHB_CLK					141
-+#define CAM_CC_SFE_0_CLK					142
-+#define CAM_CC_SFE_0_CLK_SRC					143
-+#define CAM_CC_SFE_0_FAST_AHB_CLK				144
-+#define CAM_CC_SFE_1_CLK					145
-+#define CAM_CC_SFE_1_CLK_SRC					146
-+#define CAM_CC_SFE_1_FAST_AHB_CLK				147
-+#define CAM_CC_SLEEP_CLK					148
-+#define CAM_CC_SLEEP_CLK_SRC					149
-+#define CAM_CC_SLOW_AHB_CLK_SRC					150
-+#define CAM_CC_XO_CLK_SRC					151
-+
-+/* CAM_CC power domains */
-+#define CAM_CC_BPS_GDSC						0
-+#define CAM_CC_IFE_0_GDSC					1
-+#define CAM_CC_IFE_1_GDSC					2
-+#define CAM_CC_IFE_2_GDSC					3
-+#define CAM_CC_IPE_0_GDSC					4
-+#define CAM_CC_SBI_GDSC						5
-+#define CAM_CC_SFE_0_GDSC					6
-+#define CAM_CC_SFE_1_GDSC					7
-+#define CAM_CC_TITAN_TOP_GDSC					8
-+
-+/* CAM_CC resets */
-+#define CAM_CC_BPS_BCR						0
-+#define CAM_CC_DRV_BCR						1
-+#define CAM_CC_ICP_BCR						2
-+#define CAM_CC_IFE_0_BCR					3
-+#define CAM_CC_IFE_1_BCR					4
-+#define CAM_CC_IFE_2_BCR					5
-+#define CAM_CC_IPE_0_BCR					6
-+#define CAM_CC_QDSS_DEBUG_BCR					7
-+#define CAM_CC_SBI_BCR						8
-+#define CAM_CC_SFE_0_BCR					9
-+#define CAM_CC_SFE_1_BCR					10
-+
-+#endif
+ static const struct alpha_pll_config cam_cc_pll3_config = {
+-	.l = 0x2d,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x0044002d,
+ 	.alpha = 0x0,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+@@ -247,7 +250,8 @@ static struct clk_alpha_pll_postdiv cam_cc_pll3_out_even = {
+ };
+ 
+ static const struct alpha_pll_config cam_cc_pll4_config = {
+-	.l = 0x2d,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x0044002d,
+ 	.alpha = 0x0,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+@@ -295,7 +299,8 @@ static struct clk_alpha_pll_postdiv cam_cc_pll4_out_even = {
+ };
+ 
+ static const struct alpha_pll_config cam_cc_pll5_config = {
+-	.l = 0x2d,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x0044002d,
+ 	.alpha = 0x0,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+@@ -343,7 +348,8 @@ static struct clk_alpha_pll_postdiv cam_cc_pll5_out_even = {
+ };
+ 
+ static const struct alpha_pll_config cam_cc_pll6_config = {
+-	.l = 0x2d,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x0044002d,
+ 	.alpha = 0x0,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+@@ -391,7 +397,8 @@ static struct clk_alpha_pll_postdiv cam_cc_pll6_out_even = {
+ };
+ 
+ static const struct alpha_pll_config cam_cc_pll7_config = {
+-	.l = 0x2d,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x0044002d,
+ 	.alpha = 0x0,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+@@ -439,7 +446,8 @@ static struct clk_alpha_pll_postdiv cam_cc_pll7_out_even = {
+ };
+ 
+ static const struct alpha_pll_config cam_cc_pll8_config = {
+-	.l = 0x32,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x00440032,
+ 	.alpha = 0x0,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+diff --git a/drivers/clk/qcom/dispcc-sm8450.c b/drivers/clk/qcom/dispcc-sm8450.c
+index adbfd30bfc96..b0f86bd40a80 100644
+--- a/drivers/clk/qcom/dispcc-sm8450.c
++++ b/drivers/clk/qcom/dispcc-sm8450.c
+@@ -76,11 +76,12 @@ static struct pll_vco lucid_evo_vco[] = {
+ };
+ 
+ static const struct alpha_pll_config disp_cc_pll0_config = {
+-	.l = 0xD,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x0044000d,
+ 	.alpha = 0x6492,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+-	.config_ctl_hi1_val = 0x32AA299C,
++	.config_ctl_hi1_val = 0x32aa299c,
+ 	.user_ctl_val = 0x00000000,
+ 	.user_ctl_hi_val = 0x00000805,
+ };
+@@ -103,11 +104,12 @@ static struct clk_alpha_pll disp_cc_pll0 = {
+ };
+ 
+ static const struct alpha_pll_config disp_cc_pll1_config = {
+-	.l = 0x1F,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x0044001f,
+ 	.alpha = 0x4000,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+-	.config_ctl_hi1_val = 0x32AA299C,
++	.config_ctl_hi1_val = 0x32aa299c,
+ 	.user_ctl_val = 0x00000000,
+ 	.user_ctl_hi_val = 0x00000805,
+ };
+diff --git a/drivers/clk/qcom/dispcc-sm8550.c b/drivers/clk/qcom/dispcc-sm8550.c
+index 1e5a11081860..b0d4c623731d 100644
+--- a/drivers/clk/qcom/dispcc-sm8550.c
++++ b/drivers/clk/qcom/dispcc-sm8550.c
+@@ -76,7 +76,8 @@ static struct pll_vco lucid_ole_vco[] = {
+ };
+ 
+ static const struct alpha_pll_config disp_cc_pll0_config = {
+-	.l = 0xd,
++	/* .l includes RINGOSC_CAL_L_VAL, CAL_L_VAL, L_VAL fields */
++	.l = 0x4444000d,
+ 	.alpha = 0x6492,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+@@ -103,7 +104,8 @@ static struct clk_alpha_pll disp_cc_pll0 = {
+ };
+ 
+ static const struct alpha_pll_config disp_cc_pll1_config = {
+-	.l = 0x1f,
++	/* .l includes RINGOSC_CAL_L_VAL, CAL_L_VAL, L_VAL fields */
++	.l = 0x4444001f,
+ 	.alpha = 0x4000,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+diff --git a/drivers/clk/qcom/gpucc-sa8775p.c b/drivers/clk/qcom/gpucc-sa8775p.c
+index 18d23be8d435..153bf6ecb795 100644
+--- a/drivers/clk/qcom/gpucc-sa8775p.c
++++ b/drivers/clk/qcom/gpucc-sa8775p.c
+@@ -46,7 +46,8 @@ static const struct pll_vco lucid_evo_vco[] = {
+ 
+ /* 810MHz configuration */
+ static struct alpha_pll_config gpu_cc_pll0_config = {
+-	.l = 0x2a,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x0044002a,
+ 	.alpha = 0x3000,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
+@@ -72,7 +73,8 @@ static struct clk_alpha_pll gpu_cc_pll0 = {
+ 
+ /* 1000MHz configuration */
+ static struct alpha_pll_config gpu_cc_pll1_config = {
+-	.l = 0x34,
++	/* .l includes CAL_L_VAL, L_VAL fields */
++	.l = 0x00440034,
+ 	.alpha = 0x1555,
+ 	.config_ctl_val = 0x20485699,
+ 	.config_ctl_hi_val = 0x00182261,
 -- 
 2.40.1
 
