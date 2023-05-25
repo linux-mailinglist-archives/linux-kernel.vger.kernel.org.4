@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C50C71148B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7047114B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242066AbjEYSib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        id S241907AbjEYSix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241969AbjEYSiD (ORCPT
+        with ESMTP id S242037AbjEYSiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:38:03 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A451703;
-        Thu, 25 May 2023 11:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3UfPchLUYdWy9KCje7JNWMJZu0GBbqs1XHhZyb9Elpg=; b=dREWFlMgPsOScdh4mHYj5vpNlw
-        HeeuA9W7TI40gjiRe+mbNwDH9vWaRtED9kNXnJ7Eusr53g6BtLAuotQypKw9DJH2uep7C9CpsQ1TQ
-        bllam3AtdkUmxLMZlhm16mC05+GB2+Gk4N6vp43KXCjFQaya1hE5GmKX/HKra0P2wBWWcjHIEo1V2
-        3QPjca4/AhFY57yNLeouXSnrY3JLPy6ofCSM2oqccSgpfEqxBRP9wS2qzKiS/7ETGDwKvXWJBCVSf
-        eqlNosa0U3phxMepSLIM4URGOCcoENiqxjZrTOQyp1azZhXnTh3gdW9Ek2FpB4L2sCBWcXpjL3ZiV
-        CQJ4yMnw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q2Fnt-00HPwi-2H;
-        Thu, 25 May 2023 18:35:13 +0000
-Date:   Thu, 25 May 2023 11:35:13 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>, hch@lst.de,
-        brauner@kernel.org, david@redhat.com
-Cc:     tglx@linutronix.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com, lennart@poettering.net,
-        gregkh@linuxfoundation.org, rafael@kernel.org, song@kernel.org,
-        lucas.de.marchi@gmail.com, lucas.demarchi@intel.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com
-Subject: Re: [PATCH 1/2] fs/kernel_read_file: add support for duplicate
- detection
-Message-ID: <ZG+qYdGsbE7mOn6M@bombadil.infradead.org>
-References: <20230524213620.3509138-1-mcgrof@kernel.org>
- <20230524213620.3509138-2-mcgrof@kernel.org>
- <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
- <CAHk-=wgKu=tJf1bm_dtme4Hde4zTB=_7EdgR8avsDRK4_jD+uA@mail.gmail.com>
- <ZG+kDevFH6uE1I/j@bombadil.infradead.org>
+        Thu, 25 May 2023 14:38:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7B42117;
+        Thu, 25 May 2023 11:36:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B76AE64903;
+        Thu, 25 May 2023 18:36:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0167AC433D2;
+        Thu, 25 May 2023 18:36:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685039776;
+        bh=30LUA668h7VdTQuEqajPXaMTBzrCOVJwFLuPF9LjHBo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=IuUfepG12olIeB2lzTa7tGatEJi2UUccya/fNmL6b7wPDQUpg8G4y9Hf2JbXY4d8y
+         +f0jF+dsHPW+gis9zOKYcdy6VGdcYs6c8IyQbPYS/469rUlnQ65pDeIGt3NgM7FXeG
+         NDG31+D6N0bqLwxkmfu2gw6BwZusxHn3Sv+C/tKWdFgnLWE24VinD/PEWjWhhGPJoN
+         BDxin0Fugq0IHAu62DjMoR+dCtYLKtYWuW0Z9/U9Xm/goUlbqHmNu3ls3gT52zjSup
+         1qNqYHHSL+UaLp8jMSc7hSMWlFU3S4bRQcsXbT86/0ZpARTIln9GHNM+KEzFGqe9og
+         NaRHElROTzQKw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jeremy Soller <jeremy@system76.com>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        mario.limonciello@amd.com, Syed.SabaKareem@amd.com,
+        xazrael@hotmail.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.1 03/57] ASoC: amd: yc: Add DMI entry to support System76 Pangolin 12
+Date:   Thu, 25 May 2023 14:35:13 -0400
+Message-Id: <20230525183607.1793983-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
+References: <20230525183607.1793983-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZG+kDevFH6uE1I/j@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:08:13AM -0700, Luis Chamberlain wrote:
-> + fsdevel please review,
+From: Jeremy Soller <jeremy@system76.com>
 
-> So with two other hunks added (2nd and 4th), this now matches parity with
-> my patch, not suggesting this is right, just demonstrating how this
-> could be resolved with this. We could also just have a helper which lets
-> the module code allow_write_access() at the end of its use of the fd
-> (failure to load or module is removed).
+[ Upstream commit 7b9891ad25246b18b5ccc19518da7abc7763aa0a ]
 
-This even fixes the pathological case with stress-ng for finit_module:
+Add pang12 quirk to enable the internal microphone.
 
-./stress-ng --module 8192 --module-name xfs
+Signed-off-by: Jeremy Soller <jeremy@system76.com
+Signed-off-by: Tim Crawford <tcrawford@system76.com
+Link: https://lore.kernel.org/r/20230505161458.19676-1-tcrawford@system76.com
+Signed-off-by: Mark Brown <broonie@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ sound/soc/amd/yc/acp6x-mach.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-(stress-ng assumes you have all dependencies already loaded and
- the module is not loaded, it uses finit_module() directly)
+diff --git a/sound/soc/amd/yc/acp6x-mach.c b/sound/soc/amd/yc/acp6x-mach.c
+index 0acdf0156f075..b844f321d139e 100644
+--- a/sound/soc/amd/yc/acp6x-mach.c
++++ b/sound/soc/amd/yc/acp6x-mach.c
+@@ -276,6 +276,13 @@ static const struct dmi_system_id yc_acp_quirk_table[] = {
+ 			DMI_MATCH(DMI_BOARD_NAME, "8A22"),
+ 		}
+ 	},
++	{
++		.driver_data = &acp6x_card,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "System76"),
++			DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
++		}
++	},
+ 	{}
+ };
+ 
+-- 
+2.39.2
 
-  Luis
