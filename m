@@ -2,115 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B1E710BDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335C2710BCA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240843AbjEYMPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 08:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        id S241143AbjEYMKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 08:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjEYMPp (ORCPT
+        with ESMTP id S240825AbjEYMKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 08:15:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD3CBB;
-        Thu, 25 May 2023 05:15:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 862161FE57;
-        Thu, 25 May 2023 12:15:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685016943;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/UQdvDq4//dZNHe4PM4r9XOD1HMKEFnVGMgfQGues28=;
-        b=AtCbTEOPM+2g/rs3dX9aJ7MYw2yQmJRsTeiY8QVxQC1/yIjjRru9NbNGwXsz97i1iLxwal
-        cHIE0s9iF+1d0dAA6mIPs0bBguH6jntoqif0n8u+MU9qtnuJe6R/3F8NP9AySqXrd4yh2A
-        ut5N0g5V0Tj8jIxIfvCYvXg2pNIrdKk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685016943;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/UQdvDq4//dZNHe4PM4r9XOD1HMKEFnVGMgfQGues28=;
-        b=3tdHkz3oyAfp97Jh6U99RsdBTiWbnda/+aVkteDiCneEdvddX+B8j2FqJ+LYWXGNA8s8MZ
-        rtK5ii2+0prk1OCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 592E6134B2;
-        Thu, 25 May 2023 12:15:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bimgFG9Rb2RiLwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Thu, 25 May 2023 12:15:43 +0000
-Date:   Thu, 25 May 2023 14:09:35 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     David Sterba <dsterba@suse.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH] fs: use UB-safe check for signed addition overflow in
- remap_verify_area
-Message-ID: <20230525120935.GI30909@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <20230523162628.17071-1-dsterba@suse.com>
- <20230524-umfahren-stift-d1c34fd1d0fa@brauner>
+        Thu, 25 May 2023 08:10:05 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05D6E7;
+        Thu, 25 May 2023 05:10:01 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96f6a9131fdso79529366b.1;
+        Thu, 25 May 2023 05:10:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685016600; x=1687608600;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rcZFua0EILx4UgL94m890/UaW7590iqXfYJZcRYRhjI=;
+        b=e51ZnOfJ1t/HYqAKC9YQAQk0SSWNN6Gcf6eX15qnKverJ5v2wTq1XItzYrgvLb6Jlc
+         nhS13CzXaongQ9ENjk2B1KGf3BvBL2Y0M6y9AlxFM4iysWL6uB9U25VP6lRXdjP5TbTk
+         w2Ct2rt0kxCfGhR50mAp4HILAlPtkxTzsCi5xumrO/Pj/0Y2mkap5gqJyjiK9zj/0XBo
+         0xReVcHuBoxG9om06U1JiXltUSvNKtm+EWnDUNNtYHCiGVua/zsWiRI8bFRUJ8y4MODi
+         Ss7ewqnkGgO68IVTpCqs4rJL5RTZuzncA2cPhTadyae4YsVGgLL5IIT91uDCAAgsdgaM
+         l2HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685016600; x=1687608600;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rcZFua0EILx4UgL94m890/UaW7590iqXfYJZcRYRhjI=;
+        b=lvAwIzP4RsZXlposbj3n3VSqZvcQ0ewyq43P9BslIyqucnIyUTYfqlbReMQRf411sv
+         AfZzO9j/mcqey+i8VhDga8ae3vxHIVMuJjKUfWpnss+hfeqAK0XB26iieeN5fsSMuIRk
+         4ywIKtNgBVo0loD+DyC4hjH+jmXb8OF2BARWWNXTSEOwzjTy1qd5kTexC5z41wjfMKO0
+         TRcAKk1kaiNLFiZsra+V9R5lPwMp+PR6Ucc+kNJn3tQTNHHyHN71njVgMtDhnJ5ah1/6
+         I7xKgVrbPXN96ucMga2HVdnWfDfrt+/OSsnI5W1a7fW6wK3ZNE5gFLEDTqHXmaPo6HpR
+         DBdA==
+X-Gm-Message-State: AC+VfDySsFSSMnahpN7MUiD3+VKYVzEefuGtnH7qcDI0C/JI9NEUh5KB
+        frVfwwa7zRzJTKdeskVdoPQ=
+X-Google-Smtp-Source: ACHHUZ7zIdWYYBbfyJFITOB1FxiDdqR7ygd9FU8331naFjWq13i+5GYuWd8Ym1lSFAJSdAzQNFATPg==
+X-Received: by 2002:a17:907:3185:b0:957:862a:9e6e with SMTP id xe5-20020a170907318500b00957862a9e6emr1104852ejb.73.1685016599901;
+        Thu, 25 May 2023 05:09:59 -0700 (PDT)
+Received: from fedora.. ([213.149.38.146])
+        by smtp.googlemail.com with ESMTPSA id d5-20020a170906640500b0094ef923a6ccsm765216ejm.219.2023.05.25.05.09.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 05:09:59 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v3 1/5] soc: qcom: socinfo: move SMEM item struct and defines to a header
+Date:   Thu, 25 May 2023 14:09:52 +0200
+Message-Id: <20230525120956.3095317-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524-umfahren-stift-d1c34fd1d0fa@brauner>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 04:16:17PM +0200, Christian Brauner wrote:
-> On Tue, 23 May 2023 18:26:28 +0200, David Sterba wrote:
-> > The following warning pops up with enabled UBSAN in tests fstests/generic/303:
-> > 
-> >   [23127.529395] UBSAN: Undefined behaviour in fs/read_write.c:1725:7
-> >   [23127.529400] signed integer overflow:
-> >   [23127.529403] 4611686018427322368 + 9223372036854775807 cannot be represented in type 'long long int'
-> >   [23127.529412] CPU: 4 PID: 26180 Comm: xfs_io Not tainted 5.2.0-rc2-1.ge195904-vanilla+ #450
-> >   [23127.556999] Hardware name: empty empty/S3993, BIOS PAQEX0-3 02/24/2008
-> >   [23127.557001] Call Trace:
-> >   [23127.557060]  dump_stack+0x67/0x9b
-> >   [23127.557070]  ubsan_epilogue+0x9/0x40
-> >   [23127.573496]  handle_overflow+0xb3/0xc0
-> >   [23127.573514]  do_clone_file_range+0x28f/0x2a0
-> >   [23127.573547]  vfs_clone_file_range+0x35/0xb0
-> >   [23127.573564]  ioctl_file_clone+0x8d/0xc0
-> >   [23127.590144]  do_vfs_ioctl+0x300/0x700
-> >   [23127.590160]  ksys_ioctl+0x70/0x80
-> >   [23127.590203]  ? trace_hardirqs_off_thunk+0x1a/0x1c
-> >   [23127.590210]  __x64_sys_ioctl+0x16/0x20
-> >   [23127.590215]  do_syscall_64+0x5c/0x1d0
-> >   [23127.590224]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> >   [23127.590231] RIP: 0033:0x7ff6d7250327
-> >   [23127.590241] RSP: 002b:00007ffe3a38f1d8 EFLAGS: 00000206 ORIG_RAX: 0000000000000010
-> >   [23127.590246] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007ff6d7250327
-> >   [23127.590249] RDX: 00007ffe3a38f220 RSI: 000000004020940d RDI: 0000000000000003
-> >   [23127.590252] RBP: 0000000000000000 R08: 00007ffe3a3c80a0 R09: 00007ffe3a3c8080
-> >   [23127.590255] R10: 000000000fa99fa0 R11: 0000000000000206 R12: 0000000000000000
-> >   [23127.590260] R13: 0000000000000000 R14: 3fffffffffff0000 R15: 00007ff6d750a20c
-> > 
-> > [...]
-> 
-> Independent of this fix it is a bit strange that we have this
-> discrepancy between struct file_clone_range using u64s and the internal
-> apis using loff_t. It's not a big deal but it's a bit ugly.
+Move SMEM item struct and related defines to a header in order to be able
+to reuse them in the SMEM driver instead of duplicating them.
 
-The file_clone_range used to be a private btrfs ioctl with u64 types
-that got lifted to VFS, inheriting the types.
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ drivers/soc/qcom/socinfo.c       | 67 +-----------------------------
+ include/linux/soc/qcom/socinfo.h | 70 ++++++++++++++++++++++++++++++++
+ 2 files changed, 71 insertions(+), 66 deletions(-)
+ create mode 100644 include/linux/soc/qcom/socinfo.h
 
-04b38d601239 ("vfs: pull btrfs clone API to vfs layer")
+diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+index c2e4a57dd666..ee6bbf76d941 100644
+--- a/drivers/soc/qcom/socinfo.c
++++ b/drivers/soc/qcom/socinfo.c
+@@ -11,6 +11,7 @@
+ #include <linux/random.h>
+ #include <linux/slab.h>
+ #include <linux/soc/qcom/smem.h>
++#include <linux/soc/qcom/socinfo.h>
+ #include <linux/string.h>
+ #include <linux/stringify.h>
+ #include <linux/sys_soc.h>
+@@ -32,15 +33,6 @@
+ #define qcom_board_id(id) QCOM_ID_ ## id, __stringify(id)
+ #define qcom_board_id_named(id, name) QCOM_ID_ ## id, (name)
+ 
+-#define SMEM_SOCINFO_BUILD_ID_LENGTH           32
+-#define SMEM_SOCINFO_CHIP_ID_LENGTH            32
+-
+-/*
+- * SMEM item id, used to acquire handles to respective
+- * SMEM region.
+- */
+-#define SMEM_HW_SW_BUILD_ID            137
+-
+ #ifdef CONFIG_DEBUG_FS
+ #define SMEM_IMAGE_VERSION_BLOCKS_COUNT        32
+ #define SMEM_IMAGE_VERSION_SIZE                4096
+@@ -126,64 +118,7 @@ static const char *const pmic_models[] = {
+ 	[58] = "PM8450",
+ 	[65] = "PM8010",
+ };
+-#endif /* CONFIG_DEBUG_FS */
+-
+-/* Socinfo SMEM item structure */
+-struct socinfo {
+-	__le32 fmt;
+-	__le32 id;
+-	__le32 ver;
+-	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
+-	/* Version 2 */
+-	__le32 raw_id;
+-	__le32 raw_ver;
+-	/* Version 3 */
+-	__le32 hw_plat;
+-	/* Version 4 */
+-	__le32 plat_ver;
+-	/* Version 5 */
+-	__le32 accessory_chip;
+-	/* Version 6 */
+-	__le32 hw_plat_subtype;
+-	/* Version 7 */
+-	__le32 pmic_model;
+-	__le32 pmic_die_rev;
+-	/* Version 8 */
+-	__le32 pmic_model_1;
+-	__le32 pmic_die_rev_1;
+-	__le32 pmic_model_2;
+-	__le32 pmic_die_rev_2;
+-	/* Version 9 */
+-	__le32 foundry_id;
+-	/* Version 10 */
+-	__le32 serial_num;
+-	/* Version 11 */
+-	__le32 num_pmics;
+-	__le32 pmic_array_offset;
+-	/* Version 12 */
+-	__le32 chip_family;
+-	__le32 raw_device_family;
+-	__le32 raw_device_num;
+-	/* Version 13 */
+-	__le32 nproduct_id;
+-	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
+-	/* Version 14 */
+-	__le32 num_clusters;
+-	__le32 ncluster_array_offset;
+-	__le32 num_defective_parts;
+-	__le32 ndefective_parts_array_offset;
+-	/* Version 15 */
+-	__le32 nmodem_supported;
+-	/* Version 16 */
+-	__le32  feature_code;
+-	__le32  pcode;
+-	__le32  npartnamemap_offset;
+-	__le32  nnum_partname_mapping;
+-	/* Version 17 */
+-	__le32 oem_variant;
+-};
+ 
+-#ifdef CONFIG_DEBUG_FS
+ struct socinfo_params {
+ 	u32 raw_device_family;
+ 	u32 hw_plat_subtype;
+diff --git a/include/linux/soc/qcom/socinfo.h b/include/linux/soc/qcom/socinfo.h
+new file mode 100644
+index 000000000000..d1cbc49a2a2d
+--- /dev/null
++++ b/include/linux/soc/qcom/socinfo.h
+@@ -0,0 +1,70 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __QCOM_SOCINFO_H__
++#define __QCOM_SOCINFO_H__
++
++/*
++ * SMEM item id, used to acquire handles to respective
++ * SMEM region.
++ */
++#define SMEM_HW_SW_BUILD_ID		137
++
++#define SMEM_SOCINFO_BUILD_ID_LENGTH	32
++#define SMEM_SOCINFO_CHIP_ID_LENGTH	32
++
++/* Socinfo SMEM item structure */
++struct socinfo {
++	__le32 fmt;
++	__le32 id;
++	__le32 ver;
++	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
++	/* Version 2 */
++	__le32 raw_id;
++	__le32 raw_ver;
++	/* Version 3 */
++	__le32 hw_plat;
++	/* Version 4 */
++	__le32 plat_ver;
++	/* Version 5 */
++	__le32 accessory_chip;
++	/* Version 6 */
++	__le32 hw_plat_subtype;
++	/* Version 7 */
++	__le32 pmic_model;
++	__le32 pmic_die_rev;
++	/* Version 8 */
++	__le32 pmic_model_1;
++	__le32 pmic_die_rev_1;
++	__le32 pmic_model_2;
++	__le32 pmic_die_rev_2;
++	/* Version 9 */
++	__le32 foundry_id;
++	/* Version 10 */
++	__le32 serial_num;
++	/* Version 11 */
++	__le32 num_pmics;
++	__le32 pmic_array_offset;
++	/* Version 12 */
++	__le32 chip_family;
++	__le32 raw_device_family;
++	__le32 raw_device_num;
++	/* Version 13 */
++	__le32 nproduct_id;
++	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
++	/* Version 14 */
++	__le32 num_clusters;
++	__le32 ncluster_array_offset;
++	__le32 num_defective_parts;
++	__le32 ndefective_parts_array_offset;
++	/* Version 15 */
++	__le32 nmodem_supported;
++	/* Version 16 */
++	__le32  feature_code;
++	__le32  pcode;
++	__le32  npartnamemap_offset;
++	__le32  nnum_partname_mapping;
++	/* Version 17 */
++	__le32 oem_variant;
++};
++
++#endif
+-- 
+2.40.1
+
