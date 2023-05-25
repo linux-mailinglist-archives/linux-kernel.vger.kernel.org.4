@@ -2,489 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9977108F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4A4710903
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240720AbjEYJdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S240761AbjEYJe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240554AbjEYJcr (ORCPT
+        with ESMTP id S240503AbjEYJek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:32:47 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33871A8
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:32:43 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5289ce6be53so593313a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1685007163; x=1687599163;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2edDXEsQTHI7uII+c9+BmUZr5wGVnkwzXdOkT9FS/GE=;
-        b=XPbv2IKMzt1GxUt3sUXSbVSu2nv3CZE/RyBGO6HoRIp9TVxXYKfhZtn2clBFpQz6FN
-         UEhXjKwBc6+9GK0Ugi81wXhA9hUrX/mo5Af6Ny7VoC35sceygSn70ZYmbDtTbjbvdhZN
-         GTlJCWDjFyQnJn96mS0SDlgZAqK8vZK0Vp/1Hz3C0hgHLS3pOH3G4T06byhPM+zHIrK0
-         VDXC1ggDthQ6aVKRC81FZFduJcAKnEXFZULCMQ0RjBrvb18Q6IwNlmXUbSnmc67TP/rD
-         hQxVVN3ahhDKHY7aN6uRKNu63KNg922vGOA5Y9PsVodt++t6RL/UDq17ylTtoT6apxmc
-         MwvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685007163; x=1687599163;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2edDXEsQTHI7uII+c9+BmUZr5wGVnkwzXdOkT9FS/GE=;
-        b=URKXdEgwUW0M3/sa2Z0uuhnNvcdghp3AQMbRWXJR/zP/bRjpREY7fJ+Y3KsIy0atjn
-         6onSmDzIWvbwSZcwK/VJ+zMZz8U1FoJYD53mn79F9s8o+9qCnmZ5z++ApMwu0ekMgmBD
-         FHk/ssknEKqJYdgqANhRu29DQJASAoOnsvFYDZK3iRwmKAVpWjCtQSgvc299Bp+nc4je
-         cNJS+VTT4jxuv/pqydBQ1CqosdBciYH9yqjuRnfA2SGNj9a8C/gbGWKIm+tDafuRel+q
-         O/FdSq0jN/GLRB+3fm+wvMlT0+qzKg3oQoNm1HBA4vP/3aKcgQUTknzeMBGf9NeuC7bD
-         lGTw==
-X-Gm-Message-State: AC+VfDwQy9IZHE5K/cALtm/jV+ZpwKd2QJetTOad1CwgjHS4YD+ENAVo
-        eXyYBBkSmideOLOPJlsjHFjuaQ==
-X-Google-Smtp-Source: ACHHUZ6FmTha8Z5JOuQY03Iq8yyCy6x0Ce/uSiwkgoqPBJWDxm0VTSp/bm/Bslp7GxsnUYCJdKJzBQ==
-X-Received: by 2002:a17:903:22cf:b0:1ac:7e95:74bf with SMTP id y15-20020a17090322cf00b001ac7e9574bfmr1000680plg.6.1685007163266;
-        Thu, 25 May 2023 02:32:43 -0700 (PDT)
-Received: from yc.huaqin.com ([101.78.151.214])
-        by smtp.gmail.com with ESMTPSA id n6-20020a170902e54600b001afa7040a70sm951039plf.276.2023.05.25.02.32.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 02:32:42 -0700 (PDT)
-From:   Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-To:     dianders@google.com, daniel@ffwll.ch, neil.armstrong@linaro.org,
-        sam@ravnborg.org, airlied@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, hsinyi@google.com,
-        conor+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [v4 4/4] drm/panel: Support for Starry-ili9882t TDDI MIPI-DSI panel
-Date:   Thu, 25 May 2023 17:31:51 +0800
-Message-Id: <20230525093151.2338370-5-yangcong5@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230525093151.2338370-1-yangcong5@huaqin.corp-partner.google.com>
-References: <1adda828-cf35-fb2c-6db5-f9ca91b5b62a@linaro.org>
- <20230525093151.2338370-1-yangcong5@huaqin.corp-partner.google.com>
+        Thu, 25 May 2023 05:34:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF70919C;
+        Thu, 25 May 2023 02:34:30 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685007268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4NGWDH2m9xz3zGie63zl1kcLGjTJ0fX1VflVrGzz2ZQ=;
+        b=Kja8EByGHMg80rkSKT9+A6oAP7Ytw5mSKQu0+uGfVfwe5tVdGCEi5josuEM1SwN606+mom
+        tJOhrFWIt2zJG+DlK5DjPmWfVz6loRqSChpbkp8HXvZab2zEzJXhmgL0k+AWUZunXGh4bK
+        ZB+SftTZW59pKhVFlzUNZNYOpZMdX8zxvpepVbJv55/P+jYmWnd8ln/AejbG3dDoZJevAa
+        J7Qto8rkUPaEA13Qh78iauHtxD9/MNjhQsamwocWO64h7fGgSzp5rGrAHv5Xn4mRXNmpig
+        fi0pD7NC4PYFiEdTiZBJclw3eqzxfLzFQqzujGa99ba9O296DwZrG+8YpmfJ+w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685007268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4NGWDH2m9xz3zGie63zl1kcLGjTJ0fX1VflVrGzz2ZQ=;
+        b=mmiTP6jCW1+KvC8QM+LWeB5WcVHbyStKgJqzDNEQsZrG0o3PYsrEqd/a7KE5S+4YPNPZjx
+        20P+WWxS57IdbmBQ==
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Matthew Howell <matthew.howell@sealevel.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-serial@vger.kernel.org
+Subject: [PATCH tty v1 1/8] serial: 8250: lock port in startup() callbacks
+Date:   Thu, 25 May 2023 11:37:52 +0206
+Message-Id: <20230525093159.223817-2-john.ogness@linutronix.de>
+In-Reply-To: <20230525093159.223817-1-john.ogness@linutronix.de>
+References: <20230525093159.223817-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Starry-ili9882 is a 10.51" WUXGA TFT panel. which fits in nicely with
-the existing panel-boe-tv101wum-nl6 driver. From the datasheet,MIPI need
-to keep the LP11 state before the lcm_reset pin is pulled high. So add
-lp11_before_reset flag.
+uart_ops startup() callback is called without interrupts
+disabled and without port->lock locked, relatively late during the
+boot process (from the call path of console_on_rootfs()). If the
+device is a console, it was already previously registered and could
+be actively printing messages.
 
-Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+The console printing function serial8250_console_write() modifies
+the interrupt register (UART_IER) under the port->lock with the
+pattern: read, clear, restore.
+
+Since some startup() callbacks are modifying UART_IER without the
+port->lock locked, it is possible that the value intended to be
+written by the startup() callback will get overwritten and be
+lost.
+
+CPU0                           CPU1
+serial8250_console_write       omap_8250_startup
+--------------------------     -----------------
+spin_lock(port->lock)
+oldval = read(UART_IER)
+uart_console_write()
+                               write(newval, UART_IER)
+write(oldval, UART_IER)
+spin_unlock(port->lock)
+
+Add port->lock synchronization to the 8250 startup() callbacks
+where they need to access UART_IER. This avoids racing with
+serial8250_console_write().
+
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
 ---
- .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 371 ++++++++++++++++++
- 1 file changed, 371 insertions(+)
+ drivers/tty/serial/8250/8250_bcm7271.c |  4 ++++
+ drivers/tty/serial/8250/8250_exar.c    |  4 ++++
+ drivers/tty/serial/8250/8250_omap.c    |  3 +++
+ drivers/tty/serial/8250/8250_port.c    | 18 ++++++++++++++++--
+ 4 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-index 0772d96e446c..720b77964fcf 100644
---- a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-+++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-@@ -1370,6 +1370,346 @@ static const struct panel_init_cmd starry_himax83102_j02_init_cmd[] = {
- 	{},
- };
+diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
+index f801b1f5b46c..2b38bcc5112e 100644
+--- a/drivers/tty/serial/8250/8250_bcm7271.c
++++ b/drivers/tty/serial/8250/8250_bcm7271.c
+@@ -605,9 +605,13 @@ static int brcmuart_startup(struct uart_port *port)
+ 	/*
+ 	 * Disable the Receive Data Interrupt because the DMA engine
+ 	 * will handle this.
++	 *
++	 * Synchronize UART_IER access against the console.
+ 	 */
++	spin_lock_irq(&port->lock);
+ 	up->ier &= ~UART_IER_RDI;
+ 	serial_port_out(port, UART_IER, up->ier);
++	spin_unlock_irq(&port->lock);
  
-+static const struct panel_init_cmd starry_ili9882t_init_cmd[] = {
-+	_INIT_DELAY_CMD(5),
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x01),
-+	_INIT_DCS_CMD(0x00, 0x42),
-+	_INIT_DCS_CMD(0x01, 0x11),
-+	_INIT_DCS_CMD(0x02, 0x00),
-+	_INIT_DCS_CMD(0x03, 0x00),
-+
-+	_INIT_DCS_CMD(0x04, 0x01),
-+	_INIT_DCS_CMD(0x05, 0x11),
-+	_INIT_DCS_CMD(0x06, 0x00),
-+	_INIT_DCS_CMD(0x07, 0x00),
-+
-+	_INIT_DCS_CMD(0x08, 0x80),
-+	_INIT_DCS_CMD(0x09, 0x81),
-+	_INIT_DCS_CMD(0x0A, 0x71),
-+	_INIT_DCS_CMD(0x0B, 0x00),
-+
-+	_INIT_DCS_CMD(0x0C, 0x00),
-+	_INIT_DCS_CMD(0x0E, 0x1A),
-+
-+	_INIT_DCS_CMD(0x24, 0x00),
-+	_INIT_DCS_CMD(0x25, 0x00),
-+	_INIT_DCS_CMD(0x26, 0x00),
-+	_INIT_DCS_CMD(0x27, 0x00),
-+
-+	_INIT_DCS_CMD(0x2C, 0xD4),
-+	_INIT_DCS_CMD(0xB9, 0x40),
-+
-+	_INIT_DCS_CMD(0xB0, 0x11),
-+
-+	_INIT_DCS_CMD(0xE6, 0x32),
-+	_INIT_DCS_CMD(0xD1, 0x30),
-+
-+	_INIT_DCS_CMD(0xD6, 0x55),
-+
-+	_INIT_DCS_CMD(0xD0, 0x01),
-+	_INIT_DCS_CMD(0xE3, 0x93),
-+	_INIT_DCS_CMD(0xE4, 0x00),
-+	_INIT_DCS_CMD(0xE5, 0x80),
-+
-+	_INIT_DCS_CMD(0x31, 0x07),
-+	_INIT_DCS_CMD(0x32, 0x07),
-+	_INIT_DCS_CMD(0x33, 0x07),
-+	_INIT_DCS_CMD(0x34, 0x07),
-+	_INIT_DCS_CMD(0x35, 0x07),
-+	_INIT_DCS_CMD(0x36, 0x01),
-+	_INIT_DCS_CMD(0x37, 0x00),
-+	_INIT_DCS_CMD(0x38, 0x28),
-+	_INIT_DCS_CMD(0x39, 0x29),
-+	_INIT_DCS_CMD(0x3A, 0x11),
-+	_INIT_DCS_CMD(0x3B, 0x13),
-+	_INIT_DCS_CMD(0x3C, 0x15),
-+	_INIT_DCS_CMD(0x3D, 0x17),
-+	_INIT_DCS_CMD(0x3E, 0x09),
-+	_INIT_DCS_CMD(0x3F, 0x0D),
-+	_INIT_DCS_CMD(0x40, 0x02),
-+	_INIT_DCS_CMD(0x41, 0x02),
-+	_INIT_DCS_CMD(0x42, 0x02),
-+	_INIT_DCS_CMD(0x43, 0x02),
-+	_INIT_DCS_CMD(0x44, 0x02),
-+	_INIT_DCS_CMD(0x45, 0x02),
-+	_INIT_DCS_CMD(0x46, 0x02),
-+
-+	_INIT_DCS_CMD(0x47, 0x07),
-+	_INIT_DCS_CMD(0x48, 0x07),
-+	_INIT_DCS_CMD(0x49, 0x07),
-+	_INIT_DCS_CMD(0x4A, 0x07),
-+	_INIT_DCS_CMD(0x4B, 0x07),
-+	_INIT_DCS_CMD(0x4C, 0x01),
-+	_INIT_DCS_CMD(0x4D, 0x00),
-+	_INIT_DCS_CMD(0x4E, 0x28),
-+	_INIT_DCS_CMD(0x4F, 0x29),
-+	_INIT_DCS_CMD(0x50, 0x10),
-+	_INIT_DCS_CMD(0x51, 0x12),
-+	_INIT_DCS_CMD(0x52, 0x14),
-+	_INIT_DCS_CMD(0x53, 0x16),
-+	_INIT_DCS_CMD(0x54, 0x08),
-+	_INIT_DCS_CMD(0x55, 0x0C),
-+	_INIT_DCS_CMD(0x56, 0x02),
-+	_INIT_DCS_CMD(0x57, 0x02),
-+	_INIT_DCS_CMD(0x58, 0x02),
-+	_INIT_DCS_CMD(0x59, 0x02),
-+	_INIT_DCS_CMD(0x5A, 0x02),
-+	_INIT_DCS_CMD(0x5B, 0x02),
-+	_INIT_DCS_CMD(0x5C, 0x02),
-+
-+	_INIT_DCS_CMD(0x61, 0x07),
-+	_INIT_DCS_CMD(0x62, 0x07),
-+	_INIT_DCS_CMD(0x63, 0x07),
-+	_INIT_DCS_CMD(0x64, 0x07),
-+	_INIT_DCS_CMD(0x65, 0x07),
-+	_INIT_DCS_CMD(0x66, 0x01),
-+	_INIT_DCS_CMD(0x67, 0x00),
-+	_INIT_DCS_CMD(0x68, 0x28),
-+	_INIT_DCS_CMD(0x69, 0x29),
-+	_INIT_DCS_CMD(0x6A, 0x16),
-+	_INIT_DCS_CMD(0x6B, 0x14),
-+	_INIT_DCS_CMD(0x6C, 0x12),
-+	_INIT_DCS_CMD(0x6D, 0x10),
-+	_INIT_DCS_CMD(0x6E, 0x0C),
-+	_INIT_DCS_CMD(0x6F, 0x08),
-+	_INIT_DCS_CMD(0x70, 0x02),
-+	_INIT_DCS_CMD(0x71, 0x02),
-+	_INIT_DCS_CMD(0x72, 0x02),
-+	_INIT_DCS_CMD(0x73, 0x02),
-+	_INIT_DCS_CMD(0x74, 0x02),
-+	_INIT_DCS_CMD(0x75, 0x02),
-+	_INIT_DCS_CMD(0x76, 0x02),
-+
-+	_INIT_DCS_CMD(0x77, 0x07),
-+	_INIT_DCS_CMD(0x78, 0x07),
-+	_INIT_DCS_CMD(0x79, 0x07),
-+	_INIT_DCS_CMD(0x7A, 0x07),
-+	_INIT_DCS_CMD(0x7B, 0x07),
-+	_INIT_DCS_CMD(0x7C, 0x01),
-+	_INIT_DCS_CMD(0x7D, 0x00),
-+	_INIT_DCS_CMD(0x7E, 0x28),
-+	_INIT_DCS_CMD(0x7F, 0x29),
-+	_INIT_DCS_CMD(0x80, 0x17),
-+	_INIT_DCS_CMD(0x81, 0x15),
-+	_INIT_DCS_CMD(0x82, 0x13),
-+	_INIT_DCS_CMD(0x83, 0x11),
-+	_INIT_DCS_CMD(0x84, 0x0D),
-+	_INIT_DCS_CMD(0x85, 0x09),
-+	_INIT_DCS_CMD(0x86, 0x02),
-+	_INIT_DCS_CMD(0x87, 0x07),
-+	_INIT_DCS_CMD(0x88, 0x07),
-+	_INIT_DCS_CMD(0x89, 0x07),
-+	_INIT_DCS_CMD(0x8A, 0x07),
-+	_INIT_DCS_CMD(0x8B, 0x07),
-+	_INIT_DCS_CMD(0x8C, 0x07),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x02),
-+	_INIT_DCS_CMD(0x29, 0x3A),
-+	_INIT_DCS_CMD(0x2A, 0x3B),
-+
-+	_INIT_DCS_CMD(0x06, 0x01),
-+	_INIT_DCS_CMD(0x07, 0x01),
-+	_INIT_DCS_CMD(0x08, 0x0C),
-+	_INIT_DCS_CMD(0x09, 0x44),
-+
-+	_INIT_DCS_CMD(0x3C, 0x0A),
-+	_INIT_DCS_CMD(0x39, 0x11),
-+	_INIT_DCS_CMD(0x3D, 0x00),
-+	_INIT_DCS_CMD(0x3A, 0x0C),
-+	_INIT_DCS_CMD(0x3B, 0x44),
-+
-+	_INIT_DCS_CMD(0x53, 0x1F),
-+	_INIT_DCS_CMD(0x5E, 0x40),
-+	_INIT_DCS_CMD(0x84, 0x00),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x03),
-+	_INIT_DCS_CMD(0x20, 0x01),
-+	_INIT_DCS_CMD(0x21, 0x3C),
-+	_INIT_DCS_CMD(0x22, 0xFA),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x0A),
-+	_INIT_DCS_CMD(0xE0, 0x01),
-+	_INIT_DCS_CMD(0xE2, 0x01),
-+	_INIT_DCS_CMD(0xE5, 0x91),
-+	_INIT_DCS_CMD(0xE6, 0x3C),
-+	_INIT_DCS_CMD(0xE7, 0x00),
-+	_INIT_DCS_CMD(0xE8, 0xFA),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x12),
-+	_INIT_DCS_CMD(0x87, 0x2C),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x05),
-+	_INIT_DCS_CMD(0x73, 0xE5),
-+	_INIT_DCS_CMD(0x7F, 0x6B),
-+	_INIT_DCS_CMD(0x6D, 0xA4),
-+	_INIT_DCS_CMD(0x79, 0x54),
-+	_INIT_DCS_CMD(0x69, 0x97),
-+	_INIT_DCS_CMD(0x6A, 0x97),
-+	_INIT_DCS_CMD(0xA5, 0x3F),
-+	_INIT_DCS_CMD(0x61, 0xDA),
-+	_INIT_DCS_CMD(0xA7, 0xF1),
-+	_INIT_DCS_CMD(0x5F, 0x01),
-+	_INIT_DCS_CMD(0x62, 0x3F),
-+	_INIT_DCS_CMD(0x1D, 0x90),
-+	_INIT_DCS_CMD(0x86, 0x87),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x06),
-+	_INIT_DCS_CMD(0xC0, 0x80),
-+	_INIT_DCS_CMD(0xC1, 0x07),
-+	_INIT_DCS_CMD(0xCA, 0x58),
-+	_INIT_DCS_CMD(0xCB, 0x02),
-+	_INIT_DCS_CMD(0xCE, 0x58),
-+	_INIT_DCS_CMD(0xCF, 0x02),
-+	_INIT_DCS_CMD(0x67, 0x60),
-+	_INIT_DCS_CMD(0x10, 0x00),
-+	_INIT_DCS_CMD(0x92, 0x22),
-+	_INIT_DCS_CMD(0xD3, 0x08),
-+	_INIT_DCS_CMD(0xD6, 0x55),
-+	_INIT_DCS_CMD(0xDC, 0x38),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x08),
-+	_INIT_DCS_CMD(0xE0, 0x00, 0x10, 0x2A, 0x4D, 0x61, 0x56, 0x6A, 0x6E, 0x79, 0x76, 0x8F, 0x95, 0x98, 0xAE, 0xAA, 0xB2, 0xBB, 0xCE, 0xC6, 0xBD, 0xD5, 0xE2, 0xE8),
-+	_INIT_DCS_CMD(0xE1, 0x00, 0x10, 0x2A, 0x4D, 0x61, 0x56, 0x6A, 0x6E, 0x79, 0x76, 0x8F, 0x95, 0x98, 0xAE, 0xAA, 0xB2, 0xBB, 0xCE, 0xC6, 0xBD, 0xD5, 0xE2, 0xE8),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x04),
-+	_INIT_DCS_CMD(0xBA, 0x81),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x0C),
-+	_INIT_DCS_CMD(0x00, 0x02),
-+	_INIT_DCS_CMD(0x01, 0x00),
-+	_INIT_DCS_CMD(0x02, 0x03),
-+	_INIT_DCS_CMD(0x03, 0x01),
-+	_INIT_DCS_CMD(0x04, 0x03),
-+	_INIT_DCS_CMD(0x05, 0x02),
-+	_INIT_DCS_CMD(0x06, 0x04),
-+	_INIT_DCS_CMD(0x07, 0x03),
-+	_INIT_DCS_CMD(0x08, 0x03),
-+	_INIT_DCS_CMD(0x09, 0x04),
-+	_INIT_DCS_CMD(0x0A, 0x04),
-+	_INIT_DCS_CMD(0x0B, 0x05),
-+	_INIT_DCS_CMD(0x0C, 0x04),
-+	_INIT_DCS_CMD(0x0D, 0x06),
-+	_INIT_DCS_CMD(0x0E, 0x05),
-+	_INIT_DCS_CMD(0x0F, 0x07),
-+	_INIT_DCS_CMD(0x10, 0x04),
-+	_INIT_DCS_CMD(0x11, 0x08),
-+	_INIT_DCS_CMD(0x12, 0x05),
-+	_INIT_DCS_CMD(0x13, 0x09),
-+	_INIT_DCS_CMD(0x14, 0x05),
-+	_INIT_DCS_CMD(0x15, 0x0A),
-+	_INIT_DCS_CMD(0x16, 0x06),
-+	_INIT_DCS_CMD(0x17, 0x0B),
-+	_INIT_DCS_CMD(0x18, 0x05),
-+	_INIT_DCS_CMD(0x19, 0x0C),
-+	_INIT_DCS_CMD(0x1A, 0x06),
-+	_INIT_DCS_CMD(0x1B, 0x0D),
-+	_INIT_DCS_CMD(0x1C, 0x06),
-+	_INIT_DCS_CMD(0x1D, 0x0E),
-+	_INIT_DCS_CMD(0x1E, 0x07),
-+	_INIT_DCS_CMD(0x1F, 0x0F),
-+	_INIT_DCS_CMD(0x20, 0x06),
-+	_INIT_DCS_CMD(0x21, 0x10),
-+	_INIT_DCS_CMD(0x22, 0x07),
-+	_INIT_DCS_CMD(0x23, 0x11),
-+	_INIT_DCS_CMD(0x24, 0x07),
-+	_INIT_DCS_CMD(0x25, 0x12),
-+	_INIT_DCS_CMD(0x26, 0x08),
-+	_INIT_DCS_CMD(0x27, 0x13),
-+	_INIT_DCS_CMD(0x28, 0x07),
-+	_INIT_DCS_CMD(0x29, 0x14),
-+	_INIT_DCS_CMD(0x2A, 0x08),
-+	_INIT_DCS_CMD(0x2B, 0x15),
-+	_INIT_DCS_CMD(0x2C, 0x08),
-+	_INIT_DCS_CMD(0x2D, 0x16),
-+	_INIT_DCS_CMD(0x2E, 0x09),
-+	_INIT_DCS_CMD(0x2F, 0x17),
-+	_INIT_DCS_CMD(0x30, 0x08),
-+	_INIT_DCS_CMD(0x31, 0x18),
-+	_INIT_DCS_CMD(0x32, 0x09),
-+	_INIT_DCS_CMD(0x33, 0x19),
-+	_INIT_DCS_CMD(0x34, 0x09),
-+	_INIT_DCS_CMD(0x35, 0x1A),
-+	_INIT_DCS_CMD(0x36, 0x0A),
-+	_INIT_DCS_CMD(0x37, 0x1B),
-+	_INIT_DCS_CMD(0x38, 0x0A),
-+	_INIT_DCS_CMD(0x39, 0x1C),
-+	_INIT_DCS_CMD(0x3A, 0x0A),
-+	_INIT_DCS_CMD(0x3B, 0x1D),
-+	_INIT_DCS_CMD(0x3C, 0x0A),
-+	_INIT_DCS_CMD(0x3D, 0x1E),
-+	_INIT_DCS_CMD(0x3E, 0x0A),
-+	_INIT_DCS_CMD(0x3F, 0x1F),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x04),
-+	_INIT_DCS_CMD(0xBA, 0x01),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x0E),
-+	_INIT_DCS_CMD(0x02, 0x0C),
-+	_INIT_DCS_CMD(0x20, 0x10),
-+	_INIT_DCS_CMD(0x25, 0x16),
-+	_INIT_DCS_CMD(0x26, 0xE0),
-+	_INIT_DCS_CMD(0x27, 0x00),
-+	_INIT_DCS_CMD(0x29, 0x71),
-+	_INIT_DCS_CMD(0x2A, 0x46),
-+	_INIT_DCS_CMD(0x2B, 0x1F),
-+	_INIT_DCS_CMD(0x2D, 0xC7),
-+	_INIT_DCS_CMD(0x31, 0x02),
-+	_INIT_DCS_CMD(0x32, 0xDF),
-+	_INIT_DCS_CMD(0x33, 0x5A),
-+	_INIT_DCS_CMD(0x34, 0xC0),
-+	_INIT_DCS_CMD(0x35, 0x5A),
-+	_INIT_DCS_CMD(0x36, 0xC0),
-+	_INIT_DCS_CMD(0x38, 0x65),
-+	_INIT_DCS_CMD(0x80, 0x3E),
-+	_INIT_DCS_CMD(0x81, 0xA0),
-+	_INIT_DCS_CMD(0xB0, 0x01),
-+	_INIT_DCS_CMD(0xB1, 0xCC),
-+	_INIT_DCS_CMD(0xC0, 0x12),
-+	_INIT_DCS_CMD(0xC2, 0xCC),
-+	_INIT_DCS_CMD(0xC3, 0xCC),
-+	_INIT_DCS_CMD(0xC4, 0xCC),
-+	_INIT_DCS_CMD(0xC5, 0xCC),
-+	_INIT_DCS_CMD(0xC6, 0xCC),
-+	_INIT_DCS_CMD(0xC7, 0xCC),
-+	_INIT_DCS_CMD(0xC8, 0xCC),
-+	_INIT_DCS_CMD(0xC9, 0xCC),
-+	_INIT_DCS_CMD(0x30, 0x00),
-+	_INIT_DCS_CMD(0x00, 0x81),
-+	_INIT_DCS_CMD(0x08, 0x02),
-+	_INIT_DCS_CMD(0x09, 0x00),
-+	_INIT_DCS_CMD(0x07, 0x21),
-+	_INIT_DCS_CMD(0x04, 0x10),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x1E),
-+	_INIT_DCS_CMD(0x60, 0x00),
-+	_INIT_DCS_CMD(0x64, 0x00),
-+	_INIT_DCS_CMD(0x6D, 0x00),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x0B),
-+	_INIT_DCS_CMD(0xA6, 0x44),
-+	_INIT_DCS_CMD(0xA7, 0xB6),
-+	_INIT_DCS_CMD(0xA8, 0x03),
-+	_INIT_DCS_CMD(0xA9, 0x03),
-+	_INIT_DCS_CMD(0xAA, 0x51),
-+	_INIT_DCS_CMD(0xAB, 0x51),
-+	_INIT_DCS_CMD(0xAC, 0x04),
-+	_INIT_DCS_CMD(0xBD, 0x92),
-+	_INIT_DCS_CMD(0xBE, 0xA1),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x05),
-+	_INIT_DCS_CMD(0x86, 0x87),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x06),
-+	_INIT_DCS_CMD(0x92, 0x22),
-+
-+	_INIT_DCS_CMD(0xFF, 0x98, 0x82, 0x00),
-+	_INIT_DCS_CMD(0x11),
-+	_INIT_DELAY_CMD(120),
-+	_INIT_DCS_CMD(0x29),
-+	_INIT_DELAY_CMD(20),
-+	{},
-+};
-+
- static inline struct boe_panel *to_boe_panel(struct drm_panel *panel)
- {
- 	return container_of(panel, struct boe_panel, base);
-@@ -1795,6 +2135,34 @@ static const struct panel_desc starry_himax83102_j02_desc = {
- 	.lp11_before_reset = true,
- };
+ 	priv->tx_running = false;
+ 	priv->dma.rx_dma = NULL;
+diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+index 64770c62bbec..ae66ef9d863c 100644
+--- a/drivers/tty/serial/8250/8250_exar.c
++++ b/drivers/tty/serial/8250/8250_exar.c
+@@ -194,8 +194,12 @@ static int xr17v35x_startup(struct uart_port *port)
+ 	/*
+ 	 * Make sure all interrups are masked until initialization is
+ 	 * complete and the FIFOs are cleared
++	 *
++	 * Synchronize UART_IER access against the console.
+ 	 */
++	spin_lock_irq(&port->lock);
+ 	serial_port_out(port, UART_IER, 0);
++	spin_unlock_irq(&port->lock);
  
-+static const struct drm_display_mode starry_ili9882t_default_mode = {
-+	.clock = 165280,
-+	.hdisplay = 1200,
-+	.hsync_start = 1200 + 32,
-+	.hsync_end = 1200 + 32 + 30,
-+	.htotal = 1200 + 32 + 30 + 32,
-+	.vdisplay = 1920,
-+	.vsync_start = 1920 + 68,
-+	.vsync_end = 1920 + 68 + 2,
-+	.vtotal = 1920 + 68 + 2 + 10,
-+	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
-+};
-+
-+static const struct panel_desc starry_ili9882t_desc = {
-+	.modes = &starry_ili9882t_default_mode,
-+	.bpc = 8,
-+	.size = {
-+		.width_mm = 141,
-+		.height_mm = 226,
-+	},
-+	.lanes = 4,
-+	.format = MIPI_DSI_FMT_RGB888,
-+	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
-+		      MIPI_DSI_MODE_LPM,
-+	.init_cmds = starry_ili9882t_init_cmd,
-+	.lp11_before_reset = true,
-+};
-+
- static int boe_panel_get_modes(struct drm_panel *panel,
- 			       struct drm_connector *connector)
- {
-@@ -1971,6 +2339,9 @@ static const struct of_device_id boe_of_match[] = {
- 	{ .compatible = "starry,himax83102-j02",
- 	  .data = &starry_himax83102_j02_desc
- 	},
-+	{ .compatible = "starry,ili9882t",
-+	  .data = &starry_ili9882t_desc
-+	},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, boe_of_match);
+ 	return serial8250_do_startup(port);
+ }
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index 5c093dfcee1d..fbca0692aa51 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -710,8 +710,11 @@ static int omap_8250_startup(struct uart_port *port)
+ 		up->dma = NULL;
+ 	}
+ 
++	/* Synchronize UART_IER access against the console. */
++	spin_lock_irq(&port->lock);
+ 	up->ier = UART_IER_RLSI | UART_IER_RDI;
+ 	serial_out(up, UART_IER, up->ier);
++	spin_unlock_irq(&port->lock);
+ 
+ #ifdef CONFIG_PM
+ 	up->capabilities |= UART_CAP_RPM;
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 0cef9bfd0471..b3971302d8e5 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2149,7 +2149,12 @@ int serial8250_do_startup(struct uart_port *port)
+ 
+ 	serial8250_rpm_get(up);
+ 	if (port->type == PORT_16C950) {
+-		/* Wake up and initialize UART */
++		/*
++		 * Wake up and initialize UART
++		 *
++		 * Synchronize UART_IER access against the console.
++		 */
++		spin_lock_irqsave(&port->lock, flags);
+ 		up->acr = 0;
+ 		serial_port_out(port, UART_LCR, UART_LCR_CONF_MODE_B);
+ 		serial_port_out(port, UART_EFR, UART_EFR_ECB);
+@@ -2159,12 +2164,19 @@ int serial8250_do_startup(struct uart_port *port)
+ 		serial_port_out(port, UART_LCR, UART_LCR_CONF_MODE_B);
+ 		serial_port_out(port, UART_EFR, UART_EFR_ECB);
+ 		serial_port_out(port, UART_LCR, 0);
++		spin_unlock_irqrestore(&port->lock, flags);
+ 	}
+ 
+ 	if (port->type == PORT_DA830) {
+-		/* Reset the port */
++		/*
++		 * Reset the port
++		 *
++		 * Synchronize UART_IER access against the console.
++		 */
++		spin_lock_irqsave(&port->lock, flags);
+ 		serial_port_out(port, UART_IER, 0);
+ 		serial_port_out(port, UART_DA830_PWREMU_MGMT, 0);
++		spin_unlock_irqrestore(&port->lock, flags);
+ 		mdelay(10);
+ 
+ 		/* Enable Tx, Rx and free run mode */
+@@ -2275,6 +2287,8 @@ int serial8250_do_startup(struct uart_port *port)
+ 		 * this interrupt whenever the transmitter is idle and
+ 		 * the interrupt is enabled.  Delays are necessary to
+ 		 * allow register changes to become visible.
++		 *
++		 * Synchronize UART_IER access against the console.
+ 		 */
+ 		spin_lock_irqsave(&port->lock, flags);
+ 
 -- 
-2.25.1
+2.30.2
 
