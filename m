@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8327109F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64997109F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240997AbjEYKSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
+        id S241001AbjEYKS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240928AbjEYKRZ (ORCPT
+        with ESMTP id S240760AbjEYKRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:17:25 -0400
+        Thu, 25 May 2023 06:17:45 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AF0E4A
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:16:45 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id C5D385C0120;
-        Thu, 25 May 2023 06:16:44 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95363E51
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:16:46 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 11DCA5C0073;
+        Thu, 25 May 2023 06:16:46 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 25 May 2023 06:16:44 -0400
+  by compute5.internal (MEProxy); Thu, 25 May 2023 06:16:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1685009804; x=
-        1685096204; bh=DKCYLbsQPb/xchwUl7JQfieNs7hWP6tRXhDTBLxytjU=; b=Q
-        7k+jH/f5wit+CZkzKHfERBOmCWq8slg2aDJZIzSYPVHiYaSkCTo3FminrQ+e4GK2
-        98bbTX4eo7DCt+CZHszE1M7FqOsRdzEoWmVlE8xnTJXjj++Ty2C646LU2RejbVn8
-        uJ4OY06FHCfBvk/7MmEkJouM1ba1VmdPM3dQ7hOna/kfHkLyrGiPjRHsdlomn2Kr
-        x/rn6h3LmciCYuE6lEgMTKuiDguRIEMl8LUjyEU6lPjjvOfhHEWO+FyHkRAzSLv3
-        WBdNDbsBqsCqS08Z6iRvOuwnzEo4+1c+reJvYmb6m4C5irtdHXJY+KrWhyt3TNvi
-        w9S238/OgQ4eoi5B38BQA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
+         h=cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685009804; x=
-        1685096204; bh=DKCYLbsQPb/xchwUl7JQfieNs7hWP6tRXhDTBLxytjU=; b=Z
-        4BNLzrGaxaNtEk7ybIvpjzZ3Robav7jU7OQG3tei5urogPQ5BT5rfX0d4k8hLCq1
-        d0952Zch0PQl2Hr6dnfLypt9e+iV0wcIeQqS5wwnoY84+/aPYfBjyqWncfgGIzM7
-        QGUzR/R3qvKrZmEqKN9N0YAdGLbweyJD7YupeGXF7+RnOCTGYaRl2dGFzwI5Zwld
-        s2SHKfVWskqnd3rLkmzEVm6erfmue27f1pzm3wiQy+Yw5J8lkWadCkMMnS+HoamY
-        rmpQO7s6laYzoQoPZM41/s/kdE076KiyEHiEhyt0JGAWkRZ4i9MTdxVoMZfNzIL2
-        8RVzEFdI81g0Z3Pdl/9Tg==
-X-ME-Sender: <xms:jDVvZEkdF2VJfpjmWXT6-htsCMyQzKjKkykrk3pMnv6emmP7sL1Rjg>
-    <xme:jDVvZD0qaWTmkQrsWCwAd7qlVxFK3eBYrjJxijssuVRM6-3am3-AmeLelF95TwOTp
-    QFxI5luncfw5-UfUZ8>
-X-ME-Received: <xmr:jDVvZCoiVgrMjNW9ISPW0Zqj04DvQJMB98SLH14ctxsKrzHNF4EG12vIT28DO86jYfQRyfq_MZt-VeTttQnz6Y-sslF2qRIicnuGLMX8fEO-Zw>
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1685009806; x=
+        1685096206; bh=CwMQ3mRgLz5XKiLhS8Bwc8Qm3NwjUti4uZQkCUexV3s=; b=X
+        6ADm6VmVdvfMbXrcDmvKQF75wkZM1Y9gmHEjaOdUk0zeZ7sXuBp4j+V7/qjWut30
+        ULMvUTP/Yx3X5oh2AZn98pzXFuAzqq2WzHMjZI5629/Z/XCq6+6igd1piOgHsImS
+        LKAfrTkk9c3yiWoKGKMHwRF0XlsB49wOnlXZ+cg2cig5zyqbYxbPHh9E9w7U8p6V
+        C8Ckk+WJue2suAlhCNn48uG2PRRajJGu8imzvuw79irtIgaJpNJmEmuCCQVZArvP
+        1sr8eYZhOo6yrMF9cxrlzBKvqWlsudQ793uzKlZ6Y4w4fek4D72iYySDQIljLsWU
+        o1Wkj6O1qtU8KuLVcLr8Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:date:feedback-id:feedback-id:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; t=1685009806; x=1685096206; bh=C
+        wMQ3mRgLz5XKiLhS8Bwc8Qm3NwjUti4uZQkCUexV3s=; b=DY+SVeD85NeZ9wveQ
+        L5SDs4ppqzV8x53QxsZi23SPlWTe084qAu/tQQR8oGjkDPjbODW8F+NHxACAW0zB
+        z0Ns7A5m1wewrclY7Do388+MQzbFCmhwp/uau9uX5UpgD2EFbNzJ3dAhOLrnkeNW
+        15j48ZbOwImtewdA1hhFe2N8WRf99w4nViz+kWfaghIuRE0kxKcVMzoQVqShd8zs
+        zGYIs9u/pNPd+e9V+m5kbZSU8YHxWOXMoOR67u1J1eh7kWK6H1D6gVVB6QS5jaT7
+        CHz74ZsgcYU1/zPLdqFLchuRyuBoyuUxbBfV9E+tunSG4leWiMr6Bxq0ES1v9vtl
+        Ks+yw==
+X-ME-Sender: <xms:jTVvZAEO3YBaoC6vJuzv_q4YJol0xuO4SfTK5L92hGM9e278_qI5ow>
+    <xme:jTVvZJX4lYdgzOpSNcR0CdRD516vXRW3UQpeYoR1mnnWaUDhJW-5VS_YcaC-IwOh_
+    JyeEf2x1tS1QnqkL54>
+X-ME-Received: <xmr:jTVvZKIN7c4OhoUzeRreLFQFcVNDfmCgJW7FDyZDmGrXzlEd-g4FjaSFG6UP7bjSVtb-SpRxlSNalRwZs0zVf6fsYYEEdxZg1Q3m_T0Irp4Wfw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejjedgvdehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghk
-    rghshhhisehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpedvjefgje
-    euvdfguddukeelveetgfdtvefhtdfffeeigfevueetffeivdffkedvtdenucevlhhushht
-    vghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghshhhise
-    hsrghkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:jDVvZAm0-fgIB7EeVJS8M5o81DjMpLcDn4E6BbeQa7hIsis8iPq_4Q>
-    <xmx:jDVvZC2CoVy46cCQTf-1iJG1Zsq7gsK1v5DOZutJryBt3YR4qDb0Yw>
-    <xmx:jDVvZHt3GxSj4ciTJLjXDj794MjRLzzBG19r9twz7cmYkca_j49bag>
-    <xmx:jDVvZH_XpeZQ0Yc7LdLtU9OPpxZjPp9qAcjew_q1H2LHU9yc-rUe3Q>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
+    dtredttdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgr
+    shhhihesshgrkhgrmhhotggthhhirdhjpheqnecuggftrfgrthhtvghrnhepveefffefke
+    etgfevgeefleehfffhueejtdejveethfekveektdejjedvtdejhfejnecuvehluhhsthgv
+    rhfuihiivgepvdenucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhhihessh
+    grkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:jTVvZCHGaWc57wKanTfcDP4J_5HJEurAQtPg7Jvv-vDv7agu06dR8A>
+    <xmx:jTVvZGXGupAB4LwbHbyzvJw-5Xz6CUH-peyMYpHrGTHtqB1vReGLlw>
+    <xmx:jTVvZFPTx2mmPzwlNefCElMvrLjND2Idw0XteO_uLs5ya1Vgyf080g>
+    <xmx:jjVvZPd8vab4db_FGv9y8x1BhEar7bHPCpzc3IxP380KZDEdV6Z0BQ>
 Feedback-ID: ie8e14432:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 25 May 2023 06:16:43 -0400 (EDT)
+ 25 May 2023 06:16:44 -0400 (EDT)
 From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
 To:     linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Cc:     kunit-dev@googlegroups.com
-Subject: [PATCH v2 11/12] firewire: cdev: add new event to notify phy packet with time stamp
-Date:   Thu, 25 May 2023 19:16:24 +0900
-Message-Id: <20230525101625.888906-12-o-takashi@sakamocchi.jp>
+Subject: [PATCH v2 12/12] firewire: cdev: implement new event relevant to phy packet with time stamp
+Date:   Thu, 25 May 2023 19:16:25 +0900
+Message-Id: <20230525101625.888906-13-o-takashi@sakamocchi.jp>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525101625.888906-1-o-takashi@sakamocchi.jp>
 References: <20230525101625.888906-1-o-takashi@sakamocchi.jp>
@@ -85,183 +84,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds new event to notify event of phy packet with time stamp
-field.
+In 1394 OHCI, the OUTPUT_LAST descriptor of Asynchronous Transmit (AT)
+context has timeStamp field, in which 1394 OHCI controller record the
+isochronous cycle when the packet was sent for the request subaction.
+Additionally, the trailing quadlet of Asynchronous Receive (AR) context
+has timeStamp field as well in which 1394 OHCI controller record the
+isochronous cycle when the packet arrived. The time stamps are also
+available for the cases to send and receive phy packet.
 
-Unlike the fw_cdev_event_request3 and fw_cdev_event_response2, the size
-of new structure, fw_cdev_event_phy_packet2, is multiples of 8, thus
-padding is not required to keep the same size between System V ABI for
-different architectures.
+This commit implements new events with time stamp field for user space.
 
-It is noticeable that for the case of ping request 1394 OHCI controller
-does not record the isochronous cycle at which the packet was sent for
-the request subaction. Instead, it records round-trip count measured by
-hardware at 42.195 MHz resolution.
-
-Cc: kunit-dev@googlegroups.com
 Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 ---
- drivers/firewire/uapi-test.c       | 14 +++++++
- include/uapi/linux/firewire-cdev.h | 67 +++++++++++++++++++++++++-----
- 2 files changed, 71 insertions(+), 10 deletions(-)
+ drivers/firewire/core-cdev.c | 90 +++++++++++++++++++++++++++---------
+ 1 file changed, 68 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/firewire/uapi-test.c b/drivers/firewire/uapi-test.c
-index c342ba474ee6..9732b5be3844 100644
---- a/drivers/firewire/uapi-test.c
-+++ b/drivers/firewire/uapi-test.c
-@@ -59,10 +59,24 @@ static void structure_layout_event_response2(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, 32, offsetof(struct fw_cdev_event_response2, data));
+diff --git a/drivers/firewire/core-cdev.c b/drivers/firewire/core-cdev.c
+index 2220de3c945e..6274b86eb943 100644
+--- a/drivers/firewire/core-cdev.c
++++ b/drivers/firewire/core-cdev.c
+@@ -206,6 +206,7 @@ struct outbound_phy_packet_event {
+ 	struct fw_packet p;
+ 	union {
+ 		struct fw_cdev_event_phy_packet without_tstamp;
++		struct fw_cdev_event_phy_packet2 with_tstamp;
+ 	} phy_packet;
+ };
+ 
+@@ -213,6 +214,7 @@ struct inbound_phy_packet_event {
+ 	struct event event;
+ 	union {
+ 		struct fw_cdev_event_phy_packet without_tstamp;
++		struct fw_cdev_event_phy_packet2 with_tstamp;
+ 	} phy_packet;
+ };
+ 
+@@ -1555,7 +1557,6 @@ static void outbound_phy_packet_callback(struct fw_packet *packet,
+ 		container_of(packet, struct outbound_phy_packet_event, p);
+ 	struct client *e_client = e->client;
+ 	u32 rcode;
+-	struct fw_cdev_event_phy_packet *pp;
+ 
+ 	switch (status) {
+ 	// expected:
+@@ -1583,10 +1584,31 @@ static void outbound_phy_packet_callback(struct fw_packet *packet,
+ 		break;
+ 	}
+ 
+-	pp = &e->phy_packet.without_tstamp;
+-	pp->rcode = rcode;
+-	pp->data[0] = packet->timestamp;
+-	queue_event(e->client, &e->event, &e->phy_packet, sizeof(*pp) + pp->length, NULL, 0);
++	switch (e->phy_packet.without_tstamp.type) {
++	case FW_CDEV_EVENT_PHY_PACKET_SENT:
++	{
++		struct fw_cdev_event_phy_packet *pp = &e->phy_packet.without_tstamp;
++
++		pp->rcode = rcode;
++		pp->data[0] = packet->timestamp;
++		queue_event(e->client, &e->event, &e->phy_packet, sizeof(*pp) + pp->length,
++			    NULL, 0);
++		break;
++	}
++	case FW_CDEV_EVENT_PHY_PACKET_SENT2:
++	{
++		struct fw_cdev_event_phy_packet2 *pp = &e->phy_packet.with_tstamp;
++
++		pp->rcode = rcode;
++		pp->tstamp = packet->timestamp;
++		queue_event(e->client, &e->event, &e->phy_packet, sizeof(*pp) + pp->length,
++			    NULL, 0);
++		break;
++	}
++	default:
++		WARN_ON(1);
++		break;
++	}
+ 
+ 	client_put(e_client);
  }
+@@ -1596,13 +1618,12 @@ static int ioctl_send_phy_packet(struct client *client, union ioctl_arg *arg)
+ 	struct fw_cdev_send_phy_packet *a = &arg->send_phy_packet;
+ 	struct fw_card *card = client->device->card;
+ 	struct outbound_phy_packet_event *e;
+-	struct fw_cdev_event_phy_packet *pp;
  
-+// Added at v6.4.
-+static void structure_layout_event_phy_packet2(struct kunit *test)
-+{
-+	KUNIT_EXPECT_EQ(test, 24, sizeof(struct fw_cdev_event_phy_packet2));
+ 	/* Access policy: Allow this ioctl only on local nodes' device files. */
+ 	if (!client->device->is_local)
+ 		return -ENOSYS;
+ 
+-	e = kzalloc(sizeof(*e) + 4, GFP_KERNEL);
++	e = kzalloc(sizeof(*e) + sizeof(a->data), GFP_KERNEL);
+ 	if (e == NULL)
+ 		return -ENOMEM;
+ 
+@@ -1616,11 +1637,23 @@ static int ioctl_send_phy_packet(struct client *client, union ioctl_arg *arg)
+ 	e->p.header_length	= 12;
+ 	e->p.callback		= outbound_phy_packet_callback;
+ 
+-	pp = &e->phy_packet.without_tstamp;
+-	pp->closure = a->closure;
+-	pp->type = FW_CDEV_EVENT_PHY_PACKET_SENT;
+-	if (is_ping_packet(a->data))
+-		pp->length = 4;
++	if (client->version < FW_CDEV_VERSION_EVENT_ASYNC_TSTAMP) {
++		struct fw_cdev_event_phy_packet *pp = &e->phy_packet.without_tstamp;
 +
-+	KUNIT_EXPECT_EQ(test, 0, offsetof(struct fw_cdev_event_phy_packet2, closure));
-+	KUNIT_EXPECT_EQ(test, 8, offsetof(struct fw_cdev_event_phy_packet2, type));
-+	KUNIT_EXPECT_EQ(test, 12, offsetof(struct fw_cdev_event_phy_packet2, rcode));
-+	KUNIT_EXPECT_EQ(test, 16, offsetof(struct fw_cdev_event_phy_packet2, length));
-+	KUNIT_EXPECT_EQ(test, 20, offsetof(struct fw_cdev_event_phy_packet2, tstamp));
-+	KUNIT_EXPECT_EQ(test, 24, offsetof(struct fw_cdev_event_phy_packet2, data));
-+}
++		pp->closure = a->closure;
++		pp->type = FW_CDEV_EVENT_PHY_PACKET_SENT;
++		if (is_ping_packet(a->data))
++			pp->length = 4;
++	} else {
++		struct fw_cdev_event_phy_packet2 *pp = &e->phy_packet.with_tstamp;
 +
- static struct kunit_case structure_layout_test_cases[] = {
- 	KUNIT_CASE(structure_layout_event_response),
- 	KUNIT_CASE(structure_layout_event_request3),
- 	KUNIT_CASE(structure_layout_event_response2),
-+	KUNIT_CASE(structure_layout_event_phy_packet2),
- 	{}
- };
++		pp->closure = a->closure;
++		pp->type = FW_CDEV_EVENT_PHY_PACKET_SENT2;
++		// Keep the data field so that application can match the response event to the
++		// request.
++		pp->length = sizeof(a->data);
++		memcpy(pp->data, a->data, sizeof(a->data));
++	}
  
-diff --git a/include/uapi/linux/firewire-cdev.h b/include/uapi/linux/firewire-cdev.h
-index ae8ccf7d7d2a..155e71598cb4 100644
---- a/include/uapi/linux/firewire-cdev.h
-+++ b/include/uapi/linux/firewire-cdev.h
-@@ -49,6 +49,8 @@
- /* available since kernel version 6.3 */
- #define FW_CDEV_EVENT_REQUEST3				0x0a
- #define FW_CDEV_EVENT_RESPONSE2				0x0b
-+#define FW_CDEV_EVENT_PHY_PACKET_SENT2			0x0c
-+#define FW_CDEV_EVENT_PHY_PACKET_RECEIVED2		0x0d
+ 	card->driver->send_request(card, &e->p);
  
- /**
-  * struct fw_cdev_event_common - Common part of all fw_cdev_event_* types
-@@ -423,20 +425,59 @@ struct fw_cdev_event_iso_resource {
-  * @type:	%FW_CDEV_EVENT_PHY_PACKET_SENT or %..._RECEIVED
-  * @rcode:	%RCODE_..., indicates success or failure of transmission
-  * @length:	Data length in bytes
-+ * @data:	Incoming data for %FW_CDEV_IOC_RECEIVE_PHY_PACKETS. For %FW_CDEV_IOC_SEND_PHY_PACKET
-+ *		the field has the same data in the request, thus the length of 8 bytes.
-+ *
-+ * This event is sent instead of &fw_cdev_event_phy_packet2 if the kernel or
-+ * the client implements ABI version <= 5. It has the lack of time stamp field comparing to
-+ * &fw_cdev_event_phy_packet2.
-+ */
-+struct fw_cdev_event_phy_packet {
-+	__u64 closure;
-+	__u32 type;
-+	__u32 rcode;
-+	__u32 length;
-+	__u32 data[];
-+};
+@@ -1655,20 +1688,33 @@ void fw_cdev_handle_phy_packet(struct fw_card *card, struct fw_packet *p)
+ 	spin_lock_irqsave(&card->lock, flags);
+ 
+ 	list_for_each_entry(client, &card->phy_receiver_list, phy_receiver_link) {
+-		struct fw_cdev_event_phy_packet *pp;
+-
+ 		e = kmalloc(sizeof(*e) + 8, GFP_ATOMIC);
+ 		if (e == NULL)
+ 			break;
+ 
+-		pp = &e->phy_packet.without_tstamp;
+-		pp->closure = client->phy_receiver_closure;
+-		pp->type = FW_CDEV_EVENT_PHY_PACKET_RECEIVED;
+-		pp->rcode = RCODE_COMPLETE;
+-		pp->length = 8;
+-		pp->data[0] = p->header[1];
+-		pp->data[1] = p->header[2];
+-		queue_event(client, &e->event, &e->phy_packet, sizeof(*pp) + 8, NULL, 0);
++		if (client->version < FW_CDEV_VERSION_EVENT_ASYNC_TSTAMP) {
++			struct fw_cdev_event_phy_packet *pp = &e->phy_packet.without_tstamp;
 +
-+/**
-+ * struct fw_cdev_event_phy_packet2 - A PHY packet was transmitted or received with time stamp.
-+ * @closure:	See &fw_cdev_event_common; set by %FW_CDEV_IOC_SEND_PHY_PACKET
-+ *		or %FW_CDEV_IOC_RECEIVE_PHY_PACKETS ioctl
-+ * @type:	%FW_CDEV_EVENT_PHY_PACKET_SENT2 or %FW_CDEV_EVENT_PHY_PACKET_RECEIVED2
-+ * @rcode:	%RCODE_..., indicates success or failure of transmission
-+ * @length:	Data length in bytes
-+ * @tstamp:	For %FW_CDEV_EVENT_PHY_PACKET_RECEIVED2, the time stamp of isochronous cycle at
-+ *		which the packet arrived. For %FW_CDEV_EVENT_PHY_PACKET_SENT2 and non-ping packet,
-+ *		the time stamp of isochronous cycle at which the packet was sent. For ping packet,
-+ *		the tick count for round-trip time measured by 1394 OHCI controller.
-+ * The time stamp of isochronous cycle at which either the response was sent for
-+ *		%FW_CDEV_EVENT_PHY_PACKET_SENT2 or the request arrived for
-+ *		%FW_CDEV_EVENT_PHY_PACKET_RECEIVED2.
-  * @data:	Incoming data
-  *
-- * If @type is %FW_CDEV_EVENT_PHY_PACKET_SENT, @length is 0 and @data empty,
-- * except in case of a ping packet:  Then, @length is 4, and @data[0] is the
-- * ping time in 49.152MHz clocks if @rcode is %RCODE_COMPLETE.
-+ * If @type is %FW_CDEV_EVENT_PHY_PACKET_SENT2, @length is 8 and @data consists of the two PHY
-+ * packet quadlets to be sent, in host byte order,
-  *
-- * If @type is %FW_CDEV_EVENT_PHY_PACKET_RECEIVED, @length is 8 and @data
-- * consists of the two PHY packet quadlets, in host byte order.
-+ * If @type is %FW_CDEV_EVENT_PHY_PACKET_RECEIVED2, @length is 8 and @data consists of the two PHY
-+ * packet quadlets, in host byte order.
-+ *
-+ * For %FW_CDEV_EVENT_PHY_PACKET_RECEIVED2, the @tstamp is the isochronous cycle at which the
-+ * packet arrived. It is 16 bit integer value and the higher 3 bits expresses three low order bits
-+ * of second field and the rest 13 bits expresses cycle field in the format of CYCLE_TIME register.
-+ *
-+ * For %FW_CDEV_EVENT_PHY_PACKET_SENT2, the @tstamp has different meanings whether to sent the
-+ * packet for ping or not. If it's not for ping, the @tstamp is the isochronous cycle at which the
-+ * packet was sent, and use the same format as the case of %FW_CDEV_EVENT_PHY_PACKET_SENT2. If it's
-+ * for ping, the @tstamp is for round-trip time measured by 1394 OHCI controller with 42.195 MHz
-+ * resolution.
-  */
--struct fw_cdev_event_phy_packet {
-+struct fw_cdev_event_phy_packet2 {
- 	__u64 closure;
- 	__u32 type;
- 	__u32 rcode;
- 	__u32 length;
-+	__u32 tstamp;
- 	__u32 data[];
- };
++			pp->closure = client->phy_receiver_closure;
++			pp->type = FW_CDEV_EVENT_PHY_PACKET_RECEIVED;
++			pp->rcode = RCODE_COMPLETE;
++			pp->length = 8;
++			pp->data[0] = p->header[1];
++			pp->data[1] = p->header[2];
++			queue_event(client, &e->event, &e->phy_packet, sizeof(*pp) + 8, NULL, 0);
++		} else {
++			struct fw_cdev_event_phy_packet2 *pp = &e->phy_packet.with_tstamp;
++
++			pp = &e->phy_packet.with_tstamp;
++			pp->closure = client->phy_receiver_closure;
++			pp->type = FW_CDEV_EVENT_PHY_PACKET_RECEIVED2;
++			pp->rcode = RCODE_COMPLETE;
++			pp->length = 8;
++			pp->tstamp = p->timestamp;
++			pp->data[0] = p->header[1];
++			pp->data[1] = p->header[2];
++			queue_event(client, &e->event, &e->phy_packet, sizeof(*pp) + 8, NULL, 0);
++		}
+ 	}
  
-@@ -459,6 +500,8 @@ struct fw_cdev_event_phy_packet {
-  *
-  * @request3:		Valid if @common.type == %FW_CDEV_EVENT_REQUEST3
-  * @response2:		Valid if @common.type == %FW_CDEV_EVENT_RESPONSE2
-+ * @phy_packet2:	Valid if @common.type == %FW_CDEV_EVENT_PHY_PACKET_SENT2 or
-+ *				%FW_CDEV_EVENT_PHY_PACKET_RECEIVED2
-  *
-  * Convenience union for userspace use.  Events could be read(2) into an
-  * appropriately aligned char buffer and then cast to this union for further
-@@ -480,6 +523,7 @@ union fw_cdev_event {
- 	struct fw_cdev_event_phy_packet		phy_packet;		/* added in 2.6.36 */
- 	struct fw_cdev_event_request3		request3;		/* added in 6.3 */
- 	struct fw_cdev_event_response2		response2;		/* added in 6.3 */
-+	struct fw_cdev_event_phy_packet2	phy_packet2;		/* added in 6.3 */
- };
- 
- /* available since kernel version 2.6.22 */
-@@ -547,6 +591,8 @@ union fw_cdev_event {
-  *  6  (6.4)     - added some event for subactions of asynchronous transaction with time stamp
-  *                   - %FW_CDEV_EVENT_REQUEST3
-  *                   - %FW_CDEV_EVENT_RESPONSE2
-+ *                   - %FW_CDEV_EVENT_PHY_PACKET_SENT2
-+ *                   - %FW_CDEV_EVENT_PHY_PACKET_RECEIVED2
-  */
- 
- /**
-@@ -1100,8 +1146,8 @@ struct fw_cdev_send_stream_packet {
-  * @data:	First and second quadlet of the PHY packet
-  * @generation:	The bus generation where packet is valid
-  *
-- * The %FW_CDEV_IOC_SEND_PHY_PACKET ioctl sends a PHY packet to all nodes
-- * on the same card as this device.  After transmission, an
-+ * The %FW_CDEV_IOC_SEND_PHY_PACKET ioctl sends a PHY packet to all nodes on the same card as this
-+ * device.  After transmission, either %FW_CDEV_EVENT_PHY_PACKET_SENT event or
-  * %FW_CDEV_EVENT_PHY_PACKET_SENT event is generated.
-  *
-  * The payload @data\[\] shall be specified in host byte order.  Usually,
-@@ -1120,8 +1166,9 @@ struct fw_cdev_send_phy_packet {
-  * struct fw_cdev_receive_phy_packets - start reception of PHY packets
-  * @closure: Passed back to userspace in phy packet events
-  *
-- * This ioctl activates issuing of %FW_CDEV_EVENT_PHY_PACKET_RECEIVED due to
-- * incoming PHY packets from any node on the same bus as the device.
-+ * This ioctl activates issuing of either %FW_CDEV_EVENT_PHY_PACKET_RECEIVED or
-+ * %FW_CDEV_EVENT_PHY_PACKET_RECEIVED2 due to incoming PHY packets from any node on the same bus
-+ * as the device.
-  *
-  * The ioctl is only permitted on device files which represent a local node.
-  */
+ 	spin_unlock_irqrestore(&card->lock, flags);
 -- 
 2.39.2
 
