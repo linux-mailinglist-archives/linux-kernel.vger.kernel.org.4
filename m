@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44827711522
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351127115CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242474AbjEYSoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S242478AbjEYSoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242346AbjEYSno (ORCPT
+        with ESMTP id S242340AbjEYSnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:43:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9231FEF;
+        Thu, 25 May 2023 14:43:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB991FF0;
         Thu, 25 May 2023 11:40:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0197964920;
-        Thu, 25 May 2023 18:38:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 978A7C433AE;
-        Thu, 25 May 2023 18:38:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7483D60BEC;
+        Thu, 25 May 2023 18:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108BEC4339C;
+        Thu, 25 May 2023 18:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039912;
-        bh=wNda3bZlc2vfyvi7DQgqvTCZhG0Vfg3T2a4I9OeFoXc=;
+        s=k20201202; t=1685039915;
+        bh=IkGBsXi3C4HEnccIyBaIOzBJS5i014sdapMrMLHbqrQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sf4dKkUNDuZ2c4SULq3DRYC4R55lI90a6Vub1xT+tvk9k5n5y85MKWkzgGG6tOOTX
-         EV3lEdwi1zjmJniP/MEOlvCn/qXvBLfAYipa7+j8MgJ5Q8bWksDLwOK/YKlqE9HZ1x
-         KL7czPUg7gLE5+LjxQ9rwiKHiHoPs3FSdmKY9gbH92wSibjj1ka6jlzg0/wk7EcZ/M
-         /HwzXhkQRrlzhPAE0RWFoAJv/X52stGWAH9AQincbRgjV0D0cZLa6XeSBDM8RGHNVi
-         QlGS/J5qZTR1h9ZIOeULRCqp0FQVzFLwgnz7JYGRZTqllrfv7AAT/MLvY6QOo5m7ku
-         pciv8Rgsvw91g==
+        b=gLVSvAViejIOrxyght+WiypNqnN7raxM69nqUz8SBxINPZnGLCbgpn3ezSUdcJNkI
+         7bAkF6nVfZd8V0OTvfqjyHUM2ERh0DEIXrOsTHegXG+Bjs6u+MPiZaQO/hchXD0lEM
+         bfbbt5aDYynyhfe34Pi1SXHeIRZYhaW6+csjIfB00ezikQwiTRWGeF8hJnQxW8tFea
+         ks0uD8h8Q34DxAesDQ2JaQoVZyIcRT4rgyrR/u3kr/JsxV8xdHSkDf2YA78TJvfN0v
+         12ufBUkBk+jJiAYf8z/RYLw9zpV76sR5VXHLU8IonsH+RPkSJDT9JHaE/juOUaRGH4
+         5OOTz5CxUng2Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Maurizio Lombardi <mlombard@redhat.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-nvme@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 48/57] nvme: do not let the user delete a ctrl before a complete initialization
-Date:   Thu, 25 May 2023 14:35:58 -0400
-Message-Id: <20230525183607.1793983-48-sashal@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Takashi Iwai <tiwai@suse.de>,
+        Sasha Levin <sashal@kernel.org>, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.1 49/57] ALSA: oss: avoid missing-prototype warnings
+Date:   Thu, 25 May 2023 14:35:59 -0400
+Message-Id: <20230525183607.1793983-49-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183607.1793983-1-sashal@kernel.org>
 References: <20230525183607.1793983-1-sashal@kernel.org>
@@ -49,8 +47,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,73 +57,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maurizio Lombardi <mlombard@redhat.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 2eb94dd56a4a4e3fe286def3e2ba207804a37345 ]
+[ Upstream commit 040b5a046a9e18098580d3ccd029e2318fca7859 ]
 
-If a userspace application performes a "delete_controller" command
-early during the ctrl initialization, the delete operation
-may race against the init code and the kernel will crash.
+Two functions are defined and used in pcm_oss.c but also optionally
+used from io.c, with an optional prototype. If CONFIG_SND_PCM_OSS_PLUGINS
+is disabled, this causes a warning as the functions are not static
+and have no prototype:
 
-nvme nvme5: Connect command failed: host path error
-nvme nvme5: failed to connect queue: 0 ret=880
-PF: supervisor write access in kernel mode
-PF: error_code(0x0002) - not-present page
- blk_mq_quiesce_queue+0x18/0x90
- nvme_tcp_delete_ctrl+0x24/0x40 [nvme_tcp]
- nvme_do_delete_ctrl+0x7f/0x8b [nvme_core]
- nvme_sysfs_delete.cold+0x8/0xd [nvme_core]
- kernfs_fop_write_iter+0x124/0x1b0
- new_sync_write+0xff/0x190
- vfs_write+0x1ef/0x280
+sound/core/oss/pcm_oss.c:1235:19: error: no previous prototype for 'snd_pcm_oss_write3' [-Werror=missing-prototypes]
+sound/core/oss/pcm_oss.c:1266:19: error: no previous prototype for 'snd_pcm_oss_read3' [-Werror=missing-prototypes]
 
-Fix the crash by checking the NVME_CTRL_STARTED_ONCE bit;
-if it's not set it means that the nvme controller is still
-in the process of getting initialized and the kernel
-will return an -EBUSY error to userspace.
-Set the NVME_CTRL_STARTED_ONCE later in the nvme_start_ctrl()
-function, after the controller start operation is completed.
+Avoid this by making the prototypes unconditional.
 
-Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20230516195046.550584-2-arnd@kernel.org
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/core.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ sound/core/oss/pcm_plugin.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index f502e032e7e46..2e22c78991ccf 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -3540,6 +3540,9 @@ static ssize_t nvme_sysfs_delete(struct device *dev,
- {
- 	struct nvme_ctrl *ctrl = dev_get_drvdata(dev);
+diff --git a/sound/core/oss/pcm_plugin.h b/sound/core/oss/pcm_plugin.h
+index 46e273bd4a786..50a6b50f5db4c 100644
+--- a/sound/core/oss/pcm_plugin.h
++++ b/sound/core/oss/pcm_plugin.h
+@@ -141,6 +141,14 @@ int snd_pcm_area_copy(const struct snd_pcm_channel_area *src_channel,
  
-+	if (!test_bit(NVME_CTRL_STARTED_ONCE, &ctrl->flags))
-+		return -EBUSY;
+ void *snd_pcm_plug_buf_alloc(struct snd_pcm_substream *plug, snd_pcm_uframes_t size);
+ void snd_pcm_plug_buf_unlock(struct snd_pcm_substream *plug, void *ptr);
++#else
 +
- 	if (device_remove_file_self(dev, attr))
- 		nvme_delete_ctrl_sync(ctrl);
- 	return count;
-@@ -4980,7 +4983,7 @@ void nvme_start_ctrl(struct nvme_ctrl *ctrl)
- 	 * that were missed. We identify persistent discovery controllers by
- 	 * checking that they started once before, hence are reconnecting back.
- 	 */
--	if (test_and_set_bit(NVME_CTRL_STARTED_ONCE, &ctrl->flags) &&
-+	if (test_bit(NVME_CTRL_STARTED_ONCE, &ctrl->flags) &&
- 	    nvme_discovery_ctrl(ctrl))
- 		nvme_change_uevent(ctrl, "NVME_EVENT=rediscover");
++static inline snd_pcm_sframes_t snd_pcm_plug_client_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t drv_size) { return drv_size; }
++static inline snd_pcm_sframes_t snd_pcm_plug_slave_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t clt_size) { return clt_size; }
++static inline int snd_pcm_plug_slave_format(int format, const struct snd_mask *format_mask) { return format; }
++
++#endif
++
+ snd_pcm_sframes_t snd_pcm_oss_write3(struct snd_pcm_substream *substream,
+ 				     const char *ptr, snd_pcm_uframes_t size,
+ 				     int in_kernel);
+@@ -151,14 +159,6 @@ snd_pcm_sframes_t snd_pcm_oss_writev3(struct snd_pcm_substream *substream,
+ snd_pcm_sframes_t snd_pcm_oss_readv3(struct snd_pcm_substream *substream,
+ 				     void **bufs, snd_pcm_uframes_t frames);
  
-@@ -4991,6 +4994,7 @@ void nvme_start_ctrl(struct nvme_ctrl *ctrl)
- 	}
- 
- 	nvme_change_uevent(ctrl, "NVME_EVENT=connected");
-+	set_bit(NVME_CTRL_STARTED_ONCE, &ctrl->flags);
- }
- EXPORT_SYMBOL_GPL(nvme_start_ctrl);
- 
+-#else
+-
+-static inline snd_pcm_sframes_t snd_pcm_plug_client_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t drv_size) { return drv_size; }
+-static inline snd_pcm_sframes_t snd_pcm_plug_slave_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t clt_size) { return clt_size; }
+-static inline int snd_pcm_plug_slave_format(int format, const struct snd_mask *format_mask) { return format; }
+-
+-#endif
+-
+ #ifdef PLUGIN_DEBUG
+ #define pdprintf(fmt, args...) printk(KERN_DEBUG "plugin: " fmt, ##args)
+ #else
 -- 
 2.39.2
 
