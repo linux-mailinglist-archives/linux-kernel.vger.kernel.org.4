@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23217109E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5837109EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240974AbjEYKR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
+        id S240980AbjEYKR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240910AbjEYKRE (ORCPT
+        with ESMTP id S240912AbjEYKRE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 May 2023 06:17:04 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EF61B9
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:16:38 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 296265C0244;
-        Thu, 25 May 2023 06:16:38 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21661B5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:16:39 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 67BD85C01A2;
+        Thu, 25 May 2023 06:16:39 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 25 May 2023 06:16:38 -0400
+  by compute5.internal (MEProxy); Thu, 25 May 2023 06:16:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
          h=cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1685009798; x=
-        1685096198; bh=Zx5vRuZcoTFwzB00ySCuly08OEL537Ypl8d8EH6oHiA=; b=l
-        m74cWIzolzGl1ucQMSKLGaBg07P2vizDWBXWO0+s6MAi+KHg+JNgGT8bJeJxdNSf
-        VCqkbw/l8lsRh/jXmNJC+aUsTWyy24BrXrlXh62Bklvz3hHwvqMyFX4dcFJdb1K7
-        3oF0+sAmP91Wba/EtzxkEgra/BT37rMEDOeI1U/VxvuDt4pn+10LddS4+muEYJ0S
-        bgApsubG/EUbmcsvQq2mdq4XY+j+OebRoQUoyrFl6qM5gILktTjAZR2Kw0Rskpbl
-        CzUEsGy1svOOmH3/VWSPI5yK1cJjA+GKhxTC2KK536SGOOSA5ERnoWE8DfM1LK/k
-        NJQ8EUoeqC1Vmst9lKGWw==
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1685009799; x=
+        1685096199; bh=hCn80S16t5KWMrqhGJtFmBVIPiQ9NKvnaZBu9C4Y5xc=; b=S
+        pX+U/7bbNrznA7H2rB6zu/T594d7BHGsU1A5ERwF0Xgu9TYlHw1XjggBptgpLH/x
+        jF/EHY+ykLsMS3bSZVw2WcED+vJtDDVh3K5lphxGcy5QyVNG5p7MrYPbqbaiRnM+
+        mCDh9M3xkAjKR0mSgl97bAvDqWsWr65H6IjExxTbd/ZC4nlixOWdu7bC8iH3IVaO
+        XMBefErDfgizeI09MXW8HlnkcQLxTSSV4XGbQTaycND9ZHhm7XItdStXJ5TKyEpX
+        EuitHfReSaucXfZjoRX7tv0XzRRNqOkXD6IneJM5BCoVL4l6WiwRXioRGb2WCGkN
+        BhOl15iPWZmfEThmHNMrQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:content-type
         :date:date:feedback-id:feedback-id:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
         :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1685009798; x=1685096198; bh=Z
-        x5vRuZcoTFwzB00ySCuly08OEL537Ypl8d8EH6oHiA=; b=gimzlISCzlg/ojFrl
-        quqOQaRddmnklRE08uxjIIgoReweKBeyICy5sfqxBifEDrQDPmDR7VQZJ13A9WQy
-        sADtAcCS4I1zL/p0lMaXlGhZKhqSQbBxXcswCTWy4EiAeygSa7ZsQSfubA+sCORf
-        X3VFduQItKfOe/uAawXouYPRtENiz+tjp2kmrmfji9F6SYpMVA8aigit05nNL8Vu
-        fgWtxYCymOFNRgvGF05WQeL4fv9AmDa6WRG7kjBRwdBxjpIUP4LtimN/EZgBGIfB
-        snnR9YAnrfx+1eYqbqMpouYHESntwzKz3A3/jRcwoOCqzyaPk+Kb33r5bb6N0Mmp
-        6UIIw==
-X-ME-Sender: <xms:hjVvZLiLojGQcbddpV4o_iR_h-W5F-HNKtnzlL3la6JKCmuh0rWHUQ>
-    <xme:hjVvZIDpUtEGi_CfWWNu6W-WkfSkkrLUwEy5HEB-ybV1jEByickBOxa-MHzgBZ_Sm
-    F1qG_47D_X4Jl9rEZU>
-X-ME-Received: <xmr:hjVvZLHDdtdKa3EOBJ2haP6q6Ey0AsPPYOjU2ceAJURJxPQxCWn60Sxtov72v03iBtsjZ7RwouhjkWToPoVkz86Je1tAFuE1LI49eKmW9UH4iA>
+        :x-me-sender:x-sasl-enc; s=fm1; t=1685009799; x=1685096199; bh=h
+        Cn80S16t5KWMrqhGJtFmBVIPiQ9NKvnaZBu9C4Y5xc=; b=ygaLTXeBUT6MZMicC
+        7rM0fte9LEZe6X/8daKcUvK1/RTt132TipqEhhdaUzWKXhnDBScr3rIixUCvkmkH
+        2Mgmq8NC9VloOvPo88+fCco4P0uoLUpAgBScWq+tpqSkg5FxHZbFSdFAxUR2BPmJ
+        J0RCpPyzeBHokygzF2iWFYan+p5wm7pG3a6+Zoz/EySqsMEy4g9DlQdSNIU/lO2g
+        jVL4jwSBG2ybzws89yb2rjQ1PtihB/411JkJoMRxqG24EpIWsBk1md+jNaFwa96x
+        bVX7r7dnEl1B9adPu+w3l0bc+P60Uhn9ql0PqWAHhyGYslphrvG5mWvuhuxLIMtQ
+        kse5w==
+X-ME-Sender: <xms:hzVvZOgb1dl4bdUcCqlM4uepxOpNmfmQ4CXXHJliwSo7V60gR3_nMQ>
+    <xme:hzVvZPBtpWiMK9SFKGgJJxRA55p5CPigyiRn6j4zciAS1g6I85rjpC6WrPvMXgGKV
+    P3ZoGv5oKxwXQ6HLH8>
+X-ME-Received: <xmr:hzVvZGHH1Z9L9isOR6hojdTHe0AiQVsdq-CMzLG5z9iB8sBUldB1H9-ZtGaB_XqqsfAQ5oGJSVoHe8uqi8Xoai88QlvJ2FbokOIi9kQRC6hZUw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejjedgvdehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
     dtredttdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgr
     shhhihesshgrkhgrmhhotggthhhirdhjpheqnecuggftrfgrthhtvghrnhepveefffefke
     etgfevgeefleehfffhueejtdejveethfekveektdejjedvtdejhfejnecuvehluhhsthgv
-    rhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhhihessh
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhhihessh
     grkhgrmhhotggthhhirdhjph
-X-ME-Proxy: <xmx:hjVvZITEcZvuFwtbgfYcrIQbQEq2FC9T7kav8GrL_WWNCLCR3zzt6A>
-    <xmx:hjVvZIwI80N-Nnh2V9JX-qZEsl7P3zH1nnIIU8EF9tBWh6ymgKitrw>
-    <xmx:hjVvZO4HHxKbqxClE0q_ja-Fz-jLUJbsCgkYzHimdO_AgR6EJYD4CA>
-    <xmx:hjVvZOZFvOkk9rrTrAbLkMlNIh_9yYHMtkkUD6rc3-HvOXD5T3EPuA>
+X-ME-Proxy: <xmx:hzVvZHR2dk-CIUaPq6wyfsKYDrBBo7PbxjP_J0KUiggtxQBczbrajA>
+    <xmx:hzVvZLxrEEuAGofHI0ouYd8VNG3wT2nzq7SKH98eiO0AINzYPllDwg>
+    <xmx:hzVvZF5j_5D-AacAZt-wI6fFvfnnTtdEGcBTiaFd_Es0hUYyILiIwQ>
+    <xmx:hzVvZJYPtpnVo4zAiii2nZOXwHjP_LAnHvCuiD0n34DjZXr9A2gVuQ>
 Feedback-ID: ie8e14432:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 25 May 2023 06:16:37 -0400 (EDT)
+ 25 May 2023 06:16:38 -0400 (EDT)
 From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
 To:     linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 06/12] firewire: core: implement variations to send request and wait for response with time stamp
-Date:   Thu, 25 May 2023 19:16:19 +0900
-Message-Id: <20230525101625.888906-7-o-takashi@sakamocchi.jp>
+Subject: [PATCH v2 07/12] firewire: cdev: code refactoring to operate event of response
+Date:   Thu, 25 May 2023 19:16:20 +0900
+Message-Id: <20230525101625.888906-8-o-takashi@sakamocchi.jp>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525101625.888906-1-o-takashi@sakamocchi.jp>
 References: <20230525101625.888906-1-o-takashi@sakamocchi.jp>
@@ -84,193 +84,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the previous commit, the core function of Linux FireWire subsystem
-was changed for two cases to operate asynchronous transaction with or
-without time stamp.
-
-This commit changes kernel API for the two cases. Current kernel API,
-fw_send_request(), is changed to be static inline function to call
-__fw_send_request(), which receives two argument for union and flag of
-callback function. The new kernel API, fw_send_request_with_tstamp() is
-also added as static inline function, too. When calling, the two
-arguments are copied to internal structure, then used in softIRQ
-context.
+This commit is a preparation to handle time stamp of asynchronous
+transaction for user space application.
 
 Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 ---
- drivers/firewire/core-transaction.c | 41 +++++++++++------
- include/linux/firewire.h            | 69 +++++++++++++++++++++++++++--
- 2 files changed, 92 insertions(+), 18 deletions(-)
+ drivers/firewire/core-cdev.c | 27 +++++++++++++++------------
+ 1 file changed, 15 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/firewire/core-transaction.c b/drivers/firewire/core-transaction.c
-index a20f97fdd06c..130b95aca629 100644
---- a/drivers/firewire/core-transaction.c
-+++ b/drivers/firewire/core-transaction.c
-@@ -316,7 +316,8 @@ static int allocate_tlabel(struct fw_card *card)
- }
+diff --git a/drivers/firewire/core-cdev.c b/drivers/firewire/core-cdev.c
+index 5a9446d30447..315ebc8c545d 100644
+--- a/drivers/firewire/core-cdev.c
++++ b/drivers/firewire/core-cdev.c
+@@ -170,7 +170,9 @@ struct outbound_transaction_event {
+ 	struct event event;
+ 	struct client *client;
+ 	struct outbound_transaction_resource r;
+-	struct fw_cdev_event_response response;
++	union {
++		struct fw_cdev_event_response without_tstamp;
++	} rsp;
+ };
  
- /**
-- * fw_send_request() - submit a request packet for transmission
-+ * __fw_send_request() - submit a request packet for transmission to generate callback for response
-+ *			 subaction with or without time stamp.
-  * @card:		interface to send the request at
-  * @t:			transaction instance to which the request belongs
-  * @tcode:		transaction code
-@@ -326,7 +327,9 @@ static int allocate_tlabel(struct fw_card *card)
-  * @offset:		48bit wide offset into destination's address space
-  * @payload:		data payload for the request subaction
-  * @length:		length of the payload, in bytes
-- * @callback:		function to be called when the transaction is completed
-+ * @callback:		union of two functions whether to receive time stamp or not for response
-+ *			subaction.
-+ * @with_tstamp:	Whether to receive time stamp or not for response subaction.
-  * @callback_data:	data to be passed to the transaction completion callback
-  *
-  * Submit a request packet into the asynchronous request transmission queue.
-@@ -363,10 +366,10 @@ static int allocate_tlabel(struct fw_card *card)
-  * transaction completion and hence execution of @callback may happen even
-  * before fw_send_request() returns.
-  */
--void fw_send_request(struct fw_card *card, struct fw_transaction *t, int tcode,
--		     int destination_id, int generation, int speed,
--		     unsigned long long offset, void *payload, size_t length,
--		     fw_transaction_callback_t callback, void *callback_data)
-+void __fw_send_request(struct fw_card *card, struct fw_transaction *t, int tcode,
-+		int destination_id, int generation, int speed, unsigned long long offset,
-+		void *payload, size_t length, union fw_transaction_callback callback,
-+		bool with_tstamp, void *callback_data)
+ struct inbound_transaction_event {
+@@ -540,7 +542,7 @@ static void complete_transaction(struct fw_card *card, int rcode,
+ 				 void *payload, size_t length, void *data)
  {
+ 	struct outbound_transaction_event *e = data;
+-	struct fw_cdev_event_response *rsp = &e->response;
++	struct fw_cdev_event_response *rsp = &e->rsp.without_tstamp;
+ 	struct client *client = e->client;
  	unsigned long flags;
- 	int tlabel;
-@@ -381,7 +384,19 @@ void fw_send_request(struct fw_card *card, struct fw_transaction *t, int tcode,
- 	tlabel = allocate_tlabel(card);
- 	if (tlabel < 0) {
- 		spin_unlock_irqrestore(&card->lock, flags);
--		callback(card, RCODE_SEND_ERROR, NULL, 0, callback_data);
-+		if (!with_tstamp) {
-+			callback.without_tstamp(card, RCODE_SEND_ERROR, NULL, 0, callback_data);
-+		} else {
-+			// Timestamping on behalf of hardware.
-+			u32 curr_cycle_time = 0;
-+			u32 tstamp;
+ 
+@@ -581,6 +583,8 @@ static int init_request(struct client *client,
+ 			int destination_id, int speed)
+ {
+ 	struct outbound_transaction_event *e;
++	struct fw_cdev_event_response *rsp;
++	void *payload;
+ 	int ret;
+ 
+ 	if (request->tcode != TCODE_STREAM_DATA &&
+@@ -594,14 +598,14 @@ static int init_request(struct client *client,
+ 	e = kmalloc(sizeof(*e) + request->length, GFP_KERNEL);
+ 	if (e == NULL)
+ 		return -ENOMEM;
+-
+ 	e->client = client;
+-	e->response.length = request->length;
+-	e->response.closure = request->closure;
+ 
+-	if (request->data &&
+-	    copy_from_user(e->response.data,
+-			   u64_to_uptr(request->data), request->length)) {
++	rsp = &e->rsp.without_tstamp;
++	rsp->length = request->length;
++	rsp->closure = request->closure;
++	payload = rsp->data;
 +
-+			(void)fw_card_read_cycle_time(card, &curr_cycle_time);
-+			tstamp = cycle_time_to_ohci_tstamp(curr_cycle_time);
-+
-+			callback.with_tstamp(card, RCODE_SEND_ERROR, tstamp, tstamp, NULL, 0,
-+					     callback_data);
-+		}
- 		return;
++	if (request->data && copy_from_user(payload, u64_to_uptr(request->data), request->length)) {
+ 		ret = -EFAULT;
+ 		goto failed;
  	}
+@@ -611,10 +615,9 @@ static int init_request(struct client *client,
+ 	if (ret < 0)
+ 		goto failed;
  
-@@ -389,14 +404,12 @@ void fw_send_request(struct fw_card *card, struct fw_transaction *t, int tcode,
- 	t->tlabel = tlabel;
- 	t->card = card;
- 	t->is_split_transaction = false;
--	timer_setup(&t->split_timeout_timer,
--		    split_transaction_timeout_callback, 0);
--	t->callback.without_tstamp = callback;
--	t->with_tstamp = false;
-+	timer_setup(&t->split_timeout_timer, split_transaction_timeout_callback, 0);
-+	t->callback = callback;
-+	t->with_tstamp = with_tstamp;
- 	t->callback_data = callback_data;
+-	fw_send_request(client->device->card, &e->r.transaction,
+-			request->tcode, destination_id, request->generation,
+-			speed, request->offset, e->response.data,
+-			request->length, complete_transaction, e);
++	fw_send_request(client->device->card, &e->r.transaction, request->tcode, destination_id,
++			request->generation, speed, request->offset, payload, request->length,
++			complete_transaction, e);
+ 	return 0;
  
--	fw_fill_request(&t->packet, tcode, t->tlabel,
--			destination_id, card->node_id, generation,
-+	fw_fill_request(&t->packet, tcode, t->tlabel, destination_id, card->node_id, generation,
- 			speed, offset, payload, length);
- 	t->packet.callback = transmit_complete_callback;
- 
-@@ -406,7 +419,7 @@ void fw_send_request(struct fw_card *card, struct fw_transaction *t, int tcode,
- 
- 	card->driver->send_request(card, &t->packet);
- }
--EXPORT_SYMBOL(fw_send_request);
-+EXPORT_SYMBOL_GPL(__fw_send_request);
- 
- struct transaction_callback_data {
- 	struct completion done;
-diff --git a/include/linux/firewire.h b/include/linux/firewire.h
-index d61693341da1..a7fd23d0010d 100644
---- a/include/linux/firewire.h
-+++ b/include/linux/firewire.h
-@@ -356,10 +356,71 @@ void fw_send_response(struct fw_card *card,
- 		      struct fw_request *request, int rcode);
- int fw_get_request_speed(struct fw_request *request);
- u32 fw_request_get_timestamp(const struct fw_request *request);
--void fw_send_request(struct fw_card *card, struct fw_transaction *t,
--		     int tcode, int destination_id, int generation, int speed,
--		     unsigned long long offset, void *payload, size_t length,
--		     fw_transaction_callback_t callback, void *callback_data);
-+
-+void __fw_send_request(struct fw_card *card, struct fw_transaction *t, int tcode,
-+		int destination_id, int generation, int speed, unsigned long long offset,
-+		void *payload, size_t length, union fw_transaction_callback callback,
-+		bool with_tstamp, void *callback_data);
-+
-+/**
-+ * fw_send_request() - submit a request packet for transmission to generate callback for response
-+ *		       subaction without time stamp.
-+ * @card:		interface to send the request at
-+ * @t:			transaction instance to which the request belongs
-+ * @tcode:		transaction code
-+ * @destination_id:	destination node ID, consisting of bus_ID and phy_ID
-+ * @generation:		bus generation in which request and response are valid
-+ * @speed:		transmission speed
-+ * @offset:		48bit wide offset into destination's address space
-+ * @payload:		data payload for the request subaction
-+ * @length:		length of the payload, in bytes
-+ * @callback:		function to be called when the transaction is completed
-+ * @callback_data:	data to be passed to the transaction completion callback
-+ *
-+ * A variation of __fw_send_request() to generate callback for response subaction without time
-+ * stamp.
-+ */
-+static inline void fw_send_request(struct fw_card *card, struct fw_transaction *t, int tcode,
-+				   int destination_id, int generation, int speed,
-+				   unsigned long long offset, void *payload, size_t length,
-+				   fw_transaction_callback_t callback, void *callback_data)
-+{
-+	union fw_transaction_callback cb = {
-+		.without_tstamp = callback,
-+	};
-+	__fw_send_request(card, t, tcode, destination_id, generation, speed, offset, payload,
-+			  length, cb, false, callback_data);
-+}
-+
-+/**
-+ * fw_send_request_with_tstamp() - submit a request packet for transmission to generate callback for
-+ *				   response with time stamp.
-+ * @card:		interface to send the request at
-+ * @t:			transaction instance to which the request belongs
-+ * @tcode:		transaction code
-+ * @destination_id:	destination node ID, consisting of bus_ID and phy_ID
-+ * @generation:		bus generation in which request and response are valid
-+ * @speed:		transmission speed
-+ * @offset:		48bit wide offset into destination's address space
-+ * @payload:		data payload for the request subaction
-+ * @length:		length of the payload, in bytes
-+ * @callback:		function to be called when the transaction is completed
-+ * @callback_data:	data to be passed to the transaction completion callback
-+ *
-+ * A variation of __fw_send_request() to generate callback for response subaction with time stamp.
-+ */
-+static inline void fw_send_request_with_tstamp(struct fw_card *card, struct fw_transaction *t,
-+	int tcode, int destination_id, int generation, int speed, unsigned long long offset,
-+	void *payload, size_t length, fw_transaction_callback_with_tstamp_t callback,
-+	void *callback_data)
-+{
-+	union fw_transaction_callback cb = {
-+		.with_tstamp = callback,
-+	};
-+	__fw_send_request(card, t, tcode, destination_id, generation, speed, offset, payload,
-+			  length, cb, true, callback_data);
-+}
-+
- int fw_cancel_transaction(struct fw_card *card,
- 			  struct fw_transaction *transaction);
- int fw_run_transaction(struct fw_card *card, int tcode, int destination_id,
+  failed:
 -- 
 2.39.2
 
