@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8E37113C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5187113C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240387AbjEYSch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S240978AbjEYScl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241134AbjEYSca (ORCPT
+        with ESMTP id S240825AbjEYSci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:32:30 -0400
+        Thu, 25 May 2023 14:32:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001E0E4F;
-        Thu, 25 May 2023 11:32:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50108E63;
+        Thu, 25 May 2023 11:32:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 604DB6487C;
-        Thu, 25 May 2023 18:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03418C433D2;
-        Thu, 25 May 2023 18:32:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C27C06489C;
+        Thu, 25 May 2023 18:32:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D081AC433EF;
+        Thu, 25 May 2023 18:32:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685039538;
-        bh=HoD8pfnSJ9bfKM/4PbrabivCPKLDimTR4j8uvKoaaYg=;
+        s=k20201202; t=1685039543;
+        bh=HFdrnqkcnUQg9uWpFJ+udX6fWvMx3SLmIe6cCrti5OM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MIl5viWTcT3sM9QJ1uQDIfr15Y5ZodWe6RL1GZ1+/jHqOkQoViLluXf2JDNapYxQs
-         WlpBxczvyNiIrZlNKxC+XojnFUOGg+Q40S0CH+yjGkqFId69Mfs/1w9hrm2Xlev+o2
-         6qDKoQE3UQmg6bjsxvpQa7xheumSmdxZgX8EhQ+FveMtlcUfphUpLVnftgZWtAUbls
-         KxgLDQEbaLMHN58Yxmua6H7VX3N/VTovMGwERmFuFP7IOwLQ+aB4exErCPMgFlR8HQ
-         wtTvJMBAvvF7rWxU8wu4AKOGrlKtlCesxjf//aoaSzrUWwCIkIzdaN4c7OVgjd1skA
-         79xuwVXecgBdA==
+        b=clfOKxOX2v7F5jrxSKvZiWtZTP9J89qDoEm3D6m1PHVJ5nCygIv5O107Zb+8sPgmG
+         iJq8Smp6tbYhctNMx+HH83yRo491ZVlP1IjA0cvTUeBToZihjU3Tezj69UP3yVLrFf
+         yDGKbOog3f0VwvHXGJlI77s/KjtuaHnBcWnI0rEMFy8iSJTPEfkfxvht06dxV/j897
+         F2UyRjJGwTTlHPJA8PrS+K6i2GPuw0fkQ3ZTmGtQ2nLeYX807juosF4Jf9X0rmr4KF
+         YP/KXNw6YQg5M7Vm7OCa73qTjREMWC/ClWpF2mC49pmvHOD2rGo7l97MM/GRsnyPpx
+         DGOeu9bZ8hhCA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hao Zeng <zenghao@kylinos.cn>,
+Cc:     Mark Brown <broonie@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, trenn@suse.com,
-        shuah@kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 06/67] cpupower:Fix resource leaks in sysfs_get_enabled()
-Date:   Thu, 25 May 2023 14:30:43 -0400
-Message-Id: <20230525183144.1717540-6-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 07/67] selftests/ftrace: Improve integration with kselftest runner
+Date:   Thu, 25 May 2023 14:30:44 -0400
+Message-Id: <20230525183144.1717540-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525183144.1717540-1-sashal@kernel.org>
 References: <20230525183144.1717540-1-sashal@kernel.org>
@@ -58,71 +60,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Zeng <zenghao@kylinos.cn>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit e652be0f59d4ba4d5c636b1f7f4dcb73aae049fa ]
+[ Upstream commit dbcf76390eb9a65d5d0c37b0cd57335218564e37 ]
 
-The sysfs_get_enabled() opened file processor not closed,
-may cause a file handle leak.
-Putting error handling and resource cleanup code together
-makes the code easy to maintain and read.
-Removed the unnecessary else if branch from the original
-function, as it should return an error in cases other than '0'.
+The ftrace selftests do not currently produce KTAP output, they produce a
+custom format much nicer for human consumption. This means that when run in
+automated test systems we just get a single result for the suite as a whole
+rather than recording results for individual test cases, making it harder
+to look at the test data and masking things like inappropriate skips.
 
-Signed-off-by: Hao Zeng <zenghao@kylinos.cn>
-Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
+Address this by adding support for KTAP output to the ftracetest script and
+providing a trivial wrapper which will be invoked by the kselftest runner
+to generate output in this format by default, users using ftracetest
+directly will continue to get the existing output.
+
+This is not the most elegant solution but it is simple and effective. I
+did consider implementing this by post processing the existing output
+format but that felt more complex and likely to result in all output being
+lost if something goes seriously wrong during the run which would not be
+helpful. I did also consider just writing a separate runner script but
+there's enough going on with things like the signal handling for that to
+seem like it would be duplicating too much.
+
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/power/cpupower/lib/powercap.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+ tools/testing/selftests/ftrace/Makefile       |  3 +-
+ tools/testing/selftests/ftrace/ftracetest     | 63 ++++++++++++++++++-
+ .../testing/selftests/ftrace/ftracetest-ktap  |  8 +++
+ 3 files changed, 70 insertions(+), 4 deletions(-)
+ create mode 100755 tools/testing/selftests/ftrace/ftracetest-ktap
 
-diff --git a/tools/power/cpupower/lib/powercap.c b/tools/power/cpupower/lib/powercap.c
-index 0ce29ee4c2e46..a7a59c6bacda8 100644
---- a/tools/power/cpupower/lib/powercap.c
-+++ b/tools/power/cpupower/lib/powercap.c
-@@ -40,25 +40,34 @@ static int sysfs_get_enabled(char *path, int *mode)
- {
- 	int fd;
- 	char yes_no;
-+	int ret = 0;
+diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
+index d6e106fbce11c..a1e955d2de4cc 100644
+--- a/tools/testing/selftests/ftrace/Makefile
++++ b/tools/testing/selftests/ftrace/Makefile
+@@ -1,7 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ all:
  
- 	*mode = 0;
+-TEST_PROGS := ftracetest
++TEST_PROGS_EXTENDED := ftracetest
++TEST_PROGS := ftracetest-ktap
+ TEST_FILES := test.d settings
+ EXTRA_CLEAN := $(OUTPUT)/logs/*
  
- 	fd = open(path, O_RDONLY);
--	if (fd == -1)
--		return -1;
-+	if (fd == -1) {
-+		ret = -1;
-+		goto out;
-+	}
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index c3311c8c40890..2506621e75dfb 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -13,6 +13,7 @@ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+ echo " Options:"
+ echo "		-h|--help  Show help message"
+ echo "		-k|--keep  Keep passed test logs"
++echo "		-K|--ktap  Output in KTAP format"
+ echo "		-v|--verbose Increase verbosity of test messages"
+ echo "		-vv        Alias of -v -v (Show all results in stdout)"
+ echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
+@@ -85,6 +86,10 @@ parse_opts() { # opts
+       KEEP_LOG=1
+       shift 1
+     ;;
++    --ktap|-K)
++      KTAP=1
++      shift 1
++    ;;
+     --verbose|-v|-vv|-vvv)
+       if [ $VERBOSE -eq -1 ]; then
+ 	usage "--console can not use with --verbose"
+@@ -178,6 +183,7 @@ TEST_DIR=$TOP_DIR/test.d
+ TEST_CASES=`find_testcases $TEST_DIR`
+ LOG_DIR=$TOP_DIR/logs/`date +%Y%m%d-%H%M%S`/
+ KEEP_LOG=0
++KTAP=0
+ DEBUG=0
+ VERBOSE=0
+ UNSUPPORTED_RESULT=0
+@@ -229,7 +235,7 @@ prlog() { # messages
+     newline=
+     shift
+   fi
+-  printf "$*$newline"
++  [ "$KTAP" != "1" ] && printf "$*$newline"
+   [ "$LOG_FILE" ] && printf "$*$newline" | strip_esc >> $LOG_FILE
+ }
+ catlog() { #file
+@@ -260,11 +266,11 @@ TOTAL_RESULT=0
  
- 	if (read(fd, &yes_no, 1) != 1) {
--		close(fd);
--		return -1;
-+		ret = -1;
-+		goto out_close;
- 	}
+ INSTANCE=
+ CASENO=0
++CASENAME=
  
- 	if (yes_no == '1') {
- 		*mode = 1;
--		return 0;
-+		goto out_close;
- 	} else if (yes_no == '0') {
--		return 0;
-+		goto out_close;
-+	} else {
-+		ret = -1;
-+		goto out_close;
- 	}
--	return -1;
-+out_close:
-+	close(fd);
-+out:
-+	return ret;
+ testcase() { # testfile
+   CASENO=$((CASENO+1))
+-  desc=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
+-  prlog -n "[$CASENO]$INSTANCE$desc"
++  CASENAME=`grep "^#[ \t]*description:" $1 | cut -f2- -d:`
  }
  
- int powercap_get_enabled(int *mode)
+ checkreq() { # testfile
+@@ -277,40 +283,68 @@ test_on_instance() { # testfile
+   grep -q "^#[ \t]*flags:.*instance" $1
+ }
+ 
++ktaptest() { # result comment
++  if [ "$KTAP" != "1" ]; then
++    return
++  fi
++
++  local result=
++  if [ "$1" = "1" ]; then
++    result="ok"
++  else
++    result="not ok"
++  fi
++  shift
++
++  local comment=$*
++  if [ "$comment" != "" ]; then
++    comment="# $comment"
++  fi
++
++  echo $CASENO $result $INSTANCE$CASENAME $comment
++}
++
+ eval_result() { # sigval
+   case $1 in
+     $PASS)
+       prlog "	[${color_green}PASS${color_reset}]"
++      ktaptest 1
+       PASSED_CASES="$PASSED_CASES $CASENO"
+       return 0
+     ;;
+     $FAIL)
+       prlog "	[${color_red}FAIL${color_reset}]"
++      ktaptest 0
+       FAILED_CASES="$FAILED_CASES $CASENO"
+       return 1 # this is a bug.
+     ;;
+     $UNRESOLVED)
+       prlog "	[${color_blue}UNRESOLVED${color_reset}]"
++      ktaptest 0 UNRESOLVED
+       UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
+       return $UNRESOLVED_RESULT # depends on use case
+     ;;
+     $UNTESTED)
+       prlog "	[${color_blue}UNTESTED${color_reset}]"
++      ktaptest 1 SKIP
+       UNTESTED_CASES="$UNTESTED_CASES $CASENO"
+       return 0
+     ;;
+     $UNSUPPORTED)
+       prlog "	[${color_blue}UNSUPPORTED${color_reset}]"
++      ktaptest 1 SKIP
+       UNSUPPORTED_CASES="$UNSUPPORTED_CASES $CASENO"
+       return $UNSUPPORTED_RESULT # depends on use case
+     ;;
+     $XFAIL)
+       prlog "	[${color_green}XFAIL${color_reset}]"
++      ktaptest 1 XFAIL
+       XFAILED_CASES="$XFAILED_CASES $CASENO"
+       return 0
+     ;;
+     *)
+       prlog "	[${color_blue}UNDEFINED${color_reset}]"
++      ktaptest 0 error
+       UNDEFINED_CASES="$UNDEFINED_CASES $CASENO"
+       return 1 # this must be a test bug
+     ;;
+@@ -371,6 +405,7 @@ __run_test() { # testfile
+ run_test() { # testfile
+   local testname=`basename $1`
+   testcase $1
++  prlog -n "[$CASENO]$INSTANCE$CASENAME"
+   if [ ! -z "$LOG_FILE" ] ; then
+     local testlog=`mktemp $LOG_DIR/${CASENO}-${testname}-log.XXXXXX`
+   else
+@@ -405,6 +440,17 @@ run_test() { # testfile
+ # load in the helper functions
+ . $TEST_DIR/functions
+ 
++if [ "$KTAP" = "1" ]; then
++  echo "TAP version 13"
++
++  casecount=`echo $TEST_CASES | wc -w`
++  for t in $TEST_CASES; do
++    test_on_instance $t || continue
++    casecount=$((casecount+1))
++  done
++  echo "1..${casecount}"
++fi
++
+ # Main loop
+ for t in $TEST_CASES; do
+   run_test $t
+@@ -439,6 +485,17 @@ prlog "# of unsupported: " `echo $UNSUPPORTED_CASES | wc -w`
+ prlog "# of xfailed: " `echo $XFAILED_CASES | wc -w`
+ prlog "# of undefined(test bug): " `echo $UNDEFINED_CASES | wc -w`
+ 
++if [ "$KTAP" = "1" ]; then
++  echo -n "# Totals:"
++  echo -n " pass:"`echo $PASSED_CASES | wc -w`
++  echo -n " faii:"`echo $FAILED_CASES | wc -w`
++  echo -n " xfail:"`echo $XFAILED_CASES | wc -w`
++  echo -n " xpass:0"
++  echo -n " skip:"`echo $UNTESTED_CASES $UNSUPPORTED_CASES | wc -w`
++  echo -n " error:"`echo $UNRESOLVED_CASES $UNDEFINED_CASES | wc -w`
++  echo
++fi
++
+ cleanup
+ 
+ # if no error, return 0
+diff --git a/tools/testing/selftests/ftrace/ftracetest-ktap b/tools/testing/selftests/ftrace/ftracetest-ktap
+new file mode 100755
+index 0000000000000..b3284679ef3af
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/ftracetest-ktap
+@@ -0,0 +1,8 @@
++#!/bin/sh -e
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# ftracetest-ktap: Wrapper to integrate ftracetest with the kselftest runner
++#
++# Copyright (C) Arm Ltd., 2023
++
++./ftracetest -K
 -- 
 2.39.2
 
