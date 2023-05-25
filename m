@@ -2,131 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DE87101E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 02:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D6F7101E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 02:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbjEYAGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 20:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
+        id S231443AbjEYAMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 20:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjEYAGW (ORCPT
+        with ESMTP id S229452AbjEYAMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 20:06:22 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4ACA99
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:06:20 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f600a6a890so29975e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:06:20 -0700 (PDT)
+        Wed, 24 May 2023 20:12:06 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717B7135
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:12:04 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-64d20f79776so921388b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684973179; x=1687565179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q6y2T4aCSu8SfDSRBVPepEbUZJ4FOAswZ/Dl6ph/P2s=;
-        b=v+vO3KtaS1phlSRKZZTGgXkFjboXX+ks0HNH3n7OjahS6jWuOyvj4JYDBxU23rtCWg
-         Fp1UWOKeqYywgSV6DmVfOrcxrkG6eXiguVqbW7ZKksZs0voPMobLhAf3gotaqsY9owb3
-         9X3cfSg/vIokAMjOHvsi92+EvuAAAaz4T88xN0DBiWM1hFPeqs/CLZpodOKq1yuNKQoX
-         BVHeg088hhk/1wz1f4nyds+aPVygeeY4I3qtgkFU+jqqcsM4ig0zFKZbaqSGhIVTvUZx
-         QcKg+RPeOlW+Q7zHmORd137a9edoq1A14wYmAPvtxyiEjMz24ldKpN8Qxucn+i/Iuzi1
-         0IRQ==
+        d=google.com; s=20221208; t=1684973524; x=1687565524;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CuGzP4jvcFhZR0qNDB5MEw2qn9YAXXZ3upPhfuHloLo=;
+        b=QyP5/8p7Gy/PZSdwURtv5JC7lUyDeFZAlQgrfKUMESQAz11X9jTC701MmiWTjBTWvF
+         IAuICHYBgGOZqQeEcyVQjQpaMAQYEio+n0H39WxwzhfDxbpisBUkNZjpTJD5ubWRy1Iy
+         c6nUdTAJEBFUNl/+Byq7Cyfiw0sqvpVQLlvMrz2cFsUwhoccvg3tiIsUCPORX8Fr1MC5
+         u000gRpAjzCP6n671I4By3AFo3+L3eeMmeRAwC87rjDfLnqU7Xk3YbbsJ516rCo/V6py
+         UEzelwVRqWiBazvdg4pIdomKH5G/lutEBpQNw1JZ8k27mpiU74Cz5jr01Ri8TpDddZUW
+         QLaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684973179; x=1687565179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q6y2T4aCSu8SfDSRBVPepEbUZJ4FOAswZ/Dl6ph/P2s=;
-        b=C9EoTwU9uyQ6cJBQTo2Wmze+XZCZyKpVb8Wr3FqDrcgnRKrD28NQ4ktHLBon2mJB2R
-         D51pSrFGI3C819x+EwrunKCiDmYydfkYPE7WlxtAgd32rmrvzrqTi1MLv77uKqeqJu+x
-         wgAoLYAR/18U4zYCmiq8FMcdy8WIQtwtVN2sAfuMO8QovWg4WOJDzeA51R4jB+1Z2evO
-         CZ4cXluH9PqoH8j0QYTahlYwioOG6xMuNnVX6cc3aebIzCPuSd593DVeS1ZGkDJyv0j9
-         nuDxkvaLNl+IquGAzfr8n69Qxff99TwQnZDjbqoD6EXSRSb0Z5Og8DWR6DuYslBgWbN6
-         anCA==
-X-Gm-Message-State: AC+VfDxp8wh8ybQ1T7Z7bRS6lkkGaWq+wWpidM3CeQRCjbHYV6ZwrkKo
-        hAFSKtkDF7GPYWvaPRhDCmeV1hvkYwDkhtJrlTsuIg==
-X-Google-Smtp-Source: ACHHUZ4sbjWspZgkEqrDsqh2MBrtkkcJLNCg8xRKWlGgbq3vGNreJBWEEaxV6Ez7gN0v+6CNpWC+8TKIU4z94zmy9VY=
-X-Received: by 2002:a05:600c:1c93:b0:3f4:2736:b5eb with SMTP id
- k19-20020a05600c1c9300b003f42736b5ebmr25661wms.1.1684973179281; Wed, 24 May
- 2023 17:06:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230518013414.3053254-1-joshdon@google.com> <20230518013414.3053254-2-joshdon@google.com>
- <ZG0z1enh3TNbsxQh@slm.duckdns.org>
-In-Reply-To: <ZG0z1enh3TNbsxQh@slm.duckdns.org>
-From:   Josh Don <joshdon@google.com>
-Date:   Wed, 24 May 2023 17:06:08 -0700
-Message-ID: <CABk29Nvh6jxv3cWampfjiz57=vvQVX8ThtaJPXF=vc3aqme6YQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] sched: add throttled time stat for throttled children
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Xiangling Kong <xiangling@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
+        d=1e100.net; s=20221208; t=1684973524; x=1687565524;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CuGzP4jvcFhZR0qNDB5MEw2qn9YAXXZ3upPhfuHloLo=;
+        b=fdzgXnuy8Uk9WrGo1Ax4RmDYLMaGWcAaLfn7Guu0ea+SUGA1uma+w6T/aIHJdo3xI4
+         6TuzUdLS5SBozVPmgaz64jFNs2rCeqPvsVpdPJ4kBvhuSu+Yujyu3kYbLYBwUqNM1vrp
+         uXef2ITrYK1gwr+hEop9AG1K2RxcrcsxN1KEkyFR0s38pOhI4ggBmi2DarjSQtMWm8rt
+         xC2rtV+nlECeWZ6QfktiOFofaAH2HjXqASe0IM4hTgO+stC8/k+HO9mR/flyRQI7nHjY
+         FS4ktLn+lmrkweTaYE9m3LLwpMxYTh8dNX6WyDZMWOgq374E2KKX+34GHmog6mjngLSE
+         0MNQ==
+X-Gm-Message-State: AC+VfDzhH0j9fUnAca1aEgIVYkdkvbnkBw/RLUpXhflLzIuBNf78vOcq
+        ZTBHIGdHHpriaND5/Pou5etiosWIvqMW
+X-Google-Smtp-Source: ACHHUZ5L4U6ncBchHbVPNxt3jSblZwPArf1Lu6PXIrUka0L1XTGS+c1Dcdl+Z/M7MxNvOvoT5Wxs5g76s7/Q
+X-Received: from jiangzp-glinux-dev.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4c52])
+ (user=jiangzp job=sendgmr) by 2002:a05:6a00:1514:b0:63d:397a:8fdd with SMTP
+ id q20-20020a056a00151400b0063d397a8fddmr1747469pfu.0.1684973523938; Wed, 24
+ May 2023 17:12:03 -0700 (PDT)
+Date:   Wed, 24 May 2023 17:11:58 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+Message-ID: <20230524171158.kernel.v1.1.Ie9c81a5f8bbdb4f9a2007c56f05001d7e674dbe0@changeid>
+Subject: [kernel PATCH v1] Bluetooth: hci_sync: add lock to protect HCI_UNREGISTER
+From:   Zhengping Jiang <jiangzp@google.com>
+To:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        luiz.dentz@gmail.com
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        Zhengping Jiang <jiangzp@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Tejun,
+When the HCI_UNREGISTER flag is set, no jobs should be scheduled. Fix
+potential race when HCI_UNREGISTER is set after the flag is tested in
+hci_cmd_sync_queue.
 
-On Tue, May 23, 2023 at 2:44=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> (cc'ing Johannes)
->
-> On Wed, May 17, 2023 at 06:34:14PM -0700, Josh Don wrote:
-> > We currently export the total throttled time for cgroups that are given
-> > a bandwidth limit. This patch extends this accounting to also account
-> > the total time that each children cgroup has been throttled.
-> >
-> > This is useful to understand the degree to which children have been
-> > affected by the throttling control. Children which are not runnable
-> > during the entire throttled period, for example, will not show any
-> > self-throttling time during this period.
-> ...
-> > @@ -11204,20 +11217,24 @@ static int cpu_extra_stat_show(struct seq_fil=
-e *sf,
-> >       {
-> >               struct task_group *tg =3D css_tg(css);
-> >               struct cfs_bandwidth *cfs_b =3D &tg->cfs_bandwidth;
-> > -             u64 throttled_usec, burst_usec;
-> > +             u64 throttled_usec, burst_usec, throttled_self_usec;
-> >
-> >               throttled_usec =3D cfs_b->throttled_time;
-> >               do_div(throttled_usec, NSEC_PER_USEC);
-> > +             throttled_self_usec =3D throttled_time_self(tg);
-> > +             do_div(throttled_self_usec, NSEC_PER_USEC);
-> >               burst_usec =3D cfs_b->burst_time;
-> >               do_div(burst_usec, NSEC_PER_USEC);
-> >
-> >               seq_printf(sf, "nr_periods %d\n"
-> >                          "nr_throttled %d\n"
-> >                          "throttled_usec %llu\n"
-> > +                        "throttled_self_usec %llu\n"
->
-> This is fine in principle but I think it'd be better to keep it consisten=
-t
-> with how non-hierarchical events are in memory.events.local. ie. Can we
-> please add cpu.stat.local instead of adding the _self key to cpu.stat?
+Fixes: 0b94f2651f56 ("Bluetooth: hci_sync: Fix queuing commands when HCI_UNREGISTER is set")
+Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+---
 
-It seemed unfortunate to split it out into a separate interface, since
-there wouldn't be much to put there, but I don't have a strong
-objection to this. I'll go ahead and make that change for v2.
+Changes in v1:
+- Add a lock to protect HCI_UNREGISTER flag
 
-Best,
-Josh
+ include/net/bluetooth/hci_core.h |  1 +
+ net/bluetooth/hci_core.c         |  2 ++
+ net/bluetooth/hci_sync.c         | 20 ++++++++++++++------
+ 3 files changed, 17 insertions(+), 6 deletions(-)
+
+diff --git a/include/net/bluetooth/hci_core.h b/include/net/bluetooth/hci_core.h
+index c86ecce34854..9a21b4787df5 100644
+--- a/include/net/bluetooth/hci_core.h
++++ b/include/net/bluetooth/hci_core.h
+@@ -515,6 +515,7 @@ struct hci_dev {
+ 	struct work_struct	cmd_sync_work;
+ 	struct list_head	cmd_sync_work_list;
+ 	struct mutex		cmd_sync_work_lock;
++	struct mutex		hdev_unregister_lock;
+ 	struct work_struct	cmd_sync_cancel_work;
+ 	struct work_struct	reenable_adv_work;
+ 
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index a856b1051d35..216c78656133 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -2686,7 +2686,9 @@ void hci_unregister_dev(struct hci_dev *hdev)
+ {
+ 	BT_DBG("%p name %s bus %d", hdev, hdev->name, hdev->bus);
+ 
++	mutex_lock(&hdev->hdev_unregister_lock);
+ 	hci_dev_set_flag(hdev, HCI_UNREGISTER);
++	mutex_unlock(&hdev->hdev_unregister_lock);
+ 
+ 	write_lock(&hci_dev_list_lock);
+ 	list_del(&hdev->list);
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index 647a8ce54062..2038335bdc85 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -629,6 +629,7 @@ void hci_cmd_sync_init(struct hci_dev *hdev)
+ 	INIT_WORK(&hdev->cmd_sync_work, hci_cmd_sync_work);
+ 	INIT_LIST_HEAD(&hdev->cmd_sync_work_list);
+ 	mutex_init(&hdev->cmd_sync_work_lock);
++	mutex_init(&hdev->hdev_unregister_lock);
+ 
+ 	INIT_WORK(&hdev->cmd_sync_cancel_work, hci_cmd_sync_cancel_work);
+ 	INIT_WORK(&hdev->reenable_adv_work, reenable_adv);
+@@ -692,14 +693,19 @@ int hci_cmd_sync_submit(struct hci_dev *hdev, hci_cmd_sync_work_func_t func,
+ 			void *data, hci_cmd_sync_work_destroy_t destroy)
+ {
+ 	struct hci_cmd_sync_work_entry *entry;
++	int err = 0;
+ 
+-	if (hci_dev_test_flag(hdev, HCI_UNREGISTER))
+-		return -ENODEV;
++	mutex_lock(&hdev->hdev_unregister_lock);
++	if (hci_dev_test_flag(hdev, HCI_UNREGISTER)) {
++		err = -ENODEV;
++		goto unlock;
++	}
+ 
+ 	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
+-	if (!entry)
+-		return -ENOMEM;
+-
++	if (!entry) {
++		err = -ENOMEM;
++		goto unlock;
++	}
+ 	entry->func = func;
+ 	entry->data = data;
+ 	entry->destroy = destroy;
+@@ -710,7 +716,9 @@ int hci_cmd_sync_submit(struct hci_dev *hdev, hci_cmd_sync_work_func_t func,
+ 
+ 	queue_work(hdev->req_workqueue, &hdev->cmd_sync_work);
+ 
+-	return 0;
++unlock:
++	mutex_unlock(&hdev->hdev_unregister_lock);
++	return err;
+ }
+ EXPORT_SYMBOL(hci_cmd_sync_submit);
+ 
+-- 
+2.40.1.698.g37aff9b760-goog
+
