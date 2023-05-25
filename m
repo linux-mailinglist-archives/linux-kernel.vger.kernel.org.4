@@ -2,71 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81527118BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A297118C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241919AbjEYVDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 17:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
+        id S240138AbjEYVHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 17:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240717AbjEYVCu (ORCPT
+        with ESMTP id S230129AbjEYVHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 17:02:50 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703901BC;
-        Thu, 25 May 2023 14:02:23 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-510e90d785fso4624132a12.2;
-        Thu, 25 May 2023 14:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685048542; x=1687640542;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nax/DXvV7aPRLv33Egja3ns9F/aEPbpzdpouXsbNQfc=;
-        b=OXlXgQBpb4u1NkgDV1i/lhd5SbJunSLkTu8PXxsmdD/qe3nhjw5uMPXdtO7SsuZuze
-         5aR2XJx485G4YoTtB2RfnVfRgHMqaWGN6h5ofCax4MsfC3ZHQM8X+V6y0gB4Gp9FC+z2
-         XWawyGXLQfSCfT/IBo7/IveX5L/HPWg6swPJ+YcFGUsB8uWzMmE8wMUYo09FInaizaBo
-         pOhXUK2gDeiX7CN546KLvqM0tYgm5+GsyHlbAkrjPXsnE1obyAh+OcbZfV6+T1bX2l9a
-         N8ZDhmC+gshiqcnN8p7Y3UxmR0ce/UloMo6Jkb+qIqLK9jfU+nTQwAidJMawm6KX+Jck
-         g6BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685048542; x=1687640542;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nax/DXvV7aPRLv33Egja3ns9F/aEPbpzdpouXsbNQfc=;
-        b=KSVdbeIJYQ8u0YeWcUTuAy7Iyi6oMgcCs1eUpUGHDs5y7OnK7ffIbkrQ365LE4ma/q
-         XlvSjRrn7p/MmTO14YmuHN3RNyS1SjzZuCE+g/RFHCCct6VHfXCYtW2+KZ+9JncW+2dY
-         6NOer+xd7mj5h0u3l/stT3IyK46JsCy1L8TXgcaXGmHcHIhU4aTpHs8hCZoCI166tjPL
-         CE4b5JinW2vF2o1DIiAWma+Dpu71boO5kWn2MBKX4AQ9TGP2sX1gKXg5JmrdTv4CM7gj
-         sLtnP/ahX5n0zPucS7zuyj6AWIGzSFP4WfCWVfWdtdczZWibHo9wNLOxX1e4GVlbQnf5
-         L8BA==
-X-Gm-Message-State: AC+VfDycBH+a5Mzmk5a9b48yr/7CgXZEX9/YNK99UNgRAFthDugTiYko
-        4MUa8xkW0Qq9l8+qUuo1ZmocHSNtDt+1Og==
-X-Google-Smtp-Source: ACHHUZ7kUlaXG8xtEFiebNPJ+ek33dTWoMyKVbou1e43+fOvN6gaFkMdKNUCudgXYcE3kK6WPAY8Yg==
-X-Received: by 2002:a05:6402:10d0:b0:504:894b:1bc9 with SMTP id p16-20020a05640210d000b00504894b1bc9mr5340222edu.26.1685048541916;
-        Thu, 25 May 2023 14:02:21 -0700 (PDT)
-Received: from fedora.. ([213.149.38.146])
-        by smtp.googlemail.com with ESMTPSA id c25-20020aa7df19000000b0050e04125a46sm913010edy.10.2023.05.25.14.02.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 14:02:21 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v4 5/5] cpufreq: qcom-nvmem: use helper to get SMEM SoC ID
-Date:   Thu, 25 May 2023 23:02:14 +0200
-Message-Id: <20230525210214.78235-5-robimarko@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230525210214.78235-1-robimarko@gmail.com>
-References: <20230525210214.78235-1-robimarko@gmail.com>
+        Thu, 25 May 2023 17:07:08 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4DB195;
+        Thu, 25 May 2023 14:07:07 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PKLd3X025346;
+        Thu, 25 May 2023 21:07:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=8vutX7YD9Smqw/r/Wv6LOSzzgrNxIrSLiU/bvej0utc=;
+ b=jLZooDLcSjrOTK4QEPT5Txn6B14O2Z7o7EDnNfADJCeHFE/TZYbSzNWnmbw4mkBx+/9E
+ IDb8zqs4SpoQj1F3Zk/AvgzpSjE50lBpMJ+KEMG8yYEGwOu306Ga+g1LAwCSsNb+UUyS
+ Mt63rg6kXBDPPr69hyysMG0b1pUF7ywQXu6qRWsvdiLXMXe8UCZkXUncCsFxsxQiIgrz
+ mKi9oWIvdz8CG+hpJtZZ8j91+b7e22oekHXUcrbXsRO0h8nUPJtr7YHlKdF9Jgi0VmPm
+ wvzkjm+EyNyY6Ty0psoiV7Y8kw4xD5mUuZlUuACpYQYmGQD0pr4Z/02PInUIJaN+ECEA zA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsywft2sy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 21:07:01 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PL71IX016971
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 21:07:01 GMT
+Received: from [10.110.51.179] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
+ 2023 14:07:00 -0700
+Message-ID: <0a11211d-f1fc-52b3-89c2-573b6a43d2e1@quicinc.com>
+Date:   Thu, 25 May 2023 14:06:59 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 2/5] soc: qcom: smem: Switch to EXPORT_SYMBOL_GPL()
+Content-Language: en-US
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+To:     Robert Marko <robimarko@gmail.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <ilia.lin@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <ansuelsmth@gmail.com>
+References: <20230525120956.3095317-1-robimarko@gmail.com>
+ <20230525120956.3095317-2-robimarko@gmail.com>
+ <44062c19-673c-f65e-2ee9-f49bf38fed1a@quicinc.com>
+In-Reply-To: <44062c19-673c-f65e-2ee9-f49bf38fed1a@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7F-fyAL6yf3RVL5TaZrz5ZGOdeuRTlD_
+X-Proofpoint-ORIG-GUID: 7F-fyAL6yf3RVL5TaZrz5ZGOdeuRTlD_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_12,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ bulkscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
+ malwarescore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250179
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,119 +84,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that SMEM exports a helper to get the SMEM SoC ID lets utilize it.
-Currently qcom_cpufreq_get_msm_id() is encoding the returned SMEM SoC ID
-into an enum, however there is no reason to do so and we can just match
-directly on the SMEM SoC ID as returned by qcom_smem_get_soc_id().
+On 5/25/2023 1:21 PM, Trilok Soni wrote:
+> On 5/25/2023 5:09 AM, Robert Marko wrote:
+>> SMEM has been GPL licensed from the start, and there is no reason to use
+>> EXPORT_SYMBOL() so switch to the GPL version.
+>>
+>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> 
+> Excellent. Thank you.
+> 
+> Reviewed-by: Trilok Soni <tsoni@quicinc.com>
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-Changes in v4:
-* Adapt to name change to qcom_smem_get_soc_id()
+Correction in email ID. I have a separate one for open-source work which 
+makes the email clients happy.
 
-Changes in v3:
-* Adapt to helper using argument now
+Reviewed-by: Trilok Soni <quic_tsoni@quicinc.com>
 
-Changes in v2:
-* Utilize helper exported by SMEM instead of refactoring
-qcom_cpufreq_get_msm_id()
----
- drivers/cpufreq/qcom-cpufreq-nvmem.c | 56 +++++-----------------------
- 1 file changed, 10 insertions(+), 46 deletions(-)
+Sorry for the trouble.
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-index 60e99be2d3db..a88b6fe5db50 100644
---- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-@@ -29,16 +29,8 @@
- #include <linux/slab.h>
- #include <linux/soc/qcom/smem.h>
- 
--#define MSM_ID_SMEM	137
--
- #include <dt-bindings/arm/qcom,ids.h>
- 
--enum _msm8996_version {
--	MSM8996_V3,
--	MSM8996_SG,
--	NUM_OF_MSM8996_VERSIONS,
--};
--
- struct qcom_cpufreq_drv;
- 
- struct qcom_cpufreq_match_data {
-@@ -135,60 +127,32 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
- 	dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
- }
- 
--static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
--{
--	size_t len;
--	u32 *msm_id;
--	enum _msm8996_version version;
--
--	msm_id = qcom_smem_get(QCOM_SMEM_HOST_ANY, MSM_ID_SMEM, &len);
--	if (IS_ERR(msm_id))
--		return NUM_OF_MSM8996_VERSIONS;
--
--	/* The first 4 bytes are format, next to them is the actual msm-id */
--	msm_id++;
--
--	switch ((enum _msm_id)*msm_id) {
--	case QCOM_ID_MSM8996:
--	case QCOM_ID_APQ8096:
--		version = MSM8996_V3;
--		break;
--	case QCOM_ID_MSM8996SG:
--	case QCOM_ID_APQ8096SG:
--		version = MSM8996_SG;
--		break;
--	default:
--		version = NUM_OF_MSM8996_VERSIONS;
--	}
--
--	return version;
--}
--
- static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
- 					  struct nvmem_cell *speedbin_nvmem,
- 					  char **pvs_name,
- 					  struct qcom_cpufreq_drv *drv)
- {
- 	size_t len;
-+	u32 msm_id;
- 	u8 *speedbin;
--	enum _msm8996_version msm8996_version;
-+	int ret;
- 	*pvs_name = NULL;
- 
--	msm8996_version = qcom_cpufreq_get_msm_id();
--	if (NUM_OF_MSM8996_VERSIONS == msm8996_version) {
--		dev_err(cpu_dev, "Not Snapdragon 820/821!");
--		return -ENODEV;
--	}
-+	ret = qcom_smem_get_soc_id(&msm_id);
-+	if (ret)
-+		return ret;
- 
- 	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
- 	if (IS_ERR(speedbin))
- 		return PTR_ERR(speedbin);
- 
--	switch (msm8996_version) {
--	case MSM8996_V3:
-+	switch (msm_id) {
-+	case QCOM_ID_MSM8996:
-+	case QCOM_ID_APQ8096:
- 		drv->versions = 1 << (unsigned int)(*speedbin);
- 		break;
--	case MSM8996_SG:
-+	case QCOM_ID_MSM8996SG:
-+	case QCOM_ID_APQ8096SG:
- 		drv->versions = 1 << ((unsigned int)(*speedbin) + 4);
- 		break;
- 	default:
--- 
-2.40.1
+---Trilok Soni
 
