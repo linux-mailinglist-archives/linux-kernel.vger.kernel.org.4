@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C567118BE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0917118BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241869AbjEYVC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 17:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S233042AbjEYVDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 17:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbjEYVCu (ORCPT
+        with ESMTP id S239074AbjEYVCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 May 2023 17:02:50 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FCF199;
-        Thu, 25 May 2023 14:02:21 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-510e419d701so5687375a12.1;
-        Thu, 25 May 2023 14:02:21 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DC4E44;
+        Thu, 25 May 2023 14:02:22 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-510d9218506so364114a12.1;
+        Thu, 25 May 2023 14:02:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685048539; x=1687640539;
+        d=gmail.com; s=20221208; t=1685048541; x=1687640541;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zQtz6v7Hj5j1tfmowjTsEjjYvDTSsmx54tvIW02KIzE=;
-        b=BgR3QBvaOti23Wx+ddMulO5QO8k+UajcZBC+FwQS8tgAsD9oUdoxRDNQQAO2/N5O/E
-         m40TonwXHFwM0FmymmxGGxAQAKadR69sfcEmx5N5HhCIXPN9sizvgHc29El4F8fJnJvy
-         DNM+k/WW93t6ya/5ha1gLvxaK5o/YxFo+Xn6Hn/Ze2qQJyr2M8clRAqDt3DxZJbz0g6k
-         4VVuruCe8TK84SvDrOQ0nRHzBkco4CUeszGDYD2sfzXIwyXmPycEzWVSsIgDGRosYSvi
-         sxVZFPHXKaYos7wapvAVp9xLgwiGCf5dMblMznYTR9q1cSkocYb/HnpKBIGi1ECyzHc8
-         B30w==
+        bh=OpOWhP8DxFONC41kTCdHjaq2c0kscoG17qr+mKyv86Y=;
+        b=L5qtNbh7SdIzNNd/mBEdxZ2FXrZxraKRbC9vv+2cZMYlTmN7Fw6x3ZZh8YM1dv7Ph7
+         p7U9cm8tug0+kmBTUGpROeRlg9SQ+zQrkOA7Q+nCnYFjvjAzinqVRdt0nuQ3zWkY7yXi
+         pS6MyLZAPaE6r0wjH7214ik//1ggheBqo477uQ7HCrMQJKPrPQ0gLP5a3M1YEILYYfOq
+         UeXBCiebcgRS5HxKLa/4Ey7PIZRHuOOO/ysrqZ3KY6Z0ZuxkHB9WoXRkVLLPN59pWqGM
+         wWPda2nzJiJMMzmzPCapojuwVHmgxg3Y0R14PE7Jp0+Kn2aGdoBX1LE2RuqvxHVyhlCY
+         3uuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685048539; x=1687640539;
+        d=1e100.net; s=20221208; t=1685048541; x=1687640541;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zQtz6v7Hj5j1tfmowjTsEjjYvDTSsmx54tvIW02KIzE=;
-        b=kuWDbUcwoe7t1Cq0w2TtESDV3DJY80c8hFNg+ltg0ps2xQSdrd1KLz1PRZ29FN8XUV
-         D+slVfzpEmV/sVtMx6a8k+ilmWACBDHMtEOqJcDDQAAZwky6LE2XYN4PHRwmVdkNIVCT
-         RrhMRgNCZT1O3L9QrzV6zpwC+0iFbk2NI2D1mN69JAk+SO5zHoHlXxvX9Fyhzay6x2ST
-         FHa1ltLhyXtGh7ODz0M1VvZUWGy3S99JDrkjE2e96NIQn/XVZ3LuY8D1NcZy2WlHvroz
-         /kNS9DEfo7dUSKoAdzJyhgZwROPwAthbDXw1DPyEh02848NSeCyKER8aRTCEBGWbrwYO
-         ir3A==
-X-Gm-Message-State: AC+VfDxfuCWxh5QSiBmPcoW6UOFdgkYwNqC6Xs2BMa9hdTpYoyCsC6Ol
-        jI5wQxNLL181iBgg2D9ZXWE=
-X-Google-Smtp-Source: ACHHUZ4hUXusKtbwX40uslNL/odfRfMKq3ncRSrLNqdQUnhQNCdanji0hT9vGkn42s0sCkPb4I/kVg==
-X-Received: by 2002:aa7:c688:0:b0:510:dd3e:86cd with SMTP id n8-20020aa7c688000000b00510dd3e86cdmr5994877edq.20.1685048539533;
-        Thu, 25 May 2023 14:02:19 -0700 (PDT)
+        bh=OpOWhP8DxFONC41kTCdHjaq2c0kscoG17qr+mKyv86Y=;
+        b=MjCBH4TgaXK36YE+LzyQdtd5CxlfH7bek91Q1Qeyw0fKZBe61C/eUZlkcLsDOyMms6
+         WaOqlR2Qhg+QIiILJ4eXAtWaVD3WLne9sOTaxIdr8rcznHitFnTlsGPKrvS3B6HtPEPt
+         V+nohXMMEETPKTGtZZvNZNKfrJ8tg9eEWIBGFAcv9FfoK6sTQ6m0oZkXfTiXiwc8STbc
+         H+i0fP4KjFj9+pQnqIr57hLkT2Q6XCer4wFta9qVrsA1ajcDCcVGDKjVzx6kC+e1DWv3
+         4EqJFBUL8Qn8X0FQI7Oe35g/MwE6wVM6BbY0WUTPnq8Vqu4mJxHv44qC9l33V67IH0dz
+         DBGA==
+X-Gm-Message-State: AC+VfDyRzIwrPkk8V3xqB/ahvbRHfjdVHKR2OCs5rtOLX9+g2T+mjy6h
+        cmRUtiWpWUqtpcHTcbIozuI=
+X-Google-Smtp-Source: ACHHUZ7cokGVc2W2zOPV2XYF80y64Q7vf/pSMINHzih9EoZmNvIAe4flYuau5K4CTTJCEgtdbO9XBg==
+X-Received: by 2002:aa7:d687:0:b0:50d:a804:423 with SMTP id d7-20020aa7d687000000b0050da8040423mr4007864edr.10.1685048540688;
+        Thu, 25 May 2023 14:02:20 -0700 (PDT)
 Received: from fedora.. ([213.149.38.146])
-        by smtp.googlemail.com with ESMTPSA id c25-20020aa7df19000000b0050e04125a46sm913010edy.10.2023.05.25.14.02.18
+        by smtp.googlemail.com with ESMTPSA id c25-20020aa7df19000000b0050e04125a46sm913010edy.10.2023.05.25.14.02.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 14:02:19 -0700 (PDT)
+        Thu, 25 May 2023 14:02:20 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org
-Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v4 3/5] soc: qcom: smem: introduce qcom_smem_get_soc_id()
-Date:   Thu, 25 May 2023 23:02:12 +0200
-Message-Id: <20230525210214.78235-3-robimarko@gmail.com>
+Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH v4 4/5] cpufreq: qcom-nvmem: use SoC ID-s from bindings
+Date:   Thu, 25 May 2023 23:02:13 +0200
+Message-Id: <20230525210214.78235-4-robimarko@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230525210214.78235-1-robimarko@gmail.com>
 References: <20230525210214.78235-1-robimarko@gmail.com>
@@ -74,81 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a helper to return the SoC SMEM ID, which is used to identify the
-exact SoC model as there may be differences in the same SoC family.
-
-Currently, cpufreq-nvmem does this completely in the driver and there has
-been more interest expresed for other drivers to use this information so
-lets expose a common helper to prevent redoing it in individual drivers
-since this field is present on every SMEM table version.
+SMEM SoC ID-s are now stored in DT bindings so lets use those instead of
+defining them in the driver again.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
-Changes in v4:
-* Change helper name to qcom_smem_get_soc_id()
-* Remove len and just pass NULL, that is sufficient here
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-Changes in v3:
-* Change export to EXPORT_SYMBOL_GPL
-* Use an argument for returning SoC ID
-* Update kerneldoc
----
- drivers/soc/qcom/smem.c       | 23 +++++++++++++++++++++++
- include/linux/soc/qcom/smem.h |  2 ++
- 2 files changed, 25 insertions(+)
-
-diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
-index bc98520c4969..78cf79ea4924 100644
---- a/drivers/soc/qcom/smem.c
-+++ b/drivers/soc/qcom/smem.c
-@@ -14,6 +14,7 @@
- #include <linux/sizes.h>
- #include <linux/slab.h>
- #include <linux/soc/qcom/smem.h>
-+#include <linux/soc/qcom/socinfo.h>
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index a577586b23be..60e99be2d3db 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -31,12 +31,7 @@
  
- /*
-  * The Qualcomm shared memory system is a allocate only heap structure that
-@@ -772,6 +773,28 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
- }
- EXPORT_SYMBOL_GPL(qcom_smem_virt_to_phys);
+ #define MSM_ID_SMEM	137
  
-+/**
-+ * qcom_smem_get_soc_id() - return the SoC ID
-+ * @id:	On success, we return the SoC ID here.
-+ *
-+ * Look up SoC ID from HW/SW build ID and return it.
-+ *
-+ * Return: 0 on success, negative errno on failure.
-+ */
-+int qcom_smem_get_soc_id(u32 *id)
-+{
-+	struct socinfo *info;
-+
-+	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, NULL);
-+	if (IS_ERR(info))
-+		return PTR_ERR(info);
-+
-+	*id = info->id;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(qcom_smem_get_soc_id);
-+
- static int qcom_smem_get_sbl_version(struct qcom_smem *smem)
- {
- 	struct smem_header *header;
-diff --git a/include/linux/soc/qcom/smem.h b/include/linux/soc/qcom/smem.h
-index 86e1b358688a..223db6a9c733 100644
---- a/include/linux/soc/qcom/smem.h
-+++ b/include/linux/soc/qcom/smem.h
-@@ -11,4 +11,6 @@ int qcom_smem_get_free_space(unsigned host);
+-enum _msm_id {
+-	MSM8996V3 = 0xF6ul,
+-	APQ8096V3 = 0x123ul,
+-	MSM8996SG = 0x131ul,
+-	APQ8096SG = 0x138ul,
+-};
++#include <dt-bindings/arm/qcom,ids.h>
  
- phys_addr_t qcom_smem_virt_to_phys(void *p);
+ enum _msm8996_version {
+ 	MSM8996_V3,
+@@ -154,12 +149,12 @@ static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
+ 	msm_id++;
  
-+int qcom_smem_get_soc_id(u32 *id);
-+
- #endif
+ 	switch ((enum _msm_id)*msm_id) {
+-	case MSM8996V3:
+-	case APQ8096V3:
++	case QCOM_ID_MSM8996:
++	case QCOM_ID_APQ8096:
+ 		version = MSM8996_V3;
+ 		break;
+-	case MSM8996SG:
+-	case APQ8096SG:
++	case QCOM_ID_MSM8996SG:
++	case QCOM_ID_APQ8096SG:
+ 		version = MSM8996_SG;
+ 		break;
+ 	default:
 -- 
 2.40.1
 
