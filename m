@@ -2,106 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C86710A9E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0664A710AA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240733AbjEYLL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
+        id S240712AbjEYLOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240294AbjEYLLw (ORCPT
+        with ESMTP id S240294AbjEYLOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:11:52 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBB1191;
-        Thu, 25 May 2023 04:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7pnqEDqTdXXIQOBLwb2FYHGZeiwAvkXUoR0xGIGm1tA=; b=Y5fWM8svQePSKhhdt6bnlWPjdN
-        pZ6uBLzdn+6ZLX66yd6iAQSOPELpAsm2thocsaCrSBICaQtZpH+w3bUnUeot4cjW6uoEiJiKCNeEo
-        Hn0UM8Oruh62o+WHwv+tl/PZnTilFT6xDZElEoyuozcUNcdyGxv0ln3N6Tg1Z5bTdz4KuHbdZTdI0
-        v2NBZQ7iyQDxoBpGtCoF5ZRHR0YuQHEmi39yJynaQ4m0hD2JXpm1ux/qofPOcxXtoejMnAD2T2VSz
-        UjuSYtERGhniQnzXMm9lrmwgxVsD3ZwcekQwK/a061aLpV7X72NKqDLos/hahiKnIEIhHTZCBX9nb
-        JX3EUG6Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49710)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q28sj-0003y0-FZ; Thu, 25 May 2023 12:11:45 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q28sc-0002ct-V3; Thu, 25 May 2023 12:11:38 +0100
-Date:   Thu, 25 May 2023 12:11:38 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Mark Brown <broonie@kernel.org>, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Subject: Re: [PATCH net-next v2 1/4] net: mdio: Introduce a regmap-based mdio
- driver
-Message-ID: <ZG9CajddFYKAFlO/@shell.armlinux.org.uk>
-References: <20230525101126.370108-1-maxime.chevallier@bootlin.com>
- <20230525101126.370108-2-maxime.chevallier@bootlin.com>
+        Thu, 25 May 2023 07:14:05 -0400
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6322410B
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:14:03 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:59b9:3473:f0ae:e2b7])
+        by baptiste.telenet-ops.be with bizsmtp
+        id 0zE02A0065NiV2701zE0g9; Thu, 25 May 2023 13:14:00 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1q28ue-00349j-NA;
+        Thu, 25 May 2023 13:14:00 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1q28uu-00DnlR-DD;
+        Thu, 25 May 2023 13:14:00 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Osama Muhammad <osmtendev@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v3 0/2] regulator: core: Fix error checking and messages
+Date:   Thu, 25 May 2023 13:13:57 +0200
+Message-Id: <cover.1685013051.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525101126.370108-2-maxime.chevallier@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 12:11:23PM +0200, Maxime Chevallier wrote:
-> +struct mii_bus *devm_mdio_regmap_register(struct device *dev,
-> +					  const struct mdio_regmap_config *config)
-> +{
-> +	struct mdio_regmap_config *mrc;
-> +	struct mii_bus *mii;
-> +	int rc;
-> +
-> +	if (!config->parent)
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	mii = devm_mdiobus_alloc_size(config->parent, sizeof(*mrc));
-> +	if (!mii)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	mrc = mii->priv;
-> +	memcpy(mrc, config, sizeof(*mrc));
-> +
-> +	mrc->regmap = config->regmap;
-> +	mrc->valid_addr = config->valid_addr;
+	Hi all,
 
-You have just memcpy'd everything from config into mrc. Doesn't this
-already include "regmap" and "valid_addr" ?
+This patch series corrects an error check, fixes error messages when
+debugfs is not enabled, and improves debugfs error handling in the
+regulator core.
 
-However, these are the only two things used, so does it really make
-sense to allocate the full mdio_regmap_config structure, or would a
-smaller data structure (of one pointer and one u8) be more appropriate?
+Changes compared to v2:
+  - Fix build after patch 1.
+
+Changes compared to v1:
+  - Split in two patches,
+  - Improve rationale.
+
+Thanks for your comments!
+
+Geert Uytterhoeven (2):
+  regulator: core: Fix more error checking for debugfs_create_dir()
+  regulator: core: Streamline debugfs operations
+
+ drivers/regulator/core.c | 30 +++++++++++++-----------------
+ 1 file changed, 13 insertions(+), 17 deletions(-)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.34.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
