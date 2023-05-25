@@ -2,133 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38252710E11
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C361D710E12
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241591AbjEYOPr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 10:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
+        id S241594AbjEYOQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbjEYOPp (ORCPT
+        with ESMTP id S232848AbjEYOQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:15:45 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82422183;
-        Thu, 25 May 2023 07:15:43 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96f44435d92so63296366b.0;
-        Thu, 25 May 2023 07:15:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685024142; x=1687616142;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aQ2g4elRikyixYIC50RK+Kur2gPh7SkgFNK50sXBtIU=;
-        b=ljOzKGF7YfR1iOeq0xMEdkB/yQIaChrCege93rkn+Nr78TUusLUMfJjVSH32sd0H6c
-         BEBJ3Nt0wjMEHVw+z116epDyUXu1wgrM1InGac1Ypxq36uvBC/CBCncRxP4WyHZ6/dgL
-         E7yHZ1u0TyWB2cXUUMDwz1mmxaZzwmco3NRjVdrH0lwK/ATs53ijImVzeBbv/BQslO0F
-         vBk4H5eSF2hRDKMoI9HVBFxB8U+x5JZ5lQmaO6YxPEYNVLSDxZ2e9kp31LiIq9DsGtEA
-         KOgc2hiIqrbWc4mYJfR4tKxvm3nNB0I2A6dIkCypwuXzjAWBXrLOL7un0vGwEcI+ktNZ
-         9hWQ==
-X-Gm-Message-State: AC+VfDxU41QVEVqBcv/YMcrtrKrcnr+g2mm7OzNvoUJkUFfZDNErqQ9b
-        Gql7uEK2/IYm0z+Y65hjkeV16/3eQKEkQAB03yU=
-X-Google-Smtp-Source: ACHHUZ4hzHl+ujaKW7jGsG5zfh0wu+kzIkGH1M/X2hpn4MzleSBJWnQCYvcE6JgR+CFem1LH+sjTv1jhOvGlHTywx/s=
-X-Received: by 2002:a17:906:d3:b0:94f:66af:b1f7 with SMTP id
- 19-20020a17090600d300b0094f66afb1f7mr18698786eji.1.1685024141748; Thu, 25 May
- 2023 07:15:41 -0700 (PDT)
+        Thu, 25 May 2023 10:16:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28C3183;
+        Thu, 25 May 2023 07:16:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F82164610;
+        Thu, 25 May 2023 14:16:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71A7CC433D2;
+        Thu, 25 May 2023 14:16:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685024172;
+        bh=N10Xh9Jo2X7q40vW1TQk3XJXStUWPtezpNSxbAU/zag=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=L40dSOEfKkgy2DcAQS4c6miQaY5NazUDb9rtKgkFSbFms7IPoPVKWVGVy1e6ASpqa
+         f4f0t8iakbp+Emcod1MCdXDcg2CsJDV6rjwPjUu6QRnWPCmWShEqcsq/NG6sk5iHqH
+         7lQ6UrC+1vB8RsKgxg7puOoWXy4I3GN/Y2v9WtLNh8aBHlXqbVqhKG7cl1cqiRuW7+
+         pJlCxrH/H4OaoRiBqUA7AF9QCLrDhH/hYtOsC86cA0Ft2gBgLlum+AQtU6+EbZ8Bc8
+         JML2bUgdlMHRZOPZ3hOFZpA9mp6R6+68ROx8C7tazMxTRML40bnOgmxMWipuEDseAo
+         MVEa7MhZLvd+g==
+Message-ID: <4f8f78c4-2af5-5089-a243-2df1c7cfb2d3@kernel.org>
+Date:   Thu, 25 May 2023 16:16:06 +0200
 MIME-Version: 1.0
-References: <20230524190726.17012-1-mario.limonciello@amd.com> <20230524190726.17012-2-mario.limonciello@amd.com>
-In-Reply-To: <20230524190726.17012-2-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 25 May 2023 16:15:30 +0200
-Message-ID: <CAJZ5v0j8b78LWiO0UsiXvdf6jLqnQ6yLM4hRgCjyNrDncaZMZQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] PCI: Don't assume root ports from > 2015 are power manageable
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Deucher Alexander <Alexander.Deucher@amd.com>,
-        linux-pm@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-        Iain Lane <iain@orangesquash.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V2 3/3] tracing/timerlat: Add user-space interface
+To:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     oe-kbuild-all@lists.linux.dev, Juri Lelli <juri.lelli@redhat.com>,
+        William White <chwhite@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <a7b2c215c763e95a56fa1258743332b570c81c9d.1684860626.git.bristot@kernel.org>
+ <202305242020.VlsOXEMn-lkp@intel.com>
+Content-Language: en-US
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <202305242020.VlsOXEMn-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 9:07 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> Using a USB keyboard or mouse to wakeup the system from s2idle fails when
-> that XHCI device is connected to a USB-C port for an AMD USB4 router.
->
-> Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-> all PCIe ports go into D3 during s2idle.
->
-> When specific root ports are put into D3 over s2idle on some AMD platforms
-> it is not possible for the platform to properly identify wakeup sources.
-> This happens whether the root port goes into D3hot or D3cold.
->
-> Comparing registers between Linux and Windows 11 this behavior to put
-> these specific root ports into D3 at suspend is unique to Linux. On an
-> affected system Windows does not put those specific root ports into D3
-> over Modern Standby.
->
-> Windows doesn't put the root ports into D3 because root ports are not
-> power manageable.
->
-> Linux shouldn't assume root ports support D3 just because they're on a
-> machine newer than 2015, the ports should also be deemed power manageable.
-> Add an extra check explicitly for root ports to ensure D3 isn't selected
-> for these ports.
+On 5/24/23 14:48, kernel test robot wrote:
+> Hi Daniel,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.4-rc3 next-20230524]
+> [cannot apply to rostedt-trace/for-next rostedt-trace/for-next-urgent]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Bristot-de-Oliveira/tracing-osnoise-Switch-from-PF_NO_SETAFFINITY-to-migrate_disable/20230524-012512
+> base:   linus/master
+> patch link:    https://lore.kernel.org/r/a7b2c215c763e95a56fa1258743332b570c81c9d.1684860626.git.bristot%40kernel.org
+> patch subject: [PATCH V2 3/3] tracing/timerlat: Add user-space interface
+> config: i386-randconfig-i014-20230523
+> compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+> reproduce (this is a W=1 build):
+>         # https://github.com/intel-lab-lkp/linux/commit/89216b54eaf490480bc1929f5780f95a688a91bb
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Daniel-Bristot-de-Oliveira/tracing-osnoise-Switch-from-PF_NO_SETAFFINITY-to-migrate_disable/20230524-012512
+>         git checkout 89216b54eaf490480bc1929f5780f95a688a91bb
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=1 O=build_dir ARCH=i386 olddefconfig
+>         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/trace/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202305242020.VlsOXEMn-lkp@intel.com/
+> 
+> All error/warnings (new ones prefixed by >>):
+> 
+>    kernel/trace/trace_osnoise.c: In function 'timerlat_fd_open':
+>>> kernel/trace/trace_osnoise.c:2364:16: error: implicit declaration of function 'this_cpu_tmr_var'; did you mean 'this_cpu_osn_var'? [-Werror=implicit-function-declaration]
+>     2364 |         tlat = this_cpu_tmr_var();
+>          |                ^~~~~~~~~~~~~~~~
+>          |                this_cpu_osn_var
 
-"D3 isn't selected for them if they are not power-manageable through
-platform firmware."  Or similar.
 
-With this addressed:
+Thanks robot, I forgot to test without timerlat enabled. Easy to fix, an ifdef
+here and there.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-
->
-> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-> Reported-by: Iain Lane <iain@orangesquash.org.uk>
-> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> v3->v4:
->  * Move after refactor
-> ---
->  drivers/pci/pci.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index d1fa040bcea7..d293db963327 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -3015,6 +3015,14 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
->         if (dmi_check_system(bridge_d3_blacklist))
->                 return false;
->
-> +       /*
-> +        * It's not safe to put root ports that don't support power
-> +        * management into D3.
-> +        */
-> +       if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
-> +           !platform_pci_power_manageable(bridge))
-> +               return false;
-> +
->         /*
->          * It should be safe to put PCIe ports from 2015 or newer
->          * to D3.
-> --
-> 2.34.1
->
+-- Daniel
