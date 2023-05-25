@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5557118EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895A27118EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240798AbjEYVRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 17:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
+        id S241058AbjEYVRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 17:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239784AbjEYVRS (ORCPT
+        with ESMTP id S236434AbjEYVRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 17:17:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00823194;
-        Thu, 25 May 2023 14:17:16 -0700 (PDT)
+        Thu, 25 May 2023 17:17:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8327AA7;
+        Thu, 25 May 2023 14:17:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9177A64B2D;
-        Thu, 25 May 2023 21:17:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE7C0C433D2;
-        Thu, 25 May 2023 21:17:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11BCC64B30;
+        Thu, 25 May 2023 21:17:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31806C433D2;
+        Thu, 25 May 2023 21:17:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685049436;
-        bh=gEZ02IzSGf5PaaA4CSw9rHnl4VSwKJa0glxNZVbO8yg=;
+        s=k20201202; t=1685049437;
+        bh=vEe5IMrxvZ6zjp9aBXSVRXJpxdUpiaH0SmaBoWt1Nqw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dZ9cqp2i9MJ3BusPvHZ9HnVnuVpootCBf3eMhWPE5KFV12zK+eelDr4Xfo20BjHHX
-         WM+NMD6XNdVhuH7cC7FQe7d2aWlaVhi/yO/jtBmTeA1fn+L1c0CW0mvdZ9ZyquWgTf
-         X5vSVi8qP3j9kyFjL3rnr5aM4d0n6NCw5+jy/lrFaSTMbr/iPshcq6sDdmPleC3YKe
-         pxCsak13k9+Q5I3AhVjDG4Aa8xoc/BGryO4RJWJMI8wxKdwkHHzNaW7l3rHopczC8a
-         BnRL0f/80To2w9w845QQ6UTs1VR3uyajGqCECeDgqkMFiN1SalQyyAJFm4Kpjsz3hT
-         TnEc018fzN8zA==
+        b=OOYzQrWxDyfJoP/3gDvkOTQNTcpl0mwqfLpe6KQap1/xPJQeBfJUO7RYyGvzhmOuc
+         sPgFSRVBY8DV4AVO1YTcpbX0qw3yi5Js+zc/+dZaGt4wV37xEIipDxHW06FlMFjuJS
+         vhwWXp7UusKlHg90Qnuj1QarpO195cnncgjbU6BeqloOqBAoQV2p2+pCfuYxEZ4DfS
+         wuG4o0VNtGWIVVCvYlVEABI3tHoB6YJIm6aqZlu77Zk+HmElPGWrUGTaOsPEwe2T7i
+         DhLUlRD2XTYi++pHyS0dkxF9zfYKKk60w69dvm63WpZqEam/N/P0avkG7br2V5agBS
+         wHmG0E80/2V2Q==
 From:   Eduardo Valentin <evalenti@kernel.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org,
         linux-pm@vger.kernel.org
@@ -40,16 +40,16 @@ Cc:     Eduardo Valentin <eduval@amazon.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] thermal: core: register reboot nb
-Date:   Thu, 25 May 2023 14:16:54 -0700
-Message-Id: <20230525211655.627415-3-evalenti@kernel.org>
+Subject: [PATCH 3/3] thermal: core: register a crash callback
+Date:   Thu, 25 May 2023 14:16:55 -0700
+Message-Id: <20230525211655.627415-4-evalenti@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230525211655.627415-1-evalenti@kernel.org>
 References: <20230525211655.627415-1-evalenti@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,11 +60,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Eduardo Valentin <eduval@amazon.com>
 
-This commit will register a reboot notifier block
-callback for giving opportunity tearing down
-thermal zones, e.g. remove their workqueues, and
-for giving the governors the opportunity to leave
-the hardware in a known safe state.
+This commit will register a crash callback for
+the thermal subsystem, this way the thermal
+core can tear down the thermal zones and ask
+governors to leave the hardware in a known
+safe state prior upon the event of a crash.
 
 Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
 Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
@@ -77,77 +77,53 @@ Cc: linux-kernel@vger.kernel.org (open list)
 
 Signed-off-by: Eduardo Valentin <eduval@amazon.com>
 ---
- drivers/thermal/thermal_core.c | 39 ++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ drivers/thermal/thermal_core.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 359e7b2ff0e3..66a255fb650b 100644
+index 66a255fb650b..38b168b9245e 100644
 --- a/drivers/thermal/thermal_core.c
 +++ b/drivers/thermal/thermal_core.c
-@@ -319,6 +319,12 @@ static void handle_error_temperature(struct thermal_zone_device *tz, int error)
- 		tz->governor->check_error(tz, error);
+@@ -20,6 +20,7 @@
+ #include <linux/string.h>
+ #include <linux/of.h>
+ #include <linux/suspend.h>
++#include <linux/panic_notifier.h>
+ 
+ #define CREATE_TRACE_POINTS
+ #include "thermal_trace.h"
+@@ -1525,6 +1526,14 @@ static void thermal_reboot_prepare(void)
+ 	}
  }
  
-+static void handle_reboot_prepare(struct thermal_zone_device *tz)
++static int thermal_crash_notify(struct notifier_block *nb,
++				unsigned long mode, void *_unused)
 +{
-+	if (tz->governor && tz->governor->reboot_prepare)
-+		tz->governor->reboot_prepare(tz);
-+}
++	thermal_reboot_prepare();
 +
- void thermal_zone_device_critical(struct thermal_zone_device *tz)
- {
- 	/*
-@@ -1508,6 +1514,30 @@ struct thermal_zone_device *thermal_zone_get_zone_by_name(const char *name)
- }
- EXPORT_SYMBOL_GPL(thermal_zone_get_zone_by_name);
- 
-+/* Best effort attempt to leave thermal zones at a safe state across reboots */
-+static void thermal_reboot_prepare(void)
-+{
-+	struct thermal_zone_device *tz;
-+
-+	list_for_each_entry(tz, &thermal_tz_list, node) {
-+		cancel_delayed_work(&tz->poll_queue);
-+		handle_reboot_prepare(tz);
-+	}
-+}
-+
-+static int thermal_reboot_notify(struct notifier_block *nb,
-+				 unsigned long mode, void *_unused)
-+{
-+	switch (mode) {
-+	case SYS_RESTART:
-+		thermal_reboot_prepare();
-+		break;
-+	default:
-+		break;
-+	}
 +	return 0;
 +}
 +
- static int thermal_pm_notify(struct notifier_block *nb,
- 			     unsigned long mode, void *_unused)
+ static int thermal_reboot_notify(struct notifier_block *nb,
+ 				 unsigned long mode, void *_unused)
  {
-@@ -1539,6 +1569,10 @@ static struct notifier_block thermal_pm_nb = {
+@@ -1569,6 +1578,10 @@ static struct notifier_block thermal_pm_nb = {
  	.notifier_call = thermal_pm_notify,
  };
  
-+static struct notifier_block thermal_reboot_nb = {
-+	.notifier_call = thermal_reboot_notify,
++static struct notifier_block thermal_crash_nb = {
++	.notifier_call = thermal_crash_notify,
 +};
 +
- static int __init thermal_init(void)
- {
- 	int result;
-@@ -1572,6 +1606,11 @@ static int __init thermal_init(void)
- 		pr_warn("Thermal: Can not register suspend notifier, return %d\n",
+ static struct notifier_block thermal_reboot_nb = {
+ 	.notifier_call = thermal_reboot_notify,
+ };
+@@ -1611,6 +1624,8 @@ static int __init thermal_init(void)
+ 		pr_warn("Thermal: Can not register reboot notifier, return %d\n",
  			result);
  
-+	result = register_reboot_notifier(&thermal_reboot_nb);
-+	if (result)
-+		pr_warn("Thermal: Can not register reboot notifier, return %d\n",
-+			result);
-+
++	atomic_notifier_chain_register(&panic_notifier_list,
++				       &thermal_crash_nb);
  	return 0;
  
  unregister_governors:
