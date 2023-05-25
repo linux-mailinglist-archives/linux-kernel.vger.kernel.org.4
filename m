@@ -2,158 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27457111CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC93A7111D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240793AbjEYRPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S240835AbjEYRRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233441AbjEYRPw (ORCPT
+        with ESMTP id S234155AbjEYRQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:15:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F99219C;
-        Thu, 25 May 2023 10:15:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AAFE647AC;
-        Thu, 25 May 2023 17:15:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61CDBC433EF;
-        Thu, 25 May 2023 17:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685034949;
-        bh=TXjQCnAa5THzyIrwuNbT4Dh/meMvaMaqsvTb26bbuzI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B5eR9BgPKenKGqomZZBwCcCY5t43JkAdu/9kaqNRakcPH6DNU7PBd4KV7W1mUlwya
-         nLJcFkY1rAyJThZ6XEWDKUI0bgZNDr4Fzger9xEWLC0CEJR+5KVO6AloJq1LuWrVHe
-         VnaL4btQZ9mBS/YcuxkPQoSj1WYpcf+jjl3Etgh+YZICHOILgOCnhnjD7TstVboNcl
-         E/UW8Aw7Ly/n0ZQ0EwesPlIsevT4nEClXCQFDJOrZawlDsSGpFsfz0OlCgiapjzXXH
-         L02ioiaXvLrUJ0jZs5rLzWCCs/WOBqsVnf1OIFiuYW9LQX42dxLrV5+CTqvP4ZWhS2
-         99zRuI+5yA8Yw==
-Date:   Thu, 25 May 2023 18:15:43 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, y@spud
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        sebastian.reichel@collabora.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 4/5] dt-bindings: watchdog: atmel,at91rm9200-wdt: convert
- to yaml
-Message-ID: <20230525-union-camping-ceb65a7edc4c@spud>
-References: <20230525125602.640855-1-claudiu.beznea@microchip.com>
- <20230525125602.640855-5-claudiu.beznea@microchip.com>
+        Thu, 25 May 2023 13:16:59 -0400
+Received: from sonic308-18.consmr.mail.ir2.yahoo.com (sonic308-18.consmr.mail.ir2.yahoo.com [77.238.178.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D2518D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:16:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1685035015; bh=xkgnHjBKgUoTwdkT61NT3PpvtEjCsZBF89ShWXMrk8A=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=HaTVT25f9lqUnbp8L5yar5hbbsHNlY0LyA4z4xDpKfjuquHCus8yaXs3rCDKo9x66KsZz+h6+Wp5VtIDnspos8woLlBvKFPipqzKx3nFKbKhJb/APNybvAcvSQ/wFCFdFBGQymd6ghuRfD1/lLb8SXYMUlpYaaFgns/UG60n/lJ6or4pNNlaHSaDBCeAZ8hxn84mGIJgW0ODm+C+NH8+WCBoExTCUvY8PwUDkKDvH/aBqk/7wY4vZzbiePXiCPD0fiGi+1HZrCw7qYqjFeoTD3saMq/XyZ5U9HuRi6yv+5hYj44MtBOpGndEaL8LilpR6JvxVSB4Y8bElbdjQ2KqpA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1685035015; bh=PawQULQLg4LscEgh9vaZZDdtXDFK5uRu7EfNU7g6Wm4=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=JbdOqQ6ZdbOnTNnRm3U2tV1/BRfm7bpMlpIOpC4eX+uoZIuMOsGIz3kcg7ocdcD3jNtYgoHEkErTRhNkJ5hZqOTzhwsG9klQQbAF3nj1Vvybriys2E6JlcTTXDqlfRt9rBQAiqx+bbr83b+EphAnbaCg4RfHveqXGBRZi3o2Fij2upiZB9kY6SllgRAXCFvueSm84aPVkQsHmxg/IG7eqN2uSz4l5ri7wynJ8jIjrzlhsoTw2RrEQiOSY6T4tTHOgLA7VU3vN648++EA86XCvmsjodnc3j85FowixOJD2Nltacv9ZFIqyu75W5VJodiGgeLG/05Jk16/BIFKT1cJjw==
+X-YMail-OSG: RgaBlaIVM1nUppqx0Hh5l3kHWwZNL_1F8cFW6_8SOqX8CAftl676FQNZCItEdLs
+ CSG5XHlk3ZiKUuvCG7jkEr7sBbM0cJvdG8V8HpUaAte_xx_UkqvmSTto3jJ8OFqDsSqTq25.wXKN
+ xF1Hyj_Bi1hOgJSMLuCjY1XF_ZJGF4Ta3TYVIyOem_Lv87szWzR6HjTVm7dXSNje40SGyfbkUJrv
+ H2Ly6lsR8ZuJ6xeG0v9Nq81cO3Apm5VL5z0PDjxdoFUt5o8HkMoKDNjRkbf5i1MaccC0abH24cJq
+ N.XeDPH1EIfZMcEhZbZhcApAZa6_sm61gS5zyqzHnZa3_TsW5BBDjLKQduMl_hE9BUY75Gsrfz3u
+ SfHnVyiyC0hQjy1mx8Rj9Mecy.wNZtyHOmgXrT0yqteJv9kBpWMy.Y94.MJ6HqIOUdYFeFQztf3Q
+ PR.4NPCxFnXrvmBmuqx.vU.CfT3IxH8lZsjW0lVyHl3nEEfM40UKHwQ7.bmNZSopxx_93Htopt6T
+ 3qgxmP1GcsEgobeZrwG2xTFlKuCQ8tD6gtWAR4zeLjQcXLNfLbGGeMKE0CgF5Tj.Du8FTddRzl5N
+ DIOluI1N8esuPvBBBoQf1MTtmSUOA9f6ho5VCbh1WLAtHyGXNT4U8kwSSVKtvOvhDkWcgqqN0SnK
+ KQtSAe6HQVD8_fF.8gz0Mxsffodk8oyaC9eE6HG_SVGSgPAV1wp65pEHZexiWdFW41SU5EEgKW0O
+ i6LJH_VAH7gVEaFob6iccdzcw9VcFtWekBJWZv4uHV2c66q2WB_pTayN0C2TUTuX29M4xHv9c1F9
+ WREzHvzNzvncX56AP0d55kdC9w0eveA_yP04sFhs4uo8kYHViC5k9NuprmbAbAhKkRImJQY61Qca
+ RPDoXMwsZPDrEq9AjfxHVEotepGY8FGMmrMw4bTZw8BXqTNQCPt9DxbqQO0FdvSukIszIC5Cj5Iz
+ HYPavvaVv4tliCGJ6ZA9ikZVgiwh89mIZG4DYzPlsRPaFyVgqC4oDtedwMOtgaTTccDNu3e8.3XO
+ wHjr7FF6aTwoTMLfuq1iK9u3CsPt28ZnJWM.v8FffHQ.cIaYj5JdpGDCk2Ar8s3937w2471PoFYV
+ wu1f5GwMl7EpNjUEE_7XiRjWbcaWdxdojZoNaRHcGO0GsPVGtvbKk3esyEHFptbL7My_b9dLQtdf
+ 71W0tuFHUk727cCz2VtdYRgXq5W62XTCPwNje6NmPDZlDJ58H6RPfnzpDQD_2Bz4cX2WdUEjrSlf
+ CbkrUlgYxeJp8NoZp5TaoNpw6TiNOttl_2dCJcTw_07LxDOVYWb_Ej8lXjbyqqEYJ1LSmnoAZreW
+ yPTgb5HanuoDFQVhon9VzFUWSdeFFBvIa0uhKQRR2TAj_7q2vckt8NkpVbVs6peyrn8RmAdgSO5m
+ tXAUIDiFY5xvyK9AHFeJgad45l5L_BmS2P7fS_wxkVDjVVDzyJJ8XjAF0d9cjV9audh_9SzSVQDD
+ 2f.zLr.7PIbMvvgJo.1JTewYBYXLM3elEG_uaBn0WZqTtvhLaHpaXoAVyqSMOC8ZGzmHsvMG3Am1
+ mGrfXpuOCGwjdiS.8wu195hq_XsqL.oHtUHOk1GqyoNEGJwv2fxYb41iT5yWGRHD3BQ9COoL2U0M
+ qWEnv99aG_l2PitQIv8v1PP.9nvy8sYNtVH81HvbnTMJTd3v6sjsqL_CsJPI4KkKefNK8JhpNRqG
+ Bc1RUCORhUuZ6jqcNoO6MEj1EEbL2XXl8rQ2wzLdhTXV9u8KCYX1Dt75IzwClIcSLrDKfQbY6460
+ XhbXFDw4pvrfpZw6713ou4iiFvEs2CZ2MC7IlMdZUHj9Nsdu1VdZlaiiDOFf.oX0h5nAk76puZrB
+ HNlOVuBla6dXq8BlPUID66yQYt7lkrYY03Qh0EHTJMuAsRrmeIk1jFCQMSUmvhxaOA_AjYGJDvZw
+ MZuybCRml22EzhFR7oewV5zG7ZnQDmfrJJspdJdYpimh0xFUDRDPV6CyhNRj3VXQfTZN2yQdj6nT
+ 9IShBPDECyOhurwCgyg_C9WVkvmnmpj3Rsh.CqJb8UfTMN42TZ4o5j0jbyqJ8xJf74ph3BbEnyft
+ evJ4HYF5Rqsmsv_VIOAv.LViEd2zNVE0KV2ckd1HiZY8GqktH2ZE3LQvcShtnsVOJCwNoZ2EcWDt
+ oWJQ1NrM1tt_mHlgUdHSA_5E_xU8q3x0zRXafmby40u.m0.1MKIDO04yv.GG4xvFPqjTqyFIShYH
+ trRF2yQzZJTLsjK3VU4ueTvyI_mWBKHYb6J3XGPAzjySizWw2p4NUMfrJ5LjFvGOS444kbaKFQlr
+ W7RYuI._tXg--
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 6296b9f7-b72c-4688-8d28-6ed9ad826277
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ir2.yahoo.com with HTTP; Thu, 25 May 2023 17:16:55 +0000
+Received: by hermes--production-ir2-7867f454fc-tvsct (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 728940cf93f8512d21c18c5c5db9725e;
+          Thu, 25 May 2023 17:16:50 +0000 (UTC)
+Message-ID: <8ba9bb4c-6b9f-21ea-e9fe-89d5038dff2c@rocketmail.com>
+Date:   Thu, 25 May 2023 19:16:48 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3mPePxdRmSeXHm4M"
-Content-Disposition: inline
-In-Reply-To: <20230525125602.640855-5-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 04/10 RESEND] mfd: rt5033: Apply preparatory changes
+ before adding rt5033-charger driver
+To:     Lee Jones <lee@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Grimler <henrik@grimler.se>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1684182964.git.jahau@rocketmail.com>
+ <31c750ae13a1c1896b51d8f0a0d9869f8b85624f.1684182964.git.jahau@rocketmail.com>
+ <20230525104434.GD9691@google.com>
+Content-Language: en-US
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <20230525104434.GD9691@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Lee,
 
---3mPePxdRmSeXHm4M
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 25.05.23 12:44, Lee Jones wrote:
+> On Mon, 15 May 2023, Jakob Hauser wrote:
 
-On Thu, May 25, 2023 at 03:56:01PM +0300, Claudiu Beznea wrote:
-> Convert Atmel AT91RM9200 system timer watchdog bindings to YAML.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  .../watchdog/atmel,at91rm9200-wdt.yaml        | 29 +++++++++++++++++++
->  .../watchdog/atmel-at91rm9200-wdt.txt         |  9 ------
->  2 files changed, 29 insertions(+), 9 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91=
-rm9200-wdt.yaml
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91=
-rm9200-wdt.txt
->=20
-> diff --git a/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-=
-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.=
-yaml
-> new file mode 100644
-> index 000000000000..d05cdf15dc1c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
-> @@ -0,0 +1,29 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/atmel,at91rm9200-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel AT91RM9200 System Timer Watchdog
-> +
-> +maintainers:
-> +  - Nicolas Ferre <nicolas.ferre@microchip.com>
-> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
-> +  - Claudiu Beznea <claudiu.beznea@microchip.coam>
-> +
-> +properties:
-> +  compatible:
-> +    const: atmel,at91rm9200-wdt
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog {
-> +        compatible =3D "atmel,at91rm9200-wdt";
-> +    }
+...
 
-This example is broken, you missed copying the ;
+>> diff --git a/include/linux/mfd/rt5033.h b/include/linux/mfd/rt5033.h
+>> index 8f306ac15a27..e99e2ab0c1c1 100644
+>> --- a/include/linux/mfd/rt5033.h
+>> +++ b/include/linux/mfd/rt5033.h
+>> @@ -51,7 +51,7 @@ struct rt5033_charger_data {
+>>   struct rt5033_charger {
+>>   	struct device			*dev;
+>>   	struct rt5033_dev		*rt5033;
+>> -	struct power_supply		psy;
+>> +	struct power_supply		*psy;
+> 
+> Is this current unused?
 
-Thanks,
-Conor.
+Currently this is not in use. The rt5033 charger driver gets introduced 
+by this pachset.
 
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-=
-wdt.txt b/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.t=
-xt
-> deleted file mode 100644
-> index d4d86cf8f9eb..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
-> +++ /dev/null
-> @@ -1,9 +0,0 @@
-> -Atmel AT91RM9200 System Timer Watchdog
-> -
-> -Required properties:
-> -- compatible: must be "atmel,at91sam9260-wdt".
-> -
-> -Example:
-> -	watchdog@fffffd00 {
-> -		compatible =3D "atmel,at91rm9200-wdt";
-> -	};
-> --=20
-> 2.34.1
->=20
+The struct rt5033_charger was added in Dec 2014 with the mfd driver [1] 
+but the charger driver didn't make it [2] and further effort to 
+implement it phased out [3].
 
---3mPePxdRmSeXHm4M
-Content-Type: application/pgp-signature; name="signature.asc"
+[1] https://lore.kernel.org/lkml/20141209140102.GZ3951@x1
+[2] https://lore.kernel.org/lkml/20150122183037.GA24898@earth.universe
+[3] 
+https://lore.kernel.org/lkml/1425864191-4121-1-git-send-email-beomho.seo@samsung.com/T/#t
 
------BEGIN PGP SIGNATURE-----
+>>   	struct rt5033_charger_data	*chg;
+>>   };
+>>   
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG+XvwAKCRB4tDGHoIJi
-0m3yAQCPkatqkx00U98+bRNZhMThHa+pW4rc5LIOS2Dy25zAqgEA9ZW8F0jNB+dl
-2tCAK1FKZoK+u11mnITqEPloSinnjQk=
-=Rk6Q
------END PGP SIGNATURE-----
-
---3mPePxdRmSeXHm4M--
+Kind regards,
+Jakob
