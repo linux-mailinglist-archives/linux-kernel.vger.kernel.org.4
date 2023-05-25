@@ -2,319 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AE9A710AA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95371710AAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbjEYLQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
+        id S240696AbjEYLRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbjEYLQj (ORCPT
+        with ESMTP id S240677AbjEYLRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:16:39 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454F810B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:16:38 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d3e5e5980so2391163b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685013398; x=1687605398;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=akPYEm13nbOmW0iN7/JIjDLNxLC4y1P/u0Dvad6LmIs=;
-        b=mVrjKR9upiukjEipWFGcUW8T7Biqsm7NG5c+O3UBEpn8LDKgp49WCGLDIaxkprltwS
-         LtDpil8mpjqgTvaReBr3C/XK0Mg3VgOgvpwEA2VMTxfkM1cL3oJ0ejqriztvGOtDdCfc
-         675NkycIFzclpt3fSAVHItFzxgM3i3uy9ii5UXtyS2pAJErq2J/VHt7u726px70kEL4J
-         hGIvNscVdU6GMU59ieirv24as5Jl1A7GA8/GFaiT5rAFIZp+N2ruSRoyMqUpiY6h/rs5
-         nItMhcqzsnoFrGn6Ouy0Lmop6zb6gjquzr0zuwJhm61JNQ8jYKuIHywhbNw7lZFAyobm
-         YC4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685013398; x=1687605398;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=akPYEm13nbOmW0iN7/JIjDLNxLC4y1P/u0Dvad6LmIs=;
-        b=lLy+aEduHdNMPbwS0OHW7uEYKp2KdOPS7oDr3emGPKxV1e9jJlD4kYxbRzOBokIA+2
-         /d+Mon7NutZRWVOVO7q6uJvom06N0odrqSKVqCLH/R8ZA09UAf37IawIxX3MYnIeknRD
-         e/RVSGYAcvn0cm4giOAeMcCwx0swhrTW89vj98DZvmi8CcT/ywvWSR/mnzEF6N30tvRC
-         69uMgXjn6ObIKlKE3L/lUZ7+t6HsQB4didLCE+uubFS0QlKRz2u6Wdi/wvW38oTk8Vbf
-         CPTbHf25tnpBuJHUMY035/eiErM3nitOLFJ/54aFj7c5sZg7WCaj2OveIN3nsC87kLK3
-         pxqA==
-X-Gm-Message-State: AC+VfDx0Hrg7QQuAtgWykmydab5qpZDsWNv0B46X0Wc5Dhug7D+a7APQ
-        7TpQh9j2b7Tp553jm3KCNASm571cDbzCDDfamQH16Q==
-X-Google-Smtp-Source: ACHHUZ5LU3mf1s3v+DqVRMyenAvDE+59ba21Ha7X/aIYa36yUYI6Kc+cMR+sJ9DEvEp/R6622tFqBt80+e4gPVRvoR8=
-X-Received: by 2002:a05:6a20:c78f:b0:102:18a9:cad7 with SMTP id
- hk15-20020a056a20c78f00b0010218a9cad7mr19882126pzb.58.1685013397695; Thu, 25
- May 2023 04:16:37 -0700 (PDT)
+        Thu, 25 May 2023 07:17:30 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2099.outbound.protection.outlook.com [40.107.117.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C753113A;
+        Thu, 25 May 2023 04:17:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BNBbwIgSq/ybmJwi+fWkSftRmMvcQA3oh4EdigwsV8/slkdlweMEKNzEV2p/tuwI75s0LLDRj8jfISC8I+u+Ihzl7j8zAKCZHTrgHqNPN+HHOYSj/u+a9rtImLxEpzmtFyVBuR+x0G/QJ6p62s2GP40gTTLpzWzrOwtmD3EOylg9QEs7AiNdSsSA5kPEHiO+Qy7LxWeBNvdjWbd5jMajaagEJ8Kpmwgf8JruRqja77+k+FY9kts9gqHhbvuH3Dnsch/IU+C/rdJ0Pqnz2txzGzSqcL4qAd+L6Z1hhPvZ8XYW+lXEbe7cxkXK4uI8FAebPZ5qVxlS7704JdDGZaUSog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q281zBsc1yykypkcYvhdkHyt0pNtI5Z/UAe1TdFoq1w=;
+ b=QMKqRIWmIT5wsGyY2CCnKF9FYTjA7eFimagGNUVuvH9UfgXDcgLserWSuG1Qb+KNoxV6y+moJpCcvuMdi2YgkNHyrJbEJPkRzBYJCT9XATSe7/vcSlZ98qlstwbY1U+Mm5y4DnwO4Kmd0E7FjYEScKieHUnuJIfnt3U5vIKCTW9bB5XzjdPoeIffEd29X1YbfIihVZB1KCiFh7/Q8C6lvUpZ8nlNRVlPlxNGaOjnIs2QJtE8jX2IQiWi2Xj7QUrwWH1+yu5Wu3kPjOFEgQeCwGQrbI/bHmd4uqWaP7QKWVD8ETDiAyWt0OHCWLyK1wmBrP3jZonR69DTbzEsaN5bow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q281zBsc1yykypkcYvhdkHyt0pNtI5Z/UAe1TdFoq1w=;
+ b=R11emTzXgR6DsITY3F/JVWImZyCM5MT1Chi/a+HKkepHs/7XFhDeKnFBM9XeCc8oP4mJen6DrE4eeRSUiMpbKqutyCxcvwyF3ei0OoxTvs7KcVu3bWpEPKZnuC3YnAFcQj8C5i7Jb8cUcaHe6C71Ft++iISFv7dsi3VLdLbOoMdxvCaz16YABKZFzHZbYjzr4aePK/FZBKrrj08l8rO7V1LM3UJjQXvQuSs1nXmfYy0gdRoECj0Lm4HBUGeBFx1Tdqb2efS88g7PdNgCwsOvik4iaev+A7EEXyA2wDGJ9T6dPKGGzZhPvqhxv9rEAFRZ9nTbk8LlQbHBlSg8xf0TQg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+ by TYZPR06MB4447.apcprd06.prod.outlook.com (2603:1096:400:83::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16; Thu, 25 May
+ 2023 11:17:23 +0000
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e%6]) with mapi id 15.20.6411.021; Thu, 25 May 2023
+ 11:17:23 +0000
+From:   Lu Hongfei <luhongfei@vivo.com>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Anjelique Melendez <quic_amelende@quicinc.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Lu Hongfei <11117923@bbktel.com>,
+        linux-leds@vger.kernel.org (open list:LED SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
+Subject: [PATCH] led: qcom-lpg: Fix resource leaks in for_each_available_child_of_node() loops
+Date:   Thu, 25 May 2023 19:17:03 +0800
+Message-Id: <20230525111705.3055-1-luhongfei@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYCPR01CA0065.jpnprd01.prod.outlook.com
+ (2603:1096:405:2::29) To TYZPR06MB6697.apcprd06.prod.outlook.com
+ (2603:1096:400:451::6)
 MIME-Version: 1.0
-References: <20230524131958.2139331-1-james.clark@arm.com> <20230524131958.2139331-4-james.clark@arm.com>
-In-Reply-To: <20230524131958.2139331-4-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 25 May 2023 12:16:26 +0100
-Message-ID: <CAJ9a7Vj99VVDC6Xjyg1cYza-nOk62xPKg7rA4b5XBcU5B=oWVw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] perf cs-etm: Track exception level
-To:     James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org, denik@chromium.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|TYZPR06MB4447:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6ab77395-31c2-44b9-76c9-08db5d119c6e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W6J2H4GfE8bN3G148SEbeDD0tsxa26prUqdEgs+KleRgvaDHlnr/Qtifpup49P8O4IUtPeMJspuVuDmjNbIFP4D/DA6o3ps+gy/k/340Oc4gmZd+udvpbi8ZzyiFlA513il9UFsdefYI1gODwldUyMZgV1WbUvrJITASGN3Z4DFDyYSknXb1wfWgYV81esrQnfXSOTjhPmcO61CHWTZ+EcACmddBxcnpgMHOvh1V4qmJjPnbpECeqXdqQcAy/3o8+7qhemky70ZaNuLFLZGCOWHWCUr/w1kbEhSz2S0NdP2G0SQTlrHLU+8Qest5iD38oWrtOioQ4r7nDbUbzkr4ttD03OkFLC4wb69jrKHp3XX9ns3Squnh4PA2Yzaka3RIoz3V3DwmL6jDBI/Unw4vA3zMrPdML6eeBiIEhVH1WQEY6dO/oEepUfCKPRtk8o8TJwrVQq1ANoLVOIAI6lsKhtY2K5MepzxE/0vZNI/Cln6PKrOykKnfLDrqNtkL7F+8fMczI8nOctULdKbc2rmInFHI7U16xSBnEGbJBEHQPmJX11Fc55TALREprgGxzmH+zoTAr53f2tzvMNgEBGdLp/FCLRJRox/AwCNl9BY2J3ZZSl9YoXg3u+dFcT1n76m7UsnXOLjanOJnlRYGHK/New==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(39860400002)(366004)(396003)(376002)(451199021)(36756003)(86362001)(52116002)(4326008)(110136005)(316002)(66946007)(66476007)(66556008)(478600001)(6666004)(6486002)(41300700001)(8676002)(8936002)(2906002)(7416002)(5660300002)(38350700002)(38100700002)(921005)(1076003)(26005)(2616005)(107886003)(6506007)(186003)(6512007)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OlT+9ik5qU1Iz9iXTT3v9UFYCvFihFi7uMyp+SPU3n9jE7r4iPF0T7WykwVH?=
+ =?us-ascii?Q?NpktQcIQIZqYbFsQZPKhDg2PormTmKFbLAEVBROyO3r1Mwopwbt+Cm5x0FKK?=
+ =?us-ascii?Q?OGXgugtFAnKIaHH9wGAixbs1oRCvFcpj7tfxyTaFA1AdTU+nn65riPnQHYpc?=
+ =?us-ascii?Q?ESsvRswpNs//AvksiSUVrdPbjTXwmsHNA/LHm4pN+S5EMO6jbW7Vy28f74ac?=
+ =?us-ascii?Q?pIywVQwPtC/Vfx+YrBBxrAwU3++8rLbWEPqTMZF4pNcKHlOecN39D58hrkqS?=
+ =?us-ascii?Q?sf89+IM7DTxLdXQa1pXTFOhxDl4dXU9gTTBLwBJTqGb2EL0rDLJpKr9Z6D5E?=
+ =?us-ascii?Q?U+jFYii8d27WHSHf67KAjkxZPPBVBkXtTrOlH+Z5U1BSGljzL+rcQfgcqJTN?=
+ =?us-ascii?Q?Ttic0HzQ68BRjPpAlCmbjaLQFTJGLrKwwBN20SB0HgVkhihw88p6SnZMYtnQ?=
+ =?us-ascii?Q?julHmkm1xCYxXeR+HTDuEz8rf2acGdlpqPkfNnnM4wrN3pUrqPZ/pUM21rbv?=
+ =?us-ascii?Q?bWy0B/PVe56v/G7wByzlu5jru/cC/ytlnro7e/3mWfVVSlCZFk7ZI+qfTXAj?=
+ =?us-ascii?Q?90/L1rkdnokuQvdY6E3o6d7rcakfYTx88EVCyMWngqlPGgkBjSSLDgW35OEH?=
+ =?us-ascii?Q?FB0YUJCwalXVpD2bv/x5KuFxShPZRci3qgnwYirgISE0ZRIMPz3dzMX1kp0/?=
+ =?us-ascii?Q?RvcVYRMX90grtLmeBVI+0T9UeD3LsVzDWTCCzBP/IaXIcFakObYxdMANCE/a?=
+ =?us-ascii?Q?QJeMFyfP0uIplWZ8ushId/URvrQNr9HHMDYnMnKNzp44ejdulkFSgEw0ZclA?=
+ =?us-ascii?Q?BhYDpwcGj/DK3+NxPJkRZOsieonRLoz4niCSuXzmnnyWyqPAtm0B6YT2MpDN?=
+ =?us-ascii?Q?Ia2qlDffDL4AhEtnPBnEG1M7Qp3XZ8tNCeZUzBX/LWU/ufSZk/U0jnehLiLv?=
+ =?us-ascii?Q?OSWdqKeYm4zqy7sqRliAa438WY6UVF+qhMlUBtRnToAk5j4q6Wev7D7AeZya?=
+ =?us-ascii?Q?O/vE2QmqpAbvpj/r0ykRs7Zb68sJvrQ7y2uXxP7vSwtsRD6XppE/ZNbumFi2?=
+ =?us-ascii?Q?dc/8V09nTKdwiWZ7nfVM9TFy+7k6+JhVYgYolA9b+9bMt69KQeyD1hnxr/aG?=
+ =?us-ascii?Q?vkFy854fX+Jdzcft8tZMk7RD5mO+drTmbuUGM/2gtPwvC7fwiFdxephD/s0e?=
+ =?us-ascii?Q?MJzVNxmLo5m/Oke8pdg8lV3lbAAOEdVlmtq6trhfDoBtfjph/DAOW0mEELQF?=
+ =?us-ascii?Q?xSoQR6f21wGi+TIdIC9GRh8Sf9DF68W5qNmHEoMlwgH2djvsulFV/0GSFeMM?=
+ =?us-ascii?Q?xs3VIr1jAe0lBQ7MDTPGhaZ+3pLIYYdexaCuy5w8YBDb+vq33jQP2Fr5l+vw?=
+ =?us-ascii?Q?mSZw7N8WTbYSI/ODkQPefpi+KrWg7BRnG5GVhZOgaQBp0+WU09ZQ2uPPdVq8?=
+ =?us-ascii?Q?0+A9AJ/BQfDwXNDtlXeiiA1E6/tLsM1b2hBDQPIEA3yL23sDo3cGM07UZvhA?=
+ =?us-ascii?Q?EynaN2gB9xxN9BMAoBzjgdZ4GRMMSOeqXUnglN+drEaRJQ7qxtf56MEn2RAZ?=
+ =?us-ascii?Q?qLl/X8kqvr9jHwWhwNGBGHAfuKWca/jR4lKBPlUq?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ab77395-31c2-44b9-76c9-08db5d119c6e
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 11:17:22.9677
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ys48pXGKuwdlhNyTo6QEiqHYkd1o264t7TMsxJoUnfcHhzVUHmSFW/istHujw+2cZ79ktygA0yQehCpkdkjGbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4447
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+for_each_available_child_of_node in lpg_probe and lpg_add_led need
+to execute of_node_put before return. this patch could fix this bug.
 
-On Wed, 24 May 2023 at 14:20, James Clark <james.clark@arm.com> wrote:
->
-> Currently we assume all trace belongs to the host machine so when
-> the decoder should be looking at the guest kernel maps it can crash
-> because it looks at the host ones instead.
->
-> Avoid one scenario (guest kernel running at EL1) by assigning the
-> default guest machine to this trace. For userspace trace it's still not
-> possible to determine guest vs host, but the PIDs should help in this
-> case.
->
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  7 +-
->  tools/perf/util/cs-etm.c                      | 64 ++++++++++++++-----
->  tools/perf/util/cs-etm.h                      |  5 +-
->  3 files changed, 56 insertions(+), 20 deletions(-)
->
-> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> index 82a27ab90c8b..ac227cd03eb0 100644
-> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> @@ -573,12 +573,13 @@ cs_etm_decoder__set_tid(struct cs_etm_queue *etmq,
->                 break;
->         }
->
-> +       if (cs_etm__etmq_set_tid_el(etmq, tid, trace_chan_id,
-> +                                elem->context.exception_level))
-> +               return OCSD_RESP_FATAL_SYS_ERR;
-> +
->         if (tid == -1)
->                 return OCSD_RESP_CONT;
->
-> -       if (cs_etm__etmq_set_tid(etmq, tid, trace_chan_id))
-> -               return OCSD_RESP_FATAL_SYS_ERR;
-> -
->         /*
->          * A timestamp is generated after a PE_CONTEXT element so make sure
->          * to rely on that coming one.
-> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-> index a997fe79d458..b9ba19327f26 100644
-> --- a/tools/perf/util/cs-etm.c
-> +++ b/tools/perf/util/cs-etm.c
-> @@ -14,7 +14,6 @@
->  #include <linux/types.h>
->  #include <linux/zalloc.h>
->
-> -#include <opencsd/ocsd_if_types.h>
->  #include <stdlib.h>
->
->  #include "auxtrace.h"
-> @@ -87,6 +86,8 @@ struct cs_etm_traceid_queue {
->         union perf_event *event_buf;
->         struct thread *thread;
->         struct thread *prev_thread;
-> +       ocsd_ex_level prev_el;
-> +       ocsd_ex_level el;
->         struct branch_stack *last_branch;
->         struct branch_stack *last_branch_rb;
->         struct cs_etm_packet *prev_packet;
-> @@ -479,6 +480,7 @@ static int cs_etm__init_traceid_queue(struct cs_etm_queue *etmq,
->
->         queue = &etmq->etm->queues.queue_array[etmq->queue_nr];
->         tidq->trace_chan_id = trace_chan_id;
-> +       tidq->el = tidq->prev_el = ocsd_EL_unknown;
->         tidq->thread = machine__findnew_thread(&etm->session->machines.host, -1,
->                                                queue->tid);
->         tidq->prev_thread = machine__idle_thread(&etm->session->machines.host);
-> @@ -618,6 +620,7 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
->                 tmp = tidq->packet;
->                 tidq->packet = tidq->prev_packet;
->                 tidq->prev_packet = tmp;
-> +               tidq->prev_el = tidq->el;
->                 thread__put(tidq->prev_thread);
->                 tidq->prev_thread = thread__get(tidq->thread);
->         }
-> @@ -879,11 +882,34 @@ static bool cs_etm__evsel_is_auxtrace(struct perf_session *session,
->         return evsel->core.attr.type == aux->pmu_type;
->  }
->
-> -static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address)
-> +static struct machine *cs_etm__get_machine(struct cs_etm_auxtrace *etm,
-> +                                          ocsd_ex_level el)
->  {
-> -       struct machine *machine;
-> +       /*
-> +        * Not perfect, but assume anything in EL1 is the default guest, and
-> +        * everything else is the host. nHVE and pKVM may not work with this
-> +        * assumption. And distinguishing between guest and host userspaces
-> +        * isn't currently supported either. Neither is multiple guest support.
-> +        * All this does is reduce the likeliness of decode errors where we look
-> +        * into the host kernel maps when it should have been the guest maps.
-> +        */
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+---
+ drivers/leds/rgb/leds-qcom-lpg.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 drivers/leds/rgb/leds-qcom-lpg.c
 
-What effect does this have if I am running with host only, kernel at
-EL1, e.g. any platform that is not running an EL2 kernel?
-
-Mike
-
-
-> +       switch (el) {
-> +       case ocsd_EL1:
-> +               return machines__find_guest(&etm->session->machines,
-> +                                           DEFAULT_GUEST_KERNEL_ID);
-> +       case ocsd_EL3:
-> +       case ocsd_EL2:
-> +       case ocsd_EL0:
-> +       case ocsd_EL_unknown:
-> +       default:
-> +               return &etm->session->machines.host;
-> +       }
-> +}
->
-> -       machine = &etmq->etm->session->machines.host;
-> +static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address,
-> +                          ocsd_ex_level el)
-> +{
-> +       struct machine *machine = cs_etm__get_machine(etmq->etm, el);
->
->         if (address >= machine__kernel_start(machine)) {
->                 if (machine__is_host(machine))
-> @@ -893,10 +919,14 @@ static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address)
->         } else {
->                 if (machine__is_host(machine))
->                         return PERF_RECORD_MISC_USER;
-> -               else if (perf_guest)
-> +               else {
-> +                       /*
-> +                        * Can't really happen at the moment because
-> +                        * cs_etm__get_machine() will always return
-> +                        * machines.host for any non EL1 trace.
-> +                        */
->                         return PERF_RECORD_MISC_GUEST_USER;
-> -               else
-> -                       return PERF_RECORD_MISC_HYPERVISOR;
-> +               }
->         }
->  }
->
-> @@ -913,11 +943,12 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
->         if (!etmq)
->                 return 0;
->
-> -       cpumode = cs_etm__cpu_mode(etmq, address);
->         tidq = cs_etm__etmq_get_traceid_queue(etmq, trace_chan_id);
->         if (!tidq)
->                 return 0;
->
-> +       cpumode = cs_etm__cpu_mode(etmq, address, tidq->el);
-> +
->         if (!thread__find_map(tidq->thread, cpumode, address, &al))
->                 return 0;
->
-> @@ -1296,9 +1327,10 @@ cs_etm__get_trace(struct cs_etm_queue *etmq)
->  }
->
->  static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
-> -                              struct cs_etm_traceid_queue *tidq, pid_t tid)
-> +                              struct cs_etm_traceid_queue *tidq, pid_t tid,
-> +                              ocsd_ex_level el)
->  {
-> -       struct machine *machine = &etm->session->machines.host;
-> +       struct machine *machine = cs_etm__get_machine(etm, el);
->
->         if (tid != -1) {
->                 thread__zput(tidq->thread);
-> @@ -1308,10 +1340,12 @@ static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
->         /* Couldn't find a known thread */
->         if (!tidq->thread)
->                 tidq->thread = machine__idle_thread(machine);
-> +
-> +       tidq->el = el;
->  }
->
-> -int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
-> -                        pid_t tid, u8 trace_chan_id)
-> +int cs_etm__etmq_set_tid_el(struct cs_etm_queue *etmq, pid_t tid, u8 trace_chan_id,
-> +                        ocsd_ex_level el)
->  {
->         struct cs_etm_traceid_queue *tidq;
->
-> @@ -1319,7 +1353,7 @@ int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
->         if (!tidq)
->                 return -EINVAL;
->
-> -       cs_etm__set_thread(etmq->etm, tidq, tid);
-> +       cs_etm__set_thread(etmq->etm, tidq, tid, el);
->         return 0;
->  }
->
-> @@ -1389,7 +1423,7 @@ static int cs_etm__synth_instruction_sample(struct cs_etm_queue *etmq,
->         struct perf_sample sample = {.ip = 0,};
->
->         event->sample.header.type = PERF_RECORD_SAMPLE;
-> -       event->sample.header.misc = cs_etm__cpu_mode(etmq, addr);
-> +       event->sample.header.misc = cs_etm__cpu_mode(etmq, addr, tidq->el);
->         event->sample.header.size = sizeof(struct perf_event_header);
->
->         /* Set time field based on etm auxtrace config. */
-> @@ -1448,7 +1482,7 @@ static int cs_etm__synth_branch_sample(struct cs_etm_queue *etmq,
->         ip = cs_etm__last_executed_instr(tidq->prev_packet);
->
->         event->sample.header.type = PERF_RECORD_SAMPLE;
-> -       event->sample.header.misc = cs_etm__cpu_mode(etmq, ip);
-> +       event->sample.header.misc = cs_etm__cpu_mode(etmq, ip, tidq->prev_el);
->         event->sample.header.size = sizeof(struct perf_event_header);
->
->         /* Set time field based on etm auxtrace config. */
-> diff --git a/tools/perf/util/cs-etm.h b/tools/perf/util/cs-etm.h
-> index 70cac0375b34..88e9b25a8a9f 100644
-> --- a/tools/perf/util/cs-etm.h
-> +++ b/tools/perf/util/cs-etm.h
-> @@ -232,10 +232,11 @@ int cs_etm__process_auxtrace_info(union perf_event *event,
->  struct perf_event_attr *cs_etm_get_default_config(struct perf_pmu *pmu);
->
->  #ifdef HAVE_CSTRACE_SUPPORT
-> +#include <opencsd/ocsd_if_types.h>
->  int cs_etm__get_cpu(u8 trace_chan_id, int *cpu);
->  int cs_etm__get_pid_fmt(u8 trace_chan_id, u64 *pid_fmt);
-> -int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
-> -                        pid_t tid, u8 trace_chan_id);
-> +int cs_etm__etmq_set_tid_el(struct cs_etm_queue *etmq, pid_t tid, u8 trace_chan_id,
-> +                        ocsd_ex_level el);
->  bool cs_etm__etmq_is_timeless(struct cs_etm_queue *etmq);
->  void cs_etm__etmq_set_traceid_queue_timestamp(struct cs_etm_queue *etmq,
->                                               u8 trace_chan_id);
-> --
-> 2.34.1
->
-
-
+diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
+index 55a037234df1..0e8ff36c4bf7
+--- a/drivers/leds/rgb/leds-qcom-lpg.c
++++ b/drivers/leds/rgb/leds-qcom-lpg.c
+@@ -1173,8 +1173,10 @@ static int lpg_add_led(struct lpg *lpg, struct device_node *np)
+ 		i = 0;
+ 		for_each_available_child_of_node(np, child) {
+ 			ret = lpg_parse_channel(lpg, child, &led->channels[i]);
+-			if (ret < 0)
++			if (ret < 0) {
++				of_node_put(child);
+ 				return ret;
++			}
+ 
+ 			info[i].color_index = led->channels[i]->color;
+ 			info[i].intensity = 0;
+@@ -1352,8 +1354,10 @@ static int lpg_probe(struct platform_device *pdev)
+ 
+ 	for_each_available_child_of_node(pdev->dev.of_node, np) {
+ 		ret = lpg_add_led(lpg, np);
+-		if (ret)
++		if (ret) {
++			of_node_put(np);
+ 			return ret;
++		}
+ 	}
+ 
+ 	for (i = 0; i < lpg->num_channels; i++)
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+2.39.0
+
