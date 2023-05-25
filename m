@@ -2,169 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B035F710D41
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63157710D4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241285AbjEYNbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
+        id S241287AbjEYNfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjEYNbr (ORCPT
+        with ESMTP id S230464AbjEYNfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:31:47 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C7C186;
-        Thu, 25 May 2023 06:31:46 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bcb00a4c2so3828496a12.1;
-        Thu, 25 May 2023 06:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685021504; x=1687613504;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gT/KiN/GVyh9un3dWdPg6LQ82j/4nY+K0qSJUuMUUpI=;
-        b=qwY0TP99Ca/0IXyk27S4mDxmWlYNSp8F/MWDDKTv+ExOQQRSAx/ztp5tsYcLPqOysY
-         BUrxc8gfNJh4f22r4z7XXHTb2bbsK+aEsh0TYxie2/eAd6IDCzwdrPl6RfEtz2GD8qx4
-         xrf0bjaw4Jvhkhn8O7dVhBLuS4joNfs10SrHXpZDwDaBXt2Cd3xXw1boXhEHE97CPDQi
-         ukjzCp4QzULJ4DEAHjnoRth5O8b68CULO7pqpCK/AxpHKnr3paefwDwC+9kAVhKWW5Ba
-         r2ZBxx3d/9/vOKyH5n4M0afyxFQrvnN+dyngVkXo6oU+Bx7mUnis9Dg/A4eEdoT2Dy54
-         JhcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685021504; x=1687613504;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gT/KiN/GVyh9un3dWdPg6LQ82j/4nY+K0qSJUuMUUpI=;
-        b=M38J7dJCfPwjWpEKdojeuht9GgGYxz6an8PNOCjv940tOGdLWQFN+gA6GjoaR+TMUr
-         cvq27vJknIwijkrA0rmazzcl2q/STcjIWqZVgaWsXM1oZ8l0GcU4eR3u4kYZsfnkzQJ4
-         KxJ3CuGxWYB8+eUVs9vSxCG5AjE0DRhtzOnpa6ODP10kzWoo/qYWLVdPJ3i44Da67Ht+
-         4xpmTBBJ4K6Y6YeDQeXOfkmFi6c7U1m3S7RhUUwrbKfa3qIXM+L3pexc+IhyJP+By/mH
-         GDdICWB/Vh7lzAcRYzXNhyXT7py6vP31f8IOwDqVlXa5RPaUmNovbHdh81obUQovfKE9
-         +6DA==
-X-Gm-Message-State: AC+VfDyRwl+pVg5dt7KU7TbXcHnTmoelH8wg5L+exrY08jxm10pZvHVr
-        dQRYdgxUKVBPtw3xBJh2SH0=
-X-Google-Smtp-Source: ACHHUZ7C1fLtYhn8fZGe3ehLd1Xq/uazQq9TEEOCoBMvdYjTG9644jyrZ3G60lSa+jZQQSKib5XpTw==
-X-Received: by 2002:a05:6402:204d:b0:510:ec67:22d2 with SMTP id bc13-20020a056402204d00b00510ec6722d2mr4482475edb.10.1685021504024;
-        Thu, 25 May 2023 06:31:44 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id r3-20020a056402034300b0050bce352dc5sm543380edw.85.2023.05.25.06.31.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 06:31:43 -0700 (PDT)
-Date:   Thu, 25 May 2023 16:31:40 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 05/30] net: dsa: mt7530: read XTAL value from
- correct register
-Message-ID: <20230525133140.xewm6g5rl7sm57d2@skbuf>
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-6-arinc.unal@arinc9.com>
- <20230524165701.pbrcs4e74juzb4r3@skbuf>
- <7c915d5b-56c9-430d-05ac-544f76966eb1@arinc9.com>
+        Thu, 25 May 2023 09:35:20 -0400
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4A4132;
+        Thu, 25 May 2023 06:35:15 -0700 (PDT)
+Date:   Thu, 25 May 2023 13:35:08 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1685021712; x=1685280912;
+        bh=7IixD+bhmeF+BKHzzoQ2QhW1JCPmJJ1WQf05j26o1sY=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=DYGfzTpQu21styBltnt9D3k03W6GJg/uDtdfvnDhGdlAkMwooOCP07D9xAQ+v0Wle
+         KbKuwPAFzEvhNoPQ1nq7IxFvMvcr5KZr0c3jE2ihw1dMspOJYajdYkiKhTL0jgcrL8
+         VX9v2M3+UZJwdBgpDwL8eaiW2Ot1x743FfbdZK6hPcqXn2cRwonPFhT3036J3r0n/c
+         tPpCXSVwyt5qf44euL/D1m9D6kHglDndgT1xe7Vb2qJwz1FM2Yr1kJ4EWSCu8GbEWW
+         k5Ym3rg8IWCXZ2PdDnA62WRuqHwtHGoupZ7Jvqx0S+qUMucL6cwo0UokPYRlRlkjaS
+         0J5j2mM4B2C0Q==
+To:     Alice Ryhl <aliceryhl@google.com>
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Andreas Hindborg <a.hindborg@samsung.com>
+Subject: Re: [PATCH v2 1/4] rust: sync: reword the `Arc` safety comment for `Send`
+Message-ID: <JuMYWDm-bTPwPZDn-6oMCeneM4Po-XXsrihWp6sJmkrr60ANrJ3s32Vm6mlxrttdZAlSG5lcjPGtOqf9yrsAkgjV7JNyDZvHkH0einxCNhg=@proton.me>
+In-Reply-To: <20230523144418.1250547-2-aliceryhl@google.com>
+References: <20230523144418.1250547-1-aliceryhl@google.com> <20230523144418.1250547-2-aliceryhl@google.com>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7c915d5b-56c9-430d-05ac-544f76966eb1@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 09:20:08AM +0300, Arınç ÜNAL wrote:
-> On 24.05.2023 19:57, Vladimir Oltean wrote:
-> > On Mon, May 22, 2023 at 03:15:07PM +0300, arinc9.unal@gmail.com wrote:
-> > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > 
-> > > On commit 7ef6f6f8d237 ("net: dsa: mt7530: Add MT7621 TRGMII mode support")
-> > > macros for reading the crystal frequency were added under the MT7530_HWTRAP
-> > > register. However, the value given to the xtal variable on
-> > > mt7530_pad_clk_setup() is read from the MT7530_MHWTRAP register instead.
-> > > 
-> > > Although the document MT7621 Giga Switch Programming Guide v0.3 states that
-> > > the value can be read from both registers, use the register where the
-> > > macros were defined under.
-> > > 
-> > > Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > ---
-> > 
-> > I'm sorry, but I refuse this patch, mainly as a matter of principle -
-> > because that's just not how we do things, and you need to understand why.
-> > 
-> > The commit title ("read XTAL value from correct register") claims that
-> > the process of reading a field which cannot be changed by software is
-> > any more correct when it is read from HWTRAP rather than MHWTRAP
-> > (modified HWTRAP).
-> > 
-> > Your justification is that it's confusing to you if two registers have
-> > the same layout, and the driver has a single set of macros to decode the
-> > fields from both. You seem to think it's somehow not correct to decode
-> > fields from the MHWTRAP register using macros which have just HWTRAP in
-> > the name.
-> 
-> No, it doesn't confuse me that two registers share the same layout. My
-> understanding was that the MHWTRAP register should be used for modifying the
-> hardware trap, and the HWTRAP register should be used for reading from the
-> hardware trap.
+On 5/23/23 16:44, Alice Ryhl wrote:
+> The safety comment on `impl Send for Arc` talks about "directly"
+> accessing the value, when it really means "accessing the value with a
+> mutable reference". This commit clarifies that.
+>=20
+> Suggested-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
+> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
 
-My understanding is that reading from the read-only HWTRAP always gives
-you the power-on settings, while reading from the r/w MHWTRAP always
-gives you the current settings. If those settings coincide, as happens
-here, there's no practical difference.
+Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 
-> I see that the XTAL constants were defined under the HWTRAP
-> register so I thought it would make sense to change the code to read the
-> XTAL values from the HWTRAP register instead. Let me know if you disagree
-> with this.
+> ---
+>   rust/kernel/sync/arc.rs | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> index e6d206242465..87a4c9ed712b 100644
+> --- a/rust/kernel/sync/arc.rs
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -146,8 +146,8 @@ impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::Dis=
+patchFromDyn<Arc<U>> for Ar
+>=20
+>   // SAFETY: It is safe to send `Arc<T>` to another thread when the under=
+lying `T` is `Sync` because
+>   // it effectively means sharing `&T` (which is safe because `T` is `Syn=
+c`); additionally, it needs
+> -// `T` to be `Send` because any thread that has an `Arc<T>` may ultimate=
+ly access `T` directly, for
+> -// example, when the reference count reaches zero and `T` is dropped.
+> +// `T` to be `Send` because any thread that has an `Arc<T>` may ultimate=
+ly access `T` using a
+> +// mutable reference, for example, when the reference count reaches zero=
+ and `T` is dropped.
+>   unsafe impl<T: ?Sized + Sync + Send> Send for Arc<T> {}
+>=20
+>   // SAFETY: It is safe to send `&Arc<T>` to another thread when the unde=
+rlying `T` is `Sync` for the
+> --
+> 2.40.1.698.g37aff9b760-goog
+>=20
 
-I disagree as a matter of principle with the reasoning. The fact that
-XTAL constants are defined under HWTRAP is not a reason to change the
-code to read the XTAL values from the HWTRAP register. The fact that
-XTAL_FSEL is read-only in MHWTRAP is indeed a reason why you *could*
-read it from HWTRAP, but also not one why you *should* make a change.
-
-> > Seriously, please first share these small rewrites with someone more
-> > senior than you, and ask for a preliminary second opinion.
-> 
-> Would submitting this as an RFC had been a similar action to your describing
-> here? Because I already did that:
-> 
-> https://lore.kernel.org/netdev/20230421143648.87889-6-arinc.unal@arinc9.com/
-
-In practice, volume is also an issue. The higher the volume, the lower
-the chances that people will be able to crop a chunk of time large enough
-to review.
-
-> I should've given more effort to explain my reasons for this patch. I
-> disagree that the series is a large volume of worthless and misguided
-> refactoring and am happy to discuss it patch by patch.
-
-I agree that the follow-up patches, as far as I could reach into this
-series, are not as gratuitous as this one.
+--=20
+Cheers,
+Benno
