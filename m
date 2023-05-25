@@ -2,145 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE71471024F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 03:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156C3710251
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 03:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234798AbjEYBXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 21:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S232897AbjEYBXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 21:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjEYBXE (ORCPT
+        with ESMTP id S229630AbjEYBXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 21:23:04 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC64AF5
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 18:23:01 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8c3186735so3049149276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 18:23:01 -0700 (PDT)
+        Wed, 24 May 2023 21:23:34 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C67F5
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 18:23:33 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f4b0a0b557so1706556e87.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 18:23:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684977781; x=1687569781;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JiDrdjr9ZIvJRpTUykulKnPPib43IN+W9wnZrH/g/co=;
-        b=Kc4m8fCt442UK9sds+JYnCWnnXQpQizzytfKVQhDZkNY9+1qRMLazQeW801p+gspii
-         IQTicNAxo/MDfJclziG6AJImn0Et/GBw06sCD+fITH49YsrjHBeQk4+4fdp8xwm0e9T4
-         ELuFE4v+8Rt6ZRoLX3GXXwxM3wnRxBB4yaBEtIxoWv6e+RYk3W0YSpf28DGIxXl8dI64
-         wH/3Q6Mk9siXQ3Cp/P3F1YGISixoPdtRHj2YHx4Fhq3h8REvRrXlK6nJfuZ723TCxUq3
-         8FZu17NSLb6po7FUTSqQld/fOrPsZbjs0YHqzrGISUdbvE9LydumDgS1nlaNeJ1Sxli5
-         I/fw==
+        d=gmail.com; s=20221208; t=1684977811; x=1687569811;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ImO6OtSkFfnvqFi/Tdj42NbWs/io79Pf0LI695zdQVY=;
+        b=cLEsJxGCeWR0JFmIcbzKPv46zp4Nl1rQF+aCeJitALaDzDdP0m0Dnl7gfz6vwlNqPj
+         xp2kGQXVGvaqzlpJIoxk6U6dLDDHWyQoD4snYzy+ZHTadjqyIrgwm+AVPX//PY5VGnmr
+         PMh8/910FClKBXpC+Ffitssgdo/KLt/GarDP192FFlK6RT3yTJxHyhYqO3YFG4FLaVvT
+         pFmmoholHhL1vxdfVoGxUfSJJNLtWNWHQn+qgj89q2lpoHw5YHQKgAKVdEfqDnuU/NS6
+         TYVkQ9yAme5Jp4qflWuebnIfq9FYgpYkXWz4NlDqvK0bfKouPbbqTaJ0w352funqt2Ur
+         0gUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684977781; x=1687569781;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JiDrdjr9ZIvJRpTUykulKnPPib43IN+W9wnZrH/g/co=;
-        b=QTdL70YwzWsDcMG7v7K2jVsnWkhoDBVcgirCd4hxJtlQlrCrzJJGXCV80rSFugcF9l
-         yAkrga1vL422OpnlzHTt5wIqtscVU1/Db/miBlsqaFzh05OTwXsSt6Wzf7xcQdFNC8B2
-         7W0aKoK1ZKIsLobzES1u9j8dSVXcmsVvDBWqeFetwfVrbAKDAqw/970KgsBRtfIsKxzk
-         v8qlFvLBaF6yagIJS2n+45vlHd2RSJydbbVbKs/QRySZ/JwPwXNno+KIsNTOMT+Yt9Fo
-         y9gJdZSqYYSYLYzaKCVyAKEuj3Vf8bmb+G9sf+Ks1KFWucahIGHhkPr48Mq3Miq731v5
-         ZDCQ==
-X-Gm-Message-State: AC+VfDxXJ6sfTEGHgIAvsguSRSkBoNTuGB6lPTjBzyefshjLxofzWPEY
-        Z8wYzMsIl3L/cQNR6LeW5BmY0mf9pl0LoQ==
-X-Google-Smtp-Source: ACHHUZ4YWaUzpt35EAhVNGF2S/+iZk+Ncd2VTjuqIw7hCp129AfK4hYExWoJGFS+acfRQcSTRFepi+stvqMUPg==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a05:6902:4a8:b0:bab:a1e6:c87d with SMTP
- id r8-20020a05690204a800b00baba1e6c87dmr837508ybs.4.1684977781052; Wed, 24
- May 2023 18:23:01 -0700 (PDT)
-Date:   Thu, 25 May 2023 01:22:59 +0000
-In-Reply-To: <20230522070122.6727-4-wuyun.abel@bytedance.com>
-Mime-Version: 1.0
-References: <20230522070122.6727-1-wuyun.abel@bytedance.com> <20230522070122.6727-4-wuyun.abel@bytedance.com>
-Message-ID: <20230525012259.qd6i6rtqvvae3or7@google.com>
-Subject: Re: [PATCH v2 3/4] sock: Consider memcg pressure when raising sockmem
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Glauber Costa <glommer@parallels.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684977811; x=1687569811;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ImO6OtSkFfnvqFi/Tdj42NbWs/io79Pf0LI695zdQVY=;
+        b=izGgZPiHQxctUsSkO2Jdq9DBE5dYKAHdZwmPHWkAGK1VCEHAD8Vvcn5G7m5Mdk0+5C
+         Nqq208rPHgU5HgbjHBVdvJ/EPk4dxkC5EI+7uasahSijHArPwncZLGw6fhazPFZlQBCj
+         DGZ+y02ISuIFsA2GLIXj3L0v45ofm5YmqgRjy58QJiDIVFZ9C1whl7eQMWCv2waD/8X2
+         4oUVoSaHAN7HSh4KnuVG4zywxg6pydHit+/BUmOmM5bJBBIuK4/lkpE5XFc2blj9Rsdc
+         eb4apxdmEF5LRBhFcdiZ3yFQEJrA795om15AN3UlNB94+1IvnnBKhZ1cVv9jfKhA6gwF
+         fu5Q==
+X-Gm-Message-State: AC+VfDw3uJTpkBDivzXOl4YKUb341SqC0CmbJB6BVSmSnfAZYihK5sHY
+        Y10v7hShp6a2PQOuhhbstJ/TkInlYtV9DDskpF4=
+X-Google-Smtp-Source: ACHHUZ4R1YP38WQ+w5tcAppMXtmV8ADJBETAAAQK+pQaNcR7Z1INqwa5atnT5D3ecG2LzRAH0mK4g7Qq2e/3e42QVbE=
+X-Received: by 2002:ac2:4ad1:0:b0:4f3:8c0d:41c4 with SMTP id
+ m17-20020ac24ad1000000b004f38c0d41c4mr6139693lfp.30.1684977811090; Wed, 24
+ May 2023 18:23:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <1684919574-28368-1-git-send-email-zhaoyang.huang@unisoc.com> <CAJuCfpHLdmtzAvhk94vLmkDNBAO8xJMFEdnXy8j=0KGovmmC_w@mail.gmail.com>
+In-Reply-To: <CAJuCfpHLdmtzAvhk94vLmkDNBAO8xJMFEdnXy8j=0KGovmmC_w@mail.gmail.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Thu, 25 May 2023 09:23:07 +0800
+Message-ID: <CAGWkznGs=voCMYWsSRMJ7ZKxz0NcB6P9ynOK8AizHBHZG2MoDA@mail.gmail.com>
+Subject: Re: [PATCH] mm: deduct the number of pages reclaimed by madvise from workingset
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:01:21PM +0800, Abel Wu wrote:
-> For now __sk_mem_raise_allocated() mainly considers global socket
-> memory pressure and allows to raise if no global pressure observed,
-> including the sockets whose memcgs are in pressure, which might
-> result in longer memcg memstall.
-> 
-> So take net-memcg's pressure into consideration when allocating
-> socket memory to alleviate long tail latencies.
-> 
-> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
-
-Hi Abel,
-
-Have you seen any real world production issue which is fixed by this
-patch or is it more of a fix after reading code?
-
-This code is quite subtle and small changes can cause unintended
-behavior changes. At the moment the tcp memory accounting and memcg
-accounting is intermingled and I think we should decouple them.
-
-> ---
->  net/core/sock.c | 23 ++++++++++++++++-------
->  1 file changed, 16 insertions(+), 7 deletions(-)
-> 
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 801df091e37a..7641d64293af 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -2977,21 +2977,30 @@ int __sk_mem_raise_allocated(struct sock *sk, int size, int amt, int kind)
->  {
->  	bool memcg_charge = mem_cgroup_sockets_enabled && sk->sk_memcg;
->  	struct proto *prot = sk->sk_prot;
-> -	bool charged = true;
-> +	bool charged = true, pressured = false;
->  	long allocated;
->  
->  	sk_memory_allocated_add(sk, amt);
->  	allocated = sk_memory_allocated(sk);
-> -	if (memcg_charge &&
-> -	    !(charged = mem_cgroup_charge_skmem(sk->sk_memcg, amt,
-> -						gfp_memcg_charge())))
-> -		goto suppress_allocation;
-> +
-> +	if (memcg_charge) {
-> +		charged = mem_cgroup_charge_skmem(sk->sk_memcg, amt,
-> +						  gfp_memcg_charge());
-> +		if (!charged)
-> +			goto suppress_allocation;
-> +		if (mem_cgroup_under_socket_pressure(sk->sk_memcg))
-
-The memcg under pressure callback does a upward memcg tree walk, do
-please make sure you have tested the performance impact of this.
-
-> +			pressured = true;
-> +	}
->  
->  	/* Under limit. */
-> -	if (allocated <= sk_prot_mem_limits(sk, 0)) {
-> +	if (allocated <= sk_prot_mem_limits(sk, 0))
->  		sk_leave_memory_pressure(sk);
-> +	else
-> +		pressured = true;
-> +
-> +	/* No pressure observed in global/memcg. */
-> +	if (!pressured)
->  		return 1;
-> -	}
->  
->  	/* Under pressure. */
->  	if (allocated > sk_prot_mem_limits(sk, 1))
-> -- 
-> 2.37.3
-> 
+On Thu, May 25, 2023 at 4:41=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Wed, May 24, 2023 at 2:13=E2=80=AFAM zhaoyang.huang
+> <zhaoyang.huang@unisoc.com> wrote:
+> >
+> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >
+> > The pages reclaimed by madvise_pageout are made of inactive and dropped=
+ from LRU
+> > forcefully, which lead to the coming up refault pages possess a large r=
+efault
+> > distance than it should be. These could affect the accuracy of thrashin=
+g when
+> > madvise_pageout is used as a common way of memory reclaiming as ANDROID=
+ does now.
+>
+> Doesn't workingset_eviction() in the following call chain already
+> handle nonresident page aging?:
+>
+> reclaim_pages
+>   reclaim_folio_list
+>     shrink_folio_list
+>       __remove_mapping
+>         workingset_eviction
+>           workingset_age_nonresident
+Yes. What I suggest is to minor this pages from non-resident as they
+are dropped forcefully
+>
+>
+> >
+> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > ---
+> >  include/linux/swap.h | 2 +-
+> >  mm/madvise.c         | 4 ++--
+> >  mm/vmscan.c          | 8 +++++++-
+> >  3 files changed, 10 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/linux/swap.h b/include/linux/swap.h
+> > index 2787b84..0312142 100644
+> > --- a/include/linux/swap.h
+> > +++ b/include/linux/swap.h
+> > @@ -428,7 +428,7 @@ extern unsigned long mem_cgroup_shrink_node(struct =
+mem_cgroup *mem,
+> >  extern int vm_swappiness;
+> >  long remove_mapping(struct address_space *mapping, struct folio *folio=
+);
+> >
+> > -extern unsigned long reclaim_pages(struct list_head *page_list);
+> > +extern unsigned long reclaim_pages(struct mm_struct *mm, struct list_h=
+ead *page_list);
+> >  #ifdef CONFIG_NUMA
+> >  extern int node_reclaim_mode;
+> >  extern int sysctl_min_unmapped_ratio;
+> > diff --git a/mm/madvise.c b/mm/madvise.c
+> > index b6ea204..61c8d7b 100644
+> > --- a/mm/madvise.c
+> > +++ b/mm/madvise.c
+> > @@ -420,7 +420,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t =
+*pmd,
+> >  huge_unlock:
+> >                 spin_unlock(ptl);
+> >                 if (pageout)
+> > -                       reclaim_pages(&page_list);
+> > +                       reclaim_pages(mm, &page_list);
+> >                 return 0;
+> >         }
+> >
+> > @@ -516,7 +516,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t =
+*pmd,
+> >         arch_leave_lazy_mmu_mode();
+> >         pte_unmap_unlock(orig_pte, ptl);
+> >         if (pageout)
+> > -               reclaim_pages(&page_list);
+> > +               reclaim_pages(mm, &page_list);
+> >         cond_resched();
+> >
+> >         return 0;
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index 20facec..048c10b 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -2741,12 +2741,14 @@ static unsigned int reclaim_folio_list(struct l=
+ist_head *folio_list,
+> >         return nr_reclaimed;
+> >  }
+> >
+> > -unsigned long reclaim_pages(struct list_head *folio_list)
+> > +unsigned long reclaim_pages(struct mm_struct *mm, struct list_head *fo=
+lio_list)
+>
+> You would also need to change Damon usage of reclaim_pages() here:
+> https://elixir.bootlin.com/linux/v6.4-rc1/source/mm/damon/paddr.c#L253
+ok, thanks for reminding
+>
+> >  {
+> >         int nid;
+> >         unsigned int nr_reclaimed =3D 0;
+> >         LIST_HEAD(node_folio_list);
+> >         unsigned int noreclaim_flag;
+> > +       struct lruvec *lruvec;
+> > +       struct mem_cgroup *memcg =3D get_mem_cgroup_from_mm(mm);
+> >
+> >         if (list_empty(folio_list))
+> >                 return nr_reclaimed;
+> > @@ -2764,10 +2766,14 @@ unsigned long reclaim_pages(struct list_head *f=
+olio_list)
+> >                 }
+> >
+> >                 nr_reclaimed +=3D reclaim_folio_list(&node_folio_list, =
+NODE_DATA(nid));
+> > +               lruvec =3D &memcg->nodeinfo[nid]->lruvec;
+> > +               workingset_age_nonresident(lruvec, -nr_reclaimed);
+> >                 nid =3D folio_nid(lru_to_folio(folio_list));
+> >         } while (!list_empty(folio_list));
+> >
+> >         nr_reclaimed +=3D reclaim_folio_list(&node_folio_list, NODE_DAT=
+A(nid));
+> > +       lruvec =3D &memcg->nodeinfo[nid]->lruvec;
+> > +       workingset_age_nonresident(lruvec, -nr_reclaimed);
+> >
+> >         memalloc_noreclaim_restore(noreclaim_flag);
+> >
+> > --
+> > 1.9.1
+> >
