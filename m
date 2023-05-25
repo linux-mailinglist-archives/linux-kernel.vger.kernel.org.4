@@ -2,180 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263DA71133F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C3E711345
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbjEYSLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
+        id S238954AbjEYSLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbjEYSLH (ORCPT
+        with ESMTP id S231599AbjEYSLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:11:07 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202AC125;
-        Thu, 25 May 2023 11:11:03 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PFBTQ4021226;
-        Thu, 25 May 2023 18:10:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=k/r0fgBjSAJae8JY6gVMJ84uFagaJuMzHr7EblkGMp4=;
- b=jD6v+OtLZcXOW9wbp+1alveyseHuTlfVrg10JQqSVAw5fJAmu5L3kRJMzKOmH9q26mzT
- fm/6b7USpD//OWLCmT7zyfc6bvE7Dm8ZbNLAubpuFHPFj8vOUFDU0eSSyDslsittK9th
- NotVnmyG/7z/kVsNCHOTBGarSihElmLz2JozbmbHgicL7n0vL/oXMvMzoSZbmfpCYG+R
- tkHXlqCg/fWAtcbKUJfmrMfCu18ZpKxi1Efs4yys3Ux1cwrO5hhh+YwRG34q5wR5xNsx
- RDIrfvJzZWu6dhs/vUN/5NbFzB7zHTqk67RM8/N6V9NrvW3uBhQSnjFLN7ZQkTnYQIAb og== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt8tarn2w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 18:10:30 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PIARC1012425
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 18:10:27 GMT
-Received: from [10.110.20.135] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
- 2023 11:10:25 -0700
-Message-ID: <208f05b3-ed92-5b22-6200-8bb28d62fd77@quicinc.com>
-Date:   Thu, 25 May 2023 11:10:24 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
-Content-Language: en-US
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Leonard Lausen <leonard@lausen.nl>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Bjorn Andersson" <andersson@kernel.org>
-CC:     <freedreno@lists.freedesktop.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        <regressions@lists.linux.dev>, David Airlie <airlied@gmail.com>,
-        "Nikita Travkin" <nikita@trvn.ru>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>, <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Johan Hovold <johan+linaro@kernel.org>
-References: <e547edf4-1b48-5d12-1600-45f78e7cab49@quicinc.com>
- <1345a125-f745-4fe3-0f5e-bfe84225958d@quicinc.com>
- <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
- <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
- <20230508021536.txtamifw2vkfncnx@ripper>
- <3802269cd54ce105ef6dece03b1b9af575b4fa06@lausen.nl>
- <ad351c02-1c29-3601-53e8-f8cdeca2ac63@linaro.org>
- <49d175ec16e3f65a18265063e51092ee8d0d79c1@lausen.nl>
- <f2d1bb37-ea83-4d5d-6ef5-ae84c26d6ac1@quicinc.com>
- <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
- <7deff127-4c6d-1f59-33a8-f44eea86bacd@quicinc.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <7deff127-4c6d-1f59-33a8-f44eea86bacd@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: dWDv8Ky6LVDFNGnQw98blBLLg0kw7kTl
-X-Proofpoint-ORIG-GUID: dWDv8Ky6LVDFNGnQw98blBLLg0kw7kTl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_10,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- adultscore=0 mlxscore=0 spamscore=0 phishscore=0 suspectscore=0
- bulkscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305250151
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 14:11:32 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B813E42
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:11:24 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-5341081a962so1899496a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:11:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685038283; x=1687630283;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=24LANnmej8B3PcoImBJ8uEUDYvKnZqxjGN/SizttJ88=;
+        b=tfbNBx83T6bPZDxFw2ZWGuTGQOsaah7q9ig8ugF86C5fhG52SQ/fOUUWwUl4r+W7Jq
+         iKCuG4jyFuJ4zEbeIWoQ5eTXgHX4pe+AHekLx2MiZIGuAl5TACh0y2SJi5StGgDeOhva
+         zJsSCsRi/AWap5Z+nFg7hf7oNOOgjMr+K0fTQqEN2MBGQ3O0ooQ2HBP9c6FMiIvOIc/6
+         yHdrovfpytnGEv5gYTr4XVrf4OE7USNO7lH2b9ctcXJCEJ9YqcMFPR0ysoJIi2gO0Gp/
+         xa0gz0fEanoleg1GN1aZCzkIA38WMLOhMikwyxym85m2e4pSxnOXOSgUme05YV+teuJG
+         rdWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685038283; x=1687630283;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=24LANnmej8B3PcoImBJ8uEUDYvKnZqxjGN/SizttJ88=;
+        b=k+jMRQ78NtPt88dScxgLunUp5DHWNtBarKIZIP46suzrqJDbrDwnmSJE/WLliJRCPR
+         OKO398V8lWpslzL2ZZK+qXEbYToYx5DvRmikKaUliTGh0a1X8jwEakQA8Yg83afkermi
+         VrsLimOokAm+69U3JhcTlux3FOkET0dmoNtO/Jx46Mikj+3EGkiA33whSWXFAPtaq4pu
+         bBCulj4ZRTExWj7rXcL+7nRjdDX/4EjiCIy/XtwZx/YehwNkQyQ6eeOPYl2XBVIVmqu9
+         KSvUjyH10ihj3UEK2WQ5wH3opkU24P8WWXQQtLG4cYiPpmgoqqdUccTPfjnvVeBfrwOD
+         YxfA==
+X-Gm-Message-State: AC+VfDwM+J4BWyY7r1MdKl6Tcgzx2b2yf1o37Up/XzQT98QCwLY9I2Hl
+        pxssXVjPdMJzjVkbXRNg/VS0g97OU5Q=
+X-Google-Smtp-Source: ACHHUZ5bIKgjRyFxtN7gSChcpUakbsaH1V3Ik5uR+3HRpu33XfaUepEJ5Tou44ROLmaQZn2Z1cbN7hH+k/M=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:6792:0:b0:530:3aaa:81b5 with SMTP id
+ e18-20020a656792000000b005303aaa81b5mr5048751pgr.8.1685038283578; Thu, 25 May
+ 2023 11:11:23 -0700 (PDT)
+Date:   Thu, 25 May 2023 11:11:21 -0700
+In-Reply-To: <20230420104622.12504-6-ljrcore@126.com>
+Mime-Version: 1.0
+References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-6-ljrcore@126.com>
+Message-ID: <ZG+kyWjyhr7cg/xb@google.com>
+Subject: Re: [PATCH v2 5/7] KVM: selftests: Check if pmu_event_filter meets
+ expectations on fixed ctrs
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/25/2023 10:57 AM, Kuogee Hsieh wrote:
+On Thu, Apr 20, 2023, Jinrong Liang wrote:
+> From: Jinrong Liang <cloudliang@tencent.com>
 > 
-> On 5/24/2023 5:58 AM, Leonard Lausen wrote:
->>>>>>>> [  275.025497] [drm:dpu_encoder_phys_vid_wait_for_commit_done:488]
->>>>>>>> [dpu error]vblank timeout
->>>>>>>> [  275.025514] [drm:dpu_kms_wait_for_commit_done:510] [dpu 
->>>>>>>> error]wait
->>>>>>>> for commit done returned -110
->>>>>>>> [  275.064141] [drm:dpu_encoder_frame_done_timeout:2382] [dpu
->>>>>>>> error]enc33 frame done timeout
->>>>>> This is a different crash but the root-cause of both the issues is 
->>>>>> the
->>>>>> bridge hpd_enable/disable series.
->>>>>>
->>>>>> https://patchwork.freedesktop.org/patch/514414/
->>>> Yes, the new patch to fix this issue is here
->>>>
->>>> https://patchwork.freedesktop.org/patch/538601/?series=118148&rev=3
->>>>
->>>> Apologies if you were not CCed on this, if a next version is CCed,
->>>> will ask kuogee to cc you.
->>>>
->>>> Meanwhile, will be great if you can verify if it works for you and
->>>> provide Tested-by tags.
->>> Hi Leonard,
->>>
->>> I had  cc you with v5 patches.
->>>
->>> Would you please verify it.
->> Hi Kuogee,
->>
->> thank you. Verified the v6 patch fixes the regression when ported to
->> 6.3.3. One non-fatal issue remains: Suspending and resuming the system
->> while USB-C DP monitor is connected triggers an error, though the system
->> recovers within a second without the need to unplug the cable.
->>
->> [drm:drm_mode_config_helper_resume] *ERROR* Failed to resume (-107)
->>
->>
->> dmesg snippet related to the suspend below
->>
->>
->> [  197.845110] usb 2-1.4.4: reset SuperSpeed USB device number 12 
->> using xhci-hcd
->> [  198.235191] [drm:drm_mode_config_helper_resume] *ERROR* Failed to 
->> resume (-107)
+> From: Jinrong Liang <cloudliang@tencent.com>
 > 
-> Hi Leonard,
+> Add tests to cover that pmu_event_filter works as expected when
+> it's applied to fixed performance counters, even if there is none
+> fixed counter exists (e.g. Intel guest pmu version=1 or AMD guest).
 > 
-> I did not see this problem at my setup (Kodiak) during suspend/resume.
+> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+> ---
+>  .../kvm/x86_64/pmu_event_filter_test.c        | 109 ++++++++++++++++++
+>  1 file changed, 109 insertions(+)
 > 
-> Will investigate more on Trogdor device.
-> 
-> Thanks,
-> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> index a3d5c30ce914..0f54c53d7fff 100644
+> --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> @@ -31,6 +31,7 @@
+>  #define PMU_EVENT_FILTER_INVALID_ACTION		(KVM_PMU_EVENT_DENY + 1)
+>  #define PMU_EVENT_FILTER_INVALID_FLAGS			(KVM_PMU_EVENT_FLAG_MASKED_EVENTS + 1)
+>  #define PMU_EVENT_FILTER_INVALID_NEVENTS		(MAX_FILTER_EVENTS + 1)
+> +#define INTEL_PMC_IDX_FIXED 32
+>  
+>  /*
+>   * This is how the event selector and unit mask are stored in an AMD
+> @@ -817,6 +818,113 @@ static void test_filter_ioctl(struct kvm_vcpu *vcpu)
+>  	}
+>  }
+>  
+> +static void intel_guest_run_fixed_counters(uint8_t fixed_ctr_idx)
+> +{
+> +	for (;;) {
+> +		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0);
+> +		wrmsr(MSR_CORE_PERF_FIXED_CTR0 + fixed_ctr_idx, 0);
+> +
+> +		/* Only OS_EN bit is enabled for fixed counter[idx]. */
+> +		wrmsr(MSR_CORE_PERF_FIXED_CTR_CTRL, BIT_ULL(4 * fixed_ctr_idx));
+> +		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL,
+> +		      BIT_ULL(INTEL_PMC_IDX_FIXED + fixed_ctr_idx));
+> +		__asm__ __volatile__("loop ." : "+c"((int){NUM_BRANCHES}));
+> +		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0);
+> +
+> +		GUEST_SYNC(rdmsr(MSR_CORE_PERF_FIXED_CTR0 + fixed_ctr_idx));
+> +	}
+> +}
+> +
+> +static struct kvm_vcpu *new_vcpu(void *guest_code)
+> +{
+> +	struct kvm_vm *vm;
+> +	struct kvm_vcpu *vcpu;
+> +
+> +	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+> +	vm_init_descriptor_tables(vm);
+> +	vcpu_init_descriptor_tables(vcpu);
 
-Hi Leonard
+Unnecessary copy+paste, this test doesn't setup a #GP handler.
 
-Feel free to open a bug for this and assign to me, we can check this and 
-ask more info if needed on that bug.
+> +
+> +	return vcpu;
+> +}
+> +
+> +static void free_vcpu(struct kvm_vcpu *vcpu)
+> +{
+> +	kvm_vm_free(vcpu->vm);
+> +}
+> +
+> +static uint64_t test_fixed_ctr_without_filter(struct kvm_vcpu *vcpu)
+> +{
+> +	return run_vcpu_to_sync(vcpu);
+> +}
 
-Thanks
+Please don't add a wrappers that are single line passthroughs.
 
-Abhinav
+> +static const uint32_t actions[] = {
+> +	KVM_PMU_EVENT_ALLOW,
+> +	KVM_PMU_EVENT_DENY,
+> +};
 
+(a) don't define global variables with super common names (this test sets a bad
+precedent).  (b) this array is used in *one* function, i.e. it can be a local
+variable.  (c) using an array doesn't save you code and just obfuscates what's
+happening.
+
+> +static uint64_t test_fixed_ctr_with_filter(struct kvm_vcpu *vcpu,
+
+Don't abbreviate "counter", there's really no need and "ctr" versus "ctrl" is
+already confusing enough.
+
+> +					   uint32_t action,
+> +					   uint32_t bitmap)
+> +{
+> +	struct kvm_pmu_event_filter *f;
+> +	uint64_t r;
+> +
+> +	f = create_pmu_event_filter(0, 0, action, 0, bitmap);
+> +	r = test_with_filter(vcpu, f);
+> +	free(f);
+> +	return r;
+> +}
+> +
+> +static bool fixed_ctr_is_allowed(uint8_t idx, uint32_t action, uint32_t bitmap)
+> +{
+> +	return (action == KVM_PMU_EVENT_ALLOW && (bitmap & BIT_ULL(idx))) ||
+> +		(action == KVM_PMU_EVENT_DENY && !(bitmap & BIT_ULL(idx)));
+
+This helper shouldn't exist.  It's largely a symptom of using an array.
+> +}
+> +
+> +static void test_fixed_ctr_action_and_bitmap(struct kvm_vcpu *vcpu,
+> +					     uint8_t fixed_ctr_idx,
+> +					     uint8_t max_fixed_num)
+> +{
+> +	uint8_t i;
+> +	uint32_t bitmap;
+> +	uint64_t count;
+> +	bool expected;
+> +
+> +	/*
+> +	 * Check the fixed performance counter can count normally works when
+> +	 * KVM userspace doesn't set any pmu filter.
+> +	 */
+> +	TEST_ASSERT(max_fixed_num && test_fixed_ctr_without_filter(vcpu),
+> +		    "Fixed counter does not exist or does not work as expected.");
+> +
+> +	for (i = 0; i < ARRAY_SIZE(actions); i++) {
+> +		for (bitmap = 0; bitmap < BIT_ULL(max_fixed_num); bitmap++) {
+
+You're comparing a 32-bit value against a 64-bit value.
+
+> +			expected = fixed_ctr_is_allowed(fixed_ctr_idx, actions[i], bitmap);
+> +			count = test_fixed_ctr_with_filter(vcpu, actions[i], bitmap);
+> +
+> +			TEST_ASSERT(expected == !!count,
+> +				    "Fixed event filter does not work as expected.");
+> +		}
+> +	}
+
+static uint64_t test_with_fixed_counter_filter(struct kvm_vcpu *vcpu,
+					       uint32_t action, uint32_t bitmap)
+{
+	...
+
+}
+
+static void __test_fixed_counter_bitmap(...)
+{
+	uint32_t bitmap;
+
+	TEST_ASSERT(nr_fixed_counters < sizeof(bitmap));
+
+	for (i = 0; i < BIT(nr_fixed_counters); i++) {
+		count = test_with_fixed_counter_filter(vcpu, KVM_PMU_EVENT_ALLOW,
+						       bitmap);
+		TEST_ASSERT(!!count == !!(bitmap & BIT(idx)));
+
+		count = test_with_fixed_counter_filter(vcpu, KVM_PMU_EVENT_DENY,
+						       bitmap);
+		TEST_ASSERT(!!count == !(bitmap & BIT(idx)));
+
+	}
+}
+
+> +}
+> +
+> +static void test_fixed_counter_bitmap(void)
+> +{
+> +	struct kvm_vcpu *vcpu;
+> +	uint8_t idx, max_fixed_num = get_kvm_supported_fixed_num();
+> +
+> +	/*
+> +	 * Check that pmu_event_filter works as expected when it's applied to
+> +	 * fixed performance counters.
+> +	 */
+> +	for (idx = 0; idx < max_fixed_num; idx++) {
+> +		vcpu = new_vcpu(intel_guest_run_fixed_counters);
+> +		vcpu_args_set(vcpu, 1, idx);
+> +		test_fixed_ctr_action_and_bitmap(vcpu, idx, max_fixed_num);
+> +		free_vcpu(vcpu);
+> +	}
+> +}
+> +
+>  int main(int argc, char *argv[])
+>  {
+>  	void (*guest_code)(void);
+> @@ -860,6 +968,7 @@ int main(int argc, char *argv[])
+>  	kvm_vm_free(vm);
+>  
+>  	test_pmu_config_disable(guest_code);
+> +	test_fixed_counter_bitmap();
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.31.1
 > 
->> [  198.528638] OOM killer enabled.
->> [  198.531866] Restarting tasks ...
->> [  198.531994] usb 1-1.4.4.1: USB disconnect, device number 27
->> [  198.532223] usb 1-1.4.3: USB disconnect, device number 23
->> [  198.532509] usb 1-1.4.2.1: USB disconnect, device number 29
->> [  198.534805] r8152-cfgselector 2-1.4.4.2: USB disconnect, device 
->> number 13
->> [  198.535444] done.
->> [  198.535536] usb 1-1.1: USB disconnect, device number 15
->> [  198.567811] random: crng reseeded on system resumption
->> [  198.583431] PM: suspend exit
