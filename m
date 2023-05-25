@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5996C7109E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6E77109E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240844AbjEYKR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S240933AbjEYKRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240917AbjEYKQj (ORCPT
+        with ESMTP id S238966AbjEYKRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:16:39 -0400
+        Thu, 25 May 2023 06:17:01 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AA61A1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800BF10B
         for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:16:33 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9BF0C5C0185;
-        Thu, 25 May 2023 06:16:31 -0400 (EDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id C76315C005E;
+        Thu, 25 May 2023 06:16:32 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 25 May 2023 06:16:31 -0400
+  by compute6.internal (MEProxy); Thu, 25 May 2023 06:16:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1685009791; x=
-        1685096191; bh=JW0p8/eDaYU/cW3GeziZHaBybYl27FrC9hzeWZqxqbk=; b=M
-        38HuQLBfosmKb8msy8QXeWAgz9AL5eSQIhTGBE0JIvDunZ5bcc1Db3Qc5nX8Lzfd
-        vNBZ2wnjUX3p78KO/oSUksA0Xgz5OE6jpFZcRJoW1IsFoSAfntWB8RHUvyuXHRLq
-        pdbQ6Jxig5+Bz6yHo2fD3S8Ty09mNRVtPCdKbCibhIGemUTHL8+HtLCWRiemotp0
-        er5DPfFwpdy5dGV0jJs+BUtF+y3qFnojUmQbIqFMPWQXpdRk1KNm6vWjiAcJ4gQW
-        FaUBSotqY+kwXZnWYhbzds+3REGi7ohTcpypi1E3mqMnEmIqv1tl4hLAHRfPgsCh
-        GD81EAOx9RpKe2y396M7A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
+         h=cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685009791; x=
-        1685096191; bh=JW0p8/eDaYU/cW3GeziZHaBybYl27FrC9hzeWZqxqbk=; b=r
-        wlAKzTuDanT/5QAAVyo+XdEGMUNsmC0L7csDWOLf9mZYcoL/G1bFzQX+Hzgn3hrS
-        S6gLkVvVxDgi0i2AXOZFA19oLsG+GLJYeshqmMBetHyITTXQxI1Oe1SFtMu9xktx
-        qCcF6iWKwnNweBlGKB0ZFhInqRk/4bTUPh5lES66HIkqgSN+urIDJRJQjICESCT/
-        TEmxskSLEVCC2CRTVTy+gVvFPN7Su7nYfommglqFY3ARPyu5YK7gidRkyVNJRLV2
-        ycNgiJ9+rvcpDFDelGX+oVq8IB6fPNPn16LA4oO6KJ920TG9IJj/Bh0wK9/DD5/t
-        VSrNMR72oK1Wmj1XBWftg==
-X-ME-Sender: <xms:fzVvZJg3uO8fh4FLIJGZ9TaZSG0r6a1YYi-3eDwnkpnvw6B3pf8EYw>
-    <xme:fzVvZOBXeOuGAgxWayDtizDa1mbZExhu4MH8QLz3cU-hXxjs0ZQpg78XmZmfwC09U
-    nrluDNaGeyFDO9Y_-c>
-X-ME-Received: <xmr:fzVvZJECEZsSgQVkr1zdYnZU2i1GA1Rs6It9kcg7pzAjSpmF-My_DMJgOoorbJ-xcZv5Yg5e7h-d1aPsGD8FRU2L9h_aylenyNARpM9PYcXSog>
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1685009792; x=
+        1685096192; bh=Scx2YERYya4XNfuQABUzrTu3FrRelGdDymkzNIze9SM=; b=t
+        URz73QyTJeNYVfkWY4u8oGDpXhfvPRD4wmi9qORH7g4LETGWvIGVmPu8lfLUMIF9
+        CXE/laTx96Xb0kHoUdWyQIktPXBxl5mn76XNr83bAdK7kaaGcZw7JvZTaoZrfS1V
+        52mZh/Ckm5FGNHpUc3c+zK+4MWmtTLdVU1OvqOQlZekBI6acw5YioKUGt6souALf
+        qS0AwQ/KKS7yE0Uhdlmqk9qV1Z2k67pH485EllcZfZqI6HU8r90xlAY0YEsBPMAR
+        DNgLQGOhd3XTkq6OlOrlnQZRyHztzkjvJllC3kRxN44KwRZylP9lBYFho5RndlId
+        GsyTOvk0k5UpP1JJ5TSvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:date:feedback-id:feedback-id:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; t=1685009792; x=1685096192; bh=S
+        cx2YERYya4XNfuQABUzrTu3FrRelGdDymkzNIze9SM=; b=RIlv5kRuoe2I7bagc
+        HKNwjq7jiM+akJ66uEsfL1gqofg2EGh213DjhuXyWzx5nEQKwGbhageywJOWcnwI
+        IFwOajenEdad7HrteyCmeJksvbL4lMZQOyZSHTxoxI/P1Q2e15WC9QQiT2FHuioc
+        ZtkC74kzNlagxJpNKJDLBWifbQ2QeVu+HuaiS3mpDr8YJCkvaZt5KZ0+opY8AJ5S
+        hNOgfjuDFwVtpfWOES7srSeHh5boR6fYbVXL0RdWyn0hrE4rH6CXaCoeiTvgApW1
+        ZPy1frlDtIR02P68s9bBbqolfD6PjimAUzB6XGTTj1+YPHBF+QK+J4n41FzQ54My
+        dXHVg==
+X-ME-Sender: <xms:gDVvZCh_3NqZ013fxEGBR_d63gbcS3KSWg-oP7pgemUDRgZEhBmi4w>
+    <xme:gDVvZDAw9noM_q1rnbPTvcldWIBRUR6Uq1KpsSIzAg3r-NMY6c-dz-u4c0LYxz6ok
+    lslW4Fo7opFGaobIEI>
+X-ME-Received: <xmr:gDVvZKH8vY2VBSh59QM7HSUFeOOZo_lQAcijxbEwarNu7K3jYHGdl4lylhUahWE_oDb1rz6LsOvyDcS5F5Csd9zsaNwRUtw-eiAoMJwY_bwQcw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejjedgvdehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghk
-    rghshhhisehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeduuddttd
-    euueduledvleethfetleeuledvvddvjeeiueekkeektdegudekffdvveenucffohhmrghi
-    nhepvdejrdhithdpthgvshhtrghnhihthhhinhhgrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgr
-    mhhotggthhhirdhjph
-X-ME-Proxy: <xmx:fzVvZOTJG69B7Tiac3-vk04TxssSdrcK441xMlkYMVsGIzn5bkhz6w>
-    <xmx:fzVvZGySq5ivACiwHT0KFSxGAf26H_UqL-xHTfV8GrG8E3XeKpy0xQ>
-    <xmx:fzVvZE78EEtK7gvXdDxMYXBRDUUIvdRa2Xv2X6ejo9brg6LgYv-4wQ>
-    <xmx:fzVvZLqtRLp5fdF4h3NIw2qq8uE_x0brURdkHZAkNXvxIqYH2ecwlQ>
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgjfhgggfestdekre
+    dtredttdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgr
+    shhhihesshgrkhgrmhhotggthhhirdhjpheqnecuggftrfgrthhtvghrnhepveefffefke
+    etgfevgeefleehfffhueejtdejveethfekveektdejjedvtdejhfejnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepohdqthgrkhgrshhhihessh
+    grkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:gDVvZLSiLNLFdTSMIWQHATlMWLRFQXBMTF6VFvPbR11NaRZ0qgsdcg>
+    <xmx:gDVvZPzCYungOf8hCxhdOTHM8yGVHaljGiLhvKD1mEabgFF-7LFANQ>
+    <xmx:gDVvZJ4JcuOv-Q51mMTMevkFcZuiSbXlhuWS5jPepT29CMbd03A0ng>
+    <xmx:gDVvZNas9--L-cd5E1z7b-Wz9BQGflMsOiG1nHZ2f-99PxS49kPTuA>
 Feedback-ID: ie8e14432:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 25 May 2023 06:16:30 -0400 (EDT)
+ 25 May 2023 06:16:31 -0400 (EDT)
 From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
 To:     linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Cc:     kunit-dev@googlegroups.com
-Subject: [PATCH v2 01/12] firewire: add KUnit test to check layout of UAPI structures
-Date:   Thu, 25 May 2023 19:16:14 +0900
-Message-Id: <20230525101625.888906-2-o-takashi@sakamocchi.jp>
+Subject: [PATCH v2 02/12] firewire: cdev: add new version of ABI to notify time stamp at request/response subaction of transaction
+Date:   Thu, 25 May 2023 19:16:15 +0900
+Message-Id: <20230525101625.888906-3-o-takashi@sakamocchi.jp>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525101625.888906-1-o-takashi@sakamocchi.jp>
 References: <20230525101625.888906-1-o-takashi@sakamocchi.jp>
@@ -86,120 +84,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In future commits, some new structure will be added to express new type
-of event. They are exposed to user space as the part of UAPI. It is likely
-to get trouble in ioctl compatibility layer for 32 bit binaries in 64 bit
-host machine since the layout of structure could differ depending on
-System V ABI for these architectures. Actually the subsystem already got
-such trouble at v2.6.27. It is preferable to decide the layout of
-structure carefully so that the layer is free from such trouble.
+This commit adds new version of ABI for future new events with time stamp
+for request/response subaction of asynchronous transaction to user
+space.
 
-This commit utilizes KUnit framework to check the layout of structure for
-the purpose. A test is added for the existent issue.
-
-Cc: kunit-dev@googlegroups.com
 Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 ---
- drivers/firewire/.kunitconfig |  4 ++++
- drivers/firewire/Kconfig      | 16 +++++++++++++++
- drivers/firewire/Makefile     |  3 +++
- drivers/firewire/uapi-test.c  | 38 +++++++++++++++++++++++++++++++++++
- 4 files changed, 61 insertions(+)
- create mode 100644 drivers/firewire/.kunitconfig
- create mode 100644 drivers/firewire/uapi-test.c
+ drivers/firewire/core-cdev.c       | 1 +
+ include/uapi/linux/firewire-cdev.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/firewire/.kunitconfig b/drivers/firewire/.kunitconfig
-new file mode 100644
-index 000000000000..1599e069395f
---- /dev/null
-+++ b/drivers/firewire/.kunitconfig
-@@ -0,0 +1,4 @@
-+CONFIG_KUNIT=y
-+CONFIG_PCI=y
-+CONFIG_FIREWIRE=y
-+CONFIG_FIREWIRE_KUNIT_UAPI_TEST=y
-diff --git a/drivers/firewire/Kconfig b/drivers/firewire/Kconfig
-index ec00a6f70da8..0a6596b027db 100644
---- a/drivers/firewire/Kconfig
-+++ b/drivers/firewire/Kconfig
-@@ -18,6 +18,22 @@ config FIREWIRE
- 	  To compile this driver as a module, say M here: the module will be
- 	  called firewire-core.
+diff --git a/drivers/firewire/core-cdev.c b/drivers/firewire/core-cdev.c
+index 2c16ee8fd842..88c8b5fac5e5 100644
+--- a/drivers/firewire/core-cdev.c
++++ b/drivers/firewire/core-cdev.c
+@@ -43,6 +43,7 @@
+ #define FW_CDEV_VERSION_EVENT_REQUEST2		4
+ #define FW_CDEV_VERSION_ALLOCATE_REGION_END	4
+ #define FW_CDEV_VERSION_AUTO_FLUSH_ISO_OVERFLOW	5
++#define FW_CDEV_VERSION_EVENT_ASYNC_TSTAMP	6
  
-+config FIREWIRE_KUNIT_UAPI_TEST
-+	tristate "KUnit tests for layout of structure in UAPI" if !KUNIT_ALL_TESTS
-+	depends on FIREWIRE && KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the KUnit tests whether structures exposed to user
-+	  space have expected layout.
-+
-+	  KUnit tests run during boot and output the results to the debug
-+	  log in TAP format (https://testanything.org/). Only useful for
-+	  kernel devs running KUnit test harness and are not for inclusion
-+	  into a production build.
-+
-+	  For more information on KUnit and unit tests in general, refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
- config FIREWIRE_OHCI
- 	tristate "OHCI-1394 controllers"
- 	depends on PCI && FIREWIRE && MMU
-diff --git a/drivers/firewire/Makefile b/drivers/firewire/Makefile
-index e58c8c794778..b24b2879ac34 100644
---- a/drivers/firewire/Makefile
-+++ b/drivers/firewire/Makefile
-@@ -15,3 +15,6 @@ obj-$(CONFIG_FIREWIRE_SBP2) += firewire-sbp2.o
- obj-$(CONFIG_FIREWIRE_NET)  += firewire-net.o
- obj-$(CONFIG_FIREWIRE_NOSY) += nosy.o
- obj-$(CONFIG_PROVIDE_OHCI1394_DMA_INIT) += init_ohci1394_dma.o
-+
-+firewire-uapi-test-objs += uapi-test.o
-+obj-$(CONFIG_FIREWIRE_KUNIT_UAPI_TEST) += firewire-uapi-test.o
-diff --git a/drivers/firewire/uapi-test.c b/drivers/firewire/uapi-test.c
-new file mode 100644
-index 000000000000..4dc633b91336
---- /dev/null
-+++ b/drivers/firewire/uapi-test.c
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// uapi_test.c - An application of Kunit to check layout of structures exposed to user space for
-+//		 FireWire subsystem.
-+//
-+// Copyright (c) 2023 Takashi Sakamoto
-+
-+#include <kunit/test.h>
-+#include <linux/firewire-cdev.h>
-+
-+// Known issue added at v2.6.27 kernel.
-+static void structure_layout_event_response(struct kunit *test)
-+{
-+#if defined(CONFIG_X86_32)
-+	// 4 bytes alignment for aggregate type including 8 bytes storage types.
-+	KUNIT_EXPECT_EQ(test, 20, sizeof(struct fw_cdev_event_response));
-+#else
-+	// 8 bytes alignment for aggregate type including 8 bytes storage types.
-+	KUNIT_EXPECT_EQ(test, 24, sizeof(struct fw_cdev_event_response));
-+#endif
-+
-+	KUNIT_EXPECT_EQ(test, 0, offsetof(struct fw_cdev_event_response, closure));
-+	KUNIT_EXPECT_EQ(test, 8, offsetof(struct fw_cdev_event_response, type));
-+	KUNIT_EXPECT_EQ(test, 12, offsetof(struct fw_cdev_event_response, rcode));
-+	KUNIT_EXPECT_EQ(test, 16, offsetof(struct fw_cdev_event_response, length));
-+	KUNIT_EXPECT_EQ(test, 20, offsetof(struct fw_cdev_event_response, data));
-+}
-+
-+static struct kunit_case structure_layout_test_cases[] = {
-+	KUNIT_CASE(structure_layout_event_response),
-+	{}
-+};
-+
-+static struct kunit_suite structure_layout_test_suite = {
-+	.name = "firewire-uapi-structure-layout",
-+	.test_cases = structure_layout_test_cases,
-+};
-+kunit_test_suite(structure_layout_test_suite);
+ struct client {
+ 	u32 version;
+diff --git a/include/uapi/linux/firewire-cdev.h b/include/uapi/linux/firewire-cdev.h
+index 92be3ea3c6e0..e3d463b2c288 100644
+--- a/include/uapi/linux/firewire-cdev.h
++++ b/include/uapi/linux/firewire-cdev.h
+@@ -457,6 +457,7 @@ union fw_cdev_event {
+  *  5  (3.4)     - send %FW_CDEV_EVENT_ISO_INTERRUPT events when needed to
+  *                 avoid dropping data
+  *               - added %FW_CDEV_IOC_FLUSH_ISO
++ *  6  (6.4)     - added some event for subactions of asynchronous transaction with time stamp
+  */
+ 
+ /**
 -- 
 2.39.2
 
