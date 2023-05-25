@@ -2,166 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9184A710E30
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DB9710E31
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241500AbjEYOVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S241610AbjEYOVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjEYOVC (ORCPT
+        with ESMTP id S241607AbjEYOVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:21:02 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B096189;
-        Thu, 25 May 2023 07:21:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=U8Ak11VIsc+VQhtMvrttpQiETgYMyOlybtRim6fMVi8=; b=NBQsDfTgYYZT0p9hVq/M7btlaw
-        FF3WYNlSo9swkBIqjIu0sUYi3sou4mxgUw9C7Iw+7Q1lrB8d8nhWaDiCn+aucm5HDK9LvwarpDmE0
-        1HiVUN26Q/Qgd399Y5XpfuFJ8DREht21ZUuoorPIjwXqGszB208WDMi8DOhgAqbKKWzHtJANr9Qp3
-        ALs4m7kyHdQ8iTjmDszLjZb5Gr6coOV66fpS8iX4T1aN0zjbg1Hw5MxnrrOv4xPigKqbAThn2WZRm
-        pjz7F/gT34P5LzQHsl5FdcpvrIddoNPh0xwZX9+geRDqBpZfIaNWDMU7P2htPXzhO+WV5JB40wRFV
-        6XXuOs2w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q2BpR-006Z1z-2k;
-        Thu, 25 May 2023 14:20:34 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E3FCC300322;
-        Thu, 25 May 2023 16:20:31 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C8AC3241ECA53; Thu, 25 May 2023 16:20:31 +0200 (CEST)
-Date:   Thu, 25 May 2023 16:20:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Ravi Bangoria <ravi.bangoria@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>, namhyung@kernel.org,
-        eranian@google.com, acme@kernel.org, mark.rutland@arm.com,
-        jolsa@kernel.org, irogers@google.com, bp@alien8.de,
-        kan.liang@linux.intel.com, adrian.hunter@intel.com,
-        maddy@linux.ibm.com, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com, maz@kernel.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v4 3/4] perf/core: Remove pmu linear searching code
-Message-ID: <20230525142031.GU83892@hirez.programming.kicks-ass.net>
-References: <20230504110003.2548-1-ravi.bangoria@amd.com>
- <20230504110003.2548-4-ravi.bangoria@amd.com>
- <20230524214133.GA2359762@dev-arch.thelio-3990X>
- <f02c78e2-34b9-4985-640a-279dae1004a9@amd.com>
- <ZG8KLbZSECiYaKFc@linux.dev>
+        Thu, 25 May 2023 10:21:08 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAD0191
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685024466; x=1716560466;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YCkWpWKLi5LA0hLoKYmV6Pn63lRC3AnzJmUk0eTfHn4=;
+  b=Kk8PXdNbevFZ7tPkt421fyb9Tt7zG/F3a4pw6lIjQQg4+ACO2NzwDv+I
+   blYp+tqFXrgEkkYtJu9+q/tBZ7qMuFWybnw9zGM/YdqvtWEQxUi/enkK5
+   9EH6Sm9BuuANi+WNSRwhxPf06wwVohELijFVM6RTPXdKfNe08ieZOV4MT
+   izx9eEBqitYaEX/7Pr++f9JZEaAXRnefwbO8STV+DkHwfQwZKX+UgIYmW
+   cMdk51TTN94pJZKVJnHlz4iDmKKpMDkyYPaptzDpgxrV7Kmf+M8Drjv8c
+   ZWO2D8r1yaxU2+DBzH7oooSvq5g/QLB8DLa/QvAzvr01KxpTh+GM3d4d4
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="asc'?scan'208";a="153919948"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 07:21:03 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 25 May 2023 07:20:59 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 25 May 2023 07:20:57 -0700
+Date:   Thu, 25 May 2023 15:20:35 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Anup Patel <anup@brainfault.org>
+CC:     Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alexandre Ghiti <alex@ghiti.fr>, <robh@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        <jeeheng.sia@starfivetech.com>, <linux-kernel@vger.kernel.org>,
+        <palmer@rivosinc.com>, <leyfoon.tan@starfivetech.com>,
+        <mason.huo@starfivetech.com>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Song Shuai <suagrfillet@gmail.com>,
+        <linux-riscv@lists.infradead.org>,
+        Andrew Jones <ajones@ventanamicro.com>
+Subject: Re: Bug report: kernel paniced when system hibernates
+Message-ID: <20230525-citric-waged-a2f78d27eb0c@wendy>
+References: <CAAhSdy3tKAk1xjinwnSWan0ivdDapcLvSb+hGNynPFZMUsoB9A@mail.gmail.com>
+ <fe8d716c-fb4f-1f3f-6c69-de1d8b9fb6af@ghiti.fr>
+ <CAK9=C2X1BjZCHfYM33pZQtavu7yRqxwsypWL5OWj79bJrnDMQg@mail.gmail.com>
+ <CAOnJCULpa-TJuG=TtCDOxOdUviZzWheLE-GMiU1r7GWaKn0nuQ@mail.gmail.com>
+ <20230525-guacamole-swimmer-68048a73baac@wendy>
+ <CAK9=C2WUyLxZwQO37cN-i+V+A3yxmEoaj=uE8yR8nseYTDW7oQ@mail.gmail.com>
+ <20230525-postnasal-monopoly-98adb96ffaa1@wendy>
+ <CAAhSdy06nQh4H1FP_K_-VF462mhj+F2M=4AV4QSCUGe5XVqX0g@mail.gmail.com>
+ <20230525-shrapnel-precut-26500fca4a48@wendy>
+ <CAAhSdy3SqeLdAfaojUki=ht21nr4ZUPMkW_t9M6ntQCt6Ds4Nw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="AIux2bwC0CEBr+0s"
 Content-Disposition: inline
-In-Reply-To: <ZG8KLbZSECiYaKFc@linux.dev>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAAhSdy3SqeLdAfaojUki=ht21nr4ZUPMkW_t9M6ntQCt6Ds4Nw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 07:11:41AM +0000, Oliver Upton wrote:
+--AIux2bwC0CEBr+0s
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The PMUv3 driver does pass a name, but it relies on getting back an
-> allocated pmu id as @type is -1 in the call to perf_pmu_register().
-> 
-> What actually broke is how KVM probes for a default core PMU to use for
-> a guest. kvm_pmu_probe_armpmu() creates a counter w/ PERF_TYPE_RAW and
-> reads the pmu from the returned perf_event. The linear search had the
-> effect of eventually stumbling on the correct core PMU and succeeding.
-> 
-> Perf folks: is this WAI for heterogenous systems?
+On Thu, May 25, 2023 at 07:29:46PM +0530, Anup Patel wrote:
+> On Thu, May 25, 2023 at 7:26=E2=80=AFPM Conor Dooley <conor.dooley@microc=
+hip.com> wrote:
+> >
+> > On Thu, May 25, 2023 at 07:13:11PM +0530, Anup Patel wrote:
+> > > On Thu, May 25, 2023 at 7:08=E2=80=AFPM Conor Dooley <conor.dooley@mi=
+crochip.com> wrote:
+> > > >
+> > > > On Thu, May 25, 2023 at 06:51:28PM +0530, Anup Patel wrote:
+> > > >
+> > > > > > We should only rely on this node name for known bad versions of=
+ opensbi
+> > > > > > IMO. Going forward, if something needs to be reserved for firmw=
+are, the
+> > > > > > firmware should make sure that it is reserved by using the prop=
+erty for
+> > > > > > that purpose :)
+> > > >
+> > > > > There is no issue with OpenSBI since it does the right thing by m=
+arking
+> > > > > memory as reserved in the DT. This real issue is with the kernel =
+handling
+> > > > > of reserved memory for hibernate.
+> > > >
+> > > > I don't think we are talking about the same thing here. I meant the
+> > > > no-map property which OpenSBI does not set.
+> > >
+> > > Yes, we are talking about the same thing. It's not just OpenSBI not
+> > > setting no-map property in reserved memory node because other
+> > > SBI implementations would be doing the same thing (i.e. not setting
+> > > no-map property)
+> >
+> > Other SBI implementations doing the same thing doesn't make it any more
+> > correct though, right?
+>=20
+> Like multiple folks suggested, we need DT binding for distinguishing
+> firmware reserved memory from other reserved memory.
 
-TBH, I'm not sure. hetero and virt don't mix very well AFAIK and I'm not
-sure what ARM64 does here.
+And I have agreed with multiple times!
 
-IIRC the only way is to hard affine things; that is, force vCPU of
-'type' to the pCPU mask of 'type' CPUs.
+> Until that
+> happens we should either mark hibernate support as experimental
+> or revert it.
 
-If you don't do that; or let userspace 'override' that, things go
-sideways *real* fast.
+That works for me. How about the below?
 
-Mark gonna have to look at this.
+-- >8 --
+=46rom 1d4381290a1600eff9b29b8ace6be73955d9726c Mon Sep 17 00:00:00 2001
+=46rom: Conor Dooley <conor.dooley@microchip.com>
+Date: Thu, 25 May 2023 15:09:08 +0100
+Subject: [PATCH] RISC-V: mark hibernation as broken
 
-> Either way, the whole KVM end of this scheme is a bit clunky, and I
-> believe it to be unneccessary at this point as we maintain a list of
-> core PMU instances that KVM is able to virtualize. We can just walk
-> that to find a default PMU to use.
-> 
-> Not seeing any issues on -next with the below diff. If this works for
-> folks I can actually wrap it up in a patch and send it out.
-> 
-> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-> index 45727d50d18d..cbc0b662b7f8 100644
-> --- a/arch/arm64/kvm/pmu-emul.c
-> +++ b/arch/arm64/kvm/pmu-emul.c
-> @@ -694,47 +694,26 @@ void kvm_host_pmu_init(struct arm_pmu *pmu)
->  
->  static struct arm_pmu *kvm_pmu_probe_armpmu(void)
->  {
-> -	struct perf_event_attr attr = { };
-> -	struct perf_event *event;
-> -	struct arm_pmu *pmu = NULL;
-> -
-> -	/*
-> -	 * Create a dummy event that only counts user cycles. As we'll never
-> -	 * leave this function with the event being live, it will never
-> -	 * count anything. But it allows us to probe some of the PMU
-> -	 * details. Yes, this is terrible.
-> -	 */
-> -	attr.type = PERF_TYPE_RAW;
-> -	attr.size = sizeof(attr);
-> -	attr.pinned = 1;
-> -	attr.disabled = 0;
-> -	attr.exclude_user = 0;
-> -	attr.exclude_kernel = 1;
-> -	attr.exclude_hv = 1;
-> -	attr.exclude_host = 1;
-> -	attr.config = ARMV8_PMUV3_PERFCTR_CPU_CYCLES;
-> -	attr.sample_period = GENMASK(63, 0);
-> +	struct arm_pmu *arm_pmu = NULL, *tmp;
-> +	struct arm_pmu_entry *entry;
-> +	int cpu;
->  
-> -	event = perf_event_create_kernel_counter(&attr, -1, current,
-> -						 kvm_pmu_perf_overflow, &attr);
-> +	mutex_lock(&arm_pmus_lock);
-> +	cpu = get_cpu();
->  
-> -	if (IS_ERR(event)) {
-> -		pr_err_once("kvm: pmu event creation failed %ld\n",
-> -			    PTR_ERR(event));
-> -		return NULL;
-> -	}
-> +	list_for_each_entry(entry, &arm_pmus, entry) {
-> +		tmp = entry->arm_pmu;
->  
-> -	if (event->pmu) {
-> -		pmu = to_arm_pmu(event->pmu);
-> -		if (pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_NI ||
-> -		    pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF)
-> -			pmu = NULL;
-> +		if (cpumask_test_cpu(cpu, &tmp->supported_cpus)) {
-> +			arm_pmu = tmp;
-> +			break;
-> +		}
->  	}
->  
-> -	perf_event_disable(event);
-> -	perf_event_release_kernel(event);
-> +	put_cpu();
-> +	mutex_unlock(&arm_pmus_lock);
->  
-> -	return pmu;
-> +	return arm_pmu;
->  }
+Hibernation support depends on firmware marking its reserved
+regions as not mappable by Linux. As things stand, the de-facto SBI
+implementation (OpenSBI) does not do this, and other implementations may
+not do so either, resulting in kernel panics during hibernation ([1],
+[2]).
+
+Disable support for hibernation until such time that an SBI
+implementation independent way to communicate what regions are reserved
+has been agreed upon.
+
+Reported-by: Song Shuai <suagrfillet@gmail.com>
+Link: https://lore.kernel.org/all/CAAYs2=3DgQvkhTeioMmqRDVGjdtNF_vhB+vm_1dH=
+JxPNi75YDQ_Q@mail.gmail.com/ [1]
+Reported-by: JeeHeng Sia <jeeheng.sia@starfivetech.com>
+Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/ITXwaKfA6z8
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ arch/riscv/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 13f058490608..b2495192f35a 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -801,7 +801,7 @@ menu "Power management options"
+ source "kernel/power/Kconfig"
+=20
+ config ARCH_HIBERNATION_POSSIBLE
+-	def_bool y
++	def_bool n
+=20
+ config ARCH_HIBERNATION_HEADER
+ 	def_bool HIBERNATION
+--=20
+2.39.2
+
+
+--AIux2bwC0CEBr+0s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG9usgAKCRB4tDGHoIJi
+0o+bAQC85DODqSEm+RKOlB9eGicWZIkp8ZTsFWp6dFDXuf2vnQEAro2D8OY5ZsL8
+p9xN+HrUuCPopNZZedQoTMeZzPSUkwQ=
+=Ks3R
+-----END PGP SIGNATURE-----
+
+--AIux2bwC0CEBr+0s--
