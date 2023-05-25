@@ -2,84 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518C3711190
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F5D711193
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239134AbjEYRBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        id S234557AbjEYRCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231990AbjEYRBv (ORCPT
+        with ESMTP id S231869AbjEYRCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:01:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266651A7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:01:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685034069;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2kW+rTE3/dBrTBKwDunnX8pfK/lEaBYR555nV9R9qVo=;
-        b=MTmxEDShwZ5zO/qNp7QiYm9Ol9LTT2Fgh260I4ZMBzGmnEwsJI0djoGJAc7dfv80ICCMJ/
-        Cys3Q8oM/q41NRuuQOv2+IlQtcxjPdzHeu3/efQ1F3KLW+1mA5HtEGMOeMoXcq9c46HN09
-        Y62jfn1/vBNfIuSEiuPU8tcM8vkSwOc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-624--3mXKAo5NJujWbM9vOOlyQ-1; Thu, 25 May 2023 13:01:04 -0400
-X-MC-Unique: -3mXKAo5NJujWbM9vOOlyQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C1E26801224;
-        Thu, 25 May 2023 17:01:02 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4BE582166B2E;
-        Thu, 25 May 2023 17:01:00 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wjaqHgd4u63XdZoTPs1YCJnDZ7-GQHKKdFrT32y2-__tw@mail.gmail.com>
-References: <CAHk-=wjaqHgd4u63XdZoTPs1YCJnDZ7-GQHKKdFrT32y2-__tw@mail.gmail.com> <ZGxfrOLZ4aN9/MvE@infradead.org> <20230522205744.2825689-1-dhowells@redhat.com> <3068545.1684872971@warthog.procyon.org.uk> <ZG2m0PGztI2BZEn9@infradead.org> <3215177.1684918030@warthog.procyon.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: Extending page pinning into fs/direct-io.c
+        Thu, 25 May 2023 13:02:19 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7859E19D;
+        Thu, 25 May 2023 10:02:16 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D850820FBE8A;
+        Thu, 25 May 2023 10:02:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D850820FBE8A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1685034136;
+        bh=EgVF48GGGbH4AEk2pm5ZOYU7xMFzxBxcy4M6c/oV564=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TnsOnRpar130IqJi2QdrNZKNDxz/h/NPnp3Xbcll123FLUnFFbzDxXHcuZ0U8yyRN
+         ydVMNpi5xm/vROxyBpF9rTm/zPHyfrspVxaH6mv8jmB43YB2yy6lTd+R2sbV9nLTwP
+         LUfLvAOxF8bPa4aJJtmhvgOQ46U7icELlBKIol2k=
+Date:   Thu, 25 May 2023 10:02:12 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org,
+        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kelulanainsley@gmail.com
+Subject: Re: [PATCH] tracing/user_events: Prevent same name but different
+ args event
+Message-ID: <20230525170212.GB82@W11-BEAU-MD.localdomain>
+References: <20230525012105.7936-1-sunliming@kylinos.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <88982.1685034059.1@warthog.procyon.org.uk>
-Date:   Thu, 25 May 2023 18:00:59 +0100
-Message-ID: <88983.1685034059@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230525012105.7936-1-sunliming@kylinos.cn>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Thu, May 25, 2023 at 09:21:05AM +0800, sunliming wrote:
+> User processes register name_args for events. If the same name but different
+> args event are registered. The trace outputs of second event are printed
+> as the first event. This is incorrect.
+> 
 
-> We do have cases that try to use the page coloring that we support.
+Good catch, we do this in dynamic_events, but not in the raw ABI case.
 
-What do we gain from it?  Presumably since nothing is supposed to write to
-that page, it can be shared in all the caches.
+> Return EADDRINUSE back to the user process if the same name but different args
+> event has being registered.
+> 
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> ---
+>  kernel/trace/trace_events_user.c              | 74 ++++++++++++++++---
+>  .../selftests/user_events/ftrace_test.c       |  6 ++
+>  2 files changed, 68 insertions(+), 12 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index b1ecd7677642..aacd22c1e9f8 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -1741,6 +1741,46 @@ static int user_event_trace_register(struct user_event *user)
+>  	return ret;
+>  }
+>  
+> +static int compare_ftrace_field(struct ftrace_event_field *field1,
+> +					struct ftrace_event_field *field2)
+> +{
+> +	if (field1->offset == field2->offset &&
+> +	    field1->size == field2->size &&
+> +	    field1->is_signed == field2->is_signed &&
+> +	    field1->filter_type == field2->filter_type &&
+> +	    !strcmp(field1->name, field2->name))
+> +		return 0;
+> +	else
+> +		return -1;
+> +}
+> +
+> +static int user_event_compare_fields(struct user_event *user1,
+> +						struct user_event *user2)
+> +{
+> +	struct ftrace_event_field *field1, *field2;
+> +
+> +	field1 = list_first_entry(&user1->fields,
+> +			struct ftrace_event_field, link);
+> +	field2 = list_first_entry(&user2->fields,
+> +			struct ftrace_event_field, link);
+> +
+> +	while (&field1->link != &user1->fields &&
+> +			&field2->link != &user2->fields) {
+> +
+> +		if (compare_ftrace_field(field1, field2))
+> +			break;
+> +
+> +		field1 = list_next_entry(field1, link);
+> +		field2 = list_next_entry(field2, link);
+> +	}
+> +
+> +	if (&field1->link == &user1->fields &&
+> +			&field2->link == &user2->fields)
+> +		return 0;
+> +	else
+> +		return -EADDRINUSE;
+> +}
+> +
 
-David
+We already have a way to compare the fields match via the dynamic_events
+interface. Please change to use user_fields_match() instead. This makes
+it so we only have one way to do this check, etc.
 
+>  /*
+>   * Parses the event name, arguments and flags then registers if successful.
+>   * The name buffer lifetime is owned by this method for success cases only.
+> @@ -1752,23 +1792,13 @@ static int user_event_parse(struct user_event_group *group, char *name,
+>  {
+>  	int ret;
+>  	u32 key;
+> -	struct user_event *user;
+> +	struct user_event *user, *tmp_user;
+>  
+>  	/* Prevent dyn_event from racing */
+>  	mutex_lock(&event_mutex);
+> -	user = find_user_event(group, name, &key);
+> +	tmp_user = find_user_event(group, name, &key);
+>  	mutex_unlock(&event_mutex);
+>  
+
+Here we should be able to just do something like:
+argv = argv_split(GFP_KERNEL, args, &argc);
+match = user_fields_match(user, argc, argv);
+argv_free(argv);
+
+NOTE: The above is just pseudocode and does not check the return of
+argv_split, etc. but gives you the idea.
+
+> -	if (user) {
+> -		*newuser = user;
+> -		/*
+> -		 * Name is allocated by caller, free it since it already exists.
+> -		 * Caller only worries about failure cases for freeing.
+> -		 */
+> -		kfree(name);
+> -		return 0;
+> -	}
+> -
+>  	user = kzalloc(sizeof(*user), GFP_KERNEL_ACCOUNT);
+>  
+>  	if (!user)
+> @@ -1786,6 +1816,26 @@ static int user_event_parse(struct user_event_group *group, char *name,
+>  	if (ret)
+>  		goto put_user;
+>  
+> +	if (tmp_user) {
+> +		/*
+> +		 * Prevent users form using the same name for different fields. This
+> +		 * can cause unexpected output for the second event.
+> +		 */
+> +		ret = user_event_compare_fields(user, tmp_user);
+> +
+> +		if (!ret) {
+> +			*newuser = tmp_user;
+> +			/*
+> +			 * Name is allocated by caller, free it since it already exists.
+> +			 * Caller only worries about failure cases for freeing.
+> +			 */
+> +			kfree(name);
+> +		} else
+> +			refcount_dec(&tmp_user->refcnt);
+> +
+> +		goto put_user;
+> +	}
+> +
+>  	ret = user_event_create_print_fmt(user);
+>  
+>  	if (ret)
+> diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+> index 7c99cef94a65..d738efd51daf 100644
+> --- a/tools/testing/selftests/user_events/ftrace_test.c
+> +++ b/tools/testing/selftests/user_events/ftrace_test.c
+> @@ -228,6 +228,12 @@ TEST_F(user, register_events) {
+>  	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+>  	ASSERT_EQ(0, reg.write_index);
+>  
+> +	/* Multipule regitsters to same name but different args should fail */
+
+Typos, should be Multiple registers to same name but different args
+should fail.
+
+> +	reg.enable_bit = 29;
+> +	reg.name_args = (__u64)"__test_event u32 field1;";
+> +	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+> +	ASSERT_EQ(EADDRINUSE, errno);
+> +
+>  	/* Ensure disabled */
+>  	self->enable_fd = open(enable_file, O_RDWR);
+>  	ASSERT_NE(-1, self->enable_fd);
+> -- 
+> 2.25.1
+
+Thanks,
+-Beau
