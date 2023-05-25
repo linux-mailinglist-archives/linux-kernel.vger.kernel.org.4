@@ -2,132 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC857110CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0806A7110CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239601AbjEYQUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
+        id S239473AbjEYQUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232938AbjEYQUm (ORCPT
+        with ESMTP id S232938AbjEYQUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:20:42 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBD010B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:20:41 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bcb00a4c2so4155658a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685031639; x=1687623639;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ku5sOb6PtVoCvGfeJzKGQIZVhFagEKIux+ec1ZmkO4g=;
-        b=AEs1DUE4e6Dkn0FAL7fqRZCkOBdPGQ4UuhqutRZLYk8l4cLOLGJjHRRj7OWKTNPBcI
-         XL+6/yZ72PWNHLQObpXU/MPesFy7TQuuBKavv5b5iICHB3pwxMPPGiwy8E6bKx4HeZWU
-         6wmIxTBiLBA5L1ZAxBs7MKrKDYnidHxVu75Ss=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685031639; x=1687623639;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ku5sOb6PtVoCvGfeJzKGQIZVhFagEKIux+ec1ZmkO4g=;
-        b=L8Gl6f/5fnl3KdxGScFimyL2+xWu6jXh5pP19jEFbljRtQ3owAjDY3XayR73xRW1QO
-         PL8M4/BWGLtqb0kdSC/NIW+i18ehru0u9MjuY+fBA9FTczeM3tbH/ExgJVgPYIuN221D
-         HLqKJjEIywvje4q1MiM1kdNyTcYru9O1xh1uDuospIUTl71LVPdO9a0fm/vksKJ+ZgHw
-         ecU9sZWlketnT0mNH7lAqoKBbKhXQetp5EYste6cRbtGCNyUoA5EGJc6zPySiSrDp22T
-         N6rXPlUUiJImBOJcJa42F0DbfIH24/hAPQIvcS5Idw3SAZuchAFMrG/5/e0tS6aN6KTi
-         4H4A==
-X-Gm-Message-State: AC+VfDwNcUwpTquzs/m3mRhhCpg1gAj9IUoOsMwTl//wihoOL8YhYu7L
-        GZuUuJKPctax9jsf4A6EgUrzqwsgFs9iny+26GrrNXEQ
-X-Google-Smtp-Source: ACHHUZ6cZvcQxfSueIyDvW4mDOtXS6dFK1Is8I5RO1mgH6TBNrO/CkBPMdFAgERYde4IzOc62xycog==
-X-Received: by 2002:a17:907:3f0a:b0:973:afe2:a01 with SMTP id hq10-20020a1709073f0a00b00973afe20a01mr2037116ejc.75.1685031639378;
-        Thu, 25 May 2023 09:20:39 -0700 (PDT)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
-        by smtp.gmail.com with ESMTPSA id b25-20020aa7cd19000000b0050bd19ec39bsm694018edw.83.2023.05.25.09.20.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 09:20:37 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-96ff9c0a103so132122366b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:20:37 -0700 (PDT)
-X-Received: by 2002:a17:907:7207:b0:96f:7e14:3084 with SMTP id
- dr7-20020a170907720700b0096f7e143084mr2270332ejc.44.1685031636699; Thu, 25
- May 2023 09:20:36 -0700 (PDT)
+        Thu, 25 May 2023 12:20:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5B3139
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:20:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 035006197F
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:20:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79546C433D2;
+        Thu, 25 May 2023 16:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685031635;
+        bh=2w4rrL1C0Qs+cOYNmYdTfanv48y+sYseid/+Gt86h+Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ENpQJdkhDadGeh44/mMedQmcN0d2v/1DuMF6FEWsgIbsf/1n1/rL8xcmayICi+mJM
+         3ShJR9wCpUSb+F+ws7FExcr/9SZzUoTjy67ILLTuN3MxNJDyV4dk9v+BDptw6F1zaB
+         siSMjnNL/gmfXf0+H5jB23OAIwEG60NyYJUK5NNll3faSNq6H7V9NzZixX6fVvMKMD
+         y5XXjg01HU9fCubc6J9irBFlUHHLZsasCpyIbiDkpA/PuJz1HgxNJcZ2CykTLM9N96
+         xJ7SdBnYpRZ3svKWz2iZ16tE+Ws8rV3Zvsr5mQlpfeKp47QAtgOgf1j2f8XFxS1gZR
+         VGEO2Zo5EqVHg==
+Date:   Thu, 25 May 2023 17:20:30 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Deepak Gupta <debug@rivosinc.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
+Subject: Re: [GIT PULL] x86/shstk for 6.4
+Message-ID: <b402b80b-a7c6-4ef0-b977-c0f5f582b78a@sirena.org.uk>
+References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
+ <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
+ <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com>
+ <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com>
+ <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
+ <ad5b44e17c1c17ebdc581169fec7e80f7ef2a4d4.camel@intel.com>
+ <CAHk-=wiZjSu7c9sFYZb3q04108stgHff2wfbokGCCgW7riz+8Q@mail.gmail.com>
+ <bd7c4f53cd27224308bff305513978dced1495ad.camel@intel.com>
+ <20230515212255.GA562920@debug.ba.rivosinc.com>
 MIME-Version: 1.0
-References: <20230522025124.5863-1-michael.christie@oracle.com>
- <20230522025124.5863-4-michael.christie@oracle.com> <20230522123029.GA22159@redhat.com>
- <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com> <20230522174757.GC22159@redhat.com>
- <20230523121506.GA6562@redhat.com> <87bkib6nxr.fsf@email.froward.int.ebiederm.org>
- <20230524141022.GA19091@redhat.com> <87ttw1zt4i.fsf@email.froward.int.ebiederm.org>
- <20230525115512.GA9229@redhat.com> <87y1lcxwcj.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87y1lcxwcj.fsf@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 25 May 2023 09:20:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj4DS=2F5mW+K2P7cVqrsuGd3rKE_2k2BqnnPeeYhUCvg@mail.gmail.com>
-Message-ID: <CAHk-=wj4DS=2F5mW+K2P7cVqrsuGd3rKE_2k2BqnnPeeYhUCvg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps regression
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4xDnJ/JT4ZY6//sb"
+Content-Disposition: inline
+In-Reply-To: <20230515212255.GA562920@debug.ba.rivosinc.com>
+X-Cookie: volcano, n.:
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 8:30=E2=80=AFAM Eric W. Biederman <ebiederm@xmissio=
-n.com> wrote:
->
-> Basically with no patches that is where Linus's kernel is.
->
-> User complained about the new thread showing up in ps.
 
-Well, not only that, but it actively broke existing workflows for
-managing things. Showing up in 'ps' wasn't just some purely cosmetic
-issue, but had semantic meaning.
+--4xDnJ/JT4ZY6//sb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-And honestly, I think the core issue is that we should just make this
-work. Kernel threads randomly switching to user memory threads was
-wrong, so CLONE_VM is absolutely the right thing to do.
+On Mon, May 15, 2023 at 02:22:55PM -0700, Deepak Gupta wrote:
+> On Sun, May 07, 2023 at 04:24:24PM +0000, Edgecombe, Rick P wrote:
 
-But while "CLONE_VM without real threading" is a very traditional
-thing in Linux - it was the original model for clone(), after all - I
-don't believe it is the *correct* model. There was a very real reason
-clone() has grown CLONE_THREAD and friends.
+> > BTW, I forgot to mention that there is another architecture (maybe 2)
+> > that is expected to use this refactor for implementing their shadow
+> > stacks. So FWIW, this churn is not just for x86.
 
-So honestly, I really think we want to complete the vhost move to
-CLONE_THREAD (and thus CLONE_SIGNAL).
+> That's right, one of them is RISC-V.
 
-Not because the old kthread model didn't _work_, but because it's
-really really wrong to try to randomly take on user-space attributes
-at run-time.
+Also arm64.
 
-And once you do the "user threads in kernel space" model, at that
-point you really do want to act like a proper thread. Both because of
-that 'ps' issue (which is really just "show the world what your
-relationship is), but simply because that is the modern threading
-model that we use for everything else, and special cases are bad.
+> RISC-V control-flow integrity: https://github.com/riscv/riscv-cfi
 
-So I'd really like to finish this. Even if we end up with a hack or
-two in signal handling that we can hopefully fix up later by having
-vhost fix up some of its current assumptions.
+> Since RISC-V PTE have 3 separate bits for read, write and execute. Write
+> only (R=0, W=1, X=0) encodings had been reserved and thus cpu supporting
+> this extension will treat this reserved encoding as shadow stack.
 
-It has worked wonderfully well for io_uring - but we *did* have quite
-a bit of conversion patches over some time as people found issues.
-Which is why I don't expect the vhost conevrsion to be entirely
-pain-free either, and I don't think we necessarily have to get to a
-"perfect and clean" state immediately, just a "working and
-conceptually in the right direction" state.
+> It doesn't get messy as in case of x86 (due to overloading of dirty bit),
+> but it still will need pte helper which marks a page "shadow stack
+> writeable" or "regular writeable" depending on vma.
 
-             Linus
+For arm64 GCS (our shadow stack equivalent) is built on top of another
+extension that allows us to assign arbitrary meanings to four of the
+bits (they become an index into an array of actual permissions) so we
+might be able to avoid having to look at the VMA, though we might want
+to in future in order to make better use of the other features of the
+indirection extension.
+
+--4xDnJ/JT4ZY6//sb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRvis0ACgkQJNaLcl1U
+h9BKswf/WpINbiUBFLGfCXGwM0YsASUPoJoK1V7g+saDH9q66NEq4yB1t/UFPSPY
+bylxlSVk97TTHlTDR5Z6twr/YdVX5hqcszBMOhUBqgImKGBHvc10+mBj3dIUeUCR
+/zexGgbk/vZw9zmzBdRwK4bZESO44DZC+lYpKjxoXct2wYrZuzLz+dlE/fvYTa93
+1mq6fU6tel2Rnxk5EUoE1PC4wYIGsMEzDcHccfl2O/xwcvwDgIR6xQ7hHSRqyzDC
+JoH0C4PklIJFs1151uCvO8m2qIM3gJqJGGXHrYi3qs1gAdebWbQywdx59hFHNAnG
++JONah/5gMlQ6ER7q29Cd0o21gzNag==
+=46DT
+-----END PGP SIGNATURE-----
+
+--4xDnJ/JT4ZY6//sb--
