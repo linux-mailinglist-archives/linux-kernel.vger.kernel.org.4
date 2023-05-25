@@ -2,81 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6B5710D1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D805710D21
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241204AbjEYNTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
+        id S241226AbjEYNTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbjEYNTW (ORCPT
+        with ESMTP id S241223AbjEYNTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:19:22 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9446D99;
-        Thu, 25 May 2023 06:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=BiYBStJNOLDU6CVASAjjdQmOaxZ6ZXmr39+ac65rV2c=; b=xgQlUEJoApDfjNzRhAZ7nyE3w8
-        XU78wFcub24VIs36AQ6Knnp4wy8htPszdMNdCkxvAy89Wj4Jj8gE2EGbhc7e5LSvDhdIkFgn5UcdX
-        sMLInSML3Ay/xFAWVJ8l0j6z+7fp5g2aBp5omZ4Nc7jvjZzLy3oD36O1KX79g4UvQU7M=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:37108 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q2Arp-0007ff-Ub; Thu, 25 May 2023 09:18:58 -0400
-Date:   Thu, 25 May 2023 09:18:57 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     andy.shevchenko@gmail.com
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230525091857.612b591997faa964dfdfe1f6@hugovil.com>
-In-Reply-To: <ZG84rnwh3XTdY-iy@surfacebook>
-References: <20230525040324.3773741-1-hugo@hugovil.com>
-        <20230525040324.3773741-5-hugo@hugovil.com>
-        <ZG84rnwh3XTdY-iy@surfacebook>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Thu, 25 May 2023 09:19:50 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828DD194
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:19:48 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-783f7e82f2aso304069241.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:19:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685020787; x=1687612787;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LxwYtGB9RBUo2ARBEDaRy/j62e5UsedQQydMRI+nQLA=;
+        b=MMcqVtbtrkBNeoUv3HforN2Tm6L6iCwCIBv793tAV7Ufz+ANrbu/ezmTA7UZp8mXC9
+         lH57eB6u4V4f3StbMW1WCizBsB+CJpTnCn7Yi/QsuWgeWKHxcF3/ELMDVukdHwpEu9qC
+         Fjprx7sB6aEz6BcNaTkAwUDS7PmPBpQBTlHhiM0SFDFb1R9HC3uTuG8HjVOF0XVF1EM0
+         BRUD0y7jNUgTE9+NGSGJ2FR9V/6ix5KcLWm8DH3hEN3Sjinzosx5kYKz9zIZ/cZemS+N
+         klVuoSk/wGC1vBt0es3psdtY+hJkt7sQUMg8CViSOYXwXEq4rWbCK4RfyntGFTHYg8O9
+         UHsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685020787; x=1687612787;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LxwYtGB9RBUo2ARBEDaRy/j62e5UsedQQydMRI+nQLA=;
+        b=LG+eiwZBPlU/gaNSbs3Lz0PxmuWEtNEBXjpWHlOe3VLXGbw6XYD3+Zm+Neuh2/+A5x
+         1DTkBWbEUXBp+iyyFxj6MNwYwKPoQ/r4S0dlNsM2PRQmMonG6gHAVnTBIrVqF8MAFbyw
+         5PFmGIPdGWNcFjGcEvFLELzR5fJwfrk+6ZdqNQXwQT2/6pFp4IWkLn1Vcz6470ibudgO
+         XuPNBSxi9eJGiweSAHZf9Gg1rA+fXtOoMmO4nhv3ri4dNwPWUUSgADqSqyJdfYTWhLjA
+         ut0Q2jU5IxuXL9lVypEOnPCyC1TRvgNyQeF0omp9lq8tcp+Gy4SzWO7+4/tJe1wk25Fi
+         UhRA==
+X-Gm-Message-State: AC+VfDy5MjGtWjrn5Y/fbltZiYarG1wk98jDjnKCrGM0VHyszJZLAF+m
+        DHNJQTZw3ePjK8ke5oEti4/r59Dnlgj9CPnWAQBGxg==
+X-Google-Smtp-Source: ACHHUZ42Drc7sO+IRPZGz/5d/uVry/K390ESSzAk3GBhH6r+qU6dbeXUk2WO+qVRetwGo9sXfBaagpUHwTE1H2R+ODo=
+X-Received: by 2002:a67:cd82:0:b0:430:2d04:4691 with SMTP id
+ r2-20020a67cd82000000b004302d044691mr5130904vsl.23.1685020787396; Thu, 25 May
+ 2023 06:19:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
+ <20230516134447.GB30894@willie-the-truck>
+In-Reply-To: <20230516134447.GB30894@willie-the-truck>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 25 May 2023 18:49:36 +0530
+Message-ID: <CA+G9fYtZjGomLjDi+Vf-hdcLpKPKbPmn4nwoPXvn24SG2hEJMg@mail.gmail.com>
+Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in fpsimd_release_task
+To:     Will Deacon <will@kernel.org>
+Cc:     broonie@kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 04/11] serial: sc16is7xx: add post reset delay
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023 13:30:06 +0300
-andy.shevchenko@gmail.com wrote:
+Hi Will,
 
-> Thu, May 25, 2023 at 12:03:17AM -0400, Hugo Villeneuve kirjoitti:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Make sure we wait at least 3us before initiating communication with
-> > the device after reset.
-> 
-> ...
-> 
-> > +	usleep_range(3, 5);
-> 
-> I would put (5, 10) instead to relax a bit the scheduler.
+On Tue, 16 May 2023 at 19:14, Will Deacon <will@kernel.org> wrote:
+>
+> Hi Naresh,
+>
+> On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
+> > Following kernel BUG noticed while running selftests arm64 fp-stress
+> > running stable rc kernel versions 6.1.29-rc1 and 6.3.3-rc1.
+>
+> Is there a known-good build so that we could attempt a bisection?
 
-Hi,
-Ok, done.
+[ Sorry for the delay ]
+
+Since this problem is intermittent, It is not easy to bisect.
+
+On Linux next this fp-stress BUG: has been happening *intermittently* from
+next-20230314 dated March 14, 2023.
+
+On Linux stable-rc it started happening on 6.3.2-rc1 and 6.1.28-rc2.
+
+Here is the proof showing the intermittent occurance on Linux next,
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230518/testrun/17066471/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/history/?page=3
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230518/testrun/17066471/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/history/?page=2
+  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230518/testrun/17066471/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/history/?page=1
+
+Here is the proof showing the intermittent occurance on stable-rc 6.3 and 6.1.
+ - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3-rc4-1628-g48aa7b4284af/testrun/16730800/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/history/
+  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.22-1202-g2b7e1f92aa55/testrun/16814751/suite/log-parser-test/test/check-kernel-bug-9588df685892e898be8969def31c5aa074b2faada33f12ebc88fd7e7b52893cd/history/
+
+- Naresh
