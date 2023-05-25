@@ -2,170 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EF7710618
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28427105FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239586AbjEYHOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 03:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
+        id S236277AbjEYHLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 03:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239222AbjEYHNQ (ORCPT
+        with ESMTP id S232441AbjEYHLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 03:13:16 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4237D1701
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:12:41 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5653a78102eso7037927b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:12:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684998755; x=1687590755;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fUbHbSjVoUcJs86GoUKywFnnspnn0CwjY1A+xgeJcrE=;
-        b=7LtR4l2JL/M4jrlSVU40EKtOPMO9N0dHxSoR2A3E+/SFXlYWvUTFqVwUxLJUSGlzDV
-         F6u5E3ufJCkrh98qSFG5E9ePrbrARJkjqi9c1X5Xttcmj/6EVj4j2RBPb8B3ZL+Amrki
-         yj3ZkWUqMrq7qgqbXOH+Q+Zx7PkrJQaD9q9U/zGCebFeL2Yo17ojkCnQ60ZOmbXfptTv
-         ezVT76QHlFCtJvzF54v9e5KRtWbnKLSESLXIBy9oAHjzUYpyfy/+p/fmc3NOZgZCsB+D
-         CPWb/PhGo7Drd9gjoehm7CMbM1mCV3R16jIFa7AUSXDPfXFXWql0HqQM9qAInpOaZ/xA
-         20RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684998755; x=1687590755;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fUbHbSjVoUcJs86GoUKywFnnspnn0CwjY1A+xgeJcrE=;
-        b=J2JZ90jSklSry8bxUZ2YcwxdsLhfUoPMjbRUdS0gqRx9r3MtIM46a/IYawqCxX47Gb
-         LQ1ADrOygLxVug1yo73qbMoS2bUeH0KMYTwMtKAPvDL2+s38IDXUysGJxyUGoD6IFQV+
-         FHbO8sZos0meTwbtZ0n7lL5mnkK3sD1utIcnTZ9CRfnUK5thZlNMBGfzAFgjf71Vp4vc
-         wmosJ5GQ88d1vDTKvKy2XvLHOU5DfbpQPSNFdRSuqYbEbSYSA1sFqespUTcuxew/2Jh3
-         Kv9kMYZkK9O91tTvDy3aXte/rf0x9ZRe6mhEMlgQ9vv4ehNQhDvLKj+ZmXAljQCBIEQf
-         0hjA==
-X-Gm-Message-State: AC+VfDzSNCzyQmAucjcmo75hgR0BiTwXShjohPnrvMzr5QNAwudn4Mvl
-        cr30q4hspWqveuCr8Lk9K/yLLitjGDwL
-X-Google-Smtp-Source: ACHHUZ6DYMEKjWI2+BEz4r2CwS0UkrArsaV42OVmb0uVNSR+netmY8Zy2pEdzoCY7oajTqfSioq+92W7Wt0s
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:7aa7:3d2d:76ae:8e96])
- (user=irogers job=sendgmr) by 2002:a81:ae68:0:b0:55e:14b:bab9 with SMTP id
- g40-20020a81ae68000000b0055e014bbab9mr12549654ywk.4.1684998754691; Thu, 25
- May 2023 00:12:34 -0700 (PDT)
-Date:   Thu, 25 May 2023 00:11:33 -0700
-In-Reply-To: <20230525071133.2066610-1-irogers@google.com>
-Message-Id: <20230525071133.2066610-17-irogers@google.com>
-Mime-Version: 1.0
-References: <20230525071133.2066610-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Subject: [PATCH v1 16/16] libsubcmd: Avoid two path statics
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Ross Zwisler <zwisler@chromium.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 03:11:51 -0400
+Received: from out-24.mta0.migadu.com (out-24.mta0.migadu.com [IPv6:2001:41d0:1004:224b::18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4EE83
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:11:49 -0700 (PDT)
+Date:   Thu, 25 May 2023 07:11:41 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684998707;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Iz6y8y6khpMjAIZq8YDzvt5EdSkB55kQXDEISakUjns=;
+        b=n5fwCDL0eOfW/wMfQaEDC7YPW1PyI/z1kdA2egEpwnmCwAgLo6k/aKjPTwXqblxRRbrb1N
+        8y4t1/2lEN/k8VnpE5HDLiWIQHitDjOln1g/tMw09KqO44sdTgg+9U1z3VDc+sRV6R0SgL
+        b+rXGgr4sY4156ZeAAntGIINkL4C6IY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>, peterz@infradead.org,
+        namhyung@kernel.org, eranian@google.com, acme@kernel.org,
+        mark.rutland@arm.com, jolsa@kernel.org, irogers@google.com,
+        bp@alien8.de, kan.liang@linux.intel.com, adrian.hunter@intel.com,
+        maddy@linux.ibm.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com, maz@kernel.org, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v4 3/4] perf/core: Remove pmu linear searching code
+Message-ID: <ZG8KLbZSECiYaKFc@linux.dev>
+References: <20230504110003.2548-1-ravi.bangoria@amd.com>
+ <20230504110003.2548-4-ravi.bangoria@amd.com>
+ <20230524214133.GA2359762@dev-arch.thelio-3990X>
+ <f02c78e2-34b9-4985-640a-279dae1004a9@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f02c78e2-34b9-4985-640a-279dae1004a9@amd.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a single stack allocated buffer and avoid 8,192 bytes in .bss.
+On Thu, May 25, 2023 at 10:46:01AM +0530, Ravi Bangoria wrote:
+> On 25-May-23 3:11 AM, Nathan Chancellor wrote:
+> > My apologies if this has already been reported or fixed already, I did a
+> > search of lore.kernel.org and did not find anything. This patch as
+> > commit 9551fbb64d09 ("perf/core: Remove pmu linear searching code") in
+> > -next breaks starting QEMU with KVM enabled on two of my arm64 machines:
+> > 
+> > $ qemu-system-aarch64 \
+> >     -display none \
+> >     -nodefaults \
+> >     -machine virt,gic-version=max \
+> >     -append 'console=ttyAMA0 earlycon' \
+> >     -kernel arch/arm64/boot/Image.gz \
+> >     -initrd rootfs.cpio \
+> >     -cpu host \
+> >     -enable-kvm \
+> >     -m 512m \
+> >     -smp 8 \
+> >     -serial mon:stdio
+> > qemu-system-aarch64: PMU: KVM_SET_DEVICE_ATTR: No such device
+> > qemu-system-aarch64: failed to set irq for PMU
+> > 
+> > In the kernel log, I see
+> > 
+> > [   42.944952] kvm: pmu event creation failed -2
+> > 
+> > I am not sure if this issue is unexpected as a result of this change or
+> > if there is something that needs to change on the arm64 KVM side (it
+> > appears the kernel message comes from arch/arm64/kvm/pmu-emul.c).
+> 
+> Thanks for reporting it.
+> 
+> Based on these detail, I feel the pmu registration failed in the host,
+> most probably because pmu driver did not pass pmu name while calling
+> perf_pmu_register(). Consequently kvm also failed while trying to use
+> it for guest. Can you please check host kernel logs.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/lib/subcmd/exec-cmd.c | 35 ++++++++++++++++++++---------------
- 1 file changed, 20 insertions(+), 15 deletions(-)
+The PMUv3 driver does pass a name, but it relies on getting back an
+allocated pmu id as @type is -1 in the call to perf_pmu_register().
 
-diff --git a/tools/lib/subcmd/exec-cmd.c b/tools/lib/subcmd/exec-cmd.c
-index 5dbea456973e..7739b5217cf6 100644
---- a/tools/lib/subcmd/exec-cmd.c
-+++ b/tools/lib/subcmd/exec-cmd.c
-@@ -36,38 +36,40 @@ static int is_absolute_path(const char *path)
- 	return path[0] == '/';
- }
+What actually broke is how KVM probes for a default core PMU to use for
+a guest. kvm_pmu_probe_armpmu() creates a counter w/ PERF_TYPE_RAW and
+reads the pmu from the returned perf_event. The linear search had the
+effect of eventually stumbling on the correct core PMU and succeeding.
+
+Perf folks: is this WAI for heterogenous systems?
+
+Either way, the whole KVM end of this scheme is a bit clunky, and I
+believe it to be unneccessary at this point as we maintain a list of
+core PMU instances that KVM is able to virtualize. We can just walk
+that to find a default PMU to use.
+
+Not seeing any issues on -next with the below diff. If this works for
+folks I can actually wrap it up in a patch and send it out.
+
+diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+index 45727d50d18d..cbc0b662b7f8 100644
+--- a/arch/arm64/kvm/pmu-emul.c
++++ b/arch/arm64/kvm/pmu-emul.c
+@@ -694,47 +694,26 @@ void kvm_host_pmu_init(struct arm_pmu *pmu)
  
--static const char *get_pwd_cwd(void)
-+static const char *get_pwd_cwd(char *buf, size_t sz)
+ static struct arm_pmu *kvm_pmu_probe_armpmu(void)
  {
--	static char cwd[PATH_MAX + 1];
- 	char *pwd;
- 	struct stat cwd_stat, pwd_stat;
--	if (getcwd(cwd, PATH_MAX) == NULL)
-+	if (getcwd(buf, sz) == NULL)
- 		return NULL;
- 	pwd = getenv("PWD");
--	if (pwd && strcmp(pwd, cwd)) {
--		stat(cwd, &cwd_stat);
-+	if (pwd && strcmp(pwd, buf)) {
-+		stat(buf, &cwd_stat);
- 		if (!stat(pwd, &pwd_stat) &&
- 		    pwd_stat.st_dev == cwd_stat.st_dev &&
- 		    pwd_stat.st_ino == cwd_stat.st_ino) {
--			strlcpy(cwd, pwd, PATH_MAX);
-+			strlcpy(buf, pwd, sz);
- 		}
- 	}
--	return cwd;
-+	return buf;
- }
- 
--static const char *make_nonrelative_path(const char *path)
-+static const char *make_nonrelative_path(char *buf, size_t sz, const char *path)
- {
--	static char buf[PATH_MAX + 1];
+-	struct perf_event_attr attr = { };
+-	struct perf_event *event;
+-	struct arm_pmu *pmu = NULL;
 -
- 	if (is_absolute_path(path)) {
--		if (strlcpy(buf, path, PATH_MAX) >= PATH_MAX)
-+		if (strlcpy(buf, path, sz) >= sz)
- 			die("Too long path: %.*s", 60, path);
- 	} else {
--		const char *cwd = get_pwd_cwd();
-+		const char *cwd = get_pwd_cwd(buf, sz);
-+
- 		if (!cwd)
- 			die("Cannot determine the current working directory");
--		if (snprintf(buf, PATH_MAX, "%s/%s", cwd, path) >= PATH_MAX)
-+
-+		if (strlen(cwd) + strlen(path) + 2 >= sz)
- 			die("Too long path: %.*s", 60, path);
-+
-+		strcat(buf, "/");
-+		strcat(buf, path);
- 	}
- 	return buf;
- }
-@@ -133,8 +135,11 @@ static void add_path(char **out, const char *path)
- 	if (path && *path) {
- 		if (is_absolute_path(path))
- 			astrcat(out, path);
--		else
--			astrcat(out, make_nonrelative_path(path));
-+		else {
-+			char buf[PATH_MAX];
-+
-+			astrcat(out, make_nonrelative_path(buf, sizeof(buf), path));
-+		}
+-	/*
+-	 * Create a dummy event that only counts user cycles. As we'll never
+-	 * leave this function with the event being live, it will never
+-	 * count anything. But it allows us to probe some of the PMU
+-	 * details. Yes, this is terrible.
+-	 */
+-	attr.type = PERF_TYPE_RAW;
+-	attr.size = sizeof(attr);
+-	attr.pinned = 1;
+-	attr.disabled = 0;
+-	attr.exclude_user = 0;
+-	attr.exclude_kernel = 1;
+-	attr.exclude_hv = 1;
+-	attr.exclude_host = 1;
+-	attr.config = ARMV8_PMUV3_PERFCTR_CPU_CYCLES;
+-	attr.sample_period = GENMASK(63, 0);
++	struct arm_pmu *arm_pmu = NULL, *tmp;
++	struct arm_pmu_entry *entry;
++	int cpu;
  
- 		astrcat(out, ":");
+-	event = perf_event_create_kernel_counter(&attr, -1, current,
+-						 kvm_pmu_perf_overflow, &attr);
++	mutex_lock(&arm_pmus_lock);
++	cpu = get_cpu();
+ 
+-	if (IS_ERR(event)) {
+-		pr_err_once("kvm: pmu event creation failed %ld\n",
+-			    PTR_ERR(event));
+-		return NULL;
+-	}
++	list_for_each_entry(entry, &arm_pmus, entry) {
++		tmp = entry->arm_pmu;
+ 
+-	if (event->pmu) {
+-		pmu = to_arm_pmu(event->pmu);
+-		if (pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_NI ||
+-		    pmu->pmuver == ID_AA64DFR0_EL1_PMUVer_IMP_DEF)
+-			pmu = NULL;
++		if (cpumask_test_cpu(cpu, &tmp->supported_cpus)) {
++			arm_pmu = tmp;
++			break;
++		}
  	}
--- 
-2.40.1.698.g37aff9b760-goog
+ 
+-	perf_event_disable(event);
+-	perf_event_release_kernel(event);
++	put_cpu();
++	mutex_unlock(&arm_pmus_lock);
+ 
+-	return pmu;
++	return arm_pmu;
+ }
+ 
+ u64 kvm_pmu_get_pmceid(struct kvm_vcpu *vcpu, bool pmceid1)
 
+-- 
+Thanks,
+Oliver
