@@ -2,65 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8748B710FC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AE9710FC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241667AbjEYPjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S241696AbjEYPjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241327AbjEYPjH (ORCPT
+        with ESMTP id S241327AbjEYPjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:39:07 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8F099
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:39:05 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96f5685f902so118977466b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:39:05 -0700 (PDT)
+        Thu, 25 May 2023 11:39:03 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B4718D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:39:02 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6dfc4e01fso5551605e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:39:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685029144; x=1687621144;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GfIokcEoUcrcdH5Go22anmvwVolnzE/qQC062YOEZBw=;
-        b=cvguMHhN93mqSQdUe1bjg940LLueVFfQ47fuxKmIVJY/Ts6fCEhW9ogRFrfJA+RRR+
-         RBcXG0QSx/sambwpr+QIBK1LV5uqmTgGP6ooQuHGTTZN/FhWue1mcwJxp98ulY6Hp9ML
-         6DLu7ziSS/4wROUF6FS0zJELXciorIweRVpuj6oxGyigLIT+1P9HuQ7JF7fbhPF42A3r
-         2SaUdYpBLNiM7uyoY1rEzwfQaAW2nm+DrC5FBvAteUOt+p4kXLFOEjj0RZqXI9cYNp3b
-         /FMfrlChKs5sx75VUR8S4uiPFqH3wUVDvM6TOvTAUAAGxuEQViiHd2/iVDQdiLyC1IcU
-         gfeA==
+        d=linaro.org; s=google; t=1685029141; x=1687621141;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=e5MsIAMoJVar8Zj7rADk8UannLcUgUHv/XJnO8fuyYI=;
+        b=eOLcsLkyESvvG3aMyrGh7ie/Y2rSj5chRxW+yOYyku20HOX42lFDWAikOONenaTKtQ
+         98J+LRq5wIKaEY30zfpmbprkS5bXV+0h9FlxEu/FGfKfGBDeHI4FoJqMtlnELBbjZFnP
+         XEQzYuaz/TTzTgt+ENbdDFuvjpM2juM3oTjQpMxF8XAmRPDtA4OLbueJhdc0b1cxt9z9
+         Tdq+3Q0d2yK5d6NWiYPo8TRlp+QZKhfWTLyo8C2+Vgu5rwXp0BfYq0epdE/gPLFKOQ3H
+         Gw0CuS2zQ5h/3j4NdhUD3pn+qlA0+ZtmACvc1H8dhj8YFiL0EndDHT63H58cEM21k4XK
+         bd7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685029144; x=1687621144;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1685029141; x=1687621141;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GfIokcEoUcrcdH5Go22anmvwVolnzE/qQC062YOEZBw=;
-        b=WSqi1ykm7O9HEh2dD/efedCskCp0HaymN2R9VXaUkOKGlDLd4+UHpdlfThBpYM3pOS
-         MZ6MeeHzvzllfzdGR8cGxCHMW9JBVgGpwlltjWE5Gbi/GRetlLFSNqDiaPiijgIrHb/r
-         9F+8LN6asOtk0R9HwU7y4+8CRleMv6TNgVGz6JPt0qNRZhYX8ifLVvvntnD1o6q8Jkj8
-         1CsoLLbFUCsItnYrhvUOVVOLPaTaWx0JivO3BYHc4w+/LSP7iDOv0tIjDLthSIC0YxJB
-         9evQVRkX1vWLdsEUpH2TdiARC07eDjytTH5FhqmBK89jsXUw5YvrIQNBrhMMgXzm+VOE
-         kgoQ==
-X-Gm-Message-State: AC+VfDyv1W0il2Pu7cjryoU/6WGRvsoRRvvz70Sibm4N99GANuMC1Ivc
-        DFz+ByaGlizEsjZKu3lF8cJkMAU8NiCOdQ==
-X-Google-Smtp-Source: ACHHUZ6YyP9kiSwwOJOPi/Waygje0qyYEtUEHEDx7A8q1UjnvXuwJoPlLNUOL0Q5qhBjpxhoJ/uQiA==
-X-Received: by 2002:a17:906:4fc7:b0:973:9337:1aac with SMTP id i7-20020a1709064fc700b0097393371aacmr2177841ejw.60.1685029143624;
-        Thu, 25 May 2023 08:39:03 -0700 (PDT)
-Received: from Osmten.. ([103.84.150.78])
-        by smtp.gmail.com with ESMTPSA id j22-20020a1709062a1600b0096b1206aa3fsm979608eje.89.2023.05.25.08.39.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 08:39:03 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     sre@kernel.org, jinpu.wang@ionos.com
-Cc:     linux-kernel@vger.kernel.org, Osama Muhammad <osmtendev@gmail.com>
-Subject: [PATCH] omap_ssi_port.c: Drop error checking for debugfs_create_dir
-Date:   Thu, 25 May 2023 20:38:37 +0500
-Message-Id: <20230525153837.13198-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=e5MsIAMoJVar8Zj7rADk8UannLcUgUHv/XJnO8fuyYI=;
+        b=CsoDvoDz94aRT0ZBTNzj/HOwUmQ7wIL9bobUYCufXA0eyUE1j8eKsGllN1fHAS1qS7
+         eGsXbNREsiM6wn50oKZn7yUGc+hdUiRpwFLVUZz0Qoel/0Yg2kcoTtmNBvdcgC4XPZyb
+         cBcsr9oFOpubVykPif2BDpE+LK/w3jpgIqgxFiHshCqPyQQOks1u+SqB/PCJ4+N3wNEM
+         p9OktRmVzYcKw1vYoLsN2qpd+QONND7Blv2eoRgLqDl6gLCGwvo0XbMo1BJIFGrTrVQF
+         HvAPvvOhxdFQdFiB+kyvl7Z1uiIEC0GSE6v8W8En/Ylp+c94Mp9VPk4g4nZ5b9M3HMc/
+         FtXw==
+X-Gm-Message-State: AC+VfDwtRi5rYx08pXNbxoUOKWq0kRcz75+lfBaQ6BegGkL6aDOYBzBT
+        wqAi95eA6gwuIc2+RsO7qq7twA==
+X-Google-Smtp-Source: ACHHUZ7RcZZc9uwnUpx72FTFYuDnECqOlRd6TRRbs+KFyMpHIOiDmbB6Jg9nOuBTN9bsYAwBbdcnYA==
+X-Received: by 2002:a05:600c:2119:b0:3f6:468:79b8 with SMTP id u25-20020a05600c211900b003f6046879b8mr3463927wml.22.1685029140748;
+        Thu, 25 May 2023 08:39:00 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5cdb:105b:7481:b0e6? ([2a01:e0a:982:cbb0:5cdb:105b:7481:b0e6])
+        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003f4248dcfcbsm6106829wmc.30.2023.05.25.08.38.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 08:39:00 -0700 (PDT)
+Message-ID: <8c65c5c3-0415-78c0-4585-df94a532a04e@linaro.org>
+Date:   Thu, 25 May 2023 17:38:59 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH V7 0/6] drm: bridge: samsung-dsim: Support variable
+ clocking
+Content-Language: en-US
+To:     Adam Ford <aford173@gmail.com>, Fabio Estevam <festevam@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Inki Dae <inki.dae@samsung.com>
+References: <20230518230626.404068-1-aford173@gmail.com>
+ <CAOMZO5DBefFuLWi39txu2RiU5vdHVx-0T48Fua6M5Y6Fr9PGNg@mail.gmail.com>
+ <CAHCN7xLqmMPtnHTVbApyYxY2tx97oRjsk_51abdDcZkOJmA=Tw@mail.gmail.com>
+ <CAHCN7xJTWqf_qfaZge4GpKuuzPE_OC-Kx7hBd_hFLOchH=Ef0g@mail.gmail.com>
+ <CAOMZO5Csjx17kfkxN1xMLuCg+-J0v6rjiuvaK-ZktXO50ZTuSw@mail.gmail.com>
+ <CAHCN7xL2GWLTwMttCha=b9_W0nE5aimCQ08YJFrCF5vNZUOL7Q@mail.gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <CAHCN7xL2GWLTwMttCha=b9_W0nE5aimCQ08YJFrCF5vNZUOL7Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,61 +93,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the error checking in spi-dw-core.c in
-omap_ssi_port.c. The DebugFS kernel API is developed in
-a way that the caller can safely ignore the errors that
-occur during the creation of DebugFS nodes.
+On 24/05/2023 14:49, Adam Ford wrote:
+> On Wed, May 24, 2023 at 7:45 AM Fabio Estevam <festevam@gmail.com> wrote:
+>>
+>> Hi Adam,
+>>
+>> On Tue, May 23, 2023 at 8:49 PM Adam Ford <aford173@gmail.com> wrote:
+>>
+>>> Inki,
+>>>
+>>> I haven't heard back from you on whether or not you want the bindings
+>>> patch to be included with me resending the series as V7 or if you're
+>>> OK with a single, stand-alone patch.
+>>> Will you let me know?  I have the patch standing by waiting for
+>>> instructions.  If you're not the right person to ask, please let me
+>>> know who the right person is.
+>>
+>> Neil has also been collecting samsung-dsim patches. Maybe he can clarify.
+> 
+> If it matters, my preference all along was to do the bindings as a
+> separate thing once the driver updates were merged into the tree.
+> Since the bindings can be done in different ways, I was hoping to have
+> a separate discussion on the right way to do the bindings. If they
+> need to be part of the series, I can do that.
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
----
- drivers/hsi/controllers/omap_ssi_port.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+If you don't introduce compatibles, no need to send bindings, it can
+be send separately.
 
-diff --git a/drivers/hsi/controllers/omap_ssi_port.c b/drivers/hsi/controllers/omap_ssi_port.c
-index 7ad41599baa5..8feb91d256fd 100644
---- a/drivers/hsi/controllers/omap_ssi_port.c
-+++ b/drivers/hsi/controllers/omap_ssi_port.c
-@@ -151,23 +151,20 @@ static int ssi_div_set(void *data, u64 val)
- 
- DEFINE_DEBUGFS_ATTRIBUTE(ssi_sst_div_fops, ssi_div_get, ssi_div_set, "%llu\n");
- 
--static int ssi_debug_add_port(struct omap_ssi_port *omap_port,
-+static void ssi_debug_add_port(struct omap_ssi_port *omap_port,
- 				     struct dentry *dir)
- {
- 	struct hsi_port *port = to_hsi_port(omap_port->dev);
- 
- 	dir = debugfs_create_dir(dev_name(omap_port->dev), dir);
--	if (IS_ERR(dir))
--		return -ENOMEM;
-+
- 	omap_port->dir = dir;
- 	debugfs_create_file("regs", S_IRUGO, dir, port, &ssi_port_regs_fops);
- 	dir = debugfs_create_dir("sst", dir);
--	if (IS_ERR(dir))
--		return -ENOMEM;
-+
- 	debugfs_create_file_unsafe("divisor", 0644, dir, port,
- 				   &ssi_sst_div_fops);
- 
--	return 0;
- }
- #endif
- 
-@@ -1217,11 +1214,8 @@ static int ssi_port_probe(struct platform_device *pd)
- 	pm_runtime_enable(omap_port->pdev);
- 
- #ifdef CONFIG_DEBUG_FS
--	err = ssi_debug_add_port(omap_port, omap_ssi->dir);
--	if (err < 0) {
--		pm_runtime_disable(omap_port->pdev);
--		goto error;
--	}
-+	 ssi_debug_add_port(omap_port, omap_ssi->dir);
-+
- #endif
- 
- 	hsi_add_clients_from_dt(port, np);
--- 
-2.34.1
+Can I apply this serie and 20230503163313.2640898-2-frieder@fris.de ? seems all has been reviewed.
+
+Neil
+
+> 
+> adam
 
