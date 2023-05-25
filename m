@@ -2,272 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9037119FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02957119FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241863AbjEYWIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 18:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
+        id S242069AbjEYWKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 18:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjEYWIo (ORCPT
+        with ESMTP id S233274AbjEYWKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 18:08:44 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2054.outbound.protection.outlook.com [40.107.237.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC3212F;
-        Thu, 25 May 2023 15:08:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NDzxEvsaO1TYPrpNnTtYfLF1Pozi+1+aPaOvygUHd87o6RkgWw0KSnW4nC/c7vFEcJsrrb+KuIiyHKcJQrucvtUEaCxCIBlSD1phsjzdBOTHms/icPoPey1kAO3cAVtv2ILqvkU0BEa/1y7m2gzVudVCMFeEwyw2ijCUiZCLINalbCNB89IVw2TOt4WNcKysI7dxy0KMyrT5yO9DfPla6KarF6QbQMUgGW6lggdND3y4zmWv+QYzqVcRsHOcY1bkMoslyhhDVR9jB+8QyHC/kCKta6DMI5RA1hxuSA16/skYp6HgvxPtLhRhxkZexvthNSgTJJ4C7Duy57TBcDWFLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4a+A/4ThqnVlDpA0b1fzwp7FliSiM0jlWfYiPGJjuww=;
- b=SnM4rp5zF3sY8gn1jbrATBQmr9CD35Zr5xfznU8pKe8vmPn1OiJFXg7+ejvDE+DAS5EKhmqA1PA7gVaikHxT2Hist4HtZcH26xcy0PxSDhtcNtabd/PJxfLJDjhWvc1IfJm73EVmFUNQ2Gf9KGupvFBWNzGko7k0Mcbt505AAIcUHYBYP6636ohik/RzRx/DfVd58oVCZwOMJdqfS9s2Tq4pd64DyR6c/9UL1P0hvq+0kYEGD5nuLMr35XZO+CTkggyhWtdk6qRd6Fv6bRfgLWEUS/DoE+7VGEhT1aCLXJbsAz8C9vBdeNh2FxRnOe7p3FT/KGGSTM24yTPrNKtnzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4a+A/4ThqnVlDpA0b1fzwp7FliSiM0jlWfYiPGJjuww=;
- b=I+bv1Bnur/60EfMScVRjlNWz/8sKJx3gk71ped9Kbiwtll0T+NPOFY8TFHzIr4HS2TWlc24ZS2/jlMD1wCycpLuQAOA2H1CUqVTT8KBgxzwrbWihcdNBq6ZLkAX3K3G+1ZpegEKADVF7tjv6fP4bLpwLrjBFtmQkcn3a0vzLSOo=
-Received: from BN0PR04CA0137.namprd04.prod.outlook.com (2603:10b6:408:ed::22)
- by SJ0PR12MB5673.namprd12.prod.outlook.com (2603:10b6:a03:42b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16; Thu, 25 May
- 2023 22:08:39 +0000
-Received: from BN8NAM11FT102.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ed:cafe::f7) by BN0PR04CA0137.outlook.office365.com
- (2603:10b6:408:ed::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.17 via Frontend
- Transport; Thu, 25 May 2023 22:08:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT102.mail.protection.outlook.com (10.13.177.27) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6433.18 via Frontend Transport; Thu, 25 May 2023 22:08:39 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 25 May
- 2023 17:08:36 -0500
-Date:   Fri, 26 May 2023 00:08:33 +0200
-From:   Robert Richter <rrichter@amd.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
-        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
-        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bhelgaas@google.com>
-Subject: Re: [PATCH v4 23/23] PCI/AER: Unmask RCEC internal errors to enable
- RCH downstream port error handling
-Message-ID: <ZG/cYUaZerXNqqJl@rric.localdomain>
-References: <20230523232214.55282-24-terry.bowman@amd.com>
- <ZG6FYhegl3+UlX76@bhelgaas>
+        Thu, 25 May 2023 18:10:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF887183
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:09:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685052559;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dJeYXRBQttCVikZVDOeeK4P8EFg9Raz3eKfB/gpnZ2o=;
+        b=BonpJeOJQf0jyUrl/EegPVTFY3JqQn2Y4uWik2c54I3qqBtKA6FCmQubP3JxTtR1L3Ek33
+        gbkK8GK469n+4YsrjOZ8Hu/oN7WMFm7l+MZGAou0H1kkMQcn4KLqZCLk4eLla2D2nXKcRx
+        aOU2fUgZvd/UwaVs7iAD2ye9IZ5vMjc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-342-nm7LPY8pOda3xPAriSf6Lw-1; Thu, 25 May 2023 18:09:18 -0400
+X-MC-Unique: nm7LPY8pOda3xPAriSf6Lw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BC918007D9;
+        Thu, 25 May 2023 22:09:17 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3FCB4202696C;
+        Thu, 25 May 2023 22:09:15 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230525211346.718562-1-Kenny.Ho@amd.com>
+References: <20230525211346.718562-1-Kenny.Ho@amd.com>
+To:     Kenny Ho <Kenny.Ho@amd.com>
+Cc:     dhowells@redhat.com, David Laight <David.Laight@aculab.com>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        "Kenny Ho" <y2kenny@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        alexander.deucher@amd.com
+Subject: Re: [PATCH] Truncate UTS_RELEASE for rxrpc version
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZG6FYhegl3+UlX76@bhelgaas>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT102:EE_|SJ0PR12MB5673:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6014c13a-c813-4512-757f-08db5d6c9806
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HHd7g4RtjBhLGkNQ604IWoRg9wKlJpceJPwMFEHfsJEZgz6Tarc0AtRckihy0MEXYese6vOsUWsJcg+9qcnvYJ7idAQta1C/dpWiExtOfb7OsGSTQz1UadIV/mXQlk2qmWPNX3+dFJlMsP0BdEtQAxy+9k5OWiUD/ukygsfUOhOvN/hGjOL0wyAdP8sHbPefAPWhg8tryDGQKcoL/YofYrU14MLZmcxtSzWHs5zY1USqM46Korhg4Gchnujao392dO1VHzjSSa4rorLA/qdM/5NV3uXFBcILRL83u99GfBfAFtSXmomQbi6CFEjjDrjPfwrc/mpyD+t1c71TGO7OcEyJS9S7EhapTNL1kmUspxtHyg0Owjv70PPpgV5DZc5pTV8Vr+IesUZCglSlGBhtkHVVE9xL6+EgzlngQR3SGhUbrbGjWV6mv2L7nyX3SGI2VYK0wwLSKVKBkK5lC1tI2xX9nZRO1aWuejy310l2ABrjdepZsIFF/2TA4Sog0ewkgaQKmnw0wzIKpy+mkhXPxffBtJBvDXV4OB9u1ryEjcrXZbTC96K9ex3AZcql84x5GqAx4eR3L8cd4NukVP7C423xx/+sglSM7i0Npzl8wrSnPHDsufqgkyhu+pTSFYIwyi6IX6b7dgjWv86wWOwEubcgqo4lDfUOoF38SX/dopeEUQ1SNpMmq72uR3/H1YK4sQ3mvVwmDPZE4EzPVyytc8N0ETo3FyNHRaJcPP/6aQLgcV3hAAqL4eVb3muBq1XtNse4jYpehMqfLdIUs6N29Osxoa/sv+K9K/8uvywbvHM=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199021)(36840700001)(40470700004)(46966006)(70206006)(4326008)(70586007)(6916009)(7416002)(8676002)(8936002)(54906003)(478600001)(5660300002)(41300700001)(7696005)(6666004)(316002)(40460700003)(40480700001)(55016003)(82740400003)(356005)(81166007)(186003)(2906002)(16526019)(53546011)(9686003)(36860700001)(83380400001)(336012)(426003)(26005)(47076005)(82310400005)(36900700001)(309714004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 22:08:39.0999
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6014c13a-c813-4512-757f-08db5d6c9806
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT102.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5673
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-ID: <223249.1685052554.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 25 May 2023 23:09:14 +0100
+Message-ID: <223250.1685052554@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.05.23 16:45:06, Bjorn Helgaas wrote:
-> On Tue, May 23, 2023 at 06:22:14PM -0500, Terry Bowman wrote:
-> > From: Robert Richter <rrichter@amd.com>
-> > 
-> > AER corrected and uncorrectable internal errors (CIE/UIE) are masked
-> > in their corresponding mask registers per default once in power-up
-> > state. [1][2] Enable internal errors for RCECs to receive CXL
-> > downstream port errors of Restricted CXL Hosts (RCHs).
-> > 
-> > [1] CXL 3.0 Spec, 12.2.1.1 - RCH Downstream Port Detected Errors
-> > [2] PCIe Base Spec 6.0, 7.8.4.3 Uncorrectable Error Mask Register,
-> >     7.8.4.6 Correctable Error Mask Register
-> 
-> I use "r6.0" to make sure it isn't mistaken for a section number.
-> 
-> > Co-developed-by: Terry Bowman <terry.bowman@amd.com>
-> > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> > Signed-off-by: Robert Richter <rrichter@amd.com>
-> > ---
-> >  drivers/pci/pcie/aer.c | 64 ++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 64 insertions(+)
-> > 
-> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > index 2e3f00b6a5bd..c5076ae4eb58 100644
-> > --- a/drivers/pci/pcie/aer.c
-> > +++ b/drivers/pci/pcie/aer.c
-> > @@ -948,6 +948,32 @@ static bool find_source_device(struct pci_dev *parent,
-> >  
-> >  #ifdef CONFIG_PCIEAER_CXL
-> >  
-> > +static int pci_aer_unmask_internal_errors(struct pci_dev *dev)
-> > +{
-> > +	int aer, rc;
-> > +	u32 mask;
-> > +
-> > +	if (!pcie_aer_is_native(dev))
-> > +		return -EIO;
-> > +
-> > +	aer = dev->aer_cap;
-> > +	rc = pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_MASK, &mask);
-> > +	if (rc)
-> > +		return rc;
-> 
-> I don't think there's much value in checking all these config accesses
-> for failure.  A failure return really just means you called it with
-> invalid parameters; it doesn't tell you whether it was successful on
-> PCI.
-> 
-> > +	mask &= ~PCI_ERR_UNC_INTN;
-> > +	rc = pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_MASK, mask);
-> > +	if (rc)
-> > +		return rc;
-> > +
-> > +	rc = pci_read_config_dword(dev, aer + PCI_ERR_COR_MASK, &mask);
-> > +	if (rc)
-> > +		return rc;
-> > +	mask &= ~PCI_ERR_COR_INTERNAL;
-> > +	rc = pci_write_config_dword(dev, aer + PCI_ERR_COR_MASK, mask);
-> > +
-> > +	return rc;
-> > +}
-> > +
-> >  static bool is_cxl_mem_dev(struct pci_dev *dev)
-> >  {
-> >  	/*
-> > @@ -1031,7 +1057,44 @@ static void cxl_rch_handle_error(struct pci_dev *dev, struct aer_err_info *info)
-> >  		pcie_walk_rcec(dev, cxl_rch_handle_error_iter, info);
-> >  }
-> >  
-> > +static int handles_cxl_error_iter(struct pci_dev *dev, void *data)
-> > +{
-> > +	int *handles_cxl = data;
-> > +
-> > +	*handles_cxl = is_cxl_mem_dev(dev) && cxl_error_is_native(dev);
-> 
-> This effectively only looks at the *last* RCiEP associated with this
-> RCEC.  I would expect a logical OR of all of them.
-> 
-> I see this is another use of is_cxl_mem_dev() and
-> cxl_error_is_native() that really requires them to be in this file.
-> 
-> > +	return *handles_cxl;
+Kenny Ho <Kenny.Ho@amd.com> wrote:
 
-If this is non-zero, the iteration stops. So as soon we find a cxl
-device we can stop the loop. Else, all devices are non-cxl devs and
-the last return is zero too.
+> @@ -30,6 +28,7 @@ static void rxrpc_send_version_request(struct rxrpc_lo=
+cal *local,
+>  	struct sockaddr_rxrpc srx;
+>  	struct msghdr msg;
+>  	struct kvec iov[2];
+> +	static char rxrpc_version_string[65];
+>  	size_t len;
+>  	int ret;
+>  =
 
-Now checking the code, pci_walk_bus() works that way, but walk_rcec()
-does not break in all cases. I think this function not working as
-expected. We would need to check if pci_walk_bus() stopped the
-iteration, e.g. with a return code.
 
-Alternatively we could add this check:
+That's not thread-safe.  If you have multiple endpoints each one of them c=
+ould
+be overwriting the string at the same time.  We can't guarantee that one
+wouldn't corrupt the other.
 
-	if (!*handles_cxl)
-		*handles_cxl = ...
+There's also no need to reprint it every time; just once during module ini=
+t
+will do.  How about the attached patch instead?
 
-> > +}
-> > +
-> > +static bool handles_cxl_errors(struct pci_dev *rcec)
-> > +{
-> > +	int handles_cxl = 0;
-> > +
-> > +	if (pci_pcie_type(rcec) == PCI_EXP_TYPE_RC_EC &&
-> > +	    pcie_aer_is_native(rcec))
-> > +		pcie_walk_rcec(rcec, handles_cxl_error_iter, &handles_cxl);
-> > +
-> > +	return !!handles_cxl;
-> > +}
-> > +
-> > +static void cxl_rch_enable_rcec(struct pci_dev *rcec)
-> > +{
-> > +	if (!handles_cxl_errors(rcec))
-> > +		return;
-> > +
-> > +	/*
-> > +	 * Internal errors are masked by default, unmask RCEC's here
-> > +	 * PCI6.0 7.8.4.3 Uncorrectable Error Mask Register (Offset 08h)
-> > +	 * PCI6.0 7.8.4.6 Correctable Error Mask Register (Offset 14h)
-> 
-> The spec references seem superfluous here.  The PCI_ERR_UNCOR_MASK and
-> PCI_ERR_COR_MASK in pci_aer_unmask_internal_errors() are pretty good
-> pointers.
-> 
-> > +	 */
-> > +	if (pci_aer_unmask_internal_errors(rcec))
-> > +		pci_err(rcec, "CXL: Failed to unmask internal errors");
-> > +	else
-> > +		pci_info(rcec, "CXL: Internal errors unmasked");
-> > +}
-> > +
-> >  #else
-> > +static inline void cxl_rch_enable_rcec(struct pci_dev *dev) { }
-> >  static inline void cxl_rch_handle_error(struct pci_dev *dev,
-> >  					struct aer_err_info *info) { }
-> >  #endif
-> > @@ -1432,6 +1495,7 @@ static int aer_probe(struct pcie_device *dev)
-> >  		return status;
-> >  	}
-> >  
-> > +	cxl_rch_enable_rcec(port);
-> 
-> Could this be done by the driver that claims the CXL RCiEP?  There's
-> no point in unmasking the errors before there's a driver with
-> pci_error_handlers that can do something with them anyway.
+David
+---
+rxrpc: Truncate UTS_RELEASE for rxrpc version
 
-This sounds reasonable at the first glance. The problem is there could
-be many devices associated with the RCEC. Not all of them will be
-bound to a driver and handler at the same time. We would need to
-refcount it or maintain a list of enabled devices. But there is
-already something similar by checking dev->driver. But right, AER
-errros could be seen and handled then at least on PCI level. I tent to
-permanently enable RCEC AER, but that could cause side-effects. What
-do you think?
+UTS_RELEASE has a maximum length of 64 which can cause rxrpc_version to
+exceed the 65 byte message limit.
 
-Thanks,
+Per the rx spec[1]: "If a server receives a packet with a type value of 13=
+,
+and the client-initiated flag set, it should respond with a 65-byte payloa=
+d
+containing a string that identifies the version of AFS software it is
+running."
 
--Robert
+The current implementation causes a compile error when WERROR is turned on
+and/or UTS_RELEASE exceeds the length of 49 (making the version string mor=
+e
+than 64 characters).
 
-> 
-> >  	aer_enable_rootport(rpc);
-> >  	pci_info(port, "enabled with IRQ %d\n", dev->irq);
-> >  	return 0;
-> > -- 
-> > 2.34.1
-> > 
+Fix this by generating the string during module initialisation and limitin=
+g
+the UTS_RELEASE segment of the string does not exceed 49 chars.  We need t=
+o
+make sure that the 64 bytes includes "linux-" at the front and " AF_RXRPC"=
+ at
+the back as this may be used in pattern matching.
+
+Fixes: 44ba06987c0b ("RxRPC: Handle VERSION Rx protocol packets")
+Reported-by: Kenny Ho <Kenny.Ho@amd.com>
+Link: https://lore.kernel.org/r/20230523223944.691076-1-Kenny.Ho@amd.com/
+Signed-off-by: David Howells <dhowells@redhat.com>
+Link: https://web.mit.edu/kolya/afs/rx/rx-spec [1]
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: Andrew Lunn <andrew@lunn.ch>
+cc: David Laight <David.Laight@ACULAB.COM>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: linux-afs@lists.infradead.org
+cc: netdev@vger.kernel.org
+---
+ net/rxrpc/af_rxrpc.c    |    1 +
+ net/rxrpc/ar-internal.h |    1 +
+ net/rxrpc/local_event.c |   11 ++++++++++-
+ 3 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
+index 31f738d65f1c..da0b3b5157d5 100644
+--- a/net/rxrpc/af_rxrpc.c
++++ b/net/rxrpc/af_rxrpc.c
+@@ -980,6 +980,7 @@ static int __init af_rxrpc_init(void)
+ 	BUILD_BUG_ON(sizeof(struct rxrpc_skb_priv) > sizeof_field(struct sk_buff=
+, cb));
+ =
+
+ 	ret =3D -ENOMEM;
++	rxrpc_gen_version_string();
+ 	rxrpc_call_jar =3D kmem_cache_create(
+ 		"rxrpc_call_jar", sizeof(struct rxrpc_call), 0,
+ 		SLAB_HWCACHE_ALIGN, NULL);
+diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
+index 5d44dc08f66d..e8e14c6f904d 100644
+--- a/net/rxrpc/ar-internal.h
++++ b/net/rxrpc/ar-internal.h
+@@ -1068,6 +1068,7 @@ int rxrpc_get_server_data_key(struct rxrpc_connectio=
+n *, const void *, time64_t,
+ /*
+  * local_event.c
+  */
++void rxrpc_gen_version_string(void);
+ void rxrpc_send_version_request(struct rxrpc_local *local,
+ 				struct rxrpc_host_header *hdr,
+ 				struct sk_buff *skb);
+diff --git a/net/rxrpc/local_event.c b/net/rxrpc/local_event.c
+index 5e69ea6b233d..993c69f97488 100644
+--- a/net/rxrpc/local_event.c
++++ b/net/rxrpc/local_event.c
+@@ -16,7 +16,16 @@
+ #include <generated/utsrelease.h>
+ #include "ar-internal.h"
+ =
+
+-static const char rxrpc_version_string[65] =3D "linux-" UTS_RELEASE " AF_=
+RXRPC";
++static char rxrpc_version_string[65]; // "linux-" UTS_RELEASE " AF_RXRPC"=
+;
++
++/*
++ * Generate the VERSION packet string.
++ */
++void rxrpc_gen_version_string(void)
++{
++	snprintf(rxrpc_version_string, sizeof(rxrpc_version_string),
++		 "linux-%.49s AF_RXRPC", UTS_RELEASE);
++}
+ =
+
+ /*
+  * Reply to a version request
+
