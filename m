@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD1C710AF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3AD710AF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240911AbjEYLbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
+        id S240931AbjEYLbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240873AbjEYLbA (ORCPT
+        with ESMTP id S233558AbjEYLbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:31:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE2B195;
-        Thu, 25 May 2023 04:30:58 -0700 (PDT)
+        Thu, 25 May 2023 07:31:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D38FE4A;
+        Thu, 25 May 2023 04:31:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E56A764501;
-        Thu, 25 May 2023 11:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F37DC4339B;
-        Thu, 25 May 2023 11:30:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D71FC64501;
+        Thu, 25 May 2023 11:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3EFEC433EF;
+        Thu, 25 May 2023 11:31:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685014257;
-        bh=WuDnzx0mN7mNBgU7tsgoEX4DNhtKyDb/OxubW6VyA0U=;
+        s=k20201202; t=1685014292;
+        bh=4Dz9zMJVhxwMMiquc88J5UTjI72zXQLwzeT/4mr38VY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GC+ljHC8H2Iux5AZ0GremU5o0Eby4zu6UKKSgNyfTjIWSXgLjXrQrHe/ZBENSdmmB
-         rpjFZV7JHHSX4YXl69iH+LCnz+zJjiWyZsi4gcUrfqqj6Lsr+e8lqUfoJjoNAakTps
-         ljuQitF4E2r+WIbyJeA2Nh2SzaZjOqCv74oCvYK0m4uf52VeziYlfzc6M5fNWpP2Fe
-         Xap4H/8ymCI6J8X54VvkxRvbw/Ubgi+7kF8jut2nUz1Jpb8jvyX3C7v5769Y+oMh8k
-         jxFYEeFD3JRntRv8w/pp92/5vkjCRxKCD/W9a+zg8JxGOp2X8wg8HZzO8C3Ou9n9sE
-         o6ly+cQMgxEEA==
-Date:   Thu, 25 May 2023 12:30:52 +0100
+        b=biPs19dkMBRvz+eupbEagngMdLtHrzltjYKo7RPIOy+428C5+o8aWHIrAHSDFUIY5
+         csL6OR2vN6Bj/MGkBrJEyBaF9cAzhcq13JkH5cO4KJpi/cZc4lENp9VK6+w52SX33D
+         tXvX+iuxLSJc3j3W4XjBjd9dvtL2de2DK8Ztew973b1KvTtfkN+t7+iVfqpwy53FL7
+         kCGhYnca9c9/vgDGqmTBbYoHWXrUqfYDf+TVJuS8s+rVGzd6bDSwFMPVE88cjwjJBP
+         VS3xUSmR8E4g+rw5ThyJBjzRxLCjQ7GN27hx6AwYK+vKVxDn/Iqj5qvvp9D5Q6Yx/2
+         r3mnkiDCsvJcw==
+Date:   Thu, 25 May 2023 12:31:27 +0100
 From:   Lee Jones <lee@kernel.org>
-To:     p.paillet@foss.st.com
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mfd: add vref_ddr supply for STPMIC1
-Message-ID: <20230525113052.GC423913@google.com>
-References: <20230523074206.201962-1-p.paillet@foss.st.com>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Jan-Simon Moeller <jansimon.moeller@gmx.de>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org
+Subject: Re: [PATCH] leds: blinkm: Replace all non-returning strlcpy with
+ strscpy
+Message-ID: <20230525113127.GD423913@google.com>
+References: <20230523021228.2406112-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230523074206.201962-1-p.paillet@foss.st.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230523021228.2406112-1-azeemshaikh38@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,15 +57,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023, p.paillet@foss.st.com wrote:
+On Tue, 23 May 2023, Azeem Shaikh wrote:
 
-> From: Pascal Paillet <p.paillet@foss.st.com>
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> No return values were used, so direct replacement is safe.
 > 
-> Add vref_ddr supply description for the STPMIC1.
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
 > 
-> Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 > ---
->  Documentation/devicetree/bindings/mfd/st,stpmic1.yaml | 2 +-
+>  drivers/leds/leds-blinkm.c |    2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied, thanks
