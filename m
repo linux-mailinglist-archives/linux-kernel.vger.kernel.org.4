@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2FB71196D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1621B711970
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 23:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241300AbjEYVpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 17:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49110 "EHLO
+        id S241506AbjEYVsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 17:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240832AbjEYVpp (ORCPT
+        with ESMTP id S230203AbjEYVsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 17:45:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BAFE4D;
-        Thu, 25 May 2023 14:45:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6673364B71;
-        Thu, 25 May 2023 21:44:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF540C433EF;
-        Thu, 25 May 2023 21:44:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685051098;
-        bh=1d20bjdX5HUdVvZRPf4VGSbqIqinzRsHvwcKXpOUIoQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oAcQUkkSOjsmVnkbAo4rOPwsRIs+qW+MUrnXDJbyzI1Pifb67gOi0pDVzmXxEiaRF
-         w26LgUXziy2EcR4xt0dZ2jqo1wPKGCGD+Mx1CZ6QVeuLCKqxiQtZuI6Axo+9pID+RU
-         HGVtbDxkNNoSH8t1E++SMFq7Wv63fT9+ocO6MJED+HjPs67A78PRR+dcVRDiXtxznK
-         NcUe1wFCrzkRoDF8rqA7NodXIuuB/RfyhdBGqzPowYgn4GrAOVKig2tVjFUSro4jkN
-         SzJfi051sYZyOoljcfNKrmt5kgZX8y/wTvzJ4XhNmTQnocUfzg8D7/3Glsu+Of4IiS
-         /AlNRIjLaIeyQ==
-Date:   Thu, 25 May 2023 22:44:53 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v6 10/11] riscv: dts: starfive: jh7110: Add DVP and HDMI
- TX pixel external clocks
-Message-ID: <20230525-upscale-siberian-54c5f003334c@spud>
-References: <20230518101234.143748-1-xingyu.wu@starfivetech.com>
- <20230518101234.143748-11-xingyu.wu@starfivetech.com>
+        Thu, 25 May 2023 17:48:40 -0400
+Received: from out-56.mta1.migadu.com (out-56.mta1.migadu.com [95.215.58.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4613299
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 14:48:39 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685051317;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/htzEy4EHBMdNE/JbpSxK/E6aimlWCZ120WLz6hVPdg=;
+        b=k6jGFcUqjzohjB8xz2f7m8Jps7CXkyBO6+5Ta9qstxqh0NLeOgn367GHD3EQsk1sgmfZKd
+        DPMXEQ/RFaJQFONq4eZEvQUZC/bfUO7wHYP8CqKmiZDQNXvb5ia9htTi5KjE5B/dPmXp8/
+        m6IgFfuoGt5vQIdcp87lhi+vrPF8uxU=
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     linux-kernel@vger.kernel.org, axboe@kernel.dk
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [PATCH 0/7] block layer patches for bcachefs
+Date:   Thu, 25 May 2023 17:48:15 -0400
+Message-Id: <20230525214822.2725616-1-kent.overstreet@linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="14g6l7gbkD9WOY4x"
-Content-Disposition: inline
-In-Reply-To: <20230518101234.143748-11-xingyu.wu@starfivetech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jens, here's the full series of block layer patches needed for bcachefs:
 
---14g6l7gbkD9WOY4x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Some of these (added exports, zero_fill_bio_iter?) can probably go with
+the bcachefs pull and I'm just including here for completeness. The main
+ones are the bio_iter patches, and the __invalidate_super() patch.
 
-On Thu, May 18, 2023 at 06:12:33PM +0800, Xingyu Wu wrote:
-> Add DVP and HDMI TX pixel external fixed clocks and the rates are
-> 74.25MHz and 297MHz.
->=20
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+The bio_iter series has a new documentation patch.
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+I would still like the __invalidate_super() patch to get some review
+(from VFS people? unclear who owns this).
 
 Thanks,
-Conor.
+Kent
 
---14g6l7gbkD9WOY4x
-Content-Type: application/pgp-signature; name="signature.asc"
+Kent Overstreet (7):
+  block: Add some exports for bcachefs
+  block: Allow bio_iov_iter_get_pages() with bio->bi_bdev unset
+  block: Bring back zero_fill_bio_iter
+  block: Rework bio_for_each_segment_all()
+  block: Rework bio_for_each_folio_all()
+  block: Add documentation for bio iterator macros
+  block: Don't block on s_umount from __invalidate_super()
 
------BEGIN PGP SIGNATURE-----
+ block/bdev.c               |   2 +-
+ block/bio.c                |  57 ++++++------
+ block/blk-core.c           |   1 +
+ block/blk-map.c            |  38 ++++----
+ block/blk.h                |   1 -
+ block/bounce.c             |  12 +--
+ drivers/md/bcache/btree.c  |   8 +-
+ drivers/md/dm-crypt.c      |  10 +-
+ drivers/md/raid1.c         |   4 +-
+ fs/btrfs/disk-io.c         |   4 +-
+ fs/btrfs/extent_io.c       |  50 +++++-----
+ fs/btrfs/raid56.c          |  14 +--
+ fs/crypto/bio.c            |   9 +-
+ fs/erofs/zdata.c           |   4 +-
+ fs/ext4/page-io.c          |   8 +-
+ fs/ext4/readpage.c         |   4 +-
+ fs/f2fs/data.c             |  20 ++--
+ fs/gfs2/lops.c             |  10 +-
+ fs/gfs2/meta_io.c          |   8 +-
+ fs/iomap/buffered-io.c     |  14 +--
+ fs/mpage.c                 |   4 +-
+ fs/squashfs/block.c        |  48 +++++-----
+ fs/squashfs/lz4_wrapper.c  |  17 ++--
+ fs/squashfs/lzo_wrapper.c  |  17 ++--
+ fs/squashfs/xz_wrapper.c   |  19 ++--
+ fs/squashfs/zlib_wrapper.c |  18 ++--
+ fs/squashfs/zstd_wrapper.c |  19 ++--
+ fs/super.c                 |  40 ++++++--
+ fs/verity/verify.c         |   9 +-
+ include/linux/bio.h        | 186 +++++++++++++++++++++++++------------
+ include/linux/blkdev.h     |   1 +
+ include/linux/bvec.h       |  70 ++++++++------
+ include/linux/fs.h         |   1 +
+ 33 files changed, 429 insertions(+), 298 deletions(-)
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG/W1QAKCRB4tDGHoIJi
-0tacAQDzU7wda2zCGFCxnqT+sHimB4/P36sZ0pPmFeBEUk3dIAD/UZFrrFZD0rlX
-S99BGmiDwdA9CkSxOXkuNlTIIz+rdAE=
-=wubc
------END PGP SIGNATURE-----
+-- 
+2.40.1
 
---14g6l7gbkD9WOY4x--
