@@ -2,161 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9757112F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4107D7112F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239472AbjEYR55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S239698AbjEYR7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbjEYR54 (ORCPT
+        with ESMTP id S229663AbjEYR7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:57:56 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99410194;
-        Thu, 25 May 2023 10:57:54 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PG0EXt019837;
-        Thu, 25 May 2023 17:57:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=zqLmtibLKU7869PGFrgjEJRIXzWm6C1SWM2UnNl/rDs=;
- b=hbvENCXCI1I4YJ+Nr98RcWYketC7X6uPMRkQa8mvU0H02Tx4+xd6POkEikroNmb/KSlH
- LhVUSEXIaVdVAy/v+EXdqbwdUatPp5mhcxifCCKMaWSiTeJa3BR8afcSUCJqVFM8NrNT
- j1gl4UM7WB1RS49Ko+iuh3nJ8xrhOjv/Ro4cO4ki2lp6UjOfryJwIEmYp3MYF/BXI80Y
- TwQjCCTAIoihU1206g7BtaXzC6qyZize5utTfDLc3CSChYHOwna8aWXZ2GjtVC9G0Jqv
- 2ZfOcZBUvjzR3+OyqBhXnGRtr+RKru79QhIdr1TjdD/yilX5Wk1l1kW8Td2XQSoUTbUI mQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt47es6ag-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 17:57:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PHvGMT027813
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 17:57:16 GMT
-Received: from [10.71.110.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
- 2023 10:57:16 -0700
-Message-ID: <7deff127-4c6d-1f59-33a8-f44eea86bacd@quicinc.com>
-Date:   Thu, 25 May 2023 10:57:15 -0700
+        Thu, 25 May 2023 13:59:23 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A1E97
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:59:22 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-62382e86f81so120876d6.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1685037561; x=1687629561;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xICDDNJzTMlV+C/EWakClHRszr/QmvJchpBapNb+gXg=;
+        b=ZtAAnBMTGJP2tWkUSP5xUaYDRcsCorb+brBvD5yulvtESeyck9fnJcZflYXGFaOG7q
+         rN/jpZWDOzstrhdML+6txc1IMJzYUmDz+m9TkT5vwAglK79Hc62v3bCWj1Gt+WltZpfF
+         fzPj0phTkncD8dyvZFVQzwbVUPeaSKn2qA+p0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685037561; x=1687629561;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xICDDNJzTMlV+C/EWakClHRszr/QmvJchpBapNb+gXg=;
+        b=UcPG207IxroidFtMr56oY/F3vacCA+UiR7fDWhOv4pnkpOY75XYz/Mikv2u/BFXbue
+         B2wJsgiaUna4rliBZ2P8Rva2GT+HSjfEYBtHAi6zK4MaegnUUMLw01U0tmR53KBnMAkB
+         RoBhiXpn+vQWa7UfoahNNcoySppgQioSYmCibs/fEO3j0Qwpc088Ia3ng4pC/0y2Ym4W
+         DEZkaAwrzhrYKcsfVmAhcWN3jaUynj2j4ALIU61g+lqiLZi+dNy57UK9ybtepnt1yyhs
+         dLX0+a+R8VkbnXBqPpqD31r9/Jq8zdPuEViszh42bxuSOMHX12Sw9zk8vUgE9DYYf96U
+         UHTA==
+X-Gm-Message-State: AC+VfDzYArL0LEPL/QhscoyoPj5UXBKsV3vRVQdX7A7bVkHgGuAotKok
+        LGvxMAL0HEZ1CXHr849CTNl85A==
+X-Google-Smtp-Source: ACHHUZ7/1WnwUtu7rRfenj0wPjQi+PDctVOTb4kqHC5JGDcy3jyqWBfFc9/AV3r8to5l29aRUSb+/g==
+X-Received: by 2002:a05:6214:4014:b0:619:152a:b9a5 with SMTP id kd20-20020a056214401400b00619152ab9a5mr2212677qvb.10.1685037561084;
+        Thu, 25 May 2023 10:59:21 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id q26-20020a05620a039a00b0075c97468f57sm554049qkm.82.2023.05.25.10.59.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 10:59:20 -0700 (PDT)
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
+        Doug Berger <doug.berger@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next v2] net: phy: broadcom: Register dummy IRQ handler
+Date:   Thu, 25 May 2023 10:59:15 -0700
+Message-Id: <20230525175916.3550997-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
-Content-Language: en-US
-To:     Leonard Lausen <leonard@lausen.nl>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     <freedreno@lists.freedesktop.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        <regressions@lists.linux.dev>, David Airlie <airlied@gmail.com>,
-        "Nikita Travkin" <nikita@trvn.ru>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>, <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Johan Hovold <johan+linaro@kernel.org>
-References: <e547edf4-1b48-5d12-1600-45f78e7cab49@quicinc.com>
- <1345a125-f745-4fe3-0f5e-bfe84225958d@quicinc.com>
- <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
- <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
- <20230508021536.txtamifw2vkfncnx@ripper>
- <3802269cd54ce105ef6dece03b1b9af575b4fa06@lausen.nl>
- <ad351c02-1c29-3601-53e8-f8cdeca2ac63@linaro.org>
- <49d175ec16e3f65a18265063e51092ee8d0d79c1@lausen.nl>
- <f2d1bb37-ea83-4d5d-6ef5-ae84c26d6ac1@quicinc.com>
- <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: tvNJ97bIjRQRLiNJT5nPHuQUXfBH6D4N
-X-Proofpoint-ORIG-GUID: tvNJ97bIjRQRLiNJT5nPHuQUXfBH6D4N
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_10,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- suspectscore=0 clxscore=1015 adultscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305250150
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000004afe3c05fc8861de"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--0000000000004afe3c05fc8861de
+Content-Transfer-Encoding: 8bit
 
-On 5/24/2023 5:58 AM, Leonard Lausen wrote:
->>>>>>> [  275.025497] [drm:dpu_encoder_phys_vid_wait_for_commit_done:488]
->>>>>>> [dpu error]vblank timeout
->>>>>>> [  275.025514] [drm:dpu_kms_wait_for_commit_done:510] [dpu error]wait
->>>>>>> for commit done returned -110
->>>>>>> [  275.064141] [drm:dpu_encoder_frame_done_timeout:2382] [dpu
->>>>>>> error]enc33 frame done timeout
->>>>> This is a different crash but the root-cause of both the issues is the
->>>>> bridge hpd_enable/disable series.
->>>>>
->>>>> https://patchwork.freedesktop.org/patch/514414/
->>> Yes, the new patch to fix this issue is here
->>>
->>> https://patchwork.freedesktop.org/patch/538601/?series=118148&rev=3
->>>
->>> Apologies if you were not CCed on this, if a next version is CCed,
->>> will ask kuogee to cc you.
->>>
->>> Meanwhile, will be great if you can verify if it works for you and
->>> provide Tested-by tags.
->> Hi Leonard,
->>
->> I had  cc you with v5 patches.
->>
->> Would you please verify it.
-> Hi Kuogee,
->
-> thank you. Verified the v6 patch fixes the regression when ported to
-> 6.3.3. One non-fatal issue remains: Suspending and resuming the system
-> while USB-C DP monitor is connected triggers an error, though the system
-> recovers within a second without the need to unplug the cable.
->
-> [drm:drm_mode_config_helper_resume] *ERROR* Failed to resume (-107)
->
->
-> dmesg snippet related to the suspend below
->
->
-> [  197.845110] usb 2-1.4.4: reset SuperSpeed USB device number 12 using xhci-hcd
-> [  198.235191] [drm:drm_mode_config_helper_resume] *ERROR* Failed to resume (-107)
+In order to have our interrupt descriptor fully setup and in particular
+the action, ensure that we register a full fledged interrupt handler.
+This also allow us to set the interrupt polarity and flow through the
+same call.
 
-Hi Leonard,
+This is specifically necessary for kernel/irq/pm.c::suspend_device_irq
+to set the interrupt descriptor to the IRQD_WAKEUP_ARMED state and
+enable the interrupt for wake-up since it was still in a disabled state.
 
-I did not see this problem at my setup (Kodiak) during suspend/resume.
+Without an interrupt descriptor we would have ran into cases where the
+wake-up interrupt is not capable of waking up the system, specifically
+if we resumed the system ACPI S5 using the Ethernet PHY. In that case
+the Ethernet PHY interrupt would be pending by the time the kernel
+booted, which it would acknowledge but then we could never use it as
+a wake-up source again.
 
-Will investigate more on Trogdor device.
+Fixes: 8baddaa9d4ba ("net: phy: broadcom: Add support for Wake-on-LAN")
+Suggested-by: Doug Berger <doug.berger@broadcom.com>
+Debugged-by: Doug Berger <doug.berger@broadcom.com>
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+Changes in v2:
 
-Thanks,
+- provided more details about the mechanics of wake-up interrupts arming
+- added a Debugged-by tag for Doug since he really whispered the
+  solution to my keyboard
+
+ drivers/net/phy/bcm-phy-lib.c | 6 ++++++
+ drivers/net/phy/bcm-phy-lib.h | 2 ++
+ drivers/net/phy/broadcom.c    | 9 ++++++++-
+ 3 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/phy/bcm-phy-lib.c b/drivers/net/phy/bcm-phy-lib.c
+index 27c57f6ab211..5603d0a9ce96 100644
+--- a/drivers/net/phy/bcm-phy-lib.c
++++ b/drivers/net/phy/bcm-phy-lib.c
+@@ -1028,6 +1028,12 @@ void bcm_phy_get_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol)
+ }
+ EXPORT_SYMBOL_GPL(bcm_phy_get_wol);
+ 
++irqreturn_t bcm_phy_wol_isr(int irq, void *dev_id)
++{
++	return IRQ_HANDLED;
++}
++EXPORT_SYMBOL_GPL(bcm_phy_wol_isr);
++
+ MODULE_DESCRIPTION("Broadcom PHY Library");
+ MODULE_LICENSE("GPL v2");
+ MODULE_AUTHOR("Broadcom Corporation");
+diff --git a/drivers/net/phy/bcm-phy-lib.h b/drivers/net/phy/bcm-phy-lib.h
+index c6fed43ec913..2f30ce0cab0e 100644
+--- a/drivers/net/phy/bcm-phy-lib.h
++++ b/drivers/net/phy/bcm-phy-lib.h
+@@ -8,6 +8,7 @@
+ 
+ #include <linux/brcmphy.h>
+ #include <linux/phy.h>
++#include <linux/interrupt.h>
+ 
+ struct ethtool_wolinfo;
+ 
+@@ -115,5 +116,6 @@ static inline void bcm_ptp_stop(struct bcm_ptp_private *priv)
+ 
+ int bcm_phy_set_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol);
+ void bcm_phy_get_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol);
++irqreturn_t bcm_phy_wol_isr(int irq, void *dev_id);
+ 
+ #endif /* _LINUX_BCM_PHY_LIB_H */
+diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
+index 418e6bc0e998..822c8b01dc53 100644
+--- a/drivers/net/phy/broadcom.c
++++ b/drivers/net/phy/broadcom.c
+@@ -927,7 +927,14 @@ static int bcm54xx_phy_probe(struct phy_device *phydev)
+ 
+ 	if (!IS_ERR(wakeup_gpio)) {
+ 		priv->wake_irq = gpiod_to_irq(wakeup_gpio);
+-		ret = irq_set_irq_type(priv->wake_irq, IRQ_TYPE_LEVEL_LOW);
++
++		/* Dummy interrupt handler which is not enabled but is provided
++		 * in order for the interrupt descriptor to be fully set-up.
++		 */
++		ret = devm_request_irq(&phydev->mdio.dev, priv->wake_irq,
++				       bcm_phy_wol_isr,
++				       IRQF_TRIGGER_LOW | IRQF_NO_AUTOEN,
++				       dev_name(&phydev->mdio.dev), phydev);
+ 		if (ret)
+ 			return ret;
+ 	}
+-- 
+2.34.1
 
 
-> [  198.528638] OOM killer enabled.
-> [  198.531866] Restarting tasks ...
-> [  198.531994] usb 1-1.4.4.1: USB disconnect, device number 27
-> [  198.532223] usb 1-1.4.3: USB disconnect, device number 23
-> [  198.532509] usb 1-1.4.2.1: USB disconnect, device number 29
-> [  198.534805] r8152-cfgselector 2-1.4.4.2: USB disconnect, device number 13
-> [  198.535444] done.
-> [  198.535536] usb 1-1.1: USB disconnect, device number 15
-> [  198.567811] random: crng reseeded on system resumption
-> [  198.583431] PM: suspend exit
+--0000000000004afe3c05fc8861de
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIi35FbTGMSROxIx
+ou08smRwPZZ4sAicqgQFMxg4hUTKMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDUyNTE3NTkyMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCEOY7xgxquOju2+/UJxS/fQJWh/7Wi32y3
+awBk5abRUtcL9UvdVkVG4PJbxqQmzNMxYv/t5hU///OEriL7Oi0v64LwaJTPUZfpu3JsFIhIlwdu
+06hM4MRCZGTEFNq0qEXckzqkfOnYA9sFf3G6wpZixo8hRhnVD4Nlz76B/nnkcI1fQx9R02dyg1VR
+WGwjsRtY82lpYVXcVewyKkf4H+Qs1hRFmd+SehUnTFIGG2lkB/VXzqDaa6sW9DkB+kz1ZFuZsepe
+KG4zmqy12tTosmm+ZZ7OA4l8C+5brTw1Jb/1YYy0HpBcP2G8rBurn6QYIW2t5dw435DX2dtzljp5
+263q
+--0000000000004afe3c05fc8861de--
