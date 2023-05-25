@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67065710875
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70B9710877
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235433AbjEYJNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        id S239477AbjEYJOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjEYJNu (ORCPT
+        with ESMTP id S236207AbjEYJOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:13:50 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB5B197;
-        Thu, 25 May 2023 02:13:48 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75b0f2ce4b7so36248185a.2;
-        Thu, 25 May 2023 02:13:48 -0700 (PDT)
+        Thu, 25 May 2023 05:14:42 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579AFA7;
+        Thu, 25 May 2023 02:14:41 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so4003448a12.3;
+        Thu, 25 May 2023 02:14:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685006027; x=1687598027;
+        d=gmail.com; s=20221208; t=1685006080; x=1687598080;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9dXxRgpCYwYEvO8+viBKaOCvYsHdp+OLwEgKK5Zar84=;
-        b=Ls554U3ah3KLc5ag0G4cR+GTuWgnowKVe2eWj/Eiys8rv5glhbXYEY9fV04gF59JLh
-         9jZhc0Ua/7ZvWvL7R+KdNgXZaz9zqr84HBjHnlHbQMyRkjTCXSCBLGmMTYztMY1sdlbN
-         K1NaU92EtWfRaVJFVNcqBsW64IOO2rKq4cYM/nBP2ybsXMM5B7APjNrY8f6p2fRElRwe
-         U4Bu6JukPUZplBQgQkXsL1h544YfvgWWB3T/R5LGGFgwWaxinNdHRDAmE9/4T5tNPeaq
-         Z+YwUeGwXdoEymEZw67hxXXg4RsGMG4mETL4X/y3aIUa1KYK1y9kZg15EKZZNoODA+PL
-         Yaew==
+        bh=76DwNbDGQP83GHoYB0zX5gS/ikCHV5gsiqGNLpVFqG8=;
+        b=boIE2/DjBSzAR6jnreSa/tnfPh3NCpOeJliJnP/XB09U40pEdzi3vKzsQZT6i06JeG
+         sT+3n0kGa5LXepWTrSIcvuc8Te9puNUGfIveI5ZpGQrn0UTzkfSHNYb823DuojXpJXqn
+         0FoaQT8xOsNz1Z2zCRMTQofhxWwBEBUw36nuTN1T1TCOQkfpcsn/B/5cdO5AlnSHl9eq
+         L4N8phg1kxTKXnxidSbr3w5wzJPpv6WC90NsdhNw64tYe2sdtJ7Fcm7bp1qs1cE8IPr0
+         USWEhmil2Il3JBhBKtc+H/cxAGGaSwdEtwBJ0Z5L1fC8JFvTZxkuqJb+eZathGdIbGnz
+         H2bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685006027; x=1687598027;
+        d=1e100.net; s=20221208; t=1685006080; x=1687598080;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9dXxRgpCYwYEvO8+viBKaOCvYsHdp+OLwEgKK5Zar84=;
-        b=dBMFEvzUuYis0BLwR1Pjd17pK7iTn3dgflnb7NgZ2m0acfQRZUXQySorzNvcTQHNXg
-         YAGASUf1nhOUFl8Al1pS2P5wAkLtWDmsgeU57wOeZcdSrXdImclKII8IGFjmcPpUBfLB
-         GLT9nmcHMGpopxrC+j1qZMYo43Dh7+1MAuEkxKs4LiLXjwxhaWfcrDVcgGlN6ORjFWBq
-         Ub9jjJbTL/BS/KVum3aanCCWTrBhnn3my9kkS8VqoE21xV913VFWGLKadMaxT63QVYO4
-         jFPIqt6PBCksgmY2RWzCkfamm5HwKXrz2shfmBYU1CWk8KUgbQ9a31EveE64KTA31zs7
-         H+0w==
-X-Gm-Message-State: AC+VfDyDxuMPyMay4nytiCArCgRLnPGOMjAtPrXPx8+z0LDCuesQfCN4
-        VV1Odd4V7N7yZatyHWS8cR2K+KI6tIYh8Kcz09k=
-X-Google-Smtp-Source: ACHHUZ5/PSruSG0Zg49jiTqWBTWANT+/yiun94pxgP+eSbT3w3NfkfztzOx4znxgMQFr25/t/KPxnzbFOMfO9tlaHIM=
-X-Received: by 2002:ad4:5d48:0:b0:616:4c4b:c9b9 with SMTP id
- jk8-20020ad45d48000000b006164c4bc9b9mr734564qvb.37.1685006027396; Thu, 25 May
- 2023 02:13:47 -0700 (PDT)
+        bh=76DwNbDGQP83GHoYB0zX5gS/ikCHV5gsiqGNLpVFqG8=;
+        b=IroaceaBLkM2c7MEkRSGotCAvdaosK6iy1G+bK3t41+PdF4gXvlhE4/h3NJA6ArBG+
+         Jb9GPG1hDVBb8mdd7+SMVXAXZN0E+47mdnOWBrEN9UxCbyjapZcNSS3bg+KoV41oXFoZ
+         2ezs0BLgULkam6WHS/LbDaC87XZBFS9Pd4wvbEvp5eqzo8IBAxjUiGT/HAW7iqd2STnv
+         /hY4i3zdME/waiBOqy4Zr6lyXaOY+y/BTYtNVOEyrgBeu5s/YJKZAMEtw4sh09I4bWqT
+         scKg2iQ0iJ6VeafbQak6+lUTVSHn6iH+G37VOlEmyCwcGwMIJ6G5LGm+5cZvwfrei7Yw
+         AQOg==
+X-Gm-Message-State: AC+VfDzQukXLSz5H130Pfczxnag1TEXhOur566OwtQfW4kw9m5ILc2l3
+        7B+ExLiGz3UM1D0QZndSPZdwTZMusR/PNy1p5R0=
+X-Google-Smtp-Source: ACHHUZ7qksFuVsSCC5e4gkXBm7DhNf6+QyeUwJCZOQbWdl2/LWLcjBKNw8OpJCnaFNMia0GgI3lmJsOwrZhrCmISxoI=
+X-Received: by 2002:a17:906:dac4:b0:96f:da2c:ddc1 with SMTP id
+ xi4-20020a170906dac400b0096fda2cddc1mr1039915ejb.75.1685006079534; Thu, 25
+ May 2023 02:14:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <ZGzsD_HMbMGhGwcr@surfacebook> <72990baf-6964-01ad-d891-7090831d0310@alliedtelesis.co.nz>
- <ZG2jgwjK+CBmOk3G@sol> <f9006a57-4c67-c8a0-badc-84b3292aa686@alliedtelesis.co.nz>
-In-Reply-To: <f9006a57-4c67-c8a0-badc-84b3292aa686@alliedtelesis.co.nz>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 25 May 2023 12:13:11 +0300
-Message-ID: <CAHp75VfVr0N4Fv=s_12vcTi8=pGWJgeWoXpxQvqSNWDcZauS=A@mail.gmail.com>
-Subject: Re: using libgpiod to replace sysfs ABI (was Re: [PATCH] gpiolib:
- Avoid side effects in gpio_is_visible())
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230524093623.3698134-1-chenhuacai@loongson.cn> <ZG4rZYBKaWrsctuH@bhelgaas>
+In-Reply-To: <ZG4rZYBKaWrsctuH@bhelgaas>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 25 May 2023 17:14:28 +0800
+Message-ID: <CAAhV-H5u8qtXpr-mY+pKq7UfmyBgr3USRTQpo9-w28w8pHX8QQ@mail.gmail.com>
+Subject: Re: [PATCH] pci: irq: Add an early parameter to limit pci irq numbers
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ahmed S . Darwish" <darwi@linutronix.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>, linux-pci@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongson-kernel@lists.loongnix.cn,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,23 +78,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 2:53=E2=80=AFAM Chris Packham
-<Chris.Packham@alliedtelesis.co.nz> wrote:
-> On 24/05/23 17:41, Kent Gibson wrote:
+Hi, Bjorn,
 
-...
+On Wed, May 24, 2023 at 11:21=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org>=
+ wrote:
+>
+> [+cc Marc, LKML]
+>
+> On Wed, May 24, 2023 at 05:36:23PM +0800, Huacai Chen wrote:
+> > Some platforms (such as LoongArch) cannot provide enough irq numbers as
+> > many as logical cpu numbers. So we should limit pci irq numbers when
+> > allocate msi/msix vectors, otherwise some device drivers may fail at
+> > initialization. This patch add a cmdline parameter "pci_irq_limit=3Dxxx=
+x"
+> > to control the limit.
+> >
+> > The default pci msi/msix number limit is defined 32 for LoongArch and
+> > NR_IRQS for other platforms.
+>
+> The IRQ experts can chime in on this, but this doesn't feel right to
+> me.  I assume arch code should set things up so only valid IRQ numbers
+> can be allocated.  This doesn't seem necessarily PCI-specific, I'd
+> prefer to avoid an arch #ifdef here, and I'd also prefer to avoid a
+> command-line parameter that users have to discover and supply.
+The problem we meet: LoongArch machines can have as many as 256
+logical cpus, and the maximum of msi vectors is 192. Even on a 64-core
+machine, 192 irqs can be easily exhausted if there are several NICs
+(NIC usually allocates msi irqs depending on the number of online
+cpus). So we want to limit the msi allocation.
 
-> It'd also be great if there was some way of ensuring that a line's state
-> is kept after the application has released the request (i.e. the txdis
-> case I mentioned). But that probably needs work on the kernel side to
-> make such guarantees.
+This is not a LoongArch-specific problem, because I think other
+platforms can also meet if they have many NICs. But of course,
+LoongArch can meet it more easily because the available msi vectors
+are very few. So, adding a cmdline parameter is somewhat reasonable.
 
-Won't happen. It will require too much of strictness to be added into
-the kernel with likely breakage of the existing code and
-documentation. What is being discussed is a D-Bus (like?) daemon +
-Policy in user space that will allow user / process / cgroup / etc to
-"own" the line and track its state.
+After some investigation, I think it may be possible to modify
+drivers/irqchip/irq-loongson-pch-msi.c and override
+msi_domain_info::domain_alloc_irqs() to limit msi allocation. However,
+doing that need to remove the "static" before
+__msi_domain_alloc_irqs(), which means revert
+762687ceb31fc296e2e1406559e8bb5 ("genirq/msi: Make
+__msi_domain_alloc_irqs() static"), I don't know whether that is
+acceptable.
 
---=20
-With Best Regards,
-Andy Shevchenko
+If such a revert is not acceptable, it seems that we can only use the
+method in this patch. Maybe rename pci_irq_limits to pci_msi_limits is
+a little better.
+
+Huacai
+
+>
+> > Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  drivers/pci/msi/msi.c | 26 +++++++++++++++++++++++++-
+> >  1 file changed, 25 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+> > index ef1d8857a51b..6617381e50e7 100644
+> > --- a/drivers/pci/msi/msi.c
+> > +++ b/drivers/pci/msi/msi.c
+> > @@ -402,12 +402,34 @@ static int msi_capability_init(struct pci_dev *de=
+v, int nvec,
+> >       return ret;
+> >  }
+> >
+> > +#ifdef CONFIG_LOONGARCH
+> > +#define DEFAULT_PCI_IRQ_LIMITS 32
+> > +#else
+> > +#define DEFAULT_PCI_IRQ_LIMITS NR_IRQS
+> > +#endif
+> > +
+> > +static int pci_irq_limits =3D DEFAULT_PCI_IRQ_LIMITS;
+> > +
+> > +static int __init pci_irq_limit(char *str)
+> > +{
+> > +     get_option(&str, &pci_irq_limits);
+> > +
+> > +     if (pci_irq_limits =3D=3D 0)
+> > +             pci_irq_limits =3D DEFAULT_PCI_IRQ_LIMITS;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +early_param("pci_irq_limit", pci_irq_limit);
+> > +
+> >  int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec=
+,
+> >                          struct irq_affinity *affd)
+> >  {
+> >       int nvec;
+> >       int rc;
+> >
+> > +     maxvec =3D clamp_val(maxvec, 0, pci_irq_limits);
+> > +
+> >       if (!pci_msi_supported(dev, minvec) || dev->current_state !=3D PC=
+I_D0)
+> >               return -EINVAL;
+> >
+> > @@ -776,7 +798,9 @@ static bool pci_msix_validate_entries(struct pci_de=
+v *dev, struct msix_entry *en
+> >  int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *en=
+tries, int minvec,
+> >                           int maxvec, struct irq_affinity *affd, int fl=
+ags)
+> >  {
+> > -     int hwsize, rc, nvec =3D maxvec;
+> > +     int hwsize, rc, nvec;
+> > +
+> > +     nvec =3D clamp_val(maxvec, 0, pci_irq_limits);
+> >
+> >       if (maxvec < minvec)
+> >               return -ERANGE;
+> > --
+> > 2.39.1
+> >
