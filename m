@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D035710354
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 05:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75764710352
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 05:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbjEYDe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 23:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S230127AbjEYDeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 23:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjEYDe5 (ORCPT
+        with ESMTP id S229530AbjEYDeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 23:34:57 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A34DE2;
-        Wed, 24 May 2023 20:34:54 -0700 (PDT)
-Received: from m202171703$hust.edu.cn ( [172.16.0.254] ) by
- ajax-webmail-app1 (Coremail) ; Thu, 25 May 2023 11:33:42 +0800 (GMT+08:00)
-X-Originating-IP: [172.16.0.254]
-Date:   Thu, 25 May 2023 11:33:42 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5byg572R?= <m202171703@hust.edu.cn>
-To:     "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>
-Cc:     "Peter Korsgaard" <peter@korsgaard.com>,
-        "Andrew Lunn" <andrew@lunn.ch>,
-        hust-os-kernel-patches@googlegroups.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Dan Carpenter" <dan.carpenter@linaro.org>
-Subject: Re: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
- Copyright (c) 2002-2023 www.mailtech.cn hust
-In-Reply-To: <68c4b991-6af9-36e8-354c-7c3b232ba4c2@wanadoo.fr>
-References: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
- <20230524154318.2259-1-silver_code@hust.edu.cn>
- <68c4b991-6af9-36e8-354c-7c3b232ba4c2@wanadoo.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Wed, 24 May 2023 23:34:12 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16C9FE2;
+        Wed, 24 May 2023 20:34:09 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxiPEv125kUrwAAA--.1775S3;
+        Thu, 25 May 2023 11:34:07 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOQu125kVzh2AA--.64313S3;
+        Thu, 25 May 2023 11:34:06 +0800 (CST)
+Subject: Re: [PATCH v11 2/2] spi: loongson: add bus driver for the loongson
+ spi controller
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <20230522071030.5193-3-zhuyinbo@loongson.cn> <ZGy3b7ZfNwWoGDTu@surfacebook>
+ <35b0500c-d7fe-6479-eeff-d45bbf9a9426@loongson.cn>
+ <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <2a72a2c2-6fda-1ea8-3b27-5623cc1132aa@loongson.cn>
+Date:   Thu, 25 May 2023 11:34:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Message-ID: <5cceb5b5.c1fe.18850f830e0.Coremail.m202171703@hust.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: FgEQrABnFJkW125kJYl2Ag--.24180W
-X-CM-SenderInfo: rpsqjiqxrxijo6kx23oohg3hdfq/1tbiAQoAAGRrClNO0gATsS
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAHp75VdHPFDAd4iHdX5jXCM-tq0ZbFJDjvF9GCR_n7HVtd+obg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxoOQu125kVzh2AA--.64313S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxGw17Cw48WFyktrW5tw1UZFb_yoW5Cw1xpF
+        WUJa1jyr4UJrWkCw1Iqwn5Xrn2yryfJF1UWwn8tFy8Gr1qvF13Xr1UKrWa9rZ3uFs5uF48
+        Za1UXFs3CF90y3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
+        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
+        80aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8c_-PUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,106 +71,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgIENocmlzdG9waGUsCgpUaGFua3MgZm9yIHlvdXIgc3VnZ2VzdGlvbnMuIEhvd2V2ZXIsIGJv
-dGggY2xrX2dldF9yYXRlIGFuZCBjbGtfcHJlcGFyZV9lbmFibGUgCndpbGwgcmV0dXJuIDAgaWYg
-aTJjLT5jbGsgaXMgTlVMTCwgc28gSSB0aGluayB3ZSBtYXkgbm90IG5lZWQgdG8gdGFrZSB0aGlz
-IGlzc3VlIAppbnRvIGFjY291bnQuCgpSZWdhcmRzLApXYW5nIFpoYW5nCgoiQ2hyaXN0b3BoZSBK
-QUlMTEVUIiA8Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI+5YaZ6YGT77yaCj4gTGUgMjQv
-MDUvMjAyMyDDoCAxNzo0MywgV2FuZyBaaGFuZyBhIMOpY3JpdMKgOg0KPiA+IFdoaWxlIGl0IGlz
-IG5vdCBlbnRpcmVseSBjbGVhciB3aHkgdGhlIG9yaWdpbmFsIGF1dGhvciBpbXBsZW1lbnRlZCB0
-aGlzDQo+ID4gYmVoYXZpb3IsIHRoZXJlIG1heSBoYXZlIGJlZW4gY2VydGFpbiBjaXJjdW1zdGFu
-Y2VzIG9yIGlzc3VlcyB0aGF0IHdlcmUgbm90DQo+ID4gYXBwYXJlbnQgdG8gdXMuIEl0J3MgcG9z
-c2libGUgdGhhdCB0aGV5IHdlcmUgdHJ5aW5nIHRvIHdvcmsgYXJvdW5kIGEgYnVnIGJ5DQo+ID4g
-ZW1wbG95aW5nIGFuIHVuY29udmVudGlvbmFsIHNvbHV0aW9uLlVzaW5nIGBkZXZtX2Nsa19nZXRf
-ZW5hYmxlZCgpYCByYXRoZXINCj4gPiB0aGFuIGRldm1fY2xrX2dldCgpIGNhbiBhdXRvbWF0aWNh
-bGx5IHRyYWNrIHRoZSB1c2FnZSBvZiBjbG9ja3MgYW5kIGZyZWUNCj4gPiB0aGVtIHdoZW4gdGhl
-eSBhcmUgbm8gbG9uZ2VyIG5lZWRlZCBvciBhbiBlcnJvciBvY2N1cnMuDQo+ID4gDQo+ID4gZml4
-aW5nIGl0IGJ5IGNoYW5naW5nIGBvY29yZXNfaTJjX29mX3Byb2JlYCB0byB1c2UNCj4gPiBgZGV2
-bV9jbGtfZ2V0X29wdGlvbmFsX2VuYWJsZWQoKWAgcmF0aGVyIHRoYW4gYGRldm1fY2xrX2dldCgp
-YCwgY2hhbmdpbmcNCj4gPiBgZ290byBlcnJfY2xrJyB0byBkaXJlY3QgcmV0dXJuIGFuZCByZW1v
-dmluZyBgZXJyX2Nsa2AuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogV2FuZyBaaGFuZyA8c2ls
-dmVyX2NvZGVAaHVzdC5lZHUuY24+DQo+ID4gUmV2aWV3ZWQtYnk6IEFuZHJldyBMdW5uIDxhbmRy
-ZXdAbHVubi5jaD4NCj4gPiAtLS0NCj4gPiB2Mi0+djM6IHVzZSBgZGV2bV9jbGtfZ2V0X29wdGlv
-bmFsX2VuYWJsZWQoKWAgdG8gbWFuYWdlIGNsa3MNCj4gPiB2MS0+djI6IGNoYW5nZSBgb2NvcmVz
-X2kyY19vZl9wcm9iZWAgdG8gdXNlIGBkZXZtX2Nsa19nZXRfZW5hYmxlZCgpYA0KPiA+IC0tLQ0K
-PiA+ICAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1vY29yZXMuYyB8IDU3ICsrKysrKysrKysrKyst
-LS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlvbnMo
-KyksIDM1IGRlbGV0aW9ucygtKQ0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9i
-dXNzZXMvaTJjLW9jb3Jlcy5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1vY29yZXMuYw0KPiA+
-IGluZGV4IDJlNTc1ODU2YzVjZC4uMzE2ZDcyY2RlM2I5IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZl
-cnMvaTJjL2J1c3Nlcy9pMmMtb2NvcmVzLmMNCj4gPiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMv
-aTJjLW9jb3Jlcy5jDQo+ID4gQEAgLTU1MiwxNiArNTUyLDE0IEBAIHN0YXRpYyBpbnQgb2NvcmVz
-X2kyY19vZl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2LA0KPiA+ICAgCQkJCQkJ
-CSZjbG9ja19mcmVxdWVuY3kpOw0KPiA+ICAgCWkyYy0+YnVzX2Nsb2NrX2toeiA9IDEwMDsNCj4g
-PiAgIA0KPiA+IC0JaTJjLT5jbGsgPSBkZXZtX2Nsa19nZXQoJnBkZXYtPmRldiwgTlVMTCk7DQo+
-ID4gKwlpMmMtPmNsayA9IGRldm1fY2xrX2dldF9vcHRpb25hbF9lbmFibGVkKCZwZGV2LT5kZXYs
-IE5VTEwpOw0KPiA+ICAgDQo+ID4gLQlpZiAoIUlTX0VSUihpMmMtPmNsaykpIHsNCj4gPiAtCQlp
-bnQgcmV0ID0gY2xrX3ByZXBhcmVfZW5hYmxlKGkyYy0+Y2xrKTsNCj4gPiAtDQo+ID4gLQkJaWYg
-KHJldCkgew0KPiA+IC0JCQlkZXZfZXJyKCZwZGV2LT5kZXYsDQo+ID4gLQkJCQkiY2xrX3ByZXBh
-cmVfZW5hYmxlIGZhaWxlZDogJWRcbiIsIHJldCk7DQo+ID4gLQkJCXJldHVybiByZXQ7DQo+ID4g
-LQkJfQ0KPiA+ICsJaWYgKElTX0VSUihpMmMtPmNsaykpIHsNCj4gPiArCQlkZXZfZXJyKCZwZGV2
-LT5kZXYsDQo+ID4gKwkJCSJkZXZtX2Nsa19nZXRfb3B0aW9uYWxfZW5hYmxlZCBmYWlsZWRcbiIp
-Ow0KPiANCj4gTWF5YmUgZGV2X2Vycl9wcm9iZSgpIHdvdWxkIGJlIG5pY2UgaGVyZS4gVGhpcyB3
-b3VsZCBsb2cgdGhlIGVycm9yIGNvZGUsIA0KPiBhbmQgZmlsdGVyIC1FUFJPQkVfREVGRVIsIHNo
-b3VsZCBpdCBoYXBwZW4uDQo+IA0KPiA+ICsJCXJldHVybiBQVFJfRVJSKGkyYy0+Y2xrKTsNCj4g
-PiArCX0NCj4gPiArCWlmIChpMmMtPmNsaykgew0KPiA+ICAgCQlpMmMtPmlwX2Nsb2NrX2toeiA9
-IGNsa19nZXRfcmF0ZShpMmMtPmNsaykgLyAxMDAwOw0KPiA+ICAgCQlpZiAoY2xvY2tfZnJlcXVl
-bmN5X3ByZXNlbnQpDQo+ID4gICAJCQlpMmMtPmJ1c19jbG9ja19raHogPSBjbG9ja19mcmVxdWVu
-Y3kgLyAxMDAwOw0KPiA+IEBAIC01NzMsNyArNTcxLDYgQEAgc3RhdGljIGludCBvY29yZXNfaTJj
-X29mX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYsDQo+ID4gICAJCQlpZiAoIWNs
-b2NrX2ZyZXF1ZW5jeV9wcmVzZW50KSB7DQo+ID4gICAJCQkJZGV2X2VycigmcGRldi0+ZGV2LA0K
-PiA+ICAgCQkJCQkiTWlzc2luZyByZXF1aXJlZCBwYXJhbWV0ZXIgJ29wZW5jb3JlcyxpcC1jbG9j
-ay1mcmVxdWVuY3knXG4iKTsNCj4gPiAtCQkJCWNsa19kaXNhYmxlX3VucHJlcGFyZShpMmMtPmNs
-ayk7DQo+ID4gICAJCQkJcmV0dXJuIC1FTk9ERVY7DQo+ID4gICAJCQl9DQo+ID4gICAJCQlpMmMt
-PmlwX2Nsb2NrX2toeiA9IGNsb2NrX2ZyZXF1ZW5jeSAvIDEwMDA7DQo+ID4gQEAgLTY3OCw4ICs2
-NzUsNyBAQCBzdGF0aWMgaW50IG9jb3Jlc19pMmNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rldmlj
-ZSAqcGRldikNCj4gPiAgIAkJZGVmYXVsdDoNCj4gPiAgIAkJCWRldl9lcnIoJnBkZXYtPmRldiwg
-IlVuc3VwcG9ydGVkIEkvTyB3aWR0aCAoJWQpXG4iLA0KPiA+ICAgCQkJCWkyYy0+cmVnX2lvX3dp
-ZHRoKTsNCj4gPiAtCQkJcmV0ID0gLUVJTlZBTDsNCj4gPiAtCQkJZ290byBlcnJfY2xrOw0KPiA+
-ICsJCQlyZXR1cm4gLUVJTlZBTDsNCj4gPiAgIAkJfQ0KPiA+ICAgCX0NCj4gPiAgIA0KPiA+IEBA
-IC03MTAsMTMgKzcwNiwxMyBAQCBzdGF0aWMgaW50IG9jb3Jlc19pMmNfcHJvYmUoc3RydWN0IHBs
-YXRmb3JtX2RldmljZSAqcGRldikNCj4gPiAgIAkJCQkJCSAgIHBkZXYtPm5hbWUsIGkyYyk7DQo+
-ID4gICAJCWlmIChyZXQpIHsNCj4gPiAgIAkJCWRldl9lcnIoJnBkZXYtPmRldiwgIkNhbm5vdCBj
-bGFpbSBJUlFcbiIpOw0KPiA+IC0JCQlnb3RvIGVycl9jbGs7DQo+ID4gKwkJCXJldHVybiByZXQ7
-DQo+ID4gICAJCX0NCj4gPiAgIAl9DQo+ID4gICANCj4gPiAgIAlyZXQgPSBvY29yZXNfaW5pdCgm
-cGRldi0+ZGV2LCBpMmMpOw0KPiA+ICAgCWlmIChyZXQpDQo+ID4gLQkJZ290byBlcnJfY2xrOw0K
-PiA+ICsJCXJldHVybiByZXQ7DQo+ID4gICANCj4gPiAgIAkvKiBob29rIHVwIGRyaXZlciB0byB0
-cmVlICovDQo+ID4gICAJcGxhdGZvcm1fc2V0X2RydmRhdGEocGRldiwgaTJjKTsNCj4gPiBAQCAt
-NzI4LDcgKzcyNCw3IEBAIHN0YXRpYyBpbnQgb2NvcmVzX2kyY19wcm9iZShzdHJ1Y3QgcGxhdGZv
-cm1fZGV2aWNlICpwZGV2KQ0KPiA+ICAgCS8qIGFkZCBpMmMgYWRhcHRlciB0byBpMmMgdHJlZSAq
-Lw0KPiA+ICAgCXJldCA9IGkyY19hZGRfYWRhcHRlcigmaTJjLT5hZGFwKTsNCj4gPiAgIAlpZiAo
-cmV0KQ0KPiA+IC0JCWdvdG8gZXJyX2NsazsNCj4gPiArCQlyZXR1cm4gcmV0Ow0KPiA+ICAgDQo+
-ID4gICAJLyogYWRkIGluIGtub3duIGRldmljZXMgdG8gdGhlIGJ1cyAqLw0KPiA+ICAgCWlmIChw
-ZGF0YSkgew0KPiA+IEBAIC03MzcsMTAgKzczMyw2IEBAIHN0YXRpYyBpbnQgb2NvcmVzX2kyY19w
-cm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiA+ICAgCX0NCj4gPiAgIA0KPiA+
-ICAgCXJldHVybiAwOw0KPiA+IC0NCj4gPiAtZXJyX2NsazoNCj4gPiAtCWNsa19kaXNhYmxlX3Vu
-cHJlcGFyZShpMmMtPmNsayk7DQo+ID4gLQlyZXR1cm4gcmV0Ow0KPiA+ICAgfQ0KPiA+ICAgDQo+
-ID4gICBzdGF0aWMgaW50IG9jb3Jlc19pMmNfcmVtb3ZlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2Ug
-KnBkZXYpDQo+ID4gQEAgLTc1NSw5ICs3NDcsNiBAQCBzdGF0aWMgaW50IG9jb3Jlc19pMmNfcmVt
-b3ZlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ID4gICAJLyogcmVtb3ZlIGFkYXB0
-ZXIgJiBkYXRhICovDQo+ID4gICAJaTJjX2RlbF9hZGFwdGVyKCZpMmMtPmFkYXApOw0KPiA+ICAg
-DQo+ID4gLQlpZiAoIUlTX0VSUihpMmMtPmNsaykpDQo+ID4gLQkJY2xrX2Rpc2FibGVfdW5wcmVw
-YXJlKGkyYy0+Y2xrKTsNCj4gPiAtDQo+ID4gICAJcmV0dXJuIDA7DQo+ID4gICB9DQo+ID4gICAN
-Cj4gPiBAQCAtNzcxLDggKzc2MCw3IEBAIHN0YXRpYyBpbnQgb2NvcmVzX2kyY19zdXNwZW5kKHN0
-cnVjdCBkZXZpY2UgKmRldikNCj4gPiAgIAljdHJsICY9IH4oT0NJMkNfQ1RSTF9FTiB8IE9DSTJD
-X0NUUkxfSUVOKTsNCj4gPiAgIAlvY19zZXRyZWcoaTJjLCBPQ0kyQ19DT05UUk9MLCBjdHJsKTsN
-Cj4gPiAgIA0KPiA+IC0JaWYgKCFJU19FUlIoaTJjLT5jbGspKQ0KPiA+IC0JCWNsa19kaXNhYmxl
-X3VucHJlcGFyZShpMmMtPmNsayk7DQo+ID4gKwljbGtfZGlzYWJsZV91bnByZXBhcmUoaTJjLT5j
-bGspOw0KPiA+ICAgCXJldHVybiAwOw0KPiA+ICAgfQ0KPiA+ICAgDQo+ID4gQEAgLTc4MCwxOSAr
-NzY4LDE4IEBAIHN0YXRpYyBpbnQgb2NvcmVzX2kyY19yZXN1bWUoc3RydWN0IGRldmljZSAqZGV2
-KQ0KPiA+ICAgew0KPiA+ICAgCXN0cnVjdCBvY29yZXNfaTJjICppMmMgPSBkZXZfZ2V0X2RydmRh
-dGEoZGV2KTsNCj4gPiAgIA0KPiA+IC0JaWYgKCFJU19FUlIoaTJjLT5jbGspKSB7DQo+ID4gLQkJ
-dW5zaWduZWQgbG9uZyByYXRlOw0KPiA+IC0JCWludCByZXQgPSBjbGtfcHJlcGFyZV9lbmFibGUo
-aTJjLT5jbGspOw0KPiA+ICsJdW5zaWduZWQgbG9uZyByYXRlOw0KPiA+ICsJaW50IHJldCA9IGNs
-a19wcmVwYXJlX2VuYWJsZShpMmMtPmNsayk7DQo+ID4gICANCj4gPiAtCQlpZiAocmV0KSB7DQo+
-ID4gLQkJCWRldl9lcnIoZGV2LA0KPiA+IC0JCQkJImNsa19wcmVwYXJlX2VuYWJsZSBmYWlsZWQ6
-ICVkXG4iLCByZXQpOw0KPiA+IC0JCQlyZXR1cm4gcmV0Ow0KPiA+IC0JCX0NCj4gPiAtCQlyYXRl
-ID0gY2xrX2dldF9yYXRlKGkyYy0+Y2xrKSAvIDEwMDA7DQo+ID4gLQkJaWYgKHJhdGUpDQo+ID4g
-LQkJCWkyYy0+aXBfY2xvY2tfa2h6ID0gcmF0ZTsNCj4gPiArCWlmIChyZXQpIHsNCj4gPiArCQlk
-ZXZfZXJyKGRldiwNCj4gPiArCQkJImNsa19wcmVwYXJlX2VuYWJsZSBmYWlsZWQ6ICVkXG4iLCBy
-ZXQpOw0KPiA+ICsJCXJldHVybiByZXQ7DQo+ID4gICAJfQ0KPiA+ICsJcmF0ZSA9IGNsa19nZXRf
-cmF0ZShpMmMtPmNsaykgLyAxMDAwOw0KPiANCj4gTm93IChiZWNhdXNlIG9mIHRoZSBkZXZtX2Ns
-a19nZXRfb3B0aW9uYWxfZW5hYmxlZCgpKSwgaTJjLT5jbGsgY2FuIGJlIA0KPiBOVUxMLCBzbyB0
-aGlzIHdvdWxkIGRlZmVyZW5jZSBhIE5VTEwgcG9pbnRlci4NCj4gDQo+IENKDQo+IA0KPiANCj4g
-PiArCWlmIChyYXRlKQ0KPiA+ICsJCWkyYy0+aXBfY2xvY2tfa2h6ID0gcmF0ZTsNCj4gPiArDQo+
-ID4gICAJcmV0dXJuIG9jb3Jlc19pbml0KGRldiwgaTJjKTsNCj4gPiAgIH0NCj4gPiAgIA0K
+
+
+在 2023/5/24 下午4:42, Andy Shevchenko 写道:
+> On Wed, May 24, 2023 at 10:52 AM zhuyinbo <zhuyinbo@loongson.cn> wrote:
+>> 在 2023/5/23 下午8:54, andy.shevchenko@gmail.com 写道:
+>>> Mon, May 22, 2023 at 03:10:30PM +0800, Yinbo Zhu kirjoitti:
+> 
+> ...
+> 
+>>>> +static int loongson_spi_update_state(struct loongson_spi *loongson_spi,
+>>>> +                            struct spi_device *spi, struct spi_transfer *t)
+>>>> +{
+>>>> +    unsigned int hz;
+>>>> +
+>>>> +    if (t)
+>>>> +            hz = t->speed_hz;
+>>>
+>>> And if t is NULL? hz will be uninitialized. Don't you get a compiler warning?
+>>> (Always test your code with `make W=1 ...`)
+>>
+>> I always use `make W=1` and I don't find any warning, but that what you
+>> said was right and I will initial hz.
+> 
+> Note, if hz == 0 when t == NULL, you can unify that check with the below.
+> 
+>>>> +    if (hz && loongson_spi->hz != hz)
+> 
+> Something like
+> 
+>    if (t && _spi->hz != t->speed_hz)
+>      ...(..., t->speed_hz);
+> 
+> In such a case you won't need a temporary variable.
+
+okay, I got it.
+
+> 
+>>>> +            loongson_spi_set_clk(loongson_spi, hz);
+>>>> +
+>>>> +    if ((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK)
+>>>> +            loongson_spi_set_mode(loongson_spi, spi);
+>>>> +
+>>>> +    return 0;
+>>>> +}
+> 
+> ...
+> 
+>>> Why do you use deprecated naming? Can you use spi_controller* instead of
+>>> spi_master* in all cases?
+>>
+>> It seems was a personal code style issue and I don't find the
+>> differences between spi_controller and spi_master, Using spi_controller*
+>> is also acceptable to me and I will use spi_controller* instead of
+>> spi_master* in all cases.
+> 
+> Read this section (#4) in full
+> https://kernel.org/doc/html/latest/process/coding-style.html#naming
+
+okay, I got it.
+
+> 
+> ...
+> 
+>>>> +    clk = devm_clk_get_optional(dev, NULL);
+>>>> +    if (!IS_ERR(clk))
+>>>> +            spi->clk_rate = clk_get_rate(clk);
+>>>
+>>>> +    else
+>>>
+>>> Redundant. Just check for the error first as it's very usual pattern in the
+>>> Linux kernel.
+>>
+>> Like below ?
+>>
+>>           clk = devm_clk_get_optional(dev, NULL);
+>> -       if (!IS_ERR(clk))
+>> -               spi->clk_rate = clk_get_rate(clk);
+>> -       else
+>> +       if (IS_ERR(clk))
+>>                   return dev_err_probe(dev, PTR_ERR(clk), "unable to get
+>> clock\n");
+>>
+>> +       spi->clk_rate = clk_get_rate(clk);
+> 
+> Yes.
+
+okay, I got it.
+> 
+>>           loongson_spi_reginit(spi);
+> 
+>>>> +            return dev_err_probe(dev, PTR_ERR(clk), "unable to get clock\n");
+> 
+> ...
+> 
+>>>> +    ret = loongson_spi_init_master(dev, reg_base);
+>>>> +    if (ret)
+>>>> +            return dev_err_probe(dev, ret, "failed to initialize master\n");
+>>>> +
+>>>> +    return ret;
+>>>
+>>>        return 0;
+>>
+>> It seems was more appropriate that initialize ret then return ret.
+>> Do you think so ?
+> 
+> What do you mean and how does it help here?
+
+I'm sorry, I was wrong before and the ret varible seems not to be
+initialized and it always record the return value for
+loongson_spi_init_master.
+
+It seems was appropriate that use "return ret" and I don't got your
+point that in probe for use "return 0"
+
+> 
+> 
+> ...
+> 
+>>>> +#include <linux/spi/spi.h>
+>>>
+>>> This neither.
+>>
+>> That other .c file seems to need it and I will move it to other .c
+>> code file.
+> 
+> Yes, please do.
+
+okay, I got it.
+
+Thanks,
+Yinbo
+
