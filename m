@@ -2,134 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0AB1711851
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094E871185B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjEYUmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 16:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S240909AbjEYUol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 16:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233846AbjEYUmg (ORCPT
+        with ESMTP id S229832AbjEYUoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 16:42:36 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35E912F
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:42:21 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-557c9d7011aso130046eaf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685047341; x=1687639341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zVYcgjfes3J6HZEQtVdQbHlu24tneGcQpq06nRhrvlw=;
-        b=PSyP6IvpP8iGD8Tj+Tfz/Bm9wDNlPGgoMn+qDn/5dJgLWzYjTEtz2bsuJTLE0F+vV/
-         asWjzVh87EH3fm+DKWt9HY7TCXX8tz+ka615/7caIfTzb/+1hE+2mbvj+P7Mlt7N3/KH
-         Rw2SLDn+MIy1CbWtK+NyVlEuxezzlAgZr3w7nGZTQ3WjxStTix4aVbMMcytId7CPOblr
-         fTMl2UJiRh6jRIw9/BM7uKUU4ufMfx+TXz3dqsNdBQpk5nLbnkHJJxT9y5Z70c+0nmjM
-         Y8aVyyNragyAAcOSEu0SUTkdFJaLgOSETEVwam60wyhb5yxy4hQz2PZnmiiF3hPa2WNI
-         Rzkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685047341; x=1687639341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zVYcgjfes3J6HZEQtVdQbHlu24tneGcQpq06nRhrvlw=;
-        b=gPObh/Wsmv2Kf41Mro1Ye4At39mXiKkKk9GypQvAqYJhQekZtVeYZSdbGajLU3Ib1O
-         KZxbR6D8wGZWYuxhaONTzaGwSyCT/2xfVJDXRADRGqm1uz/AI7Zo6We374eIOSHn75S5
-         7vt//NJO/M/NuICXpMX5PMEecwuDtIyhHT1GrASzyiLcONROgFI6JXMKeQ35CY1oe+v2
-         46/LCwATgF8L3cRymqPLyS0Bbn62tMyrvoKWzH3t/ylErAgF9S/Lq4cgomkTy/i4hvU7
-         i4LOuoY4NwPTGcnKeehlqgW84Avp7BXs5RaJP0iPKUqX9F8VAQrIfmVghNnlkdJgQMzR
-         qXkw==
-X-Gm-Message-State: AC+VfDx0IY6GFekp1BQbOoOIjeZsxTxgVRfazs1csXdsCmSZrtnPYCfs
-        I1Rl+GNyS1LjFyAMJFgqoABlPcPtNHXiWpCaWaY=
-X-Google-Smtp-Source: ACHHUZ4YPET8OizIKc5koGJ9RzLrN2jN14bPaH5Iiua0eEhpZi+Z6cy0ZV3Yt5kZm+d3Z0y9u8p+McJ38Y5NHtBpWhU=
-X-Received: by 2002:a4a:9bcd:0:b0:546:dd51:f74f with SMTP id
- b13-20020a4a9bcd000000b00546dd51f74fmr1965310ook.4.1685047340843; Thu, 25 May
- 2023 13:42:20 -0700 (PDT)
+        Thu, 25 May 2023 16:44:37 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2061b.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eb2::61b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2E5D3;
+        Thu, 25 May 2023 13:44:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ICCyhP1RzCLM0AphLyhV93JgfQLsX8iMj3z3vQf7JNVLKQhkUiGbX0cs5m83nx020JJXHztgYSBWqlawtukugF6+oXAKCDfxmOkaS7s9WSTyYRNKGxwWkIEz7XzdlL/DqUlbT441tIA/Fmp1RfAE7PMzXMqSBUqXsSxuGFcsqqMskrS/q9M0myc2pZq4K7VkkZa2/kay7bsjWukYFXdM4n8DTkrigdqDaTc/VvUirrGLXBG2l12Cw/QrpCaLd78pmpom0flk7P3/Gz27VhCgpM4UPoZRdJfH/25+mWG+ECeSFG0NnKhqXkdZPXZ2MxjuCOufRpqcIX4ymEyx2+BBXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wHv6/FizfqOfQJDVL98OPZqH68YfY8hQAeEVz4+r1Es=;
+ b=G6vCIuIStO7EuFK419kWqF2BJKQU+9m+V6p/R8GiUVNulGbpzxWtpzRxmIk3PcE642Db9pEkd5ZfRGw9z1pTmX8NZonkmPWEt7ZAEjR1If2WjPNnkaxieE+qj9jR+d+J8az0ysYRjM15iWrPjMQa5eoN6knns5vIV+bChpWW+U13Eo2S5tSWKfmNPu5wawDz4r1SJxwlnIsfGu/5COPguIb7O2Wql4oaUJKcJyF9aSbXpRXto3gUEdqiUHSTN2qyVlx8FvP2OJwv23Cp6/a5z2usco3JPyxb3fMy1xUTaWlhlec9d9MGeOV5FPRNnjKR8VCAypgnyqmMMMTuUSeG5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wHv6/FizfqOfQJDVL98OPZqH68YfY8hQAeEVz4+r1Es=;
+ b=39+rQx019zSZbrHPZO9WWplaV4g2/5WzErAUjFPkReocyXA5r8vZiHoxmAzSaKRLAQsF7QwmX7FNcpaHK276zFlHDzF+IVSYVveDYAIZO95Pd+0qV70//OBOKyqkIs/Y6gsF6RWadaKxcbQOYiR7L31PG/GWLR6WyiejAvDrrkk=
+Received: from CY5PR19CA0092.namprd19.prod.outlook.com (2603:10b6:930:83::6)
+ by IA0PR12MB7673.namprd12.prod.outlook.com (2603:10b6:208:435::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.17; Thu, 25 May
+ 2023 20:44:31 +0000
+Received: from CY4PEPF0000C97C.namprd02.prod.outlook.com
+ (2603:10b6:930:83:cafe::a2) by CY5PR19CA0092.outlook.office365.com
+ (2603:10b6:930:83::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.18 via Frontend
+ Transport; Thu, 25 May 2023 20:44:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000C97C.mail.protection.outlook.com (10.167.241.135) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6433.7 via Frontend Transport; Thu, 25 May 2023 20:44:30 +0000
+Received: from onyx-7400host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 25 May
+ 2023 15:44:29 -0500
+From:   Avadhut Naik <Avadhut.Naik@amd.com>
+To:     <rafael@kernel.org>, <gregkh@linuxfoundation.org>,
+        <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     <avadnaik@amd.com>, <yazen.ghannam@amd.com>,
+        <alexey.kardashevskiy@amd.com>, <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v2 0/3] Add support for Vendor Defined Error Types in Einj Module
+Date:   Thu, 25 May 2023 20:44:19 +0000
+Message-ID: <20230525204422.4754-1-Avadhut.Naik@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230525203531.3233040-1-trix@redhat.com>
-In-Reply-To: <20230525203531.3233040-1-trix@redhat.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 25 May 2023 16:42:09 -0400
-Message-ID: <CADnq5_MNr3RsXi65AdYxkZc8EUYpJBNm-oLhenzcLzRKmN+gLg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: move gfx9_cs_data definition
-To:     Tom Rix <trix@redhat.com>
-Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        Hawking.Zhang@amd.com, le.ma@amd.com, jesse.zhang@amd.com,
-        Jiadong.Zhu@amd.com, mario.limonciello@amd.com, Likun.Gao@amd.com,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C97C:EE_|IA0PR12MB7673:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9d9e32d8-8103-40b7-0952-08db5d60d726
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DlVjaq+URpmOwha7M+vWxtVjmEG52CcJrzcuTDomUoJSh5kIaZ/uC0LxAUGhJGJsL9s7qWeAC9GNqAFkDvifEEbmhZYDrNWyN0VLF0boiAdzfFlLmPy3bvri/vCL/w+aQ8LZCWd+s8mVwlOBL0lIlIqdrP1veel2oaVMl9I0KRW2hmTP7exA9mYsX7yzemxMQ8R0c4Q4F8N3VacRYDxe9p5QgARQyo/crd9aD8cCJa/H2VS8s4O7abM9DYF6YRbA5ojL3s4x/NPNvzKa/GWpYJMm8JVJRd9qzzt2ItjQStDpq6qw8JICjITs24glYG9x7x1xkl0lscjk1ADK9eFGVDf57/EzY2cQL3WTMMEy6+wI0Z6hS7GXAbp2nSC62mNrctO0p57oiqe4Dia1i2DpjyRUQ27agzWCp0hIoK49NeoZ1TX2gmNmNMX9dQoyqLA62G8qzL5lTgkL1XlfXcViTSZds0LkTGZBm5NSGrzIrvsXQTtChOckT+0B7RrOdVCN+GYuIHNpmLJR8ZPymy6bMEfxkTbfzTTKObNYzJcNMDU6mKfcvzsh4e07J+iEkz4lJGwNoUVDNSbNqvLYKxAFOmDai5citZuTnSFTjIyORmu60HeYWLDJTHC6E7OascXi+oPUP+g8c9MkJiKKkM/GIRLRqhAUm7K+JSE6TgY6ZMyy+c7diLIMqpvGuWvE1C7irDFkG3sz72Pjkg7sXxtloDERlHsdHL18KjNLdaz8VCmhf10bIMAxUT7I93GAqFajtk4zwjFGF5ZvXs2OXdjna0WNcDhr68/wfosOe8BNAP4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(39860400002)(376002)(451199021)(40470700004)(46966006)(36840700001)(40460700003)(336012)(426003)(2616005)(47076005)(83380400001)(2906002)(186003)(16526019)(36756003)(36860700001)(86362001)(82310400005)(356005)(81166007)(40480700001)(82740400003)(70206006)(70586007)(5660300002)(4326008)(6666004)(41300700001)(7696005)(54906003)(316002)(8936002)(1076003)(26005)(8676002)(110136005)(478600001)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 20:44:30.9957
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d9e32d8-8103-40b7-0952-08db5d60d726
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C97C.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7673
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 4:35=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
->
-> gcc with W=3D1 reports
-> In file included from drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c:32:
-> drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h:939:36: error:
->   =E2=80=98gfx9_cs_data=E2=80=99 defined but not used [-Werror=3Dunused-c=
-onst-variable=3D]
->   939 | static const struct cs_section_def gfx9_cs_data[] =3D {
->       |                                    ^~~~~~~~~~~~
->
-> gfx9_cs_data is only used in gfx_v9_0.c, so move its definition there.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+This patchset adds support for Vendor Defined Error types in the einj
+module by exporting a binary blob file in module's debugfs directory.
+Userspace tools can write OEM Defined Structures into the blob file as
+part of injecting Vendor defined errors.
 
-Already fixed with:
-https://patchwork.freedesktop.org/patch/539234/
-which will show up in my tree momentarily.
+The first patch refactors available_error_type_show() function to ensure
+all errors supported by the platform are output through einj module's
+available_error_type file in debugfs.
 
-Alex
+The second patch adds a write callback for binary blobs created through
+debugfs_create_blob() API.
 
+The third adds the required support i.e. establishing the memory mapping
+and exporting it through debugfs blob file for Vendor-defined Error types.
 
-> ---
->  drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h | 4 ----
->  drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c        | 5 +++++
->  2 files changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h b/drivers/gpu/d=
-rm/amd/amdgpu/clearstate_gfx9.h
-> index 567a904804bc..6de4778789ed 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h
-> +++ b/drivers/gpu/drm/amd/amdgpu/clearstate_gfx9.h
-> @@ -936,7 +936,3 @@ static const struct cs_extent_def gfx9_SECT_CONTEXT_d=
-efs[] =3D
->      {gfx9_SECT_CONTEXT_def_8, 0x0000a2f5, 155 },
->      { 0, 0, 0 }
->  };
-> -static const struct cs_section_def gfx9_cs_data[] =3D {
-> -    { gfx9_SECT_CONTEXT_defs, SECT_CONTEXT },
-> -    { 0, SECT_NONE }
-> -};
-> diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c b/drivers/gpu/drm/amd/=
-amdgpu/gfx_v9_0.c
-> index 8bf95a6b0767..c97a68a39d93 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-> @@ -56,6 +56,11 @@
->  #include "asic_reg/pwr/pwr_10_0_sh_mask.h"
->  #include "asic_reg/gc/gc_9_0_default.h"
->
-> +static const struct cs_section_def gfx9_cs_data[] =3D {
-> +    { gfx9_SECT_CONTEXT_defs, SECT_CONTEXT },
-> +    { 0, SECT_NONE }
-> +};
-> +
->  #define GFX9_NUM_GFX_RINGS     1
->  #define GFX9_NUM_SW_GFX_RINGS  2
->  #define GFX9_MEC_HPD_SIZE 4096
-> --
-> 2.27.0
->
+Changes in V2:
+ - Split the v1 patch, as was recommended, to have a seperate patch for
+changes in debugfs.
+ - Refactored available_error_type_show() function into a seperate patch.
+ - Changed file permissions to octal format to remove checkpatch warnings.
+
+Avadhut Naik (3):
+  ACPI: APEI: EINJ: Refactor available_error_type_show()
+  fs: debugfs: Add write functionality to debugfs blobs
+  ACPI: APEI: EINJ: Add support for vendor defined error types
+
+ drivers/acpi/apei/einj.c | 62 ++++++++++++++++++++++++++--------------
+ fs/debugfs/file.c        | 28 ++++++++++++++----
+ 2 files changed, 64 insertions(+), 26 deletions(-)
+
+-- 
+2.34.1
+
