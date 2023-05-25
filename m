@@ -2,126 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871E5710D06
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A872A710D11
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241170AbjEYNLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
+        id S236025AbjEYNQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbjEYNLp (ORCPT
+        with ESMTP id S231397AbjEYNQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:11:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B9CB2;
-        Thu, 25 May 2023 06:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9DEm7cVBdm52kK3UCzMVMzsLM3W+SSD9KxYzTiOP2os=; b=U1iALbTK7rHRU7VruFM7TO2E1Z
-        xvRWFPd1doSjCsYDCMHOsTa++oGrg2nEYlCWtLO9dvrCYG9N6QHsuU4eTucS5i/YzLpxsrSFrNYvb
-        TnGFukTMiMyFir0UB6XRsXp7+8l811BLakEig4nBp09A0rwnSvgUO8h8Obxd2EIXiNEj99e87oVpR
-        wwUrVPb3F/WC52qPGfwBWdAQ/yTLMvMbyc9o7/4SrP+Orf6KuaDzcBvOeSUSIZQtnSs2xNgAfKEGX
-        wAZb3MoIN8mFE7OLypmP7Jb+v5G1tAMXpGUnnBN6AvHH0VEO3mjcUXclEe3PAtmDJI25A1jXCr8Et
-        CiIKtoYQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q2Ajx-00CD2j-1K; Thu, 25 May 2023 13:10:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E6AAC3001AE;
-        Thu, 25 May 2023 15:10:43 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B530C20A78741; Thu, 25 May 2023 15:10:43 +0200 (CEST)
-Date:   Thu, 25 May 2023 15:10:43 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
-        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH v3 08/11] slub: Replace cmpxchg_double()
-Message-ID: <20230525131043.GT83892@hirez.programming.kicks-ass.net>
-References: <20230515075659.118447996@infradead.org>
- <20230515080554.453785148@infradead.org>
- <20230524093246.GP83892@hirez.programming.kicks-ass.net>
- <20230525102946.GE38236@hirez.programming.kicks-ass.net>
- <292934ce-73fa-4077-9051-2ad909828f4a@app.fastmail.com>
+        Thu, 25 May 2023 09:16:30 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825D699;
+        Thu, 25 May 2023 06:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685020587; x=1716556587;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bji74CU8lVc3dQnwGVK8uYW1fWx2VIw8L4AKclmka2I=;
+  b=d9MjSRa1YqEiBchkjRbMyiG0dILBbf9QUrgrIeScCzNOXuANKHhTB7sO
+   0+kS3NNfNLi9Ot14YnhzioNppItJE/X3aGAU598h18b9SkI7d0BkqC4qf
+   hN8yK9pfPrDX/C4AjdbR0jfAowev/pyz76gcqwCH0o7kMB3R7puiBL+Mh
+   Q/sylqQ1LsEOXebxOJkrcuZA9+v5ReozPfA0CArp9Ss5TzLlyxBDVODtK
+   EbnXizVF6YJGEt0S6DBG540jdu+hYSN6G2dyX8l59FitWSxwoA0Vo1Dea
+   DMGYpOJX0HtQImmxNqrVuKguo3/3RsXse4dRqd7UyIgkOUo4wyEOq7UsX
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="asc'?scan'208";a="214869960"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 06:16:26 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 25 May 2023 06:16:27 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 25 May 2023 06:16:24 -0700
+Date:   Thu, 25 May 2023 14:16:02 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor@kernel.org>, <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH v16 5/6] dt-bindings: clock: meson: add A1 Peripherals
+ clock controller bindings
+Message-ID: <20230525-connected-skipper-442c6d0b52c1@wendy>
+References: <20230523135351.19133-1-ddrokosov@sberdevices.ru>
+ <20230523135351.19133-6-ddrokosov@sberdevices.ru>
+ <20230525093736.naztwqlhvskujsoa@CAB-WSD-L081021>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="68QoUxHiy/kLBBjz"
 Content-Disposition: inline
-In-Reply-To: <292934ce-73fa-4077-9051-2ad909828f4a@app.fastmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230525093736.naztwqlhvskujsoa@CAB-WSD-L081021>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 12:52:06PM +0200, Arnd Bergmann wrote:
-> On Thu, May 25, 2023, at 12:29, Peter Zijlstra wrote:
-> > On Wed, May 24, 2023 at 11:32:47AM +0200, Peter Zijlstra wrote:
-> >> On Mon, May 15, 2023 at 09:57:07AM +0200, Peter Zijlstra wrote:
-> >
-> > This then also means I need to look at this_cpu_cmpxchg128 and
-> > this_cpu_cmoxchg64 behaviour when we dont have the CPUID feature.
-> >
-> > Because current verions seem to assume the instruction is present.
-> 
-> As far as I could tell when reviewing your series, this_cpu_cmpxchg64()
-> is always available on all architectures. Depending on compile-time
-> feature detection this would be either a native instruction that
-> is guaranteed to work, or the irq-disabled version. On x86, this
-> is handled at runtime with alternative_io().
-> 
-> this_cpu_cmpxchg128() clearly needed the system_has_cmpxchg128()
-> check, same as system_has_cmpxchg_double() today.
+--68QoUxHiy/kLBBjz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So, having just dug through all that, on x86:
+On Thu, May 25, 2023 at 12:37:36PM +0300, Dmitry Rokosov wrote:
+> Hello Rob, Krzysztof and Conor,
+>=20
+> Could you please take a look at this patch version? Before Rob marked
+> this patchset with RvB at v13 -
+> https://lore.kernel.org/linux-amlogic/168130720431.2218249.76710619649880=
+64525.robh@kernel.org/
+>=20
+> However, due to several comments from other maintainers, unfortunately,
+> I had to rename the 'a1-clkc' controller to 'a1-peripherals-clkc' and
+> remove Rob's RvB.
 
-this_cpu_cmpxchg64() is:
+I dunno if the compatible change is worth dropping the tag for tbh.
+That seems to be the only change, so I guess you can have my R-b instead
+of Rob's...
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
- X86_CMPXCHG64=n -> fallback, irrespective of CX8
- X86_CMPXCHG64=y -> cmpxchg8b
- X86_64          -> cmpxchg
+Cheers,
+Conor.
 
+--68QoUxHiy/kLBBjz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I've changed it to be similar between 32bit and 64bit such that both:
+-----BEGIN PGP SIGNATURE-----
 
-  cmpxchg#b when CX#, otherwise this_cpu_cmpxchg#b_emu
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG9fkgAKCRB4tDGHoIJi
+0pRoAQDxk5nwMh6wGwdzyLznrxJI2Wbak7jHxQtaSq4C+2Zr7AEAt+xK055gIGNQ
+a6u9fKyHj5+k8LB9XmdcuS5cl3HwpwI=
+=HgEl
+-----END PGP SIGNATURE-----
 
-
+--68QoUxHiy/kLBBjz--
