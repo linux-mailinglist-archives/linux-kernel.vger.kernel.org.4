@@ -2,198 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A425C710626
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BFA710628
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239029AbjEYHV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 03:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
+        id S239202AbjEYHVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 03:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234189AbjEYHV0 (ORCPT
+        with ESMTP id S234189AbjEYHVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 03:21:26 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D276F83;
-        Thu, 25 May 2023 00:21:24 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P6C3Xn020344;
-        Thu, 25 May 2023 07:21:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=9lxy6iBtU5/k0RHXRlhcdMNyZIJ6KVrxrLG1krZWlAU=;
- b=JSHoUtRe0r2Lf90r3WWQVG42gdI+37ikmLBmdmoIXDNcHre8uJN50VLlDVl0INH7+1XT
- vqiKfB8eq9ybuh5UBEC1+KpofIdXc16u2CrTOQhqfceOcCtWCx9wHhTSZPVeQ7QSsIja
- UOuxOQbD4kvPdwsqf75n5dUxqPCPognwHQO7xCUHgL7+1zG5Jq4zLVDHxWfoLrW9biV5
- mv3XQ4LynNvynK0H8DlvddqzmBxqKJmlt9faxBLn0pYQRzZa3I0UFIvhAJn5rP7jo8dw
- LKJwFwX7GKVZVv1rVjPN5AtPG88bdZHXxrnurYAybZx+yybFvphseOtNFc891EsedQEq FQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsp509jjw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 07:21:06 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34P7L4i0030027
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 07:21:04 GMT
-Received: from [10.253.35.57] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
- 2023 00:21:00 -0700
-Message-ID: <b5dd9d63-fb11-e343-a0a6-4aa8217fd7b3@quicinc.com>
-Date:   Thu, 25 May 2023 15:20:58 +0800
+        Thu, 25 May 2023 03:21:36 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FC419D;
+        Thu, 25 May 2023 00:21:35 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2553663f71eso819790a91.3;
+        Thu, 25 May 2023 00:21:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684999294; x=1687591294;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xqc0RvBjEqmfMd1qioMCyBJH4DDZdjxzMOj0X5GfsUA=;
+        b=gVlD33aFtOvzkcMkjOJ1fIcAsTV+rLJybqU5nLh5n7mK9K/xH9tWAzYgoNQrCpNzQI
+         gNdVIfwhcj32Xkr//kBOI/fZwy4qPkJOyjT/ndcJ9rGoHxucTUDOazC6Ff67pLMu4O1g
+         Z+1JDlh6ZrD2/nwUI0A8be0EpO0cmc5OSD3C03ecvqVsskQZSWlKofxeU/QnTjQBgTGP
+         S8EA8JrG76ODO5Cqe3zWQRvKzhBZIl9kMDrob4qb+c8iRP5IpEjy0MH4czojugLfHVD8
+         6+MyRN0ZujXqMbMr+CloWAYSHJWXZ5TGHx3HkVnQFbmsw7RzIQHv0J6x7Fu5MzgU2LBK
+         r8Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684999294; x=1687591294;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xqc0RvBjEqmfMd1qioMCyBJH4DDZdjxzMOj0X5GfsUA=;
+        b=IXxKy33Ln8mNZAWVxuY75ie37+IA/plckL96WoFfsgf2FlvNGt3lH57ISRN/av6Wr9
+         aJyCy5axPMwJykxDafRyYHah/abARNlkDJcKskrE+nB8gALk8JqjyYT/No54oSfDon8G
+         +b6ZdKy9gtnVc+zfDp/DPoJ1lvfFLQvIw498O1KyiHIKCE4pOZsUHhwQ+hHFL0CdQkb5
+         Mkmw+tW/8rr/5dyhN95kVaTZCZ+fotISQAjdcc1//eacZJUVfloCRGF29/hpqyZ4Kvrj
+         1uV7lRgk5gU4gQzWsqxrWDWsDXmjvIi+nmm55g1mA4rU91QI5p7qPTf1ututf8ynSCxf
+         t8Qg==
+X-Gm-Message-State: AC+VfDyvRR/rtZQCg3ktDG9uLuptEH+5bbRp0lK+qMjhnpeyKui0V8rx
+        59hzfSlHHhfsiyQnFhCo5ho=
+X-Google-Smtp-Source: ACHHUZ5IYbP3gSc5r6+a5rwq/3ZjNdRBiDTIFHh8RjXFUliqBUw8onJAOOk1gJ3maZ3R7QkHFAGCQw==
+X-Received: by 2002:a17:90a:9317:b0:253:62c2:4e1b with SMTP id p23-20020a17090a931700b0025362c24e1bmr640751pjo.48.1684999294520;
+        Thu, 25 May 2023 00:21:34 -0700 (PDT)
+Received: from [172.27.236.17] (ec2-16-163-40-128.ap-east-1.compute.amazonaws.com. [16.163.40.128])
+        by smtp.gmail.com with ESMTPSA id l64-20020a633e43000000b0053ef188c90bsm467964pga.89.2023.05.25.00.21.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 00:21:34 -0700 (PDT)
+Message-ID: <393b16f7-8359-5d77-7d5d-8942de987331@gmail.com>
+Date:   Thu, 25 May 2023 15:21:28 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v4 02/11] coresight-tpda: Add DSB dataset support
+Subject: Re: [PATCH v2 5/6] KVM: x86: Keep a per-VM MTRR state
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, seanjc@google.com
+References: <20230509134825.1523-1-yan.y.zhao@intel.com>
+ <20230509135300.1855-1-yan.y.zhao@intel.com>
+ <3f09e751-33fd-7d60-78cd-6857d113e8bd@gmail.com>
+ <ZGxbat2mM6AfOOVv@yzhao56-desk.sh.intel.com>
 Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <andersson@kernel.org>
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-3-git-send-email-quic_taozha@quicinc.com>
- <444bc278-a3e3-7d99-6020-7c3337371f66@arm.com>
- <e2e4b998-e6d8-59e9-fce7-0072954001dd@arm.com>
-From:   Tao Zhang <quic_taozha@quicinc.com>
-In-Reply-To: <e2e4b998-e6d8-59e9-fce7-0072954001dd@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fdUvlDcfrRmfVoc5YJTxlOiZhTROTthe
-X-Proofpoint-ORIG-GUID: fdUvlDcfrRmfVoc5YJTxlOiZhTROTthe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_03,2023-05-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 malwarescore=0 impostorscore=0 spamscore=0
- suspectscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305250059
+From:   Robert Hoo <robert.hoo.linux@gmail.com>
+In-Reply-To: <ZGxbat2mM6AfOOVv@yzhao56-desk.sh.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/23/2023 2:21 PM, Yan Zhao wrote:
+[...]
+> Yes, leaving each vCPU's MTRR to mimic HW.
+> 
+> As also suggested in SDM, the guest OS manipulates MTRRs in this way:
+> 
+> for each online CPUs {
+> 	disable MTRR
+> 	update fixed/var MTRR ranges
+> 	enable MTRR
+> }
+> Guest OS needs to access memory only after this full pattern.
+> 
+Thanks for confirmation and clarification.
 
-On 5/23/2023 10:48 PM, Suzuki K Poulose wrote:
-> On 23/05/2023 11:07, Suzuki K Poulose wrote:
->> On 27/04/2023 10:00, Tao Zhang wrote:
->>> Read the DSB element size from the device tree. Set the register
->>> bit that controls the DSB element size of the corresponding port.
->>>
->>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>> ---
->>>   drivers/hwtracing/coresight/coresight-core.c |  1 +
->>>   drivers/hwtracing/coresight/coresight-tpda.c | 92 
->>> +++++++++++++++++++++++++---
->>>   drivers/hwtracing/coresight/coresight-tpda.h |  4 ++
->>>   drivers/hwtracing/coresight/coresight-tpdm.c |  2 +-
->>>   include/linux/coresight.h                    |  1 +
->>>   5 files changed, 90 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
->>> b/drivers/hwtracing/coresight/coresight-core.c
->>> index 2af416b..f1eacbb 100644
->>> --- a/drivers/hwtracing/coresight/coresight-core.c
->>> +++ b/drivers/hwtracing/coresight/coresight-core.c
->>> @@ -1092,6 +1092,7 @@ static int coresight_validate_source(struct 
->>> coresight_device *csdev,
->>>       if (subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_PROC &&
->>>           subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE &&
->>> +        subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_TPDM &&
->>>           subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_OTHERS) {
->>>           dev_err(&csdev->dev, "wrong device subtype in %s\n", 
->>> function);
->>>           return -EINVAL;
->>
->> Please see the comment at the bottom.
->>
->>> diff --git a/drivers/hwtracing/coresight/coresight-tpda.c 
->>> b/drivers/hwtracing/coresight/coresight-tpda.c
->>> index 8d2b9d2..af9c72f 100644
->>> --- a/drivers/hwtracing/coresight/coresight-tpda.c
->>> +++ b/drivers/hwtracing/coresight/coresight-tpda.c
->>> @@ -21,6 +21,56 @@
->>>   DEFINE_CORESIGHT_DEVLIST(tpda_devs, "tpda");
->>> +/* Search and read element data size from the TPDM node in
->>> + * the devicetree. Each input port of TPDA is connected to
->>> + * a TPDM. Different TPDM supports different types of dataset,
->>> + * and some may support more than one type of dataset.
->>> + * Parameter "inport" is used to pass in the input port number
->>> + * of TPDA, and it is set to 0 in the recursize call.
->>> + * Parameter "parent" is used to pass in the original call.
->>> + */
->>> +static int tpda_set_element_size(struct tpda_drvdata *drvdata,
->>> +               struct coresight_device *csdev, int inport, bool 
->>> parent)
->
-> The name parent is a bit confusing. It could imply parent device ? That
-> is kind of inverse ? because, parent = true, indicates the parent device
-> of tpda, which is not true. Could we simply say
->
-> bool match_inport => When true, the dest_port of the connection from the
-> csdev must match the inport ? And ...
->
-Sure, I will update this in the next patch series.
->>> +{
->>> +    static int nr_inport;
->>> +    int i;
->>> +    static bool tpdm_found;
->>> +    struct coresight_device *in_csdev;
->>> +
->>> +    if (inport > (TPDA_MAX_INPORTS - 1))
->>> +        return -EINVAL;
->>> +
->>> +    if (parent) {
->>> +        nr_inport = inport;
->>> +        tpdm_found = false;
->>> +    }
->>> +
->>> +    for (i = 0; i < csdev->pdata->nr_inconns; i++) {
->>> +        in_csdev = csdev->pdata->in_conns[i]->src_dev;
->>> +        if (!in_csdev)
->>> +            break;
->>> +
->>> +        if (parent)
->>> +            if (csdev->pdata->in_conns[i]->dest_port != inport)
->>> +                continue;
->
-> The above can become :
->
->         if (match_inport &&
->         csdev->pdata->in_conns[i]->dest_port != inport)
->         continue;
+> So, I think there should not have "hazard of inconsistency among per-VPU MTRR
+> states".
+> 
+> I want to have per-VM MTRR state is because I want to reduce unnessary EPT
+> zap, which costs quite a lot cpu cycles even when the EPT is empty.
+> 
+> In this patch, per-VM MTRR pointer is used to point to vCPU 0's MTRR state,
+> so that it can save some memory to keep the MTRR state.
+> But I found out that it would only work when vCPU 0 (boot processor) is
+> always online (which is not true for x86 under some configration).
+> 
+> I'll try to find out lowest online vCPU and keep a per-VM copy of MTRR state
+> in next version.
+> 
+> Thanks!
+> 
 
-Sure, I will update this in the next patch series.
+IIUC, your saving comes from skips the intermediate state during boot, when 
+APs goes through setting MTRR, which would cause SPTE zap before your this 
+patch set.
+
+MHO was, now that your ignores other vCPU's MTRR settings (unless it is 
+different from BP's MTRR?), why not let each vCPU's MTRR set/update 
+directly set to the per-VM MTRR states (if differs from current value). 
+It's guest OS/BIOS's responsibility to keep the consistency anyway. And 
+even if the malfunction caused by the inconsistency might differ from that 
+of native, SDM doesn't clearly state how the malfunction should be, does it?
+that's to say, anyone knows, when inconsistency happens, does it cause that 
+logical processor malfunction or in fact it impacts the global MTRR 
+settings? If the latter, I think leaving only the per-VM MTRR state aligns 
+with native.
+
+BTW, with regard to KVM_X86_QUIRK_CD_NW_CLEARED, I see svm honors it while 
+vmx doesn't before it clear CR0.CD/NW.
+
+svm_set_cr0():
+
+	if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
+		hcr0 &= ~(X86_CR0_CD | X86_CR0_NW);
 
 
-Best,
+vmx_set_cr0():
 
-Tao
+	hw_cr0 = (cr0 & ~KVM_VM_CR0_ALWAYS_OFF);
 
->
-> Suzuki
->
+Perhaps vmx side can be fixed passingly?
