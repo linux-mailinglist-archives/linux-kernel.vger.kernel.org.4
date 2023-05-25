@@ -2,56 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A4E7107D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBB47107DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240362AbjEYIpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S240417AbjEYIrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240408AbjEYIpU (ORCPT
+        with ESMTP id S232749AbjEYIre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:45:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243A8E64;
-        Thu, 25 May 2023 01:45:12 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 25 May 2023 04:47:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD789E;
+        Thu, 25 May 2023 01:47:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 79E2A6601B06;
-        Thu, 25 May 2023 09:45:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685004310;
-        bh=hOyOt1EoacKFH2fvLL5OIM0fKfkDQg3D/nNEqCtrASs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=C2P8ypGHHTF8dDrtKSF1tL7UPrkuYijWh0FoMPieGkR0pLVBMcEE7deOo16pLLXvV
-         /R/rn4oRcRE9+gb2uDeL6UDpYuST4a6LmFJ77owHsC8Zu8T4m4oJ7fNVjZyw2GbJyV
-         SiJyZJc7zVvMP/mkxuh8rBgN0oDBvJaxYxKKnNNstbl1hVP1odtG6IQJ9FWWqHo6RM
-         R6Mw897p4AMDnuHO1cTWQOwxlJc5fVW6qiiSkkNsIrhZzdBIJ2SVRAysVe5Dn5EX0U
-         zd/Pkis5kPPmIQZ3v4BlsSc8R1ukmobmPuDxl15dkpst/6wFLxhHujVK863BZYR1om
-         vpFBwIRIOkOkg==
-Message-ID: <2117b7c4-d164-de17-5a2d-ef3d51304983@collabora.com>
-Date:   Thu, 25 May 2023 10:45:07 +0200
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C360B21CA3;
+        Thu, 25 May 2023 08:47:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1685004451; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KuhUxhJ4qXqlC8S61jGgkZ/rePw29whTgtvzHY6sSiI=;
+        b=ZrusZYsCefuMnAVLQhgd8aBN2vNvwAyrM1z1cZn9oRunL0M8JfFy92IqTRXhxJg9dyQ+3V
+        Q8yHLX3wYbtbH0HYQWtQlKL9UMpQKxyFX1cHfV97/XUUa9mdp5HlUf7zSKu6aMJI3TC4fN
+        /g6oWielTzMSNQo/9YenUVIHEIU6Zp0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1685004451;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KuhUxhJ4qXqlC8S61jGgkZ/rePw29whTgtvzHY6sSiI=;
+        b=XdzjVSs3+TjUoFyH5X//zoHI1wt48WjIl65701RGoFiCfws+iTsL1D3tjnaB6pIYnjG35e
+        Nerxvu9ESp34vGDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B1FAA13356;
+        Thu, 25 May 2023 08:47:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mxRrK6Mgb2TyRAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 25 May 2023 08:47:31 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 36009A075C; Thu, 25 May 2023 10:47:31 +0200 (CEST)
+Date:   Thu, 25 May 2023 10:47:31 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Jan Kara <jack@suse.cz>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        "Darrick J . Wong" <djwong@kernel.org>, dhowells@redhat.com,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, Bob Peterson <rpeterso@redhat.com>
+Subject: Re: [PATCH 06/32] sched: Add task_struct->faults_disabled_mapping
+Message-ID: <20230525084731.losrlnarpbqtqzil@quack3>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-7-kent.overstreet@linux.dev>
+ <20230510010737.heniyuxazlprrbd6@quack3>
+ <ZFs3RYgdCeKjxYCw@moria.home.lan>
+ <20230523133431.wwrkjtptu6vqqh5e@quack3>
+ <ZGzugpw7vgCFxOYL@moria.home.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Content-Language: en-US
-To:     Prashanth K <quic_prashk@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1685004036-17273-1-git-send-email-quic_prashk@quicinc.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1685004036-17273-1-git-send-email-quic_prashk@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGzugpw7vgCFxOYL@moria.home.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,77 +80,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/05/23 10:40, Prashanth K ha scritto:
-> Currently if we bootup a device without cable connected, then
-> usb-conn-gpio won't call set_role() since last_role is same as
-> current role. This happens because during probe last_role gets
-> initialised to zero.
+On Tue 23-05-23 12:49:06, Kent Overstreet wrote:
+> > > No, that's definitely handled (and you can see it in the code I linked),
+> > > and I wrote a torture test for fstests as well.
+> > 
+> > I've checked the code and AFAICT it is all indeed handled. BTW, I've now
+> > remembered that GFS2 has dealt with the same deadlocks - b01b2d72da25
+> > ("gfs2: Fix mmap + page fault deadlocks for direct I/O") - in a different
+> > way (by prefaulting pages from the iter before grabbing the problematic
+> > lock and then disabling page faults for the iomap_dio_rw() call). I guess
+> > we should somehow unify these schemes so that we don't have two mechanisms
+> > for avoiding exactly the same deadlock. Adding GFS2 guys to CC.
 > 
-> To avoid this, added a new constant in enum usb_role, last_role
-> is set to USB_ROLE_UNKNOWN before performing initial detection.
+> Oof, that sounds a bit sketchy. What happens if the dio call passes in
+> an address from the same address space?
+
+If we submit direct IO that uses mapped file F at offset O as a buffer for
+direct IO from file F, offset O, it will currently livelock in an
+indefinite retry loop. It should rather return error or fall back to
+buffered IO. But that should be fixable. Andreas?
+
+But if the buffer and direct IO range does not overlap, it will just
+happily work - iomap_dio_rw() invalidates only the range direct IO is done
+to.
+
+> What happens if we race with the pages we faulted in being evicted?
+
+We fault them in again and retry.
+
+> > Also good that you've written a fstest for this, that is definitely a useful
+> > addition, although I suspect GFS2 guys added a test for this not so long
+> > ago when testing their stuff. Maybe they have a pointer handy?
 > 
-> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-
-I'm sorry to make a call for v4, but you have to mention that you're touching
-the cdns3 driver in the commit description, if you want to keep the entire
-change set in one commit... otherwise you'll have to split it in two, one adding
-the new entry to the enum and fixing cdns3; the other setting the last role to
-unknown in usb-conn-gpio.c.
-
-I can suggest text for keeping that in one commit, but the choice is yours;
-
-"While at it, also handle default case for the usb_role switch
-in cdns3 to avoid build warnings."
-
-> ---
-> v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
->      the test robot
-> v2: Added USB_ROLE_UNKNWON to enum usb_role
+> More tests more good.
 > 
->   drivers/usb/cdns3/core.c           | 2 ++
->   drivers/usb/common/usb-conn-gpio.c | 3 +++
->   include/linux/usb/role.h           | 1 +
->   3 files changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index dbcdf3b..69d2921 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -252,6 +252,8 @@ static enum usb_role cdns_hw_role_state_machine(struct cdns *cdns)
->   		if (!vbus)
->   			role = USB_ROLE_NONE;
->   		break;
-> +	default:
-> +		break;
->   	}
->   
->   	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
-> diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-> index e20874c..30bdb81 100644
-> --- a/drivers/usb/common/usb-conn-gpio.c
-> +++ b/drivers/usb/common/usb-conn-gpio.c
-> @@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
->   	platform_set_drvdata(pdev, info);
->   	device_set_wakeup_capable(&pdev->dev, true);
->   
-> +	/* Set last role to unknown before performing the initial detection */
-> +	info->last_role = USB_ROLE_UNKNOWN;
-> +
->   	/* Perform initial detection */
->   	usb_conn_queue_dwork(info, 0);
->   
-> diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
-> index b5deafd..221d462 100644
-> --- a/include/linux/usb/role.h
-> +++ b/include/linux/usb/role.h
-> @@ -8,6 +8,7 @@
->   struct usb_role_switch;
->   
->   enum usb_role {
-> +	USB_ROLE_UNKNOWN = -1,
->   	USB_ROLE_NONE,
->   	USB_ROLE_HOST,
->   	USB_ROLE_DEVICE,
+> So if we want to lift this scheme to the VFS layer, we'd start by
+> replacing the lock you added (grepping for it, the name escapes me) with
+> a different type of lock - two_state_shared_lock in my code, it's like a
+> rw lock except writers don't exclude other writers. That way the DIO
+> path can use it without singlethreading writes to a single file.
 
+Yes, I've noticed that you are introducing in bcachefs a lock with very
+similar semantics to mapping->invalidate_lock, just with this special lock
+type. What I'm kind of worried about with two_state_shared_lock as
+implemented in bcachefs is the fairness. AFAICS so far if someone is e.g.
+heavily faulting pages on a file, direct IO to that file can be starved
+indefinitely. That is IMHO not a good thing and I would not like to use
+this type of lock in VFS until this problem is resolved. But it should be
+fixable e.g. by introducing some kind of deadline for a waiter after which
+it will block acquisitions of the other lock state.
 
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
