@@ -2,233 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C379711743
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A527115D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243658AbjEYTU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 15:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        id S242515AbjEYSqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243727AbjEYTUB (ORCPT
+        with ESMTP id S242436AbjEYSn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 15:20:01 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D72A210C
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:15:20 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-510d1972d5aso4503095a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:15:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1685042012; x=1687634012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BQFtlRq4aJTYhV0eQW9iMfrGDr0aZKTMQmG9jztszkI=;
-        b=WFN8CXQQKEUo5pr5H5nyGxvmeQuV1Jk7efuIsYORcmzzqaTaHNKbYWCXRyY8uXJS7h
-         SIWYI990XHy37kDvlNNiIXNo2IRLIrxDmJJ//vLfpzUCmhYlNtktr3N/mFgf8w3qvbZ8
-         xe3lUg/Mer15loSxSdC0EdoIBoBfjL7L/7lOc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685042012; x=1687634012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BQFtlRq4aJTYhV0eQW9iMfrGDr0aZKTMQmG9jztszkI=;
-        b=Vc62m3m4Ar+plBVwYkXz2wHmAEq8UZFkTxLoqXDt8rOa6Q6N+m3W2FiDUPLLx1bTS1
-         3EY6Q3Q383a3afO6e6sa1v3hBnJqAhStboezqMojnCCxKTNDUMWzaszN0Qvf2dq+jvEZ
-         oM/ZTooVAWikbS4GyLkQVCPlLlFrPsZXHgyekPUT6wEvo3OsFro6ooDO2mpQ4EhlWZ/9
-         Q1ASpq8xHhxt4+ut/DL3hDerDb63/9qT5J5abj5rwZR/5QKZ1et3ktx4FbLgfv4SuG3i
-         UECZP26qwZhiWay09cq8Eoh3yRz+0FHV+fk2mwQgIFrK+B9A4BXOGrYc5zcLQ12PCZCv
-         ImOg==
-X-Gm-Message-State: AC+VfDwwIXkurf6aSBIOWMJEM6lI17c7mnOn6BA+gEGgPsvZ54wKI84t
-        aYAy63CmVzOyr3Z3H7IMLNdEhFEqffMX447kHqaxX1RFytGwixk=
-X-Google-Smtp-Source: ACHHUZ4SiUCJDYi/eHZ7lZZIC387i25yihp4ohxzNlmqxJ4xLZFOa3yBjwJHhlwwLzLBC3jP8srlTLLSOJgyvbffquI=
-X-Received: by 2002:a2e:9a91:0:b0:2af:22a0:81ec with SMTP id
- p17-20020a2e9a91000000b002af22a081ecmr1249470lji.27.1685039871757; Thu, 25
- May 2023 11:37:51 -0700 (PDT)
+        Thu, 25 May 2023 14:43:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FEC2694;
+        Thu, 25 May 2023 11:40:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F11056493D;
+        Thu, 25 May 2023 18:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97298C433EF;
+        Thu, 25 May 2023 18:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685039937;
+        bh=kZTG3ob6lvK4ed6LIxJODwypGdMd3TUKZh3hvud4Soc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CP5QOmVDDZIFhKTjwqKaZqX7iJLCMhmyR9u2f5KS9YqtxBBQQpqCKFYKjhRchPQSH
+         TWuKDqR4J+DR6AcyT6HmA13j71BrkPl7BsLvaFA9eo7JHc8qBy8N8wsrv22rmz3CpB
+         HGB7GbogbSWoJTdLbr3b2uVfiGC4UCLP5XOA/BjXkL6nNKiF/L15YX9Tu0HR8mIUPa
+         T/JtfqrU5ife+Dzg/2mf3EeGf2ZTVsiKcw93kGqunFq2wRTaqbs2RoYvT9tEbpje/k
+         FsRPJoHtBwHIvfBD05sZFkBb8wf8hYt7k425xeD8LsFs/lba5aTm3ovTpmno6SgNx7
+         D1TmD7giOBIVA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Sagi Grimberg <sagi@grimberg.me>,
+        Andrey God <andreygod83@protonmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sasha Levin <sashal@kernel.org>, kbusch@kernel.org,
+        linux-nvme@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.15 01/43] nvme-pci: add NVME_QUIRK_BOGUS_NID for HS-SSD-FUTURE 2048G
+Date:   Thu, 25 May 2023 14:38:12 -0400
+Message-Id: <20230525183854.1855431-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <CAK9=C2X1BjZCHfYM33pZQtavu7yRqxwsypWL5OWj79bJrnDMQg@mail.gmail.com>
- <CAOnJCULpa-TJuG=TtCDOxOdUviZzWheLE-GMiU1r7GWaKn0nuQ@mail.gmail.com>
- <20230525-guacamole-swimmer-68048a73baac@wendy> <CAK9=C2WUyLxZwQO37cN-i+V+A3yxmEoaj=uE8yR8nseYTDW7oQ@mail.gmail.com>
- <20230525-postnasal-monopoly-98adb96ffaa1@wendy> <CAAhSdy06nQh4H1FP_K_-VF462mhj+F2M=4AV4QSCUGe5XVqX0g@mail.gmail.com>
- <20230525-shrapnel-precut-26500fca4a48@wendy> <CAAhSdy3SqeLdAfaojUki=ht21nr4ZUPMkW_t9M6ntQCt6Ds4Nw@mail.gmail.com>
- <20230525-citric-waged-a2f78d27eb0c@wendy> <CAOnJCULfC0jmiucLNMeJZwJf4QbGAN6r4B-ubUbP16KVpxrCfA@mail.gmail.com>
- <20230525-flaring-trading-f2bf0713ae26@spud>
-In-Reply-To: <20230525-flaring-trading-f2bf0713ae26@spud>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 25 May 2023 11:37:40 -0700
-Message-ID: <CAOnJCUK_EgX-En1QNS8yX1WA1nj8w2kpvXMQcvgWuR3dvzEQYw@mail.gmail.com>
-Subject: Re: Bug report: kernel paniced when system hibernates
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Alexandre Ghiti <alex@ghiti.fr>, robh@kernel.org,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        jeeheng.sia@starfivetech.com, linux-kernel@vger.kernel.org,
-        palmer@rivosinc.com, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Song Shuai <suagrfillet@gmail.com>,
-        linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:22=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
-ote:
->
-> Hey Atish,
->
-> On Thu, May 25, 2023 at 10:39:44AM -0700, Atish Patra wrote:
-> > > How about the below?
->
-> > Instead of disabling hibernate support why not revert the patch
-> > 3335068 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
-> > which doesn't add any "measured" value at this point.
-> > However, keeping the hibernation feature on and disabling linear
-> > mapping will get more testing on hibernation.
-> > While disabling hibernation and keeping the above patch which
-> > doesn't have any value at all.
-> >
-> > We don't have a regression at this point. So either approach will work =
-though.
->
-> I favoured this approach so that we do not release a kernel in which
-> hibernate works for these versions of OpenSBI and then stops working in
-> the future when we shore up how communicating this is supposed to work.
-> It allows us to fix the problem "properly" in slow-time, instead of
-> racing against v6.4's release.
->
+From: Sagi Grimberg <sagi@grimberg.me>
 
-Fair enough.
+[ Upstream commit 1616d6c3717bae9041a4240d381ec56ccdaafedc ]
 
-> I happened to be talking to Palmer and he suggested making it depend on
-> NONPORTABLE:
-> |> config NONPORTABLE
-> |>      bool "Allow configurations that result in non-portable kernels"
-> |>      help
-> |>        RISC-V kernel binaries are compatible between all known systems
-> |>        whenever possible, but there are some use cases that can only b=
-e
-> |>        satisfied by configurations that result in kernel binaries that=
- are
-> |>        not portable between systems.
-> |>
-> |>        Selecting N does not guarantee kernels will be portable to all =
-known
-> |>        systems.  Selecting any of the options guarded by NONPORTABLE w=
-ill
-> |>        result in kernel binaries that are unlikely to be portable betw=
-een
-> |>        systems.
-> |>
-> |>        If unsure, say N.
->
-> I actually think that that makes more sense, as it may actually be fine
-> to use hibernation depending on what your SBI implementation does.
->
+Add a quirk to fix HS-SSD-FUTURE 2048G SSD drives reporting duplicate
+nsids.
 
-That works too.
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217384
+Reported-by: Andrey God <andreygod83@protonmail.com>
+Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/nvme/host/pci.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> > If we choose to go this route, some thoughts about the commit message.
-> > > -- >8 --
-> > > From 1d4381290a1600eff9b29b8ace6be73955d9726c Mon Sep 17 00:00:00 200=
-1
-> > > From: Conor Dooley <conor.dooley@microchip.com>
-> > > Date: Thu, 25 May 2023 15:09:08 +0100
-> > > Subject: [PATCH] RISC-V: mark hibernation as broken
-> > >
-> > > Hibernation support depends on firmware marking its reserved
-> > > regions as not mappable by Linux. As things stand, the de-facto SBI
-> >
-> > either not mappable or no save/restore capable (as We still have not
-> > concluded which way we want to go in)
->
-> s/mappable/accessible/? Sounds like a good catch all?
->
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index c3acef6c32917..bfb9ddec9f887 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3403,6 +3403,8 @@ static const struct pci_device_id nvme_id_table[] = {
+ 				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
+ 	{ PCI_DEVICE(0x10ec, 0x5763), /* TEAMGROUP T-FORCE CARDEA ZERO Z330 SSD */
+ 		.driver_data = NVME_QUIRK_BOGUS_NID, },
++	{ PCI_DEVICE(0x1e4b, 0x1602), /* HS-SSD-FUTURE 2048G  */
++		.driver_data = NVME_QUIRK_BOGUS_NID, },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMAZON, 0x0061),
+ 		.driver_data = NVME_QUIRK_DMA_ADDRESS_BITS_48, },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_AMAZON, 0x0065),
+-- 
+2.39.2
 
-Yeah.
-
-> >
-> > > implementation (OpenSBI) does not do this, and other implementations =
-may
-> > > not do so either, resulting in kernel panics during hibernation ([1],
-> > > [2]).
-> > >
-> >
-> > we should probably add more context in the commit message.
-> > How about adding something along these lines:
-> >
-> > As things stand, the latest version of de-facto SBI
-> > implementation(OpenSBI) doesn't
-> > do this any more to allow 1G huge page mappings by kernel. Other SBI
-> > implementations are probably
-> > doing the same. Until the commit 3335068 ("riscv: Use PUD/P4D/PGD
-> > pages for the linear mapping"),
-> > the first 2MB region of DRAM (where the typically firmware resides)
-> > was not mappable by kernel. However,
-> > enabling that mapping resulted in the kernel panics during hibernation
-> > ([1], [2]) as the hibernation process
-> > tries to save/restore any mapped region even though it is marked as res=
-erved.
->
-> SGTM, I could go with that.
->
-> > > Disable support for hibernation until such time that an SBI
-> > > implementation independent way to communicate what regions are reserv=
-ed
-> > > has been agreed upon.
-> > >
-> >
-> > Anybody who wants to test the hibernation feature must revert the
-> > above mentioned patch along with turning on
-> > the config.
->
-> This goes away with the use of non-portable, although I would work
-> mention of the config option into the commit message.
->
-
-Any testing of hibernation still needs to revert the patch until we
-have the proper fix.
-
-> Thanks,
-> Conor.
->
-> > > Reported-by: Song Shuai <suagrfillet@gmail.com>
-> > > Link: https://lore.kernel.org/all/CAAYs2=3DgQvkhTeioMmqRDVGjdtNF_vhB+=
-vm_1dHJxPNi75YDQ_Q@mail.gmail.com/ [1]
-> > > Reported-by: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > > Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/ITXwaKf=
-A6z8
-> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > > ---
-> > >  arch/riscv/Kconfig | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index 13f058490608..b2495192f35a 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -801,7 +801,7 @@ menu "Power management options"
-> > >  source "kernel/power/Kconfig"
-> > >
-> > >  config ARCH_HIBERNATION_POSSIBLE
-> > > -       def_bool y
-> > > +       def_bool n
-> > >
-> > >  config ARCH_HIBERNATION_HEADER
-> > >         def_bool HIBERNATION
->
-
-
---=20
-Regards,
-Atish
