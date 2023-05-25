@@ -2,107 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB0D7106CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9A17106DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjEYIAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S238804AbjEYIIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235608AbjEYIAF (ORCPT
+        with ESMTP id S234519AbjEYIH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:00:05 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643B3186
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:00:01 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f655a8135bso1887905e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:00:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685001600; x=1687593600;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rx6/AkchhhsIk24IhJ++7ZLwXy7ijhSBwh/BY8UUZQc=;
-        b=c9mNv6qaak/+jqDMGn3APvrr0+w5ES0c1AXI6yC9/c9lAG4EPwi49Txcj5wWxuApZr
-         ksHgUxODxOTedlSiCT7b4eHmnSiLO/9tL8AME3h15Z6ar5myK9hI4dYRDxnvjHK50aCF
-         Rsjpw/xs7XIBDEhTu00iegVvL2gf8NDKn2Anjnm7tsPydrfChLCRa6VhBAfl6FBECjG5
-         a0dbx99g1URkUvbhsvZ5y4DDF1VHEY3x0OL4fYijdjkNPzJxU4K14wdQ8CeVjaout3Gw
-         jsjhN8/zjx99gvNTg+vyp9I5cuLrvAJ6u7il4vyi+KSKMg9rRuddb3Ff/AeX991jC8h0
-         KRbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685001600; x=1687593600;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Rx6/AkchhhsIk24IhJ++7ZLwXy7ijhSBwh/BY8UUZQc=;
-        b=DUUWIqblOj8Vg9HXH+RovkmbGQ6MjRKPsmhrCYYnuK8bK7J7Oi0hwkxQyp7aI73BkA
-         9EF8/0TD4v6Q0fTN38eKEUEgu6uD+h2nXfjXBll/tOFfhjYOOl4y9SucCRsIaDnO5eeu
-         Y1fnEr894Ocheh6O6wKiFuq3aUnn8wTPmNEbMC5LuTvN7v3f/yZ/PM0DJCX3HMZpvCSG
-         e+nujUTIeg2XpVCgmfe1/phs81VrE0Xl5uZ5gqnfa38htfgSMqzCeComEZf7QNjjXmyN
-         zuFmra2+gfQb2zmxrlQjT4enXjYTfj7E0YEiQxV7CzXgpqIXcDj5NTguNsOroH2cV+5w
-         zRpg==
-X-Gm-Message-State: AC+VfDyB4Xw2O0wMPlPvJfga+VrjYFPsvaAXAa1zZTw0VPdfuZ2R/aQQ
-        c8YvFsSTw5eSKkvJ8b05Q+yhPw==
-X-Google-Smtp-Source: ACHHUZ4TryZ8bkmN1UsFCBXfEMWzWC55lUiNfaVtlNpCYURcJisdCMit0DGkffnluVcPdw3cG+osKg==
-X-Received: by 2002:a1c:7913:0:b0:3f6:770:fafd with SMTP id l19-20020a1c7913000000b003f60770fafdmr2037330wme.7.1685001599877;
-        Thu, 25 May 2023 00:59:59 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:5cdb:105b:7481:b0e6? ([2a01:e0a:982:cbb0:5cdb:105b:7481:b0e6])
-        by smtp.gmail.com with ESMTPSA id a18-20020a05600c225200b003f60a446fe5sm1178490wmm.29.2023.05.25.00.59.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 00:59:59 -0700 (PDT)
-Message-ID: <1adda828-cf35-fb2c-6db5-f9ca91b5b62a@linaro.org>
-Date:   Thu, 25 May 2023 09:59:58 +0200
+        Thu, 25 May 2023 04:07:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBBA122;
+        Thu, 25 May 2023 01:07:56 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2BD6E6605838;
+        Thu, 25 May 2023 09:07:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685002075;
+        bh=GlR/t9XuJkIbmC5BWGwxNaicq3zxxpUewaYETNdEFYU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fyJza44H+G6I0peneKyo3UlGsPzEV4ywcpL42Cfb0pdAPwYBUO6nQ6ZTI5Nvlx90d
+         0LE113MOA7/uP3cY6J3xljiGQS3xSfSBy7A/czX24NESLY4635fHby+fOem+J0Xyf3
+         DH0IWKv+0GRATbuzsgNlXo1xKheaLOQ246lrixQrFE3YZLe9l29ipvz17cVwcCOeng
+         e7BbrwJBmDi7I6jd/HyyQE5WxuCA2HavpksP66w+1R/wkvGZoLc2EiWLgF4jIRsvPE
+         KKD1mWnDHofTlO2Nw5ZBvbZT8XNtq1OnKZAhtIT/xTuy6XtnQMFs0KOtCBp2SQkVhD
+         R9B1/j1Ec8lbA==
+Message-ID: <64825178-2310-8c8a-2ed9-4ae14a46915e@collabora.com>
+Date:   Thu, 25 May 2023 10:07:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [v3 0/4] Support Starry-himax83102-j02 and Starry-ili9882t TDDI
- MIPI-DSI panel
+Subject: Re: [PATCH v2] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+To:     Prashanth K <quic_prashk@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1684936207-23529-1-git-send-email-quic_prashk@quicinc.com>
 Content-Language: en-US
-To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
-        dianders@chromium.org
-Cc:     airlied@gmail.com, conor+dt@kernel.org, daniel@ffwll.ch,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        hsinyi@google.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org, sam@ravnborg.org
-References: <CAD=FV=XUuzjjLq3YP3683jOd06odwk5Dox5MS8oY8goB-_8T5w@mail.gmail.com>
- <20230525025000.3692510-1-yangcong5@huaqin.corp-partner.google.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230525025000.3692510-1-yangcong5@huaqin.corp-partner.google.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1684936207-23529-1-git-send-email-quic_prashk@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 25/05/2023 04:49, Cong Yang wrote:
-> Compare V2: order of the tables match the order they're
-> referenced.
+Il 24/05/23 15:50, Prashanth K ha scritto:
+> Currently if we bootup a device without cable connected, then
+> usb-conn-gpio won't call set_role() since last_role is same as
+> current role. This happens because during probe last_role gets
+> initialized to zero.
 > 
-> Cong Yang (4):
->    dt-bindings: display: panel: Add compatible for Starry himax83102-j02
->    drm/panel: Support for Starry-himax83102-j02 TDDI MIPI-DSI panel
->    dt-bindings: display: panel: Add compatible for Starry ili9882t
->    drm/panel: Support for Starry-ili9882t TDDI MIPI-DSI panel
+> To avoid this, added a new constant in enum usb_role, last_role
+> is set to USB_ROLE_UNKNOWN before performing initial detection.
 > 
->   .../display/panel/boe,tv101wum-nl6.yaml       |   4 +
->   .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 471 ++++++++++++++++++
->   2 files changed, 475 insertions(+)
->
+> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
 
-Please resend without Conor's acks on patches 2 and 4.
+There's an issue with drivers/usb/cdns3/core.c as pointed out by the
+test robot; the solution is to handle `default` in the switch, I'd say
+that it would be safe to handle it as
 
-Thanks,
-Neil
+	default:
+		break;
+
+after solving that:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+> ---
+> v2: Added USB_ROLE_UNKNWON to enum usb_role
+> 
+>   drivers/usb/common/usb-conn-gpio.c | 3 +++
+>   include/linux/usb/role.h           | 1 +
+>   2 files changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+> index e20874c..30bdb81 100644
+> --- a/drivers/usb/common/usb-conn-gpio.c
+> +++ b/drivers/usb/common/usb-conn-gpio.c
+> @@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
+>   	platform_set_drvdata(pdev, info);
+>   	device_set_wakeup_capable(&pdev->dev, true);
+>   
+> +	/* Set last role to unknown before performing the initial detection */
+> +	info->last_role = USB_ROLE_UNKNOWN;
+> +
+>   	/* Perform initial detection */
+>   	usb_conn_queue_dwork(info, 0);
+>   
+> diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
+> index b5deafd..221d462 100644
+> --- a/include/linux/usb/role.h
+> +++ b/include/linux/usb/role.h
+> @@ -8,6 +8,7 @@
+>   struct usb_role_switch;
+>   
+>   enum usb_role {
+> +	USB_ROLE_UNKNOWN = -1,
+>   	USB_ROLE_NONE,
+>   	USB_ROLE_HOST,
+>   	USB_ROLE_DEVICE,
 
 
