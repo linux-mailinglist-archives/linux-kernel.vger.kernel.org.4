@@ -2,230 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FD8710F81
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A25710F9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241783AbjEYPZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        id S241606AbjEYPa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241532AbjEYPZ3 (ORCPT
+        with ESMTP id S241791AbjEYPa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:25:29 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580FC19C;
-        Thu, 25 May 2023 08:25:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=pBbauL/USHBNSfOtpD5kHOjUjf5hfBSxdPRkWcdqI7U=; b=JX9DED8Mz9hNHg3UBaHko4pOJS
-        neBjjzsyUALXjDHNz6VPV4Z0b2OIqPyBJBP3WFflQ922YLqV2W2f3rjFFzbDYnjpKNzVVXhhbCc32
-        sPAQEhKzpntcyGhKXuyAmFx8gRWaV8ZDP3LGVIUkEEoErCzF1hmPHMHXdwrjz+ntyxGQ=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:45094 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q2Cq7-0000QR-Eu; Thu, 25 May 2023 11:25:20 -0400
-Date:   Thu, 25 May 2023 11:25:18 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        jringle@gridpoint.com, tomasz.mon@camlingroup.com,
-        l.perczak@camlintechnologies.com,
-        linux-serial <linux-serial@vger.kernel.org>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230525112518.6589651e814325804744182f@hugovil.com>
-In-Reply-To: <73413221-a87c-b619-5171-70cb117cdf@linux.intel.com>
-References: <20230525040324.3773741-1-hugo@hugovil.com>
-        <20230525040324.3773741-10-hugo@hugovil.com>
-        <73413221-a87c-b619-5171-70cb117cdf@linux.intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Thu, 25 May 2023 11:30:56 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F02B1A4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:30:53 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:37406)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q2CvS-000r5n-Fi; Thu, 25 May 2023 09:30:50 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:35938 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q2CvR-00FA7J-65; Thu, 25 May 2023 09:30:50 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
+        nicolas.dichtel@6wind.com, axboe@kernel.dk,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+References: <20230522025124.5863-1-michael.christie@oracle.com>
+        <20230522025124.5863-4-michael.christie@oracle.com>
+        <20230522123029.GA22159@redhat.com>
+        <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com>
+        <20230522174757.GC22159@redhat.com> <20230523121506.GA6562@redhat.com>
+        <87bkib6nxr.fsf@email.froward.int.ebiederm.org>
+        <20230524141022.GA19091@redhat.com>
+        <87ttw1zt4i.fsf@email.froward.int.ebiederm.org>
+        <20230525115512.GA9229@redhat.com>
+Date:   Thu, 25 May 2023 10:30:04 -0500
+In-Reply-To: <20230525115512.GA9229@redhat.com> (Oleg Nesterov's message of
+        "Thu, 25 May 2023 13:55:13 +0200")
+Message-ID: <87y1lcxwcj.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1q2CvR-00FA7J-65;;;mid=<87y1lcxwcj.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX1/R72iCqGKqDUSGxzLbRgsNGaK/j3KlzUI=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 09/11] serial: sc16is7xx: add I/O register
- translation offset
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 721 ms - load_scoreonly_sql: 0.28 (0.0%),
+        signal_user_changed: 18 (2.5%), b_tie_ro: 14 (2.0%), parse: 3.3 (0.5%),
+         extract_message_metadata: 12 (1.7%), get_uri_detail_list: 2.9 (0.4%),
+        tests_pri_-2000: 11 (1.5%), compile_eval: 59 (8.2%), tests_pri_-1000:
+        6 (0.9%), tests_pri_-950: 2.8 (0.4%), tests_pri_-900: 2.5 (0.3%),
+        tests_pri_-200: 1.45 (0.2%), tests_pri_-100: 11 (1.5%), tests_pri_-90:
+        100 (13.9%), check_bayes: 92 (12.7%), b_tokenize: 12 (1.7%),
+        b_tok_get_all: 7 (1.0%), b_comp_prob: 3.2 (0.4%), b_tok_touch_all: 62
+        (8.6%), b_finish: 1.47 (0.2%), tests_pri_0: 501 (69.6%),
+        check_dkim_signature: 1.13 (0.2%), check_dkim_adsp: 7 (1.0%),
+        poll_dns_idle: 0.47 (0.1%), tests_pri_10: 3.7 (0.5%), tests_pri_500:
+        17 (2.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023 15:10:00 +0300 (EEST)
-Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com> wrote:
+Oleg Nesterov <oleg@redhat.com> writes:
 
-> On Thu, 25 May 2023, Hugo Villeneuve wrote:
->=20
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >=20
-> > If the shared GPIO pins on a dual port/channel variant like the
-> > SC16IS752 are configured as GPIOs for port A, and modem control lines
-> > on port A, we need to translate the Linux GPIO offset to an offset
-> > that is compatible with the I/O registers of the SC16IS7XX (IOState,
-> > IODir and IOIntEna).
-> >=20
-> > Add a new variable to store that offset and set it when we detect that
-> > special case.
-> >=20
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  drivers/tty/serial/sc16is7xx.c | 54 +++++++++++++++++++++++++++++++++-
-> >  1 file changed, 53 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is=
-7xx.c
-> > index 97ec532a0a19..c2cfd057ed9a 100644
-> > --- a/drivers/tty/serial/sc16is7xx.c
-> > +++ b/drivers/tty/serial/sc16is7xx.c
-> > @@ -338,6 +338,7 @@ struct sc16is7xx_port {
-> >  #ifdef CONFIG_GPIOLIB
-> >  	struct gpio_chip		gpio;
-> >  	int				gpio_configured;
-> > +	int				gpio_offset;
-> >  #endif
-> >  	unsigned char			buf[SC16IS7XX_FIFO_SIZE];
-> >  	struct kthread_worker		kworker;
-> > @@ -1298,12 +1299,50 @@ static const struct uart_ops sc16is7xx_ops =3D {
-> >  };
-> > =20
-> >  #ifdef CONFIG_GPIOLIB
-> > +
-> > +/*
-> > + * We may need to translate the Linux GPIO offset to a SC16IS7XX offse=
-t.
-> > + * This is needed only for the case where a dual port variant is confi=
-gured to
-> > + * have only port B as modem status lines.
-> > + *
-> > + * Example for SC16IS752/762 with upper bank (port A) set as GPIOs, and
-> > + * lower bank (port B) set as modem status lines (special case describ=
-ed above):
-> > + *
-> > + * Pin         GPIO pin     Linux GPIO     SC16IS7XX
-> > + * name        function     offset         offset
-> > + * --------------------------------------------------
-> > + * GPIO7/RIA    GPIO7          3              7
-> > + * GPIO6/CDA    GPIO6          2              6
-> > + * GPIO5/DTRA   GPIO5          1              5
-> > + * GPIO4/DSRA   GPIO4          0              4
-> > + * GPIO3/RIB    RIB           N/A            N/A
-> > + * GPIO2/CDB    CDB           N/A            N/A
-> > + * GPIO1/DTRB   DTRB          N/A            N/A
-> > + * GPIO0/DSRB   DSRB          N/A            N/A
-> > + *
-> > + * Example  for SC16IS750/760 with upper bank (7..4) set as modem stat=
-us lines,
-> > + * and lower bank (3..0) as GPIOs:
-> > + *
-> > + * Pin         GPIO pin     Linux GPIO     SC16IS7XX
-> > + * name        function     offset         offset
-> > + * --------------------------------------------------
-> > + * GPIO7/RI     RI            N/A            N/A
-> > + * GPIO6/CD     CD            N/A            N/A
-> > + * GPIO5/DTR    DTR           N/A            N/A
-> > + * GPIO4/DSR    DSR           N/A            N/A
-> > + * GPIO3        GPIO3          3              3
-> > + * GPIO2        GPIO2          2              2
-> > + * GPIO1        GPIO1          1              1
-> > + * GPIO0        GPIO0          0              0
-> > + */
-> > +
-> >  static int sc16is7xx_gpio_get(struct gpio_chip *chip, unsigned offset)
-> >  {
-> >  	unsigned int val;
-> >  	struct sc16is7xx_port *s =3D gpiochip_get_data(chip);
-> >  	struct uart_port *port =3D &s->p[0].port;
-> > =20
-> > +	offset +=3D s->gpio_offset;
-> >  	val =3D sc16is7xx_port_read(port, SC16IS7XX_IOSTATE_REG);
-> > =20
-> >  	return !!(val & BIT(offset));
-> > @@ -1314,6 +1353,7 @@ static void sc16is7xx_gpio_set(struct gpio_chip *=
-chip, unsigned offset, int val)
-> >  	struct sc16is7xx_port *s =3D gpiochip_get_data(chip);
-> >  	struct uart_port *port =3D &s->p[0].port;
-> > =20
-> > +	offset +=3D s->gpio_offset;
-> >  	sc16is7xx_port_update(port, SC16IS7XX_IOSTATE_REG, BIT(offset),
-> >  			      val ? BIT(offset) : 0);
-> >  }
-> > @@ -1324,6 +1364,7 @@ static int sc16is7xx_gpio_direction_input(struct =
-gpio_chip *chip,
-> >  	struct sc16is7xx_port *s =3D gpiochip_get_data(chip);
-> >  	struct uart_port *port =3D &s->p[0].port;
-> > =20
-> > +	offset +=3D s->gpio_offset;
-> >  	sc16is7xx_port_update(port, SC16IS7XX_IODIR_REG, BIT(offset), 0);
-> > =20
-> >  	return 0;
-> > @@ -1336,6 +1377,8 @@ static int sc16is7xx_gpio_direction_output(struct=
- gpio_chip *chip,
-> >  	struct uart_port *port =3D &s->p[0].port;
-> >  	u8 state =3D sc16is7xx_port_read(port, SC16IS7XX_IOSTATE_REG);
-> > =20
-> > +	offset +=3D s->gpio_offset;
-> > +
-> >  	if (val)
-> >  		state |=3D BIT(offset);
-> >  	else
-> > @@ -1395,6 +1438,7 @@ static int sc16is7xx_probe(struct device *dev,
-> > =20
-> >  #ifdef CONFIG_GPIOLIB
-> >  	s->gpio_configured =3D devtype->nr_gpio;
-> > +	s->gpio_offset =3D 0;
-> >  #endif /* CONFIG_GPIOLIB */
-> > =20
-> >  	/* Always ask for fixed clock rate from a property. */
-> > @@ -1529,16 +1573,24 @@ static int sc16is7xx_probe(struct device *dev,
-> >  #endif /* CONFIG_GPIOLIB */
-> >  			}
-> > =20
-> > -		if (val)
-> > +		if (val) {
-> > +#ifdef CONFIG_GPIOLIB
-> > +			/* Additional I/O regs offset. */
-> > +			if (val =3D=3D SC16IS7XX_IOCONTROL_MODEM_B_BIT)
-> > +				s->gpio_offset =3D SC16IS7XX_GPIOS_PER_BANK;
-> > +#endif /* CONFIG_GPIOLIB */
-> > +
-> >  			regmap_update_bits(
-> >  				s->regmap,
-> >  				SC16IS7XX_IOCONTROL_REG << SC16IS7XX_REG_SHIFT,
-> >  				SC16IS7XX_IOCONTROL_MODEM_A_BIT |
-> >  				SC16IS7XX_IOCONTROL_MODEM_B_BIT, val);
-> > +		}
-> >  	}
-> > =20
-> >  #ifdef CONFIG_GPIOLIB
-> >  	dev_dbg(dev, "GPIOs to configure: %d\n", s->gpio_configured);
-> > +	dev_dbg(dev, "GPIOs offset: %d\n", s->gpio_offset);
-> > =20
-> >  	if (s->gpio_configured) {
-> >  		/* Setup GPIO controller */
-> >=20
->=20
-> Is the order of this and 8/11 patch correct or should this precede that=20
-> other patch? That is, is 8/11 alone useful enough or would this also be=20
-> wanted? (I'm aware that 8/11 has a Fixes tag).
+> On 05/24, Eric W. Biederman wrote:
+>>
+>> Oleg Nesterov <oleg@redhat.com> writes:
+>>
+>> > Yes, but probably SIGABRT/exit doesn't really differ from SIGKILL wrt
+>> > vhost_worker().
+>>
+>> Actually I think it reveals that exiting with SIGABRT will cause
+>> a deadlock.
+>>
+>> coredump_wait will wait for all of the threads to reach
+>> coredump_task_exit.  Meanwhile vhost_worker is waiting for
+>> all of the other threads to reach exit_files to close their
+>> file descriptors.
+>
+> Indeed, I didn't think about this.
+>
+>
+> So why do we actually need CLONE_THREAD ? Can't vhost_worker() be a kernel thread?
+>
+> kthread_create() won't be convenient, but how about kernel_thread() ? it inherits
+> mm/cgroups/rlimits/etc, kthread_stop() should work just fine.
 
-In fact, this patch (9/11) could be considered to be part of 8/11. I decide=
-d to separate it in order to facilitate the review process.
+Basically with no patches that is where Linus's kernel is.
 
-Maybe I should merge them...
+User complained about the new thread showing up in ps.  So the
+exploration of how we could use CLONE_THREAD instead of what is
+currently merged began.
 
-Hugo.
+Eric
