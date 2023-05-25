@@ -2,146 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6797D7119F9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9037119FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241790AbjEYWGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 18:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
+        id S241863AbjEYWIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 18:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233104AbjEYWGd (ORCPT
+        with ESMTP id S229931AbjEYWIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 18:06:33 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6102A12F
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:06:32 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-561c1ae21e7so3785257b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685052391; x=1687644391;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UR4x6rXE0bo/ckqm6Jv4R6OAJNwweiidW4Yk75ZB+NQ=;
-        b=ueglYvsjHws3Vja2dJ9Cy5bXiw8Uu5eCcGKzAUINwqqmZmuOVZ2tSeTbvZesbRYf5k
-         LVuLldxIO5UaKvQPPHoCfrz+K1HmO1Q7e7lObTL7uAyZBcrrJBIFPfsebZEzoqlSF/NC
-         uNW3Pw2Ws777qnPVwi1s1YRqXXBabl3XW/USHJBSzUo2BMhiUET3eZnBC+Tw6hhTMpvU
-         9mwXS3U27RpbuNeA3YXCMRCzZnA5avZvcuFZk4xAQR+SUZgnpl0nvx+1bkB9f3Ag+QGc
-         RlClPWHiz9eYf2lBVNbE6HX4hkTPTlwAvH3CPE47ekdt78pxKuEQ18kaQgjAUkc1BGz8
-         0VrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685052391; x=1687644391;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UR4x6rXE0bo/ckqm6Jv4R6OAJNwweiidW4Yk75ZB+NQ=;
-        b=BhK2cz3ESuLIl8LsSFbDO8Xre8f66Zt4hLh2jqnnuRcd6Z/95pOrJcPQ5MXOtpIWNg
-         2gyD4mTavPSNXsZueaIPLVK9VHuwBH5fIjg7eRfG0Ck1bh4I7nW79eq751Gk8c0I3RII
-         TYu9pOlsO4Tvbm03za/Aj+2I/srZtB1KzkGUmur7NsOFTveElYYaiv0uJZOTy1nXn9OA
-         YH9sMPu+1uonjgM6K4oxDs9HihgeVLLdn59TipcKvwDnSTBCmfGDI0FVKib5t484te8E
-         jW/izi5mvhnjtO+EnuN9Vs1sfyIsfkGAVDCV5QxuLugP12uWZvqsOxwzpo3sxdZWkhyf
-         QumA==
-X-Gm-Message-State: AC+VfDzqKC2OgfDz5OzDD9coKJU7pFh0UEO0M7zApnD1T7Xmi4N3NRbz
-        L2OmYGUdnqgWHE/NCgWxtVb7HQ==
-X-Google-Smtp-Source: ACHHUZ5+gq3WKyM1RjGKDETUWUkkI2NTdK1hXriUldQCpOa1eAi5N8VOb1OaskV4/hm/b64oaD8bpA==
-X-Received: by 2002:a81:9201:0:b0:561:baab:fd22 with SMTP id j1-20020a819201000000b00561baabfd22mr1046488ywg.3.1685052391294;
-        Thu, 25 May 2023 15:06:31 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id t20-20020a81c254000000b00561949f713fsm648660ywg.39.2023.05.25.15.06.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 15:06:30 -0700 (PDT)
-Date:   Thu, 25 May 2023 15:06:27 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Peter Xu <peterx@redhat.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 15/31] mm/userfaultfd: allow pte_offset_map_lock() to
- fail
-In-Reply-To: <ZG6TOyH7NJIgXxGX@x1n>
-Message-ID: <8f2131ac-8996-e4b3-2aad-7a4d11bd538f@google.com>
-References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <49d92b15-3442-4e84-39bd-c77c316bf844@google.com> <ZG6TOyH7NJIgXxGX@x1n>
+        Thu, 25 May 2023 18:08:44 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2054.outbound.protection.outlook.com [40.107.237.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC3212F;
+        Thu, 25 May 2023 15:08:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NDzxEvsaO1TYPrpNnTtYfLF1Pozi+1+aPaOvygUHd87o6RkgWw0KSnW4nC/c7vFEcJsrrb+KuIiyHKcJQrucvtUEaCxCIBlSD1phsjzdBOTHms/icPoPey1kAO3cAVtv2ILqvkU0BEa/1y7m2gzVudVCMFeEwyw2ijCUiZCLINalbCNB89IVw2TOt4WNcKysI7dxy0KMyrT5yO9DfPla6KarF6QbQMUgGW6lggdND3y4zmWv+QYzqVcRsHOcY1bkMoslyhhDVR9jB+8QyHC/kCKta6DMI5RA1hxuSA16/skYp6HgvxPtLhRhxkZexvthNSgTJJ4C7Duy57TBcDWFLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4a+A/4ThqnVlDpA0b1fzwp7FliSiM0jlWfYiPGJjuww=;
+ b=SnM4rp5zF3sY8gn1jbrATBQmr9CD35Zr5xfznU8pKe8vmPn1OiJFXg7+ejvDE+DAS5EKhmqA1PA7gVaikHxT2Hist4HtZcH26xcy0PxSDhtcNtabd/PJxfLJDjhWvc1IfJm73EVmFUNQ2Gf9KGupvFBWNzGko7k0Mcbt505AAIcUHYBYP6636ohik/RzRx/DfVd58oVCZwOMJdqfS9s2Tq4pd64DyR6c/9UL1P0hvq+0kYEGD5nuLMr35XZO+CTkggyhWtdk6qRd6Fv6bRfgLWEUS/DoE+7VGEhT1aCLXJbsAz8C9vBdeNh2FxRnOe7p3FT/KGGSTM24yTPrNKtnzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4a+A/4ThqnVlDpA0b1fzwp7FliSiM0jlWfYiPGJjuww=;
+ b=I+bv1Bnur/60EfMScVRjlNWz/8sKJx3gk71ped9Kbiwtll0T+NPOFY8TFHzIr4HS2TWlc24ZS2/jlMD1wCycpLuQAOA2H1CUqVTT8KBgxzwrbWihcdNBq6ZLkAX3K3G+1ZpegEKADVF7tjv6fP4bLpwLrjBFtmQkcn3a0vzLSOo=
+Received: from BN0PR04CA0137.namprd04.prod.outlook.com (2603:10b6:408:ed::22)
+ by SJ0PR12MB5673.namprd12.prod.outlook.com (2603:10b6:a03:42b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16; Thu, 25 May
+ 2023 22:08:39 +0000
+Received: from BN8NAM11FT102.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ed:cafe::f7) by BN0PR04CA0137.outlook.office365.com
+ (2603:10b6:408:ed::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.17 via Frontend
+ Transport; Thu, 25 May 2023 22:08:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT102.mail.protection.outlook.com (10.13.177.27) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6433.18 via Frontend Transport; Thu, 25 May 2023 22:08:39 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 25 May
+ 2023 17:08:36 -0500
+Date:   Fri, 26 May 2023 00:08:33 +0200
+From:   Robert Richter <rrichter@amd.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bhelgaas@google.com>
+Subject: Re: [PATCH v4 23/23] PCI/AER: Unmask RCEC internal errors to enable
+ RCH downstream port error handling
+Message-ID: <ZG/cYUaZerXNqqJl@rric.localdomain>
+References: <20230523232214.55282-24-terry.bowman@amd.com>
+ <ZG6FYhegl3+UlX76@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZG6FYhegl3+UlX76@bhelgaas>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT102:EE_|SJ0PR12MB5673:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6014c13a-c813-4512-757f-08db5d6c9806
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HHd7g4RtjBhLGkNQ604IWoRg9wKlJpceJPwMFEHfsJEZgz6Tarc0AtRckihy0MEXYese6vOsUWsJcg+9qcnvYJ7idAQta1C/dpWiExtOfb7OsGSTQz1UadIV/mXQlk2qmWPNX3+dFJlMsP0BdEtQAxy+9k5OWiUD/ukygsfUOhOvN/hGjOL0wyAdP8sHbPefAPWhg8tryDGQKcoL/YofYrU14MLZmcxtSzWHs5zY1USqM46Korhg4Gchnujao392dO1VHzjSSa4rorLA/qdM/5NV3uXFBcILRL83u99GfBfAFtSXmomQbi6CFEjjDrjPfwrc/mpyD+t1c71TGO7OcEyJS9S7EhapTNL1kmUspxtHyg0Owjv70PPpgV5DZc5pTV8Vr+IesUZCglSlGBhtkHVVE9xL6+EgzlngQR3SGhUbrbGjWV6mv2L7nyX3SGI2VYK0wwLSKVKBkK5lC1tI2xX9nZRO1aWuejy310l2ABrjdepZsIFF/2TA4Sog0ewkgaQKmnw0wzIKpy+mkhXPxffBtJBvDXV4OB9u1ryEjcrXZbTC96K9ex3AZcql84x5GqAx4eR3L8cd4NukVP7C423xx/+sglSM7i0Npzl8wrSnPHDsufqgkyhu+pTSFYIwyi6IX6b7dgjWv86wWOwEubcgqo4lDfUOoF38SX/dopeEUQ1SNpMmq72uR3/H1YK4sQ3mvVwmDPZE4EzPVyytc8N0ETo3FyNHRaJcPP/6aQLgcV3hAAqL4eVb3muBq1XtNse4jYpehMqfLdIUs6N29Osxoa/sv+K9K/8uvywbvHM=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199021)(36840700001)(40470700004)(46966006)(70206006)(4326008)(70586007)(6916009)(7416002)(8676002)(8936002)(54906003)(478600001)(5660300002)(41300700001)(7696005)(6666004)(316002)(40460700003)(40480700001)(55016003)(82740400003)(356005)(81166007)(186003)(2906002)(16526019)(53546011)(9686003)(36860700001)(83380400001)(336012)(426003)(26005)(47076005)(82310400005)(36900700001)(309714004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 22:08:39.0999
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6014c13a-c813-4512-757f-08db5d6c9806
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT102.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5673
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023, Peter Xu wrote:
-> On Sun, May 21, 2023 at 10:07:35PM -0700, Hugh Dickins wrote:
-> > mfill_atomic_install_pte() and mfill_atomic_pte_zeropage() treat
-> > failed pte_offset_map_lock() as -EFAULT, with no attempt to retry.
+On 24.05.23 16:45:06, Bjorn Helgaas wrote:
+> On Tue, May 23, 2023 at 06:22:14PM -0500, Terry Bowman wrote:
+> > From: Robert Richter <rrichter@amd.com>
+> > 
+> > AER corrected and uncorrectable internal errors (CIE/UIE) are masked
+> > in their corresponding mask registers per default once in power-up
+> > state. [1][2] Enable internal errors for RCECs to receive CXL
+> > downstream port errors of Restricted CXL Hosts (RCHs).
+> > 
+> > [1] CXL 3.0 Spec, 12.2.1.1 - RCH Downstream Port Detected Errors
+> > [2] PCIe Base Spec 6.0, 7.8.4.3 Uncorrectable Error Mask Register,
+> >     7.8.4.6 Correctable Error Mask Register
 > 
-> Could you help explain why it should be -EFAULT, not -EAGAIN or -EEXIST?
+> I use "r6.0" to make sure it isn't mistaken for a section number.
+> 
+> > Co-developed-by: Terry Bowman <terry.bowman@amd.com>
+> > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> > Signed-off-by: Robert Richter <rrichter@amd.com>
+> > ---
+> >  drivers/pci/pcie/aer.c | 64 ++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 64 insertions(+)
+> > 
+> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > index 2e3f00b6a5bd..c5076ae4eb58 100644
+> > --- a/drivers/pci/pcie/aer.c
+> > +++ b/drivers/pci/pcie/aer.c
+> > @@ -948,6 +948,32 @@ static bool find_source_device(struct pci_dev *parent,
+> >  
+> >  #ifdef CONFIG_PCIEAER_CXL
+> >  
+> > +static int pci_aer_unmask_internal_errors(struct pci_dev *dev)
+> > +{
+> > +	int aer, rc;
+> > +	u32 mask;
+> > +
+> > +	if (!pcie_aer_is_native(dev))
+> > +		return -EIO;
+> > +
+> > +	aer = dev->aer_cap;
+> > +	rc = pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_MASK, &mask);
+> > +	if (rc)
+> > +		return rc;
+> 
+> I don't think there's much value in checking all these config accesses
+> for failure.  A failure return really just means you called it with
+> invalid parameters; it doesn't tell you whether it was successful on
+> PCI.
+> 
+> > +	mask &= ~PCI_ERR_UNC_INTN;
+> > +	rc = pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_MASK, mask);
+> > +	if (rc)
+> > +		return rc;
+> > +
+> > +	rc = pci_read_config_dword(dev, aer + PCI_ERR_COR_MASK, &mask);
+> > +	if (rc)
+> > +		return rc;
+> > +	mask &= ~PCI_ERR_COR_INTERNAL;
+> > +	rc = pci_write_config_dword(dev, aer + PCI_ERR_COR_MASK, mask);
+> > +
+> > +	return rc;
+> > +}
+> > +
+> >  static bool is_cxl_mem_dev(struct pci_dev *dev)
+> >  {
+> >  	/*
+> > @@ -1031,7 +1057,44 @@ static void cxl_rch_handle_error(struct pci_dev *dev, struct aer_err_info *info)
+> >  		pcie_walk_rcec(dev, cxl_rch_handle_error_iter, info);
+> >  }
+> >  
+> > +static int handles_cxl_error_iter(struct pci_dev *dev, void *data)
+> > +{
+> > +	int *handles_cxl = data;
+> > +
+> > +	*handles_cxl = is_cxl_mem_dev(dev) && cxl_error_is_native(dev);
+> 
+> This effectively only looks at the *last* RCiEP associated with this
+> RCEC.  I would expect a logical OR of all of them.
+> 
+> I see this is another use of is_cxl_mem_dev() and
+> cxl_error_is_native() that really requires them to be in this file.
+> 
+> > +	return *handles_cxl;
 
-Thanks a lot for looking, Peter.
+If this is non-zero, the iteration stops. So as soon we find a cxl
+device we can stop the loop. Else, all devices are non-cxl devs and
+the last return is zero too.
 
-No good justification for -EFAULT: I just grabbed the closest, fairly
-neutral, error code that I could see already being in use there: but now
-that you mention -EAGAIN, which I can see being used from mfill_atomic(),
-yes, that would be ideal - and consistent with how it's already being used.
+Now checking the code, pci_walk_bus() works that way, but walk_rcec()
+does not break in all cases. I think this function not working as
+expected. We would need to check if pci_walk_bus() stopped the
+iteration, e.g. with a return code.
 
-I'll make that change, thanks for suggesting.  (And it had bugged me how
-my fs/userfaultfd.c was electing to retry, but this one electing to fail.)
+Alternatively we could add this check:
+
+	if (!*handles_cxl)
+		*handles_cxl = ...
+
+> > +}
+> > +
+> > +static bool handles_cxl_errors(struct pci_dev *rcec)
+> > +{
+> > +	int handles_cxl = 0;
+> > +
+> > +	if (pci_pcie_type(rcec) == PCI_EXP_TYPE_RC_EC &&
+> > +	    pcie_aer_is_native(rcec))
+> > +		pcie_walk_rcec(rcec, handles_cxl_error_iter, &handles_cxl);
+> > +
+> > +	return !!handles_cxl;
+> > +}
+> > +
+> > +static void cxl_rch_enable_rcec(struct pci_dev *rcec)
+> > +{
+> > +	if (!handles_cxl_errors(rcec))
+> > +		return;
+> > +
+> > +	/*
+> > +	 * Internal errors are masked by default, unmask RCEC's here
+> > +	 * PCI6.0 7.8.4.3 Uncorrectable Error Mask Register (Offset 08h)
+> > +	 * PCI6.0 7.8.4.6 Correctable Error Mask Register (Offset 14h)
+> 
+> The spec references seem superfluous here.  The PCI_ERR_UNCOR_MASK and
+> PCI_ERR_COR_MASK in pci_aer_unmask_internal_errors() are pretty good
+> pointers.
+> 
+> > +	 */
+> > +	if (pci_aer_unmask_internal_errors(rcec))
+> > +		pci_err(rcec, "CXL: Failed to unmask internal errors");
+> > +	else
+> > +		pci_info(rcec, "CXL: Internal errors unmasked");
+> > +}
+> > +
+> >  #else
+> > +static inline void cxl_rch_enable_rcec(struct pci_dev *dev) { }
+> >  static inline void cxl_rch_handle_error(struct pci_dev *dev,
+> >  					struct aer_err_info *info) { }
+> >  #endif
+> > @@ -1432,6 +1495,7 @@ static int aer_probe(struct pcie_device *dev)
+> >  		return status;
+> >  	}
+> >  
+> > +	cxl_rch_enable_rcec(port);
+> 
+> Could this be done by the driver that claims the CXL RCiEP?  There's
+> no point in unmasking the errors before there's a driver with
+> pci_error_handlers that can do something with them anyway.
+
+This sounds reasonable at the first glance. The problem is there could
+be many devices associated with the RCEC. Not all of them will be
+bound to a driver and handler at the same time. We would need to
+refcount it or maintain a list of enabled devices. But there is
+already something similar by checking dev->driver. But right, AER
+errros could be seen and handled then at least on PCI level. I tent to
+permanently enable RCEC AER, but that could cause side-effects. What
+do you think?
+
+Thanks,
+
+-Robert
 
 > 
-> IIUC right now if pte existed we have -EEXIST returned as part of the
-> userfault ABI, no matter whether it's pte or thp.
-
-It might or might not correspond to -EEXIST - it might even end up as
--EFAULT on a retry after -EAGAIN: I see mfill_atomic() contains both
--EEXIST and -EFAULT cases for pmd_trans_huge().  Actually, I could
-say that the -EFAULT case there corresponds to the -EFAULT in this
-15/31 patch, but that would be by coincidence not design: I'm happier
-with your -EAGAIN suggestion.
-
-> 
-> IMHO it may boil down to my limited knowledge on how pte_offset_map_lock()
-> is used after this part 2 series, and I assume the core changes will be in
-> your 3rd series (besides this one and the arch one).
-> 
-> Please shed some light if there's quick answers (IIUC this is for speeding
-> up collapsing shmem thps, but still no much clue here), or I can also wait
-> for reading the 3rd part if it'll come soon in any form.
-
-It wouldn't be particularly easy to deduce from the third series of
-patches, rather submerged in implementation details.  Just keep in mind
-that, like in the "old" pmd_trans_unstable() cases, there may be instants
-at which, when trying to get the lock on a page table, that page table
-might already have gone, or been replaced by something else e.g. a THP,
-and a retry necessary at the outer level (if it's important to persist).
-
-Hugh
+> >  	aer_enable_rootport(rpc);
+> >  	pci_info(port, "enabled with IRQ %d\n", dev->irq);
+> >  	return 0;
+> > -- 
+> > 2.34.1
+> > 
