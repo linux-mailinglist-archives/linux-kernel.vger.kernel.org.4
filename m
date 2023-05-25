@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EADF710744
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69910710745
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239531AbjEYIZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
+        id S239667AbjEYIZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbjEYIZH (ORCPT
+        with ESMTP id S233942AbjEYIZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:25:07 -0400
+        Thu, 25 May 2023 04:25:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FAB18C
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:25:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9394F18C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:25:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E14D860FAA
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:25:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7728C433D2;
-        Thu, 25 May 2023 08:25:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 208F363C3E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:25:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B6DDC433EF;
+        Thu, 25 May 2023 08:25:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685003104;
-        bh=grNGwJfKWoBTpHT3Wmi+ZF/bEInd8peYBr4JARBqluI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V3o5NCJv7n+774JknAT+F+0rMRvBC6KmsOrVG4f08XgskuY4sSSiQi7M7cNRfTxXQ
-         5I6/akS+M3M7SP1DCY+34zoMT/xVgzoLV0+kGckVsZdDB9/+BUVtWkHMMN0rKTQ7mS
-         W27f/A5CDV7sg5I0P7RDaL9UIWsHdn+DVwm+93nnd6MFwG/H3Q0R9Vx03TtgOjsacr
-         LNA2Aad2GWcYq8TFWud+C7F8jdV9L6eVAVxbQgtapC/Fpf4ly/38ygoU+WE5AedTmX
-         9RCL5yidlze9IyNjv1rR/f61EpLLyQqz4stJmLjbOnspBIyJE+0EJVybRABtI37GaW
-         +y5IXHjxX2vQQ==
-Date:   Thu, 25 May 2023 11:24:44 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     akpm@linux-foundation.org, mhocko@suse.com, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] mm/mm_init.c: remove comments in
- zone_spanned_pages_in_node() and zone_absent_pages_in_node()
-Message-ID: <20230525082444.GT4967@kernel.org>
-References: <20230525040150.1588-1-haifeng.xu@shopee.com>
+        s=k20201202; t=1685003113;
+        bh=wdwLIYaRnnHNZrYI8ePzismwEYz5I7HXxffbJWvgnJM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fGHFzqJYUhsyMhG5K89rik+THLbemTJ2u5RuPhWjXMTqcPz6qYmXNegWOUOUO1/PK
+         6FLBlJB5y4djFMDRJjCZLbnrEqDkBNNTnwzQBrcmMWqt6cFnTmesOoujqgF2RLCLXd
+         bJuRudkQKJ0oofi4hO4icVn9i8fByIIpCqzxegy96cy52af/skg8PlkfWpL1aeYkwp
+         h5/KKyB0d0F6gpBWGXpiiemVuL+0LFrGjj1E1D6DldB+Kd4aJG22NYrtjxUsOGxc8R
+         J5elbpZrjhM8FLb4W4IIQL0yjAQQny/XyKXikblFtSn2a4WAgZ5SEof6rnTy3271jG
+         hZRchio1OJ8QQ==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH v2] f2fs: fix to set noatime and immutable flag for quota file
+Date:   Thu, 25 May 2023 16:25:08 +0800
+Message-Id: <20230525082508.2320763-1-chao@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525040150.1588-1-haifeng.xu@shopee.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,49 +52,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 04:01:48AM +0000, Haifeng Xu wrote:
-> Since commit 03e85f9d5f1f ("mm/page_alloc: Introduce free_area_init_core_hotplug"),
-> free_area_init_node() doesn't get called in hotplug path anymore, so
-> remove the comments related to it.
-> 
-> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
-> ---
->  mm/mm_init.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index 7f7f9c677854..cf55bba04b23 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -1174,7 +1174,6 @@ static unsigned long __init zone_absent_pages_in_node(int nid,
->  	unsigned long zone_start_pfn, zone_end_pfn;
->  	unsigned long nr_absent;
->  
-> -	/* When hotadd a new node from cpu_up(), the node should be empty */
->  	if (!node_start_pfn && !node_end_pfn)
->  		return 0;
+We should set noatime bit for quota files, since no one cares about
+atime of quota file, and we should set immutalbe bit as well, due to
+nobody should write to the file through exported interfaces.
 
-I think it's better to call calculate_node_totalpages only if node actually has 
-memory and for node with no memory we just need to make sure all the node
-and zone page counts are indeed set to 0.
+Meanwhile this patch use inode_lock to avoid race condition during
+inode->i_flags, f2fs_inode->i_flags update.
 
-Then the condition here and in zone_spanned_pages_in_node() can be removed
-along with the comment and patch 2 won't be required at all.
-  
-> @@ -1227,7 +1226,7 @@ static unsigned long __init zone_spanned_pages_in_node(int nid,
->  {
->  	unsigned long zone_low = arch_zone_lowest_possible_pfn[zone_type];
->  	unsigned long zone_high = arch_zone_highest_possible_pfn[zone_type];
-> -	/* When hotadd a new node from cpu_up(), the node should be empty */
-> +
->  	if (!node_start_pfn && !node_end_pfn)
->  		return 0;
->  
-> -- 
-> 2.25.1
-> 
-> 
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+v2:
+- fix to detect i_flags status correctly.
+ fs/f2fs/super.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 51812f459581..1cf84c993d7c 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -2763,7 +2763,17 @@ static int f2fs_quota_enable(struct super_block *sb, int type, int format_id,
+ 	}
+ 
+ 	/* Don't account quota for quota files to avoid recursion */
++	inode_lock(qf_inode);
+ 	qf_inode->i_flags |= S_NOQUOTA;
++
++	if (!(F2FS_I(qf_inode)->i_flags & F2FS_NOATIME_FL) ||
++		!(F2FS_I(qf_inode)->i_flags & F2FS_IMMUTABLE_FL)) {
++		F2FS_I(qf_inode)->i_flags |=
++				F2FS_NOATIME_FL | F2FS_IMMUTABLE_FL;
++		f2fs_set_inode_flags(qf_inode);
++	}
++	inode_unlock(qf_inode);
++
+ 	err = dquot_load_quota_inode(qf_inode, type, format_id, flags);
+ 	iput(qf_inode);
+ 	return err;
 -- 
-Sincerely yours,
-Mike.
+2.40.1
+
