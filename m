@@ -2,198 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750BA710941
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3000B710947
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240670AbjEYJxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S233482AbjEYJxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbjEYJxR (ORCPT
+        with ESMTP id S231934AbjEYJxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:53:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BC2198
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:52:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685008352;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T483GshQ1etV4/B80hSTyHnl4OtRX6eMmZK03OF9d2k=;
-        b=ehyk8Sp1/uG/TGtsGbMfvc3IEZHO6/Hk9LgW+drL7lPwS3jhs9nRpx9iYow/CyL1QMY9Mh
-        ufuvtQlWqh81vNekqi7SelyqZCR1Kq1Lry+lwDCRgMBW0+ENFqYXxPTqjqzN5QKGV/lrb8
-        awJHfgqtLVV2JD8Jq0pdXDWDuc7bjd0=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-197-SqYuNH8PPeW5TqEEswp41g-1; Thu, 25 May 2023 05:52:31 -0400
-X-MC-Unique: SqYuNH8PPeW5TqEEswp41g-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-50dfa390825so2504101a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:52:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685008349; x=1687600349;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T483GshQ1etV4/B80hSTyHnl4OtRX6eMmZK03OF9d2k=;
-        b=GMY+yKkUohRf3N84GNwnH9O4qVypp8UWoqDV0our0wOrWig28+ag65VXs0A0LLdDeL
-         zSr5HG9wSlMiCvfcnXy2AJcvuQUXtNO1Q1sWCpWKAGiwCp6YE1xBF4zhI7MZJfRAUjC1
-         9D7fQUdjhTSJpKGypOjXn9WJ6iiR7KRT9pX/gKQ593ofb532Rl78ZW8cpbLC7SXqM2Pz
-         cSkU1gVirsIxRx0QohiututHIn7tPLoMjPR0gH0z68MyTR+2hDEmZ27PkBl5wZpxjUHG
-         2BCMkPxhyF0A2xDtPXIdwmN8CsWkBQClsKXWonvh2qlTSeiPvkYioTWFhQ0L3qnixxzO
-         A6NQ==
-X-Gm-Message-State: AC+VfDyvX++WNTbLZ8FQ0sth5LNGRyJr56GBnhlw4Osyk6At0zeaJgDT
-        fdvn5XEMOhPbg9DkYvh2jXt3dma2UfIVujkFYiKs8TmBQgSRJzC5IbIK7Ly3QMNBfXDFp7WzxY+
-        /4vK2deeUgsf+iMaUqs3VP3FdhhqYxlqe
-X-Received: by 2002:aa7:d316:0:b0:50b:c72a:2b26 with SMTP id p22-20020aa7d316000000b0050bc72a2b26mr4278277edq.9.1685008349619;
-        Thu, 25 May 2023 02:52:29 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4+iNh5Y5HpqElML4Mwp3cdCIoRI8ossZKCcSedVvPSiCi6hlR84Y6A/1kXAzHKM61nWvZOug==
-X-Received: by 2002:aa7:d316:0:b0:50b:c72a:2b26 with SMTP id p22-20020aa7d316000000b0050bc72a2b26mr4278270edq.9.1685008349312;
-        Thu, 25 May 2023 02:52:29 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id d27-20020a056402517b00b0050c0d651fb1sm377005ede.75.2023.05.25.02.52.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 02:52:28 -0700 (PDT)
-Message-ID: <a27660bd-fa7c-20c5-b7f2-f2ff20fe6cb8@redhat.com>
-Date:   Thu, 25 May 2023 11:52:28 +0200
+        Thu, 25 May 2023 05:53:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E79E7;
+        Thu, 25 May 2023 02:53:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E05260B66;
+        Thu, 25 May 2023 09:53:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50CCC433EF;
+        Thu, 25 May 2023 09:53:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685008426;
+        bh=tLf3d/gKdJeLlsMHMqGEB2pJUyxiRqlEFrB77+u+ub0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nHZvWC4W8EmZIK3OdntUi3kT9ru0BfJJhHh6tP01F9qRF5FtXJMxp/6GYe7ayxt9e
+         Qy1nQ3ImSYarIQKI58JvdxLsZnxqPNkpVuZwMWvTEy422tg46oSZQuV6fXGZNz4kqW
+         6tRHFG3RDhzd3or195z0Sau7VQC8Go6YHzSkYWQI4TCOtHytM3i1cTJQ6kN5F+s5zT
+         klaopGVfUV6P3Ro6aMlnHidFMwj4zMa00eaL3V2B2os8xT3nvjIhZWgHnbJle+C6JF
+         r77d08PW7VCneRsYMTlJDUsGQaYgF+8f+53ELWphWz9fPX2pRst9cvHiPhgLCXsnkl
+         S+BoPymZOR+xA==
+Date:   Thu, 25 May 2023 10:53:41 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Qii Wang =?utf-8?B?KOeOi+eQqik=?= <Qii.Wang@mediatek.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Leilk Liu =?utf-8?B?KOWImOejiik=?= <Leilk.Liu@mediatek.com>,
+        Tim Kuo =?utf-8?B?KOmDreW7t+esmSk=?= <Tim.Kuo@mediatek.com>,
+        "srv_heupstream@mediatek.com" <srv_heupstream@mediatek.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH] spi: mediatek: advertise the availability of Dual and
+ Quad mode
+Message-ID: <e21758df-7f70-4a76-9759-5621bfa5b0db@sirena.org.uk>
+References: <20230523112608.10298-1-qii.wang@mediatek.com>
+ <97af2a29-8aef-499d-9f07-bb262ec398cb@sirena.org.uk>
+ <7a99a7da9edc93f4e231500b1b781188f894d775.camel@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/4] platform/x86: think-lmi: Enable opcode support on
- BIOS settings
-Content-Language: en-US, nl
-To:     Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc:     "markgross@kernel.org" <markgross@kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>, linux-kernel@vger.kernel.org
-References: <mpearson-lenovo@squebb.ca>
- <20230517181945.3725-1-mpearson-lenovo@squebb.ca>
- <b79fa66c-b8bc-125c-ccfa-9dae727022e9@redhat.com>
- <04415f83-64fa-4d70-91fa-4425e163b350@app.fastmail.com>
- <71d0ddfa-ccca-43ee-aaac-6daf6b876824@app.fastmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <71d0ddfa-ccca-43ee-aaac-6daf6b876824@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E5yAS6xqncTy2UwS"
+Content-Disposition: inline
+In-Reply-To: <7a99a7da9edc93f4e231500b1b781188f894d775.camel@mediatek.com>
+X-Cookie: I demand IMPUNITY!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
 
-On 5/24/23 20:20, Mark Pearson wrote:
-> Hi Hans,
-> 
-> On Tue, May 23, 2023, at 8:36 AM, Mark Pearson wrote:
->> Thanks Hans,
->>
->> On Tue, May 23, 2023, at 6:46 AM, Hans de Goede wrote:
->>> Hi Mark,
->>>
->>> On 5/17/23 20:19, Mark Pearson wrote:
->>>> Whilst reviewing some documentation from the FW team on using WMI on
->>>> Lenovo system I noticed that we weren't using Opcode support when
->>>> changing BIOS settings in the thinkLMI driver.
->>>>
->>>> We should be doing this to ensure we're future proof as the old
->>>> non-opcode mechanism has been deprecated.
->>>>
->>>> Tested on X1 Carbon G10 and G11.
->>>>
->>>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
->>>> ---
->>>>  drivers/platform/x86/think-lmi.c | 23 ++++++++++++++++++++++-
->>>>  1 file changed, 22 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
->>>> index 1138f770149d..d9341305eba9 100644
->>>> --- a/drivers/platform/x86/think-lmi.c
->>>> +++ b/drivers/platform/x86/think-lmi.c
->>>> @@ -1001,7 +1001,28 @@ static ssize_t current_value_store(struct kobject *kobj,
->>>>  				tlmi_priv.pwd_admin->save_signature);
->>>>  		if (ret)
->>>>  			goto out;
->>>
->>>> -	} else { /* Non certiifcate based authentication */
->>>> +	} else if (tlmi_priv.opcode_support) {
->>>> +		/* If opcode support is present use that interface */
->>>> +		set_str = kasprintf(GFP_KERNEL, "%s,%s;", setting->display_name,
->>>> +					new_setting);
->>>> +		if (!set_str) {
->>>> +			ret = -ENOMEM;
->>>> +			goto out;
->>>> +		}
->>>> +
->>>> +		ret = tlmi_simple_call(LENOVO_SET_BIOS_SETTINGS_GUID, set_str);
->>>> +		if (ret)
->>>> +			goto out;
->>>> +
->>>> +		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
->>>> +			ret = tlmi_opcode_setting("WmiOpcodePasswordAdmin",
->>>> +					tlmi_priv.pwd_admin->password);
->>>> +			if (ret)
->>>> +				goto out;
->>>> +		}
->>>> +
->>>> +		ret = tlmi_save_bios_settings("");
->>>
->>> I'm a bit confused about how this works. You are calling the same
->>> LENOVO_SET_BIOS_SETTINGS_GUID as the old non opcode based authentication method
->>> without any auth string.
->>>
->>> And then afterwards you are calling LENOVO_OPCODE_IF_GUID with
->>> "WmiOpcodePasswordAdmin:<passwd>"
->>>
->>> Won't the initial LENOVO_SET_BIOS_SETTINGS_GUID get rejected since
->>> it does not include an auth-string and you have not authenticated
->>> yet using the opcode mechanism either. IOW shouldn't the opcode
->>> auth call go first ?
->>>
->>> And how does this work timing wise, vs races with userspace doing
->>> multiple sysfs writes at once.
->>>
->>> If the authentication done afterwards really acks the last
->>> LENOVO_SET_BIOS_SETTINGS_GUID call then a userspace based
->>> attacker could try to race and overwrite the last
->>> LENOVO_SET_BIOS_SETTINGS_GUID call before the ack happens... ?
->>>
->>> If this code really is correct I think we need to introduce
->>> a mutex to avoid this race.
->>>
->>> And this also needs some comments to explain what is going on.
->>
->> Agreed - and looking at it now....I'm questioning it myself. This was 
->> tested so it works...but I wonder if that was more luck than judgement.
->> Let me do some checking - I think I may have messed up here.
->>
-> 
-> Looked at this and the code is correct - even if it is a bit weird :)
-> https://docs.lenovocdrt.com/#/bios/wmi/wmi_guide?id=set-and-save-a-bios-setting-on-newer-models
-> 
-> The save_bios_settings would fail if a password was not set (if it's required).
+--E5yAS6xqncTy2UwS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ok, can you add some comments to the next revision explaining this ?
-(no need to write a novel, just some short comments)
+On Thu, May 25, 2023 at 06:21:26AM +0000, Qii Wang (=E7=8E=8B=E7=90=AA) wro=
+te:
 
-> With regards to race conditions - that does seem somewhat unlikely in real life but I can add a mutex around this to catch that condition. I think I should probably do the same in a couple of other places (e.g. certificate_store and new_password_store) where multiple WMI calls are needed to complete an operation. 
+> The previous patch was this one:=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
+/drivers/spi/spi-mt65xx.c?h=3Dv6.4-rc3&id=3D9f763fd20da7d892ffaedac0c58d821=
+922f8a674
 
-Ack for also adding the mutex in other places where there is more
-then 1 WMI call involved.
+Please include human readable descriptions of things like commits and
+issues being discussed in e-mail in your mails, this makes them much
+easier for humans to read especially when they have no internet access.
+I do frequently catch up on my mail on flights or while otherwise
+travelling so this is even more pressing for me than just being about
+making things a bit easier to read.
 
-> Is it OK if I do that as a separate commit on the end of the series or would you rather it was included in this commit? As the scope is, I think, more than just this function I'm leaning towards a separate commit but let me know what best practice is.
+--E5yAS6xqncTy2UwS
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Adding this in a separate commit is fine with me.
+-----BEGIN PGP SIGNATURE-----
 
-Regards,
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRvMCQACgkQJNaLcl1U
+h9CDDwf+O0uRW+IX4K9wPhydgsnobcj/fhSfVLefIiiSvrPRl27vNm1oKmwe6LIm
+p0VGIY258AobfS73u0PWEZF8XQsZxzi1kgoi7X/gji1LiqtU/iOBgYLQx4jyv7Or
+GWFcmirYNnyzwsaUd5bwIpwsN6N5E95rC1Zo8AZS4eO1Lc/UVr7RtC6H5htyMen6
+rmt6d42OpF4gF83ERIL74vGIm/VuqteA55l+yfHGCjYpygH39RaYI6pGUBIasRAo
+QjL+s7Jr/+FEj9zt3K0DdCTrBzIwVefejtOixSCLFTgTiDr+/JNLTqwcbk7uYHBD
+zXArYY5qi8/pY1oshy9ZhrJnnn7nAQ==
+=XjGO
+-----END PGP SIGNATURE-----
 
-Hans
-
-
+--E5yAS6xqncTy2UwS--
