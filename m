@@ -2,88 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D96710AC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E37710ACD
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240938AbjEYLVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
+        id S238749AbjEYLWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240873AbjEYLVZ (ORCPT
+        with ESMTP id S235297AbjEYLWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:21:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CDF1B0;
-        Thu, 25 May 2023 04:21:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F1406409B;
-        Thu, 25 May 2023 11:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD548C433D2;
-        Thu, 25 May 2023 11:21:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685013675;
-        bh=ni3fv1TAGwhAduvkHrW+xcXeUTzxm+PZZUqb8TFrHOk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GteQeC5wbJh/zN16M68svm+KDqi1k6O18ph0ng76OdPPVwKzrGcxwze3Xrm8G2Mg/
-         dSyw6ehK6SEaNtASJIy/6BImXVtKVTdlSbTs8UORW4tltSaJQAWtyYJHYvHUleYObv
-         sqi/Qe8phG2eSEei2GzsWrTBNZcJRo4claI7xnUvZRNEm7nrB/9Xp8+3/UZ8lB6UN0
-         bbnRZXMSMYjM5OgeImTln8DU2ZSkoFS9fZJy0ayfBXzXFy/R+RksF/aCmrc3H2ZXk+
-         rbeuI8klZIm9A9+c4vG/Tth0Vk0NQXXMkJXH0x9pRlVUmOCRua/KDKHzFDR6ZHVVZP
-         OQNbmNqIfZy2g==
-Date:   Thu, 25 May 2023 12:21:08 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v5 17/44] leds: add HAS_IOPORT dependencies
-Message-ID: <20230525112108.GE411262@google.com>
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
- <20230522105049.1467313-18-schnelle@linux.ibm.com>
+        Thu, 25 May 2023 07:22:51 -0400
+Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEC410B
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:22:49 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
+        id 793c14e4-faee-11ed-b972-005056bdfda7;
+        Thu, 25 May 2023 14:22:46 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Thu, 25 May 2023 14:22:46 +0300
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v3 09/11] serial: sc16is7xx: add I/O register translation
+ offset
+Message-ID: <ZG9FBgX2useVeuWl@surfacebook>
+References: <20230525040324.3773741-1-hugo@hugovil.com>
+ <20230525040324.3773741-10-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230522105049.1467313-18-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230525040324.3773741-10-hugo@hugovil.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023, Niklas Schnelle wrote:
-
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
+Thu, May 25, 2023 at 12:03:23AM -0400, Hugo Villeneuve kirjoitti:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> Acked-by: Pavel Machek <pavel@ucw.cz>
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->  drivers/leds/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> If the shared GPIO pins on a dual port/channel variant like the
+> SC16IS752 are configured as GPIOs for port A, and modem control lines
+> on port A, we need to translate the Linux GPIO offset to an offset
+> that is compatible with the I/O registers of the SC16IS7XX (IOState,
+> IODir and IOIntEna).
+> 
+> Add a new variable to store that offset and set it when we detect that
+> special case.
 
-Applied, thanks
+...
+
+> +/*
+> + * We may need to translate the Linux GPIO offset to a SC16IS7XX offset.
+> + * This is needed only for the case where a dual port variant is configured to
+> + * have only port B as modem status lines.
+> + *
+> + * Example for SC16IS752/762 with upper bank (port A) set as GPIOs, and
+> + * lower bank (port B) set as modem status lines (special case described above):
+> + *
+> + * Pin         GPIO pin     Linux GPIO     SC16IS7XX
+> + * name        function     offset         offset
+> + * --------------------------------------------------
+> + * GPIO7/RIA    GPIO7          3              7
+> + * GPIO6/CDA    GPIO6          2              6
+> + * GPIO5/DTRA   GPIO5          1              5
+> + * GPIO4/DSRA   GPIO4          0              4
+> + * GPIO3/RIB    RIB           N/A            N/A
+> + * GPIO2/CDB    CDB           N/A            N/A
+> + * GPIO1/DTRB   DTRB          N/A            N/A
+> + * GPIO0/DSRB   DSRB          N/A            N/A
+> + *
+> + * Example  for SC16IS750/760 with upper bank (7..4) set as modem status lines,
+
+Single space is enough.
+
+> + * and lower bank (3..0) as GPIOs:
+> + *
+> + * Pin         GPIO pin     Linux GPIO     SC16IS7XX
+> + * name        function     offset         offset
+> + * --------------------------------------------------
+> + * GPIO7/RI     RI            N/A            N/A
+> + * GPIO6/CD     CD            N/A            N/A
+> + * GPIO5/DTR    DTR           N/A            N/A
+> + * GPIO4/DSR    DSR           N/A            N/A
+> + * GPIO3        GPIO3          3              3
+> + * GPIO2        GPIO2          2              2
+> + * GPIO1        GPIO1          1              1
+> + * GPIO0        GPIO0          0              0
+> + */
+
+Wondering if you can always register 8 pins and use valid mask to define which
+one are in use?
 
 -- 
-Lee Jones [李琼斯]
+With Best Regards,
+Andy Shevchenko
+
+
