@@ -1,344 +1,200 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F62E711A41
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:43:13 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 55E2C711A49
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241062AbjEYWlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 18:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        id S234702AbjEYWpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 18:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241703AbjEYWlh (ORCPT
+        with ESMTP id S230465AbjEYWpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 18:41:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A3C1AC
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:40:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685054412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PCC0sosk0Q9OchSk1Wd/PogJY3iRiwmEwElEkGvXYZE=;
-        b=MDbCHnw5LrpRZAgYBMuKfJr+pKqkMYbfgTPPmlTAuUJ4GH2hsW44TP2L//t1SEGWEUXKG6
-        P9cy0WAi69TTvi8k9zmxPNa5epUrjxNMNadYe/1U2m+2RISIMdbbDpC53mki/oHquhfoD3
-        esJP+B0Vq85b5nFl1AC+vcvTJ/+RwSs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-344-_OlhGPMwOpeIMBefHaCpnA-1; Thu, 25 May 2023 18:40:08 -0400
-X-MC-Unique: _OlhGPMwOpeIMBefHaCpnA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E96918007D9;
-        Thu, 25 May 2023 22:40:07 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9049E7AF5;
-        Thu, 25 May 2023 22:40:05 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        David Hildenbrand <david@redhat.com>
-Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [RFC PATCH v2 3/3] block: Use iov_iter_extract_pages() and page pinning in direct-io.c
-Date:   Thu, 25 May 2023 23:39:53 +0100
-Message-Id: <20230525223953.225496-4-dhowells@redhat.com>
-In-Reply-To: <20230525223953.225496-1-dhowells@redhat.com>
-References: <20230525223953.225496-1-dhowells@redhat.com>
+        Thu, 25 May 2023 18:45:07 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFFB9E
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:45:01 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-561bcd35117so3745217b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:45:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685054701; x=1687646701;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zr4PzYVvcFu5HRS+oUxUsdXhS9HU/i14IGA9kInV6TU=;
+        b=TjYjn6KmCyyJoAwue8HvkMTmfxRDWJmcG7ZWa2chlQXhANNAMx3kHaK351lIiAi+uY
+         vFFSUg8DiT7CdeXRGnrHCVXgLTnx8tkMOzpr5+TilY0wRHNjGkNLnmvsjyuUDrTqtUI/
+         RG5grrCzluZapGlbCT3mM6N1154bwAnoJEy4RLT/99t2w/zb4rVnhnC7nIu+boxKICfs
+         vryo9pRudQRKchESj5rFv0xLwTV76PzVVLzTMKB6PRmMuwV4K/qZql1Yu7rfEYJQNQUK
+         Kk3m2ZGaHDh4pIO45OUhc2gN2+wRG4l6W3dASY6XMmMoxC1GGvHnrruNoYZFbTuwVYHZ
+         ea9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685054701; x=1687646701;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zr4PzYVvcFu5HRS+oUxUsdXhS9HU/i14IGA9kInV6TU=;
+        b=KkZPtRXFnPB1LdgngjWxZv+BD91Kv1abAKkG5/LtHwtThHxVhCk0mNO7C8DfMs7FjI
+         rawjSAOSVuGVgUm33owYJqqxmQA89Qwp6NR/sEUbRHag/Ic/Jx3qOBM48l9bUqAkg1oi
+         nvRVNjeSxwYIkcqJ60DuVkb9xqBd+OfXmEAeS1u0662I7l8wM/ezLNNY5j27H5uWdFrl
+         0M6wP+ESVxE3a5UNtU8A+RxM+UYe6dK+49iLM5VwRfQZbQKUBrrAZ2VLaG7TiiKavi3S
+         XEd/18hp0RfnhDWiFPw2xcT9kjinqhDNVrv+8LAU2ZWafdnp3+yfAHzEOC2LM3BYwoew
+         /Y/A==
+X-Gm-Message-State: AC+VfDzZ4G0Kcb4Y01u/x5z0Pae3OaiShhLFG3kShogZGRsPia71yc7R
+        0+0Hvng8uk8Y7uQC8IznN8EXxw==
+X-Google-Smtp-Source: ACHHUZ7PWCnU65QmVAHZO/udLtMlEKOZXpL3ccFnkwF15Ous02mDtojdRLGZ24kcfmtChFQBDV0BqQ==
+X-Received: by 2002:a0d:d4d5:0:b0:565:8c16:a0e1 with SMTP id w204-20020a0dd4d5000000b005658c16a0e1mr53112ywd.13.1685054700797;
+        Thu, 25 May 2023 15:45:00 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id i22-20020a0ddf16000000b00556aa81f615sm716151ywe.68.2023.05.25.15.44.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 15:45:00 -0700 (PDT)
+Date:   Thu, 25 May 2023 15:44:52 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Tu Jinjiang <tujinjiang@huawei.com>
+cc:     hughd@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, wangkefeng.wang@huawei.com,
+        sunnanyong@huawei.com
+Subject: Re: [PATCH] mm: shmem: Fix UAF bug in shmem_show_options()
+In-Reply-To: <20230525031640.593733-1-tujinjiang@huawei.com>
+Message-ID: <489cb23-7860-feb8-1b58-3586db1be3@google.com>
+References: <20230525031640.593733-1-tujinjiang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change the old block-based direct-I/O code to use iov_iter_extract_pages()
-to pin user pages or leave kernel pages unpinned rather than taking refs
-when submitting bios.
+On Thu, 25 May 2023, Tu Jinjiang wrote:
 
-This makes use of the preceding patches to not take pins on the zero page
-(thereby allowing insertion of zero pages in with pinned pages) and to get
-additional pins on pages, allowing an extracted page to be used in multiple
-bios without having to re-extract it.
+> shmem_show_options() uses sbinfo->mpol without adding it's refcnt. This
+> may lead to race with replacement of the mpol by remount. The execution
+> sequence is as follows.
+> 
+>        CPU0                                   CPU1
+> shmem_show_options()                        shmem_reconfigure()
+>     shmem_show_mpol(seq, sbinfo->mpol)          mpol = sbinfo->mpol
+>                                                 mpol_put(mpol)
+>         mpol->mode
+> 
+> The KASAN report is as follows.
+> 
+> BUG: KASAN: slab-use-after-free in shmem_show_options+0x21b/0x340
+> Read of size 2 at addr ffff888124324004 by task mount/2388
+> 
+> CPU: 2 PID: 2388 Comm: mount Not tainted 6.4.0-rc3-00017-g9d646009f65d-dirty #8
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0x37/0x50
+>  print_report+0xd0/0x620
+>  ? shmem_show_options+0x21b/0x340
+>  ? __virt_addr_valid+0xf4/0x180
+>  ? shmem_show_options+0x21b/0x340
+>  kasan_report+0xb8/0xe0
+>  ? shmem_show_options+0x21b/0x340
+>  shmem_show_options+0x21b/0x340
+>  ? __pfx_shmem_show_options+0x10/0x10
+>  ? strchr+0x2c/0x50
+>  ? strlen+0x23/0x40
+>  ? seq_puts+0x7d/0x90
+>  show_vfsmnt+0x1e6/0x260
+>  ? __pfx_show_vfsmnt+0x10/0x10
+>  ? __kasan_kmalloc+0x7f/0x90
+>  seq_read_iter+0x57a/0x740
+>  vfs_read+0x2e2/0x4a0
+>  ? __pfx_vfs_read+0x10/0x10
+>  ? down_write_killable+0xb8/0x140
+>  ? __pfx_down_write_killable+0x10/0x10
+>  ? __fget_light+0xa9/0x1e0
+>  ? up_write+0x3f/0x80
+>  ksys_read+0xb8/0x150
+>  ? __pfx_ksys_read+0x10/0x10
+>  ? fpregs_assert_state_consistent+0x55/0x60
+>  ? exit_to_user_mode_prepare+0x2d/0x120
+>  do_syscall_64+0x3c/0x90
+>  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> 
+>  </TASK>
+> 
+> Allocated by task 2387:
+>  kasan_save_stack+0x22/0x50
+>  kasan_set_track+0x25/0x30
+>  __kasan_slab_alloc+0x59/0x70
+>  kmem_cache_alloc+0xdd/0x220
+>  mpol_new+0x83/0x150
+>  mpol_parse_str+0x280/0x4a0
+>  shmem_parse_one+0x364/0x520
+>  vfs_parse_fs_param+0xf8/0x1a0
+>  vfs_parse_fs_string+0xc9/0x130
+>  shmem_parse_options+0xb2/0x110
+>  path_mount+0x597/0xdf0
+>  do_mount+0xcd/0xf0
+>  __x64_sys_mount+0xbd/0x100
+>  do_syscall_64+0x3c/0x90
+>  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> 
+> Freed by task 2389:
+>  kasan_save_stack+0x22/0x50
+>  kasan_set_track+0x25/0x30
+>  kasan_save_free_info+0x2e/0x50
+>  __kasan_slab_free+0x10e/0x1a0
+>  kmem_cache_free+0x9c/0x350
+>  shmem_reconfigure+0x278/0x370
+>  reconfigure_super+0x383/0x450
+>  path_mount+0xcc5/0xdf0
+>  do_mount+0xcd/0xf0
+>  __x64_sys_mount+0xbd/0x100
+>  do_syscall_64+0x3c/0x90
+>  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> 
+> The buggy address belongs to the object at ffff888124324000
+>  which belongs to the cache numa_policy of size 32
+> The buggy address is located 4 bytes inside of
+>  freed 32-byte region [ffff888124324000, ffff888124324020)
+> ==================================================================
+> 
+> To fix the bug, shmem_get_sbmpol() / mpol_put() needs to be called
+> before / after shmem_show_mpol() call.
+> 
+> Signed-off-by: Tu Jinjiang <tujinjiang@huawei.com>
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Christoph Hellwig <hch@infradead.org>
-cc: David Hildenbrand <david@redhat.com>
-cc: Andrew Morton <akpm@linux-foundation.org>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Jan Kara <jack@suse.cz>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Jason Gunthorpe <jgg@nvidia.com>
-cc: Logan Gunthorpe <logang@deltatee.com>
-cc: Hillf Danton <hdanton@sina.com>
-cc: Christian Brauner <brauner@kernel.org>
-cc: Linus Torvalds <torvalds@linux-foundation.org>
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-block@vger.kernel.org
-cc: linux-kernel@vger.kernel.org
-cc: linux-mm@kvack.org
----
+Thank you -
+Acked-by: Hugh Dickins <hughd@google.com>
 
-Notes:
-    ver #2)
-     - Need to set BIO_PAGE_PINNED conditionally, not BIO_PAGE_REFFED.
-
- fs/direct-io.c | 72 ++++++++++++++++++++++++++++++--------------------
- 1 file changed, 43 insertions(+), 29 deletions(-)
-
-diff --git a/fs/direct-io.c b/fs/direct-io.c
-index ad20f3428bab..5d4c5be0fb41 100644
---- a/fs/direct-io.c
-+++ b/fs/direct-io.c
-@@ -42,8 +42,8 @@
- #include "internal.h"
- 
- /*
-- * How many user pages to map in one call to get_user_pages().  This determines
-- * the size of a structure in the slab cache
-+ * How many user pages to map in one call to iov_iter_extract_pages().  This
-+ * determines the size of a structure in the slab cache
-  */
- #define DIO_PAGES	64
- 
-@@ -121,12 +121,13 @@ struct dio {
- 	struct inode *inode;
- 	loff_t i_size;			/* i_size when submitted */
- 	dio_iodone_t *end_io;		/* IO completion function */
-+	bool need_unpin;		/* T if we need to unpin the pages */
- 
- 	void *private;			/* copy from map_bh.b_private */
- 
- 	/* BIO completion state */
- 	spinlock_t bio_lock;		/* protects BIO fields below */
--	int page_errors;		/* errno from get_user_pages() */
-+	int page_errors;		/* err from iov_iter_extract_pages() */
- 	int is_async;			/* is IO async ? */
- 	bool defer_completion;		/* defer AIO completion to workqueue? */
- 	bool should_dirty;		/* if pages should be dirtied */
-@@ -165,14 +166,14 @@ static inline unsigned dio_pages_present(struct dio_submit *sdio)
-  */
- static inline int dio_refill_pages(struct dio *dio, struct dio_submit *sdio)
- {
-+	struct page **pages = dio->pages;
- 	const enum req_op dio_op = dio->opf & REQ_OP_MASK;
- 	ssize_t ret;
- 
--	ret = iov_iter_get_pages2(sdio->iter, dio->pages, LONG_MAX, DIO_PAGES,
--				&sdio->from);
-+	ret = iov_iter_extract_pages(sdio->iter, &pages, LONG_MAX,
-+				     DIO_PAGES, 0, &sdio->from);
- 
- 	if (ret < 0 && sdio->blocks_available && dio_op == REQ_OP_WRITE) {
--		struct page *page = ZERO_PAGE(0);
- 		/*
- 		 * A memory fault, but the filesystem has some outstanding
- 		 * mapped blocks.  We need to use those blocks up to avoid
-@@ -180,8 +181,7 @@ static inline int dio_refill_pages(struct dio *dio, struct dio_submit *sdio)
- 		 */
- 		if (dio->page_errors == 0)
- 			dio->page_errors = ret;
--		get_page(page);
--		dio->pages[0] = page;
-+		dio->pages[0] = ZERO_PAGE(0);
- 		sdio->head = 0;
- 		sdio->tail = 1;
- 		sdio->from = 0;
-@@ -201,9 +201,9 @@ static inline int dio_refill_pages(struct dio *dio, struct dio_submit *sdio)
- 
- /*
-  * Get another userspace page.  Returns an ERR_PTR on error.  Pages are
-- * buffered inside the dio so that we can call get_user_pages() against a
-- * decent number of pages, less frequently.  To provide nicer use of the
-- * L1 cache.
-+ * buffered inside the dio so that we can call iov_iter_extract_pages()
-+ * against a decent number of pages, less frequently.  To provide nicer use of
-+ * the L1 cache.
-  */
- static inline struct page *dio_get_page(struct dio *dio,
- 					struct dio_submit *sdio)
-@@ -219,6 +219,18 @@ static inline struct page *dio_get_page(struct dio *dio,
- 	return dio->pages[sdio->head];
- }
- 
-+static void dio_pin_page(struct dio *dio, struct page *page)
-+{
-+	if (dio->need_unpin)
-+		page_get_additional_pin(page);
-+}
-+
-+static void dio_unpin_page(struct dio *dio, struct page *page)
-+{
-+	if (dio->need_unpin)
-+		unpin_user_page(page);
-+}
-+
- /*
-  * dio_complete() - called when all DIO BIO I/O has been completed
-  *
-@@ -402,8 +414,8 @@ dio_bio_alloc(struct dio *dio, struct dio_submit *sdio,
- 		bio->bi_end_io = dio_bio_end_aio;
- 	else
- 		bio->bi_end_io = dio_bio_end_io;
--	/* for now require references for all pages */
--	bio_set_flag(bio, BIO_PAGE_REFFED);
-+	if (dio->need_unpin)
-+		bio_set_flag(bio, BIO_PAGE_PINNED);
- 	sdio->bio = bio;
- 	sdio->logical_offset_in_bio = sdio->cur_page_fs_offset;
- }
-@@ -444,8 +456,9 @@ static inline void dio_bio_submit(struct dio *dio, struct dio_submit *sdio)
-  */
- static inline void dio_cleanup(struct dio *dio, struct dio_submit *sdio)
- {
--	while (sdio->head < sdio->tail)
--		put_page(dio->pages[sdio->head++]);
-+	if (dio->need_unpin)
-+		unpin_user_pages(dio->pages + sdio->head,
-+				 sdio->tail - sdio->head);
- }
- 
- /*
-@@ -676,7 +689,7 @@ static inline int dio_new_bio(struct dio *dio, struct dio_submit *sdio,
-  *
-  * Return zero on success.  Non-zero means the caller needs to start a new BIO.
-  */
--static inline int dio_bio_add_page(struct dio_submit *sdio)
-+static inline int dio_bio_add_page(struct dio *dio, struct dio_submit *sdio)
- {
- 	int ret;
- 
-@@ -688,7 +701,7 @@ static inline int dio_bio_add_page(struct dio_submit *sdio)
- 		 */
- 		if ((sdio->cur_page_len + sdio->cur_page_offset) == PAGE_SIZE)
- 			sdio->pages_in_io--;
--		get_page(sdio->cur_page);
-+		dio_pin_page(dio, sdio->cur_page);
- 		sdio->final_block_in_bio = sdio->cur_page_block +
- 			(sdio->cur_page_len >> sdio->blkbits);
- 		ret = 0;
-@@ -743,11 +756,11 @@ static inline int dio_send_cur_page(struct dio *dio, struct dio_submit *sdio,
- 			goto out;
- 	}
- 
--	if (dio_bio_add_page(sdio) != 0) {
-+	if (dio_bio_add_page(dio, sdio) != 0) {
- 		dio_bio_submit(dio, sdio);
- 		ret = dio_new_bio(dio, sdio, sdio->cur_page_block, map_bh);
- 		if (ret == 0) {
--			ret = dio_bio_add_page(sdio);
-+			ret = dio_bio_add_page(dio, sdio);
- 			BUG_ON(ret != 0);
- 		}
- 	}
-@@ -804,13 +817,13 @@ submit_page_section(struct dio *dio, struct dio_submit *sdio, struct page *page,
- 	 */
- 	if (sdio->cur_page) {
- 		ret = dio_send_cur_page(dio, sdio, map_bh);
--		put_page(sdio->cur_page);
-+		dio_unpin_page(dio, sdio->cur_page);
- 		sdio->cur_page = NULL;
- 		if (ret)
- 			return ret;
- 	}
- 
--	get_page(page);		/* It is in dio */
-+	dio_pin_page(dio, page);		/* It is in dio */
- 	sdio->cur_page = page;
- 	sdio->cur_page_offset = offset;
- 	sdio->cur_page_len = len;
-@@ -825,7 +838,7 @@ submit_page_section(struct dio *dio, struct dio_submit *sdio, struct page *page,
- 		ret = dio_send_cur_page(dio, sdio, map_bh);
- 		if (sdio->bio)
- 			dio_bio_submit(dio, sdio);
--		put_page(sdio->cur_page);
-+		dio_unpin_page(dio, sdio->cur_page);
- 		sdio->cur_page = NULL;
- 	}
- 	return ret;
-@@ -926,7 +939,7 @@ static int do_direct_IO(struct dio *dio, struct dio_submit *sdio,
- 
- 				ret = get_more_blocks(dio, sdio, map_bh);
- 				if (ret) {
--					put_page(page);
-+					dio_unpin_page(dio, page);
- 					goto out;
- 				}
- 				if (!buffer_mapped(map_bh))
-@@ -971,7 +984,7 @@ static int do_direct_IO(struct dio *dio, struct dio_submit *sdio,
- 
- 				/* AKPM: eargh, -ENOTBLK is a hack */
- 				if (dio_op == REQ_OP_WRITE) {
--					put_page(page);
-+					dio_unpin_page(dio, page);
- 					return -ENOTBLK;
- 				}
- 
-@@ -984,7 +997,7 @@ static int do_direct_IO(struct dio *dio, struct dio_submit *sdio,
- 				if (sdio->block_in_file >=
- 						i_size_aligned >> blkbits) {
- 					/* We hit eof */
--					put_page(page);
-+					dio_unpin_page(dio, page);
- 					goto out;
- 				}
- 				zero_user(page, from, 1 << blkbits);
-@@ -1024,7 +1037,7 @@ static int do_direct_IO(struct dio *dio, struct dio_submit *sdio,
- 						  sdio->next_block_for_io,
- 						  map_bh);
- 			if (ret) {
--				put_page(page);
-+				dio_unpin_page(dio, page);
- 				goto out;
- 			}
- 			sdio->next_block_for_io += this_chunk_blocks;
-@@ -1039,8 +1052,8 @@ static int do_direct_IO(struct dio *dio, struct dio_submit *sdio,
- 				break;
- 		}
- 
--		/* Drop the ref which was taken in get_user_pages() */
--		put_page(page);
-+		/* Drop the pin which was taken in get_user_pages() */
-+		dio_unpin_page(dio, page);
- 	}
- out:
- 	return ret;
-@@ -1135,6 +1148,7 @@ ssize_t __blockdev_direct_IO(struct kiocb *iocb, struct inode *inode,
- 		/* will be released by direct_io_worker */
- 		inode_lock(inode);
- 	}
-+	dio->need_unpin = iov_iter_extract_will_pin(iter);
- 
- 	/* Once we sampled i_size check for reads beyond EOF */
- 	dio->i_size = i_size_read(inode);
-@@ -1259,7 +1273,7 @@ ssize_t __blockdev_direct_IO(struct kiocb *iocb, struct inode *inode,
- 		ret2 = dio_send_cur_page(dio, &sdio, &map_bh);
- 		if (retval == 0)
- 			retval = ret2;
--		put_page(sdio.cur_page);
-+		dio_unpin_page(dio, sdio.cur_page);
- 		sdio.cur_page = NULL;
- 	}
- 	if (sdio.bio)
-
+> ---
+>  mm/shmem.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index e40a08c5c6d7..5e54ab5f61f2 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -3726,6 +3726,7 @@ static int shmem_reconfigure(struct fs_context *fc)
+>  static int shmem_show_options(struct seq_file *seq, struct dentry *root)
+>  {
+>  	struct shmem_sb_info *sbinfo = SHMEM_SB(root->d_sb);
+> +	struct mempolicy *mpol;
+>  
+>  	if (sbinfo->max_blocks != shmem_default_max_blocks())
+>  		seq_printf(seq, ",size=%luk",
+> @@ -3768,7 +3769,9 @@ static int shmem_show_options(struct seq_file *seq, struct dentry *root)
+>  	if (sbinfo->huge)
+>  		seq_printf(seq, ",huge=%s", shmem_format_huge(sbinfo->huge));
+>  #endif
+> -	shmem_show_mpol(seq, sbinfo->mpol);
+> +	mpol = shmem_get_sbmpol(sbinfo);
+> +	shmem_show_mpol(seq, mpol);
+> +	mpol_put(mpol);
+>  	if (sbinfo->noswap)
+>  		seq_printf(seq, ",noswap");
+>  	return 0;
+> -- 
+> 2.25.1
