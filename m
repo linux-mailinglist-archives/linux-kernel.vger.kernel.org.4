@@ -2,106 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1912710DD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD29710DD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241024AbjEYOB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
+        id S241452AbjEYOCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241401AbjEYOBu (ORCPT
+        with ESMTP id S240681AbjEYOCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:01:50 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3403E186;
-        Thu, 25 May 2023 07:01:12 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 9CC4D5FD51;
-        Thu, 25 May 2023 17:01:02 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685023262;
-        bh=bpPitjV95L3ioVshJeARXDTfhB1q4NXomIjqNtoVQq0=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=g542J5yIh9b82dadzQ8Wzl6DX57oGV8BuX0mh2ze4Lxm+6swAF021XvoO8GlwxhT6
-         Pq7nf95oLmZnAL7nbuuLJrlbpPy+Ls62/SpbtMjJ1+zYrgZRm+mv6c9jEW7PG11L7K
-         MWOZeU+48k2eWJJPd5jBSlocvi6aBbF883AvvL3TtR5N3LA9lLGt0Mgy6Vufx4y4v0
-         UZeg7QdcWiUFvEEKDnq6/udXmN2PqmQeLhV2nI8+vkeOpEFcvawVE/FCbXyq4nxnEJ
-         tTtWSfufJTfkg06kJ5qH2vEyV2UYNmOpwFKsXlspxbSAfqDIQtzzNyjs8AnRfB8Y2s
-         AWQ3QJod3p4IA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 25 May 2023 17:01:01 +0300 (MSK)
-Date:   Thu, 25 May 2023 17:01:00 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor@kernel.org>, <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH v16 5/6] dt-bindings: clock: meson: add A1 Peripherals
- clock controller bindings
-Message-ID: <20230525140100.mdzuhyfhxxkf4mx7@CAB-WSD-L081021>
-References: <20230523135351.19133-1-ddrokosov@sberdevices.ru>
- <20230523135351.19133-6-ddrokosov@sberdevices.ru>
- <20230525093736.naztwqlhvskujsoa@CAB-WSD-L081021>
- <20230525-connected-skipper-442c6d0b52c1@wendy>
+        Thu, 25 May 2023 10:02:16 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51AF1A4;
+        Thu, 25 May 2023 07:01:50 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QRqTn1cLmz4f3kp4;
+        Thu, 25 May 2023 22:01:17 +0800 (CST)
+Received: from [10.174.179.247] (unknown [10.174.179.247])
+        by APP4 (Coremail) with SMTP id gCh0CgBn0LMtam9kk9TAKA--.21737S3;
+        Thu, 25 May 2023 22:01:18 +0800 (CST)
+Message-ID: <586af9e9-d21a-632a-0396-b578d9d950d8@huaweicloud.com>
+Date:   Thu, 25 May 2023 22:01:17 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230525-connected-skipper-442c6d0b52c1@wendy>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/25 11:25:00 #21349968
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 0/3] raid10 bugfix
+To:     Song Liu <song@kernel.org>, linan666@huaweicloud.com
+Cc:     shli@fb.com, allenpeng@synology.com, alexwu@synology.com,
+        bingjingc@synology.com, neilb@suse.de, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com
+References: <20230522115449.2203939-1-linan666@huaweicloud.com>
+ <CAPhsuW72GX2BrSmacuK9V2sD3V5DqL4AA_1datAbwNTYKm=LGg@mail.gmail.com>
+From:   Li Nan <linan666@huaweicloud.com>
+In-Reply-To: <CAPhsuW72GX2BrSmacuK9V2sD3V5DqL4AA_1datAbwNTYKm=LGg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBn0LMtam9kk9TAKA--.21737S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYW7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvE
+        ncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I
+        8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0E
+        jII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbI
+        xvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
+        xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrx
+        kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
+        6r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW8JVW3JwCI42IY6I8E87Iv67AKxVWUJVW8Jw
+        CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5vtCUUUU
+        U
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conor,
 
-Thank you for quick reply!
 
-On Thu, May 25, 2023 at 02:16:02PM +0100, Conor Dooley wrote:
-> On Thu, May 25, 2023 at 12:37:36PM +0300, Dmitry Rokosov wrote:
-> > Hello Rob, Krzysztof and Conor,
-> > 
-> > Could you please take a look at this patch version? Before Rob marked
-> > this patchset with RvB at v13 -
-> > https://lore.kernel.org/linux-amlogic/168130720431.2218249.7671061964988064525.robh@kernel.org/
-> > 
-> > However, due to several comments from other maintainers, unfortunately,
-> > I had to rename the 'a1-clkc' controller to 'a1-peripherals-clkc' and
-> > remove Rob's RvB.
+在 2023/5/24 2:44, Song Liu 写道:
+> On Mon, May 22, 2023 at 4:56 AM <linan666@huaweicloud.com> wrote:
+>>
+>> From: Li Nan <linan122@huawei.com>
+>>
+>> Li Nan (3):
+>>    md/raid10: fix null-ptr-deref of mreplace in raid10_sync_request
+>>    md/raid10: fix incorrect done of recovery
+>>    md/raid10: fix io loss while replacement replace rdev
 > 
-> I dunno if the compatible change is worth dropping the tag for tbh.
-> That seems to be the only change, so I guess you can have my R-b instead
-> of Rob's...
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Please address feedback and send v2.
 > 
-> Cheers,
-> Conor.
+> Thanks,
+> Song
+> .
 
-I was unaware of the official policy regarding the removal of RvB during
-renaming changes. I took a cautious approach to the situation :)
-
+Thanks for review, I will send v2 later.
 -- 
-Thank you,
-Dmitry
+Thanks,
+Nan
+
