@@ -2,185 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA245710F99
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0623710FA0
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241786AbjEYPai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
+        id S241802AbjEYPb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbjEYPae (ORCPT
+        with ESMTP id S233087AbjEYPby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:30:34 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B06195
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:30:32 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f3b9c88af8so2699715e87.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:30:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ferroamp-se.20221208.gappssmtp.com; s=20221208; t=1685028630; x=1687620630;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lPuHDfJlTRWNIDrZeM6vHqKJY4YBArQHuXDU3A0RTxY=;
-        b=e95BZHYjsevbDtuVfvlMCj6/qmG1HwycR6hbBsDLmF0/KLwzcsgqMvBpnd6UG6Hb07
-         O415mDXB5o1G6ZZojfFi580zgcZOUyQhOMmLF6BeaFjKV9hrfrh1DVLTMre+X7kNH5a1
-         cl/EM/gLS34U5waMjbAUk+VgxAyvqWg5IPzS5l30O+0UFFr3DVSNwcT6Jo+vfZ1cEakg
-         Tg4NigvGYo3LKoalvpHHH3ELSnkbbjEmJ7v24sU6OXCXXBe6TlJ9lRZnBFIETRyp9Z9J
-         b0u/19EayOabR8Pzw3qAf4cdQu/dPtbczFcmdDQWCtWeETbOi5ikRga0kD/Q2TvSrNy/
-         9nfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685028630; x=1687620630;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lPuHDfJlTRWNIDrZeM6vHqKJY4YBArQHuXDU3A0RTxY=;
-        b=Tr3lqpYqx0MOwQBrc1bsTBlOxD8Qvdw9CMxHxUSJHJjgqsji3OK5Lgg76FVPwO4RQJ
-         sr66UajMdpxagHw2dIX7ySZI+vL06rLkuDZkr1MEj0Zmt3etlSOmQG5GV5IiDeqkSE7D
-         WWttokXJ17/QibJW6w3dD2YeIQBS49hYK4uuzpoYPnPK5YP1wZ4D+32POAWThSqwa8Cu
-         X/ZIF101t3am78b7oqWDmsVDzTi+mZ5WilmZJ2ocaTeayBax25Q+fVA7Xk7Ag32o5YGU
-         35BglxWnuT1/eoiIBh/pkEbAKuXBAzCA4pxEd0N4SjITIRk37gMoqJSpJDAs+vWJ7JZK
-         L6Qg==
-X-Gm-Message-State: AC+VfDzXUccui868zyhtTGHYP4hMc5r4wTMRgJpkuPsOlFBTrDJ+kkL8
-        aU9Xa7+/bTVYdMfml8ieShnkRQ==
-X-Google-Smtp-Source: ACHHUZ6+eTGaEzLm5tVgzKM9SOm9NZRq7IEmz6ZCXHASpgaSQIu5To4mGi7Omlo6uwChYXfastmoxA==
-X-Received: by 2002:ac2:5585:0:b0:4ef:ec94:9674 with SMTP id v5-20020ac25585000000b004efec949674mr6609883lfg.32.1685028630326;
-        Thu, 25 May 2023 08:30:30 -0700 (PDT)
-Received: from debian (151.236.202.107.c.fiberdirekt.net. [151.236.202.107])
-        by smtp.gmail.com with ESMTPSA id t9-20020ac243a9000000b004edc485f86bsm244080lfl.239.2023.05.25.08.30.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 08:30:29 -0700 (PDT)
-Date:   Thu, 25 May 2023 17:30:27 +0200
-From:   =?iso-8859-1?Q?Ram=F3n?= Nordin Rodriguez 
-        <ramon.nordin.rodriguez@ferroamp.se>
-To:     Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, horatiu.vultur@microchip.com,
-        Woojung.Huh@microchip.com, Nicolas.Ferre@microchip.com,
-        Thorsten.Kummermehr@microchip.com
-Subject: Re: [PATCH net-next v3 2/6] net: phy: microchip_t1s: replace
- read-modify-write code with phy_modify_mmd
-Message-ID: <ZG9/E8Am2ICEHIbr@debian>
-References: <20230524144539.62618-1-Parthiban.Veerasooran@microchip.com>
- <20230524144539.62618-3-Parthiban.Veerasooran@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524144539.62618-3-Parthiban.Veerasooran@microchip.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 11:31:54 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D430599;
+        Thu, 25 May 2023 08:31:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=EkzddqA17p235kwja0SprO9NNK44EhEHUgSVbdwHCo4=; b=V9sZ9f5qxoG0lmo+ePzz7kr/r+
+        jI7Cg7o38QlwBJo7L33SmqQh1Vs20zOyI/jaukfVWjM2qOUuAKOln/LyrrNN4p+nadgmOHjtkJ9aI
+        ey+IC/lxGqIbazvjzgUwwt4zVJTSpFZ3ZcnLsJi3kGioe7CMsDu/UFz9iqAQgkXdHyUY=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48052 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q2CwL-0000UV-T4; Thu, 25 May 2023 11:31:46 -0400
+Date:   Thu, 25 May 2023 11:31:45 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     andy.shevchenko@gmail.com
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230525113145.35cef67328b63ba4239d2361@hugovil.com>
+In-Reply-To: <ZG9FBgX2useVeuWl@surfacebook>
+References: <20230525040324.3773741-1-hugo@hugovil.com>
+        <20230525040324.3773741-10-hugo@hugovil.com>
+        <ZG9FBgX2useVeuWl@surfacebook>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 09/11] serial: sc16is7xx: add I/O register
+ translation offset
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:15:35PM +0530, Parthiban Veerasooran wrote:
-> Replace read-modify-write code in the lan867x_config_init function to
-> avoid handling data type mismatch and to simplify the code.
+On Thu, 25 May 2023 14:22:46 +0300
+andy.shevchenko@gmail.com wrote:
+
+> Thu, May 25, 2023 at 12:03:23AM -0400, Hugo Villeneuve kirjoitti:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > If the shared GPIO pins on a dual port/channel variant like the
+> > SC16IS752 are configured as GPIOs for port A, and modem control lines
+> > on port A, we need to translate the Linux GPIO offset to an offset
+> > that is compatible with the I/O registers of the SC16IS7XX (IOState,
+> > IODir and IOIntEna).
+> > 
+> > Add a new variable to store that offset and set it when we detect that
+> > special case.
 > 
-> Signed-off-by: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
-> ---
->  drivers/net/phy/microchip_t1s.c | 23 +++++++++++------------
->  1 file changed, 11 insertions(+), 12 deletions(-)
+> ...
 > 
-> diff --git a/drivers/net/phy/microchip_t1s.c b/drivers/net/phy/microchip_t1s.c
-> index a42a6bb6e3bd..b5b5a95fa6e7 100644
-> --- a/drivers/net/phy/microchip_t1s.c
-> +++ b/drivers/net/phy/microchip_t1s.c
-> @@ -31,19 +31,19 @@
->   * W   0x1F 0x0099 0x7F80 ------
->   */
->  
-> -static const int lan867x_fixup_registers[12] = {
-> +static const u32 lan867x_fixup_registers[12] = {
->  	0x00D0, 0x00D1, 0x0084, 0x0085,
->  	0x008A, 0x0087, 0x0088, 0x008B,
->  	0x0080, 0x00F1, 0x0096, 0x0099,
->  };
->  
-> -static const int lan867x_fixup_values[12] = {
-> +static const u16 lan867x_fixup_values[12] = {
->  	0x0002, 0x0000, 0x3380, 0x0006,
->  	0xC000, 0x801C, 0x033F, 0x0404,
->  	0x0600, 0x2400, 0x2000, 0x7F80,
->  };
->  
-> -static const int lan867x_fixup_masks[12] = {
-> +static const u16 lan867x_fixup_masks[12] = {
->  	0x0E03, 0x0300, 0xFFC0, 0x000F,
->  	0xF800, 0x801C, 0x1FFF, 0xFFFF,
->  	0x0600, 0x7F00, 0x2000, 0xFFFF,
-> @@ -63,23 +63,22 @@ static int lan867x_config_init(struct phy_device *phydev)
->  	 * used, which might then write the same value back as read + modified.
->  	 */
->  
-> -	int reg_value;
->  	int err;
-> -	int reg;
->  
->  	/* Read-Modified Write Pseudocode (from AN1699)
->  	 * current_val = read_register(mmd, addr) // Read current register value
->  	 * new_val = current_val AND (NOT mask) // Clear bit fields to be written
->  	 * new_val = new_val OR value // Set bits
-> -	 * write_register(mmd, addr, new_val) // Write back updated register value
-> +	 * write_register(mmd, addr, new_val) // Write back updated register value.
-> +	 * Although AN1699 says Read, Modify, Write, the write is not required if
-> +	 * the register already has the required value.
->  	 */
->  	for (int i = 0; i < ARRAY_SIZE(lan867x_fixup_registers); i++) {
-> -		reg = lan867x_fixup_registers[i];
-> -		reg_value = phy_read_mmd(phydev, MDIO_MMD_VEND2, reg);
-> -		reg_value &= ~lan867x_fixup_masks[i];
-> -		reg_value |= lan867x_fixup_values[i];
-> -		err = phy_write_mmd(phydev, MDIO_MMD_VEND2, reg, reg_value);
-> -		if (err != 0)
-> +		err = phy_modify_mmd(phydev, MDIO_MMD_VEND2,
-> +				     lan867x_fixup_registers[i],
-> +				     lan867x_fixup_masks[i],
-> +				     lan867x_fixup_values[i]);
-
-This change answers an uncertainty in the block comment in the top of
-this func, pasted here for your convenience
-
-	/* HW quirk: Microchip states in the application note (AN1699) for the phy
-	 * that a set of read-modify-write (rmw) operations has to be performed
-	 * on a set of seemingly magic registers.
-	 * The result of these operations is just described as 'optimal performance'
-	 * Microchip gives no explanation as to what these mmd regs do,
-	 * in fact they are marked as reserved in the datasheet.
-	 * It is unclear if phy_modify_mmd would be safe to use or if a write
-	 * really has to happen to each register.
-	 * In order to exactly conform to what is stated in the AN phy_write_mmd is
-	 * used, which might then write the same value back as read + modified.
-	 */
-
-This change also invalidates most of the comment. I think this should be
-reduced to something along the lines of:
-	/* HW quirk: Microchip states in the application note (AN1699) for the phy
-	 * that a set of read-modify-write (rmw) operations has to be performed
-	 * on a set of seemingly magic registers.
-	 * The result of these operations is just described as 'optimal performance'
-	 * Microchip gives no explanation as to what these mmd regs do,
-	 * in fact they are marked as reserved in the datasheet.*/
-
-Additionally I don't mind it if you change the tone of the comment. This was brought
-up in the sitdown we had, where it was explained from Microchip that
-documenting what the reg operations actually does would expose to much
-of the internal workings of the chip.
-
-Possibly this comment should move down to where the fixup reg operations
-are performed, and replace the comment about the 'read write modify'
-stuff all togheter.
-In my opinion I kind of loose context about what the func does when it
-first explains the fixup stuff, then actually does something with the
-STS2 regs, and finally actually does the fixup.
-> +		if (err)
->  			return err;
->  	}
->  
-> -- 
-> 2.34.1
+> > +/*
+> > + * We may need to translate the Linux GPIO offset to a SC16IS7XX offset.
+> > + * This is needed only for the case where a dual port variant is configured to
+> > + * have only port B as modem status lines.
+> > + *
+> > + * Example for SC16IS752/762 with upper bank (port A) set as GPIOs, and
+> > + * lower bank (port B) set as modem status lines (special case described above):
+> > + *
+> > + * Pin         GPIO pin     Linux GPIO     SC16IS7XX
+> > + * name        function     offset         offset
+> > + * --------------------------------------------------
+> > + * GPIO7/RIA    GPIO7          3              7
+> > + * GPIO6/CDA    GPIO6          2              6
+> > + * GPIO5/DTRA   GPIO5          1              5
+> > + * GPIO4/DSRA   GPIO4          0              4
+> > + * GPIO3/RIB    RIB           N/A            N/A
+> > + * GPIO2/CDB    CDB           N/A            N/A
+> > + * GPIO1/DTRB   DTRB          N/A            N/A
+> > + * GPIO0/DSRB   DSRB          N/A            N/A
+> > + *
+> > + * Example  for SC16IS750/760 with upper bank (7..4) set as modem status lines,
 > 
+> Single space is enough.
+
+Fixed.
+
+ 
+> > + * and lower bank (3..0) as GPIOs:
+> > + *
+> > + * Pin         GPIO pin     Linux GPIO     SC16IS7XX
+> > + * name        function     offset         offset
+> > + * --------------------------------------------------
+> > + * GPIO7/RI     RI            N/A            N/A
+> > + * GPIO6/CD     CD            N/A            N/A
+> > + * GPIO5/DTR    DTR           N/A            N/A
+> > + * GPIO4/DSR    DSR           N/A            N/A
+> > + * GPIO3        GPIO3          3              3
+> > + * GPIO2        GPIO2          2              2
+> > + * GPIO1        GPIO1          1              1
+> > + * GPIO0        GPIO0          0              0
+> > + */
+> 
+> Wondering if you can always register 8 pins and use valid mask to define which
+> one are in use?
+
+I will look into it, I think it may be a good idea and could help to simplify things a bit.
+
+Hugo.
