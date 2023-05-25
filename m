@@ -2,186 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27CB711165
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A2F711166
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbjEYQxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S234699AbjEYQx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbjEYQxB (ORCPT
+        with ESMTP id S239074AbjEYQxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:53:01 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158D9194
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cfgTSMcxjwAGXAqRNOZFC56D/VdiYcVGEhQCRK6sn0Y=; b=mDe/26FnD6W+OGKvkXu8PLYy77
-        hr9jPTGJEbt/5j/0R4TNbVUZ+mooTo29WEyBUk8G+FbrKw+xQCPENoEmUUO/BXgUtCiVQE0gKV+cM
-        nl/T3f3k4fcF2lSkhBkrf5Cr0sPCkPoY28Cq0zG0LqpZRLb1oPUyt/cUG7jxqJEAvVjMUCztvlZv1
-        6v08UWtzYIHDBy0T03R5DeUIXLiVM0JqlmDRY/F9NbBdetf0L/Ktm6QWADs/Y5PzOsCAHHDlSxVxR
-        1+1OGzxvQ4eoUVP+3Wu9c1XRBa7Zx+lMj9xi+CUmldJVBe1Ur+d4ZkEgPtJRs4BVtSHuN+KmfpiN4
-        /uZ2L07w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q2ECk-006bTt-1V;
-        Thu, 25 May 2023 16:52:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55B0C300338;
-        Thu, 25 May 2023 18:52:44 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2C10C24393D93; Thu, 25 May 2023 18:52:44 +0200 (CEST)
-Date:   Thu, 25 May 2023 18:52:44 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH] sched: Consider task_struct::saved_state in
- wait_task_inactive().
-Message-ID: <20230525165244.GV83892@hirez.programming.kicks-ass.net>
-References: <Y++UzubyNavLKFDP@linutronix.de>
+        Thu, 25 May 2023 12:53:09 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A582E1A2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:53:07 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5343c3daff0so1318337a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:53:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685033587; x=1687625587;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8yHwoFl0A/2RKkd9CDZCOO1UVgBmrXuW4M9cQO6ErvY=;
+        b=lpMRkuqLYneULplpBZz2RXh/cuyVkwoJ68sZeWdnaqCzMMgVPaSeFMDqzv4JPpMK06
+         C3nvI3Jhsw/YNvHxVgu8/B2nJ/pAtQ0/R5TqhOgncfX9bJiZ3M3RF/rLUsNKvtspfsPe
+         SwH5ebNGkl41kLCi/DP/M0OS8JLet+x9EUUQcv1r9ii1AmB69Wq31VOpC+n+d2PIZ9s5
+         YBsaA3jHsJ+KQYNXczXFsZzbdQBskG01pkkVEgvEPX0Pc2ERoKcWOCNoz8T5/0bSIaA/
+         T3Bu9rAWAJObEVv1Inq2PDL1lllQA2rBKqyrtvnSLVD9BD2BNS1GpV0bJXAXzVgoe+Uc
+         YmLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685033587; x=1687625587;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8yHwoFl0A/2RKkd9CDZCOO1UVgBmrXuW4M9cQO6ErvY=;
+        b=IGSvZ5s2IWf9yl+B1tNZFopZMdIdGDP07e/tPO5oiX7hv50axfBFdbLuu8UoMGBEN5
+         xY4MTbLFH419OG3CLD+Ne5a+meeZOT/QcCZK/fd5BgDvg3dNl79iI92pDWhRCJ2nsefg
+         cLkrp2CWYY7nGez8Mo/bFLlAvTRhfBqkBA8iimtEUHXOmfRBlZcwTJ4ay7TK7reUE+XH
+         fwDp+4Lrj6B8WPA0/Gqc2Gin6q8QiIwEqHzwztl8+FJW6ObjG9lWNubgtNch8hlLDP5C
+         VY/K7ddp/4kBQ8sTDXjlFKHI4XrMQFBLjgYWnWCUrefwZmqdahYiTgeCEyCi2BGb91aa
+         J1Zg==
+X-Gm-Message-State: AC+VfDwHZTB/FuBH0c6Y0HkjTV0UAQHh5Ol4zz5yBgsqJ0agLbMUfQXd
+        eCbVMQ7dAI/odalFV/pBLAxVMFxTI5TBGbuU5SQ=
+X-Google-Smtp-Source: ACHHUZ5756kDyQ3thlbZSXVFs49/TzQSSWzfrXvvbCU9rvev1DAHCpYtHAWFgLoZPIxbSFz20FZvFNqWssJrqqcd+Ik=
+X-Received: by 2002:a17:903:22d1:b0:1ad:fcdc:bcb9 with SMTP id
+ y17-20020a17090322d100b001adfcdcbcb9mr3047115plg.23.1685033586859; Thu, 25
+ May 2023 09:53:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y++UzubyNavLKFDP@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230524065051.6328-1-cerasuolodomenico@gmail.com> <CAJD7tkY0j4xzstf=OCX-k-mujzbXf_nt=H4F5JCZNZ8N1iEEcg@mail.gmail.com>
+In-Reply-To: <CAJD7tkY0j4xzstf=OCX-k-mujzbXf_nt=H4F5JCZNZ8N1iEEcg@mail.gmail.com>
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Date:   Thu, 25 May 2023 18:52:55 +0200
+Message-ID: <CA+CLi1gzVop3=kmARn09NKKh6yW=bt9KYrzc0AfXB64J0r-9Ew@mail.gmail.com>
+Subject: Re: [PATCH] mm: zswap: shrink until can accept
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        hannes@cmpxchg.org, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 03:53:02PM +0100, Sebastian Andrzej Siewior wrote:
+On Thu, May 25, 2023 at 2:59=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com>=
+ wrote:
+>
+> Hi Domenico,
+>
+> On Tue, May 23, 2023 at 11:50=E2=80=AFPM Domenico Cerasuolo
+> <cerasuolodomenico@gmail.com> wrote:
+> >
+> > This update addresses an issue with the zswap reclaim mechanism, which
+> > hinders the efficient offloading of cold pages to disk, thereby
+> > compromising the preservation of the LRU order and consequently
+> > diminishing, if not inverting, its performance benefits.
+> >
+> > The functioning of the zswap shrink worker was found to be inadequate,
+> > as shown by basic benchmark test. For the test, a kernel build was
+> > utilized as a reference, with its memory confined to 1G via a cgroup an=
+d
+> > a 5G swap file provided. The results are presented below, these are
+> > averages of three runs without the use of zswap:
+> >
+> > real 46m26s
+> > user 35m4s
+> > sys 7m37s
+> >
+> > With zswap (zbud) enabled and max_pool_percent set to 1 (in a 32G
+> > system), the results changed to:
+> >
+> > real 56m4s
+> > user 35m13s
+> > sys 8m43s
+> >
+> > written_back_pages: 18
+> > reject_reclaim_fail: 0
+> > pool_limit_hit:1478
+> >
+> > Besides the evident regression, one thing to notice from this data is
+> > the extremely low number of written_back_pages and pool_limit_hit.
+> >
+> > The pool_limit_hit counter, which is increased in zswap_frontswap_store
+> > when zswap is completely full, doesn't account for a particular
+> > scenario: once zswap hits his limit, zswap_pool_reached_full is set to
+> > true; with this flag on, zswap_frontswap_store rejects pages if zswap i=
+s
+> > still above the acceptance threshold. Once we include the rejections du=
+e
+> > to zswap_pool_reached_full && !zswap_can_accept(), the number goes from
+> > 1478 to a significant 21578266.
+> >
+> > Zswap is stuck in an undesirable state where it rejects pages because
+> > it's above the acceptance threshold, yet fails to attempt memory
+> > reclaimation. This happens because the shrink work is only queued when
+> > zswap_frontswap_store detects that it's full and the work itself only
+> > reclaims one page per run.
+> >
+> > This state results in hot pages getting written directly to disk,
+> > while cold ones remain memory, waiting only to be invalidated. The LRU
+> > order is completely broken and zswap ends up being just an overhead
+> > without providing any benefits.
+> >
+> > This commit applies 2 changes: a) the shrink worker is set to reclaim
+> > pages until the acceptance threshold is met and b) the task is also
+> > enqueued when zswap is not full but still above the threshold.
+> >
+> > Testing this suggested update showed much better numbers:
+> >
+> > real 36m37s
+> > user 35m8s
+> > sys 9m32s
+> >
+> > written_back_pages: 10459423
+> > reject_reclaim_fail: 12896
+> > pool_limit_hit: 75653
+>
+> Impressive numbers, and great find in general!
+>
+> I wonder how other workloads benefit/regress from this change.
+> Anything else that you happened to run? :)
+>
+Hi Yosry,
 
-> +static __always_inline bool state_mismatch(struct task_struct *p, unsigned int match_state)
-> +{
-> +	unsigned long flags;
-> +	bool mismatch;
-> +
-> +	raw_spin_lock_irqsave(&p->pi_lock, flags);
-> +	if (READ_ONCE(p->__state) & match_state)
-> +		mismatch = false;
-> +	else if (READ_ONCE(p->saved_state) & match_state)
-> +		mismatch = false;
-> +	else
-> +		mismatch = true;
-> +
-> +	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
-> +	return mismatch;
-> +}
-> +static __always_inline bool state_match(struct task_struct *p, unsigned int match_state,
-> +					bool *wait)
-> +{
-> +	if (READ_ONCE(p->__state) & match_state)
-> +		return true;
-> +	if (READ_ONCE(p->saved_state) & match_state) {
-> +		*wait = true;
-> +		return true;
-> +	}
-> +	return false;
-> +}
-> +#else
-> +static __always_inline bool state_mismatch(struct task_struct *p, unsigned int match_state)
-> +{
-> +	return !(READ_ONCE(p->__state) & match_state);
-> +}
-> +static __always_inline bool state_match(struct task_struct *p, unsigned int match_state,
-> +					bool *wait)
-> +{
-> +	return (READ_ONCE(p->__state) & match_state);
-> +}
-> +#endif
-> +
->  /*
->   * wait_task_inactive - wait for a thread to unschedule.
->   *
+thanks for the quick feedback!
 
-Urgh...
-
-I've ended up with the below.. I've tried folding it with
-ttwu_state_match() but every attempt so far makes it an unholy mess.
-
-Now, if only we had proper lock guard then we could drop another few
-lines, but alas.
-
----
- kernel/sched/core.c | 35 +++++++++++++++++++++++++++++++++--
- 1 file changed, 33 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a68d1276bab0..5a106629a98d 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3341,6 +3341,37 @@ int migrate_swap(struct task_struct *cur, struct task_struct *p,
- }
- #endif /* CONFIG_NUMA_BALANCING */
- 
-+static __always_inline
-+bool __wti_state_match(struct task_struct *p, unsigned int state, int *queued)
-+{
-+	if (READ_ONCE(p->__state) & state)
-+		return true;
-+
-+#ifdef CONFIG_PREEMPT_RT
-+	if (READ_ONCE(p->saved_state) & state) {
-+		if (queued)
-+			*queued = 1;
-+		return true;
-+	}
-+#endif
-+	return false;
-+}
-+
-+static __always_inline bool wti_state_match(struct task_struct *p, unsigned int state)
-+{
-+#ifdef CONFIG_PREEMPT_RT
-+	bool match;
-+
-+	raw_spin_lock_irq(&p->pi_lock);
-+	match = __wti_state_match(p, state, NULL);
-+	raw_spin_unlock_irq(&p->pi_lock);
-+
-+	return match;
-+#else
-+	return __wti_state_match(p, state, NULL);
-+#endif
-+}
-+
- /*
-  * wait_task_inactive - wait for a thread to unschedule.
-  *
-@@ -3385,7 +3416,7 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
- 		 * is actually now running somewhere else!
- 		 */
- 		while (task_on_cpu(rq, p)) {
--			if (!(READ_ONCE(p->__state) & match_state))
-+			if (!wti_state_match(p, match_state))
- 				return 0;
- 			cpu_relax();
- 		}
-@@ -3400,7 +3431,7 @@ unsigned long wait_task_inactive(struct task_struct *p, unsigned int match_state
- 		running = task_on_cpu(rq, p);
- 		queued = task_on_rq_queued(p);
- 		ncsw = 0;
--		if (READ_ONCE(p->__state) & match_state)
-+		if (__wti_state_match(p, match_state, &queued))
- 			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
- 		task_rq_unlock(rq, p, &rf);
- 
+Besides stressers, I haven't tested any other actual workload, we don't hav=
+e
+writeback in production yet so I can't provide any data from there. I was
+wondering what kind of actual workload I could use to test this on my deskt=
+op,
+but I couldn't think of anything relevant, I'm open to suggestions though :=
+)
+> >
+> > Fixes: 45190f01dd40 ("mm/zswap.c: add allocation hysteresis if pool lim=
+it is hit")
+> > Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> > ---
+> >  mm/zswap.c | 10 +++++++---
+> >  1 file changed, 7 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/mm/zswap.c b/mm/zswap.c
+> > index 59da2a415fbb..2ee0775d8213 100644
+> > --- a/mm/zswap.c
+> > +++ b/mm/zswap.c
+> > @@ -587,9 +587,13 @@ static void shrink_worker(struct work_struct *w)
+> >  {
+> >         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
+> >                                                 shrink_work);
+> > +       int ret;
+> >
+> > -       if (zpool_shrink(pool->zpool, 1, NULL))
+> > -               zswap_reject_reclaim_fail++;
+> > +       do {
+> > +               ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> > +               if (ret)
+> > +                       zswap_reject_reclaim_fail++;
+> > +       } while (!zswap_can_accept() && ret !=3D -EINVAL);
+>
+> One question/comment here about the retry logic.
+>
+> So I looked through the awfully convoluted writeback code, and there
+> are multiple layers, and some of them tend to overwrite the return
+> value of the layer underneath :(
+>
+> For zsmalloc (as an example):
+> zpool_shrink()->zs_zpool_shrink()->zs_reclaim_page()->zpool_ops.evict()->=
+zswap_writeback_entry().
+>
+> First of all, that zpool_ops is an unnecessarily confusing
+> indirection, but anyway.
+>
+> - zswap_writeback_entry() will either return -ENOMEM or -EEXIST on error
+> - zs_reclaim_page()/zbud_reclaim_page() will return -EINVAL if the lru
+> is empty, and -EAGAIN on other errors.
+> - zs_zpool_shrink()/zbud_zpool_shrink() will mostly propagate the
+> return value of  zs_reclaim_page()/zbud_reclaim_page().
+> - zpool_shrink() will return -EINVAL if the driver does not support
+> shrinking, otherwise it will propagate the return value from the
+> driver.
+>
+> So it looks like we will get -EINVAL only if the driver lru is empty
+> or the driver does not support writeback, so rightfully we should not
+> retry.
+>
+> If zswap_writeback_entry() returns -EEXIST, it probably means that we
+> raced with another task decompressing the page, so rightfully we
+> should retry to writeback another page instead.
+>
+> If zswap_writeback_entry() returns -ENOMEM, it doesn't necessarily
+> mean that we couldn't allocate memory (unfortunately), it looks like
+> we will return -ENOMEM in other cases as well. Arguably, we can retry
+> in all cases, because even if we were actually out of memory, we are
+> trying to make an allocation that will eventually free more memory.
+>
+> In all cases, I think it would be nicer if we retry if ret =3D=3D -EAGAIN
+> instead. It is semantically more sane. In this specific case it is
+> functionally NOP as zs_reclaim_page()/zbud_reclaim_page() will mostly
+> return -EAGAIN anyway, but in case someone tries to use saner errnos
+> in the future, this will age better.
+Retrying if ret =3D=3D -EAGAIN seems much nicer indeed, will change it.
+>
+> Also, do we intentionally want to keep retrying forever on failure? Do
+> we want to add a max number of retries?
+If the drivers guaranteed that zpool_shrink will remove at least an entry
+from their LRU, the retry wouldn't be needed because the LRU will
+eventually be emptied. But this is an assumption on the implementation of
+the zpool, so yes, we could use a max retries. I think that being a sanity
+check, it should overshoot the required number of iterations in order to
+avoid a premature break, what about retrying a max of
+zswap_stored_pages times?
+>
+> >         zswap_pool_put(pool);
+> >  }
+> >
+> > @@ -1188,7 +1192,7 @@ static int zswap_frontswap_store(unsigned type, p=
+goff_t offset,
+> >         if (zswap_pool_reached_full) {
+> >                if (!zswap_can_accept()) {
+> >                         ret =3D -ENOMEM;
+> > -                       goto reject;
+> > +                       goto shrink;
+> >                 } else
+> >                         zswap_pool_reached_full =3D false;
+> >         }
+> > --
+> > 2.34.1
+> >
