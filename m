@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6289710857
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A8C71085E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239839AbjEYJJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48490 "EHLO
+        id S235124AbjEYJKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbjEYJJD (ORCPT
+        with ESMTP id S239380AbjEYJKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:09:03 -0400
+        Thu, 25 May 2023 05:10:00 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABBA61B1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:09:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 224A5E4B;
+        Thu, 25 May 2023 02:09:51 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 862CE1042;
-        Thu, 25 May 2023 02:09:46 -0700 (PDT)
-Received: from [10.1.27.40] (C02Z41KALVDN.cambridge.arm.com [10.1.27.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6DABD3F67D;
-        Thu, 25 May 2023 02:08:59 -0700 (PDT)
-Message-ID: <6dfa35b0-7e1d-5b0d-1ee8-d7f5d58b4ed0@arm.com>
-Date:   Thu, 25 May 2023 10:08:57 +0100
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC5651042;
+        Thu, 25 May 2023 02:10:35 -0700 (PDT)
+Received: from [10.57.70.156] (unknown [10.57.70.156])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5DA9A3F67D;
+        Thu, 25 May 2023 02:09:48 -0700 (PDT)
+Message-ID: <320ee3b4-63ed-ec50-03c6-906803e34571@arm.com>
+Date:   Thu, 25 May 2023 10:09:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v2 4/5] mm: Add new ptep_deref() helper to fully
- encapsulate pte_t
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        SeongJae Park <sj@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        damon@lists.linux.dev
-References: <20230518110727.2106156-1-ryan.roberts@arm.com>
- <20230518110727.2106156-5-ryan.roberts@arm.com>
- <CAOUHufZaiTCxk4M4w5GaA-+5FoMnHZt+fzoU=cYCA1Ldk7CVEQ@mail.gmail.com>
- <692e9e7e-ee00-368b-6a31-60a895f7011c@arm.com>
-In-Reply-To: <692e9e7e-ee00-368b-6a31-60a895f7011c@arm.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v4 03/11] coresight-tpdm: Initialize DSB subunit
+ configuration
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org
+References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
+ <1682586037-25973-4-git-send-email-quic_taozha@quicinc.com>
+ <db575b8f-12e9-dab5-c7f6-b524cbce64d9@arm.com>
+ <92b73ba2-00c5-9f18-ed27-a302f4e79bb2@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <92b73ba2-00c5-9f18-ed27-a302f4e79bb2@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -55,46 +61,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2023 10:12, Ryan Roberts wrote:
-> On 18/05/2023 20:28, Yu Zhao wrote:
->> On Thu, May 18, 2023 at 5:07 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+On 25/05/2023 09:12, Tao Zhang wrote:
+> 
+> On 5/23/2023 9:42 PM, Suzuki K Poulose wrote:
+>> On 27/04/2023 10:00, Tao Zhang wrote:
+>>> DSB is used for monitoring “events”. Events are something that
+>>> occurs at some point in time. It could be a state decode, the
+>>> act of writing/reading a particular address, a FIFO being empty,
+>>> etc. This decoding of the event desired is done outside TPDM.
+>>> DSB subunit need to be configured in enablement and disablement.
+>>> A struct that specifics associated to dsb dataset is needed. It
+>>> saves the configuration and parameters of the dsb datasets. This
+>>> change is to add this struct and initialize the configuration of
+>>> DSB subunit.
 >>>
->>> There are many call sites that directly dereference a pte_t pointer.
->>> This makes it very difficult to properly encapsulate a page table in the
->>> arch code without having to allocate shadow page tables. ptep_deref()
->>> aims to solve this by replacing all direct dereferences with a call to
->>> this function.
->>>
->>> The default implementation continues to just dereference the pointer
->>> (*ptep), so generated code should be exactly the same. However, it is
->>> possible for the architecture to override the default with their own
->>> implementation, that can (e.g.) hide certain bits from the core code, or
->>> determine young/dirty status by mixing in state from another source.
->>>
->>> While ptep_get() and ptep_get_lockless() already exist, these are
->>> implemented as atomic accesses (e.g. READ_ONCE() in the default case).
->>> So rather than using ptep_get() and risking performance regressions,
->>> introduce an new variant.
+>>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+
+...
+
+>>> + * dataset types. It covers Basic Counts(BC), Tenure Counts(TC),
+>>> + * Continuous Multi-Bit(CMB), Multi-lane CMB(MCMB) and Discrete Single
+>>> + * Bit(DSB). This function will initialize the configuration according
+>>> + * to the dataset type supported by the TPDM.
+>>> + */
+>>>   static void __tpdm_enable(struct tpdm_drvdata *drvdata)
+>>>   {
+>>>       CS_UNLOCK(drvdata->base);
+>>> @@ -110,15 +144,24 @@ static const struct coresight_ops tpdm_cs_ops = {
+>>>       .source_ops    = &tpdm_source_ops,
+>>>   };
+>>>   -static void tpdm_init_default_data(struct tpdm_drvdata *drvdata)
+>>> +static int tpdm_datasets_setup(struct tpdm_drvdata *drvdata)
+>>>   {
+>>>       u32 pidr;
+>>>   -    CS_UNLOCK(drvdata->base);
+>>>       /*  Get the datasets present on the TPDM. */
+>>>       pidr = readl_relaxed(drvdata->base + CORESIGHT_PERIPHIDR0);
+>>>       drvdata->datasets |= pidr & GENMASK(TPDM_DATASETS - 1, 0);
+>>> -    CS_LOCK(drvdata->base);
 >>
->> We should reuse ptep_get():
->> 1. I don't think READ_ONCE() can cause measurable regressions in this case.
->> 2. It's technically wrong without it.
+>> Why are we removing the CS_{UN,}LOCK here ?
 > 
-> Can you clarify what you mean by technically wrong? Are you saying that the
-> current code that does direct dereferencing is buggy?
+> CS_UNLOCK is used before writing data to Coresight registers. Here this 
+> function
 > 
-> I previously convinced myself that the potential for the compiler generating
-> multiple loads was safe because the code in question is under the PTL so there
-> are no concurrent stores. And we shouldn't see any tearing for the same reason.
-> 
-> That said, if there is concensus that we can just use ptep_get() (==
-> READ_ONCE()) everywhere, then I agree that would be cleaner. Does anyone object?
+> doesn't need to write data to any registers, so I remove the 
+> CS_{UN,}LOCK here.
 
-Hi all,
+Please make this a separate patch to avoid confusing and keep it at the
+beginning of the series.
 
-A politie bump: It would be great to hear opinions on this before I go ahead and
-make the change.
-
-Thanks,
-Ryan
+Suzuki
 
