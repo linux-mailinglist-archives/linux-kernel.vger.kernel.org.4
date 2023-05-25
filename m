@@ -2,215 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E950C710742
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D676B712BCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239425AbjEYIWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S229978AbjEZRam convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 26 May 2023 13:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234023AbjEYIWo (ORCPT
+        with ESMTP id S233019AbjEZRai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:22:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F166122;
-        Thu, 25 May 2023 01:22:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9806F643C2;
-        Thu, 25 May 2023 08:22:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3450C433D2;
-        Thu, 25 May 2023 08:22:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685002961;
-        bh=BMal3lRf0YeLMZBUF7KpBH68HoeAfjihUs5S7Jxz8Ls=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iuXj4PrzjeLpH3b2vv2KFqq7j0TaZNRq5rM3EV6Fm3N6fScUNTYLGbPD10AwafuFq
-         XFC4dhD8vaz9uuQVod5TTI+1hr3pZJ4sQT6HaVkz1nKpnrJ0Xh4ugk0GoYGw8iwJkp
-         5vJWFtSgiadvxTwAp8fW3C9vVSugdmEgB3YzXVtlCSgCBPfMKV6RrRUpES1sWMHJjF
-         lVAUdI2H25ylx5Dm1DvQgOsym/JI7FOH0qFo5/868EeB8845XRGPevIRHOP6kIiBMU
-         fbxnFcaqAtmAXf14iRHeagGxuAyLibB1+WF24s5FNf0tDScxQi7VhollKncNJ/66Fl
-         YgKQquQzFCBwA==
-Date:   Thu, 25 May 2023 10:22:30 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     bhelgaas@google.com, davem@davemloft.net, edumazet@google.com,
-        haiyangz@microsoft.com, jakeo@microsoft.com, kuba@kernel.org,
-        kw@linux.com, kys@microsoft.com, leon@kernel.org,
-        linux-pci@vger.kernel.org, mikelley@microsoft.com,
-        pabeni@redhat.com, robh@kernel.org, saeedm@nvidia.com,
-        wei.liu@kernel.org, longli@microsoft.com, boqun.feng@gmail.com,
-        ssengar@microsoft.com, helgaas@kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        josete@microsoft.com, stable@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] Revert "PCI: hv: Fix a timing issue which causes
- kdump to fail occasionally"
-Message-ID: <ZG8axpfFQArZ0Hj/@lpieralisi>
-References: <20230420024037.5921-1-decui@microsoft.com>
- <20230420024037.5921-5-decui@microsoft.com>
+        Fri, 26 May 2023 13:30:38 -0400
+Received: from pmg.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E979189
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:30:35 -0700 (PDT)
+Received: from pmg.saludzona6.gob.ec (localhost.localdomain [127.0.0.1])
+        by pmg.saludzona6.gob.ec (Proxmox) with ESMTP id 584E31A2F68;
+        Fri, 26 May 2023 11:32:49 -0500 (-05)
+Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [192.168.50.8])
+        by pmg.saludzona6.gob.ec (Proxmox) with ESMTP id 729A61A2816;
+        Fri, 26 May 2023 10:47:09 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 8D78F22869CE;
+        Thu, 25 May 2023 03:24:03 -0500 (-05)
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id r6nSSPZx0S5s; Thu, 25 May 2023 03:23:58 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id D8C192286C09;
+        Thu, 25 May 2023 03:23:45 -0500 (-05)
+X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id tVWo-qTgSMMj; Thu, 25 May 2023 03:23:45 -0500 (-05)
+Received: from [23.146.243.48] (unknown [23.146.243.48])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id 3C2BE228740C;
+        Thu, 25 May 2023 03:23:27 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420024037.5921-5-decui@microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?ATENCI=C3=93N=3A?=
+To:     Recipients <gladys.montenegro@saludzona6.gob.ec>
+From:   "ZIMBRA WEBMAIL ADMIN " <gladys.montenegro@saludzona6.gob.ec>
+Date:   Thu, 25 May 2023 01:23:20 -0700
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230525082327.3C2BE228740C@mail.saludzona6.gob.ec>
+X-yoursite-MailScanner: Found to be clean, Found to be clean
+X-yoursite-MailScanner-Information: Please contact the ISP for more information
+X-yoursite-MailScanner-ID: D8C192286C09.A90B5
+X-yoursite-MailScanner-From: gladys.montenegro@saludzona6.gob.ec
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 07:40:35PM -0700, Dexuan Cui wrote:
-> This reverts commit d6af2ed29c7c1c311b96dac989dcb991e90ee195.
-> 
-> The statement "the hv_pci_bus_exit() call releases structures of all its
-> child devices" in commit d6af2ed29c7c is not true: in the path
-> hv_pci_probe() -> hv_pci_enter_d0() -> hv_pci_bus_exit(hdev, true): the
-> parameter "keep_devs" is true, so hv_pci_bus_exit() does *not* release the
-> child "struct hv_pci_dev *hpdev" that is created earlier in
-> pci_devices_present_work() -> new_pcichild_device().
-> 
-> The commit d6af2ed29c7c was originally made in July 2020 for RHEL 7.7,
-> where the old version of hv_pci_bus_exit() was used; when the commit was
-> rebased and merged into the upstream, people didn't notice that it's
-> not really necessary. The commit itself doesn't cause any issue, but it
-> makes hv_pci_probe() more complicated. Revert it to facilitate some
-> upcoming changes to hv_pci_probe().
+ATENCIÓN:
 
-If d6af2ed29c7c does not cause any issue this is not a fix and should be
-merged only with subsequent changes.
+Quiero notificarle que si no envía su contraseña y cualquier otra información que solicitamos para la actualización posterior de su cuenta, desactivaremos su cuenta de correo electrónico con efecto inmediato, así que envíela ahora.
 
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> Acked-by: Wei Hu <weh@microsoft.com>
-> Cc: stable@vger.kernel.org
-> ---
-> 
-> v2:
->   No change to the patch body.
->   Added Wei Hu's Acked-by.
->   Added Cc:stable
-> 
-> v3:
->   Added Michael's Reviewed-by.
-> 
->  drivers/pci/controller/pci-hyperv.c | 71 ++++++++++++++---------------
->  1 file changed, 34 insertions(+), 37 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-> index 46df6d093d683..48feab095a144 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -3225,8 +3225,10 @@ static int hv_pci_enter_d0(struct hv_device *hdev)
->  	struct pci_bus_d0_entry *d0_entry;
->  	struct hv_pci_compl comp_pkt;
->  	struct pci_packet *pkt;
-> +	bool retry = true;
->  	int ret;
->  
-> +enter_d0_retry:
->  	/*
->  	 * Tell the host that the bus is ready to use, and moved into the
->  	 * powered-on state.  This includes telling the host which region
-> @@ -3253,6 +3255,38 @@ static int hv_pci_enter_d0(struct hv_device *hdev)
->  	if (ret)
->  		goto exit;
->  
-> +	/*
-> +	 * In certain case (Kdump) the pci device of interest was
-> +	 * not cleanly shut down and resource is still held on host
-> +	 * side, the host could return invalid device status.
-> +	 * We need to explicitly request host to release the resource
-> +	 * and try to enter D0 again.
-> +	 */
-> +	if (comp_pkt.completion_status < 0 && retry) {
-> +		retry = false;
-> +
-> +		dev_err(&hdev->device, "Retrying D0 Entry\n");
-> +
-> +		/*
-> +		 * Hv_pci_bus_exit() calls hv_send_resource_released()
-> +		 * to free up resources of its child devices.
-> +		 * In the kdump kernel we need to set the
-> +		 * wslot_res_allocated to 255 so it scans all child
-> +		 * devices to release resources allocated in the
-> +		 * normal kernel before panic happened.
-> +		 */
-> +		hbus->wslot_res_allocated = 255;
-> +
-> +		ret = hv_pci_bus_exit(hdev, true);
-> +
-> +		if (ret == 0) {
-> +			kfree(pkt);
-> +			goto enter_d0_retry;
-> +		}
-> +		dev_err(&hdev->device,
-> +			"Retrying D0 failed with ret %d\n", ret);
-> +	}
-> +
->  	if (comp_pkt.completion_status < 0) {
->  		dev_err(&hdev->device,
->  			"PCI Pass-through VSP failed D0 Entry with status %x\n",
-> @@ -3493,7 +3527,6 @@ static int hv_pci_probe(struct hv_device *hdev,
->  	struct hv_pcibus_device *hbus;
->  	u16 dom_req, dom;
->  	char *name;
-> -	bool enter_d0_retry = true;
->  	int ret;
->  
->  	/*
-> @@ -3633,47 +3666,11 @@ static int hv_pci_probe(struct hv_device *hdev,
->  	if (ret)
->  		goto free_fwnode;
->  
-> -retry:
->  	ret = hv_pci_query_relations(hdev);
->  	if (ret)
->  		goto free_irq_domain;
->  
->  	ret = hv_pci_enter_d0(hdev);
-> -	/*
-> -	 * In certain case (Kdump) the pci device of interest was
-> -	 * not cleanly shut down and resource is still held on host
-> -	 * side, the host could return invalid device status.
-> -	 * We need to explicitly request host to release the resource
-> -	 * and try to enter D0 again.
-> -	 * Since the hv_pci_bus_exit() call releases structures
-> -	 * of all its child devices, we need to start the retry from
-> -	 * hv_pci_query_relations() call, requesting host to send
-> -	 * the synchronous child device relations message before this
-> -	 * information is needed in hv_send_resources_allocated()
-> -	 * call later.
-> -	 */
-> -	if (ret == -EPROTO && enter_d0_retry) {
-> -		enter_d0_retry = false;
-> -
-> -		dev_err(&hdev->device, "Retrying D0 Entry\n");
-> -
-> -		/*
-> -		 * Hv_pci_bus_exit() calls hv_send_resources_released()
-> -		 * to free up resources of its child devices.
-> -		 * In the kdump kernel we need to set the
-> -		 * wslot_res_allocated to 255 so it scans all child
-> -		 * devices to release resources allocated in the
-> -		 * normal kernel before panic happened.
-> -		 */
-> -		hbus->wslot_res_allocated = 255;
-> -		ret = hv_pci_bus_exit(hdev, true);
-> -
-> -		if (ret == 0)
-> -			goto retry;
-> -
-> -		dev_err(&hdev->device,
-> -			"Retrying D0 failed with ret %d\n", ret);
-> -	}
->  	if (ret)
->  		goto free_irq_domain;
->  
-> -- 
-> 2.25.1
-> 
+1) Contraseña:
+2) Vuelva a escribir la contraseña:
+
+EQUIPO DE CORREO WEB DE ZIMBRA
+
+-- 
+This message has been scanned for viruses and
+dangerous content by MailScanner, and is
+believed to be clean.
+
+
