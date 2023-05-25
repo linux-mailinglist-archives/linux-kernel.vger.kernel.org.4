@@ -2,165 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7267110D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F157110D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbjEYQVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S239826AbjEYQXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239770AbjEYQVQ (ORCPT
+        with ESMTP id S233548AbjEYQXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:21:16 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF66C19A
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:21:13 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1ae51b07338so12486645ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:21:13 -0700 (PDT)
+        Thu, 25 May 2023 12:23:06 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC741197
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:23:05 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53f06f7cc74so833618a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 09:23:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685031673; x=1687623673;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lR6J9TvXn9/or5O3pdTkH60kcb1mT4LDvcJAYgDiz7s=;
-        b=EM8TsBT/Zo04L+jH4EotMG3q1FMcUAGke00LNbj15w+MQ1qxm1+wr+s23oa9kd6JpB
-         n0no0x/vhQC3o9sy3qz0Rmh3FtUX75T+28Uw0tauPGtBr1ac/C3b8MYuFQjC5e75KXRZ
-         syeygCV0L9z6E1t3OUjvIZtWxh4B7OZjJVpphSNey3cQ6ZCbG0c4Px9no7PLNw38mZfO
-         1sd6XkijpqiAoCgEg74OdGtbL+bf9SBvv8nn5B0APoPa6OV4ysW+j7IjxRub9MtG0FvZ
-         EfqcQQJ5KcJPY0lKRuiGalhTmiNqf7ZTfWGfuoq4xqtx3/WAqu3k/nXZLLczhPmHNYzn
-         d07A==
+        d=google.com; s=20221208; t=1685031785; x=1687623785;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/HdBiYHXb0t/eYfGc/stu36RyqTGN6i7PmYRLl38sM4=;
+        b=Ms1EfGgkWfjHyAEkYKEt1EK1c0RFGrAyO7YlB5VADfKnqvkE/3Q90TA52bwGi+C54/
+         4z+1IXDYFa69QOgk9+iEezTtPmTRTiYRMdTcWoaEhiekfJZ5qanq/KVZ93a35S65Jy1j
+         WpqPDkqSkNnqysAT/nWNmhFVZwb1W5f3wWjc82SXAd7yE53jFxhChegmF2f1mZSgvdYT
+         2PjlMucBTIcEebTxQCHwZcOH/9IqHQZmKPDhGcGs2h8YJtbrrgclLGN8ttUXYsVvTJky
+         PZgij3I8YJ2FZ/t6PC1NhWFH/yMM80DI+lHqqpwW/F0KchdCmxRw0s/1euxOMEabHbgj
+         fvYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685031673; x=1687623673;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lR6J9TvXn9/or5O3pdTkH60kcb1mT4LDvcJAYgDiz7s=;
-        b=V5w05TYkve34HYiYJPlAgfNZBBrpmsW7Nm8e76Ea7vJnGfIJ0iGTAg2zphZve5Tehf
-         MNQl0vT9/7KERo8oGxfThnK7qKiCgASMCHUFn8AIiGgSDMKYbMRd0CdEw9ExumIs6TTJ
-         +Nb7tR3qEtCKs2fEcbrOkqswReOBEpa7zJ9QTCZVsNYJdVklYjT2FCGMu5naxZGu+VPC
-         PrP6isaYXMpK1Jh/m16GhjVbu0IdOnzeJaFzGN6qX3IHCt+i9oSUO+3O/jhvIvXnbDDf
-         PK8k4b+Cg1GYDDwhG58oRbXojyzdoh22qWrUmvtQVYSKI8Ljzyn95QS74U0eRR3nrYhu
-         kYmA==
-X-Gm-Message-State: AC+VfDzRaa1AG0Wh4k+ZHHOHgld+g/vuhTXBBel7oNgMs6XlHZO0o4Ul
-        ApCy5TZL0nMoFIBw6xWjK0S7IDVR3JZaIA7JSL0=
-X-Google-Smtp-Source: ACHHUZ4sgGwtWXBApTubMwD+ctsYBM3Rn5DjVAsxU05U0oi7GjJiQCcZNhl02V8PRjoOsaFPMMNCTnRJPwl4AvYVdmI=
-X-Received: by 2002:a17:902:e892:b0:1ae:1237:874d with SMTP id
- w18-20020a170902e89200b001ae1237874dmr2152497plg.69.1685031672857; Thu, 25
- May 2023 09:21:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230518230626.404068-1-aford173@gmail.com> <CAOMZO5DBefFuLWi39txu2RiU5vdHVx-0T48Fua6M5Y6Fr9PGNg@mail.gmail.com>
- <CAHCN7xLqmMPtnHTVbApyYxY2tx97oRjsk_51abdDcZkOJmA=Tw@mail.gmail.com>
- <CAHCN7xJTWqf_qfaZge4GpKuuzPE_OC-Kx7hBd_hFLOchH=Ef0g@mail.gmail.com>
- <CAOMZO5Csjx17kfkxN1xMLuCg+-J0v6rjiuvaK-ZktXO50ZTuSw@mail.gmail.com>
- <CAHCN7xL2GWLTwMttCha=b9_W0nE5aimCQ08YJFrCF5vNZUOL7Q@mail.gmail.com>
- <8c65c5c3-0415-78c0-4585-df94a532a04e@linaro.org> <CAHCN7xJBf+8KyXbqxVSUUXbKqomX+i-13Ed23QFeF0SM8nQpzw@mail.gmail.com>
- <8f50dc2c-4d74-6c0f-87bc-b96bbf1373a9@linaro.org> <bef20993-b831-b692-237e-b1e89ac4f34b@linaro.org>
-In-Reply-To: <bef20993-b831-b692-237e-b1e89ac4f34b@linaro.org>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Thu, 25 May 2023 11:21:01 -0500
-Message-ID: <CAHCN7xLDoftN9kP7tdkyd0RQ+X2T3oha0tgfXamm-eonXmYnBg@mail.gmail.com>
-Subject: Re: [PATCH V7 0/6] drm: bridge: samsung-dsim: Support variable clocking
-To:     neil.armstrong@linaro.org
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        dri-devel@lists.freedesktop.org, Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Inki Dae <inki.dae@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685031785; x=1687623785;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/HdBiYHXb0t/eYfGc/stu36RyqTGN6i7PmYRLl38sM4=;
+        b=imrDvtTVRhFDqOi+B9xZZFkRdbmAs+3HrlCIUMn8settZBjs3sYo61Q4CGszCmZt0B
+         OQTF3YEN4T9wo/xTCM2usDSxfznok/rxFv1HljICSoQMsiXkXmgstFf1N6ACbw+biZjW
+         3xpjhox1XqjBnA1eupwM4SLrJaN1dwCADRLsddd36ZqUnvnZodel4M65SY3Xb7cWKUAB
+         2YcEbXj/eKzUEV7m6t776e3GSMKVGs7TZ5pNsnuBHuC45XZq0KA30cbh9l2gQKMULFQR
+         ya42k1ecgwY6q4PE67YhqTZhGxfeJW1SDxFAaLpoPhamnkzuyikJyBfPMwCTEiejqQX5
+         5xTQ==
+X-Gm-Message-State: AC+VfDzjeEXst0ZtfoRyVJqMLiABCx2tcjU1vGmmAF6cXAxzCdpG0Lf4
+        o/Z1wGi+Vdp3H56VzLIVWRrMzJBJqpg=
+X-Google-Smtp-Source: ACHHUZ4eMNRNmPGVNI0d/g62J6qYg9y69eF3HSc+XqALVPDfQutlySlqNuJtdiVOrOZz4FeES2slvW+AmvQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:e847:0:b0:524:fba4:fd51 with SMTP id
+ a7-20020a63e847000000b00524fba4fd51mr741353pgk.3.1685031785184; Thu, 25 May
+ 2023 09:23:05 -0700 (PDT)
+Date:   Thu, 25 May 2023 09:23:03 -0700
+In-Reply-To: <20230420104622.12504-2-ljrcore@126.com>
+Mime-Version: 1.0
+References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-2-ljrcore@126.com>
+Message-ID: <ZG+LZ4rATc8elt38@google.com>
+Subject: Re: [PATCH v2 1/7] KVM: selftests: Replace int with uint32_t for nevents
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Like Xu <like.xu.linux@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:19=E2=80=AFAM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
->
-> On 25/05/2023 18:15, neil.armstrong@linaro.org wrote:
-> > On 25/05/2023 17:57, Adam Ford wrote:
-> >> On Thu, May 25, 2023 at 10:39=E2=80=AFAM Neil Armstrong
-> >> <neil.armstrong@linaro.org> wrote:
-> >>>
-> >>> On 24/05/2023 14:49, Adam Ford wrote:
-> >>>> On Wed, May 24, 2023 at 7:45=E2=80=AFAM Fabio Estevam <festevam@gmai=
-l.com> wrote:
-> >>>>>
-> >>>>> Hi Adam,
-> >>>>>
-> >>>>> On Tue, May 23, 2023 at 8:49=E2=80=AFPM Adam Ford <aford173@gmail.c=
-om> wrote:
-> >>>>>
-> >>>>>> Inki,
-> >>>>>>
-> >>>>>> I haven't heard back from you on whether or not you want the bindi=
-ngs
-> >>>>>> patch to be included with me resending the series as V7 or if you'=
-re
-> >>>>>> OK with a single, stand-alone patch.
-> >>>>>> Will you let me know?  I have the patch standing by waiting for
-> >>>>>> instructions.  If you're not the right person to ask, please let m=
-e
-> >>>>>> know who the right person is.
-> >>>>>
-> >>>>> Neil has also been collecting samsung-dsim patches. Maybe he can cl=
-arify.
-> >>>>
-> >>>> If it matters, my preference all along was to do the bindings as a
-> >>>> separate thing once the driver updates were merged into the tree.
-> >>>> Since the bindings can be done in different ways, I was hoping to ha=
-ve
-> >>>> a separate discussion on the right way to do the bindings. If they
-> >>>> need to be part of the series, I can do that.
-> >>>
-> >>> If you don't introduce compatibles, no need to send bindings, it can
-> >>> be send separately.
-> >>
-> >> This series doesn't change any compatibility.
-> >>
-> >>>
-> >>> Can I apply this serie and 20230503163313.2640898-2-frieder@fris.de ?=
- seems all has been reviewed.
-> >>
-> >> Looking at the driver, it looks like linux-next has some newer
-> >> features added into the driver since I started, so this series might
-> >> need a re-base.  If that's the case, let me know, and I'll do the
-> >> re-base.
-> >
-> > Ok I'll pull the other bits and let you know if this one needs a rebase=
-.
->
-> Indeed, starting at patch 3 it fails to apply, a rebase on drm-misc-next =
-is welcome!
+On Thu, Apr 20, 2023, Jinrong Liang wrote:
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> Defined as type __u32, the nevents field in kvm_pmu_event_filter
+> can only accept positive values within a specific range. Therefore,
+> replacing int with uint32_t for nevents ensures consistency and
+> readability in the code.
 
-I'll do it when I get home tonight and have the next rev.
+Not really.  It fixes one type of inconsistency that is fairly common (userspace
+passing an integer count to the kernel), and replaces it with a different type
+of inconsistency (signed iterator comparing against an unsigned count).  There's
+already one of those in remove_event(), but I'd rather not create more.
 
-adam
->
-> Neil
->
-> >
-> > Neil
-> >
-> >>
-> >> adam
-> >>
-> >>>
-> >>> Neil
-> >>>
-> >>>>
-> >>>> adam
-> >>>
-> >
->
+Passing an unsigned int to track what *should* be a small-ish, postive integer
+can also make it more difficult to detect bugs, e.g. assertions like this won't
+work:
+
+	TEST_ASSERT(nevents >= 0);
+
+If this code were being written from scratch then I wouldn't object to using
+uint32_t everywhere, but I don't see the point of trying to retroactively change
+the code.
