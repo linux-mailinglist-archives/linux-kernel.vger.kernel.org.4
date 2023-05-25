@@ -2,84 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBE871071C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C41710722
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237421AbjEYIP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47530 "EHLO
+        id S239245AbjEYIQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjEYIPZ (ORCPT
+        with ESMTP id S229527AbjEYIQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:15:25 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E013E195;
-        Thu, 25 May 2023 01:15:20 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P6vCna010987;
-        Thu, 25 May 2023 10:14:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : from : subject : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=6eqB/2RVN5f/EsmFhOLILkPDHswfNdCOdRhZtrk1duU=;
- b=K+tsvG6ECwhzWGvIrNzOwpjUqyOubAhwbi2QX4tUeFUYHRsm9Nb4JX0jBpFYvkxuBplF
- DxOwlBlN0UZpkNadjuB2e5Q++17yRrTayHjHprSnkQdNHsgJqVZyEYQ2RKgO6/R2sNIy
- DQ30QwWdeNvSW560OuPSk2VffPS7Cj/z2qEAuJou5eO5yRxVxMSjzbygIvlHhBMaA4yG
- oM5PMGD85Y7sKFbwhr9kvSyCjaJwVyLOOqFjyZfffrHFcQwbD8t7tkCDMUNFo0GtMHJv
- Y/XK385ajzTVd8EzcoimwS7aKwflkwBwF7Ml7EdMNanRpmOjdrulTBCwUzW98+hE/6kR Jw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qt2uy8k3c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 10:14:54 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B6BE810002A;
-        Thu, 25 May 2023 10:14:53 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A5474212FDC;
-        Thu, 25 May 2023 10:14:53 +0200 (CEST)
-Received: from [10.252.18.243] (10.252.18.243) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 25 May
- 2023 10:14:52 +0200
-Message-ID: <32fafa74-8964-c9cf-f95b-f2cd084f46c6@foss.st.com>
-Date:   Thu, 25 May 2023 10:14:52 +0200
+        Thu, 25 May 2023 04:16:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6B899;
+        Thu, 25 May 2023 01:16:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1745643AC;
+        Thu, 25 May 2023 08:16:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E18EDC433EF;
+        Thu, 25 May 2023 08:16:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685002574;
+        bh=K2jAHhKKwgAET5fyc2ERiEaO3ErwK7xD3nttPnJaXfI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YGJ1dimBfF/DWboT1zfSrn474WMxAVgWF28GxGUOFEjBEw+reuo6isz3sWjMK2G7R
+         qm8UAEInwNMyeYBhRCtjl+aeqZzfsfsGnfRyrFtr6srnsr/AdGSceiunkSB7sFmwUQ
+         ahNXN9Mx5UNo2rgPPeg3EjbMqvWmyopyDSkW+eGiEHhX2t3h2diyfpoiWEfxVw11MV
+         MNJdU01N9f+9DzsX7ZzxCmRrZPhaY7/l0zVVRLUXMxAiA0mG6we58jB/X+x0eYcSrY
+         dm/BF+QoQH/A9uiFPHIdlPv8NeN0VWijfkv6GDzRyfY3vzga5Lj2jcLLE4/O5DhNtR
+         Dt58Pxq0LUcVA==
+Date:   Thu, 25 May 2023 10:16:03 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     bhelgaas@google.com, davem@davemloft.net, edumazet@google.com,
+        haiyangz@microsoft.com, jakeo@microsoft.com, kuba@kernel.org,
+        kw@linux.com, kys@microsoft.com, leon@kernel.org,
+        linux-pci@vger.kernel.org, mikelley@microsoft.com,
+        pabeni@redhat.com, robh@kernel.org, saeedm@nvidia.com,
+        wei.liu@kernel.org, longli@microsoft.com, boqun.feng@gmail.com,
+        ssengar@microsoft.com, helgaas@kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        josete@microsoft.com, stable@vger.kernel.org
+Subject: Re: [PATCH v3 3/6] PCI: hv: Remove the useless hv_pcichild_state
+ from struct hv_pci_dev
+Message-ID: <ZG8ZQ1U4kmGBVe4/@lpieralisi>
+References: <20230420024037.5921-1-decui@microsoft.com>
+ <20230420024037.5921-4-decui@microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-Subject: Re: [PATCH v3 3/3] ARM: dts: stm32: fix several DT warnings on
- stm32mp15
-To:     Marek Vasut <marex@denx.de>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>
-CC:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@dh-electronics.com>
-References: <20230517143542.284029-1-raphael.gallais-pou@foss.st.com>
- <20230517143542.284029-4-raphael.gallais-pou@foss.st.com>
- <f64de05b-8854-4345-80c2-f424968defdc@denx.de>
- <e963370c-7018-243a-712d-62ca8463bfd8@foss.st.com>
- <5f201903-17cb-5054-763c-f03b1066db1d@denx.de>
-Content-Language: en-US
-In-Reply-To: <5f201903-17cb-5054-763c-f03b1066db1d@denx.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.252.18.243]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_04,2023-05-24_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420024037.5921-4-decui@microsoft.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,104 +64,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 19, 2023 at 07:40:34PM -0700, Dexuan Cui wrote:
+> The hpdev->state is never really useful. The only use in
+> hv_pci_eject_device() and hv_eject_device_work() is not really necessary.
+> 
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> Cc: stable@vger.kernel.org
+> ---
+> 
+> v2:
+>   No change to the patch body.
+>   Added Cc:stable
+> 
+> v3:
+>   Added Michael's Reviewed-by.
+> 
+>  drivers/pci/controller/pci-hyperv.c | 12 ------------
+>  1 file changed, 12 deletions(-)
 
-On 5/18/23 01:33, Marek Vasut wrote:
-> On 5/17/23 19:04, Raphael Gallais-Pou wrote:
->> Hi Marek
->
-> Hi,
->
->> On 5/17/23 17:41, Marek Vasut wrote:
->>> On 5/17/23 16:35, Raphael Gallais-Pou wrote:
->>>
->>> Hi,
->>>
->>>> diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
->>>> b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
->>>> index 0f1110e42c93..a6e2e20f12fa 100644
->>>> --- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
->>>> +++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
->>>> @@ -457,8 +457,7 @@ &ltdc {
->>>>        status = "okay";
->>>>          port {
->>>> -        ltdc_ep0_out: endpoint@0 {
->>>> -            reg = <0>;
->>>> +        ltdc_ep0_out: endpoint {
->>>>                remote-endpoint = <&sii9022_in>;
->>>>            };
->>>>        };
->>>
->>> This LTDC port/endpoint stuff always scares me, because I always feel I get it
->>> wrong.
->>>
->>> I believe the LTDC does have one "port" , correct.
->>>
->>> But I think (?) that the LTDC has two endpoints, endpoint@0 for DPI (parallel
->>> output out of the SoC) and endpoint@1 for DSI (internal connection into the
->>> DSI serializer) ?
->>
->> You are correct indeed, I rushed the patch and did not thought about this. I
->> agree that this can be confusing, as I also take some time to think through it.
->>
->>>
->>> Only one of the endpoints can be connected at a time, but there are actually
->>> two endpoints in the LTDC port {} node, aren't there ?
->> Yes, they are mutually exclusive.
->>>
->>> So the original description should be OK I think , maybe #address/#size-cells
->>> are missing instead ?
->>
->> Thing is: this file is only included in two device-trees : stm32mp157c-dk1.dts
->> and stm32mp157c-dk2.dts.
->>
->> Among those two files there is only one which adds a second endpoint. Thus if
->> the fields are set higher in the hierarchy, a warning yields.
->
-> I do not understand this one part, which warning are you trying to fix ?
-> I just ran '$ make CHECK_DTBS=1 stm32mp157a-dk1.dtb stm32mp157c-dk2.dtb' in
-> latest linux-next and there was no warning related to LTDC .
+Is this patch _required_ for subsequent fixes ? It is not a fix itself
+so I am asking.
 
-I'm sorry, I looked back at it and my explanations are confusing.
+Acked-by: Lorenzo Pieralisi <lpieralisi@kernel.org>
 
-I use Alex Torgue's tree, and I'm based on the next branch, but linux-next
-should be the same I just checked it.
-
->
-> I think if you retain the stm32mp151.dtsi &ltdc { port { #address-cells = <1>;
-> #size-cells = <0>; }; }; part, then you wouldn't be getting any warnings
-> regarding LTDC , and you wouldn't have to remove the unit-address from
-> endpoint@0 .
->
-> btw. I do use both endpoint@0/endpoint@1 in Avenger96 DTOs, but those are not
-> submitted yet, I have to clean them up a bit more first.
->
->> One way to do it would be to make the endpoint@0 go down in the device-tree with
->> its dependencies, so that both endpoints are the same level without generating
->> noise.
->
-> I'm afraid I really don't quite understand which warning you're referring to.
-> Can you please share that warning and ideally how to trigger it (the
-> command-line incantation) ?
-
-Using '$ make dtbs W=1', you can observe several of the followings:
-
-arch/arm/boot/dts/stm32mp151.dtsi:1533.9-1536.6: Warning
-(avoid_unnecessary_addr_size): /soc/display-controller@5a001000/port:
-unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
-arch/arm/boot/dts/stm32mp151.dtsi:1533.9-1536.6: Warning (graph_child_address):
-/soc/display-controller@5a001000/port: graph node has single child node
-'endpoint@0', #address-cells/#size-cells are not necessary
-
-This &ltdc { port { #address-cells = <1>; #size-cells = <0>; }; }; part is
-actually annoying. This is because there is several device-trees that only got
-one endpoint, and some other that includes two.
-
-For instance: stm32mp15xx-dhcor-avenger96.dtsi vs stm32mp157c-dk2.dts.
-
-I would like to remove to root part of address/size field and let only the lower
-device-trees with with multiple endpoints handle their own fields. I hope this
-explains a bit better my process.
-
-Regards,
-Raphaël Gallais-Pou
-
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index 1b11cf7391933..46df6d093d683 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -553,19 +553,10 @@ struct hv_dr_state {
+>  	struct hv_pcidev_description func[];
+>  };
+>  
+> -enum hv_pcichild_state {
+> -	hv_pcichild_init = 0,
+> -	hv_pcichild_requirements,
+> -	hv_pcichild_resourced,
+> -	hv_pcichild_ejecting,
+> -	hv_pcichild_maximum
+> -};
+> -
+>  struct hv_pci_dev {
+>  	/* List protected by pci_rescan_remove_lock */
+>  	struct list_head list_entry;
+>  	refcount_t refs;
+> -	enum hv_pcichild_state state;
+>  	struct pci_slot *pci_slot;
+>  	struct hv_pcidev_description desc;
+>  	bool reported_missing;
+> @@ -2750,8 +2741,6 @@ static void hv_eject_device_work(struct work_struct *work)
+>  	hpdev = container_of(work, struct hv_pci_dev, wrk);
+>  	hbus = hpdev->hbus;
+>  
+> -	WARN_ON(hpdev->state != hv_pcichild_ejecting);
+> -
+>  	/*
+>  	 * Ejection can come before or after the PCI bus has been set up, so
+>  	 * attempt to find it and tear down the bus state, if it exists.  This
+> @@ -2808,7 +2797,6 @@ static void hv_pci_eject_device(struct hv_pci_dev *hpdev)
+>  		return;
+>  	}
+>  
+> -	hpdev->state = hv_pcichild_ejecting;
+>  	get_pcichild(hpdev);
+>  	INIT_WORK(&hpdev->wrk, hv_eject_device_work);
+>  	queue_work(hbus->wq, &hpdev->wrk);
+> -- 
+> 2.25.1
+> 
