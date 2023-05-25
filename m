@@ -2,114 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A25710F9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA245710F99
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241606AbjEYPa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
+        id S241786AbjEYPai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241791AbjEYPa4 (ORCPT
+        with ESMTP id S231344AbjEYPae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:30:56 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F02B1A4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:30:53 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:37406)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q2CvS-000r5n-Fi; Thu, 25 May 2023 09:30:50 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:35938 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q2CvR-00FA7J-65; Thu, 25 May 2023 09:30:50 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
-        nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-References: <20230522025124.5863-1-michael.christie@oracle.com>
-        <20230522025124.5863-4-michael.christie@oracle.com>
-        <20230522123029.GA22159@redhat.com>
-        <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com>
-        <20230522174757.GC22159@redhat.com> <20230523121506.GA6562@redhat.com>
-        <87bkib6nxr.fsf@email.froward.int.ebiederm.org>
-        <20230524141022.GA19091@redhat.com>
-        <87ttw1zt4i.fsf@email.froward.int.ebiederm.org>
-        <20230525115512.GA9229@redhat.com>
-Date:   Thu, 25 May 2023 10:30:04 -0500
-In-Reply-To: <20230525115512.GA9229@redhat.com> (Oleg Nesterov's message of
-        "Thu, 25 May 2023 13:55:13 +0200")
-Message-ID: <87y1lcxwcj.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 25 May 2023 11:30:34 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B06195
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:30:32 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f3b9c88af8so2699715e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:30:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ferroamp-se.20221208.gappssmtp.com; s=20221208; t=1685028630; x=1687620630;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lPuHDfJlTRWNIDrZeM6vHqKJY4YBArQHuXDU3A0RTxY=;
+        b=e95BZHYjsevbDtuVfvlMCj6/qmG1HwycR6hbBsDLmF0/KLwzcsgqMvBpnd6UG6Hb07
+         O415mDXB5o1G6ZZojfFi580zgcZOUyQhOMmLF6BeaFjKV9hrfrh1DVLTMre+X7kNH5a1
+         cl/EM/gLS34U5waMjbAUk+VgxAyvqWg5IPzS5l30O+0UFFr3DVSNwcT6Jo+vfZ1cEakg
+         Tg4NigvGYo3LKoalvpHHH3ELSnkbbjEmJ7v24sU6OXCXXBe6TlJ9lRZnBFIETRyp9Z9J
+         b0u/19EayOabR8Pzw3qAf4cdQu/dPtbczFcmdDQWCtWeETbOi5ikRga0kD/Q2TvSrNy/
+         9nfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685028630; x=1687620630;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lPuHDfJlTRWNIDrZeM6vHqKJY4YBArQHuXDU3A0RTxY=;
+        b=Tr3lqpYqx0MOwQBrc1bsTBlOxD8Qvdw9CMxHxUSJHJjgqsji3OK5Lgg76FVPwO4RQJ
+         sr66UajMdpxagHw2dIX7ySZI+vL06rLkuDZkr1MEj0Zmt3etlSOmQG5GV5IiDeqkSE7D
+         WWttokXJ17/QibJW6w3dD2YeIQBS49hYK4uuzpoYPnPK5YP1wZ4D+32POAWThSqwa8Cu
+         X/ZIF101t3am78b7oqWDmsVDzTi+mZ5WilmZJ2ocaTeayBax25Q+fVA7Xk7Ag32o5YGU
+         35BglxWnuT1/eoiIBh/pkEbAKuXBAzCA4pxEd0N4SjITIRk37gMoqJSpJDAs+vWJ7JZK
+         L6Qg==
+X-Gm-Message-State: AC+VfDzXUccui868zyhtTGHYP4hMc5r4wTMRgJpkuPsOlFBTrDJ+kkL8
+        aU9Xa7+/bTVYdMfml8ieShnkRQ==
+X-Google-Smtp-Source: ACHHUZ6+eTGaEzLm5tVgzKM9SOm9NZRq7IEmz6ZCXHASpgaSQIu5To4mGi7Omlo6uwChYXfastmoxA==
+X-Received: by 2002:ac2:5585:0:b0:4ef:ec94:9674 with SMTP id v5-20020ac25585000000b004efec949674mr6609883lfg.32.1685028630326;
+        Thu, 25 May 2023 08:30:30 -0700 (PDT)
+Received: from debian (151.236.202.107.c.fiberdirekt.net. [151.236.202.107])
+        by smtp.gmail.com with ESMTPSA id t9-20020ac243a9000000b004edc485f86bsm244080lfl.239.2023.05.25.08.30.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 08:30:29 -0700 (PDT)
+Date:   Thu, 25 May 2023 17:30:27 +0200
+From:   =?iso-8859-1?Q?Ram=F3n?= Nordin Rodriguez 
+        <ramon.nordin.rodriguez@ferroamp.se>
+To:     Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, horatiu.vultur@microchip.com,
+        Woojung.Huh@microchip.com, Nicolas.Ferre@microchip.com,
+        Thorsten.Kummermehr@microchip.com
+Subject: Re: [PATCH net-next v3 2/6] net: phy: microchip_t1s: replace
+ read-modify-write code with phy_modify_mmd
+Message-ID: <ZG9/E8Am2ICEHIbr@debian>
+References: <20230524144539.62618-1-Parthiban.Veerasooran@microchip.com>
+ <20230524144539.62618-3-Parthiban.Veerasooran@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1q2CvR-00FA7J-65;;;mid=<87y1lcxwcj.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX1/R72iCqGKqDUSGxzLbRgsNGaK/j3KlzUI=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524144539.62618-3-Parthiban.Veerasooran@microchip.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 721 ms - load_scoreonly_sql: 0.28 (0.0%),
-        signal_user_changed: 18 (2.5%), b_tie_ro: 14 (2.0%), parse: 3.3 (0.5%),
-         extract_message_metadata: 12 (1.7%), get_uri_detail_list: 2.9 (0.4%),
-        tests_pri_-2000: 11 (1.5%), compile_eval: 59 (8.2%), tests_pri_-1000:
-        6 (0.9%), tests_pri_-950: 2.8 (0.4%), tests_pri_-900: 2.5 (0.3%),
-        tests_pri_-200: 1.45 (0.2%), tests_pri_-100: 11 (1.5%), tests_pri_-90:
-        100 (13.9%), check_bayes: 92 (12.7%), b_tokenize: 12 (1.7%),
-        b_tok_get_all: 7 (1.0%), b_comp_prob: 3.2 (0.4%), b_tok_touch_all: 62
-        (8.6%), b_finish: 1.47 (0.2%), tests_pri_0: 501 (69.6%),
-        check_dkim_signature: 1.13 (0.2%), check_dkim_adsp: 7 (1.0%),
-        poll_dns_idle: 0.47 (0.1%), tests_pri_10: 3.7 (0.5%), tests_pri_500:
-        17 (2.4%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+On Wed, May 24, 2023 at 08:15:35PM +0530, Parthiban Veerasooran wrote:
+> Replace read-modify-write code in the lan867x_config_init function to
+> avoid handling data type mismatch and to simplify the code.
+> 
+> Signed-off-by: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
+> ---
+>  drivers/net/phy/microchip_t1s.c | 23 +++++++++++------------
+>  1 file changed, 11 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/net/phy/microchip_t1s.c b/drivers/net/phy/microchip_t1s.c
+> index a42a6bb6e3bd..b5b5a95fa6e7 100644
+> --- a/drivers/net/phy/microchip_t1s.c
+> +++ b/drivers/net/phy/microchip_t1s.c
+> @@ -31,19 +31,19 @@
+>   * W   0x1F 0x0099 0x7F80 ------
+>   */
+>  
+> -static const int lan867x_fixup_registers[12] = {
+> +static const u32 lan867x_fixup_registers[12] = {
+>  	0x00D0, 0x00D1, 0x0084, 0x0085,
+>  	0x008A, 0x0087, 0x0088, 0x008B,
+>  	0x0080, 0x00F1, 0x0096, 0x0099,
+>  };
+>  
+> -static const int lan867x_fixup_values[12] = {
+> +static const u16 lan867x_fixup_values[12] = {
+>  	0x0002, 0x0000, 0x3380, 0x0006,
+>  	0xC000, 0x801C, 0x033F, 0x0404,
+>  	0x0600, 0x2400, 0x2000, 0x7F80,
+>  };
+>  
+> -static const int lan867x_fixup_masks[12] = {
+> +static const u16 lan867x_fixup_masks[12] = {
+>  	0x0E03, 0x0300, 0xFFC0, 0x000F,
+>  	0xF800, 0x801C, 0x1FFF, 0xFFFF,
+>  	0x0600, 0x7F00, 0x2000, 0xFFFF,
+> @@ -63,23 +63,22 @@ static int lan867x_config_init(struct phy_device *phydev)
+>  	 * used, which might then write the same value back as read + modified.
+>  	 */
+>  
+> -	int reg_value;
+>  	int err;
+> -	int reg;
+>  
+>  	/* Read-Modified Write Pseudocode (from AN1699)
+>  	 * current_val = read_register(mmd, addr) // Read current register value
+>  	 * new_val = current_val AND (NOT mask) // Clear bit fields to be written
+>  	 * new_val = new_val OR value // Set bits
+> -	 * write_register(mmd, addr, new_val) // Write back updated register value
+> +	 * write_register(mmd, addr, new_val) // Write back updated register value.
+> +	 * Although AN1699 says Read, Modify, Write, the write is not required if
+> +	 * the register already has the required value.
+>  	 */
+>  	for (int i = 0; i < ARRAY_SIZE(lan867x_fixup_registers); i++) {
+> -		reg = lan867x_fixup_registers[i];
+> -		reg_value = phy_read_mmd(phydev, MDIO_MMD_VEND2, reg);
+> -		reg_value &= ~lan867x_fixup_masks[i];
+> -		reg_value |= lan867x_fixup_values[i];
+> -		err = phy_write_mmd(phydev, MDIO_MMD_VEND2, reg, reg_value);
+> -		if (err != 0)
+> +		err = phy_modify_mmd(phydev, MDIO_MMD_VEND2,
+> +				     lan867x_fixup_registers[i],
+> +				     lan867x_fixup_masks[i],
+> +				     lan867x_fixup_values[i]);
 
-> On 05/24, Eric W. Biederman wrote:
->>
->> Oleg Nesterov <oleg@redhat.com> writes:
->>
->> > Yes, but probably SIGABRT/exit doesn't really differ from SIGKILL wrt
->> > vhost_worker().
->>
->> Actually I think it reveals that exiting with SIGABRT will cause
->> a deadlock.
->>
->> coredump_wait will wait for all of the threads to reach
->> coredump_task_exit.  Meanwhile vhost_worker is waiting for
->> all of the other threads to reach exit_files to close their
->> file descriptors.
->
-> Indeed, I didn't think about this.
->
->
-> So why do we actually need CLONE_THREAD ? Can't vhost_worker() be a kernel thread?
->
-> kthread_create() won't be convenient, but how about kernel_thread() ? it inherits
-> mm/cgroups/rlimits/etc, kthread_stop() should work just fine.
+This change answers an uncertainty in the block comment in the top of
+this func, pasted here for your convenience
 
-Basically with no patches that is where Linus's kernel is.
+	/* HW quirk: Microchip states in the application note (AN1699) for the phy
+	 * that a set of read-modify-write (rmw) operations has to be performed
+	 * on a set of seemingly magic registers.
+	 * The result of these operations is just described as 'optimal performance'
+	 * Microchip gives no explanation as to what these mmd regs do,
+	 * in fact they are marked as reserved in the datasheet.
+	 * It is unclear if phy_modify_mmd would be safe to use or if a write
+	 * really has to happen to each register.
+	 * In order to exactly conform to what is stated in the AN phy_write_mmd is
+	 * used, which might then write the same value back as read + modified.
+	 */
 
-User complained about the new thread showing up in ps.  So the
-exploration of how we could use CLONE_THREAD instead of what is
-currently merged began.
+This change also invalidates most of the comment. I think this should be
+reduced to something along the lines of:
+	/* HW quirk: Microchip states in the application note (AN1699) for the phy
+	 * that a set of read-modify-write (rmw) operations has to be performed
+	 * on a set of seemingly magic registers.
+	 * The result of these operations is just described as 'optimal performance'
+	 * Microchip gives no explanation as to what these mmd regs do,
+	 * in fact they are marked as reserved in the datasheet.*/
 
-Eric
+Additionally I don't mind it if you change the tone of the comment. This was brought
+up in the sitdown we had, where it was explained from Microchip that
+documenting what the reg operations actually does would expose to much
+of the internal workings of the chip.
+
+Possibly this comment should move down to where the fixup reg operations
+are performed, and replace the comment about the 'read write modify'
+stuff all togheter.
+In my opinion I kind of loose context about what the func does when it
+first explains the fixup stuff, then actually does something with the
+STS2 regs, and finally actually does the fixup.
+> +		if (err)
+>  			return err;
+>  	}
+>  
+> -- 
+> 2.34.1
+> 
