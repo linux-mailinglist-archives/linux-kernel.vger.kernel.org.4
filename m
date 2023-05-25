@@ -2,214 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2817105AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 08:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8A47105B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 08:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238285AbjEYG1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 02:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S238359AbjEYGbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 02:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjEYG1w (ORCPT
+        with ESMTP id S229725AbjEYGbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 02:27:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDC7187;
-        Wed, 24 May 2023 23:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684996071; x=1716532071;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=+mtq0z6sl/ZViRgAmc0+SXz2dtgqXN4LOWfPtloCazg=;
-  b=EQn26Hn3URuFOYQfmDWV7Ujg2NGZ380ouU9xCjSk5HXaXg9/we8ie/Iq
-   3VYmmnMAM5Ai/cEaKgxSUnkYZwPx+WRFU9jEq1uiUjurLxZ0fAG7IHEKS
-   0sQ8bP1Ne6bPYWxTtaixyZ8qF6ykIwJLFfUYIlAE7oTiJD6xHOuB1GWQ+
-   13TFjDfLn7vOn6Mytn/T14VutQZFEPRv+zt+TF9Q4Bl99mzu5jAwIdddh
-   zjJgQI2RKhcj8chLfmfSRdd+VDoORMQlM73MW4q03PiFX2X1bO1XwXo8p
-   TLsvkP4CscUxQ/tYA7Qjse2JnBcv8PchoSya8I6MQCllPFuSZYEMjUv3T
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="382045504"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="382045504"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 23:27:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="1034851631"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="1034851631"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga005.fm.intel.com with ESMTP; 24 May 2023 23:27:51 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 23:27:51 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 24 May 2023 23:27:50 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 24 May 2023 23:27:50 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 24 May 2023 23:27:50 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J75Qwlz7Ampfgd0qBbaLPxzI6wBbzCyv+KM//TNfrB35AI6WD10DPYjXy4nipdI0pc4nJMKGSemK17wKhBZLhMmVCI2WJXMxsjzWDzG7n8tp3ZGLFNJS03S1jUDnKX04Cud8LvQ9AjjIJAqfwLVVvkForc9Efd0mhxbNJZlU7LgYpLhrIpliJw4GPs1Wf9nsRZWBSMXQJO+NApd/3fKbEv4NBqzuwHpbUC7Qk5bLoPvaF+pg9UmmRdpbgzYs6YFa2ZbEUTElV86UusHG+uFk4vPL+QrQDuAM2VEh2TCRTqXJiESNt4ZcglJQHsQJI49dIqfK2YYHdCnLPjLedE8JdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tomI3m8PGq1tFzrepQdnxtm1HwRLpY1hOQoZ5mSxSKw=;
- b=QQvF9xL+fCJwgERGgaoSSlgsE7r4NPghTfOaiGXcxX802WmmetrCJCiKKYN8kmObZhSNAH3LZg28bRWIzzl6A+qpSEDnA4yHChmz30KSapwwv7n7xnR5ypqEhlAhawqDmeU3bkKBKjkpxZv5YUQM4rbueSrzammIhV57J5MaCOpnl2rspmPToZbzgV4VHYSKDyacHsjoqFSwvOWsrQUD4/ErRKxBHc4U0qiPCs/vC88N5LxbUS4N9Wg0TxF1+7vj74K98kVToA5EbSX9B103DHK20xlF40XNKyqOepj9wwKIbowA/NPJAzzIpNKY0A4q7cpgAgj8f8I/wfo6FFJWJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DM4PR11MB5520.namprd11.prod.outlook.com (2603:10b6:5:39f::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Thu, 25 May
- 2023 06:27:41 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::dd3:4277:e348:9e00]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::dd3:4277:e348:9e00%3]) with mapi id 15.20.6433.015; Thu, 25 May 2023
- 06:27:40 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>
-CC:     Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        "Ranganathan, Narayan" <narayan.ranganathan@intel.com>
-Subject: RE: [PATCH v7 2/4] iommu: Move global PASID allocation from SVA to
- core
-Thread-Topic: [PATCH v7 2/4] iommu: Move global PASID allocation from SVA to
- core
-Thread-Index: AQHZjZxI9J7I1OJPuUGsmbdFIDhk/q9qiCNQ
-Date:   Thu, 25 May 2023 06:27:40 +0000
-Message-ID: <BN9PR11MB5276F7D03C5595F03A9A14858C469@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230523173451.2932113-1-jacob.jun.pan@linux.intel.com>
- <20230523173451.2932113-3-jacob.jun.pan@linux.intel.com>
-In-Reply-To: <20230523173451.2932113-3-jacob.jun.pan@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DM4PR11MB5520:EE_
-x-ms-office365-filtering-correlation-id: 4638e807-cd85-4241-4659-08db5ce92409
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: KlSxxFBUJvPxvb3nzfH/TGBHlFF2WMHFOtH1NcRtf9RNbwKppkLUG6ZgzUUUmF26SQ+ILb504mt4Anv2xoIrU3nuatphraMf+ayIpZqnJcU8pm32ndJc9hHDBKVQnqCdzwogbfjp7Fs2bmCNRURUnTsKuovXU6ctQLkr9TXqdAcjrP4Rop45XE3YWFPUm1sPHqrsY3DnG4FRsmZ67gfEFl1NqE9j3j96auMnLd/64oBEUBpSp+3e8saE4NjtMxLUotU/wk0eNPGGGTZZ0N/3m2R0NuYqHfnxi3HcqXcl25ao4zkzJO7LsgU/3iAB0Er2nxIKoDo6NELShBa/uli4UQK1BG4PRQkbxa/ohwk534FKS2rQegtL2zHZJucPenLtu50GNnYzaWjkG0bXK0mf3vvSTuf0uwFlvTNzYdogZaL8NzgOEVjinPez/3ERAjzArW+j23uKRTkkcj6jfkVgVjHlP4bvGMjAb26YqUTqkSMFHYgF35knkW7mJ5ebekYdmKGARmF4VEeK/UFScraNSurhro574N/3b8kHMH0thO6qyBfl5m66gpHkbJ0U3zObKtEw3Ru/W06GL1jo0WVZSQpTQVi9mJiiK1a+a6ftDLS5ZwRVPlmDkfaBtYbC2q0apLyc8r7hlGMe/l51YyPt6w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(376002)(346002)(396003)(366004)(451199021)(54906003)(110136005)(33656002)(2906002)(52536014)(5660300002)(7416002)(8676002)(41300700001)(66946007)(4326008)(66476007)(66446008)(55016003)(66556008)(64756008)(7696005)(76116006)(478600001)(71200400001)(316002)(8936002)(6506007)(26005)(86362001)(82960400001)(9686003)(921005)(122000001)(186003)(38100700002)(83380400001)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ypGpL+FS0LuzdsxGkhiHkj/1DQKzamOIqZtrMJbZEWXXXVsSz4iY4jPOHwDN?=
- =?us-ascii?Q?rqEGJeEXPUTLp6iX31XE8C+M0LtOHrxPmizLq0Nhh9uLtO9fZdQXioUx8fRt?=
- =?us-ascii?Q?BS0Rc7ndkgp4M+IM7Y5Op5t4wha0DgxGXBjyB2Xj2PIJYqgdWxJ0gBgMkAXT?=
- =?us-ascii?Q?GdOfi2SUg2mM0j7pvs8MmUcdedx9+YtqcNPBYtQRoSNA6Ia+Ei3RwbqW2+kr?=
- =?us-ascii?Q?dRxRVfRkETJhTf2RoWLDFqC0pz03wLf/cVCmMICnngJ07kpeCWH6K7m/1+Op?=
- =?us-ascii?Q?VhaoyjQr/t0AwAOrOYuhCElpjxlBkW+aVSNgfesmV01ZGHDmVIy8YxluoD9M?=
- =?us-ascii?Q?p6U0o+435aIqV2cMgn9h1G2+1ww5G2XtqECEumfQsQ/rgYQtLzVZIFJ5ZHvF?=
- =?us-ascii?Q?Sb3yXDofrOXEfsw535HBmxQkRhgUGko55VUEtVR9sfWWCmwR5QcfuB2CqgpK?=
- =?us-ascii?Q?DO4i547WCJuYicJuLb3STuir4erwJezYSOh4Bo70rfCP3T09pZvGlwLaLryF?=
- =?us-ascii?Q?Pbk6uxPKhXLF/XNs3gmITi8L6QZU+o9qtJh4GSxFkC0bjdSWrARPNRao5nts?=
- =?us-ascii?Q?sMgO2d1MT68aTtWRMm46aRreCxICCIP/WCPKrSvQkbqQyXzb7K6ZDDmO7vXq?=
- =?us-ascii?Q?336d+gkqzZfeCT1/MdkU0bQvQZmBeBiXqgb81PDKCZU9kQPN7cdVWFInSu9A?=
- =?us-ascii?Q?1s8WTuGcn/mJKr6jca03k8KJR4K8ZEzBNGfeNnFGn2wUlryFlhaCJrcmEtlt?=
- =?us-ascii?Q?LuO+GGjNeGY0LuLXkh/fBRBhidG3DxBcqu/FRfITLJjXgPQXqmrO00qv8y4w?=
- =?us-ascii?Q?7rKZS/7Z/raGTmys5CGmS/yzsTMJKnWLqY6VZ9p9LKzPdG/rBPZw0k6b76PP?=
- =?us-ascii?Q?Fib7S0+b87xPsaXgoeXOnNT9KQNwcHIVgDX6Qgm552XrGZb4t7pT7A/DFTeO?=
- =?us-ascii?Q?SzgqeKyl16ijuAXN+QK5qZrN67Er2eLeMPFjkF2Mda3VaGgMbxl4JpKRDbfc?=
- =?us-ascii?Q?iT/9F0uzp0E7XOQeLdO1LOmrpfpDT8QqelUki+lCv0IOn9IiC1/Wp+2nqk2O?=
- =?us-ascii?Q?1YUf3u+/ceUiUa4WwcJMmRcK0pzxplJDPZf5ZDBqK7kfav2f41gP/zg02tz1?=
- =?us-ascii?Q?ad2O6wSZU3brcGBCSlwYQrP0tzA9JeqXwGN/djvkjUqRhTLAxjrgnC3MfyGw?=
- =?us-ascii?Q?ElFuX/pRwUC8olWuTADjBXwQJxWssd+AZ4oAVxvmyBAePYU/TGtqYgCB3BTw?=
- =?us-ascii?Q?Js7RNHsGpjjXQfv7OQWwXLDECuWQHrqZjDUh1WqEH5ZuNGFzU4bua0oGH3gf?=
- =?us-ascii?Q?t0aD6Xbrl7O7hRSuj1qqoyK5iiIRs9vK/N2nS+15J2F3LkBO/3Px5Qy4chnv?=
- =?us-ascii?Q?4wkIwkTf1GAecd3P1+YrUvW9Q6QQvnxO8B6zoJPdA3fvZ3wUSPQ0MBRvJCyJ?=
- =?us-ascii?Q?vre0qJsNZUumZkzoW7VwOb1fv3AwGOUVkkDYc8ejxD6gcm9wgNB5tJEMnvKN?=
- =?us-ascii?Q?YH1jXVoH+0SQWEbAS6zy4vp7L5nHEXD7uj/PpbleRj6NhxIupUODk4KoDScf?=
- =?us-ascii?Q?nXMyJ8MBqQxvJhL5JmrEszmwDu2iLb/Ny3sLfiUT?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 25 May 2023 02:31:15 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19486189;
+        Wed, 24 May 2023 23:31:13 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-561bcd35117so2714027b3.3;
+        Wed, 24 May 2023 23:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684996272; x=1687588272;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8n8iOYyYZVUfxiH0/iEZbqyr+i/7ghiJPs0pDzg9C1M=;
+        b=CEG+EMXyuQ6cQIaCVG5zhC6DLoaW9Y9bYtqLKPYbsnsc//kGjybkaBY5ND1eHqCBfa
+         o5lFTInLRncn+bPWvIhJMiacT9q/WLWrhawblI7EvTZaiEKt45THhZCqqXcFJ01vVVnl
+         P7dvLt8hkWxf7RD/qimHZ4Qt6TVTRry2nzymNq6h/5p58Vkm9rAd4+ORN1TZA5P0Trmj
+         XCZvAfF8ebTLNxVA6YY2qQgg/2pj6X50DYMrNJZ+OUJQ+yxJxlYaBbt+Xr6KNiqUWjai
+         iwCmHR/s9qugPawoChN67lNCjPzowMYKDl+6lEXREEesC9ygQfKlCL9Q/RZvgZYVjVgF
+         0neA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684996272; x=1687588272;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8n8iOYyYZVUfxiH0/iEZbqyr+i/7ghiJPs0pDzg9C1M=;
+        b=Hg2belZHGQQln81K+WJrkl32UzuDm5p4FmETL5MxRnxsWjyYgYdm8QVa6WvJT2+Lar
+         n3KEMj6nz0l7Hoga2mtluNTCvXf5LPxoBJAmYYUv3cvrPFypBc2A4DT4aRBnLTVF+TAD
+         K53Tx8MF3CL5+G+gmw0ErAwbz7boqcl0oRd52JzeTBP3vqe0qPuH22vVlJxS8vcSe9Bb
+         RMPliy0pEl0ojCaVXtJU8b9lZmoAv4YqTjv9KIuIyYUooXvdQErqKazmGgARwf50Dtae
+         Ikuj+Krm2sTX7AwCjof6lPsdQ4vDl6ERGzkDvBGgmYYIOYwmZQxMW56NhjYoJ7o/5V2N
+         30OQ==
+X-Gm-Message-State: AC+VfDwvenbCyzizD+uNx3X1ATAU6wNnAkc/SOwKAc6lnmf7LlkassI/
+        0vPUyxPHovwiq/pBGFECjYPji9vNsqDXLEss7w==
+X-Google-Smtp-Source: ACHHUZ56BFLHxCC/VLM3UoUcphcEeGIxtn7J8rlrtNeupmfjXUWipsAbSTJh4ygS6L6azKUsT7BMHOimNJUHd9tW/Z0=
+X-Received: by 2002:a81:c308:0:b0:565:323d:8182 with SMTP id
+ r8-20020a81c308000000b00565323d8182mr11261506ywk.22.1684996272237; Wed, 24
+ May 2023 23:31:12 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4638e807-cd85-4241-4659-08db5ce92409
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 May 2023 06:27:40.4464
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: klzl5FcftKPOEUNgN+k1pr0xbGSZl/OvS9S1Uiw8cIky40UQl+Hmc7crh0bSe25fNbA5hEXedQ5yFNZMah6TAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5520
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <ZGuDJos8D7N0J6Z2@francesco-nb.int.toradex.com> <ZG4ISE3WXlTM3H54@debian.me>
+In-Reply-To: <ZG4ISE3WXlTM3H54@debian.me>
+From:   Johannes Pointner <h4nn35.work@gmail.com>
+Date:   Thu, 25 May 2023 08:31:00 +0200
+Message-ID: <CAHvQdo0gucr-GcWc9YFxsP4WwPUdK9GQ6w-5t9CuqqvPTv+VcA@mail.gmail.com>
+Subject: Re: DP83867 ethernet PHY regression
+To:     Francesco Dolcini <francesco@dolcini.it>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Praneeth Bajjuri <praneeth@ti.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Dan Murphy <dmurphy@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> Sent: Wednesday, May 24, 2023 1:35 AM
->=20
->  /* Allocate a PASID for the mm within range (inclusive) */
-> -static int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min,
-> ioasid_t max)
-> +static int iommu_sva_alloc_pasid(struct mm_struct *mm, struct device *de=
-v)
->  {
-> +	ioasid_t pasid;
->  	int ret =3D 0;
->=20
-> -	if (min =3D=3D IOMMU_PASID_INVALID ||
-> -	    max =3D=3D IOMMU_PASID_INVALID ||
-> -	    min =3D=3D 0 || max < min)
-> -		return -EINVAL;
-> -
->  	if (!arch_pgtable_dma_compat(mm))
->  		return -EBUSY;
->=20
->  	mutex_lock(&iommu_sva_lock);
->  	/* Is a PASID already associated with this mm? */
->  	if (mm_valid_pasid(mm)) {
-> -		if (mm->pasid < min || mm->pasid > max)
-> +		if (mm->pasid > dev->iommu->max_pasids)
+On Wed, May 24, 2023 at 3:22=E2=80=AFPM Bagas Sanjaya <bagasdotme@gmail.com=
+> wrote:
+>
+> On Mon, May 22, 2023 at 04:58:46PM +0200, Francesco Dolcini wrote:
+> > Hello all,
+> > commit da9ef50f545f ("net: phy: dp83867: perform soft reset and retain
+> > established link") introduces a regression on my TI AM62 based board.
+> >
+> > I have a working DTS with Linux TI 5.10 downstream kernel branch, while
+> > testing the DTS with v6.4-rc in preparation of sending it to the mailin=
+g
+> > list I noticed that ethernet is working only on a cold poweron.
+> >
+> > With da9ef50f545f reverted it always works.
+> >
+> > Here the DTS snippet for reference:
+> >
+> > &cpsw_port1 {
+> >       phy-handle =3D <&cpsw3g_phy0>;
+> >       phy-mode =3D "rgmii-rxid";
+> > };
+> >
+> > &cpsw3g_mdio {
+> >       assigned-clocks =3D <&k3_clks 157 20>;
+> >       assigned-clock-parents =3D <&k3_clks 157 22>;
+> >       assigned-clock-rates =3D <25000000>;
+> >
+> >       cpsw3g_phy0: ethernet-phy@0 {
+> >               compatible =3D "ethernet-phy-id2000.a231";
+> >               reg =3D <0>;
+> >               interrupt-parent =3D <&main_gpio0>;
+> >               interrupts =3D <25 IRQ_TYPE_EDGE_FALLING>;
+> >               reset-gpios =3D <&main_gpio0 17 GPIO_ACTIVE_LOW>;
+> >               reset-assert-us =3D <10>;
+> >               reset-deassert-us =3D <1000>;
+> >               ti,fifo-depth =3D <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
+> >               ti,rx-internal-delay =3D <DP83867_RGMIIDCTL_2_00_NS>;
+> >       };
+> > };
+> >
+>
+> Thanks for the regression report. I'm adding it to regzbot:
+>
+> #regzbot ^introduced: da9ef50f545f86
+> #regzbot title: TI AM62 DTS regression due to dp83867 soft reset
 
-">" should be ">=3D"
+Hello Francesco,
 
-> +ioasid_t iommu_alloc_global_pasid_dev(struct device *dev)
-> +{
-> +	int ret;
-> +	ioasid_t max;
-> +
-> +	max =3D dev->iommu->max_pasids;
-> +	ret =3D ida_alloc_range(&iommu_global_pasid_ida,
-> IOMMU_FIRST_GLOBAL_PASID, max, GFP_KERNEL);
+I had a similar issue with a patch like this, but in my case it was the DP8=
+3822.
+https://lore.kernel.org/netdev/CAHvQdo2yzJC89K74c_CZFjPydDQ5i22w36XPR5tKVv_=
+W8a2vcg@mail.gmail.com/
+I also raised the question for the commit da9ef50f545f.
+https://lore.kernel.org/lkml/CAHvQdo1U_L=3DpETmTJXjdzO+k7vNTxMyujn99Y3Ot9xA=
+yQu=3DatQ@mail.gmail.com/
 
-max is inclusive. Here should minus one.
+The problem was/is for me that the phy gets the clock from the CPU and
+the phy is already initialized in the u-boot.
+During the Linux kernel boot up there is a short amount of time where
+no clock is delivered to the phy.
+The phy didn't like this and was most of the time not usable anymore.
+The only thing that brought the phy/link back was resetting the phy
+using the phytool.
 
-otherwise looks good to me,
-
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Regards,
+Hannes
