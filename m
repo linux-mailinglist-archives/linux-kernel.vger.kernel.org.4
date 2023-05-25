@@ -2,78 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB034710FF8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E16711003
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241346AbjEYPvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S241495AbjEYPwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241186AbjEYPun (ORCPT
+        with ESMTP id S241387AbjEYPvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:50:43 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD32D10B;
-        Thu, 25 May 2023 08:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=9zPZPSkgvuyotoAA/KTUJbfPBjL1vH6aa8V0io941jQ=; b=LDOqAV1ryRWXbT+F5bkBsxp4rW
-        3yuiEn6uzp08iegx29y+n2fARDgg7gwGNPWdd5NKemk6BLw59COhjne3TSxgQlzX8uz9p/vA8cEjm
-        JGrUHYHa6cHUxZRLnwxO++Y2ZYT+dgCF1qHQlpdBarooN9iOFtu6cV1W1kNjvBA7ydYA=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q2DEL-00DuN4-UJ; Thu, 25 May 2023 17:50:21 +0200
-Date:   Thu, 25 May 2023 17:50:21 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     =?iso-8859-1?Q?Ram=F3n?= Nordin Rodriguez 
-        <ramon.nordin.rodriguez@ferroamp.se>
-Cc:     Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        horatiu.vultur@microchip.com, Woojung.Huh@microchip.com,
-        Nicolas.Ferre@microchip.com, Thorsten.Kummermehr@microchip.com
-Subject: Re: [PATCH net-next v3 2/6] net: phy: microchip_t1s: replace
- read-modify-write code with phy_modify_mmd
-Message-ID: <99ccdedb-c2c7-4187-9fb4-b2047480e097@lunn.ch>
-References: <20230524144539.62618-1-Parthiban.Veerasooran@microchip.com>
- <20230524144539.62618-3-Parthiban.Veerasooran@microchip.com>
- <ZG9/E8Am2ICEHIbr@debian>
+        Thu, 25 May 2023 11:51:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D24C0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:51:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685029873;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Dnh9Ymd0aXLnszSbYXuRCQIZeE9p62JOLrx7AW+9I7M=;
+        b=BHKXOef8H4clnsltF7EMqDwEmH53H536iDdNJ+Nmakv8dMscq0I7tPO/i1F6302zdjf8b5
+        64pu6wVHGi6A1sbZLTIesrI4IpJpNN0GSTfbZ6Q40CaysxohL0RjOMBXJjT3LD1CbdOZYL
+        01UHEwWjD7eybhd09iObEFHAe3r9wzo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-138-tBX-uUEGPaSF-e1H0150-Q-1; Thu, 25 May 2023 11:51:08 -0400
+X-MC-Unique: tBX-uUEGPaSF-e1H0150-Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E1DD8030D2;
+        Thu, 25 May 2023 15:51:07 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7180D200BA65;
+        Thu, 25 May 2023 15:51:04 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>,
+        David Hildenbrand <david@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [RFC PATCH 0/3] block: Make old dio use iov_iter_extract_pages() and page pinning
+Date:   Thu, 25 May 2023 16:50:59 +0100
+Message-Id: <20230525155102.87353-1-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZG9/E8Am2ICEHIbr@debian>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This change also invalidates most of the comment. I think this should be
-> reduced to something along the lines of:
-> 	/* HW quirk: Microchip states in the application note (AN1699) for the phy
-> 	 * that a set of read-modify-write (rmw) operations has to be performed
-> 	 * on a set of seemingly magic registers.
-> 	 * The result of these operations is just described as 'optimal performance'
-> 	 * Microchip gives no explanation as to what these mmd regs do,
-> 	 * in fact they are marked as reserved in the datasheet.*/
+Hi Christoph, David,
 
-I agree the comments should be reviewed in light of these changes.
+Since Christoph asked nicely[1] ;-), here are three patches that go on top
+of the similar patches for bio structs now in the block tree that make the
+old block direct-IO code use iov_iter_extract_pages() and page pinning.
 
-> 
-> Additionally I don't mind it if you change the tone of the comment. This was brought
-> up in the sitdown we had, where it was explained from Microchip that
-> documenting what the reg operations actually does would expose to much
-> of the internal workings of the chip.
+There are three patches:
 
-They cannot care too much, or the firmware in the PHY would do this
-where it is all hidden away.
+ (1) Make page pinning not add or remove a pin to/from the ZERO_PAGE,
+     thereby allowing the dio code to insert zero pages in the middle of
+     dealing with pinned pages.
 
-      Andrew
+ (2) Provide a function to allow an additional pin to be taken on a page we
+     already have pinned (and do nothing for the zero page).
+
+ (3) Switch direct-io.c over to using page pinning and to use
+     iov_iter_extract_pages() so that pages from non-user-backed iterators
+     aren't pinned.
+
+Note that I haven't managed to test this yet as SELinux is refusing to let
+me mount things like ext2 filesystems on account of it not having xattrs:-/
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-old-dio
+
+David
+
+Link: https://lore.kernel.org/r/ZGxfrOLZ4aN9/MvE@infradead.org/ [1]
+
+David Howells (3):
+  mm: Don't pin ZERO_PAGE in pin_user_pages()
+  mm: Provide a function to get an additional pin on a page
+  block: Use iov_iter_extract_pages() and page pinning in direct-io.c
+
+ fs/direct-io.c     | 68 ++++++++++++++++++++++++++++------------------
+ include/linux/mm.h |  1 +
+ mm/gup.c           | 54 +++++++++++++++++++++++++++++++++++-
+ 3 files changed, 95 insertions(+), 28 deletions(-)
+
