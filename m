@@ -2,180 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57E1711338
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BBF711336
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233020AbjEYSJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S241257AbjEYSIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240679AbjEYSJG (ORCPT
+        with ESMTP id S241228AbjEYSIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:09:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D620A125
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:07:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685038013;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/STt3uYUF/eA3pcGXeIfU31ic0BPqfIYsBRnvLLrcA8=;
-        b=U/5JZCPOk7HsIixAs+LgAAt1Tp04HId8HXxB5wZVJopHNKQLWC/q247KLyJy0M3dqaw5Zg
-        BjVdpxh/ICoPJevn0q+Gc75X1Ho+TPIgajRuETFwUoG6HSWg19cVv6AT3vdORrpDSe8oMM
-        lhNbOKoWC0itthdNwMQ30D4xGcpRWRI=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-85-9fP8AxyrNFCnaNGB2CS_7Q-1; Thu, 25 May 2023 14:06:52 -0400
-X-MC-Unique: 9fP8AxyrNFCnaNGB2CS_7Q-1
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3387d718f4eso44374985ab.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:06:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685038011; x=1687630011;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/STt3uYUF/eA3pcGXeIfU31ic0BPqfIYsBRnvLLrcA8=;
-        b=SBgGVvWxwAdfCnKbjL65i+zcke/K/5ipHieNee9laqDXb44gE2iRBXbKa9ua5+jt5G
-         G9xoAeaJ+AnklXt/zRFzinkceTYgpmQO2Tw3KrOqv/7RZGu9mV27OwZ3LaoezKc7fEpE
-         FVEKiXtTeROp4mXOY5OphCmAMP+5rzVaymEIfMExdH1OVj9HRyLU1TaGmwG+3TTRjUta
-         wPj52eCuPU3AwB4K1jWzNtzUPVQGCJfqVmA02aV2P/+VTiIE6IDrxTmF3PSKqRfti6gE
-         AAd6o8Qo4k5ps1XJlaYPfHGWRcnx6D3UrzrTIfUKEVNqd135xgdQvId6gBdEffcEmvX9
-         Cfkw==
-X-Gm-Message-State: AC+VfDzIFc2tkhwrqHD0LtmQRl9ZA+RMIlrjWCoFE5oIoqfNJYxNrMu/
-        HAg1wplCaHsXoUjGPnCxRHejfjM44dOePu1m+/QtpF4DrAs304jcwU5ZRkKJtAFezl+TsnuxGzD
-        KmkZoFjk1R1H7f5HWQILfrdXQ
-X-Received: by 2002:a92:cc92:0:b0:332:dd0a:c6df with SMTP id x18-20020a92cc92000000b00332dd0ac6dfmr15399945ilo.22.1685038011243;
-        Thu, 25 May 2023 11:06:51 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5f0lXAJzyZMLgAAku3HttSAaB/9PyTut5L0+yIVgNcAGnDpm9J3odo9mu57GJnqdXcMVWWew==
-X-Received: by 2002:a92:cc92:0:b0:332:dd0a:c6df with SMTP id x18-20020a92cc92000000b00332dd0ac6dfmr15399922ilo.22.1685038011006;
-        Thu, 25 May 2023 11:06:51 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id v18-20020a056638359200b004145ebbf193sm559419jal.51.2023.05.25.11.06.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 11:06:50 -0700 (PDT)
-Date:   Thu, 25 May 2023 12:06:48 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v3 00/10] Add Intel VT-d nested translation
-Message-ID: <20230525120648.70d954fb.alex.williamson@redhat.com>
-In-Reply-To: <BN9PR11MB52765FA8255FB8F8A1A6F11B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230511145110.27707-1-yi.l.liu@intel.com>
-        <BN9PR11MB52765FA8255FB8F8A1A6F11B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Thu, 25 May 2023 14:08:44 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F73E7F;
+        Thu, 25 May 2023 11:08:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=YL8OMDLHODA41rvR8ub9++8ad6Sy/4p0ql0b8s32pR4=; b=hG3IAvmXcplLQeAkZUYiIB2Lu1
+        wosgmRGyX2O7q/NhVvhVdn4UWMpVTx3FVQiRQS/1KtwYsOs5n0hJCGyE2oYr/A6fQ9tjw0DqMYe6u
+        wo51sRdOEd1/CzSnlBjTBRUtcPu7puN+EljKWHqncqQyRl+08ZIiujx2jiMbc+w6uLyfkzBQE5nNj
+        bOTepye23vwfIh9CrUmOnJFHqmZHvIzZTFq1AyEoTsj1JM3ByOxaqCGS4xGxkxCL/p7V3klhUYf3c
+        3uZrAYijmR68QIr2l2efVer9Egw/SZ/NHj23zusMNth8PgW7BYpicGg0+jWl189lWrIJospApzMMq
+        OdOTjUPA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2FNm-00HL6H-01;
+        Thu, 25 May 2023 18:08:14 +0000
+Date:   Thu, 25 May 2023 11:08:13 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>, hch@lst.de,
+        brauner@kernel.org, david@redhat.com
+Cc:     tglx@linutronix.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com, lennart@poettering.net,
+        gregkh@linuxfoundation.org, rafael@kernel.org, song@kernel.org,
+        lucas.de.marchi@gmail.com, lucas.demarchi@intel.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com
+Subject: Re: [PATCH 1/2] fs/kernel_read_file: add support for duplicate
+ detection
+Message-ID: <ZG+kDevFH6uE1I/j@bombadil.infradead.org>
+References: <20230524213620.3509138-1-mcgrof@kernel.org>
+ <20230524213620.3509138-2-mcgrof@kernel.org>
+ <CAHk-=wjahcAqLYm0ijcAVcPcQAz-UUuJ3Ubx4GzP_SJAupf=qQ@mail.gmail.com>
+ <CAHk-=wgKu=tJf1bm_dtme4Hde4zTB=_7EdgR8avsDRK4_jD+uA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wgKu=tJf1bm_dtme4Hde4zTB=_7EdgR8avsDRK4_jD+uA@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023 08:59:43 +0000
-"Tian, Kevin" <kevin.tian@intel.com> wrote:
++ fsdevel please review,
 
-> > From: Liu, Yi L <yi.l.liu@intel.com>
-> > Sent: Thursday, May 11, 2023 10:51 PM
-> >=20
-> > The first Intel platform supporting nested translation is Sapphire
-> > Rapids which, unfortunately, has a hardware errata [2] requiring special
-> > treatment. This errata happens when a stage-1 page table page (either
-> > level) is located in a stage-2 read-only region. In that case the IOMMU
-> > hardware may ignore the stage-2 RO permission and still set the A/D bit
-> > in stage-1 page table entries during page table walking.
-> >=20
-> > A flag IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 is introduced to
-> > report
-> > this errata to userspace. With that restriction the user should either
-> > disable nested translation to favor RO stage-2 mappings or ensure no
-> > RO stage-2 mapping to enable nested translation.
-> >=20
-> > Intel-iommu driver is armed with necessary checks to prevent such mix
-> > in patch10 of this series.
-> >=20
-> > Qemu currently does add RO mappings though. The vfio agent in Qemu
-> > simply maps all valid regions in the GPA address space which certainly
-> > includes RO regions e.g. vbios.
-> >=20
-> > In reality we don't know a usage relying on DMA reads from the BIOS
-> > region. Hence finding a way to allow user opt-out RO mappings in
-> > Qemu might be an acceptable tradeoff. But how to achieve it cleanly
-> > needs more discussion in Qemu community. For now we just hacked Qemu
-> > to test.
-> >  =20
->=20
-> Hi, Alex,
->=20
-> Want to touch base on your thoughts about this errata before we
-> actually go to discuss how to handle it in Qemu.
->=20
-> Overall it affects all Sapphire Rapids platforms. Fully disabling nested
-> translation in the kernel just for this rare vulnerability sounds an over=
-kill.
->=20
-> So we decide to enforce the exclusive check (RO in stage-2 vs. nesting)
-> in the kernel and expose the restriction to userspace so the VMM can
-> choose which one to enable based on its own requirement.
->=20
-> At least this looks a reasonable tradeoff to some proprietary VMMs
-> which never adds RO mappings in stage-2 today.
->=20
-> But we do want to get Qemu support nested translation on those
-> platform as the widely-used reference VMM!
->=20
-> Do you see any major oversight before pursuing such change in Qemu
-> e.g. having a way for the user to opt-out adding RO mappings in stage-2? =
-=F0=9F=98=8A
+On Wed, May 24, 2023 at 09:00:02PM -0700, Linus Torvalds wrote:
+> On Wed, May 24, 2023 at 2:52 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > This is all disgusting.
+> 
+> Bringing back the original thread, because I just sent an alternate
+> patch to Luis to test.
+> 
+> That one is also disgusting, but for different reasons: it needs some
+> polish if it works. It's a very simple patch, in that it just extends
+> our existing i_writecount and ETXTBSY logic to also have a "exclusive"
+> mode, and says that we do the module file reading in that exclusive
+> mode (so if/when udev in its incompetence tries to load the same
+> module X number of times at the same time, only one will read at a
+> time).
 
-I don't feel like I have enough info to know what common scenarios are
-going to make use of 2-stage and nested configurations and how likely a
-user is to need such an opt-out.  If it's likely that a user is going
-to encounter this configuration, an opt-out is at best a workaround.
-It's a significant support issue if a user needs to generate a failure
-in QEMU, notice and decipher any log messages that failure may have
-generated, and take action to introduce specific changes in their VM
-configuration to support a usage restriction.
+Indeed, this is the sort of gem I was hoping we could acomplish.
 
-For QEMU I might lean more towards an effort to better filter the
-mappings we create to avoid these read-only ranges that likely don't
-require DMA mappings anyway.
+> The disgusting part is mainly the hacky test for "id ==
+> READING_MODULE", and it would probably be better with some kind of
+> "exclusive flag" field for general use, but right now READING_MODULE
+> is basically that one user.
+> 
+> Luis having explained _why_ we'd want this (and honestly, it took a
+> couple of tries), I can only say that udev is horribly broken, and
+> this most definitely should be fixed in user mode. udev randomly
+> loading the same module multiple times just because it gets confused
+> is not ok.
 
-How much does this affect arbitrary userspace vfio drivers?  For
-example are there scenarios where running in a VM with a vIOMMU
-introduces nested support that's unknown to the user which now prevents
-this usage?  An example might be running an L2 guest with a version of
-QEMU that does create read-only mappings.  If necessary, how would lack
-of read-only mapping support be conveyed to those nested use cases?
-Thanks,
+At this point it would be good for for someone on the udev camp to at
+least to *try*. If the problem is the fork on udev, maybe the shmem
+could be used to share the module context to prevent duplicates.
 
-Alex
+> Any udev developer that goes "we can't fix it in user space" should be
+> ashamed of themselves. Really? Just randomly doing the same thing in
+> parallel and expecting the kernel to sort out your mess? What a crock.
+> 
+> But this *might* mitigate that udev horror. And not introduce any new
+> kernel-side horror, just a slight extension of our existing writer
+> exclusion logic to allow "full exclusive access".
 
+Yes, that expresses what is needed well and is simple enough.
+
+> (Note: it's not actually excluding other purely regular readers - but
+> it *is* excluding not just writers, but also other "special readers"
+> that want to exclude writers)
+> 
+> I'd like to point out that this patch really is completely untested.
+> It built for me, but that's all the testing it has gotten. It's
+> _small_. Tiny, even. But that "id == READING_MODULE" thing really is
+> pretty disgusting and I feel this needs more thought.
+
+>  fs/kernel_read_file.c | 6 +++++-
+>  include/linux/fs.h    | 6 ++++++
+>  2 files changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
+> index 5d826274570c..ff3e894f8cd4 100644
+> --- a/fs/kernel_read_file.c
+> +++ b/fs/kernel_read_file.c
+> @@ -48,7 +48,11 @@ ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
+>  	if (!S_ISREG(file_inode(file)->i_mode))
+>  		return -EINVAL;
+>  
+> -	ret = deny_write_access(file);
+> +	/* Module reading wants *exclusive* access to the file */
+> +	if (id == READING_MODULE)
+> +		ret = exclusive_deny_write_access(file);
+> +	else
+> +		ret = deny_write_access(file);
+>  	if (ret)
+>  		return ret;
+>  
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 21a981680856..722b42a77d51 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2566,6 +2566,12 @@ static inline int deny_write_access(struct file *file)
+>  	struct inode *inode = file_inode(file);
+>  	return atomic_dec_unless_positive(&inode->i_writecount) ? 0 : -ETXTBSY;
+>  }
+> +static inline int exclusive_deny_write_access(struct file *file)
+> +{
+> +	int old = 0;
+> +	struct inode *inode = file_inode(file);
+> +	return atomic_try_cmpxchg(&inode->i_writecount, &old, -1) ? 0 : -ETXTBSY;
+> +}
+>  static inline void put_write_access(struct inode * inode)
+>  {
+>  	atomic_dec(&inode->i_writecount);
+
+Certainly on the track where I wish we could go. Now this goes tested.
+On 255 cores:
+
+Before:                                                                          
+                                                                                 
+vagrant@kmod ~ $ sudo systemd-analyze                                            
+Startup finished in 41.653s (kernel) + 44.305s (userspace) = 1min 25.958s        
+graphical.target reached after 44.178s in userspace.  
+
+root@kmod ~ # grep "Virtual mem wasted bytes" /sys/kernel/debug/modules/stats    
+ Virtual mem wasted bytes       1949006968 
+
+                                                                                 
+; 1949006968/1024/1024/1024                                                      
+        ~1.81515418738126754761                                                  
+                                                                                 
+So ~1.8 GiB... of vmalloc space wasted during boot.
+
+After:
+
+systemd-analyze 
+Startup finished in 24.438s (kernel) + 41.278s (userspace) = 1min 5.717s 
+graphical.target reached after 41.154s in userspace.
+
+root@kmod ~ # grep "Virtual mem wasted bytes" /sys/kernel/debug/modules/stats
+ Virtual mem wasted bytes       354413398
+
+So still 337.99 MiB of vmalloc space wasted during boot due to
+duplicates. The reason is the exclusive_deny_write_access() must be
+kept during the life of the module otherwise as soon as it is done
+others can still race to load after and fail later after it sees the
+module is already loaded. It sounds crazy to think that such races
+exist because that means userspace didn't see the module loaded yet
+and still tried finit_module() but the stats reveal that's the
+case.
+
+So with two other hunks added (2nd and 4th), this now matches parity with
+my patch, not suggesting this is right, just demonstrating how this
+could be resolved with this. We could also just have a helper which lets
+the module code allow_write_access() at the end of its use of the fd
+(failure to load or module is removed).
+
+diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
+index 5d826274570c..ff5b338a288b 100644
+--- a/fs/kernel_read_file.c
++++ b/fs/kernel_read_file.c
+@@ -48,7 +48,11 @@ ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
+ 	if (!S_ISREG(file_inode(file)->i_mode))
+ 		return -EINVAL;
+ 
+-	ret = deny_write_access(file);
++	/* Module reading wants *exclusive* access to the file */
++	if (id == READING_MODULE)
++		ret = exclusive_deny_write_access(file);
++	else
++		ret = deny_write_access(file);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -119,7 +123,8 @@ ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
+ 	}
+ 
+ out:
+-	allow_write_access(file);
++	if (id != READING_MODULE)
++		allow_write_access(file);
+ 	return ret == 0 ? copied : ret;
+ }
+ EXPORT_SYMBOL_GPL(kernel_read_file);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 21a981680856..722b42a77d51 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2566,6 +2566,12 @@ static inline int deny_write_access(struct file *file)
+ 	struct inode *inode = file_inode(file);
+ 	return atomic_dec_unless_positive(&inode->i_writecount) ? 0 : -ETXTBSY;
+ }
++static inline int exclusive_deny_write_access(struct file *file)
++{
++	int old = 0;
++	struct inode *inode = file_inode(file);
++	return atomic_try_cmpxchg(&inode->i_writecount, &old, -1) ? 0 : -ETXTBSY;
++}
+ static inline void put_write_access(struct inode * inode)
+ {
+ 	atomic_dec(&inode->i_writecount);
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 044aa2c9e3cb..88aaada929b1 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3078,8 +3079,10 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+ 	len = kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
+ 				       READING_MODULE);
+ 	if (len < 0) {
+-		mod_stat_inc(&failed_kreads);
+-		mod_stat_add_long(len, &invalid_kread_bytes);
++		if (len != -ETXTBSY) {
++			mod_stat_inc(&failed_kreads);
++			mod_stat_add_long(len, &invalid_kread_bytes);
++		}
+ 		return len;
+ 	}
+ 
