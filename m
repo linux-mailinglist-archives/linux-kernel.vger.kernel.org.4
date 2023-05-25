@@ -2,159 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCD47107E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 966D37107E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240440AbjEYItd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S240150AbjEYIuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbjEYItb (ORCPT
+        with ESMTP id S232938AbjEYIus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:49:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8713198;
-        Thu, 25 May 2023 01:49:30 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7313C6601F25;
-        Thu, 25 May 2023 09:49:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685004569;
-        bh=EtbcIEsusRHFZTgu8Dex+fRPFWvkGsCdZCUXAljl5dA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R3Kqq201hrVo9BPurnMzA4ezjYaxoOObvi2g1URGN83ygYowisAzheTdUdqoN8r5n
-         TSPVNXvf2IqTDg6Ua32jPMj5mo3fBXv6Jzp00dpCYtRkUZIBFKRI6Z95fFDvcq9zyB
-         Qmf4i6a4nRyF4Lo8EjOvSFAi7xS9fItyrAASqEHumC9d+L+2iMqekjSs9WuiEvzVgr
-         kqPO/q7IWRwlb7SHqcUp/Q775FHR3XSGYEdGLrJGcoMiI0kG0mYN6GtVrQxhaJszeY
-         PEVm7f/e/4fGzFf7IIwz7zGZD1F44ZMszNcIUEl1DVmOHxBiPP4hdPjndP8BOQ7DIl
-         oElYLmw5vShYA==
-Message-ID: <b80ceed1-0c5a-0875-dab0-309e2318d88e@collabora.com>
-Date:   Thu, 25 May 2023 10:49:26 +0200
+        Thu, 25 May 2023 04:50:48 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7C0A3;
+        Thu, 25 May 2023 01:50:47 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P72FvX025896;
+        Thu, 25 May 2023 08:50:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Af1TxvjbZ8mo/wWa1yqPCR91AO3VbXIHIgj9vrTOVxU=;
+ b=j/cY1KVAIcEMbpI4t3jA/Q21H7hK8IGpPOHjUokbv3SMsWOXCeXjYh1gAmQucIW72ppT
+ fSB4XU1RXGbTQMDLAVKNIJYzRtL806oIuD29PsbyHk08SSCNYyEzQPENaAz9DzwqUK/f
+ 8fghlI61RC+Ex4kzq5n6qO3IEOZ81G56anwrXgbphQMB8aeKz9/v7qkvYmeGNkj8/wSt
+ FqMVY2dkZqXpCAwKSWx1NbXN6U43jz7CrmfK0dF42nBn7hDCCHjpvGRt4ZPAHQqrjCCS
+ VoZDLbs3M44GDHWClKyUvV+Uyk66+ir/lSGFWY8WfI43QgXzz9ZcQ3borg1iTCB7pff2 9Q== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsywfrjx7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 08:50:43 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34P8ogkk014918
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 08:50:42 GMT
+Received: from [10.217.219.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
+ 2023 01:50:40 -0700
+Message-ID: <fbfc6917-d938-a055-2f58-e70a6d454ea2@quicinc.com>
+Date:   Thu, 25 May 2023 14:20:37 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v8 07/10] arm64: dts: mediatek: add ethernet support for
- mt8365-evk
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
 Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>
-References: <20230203-evk-board-support-v8-0-7019f3fd0adf@baylibre.com>
- <20230203-evk-board-support-v8-7-7019f3fd0adf@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230203-evk-board-support-v8-7-7019f3fd0adf@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1685004036-17273-1-git-send-email-quic_prashk@quicinc.com>
+ <2117b7c4-d164-de17-5a2d-ef3d51304983@collabora.com>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <2117b7c4-d164-de17-5a2d-ef3d51304983@collabora.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: w6MVAwqBWVkpKSBADPVNMnLINSVx3KdD
+X-Proofpoint-ORIG-GUID: w6MVAwqBWVkpKSBADPVNMnLINSVx3KdD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_04,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ bulkscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
+ malwarescore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250073
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/05/23 10:33, Alexandre Mergnat ha scritto:
-> - Enable "vibr" and "vsim2" regulators to power the ethernet chip.
+
+
+On 25-05-23 02:15 pm, AngeloGioacchino Del Regno wrote:
+> Il 25/05/23 10:40, Prashanth K ha scritto:
+>> Currently if we bootup a device without cable connected, then
+>> usb-conn-gpio won't call set_role() since last_role is same as
+>> current role. This happens because during probe last_role gets
+>> initialised to zero.
+>>
+>> To avoid this, added a new constant in enum usb_role, last_role
+>> is set to USB_ROLE_UNKNOWN before performing initial detection.
+>>
+>> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection 
+>> detection driver")
+>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
 > 
-> Tested-by: Kevin Hilman <khilman@baylibre.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 48 +++++++++++++++++++++++++++++
->   1 file changed, 48 insertions(+)
+> I'm sorry to make a call for v4, but you have to mention that you're 
+> touching
+> the cdns3 driver in the commit description, if you want to keep the entire
+> change set in one commit... otherwise you'll have to split it in two, 
+> one adding
+> the new entry to the enum and fixing cdns3; the other setting the last 
+> role to
+> unknown in usb-conn-gpio.c.
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> index 1a5769c397c2..86524cbf4354 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> @@ -88,6 +88,29 @@ optee_reserved: optee@43200000 {
->   	};
->   };
->   
-> +&ethernet {
-> +	pinctrl-0 = <&ethernet_pins>;
-> +	pinctrl-names = "default";
-> +	phy-handle = <&eth_phy>;
-> +	phy-mode = "rmii";
-> +	/*
-> +	 * Ethernet and HDMI (DSI0) are sharing pins.
-> +	 * Only one can be enabled at a time and require the physical switch
-> +	 * SW2101 to be set on LAN position
-> +	 * mt6357_vibr_reg and mt6357_vsim2_reg are needed to supply ethernet
-> +	 */
-> +	status = "disabled";
-
-Ouh, that's sad :-(
-
-...but you're left with no other choice, so I agree with providing at least
-the full node in case anyone wants to actually enable it by flipping the
-switch on the board, so you get my
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Cheers!
-
-> +
-> +	mdio {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		eth_phy: ethernet-phy@0 {
-> +			reg = <0>;
-> +		};
-> +	};
-> +};
-> +
->   &i2c0 {
->   	clock-frequency = <100000>;
->   	pinctrl-0 = <&i2c0_pins>;
-> @@ -138,6 +161,31 @@ &mt6357_pmic {
->   };
->   
->   &pio {
-> +	ethernet_pins: ethernet-pins {
-> +		phy_reset_pins {
-> +			pinmux = <MT8365_PIN_133_TDM_TX_DATA1__FUNC_GPIO133>;
-> +		};
-> +
-> +		rmii_pins {
-> +			pinmux = <MT8365_PIN_0_GPIO0__FUNC_EXT_TXD0>,
-> +				 <MT8365_PIN_1_GPIO1__FUNC_EXT_TXD1>,
-> +				 <MT8365_PIN_2_GPIO2__FUNC_EXT_TXD2>,
-> +				 <MT8365_PIN_3_GPIO3__FUNC_EXT_TXD3>,
-> +				 <MT8365_PIN_4_GPIO4__FUNC_EXT_TXC>,
-> +				 <MT8365_PIN_5_GPIO5__FUNC_EXT_RXER>,
-> +				 <MT8365_PIN_6_GPIO6__FUNC_EXT_RXC>,
-> +				 <MT8365_PIN_7_GPIO7__FUNC_EXT_RXDV>,
-> +				 <MT8365_PIN_8_GPIO8__FUNC_EXT_RXD0>,
-> +				 <MT8365_PIN_9_GPIO9__FUNC_EXT_RXD1>,
-> +				 <MT8365_PIN_10_GPIO10__FUNC_EXT_RXD2>,
-> +				 <MT8365_PIN_11_GPIO11__FUNC_EXT_RXD3>,
-> +				 <MT8365_PIN_12_GPIO12__FUNC_EXT_TXEN>,
-> +				 <MT8365_PIN_13_GPIO13__FUNC_EXT_COL>,
-> +				 <MT8365_PIN_14_GPIO14__FUNC_EXT_MDIO>,
-> +				 <MT8365_PIN_15_GPIO15__FUNC_EXT_MDC>;
-> +		};
-> +	};
-> +
->   	gpio_keys: gpio-keys-pins {
->   		pins {
->   			pinmux = <MT8365_PIN_24_KPCOL0__FUNC_KPCOL0>;
+> I can suggest text for keeping that in one commit, but the choice is yours;
 > 
+> "While at it, also handle default case for the usb_role switch
+> in cdns3 to avoid build warnings."
+> 
+Yea that's right, will add it in next version. Thanks for the suggestion.
 
+Regards,
+Prashanth K
