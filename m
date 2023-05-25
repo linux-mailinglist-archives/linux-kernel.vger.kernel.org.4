@@ -2,96 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FECF71173D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7118C7117B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240325AbjEYTUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 15:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        id S242117AbjEYTwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 15:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242930AbjEYTTp (ORCPT
+        with ESMTP id S242131AbjEYTwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 15:19:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C781704;
-        Thu, 25 May 2023 12:14:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53F2F649B8;
-        Thu, 25 May 2023 18:46:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E701CC433EF;
-        Thu, 25 May 2023 18:46:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040377;
-        bh=3PDmc6L7A6mgTOux6TLm02hoP0ttjWOtM1RGrNSIS7I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OPau+CB9hxqHaS+0tlgU9Z7bOEPHjI0DWJ0Gl/eCm45bTLVYyM4G/8pKVlzljyDwQ
-         QjGQeuVs8yYmwrONR0kxjPVutLlCxCYfbw84E+rGJMG3XEVUwAVm7tNEoeqo7/pGOy
-         P0fa2uJy66JBHYjHPKtV05QTAPbtt3vJWHGi90XEvpWzq6RBhLPV5CgKqOPa0g4Z2c
-         p38g+FC7PFCuAMP+jgPaqmW9poOXovCr3oWxf+uhRwhHvWcH5F48cKJ+2evEiIJrQM
-         9Y67DdCdqTaV9MF62102U2lzSRI7Joiof6xdhig1J9leG0LP6dBRO/NR2PlDN+3E/k
-         0EByGL04/05nQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, andrew@lunn.ch,
-        hkallweit1@gmail.com, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 20/20] mdio_bus: unhide mdio_bus_init prototype
-Date:   Thu, 25 May 2023 14:45:16 -0400
-Message-Id: <20230525184520.2004878-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230525184520.2004878-1-sashal@kernel.org>
-References: <20230525184520.2004878-1-sashal@kernel.org>
+        Thu, 25 May 2023 15:52:11 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB88186;
+        Thu, 25 May 2023 12:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=D7NQmRuqfIsEVR83BVLhsz0LP5kJifZlCo3sFrhILyA=; b=RbmZ2COJ0hOjRehG14J87kDkCi
+        MHCwALzarsaHHrZifIhnzjBtS5ICNh0Dpx01/0rzkQt5UHRlDdncz2xyvRRg4hiCtzr3dZ5/aQP6g
+        TCOlcRlB7CRYm/N7wHEHzGG+3tpBPmVxPLSkKrgtjKnr87P+VrpYfMn4fYFcShV+DM9jxv2XrhrFr
+        EQ7XVYTflbx7l3tiuzgd1gzn5uo7n71cHoSAunqtJlwJaEW7IVWFIQNBk57qUNaUp0Y+easuXgzme
+        zFP/KaSD2jxjzd871VCfrlgs+iTR26KC1DVufH+43lQ1cekF9VoVwx9QmRZ4+OMn4yH8WWWDZA3+x
+        CKtoNQdw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2Fxt-00HTHf-00;
+        Thu, 25 May 2023 18:45:33 +0000
+Date:   Thu, 25 May 2023 11:45:32 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     keescook@chromium.org, yzaikin@google.com, ebiederm@xmission.com,
+        arnd@arndb.de, bp@alien8.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        luto@kernel.org, peterz@infradead.org, brgerst@gmail.com,
+        christophe.jaillet@wanadoo.fr, kirill.shutemov@linux.intel.com,
+        jroedel@suse.de, j.granados@samsung.com, akpm@linux-foundation.org,
+        willy@infradead.org, linux-parisc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] signal: move show_unhandled_signals sysctl to its
+ own file
+Message-ID: <ZG+szFEwbwh6lB9I@bombadil.infradead.org>
+References: <20230522210814.1919325-1-mcgrof@kernel.org>
+ <20230522210814.1919325-3-mcgrof@kernel.org>
+ <d0fe7a6f-8cd9-0b81-758a-f3b444e74bab@intel.com>
+ <ZG29HWE9NWn56hTg@bombadil.infradead.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZG29HWE9NWn56hTg@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Wed, May 24, 2023 at 12:30:37AM -0700, Luis Chamberlain wrote:
+> Let me know!
 
-[ Upstream commit 2e9f8ab68f42b059e80db71266c1675c07c664bd ]
+Re-poke. I know, it's just been a day :P
 
-mdio_bus_init() is either used as a local module_init() entry,
-or it gets called in phy_device.c. In the former case, there
-is no declaration, which causes a warning:
-
-drivers/net/phy/mdio_bus.c:1371:12: error: no previous prototype for 'mdio_bus_init' [-Werror=missing-prototypes]
-
-Remove the #ifdef around the declaration to avoid the warning..
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/r/20230516194625.549249-4-arnd@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/linux/phy.h | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 8b6850707e629..1c1cc2ec0a7fc 100644
---- a/include/linux/phy.h
-+++ b/include/linux/phy.h
-@@ -940,10 +940,8 @@ int phy_ethtool_set_link_ksettings(struct net_device *ndev,
- 				   const struct ethtool_link_ksettings *cmd);
- int phy_ethtool_nway_reset(struct net_device *ndev);
- 
--#if IS_ENABLED(CONFIG_PHYLIB)
- int __init mdio_bus_init(void);
- void mdio_bus_exit(void);
--#endif
- 
- extern struct bus_type mdio_bus_type;
- 
--- 
-2.39.2
-
+  Luis
