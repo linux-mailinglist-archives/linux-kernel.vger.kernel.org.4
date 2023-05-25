@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3652711A7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75AD711A82
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236068AbjEYXSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 19:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S229526AbjEYXSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 19:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234005AbjEYXSI (ORCPT
+        with ESMTP id S241149AbjEYXSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 19:18:08 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BA8119
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:18:05 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2af2db78b38so1069301fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:18:05 -0700 (PDT)
+        Thu, 25 May 2023 19:18:25 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F2DE56
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:18:21 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f3a9ad31dbso63516e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:18:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685056684; x=1687648684;
+        d=linaro.org; s=google; t=1685056699; x=1687648699;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zTB/pmwG63wu1XX6OpijzuyVDCKTeiG0sKpJUUaHack=;
-        b=eaTbSaX7bvGX6VR5Tc7SMkP/yhL033FJ4CvGLMJjN7VPGwS7VxfOuzjDNl4l73fqjb
-         CZIpDOuHeTSHx0sNliURXDgwldbWJ2kJgmjjEHvdSxrmbpl17ViOYlCJD0fBBfnjjw8x
-         IIIMYTELX4K5OawLIpPXrRfcGDimQcO7aJ27H29HsZW3l5+ema3WdJq9jTnSI09KtHRd
-         wSIAA94pwgUrETtZxqHz5gELRjG/g6fy0WjsV7h5mHSVv2KII03Gw6MXel4yNAL9HhhK
-         0RGwi3q3mxkhj0sQg5QraUHknQmWDe9EVJyOj+eJiKVQEZTm0kA7mBdAv9peBWJ5D9Ag
-         4RrQ==
+        bh=nVpMlft04baQe3FGBQ1uPFAK60NKjDWRg8PgqN8ZkKs=;
+        b=GWTOtMpfSAgViyuzSRA6mbYzXhGs2FqqTAwIzKk3x37OoFGbj85vDXPTmX+X0nyUPj
+         lG1Fhx76fjwSnGCNkjGDFbwZWQzxlot5ZPq2QY+XP7yxKv+C6/LY4US57qZgGBn+RJZ4
+         CVWdzs0wvNq8SCL04pSVU9U2QvGY3cLy21bZakUGE299pqo26qW40fk0z1F5Mb0I2Cev
+         5V/EoO9gAIuMbozA/5zAWCi8KYlQOv5YvyrecOuybW2ze6N7yRHa+ge0NWYZJCRnyz14
+         wvgY/Qo55yWcXyOTKZIrc6eqQa1xrO+v8yHLgvlWJeh0xMSuwb1r8GLEn6PoJTi6ha97
+         NF6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685056684; x=1687648684;
+        d=1e100.net; s=20221208; t=1685056699; x=1687648699;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zTB/pmwG63wu1XX6OpijzuyVDCKTeiG0sKpJUUaHack=;
-        b=M+vk1+rKdVFughns9g+oe28nDWmnQ7ZssUs+cmLkwv0d+aa7T9507gDf43I2fyfPlR
-         +BnXHFlXJbx8qsSXShg33ZaQrBqtZejmdxh/JNkUE1xRE5dpzbIH+U/CjVE7eCcPtjcx
-         FCgRthdlNHFUA4JbzEpkUkz68PFBqQul/E61w5gUycvTxg8A5i/mXJCQV42Zi2tpgcBP
-         OmfQXZj39QP92BdVcMO2cmBvw5njrPMUrdaQ9RttlY3n3f6fxOmmWuUglOniVnKlalrc
-         Npfd0pl7+JySn5ekG1Sp+5CEefDYi/ZOS23UTl6yw94XSx9o6m+VLsVdzpE9XECm5dxH
-         KaPw==
-X-Gm-Message-State: AC+VfDxPS7rnOt11RYNGN/qMM7wQoLlcLY5P+KoCTeQGpqmwQY6MPhAD
-        2ANI7hgn1S1QvgdRJr9eWXnu3g==
-X-Google-Smtp-Source: ACHHUZ5ynURV3MRz9L/oak0grldRs3wItPobCfex/UfUcG6ZZMYa1t67R3IhB+PNazHVZ+ohffaBgA==
-X-Received: by 2002:ac2:443b:0:b0:4f4:c909:cdda with SMTP id w27-20020ac2443b000000b004f4c909cddamr1926602lfl.46.1685056684120;
-        Thu, 25 May 2023 16:18:04 -0700 (PDT)
+        bh=nVpMlft04baQe3FGBQ1uPFAK60NKjDWRg8PgqN8ZkKs=;
+        b=N6WTUua30wN1/+5xk4mwauxcDcZlkmHf4YchoWnAzqP1wlPJiqWFIJMmHbKuuqVxr2
+         nBkj5vBQNywqF+hpdwlBJgMd4BAbGHNSqBMapLDGNuL3mp35UVq9O1xutCN4GjwGVj83
+         bs8afmbtPB+HtdL2eI0zYXOVcs4/sNEYAeyxHKBbYcFikePax7vJajMS7CMbOuGNl2YR
+         Lj0VmDEIvZ1ZShtNQL6DTIG5DumBQVPyFMLVGBAkRIv2fpPp5R5W3fW9HVfk3x3XQFYP
+         +7Cn5DR6NTHiWVGA4cQaHe1PsG2SSQOkfBegTV+bHHDOZvSZo14eks14Inqful/310yz
+         xvsA==
+X-Gm-Message-State: AC+VfDxNywZxpbgeaPvx+NcqeNT250KcywLnzvwT0uoIX1XhBkLsMfsh
+        FHdoXXV5S56nLSepWg4cEW6Zmw==
+X-Google-Smtp-Source: ACHHUZ42t+kPWopue5lTtE9aHyixf26vmAWbHIBbKEH6AO1badc8c70TkbKv9vO1kH8MBf6kPbL44A==
+X-Received: by 2002:a05:6512:410:b0:4f4:d805:cf62 with SMTP id u16-20020a056512041000b004f4d805cf62mr950794lfk.5.1685056699552;
+        Thu, 25 May 2023 16:18:19 -0700 (PDT)
 Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id y6-20020a197506000000b004f2532cfbc1sm374041lfe.81.2023.05.25.16.18.03
+        by smtp.gmail.com with ESMTPSA id t9-20020ac243a9000000b004edc485f86bsm366766lfl.239.2023.05.25.16.18.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 16:18:03 -0700 (PDT)
-Message-ID: <5382b518-7691-ee70-c522-9ce0b14d60c1@linaro.org>
-Date:   Fri, 26 May 2023 01:18:02 +0200
+        Thu, 25 May 2023 16:18:19 -0700 (PDT)
+Message-ID: <a196330e-9d70-1bbd-6fae-7d60eb06e478@linaro.org>
+Date:   Fri, 26 May 2023 01:18:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v4 5/5] cpufreq: qcom-nvmem: use helper to get SMEM SoC ID
+Subject: Re: [PATCH v4 3/5] soc: qcom: smem: introduce qcom_smem_get_soc_id()
 Content-Language: en-US
 To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
         andersson@kernel.org, ilia.lin@kernel.org, rafael@kernel.org,
@@ -63,15 +63,15 @@ To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
 Cc:     ansuelsmth@gmail.com
 References: <20230525210214.78235-1-robimarko@gmail.com>
- <20230525210214.78235-5-robimarko@gmail.com>
+ <20230525210214.78235-3-robimarko@gmail.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230525210214.78235-5-robimarko@gmail.com>
+In-Reply-To: <20230525210214.78235-3-robimarko@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,124 +81,83 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 25.05.2023 23:02, Robert Marko wrote:
-> Now that SMEM exports a helper to get the SMEM SoC ID lets utilize it.
-> Currently qcom_cpufreq_get_msm_id() is encoding the returned SMEM SoC ID
-> into an enum, however there is no reason to do so and we can just match
-> directly on the SMEM SoC ID as returned by qcom_smem_get_soc_id().
+> Introduce a helper to return the SoC SMEM ID, which is used to identify the
+> exact SoC model as there may be differences in the same SoC family.
+> 
+> Currently, cpufreq-nvmem does this completely in the driver and there has
+> been more interest expresed for other drivers to use this information so
+> lets expose a common helper to prevent redoing it in individual drivers
+> since this field is present on every SMEM table version.
 > 
 > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
 > Changes in v4:
-> * Adapt to name change to qcom_smem_get_soc_id()
+> * Change helper name to qcom_smem_get_soc_id()
+> * Remove len and just pass NULL, that is sufficient here
 > 
 > Changes in v3:
-> * Adapt to helper using argument now
-> 
-> Changes in v2:
-> * Utilize helper exported by SMEM instead of refactoring
-> qcom_cpufreq_get_msm_id()
+> * Change export to EXPORT_SYMBOL_GPL
+> * Use an argument for returning SoC ID
+> * Update kerneldoc
 > ---
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 56 +++++-----------------------
->  1 file changed, 10 insertions(+), 46 deletions(-)
+>  drivers/soc/qcom/smem.c       | 23 +++++++++++++++++++++++
+>  include/linux/soc/qcom/smem.h |  2 ++
+>  2 files changed, 25 insertions(+)
 > 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index 60e99be2d3db..a88b6fe5db50 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -29,16 +29,8 @@
+> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+> index bc98520c4969..78cf79ea4924 100644
+> --- a/drivers/soc/qcom/smem.c
+> +++ b/drivers/soc/qcom/smem.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/sizes.h>
 >  #include <linux/slab.h>
 >  #include <linux/soc/qcom/smem.h>
+> +#include <linux/soc/qcom/socinfo.h>
 >  
-> -#define MSM_ID_SMEM	137
-> -
->  #include <dt-bindings/arm/qcom,ids.h>
->  
-> -enum _msm8996_version {
-> -	MSM8996_V3,
-> -	MSM8996_SG,
-> -	NUM_OF_MSM8996_VERSIONS,
-> -};
-> -
->  struct qcom_cpufreq_drv;
->  
->  struct qcom_cpufreq_match_data {
-> @@ -135,60 +127,32 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
->  	dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
+>  /*
+>   * The Qualcomm shared memory system is a allocate only heap structure that
+> @@ -772,6 +773,28 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
 >  }
+>  EXPORT_SYMBOL_GPL(qcom_smem_virt_to_phys);
 >  
-> -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
-> -{
-> -	size_t len;
-> -	u32 *msm_id;
-> -	enum _msm8996_version version;
-> -
-> -	msm_id = qcom_smem_get(QCOM_SMEM_HOST_ANY, MSM_ID_SMEM, &len);
-> -	if (IS_ERR(msm_id))
-> -		return NUM_OF_MSM8996_VERSIONS;
-> -
-> -	/* The first 4 bytes are format, next to them is the actual msm-id */
-> -	msm_id++;
-> -
-> -	switch ((enum _msm_id)*msm_id) {
-> -	case QCOM_ID_MSM8996:
-> -	case QCOM_ID_APQ8096:
-> -		version = MSM8996_V3;
-> -		break;
-> -	case QCOM_ID_MSM8996SG:
-> -	case QCOM_ID_APQ8096SG:
-> -		version = MSM8996_SG;
-> -		break;
-> -	default:
-> -		version = NUM_OF_MSM8996_VERSIONS;
-> -	}
-> -
-> -	return version;
-> -}
-> -
->  static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
->  					  struct nvmem_cell *speedbin_nvmem,
->  					  char **pvs_name,
->  					  struct qcom_cpufreq_drv *drv)
->  {
->  	size_t len;
-> +	u32 msm_id;
-__le32
-
->  	u8 *speedbin;
-> -	enum _msm8996_version msm8996_version;
-> +	int ret;
->  	*pvs_name = NULL;
->  
-> -	msm8996_version = qcom_cpufreq_get_msm_id();
-> -	if (NUM_OF_MSM8996_VERSIONS == msm8996_version) {
-> -		dev_err(cpu_dev, "Not Snapdragon 820/821!");
-> -		return -ENODEV;
-> -	}
-> +	ret = qcom_smem_get_soc_id(&msm_id);
-> +	if (ret)
-> +		return ret;
-Now since it can return a PTR_ERR, you should check for IS_ERR
-and return ERR_PTR if that happens
+> +/**
+> + * qcom_smem_get_soc_id() - return the SoC ID
+> + * @id:	On success, we return the SoC ID here.
+> + *
+> + * Look up SoC ID from HW/SW build ID and return it.
+> + *
+> + * Return: 0 on success, negative errno on failure.
+> + */
+> +int qcom_smem_get_soc_id(u32 *id)
+__le32 *id
 
 LGTM otherwise!
 
 Konrad
+> +{
+> +	struct socinfo *info;
+> +
+> +	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, NULL);
+> +	if (IS_ERR(info))
+> +		return PTR_ERR(info);
+> +
+> +	*id = info->id;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_smem_get_soc_id);
+> +
+>  static int qcom_smem_get_sbl_version(struct qcom_smem *smem)
+>  {
+>  	struct smem_header *header;
+> diff --git a/include/linux/soc/qcom/smem.h b/include/linux/soc/qcom/smem.h
+> index 86e1b358688a..223db6a9c733 100644
+> --- a/include/linux/soc/qcom/smem.h
+> +++ b/include/linux/soc/qcom/smem.h
+> @@ -11,4 +11,6 @@ int qcom_smem_get_free_space(unsigned host);
 >  
->  	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
->  	if (IS_ERR(speedbin))
->  		return PTR_ERR(speedbin);
+>  phys_addr_t qcom_smem_virt_to_phys(void *p);
 >  
-> -	switch (msm8996_version) {
-> -	case MSM8996_V3:
-> +	switch (msm_id) {
-> +	case QCOM_ID_MSM8996:
-> +	case QCOM_ID_APQ8096:
->  		drv->versions = 1 << (unsigned int)(*speedbin);
->  		break;
-> -	case MSM8996_SG:
-> +	case QCOM_ID_MSM8996SG:
-> +	case QCOM_ID_APQ8096SG:
->  		drv->versions = 1 << ((unsigned int)(*speedbin) + 4);
->  		break;
->  	default:
+> +int qcom_smem_get_soc_id(u32 *id);
+> +
+>  #endif
