@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B2C71069D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321047106B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237715AbjEYHqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 03:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S238377AbjEYHtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 03:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239069AbjEYHqM (ORCPT
+        with ESMTP id S239192AbjEYHte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 03:46:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36901BF
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685000724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=moqm2xMtvs1QXIlu4uTeryrCfPMIkNPE51IfYtbbbXc=;
-        b=eRvdO5twmhV7fLf8r82TH11k5aLsV/LpxyjUw8foeaL+41+LuOm/c9rvVseq72dON/QCP9
-        qV2pkNJTn0Jt2zswnO7oCfy8X4rhFjx7XZmgcnQct2Fsu1e0DuPqDXlsUs+4rsfYHxPYWl
-        NRW+hYBqD0wFOThbFSaW1T+hM48+X88=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-617-1UDXCO2yNqG4UyyWQ1bdYw-1; Thu, 25 May 2023 03:45:22 -0400
-X-MC-Unique: 1UDXCO2yNqG4UyyWQ1bdYw-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-62380ffb993so10955206d6.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:45:22 -0700 (PDT)
+        Thu, 25 May 2023 03:49:34 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111111BF
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:49:32 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f3b9755961so2040003e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685000970; x=1687592970;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=V1XvSVODDEA3TsNr4/6rD8fONkRZXOKHxfaQzrvBuWE=;
+        b=Rb//MjVriA87cNvKfaQfy3k9aTXfLTkqIAAMtLnZJCSLwvy103u/pNn02HRykZaUUX
+         1vsVPWhDqU+OqtlMaTmprHYMgDKPpfCWb49z0qLWfQH45DLgWjAORZw3oExhyKG1IHSI
+         J4fXuhJ8dMvB8XOb1vj/I6nA1/TKUznn+jJgljKwgqIUQLmIgBOCFrrgRiCVQwJ4digD
+         b7vxocdF8bhn3v9RlkTFXzfH0YUs2UwotoGSt/gWnNoblBQfExdUtRP6J2BqCTLKf9+Z
+         B5zPjKK+Mpt7ur40CI3YTFTWHXU9rIDR9C+hGWSfoUJKIjtUIV9NT7yndiav3lObKCV5
+         xEtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685000722; x=1687592722;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1685000970; x=1687592970;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=moqm2xMtvs1QXIlu4uTeryrCfPMIkNPE51IfYtbbbXc=;
-        b=SSChtS0g2V7APmC6VlWFTkoZT55AYtGgi30e+EuMMuIVbgpXyj5JvZrRnU4QuO40dS
-         X5pxyuXWvkRGvrDaGNkybp7wl9b3szbVgzaQqiAX2ovEoziDyHt/pQuPg0uePnsKwFd+
-         YZPWBbFYC+wh8QoKFgNzy2xkj7WPbYIoAUKv8Q1hT8C7UEl45etgKTExCVI01Gh/rnrs
-         LtwuciB9Y5I7/TG/E8+GYqxivGFrnATLjWzCOdg0SV9WV88h9fz+xPXShHQSPN/GX7J7
-         LAuH10rXHZzFw0i3Q/dg9SJC0Mw19oknIw+nZ5AKot7fGIj5V81fhfH5JVO3rIlPL3XQ
-         e5+A==
-X-Gm-Message-State: AC+VfDwU4MaWpRl0SVPKsX7FYMTFQhJ5+aXPvuq+F48rKSM2rQfreFGD
-        sFa0TqPtEMa6hMOjuVfmFKBsRxFzAKaoQqSf9OZ0A59DdnW+KOCad17fwU8UdeVvsB7V+CqLTeR
-        Bxy7ySAn629qCGY2vvwoOkXug
-X-Received: by 2002:a05:6214:5013:b0:5ef:56e4:f629 with SMTP id jo19-20020a056214501300b005ef56e4f629mr514380qvb.38.1685000722331;
-        Thu, 25 May 2023 00:45:22 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6HCJKGlMVKZnjVIAhyXmrhUFUNU35N4whAygVzlGeR13jXaM1sA9iXGP6ukgCNVa86jNz5fg==
-X-Received: by 2002:a05:6214:5013:b0:5ef:56e4:f629 with SMTP id jo19-20020a056214501300b005ef56e4f629mr514372qvb.38.1685000722072;
-        Thu, 25 May 2023 00:45:22 -0700 (PDT)
-Received: from redhat.com ([191.101.160.247])
-        by smtp.gmail.com with ESMTPSA id l16-20020ad44250000000b0061b698e2acesm234148qvq.18.2023.05.25.00.45.19
+        bh=V1XvSVODDEA3TsNr4/6rD8fONkRZXOKHxfaQzrvBuWE=;
+        b=SrFnDh0d+ruduZmLpDxCuTv1GXAUNtRw39dktaeky/X+cQ1pWmI0WalOJZVmEGZzd4
+         xUef++MpJodqZXeUf1fxnuaJSdOJjAk1ZnKohAE6hRSLil++y9S5Tysy1hYNC0VEPgFT
+         E9T+tPf+LMrPyQDBfiar40TzBFUtjFPxm6C3Hpibg1WFa22XVIMbqQhHFstcmlpVlU4N
+         sXp8SAuuUvWLvlYffTjLNEiQVWvnUjUe0T4vM4DRrGRa0Wd3d4XafMD+F1opV5TOxLoC
+         CaYM/IpYyXl94KesOGHz2dbFJqKhYDnUpFvIQiN+eiHZmnYZCBwzY6EQTOjcnHp5yuws
+         JHAw==
+X-Gm-Message-State: AC+VfDxvpwyiWGGm97uKhS+pL35IhLvHlczaAr8LaLIYZBKW2BxbNeng
+        UgXsEuhKn/fC5jgNNESMYOm1/A==
+X-Google-Smtp-Source: ACHHUZ4kdZAHbddsr82/JU+BYvNmlUQoxgJp+jPn0fQ2cDA6MucbPgKmHAJbM5tZHMio1jw9kM0xoQ==
+X-Received: by 2002:a05:6512:21a6:b0:4ef:f3bf:93a6 with SMTP id c6-20020a05651221a600b004eff3bf93a6mr6505557lft.51.1685000970268;
+        Thu, 25 May 2023 00:49:30 -0700 (PDT)
+Received: from localhost (77.241.128.147.mobile.3.dk. [77.241.128.147])
+        by smtp.gmail.com with ESMTPSA id t17-20020ac25491000000b004f3b6e71eb1sm108281lfk.291.2023.05.25.00.49.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 00:45:21 -0700 (PDT)
-Date:   Thu, 25 May 2023 03:45:17 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     Rong Tao <rongtao@cestc.cn>, Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:VIRTIO CORE AND NET DRIVERS" 
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH] tools/virtio: Add .gitignore to ringtest
-Message-ID: <20230525034503-mutt-send-email-mst@kernel.org>
-References: <tencent_C8F0F579940491D14055C82FABE812478505@qq.com>
+        Thu, 25 May 2023 00:49:29 -0700 (PDT)
+References: <87edn6do1b.fsf@metaspace.dk>
+ <20230524111127.2491643-1-aliceryhl@google.com>
+User-agent: mu4e 1.10.3; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Alice Ryhl <aliceryhl@google.com>
+Cc:     alex.gaynor@gmail.com, benno.lossin@proton.me,
+        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, patches@lists.linux.dev,
+        rust-for-linux@vger.kernel.org, tj@kernel.org, wedsonaf@gmail.com
+Subject: Re: [PATCH v1 3/7] rust: sync: add `Arc::{from_raw, into_raw}`
+Date:   Thu, 25 May 2023 09:45:29 +0200
+In-reply-to: <20230524111127.2491643-1-aliceryhl@google.com>
+Message-ID: <87a5xsetq5.fsf@metaspace.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_C8F0F579940491D14055C82FABE812478505@qq.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:36:12PM +0800, Rong Tao wrote:
-> From: Rong Tao <rongtao@cestc.cn>
-> 
-> Ignore executions for ringtest.
 
-I think you mean "executables".
+Alice Ryhl <aliceryhl@google.com> writes:
 
-> 
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> ---
->  tools/virtio/ringtest/.gitignore | 7 +++++++
->  1 file changed, 7 insertions(+)
->  create mode 100644 tools/virtio/ringtest/.gitignore
-> 
-> diff --git a/tools/virtio/ringtest/.gitignore b/tools/virtio/ringtest/.gitignore
-> new file mode 100644
-> index 000000000000..100b9e30c0f4
-> --- /dev/null
-> +++ b/tools/virtio/ringtest/.gitignore
-> @@ -0,0 +1,7 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +/noring
-> +/ptr_ring
-> +/ring
-> +/virtio_ring_0_9
-> +/virtio_ring_inorder
-> +/virtio_ring_poll
-> -- 
-> 2.39.1
-> 
+> Andreas Hindborg <nmi@metaspace.dk> writes:
+>> Alice Ryhl <aliceryhl@google.com> writes:
+>>> +        // This preserves the metadata in the pointer, if any.
+>>> +        let metadata = core::ptr::metadata(ptr as *const ArcInner<T>);
+>> 
+>> I can't follow this. How does this work? `ptr` was for field
+>> `inner.data: T`, but we are casting to `ArcInner<T>`.
+>> 
+>>> +        let ptr = (ptr as *mut u8).wrapping_sub(val_offset) as *mut ();
+>>> +        let ptr = core::ptr::from_raw_parts_mut(ptr, metadata);
+>> 
+>> Metadata was obtained from a pointer pointing to `inner.data`, we then
+>> move it back to beginning of `ArcInner<T>` and then reconstruct the
+>> potentially fat pointer with metadata from the pointer to `T`? How can
+>> this be right?
+>
+> The metadata of a struct is always the metadata of its last field, so
+> both `*mut T` and `*mut ArcInner<T>` have the same metadata. Because of
+> that, moving the metadata over from one type to the other is ok.
+>
+> The reason that I cast to an `ArcInner<T>` pointer before calling
+> `metadata` is because I get a type mismatch otherwise for the metadata,
+> since the compiler doesn't unify the metadata types when the type is
+> generic.
 
+OK, cool. In that case, since this is common knowledge (is it?),
+could you maybe include a link to the relevant documentation, or a
+comment indicating why this is OK?
+
+BR Andreas
