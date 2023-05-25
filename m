@@ -2,96 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E16F7108D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A964710540
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbjEYJ0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 05:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
+        id S240137AbjEYFU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 01:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240250AbjEYJ0g (ORCPT
+        with ESMTP id S239983AbjEYFUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:26:36 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3A21B1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:26:33 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3094871953bso1298046f8f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:26:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685006791; x=1687598791;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gWtFhIZ8BYEBC241hJPMRaQ7fL223lARPk2xj1KRlLo=;
-        b=ksHvc9/KJc8tm8ddO3VFoE5QrlC2waPNIe++XS9LB0o0JrMFZAeIoo5XiRZa34k8Mm
-         adRWW5BpbZbHCCZ3EfKxW0HYE3tT4/G8hy741p+ucGuludmSzf9ymx7MnxkL/zf+7rSJ
-         zZmHTHyyj8cNdTrPatdM6xAghgwM5QEDXiAeZZ0A4pkSnLUpNuM5BqLfOm3e9Ax59b1A
-         g61peEK9FWKDnhK9YTk3thi8hz/TKMgQ9vxK4+aCTDyZipQDPbMSqoz3Kgy8NnIZJRHg
-         Ei3VYs3970BBcCQ860dc+3ztEEvJKCrvwNjWcK8FQBmJCWt4CM2nBqEfoHwU3vpiZ8Fe
-         Tltg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685006791; x=1687598791;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gWtFhIZ8BYEBC241hJPMRaQ7fL223lARPk2xj1KRlLo=;
-        b=NoTNaMBv+uXeTycw0/qVcvvAy8s2ZbCvQCx8jmEU/lpw7eBb0pkTHfijrhzLLKarI1
-         ocR1IEOy3WIBtQihS1LErk86pHCE/5M55eVqt69tqEOXHArVhJADy5DCqhO0ppVKrW/l
-         aGMc8C8auZD++E9AhVhUW5QgAoSV5gaXlxnJSl8eLZ6XjDHDSPWGwcF6f7Xu2Tokcamw
-         eSiqolSQLPGWgIdslg6kUVZbpXIW1R2BKzgBw9qDFBeYY+O8SLBV445BZhsXIIw1Ici9
-         1ox0nrHgvbv4rkPL3yetxCncdeImT2G0dYdqCMIt2JItbVZntNusx82WAmz/tRq7SI4I
-         Lfig==
-X-Gm-Message-State: AC+VfDzgS8DdG5qLvhb5yNnkT9j85r2VKtmEIOI88I42cDoeNkTtEVZx
-        3UZU6MgD6WZkUV+UZzH+u5xM1Q==
-X-Google-Smtp-Source: ACHHUZ6EY3c+1h77d9ed/WvmP29ij6SAXuvZPnWlcLcj5atxSqIiFQxktBiFzLlEuGFH7mf26UtKbA==
-X-Received: by 2002:adf:e550:0:b0:306:2fac:f88 with SMTP id z16-20020adfe550000000b003062fac0f88mr1828144wrm.28.1685006791750;
-        Thu, 25 May 2023 02:26:31 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o16-20020a5d58d0000000b002ffbf2213d4sm1139017wrf.75.2023.05.25.02.26.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 02:26:30 -0700 (PDT)
-Date:   Thu, 25 May 2023 08:05:58 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Wang Zhang <silver_code@hust.edu.cn>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        hust-os-kernel-patches@googlegroups.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
-Message-ID: <1b0de79d-87c9-46df-8b2f-f40bf58108c5@kili.mountain>
-References: <5572a733.abc0.18846f13b0b.Coremail.m202171703@hust.edu.cn>
- <20230524154318.2259-1-silver_code@hust.edu.cn>
- <68c4b991-6af9-36e8-354c-7c3b232ba4c2@wanadoo.fr>
+        Thu, 25 May 2023 01:20:06 -0400
+Received: from out-30.mta1.migadu.com (out-30.mta1.migadu.com [95.215.58.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2AD4EFA
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:08:02 -0700 (PDT)
+Date:   Thu, 25 May 2023 01:07:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684991280;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d6WQ9TaAjYlC3Hw4sqFmSGpRq5ot1EQ0nvfKj79dNbI=;
+        b=aZ+hcMQtBHEz8YPaBeJ2z0GfrElZdaUcqe0fylpBdqCRnIk6TXjyBZFQHlFkZ6QmuFjrBU
+        5RV28KpUlaTJ6GqaA5v+Zbo9kUMMmGa9xUqlFxRZew0kvqFLhdnfI+iRRsMSLZZvfkAWTf
+        QTBbRYl0ZL4TIQUe1Og1JujMQBdawYs=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Coly Li <colyli@suse.de>
+Subject: Re: [PATCH 2/2] bcache: Convert to lock_cmp_fn
+Message-ID: <ZG7tGKYM3zq5MG7v@moria.home.lan>
+References: <20230509195847.1745548-1-kent.overstreet@linux.dev>
+ <20230509195847.1745548-2-kent.overstreet@linux.dev>
+ <20230510130151.GL4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <68c4b991-6af9-36e8-354c-7c3b232ba4c2@wanadoo.fr>
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230510130151.GL4253@hirez.programming.kicks-ass.net>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 09:21:56PM +0200, Christophe JAILLET wrote:
-> > +	if (ret) {
-> > +		dev_err(dev,
-> > +			"clk_prepare_enable failed: %d\n", ret);
-> > +		return ret;
-> >   	}
-> > +	rate = clk_get_rate(i2c->clk) / 1000;
+On Wed, May 10, 2023 at 03:01:51PM +0200, Peter Zijlstra wrote:
+> >  static struct btree *mca_bucket_alloc(struct cache_set *c,
+> >  				      struct bkey *k, gfp_t gfp)
+> >  {
+> > @@ -572,7 +593,7 @@ static struct btree *mca_bucket_alloc(struct cache_set *c,
+> >  		return NULL;
+> >  
+> >  	init_rwsem(&b->lock);
+> > -	lockdep_set_novalidate_class(&b->lock);
+> > +	lock_set_cmp_fn(&b->lock, btree_lock_cmp_fn, btree_lock_print_fn);
+> >  	mutex_init(&b->write_lock);
+> >  	lockdep_set_novalidate_class(&b->write_lock);
 > 
-> Now (because of the devm_clk_get_optional_enabled()), i2c->clk can be NULL,
-> so this would deference a NULL pointer.
-> 
+> I can't help but notice you've got yet another novalidate_class usage
+> here. What does it take to get rid of that?
 
-No, it's fine.  clk_get_rate() checks for NULL.  When a function returns
-a mix of error pointers and NULL, like devm_clk_get_optional_enabled(),
-then all the functions like this must have NULL checks built it.
+A locking rework, probably switching bcache to six locks.
 
-regards,
-dan carpenter
-
+I'd rather prioritize getting bcachefs merged and then working on an
+upgrade path from bcache -> bcahcefs so we can depracate bcache,
+though...
