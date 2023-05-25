@@ -2,113 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AFF71021C
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 02:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E20710221
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 02:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233018AbjEYAx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 20:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
+        id S233280AbjEYA6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 20:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjEYAxY (ORCPT
+        with ESMTP id S229661AbjEYA6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 20:53:24 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659CCE7
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:53:22 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id AF5272C02E0;
-        Thu, 25 May 2023 12:53:19 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1684975999;
-        bh=gakfYzajycWsBIRNP8cV6Mi5LfkKI00ALEVp/557AR0=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=opxRzPOMErYuaex5VKKtrEpdkwSwq0I/abh33hNMcE1bFwXayQdf7pizD/waWK64J
-         NWbFvdSNQa3ndbqaG4wRuNGcd5y7JQwoiBm1lFcVWgiaAL2FOujUsZ4V4xu7YAtlo8
-         eYRs7gdeyA76Ge48X0V2nWobvoTYSw5V4QSZ0Z3JQdWsPP8DiNoTpiBDXVXVBaSZ0x
-         X2OSRrSJzW/X3rwgZZUq91ud8vkfkBtrcJroc71hBDyP8wnY58AIE5g5v7tqEcz2Ah
-         N+Gzly+YvsTkYJt8qCJrtNn+4uDu66h/Ijc3ZUs6xERR8ClnrBx+ClhEUJNYgXHS5G
-         Fnu/56z5cngqw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B646eb17f0001>; Thu, 25 May 2023 12:53:19 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 25 May 2023 12:53:19 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Thu, 25 May 2023 12:53:19 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Vadym Kochan <vadym.kochan@plvision.eu>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Aviram Dali <aviramd@marvell.com>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Elad Nachman <enachman@marvell.com>
-Subject: Re: [PATCH 0/3] mtd: rawnand: marvell: add support for AC5 SoC
-Thread-Topic: [PATCH 0/3] mtd: rawnand: marvell: add support for AC5 SoC
-Thread-Index: AQHY45PTmnmHPuwW40yPMLrn8y8OYa9qtkQA
-Date:   Thu, 25 May 2023 00:53:19 +0000
-Message-ID: <143fb1ff-b2d4-a6fe-e892-b55a7bbf56f8@alliedtelesis.co.nz>
-References: <20221019082046.30160-1-vadym.kochan@plvision.eu>
-In-Reply-To: <20221019082046.30160-1-vadym.kochan@plvision.eu>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BED105E491B8E142A82B3707E313028D@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Wed, 24 May 2023 20:58:06 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9659DE6
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:58:05 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ae50da739dso6447965ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684976285; x=1687568285;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DAPj42Llo1zBn7j5EbZjUwNn1stxlOLmIFbZP+Hkftw=;
+        b=sWE5ttu3IOXvq5dPyRBpeVf+bDhetwFF738sdeIWuimyyiaHOkxhav9sQg3tTgc91z
+         bK7sKVesnW5qwF+P3y1gUG0uoH73rhx+bkvwhXldiYbhYUV+RrMpl0exxYN7PP6+HGEU
+         FU+s9gSBGTDVP3WIF0BjcE1UdvboZ1FE/dkAjCpPiDDutsaZ/u7pi5/9WQpPpNkvb1Gs
+         Z8TpW8V59Lqn3Xti6S16RkRWlOpslsh5mDZs15+ZZYf1jVvj999Snw9VgawFwlkCBsHo
+         eqHSppNjj7DpNC14XSkoBhooTRdrKVsjAfG+aG3zr4Z34f9LuIxigXjPpOKk1AKZM0so
+         7Cbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684976285; x=1687568285;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DAPj42Llo1zBn7j5EbZjUwNn1stxlOLmIFbZP+Hkftw=;
+        b=hA5238KiynFXH7WHr5dCE3svzJ22vMrITZRppvganmgfb95xjIu2oQwmk50XNtMJvv
+         B81gmeAFSHCOf7De9Q1gcV/06fWGjzHSjX/hdx7K71bZ/8qe/+5XHEE9X7bcxh/Ipdp2
+         jN+e9E+tCGYxtzTO1Rz2DdRsRUDTQO65yVtcWXB7GQ8pA5rQW1WPM102D/ubjxdqjbOe
+         7GEDjoR6Top3D7KZFhwopHb1BerpW9x4lJn7YUocQFYJunzAxPDpuxPh7g2UsZlu8sHa
+         Nu3xj5Ggm7kVe6cLMK/ZWwRP8zJheKv2DS+ILkdl47j4vt6BXdmeUi4B3GcycWQl7psA
+         mURQ==
+X-Gm-Message-State: AC+VfDwNYVtpz0sL76y3tl5gjR+QlOPLr3zkPFXKO/JtSuuPJCE6lUnv
+        dP/3ss6ZmGQbDl0lrJE/ZBo=
+X-Google-Smtp-Source: ACHHUZ6vCwyHjQH58WcHE/CqcAAdVyARITzyZWBize5iGPj/Rzy5RhPCJclyEbqnFkeiDbOlfU74IQ==
+X-Received: by 2002:a17:903:124f:b0:1af:9c18:a160 with SMTP id u15-20020a170903124f00b001af9c18a160mr17670692plh.17.1684976284891;
+        Wed, 24 May 2023 17:58:04 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-12.three.co.id. [116.206.28.12])
+        by smtp.gmail.com with ESMTPSA id c2-20020a170902b68200b001ac8218ddb7sm76943pls.84.2023.05.24.17.58.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 May 2023 17:58:04 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 6D35D10625B; Thu, 25 May 2023 07:58:00 +0700 (WIB)
+Date:   Thu, 25 May 2023 07:57:59 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Zi Yan <ziy@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        doru iorgulescu <doru.iorgulescu1@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Disha Goel <disgoel@linux.vnet.ibm.com>
+Subject: Re: Fwd: ./include/linux/mmzone.h:1735:2: error: #error Allocator
+ MAX_ORDER exceeds SECTION_SIZE (v6.4-rc3 build regression)
+Message-ID: <ZG6yl8RN0ChIfNGG@debian.me>
+References: <2a1cd5e6-01f7-66f9-1f9d-c655cc3f919b@gmail.com>
+ <5d22e1e9-0307-3664-8b4a-99caaaaa4315@gmail.com>
+ <87bki9ai11.fsf@mail.lhotse>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=QG0ANWG3iu1Ceheqxc0A:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uI/IsBv88xgOn6QO"
+Content-Disposition: inline
+In-Reply-To: <87bki9ai11.fsf@mail.lhotse>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgVmFkeW0sDQoNCk9uIDE5LzEwLzIyIDIxOjIwLCBWYWR5bSBLb2NoYW4gd3JvdGU6DQo+IFRo
-aXMgc2VyaWVzIGFkZHMgc3VwcG9ydCBmb3IgQUM1IFNvQy4NCj4NCj4gVGhlIGZvbGxvd2luZyBj
-aGFuZ2VzIHdlcmUgbWFkZSB0byBhZGQgQUM1IHN1cHBvcnQ6DQo+DQo+ICAgICAxKSBNb2RpZnkg
-TWFydmVsbCBuYW5kIE5GQyB0aW1pbmcgc2V0IGZvciBtb2RlIDANCj4NCj4gICAgIDIpIGZpeCB2
-YWxpZGF0aW9uIGluIEFDNSBOYW5kIGRyaXZlciBmb3IgT05GSSB0aW1pbmdzIHZhbHVlcyBtb2Rl
-cyAxIGFuZCAzDQo+DQo+ICAgICAzKSByZW1vdmUgdW5uZWNlc3NhcnkgbmFuZCB0aW1pbmctbW9k
-ZSBpbiBkZXZpY2UgdHJlZSBvZiBhYzUuZHRzaQ0KPg0KPiAgICAgNCkgYWRkIG5hbmQgbWlzc2lu
-ZyBBQzVYIGxheW91dHMgLCBhZGQgb3B0aW9uIHRvIHVzZSBuZHRyIHByZWRlZmluZWQgdmFsdWVz
-DQo+DQo+ICAgICA1KSBaZXJvIHN0ZXBzIGFuZCB0b3RhbCBmaWVsZHMgb2YgZWNjIGluIGVjYyBj
-b250cm9sbGVyIGluaXRpYWxpemF0aW9uIHNvDQo+ICAgICAgICBuYW5kX3NjYW5fdGFpbCgpIHdp
-bGwgY2FsY3VsYXRlIHRoZXNlIHR3byBmaWVsZHMsIG90aGVyd2lzZQ0KPiAgICAgICAgTkFORCBp
-bml0aWFsaXphdGlvbiB3aWxsIGZhaWwgd2l0aCBrZXJuZWwgNS4xNSBhbmQgYWJvdmUuDQo+DQo+
-IEF2aXJhbSBEYWxpICgyKToNCj4gICAgZHQtYmluZGluZ3M6IG10ZDogQWRkIEFDNSBzcGVjaWZp
-YyBiaW5kaW5nDQo+ICAgIG10ZDogcmF3bmFuZDogbWFydmVsbDogYWRkIHN1cHBvcnQgZm9yIEFD
-NSBTb0MNCg0KQXJlIHlvdSBzdGlsbCBsb29raW5nIGludG8gdGhpcyBzZXJpZXM/IEkgc2VlIG9u
-ZSBwYXJ0IG1hZGUgaXQgdXBzdHJlYW0gDQphcyBjb21taXQgNjhjMThkYWU2ODg4ICgibXRkOiBy
-YXduYW5kOiBtYXJ2ZWxsOiBhZGQgbWlzc2luZyBsYXlvdXRzIikgDQphbmQgdGhlcmUgd2FzIGFu
-IG9mZi1zaG9vdCBzZXJpZXMgYXJvdW5kIGNvbnZlcnRpbmcgdGhlIERUIGJpbmRpbmcuDQoNCj4g
-VmFkeW0gS29jaGFuICgxKToNCj4gICAgbXRkOiByYXduYW5kOiBQYXJ0aWFsbHkgcmV2ZXJ0IDQx
-MTRmOTdjNDFjZCAoIm10ZDogcmF3bmFuZDogR2V0IHJpZCBvZg0KPiAgICAgIGEgZmV3IHVudXNl
-ZCBkZWZpbml0aW9ucyIpDQo+DQo+ICAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvbXRkL21hcnZl
-bGwtbmFuZC50eHQgIHwgICAxICsNCj4gICBkcml2ZXJzL210ZC9uYW5kL3Jhdy9LY29uZmlnICAg
-ICAgICAgICAgICAgICAgfCAgIDIgKy0NCj4gICBkcml2ZXJzL210ZC9uYW5kL3Jhdy9tYXJ2ZWxs
-X25hbmQuYyAgICAgICAgICAgfCAyNzcgKysrKysrKysrKysrKysrKy0tDQo+ICAgZHJpdmVycy9t
-dGQvbmFuZC9yYXcvbmFuZF90aW1pbmdzLmMgICAgICAgICAgIHwgIDE0ICsNCj4gICBpbmNsdWRl
-L2xpbnV4L210ZC9yYXduYW5kLmggICAgICAgICAgICAgICAgICAgfCAgIDMgKw0KPiAgIDUgZmls
-ZXMgY2hhbmdlZCwgMjY0IGluc2VydGlvbnMoKyksIDMzIGRlbGV0aW9ucygtKQ0KPg==
+
+--uI/IsBv88xgOn6QO
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, May 25, 2023 at 01:03:22AM +1000, Michael Ellerman wrote:
+> Should be fixed properly by:
+>=20
+> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20230519113806.37=
+0635-1-mpe@ellerman.id.au/
+>=20
+> Which is in powerpc-fixes as 358e526a1648.
+
+Telling regzbot:
+
+#regzbot fix: 358e526a1648cd
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--uI/IsBv88xgOn6QO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZG6ykgAKCRD2uYlJVVFO
+oxijAP45l+3tHS1RyfI0SLq839DSHCEILcLXGqrYLoT/703ziwEArDioVbgb0kUO
+HKdcUrooAH0IKxya1qWE/qkt2ZKQpwo=
+=oXBj
+-----END PGP SIGNATURE-----
+
+--uI/IsBv88xgOn6QO--
