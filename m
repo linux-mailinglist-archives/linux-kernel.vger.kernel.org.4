@@ -2,272 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201347117A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDDE711868
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242007AbjEYTvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 15:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S241717AbjEYUrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 16:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241295AbjEYTux (ORCPT
+        with ESMTP id S233284AbjEYUrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 15:50:53 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CBB90;
-        Thu, 25 May 2023 12:50:51 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 71A985C00F5;
-        Thu, 25 May 2023 15:08:17 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 25 May 2023 15:08:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685041697; x=
-        1685128097; bh=zaKPFfQtRUHYG9M1a5mHVEammKUzjYCsA0rv+VmXpGk=; b=C
-        JVb1brA/wH0ZrEFKYQjInT06081NJopyKvHikdpM+3nBxZilNC9hBEce4bfXC+HQ
-        okuNy6dplEpvBoxRo2J/kat0BxSCvdzIR7cW8Rh8f2m3L8N7kiCFrVwi/YQaEXC7
-        yVMzih57OM0Dvg9Xi26BUz+jwaac4w8uAwhZgjcd/PZkagkEOJ49XrTCjeNqBNEm
-        RSuqlERrvMUu6+0s7DSKr4S8ugACl0duyvHe8n7X3iRgBweJxsq17B1gZKcEYcaN
-        HNWWq1rhd2pXvZ1FfFiXS6U/NbRrgMuHNbhu5fNCDW5I1w+hccyVxQYA0zUgUoPX
-        q3WIbkf+vu4SG5CqIWL5w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685041697; x=1685128097; bh=zaKPFfQtRUHYG
-        9M1a5mHVEammKUzjYCsA0rv+VmXpGk=; b=JwW6psopPWKdWoWBP7Cz++IxIsEj6
-        km2WZpqPPn6NHjG+bgOXTv8LFM23DuxzvtCaYF8VgFfG4zhFo/lfMEcUWLcs3VkT
-        3lMCMRsbDRnEKEJCRJZxJRuQixfglrTyStnRwHhJ7xZT6tKNm5CvQEavEGGKUeJ5
-        I9fqlHVjt4VcEMDc1j8VcEB4ezO0z9MEk3Mt9P8eoBhEgOYC7Bb+nbhjdbFtZRM6
-        Ru0t25B1jM10JKaOiMha5DIi8VGwSOjnPN4gBbG0zN9pX3UJ4A/lvVDeIUk9XeFq
-        +iAX19EE2SbAMFH3LAW1CH52Anc7AfiWmCtCHjfaig1eTp1se+3g2vD/w==
-X-ME-Sender: <xms:ILJvZCCWBw1zarw5SCR_V4ph9BeA1fQGW5MZxcK9iEGHH0T0x6Fy5A>
-    <xme:ILJvZMjHkcovdG9h2hq4K0VP7MuQcmymdRBEEvJQy0U2YO6JOZQqHY0WetrT9z89A
-    00Lj78p3abHhye64Bc>
-X-ME-Received: <xmr:ILJvZFkYUM2IRTnIowHBmppJyuCAxBSJ20XBhsAFuxbshakM4yFvsXCNU1XGHYbKepGZzw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejjedgudefvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpedfmfhi
-    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
-    hnrghmvgeqnecuggftrfgrthhtvghrnhepkedvvdejffehteegtddvgfeijeeivdegjeei
-    teejheeiheevffeukeefheffvdevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:ILJvZAzA6UVzSz9ngTN8n7Odc1kxdH3R4ii-_trvX37gwleRoj6uDA>
-    <xmx:ILJvZHRRZXbWZnmXHgS28-uFZh7f043iIK7vZOZRkz9yvl7luRtHWw>
-    <xmx:ILJvZLaCKKBBnBXepEXhlBuYPQMjl7hNQPxxBLUgHuGuPN5izL_50g>
-    <xmx:IbJvZCl_PhXBvencnsBltNfTb-meNrFSjZ07cBH5sazR8ENF15ByBQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 25 May 2023 15:08:15 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 5098710C61D; Thu, 25 May 2023 22:08:12 +0300 (+03)
-Date:   Thu, 25 May 2023 22:08:12 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     kirill.shutemov@linux.intel.com, Dexuan Cui <decui@microsoft.com>,
-        ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com
-Subject: Re: [PATCH v6 2/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Message-ID: <20230525190812.bz5hg5k3uaibtcys@box>
-References: <20230504225351.10765-1-decui@microsoft.com>
- <20230504225351.10765-3-decui@microsoft.com>
- <9e466079-ff27-f928-b470-eb5ef157f048@intel.com>
- <20230523223750.botogigv6ht7p2zg@box.shutemov.name>
- <2d96a23f-a16a-50e1-7960-a2d4998ce52f@intel.com>
- <20230523232851.a3djqxmpjyfghbvc@box.shutemov.name>
+        Thu, 25 May 2023 16:47:08 -0400
+Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BE23135
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:47:03 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 2GKMq0dJafPgg2GKMqWAgb; Thu, 25 May 2023 21:08:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685041734;
+        bh=3aimI6STBYAt/4Ogpc6VsM7BIeMI40FG7v2LxQxwQAI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=gX3SCaZQg5EPTYI31bq/oR3T1qvCOEQ0li4E60dFzmH/3gGs9KS/wCuubTKkk28mi
+         +hr2M7ZLBCNUu9J3bp9z/FG27zlp+xsEwdAwwb8aTlM96/1TEXvL5SJDpaitriHfGf
+         V4BbYzJpTkT8erO4pVjGlu6cWIxxp4G0/N44VXofnCiFV0kEDn7KTfqyZafiVw87m0
+         Xe/yN8xKuaAkqPfBh/3VpwaFfBXhuh6LuWGgteQAG0g+oTb+l2S2OtEjXMyr/FhT55
+         kdUbxnRt4qXZRpc8Ok8r5Dj8/PHEvvz9aqxis6Oa7gqEm6urhWXadRGZzOIN0J8y0L
+         PCYqOTJsnuFSA==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 25 May 2023 21:08:54 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <99737c85-625f-9067-f72c-ddc6822866e2@wanadoo.fr>
+Date:   Thu, 25 May 2023 21:08:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523232851.a3djqxmpjyfghbvc@box.shutemov.name>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 2/4] usb: cdns2: Add main part of Cadence USBHS driver
+Content-Language: fr
+To:     pawell@cadence.com
+Cc:     Cliff.Holden@siriusxm.com, Daisy.Barrera@siriusxm.com,
+        biju.das.jz@bp.renesas.com, egtvedt@samfundet.no,
+        gregkh@linuxfoundation.org, herve.codina@bootlin.com,
+        jdelvare@suse.de, linus.walleij@linaro.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        neal_liu@aspeedtech.com, tony@atomide.com
+References: <20230525054916.243330-1-pawell@cadence.com>
+ <20230525054916.243330-3-pawell@cadence.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230525054916.243330-3-pawell@cadence.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 02:28:51AM +0300, kirill.shutemov@linux.intel.com wrote:
-> On Tue, May 23, 2023 at 03:43:15PM -0700, Dave Hansen wrote:
-> > On 5/23/23 15:37, kirill.shutemov@linux.intel.com wrote:
-> > >> How does this work with load_unaligned_zeropad()?  Couldn't it be
-> > >> running around poking at one of these vmalloc()'d pages via the direct
-> > >> map during a shared->private conversion before the page has been accepted?
-> > > Alias processing in __change_page_attr_set_clr() will change direct
-> > > mapping if you call it on vmalloc()ed memory. I think we are safe wrt
-> > > load_unaligned_zeropad() here.
-> > 
-> > We're *eventually* OK:
-> > 
-> > >         /* Notify hypervisor that we are about to set/clr encryption attribute. */
-> > >         x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
-> > > 
-> > >         ret = __change_page_attr_set_clr(&cpa, 1);
-> > 
-> > But what about in the middle between enc_status_change_prepare() and
-> > __change_page_attr_set_clr()?  Don't the direct map and the
-> > shared/private status of the page diverge in there?
+Le 25/05/2023 à 07:49, Pawel Laszczak a écrit :
+> This patch introduces the main part of Cadence USBHS driver
+> to Linux kernel.
+> To reduce the patch size a little bit, the header file gadget.h was
+> intentionally added as separate patch.
 > 
-> Hmm. Maybe we would need to go through making the range in direct mapping
-> non-present before notifying VMM about the change.
+> The Cadence USB 2.0 Controller is a highly configurable IP Core which
+> supports both full and high speed data transfer.
 > 
-> I need to look at this again in the morning.
+> The current driver has been validated with FPGA platform. We have
+> support for PCIe bus, which is used on FPGA prototyping.
+> 
+> Signed-off-by: Pawel Laszczak <pawell-vna1KIf7WgpBDgjK7y7TUQ@public.gmane.org>
+> ---
+>   drivers/usb/gadget/udc/Kconfig              |    2 +
+>   drivers/usb/gadget/udc/Makefile             |    1 +
+>   drivers/usb/gadget/udc/cdns2/Kconfig        |   11 +
+>   drivers/usb/gadget/udc/cdns2/Makefile       |    5 +
+>   drivers/usb/gadget/udc/cdns2/cdns2-ep0.c    |  638 +++++
+>   drivers/usb/gadget/udc/cdns2/cdns2-gadget.c | 2426 +++++++++++++++++++
+>   drivers/usb/gadget/udc/cdns2/cdns2-pci.c    |  149 ++
+>   7 files changed, 3232 insertions(+)
+>   create mode 100644 drivers/usb/gadget/udc/cdns2/Kconfig
+>   create mode 100644 drivers/usb/gadget/udc/cdns2/Makefile
+>   create mode 100644 drivers/usb/gadget/udc/cdns2/cdns2-ep0.c
+>   create mode 100644 drivers/usb/gadget/udc/cdns2/cdns2-gadget.c
+>   create mode 100644 drivers/usb/gadget/udc/cdns2/cdns2-pci.c
+> 
+> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+> index 83cae6bb12eb..aae1787320d4 100644
+> --- a/drivers/usb/gadget/udc/Kconfig
+> +++ b/drivers/usb/gadget/udc/Kconfig
+> @@ -463,6 +463,8 @@ config USB_ASPEED_UDC
+>   
+>   source "drivers/usb/gadget/udc/aspeed-vhub/Kconfig"
+>   
+> +source "drivers/usb/gadget/udc/cdns2/Kconfig"
+> +
+>   #
+>   # LAST -- dummy/emulated controller
+>   #
+> diff --git a/drivers/usb/gadget/udc/Makefile b/drivers/usb/gadget/udc/Makefile
+> index ee569f63c74a..b52f93e9c61d 100644
+> --- a/drivers/usb/gadget/udc/Makefile
+> +++ b/drivers/usb/gadget/udc/Makefile
+> @@ -42,3 +42,4 @@ obj-$(CONFIG_USB_ASPEED_VHUB)	+= aspeed-vhub/
+>   obj-$(CONFIG_USB_ASPEED_UDC)	+= aspeed_udc.o
+>   obj-$(CONFIG_USB_BDC_UDC)	+= bdc/
+>   obj-$(CONFIG_USB_MAX3420_UDC)	+= max3420_udc.o
+> +obj-$(CONFIG_USB_CDNS2_UDC)	+= cdns2/
+> diff --git a/drivers/usb/gadget/udc/cdns2/Kconfig b/drivers/usb/gadget/udc/cdns2/Kconfig
+> new file mode 100644
+> index 000000000000..310db4788353
+> --- /dev/null
+> +++ b/drivers/usb/gadget/udc/cdns2/Kconfig
+> @@ -0,0 +1,11 @@
+> +config USB_CDNS2_UDC
+> +	tristate "Cadence USBHS Device Controller"
+> +	depends on USB_PCI && ACPI && HAS_DMA
+> +	help
+> +	  Cadence USBHS Device controller is a PCI based USB peripheral
+> +	  controller which supports both full and high speed USB 2.0
+> +	  data transfers.
+> +
+> +	  Say "y" to link the driver statically, or "m" to build a
+> +	  dynamically linked module called "cdns2-pci.ko" and to
 
-Okay, I've got around to it finally.
+I'm not expert in module naming, but isn't it cdns2-udc-pci?
 
-Private->Shared conversion is safe: we first set shared bit in the direct
-mapping and all aliases and then call MapGPA enc_status_change_finish().
-So we don't have privately mapped pages that we converted to shared with
-MapGPA.
+> +	  force all gadget drivers to also be dynamically linked.
 
-Shared->Private is not safe. As with Private->Shared, we adjust direct
-mapping before notifying VMM and accepting the memory, so there's short
-window when privately mapped memory that is neither mapped into SEPT nor
-accepted. It is a problem as it can race with load_unaligned_zeropad().
+[...]
 
-Shared->Private conversion is rare. I only see one call total during the
-boot in my setup. Worth fixing anyway.
+> +static void cdns2_ep_tx_isoc(struct cdns2_endpoint *pep,
+> +			     struct cdns2_request *preq,
+> +			     int num_trbs)
+> +{
+> +	struct scatterlist *sg = NULL;
+> +	u32 remaining_packet_size = 0;
+> +	struct cdns2_trb *trb;
+> +	bool first_trb = true;
+> +	dma_addr_t trb_dma;
+> +	u32 trb_buff_len;
+> +	u32 block_length;
+> +	int sg_iter = 0;
 
+Not need to init.
 
-The patch below fixes the issue by hooking up enc_status_change_prepare()
-and doing conversion from Shared to Private there.
+> +	int sent_len;
+> +	int td_idx = 0;
+> +	int split_size;
+> +	u32 control;
 
-enc_status_change_finish() only covers Private to Shared conversion.
+[...]
 
-The patch is on top of unaccepted memory patchset. It is more convenient
-base. I will rebase to Linus' tree if the approach looks sane to you.
+> +/* Prepare and start transfer for all not started requests. */
+> +static int cdns2_start_all_request(struct cdns2_device *pdev,
+> +				   struct cdns2_endpoint *pep)
+> +{
+> +	struct cdns2_request *preq;
+> +	int ret = 0;
+> +
+> +	while (!list_empty(&pep->deferred_list)) {
+> +		preq = cdns2_next_preq(&pep->deferred_list);
+> +
+> +		ret = cdns2_ep_run_transfer(pep, preq);
+> +		if (ret)
+> +			return ret;
+> +
+> +		list_move_tail(&preq->list, &pep->pending_list);
+> +	}
+> +
+> +	pep->ep_state &= ~EP_RING_FULL;
+> +
+> +	return ret;
 
-Any comments?
+Maybe return 0; would be more explicit? (and would remove the "= 0" above)
 
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 32501277ef84..b73ec2449c64 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -713,16 +713,32 @@ static bool tdx_cache_flush_required(void)
- 	return true;
- }
- 
-+static bool tdx_enc_status_change_prepare(unsigned long vaddr, int numpages,
-+					  bool enc)
-+{
-+	phys_addr_t start = __pa(vaddr);
-+	phys_addr_t end = __pa(vaddr + numpages * PAGE_SIZE);
-+
-+	if (!enc)
-+		return true;
-+
-+	return tdx_enc_status_changed_phys(start, end, enc);
-+}
-+
- /*
-  * Inform the VMM of the guest's intent for this physical page: shared with
-  * the VMM or private to the guest.  The VMM is expected to change its mapping
-  * of the page in response.
-  */
--static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
-+static bool tdx_enc_status_change_finish(unsigned long vaddr, int numpages,
-+					 bool enc)
- {
- 	phys_addr_t start = __pa(vaddr);
- 	phys_addr_t end = __pa(vaddr + numpages * PAGE_SIZE);
- 
-+	if (enc)
-+		return true;
-+
- 	return tdx_enc_status_changed_phys(start, end, enc);
- }
- 
-@@ -753,9 +769,10 @@ void __init tdx_early_init(void)
- 	 */
- 	physical_mask &= cc_mask - 1;
- 
--	x86_platform.guest.enc_cache_flush_required = tdx_cache_flush_required;
--	x86_platform.guest.enc_tlb_flush_required   = tdx_tlb_flush_required;
--	x86_platform.guest.enc_status_change_finish = tdx_enc_status_changed;
-+	x86_platform.guest.enc_cache_flush_required  = tdx_cache_flush_required;
-+	x86_platform.guest.enc_tlb_flush_required    = tdx_tlb_flush_required;
-+	x86_platform.guest.enc_status_change_prepare = tdx_enc_status_change_prepare;
-+	x86_platform.guest.enc_status_change_finish  = tdx_enc_status_change_finish;
- 
- 	pr_info("Guest detected\n");
- }
-diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
-index 88085f369ff6..1ca9701917c5 100644
---- a/arch/x86/include/asm/x86_init.h
-+++ b/arch/x86/include/asm/x86_init.h
-@@ -150,7 +150,7 @@ struct x86_init_acpi {
-  * @enc_cache_flush_required	Returns true if a cache flush is needed before changing page encryption status
-  */
- struct x86_guest {
--	void (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
-+	bool (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
- 	bool (*enc_status_change_finish)(unsigned long vaddr, int npages, bool enc);
- 	bool (*enc_tlb_flush_required)(bool enc);
- 	bool (*enc_cache_flush_required)(void);
-diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
-index d82f4fa2f1bf..64664311ac2b 100644
---- a/arch/x86/kernel/x86_init.c
-+++ b/arch/x86/kernel/x86_init.c
-@@ -130,8 +130,8 @@ struct x86_cpuinit_ops x86_cpuinit = {
- 
- static void default_nmi_init(void) { };
- 
--static void enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { }
--static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return false; }
-+static bool enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { return true; }
-+static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return true; }
- static bool enc_tlb_flush_required_noop(bool enc) { return false; }
- static bool enc_cache_flush_required_noop(void) { return false; }
- static bool is_private_mmio_noop(u64 addr) {return false; }
-diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
-index e0b51c09109f..4f95c449a406 100644
---- a/arch/x86/mm/mem_encrypt_amd.c
-+++ b/arch/x86/mm/mem_encrypt_amd.c
-@@ -319,7 +319,7 @@ static void enc_dec_hypercall(unsigned long vaddr, int npages, bool enc)
- #endif
- }
- 
--static void amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool enc)
-+static bool amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool enc)
- {
- 	/*
- 	 * To maintain the security guarantees of SEV-SNP guests, make sure
-@@ -327,6 +327,8 @@ static void amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool
- 	 */
- 	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP) && !enc)
- 		snp_set_memory_shared(vaddr, npages);
-+
-+	return true;
- }
- 
- /* Return true unconditionally: return value doesn't matter for the SEV side */
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 7159cf787613..b8f48ebe753c 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -2151,7 +2151,8 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
- 		cpa_flush(&cpa, x86_platform.guest.enc_cache_flush_required());
- 
- 	/* Notify hypervisor that we are about to set/clr encryption attribute. */
--	x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
-+	if (!x86_platform.guest.enc_status_change_prepare(addr, numpages, enc))
-+		return -EIO;
- 
- 	ret = __change_page_attr_set_clr(&cpa, 1);
- 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> +}
+
+[...]
+
+> diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
+> new file mode 100644
+> index 000000000000..ab2891c79b5c
+> --- /dev/null
+> +++ b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
+> @@ -0,0 +1,149 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Cadence USBHS-DEV controller - PCI Glue driver.
+> + *
+> + * Copyright (C) 2023 Cadence.
+> + *
+> + * Author: Pawel Laszczak <pawell-vna1KIf7WgpBDgjK7y7TUQ@public.gmane.org>
+> + *
+> + */
+> +
+> +#include <linux/pm_runtime.h>
+> +#include <linux/slab.h>
+> +#include <linux/pci.h>
+> +
+> +#include "cdns2-gadget.h"
+> +
+> +#define PCI_DRIVER_NAME		"cdns-pci-usbhs"
+> +#define CDNS_VENDOR_ID		0x17cd
+> +#define CDNS_DEVICE_ID		0x0120
+> +#define PCI_BAR_DEV		0
+> +#define PCI_DEV_FN_DEVICE	0
+> +
+> +static int cdns2_pci_probe(struct pci_dev *pdev,
+> +			   const struct pci_device_id *id)
+> +{
+> +	resource_size_t rsrc_start, rsrc_len;
+> +	struct device *dev = &pdev->dev;
+> +	struct cdns2_device *priv_dev;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	/* For GADGET PCI (devfn) function number is 0. */
+> +	if (!id || pdev->devfn != PCI_DEV_FN_DEVICE ||
+> +	    pdev->class != PCI_CLASS_SERIAL_USB_DEVICE)
+> +		return -EINVAL;
+> +
+> +	ret = pcim_enable_device(pdev);
+> +	if (ret)
+> +		dev_err(&pdev->dev, "Enabling PCI device has failed %d\n", ret);
+
+Should we bail out in this case?
+
+> +
+> +	pci_set_master(pdev);
+> +
+> +	priv_dev = kzalloc(sizeof(*priv_dev), GFP_KERNEL);
+> +	if (!priv_dev) {
+> +		ret = -ENOMEM;
+> +		goto disable_pci;
+
+Any reason, not to use devm_kzalloc() and manually hanfle kfree() in the 
+error handling path and in the removbe function ?
+
+> +	}
+> +
+> +	dev_dbg(dev, "Initialize resources\n");
+> +	rsrc_start = pci_resource_start(pdev, PCI_BAR_DEV);
+> +	rsrc_len = pci_resource_len(pdev, PCI_BAR_DEV);
+> +
+> +	res = devm_request_mem_region(dev, rsrc_start, rsrc_len, "dev");
+> +	if (!res) {
+> +		dev_dbg(dev, "controller already in use\n");
+> +		ret = -EBUSY;
+> +		goto free_priv_dev;
+> +	}
+> +
+> +	priv_dev->regs = devm_ioremap(dev, rsrc_start, rsrc_len);
+> +	if (!priv_dev->regs) {
+> +		dev_dbg(dev, "error mapping memory\n");
+> +		ret = -EFAULT;
+> +		goto free_priv_dev;
+> +	}
+> +
+> +	priv_dev->irq = pdev->irq;
+> +	dev_dbg(dev, "USBSS-DEV physical base addr: %pa\n",
+> +		&rsrc_start);
+> +
+> +	priv_dev->dev = dev;
+> +
+> +	priv_dev->eps_supported = 0x000f000f;
+> +	priv_dev->onchip_tx_buf = 16;
+> +	priv_dev->onchip_rx_buf = 16;
+> +
+> +	ret = cdns2_gadget_init(priv_dev);
+> +	if (ret)
+> +		goto free_priv_dev;
+> +
+> +	pci_set_drvdata(pdev, priv_dev);
+> +
+> +	device_wakeup_enable(&pdev->dev);
+> +	if (pci_dev_run_wake(pdev))
+> +		pm_runtime_put_noidle(&pdev->dev);
+> +
+> +	return 0;
+> +
+> +free_priv_dev:
+> +	kfree(priv_dev);
+> +
+> +disable_pci:
+> +	pci_disable_device(pdev);
+> +
+> +	return ret;
+> +}
+> +
+> +static void cdns2_pci_remove(struct pci_dev *pdev)
+> +{
+> +	struct cdns2_device *priv_dev = pci_get_drvdata(pdev);
+> +
+> +	if (pci_dev_run_wake(pdev))
+> +		pm_runtime_get_noresume(&pdev->dev);
+> +
+> +	cdns2_gadget_remove(priv_dev);
+> +	kfree(priv_dev);
+
+There is a pci_disable_device() in the error handling path of the probe, 
+but not in the remove function.
+
+Is it on purpose?
+Since pcim_enable_device() is used, is it needed above?
+
+CJ
+
+[...]
+
+> +static struct pci_driver cdns2_pci_driver = {
+> +	.name = "cdns2-pci",
+> +	.id_table = &cdns2_pci_ids[0],
+> +	.probe = cdns2_pci_probe,
+> +	.remove = cdns2_pci_remove,
+> +	.driver = {
+> +		.pm = pm_ptr(&cdns2_pci_pm_ops),
+> +	}
+> +};
+> +
+> +module_pci_driver(cdns2_pci_driver);
+> +MODULE_DEVICE_TABLE(pci, cdns2_pci_ids);
+> +
+> +MODULE_ALIAS("pci:cdns2");
+> +MODULE_AUTHOR("Pawel Laszczak <pawell-vna1KIf7WgpBDgjK7y7TUQ@public.gmane.org>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("Cadence CDNS2 PCI driver");
+
