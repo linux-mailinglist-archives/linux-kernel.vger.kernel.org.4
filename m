@@ -2,150 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E24F710A7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09446710A84
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 13:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240854AbjEYLC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 07:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S240903AbjEYLDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 07:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240832AbjEYLB7 (ORCPT
+        with ESMTP id S240901AbjEYLCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 07:01:59 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD77119
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:01:56 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-2533d74895bso1027995a91.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 04:01:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685012516; x=1687604516;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UbjVWck/hWoFPnwCC+/uqQ8bifjydlPxrNA6Wzo7G0w=;
-        b=YG23WwR4ZwaIZ7jMECdpEzffAUUzprTCGLkw5Ms+ryRqUEqthhCayg7o4n4ttM9Xex
-         xNH392l8qwf+BR7xOR44na0/oFzCKuMctOo48860cPXDyLuy8FjlKO6o+8V4TIdRDxvY
-         /C3TLJoFaTPzkMTafPrby8Z2Tfj9YAEosI4mJmPW3/VSrpjhw9g3ugjE9JKO3eHj8JLv
-         d6YvKeKo9YlX16X0rMu5XWbn0Cv/aUrmrv8YTyDnDjaEXRXls0T+h/pzTADqL9ezOOPj
-         bSbqYyKOHJUru6Ue+7bK4YULWXKo3SBn7ZDELVGunmH2lhUlC0Pnp6lmGa3YrxnUNVHJ
-         Fdcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685012516; x=1687604516;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UbjVWck/hWoFPnwCC+/uqQ8bifjydlPxrNA6Wzo7G0w=;
-        b=MgUaFZHYw+eeA0nSTYAYg0IIGYSEfRi6PHdSSkWrXdoK6cOosqFVgL/otIu/wdOgcl
-         NjL/izdzSlp1KJ3cKiBUrJiiMCyA5xI74bRXytib2KUAuOIQugHD+3BEZi/fpw3DvxNe
-         /ELQrH9uJ0+3YkW3rqax8d5JDu/vJqnLWYUX+TrpQKG9JZhtwVjbeP5B2UoPXBa9oFgD
-         VpQl5snCdU3QAhXM+y3NN3SfZjuPFlqdlfkaFUBaEdYws6lhbYW/g/O992kmKmCjxprB
-         KJXhPU4QyKUpOFA7LlTThr6IXnR8j+qUdHqPsgWJ+uMVR+pDnjg+hJKAGGjazFiqLrsF
-         cwwQ==
-X-Gm-Message-State: AC+VfDy92kSi+onyBrWu68G23I2vqEKjRG90YQdWjJ8j+rR54nDwhbxm
-        SlD6rL3YVs5BTje0jQmTv1OcCV26wKgaybi3jjvFdA==
-X-Google-Smtp-Source: ACHHUZ6ZPsbfxxo120zv1/o0xjAaF0T6hYsGyl2SeHsDctCjLENIkmGY9RKV14apPqLIsC2M2QV5/UCAkpxrfROm43k=
-X-Received: by 2002:a17:90a:8ce:b0:24b:7618:2d16 with SMTP id
- 14-20020a17090a08ce00b0024b76182d16mr1432337pjn.31.1685012515861; Thu, 25 May
- 2023 04:01:55 -0700 (PDT)
+        Thu, 25 May 2023 07:02:45 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D43F19C;
+        Thu, 25 May 2023 04:02:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685012564; x=1716548564;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=JUZRchCrUXgDaPejlQfvti7Go2spVqBqTTI8DzIipZk=;
+  b=YFcitSV7sQazdAoXzqK9xD1Ffcf7t23aP1g8v72mqd5DsqZNP28M8Ee2
+   zrnJ3DT0hh1JNdpKrudd/W1kZjOnNTd+l+dMdexEefIOPYy6rCw74927m
+   VjXeUVqMO42j+BIe79wuu7UKfG0kMIAXvLiizfWonpc5LGv8KSlX2ssQg
+   d569LGDn+dQOJkApEXB52HHoZbFDkUxpqgXnM9TM3g2T7VXHVF0MWWwrP
+   U9s5pS4/jwWF4oNtwDtkQfESSaueSby0l+IzVAKkwIgmfc4bqGnoSsKAV
+   JTvjDsjWWy0ZUcdCwOE4MQCzMamiBIWrJbdXuEPcpW7A5OAa9ONTRCi8/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="338430744"
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="scan'208";a="338430744"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 04:02:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="951402317"
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="scan'208";a="951402317"
+Received: from aghiriba-mobl.ger.corp.intel.com ([10.249.40.17])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 04:02:21 -0700
+Date:   Thu, 25 May 2023 14:02:19 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        jringle@gridpoint.com, tomasz.mon@camlingroup.com,
+        l.perczak@camlintechnologies.com,
+        linux-serial <linux-serial@vger.kernel.org>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v3 03/11] serial: sc16is7xx: mark IOCONTROL register as
+ volatile
+In-Reply-To: <20230525040324.3773741-4-hugo@hugovil.com>
+Message-ID: <751bc02d-d06f-55cb-cb7a-a39871a0775d@linux.intel.com>
+References: <20230525040324.3773741-1-hugo@hugovil.com> <20230525040324.3773741-4-hugo@hugovil.com>
 MIME-Version: 1.0
-References: <20230522102604.1081416-1-james.clark@arm.com>
-In-Reply-To: <20230522102604.1081416-1-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 25 May 2023 12:01:44 +0100
-Message-ID: <CAJ9a7VghEAKBE0OW-byyNN_9OXgYa_N__9c-3mGDRFVRHjiQrg@mail.gmail.com>
-Subject: Re: [PATCH] perf cs-etm: Copy kernel coresight-pmu.h header
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-perf-users@vger.kernel.org, acme@kernel.org,
-        siyanteng@loongson.cn, Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 at 11:26, James Clark <james.clark@arm.com> wrote:
->
-> Copy the kernel version of the header to fix the header diff build
-> warning. Some new definitions were only added to the tools side header,
-> but these are only used in Perf so move them to a different header.
->
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  tools/include/linux/coresight-pmu.h | 13 -------------
->  tools/perf/util/cs-etm.h            | 13 +++++++++++++
->  2 files changed, 13 insertions(+), 13 deletions(-)
->
-> diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
-> index cef3b1c25335..51ac441a37c3 100644
-> --- a/tools/include/linux/coresight-pmu.h
-> +++ b/tools/include/linux/coresight-pmu.h
-> @@ -21,19 +21,6 @@
->   */
->  #define CORESIGHT_LEGACY_CPU_TRACE_ID(cpu)  (0x10 + (cpu * 2))
->
-> -/* CoreSight trace ID is currently the bottom 7 bits of the value */
-> -#define CORESIGHT_TRACE_ID_VAL_MASK    GENMASK(6, 0)
-> -
-> -/*
-> - * perf record will set the legacy meta data values as unused initially.
-> - * This allows perf report to manage the decoders created when dynamic
-> - * allocation in operation.
-> - */
-> -#define CORESIGHT_TRACE_ID_UNUSED_FLAG BIT(31)
-> -
-> -/* Value to set for unused trace ID values */
-> -#define CORESIGHT_TRACE_ID_UNUSED_VAL  0x7F
-> -
->  /*
->   * Below are the definition of bit offsets for perf option, and works as
->   * arbitrary values for all ETM versions.
-> diff --git a/tools/perf/util/cs-etm.h b/tools/perf/util/cs-etm.h
-> index 70cac0375b34..ecca40787ac9 100644
-> --- a/tools/perf/util/cs-etm.h
-> +++ b/tools/perf/util/cs-etm.h
-> @@ -227,6 +227,19 @@ struct cs_etm_packet_queue {
->  #define INFO_HEADER_SIZE (sizeof(((struct perf_record_auxtrace_info *)0)->type) + \
->                           sizeof(((struct perf_record_auxtrace_info *)0)->reserved__))
->
-> +/* CoreSight trace ID is currently the bottom 7 bits of the value */
-> +#define CORESIGHT_TRACE_ID_VAL_MASK    GENMASK(6, 0)
-> +
-> +/*
-> + * perf record will set the legacy meta data values as unused initially.
-> + * This allows perf report to manage the decoders created when dynamic
-> + * allocation in operation.
-> + */
-> +#define CORESIGHT_TRACE_ID_UNUSED_FLAG BIT(31)
-> +
-> +/* Value to set for unused trace ID values */
-> +#define CORESIGHT_TRACE_ID_UNUSED_VAL  0x7F
-> +
->  int cs_etm__process_auxtrace_info(union perf_event *event,
->                                   struct perf_session *session);
->  struct perf_event_attr *cs_etm_get_default_config(struct perf_pmu *pmu);
-> --
-> 2.34.1
->
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
+On Thu, 25 May 2023, Hugo Villeneuve wrote:
+
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> Bit SRESET (3) is cleared when a reset operation is completed. Having
+> the IOCONTROL register as non-volatile will always read SRESET as 1.
+> Therefore mark IOCONTROL register as a volatile register.
+> 
+> Fixes: dfeae619d781 ("serial: sc16is7xx")
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+
+What is the impact of this problem? That is, what doesn't work? I only see 
+writes to SC16IS7XX_IOCONTROL_REG. If there are no concrete problems 
+fixed, don't put Fixes tag.
 
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+ i.
+
+> ---
+>  drivers/tty/serial/sc16is7xx.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
+> index 00054bb49780..a7c4da3cfd2b 100644
+> --- a/drivers/tty/serial/sc16is7xx.c
+> +++ b/drivers/tty/serial/sc16is7xx.c
+> @@ -488,6 +488,7 @@ static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned int reg)
+>  	case SC16IS7XX_TXLVL_REG:
+>  	case SC16IS7XX_RXLVL_REG:
+>  	case SC16IS7XX_IOSTATE_REG:
+> +	case SC16IS7XX_IOCONTROL_REG:
+>  		return true;
+>  	default:
+>  		break;
+> 
