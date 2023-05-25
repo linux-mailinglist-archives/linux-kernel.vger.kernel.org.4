@@ -2,89 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD29710DD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB3E710DDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241452AbjEYOCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S241458AbjEYOCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240681AbjEYOCQ (ORCPT
+        with ESMTP id S241475AbjEYOC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:02:16 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51AF1A4;
-        Thu, 25 May 2023 07:01:50 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QRqTn1cLmz4f3kp4;
-        Thu, 25 May 2023 22:01:17 +0800 (CST)
-Received: from [10.174.179.247] (unknown [10.174.179.247])
-        by APP4 (Coremail) with SMTP id gCh0CgBn0LMtam9kk9TAKA--.21737S3;
-        Thu, 25 May 2023 22:01:18 +0800 (CST)
-Message-ID: <586af9e9-d21a-632a-0396-b578d9d950d8@huaweicloud.com>
-Date:   Thu, 25 May 2023 22:01:17 +0800
+        Thu, 25 May 2023 10:02:29 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A62A1B5
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:02:03 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-309d3e8777cso796543f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:02:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685023320; x=1687615320;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HUbH3AqqDl8CE94ueCQYCD3fcBOZcuYmHQxQOWzVdSI=;
+        b=AB/2sJFSbuTqwsZTCrfgFt0hVWsnb/KsgsZvmfNIJ/vK0a8oqMv1d5VqO+0UXeGcqC
+         WNmVQURw2sdgCCZv2evGfdvntSL9XeVy7KQIio/WVhMEEWuRkFMYfDq8Nwg/DahYA5zy
+         egQSSPXTeS52CzY8Bd1kfbW+OFdLCwoBKT/jkG7tCa5iRqLXAJRZtsfkr0V7d/FGDrqa
+         8h2UGsOQHanQlZTXB1y644pZaRDcfNFSFHfjU5XvOTetWyShK4SwDSBraE7w7DUZiSVN
+         9IPrrwyvzX4KGugorH2+x1cOBhmY8zb+uqKHmkyHmToSDvbK20MDgJEUWTpCUrXA22CL
+         922g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685023320; x=1687615320;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HUbH3AqqDl8CE94ueCQYCD3fcBOZcuYmHQxQOWzVdSI=;
+        b=gJHA8MfLQma/0sTuh8jcG7P565zH1iNQszmJu9caQm8SBmADfAX7i5uYD5M6XIFM9c
+         PJLN0Aq50OXXw5WftGeIoBDZwtUyVHaqDakqJpeUUzcSKn6yxrA0w0KTkQFcLugCpS/d
+         vuFVv1vFJ6B1SNd0Yy5gYH+9WjmAD4jIznTyg00lgqrYDUnPbPLRdequggeYdqIzbSPN
+         VMcbzAFJEPyEkEC+a7/8pEc9juPMYzptB+31xkWnNj2gVr47etnO96DeZ/xYFEbXWPX8
+         +/0HDlWsSo/kKc/ilS6FM2uEarByUg2a63RO7rOp2N+p3mx68dUSC3DS8TjT6BN0OTLf
+         w8/A==
+X-Gm-Message-State: AC+VfDxn7H85bXUlcyuLFdidnYBn1OG9zPOflZ3hP4WRcVvjACRAmmYv
+        GcGeLoTY86SIACNPVRD0QGR+JA==
+X-Google-Smtp-Source: ACHHUZ4tXSENb+Vpjdf1ltyggjuSDPeNMOgHYDIP1ZGt4QKGSuaeGFxeAHpbVKgbP5ttyGtPZ1y0ew==
+X-Received: by 2002:adf:f644:0:b0:309:6fe4:a20d with SMTP id x4-20020adff644000000b003096fe4a20dmr2025859wrp.9.1685023320556;
+        Thu, 25 May 2023 07:02:00 -0700 (PDT)
+Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:5aef:8608:89d7:7961])
+        by smtp.gmail.com with ESMTPSA id u4-20020adfdd44000000b003063176ef09sm1944866wrm.6.2023.05.25.07.01.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 07:01:59 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
+        Sandipan Patra <spatra@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev@vger.kernel.org (open list:MELLANOX MLX5 core VPI driver),
+        linux-rdma@vger.kernel.org (open list:MELLANOX MLX5 core VPI driver),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/8] net/mlx5: Update the driver with the recent thermal changes
+Date:   Thu, 25 May 2023 16:01:28 +0200
+Message-Id: <20230525140135.3589917-2-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
+References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/3] raid10 bugfix
-To:     Song Liu <song@kernel.org>, linan666@huaweicloud.com
-Cc:     shli@fb.com, allenpeng@synology.com, alexwu@synology.com,
-        bingjingc@synology.com, neilb@suse.de, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com
-References: <20230522115449.2203939-1-linan666@huaweicloud.com>
- <CAPhsuW72GX2BrSmacuK9V2sD3V5DqL4AA_1datAbwNTYKm=LGg@mail.gmail.com>
-From:   Li Nan <linan666@huaweicloud.com>
-In-Reply-To: <CAPhsuW72GX2BrSmacuK9V2sD3V5DqL4AA_1datAbwNTYKm=LGg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBn0LMtam9kk9TAKA--.21737S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYW7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
-        Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvE
-        ncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I
-        8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0E
-        jII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbI
-        xvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
-        xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrx
-        kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
-        6r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW8JVW3JwCI42IY6I8E87Iv67AKxVWUJVW8Jw
-        CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5vtCUUUU
-        U
-X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The thermal framework is migrating to the generic trip points. The set
+of changes also implies a self-encapsulation of the thermal zone
+device structure where the internals are no longer directly accessible
+but with accessors.
 
+Use the new API instead, so the next changes can be pushed in the
+thermal framework without this driver failing to compile.
 
-在 2023/5/24 2:44, Song Liu 写道:
-> On Mon, May 22, 2023 at 4:56 AM <linan666@huaweicloud.com> wrote:
->>
->> From: Li Nan <linan122@huawei.com>
->>
->> Li Nan (3):
->>    md/raid10: fix null-ptr-deref of mreplace in raid10_sync_request
->>    md/raid10: fix incorrect done of recovery
->>    md/raid10: fix io loss while replacement replace rdev
-> 
-> Please address feedback and send v2.
-> 
-> Thanks,
-> Song
-> .
+No functional changes intended.
 
-Thanks for review, I will send v2 later.
+Cc: Sandipan Patra <spatra@nvidia.com>
+Cc: Gal Pressman <gal@nvidia.com>
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/thermal.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/thermal.c b/drivers/net/ethernet/mellanox/mlx5/core/thermal.c
+index e47fa6fb836f..20bb5eb266c1 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/thermal.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/thermal.c
+@@ -45,7 +45,7 @@ static int mlx5_thermal_get_mtmp_temp(struct mlx5_core_dev *mdev, u32 id, int *p
+ static int mlx5_thermal_get_temp(struct thermal_zone_device *tzdev,
+ 				 int *p_temp)
+ {
+-	struct mlx5_thermal *thermal = tzdev->devdata;
++	struct mlx5_thermal *thermal = thermal_zone_device_priv(tzdev);
+ 	struct mlx5_core_dev *mdev = thermal->mdev;
+ 	int err;
+ 
+@@ -81,12 +81,13 @@ int mlx5_thermal_init(struct mlx5_core_dev *mdev)
+ 		return -ENOMEM;
+ 
+ 	thermal->mdev = mdev;
+-	thermal->tzdev = thermal_zone_device_register(data,
+-						      MLX5_THERMAL_NUM_TRIPS,
+-						      MLX5_THERMAL_TRIP_MASK,
+-						      thermal,
+-						      &mlx5_thermal_ops,
+-						      NULL, 0, MLX5_THERMAL_POLL_INT_MSEC);
++	thermal->tzdev = thermal_zone_device_register_with_trips(data,
++								 NULL,
++								 MLX5_THERMAL_NUM_TRIPS,
++								 MLX5_THERMAL_TRIP_MASK,
++								 thermal,
++								 &mlx5_thermal_ops,
++								 NULL, 0, MLX5_THERMAL_POLL_INT_MSEC);
+ 	if (IS_ERR(thermal->tzdev)) {
+ 		dev_err(mdev->device, "Failed to register thermal zone device (%s) %ld\n",
+ 			data, PTR_ERR(thermal->tzdev));
 -- 
-Thanks,
-Nan
+2.34.1
 
