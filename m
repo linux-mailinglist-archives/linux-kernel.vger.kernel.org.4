@@ -2,51 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F3C71116F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBCF71117B
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 18:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235439AbjEYQzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 12:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
+        id S240433AbjEYQ65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 12:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240570AbjEYQyq (ORCPT
+        with ESMTP id S229832AbjEYQ6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 12:54:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D479E198;
-        Thu, 25 May 2023 09:54:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AB9A60E08;
-        Thu, 25 May 2023 16:54:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE6FEC433D2;
-        Thu, 25 May 2023 16:54:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685033684;
-        bh=b/kcNC1mTxOUZ8PoUr6DD3ar+AE8iZC0VPz7vvk8tD0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qZfvRBE3zCT2iw7jN4UFkM8SmL6iiCIqK252yGnvskmxmzTjCK3+SAbmA8bOYuLxX
-         aZKYWKY5nHfUAXaVMoxB5S+azrEzO+oUgWM5xTvlcu2EIwiPGee7UeNHr/cEqU9ZOq
-         b66kGuxiJdLPktnzRthBnF8Rcm2YfvR4eDs/k0CKQ8FXiJr2wTGrd7/Pac0CqmfFqX
-         gqtpa3Qk34BunwMJ/wVtZXsmXSMPGDz4tYOGKTcYLtu3UrxOlBL5heHCnNluPueNxx
-         RaG4TzhmkeC/m/cYK3rYCnRKF07ZB7a9FREKK0OfB9+OVPc8jl7wDk5p2mGxkEdnik
-         cpdpJlCuY4/ag==
-Received: by mercury (Postfix, from userid 1000)
-        id 631561060A3F; Thu, 25 May 2023 18:54:42 +0200 (CEST)
-Date:   Thu, 25 May 2023 18:54:42 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 6.4-rc
-Message-ID: <20230525165442.lnltc55c6ivirtub@mercury.elektranox.org>
+        Thu, 25 May 2023 12:58:55 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499EF135;
+        Thu, 25 May 2023 09:58:54 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PFAHul023388;
+        Thu, 25 May 2023 16:58:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=v3ifwnsMcKSTqVYUFaVpwmcfPvV69o1mSGOuxFfiRzc=;
+ b=KLKnpX9U5LmbSBWqWS6KZ8RkXt3LjD4bqqvn4/rPNf1Nhxtvucf4XII71VqXZvyp8NJk
+ bAKfDE7lMR53v30Qg5iWaqNeq7SB+1dfC/aH/xXiehh4FnoOXgh0EIYWmLB58Pk302p1
+ 0r+ndn/G0WP7F8ZrXw+HxuTy1km1IMZBbkSC4aKel7XRLqhX1QB3M9mxZgu1LGyy3dWZ
+ d/gH4OTpWjVJCsw6zrSj0r9w2qj+ynC1z0YUBfEgWSxPNAEbn/Ch9pPuX92SPkg/UovB
+ HHgY3b0S4twF2jI3yCICU6fxfNQkud28l+0Pcm0KgAHpwsKujS93wkLUM7cJk7Xfulw9 9Q== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qstg3t79g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 16:58:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PGwnOU024480
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 16:58:49 GMT
+Received: from [10.216.52.104] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
+ 2023 09:58:43 -0700
+Message-ID: <86396e49-96e8-20d1-7753-0e2e5a9c0347@quicinc.com>
+Date:   Thu, 25 May 2023 22:28:38 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="enjxfv2xgm7zhka3"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 2/4] dt-bindings: clock: qcom: Add SM8550 camera clock
+ controller
+To:     Conor Dooley <conor@kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        "Satya Priya Kakitapalli" <quic_skakitap@quicinc.com>,
+        <quic_ajipan@quicinc.com>, <quic_imrashai@quicinc.com>
+References: <20230519155602.6642-1-quic_jkona@quicinc.com>
+ <20230519155602.6642-3-quic_jkona@quicinc.com>
+ <20230519-crumb-vividly-0d278146defe@spud>
+From:   Jagadeesh Kona <quic_jkona@quicinc.com>
+In-Reply-To: <20230519-crumb-vividly-0d278146defe@spud>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: p2cKUfzz3COWO46kz_wvaZC7QDH5-Yn3
+X-Proofpoint-ORIG-GUID: p2cKUfzz3COWO46kz_wvaZC7QDH5-Yn3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_09,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 spamscore=0 clxscore=1011 mlxlogscore=744 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250141
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,114 +92,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Conor,
 
---enjxfv2xgm7zhka3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Thanks for your review!
 
-Hi Linus,
+On 5/19/2023 10:18 PM, Conor Dooley wrote:
+> On Fri, May 19, 2023 at 09:26:00PM +0530, Jagadeesh Kona wrote:
+>> Add device tree bindings for the camera clock controller on
+>> Qualcomm SM8550 platform.
+>>
+>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> 
+> Should this SoB go with a Co-developed-by?
+> I'll leave it up to Krzysztof or someone else familiar with qcom
+> products as to whether there's an existing binding that this should be
+> added to, but qcom,videocc.yaml seems "suspect" to an outsider.
+> 
+> Otherwise, what you have here looks fine to me.
+> 
+> Thanks,
+> Conor.
+Will reuse SM8450 CAMCC YAML file for SM8550
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.4-rc
-
-for you to fetch changes up to 95339f40a8b652b5b1773def31e63fc53c26378a:
-
-  power: supply: Fix logic checking if system is running from battery (2023-05-16 23:02:56 +0200)
-
-----------------------------------------------------------------
-Power Supply Fixes for 6.4 cycle
-
-Fixes for the 6.4 cycle:
- * Fix power_supply_get_battery_info for devices without parent
-   devices resulting in NULL pointer dereference
- * Fix desktop systems reporting to run on battery once a power-supply
-   device with device scope appears (e.g. a HID keyboard with a battery)
- * Ratelimit debug print about driver not providing data
- * Fix race condition related to external_power_changed in multiple
-   drivers (ab8500, axp288, bq25890, sc27xx, bq27xxx)
- * Fix LED trigger switching from blinking to solid-on when charging
-   finishes
- * Fix multiple races in bq27xxx battery driver
- * mt6360: handle potential ENOMEM from devm_work_autocancel
- * sbs-charger: Fix SBS_CHARGER_STATUS_CHARGE_INHIBITED bit
- * rt9467: avoid passing 0 to dev_err_probe
-
-----------------------------------------------------------------
-ChiaEn Wu (1):
-      power: supply: rt9467: Fix passing zero to 'dev_err_probe'
-
-Daisuke Nojiri (1):
-      power: supply: sbs-charger: Fix INHIBITED bit for Status reg
-
-Hans de Goede (15):
-      power: supply: ab8500: Fix external_power_changed race
-      power: supply: axp288_fuel_gauge: Fix external_power_changed race
-      power: supply: bq25890: Fix external_power_changed race
-      power: supply: sc27xx: Fix external_power_changed race
-      power: supply: leds: Fix blink to LED on transition
-      power: supply: bq27xxx: Fix bq27xxx_battery_update() race condition
-      power: supply: bq27xxx: Fix I2C IRQ race on remove
-      power: supply: bq27xxx: Fix poll_interval handling and races on remove
-      power: supply: bq27xxx: Add cache parameter to bq27xxx_battery_current_and_status()
-      power: supply: bq27xxx: Move bq27xxx_battery_update() down
-      power: supply: bq27xxx: Ensure power_supply_changed() is called on current sign changes
-      power: supply: bq27xxx: After charger plug in/out wait 0.5s for things to stabilize
-      power: supply: bq27xxx: Use mod_delayed_work() instead of cancel() + schedule()
-      power: supply: bq25890: Call power_supply_changed() after updating input current or voltage
-      power: supply: bq24190: Call power_supply_changed() after updating input current
-
-Huacai Chen (1):
-      power: supply: Fix power_supply_get_battery_info() if parent is NULL
-
-Kang Chen (1):
-      power: supply: mt6360: add a check of devm_work_autocancel in mt6360_charger_probe
-
-Marek Vasut (1):
-      power: supply: Ratelimit no data debug output
-
-Mario Limonciello (1):
-      power: supply: Fix logic checking if system is running from battery
-
- drivers/power/supply/ab8500_btemp.c        |   6 +-
- drivers/power/supply/ab8500_fg.c           |   6 +-
- drivers/power/supply/axp288_fuel_gauge.c   |   2 +-
- drivers/power/supply/bq24190_charger.c     |   1 +
- drivers/power/supply/bq25890_charger.c     |   5 +-
- drivers/power/supply/bq27xxx_battery.c     | 181 ++++++++++++++++-------------
- drivers/power/supply/bq27xxx_battery_i2c.c |   3 +-
- drivers/power/supply/mt6360_charger.c      |   4 +-
- drivers/power/supply/power_supply_core.c   |  15 ++-
- drivers/power/supply/power_supply_leds.c   |   5 +-
- drivers/power/supply/power_supply_sysfs.c  |   3 +-
- drivers/power/supply/rt9467-charger.c      |   2 +-
- drivers/power/supply/sbs-charger.c         |   2 +-
- drivers/power/supply/sc27xx_fuel_gauge.c   |   9 +-
- include/linux/power/bq27xxx_battery.h      |   4 +
- 15 files changed, 136 insertions(+), 112 deletions(-)
-
---enjxfv2xgm7zhka3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRvktIACgkQ2O7X88g7
-+pqgDA//WAUAILRGRhZ8clOyhjItdJRn6Op3+rARg1DvRby/uKW+CLUHAkJ3EgLk
-ILJGSpXDbaoMFlcMRxv24QkUE9IEiZ/8043Jm77cHNfOL1dcdWWGw1YvylOIbIkX
-cXUNi6OZF3KVbviPvlncETx9cxGPkMlz34aqtP92iT+wMPNouji1rhUiLpC8PVcT
-xN+8cou8NOYZHFubA9sHTTgA26VYI2b2Zl6B1ssfqlREMOOH899WlgaCwW1sXRvm
-MKmYmlkdck/B3xg/NLIXCT5iczNx400X/a0fukXkPktH8uK3VtRalopfB5roRYPK
-V3HIjKMGSF0fNdeJ/3h5AaiYWYKvmOvKKruFHBAY6+37uNwDmKusSP+UYteqXqH4
-C0iRtj1UDl51M2UPv7z/xXxa3BUD5/Fvep2Xdd3Fknpm1HcNdlrgz9OF0epAe8Ky
-ZU7uyz3wToEY9ZtmUzpsP31IDo9IyJQmyauQ1RvBCsoNlYPR2ZfFek5kpgTa/uvB
-YeMVyxzMBOuay3Gm4ra+hTRSm5f4txLpwlh47+jNt+fiQ7KUiG/i4bSg04IU04iQ
-b4+9u1cqsfloYm7fDeSSbisVkEDC+e4tzylr+sXuMRaYDdGXJ9K0ZiefXPruvtG1
-p4v28gphHOk3v0GKd71Lr6onqlou1VwU88GtWh0iMUbdDv/r0JA=
-=hJcO
------END PGP SIGNATURE-----
-
---enjxfv2xgm7zhka3--
+Thanks & Regards,
+Jagadeesh
