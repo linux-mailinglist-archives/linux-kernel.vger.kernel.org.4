@@ -2,184 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C80F7117AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418367117AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241933AbjEYTv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 15:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
+        id S242042AbjEYTv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 15:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235214AbjEYTvx (ORCPT
+        with ESMTP id S241958AbjEYTvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 15:51:53 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BEA12F;
-        Thu, 25 May 2023 12:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=51vGjxfu+4jotgoJPqTXpcFpuWreFBe0vTvfgLveh0Y=; b=WzVLUJN1dYmV1mynMoZwi8ICIP
-        NtA2lShoTygqgtpXYkIe5sF+5WXFcm+Jej6ktbE0g1HpXQY48uBsUku8kaEZnZPk+afyRbucGHlVH
-        IfnoX6xV203VqkBQlAt+SCGwYq/twxrjzXsLXbvklVi1JjmcvcH5dEn+z/QM2PS/JZbLwSmIZSCci
-        fe3qpg/sqS71PwAhakT6qeoQWcR+2gyRal1XLChNGtkmorNg2tkzOHienaazOQTRiuvJVroRFkYkX
-        AcA3vPn2CAWVu84iHYg7djTtkD0KeJXqDLmaZbYy/F67zzhxODejLfgFcO0KvCMUgjDfUXszBFvYH
-        U8jC/61A==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1q2GzU-0000BH-Lm; Thu, 25 May 2023 21:51:16 +0200
-Received: from [178.197.248.42] (helo=linux.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1q2GzT-00018s-Nw; Thu, 25 May 2023 21:51:15 +0200
-Subject: Re: [PATCH bpf-next 1/2] bpf, net: Support SO_REUSEPORT sockets with
- bpf_sk_assign
-To:     Eric Dumazet <edumazet@google.com>,
-        Lorenz Bauer <lmb@isovalent.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Joe Stringer <joe@wand.net.nz>, Joe Stringer <joe@cilium.io>,
-        Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20230525081923.8596-1-lmb@isovalent.com>
- <CANn89iJx74gR7Xuahd0S3pLXYC8EX6+JRkbt6T_bemMX-8zyig@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <a71b8941-1ffc-37fc-6676-d3b4cf44f149@iogearbox.net>
-Date:   Thu, 25 May 2023 21:51:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 25 May 2023 15:51:55 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1C5AA
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:51:35 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-565a3cdba71so2023567b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 12:51:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1685044295; x=1687636295;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dQtVi/2EvKDxLlI3bV7/HKRrNErdeyi9JL2Y1lgW7U0=;
+        b=Swg9j2dX6OFqvp/TbbvMAvLSnvq4lrSFepdc7WisPr485X0zxndyAOTcnYAWuQlJnD
+         PWBVlHe9ycm6hZ1quoMvEnRLVj6JFbsPmhJaylAoUIIUCaxFkkFWYjRngOn75C4lG5dq
+         0rT6q9ds9flykVL2GXwJMgoWlC05gr+EpUapg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685044295; x=1687636295;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dQtVi/2EvKDxLlI3bV7/HKRrNErdeyi9JL2Y1lgW7U0=;
+        b=F2+zU8IsXNZvQf00LTRYIXfgDSAOlR+bpZ5038IprZduORT/JLt9XEe0jY90UGjnoy
+         EgiBzjb7dSOQzSv40VRdPR3xaCKHDAFwrU66t4/Rb52HuCQQgob/ptCY0z+TACiMWxXf
+         2EuP0rDk07BQ73ZUzU7jYAUWqAkkSGqCRDvLubf2zFBhpIIOeyWfRR2tRrODf0MZXAQD
+         HjEp3DKUAJZ92xDQwh5I3uzMs/AxusZ4j9uT0ISvYfdOef/GBugD5DOc2SLOxWEFC/Tj
+         1aYkqUi10JeNzBDrpr7yGVg9g0eaiU8qMb9SScg2woAMg9bg9thwCSOySyGTNue8IC4u
+         Lzww==
+X-Gm-Message-State: AC+VfDxINlt1oF0KRe4jNwdP1R3fYuEgtFJoUfwEjuWnZwzSZwXAboDJ
+        015J0+dRAw0plbiiYzQCjmk+E0Sq5zHlfNEkYdvR+Q==
+X-Google-Smtp-Source: ACHHUZ48YLnlxKAvKA5r3j7SV3FxQvvF2F8Z3cb2tPTI6RLteNgzhMgofaL8DiLyWzreAJOpz+qbXIlc7eGttaRZhwI=
+X-Received: by 2002:a81:6bd6:0:b0:564:dd8d:b0d0 with SMTP id
+ g205-20020a816bd6000000b00564dd8db0d0mr774098ywc.22.1685044294749; Thu, 25
+ May 2023 12:51:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CANn89iJx74gR7Xuahd0S3pLXYC8EX6+JRkbt6T_bemMX-8zyig@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26918/Thu May 25 09:25:14 2023)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230524153239.3036507-1-joel@joelfernandes.org>
+ <20230524153239.3036507-2-joel@joelfernandes.org> <CAHk-=wiNUe7YjK9fmZk+2ZQhjLH-64WrkwnXO9813_iLuaFXuQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wiNUe7YjK9fmZk+2ZQhjLH-64WrkwnXO9813_iLuaFXuQ@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 25 May 2023 15:51:23 -0400
+Message-ID: <CAEXW_YQO5-=4HRiZFiJ7ZsAHSLFEhHP29czqODFkH5mmVeqjZQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] mm/mremap: Optimize the start addresses in move_page_tables()
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/23 3:24 PM, Eric Dumazet wrote:
-> On Thu, May 25, 2023 at 10:19 AM Lorenz Bauer <lmb@isovalent.com> wrote:
->>
->> Currently the bpf_sk_assign helper in tc BPF context refuses SO_REUSEPORT
->> sockets. This means we can't use the helper to steer traffic to Envoy, which
->> configures SO_REUSEPORT on its sockets. In turn, we're blocked from removing
->> TPROXY from our setup.
->>
->> The reason that bpf_sk_assign refuses such sockets is that the bpf_sk_lookup
->> helpers don't execute SK_REUSEPORT programs. Instead, one of the
->> reuseport sockets is selected by hash. This could cause dispatch to the
->> "wrong" socket:
->>
->>      sk = bpf_sk_lookup_tcp(...) // select SO_REUSEPORT by hash
->>      bpf_sk_assign(skb, sk) // SK_REUSEPORT wasn't executed
->>
->> Fixing this isn't as simple as invoking SK_REUSEPORT from the lookup
->> helpers unfortunately. In the tc context, L2 headers are at the start
->> of the skb, while SK_REUSEPORT expects L3 headers instead.
->>
->> Instead, we execute the SK_REUSEPORT program when the assigned socket
->> is pulled out of the skb, further up the stack. This creates some
->> trickiness with regards to refcounting as bpf_sk_assign will put both
->> refcounted and RCU freed sockets in skb->sk. reuseport sockets are RCU
->> freed. We can infer that the sk_assigned socket is RCU freed if the
->> reuseport lookup succeeds, but convincing yourself of this fact isn't
->> straight forward. Therefore we defensively check refcounting on the
->> sk_assign sock even though it's probably not required in practice.
->>
->> Fixes: 8e368dc ("bpf: Fix use of sk->sk_reuseport from sk_assign")
->> Fixes: cf7fbe6 ("bpf: Add socket assign support")
->> Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
->> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
->> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
->> Cc: Joe Stringer <joe@cilium.io>
->> Link: https://lore.kernel.org/bpf/CACAyw98+qycmpQzKupquhkxbvWK4OFyDuuLMBNROnfWMZxUWeA@mail.gmail.com/
->> ---
->>   include/net/inet6_hashtables.h | 36 +++++++++++++++++++++++++++++-----
->>   include/net/inet_hashtables.h  | 27 +++++++++++++++++++++++--
->>   include/net/sock.h             |  7 +++++--
->>   include/uapi/linux/bpf.h       |  3 ---
->>   net/core/filter.c              |  2 --
->>   net/ipv4/inet_hashtables.c     | 15 +++++++-------
->>   net/ipv4/udp.c                 | 23 +++++++++++++++++++---
->>   net/ipv6/inet6_hashtables.c    | 19 +++++++++---------
->>   net/ipv6/udp.c                 | 23 +++++++++++++++++++---
->>   tools/include/uapi/linux/bpf.h |  3 ---
->>   10 files changed, 119 insertions(+), 39 deletions(-)
-> 
-> 
->> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
->> index e7391bf310a7..920131e4a65d 100644
->> --- a/net/ipv4/inet_hashtables.c
->> +++ b/net/ipv4/inet_hashtables.c
->> @@ -332,10 +332,10 @@ static inline int compute_score(struct sock *sk, struct net *net,
->>          return score;
->>   }
->>
->> -static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
->> -                                           struct sk_buff *skb, int doff,
->> -                                           __be32 saddr, __be16 sport,
->> -                                           __be32 daddr, unsigned short hnum)
->> +struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
->> +                                  struct sk_buff *skb, int doff,
->> +                                  __be32 saddr, __be16 sport,
->> +                                  __be32 daddr, unsigned short hnum)
->>   {
->>          struct sock *reuse_sk = NULL;
->>          u32 phash;
->> @@ -346,6 +346,7 @@ static inline struct sock *lookup_reuseport(struct net *net, struct sock *sk,
->>          }
->>          return reuse_sk;
->>   }
->> +EXPORT_SYMBOL_GPL(inet_lookup_reuseport);
->>
->>   /*
->>    * Here are some nice properties to exploit here. The BSD API
->> @@ -369,8 +370,8 @@ static struct sock *inet_lhash2_lookup(struct net *net,
->>          sk_nulls_for_each_rcu(sk, node, &ilb2->nulls_head) {
->>                  score = compute_score(sk, net, hnum, daddr, dif, sdif);
->>                  if (score > hiscore) {
->> -                       result = lookup_reuseport(net, sk, skb, doff,
->> -                                                 saddr, sport, daddr, hnum);
->> +                       result = inet_lookup_reuseport(net, sk, skb, doff,
->> +                                                      saddr, sport, daddr, hnum);
->>                          if (result)
->>                                  return result;
->>
-> 
-> Please split in a series.
-> 
-> First a patch renaming lookup_reuseport() to inet_lookup_reuseport()
-> and inet6_lookup_reuseport()
-> (cleanup, no change in behavior)
-> 
-> This would ease review and future bug hunting quite a bit.
+Hi Linus,
 
-Makes sense and should reduce the churn on the actual change.
+On Wed, May 24, 2023 at 7:23=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Hmm. I'm still quite unhappy about your can_align_down().
+>
+> On Wed, May 24, 2023 at 8:32=E2=80=AFAM Joel Fernandes (Google)
+> <joel@joelfernandes.org> wrote:
+> >
+> > +       /* If the masked address is within vma, we cannot align the add=
+ress down. */
+> > +       if (vma->vm_start <=3D addr_masked)
+> > +               return false;
+>
+> I don't think this test is right.
+>
+> The test should not be "is the mapping still there at the point we
+> aligned down to".
+>
+> No, the test should be whether there is any part of the mapping below
+> the point we're starting with:
+>
+>         if (vma->vm_start < addr_to_align)
+>                 return false;
+>
+> because we can do the "expand the move down" *only* if it's the
+> beginning of the vma (because otherwise we'd be moving part of the vma
+> that precedes the address!)
 
-I think Lorenz is planning to flush out a v2 next week with this split.
+You are right, I missed that. Funny I did think about this case you
+mentioned. I will fix it in the next revision, thanks.
 
-Thanks,
-Daniel
+> (Alternatively, just make that "<" be "!=3D" - we're basically saying
+> that we can expand moving ptes to a pmd boundary *only* if this vma
+> starts at that point. No?).
+
+Yes, I prefer the "!=3D" check. I will use that.
+
+>
+> > +       cur =3D find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
+> > +       if (!cur || cur !=3D vma || !prev)
+> > +               return false;
+>
+> I've mentioned this test before, and I still find it actively misleading.
+>
+> First off, the "!cur || cur !=3D vma" test is clearly redundant. We know
+> 'vma' isn't NULL (we just dereferenced it!). So "cur !=3D vma" already
+> includes the "!cur" test.
+>
+> So that "!cur" part of the test simply *cannot* be sensible.
+
+Ok, I agree with you now.
+
+> And the "!prev" test still makes no sense to me. You tried to explain
+> it to me earlier, and I clearly didn't get it. It seems actively
+> wrong. I still think "!prev" should return true.
+
+Yes, ok. Sounds good.
+
+> You seemed to think that "!prev" couldn';t actually happen and would
+> be a sign of some VM problem, but that doesn't make any sense to me.
+> Of course !prev can happen - if "vma" is the first vma in the VM and
+> there is no previous.
+>
+> It may be *rare*, but I still don't understand why you'd make that
+> "there is no vma below us" mean "we cannot expand the move below us
+> because there's something there".
+>
+> So I continue to think that this test should just be
+>
+>         if (WARN_ON_ONCE(cur !=3D vma))
+>                 return false;
+
+I agree with this now.
+
+>
+> because if it ever returns something that *isn't* the same as vma,
+> then we do indeed have serious problems. But that WARN_ON_ONCE() shows
+> that that's a "cannot happen" thing, not some kind of "if this happens
+> than don't do it" test.
+>
+> and then the *real* test  for "can we align down" should just be
+>
+>         return !prev || prev->vm_end <=3D addr_masked;
+
+Agreed, that's cleaner.
+
+> Because while I think your code _works_, it really doesn't seem to
+> make much sense as it stands in your patch. The tests are actively
+> misleading. No?
+
+True, your approach makes me want to improve on writing cleaner code
+than being excessively paranoid. So thank you for that.
+
+These patches have been tricky to get right so thank you for your
+continued input and quick feedback.
+
+I will add a test for the case you mentioned above where the address
+to realign wasn't in the VMA's beginning.
+
+thanks,
+
+- Joel
