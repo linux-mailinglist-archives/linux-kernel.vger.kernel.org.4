@@ -2,129 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C957112C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B77E7112C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233203AbjEYRqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        id S234204AbjEYRqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239698AbjEYRqi (ORCPT
+        with ESMTP id S240624AbjEYRqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:46:38 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CAD1A7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:46:17 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5618857518dso11873397b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:46:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685036776; x=1687628776;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6xpqqXPrAvFJvmn1X4m04iFO9lqyLz151DsCgMF2J2A=;
-        b=vsGHJndszpsQgsdTVc/Azi40HECtyqi5XkDlxGBY6rgqlIl1PWECEjZy+H+NbkelvI
-         +2l57sQdXnaIZSlMjZhOTiV6TEQKfdPsAvNE3iG2iq2G3Y7SCMqyQj/kw2tufMtbMCcA
-         o7wBhpZIWOYH0dgYE6ChQUtyv0bo7CDTBOEOVj63onjziAuTcrTf8A9x2LB1DwJymdCN
-         To1ewi+4lz8kZPupTR1kWQ4hC4Ulo4tXxWHQtFUJ3gadgLqiWxqFCExouCIyJUtqnC8B
-         hd9nf4QGoSu8fdDf0plkasadfslHp+FzcHo3IqGNHNjurioOjg97iT4oMCDmBejQnJmi
-         KS4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685036776; x=1687628776;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6xpqqXPrAvFJvmn1X4m04iFO9lqyLz151DsCgMF2J2A=;
-        b=TWdy+LdtfRdKLS0to7pfwprWD4tkRGkYT7MoUColPrMvz91m7/gO1yF1rkAgR+wZEL
-         vx+aM8Wq3wXV9gpIcFb4rVykLg5gsBxcuB4AomvS+9gB0DA+uQrupmUVdW88bL2tMmLa
-         wbDqsu3AMDXVmNjsLLlHFuppeDACiNpqf3haaThuLJc+e1d0Bi2gftfcUWGDqC0SoS3r
-         mi2l3t8+q2twmiv2iDS46fdtaxHZj5rzaW1zxqWpmKzcXYAo86J7w/iZcG4czJmNbrpd
-         KWA19p5GZzDZ0S3FqWV4Q3u2OKrkx18TFnXNbCJmS4o2G2IXKUO0B4kvi8xbQv80Z/KF
-         f/IA==
-X-Gm-Message-State: AC+VfDw3ZljrItALxpikzs8wCZioS49tdaUbuM//JeyvnY492pZB0SKY
-        U/kWHW5OzrmU7EwmEYbIRVRGFwRErug=
-X-Google-Smtp-Source: ACHHUZ6uecTzKvghpOusKXyvvuAFO92WI6ZAoaZZajrASjfWuYLGwgqWAH1KX8n/LYSi4fQ+kXcbOnBKe+w=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:b606:0:b0:561:c4ef:1def with SMTP id
- u6-20020a81b606000000b00561c4ef1defmr227363ywh.0.1685036776503; Thu, 25 May
- 2023 10:46:16 -0700 (PDT)
-Date:   Thu, 25 May 2023 10:46:15 -0700
-In-Reply-To: <20230420104622.12504-4-ljrcore@126.com>
-Mime-Version: 1.0
-References: <20230420104622.12504-1-ljrcore@126.com> <20230420104622.12504-4-ljrcore@126.com>
-Message-ID: <ZG+e55VbXd/YCnnV@google.com>
-Subject: Re: [PATCH v2 3/7] KVM: selftests: Test unavailable event filters are rejected
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jinrong Liang <ljr.kernel@gmail.com>
-Cc:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 13:46:44 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79BE410B
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:46:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5CF881042;
+        Thu, 25 May 2023 10:47:21 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5D1233F6C4;
+        Thu, 25 May 2023 10:46:35 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     hch@infradead.org
+Cc:     m.szyprowski@samsung.com, iommu@lists.linux.dev,
+        catalin.marinas@arm.com, linux-kernel@vger.kernel.org,
+        logang@deltatee.com
+Subject: [PATCH] dma-mapping: Name SG DMA flag helpers consistently
+Date:   Thu, 25 May 2023 18:46:31 +0100
+Message-Id: <fa2eca2862c7ffc41b50337abffb2dfd2864d3ea.1685036694.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.39.2.101.g768bb238c484.dirty
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023, Jinrong Liang wrote:
-> From: Jinrong Liang <cloudliang@tencent.com>
-> 
-> From: Jinrong Liang <cloudliang@tencent.com>
-> 
-> Adds unsupported input test cases for PMU filter. Specifically,
-> it tests the input of unsupported "action" values, unsupported
-> "flags" values, and unsupported "nevents" values, which should
-> all return an error, as they are currently unsupported by the
-> filter. Additionally, the patch tests setting non-exist fixed
-> counters in the fixed bitmap doesn't fail.
-> 
-> This change aims to improve the testing of the PMU filter and
-> ensure that it functions correctly in all supported use cases.
-> The patch has been tested and verified to function correctly.
-> 
-> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
-> ---
->  .../kvm/x86_64/pmu_event_filter_test.c        | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> index 4e87eea6986b..a3d5c30ce914 100644
-> --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-> @@ -27,6 +27,10 @@
->  #define ARCH_PERFMON_BRANCHES_RETIRED		5
->  
->  #define NUM_BRANCHES 42
-> +#define FIXED_CTR_NUM_MASK				GENMASK_ULL(4, 0)
-> +#define PMU_EVENT_FILTER_INVALID_ACTION		(KVM_PMU_EVENT_DENY + 1)
-> +#define PMU_EVENT_FILTER_INVALID_FLAGS			(KVM_PMU_EVENT_FLAG_MASKED_EVENTS + 1)
-> +#define PMU_EVENT_FILTER_INVALID_NEVENTS		(MAX_FILTER_EVENTS + 1)
->  
->  /*
->   * This is how the event selector and unit mask are stored in an AMD
-> @@ -743,10 +747,22 @@ static int run_filter_test(struct kvm_vcpu *vcpu, const uint64_t *events,
->  	return r;
->  }
->  
-> +static uint8_t get_kvm_supported_fixed_num(void)
-> +{
-> +	const struct kvm_cpuid_entry2 *kvm_entry;
-> +
-> +	if (host_cpu_is_amd)
-> +		return 0;
-> +
-> +	kvm_entry = get_cpuid_entry(kvm_get_supported_cpuid(), 0xa, 0);
-> +	return kvm_entry->edx & FIXED_CTR_NUM_MASK;
+sg_is_dma_bus_address() is inconsistent with the naming pattern of its
+corresponding setters and its own kerneldoc, so take the majority vote
+and rename it sg_dma_is_bus_address() (and fix up the missing
+underscores in the kerneldoc too). This gives us a nice clear pattern
+where SG DMA flags are SG_DMA_<NAME>, and the helpers for acting on them
+are sg_dma_<action>_<name>().
 
-Ah, I got ahead of myself.  This is where the KVM_X86_PROPERTY comes in.
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+ drivers/iommu/dma-iommu.c   | 8 ++++----
+ drivers/iommu/iommu.c       | 2 +-
+ include/linux/scatterlist.h | 8 ++++----
+ kernel/dma/direct.c         | 2 +-
+ 4 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 7a9f0b0bddbd..b8bba4aa196f 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -1080,7 +1080,7 @@ static int __finalise_sg(struct device *dev, struct scatterlist *sg, int nents,
+ 		sg_dma_address(s) = DMA_MAPPING_ERROR;
+ 		sg_dma_len(s) = 0;
+ 
+-		if (sg_is_dma_bus_address(s)) {
++		if (sg_dma_is_bus_address(s)) {
+ 			if (i > 0)
+ 				cur = sg_next(cur);
+ 
+@@ -1136,7 +1136,7 @@ static void __invalidate_sg(struct scatterlist *sg, int nents)
+ 	int i;
+ 
+ 	for_each_sg(sg, s, nents, i) {
+-		if (sg_is_dma_bus_address(s)) {
++		if (sg_dma_is_bus_address(s)) {
+ 			sg_dma_unmark_bus_address(s);
+ 		} else {
+ 			if (sg_dma_address(s) != DMA_MAPPING_ERROR)
+@@ -1329,7 +1329,7 @@ static void iommu_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
+ 	 * just have to be determined.
+ 	 */
+ 	for_each_sg(sg, tmp, nents, i) {
+-		if (sg_is_dma_bus_address(tmp)) {
++		if (sg_dma_is_bus_address(tmp)) {
+ 			sg_dma_unmark_bus_address(tmp);
+ 			continue;
+ 		}
+@@ -1343,7 +1343,7 @@ static void iommu_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
+ 
+ 	nents -= i;
+ 	for_each_sg(tmp, tmp, nents, i) {
+-		if (sg_is_dma_bus_address(tmp)) {
++		if (sg_dma_is_bus_address(tmp)) {
+ 			sg_dma_unmark_bus_address(tmp);
+ 			continue;
+ 		}
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index f1dcfa3f1a1b..eb620552967b 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -2567,7 +2567,7 @@ ssize_t iommu_map_sg(struct iommu_domain *domain, unsigned long iova,
+ 			len = 0;
+ 		}
+ 
+-		if (sg_is_dma_bus_address(sg))
++		if (sg_dma_is_bus_address(sg))
+ 			goto next;
+ 
+ 		if (len) {
+diff --git a/include/linux/scatterlist.h b/include/linux/scatterlist.h
+index 375a5e90d86a..d1ed52d083da 100644
+--- a/include/linux/scatterlist.h
++++ b/include/linux/scatterlist.h
+@@ -259,7 +259,7 @@ static inline void sg_unmark_end(struct scatterlist *sg)
+ #define SG_DMA_BUS_ADDRESS (1 << 0)
+ 
+ /**
+- * sg_dma_is_bus address - Return whether a given segment was marked
++ * sg_dma_is_bus_address - Return whether a given segment was marked
+  *			   as a bus address
+  * @sg:		 SG entry
+  *
+@@ -267,13 +267,13 @@ static inline void sg_unmark_end(struct scatterlist *sg)
+  *   Returns true if sg_dma_mark_bus_address() has been called on
+  *   this segment.
+  **/
+-static inline bool sg_is_dma_bus_address(struct scatterlist *sg)
++static inline bool sg_dma_is_bus_address(struct scatterlist *sg)
+ {
+ 	return sg->dma_flags & SG_DMA_BUS_ADDRESS;
+ }
+ 
+ /**
+- * sg_dma_mark_bus address - Mark the scatterlist entry as a bus address
++ * sg_dma_mark_bus_address - Mark the scatterlist entry as a bus address
+  * @sg:		 SG entry
+  *
+  * Description:
+@@ -301,7 +301,7 @@ static inline void sg_dma_unmark_bus_address(struct scatterlist *sg)
+ 
+ #else
+ 
+-static inline bool sg_is_dma_bus_address(struct scatterlist *sg)
++static inline bool sg_dma_is_bus_address(struct scatterlist *sg)
+ {
+ 	return false;
+ }
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index 5595d1d5cdcc..d29cade048db 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -463,7 +463,7 @@ void dma_direct_unmap_sg(struct device *dev, struct scatterlist *sgl,
+ 	int i;
+ 
+ 	for_each_sg(sgl,  sg, nents, i) {
+-		if (sg_is_dma_bus_address(sg))
++		if (sg_dma_is_bus_address(sg))
+ 			sg_dma_unmark_bus_address(sg);
+ 		else
+ 			dma_direct_unmap_page(dev, sg->dma_address,
+-- 
+2.39.2.101.g768bb238c484.dirty
+
