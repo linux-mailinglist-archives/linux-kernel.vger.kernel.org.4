@@ -2,84 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE30F710DB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 467FE710DBE
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241224AbjEYN5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
+        id S241080AbjEYN7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241195AbjEYN52 (ORCPT
+        with ESMTP id S241197AbjEYN7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:57:28 -0400
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028B4199
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:57:14 -0700 (PDT)
-Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-456f7ea8694so194564e0c.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685023033; x=1687615033;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SjXLBP5xNer1wTnBOJomhSlEzBF7juDtm2PHV6Lv/6M=;
-        b=SCYpJCxD3xQFw84DxLYIw4xYuFIXbznBg4TaKsdVZDBcAgriBwuolhGfxV9FkLp2g0
-         XoQ61QezNJLfaTqcyTcVbhqXIm8FaYt26urbDInX4AHZF9MHSq2PAUlzUrmaB0iTdR+3
-         ECGzCtoZQrOGX8OS98ZEzr38Tm7GmvPvgD/g+I+fZLxjHIcDtCi9T46LLp/KCQTW1FkN
-         zIdtekswGYRFN0Hd79AAkBP819NHJJeLU/8/XpHqPCvPEVH+dC7RGOa0Mvaw93cg8SJh
-         89i22WmnmesgFwMcsEc6G3QjmOTZyVGM5+R5mNNmuxVL6MhbUwXEECD19AyTNnhIcB5c
-         0m/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685023033; x=1687615033;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SjXLBP5xNer1wTnBOJomhSlEzBF7juDtm2PHV6Lv/6M=;
-        b=L5eB1ccbnNpiz4YrQ0aJ6hd9mJk4sMe13gDhACWA0ZunTtT6wA0mdShkjCwS0n7zQ6
-         KQ5Fja0yzsQV/FlddyAdydAJ9wn/5UOEkrtJ02JEaeQx5cXu1aJY3lFB+hN1tiIWHDdR
-         f/Huv27RwQjKjsYEXs4/NX2GE9biqW/9DurwRRBF+4c1h0E1o4ZIMw5OWh+44tCXSW4i
-         d1xmBpEYoj5hqMwoUCw935QRHpQ+9n/rcuftjyTJlcGlOcGmJNdlzBc9ZjAHFeSR5qFh
-         k6xoTSdAv79q/q32dpU09Bs7muRzVmw+8ffu6sGWrfjYiV0aAxy3jWT2sHekL9KMt7l3
-         wSaQ==
-X-Gm-Message-State: AC+VfDznAxgf3koyIy5Lb+WBUNHbJzqVdnH1iNFl+kWafMV/j9veWM5+
-        jxicHgn22Ehvs4ekN/of9B+tkanCJLuoERNBWO4=
-X-Google-Smtp-Source: ACHHUZ6/8dzD8nIiqszVtA0BuNuIlptN/pBJrknucK9LJ2heZzxO7Il3YJ/5h5tJvlIeDgJq531WMjAjgfKlR+cyjG0=
-X-Received: by 2002:a1f:5c4d:0:b0:456:d210:68e2 with SMTP id
- q74-20020a1f5c4d000000b00456d21068e2mr6588416vkb.10.1685023033065; Thu, 25
- May 2023 06:57:13 -0700 (PDT)
+        Thu, 25 May 2023 09:59:51 -0400
+Received: from smtp-8faf.mail.infomaniak.ch (smtp-8faf.mail.infomaniak.ch [IPv6:2001:1600:3:17::8faf])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B31A199
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:59:48 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QRqS21ymJzMqR7q;
+        Thu, 25 May 2023 15:59:46 +0200 (CEST)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QRqRs62HQzMrvhY;
+        Thu, 25 May 2023 15:59:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1685023186;
+        bh=dkxhZ1HkwQnup1ntsnpZMoLqXeEGTbS0hUQ4TXONwZM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=z7dLLPtoGNMkprHSpGt6xiWHcyKmtDBlHRXiVa8nrKOQpQVJaMTM9UlR6ArI194Tz
+         QXVWg9U8wg3ep4cqLdnYovLTDgvCD2x6qehmxK+0nYNikwoJuBw6oD50iugwe2xhqn
+         Gl2TgNvsZgLXncnPn3fvZ8S1jZ3eCH7T1FazAaIE=
+Message-ID: <facfd178-3157-80b4-243b-a5c8dabadbfb@digikod.net>
+Date:   Thu, 25 May 2023 15:59:35 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:6124:5199:b0:36b:efd0:c1b4 with HTTP; Thu, 25 May 2023
- 06:57:12 -0700 (PDT)
-Reply-To: choipark90@yahoo.com
-From:   Choi Park <ubacustormerscar@gmail.com>
-Date:   Thu, 25 May 2023 14:57:12 +0100
-Message-ID: <CAGMLrsUUA8Xv+u9EBF6a6jJiLABe3FeLDmDRXkKqzEFu=FrmYw@mail.gmail.com>
-Subject: investment partners
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+User-Agent: 
+Subject: Re: [RFC PATCH v1 0/9] Hypervisor-Enforced Kernel Integrity
+Content-Language: en-US
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "yuanyu@google.com" <yuanyu@google.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "marian.c.rotariu@gmail.com" <marian.c.rotariu@gmail.com>,
+        "Graf, Alexander" <graf@amazon.com>,
+        "Andersen, John S" <john.s.andersen@intel.com>,
+        "madvenka@linux.microsoft.com" <madvenka@linux.microsoft.com>,
+        "liran.alon@oracle.com" <liran.alon@oracle.com>,
+        "ssicleru@bitdefender.com" <ssicleru@bitdefender.com>,
+        "tgopinath@microsoft.com" <tgopinath@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "dev@lists.cloudhypervisor.org" <dev@lists.cloudhypervisor.org>,
+        "mdontu@bitdefender.com" <mdontu@bitdefender.com>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "nicu.citu@icloud.com" <nicu.citu@icloud.com>,
+        "ztarkhani@microsoft.com" <ztarkhani@microsoft.com>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <20230505152046.6575-1-mic@digikod.net>
+ <93726a7b9498ec66db21c5792079996d5fed5453.camel@intel.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <93726a7b9498ec66db21c5792079996d5fed5453.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello my friend how are you doing with your daily activities I hope
-you are doing well, sorry that I have to contact you via this platform
-again as I have tried to post this information via regular post but I
-did not get a reply from you.
-Please this massage is not meant to steal your information or harm you
-but just to  do what my client mandated me to do  . i got your contact
-when searching for a reliable and reputable person that can be trusted
-as my that client  Mrs Ma-Ri  Kim from  Hong Kong  who  Directed  me
-to get her someone that she will trust to invest part of her money
-outside Hong Kong   for her under aged child  if you are interested
-and can handle this funds let me know I hoping to hear from you for
-more details  .
-as said this  massage  does not any way  to steal your information or
-anything evil
-Mr Choi Park
+
+On 25/05/2023 00:20, Edgecombe, Rick P wrote:
+> On Fri, 2023-05-05 at 17:20 +0200, Mickaël Salaün wrote:
+>> # How does it work?
+>>
+>> This implementation mainly leverages KVM capabilities to control the
+>> Second
+>> Layer Address Translation (or the Two Dimensional Paging e.g.,
+>> Intel's EPT or
+>> AMD's RVI/NPT) and Mode Based Execution Control (Intel's MBEC)
+>> introduced with
+>> the Kaby Lake (7th generation) architecture. This allows to set
+>> permissions on
+>> memory pages in a complementary way to the guest kernel's managed
+>> memory
+>> permissions. Once these permissions are set, they are locked and
+>> there is no
+>> way back.
+>>
+>> A first KVM_HC_LOCK_MEM_PAGE_RANGES hypercall enables the guest
+>> kernel to lock
+>> a set of its memory page ranges with either the HEKI_ATTR_MEM_NOWRITE
+>> or the
+>> HEKI_ATTR_MEM_EXEC attribute. The first one denies write access to a
+>> specific
+>> set of pages (allow-list approach), and the second only allows kernel
+>> execution
+>> for a set of pages (deny-list approach).
+>>
+>> The current implementation sets the whole kernel's .rodata (i.e., any
+>> const or
+>> __ro_after_init variables, which includes critical security data such
+>> as LSM
+>> parameters) and .text sections as non-writable, and the .text section
+>> is the
+>> only one where kernel execution is allowed. This is possible thanks
+>> to the new
+>> MBEC support also brough by this series (otherwise the vDSO would
+>> have to be
+>> executable). Thanks to this hardware support (VT-x, EPT and MBEC),
+>> the
+>> performance impact of such guest protection is negligible.
+>>
+>> The second KVM_HC_LOCK_CR_UPDATE hypercall enables guests to pin some
+>> of its
+>> CPU control register flags (e.g., X86_CR0_WP, X86_CR4_SMEP,
+>> X86_CR4_SMAP),
+>> which is another complementary hardening mechanism.
+>>
+>> Heki can be enabled with the heki=1 boot command argument.
+>>
+>>
+> 
+> Can the guest kernel ask the host VMM's emulated devices to DMA into
+> the protected data? It should go through the host userspace mappings I
+> think, which don't care about EPT permissions. Or did I miss where you
+> are protecting that another way? There are a lot of easy ways to ask
+> the host to write to guest memory that don't involve the EPT. You
+> probably need to protect the host userspace mappings, and also the
+> places in KVM that kmap a GPA provided by the guest.
+
+Good point, I'll check this confused deputy attack. Extended KVM 
+protections should indeed handle all ways to map guests' memory. I'm 
+wondering if current VMMs would gracefully handle such new restrictions 
+though.
+
+
+> 
+> [ snip ]
+> 
+>>
+>> # Current limitations
+>>
+>> The main limitation of this patch series is the statically enforced
+>> permissions. This is not an issue for kernels without module but this
+>> needs to
+>> be addressed.  Mechanisms that dynamically impact kernel executable
+>> memory are
+>> not handled for now (e.g., kernel modules, tracepoints, eBPF JIT),
+>> and such
+>> code will need to be authenticated.  Because the hypervisor is highly
+>> privileged and critical to the security of all the VMs, we don't want
+>> to
+>> implement a code authentication mechanism in the hypervisor itself
+>> but delegate
+>> this verification to something much less privileged. We are thinking
+>> of two
+>> ways to solve this: implement this verification in the VMM or spawn a
+>> dedicated
+>> special VM (similar to Windows's VBS). There are pros on cons to each
+>> approach:
+>> complexity, verification code ownership (guest's or VMM's), access to
+>> guest
+>> memory (i.e., confidential computing).
+> 
+> The kernel often creates writable aliases in order to write to
+> protected data (kernel text, etc). Some of this is done right as text
+> is being first written out (alternatives for example), and some happens
+> way later (jump labels, etc). So for verification, I wonder what stage
+> you would be verifying? If you want to verify the end state, you would
+> have to maintain knowledge in the verifier of all the touch-ups the
+> kernel does. I think it would get very tricky.
+
+For now, in the static kernel case, all rodata and text GPA is 
+restricted, so aliasing such memory in a writable way before or after 
+the KVM enforcement would still restrict write access to this memory, 
+which could be an issue but not a security one. Do you have such 
+examples in mind?
+
+
+> 
+> It also seems it will be a decent ask for the guest kernel to keep
+> track of GPA permissions as well as normal virtual memory pemirssions,
+> if this thing is not widely used.
+
+This would indeed be required to properly handle the dynamic cases.
+
+
+> 
+> So I wondering if you could go in two directions with this:
+> 1. Make this a feature only for super locked down kernels (no modules,
+> etc). Forbid any configurations that might modify text. But eBPF is
+> used for seccomp, so you might be turning off some security protections
+> to get this.
+
+Good idea. For "super locked down kernels" :) , we should disable all 
+kernel executable changes with the related kernel build configuration 
+(e.g. eBPF JIT, kernel module, kprobes…) to make sure there is no such 
+legitimate access. This looks like an acceptable initial feature.
+
+
+> 2. Loosen the rules to allow the protections to not be so one-way
+> enable. Get less security, but used more widely.
+
+This is our goal. I think both static and dynamic cases are legitimate 
+and have value according to the level of security sought. This should be 
+a build-time configuration.
+
+> 
+> There were similar dilemmas with the PV CR pinning stuff.
