@@ -2,102 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D797117D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1321E7117DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235721AbjEYUGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 16:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
+        id S241395AbjEYUIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 16:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbjEYUGU (ORCPT
+        with ESMTP id S239801AbjEYUIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 16:06:20 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE4DA7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:06:18 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2af30a12e84so10961181fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1685045176; x=1687637176;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U3spcq+MrkOIWF4SfW0stmLuaSodhQuiQ2dFEDG11ZA=;
-        b=Y2amLA3bKwVejayNzOT4S2WIDvyXw7VfW5iFKCytn5tcad8JCmmuQb9kunBGUyiN1R
-         djsNvbvOhc12DL9y9u5Qm05x3ppmerrqayzEcWr2r6+Ai8goHUIRzFewdMUQ6jkPHJAv
-         X2Ymz4SIrraaHvPpIPnbumHz+/QQZc+8b41uI=
+        Thu, 25 May 2023 16:08:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41BBB2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685045284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Pscghevf+cSG52ERcGqww4er3grbyjpAV659C+ZtVu8=;
+        b=aySUPW3khLTGmyjYvAWH6G9DK8/t7+YSouEfXNDB0oxez9fHFSoDEypOSCZK9vtbFlsixi
+        2qS9oo6ViHeTaHg1LyEvc2Bo9rG+GTH8VXNBA6L7l53U6x37HnEuVxOwrjWRCnSceYnj9g
+        KfC9gVl3hupehc/VtOflsKqgMEmvhuE=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-627-_rkvqrGPOz-f9udm2MDBHQ-1; Thu, 25 May 2023 16:08:03 -0400
+X-MC-Unique: _rkvqrGPOz-f9udm2MDBHQ-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-626047242b9so329476d6.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:08:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685045176; x=1687637176;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U3spcq+MrkOIWF4SfW0stmLuaSodhQuiQ2dFEDG11ZA=;
-        b=TirJkHlIzp2uBSodWEFZ8d09D2ukyVEFYZBx8Qt3UVbToGac4q2JmI8+1ZgMQqnuth
-         dz6PQwagGczRfW+XmwzvGpWCyjhjFsiM2clQB6v5zYKgYViO57KKpKwl4rDObmW96yKr
-         Jk4Xr88K7wNwyI5RNai89SNUbOUZaRK8bSoHOWhO3GDGqTDhPajj+WowIWPakPeS8fZI
-         qZZrixeTKT6TVALHAK8WdgtARY8BACYTe7UPNPSE0rQnb4wvFVh3IZcfjmlcTkw2Z5g2
-         yuVb6L1z9JfD7lwYdjmj1LgzUdvAYsmZG0+pM3R9AvECc55W9md/P/XwYOHXhIwsY83U
-         AL2g==
-X-Gm-Message-State: AC+VfDwm+SGyVnh5zGZQeQcx6mK4YIgSYgso3dufYlGGGI7B76c9f6Lz
-        ux5oNVWsVHPE9nY8dUtOn4ziZ1Lg27l7sLDBc2Zy
-X-Google-Smtp-Source: ACHHUZ7hJ5WkNy8+TAtwUENxM1v6lnmWt2g0rRrlpenYRzRQ/0Ej7gcTYezaDZ+q1V9T2tP6MZTe5bQ4Bb2Ja436M+w=
-X-Received: by 2002:a2e:7c05:0:b0:2a8:a858:a4ab with SMTP id
- x5-20020a2e7c05000000b002a8a858a4abmr1209094ljc.39.1685045176486; Thu, 25 May
- 2023 13:06:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685045282; x=1687637282;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pscghevf+cSG52ERcGqww4er3grbyjpAV659C+ZtVu8=;
+        b=hHL7xuV++09kffx1uc2ToecNjjxixfVX2KxMpmKuqiouxSjnIRBetZ9X7Zr4AEeqDU
+         JUvWyNyVcQN/7MhGVuzFbt+7dTEk0z4MCr++uWko96v77cDxKvdViz/4W/i4AVx4ni/f
+         5AGwf0mPSexwLgldIMy26qiRkn4rAkdSvWUIIqq868k54HB7nKP3WfPPIID36kXTNy3m
+         lSvmMbEojY2E+THvWjX2MOF7LqW7b1LkYfkV71o9aS5Y78UPo5QvkNbdC+wd3VWLh0RE
+         PTG3bW4opRlBk52R1iV0MMy6q4klfBoW1oZIA9GY7OQWfehju8n5iP4rX5matlhvIcIU
+         thFQ==
+X-Gm-Message-State: AC+VfDxCnl2Fw8oGiY7gk5Qf6Ph52SO/PfpkTY+cwE+dcvT7Tw6mZPHf
+        HAao+2LW754dKLN5QULyM8mjaSzBQhA8q991i8boOG84vYm1RrfGLrSo+3KHwyoYKslWDuYHEVo
+        TyENDSDl+tsSnzfAnKpEVriff
+X-Received: by 2002:ad4:5cce:0:b0:625:aa48:def6 with SMTP id iu14-20020ad45cce000000b00625aa48def6mr2958790qvb.54.1685045282646;
+        Thu, 25 May 2023 13:08:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7LtC1076E/oGoBe45eqDKHdSLnAL80iwqLeHY19bYNAJnnZix57WmgzgioKtImTkWVm13Drg==
+X-Received: by 2002:ad4:5cce:0:b0:625:aa48:def6 with SMTP id iu14-20020ad45cce000000b00625aa48def6mr2958758qvb.54.1685045282407;
+        Thu, 25 May 2023 13:08:02 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id lw1-20020a05621457c100b005ef81cc63ccsm649736qvb.117.2023.05.25.13.08.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 13:08:01 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     Felix.Kuehling@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, nathan@kernel.org, ndesaulniers@google.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/amdkfd: remove unused function get_reserved_sdma_queues_bitmap
+Date:   Thu, 25 May 2023 16:07:59 -0400
+Message-Id: <20230525200759.3214525-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20230525-guacamole-swimmer-68048a73baac@wendy>
- <CAK9=C2WUyLxZwQO37cN-i+V+A3yxmEoaj=uE8yR8nseYTDW7oQ@mail.gmail.com>
- <20230525-postnasal-monopoly-98adb96ffaa1@wendy> <CAAhSdy06nQh4H1FP_K_-VF462mhj+F2M=4AV4QSCUGe5XVqX0g@mail.gmail.com>
- <20230525-shrapnel-precut-26500fca4a48@wendy> <CAAhSdy3SqeLdAfaojUki=ht21nr4ZUPMkW_t9M6ntQCt6Ds4Nw@mail.gmail.com>
- <20230525-citric-waged-a2f78d27eb0c@wendy> <CAOnJCULfC0jmiucLNMeJZwJf4QbGAN6r4B-ubUbP16KVpxrCfA@mail.gmail.com>
- <20230525-flaring-trading-f2bf0713ae26@spud> <CAOnJCUK_EgX-En1QNS8yX1WA1nj8w2kpvXMQcvgWuR3dvzEQYw@mail.gmail.com>
- <20230525-desecrate-imposing-d97ab34e06ad@spud>
-In-Reply-To: <20230525-desecrate-imposing-d97ab34e06ad@spud>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 25 May 2023 13:06:04 -0700
-Message-ID: <CAOnJCUKfRv68Bh8ue=ZhMGxai9_UEHLpm3553g2c2NXh-RP-TQ@mail.gmail.com>
-Subject: Re: Bug report: kernel paniced when system hibernates
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Alexandre Ghiti <alex@ghiti.fr>, robh@kernel.org,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        jeeheng.sia@starfivetech.com, linux-kernel@vger.kernel.org,
-        palmer@rivosinc.com, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Song Shuai <suagrfillet@gmail.com>,
-        linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:39=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
-ote:
->
-> On Thu, May 25, 2023 at 11:37:40AM -0700, Atish Patra wrote:
->
-> > Any testing of hibernation still needs to revert the patch until we
-> > have the proper fix.
->
-> "the patch" is what exactly? I assume you don't mean depending on
-> NONPORTABLE, since that is a Kconfig option.
+clang with W=1 reports
+drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device_queue_manager.c:122:24: error:
+  unused function 'get_reserved_sdma_queues_bitmap' [-Werror,-Wunused-function]
+static inline uint64_t get_reserved_sdma_queues_bitmap(struct device_queue_manager *dqm)
+                       ^
+This function is not used so remove it.
 
-Nope. Sorry I meant the commit
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-3335068 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
+index 493b4b66f180..2fbd0a96424f 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_device_queue_manager.c
+@@ -119,11 +119,6 @@ unsigned int get_num_xgmi_sdma_queues(struct device_queue_manager *dqm)
+ 		dqm->dev->kfd->device_info.num_sdma_queues_per_engine;
+ }
+ 
+-static inline uint64_t get_reserved_sdma_queues_bitmap(struct device_queue_manager *dqm)
+-{
+-	return dqm->dev->kfd->device_info.reserved_sdma_queues_bitmap;
+-}
+-
+ static void init_sdma_bitmaps(struct device_queue_manager *dqm)
+ {
+ 	bitmap_zero(dqm->sdma_bitmap, KFD_MAX_SDMA_QUEUES);
+-- 
+2.27.0
 
-
---=20
-Regards,
-Atish
