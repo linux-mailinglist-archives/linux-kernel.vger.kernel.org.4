@@ -2,176 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C747111EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39C97111F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238184AbjEYRU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S240993AbjEYRVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236311AbjEYRUz (ORCPT
+        with ESMTP id S230129AbjEYRVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:20:55 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CAC1A4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:20:48 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75b08639930so58725485a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685035247; x=1687627247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=idVvh3Hi/Oxhf6eEX+oF6Y39sENzliovz45uq92Jgac=;
-        b=dXoLpKXqaoar+9J5WZ565irtkP9mp/Z9ejfauR9coLH2R8X9wD90CHTWYApPU+rDUz
-         KUwcmYAWzSlHMJeSlCR5GOtS+2V6LGwpwHdn067k72imWd3U1CwMREAbP6cWyNTV6TyA
-         /TDD4M0CAbLsVMvcZTjq35F1QoJS638ojjuiHzKSlhy6LJw8rVnpA4nRBbiRyrfB6gGO
-         lDy6bbUftSNHWTitNtQWpaal380n+vrX8lNcTfiYCu4jpne0FhNRfyMpuquQ+re0eYmg
-         Z5dYOCeYHB4Vt3zA71kGptKnRd13QaI5hIDK0uhfq03NRvgk+AmOI5wQqbmfXOEPEXTl
-         U6EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685035247; x=1687627247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=idVvh3Hi/Oxhf6eEX+oF6Y39sENzliovz45uq92Jgac=;
-        b=TIrqLL2ZwweVHNXMi4Q7NEzjBKYWDkSw5hm2RE8rl1tx09TkJFgWepjOmIAv3UTtFO
-         dGzWJUCLPBKSL7O2Q3veLA400/FGiMfBQU/iEW/d6qAn7/r1KP3MvuoPdHuDXAyzwDeG
-         PMPQg7GpQjFqCAYJLI/yLW8MawcjhS4R785I12za7O1kjsSfgUmsePh7eVJ/70TPo0K/
-         tIb32x+6aYYynJnoAL2LQtTVkgwOitmA/cwEwO/gPPWTDZrU4z/vXIyRWbC4Y/UTt+85
-         40d2JgysxAx463Uxd91m6a/e8h3prxppnrgn4GZi294g/yfikyretmuyThBJ8/9YEbTb
-         l0tg==
-X-Gm-Message-State: AC+VfDxRkvDJx80UYJ/+RLPnlxIkcB91a4t3EIHU6pgK+UIc2lW6Dq5q
-        cjh5+/N/tTJao71ZccX/RITyOBRhp/xkR8Bw5iJbQKqeMGu+MBnofOwdVw==
-X-Google-Smtp-Source: ACHHUZ6YN2OHVzq5lblbEVFVyuZYsf5PZl90I1LnhIBj0jt0olmiCSdaWhPh+5nnkil1lWiIUdAbGsFocTvFIUehI4g=
-X-Received: by 2002:a05:620a:439c:b0:75b:23a1:d858 with SMTP id
- a28-20020a05620a439c00b0075b23a1d858mr3626403qkp.26.1685035247090; Thu, 25
- May 2023 10:20:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230521160426.1881124-1-masahiroy@kernel.org> <20230521160426.1881124-9-masahiroy@kernel.org>
-In-Reply-To: <20230521160426.1881124-9-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 25 May 2023 10:20:36 -0700
-Message-ID: <CAKwvOdmDRNXQd0oDCjV1XdCk4coEd4_=V_idpObc9ibuVwOWgw@mail.gmail.com>
-Subject: Re: [PATCH v6 08/20] modpost: remove is_shndx_special() check from section_rel(a)
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 13:21:09 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A49195;
+        Thu, 25 May 2023 10:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=b9Zte/1jFhBuFVD5ydCZfQdpJv9ttP11KPikJhqUxls=; b=AXPlcTFdx9qZlDVeR7WrLfgkZR
+        8oVfKSuX/aewdBSKXqeOW5wDnFjnzXEBBjxe3iBNWEJIRhEks7aVeUdNTuQ1f8p5GJmNNBpbyYKBs
+        uIhxlpQX3BKTy18j4WJTm8XESWyN0IgKrCbhaWZ3nLuV0jkYWZ8yVdXaizUb7TZWcL+g=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:50040 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q2Edr-0001iA-0O; Thu, 25 May 2023 13:20:54 -0400
+Date:   Thu, 25 May 2023 13:20:46 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     andy.shevchenko@gmail.com, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230525132046.6c48f2fd9235215f01238a04@hugovil.com>
+In-Reply-To: <20230525113145.35cef67328b63ba4239d2361@hugovil.com>
+References: <20230525040324.3773741-1-hugo@hugovil.com>
+        <20230525040324.3773741-10-hugo@hugovil.com>
+        <ZG9FBgX2useVeuWl@surfacebook>
+        <20230525113145.35cef67328b63ba4239d2361@hugovil.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 09/11] serial: sc16is7xx: add I/O register
+ translation offset
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> This check is unneeded. Without it, sec_name() will returns the null
-> string "", then section_mismatch() will return immediately.
->
-> Anyway, special section indices rarely appear in these loops.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Thu, 25 May 2023 11:31:45 -0400
+Hugo Villeneuve <hugo@hugovil.com> wrote:
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> On Thu, 25 May 2023 14:22:46 +0300
+> andy.shevchenko@gmail.com wrote:
+> 
+> > Thu, May 25, 2023 at 12:03:23AM -0400, Hugo Villeneuve kirjoitti:
+> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > 
+> > > If the shared GPIO pins on a dual port/channel variant like the
+> > > SC16IS752 are configured as GPIOs for port A, and modem control lines
+> > > on port A, we need to translate the Linux GPIO offset to an offset
+> > > that is compatible with the I/O registers of the SC16IS7XX (IOState,
+> > > IODir and IOIntEna).
+> > > 
+> > > Add a new variable to store that offset and set it when we detect that
+> > > special case.
+> > 
+> > ...
+> > 
+> > > +/*
+> > > + * We may need to translate the Linux GPIO offset to a SC16IS7XX offset.
+> > > + * This is needed only for the case where a dual port variant is configured to
+> > > + * have only port B as modem status lines.
+> > > + *
+> > > + * Example for SC16IS752/762 with upper bank (port A) set as GPIOs, and
+> > > + * lower bank (port B) set as modem status lines (special case described above):
+> > > + *
+> > > + * Pin         GPIO pin     Linux GPIO     SC16IS7XX
+> > > + * name        function     offset         offset
+> > > + * --------------------------------------------------
+> > > + * GPIO7/RIA    GPIO7          3              7
+> > > + * GPIO6/CDA    GPIO6          2              6
+> > > + * GPIO5/DTRA   GPIO5          1              5
+> > > + * GPIO4/DSRA   GPIO4          0              4
+> > > + * GPIO3/RIB    RIB           N/A            N/A
+> > > + * GPIO2/CDB    CDB           N/A            N/A
+> > > + * GPIO1/DTRB   DTRB          N/A            N/A
+> > > + * GPIO0/DSRB   DSRB          N/A            N/A
+> > > + *
+> > > + * Example  for SC16IS750/760 with upper bank (7..4) set as modem status lines,
+> > 
+> > Single space is enough.
+> 
+> Fixed.
+> 
+>  
+> > > + * and lower bank (3..0) as GPIOs:
+> > > + *
+> > > + * Pin         GPIO pin     Linux GPIO     SC16IS7XX
+> > > + * name        function     offset         offset
+> > > + * --------------------------------------------------
+> > > + * GPIO7/RI     RI            N/A            N/A
+> > > + * GPIO6/CD     CD            N/A            N/A
+> > > + * GPIO5/DTR    DTR           N/A            N/A
+> > > + * GPIO4/DSR    DSR           N/A            N/A
+> > > + * GPIO3        GPIO3          3              3
+> > > + * GPIO2        GPIO2          2              2
+> > > + * GPIO1        GPIO1          1              1
+> > > + * GPIO0        GPIO0          0              0
+> > > + */
+> > 
+> > Wondering if you can always register 8 pins and use valid mask to define which
+> > one are in use?
+> 
+> I will look into it, I think it may be a good idea and could help to simplify things a bit.
 
-> ---
->
-> Changes in v6:
->   - Remove is_shndx_special() definition
->
->  scripts/mod/modpost.c | 16 ++++------------
->  scripts/mod/modpost.h |  5 -----
->  2 files changed, 4 insertions(+), 17 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index f364738a236e..40fac4f64fcd 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1361,7 +1361,6 @@ static int addend_mips_rel(struct elf_info *elf, El=
-f_Shdr *sechdr, Elf_Rela *r)
->  static void section_rela(const char *modname, struct elf_info *elf,
->                          Elf_Shdr *sechdr)
->  {
-> -       Elf_Sym  *sym;
->         Elf_Rela *rela;
->         Elf_Rela r;
->         unsigned int r_sym;
-> @@ -1404,11 +1403,8 @@ static void section_rela(const char *modname, stru=
-ct elf_info *elf,
->                                 continue;
->                         break;
->                 }
-> -               sym =3D elf->symtab_start + r_sym;
-> -               /* Skip special sections */
-> -               if (is_shndx_special(sym->st_shndx))
-> -                       continue;
-> -               check_section_mismatch(modname, elf, sym,
-> +
-> +               check_section_mismatch(modname, elf, elf->symtab_start + =
-r_sym,
->                                        fsecndx, fromsec, r.r_offset, r.r_=
-addend);
->         }
->  }
-> @@ -1416,7 +1412,6 @@ static void section_rela(const char *modname, struc=
-t elf_info *elf,
->  static void section_rel(const char *modname, struct elf_info *elf,
->                         Elf_Shdr *sechdr)
->  {
-> -       Elf_Sym *sym;
->         Elf_Rel *rel;
->         Elf_Rela r;
->         unsigned int r_sym;
-> @@ -1463,11 +1458,8 @@ static void section_rel(const char *modname, struc=
-t elf_info *elf,
->                 default:
->                         fatal("Please add code to calculate addend for th=
-is architecture\n");
->                 }
-> -               sym =3D elf->symtab_start + r_sym;
-> -               /* Skip special sections */
-> -               if (is_shndx_special(sym->st_shndx))
-> -                       continue;
-> -               check_section_mismatch(modname, elf, sym,
-> +
-> +               check_section_mismatch(modname, elf, elf->symtab_start + =
-r_sym,
->                                        fsecndx, fromsec, r.r_offset, r.r_=
-addend);
->         }
->  }
-> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-> index 1178f40a73f3..b1e2d95f8047 100644
-> --- a/scripts/mod/modpost.h
-> +++ b/scripts/mod/modpost.h
-> @@ -151,11 +151,6 @@ struct elf_info {
->         Elf32_Word   *symtab_shndx_stop;
->  };
->
-> -static inline int is_shndx_special(unsigned int i)
-> -{
-> -       return i !=3D SHN_XINDEX && i >=3D SHN_LORESERVE && i <=3D SHN_HI=
-RESERVE;
-> -}
-> -
->  /* Accessor for sym->st_shndx, hides ugliness of "64k sections" */
->  static inline unsigned int get_secindex(const struct elf_info *info,
->                                         const Elf_Sym *sym)
-> --
-> 2.39.2
->
+Hi,
+finally, this was the way to go. The resulting code/patch is much simpler and elegant this way. Thank you for the suggestion.
 
+I will submit a V4 with all the changes.
 
---=20
-Thanks,
-~Nick Desaulniers
+Hugo.
