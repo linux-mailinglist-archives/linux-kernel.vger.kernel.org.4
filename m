@@ -2,155 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1CC7112E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886DD7112E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236440AbjEYRxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S238966AbjEYRy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbjEYRxm (ORCPT
+        with ESMTP id S230265AbjEYRy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:53:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCF597;
-        Thu, 25 May 2023 10:53:40 -0700 (PDT)
-Date:   Thu, 25 May 2023 17:53:38 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685037218;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=oZIJ944O+77XG1tBqABBNpbuyoFIQ90Ml03G5VCwmns=;
-        b=gcztliWmrO0p2gx6UtKjkH7IoiB7JNVSeXzrBOCqz2fWCdOUY4km7OsO3SkyqaDtPvpmzo
-        O0BEGk3Xicx2z/gaAKr/CtZiMfN2UnEtdHgrPRBrogvkBZkqDTdnkzqX1FVye10jVfUIxF
-        j4ODaiIEhEkWSUdSpCXpaGIHwN6XhEiV37PHFdXHqcgoZIz0UsTc45mohV+le2AsMWhAr9
-        rfSYfNlcw100NFmhn57a68vEmXw/0FPVntNbwxVAigg9tpnajdxVF7ZJYV3ytGOSRLvA1s
-        sZ68wZ23Bb5zrwT6D/Q6gprKh2nTuaw1fGbF+u7RR7H+NXQdSvZ03HxwOnfcbA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685037218;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=oZIJ944O+77XG1tBqABBNpbuyoFIQ90Ml03G5VCwmns=;
-        b=9cOE9CF6lPkY7Mj+jwqaRToW+EgMt0Lvrfcn9Dj9fBo61OxdKjBLJUPQMFf/POZNpIXUT9
-        4eijTwSdRATS0mDQ==
-From:   "tip-bot2 for Zhang Rui" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/topology: Fix erroneous smp_num_siblings on
- Intel Hybrid platforms
-Cc:     Len Brown <len.brown@intel.com>, Zhang Rui <rui.zhang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Thu, 25 May 2023 13:54:28 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C1097;
+        Thu, 25 May 2023 10:54:27 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-973bf581759so128328366b.0;
+        Thu, 25 May 2023 10:54:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685037265; x=1687629265;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y/20VApzN3sPBkZnwvcb54AXnS2bInta1+wgq5QOgNk=;
+        b=oPFaXJfLPwtyQ8WQccrT5LJWteQExDZlck7hQ8gV3hf2nc9G+/0BySXr22HsKUzmF4
+         9Di1OwPIY/19Mt7BETii5qHDnhYu1XOXOJPbC2lfFDbA/Kb6eb+4+wj3441d0t+M60sL
+         FCu78LPWypiTBBgyBI6eETM9558mdswP1U05UdIVYZpaUvOPHogvaF/ujUJ0RomnP1rD
+         9Jxo2LgGIaNZUEYKC8zm1r/hFCyuIjcZH9FZAIQjVbfiqsraqUk7BLkFVj0oa9QhargJ
+         0hMwvvVqh+q/OxQ9UcqL2Fj15UXlyi4Id2PyCkUlnckEtrGymRbvEW7SryyWCskwxECZ
+         BV8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685037265; x=1687629265;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y/20VApzN3sPBkZnwvcb54AXnS2bInta1+wgq5QOgNk=;
+        b=AzwCHLVTBJ0cP5CdBQS9lD68dHczoqnjNMXBeo67HVHtY2Up4FwdWlk6kNgRVgScwL
+         J+bz14RgohYErHYCLKEUeq6lWhnweA+BI8Vq2Er8kQumdVq7Y/qm4I3XqwAuvkd1fDRw
+         bsjeDJcDS/HoYze92yO3mcgUAWzI3gM9lmX9qrm5C/bCznZjTvbJQL0j774Z6OQfiGKj
+         oxIJvvTlLKdfYQ1Ij3NPOOeSMY+YAp/LDyjEHbPM2ERc9T7glPyrnCbDtMBu4zFxztya
+         UhDaANhF512iNX1hSwwEaJW1v7MEbIF+kvT0wXH4JP+1h/dQhHvOnb6tYqGVummvjtTe
+         foIg==
+X-Gm-Message-State: AC+VfDxugOH0IkRyZpyT47I80lj9S9dxljr8J2Lxw7P4HFI5FhCKvPWe
+        DR1ibhJlykhSwBcWkp3SoO5/liryaWH9ksxsSAk=
+X-Google-Smtp-Source: ACHHUZ4uYZNxBOT8583zqUCp1HxGXJcJEeFPbQbqIP0VbykWDy05PjW7yuUdg18pAwUBZmZYzK9+WAFtxN3EqV1tdgk=
+X-Received: by 2002:a17:907:36c9:b0:953:517a:8f1a with SMTP id
+ bj9-20020a17090736c900b00953517a8f1amr2030819ejc.58.1685037265452; Thu, 25
+ May 2023 10:54:25 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <168503721832.404.4706329081986329618.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230525000307.3202449-1-namhyung@kernel.org>
+In-Reply-To: <20230525000307.3202449-1-namhyung@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 25 May 2023 10:54:13 -0700
+Message-ID: <CAEf4BzbKtJ+xehJqzStiUEB67YbDFpydVSiLbNi2=WQt+8iDBQ@mail.gmail.com>
+Subject: Re: [PATCH] perf bpf filter: Fix a broken perf sample data naming in BPF
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Wed, May 24, 2023 at 5:03=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> BPF CO-RE requires 3 underscores for the ignored suffix rule but it
+> mistakenly used only 2.  Let's fix it.
+>
+> Fixes: 3a8b8fc31748 ("perf bpf filter: Support pre-5.16 kernels where 'me=
+m_hops' isn't in 'union perf_mem_data_src'")
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/util/bpf_skel/sample_filter.bpf.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
 
-Commit-ID:     edc0a2b5957652f4685ef3516f519f84807087db
-Gitweb:        https://git.kernel.org/tip/edc0a2b5957652f4685ef3516f519f84807087db
-Author:        Zhang Rui <rui.zhang@intel.com>
-AuthorDate:    Thu, 23 Mar 2023 09:56:40 +08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 25 May 2023 10:48:42 -07:00
+Seems like that's the only remaining case. LGTM.
 
-x86/topology: Fix erroneous smp_num_siblings on Intel Hybrid platforms
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-Traditionally, all CPUs in a system have identical numbers of SMT
-siblings.  That changes with hybrid processors where some logical CPUs
-have a sibling and others have none.
-
-Today, the CPU boot code sets the global variable smp_num_siblings when
-every CPU thread is brought up. The last thread to boot will overwrite
-it with the number of siblings of *that* thread. That last thread to
-boot will "win". If the thread is a Pcore, smp_num_siblings == 2.  If it
-is an Ecore, smp_num_siblings == 1.
-
-smp_num_siblings describes if the *system* supports SMT.  It should
-specify the maximum number of SMT threads among all cores.
-
-Ensure that smp_num_siblings represents the system-wide maximum number
-of siblings by always increasing its value. Never allow it to decrease.
-
-On MeteorLake-P platform, this fixes a problem that the Ecore CPUs are
-not updated in any cpu sibling map because the system is treated as an
-UP system when probing Ecore CPUs.
-
-Below shows part of the CPU topology information before and after the
-fix, for both Pcore and Ecore CPU (cpu0 is Pcore, cpu 12 is Ecore).
-...
--/sys/devices/system/cpu/cpu0/topology/package_cpus:000fff
--/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-11
-+/sys/devices/system/cpu/cpu0/topology/package_cpus:3fffff
-+/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-21
-...
--/sys/devices/system/cpu/cpu12/topology/package_cpus:001000
--/sys/devices/system/cpu/cpu12/topology/package_cpus_list:12
-+/sys/devices/system/cpu/cpu12/topology/package_cpus:3fffff
-+/sys/devices/system/cpu/cpu12/topology/package_cpus_list:0-21
-
-Notice that the "before" 'package_cpus_list' has only one CPU.  This
-means that userspace tools like lscpu will see a little laptop like
-an 11-socket system:
-
--Core(s) per socket:  1
--Socket(s):           11
-+Core(s) per socket:  16
-+Socket(s):           1
-
-This is also expected to make the scheduler do rather wonky things
-too.
-
-[ dhansen: remove CPUID detail from changelog, add end user effects ]
-
-CC: stable@kernel.org
-Fixes: bbb65d2d365e ("x86: use cpuid vector 0xb when available for detecting cpu topology")
-Fixes: 95f3d39ccf7a ("x86/cpu/topology: Provide detect_extended_topology_early()")
-Suggested-by: Len Brown <len.brown@intel.com>
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/all/20230323015640.27906-1-rui.zhang%40intel.com
----
- arch/x86/kernel/cpu/topology.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/topology.c b/arch/x86/kernel/cpu/topology.c
-index 5e868b6..0270925 100644
---- a/arch/x86/kernel/cpu/topology.c
-+++ b/arch/x86/kernel/cpu/topology.c
-@@ -79,7 +79,7 @@ int detect_extended_topology_early(struct cpuinfo_x86 *c)
- 	 * initial apic id, which also represents 32-bit extended x2apic id.
- 	 */
- 	c->initial_apicid = edx;
--	smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
-+	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
- #endif
- 	return 0;
- }
-@@ -109,7 +109,8 @@ int detect_extended_topology(struct cpuinfo_x86 *c)
- 	 */
- 	cpuid_count(leaf, SMT_LEVEL, &eax, &ebx, &ecx, &edx);
- 	c->initial_apicid = edx;
--	core_level_siblings = smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
-+	core_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
-+	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
- 	core_plus_mask_width = ht_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
- 	die_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
- 	pkg_mask_width = die_plus_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+> diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/ut=
+il/bpf_skel/sample_filter.bpf.c
+> index cffe493af1ed..fb94f5280626 100644
+> --- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
+> +++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+> @@ -25,7 +25,7 @@ struct perf_sample_data___new {
+>  } __attribute__((preserve_access_index));
+>
+>  /* new kernel perf_mem_data_src definition */
+> -union perf_mem_data_src__new {
+> +union perf_mem_data_src___new {
+>         __u64 val;
+>         struct {
+>                 __u64   mem_op:5,       /* type of opcode */
+> @@ -108,7 +108,7 @@ static inline __u64 perf_get_sample(struct bpf_perf_e=
+vent_data_kern *kctx,
+>                 if (entry->part =3D=3D 7)
+>                         return kctx->data->data_src.mem_blk;
+>                 if (entry->part =3D=3D 8) {
+> -                       union perf_mem_data_src__new *data =3D (void *)&k=
+ctx->data->data_src;
+> +                       union perf_mem_data_src___new *data =3D (void *)&=
+kctx->data->data_src;
+>
+>                         if (bpf_core_field_exists(data->mem_hops))
+>                                 return data->mem_hops;
+> --
+> 2.41.0.rc0.172.g3f132b7071-goog
+>
+>
