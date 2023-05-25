@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BF5711688
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1DA71160E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242866AbjEYSwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        id S243329AbjEYSud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243150AbjEYSuH (ORCPT
+        with ESMTP id S242618AbjEYSqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:50:07 -0400
+        Thu, 25 May 2023 14:46:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A111FC4;
-        Thu, 25 May 2023 11:43:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B124219;
+        Thu, 25 May 2023 11:42:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE82F60BD4;
-        Thu, 25 May 2023 18:42:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C215DC4339B;
-        Thu, 25 May 2023 18:42:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41C4260BEA;
+        Thu, 25 May 2023 18:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC441C433D2;
+        Thu, 25 May 2023 18:42:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685040145;
-        bh=vPBYA2SwKFT9H7jH540n6evqbAfIJZJoHuTUD7tDdEA=;
+        s=k20201202; t=1685040148;
+        bh=IkGBsXi3C4HEnccIyBaIOzBJS5i014sdapMrMLHbqrQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UGv6CKDuKy7ldpC359v0eeDQc3cMQ/wTE8zni6aK3PYaAVx8L8lpLNcZc7iyAhNaj
-         Pfc1EUMYrHvf+AKf9SUOsUn7t8IIoeDyebrpo6cZM9YCdt0Xn2Z3EIP/VVEVoTxX6v
-         YGeYJPbJN40L0eQ15RHcrDc+EiqAw+iGI8whS37jXRWbnIziF09AZSW234rohnsg9n
-         Vw9tnCLsg/iz0zQByKpSO0zp0qQr6O+H+8UQ5zDVbPRERneJwZP3ki4oGPZyhfAryf
-         0CUpCrpyb4Qq7gMTgYYkwb3RCWGHJY5MyY44Z9J0WtmSIg+6C33cCgXS1HGVnZLnwe
-         +WmQ32wwsBueA==
+        b=OCfHu7u2oaBO+YhrTHYlqC/Rs5mwh+FYE6b/lZBo5wpUman+zDEZhuGhwa/FOFMBZ
+         tDv+zxw7Y74Pv7QvIBwu6r5ayU5ubNse7EOKABAEBn62Q9CmCTTclPOXOFbZFfHjhS
+         vKIU3sXRPbLfwsQfjp4y/KrEDScbVcjTJQ3IJjHFJL0OOWfnr0rgDX84E+IyZMmAlx
+         q9xVKViGNaBzL3HyXYlJ/w4bOpEPhr7f2oDPbsE/TxEPvuRw1w+jyhp8tYlZnMLRZW
+         5CGqwCaxP10A0zEo6eILZgkAKM2p0aw/84ZfJzUm7DYJDXxx8DtnbqO1GUOxkq5nmp
+         CmMF6b/LXLDRQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tom Rix <trix@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Florian Westphal <fw@strlen.de>,
-        Sasha Levin <sashal@kernel.org>, pablo@netfilter.org,
-        kadlec@netfilter.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 27/31] netfilter: conntrack: define variables exp_nat_nla_policy and any_addr with CONFIG_NF_NAT
-Date:   Thu, 25 May 2023 14:40:58 -0400
-Message-Id: <20230525184105.1909399-27-sashal@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Takashi Iwai <tiwai@suse.de>,
+        Sasha Levin <sashal@kernel.org>, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.10 28/31] ALSA: oss: avoid missing-prototype warnings
+Date:   Thu, 25 May 2023 14:40:59 -0400
+Message-Id: <20230525184105.1909399-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230525184105.1909399-1-sashal@kernel.org>
 References: <20230525184105.1909399-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -63,57 +57,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 224a876e37543eee111bf9b6aa4935080e619335 ]
+[ Upstream commit 040b5a046a9e18098580d3ccd029e2318fca7859 ]
 
-gcc with W=1 and ! CONFIG_NF_NAT
-net/netfilter/nf_conntrack_netlink.c:3463:32: error:
-  ‘exp_nat_nla_policy’ defined but not used [-Werror=unused-const-variable=]
- 3463 | static const struct nla_policy exp_nat_nla_policy[CTA_EXPECT_NAT_MAX+1] = {
-      |                                ^~~~~~~~~~~~~~~~~~
-net/netfilter/nf_conntrack_netlink.c:2979:33: error:
-  ‘any_addr’ defined but not used [-Werror=unused-const-variable=]
- 2979 | static const union nf_inet_addr any_addr;
-      |                                 ^~~~~~~~
+Two functions are defined and used in pcm_oss.c but also optionally
+used from io.c, with an optional prototype. If CONFIG_SND_PCM_OSS_PLUGINS
+is disabled, this causes a warning as the functions are not static
+and have no prototype:
 
-These variables use is controlled by CONFIG_NF_NAT, so should their definitions.
+sound/core/oss/pcm_oss.c:1235:19: error: no previous prototype for 'snd_pcm_oss_write3' [-Werror=missing-prototypes]
+sound/core/oss/pcm_oss.c:1266:19: error: no previous prototype for 'snd_pcm_oss_read3' [-Werror=missing-prototypes]
 
-Signed-off-by: Tom Rix <trix@redhat.com>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Avoid this by making the prototypes unconditional.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20230516195046.550584-2-arnd@kernel.org
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_netlink.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ sound/core/oss/pcm_plugin.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
-index c9ca857f1068d..27d3e54666b90 100644
---- a/net/netfilter/nf_conntrack_netlink.c
-+++ b/net/netfilter/nf_conntrack_netlink.c
-@@ -2976,7 +2976,9 @@ static int ctnetlink_exp_dump_mask(struct sk_buff *skb,
- 	return -1;
- }
+diff --git a/sound/core/oss/pcm_plugin.h b/sound/core/oss/pcm_plugin.h
+index 46e273bd4a786..50a6b50f5db4c 100644
+--- a/sound/core/oss/pcm_plugin.h
++++ b/sound/core/oss/pcm_plugin.h
+@@ -141,6 +141,14 @@ int snd_pcm_area_copy(const struct snd_pcm_channel_area *src_channel,
  
-+#if IS_ENABLED(CONFIG_NF_NAT)
- static const union nf_inet_addr any_addr;
+ void *snd_pcm_plug_buf_alloc(struct snd_pcm_substream *plug, snd_pcm_uframes_t size);
+ void snd_pcm_plug_buf_unlock(struct snd_pcm_substream *plug, void *ptr);
++#else
++
++static inline snd_pcm_sframes_t snd_pcm_plug_client_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t drv_size) { return drv_size; }
++static inline snd_pcm_sframes_t snd_pcm_plug_slave_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t clt_size) { return clt_size; }
++static inline int snd_pcm_plug_slave_format(int format, const struct snd_mask *format_mask) { return format; }
++
 +#endif
++
+ snd_pcm_sframes_t snd_pcm_oss_write3(struct snd_pcm_substream *substream,
+ 				     const char *ptr, snd_pcm_uframes_t size,
+ 				     int in_kernel);
+@@ -151,14 +159,6 @@ snd_pcm_sframes_t snd_pcm_oss_writev3(struct snd_pcm_substream *substream,
+ snd_pcm_sframes_t snd_pcm_oss_readv3(struct snd_pcm_substream *substream,
+ 				     void **bufs, snd_pcm_uframes_t frames);
  
- static __be32 nf_expect_get_id(const struct nf_conntrack_expect *exp)
- {
-@@ -3466,10 +3468,12 @@ ctnetlink_change_expect(struct nf_conntrack_expect *x,
- 	return 0;
- }
- 
-+#if IS_ENABLED(CONFIG_NF_NAT)
- static const struct nla_policy exp_nat_nla_policy[CTA_EXPECT_NAT_MAX+1] = {
- 	[CTA_EXPECT_NAT_DIR]	= { .type = NLA_U32 },
- 	[CTA_EXPECT_NAT_TUPLE]	= { .type = NLA_NESTED },
- };
-+#endif
- 
- static int
- ctnetlink_parse_expect_nat(const struct nlattr *attr,
+-#else
+-
+-static inline snd_pcm_sframes_t snd_pcm_plug_client_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t drv_size) { return drv_size; }
+-static inline snd_pcm_sframes_t snd_pcm_plug_slave_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t clt_size) { return clt_size; }
+-static inline int snd_pcm_plug_slave_format(int format, const struct snd_mask *format_mask) { return format; }
+-
+-#endif
+-
+ #ifdef PLUGIN_DEBUG
+ #define pdprintf(fmt, args...) printk(KERN_DEBUG "plugin: " fmt, ##args)
+ #else
 -- 
 2.39.2
 
