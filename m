@@ -2,124 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC4D7113AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30E07113B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236571AbjEYS3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S239626AbjEYSaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbjEYS3g (ORCPT
+        with ESMTP id S234112AbjEYSad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:29:36 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8B3125
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:29:35 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f4c264f6c6so2841196e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:29:35 -0700 (PDT)
+        Thu, 25 May 2023 14:30:33 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2AC12C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:30:31 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f3a9ad31dbso2942078e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:30:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685039373; x=1687631373;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H+b24C77d9A2u9UTnLoifoUxD5slr2fdLTj++pWst70=;
-        b=fLEkzZfSVZKSHIt49CCsR3FwdXcGBM+yggkoWf6irQPOVz9dI4elnrX6N9qKeRjvZ8
-         DEJlyMRpYESTW8CwsZzEmuSExNZZ8cdJ5iA7uq8zdD+8FoWv9EWlKcqGnr5MqeZwAT9W
-         tgPbbeAaKbkoQROrQn8bbtaTGAccu13e+zC0DBd/9aByAy8AL3Th1V5sNTPnRS6WUmxx
-         WIHZF5+4q7biw21do3UBX1Tdql0b5fXjglVfSV+A8PPdvhi/EltrD7SDLzCoGR8N+dvx
-         NhvtMfVxZA55p/+xiRf4NO/d/aRUF4+S2kVhnmn1kGR8FK8D9fBtjxZbJwP+aoRAtVtc
-         Vw3Q==
+        d=ferroamp-se.20221208.gappssmtp.com; s=20221208; t=1685039430; x=1687631430;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+YJ/U9yQq7zENy/xeT5OhlkVCIP/m9WLirdWwzeDK4I=;
+        b=jklSg68Yjq7Ohsf/zGVOv18G5cs2zXhVUYIHJ9oz41V5C6o9cEHx0aUKecr5ZvoSMz
+         bfvuVb+k25HF7HOGe68clM7VAZM/PrDoBpAhleFL9zvFYPvvXvzz8clUm+txJU7XeYw5
+         /AdH8wAIROoj0XRklCZKZ2yNmZcXiE2QkHUF+N7ioHqcEFJXPDqY+YuHgrJtBTeIChwF
+         xhVUst+NzkjyVjGhtZWA2Ek7XS1/wyfXkSyl8dkYWF3j+9glwpQVhDpY31boqS8kYa9F
+         brttZp2s3/JdaEwTHpdtkgl7+Yp+U07XKejie82aCumUh5KB+40AiG29ZQo+6hKp6JOh
+         TI9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685039373; x=1687631373;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1685039430; x=1687631430;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H+b24C77d9A2u9UTnLoifoUxD5slr2fdLTj++pWst70=;
-        b=RoFpCsmnuwA6ma6OSBF2l2veX1A6xzhaqv2SGpHXIsmTNKz1YR/LEwiqhUK04tRd7+
-         FkvwVhylevf4GchFQJS0AF8Xy8SvzEMJkj/ZLM7G0NbvYHCHoEfGcZlc5XthQxAgzbT9
-         wsWsIEF1SZpNCEyttUqm0eOW9hRuR9LpQpb/rPJF5YRNH2+8uV7lcxh78SYN9MalhJLx
-         HLcw4FOxFyP28Ptcj++o+vRE2m7nQE8PATefm9P0LWYFF4zCVoEvDJwoytxXmKEkXRRu
-         g8rlje+GNbz16zdRIjxfnewNORTUpbupfUdl4VP5IEaHysnfBItMwF6ZQmIg9pofglEL
-         bIJg==
-X-Gm-Message-State: AC+VfDxxTVVRxn6PQ6D0wf8LRajf1fLr7KXyzhq0xVUl4rGS/66bG3Yp
-        s6F1sSwPkZt9E4Ylve0gqAyEAA==
-X-Google-Smtp-Source: ACHHUZ4cuZ+XPY8hnX4V/tTQBykGPBXRAE5A+zNP3iexE+m6J8nJtSxLuUXwZj5ASu6EX4nyvgoeew==
-X-Received: by 2002:a19:c517:0:b0:4f3:792c:289d with SMTP id w23-20020a19c517000000b004f3792c289dmr6409992lfe.20.1685039373522;
-        Thu, 25 May 2023 11:29:33 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id k19-20020ac24573000000b004db3eff4b12sm295337lfm.171.2023.05.25.11.29.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 11:29:32 -0700 (PDT)
-Message-ID: <85b1c798-bb6e-a37c-d84f-983d19cb96c2@linaro.org>
-Date:   Thu, 25 May 2023 21:29:32 +0300
+        bh=+YJ/U9yQq7zENy/xeT5OhlkVCIP/m9WLirdWwzeDK4I=;
+        b=PWcrTTtA4qvRF5Qbh/x8cPHJVEPp0PAcvYJ5JwYV/u5ciSHSD7R1bvIDdbq2YqeX7V
+         HBGgQvBmRyyDIkAx/ZDjXR/tRZtE1t6UkAtHRtZ4n4HqfvSwjzp1zfkFiHGngKC2a+Km
+         df7xqQNRrJSy44qVKla+kvnntMWhg5JYMS7BqsjfTgC+L133Tisn4W1xjiVJumilVVVO
+         oTVpjXTqfoK9g//Yxd8hwnYfZbY5dCG4Ruw1lctmEVEUQLtOkUBDWqDq71JZgHEa+HxF
+         Ra8u+ErtNPFLHi+4izY4WqRT6om7LbAvSUjPYL84bgP3iNoPIW4WUVFmNRbrooESRunT
+         pC2Q==
+X-Gm-Message-State: AC+VfDzPvi+1KOI7QJuQ0Ua6Ffx/QkI+cEzPKiZLfgKhM+4Zy+mor3zM
+        Mm0yVpkp+DQkW7l1MrdHEuWsWg==
+X-Google-Smtp-Source: ACHHUZ6GpGNkXqsuXcs2YgoOJsCMXwrX9WEYcj1NNZ2HxN1HKZL1L3M96Tda83v8EXyBwnNG83x1Bg==
+X-Received: by 2002:ac2:4299:0:b0:4d8:75f8:6963 with SMTP id m25-20020ac24299000000b004d875f86963mr5769978lfh.38.1685039430204;
+        Thu, 25 May 2023 11:30:30 -0700 (PDT)
+Received: from builder (c188-149-203-37.bredband.tele2.se. [188.149.203.37])
+        by smtp.gmail.com with ESMTPSA id g21-20020ac25395000000b004f3b258feefsm296583lfh.179.2023.05.25.11.30.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 11:30:29 -0700 (PDT)
+Date:   Thu, 25 May 2023 20:30:27 +0200
+From:   =?iso-8859-1?Q?Ram=F3n?= Nordin Rodriguez 
+        <ramon.nordin.rodriguez@ferroamp.se>
+To:     Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, horatiu.vultur@microchip.com,
+        Woojung.Huh@microchip.com, Nicolas.Ferre@microchip.com,
+        Thorsten.Kummermehr@microchip.com
+Subject: Re: [PATCH net-next v3 5/6] net: phy: microchip_t1s: remove
+ unnecessary interrupts disabling code
+Message-ID: <ZG+pQ95pU2yn7LlR@builder>
+References: <20230524144539.62618-1-Parthiban.Veerasooran@microchip.com>
+ <20230524144539.62618-6-Parthiban.Veerasooran@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6] drm/msm/dp: enable HDP plugin/unplugged interrupts at
- hpd_enable/disable
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
-        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        leonard@lausen.nl, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1684878756-17830-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1684878756-17830-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230524144539.62618-6-Parthiban.Veerasooran@microchip.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/2023 00:52, Kuogee Hsieh wrote:
-> The internal_hpd flag is set to true by dp_bridge_hpd_enable() and set to
-> false by dp_bridge_hpd_disable() to handle GPIO pinmuxed into DP controller
-> case. HDP related interrupts can not be enabled until internal_hpd is set
-> to true. At current implementation dp_display_config_hpd() will initialize
-> DP host controller first followed by enabling HDP related interrupts if
-> internal_hpd was true at that time. Enable HDP related interrupts depends on
-> internal_hpd status may leave system with DP driver host is in running state
-> but without HDP related interrupts being enabled. This will prevent external
-> display from being detected. Eliminated this dependency by moving HDP related
-> interrupts enable/disable be done at dp_bridge_hpd_enable/disable() directly
-> regardless of internal_hpd status.
+On Wed, May 24, 2023 at 08:15:38PM +0530, Parthiban Veerasooran wrote:
+> By default, except Reset Complete interrupt in the Interrupt Mask 2
+> Register all other interrupts are disabled/masked. As Reset Complete
+> status is already handled, it doesn't make sense to disable it.
 > 
-> Changes in V3:
-> -- dp_catalog_ctrl_hpd_enable() and dp_catalog_ctrl_hpd_disable()
-> -- rewording ocmmit text
-> 
-> Changes in V4:
-> -- replace dp_display_config_hpd() with dp_display_host_start()
-> -- move enable_irq() at dp_display_host_start();
-> 
-> Changes in V5:
-> -- replace dp_display_host_start() with dp_display_host_init()
-> 
-> Changes in V6:
-> -- squash remove enable_irq() and disable_irq()
-> 
-> Fixes: cd198caddea7 ("drm/msm/dp: Rely on hpd_enable/disable callbacks")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
 > ---
->   drivers/gpu/drm/msm/dp/dp_catalog.c | 15 +++++++-
->   drivers/gpu/drm/msm/dp/dp_catalog.h |  3 +-
->   drivers/gpu/drm/msm/dp/dp_display.c | 71 ++++++++++---------------------------
->   3 files changed, 35 insertions(+), 54 deletions(-)
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Ramón Nordin Rodriguez <ramon.nordin.rodriguez@ferroamp.se>
+Tested-by: Ramón Nordin Rodriguez <ramon.nordin.rodriguez@ferroamp.se>
 
--- 
-With best wishes
-Dmitry
-
+Testing has been pretty rudamentary, but the procedure has been as
+follows:
+    * Hotplug 2 devices
+    * Unload and reload the lkm
+    * Ping 2 devices over ipv6 link local addresses
+All testing has been performed with the EVB-LAN8670-USB
