@@ -2,210 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC4B710EE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF69710EEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 17:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233952AbjEYPAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 11:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
+        id S241064AbjEYPBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 11:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjEYPAS (ORCPT
+        with ESMTP id S240847AbjEYPBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 11:00:18 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2113.outbound.protection.outlook.com [40.107.244.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFD4A3;
-        Thu, 25 May 2023 08:00:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jwro4jZXykahkN5cb46VNLiPI1VJmVP1Uh/BYFTopbYJuZSI/NaxtSuPtyKpcCP15gctMtIlNXBpjLP3dTDOvX+ClNkVI09jHKK+/xFfZGoTujxrIqkhOSucLKXNpWxlGACUbhgaJNSH5qr5WkxpK58QmKicNKLg1fSwJ8m/KuRHvtuljGtt/6cu9OKi6D/Qg/8xRPA8Nfxcsel2kfnAnUk6QeMw7ApmJHNrPSqeLYdlUtcGOCSzHKmLDZhEV6Ths9MmGltmPB3DA9jJROe/GlFVC4Ike0188jnDTo8gRoY3uoB9UWV0kb0qII+iZ1s6ZicvhxhgbLYEpLcIgwM4sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Afi5G8Q2daUk42/ANWx3ohh9fykAEEAoMPyrUMYorjQ=;
- b=kVTB+0InOqqsLHCo1IDd53/9WsFNGt3uPum5WTEHqufCg8k412ijft246+g0pLWqu5F2P07E970ke0nlhi58oyuowqWYr50InskHi1L7/4Ozp+Kuj/XVps6WWTRrVbvWAwA4XUbJbbr9wqw7OJVzVyHVHAoUjFVEx7biEyYHVK4WMfSydeqiVLjYijBW4kL3dUwoMTatwNptMAavP4XM8OepHtRhC94fs9jMkBmaVBjNtsLf4WtHGwlyudMvwReu2CogoD5LUR0eijhi15pIm4h7z4NdX7UGZmqXeooH0aHOzl0LMpDAZLKLwD+E5TsDXjLvW4MKwaNctluPjPwBQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Thu, 25 May 2023 11:01:01 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A971B3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:00:59 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-25359e411ceso967003a91.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:00:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Afi5G8Q2daUk42/ANWx3ohh9fykAEEAoMPyrUMYorjQ=;
- b=UAyCcJIMkFublK5kMMxnwm7EsToWeL9xWljp9mapoXScudY8o3w34sNJiGDz60Ml6M3sf/mUw7/wRI04kRwCLv9Dd4uz3aULj/6SXgDai2UoQsmgPSp7s+znCDMyy5yCybauuvUQbYjD2VgTvTCTFbBVb5ruVGmiiOj2VcqNWWA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BLAPR13MB4673.namprd13.prod.outlook.com (2603:10b6:208:307::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.25; Thu, 25 May
- 2023 15:00:12 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.017; Thu, 25 May 2023
- 15:00:12 +0000
-Date:   Thu, 25 May 2023 17:00:04 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Mark Brown <broonie@kernel.org>, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Subject: Re: [PATCH net-next v2 1/4] net: mdio: Introduce a regmap-based mdio
- driver
-Message-ID: <ZG939BnbaRP4GiI4@corigine.com>
-References: <20230525101126.370108-1-maxime.chevallier@bootlin.com>
- <20230525101126.370108-2-maxime.chevallier@bootlin.com>
- <ZG9AT4EeCmoyN5N2@corigine.com>
- <20230525144359.0cb16996@pc-7.home>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525144359.0cb16996@pc-7.home>
-X-ClientProxiedBy: AM0PR03CA0093.eurprd03.prod.outlook.com
- (2603:10a6:208:69::34) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BLAPR13MB4673:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc6c601a-d5b2-47c3-1d7a-08db5d30bd32
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cLCKEOEIVyBaxhIztQWoHWVDU7Y07jtOJ+wacEqmIqF/DgFjiDCUlyToM6qa0/27oXDBTVT3xXhbQX5VtVr+bxLTZpjVij9SqYBMf0PhsJ1PbUHklx8ni4oruDV1u+b7negDjIBU7GgBGLIyQr1mu7IJfgEFEdsTHHDLJU4BtR6TayqgzehPz7e3nMHevh7zv+h5rv+WULdYYeFecFd3aPi6rXzVM8eMUxbe+zO+Ik07Ys3pN+o9E23VMhsvhiKNCg13WIN9GlJd7U4NGR/0JIDWTD0JnGXbDOCdXibr/5+D2oGyz+3D14caQdKbx2hRNRrBhxKkMgvBnONOIzFABBC5lY/daE62nsb0uzTfwCp2pcqIxhkUckf78zTgYCcMpaz6CRu7XTY+2+eJy2cBGmpRQJFIRr/X24vTcO7DMBti9A2rw8hD1DvBT0TsavMzxIY0IYpJ/XshLbUQo2thNYDDtQXiRWQYY09rHbodRdcVE6aym9jRWveTy6L+iEMjzzmFlHgw7246jxSE7X8C59UAx5SAgsRXAkfNadbzrPDiKBFUFlDXPRfX+bnM9/+s
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39830400003)(346002)(136003)(376002)(366004)(451199021)(86362001)(36756003)(186003)(2906002)(83380400001)(478600001)(38100700002)(316002)(2616005)(54906003)(4326008)(6916009)(66946007)(6506007)(44832011)(5660300002)(7416002)(8676002)(6512007)(41300700001)(6486002)(6666004)(66476007)(66556008)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nV8isRmATYhMxQjQvpoFY8J8RrPYvwoKw+dAuGxIr9mrL5zIO/aqEmEYgwdR?=
- =?us-ascii?Q?11ulS+JNGdlRK2xY8So9DgH7+KWS6T1pqPxxrlZOKJ8GXHS1rpV0Wxwz0RFa?=
- =?us-ascii?Q?4GAaLEl443c0SwxhEjegfzWizwguM6kJUPhoFfo/kUVr2PAKzxN8VqnULmJS?=
- =?us-ascii?Q?zvnf3r9AhXeZWWB7jOHvYU9WnrhRhJq2uTBDLf0TD1uloYRswcujztLhNXUZ?=
- =?us-ascii?Q?r0eKGcjQBMWbfoKarVxAm1AF9jCtMZ3l6cEyEId9e03aa67v4FaxTm+oWSFL?=
- =?us-ascii?Q?jciVP95KnO57WJd+W3iRVuCqfqF0nLdOaZIjqi5arRDY4ep0Vd7IN/a2+2Uf?=
- =?us-ascii?Q?M64Bs3nvZ1+gVfeIEdzLfvhO9kMI5H6pOMUeoS0wuVz6rSkiNfPARcPfl0P/?=
- =?us-ascii?Q?XaslpZ4fRUPH9tW2dY1lL/CWtaPLuT/vY8K1zfanoS4No/m5n3LwgPEO1MQJ?=
- =?us-ascii?Q?bSRc8aIxiAOzjp8wq3+7jGEXMJXgi58GgVyNfR/+tY/7148VM2vqtgL4JSoX?=
- =?us-ascii?Q?a6g5KLA4Cs/dyIY9L68I0pcaYcwf7xzYabtNEmrwCKcgSCOJ4uktvsr+o+hj?=
- =?us-ascii?Q?iGI+xJPL8zp+y91jEeEickz3I/FCrImJnZ/cOSQyXv1MW4egzlBr6Q2J+/Hi?=
- =?us-ascii?Q?kUFJk2TRzKTkRHnTMRnIcfpju+JAiiq40Rp1R1qa65rpqIB1xSoNeHytY1Tm?=
- =?us-ascii?Q?N1l+dUSd99SOBQMcfujAj+qt6a29kQtShyvxSlWTiSfdtAb5C5WXvr3RaG6Q?=
- =?us-ascii?Q?OPi1jRS+/0Yqqa/oBh1qfTxJlnOOxFymQUNBbuLp9wC0uC8C9AGPgwWbOvC1?=
- =?us-ascii?Q?aczDWIJNy0nphOVL5KagAsM2X3Ktt5VfV8l3f2FdzdHC4I7jHvoGpZGnU6XW?=
- =?us-ascii?Q?4jiTaVueTBRzfu3Sy2dwqWigzIPbiInr80wpaz8fYo2ASdrE1Dyjh/jpT2wm?=
- =?us-ascii?Q?kQ6tgJGti3fZik/s9ibL/GDTsCxiIU8NQeATlKa+yL65FFsepb+pN4BNK2ph?=
- =?us-ascii?Q?Y6NHXtmyVoeQ2HAPV6Wnc/uXtIfNFgV8KkckjoLVfN7ScbXIJiLFkfotzxEd?=
- =?us-ascii?Q?dimRcy4ACl27sQMbdu2AXeupm31L5QbYV31j14N+y6yaCMA0zUv3FZFOscOP?=
- =?us-ascii?Q?/dgdgqOCk8Ujxh6qBneuFqu0TFJLvY5QJfkWzTnBSGo/CGCuSoRByTz9Yu43?=
- =?us-ascii?Q?f403IF1MqqpU3w/aN1Zb0XrSkJSo7JxpCBw3BcX53+28wyZDlQVbN2zRe12U?=
- =?us-ascii?Q?xByjp5CzHsaDp1Yb9yntWyPrHQp/+vQDYP+XRR7etVnpBTx4UZlAHHFNX7+o?=
- =?us-ascii?Q?1lG19dxoSBWpyQBD3EjN783GjRu3DFQNdghQercrMKrG0Umigqu+fXBqlK8A?=
- =?us-ascii?Q?fX1oh+hrztasQPs6jqHz1VcRHR4ntDoNBoQJUsQk3x6Zeo1mioIt6wHTaqVC?=
- =?us-ascii?Q?sYTUgE/Jy4P9hwDl/+3eief80aIvGx5KMfuldJK0hwivJzG5a4af2aUenI3r?=
- =?us-ascii?Q?QRClDv438tm2JDLqj/Fdns/a52XwUtZyrj56ryTZePgwTUnXjhSZKgRLFVZN?=
- =?us-ascii?Q?HdCYUeOUslLc1OOxjYwX+TPkYvL72x8UUhGPEAjESuAACQmJLbNI6lu4EYfb?=
- =?us-ascii?Q?x//QtjiqQCpCFfuYXArd8yXevvHL4ZNi26Atdi8dZ28QFa8LBR4V9Y9gqWmV?=
- =?us-ascii?Q?SKDm+Q=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc6c601a-d5b2-47c3-1d7a-08db5d30bd32
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 15:00:12.3675
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lyiQFVrx0szKERgHHm0Xhc3Ncem2nmr2UnJFGxMn/VSuU7oj2EhKVN+2Iuoae9oHYzKLx9sHpbSbmYrkTVgyPYAUvf7sTVSlCxCmXk9ZDGo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR13MB4673
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20221208; t=1685026859; x=1687618859;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2rgc5wNBzRwTZsiTn0J0WHKeSrzO5GwJcVsGE/2GYBg=;
+        b=AyY7s5NO6ZYMxx+nAp8os1iSmL+QUh0+NNNS14PW8xDvfy14jeBv20Cn+/xySm0GS+
+         7JLXIMsPgorL07xkxMYRmcSAp/H90WQnq5m0O4W/mOE9Um4tYYNOk5Bgg/ZJeGjjUE0E
+         tAU2NRyk6rNg0Sd0lXD/e5OJdMa3n3EpMDS/xks/N183FlGxRzVW1SsHC/8+k8/JX/Y1
+         af3OGWtTx7YIOKwNAEi/VswrUDCEvN2lluN+Bpsy/lCDUbo55Rx4891gHCjPsU2SUtSS
+         8uNw0kEDQBwtNMS9jtoCWLNl9mVDch8QqvuUftQh8EZpQMLUC3PrWXy31Dy4aOSm5rUq
+         vuZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685026859; x=1687618859;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2rgc5wNBzRwTZsiTn0J0WHKeSrzO5GwJcVsGE/2GYBg=;
+        b=lYxxzchpWxEKwqvWLOx+huVr3zI9gXQpYjKb+HnXhz2DJJJIWeNywjbFo3C6pvxorm
+         lO6TCK+L4DYcrMPa6VfWKSPt7niLD3Nlwl9NR8VMKla2ifsWziPSJIH2ug4nwrj6D9LR
+         gmC4prTFNv9DxI8Cg4opDJ1hLqzRHnBu/kVk/WuQc30rA6J3md5Mw+n/nfmF9I31HDIS
+         T4ALvUVqjiLm7dS8D7eeDHqpfiO0lxs6puldLOdnIdgUdaJJDq9mY+0oPBP1ftNHR0SD
+         a/yZ3jAaaBm/YxdkBfe9mrmVK9Qc7uf0/seXGcGs4K3bbRM8T6gVTYFkeJq9OQIS7G8X
+         tfug==
+X-Gm-Message-State: AC+VfDwiQ5Gt13Or86NpI0Ip525ly6cevfQ2Opdbkkug36G8wXbZFLkw
+        2qUM/bLlWkBB0UI3ND7TL0beceJhh3I=
+X-Google-Smtp-Source: ACHHUZ7RT45qInXgmU/+XvDTNZGc1dzAPlp7OuPf32BVGX9UmDt71fsVlzRmkTnl1/mPDEQCJf1xczlIfmM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:9304:b0:250:a6c1:b843 with SMTP id
+ p4-20020a17090a930400b00250a6c1b843mr436712pjo.9.1685026859534; Thu, 25 May
+ 2023 08:00:59 -0700 (PDT)
+Date:   Thu, 25 May 2023 08:00:58 -0700
+In-Reply-To: <393b16f7-8359-5d77-7d5d-8942de987331@gmail.com>
+Mime-Version: 1.0
+References: <20230509134825.1523-1-yan.y.zhao@intel.com> <20230509135300.1855-1-yan.y.zhao@intel.com>
+ <3f09e751-33fd-7d60-78cd-6857d113e8bd@gmail.com> <ZGxbat2mM6AfOOVv@yzhao56-desk.sh.intel.com>
+ <393b16f7-8359-5d77-7d5d-8942de987331@gmail.com>
+Message-ID: <ZG94Kmb8jMZKhtJW@google.com>
+Subject: Re: [PATCH v2 5/6] KVM: x86: Keep a per-VM MTRR state
+From:   Sean Christopherson <seanjc@google.com>
+To:     Robert Hoo <robert.hoo.linux@gmail.com>
+Cc:     Yan Zhao <yan.y.zhao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 02:43:59PM +0200, Maxime Chevallier wrote:
-> Hello Simon,
+On Thu, May 25, 2023, Robert Hoo wrote:
+> On 5/23/2023 2:21 PM, Yan Zhao wrote:
+> IIUC, your saving comes from skips the intermediate state during boot, when
+> APs goes through setting MTRR, which would cause SPTE zap before your this
+> patch set.
 > 
-> On Thu, 25 May 2023 13:02:39 +0200
-> Simon Horman <simon.horman@corigine.com> wrote:
-> 
-> > On Thu, May 25, 2023 at 12:11:23PM +0200, Maxime Chevallier wrote:
-> > > There exists several examples today of devices that embed an
-> > > ethernet PHY or PCS directly inside an SoC. In this situation,
-> > > either the device is controlled through a vendor-specific register
-> > > set, or sometimes exposes the standard 802.3 registers that are
-> > > typically accessed over MDIO.
-> > > 
-> > > As phylib and phylink are designed to use mdiodevices, this driver
-> > > allows creating a virtual MDIO bus, that translates mdiodev register
-> > > accesses to regmap accesses.
-> > > 
-> > > The reason we use regmap is because there are at least 3 such
-> > > devices known today, 2 of them are Altera TSE PCS's, memory-mapped,
-> > > exposed with a 4-byte stride in stmmac's dwmac-socfpga variant, and
-> > > a 2-byte stride in altera-tse. The other one
-> > > (nxp,sja1110-base-tx-mdio) is exposed over SPI.
-> > > 
-> > > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>  
-> > 
-> > ...
-> > 
-> > > +struct mii_bus *devm_mdio_regmap_register(struct device *dev,
-> > > +					  const struct
-> > > mdio_regmap_config *config) +{
-> > > +	struct mdio_regmap_config *mrc;
-> > > +	struct mii_bus *mii;
-> > > +	int rc;
-> > > +
-> > > +	if (!config->parent)
-> > > +		return ERR_PTR(-EINVAL);
-> > > +
-> > > +	mii = devm_mdiobus_alloc_size(config->parent,
-> > > sizeof(*mrc));
-> > > +	if (!mii)
-> > > +		return ERR_PTR(-ENOMEM);
-> > > +
-> > > +	mrc = mii->priv;
-> > > +	memcpy(mrc, config, sizeof(*mrc));
-> > > +
-> > > +	mrc->regmap = config->regmap;
-> > > +	mrc->valid_addr = config->valid_addr;
-> > > +
-> > > +	mii->name = DRV_NAME;
-> > > +	strscpy(mii->id, config->name, MII_BUS_ID_SIZE);
-> > > +	mii->parent = config->parent;
-> > > +	mii->read = mdio_regmap_read_c22;
-> > > +	mii->write = mdio_regmap_write_c22;
-> > > +
-> > > +	if (config->autoscan)
-> > > +		mii->phy_mask = ~BIT(config->valid_addr);
-> > > +	else
-> > > +		mii->phy_mask = ~0UL;  
-> > 
-> > Hi Maxime,
-> > 
-> > phy_mask is a u32.
-> > But 0UL may be either 32 or 64 bits wide.
-> 
-> Right
-> 
-> > I think a better approach would be to use U32_MAX.
-> 
-> I guess ~0 would also work, and this would also align with what
-> fixed-phy and sfp do for their internal MDIO bus.
+> MHO was, now that your ignores other vCPU's MTRR settings (unless it is
+> different from BP's MTRR?), why not let each vCPU's MTRR set/update directly
+> set to the per-VM MTRR states (if differs from current value). It's guest
+> OS/BIOS's responsibility to keep the consistency anyway. And even if the
+> malfunction caused by the inconsistency might differ from that of native,
+> SDM doesn't clearly state how the malfunction should be, does it?
+> that's to say, anyone knows, when inconsistency happens, does it cause that
+> logical processor malfunction or in fact it impacts the global MTRR
+> settings? If the latter, I think leaving only the per-VM MTRR state aligns
+> with native.
 
-Yes, I guess so too.
+The MTRRs are not system wide or per-package though, they are per logical CPU.
+Yes, they "need" to be consistent with respect to one another, but only when the
+CPU is actually accessing memory.  This is a big reason why trying to track MTRRs
+as a per-VM asset in KVM is so difficult/messy.  Software doesn't rendezvous all
+CPUs and then do the write on just one CPU, each CPU does its own writes more or
+less independently.
 
-> I'll fix that for next revision
+> BTW, with regard to KVM_X86_QUIRK_CD_NW_CLEARED, I see svm honors it while
+> vmx doesn't before it clear CR0.CD/NW.
+> 
+> svm_set_cr0():
+> 
+> 	if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
+> 		hcr0 &= ~(X86_CR0_CD | X86_CR0_NW);
+> 
+> 
+> vmx_set_cr0():
+> 
+> 	hw_cr0 = (cr0 & ~KVM_VM_CR0_ALWAYS_OFF);
+> 
+> Perhaps vmx side can be fixed passingly?
 
-Thanks!
+Sadly, no.  SVM and VMX manage guest memtype completely differently.  VMX doesn't
+allow CR0.CD=1 when VMX is enabled, and so KVM needs to emulate CR0.CD via the EPT
+memtype.
