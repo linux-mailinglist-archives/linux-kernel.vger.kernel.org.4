@@ -2,83 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2E2710B9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA69E710BA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240453AbjEYMCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 08:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43770 "EHLO
+        id S241019AbjEYMDQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 08:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjEYMCa (ORCPT
+        with ESMTP id S229754AbjEYMDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 08:02:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2DD13A;
-        Thu, 25 May 2023 05:02:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60135644EF;
-        Thu, 25 May 2023 12:02:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69EC6C433EF;
-        Thu, 25 May 2023 12:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685016148;
-        bh=6cMWfyYxquh84atqJ0WzGSDvducDprtXvAOZRpr31oI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tnkvNLlr3a3x8Et9TQ8vy2AlfVZcIiCRCGv6tEHDyJTXxTv3CsSZ75a/ttzPxs1/O
-         tRS8OiqD0QxYW94FzpEHoCdh84oD3lBhaoqFXCsuH8xlnluCn+WO6EWUC4O1dpW94R
-         BUScCsjemNDrUVvuE0ndm/ZoN/vT4gHTUJ8LCvy86gJlejQjbEz/DCiDvdtnuNt8vP
-         gU/I6+ciIaPktxIPdZAO1egTUVmfSwygzxd4MQrddYrVK5wajLQSPjjOb3Y9SbG+Rv
-         9xFBoRT34nvd7wAg0PebxgyZ8KzEQ2w7caNm4tKQ6IEFCXtkQ7o1LirdrhtSaYjsDP
-         rXQYJRWJZK6zg==
-Date:   Thu, 25 May 2023 13:02:23 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Lu Hongfei <luhongfei@vivo.com>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Anjelique Melendez <quic_amelende@quicinc.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Lu Hongfei <11117923@bbktel.com>,
-        "open list:LED SUBSYSTEM" <linux-leds@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        opensource.kernel@vivo.com
-Subject: Re: [PATCH] led: qcom-lpg: Fix resource leaks in
- for_each_available_child_of_node() loops
-Message-ID: <20230525120223.GB443478@google.com>
-References: <20230525111705.3055-1-luhongfei@vivo.com>
+        Thu, 25 May 2023 08:03:14 -0400
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFB79C;
+        Thu, 25 May 2023 05:03:13 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-504d149839bso581234a12.1;
+        Thu, 25 May 2023 05:03:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685016192; x=1687608192;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K9S0ma7iu2Ky/aDiCRE3Nd9h/94aau3Fx7GR6wHQD04=;
+        b=FkvJBh+ubyXOHu18AH0c5YwRhJW6JJcwRTsjnuvI7CV8ayQcYCyzdgL8mOkuH1nfjN
+         p+UVeaqz+B0LvVV2mmB0UuOi91mrEUKxmsjjXUYTYPh8jE43L0nCnpvmN+h1NaaHpSnt
+         udeUC64uMZPtqyEqg4Cs5b4lBD9bwly31gWRJq95A9OmkOpoy1dXb+VM9GWmBIQ4KBO6
+         KK3RNjxXkeHS+iJR9OB2giISSn4Hw1OXeydZYNzBN6FC5bJ0La1iQmnSBF4MkTNmFeew
+         NoLiehAMW4m9tRoiwiH80Nl18utKL2CA7gzYqrk6Vszh1zCObNG/jKVuoipr3XFFcp7B
+         ZleQ==
+X-Gm-Message-State: AC+VfDw8rJI8j/baut9QZdk94zG1KV7or4QLoNBtjlRTJ9Be/ti3ecff
+        FrSur674s1DciZZfyNLMNOae9BihDFZ5EHfMjjE=
+X-Google-Smtp-Source: ACHHUZ7RzuKQg/fIionyFwEoFqR+Eeg3H6bRtfIP3/OhCUcag8qzxwzIimb3MHkAmExHXu9pYSV1F6LGCj5QdYXqwus=
+X-Received: by 2002:a05:6402:524e:b0:50d:fd8e:e224 with SMTP id
+ t14-20020a056402524e00b0050dfd8ee224mr15510365edd.1.1685016191394; Thu, 25
+ May 2023 05:03:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230525111705.3055-1-luhongfei@vivo.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230522200033.2605-1-mario.limonciello@amd.com>
+In-Reply-To: <20230522200033.2605-1-mario.limonciello@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 25 May 2023 14:02:58 +0200
+Message-ID: <CAJZ5v0gSDxEGMM02SeKuSMRGJppJwYTbX2_Jy5-ovUOGpKASvw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] include/linux/suspend.h: Only show pm_pr_dbg
+ messages at suspend/resume
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     rafael@kernel.org, hdegoede@redhat.com, linus.walleij@linaro.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-pm@vger.kernel.org, Shyam-sundar.S-k@amd.com,
+        Basavaraj.Natikar@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023, Lu Hongfei wrote:
-
-> for_each_available_child_of_node in lpg_probe and lpg_add_led need
-> to execute of_node_put before return. this patch could fix this bug.
-> 
-> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+On Mon, May 22, 2023 at 10:01 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> All uses in the kernel are currently already oriented around
+> suspend/resume. As some other parts of the kernel may also use these
+> messages in functions that could also be used outside of
+> suspend/resume, only enable in suspend/resume path.
+>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  drivers/leds/rgb/leds-qcom-lpg.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->  mode change 100644 => 100755 drivers/leds/rgb/leds-qcom-lpg.c
+>  include/linux/suspend.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index d0d4598a7b3f..a40f2e667e09 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -564,7 +564,8 @@ static inline int pm_dyn_debug_messages_on(void)
+>  #endif
+>  #define __pm_pr_dbg(fmt, ...)                                  \
+>         do {                                                    \
+> -               if (pm_debug_messages_on)                       \
+> +               if (pm_debug_messages_on &&                     \
+> +                   pm_suspend_target_state != PM_SUSPEND_ON)   \
 
-I made a few tweaks to the commit messaged.
+Instead of this, I would define a function, say
+pm_debug_messages_should_print(), that would do the check and I would
+use it also in __pm_deferred_pr_dbg().
 
-Applied, thanks
-
--- 
-Lee Jones [李琼斯]
+>                         printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__);  \
+>                 else if (pm_dyn_debug_messages_on())            \
+>                         pr_debug(fmt, ##__VA_ARGS__);   \
+> @@ -589,7 +590,8 @@ static inline int pm_dyn_debug_messages_on(void)
+>  /**
+>   * pm_pr_dbg - print pm sleep debug messages
+>   *
+> - * If pm_debug_messages_on is enabled, print message.
+> + * If pm_debug_messages_on is enabled and the system is entering/leaving
+> + *      suspend, print message.
+>   * If pm_debug_messages_on is disabled and CONFIG_DYNAMIC_DEBUG is enabled,
+>   *     print message only from instances explicitly enabled on dynamic debug's
+>   *     control.
+>
+> base-commit: 42dfdd08422dec99bfe526072063f65c0b9fb7d2
+> --
