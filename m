@@ -2,199 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02957119FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6E27119FE
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242069AbjEYWKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 18:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
+        id S241693AbjEYWJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 18:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233274AbjEYWKG (ORCPT
+        with ESMTP id S229931AbjEYWJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 18:10:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF887183
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685052559;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dJeYXRBQttCVikZVDOeeK4P8EFg9Raz3eKfB/gpnZ2o=;
-        b=BonpJeOJQf0jyUrl/EegPVTFY3JqQn2Y4uWik2c54I3qqBtKA6FCmQubP3JxTtR1L3Ek33
-        gbkK8GK469n+4YsrjOZ8Hu/oN7WMFm7l+MZGAou0H1kkMQcn4KLqZCLk4eLla2D2nXKcRx
-        aOU2fUgZvd/UwaVs7iAD2ye9IZ5vMjc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-342-nm7LPY8pOda3xPAriSf6Lw-1; Thu, 25 May 2023 18:09:18 -0400
-X-MC-Unique: nm7LPY8pOda3xPAriSf6Lw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BC918007D9;
-        Thu, 25 May 2023 22:09:17 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3FCB4202696C;
-        Thu, 25 May 2023 22:09:15 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230525211346.718562-1-Kenny.Ho@amd.com>
-References: <20230525211346.718562-1-Kenny.Ho@amd.com>
-To:     Kenny Ho <Kenny.Ho@amd.com>
-Cc:     dhowells@redhat.com, David Laight <David.Laight@aculab.com>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "Kenny Ho" <y2kenny@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        alexander.deucher@amd.com
-Subject: Re: [PATCH] Truncate UTS_RELEASE for rxrpc version
+        Thu, 25 May 2023 18:09:31 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD21512F;
+        Thu, 25 May 2023 15:09:30 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-53f04fdd77dso30938a12.3;
+        Thu, 25 May 2023 15:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685052570; x=1687644570;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=9M8nWoD6KWrYcLP+c2xne+17Aj3PiuijAzZBCy4tnBM=;
+        b=UPuy1ySXcvpF9xExgdv8gW5kMgOc2DwvioFjAxKAKh+6uTzCldGq2K7xENFEspkCu+
+         qZWDD88GK3bkynGTXLt13sfLNqKlBvkpQgUb9UK3KdYvYShADVw0zOhDJU3qXELSBGFW
+         oUZ6tt9i4w+/Uilw7d7sp+xQUj7z1DtjwAyica3LRQv47gBekQad074dUmna9zEFbOUZ
+         dX9+epKGt6YUAAUABolRNL5OE+uyq+VyLLGPoeZC1/5BZNjGj2gL+bx4C8JXklRvvqLK
+         n6HLZ4v7tCua1qpM2vL5y+WyleIoO8y9ODPU4MT1XXtjYG2p29ICT7CYZwhpxAcRTXRU
+         SrRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685052570; x=1687644570;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9M8nWoD6KWrYcLP+c2xne+17Aj3PiuijAzZBCy4tnBM=;
+        b=eS+Qor0hLklVu6wEMrJaRgZC3/eWLjGtL5LsFT5zNJsSSIaasQfPWfsUBWFjOrTuQ0
+         0O+Pd252nPj2yp45dgojF/Zoz2TDu63gfGXMPTGGz8xk+0vma+JXs+0scgDxyZdfSVr/
+         8ajRj92MWs1j0vSfFU2JSEB9Y+NWjlX6uMCOOG6Oaze9SlJENiiRQL6EsLZb+3GMtpvw
+         9vzqIr7gz35K/PpIvVHANVdPnKNaBeuHy8k+lv302bwi7cG+Ek11TcX30u2cMYqcN6SQ
+         a9jdGTxZRi43Er+rzOoHDWU+KW3x7yxUSpJaO/wzUjCTnCjz9aZVFArUyxOlbQyavr5U
+         7aaw==
+X-Gm-Message-State: AC+VfDyipTZEKcbNFMtUF8TB9Ffed3qS0c5qHFhCM8Tw4GOAcOunKkp+
+        03jOmCMHp51VpMSV6k7btj4=
+X-Google-Smtp-Source: ACHHUZ5xulfWCfPzYH9/YLwNiNbqV0qi7EXkYL11ysjOWGGrhN+EHNomXiXdAkVZm2KUiWB8cNLwrw==
+X-Received: by 2002:a17:902:8210:b0:1ae:6882:5bc4 with SMTP id x16-20020a170902821000b001ae68825bc4mr104977pln.64.1685052570159;
+        Thu, 25 May 2023 15:09:30 -0700 (PDT)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:7217:977f:12fc:72e0])
+        by smtp.gmail.com with ESMTPSA id x6-20020a170902ea8600b001a6ed2d0ef8sm1851390plb.273.2023.05.25.15.09.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 15:09:29 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH] tools lib subcmd: Show parent options in help
+Date:   Thu, 25 May 2023 15:09:27 -0700
+Message-ID: <20230525220927.3544192-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <223249.1685052554.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 25 May 2023 23:09:14 +0100
-Message-ID: <223250.1685052554@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kenny Ho <Kenny.Ho@amd.com> wrote:
+I've just realized that help message in a subcommand didn't show one
+in the parent command.  Since the option parser understands the parent,
+display code should do the same.  For example, `perf ftrace latency -h`
+should show options in the `perf ftrace` command too.
 
-> @@ -30,6 +28,7 @@ static void rxrpc_send_version_request(struct rxrpc_lo=
-cal *local,
->  	struct sockaddr_rxrpc srx;
->  	struct msghdr msg;
->  	struct kvec iov[2];
-> +	static char rxrpc_version_string[65];
->  	size_t len;
->  	int ret;
->  =
+Before:
 
+  $ perf ftrace latency -h
 
-That's not thread-safe.  If you have multiple endpoints each one of them c=
-ould
-be overwriting the string at the same time.  We can't guarantee that one
-wouldn't corrupt the other.
+   Usage: perf ftrace [<options>] [<command>]
+      or: perf ftrace [<options>] -- [<command>] [<options>]
+      or: perf ftrace {trace|latency} [<options>] [<command>]
+      or: perf ftrace {trace|latency} [<options>] -- [<command>] [<options>]
 
-There's also no need to reprint it every time; just once during module ini=
-t
-will do.  How about the attached patch instead?
+      -b, --use-bpf         Use BPF to measure function latency
+      -n, --use-nsec        Use nano-second histogram
+      -T, --trace-funcs <func>
+                            Show latency of given function
 
-David
+After:
+
+  $ perf ftrace latency -h
+
+   Usage: perf ftrace [<options>] [<command>]
+      or: perf ftrace [<options>] -- [<command>] [<options>]
+      or: perf ftrace {trace|latency} [<options>] [<command>]
+      or: perf ftrace {trace|latency} [<options>] -- [<command>] [<options>]
+
+      -a, --all-cpus        System-wide collection from all CPUs
+      -b, --use-bpf         Use BPF to measure function latency
+      -C, --cpu <cpu>       List of cpus to monitor
+      -n, --use-nsec        Use nano-second histogram
+      -p, --pid <pid>       Trace on existing process id
+      -T, --trace-funcs <func>
+                            Show latency of given function
+      -v, --verbose         Be more verbose
+          --tid <tid>       Trace on existing thread id (exclusive to --pid)
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
-rxrpc: Truncate UTS_RELEASE for rxrpc version
+ tools/lib/subcmd/parse-options.c | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
-UTS_RELEASE has a maximum length of 64 which can cause rxrpc_version to
-exceed the 65 byte message limit.
-
-Per the rx spec[1]: "If a server receives a packet with a type value of 13=
-,
-and the client-initiated flag set, it should respond with a 65-byte payloa=
-d
-containing a string that identifies the version of AFS software it is
-running."
-
-The current implementation causes a compile error when WERROR is turned on
-and/or UTS_RELEASE exceeds the length of 49 (making the version string mor=
-e
-than 64 characters).
-
-Fix this by generating the string during module initialisation and limitin=
-g
-the UTS_RELEASE segment of the string does not exceed 49 chars.  We need t=
-o
-make sure that the 64 bytes includes "linux-" at the front and " AF_RXRPC"=
- at
-the back as this may be used in pattern matching.
-
-Fixes: 44ba06987c0b ("RxRPC: Handle VERSION Rx protocol packets")
-Reported-by: Kenny Ho <Kenny.Ho@amd.com>
-Link: https://lore.kernel.org/r/20230523223944.691076-1-Kenny.Ho@amd.com/
-Signed-off-by: David Howells <dhowells@redhat.com>
-Link: https://web.mit.edu/kolya/afs/rx/rx-spec [1]
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: Andrew Lunn <andrew@lunn.ch>
-cc: David Laight <David.Laight@ACULAB.COM>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: linux-afs@lists.infradead.org
-cc: netdev@vger.kernel.org
----
- net/rxrpc/af_rxrpc.c    |    1 +
- net/rxrpc/ar-internal.h |    1 +
- net/rxrpc/local_event.c |   11 ++++++++++-
- 3 files changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
-index 31f738d65f1c..da0b3b5157d5 100644
---- a/net/rxrpc/af_rxrpc.c
-+++ b/net/rxrpc/af_rxrpc.c
-@@ -980,6 +980,7 @@ static int __init af_rxrpc_init(void)
- 	BUILD_BUG_ON(sizeof(struct rxrpc_skb_priv) > sizeof_field(struct sk_buff=
-, cb));
- =
-
- 	ret =3D -ENOMEM;
-+	rxrpc_gen_version_string();
- 	rxrpc_call_jar =3D kmem_cache_create(
- 		"rxrpc_call_jar", sizeof(struct rxrpc_call), 0,
- 		SLAB_HWCACHE_ALIGN, NULL);
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 5d44dc08f66d..e8e14c6f904d 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -1068,6 +1068,7 @@ int rxrpc_get_server_data_key(struct rxrpc_connectio=
-n *, const void *, time64_t,
- /*
-  * local_event.c
-  */
-+void rxrpc_gen_version_string(void);
- void rxrpc_send_version_request(struct rxrpc_local *local,
- 				struct rxrpc_host_header *hdr,
- 				struct sk_buff *skb);
-diff --git a/net/rxrpc/local_event.c b/net/rxrpc/local_event.c
-index 5e69ea6b233d..993c69f97488 100644
---- a/net/rxrpc/local_event.c
-+++ b/net/rxrpc/local_event.c
-@@ -16,7 +16,16 @@
- #include <generated/utsrelease.h>
- #include "ar-internal.h"
- =
-
--static const char rxrpc_version_string[65] =3D "linux-" UTS_RELEASE " AF_=
-RXRPC";
-+static char rxrpc_version_string[65]; // "linux-" UTS_RELEASE " AF_RXRPC"=
-;
+diff --git a/tools/lib/subcmd/parse-options.c b/tools/lib/subcmd/parse-options.c
+index 9fa75943f2ed..41de97671c72 100644
+--- a/tools/lib/subcmd/parse-options.c
++++ b/tools/lib/subcmd/parse-options.c
+@@ -806,18 +806,28 @@ static int option__cmp(const void *va, const void *vb)
+ 
+ static struct option *options__order(const struct option *opts)
+ {
+-	int nr_opts = 0, nr_group = 0, len;
+-	const struct option *o = opts;
+-	struct option *opt, *ordered, *group;
++	int nr_opts = 0, nr_group = 0, nr_parent = 0, len;
++	const struct option *o, *p = opts;
++	struct option *opt, *ordered = NULL, *group;
+ 
+-	for (o = opts; o->type != OPTION_END; o++)
++retry:
++	for (o = p; o->type != OPTION_END; o++)
+ 		++nr_opts;
+ 
+-	len = sizeof(*o) * (nr_opts + 1);
+-	ordered = malloc(len);
+-	if (!ordered)
++	len = sizeof(*o) * (nr_opts + !o->parent);
++	group = realloc(ordered, len);
++	if (!group)
+ 		goto out;
+-	memcpy(ordered, opts, len);
++	ordered = group;
++	memcpy(&ordered[nr_parent], p, sizeof(*o) * (nr_opts - nr_parent));
 +
-+/*
-+ * Generate the VERSION packet string.
-+ */
-+void rxrpc_gen_version_string(void)
-+{
-+	snprintf(rxrpc_version_string, sizeof(rxrpc_version_string),
-+		 "linux-%.49s AF_RXRPC", UTS_RELEASE);
-+}
- =
-
- /*
-  * Reply to a version request
++	if (o->parent) {
++		p = o->parent;
++		nr_parent = nr_opts;
++		goto retry;
++	}
++	/* copy the last OPTION_END */
++	memcpy(&ordered[nr_opts], o, sizeof(*o));
+ 
+ 	/* sort each option group individually */
+ 	for (opt = group = ordered; opt->type != OPTION_END; opt++) {
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
