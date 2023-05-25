@@ -2,252 +2,701 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07AA710A3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0655971099F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239955AbjEYKjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
+        id S240838AbjEYKOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjEYKjU (ORCPT
+        with ESMTP id S240828AbjEYKO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:39:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C40E6;
-        Thu, 25 May 2023 03:39:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685011158; x=1716547158;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   in-reply-to:mime-version;
-  bh=PCcKkxgoC/YwAqVHqGYbQdcbloRTTrYNZ6DDgypS158=;
-  b=N3krzJopeojtMKw45konZmRxVRt6HrFsi/pJ4l6zAEwtxLU/duqSshAd
-   JvfIHTNIbeMj3lIeEiQZN+M2dDycLWkvKxUC+/SJQGvZA4099RfFspaBb
-   n3cTAaX35dN5eDLuwQ2Nezbye10Ca2yQXIn5gNrcPl0fpLlNW8+ehnKNj
-   IlsLHgOqA/79zDnAcKnUScFLonEq/NfRzdIoLSGcHMrd6624+si+rfb/P
-   LrotAYgVVR4BQeaCqANcRO/sACwjg2EFGaWvscHSWhp1Sh/UrWwnO/9MS
-   fSRsF2qYMK0hfBI0LzKsy/v6aN5uRO5yte8VdR0r0XgjFZcUQe5kx4hX9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="338426998"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="338426998"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 03:39:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="849154765"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="849154765"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga001.fm.intel.com with ESMTP; 25 May 2023 03:39:16 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 25 May 2023 03:39:16 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 25 May 2023 03:39:16 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.104)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 25 May 2023 03:39:16 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iLAf15HvSOoK3LoYDIe3MkxNMRd+jwAC0DNCXtzbcRr4gmIyBr/Du9zBEDENAZF4U6MCIVb+WyTPyL8YEBwJcPtlXDONJW3iYdx0qdYQ/gumLST6TNGLPqGmRSt8ncfzJrfyeJ+AD6pUqA7Wznkoo7y3m326GYYBtE2QO5tpAwYEznRuwSPRj/JmUuCPAJLMVKx0KsPxYWfkQZwPeidhGQWQn++oi31UMlbyIyNT+BXnPcyhJvoQPGjbWdcauE8JRVdQ6xLsW1S9Z/pDbdI2a4JwTY/N7OxTF+DWbDV/IwA/lLvYQksEN5eqneSA9UrMC8m3DFq/rGheQLOrtyxnNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jAR6SNjaqHENYDDnb7HwdkSkLz9R7I4vfYEAwGFPTuo=;
- b=a9LzT3vCQhP/dCiixEv2k56FuqgybPOKAomU4qs2Vpjfh4NJ0Dhfm/PDyREhJKsoVyBBZuAcYSmHjmauWdPeiuPGZ5PhmBFxPIvVsuQ8j4fqsV7bDO913x+amNuJ11S+GqQrXFWdOvN4Ll94DaZ+RcL8m+/wybnySDO0mWbV+7XwRB1Ve5/1wwBoj1NjUv8BQdFSd5dT/EAigLqfic8Pt750fd41ncMqgHzbh2xKLWQmBeFn1bfF29G2CW3hHHwB6Zbs0CNsKq+gsmXSvNRtI84/Fn63zDZhKwl7QL1IACYkgvvSBxNXljknfCgJK240J3eLcXtx5Jjk+/9H155Gvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
- PH7PR11MB6331.namprd11.prod.outlook.com (2603:10b6:510:1fd::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Thu, 25 May
- 2023 10:39:13 +0000
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::af48:a141:6dd6:25e]) by DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::af48:a141:6dd6:25e%6]) with mapi id 15.20.6433.017; Thu, 25 May 2023
- 10:39:13 +0000
-Date:   Thu, 25 May 2023 18:14:04 +0800
-From:   Yan Zhao <yan.y.zhao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Chao Gao <chao.gao@intel.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <pbonzini@redhat.com>
-Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: add a new mmu zap helper to
- indicate memtype changes
-Message-ID: <ZG807ECX4TeBcE61@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <20230509134825.1523-1-yan.y.zhao@intel.com>
- <20230509135006.1604-1-yan.y.zhao@intel.com>
- <ZFsr9TynkA/CyPgg@chao-email>
- <ZFtQeLNuXP6tDMne@yzhao56-desk.sh.intel.com>
- <ZG1DhSdhpTkxrfCq@google.com>
- <ZG10zi6YtqGeik7u@yzhao56-desk.sh.intel.com>
- <ZG4kMKXKnQuQOTa7@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZG4kMKXKnQuQOTa7@google.com>
-X-ClientProxiedBy: SG2PR01CA0178.apcprd01.prod.exchangelabs.com
- (2603:1096:4:28::34) To DS7PR11MB5966.namprd11.prod.outlook.com
- (2603:10b6:8:71::6)
+        Thu, 25 May 2023 06:14:27 -0400
+Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA17E42;
+        Thu, 25 May 2023 03:14:17 -0700 (PDT)
+Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
+        by mta-01.yadro.com (Proxmox) with ESMTP id 4E0A13425C3;
+        Thu, 25 May 2023 13:14:16 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :from:from:in-reply-to:message-id:mime-version:references
+        :reply-to:subject:subject:to:to; s=mta-01; bh=5EZnxK6bRYG8A/1Hg8
+        cPbBh2r9Yf2ahvAjcLGbxwLv0=; b=YqiB76LhjAOerCQvn6bIObMFmUlFUfPOff
+        55SIgo/km+Unq0rB0bc4SjHHZ67zXmzGkefxUNV+Z0SjY9vQjNspTIfCqYyewWQT
+        f+AQzt1ReX5EExWiDCTFRerRCFZT2JUNZME5jAubHqmtTUsfVwUUusNG6zVdC6BE
+        uGm5oI53o=
+Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Proxmox) with ESMTPS id 3CF9F342578;
+        Thu, 25 May 2023 13:14:16 +0300 (MSK)
+Received: from xpad.Home (172.22.2.87) by T-EXCH-08.corp.yadro.com
+ (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Thu, 25 May
+ 2023 13:14:15 +0300
+From:   Vladimir Barinov <v.barinov@yadro.com>
+To:     Lee Jones <lee@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        Vladimir Barinov <v.barinov@yadro.com>, <linux@yadro.com>
+Subject: [PATCH v2 1/2] leds: add Awinic AW2026 LED driver
+Date:   Thu, 25 May 2023 13:14:10 +0300
+Message-ID: <20230525101410.2036834-1-v.barinov@yadro.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230525101341.2036563-1-v.barinov@yadro.com>
+References: <20230525101341.2036563-1-v.barinov@yadro.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|PH7PR11MB6331:EE_
-X-MS-Office365-Filtering-Correlation-Id: df3853f3-2cf0-4deb-c112-08db5d0c479c
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AN+xd6q4tYTsTDwhnhHAE5AS3bNQ3u6/PAPHi+AurH420X30O1TqNFeFL0V4ITDxVtglVThwiI9vm857fUtCfL//oIAH48qcK+ZyVPOmXyJZsDEkOz+5cMYN+svu9uiQAhZmRSMOS0AnkLLUEO2QOv+LaPwekhb9C6HeLojzl0N/FQ08iCCVsecMDmBs9I0cu7xTW9AsL1YH8EADj4iLJixD9pfYJGSdD6cO2mfrTxsgkctPvOkoKfLt62F3GxRlksvSXgKXpslB2Pb3OjcKVCcPBWDe1MDDfjjrvUU7IEXGnlzxvgdU7pGCRK/3AHiyCuTHnG/hAR2zc30k3tAsh/WTyTZYZymjqEK13a9fL/nw+DzSlUFHXt0eaZwNLil/4hT3f1DnSVDum29kllVOy8RMrktrEUDTxPt0Ih5MgtwrDJ9tKdGU2B+UQCkMQAH0FIeo+CEyL90fFjjWvptOd5l/TOujVqef/XHnyPlL0+OLX0pO5uxPvPvJ5x50f2D1LL+VMDJMKsKPdBptpD7XWAKs47RmUHi5lmZHu2M+nOlmM2OVyLz9wzcZW7OhELgsrsr7PoHivinZa1htzZHvnlO3FDkItldMNGnpkjKjIpqQ5sxtWKv6xt1BKFyHs75H
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(39860400002)(376002)(396003)(346002)(451199021)(83380400001)(2906002)(3450700001)(186003)(86362001)(82960400001)(38100700002)(6666004)(6486002)(41300700001)(316002)(8936002)(8676002)(5660300002)(478600001)(66946007)(6916009)(66556008)(66476007)(4326008)(6512007)(6506007)(26005)(309714004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2md9K0FRwsAzUv09aSU3n3zDrcrfAIBu+br2DpIyQ314gLhcEIHJLlImEDk+?=
- =?us-ascii?Q?7gnd+Fm+ZEM2EuI3Yx7iI7XeEUmVFgQu+b3gQlb7px/pdSXTOMg4NGWouO2g?=
- =?us-ascii?Q?SSp23kLvoM4kcmQOgDK6ok9n9tbN8H/NmzClUebOiIy16kNpVaLWcnCF3o56?=
- =?us-ascii?Q?GZjhyCVMf/X4z3WaCGGql2l4U4ttHIlR0cEQnwJWQFPxrZZqBFjwfs2sAX+2?=
- =?us-ascii?Q?jLAXVXvBSJttGe5e/aqpNrXB5TG2PAgjdSTlL9PKSm0bfqAEZoYsPrJJVpJl?=
- =?us-ascii?Q?M5yMG/vcrOIzPhkyD7GAmeOEXv3/dcj8mMhbNpNCnuQj+sDcJH8OB1amI9ut?=
- =?us-ascii?Q?wdflPdT54KxpuSaaZFsqaJezYSNszv3OmpCeHFNN4581K2r5gMNrzVreZo1P?=
- =?us-ascii?Q?rZT4icOmy8igCvsGm9pBpfiZ8V9jHR+blkTIXlCsmTJQd7wRDHcmRMfQGRg7?=
- =?us-ascii?Q?FtdKD1HkEZnp1Ik60KHrtbECDBkN5oGgDQ1JOYJULVFiJZTSAX6sQagZSch3?=
- =?us-ascii?Q?5A/fXbU0p0jiKthgwrRQbZ+8jiOvzu6unaLFfXr9wQK/2jtBn8i9aAwIOi3N?=
- =?us-ascii?Q?03gR+NvhsiVKS/OefQmAMamsKGmOtoowKlOGd2va7ISnYv+4p0925PAI0RRz?=
- =?us-ascii?Q?jbKFwNX9hKUn4HvCM37yQ6cSa5v1V+blesT0WcJJ1gdRcBss/DERDWwpOr/f?=
- =?us-ascii?Q?b86a8r4l6BPEjpS8iRkB8/iRnAwbViELh3hskYBH2Q0K6fbvrfMwF32+3My0?=
- =?us-ascii?Q?OJ9Z9yGPnDgJr2chN99c2T458uYAL4olusxIlUah29w4wftJF//rXXb+EZ1t?=
- =?us-ascii?Q?haqHyIrwdmPRMw2xi4DI3HBUETaBHh4kGdxHeS2Hz/5mJxtPPl5WJLBAfkE0?=
- =?us-ascii?Q?pH0ELZaP+XMqs0byAYJNw910TSI1RCN5UBaSCrt/QE/UDNCRMQQ5ZkubhUkT?=
- =?us-ascii?Q?LUdPQUF2QVbmR1yb08z8CQehBhrKqLx0Qbk/QJkld4ouhV/3vCyoFk5LlhHO?=
- =?us-ascii?Q?8Ko0m+z8HvLxML/BjsOOYZq1ZUZ2/B5f2KIqz7a6AAXGJMkA9T1q6wm0PWpm?=
- =?us-ascii?Q?uBsHDZZZY00aUe76OYlVhdQ+7ZewCPviwlbUV/0DKBgHDnTE61P73KCDmqwz?=
- =?us-ascii?Q?zXO8GBF5m8aadmNXVb61OGesbmOJIf3IregsliyACI7VDFGQzPcmF2NGIQm4?=
- =?us-ascii?Q?egDqmakNgyo4zmEUD9HsLn0ASa8B0B5G7FJ3mGpKVn2ob7vxWGWE+eQn1Fqf?=
- =?us-ascii?Q?qQnJJM54lfO2XPK8+t16C4aen3NdcAMQCCBgsDwEgoWz0xZcd5V8tV6j91c4?=
- =?us-ascii?Q?jHD0Rgy7JbyJIxCVpL4guF1ZVCpxE70uJ6mu9LQNfYrW2Z0eeHwIxfC78oUJ?=
- =?us-ascii?Q?IHuzjebDIwwVxGARkhbA7bx2CZEzUgGtra0wTY2WFvSraY9PTZeK5q4rGpYP?=
- =?us-ascii?Q?REu3OPEH2NJcsPTw+B1GZiNpkwuLhpYJmtK3mCS0vwQ3FNviKa6+yFAJC79l?=
- =?us-ascii?Q?kwBagfiTo0qOiOTQ+x3eHMF+HzWBNabAndXbDzbjKjKHButXcpnpfMenKx9L?=
- =?us-ascii?Q?8TGP9BJXuaY0hpQqxYAr4co3rgodYSP3umHekkSl?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: df3853f3-2cf0-4deb-c112-08db5d0c479c
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 10:39:13.4138
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5Qch9RtZFGhlekVxkulsU0rEub3Q1KCPwNYgqWEKdiNd4Tisg+eDhbaKIT2h4HVVF3RKGGKEwTg+S5VTiraMdw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6331
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.22.2.87]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-08.corp.yadro.com (172.17.11.58)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 07:50:24AM -0700, Sean Christopherson wrote:
-> On Wed, May 24, 2023, Yan Zhao wrote:
-> > On Tue, May 23, 2023 at 03:51:49PM -0700, Sean Christopherson wrote:
-> > > diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
-> > > index 3eb6e7f47e96..a67c28a56417 100644
-> > > --- a/arch/x86/kvm/mtrr.c
-> > > +++ b/arch/x86/kvm/mtrr.c
-> > > @@ -320,7 +320,7 @@ static void update_mtrr(struct kvm_vcpu *vcpu, u32 msr)
-> > >  	struct kvm_mtrr *mtrr_state = &vcpu->arch.mtrr_state;
-> > >  	gfn_t start, end;
-> > >  
-> > > -	if (!tdp_enabled || !kvm_arch_has_noncoherent_dma(vcpu->kvm))
-> > > +	if (!kvm_mmu_honors_guest_mtrrs(vcpu->kvm))
-> > Could we also add another helper kvm_mmu_cap_honors_guest_mtrrs(), which
-> > does not check kvm_arch_has_noncoherent_dma()?
-> > 
-> > +static inline bool kvm_mmu_cap_honors_guest_mtrrs(struct kvm *kvm)
-> > +{
-> > +       return !!shadow_memtype_mask;
-> > +}
-> > 
-> > This is because in patch 4 I plan to do the EPT zap when
-> > noncoherent_dma_count goes from 1 to 0.
-> 
-> Hrm, the 1->0 transition is annoying.  Rather than trying to capture the "everything
-> except non-coherent DMA" aspect, what about this?
-> 
-> mmu.c:
-> 
-> bool __kvm_mmu_honors_guest_mtrrs(struct kvm *kvm, bool vm_has_noncoherent_dma)
-> {
-> 	/*
-> 	 * If the TDP is enabled, the host MTRRs are ignored by TDP
-> 	 * (shadow_memtype_mask is non-zero), and the VM has non-coherent DMA
-> 	 * (DMA doesn't snoop CPU caches), KVM's ABI is to honor the memtype
-> 	 * from the guest's MTRRs so that guest accesses to memory that is
-> 	 * DMA'd aren't cached against the guest's wishes.
-> 	 *
-> 	 * Note, KVM may still ultimately ignore guest MTRRs for certain PFNs,
-> 	 * e.g. KVM will force UC memtype for host MMIO.
-> 	 */
-> 	return vm_has_noncoherent_dma && tdp_enabled && shadow_memtype_mask;
-> }
-> 
-> mmu.h:
-> 
-> bool __kvm_mmu_honors_guest_mtrrs(struct kvm *kvm, bool vm_has_noncoherent_dma);
-> 
-> static inline bool kvm_mmu_honors_guest_mtrrs(struct kvm *kvm)
-> {
-> 	
-> 	return __kvm_mmu_honors_guest_mtrrs(kvm, kvm_arch_has_noncoherent_dma(kvm));
-> }
+This adds support for Awinic AW2026 3-channel LED driver with
+I2C insterface. It supports hardware blinking and hardware
+pattern generator.
 
-This should work and it centralizes the comments into one place, though I dislike
-having to pass true as vm_has_noncoherent_dma in case of 1->0 transition. :)
+Signed-off-by: Vladimir Barinov <v.barinov@yadro.com>
+---
+Changes in version 2:
+- fixed typos in patch header 2016 -> 2026
 
-> 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 41d7bb51a297..ad0c43d7f532 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -13146,13 +13146,19 @@ EXPORT_SYMBOL_GPL(kvm_arch_has_assigned_device);
-> > 
-> >  void kvm_arch_register_noncoherent_dma(struct kvm *kvm)
-> >  {
-> > -       atomic_inc(&kvm->arch.noncoherent_dma_count);
-> > +       if (atomic_inc_return(&kvm->arch.noncoherent_dma_count) == 1) {
-> > +               if (kvm_mmu_cap_honors_guest_mtrrs(kvm))
-> > +                       kvm_zap_gfn_range(kvm, 0, ~0ULL);
-> 
-> No need for multiple if statements.  Though rather than have identical code in
-> both the start/end paths, how about this?  That provides a single location for a
-> comment.  Or maybe first/last instead of start/end?
-> 
-> static void kvm_noncoherent_dma_start_or_end(struct kvm *kvm)
-What does start_or_end or first_or_last stand for? 
+ drivers/leds/Kconfig       |  10 +
+ drivers/leds/Makefile      |   1 +
+ drivers/leds/leds-aw2026.c | 578 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 589 insertions(+)
+ create mode 100644 drivers/leds/leds-aw2026.c
 
-> {
-> 	/* comment goes here. */
-> 	if (__kvm_mmu_honors_guest_mtrrs(kvm, true))
-> 		kvm_zap_gfn_range(kvm, 0, ~0ULL);
-> }
-> 
-> void kvm_arch_register_noncoherent_dma(struct kvm *kvm)
-> {
-> 	if (atomic_inc_return(&kvm->arch.noncoherent_dma_count) == 1)
-> 		kvm_noncoherent_dma_start_or_end(kvm);
-> }
-> EXPORT_SYMBOL_GPL(kvm_arch_register_noncoherent_dma);
-> 
-> void kvm_arch_unregister_noncoherent_dma(struct kvm *kvm)
-> {
-> 	if (!atomic_dec_return(&kvm->arch.noncoherent_dma_count))
-> 		kvm_noncoherent_dma_start_or_end(kvm);
-> }
-> EXPORT_SYMBOL_GPL(kvm_arch_unregister_noncoherent_dma);
-> 
+diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+index aaa9140bc351..574f3cc47d3e 100644
+--- a/drivers/leds/Kconfig
++++ b/drivers/leds/Kconfig
+@@ -104,6 +104,16 @@ config LEDS_AW2013
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called leds-aw2013.
+ 
++config LEDS_AW2026
++	tristate "LED support for Awinic AW2026"
++	depends on LEDS_CLASS && I2C && OF
++	help
++	  This option enables support for the AW2026 3-channel
++	  LED driver.
++
++	  To compile this driver as a module, choose M here: the module
++	  will be called leds-aw2026.
++
+ config LEDS_BCM6328
+ 	tristate "LED Support for Broadcom BCM6328"
+ 	depends on LEDS_CLASS
+diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+index d30395d11fd8..7fb7b48329ff 100644
+--- a/drivers/leds/Makefile
++++ b/drivers/leds/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_LEDS_AN30259A)		+= leds-an30259a.o
+ obj-$(CONFIG_LEDS_APU)			+= leds-apu.o
+ obj-$(CONFIG_LEDS_ARIEL)		+= leds-ariel.o
+ obj-$(CONFIG_LEDS_AW2013)		+= leds-aw2013.o
++obj-$(CONFIG_LEDS_AW2026)		+= leds-aw2026.o
+ obj-$(CONFIG_LEDS_BCM6328)		+= leds-bcm6328.o
+ obj-$(CONFIG_LEDS_BCM6358)		+= leds-bcm6358.o
+ obj-$(CONFIG_LEDS_BD2802)		+= leds-bd2802.o
+diff --git a/drivers/leds/leds-aw2026.c b/drivers/leds/leds-aw2026.c
+new file mode 100644
+index 000000000000..7c2d5f62797c
+--- /dev/null
++++ b/drivers/leds/leds-aw2026.c
+@@ -0,0 +1,578 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Awinic AW2026 3-channel LED driver
++ *
++ * Author: Vladimir Barinov <v.barinov@yadro.com>
++ * Copyright (C) 2023 KNS Group LLC (YADRO)
++ */
++
++#include <linux/i2c.h>
++#include <linux/leds.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/of.h>
++#include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
++
++#define AW2026_MAX_LEDS		3
++
++/* Chip ID and Software Reset Register */
++#define AW2026_RSTIDR		0x00
++#define AW2026_RSTIDR_RESET	0x55
++#define AW2026_RSTIDR_CHIP_ID	0x31
++
++/* Global Control Register */
++#define AW2026_GCR		0x01
++#define AW2026_GCR_CHIPEN	BIT(0)
++
++/* LED Maximum Current Register */
++#define AW2026_IMAX		0x03
++#define AW2026_IMAX_MASK	(BIT(0) | BIT(1))
++
++/* LED Configure Register */
++#define AW2026_LCFG(x)		(0x04 + (x))
++#define AW2026_LCFG_LEDMD	BIT(0)
++#define AW2026_LCFG_FADE_IN	BIT(1)
++#define AW2026_LCFG_FADE_OUT	BIT(2)
++
++/* LED Channel Enable Register */
++#define AW2026_LEDEN		0x07
++
++/* Pattern Run/Stop Register */
++#define AW2026_PATRUN		0x09
++
++/* LED Current Register */
++#define AW2026_ILED(x)		(0x10 + (x))
++#define AW2026_ILED_MAX		0xFF
++
++/* PWM duty level Register */
++#define AW2026_PWM(x)		(0x1C + (x))
++#define AW2026_PWM_DUTY_MAX	0xFF
++
++/* T1 Time Parameter of Pattern */
++#define AW2026_PAT_T1(x)	(0x30 + 5*(x))
++
++/* T2 Time Parameter of Pattern */
++#define AW2026_PAT_T2(x)	(0x31 + 5*(x))
++
++struct aw2026;
++
++enum aw2026_state {
++	AW2026_STATE_OFF,
++	AW2026_STATE_ON,
++	AW2026_STATE_KEEP,
++};
++
++struct aw2026_led {
++	struct aw2026 *chip;
++	struct fwnode_handle *fwnode;
++	struct led_classdev cdev;
++	enum aw2026_state default_state;
++	u32 idx;
++};
++
++struct aw2026 {
++	struct i2c_client *client;
++	struct regmap *regmap;
++	struct mutex lock;
++	struct regulator *vcc_regulator;
++	struct aw2026_led leds[AW2026_MAX_LEDS];
++	int num_leds;
++	unsigned int imax;
++	bool enabled;
++};
++
++static const struct regmap_config aw2026_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.max_register = 0x3e,
++};
++
++struct msec_reg {
++	u32 msec;
++	u8 reg;
++};
++
++static const struct msec_reg aw2026_msec_reg[] = {
++	{ .msec =    4, .reg = 0x0 },
++	{ .msec =  130, .reg = 0x1 },
++	{ .msec =  260, .reg = 0x2 },
++	{ .msec =  380, .reg = 0x3 },
++	{ .msec =  510, .reg = 0x4 },
++	{ .msec =  770, .reg = 0x5 },
++	{ .msec = 1040, .reg = 0x6 },
++	{ .msec = 1600, .reg = 0x7 },
++	{ .msec = 2100, .reg = 0x8 },
++	{ .msec = 2600, .reg = 0x9 },
++	{ .msec = 3100, .reg = 0xa },
++	{ .msec = 4200, .reg = 0xb },
++	{ .msec = 5200, .reg = 0xc },
++	{ .msec = 6200, .reg = 0xd },
++	{ .msec = 7300, .reg = 0xe },
++	{ .msec = 8300, .reg = 0xf },
++	{ /* sentinel */ },
++};
++
++static int aw2026_chip_init(struct aw2026 *chip)
++{
++	int idx, ret;
++
++	ret = regmap_update_bits(chip->regmap, AW2026_GCR, AW2026_GCR_CHIPEN,
++				 AW2026_GCR_CHIPEN);
++	if (ret)
++		return ret;
++
++	/* Max current */
++	ret = regmap_update_bits(chip->regmap, AW2026_IMAX,
++				 AW2026_IMAX_MASK, chip->imax);
++	if (ret)
++		return ret;
++
++	for (idx = 0; idx < chip->num_leds; idx++) {
++		/* PWM level */
++		ret = regmap_write(chip->regmap, AW2026_PWM(idx), AW2026_PWM_DUTY_MAX);
++		if (ret)
++			return ret;
++	}
++
++	return ret;
++}
++
++static void aw2026_chip_disable(struct aw2026 *chip)
++{
++	int ret;
++
++	if (!chip->enabled)
++		return;
++
++	regmap_update_bits(chip->regmap, AW2026_GCR, AW2026_GCR_CHIPEN, 0);
++
++	ret = regulator_disable(chip->vcc_regulator);
++	if (ret) {
++		dev_err(&chip->client->dev,
++			"Failed to disable regulator: %d\n", ret);
++		return;
++	}
++
++	chip->enabled = false;
++}
++
++static int aw2026_chip_enable(struct aw2026 *chip)
++{
++	int ret;
++
++	if (chip->enabled)
++		return 0;
++
++	ret = regulator_enable(chip->vcc_regulator);
++	if (ret) {
++		dev_err(&chip->client->dev,
++			"Failed to enable regulator: %d\n", ret);
++		return ret;
++	}
++	chip->enabled = true;
++
++	ret = aw2026_chip_init(chip);
++	if (ret)
++		aw2026_chip_disable(chip);
++
++	return ret;
++}
++
++static bool aw2026_chip_in_use(struct aw2026 *chip)
++{
++	int i;
++
++	for (i = 0; i < chip->num_leds; i++)
++		if (chip->leds[i].cdev.brightness)
++			return true;
++
++	return false;
++}
++
++static int aw2026_brightness_set(struct led_classdev *cdev,
++				 enum led_brightness brightness)
++{
++	struct aw2026_led *led = container_of(cdev, struct aw2026_led, cdev);
++	int ret, idx = led->idx;
++
++	mutex_lock(&led->chip->lock);
++
++	if (aw2026_chip_in_use(led->chip)) {
++		ret = aw2026_chip_enable(led->chip);
++		if (ret)
++			goto error;
++	}
++
++	if (brightness) {
++		/* Manual mode */
++		ret = regmap_update_bits(led->chip->regmap, AW2026_LCFG(idx),
++					 AW2026_LCFG_LEDMD, 0);
++		if (ret)
++			goto error;
++		/* Current configure */
++		ret = regmap_write(led->chip->regmap, AW2026_ILED(idx), brightness);
++		if (ret)
++			goto error;
++		/* Enable LED */
++		ret = regmap_update_bits(led->chip->regmap, AW2026_LEDEN, BIT(idx), 0xFF);
++	} else {
++		/* Disable LED */
++		ret = regmap_update_bits(led->chip->regmap, AW2026_LEDEN, BIT(idx), 0);
++	}
++	if (ret)
++		goto error;
++
++	if (!aw2026_chip_in_use(led->chip))
++		aw2026_chip_disable(led->chip);
++
++error:
++	mutex_unlock(&led->chip->lock);
++
++	return ret;
++}
++
++static int aw2026_convert_msec_to_reg(struct aw2026 *chip, u32 *msec, u8 *reg)
++{
++	const struct msec_reg *value;
++	const struct msec_reg *prev_value = NULL;
++
++	for (value = aw2026_msec_reg; value->msec; value++) {
++		if (value->msec >= *msec)
++			break;
++		prev_value = value;
++	}
++
++	if (!value->msec) {
++		dev_err(&chip->client->dev, "Unsupported msec (%u)", *msec);
++		return -ERANGE;
++	}
++
++	if (prev_value && ((*msec - prev_value->msec) <= (value->msec - *msec)))
++		value = prev_value;
++
++	*reg = value->reg;
++	*msec = value->msec;
++
++	return 0;
++}
++
++static int aw2026_pattern_setup(struct aw2026_led *led, u8 trise, u8 ton, u8 tfall, u8 toff)
++{
++	int ret, idx = led->idx;
++
++	mutex_lock(&led->chip->lock);
++
++	if (aw2026_chip_in_use(led->chip)) {
++		ret = aw2026_chip_enable(led->chip);
++		if (ret)
++			goto error;
++	}
++
++	/* Pattern mode */
++	ret = regmap_update_bits(led->chip->regmap, AW2026_LCFG(idx),
++				 AW2026_LCFG_LEDMD, 0xFF);
++	if (ret)
++		goto error;
++	/* Current configure */
++	ret = regmap_write(led->chip->regmap, AW2026_ILED(idx), led->cdev.brightness);
++	if (ret)
++		goto error;
++	/* Rise and On time of Pattern */
++	ret = regmap_write(led->chip->regmap, AW2026_PAT_T1(idx), (trise << 4) | ton);
++	if (ret)
++		goto error;
++	/* Fall and Off time of Pattern */
++	ret = regmap_write(led->chip->regmap, AW2026_PAT_T2(idx), (tfall << 4) | toff);
++	if (ret)
++		goto error;
++	/* Pattern run for individual LED */
++	ret = regmap_update_bits(led->chip->regmap, AW2026_PATRUN, BIT(idx), 0xFF);
++	if (ret)
++		goto error;
++	/* Enable LED */
++	ret = regmap_update_bits(led->chip->regmap, AW2026_LEDEN, BIT(idx), 0xFF);
++
++error:
++	mutex_unlock(&led->chip->lock);
++
++	return ret;
++}
++
++static int aw2026_pattern_set(struct led_classdev *cdev,
++			      struct led_pattern *pattern,
++			      u32 len, int repeat)
++{
++	struct aw2026_led *led = container_of(cdev, struct aw2026_led, cdev);
++	struct aw2026 *chip = led->chip;
++	int ret;
++	u8 trise, ton, tfall, toff;
++
++	if (len == 1) {
++		led->cdev.brightness = pattern[0].brightness;
++		return aw2026_brightness_set(cdev, led->cdev.brightness);
++	}
++
++	if (repeat > 0 || len != 4)
++		return -EINVAL;
++
++	ret = aw2026_convert_msec_to_reg(chip, &pattern[0].delta_t, &trise);
++	if (ret)
++		return ret;
++	ret = aw2026_convert_msec_to_reg(chip, &pattern[1].delta_t, &ton);
++	if (ret)
++		return ret;
++	ret = aw2026_convert_msec_to_reg(chip, &pattern[2].delta_t, &tfall);
++	if (ret)
++		return ret;
++	ret = aw2026_convert_msec_to_reg(chip, &pattern[3].delta_t, &toff);
++	if (ret)
++		return ret;
++
++	dev_dbg(&chip->client->dev, "pattern timings: %d %d %d %d\n",
++		trise, ton, tfall, toff);
++
++	led->cdev.brightness = max(max(pattern[0].brightness, pattern[1].brightness),
++				   max(pattern[2].brightness, pattern[3].brightness));
++
++	return aw2026_pattern_setup(led, trise, ton, tfall, toff);
++}
++
++static int aw2026_pattern_clear(struct led_classdev *cdev)
++{
++	return aw2026_brightness_set(cdev, LED_OFF);
++}
++
++static int aw2026_blink_set(struct led_classdev *cdev,
++			    unsigned long *delay_on, unsigned long *delay_off)
++{
++	struct aw2026_led *led = container_of(cdev, struct aw2026_led, cdev);
++	struct aw2026 *chip = led->chip;
++	u8 ton, toff;
++	int ret;
++
++	if (!*delay_on) {
++		led->cdev.brightness = LED_OFF;
++		return aw2026_brightness_set(&led->cdev, LED_OFF);
++	}
++
++	led->cdev.brightness = LED_FULL;
++
++	if (!*delay_off)
++		return aw2026_brightness_set(&led->cdev, LED_FULL);
++
++	ret = aw2026_convert_msec_to_reg(chip, (u32 *)delay_on, &ton);
++	if (ret)
++		return ret;
++	ret = aw2026_convert_msec_to_reg(chip, (u32 *)delay_off, &toff);
++	if (ret)
++		return ret;
++
++	dev_dbg(&chip->client->dev, "blink timings: %d %d\n", ton, toff);
++
++	return aw2026_pattern_setup(led, 0, ton, 0, toff);
++}
++
++static int aw2026_parse_dt(struct i2c_client *client, struct aw2026 *chip)
++{
++	struct device_node *np = dev_of_node(&client->dev), *child;
++	int count, ret = 0, i = 0;
++	struct aw2026_led *led;
++	const char *str;
++	u32 imax;
++
++	count = of_get_available_child_count(np);
++	if (!count || count > AW2026_MAX_LEDS)
++		return -EINVAL;
++
++	if (!of_property_read_u32(np, "awinic,led-max-microamp", &imax)) {
++		chip->imax = min_t(u32, hweight32(imax / 3187 - 1), 3);
++	} else {
++		chip->imax = 1; /* 6.375mA */
++		dev_info(&client->dev,
++			 "DT property led-max-microamp is missing\n");
++	}
++
++	for_each_available_child_of_node(np, child) {
++		u32 source;
++
++		ret = of_property_read_u32(child, "reg", &source);
++		if (ret != 0 || source >= AW2026_MAX_LEDS) {
++			dev_err(&chip->client->dev,
++				"Couldn't read LED address: %d\n", ret);
++			count--;
++			continue;
++		}
++
++		led = &chip->leds[i];
++		led->idx = source;
++		led->chip = chip;
++		led->fwnode = of_fwnode_handle(child);
++
++		if (!of_property_read_string(child, "default-state", &str)) {
++			if (!strcmp(str, "on"))
++				led->default_state = AW2026_STATE_ON;
++			else if (!strcmp(str, "keep"))
++				led->default_state = AW2026_STATE_KEEP;
++			else
++				led->default_state = AW2026_STATE_OFF;
++		}
++
++		i++;
++	}
++
++	if (!count)
++		return -EINVAL;
++
++	chip->num_leds = i;
++
++	return 0;
++}
++
++static void aw2026_init_default_state(struct aw2026_led *led)
++{
++	struct aw2026 *chip = led->chip;
++	int led_on;
++	int ret, idx = led->idx;
++
++	switch (led->default_state) {
++	case AW2026_STATE_ON:
++		led->cdev.brightness = LED_FULL;
++		break;
++	case AW2026_STATE_KEEP:
++		/* keep setup made in loader */
++		ret = regmap_read(chip->regmap, AW2026_LEDEN, &led_on);
++		if (ret)
++			return;
++
++		if (!(led_on & BIT(idx))) {
++			led->cdev.brightness = LED_OFF;
++			break;
++		}
++		regmap_read(chip->regmap, AW2026_ILED(idx),
++			    &led->cdev.brightness);
++		return;
++	default:
++		led->cdev.brightness = LED_OFF;
++	}
++
++	aw2026_brightness_set(&led->cdev, led->cdev.brightness);
++}
++
++static int aw2026_probe(struct i2c_client *client)
++{
++	struct aw2026 *chip;
++	int i, ret;
++	unsigned int chipid;
++
++	chip = devm_kzalloc(&client->dev, sizeof(struct aw2026), GFP_KERNEL);
++	if (!chip)
++		return -ENOMEM;
++
++	ret = aw2026_parse_dt(client, chip);
++	if (ret < 0)
++		return ret;
++
++	mutex_init(&chip->lock);
++	chip->client = client;
++	i2c_set_clientdata(client, chip);
++
++	chip->regmap = devm_regmap_init_i2c(client, &aw2026_regmap_config);
++	if (IS_ERR(chip->regmap)) {
++		ret = PTR_ERR(chip->regmap);
++		dev_err(&client->dev, "Failed to allocate register map: %d\n",
++			ret);
++		goto error;
++	}
++
++	chip->vcc_regulator = devm_regulator_get(&client->dev, "vcc");
++	ret = PTR_ERR_OR_ZERO(chip->vcc_regulator);
++	if (ret) {
++		if (ret != -EPROBE_DEFER)
++			dev_err(&client->dev,
++				"Failed to request regulator: %d\n", ret);
++		goto error;
++	}
++
++	ret = regulator_enable(chip->vcc_regulator);
++	if (ret) {
++		dev_err(&client->dev,
++			"Failed to enable regulator: %d\n", ret);
++		goto error;
++	}
++
++	ret = regmap_read(chip->regmap, AW2026_RSTIDR, &chipid);
++	if (ret) {
++		dev_err(&client->dev, "Failed to read chip ID: %d\n", ret);
++		goto error_reg;
++	}
++
++	if (chipid != AW2026_RSTIDR_CHIP_ID) {
++		ret = -ENODEV;
++		goto error_reg;
++	}
++
++	for (i = 0; i < chip->num_leds; i++) {
++		struct led_init_data init_data = {};
++		struct aw2026_led *led = &chip->leds[i];
++
++		aw2026_init_default_state(&chip->leds[i]);
++		led->cdev.brightness_set_blocking = aw2026_brightness_set;
++		led->cdev.blink_set = aw2026_blink_set;
++		led->cdev.pattern_set = aw2026_pattern_set;
++		led->cdev.pattern_clear = aw2026_pattern_clear;
++
++		init_data.fwnode = chip->leds[i].fwnode;
++
++		ret = devm_led_classdev_register_ext(&client->dev,
++						     &led->cdev, &init_data);
++		if (ret < 0)
++			goto error_reg;
++	}
++
++	ret = regulator_disable(chip->vcc_regulator);
++	if (ret) {
++		dev_err(&client->dev,
++			"Failed to disable regulator: %d\n", ret);
++		goto error;
++	}
++
++	return 0;
++
++error_reg:
++	regulator_disable(chip->vcc_regulator);
++error:
++	mutex_destroy(&chip->lock);
++	return ret;
++}
++
++static void aw2026_remove(struct i2c_client *client)
++{
++	struct aw2026 *chip = i2c_get_clientdata(client);
++
++	aw2026_chip_disable(chip);
++
++	mutex_destroy(&chip->lock);
++}
++
++static const struct of_device_id aw2026_match_table[] = {
++	{ .compatible = "awinic,aw2026", },
++	{ /* sentinel */ },
++};
++
++MODULE_DEVICE_TABLE(of, aw2026_match_table);
++
++static struct i2c_driver aw2026_driver = {
++	.driver = {
++		.name = "leds-aw2026",
++		.of_match_table = of_match_ptr(aw2026_match_table),
++	},
++	.probe_new = aw2026_probe,
++	.remove = aw2026_remove,
++};
++
++module_i2c_driver(aw2026_driver);
++
++MODULE_DESCRIPTION("AW2026 LED driver");
++MODULE_AUTHOR("Vladimir Barinov");
++MODULE_LICENSE("GPL");
+-- 
+2.34.1
+
+
