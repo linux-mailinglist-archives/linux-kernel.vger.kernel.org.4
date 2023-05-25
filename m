@@ -2,58 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7370C71177D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B12711787
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 21:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241878AbjEYTfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 15:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
+        id S231596AbjEYTmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 15:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241647AbjEYTfX (ORCPT
+        with ESMTP id S240536AbjEYTmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 15:35:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF776187;
-        Thu, 25 May 2023 12:34:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFDF8612D6;
-        Thu, 25 May 2023 19:33:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7ADAC433EF;
-        Thu, 25 May 2023 19:33:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685043202;
-        bh=3V9ZIXlDDZor3DAT0CgcWqiGThFIU/g9uSktbalO/hM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=apuSyGxTFMbKlkb7aDeovgx93CL1ZBHh2jzm9D1MDJftJEZbVoYtcStlYN5CO3e5o
-         U9ODL2bH7boDTstjfzWCc9fgH94OCyytWreMcM8uu4zOZRn1aBZg+SwLL9gieUOOLy
-         F9ttqJIg3SVeNsCGcAwxW8O/PEG9FqObPMkskhCJMdxZn56lEovDrR/B3r/EvzUH3b
-         0vADEspQxLOe3tl1eKxX8Iiz5QIPYYgNln9E0W2AGAtWqTeEXM8TeTI4uWQ9cetOv5
-         nlzZK3L1xYxu375cIsRAq+uhm0e8BnndD0nztcKDHxCe2hPlJQv38lJZc/x3vXAeW9
-         BTaE7yQ0MEPNQ==
-Date:   Thu, 25 May 2023 12:37:11 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
-        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        leonard@lausen.nl, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] drm/msm/dp: enable HDP plugin/unplugged interrupts at
- hpd_enable/disable
-Message-ID: <20230525193711.in6gf22c7pvtx2eu@ripper>
-References: <1684878756-17830-1-git-send-email-quic_khsieh@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1684878756-17830-1-git-send-email-quic_khsieh@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 25 May 2023 15:42:04 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F14810D3;
+        Thu, 25 May 2023 12:41:36 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id B9D475C01C0;
+        Thu, 25 May 2023 15:40:03 -0400 (EDT)
+Received: from imap52 ([10.202.2.102])
+  by compute5.internal (MEProxy); Thu, 25 May 2023 15:40:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1685043603; x=1685130003; bh=/H
+        gMDkSSMwYHgE33LxVKpXZsmvDoxFZ3zo7+14wlNm4=; b=qApdvS0dJq+1BaYYi4
+        osll/bnw3NetQcL79fFyonPcsLW2ho+A8DCCVKPdN44bceIe4hFABpXMsfrXsjcJ
+        Fm0PFxRMk3vkOK8g6RNii7NM2RE3mqPV8vU4W9UquwRMo4RHts8jc+ej4eNOHjQi
+        LDXOqNnTq5UDIhOpQmxQR/iAUOVbIhll5KNPzQrgUPzXNt5oFe8Tp2vv36udomPW
+        vDebhBWlhsJTMga0mnlkYxanoXf/SY+Deu0AO1cdo6V6dx+xLhEiETlrt+fyGrDN
+        BVqFooHCYY5UHbyWl2VD3TA5nIGbnNGNF4m9JcsbrS1oye7+wYZbsA2zR1FSzFAn
+        owWA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685043603; x=1685130003; bh=/HgMDkSSMwYHg
+        E33LxVKpXZsmvDoxFZ3zo7+14wlNm4=; b=eEVw6xTCR9jhK0XglC3sQjsn3YCBG
+        3l2K5SRTieau8bbafncGQZ2xdtdGSkh0tC9xDUZqoeZN5k5s2vwyr8lZ2H0kexDy
+        Vi/wB51J6Oly22cKzLahMvbPavNuKG36j6LpMiBCWs7Sw7AHVeTQVzGVMZLClDU/
+        oLhmpmjNOzeUJ2ztDSGkgYtKYlRXKJiZF3eL0/KA8OHy/Tx0SiC3Q+GHT/H4lvYq
+        RI7SHflgTTYbrB5QprGZz7J3VucQvwp3dxpDkhoUTy8UG20OhWxQ/4S/pCKOseoY
+        wXTTvn0pvMDNG2tsKRD20V2qefaJ2T0vE8SXOpFnDXkIvhGtmHXCB2Alg==
+X-ME-Sender: <xms:k7lvZAdlpywTSKYcm3v7lR1OuJa4S1pyFON6yMQ0ebr-E_z7ST_KGA>
+    <xme:k7lvZCNqdORWrW4PBo6cDAvXRo-lnZI4c78zIXb4qqv_akZxgxaEDLEzyzaID8i7D
+    nuAHG9Xr4PGHzgtnNw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejjedgudeflecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfo
+    rghrkhcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsg
+    gsrdgtrgeqnecuggftrfgrthhtvghrnhepieeufeejieevteduvdekteefledtveffvedu
+    hefffeejudefvdeijeegudegkefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgt
+    rg
+X-ME-Proxy: <xmx:k7lvZBj7kAaNqH_xoebbJVNwN-eU51Sd_lo7DFCPwpzJo8MtCwfPPQ>
+    <xmx:k7lvZF_lVZw8kV9Vb1YOOst9gRPV34L_-HCfy610V7mv8QeKlff57w>
+    <xmx:k7lvZMvHfc4TvB-RjyjhFT9UFVJB1rE2E8ZjAK9X3mRUypH958vBvA>
+    <xmx:k7lvZJWdmsNx8s615i3dS0J7JSbqHxJQoFslojbB1JZIgDxMN15idA>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 67253C60091; Thu, 25 May 2023 15:40:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <17963a3d-996f-4bb8-918e-aadba15be9bc@app.fastmail.com>
+In-Reply-To: <20230525193132.3727-3-mpearson-lenovo@squebb.ca>
+References: <mpearson-lenovo@squebb.ca>
+ <20230525193132.3727-1-mpearson-lenovo@squebb.ca>
+ <20230525193132.3727-3-mpearson-lenovo@squebb.ca>
+Date:   Thu, 25 May 2023 15:39:43 -0400
+From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To:     "Hans de Goede" <hdegoede@redhat.com>
+Cc:     "markgross@kernel.org" <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] platform/x86: think-lmi: Correct NVME password handling
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,258 +88,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 02:52:36PM -0700, Kuogee Hsieh wrote:
-> The internal_hpd flag is set to true by dp_bridge_hpd_enable() and set to
-> false by dp_bridge_hpd_disable() to handle GPIO pinmuxed into DP controller
-> case. HDP related interrupts can not be enabled until internal_hpd is set
-> to true. At current implementation dp_display_config_hpd() will initialize
-> DP host controller first followed by enabling HDP related interrupts if
-> internal_hpd was true at that time. Enable HDP related interrupts depends on
-> internal_hpd status may leave system with DP driver host is in running state
-> but without HDP related interrupts being enabled. This will prevent external
-> display from being detected. Eliminated this dependency by moving HDP related
-> interrupts enable/disable be done at dp_bridge_hpd_enable/disable() directly
-> regardless of internal_hpd status.
-> 
-> Changes in V3:
-> -- dp_catalog_ctrl_hpd_enable() and dp_catalog_ctrl_hpd_disable()
-> -- rewording ocmmit text
-> 
-> Changes in V4:
-> -- replace dp_display_config_hpd() with dp_display_host_start()
-> -- move enable_irq() at dp_display_host_start();
-> 
-> Changes in V5:
-> -- replace dp_display_host_start() with dp_display_host_init()
-> 
-> Changes in V6:
-> -- squash remove enable_irq() and disable_irq()
-> 
-> Fixes: cd198caddea7 ("drm/msm/dp: Rely on hpd_enable/disable callbacks")
+Hi Hans,
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-Tested-by: Bjorn Andersson <andersson@kernel.org>
+My apologies - I completely forgot to add the v2 tag on this patch series...had a complete brain fart.
+I assume I should resend them all - correctly named.
 
-Thank you Kuogee,
-Bjorn
+I also have no idea why they showed up out of order...I'm blaming that one on the email server.
 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Sorry :(
+
+Mark
+
+
+On Thu, May 25, 2023, at 3:31 PM, Mark Pearson wrote:
+> NVME passwords identifier have been standardised across the Lenovo
+> systems and now use udrp and adrp (user and admin level) instead of
+> unvp and mnvp.
+>
+> This should apparently be backwards compatible.
+>
+> Also cleaned up so the index is set to a default of 1 rather than 0
+> as this just makes more sense (there is no device 0).
+>
+> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 > ---
->  drivers/gpu/drm/msm/dp/dp_catalog.c | 15 +++++++-
->  drivers/gpu/drm/msm/dp/dp_catalog.h |  3 +-
->  drivers/gpu/drm/msm/dp/dp_display.c | 71 ++++++++++---------------------------
->  3 files changed, 35 insertions(+), 54 deletions(-)
+> Changes in V2: None. Version bumped in series
+>
+>  drivers/platform/x86/think-lmi.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+> index c7e98fbe7c3d..1c02958035ad 100644
+> --- a/drivers/platform/x86/think-lmi.c
+> +++ b/drivers/platform/x86/think-lmi.c
+> @@ -456,9 +456,9 @@ static ssize_t new_password_store(struct kobject *kobj,
+>  				sprintf(pwd_type, "mhdp%d", setting->index);
+>  		} else if (setting == tlmi_priv.pwd_nvme) {
+>  			if (setting->level == TLMI_LEVEL_USER)
+> -				sprintf(pwd_type, "unvp%d", setting->index);
+> +				sprintf(pwd_type, "udrp%d", setting->index);
+>  			else
+> -				sprintf(pwd_type, "mnvp%d", setting->index);
+> +				sprintf(pwd_type, "adrp%d", setting->index);
+>  		} else {
+>  			sprintf(pwd_type, "%s", setting->pwd_type);
+>  		}
+> @@ -1524,6 +1524,10 @@ static int tlmi_analyze(void)
+>  		if (!tlmi_priv.pwd_nvme)
+>  			goto fail_clear_attr;
 > 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
-> index 7a8cf1c..5142aeb 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
-> @@ -620,7 +620,7 @@ void dp_catalog_hpd_config_intr(struct dp_catalog *dp_catalog,
->  				config & DP_DP_HPD_INT_MASK);
->  }
->  
-> -void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog)
-> +void dp_catalog_ctrl_hpd_enable(struct dp_catalog *dp_catalog)
->  {
->  	struct dp_catalog_private *catalog = container_of(dp_catalog,
->  				struct dp_catalog_private, dp_catalog);
-> @@ -635,6 +635,19 @@ void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog)
->  	dp_write_aux(catalog, REG_DP_DP_HPD_CTRL, DP_DP_HPD_CTRL_HPD_EN);
->  }
->  
-> +void dp_catalog_ctrl_hpd_disable(struct dp_catalog *dp_catalog)
-> +{
-> +	struct dp_catalog_private *catalog = container_of(dp_catalog,
-> +				struct dp_catalog_private, dp_catalog);
+> +		/* Set default hdd/nvme index to 1 as there is no device 0 */
+> +		tlmi_priv.pwd_hdd->index = 1;
+> +		tlmi_priv.pwd_nvme->index = 1;
 > +
-> +	u32 reftimer = dp_read_aux(catalog, REG_DP_DP_HPD_REFTIMER);
-> +
-> +	reftimer &= ~DP_DP_HPD_REFTIMER_ENABLE;
-> +	dp_write_aux(catalog, REG_DP_DP_HPD_REFTIMER, reftimer);
-> +
-> +	dp_write_aux(catalog, REG_DP_DP_HPD_CTRL, 0);
-> +}
-> +
->  static void dp_catalog_enable_sdp(struct dp_catalog_private *catalog)
->  {
->  	/* trigger sdp */
-> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
-> index 82376a2..38786e8 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_catalog.h
-> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
-> @@ -104,7 +104,8 @@ bool dp_catalog_ctrl_mainlink_ready(struct dp_catalog *dp_catalog);
->  void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool enable);
->  void dp_catalog_hpd_config_intr(struct dp_catalog *dp_catalog,
->  			u32 intr_mask, bool en);
-> -void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog);
-> +void dp_catalog_ctrl_hpd_enable(struct dp_catalog *dp_catalog);
-> +void dp_catalog_ctrl_hpd_disable(struct dp_catalog *dp_catalog);
->  void dp_catalog_ctrl_config_psr(struct dp_catalog *dp_catalog);
->  void dp_catalog_ctrl_set_psr(struct dp_catalog *dp_catalog, bool enter);
->  u32 dp_catalog_link_is_connected(struct dp_catalog *dp_catalog);
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 3e13acdf..cb805cf 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -615,12 +615,6 @@ static int dp_hpd_plug_handle(struct dp_display_private *dp, u32 data)
->  		dp->hpd_state = ST_MAINLINK_READY;
->  	}
->  
-> -	/* enable HDP irq_hpd/replug interrupt */
-> -	if (dp->dp_display.internal_hpd)
-> -		dp_catalog_hpd_config_intr(dp->catalog,
-> -					   DP_DP_IRQ_HPD_INT_MASK | DP_DP_HPD_REPLUG_INT_MASK,
-> -					   true);
-> -
->  	drm_dbg_dp(dp->drm_dev, "After, type=%d hpd_state=%d\n",
->  			dp->dp_display.connector_type, state);
->  	mutex_unlock(&dp->event_mutex);
-> @@ -658,12 +652,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
->  	drm_dbg_dp(dp->drm_dev, "Before, type=%d hpd_state=%d\n",
->  			dp->dp_display.connector_type, state);
->  
-> -	/* disable irq_hpd/replug interrupts */
-> -	if (dp->dp_display.internal_hpd)
-> -		dp_catalog_hpd_config_intr(dp->catalog,
-> -					   DP_DP_IRQ_HPD_INT_MASK | DP_DP_HPD_REPLUG_INT_MASK,
-> -					   false);
-> -
->  	/* unplugged, no more irq_hpd handle */
->  	dp_del_event(dp, EV_IRQ_HPD_INT);
->  
-> @@ -687,10 +675,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
->  		return 0;
->  	}
->  
-> -	/* disable HPD plug interrupts */
-> -	if (dp->dp_display.internal_hpd)
-> -		dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, false);
-> -
->  	/*
->  	 * We don't need separate work for disconnect as
->  	 * connect/attention interrupts are disabled
-> @@ -706,10 +690,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
->  	/* signal the disconnect event early to ensure proper teardown */
->  	dp_display_handle_plugged_change(&dp->dp_display, false);
->  
-> -	/* enable HDP plug interrupt to prepare for next plugin */
-> -	if (dp->dp_display.internal_hpd)
-> -		dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, true);
-> -
->  	drm_dbg_dp(dp->drm_dev, "After, type=%d hpd_state=%d\n",
->  			dp->dp_display.connector_type, state);
->  
-> @@ -1082,26 +1062,6 @@ void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp)
->  	mutex_unlock(&dp_display->event_mutex);
->  }
->  
-> -static void dp_display_config_hpd(struct dp_display_private *dp)
-> -{
-> -
-> -	dp_display_host_init(dp);
-> -	dp_catalog_ctrl_hpd_config(dp->catalog);
-> -
-> -	/* Enable plug and unplug interrupts only if requested */
-> -	if (dp->dp_display.internal_hpd)
-> -		dp_catalog_hpd_config_intr(dp->catalog,
-> -				DP_DP_HPD_PLUG_INT_MASK |
-> -				DP_DP_HPD_UNPLUG_INT_MASK,
-> -				true);
-> -
-> -	/* Enable interrupt first time
-> -	 * we are leaving dp clocks on during disconnect
-> -	 * and never disable interrupt
-> -	 */
-> -	enable_irq(dp->irq);
-> -}
-> -
->  void dp_display_set_psr(struct msm_dp *dp_display, bool enter)
->  {
->  	struct dp_display_private *dp;
-> @@ -1176,7 +1136,7 @@ static int hpd_event_thread(void *data)
->  
->  		switch (todo->event_id) {
->  		case EV_HPD_INIT_SETUP:
-> -			dp_display_config_hpd(dp_priv);
-> +			dp_display_host_init(dp_priv);
->  			break;
->  		case EV_HPD_PLUG_INT:
->  			dp_hpd_plug_handle(dp_priv, todo->data);
-> @@ -1282,7 +1242,6 @@ int dp_display_request_irq(struct msm_dp *dp_display)
->  				dp->irq, rc);
->  		return rc;
->  	}
-> -	disable_irq(dp->irq);
->  
->  	return 0;
->  }
-> @@ -1394,13 +1353,8 @@ static int dp_pm_resume(struct device *dev)
->  	/* turn on dp ctrl/phy */
->  	dp_display_host_init(dp);
->  
-> -	dp_catalog_ctrl_hpd_config(dp->catalog);
-> -
-> -	if (dp->dp_display.internal_hpd)
-> -		dp_catalog_hpd_config_intr(dp->catalog,
-> -				DP_DP_HPD_PLUG_INT_MASK |
-> -				DP_DP_HPD_UNPLUG_INT_MASK,
-> -				true);
-> +	if (dp_display->is_edp)
-> +		dp_catalog_ctrl_hpd_enable(dp->catalog);
->  
->  	if (dp_catalog_link_is_connected(dp->catalog)) {
->  		/*
-> @@ -1568,9 +1522,8 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
->  
->  	if (aux_bus && dp->is_edp) {
->  		dp_display_host_init(dp_priv);
-> -		dp_catalog_ctrl_hpd_config(dp_priv->catalog);
-> +		dp_catalog_ctrl_hpd_enable(dp_priv->catalog);
->  		dp_display_host_phy_init(dp_priv);
-> -		enable_irq(dp_priv->irq);
->  
->  		/*
->  		 * The code below assumes that the panel will finish probing
-> @@ -1612,7 +1565,6 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
->  
->  error:
->  	if (dp->is_edp) {
-> -		disable_irq(dp_priv->irq);
->  		dp_display_host_phy_exit(dp_priv);
->  		dp_display_host_deinit(dp_priv);
->  	}
-> @@ -1801,16 +1753,31 @@ void dp_bridge_hpd_enable(struct drm_bridge *bridge)
->  {
->  	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
->  	struct msm_dp *dp_display = dp_bridge->dp_display;
-> +	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
-> +
-> +	mutex_lock(&dp->event_mutex);
-> +	dp_catalog_ctrl_hpd_enable(dp->catalog);
-> +
-> +	/* enable HDP interrupts */
-> +	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, true);
->  
->  	dp_display->internal_hpd = true;
-> +	mutex_unlock(&dp->event_mutex);
->  }
->  
->  void dp_bridge_hpd_disable(struct drm_bridge *bridge)
->  {
->  	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
->  	struct msm_dp *dp_display = dp_bridge->dp_display;
-> +	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
-> +
-> +	mutex_lock(&dp->event_mutex);
-> +	/* disable HDP interrupts */
-> +	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, false);
-> +	dp_catalog_ctrl_hpd_disable(dp->catalog);
->  
->  	dp_display->internal_hpd = false;
-> +	mutex_unlock(&dp->event_mutex);
->  }
->  
->  void dp_bridge_hpd_notify(struct drm_bridge *bridge,
+>  		if (tlmi_priv.pwdcfg.core.password_state & TLMI_HDD_PWD) {
+>  			/* Check if PWD is configured and set index to first drive found */
+>  			if (tlmi_priv.pwdcfg.ext.hdd_user_password ||
 > -- 
-> 2.7.4
-> 
+> 2.40.1
