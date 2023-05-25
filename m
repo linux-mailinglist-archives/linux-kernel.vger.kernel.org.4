@@ -2,151 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFBF710748
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598E071074A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238376AbjEYI0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
+        id S239733AbjEYI1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbjEYI0r (ORCPT
+        with ESMTP id S234923AbjEYI1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:26:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C3299
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:26:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8426A61870
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 08:26:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0ADAC433EF;
-        Thu, 25 May 2023 08:26:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685003204;
-        bh=G5OcWyr2B122xVxY4jWblz0GjpAgP1YgwoGovSGpD6Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Skq/px/LD9AWrEW21C+JiplzLT933iwefqVEE/ES4HQWqWRvI58QrCMTQna8tMjRh
-         y9JFaZfEpRX1IHKqh1CFn4UyvylK6puq66sOkRvOCGoUzEeu546iXGzAhg+PwwsqBp
-         YxDttTA2CcVeA4I9jSuxaUXnVY0/12H3cQS1CY2QhfosbhLiPWjYiwi115WBN6TrOU
-         V+GGutoJIdL3iDw7jeSOh/DzpQQp+r7wM6TvseL9nbnQIjyFzaM45vbm4V4IS+S7RN
-         2vw52hFQqpLhf2v+4O3OFsMIobyk3IoxXJ7uJEVmOG13v+zVrkhezchKWaVgxi3P7f
-         2kGnRPKrKEaaw==
-Date:   Thu, 25 May 2023 11:26:24 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     akpm@linux-foundation.org, mhocko@suse.com, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] mm/mm_init.c: do not calculate
- zone_start_pfn/zone_end_pfn in zone_absent_pages_in_node()
-Message-ID: <20230525082624.GU4967@kernel.org>
-References: <20230525040150.1588-3-haifeng.xu@shopee.com>
+        Thu, 25 May 2023 04:27:06 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3284C195;
+        Thu, 25 May 2023 01:27:01 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P7DUj9029815;
+        Thu, 25 May 2023 08:26:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=CDAp/8lxKKBMi2F1RWZSUoljFotx/Q6IClC6pFPFajk=;
+ b=P2Fu8i15RKl0z+9g2mqfB20TnszMjK+YlL1YjPsp7ucqhFq7rgVKbg8ACLWvb34qVfq4
+ 3RPOQCF10F+WK7XA9FLCyxpCrWiHeV+XlKxgzmyr55QnKPdYX6eITXyn9soX3vWU0SEn
+ ++g0wvCCvFIM7jwRTJpHRGdIOZbPk06/Lj8lc+ujwPM6Hi8BxwB57j0ExmhMozlhdR4e
+ jI52+nNB48yhy9h340dbaBIIWql/qQyqOlGTXROj+2R/R2V1A5PezjbDPPGzHxrEPPy0
+ LZD2CSfLQUfTJ9TJniKkV1aMvC0mTwQOpWfJaYZnZ4jorGzulwsN4In0XGXze5TqM9Ag GQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt02a8h2x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 08:26:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34P8Qsev011489
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 08:26:54 GMT
+Received: from [10.217.219.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
+ 2023 01:26:52 -0700
+Message-ID: <a93575a0-e941-6fe2-635f-ac3c4d7acfef@quicinc.com>
+Date:   Thu, 25 May 2023 13:56:49 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525040150.1588-3-haifeng.xu@shopee.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Content-Language: en-US
+To:     =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
+        <Chunfeng.Yun@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <1684936207-23529-1-git-send-email-quic_prashk@quicinc.com>
+ <87bee7defd2578dba9502c14b53b7e5a91b5a5a8.camel@mediatek.com>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <87bee7defd2578dba9502c14b53b7e5a91b5a5a8.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1KWrzmH1Lgbau4h01aMCjVIolSh2J9pa
+X-Proofpoint-ORIG-GUID: 1KWrzmH1Lgbau4h01aMCjVIolSh2J9pa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_04,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 spamscore=0 malwarescore=0 suspectscore=0 clxscore=1015
+ mlxscore=0 phishscore=0 adultscore=0 impostorscore=0 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250069
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 04:01:50AM +0000, Haifeng Xu wrote:
-> In calculate_node_totalpages(), zone_start_pfn/zone_end_pfn are
-> calculated in zone_spanned_pages_in_node(), so use them as parameters
-> instead of node_start_pfn/node_end_pfn and the duplicated calculation
-> process can de dropped.
-> 
-> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
-> ---
->  mm/mm_init.c | 35 ++++++++++++-----------------------
->  1 file changed, 12 insertions(+), 23 deletions(-)
-> 
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index 898af4eb9ce2..88c4a9266e2a 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -1166,23 +1166,11 @@ unsigned long __init absent_pages_in_range(unsigned long start_pfn,
->  /* Return the number of page frames in holes in a zone on a node */
->  static unsigned long __init zone_absent_pages_in_node(int nid,
->  					unsigned long zone_type,
-> -					unsigned long node_start_pfn,
-> -					unsigned long node_end_pfn)
-> +					unsigned long zone_start_pfn,
-> +					unsigned long zone_end_pfn)
->  {
-> -	unsigned long zone_low = arch_zone_lowest_possible_pfn[zone_type];
-> -	unsigned long zone_high = arch_zone_highest_possible_pfn[zone_type];
-> -	unsigned long zone_start_pfn, zone_end_pfn;
->  	unsigned long nr_absent;
->  
-> -	if (!node_start_pfn && !node_end_pfn)
-> -		return 0;
-> -
-> -	zone_start_pfn = clamp(node_start_pfn, zone_low, zone_high);
-> -	zone_end_pfn = clamp(node_end_pfn, zone_low, zone_high);
-> -
-> -	adjust_zone_range_for_zone_movable(nid, zone_type,
-> -			node_start_pfn, node_end_pfn,
-> -			&zone_start_pfn, &zone_end_pfn);
->  	nr_absent = __absent_pages_in_range(nid, zone_start_pfn, zone_end_pfn);
->  
->  	/*
-> @@ -1254,6 +1242,7 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
->  						unsigned long node_end_pfn)
->  {
->  	unsigned long realtotalpages = 0, totalpages = 0;
-> +	int nid = pgdat->node_id;
->  	enum zone_type i;
->  
->  	for (i = 0; i < MAX_NR_ZONES; i++) {
-> @@ -1262,15 +1251,15 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
->  		unsigned long spanned, absent;
->  		unsigned long real_size;
->  
-> -		spanned = zone_spanned_pages_in_node(pgdat->node_id, i,
-> -						     node_start_pfn,
-> -						     node_end_pfn,
-> -						     &zone_start_pfn,
-> -						     &zone_end_pfn);
-> +		spanned = zone_spanned_pages_in_node(nid, i,
-> +						node_start_pfn,
-> +						node_end_pfn,
-> +						&zone_start_pfn,
-> +						&zone_end_pfn);
 
-Please remove unrelated whitespace changes.
-Also I don't see a strong need to replace pgdat->node_id with a local
-variable here and below.
 
->  		if (spanned) {
-> -			absent = zone_absent_pages_in_node(pgdat->node_id, i,
-> -							   node_start_pfn,
-> -							   node_end_pfn);
-> +			absent = zone_absent_pages_in_node(nid, i,
-> +							zone_start_pfn,
-> +							zone_end_pfn);
->  			real_size = spanned - absent;
->  			zone->zone_start_pfn = zone_start_pfn;
->  		} else {
-> @@ -1289,7 +1278,7 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
->  
->  	pgdat->node_spanned_pages = totalpages;
->  	pgdat->node_present_pages = realtotalpages;
-> -	pr_debug("On node %d totalpages: %lu\n", pgdat->node_id, realtotalpages);
-> +	pr_debug("On node %d totalpages: %lu\n", nid, realtotalpages);
->  }
->  
->  static unsigned long __init calc_memmap_size(unsigned long spanned_pages,
-> -- 
-> 2.25.1
+On 25-05-23 12:27 pm, Chunfeng Yun (云春峰) wrote:
+> On Wed, 2023-05-24 at 19:20 +0530, Prashanth K wrote:
+>> External email : Please do not click links or open attachments until
+>> you have verified the sender or the content.
+>>
+>>
+>> Currently if we bootup a device without cable connected, then
+>> usb-conn-gpio won't call set_role() since last_role is same as
+>> current role. This happens because during probe last_role gets
+>> initialized to zero.
+>>
+>> To avoid this, added a new constant in enum usb_role, last_role
+>> is set to USB_ROLE_UNKNOWN before performing initial detection.
+>>
+>> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection
+>> detection driver")
+>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+>> ---
+>> v2: Added USB_ROLE_UNKNWON to enum usb_role
+>>
+>>   drivers/usb/common/usb-conn-gpio.c | 3 +++
+>>   include/linux/usb/role.h           | 1 +
+>>   2 files changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/usb/common/usb-conn-gpio.c
+>> b/drivers/usb/common/usb-conn-gpio.c
+>> index e20874c..30bdb81 100644
+>> --- a/drivers/usb/common/usb-conn-gpio.c
+>> +++ b/drivers/usb/common/usb-conn-gpio.c
+>> @@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device
+>> *pdev)
+>>          platform_set_drvdata(pdev, info);
+>>          device_set_wakeup_capable(&pdev->dev, true);
+>>
+>> +       /* Set last role to unknown before performing the initial
+>> detection */
+>> +       info->last_role = USB_ROLE_UNKNOWN;
 > 
-> 
+> Do you only use vbus-pin?
 
--- 
-Sincerely yours,
-Mike.
+This driver has support for both Vbus and ID GPIOs.
+> 
+> This driver assumes that the gadget driver's default role is none.
+
+No, after probe it calls set role based on the state of Vbus and ID pin.
+If Vbus is low, then it should issue none role to the gadget. But 
+currently it doesnt call set_role if initial role is none.
+
+Regards
+
