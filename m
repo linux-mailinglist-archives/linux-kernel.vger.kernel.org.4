@@ -2,36 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435E871126D
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF8271126E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240848AbjEYRcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
+        id S241048AbjEYRcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjEYRcH (ORCPT
+        with ESMTP id S240529AbjEYRcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:32:07 -0400
+        Thu, 25 May 2023 13:32:09 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE6BD189
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:32:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 988CC19D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:32:07 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9957D1655;
-        Thu, 25 May 2023 10:32:50 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C48F165C;
+        Thu, 25 May 2023 10:32:52 -0700 (PDT)
 Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B79013F840;
-        Thu, 25 May 2023 10:32:02 -0700 (PDT)
-Message-ID: <c6038e0e-68c2-f637-5b1f-7fba8cad6222@arm.com>
-Date:   Thu, 25 May 2023 18:32:01 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF43C3F6C4;
+        Thu, 25 May 2023 10:32:04 -0700 (PDT)
+Message-ID: <db5c8ad5-6311-5833-c0e4-a3536840e4ad@arm.com>
+Date:   Thu, 25 May 2023 18:32:03 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
 Subject: Re: [PATCH v3 08/19] x86/resctrl: Add cpumask_any_housekeeping() for
  limbo/overflow
 Content-Language: en-GB
-To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         H Peter Anvin <hpa@zytor.com>,
@@ -45,13 +46,13 @@ Cc:     Fenghua Yu <fenghua.yu@intel.com>,
         Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
 References: <20230320172620.18254-1-james.morse@arm.com>
  <20230320172620.18254-9-james.morse@arm.com>
- <3145caff-4e73-0ef2-5bc2-70cdfe7953e9@intel.com>
- <78256a0f-d6e2-9c65-610d-ff962fdfed5b@arm.com>
- <c099e82e-540a-c4e4-2efb-3db24481a64c@intel.com>
+ <8f10581c-63ff-fef5-4f9e-d1ded096528@linux.intel.com>
+ <01e0704c-6d69-07ca-8a3b-c2cff498c972@arm.com>
+ <b7af42dd-2169-5013-93d8-24eb5c37f5bf@linux.intel.com>
 From:   James Morse <james.morse@arm.com>
-In-Reply-To: <c099e82e-540a-c4e4-2efb-3db24481a64c@intel.com>
+In-Reply-To: <b7af42dd-2169-5013-93d8-24eb5c37f5bf@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -61,21 +62,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+Hi Ilpo,
 
-On 28/04/2023 00:36, Reinette Chatre wrote:
-> On 4/27/2023 7:10 AM, James Morse wrote:
->> On 01/04/2023 00:24, Reinette Chatre wrote:
->>> On 3/20/2023 10:26 AM, James Morse wrote:
-
+On 27/04/2023 15:25, Ilpo Järvinen wrote:
+> On Thu, 27 Apr 2023, James Morse wrote:
+>> On 21/03/2023 15:14, Ilpo Jï¿œrvinen wrote:
+>>> On Mon, 20 Mar 2023, James Morse wrote:
+>>>
+>>>> The limbo and overflow code picks a CPU to use from the domain's list
+>>>> of online CPUs. Work is then scheduled on these CPUs to maintain
+>>>> the limbo list and any counters that may overflow.
+>>>>
+>>>> cpumask_any() may pick a CPU that is marked nohz_full, which will
+>>>> either penalise the work that CPU was dedicated to, or delay the
+>>>> processing of limbo list or counters that may overflow. Perhaps
+>>>> indefinitely. Delaying the overflow handling will skew the bandwidth
+>>>> values calculated by mba_sc, which expects to be called once a second.
+>>>>
+>>>> Add cpumask_any_housekeeping() as a replacement for cpumask_any()
+>>>> that prefers housekeeping CPUs. This helper will still return
+>>>> a nohz_full CPU if that is the only option. The CPU to use is
+>>>> re-evaluated each time the limbo/overflow work runs. This ensures
+>>>> the work will move off a nohz_full CPU once a houskeeping CPU is
+>>>
+>>> housekeeping
+>>>
+>>>> available.
+>>
 >>>> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
 >>>> index 87545e4beb70..0b5fd5a0cda2 100644
 >>>> --- a/arch/x86/kernel/cpu/resctrl/internal.h
 >>>> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
->>>> @@ -55,6 +56,28 @@
->>>>  /* Max event bits supported */
->>>>  #define MAX_EVT_CONFIG_BITS		GENMASK(6, 0)
->>>>  
+>>
 >>>> +/**
 >>>> + * cpumask_any_housekeeping() - Chose any cpu in @mask, preferring those that
 >>>> + *			        aren't marked nohz_full
@@ -91,78 +109,24 @@ On 28/04/2023 00:36, Reinette Chatre wrote:
 >>>> +	cpu = cpumask_any(mask);
 >>>> +	if (tick_nohz_full_cpu(cpu)) {
 >>>> +		hk_cpu = cpumask_nth_andnot(0, mask, tick_nohz_full_mask);
->>>> +		if (hk_cpu < nr_cpu_ids)
->>>> +			cpu = hk_cpu;
->>>> +	}
->>>> +
->>
->>> I think as a start this could perhaps be a #if defined(CONFIG_NO_HZ_FULL). There
->>> appears to be a precedent for this in kernel/rcu/tree_nocb.h.
->>
->> This harms readability, and prevents the compiler from testing that this is valid C code
->> for any compile of this code.
->>
->> With if-def's here you'd be reliant on come CI system to build with the required
->> combination of Kconfig symbols to expose any warnings.
->>
->> It's much better to use IS_ENABLED() in the helpers and rely on the compiler's
->> dead-code-elimination to remove paths that have been configured out.
->>
->> (See the section on Conditional Compilation in coding-style for a much better summary!)
-> 
-> My assumption was that you intended to implement what is described first in
-> the document you point to. That is, providing no-stub versions for all
-> and then calling everything unconditionally. Since I did not see universal stubs
-> for the code you are using I was looking at how other areas in the kernel handled
-> the same. 
-> 
-> Reading your response to Ilpo and what you write later I now see that you are using
-> a combination of no-op stubs and conditional compilation. That is, you use a no-op stub,
-> instead of "IS_ENABLED()" or "#if" to conditionally compile some code. I am not familiar
-> with how compilers handle these scenarios.
-> 
-
->>>> diff --git a/include/linux/tick.h b/include/linux/tick.h
->>>> index bfd571f18cfd..ae2e9019fc18 100644
->>>> --- a/include/linux/tick.h
->>>> +++ b/include/linux/tick.h
->>>> @@ -174,9 +174,10 @@ static inline u64 get_cpu_iowait_time_us(int cpu, u64 *unused) { return -1; }
->>>>  static inline void tick_nohz_idle_stop_tick_protected(void) { }
->>>>  #endif /* !CONFIG_NO_HZ_COMMON */
->>>>  
->>>> +extern cpumask_var_t tick_nohz_full_mask;
->>>> +
->>>>  #ifdef CONFIG_NO_HZ_FULL
->>>>  extern bool tick_nohz_full_running;
->>>> -extern cpumask_var_t tick_nohz_full_mask;
->>>>  
->>>>  static inline bool tick_nohz_full_enabled(void)
->>>>  {
 >>>
->>> In addition to what Ilpo pointed out, be careful here.
->>> cpumask_var_t is a pointer (or array) and needs to be
->>> allocated before use. Moving its declaration but not the
->>> allocation code seems risky.
+>>> Why cpumask_nth_and() is not enough here? ..._andnot() seems to alter 
+>>> tick_nohz_full_mask which doesn't seem desirable?
 >>
->> Risky how? Any use of tick_nohz_full_mask that isn't guarded by something like
->> tick_nohz_full_cpu() will lead to a link error regardless of the type.
+>> tick_nohz_full_mask is the list of CPUs we should avoid. This wants to find the first cpu
+>> set in the domain mask, and clear in tick_nohz_full_mask.
+>>
+>> Where does cpumask_nth_andnot() modify its arguments? Its arguments are const.
 > 
-> I assumed that the intention was to create an actual "no-op" stub for this
-> mask, enabling it to be used unconditionally. That the intention is for it
-> to be guarded and how the compiler deals with this was not obvious to me. I think
-> it would be good to call out this usage when submitting this to the appropriate
-> maintainers. A comment near the declaration may help users to know how it is
-> intended to be used.
+> Ah, it doesn't, I'm sorry about that.
+> 
+> I think I was trapped by ambiguous English:
+>  * cpumask_nth_andnot - get the first cpu set in 1st cpumask, and clear in 2nd.
+> ...which can be understood as it clearing it in 2nd.
+Great, I'm not going mad!
 
-Right, I'll add a comment:
-/*
- * Mask of CPUs that are nohz_full.
- *
- * Users should be guarded by CONFIG_NO_HZ_FULL or a tick_nohz_full_cpu()
- * check.
- */
-
-
+How could the english there be clearer?
+"get the first cpu that is set in 1st cpumask, and not set in 2nd." ?
 
 
 Thanks,
