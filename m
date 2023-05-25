@@ -2,152 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD703710DC0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3D4710DCA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241400AbjEYOAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
+        id S241447AbjEYOAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241428AbjEYOAD (ORCPT
+        with ESMTP id S241428AbjEYOAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:00:03 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D091A6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:00:00 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-510ea8d0bb5so3758929a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20221208.gappssmtp.com; s=20221208; t=1685023198; x=1687615198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hPrIK19LKsIekBL7Exksia/ZXnGLEugBzMWwwv5N8PY=;
-        b=wNs1Dd0fiUT91Vm7v3vikIO0L1KvCJsboGzq0ADBHCcoGPEZ4zpEwIlq2IhdnByCXf
-         kW2WUhlIKMZfmrsNqXKAj6AMmZ+8iepaAWzdRJZ/MOp78LOEyFwYN84kDdGs23JIG9++
-         6Pn+2/ts1wzfGKG8uV6q+a43VlyjLwzs2JgUckVji0vbjIbKn/VrsQSl6OEw9EkJLGk6
-         3c+viiBEJz5lBBVoXe/NvrXyiWPFZd253iqON2EmnwVqFRENvzCktcXaEUZamxXK6n5F
-         J3Un2kC+khnAyKESeVqOxn001SL41oivn/U4NOwQ98sMfgUAF3sBVEMk9OBdNBYkIpZU
-         TFQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685023198; x=1687615198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hPrIK19LKsIekBL7Exksia/ZXnGLEugBzMWwwv5N8PY=;
-        b=VqBmNgINA0AiAlR5k2d9i7LcHjxgm8r+cMZppiObKowDHUv2WHjHdrVypm9dttXY+Z
-         qa1gIMJ5uJec+VUEzAvsNXj3VY/sfw0VUaBk+BvTIc09wOW2MkhYuUJuh6JG9F+OxWDv
-         6Umpx0b473TXiqUsUo61vaC4rfZEOZNP5EsBhyDWxZ8kdCp6Rt8uYTWJvVCB5tox2BaL
-         PnIDibbNZ6vSjkwDGxbvbI8TVRJ1c0r4MN8BQEDCrq4f4xKYCQuNDtvDb3J25xFZwsZ3
-         mSULW9AUbYH1NaQ7r+S1i56KhWqkAGUHS3ZhktrXQ0tw4HsgtbA0wFO1Gd3xbLvYiPSG
-         qn+Q==
-X-Gm-Message-State: AC+VfDyFKTSle79zVyhNLSGGIuqdTmvwU843ifEy84iJkrghKiI8TAK9
-        jGbH9bnT3l1PZFJrqRRI5jReMMMddEn879W79y7SZg==
-X-Google-Smtp-Source: ACHHUZ7lf7ik+P2YwcQcVNg1huYeLbeYnW5Lw15SXlyDhIMtug3qin18sNXDOjx/aNLoN0GoixYAkLROtI4uNjlZhXw=
-X-Received: by 2002:a17:906:5d13:b0:96f:893:7f5 with SMTP id
- g19-20020a1709065d1300b0096f089307f5mr2182403ejt.26.1685023198318; Thu, 25
- May 2023 06:59:58 -0700 (PDT)
+        Thu, 25 May 2023 10:00:30 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF031E4C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:00:19 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PBPhU1006105;
+        Thu, 25 May 2023 09:00:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=eCUB3/UAkA9+tomxghvik6imKdz8/+ICfTEkpKQI8uY=;
+ b=eZxZiJcHrmr+vZMK/3sW3OqEVSBH7BJDsmS4mTaGmw7CsbkcFPDBz2pVwto92Vd7KS6Y
+ OuuDADJWsyE5vC2e0y9bhoZY+WVPV58pJtsNklLv3fYBOBPfZmAUtvF5wusR/p+4zAgU
+ UFITRSVKq4vPfI8g5GQj4gTLi5A6E7Pb0ZE0RNba9sy5KDGywPuCb4Z1Fv1I05/+uCiJ
+ 7mu78YzUYQuVlL68sEEmPLQu41s1kfkiv041kIZfJqV1ezvdknLJnflRhtAvl4rDI6vG
+ xwPOvRN2pLW5MHYs5+l4etPuIDrH31qxLXB01BXUZH6WvCGow0qNlXlphBeN8feFN9lv aA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qptmm6wbf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 09:00:04 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 25 May
+ 2023 09:00:03 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 25 May 2023 09:00:03 -0500
+Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.238.43])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DBC6311D4;
+        Thu, 25 May 2023 14:00:02 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH RESEND v1 0/3] Fixes and cleanup for CS35L41 HDA
+Date:   Thu, 25 May 2023 14:59:52 +0100
+Message-ID: <20230525135955.2108140-1-sbinding@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230517-preacher-primer-f41020b3376a@wendy> <CAHVXubhMLgb54_7zV2yFuGPoMKCkUXwozHbDvghc7kQqNLK-JA@mail.gmail.com>
- <CAAhSdy3tKAk1xjinwnSWan0ivdDapcLvSb+hGNynPFZMUsoB9A@mail.gmail.com>
- <fe8d716c-fb4f-1f3f-6c69-de1d8b9fb6af@ghiti.fr> <CAK9=C2X1BjZCHfYM33pZQtavu7yRqxwsypWL5OWj79bJrnDMQg@mail.gmail.com>
- <CAOnJCULpa-TJuG=TtCDOxOdUviZzWheLE-GMiU1r7GWaKn0nuQ@mail.gmail.com>
- <20230525-guacamole-swimmer-68048a73baac@wendy> <CAK9=C2WUyLxZwQO37cN-i+V+A3yxmEoaj=uE8yR8nseYTDW7oQ@mail.gmail.com>
- <20230525-postnasal-monopoly-98adb96ffaa1@wendy> <CAAhSdy06nQh4H1FP_K_-VF462mhj+F2M=4AV4QSCUGe5XVqX0g@mail.gmail.com>
- <20230525-shrapnel-precut-26500fca4a48@wendy>
-In-Reply-To: <20230525-shrapnel-precut-26500fca4a48@wendy>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Thu, 25 May 2023 19:29:46 +0530
-Message-ID: <CAAhSdy3SqeLdAfaojUki=ht21nr4ZUPMkW_t9M6ntQCt6Ds4Nw@mail.gmail.com>
-Subject: Re: Bug report: kernel paniced when system hibernates
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alexandre Ghiti <alex@ghiti.fr>, robh@kernel.org,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        jeeheng.sia@starfivetech.com, linux-kernel@vger.kernel.org,
-        palmer@rivosinc.com, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Song Shuai <suagrfillet@gmail.com>,
-        linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: VhJfL1LOPdClfRFRPp5aDzebKY6BtOK9
+X-Proofpoint-GUID: VhJfL1LOPdClfRFRPp5aDzebKY6BtOK9
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 7:26=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> On Thu, May 25, 2023 at 07:13:11PM +0530, Anup Patel wrote:
-> > On Thu, May 25, 2023 at 7:08=E2=80=AFPM Conor Dooley <conor.dooley@micr=
-ochip.com> wrote:
-> > >
-> > > On Thu, May 25, 2023 at 06:51:28PM +0530, Anup Patel wrote:
-> > >
-> > > > > We should only rely on this node name for known bad versions of o=
-pensbi
-> > > > > IMO. Going forward, if something needs to be reserved for firmwar=
-e, the
-> > > > > firmware should make sure that it is reserved by using the proper=
-ty for
-> > > > > that purpose :)
-> > >
-> > > > There is no issue with OpenSBI since it does the right thing by mar=
-king
-> > > > memory as reserved in the DT. This real issue is with the kernel ha=
-ndling
-> > > > of reserved memory for hibernate.
-> > >
-> > > I don't think we are talking about the same thing here. I meant the
-> > > no-map property which OpenSBI does not set.
-> >
-> > Yes, we are talking about the same thing. It's not just OpenSBI not
-> > setting no-map property in reserved memory node because other
-> > SBI implementations would be doing the same thing (i.e. not setting
-> > no-map property)
->
-> Other SBI implementations doing the same thing doesn't make it any more
-> correct though, right?
+Several minor issues were found during additional testing and
+static analysis. These patches fix these minor issues.
 
-Like multiple folks suggested, we need DT binding for distinguishing
-firmware reserved memory from other reserved memory. Until that
-happens we should either mark hibernate support as experimental
-or revert it.
+Stefan Binding (3):
+  ALSA: hda: cs35l41: Clean up Firmware Load Controls
+  ALSA: hda: cs35l41: Fix endian conversions
+  ALSA: hda/realtek: Delete cs35l41 component master during free
 
-Regards,
-Anup
+ sound/pci/hda/cs35l41_hda.c   | 40 ++++++++++++++++-------------------
+ sound/pci/hda/patch_realtek.c |  2 ++
+ 2 files changed, 20 insertions(+), 22 deletions(-)
 
->
-> > > > Like Atish mentioned, not just OpenSBI, there will be other entitie=
-s
-> > > > (like TSM) or some other M-mode firmware which will also reserve
-> > > > memory in DT/ACPI so clearly kernel needs a SBI implementation
-> > > > independent way of handling reserved memory for hibernate.
-> > >
-> > > > > > Another option is to use compatible string or label property to=
- indicate
-> > > > > > that this memory region is not to be saved/restored during hibe=
-rnation.
-> > > > > > This can be documented in RISC-V DT bindings as well as the boo=
-ting guide
-> > > > > > doc that alex was talking about.
-> > > > >
-> > > > > Sure, a dt-binding for sbi reserved regions doesn't immediately s=
-ound
-> > > > > like an awful idea... But we still have to work around the borked
-> > > > > firmware - be that disabling hibernation or using the mmode_resv =
-node
-> > > > > when we know that the version of OpenSBI is one of those with the
-> > > > > problem.
-> > >
-> > > Did you skip over this? I was agreeing that defining a common binding=
- for
-> > > sbi reserved regions was a good idea.
+-- 
+2.34.1
+
