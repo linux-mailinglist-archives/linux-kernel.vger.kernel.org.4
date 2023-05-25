@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3802C7103DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620C07103E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjEYEKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S238355AbjEYEOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235094AbjEYEJ0 (ORCPT
+        with ESMTP id S238307AbjEYENi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:09:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF381FDB;
-        Wed, 24 May 2023 21:06:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6udzwAg9K4Zo17ilvfnqobn9xHwMSG5Rs7tEzcXAEiI=; b=l6Ua4MgYnFd3mbz5UFnWznqeqa
-        aagYos/M7qRPH6QcdREjzrKkxKTQZjwVtjFhnAviSoDuXIfKw8dLIoSH5beMQnn/PizLRHOnz0ntS
-        +LXDUFKgQPfvWQSLMeuis0pQxYxGZ5/Zr+ALFMvK2So3uDcp2NqRQBNDX1u4toIi864UB+EqUmUD9
-        BiqHDiXQhI/ZdjDmmoU1IZRxSqkabm3+PEJ45yaI23M7eB3CXcgSnRv9joInATNwdE+8q2M5VXqJ/
-        iAatOmqEM6GCNzeGlLyc+Cazbq8chA5jsvRZm31M0UQn3EexEb4OlHt2fNHZW7oxWeab+SWZLaNKQ
-        6exQRc6A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q22F2-00BpOP-FC; Thu, 25 May 2023 04:06:20 +0000
-Date:   Thu, 25 May 2023 05:06:20 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH v4 05/36] mm: Add default definition of set_ptes()
-Message-ID: <ZG7evKeOquNaxESl@casper.infradead.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-6-willy@infradead.org>
- <10c85f5c-3332-9130-c6f0-d36b9ea4b549@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <10c85f5c-3332-9130-c6f0-d36b9ea4b549@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 00:13:38 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D57119AC;
+        Wed, 24 May 2023 21:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=UviYOKHOAQA1VQzgBo6ztxXR+Aqfge1Zw3705YVK4Fs=; b=rh9UB031sEC44GthodVOJHjCcv
+        LbtT7u/11tHq4jJQ8wcF1InsfFhyMU3Tjxgfohjgx5ZFmeNRFjhXBVQv/z4Es5Fk9mcaG/n+jRSqE
+        VyP/wUZsEK5PMLk+W5Vyro/Uc31vdgZcgjI7FRgvXFGANGZAV3WdLVJEKduQHGUMNFLA=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:59660 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q22H9-0001l4-7o; Thu, 25 May 2023 00:08:31 -0400
+Date:   Thu, 25 May 2023 00:08:30 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <20230525000830.f9afb7683a12c6d109a757cb@hugovil.com>
+In-Reply-To: <20230517141229.3792446-1-hugo@hugovil.com>
+References: <20230517141229.3792446-1-hugo@hugovil.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] serial: sc16is7xx: fix syntax error in comments
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 08:31:14AM +0530, Anshuman Khandual wrote:
-> > +#ifndef set_ptes
-> > +#ifdef PFN_PTE_SHIFT
-> > +/**
-> > + * set_ptes - Map consecutive pages to a contiguous range of addresses.
-> > + * @mm: Address space to map the pages into.
-> > + * @addr: Address to map the first page at.
-> > + * @ptep: Page table pointer for the first entry.
-> > + * @pte: Page table entry for the first page.
-> > + * @nr: Number of pages to map.
-> > + *
-> > + * May be overridden by the architecture, or the architecture can define
-> > + * set_pte() and PFN_PTE_SHIFT.
-> > + *
-> > + * Context: The caller holds the page table lock.  The pages all belong
-> > + * to the same folio.  The PTEs are all in the same PMD.
-> > + */
-> > +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> > +		pte_t *ptep, pte_t pte, unsigned int nr)
-> > +{
-> > +	page_table_check_ptes_set(mm, addr, ptep, pte, nr);
-> > +
-> > +	for (;;) {
-> > +		set_pte(ptep, pte);
-> > +		if (--nr == 0)
-> > +			break;
-> > +		ptep++;
-> > +		pte = __pte(pte_val(pte) + (1UL << PFN_PTE_SHIFT));
-> > +	}
-> > +}
-> > +#ifndef set_pte_at
-> > +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
-> > +#endif
+On Wed, 17 May 2023 10:12:29 -0400
+Hugo Villeneuve <hugo@hugovil.com> wrote:
+
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> Should not there be a build phase call out when both set_ptes() and PFN_PTE_SHIFT
-> are not defined on a given platform ?
+> cotroller -> controller
+> 
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  drivers/tty/serial/sc16is7xx.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
+> index abad091baeea..5bd98e4316f5 100644
+> --- a/drivers/tty/serial/sc16is7xx.c
+> +++ b/drivers/tty/serial/sc16is7xx.c
+> @@ -1501,7 +1501,7 @@ static int sc16is7xx_probe(struct device *dev,
+>  
+>  #ifdef CONFIG_GPIOLIB
+>  	if (devtype->nr_gpio) {
+> -		/* Setup GPIO cotroller */
+> +		/* Setup GPIO controller */
+>  		s->gpio.owner		 = THIS_MODULE;
+>  		s->gpio.parent		 = dev;
+>  		s->gpio.label		 = dev_name(dev);
+> -- 
+> 2.30.2
 
-How does that help?  Either way you get a clear build error.
-
+This patch is now integrated in the following series:
+https://lkml.org/lkml/2023/5/25/7
