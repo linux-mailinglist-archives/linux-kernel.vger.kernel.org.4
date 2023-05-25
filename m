@@ -2,65 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF781710BE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF18710BE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240987AbjEYMRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 08:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S241027AbjEYMRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 08:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjEYMRK (ORCPT
+        with ESMTP id S240973AbjEYMRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 08:17:10 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5B1A9;
-        Thu, 25 May 2023 05:17:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685017029; x=1716553029;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=bQ1iL6BsiW9BxzNcM756bUoMHD0bKrBZjPW4yVwoXCU=;
-  b=dgFfOhPQlNaO5yv7W8H9G0lYcOqEgFOV8SIrUHAWz+dqGQtX+WKYGzsf
-   4dydSYz+lEVipxpesrTk43+OLNZPTnYl76sqLSyV8Vjev/I4kRTor0prq
-   Wc2ZSYtN/4lXZBVEWFeKui0RdPaOXYVIBexpK3WuO7kPI6dY+ZEO9Q21Y
-   CEX+Ailz1yv2zjS6+wNIfYU819vGHqc+zjI5NIAQr7YKoHSasO5coonVS
-   c7Y2uEUkmVEuAhjOUkK82OfH6WIvE9UaNpJ5RDfJ45A+YDwp8jAB9ymFe
-   MIL6oBQB7l0X4vIjDkHxivjf9ZCWc01E5bM4jy9mV8I3uUTLoTD6MYXp0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="357096183"
-X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
-   d="scan'208";a="357096183"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 05:17:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="1034963147"
-X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
-   d="scan'208";a="1034963147"
-Received: from aghiriba-mobl.ger.corp.intel.com ([10.249.40.17])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 05:17:04 -0700
-Date:   Thu, 25 May 2023 15:17:02 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        jringle@gridpoint.com, tomasz.mon@camlingroup.com,
-        l.perczak@camlintechnologies.com,
-        linux-serial <linux-serial@vger.kernel.org>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 10/11] serial: sc16is7xx: add call to get rs485 DT
- flags and properties
-In-Reply-To: <20230525040324.3773741-11-hugo@hugovil.com>
-Message-ID: <986e2042-6c1d-b87a-ef9-d89a61bc8c@linux.intel.com>
-References: <20230525040324.3773741-1-hugo@hugovil.com> <20230525040324.3773741-11-hugo@hugovil.com>
+        Thu, 25 May 2023 08:17:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E212AA9;
+        Thu, 25 May 2023 05:17:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5942A1FE5C;
+        Thu, 25 May 2023 12:17:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1685017051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2dzHnSkKSTY5qlRUI5cyea03h/AtEkjWPF2KHs6AMuY=;
+        b=l4uwul7a9d7ai//eKop7F/76NhEFiPT+6AulP8hXlAENTeciQUq+i7qbcXAk1+56oivF8C
+        KupcFrWBVM9QVfTiA154I19lFhzU2pj118AIWNUh1/XR8Y7T0T+/vXsx25cL6C0kS52H6Q
+        7MQM+y+Gggsg7yzkx1ll8K5quEbaxFs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1685017051;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2dzHnSkKSTY5qlRUI5cyea03h/AtEkjWPF2KHs6AMuY=;
+        b=eWlU1g39Km6Gwl34yMDbsZv9Xuk2mSTQtjzIJoQSXAuWzN7LROgqwncprq3x+okNgupCGq
+        RknlYBd1WAe0j9Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 44B96134B2;
+        Thu, 25 May 2023 12:17:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id N2C8ENtRb2QGMAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 25 May 2023 12:17:31 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id D5DFAA075C; Thu, 25 May 2023 14:17:30 +0200 (CEST)
+Date:   Thu, 25 May 2023 14:17:30 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     hch@infradead.org, djwong@kernel.org, sandeen@sandeen.net,
+        song@kernel.org, rafael@kernel.org, gregkh@linuxfoundation.org,
+        viro@zeniv.linux.org.uk, jack@suse.cz, jikos@kernel.org,
+        bvanassche@acm.org, ebiederm@xmission.com, mchehab@kernel.org,
+        keescook@chromium.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        linux-fsdevel@vger.kernel.org, kernel@tuxforce.de,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] fs: unify locking semantics for fs freeze / thaw
+Message-ID: <20230525121730.mqmdm7zp2rvnqjvi@quack3>
+References: <20230508011717.4034511-1-mcgrof@kernel.org>
+ <20230508011717.4034511-2-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-2137940837-1685017028=:1738"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508011717.4034511-2-mcgrof@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,45 +77,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-2137940837-1685017028=:1738
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 25 May 2023, Hugo Villeneuve wrote:
-
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On Sun 07-05-23 18:17:12, Luis Chamberlain wrote:
+> Right now freeze_super()  and thaw_super() are called with
+> different locking contexts. To expand on this is messy, so
+> just unify the requirement to require grabbing an active
+> reference and keep the superblock locked.
 > 
-> Add call to uart_get_rs485_mode() to probe for RS485 flags and
-> properties from device tree.
-> 
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
->  drivers/tty/serial/sc16is7xx.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-> index c2cfd057ed9a..03d00b144304 100644
-> --- a/drivers/tty/serial/sc16is7xx.c
-> +++ b/drivers/tty/serial/sc16is7xx.c
-> @@ -1511,6 +1511,10 @@ static int sc16is7xx_probe(struct device *dev,
->  			goto out_ports;
->  		}
+> Suggested-by: Christoph Hellwig <hch@infradead.org>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+
+Finally got around to looking at this. Sorry for the delay. In principle I
+like the direction but see below:
+
+> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> index 61c5f9d26018..e31d6791d3e3 100644
+> --- a/fs/f2fs/gc.c
+> +++ b/fs/f2fs/gc.c
+> @@ -2166,7 +2166,10 @@ int f2fs_resize_fs(struct f2fs_sb_info *sbi, __u64 block_count)
+>  	if (err)
+>  		return err;
 >  
-> +		ret = uart_get_rs485_mode(&s->p[i].port);
-> +		if (ret)
-> +			goto out_ports;
-> +
->  		/* Disable all interrupts */
->  		sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_IER_REG, 0);
->  		/* Disable TX/RX */
-> 
+> +	if (!get_active_super(sbi->sb->s_bdev))
+> +		return -ENOTTY;
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Calling get_active_super() like this is just sick. You rather want to
+provide a helper for grabbing another active sb reference and locking the
+sb when you already have sb reference. Because that is what is needed in
+the vast majority of the places. Something like
 
+void grab_active_super(struct super_block *sb)
+{
+	down_write(sb->s_umount);
+	atomic_inc(&s->s_active);
+}
+
+> @@ -851,13 +849,13 @@ struct super_block *get_active_super(struct block_device *bdev)
+>  		if (sb->s_bdev == bdev) {
+>  			if (!grab_super(sb))
+>  				goto restart;
+> -			up_write(&sb->s_umount);
+>  			return sb;
+>  		}
+>  	}
+>  	spin_unlock(&sb_lock);
+>  	return NULL;
+>  }
+> +EXPORT_SYMBOL_GPL(get_active_super);
+
+And I'd call this grab_bdev_super() and no need to export it when you have
+grab_active_super().
+
+> @@ -1636,10 +1634,13 @@ static void sb_freeze_unlock(struct super_block *sb, int level)
+>  }
+>  
+>  /**
+> - * freeze_super - lock the filesystem and force it into a consistent state
+> + * freeze_super - force a filesystem backed by a block device into a consistent state
+>   * @sb: the super to lock
+>   *
+> - * Syncs the super to make sure the filesystem is consistent and calls the fs's
+> + * Used by filesystems and the kernel to freeze a fileystem backed by a block
+> + * device into a consistent state. Callers must use get_active_super(bdev) to
+> + * lock the @sb and when done must unlock it with deactivate_locked_super().
+> + * Syncs the filesystem backed by the @sb and calls the filesystem's optional
+>   * freeze_fs.  Subsequent calls to this without first thawing the fs will return
+>   * -EBUSY.
+>   *
+> @@ -1672,22 +1673,15 @@ int freeze_super(struct super_block *sb)
+>  {
+>  	int ret;
+>  
+> -	atomic_inc(&sb->s_active);
+> -	down_write(&sb->s_umount);
+> -	if (sb->s_writers.frozen != SB_UNFROZEN) {
+> -		deactivate_locked_super(sb);
+
+At least add a warning for s_umount not being held here?
+
+> +	if (sb->s_writers.frozen != SB_UNFROZEN)
+>  		return -EBUSY;
+> -	}
+>  
+> -	if (!(sb->s_flags & SB_BORN)) {
+> -		up_write(&sb->s_umount);
+> +	if (!(sb->s_flags & SB_BORN))
+>  		return 0;	/* sic - it's "nothing to do" */
+> -	}
+>  
+>  	if (sb_rdonly(sb)) {
+>  		/* Nothing to do really... */
+>  		sb->s_writers.frozen = SB_FREEZE_COMPLETE;
+> -		up_write(&sb->s_umount);
+>  		return 0;
+>  	}
+
+								Honza
 -- 
- i.
-
---8323329-2137940837-1685017028=:1738--
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
