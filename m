@@ -2,233 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200C9710DA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20946710DA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241157AbjEYNvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
+        id S241313AbjEYNyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241225AbjEYNvk (ORCPT
+        with ESMTP id S234743AbjEYNyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:51:40 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2061A6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:51:36 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-783eb14ae3cso714165241.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:51:36 -0700 (PDT)
+        Thu, 25 May 2023 09:54:13 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D7E189
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:54:09 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f6bafd4782so4868181cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:54:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685022696; x=1687614696;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n19tabLNtFp1Iz9K9pxIJD1OumeleMtFy/K7WnzgIfg=;
-        b=sdx1I3H43CqY0+7VjcSBTZyBmaYW73mvbcH9NIAIuik6vBNGrDhItHXEkqI+Y3O65w
-         IXmiIBFCzLj249aZ+DwxEGpozd5ptsurxC8lwyRrA4UUvWb8FWcEvDDyKU9WERlAC5KW
-         Fyi/AsQb2yEuUyC1GLSLsMjTZ6IlXOc1gCbfCXPpgmCCaG52xCb901LcHQ6eRnBBA8pL
-         Py1MzKDCP9+Qor6Wq/3uDyE9jreXmHQWET7nBZoGHdMM1iBPwqeKsXNMBeZXhIvgGDu0
-         biNTEtWFtWMhtNBDmGrgsNaYPBZH3Rb8RKHYxv0KGG1A9G6Sr3+NY09m2h+5WeIU7OSY
-         wB4A==
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685022848; x=1687614848;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bLEZRdqcCWpE4xyc1kmqZXFrPIoPVCRTH/D3PTcgmf4=;
+        b=LITMVb+ohsmbbnOgQYinNMiwgZI+Vu9oEIG4dSqbWs6cV4BGXZ81XRDZ66RNYkGPcY
+         d94i2HGWR/MShjHHwieUU9IgaHYfY4/RW2gCSITSQmvcZky6VJLfUFjjqAOMF5UMb0ag
+         iUFvRKUnI5KPyy7Dwu6rFA+Gag9PIdFp9MtU2Aga8Zd07p9NVFjX8QD2g5BpPYjEKXaq
+         HvI1qYu6JxRiWjSmGWP4bNvrWAG0blrQjmxw8Hqz47F27DBoaOqzUMBDiG297zBD7XZo
+         sHt2BlLbM/6H9olL2RiHTj+9EGRL5laQenCRqX0NpdxesxF3qXh0QOfKqyTfc5VBMjUj
+         /L2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685022696; x=1687614696;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n19tabLNtFp1Iz9K9pxIJD1OumeleMtFy/K7WnzgIfg=;
-        b=bAAZGn5/SdqP8dO162awjSVL+8EGJcEsn7wkBl1Y5DEnD9XNRfrpBHyo32C0BTpXdl
-         dbdtwR8QstfdiN07oLoQcSxHJBcAqxXNUXboqx13BPcKlEcUAbVIcdnv4bvLQ7vgyjEg
-         4B57nA1jSBDR4ZW/7dbN20JwQL8kes5lh+Jk8UNrEUEfYi9YFMjPUJiEafpSK7oH/PcF
-         d//Ut3miQFU5r7p6MM4oOgJ2y4xY2wL40JihYR4MYbTfMGSTTrtu197vhp+8+TeUwDnW
-         7uF5Q1mEIpV9tazeU/R1obPtksvjaMQQ6bZxCOG1vwWoEjz4OFtLzoV3Qk3Xc85tmXjG
-         82kw==
-X-Gm-Message-State: AC+VfDydPFfeeCUOtmpOBXHdXGgxXUHE/y9BXfxowMFkwt7sF7V7TNzo
-        psoe6ma+U9jXFaMKBuUxp0oEeV3MVqyBQDIkecsP8Q==
-X-Google-Smtp-Source: ACHHUZ45iqVUZWAxmYQp90u1RQkVeX/4NHZY3Nm3bCxxSaV1E/EC64hFIztI5ZcN0+eOub/1YGI6qrhg3cAjP/LsJPI=
-X-Received: by 2002:a05:6102:2856:b0:42c:78e4:ef23 with SMTP id
- az22-20020a056102285600b0042c78e4ef23mr5714739vsb.31.1685022695691; Thu, 25
- May 2023 06:51:35 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685022848; x=1687614848;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bLEZRdqcCWpE4xyc1kmqZXFrPIoPVCRTH/D3PTcgmf4=;
+        b=VfkDiusIyZusgBHhmcGkEGFTQMj6XtHFG7/eRaj4UvovRyfo3ts2gz8rYQqqnwCq9M
+         5yEgJkSogBaWIufeMNXSLEY5QEEh9SIhAqn36xLQJGlCtUugJGuAUBdSUpPdkwNziVty
+         X28Y/4foXkIk+iXAO9xwwDizKWA0ZroCjcq+QWFaja0AaNosd07al5HwTKJ9MKm87ZLg
+         olcmNgQmJq8RsvVktS/+LtvuheV5bafCuUoa1pZVVidQ2awcfSj1+AQV5BS05q/HMXzq
+         jQ3YCR574SNWeAd6PKMvQImvrykB8P/tXE4Uswwfr2wE/XBL8sP85o8Oswz9lOGhsDwf
+         aPWg==
+X-Gm-Message-State: AC+VfDzm9/rmqKHv+kEU4nUzfs1RVmH2hVJKTlxUfKJa4l0MITVskVPx
+        b3LBgk1MbOGxCukPtIQHyqMIMA==
+X-Google-Smtp-Source: ACHHUZ55Ue38M3RU860aS455regVxF0q065zBCLs3j24DWS8tAv4nXVZwx3K4sGmBgc3RKH5Blqcag==
+X-Received: by 2002:a05:622a:8a:b0:3f3:95a7:a5ac with SMTP id o10-20020a05622a008a00b003f395a7a5acmr29078052qtw.51.1685022848413;
+        Thu, 25 May 2023 06:54:08 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:8bb6])
+        by smtp.gmail.com with ESMTPSA id d10-20020ac8534a000000b003e69d6792f6sm412101qto.45.2023.05.25.06.54.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 06:54:07 -0700 (PDT)
+Date:   Thu, 25 May 2023 09:54:07 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, ke.wang@unisoc.com
+Subject: Re: [PATCH] mm: deduct the number of pages reclaimed by madvise from
+ workingset
+Message-ID: <20230525135407.GA31865@cmpxchg.org>
+References: <1684919574-28368-1-git-send-email-zhaoyang.huang@unisoc.com>
 MIME-Version: 1.0
-References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
- <b4bfd69f-2092-4d15-b7ce-b814f5f10ff2@sirena.org.uk>
-In-Reply-To: <b4bfd69f-2092-4d15-b7ce-b814f5f10ff2@sirena.org.uk>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 25 May 2023 19:21:24 +0530
-Message-ID: <CA+G9fYv=uyQaJs0JLMmZWLeLH0G5FF7WGcTa7y0bi0nCDfoi+A@mail.gmail.com>
-Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in fpsimd_release_task
-To:     Mark Brown <broonie@kernel.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1684919574-28368-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 at 03:42, Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
->
-> > # To install tuxrun on your system globally:
-> > # sudo pip3 install -U tuxrun=3D=3D0.42.0
->
-> I'm not thrilled about the idea of installing some Python package
-> outside of my distro package manager, especially not running as root,
-> but I *do* have a checked out copy of tuxrun which normally seems to do
-> something...
->
-> > #
-> > # See https://tuxrun.org/ for complete documentation.
-> >
-> > tuxrun   \
-> >  --runtime podman   \
-> >  --device fvp-aemva   \
-> >  --boot-args rw   \
-> >  --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5Nv=
-LiBcWRMuy6lXftDVQMvca/Image.gz
-> >   \
-> >  --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5N=
-vLiBcWRMuy6lXftDVQMvca/modules.tar.xz
-> >   \
-> >  --rootfs https://storage.tuxboot.com/debian/bookworm/arm64/rootfs.ext4=
-.xz   \
-> >  --parameters SKIPFILE=3Dskipfile-lkft.yaml   \
-> >  --parameters KSELFTEST=3Dhttps://storage.tuxsuite.com/public/linaro/lk=
-ft/builds/2Pq5NvLiBcWRMuy6lXftDVQMvca/kselftest.tar.xz
-> >   \
-> >  --image tuxrun:fvp   \
-> >  --tests kselftest-arm64   \
-> >  --timeouts boot=3D60 kselftest-arm64=3D60
->
-> This command does not work for me, after fixing up the fact that
-> multiple lines have continuation characters that are nonfunctional due
-> to being wrapped onto the next line I get:
->
-> | Error: error getting default registries to try: short-name "tuxrun:fvp"=
- did not resolve to an alias and no unqualified-search registries are defin=
-ed in "/etc/containers/registries.conf"
->
-> Trying tip of tree tuxrun gives the same result.  Grovelling around in
-> the documentation I see there's a need to manually build some containers
-> for the FVP so I was able to get the above command to boot with the
-> --image option removed and switching to docker as the runtime but after
-> faffing for a very large amount of time even by the standards of the
-> model it appeared to just shut down the model without starting
-> kselftest, possibly due to having mounted some of the filesystems read
-> only:
->
-> 2023-05-22T21:03:43 Using a character delay of 50 (ms)
-> 2023-05-22T21:03:43 #=E2=8F=8E
-> 2023-05-22T21:03:43 [?2004l[?2004hroot@runner-pqlayms-project-40964107-co=
-ncurrent-5:~# #
-> 2023-05-22T21:03:43 lava-test-shell: Wait for prompt ['root@(.*):[/~]#'] =
-(timeout 01:00:00)
-> 2023-05-22T21:03:43 #
-> 2023-05-22T21:03:43 Using /lava-1
-> 2023-05-22T21:03:43 Sending with 50 millisecond of delay
-> 2023-05-22T21:03:43 export SHELL=3D/bin/sh=E2=8F=8E
-> 2023-05-22T21:03:45 [?2004l[?2004hroot@runner-pqlayms-project-40964107-co=
-ncurrent-5:~# export SHELL=3D/bin/sh
-> 2023-05-22T21:03:45 export SHELL=3D/bin/sh
-> 2023-05-22T21:03:45 Sending with 50 millisecond of delay
-> 2023-05-22T21:03:45 . /lava-1/environment=E2=8F=8E
-> 2023-05-22T21:03:47 [?2004l[?2004hroot@runner-pqlayms-project-40964107-co=
-ncurrent-5:~# . /lava-1/environment
-> 2023-05-22T21:03:47 . /lava-1/environment
-> 2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_1' for 1 seco=
-nd
-> 2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_2' for 1 seco=
-nd
-> 2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_3' for 1 seco=
-nd
-> 2023-05-22T21:03:47 Sending with 50 millisecond of delay
-> 2023-05-22T21:03:47 /lava-1/bin/lava-test-runner /lava-1/0=E2=8F=8E
-> 2023-05-22T21:03:51 [?2004l[?2004hroot@runner-pqlayms-project-40964107-co=
-ncurrent-5:~# /lava-1/bin/lava-test-runner /lava-1/0
-> 2023-05-22T21:03:51 Test shell timeout: 10s (minimum of the action and co=
-nnection timeout)
-> 2023-05-22T21:03:51 /lava-1/bin/lava-test-runne r /lava-1/0
-> 2023-05-22T21:03:52 [?2004lmkdir: cannot create directory =E2=80=98/lava-=
-1/0/results=E2=80=99: Read-only file system
-> 2023-05-22T21:03:53 mv: cannot move '/lava-1/0/lava-test-runner.conf' to =
-'/lava-1/0/lava-test-runner.conf-1684789015': Read-only file system
-> 2023-05-22T21:03:54 cat: /lava-1/0/lava-test-runner.conf-1684789015: No s=
-uch file or directory
-> 2023-05-22T21:03:55 ok: lava_test_shell seems to have completed
-> 2023-05-22T21:03:55 end: 3.1 lava-test-shell (duration 00:00:12) [common]
-> 2023-05-22T21:03:55 end: 3 lava-test-retry (duration 00:00:12) [common]
-> 2023-05-22T21:03:55 start: 4 finalize (timeout 00:10:00) [common]
-> 2023-05-22T21:03:55 start: 4.1 power-off (timeout 00:01:00) [common]
-> 2023-05-22T21:03:55 end: 4.1 power-off (duration 00:00:00) [common]
-> 2023-05-22T21:03:55 start: 4.2 read-feedback (timeout 00:10:00) [common]
->
-> Attempting to use podman as the runtime as your command said had various
-> problems:
->
-> 2023-05-22T21:07:01 start: 2.1.1 check-fvp-version (timeout 01:00:00) [co=
-mmon]
-> 2023-05-22T21:07:01 sh -c docker run --rm fvp:aemva-11.21.15 /opt/model/F=
-VP_AEMvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version
-> 2023-05-22T21:07:01 Parsed command exited 1.
-> 2023-05-22T21:07:01 action: check-fvp-version
-> command: ['sh', '-c', 'docker run --rm fvp:aemva-11.21.15 /opt/model/FVP_=
-AEMvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version']
-> message: Command '['sh', '-c', 'docker run --rm fvp:aemva-11.21.15 /opt/m=
-odel/FVP_AEMvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version']' re=
-turned non-zero exit status 1.
-> output: Missing runtime '/usr/bin/podman'
-> return code: 1
->
-> (I do have podman installed though I rarely use it, this looks to be in
-> the LAVA container though)
->
-> > Test log links:
-> > =3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build=
-/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/test/chec=
-k-kernel-kfence/log
-> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build=
-/v6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/tests/
-> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build=
-/v6.1.28-240-gb82733c0ff99/testrun/17007268/suite/kselftest-arm64/tests/
-> >
-> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build=
-/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/test/check=
--kernel-bug/log
-> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build=
-/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/tests/
-> >  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build=
-/v6.3.2-247-g5a952cfef67c/testrun/17015127/suite/kselftest-arm64/tests/
->
-> None of these seem to provide me with information like what kernel
-> config was used but I did manage to find
->
->   https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLiBcWRMuy6=
-lXftDVQMvca/config
->
-> which might be it?  Or one of them?  However even trying to use that I'm
-> unable to reproduce issues with either the FVP or qemu.
+On Wed, May 24, 2023 at 05:12:54PM +0800, zhaoyang.huang wrote:
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> 
+> The pages reclaimed by madvise_pageout are made of inactive and dropped from LRU
+> forcefully, which lead to the coming up refault pages possess a large refault
+> distance than it should be. These could affect the accuracy of thrashing when
+> madvise_pageout is used as a common way of memory reclaiming as ANDROID does now.
 
-You got the right config file which we are using for testing
-FVP selftests.
+This alludes to, but doesn't explain, a real world usecase.
 
-Since it is intermittent it is not easy to reproduce always.
-You are right ! that, you may have to try with full sub set run
+Yes, madvise_pageout() will record non-resident entries today. This
+means refault and thrash detection is on for user-driven reclaim.
 
-./run_kselftest.sh -c arm64
+So why is that undesirable?
 
-- Naresh
+Today we measure and report the cost of reclaim and memory pressure
+for physical memory shortages, cgroup limits, and user-driven cgroup
+reclaim. Why should we not do the same for madv_pageout()? If the
+userspace code that drives pageout has a bug and the result is extreme
+thrashing, wouldn't you want to know that?
+
+Please explain the idea here better.
+
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+>  include/linux/swap.h | 2 +-
+>  mm/madvise.c         | 4 ++--
+>  mm/vmscan.c          | 8 +++++++-
+>  3 files changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index 2787b84..0312142 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -428,7 +428,7 @@ extern unsigned long mem_cgroup_shrink_node(struct mem_cgroup *mem,
+>  extern int vm_swappiness;
+>  long remove_mapping(struct address_space *mapping, struct folio *folio);
+>  
+> -extern unsigned long reclaim_pages(struct list_head *page_list);
+> +extern unsigned long reclaim_pages(struct mm_struct *mm, struct list_head *page_list);
+>  #ifdef CONFIG_NUMA
+>  extern int node_reclaim_mode;
+>  extern int sysctl_min_unmapped_ratio;
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index b6ea204..61c8d7b 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -420,7 +420,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+>  huge_unlock:
+>  		spin_unlock(ptl);
+>  		if (pageout)
+> -			reclaim_pages(&page_list);
+> +			reclaim_pages(mm, &page_list);
+>  		return 0;
+>  	}
+>  
+> @@ -516,7 +516,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+>  	arch_leave_lazy_mmu_mode();
+>  	pte_unmap_unlock(orig_pte, ptl);
+>  	if (pageout)
+> -		reclaim_pages(&page_list);
+> +		reclaim_pages(mm, &page_list);
+>  	cond_resched();
+>  
+>  	return 0;
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 20facec..048c10b 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2741,12 +2741,14 @@ static unsigned int reclaim_folio_list(struct list_head *folio_list,
+>  	return nr_reclaimed;
+>  }
+>  
+> -unsigned long reclaim_pages(struct list_head *folio_list)
+> +unsigned long reclaim_pages(struct mm_struct *mm, struct list_head *folio_list)
+>  {
+>  	int nid;
+>  	unsigned int nr_reclaimed = 0;
+>  	LIST_HEAD(node_folio_list);
+>  	unsigned int noreclaim_flag;
+> +	struct lruvec *lruvec;
+> +	struct mem_cgroup *memcg = get_mem_cgroup_from_mm(mm);
+>  
+>  	if (list_empty(folio_list))
+>  		return nr_reclaimed;
+> @@ -2764,10 +2766,14 @@ unsigned long reclaim_pages(struct list_head *folio_list)
+>  		}
+>  
+>  		nr_reclaimed += reclaim_folio_list(&node_folio_list, NODE_DATA(nid));
+> +		lruvec = &memcg->nodeinfo[nid]->lruvec;
+> +		workingset_age_nonresident(lruvec, -nr_reclaimed);
+>  		nid = folio_nid(lru_to_folio(folio_list));
+>  	} while (!list_empty(folio_list));
+>  
+>  	nr_reclaimed += reclaim_folio_list(&node_folio_list, NODE_DATA(nid));
+> +	lruvec = &memcg->nodeinfo[nid]->lruvec;
+> +	workingset_age_nonresident(lruvec, -nr_reclaimed);
+
+The task might have moved cgroups in between, who knows what kind of
+artifacts it will introduce if you wind back the wrong clock.
+
+If there are reclaim passes that shouldn't participate in non-resident
+tracking, that should be plumbed through the stack to __remove_mapping
+(which already has that bool reclaimed param to not record entries).
