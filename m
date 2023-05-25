@@ -2,124 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7A9711217
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BDE71121A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234507AbjEYR0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40696 "EHLO
+        id S233178AbjEYR1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjEYR0H (ORCPT
+        with ESMTP id S229754AbjEYR1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:26:07 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2EA199
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:26:02 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51190fd46c3so4316986a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:26:02 -0700 (PDT)
+        Thu, 25 May 2023 13:27:01 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADE4189
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:26:59 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f3b337e842so2692807e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:26:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685035560; x=1687627560;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EJa+li1Oy5bbsqG6UFm3MUpvaFnPsLyMyN5vhg0qjCI=;
-        b=Ok2oHq3cev+oksqRUcG1p3USoN99IbgxduJYBtiM1ZppktJCef7OJEAeTtiFyV4Pla
-         ualjpqrKd+WIl8n4NZV9wQWuCy1d7zew36uRaxySx+XcHvwZotJwo3OYIopLB4A7A7Jg
-         Af69GCES8xqOENGnIFKoV7WULD0sjK3aGPWqU=
+        d=selfcaring-info.20221208.gappssmtp.com; s=20221208; t=1685035618; x=1687627618;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lY8ccbGKRV0yQgSNg9RX5YStz86Ed8+7HWloI1s4q4o=;
+        b=g00QYRslxnrVEihHlfRlHpZal9iJEr9jfGGvtXLPO56KnYmCIxCShCLpIqBWIkH3J2
+         apfQEnrLyp+cQNFDUh5/SlM/afgTaeFGLtnc6QHxd+wfOSY+JAaZRSI/WOCfGtlr6xqU
+         tMV2Cvw3lPeWGWQg4mhnJ/aexn5m705FG5tJnBUy1i+dYkPsIDT8vMNix5grxYhWX5zV
+         kS/ax+AtOM6DAcG+h12hPakRMsZ70UosPEynID0U/sVTf3XkDPp/+WaIkWzl9JeKKKuc
+         rXIMDgGYzdrdBhmfJiV24AhzEUkaIamWV880kFxyZVMMQf9Mp9HZd02bnDxhWd+aDPcv
+         jSaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685035560; x=1687627560;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EJa+li1Oy5bbsqG6UFm3MUpvaFnPsLyMyN5vhg0qjCI=;
-        b=cgAKW/MhOKrhePkKg+dHOXikcT4pOUoqiflrUztMMUEACI6dxVWFhgnxKlyBd3OKDo
-         ZSCgbvVUKarg3BaHEfu1b7gLY6lbIH5hpf5XuE1S2aw2AI2EKJl7hZfwXxAU7TlvgTpL
-         DKufQtu2tRcdFkW1fOTZ/QVg4Q2akxCyEUPe060X/ymKzMoJrOhLPxk6J8NBBjpMYgXn
-         sNkyGpN4qbQ2mJgOmsIJ6+eaRCAYvhKQ+OUpIxrRf8U1N3mvZQJbd533ToEzwzIb+5ov
-         w7NTmUm4eJeB9MaS3rn1jRa/a70cNRqUkViyYyiDEvg7f2hP5eOIGZUpTqSt4/Ucjexc
-         BmYw==
-X-Gm-Message-State: AC+VfDx6jxJw6TKdMnt0bWEX0Atw4HeVruMxJLKWdj0FwQ1i5KmB4ONe
-        2ImbTEHQYCyD/e2esWgu2gCwf2V8V1swq51f6uqtZT22
-X-Google-Smtp-Source: ACHHUZ4IpWpRBNh1vOhZ4rTTriX34uhXaH8VuWtxKQ9wFwxvZykMoGXlQjQqYeUUjV0DFZY0+YxTSw==
-X-Received: by 2002:a17:907:7204:b0:971:484:6392 with SMTP id dr4-20020a170907720400b0097104846392mr2447535ejc.38.1685035560775;
-        Thu, 25 May 2023 10:26:00 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id u24-20020a1709064ad800b0096f67b55b0csm1107050ejt.115.2023.05.25.10.25.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 10:25:59 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96f8d485ef3so143082666b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:25:59 -0700 (PDT)
-X-Received: by 2002:a17:906:7954:b0:96a:37af:ff37 with SMTP id
- l20-20020a170906795400b0096a37afff37mr2274160ejo.15.1685035559397; Thu, 25
- May 2023 10:25:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685035618; x=1687627618;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lY8ccbGKRV0yQgSNg9RX5YStz86Ed8+7HWloI1s4q4o=;
+        b=CQDHPOD4R1Rn+oCj0vTc3ir9Ro4LUZn/aeqEdzjS24utOx09rtfYHxDOeMho3pIR9g
+         ola7jLDZDVZbWD6SnwNvsqn7bPZRz2t7ucSBBoF9wvwe3/G/nrjKBP5OrJnBSNyBUkqa
+         fVg77JMhM6NL2cq5FV7HnPTIheNonXxxBUk03GSztkdi+sVaj6JIEluu8A/8DLYfxK8c
+         9Qu9/IttWvSLK2E+WAnxjXSDrHnveGIjWbyB1xDpk6WVQPEZgXpPd+hI/nchaTBGT5l4
+         CnahOAgvpF+xRrbEdR8QRI3z9wwuNghS/xkuoUX89B0oyNT/pt/TOTVGE+ZZ9uqrMQoJ
+         rrgw==
+X-Gm-Message-State: AC+VfDyWx1B0+ACq5Bup/AfI15FrI9XJliSp3ikPYZvncsgeL7d/KbM2
+        SQlZcKKm1eE7xmaBduugL3JQx35CWXU5idc1IbQQU8qN4jOUz3RU
+X-Google-Smtp-Source: ACHHUZ7x1r/4td9Ryb86CeupmWhGPOlmdDkDJ0hyY5qhSkaBXAAf5ZCdr4BP/AWp9us1AH67+vyhN4Ot3US6L8O8hKs=
+X-Received: by 2002:ac2:4119:0:b0:4f3:7c24:1029 with SMTP id
+ b25-20020ac24119000000b004f37c241029mr6245074lfi.60.1685035617723; Thu, 25
+ May 2023 10:26:57 -0700 (PDT)
+Received: from 785115219520 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 25 May 2023 17:26:57 +0000
 MIME-Version: 1.0
-References: <ZGxfrOLZ4aN9/MvE@infradead.org> <20230522205744.2825689-1-dhowells@redhat.com>
- <3068545.1684872971@warthog.procyon.org.uk> <ZG2m0PGztI2BZEn9@infradead.org>
- <3215177.1684918030@warthog.procyon.org.uk> <CAHk-=wjaqHgd4u63XdZoTPs1YCJnDZ7-GQHKKdFrT32y2-__tw@mail.gmail.com>
- <e00ee9f5-0f02-6463-bc84-b94c17f488bc@redhat.com> <CAHk-=wgPWUCyhiM+=S3nmh4JK8qtBQteYvtiXpoYpDjfKHnEhQ@mail.gmail.com>
- <144598.1685034915@warthog.procyon.org.uk>
-In-Reply-To: <144598.1685034915@warthog.procyon.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 25 May 2023 10:25:42 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wirrJNoVSOSVK2ae9pa7Q5kJKFYMk2ad-_6YrS1cEScqA@mail.gmail.com>
-Message-ID: <CAHk-=wirrJNoVSOSVK2ae9pa7Q5kJKFYMk2ad-_6YrS1cEScqA@mail.gmail.com>
-Subject: Re: Extending page pinning into fs/direct-io.c
-To:     David Howells <dhowells@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+From:   Brad Krause <info@selfcaring.info>
+Date:   Thu, 25 May 2023 17:26:57 +0000
+Message-ID: <CAGethNxwo740z22BeDk-nSkV2uU85rFfwWctzm3zO8Sxuj0Onw@mail.gmail.com>
+Subject: Can I write an article for your website?
+To:     linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 10:15=E2=80=AFAM David Howells <dhowells@redhat.com=
-> wrote:
->
->  It doesn't seem I can add it to mm.h as an inline function.
+Hi,
 
-What? We already have that pattern inside is_longterm_pinnable_page(),
-so that's really strange.
+Entrepreneurs have a lot on their plate when it comes to running a
+business. Therefore, self-care should always be a high priority.
 
-But regardless, please don't duplicate that odd conditional for no
-reason, and don't scream.
+I'd like to address this topic in a free article for you.
+Specifically, I'll write about why it's important for entrepreneurs to
+make time for self-care.
 
-So regardless of where it is, make that "is_zero_folio()" just do
-"is_zero_page(&folio->page)" rather than repeat the question.
+I'll be sure to include useful tips like getting proper nutrition,
+going to the gym/working out at home, trying relaxation techniques,
+and time-saving tips (e.g., hiring services for their business) that
+can help entrepreneurs focus more on self-care. Your website will also
+be featured in the article.
 
-I also wonder whether we shouldn't just use the "transparent union"
-argument thing more aggressively. Something like
+Would you like to review the piece when I'm done? My hope is that
+you'll find it a good addition for your website and decide to share it
+with your readers.
 
-   typedef union {
-        struct page *page;
-        struct folio *folio;
-   } page_or_folio_t __attribute__ ((__transparent_union__));
+Looking forward to hearing from you!
 
-and then you should be able to do something like this:
+Many thanks,
+Brad Krause of selfcaring.info
+Be the best you that you can be.
 
-    static inline bool is_zero_page(const page_or_folio_t arg)
-    {
-        return is_zero_pfn(page_to_pfn(arg.page));
-    }
 
-and we don't have to keep generating the two versions over and over
-and over again.
-
-                Linus
+P.S. If you=E2=80=99d prefer an article on a different topic, please let me
+know. That said, I understand if you=E2=80=99re not interested in guest pos=
+ts.
+Just let me know and I won=E2=80=99t reach out to you again.
