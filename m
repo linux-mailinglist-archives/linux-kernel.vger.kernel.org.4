@@ -2,53 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE42710A48
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BACEB710A4C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240204AbjEYKsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
+        id S240420AbjEYKtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234122AbjEYKsy (ORCPT
+        with ESMTP id S232250AbjEYKt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:48:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A1510B;
-        Thu, 25 May 2023 03:48:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D3CC6449C;
-        Thu, 25 May 2023 10:48:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94633C433EF;
-        Thu, 25 May 2023 10:48:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685011731;
-        bh=syfifLlyaCvCKOOmv82wXtJYyig6H3axNUQALr6O/Po=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nUDlQbvjYUYvKbKHVeHHpAqXZgMNsmrf6QQHoQh1xz8pCNXHdXxZwsn0EfOB8rKRn
-         YhMg2VldyoCQEgcy04zbZ80kaL4/F2XCv4HVogzMs7jQCYymBfZCXXGaXPk3vq2Dv6
-         8d/yJrGwbW85yH5sTaeY2sogxLsSFO4OwBMMipnie5r9j/1dzFXlMORhVvF4mNga14
-         /ht5p2AjBcqc/HwzFGofqysVDqAnZf2x0swrfqkgDW4UtGNU9Fo2ztEhBbC6sOT9an
-         D17lK4fErodcOjSXvhQVFKqa6CXTLUZOyW2ctbxuP0tyj7vYYpQj05F9NUIDrgctFf
-         H30SgAvWakNlg==
-Date:   Thu, 25 May 2023 11:48:46 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jerome Neanne <jneanne@baylibre.com>
-Cc:     tony@atomide.com, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com, nm@ti.com,
-        afd@ti.com, msp@baylibre.com
-Subject: Re: [PATCH] mfd: tps65219: Add support for soft shutdown via sys-off
- API
-Message-ID: <20230525104846.GE9691@google.com>
-References: <20230511122100.2225417-1-jneanne@baylibre.com>
+        Thu, 25 May 2023 06:49:29 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0749810B;
+        Thu, 25 May 2023 03:49:27 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P8BAuF011797;
+        Thu, 25 May 2023 10:49:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2mS2U45kr5JMTtsJZuoWbB1M4W7I9XKqCsB0vzkHquM=;
+ b=QXeBNJ92k81MhkVeYy8RAs1q9dceo6J++1Mc1K5nFb2OYYIeX3Yco0OPpFDpyQhJnvrg
+ 8VFDfIT/K+bp05mfBhN+tf7eIfntjO0PZ6zxUQAAZ74MLT8WnKbUnx/sLI4jUfMN4XeP
+ yKcdUNqkWHwrmFuk5VkknCa4vguDzVb1VGbnN/ZD2N4piGfmDFQ6s34mWWELW2N4C08d
+ gn1Q4KXOYN0i9UyboDVoCWb++522MYF1P44UQQabA0223R26UAnu58x9U2GJN5F/f+9V
+ IVsX1GyfZLS+RFvleJd+xfIKcMCo8+bUcBd0kPDD/0uJ1veX9qUlQVj3BbfF9zSXxbD5 lA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsp509ysj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 10:49:23 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PAnMcK010598
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 10:49:22 GMT
+Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
+ 2023 03:49:17 -0700
+Message-ID: <8432dd81-6015-7839-1d9b-a80b350e2720@quicinc.com>
+Date:   Thu, 25 May 2023 16:19:14 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: (subset) [PATCH V3 0/6] Incremental patches on minimal boot
+ support
+To:     Bjorn Andersson <andersson@kernel.org>, <agross@kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Devi Priya <quic_devipriy@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <konrad.dybcio@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <sboyd@kernel.org>, <mturquette@baylibre.com>
+CC:     <quic_arajkuma@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_poovendh@quicinc.com>, <quic_srichara@quicinc.com>,
+        <quic_anusha@quicinc.com>
+References: <20230425084010.15581-1-quic_devipriy@quicinc.com>
+ <168454808161.2842337.17993685425906614863.b4-ty@kernel.org>
+Content-Language: en-US
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <168454808161.2842337.17993685425906614863.b4-ty@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230511122100.2225417-1-jneanne@baylibre.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lwXRw80Lx-NjGTHodCHPvVJFFzJ_e93_
+X-Proofpoint-ORIG-GUID: lwXRw80Lx-NjGTHodCHPvVJFFzJ_e93_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_06,2023-05-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ lowpriorityscore=0 malwarescore=0 impostorscore=0 spamscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250089
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,135 +88,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023, Jerome Neanne wrote:
 
-> Use new API for power-off mode support:
-> Link: https://lwn.net/Articles/894511/
-> Link: https://lore.kernel.org/all/7hfseqa7l0.fsf@baylibre.com/
-> 
-> sys-off API allows support of shutdown handler and restart handler.
-> 
-> Shutdown was not supported before that enhancement.
-> This is required for platform that are not using PSCI.
-> 
-> Test:
-> - restart:
->   # reboot
->   Default is cold reset:
->   # cat /sys/kernel/reboot/mode
->   Switch boot mode to warm reset:
->   # echo warm > /sys/kernel/reboot/mode
-> - power-off:
->   # halt
-> 
-> Tested on AM62-LP-SK board.
-> 
-> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-> Suggested-by: Andrew Davis <afd@ti.com>
-> Reviewed-by: Andrew Davis <afd@ti.com>
-> ---
-> 
-> Notes:
->     Change-log v2 to v1
->     v1: Link: https://lore.kernel.org/all/20230203140150.13071-1-jneanne@baylibre.com/
->     Andrew Davis Review:
->     - Use new helpers devm_register_restart_handler and devm_register_power_off_handler
->     Vignesh Raghavendra:
->     - Fix typo on board name in commit message
-> 
->  drivers/mfd/tps65219.c | 41 ++++++++++++++++++++++++++++++-----------
->  1 file changed, 30 insertions(+), 11 deletions(-)
+On 5/20/2023 7:31 AM, Bjorn Andersson wrote:
+> On Tue, 25 Apr 2023 14:10:04 +0530, Devi Priya wrote:
+>> Patchset V9 of the series: Add minimal boot support for IPQ9574 has been
+>> merged and is available in linux-next/master.
+>> V12 being the latest revision posted in the series, the delta between
+>> revisions V9 and V12 is posted as a separate series as suggested by
+>> Bjorn to avoid possible confusions.
+>>
+>> This series adds the delta changes between revisions V9 and V12.
+>>
+>> [...]
+> Applied, thanks!
+>
+> [1/6] arm64: dts: qcom: ipq9574: Update the size of GICC & GICV regions
+>        commit: 6fb45762691d12d9812c41d20b2f5db1412047ae
+> [5/6] arm64: dts: qcom: ipq9574: Drop bias_pll_ubi_nc_clk input
+>        commit: 4fc6a939aba4c0aa723b9da8363d262d3d60e57e
+> [6/6] arm64: dts: qcom: ipq9574: rename al02-c7 dts to rdp433
+>        (no commit info)
 
-Couple of nits.
- 
-> diff --git a/drivers/mfd/tps65219.c b/drivers/mfd/tps65219.c
-> index 0e402fda206b..5115d0a66701 100644
-> --- a/drivers/mfd/tps65219.c
-> +++ b/drivers/mfd/tps65219.c
-> @@ -25,25 +25,34 @@ static int tps65219_cold_reset(struct tps65219 *tps)
->  				  TPS65219_MFP_COLD_RESET_I2C_CTRL_MASK);
->  }
->  
-> -static int tps65219_restart(struct notifier_block *this,
-> -			    unsigned long reboot_mode, void *cmd)
-> +static int tps65219_soft_shutdown(struct tps65219 *tps)
->  {
-> -	struct tps65219 *tps;
-> +	return regmap_update_bits(tps->regmap, TPS65219_REG_MFP_CTRL,
-> +				  TPS65219_MFP_I2C_OFF_REQ_MASK,
-> +				  TPS65219_MFP_I2C_OFF_REQ_MASK);
-> +}
->  
-> -	tps = container_of(this, struct tps65219, nb);
-> +static int tps65219_power_off_handler(struct sys_off_data *data)
-> +{
-> +	tps65219_soft_shutdown(data->cb_data);
-> +	return NOTIFY_DONE;
-> +}
->  
-> +static int tps65219_restart(struct tps65219 *tps,
-> +			    unsigned long reboot_mode)
 
-Why the line-wrap?
+Hi Bjorn,
 
-> +{
->  	if (reboot_mode == REBOOT_WARM)
->  		tps65219_warm_reset(tps);
->  	else
->  		tps65219_cold_reset(tps);
-> -
 
-This has nothing to do with the patch, and I liked it better before.
+I don't see the [6/6] in qcom/for-next.  Some part of the below 
+change[1] is also missed in qcom/for-next [2], I'm not sure if this is 
+because of missing [6/6]. Kindly let me know if I am missing something.
 
->  	return NOTIFY_DONE;
->  }
->  
-> -static struct notifier_block pmic_rst_restart_nb = {
-> -	.notifier_call = tps65219_restart,
-> -	.priority = 200,
-> -};
-> +static int tps65219_restart_handler(struct sys_off_data *data)
-> +{
-> +	tps65219_restart(data->cb_data, data->mode);
-> +	return NOTIFY_DONE;
-> +}
->  
->  static const struct resource tps65219_pwrbutton_resources[] = {
->  	DEFINE_RES_IRQ_NAMED(TPS65219_INT_PB_FALLING_EDGE_DETECT, "falling"),
-> @@ -269,13 +278,23 @@ static int tps65219_probe(struct i2c_client *client)
->  		}
->  	}
->  
-> -	tps->nb = pmic_rst_restart_nb;
-> -	ret = register_restart_handler(&tps->nb);
-> +	ret = devm_register_restart_handler(tps->dev,
-> +					    tps65219_restart_handler,
-> +					    tps);
-> +
->  	if (ret) {
->  		dev_err(tps->dev, "cannot register restart handler, %d\n", ret);
->  		return ret;
->  	}
->  
-> +	ret = devm_register_power_off_handler(tps->dev,
-> +					      tps65219_power_off_handler,
-> +					      tps);
-> +	if (ret) {
-> +		dev_err(tps->dev, "failed to register power-off handler: %d\n",
-> +			ret);
+[1] 
+https://lore.kernel.org/linux-arm-msm/168499048186.3998961.10536295689489328026.b4-ty@kernel.org/T/#t
 
-I wouldn't wrap here either to be honest.
+[2] 
+https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?h=for-next&id=9ef42640504e09ecc79530b6e532ebf48305516b
 
-checkpatch.pl now complains at 100-chars.
 
-> +		return ret;
-> +	}
->  	return 0;
->  }
->  
-> -- 
-> 2.34.1
-> 
+Thanks,
 
--- 
-Lee Jones [李琼斯]
+
+>
+> Best regards,
