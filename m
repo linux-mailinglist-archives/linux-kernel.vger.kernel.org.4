@@ -2,185 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 041E5710995
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5327C7109A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240837AbjEYKMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S240860AbjEYKPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240809AbjEYKMQ (ORCPT
+        with ESMTP id S240884AbjEYKOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:12:16 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FE51B1;
-        Thu, 25 May 2023 03:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685009522; x=1716545522;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=N/zwrSVypYR69GoZqPE+SbIhxpOv+B6QByyWYEs768E=;
-  b=ilJ1+XzFjHnlOrV0x8DWRKcoNnbkuh3EgV+pLe/6Leqe9Mb+GZkJxaca
-   NAnjT3/oLwrVH+hbB0dIfGWBCbUIQJN4x2Ep8BeydXW6eDM2y4I61/uwH
-   TbyL3zYTm5WSWDx3y7035arwab5+BTuuhY2yT6as1XEQuNapUeXjoAAsQ
-   lExkOKaDi0CXPTqoAjwOgc4qnP3Q6FIiv269YBuaLeQ4lNpH0hYbmnTwg
-   pM1nLy2oJWlsXefRiGLj2Xum/6+Ba4JlR/hBcnPTQohNH3MhUg1c8Fd8S
-   pPB84aOx3kf3OezJkxHVBZrrk8toFZDdoxVYyVpLmw4hJpwf92q//y25D
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="334194535"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="334194535"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 03:12:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="655164459"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="655164459"
-Received: from aghiriba-mobl.ger.corp.intel.com ([10.249.40.17])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 03:11:54 -0700
-Date:   Thu, 25 May 2023 13:11:51 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?ISO-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal Kazior <michal.kazior@tieto.com>,
-        Janusz Dziedzic <janusz.dziedzic@tieto.com>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dean Luick <dean.luick@cornelisnetworks.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 9/9] wifi: ath10k: Use RMW accessors for changing
- LNKCTL
-In-Reply-To: <ZG4o/pYseBklnrTc@bhelgaas>
-Message-ID: <ecdc8e85-786-db97-a7d4-bfd82c08714@linux.intel.com>
-References: <ZG4o/pYseBklnrTc@bhelgaas>
+        Thu, 25 May 2023 06:14:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E8CE66
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685009599;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3qUwZavWeot6BxoSwWB1BeOsQSAKpT3nzUsF0j/xmbk=;
+        b=HwEdC2z4TDa0JTuP9UuNI/G1yjiJy/jfcjJxsGbf2ktudUEZSy2NCXQsDOPZizwFOJZQqA
+        FRN3IMqMYVStQ4eDTqKhMU68Zv4ClT3TKJupG9cMOAZc8N2hYWtvISUt4ga0bKmtasUgJX
+        ClZ4UK0SywpRv0HwTQPCt3KPsRpkSgE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-440-XtW11Vf2Oz6A2Brv6rTUuw-1; Thu, 25 May 2023 06:13:18 -0400
+X-MC-Unique: XtW11Vf2Oz6A2Brv6rTUuw-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-50daa85e940so2524078a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:13:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685009596; x=1687601596;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3qUwZavWeot6BxoSwWB1BeOsQSAKpT3nzUsF0j/xmbk=;
+        b=YkAodAzdMU8YY4P6Wt4hUpaYTzUErZK4IVIZ+6aUKvYDyJLA2b2N4q7X8lndsvuOFC
+         qYG+N2NoBZptCa6ondnFnuPvsCYvus8BGjvkH9iMk7jDvrpFcNw76YO+oO1kC8w9ovmK
+         EfMqh4Bm2l3NylNI4FaNwBlOrORSbruC9ePJJGmKoEdfC14kc47xAxk3+ajomXWqomaK
+         MyMgcVTG7wmZkJyWeFpGxSdJJMnmuoS5ULq2Ijv35L6Q3yJumGLavRc7etMcMA+V00NT
+         VprvmjCy+Fbs+8ZhCzcYBMTWd/Hq/AHrUWtvNL3+SsXw2Gwim90EzR3+TBBgGvIpFgxW
+         srPQ==
+X-Gm-Message-State: AC+VfDyqLpFvnB9tVm7pe8DxjwPBYrzjaa69SRTV3z3B1CD+RCQNn+nz
+        RPS4KNvgaMAZ6oeRJhH4xJ8aaZSWM9+spo+TUkRZdn/cGKxtHhesFq0+ny7/6lLSEKzMl/qa74f
+        MrXha2SH8ZJTinrd3ISgBl8fX7ZlFn4zD
+X-Received: by 2002:a17:907:720f:b0:972:aa30:203e with SMTP id dr15-20020a170907720f00b00972aa30203emr1112323ejc.34.1685009596735;
+        Thu, 25 May 2023 03:13:16 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4UVuOdKtAJmTw+9/lxOTaN96LepZ+KFwgazTOkVRaQ7goTvLQZICLYaLw7QL++QbWevUCWkA==
+X-Received: by 2002:a17:907:720f:b0:972:aa30:203e with SMTP id dr15-20020a170907720f00b00972aa30203emr1112304ejc.34.1685009596436;
+        Thu, 25 May 2023 03:13:16 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id kq10-20020a170906abca00b00960005e09a3sm648261ejb.61.2023.05.25.03.13.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 03:13:15 -0700 (PDT)
+Message-ID: <dcdb3d12-e0af-5e4d-119e-d4fbe9a9495b@redhat.com>
+Date:   Thu, 25 May 2023 12:13:15 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1525169391-1685006896=:1738"
-Content-ID: <e7b32c4d-e7b9-c81d-670-b54285b6b554@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for suspend
+ related messages
+Content-Language: en-US, nl
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>
+Cc:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        "Natikar, Basavaraj" <Basavaraj.Natikar@amd.com>
+References: <20230522200033.2605-1-mario.limonciello@amd.com>
+ <20230522200033.2605-4-mario.limonciello@amd.com>
+ <e9eb526d-84fe-b814-67a3-6f7977aa0078@redhat.com>
+ <MN0PR12MB6101AF7606A3547EC5AA42A7E2409@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <MN0PR12MB6101AF7606A3547EC5AA42A7E2409@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Mario,
 
---8323329-1525169391-1685006896=:1738
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <5114585-6ccd-c09a-416-a53bb2256299@linux.intel.com>
-
-On Wed, 24 May 2023, Bjorn Helgaas wrote:
-
-> On Wed, May 17, 2023 at 01:52:35PM +0300, Ilpo Järvinen wrote:
-> > Don't assume that only the driver would be accessing LNKCTL. ASPM
-> > policy changes can trigger write to LNKCTL outside of driver's control.
-> > 
-> > Use RMW capability accessors which does proper locking to avoid losing
-> > concurrent updates to the register value. On restore, clear the ASPMC
-> > field properly.
-> > 
-> > Fixes: 76d870ed09ab ("ath10k: enable ASPM")
-> > Suggested-by: Lukas Wunner <lukas@wunner.de>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > Cc: stable@vger.kernel.org
-> > ---
-> >  drivers/net/wireless/ath/ath10k/pci.c | 9 +++++----
-> >  1 file changed, 5 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/net/wireless/ath/ath10k/pci.c b/drivers/net/wireless/ath/ath10k/pci.c
-> > index a7f44f6335fb..9275a672f90c 100644
-> > --- a/drivers/net/wireless/ath/ath10k/pci.c
-> > +++ b/drivers/net/wireless/ath/ath10k/pci.c
-> > @@ -1963,8 +1963,9 @@ static int ath10k_pci_hif_start(struct ath10k *ar)
-> >  	ath10k_pci_irq_enable(ar);
-> >  	ath10k_pci_rx_post(ar);
-> >  
-> > -	pcie_capability_write_word(ar_pci->pdev, PCI_EXP_LNKCTL,
-> > -				   ar_pci->link_ctl);
-> > +	pcie_capability_clear_and_set_word(ar_pci->pdev, PCI_EXP_LNKCTL,
-> > +					   PCI_EXP_LNKCTL_ASPMC,
-> > +					   ar_pci->link_ctl & PCI_EXP_LNKCTL_ASPMC);
-> >  
-> >  	return 0;
-> >  }
-> > @@ -2821,8 +2822,8 @@ static int ath10k_pci_hif_power_up(struct ath10k *ar,
-> >  
-> >  	pcie_capability_read_word(ar_pci->pdev, PCI_EXP_LNKCTL,
-> >  				  &ar_pci->link_ctl);
-> > -	pcie_capability_write_word(ar_pci->pdev, PCI_EXP_LNKCTL,
-> > -				   ar_pci->link_ctl & ~PCI_EXP_LNKCTL_ASPMC);
-> > +	pcie_capability_clear_word(ar_pci->pdev, PCI_EXP_LNKCTL,
-> > +				   PCI_EXP_LNKCTL_ASPMC);
+On 5/23/23 18:21, Limonciello, Mario wrote:
+> [AMD Official Use Only - General]
 > 
-> These ath drivers all have the form:
+>> -----Original Message-----
+>> From: Hans de Goede <hdegoede@redhat.com>
+>> Sent: Tuesday, May 23, 2023 6:08 AM
+>> To: Limonciello, Mario <Mario.Limonciello@amd.com>; rafael@kernel.org;
+>> linus.walleij@linaro.org
+>> Cc: linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+>> gpio@vger.kernel.org; platform-driver-x86@vger.kernel.org; linux-
+>> pm@vger.kernel.org; S-k, Shyam-sundar <Shyam-sundar.S-k@amd.com>;
+>> Natikar, Basavaraj <Basavaraj.Natikar@amd.com>
+>> Subject: Re: [PATCH v2 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for
+>> suspend related messages
+>>
+>> Hi Mario,
+>>
+>> On 5/22/23 22:00, Mario Limonciello wrote:
+>>> Using pm_pr_dbg() allows users to toggle
+>> `/sys/power/pm_debug_messages`
+>>> as a single knob to turn on messages that amd-pmc can emit to aid in
+>>> any s2idle debugging.
+>>>
+>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>> ---
+>>>  drivers/platform/x86/amd/pmc.c | 4 ++--
+>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/platform/x86/amd/pmc.c
+>> b/drivers/platform/x86/amd/pmc.c
+>>> index 427905714f79..1304cd6f13f6 100644
+>>> --- a/drivers/platform/x86/amd/pmc.c
+>>> +++ b/drivers/platform/x86/amd/pmc.c
+>>> @@ -543,7 +543,7 @@ static int amd_pmc_idlemask_read(struct
+>> amd_pmc_dev *pdev, struct device *dev,
+>>>     }
+>>>
+>>>     if (dev)
+>>> -           dev_dbg(pdev->dev, "SMU idlemask s0i3: 0x%x\n", val);
+>>> +           pm_pr_dbg("SMU idlemask s0i3: 0x%x\n", val);
+>>>
+>>>     if (s)
+>>>             seq_printf(s, "SMU idlemask : 0x%x\n", val);
+>>
+>> This does not compile, amd/pmc.c may be build as an amd-pmc.ko module
+>> and currently the pm_debug_messages_on flag used by pm_pr_dbg()
+>> is not exported to modules:
+>>
+>>   CC [M]  drivers/platform/x86/amd/pmc.o
+>>   LD [M]  drivers/platform/x86/amd/amd-pmc.o
+>>   MODPOST Module.symvers
+>> ERROR: modpost: "pm_debug_messages_on"
+>> [drivers/platform/x86/amd/amd-pmc.ko] undefined!
+>> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+>> make: *** [Makefile:1978: modpost] Error 2
+>>
+>> Regards,
+>>
+>> Hans
+>>
 > 
->   1) read LNKCTL
->   2) save LNKCTL value in ->link_ctl
->   3) write LNKCTL with "->link_ctl & ~PCI_EXP_LNKCTL_ASPMC"
->      to disable ASPM
->   4) write LNKCTL with ->link_ctl, presumably to re-enable ASPM
-> 
-> These patches close the hole between 1) and 3) where other LNKCTL
-> updates could interfere, which is definitely a good thing.
-> 
-> But the hole between 1) and 4) is much bigger and still there.  Any
-> update by the PCI core in that interval would be lost.
+> My apologies, yes I was compiling in when testing.  Let me ask if this
+> series makes sense and is "generally" agreeable though.
 
-Any update to PCI_EXP_LNKCTL_ASPMC field in that interval is lost yes, the 
-updates to _the other fields_ in LNKCTL are not lost.
+I have no objections against this series, otherwise I don't really
+have a strong opinion on this series.
 
-I know this might result in drivers/pci/pcie/aspm.c disagreeing what
-the state of the ASPM is (as shown under sysfs) compared with LNKCTL 
-value but the cause can no longer be due racing RMW. Essentially, 4) is 
-seen as an override to what core did if it changed ASPMC in between. 
-Technically, something is still "lost" like you say but for a different 
-reason than this series is trying to fix.
+If this makes sense and if exporting pm_debug_messages_on is ok
+is Rafael's call to make IMHO.
 
-> Straw-man proposal:
-> 
->   - Change pci_disable_link_state() so it ignores aspm_disabled and
->     always disables ASPM even if platform firmware hasn't granted
->     ownership.  Maybe this should warn and taint the kernel.
-> 
->   - Change drivers to use pci_disable_link_state() instead of writing
->     LNKCTL directly.
+Rafael ?
 
-I fully agree that's the direction we should be moving, yes. However, I'm 
-a bit hesitant to take that leap in one step. These drivers currently not 
-only disable ASPM but also re-enable it (assuming we guessed the intent
-right).
+Regards,
 
-If I directly implement that proposal, ASPM is not going to be re-enabled 
-when PCI core does not allowing it. Could it cause some power related 
-regression?
-
-My plan is to make another patch series after these to realize exactly 
-what you're proposing. It would allow better to isolate the problems that 
-related to the lack of ASPM.
-
-I hope this two step approach is an acceptable way forward? I can of 
-course add those patches on top of these if that would be preferrable.
+Hans
 
 
--- 
- i.
---8323329-1525169391-1685006896=:1738--
+
+
