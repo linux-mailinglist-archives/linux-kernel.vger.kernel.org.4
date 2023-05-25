@@ -2,57 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CA0710A2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE88710A2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240648AbjEYKdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S240866AbjEYKeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjEYKde (ORCPT
+        with ESMTP id S230054AbjEYKeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:33:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FF010B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:33:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF0F661382
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4966C433D2;
-        Thu, 25 May 2023 10:33:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685010812;
-        bh=lastZx5SZ9z5uaXi7f0nP+cp3xVMrDoq188o753MBdQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gbFjn/PfAY/ZC+BnbBH6Prx+vdzb0oTFDqpkPMJpHiHwGw3q1F+aWJ+KTL88cE90a
-         obSlu80dtiN2iJ52db6wbnHHeVnla8cRFSV3JdTPNb5ozbtDTLAWQ+H6YKeMvqGJ4E
-         Di+SH0YiqKLv7qKZKx8V5NdCC5KdxU1/Sjv2ZJdMPdTWIaoWAnFGlIZayI3DDG+Swl
-         JqnPtgtUFNWZLadLViX8W31azH8Dt/972ymQqN89ea7jh8bg1W6MgaJ+sf17xSl7WT
-         cenMfs4Q6uUycDWPd0q9VkwqE8vlhsxkji/respup7qXx/voWnjJKo21X+49hyf+JX
-         OOv6xq8ooMSmg==
-Date:   Thu, 25 May 2023 11:33:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Osama Muhammad <osmtendev@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] regulator: core: Fix more error checking for
- debugfs_create_dir()
-Message-ID: <22d1dd88-6bf4-444a-8ea1-61ef627ca7a0@sirena.org.uk>
-References: <cover.1684930647.git.geert+renesas@glider.be>
- <f8e4716278b0a6fe7d9e5537715eb21dcd991d1d.1684930647.git.geert+renesas@glider.be>
+        Thu, 25 May 2023 06:34:20 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5038210B
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:34:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VjRzVu4_1685010854;
+Received: from 30.97.48.238(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjRzVu4_1685010854)
+          by smtp.aliyun-inc.com;
+          Thu, 25 May 2023 18:34:15 +0800
+Message-ID: <bb7cd2ae-b461-79bb-bdde-2b8c04bb475b@linux.alibaba.com>
+Date:   Thu, 25 May 2023 18:34:13 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1Ew73XuzqX1/lYTh"
-Content-Disposition: inline
-In-Reply-To: <f8e4716278b0a6fe7d9e5537715eb21dcd991d1d.1684930647.git.geert+renesas@glider.be>
-X-Cookie: Enjoy yourself while you're still old.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH] erofs: clean up z_erofs_pcluster_readmore()
+To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org, chao@kernel.org,
+        jefflexu@linux.alibaba.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, huyue2@coolpad.com,
+        zhangwen@coolpad.com
+References: <20230525072605.17857-1-zbestahu@gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230525072605.17857-1-zbestahu@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,52 +45,22 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---1Ew73XuzqX1/lYTh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 24, 2023 at 02:22:17PM +0200, Geert Uytterhoeven wrote:
-> In case of failure, debugfs_create_dir() does not return NULL, but an
-> error pointer.  Most incorrect error checks were fixed, but the one in
-> create_regulator() was forgotten.
+On 2023/5/25 00:26, Yue Hu wrote:
+> From: Yue Hu <huyue2@coolpad.com>
+> 
+> No need end parameter since it's pointless for !backmost, we can get it
+> for backmost internally.  And we only expand the trailing edge, so the
+> newstart can be replaced with ->headoffset.
+> 
+> Also, remove linux/prefetch.h that is not used anymore after commit
+> 386292919c25 ("erofs: introduce readmore decompression strategy").
+> 
+> Signed-off-by: Yue Hu <huyue2@coolpad.com>
 
-This breaks the build:
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-/build/stage/linux/drivers/regulator/core.c:1916:11: error: expected identi=
-fier=20
-or =E2=80=98(=E2=80=99 before =E2=80=98else=E2=80=99
- 1916 |         } else {
-      |           ^~~~
-/build/stage/linux/drivers/regulator/core.c:1933:9: error: expected identif=
-ier o
-r =E2=80=98(=E2=80=99 before =E2=80=98if=E2=80=99
- 1933 |         if (!regulator_ops_is_valid(rdev, REGULATOR_CHANGE_STATUS) =
-&&
-      |         ^~
-/build/stage/linux/drivers/regulator/core.c:1937:9: error: expected identif=
-ier o
-r =E2=80=98(=E2=80=99 before =E2=80=98return=E2=80=99
- 1937 |         return regulator;
-      |         ^~~~~~
-/build/stage/linux/drivers/regulator/core.c:1938:1: error: expected identif=
-ier or =E2=80=98(=E2=80=99 before =E2=80=98}=E2=80=99 token
- 1938 | }
-      | ^
+Will test it with the following bulk later.
 
---1Ew73XuzqX1/lYTh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRvOXcACgkQJNaLcl1U
-h9BgKgf+IxF8wNfDs3nf1qMktu3v4cIvlrN/cvCtFlQohBYLfBxs2I9E3qcORK0c
-KvBo194IcIal+LDov9i6/CMMjkmvmR4VgtD3TplTb18NKBBgtYr6vi4LTVvmiqVZ
-tWp6KtaAtEazfLIlr4ysGIBK69KTzdD4ghJAFmaaIvjfVuQ7E9CrR/Elu59Ru487
-78+pURiWPCajru5USKgj1ve3gvITJ1q+I2xECqXHLgiLP/CkqXQ1RxF8RfnxNpzx
-yOMmyLfzaMvRsYbTM1yZ1madTjdo1f4WfVhk3i3tS1n8aQ3xIRXWo3z8ecYPcAyV
-MgIjjUXtZWCI2ItOEI0Oy2wkl2SQXA==
-=gwy9
------END PGP SIGNATURE-----
-
---1Ew73XuzqX1/lYTh--
+Thanks,
+Gao Xiang
