@@ -2,308 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA7B7106AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348FB7106B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237697AbjEYHrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 03:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
+        id S233186AbjEYHsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 03:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237991AbjEYHrP (ORCPT
+        with ESMTP id S239735AbjEYHsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 03:47:15 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C25910C6;
-        Thu, 25 May 2023 00:47:10 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-77483a5a350so48249839f.0;
-        Thu, 25 May 2023 00:47:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685000829; x=1687592829;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PnS3KUBRyjQPPwobBxG2JUIPPiM6c8WlbyFpnNuaGkw=;
-        b=cztDxKeNSz3B9j9Ph8v/g/b7C1l6YDh3xkeiMpqx9kiaNBOPaDuUisI9iQl/BRQ8Bd
-         HWWu0O6PnCMHpm5TaGICNVO8Hu3qE6LuWPNtr9f5pjPi/GWfx9TPCSCwBRq2Ajd8lP8d
-         gCLL/Lxyc9D9hg3EI8O8BiTpc04eTYTaT14X0Nvg/9D+Okc3D2hNVnyWwP8InjFmvDFy
-         u0vHFdiaHj1VW6mnP4hHlKbtmiLAlmmAv8e9i8KOVCD5yJxctRqLQmDgCw8o1qebnQlJ
-         JQMcoIvM7UsfNLGazC2El6ZTSTqdfeh+0HPbKzGdxkRX6akagLCKXlCjWzCKZsROJt4U
-         xidQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685000829; x=1687592829;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PnS3KUBRyjQPPwobBxG2JUIPPiM6c8WlbyFpnNuaGkw=;
-        b=hXr4X4G7t86K9nwpNzZbwVsBQVfhpgB6eFlA1llqHBSGs3d1WzoY3QROmd4zxAWAE9
-         GUTh5ZmLoXCoaSp4QTEIPQMe4vKCMobyE5IwhoH5MFX4Bwl5YhxxS/iYTvDwJMaJhHau
-         U3ztCk7MR+v9+UGTZXsykVQW+/gcVpO7sTQ0wIIosUcWGJoQaZ1a1Uzl7cMomj1UOmEK
-         /oV69QZUQgXdCGyztbuI+yWWL7GzeURZt2N9vhhL8zlPtY4UK4QqzAzYHbDBJKIiED7K
-         BmfQ58T+Az7k7GNiDk7J6UX7hoDy+CGimAs/HxFB6AcBRXUNZOStyVO+hMbGJNtzlXDc
-         WcKw==
-X-Gm-Message-State: AC+VfDyIQWW/2CKHBfZKFR7aQQyhaTlU/8ybci7VkiGp4pDD5GDBqBFf
-        KOqsHcvRO8FLUYEatvVg5UwvfBgy819olJ4WPguaWAqyOVNTtQ==
-X-Google-Smtp-Source: ACHHUZ4oIlEiVAMypWmcT1VzaZ77w0VSE82EWwJ9rvCS5CllEFhR776msnXsd3wVl5j+HJ9KuoDxd0sjRuGsDwnOI1c=
-X-Received: by 2002:a5d:818d:0:b0:776:f672:8961 with SMTP id
- u13-20020a5d818d000000b00776f6728961mr86710ion.20.1685000829291; Thu, 25 May
- 2023 00:47:09 -0700 (PDT)
+        Thu, 25 May 2023 03:48:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C851B4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 00:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685000888; x=1716536888;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=L2B6pmV1mFrHWGocabJv/c72Da4WuHufoT5udX1jxcY=;
+  b=WAL93Nd7GrUh6KlkhqbeAs8xoEgz5l+sd3FBvvbHq2iJrPQ7642bKKqe
+   9/MeF7tu2dqP/fCjFEJCTNfp/QHc0F7Pv/v0alREW06EAttilJ0Wxt+mD
+   wv0xitYouVStdZEExldObnwggQJAwD59oRTpvJoO4Mk1dnF21JUrou0Ej
+   vq20u7W2U/uctBYWFuAMJez/KHREOkVpT6xoIwK1ys6B8lNSezuVmOGi6
+   WRnJJVVTqrvJtAJLju1kpnOWxU0LtHi5Ias9pRX6rz+78e3YpVAp2g4GY
+   PChXce5GeI77ElDu8kPVLgKWiaPlwYZdNNF1YRK6ZMtFYE0DNGQCbZ8qw
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="338391137"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="338391137"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 00:48:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="828932577"
+X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
+   d="scan'208";a="828932577"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga004.jf.intel.com with ESMTP; 25 May 2023 00:48:04 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 25 May 2023 00:48:04 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 25 May 2023 00:48:04 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 25 May 2023 00:48:04 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.44) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 25 May 2023 00:48:03 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NZEqvSU6LkoYtoenrLFWsvK1j7PRsZEUjqvPFEQIQx/UyQTWrZ47wuB1ov6qjfoc3b7Wz0blR0eLXH34+47+2FjElq75GsrOwYznC+hCMc+pXoUxa0/UmdGIxuH58HUhyBSFaGnZE0svWdd3KheqiZUYrVZuXJyov3oPWqz/YYTfKBD4+1K7e3FPOwsy+OuaDRC/IlCHY+KOrnrWC60Y6WL2okjRTcIvY8KEuON/Lams4/Vq/jVIg89xHzZsKcs0Dfl1E7gzfpiJB1OgDWBigRQKjscRYrIODn2gNcYcWg0OYO2z9qrVViYiuhekt+MW9s2XaMsF9qvqCaNxkiJWNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MRXDJgOfkfCAhyt0SBzwmKGcSDK8Qkmy8mCNps0YGkw=;
+ b=W2+Rru2ZV/e2krr8fPra2oq8jeH0/09M/29pVr5NPAv6om+PimE39LiiXGefc3jdXCRbvOyPzipVKV6WsgNu2UPDOoj5x8fVNSVemSeUqwdPe2GKwLIhvpP01UbMC8QzmJzMJShTGoyp6KwDm1g8AD2llEMfBqiQPMLMQaUJCzN+Gl5+rr5btHr0J9o2yCXn9dCue7sOlaG8z+IK6MEmRi6Qc09lOYLUbSkckVieDSr5VNJAtMxU7Z7kIA/tlW+bJSZ12cgTThwIXTM36MRddLrPxWF9wqkd2UXXZ8x/jMmsNv3v1/WnG+KSpjd6WQ/F43+DZHOOItmzt/AP1q0ArQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+ by BL3PR11MB6508.namprd11.prod.outlook.com (2603:10b6:208:38f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Thu, 25 May
+ 2023 07:47:56 +0000
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::c219:56e8:1243:2a5d]) by MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::c219:56e8:1243:2a5d%3]) with mapi id 15.20.6411.028; Thu, 25 May 2023
+ 07:47:56 +0000
+Date:   Thu, 25 May 2023 15:47:36 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Mike Galbraith <efault@gmx.de>
+CC:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        Aaron Lu <aaron.lu@intel.com>, Barry Song <baohua@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] sched/fair: Introduce SIS_PAIR to wakeup task on
+ local idle core first
+Message-ID: <ZG8SmByO0g5fjOc7@chenyu5-mobl1>
+References: <20230516011159.4552-1-yu.c.chen@intel.com>
+ <19664c68f77f5b23a86e5636a17ad2cbfa073f78.camel@gmx.de>
+ <ZGNBt7vWJ3fDs5Sc@chenyu5-mobl1>
+ <795a6d9475ecb444d219a9d36dc93b48a69e960e.camel@gmx.de>
+ <ZGUHa+Si4dJbdsZN@chenyu5-mobl1>
+ <0ac968e3-cd80-6339-970d-37005876b145@amd.com>
+ <ZGWmveL2YTiXp2XR@chenyu5-mobl1>
+ <12061140-4f09-b83f-843c-2fb8ff9f6e81@amd.com>
+ <ZGrrUVZBY6qqeS0K@chenyu5-mobl1>
+ <5ffb7ebcc75c106d791d4b5c4dece4b74c551245.camel@gmx.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <5ffb7ebcc75c106d791d4b5c4dece4b74c551245.camel@gmx.de>
+X-ClientProxiedBy: SG2PR01CA0110.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:40::14) To MN0PR11MB6206.namprd11.prod.outlook.com
+ (2603:10b6:208:3c6::8)
 MIME-Version: 1.0
-References: <20230327121317.4081816-1-arnd@kernel.org>
-In-Reply-To: <20230327121317.4081816-1-arnd@kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 25 May 2023 08:46:43 +0100
-Message-ID: <CA+V-a8sTjDWwmH5HYk6zK8oaPGGM4Qhf-ftGrQzeKmbRFj4g-w@mail.gmail.com>
-Subject: Re: [PATCH 00/21] dma-mapping: unify support for cache flushes
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|BL3PR11MB6508:EE_
+X-MS-Office365-Filtering-Correlation-Id: 76e0e9ae-105e-4e7d-38b2-08db5cf45a27
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: z9pxED2nFr1uI2qfZjHtBoECbFRx6VjiRPjVqQfERnP1o1NhyMXiN/xKyYck1vfAMo92g/QxilbR9H7YYDsvIphLkPT3VPPcwUsJKNauDEKf27O85Cbgfq3tssbZI3gfG3TD3yw/YTMwEsU+u4lub4ye6dpdamvXFSnxiJiHAE5dWwcIzj2sWq7r2f5OSs/RRlKQC87rW5BM5p2+V+WB284WU9z5Ci64fF/aaeCmDJkOr1/KFZtezOy99wX98R/0o2lNSdEEWlcTnYE2TBXuCVNOhglOxSIVV33y4KD2mg2g1Iq7LA4Lx1RQ3vHgUU7yMhm6AV8a+CSsTJCulXZmwJi1Pkh0w5UCqNjXKflnuYh62HKyaQzm+kU0p+73wKQEcPy7UdFNB3SzyevO4wi6riYc25UPRXiH6tQ6GEcfPJHsn1h9FYPu0RJ5/G7bLAgsyZwaoTnEK/ExUQeC8AdzvcmBPyVyKFchxvdb8By3VFqZ183+YO2OkvWaQ3B39/38OaeR4EuFYiyzyQlsu/F4zcytdfT375BK6kCI0xHY16E=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(376002)(136003)(366004)(396003)(39860400002)(451199021)(54906003)(478600001)(33716001)(966005)(6916009)(38100700002)(4326008)(66556008)(66476007)(66946007)(41300700001)(6486002)(86362001)(82960400001)(5660300002)(7416002)(8676002)(8936002)(53546011)(9686003)(6506007)(6512007)(2906002)(186003)(26005)(83380400001)(316002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NdSCfmMnnIaq42ku/rJYstdqcZ9RpNzcPw/p+lgEBTDlAfWKixACdL8ehkIK?=
+ =?us-ascii?Q?hfLpCVg6njvKMEAUf4oSysokBG73WPQNetrdOQHkkQkQW+5yIx9eO9ahge1a?=
+ =?us-ascii?Q?yJGjdl6HO2ikbdl+Qf/nxaPIgn7LwxR23D59c7KGvBgNwL0/zGE9QtKGrW0R?=
+ =?us-ascii?Q?iV8BOG9hMDsEHlrXkfs+BhlZTkTyDmVGdl2FigrB0L5eo2K5/qW0aICoUc4e?=
+ =?us-ascii?Q?ldJN+mmg0wuhwraGQAUrsI1nnbxReEZKJ4W1f8SFBToafwHynkBcptz/oBH5?=
+ =?us-ascii?Q?TwKXxDyo4DJ43quYwPbWRjRqWFhfRykDYs15lfn9AmWVxLiAQqmVLhGQubJ6?=
+ =?us-ascii?Q?B5PbaqT0O0LwaarnJeuNj+jTkL4IDL/ME+lzeCb3zPE/e9qY4MZCFozIXMRF?=
+ =?us-ascii?Q?CrUfkBOIMimVC5uvnjr2wm11w4QM7DBWxII3tlWriD2atCswLhOym9ScH+at?=
+ =?us-ascii?Q?bRth6q1pZ4vgb5fIxrT8n1joMgTXUP7LdMoWD+NRPOtGx1l0NEwUTYAGm1xJ?=
+ =?us-ascii?Q?D2dQWVR1VsOpmmlBTVGHDELdJuKzxemU3efMUzCak4wq3WHo9lT7DDRjsiAq?=
+ =?us-ascii?Q?wg/ufOxrimQaK8o4Chb85Y86Odwp6Ca/51M6yom+vCDZKoq04y50XLsSF95X?=
+ =?us-ascii?Q?PlEwcG3O6DlHpq7p2prRR21Ey/Yy8G09RzKduURQ9cFLinRvE9oYb/27yWVy?=
+ =?us-ascii?Q?oOwIkk+6IYs2cs08LTUrx79mtAf3YJA38+B4Uxz8AZigveTo0N1i3o0ls57s?=
+ =?us-ascii?Q?GjgW1+59cTqy9GB1wqUXzgQnGsNPnQaxgpINj5dqllUOzhKUoaAlC0+iEz+o?=
+ =?us-ascii?Q?ZJu8BgzCdQZ7FfwcZXfkNJFLU03WpT3IN/vgqtt1qCLFa3O1u7iO/ajCmrIX?=
+ =?us-ascii?Q?tvpdxbrWu/2pyKRi3z5hMpDyD+jWHevuk7qQXPDNgSnyjJu1ZKEiB0N730qE?=
+ =?us-ascii?Q?J+R3KTyKPKAIdk8IeEMQda9jW3Mnuxqyj3zYUDSKLiU0iK1M4hZdn4QGG0wS?=
+ =?us-ascii?Q?qMhvgBlUWD89uvL9h+fLiLc5qXBIHRk0CMz53WsgGMdXskip/t4pL7nCv98H?=
+ =?us-ascii?Q?uHvQv2or6kQO78f+wiYwy0tsU3czpo8fU6KqTi7X7Dmg2gXXKJKHzEqHTJOE?=
+ =?us-ascii?Q?jJy93sM/gaM8nt2fgIBnq2SEXaZEiksZb6dP6sv95oQ6h5b743JVq1+r0h0F?=
+ =?us-ascii?Q?R4EpkLzR0/MT3594ON1OG5sZ7V9m5hQi/8yjr7sbtatnr2a+dU9E2G9B4kNy?=
+ =?us-ascii?Q?8r7pZnuBUM6NgZOfIBv7vWPzBLAaIWIxrivTwovevO1bzl7MSHxmnmdnJVSC?=
+ =?us-ascii?Q?a7DXDfbc2U3vt7tpNQdI+PeB0v5+4eEMTbGh+nNTbH4+yTkBTGN4hvcy1Sz5?=
+ =?us-ascii?Q?GQi9mLUfoLJqjFF+NhLEgR7r5FwPJ87ayKzjUHPIZ86+lYeZxQsfcl9NBS8T?=
+ =?us-ascii?Q?5ZjHHFglw4h3KjXzjRkw5xcjXMTbP6Kp0zC/F+fVYllAAurMl0Jx8PbiFMwB?=
+ =?us-ascii?Q?tW/HDDHV3ufa1db8+WJyOiQkkZY/v9oLtHUckmXseYujH4i/DqYwJIZoDcOW?=
+ =?us-ascii?Q?2obCyn6H0QQYlqSI8qa7fe6uixj8ANpKdYHy7Tn/?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76e0e9ae-105e-4e7d-38b2-08db5cf45a27
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2023 07:47:55.9933
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LWalJ1K9Xjc+0tAhdilgpHlfzGrkne6T7sIKl3gAiivgRARo1P/xDqPkMGyIgh66ovu7HhQLJq1hrRvqYdrlOA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6508
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 2023-05-22 at 09:10:33 +0200, Mike Galbraith wrote:
+> On Mon, 2023-05-22 at 12:10 +0800, Chen Yu wrote:
+> >
+> > Meanwhile, I looked back at Yicong's proposal on waking up task
+> > on local cluster first. It did show some improvement on Jacobsville,
+> > I guess that could also be a chance to reduce C2C latency.
+> 
+> Something else to consider is that communication data comes in many
+> size chunks and volumes, and cache footprints can easily be entirely
+> local constructs unrelated to any transferred data.
+> 
+> At one extreme of the huge spectrum of possibilities, a couple less
+> than brilliant tasks playing high speed ping-pong can bounce all over a
+> box with zero consequences, but for a pair more akin to say Einstein
+> and Bohr pondering chalkboards full of mind bending math and meeting
+> occasionally at the water cooler to exchange snarky remarks, needlessly
+> bouncing them about forces them to repopulate chalkboards, and C2C
+> traffic you try to avoid via bounce you generate via bounce.
+> 
+> Try as you may, methinks you're unlikely to succeed at avoiding C2C in
+> a box where roughly half of all paths are C2C.  What tasks have in
+> their pockets and what they'll do with a CPU at any point in time is
+> unknown and unknowable by the scheduler, dooming pinpoint placement
+> accuracy as a goal.
+>
+I guess what you mean is that, for a wakee has large local data cache
+footprint, it is not a good idea to wakeup the wakee on a remote core.
+Because in that way the wakee has to repopulate the cache from scratch.
+Yes, the problem is that currently the scheduler is lacking of metric
+to indicate the task's working set, or per-task-cache-footprint-track
+(although we have numa balancing to calculate per-task-node-statistics).
+If provided with this cache-aware metric, the wakee can be put to a candidate
+CPU where the cache locallity(either LLC or L2) is friendly to the wakee.
+Because there is no such accurate metric, the heuristic seems to be an compromised
+way to predict the task placement.
 
-On Mon, Mar 27, 2023 at 1:14=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> After a long discussion about adding SoC specific semantics for when
-> to flush caches in drivers/soc/ drivers that we determined to be
-> fundamentally flawed[1], I volunteered to try to move that logic into
-> architecture-independent code and make all existing architectures do
-> the same thing.
->
-> As we had determined earlier, the behavior is wildly different across
-> architectures, but most of the differences come down to either bugs
-> (when required flushes are missing) or extra flushes that are harmless
-> but might hurt performance.
->
-> I finally found the time to come up with an implementation of this, which
-> starts by replacing every outlier with one of the three common options:
->
->  1. architectures without speculative prefetching (hegagon, m68k,
->     openrisc, sh, sparc, and certain armv4 and xtensa implementations)
->     only flush their caches before a DMA, by cleaning write-back caches
->     (if any) before a DMA to the device, and by invalidating the caches
->     before a DMA from a device
->
->  2. arc, microblaze, mips, nios2, sh and later xtensa now follow the
->     normal 32-bit arm model and invalidate their writeback caches
->     again after a DMA from the device, to remove stale cache lines
->     that got prefetched during the DMA. arc, csky and mips used to
->     invalidate buffers also before the bidirectional DMA, but this
->     is now skipped whenever we know it gets invalidated again
->     after the DMA.
->
->  3. parisc, powerpc and riscv already flushed buffers before
->     a DMA_FROM_DEVICE, and these get moved to the arm64 behavior
->     that does the writeback before and invalidate after both
->     DMA_FROM_DEVICE and DMA_BIDIRECTIONAL in order to avoid the
->     problem of accidentally leaking stale data if the DMA does
->     not actually happen[2].
->
-> The last patch in the series replaces the architecture specific code
-> with a shared version that implements all three based on architecture
-> specific parameters that are almost always determined at compile time.
->
-> The difference between cases 1. and 2. is hardware specific, while betwee=
-n
-> 2. and 3. we need to decide which semantics we want, but I explicitly
-> avoid this question in my series and leave it to be decided later.
->
-> Another difference that I do not address here is what cache invalidation
-> does for partical cache lines. On arm32, arm64 and powerpc, a partial
-> cache line always gets written back before invalidation in order to
-> ensure that data before or after the buffer is not discarded. On all
-> other architectures, the assumption is cache lines are never shared
-> between DMA buffer and data that is accessed by the CPU. If we end up
-> always writing back dirty cache lines before a DMA (option 3 above),
-> then this point becomes moot, otherwise we should probably address this
-> in a follow-up series to document one behavior or the other and implement
-> it consistently.
->
-> Please review!
->
->       Arnd
->
-> [1] https://lore.kernel.org/all/20221212115505.36770-1-prabhakar.mahadev-=
-lad.rj@bp.renesas.com/
-> [2] https://lore.kernel.org/all/20220606152150.GA31568@willie-the-truck/
->
-> Arnd Bergmann (21):
->   openrisc: dma-mapping: flush bidirectional mappings
->   xtensa: dma-mapping: use normal cache invalidation rules
->   sparc32: flush caches in dma_sync_*for_device
->   microblaze: dma-mapping: skip extra DMA flushes
->   powerpc: dma-mapping: split out cache operation logic
->   powerpc: dma-mapping: minimize for_cpu flushing
->   powerpc: dma-mapping: always clean cache in _for_device() op
->   riscv: dma-mapping: only invalidate after DMA, not flush
->   riscv: dma-mapping: skip invalidation before bidirectional DMA
->   csky: dma-mapping: skip invalidating before DMA from device
->   mips: dma-mapping: skip invalidating before bidirectional DMA
->   mips: dma-mapping: split out cache operation logic
->   arc: dma-mapping: skip invalidating before bidirectional DMA
->   parisc: dma-mapping: use regular flush/invalidate ops
->   ARM: dma-mapping: always invalidate WT caches before DMA
->   ARM: dma-mapping: bring back dmac_{clean,inv}_range
->   ARM: dma-mapping: use arch_sync_dma_for_{device,cpu}() internally
->   ARM: drop SMP support for ARM11MPCore
->   ARM: dma-mapping: use generic form of arch_sync_dma_* helpers
->   ARM: dma-mapping: split out arch_dma_mark_clean() helper
->   dma-mapping: replace custom code with generic implementation
->
-Do you plan to send v2 for this series?
+The C2C was mainly caused by accessing global tg->load, so besides
+wakeup placement, there should also be other way to mitigate C2C,
+such as reducing the frequency of accessing tg->load.
 
-Cheers,
-Prabhakar
+Besides that, while studying the history of wake_wide(), I suddenly
+found that 10 years ago Michael has proposed exactly the same strategy to
+check if task A and B are waking up each other, if they are, put them
+together, otherwise, spread them to different LLC:
+https://lkml.org/lkml/2013/3/6/73
+And this version has finnaly evolved to what wake_wide() looks like today
+in your patch:
+https://marc.info/?l=linux-kernel&m=143688840122477
+If I understand correctly, if wake_wide() can decide whether to wakeup the
+task on an idle CPU on local LLC or remote LLC, does it also
+make sense to extend wake_wide() for SMT domain and L2 domain?
+Say, if wake_wide(p, nr_smt) returns true, then find an idle CPU on remote
+SMT domain, otherwise scan for an idle CPU in local SMT domain. In this
+case, does has_idle_core check matter?
 
->  arch/arc/mm/dma.c                          |  66 ++------
->  arch/arm/Kconfig                           |   4 +
->  arch/arm/include/asm/cacheflush.h          |  21 +++
->  arch/arm/include/asm/glue-cache.h          |   4 +
->  arch/arm/mach-oxnas/Kconfig                |   4 -
->  arch/arm/mach-oxnas/Makefile               |   1 -
->  arch/arm/mach-oxnas/headsmp.S              |  23 ---
->  arch/arm/mach-oxnas/platsmp.c              |  96 -----------
->  arch/arm/mach-versatile/platsmp-realview.c |   4 -
->  arch/arm/mm/Kconfig                        |  19 ---
->  arch/arm/mm/cache-fa.S                     |   4 +-
->  arch/arm/mm/cache-nop.S                    |   6 +
->  arch/arm/mm/cache-v4.S                     |  13 +-
->  arch/arm/mm/cache-v4wb.S                   |   4 +-
->  arch/arm/mm/cache-v4wt.S                   |  22 ++-
->  arch/arm/mm/cache-v6.S                     |  35 +---
->  arch/arm/mm/cache-v7.S                     |   6 +-
->  arch/arm/mm/cache-v7m.S                    |   4 +-
->  arch/arm/mm/dma-mapping-nommu.c            |  36 ++--
->  arch/arm/mm/dma-mapping.c                  | 181 ++++++++++-----------
->  arch/arm/mm/proc-arm1020.S                 |   4 +-
->  arch/arm/mm/proc-arm1020e.S                |   4 +-
->  arch/arm/mm/proc-arm1022.S                 |   4 +-
->  arch/arm/mm/proc-arm1026.S                 |   4 +-
->  arch/arm/mm/proc-arm920.S                  |   4 +-
->  arch/arm/mm/proc-arm922.S                  |   4 +-
->  arch/arm/mm/proc-arm925.S                  |   4 +-
->  arch/arm/mm/proc-arm926.S                  |   4 +-
->  arch/arm/mm/proc-arm940.S                  |   4 +-
->  arch/arm/mm/proc-arm946.S                  |   4 +-
->  arch/arm/mm/proc-feroceon.S                |   8 +-
->  arch/arm/mm/proc-macros.S                  |   2 +
->  arch/arm/mm/proc-mohawk.S                  |   4 +-
->  arch/arm/mm/proc-xsc3.S                    |   4 +-
->  arch/arm/mm/proc-xscale.S                  |   6 +-
->  arch/arm64/mm/dma-mapping.c                |  28 ++--
->  arch/csky/mm/dma-mapping.c                 |  46 +++---
->  arch/hexagon/kernel/dma.c                  |  44 ++---
->  arch/m68k/kernel/dma.c                     |  43 +++--
->  arch/microblaze/kernel/dma.c               |  38 ++---
->  arch/mips/mm/dma-noncoherent.c             |  75 +++------
->  arch/nios2/mm/dma-mapping.c                |  57 +++----
->  arch/openrisc/kernel/dma.c                 |  62 ++++---
->  arch/parisc/include/asm/cacheflush.h       |   6 +-
->  arch/parisc/kernel/pci-dma.c               |  33 +++-
->  arch/powerpc/mm/dma-noncoherent.c          |  76 +++++----
->  arch/riscv/mm/dma-noncoherent.c            |  51 +++---
->  arch/sh/kernel/dma-coherent.c              |  43 +++--
->  arch/sparc/Kconfig                         |   2 +-
->  arch/sparc/kernel/ioport.c                 |  38 +++--
->  arch/xtensa/Kconfig                        |   1 -
->  arch/xtensa/include/asm/cacheflush.h       |   6 +-
->  arch/xtensa/kernel/pci-dma.c               |  47 +++---
->  include/linux/dma-sync.h                   | 107 ++++++++++++
->  54 files changed, 721 insertions(+), 699 deletions(-)
->  delete mode 100644 arch/arm/mach-oxnas/headsmp.S
->  delete mode 100644 arch/arm/mach-oxnas/platsmp.c
->  create mode 100644 include/linux/dma-sync.h
->
-> --
-> 2.39.2
->
-> Cc: Vineet Gupta <vgupta@kernel.org>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: Brian Cain <bcain@quicinc.com>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Michal Simek <monstr@monstr.eu>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Cc: Conor Dooley <conor.dooley@microchip.com>
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-oxnas@groups.io
-> Cc: linux-csky@vger.kernel.org
-> Cc: linux-hexagon@vger.kernel.org
-> Cc: linux-m68k@lists.linux-m68k.org
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-openrisc@vger.kernel.org
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-riscv@lists.infradead.org
-> Cc: linux-sh@vger.kernel.org
-> Cc: sparclinux@vger.kernel.org
-> Cc: linux-xtensa@linux-xtensa.org
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+thanks,
+Chenyu
