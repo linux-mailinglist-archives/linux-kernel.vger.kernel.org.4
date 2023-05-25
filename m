@@ -2,221 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC74711282
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AF871129E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240965AbjEYRkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S239149AbjEYRlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241428AbjEYRkH (ORCPT
+        with ESMTP id S230511AbjEYRlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:40:07 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FDD19C
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:39:58 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2af2db78b38so9335841fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:39:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1685036396; x=1687628396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QvotGdSeJEkge/b3ttPXelgK85DYS8pQFKgHga3n2Gg=;
-        b=L7s7f6E/roTH2qqgoVMKc9eoLjSfY0CTExLwLbLMz9L9WKDU4qNU4wPFiLZGPzGXKT
-         qNv051C65wDRnArtGqPKM8t+QVH+MkRzjMvkGQ3Wlv6nqQPNB6hmt9JP7bHNegHJkMw9
-         y/P4aO0V555E+WaHY0x/OTi/en+RY03zmtcd4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685036396; x=1687628396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QvotGdSeJEkge/b3ttPXelgK85DYS8pQFKgHga3n2Gg=;
-        b=kmCOizcNjlmVeSKt8FS+2wRiLXGHcQB3dpa5CpnRAvravAonJAVc3MCN0VLbHT47zL
-         ekB2mIOQIhVVCO0sZI+FZrOgfqdWt4lVpmEMyYgE49c3QLcU0QjNIqW3kM/DYd5GnMrI
-         twnuZt8tbYmcNdwzeq6nAAHSnpokhPWoAdQAuWS5+AnxfWE7oT23RubHoiF84PT1PNvA
-         c2XaXmo2LLlvAfISv3+f3ZFjbvS8EHPrJNjUrOrUxe14ShyDsEjqI0z2njHbn+uT8hjJ
-         gsN7o8lc5CzdWYNHaF088oxs2H/heXPO2DaOd3par5QZYEULalzWL1hAtFIyXipU3jf/
-         LInQ==
-X-Gm-Message-State: AC+VfDyH8k/8NIQyw7QIP9b+BB9YLkjEZvA0UNzXHeMi0tF1ZBFmtu4M
-        nyQ3jq2ntMyHkifhtbbrnHkPRure9IR7gi1C00ds
-X-Google-Smtp-Source: ACHHUZ4asHjlRHQo9glk94sftK3Yhg4i4wdzARQcQ2m9eykg4+/R+RNtCbER9ZlasWSTbQ0fkuULO9/hWVZ/oEYfn/k=
-X-Received: by 2002:a05:651c:116:b0:2aa:474f:16e with SMTP id
- a22-20020a05651c011600b002aa474f016emr1095376ljb.30.1685036396440; Thu, 25
- May 2023 10:39:56 -0700 (PDT)
+        Thu, 25 May 2023 13:41:21 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B517B19D;
+        Thu, 25 May 2023 10:41:19 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PFCJM5020541;
+        Thu, 25 May 2023 17:41:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=PG5Ag7h7VCcaRLh2LfmjMf7MXYMgpeS4Kg4IZLMuQ6k=;
+ b=LjN9QLffyDBdLP7P+y62NawHGTHptw8WBKyvhgHIPoMspkdv0jb2zpTx5Aq+CJPcRcjv
+ p4qiFN1LDkHqNF7A12BclUzDHxlgSU0EK52JLJIJ1Swfy81QnsplQxQtW26492FBamZg
+ ajfA560T++XKYrYl5jjQn6b1WGkFNM6FEsDr8clM7Rfm/yWFN+2nnJoP1I9yWgBg9lY5
+ vCzVZByO8kfgbB/LgnLZqfSI9SGp3kRJtoP1V+wPHSTcwBMJzejK56IlPV5lB8pxcal5
+ wR2CngZRTvTTkde9g61NngC3b6GFoKnxzX6pI8vOKyK9SKIrgEiXKO69gmM4z1L/AdyC 8A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsqqjapfa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 17:41:08 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PHf7Vs022255
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 17:41:07 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 25 May 2023 10:41:06 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v14 00/10] add DSC 1.2 dpu supports
+Date:   Thu, 25 May 2023 10:40:48 -0700
+Message-ID: <1685036458-22683-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <CAAhSdy3tKAk1xjinwnSWan0ivdDapcLvSb+hGNynPFZMUsoB9A@mail.gmail.com>
- <fe8d716c-fb4f-1f3f-6c69-de1d8b9fb6af@ghiti.fr> <CAK9=C2X1BjZCHfYM33pZQtavu7yRqxwsypWL5OWj79bJrnDMQg@mail.gmail.com>
- <CAOnJCULpa-TJuG=TtCDOxOdUviZzWheLE-GMiU1r7GWaKn0nuQ@mail.gmail.com>
- <20230525-guacamole-swimmer-68048a73baac@wendy> <CAK9=C2WUyLxZwQO37cN-i+V+A3yxmEoaj=uE8yR8nseYTDW7oQ@mail.gmail.com>
- <20230525-postnasal-monopoly-98adb96ffaa1@wendy> <CAAhSdy06nQh4H1FP_K_-VF462mhj+F2M=4AV4QSCUGe5XVqX0g@mail.gmail.com>
- <20230525-shrapnel-precut-26500fca4a48@wendy> <CAAhSdy3SqeLdAfaojUki=ht21nr4ZUPMkW_t9M6ntQCt6Ds4Nw@mail.gmail.com>
- <20230525-citric-waged-a2f78d27eb0c@wendy>
-In-Reply-To: <20230525-citric-waged-a2f78d27eb0c@wendy>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 25 May 2023 10:39:44 -0700
-Message-ID: <CAOnJCULfC0jmiucLNMeJZwJf4QbGAN6r4B-ubUbP16KVpxrCfA@mail.gmail.com>
-Subject: Re: Bug report: kernel paniced when system hibernates
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Anup Patel <anup@brainfault.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Alexandre Ghiti <alex@ghiti.fr>, robh@kernel.org,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        jeeheng.sia@starfivetech.com, linux-kernel@vger.kernel.org,
-        palmer@rivosinc.com, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Song Shuai <suagrfillet@gmail.com>,
-        linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: BXZKcP67BeUJPN6SQbMinjTyCS9r4ap2
+X-Proofpoint-ORIG-GUID: BXZKcP67BeUJPN6SQbMinjTyCS9r4ap2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_10,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 adultscore=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 spamscore=0 phishscore=0 mlxscore=0 malwarescore=0
+ mlxlogscore=850 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250147
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 7:21=E2=80=AFAM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> On Thu, May 25, 2023 at 07:29:46PM +0530, Anup Patel wrote:
-> > On Thu, May 25, 2023 at 7:26=E2=80=AFPM Conor Dooley <conor.dooley@micr=
-ochip.com> wrote:
-> > >
-> > > On Thu, May 25, 2023 at 07:13:11PM +0530, Anup Patel wrote:
-> > > > On Thu, May 25, 2023 at 7:08=E2=80=AFPM Conor Dooley <conor.dooley@=
-microchip.com> wrote:
-> > > > >
-> > > > > On Thu, May 25, 2023 at 06:51:28PM +0530, Anup Patel wrote:
-> > > > >
-> > > > > > > We should only rely on this node name for known bad versions =
-of opensbi
-> > > > > > > IMO. Going forward, if something needs to be reserved for fir=
-mware, the
-> > > > > > > firmware should make sure that it is reserved by using the pr=
-operty for
-> > > > > > > that purpose :)
-> > > > >
-> > > > > > There is no issue with OpenSBI since it does the right thing by=
- marking
-> > > > > > memory as reserved in the DT. This real issue is with the kerne=
-l handling
-> > > > > > of reserved memory for hibernate.
-> > > > >
-> > > > > I don't think we are talking about the same thing here. I meant t=
-he
-> > > > > no-map property which OpenSBI does not set.
-> > > >
-> > > > Yes, we are talking about the same thing. It's not just OpenSBI not
-> > > > setting no-map property in reserved memory node because other
-> > > > SBI implementations would be doing the same thing (i.e. not setting
-> > > > no-map property)
-> > >
-> > > Other SBI implementations doing the same thing doesn't make it any mo=
-re
-> > > correct though, right?
-> >
-> > Like multiple folks suggested, we need DT binding for distinguishing
-> > firmware reserved memory from other reserved memory.
->
-> And I have agreed with multiple times!
->
-> > Until that
-> > happens we should either mark hibernate support as experimental
-> > or revert it.
->
-> That works for me. How about the below?
->
+This series adds the DPU side changes to support DSC 1.2 encoder. This
+was validated with both DSI DSC 1.2 panel and DP DSC 1.2 monitor.
+The DSI and DP parts will be pushed later on top of this change.
+This seriel is rebase on [1], [2] and catalog fixes from rev-4 of [3].
 
-Instead of disabling hibernate support why not revert the patch
-3335068 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
-which doesn't add any "measured" value at this point.
-However, keeping the hibernation feature on and disabling linear
-mapping will get more
-testing on hibernation. While disabling hibernation and keeping the above p=
-atch
-which doesn't have any value at all.
+[1]: https://patchwork.freedesktop.org/series/116851/
+[2]: https://patchwork.freedesktop.org/series/116615/
+[3]: https://patchwork.freedesktop.org/series/112332/
 
-We don't have a regression at this point. So either approach will work thou=
-gh.
+Abhinav Kumar (2):
+  drm/msm/dpu: add DSC blocks to the catalog of MSM8998 and SC8180X
+  drm/msm/dpu: add DSC 1.2 hw blocks for relevant chipsets
 
-If we choose to go this route, some thoughts about the commit message.
-> -- >8 --
-> From 1d4381290a1600eff9b29b8ace6be73955d9726c Mon Sep 17 00:00:00 2001
-> From: Conor Dooley <conor.dooley@microchip.com>
-> Date: Thu, 25 May 2023 15:09:08 +0100
-> Subject: [PATCH] RISC-V: mark hibernation as broken
->
-> Hibernation support depends on firmware marking its reserved
-> regions as not mappable by Linux. As things stand, the de-facto SBI
+Kuogee Hsieh (8):
+  drm/msm/dpu: set DSC flush bit correctly at MDP CTL flush register
+  drm/msm/dpu: add DPU_PINGPONG_DSC feature bit for DPU < 7.0.0
+  drm/msm/dpu: Guard PINGPONG DSC ops behind DPU_PINGPONG_DSC bit
+  drm/msm/dpu: Introduce PINGPONG_NONE to disconnect DSC from PINGPONG
+  drm/msm/dpu: add support for DSC encoder v1.2 engine
+  drm/msm/dpu: always clear every individual pending flush mask
+  drm/msm/dpu: separate DSC flush update out of interface
+  drm/msm/dpu: Tear down DSC datapath on encoder cleanup
 
-either not mappable or no save/restore capable (as We still have not
-concluded which way we want to go in)
+ drivers/gpu/drm/msm/Makefile                       |   1 +
+ .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |   7 +
+ .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    |  11 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  14 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |   7 +
+ .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   |  16 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  14 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h |  14 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  51 ++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  24 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  35 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c         |  33 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h         |  11 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c         |  14 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h         |  15 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c     | 387 +++++++++++++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h        |   3 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |   9 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c             |   7 +-
+ 19 files changed, 644 insertions(+), 29 deletions(-)
+ create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
 
-> implementation (OpenSBI) does not do this, and other implementations may
-> not do so either, resulting in kernel panics during hibernation ([1],
-> [2]).
->
+-- 
+2.7.4
 
-we should probably add more context in the commit message.
-How about adding something along these lines:
-
-As things stand, the latest version of de-facto SBI
-implementation(OpenSBI) doesn't
-do this any more to allow 1G huge page mappings by kernel. Other SBI
-implementations are probably
-doing the same. Until the commit 3335068 ("riscv: Use PUD/P4D/PGD
-pages for the linear mapping"),
-the first 2MB region of DRAM (where the typically firmware resides)
-was not mappable by kernel. However,
-enabling that mapping resulted in the kernel panics during hibernation
-([1], [2]) as the hibernation process
-tries to save/restore any mapped region even though it is marked as reserve=
-d.
-
-
-> Disable support for hibernation until such time that an SBI
-> implementation independent way to communicate what regions are reserved
-> has been agreed upon.
->
-
-Anybody who wants to test the hibernation feature must revert the
-above mentioned patch along with turning on
-the config.
-
-> Reported-by: Song Shuai <suagrfillet@gmail.com>
-> Link: https://lore.kernel.org/all/CAAYs2=3DgQvkhTeioMmqRDVGjdtNF_vhB+vm_1=
-dHJxPNi75YDQ_Q@mail.gmail.com/ [1]
-> Reported-by: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/ITXwaKfA6z8
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 13f058490608..b2495192f35a 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -801,7 +801,7 @@ menu "Power management options"
->  source "kernel/power/Kconfig"
->
->  config ARCH_HIBERNATION_POSSIBLE
-> -       def_bool y
-> +       def_bool n
->
->  config ARCH_HIBERNATION_HEADER
->         def_bool HIBERNATION
-> --
-> 2.39.2
->
-
-
---
-Regards,
-Atish
