@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3084B710320
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B00710322
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 04:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236518AbjEYC5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 22:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
+        id S237829AbjEYC55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 22:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjEYC5r (ORCPT
+        with ESMTP id S231126AbjEYC5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 22:57:47 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423F612F
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 19:57:43 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1684983419t85lva7q
+        Wed, 24 May 2023 22:57:48 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B1C139
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 19:57:44 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1684983425tx9azvf6
 Received: from localhost.localdomain ( [221.226.144.218])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 25 May 2023 10:56:57 +0800 (CST)
+        id ; Thu, 25 May 2023 10:57:03 +0800 (CST)
 X-QQ-SSF: 01200000000000303000000A0000000
-X-QQ-FEAT: 6m2HWuPn8APBKt63b3ah3TllQMoQddj48JDVm4Iepq5vRZSuXhWkDmIyJiEkQ
-        MMvn40T53r5LmKlVQsPdr7bAyetskT7oogCcohGJNvN7UewCTkHFngfiLwsab7GI7lkPqoL
-        hUOlodi0YIdrXuTQoCL2ILEPmt9iEG19lXfRne5e00JAyBeo/LRJVJK11hYEmya4nTQXBeh
-        wj3H4AoK/LJVOpUmO4+6EMM+p22e9We1hFNY4tMXwU/U1dN+3DTmK0EOBfo5m1dvTT2Jkex
-        CH+oS9ZeiuMRrxsyOK8JZr0YuD8zCH3Y92kgw/8TnFCP9w7Nl3QIj3OvbR+CgWtZcG3NKp8
-        TUruhAgK+guXxTnDBFbCZ4wFEx43f1gw7hB8RcF
+X-QQ-FEAT: jXjag1m6xl7WyIELRssET5EuttbKJzokSNielpVbJR2OiTpJeAJqTrFwO96YQ
+        tokwilre7FqbTP0hnGE/ppzEy4bGUXKgRio2t+VIoMM2VWauzbUnGHa+Sipa1RrbyDuNOKx
+        tqcxBrmnAFQ73StoonTBlSrKXKjl2PLQBKsga30zCSInjh0TED/zIWvq4tMsNQNAnCpkJ2b
+        +LvFTNStGcpt/ubUt0VFOLUKlIk15QK9A6SIzGrTD+Bb5fa5C0POkIA6UXLqL4PbE4H4BGq
+        tOb3wYkj0Rdial2N4ncNiCkaWFc0j00Ympqcu8Vo4UNBJiJsNZUxhCfOk3pEyLldJqjsgn2
+        wZqYEqOCnSmEcXUyeWpuM2qnQwOAUhUxLO5sjkUPYvR0+BKt1ZNLxG/7LKvYg==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14888827228828076966
+X-BIZMAIL-ID: 6696857243706674612
 From:   Song Shuai <songshuaishuai@tinylab.org>
 To:     catalin.marinas@arm.com, will@kernel.org, paul.walmsley@sifive.com,
         palmer@dabbelt.com, aou@eecs.berkeley.edu, chris@zankel.net,
@@ -38,10 +38,12 @@ To:     catalin.marinas@arm.com, will@kernel.org, paul.walmsley@sifive.com,
         leyfoon.tan@starfivetech.com
 Cc:     linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH 0/4] Remove WARN_ON in save_processor_state
-Date:   Thu, 25 May 2023 10:55:51 +0800
-Message-Id: <20230525025555.24104-1-songshuaishuai@tinylab.org>
+Subject: [PATCH 1/4] ARM: hibernate: remove WARN_ON in save_processor_state
+Date:   Thu, 25 May 2023 10:55:52 +0800
+Message-Id: <20230525025555.24104-2-songshuaishuai@tinylab.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20230525025555.24104-1-songshuaishuai@tinylab.org>
+References: <20230525025555.24104-1-songshuaishuai@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -59,22 +61,25 @@ During hibernation or restoration, freeze_secondary_cpus
 checks num_online_cpus via BUG_ON, and the subsequent
 save_processor_state also does the checking with WARN_ON.
 
-So remove the unnecessary checking in save_processor_state
-for ARM,arm64,riscv,xtensa architechtures.
+So remove the unnecessary checking in save_processor_state.
 
+Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
+---
+ arch/arm/kernel/hibernate.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Song Shuai (4):
-  ARM: hibernate: remove WARN_ON in save_processor_state
-  arm64: hibernate: remove WARN_ON in save_processor_state
-  riscv: hibernate: remove WARN_ON in save_processor_state
-  xtensa: hibernate: remove WARN_ON in save_processor_state
-
- arch/arm/kernel/hibernate.c    | 1 -
- arch/arm64/kernel/hibernate.c  | 1 -
- arch/riscv/kernel/hibernate.c  | 1 -
- arch/xtensa/kernel/hibernate.c | 1 -
- 4 files changed, 4 deletions(-)
-
+diff --git a/arch/arm/kernel/hibernate.c b/arch/arm/kernel/hibernate.c
+index 2373020af965..84abccf3221a 100644
+--- a/arch/arm/kernel/hibernate.c
++++ b/arch/arm/kernel/hibernate.c
+@@ -33,7 +33,6 @@ int pfn_is_nosave(unsigned long pfn)
+ 
+ void notrace save_processor_state(void)
+ {
+-	WARN_ON(num_online_cpus() != 1);
+ 	local_fiq_disable();
+ }
+ 
 -- 
 2.20.1
 
