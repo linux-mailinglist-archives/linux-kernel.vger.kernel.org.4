@@ -2,638 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7856710CD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0202710CC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241347AbjEYNBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
+        id S241230AbjEYNAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241196AbjEYNA4 (ORCPT
+        with ESMTP id S241290AbjEYNAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:00:56 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AE510E4;
-        Thu, 25 May 2023 06:00:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685019626; x=1716555626;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wF6bRgbMGI8gMENkkSkKdZ8e+y0Jpj2PF5F+u+WqUzg=;
-  b=cpeOIgNr1fcbMqz3tKkZZPggp8sxKnfIL3s0dHeZTda8wnvio7R/S+hh
-   ExF6b7/8Dw0yhWmIL4tAA+/w4W+72jARkEBOCbYT1VnvGxP6jaFQ6xfoZ
-   Eaz6krBEhaB9M3PXeCBJSbFxABIFTOTJ0ojzqQ9t9LfwLMOFkuvtk2pAv
-   BZy2fqFTylMlq+hVJW/u8/qCYaQIDg6g28+kvHmkmB298s859qVK+O0ei
-   4BT9RerPV0MYuMqgjweh1zEPCT9jjgEAN/dvPE8Z427iIwQH7ErTcvxLj
-   yj/Ukrc+8B+gmqMKExuqbAvpiWvp/97lxPOq+fd8wbUaVYfHb9WSFxchS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="351384498"
-X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
-   d="scan'208";a="351384498"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 05:59:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="817075227"
-X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
-   d="scan'208";a="817075227"
-Received: from newjersey.igk.intel.com ([10.102.20.203])
-  by fmsmga002.fm.intel.com with ESMTP; 25 May 2023 05:59:15 -0700
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 12/12] iavf: switch queue stats to libie
-Date:   Thu, 25 May 2023 14:57:46 +0200
-Message-Id: <20230525125746.553874-13-aleksander.lobakin@intel.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230525125746.553874-1-aleksander.lobakin@intel.com>
-References: <20230525125746.553874-1-aleksander.lobakin@intel.com>
+        Thu, 25 May 2023 09:00:03 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683E21B9;
+        Thu, 25 May 2023 05:59:36 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34P9K079010423;
+        Thu, 25 May 2023 12:59:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=uWU4Qmab2BHmLrbhbP6NqzbDqIcJ4DyUhfuXt6gAyH8=;
+ b=UbYDnWlRWP2jLYC70DbbhzUWIdNUXt44UQmMCvw+eIfeaHIjQ5bLl7luBJ4mxbfgZdO8
+ Eh07B6Z713pjz6acMTq2KlGNEyCxidVExLT1V8j6TGHNdrRzKCDBWpNoUpsCmF/XmUXc
+ seu84atqskpEu6bNFU1LCcwCMvGevZhYLueMf8UZ0Ge8bdaj7PXR+ErnB58rRJS7fB//
+ eKgV3YloUEMXRoIdQKx0g7PVJRwFOVJA92ue/XfoI5XMGiytZxeSw2uOGMsSd2UvBdHZ
+ ENPwAZtqXAYgwcWJ+1scBeGfoJVbs+B+i1sydfv2ycSHZZrpv7/5LXgnJRgmDuL/daDE 0w== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qstg3smry-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 12:59:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PCx9mR005851
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 12:59:09 GMT
+Received: from [10.216.31.104] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
+ 2023 05:59:04 -0700
+Message-ID: <c4a50acd-2c0a-7c18-95d8-e9145fa1ff24@quicinc.com>
+Date:   Thu, 25 May 2023 18:28:59 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v3 3/5] soc: qcom: smem: introduce qcom_smem_get_msm_id()
+To:     Robert Marko <robimarko@gmail.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <ilia.lin@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <ansuelsmth@gmail.com>
+References: <20230525120956.3095317-1-robimarko@gmail.com>
+ <20230525120956.3095317-3-robimarko@gmail.com>
+Content-Language: en-US
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <20230525120956.3095317-3-robimarko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8ojr9q1T-uIqTRYcIiURYy6SBExkdjyD
+X-Proofpoint-ORIG-GUID: 8ojr9q1T-uIqTRYcIiURYy6SBExkdjyD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-25_06,2023-05-25_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 spamscore=0 clxscore=1011 mlxlogscore=999 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305250107
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iavf is pretty much ready for using the generic libie stats, so drop all
-the custom code and just use generic definitions. The only thing is that
-it previously lacked the counter of Tx queue stops. It's present in the
-other drivers, so add it here as well.
-The rest is straightforward. There were two fields in the Tx stats
-struct, which didn't belong there. The first one has never been used,
-wipe it; and move the other to the queue structure. Plus move around
-a couple fields in &iavf_ring to account stats structs' alignment.
 
-Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
----
- .../net/ethernet/intel/iavf/iavf_ethtool.c    | 87 ++++------------
- drivers/net/ethernet/intel/iavf/iavf_main.c   |  2 +
- drivers/net/ethernet/intel/iavf/iavf_txrx.c   | 98 ++++++++++---------
- drivers/net/ethernet/intel/iavf/iavf_txrx.h   | 47 +++------
- 4 files changed, 87 insertions(+), 147 deletions(-)
+On 5/25/2023 5:39 PM, Robert Marko wrote:
+> Introduce a helper to return the SoC SMEM ID, which is used to identify the
+> exact SoC model as there may be differences in the same SoC family.
+>
+> Currently, cpufreq-nvmem does this completely in the driver and there has
+> been more interest expresed for other drivers to use this information so
+> lets expose a common helper to prevent redoing it in individual drivers
+> since this field is present on every SMEM table version.
+>
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+> Changes in v3:
+> * Change export to EXPORT_SYMBOL_GPL
+> * Use an argument for returning SoC ID
+> * Update kerneldoc
+> ---
+>   drivers/soc/qcom/smem.c       | 24 ++++++++++++++++++++++++
+>   include/linux/soc/qcom/smem.h |  2 ++
+>   2 files changed, 26 insertions(+)
+>
+> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+> index bc98520c4969..185ed0da11a1 100644
+> --- a/drivers/soc/qcom/smem.c
+> +++ b/drivers/soc/qcom/smem.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/sizes.h>
+>   #include <linux/slab.h>
+>   #include <linux/soc/qcom/smem.h>
+> +#include <linux/soc/qcom/socinfo.h>
+>   
+>   /*
+>    * The Qualcomm shared memory system is a allocate only heap structure that
+> @@ -772,6 +773,29 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
+>   }
+>   EXPORT_SYMBOL_GPL(qcom_smem_virt_to_phys);
+>   
+> +/**
+> + * qcom_smem_get_msm_id() - return the SoC ID
+> + * @id:	On success, we return the SoC ID here.
+> + *
+> + * Look up SoC ID from HW/SW build ID and return it.
+> + *
+> + * Return: 0 on success, negative errno on failure.
+> + */
+> +int qcom_smem_get_msm_id(u32 *id)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-index de3050c02b6f..0dcf50d75f86 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-@@ -46,16 +46,6 @@ struct iavf_stats {
- 	.stat_offset = offsetof(_type, _stat) \
- }
- 
--/* Helper macro for defining some statistics related to queues */
--#define IAVF_QUEUE_STAT(_name, _stat) \
--	IAVF_STAT(struct iavf_ring, _name, _stat)
--
--/* Stats associated with a Tx or Rx ring */
--static const struct iavf_stats iavf_gstrings_queue_stats[] = {
--	IAVF_QUEUE_STAT("%s-%u.packets", stats.packets),
--	IAVF_QUEUE_STAT("%s-%u.bytes", stats.bytes),
--};
--
- /**
-  * iavf_add_one_ethtool_stat - copy the stat into the supplied buffer
-  * @data: location to store the stat value
-@@ -141,43 +131,6 @@ __iavf_add_ethtool_stats(u64 **data, void *pointer,
- #define iavf_add_ethtool_stats(data, pointer, stats) \
- 	__iavf_add_ethtool_stats(data, pointer, stats, ARRAY_SIZE(stats))
- 
--/**
-- * iavf_add_queue_stats - copy queue statistics into supplied buffer
-- * @data: ethtool stats buffer
-- * @ring: the ring to copy
-- *
-- * Queue statistics must be copied while protected by
-- * u64_stats_fetch_begin, so we can't directly use iavf_add_ethtool_stats.
-- * Assumes that queue stats are defined in iavf_gstrings_queue_stats. If the
-- * ring pointer is null, zero out the queue stat values and update the data
-- * pointer. Otherwise safely copy the stats from the ring into the supplied
-- * buffer and update the data pointer when finished.
-- *
-- * This function expects to be called while under rcu_read_lock().
-- **/
--static void
--iavf_add_queue_stats(u64 **data, struct iavf_ring *ring)
--{
--	const unsigned int size = ARRAY_SIZE(iavf_gstrings_queue_stats);
--	const struct iavf_stats *stats = iavf_gstrings_queue_stats;
--	unsigned int start;
--	unsigned int i;
--
--	/* To avoid invalid statistics values, ensure that we keep retrying
--	 * the copy until we get a consistent value according to
--	 * u64_stats_fetch_retry. But first, make sure our ring is
--	 * non-null before attempting to access its syncp.
--	 */
--	do {
--		start = !ring ? 0 : u64_stats_fetch_begin(&ring->syncp);
--		for (i = 0; i < size; i++)
--			iavf_add_one_ethtool_stat(&(*data)[i], ring, &stats[i]);
--	} while (ring && u64_stats_fetch_retry(&ring->syncp, start));
--
--	/* Once we successfully copy the stats in, update the data pointer */
--	*data += size;
--}
--
- /**
-  * __iavf_add_stat_strings - copy stat strings into ethtool buffer
-  * @p: ethtool supplied buffer
-@@ -237,8 +190,6 @@ static const struct iavf_stats iavf_gstrings_stats[] = {
- 
- #define IAVF_STATS_LEN	ARRAY_SIZE(iavf_gstrings_stats)
- 
--#define IAVF_QUEUE_STATS_LEN	ARRAY_SIZE(iavf_gstrings_queue_stats)
--
- /**
-  * iavf_get_link_ksettings - Get Link Speed and Duplex settings
-  * @netdev: network interface device structure
-@@ -308,18 +259,22 @@ static int iavf_get_link_ksettings(struct net_device *netdev,
-  **/
- static int iavf_get_sset_count(struct net_device *netdev, int sset)
- {
--	/* Report the maximum number queues, even if not every queue is
--	 * currently configured. Since allocation of queues is in pairs,
--	 * use netdev->real_num_tx_queues * 2. The real_num_tx_queues is set
--	 * at device creation and never changes.
--	 */
-+	u32 num;
- 
--	if (sset == ETH_SS_STATS)
--		return IAVF_STATS_LEN +
--			(IAVF_QUEUE_STATS_LEN * 2 *
--			 netdev->real_num_tx_queues);
--	else
-+	switch (sset) {
-+	case ETH_SS_STATS:
-+		/* Per-queue */
-+		num = libie_rq_stats_get_sset_count();
-+		num += libie_sq_stats_get_sset_count();
-+		num *= netdev->real_num_tx_queues;
-+
-+		/* Global */
-+		num += IAVF_STATS_LEN;
-+
-+		return num;
-+	default:
- 		return -EINVAL;
-+	}
- }
- 
- /**
-@@ -346,15 +301,15 @@ static void iavf_get_ethtool_stats(struct net_device *netdev,
- 	 * it to iterate over rings' stats.
- 	 */
- 	for (i = 0; i < adapter->num_active_queues; i++) {
--		struct iavf_ring *ring;
-+		const struct iavf_ring *ring;
- 
- 		/* Tx rings stats */
--		ring = &adapter->tx_rings[i];
--		iavf_add_queue_stats(&data, ring);
-+		libie_sq_stats_get_data(&data, &adapter->tx_rings[i].sq_stats);
- 
- 		/* Rx rings stats */
- 		ring = &adapter->rx_rings[i];
--		iavf_add_queue_stats(&data, ring);
-+		libie_rq_stats_get_data(&data, &ring->rq_stats,
-+					ring->rx_pages ? ring->pool : NULL);
- 	}
- 	rcu_read_unlock();
- }
-@@ -376,10 +331,8 @@ static void iavf_get_stat_strings(struct net_device *netdev, u8 *data)
- 	 * real_num_tx_queues for both Tx and Rx queues.
- 	 */
- 	for (i = 0; i < netdev->real_num_tx_queues; i++) {
--		iavf_add_stat_strings(&data, iavf_gstrings_queue_stats,
--				      "tx", i);
--		iavf_add_stat_strings(&data, iavf_gstrings_queue_stats,
--				      "rx", i);
-+		libie_sq_stats_get_strings(&data, i);
-+		libie_rq_stats_get_strings(&data, i);
- 	}
- }
- 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 120bb6a09ceb..4a702795ddb3 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -1581,6 +1581,7 @@ static int iavf_alloc_queues(struct iavf_adapter *adapter)
- 		tx_ring->itr_setting = IAVF_ITR_TX_DEF;
- 		if (adapter->flags & IAVF_FLAG_WB_ON_ITR_CAPABLE)
- 			tx_ring->flags |= IAVF_TXR_FLAGS_WB_ON_ITR;
-+		u64_stats_init(&tx_ring->sq_stats.syncp);
- 
- 		rx_ring = &adapter->rx_rings[i];
- 		rx_ring->queue_index = i;
-@@ -1588,6 +1589,7 @@ static int iavf_alloc_queues(struct iavf_adapter *adapter)
- 		rx_ring->dev = &adapter->pdev->dev;
- 		rx_ring->count = adapter->rx_desc_count;
- 		rx_ring->itr_setting = IAVF_ITR_RX_DEF;
-+		u64_stats_init(&rx_ring->rq_stats.syncp);
- 	}
- 
- 	adapter->num_active_queues = num_active_queues;
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.c b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-index 1de67a70f045..12308e7c9ec0 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.c
-@@ -158,6 +158,9 @@ void iavf_detect_recover_hung(struct iavf_vsi *vsi)
- 	for (i = 0; i < vsi->back->num_active_queues; i++) {
- 		tx_ring = &vsi->back->tx_rings[i];
- 		if (tx_ring && tx_ring->desc) {
-+			const struct libie_sq_stats *st = &tx_ring->sq_stats;
-+			u32 start;
-+
- 			/* If packet counter has not changed the queue is
- 			 * likely stalled, so force an interrupt for this
- 			 * queue.
-@@ -165,8 +168,13 @@ void iavf_detect_recover_hung(struct iavf_vsi *vsi)
- 			 * prev_pkt_ctr would be negative if there was no
- 			 * pending work.
- 			 */
--			packets = tx_ring->stats.packets & INT_MAX;
--			if (tx_ring->tx_stats.prev_pkt_ctr == packets) {
-+			do {
-+				start = u64_stats_fetch_begin(&st->syncp);
-+				packets = u64_stats_read(&st->packets) &
-+					  INT_MAX;
-+			} while (u64_stats_fetch_retry(&st->syncp, start));
-+
-+			if (tx_ring->prev_pkt_ctr == packets) {
- 				iavf_force_wb(vsi, tx_ring->q_vector);
- 				continue;
- 			}
-@@ -175,7 +183,7 @@ void iavf_detect_recover_hung(struct iavf_vsi *vsi)
- 			 * to iavf_get_tx_pending()
- 			 */
- 			smp_rmb();
--			tx_ring->tx_stats.prev_pkt_ctr =
-+			tx_ring->prev_pkt_ctr =
- 			  iavf_get_tx_pending(tx_ring, true) ? packets : -1;
- 		}
- 	}
-@@ -194,10 +202,10 @@ void iavf_detect_recover_hung(struct iavf_vsi *vsi)
- static bool iavf_clean_tx_irq(struct iavf_vsi *vsi,
- 			      struct iavf_ring *tx_ring, int napi_budget)
- {
-+	struct libie_sq_onstack_stats stats = { };
- 	int i = tx_ring->next_to_clean;
- 	struct iavf_tx_buffer *tx_buf;
- 	struct iavf_tx_desc *tx_desc;
--	unsigned int total_bytes = 0, total_packets = 0;
- 	unsigned int budget = IAVF_DEFAULT_IRQ_WORK;
- 
- 	tx_buf = &tx_ring->tx_bi[i];
-@@ -224,8 +232,8 @@ static bool iavf_clean_tx_irq(struct iavf_vsi *vsi,
- 		tx_buf->next_to_watch = NULL;
- 
- 		/* update the statistics for this packet */
--		total_bytes += tx_buf->bytecount;
--		total_packets += tx_buf->gso_segs;
-+		stats.bytes += tx_buf->bytecount;
-+		stats.packets += tx_buf->gso_segs;
- 
- 		/* free the skb */
- 		napi_consume_skb(tx_buf->skb, napi_budget);
-@@ -282,12 +290,9 @@ static bool iavf_clean_tx_irq(struct iavf_vsi *vsi,
- 
- 	i += tx_ring->count;
- 	tx_ring->next_to_clean = i;
--	u64_stats_update_begin(&tx_ring->syncp);
--	tx_ring->stats.bytes += total_bytes;
--	tx_ring->stats.packets += total_packets;
--	u64_stats_update_end(&tx_ring->syncp);
--	tx_ring->q_vector->tx.total_bytes += total_bytes;
--	tx_ring->q_vector->tx.total_packets += total_packets;
-+	libie_sq_napi_stats_add(&tx_ring->sq_stats, &stats);
-+	tx_ring->q_vector->tx.total_bytes += stats.bytes;
-+	tx_ring->q_vector->tx.total_packets += stats.packets;
- 
- 	if (tx_ring->flags & IAVF_TXR_FLAGS_WB_ON_ITR) {
- 		/* check to see if there are < 4 descriptors
-@@ -306,10 +311,10 @@ static bool iavf_clean_tx_irq(struct iavf_vsi *vsi,
- 
- 	/* notify netdev of completed buffers */
- 	netdev_tx_completed_queue(txring_txq(tx_ring),
--				  total_packets, total_bytes);
-+				  stats.packets, stats.bytes);
- 
- #define TX_WAKE_THRESHOLD ((s16)(DESC_NEEDED * 2))
--	if (unlikely(total_packets && netif_carrier_ok(tx_ring->netdev) &&
-+	if (unlikely(stats.packets && netif_carrier_ok(tx_ring->netdev) &&
- 		     (IAVF_DESC_UNUSED(tx_ring) >= TX_WAKE_THRESHOLD))) {
- 		/* Make sure that anybody stopping the queue after this
- 		 * sees the new next_to_clean.
-@@ -320,7 +325,7 @@ static bool iavf_clean_tx_irq(struct iavf_vsi *vsi,
- 		   !test_bit(__IAVF_VSI_DOWN, vsi->state)) {
- 			netif_wake_subqueue(tx_ring->netdev,
- 					    tx_ring->queue_index);
--			++tx_ring->tx_stats.restart_queue;
-+			libie_stats_inc_one(&tx_ring->sq_stats, restarts);
- 		}
- 	}
- 
-@@ -675,7 +680,7 @@ int iavf_setup_tx_descriptors(struct iavf_ring *tx_ring)
- 
- 	tx_ring->next_to_use = 0;
- 	tx_ring->next_to_clean = 0;
--	tx_ring->tx_stats.prev_pkt_ctr = -1;
-+	tx_ring->prev_pkt_ctr = -1;
- 	return 0;
- 
- err:
-@@ -731,7 +736,7 @@ void iavf_free_rx_resources(struct iavf_ring *rx_ring)
- 	kfree(rx_ring->rx_pages);
- 	rx_ring->rx_pages = NULL;
- 
--	page_pool_destroy(rx_ring->pool);
-+	libie_rx_page_pool_destroy(rx_ring->pool, &rx_ring->rq_stats);
- 	rx_ring->dev = dev;
- 
- 	if (rx_ring->desc) {
-@@ -760,8 +765,6 @@ int iavf_setup_rx_descriptors(struct iavf_ring *rx_ring)
- 	if (!rx_ring->rx_pages)
- 		return ret;
- 
--	u64_stats_init(&rx_ring->syncp);
--
- 	/* Round up to nearest 4K */
- 	rx_ring->size = rx_ring->count * sizeof(union iavf_32byte_rx_desc);
- 	rx_ring->size = ALIGN(rx_ring->size, 4096);
-@@ -863,10 +866,8 @@ static u32 __iavf_alloc_rx_pages(struct iavf_ring *rx_ring, u32 to_refill,
- 		dma_addr_t dma;
- 
- 		page = page_pool_alloc_pages(pool, gfp);
--		if (!page) {
--			rx_ring->rx_stats.alloc_page_failed++;
-+		if (!page)
- 			break;
--		}
- 
- 		rx_ring->rx_pages[ntu] = page;
- 		dma = page_pool_get_dma_addr(page);
-@@ -1090,25 +1091,23 @@ static struct sk_buff *iavf_build_skb(struct page *page, u32 size)
- 
- /**
-  * iavf_is_non_eop - process handling of non-EOP buffers
-- * @rx_ring: Rx ring being processed
-  * @rx_desc: Rx descriptor for current buffer
-- * @skb: Current socket buffer containing buffer in progress
-+ * @stats: NAPI poll local stats to update
-  *
-  * This function updates next to clean.  If the buffer is an EOP buffer
-  * this function exits returning false, otherwise it will place the
-  * sk_buff in the next buffer to be chained and return true indicating
-  * that this is in fact a non-EOP buffer.
-  **/
--static bool iavf_is_non_eop(struct iavf_ring *rx_ring,
--			    union iavf_rx_desc *rx_desc,
--			    struct sk_buff *skb)
-+static bool iavf_is_non_eop(union iavf_rx_desc *rx_desc,
-+			    struct libie_rq_onstack_stats *stats)
- {
- 	/* if we are the last buffer then there is nothing else to do */
- #define IAVF_RXD_EOF BIT(IAVF_RX_DESC_STATUS_EOF_SHIFT)
- 	if (likely(iavf_test_staterr(rx_desc, IAVF_RXD_EOF)))
- 		return false;
- 
--	rx_ring->rx_stats.non_eop_descs++;
-+	stats->fragments++;
- 
- 	return true;
- }
-@@ -1127,8 +1126,8 @@ static bool iavf_is_non_eop(struct iavf_ring *rx_ring,
-  **/
- static int iavf_clean_rx_irq(struct iavf_ring *rx_ring, int budget)
- {
--	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
- 	const gfp_t gfp = GFP_ATOMIC | __GFP_NOWARN;
-+	struct libie_rq_onstack_stats stats = { };
- 	u32 to_refill = IAVF_DESC_UNUSED(rx_ring);
- 	struct page_pool *pool = rx_ring->pool;
- 	struct sk_buff *skb = rx_ring->skb;
-@@ -1145,9 +1144,13 @@ static int iavf_clean_rx_irq(struct iavf_ring *rx_ring, int budget)
- 		u64 qword;
- 
- 		/* return some buffers to hardware, one at a time is too slow */
--		if (to_refill >= IAVF_RX_BUFFER_WRITE)
-+		if (to_refill >= IAVF_RX_BUFFER_WRITE) {
- 			to_refill = __iavf_alloc_rx_pages(rx_ring, to_refill,
- 							  gfp);
-+			if (unlikely(to_refill))
-+				libie_stats_inc_one(&rx_ring->rq_stats,
-+						    alloc_page_fail);
-+		}
- 
- 		rx_desc = IAVF_RX_DESC(rx_ring, ntc);
- 
-@@ -1195,7 +1198,8 @@ static int iavf_clean_rx_irq(struct iavf_ring *rx_ring, int budget)
- 		/* exit if we failed to retrieve a buffer */
- 		if (!skb) {
- 			page_pool_put_page(pool, page, size, true);
--			rx_ring->rx_stats.alloc_buff_failed++;
-+			libie_stats_inc_one(&rx_ring->rq_stats,
-+					    build_skb_fail);
- 			break;
- 		}
- 
-@@ -1207,7 +1211,7 @@ static int iavf_clean_rx_irq(struct iavf_ring *rx_ring, int budget)
- 
- 		prefetch(IAVF_RX_DESC(rx_ring, ntc));
- 
--		if (iavf_is_non_eop(rx_ring, rx_desc, skb))
-+		if (iavf_is_non_eop(rx_desc, &stats))
- 			continue;
- 
- 		/* ERR_MASK will only have valid bits if EOP set, and
-@@ -1227,7 +1231,7 @@ static int iavf_clean_rx_irq(struct iavf_ring *rx_ring, int budget)
- 		}
- 
- 		/* probably a little skewed due to removing CRC */
--		total_rx_bytes += skb->len;
-+		stats.bytes += skb->len;
- 
- 		qword = le64_to_cpu(rx_desc->wb.qword1.status_error_len);
- 		rx_ptype = (qword & IAVF_RXD_QW1_PTYPE_MASK) >>
-@@ -1249,7 +1253,7 @@ static int iavf_clean_rx_irq(struct iavf_ring *rx_ring, int budget)
- 		skb = NULL;
- 
- 		/* update budget accounting */
--		total_rx_packets++;
-+		stats.packets++;
- 	}
- 
- 	rx_ring->next_to_clean = ntc;
-@@ -1260,16 +1264,16 @@ static int iavf_clean_rx_irq(struct iavf_ring *rx_ring, int budget)
- 		/* guarantee a trip back through this routine if there was
- 		 * a failure
- 		 */
--		if (unlikely(to_refill))
-+		if (unlikely(to_refill)) {
-+			libie_stats_inc_one(&rx_ring->rq_stats,
-+					    alloc_page_fail);
- 			cleaned_count = budget;
-+		}
- 	}
- 
--	u64_stats_update_begin(&rx_ring->syncp);
--	rx_ring->stats.packets += total_rx_packets;
--	rx_ring->stats.bytes += total_rx_bytes;
--	u64_stats_update_end(&rx_ring->syncp);
--	rx_ring->q_vector->rx.total_packets += total_rx_packets;
--	rx_ring->q_vector->rx.total_bytes += total_rx_bytes;
-+	libie_rq_napi_stats_add(&rx_ring->rq_stats, &stats);
-+	rx_ring->q_vector->rx.total_packets += stats.packets;
-+	rx_ring->q_vector->rx.total_bytes += stats.bytes;
- 
- 	return cleaned_count;
- }
-@@ -1448,10 +1452,8 @@ int iavf_napi_poll(struct napi_struct *napi, int budget)
- 			return budget - 1;
- 		}
- tx_only:
--		if (arm_wb) {
--			q_vector->tx.ring[0].tx_stats.tx_force_wb++;
-+		if (arm_wb)
- 			iavf_enable_wb_on_itr(vsi, q_vector);
--		}
- 		return budget;
- 	}
- 
-@@ -1910,6 +1912,7 @@ bool __iavf_chk_linearize(struct sk_buff *skb)
- int __iavf_maybe_stop_tx(struct iavf_ring *tx_ring, int size)
- {
- 	netif_stop_subqueue(tx_ring->netdev, tx_ring->queue_index);
-+	libie_stats_inc_one(&tx_ring->sq_stats, stops);
- 	/* Memory barrier before checking head and tail */
- 	smp_mb();
- 
-@@ -1919,7 +1922,8 @@ int __iavf_maybe_stop_tx(struct iavf_ring *tx_ring, int size)
- 
- 	/* A reprieve! - use start_queue because it doesn't call schedule */
- 	netif_start_subqueue(tx_ring->netdev, tx_ring->queue_index);
--	++tx_ring->tx_stats.restart_queue;
-+	libie_stats_inc_one(&tx_ring->sq_stats, restarts);
-+
- 	return 0;
- }
- 
-@@ -2100,7 +2104,7 @@ static netdev_tx_t iavf_xmit_frame_ring(struct sk_buff *skb,
- 			return NETDEV_TX_OK;
- 		}
- 		count = iavf_txd_use_count(skb->len);
--		tx_ring->tx_stats.tx_linearize++;
-+		libie_stats_inc_one(&tx_ring->sq_stats, linearized);
- 	}
- 
- 	/* need: 1 descriptor per page * PAGE_SIZE/IAVF_MAX_DATA_PER_TXD,
-@@ -2110,7 +2114,7 @@ static netdev_tx_t iavf_xmit_frame_ring(struct sk_buff *skb,
- 	 * otherwise try next time
- 	 */
- 	if (iavf_maybe_stop_tx(tx_ring, count + 4 + 1)) {
--		tx_ring->tx_stats.tx_busy++;
-+		libie_stats_inc_one(&tx_ring->sq_stats, busy);
- 		return NETDEV_TX_BUSY;
- 	}
- 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_txrx.h b/drivers/net/ethernet/intel/iavf/iavf_txrx.h
-index 8fbe549ce6a5..64c93d6fa54d 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_txrx.h
-+++ b/drivers/net/ethernet/intel/iavf/iavf_txrx.h
-@@ -4,6 +4,8 @@
- #ifndef _IAVF_TXRX_H_
- #define _IAVF_TXRX_H_
- 
-+#include <linux/net/intel/libie/stats.h>
-+
- /* Interrupt Throttling and Rate Limiting Goodies */
- #define IAVF_DEFAULT_IRQ_WORK      256
- 
-@@ -201,27 +203,6 @@ struct iavf_tx_buffer {
- 	u32 tx_flags;
- };
- 
--struct iavf_queue_stats {
--	u64 packets;
--	u64 bytes;
--};
--
--struct iavf_tx_queue_stats {
--	u64 restart_queue;
--	u64 tx_busy;
--	u64 tx_done_old;
--	u64 tx_linearize;
--	u64 tx_force_wb;
--	int prev_pkt_ctr;
--	u64 tx_lost_interrupt;
--};
--
--struct iavf_rx_queue_stats {
--	u64 non_eop_descs;
--	u64 alloc_page_failed;
--	u64 alloc_buff_failed;
--};
--
- /* some useful defines for virtchannel interface, which
-  * is the only remaining user of header split
-  */
-@@ -272,21 +253,9 @@ struct iavf_ring {
- #define IAVF_TXR_FLAGS_VLAN_TAG_LOC_L2TAG2	BIT(4)
- #define IAVF_RXR_FLAGS_VLAN_TAG_LOC_L2TAG2_2	BIT(5)
- 
--	/* stats structs */
--	struct iavf_queue_stats	stats;
--	struct u64_stats_sync syncp;
--	union {
--		struct iavf_tx_queue_stats tx_stats;
--		struct iavf_rx_queue_stats rx_stats;
--	};
--
--	unsigned int size;		/* length of descriptor ring in bytes */
--	dma_addr_t dma;			/* physical address of ring */
--
- 	struct iavf_vsi *vsi;		/* Backreference to associated VSI */
- 	struct iavf_q_vector *q_vector;	/* Backreference to associated vector */
- 
--	struct rcu_head rcu;		/* to avoid race on free */
- 	struct sk_buff *skb;		/* When iavf_clean_rx_ring_irq() must
- 					 * return before it sees the EOP for
- 					 * the current packet, we save that skb
-@@ -295,6 +264,18 @@ struct iavf_ring {
- 					 * iavf_clean_rx_ring_irq() is called
- 					 * for this ring.
- 					 */
-+
-+	/* stats structs */
-+	union {
-+		struct libie_sq_stats sq_stats;
-+		struct libie_rq_stats rq_stats;
-+	};
-+
-+	int prev_pkt_ctr;		/* For stall detection */
-+	unsigned int size;		/* length of descriptor ring in bytes */
-+	dma_addr_t dma;			/* physical address of ring */
-+
-+	struct rcu_head rcu;		/* to avoid race on free */
- } ____cacheline_internodealigned_in_smp;
- 
- #define IAVF_ITR_ADAPTIVE_MIN_INC	0x0002
--- 
-2.40.1
 
+I think, MSM  is not the only platform which will leverage this API. 
+qcom_smem_get_soc_id() / qcom_smem_get_cpu_id() would make more sense 
+than qcom_smem_get_msm_id() ?
+
+
+> +{
+> +	size_t len;
+> +	struct socinfo *info;
+> +
+> +	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, &len);
+
+
+len is unused after this, can we just pass NULL? Did a quick check on 
+the code, if we pass the address, size of the item will be updated, else no.
+
+
+> +	if (IS_ERR(info))
+> +		return PTR_ERR(info);
+> +
+> +	*id = info->id;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_smem_get_msm_id);
+> +
+>   static int qcom_smem_get_sbl_version(struct qcom_smem *smem)
+>   {
+>   	struct smem_header *header;
+> diff --git a/include/linux/soc/qcom/smem.h b/include/linux/soc/qcom/smem.h
+> index 86e1b358688a..cb204ad6373c 100644
+> --- a/include/linux/soc/qcom/smem.h
+> +++ b/include/linux/soc/qcom/smem.h
+> @@ -11,4 +11,6 @@ int qcom_smem_get_free_space(unsigned host);
+>   
+>   phys_addr_t qcom_smem_virt_to_phys(void *p);
+>   
+> +int qcom_smem_get_msm_id(u32 *id);
+> +
+>   #endif
