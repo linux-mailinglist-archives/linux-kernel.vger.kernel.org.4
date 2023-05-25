@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4CD710583
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9191710585
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbjEYFyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 01:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S234258AbjEYFyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 01:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjEYFxs (ORCPT
+        with ESMTP id S237630AbjEYFy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 01:53:48 -0400
+        Thu, 25 May 2023 01:54:26 -0400
 Received: from ubuntu20 (unknown [193.203.214.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9253519C
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:53:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D39E132
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:54:04 -0700 (PDT)
 Received: by ubuntu20 (Postfix, from userid 1003)
-        id 11D5CE1D3E; Thu, 25 May 2023 13:52:42 +0800 (CST)
+        id 2AA0DE1D15; Thu, 25 May 2023 13:54:03 +0800 (CST)
 From:   Yang Yang <yang.yang29@zte.com.cn>
 To:     akpm@linux-foundation.org, david@redhat.com
 Cc:     yang.yang29@zte.com.cn, imbrenda@linux.ibm.com,
         jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
-        xu.xin16@zte.com.cn
-Subject: [PATCH v10 3/5] ksm: add ksm zero pages for each process
-Date:   Thu, 25 May 2023 13:52:40 +0800
-Message-Id: <20230525055240.27324-1-yang.yang29@zte.com.cn>
+        xu.xin16@zte.com.cn, shr@devkernel.io
+Subject: [PATCH v10 4/5] ksm: consider KSM-placed zeropages when calculating KSM profit
+Date:   Thu, 25 May 2023 13:54:01 +0800
+Message-Id: <20230525055401.27375-1-yang.yang29@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <202305251341580149313@zte.com.cn>
 References: <202305251341580149313@zte.com.cn>
@@ -45,149 +45,79 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: xu xin <xu.xin16@zte.com.cn>
 
-As the number of ksm zero pages is not included in ksm_merging_pages per
-process when enabling use_zero_pages, it's unclear of how many actual
-pages are merged by KSM. To let users accurately estimate their memory
-demands when unsharing KSM zero-pages, it's necessary to show KSM zero-
-pages per process. In addition, it help users to know the actual KSM
-profit because KSM-placed zero pages are also benefit from KSM.
-
-since unsharing zero pages placed by KSM accurately is achieved, then
-tracking empty pages merging and unmerging is not a difficult thing any
-longer.
-
-Since we already have /proc/<pid>/ksm_stat, just add the information of
-'ksm_zero_pages' in it.
+When use_zero_pages is enabled, the calculation of ksm profit is not
+correct because ksm zero pages is not counted in. So update the
+calculation of KSM profit including the documentation.
 
 Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+Acked-by: David Hildenbrand <david@redhat.com>
 Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
 Cc: Yang Yang <yang.yang29@zte.com.cn>
+Cc: Jiang Xuexin <jiang.xuexin@zte.com.cn>
+Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
 ---
- fs/proc/base.c           | 1 +
- include/linux/ksm.h      | 8 +++++---
- include/linux/mm_types.h | 9 +++++++--
- mm/khugepaged.c          | 2 +-
- mm/ksm.c                 | 1 +
- mm/memory.c              | 4 ++--
- 6 files changed, 17 insertions(+), 8 deletions(-)
+ Documentation/admin-guide/mm/ksm.rst | 18 +++++++++++-------
+ mm/ksm.c                             |  4 ++--
+ 2 files changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index 05452c3b9872..eb2e498e3b8d 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -3207,6 +3207,7 @@ static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *ns,
- 	mm = get_task_mm(task);
- 	if (mm) {
- 		seq_printf(m, "ksm_rmap_items %lu\n", mm->ksm_rmap_items);
-+		seq_printf(m, "ksm_zero_pages %lu\n", mm->ksm_zero_pages);
- 		seq_printf(m, "ksm_merging_pages %lu\n", mm->ksm_merging_pages);
- 		seq_printf(m, "ksm_process_profit %ld\n", ksm_process_profit(mm));
- 		mmput(mm);
-diff --git a/include/linux/ksm.h b/include/linux/ksm.h
-index e80aa49009b2..c2dd786a30e1 100644
---- a/include/linux/ksm.h
-+++ b/include/linux/ksm.h
-@@ -35,10 +35,12 @@ void __ksm_exit(struct mm_struct *mm);
+diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
+index 6cc919dbfd55..5c5be7bd84b8 100644
+--- a/Documentation/admin-guide/mm/ksm.rst
++++ b/Documentation/admin-guide/mm/ksm.rst
+@@ -203,21 +203,25 @@ several times, which are unprofitable memory consumed.
+ 1) How to determine whether KSM save memory or consume memory in system-wide
+    range? Here is a simple approximate calculation for reference::
  
- extern unsigned long ksm_zero_pages;
+-	general_profit =~ pages_sharing * sizeof(page) - (all_rmap_items) *
++	general_profit =~ ksm_saved_pages * sizeof(page) - (all_rmap_items) *
+ 			  sizeof(rmap_item);
  
--static inline void ksm_might_unmap_zero_page(pte_t pte)
-+static inline void ksm_might_unmap_zero_page(struct mm_struct *mm, pte_t pte)
- {
--	if (is_ksm_zero_pte(pte))
-+	if (is_ksm_zero_pte(pte)) {
- 		ksm_zero_pages--;
-+		mm->ksm_zero_pages--;
-+	}
- }
+-   where all_rmap_items can be easily obtained by summing ``pages_sharing``,
+-   ``pages_shared``, ``pages_unshared`` and ``pages_volatile``.
++   where ksm_saved_pages equals to the sum of ``pages_sharing`` +
++   ``ksm_zero_pages`` of the system, and all_rmap_items can be easily
++   obtained by summing ``pages_sharing``, ``pages_shared``, ``pages_unshared``
++   and ``pages_volatile``.
  
- static inline int ksm_fork(struct mm_struct *mm, struct mm_struct *oldmm)
-@@ -109,7 +111,7 @@ static inline void ksm_exit(struct mm_struct *mm)
- {
- }
+ 2) The KSM profit inner a single process can be similarly obtained by the
+    following approximate calculation::
  
--static inline void ksm_might_unmap_zero_page(pte_t pte)
-+static inline void ksm_might_unmap_zero_page(struct mm_struct *mm, pte_t pte)
- {
- }
+-	process_profit =~ ksm_merging_pages * sizeof(page) -
++	process_profit =~ ksm_saved_pages * sizeof(page) -
+ 			  ksm_rmap_items * sizeof(rmap_item).
  
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 306a3d1a0fa6..14f781509812 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -777,7 +777,7 @@ struct mm_struct {
- #ifdef CONFIG_KSM
- 		/*
- 		 * Represent how many pages of this process are involved in KSM
--		 * merging.
-+		 * merging (not including ksm_zero_pages).
- 		 */
- 		unsigned long ksm_merging_pages;
- 		/*
-@@ -785,7 +785,12 @@ struct mm_struct {
- 		 * including merged and not merged.
- 		 */
- 		unsigned long ksm_rmap_items;
--#endif
-+		/*
-+		 * Represent how many empty pages are merged with kernel zero
-+		 * pages when enabling KSM use_zero_pages.
-+		 */
-+		unsigned long ksm_zero_pages;
-+#endif /* CONFIG_KSM */
- #ifdef CONFIG_LRU_GEN
- 		struct {
- 			/* this mm_struct is on lru_gen_mm_list */
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 3f293e2436f3..225d98744d2e 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -712,7 +712,7 @@ static void __collapse_huge_page_copy_succeeded(pte_t *pte,
- 				spin_lock(ptl);
- 				ptep_clear(vma->vm_mm, address, _pte);
- 				spin_unlock(ptl);
--				ksm_might_unmap_zero_page(pteval);
-+				ksm_might_unmap_zero_page(vma->vm_mm, pteval);
- 			}
- 		} else {
- 			src_page = pte_page(pteval);
+-   where ksm_merging_pages is shown under the directory ``/proc/<pid>/``,
+-   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``. The process profit
+-   is also shown in ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
++   where ksm_saved_pages equals to the sum of ``ksm_merging_pages`` and
++   ``ksm_zero_pages``, both of which are shown under the directory
++   ``/proc/<pid>/ksm_stat``, and ksm_rmap_items is also shown in
++   ``/proc/<pid>/ksm_stat``. The process profit is also shown in
++   ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
+ 
+ From the perspective of application, a high ratio of ``ksm_rmap_items`` to
+ ``ksm_merging_pages`` means a bad madvise-applied policy, so developers or
 diff --git a/mm/ksm.c b/mm/ksm.c
-index d3ed90159322..07a6fe7d7c99 100644
+index 07a6fe7d7c99..1c7d0e215c47 100644
 --- a/mm/ksm.c
 +++ b/mm/ksm.c
-@@ -1231,6 +1231,7 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
- 		 */
- 		newpte = pte_mkdirty(pte_mkspecial(pfn_pte(page_to_pfn(kpage), vma->vm_page_prot)));
- 		ksm_zero_pages++;
-+		mm->ksm_zero_pages++;
- 		/*
- 		 * We're replacing an anonymous page with a zero page, which is
- 		 * not anonymous. We need to do proper accounting otherwise we
-diff --git a/mm/memory.c b/mm/memory.c
-index 15e6bd757eab..811a98fb403e 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1416,7 +1416,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
- 			zap_install_uffd_wp_if_needed(vma, addr, pte, details,
- 						      ptent);
- 			if (unlikely(!page)) {
--				ksm_might_unmap_zero_page(ptent);
-+				ksm_might_unmap_zero_page(mm, ptent);
- 				continue;
- 			}
+@@ -3090,7 +3090,7 @@ static void wait_while_offlining(void)
+ #ifdef CONFIG_PROC_FS
+ long ksm_process_profit(struct mm_struct *mm)
+ {
+-	return mm->ksm_merging_pages * PAGE_SIZE -
++	return (long)(mm->ksm_merging_pages + mm->ksm_zero_pages) * PAGE_SIZE -
+ 		mm->ksm_rmap_items * sizeof(struct ksm_rmap_item);
+ }
+ #endif /* CONFIG_PROC_FS */
+@@ -3371,7 +3371,7 @@ static ssize_t general_profit_show(struct kobject *kobj,
+ {
+ 	long general_profit;
  
-@@ -3122,7 +3122,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
- 				inc_mm_counter(mm, MM_ANONPAGES);
- 			}
- 		} else {
--			ksm_might_unmap_zero_page(vmf->orig_pte);
-+			ksm_might_unmap_zero_page(mm, vmf->orig_pte);
- 			inc_mm_counter(mm, MM_ANONPAGES);
- 		}
- 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+-	general_profit = ksm_pages_sharing * PAGE_SIZE -
++	general_profit = (ksm_pages_sharing + ksm_zero_pages) * PAGE_SIZE -
+ 				ksm_rmap_items * sizeof(struct ksm_rmap_item);
+ 
+ 	return sysfs_emit(buf, "%ld\n", general_profit);
 -- 
 2.15.2
