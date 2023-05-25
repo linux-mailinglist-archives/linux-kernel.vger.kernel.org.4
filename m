@@ -2,109 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A2A71094F
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CDE710953
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 11:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240728AbjEYJ4Q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 05:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
+        id S240747AbjEYJ4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 05:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240696AbjEYJ4N (ORCPT
+        with ESMTP id S240760AbjEYJ4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 05:56:13 -0400
-Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2941A1;
-        Thu, 25 May 2023 02:56:07 -0700 (PDT)
-Received: from mail5.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 39D033A1F6E;
-        Thu, 25 May 2023 11:56:06 +0200 (CEST)
-Received: from mail5.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 2581F3A1F1A;
-        Thu, 25 May 2023 11:56:06 +0200 (CEST)
-X-TM-AS-ERS: 10.181.10.102-127.5.254.253
-X-TM-AS-SMTP: 1.0 bXgyLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
-        Q==
-X-DDEI-TLS-USAGE: Used
-Received: from mx2.dmz.swissbit.com (mx2.dmz.swissbit.com [10.181.10.102])
-        by mail5.swissbit.com (Postfix) with ESMTPS;
-        Thu, 25 May 2023 11:56:06 +0200 (CEST)
-From:   Christian Loehle <CLoehle@hyperstone.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     Avri Altman <avri.altman@wdc.com>
-Subject: [PATCHv2 1/2] mmc: block: ioctl: do write error check for spi
-Thread-Topic: [PATCHv2 1/2] mmc: block: ioctl: do write error check for spi
-Thread-Index: AdmO7rHviS91U1oAQZuuTphsBGwqww==
-Date:   Thu, 25 May 2023 09:56:04 +0000
-Message-ID: <55920f880c9742f486f64aa44e25508e@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 25 May 2023 05:56:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8FD1A8
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 02:56:34 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q27hv-000883-9M; Thu, 25 May 2023 11:56:31 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q27ht-002h38-Ud; Thu, 25 May 2023 11:56:29 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q27ht-007oDK-Cl; Thu, 25 May 2023 11:56:29 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Philipp Marek <philipp@marek.priv.at>
+Subject: [PATCH 1/3] w1: gpio: Don't use platform data for driver data
+Date:   Thu, 25 May 2023 11:56:22 +0200
+Message-Id: <20230525095624.615350-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27648.006
-X-TMASE-Result: 10--4.065800-10.000000
-X-TMASE-MatchedRID: ktgZsDp28T8DFgoHQs6fmr3+Qwz7LRxRIQTCbSdwtuLAuQ0xDMaXkH4q
-        tYI9sRE/7wJL2+8U4LGdvqdyyw/iEE5gqNn1dvU1zr16YOzjZ100YL9SJPufXyxMw0FMkBlZ1Oc
-        bCqcD38mHDkT9mJ2wf7U4DFGRfvg/lwV2iaAfSWf+xOhjarOnHmVV1G+Ck2l7+gtHj7OwNO0UQC
-        QtpNwWeprn8sNK/mnnWzV3P5Z+pOyDhg8vyIWpG6Qdb7n0u0KZ
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: f78f32c9-a9c6-45b6-a790-0f36f2e56b7b-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5440; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Jr4jdd4Vt9tRKMjOFoYlMijWrtsLO2vVIlPaYdkD+R0=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkbzDFc/Nj9ZzPpm5eilXnslC+/f1q4jaQBR/up uPTvCurhC2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZG8wxQAKCRCPgPtYfRL+ TqJ/B/9dVbYK5JxkcaW3vYtvn3QzSxxKTL3tWtV1yUQxGu21tRypwnhsil9xJpgASJkFt9GkmnD MBJg+tHqB0NNnWxbSKDD6exSeNn4HRuRd1ehOVeJ/ZimFUFVZis06cE86oUyGYT/euAMUEL/4SP KrLkRgpnSGo+O9yTUjwKXoXbZohExbMPBfasjTPtweyv2nTNelA9GRYlpn0/Fl74ankM9/u/bP5 kBMHqwRrSK4seqQef5gwjk2ZafLQsyYYGHQuqpFjkcq5IHs4YER52TrwnSDj4HOXJkpmxdbubQ/ +xFEIn45wrQzSFOdmW2uOrv4hX9/UBPLUs1r/XkLvU/jPSdm
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SPI doesn't have the usual PROG path we can check for error bits
-after moving back to TRAN. Instead it holds the line LOW until
-completion. We can then check if the card shows any errors or
-is in IDLE state, indicating the line is no longer LOW because
-the card was reset.
+struct device's .platform_data isn't for drivers to write to. For
+driver-specific data there is .driver_data instead.
 
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+As there is no in-tree platform that provides w1_gpio_platform_data,
+drop the include file and replace it by a local struct w1_gpio_ddata.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/mmc/core/block.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/w1/masters/w1-gpio.c | 56 +++++++++++++++++-------------------
+ include/linux/w1-gpio.h      | 22 --------------
+ 2 files changed, 27 insertions(+), 51 deletions(-)
+ delete mode 100644 include/linux/w1-gpio.h
 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index d920c4178389..e46330815484 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -178,6 +178,7 @@ static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
- 			       int recovery_mode,
- 			       struct mmc_queue *mq);
- static void mmc_blk_hsq_req_done(struct mmc_request *mrq);
-+static int mmc_spi_err_check(struct mmc_card *card);
+diff --git a/drivers/w1/masters/w1-gpio.c b/drivers/w1/masters/w1-gpio.c
+index e45acb6d916e..8d65db65178c 100644
+--- a/drivers/w1/masters/w1-gpio.c
++++ b/drivers/w1/masters/w1-gpio.c
+@@ -9,7 +9,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+-#include <linux/w1-gpio.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/of_platform.h>
+ #include <linux/err.h>
+@@ -18,9 +17,16 @@
  
- static struct mmc_blk_data *mmc_blk_get(struct gendisk *disk)
+ #include <linux/w1.h>
+ 
++struct w1_gpio_ddata {
++	struct gpio_desc *gpiod;
++	struct gpio_desc *pullup_gpiod;
++	void (*enable_external_pullup)(int enable);
++	unsigned int pullup_duration;
++};
++
+ static u8 w1_gpio_set_pullup(void *data, int delay)
  {
-@@ -608,6 +609,11 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
- 	if ((card->host->caps & MMC_CAP_WAIT_WHILE_BUSY) && use_r1b_resp)
- 		return 0;
+-	struct w1_gpio_platform_data *pdata = data;
++	struct w1_gpio_ddata *pdata = data;
  
-+	if (mmc_host_is_spi(card->host)) {
-+		if (idata->ic.write_flag || r1b_resp || cmd.flags & MMC_RSP_SPI_BUSY)
-+			return mmc_spi_err_check(card);
-+		return err;
-+	}
- 	/* Ensure RPMB/R1B command has completed by polling with CMD13. */
- 	if (idata->rpmb || r1b_resp)
- 		err = mmc_poll_for_busy(card, busy_timeout_ms, false,
+ 	if (delay) {
+ 		pdata->pullup_duration = delay;
+@@ -46,14 +52,14 @@ static u8 w1_gpio_set_pullup(void *data, int delay)
+ 
+ static void w1_gpio_write_bit(void *data, u8 bit)
+ {
+-	struct w1_gpio_platform_data *pdata = data;
++	struct w1_gpio_ddata *pdata = data;
+ 
+ 	gpiod_set_value(pdata->gpiod, bit);
+ }
+ 
+ static u8 w1_gpio_read_bit(void *data)
+ {
+-	struct w1_gpio_platform_data *pdata = data;
++	struct w1_gpio_ddata *pdata = data;
+ 
+ 	return gpiod_get_value(pdata->gpiod) ? 1 : 0;
+ }
+@@ -69,35 +75,25 @@ MODULE_DEVICE_TABLE(of, w1_gpio_dt_ids);
+ static int w1_gpio_probe(struct platform_device *pdev)
+ {
+ 	struct w1_bus_master *master;
+-	struct w1_gpio_platform_data *pdata;
++	struct w1_gpio_ddata *pdata;
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *np = dev->of_node;
+ 	/* Enforce open drain mode by default */
+ 	enum gpiod_flags gflags = GPIOD_OUT_LOW_OPEN_DRAIN;
+ 	int err;
+ 
+-	if (of_have_populated_dt()) {
+-		pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
+-		if (!pdata)
+-			return -ENOMEM;
++	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
++	if (!pdata)
++		return -ENOMEM;
+ 
+-		/*
+-		 * This parameter means that something else than the gpiolib has
+-		 * already set the line into open drain mode, so we should just
+-		 * driver it high/low like we are in full control of the line and
+-		 * open drain will happen transparently.
+-		 */
+-		if (of_property_present(np, "linux,open-drain"))
+-			gflags = GPIOD_OUT_LOW;
+-
+-		pdev->dev.platform_data = pdata;
+-	}
+-	pdata = dev_get_platdata(dev);
+-
+-	if (!pdata) {
+-		dev_err(dev, "No configuration data\n");
+-		return -ENXIO;
+-	}
++	/*
++	 * This parameter means that something else than the gpiolib has
++	 * already set the line into open drain mode, so we should just
++	 * driver it high/low like we are in full control of the line and
++	 * open drain will happen transparently.
++	 */
++	if (of_property_present(np, "linux,open-drain"))
++		gflags = GPIOD_OUT_LOW;
+ 
+ 	master = devm_kzalloc(dev, sizeof(struct w1_bus_master),
+ 			GFP_KERNEL);
+@@ -152,7 +148,7 @@ static int w1_gpio_probe(struct platform_device *pdev)
+ static int w1_gpio_remove(struct platform_device *pdev)
+ {
+ 	struct w1_bus_master *master = platform_get_drvdata(pdev);
+-	struct w1_gpio_platform_data *pdata = dev_get_platdata(&pdev->dev);
++	struct w1_gpio_ddata *pdata = master->data;
+ 
+ 	if (pdata->enable_external_pullup)
+ 		pdata->enable_external_pullup(0);
+@@ -167,7 +163,8 @@ static int w1_gpio_remove(struct platform_device *pdev)
+ 
+ static int __maybe_unused w1_gpio_suspend(struct device *dev)
+ {
+-	struct w1_gpio_platform_data *pdata = dev_get_platdata(dev);
++	struct w1_bus_master *master = dev_get_drvdata(dev);
++	struct w1_gpio_ddata *pdata = master->data;
+ 
+ 	if (pdata->enable_external_pullup)
+ 		pdata->enable_external_pullup(0);
+@@ -177,7 +174,8 @@ static int __maybe_unused w1_gpio_suspend(struct device *dev)
+ 
+ static int __maybe_unused w1_gpio_resume(struct device *dev)
+ {
+-	struct w1_gpio_platform_data *pdata = dev_get_platdata(dev);
++	struct w1_bus_master *master = dev_get_drvdata(dev);
++	struct w1_gpio_ddata *pdata = master->data;
+ 
+ 	if (pdata->enable_external_pullup)
+ 		pdata->enable_external_pullup(1);
+diff --git a/include/linux/w1-gpio.h b/include/linux/w1-gpio.h
+deleted file mode 100644
+index 3495fd0dc790..000000000000
+--- a/include/linux/w1-gpio.h
++++ /dev/null
+@@ -1,22 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * w1-gpio interface to platform code
+- *
+- * Copyright (C) 2007 Ville Syrjala <syrjala@sci.fi>
+- */
+-#ifndef _LINUX_W1_GPIO_H
+-#define _LINUX_W1_GPIO_H
+-
+-struct gpio_desc;
+-
+-/**
+- * struct w1_gpio_platform_data - Platform-dependent data for w1-gpio
+- */
+-struct w1_gpio_platform_data {
+-	struct gpio_desc *gpiod;
+-	struct gpio_desc *pullup_gpiod;
+-	void (*enable_external_pullup)(int enable);
+-	unsigned int pullup_duration;
+-};
+-
+-#endif /* _LINUX_W1_GPIO_H */
+
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
 -- 
-2.37.3
-
-
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
+2.39.2
 
