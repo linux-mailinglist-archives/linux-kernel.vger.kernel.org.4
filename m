@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0C8711A2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF93E711A31
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 00:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242113AbjEYWaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 18:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S234814AbjEYWdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 18:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjEYWaO (ORCPT
+        with ESMTP id S231964AbjEYWdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 18:30:14 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEFA189
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:30:13 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacfa4eefebso412265276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:30:13 -0700 (PDT)
+        Thu, 25 May 2023 18:33:43 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B6E95
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:33:42 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-2561e5fcdffso194210a91.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 15:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685053812; x=1687645812;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tpe07KW4MlBzxlGn7n37Z+ZqlMCf6ry7/JhPxHNLhGc=;
-        b=gnIqfD78xjJBrl22JS5xn0bJm2eRs9S14W4Wng9ZmN/KRqAlYoQCuuH4TE99W8J0Gw
-         DqJTar/YTthPR0dQielI1FOXVatroR8HUJuyf+cuNIIxNech7uODHv0p8Rzqq304rN4v
-         sZzHeaLXRJQ+32bQ8wm/EDFDhmOzwzoPHYf8Ii381bdvMLoWClbe+59CLtJmE+43626j
-         2NulVW9L0ULrslMvVfoO5v8PHnvaaxbEjYq9SEnxNW6qg8LvT3/FJcdb4a0cmKIxPt00
-         hlLUHZv6s2N42FO7nOEg3vvryPM+OO6YjcCIl3fy6jbjMCoQSEjzb3ex13zRiIkaYEFY
-         OOZw==
+        d=gmail.com; s=20221208; t=1685054021; x=1687646021;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=it1+6Jg22xuuOE9SYPAN/iwlzZWUeu8495FiEy3sBB4=;
+        b=LPvC+uHpAP0av52DhugHetYXjt4cMNNYKSwV2HzaHLIBMRWuQ4Pja4It29dCkjjjxo
+         0X1A+e+/EkNNd4XcWvNZ4WMzmbrNTNS2UibgKnA+QMW1rrtnIrptgVvvDeEzekwu6wkI
+         6D/Nk09iPiFSMp2k0OHcc+NPZZBu5iPJmbne15OaEcNMz1T34sAZFmfNXTLi0kI7mbpb
+         ER9wzYIh93XU+DyxZhOu//36NsgCHgJBdJzHqhp6pFO+2IpqufododvHGaxrnFqMh5+5
+         +/ETeTOCeCsYvcKkG0vRzyLyXFOHb3JrGU2n7UYG480gjBnP78CbOZ5WeQmwZJ8Bx82b
+         IHLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685053812; x=1687645812;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tpe07KW4MlBzxlGn7n37Z+ZqlMCf6ry7/JhPxHNLhGc=;
-        b=ianGZL7RfrJlQACnifApIPclk2c7BUti2pn1HY0gUDe/sKXO+zBmD6ec7xjviNZh1M
-         9jVdSiwQZ+t7lse0rXDRCAMkhv6t7i/kYjkBMsE7LuNIRx8QZJTNsqg1muxsLiB7CbUa
-         8zBnIKLRmPdr2pCSuq2S1Ye5gCsRKYtNBiljKdgBzUITTATc2rHOFSCgpiRU72oDEu0X
-         a98a8NcpTA40aYnildmHrFtedvZJe/VnWYw9FiMgLbNHBBU8HUcL3EVjRlvNw05A1T8S
-         QXl3Nb+OWdDGWzjkVywx4yqaGLEoD1ImxCEy1tImt+fFvwdJuq9coUkll/qzC0cLWX0h
-         On5Q==
-X-Gm-Message-State: AC+VfDwkc31kxWT56ALE8kW/I2x/AvN7Qoh1XAvva79K/bV9yXz4tSO2
-        D+nUA1Kw4k+3W4oq7+8A1UBlDXfYLkI=
-X-Google-Smtp-Source: ACHHUZ62cNRvxG25DIpG9Icp/006GZJVCqE64XxsrFxfdoy7ebQaEM9QJ0+Xwo1aB7s3oHXb9fFnwi+6caE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:5485:0:b0:ba7:3724:37dc with SMTP id
- i127-20020a255485000000b00ba7372437dcmr2251497ybb.13.1685053812610; Thu, 25
- May 2023 15:30:12 -0700 (PDT)
-Date:   Thu, 25 May 2023 15:30:11 -0700
-In-Reply-To: <2d7f7f80-278d-9fcf-cfc4-c433e95d9842@gmail.com>
-Mime-Version: 1.0
-References: <20230427095333.35038-1-abusse@amazon.com> <2d7f7f80-278d-9fcf-cfc4-c433e95d9842@gmail.com>
-Message-ID: <ZG/hc+9/2BraMrZB@google.com>
-Subject: Re: [PATCH 0/2] KVM support for Intel PMU v5 fixed function PMC bitmap
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Anselm Busse <abusse@amazon.com>, dwmw@amazon.co.uk,
-        hborghor@amazon.de, sironi@amazon.de,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685054021; x=1687646021;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=it1+6Jg22xuuOE9SYPAN/iwlzZWUeu8495FiEy3sBB4=;
+        b=TZQrzWY7YCprDMcVbsjcPIh4zrBFL5bP0H5Qx1qFF501f8ApbcXv+LFV+IRzLx171q
+         yWVm4kxflwJhPs+MR1h3QsJ3ySBAK2BdfGhmAaurslEJRCneXGDSgMct7g6W1PgcXrUG
+         REhk3pcKYdeCqdEHQL7LdndwgkH0M2JFDYQj15CxTbBcsfmbWybXbb/XNDxwVKNb1piC
+         mqjb921xBgBMw6w/ouOX8U8Hfn1UU36ZRd89SNo0rubJ/pio4Agz6Z/iUFVGWTjYgAgj
+         9K7kCMgm9hbxOwVpSXx60g9o22WF76HvlrsoVJzt7BABd+vd38ToOUhrHLfg26xioOQo
+         Z2Ng==
+X-Gm-Message-State: AC+VfDy4vn4V2nJx51q+0byZQkJHPWwnuv64s5TViLUkud0lbvxz8fVt
+        oXSvdaFlY4g47U85knQgnfuAsTxlGpNYDqLh4Ykw9g7v3+k=
+X-Google-Smtp-Source: ACHHUZ6t0QJ7YQpCpJi+CO5H2M5VDiG9VJSR4X8q/Jyc6UBpQX/qJ2MAhwjTgB1kJZ3tLOpIxEDkLnnFNffIaExm6Jo=
+X-Received: by 2002:a17:90a:3189:b0:253:8c39:642 with SMTP id
+ j9-20020a17090a318900b002538c390642mr271989pjb.5.1685054021219; Thu, 25 May
+ 2023 15:33:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+ <b9da41bb-b7b6-2fc6-caac-b01b6719334@google.com> <CAHbLzkpdWqLM1+Jb+rzVjxGyRBUtJFU_2O7=7PtE0dNgsvXSrQ@mail.gmail.com>
+ <CAHbLzkpOs4fz5NuAzQDdMRQYDLn6HzR1CHQoU5OYZyPW1GQmHg@mail.gmail.com>
+ <3d548f45-9ff9-d73a-83e0-bdd312f524@google.com> <CAHbLzkrkGx-+OVLexWAx0THeOsD1C1DHt2VjgnkYJe-MqeW3Zw@mail.gmail.com>
+ <7538c751-9bee-75f9-50a5-1bc12f919e8e@google.com>
+In-Reply-To: <7538c751-9bee-75f9-50a5-1bc12f919e8e@google.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 25 May 2023 15:33:29 -0700
+Message-ID: <CAHbLzkobBuHGKdEXh02e54Vzd_1yyvuShKUYMxTGWtqGXrrVYQ@mail.gmail.com>
+Subject: Re: [PATCH 25/31] mm/gup: remove FOLL_SPLIT_PMD use of pmd_trans_unstable()
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023, Like Xu wrote:
-> On 27/4/2023 5:53 pm, Anselm Busse wrote:
-> > Starting with v5, the Intel PMU allows to indicate the available fixed
-> > function PMCs not only through CPUID.0AH.EDX[4:0] but also through a
-> > bit mask in CPUID.0AH.ECX. According to the SDM the OS can consider a
-> > fix function PMC i supported for:
-> > 
-> > CPUID.0AH.ECX[i] || (CPUID.0AH.EDX[4:0] > i)
-> 
-> Yes, this feature is attractive for virtualization scenarios, and it gives
-> flexibility to control which fixed counters are available or not in the
-> virtual machine.
-> 
-> However, currently KVM/x86 also supports Intel PMU V2, so I would expect
-> that we will review the enablement code for v3 and v4 first.
+On Thu, May 25, 2023 at 2:16=E2=80=AFPM Hugh Dickins <hughd@google.com> wro=
+te:
+>
+> On Wed, 24 May 2023, Yang Shi wrote:
+> > On Tue, May 23, 2023 at 9:26=E2=80=AFPM Hugh Dickins <hughd@google.com>=
+ wrote:
+> > > On Mon, 22 May 2023, Yang Shi wrote:
+> > >
+> > > > For other unstable cases, it will return -ENOMEM instead of -EBUSY.
+> > >
+> > > I don't think so: the possibly-failing __pte_alloc() only gets called
+> > > in the pmd_none() case.
+> >
+> > I mean what if pmd is not none for huge zero page. If it is not
+> > pmd_none pte_alloc() just returns 0,
+>
+> Yes, I agree with you on that.
+>
+> > then returns -ENOMEM instead of -EBUSY.
+>
+> But disagree with you on that.
+>
+>                 return pte_alloc(mm, pmd) ? ERR_PTR(-ENOMEM) :
+>                         follow_page_pte(vma, address, pmd, flags, &ctx->p=
+gmap);
+>
+> Doesn't that say that if pte_alloc() returns 0, then follow_page_mask()
+> will call follow_page_pte() and return whatever that returns?
 
-Looking at v3, I think we probably want to skip straight to v5.  I don't see a sane
-way for KVM to emulate/virtualize AnyThread, which comes in v3 without a separate
-CPUID feature flag.  The SDM even calls out that it'd be a mess to deal with in a
-virtualized environment.  v5 introduces a CPUID bit to allow deprecating AnyThread,
-i.e. would give KVM the ability to advertise a sane vPMU model to userspace.
-Amusingly, KVM advertises "edx.split.anythread_deprecated = 1" for v1+, so maybe
-we don't even need to do any enabling?  At glance, I don't see any other changes
-in v3 that require KVM support.
+Err... you are right. I misread the code. Anyway it returns -ENOMEM
+instead of -EBUSY when pmd is none and pte alloc fails. Returning
+-ENOMEM does make sense for this case. Is it worth some words in the
+commit log for the slight behavior change?
 
-v4 looks to be an entirely different story than v3 though.  So I agree with Like
-that we need to enable v3 and v4 before advertising support for v5.  And KVM *does*
-need to actually advertise v5.  Emulating the fixed counter bitmap without a way to
-tell userspace about the functionality will create a mess.
-
-TL;DR: If y'all want the shiny features in v5, please enable v3 and v4 first.  I'm
-totally fine taking a series to go all the way to v5 (might even be preferred due
-to the AnyThread crud), but I don't want to advertise v5 without supporting the
-required v3/v4 features.
-
-> Ref: https://lore.kernel.org/kvm/CALMp9eQVnk8gkOpX5AHhaCr8-5Fe=qNuX8PUP1Gv2H5FSYmHSw@mail.gmail.com/
-
-I agree 100% with Jim, the bitmask stuff is firmly v5+.
+>
+> > Or it is impossible that pmd end up being pmd_huge_trans or
+> > !pmd_present? It should be very unlikely, for example, migration does
+> > skip huge zero page, but I'm not sure whether there is any corner case
+> > that I missed.
+>
+> I'm assuming both are possible there (but not asserting that they are).
+>
+> Hugh
