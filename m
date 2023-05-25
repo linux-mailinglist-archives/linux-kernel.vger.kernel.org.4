@@ -2,187 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7B7710C29
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5EB710C2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240340AbjEYMb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 08:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S241025AbjEYMd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 08:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241025AbjEYMbw (ORCPT
+        with ESMTP id S234820AbjEYMdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 08:31:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB924E4F
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 05:31:18 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QRnRS02qWzYslp;
-        Thu, 25 May 2023 20:29:07 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 25 May 2023 20:31:15 +0800
-Message-ID: <3de796ad-a570-090a-bd61-fa9ca0b2b4a7@huawei.com>
-Date:   Thu, 25 May 2023 20:31:15 +0800
+        Thu, 25 May 2023 08:33:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C6C12F;
+        Thu, 25 May 2023 05:33:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4281760B70;
+        Thu, 25 May 2023 12:33:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F38C433EF;
+        Thu, 25 May 2023 12:33:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685018030;
+        bh=WwuJIMk0ASgoxwnOktjJhHCWL86S4p4sEIeupWlyQeM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SDBX1zmYPcqsRMMCAemYBOSVgszCtQonTA8o1DAdib8QXlakORJDRYus5rZ/EwuKr
+         ijRsGYc5cteo7Tj0F7NrSUDpEa7n1Sw4Hc3whujqhje7DkYPRtcY9j3VWqNJnLj3Bf
+         AlVy16XSemuyg3rRTEdCIJnyf2hlABBiMW746UIGGO44p6dItFydqjr7eElN04lAgY
+         q8u3rWzIE9k1GyODSdf5Daf4IdjpcrvXjmoHvCGkUBBKoXCaQpj2nsQEgIszQ0n2mi
+         jVrJAVWdyx5zIkKMadEPWy6Q/XteRfGZUMk8rOBUqQ6JUm73YCbhK4wCe1vWrwxTn3
+         Ob4HwfF6npgPQ==
+Date:   Thu, 25 May 2023 14:33:44 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] fs: split off vfs_getdents function of getdents64
+ syscall
+Message-ID: <20230525-ziellinie-dachten-3eaa30a89e6f@brauner>
+References: <ZG0slV2BhSZkRL_y@codewreck.org>
+ <ZG0qgniV1DzIbbzi@codewreck.org>
+ <20230524-monolog-punkband-4ed95d8ea852@brauner>
+ <ZG6DUfdbTHS-e5P7@codewreck.org>
+ <20230525-funkanstalt-ertasten-a43443d045c8@brauner>
+ <ZG8_su9Pq1oI-t5s@codewreck.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
-To:     "Gowans, James" <jgowans@amazon.com>,
-        "maz@kernel.org" <maz@kernel.org>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "zouyipeng@huawei.com" <zouyipeng@huawei.com>,
-        "Raslan, KarimAllah" <karahmed@amazon.com>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sironi, Filippo" <sironi@amazon.de>,
-        "chris.zjh@huawei.com" <chris.zjh@huawei.com>
-References: <20230317095300.4076497-1-jgowans@amazon.com>
- <87h6tp5lkt.wl-maz@kernel.org>
- <0869847124f982c50d0f8d0ede996004f90a5576.camel@amazon.com>
- <86pm89kyyt.wl-maz@kernel.org>
- <7fdfb01590d8e502f384aa0bb0dc9c614caa5dfc.camel@amazon.com>
- <5a1fb95b57efbd6b6c2cea4a4e3ae5407fadeeb9.camel@amazon.com>
- <86sfcfghqh.wl-maz@kernel.org>
- <605113d89cdf53ba1a5034bb15704da58a5336d7.camel@amazon.com>
-From:   "Liao, Chang" <liaochang1@huawei.com>
-In-Reply-To: <605113d89cdf53ba1a5034bb15704da58a5336d7.camel@amazon.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZG8_su9Pq1oI-t5s@codewreck.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 25, 2023 at 08:00:02PM +0900, Dominique Martinet wrote:
+> Christian Brauner wrote on Thu, May 25, 2023 at 11:22:08AM +0200:
+> > > What was confusing is that default_llseek updates f_pos under the
+> > > inode_lock (write), and getdents also takes that lock (for read only in
+> > > shared implem), so I assumed getdents also was just protected by this
+> > > read lock, but I guess that was a bad assumption (as I kept pointing
+> > > out, a shared read lock isn't good enough, we definitely agree there)
+> > > 
+> > > 
+> > > In practice, in the non-registered file case io_uring is also calling
+> > > fdget, so the lock is held exactly the same as the syscall and I wasn't
+> > 
+> > No, it really isn't. fdget() doesn't take f_pos_lock at all:
+> > 
+> > fdget()
+> > -> __fdget()
+> >    -> __fget_light()
+> >       -> __fget()
+> >          -> __fget_files()
+> >             -> __fget_files_rcu()
+> 
+> Ugh, I managed to not notice that I was looking at fdget_pos and that
+> it's not the same as fdget by the time I wrote two paragraphs... These
+> functions all have too many wrappers and too similar names for a quick
+> look before work.
+> 
+> > If that were true then any system call that passes an fd and uses
+> > fdget() would try to acquire a mutex on f_pos_lock. We'd be serializing
+> > every *at based system call on f_pos_lock whenever we have multiple fds
+> > referring to the same file trying to operate on it concurrently.
+> > 
+> > We do have fdget_pos() and fdput_pos() as a special purpose fdget() for
+> > a select group of system calls that require this synchronization.
+> 
+> Right, that makes sense, and invalidates everything I said after that
+> anyway but it's not like looking stupid ever killed anyone.
 
+I strongly disagree with the looking stupid part. These callchains are
+quite unwieldy and it's easy to get confused. Usually if you receive a
+long mail about the semantics involved - as in the earlier thread - it
+means there's landmines all over.
 
-在 2023/5/23 20:47, Gowans, James 写道:
-> On Tue, 2023-05-02 at 11:17 +0100, Marc Zyngier wrote:
->>
->> Sorry for the delay, I've been travelling the past couple of weeks.
 > 
-> Me too - just getting back to this now. :-)
->>
->> On Tue, 02 May 2023 09:43:02 +0100,
->> "Gowans, James" <jgowans@amazon.com> wrote:
->>>
->>>> This will run check_irq_resend() on the *newly affined* CPU, while the old
->>>> one is still running the original handler. AFAICT what will happen is:
->>>> check_irq_resend
->>>>   try_retrigger
->>>>     irq_chip_retrigger_hierarchy
->>>>       its_irq_retrigger
->>>> ... which will cause the ITS to *immediately* re-trigger the IRQ. The
->>>> original CPU can still be running the handler in that case.
->>
->> Immediately is a relative thing. The GIC processes interrupts far
->> slower than the CPU can handle them.
+> Ok so it would require adding a new wrapper from struct file to struct
+> fd that'd eventually take the lock and set FDPUT_POS_UNLOCK for... not
+> fdput_pos but another function for that stopping short of fdput...
+> Then just call that around both vfs_llseek and vfs_getdents calls; which
+> is the easy part.
 > 
-> Ack - I've tested with your patch below and empirically on my system it
-> seems that a resend storm (running resend in a tight loop on the new CPU
-> while the original one is still slowly running a handler) causes
-> interrupts get delivered at period of about 40 µs. That is indeed less
-> "immediately" than handlers *typically* take.
-> 
->> Yes, this is clearly missing from my patch, thanks for pointing this
->> out. I think something like the hack below should handle it.
->>
->> diff --git a/kernel/irq/resend.c b/kernel/irq/resend.c
->> index 0c46e9fe3a89..5fa96842a882 100644
->> --- a/kernel/irq/resend.c
->> +++ b/kernel/irq/resend.c
->> @@ -117,7 +117,8 @@ int check_irq_resend(struct irq_desc *desc, bool inject)
->>                 return -EINVAL;
->>         }
->>
->> -       if (desc->istate & IRQS_REPLAY)
->> +       if ((desc->istate & IRQS_REPLAY) &&
->> +           !irqd_needs_resend_when_in_progress(&desc->irq_data))
->>                 return -EBUSY;
+> (Or possibly call mutex_lock directly like Dylan did in [1]...)
+> [1] https://lore.kernel.org/all/20220222105504.3331010-1-dylany@fb.com/T/#m3609dc8057d0bc8e41ceab643e4d630f7b91bde6
 
-Post from my email in this thread:
+We'd need a consistent story whatever it ends up being.
 
-"Second, I am concerned that repeatedly resending the interrupt could be harmful to
-the current task running on the new CPU. When an interrupt is delivered, the task
-will be interrupt and forced to save and restore it context, and CPU must switch
-exception level. This can be a costly operation, especially for virtualization systems."
+> I'll be honest though I'm thankful for your explanations but I think
+> I'll just do like Stefan and stop trying for now: the only reason I've
+> started this was because I wanted to play with io_uring for a new toy
+> project and it felt awkward without a getdents for crawling a tree; and
+> I'm long past the point where I should have thrown the towel and just
+> make that a sequential walk.
+> There's too many "conditional patches" (NOWAIT, end of dir indicator)
+> that I don't care about and require additional work to rebase
+> continuously so I'll just leave it up to someone else who does care.
+> 
+> So to that someone: feel free to continue from these branches (I've
+> included the fix for kernfs_fop_readdir that Dan Carpenter reported):
+> https://github.com/martinetd/linux/commits/io_uring_getdents
+> https://github.com/martinetd/liburing/commits/getdents
+> 
+> Or just start over, there's not that much code now hopefully the
+> baseline requirements have gotten a little bit clearer.
+> 
+> 
+> Sorry for stirring the mess and leaving halfway, if nobody does continue
+> I might send a v3 when I have more time/energy in a few months, but it
+> won't be quick.
 
-Fortunately, this problem is supposed to occur rarely. This means that the performance
-degradation may not be so noticeable at the business level. However, I just wonder if
-there is another way to handle this situation that does not involve tweaking IRQS_PENDING
-or repeatedly resending the interrupt to the new CPU.
-
-Thanks.
-
->>
->>         if (!(desc->istate & IRQS_PENDING) && !inject)
-> 
-> Have tested this and confirm it mitigates the issue.
-> 
->> I really think that we want to move away from the old CPU asap.
->> Imagine the following case: we want to turn a CPU off, and for this we
->> need to migrate the interrupts away from it. But the source of the
->> interrupt is a guest which keeps the interrupt coming, and this could
->> at least in theory delay the offlining indefinitely.
-> 
-> Agreed - just note that whether we do the hardware-assisted
-> irq_retrigger() before the handler on the newly affined CPU (as your patch
-> does) or after the handler on the old CPU (as my original patch suggested)
-> doesn't make a difference - either way the next actual handler run will
-> happen on the newly affined CPU and we get off the old CPU for the next
-> handler runs.
-> 
-> The only time is does make a difference is in the SW resend case but as
-> you point out:
-> 
->> With SW resend, the tasklet should get moved to CPUs that are still
->> online, and there may be some additional work to do here.
-> 
->>> Just checking to see if you've had a chance to consider these
->>> issues/thoughts, and if/how they should be handled?
->>> I'm still tending towards saying that the check_irq_resend() should run
->>> after handle_irq_event() and the IRQS_PENDING flag should be wrangled to
->>> decide whether or not to resend.
->>
->> I still think this is the wrong approach. This mixes the pending and
->> replay states, which are significantly different in the IRQ code.
-> 
-> Okay, TBH I'm not too sure what the difference between these two flags is,
-> the comments on the enum values isn't too detailed. I was inspired by
-> handle_edge_irq() to use the IRQ_PENDING. Any idea why it's correct to use
-> IRQ_PENDING there but not here? We could tweak this to use the REPLAY flag
-> and use that to conditionally run check_irq_resend() after the handler.
-> 
->> I definitely want to see more testing on this, but I'm not sure the SW
->> resend part is that critical. The issue at hand really is a GIC
->> specific problem.
-> 
-> Ack, I'm also happy to not bother with the SW resend case too much. Just
-> cross-posting from your other email (unifying the threads):
-> 
->> I contend that this really is a GICv3 architectural bug. The lack of
->> an active state on LPIs leads to it, and as far as I can tell, no
->> other interrupt architecture has the same issue. So the onus should be
->> on the GIC, the GIC only, and only the parts of the GIC that require
->> it (SPIs, PPIs and SGIs are fine, either because they have an active
->> state, or because the lock isn't dropped when calling the handler).
-> 
-> Again I'm happy to defer to you here. I'm still not sure why we wouldn't
-> prefer to solve this in a way that *doesn't* need flags, and will just
-> never run for interrupt controllers which are not impacted? That seems
-> like we could have simpler code with no downside.
-> 
-> JG
-> 
-
--- 
-BR
-Liao, Chang
+It's fine.
