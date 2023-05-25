@@ -2,142 +2,375 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4FA710A65
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40EE710A6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 12:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240800AbjEYKz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 06:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
+        id S240181AbjEYK6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 06:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbjEYKzy (ORCPT
+        with ESMTP id S229663AbjEYK6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 06:55:54 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA4990;
-        Thu, 25 May 2023 03:55:51 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-53033a0b473so1038885a12.0;
-        Thu, 25 May 2023 03:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685012151; x=1687604151;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tjU9i+ZYM/HNSnAs/618Ff78enf67mpHrMCpLJib6CU=;
-        b=k/L4FprDp8LWVHX1ZeHJ851f7uGMIooBVgX3nXVovC4l4i0ceKKaEq8NOtoXrY9Mu9
-         ObUWOww2jDwsmtlaCo5jKwSN9GvtPhxE5QFRy1TFg8XhMk3U9LYuKcHd6Zn6Y3RA5sXe
-         095cWozRhevuejiRm+i9dvcEQIumMRRqTHDMcZhEQZj9590larlbYxMsKweVf04ip4nK
-         //Vhwproo0k2kEEk+pLeDu3ZrSjZLOEmUzCIrEcjQMi7tTnVFM11h4tGt0xL7E/kV1oZ
-         L0Ced+vFvhanp2PYezIkDR1lX9UkRqOjjaRpJhKtipGQRwP8FrejFjfDIXrVlSGEKvCL
-         v7Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685012151; x=1687604151;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tjU9i+ZYM/HNSnAs/618Ff78enf67mpHrMCpLJib6CU=;
-        b=LK+oXrIKOkAfO80MqEyqj9ACOCDl9t9DAxqjHs2FY500ypJ3LZTeKMqVxJ0OVCRih2
-         vp0LCKOXEzW3VQm9huEvpW42LLYp7NWVOoqOFurq9+ofQOD1MtPVbSyz6H21VzCg+hJz
-         XKIF4oT5CrSSlm+STbaKF75Ub3LJk7byOyzc66CwwC7QCJmBoDmzC3u7iPZOTFgLvNgJ
-         ugXHwkt4WMNO2PWxiw1SoMPfdMbeFSv91mo587Ez2KhCGTLGe41UQuDjzgG5CObzbmzl
-         dMzCuyOzP3Zf7N5Xbb2r4L8Qk5/42WsN65b0K9DllZr1JQvw6UhbG4l6j4FhtZYlBwLI
-         ICsQ==
-X-Gm-Message-State: AC+VfDypXkeVkJCDRzJpU8nIzySCTlEC7+ibA3QuCBnjBmqI1CYZr/Jf
-        A1fcARftd7sM2cRLd7aIUjnGpMyWiG8=
-X-Google-Smtp-Source: ACHHUZ7J1KrU2nbIGIVFBiD5pUMC6fZk6Fpj90bK6EfiKYf2MKIx6zIFpvjf3+DyDq37dl/D6Sv9YA==
-X-Received: by 2002:a17:902:e808:b0:1a9:581e:d809 with SMTP id u8-20020a170902e80800b001a9581ed809mr1603287plg.7.1685012150744;
-        Thu, 25 May 2023 03:55:50 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-68.three.co.id. [180.214.232.68])
-        by smtp.gmail.com with ESMTPSA id p2-20020a170902eac200b001ac69bdc9d1sm1137187pld.156.2023.05.25.03.55.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 03:55:50 -0700 (PDT)
-Message-ID: <585f36f8-431a-e929-0a04-ffb65f02e9df@gmail.com>
-Date:   Thu, 25 May 2023 17:55:45 +0700
+        Thu, 25 May 2023 06:58:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15FA90
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 03:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685012234;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=k1Wg3zjxYdmVwTYUPZNoN64KyEZCyHfEIqxRXKnBqiw=;
+        b=AhT9vjxjVOfeAuRW4W7J+D1Mi7c5dFFdrht+0vst3mMla+WPv2hZjuUbbIZQPh+SSsAx02
+        RKCz2ISAIfPmA+MDZV3Wp//covkN2y7X50PCnMhQNQGMM7uTNAMaxO8Bxxn+XomySZ/O0j
+        WTR9sFNXJhSeSDEuj8iFGBNXtIGNr6o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-46-D9T7BEW8OOWD1-jFygnbWw-1; Thu, 25 May 2023 06:57:11 -0400
+X-MC-Unique: D9T7BEW8OOWD1-jFygnbWw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1D9502A5957F;
+        Thu, 25 May 2023 10:57:11 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.39.193.113])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C0C002166B2B;
+        Thu, 25 May 2023 10:57:09 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 6.4-rc4
+Date:   Thu, 25 May 2023 12:56:31 +0200
+Message-Id: <20230525105631.211284-1-pabeni@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: Fwd: absent both plymouth, and video= on linu lines, vtty[1-6]
- framebuffers produce vast raster right and bottom borders on the larger
- resolution of two displays
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Framebuffer <linux-fbdev@vger.kernel.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Nouveau/NVIDIA <nouveau@lists.freedesktop.org>,
-        Linux Stable <stable@vger.kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Antonino Daplas <adaplas@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Felix Miata <mrmazda@earthlink.net>
-References: <e8f93560-a2f6-8e9f-031a-88d333482a31@gmail.com>
-In-Reply-To: <e8f93560-a2f6-8e9f-031a-88d333482a31@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/23 17:52, Bagas Sanjaya wrote:
-> Hi,
-> 
-> I notice a regression report on Bugzilla [1]. Quoting from it:
-> 
->> Original Summary:
->> absent both plymouth, and video= on linu lines, vtty[1-6] framebuffers produce vast raster right and bottom borders on the larger resolution of two displays
->>
->> To reproduce:
->> 1-connect two unequal native resolution displays to a Tesla or Firmi GPU
->> 2-don't have plymouth in use (I don't ever have it installed, so don't know whether it impacts)
->> 3-don't include e.g. video=1440x900@60 directive on Grub's linu lines
->> 4-boot Tumbleweed or Fedora 38
->> 5-switch to a vtty, e.g. Ctrl-Alt-F3
->>
->> Actual behavior:
->> 1-Both displays utilize the resolution (same pixel grid) of the lower resolution display
->> 2-Lower resolution display behaves as expected (light text on black background)
->> 3-Higher resolution display uses same pixels as lower resolution display, with light text on black background, leaving right side and bottom raster instead of black
->>
->> Expected behavior:
->> 1-Both displays utilize the resolution (same pixel grid) of the lower resolution display
->> 2-Lower resolution display behaves as expected
->> 3-Entire higher resolution display's background is black instead of portions in raster
->>
->> Workaround: add e.g. video=1440x900@60 to Grub's linu lines, which causes both displays to use the same nominal mode on the full display space.
->>
->> Typical other linu line options:
->> noresume consoleblank=0 net.ifnames=0 ipv6.disable=1 preempt=full mitigations=none
->>
->> My Tesla has HDMI and DVI outputs, tested with 1920x1200 and 1680x1050 displays.
->> My Fermi has dual DisplayPort, tested with 2560x1440 and 1680x1050 displays.
->> Occurs Tumbleweed with 6.3.2 and 6.2.12 kernel-default, and with 6.2.15 on Fedora 38, and (partially with Tesla, right side only) with 6.2.12 and 6.3.3 on Mageia 9.
->> Does not occur with 6.1.12 kernel-default on NVidia, or with AMD Caicos (Terascale2) GPU, or with Intel Eaglelake GPU.
->> Tested only on legacy booting (no UEFI support).
->> Others might describe what I call "raster" as multicolored snow.
-> 
-> See bugzilla for the full thread and attached dmesg.
-> 
-> Anyway, I'm adding it to regzbot:
-> 
-> #regzbot introduced: v6.1.12..v6.2.12
-> #regzbot title: vast raster right and bottom borders on larger display (two displays with inequal resolution) unless forcing resolution with video= parameter
-> 
+Hi Linus!
 
-Oops, I forget to add bugzilla link:
+The following changes since commit 1f594fe7c90746982569bd4f3489e809104a9176:
 
-#regzbot introduced: v6.1.12..v6.2.12 https://bugzilla.kernel.org/show_bug.cgi?id=217479
-#regzbot from: Felix Miata <mrmazda@earthlink.net>
+  Merge tag 'net-6.4-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-05-18 08:52:14 -0700)
 
-Thanks.
+are available in the Git repository at:
 
--- 
-An old man doll... just what I always wanted! - Clara
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.4-rc4
+
+for you to fetch changes up to ad42a35bdfc6d3c0fc4cb4027d7b2757ce665665:
+
+  udplite: Fix NULL pointer dereference in __sk_mem_raise_allocated(). (2023-05-25 10:51:58 +0200)
+
+----------------------------------------------------------------
+Networking fixes for 6.4-rc4, including fixes from bluetooth and bpf
+
+Current release - regressions:
+
+  - net: fix skb leak in __skb_tstamp_tx()
+
+  - eth: mtk_eth_soc: fix QoS on DSA MAC on non MTK_NETSYS_V2 SoCs
+
+Current release - new code bugs:
+
+  - handshake:
+    - fix sock->file allocation
+    - fix handshake_dup() ref counting
+
+  - bluetooth:
+    - fix potential double free caused by hci_conn_unlink
+    - fix UAF in hci_conn_hash_flush
+
+Previous releases - regressions:
+
+  - core: fix stack overflow when LRO is disabled for virtual interfaces
+
+  - tls: fix strparser rx issues
+
+  - bpf:
+    - fix many sockmap/TCP related issues
+    - fix a memory leak in the LRU and LRU_PERCPU hash maps
+    - init the offload table earlier
+
+  - eth: mlx5e:
+    - do as little as possible in napi poll when budget is 0
+    - fix using eswitch mapping in nic mode
+    - fix deadlock in tc route query code
+
+Previous releases - always broken:
+
+  - udplite: fix NULL pointer dereference in __sk_mem_raise_allocated()
+
+  - raw: fix output xfrm lookup wrt protocol
+
+  - smc: reset connection when trying to use SMCRv2 fails
+
+  - phy: mscc: enable VSC8501/2 RGMII RX clock
+
+  - eth: octeontx2-pf: fix TSOv6 offload
+
+  - eth: cdc_ncm: deal with too low values of dwNtbOutMaxSize
+
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+
+----------------------------------------------------------------
+Alejandro Lucero (1):
+      sfc: fix devlink info error handling
+
+Andrii Nakryiko (1):
+      samples/bpf: Drop unnecessary fallthrough
+
+Anton Protopopov (1):
+      bpf: fix a memory leak in the LRU and LRU_PERCPU hash maps
+
+Arınç ÜNAL (1):
+      net: ethernet: mtk_eth_soc: fix QoS on DSA MAC on non MTK_NETSYS_V2 SoCs
+
+Christophe JAILLET (2):
+      forcedeth: Fix an error handling path in nv_probe()
+      3c589_cs: Fix an error handling path in tc589_probe()
+
+Chuck Lever (8):
+      net/handshake: Squelch allocation warning during Kunit test
+      net/handshake: Fix sock->file allocation
+      net/handshake: Remove unneeded check from handshake_dup()
+      net/handshake: Fix handshake_dup() ref counting
+      net/handshake: Fix uninitialized local variable
+      net/handshake: handshake_genl_notify() shouldn't ignore @flags
+      net/handshake: Unpin sock->file if a handshake is cancelled
+      net/handshake: Enable the SNI extension to work properly
+
+David Epping (4):
+      net: phy: mscc: add VSC8502 to MODULE_DEVICE_TABLE
+      net: phy: mscc: add support for VSC8501
+      net: phy: mscc: remove unnecessary phydev locking
+      net: phy: mscc: enable VSC8501/2 RGMII RX clock
+
+David S. Miller (2):
+      Merge branch 'tls-fixes'
+      Merge tag 'mlx5-fixes-2023-05-22' of git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux
+
+Erez Shitrit (1):
+      net/mlx5: DR, Fix crc32 calculation to work on big-endian (BE) CPUs
+
+Gavrilov Ilia (1):
+      ipv6: Fix out-of-bounds access in ipv6_find_tlv()
+
+Horatiu Vultur (1):
+      lan966x: Fix unloading/loading of the driver
+
+Jakub Kicinski (14):
+      bpf: netdev: init the offload table earlier
+      tls: rx: device: fix checking decryption status
+      tls: rx: strp: set the skb->len of detached / CoW'ed skbs
+      tls: rx: strp: force mixed decrypted records into copy mode
+      tls: rx: strp: fix determining record length in copy mode
+      tls: rx: strp: factor out copying skb data
+      tls: rx: strp: preserve decryption status of skbs when needed
+      tls: rx: strp: don't use GFP_KERNEL in softirq context
+      net/mlx5e: do as little as possible in napi poll when budget is 0
+      Merge tag 'for-net-2023-05-19' of git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth
+      docs: netdev: document the existence of the mail bot
+      Merge tag 'for-netdev' of https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
+      Merge branch 'bug-fixes-for-net-handshake'
+      Merge branch 'net-phy-mscc-support-vsc8501'
+
+Jeremy Sowden (1):
+      selftests/bpf: Fix pkg-config call building sign-file
+
+John Fastabend (14):
+      bpf, sockmap: Pass skb ownership through read_skb
+      bpf, sockmap: Convert schedule_work into delayed_work
+      bpf, sockmap: Reschedule is now done through backlog
+      bpf, sockmap: Improved check for empty queue
+      bpf, sockmap: Handle fin correctly
+      bpf, sockmap: TCP data stall on recv before accept
+      bpf, sockmap: Wake up polling after data copy
+      bpf, sockmap: Incorrectly handling copied_seq
+      bpf, sockmap: Pull socket helpers out of listen test for general use
+      bpf, sockmap: Build helper to create connected socket pair
+      bpf, sockmap: Test shutdown() correctly exits epoll and recv()=0
+      bpf, sockmap: Test FIONREAD returns correct bytes in rx buffer
+      bpf, sockmap: Test FIONREAD returns correct bytes in rx buffer with drops
+      bpf, sockmap: Test progs verifier error with latest clang
+
+Kuniyuki Iwashima (1):
+      udplite: Fix NULL pointer dereference in __sk_mem_raise_allocated().
+
+Neeraj Sanjay Kale (1):
+      Bluetooth: btnxpuart: Fix compiler warnings
+
+Nicolas Dichtel (1):
+      ipv{4,6}/raw: fix output xfrm lookup wrt protocol
+
+Paul Blakey (1):
+      net/mlx5e: TC, Fix using eswitch mapping in nic mode
+
+Po-Hsu Lin (1):
+      selftests: fib_tests: mute cleanup error message
+
+Pratyush Yadav (1):
+      net: fix skb leak in __skb_tstamp_tx()
+
+Rahul Rameshbabu (1):
+      net/mlx5e: Fix SQ wake logic in ptp napi_poll context
+
+Roi Dayan (1):
+      net/mlx5: Fix error message when failing to allocate device memory
+
+Ruihan Li (4):
+      Bluetooth: Fix potential double free caused by hci_conn_unlink
+      Bluetooth: Refcnt drop must be placed last in hci_conn_unlink
+      Bluetooth: Fix UAF in hci_conn_hash_flush again
+      Bluetooth: Unlink CISes when LE disconnects in hci_conn_del
+
+Sebastian Andrzej Siewior (1):
+      r8169: Use a raw_spinlock_t for the register locks.
+
+Shay Drory (8):
+      net/mlx5: Collect command failures data only for known commands
+      net/mlx5: Handle pairing of E-switch via uplink un/load APIs
+      net/mlx5: E-switch, Devcom, sync devcom events and devcom comp register
+      net/mlx5: Devcom, fix error flow in mlx5_devcom_register_device
+      net/mlx5: Devcom, serialize devcom registration
+      net/mlx5: Free irqs only on shutdown callback
+      net/mlx5: Fix irq affinity management
+      net/mlx5: Fix indexing of mlx5_irq
+
+Shenwei Wang (1):
+      net: fec: add dma_wmb to ensure correct descriptor values
+
+Sunil Goutham (1):
+      octeontx2-pf: Fix TSOv6 offload
+
+Taehee Yoo (1):
+      net: fix stack overflow when LRO is disabled for virtual interfaces
+
+Tudor Ambarus (1):
+      net: cdc_ncm: Deal with too low values of dwNtbOutMaxSize
+
+Vlad Buslov (2):
+      net/mlx5e: Use correct encap attribute during invalidation
+      net/mlx5e: Fix deadlock in tc route query code
+
+Vladimir Oltean (1):
+      MAINTAINERS: add myself as maintainer for enetc
+
+Wen Gu (1):
+      net/smc: Reset connection when trying to use SMCRv2 fails.
+
+Will Deacon (1):
+      bpf: Fix mask generation for 32-bit narrow loads of 64-bit fields
+
+Xin Long (1):
+      sctp: fix an issue that plpmtu can never go to complete state
+
+Yevgeny Kliteynik (1):
+      net/mlx5: DR, Check force-loopback RC QP capability independently from RoCE
+
+Yunsheng Lin (1):
+      page_pool: fix inconsistency for page_pool_ring_[un]lock()
+
+ Documentation/netlink/specs/handshake.yaml         |   4 +
+ Documentation/networking/tls-handshake.rst         |   5 +
+ Documentation/process/maintainer-netdev.rst        |  33 +-
+ MAINTAINERS                                        |   1 +
+ drivers/bluetooth/btnxpuart.c                      |   6 +-
+ drivers/net/bonding/bond_main.c                    |   8 +-
+ drivers/net/ethernet/3com/3c589_cs.c               |  11 +-
+ drivers/net/ethernet/freescale/fec_main.c          |  17 +-
+ .../net/ethernet/marvell/octeontx2/nic/otx2_txrx.c |   4 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c        |   8 +-
+ drivers/net/ethernet/mellanox/mlx5/core/cmd.c      |   3 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c   |   2 +
+ .../ethernet/mellanox/mlx5/core/en/tc_tun_encap.c  |   4 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en/txrx.h  |   2 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    |  57 ++-
+ drivers/net/ethernet/mellanox/mlx5/core/en_tx.c    |  19 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_txrx.c  |  16 +-
+ drivers/net/ethernet/mellanox/mlx5/core/eq.c       |   2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/eswitch.h  |   5 +
+ .../ethernet/mellanox/mlx5/core/eswitch_offloads.c |  16 +-
+ .../net/ethernet/mellanox/mlx5/core/lib/devcom.c   |  70 +++-
+ .../net/ethernet/mellanox/mlx5/core/lib/devcom.h   |   1 +
+ drivers/net/ethernet/mellanox/mlx5/core/main.c     |   2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/mlx5_irq.h |   1 +
+ drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c  |  40 ++-
+ .../ethernet/mellanox/mlx5/core/steering/dr_cmd.c  |   4 +-
+ .../ethernet/mellanox/mlx5/core/steering/dr_ste.c  |   3 +-
+ .../net/ethernet/microchip/lan966x/lan966x_main.c  |  10 +
+ drivers/net/ethernet/nvidia/forcedeth.c            |   1 +
+ drivers/net/ethernet/realtek/r8169_main.c          |  44 +--
+ drivers/net/ethernet/sfc/efx_devlink.c             |  95 +++--
+ drivers/net/phy/mscc/mscc.h                        |   2 +
+ drivers/net/phy/mscc/mscc_main.c                   |  82 +++--
+ drivers/net/team/team.c                            |   7 +-
+ drivers/net/usb/cdc_ncm.c                          |  24 +-
+ include/linux/if_team.h                            |   1 +
+ include/linux/mlx5/mlx5_ifc.h                      |   4 +-
+ include/linux/skbuff.h                             |  10 +
+ include/linux/skmsg.h                              |   3 +-
+ include/net/bluetooth/hci_core.h                   |   2 +-
+ include/net/bonding.h                              |   1 +
+ include/net/handshake.h                            |   1 +
+ include/net/ip.h                                   |   2 +
+ include/net/page_pool.h                            |  18 -
+ include/net/tcp.h                                  |  10 +
+ include/net/tls.h                                  |   1 +
+ include/uapi/linux/handshake.h                     |   1 +
+ include/uapi/linux/in.h                            |   1 +
+ kernel/bpf/hashtab.c                               |   6 +-
+ kernel/bpf/offload.c                               |   2 +-
+ kernel/bpf/verifier.c                              |   2 +-
+ net/bluetooth/hci_conn.c                           |  77 ++--
+ net/core/page_pool.c                               |  28 +-
+ net/core/skbuff.c                                  |   4 +-
+ net/core/skmsg.c                                   |  81 ++---
+ net/core/sock_map.c                                |   3 +-
+ net/handshake/handshake-test.c                     |  44 ++-
+ net/handshake/handshake.h                          |   1 +
+ net/handshake/netlink.c                            |  12 +-
+ net/handshake/request.c                            |   4 +
+ net/handshake/tlshd.c                              |   8 +
+ net/ipv4/ip_sockglue.c                             |  12 +-
+ net/ipv4/raw.c                                     |   5 +-
+ net/ipv4/tcp.c                                     |  11 +-
+ net/ipv4/tcp_bpf.c                                 |  79 ++++-
+ net/ipv4/udp.c                                     |   7 +-
+ net/ipv4/udplite.c                                 |   2 +
+ net/ipv6/exthdrs_core.c                            |   2 +
+ net/ipv6/raw.c                                     |   3 +-
+ net/ipv6/udplite.c                                 |   2 +
+ net/sctp/transport.c                               |  11 +-
+ net/smc/af_smc.c                                   |   9 +-
+ net/smc/smc_core.c                                 |   1 +
+ net/tls/tls.h                                      |   5 +
+ net/tls/tls_device.c                               |  22 +-
+ net/tls/tls_strp.c                                 | 185 ++++++++--
+ net/tls/tls_sw.c                                   |   4 +
+ net/unix/af_unix.c                                 |   7 +-
+ net/vmw_vsock/virtio_transport_common.c            |   5 +-
+ samples/bpf/hbm.c                                  |   1 -
+ tools/testing/selftests/bpf/Makefile               |   2 +-
+ .../selftests/bpf/prog_tests/sockmap_basic.c       | 131 +++++++
+ .../selftests/bpf/prog_tests/sockmap_helpers.h     | 390 +++++++++++++++++++++
+ .../selftests/bpf/prog_tests/sockmap_listen.c      | 370 +------------------
+ .../selftests/bpf/progs/test_sockmap_drop_prog.c   |  32 ++
+ .../selftests/bpf/progs/test_sockmap_kern.h        |  12 +-
+ .../selftests/bpf/progs/test_sockmap_pass_prog.c   |  32 ++
+ tools/testing/selftests/net/fib_tests.sh           |   2 +-
+ 88 files changed, 1488 insertions(+), 792 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_drop_prog.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
 
