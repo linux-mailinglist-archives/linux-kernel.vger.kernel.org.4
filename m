@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067197106CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 09:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB0D7106CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234281AbjEYH7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 03:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41714 "EHLO
+        id S230381AbjEYIAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjEYH7p (ORCPT
+        with ESMTP id S235608AbjEYIAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 03:59:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15FE122;
-        Thu, 25 May 2023 00:59:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1SbotI5SOBhG7bXBLx5uW2S/thCuqPvVS6nzOwu9CA8=; b=V58wO3BzmmE0SuFDyj/dG3wtLK
-        lAzsAvB3ZVtK85AeH07/CJcxdL6YrVPVNDBjp1gDEQPt3y4PFxy1zANuqX7eVYeIgd3P7ogmbXOTU
-        da9+kR0/TlSsh1y3pAg8cJlsO45ZGPvvuTYFq/fNI4L86nVhMdF9l0CdKYvln7GJza2VN0yD6cUMZ
-        9AGBExT5R92fPahMcA7LeZjMrK7dkBLryYUAAfcvK7uRiSTSxKle8hlE9ag/8t3Jjq9Yn1IOJUZuo
-        uX3hxlvo7360UC0O1DFIK/1Wbl7Y+nHItalF92A3t01qoCyYcTe7+nOpiFXaZa42gRD6g3h1sC3BR
-        Yy6h2YmA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q25sp-00Fu4N-2E;
-        Thu, 25 May 2023 07:59:39 +0000
-Date:   Thu, 25 May 2023 00:59:39 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        linux-xfs@vger.kernel.org
-Subject: Re: [PATCH 0/9] Mitigate a vmap lock contention
-Message-ID: <ZG8Va0hc67IC6Cuf@infradead.org>
-References: <20230522110849.2921-1-urezki@gmail.com>
- <ZGyqiaRnMJPFhxR6@debian-BULLSEYE-live-builder-AMD64>
- <ZGzX3vRMlGHIcYCe@pc636>
- <ZG0AE9mjHkRZIGmr@debian-BULLSEYE-live-builder-AMD64>
- <ZG3d1FUXiCk3QL3D@pc636>
- <ZG6IKE7yNEkJhge+@dread.disaster.area>
+        Thu, 25 May 2023 04:00:05 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643B3186
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:00:01 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f655a8135bso1887905e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685001600; x=1687593600;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rx6/AkchhhsIk24IhJ++7ZLwXy7ijhSBwh/BY8UUZQc=;
+        b=c9mNv6qaak/+jqDMGn3APvrr0+w5ES0c1AXI6yC9/c9lAG4EPwi49Txcj5wWxuApZr
+         ksHgUxODxOTedlSiCT7b4eHmnSiLO/9tL8AME3h15Z6ar5myK9hI4dYRDxnvjHK50aCF
+         Rsjpw/xs7XIBDEhTu00iegVvL2gf8NDKn2Anjnm7tsPydrfChLCRa6VhBAfl6FBECjG5
+         a0dbx99g1URkUvbhsvZ5y4DDF1VHEY3x0OL4fYijdjkNPzJxU4K14wdQ8CeVjaout3Gw
+         jsjhN8/zjx99gvNTg+vyp9I5cuLrvAJ6u7il4vyi+KSKMg9rRuddb3Ff/AeX991jC8h0
+         KRbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685001600; x=1687593600;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rx6/AkchhhsIk24IhJ++7ZLwXy7ijhSBwh/BY8UUZQc=;
+        b=DUUWIqblOj8Vg9HXH+RovkmbGQ6MjRKPsmhrCYYnuK8bK7J7Oi0hwkxQyp7aI73BkA
+         9EF8/0TD4v6Q0fTN38eKEUEgu6uD+h2nXfjXBll/tOFfhjYOOl4y9SucCRsIaDnO5eeu
+         Y1fnEr894Ocheh6O6wKiFuq3aUnn8wTPmNEbMC5LuTvN7v3f/yZ/PM0DJCX3HMZpvCSG
+         e+nujUTIeg2XpVCgmfe1/phs81VrE0Xl5uZ5gqnfa38htfgSMqzCeComEZf7QNjjXmyN
+         zuFmra2+gfQb2zmxrlQjT4enXjYTfj7E0YEiQxV7CzXgpqIXcDj5NTguNsOroH2cV+5w
+         zRpg==
+X-Gm-Message-State: AC+VfDyB4Xw2O0wMPlPvJfga+VrjYFPsvaAXAa1zZTw0VPdfuZ2R/aQQ
+        c8YvFsSTw5eSKkvJ8b05Q+yhPw==
+X-Google-Smtp-Source: ACHHUZ4TryZ8bkmN1UsFCBXfEMWzWC55lUiNfaVtlNpCYURcJisdCMit0DGkffnluVcPdw3cG+osKg==
+X-Received: by 2002:a1c:7913:0:b0:3f6:770:fafd with SMTP id l19-20020a1c7913000000b003f60770fafdmr2037330wme.7.1685001599877;
+        Thu, 25 May 2023 00:59:59 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5cdb:105b:7481:b0e6? ([2a01:e0a:982:cbb0:5cdb:105b:7481:b0e6])
+        by smtp.gmail.com with ESMTPSA id a18-20020a05600c225200b003f60a446fe5sm1178490wmm.29.2023.05.25.00.59.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 00:59:59 -0700 (PDT)
+Message-ID: <1adda828-cf35-fb2c-6db5-f9ca91b5b62a@linaro.org>
+Date:   Thu, 25 May 2023 09:59:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZG6IKE7yNEkJhge+@dread.disaster.area>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [v3 0/4] Support Starry-himax83102-j02 and Starry-ili9882t TDDI
+ MIPI-DSI panel
+Content-Language: en-US
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
+        dianders@chromium.org
+Cc:     airlied@gmail.com, conor+dt@kernel.org, daniel@ffwll.ch,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        hsinyi@google.com, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org, sam@ravnborg.org
+References: <CAD=FV=XUuzjjLq3YP3683jOd06odwk5Dox5MS8oY8goB-_8T5w@mail.gmail.com>
+ <20230525025000.3692510-1-yangcong5@huaqin.corp-partner.google.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230525025000.3692510-1-yangcong5@huaqin.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 07:56:56AM +1000, Dave Chinner wrote:
-> > It is up to community to decide. As i see XFS needs it also. Maybe in
-> > the future it can be removed(who knows). If the vmalloc code itself can
-> > deliver such performance as vm_map* APIs.
-> 
-> vm_map* APIs cannot be replaced with vmalloc, they cover a very
-> different use case.  i.e.  vmalloc allocates mapped memory,
-> vm_map_ram() maps allocated memory....
-> 
-> > vm_map_ram() and friends interface was added because of vmalloc drawbacks.
-> 
-> No. vm_map*() were scalability improvements added in 2009 to replace
-> on vmap() and vunmap() to avoid global lock contention in the vmap
-> allocator that XFS had been working around for years with it's own
-> internal vmap cache....
+Hi,
 
-All of that is true.  At the same time XFS could very much switch to
-vmalloc for !XBF_UNMAPPED && size > PAGE_SIZE buffers IFF that provided
-an advantage.  The need for vmap and then vm_map_* initially came from
-the fact that we were using the page cache to back the xfs_buf (or
-page_buf back then).  With your work on getting rid of the pagecache
-usage we could just use vmalloc now if we wanted to and it improves
-performance.  Or at some point we could even look into just using large
-folios for that with the infrastructure for that improving a lot (but
-I suspect we're not quite there yet).
+On 25/05/2023 04:49, Cong Yang wrote:
+> Compare V2: order of the tables match the order they're
+> referenced.
+> 
+> Cong Yang (4):
+>    dt-bindings: display: panel: Add compatible for Starry himax83102-j02
+>    drm/panel: Support for Starry-himax83102-j02 TDDI MIPI-DSI panel
+>    dt-bindings: display: panel: Add compatible for Starry ili9882t
+>    drm/panel: Support for Starry-ili9882t TDDI MIPI-DSI panel
+> 
+>   .../display/panel/boe,tv101wum-nl6.yaml       |   4 +
+>   .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 471 ++++++++++++++++++
+>   2 files changed, 475 insertions(+)
+>
 
-But ther are other uses of vm_map_* that can't do that, and they will
-benefit from the additional scalability as well even IFF just using
-vmalloc was fine for XFS now (I don't know, I haven't actually looked
-into it).
+Please resend without Conor's acks on patches 2 and 4.
+
+Thanks,
+Neil
+
+
