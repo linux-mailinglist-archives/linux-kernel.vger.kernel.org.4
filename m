@@ -2,102 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA832710E71
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FF7710E72
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241655AbjEYOfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S241488AbjEYOfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239180AbjEYOfh (ORCPT
+        with ESMTP id S239180AbjEYOfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:35:37 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C85A195
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:35:35 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-456d9652c24so418735e0c.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:35:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1685025334; x=1687617334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aAogn6dT4b6m8+lLJAd5XLZlUe3QdLu7einTf1A+tIg=;
-        b=olneRNt0QSWwgjhhvV/O7lXmLW+2Z9uuG9ZKZc988z4Tl6cH95KQuo0n9C0Ybbxv7D
-         U9Z6WWaeCLzdQMhyJBfm/h5TCWirx+agFmWwI96Hc0meNcwmmStEpY/yK37l0uNrv/LD
-         VHYKX9atO0lsz8JGcgKcNiUk0910Ur0BIRugXfF6zSXQ3K50r7sBcnfLjJW3gh5Vr4cU
-         SQkVBc6E2nGiw84gGkHHYv4BwVcs9XLkjUHibjOFvAUQgTGL+Jwups8nyiSmG53GnFvJ
-         oZIxh+UkuTiyo2kcpmHPYCEENHva6DjmbQafvJdNE1FhZmev/U/RnKJcJMNfLCZDHpIS
-         5bnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685025334; x=1687617334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aAogn6dT4b6m8+lLJAd5XLZlUe3QdLu7einTf1A+tIg=;
-        b=eWmBlPEY6BE2+jlkzTEauRnJB3AUIXbGe2BGfWsxHdZVeXxKAJl2GR3JvhtfhksF71
-         Re2WaBNgm6+WbSXuFLN6CsPySasNFGcODdvwJwv2s+X87rLz4udIABc5ucjDmgT6LuYt
-         wLwNrHquEm9Vk+mT/XyhpPDHn3DYDJUyaauNQQOUryrbWbwwS3JZnMIoe3wp5OQQUXtn
-         asqiFcqvdtoeasijEiXQghGBnnBrh5Pd9OBRnMlOHwbCnrQln0voBOUR6MCl1ygIu8PM
-         VVWFHrnCRAzID1EecC3w8yzaqH8Dsc+CiVdcuQJ4P2dSkWXyxT1MFRkoscdEk19x6DN/
-         /Y9w==
-X-Gm-Message-State: AC+VfDx/Xo29Bhu6O45JASc2tBOQ/gMyi67D3U2M65ndu/cG9MpG6n53
-        hml9BG8e4nNq7AtWOAAZZWp63QkDgSQdpGkPa0jQ1g==
-X-Google-Smtp-Source: ACHHUZ4qjNa/T2reNQHamvgq/FN+8eYf30P46YnDIhAQfq41TQFW6fcyaVASyBQ7p8xhGwBSUypu5WGUmvNEbQxN824=
-X-Received: by 2002:a05:6122:141:b0:457:56a4:19e7 with SMTP id
- r1-20020a056122014100b0045756a419e7mr1164313vko.0.1685025334463; Thu, 25 May
- 2023 07:35:34 -0700 (PDT)
+        Thu, 25 May 2023 10:35:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29BA191
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 07:35:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C7AA64644
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 14:35:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648AFC433EF;
+        Thu, 25 May 2023 14:35:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685025345;
+        bh=aPHW1firYZUPUYQjts4gcUsLZLZZc2+q5rRUj5KNoeY=;
+        h=From:Date:Subject:To:Cc:From;
+        b=ZzK+Ec/gkEIK3sm56v3nU249RDSxZTEkleji+bbG8IROwHx7x+skMJzU5m15KOwgI
+         /MM5VsUogeK7xVBowmRb8mGAsx8ue2Dpctm/XV8tlb/msPuMxRT8MTj/EsPuiS7EhR
+         WXXZyuEmA68OH5shf5WT5Dy7n/RRhuuUkpKF5bsfUF7eYjiqjp8nj4vKmLjumUFbZ/
+         AgsS2a+OFnTmAkLtiCvpo+xUxbai4YvJ7th8ro7TVJ2Ax+5K3frN1jTVj5JtWlm2iZ
+         XZChEXtTefPJ/18b6ANlfgKTFVd3/4HigYuGf3MhEV/WUUiYNrK8IMlF4FtE9yilv7
+         cJi5Eum/P4gPQ==
+From:   Simon Horman <horms@kernel.org>
+Date:   Thu, 25 May 2023 16:35:42 +0200
+Subject: [PATCH v3] virtio: Add missing documentation for structure fields
 MIME-Version: 1.0
-References: <ZGzsD_HMbMGhGwcr@surfacebook> <72990baf-6964-01ad-d891-7090831d0310@alliedtelesis.co.nz>
- <ZG2jgwjK+CBmOk3G@sol> <f9006a57-4c67-c8a0-badc-84b3292aa686@alliedtelesis.co.nz>
- <CAHp75VfVr0N4Fv=s_12vcTi8=pGWJgeWoXpxQvqSNWDcZauS=A@mail.gmail.com>
-In-Reply-To: <CAHp75VfVr0N4Fv=s_12vcTi8=pGWJgeWoXpxQvqSNWDcZauS=A@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 25 May 2023 16:35:23 +0200
-Message-ID: <CAMRc=Md2iFVMw14d4v-AjmcBniWF6r65VhcE5+HFsvH=VTdSxA@mail.gmail.com>
-Subject: Re: using libgpiod to replace sysfs ABI (was Re: [PATCH] gpiolib:
- Avoid side effects in gpio_is_visible())
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        Kent Gibson <warthog618@gmail.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230510-virtio-kdoc-v3-1-e2681ed7a425@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAD1yb2QC/32NywrCMBBFf6VkbSSZvl35H+IiSadtaElkUoNS+
+ u+m3Qni8lw4564sIFkM7JKtjDDaYL1LkJ8yZkblBuS2S8xAQC5KKXi0tFjPp84b3rVVhU3d17l
+ AlgytAnJNypkxOe45z2l8EPb2dVzc7olHGxZP7+Mxyn39HY+SS96Blg0UqlWgrxOSw/nsaWB7K
+ MIfGZIsTalAoC5Mj1/ytm0fReexevkAAAA=
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Simon Horman <horms@kernel.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:13=E2=80=AFAM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, May 25, 2023 at 2:53=E2=80=AFAM Chris Packham
-> <Chris.Packham@alliedtelesis.co.nz> wrote:
-> > On 24/05/23 17:41, Kent Gibson wrote:
->
-> ...
->
-> > It'd also be great if there was some way of ensuring that a line's stat=
-e
-> > is kept after the application has released the request (i.e. the txdis
-> > case I mentioned). But that probably needs work on the kernel side to
-> > make such guarantees.
->
-> Won't happen. It will require too much of strictness to be added into
-> the kernel with likely breakage of the existing code and
-> documentation. What is being discussed is a D-Bus (like?) daemon +
-> Policy in user space that will allow user / process / cgroup / etc to
-> "own" the line and track its state.
->
+Add missing documentation for the vqs_list_lock field of struct virtio_device,
+and the validate field of struct virtio_driver.
 
-It's already WiP[1]. I'm trying to keep the footprint minimal with
-only GLib and dbus required at run-time.
+./scripts/kernel-doc says:
 
-Bart
+ .../virtio.h:131: warning: Function parameter or member 'vqs_list_lock' not described in 'virtio_device'
+ .../virtio.h:192: warning: Function parameter or member 'validate' not described in 'virtio_driver'
+ 2 warnings as Errors
 
-[1] https://github.com/brgl/libgpiod-private/tree/topic/dbus
+No functional changes intended.
+
+Signed-off-by: Simon Horman <horms@kernel.org>
+---
+Changes in v3:
+- As suggested by Stefano Garzarella
+  + Drop inline comment for @vqs_list_lock which is now covered by Kdoc
+  + Add "Returns 0 or -errno." to @validate Kdoc
+- Link to v2: https://lore.kernel.org/r/20230510-virtio-kdoc-v2-1-1c5a20eb4cfe@kernel.org
+
+Changes in v2:
+- As suggested by Michael S. Tsirkin
+  + @validate is not called on probe
+  + @validate does validates config space
+  + embarrassingly, validate was misspelt
+- Link to v1: https://lore.kernel.org/r/20230510-virtio-kdoc-v1-1-d2b1824a9a2b@kernel.org
+---
+ include/linux/virtio.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index b93238db94e3..de6041deee37 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -103,6 +103,7 @@ int virtqueue_resize(struct virtqueue *vq, u32 num,
+  * @config_enabled: configuration change reporting enabled
+  * @config_change_pending: configuration change reported while disabled
+  * @config_lock: protects configuration change reporting
++ * @vqs_list_lock: protects @vqs.
+  * @dev: underlying device.
+  * @id: the device type identification (used to match it with a driver).
+  * @config: the configuration ops for this device.
+@@ -117,7 +118,7 @@ struct virtio_device {
+ 	bool config_enabled;
+ 	bool config_change_pending;
+ 	spinlock_t config_lock;
+-	spinlock_t vqs_list_lock; /* Protects VQs list access */
++	spinlock_t vqs_list_lock;
+ 	struct device dev;
+ 	struct virtio_device_id id;
+ 	const struct virtio_config_ops *config;
+@@ -160,6 +161,8 @@ size_t virtio_max_dma_size(const struct virtio_device *vdev);
+  * @feature_table_size: number of entries in the feature table array.
+  * @feature_table_legacy: same as feature_table but when working in legacy mode.
+  * @feature_table_size_legacy: number of entries in feature table legacy array.
++ * @validate: the function to call to validate features and config space.
++ *            Returns 0 or -errno.
+  * @probe: the function to call when a device is found.  Returns 0 or -errno.
+  * @scan: optional function to call after successful probe; intended
+  *    for virtio-scsi to invoke a scan.
+
