@@ -2,262 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C257105B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 08:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F7D7105B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 08:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238405AbjEYGgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 02:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S238427AbjEYGjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 02:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjEYGgH (ORCPT
+        with ESMTP id S229757AbjEYGjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 02:36:07 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0948D187;
-        Wed, 24 May 2023 23:36:01 -0700 (PDT)
+        Thu, 25 May 2023 02:39:44 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE869189;
+        Wed, 24 May 2023 23:39:42 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-4572fa2a92fso62240e0c.2;
+        Wed, 24 May 2023 23:39:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1684996562; x=1716532562;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hBFA23DvtteSUTXvjD6xllHeEa7Xzq+7Vmp8PXfxQSw=;
-  b=n/EbsO2WU501J7P6/zXS+kPTs3tPtgCG1yhDhutoFtVUJpmH9C3C5xh+
-   wcaYg0cDaxlao4ljNR6M4J6o4hDyd38eRf/1qenkeS4hZz8P4su4Ua4nT
-   o17xtU94uLXLvybs6pnKOf3+oNkZqfmfkDLITK36DurWYSUTYpKlsOT8T
-   zPqQCXuyE++tqzVIVr9ADEzPathDAupPhB5/KBwqMJz1oz5idccwH5wI5
-   pkPghbgx5X4YQY+3PKjb32D/EsKWEImL616JYKusmuRXwu1OxkEKWi4U2
-   gaG4MfSVH03XWBQ8yUD+zmrcjm9elcf5KLYZw5r280NN32m6/XXrk1X/s
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,190,1681164000"; 
-   d="scan'208";a="31088100"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 25 May 2023 08:36:00 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 25 May 2023 08:36:00 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 25 May 2023 08:36:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1684996560; x=1716532560;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hBFA23DvtteSUTXvjD6xllHeEa7Xzq+7Vmp8PXfxQSw=;
-  b=Cj63FBNyKp3ZC5ReJFDZJ5e2JrzPBT1/EhePF9kcGdb8NZLLYO643R+p
-   mPW/2jdRGvCCKLdORz++KmMiu8QltBPislCDXX16MU3OOwXNBa99M3SsI
-   bEdTle5YYZOPUunJ8tmZ8jXlCZcr9H6iCH0UahQ2+12RaIMLc2kHOrCOe
-   WXeruZcOjd+yBkLrwiJmc/MKgHvRHaKTFixNmtqq6ZHToToHldTDVdn/J
-   /0lM9GXEjvWJpi02mEP1PY5eUFC8qa5NOaxsEyOD01qhDfibsObXTJCv/
-   H+4mNmVavrxX8buez0NMCT/1NIWgfoM3GJj+0vfoLW7irXMnyzhvmGuue
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,190,1681164000"; 
-   d="scan'208";a="31088099"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 25 May 2023 08:35:59 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 51172280082;
-        Thu, 25 May 2023 08:35:59 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/19] EDAC/mc/synopsys: Various fixes and cleanups
-Date:   Thu, 25 May 2023 08:35:59 +0200
-Message-ID: <4488875.LvFx2qVVIh@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220910194237.10142-1-Sergey.Semin@baikalelectronics.ru>
+        d=gmail.com; s=20221208; t=1684996782; x=1687588782;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qgfz3nPmdI+S3+lmqQSPwAQ/1Clj8Evj/a1VGGmq+xQ=;
+        b=T3cMmHhcvuP+7ZN2NgqUHMGn4+w8CPYaAlgxvRNG/znwCGXb47yZVYnKngsBb9P7B+
+         g9IEVdgKxHQVLl9p0RyOXqbHTlvFLbvcnX4O/FIETgHowGN9rkxrfxAT7vODH9FXUhXI
+         56+xnusvDY6M+gmbHhK3bz8NIhA2hYusd8OUkPLHMAvGLHcqXcS1x+4ajlBZCtpkcGrD
+         2MngpJR7Jb5yT2MUjxb6AWMuBY0slbWkLj0I+lSyFqwJstZ57tCDcJlUofXYrW2bJCYU
+         8qh44tMQWKIVXHP4rsCuUUIHLGP6B5kBn+GrIa6B9qsXTXqZhGa1g4asVzbofxqN7T5P
+         /jNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684996782; x=1687588782;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qgfz3nPmdI+S3+lmqQSPwAQ/1Clj8Evj/a1VGGmq+xQ=;
+        b=IQNlGLGdchWq50JwaNH5dl7AuisIfpzp329WHqdLanHmfo5m9Gn6o/61OSjRCNoaPz
+         PWqckaRSuNuB9oPoKr1gkrjb7ACjrKd1Hx4jAE3vqAuuN+6a/Md2m+G9i8XHV9XK1cGu
+         SJ6bxhju3D74Q1170Aubg8MBn6e6OQXPLr4GJkGWjcpw0lHCiTzMUBasFm3bZwTzrIsE
+         tl7Q6qRY5bChg31TWEDOj0Pf0KQ6MBD6OMTiJhw4NL7raHRlforlxkhgGPUf6pd/YzVy
+         GywCo8HglyPm+vCb4NVG/W3LCcc2ZYRCI9o+K2kduthXE8ueTEZtaLFm9uWNqOy1Pm/N
+         VbjA==
+X-Gm-Message-State: AC+VfDwqZWvFVUOigytf8iWVYZInB+2MzqjptGyR96I0lzvD9+oiqN09
+        ynqF5M8TdX0ZhpXiMaauMaTRRE3vR64Z696n8r4=
+X-Google-Smtp-Source: ACHHUZ5bIBNeZo+jv9CLtMpvIEyomJv5OJ+5YoSCKwOxzNybuCkIMtT/jmFYv+DRVD/DuiaellhYuykZe36Qo3uV07Q=
+X-Received: by 2002:a67:bb09:0:b0:421:c588:4d40 with SMTP id
+ m9-20020a67bb09000000b00421c5884d40mr6078738vsn.15.1684996781899; Wed, 24 May
+ 2023 23:39:41 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230320095620.7480-1-di.shen@unisoc.com> <6055bc39-5c00-d12f-b5c3-fa21a9649d63@arm.com>
+ <CAHYJL4qL+nJuiN8vXGaiPQuuaPx6BA+yjRq2TRaBgb+qXi8-yw@mail.gmail.com>
+ <637a3bb1-ba1c-e707-01b7-06c1358583ca@linaro.org> <CAHYJL4rnfVp+X3imbxWzUd9ixTFAPe4ioLyi-t50PwhL0y5v8A@mail.gmail.com>
+ <da59b4ef-1532-1b3a-7a73-9a095d8c9390@linaro.org> <CAHYJL4qJwKHFsCPUvLzmUEAJtEfHDAO23D5=0zAXOYSCABJ8_g@mail.gmail.com>
+ <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org> <e31da1fa-168d-9a85-cdb3-66192d887d83@arm.com>
+ <ce9b3b01-e496-9e02-5583-41893b7154c7@linaro.org> <6022d391-9ae8-2bb4-0f81-2c99466dc556@arm.com>
+In-Reply-To: <6022d391-9ae8-2bb4-0f81-2c99466dc556@arm.com>
+From:   Di Shen <cindygm567@gmail.com>
+Date:   Thu, 25 May 2023 14:39:30 +0800
+Message-ID: <CAHYJL4r0yxLDHsTDKdcny6F7Lbzo-D48RGWyax07YUUFuzC2mg@mail.gmail.com>
+Subject: Re: [PATCH V3] thermal/core/power_allocator: avoid thermal cdev can
+ not be reset
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Di Shen <di.shen@unisoc.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
+        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com,
+        rui.zhang@intel.com, amitk@kernel.org, rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Apr 14, 2023 at 11:21=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> =
+wrote:
+>
+>
+>
+> On 4/14/23 16:06, Daniel Lezcano wrote:
+> > On 14/04/2023 16:18, Lukasz Luba wrote:
+> >>
+> >>
+> >> On 4/14/23 12:12, Daniel Lezcano wrote:
+> >>> On 13/04/2023 10:40, Di Shen wrote:
+> >>>> We have discussed this question in patch-v1:
+> >>>> https://lore.kernel.org/all/f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm=
+.com/
+> >>>>
+> >>>> Simply put, we use the trip_temp in the Android System; set differen=
+t
+> >>>> trip_temp for thermal control of different scenarios.
+> >>>
+> >>> The changes are dealing with the trip points and trying to detect the
+> >>> threshold. That part should be handled in the thermal core or thermal
+> >>> trip side, not in the governor.
+> >>>
+> >>> AFAICT, if a trip point is changed, then the power allocator should
+> >>> be reset, including the cdev state.
+> >>>
+> >>> It would be more convenient to add an ops to the governor ops
+> >>> structure to reset the governor and then call it when a trip point is
+> >>> changed in thermal_zone_set_trip()
+> >>>
+> >>>
+> >>
+> >> Sounds reasonable to have a proper API and fwk handling this corner
+> >> case scenario.
+> >> Although, if there is a need for a 'easy-to-backport' fix for IPA only=
+,
+> >> I agree with this patch, since it's straight forward to put in some
+> >> Android kernel. We can later fix the framework to handle this properly=
+.
+> >> Anyway, both ways are OK to me.
+> >
+> > Unfortunately, we can not do the maintenance of the Linux kernel based
+> > on an 'easy-to-backport' policy to Android.
+> >
+> > This patch could be applied from-list to Android as a hotfix. But for
+> > Linux the fix should be more elaborated. One solution is to add a
+> > 'reset' ops and call it from the trip point update function.
+>
+> Fair enough.
+>
+> >
+> > Did you double check the issue is not impacting the other governors too=
+ ?
+>
+> No, unfortunately, I haven't checked other governors.
 
-Am Samstag, 10. September 2022, 21:42:18 CEST schrieb Serge Semin:
-> This patchset is a first one in the series created in the framework of
-> my Baikal-T1 DDRC-related work:
->=20
-> [1: In-progress] EDAC/mc/synopsys: Various fixes and cleanups
-> Link: ---you are looking at it---
-> [2: In-progress] EDAC/synopsys: Add generic DDRC info and address mapping
-> Link:
-> https://lore.kernel.org/linux-edac/20220822191427.27969-1-Sergey.Semin@ba=
-ik
-> alelectronics.ru [3: In-progress] EDAC/synopsys: Add generic resources and
-> Baikal-T1 support Link:
-> https://lore.kernel.org/linux-edac/20220822191957.28546-1-Sergey.Semin@ba=
-ik
-> alelectronics.ru
->=20
-> Note the patchsets above must be merged in the same order as they are
-> placed in the list in order to prevent conflicts. Nothing prevents them
-> from being reviewed synchronously though. Any tests are very welcome.
-> Thanks in advance.
+Hi Lukasz and Daniel,
+I rethought about this issue, and have tried three ways to solve it.
+Finally, I realized that the root cause might be the cdev->state
+update and notify. We should get back to take cdev->state into
+account.
 
-What is the state of this/these series? AFAICS only the DT patches got=20
-applied.
-The synopsys driver got refactored quite a lot, so adding proper support fo=
-r=20
-imx8mp from current state will conflict quite a lot.
-It's a Synopsys V3.70a (without HW poisoning support!), refer to commit=20
-68b7cf5d91d4c ("arm64: dts: imx8mp: add ddr controller node to support EDAC=
- on=20
-imx8mp").
+The three ways:
+1.From trips updating perspective:
+As your suggestion=EF=BC=8Cadd an ops function for thermal_governor
+structure=EF=BC=8Cdefine it in IPA governor, and call it when trips are
+changed by userspace(sysfs node).
+
+2.From cdev->state updating perspective:
+For example, for gov_power_allocator there are two branches reached to
+__thermal_cdev_update.
+
+power_allocator_trottle
+        |
+allow_maximum_power()[gov_power_allocator.c]
+        |
+__thermal_cdev_update()[thermal_helpers.c]<<<<<<<(1)
+        |
+thermal_cdev_set_cur_state()
+        |
+cdev->ops->set_cur_state()
+        |
+thermal_notify_cdev_state_update()
+        |
+     .......
+
+
+power_allocator_throttle()[gov_power_allocator.c]
+        |
+allocate_power()
+        |
+power_actor_set_power()
+        |
+__thermal_cdev_update()[thermal_helpers.c]<<<<<<(2)
+        |
+      ......
+
+Add a variable last_state for thermal_cooling_device structure to
+record the last target cooling state, and before
+thermal_notify_cdev_state_update, determine whether the last_state is
+equal to current state. If not equal, then
+thermal_notify_cdev_state_update.
+
+static void thermal_cdev_set_cur_state(struct thermal_cooling_device
+*cdev,
+~                                        unsigned long target)
+{
+        if (cdev->ops->set_cur_state(cdev, target))
+                return;
+
+~       if (cdev->last_state !=3D target)
++               thermal_notify_cdev_state_update(cdev->id, target);
++
++       cdev->last_state =3D target;
++
+        thermal_cooling_device_stats_update(cdev, target);
+}
+
+In this way, it will only update and notify when the state is changed
+which means there's no need to use update flag to make sure it updates
+cdev->state only once.
+
+It can avoid a lot of unnecessary notifications, not only when the
+temperature drops below the first trip point(at this situation
+cdev->state is always 0) but also when the policy is working.
+
+3.Similar to the second method, but an easier one.
+Actually, in the set_cur_state ops of every cooling device, it has
+already checked whether the last cooling state is equal to current
+value or not, and returns 0. Like cpufreq cooling device:
+static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+                                unsigned long state)
+{
+        //.......
+        /* Request state should be less than max_level */
+        if (state > cpufreq_cdev->max_level)
+                return -EINVAL;
+
+        /* Check if the old cooling action is same as new cooling
+action */
+        if (cpufreq_cdev->cpufreq_state =3D=3D state)
+                return 0; //return -EAGAIN;
+}
+
+What if return a non-zero value? 1 or -EAGAIN(means thy again)? Then
+thermal_cdev_set_cur_state() in __thermal_cdev_update() can return
+directly without update and notify.
+
+I prefer method 3. Because there's no more new variable or function
+compared to 1 and 2, and it can make code more brief.
+
+Well, what do you think about the three ways? Look forward to your
+comments. Thank you!
 
 Best regards,
-Alexander
-
-> Regarding this series content. It's an initial patchset which
-> traditionally provides various fixes, cleanups and modifications required
-> for the more comfortable further features development. The main goal of it
-> though is to detach the Xilinx Zynq A05 DDRC related code into the
-> dedicated driver since first it has nothing to do with the Synopsys DW
-> uMCTL2 DDR controller and second it will be a great deal obstacle on the
-> way of extending the Synopsys-part functionality.
->=20
-> The series starts with fixes patches, which in short concern the next
-> aspects: touching the ZynqMP-specific CSRs on the Xilinx ZinqMP platform
-> only, serializing an access to the ECCCLR register, adding correct memory
-> devices type detection, setting a correct value to the
-> mem_ctl_info.scrub_cap field, dropping an erroneous ADDRMAP[4] parsing and
-> getting back a correct order of the ECC errors info detection procedure.
->=20
-> Afterwards the patchset provides several cleanup patches required for the
-> more coherent code splitting up (Xilinx Zynq A05 and Synopsys DW uMCTL2)
-> so the provided modifications would be useful in both drivers. First we
-> get to replace the platform resource manual IO-remapping with the
-> devm_platform_ioremap_resource() method call. Secondly we suggest to drop:
-> internal CE/UE errors counters, local to_mci() macros definition, some
-> redundant ecc_error_info structure fields and redundant info from the
-> error message, duplicated dimm->nr_pages debug printout and spaces from
-> the MEM_TYPE flags declarations. (The later two updates concern the MCI
-> core part.) Thirdly before splitting up the driver we need to add an
-> unique MC index allocation infrastructure to the MCI core.  It's required
-> since after splitting the driver up we'll need to make sure both device
-> types could be correctly probed on the same platform. Finally the Xilinx
-> Zynq A05 part of the driver is moved out to a dedicated driver where it
-> should been originally placed. After that the platform-specific setups API
-> is removed from the Synopsys DW uMCTL2 DDRC driver since it's no longer
-> required.
->=20
-> Finally as the cherry on the cake we suggest to unify the DW uMCTL2 DDRC
-> driver entities naming and replace the open-coded "shift/mask" patter with
-> the kernel helpers like BIT/GENMASK/FIELD_x in there. It shall
-> significantly improve the code readability.
->=20
-> Link:
-> https://lore.kernel.org/linux-edac/20220822190730.27277-1-Sergey.Semin@ba=
-ik
-> alelectronics.ru/ Changelog 2:
-> - Move Synopsys DW uMCTL2 DDRC bindings file renaming to a separate patch.
->   (@Krzysztof)
-> - Introduce a new compatible string "snps,dw-umctl2-ddrc" matching the new
->   DT-schema name.
-> - Forgot to fix some of the prefix of the SYNPS_ZYNQMP_IRQ_REGS macro
->   in several places. (@tbot)
-> - Drop the no longer used "priv" pointer from the mc_init() function.
->   (@tbot)
-> - Include "linux/bitfield.h" header file to get the FIELD_GET macro
->   definition. (@tbot)
-> - Drop the already merged in patches:
-> [PATCH 12/20] EDAC/mc: Replace spaces with tabs in memtype flags definiti=
-on
-> [PATCH 13/20] EDAC/mc: Drop duplicated dimm->nr_pages debug printout
->=20
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: Punnaiah Choudary Kalluri <punnaiah.choudary.kalluri@xilinx.com>
-> Cc: Manish Narani <manish.narani@xilinx.com>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Robert Richter <rric@kernel.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-edac@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
->=20
-> Serge Semin (19):
->   EDAC/synopsys: Fix native uMCTL2 IRQs handling procedure
->   EDAC/synopsys: Fix generic device type detection procedure
->   EDAC/synopsys: Fix mci->scrub_cap field setting
->   EDAC/synopsys: Drop erroneous ADDRMAP4.addrmap_col_b10 parse
->   EDAC/synopsys: Fix reading errors count before ECC status
->   EDAC/synopsys: Use platform device devm ioremap method
->   EDAC/synopsys: Drop internal CE and UE counters
->   EDAC/synopsys: Drop local to_mci macro implementation
->   EDAC/synopsys: Drop struct ecc_error_info.blknr field
->   EDAC/synopsys: Shorten out struct ecc_error_info.bankgrpnr field name
->   EDAC/synopsys: Drop redundant info from error message
->   EDAC/mc: Init DIMM labels in MC registration method
->   EDAC/mc: Add MC unique index allocation procedure
->   dt-bindings: memory: snps: Detach Zynq DDRC controller support
->   dt-bindings: memory: snps: Use more descriptive device name
->   EDAC/synopsys: Detach Zynq DDRC controller support
->   EDAC/synopsys: Drop unused platform-specific setup API
->   EDAC/synopsys: Unify the driver entities naming
->   EDAC/synopsys: Convert to using BIT/GENMASK/FIELD_x macros
->=20
->  .../snps,dw-umctl2-ddrc.yaml                  |  56 ++
->  .../memory-controllers/synopsys,ddrc-ecc.yaml |  76 --
->  .../xlnx,zynq-ddrc-a05.yaml                   |  38 +
->  MAINTAINERS                                   |   3 +
->  drivers/edac/Kconfig                          |   9 +-
->  drivers/edac/Makefile                         |   1 +
->  drivers/edac/edac_mc.c                        | 135 ++-
->  drivers/edac/edac_mc.h                        |   4 +
->  drivers/edac/synopsys_edac.c                  | 903 ++++++------------
->  drivers/edac/zynq_edac.c                      | 504 ++++++++++
->  10 files changed, 1026 insertions(+), 703 deletions(-)
->  create mode 100644
-> Documentation/devicetree/bindings/memory-controllers/snps,dw-umctl2-ddrc.=
-ya
-> ml delete mode 100644
-> Documentation/devicetree/bindings/memory-controllers/synopsys,ddrc-ecc.ya=
-ml
-> create mode 100644
-> Documentation/devicetree/bindings/memory-controllers/xlnx,zynq-ddrc-a05.y=
-am
-> l create mode 100644 drivers/edac/zynq_edac.c
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
-
+Di
