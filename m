@@ -2,94 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17CC710D76
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DAD710D78
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 15:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241096AbjEYNls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 09:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58478 "EHLO
+        id S233656AbjEYNmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 09:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233656AbjEYNlp (ORCPT
+        with ESMTP id S241232AbjEYNmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 09:41:45 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC84186;
-        Thu, 25 May 2023 06:41:44 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QRpxz3kQjzqSQ5;
-        Thu, 25 May 2023 21:37:11 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 25 May 2023 21:41:42 +0800
-Subject: Re: [PATCH 3/3] docs: perf: Add new description for HiSilicon UC PMU
-To:     Junhao He <hejunhao3@huawei.com>, <will@kernel.org>,
-        <jonathan.cameron@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <mark.rutland@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <yangyicong@huawei.com>,
-        <shenyang39@huawei.com>, <prime.zeng@hisilicon.com>,
-        <yangyicong@hisilicon.com>
-References: <20230523131825.6102-1-hejunhao3@huawei.com>
- <20230523131825.6102-4-hejunhao3@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <5785e3a3-0a4d-3a75-88cf-f29f43feb6bc@huawei.com>
-Date:   Thu, 25 May 2023 21:41:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 25 May 2023 09:42:12 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BF1194
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:42:10 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-56190515833so8184427b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 06:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685022130; x=1687614130;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rnG6Y0IkjRC+xsIGYgvUWotRP5vSWqfQin1m7Vqzl+Q=;
+        b=A0gGlkaoUyC51HiKT+sCwopfPgRLO/zbYFHsZREc34UN5l0U50VA2C7WbPqQdRNmiw
+         dR+UZ8Ar2aT5oRBt+f1Xqy4YU/brDH4AGJrRfcEzQUI6Hf1hBjxupWv9xzQ50XCZfV1d
+         F+91EwWiCl+OtRywLSvbmMXJMLe3C+wmPz98ed65lTI+1ISXBDQ9707JhewqqrS+P8RE
+         0P0ceE4d0A/u4GjmH2VgTs1J/+TvHQ7pi78MO3dENtkWAe1GKtX0oAfXw3eBZC27dBwu
+         PQhKTGaaY2rhgatuNqBRJam5kp6fNt9jBKPBA1vgnrAtEKvjJ8XZ2HTrUqLE2CbEl9M0
+         ajnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685022130; x=1687614130;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rnG6Y0IkjRC+xsIGYgvUWotRP5vSWqfQin1m7Vqzl+Q=;
+        b=JykoXt6c0J+VUcxuVx21a7DFzFJ6PNRUmYhfcpXmDCCChyXsaAPED/mfWHfo6GkDGi
+         pXJTksJ6ucNIBbv3VCaTIsc7luQj6Mt5zrx/jFtrayE4GgZRUxpBrR4LFsPVKV+91fwZ
+         z6/EanpAgZDq8brOtq672rhfKMpj+QvlkEsowJc4zSprVDV9Jkru7sCKyug6aA1s1i+k
+         Rv09LHzjqeDaR1JRMCBAkmgGSV2C9jId3/SGsL6pL4C+jhcnMObRTDqwQMhXpc/van78
+         DEqJGVbodwlGK7yjajGiQq3sdEmUfgQlyt0e0XNw1auJt1FxaaVHkkjhLwn7FHsT1jQy
+         nw2w==
+X-Gm-Message-State: AC+VfDyqWeErIll1suad2ipqjr9/P9Xa7z2pWdB+neLQTxOVbLhUh57h
+        o1ftiyYPciv4khRoVRICBTWO1xpyXlS5MsbS7fBE1A1aW9pjQlMl
+X-Google-Smtp-Source: ACHHUZ6BTIEaLVAcq9ramx4EpoO0jRq+5+ZKW8MlnCM75osqLzXGJ6qlJNZHHoFN2nqQOfZeKTBa4Upd84pA3+wFQ/s=
+X-Received: by 2002:a81:a1c6:0:b0:561:89f1:6bb with SMTP id
+ y189-20020a81a1c6000000b0056189f106bbmr3129173ywg.6.1685022130027; Thu, 25
+ May 2023 06:42:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230523131825.6102-4-hejunhao3@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230525092202.78a1fb01@canb.auug.org.au>
+In-Reply-To: <20230525092202.78a1fb01@canb.auug.org.au>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 25 May 2023 15:41:58 +0200
+Message-ID: <CACRpkdYUPmaBWDwH_ARHp-bFtpML3aShd_mKBBq+ndQATGEJjQ@mail.gmail.com>
+Subject: Re: linux-next: duplicate patches in the asm-generic tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/23 21:18, Junhao He wrote:
-> A new function is added on HiSilicon uncore UC PMU.
-> 
-> The UC PMU support to filter statistical information based on
-> the specified tx request uring channel. Make user configuration
-> through "uring_channel" parameter.
-> Document them to provide guidance on how to use them.
-> 
+On Thu, May 25, 2023 at 1:22=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
 
-Since it's not a new document. Just merge this into previous patch will be better for
-review.
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
+>
+>   b1e7601203a8 ("arm64: vdso: Pass (void *) to virt_to_page()")
+>
+> This is commit
+>
+>   b0abde80620f ("arm64: vdso: Pass (void *) to virt_to_page()")
+>
+> in Linus' tree.
 
-Thanks.
+Aha Catalin ACKed it and Will picked it up, perhaps Arnd can drop it from
+his tree, albeit it is not a disaster, I am surprised this was the
+biggest fallout
+we've seen of those patches.
 
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
-> ---
->  Documentation/admin-guide/perf/hisi-pmu.rst | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/perf/hisi-pmu.rst b/Documentation/admin-guide/perf/hisi-pmu.rst
-> index 546979360513..939a524fa1d6 100644
-> --- a/Documentation/admin-guide/perf/hisi-pmu.rst
-> +++ b/Documentation/admin-guide/perf/hisi-pmu.rst
-> @@ -98,6 +98,14 @@ CCL/ICL-ID. For I/O die, the ICL-ID is followed by:
->  5'b00011: HAC_ICL;
->  5'b10000: PCIe_ICL;
->  
-> +(e) uring_channel: UC PMU events 0x47~0x59 supports filtering by tx request
-> +uring channel. It is 2 bits. Some important codes are as follows:
-> +2'b11: count the events which sent to the uring_ext (MATA) channel;
-> +2'b01: is the same as 2'b11;
-> +2'b10: count the events which sent to the uring (non-MATA) channel;
-> +2'b00: default value, count the events which sent to the both uring and
-> +       uring_ext channel;
-> +
->  Users could configure IDs to count data come from specific CCL/ICL, by setting
->  srcid_cmd & srcid_msk, and data desitined for specific CCL/ICL by setting
->  tgtid_cmd & tgtid_msk. A set bit in srcid_msk/tgtid_msk means the PMU will not
-> 
+Yours,
+Linus Walleij
