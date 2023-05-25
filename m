@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B421710213
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 02:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AFF71021C
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 02:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbjEYAqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 24 May 2023 20:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
+        id S233018AbjEYAx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 24 May 2023 20:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjEYAql (ORCPT
+        with ESMTP id S229871AbjEYAxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 24 May 2023 20:46:41 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B636AD3
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:46:40 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d2c865e4eso1234716b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:46:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684975600; x=1687567600;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+RomvB4DA9ojeYiKa8NyqSxbnHiS1nQrYLO/v9EOcUE=;
-        b=DoBOGQ+m2clOgR685J/bD4OBoNNP8RRxcyCdrcnX07MqvSNTXoT9c/QipttkT2tL2U
-         oMrWjMZzqzWzFDnfDYnEob/i0/EDWa9UvNX8V+CDG4bT3/berfnMMoJ3T8H8asQYkZrz
-         zjDXEMYSXFQRi911epIIzymL3A5DTwgP9DprgjP4084++HuDnJxLBXMe0HZ0RLRpJjLh
-         gPl/K5D2ZGKOOHV/qO4s0VU+jHNMLYbTQMt2oVmCp4QC7/uNTllRiaFOHXRWCT2Ex5so
-         gRGsBQRDVu95Ceh8p3p24K++HTsNpTCDzflT34UeUfgHbJ2ytYlN4Gc5SyXVnwFdzxba
-         XCJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684975600; x=1687567600;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+RomvB4DA9ojeYiKa8NyqSxbnHiS1nQrYLO/v9EOcUE=;
-        b=fFQ4eOonDWVVMbhEQRPY6E1X5pC0xvOBwSgHzOfjzOSq7444ifeP8uAU/g03Du2pxI
-         n9FWCphtbmLA68dAUiBfORFTDPYGY+cKRLGY2zDhXsH5CA5bvknQT0qchcD/h1OpzneZ
-         t//KOLl2jtm7RzyJf+jbNKp3utrg4emQQf059uQ+OJ+z3X6Tbzg+NA2Ad96ufylEWbwQ
-         6DXwvV02DuNA3dMj9OHPZz78aPNCoXbUrB5V+0cRiKsxtWCH8K8oaAvt4BPfI7FKfJwK
-         TDZpZiJxuUAA29ojacaZr81cm+lc+xvxcZeVT1AVr5ytYygwf5XCGeOnSyhfRWv9eAV0
-         BqrQ==
-X-Gm-Message-State: AC+VfDyEcf6b9BdsfV6P4G57UIsvH2nA0c/YhbYrw3qUNxh9nJD7e91R
-        OJHyLNEC6Wpth4X0pOnLhVI=
-X-Google-Smtp-Source: ACHHUZ7Jk8m0u/sCue3c9rNgAMYF2sIXb2Nu8/W340oQ/6nb3GFgnMnAp8gh/SWNGvJJ+IZ/ktkYTg==
-X-Received: by 2002:a05:6a00:1881:b0:646:1f13:7fce with SMTP id x1-20020a056a00188100b006461f137fcemr6569792pfh.2.1684975599960;
-        Wed, 24 May 2023 17:46:39 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-12.three.co.id. [116.206.28.12])
-        by smtp.gmail.com with ESMTPSA id 26-20020aa7921a000000b0063b89300347sm43308pfo.142.2023.05.24.17.46.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 17:46:39 -0700 (PDT)
-Message-ID: <1d497dd0-958b-6385-b7fb-ae852e3e733d@gmail.com>
-Date:   Thu, 25 May 2023 07:46:31 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
+        Wed, 24 May 2023 20:53:24 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659CCE7
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 17:53:22 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id AF5272C02E0;
+        Thu, 25 May 2023 12:53:19 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1684975999;
+        bh=gakfYzajycWsBIRNP8cV6Mi5LfkKI00ALEVp/557AR0=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=opxRzPOMErYuaex5VKKtrEpdkwSwq0I/abh33hNMcE1bFwXayQdf7pizD/waWK64J
+         NWbFvdSNQa3ndbqaG4wRuNGcd5y7JQwoiBm1lFcVWgiaAL2FOujUsZ4V4xu7YAtlo8
+         eYRs7gdeyA76Ge48X0V2nWobvoTYSw5V4QSZ0Z3JQdWsPP8DiNoTpiBDXVXVBaSZ0x
+         X2OSRrSJzW/X3rwgZZUq91ud8vkfkBtrcJroc71hBDyP8wnY58AIE5g5v7tqEcz2Ah
+         N+Gzly+YvsTkYJt8qCJrtNn+4uDu66h/Ijc3ZUs6xERR8ClnrBx+ClhEUJNYgXHS5G
+         Fnu/56z5cngqw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B646eb17f0001>; Thu, 25 May 2023 12:53:19 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 25 May 2023 12:53:19 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.026; Thu, 25 May 2023 12:53:19 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Aviram Dali <aviramd@marvell.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Elad Nachman <enachman@marvell.com>
+Subject: Re: [PATCH 0/3] mtd: rawnand: marvell: add support for AC5 SoC
+Thread-Topic: [PATCH 0/3] mtd: rawnand: marvell: add support for AC5 SoC
+Thread-Index: AQHY45PTmnmHPuwW40yPMLrn8y8OYa9qtkQA
+Date:   Thu, 25 May 2023 00:53:19 +0000
+Message-ID: <143fb1ff-b2d4-a6fe-e892-b55a7bbf56f8@alliedtelesis.co.nz>
+References: <20221019082046.30160-1-vadym.kochan@plvision.eu>
+In-Reply-To: <20221019082046.30160-1-vadym.kochan@plvision.eu>
+Accept-Language: en-NZ, en-US
 Content-Language: en-US
-To:     Linux ALSA Subsystem Development <alsa-devel@alsa-project.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Karthik Bala <Karthik_Ramani@hotmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: =?UTF-8?Q?Fwd=3a_XPS_17_-_Intel=c2=ae_Smart_Sound_Technology_for_MI?=
- =?UTF-8?Q?PI_SoundWire=c2=ae_Audio_=28device_not_recognized=29?=
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.33.22.30]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BED105E491B8E142A82B3707E313028D@atlnz.lc>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=QG0ANWG3iu1Ceheqxc0A:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-I notice a bug report on Bugzilla [1]. As many developers don't keep
-an eye on it, I decide to forward it by email. Quoting from it:
-
-> Ubuntu (Lobster) 23.04 not recognizing Intel® Smart Sound Technology for MIPI SoundWire® Audio.
-> 
-> gnome-control-center showing dummy-output. 
-> 
-> I tried with the latest mainline kernel 6.4.00-RC2, still sound not working.
-
-See bugzilla for the full thread.
-
-The reporter said that he had problem only with integrated sound card on
-his laptop, and he also attached dmesg and working audio capture from Windows.
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217461
-
--- 
-An old man doll... just what I always wanted! - Clara
+SGkgVmFkeW0sDQoNCk9uIDE5LzEwLzIyIDIxOjIwLCBWYWR5bSBLb2NoYW4gd3JvdGU6DQo+IFRo
+aXMgc2VyaWVzIGFkZHMgc3VwcG9ydCBmb3IgQUM1IFNvQy4NCj4NCj4gVGhlIGZvbGxvd2luZyBj
+aGFuZ2VzIHdlcmUgbWFkZSB0byBhZGQgQUM1IHN1cHBvcnQ6DQo+DQo+ICAgICAxKSBNb2RpZnkg
+TWFydmVsbCBuYW5kIE5GQyB0aW1pbmcgc2V0IGZvciBtb2RlIDANCj4NCj4gICAgIDIpIGZpeCB2
+YWxpZGF0aW9uIGluIEFDNSBOYW5kIGRyaXZlciBmb3IgT05GSSB0aW1pbmdzIHZhbHVlcyBtb2Rl
+cyAxIGFuZCAzDQo+DQo+ICAgICAzKSByZW1vdmUgdW5uZWNlc3NhcnkgbmFuZCB0aW1pbmctbW9k
+ZSBpbiBkZXZpY2UgdHJlZSBvZiBhYzUuZHRzaQ0KPg0KPiAgICAgNCkgYWRkIG5hbmQgbWlzc2lu
+ZyBBQzVYIGxheW91dHMgLCBhZGQgb3B0aW9uIHRvIHVzZSBuZHRyIHByZWRlZmluZWQgdmFsdWVz
+DQo+DQo+ICAgICA1KSBaZXJvIHN0ZXBzIGFuZCB0b3RhbCBmaWVsZHMgb2YgZWNjIGluIGVjYyBj
+b250cm9sbGVyIGluaXRpYWxpemF0aW9uIHNvDQo+ICAgICAgICBuYW5kX3NjYW5fdGFpbCgpIHdp
+bGwgY2FsY3VsYXRlIHRoZXNlIHR3byBmaWVsZHMsIG90aGVyd2lzZQ0KPiAgICAgICAgTkFORCBp
+bml0aWFsaXphdGlvbiB3aWxsIGZhaWwgd2l0aCBrZXJuZWwgNS4xNSBhbmQgYWJvdmUuDQo+DQo+
+IEF2aXJhbSBEYWxpICgyKToNCj4gICAgZHQtYmluZGluZ3M6IG10ZDogQWRkIEFDNSBzcGVjaWZp
+YyBiaW5kaW5nDQo+ICAgIG10ZDogcmF3bmFuZDogbWFydmVsbDogYWRkIHN1cHBvcnQgZm9yIEFD
+NSBTb0MNCg0KQXJlIHlvdSBzdGlsbCBsb29raW5nIGludG8gdGhpcyBzZXJpZXM/IEkgc2VlIG9u
+ZSBwYXJ0IG1hZGUgaXQgdXBzdHJlYW0gDQphcyBjb21taXQgNjhjMThkYWU2ODg4ICgibXRkOiBy
+YXduYW5kOiBtYXJ2ZWxsOiBhZGQgbWlzc2luZyBsYXlvdXRzIikgDQphbmQgdGhlcmUgd2FzIGFu
+IG9mZi1zaG9vdCBzZXJpZXMgYXJvdW5kIGNvbnZlcnRpbmcgdGhlIERUIGJpbmRpbmcuDQoNCj4g
+VmFkeW0gS29jaGFuICgxKToNCj4gICAgbXRkOiByYXduYW5kOiBQYXJ0aWFsbHkgcmV2ZXJ0IDQx
+MTRmOTdjNDFjZCAoIm10ZDogcmF3bmFuZDogR2V0IHJpZCBvZg0KPiAgICAgIGEgZmV3IHVudXNl
+ZCBkZWZpbml0aW9ucyIpDQo+DQo+ICAgLi4uL2RldmljZXRyZWUvYmluZGluZ3MvbXRkL21hcnZl
+bGwtbmFuZC50eHQgIHwgICAxICsNCj4gICBkcml2ZXJzL210ZC9uYW5kL3Jhdy9LY29uZmlnICAg
+ICAgICAgICAgICAgICAgfCAgIDIgKy0NCj4gICBkcml2ZXJzL210ZC9uYW5kL3Jhdy9tYXJ2ZWxs
+X25hbmQuYyAgICAgICAgICAgfCAyNzcgKysrKysrKysrKysrKysrKy0tDQo+ICAgZHJpdmVycy9t
+dGQvbmFuZC9yYXcvbmFuZF90aW1pbmdzLmMgICAgICAgICAgIHwgIDE0ICsNCj4gICBpbmNsdWRl
+L2xpbnV4L210ZC9yYXduYW5kLmggICAgICAgICAgICAgICAgICAgfCAgIDMgKw0KPiAgIDUgZmls
+ZXMgY2hhbmdlZCwgMjY0IGluc2VydGlvbnMoKyksIDMzIGRlbGV0aW9ucygtKQ0KPg==
