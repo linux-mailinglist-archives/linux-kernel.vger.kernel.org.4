@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6830D711312
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0135711300
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 20:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241137AbjEYSDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 14:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
+        id S239967AbjEYSCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 14:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjEYSDQ (ORCPT
+        with ESMTP id S229663AbjEYSCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 14:03:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 695A9D3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 11:03:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5730D15BF;
-        Thu, 25 May 2023 11:03:45 -0700 (PDT)
-Received: from merodach.members.linode.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E43A3F6C4;
-        Thu, 25 May 2023 11:02:57 -0700 (PDT)
-From:   James Morse <james.morse@arm.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        James Morse <james.morse@arm.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com,
-        dfustini@baylibre.com
-Subject: [PATCH v4 10/24] tick/nohz: Move tick_nohz_full_mask declaration outside the #ifdef
-Date:   Thu, 25 May 2023 18:01:55 +0000
-Message-Id: <20230525180209.19497-11-james.morse@arm.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230525180209.19497-1-james.morse@arm.com>
-References: <20230525180209.19497-1-james.morse@arm.com>
+        Thu, 25 May 2023 14:02:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97611B6;
+        Thu, 25 May 2023 11:01:57 -0700 (PDT)
+Date:   Thu, 25 May 2023 18:01:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685037716;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=V+h3E4Nlw9i5berSwerG7OnSMsE/hnFtcs4trvYjPKs=;
+        b=jJDwH23WV08ucolwSx1lBBTMT+ZRtTyzNp7rLOis72fb+bSeTS4S2uxWzBX8/Pl+U+AL3Y
+        iaqh+3LwJ5rW5YZHro94fSuZ49LyX+tA7T9dLnP1IXQHqfytpAccS+8lZBpfI97nFnSJo6
+        HtIO50Dn2UeTXQO/88WCMnMtRwbL1fvzj8sNTpnugJ7n5BLH0H7JDxuhn20u3PwF8TZoRT
+        QjVVrc+7K9c9krCHz2QTw2CbdfMpetxRtnJwl+CgeYre8N9wtVnvzFiW/dMsZgCd30TJlq
+        hXw9X8dEEzEp21IvhcoGfqE71f9QRWDpxhUwmfX35vzNuKZVAHso+yTkiJsznA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685037716;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=V+h3E4Nlw9i5berSwerG7OnSMsE/hnFtcs4trvYjPKs=;
+        b=KvWd+prvnnRHuCvqu83rkF3Q0tL87qTKAy549vI4BfyUm5KEv6gEbBH835urqRq8f7gMXI
+        qwjdwsoFFyozqeDg==
+From:   "tip-bot2 for Noah Goldstein" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/misc] x86/csum: Improve performance of `csum_partial`
+Cc:     Noah Goldstein <goldstein.w.n@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Message-ID: <168503771547.404.3649540312110626967.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,50 +59,626 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tick_nohz_full_mask lists the CPUs that are nohz_full. This is only
-needed when CONFIG_NO_HZ_FULL is defined. tick_nohz_full_cpu() allows
-a specific CPU to be tested against the mask, and evaluates to false
-when CONFIG_NO_HZ_FULL is not defined.
+The following commit has been merged into the x86/misc branch of tip:
 
-The resctrl code needs to pick a CPU to run some work on, a new helper
-prefers housekeeping CPUs by examining the tick_nohz_full_mask. Hiding
-the declaration behind #ifdef CONFIG_NO_HZ_FULL forces all the users to
-be behind an ifdef too.
+Commit-ID:     688eb8191b475db5acfd48634600b04fd3dda9ad
+Gitweb:        https://git.kernel.org/tip/688eb8191b475db5acfd48634600b04fd3dda9ad
+Author:        Noah Goldstein <goldstein.w.n@gmail.com>
+AuthorDate:    Wed, 10 May 2023 20:10:02 -05:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Thu, 25 May 2023 10:55:18 -07:00
 
-Move the tick_nohz_full_mask declaration, this lets callers drop the
-ifdef, and guard access to tick_nohz_full_mask with IS_ENABLED() or
-something like tick_nohz_full_cpu().
+x86/csum: Improve performance of `csum_partial`
 
-The definition does not need to be moved as any callers should be
-removed at compile time unless CONFIG_NO_HZ_FULL is defined.
+1) Add special case for len == 40 as that is the hottest value. The
+   nets a ~8-9% latency improvement and a ~30% throughput improvement
+   in the len == 40 case.
 
-Signed-off-by: James Morse <james.morse@arm.com>
+2) Use multiple accumulators in the 64-byte loop. This dramatically
+   improves ILP and results in up to a 40% latency/throughput
+   improvement (better for more iterations).
+
+Results from benchmarking on Icelake. Times measured with rdtsc()
+ len   lat_new   lat_old      r    tput_new  tput_old      r
+   8      3.58      3.47  1.032        3.58      3.51  1.021
+  16      4.14      4.02  1.028        3.96      3.78  1.046
+  24      4.99      5.03  0.992        4.23      4.03  1.050
+  32      5.09      5.08  1.001        4.68      4.47  1.048
+  40      5.57      6.08  0.916        3.05      4.43  0.690
+  48      6.65      6.63  1.003        4.97      4.69  1.059
+  56      7.74      7.72  1.003        5.22      4.95  1.055
+  64      6.65      7.22  0.921        6.38      6.42  0.994
+  96      9.43      9.96  0.946        7.46      7.54  0.990
+ 128      9.39     12.15  0.773        8.90      8.79  1.012
+ 200     12.65     18.08  0.699       11.63     11.60  1.002
+ 272     15.82     23.37  0.677       14.43     14.35  1.005
+ 440     24.12     36.43  0.662       21.57     22.69  0.951
+ 952     46.20     74.01  0.624       42.98     53.12  0.809
+1024     47.12     78.24  0.602       46.36     58.83  0.788
+1552     72.01    117.30  0.614       71.92     96.78  0.743
+2048     93.07    153.25  0.607       93.28    137.20  0.680
+2600    114.73    194.30  0.590      114.28    179.32  0.637
+3608    156.34    268.41  0.582      154.97    254.02  0.610
+4096    175.01    304.03  0.576      175.89    292.08  0.602
+
+There is no such thing as a free lunch, however, and the special case
+for len == 40 does add overhead to the len != 40 cases. This seems to
+amount to be ~5% throughput and slightly less in terms of latency.
+
+Testing:
+Part of this change is a new kunit test. The tests check all
+alignment X length pairs in [0, 64) X [0, 512).
+There are three cases.
+    1) Precomputed random inputs/seed. The expected results where
+       generated use the generic implementation (which is assumed to be
+       non-buggy).
+    2) An input of all 1s. The goal of this test is to catch any case
+       a carry is missing.
+    3) An input that never carries. The goal of this test si to catch
+       any case of incorrectly carrying.
+
+More exhaustive tests that test all alignment X length pairs in
+[0, 8192) X [0, 8192] on random data are also available here:
+https://github.com/goldsteinn/csum-reproduction
+
+The reposity also has the code for reproducing the above benchmark
+numbers.
+
+Signed-off-by: Noah Goldstein <goldstein.w.n@gmail.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/all/20230511011002.935690-1-goldstein.w.n%40gmail.com
 ---
- include/linux/tick.h | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ arch/x86/lib/csum-partial_64.c |  97 ++++++---
+ lib/Kconfig.debug              |  17 ++-
+ lib/Makefile                   |   1 +-
+ lib/checksum_kunit.c           | 334 ++++++++++++++++++++++++++++++++-
+ 4 files changed, 417 insertions(+), 32 deletions(-)
+ create mode 100644 lib/checksum_kunit.c
 
-diff --git a/include/linux/tick.h b/include/linux/tick.h
-index 9459fef5b857..65af90ca409a 100644
---- a/include/linux/tick.h
-+++ b/include/linux/tick.h
-@@ -174,9 +174,16 @@ static inline u64 get_cpu_iowait_time_us(int cpu, u64 *unused) { return -1; }
- static inline void tick_nohz_idle_stop_tick_protected(void) { }
- #endif /* !CONFIG_NO_HZ_COMMON */
- 
-+/*
-+ * Mask of CPUs that are nohz_full.
-+ *
-+ * Users should be guarded by CONFIG_NO_HZ_FULL or a tick_nohz_full_cpu()
-+ * check.
-+ */
-+extern cpumask_var_t tick_nohz_full_mask;
+diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
+index 50734a2..fe58619 100644
+--- a/arch/x86/lib/csum-partial_64.c
++++ b/arch/x86/lib/csum-partial_64.c
+@@ -5,22 +5,32 @@
+  * This file contains network checksum routines that are better done
+  * in an architecture-specific manner due to speed.
+  */
+- 
 +
- #ifdef CONFIG_NO_HZ_FULL
- extern bool tick_nohz_full_running;
--extern cpumask_var_t tick_nohz_full_mask;
+ #include <linux/compiler.h>
+ #include <linux/export.h>
+ #include <asm/checksum.h>
+ #include <asm/word-at-a-time.h>
  
- static inline bool tick_nohz_full_enabled(void)
+-static inline unsigned short from32to16(unsigned a) 
++static inline unsigned short from32to16(unsigned a)
  {
--- 
-2.39.2
-
+-	unsigned short b = a >> 16; 
++	unsigned short b = a >> 16;
+ 	asm("addw %w2,%w0\n\t"
+-	    "adcw $0,%w0\n" 
++	    "adcw $0,%w0\n"
+ 	    : "=r" (b)
+ 	    : "0" (b), "r" (a));
+ 	return b;
+ }
+ 
++static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
++{
++	result = add32_with_carry(temp64 >> 32, temp64 & 0xffffffff);
++	if (unlikely(odd)) {
++		result = from32to16(result);
++		result = ((result >> 8) & 0xff) | ((result & 0xff) << 8);
++	}
++	return (__force __wsum)result;
++}
++
+ /*
+  * Do a checksum on an arbitrary memory area.
+  * Returns a 32bit checksum.
+@@ -47,21 +57,52 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ 		buff++;
+ 	}
+ 
+-	while (unlikely(len >= 64)) {
++	/*
++	 * len == 40 is the hot case due to IPv6 headers, but annotating it likely()
++	 * has noticeable negative affect on codegen for all other cases with
++	 * minimal performance benefit here.
++	 */
++	if (len == 40) {
+ 		asm("addq 0*8(%[src]),%[res]\n\t"
+ 		    "adcq 1*8(%[src]),%[res]\n\t"
+ 		    "adcq 2*8(%[src]),%[res]\n\t"
+ 		    "adcq 3*8(%[src]),%[res]\n\t"
+ 		    "adcq 4*8(%[src]),%[res]\n\t"
+-		    "adcq 5*8(%[src]),%[res]\n\t"
+-		    "adcq 6*8(%[src]),%[res]\n\t"
+-		    "adcq 7*8(%[src]),%[res]\n\t"
+ 		    "adcq $0,%[res]"
+-		    : [res] "+r" (temp64)
+-		    : [src] "r" (buff)
+-		    : "memory");
+-		buff += 64;
+-		len -= 64;
++		    : [res] "+r"(temp64)
++		    : [src] "r"(buff), "m"(*(const char(*)[40])buff));
++		return csum_tail(result, temp64, odd);
++	}
++	if (unlikely(len >= 64)) {
++		/*
++		 * Extra accumulators for better ILP in the loop.
++		 */
++		u64 tmp_accum, tmp_carries;
++
++		asm("xorl %k[tmp_accum],%k[tmp_accum]\n\t"
++		    "xorl %k[tmp_carries],%k[tmp_carries]\n\t"
++		    "subl $64, %[len]\n\t"
++		    "1:\n\t"
++		    "addq 0*8(%[src]),%[res]\n\t"
++		    "adcq 1*8(%[src]),%[res]\n\t"
++		    "adcq 2*8(%[src]),%[res]\n\t"
++		    "adcq 3*8(%[src]),%[res]\n\t"
++		    "adcl $0,%k[tmp_carries]\n\t"
++		    "addq 4*8(%[src]),%[tmp_accum]\n\t"
++		    "adcq 5*8(%[src]),%[tmp_accum]\n\t"
++		    "adcq 6*8(%[src]),%[tmp_accum]\n\t"
++		    "adcq 7*8(%[src]),%[tmp_accum]\n\t"
++		    "adcl $0,%k[tmp_carries]\n\t"
++		    "addq $64, %[src]\n\t"
++		    "subl $64, %[len]\n\t"
++		    "jge 1b\n\t"
++		    "addq %[tmp_accum],%[res]\n\t"
++		    "adcq %[tmp_carries],%[res]\n\t"
++		    "adcq $0,%[res]"
++		    : [tmp_accum] "=&r"(tmp_accum),
++		      [tmp_carries] "=&r"(tmp_carries), [res] "+r"(temp64),
++		      [len] "+r"(len), [src] "+r"(buff)
++		    : "m"(*(const char *)buff));
+ 	}
+ 
+ 	if (len & 32) {
+@@ -70,45 +111,37 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ 		    "adcq 2*8(%[src]),%[res]\n\t"
+ 		    "adcq 3*8(%[src]),%[res]\n\t"
+ 		    "adcq $0,%[res]"
+-			: [res] "+r" (temp64)
+-			: [src] "r" (buff)
+-			: "memory");
++		    : [res] "+r"(temp64)
++		    : [src] "r"(buff), "m"(*(const char(*)[32])buff));
+ 		buff += 32;
+ 	}
+ 	if (len & 16) {
+ 		asm("addq 0*8(%[src]),%[res]\n\t"
+ 		    "adcq 1*8(%[src]),%[res]\n\t"
+ 		    "adcq $0,%[res]"
+-			: [res] "+r" (temp64)
+-			: [src] "r" (buff)
+-			: "memory");
++		    : [res] "+r"(temp64)
++		    : [src] "r"(buff), "m"(*(const char(*)[16])buff));
+ 		buff += 16;
+ 	}
+ 	if (len & 8) {
+ 		asm("addq 0*8(%[src]),%[res]\n\t"
+ 		    "adcq $0,%[res]"
+-			: [res] "+r" (temp64)
+-			: [src] "r" (buff)
+-			: "memory");
++		    : [res] "+r"(temp64)
++		    : [src] "r"(buff), "m"(*(const char(*)[8])buff));
+ 		buff += 8;
+ 	}
+ 	if (len & 7) {
+-		unsigned int shift = (8 - (len & 7)) * 8;
++		unsigned int shift = (-len << 3) & 63;
+ 		unsigned long trail;
+ 
+ 		trail = (load_unaligned_zeropad(buff) << shift) >> shift;
+ 
+ 		asm("addq %[trail],%[res]\n\t"
+ 		    "adcq $0,%[res]"
+-			: [res] "+r" (temp64)
+-			: [trail] "r" (trail));
++		    : [res] "+r"(temp64)
++		    : [trail] "r"(trail));
+ 	}
+-	result = add32_with_carry(temp64 >> 32, temp64 & 0xffffffff);
+-	if (unlikely(odd)) {
+-		result = from32to16(result);
+-		result = ((result >> 8) & 0xff) | ((result & 0xff) << 8);
+-	}
+-	return (__force __wsum)result;
++	return csum_tail(result, temp64, odd);
+ }
+ EXPORT_SYMBOL(csum_partial);
+ 
+@@ -118,6 +151,6 @@ EXPORT_SYMBOL(csum_partial);
+  */
+ __sum16 ip_compute_csum(const void *buff, int len)
+ {
+-	return csum_fold(csum_partial(buff,len,0));
++	return csum_fold(csum_partial(buff, len, 0));
+ }
+ EXPORT_SYMBOL(ip_compute_csum);
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index ce51d4d..f2d6e9d 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2453,6 +2453,23 @@ config BITFIELD_KUNIT
+ 
+ 	  If unsure, say N.
+ 
++config CHECKSUM_KUNIT
++	tristate "KUnit test checksum functions at runtime" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  Enable this option to test the checksum functions at boot.
++
++	  KUnit tests run during boot and output the results to the debug log
++	  in TAP format (http://testanything.org/). Only useful for kernel devs
++	  running the KUnit test harness, and not intended for inclusion into a
++	  production build.
++
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config HASH_KUNIT_TEST
+ 	tristate "KUnit Test for integer hash functions" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+diff --git a/lib/Makefile b/lib/Makefile
+index 876fcde..cd37ec1 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -377,6 +377,7 @@ obj-$(CONFIG_PLDMFW) += pldmfw/
+ # KUnit tests
+ CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
+ obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
++obj-$(CONFIG_CHECKSUM_KUNIT) += checksum_kunit.o
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+ obj-$(CONFIG_HASHTABLE_KUNIT_TEST) += hashtable_test.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+diff --git a/lib/checksum_kunit.c b/lib/checksum_kunit.c
+new file mode 100644
+index 0000000..ace3c47
+--- /dev/null
++++ b/lib/checksum_kunit.c
+@@ -0,0 +1,334 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Test cases csum_partial and csum_fold
++ */
++
++#include <kunit/test.h>
++#include <asm/checksum.h>
++
++#define MAX_LEN 512
++#define MAX_ALIGN 64
++#define TEST_BUFLEN (MAX_LEN + MAX_ALIGN)
++
++static const __wsum random_init_sum = 0x2847aab;
++static const u8 random_buf[] = {
++	0xac, 0xd7, 0x76, 0x69, 0x6e, 0xf2, 0x93, 0x2c, 0x1f, 0xe0, 0xde, 0x86,
++	0x8f, 0x54, 0x33, 0x90, 0x95, 0xbf, 0xff, 0xb9, 0xea, 0x62, 0x6e, 0xb5,
++	0xd3, 0x4f, 0xf5, 0x60, 0x50, 0x5c, 0xc7, 0xfa, 0x6d, 0x1a, 0xc7, 0xf0,
++	0xd2, 0x2c, 0x12, 0x3d, 0x88, 0xe3, 0x14, 0x21, 0xb1, 0x5e, 0x45, 0x31,
++	0xa2, 0x85, 0x36, 0x76, 0xba, 0xd8, 0xad, 0xbb, 0x9e, 0x49, 0x8f, 0xf7,
++	0xce, 0xea, 0xef, 0xca, 0x2c, 0x29, 0xf7, 0x15, 0x5c, 0x1d, 0x4d, 0x09,
++	0x1f, 0xe2, 0x14, 0x31, 0x8c, 0x07, 0x57, 0x23, 0x1f, 0x6f, 0x03, 0xe1,
++	0x93, 0x19, 0x53, 0x03, 0x45, 0x49, 0x9a, 0x3b, 0x8e, 0x0c, 0x12, 0x5d,
++	0x8a, 0xb8, 0x9b, 0x8c, 0x9a, 0x03, 0xe5, 0xa2, 0x43, 0xd2, 0x3b, 0x4e,
++	0x7e, 0x30, 0x3c, 0x22, 0x2d, 0xc5, 0xfc, 0x9e, 0xdb, 0xc6, 0xf9, 0x69,
++	0x12, 0x39, 0x1f, 0xa0, 0x11, 0x0c, 0x3f, 0xf5, 0x53, 0xc9, 0x30, 0xfb,
++	0xb0, 0xdd, 0x21, 0x1d, 0x34, 0xe2, 0x65, 0x30, 0xf1, 0xe8, 0x1b, 0xe7,
++	0x55, 0x0d, 0xeb, 0xbd, 0xcc, 0x9d, 0x24, 0xa4, 0xad, 0xa7, 0x93, 0x47,
++	0x19, 0x2e, 0xc4, 0x5c, 0x3b, 0xc7, 0x6d, 0x95, 0x0c, 0x47, 0x60, 0xaf,
++	0x5b, 0x47, 0xee, 0xdc, 0x31, 0x31, 0x14, 0x12, 0x7e, 0x9e, 0x45, 0xb1,
++	0xc1, 0x69, 0x4b, 0x84, 0xfc, 0x88, 0xc1, 0x9e, 0x46, 0xb4, 0xc2, 0x25,
++	0xc5, 0x6c, 0x4c, 0x22, 0x58, 0x5c, 0xbe, 0xff, 0xea, 0x88, 0x88, 0x7a,
++	0xcb, 0x1c, 0x5d, 0x63, 0xa1, 0xf2, 0x33, 0x0c, 0xa2, 0x16, 0x0b, 0x6e,
++	0x2b, 0x79, 0x58, 0xf7, 0xac, 0xd3, 0x6a, 0x3f, 0x81, 0x57, 0x48, 0x45,
++	0xe3, 0x7c, 0xdc, 0xd6, 0x34, 0x7e, 0xe6, 0x73, 0xfa, 0xcb, 0x31, 0x18,
++	0xa9, 0x0b, 0xee, 0x6b, 0x99, 0xb9, 0x2d, 0xde, 0x22, 0x0e, 0x71, 0x57,
++	0x0e, 0x9b, 0x11, 0xd1, 0x15, 0x41, 0xd0, 0x6b, 0x50, 0x8a, 0x23, 0x64,
++	0xe3, 0x9c, 0xb3, 0x55, 0x09, 0xe9, 0x32, 0x67, 0xf9, 0xe0, 0x73, 0xf1,
++	0x60, 0x66, 0x0b, 0x88, 0x79, 0x8d, 0x4b, 0x52, 0x83, 0x20, 0x26, 0x78,
++	0x49, 0x27, 0xe7, 0x3e, 0x29, 0xa8, 0x18, 0x82, 0x41, 0xdd, 0x1e, 0xcc,
++	0x3b, 0xc4, 0x65, 0xd1, 0x21, 0x40, 0x72, 0xb2, 0x87, 0x5e, 0x16, 0x10,
++	0x80, 0x3f, 0x4b, 0x58, 0x1c, 0xc2, 0x79, 0x20, 0xf0, 0xe0, 0x80, 0xd3,
++	0x52, 0xa5, 0x19, 0x6e, 0x47, 0x90, 0x08, 0xf5, 0x50, 0xe2, 0xd6, 0xae,
++	0xe9, 0x2e, 0xdc, 0xd5, 0xb4, 0x90, 0x1f, 0x79, 0x49, 0x82, 0x21, 0x84,
++	0xa0, 0xb5, 0x2f, 0xff, 0x30, 0x71, 0xed, 0x80, 0x68, 0xb1, 0x6d, 0xef,
++	0xf6, 0xcf, 0xb8, 0x41, 0x79, 0xf5, 0x01, 0xbc, 0x0c, 0x9b, 0x0e, 0x06,
++	0xf3, 0xb0, 0xbb, 0x97, 0xb8, 0xb1, 0xfd, 0x51, 0x4e, 0xef, 0x0a, 0x3d,
++	0x7a, 0x3d, 0xbd, 0x61, 0x00, 0xa2, 0xb3, 0xf0, 0x1d, 0x77, 0x7b, 0x6c,
++	0x01, 0x61, 0xa5, 0xa3, 0xdb, 0xd5, 0xd5, 0xf4, 0xb5, 0x28, 0x9f, 0x0a,
++	0xa3, 0x82, 0x5f, 0x4b, 0x40, 0x0f, 0x05, 0x0e, 0x78, 0xed, 0xbf, 0x17,
++	0xf6, 0x5a, 0x8a, 0x7d, 0xf9, 0x45, 0xc1, 0xd7, 0x1b, 0x9d, 0x6c, 0x07,
++	0x88, 0xf3, 0xbc, 0xf1, 0xea, 0x28, 0x1f, 0xb8, 0x7a, 0x60, 0x3c, 0xce,
++	0x3e, 0x50, 0xb2, 0x0b, 0xcf, 0xe5, 0x08, 0x1f, 0x48, 0x04, 0xf9, 0x35,
++	0x29, 0x15, 0xbe, 0x82, 0x96, 0xc2, 0x55, 0x04, 0x6c, 0x19, 0x45, 0x29,
++	0x0b, 0xb6, 0x49, 0x12, 0xfb, 0x8d, 0x1b, 0x75, 0x8b, 0xd9, 0x6a, 0x5c,
++	0xbe, 0x46, 0x2b, 0x41, 0xfe, 0x21, 0xad, 0x1f, 0x75, 0xe7, 0x90, 0x3d,
++	0xe1, 0xdf, 0x4b, 0xe1, 0x81, 0xe2, 0x17, 0x02, 0x7b, 0x58, 0x8b, 0x92,
++	0x1a, 0xac, 0x46, 0xdd, 0x2e, 0xce, 0x40, 0x09
++};
++static const __sum16 expected_results[] = {
++	0x82d0, 0x8224, 0xab23, 0xaaad, 0x41ad, 0x413f, 0x4f3e, 0x4eab, 0x22ab,
++	0x228c, 0x428b, 0x41ad, 0xbbac, 0xbb1d, 0x671d, 0x66ea, 0xd6e9, 0xd654,
++	0x1754, 0x1655, 0x5d54, 0x5c6a, 0xfa69, 0xf9fb, 0x44fb, 0x4428, 0xf527,
++	0xf432, 0x9432, 0x93e2, 0x37e2, 0x371b, 0x3d1a, 0x3cad, 0x22ad, 0x21e6,
++	0x31e5, 0x3113, 0x0513, 0x0501, 0xc800, 0xc778, 0xe477, 0xe463, 0xc363,
++	0xc2b2, 0x64b2, 0x646d, 0x336d, 0x32cb, 0xadca, 0xad94, 0x3794, 0x36da,
++	0x5ed9, 0x5e2c, 0xa32b, 0xa28d, 0x598d, 0x58fe, 0x61fd, 0x612f, 0x772e,
++	0x763f, 0xac3e, 0xac12, 0x8312, 0x821b, 0x6d1b, 0x6cbf, 0x4fbf, 0x4f72,
++	0x4672, 0x4653, 0x6452, 0x643e, 0x333e, 0x32b2, 0x2bb2, 0x2b5b, 0x085b,
++	0x083c, 0x993b, 0x9938, 0xb837, 0xb7a4, 0x9ea4, 0x9e51, 0x9b51, 0x9b0c,
++	0x520c, 0x5172, 0x1672, 0x15e4, 0x09e4, 0x09d2, 0xacd1, 0xac47, 0xf446,
++	0xf3ab, 0x67ab, 0x6711, 0x6411, 0x632c, 0xc12b, 0xc0e8, 0xeee7, 0xeeac,
++	0xa0ac, 0xa02e, 0x702e, 0x6ff2, 0x4df2, 0x4dc5, 0x88c4, 0x87c8, 0xe9c7,
++	0xe8ec, 0x22ec, 0x21f3, 0xb8f2, 0xb8e0, 0x7fe0, 0x7fc1, 0xdfc0, 0xdfaf,
++	0xd3af, 0xd370, 0xde6f, 0xde1c, 0x151c, 0x14ec, 0x19eb, 0x193b, 0x3c3a,
++	0x3c19, 0x1f19, 0x1ee5, 0x3ce4, 0x3c7f, 0x0c7f, 0x0b8e, 0x238d, 0x2372,
++	0x3c71, 0x3c1c, 0x2f1c, 0x2e31, 0x7130, 0x7064, 0xd363, 0xd33f, 0x2f3f,
++	0x2e92, 0x8791, 0x86fe, 0x3ffe, 0x3fe5, 0x11e5, 0x1121, 0xb520, 0xb4e5,
++	0xede4, 0xed77, 0x5877, 0x586b, 0x116b, 0x110b, 0x620a, 0x61af, 0x1aaf,
++	0x19c1, 0x3dc0, 0x3d8f, 0x0c8f, 0x0c7b, 0xfa7a, 0xf9fc, 0x5bfc, 0x5bb7,
++	0xaab6, 0xa9f5, 0x40f5, 0x40aa, 0xbca9, 0xbbad, 0x33ad, 0x32ec, 0x94eb,
++	0x94a5, 0xe0a4, 0xdfe2, 0xbae2, 0xba1d, 0x4e1d, 0x4dd1, 0x2bd1, 0x2b79,
++	0xcf78, 0xceba, 0xcfb9, 0xcecf, 0x46cf, 0x4647, 0xcc46, 0xcb7b, 0xaf7b,
++	0xaf1e, 0x4c1e, 0x4b7d, 0x597c, 0x5949, 0x4d49, 0x4ca7, 0x36a7, 0x369c,
++	0xc89b, 0xc870, 0x4f70, 0x4f18, 0x5817, 0x576b, 0x846a, 0x8400, 0x4500,
++	0x447f, 0xed7e, 0xed36, 0xa836, 0xa753, 0x2b53, 0x2a77, 0x5476, 0x5442,
++	0xd641, 0xd55b, 0x625b, 0x6161, 0x9660, 0x962f, 0x7e2f, 0x7d86, 0x7286,
++	0x7198, 0x0698, 0x05ff, 0x4cfe, 0x4cd1, 0x6ed0, 0x6eae, 0x60ae, 0x603d,
++	0x093d, 0x092f, 0x6e2e, 0x6e1d, 0x9d1c, 0x9d07, 0x5c07, 0x5b37, 0xf036,
++	0xefe6, 0x65e6, 0x65c3, 0x01c3, 0x00e0, 0x64df, 0x642c, 0x0f2c, 0x0f23,
++	0x2622, 0x25f0, 0xbeef, 0xbdf6, 0xddf5, 0xdd82, 0xec81, 0xec21, 0x8621,
++	0x8616, 0xfe15, 0xfd9c, 0x709c, 0x7051, 0x1e51, 0x1dce, 0xfdcd, 0xfda7,
++	0x85a7, 0x855e, 0x5e5e, 0x5d77, 0x1f77, 0x1f4e, 0x774d, 0x7735, 0xf534,
++	0xf4f3, 0x17f3, 0x17d5, 0x4bd4, 0x4b99, 0x8798, 0x8733, 0xb632, 0xb611,
++	0x7611, 0x759f, 0xc39e, 0xc317, 0x6517, 0x6501, 0x5501, 0x5481, 0x1581,
++	0x1536, 0xbd35, 0xbd19, 0xfb18, 0xfa9f, 0xda9f, 0xd9af, 0xf9ae, 0xf92e,
++	0x262e, 0x25dc, 0x80db, 0x80c2, 0x12c2, 0x127b, 0x827a, 0x8272, 0x8d71,
++	0x8d21, 0xab20, 0xaa4a, 0xfc49, 0xfb60, 0xcd60, 0xcc84, 0xf783, 0xf6cf,
++	0x66cf, 0x66b0, 0xedaf, 0xed66, 0x6b66, 0x6b45, 0xe744, 0xe6a4, 0x31a4,
++	0x3175, 0x3274, 0x3244, 0xc143, 0xc056, 0x4056, 0x3fee, 0x8eed, 0x8e80,
++	0x9f7f, 0x9e89, 0xcf88, 0xced0, 0x8dd0, 0x8d57, 0x9856, 0x9855, 0xdc54,
++	0xdc48, 0x4148, 0x413a, 0x3b3a, 0x3a47, 0x8a46, 0x898b, 0xf28a, 0xf1d2,
++	0x40d2, 0x3fd5, 0xeed4, 0xee86, 0xff85, 0xff7b, 0xc27b, 0xc201, 0x8501,
++	0x8444, 0x2344, 0x2344, 0x8143, 0x8090, 0x908f, 0x9072, 0x1972, 0x18f7,
++	0xacf6, 0xacf5, 0x4bf5, 0x4b50, 0xa84f, 0xa774, 0xd273, 0xd19e, 0xdd9d,
++	0xdce8, 0xb4e8, 0xb449, 0xaa49, 0xa9a6, 0x27a6, 0x2747, 0xdc46, 0xdc06,
++	0xcd06, 0xcd01, 0xbf01, 0xbe89, 0xd188, 0xd0c9, 0xb9c9, 0xb8d3, 0x5ed3,
++	0x5e49, 0xe148, 0xe04f, 0x9b4f, 0x9a8e, 0xc38d, 0xc372, 0x2672, 0x2606,
++	0x1f06, 0x1e7e, 0x2b7d, 0x2ac1, 0x39c0, 0x38d6, 0x10d6, 0x10b7, 0x58b6,
++	0x583c, 0xf83b, 0xf7ff, 0x29ff, 0x29c1, 0xd9c0, 0xd90e, 0xce0e, 0xcd3f,
++	0xe83e, 0xe836, 0xc936, 0xc8ee, 0xc4ee, 0xc3f5, 0x8ef5, 0x8ecc, 0x79cc,
++	0x790e, 0xf70d, 0xf677, 0x3477, 0x3422, 0x3022, 0x2fb6, 0x16b6, 0x1671,
++	0xed70, 0xed65, 0x3765, 0x371c, 0x251c, 0x2421, 0x9720, 0x9705, 0x2205,
++	0x217a, 0x4879, 0x480f, 0xec0e, 0xeb50, 0xa550, 0xa525, 0x6425, 0x6327,
++	0x4227, 0x417a, 0x227a, 0x2205, 0x3b04, 0x3a74, 0xfd73, 0xfc92, 0x1d92,
++	0x1d47, 0x3c46, 0x3bc5, 0x59c4, 0x59ad, 0x57ad, 0x5732, 0xff31, 0xfea6,
++	0x6ca6, 0x6c8c, 0xc08b, 0xc045, 0xe344, 0xe316, 0x1516, 0x14d6,
++};
++static const __wsum init_sums_no_overflow[] = {
++	0xffffffff, 0xfffffffb, 0xfffffbfb, 0xfffffbf7, 0xfffff7f7, 0xfffff7f3,
++	0xfffff3f3, 0xfffff3ef, 0xffffefef, 0xffffefeb, 0xffffebeb, 0xffffebe7,
++	0xffffe7e7, 0xffffe7e3, 0xffffe3e3, 0xffffe3df, 0xffffdfdf, 0xffffdfdb,
++	0xffffdbdb, 0xffffdbd7, 0xffffd7d7, 0xffffd7d3, 0xffffd3d3, 0xffffd3cf,
++	0xffffcfcf, 0xffffcfcb, 0xffffcbcb, 0xffffcbc7, 0xffffc7c7, 0xffffc7c3,
++	0xffffc3c3, 0xffffc3bf, 0xffffbfbf, 0xffffbfbb, 0xffffbbbb, 0xffffbbb7,
++	0xffffb7b7, 0xffffb7b3, 0xffffb3b3, 0xffffb3af, 0xffffafaf, 0xffffafab,
++	0xffffabab, 0xffffaba7, 0xffffa7a7, 0xffffa7a3, 0xffffa3a3, 0xffffa39f,
++	0xffff9f9f, 0xffff9f9b, 0xffff9b9b, 0xffff9b97, 0xffff9797, 0xffff9793,
++	0xffff9393, 0xffff938f, 0xffff8f8f, 0xffff8f8b, 0xffff8b8b, 0xffff8b87,
++	0xffff8787, 0xffff8783, 0xffff8383, 0xffff837f, 0xffff7f7f, 0xffff7f7b,
++	0xffff7b7b, 0xffff7b77, 0xffff7777, 0xffff7773, 0xffff7373, 0xffff736f,
++	0xffff6f6f, 0xffff6f6b, 0xffff6b6b, 0xffff6b67, 0xffff6767, 0xffff6763,
++	0xffff6363, 0xffff635f, 0xffff5f5f, 0xffff5f5b, 0xffff5b5b, 0xffff5b57,
++	0xffff5757, 0xffff5753, 0xffff5353, 0xffff534f, 0xffff4f4f, 0xffff4f4b,
++	0xffff4b4b, 0xffff4b47, 0xffff4747, 0xffff4743, 0xffff4343, 0xffff433f,
++	0xffff3f3f, 0xffff3f3b, 0xffff3b3b, 0xffff3b37, 0xffff3737, 0xffff3733,
++	0xffff3333, 0xffff332f, 0xffff2f2f, 0xffff2f2b, 0xffff2b2b, 0xffff2b27,
++	0xffff2727, 0xffff2723, 0xffff2323, 0xffff231f, 0xffff1f1f, 0xffff1f1b,
++	0xffff1b1b, 0xffff1b17, 0xffff1717, 0xffff1713, 0xffff1313, 0xffff130f,
++	0xffff0f0f, 0xffff0f0b, 0xffff0b0b, 0xffff0b07, 0xffff0707, 0xffff0703,
++	0xffff0303, 0xffff02ff, 0xfffffefe, 0xfffffefa, 0xfffffafa, 0xfffffaf6,
++	0xfffff6f6, 0xfffff6f2, 0xfffff2f2, 0xfffff2ee, 0xffffeeee, 0xffffeeea,
++	0xffffeaea, 0xffffeae6, 0xffffe6e6, 0xffffe6e2, 0xffffe2e2, 0xffffe2de,
++	0xffffdede, 0xffffdeda, 0xffffdada, 0xffffdad6, 0xffffd6d6, 0xffffd6d2,
++	0xffffd2d2, 0xffffd2ce, 0xffffcece, 0xffffceca, 0xffffcaca, 0xffffcac6,
++	0xffffc6c6, 0xffffc6c2, 0xffffc2c2, 0xffffc2be, 0xffffbebe, 0xffffbeba,
++	0xffffbaba, 0xffffbab6, 0xffffb6b6, 0xffffb6b2, 0xffffb2b2, 0xffffb2ae,
++	0xffffaeae, 0xffffaeaa, 0xffffaaaa, 0xffffaaa6, 0xffffa6a6, 0xffffa6a2,
++	0xffffa2a2, 0xffffa29e, 0xffff9e9e, 0xffff9e9a, 0xffff9a9a, 0xffff9a96,
++	0xffff9696, 0xffff9692, 0xffff9292, 0xffff928e, 0xffff8e8e, 0xffff8e8a,
++	0xffff8a8a, 0xffff8a86, 0xffff8686, 0xffff8682, 0xffff8282, 0xffff827e,
++	0xffff7e7e, 0xffff7e7a, 0xffff7a7a, 0xffff7a76, 0xffff7676, 0xffff7672,
++	0xffff7272, 0xffff726e, 0xffff6e6e, 0xffff6e6a, 0xffff6a6a, 0xffff6a66,
++	0xffff6666, 0xffff6662, 0xffff6262, 0xffff625e, 0xffff5e5e, 0xffff5e5a,
++	0xffff5a5a, 0xffff5a56, 0xffff5656, 0xffff5652, 0xffff5252, 0xffff524e,
++	0xffff4e4e, 0xffff4e4a, 0xffff4a4a, 0xffff4a46, 0xffff4646, 0xffff4642,
++	0xffff4242, 0xffff423e, 0xffff3e3e, 0xffff3e3a, 0xffff3a3a, 0xffff3a36,
++	0xffff3636, 0xffff3632, 0xffff3232, 0xffff322e, 0xffff2e2e, 0xffff2e2a,
++	0xffff2a2a, 0xffff2a26, 0xffff2626, 0xffff2622, 0xffff2222, 0xffff221e,
++	0xffff1e1e, 0xffff1e1a, 0xffff1a1a, 0xffff1a16, 0xffff1616, 0xffff1612,
++	0xffff1212, 0xffff120e, 0xffff0e0e, 0xffff0e0a, 0xffff0a0a, 0xffff0a06,
++	0xffff0606, 0xffff0602, 0xffff0202, 0xffff01fe, 0xfffffdfd, 0xfffffdf9,
++	0xfffff9f9, 0xfffff9f5, 0xfffff5f5, 0xfffff5f1, 0xfffff1f1, 0xfffff1ed,
++	0xffffeded, 0xffffede9, 0xffffe9e9, 0xffffe9e5, 0xffffe5e5, 0xffffe5e1,
++	0xffffe1e1, 0xffffe1dd, 0xffffdddd, 0xffffddd9, 0xffffd9d9, 0xffffd9d5,
++	0xffffd5d5, 0xffffd5d1, 0xffffd1d1, 0xffffd1cd, 0xffffcdcd, 0xffffcdc9,
++	0xffffc9c9, 0xffffc9c5, 0xffffc5c5, 0xffffc5c1, 0xffffc1c1, 0xffffc1bd,
++	0xffffbdbd, 0xffffbdb9, 0xffffb9b9, 0xffffb9b5, 0xffffb5b5, 0xffffb5b1,
++	0xffffb1b1, 0xffffb1ad, 0xffffadad, 0xffffada9, 0xffffa9a9, 0xffffa9a5,
++	0xffffa5a5, 0xffffa5a1, 0xffffa1a1, 0xffffa19d, 0xffff9d9d, 0xffff9d99,
++	0xffff9999, 0xffff9995, 0xffff9595, 0xffff9591, 0xffff9191, 0xffff918d,
++	0xffff8d8d, 0xffff8d89, 0xffff8989, 0xffff8985, 0xffff8585, 0xffff8581,
++	0xffff8181, 0xffff817d, 0xffff7d7d, 0xffff7d79, 0xffff7979, 0xffff7975,
++	0xffff7575, 0xffff7571, 0xffff7171, 0xffff716d, 0xffff6d6d, 0xffff6d69,
++	0xffff6969, 0xffff6965, 0xffff6565, 0xffff6561, 0xffff6161, 0xffff615d,
++	0xffff5d5d, 0xffff5d59, 0xffff5959, 0xffff5955, 0xffff5555, 0xffff5551,
++	0xffff5151, 0xffff514d, 0xffff4d4d, 0xffff4d49, 0xffff4949, 0xffff4945,
++	0xffff4545, 0xffff4541, 0xffff4141, 0xffff413d, 0xffff3d3d, 0xffff3d39,
++	0xffff3939, 0xffff3935, 0xffff3535, 0xffff3531, 0xffff3131, 0xffff312d,
++	0xffff2d2d, 0xffff2d29, 0xffff2929, 0xffff2925, 0xffff2525, 0xffff2521,
++	0xffff2121, 0xffff211d, 0xffff1d1d, 0xffff1d19, 0xffff1919, 0xffff1915,
++	0xffff1515, 0xffff1511, 0xffff1111, 0xffff110d, 0xffff0d0d, 0xffff0d09,
++	0xffff0909, 0xffff0905, 0xffff0505, 0xffff0501, 0xffff0101, 0xffff00fd,
++	0xfffffcfc, 0xfffffcf8, 0xfffff8f8, 0xfffff8f4, 0xfffff4f4, 0xfffff4f0,
++	0xfffff0f0, 0xfffff0ec, 0xffffecec, 0xffffece8, 0xffffe8e8, 0xffffe8e4,
++	0xffffe4e4, 0xffffe4e0, 0xffffe0e0, 0xffffe0dc, 0xffffdcdc, 0xffffdcd8,
++	0xffffd8d8, 0xffffd8d4, 0xffffd4d4, 0xffffd4d0, 0xffffd0d0, 0xffffd0cc,
++	0xffffcccc, 0xffffccc8, 0xffffc8c8, 0xffffc8c4, 0xffffc4c4, 0xffffc4c0,
++	0xffffc0c0, 0xffffc0bc, 0xffffbcbc, 0xffffbcb8, 0xffffb8b8, 0xffffb8b4,
++	0xffffb4b4, 0xffffb4b0, 0xffffb0b0, 0xffffb0ac, 0xffffacac, 0xffffaca8,
++	0xffffa8a8, 0xffffa8a4, 0xffffa4a4, 0xffffa4a0, 0xffffa0a0, 0xffffa09c,
++	0xffff9c9c, 0xffff9c98, 0xffff9898, 0xffff9894, 0xffff9494, 0xffff9490,
++	0xffff9090, 0xffff908c, 0xffff8c8c, 0xffff8c88, 0xffff8888, 0xffff8884,
++	0xffff8484, 0xffff8480, 0xffff8080, 0xffff807c, 0xffff7c7c, 0xffff7c78,
++	0xffff7878, 0xffff7874, 0xffff7474, 0xffff7470, 0xffff7070, 0xffff706c,
++	0xffff6c6c, 0xffff6c68, 0xffff6868, 0xffff6864, 0xffff6464, 0xffff6460,
++	0xffff6060, 0xffff605c, 0xffff5c5c, 0xffff5c58, 0xffff5858, 0xffff5854,
++	0xffff5454, 0xffff5450, 0xffff5050, 0xffff504c, 0xffff4c4c, 0xffff4c48,
++	0xffff4848, 0xffff4844, 0xffff4444, 0xffff4440, 0xffff4040, 0xffff403c,
++	0xffff3c3c, 0xffff3c38, 0xffff3838, 0xffff3834, 0xffff3434, 0xffff3430,
++	0xffff3030, 0xffff302c, 0xffff2c2c, 0xffff2c28, 0xffff2828, 0xffff2824,
++	0xffff2424, 0xffff2420, 0xffff2020, 0xffff201c, 0xffff1c1c, 0xffff1c18,
++	0xffff1818, 0xffff1814, 0xffff1414, 0xffff1410, 0xffff1010, 0xffff100c,
++	0xffff0c0c, 0xffff0c08, 0xffff0808, 0xffff0804, 0xffff0404, 0xffff0400,
++	0xffff0000, 0xfffffffb,
++};
++
++static u8 tmp_buf[TEST_BUFLEN];
++
++#define full_csum(buff, len, sum) csum_fold(csum_partial(buff, len, sum))
++
++#define CHECK_EQ(lhs, rhs) KUNIT_ASSERT_EQ(test, lhs, rhs)
++
++static void assert_setup_correct(struct kunit *test)
++{
++	CHECK_EQ(sizeof(random_buf) / sizeof(random_buf[0]), MAX_LEN);
++	CHECK_EQ(sizeof(expected_results) / sizeof(expected_results[0]),
++		 MAX_LEN);
++	CHECK_EQ(sizeof(init_sums_no_overflow) /
++			 sizeof(init_sums_no_overflow[0]),
++		 MAX_LEN);
++}
++
++/*
++ * Test with randomized input (pre determined random with known results).
++ */
++static void test_csum_fixed_random_inputs(struct kunit *test)
++{
++	int len, align;
++	__wsum result, expec, sum;
++
++	assert_setup_correct(test);
++	for (align = 0; align < TEST_BUFLEN; ++align) {
++		memcpy(&tmp_buf[align], random_buf,
++		       min(MAX_LEN, TEST_BUFLEN - align));
++		for (len = 0; len < MAX_LEN && (align + len) < TEST_BUFLEN;
++		     ++len) {
++			/*
++			 * Test the precomputed random input.
++			 */
++			sum = random_init_sum;
++			result = full_csum(&tmp_buf[align], len, sum);
++			expec = expected_results[len];
++			CHECK_EQ(result, expec);
++		}
++	}
++}
++
++/*
++ * All ones input test. If there are any missing carry operations, it fails.
++ */
++static void test_csum_all_carry_inputs(struct kunit *test)
++{
++	int len, align;
++	__wsum result, expec, sum;
++
++	assert_setup_correct(test);
++	memset(tmp_buf, 0xff, TEST_BUFLEN);
++	for (align = 0; align < TEST_BUFLEN; ++align) {
++		for (len = 0; len < MAX_LEN && (align + len) < TEST_BUFLEN;
++		     ++len) {
++			/*
++			 * All carries from input and initial sum.
++			 */
++			sum = 0xffffffff;
++			result = full_csum(&tmp_buf[align], len, sum);
++			expec = (len & 1) ? 0xff00 : 0;
++			CHECK_EQ(result, expec);
++
++			/*
++			 * All carries from input.
++			 */
++			sum = 0;
++			result = full_csum(&tmp_buf[align], len, sum);
++			if (len & 1)
++				expec = 0xff00;
++			else if (len)
++				expec = 0;
++			else
++				expec = 0xffff;
++			CHECK_EQ(result, expec);
++		}
++	}
++}
++
++/*
++ * Test with input that alone doesn't cause any carries. By selecting the
++ * maximum initial sum, this allows us to test that there are no carries
++ * where there shouldn't be.
++ */
++static void test_csum_no_carry_inputs(struct kunit *test)
++{
++	int len, align;
++	__wsum result, expec, sum;
++
++	assert_setup_correct(test);
++	memset(tmp_buf, 0x4, TEST_BUFLEN);
++	for (align = 0; align < TEST_BUFLEN; ++align) {
++		for (len = 0; len < MAX_LEN && (align + len) < TEST_BUFLEN;
++		     ++len) {
++			/*
++			 * Expect no carries.
++			 */
++			sum = init_sums_no_overflow[len];
++			result = full_csum(&tmp_buf[align], len, sum);
++			expec = 0;
++			CHECK_EQ(result, expec);
++
++			/*
++			 * Expect one carry.
++			 */
++			sum = init_sums_no_overflow[len] + 1;
++			result = full_csum(&tmp_buf[align], len, sum);
++			expec = len ? 0xfffe : 0xffff;
++			CHECK_EQ(result, expec);
++		}
++	}
++}
++
++static struct kunit_case __refdata checksum_test_cases[] = {
++	KUNIT_CASE(test_csum_fixed_random_inputs),
++	KUNIT_CASE(test_csum_all_carry_inputs),
++	KUNIT_CASE(test_csum_no_carry_inputs),
++	{}
++};
++
++static struct kunit_suite checksum_test_suite = {
++	.name = "checksum",
++	.test_cases = checksum_test_cases,
++};
++
++kunit_test_suites(&checksum_test_suite);
++
++MODULE_AUTHOR("Noah Goldstein <goldstein.w.n@gmail.com>");
++MODULE_LICENSE("GPL");
