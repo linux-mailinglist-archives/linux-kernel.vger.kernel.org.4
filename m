@@ -2,149 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 468C87111AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC327111B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239813AbjEYRIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
+        id S240489AbjEYRLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238954AbjEYRIP (ORCPT
+        with ESMTP id S233090AbjEYRLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:08:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB15B6;
-        Thu, 25 May 2023 10:08:14 -0700 (PDT)
-Date:   Thu, 25 May 2023 17:08:10 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685034491;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=PqN7pZM5Ne2hSJTJYt7bvR5U0D9tiJx20qbHFDDiomM=;
-        b=M29zIeZPAeEIFUsGdpk+pnVeFO5Sp0da+exV0FRHweaoDcU8rhgdzgxdlP3FOJ8ZBgXJ1x
-        Req8nvBNtbz1mVeWr5Geig6Ij/fAGp+M64fAYVwULIk4pJJI3POnr900qWhPH7Sy9xSFX6
-        pCb11YCcf9HHXWh8LNqAwdseDUihP+QQIRhjfO8z6/O1Dn/uhwiShgW934vkDo4I0Cg7qL
-        l5ATdjRFM5s6ceotC7MyFW/wpLtZFtf1kLVT9GXApSBUhnELBr5LYt7mXP64YuUjxW3WQr
-        GKgT1mJyEwI0ASsUlqY+wDI/xs/zrvNLvPLBqOrfg1318qwb9CFbL+4kK/7CQg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685034491;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=PqN7pZM5Ne2hSJTJYt7bvR5U0D9tiJx20qbHFDDiomM=;
-        b=xIi/eEuAIM1piVbikJx5cBm6dVfZd866mZ0MmtMMw9gEplXQXsp4+b+Eo8Qjk/yVf1RbU/
-        aztFtz2B95QXqnCA==
-From:   "tip-bot2 for Zhang Rui" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/topology: Fix erroneous smp_num_siblings on
- Intel Hybrid platforms
-Cc:     Len Brown <len.brown@intel.com>, Zhang Rui <rui.zhang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Thu, 25 May 2023 13:11:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D8A189;
+        Thu, 25 May 2023 10:10:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 673AE61A69;
+        Thu, 25 May 2023 17:10:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB867C4339C;
+        Thu, 25 May 2023 17:10:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685034657;
+        bh=N0vtnAz6F6YcQyZpPs+I4KoCQ9QRqYQtSgl59L0VnzY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nSqU6eeO1iBtLlaCg/vCQV7JM+Zv2snVylzwRFAXlqb50QlB4jgT0lhCmQU4WGYVn
+         VqJbE2BVr4eWQod6HXe12zH9XZjyrhXiuzC+wC4EoPQFp/G5juekl5M7ouFkTukaWb
+         CCF4HU35eHEOg24iaB5v1fDD3hGb0MmFF8edncJd+mMXJwYrD4BRLUD00bBMzErMRl
+         cb3NAV46SKJrJv8E+H5fpn9xU/NAouSZtRVBusEovicbYuTVkkF+Fw3qsIZsw/j4cU
+         FaxSpoHrEZyk7p21TBiHcC2BkORrYUzrnpHhoE/QDbgPVshGv7YUoVxvW/xgfNXa6N
+         9Lexy2Md+IcmQ==
+Date:   Thu, 25 May 2023 18:10:52 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
+        sebastian.reichel@collabora.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: timer: atmel,at91sam9260-pit: convert
+ to yaml
+Message-ID: <20230525-renewal-proposal-9620d5520437@spud>
+References: <20230525125602.640855-1-claudiu.beznea@microchip.com>
+ <20230525125602.640855-2-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Message-ID: <168503449068.404.11918466864756004526.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9S6GJW2YFXC8WjPi"
+Content-Disposition: inline
+In-Reply-To: <20230525125602.640855-2-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     55f63fd6d4cfcaf2f5fc385bf7a80c459fe1d165
-Gitweb:        https://git.kernel.org/tip/55f63fd6d4cfcaf2f5fc385bf7a80c459fe1d165
-Author:        Zhang Rui <rui.zhang@intel.com>
-AuthorDate:    Thu, 23 Mar 2023 09:56:40 +08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 25 May 2023 10:03:03 -07:00
+--9S6GJW2YFXC8WjPi
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-x86/topology: Fix erroneous smp_num_siblings on Intel Hybrid platforms
+On Thu, May 25, 2023 at 03:55:58PM +0300, Claudiu Beznea wrote:
+> Convert Atmel PIT to YAML. Along with it clock binding has been added as
+> the driver enables it to ensure proper hardware functionality.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  .../devicetree/bindings/arm/atmel-sysregs.txt |  6 ---
+>  .../bindings/timer/atmel,at91sam9260-pit.yaml | 51 +++++++++++++++++++
+>  2 files changed, 51 insertions(+), 6 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91sam=
+9260-pit.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Do=
+cumentation/devicetree/bindings/arm/atmel-sysregs.txt
+> index 67a66bf74895..7024839c5da2 100644
+> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> @@ -4,12 +4,6 @@ Chipid required properties:
+>  - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chi=
+pid"
+>  - reg : Should contain registers location and length
+> =20
+> -PIT Timer required properties:
+> -- compatible: Should be "atmel,at91sam9260-pit"
+> -- reg: Should contain registers location and length
+> -- interrupts: Should contain interrupt for the PIT which is the IRQ line
+> -  shared across all System Controller members.
+> -
+>  PIT64B Timer required properties:
+>  - compatible: Should be "microchip,sam9x60-pit64b"
+>  - reg: Should contain registers location and length
+> diff --git a/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pi=
+t.yaml b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+> new file mode 100644
+> index 000000000000..f304cd68acd5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/atmel,at91sam9260-pit.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel Periodic Interval Timer (PIT)
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description:
+> +  Atmel periodic interval timer provides the operating system=E2=80=99s =
+scheduler
+> +  interrupt. It is designed to offer maximum accuracy and efficient mana=
+gement,
+> +  even for systems with long response time.
+> +
+> +properties:
+> +  compatible:
+> +    const: atmel,at91sam9260-pit
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description:
+> +      Contain interrupt for the PIT which is the IRQ line shared across =
+all
+> +      System Controller members.
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/at91.h>
+> +
+> +    pit: timer@fffffe40 {
+> +        compatible =3D "atmel,at91sam9260-pit";
+> +        reg =3D <0xfffffe40 0x10>;
+> +        interrupts =3D <1 IRQ_TYPE_LEVEL_HIGH 7>;
 
-Traditionally, all CPUs in a system have identical numbers of SMT
-siblings.  That changes with hybrid processors where some logical CPUs
-have a sibling and others have none.
+make dt_binding_check W=3D1 -j 30 DT_SCHEMA_FILES=3Datmel,at91sam9260-pit.y=
+aml
+  LINT    Documentation/devicetree/bindings
+  DTEX    Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.exa=
+mple.dts
+  CHKDT   Documentation/devicetree/bindings/processed-schema.json
+  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+  DTC_CHK Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.exa=
+mple.dtb
+Error: Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.exampl=
+e.dts:26.29-30 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/t=
+imer/atmel,at91sam9260-pit.example.dtb] Error 1
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
-Today, the CPU boot code sets the global variable smp_num_siblings when
-every CPU thread is brought up. The last thread to boot will overwrite
-it with the number of siblings of *that* thread. That last thread to
-boot will "win". If the thread is a Pcore, smp_num_siblings == 2.  If it
-is an Ecore, smp_num_siblings == 1.
+Think you're missing the header for IRQ_TYPE_LEVEL_HIGH
 
-smp_num_siblings describes if the *system* supports SMT.  It should
-specify the maximum number of SMT threads among all cores.
+> +        clocks =3D <&pmc PMC_TYPE_CORE PMC_MCK>;
+> +    };
+> +...
+> --=20
+> 2.34.1
+>=20
 
-Ensure that smp_num_siblings represents the system-wide maximum number
-of siblings by always increasing its value. Never allow it to decrease.
+--9S6GJW2YFXC8WjPi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-On MeteorLake-P platform, this fixes a problem that the Ecore CPUs are
-not updated in any cpu sibling map because the system is treated as an
-UP system when probing Ecore CPUs.
+-----BEGIN PGP SIGNATURE-----
 
-Below shows part of the CPU topology information before and after the
-fix, for both Pcore and Ecore CPU (cpu0 is Pcore, cpu 12 is Ecore).
-...
--/sys/devices/system/cpu/cpu0/topology/package_cpus:000fff
--/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-11
-+/sys/devices/system/cpu/cpu0/topology/package_cpus:3fffff
-+/sys/devices/system/cpu/cpu0/topology/package_cpus_list:0-21
-...
--/sys/devices/system/cpu/cpu12/topology/package_cpus:001000
--/sys/devices/system/cpu/cpu12/topology/package_cpus_list:12
-+/sys/devices/system/cpu/cpu12/topology/package_cpus:3fffff
-+/sys/devices/system/cpu/cpu12/topology/package_cpus_list:0-21
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG+WnAAKCRB4tDGHoIJi
+0v91AQCq1oOQFZhbws7xf6cV5p0dVuzAQzH3riZeIwpZe6XuYgD+PznsGUAs8MxN
+Ox2GXxjcMw6IqbeiJleelk+SUekU0Qs=
+=kogh
+-----END PGP SIGNATURE-----
 
-And this also breaks userspace tools like lscpu
--Core(s) per socket:  1
--Socket(s):           11
-+Core(s) per socket:  16
-+Socket(s):           1
-
-[ dhansen: remove CPUID detail from changelog ]
-
-CC: stable@kernel.org
-Fixes: bbb65d2d365e ("x86: use cpuid vector 0xb when available for detecting cpu topology")
-Fixes: 95f3d39ccf7a ("x86/cpu/topology: Provide detect_extended_topology_early()")
-Suggested-by: Len Brown <len.brown@intel.com>
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/all/20230323015640.27906-1-rui.zhang%40intel.com
----
- arch/x86/kernel/cpu/topology.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/topology.c b/arch/x86/kernel/cpu/topology.c
-index 5e868b6..0270925 100644
---- a/arch/x86/kernel/cpu/topology.c
-+++ b/arch/x86/kernel/cpu/topology.c
-@@ -79,7 +79,7 @@ int detect_extended_topology_early(struct cpuinfo_x86 *c)
- 	 * initial apic id, which also represents 32-bit extended x2apic id.
- 	 */
- 	c->initial_apicid = edx;
--	smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
-+	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
- #endif
- 	return 0;
- }
-@@ -109,7 +109,8 @@ int detect_extended_topology(struct cpuinfo_x86 *c)
- 	 */
- 	cpuid_count(leaf, SMT_LEVEL, &eax, &ebx, &ecx, &edx);
- 	c->initial_apicid = edx;
--	core_level_siblings = smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
-+	core_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
-+	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
- 	core_plus_mask_width = ht_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
- 	die_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
- 	pkg_mask_width = die_plus_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+--9S6GJW2YFXC8WjPi--
