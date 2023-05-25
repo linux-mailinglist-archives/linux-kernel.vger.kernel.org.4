@@ -2,113 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DEFB711A87
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 01:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135CE711C7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233502AbjEYXU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 19:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
+        id S241523AbjEZBXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 21:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjEYXUz (ORCPT
+        with ESMTP id S232720AbjEZBX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 19:20:55 -0400
-Received: from out-9.mta1.migadu.com (out-9.mta1.migadu.com [95.215.58.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39DDE7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 16:20:53 -0700 (PDT)
-Date:   Thu, 25 May 2023 19:20:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685056851;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=awHDGDbBCgCx605l2nM3DZRvWVnQwgXG0c2+8QFPH08=;
-        b=afc/C9pQwn3XtiqPNBF4cA1bN259A/OGSakqaqaneKEyfT/qZ+IzTmhTll1eoRS53CjktS
-        5yqEL3omabBC56nM3oxDuPubjFnNq+nkFI2DfCbHeaFdHwyl4jfKNaGWZTmSpROCDL8ACY
-        XxFqe+nKoVuyVihmB1LuNcS+2j/FL10=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Andreas =?utf-8?Q?Gr=C3=BCnbacher?= 
-        <andreas.gruenbacher@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
-        cluster-devel@redhat.com, "Darrick J . Wong" <djwong@kernel.org>,
-        linux-kernel@vger.kernel.org, dhowells@redhat.com,
-        linux-bcachefs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>
-Subject: Re: [Cluster-devel] [PATCH 06/32] sched: Add
- task_struct->faults_disabled_mapping
-Message-ID: <ZG/tTorh8G2919Jz@moria.home.lan>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-7-kent.overstreet@linux.dev>
- <20230510010737.heniyuxazlprrbd6@quack3>
- <ZFs3RYgdCeKjxYCw@moria.home.lan>
- <20230523133431.wwrkjtptu6vqqh5e@quack3>
- <ZGzoJLCRLk+pCKAk@infradead.org>
- <CAHpGcML0CZ1RGkOf26iYt_tK0Ux=cfdW8d3bjMVbjXLr91cs+g@mail.gmail.com>
+        Thu, 25 May 2023 21:23:28 -0400
+Received: from mail.peterfykh.hu (mail.peterfykh.hu [84.206.67.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D43125;
+        Thu, 25 May 2023 18:23:26 -0700 (PDT)
+Received: from mail.peterfykh.hu (localhost [127.0.0.1])
+        by mail.peterfykh.hu (Postfix) with ESMTP id A9CCDD1E;
+        Fri, 26 May 2023 01:21:06 +0200 (CEST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHpGcML0CZ1RGkOf26iYt_tK0Ux=cfdW8d3bjMVbjXLr91cs+g@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 26 May 2023 01:21:06 +0200
+From:   MK <szekely.emilia@peterfykh.hu>
+To:     undisclosed-recipients:;
+Subject: Hello sunshine, how are you?
+Reply-To: MK008@bahnhof.se
+Mail-Reply-To: MK008@bahnhof.se
+Message-ID: <1a8616ec1f18e4ed5a3eae68f30adaf8@peterfykh.hu>
+X-Sender: szekely.emilia@peterfykh.hu
+User-Agent: Roundcube Webmail/1.2.3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peterfykh.hu; s=mail; t=1685056885; bh=oUHOWqAICstTELrEVoVIkRXMI7on7Oehen/EwQP1PjY=; h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Subject:Reply-To:Message-ID; b=uGSp0EprdmRA1v+bDu4+mVtGxdpxpymhS7Y9L/i/NYixrN/YzVyo2lDzkJJx0gA/lNsoM02jFVuhN/yVUwxUSpIgH30naZcV8KxGRINkzjTwFTHGH3NYBqLxVd12i1CFlRFoY+MiYjdxhPWSLQO6S8O83Olj3ILkYP8wM6BwoBA=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 12:25:31AM +0200, Andreas Grünbacher wrote:
-> Am Di., 23. Mai 2023 um 18:28 Uhr schrieb Christoph Hellwig <hch@infradead.org>:
-> > On Tue, May 23, 2023 at 03:34:31PM +0200, Jan Kara wrote:
-> > > I've checked the code and AFAICT it is all indeed handled. BTW, I've now
-> > > remembered that GFS2 has dealt with the same deadlocks - b01b2d72da25
-> > > ("gfs2: Fix mmap + page fault deadlocks for direct I/O") - in a different
-> > > way (by prefaulting pages from the iter before grabbing the problematic
-> > > lock and then disabling page faults for the iomap_dio_rw() call). I guess
-> > > we should somehow unify these schemes so that we don't have two mechanisms
-> > > for avoiding exactly the same deadlock. Adding GFS2 guys to CC.
-> > >
-> > > Also good that you've written a fstest for this, that is definitely a useful
-> > > addition, although I suspect GFS2 guys added a test for this not so long
-> > > ago when testing their stuff. Maybe they have a pointer handy?
-> >
-> > generic/708 is the btrfs version of this.
-> >
-> > But I think all of the file systems that have this deadlock are actually
-> > fundamentally broken because they have a mess up locking hierarchy
-> > where page faults take the same lock that is held over the the direct I/
-> > operation.  And the right thing is to fix this.  I have work in progress
-> > for btrfs, and something similar should apply to gfs2, with the added
-> > complication that it probably means a revision to their network
-> > protocol.
-> 
-> We do disable page faults, and there can be deadlocks in page fault
-> handlers while no page faults are allowed.
-> 
-> I'm roughly aware of the locking hierarchy that other filesystems use,
-> and that's something we want to avoid because of two reasons: (1) it
-> would be an incompatible change, and (2) we want to avoid cluster-wide
-> locking operations as much as possible because they are very slow.
-> 
-> These kinds of locking conflicts are so rare in practice that the
-> theoretical inefficiency of having to retry the operation doesn't
-> matter.
+I am sorry to bother you and intrude your privacy. I am single,
+  lonely and in need of a caring, loving and romantic companion.
 
-Would you be willing to expand on that? I'm wondering if this would
-simplify things for gfs2, but you mention locking heirarchy being an
-incompatible change - how does that work?
+I am a secret admirer and would like to explore the opportunity to
+learn more about each other. I know it is strange to contact you
+this way and I hope you can forgive me. I am a shy person and
+this is the only way I know I could get your attention. I just want
+to know what you think and my intention is not to offend you.
+I hope we can be friends if that is what you want, although I wish
+to be more than just a friend. I know you have a few questions to
+ask and I hope I can satisfy some of your curiosity with a few
+answers.
 
-> 
-> > I'm absolutely not in favour to add workarounds for thes kind of locking
-> > problems to the core kernel.  I already feel bad for allowing the
-> > small workaround in iomap for btrfs, as just fixing the locking back
-> > then would have avoid massive ratholing.
-> 
-> Please let me know when those btrfs changes are in a presentable shape ...
+I believe in the saying that 'to the world you are just one person,
+but to someone special you are the world'. All I want is love,
+romantic care and attention from a special companion which I am
+hoping would be you.
 
-I would also be curious to know what btrfs needs and what the approach
-is there.
+I hope this message will be the beginning of a long term
+communication between us, simply send a reply to this message, it
+will make me happy.
+
+
+Hugs and kisses,
+
+Secret Admirer.
