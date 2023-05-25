@@ -2,114 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBEB7117CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D797117D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 22:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjEYUF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 16:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
+        id S235721AbjEYUGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 16:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbjEYUF1 (ORCPT
+        with ESMTP id S232420AbjEYUGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 16:05:27 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CC2AA;
-        Thu, 25 May 2023 13:05:25 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8C0B05C0095;
-        Thu, 25 May 2023 16:05:24 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 25 May 2023 16:05:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1685045124; x=1685131524; bh=af
-        wKzTFSZxMLcqKLuXLhRfp2yktpJdcBueVH1/yBuCY=; b=axniLfx3MCQJtIdS2i
-        bbCI1gKUjhdos+LPj7dMHAYGJ0kIZxmo5eepqWAE7guVByUAUq09j/dl3wR0exKp
-        yV32dweobQqIVx73WaAa4ap9dg7vDVyMJh2pgCTiMYW/mB0531Lpi0lyvTduaIZb
-        segLTqm/rP9GQJDnMBQnsjTA604sELGT5Zp95Xg1i0V9B22GU+tnSxQymkX5ByvZ
-        biNiPiWdPxHDwu3jc01BUcEJuAfoPQmX77euxVwdLFH/84iLUi+nspLZa3ijVCLq
-        AzgZEsdpUUOszPoT4UaCIJ//8RfjUEi8HI/CZ9gQ5y1IqQYqBWK6YktH7o+pfAaW
-        sesA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685045124; x=1685131524; bh=afwKzTFSZxMLc
-        qKLuXLhRfp2yktpJdcBueVH1/yBuCY=; b=nfx8wMoCs7XVydCE/92WK9t67M6Vf
-        pkoD2o8+Q/ID2M6Miu3AM0b/6fMQ3EyLFob4SRbPS8oj+ncr3Mh8bYKLvG+b62B7
-        tzyKbdKIGJ9niMp21ClnxBQOefX9h+XrcDjUqOY3+0Ny1NY4bOzX001CeI7w1EEb
-        wpg+8vLJ47zGOfLsewNYmdFALbqL8ExsTBESmlvRbDvUlGK9dU/l5lCN+8POkHrK
-        rFuK+MI/oVXWJhEn+kr1S/nYETGIh0qjyL7OW8nRB7t5KZ61geBzcvvvEdw7KajW
-        uBT1haEpxzvrJnIzsRnXih1FY2QPa5pl1obmzORelYHcLUQGTWMHOj0Cw==
-X-ME-Sender: <xms:hL9vZMuoaZ7x8t-fTexT-DbZ34_dPbdx1dTmHcxUvO47BP9dvGuazA>
-    <xme:hL9vZJdcvU0sJPq2YFj08NYHsSuJMZKogzoRoh7UajVTm0ChkbYTFkzPhSRAOHjG_
-    58BGBTF9Rd1UpAJQKg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejjedgudegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:hL9vZHxuZH-G-7F2VAVBDZgcDeg5R5LHeMCJrBULELxHVv3nl43qkA>
-    <xmx:hL9vZPPeOSBx09yN1CxVUlCc7aZPHYfi4U7GmM-Q7UuwF4S2LqMT1Q>
-    <xmx:hL9vZM8DOjViW_JhojDs6dnwqGXet4C5OpvRU7TPw3qeP3Gxn9RDJw>
-    <xmx:hL9vZAZVIB_9pTmhgHHnXbn_q87msw8Hub67qf1WG0RscYac1dxUVQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 30132B60086; Thu, 25 May 2023 16:05:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <7f46f5c0-a5cb-4e4f-9201-2fd06e92e1ef@app.fastmail.com>
-In-Reply-To: <20230525184520.2004878-20-sashal@kernel.org>
-References: <20230525184520.2004878-1-sashal@kernel.org>
- <20230525184520.2004878-20-sashal@kernel.org>
-Date:   Thu, 25 May 2023 22:05:01 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Sasha Levin" <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     "Jakub Kicinski" <kuba@kernel.org>, "Andrew Lunn" <andrew@lunn.ch>,
-        "Heiner Kallweit" <hkallweit1@gmail.com>,
-        Netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH AUTOSEL 4.14 20/20] mdio_bus: unhide mdio_bus_init prototype
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 25 May 2023 16:06:20 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE4DA7
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:06:18 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2af30a12e84so10961181fa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 13:06:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google; t=1685045176; x=1687637176;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U3spcq+MrkOIWF4SfW0stmLuaSodhQuiQ2dFEDG11ZA=;
+        b=Y2amLA3bKwVejayNzOT4S2WIDvyXw7VfW5iFKCytn5tcad8JCmmuQb9kunBGUyiN1R
+         djsNvbvOhc12DL9y9u5Qm05x3ppmerrqayzEcWr2r6+Ai8goHUIRzFewdMUQ6jkPHJAv
+         X2Ymz4SIrraaHvPpIPnbumHz+/QQZc+8b41uI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685045176; x=1687637176;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U3spcq+MrkOIWF4SfW0stmLuaSodhQuiQ2dFEDG11ZA=;
+        b=TirJkHlIzp2uBSodWEFZ8d09D2ukyVEFYZBx8Qt3UVbToGac4q2JmI8+1ZgMQqnuth
+         dz6PQwagGczRfW+XmwzvGpWCyjhjFsiM2clQB6v5zYKgYViO57KKpKwl4rDObmW96yKr
+         Jk4Xr88K7wNwyI5RNai89SNUbOUZaRK8bSoHOWhO3GDGqTDhPajj+WowIWPakPeS8fZI
+         qZZrixeTKT6TVALHAK8WdgtARY8BACYTe7UPNPSE0rQnb4wvFVh3IZcfjmlcTkw2Z5g2
+         yuVb6L1z9JfD7lwYdjmj1LgzUdvAYsmZG0+pM3R9AvECc55W9md/P/XwYOHXhIwsY83U
+         AL2g==
+X-Gm-Message-State: AC+VfDwm+SGyVnh5zGZQeQcx6mK4YIgSYgso3dufYlGGGI7B76c9f6Lz
+        ux5oNVWsVHPE9nY8dUtOn4ziZ1Lg27l7sLDBc2Zy
+X-Google-Smtp-Source: ACHHUZ7hJ5WkNy8+TAtwUENxM1v6lnmWt2g0rRrlpenYRzRQ/0Ej7gcTYezaDZ+q1V9T2tP6MZTe5bQ4Bb2Ja436M+w=
+X-Received: by 2002:a2e:7c05:0:b0:2a8:a858:a4ab with SMTP id
+ x5-20020a2e7c05000000b002a8a858a4abmr1209094ljc.39.1685045176486; Thu, 25 May
+ 2023 13:06:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230525-guacamole-swimmer-68048a73baac@wendy>
+ <CAK9=C2WUyLxZwQO37cN-i+V+A3yxmEoaj=uE8yR8nseYTDW7oQ@mail.gmail.com>
+ <20230525-postnasal-monopoly-98adb96ffaa1@wendy> <CAAhSdy06nQh4H1FP_K_-VF462mhj+F2M=4AV4QSCUGe5XVqX0g@mail.gmail.com>
+ <20230525-shrapnel-precut-26500fca4a48@wendy> <CAAhSdy3SqeLdAfaojUki=ht21nr4ZUPMkW_t9M6ntQCt6Ds4Nw@mail.gmail.com>
+ <20230525-citric-waged-a2f78d27eb0c@wendy> <CAOnJCULfC0jmiucLNMeJZwJf4QbGAN6r4B-ubUbP16KVpxrCfA@mail.gmail.com>
+ <20230525-flaring-trading-f2bf0713ae26@spud> <CAOnJCUK_EgX-En1QNS8yX1WA1nj8w2kpvXMQcvgWuR3dvzEQYw@mail.gmail.com>
+ <20230525-desecrate-imposing-d97ab34e06ad@spud>
+In-Reply-To: <20230525-desecrate-imposing-d97ab34e06ad@spud>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Thu, 25 May 2023 13:06:04 -0700
+Message-ID: <CAOnJCUKfRv68Bh8ue=ZhMGxai9_UEHLpm3553g2c2NXh-RP-TQ@mail.gmail.com>
+Subject: Re: Bug report: kernel paniced when system hibernates
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Anup Patel <anup@brainfault.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Alexandre Ghiti <alex@ghiti.fr>, robh@kernel.org,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        jeeheng.sia@starfivetech.com, linux-kernel@vger.kernel.org,
+        palmer@rivosinc.com, leyfoon.tan@starfivetech.com,
+        mason.huo@starfivetech.com, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Song Shuai <suagrfillet@gmail.com>,
+        linux-riscv@lists.infradead.org,
+        Andrew Jones <ajones@ventanamicro.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023, at 20:45, Sasha Levin wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Thu, May 25, 2023 at 11:39=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
+ote:
 >
-> [ Upstream commit 2e9f8ab68f42b059e80db71266c1675c07c664bd ]
+> On Thu, May 25, 2023 at 11:37:40AM -0700, Atish Patra wrote:
 >
-> mdio_bus_init() is either used as a local module_init() entry,
-> or it gets called in phy_device.c. In the former case, there
-> is no declaration, which causes a warning:
+> > Any testing of hibernation still needs to revert the patch until we
+> > have the proper fix.
 >
-> drivers/net/phy/mdio_bus.c:1371:12: error: no previous prototype for 
-> 'mdio_bus_init' [-Werror=missing-prototypes]
->
-> Remove the #ifdef around the declaration to avoid the warning..
+> "the patch" is what exactly? I assume you don't mean depending on
+> NONPORTABLE, since that is a Kconfig option.
 
-Hi Sasha,
+Nope. Sorry I meant the commit
 
-While there is nothing wrong with backporting the -Wmissing-prototypes
-warning fixes I sent, there is also really no point unless you
-want to backport all 140 of them and then also turn on that warning
-during testing.
+3335068 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
 
-The option is only enabled at the W=1 level or when using sparse (C=1).
-I hope to get these all done in 6.5 for the most common architectures,
-but I wouldn't bother putting them into stable kernels.
 
-     Arnd
+--=20
+Regards,
+Atish
