@@ -2,564 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C50710736
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076EA710738
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239521AbjEYIUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
+        id S229725AbjEYIUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239544AbjEYITm (ORCPT
+        with ESMTP id S239670AbjEYITx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:19:42 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A08F1A4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:19:34 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6d01d390bso2999785e9.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 01:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1685002773; x=1687594773;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7M+p6XfY9bpbtVibj8wMrTBF5YmJeMykjF37fK2dZH0=;
-        b=L9oKsyExayAPw78ikkzAi7uPopVonwaYktWEFmEszxBcFDLYUjBE56Rvd1NlnTL0wH
-         LQVHctu2chjWWtGw8zl0ZXA5Gxh/0ia0tisrC8tmqkMkmXOzLyzbrv61kze+xqgb5qQu
-         ml+07RHT/EL/jXvy1yBFrDTfbqNHwh6uv6Rsx7hpBJQUMTOoOoPNUtZHWzU0JshobdMc
-         ENwtIhUx+Vm/MwfbxAHqqLIoaXl8WqB9fr6vdrrdGvFofFibknNWdHF+X+lKuJAzpA+1
-         b6aCJ2w3/KgGSdwCeGfWrs2uC5WOWhDPJGta2eHEXKn9EMB91o6LN23fr7AXnh101uIz
-         QI1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685002773; x=1687594773;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7M+p6XfY9bpbtVibj8wMrTBF5YmJeMykjF37fK2dZH0=;
-        b=MTOUa6YGQGve8TC1VkLF+TO03Azzwwh6OGTyCfiMZpNAF5cqiAfR+maULa2MMNrCcB
-         ywFFIZpl7MHFu8s9r/nMW4vikgnC6DTDGzfF2aPsjlMlTTuU4ESy27b9FmhNsDZLX1fg
-         DxM4Q5snvbMCW65ZgIZlmOQM+3NrC32aIof/0EBwefcqF2zWH4GkW9rlyegj3SQGsJJq
-         6C6rexWCKA3S/Iwbeo1XDdW47c8IgZygguQ4DyxIL4vGxH2vAlWUJW/8sOGrjCqjl7U4
-         j8XZc1J3I/ZaiMsizURnlDKcpP8r+3h0p0vSqYnF9FrmwbVMqSty9KrDbFkVmoqihF8C
-         UlyA==
-X-Gm-Message-State: AC+VfDyvNn+EB8s0cZ+Z6/voiPVOGE1AZhfXvgcXNFmbagKgkOekikcs
-        gGy/H41eR14W50yt7CUK+ZE02g==
-X-Google-Smtp-Source: ACHHUZ5RyunDcCFe4caQzD0DdT2EQlF3zGscjWuXqb9SY1zMoxQo+D7QQH2bh/NJgX5EvUbi2LTHnA==
-X-Received: by 2002:a05:600c:378b:b0:3f6:a44:73bb with SMTP id o11-20020a05600c378b00b003f60a4473bbmr1787873wmr.8.1685002772945;
-        Thu, 25 May 2023 01:19:32 -0700 (PDT)
-Received: from algol.lan (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
-        by smtp.gmail.com with ESMTPSA id v7-20020a05600c214700b003f4f89bc48dsm4960399wml.15.2023.05.25.01.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 01:19:32 -0700 (PDT)
-From:   Lorenz Bauer <lmb@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Lorenz Bauer <lmb@isovalent.com>, Joe Stringer <joe@cilium.io>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test that SO_REUSEPORT can be used with sk_assign helper
-Date:   Thu, 25 May 2023 09:19:23 +0100
-Message-Id: <20230525081923.8596-2-lmb@isovalent.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230525081923.8596-1-lmb@isovalent.com>
-References: <20230525081923.8596-1-lmb@isovalent.com>
+        Thu, 25 May 2023 04:19:53 -0400
+Received: from mx5.didiglobal.com (mx5.didiglobal.com [111.202.70.122])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1806E122;
+        Thu, 25 May 2023 01:19:42 -0700 (PDT)
+Received: from mail.didiglobal.com (unknown [10.79.71.36])
+        by mx5.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 599F1B006CA0C;
+        Thu, 25 May 2023 16:19:41 +0800 (CST)
+Received: from ZJY03-ACTMBX-05.didichuxing.com (10.79.71.35) by
+ ZJY03-ACTMBX-06.didichuxing.com (10.79.71.36) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 25 May 2023 16:19:40 +0800
+Received: from ZJY03-ACTMBX-05.didichuxing.com ([fe80::7d7d:d727:7a02:e909])
+ by ZJY03-ACTMBX-05.didichuxing.com ([fe80::7d7d:d727:7a02:e909%7]) with mapi
+ id 15.01.2507.021; Thu, 25 May 2023 16:19:40 +0800
+X-MD-Sfrom: chengkaitao@didiglobal.com
+X-MD-SrcIP: 10.79.71.36
+From:   =?utf-8?B?56iL5Z6y5rabIENoZW5na2FpdGFvIENoZW5n?= 
+        <chengkaitao@didiglobal.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+CC:     "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "muchun.song@linux.dev" <muchun.song@linux.dev>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [PATCH v4 0/2] memcontrol: support cgroup level OOM protection
+Thread-Topic: [PATCH v4 0/2] memcontrol: support cgroup level OOM protection
+Thread-Index: AQHZiG6QYuA8nkfOmkSWHm0JCEvXOa9dgyoAgACXf4D//3xFAIAApWQAgAAs0QCAARSZgIACJwoAgAFL/4CABPzogIACxMMA
+Date:   Thu, 25 May 2023 08:19:40 +0000
+Message-ID: <B438A058-7C4A-46B3-B6FB-4CF32BD7D294@didiglobal.com>
+In-Reply-To: <CAJD7tkZwCreOS_XxDM_9mOTBo=Gatr12r1xtc64B_e5+HJhRqg@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.79.65.102]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8544EAEE9FD53344A86FC09D81EAFF44@didichuxing.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
-
-We use two programs to check that the new reuseport logic is executed
-appropriately.
-
-The first is a TC clsact program which bpf_sk_assigns
-the skb to a UDP or TCP socket created by user space. Since the test
-communicates via lo we see both directions of packets in the eBPF.
-Traffic ingressing to the reuseport socket is identified by looking
-at the destination port. For TCP, we additionally need to make sure
-that we only assign the initial SYN packets towards our listening
-socket. The network stack then creates a request socket which
-transitions to ESTABLISHED after the 3WHS.
-
-The second is a reuseport program which shares the fact that
-it has been executed with user space. This tells us that the delayed
-lookup mechanism is working.
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Co-developed-by: Lorenz Bauer <lmb@isovalent.com>
-Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
-Cc: Joe Stringer <joe@cilium.io>
----
- tools/testing/selftests/bpf/network_helpers.c |   3 +
- .../selftests/bpf/prog_tests/assign_reuse.c   | 280 ++++++++++++++++++
- .../selftests/bpf/progs/test_assign_reuse.c   | 142 +++++++++
- 3 files changed, 425 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/assign_reuse.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_assign_reuse.c
-
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index a105c0cd008a..8a33bcea97de 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -423,6 +423,9 @@ struct nstoken *open_netns(const char *name)
- 
- void close_netns(struct nstoken *token)
- {
-+	if (!token)
-+		return;
-+
- 	ASSERT_OK(setns(token->orig_netns_fd, CLONE_NEWNET), "setns");
- 	close(token->orig_netns_fd);
- 	free(token);
-diff --git a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-new file mode 100644
-index 000000000000..2cb9bb591e71
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-@@ -0,0 +1,280 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Isovalent */
-+#include <uapi/linux/if_link.h>
-+#include <test_progs.h>
-+
-+#include <netinet/tcp.h>
-+#include <netinet/udp.h>
-+
-+#include "network_helpers.h"
-+#include "test_assign_reuse.skel.h"
-+
-+#define NS_TEST "assign_reuse"
-+#define LOOPBACK 1
-+#define PORT 4443
-+
-+static int attach_reuseport(int sock_fd, int prog_fd)
-+{
-+	return setsockopt(sock_fd, SOL_SOCKET, SO_ATTACH_REUSEPORT_EBPF,
-+			  &prog_fd, sizeof(prog_fd));
-+}
-+
-+static socklen_t inetaddr_len(const struct sockaddr_storage *addr)
-+{
-+	return addr->ss_family == AF_INET  ? sizeof(struct sockaddr_in) :
-+	       addr->ss_family == AF_INET6 ? sizeof(struct sockaddr_in6) :
-+					     0;
-+}
-+
-+static bool is_ipv6(const char *ip)
-+{
-+	return !!strchr(ip, ':');
-+}
-+
-+static int make_socket(int sotype, const char *ip, int port,
-+		       struct sockaddr_storage *addr)
-+{
-+	struct timeval timeo = { .tv_usec = 500000 /* 500 ms */ };
-+	int family = is_ipv6(ip) ? AF_INET6 : AF_INET;
-+	int ret, fd;
-+
-+	ret = make_sockaddr(family, ip, port, addr, NULL);
-+	if (!ASSERT_OK(ret, "make_sockaddr"))
-+		return -1;
-+	fd = socket(addr->ss_family, sotype, 0);
-+	if (!ASSERT_GE(fd, 0, "socket"))
-+		return -1;
-+	ret = setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timeo, sizeof(timeo));
-+	if (!ASSERT_OK(ret, "sndtimeo")) {
-+		close(fd);
-+		return -1;
-+	}
-+	ret = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timeo, sizeof(timeo));
-+	if (!ASSERT_OK(ret, "rcvtimeo")) {
-+		close(fd);
-+		return -1;
-+	}
-+	return fd;
-+}
-+
-+static int create_server(int sotype, const char *ip, int port, int prog_fd)
-+{
-+	struct sockaddr_storage addr = {};
-+	const int one = 1;
-+	int ret, fd;
-+
-+	fd = make_socket(sotype, ip, port, &addr);
-+	if (fd < 0)
-+		return -1;
-+	if (sotype == SOCK_STREAM) {
-+		ret = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one,
-+				 sizeof(one));
-+		if (!ASSERT_OK(ret, "reuseaddr"))
-+			goto cleanup;
-+	}
-+	if (prog_fd >= 0) {
-+		ret = setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &one,
-+				 sizeof(one));
-+		if (!ASSERT_OK(ret, "reuseport"))
-+			goto cleanup;
-+		ret = attach_reuseport(fd, prog_fd);
-+		if (!ASSERT_OK(ret, "attach_reuseport"))
-+			goto cleanup;
-+	}
-+	ret = bind(fd, (void *)&addr, inetaddr_len(&addr));
-+	if (!ASSERT_OK(ret, "bind"))
-+		goto cleanup;
-+	if (sotype == SOCK_STREAM) {
-+		ret = listen(fd, SOMAXCONN);
-+		if (!ASSERT_OK(ret, "listen"))
-+			goto cleanup;
-+	}
-+	return fd;
-+cleanup:
-+	close(fd);
-+	return -1;
-+}
-+
-+static int create_client(int sotype, const char *ip, int port)
-+{
-+	struct sockaddr_storage addr = {};
-+	int ret, fd;
-+
-+	fd = make_socket(sotype, ip, port, &addr);
-+	if (fd < 0)
-+		return -1;
-+	ret = connect(fd, (void *)&addr, inetaddr_len(&addr));
-+	if (ret)
-+		goto cleanup;
-+	return fd;
-+cleanup:
-+	close(fd);
-+	return -1;
-+}
-+
-+static __u64 cookie(int fd)
-+{
-+	__u64 cookie = 0;
-+	socklen_t cookie_len = sizeof(cookie);
-+	int ret;
-+
-+	ret = getsockopt(fd, SOL_SOCKET, SO_COOKIE, &cookie, &cookie_len);
-+	ASSERT_OK(ret, "cookie");
-+	ASSERT_GT(cookie, 0, "cookie_invalid");
-+
-+	return cookie;
-+}
-+
-+static int echo_test_udp(int fd_sv, const char *ip, int port)
-+{
-+	struct sockaddr_storage addr = {};
-+	socklen_t len = sizeof(addr);
-+	char buff[1] = {};
-+	int fd_cl = -1, ret;
-+
-+	fd_cl = create_client(SOCK_DGRAM, ip, port);
-+	ASSERT_GT(fd_cl, 0, "create_client");
-+	ASSERT_EQ(getsockname(fd_cl, (void *)&addr, &len), 0, "getsockname");
-+
-+	ASSERT_EQ(send(fd_cl, buff, sizeof(buff), 0), 1, "send_client");
-+
-+	ret = recv(fd_sv, buff, sizeof(buff), 0);
-+	if (ret < 0)
-+		return errno;
-+
-+	ASSERT_EQ(ret, 1, "recv_server");
-+	ASSERT_EQ(sendto(fd_sv, buff, sizeof(buff), 0, (void *)&addr, len), 1, "send_server");
-+	ASSERT_EQ(recv(fd_cl, buff, sizeof(buff), 0), 1, "recv_client");
-+	close(fd_cl);
-+	return 0;
-+}
-+
-+static int echo_test_tcp(int fd_sv, const char *ip, int port)
-+{
-+	char buff[1] = {};
-+	int fd_cl = -1, fd_sv_cl = -1;
-+
-+	fd_cl = create_client(SOCK_STREAM, ip, port);
-+	if (fd_cl < 0)
-+		return errno;
-+
-+	fd_sv_cl = accept(fd_sv, NULL, NULL);
-+	ASSERT_GE(fd_sv_cl, 0, "accept_fd");
-+
-+	ASSERT_EQ(send(fd_cl, buff, sizeof(buff), 0), 1, "send_client");
-+	ASSERT_EQ(recv(fd_sv_cl, buff, sizeof(buff), 0), 1, "recv_server");
-+	ASSERT_EQ(send(fd_sv_cl, buff, sizeof(buff), 0), 1, "send_server");
-+	ASSERT_EQ(recv(fd_cl, buff, sizeof(buff), 0), 1, "recv_client");
-+	close(fd_sv_cl);
-+	close(fd_cl);
-+	return 0;
-+}
-+
-+void run_assign_reuse(int sotype, const char *ip, int port)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook, .ifindex = LOOPBACK,
-+			    .attach_point = BPF_TC_INGRESS, );
-+	DECLARE_LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1, );
-+	bool hook_created = false, tc_attached = false;
-+	int ret, fd_tc, fd_accept, fd_drop, fd_sv = -1, fd_map;
-+	__u64 fd_val;
-+	struct test_assign_reuse *skel;
-+	const int zero = 0;
-+
-+	skel = test_assign_reuse__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		goto cleanup;
-+
-+	skel->rodata->dest_port = port;
-+
-+	ret = test_assign_reuse__load(skel);
-+	if (!ASSERT_OK(ret, "skel_load"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(skel->bss->sk_cookie_seen, 0, "cookie_init");
-+
-+	fd_tc = bpf_program__fd(skel->progs.tc_main);
-+	fd_accept = bpf_program__fd(skel->progs.reuse_accept);
-+	fd_drop = bpf_program__fd(skel->progs.reuse_drop);
-+	fd_map = bpf_map__fd(skel->maps.sk_map);
-+
-+	fd_sv = create_server(sotype, ip, port, fd_drop);
-+	if (!ASSERT_GE(fd_sv, 0, "create_server"))
-+		goto cleanup;
-+
-+	fd_val = fd_sv;
-+	ret = bpf_map_update_elem(fd_map, &zero, &fd_val, BPF_NOEXIST);
-+	if (!ASSERT_OK(ret, "bpf_sk_map"))
-+		goto cleanup;
-+
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (ret == 0)
-+		hook_created = true;
-+	ret = ret == -EEXIST ? 0 : ret;
-+	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
-+		goto cleanup;
-+
-+	tc_opts.prog_fd = fd_tc;
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "bpf_tc_attach"))
-+		goto cleanup;
-+	tc_attached = true;
-+
-+	if (sotype == SOCK_STREAM)
-+		ASSERT_EQ(echo_test_tcp(fd_sv, ip, port), ECONNREFUSED, "drop_tcp");
-+	else
-+		ASSERT_EQ(echo_test_udp(fd_sv, ip, port), EAGAIN, "drop_udp");
-+	ASSERT_EQ(skel->bss->reuseport_executed, 1, "program executed once");
-+
-+	skel->bss->sk_cookie_seen = 0;
-+	skel->bss->reuseport_executed = 0;
-+	ASSERT_OK(attach_reuseport(fd_sv, fd_accept), "attach_reuseport(accept)");
-+
-+	if (sotype == SOCK_STREAM)
-+		ASSERT_EQ(echo_test_tcp(fd_sv, ip, port), 0, "echo_tcp");
-+	else
-+		ASSERT_EQ(echo_test_udp(fd_sv, ip, port), 0, "echo_udp");
-+
-+	ASSERT_EQ(skel->bss->sk_cookie_seen, cookie(fd_sv),
-+		  "cookie_mismatch");
-+	ASSERT_EQ(skel->bss->reuseport_executed, 1, "program executed once");
-+cleanup:
-+	if (tc_attached) {
-+		tc_opts.flags = tc_opts.prog_fd = tc_opts.prog_id = 0;
-+		ret = bpf_tc_detach(&tc_hook, &tc_opts);
-+		ASSERT_OK(ret, "bpf_tc_detach");
-+	}
-+	if (hook_created) {
-+		tc_hook.attach_point = BPF_TC_INGRESS | BPF_TC_EGRESS;
-+		bpf_tc_hook_destroy(&tc_hook);
-+	}
-+	test_assign_reuse__destroy(skel);
-+	close(fd_sv);
-+}
-+
-+void serial_test_assign_reuse(void)
-+{
-+	struct nstoken *tok = NULL;
-+
-+	SYS(out, "ip netns add %s", NS_TEST);
-+	SYS(cleanup, "ip -net %s link set dev lo up", NS_TEST);
-+
-+	tok = open_netns(NS_TEST);
-+	if (!ASSERT_OK_PTR(tok, "netns token"))
-+		return;
-+
-+	if (test__start_subtest("tcpv4"))
-+		run_assign_reuse(SOCK_STREAM, "127.0.0.1", PORT);
-+	if (test__start_subtest("tcpv6"))
-+		run_assign_reuse(SOCK_STREAM, "::1", PORT);
-+	if (test__start_subtest("udpv4"))
-+		run_assign_reuse(SOCK_DGRAM, "127.0.0.1", PORT);
-+	if (test__start_subtest("udpv6"))
-+		run_assign_reuse(SOCK_DGRAM, "::1", PORT);
-+
-+cleanup:
-+	close_netns(tok);
-+	SYS_NOFAIL("ip netns delete %s", NS_TEST);
-+out:
-+	return;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_assign_reuse.c b/tools/testing/selftests/bpf/progs/test_assign_reuse.c
-new file mode 100644
-index 000000000000..c83e870b2612
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_assign_reuse.c
-@@ -0,0 +1,142 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Isovalent */
-+#include <stdbool.h>
-+#include <linux/bpf.h>
-+#include <linux/if_ether.h>
-+#include <linux/in.h>
-+#include <linux/ip.h>
-+#include <linux/ipv6.h>
-+#include <linux/tcp.h>
-+#include <linux/udp.h>
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_helpers.h>
-+#include <linux/pkt_cls.h>
-+
-+char LICENSE[] SEC("license") = "GPL";
-+
-+__u64 sk_cookie_seen;
-+__u64 reuseport_executed;
-+union {
-+	struct tcphdr tcp;
-+	struct udphdr udp;
-+} headers;
-+
-+const volatile __u16 dest_port;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} sk_map SEC(".maps");
-+
-+SEC("sk_reuseport")
-+int reuse_accept(struct sk_reuseport_md *ctx)
-+{
-+	reuseport_executed++;
-+
-+	if (ctx->ip_protocol == IPPROTO_TCP) {
-+		if (ctx->data + sizeof(headers.tcp) > ctx->data_end)
-+			return SK_DROP;
-+
-+		if (__builtin_memcmp(&headers.tcp, ctx->data, sizeof(headers.tcp)) != 0)
-+			return SK_DROP;
-+	} else if (ctx->ip_protocol == IPPROTO_UDP) {
-+		if (ctx->data + sizeof(headers.udp) > ctx->data_end)
-+			return SK_DROP;
-+
-+		if (__builtin_memcmp(&headers.udp, ctx->data, sizeof(headers.udp)) != 0)
-+			return SK_DROP;
-+	} else {
-+		return SK_DROP;
-+	}
-+
-+	sk_cookie_seen = bpf_get_socket_cookie(ctx->sk);
-+	return SK_PASS;
-+}
-+
-+SEC("sk_reuseport")
-+int reuse_drop(struct sk_reuseport_md *ctx)
-+{
-+	reuseport_executed++;
-+	sk_cookie_seen = 0;
-+	return SK_DROP;
-+}
-+
-+static inline int
-+assign_sk(struct __sk_buff *skb)
-+{
-+	int zero = 0, ret = 0;
-+	struct bpf_sock *sk;
-+
-+	sk = bpf_map_lookup_elem(&sk_map, &zero);
-+	if (!sk)
-+		return TC_ACT_SHOT;
-+	ret = bpf_sk_assign(skb, sk, 0);
-+	bpf_sk_release(sk);
-+	return ret ? TC_ACT_SHOT : TC_ACT_OK;
-+}
-+
-+static inline bool
-+maybe_assign_tcp(struct __sk_buff *skb, struct tcphdr *th)
-+{
-+	if (th + 1 > (void *)(long)(skb->data_end))
-+		return TC_ACT_SHOT;
-+
-+	if (!th->syn || th->ack || th->dest != bpf_htons(dest_port))
-+		return TC_ACT_OK;
-+
-+	__builtin_memcpy(&headers.tcp, th, sizeof(headers.tcp));
-+	return assign_sk(skb);
-+}
-+
-+static inline bool
-+maybe_assign_udp(struct __sk_buff *skb, struct udphdr *uh)
-+{
-+	if (uh + 1 > (void *)(long)(skb->data_end))
-+		return TC_ACT_SHOT;
-+
-+	if (uh->dest != bpf_htons(dest_port))
-+		return TC_ACT_OK;
-+
-+	__builtin_memcpy(&headers.udp, uh, sizeof(headers.udp));
-+	return assign_sk(skb);
-+}
-+
-+SEC("tc")
-+int tc_main(struct __sk_buff *skb)
-+{
-+	void *data_end = (void *)(long)skb->data_end;
-+	void *data = (void *)(long)skb->data;
-+	struct ethhdr *eth;
-+
-+	eth = (struct ethhdr *)(data);
-+	if (eth + 1 > data_end)
-+		return TC_ACT_SHOT;
-+
-+	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
-+		struct iphdr *iph = (struct iphdr *)(data + sizeof(*eth));
-+
-+		if (iph + 1 > data_end)
-+			return TC_ACT_SHOT;
-+
-+		if (iph->protocol == IPPROTO_TCP)
-+			return maybe_assign_tcp(skb, (struct tcphdr *)(iph + 1));
-+		else if (iph->protocol == IPPROTO_UDP)
-+			return maybe_assign_udp(skb, (struct udphdr *)(iph + 1));
-+		else
-+			return TC_ACT_SHOT;
-+	} else {
-+		struct ipv6hdr *ip6h = (struct ipv6hdr *)(data + sizeof(*eth));
-+
-+		if (ip6h + 1 > data_end)
-+			return TC_ACT_SHOT;
-+
-+		if (ip6h->nexthdr == IPPROTO_TCP)
-+			return maybe_assign_tcp(skb, (struct tcphdr *)(ip6h + 1));
-+		else if (ip6h->nexthdr == IPPROTO_UDP)
-+			return maybe_assign_udp(skb, (struct udphdr *)(ip6h + 1));
-+		else
-+			return TC_ACT_SHOT;
-+	}
-+}
--- 
-2.40.1
-
+QXQgMjAyMy0wNS0yNCAwNjowMjo1NSwgIllvc3J5IEFobWVkIiA8eW9zcnlhaG1lZEBnb29nbGUu
+Y29tPiB3cm90ZToNCj5PbiBTYXQsIE1heSAyMCwgMjAyMyBhdCAyOjUy4oCvQU0g56iL5Z6y5rab
+IENoZW5na2FpdGFvIENoZW5nDQo+PGNoZW5na2FpdGFvQGRpZGlnbG9iYWwuY29tPiB3cm90ZToN
+Cj4+DQo+PiBBdCAyMDIzLTA1LTIwIDA2OjA0OjI2LCAiWW9zcnkgQWhtZWQiIDx5b3NyeWFobWVk
+QGdvb2dsZS5jb20+IHdyb3RlOg0KPj4gPk9uIFdlZCwgTWF5IDE3LCAyMDIzIGF0IDEwOjEy4oCv
+UE0g56iL5Z6y5rabIENoZW5na2FpdGFvIENoZW5nDQo+PiA+PGNoZW5na2FpdGFvQGRpZGlnbG9i
+YWwuY29tPiB3cm90ZToNCj4+ID4+DQo+PiA+PiBBdCAyMDIzLTA1LTE4IDA0OjQyOjEyLCAiWW9z
+cnkgQWhtZWQiIDx5b3NyeWFobWVkQGdvb2dsZS5jb20+IHdyb3RlOg0KPj4gPj4gPk9uIFdlZCwg
+TWF5IDE3LCAyMDIzIGF0IDM6MDHigK9BTSDnqIvlnrLmtpsgQ2hlbmdrYWl0YW8gQ2hlbmcNCj4+
+ID4+ID48Y2hlbmdrYWl0YW9AZGlkaWdsb2JhbC5jb20+IHdyb3RlOg0KPj4gPj4gPj4NCj4+ID4+
+ID4+IEF0IDIwMjMtMDUtMTcgMTY6MDk6NTAsICJZb3NyeSBBaG1lZCIgPHlvc3J5YWhtZWRAZ29v
+Z2xlLmNvbT4gd3JvdGU6DQo+PiA+PiA+PiA+T24gV2VkLCBNYXkgMTcsIDIwMjMgYXQgMTowMeKA
+r0FNIOeoi+Wesua2myBDaGVuZ2thaXRhbyBDaGVuZw0KPj4gPj4gPj4gPjxjaGVuZ2thaXRhb0Bk
+aWRpZ2xvYmFsLmNvbT4gd3JvdGU6DQo+PiA+PiA+PiA+Pg0KPj4gPj4gPj4NCj4+ID4+ID4+IEtp
+bGxpbmcgcHJvY2Vzc2VzIGluIG9yZGVyIG9mIG1lbW9yeSB1c2FnZSBjYW5ub3QgZWZmZWN0aXZl
+bHkgcHJvdGVjdA0KPj4gPj4gPj4gaW1wb3J0YW50IHByb2Nlc3Nlcy4gS2lsbGluZyBwcm9jZXNz
+ZXMgaW4gYSB1c2VyLWRlZmluZWQgcHJpb3JpdHkgb3JkZXINCj4+ID4+ID4+IHdpbGwgcmVzdWx0
+IGluIGEgbGFyZ2UgbnVtYmVyIG9mIE9PTSBldmVudHMgYW5kIHN0aWxsIG5vdCBiZWluZyBhYmxl
+IHRvDQo+PiA+PiA+PiByZWxlYXNlIGVub3VnaCBtZW1vcnkuIEkgaGF2ZSBiZWVuIHNlYXJjaGlu
+ZyBmb3IgYSBiYWxhbmNlIGJldHdlZW4NCj4+ID4+ID4+IHRoZSB0d28gbWV0aG9kcywgc28gdGhh
+dCB0aGVpciBzaG9ydGNvbWluZ3MgYXJlIG5vdCB0b28gb2J2aW91cy4NCj4+ID4+ID4+IFRoZSBi
+aWdnZXN0IGFkdmFudGFnZSBvZiBtZW1jZyBpcyBpdHMgdHJlZSB0b3BvbG9neSwgYW5kIEkgYWxz
+byBob3BlDQo+PiA+PiA+PiB0byBtYWtlIGdvb2QgdXNlIG9mIGl0Lg0KPj4gPj4gPg0KPj4gPj4g
+PkZvciB1cywga2lsbGluZyBwcm9jZXNzZXMgaW4gYSB1c2VyLWRlZmluZWQgcHJpb3JpdHkgb3Jk
+ZXIgd29ya3Mgd2VsbC4NCj4+ID4+ID4NCj4+ID4+ID5JdCBzZWVtcyBsaWtlIHRvIHR1bmUgbWVt
+b3J5Lm9vbS5wcm90ZWN0IHlvdSB1c2Ugb29tX2tpbGxfaW5oZXJpdCB0bw0KPj4gPj4gPm9ic2Vy
+dmUgaG93IG1hbnkgdGltZXMgdGhpcyBtZW1jZyBoYXMgYmVlbiBraWxsZWQgZHVlIHRvIGEgbGlt
+aXQgaW4gYW4NCj4+ID4+ID5hbmNlc3Rvci4gV291bGRuJ3QgaXQgYmUgbW9yZSBzdHJhaWdodGZv
+cndhcmQgdG8gc3BlY2lmeSB0aGUgcHJpb3JpdHkNCj4+ID4+ID5vZiBwcm90ZWN0aW9ucyBhbW9u
+ZyBtZW1jZ3M/DQo+PiA+PiA+DQo+PiA+PiA+Rm9yIGV4YW1wbGUsIGlmIHlvdSBvYnNlcnZlIG11
+bHRpcGxlIG1lbWNncyBiZWluZyBPT00ga2lsbGVkIGR1ZSB0bw0KPj4gPj4gPmhpdHRpbmcgYW4g
+YW5jZXN0b3IgbGltaXQsIHlvdSB3aWxsIG5lZWQgdG8gZGVjaWRlIHdoaWNoIG9mIHRoZW0gdG8N
+Cj4+ID4+ID5pbmNyZWFzZSBtZW1vcnkub29tLnByb3RlY3QgZm9yIG1vcmUsIGJhc2VkIG9uIHRo
+ZWlyIGltcG9ydGFuY2UuDQo+PiA+PiA+T3RoZXJ3aXNlLCBpZiB5b3UgaW5jcmVhc2UgYWxsIG9m
+IHRoZW0sIHRoZW4gdGhlcmUgaXMgbm8gcG9pbnQgaWYgYWxsDQo+PiA+PiA+dGhlIG1lbW9yeSBp
+cyBwcm90ZWN0ZWQsIHJpZ2h0Pw0KPj4gPj4NCj4+ID4+IElmIGFsbCBtZW1vcnkgaW4gbWVtY2cg
+aXMgcHJvdGVjdGVkLCBpdHMgbWVhbmluZyBpcyBzaW1pbGFyIHRvIHRoYXQgb2YgdGhlDQo+PiA+
+PiBoaWdoZXN0IHByaW9yaXR5IG1lbWNnIGluIHlvdXIgYXBwcm9hY2gsIHdoaWNoIGlzIHVsdGlt
+YXRlbHkga2lsbGVkIG9yDQo+PiA+PiBuZXZlciBraWxsZWQuDQo+PiA+DQo+PiA+TWFrZXMgc2Vu
+c2UuIEkgYmVsaWV2ZSBpdCBnZXRzIGEgYml0IHRyaWNraWVyIHdoZW4geW91IHdhbnQgdG8NCj4+
+ID5kZXNjcmliZSByZWxhdGl2ZSBvcmRlcmluZyBiZXR3ZWVuIG1lbWNncyB1c2luZyBtZW1vcnku
+b29tLnByb3RlY3QuDQo+Pg0KPj4gQWN0dWFsbHksIG15IG9yaWdpbmFsIGludGVudGlvbiB3YXMg
+bm90IHRvIHVzZSBtZW1vcnkub29tLnByb3RlY3QgdG8NCj4+IGFjaGlldmUgcmVsYXRpdmUgb3Jk
+ZXJpbmcgYmV0d2VlbiBtZW1jZ3MsIGl0IHdhcyBqdXN0IGEgZmVhdHVyZSB0aGF0DQo+PiBoYXBw
+ZW5lZCB0byBiZSBhY2hpZXZhYmxlLiBNeSBpbml0aWFsIGlkZWEgd2FzIHRvIHByb3RlY3QgYSBj
+ZXJ0YWluDQo+PiBwcm9wb3J0aW9uIG9mIG1lbW9yeSBpbiBtZW1jZyBmcm9tIGJlaW5nIGtpbGxl
+ZCwgYW5kIHRocm91Z2ggdGhlDQo+PiBtZXRob2QsIHBoeXNpY2FsIG1lbW9yeSBjYW4gYmUgcmVh
+c29uYWJseSBwbGFubmVkLiBCb3RoIHRoZSBwaHlzaWNhbA0KPj4gbWFjaGluZSBtYW5hZ2VyIGFu
+ZCBjb250YWluZXIgbWFuYWdlciBjYW4gYWRkIHNvbWUgdW5pbXBvcnRhbnQNCj4+IGxvYWRzIGJl
+eW9uZCB0aGUgb29tLnByb3RlY3QgbGltaXQsIGdyZWF0bHkgaW1wcm92aW5nIHRoZSBvdmVyc29s
+ZA0KPj4gcmF0ZSBvZiBtZW1vcnkuIEluIHRoZSB3b3JzdCBjYXNlIHNjZW5hcmlvLCB0aGUgcGh5
+c2ljYWwgbWFjaGluZSBjYW4NCj4+IGFsd2F5cyBwcm92aWRlIGFsbCB0aGUgbWVtb3J5IGxpbWl0
+ZWQgYnkgbWVtb3J5Lm9vbS5wcm90ZWN0IGZvciBtZW1jZy4NCj4+DQo+PiBPbiB0aGUgb3RoZXIg
+aGFuZCwgSSBhbHNvIHdhbnQgdG8gYWNoaWV2ZSByZWxhdGl2ZSBvcmRlcmluZyBvZiBpbnRlcm5h
+bA0KPj4gcHJvY2Vzc2VzIGluIG1lbWNnLCBub3QganVzdCBhIHVuaWZpZWQgb3JkZXJpbmcgb2Yg
+YWxsIG1lbWNncyBvbg0KPj4gcGh5c2ljYWwgbWFjaGluZXMuDQo+DQo+Rm9yIHVzLCBoYXZpbmcg
+YSBzdHJpY3QgcHJpb3JpdHkgb3JkZXJpbmctYmFzZWQgc2VsZWN0aW9uIGlzDQo+ZXNzZW50aWFs
+LiBXZSBoYXZlIGRpZmZlcmVudCB0aWVycyBvZiBqb2JzIG9mIGRpZmZlcmVudCBpbXBvcnRhbmNl
+LA0KPmFuZCBhIGpvYiBvZiBoaWdoZXIgcHJpb3JpdHkgc2hvdWxkIG5vdCBiZSBraWxsZWQgYmVm
+b3JlIGEgbG93ZXINCj5wcmlvcml0eSB0YXNrIGlmIHBvc3NpYmxlLCBubyBtYXR0ZXIgaG93IG11
+Y2ggbWVtb3J5IGVpdGhlciBvZiB0aGVtIGlzDQo+dXNpbmcuIFByb3RlY3RpbmcgbWVtY2dzIHNv
+bGVseSBiYXNlZCBvbiB0aGVpciB1c2FnZSBjYW4gYmUgdXNlZnVsIGluDQo+c29tZSBzY2VuYXJp
+b3MsIGJ1dCBub3QgaW4gYSBzeXN0ZW0gd2hlcmUgeW91IGhhdmUgZGlmZmVyZW50IHRpZXJzIG9m
+DQo+am9icyBydW5uaW5nIHdpdGggc3RyaWN0IHByaW9yaXR5IG9yZGVyaW5nLg0KDQpJZiB5b3Ug
+d2FudCB0byBydW4gd2l0aCBzdHJpY3QgcHJpb3JpdHkgb3JkZXJpbmcsIGl0IGNhbiBhbHNvIGJl
+IGFjaGlldmVkLCANCmJ1dCBpdCBtYXkgYmUgcXVpdGUgdHJvdWJsZXNvbWUuIFRoZSBkaXJlY3Rv
+cnkgc3RydWN0dXJlIHNob3duIGJlbG93DQpjYW4gYWNoaWV2ZSB0aGUgZ29hbC4NCg0KICAgICAg
+ICAgICAgIHJvb3QNCiAgICAgICAgICAgLyAgICAgIFwNCiAgIGNncm91cCBBICAgICAgIGNncm91
+cCBCDQoocHJvdGVjdD1tYXgpICAgIChwcm90ZWN0PTApDQogICAgICAgICAgICAgICAgLyAgICAg
+ICAgICBcDQogICAgICAgICAgIGNncm91cCBDICAgICAgY2dyb3VwIEQNCiAgICAgICAgKHByb3Rl
+Y3Q9bWF4KSAgIChwcm90ZWN0PTApDQogICAgICAgICAgICAgICAgICAgICAgIC8gICAgICAgICAg
+XA0KICAgICAgICAgICAgICAgICAgY2dyb3VwIEUgICAgICBjZ3JvdXAgRg0KICAgICAgICAgICAg
+ICAgKHByb3RlY3Q9bWF4KSAgIChwcm90ZWN0PTApDQoNCk9vbSBraWxsIG9yZGVyOiBGID4gRSA+
+IEMgPiBBDQoNCkFzIG1lbnRpb25lZCBlYXJsaWVyLCAicnVubmluZyB3aXRoIHN0cmljdCBwcmlv
+cml0eSBvcmRlcmluZyIgbWF5IGJlIA0Kc29tZSBleHRyZW1lIGlzc3VlcywgdGhhdCByZXF1aXJl
+cyB0aGUgbWFuYWdlciB0byBtYWtlIGEgY2hvaWNlLg0KDQo+Pg0KPj4gPj4gPkluIHRoaXMgY2Fz
+ZSwgd291bGRuJ3QgaXQgYmUgZWFzaWVyIHRvIGp1c3QgdGVsbCB0aGUgT09NIGtpbGxlciB0aGUN
+Cj4+ID4+ID5yZWxhdGl2ZSBwcmlvcml0eSBhbW9uZyB0aGUgbWVtY2dzPw0KPj4gPj4gPg0KPj4g
+Pj4gPj4NCj4+ID4+ID4+ID5JZiB0aGlzIGFwcHJvYWNoIHdvcmtzIGZvciB5b3UgKG9yIGFueSBv
+dGhlciBhdWRpZW5jZSksIHRoYXQncyBncmVhdCwNCj4+ID4+ID4+ID5JIGNhbiBzaGFyZSBtb3Jl
+IGRldGFpbHMgYW5kIHBlcmhhcHMgd2UgY2FuIHJlYWNoIHNvbWV0aGluZyB0aGF0IHdlDQo+PiA+
+PiA+PiA+Y2FuIGJvdGggdXNlIDopDQo+PiA+PiA+Pg0KPj4gPj4gPj4gSWYgeW91IGhhdmUgYSBn
+b29kIGlkZWEsIHBsZWFzZSBzaGFyZSBtb3JlIGRldGFpbHMgb3Igc2hvdyBzb21lIGNvZGUuDQo+
+PiA+PiA+PiBJIHdvdWxkIGdyZWF0bHkgYXBwcmVjaWF0ZSBpdA0KPj4gPj4gPg0KPj4gPj4gPlRo
+ZSBjb2RlIHdlIGhhdmUgbmVlZHMgdG8gYmUgcmViYXNlZCBvbnRvIGEgZGlmZmVyZW50IHZlcnNp
+b24gYW5kDQo+PiA+PiA+Y2xlYW5lZCB1cCBiZWZvcmUgaXQgY2FuIGJlIHNoYXJlZCwgYnV0IGVz
+c2VudGlhbGx5IGl0IGlzIGFzDQo+PiA+PiA+ZGVzY3JpYmVkLg0KPj4gPj4gPg0KPj4gPj4gPihh
+KSBBbGwgcHJvY2Vzc2VzIGFuZCBtZW1jZ3Mgc3RhcnQgd2l0aCBhIGRlZmF1bHQgc2NvcmUuDQo+
+PiA+PiA+KGIpIFVzZXJzcGFjZSBjYW4gc3BlY2lmeSBzY29yZXMgZm9yIG1lbWNncyBhbmQgcHJv
+Y2Vzc2VzLiBBIGhpZ2hlcg0KPj4gPj4gPnNjb3JlIG1lYW5zIGhpZ2hlciBwcmlvcml0eSAoYWth
+IGxlc3Mgc2NvcmUgZ2V0cyBraWxsZWQgZmlyc3QpLg0KPj4gPj4gPihjKSBUaGUgT09NIGtpbGxl
+ciBlc3NlbnRpYWxseSBsb29rcyBmb3IgdGhlIG1lbWNnIHdpdGggdGhlIGxvd2VzdA0KPj4gPj4g
+PnNjb3JlcyB0byBraWxsLCB0aGVuIGFtb25nIHRoaXMgbWVtY2csIGl0IGxvb2tzIGZvciB0aGUg
+cHJvY2VzcyB3aXRoDQo+PiA+PiA+dGhlIGxvd2VzdCBzY29yZS4gVGllcyBhcmUgYnJva2VuIGJh
+c2VkIG9uIHVzYWdlLCBzbyBlc3NlbnRpYWxseSBpZg0KPj4gPj4gPmFsbCBwcm9jZXNzZXMvbWVt
+Y2dzIGhhdmUgdGhlIGRlZmF1bHQgc2NvcmUsIHdlIGZhbGxiYWNrIHRvIHRoZQ0KPj4gPj4gPmN1
+cnJlbnQgT09NIGJlaGF2aW9yLg0KPj4gPj4NCj4+ID4+IElmIG1lbW9yeSBvdmVyc29sZCBpcyBz
+ZXZlcmUsIGFsbCBwcm9jZXNzZXMgb2YgdGhlIGxvd2VzdCBwcmlvcml0eQ0KPj4gPj4gbWVtY2cg
+bWF5IGJlIGtpbGxlZCBiZWZvcmUgc2VsZWN0aW5nIG90aGVyIG1lbWNnIHByb2Nlc3Nlcy4NCj4+
+ID4+IElmIHRoZXJlIGFyZSAxMDAwIHByb2Nlc3NlcyB3aXRoIGFsbW9zdCB6ZXJvIG1lbW9yeSB1
+c2FnZSBpbg0KPj4gPj4gdGhlIGxvd2VzdCBwcmlvcml0eSBtZW1jZywgMTAwMCBpbnZhbGlkIGtp
+bGwgZXZlbnRzIG1heSBvY2N1ci4NCj4+ID4+IFRvIGF2b2lkIHRoaXMgc2l0dWF0aW9uLCBldmVu
+IGZvciB0aGUgbG93ZXN0IHByaW9yaXR5IG1lbWNnLA0KPj4gPj4gSSB3aWxsIGxlYXZlIGhpbSBh
+IHZlcnkgc21hbGwgb29tLnByb3RlY3QgcXVvdGEuDQo+PiA+DQo+PiA+SSBjaGVja2VkIGludGVy
+bmFsbHksIGFuZCB0aGlzIGlzIGluZGVlZCBzb21ldGhpbmcgdGhhdCB3ZSBzZWUgZnJvbQ0KPj4g
+PnRpbWUgdG8gdGltZS4gV2UgdHJ5IHRvIGF2b2lkIHRoYXQgd2l0aCB1c2Vyc3BhY2UgT09NIGtp
+bGxpbmcsIGJ1dA0KPj4gPml0J3Mgbm90IDEwMCUgZWZmZWN0aXZlLg0KPj4gPg0KPj4gPj4NCj4+
+ID4+IElmIGZhY2VkIHdpdGggdHdvIG1lbWNncyB3aXRoIHRoZSBzYW1lIHRvdGFsIG1lbW9yeSB1
+c2FnZSBhbmQNCj4+ID4+IHByaW9yaXR5LCBtZW1jZyBBIGhhcyBtb3JlIHByb2Nlc3NlcyBidXQg
+bGVzcyBtZW1vcnkgdXNhZ2UgcGVyDQo+PiA+PiBzaW5nbGUgcHJvY2VzcywgYW5kIG1lbWNnIEIg
+aGFzIGZld2VyIHByb2Nlc3NlcyBidXQgbW9yZQ0KPj4gPj4gbWVtb3J5IHVzYWdlIHBlciBzaW5n
+bGUgcHJvY2VzcywgdGhlbiB3aGVuIE9PTSBvY2N1cnMsIHRoZQ0KPj4gPj4gcHJvY2Vzc2VzIGlu
+IG1lbWNnIEIgbWF5IGNvbnRpbnVlIHRvIGJlIGtpbGxlZCB1bnRpbCBhbGwgcHJvY2Vzc2VzDQo+
+PiA+PiBpbiBtZW1jZyBCIGFyZSBraWxsZWQsIHdoaWNoIGlzIHVuZmFpciB0byBtZW1jZyBCIGJl
+Y2F1c2UgbWVtY2cgQQ0KPj4gPj4gYWxzbyBvY2N1cGllcyBhIGxhcmdlIGFtb3VudCBvZiBtZW1v
+cnkuDQo+PiA+DQo+PiA+SSBiZWxpZXZlIGluIHRoaXMgY2FzZSB3ZSB3aWxsIGtpbGwgb25lIHBy
+b2Nlc3MgaW4gbWVtY2cgQiwgdGhlbiB0aGUNCj4+ID51c2FnZSBvZiBtZW1jZyBBIHdpbGwgYmVj
+b21lIGhpZ2hlciwgc28gd2Ugd2lsbCBwaWNrIGEgcHJvY2VzcyBmcm9tDQo+PiA+bWVtY2cgQSBu
+ZXh0Lg0KPj4NCj4+IElmIHRoZXJlIGlzIG9ubHkgb25lIHByb2Nlc3MgaW4gbWVtY2cgQSBhbmQg
+aXRzIG1lbW9yeSB1c2FnZSBpcyBoaWdoZXINCj4+IHRoYW4gYW55IG90aGVyIHByb2Nlc3MgaW4g
+bWVtY2cgQiwgYnV0IHRoZSB0b3RhbCBtZW1vcnkgdXNhZ2Ugb2YNCj4+IG1lbWNnIEEgaXMgbG93
+ZXIgdGhhbiB0aGF0IG9mIG1lbWNnIEIuIEluIHRoaXMgY2FzZSwgaWYgdGhlIE9PTS1raWxsZXIN
+Cj4+IHN0aWxsIGNob29zZXMgdGhlIHByb2Nlc3MgaW4gbWVtY2cgQS4gaXQgbWF5IGJlIHVuZmFp
+ciB0byBtZW1jZyBBLg0KPj4NCj4+ID4+IERvc2UgeW91ciBhcHByb2FjaCBoYXZlIHRoZXNlIGlz
+c3Vlcz8gS2lsbGluZyBwcm9jZXNzZXMgaW4gYQ0KPj4gPj4gdXNlci1kZWZpbmVkIHByaW9yaXR5
+IGlzIGluZGVlZCBlYXNpZXIgYW5kIGNhbiB3b3JrIHdlbGwgaW4gbW9zdCBjYXNlcywNCj4+ID4+
+IGJ1dCBJIGhhdmUgYmVlbiB0cnlpbmcgdG8gc29sdmUgdGhlIGNhc2VzIHRoYXQgaXQgY2Fubm90
+IGNvdmVyLg0KPj4gPg0KPj4gPlRoZSBmaXJzdCBpc3N1ZSBpcyByZWxhdGFibGUgd2l0aCBvdXIg
+YXBwcm9hY2guIExldCBtZSBkaWcgbW9yZSBpbmZvDQo+PiA+ZnJvbSBvdXIgaW50ZXJuYWwgdGVh
+bXMgYW5kIGdldCBiYWNrIHRvIHlvdSB3aXRoIG1vcmUgZGV0YWlscy4NCg0KLS0NClRoYW5rcyBm
+b3IgeW91ciBjb21tZW50IQ0KY2hlbmdrYWl0YW8NCg0KDQo=
