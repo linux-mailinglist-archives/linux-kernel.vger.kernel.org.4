@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FD3710C77
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28594710C79
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 14:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241086AbjEYMya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 08:54:30 -0400
+        id S240968AbjEYMyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 08:54:32 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbjEYMyV (ORCPT
+        with ESMTP id S240536AbjEYMyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 08:54:21 -0400
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C5D187
+        Thu, 25 May 2023 08:54:22 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FB3189
         for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 05:54:20 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R781e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VjSMoYJ_1685019255;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VjSMoYJ_1685019255)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R711e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VjSJ3iS_1685019256;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VjSJ3iS_1685019256)
           by smtp.aliyun-inc.com;
-          Thu, 25 May 2023 20:54:16 +0800
+          Thu, 25 May 2023 20:54:17 +0800
 From:   Baolin Wang <baolin.wang@linux.alibaba.com>
 To:     akpm@linux-foundation.org
 Cc:     mgorman@techsingularity.net, vbabka@suse.cz,
         baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 5/6] mm: compaction: add trace event for fast freepages isolation
-Date:   Thu, 25 May 2023 20:54:00 +0800
-Message-Id: <78d2932d0160d122c15372aceb3f2c45460a17fc.1685018752.git.baolin.wang@linux.alibaba.com>
+Subject: [PATCH 6/6] mm: compaction: skip fast freepages isolation if enough freepages are isolated
+Date:   Thu, 25 May 2023 20:54:01 +0800
+Message-Id: <f39c2c07f2dba2732fd9c0843572e5bef96f7f67.1685018752.git.baolin.wang@linux.alibaba.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <cover.1685018752.git.baolin.wang@linux.alibaba.com>
 References: <cover.1685018752.git.baolin.wang@linux.alibaba.com>
@@ -42,70 +42,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The fast_isolate_freepages() can also isolate freepages, but we can not
-know the fast isolation efficiency to understand the fast isolation pressure.
-So add a trace event to show some numbers to help to understand the efficiency
-for fast freepages isolation.
+I've observed that fast isolation often isolates more pages than
+cc->migratepages, and the excess freepages will be released back to the
+buddy system. So skip fast freepages isolation if enough freepages are
+isolated to save some CPU cycles.
 
 Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 ---
- include/trace/events/compaction.h | 11 +++++++++++
- mm/compaction.c                   |  6 +++++-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+ mm/compaction.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/trace/events/compaction.h b/include/trace/events/compaction.h
-index 3313eb83c117..2b2a975efd20 100644
---- a/include/trace/events/compaction.h
-+++ b/include/trace/events/compaction.h
-@@ -64,6 +64,17 @@ DEFINE_EVENT(mm_compaction_isolate_template, mm_compaction_isolate_freepages,
- 	TP_ARGS(start_pfn, end_pfn, nr_scanned, nr_taken)
- );
- 
-+DEFINE_EVENT(mm_compaction_isolate_template, mm_compaction_fast_isolate_freepages,
-+
-+	TP_PROTO(
-+		unsigned long start_pfn,
-+		unsigned long end_pfn,
-+		unsigned long nr_scanned,
-+		unsigned long nr_taken),
-+
-+	TP_ARGS(start_pfn, end_pfn, nr_scanned, nr_taken)
-+);
-+
- #ifdef CONFIG_COMPACTION
- TRACE_EVENT(mm_compaction_migratepages,
- 
 diff --git a/mm/compaction.c b/mm/compaction.c
-index 65d8d9223acc..eccec84dae82 100644
+index eccec84dae82..3ade4c095ed2 100644
 --- a/mm/compaction.c
 +++ b/mm/compaction.c
-@@ -1438,7 +1438,7 @@ static int next_search_order(struct compact_control *cc, int order)
- static void fast_isolate_freepages(struct compact_control *cc)
- {
- 	unsigned int limit = max(1U, freelist_scan_limit(cc) >> 1);
--	unsigned int nr_scanned = 0;
-+	unsigned int nr_scanned = 0, total_isolated = 0;
- 	unsigned long low_pfn, min_pfn, highest = 0;
- 	unsigned long nr_isolated = 0;
- 	unsigned long distance;
-@@ -1537,6 +1537,7 @@ static void fast_isolate_freepages(struct compact_control *cc)
- 				set_page_private(page, order);
- 				nr_isolated = 1 << order;
- 				nr_scanned += nr_isolated - 1;
-+				total_isolated += nr_isolated;
- 				cc->nr_freepages += nr_isolated;
- 				list_add_tail(&page->lru, &cc->freepages);
- 				count_compact_events(COMPACTISOLATED, nr_isolated);
-@@ -1557,6 +1558,9 @@ static void fast_isolate_freepages(struct compact_control *cc)
- 			limit = max(1U, limit >> 1);
- 	}
+@@ -1550,6 +1550,10 @@ static void fast_isolate_freepages(struct compact_control *cc)
  
-+	trace_mm_compaction_fast_isolate_freepages(min_pfn, cc->free_pfn,
-+						   nr_scanned, total_isolated);
+ 		spin_unlock_irqrestore(&cc->zone->lock, flags);
+ 
++		/* Skip fast search if enough freepages isolated */
++		if (cc->nr_freepages >= cc->nr_migratepages)
++			break;
 +
- 	if (!page) {
- 		cc->fast_search_fail++;
- 		if (scan_start) {
+ 		/*
+ 		 * Smaller scan on next order so the total scan is related
+ 		 * to freelist_scan_limit.
 -- 
 2.27.0
 
