@@ -2,47 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791177107FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB2C710820
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 10:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240468AbjEYIzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 04:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S240326AbjEYI6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 04:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240294AbjEYIze (ORCPT
+        with ESMTP id S233661AbjEYI6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 04:55:34 -0400
+        Thu, 25 May 2023 04:58:36 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550FB1B0;
-        Thu, 25 May 2023 01:55:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696A6E6A;
+        Thu, 25 May 2023 01:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
         :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=K9sG0POcwk6ioMsTPXOQV3eSTLgEBbB2sxvA5LCbWcQ=; b=fdt7VIxbv3TkQRWM91jZwpprV9
-        ZJ6UeaeNYURZHcPVWl9lz509obvVWnmwXb94DjsnzdOTi1W5NRxUZgm2G3iLTvanTBrrRKA2uUBmW
-        R6Le1Lg0MiA0ZT1X3YX7aEMYsV8Hmk91GojRCW2d3WSGcp15cT8xeI+PBwhD71nTJXrz8Yl75BfiX
-        wDqDKKIlWysLrK0rRjcX0ZddExqgE/5YrnkwxWDzH2gxFiPnx8D0zSdtvNZk/rBZJ+Q+00ABKMECF
-        gp4O0zcjlabod1RTaTrITZTNx6itpSK+cG5turE8dUFqrt8KB4fkxbhUY1mYJ1gyVxHcskP5cHHud
-        qsE4p1SA==;
+        bh=kKOFZxQpgSHwqPpOmDSrhdrD3suPNbVE//fKG28eDvM=; b=Wi28jKvm/jdPHVPrfw1vBlrPKz
+        EtHecYXiHt+MOaCUqHVMvBJZov0Pe4UGeRr2z9K8Zk29a3xC558HI3XcoauY/8Wf64OWOEhYORdpU
+        4bOhfbWqeg+hMcb2uXjE6tkbpVqnFJlqMhdLA03uNmSSr7FVATOYrgYqvpn8NmL3pDk4ZTuIA6hqL
+        RRxQt47O6xqc12D4G86r2GKBZ9pSrU8EtMVei5D4u1g/zkEACxEq4xT6Q4i3zj23gBfpFK19SceOL
+        kGUXILvgSD2VZsDUMGqkzpwNIXt0y7n3+s7e7TdvtifwhkmCkvXK5rMaZGF1m1VuV0I0JI/EFSTZ1
+        evki6wKw==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q26kq-00G3tZ-2y;
-        Thu, 25 May 2023 08:55:28 +0000
-Date:   Thu, 25 May 2023 01:55:28 -0700
+        id 1q26nW-00G4TT-06;
+        Thu, 25 May 2023 08:58:14 +0000
+Date:   Thu, 25 May 2023 01:58:13 -0700
 From:   Christoph Hellwig <hch@infradead.org>
-To:     Zhong Jinghua <zhongjinghua@huaweicloud.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhongjinghua@huawei.com,
-        yi.zhang@huawei.com, yukuai3@huawei.com, chengzhihao1@huawei.com,
-        yangerkun@huawei.com
-Subject: Re: [PATCH -next] block: Fix the partition start may overflow in
- add_partition()
-Message-ID: <ZG8igEyXrFa4j/gf@infradead.org>
-References: <20230522070615.1485014-1-zhongjinghua@huaweicloud.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        cluster-devel@redhat.com, "Darrick J . Wong" <djwong@kernel.org>,
+        linux-kernel@vger.kernel.org, dhowells@redhat.com,
+        linux-bcachefs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>
+Subject: Re: [Cluster-devel] [PATCH 06/32] sched: Add
+ task_struct->faults_disabled_mapping
+Message-ID: <ZG8jJRcwtx3JQf6Q@infradead.org>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-7-kent.overstreet@linux.dev>
+ <20230510010737.heniyuxazlprrbd6@quack3>
+ <ZFs3RYgdCeKjxYCw@moria.home.lan>
+ <20230523133431.wwrkjtptu6vqqh5e@quack3>
+ <ZGzoJLCRLk+pCKAk@infradead.org>
+ <ZGzrV5j7OUU6rYij@moria.home.lan>
+ <ZG2yFFcpE7w/Glge@infradead.org>
+ <ZG3GHoNnJJW4xX2H@moria.home.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230522070615.1485014-1-zhongjinghua@huaweicloud.com>
+In-Reply-To: <ZG3GHoNnJJW4xX2H@moria.home.lan>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -54,17 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:06:15PM +0800, Zhong Jinghua wrote:
-> +	if (p.start < 0 || p.length <= 0 || p.start + p.length < 0)
-> +		return -EINVAL;
-> +
->  	start = p.start >> SECTOR_SHIFT;
->  	length = p.length >> SECTOR_SHIFT;
->  
-> +	/* length may be equal to 0 after right shift */
-> +	if (!length || start + length > get_capacity(bdev->bd_disk))
-> +		return -EINVAL;
+On Wed, May 24, 2023 at 04:09:02AM -0400, Kent Overstreet wrote:
+> > Well, it seems like you are talking about something else than the
+> > existing cases in gfs2 and btrfs, that is you want full consistency
+> > between direct I/O and buffered I/O.  That's something nothing in the
+> > kernel has ever provided, so I'd be curious why you think you need it
+> > and want different semantics from everyone else?
+> 
+> Because I like code that is correct.
 
-While we're at it, shouldn't these be switched to use
-check_add_overflow?
-
+Well, start with explaining your definition of correctness, why everyone
+else is "not correct", an how you can help fixing this correctness
+problem in the existing kernel.  Thanks for your cooperation!
