@@ -2,129 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E78710DF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6D9710E00
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 16:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241518AbjEYOG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 10:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S241553AbjEYOG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 10:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241442AbjEYOGY (ORCPT
+        with ESMTP id S241519AbjEYOG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 10:06:24 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A78AE6A;
-        Thu, 25 May 2023 07:05:59 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d3578c25bso2595210b3a.3;
-        Thu, 25 May 2023 07:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685023558; x=1687615558;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nPgjNadYh8O7MO97+r7j/d1jHMHXaP+jYO/Oxgqowkw=;
-        b=ommVYYHtLu2Vj/VFDhve63ednPa4iUIK0BRPyAFZDujd9Xt3JeLe+O3NF8Q8zlzkb3
-         aAXyFBFxNP7JQq+72gNtmddn2k/TBovdx3V+3Yz9YMyNttqh+BBSrX9Zfb+xSFw/gPcr
-         BySOJjvCUI6vMlc6mRMYWDZ+Bz5xuY2eUtxI3YpE7E65jL0TVHE+nwtzVcrukf3bLDrr
-         aYfWvmJT/hI+RvF9yWEnRe3yTezD0hZVbSYP6jgO+d8W8pYSJmwv8Pa6LscCpMrOyENV
-         GSXMHLuYp0SDMYbwBePjskTW1ktJ+ZlqbpP6qGOjnYHcjksb8MXfpQE2C4NJhDVIE7dj
-         sYqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685023558; x=1687615558;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nPgjNadYh8O7MO97+r7j/d1jHMHXaP+jYO/Oxgqowkw=;
-        b=Cmxz6pJvSUpWszFnKuVqD05YlOemhtt4zKesOjGpSN3Vg+Li9xbNIoK+DFdqVxUeW7
-         dje+mKXaQa8KerJWMx+hsd5oxdc/QxExmE1KLFRR1qzIGoafN4uolGdmUq7O3L/FEG4a
-         KjvpVQgmZkTJCedwBs5Plo5ik3qfXwnm2OUgO/m7WBunkpY3wfD4wx5LaKGGGdw8mHr9
-         H5U5Yj0iwTUVr/vUh/L9kfoVk72fJVrIK4PvMqxB9lwmbvfENcbw7xLtks69M0seOxMe
-         xaBoQ6qBtXPeCqsgP10l04ZCjkMFQdizcySGjPmFoI/a/5uMUf0+rLubrQfpdXBqnRQ8
-         cbnA==
-X-Gm-Message-State: AC+VfDwBr+vX+LS763oS6Lt6WMje1PG8T4jSJNM58012s7SWHoyXGQph
-        lE9TAGJOKwkMlFZCtAIeLGI=
-X-Google-Smtp-Source: ACHHUZ47Dl0L7k8F6DW64BTj9LkTtrQ2DbW8Gx4wNp/sPCbMg+J5frhhwcYCQPMqLQmTxkr+7BdQlQ==
-X-Received: by 2002:a05:6a00:1a0f:b0:64d:42f6:4c7b with SMTP id g15-20020a056a001a0f00b0064d42f64c7bmr8027787pfv.27.1685023557843;
-        Thu, 25 May 2023 07:05:57 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-28.three.co.id. [180.214.233.28])
-        by smtp.gmail.com with ESMTPSA id s5-20020a62e705000000b0063b7f3250e9sm1242426pfh.7.2023.05.25.07.05.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 07:05:57 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id BF66B1068F8; Thu, 25 May 2023 21:05:54 +0700 (WIB)
-Date:   Thu, 25 May 2023 21:05:54 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Framebuffer <linux-fbdev@vger.kernel.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Nouveau/NVIDIA <nouveau@lists.freedesktop.org>,
-        Linux Stable <stable@vger.kernel.org>
-Cc:     Antonino Daplas <adaplas@gmail.com>, Helge Deller <deller@gmx.de>,
-        Felix Miata <mrmazda@earthlink.net>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [Nouveau] Fwd: absent both plymouth, and video= on linu lines,
- vtty[1-6] framebuffers produce vast raster right and bottom borders on the
- larger resolution of two displays
-Message-ID: <ZG9rQmIs1W8IcEcY@debian.me>
-References: <e8f93560-a2f6-8e9f-031a-88d333482a31@gmail.com>
- <585f36f8-431a-e929-0a04-ffb65f02e9df@gmail.com>
- <d4879ff1-b9ac-0373-ceb2-beaa645fba23@leemhuis.info>
+        Thu, 25 May 2023 10:06:56 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580E7E4B;
+        Thu, 25 May 2023 07:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685023603; x=1716559603;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=upPO4QUm0taAdlDSGlmbwceJ4JBD1WN4nd0/HmurPiU=;
+  b=UN71+bSlBvm5eO/lGHyIRB87X5WOqMWBzpFzqCA4wpeGg7Njx9QxMFFD
+   QUssdn7pMl+7+R4K5fAbibz8gCaKuIIGfQPewfwFJnoqFfvfcKS1k47Dv
+   1TbiJpBI05HMsSyKSOwtbJevuNFU2Eho1K+G6joDLHmBBRnUUKXRj0ksB
+   FJgCv7WsVb+ZOD5KWD9x4qX/aHD4Iq00Qz52C9O3lWE9TY/PFYXs+v0MF
+   UqqvDkW0/4xs8WMd2bfUsWyA2MXwu+wd5EDutFbN4THjBYgaek6wuW5xq
+   L+sZ9s9Qj+IN2PcqJsDx2od5T3SjNOUQ7xeqt7dQ3NCf3/IX7hYrXWQbe
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="asc'?scan'208";a="226989442"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 07:06:42 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 25 May 2023 07:06:40 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 25 May 2023 07:06:37 -0700
+Date:   Thu, 25 May 2023 15:06:15 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor@kernel.org>, <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH v16 5/6] dt-bindings: clock: meson: add A1 Peripherals
+ clock controller bindings
+Message-ID: <20230525-ranging-plow-e3f4427f44b3@wendy>
+References: <20230523135351.19133-1-ddrokosov@sberdevices.ru>
+ <20230523135351.19133-6-ddrokosov@sberdevices.ru>
+ <20230525093736.naztwqlhvskujsoa@CAB-WSD-L081021>
+ <20230525-connected-skipper-442c6d0b52c1@wendy>
+ <20230525140100.mdzuhyfhxxkf4mx7@CAB-WSD-L081021>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="grvaiosJJE1u57Uo"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="98dEgcHdS9y24H6f"
 Content-Disposition: inline
-In-Reply-To: <d4879ff1-b9ac-0373-ceb2-beaa645fba23@leemhuis.info>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230525140100.mdzuhyfhxxkf4mx7@CAB-WSD-L081021>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---grvaiosJJE1u57Uo
-Content-Type: text/plain; charset=utf-8
+--98dEgcHdS9y24H6f
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 25, 2023 at 01:24:42PM +0200, Thorsten Leemhuis wrote:
-> Bagas, thx again for your efforts, much appreciated. But I guess for drm
-> drivers that have a line like
->=20
-> B: https://gitlab.freedesktop.org/drm/[...]
->=20
-> in MAINTAINERS (which includes all the popular drm drivers) this just
-> creates a lot of confusion for everyone, as one issue will likely end up
-> being discussed in two or three places in parallel (bugzilla,
-> freedesktop, email). Better tell reporters to move their issue to the
-> freedesktop drm tracker and close the ticket in bugzilla. And don't get
-> regzbot involved, as it for now it sadly is unable to monitor the
-> freedesktop drm tracker (sooner or later I'll fix that, but for now it's
-> a blind spot :-/).
->=20
-> Pretty sure none of the DRM developers will disagree, but if I'm wrong,
-> please holler.
+On Thu, May 25, 2023 at 05:01:00PM +0300, Dmitry Rokosov wrote:
 
-OK, thanks!
+> I was unaware of the official policy regarding the removal of RvB during
+> renaming changes. I took a cautious approach to the situation :)
 
---=20
-An old man doll... just what I always wanted! - Clara
+Better safe than sorry!
 
---grvaiosJJE1u57Uo
+
+--98dEgcHdS9y24H6f
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZG9rQgAKCRD2uYlJVVFO
-o2q1AP0at4ur6rVluyiWwI+vlx6EPDtqu5dzAi4NoyxwtVFJuwEArRNKmZCx78ih
-F/NmfUXKN6TG2PwPATDa1cn4Qwp+9g8=
-=9SOh
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG9rVwAKCRB4tDGHoIJi
+0qfyAQCEDt2Wmdd7sQ0AFn0qT0m1S6WB+FG53v9IrhD+R5MRiQEAlgl5pqnYxIZ5
+1D4vdPj2SIBYSAryBd9N2bDPGtAFTQ0=
+=cV7U
 -----END PGP SIGNATURE-----
 
---grvaiosJJE1u57Uo--
+--98dEgcHdS9y24H6f--
