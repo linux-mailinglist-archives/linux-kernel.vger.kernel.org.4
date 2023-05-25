@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9191710585
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D278710586
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 07:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234258AbjEYFyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 01:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S232638AbjEYFyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 01:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237630AbjEYFy0 (ORCPT
+        with ESMTP id S237697AbjEYFyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 01:54:26 -0400
+        Thu, 25 May 2023 01:54:40 -0400
 Received: from ubuntu20 (unknown [193.203.214.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D39E132
-        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:54:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337671BB
+        for <linux-kernel@vger.kernel.org>; Wed, 24 May 2023 22:54:13 -0700 (PDT)
 Received: by ubuntu20 (Postfix, from userid 1003)
-        id 2AA0DE1D15; Thu, 25 May 2023 13:54:03 +0800 (CST)
+        id B4414E1D45; Thu, 25 May 2023 13:54:11 +0800 (CST)
 From:   Yang Yang <yang.yang29@zte.com.cn>
 To:     akpm@linux-foundation.org, david@redhat.com
 Cc:     yang.yang29@zte.com.cn, imbrenda@linux.ibm.com,
         jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
-        xu.xin16@zte.com.cn, shr@devkernel.io
-Subject: [PATCH v10 4/5] ksm: consider KSM-placed zeropages when calculating KSM profit
-Date:   Thu, 25 May 2023 13:54:01 +0800
-Message-Id: <20230525055401.27375-1-yang.yang29@zte.com.cn>
+        xu.xin16@zte.com.cn
+Subject: [PATCH v10 5/5] selftest: add a testcase of ksm zero pages
+Date:   Thu, 25 May 2023 13:54:10 +0800
+Message-Id: <20230525055410.27423-1-yang.yang29@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <202305251341580149313@zte.com.cn>
 References: <202305251341580149313@zte.com.cn>
@@ -45,79 +45,166 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: xu xin <xu.xin16@zte.com.cn>
 
-When use_zero_pages is enabled, the calculation of ksm profit is not
-correct because ksm zero pages is not counted in. So update the
-calculation of KSM profit including the documentation.
+Add a function test_unmerge_zero_page() to test the functionality on
+unsharing and counting ksm-placed zero pages and counting of this patch
+series.
+
+test_unmerge_zero_page() actually contains four subjct test objects:
+(1) whether the count of ksm zero pages can update correctly after merging;
+(2) whether the count of ksm zero pages can update correctly after
+    unmerging by madvise(...MADV_UNMERGEABLE);
+(3) whether the count of ksm zero pages can update correctly after
+	unmerging by triggering write fault.
+(4) whether ksm zero pages are really unmerged.
 
 Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-Acked-by: David Hildenbrand <david@redhat.com>
-Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
-Cc: Yang Yang <yang.yang29@zte.com.cn>
-Cc: Jiang Xuexin <jiang.xuexin@zte.com.cn>
+Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
 Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
 ---
- Documentation/admin-guide/mm/ksm.rst | 18 +++++++++++-------
- mm/ksm.c                             |  4 ++--
- 2 files changed, 13 insertions(+), 9 deletions(-)
+ tools/testing/selftests/mm/ksm_functional_tests.c | 98 ++++++++++++++++++++++-
+ 1 file changed, 97 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
-index 6cc919dbfd55..5c5be7bd84b8 100644
---- a/Documentation/admin-guide/mm/ksm.rst
-+++ b/Documentation/admin-guide/mm/ksm.rst
-@@ -203,21 +203,25 @@ several times, which are unprofitable memory consumed.
- 1) How to determine whether KSM save memory or consume memory in system-wide
-    range? Here is a simple approximate calculation for reference::
+diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+index 26853badae70..0de9d33cd565 100644
+--- a/tools/testing/selftests/mm/ksm_functional_tests.c
++++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+@@ -29,6 +29,8 @@
  
--	general_profit =~ pages_sharing * sizeof(page) - (all_rmap_items) *
-+	general_profit =~ ksm_saved_pages * sizeof(page) - (all_rmap_items) *
- 			  sizeof(rmap_item);
+ static int ksm_fd;
+ static int ksm_full_scans_fd;
++static int proc_self_ksm_stat_fd;
++static int ksm_use_zero_pages_fd;
+ static int pagemap_fd;
+ static size_t pagesize;
  
--   where all_rmap_items can be easily obtained by summing ``pages_sharing``,
--   ``pages_shared``, ``pages_unshared`` and ``pages_volatile``.
-+   where ksm_saved_pages equals to the sum of ``pages_sharing`` +
-+   ``ksm_zero_pages`` of the system, and all_rmap_items can be easily
-+   obtained by summing ``pages_sharing``, ``pages_shared``, ``pages_unshared``
-+   and ``pages_volatile``.
- 
- 2) The KSM profit inner a single process can be similarly obtained by the
-    following approximate calculation::
- 
--	process_profit =~ ksm_merging_pages * sizeof(page) -
-+	process_profit =~ ksm_saved_pages * sizeof(page) -
- 			  ksm_rmap_items * sizeof(rmap_item).
- 
--   where ksm_merging_pages is shown under the directory ``/proc/<pid>/``,
--   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``. The process profit
--   is also shown in ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
-+   where ksm_saved_pages equals to the sum of ``ksm_merging_pages`` and
-+   ``ksm_zero_pages``, both of which are shown under the directory
-+   ``/proc/<pid>/ksm_stat``, and ksm_rmap_items is also shown in
-+   ``/proc/<pid>/ksm_stat``. The process profit is also shown in
-+   ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
- 
- From the perspective of application, a high ratio of ``ksm_rmap_items`` to
- ``ksm_merging_pages`` means a bad madvise-applied policy, so developers or
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 07a6fe7d7c99..1c7d0e215c47 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -3090,7 +3090,7 @@ static void wait_while_offlining(void)
- #ifdef CONFIG_PROC_FS
- long ksm_process_profit(struct mm_struct *mm)
- {
--	return mm->ksm_merging_pages * PAGE_SIZE -
-+	return (long)(mm->ksm_merging_pages + mm->ksm_zero_pages) * PAGE_SIZE -
- 		mm->ksm_rmap_items * sizeof(struct ksm_rmap_item);
+@@ -59,6 +61,33 @@ static bool range_maps_duplicates(char *addr, unsigned long size)
+ 	return false;
  }
- #endif /* CONFIG_PROC_FS */
-@@ -3371,7 +3371,7 @@ static ssize_t general_profit_show(struct kobject *kobj,
+ 
++static long get_my_ksm_zero_pages(void)
++{
++	char buf[200];
++	char *substr_ksm_zero;
++	size_t value_pos;
++	ssize_t read_size;
++	unsigned long my_ksm_zero_pages;
++
++	if (!proc_self_ksm_stat_fd)
++		return 0;
++
++	read_size = pread(proc_self_ksm_stat_fd, buf, sizeof(buf) - 1, 0);
++	if (read_size < 0)
++		return -errno;
++
++	buf[read_size] = 0;
++
++	substr_ksm_zero = strstr(buf, "ksm_zero_pages");
++	if (!substr_ksm_zero)
++		return 0;
++
++	value_pos = strcspn(substr_ksm_zero, "0123456789");
++	my_ksm_zero_pages = strtol(substr_ksm_zero + value_pos, NULL, 10);
++
++	return my_ksm_zero_pages;
++}
++
+ static long ksm_get_full_scans(void)
  {
- 	long general_profit;
+ 	char buf[10];
+@@ -159,6 +188,70 @@ static void test_unmerge(void)
+ 	munmap(map, size);
+ }
  
--	general_profit = ksm_pages_sharing * PAGE_SIZE -
-+	general_profit = (ksm_pages_sharing + ksm_zero_pages) * PAGE_SIZE -
- 				ksm_rmap_items * sizeof(struct ksm_rmap_item);
++static void test_unmerge_zero_pages(void)
++{
++	const unsigned int size = 2 * MiB;
++	char *map;
++	unsigned int offs;
++	unsigned long pages_expected;
++
++	ksft_print_msg("[RUN] %s\n", __func__);
++
++	if (proc_self_ksm_stat_fd < 0) {
++		ksft_test_result_skip("open(\"/proc/self/ksm_stat\") failed\n");
++		return;
++	}
++	if (ksm_use_zero_pages_fd < 0) {
++		ksft_test_result_skip("open \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
++		return;
++	}
++	if (write(ksm_use_zero_pages_fd, "1", 1) != 1) {
++		ksft_test_result_skip("write \"/sys/kernel/mm/ksm/use_zero_pages\" failed\n");
++		return;
++	}
++
++	/* Let KSM deduplicate zero pages. */
++	map = mmap_and_merge_range(0x00, size, false);
++	if (map == MAP_FAILED)
++		return;
++
++	/* Check if ksm_zero_pages is updated correctly after KSM merging */
++	pages_expected = size / pagesize;
++	if (pages_expected != get_my_ksm_zero_pages()) {
++		ksft_test_result_fail("'ksm_zero_pages' updated after merging\n");
++		goto unmap;
++	}
++
++	/* Try to unmerge half of the region */
++	if (madvise(map, size / 2, MADV_UNMERGEABLE)) {
++		ksft_test_result_fail("MADV_UNMERGEABLE failed\n");
++		goto unmap;
++	}
++
++	/* Check if ksm_zero_pages is updated correctly after unmerging */
++	pages_expected /= 2;
++	if (pages_expected != get_my_ksm_zero_pages()) {
++		ksft_test_result_fail("'ksm_zero_pages' updated after unmerging\n");
++		goto unmap;
++	}
++
++	/* Trigger unmerging of the other half by writing to the pages. */
++	for (offs = size / 2; offs < size; offs += pagesize)
++		*((unsigned int *)&map[offs]) = offs;
++
++	/* Now we should have no zeropages remaining. */
++	if (get_my_ksm_zero_pages()) {
++		ksft_test_result_fail("'ksm_zero_pages' updated after write fault\n");
++		goto unmap;
++	}
++
++	/* Check if ksm zero pages are really unmerged */
++	ksft_test_result(!range_maps_duplicates(map, size),
++			"KSM zero pages were unmerged\n");
++unmap:
++	munmap(map, size);
++}
++
+ static void test_unmerge_discarded(void)
+ {
+ 	const unsigned int size = 2 * MiB;
+@@ -358,7 +451,7 @@ static void test_prctl_unmerge(void)
  
- 	return sysfs_emit(buf, "%ld\n", general_profit);
+ int main(int argc, char **argv)
+ {
+-	unsigned int tests = 5;
++	unsigned int tests = 6;
+ 	int err;
+ 
+ #ifdef __NR_userfaultfd
+@@ -379,8 +472,11 @@ int main(int argc, char **argv)
+ 	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+ 	if (pagemap_fd < 0)
+ 		ksft_exit_skip("open(\"/proc/self/pagemap\") failed\n");
++	proc_self_ksm_stat_fd = open("/proc/self/ksm_stat", O_RDONLY);
++	ksm_use_zero_pages_fd = open("/sys/kernel/mm/ksm/use_zero_pages", O_RDWR);
+ 
+ 	test_unmerge();
++	test_unmerge_zero_pages();
+ 	test_unmerge_discarded();
+ #ifdef __NR_userfaultfd
+ 	test_unmerge_uffd_wp();
 -- 
 2.15.2
