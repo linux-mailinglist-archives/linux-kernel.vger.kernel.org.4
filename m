@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA437112B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 468207112BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 19:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbjEYRob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 13:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
+        id S240709AbjEYRop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 13:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjEYRoa (ORCPT
+        with ESMTP id S235065AbjEYRok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 13:44:30 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20C0E76
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:43:56 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-ba8afcc82c0so1593864276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:43:56 -0700 (PDT)
+        Thu, 25 May 2023 13:44:40 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D449FE47
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:44:05 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-77493b3d18cso168155739f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 10:44:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685036626; x=1687628626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nvg1LF6ZKIn2vWNEhEDwKSuGqGYImWJiPe1uUBeKlZA=;
-        b=efPy5J1ioAVeAgWGlA2+YMxEGITfTO3Sb5LdcEKRz6b+uTM1gH9ymZ3F9KuvjRG3jU
-         z8PlFs7H/YSWF9GVfiG51wlspQG5IS7irbU3zNRMEHP1KNGRVpKL9jE4MoovrBo/S6Fw
-         d6l6WKoQxoyUGyvFsR5LALj/4NPRIobzt9+0QE2FzBhYJ67AD25BdGlBRADpKxc5nR9o
-         hyzTcKQakLuxoCnJyiwNFAbuRp8L3HXKKgnUVQodF7yyeRgvFxV/emlQbeGyDV99+eAg
-         ZpcO28j2T+NaOWHYPRQkvJnxlB3/HlHacbq+Zm/dhjr+HWfhaov5k4BrlyBp7S8/Tsrm
-         sPEw==
+        d=gmail.com; s=20221208; t=1685036644; x=1687628644;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IF5KlPvZ3QkxhsNhcL5v5OvfHHuGbTugqg2l5EV6fIo=;
+        b=JCRbn+P864KdKm8u2FM6ZbKkD5iM5qMtSvm4oIaSuhE6g6g3Lh/wAZ6M58YTvidbd8
+         YtW3spNmcei+kA5NJWkRiTe30YvNTVfwlnfgmk1KQi9xVhPTj3iApXgvuUN9lTsBS5eM
+         Z6cT5hYmtnLR73Hk1SKpZvcUToGSYFh7JuPKIR5igGUiMEWDsSiupAOcHT6BXfyOj6hH
+         oB6L0xBImdFML8nGkUzItRVzdkZcW/iGX5CsXBTXeQ21RvrK1rHnV0KHRuz/qbln3c3m
+         FFrguON5V+pOi8cwYFEdCd5Ew20xEErNsQEr34vE9ovNG98vkBbA4HyRw+OtTPoG4Nuc
+         TYyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685036626; x=1687628626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nvg1LF6ZKIn2vWNEhEDwKSuGqGYImWJiPe1uUBeKlZA=;
-        b=dRSpUOfUc6CUNJZQS0mIcZt2QI2K3xQYuk1obFihgfYQfif1XRF4Mi+cQRYojZN5e8
-         wNEsmwiR18Qs+qQNSF3FZzsU9aUpI5ELevJRAywQDemj+9a/aAYuOrvgSqMG5pWd3Pru
-         nVpt7643HngNGqOzkeJQIOfhB4FC0kAVn8icfHlfyb7dC+FU6uDBTS8ciDNW0U6KLBcn
-         P18SOvq0JDapcgtowO5NE6E9vCDSogQGZDER9ZEMHL4RWxkk/dJiudGapI9HeppL3mGP
-         xkb0lV4hbf5UBVQvWdA+/0iuzETGrXGdKngxqErNxDj/EWLIAr8o6hWNuhTx7moTNbTG
-         6OHg==
-X-Gm-Message-State: AC+VfDxzgcLCIIWox6s32mOJU61pLpW0oPRYD97qZF0uGr0L1vLbw0eX
-        2fKRn+GnDFm5Y/xqBAhQNwLotiaWPOsgoP6/RXBXbg==
-X-Google-Smtp-Source: ACHHUZ6NPefUkGUqL5vl6EIMjaZhIvc9rAjwAMQRnSJYg/n1gXXKtfjBGm5wCVdPT4h89FLdrxNLTwdajRoXyM+R9sE=
-X-Received: by 2002:a25:73ce:0:b0:ba8:29cf:f772 with SMTP id
- o197-20020a2573ce000000b00ba829cff772mr4654184ybc.46.1685036625596; Thu, 25
- May 2023 10:43:45 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685036644; x=1687628644;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IF5KlPvZ3QkxhsNhcL5v5OvfHHuGbTugqg2l5EV6fIo=;
+        b=i0Y6Gg0bEue8qtGhozhNwnwfGvwgYgwwf2UOL2A8xK1dObhPYIE2DdhcwlUKlwKFvA
+         ZFC/FyjJLJJCkxGMdRpFd3j6BbePuzGkJbmAT/d8hyAX7Sh7d8usj7UO5gtOJba3/BCu
+         vG6+mth7nKl38pTmGCKG2SJHq3G3OTT4jf/d3blFhYBGcYGl1j4dqI5mafnzxtGgtPev
+         jr+rXArYEnPkrGph7uJni6dPr4Z5sWqpQVL82EO9VA6wlsxSpP6oAVZ9B8M8AKuuOBvE
+         ZrDCOnzBzNY6yyrWbJyCk3ztVXD415UrundTowuHx0NHq7b0hZLs3UZ7sSj5xVMJTSos
+         Wt4A==
+X-Gm-Message-State: AC+VfDxNkttai/BpzX9W3cjALzynLpmkFEu4fJQ2W/PNAAyO/Hd41cC3
+        hn7fzQL8DPeN85S+btS1yj36Og4/1Mw=
+X-Google-Smtp-Source: ACHHUZ7u+kLo95OwKzX9gBTL/pAm1XcEf2dEI0/U0F1ZUzo/7us2ZHEBJSt/FRVCQrKOvYIrnffjHQ==
+X-Received: by 2002:a6b:7214:0:b0:774:7cee:3803 with SMTP id n20-20020a6b7214000000b007747cee3803mr283107ioc.13.1685036644390;
+        Thu, 25 May 2023 10:44:04 -0700 (PDT)
+Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
+        by smtp.googlemail.com with ESMTPSA id e38-20020a028629000000b004141e72be1asm547841jai.175.2023.05.25.10.44.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 10:44:04 -0700 (PDT)
+From:   Jim Cromie <jim.cromie@gmail.com>
+To:     catalin.marinas@arm.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Cc:     Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH] kmemleak-test: drop __init to get better backtrace
+Date:   Thu, 25 May 2023 11:43:56 -0600
+Message-Id: <20230525174356.69711-1-jim.cromie@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230525103428.49712-1-linmiaohe@huawei.com>
-In-Reply-To: <20230525103428.49712-1-linmiaohe@huawei.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 25 May 2023 10:43:34 -0700
-Message-ID: <CAJuCfpEP0m+4fdTSvY5TuWwvvpiQntG5OBhSmEMJipoX75eNLg@mail.gmail.com>
-Subject: Re: [PATCH] sched/psi: make psi_cgroups_enabled static
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     hannes@cmpxchg.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,33 +69,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 7:43=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> w=
-rote:
->
-> The static key psi_cgroups_enabled is only used inside file psi.c.
-> Make it static.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Drop the __init on kmemleak_test_init().  With it, the storage is
+reclaimed, but then the symbol isn't available for "%pS" rendering,
+and the backtrace gets a bare pointer where the actual leak happened.
 
-Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+unreferenced object 0xffff88800a2b0800 (size 1024):
+  comm "modprobe", pid 413, jiffies 4294953430
+  hex dump (first 32 bytes):
+    73 02 00 00 75 01 00 68 02 00 00 01 00 00 00 04  s...u..h........
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000fabad728>] kmalloc_trace+0x26/0x90
+    [<00000000ef738764>] 0xffffffffc02350a2
+    [<00000000004e5795>] do_one_initcall+0x43/0x210
+    [<00000000d768905e>] do_init_module+0x4a/0x210
+    [<0000000087135ab5>] __do_sys_finit_module+0x93/0xf0
+    [<000000004fcb1fa2>] do_syscall_64+0x34/0x80
+    [<00000000c73c8d9d>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
-> ---
->  kernel/sched/psi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index 81fca77397f6..2ccb0b2ebd78 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -140,7 +140,7 @@
->  static int psi_bug __read_mostly;
->
->  DEFINE_STATIC_KEY_FALSE(psi_disabled);
-> -DEFINE_STATIC_KEY_TRUE(psi_cgroups_enabled);
-> +static DEFINE_STATIC_KEY_TRUE(psi_cgroups_enabled);
->
->  #ifdef CONFIG_PSI_DEFAULT_DISABLED
->  static bool psi_enable;
-> --
-> 2.27.0
->
+with __init gone, that trace entry renders like:
+
+    [<00000000ef738764>] kmemleak_test_init+<offset>/<size>
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+---
+ samples/kmemleak/kmemleak-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/samples/kmemleak/kmemleak-test.c b/samples/kmemleak/kmemleak-test.c
+index 7b476eb8285f..6ced5ddd99d4 100644
+--- a/samples/kmemleak/kmemleak-test.c
++++ b/samples/kmemleak/kmemleak-test.c
+@@ -32,7 +32,7 @@ static DEFINE_PER_CPU(void *, kmemleak_test_pointer);
+  * Some very simple testing. This function needs to be extended for
+  * proper testing.
+  */
+-static int __init kmemleak_test_init(void)
++static int kmemleak_test_init(void)
+ {
+ 	struct test_node *elem;
+ 	int i;
+-- 
+2.40.1
+
