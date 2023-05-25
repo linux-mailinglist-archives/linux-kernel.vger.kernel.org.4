@@ -2,50 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB927104BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03D7710481
+	for <lists+linux-kernel@lfdr.de>; Thu, 25 May 2023 06:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239828AbjEYEzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 00:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
+        id S239332AbjEYEyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 00:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239443AbjEYEyQ (ORCPT
+        with ESMTP id S232087AbjEYEwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 00:54:16 -0400
+        Thu, 25 May 2023 00:52:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADF81730;
-        Wed, 24 May 2023 21:51:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4B1197;
+        Wed, 24 May 2023 21:51:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A3596428A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74226642BA;
+        Thu, 25 May 2023 04:51:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22132C4339E;
         Thu, 25 May 2023 04:51:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 481E7C433EF;
-        Thu, 25 May 2023 04:51:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684990283;
-        bh=aEGPrL9Tq+lM9ScDWy5ThIBCZFtHCSCCQWDLGhvrbXQ=;
+        s=k20201202; t=1684990285;
+        bh=4XcWpzOi9IBferzxRK/KhnQw0L9w77o3cwaLVn4q5S0=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=eFCbthqx2jPqOHN33QfEQlgg6pBotj5dHo1Lo5c+PeExId+96bIO/F92ElMCGPqT/
-         6eQHYN5PHAideITfLIcugQ9f45fLcaGFJn4zzm1e5P7wKuNwkI1DNIGh0w+Tyz6fwo
-         9QKsV7D9Lr6O7+CSEyv2OWqxPjsWgclU/MCk/+dzbPDo9kZycurZamDvDK89mL7Ret
-         tDHCKSZW8tIsgEHTQwdC4Kb+2qSNjJAnYYLsqdE4/hfJcfb6j85Aiey8+oSD/nyqYO
-         HxOwsizAL2Iv1I04cEvnO3WTg2w7ZfWXQsQ3acFT/w1MxvFKbyQHRlJUi78hQZAGlQ
-         +rhKKXjbZ8UUA==
+        b=Ph/X5mXibLWYu0mMg+KWEoyYIg0zl4SWeKYBma11ujvoLvQxvnGWVoVtXWZRIK3FA
+         43MJkZf+eBdCgVk1PACiEzifEXgBtuL+62ecruIdnanfCKaGneD78/nnmHkrl+sHYy
+         HMAtzHkw7S4ulkSgv8k1K/28fcGqeGaKzmvJL9YiSRfHZdRaEjAa5E4FmP9ISfCxZb
+         BKE0cLz9hzLn2NeTh9kOu5G3b1xMnIMg10syWFSiZi1CvsRCa/ngwyS6X7OGCztvCr
+         93UMGQpOQOap3KkUX3b7ki6XbqklnLHqoLMYoe0emIc9g34nFT3+MZAcZypFZwYY/n
+         vywkLJxyWsibA==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Luca Weiss <luca@z3ntu.xyz>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Todor Tomov <todor.too@gmail.com>,
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Molly Sophia <mollysophia379@gmail.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>
-Subject: Re: (subset) [PATCH 01/10] ARM: dts: qcom: ipq4019: correct syscon unit-address
-Date:   Wed, 24 May 2023 21:54:04 -0700
-Message-Id: <168499048184.3998961.3769442344863733308.b4-ty@kernel.org>
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>
+Subject: Re: (subset) [PATCH 01/18] arm64: dts: qcom: ipq6018: correct qrng unit address
+Date:   Wed, 24 May 2023 21:54:05 -0700
+Message-Id: <168499048184.3998961.13273522217706071499.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230420075053.41976-1-krzysztof.kozlowski@linaro.org>
-References: <20230420075053.41976-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
+References: <20230419211856.79332-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,35 +75,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023 09:50:44 +0200, Krzysztof Kozlowski wrote:
+On Wed, 19 Apr 2023 23:18:39 +0200, Krzysztof Kozlowski wrote:
 > Match unit-address to reg entry to fix dtbs W=1 warnings:
 > 
->   Warning (simple_bus_reg): /soc/syscon@1fcb000: simple-bus unit address format error, expected "1fc0000"
+>   Warning (simple_bus_reg): /soc/qrng@e1000: simple-bus unit address format error, expected "e3000"
 > 
 > 
 
 Applied, thanks!
 
-[01/10] ARM: dts: qcom: ipq4019: correct syscon unit-address
-        commit: 2c7a2700bad5f735b76acaaf721752f33e030497
-[02/10] ARM: dts: qcom: sdx55: correct rsc unit-address
-        commit: 59cf17540e48ab6c37289f0333bdf0b9c639ba80
-[03/10] ARM: dts: qcom: msm8974: correct pronto unit-address
-        commit: 547c0034b40ee18e5e4b48501b935f0ab8f70a37
-[04/10] ARM: dts: qcom: ipq8064: drop leading 0 from unit-address
-        commit: 038b8980077bf02c82324aefd6b69e00f5b8a1a2
-[05/10] ARM: dts: qcom: ipq8064: drop invalid GCC thermal-sensor unit-address
-        commit: 0dd882ae3dd9cfb51d5dc5083da3af7a35db1355
-[06/10] ARM: dts: qcom: ipq8064: correct LED node names
-        commit: 740e5ecb78d4426526cb2b3f49d0043225a8bed9
-[07/10] ARM: dts: qcom: ipq8064: align USB node names with bindings
-        commit: c13ba9b148716160a2cbbc7620944a976b6b1491
-[08/10] ARM: dts: qcom: apq8060-dragonboard: move regulators out of simple-bus
-        commit: f0e401e15d3eab570f92fab2c9ce56a2564fa828
-[09/10] ARM: dts: qcom: msm8960-cdp: move regulator out of simple-bus
-        commit: 71abfd7a0a100010d32edb28917f437537afbb7f
-[10/10] ARM: dts: qcom: apq8084: correct thermal sensor unit-address
-        commit: a8311da44f38a2f52cb4cf44710c95c1e6f2f6ec
+[01/18] arm64: dts: qcom: ipq6018: correct qrng unit address
+        commit: 085058786a7890dd44ec623fe5ac74db870f6b93
+[02/18] arm64: dts: qcom: msm8916: correct camss unit address
+        commit: 48798d992ce276cf0d57bf75318daf8eabd02aa4
+[03/18] arm64: dts: qcom: msm8916: correct MMC unit address
+        commit: 72644bc76d5145c098c268829554a0b98fab1de1
+[04/18] arm64: dts: qcom: msm8916: correct WCNSS unit address
+        commit: 1f9a41bb0bba7b373c26a6f2cc8d35cc3159c861
+[05/18] arm64: dts: qcom: msm8953: correct IOMMU unit address
+        commit: 1c06b93461ec9df8a5878947db4a9d2d1cb72855
+[06/18] arm64: dts: qcom: msm8953: correct WCNSS unit address
+        commit: 751038676e3075a5cb816034f7d5ba6e95f4486d
+[07/18] arm64: dts: qcom: msm8976: correct MMC unit address
+        commit: 80284797a4cb8ceae71e3c403bafc6648263a060
+[08/18] arm64: dts: qcom: msm8994: correct SPMI unit address
+        commit: 24f0f6a8059c7108d4ee3476c95db1e7ff4feb79
+[09/18] arm64: dts: qcom: msm8996: correct camss unit address
+        commit: e959ced1d0e5ef0b1f66a0c2d0e1ae80790e5ca5
+[10/18] arm64: dts: qcom: sdm630: correct camss unit address
+        commit: c8b7faa7e9913a94444b3f00b6480e53a174fcfd
+[11/18] arm64: dts: qcom: sdm845: correct camss unit address
+        commit: a05b913a27e46926ba60ba2bcacc7ec7a8403e4c
+[12/18] arm64: dts: qcom: sm6115: correct thermal-sensor unit address
+        commit: 2358b43256080459fcc5642265ed4fec75558f8c
+[13/18] arm64: dts: qcom: sm8350: correct DMA controller unit address
+        commit: 41d6bca799b3f40d4d3c22dd4545aeac7c210e33
+[14/18] arm64: dts: qcom: sm8350: correct PCI phy unit address
+        commit: ab98c21bc9246f421a6ae70e69f1b73cea6f85e3
+[15/18] arm64: dts: qcom: sm8350: correct USB phy unit address
+        commit: a560ab70c6e28ba784a824611d3f58969d8fadba
+[16/18] arm64: dts: qcom: sm8550: correct crypto unit address
+        commit: 3cbf49ef16962ab6d99a3659cb34a33c5f147b50
+[17/18] arm64: dts: qcom: sm8550: correct pinctrl unit address
+        commit: 950a4fe6ec8498799d1c7bd31a489a718f94a87e
+[18/18] arm64: dts: qcom: sdm845-polaris: add missing touchscreen child node reg
+        commit: 4a0156b8862665a3e31c8280607388e3001ace3d
 
 Best regards,
 -- 
