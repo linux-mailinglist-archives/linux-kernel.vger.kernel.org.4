@@ -2,68 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2E271266E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC68712674
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243343AbjEZMRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+        id S243384AbjEZMTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbjEZMRs (ORCPT
+        with ESMTP id S230064AbjEZMTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:17:48 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10B6A4;
-        Fri, 26 May 2023 05:17:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685103467; x=1716639467;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SC394MjXAyrqe3bKzmS1W+BXidwEdrV5wN/hm3izlwI=;
-  b=YIliS6CFEUUVfgXkOoSlPkPYGnsqAtXzlmQhSddZr6zCFUc3AlysXWZT
-   H2DknxzHFGK5nW9XTuJygcPRfCt6IlwEvzHQQ9m4KdzXmNQzoe6C77O9L
-   FB82GrW2UsaCzwYZpw3dwPmggSgNyWvioFqCL0NRLHZj+PAmEogm0kqRI
-   jfaHvtzLOQMlEbdFQ4d1ZjeoinHxmh6kzC7O1u3MxTJUHGJ73eTb5/hnP
-   86zxb2Fw9v7ZdWZDiMOyIVbev6fFCeSTib5vmJgoThqgD5B6VJ7RtR4gn
-   8rAB6QSnhZes4EucCOPfytn88z94XFZEVxxFWT/u9K7EMy0yjU4AOSzRF
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="353031196"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="353031196"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 05:17:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="682700451"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="682700451"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 26 May 2023 05:17:44 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 3723A413; Fri, 26 May 2023 15:17:48 +0300 (EEST)
-Date:   Fri, 26 May 2023 15:17:48 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Deucher Alexander <Alexander.Deucher@amd.com>,
-        linux-pm@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
-        Iain Lane <iain@orangesquash.org.uk>
-Subject: Re: [PATCH v4 2/2] PCI: Don't assume root ports from > 2015 are
- power manageable
-Message-ID: <20230526121748.GV45886@black.fi.intel.com>
-References: <20230524190726.17012-1-mario.limonciello@amd.com>
- <20230524190726.17012-2-mario.limonciello@amd.com>
+        Fri, 26 May 2023 08:19:49 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD7EA4
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:19:48 -0700 (PDT)
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QSP7g4t7YzsRnm;
+        Fri, 26 May 2023 20:17:35 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 26 May 2023 20:19:44 +0800
+From:   Huisong Li <lihuisong@huawei.com>
+To:     <catalin.marinas@arm.com>, <will@kernel.org>,
+        <sudeep.holla@arm.com>, <rafael.j.wysocki@intel.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <anshuman.khandual@arm.com>,
+        <wangkefeng.wang@huawei.com>, <liuyonglong@huawei.com>,
+        <lihuisong@huawei.com>
+Subject: [PATCH] arm64: acpi: Export symbol for acpi_os_ioremap
+Date:   Fri, 26 May 2023 20:17:51 +0800
+Message-ID: <20230526121751.41060-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230524190726.17012-2-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,43 +49,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 02:07:26PM -0500, Mario Limonciello wrote:
-> Using a USB keyboard or mouse to wakeup the system from s2idle fails when
-> that XHCI device is connected to a USB-C port for an AMD USB4 router.
+The driver who calls the acpi_os_ioremap() cannot be compiled if the 'M'
+is selected for the driver. The compiling log is as follows:
+-->
+MODPOST Module.symvers
+ERROR: modpost: "acpi_os_ioremap" [drivers/soc/hisilicon/xxx.ko] undefined!
+scripts/Makefile.modpost:136: recipe for target 'Module.symvers' failed
+make[1]: *** [Module.symvers] Error 1
 
-nit: I think the correct is "xHCI" but no need to spin a new version
-just for that.
+So this patch exports symbol for acpi_os_ioremap.
 
-> Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-> all PCIe ports go into D3 during s2idle.
-> 
-> When specific root ports are put into D3 over s2idle on some AMD platforms
-> it is not possible for the platform to properly identify wakeup sources.
-> This happens whether the root port goes into D3hot or D3cold.
-> 
-> Comparing registers between Linux and Windows 11 this behavior to put
-> these specific root ports into D3 at suspend is unique to Linux. On an
-> affected system Windows does not put those specific root ports into D3
-> over Modern Standby.
-> 
-> Windows doesn't put the root ports into D3 because root ports are not
-> power manageable.
+Signed-off-by: Huisong Li <lihuisong@huawei.com>
+---
+ arch/arm64/kernel/acpi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Probably better is to say:
+diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
+index dba8fcec7f33..ec0414caf3d1 100644
+--- a/arch/arm64/kernel/acpi.c
++++ b/arch/arm64/kernel/acpi.c
+@@ -354,6 +354,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+ 	}
+ 	return ioremap_prot(phys, size, pgprot_val(prot));
+ }
++EXPORT_SYMBOL(acpi_os_ioremap);
+ 
+ /*
+  * Claim Synchronous External Aborts as a firmware first notification.
+-- 
+2.33.0
 
- Windows avoids putting Root Ports that are not power manageable (e.g do
- not have platform firmware support) into low power states.
-
-but again no need to respin just for that.
-
-> Linux shouldn't assume root ports support D3 just because they're on a
-> machine newer than 2015, the ports should also be deemed power manageable.
-> Add an extra check explicitly for root ports to ensure D3 isn't selected
-> for these ports.
-> 
-> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-> Reported-by: Iain Lane <iain@orangesquash.org.uk>
-> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
