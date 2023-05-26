@@ -2,55 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A53712AEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889D6712AF2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237049AbjEZQoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S236938AbjEZQqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjEZQok (ORCPT
+        with ESMTP id S230063AbjEZQqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:44:40 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A96EE44
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:44:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DNy7VxTmcB03A0Q+wNNVFlN74rH3YM37TFbDq52wYlY=; b=sD4AiswkswMTTv28qAmagVF9O9
-        2cXaPKLaRaADYoRUlDMgpNqwpFsP6H8OhBwqPo7hrZRJBrBRjBzpA7zwuh8WLP1l8IIfXRkUvM86g
-        XuT4eUbWUHZLRrv1GNCqCkoDv42Kf5pELpezci/9Mn3Oyyd2W3o/gw/Q65RnkvreO1YkyyxJbgLEQ
-        z1PbQgBZTJDV9CeaF8d6LjU90REBzLdPxPmQ2CpvWdkXSIXUPLUNLrk3bk1advZr/tuwD0AGr7JHh
-        w0WDneSfDXIBmBBOpoVV8/OUyprcwCpbuz3W5TRG8GUUVLd+dJJjehf9F9wkqKVsOcll/1EIQxf+a
-        XO+ws+/A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q2aY4-002xqz-Qd; Fri, 26 May 2023 16:44:16 +0000
-Date:   Fri, 26 May 2023 17:44:16 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     Steven Sistare <steven.sistare@oracle.com>,
-        akpm@linux-foundation.org, david@redhat.com, ying.huang@intel.com,
-        mgorman@techsingularity.net, baolin.wang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Khalid Aziz <khalid@kernel.org>
-Subject: Re: [PATCH v4] mm, compaction: Skip all non-migratable pages during
- scan
-Message-ID: <ZHDh4Jeb/vKY+nGU@casper.infradead.org>
-References: <20230525191507.160076-1-khalid.aziz@oracle.com>
- <ZG+99h3zg7POIits@casper.infradead.org>
- <ee093583-71c3-51ba-980f-0facb03b0e23@oracle.com>
- <ZG/I7tYY4uV/32hP@casper.infradead.org>
- <ZG/To8Z3StoVoenU@casper.infradead.org>
- <60367660-f4a3-06dc-4d17-4dbdc733ef74@oracle.com>
+        Fri, 26 May 2023 12:46:10 -0400
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2E8BC
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:46:09 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1b02497f4cfso248195ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:46:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685119568; x=1687711568;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rZ7xESGkDIP+gv/TyxcTjr26EqMcpWBeDTIWa0uSfo8=;
+        b=FRrKuTiEl6n5Y3SnJf7OM9YV33dkaJsET/iDYZbH2iDp5VEd+6QdkqWJLIcF7byu35
+         ERe/EyYmkO6oGZlmZZD4Pu4WeIN4eoToGi4pQ/nOs5SMnbdHH/UWVsj9R1dHx/1nkE/l
+         svK3D9XEzcDe/OuaZfEgtaLjN0uXqlQI87ma88b7GE6lcFRnlexK+Zsgk6DbpJS1j4+U
+         0WmWDMnChBIENDNx4ZHLj9ao7/kiRFg5L5Fahg+UbB9cESus4bW+LxNLPeBl3sAz0AWk
+         gViCwh65WqPWzRzKHBUKPB9rB1T1UAoXEB4+1bxETax/wteUAyJIncG85owVreUXL3gu
+         KyNw==
+X-Gm-Message-State: AC+VfDxX+tPlgGrRAg2bnWa9T37WEnQhsgCr/sdxmoaDmwKMQxHLBGQc
+        rG6R9/pvvZUIjOuJsrbZ39u9KQ==
+X-Google-Smtp-Source: ACHHUZ7Xubhmddh9lHC80YV+z3qVxVDPAYZeGbq4cA+Ll4YhSqJ35CM4QoUFgfB49VTsdGyJNaRudw==
+X-Received: by 2002:a17:903:4282:b0:1b0:fe9:e57e with SMTP id ju2-20020a170903428200b001b00fe9e57emr2665913plb.0.1685119568432;
+        Fri, 26 May 2023 09:46:08 -0700 (PDT)
+Received: from localhost ([75.172.135.98])
+        by smtp.gmail.com with ESMTPSA id jc21-20020a17090325d500b001afba6edc8esm3481642plb.166.2023.05.26.09.45.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 09:45:48 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Mergnat <amergnat@baylibre.com>
+Subject: Re: [PATCH] clk: mediatek: mt8365: Fix inverted topclk operations
+In-Reply-To: <20230523114618.laajn2et5nbcxszv@blmsp>
+References: <20230511133226.913600-1-msp@baylibre.com>
+ <20230523114618.laajn2et5nbcxszv@blmsp>
+Date:   Fri, 26 May 2023 09:45:47 -0700
+Message-ID: <7hsfbjxcqs.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <60367660-f4a3-06dc-4d17-4dbdc733ef74@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,18 +66,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 09:44:34AM -0600, Khalid Aziz wrote:
-> > Oh, I think I found it!  pin_user_pages_remote() is called by
-> > vaddr_get_pfns().  If these are the pages you're concerned about,
-> > then the efficient way to do what you want is simply to call
-> > folio_maybe_dma_pinned().  Far more efficient than the current mess
-> > of total_mapcount().
-> 
-> vfio pinned pages triggered this change. Wouldn't checking refcounts against
-> mapcount provide a more generalized way of detecting non-migratable pages?
+Markus Schneider-Pargmann <msp@baylibre.com> writes:
 
-Well, you changed the comment to say that we were concerned about
-long-term pins.  If we are, than folio_maybe_dma_pinned() is how to test
-for long-term pins.  If we want to skip pages which are short-term pinned,
-then we need to not change the comment, and keep using mapcount/refcount
-differences.
+> just wanted to ask if I need to do something specific for it to go into
+> a rc? Sorry if I missed doing something for that, I haven't had to fix
+> something in an rc that often before.
+
+I think the  Fixes tag is enough to indicate that.
+
+Steven, is there still time for this fix be queued up for v6.4-rc?
+
+Thanks,
+
+Kevin
+
+> On Thu, May 11, 2023 at 03:32:26PM +0200, Markus Schneider-Pargmann wrote:
+>> The given operations are inverted for the wrong registers which makes
+>> multiple of the mt8365 hardware units unusable. In my setup at least usb
+>> did not work.
+>> 
+>> Fixed by swapping the operations with the inverted ones.
+>> 
+>> Reported-by: Alexandre Mergnat <amergnat@baylibre.com>
+>> Fixes: 905b7430d3cc ("clk: mediatek: mt8365: Convert simple_gate to mtk_gate clocks")
+>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+>> ---
+>>  drivers/clk/mediatek/clk-mt8365.c | 6 +++---
+>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>> 
+>> diff --git a/drivers/clk/mediatek/clk-mt8365.c b/drivers/clk/mediatek/clk-mt8365.c
+>> index 6b4e193f648d..6d785ec5754d 100644
+>> --- a/drivers/clk/mediatek/clk-mt8365.c
+>> +++ b/drivers/clk/mediatek/clk-mt8365.c
+>> @@ -583,15 +583,15 @@ static const struct mtk_gate_regs top2_cg_regs = {
+>>  
+>>  #define GATE_TOP0(_id, _name, _parent, _shift)			\
+>>  	GATE_MTK(_id, _name, _parent, &top0_cg_regs,		\
+>> -		 _shift, &mtk_clk_gate_ops_no_setclr_inv)
+>> +		 _shift, &mtk_clk_gate_ops_no_setclr)
+>>  
+>>  #define GATE_TOP1(_id, _name, _parent, _shift)			\
+>>  	GATE_MTK(_id, _name, _parent, &top1_cg_regs,		\
+>> -		 _shift, &mtk_clk_gate_ops_no_setclr)
+>> +		 _shift, &mtk_clk_gate_ops_no_setclr_inv)
+>>  
+>>  #define GATE_TOP2(_id, _name, _parent, _shift)			\
+>>  	GATE_MTK(_id, _name, _parent, &top2_cg_regs,		\
+>> -		 _shift, &mtk_clk_gate_ops_no_setclr)
+>> +		 _shift, &mtk_clk_gate_ops_no_setclr_inv)
+>>  
+>>  static const struct mtk_gate top_clk_gates[] = {
+>>  	GATE_TOP0(CLK_TOP_CONN_32K, "conn_32k", "clk32k", 10),
+>> -- 
+>> 2.40.1
+>> 
