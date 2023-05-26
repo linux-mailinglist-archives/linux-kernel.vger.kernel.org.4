@@ -2,189 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEC4711D3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE0D711D54
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbjEZB7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 21:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
+        id S236136AbjEZCDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 22:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjEZB7N (ORCPT
+        with ESMTP id S229944AbjEZCDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 21:59:13 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4D6189
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:59:12 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d30ab1ef2so344152b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:59:12 -0700 (PDT)
+        Thu, 25 May 2023 22:03:16 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41F618D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:03:14 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-33828a86ee2so75585ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:03:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685066351; x=1687658351;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1685066594; x=1687658594;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SHXSI++vej3nO9JdS3WPE1L2j+X5Z0vQui5q9gEk36o=;
-        b=u7yPykjjbmCytXH6pFeAr3KKb+n0Dr/7iRiYbmd/2mW7OQXDxbdmhCf6WTf2zF/OQA
-         xgvnwKpsoHs4kD48+/NfDkt4HR9uPDjpqKei+Ka0yT6ZhcdLK0WEzirOb1pdjfT6Kl/l
-         y6fqshg9NP1bWU2EoPB5oKxxwgbLMKz4RY56SNq0KLh4CyYFVyxMAhQ+DwYJrgwVHozn
-         ykFkaZy8lZ3/pfwXq3RhNVJy8Z3tiOBvh2IeTdxOFY+GxHTOeQ3Bo9obBuv5UG6Awwnw
-         iKpzYkpMjs2MOvS3KHQ6adGU+HflbDF/dnFeXzOZjqesxCry1a0qQjNBSsy4ajckxZwl
-         R13A==
+        bh=MNtWvPa28u8wZV0f4gpjr4fry1u8z+TX9d18m7U9c/Y=;
+        b=qWdwWqkCCTrSBfiqEXFlPREbqH9nZcRKo8eUTletLcLKGRfEd8BVHPYe6UHX/gvwE5
+         miVrAiLJEcZdAICpaldRssz9r8HdxlCrAh114QYxjrmTn6IGRCfhb2Hv5J1Oeu3fy/SF
+         7z+tw19d0oZdlyEH3kaTpOpEgoJ0jVXi+sl+5uhTsfr+i4f0gNx2IpMn7DsXa/eDyW7+
+         lPNp09CxaZW14hXdDcH0MVYt5kN5tKRPhSn4XJ0KH+VLs+kG7DmmiC7igkEq+TrVl+q9
+         qGRSI8gpv+Tfvu4yQyCeG60+FxbGNCF6cKkFvVJwNnynFUyHvVJUccJXZLSARhxIY6Af
+         EPKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685066351; x=1687658351;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SHXSI++vej3nO9JdS3WPE1L2j+X5Z0vQui5q9gEk36o=;
-        b=iPcbCtYZRxbH/r8frc9YoF4J/OokOvoJ+o12U4+aA8G+MO0W7b3ZrWeGWzTGCRv7K3
-         wLh8FUsY4vezg5czmLNC0pnekBwXfugDBIUIS/QNERrzdtZF6YqZKSmnOywIyVJKGNsm
-         h1I3lKrTyumOn9VptPdhNiuUUeDTACmaavg3UOUSDZ2+s3dGmW9INqkmaSjQcoTPAbV0
-         2N3/RmOEQ1VG0kssW7ydU+yHB1DNc5qQOihnXediL3H+jUSi1Z7mpCEuXi4yOi60HtuY
-         N/fHFrV+2rTWn5XqPrlRgtra1oytADpxrFWhroe+xbkgTwbf1L++bY4uI9IJ9CzYt7LB
-         w4kA==
-X-Gm-Message-State: AC+VfDx1pV9KtT4DgEO6b9oUb98SYpvH+1nhkxTunxBMbmKaAaOVJh4A
-        +Of5DVUw/ninlvbyngCr3hyViw==
-X-Google-Smtp-Source: ACHHUZ62FFB/huSWayTmzsRIupHGq1n53axHnLv9NDLNL/oh5ccqB5HNl6tnnxMTd0vHw7gzQMDQng==
-X-Received: by 2002:a05:6a00:2491:b0:647:d698:56d2 with SMTP id c17-20020a056a00249100b00647d69856d2mr1017231pfv.27.1685066351315;
-        Thu, 25 May 2023 18:59:11 -0700 (PDT)
-Received: from [100.64.100.6] ([194.5.48.111])
-        by smtp.gmail.com with ESMTPSA id fe22-20020a056a002f1600b0064ceb16a1a8sm1751764pfb.33.2023.05.25.18.59.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 18:59:10 -0700 (PDT)
-Message-ID: <7650f32d-6d4d-012e-b14b-538529de0577@linaro.org>
-Date:   Fri, 26 May 2023 09:58:52 +0800
+        d=1e100.net; s=20221208; t=1685066594; x=1687658594;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MNtWvPa28u8wZV0f4gpjr4fry1u8z+TX9d18m7U9c/Y=;
+        b=C1zTwuT1uk27nlV9teeE4VpF4B3gH6fimI3d94gnl7dpzYtijAeyI9g/uw68S0CTcW
+         aodPPSo4Az13DXn+eCc62kfx40xABBHt0qUiQJbRyfxfOZWMAlCriGpAVaTl5NGPY6R7
+         tt2a+Wl2HBBYLm1g4PWVeBhp1xyS6y2EQahj29ZC54pW8GT54vPWsCv5kmPZdgG24NZ9
+         tmNc4//zCAoW/f/PZOs4hPnAk2R0aQJ3vxEH0MY4lEQsvNQLvBqX07ifkggx/YrwSlBu
+         IfGyxrO5LJAfd8Pp62hoI1pkJB31SmMb8XqXnAv5Zk3AoXALJg4FGrQIfnmH9HhhZYOd
+         O6Yw==
+X-Gm-Message-State: AC+VfDykEZ+MSpQ4YwZNX+96pj3vuxKf9hZavMbiTIQnW8Ny8kNY8/bj
+        JQ4c8BBxXFNnu1DgHyj1PwbP2S1sBMJX68FFOr+Bcg==
+X-Google-Smtp-Source: ACHHUZ4iI2JJ36IHzsm7dTn9A+Vj+4OycDbPHRLJ+FJ28mIjDg1G3+RBJ+IHC1KZvYl8wi08Yr+oSlfn4P76WrDoK0A=
+X-Received: by 2002:a05:6e02:1c2e:b0:33a:e716:a76c with SMTP id
+ m14-20020a056e021c2e00b0033ae716a76cmr399ilh.26.1685066593951; Thu, 25 May
+ 2023 19:03:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v2 00/17] Add Nested Translation Support for SMMUv3
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     jgg@nvidia.com, robin.murphy@arm.com, will@kernel.org,
-        eric.auger@redhat.com, kevin.tian@intel.com,
-        baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        alex.williamson@redhat.com, yi.l.liu@intel.com
-References: <cover.1683688960.git.nicolinc@nvidia.com>
- <CABQgh9FL4ssQjBJM52_kb0aBVVPb_9Wc0Q+NL1PaQO=2LYBHCA@mail.gmail.com>
- <ZGJWgFVJDWxVpiBE@Asurada-Nvidia>
- <CABQgh9FMGPnUpz6tc6c27i6nT0Lcs9YQMoO=V40Fi2inJiCh-A@mail.gmail.com>
- <ZG/ygPy1XbSSNzR4@Asurada-Nvidia>
-From:   zhangfei gao <zhangfei.gao@linaro.org>
-In-Reply-To: <ZG/ygPy1XbSSNzR4@Asurada-Nvidia>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230518110727.2106156-1-ryan.roberts@arm.com>
+ <20230518110727.2106156-5-ryan.roberts@arm.com> <CAOUHufZaiTCxk4M4w5GaA-+5FoMnHZt+fzoU=cYCA1Ldk7CVEQ@mail.gmail.com>
+ <692e9e7e-ee00-368b-6a31-60a895f7011c@arm.com>
+In-Reply-To: <692e9e7e-ee00-368b-6a31-60a895f7011c@arm.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Thu, 25 May 2023 20:02:37 -0600
+Message-ID: <CAOUHufZDYB_9QBau+9w-ZQWjFTQpnMf-i-jJn-T7=nFizYGDhw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] mm: Add new ptep_deref() helper to fully
+ encapsulate pte_t
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        SeongJae Park <sj@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        damon@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2023/5/26 07:42, Nicolin Chen 写道:
-> On Tue, May 16, 2023 at 11:12:44AM +0800, Zhangfei Gao wrote:
+On Fri, May 19, 2023 at 3:12=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com>=
+ wrote:
 >
->>>> However when debugging hotplug PCI device, it still does not work,
->>>> Segmentation fault same as 6.2.
->>>>
->>>> guest kernel
->>>> CONFIG_HOTPLUG_PCI_PCIE=y
->>>>
->>>> boot guest (this info does not appear in 6.2)
->>>> qemu-system-aarch64: -device
->>>> vfio-pci,host=0000:76:00.1,bus=pci.1,addr=0x0,id=acc1,iommufd=iommufd0:
->>>> Failed to set data -1
->>>> qemu-system-aarch64: -device
->>>> vfio-pci,host=0000:76:00.1,bus=pci.1,addr=0x0,id=acc1,iommufd=iommufd0:
->>>> failed to set device data
->>> Hmm.. I wonder what fails the set_dev_data ioctl...
->> Simply debug, it is because dev_data.sid=0, causing
->> arm_smmu_set_dev_user_data fail
-> I found that too. The input pci bus number is 1, yet the in
-> the context of set_dev_data, the pci bus number is 0, which
-> resulted in a 0-valued sid. I will take another look to get
-> why.
+> On 18/05/2023 20:28, Yu Zhao wrote:
+> > On Thu, May 18, 2023 at 5:07=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.=
+com> wrote:
+> >>
+> >> There are many call sites that directly dereference a pte_t pointer.
+> >> This makes it very difficult to properly encapsulate a page table in t=
+he
+> >> arch code without having to allocate shadow page tables. ptep_deref()
+> >> aims to solve this by replacing all direct dereferences with a call to
+> >> this function.
+> >>
+> >> The default implementation continues to just dereference the pointer
+> >> (*ptep), so generated code should be exactly the same. However, it is
+> >> possible for the architecture to override the default with their own
+> >> implementation, that can (e.g.) hide certain bits from the core code, =
+or
+> >> determine young/dirty status by mixing in state from another source.
+> >>
+> >> While ptep_get() and ptep_get_lockless() already exist, these are
+> >> implemented as atomic accesses (e.g. READ_ONCE() in the default case).
+> >> So rather than using ptep_get() and risking performance regressions,
+> >> introduce an new variant.
+> >
+> > We should reuse ptep_get():
+> > 1. I don't think READ_ONCE() can cause measurable regressions in this c=
+ase.
+> > 2. It's technically wrong without it.
 >
->>>> $ sudo nc -U /tmp/qmpm_1.socket
->>>> (qemu) info pci
->>>> (qemu) device_del acc1
->>>>
->>>> guest:
->>>> qemu-system-aarch64: IOMMU_IOAS_UNMAP failed: No such file or directory
->>>> qemu-system-aarch64: vfio_container_dma_unmap(0xaaaae1fc0380,
->>>> 0x8000000000, 0x10000) = -2 (No such file or directory)
->>  From ex-email reply
->> (Eric) In qemu arm virt machine 0x8000000000 matches the PCI MMIO region.
->> (Yi) Currently, iommufd kernel part doesn't support mapping device BAR MMIO.
->> This is a known gap.
-> OK.
+> Can you clarify what you mean by technically wrong? Are you saying that t=
+he
+> current code that does direct dereferencing is buggy?
+
+Sorry for not being clear.
+
+I think we can agree that *ptep is volatile. Not being treated as such
+seems a bad idea to me. I don't think it'd cause any real problems --
+most warnings KCSAN reported didn't either, but we fixed them anyway.
+So should we fix this case as well while we are at it.
+
+> I previously convinced myself that the potential for the compiler generat=
+ing
+> multiple loads was safe because the code in question is under the PTL so =
+there
+> are no concurrent stores. And we shouldn't see any tearing for the same r=
+eason.
 >
->>>> qemu-system-aarch64: Failed to unset data -1
->>>> Segmentation fault (core dumped).  // also happened in 6.2
->>> Hmm, would it be possible for you to run the test again by
->>> adding the following tracers to your QEMU command?
->>>      --trace "iommufd*" \
->>>      --trace "smmu*" \
->>>      --trace "vfio_*" \
->>>      --trace "pci_*"
->>>
->> Have sent you the log directly, since it is too big.
-> I have found two missing pieces in the device detach routine.
-> Applying the following should fix the crash at hotplug path.
->
-> ----------------------------------------------------------------------------
-> diff --git a/hw/vfio/container-base.c b/hw/vfio/container-base.c
-> index 89a256efa999..2344307523cb 100644
-> --- a/hw/vfio/container-base.c
-> +++ b/hw/vfio/container-base.c
-> @@ -151,8 +151,10 @@ void vfio_container_destroy(VFIOContainer *container)
->       }
->
->       QLIST_FOREACH_SAFE(giommu, &container->giommu_list, giommu_next, tmp) {
-> -        memory_region_unregister_iommu_notifier(
-> -                MEMORY_REGION(giommu->iommu_mr), &giommu->n);
-> +        if (giommu->n.notifier_flags) {
-> +            memory_region_unregister_iommu_notifier(
-> +                    MEMORY_REGION(giommu->iommu_mr), &giommu->n);
-> +        }
->           QLIST_REMOVE(giommu, giommu_next);
->           g_free(giommu);
->       }
-> diff --git a/hw/vfio/iommufd.c b/hw/vfio/iommufd.c
-> index 844c60892db2..35d31480390d 100644
-> --- a/hw/vfio/iommufd.c
-> +++ b/hw/vfio/iommufd.c
-> @@ -652,6 +652,9 @@ found:
->        */
->       if (QLIST_EMPTY(&container->hwpt_list)) {
->           vfio_as_del_container(space, bcontainer);
-> +        if (bcontainer->nested) {
-> +            memory_listener_unregister(& bcontainer->prereg_listener);
-> +        }
->       }
->       __vfio_device_detach_container(vbasedev, container, &err);
->       if (err) {
-> ----------------------------------------------------------------------------
->
-> Would you please try your case with it?
+> That said, if there is concensus that we can just use ptep_get() (=3D=3D
+> READ_ONCE()) everywhere, then I agree that would be cleaner. Does anyone =
+object?
 
-
-Yes, this solve the hotplug segmentation fault
-
-Still report
-
-qemu-system-aarch64: IOMMU_IOAS_UNMAP failed: No such file or directory
-qemu-system-aarch64: vfio_container_dma_unmap(0xaaaae622e300, 
-0x8000000000, 0x10000) = -2 (No such file or directory)
-qemu-system-aarch64: Failed to unset data -1 (only the first time of 
-device_del)
-
-Test with device_del and device_add
-
-Thanks.
-
-
-
+(No objection to NOT using it either. Just a recommendation, since
+it's already there.)
