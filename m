@@ -2,167 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B18712E26
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B6F712E2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237003AbjEZUcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 16:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S236920AbjEZUgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 16:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjEZUb6 (ORCPT
+        with ESMTP id S229716AbjEZUgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 16:31:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A281114;
-        Fri, 26 May 2023 13:31:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B06E360E75;
-        Fri, 26 May 2023 20:31:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F54C433EF;
-        Fri, 26 May 2023 20:31:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685133116;
-        bh=dgC43JNVASW0J73pGR7cjG6PDm1SnaU+sa3pg7UyPTM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=HKUvPsNDMdMUCpYOuXiMJGS3ghlofdtQWNhOdtK934p4Msmm+XWZ4BHhOwz/Jq4J7
-         jOTVpx+9Tpib4DJiSSLWGPfKJ/QygEgMmdSMiXmlfHXQqPaMMWDqrWzz8Ygj+r6u+i
-         ITrmUIfw9VvSrNyvAFSmodoF3Ohgax85FZoHoHJLcq3vl17HnLtqT5cG5VURALJi0H
-         LgkSKDeV56isZvePgaU56KK0xXUzqOFZewxXpKRZnZNOfS64CjZisZLrRsqGsJ6uta
-         WX9N9b5t6IpIFs3BCrjiI+8n5LCq/KI3zMA1tp4XHn7rQVUvhGsoU/BRjKz/ouIRe+
-         m54GG6kchVkxA==
-Date:   Fri, 26 May 2023 15:31:54 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Robert Richter <rrichter@amd.com>
-Cc:     Terry Bowman <terry.bowman@amd.com>, alison.schofield@intel.com,
-        vishal.l.verma@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
-        dan.j.williams@intel.com, dave.jiang@intel.com,
-        Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bhelgaas@google.com
-Subject: Re: [PATCH v4 23/23] PCI/AER: Unmask RCEC internal errors to enable
- RCH downstream port error handling
-Message-ID: <ZHEXOlxfCCApI+NE@bhelgaas>
+        Fri, 26 May 2023 16:36:39 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA94F3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:36:36 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f4b80bf93aso1276930e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685133395; x=1687725395;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0QFhrmXQWyPgc4s42uFYQSvB0IVUNfYN59jpnyyV6Vs=;
+        b=uJWgr7gdiQRVYWMqQwr6at476XhkdPRKqV5e+zq3kYUgSg+Vq0zR0rqKQvcdqE80zV
+         ySerW8QnhZC9QcacTabho3bPAe3k4220XZ/Rxpj//ImMZrbB/SlkXLS2aI4uYoGTu5rb
+         7O35mirEZq4n72JQaHdjN41K/PvVtNNIhQ6RcAcgKR+fyAhuxZJQFBFnkhWzhhoewP24
+         OMc+QXO/xSPVno7k8WwVL3Tf//PUC9Zx4LmRoskhFrdlf1v5CfhVGrjFp6jPc4DwRsC4
+         Es5S/5R6Lyk59x+EYckgmsk6fjoWaccyat0y7TYka4uXPxSShMjimp9GWblHiiq56uPj
+         dlBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685133395; x=1687725395;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0QFhrmXQWyPgc4s42uFYQSvB0IVUNfYN59jpnyyV6Vs=;
+        b=Wcc0NL6+i4wW6x2uOe/v/Sq/39/ENAKsjUoDn4P1DYz+0FrFphm1d3VMERUnfA7vuD
+         KWj0Cy0I07hhaUDMm6+DLw0MVBPjOeuLSfWHlYeo2EfxEgPM2h7u3gUnX1Qbb9KFRDdO
+         o0npjZG9gq73AuMXIfPh+k7f4H+6luCWGqEdBytyUihJcJNGlXJ6rT97SO95z4CYTRUh
+         SkOcUyq7HJhnSmPtSMKAv3CFBJWyFjeHeFv8CMDSsVe4onuY7ZuwiGEbQbx6Gv3Inqs1
+         UjEgQ+BLPtyuI9aHxoxxAaangdWqS6ewP2Wvc+lUJFpdy4U9rt+gNgFcRlpQc2XuMDOd
+         5LsA==
+X-Gm-Message-State: AC+VfDxSgs9eqsdmH0lVlUwJg67DP5cshjWm6YcdY/FJR0+RA7CYSL+R
+        J5yvQdEb1eqXxpUjKpM65FQhDg==
+X-Google-Smtp-Source: ACHHUZ6lWok7qQ7Kt8GzUmHwRGY5EScRevrnB5nxrPp83bTTphSpwPirF9ZqNpltX2qMqoQ5yMBvYQ==
+X-Received: by 2002:ac2:5ed0:0:b0:4f3:b207:65ff with SMTP id d16-20020ac25ed0000000b004f3b20765ffmr833070lfq.24.1685133394986;
+        Fri, 26 May 2023 13:36:34 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id w25-20020a05651204d900b004cc8196a308sm774572lfq.98.2023.05.26.13.36.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 13:36:34 -0700 (PDT)
+Message-ID: <631e5eec-853b-dce2-c474-62e76e83d7e6@linaro.org>
+Date:   Fri, 26 May 2023 22:36:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZG/cYUaZerXNqqJl@rric.localdomain>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: media: camss: qcom,msm8996-camss: Add
+ CAMSS power domain
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Conor Dooley <conor@kernel.org>
+Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hansverk@cisco.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230526180712.8481-1-y.oudjana@protonmail.com>
+ <20230526180712.8481-2-y.oudjana@protonmail.com>
+ <20230526-obstruct-venus-5833511a58af@spud>
+ <838b134d-46cb-6237-49b0-0c287141ebb3@linaro.org>
+ <20230526-street-pox-2ff5ee106c43@spud>
+ <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 12:08:33AM +0200, Robert Richter wrote:
-> On 24.05.23 16:45:06, Bjorn Helgaas wrote:
-> > On Tue, May 23, 2023 at 06:22:14PM -0500, Terry Bowman wrote:
-> > > From: Robert Richter <rrichter@amd.com>
-> > > 
-> > > AER corrected and uncorrectable internal errors (CIE/UIE) are masked
-> > > in their corresponding mask registers per default once in power-up
-> > > state. [1][2] Enable internal errors for RCECs to receive CXL
-> > > downstream port errors of Restricted CXL Hosts (RCHs).
-> > > ...
 
-> > > +static int handles_cxl_error_iter(struct pci_dev *dev, void *data)
-> > > +{
-> > > +	int *handles_cxl = data;
-> > > +
-> > > +	*handles_cxl = is_cxl_mem_dev(dev) && cxl_error_is_native(dev);
-> > 
-> > This effectively only looks at the *last* RCiEP associated with this
-> > RCEC.  I would expect a logical OR of all of them.
-> > 
-> > > +	return *handles_cxl;
+
+On 26.05.2023 22:21, Bryan O'Donoghue wrote:
+> On 26/05/2023 21:19, Conor Dooley wrote:
+>> On Fri, May 26, 2023 at 09:05:47PM +0100, Bryan O'Donoghue wrote:
+>>> On 26/05/2023 20:46, Conor Dooley wrote:
+>>>>> +  - power-domain-names
+>>>> Why is this now required?
+>>>>
+>>>> Thanks,
+>>>> Conor.
+>>>>
+>>>
+>>> Its an accurate description of the power/clock tree to have the top power
+>>> domain be switched on prior to the clocks that depend on it.
+>>
+>> But what does that have to do with the *names* now being required?
 > 
-> If this is non-zero, the iteration stops. So as soon we find a cxl
-> device we can stop the loop. Else, all devices are non-cxl devs and
-> the last return is zero too.
+> oh the names
 > 
-> Now checking the code, pci_walk_bus() works that way, but walk_rcec()
-> does not break in all cases. I think this function not working as
-> expected. We would need to check if pci_walk_bus() stopped the
-> iteration, e.g. with a return code.
+> no toss that
+this should be
+
+if:properties:compatible:blahblahmsm8996:then:required:power-domain-names
+
+Konrad
 > 
-> Alternatively we could add this check:
+>>
+>>> I think Yassine, you could probably include the majority of your
+>>> cover-letter text in this commit to explain this change a bit better.
+>>
+>> I think it would be good to have that regardless.
+>>
+>> Cheers,
+>> Conor.
+>>
+>>> bod
+>>    ^^^ I've been trying not to think about rugby since the weekend :(
 > 
-> 	if (!*handles_cxl)
-> 		*handles_cxl = ...
-
-If handles_cxl_error_iter() returns 1 (device is CXL mem, etc),
-pci_walk_bus() will terminate.  And handles_cxl_error_iter() also sets
-*userdata to 1, so handles_cxl_errors() will return true.
-
-I think that's all you need in this case: at least one associated
-RCiEP might report errors you care about, so you should unmask RCEC
-internal errors.  You don't need to look at *all* the RCiEPs to know
-that.
-
-In the other case, cxl_rch_handle_error() does need to look at all the
-RCiEPs, and cxl_rch_handle_error_iter() always returns 0, so it should
-never terminate pci_walk_bus().
-
-So I think I raised a false alarm here, and the current patches work
-fine as-is.  But I do think it's a little bit tricky to set
-*handles_cxl and also use that as the return value and rely on it
-terminating the loop.  Maybe something like this would be more
-straightforward?
-
-  static int handles_cxl_error_iter(...)
-  {
-    ...
-    *handles_cxl |= is_cxl_mem_dev(dev) && cxl_error_is_native(dev);
-    return 0;
-  }
-
-Certainly not as efficient because it looks at more RCiEPs than
-strictly necessary.
-
-> > > +static bool handles_cxl_errors(struct pci_dev *rcec)
-> > > +{
-> > > +	int handles_cxl = 0;
-> > > +
-> > > +	if (pci_pcie_type(rcec) == PCI_EXP_TYPE_RC_EC &&
-> > > +	    pcie_aer_is_native(rcec))
-> > > +		pcie_walk_rcec(rcec, handles_cxl_error_iter, &handles_cxl);
-> > > +
-> > > +	return !!handles_cxl;
-
-> > > @@ -1432,6 +1495,7 @@ static int aer_probe(struct pcie_device *dev)
-> > >  		return status;
-> > >  	}
-> > >  
-> > > +	cxl_rch_enable_rcec(port);
-> > 
-> > Could this be done by the driver that claims the CXL RCiEP?  There's
-> > no point in unmasking the errors before there's a driver with
-> > pci_error_handlers that can do something with them anyway.
-> 
-> This sounds reasonable at the first glance. The problem is there could
-> be many devices associated with the RCEC. Not all of them will be
-> bound to a driver and handler at the same time. We would need to
-> refcount it or maintain a list of enabled devices. But there is
-> already something similar by checking dev->driver. But right, AER
-> errors could be seen and handled then at least on PCI level. I tent to
-> permanently enable RCEC AER, but that could cause side-effects. What
-> do you think?
-
-IIUC, this really just affects CXL devices, so I think the choice is
-(1) always unmask internal errors for RCECs where those CXL devices
-report errors (as this patch does), or (2) unmask when first CXL
-driver that can handle the errors is loaded and restore previous state
-when last one is unloaded.
-
-If the RCEC *only* handles errors for CXL devices, i.e., not for a mix
-of vanilla PCIe RCiEPs and CXL RCiEPs, I think I'm OK with (1).  I
-think you said only the CXL driver knows how to collect and interpret
-the error data.  Is it OK that when no such driver is loaded, we field
-error interrupts silently, without even mentioning that an error
-occurred?  I guess without the driver, the device is probably not in
-use.
-
-Bjorn
+> Pockets O'Gara should have his paddy papers rescinded
