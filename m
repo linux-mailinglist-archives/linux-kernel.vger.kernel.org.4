@@ -2,56 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE55711D38
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDEC4711D3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbjEZB5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 21:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
+        id S232154AbjEZB7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 21:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjEZB5p (ORCPT
+        with ESMTP id S229689AbjEZB7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 21:57:45 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98789E7;
-        Thu, 25 May 2023 18:57:43 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QS7H93JvJzqSSc;
-        Fri, 26 May 2023 09:53:09 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 26 May 2023 09:57:41 +0800
-Message-ID: <76b50214-fcf8-37fe-47c9-cfcaf7517048@huawei.com>
-Date:   Fri, 26 May 2023 09:57:40 +0800
+        Thu, 25 May 2023 21:59:13 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4D6189
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:59:12 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d30ab1ef2so344152b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685066351; x=1687658351;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SHXSI++vej3nO9JdS3WPE1L2j+X5Z0vQui5q9gEk36o=;
+        b=u7yPykjjbmCytXH6pFeAr3KKb+n0Dr/7iRiYbmd/2mW7OQXDxbdmhCf6WTf2zF/OQA
+         xgvnwKpsoHs4kD48+/NfDkt4HR9uPDjpqKei+Ka0yT6ZhcdLK0WEzirOb1pdjfT6Kl/l
+         y6fqshg9NP1bWU2EoPB5oKxxwgbLMKz4RY56SNq0KLh4CyYFVyxMAhQ+DwYJrgwVHozn
+         ykFkaZy8lZ3/pfwXq3RhNVJy8Z3tiOBvh2IeTdxOFY+GxHTOeQ3Bo9obBuv5UG6Awwnw
+         iKpzYkpMjs2MOvS3KHQ6adGU+HflbDF/dnFeXzOZjqesxCry1a0qQjNBSsy4ajckxZwl
+         R13A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685066351; x=1687658351;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SHXSI++vej3nO9JdS3WPE1L2j+X5Z0vQui5q9gEk36o=;
+        b=iPcbCtYZRxbH/r8frc9YoF4J/OokOvoJ+o12U4+aA8G+MO0W7b3ZrWeGWzTGCRv7K3
+         wLh8FUsY4vezg5czmLNC0pnekBwXfugDBIUIS/QNERrzdtZF6YqZKSmnOywIyVJKGNsm
+         h1I3lKrTyumOn9VptPdhNiuUUeDTACmaavg3UOUSDZ2+s3dGmW9INqkmaSjQcoTPAbV0
+         2N3/RmOEQ1VG0kssW7ydU+yHB1DNc5qQOihnXediL3H+jUSi1Z7mpCEuXi4yOi60HtuY
+         N/fHFrV+2rTWn5XqPrlRgtra1oytADpxrFWhroe+xbkgTwbf1L++bY4uI9IJ9CzYt7LB
+         w4kA==
+X-Gm-Message-State: AC+VfDx1pV9KtT4DgEO6b9oUb98SYpvH+1nhkxTunxBMbmKaAaOVJh4A
+        +Of5DVUw/ninlvbyngCr3hyViw==
+X-Google-Smtp-Source: ACHHUZ62FFB/huSWayTmzsRIupHGq1n53axHnLv9NDLNL/oh5ccqB5HNl6tnnxMTd0vHw7gzQMDQng==
+X-Received: by 2002:a05:6a00:2491:b0:647:d698:56d2 with SMTP id c17-20020a056a00249100b00647d69856d2mr1017231pfv.27.1685066351315;
+        Thu, 25 May 2023 18:59:11 -0700 (PDT)
+Received: from [100.64.100.6] ([194.5.48.111])
+        by smtp.gmail.com with ESMTPSA id fe22-20020a056a002f1600b0064ceb16a1a8sm1751764pfb.33.2023.05.25.18.59.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 18:59:10 -0700 (PDT)
+Message-ID: <7650f32d-6d4d-012e-b14b-538529de0577@linaro.org>
+Date:   Fri, 26 May 2023 09:58:52 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <jane.chu@oracle.com>
-References: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
- <5570c23a-3b12-6685-cb0b-29fc1d58f541@intel.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <5570c23a-3b12-6685-cb0b-29fc1d58f541@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH v2 00/17] Add Nested Translation Support for SMMUv3
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     jgg@nvidia.com, robin.murphy@arm.com, will@kernel.org,
+        eric.auger@redhat.com, kevin.tian@intel.com,
+        baolu.lu@linux.intel.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        alex.williamson@redhat.com, yi.l.liu@intel.com
+References: <cover.1683688960.git.nicolinc@nvidia.com>
+ <CABQgh9FL4ssQjBJM52_kb0aBVVPb_9Wc0Q+NL1PaQO=2LYBHCA@mail.gmail.com>
+ <ZGJWgFVJDWxVpiBE@Asurada-Nvidia>
+ <CABQgh9FMGPnUpz6tc6c27i6nT0Lcs9YQMoO=V40Fi2inJiCh-A@mail.gmail.com>
+ <ZG/ygPy1XbSSNzR4@Asurada-Nvidia>
+From:   zhangfei gao <zhangfei.gao@linaro.org>
+In-Reply-To: <ZG/ygPy1XbSSNzR4@Asurada-Nvidia>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,37 +84,107 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+在 2023/5/26 07:42, Nicolin Chen 写道:
+> On Tue, May 16, 2023 at 11:12:44AM +0800, Zhangfei Gao wrote:
+>
+>>>> However when debugging hotplug PCI device, it still does not work,
+>>>> Segmentation fault same as 6.2.
+>>>>
+>>>> guest kernel
+>>>> CONFIG_HOTPLUG_PCI_PCIE=y
+>>>>
+>>>> boot guest (this info does not appear in 6.2)
+>>>> qemu-system-aarch64: -device
+>>>> vfio-pci,host=0000:76:00.1,bus=pci.1,addr=0x0,id=acc1,iommufd=iommufd0:
+>>>> Failed to set data -1
+>>>> qemu-system-aarch64: -device
+>>>> vfio-pci,host=0000:76:00.1,bus=pci.1,addr=0x0,id=acc1,iommufd=iommufd0:
+>>>> failed to set device data
+>>> Hmm.. I wonder what fails the set_dev_data ioctl...
+>> Simply debug, it is because dev_data.sid=0, causing
+>> arm_smmu_set_dev_user_data fail
+> I found that too. The input pci bus number is 1, yet the in
+> the context of set_dev_data, the pci bus number is 0, which
+> resulted in a 0-valued sid. I will take another look to get
+> why.
+>
+>>>> $ sudo nc -U /tmp/qmpm_1.socket
+>>>> (qemu) info pci
+>>>> (qemu) device_del acc1
+>>>>
+>>>> guest:
+>>>> qemu-system-aarch64: IOMMU_IOAS_UNMAP failed: No such file or directory
+>>>> qemu-system-aarch64: vfio_container_dma_unmap(0xaaaae1fc0380,
+>>>> 0x8000000000, 0x10000) = -2 (No such file or directory)
+>>  From ex-email reply
+>> (Eric) In qemu arm virt machine 0x8000000000 matches the PCI MMIO region.
+>> (Yi) Currently, iommufd kernel part doesn't support mapping device BAR MMIO.
+>> This is a known gap.
+> OK.
+>
+>>>> qemu-system-aarch64: Failed to unset data -1
+>>>> Segmentation fault (core dumped).  // also happened in 6.2
+>>> Hmm, would it be possible for you to run the test again by
+>>> adding the following tracers to your QEMU command?
+>>>      --trace "iommufd*" \
+>>>      --trace "smmu*" \
+>>>      --trace "vfio_*" \
+>>>      --trace "pci_*"
+>>>
+>> Have sent you the log directly, since it is too big.
+> I have found two missing pieces in the device detach routine.
+> Applying the following should fix the crash at hotplug path.
+>
+> ----------------------------------------------------------------------------
+> diff --git a/hw/vfio/container-base.c b/hw/vfio/container-base.c
+> index 89a256efa999..2344307523cb 100644
+> --- a/hw/vfio/container-base.c
+> +++ b/hw/vfio/container-base.c
+> @@ -151,8 +151,10 @@ void vfio_container_destroy(VFIOContainer *container)
+>       }
+>
+>       QLIST_FOREACH_SAFE(giommu, &container->giommu_list, giommu_next, tmp) {
+> -        memory_region_unregister_iommu_notifier(
+> -                MEMORY_REGION(giommu->iommu_mr), &giommu->n);
+> +        if (giommu->n.notifier_flags) {
+> +            memory_region_unregister_iommu_notifier(
+> +                    MEMORY_REGION(giommu->iommu_mr), &giommu->n);
+> +        }
+>           QLIST_REMOVE(giommu, giommu_next);
+>           g_free(giommu);
+>       }
+> diff --git a/hw/vfio/iommufd.c b/hw/vfio/iommufd.c
+> index 844c60892db2..35d31480390d 100644
+> --- a/hw/vfio/iommufd.c
+> +++ b/hw/vfio/iommufd.c
+> @@ -652,6 +652,9 @@ found:
+>        */
+>       if (QLIST_EMPTY(&container->hwpt_list)) {
+>           vfio_as_del_container(space, bcontainer);
+> +        if (bcontainer->nested) {
+> +            memory_listener_unregister(& bcontainer->prereg_listener);
+> +        }
+>       }
+>       __vfio_device_detach_container(vbasedev, container, &err);
+>       if (err) {
+> ----------------------------------------------------------------------------
+>
+> Would you please try your case with it?
 
-On 2023/5/26 1:18, Dave Hansen wrote:
-> On 5/7/23 19:22, Kefeng Wang wrote:
->> Both EX_TYPE_FAULT_MCE_SAFE and EX_TYPE_DEFAULT_MCE_SAFE exception
->> fixup types are used to identify fixups which allow in kernel #MC
->> recovery, that is the Machine Check Safe Copy.
->>
->> For now, the MCE_IN_KERNEL_COPYIN flag is only set for EX_TYPE_COPY
->> and EX_TYPE_UACCESS when copy from user, and corrupted page is
->> isolated in this case, for MC-safe copy, memory_failure() is not
->> always called, some places, like __wp_page_copy_user, copy_subpage,
->> copy_user_gigantic_page and ksm_might_need_to_copy manually call
->> memory_failure_queue() to cope with such unhandled error pages,
->> recently coredump hwposion recovery support[1] is asked to do the
->> same thing, and there are some other already existed MC-safe copy
->> scenarios, eg, nvdimm, dm-writecache, dax, which has similar issue.
-> 
-> That has to set some kind of record for run-on sentences.  Could you
-> please try to rewrite this coherently?
-> 
->> The best way to fix them is set MCE_IN_KERNEL_COPYIN to MCE_SAFE
->> exception, then kill_me_never() will be queued to call memory_failure()
->> in do_machine_check() to isolate corrupted page, which avoid calling
->> memory_failure_queue() after every MC-safe copy return.
-> 
-> Could you try to send a v2 of this with a clear problem statement?
-> 
 
-:( will try to make it more clear.
+Yes, this solve the hotplug segmentation fault
 
-> What is the end user visible effect of the problem and of your solution?
+Still report
 
-The corrupted page won't be isolated for MC-safe copy scenario, and it 
-could be accessed again by use application.
+qemu-system-aarch64: IOMMU_IOAS_UNMAP failed: No such file or directory
+qemu-system-aarch64: vfio_container_dma_unmap(0xaaaae622e300, 
+0x8000000000, 0x10000) = -2 (No such file or directory)
+qemu-system-aarch64: Failed to unset data -1 (only the first time of 
+device_del)
+
+Test with device_del and device_add
+
+Thanks.
+
+
+
