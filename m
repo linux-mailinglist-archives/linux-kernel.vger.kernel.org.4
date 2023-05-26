@@ -2,155 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6819711E27
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03945711E2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjEZCwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 22:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S233734AbjEZC5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 22:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjEZCwI (ORCPT
+        with ESMTP id S229631AbjEZC5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 22:52:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB9CBC;
-        Thu, 25 May 2023 19:52:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4DFE64C6E;
-        Fri, 26 May 2023 02:52:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA50C433D2;
-        Fri, 26 May 2023 02:52:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685069526;
-        bh=elwavddJz+Fd/P1bINsLsw8TAd9fMQOUVxOVTcBdK10=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I0Iiy1YVBZpTpe4iomAH4Mt0xKIUb4LqW1IIoVCrPeCVxU7i4ftguEZVJUzBGNO05
-         o0g2K6fGEeIZL+1vTRwlhfLCVCvVgXIfqpBHLj58g0ME0AXOlSKOIHfd6myCxns747
-         RnOZ3okM2CpY84LzOeUqo1rlgN014TWJt8PFJWkMeROzF9ZG8PRCVdRZ6KApv2bMBt
-         KEUX5X2Q59UxiAEuCa5/ZKS+YsKu8n8D/KLNBIlUUxQHkUztWvvZ4Auk9wmAYlY0R5
-         VDLuIiqzakxqT7AV9ZAZ37+BaIjVb/u0Qdj0jQhAQSmAF6mf7rw4hAL9VZAVQpErkU
-         PzqtoZzmZQ6Sg==
-Date:   Thu, 25 May 2023 19:55:54 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
- for qcom wrapper
-Message-ID: <20230526025554.ni527gsr2bqxadl3@ripper>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-7-quic_kriskura@quicinc.com>
- <20230515222730.7snn2i33gkg6ctd2@ripper>
+        Thu, 25 May 2023 22:57:00 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9839C;
+        Thu, 25 May 2023 19:56:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685069815; x=1716605815;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=87EFoqFdDwJwUK3kXoChDagOZZNSvNb2HRBfvOhjr+Y=;
+  b=OysxxycIB4SU8nmFxUFsG7sMLIEBE0f5He41f0/SGIG/uePfLsiGdy/i
+   N8ohQ1DHwyF5a8UY+ml7wGQSzbkGqGgGXFv4GiZ4DTI7DRZ/l7JGV95Kb
+   ig3gLTFrfymVljjlTIvV6usZhbGyLmQFqAZm7U3iKbvUN8a0WqKFHiUua
+   /HJVTdiAFOZSLcgFOmuRAAIW8hjxGwDaj25MYNaTmuHPrr0KJFc5qSQNd
+   MnXfi7wh+sxEE030Ul+VsK8wAm0mzgjZSl5AjDFAXwDoZosNr5b2j7ntJ
+   JHwoK5s6AT9+xEJ61ULTpHiGBlCUdmpqaRlkyJLggbiWy+x8c2Dmbobmu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="419852574"
+X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
+   d="scan'208";a="419852574"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 19:56:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="738089478"
+X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
+   d="scan'208";a="738089478"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by orsmga001.jf.intel.com with ESMTP; 25 May 2023 19:56:49 -0700
+Message-ID: <8a47d13c-a555-d88a-8aba-adf11d925446@linux.intel.com>
+Date:   Fri, 26 May 2023 10:56:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515222730.7snn2i33gkg6ctd2@ripper>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v3 02/10] iommu/vt-d: Extend dmar_domain to support nested
+ domain
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>
+References: <20230511145110.27707-1-yi.l.liu@intel.com>
+ <20230511145110.27707-3-yi.l.liu@intel.com>
+ <BN9PR11MB5276AC0968EE3A5DBAD0E5018C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276AC0968EE3A5DBAD0E5018C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 03:27:30PM -0700, Bjorn Andersson wrote:
-> On Sun, May 14, 2023 at 11:19:14AM +0530, Krishna Kurapati wrote:
-> > QCOM SoC SA8295P's tertiary quad port controller supports 2 HS+SS
-> > ports and 2 HS only ports. Add support for configuring PWR_EVENT_IRQ's
-> > for all the ports during suspend/resume.
-> > 
-> > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > ---
-> >  drivers/usb/dwc3/dwc3-qcom.c | 28 ++++++++++++++++++++++------
-> >  1 file changed, 22 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > index 959fc925ca7c..7a9bce66295d 100644
-> > --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > @@ -37,7 +37,10 @@
-> >  #define PIPE3_PHYSTATUS_SW			BIT(3)
-> >  #define PIPE_UTMI_CLK_DIS			BIT(8)
-> >  
-> > -#define PWR_EVNT_IRQ_STAT_REG			0x58
-> > +#define PWR_EVNT_IRQ1_STAT_REG			0x58
-> > +#define PWR_EVNT_IRQ2_STAT_REG			0x1dc
-> > +#define PWR_EVNT_IRQ3_STAT_REG			0x228
-> > +#define PWR_EVNT_IRQ4_STAT_REG			0x238
-> >  #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
-> >  #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
-> >  
-> > @@ -93,6 +96,13 @@ struct dwc3_qcom {
-> >  	struct icc_path		*icc_path_apps;
-> >  };
-> >  
-> > +static u32 pwr_evnt_irq_stat_reg_offset[4] = {
-> > +			PWR_EVNT_IRQ1_STAT_REG,
-> > +			PWR_EVNT_IRQ2_STAT_REG,
-> > +			PWR_EVNT_IRQ3_STAT_REG,
-> > +			PWR_EVNT_IRQ4_STAT_REG,
-> 
-> Seems to be excessive indentation of these...
-> 
-> Can you also please confirm that these should be counted starting at 1 -
-> given that you otherwise talk about port0..N-1?
-> 
-> > +};
-> > +
-> >  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
-> >  {
-> >  	u32 reg;
-> > @@ -413,13 +423,16 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
-> >  {
-> >  	u32 val;
-> >  	int i, ret;
-> > +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> >  
-> >  	if (qcom->is_suspended)
-> >  		return 0;
-> >  
-> > -	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
-> > -	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
-> > -		dev_err(qcom->dev, "HS-PHY not in L2\n");
-> > +	for (i = 0; i < dwc->num_usb2_ports; i++) {
-> 
-> In the event that the dwc3 core fails to acquire or enable e.g. clocks
-> its drvdata will be NULL. If you then hit a runtime pm transition in the
-> dwc3-qcom glue you will dereference NULL here. (You can force this issue
-> by e.g. returning -EINVAL from dwc3_clk_enable()).
-> 
+On 5/24/23 3:02 PM, Tian, Kevin wrote:
+>> From: Liu, Yi L<yi.l.liu@intel.com>
+>> Sent: Thursday, May 11, 2023 10:51 PM
+>>
+>> From: Lu Baolu<baolu.lu@linux.intel.com>
+>>
+>> The nested domain fields are exclusive to those that used for a DMA
+>> remapping domain. Use union to avoid memory waste.
+>>
+>> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
+>> Signed-off-by: Yi Liu<yi.l.liu@intel.com>
+>> ---
+>>   drivers/iommu/intel/iommu.h | 35 +++++++++++++++++++++++++++++------
+>>   1 file changed, 29 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+>> index 1c5e1d88862b..e818520f4068 100644
+>> --- a/drivers/iommu/intel/iommu.h
+>> +++ b/drivers/iommu/intel/iommu.h
+>> @@ -596,15 +596,38 @@ struct dmar_domain {
+>>   	spinlock_t lock;		/* Protect device tracking lists */
+>>   	struct list_head devices;	/* all devices' list */
+>>
+>> -	struct dma_pte	*pgd;		/* virtual address */
+>> -	int		gaw;		/* max guest address width */
+>> -
+>> -	/* adjusted guest address width, 0 is level 2 30-bit */
+>> -	int		agaw;
+>>   	int		iommu_superpage;/* Level of superpages supported:
+>>   					   0 == 4KiB (no superpages), 1 ==
+>> 2MiB,
+>>   					   2 == 1GiB, 3 == 512GiB, 4 == 1TiB */
+>> -	u64		max_addr;	/* maximum mapped address */
+>> +	union {
+>> +		/* DMA remapping domain */
+>> +		struct {
+>> +			/* virtual address */
+>> +			struct dma_pte	*pgd;
+>> +			/* max guest address width */
+>> +			int		gaw;
+>> +			/*
+>> +			 * adjusted guest address width:
+>> +			 *   0: level 2 30-bit
+>> +			 *   1: level 3 39-bit
+>> +			 *   2: level 4 48-bit
+>> +			 *   3: level 5 57-bit
+>> +			 */
+>> +			int		agaw;
+>> +			/* maximum mapped address */
+>> +			u64		max_addr;
+>> +		};
+> what about 'nid'?
 
-I looked at this once more, and realized that I missed the fact that
-dwc3_qcom_is_host() will happily dereference the drvdata() just a few
-lines further down...
 
-So this is already broken.
+"nid" represents which NUMA node should we allocate pages from for this
+domain. It's updated every time when a domain is attached/detached
+to/from a device or pasid.
 
-> So if you're peaking into qcom->dwc3 you need to handle the fact that
-> dwc might be NULL, here and in resume below.
-> 
+Generally speaking, "nid" is common for all types of domain. But in this
+case, only a DMA remapping domain has a need to allocate pages. I intend
+to keep it as it for now. There's more cleanup rooms if we limit it only
+for DMA remapping domain.
 
-We need to fix the dwc3 glue design, so that the glue and the core can
-cooperate - and we have a few other use cases where this is needed (e.g.
-usb_role_switch propagation to the glue code).
-
-Regards,
-Bjorn
-
-> Regards,
-> Bjorn
+Best regards,
+baolu
