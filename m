@@ -2,73 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA36712331
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1015A71233D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242954AbjEZJQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        id S242968AbjEZJSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242739AbjEZJQS (ORCPT
+        with ESMTP id S242981AbjEZJSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:16:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0735212C
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685092532;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/vGFdqik0rBjuVyxRP6fkQFD2f5M7p6nEHdizh76LOg=;
-        b=Pyr9Vjlk030gJR2Znp75JklHos9N8E+WETEa9NfqwMsetrI3yvq/8uwVjV/Wbou+PPPcx5
-        ewFawdeJmNLiK3QhNqAq3NxdTf/g2iQMf45Lc7fXbBuZxC6h0XuOiPuPSjsNJNV351XLWU
-        /ZlCH3zQeCXtsCpTwyh4QNFCemtlpjk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-670-xsMc0qpcOM-rMmA8xGTNwA-1; Fri, 26 May 2023 05:15:31 -0400
-X-MC-Unique: xsMc0qpcOM-rMmA8xGTNwA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 26 May 2023 05:18:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B194913D;
+        Fri, 26 May 2023 02:18:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22CC71C08DAC;
-        Fri, 26 May 2023 09:15:30 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 756EE492B00;
-        Fri, 26 May 2023 09:15:27 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <4f479af6-2865-4bb3-98b9-78bba9d2065f@lucifer.local>
-References: <4f479af6-2865-4bb3-98b9-78bba9d2065f@lucifer.local> <89c7f535-8fc5-4480-845f-de94f335d332@lucifer.local> <20230525223953.225496-1-dhowells@redhat.com> <20230525223953.225496-2-dhowells@redhat.com> <520730.1685090615@warthog.procyon.org.uk>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH v2 1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4167364224;
+        Fri, 26 May 2023 09:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68D17C433D2;
+        Fri, 26 May 2023 09:18:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685092707;
+        bh=So5XfsxbD7IMm6wrDQNtnCLOFMdEi5ODkd8Op316AJA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Rl0K6KwR6v7RH6wdwgHKrD+4ETsnaMLVOJJ6aYfrJ96Zi/JXqC4otKJwzci1mZbUq
+         tG/Ml3QfnB7PEGbtxAXCI3VeG5VIA6X+9KNRQ66NmbNEEgG7nkAqhB1muHXfBd6hjC
+         5JvQWihi+A1hR93Yz/TvCCiPrnG3E3arl4UipRwRlifNnYHd+kFOgxxFwToEMiGvL2
+         XxOUYTjGpk2QNswksCMWFSt6MgsFYyFOcEH8SOtwWqwVJuDBYH51HCuR13/qSUnrbt
+         hSYoR5S0EYsdM3yjMlxXOnem8/a8ZOPyYU+A4FiqcnNDYVNCnrcKjN796WtTgK7yaJ
+         iYamAcOsdFf+A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1q2Tao-0004WY-BR; Fri, 26 May 2023 11:18:39 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 0/2] mfd: pm8008: fix module autoloading
+Date:   Fri, 26 May 2023 11:16:44 +0200
+Message-Id: <20230526091646.17318-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <522653.1685092526.1@warthog.procyon.org.uk>
-Date:   Fri, 26 May 2023 10:15:26 +0100
-Message-ID: <522654.1685092526@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,24 +58,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lorenzo Stoakes <lstoakes@gmail.com> wrote:
+This series adds the missing module device table alias needed for module
+autoloading to the pm8008 driver and drops a bogus i2c module alias
+which has never been used.
 
-> > iov_iter_extract_pages(), on the other hand, is only used in two places
-> > with these patches and the pins are always released with
-> > unpin_user_page*() so it's a lot easier to audit.
-> 
-> Thanks for the clarification. I guess these are the cases where you're
-> likely to see zero page usage, but since this is changing all PUP*() callers
-> don't you need to audit all of those too?
+Johan
 
-I don't think it should be necessary.  This only affects pages obtained from
-gup with FOLL_PIN - and, so far as I know, those always have to be released
-with unpin_user_page*() which is part of the gup API and thus it should be
-transparent to the users.
 
-Pages obtained FOLL_GET, on the other hand, aren't freed through the gup API -
-and there are a bunch of ways of releasing them - and getting additional refs
-too.
+Johan Hovold (2):
+  mfd: pm8008: fix module autoloading
+  mfd: pm8008: drop bogus i2c module alias
 
-David
+ drivers/mfd/qcom-pm8008.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+-- 
+2.39.3
 
