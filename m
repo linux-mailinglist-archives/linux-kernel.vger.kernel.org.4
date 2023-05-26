@@ -2,100 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D26712257
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9938712259
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242741AbjEZIge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
+        id S242451AbjEZIhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242184AbjEZIgc (ORCPT
+        with ESMTP id S242330AbjEZIg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:36:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E51F12F;
-        Fri, 26 May 2023 01:36:28 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2F34B6606E83;
-        Fri, 26 May 2023 09:36:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685090187;
-        bh=Y+IJxiWc633XOBZbB2+BJidraljDp8EXXiUQb5yaXZU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kpszq4hXIKce8PXvPTFmhLX/QqAmnkIe2GlYur04oNEP2DB+Ty24ObhrS9VHyNi3f
-         jvPhgysl5tFu9/L/tA5WQQq+iYFKmPnirKuzSetjd7j1x1VE2eUStQkfnCHxkputL7
-         B13Ve7LfYoMADZslX7CQrB8U08I+vDZ15MrHQQtfmgeGjC6fRO5jYkC4vreXnY6q2u
-         UISI0P0JCQOYYCf8os8otZ9K81NSeX6/N5K2aLr0bthLzegi0fmqtqrB9467rdOUQ3
-         OrIZZucUTGg3otczqteuOumrR6oNUmi21vmfZDCX9sC3j48qhE02QlmP6nUx7c1hxq
-         Mb1TGrXiu7mjg==
-Message-ID: <17ac612b-4464-4a97-4e4d-5e053b760130@collabora.com>
-Date:   Fri, 26 May 2023 10:36:23 +0200
+        Fri, 26 May 2023 04:36:58 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8081A194
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:36:56 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f68fc6b479so5387935e9.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685090215; x=1687682215;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wh7efR5v8e0vkSD7MWnUSokvejiF72nQWy6QT+M4OEk=;
+        b=q6/joui9LGDiR+/gTQhuf4Wv4GUwBNdNe5SV8a9OxQaMFBNrECsD+/xfgc3n+tuA0X
+         bJ3TC+gQoiK0e9lqfAlIiCVXocq7DF9xg6/AKzCBkpAhJ3KBjXgyT4VeBEt2j+sN3urw
+         imVBx+66mwbmOM5enOj43i+K/8FPYaUK88WUtsr8ABViExtIgmBL61CSdLcWRXPSs0NE
+         agkDMcvSFoGMfd9HVKlxR/TEpAY7OvWTdRNskfJS38/sj0bQg5NSybtwowZjYwY6m6Jr
+         QNRhYXXqSI6Zo66zjwT+pzQP0Vs0NU0mHc0R0xucNnCsJTYgQC71WHwNRyWOdsPc+Paz
+         ehfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685090215; x=1687682215;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wh7efR5v8e0vkSD7MWnUSokvejiF72nQWy6QT+M4OEk=;
+        b=aFnJ55ez9DOjmz6OwLCfGI42ioVu0+LLSJUd5OOKWKnMIZzd3vVHXISgz2eBHf5q1v
+         ptjdTAOW300BGSDn9MOZbs8WixcPwr7sXWw7d4bC077KKWY7dCKVJrd51uejKitjhrsD
+         Blhopm09kWGL3FWKvPyGXlHVY/TNN/sYskjw2q7uSZNmEv2xMwK4qZy9ZwpsGwSxwNE0
+         bQ8EobgppS8JQ6duVnMbjC+iEkZgkoSUl746NxGxa+1wlyLsZeuIPeX5pziBPi8ryM+O
+         XPgABEdxdPz4zRWYyCOphdqoFQEGPSKAOjW6L/YlRNmjD4cP9swnXW4QATBsZnitW5k7
+         X26g==
+X-Gm-Message-State: AC+VfDwJNsY45k/ZCq7zrX0DpZ/lpAGxPl6ndB0BaITjaDVKPnlSIvpR
+        lPNPzzuHiw/k/Hhb1LWqF152BczvsfpdJ3gigSpyNA==
+X-Google-Smtp-Source: ACHHUZ7DYQBiHBk+ExfjvmQiPj/1QqxrrFxOJu0T+gIHhioXAxvPRHTfhknpnn6dS5cYrmO4riAOHw==
+X-Received: by 2002:a1c:ed0b:0:b0:3f0:9564:f4f6 with SMTP id l11-20020a1ced0b000000b003f09564f4f6mr821681wmh.1.1685090214836;
+        Fri, 26 May 2023 01:36:54 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id b5-20020a5d45c5000000b002fda1b12a0bsm4379284wrs.2.2023.05.26.01.36.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 01:36:54 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230526-revert-bad-binding-v1-1-67329ad1bd80@linaro.org>
+References: <20230526-revert-bad-binding-v1-1-67329ad1bd80@linaro.org>
+Subject: Re: [PATCH] Revert "dt-bindings: bridge: samsung-dsim: Make some
+ flags optional"
+Message-Id: <168509021387.1545019.9918047087016823576.b4-ty@linaro.org>
+Date:   Fri, 26 May 2023 10:36:53 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 2/8] iio: adc: rockchip_saradc: Add support for RK3588
-Content-Language: en-US
-To:     Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
-        lars@metafoo.de, heiko@sntech.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sebastian.reichel@collabora.com
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, gustavo.padovan@collabora.com,
-        serge.broslavsky@collabora.com, Simon Xue <xxm@rock-chips.com>
-References: <20230525212712.255406-1-shreeya.patel@collabora.com>
- <20230525212712.255406-3-shreeya.patel@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230525212712.255406-3-shreeya.patel@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/05/23 23:27, Shreeya Patel ha scritto:
-> From: Simon Xue <xxm@rock-chips.com>
+Hi,
+
+On Fri, 26 May 2023 09:27:16 +0200, Neil Armstrong wrote:
+> This reverts commit cfaf76d349837f695c8aa6d7077847fec4231fe5 which was applied
+> without review due to a bad tool manipulation.
 > 
-> Add new start and read functions to support rk3588 device.
-> Also, add a device compatible string for the same.
 > 
-> Signed-off-by: Simon Xue <xxm@rock-chips.com>
-> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> ---
-> 
-> Changes in v2
->    - Add a from address.
->    - Create separate patches for adding new device support and changes to
->      the old device code.
->    - Make use of FIELD_PREP.
-> 
->   drivers/iio/adc/rockchip_saradc.c | 69 +++++++++++++++++++++++++++++++
->   1 file changed, 69 insertions(+)
-> 
-> diff --git a/drivers/iio/adc/rockchip_saradc.c b/drivers/iio/adc/rockchip_saradc.c
-> index 21f9d92a6af4..31637440be83 100644
-> --- a/drivers/iio/adc/rockchip_saradc.c
-> +++ b/drivers/iio/adc/rockchip_saradc.c
 
-You're missing a header...
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
 
-#include <linux/bitfield.h>
+[1/1] Revert "dt-bindings: bridge: samsung-dsim: Make some flags optional"
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=35070674f488eefaeb753a13df11199d10328ff8
 
-after adding that, you can get my
+-- 
+Neil
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-
-Cheers,
-Angelo
