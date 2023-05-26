@@ -2,178 +2,437 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10A77128D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 16:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFBB7128D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 16:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244006AbjEZOoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 10:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
+        id S237307AbjEZOoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 10:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243917AbjEZOoK (ORCPT
+        with ESMTP id S244017AbjEZOoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 10:44:10 -0400
-Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021025.outbound.protection.outlook.com [52.101.57.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF412E56;
-        Fri, 26 May 2023 07:43:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a8aZrDXpQbq7+n9bFD1kIL95TLulhYil5MTBuTXt+BGyttM1P+mGQjUTYomat5yAnpkbOmSVWxtwXhjm+N5dzxMXDxyAArPRZ3N0FM77lOE1oakWfqV61CQtksi7nUkR37jnJYLD+ar2b4odVg7lXIiWuZtkxroKfv+yNzeyDz+gx0RQ4C5+a/p5DvuCiLBTveUa+O6ztpKCkS2GYGiN6bSdjN4g7+FcRC8uDQpcTj/mUf09AiYCz/0LYDwyiLXVXQr1tkRX0FAC/ycrUVYDbSAlUL8xXN9t+UfgtfVXwAz2otibdKzVDYNZneJkdkGEr0PTuuHg3kDPH4fiqej0JA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=45KekFoOlXD24B0v/r1zeNiCLsfAYgjuNpJ/3apYmc0=;
- b=Ts7SNDvkE13Jy2VKBCnWE/wNS86o2U+/XNFGvseoc58iJx+hr23n46fC6wyZnVDucJUe3N3O+YBHP929I2QnIVZAWBmK9mv4kIwKogSF91O28CaAWjgROG5D8kUMxDVTYtEb+WzAwCJqaYsDiV112hv28hMxXL3o09N0MbFTWnQBkJy/FDSZXtg/k2bcH+5VcJPwbEoPax2FRtNA86tq7hJUiT+bAXpUR+33knQgHil13dAynIwXMmXjhHUSz0Wtcn7mYEdoxMFv706bFZdoQ8qAOqXiFA6ihfSt5hOK9BoEdTpLBpC82vlEO1G9JLs3VCaKBi92DLUh7LsKtQF5Fw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=45KekFoOlXD24B0v/r1zeNiCLsfAYgjuNpJ/3apYmc0=;
- b=GBoc9A7YLOrP2M+WBeWIp1u+S39yv5uwJXE8J2OAW9kRgT4Y+aLbWQlffl8xsVavof3+Gu4rH65KExMpCh9+SRjwo/aos5zgla5wtdLd0dDH1ij/NWIXIeNbryw/VHLM1nqGcU+00mYNN9VgV4J9dSv6K2Y9+l9Kcm6aoSibPgc=
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com (2603:10b6:510:1d0::10)
- by LV2PR21MB3254.namprd21.prod.outlook.com (2603:10b6:408:170::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.13; Fri, 26 May
- 2023 14:42:07 +0000
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::5600:ea5a:6768:1900]) by PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::5600:ea5a:6768:1900%5]) with mapi id 15.20.6455.012; Fri, 26 May 2023
- 14:42:07 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Paul Rosswurm <paulros@microsoft.com>,
-        "olaf@aepfle.de" <olaf@aepfle.de>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        Long Li <longli@microsoft.com>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "shradhagupta@linux.microsoft.com" <shradhagupta@linux.microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH V2,net] net: mana: Fix perf regression: remove rx_cqes,
- tx_cqes counters
-Thread-Topic: [PATCH V2,net] net: mana: Fix perf regression: remove rx_cqes,
- tx_cqes counters
-Thread-Index: AQHZjxe4aWBF7RgXTEqOWnaG2HOEma9r5WKAgAC54BA=
-Date:   Fri, 26 May 2023 14:42:07 +0000
-Message-ID: <PH7PR21MB311639268988CD72DA545774CA47A@PH7PR21MB3116.namprd21.prod.outlook.com>
-References: <1685025990-14598-1-git-send-email-haiyangz@microsoft.com>
- <20230525202557.5a5f020b@kernel.org>
-In-Reply-To: <20230525202557.5a5f020b@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=eb1de31e-f469-481a-b60f-84a8b0201767;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-26T14:31:13Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR21MB3116:EE_|LV2PR21MB3254:EE_
-x-ms-office365-filtering-correlation-id: 5f69e765-ddd6-4f3d-d034-08db5df7614c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NqsHNnfFYiJDuBf4gqJIhGcXQ9pyp0eYgMiGy/uvXnY4/ktd5NTLBwZOFucIhbH3XTjqvNei/NkoycecQHlBF9vREomwPPTtZgpfXrsWb0eqRtPedbN3S/G9OkEWhI9Q5Uuhi/LToS4w/9k/L1SyjeW+SsFdXsgMJNuf+D0mp7s/nBWV3a3FFioTkNRhdrnoHpzLzcl7TaijV3KXpx1B8FhkuQTCDhyLkJcNipE7/TpeVieVrgsw+DCKCcbOdl+ehkvWI1vP0T3mdT0ruJo6cxhcvMCL3fx8Ee8m6OuZCsU+P3nrPQ8qc5EHA5amWZgjKXXT3s+ieEcAEYLqbZO0xivQUUEAjEzgQHciHzSx0DvLC771FQoMQ6Z8QVr4p8B29lv7BKNL4YbnxjBHHi2SYSEr3o0t6FQTY2WUmS6J6giW9DvnUGNJNhSf/mxZwvduN4Feg5boeqWCkbTZR6Ts2aMAXGpBi/IW8A0KGIaUyafwSe363CAb3IFcPjUZwaOXhgTGHSVzDZ5LcL/nS9VUBVaYVYenZXFZoxOZxxvB7bG0SyEqeT+zS8rmUc2yyyHsNIHPWzhD7uWaLk5aWZ2vKqyZNr8P/WvzVfy4eZQ/ygDioNt//qrMcouSHriYiuBkrgS5T05IjwOBmxzkOsSF8/fWqS8rcpKdjSc3oJ3Jzuo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3116.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(346002)(396003)(136003)(39860400002)(451199021)(71200400001)(83380400001)(7696005)(86362001)(10290500003)(2906002)(53546011)(478600001)(122000001)(54906003)(38070700005)(26005)(9686003)(6506007)(186003)(8990500004)(66556008)(66946007)(8676002)(55016003)(52536014)(66446008)(8936002)(76116006)(33656002)(786003)(316002)(38100700002)(7416002)(82960400001)(82950400001)(41300700001)(64756008)(66476007)(6916009)(4326008)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?D7davT2xMzSpz8pPu5GdtKz0oVMwMAg/sF7ppT5OktOUjY/2ERSuPkmynqVV?=
- =?us-ascii?Q?ddVLALrlW9nxUZ/hUESIQWBk+OkZYNwoiTcE2/ic7Sg3wNbXfMgA+YODscfl?=
- =?us-ascii?Q?NQiN+ZqgT05T4SYOI1l96SPcR3d0+7ewV6+HN9c9vpzPtKepTnxGBRm+p65a?=
- =?us-ascii?Q?8e8kDOn7zBBTL1BhS57VitHPMLvWxleTxNaIq/IGnj7+T3vJ4ww1zh917PcX?=
- =?us-ascii?Q?tb9vUcx3m6wgbsIWIQ9gBZQObM6tTjKqoOaZRfVxGxo2R5vChhEHE67iFQCI?=
- =?us-ascii?Q?XyLDubxTkQP9UuqXhiUfHYPYyV6faqEtGti8qyfwV/J/yvsxlvus2YtIg/T2?=
- =?us-ascii?Q?l6qAcoTD4nJbVdohyMZl2FD1IvXcvBILkbaboeK7BEhh8/cCsnxyjQ88cNl3?=
- =?us-ascii?Q?oHRNcbMfxtTwqBJwQHO3tk1pY65TfIHRcbltFJ7PU9LoYYzpv74mxluBKVeP?=
- =?us-ascii?Q?0zppJPYSMeqzU01qsTtKTRtvA9mLCq8Y/4oGosDoKmZA3RBvHhdvbBW6HKPV?=
- =?us-ascii?Q?3hFGhK+Y5uBTWGJhOUJDduRoiimsXhbhiCLT5d1S8w4kQaquBb9gm1BlMcbp?=
- =?us-ascii?Q?Rh09JP6riqZqQKIgLIJ5n4nBbm3pYSBHP/yAHWi3OGGDbo2gUPRPtp3KoUEv?=
- =?us-ascii?Q?MBP60o1fsfNbNKI5I7hdzUeAt43G6N4YtndfAo4UB5uHVGqpfyLHDOFPxeC0?=
- =?us-ascii?Q?+4GX5qwAp4TYukpuQDAIKF5IQZZKwdI0JeiHIGHNxG2thLWMvtuHOEEKvsiU?=
- =?us-ascii?Q?EDqNuTk0dmRN3QIlByc6hsQb8Lzsc36RLVLAAuWbwMwyooWuTqJPKrr12Wvp?=
- =?us-ascii?Q?zqw7vbbPpCjfHdQ9gqUmU54MRhfN5JQiWaagQUQ5qmMCi+nf3OsKgshBvxiP?=
- =?us-ascii?Q?UhVuKasY/JzN4RlNMushqOtP8QQ1E4S0hM6S/dA1nwJoXdpjqjfzZqpA9YNI?=
- =?us-ascii?Q?TZ37zojqZmsicYj5pW2ZsyRNYXCrT/ac1yA/ZhsTycTZzvD+bMALowynwLQm?=
- =?us-ascii?Q?yFtZbMgBaW852/gj8hrKLt2XRi6D44RYxfAUHOrBk/MajepBJOb9RZcot5x/?=
- =?us-ascii?Q?sxwCo9bhQR11zdROQNmp49MOjsagFrlFOcN3lRHqN9RbU/yKDED61th/k6qK?=
- =?us-ascii?Q?XucsYhoMl8RGIyg4Wc3p4xbDUjnRS4UuTD+8YgDzCdLoR9OX7rCKS1saozNK?=
- =?us-ascii?Q?03E0v1BZvXzhLm0rsUFbgosiktE3QchFjSkbYqHvsxH9/fiw1Edv9/3T6UsS?=
- =?us-ascii?Q?zC5joub00B1UHAiHMieoTGHjvHO7JvH6W8cqs0a2y/PaZa+27vjUOsF9zZhM?=
- =?us-ascii?Q?2nuXe3fExutA41G7z7HcwPNAxPGlAVOcCaMu2obE4A4pPJW2FI734+SA0iDb?=
- =?us-ascii?Q?8eyfaZ2uZm/RRHeLz0nj2YOtAYQqPZkh7JCNaZQogN1uiA1stULAlXc1DJ9F?=
- =?us-ascii?Q?V8i+wwk0pDsPCguvAXnjWwkmlCZ1UseBeAoCfOaGLdJpQCgU3mTHKr6tgUvY?=
- =?us-ascii?Q?/K2G8oYIbdfpSgyZ3UXjqNID1zBwCvpKCrUGAPEuG0JWUhMni5VTEMSHOrbv?=
- =?us-ascii?Q?Bk1UX7U1Slv9u6XTL7y6xFOaYxm5zD0gL+tlDITE?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 26 May 2023 10:44:13 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB9E1BC;
+        Fri, 26 May 2023 07:43:34 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96fbe7fbdd4so143744166b.3;
+        Fri, 26 May 2023 07:43:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685112163; x=1687704163;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EGV0mdVcz1xVYs2otFvs3Di4K9A5VIf5zYdZmBKvdos=;
+        b=bYSfE1PLfEPBcfuqPQEB8qvST3elGNcOqi7awxjDscxaX6NLNSd+GrP5qXPYcvJZqR
+         xSpJ16uYRxZpNBt5zogQtIfny0SMmIZNLaAzOH2N2Pjn2bNxx/YZHWGeG+jF5W2chIeQ
+         QUlj9nJ8LiBzC1prf6sC7yaFJbHCpoO23r1JTmTIG0qtdMM5KvbZB3bknMQjSNdgKLbO
+         /fsMppRh3rZdGESB04crchIoQg4F8zBhHLrgHZE0wGJYPMm7cQ3eKL55B1WUKZn7ADGL
+         4Gy+Z8yyBomXGh0oReYgcf1yul+Y9CC81Mln1m/xsH6VNdjZGbFzSRTyUuM5J53mOc+x
+         nchQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685112163; x=1687704163;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EGV0mdVcz1xVYs2otFvs3Di4K9A5VIf5zYdZmBKvdos=;
+        b=fkIGIX7W7dPi1zrmkPPh7Xkxcl++cLJAYIEV22LPoTbMKKGWZ5k5b3GR/z+2yqTijd
+         lUXT4btU/a/jeSMY1k932BHV/HtvR63ydvq2YbL+ahxh96WH+UsGsT/BGMtz9nJbCVT0
+         my2we02wyhMuoPge8LX2kHETJAgx3GJUQuVgZu5FbMiXfLVm4pKEpTfUlB7Q/vRW5b6k
+         xhv7gndXNxy1HbJAtRL+5Y7pAzSIH38t5fSoiBZaN2SB4sAIJewX3XAUsMZaPGTiJFmX
+         Cr6/y/mutvtUyjo8JmccPZqzCA31s595j0sDOXIvqUnVWPp8Ly/ZeS4zhlfoJl10kjHA
+         JoRA==
+X-Gm-Message-State: AC+VfDx8uedtfAe6kLXxinngE0sgtlSNYp29Yw/l3XL22sClVe/CzLWj
+        9byoJs5+VkaqQQN1N32IM28=
+X-Google-Smtp-Source: ACHHUZ6U7SA9sdcTTp061gUoB0523aPH4JlH+7niGJanBHSJ3oQ3iWbHy6sPz+ZcY3tu1ZWGrLPSog==
+X-Received: by 2002:a17:907:7da7:b0:94e:e6b9:fef2 with SMTP id oz39-20020a1709077da700b0094ee6b9fef2mr2283358ejc.67.1685112162424;
+        Fri, 26 May 2023 07:42:42 -0700 (PDT)
+Received: from carbian.corp.quobyte.com ([2a02:8109:aa3f:ead8::d8a0])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170906c30700b0094f410225c7sm2184870ejz.169.2023.05.26.07.42.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 07:42:41 -0700 (PDT)
+From:   Mehdi Djait <mehdi.djait.k@gmail.com>
+To:     jic23@kernel.org, mazziesaccount@gmail.com
+Cc:     krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
+        lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Mehdi Djait <mehdi.djait.k@gmail.com>
+Subject: [PATCH v4 7/7] iio: accel: Add support for Kionix/ROHM KX132-1211 accelerometer
+Date:   Fri, 26 May 2023 16:42:33 +0200
+Message-Id: <d776c1dd5beef6ef812a4f7e4958eb6cb0f5e58e.1685111274.git.mehdi.djait.k@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <cover.1685109507.git.mehdi.djait.k@gmail.com>
+References: <cover.1685109507.git.mehdi.djait.k@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3116.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f69e765-ddd6-4f3d-d034-08db5df7614c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 May 2023 14:42:07.3239
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: I/JN0yH4s34Blz8ITx/FigluFrwbNOFW54G6FJUSqGzurnom+Hj90ap2YidmA+/lc8b0IHX1KL3lSlCM38z+KA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR21MB3254
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Kionix KX132-1211 is a tri-axis 16-bit accelerometer that can support
+ranges from ±2G to ±16G, digital output through I²C/SPI.
+Add support for basic accelerometer features such as reading acceleration
+via IIO using raw reads, triggered buffer (data-ready), or the WMI IRQ.
 
+Datasheet: https://kionixfs.azureedge.net/en/document/KX132-1211-Technical-Reference-Manual-Rev-5.0.pdf
+Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+---
+v4: 
+- added KX132_REG_CNTL5 to the volatile ranges
+- added the kionix reserved regs to the read_only ranges
+- removed KX132_REG_MAN_WAKEUP from the write_only ranges
 
-> -----Original Message-----
-> From: Jakub Kicinski <kuba@kernel.org>
-> Sent: Thursday, May 25, 2023 11:26 PM
-> To: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: linux-hyperv@vger.kernel.org; netdev@vger.kernel.org; Dexuan Cui
-> <decui@microsoft.com>; KY Srinivasan <kys@microsoft.com>; Paul Rosswurm
-> <paulros@microsoft.com>; olaf@aepfle.de; vkuznets@redhat.com;
-> davem@davemloft.net; wei.liu@kernel.org; edumazet@google.com;
-> pabeni@redhat.com; leon@kernel.org; Long Li <longli@microsoft.com>;
-> ssengar@linux.microsoft.com; linux-rdma@vger.kernel.org;
-> daniel@iogearbox.net; john.fastabend@gmail.com; bpf@vger.kernel.org;
-> ast@kernel.org; Ajay Sharma <sharmaajay@microsoft.com>;
-> hawk@kernel.org; tglx@linutronix.de; shradhagupta@linux.microsoft.com;
-> linux-kernel@vger.kernel.org; stable@vger.kernel.org
-> Subject: Re: [PATCH V2,net] net: mana: Fix perf regression: remove rx_cqe=
-s,
-> tx_cqes counters
->=20
-> On Thu, 25 May 2023 07:46:30 -0700 Haiyang Zhang wrote:
-> > lot caching and memory overhead, hence perf regression.
->=20
-> Horatiu's ask for more details was perfectly reasonable.
-> Provide more details to give the distros and users an
-> idea of the order of magnitude of the problem. Example
-> workload and relative perf hit, anything.
+v3:
+- fixed the warning of the kernel test robot in kx132_get_fifo_bytes
+	(invalid assignment: &=, left side has type restricted __le16
+	right side has type unsigned short)
 
-For example, a workload is iperf with 128 threads, and with RPS enabled.
-We saw perf regression of 25% with the previous patch adding the counters.
-And this patch eliminates the regression.=20
+v2:
+- mentioned the kx132-1211 in the Kconfig
+- added a kx132-specific get_fifo_bytes function
+- changed the device name from "kx132" to "kx132-1211
 
-Thanks,
-- Haiyang
+ drivers/iio/accel/Kconfig             |   8 +-
+ drivers/iio/accel/kionix-kx022a-i2c.c |   2 +
+ drivers/iio/accel/kionix-kx022a-spi.c |   2 +
+ drivers/iio/accel/kionix-kx022a.c     | 162 ++++++++++++++++++++++++++
+ drivers/iio/accel/kionix-kx022a.h     |  52 +++++++++
+ 5 files changed, 222 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/iio/accel/Kconfig b/drivers/iio/accel/Kconfig
+index b6b45d359f28..d8cc6e6f2bb9 100644
+--- a/drivers/iio/accel/Kconfig
++++ b/drivers/iio/accel/Kconfig
+@@ -418,8 +418,8 @@ config IIO_KX022A_SPI
+ 	select IIO_KX022A
+ 	select REGMAP_SPI
+ 	help
+-	  Enable support for the Kionix KX022A digital tri-axis
+-	  accelerometer connected to I2C interface.
++	  Enable support for the Kionix KX022A, KX132-1211 digital tri-axis
++	  accelerometers connected to SPI interface.
+ 
+ config IIO_KX022A_I2C
+ 	tristate "Kionix KX022A tri-axis digital accelerometer I2C interface"
+@@ -427,8 +427,8 @@ config IIO_KX022A_I2C
+ 	select IIO_KX022A
+ 	select REGMAP_I2C
+ 	help
+-	  Enable support for the Kionix KX022A digital tri-axis
+-	  accelerometer connected to I2C interface.
++	  Enable support for the Kionix KX022A, KX132-1211 digital tri-axis
++	  accelerometers connected to I2C interface.
+ 
+ config KXSD9
+ 	tristate "Kionix KXSD9 Accelerometer Driver"
+diff --git a/drivers/iio/accel/kionix-kx022a-i2c.c b/drivers/iio/accel/kionix-kx022a-i2c.c
+index ce299d0446f7..4ea28d2482ec 100644
+--- a/drivers/iio/accel/kionix-kx022a-i2c.c
++++ b/drivers/iio/accel/kionix-kx022a-i2c.c
+@@ -39,12 +39,14 @@ static int kx022a_i2c_probe(struct i2c_client *i2c)
+ 
+ static const struct i2c_device_id kx022a_i2c_id[] = {
+ 	{ .name = "kx022a", .driver_data = (kernel_ulong_t)&kx022a_chip_info },
++	{ .name = "kx132-1211", .driver_data = (kernel_ulong_t)&kx132_chip_info },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(i2c, kx022a_i2c_id);
+ 
+ static const struct of_device_id kx022a_of_match[] = {
+ 	{ .compatible = "kionix,kx022a", .data = &kx022a_chip_info },
++	{ .compatible = "kionix,kx132-1211", .data = &kx132_chip_info },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, kx022a_of_match);
+diff --git a/drivers/iio/accel/kionix-kx022a-spi.c b/drivers/iio/accel/kionix-kx022a-spi.c
+index 1e4b9d4b4b8d..3fb673ffcdeb 100644
+--- a/drivers/iio/accel/kionix-kx022a-spi.c
++++ b/drivers/iio/accel/kionix-kx022a-spi.c
+@@ -35,12 +35,14 @@ static int kx022a_spi_probe(struct spi_device *spi)
+ 
+ static const struct spi_device_id kx022a_id[] = {
+ 	{ .name = "kx022a", .driver_data = (kernel_ulong_t)&kx022a_chip_info },
++	{ .name = "kx132-1211", .driver_data = (kernel_ulong_t)&kx132_chip_info },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(spi, kx022a_id);
+ 
+ static const struct of_device_id kx022a_of_match[] = {
+ 	{ .compatible = "kionix,kx022a", .data = &kx022a_chip_info },
++	{ .compatible = "kionix,kx132-1211", .data = &kx132_chip_info },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, kx022a_of_match);
+diff --git a/drivers/iio/accel/kionix-kx022a.c b/drivers/iio/accel/kionix-kx022a.c
+index 20f5965e878c..327412a8a395 100644
+--- a/drivers/iio/accel/kionix-kx022a.c
++++ b/drivers/iio/accel/kionix-kx022a.c
+@@ -150,6 +150,117 @@ static const struct regmap_config kx022a_regmap_config = {
+ 	.cache_type = REGCACHE_RBTREE,
+ };
+ 
++/* Regmap configs kx132 */
++static const struct regmap_range kx132_volatile_ranges[] = {
++	{
++		.range_min = KX132_REG_XADP_L,
++		.range_max = KX132_REG_COTR,
++	}, {
++		.range_min = KX132_REG_TSCP,
++		.range_max = KX132_REG_INT_REL,
++	}, {
++		/* The reset bit will be cleared by sensor */
++		.range_min = KX132_REG_CNTL2,
++		.range_max = KX132_REG_CNTL2,
++	}, {
++		.range_min = KX132_REG_CNTL5,
++		.range_max = KX132_REG_CNTL5,
++	}, {
++		.range_min = KX132_REG_BUF_STATUS_1,
++		.range_max = KX132_REG_BUF_READ,
++	},
++};
++
++static const struct regmap_access_table kx132_volatile_regs = {
++	.yes_ranges = &kx132_volatile_ranges[0],
++	.n_yes_ranges = ARRAY_SIZE(kx132_volatile_ranges),
++};
++
++static const struct regmap_range kx132_precious_ranges[] = {
++	{
++		.range_min = KX132_REG_INT_REL,
++		.range_max = KX132_REG_INT_REL,
++	},
++};
++
++static const struct regmap_access_table kx132_precious_regs = {
++	.yes_ranges = &kx132_precious_ranges[0],
++	.n_yes_ranges = ARRAY_SIZE(kx132_precious_ranges),
++};
++
++static const struct regmap_range kx132_read_only_ranges[] = {
++	{
++		.range_min = KX132_REG_XADP_L,
++		.range_max = KX132_REG_INT_REL,
++	}, {
++		.range_min = KX132_REG_BUF_STATUS_1,
++		.range_max = KX132_REG_BUF_STATUS_2,
++	}, {
++		.range_min = KX132_REG_BUF_READ,
++		.range_max = KX132_REG_BUF_READ,
++	}, {
++		/* Kionix reserved registers: should not be written */
++		.range_min = 0x28,
++		.range_max = 0x28,
++	}, {
++		.range_min = 0x35,
++		.range_max = 0x36,
++	}, {
++		.range_min = 0x3c,
++		.range_max = 0x48,
++	}, {
++		.range_min = 0x4e,
++		.range_max = 0x5c,
++	}, {
++		.range_min = 0x77,
++		.range_max = 0x7f,
++	},
++};
++
++static const struct regmap_access_table kx132_ro_regs = {
++	.no_ranges = &kx132_read_only_ranges[0],
++	.n_no_ranges = ARRAY_SIZE(kx132_read_only_ranges),
++};
++
++static const struct regmap_range kx132_write_only_ranges[] = {
++	{
++		.range_min = KX132_REG_SELF_TEST,
++		.range_max = KX132_REG_SELF_TEST,
++	}, {
++		.range_min = KX132_REG_BUF_CLEAR,
++		.range_max = KX132_REG_BUF_CLEAR,
++	},
++};
++
++static const struct regmap_access_table kx132_wo_regs = {
++	.no_ranges = &kx132_write_only_ranges[0],
++	.n_no_ranges = ARRAY_SIZE(kx132_write_only_ranges),
++};
++
++static const struct regmap_range kx132_noinc_read_ranges[] = {
++	{
++		.range_min = KX132_REG_BUF_READ,
++		.range_max = KX132_REG_BUF_READ,
++	},
++};
++
++static const struct regmap_access_table kx132_nir_regs = {
++	.yes_ranges = &kx132_noinc_read_ranges[0],
++	.n_yes_ranges = ARRAY_SIZE(kx132_noinc_read_ranges),
++};
++
++static const struct regmap_config kx132_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.volatile_table = &kx132_volatile_regs,
++	.rd_table = &kx132_wo_regs,
++	.wr_table = &kx132_ro_regs,
++	.rd_noinc_table = &kx132_nir_regs,
++	.precious_table = &kx132_precious_regs,
++	.max_register = KX132_MAX_REGISTER,
++	.cache_type = REGCACHE_RBTREE,
++};
++
+ struct kx022a_data {
+ 	const struct kx022a_chip_info *chip_info;
+ 	struct regmap *regmap;
+@@ -239,6 +350,13 @@ static const struct iio_chan_spec kx022a_channels[] = {
+ 	IIO_CHAN_SOFT_TIMESTAMP(3),
+ };
+ 
++static const struct iio_chan_spec kx132_channels[] = {
++	KX022A_ACCEL_CHAN(X, KX132_REG_XOUT_L, 0),
++	KX022A_ACCEL_CHAN(Y, KX132_REG_YOUT_L, 1),
++	KX022A_ACCEL_CHAN(Z, KX132_REG_ZOUT_L, 2),
++	IIO_CHAN_SOFT_TIMESTAMP(3),
++};
++
+ /*
+  * The sensor HW can support ODR up to 1600 Hz, which is beyond what most of the
+  * Linux CPUs can handle without dropping samples. Also, the low power mode is
+@@ -613,6 +731,24 @@ static int kx022a_get_fifo_bytes(struct kx022a_data *data)
+ 	return fifo_bytes;
+ }
+ 
++static int kx132_get_fifo_bytes(struct kx022a_data *data)
++{
++	__le16 buf_status;
++	int ret, fifo_bytes;
++
++	ret = regmap_bulk_read(data->regmap, data->chip_info->buf_status1,
++			       &buf_status, sizeof(buf_status));
++	if (ret) {
++		dev_err(data->dev, "Error reading buffer status\n");
++		return ret;
++	}
++
++	fifo_bytes = le16_to_cpu(buf_status);
++	fifo_bytes &= data->chip_info->buf_smp_lvl_mask;
++
++	return fifo_bytes;
++}
++
+ static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
+ 			       bool irq)
+ {
+@@ -1036,6 +1172,32 @@ const struct kx022a_chip_info kx022a_chip_info = {
+ };
+ EXPORT_SYMBOL_NS_GPL(kx022a_chip_info, IIO_KX022A);
+ 
++const struct kx022a_chip_info kx132_chip_info = {
++	.name		  = "kx132-1211",
++	.regmap_config	  = &kx132_regmap_config,
++	.channels	  = kx132_channels,
++	.num_channels	  = ARRAY_SIZE(kx132_channels),
++	.fifo_length	  = KX132_FIFO_LENGTH,
++	.who		  = KX132_REG_WHO,
++	.id		  = KX132_ID,
++	.cntl		  = KX132_REG_CNTL,
++	.cntl2		  = KX132_REG_CNTL2,
++	.odcntl		  = KX132_REG_ODCNTL,
++	.buf_cntl1	  = KX132_REG_BUF_CNTL1,
++	.buf_cntl2	  = KX132_REG_BUF_CNTL2,
++	.buf_clear	  = KX132_REG_BUF_CLEAR,
++	.buf_status1	  = KX132_REG_BUF_STATUS_1,
++	.buf_smp_lvl_mask = KX132_MASK_BUF_SMP_LVL,
++	.buf_read	  = KX132_REG_BUF_READ,
++	.inc1		  = KX132_REG_INC1,
++	.inc4		  = KX132_REG_INC4,
++	.inc5		  = KX132_REG_INC5,
++	.inc6		  = KX132_REG_INC6,
++	.xout_l		  = KX132_REG_XOUT_L,
++	.get_fifo_bytes	  = kx132_get_fifo_bytes,
++};
++EXPORT_SYMBOL_NS_GPL(kx132_chip_info, IIO_KX022A);
++
+ int kx022a_probe_internal(struct device *dev, const struct kx022a_chip_info *chip_info)
+ {
+ 	static const char * const regulator_names[] = {"io-vdd", "vdd"};
+diff --git a/drivers/iio/accel/kionix-kx022a.h b/drivers/iio/accel/kionix-kx022a.h
+index 7792907534b5..351867a95f8c 100644
+--- a/drivers/iio/accel/kionix-kx022a.h
++++ b/drivers/iio/accel/kionix-kx022a.h
+@@ -74,6 +74,57 @@
+ #define KX022A_REG_SELF_TEST	0x60
+ #define KX022A_MAX_REGISTER	0x60
+ 
++#define KX132_REG_WHO		0x13
++#define KX132_ID		0x3d
++
++#define KX132_FIFO_LENGTH	86
++
++#define KX132_REG_CNTL		0x1b
++#define KX132_REG_CNTL2		0x1c
++#define KX132_REG_CNTL5		0x1f
++#define KX132_MASK_RES		BIT(6)
++#define KX132_GSEL_2		0x0
++#define KX132_GSEL_4		BIT(3)
++#define KX132_GSEL_8		BIT(4)
++#define KX132_GSEL_16		GENMASK(4, 3)
++
++#define KX132_REG_INS2		0x17
++#define KX132_MASK_INS2_WMI	BIT(5)
++
++#define KX132_REG_XADP_L	0x02
++#define KX132_REG_XOUT_L	0x08
++#define KX132_REG_YOUT_L	0x0a
++#define KX132_REG_ZOUT_L	0x0c
++#define KX132_REG_COTR		0x12
++#define KX132_REG_TSCP		0x14
++#define KX132_REG_INT_REL	0x1a
++
++#define KX132_REG_ODCNTL	0x21
++
++#define KX132_REG_BTS_WUF_TH	0x4a
++
++#define KX132_REG_BUF_CNTL1	0x5e
++#define KX132_REG_BUF_CNTL2	0x5f
++#define KX132_REG_BUF_STATUS_1	0x60
++#define KX132_REG_BUF_STATUS_2	0x61
++#define KX132_MASK_BUF_SMP_LVL	GENMASK(9, 0)
++#define KX132_REG_BUF_CLEAR	0x62
++#define KX132_REG_BUF_READ	0x63
++#define KX132_ODR_SHIFT		3
++#define KX132_FIFO_MAX_WMI_TH	86
++
++#define KX132_REG_INC1		0x22
++#define KX132_REG_INC5		0x26
++#define KX132_REG_INC6		0x27
++#define KX132_IPOL_LOW		0
++#define KX132_IPOL_HIGH		KX022A_MASK_IPOL
++#define KX132_ITYP_PULSE	KX022A_MASK_ITYP
++
++#define KX132_REG_INC4		0x25
++
++#define KX132_REG_SELF_TEST	0x5d
++#define KX132_MAX_REGISTER	0x76
++
+ struct device;
+ 
+ struct kx022a_data;
+@@ -131,5 +182,6 @@ struct kx022a_chip_info {
+ int kx022a_probe_internal(struct device *dev, const struct kx022a_chip_info *chip_info);
+ 
+ extern const struct kx022a_chip_info kx022a_chip_info;
++extern const struct kx022a_chip_info kx132_chip_info;
+ 
+ #endif
+-- 
+2.30.2
+
