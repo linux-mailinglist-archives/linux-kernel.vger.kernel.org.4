@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD3F7127D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748347127DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243773AbjEZN5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44528 "EHLO
+        id S243789AbjEZN5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243481AbjEZN5i (ORCPT
+        with ESMTP id S243783AbjEZN5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:57:38 -0400
+        Fri, 26 May 2023 09:57:41 -0400
 Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07249DF
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:57:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86ECF1A8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:57:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1685109456;
-  x=1716645456;
-  h=from:subject:date:message-id:mime-version:
-   content-transfer-encoding:to:cc;
-  bh=+pRMtqz9M0MkiP7GC7T1ugAxvsxIHVc59tban5NM8k8=;
-  b=AFDqNMM8s6H5YZ1Yh0d/AZfIAp64SbdgH/G5JLYs7xQFSt4rlsBkTe3u
-   MgZB/U9/1uIbdPOM2vJmA5tLo4IQo6Ta9pYA+VATJeyZNHYpVgX6iaOax
-   +dpEBtc1Vy7N8WOM9yVhEYqAoWjuOIgVC4P7eNP9g7Z/5p4B5NjlDdOFW
-   0OVsT8KTCAus9HL80cpLh0BWaPIKH4quIph+q69ZcdreBj5zoPCA1HyLJ
-   +ClxrTwQzbvORgtcfq9dsSE2B7/bFdRo3CuV7kXheaURFkmHo0jV6B5Lk
-   nYJwqmrkpv7khLgI4k8J4XoE7Tp2jEZ/TyK3RkHsU8ycJxeomp3N813LL
-   Q==;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1685109460;
+  x=1716645460;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=TLZNcw1d9SH4wI8Zf0nXKgmi5A3y+ZK1ObXJei0thLo=;
+  b=KIeWF3uClVvlsfAMx2vhn4bzptqW0/pgvvIOvLxDrV8IKL46g9myRjha
+   xbKOdYYsgmWvQ5RZLoeyyIddl52ebGi5CthFEPoO70hhKEbEtD5Zoq33S
+   yV2y3zkJ9I/oRCDVnzlL2gurATkhVpKsKQDfwPVqdUMr7unVv2bq/RL0M
+   5O3c3IccIzS47reo6mTG6fpOWF/8FGCPM37hxibB8zt3eoTKplaDQmIru
+   AOnhKbsCByrhbYkUZJc33FSJLA9kyXqU5/r66EiMIDTjwhfnGyJtzSsJg
+   qa6M7k0SbgyaG7z9iwthtPlmC1rvWec66jbYWgl1vPgsOLbJfvbVV6pPW
+   w==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-Subject: [PATCH mm-nonmm-unstable v2 0/2] squashfs: fixups for caching
-Date:   Fri, 26 May 2023 15:57:29 +0200
-Message-ID: <20230526-squashfs-cache-fixup-v2-0-6fb7723c3647@axis.com>
+Date:   Fri, 26 May 2023 15:57:30 +0200
+Subject: [PATCH mm-nonmm-unstable v2 1/2] squashfs: fix page update race
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMm6cGQC/32OwQ6CMBBEf4Xs2TVQUKIn/8Nw2JbFNpEWu0BQw
- r9b+QAvk0xmXmZWEI6OBa7ZCpFnJy74ZNQhA2PJPxhdmzyoXJX5SZ1RXhOJ7QQNGcvYuWUasLh
- UVVm0XCnWkFBNwqgjeWN/cBeCps8vGCInYt+7Q9+jDz7p5GUk/WRoUsU6GUN874/mYi/+H58Lz
- LE9VVR3pEqu9Y0WJ0cTemi2bfsCst+lLeMAAAA=
+Message-ID: <20230526-squashfs-cache-fixup-v2-1-6fb7723c3647@axis.com>
+References: <20230526-squashfs-cache-fixup-v2-0-6fb7723c3647@axis.com>
+In-Reply-To: <20230526-squashfs-cache-fixup-v2-0-6fb7723c3647@axis.com>
 To:     Phillip Lougher <phillip@squashfs.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>
 CC:     <hch@lst.de>, <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
@@ -54,28 +52,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These are a couple of fixups for
-squashfs-cache-partial-compressed-blocks.patch which is currently in
-mm-nonmm-unstable.
+We only put the page into the cache after we've read it, so the
+PageUptodate() check should not be necessary.  In fact, it's actively
+harmful since the check could fail (since we used find_get_page() and
+not find_lock_page()) and we could end up submitting a page for I/O
+after it has been read and while it's actively being used, which could
+lead to corruption depending on what the block driver does with it.
 
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
-Changes in v2:
-- Add Christoph's Reviewed-by in 1/2
-- Restrict line lengths to 80 columns in 2/2
-- Link to v1: https://lore.kernel.org/r/20230526-squashfs-cache-fixup-v1-0-d54a7fa23e7b@axis.com
+ fs/squashfs/block.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
----
-Vincent Whitchurch (2):
-      squashfs: fix page update race
-      squashfs: fix page indices
+diff --git a/fs/squashfs/block.c b/fs/squashfs/block.c
+index 6285f5afb6c6..f2412e5fc84b 100644
+--- a/fs/squashfs/block.c
++++ b/fs/squashfs/block.c
+@@ -92,7 +92,7 @@ static int squashfs_bio_read_cached(struct bio *fullbio,
+ 	bio_for_each_segment_all(bv, fullbio, iter_all) {
+ 		struct page *page = bv->bv_page;
+ 
+-		if (page->mapping == cache_mapping && PageUptodate(page)) {
++		if (page->mapping == cache_mapping) {
+ 			idx++;
+ 			continue;
+ 		}
 
- fs/squashfs/block.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
----
-base-commit: 84cc8b966a3d4cde585761d05cc448dc1da0824f
-change-id: 20230526-squashfs-cache-fixup-194431de42eb
-
-Best regards,
 -- 
-Vincent Whitchurch <vincent.whitchurch@axis.com>
+2.34.1
 
