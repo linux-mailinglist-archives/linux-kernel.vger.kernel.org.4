@@ -2,196 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45169711E12
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E47711E21
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbjEZCjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 22:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S236574AbjEZCuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 22:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjEZCjd (ORCPT
+        with ESMTP id S229631AbjEZCuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 22:39:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75DEE6;
-        Thu, 25 May 2023 19:39:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A84564C6F;
-        Fri, 26 May 2023 02:39:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA3D5C433EF;
-        Fri, 26 May 2023 02:39:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685068768;
-        bh=EERlqtTQFu4zaiK5VJdJnzeU2mLn2j64zgfoHXd3vdc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XPOFssIFixk1PVl+LdDPvLRbPZkPCrGW+eLBDlgBLtJ5n8Dcxvivs4B51l4Ds4gVg
-         0y6hEcpcpnPTTciBD4cu3QpHzrXlgAudlnDUm2XbJ4XNgGPmuQHPRp5ooQej458LZs
-         avk4mGz6eQVtslKb07OyONU2pA1YKeJeJSh9W7Jh1vLNJSBkwtLeYQgtycOe3fpHSs
-         vD3TRsqWjB5REg1aXalCknJUzKXp0KT7H+B0VwfHl686neAUlhoSNs4dJPEbp8BZot
-         GXxpgSHsSbqS2ntlP/B3GT0Xv1xwZdieNsZULfwfiNq1dnzvFvFXI+VHGomLsPCnQl
-         sjf1++Y6F+TWg==
-Date:   Thu, 25 May 2023 19:43:17 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, ansuelsmth@gmail.com
-Subject: Re: [PATCH v4 5/5] cpufreq: qcom-nvmem: use helper to get SMEM SoC ID
-Message-ID: <20230526024317.3t6nfv2aw27mrlj5@ripper>
-References: <20230525210214.78235-1-robimarko@gmail.com>
- <20230525210214.78235-5-robimarko@gmail.com>
- <5382b518-7691-ee70-c522-9ce0b14d60c1@linaro.org>
+        Thu, 25 May 2023 22:50:02 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276FD9C;
+        Thu, 25 May 2023 19:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1685069401; x=1716605401;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2k6LATmSEjQ87/ONfQdITiWFK2HdYH+jsh6Z7mJU0RU=;
+  b=rqVSCh5RFLYceZrZi13CA08HAcoo16Ikn7eOGBuR8DwrXCScPNYCxMZg
+   9nehmqWDYwj1uWkvqbEyZtfGEfLzEfFznDs2YfBUD9sCrNwtrfcy9gkIG
+   TuYMzFPZXuMHVHjDa8sGpv/1/sR1kQWa+Q8WYhH5sYp9CCnttZVq6YtyS
+   k=;
+X-IronPort-AV: E=Sophos;i="6.00,192,1681171200"; 
+   d="scan'208";a="287490348"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 02:49:53 +0000
+Received: from EX19MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com (Postfix) with ESMTPS id 7B9408064D;
+        Fri, 26 May 2023 02:49:50 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 26 May 2023 02:49:45 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.106.100.20) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 26 May 2023 02:49:40 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <kuniyu@amazon.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
+        <joe@cilium.io>, <joe@wand.net.nz>, <john.fastabend@gmail.com>,
+        <jolsa@kernel.org>, <kafai@fb.com>, <kpsingh@kernel.org>,
+        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lmb@isovalent.com>, <martin.lau@linux.dev>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@google.com>,
+        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+Date:   Thu, 25 May 2023 19:49:31 -0700
+Message-ID: <20230526024931.88117-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230526014317.80715-1-kuniyu@amazon.com>
+References: <20230526014317.80715-1-kuniyu@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5382b518-7691-ee70-c522-9ce0b14d60c1@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.106.100.20]
+X-ClientProxiedBy: EX19D032UWA004.ant.amazon.com (10.13.139.56) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 01:18:02AM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 25.05.2023 23:02, Robert Marko wrote:
-> > Now that SMEM exports a helper to get the SMEM SoC ID lets utilize it.
-> > Currently qcom_cpufreq_get_msm_id() is encoding the returned SMEM SoC ID
-> > into an enum, however there is no reason to do so and we can just match
-> > directly on the SMEM SoC ID as returned by qcom_smem_get_soc_id().
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+Date: Thu, 25 May 2023 18:43:17 -0700
+> From: Martin KaFai Lau <martin.lau@linux.dev>
+> Date: Thu, 25 May 2023 16:42:46 -0700
+> > On 5/25/23 1:19 AM, Lorenz Bauer wrote:
+> > > diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
+> > > index 56f1286583d3..3ba4dc2703da 100644
+> > > --- a/include/net/inet6_hashtables.h
+> > > +++ b/include/net/inet6_hashtables.h
+> > > @@ -48,6 +48,13 @@ struct sock *__inet6_lookup_established(struct net *net,
+> > >   					const u16 hnum, const int dif,
+> > >   					const int sdif);
+> > >   
+> > > +struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
+> > > +				    struct sk_buff *skb, int doff,
+> > > +				    const struct in6_addr *saddr,
+> > > +				    __be16 sport,
+> > > +				    const struct in6_addr *daddr,
+> > > +				    unsigned short hnum);
+> > > +
+> > >   struct sock *inet6_lookup_listener(struct net *net,
+> > >   				   struct inet_hashinfo *hashinfo,
+> > >   				   struct sk_buff *skb, int doff,
+> > > @@ -85,14 +92,33 @@ static inline struct sock *__inet6_lookup_skb(struct inet_hashinfo *hashinfo,
+> > >   					      int iif, int sdif,
+> > >   					      bool *refcounted)
+> > >   {
+> > > -	struct sock *sk = skb_steal_sock(skb, refcounted);
+> > > -
+> > > +	bool prefetched;
+> > > +	struct sock *sk = skb_steal_sock(skb, refcounted, &prefetched);
+> > > +	struct net *net = dev_net(skb_dst(skb)->dev);
+> > > +	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
+> > > +
+> > > +	if (prefetched) {
+> > > +		struct sock *reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
 > > 
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> > Changes in v4:
-> > * Adapt to name change to qcom_smem_get_soc_id()
-> > 
-> > Changes in v3:
-> > * Adapt to helper using argument now
-> > 
-> > Changes in v2:
-> > * Utilize helper exported by SMEM instead of refactoring
-> > qcom_cpufreq_get_msm_id()
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-nvmem.c | 56 +++++-----------------------
-> >  1 file changed, 10 insertions(+), 46 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > index 60e99be2d3db..a88b6fe5db50 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > @@ -29,16 +29,8 @@
-> >  #include <linux/slab.h>
-> >  #include <linux/soc/qcom/smem.h>
-> >  
-> > -#define MSM_ID_SMEM	137
-> > -
-> >  #include <dt-bindings/arm/qcom,ids.h>
-> >  
-> > -enum _msm8996_version {
-> > -	MSM8996_V3,
-> > -	MSM8996_SG,
-> > -	NUM_OF_MSM8996_VERSIONS,
-> > -};
-> > -
-> >  struct qcom_cpufreq_drv;
-> >  
-> >  struct qcom_cpufreq_match_data {
-> > @@ -135,60 +127,32 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
-> >  	dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
-> >  }
-> >  
-> > -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
-> > -{
-> > -	size_t len;
-> > -	u32 *msm_id;
-> > -	enum _msm8996_version version;
-> > -
-> > -	msm_id = qcom_smem_get(QCOM_SMEM_HOST_ANY, MSM_ID_SMEM, &len);
-> > -	if (IS_ERR(msm_id))
-> > -		return NUM_OF_MSM8996_VERSIONS;
-> > -
-> > -	/* The first 4 bytes are format, next to them is the actual msm-id */
-> > -	msm_id++;
-> > -
-> > -	switch ((enum _msm_id)*msm_id) {
-> > -	case QCOM_ID_MSM8996:
-> > -	case QCOM_ID_APQ8096:
-> > -		version = MSM8996_V3;
-> > -		break;
-> > -	case QCOM_ID_MSM8996SG:
-> > -	case QCOM_ID_APQ8096SG:
-> > -		version = MSM8996_SG;
-> > -		break;
-> > -	default:
-> > -		version = NUM_OF_MSM8996_VERSIONS;
-> > -	}
-> > -
-> > -	return version;
-> > -}
-> > -
-> >  static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
-> >  					  struct nvmem_cell *speedbin_nvmem,
-> >  					  char **pvs_name,
-> >  					  struct qcom_cpufreq_drv *drv)
-> >  {
-> >  	size_t len;
-> > +	u32 msm_id;
-> __le32
+> > If sk is TCP_ESTABLISHED, I suspect sk->sk_reuseport is 1 (from sk_clone)?
 > 
-> >  	u8 *speedbin;
-> > -	enum _msm8996_version msm8996_version;
-> > +	int ret;
-> >  	*pvs_name = NULL;
-> >  
-> > -	msm8996_version = qcom_cpufreq_get_msm_id();
-> > -	if (NUM_OF_MSM8996_VERSIONS == msm8996_version) {
-> > -		dev_err(cpu_dev, "Not Snapdragon 820/821!");
-> > -		return -ENODEV;
-> > -	}
-> > +	ret = qcom_smem_get_soc_id(&msm_id);
-> > +	if (ret)
-> > +		return ret;
-> Now since it can return a PTR_ERR, you should check for IS_ERR
-> and return ERR_PTR if that happens
+> Exactly, it will cause null-ptr-deref in reuseport_select_sock().
 
-No, the PTR_ERR() extracted the error value out of the pointer, so it's
-just an integer now (or zero on success). So this is looking correct to
-me.
+Sorry, this doesn't occur.  reuseport_select_sock() has null check.
+
+
+> We may want to use rcu_access_pointer(sk->sk_reuseport_cb) in
+> each lookup_reuseport() instead of adding sk_state check ?
+
+And if someone has a weird program that creates multiple listeners and
+disable SO_REUSEPORT for a listener that hits first in lhash2, checking
+sk_reuseport_cb might not work ?  I hope no one does such though, checking
+sk_reuseport and sk_state could be better.
 
 > 
-> LGTM otherwise!
 > 
-> Konrad
-> >  
-> >  	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
-> >  	if (IS_ERR(speedbin))
-> >  		return PTR_ERR(speedbin);
-> >  
-> > -	switch (msm8996_version) {
-> > -	case MSM8996_V3:
-> > +	switch (msm_id) {
-> > +	case QCOM_ID_MSM8996:
-
-And here are those cpu-endian constants... If msm_id is a __le32 then
-all these constants needs to be cpu_to_le32().
-
-Regards,
-Bjorn
-
-> > +	case QCOM_ID_APQ8096:
-> >  		drv->versions = 1 << (unsigned int)(*speedbin);
-> >  		break;
-> > -	case MSM8996_SG:
-> > +	case QCOM_ID_MSM8996SG:
-> > +	case QCOM_ID_APQ8096SG:
-> >  		drv->versions = 1 << ((unsigned int)(*speedbin) + 4);
-> >  		break;
-> >  	default:
+> > 
+> > If it is, it should still work other than an extra inet6_ehashfn. Does it worth 
+> > an extra sk->sk_state check or it is overkill?
+> > 
+> > 
+> > > +							       &ip6h->saddr, sport,
+> > > +							       &ip6h->daddr, ntohs(dport));
