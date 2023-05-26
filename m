@@ -2,77 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC50271256C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4A0712576
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243216AbjEZL06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 07:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
+        id S229956AbjEZLaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 07:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjEZL05 (ORCPT
+        with ESMTP id S229502AbjEZLaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 07:26:57 -0400
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE7A12F;
-        Fri, 26 May 2023 04:26:52 -0700 (PDT)
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-33aa60f4094so1841745ab.1;
-        Fri, 26 May 2023 04:26:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685100411; x=1687692411;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iJ0RPfGniHm7encY03gp85qFDTA63n+cLMONk4Pv+1c=;
-        b=FNJrB50hULQ7GRgUv1Emq0wzjI+/PIe3QVK2IW4ad78mTz6AaFNRpqRF7n++jYRo2b
-         DQqj8tnoxdKbzkod7MRwnP1xNVs+2SewfXyIzAK1tncAa9pvRvRnJrN5XgF19u0gaz5u
-         YOqsXEIKNPdYK24DDwDb3wEkk66QPcpRRYsMdMR1FecmefF1ch72dkbhEV+ZP6aD9vPv
-         ELz33S0ZKtA6arQdbgfzzAMs+wndBPN3OUrfB4kwAUfGYeqizFQzxmgjNT+jru88eEtT
-         Ri0hU4MLxu0K7CV3eg283cQ20T971RTGPvFtGdetoLJY58aYmnh3JEs1G5WhtxnwdlA4
-         4LtA==
-X-Gm-Message-State: AC+VfDyJYefBzqEpVZnkRBR2kzkhQlXGGXBGJ9UM4ZwdnEk8Hncn0Qe9
-        L3dYNXroUNtlMSBEpmt1OltTQPTiMg==
-X-Google-Smtp-Source: ACHHUZ6GnIFh8ipON1bp5u1Prt8xzgxoVgKcM4++yVzVDfMvM6WrNw0eIqO5rOyt2QdBKgaMkfivyw==
-X-Received: by 2002:a05:6e02:220a:b0:33a:a77d:3072 with SMTP id j10-20020a056e02220a00b0033aa77d3072mr3852954ilf.7.1685100410625;
-        Fri, 26 May 2023 04:26:50 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id k15-20020a02a70f000000b00413e7ca0f4csm1072271jam.174.2023.05.26.04.26.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 04:26:49 -0700 (PDT)
-Received: (nullmailer pid 547735 invoked by uid 1000);
-        Fri, 26 May 2023 11:26:47 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Fri, 26 May 2023 07:30:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9F6F7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 04:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685100555;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=h4Wb8uN/beFIyeWc47iGMcgU19K20EwZTfMIE97bOJg=;
+        b=WfRhTeB8pkX8x4TV5yWOXc92GVs0jssNjtg1iQSewEdZo1STgIQcMx6o1mkDQVfslIdQ7I
+        kbDEgsUy+FLO46aEXlPFsqE7RZnycTPtMTUryi3Lhc7kuXLg7wCptbkJpMqmFMxChCXkMx
+        W+oWnSbtnyXEOci98R18YwN0Pkohpkw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-287-46zss16mM2KLYOTz-LhglQ-1; Fri, 26 May 2023 07:29:12 -0400
+X-MC-Unique: 46zss16mM2KLYOTz-LhglQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4FCD985A5AA;
+        Fri, 26 May 2023 11:29:11 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6611A492B0A;
+        Fri, 26 May 2023 11:29:08 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v3 0/3] block: Make old dio use iov_iter_extract_pages() and page pinning
+Date:   Fri, 26 May 2023 12:28:56 +0100
+Message-Id: <20230526112859.654506-1-dhowells@redhat.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?utf-8?q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        jacopo.mondi@ideasonboard.com, linuxfancy@googlegroups.com,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        martin.hecht@avnet.eu, Linus Walleij <linus.walleij@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        laurent.pinchart@ideasonboard.com,
-        Nicholas Roth <nicholas@rothemail.net>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        devicetree@vger.kernel.org, Marco Felsch <m.felsch@pengutronix.de>
-In-Reply-To: <20230526103427.774226-2-tomm.merciai@gmail.com>
-References: <20230526103427.774226-1-tomm.merciai@gmail.com>
- <20230526103427.774226-2-tomm.merciai@gmail.com>
-Message-Id: <168510040778.547713.18211801531465598183.robh@kernel.org>
-Subject: Re: [PATCH 1/2] media: dt-bindings: alvium: add document YAML
- binding
-Date:   Fri, 26 May 2023 05:26:47 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,47 +68,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christoph, David, Lorenzo,
 
-On Fri, 26 May 2023 12:34:15 +0200, Tommaso Merciai wrote:
-> Add documentation of device tree in YAML schema for the ALVIUM
-> Camera from Allied Vision Inc.
-> 
-> References:
->  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> 
-> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> ---
->  .../media/i2c/alliedvision,alvium.yaml        | 117 ++++++++++++++++++
->  1 file changed, 117 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> 
+Here are three patches that go on top of the similar patches for bio
+structs now in the block tree that make the old block direct-IO code use
+iov_iter_extract_pages() and page pinning.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+There are three patches:
 
-yamllint warnings/errors:
+ (1) Make page pinning neither add nor remove a pin to/from a ZERO_PAGE,
+     thereby allowing the dio code to insert zero pages in the middle of
+     dealing with pinned pages.  This also mitigates a potential problem
+     whereby userspace could force the overrun the pin counter of a zero
+     page.
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.example.dts:30.32-33 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
+     A pair of functions are provided to wrap the testing of a page or
+     folio to see if it is a zero page.
 
-doc reference errors (make refcheckdocs):
+ (2) Provide a function to allow an additional pin to be taken on a page we
+     already have pinned (and do nothing for a zero page).
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230526103427.774226-2-tomm.merciai@gmail.com
+ (3) Switch direct-io.c over to using page pinning and to use
+     iov_iter_extract_pages() so that pages from non-user-backed iterators
+     aren't pinned.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+I've pushed the patches here also:
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-old-dio
 
-pip3 install dtschema --upgrade
+David
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Changes
+=======
+ver #3)
+ - Move is_zero_page() and is_zero_folio() to mm.h for dependency reasons.
+ - Add more comments and adjust the docs about pinning zero pages.
+ - Rename page_get_additional_pin() to folio_add_pin().
+ - Use is_zero_folio() in folio_add_pin().
+ - Rename need_unpin to is_pinned in struct dio.
+
+ver #2)
+ - Fix use of ZERO_PAGE().
+ - Add wrappers for testing if a page is a zero page.
+ - Return the zero page obtained, not ZERO_PAGE(0) unconditionally.
+ - Need to set BIO_PAGE_PINNED conditionally, and not BIO_PAGE_REFFED.
+
+Link: https://lore.kernel.org/r/ZGxfrOLZ4aN9/MvE@infradead.org/ [1]
+Link: https://lore.kernel.org/r/20230525155102.87353-1-dhowells@redhat.com/ # v1
+Link: https://lore.kernel.org/r/20230525223953.225496-1-dhowells@redhat.com/ # v2
+
+David Howells (3):
+  mm: Don't pin ZERO_PAGE in pin_user_pages()
+  mm: Provide a function to get an additional pin on a page
+  block: Use iov_iter_extract_pages() and page pinning in direct-io.c
+
+ Documentation/core-api/pin_user_pages.rst |  6 ++
+ fs/direct-io.c                            | 72 ++++++++++++++---------
+ include/linux/mm.h                        | 27 ++++++++-
+ mm/gup.c                                  | 58 +++++++++++++++++-
+ 4 files changed, 131 insertions(+), 32 deletions(-)
 
