@@ -2,154 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC851712390
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DCD71239D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243109AbjEZJ1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S243144AbjEZJ2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243064AbjEZJ12 (ORCPT
+        with ESMTP id S243117AbjEZJ23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:27:28 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4A119C
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685093244; x=1716629244;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=jHcCh+fBmY6y1fe/LaQpp+BF1fauVowgXBtCO+UU9y4=;
-  b=mVagUdiZw+R8T5ggr3BWtyg9wAiMMm16SCstgRH0OeOGdvhBrQailii/
-   X9FUZvgWBR9QkMIWk8uTQBh93gB8MxWTpYPHmC+xDaT8qaMNNBJhiOPHq
-   saPPVQgH+IFmY8BfDAEXRCRCdVIsone4Kd+k1EWHJVRkO/QPxQ8UjAlO+
-   jfShiR8AQbj/8Gw4OIzIRw+cBTlSyjEczasQre3o3llIkrQl/gVC5+gS5
-   UbgiGAi8EmkX3Lj4vubjvKfa/PmDjojhqz4ZT30MJIY3plWVfhQ21Z7DU
-   K3fvDHBY0mCR++DTC3A0s/wWQfAd6RnTh6LeT7vhqkt9fCOYYMh4rsAH5
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="440516517"
-X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
-   d="scan'208";a="440516517"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 02:27:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="817469267"
-X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
-   d="scan'208";a="817469267"
-Received: from rdota-mobl.ger.corp.intel.com (HELO localhost) ([10.252.44.87])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 02:27:18 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Tom Rix <trix@redhat.com>, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org,
-        ndesaulniers@google.com, ville.syrjala@linux.intel.com,
-        imre.deak@intel.com, arun.r.murthy@intel.com,
-        lucas.demarchi@intel.com
-Cc:     Tom Rix <trix@redhat.com>, intel-gfx@lists.freedesktop.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH] drm/i915: simplify switch to if-elseif
-In-Reply-To: <874jo3kwl6.fsf@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230523125116.1669057-1-trix@redhat.com>
- <874jo3kwl6.fsf@intel.com>
-Date:   Fri, 26 May 2023 12:27:16 +0300
-Message-ID: <87y1lbigsr.fsf@intel.com>
+        Fri, 26 May 2023 05:28:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F55198
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:28:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4D8D64E92
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:28:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32468C4339C;
+        Fri, 26 May 2023 09:28:25 +0000 (UTC)
+Date:   Fri, 26 May 2023 10:28:22 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Prathu Baronia <quic_pbaronia@quicinc.com>
+Cc:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64/cpucaps: increase string width to properly format
+ cpucaps.h
+Message-ID: <ZHB7tvDa7d6T6SEq@arm.com>
+References: <20230517100452.382174-1-quic_pbaronia@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517100452.382174-1-quic_pbaronia@quicinc.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023, Jani Nikula <jani.nikula@linux.intel.com> wrote:
-> On Tue, 23 May 2023, Tom Rix <trix@redhat.com> wrote:
->> clang with W=1 reports
->> drivers/gpu/drm/i915/display/intel_display.c:6012:3: error: unannotated
->>   fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
->>                 case I915_FORMAT_MOD_X_TILED:
->>                 ^
->>
->> Only one case and the default does anything in this switch, so it should
->> be changed to an if-elseif.
->
-> Thanks for the patch.
->
-> If I wanted to fix this quickly, I'd just add the break in there.
+On Wed, May 17, 2023 at 03:34:50PM +0530, Prathu Baronia wrote:
+> The lengthiest capability is `WORKAROUND_TRBE_OVERWRITE_FILL_MODE` and
+> its length is 35 characters so increase the width of left justified
+> strings to 35 and adjust the tab space for `ARM64_NCAPS` accordingly.
+> Now the generated cpucaps.h is properly formatted.
+> 
+> Signed-off-by: Prathu Baronia <quic_pbaronia@quicinc.com>
 
-I've just applied [1] doing this.
-
-I'm still open to the cleanup suggested below, if you're up for it.
-
-
-BR,
-Jani.
-
-
-[1] https://patchwork.freedesktop.org/patch/msgid/20230524-intel_async_flip_check_hw-implicit-fallthrough-v1-1-83de89e376a1@kernel.org
-
->
-> If I wanted to fix this properly, I'd add a function
-> modifier_supports_async_flips() or something, and replace the switch
-> with:
->
-> 	if (!modifier_supports_async_flips(i915, new_plane_state->hw.fb->modifier)) {
-> 		drm_dbg_kms(&i915->drm, "[PLANE:%d:%s] Modifier does not support async flips\n",
-> 			plane->base.base.id, plane->base.name);
-> 		return -EINVAL;
-> 	}
->
-> But I wouldn't just replace the switch with if-elseif. It doesn't help
-> with the overall feeling that intel_async_flip_check_hw() is too long.
->
-> BR,
-> Jani.
->
->
->>
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>  drivers/gpu/drm/i915/display/intel_display.c | 14 +++++---------
->>  1 file changed, 5 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
->> index 0490c6412ab5..1f852e49fc20 100644
->> --- a/drivers/gpu/drm/i915/display/intel_display.c
->> +++ b/drivers/gpu/drm/i915/display/intel_display.c
->> @@ -5994,8 +5994,7 @@ static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct in
->>  		 * Need to verify this for all gen9 platforms to enable
->>  		 * this selectively if required.
->>  		 */
->> -		switch (new_plane_state->hw.fb->modifier) {
->> -		case DRM_FORMAT_MOD_LINEAR:
->> +		if (new_plane_state->hw.fb->modifier == DRM_FORMAT_MOD_LINEAR) {
->>  			/*
->>  			 * FIXME: Async on Linear buffer is supported on ICL as
->>  			 * but with additional alignment and fbc restrictions
->> @@ -6008,13 +6007,10 @@ static int intel_async_flip_check_hw(struct intel_atomic_state *state, struct in
->>  					    plane->base.base.id, plane->base.name);
->>  				return -EINVAL;
->>  			}
->> -
->> -		case I915_FORMAT_MOD_X_TILED:
->> -		case I915_FORMAT_MOD_Y_TILED:
->> -		case I915_FORMAT_MOD_Yf_TILED:
->> -		case I915_FORMAT_MOD_4_TILED:
->> -			break;
->> -		default:
->> +		} else if (!(new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_X_TILED ||
->> +			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_Y_TILED ||
->> +			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_Yf_TILED ||
->> +			     new_plane_state->hw.fb->modifier == I915_FORMAT_MOD_4_TILED)) {
->>  			drm_dbg_kms(&i915->drm,
->>  				    "[PLANE:%d:%s] Modifier does not support async flips\n",
->>  				    plane->base.base.id, plane->base.name);
+Why not make it larger, say 40, just in case.
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Catalin
