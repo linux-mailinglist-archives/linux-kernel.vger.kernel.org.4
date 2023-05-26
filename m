@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89527125AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEEE7125C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243335AbjEZLg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 07:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
+        id S243345AbjEZLlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 07:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237023AbjEZLg5 (ORCPT
+        with ESMTP id S230121AbjEZLk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 07:36:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F56DE47
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 04:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685100902;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IMHlvlz6CKzHL2wE0mYlxFl6H+erPJBHzeUTjMW5vZI=;
-        b=MreF9fvn3bdfhGCMadFhejZHtoJjxkBxyfmn1p+AWGlr4g7Qij47Hh5hb+QPUlxXhf1wol
-        RsUJ9OQhJFX23hL6IrJJc6BmwvKtJriA6wsF+s1XBmvrStKawkb1YoHodAYJswphaUYSXN
-        oYahEGOWBi5mav3FkCrGRgXXN5w9JpU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-Fq5P_uGwNgawY86m8cYzKA-1; Fri, 26 May 2023 07:34:58 -0400
-X-MC-Unique: Fq5P_uGwNgawY86m8cYzKA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB1AA801224;
-        Fri, 26 May 2023 11:34:57 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DE04240CFD45;
-        Fri, 26 May 2023 11:34:54 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-cc:     dhowells@redhat.com, Kenny Ho <Kenny.Ho@amd.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        David Laight <David.Laight@ACULAB.COM>,
+        Fri, 26 May 2023 07:40:57 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808D6E7;
+        Fri, 26 May 2023 04:40:54 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id B9BEA5FD33;
+        Fri, 26 May 2023 14:40:50 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1685101250;
+        bh=n2x4yjau1soFcfco90woNujVljdNR0rpU1zLVAOSyM4=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=QiFeUnJmQzxST7Eo7f4WbbpPTgf1DzVYdaSYuXVVy2W6rGiomiqPNQoaBVwFUoFYA
+         sDPdl/LSd8TRdKpSlu+JpVZG3UCLdV9hjxbfL5oW16+i2T4yh23vvbYmywgOFmcQaB
+         YJkGmeGkQ8OJ4q1cy3/om+lBjxQu1u4kAw7fUNERqF5BsySFTY+tGZn5oMIbmowzAI
+         GVjwZ3hLx7/TXp3T57fGm7f2tSs7bqQMmVsUcVomikBwUjDykFgN3/udy7I/21Qakb
+         oGcwX0Fs577IAtNXepODapC6y7EH+P2AtEmenX89JAg8/dkXdke7QOFaegVeSGkbD6
+         OnqpjPpNFhC6Q==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 26 May 2023 14:40:45 +0300 (MSK)
+Message-ID: <4baf786b-afe5-371d-9bc4-90226e5df3af@sberdevices.ru>
+Date:   Fri, 26 May 2023 14:36:17 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v3 00/17] vsock: MSG_ZEROCOPY flag support
+Content-Language: en-US
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net] rxrpc: Truncate UTS_RELEASE for rxrpc version 
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <654973.1685100894.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 26 May 2023 12:34:54 +0100
-Message-ID: <654974.1685100894@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
+References: <20230522073950.3574171-1-AVKrasnov@sberdevices.ru>
+ <76270fab-8af7-7597-9193-64cb553a543e@sberdevices.ru>
+ <y5tgyj5awrd4hvlrsxsvrern6pd2sby2mdtskah2qp5hemmo2a@72nhcpilg7v2>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <y5tgyj5awrd4hvlrsxsvrern6pd2sby2mdtskah2qp5hemmo2a@72nhcpilg7v2>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/26 06:32:00 #21351256
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,102 +77,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    =
 
-UTS_RELEASE has a maximum length of 64 which can cause rxrpc_version to
-exceed the 65 byte message limit.
 
-Per the rx spec[1]: "If a server receives a packet with a type value of 13=
-,
-and the client-initiated flag set, it should respond with a 65-byte payloa=
-d
-containing a string that identifies the version of AFS software it is
-running."
+On 26.05.2023 13:30, Stefano Garzarella wrote:
+> On Thu, May 25, 2023 at 06:56:42PM +0300, Arseniy Krasnov wrote:
+>>
+>>
+>> On 22.05.2023 10:39, Arseniy Krasnov wrote:
+>>
+>> This patchset is unstable with SOCK_SEQPACKET. I'll fix it.
+> 
+> Thanks for let us know!
+> 
+> I'm thinking if we should start split this series in two, because it
+> becomes too big.
+> 
+> But let keep this for RFC, we can decide later. An idea is to send
+> the first 7 patches with a preparation series, and the next ones with a
+> second series.
 
-The current implementation causes a compile error when WERROR is turned on
-and/or UTS_RELEASE exceeds the length of 49 (making the version string mor=
-e
-than 64 characters).
+Hello, ok! So i'll split patchset in the following way:
+1) Patches which adds new fields/flags and checks. But all of this is not used,
+   as it is preparation.
+2) Second part starts to use it and also carries tests.
 
-Fix this by generating the string during module initialisation and limitin=
-g
-the UTS_RELEASE segment of the string does not exceed 49 chars.  We need t=
-o
-make sure that the 64 bytes includes "linux-" at the front and " AF_RXRPC"
-at the back as this may be used in pattern matching.
+Thanks, Arseniy
 
-Fixes: 44ba06987c0b ("RxRPC: Handle VERSION Rx protocol packets")
-Reported-by: Kenny Ho <Kenny.Ho@amd.com>
-Link: https://lore.kernel.org/r/20230523223944.691076-1-Kenny.Ho@amd.com/
-Signed-off-by: David Howells <dhowells@redhat.com>
-Acked-by: Kenny Ho <Kenny.Ho@amd.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: Andrew Lunn <andrew@lunn.ch>
-cc: David Laight <David.Laight@ACULAB.COM>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: linux-afs@lists.infradead.org
-cc: netdev@vger.kernel.org
-Link: https://web.mit.edu/kolya/afs/rx/rx-spec [1]
----
- net/rxrpc/af_rxrpc.c    |    1 +
- net/rxrpc/ar-internal.h |    1 +
- net/rxrpc/local_event.c |   11 ++++++++++-
- 3 files changed, 12 insertions(+), 1 deletion(-)
-
-diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
-index 31f738d65f1c..da0b3b5157d5 100644
---- a/net/rxrpc/af_rxrpc.c
-+++ b/net/rxrpc/af_rxrpc.c
-@@ -980,6 +980,7 @@ static int __init af_rxrpc_init(void)
- 	BUILD_BUG_ON(sizeof(struct rxrpc_skb_priv) > sizeof_field(struct sk_buff=
-, cb));
- =
-
- 	ret =3D -ENOMEM;
-+	rxrpc_gen_version_string();
- 	rxrpc_call_jar =3D kmem_cache_create(
- 		"rxrpc_call_jar", sizeof(struct rxrpc_call), 0,
- 		SLAB_HWCACHE_ALIGN, NULL);
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 5d44dc08f66d..e8e14c6f904d 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -1068,6 +1068,7 @@ int rxrpc_get_server_data_key(struct rxrpc_connectio=
-n *, const void *, time64_t,
- /*
-  * local_event.c
-  */
-+void rxrpc_gen_version_string(void);
- void rxrpc_send_version_request(struct rxrpc_local *local,
- 				struct rxrpc_host_header *hdr,
- 				struct sk_buff *skb);
-diff --git a/net/rxrpc/local_event.c b/net/rxrpc/local_event.c
-index 5e69ea6b233d..993c69f97488 100644
---- a/net/rxrpc/local_event.c
-+++ b/net/rxrpc/local_event.c
-@@ -16,7 +16,16 @@
- #include <generated/utsrelease.h>
- #include "ar-internal.h"
- =
-
--static const char rxrpc_version_string[65] =3D "linux-" UTS_RELEASE " AF_=
-RXRPC";
-+static char rxrpc_version_string[65]; // "linux-" UTS_RELEASE " AF_RXRPC"=
-;
-+
-+/*
-+ * Generate the VERSION packet string.
-+ */
-+void rxrpc_gen_version_string(void)
-+{
-+	snprintf(rxrpc_version_string, sizeof(rxrpc_version_string),
-+		 "linux-%.49s AF_RXRPC", UTS_RELEASE);
-+}
- =
-
- /*
-  * Reply to a version request
-
+> 
+> Thanks,
+> Stefano
+> 
