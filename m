@@ -2,141 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F704712E47
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DB5712E4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjEZUmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 16:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S230298AbjEZUnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 16:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjEZUmE (ORCPT
+        with ESMTP id S229753AbjEZUnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 16:42:04 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CF713A;
-        Fri, 26 May 2023 13:41:59 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6cbdf16d2so8150975e9.2;
-        Fri, 26 May 2023 13:41:59 -0700 (PDT)
+        Fri, 26 May 2023 16:43:51 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9591D187
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:43:49 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f1411e8111so1355562e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:43:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685133717; x=1687725717;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jaj5bts2ys56VQ+QWVF3ByEpaCAX5z4OlrYGlYiteV0=;
-        b=hZMGftC8dUzxsfwVTC/wIo3MjBnXihNAhVtmlM+kvJ/1sCz7bja+HAhA6VhKwFo8AN
-         5uQAv1/MpYs646lBH1hII1Yb9RAk0F/Jjl0bQFvunBeWqwZXkX6kqe4IskjXC2AYwbJ0
-         d2U4XharC2SK644yyUUXU070GIhwUJA2hpLtYAPrrnAqR9iR6Ext6zkoXRUgtUGodcnd
-         X5atEMi3t1QTszXMm3zEktI3XhE9UstMhc/MglrLdKI1abDkVpkGoL2ZaMEc1IMsDjDI
-         9FdggY3Hr/7FQnZSUXhZ+c/scMAwbV0y03iwab1jQhb2S9nnekpDiL8kXxCTEEQphrZx
-         pkdQ==
+        d=linaro.org; s=google; t=1685133828; x=1687725828;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/6174Ber5Dhvq9PCiuf7/gpcmZX6TBZczzj1WyeVUqs=;
+        b=DLeHOHHN6h5+N/RAZjKMg4IFFEl2HxU8bvnY4oBeY32U/NZ1rscBtgCgX+JMTC1Ka0
+         4qsVyQg7cYE/pfubShzugG+qFZCNXMR/O4jzvhBIe8r5APXu+/tI/HCnpBnYnivsJbtG
+         PZ8OViniZoRnQabmJNUCmKR0DFk/3HxE8lzpTmwFUrVv1pbas0FLMFjTylUrXbfe1pNq
+         uS6pidrzgs0YJxXqWaMouprb41l40xT4oVRT2ujDxWtAjZwyL8/YaeBlpwAX7CVKIPel
+         E7oOuvcTJBruW7eyM4lPGCuvP3ydVUz6wT1QpIvPtxqihTnzN7m27VLqLilMaYvplkdg
+         kcLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685133717; x=1687725717;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jaj5bts2ys56VQ+QWVF3ByEpaCAX5z4OlrYGlYiteV0=;
-        b=dlHLDIa5yEeWgmKXtKTI3F25MKDyoMiz82jZfAdbKDZlLChPdxag048lgQiI0jLzwY
-         Mxbug3Fz35TR7JeCfgu9FnpijIV8p4fv2oaUSpmhZdQKgiGDSVXPnaUPVBJH/jfvSUuG
-         p80E76ojlp/Pr8Pn5UgpsvjArfwiNPoojXGQAmgT4IaR7P4R9furOTaBbBKPOxZl7NnA
-         Y4+DYjP0fT7WjT/hrowF6fqPhElJ9I58L58wTZu+FAxuVU823cYcL6UPx0mVuE0QX5qW
-         KxZawL+hit92PqAONobJ0rCCE7BV9Uc3yuo4iuOKQpEIj4rbOJX+fMZoOktUKijn10Sl
-         EO0g==
-X-Gm-Message-State: AC+VfDyIrX//ydXtEfUBcsjlMZc/AiOxrgT+5cqsblkv0triM06KQsuM
-        12ExDzWWTMJzFUs+Y2oa/zM=
-X-Google-Smtp-Source: ACHHUZ4NsK4PLy2XXEpL2R2verGyqAlkyFRs8KFHaYy+t7kilvX+AkDT61Lr/ig8Zq3Or+cNrvT/Ew==
-X-Received: by 2002:a7b:cbd2:0:b0:3f4:2452:966a with SMTP id n18-20020a7bcbd2000000b003f42452966amr2220459wmi.27.1685133717251;
-        Fri, 26 May 2023 13:41:57 -0700 (PDT)
-Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id 13-20020a05600c228d00b003f60455de07sm6198427wmf.15.2023.05.26.13.41.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 13:41:56 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>, stable@vger.kernel.org
-Subject: [net PATCH] wireguard: allowedips: fix compilation warning for stack limit exceeded
-Date:   Fri, 26 May 2023 22:41:34 +0200
-Message-Id: <20230526204134.29058-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20221208; t=1685133828; x=1687725828;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/6174Ber5Dhvq9PCiuf7/gpcmZX6TBZczzj1WyeVUqs=;
+        b=g3zu+t4Q/s62U34mcKv405foN9v9BVEBTz/4crtMz1+YNFZpHfhBM+sM1cjO0uq/3Q
+         Al/hvs+/GBstv2PuVKUf0ZPxQIXfwJTL0gXHNndk/IOCQ599AL8aVHinHCrxTGIZ4YGw
+         k9Qmfs45iHMi/wuVdpZ85p34Npozn43d7pi/hlN9O7D/xkZbdSLmAAldZMuB/TrwhUJS
+         VJeaSJIvpZ+9SG4WfP61F0rLv1NwC31Rb3NtqYV86LWcghrfCZdld/DlsiSoZvXyVjij
+         4bgHVbG0ZVVpWgl+p155qjQINkE4LgR0r4WXYZaJacPLrM1aZRlfk5jivnJ9o2OoGadX
+         +kuQ==
+X-Gm-Message-State: AC+VfDyrE3WPjIXjCeIx/8XuH7f2BLfUbZGxoISZHt9Q1ImQmyzBnH8b
+        zOt5s4IqVlkmI16pCCv9Un76RA==
+X-Google-Smtp-Source: ACHHUZ4dsoFDZcDnlXVTIkaLAUNQzwlWZcpLdFsQ0CmU+dEqOnfFnPq9c11FVGDpUaepA/R+EjGfpA==
+X-Received: by 2002:ac2:547c:0:b0:4f4:af2c:97e with SMTP id e28-20020ac2547c000000b004f4af2c097emr721113lfn.11.1685133827858;
+        Fri, 26 May 2023 13:43:47 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id v17-20020a056512049100b004e9b307d2c8sm760594lfq.238.2023.05.26.13.43.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 13:43:47 -0700 (PDT)
+Message-ID: <265d1c93-0740-cd87-3ba2-e1ddf70a0c65@linaro.org>
+Date:   Fri, 26 May 2023 22:43:45 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: media: camss: qcom,msm8996-camss: Add
+ CAMSS power domain
+Content-Language: en-US
+To:     Bryan O'Donoghue <pure.logic@nexus-software.ie>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Conor Dooley <conor@kernel.org>
+Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hansverk@cisco.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230526180712.8481-1-y.oudjana@protonmail.com>
+ <20230526180712.8481-2-y.oudjana@protonmail.com>
+ <20230526-obstruct-venus-5833511a58af@spud>
+ <838b134d-46cb-6237-49b0-0c287141ebb3@linaro.org>
+ <20230526-street-pox-2ff5ee106c43@spud>
+ <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
+ <631e5eec-853b-dce2-c474-62e76e83d7e6@linaro.org>
+ <5dc28004-5ff4-2102-0bb3-8f7bee7cfca6@nexus-software.ie>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <5dc28004-5ff4-2102-0bb3-8f7bee7cfca6@nexus-software.ie>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some arch (for example IPQ8074) and other with
-KERNEL_STACKPROTECTOR_STRONG enabled, the following compilation error is
-triggered:
-drivers/net/wireguard/allowedips.c: In function 'root_remove_peer_lists':
-drivers/net/wireguard/allowedips.c:80:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-   80 | }
-      | ^
-drivers/net/wireguard/allowedips.c: In function 'root_free_rcu':
-drivers/net/wireguard/allowedips.c:67:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-   67 | }
-      | ^
-cc1: all warnings being treated as errors
 
-Since these are free function and returns void, using function that can
-fail is not ideal since an error would result in data not freed.
-Since the free are under RCU lock, we can allocate the required stack
-array as static outside the function and memset when needed.
-This effectively fix the stack frame warning without changing how the
-function work.
 
-Fixes: Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Cc: stable@vger.kernel.org
----
- drivers/net/wireguard/allowedips.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+On 26.05.2023 22:40, Bryan O'Donoghue wrote:
+> On 26/05/2023 21:36, Konrad Dybcio wrote:
+>>> oh the names
+>>>
+>>> no toss that
+>> this should be
+>>
+>> if:properties:compatible:blahblahmsm8996:then:required:power-domain-names
+>>
+>> Konrad
+> 
+> Hmm, we don't depend on the names though.
+Check patch 3!
 
-diff --git a/drivers/net/wireguard/allowedips.c b/drivers/net/wireguard/allowedips.c
-index 5bf7822c53f1..c129082f04c6 100644
---- a/drivers/net/wireguard/allowedips.c
-+++ b/drivers/net/wireguard/allowedips.c
-@@ -53,12 +53,16 @@ static void node_free_rcu(struct rcu_head *rcu)
- 	kmem_cache_free(node_cache, container_of(rcu, struct allowedips_node, rcu));
- }
- 
-+static struct allowedips_node *tmpstack[MAX_ALLOWEDIPS_BITS];
-+
- static void root_free_rcu(struct rcu_head *rcu)
- {
--	struct allowedips_node *node, *stack[MAX_ALLOWEDIPS_BITS] = {
--		container_of(rcu, struct allowedips_node, rcu) };
-+	struct allowedips_node *node, **stack = tmpstack;
- 	unsigned int len = 1;
- 
-+	memset(stack, 0, sizeof(*stack) * MAX_ALLOWEDIPS_BITS);
-+	stack[0] = container_of(rcu, struct allowedips_node, rcu);
-+
- 	while (len > 0 && (node = stack[--len])) {
- 		push_rcu(stack, node->bit[0], &len);
- 		push_rcu(stack, node->bit[1], &len);
-@@ -68,9 +72,12 @@ static void root_free_rcu(struct rcu_head *rcu)
- 
- static void root_remove_peer_lists(struct allowedips_node *root)
- {
--	struct allowedips_node *node, *stack[MAX_ALLOWEDIPS_BITS] = { root };
-+	struct allowedips_node *node, **stack = tmpstack;
- 	unsigned int len = 1;
- 
-+	memset(stack, 0, sizeof(*stack) * MAX_ALLOWEDIPS_BITS);
-+	stack[0] = root;
-+
- 	while (len > 0 && (node = stack[--len])) {
- 		push_rcu(stack, node->bit[0], &len);
- 		push_rcu(stack, node->bit[1], &len);
--- 
-2.39.2
-
+Konrad
+> 
+> ---
+> bod
