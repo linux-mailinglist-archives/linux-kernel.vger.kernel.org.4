@@ -2,61 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5919711B7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 02:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56922711BAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 02:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234786AbjEZAm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 20:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
+        id S233368AbjEZAun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 20:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjEZAmy (ORCPT
+        with ESMTP id S234276AbjEZAul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 20:42:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE6512E;
-        Thu, 25 May 2023 17:42:53 -0700 (PDT)
-Received: from [192.168.2.2] (109-252-147-95.dynamic.spd-mgts.ru [109.252.147.95])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E80A466056D7;
-        Fri, 26 May 2023 01:42:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685061772;
-        bh=b7KTbM4WhfYXB/uJQOVCQcF+/n4UsmItxYts7ak+544=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=X9p955qco/4LsnrR3Fs9iBBQ6k5LF4ildGWZENBsZXu7Beb5V7+FxMT/CrwVYPME9
-         oPadLycKEEy3ZrbSqSqYEhnaYEnJT61A49IhMckbd0qrO6NCc0r1CB/rdvBbFcNRj1
-         Qw26UXPNiRkzkKaoKikk76Y8Zhy0GoHC9x/cX5ju6UZ4YCq/+nuoF+rldkSK/PQEvA
-         SCwzyj/kA3M+N3OgjLSZ2o60bi6dyk7PPG8NPwBPkl3+8h1su6sL90EhEuOGbKcK1j
-         rDOj7viXyrovhz1l+tmnsD4MkxXOas9L7mrz6t+TMyEj/6LS3YCE8JZNKGF7ARTKxN
-         H3Now5JbFoTKw==
-Message-ID: <a7e0d4f0-a497-8697-e108-5247e11abc41@collabora.com>
-Date:   Fri, 26 May 2023 03:42:48 +0300
+        Thu, 25 May 2023 20:50:41 -0400
+Received: from out-47.mta1.migadu.com (out-47.mta1.migadu.com [IPv6:2001:41d0:203:375::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38523195
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:50:39 -0700 (PDT)
+Date:   Thu, 25 May 2023 20:50:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685062237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XccFcqhRV9oVZ2BhjoWlowoz0O43NBdleRYrqpo+tGk=;
+        b=te1MA/PDmp4dIRH1TY49m1pWccvyo+kxGKHIAX3+k8t98qQbEiPCWJYi4Gkczlt1aIn7En
+        cHq/akYRgnPKxFNi2vHECVpzXGpjZ3XraNt/Yalda8BuacVJcdSo4hYF5j3kzlTDgdIB0w
+        GQUPt6jslW3+faac2EkPdAimK2RxUyY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     linux-kernel@vger.kernel.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH 5/7] block: Rework bio_for_each_folio_all()
+Message-ID: <ZHACWWNIUR6Ohh/8@moria.home.lan>
+References: <20230525214822.2725616-1-kent.overstreet@linux.dev>
+ <20230525214822.2725616-6-kent.overstreet@linux.dev>
+ <ZG/+88/G+hX5DyCX@dread.disaster.area>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 3/8] iio: adc: rockchip_saradc: Make use of
- devm_clk_get_enabled
-Content-Language: en-US
-To:     Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
-        lars@metafoo.de, heiko@sntech.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sebastian.reichel@collabora.com
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, gustavo.padovan@collabora.com,
-        serge.broslavsky@collabora.com
-References: <20230525212712.255406-1-shreeya.patel@collabora.com>
- <20230525212712.255406-4-shreeya.patel@collabora.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230525212712.255406-4-shreeya.patel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZG/+88/G+hX5DyCX@dread.disaster.area>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,18 +51,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/23 00:27, Shreeya Patel wrote:
-> @@ -600,8 +560,6 @@ static int rockchip_saradc_suspend(struct device *dev)
->  	struct iio_dev *indio_dev = dev_get_drvdata(dev);
->  	struct rockchip_saradc *info = iio_priv(indio_dev);
->  
-> -	clk_disable_unprepare(info->clk);
-> -	clk_disable_unprepare(info->pclk);
->  	regulator_disable(info->vref);
+On Fri, May 26, 2023 at 10:36:03AM +1000, Dave Chinner wrote:
+> On Thu, May 25, 2023 at 05:48:20PM -0400, Kent Overstreet wrote:
+> > This reimplements bio_for_each_folio_all() on top of the newly-reworked
+> > bvec_iter_all, and since it's now trivial we also provide
+> > bio_for_each_folio.
+> > 
+> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> > Cc: Matthew Wilcox <willy@infradead.org>
+> > Cc: linux-block@vger.kernel.org
+> > ---
+> >  fs/crypto/bio.c        |  9 +++--
+> >  fs/iomap/buffered-io.c | 14 ++++---
+> >  fs/verity/verify.c     |  9 +++--
+> >  include/linux/bio.h    | 91 +++++++++++++++++++++---------------------
+> >  include/linux/bvec.h   | 15 +++++--
+> >  5 files changed, 75 insertions(+), 63 deletions(-)
+> ....
+> > diff --git a/include/linux/bio.h b/include/linux/bio.h
+> > index f86c7190c3..7ced281734 100644
+> > --- a/include/linux/bio.h
+> > +++ b/include/linux/bio.h
+> > @@ -169,6 +169,42 @@ static inline void bio_advance(struct bio *bio, unsigned int nbytes)
+> >  #define bio_for_each_segment(bvl, bio, iter)				\
+> >  	__bio_for_each_segment(bvl, bio, iter, (bio)->bi_iter)
+> >  
+> > +struct folio_vec {
+> > +	struct folio	*fv_folio;
+> > +	size_t		fv_offset;
+> > +	size_t		fv_len;
+> > +};
+> 
+> Can we drop the "fv_" variable prefix here? It's just unnecessary
+> verbosity when we know we have a folio_vec structure. i.e fv->folio
+> is easier to read and type than fv->fv_folio...
 
-Why clocks need to be enabled during suspend?
+That's actually one of the things I like about bio/biovec, it's been
+handy in the past for grepping and block layer refactorings...
 
--- 
-Best regards,
-Dmitry
+(I would _kill_ for a tool that let me do that kind of type-aware grep.
+ctags can in theory produce that kind of an index but I never figured
+out how to get vim to use it properly. I believe the lsp-server stuff
+that uses the compiler as a backend can do it; I've started using that
+stuff for Rust coding and it works amazingly, don't think I've tried it
+for struct members - I wonder if that stuff works at all on a codebase
+the size of the kernel or just dies...)
 
+> Hmmm, this is probably not a good name considering "struct pagevec" is
+> something completely different - the equivalent is "struct
+> folio_batch" but I can see this being confusing for people who
+> largely expect some symmetry between page<->folio naming
+> conventions...
+
+Yeah, good point. folio_seg, perhaps?
+
+(I think Matthew may have already made that suggestion...)
+
+> Also, why is this in bio.h and not in a mm/folio related header
+> file?
+
+Is it worth moving it there considering it's only used in bio.h/bvec.h?
+Perhaps we could keep it where it's used for now and move it if it gains
+more users?
