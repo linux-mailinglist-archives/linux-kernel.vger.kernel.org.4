@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEEE7125C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6307125B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243345AbjEZLlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 07:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
+        id S243349AbjEZLhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 07:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjEZLk5 (ORCPT
+        with ESMTP id S242184AbjEZLhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 07:40:57 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808D6E7;
-        Fri, 26 May 2023 04:40:54 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id B9BEA5FD33;
-        Fri, 26 May 2023 14:40:50 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685101250;
-        bh=n2x4yjau1soFcfco90woNujVljdNR0rpU1zLVAOSyM4=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=QiFeUnJmQzxST7Eo7f4WbbpPTgf1DzVYdaSYuXVVy2W6rGiomiqPNQoaBVwFUoFYA
-         sDPdl/LSd8TRdKpSlu+JpVZG3UCLdV9hjxbfL5oW16+i2T4yh23vvbYmywgOFmcQaB
-         YJkGmeGkQ8OJ4q1cy3/om+lBjxQu1u4kAw7fUNERqF5BsySFTY+tGZn5oMIbmowzAI
-         GVjwZ3hLx7/TXp3T57fGm7f2tSs7bqQMmVsUcVomikBwUjDykFgN3/udy7I/21Qakb
-         oGcwX0Fs577IAtNXepODapC6y7EH+P2AtEmenX89JAg8/dkXdke7QOFaegVeSGkbD6
-         OnqpjPpNFhC6Q==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 26 May 2023 14:40:45 +0300 (MSK)
-Message-ID: <4baf786b-afe5-371d-9bc4-90226e5df3af@sberdevices.ru>
-Date:   Fri, 26 May 2023 14:36:17 +0300
+        Fri, 26 May 2023 07:37:23 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437F51BD
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 04:37:03 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QAYrKk025556;
+        Fri, 26 May 2023 13:36:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=S6XM50mu6V6wJscvmX3U+TyamOHBOuxRqWN0uH6wbq4=;
+ b=unOnYOP7pMFoXzyoENqDTT4xAyA+yQWxd5n6RU4anROy+7RfJHMrProvk9QNE++9xQhw
+ 0DICGNUlXhcutzH4/qsG0D5X+ynvnA1I2ZBlFSJV3cA9hwPaRjAg4AqtCWRdoeVUatQG
+ 2S8oNmyT3TgXTAHtX5cAqD8HejmsjawCU5VNT1wUhf/XpWCaxwQSoAVmf6XZIrkj1uEB
+ 8UkxUNPv8obmB3snpbGuxamsK1DZMFxZTiZKEr4Z+wGUvuArdMUGhlv8VB34zg5BpXmd
+ f8ozAU+VxMATa1687S+u/PIzn0YXPVEk5NpP1yK7zboxwDRf9Jdnriph5RN6uYUeqVlF xg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qt4aw0k43-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 13:36:45 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 225F010002A;
+        Fri, 26 May 2023 13:36:45 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 13497229A83;
+        Fri, 26 May 2023 13:36:45 +0200 (CEST)
+Received: from [10.48.0.148] (10.48.0.148) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 26 May
+ 2023 13:36:43 +0200
+Message-ID: <f6aaa6b7-7f48-2574-ed0f-54cd3519bfbe@foss.st.com>
+Date:   Fri, 26 May 2023 13:36:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v3 00/17] vsock: MSG_ZEROCOPY flag support
+ Thunderbird/102.11.0
+Subject: Re: [PATCH -next] drm/stm: dsi: Use devm_platform_ioremap_resource()
 Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <20230522073950.3574171-1-AVKrasnov@sberdevices.ru>
- <76270fab-8af7-7597-9193-64cb553a543e@sberdevices.ru>
- <y5tgyj5awrd4hvlrsxsvrern6pd2sby2mdtskah2qp5hemmo2a@72nhcpilg7v2>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <y5tgyj5awrd4hvlrsxsvrern6pd2sby2mdtskah2qp5hemmo2a@72nhcpilg7v2>
-Content-Type: text/plain; charset="UTF-8"
+To:     Yang Li <yang.lee@linux.alibaba.com>, <yannick.fertre@foss.st.com>
+CC:     <raphael.gallais-pou@foss.st.com>, <airlied@gmail.com>,
+        <daniel@ffwll.ch>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230421083402.21364-1-yang.lee@linux.alibaba.com>
+From:   Philippe CORNU <philippe.cornu@foss.st.com>
+In-Reply-To: <20230421083402.21364-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/26 06:32:00 #21351256
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Originating-IP: [10.48.0.148]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,32 +77,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 4/21/23 10:34, Yang Li wrote:
+> Convert platform_get_resource(),devm_ioremap_resource() to a single call
+> to devm_platform_ioremap_resource(), as this is exactly what this function
+> does.
+> 
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>   drivers/gpu/drm/stm/dw_mipi_dsi-stm.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+> index 89897d5f5c72..1750b6a25e87 100644
+> --- a/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+> +++ b/drivers/gpu/drm/stm/dw_mipi_dsi-stm.c
+> @@ -444,15 +444,13 @@ static int dw_mipi_dsi_stm_probe(struct platform_device *pdev)
+>   	struct device *dev = &pdev->dev;
+>   	struct dw_mipi_dsi_stm *dsi;
+>   	struct clk *pclk;
+> -	struct resource *res;
+>   	int ret;
+>   
+>   	dsi = devm_kzalloc(dev, sizeof(*dsi), GFP_KERNEL);
+>   	if (!dsi)
+>   		return -ENOMEM;
+>   
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	dsi->base = devm_ioremap_resource(dev, res);
+> +	dsi->base = devm_platform_ioremap_resource(pdev, 0);
+>   	if (IS_ERR(dsi->base)) {
+>   		ret = PTR_ERR(dsi->base);
+>   		DRM_ERROR("Unable to get dsi registers %d\n", ret);
 
-On 26.05.2023 13:30, Stefano Garzarella wrote:
-> On Thu, May 25, 2023 at 06:56:42PM +0300, Arseniy Krasnov wrote:
->>
->>
->> On 22.05.2023 10:39, Arseniy Krasnov wrote:
->>
->> This patchset is unstable with SOCK_SEQPACKET. I'll fix it.
-> 
-> Thanks for let us know!
-> 
-> I'm thinking if we should start split this series in two, because it
-> becomes too big.
-> 
-> But let keep this for RFC, we can decide later. An idea is to send
-> the first 7 patches with a preparation series, and the next ones with a
-> second series.
-
-Hello, ok! So i'll split patchset in the following way:
-1) Patches which adds new fields/flags and checks. But all of this is not used,
-   as it is preparation.
-2) Second part starts to use it and also carries tests.
-
-Thanks, Arseniy
-
-> 
-> Thanks,
-> Stefano
-> 
+Applied on drm-misc-next.
+Many thanks for your patch,
+Philippe :-)
