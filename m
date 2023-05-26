@@ -2,35 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C597123CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182597123D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242645AbjEZJhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
+        id S243033AbjEZJhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjEZJhf (ORCPT
+        with ESMTP id S242746AbjEZJho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:37:35 -0400
+        Fri, 26 May 2023 05:37:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2567F3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:37:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E7410A;
+        Fri, 26 May 2023 02:37:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 811DE64E9F
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:37:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC933C433D2;
-        Fri, 26 May 2023 09:37:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5621064EB9;
+        Fri, 26 May 2023 09:37:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A581C433EF;
+        Fri, 26 May 2023 09:37:40 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] arm64: Add decode of ISS2 to data abort reports
-Date:   Fri, 26 May 2023 10:37:29 +0100
-Message-Id: <168509384592.1547825.15647313372998051132.b4-ty@arm.com>
+To:     Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] kselftest/arm64: Add a smoke test for ptracing hardware break/watch points
+Date:   Fri, 26 May 2023 10:37:38 +0100
+Message-Id: <168509385498.1547913.7827809763054726991.b4-ty@arm.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230417-arm64-iss2-dabt-decode-v3-0-c1fa503e503a@kernel.org>
-References: <20230417-arm64-iss2-dabt-decode-v3-0-c1fa503e503a@kernel.org>
+In-Reply-To: <20230414-arm64-test-hw-breakpoint-v2-1-90a19e3b1059@kernel.org>
+References: <20230414-arm64-test-hw-breakpoint-v2-1-90a19e3b1059@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -43,22 +45,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 15:05:13 +0900, Mark Brown wrote:
-> We provide fairly detailed decode of ESR for data aborts but do not
-> currently cover the information reported in ISS2 which has had quite a
-> bit of additional information added to it by recent architecture
-> extensions.  Add decode for this information to aid in debugging, for
-> completeness including features we don't actually use yet.
-> 
+On Mon, 22 May 2023 15:28:00 +0100, Mark Brown wrote:
+> There was a report that the hardware breakpoints and watch points weren't
+> reporting the debug architecture version as expected, they were reporting
+> a version of 0 which is not defined in the architecture.  This happens
+> when running in a KVM guest if the host has a debug architecture version
+> not supported by KVM, it in turn confuses GDB which rejects any debug
+> architecture version it does not know about.
 > 
 > [...]
 
-Applied to arm64 (for-next/iss2-decode), thanks!
+Applied to arm64 (for-next/kselftest), thanks!
 
-[1/2] arm64/esr: Use GENMASK() for the ISS mask
-      https://git.kernel.org/arm64/c/de847275449a
-[2/2] arm64/esr: Add decode of ISS2 to data abort reporting
-      https://git.kernel.org/arm64/c/1f9d4ba6839c
+[1/1] kselftest/arm64: Add a smoke test for ptracing hardware break/watch points
+      https://git.kernel.org/arm64/c/cb5aa6379438
 
 -- 
 Catalin
