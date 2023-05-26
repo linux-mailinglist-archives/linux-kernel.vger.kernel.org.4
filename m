@@ -2,248 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF30712F1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9847C712F2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbjEZVqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 17:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
+        id S243272AbjEZVuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 17:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjEZVqi (ORCPT
+        with ESMTP id S236842AbjEZVu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 17:46:38 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD616BC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:46:35 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-75b015c0508so85119285a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:46:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1685137595; x=1687729595;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=OChS6CgIR0Z1Ev8N1EOc1Ac0D5tF3V/2F5CsXQVoVnI=;
-        b=gWLhTXGb6lIak9sKt9LrA+ikNkcM8FCEfiOg4McGvgfbX7WaoRP4jZ5MtRUOMuE/ss
-         w80PMARIDm/z6lkOy3tAwfTjzhfqdKBNtyKWxiJ39WdEmSi6XVYb4vCptC45bMZRp2Zq
-         ocIwkMBKHBkICfVSGAFkt0NuupvK/+7iLRM3s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685137595; x=1687729595;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OChS6CgIR0Z1Ev8N1EOc1Ac0D5tF3V/2F5CsXQVoVnI=;
-        b=L1y2ZFwpkh1Xn/rHtLHb7892tqMs8VRoLbpVVgvbI2v7mZokaRL2QsKEnAKrXwZmqj
-         B55G8+FIHaoFZ6Lc5dpwm97DWtVYAIByhBsWmXX8MryZ7fcbOOxf9OrhiBDTbEuwXkh7
-         //EjHAbGBhptSLobgDFiLIgWFO7jppribRN41YO8rrzrnYkKlTLPezqMvKj+85HmWLBA
-         GoTSs9u2srrvnQg12ls0XxAffsGLO6MNew2blEEXF3fv4N5MvnFraG7UIXvgV1cKZYmB
-         u66NJobAqQo6bUCJQ4eGvN0L3zynxDO+SsAzF2SNHzlTIJnLrhkZYJ++uN9+AQD+MMxG
-         Pn/g==
-X-Gm-Message-State: AC+VfDzBGP4VloIvY2GHxXA1g7VNOzoDWYBmaZJPcOMwDsIM+iQ3O89G
-        lDMMG/szYgTnjA9m68HpF4wSCQ==
-X-Google-Smtp-Source: ACHHUZ4YpFhjfwjTMTaB4BhpA42uDMWVCFllzXTJd8TXlEX58XG7NS0QutRyUjHLqY/6XVUpFBuOVA==
-X-Received: by 2002:a05:6214:e4c:b0:626:cbe:3c6d with SMTP id o12-20020a0562140e4c00b006260cbe3c6dmr2140675qvc.22.1685137594877;
-        Fri, 26 May 2023 14:46:34 -0700 (PDT)
-Received: from [10.69.71.77] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id x16-20020a0ce0d0000000b0062593051073sm1504220qvk.111.2023.05.26.14.46.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 14:46:34 -0700 (PDT)
-Message-ID: <e0b4ef62-2d80-d5b2-e0b0-b15c00b75143@broadcom.com>
-Date:   Fri, 26 May 2023 14:46:30 -0700
+        Fri, 26 May 2023 17:50:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E415FF7;
+        Fri, 26 May 2023 14:50:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685137828; x=1716673828;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VfEhsdKfsdRHsXF4n5Ad6c1ZfAY94T+oTXwCQNRuezI=;
+  b=B2sgH/O2VuWvgVCpnayAWN+VcOkMh8YqN6rLiqp7WxQ86C2Ybfz82lC6
+   YBofYT9+IQiOn9wg6r4MZw7t89P3daxHNqBJykc52YQxG0zvcDdcbkBL/
+   Q+ftH4UZ+5DNwdw5+Whcbwa6EJqsTFX/Wp7vqDSw9ytZEw8L3IrBEUUMl
+   2QcVsdV3YutqI5/givOQtHvmIgYK8iKg53n30o485hJ76tEzbdBMJNdpK
+   TsstSPn2lgQSRWeF7RZuQJWwsdjF1cLusTJdQ/l1DpC/6rPNTkq6VZ63K
+   h9UG2FV+8MiGa43iAhjr2xLX1wWhXPULH2LpUsZbh9tdWQh9r7Et009Ti
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="440669248"
+X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
+   d="scan'208";a="440669248"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 14:50:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="879673483"
+X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
+   d="scan'208";a="879673483"
+Received: from svepakom-mobl1.amr.corp.intel.com (HELO [10.252.139.203]) ([10.252.139.203])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 14:50:27 -0700
+Message-ID: <e0ba4d6a-1d6e-12ee-5bc2-5cb3c7096aef@linux.intel.com>
+Date:   Fri, 26 May 2023 14:50:27 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v5 3/6] net: bcmasp: Add support for ASP2.0
- Ethernet controller
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        opendmb@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, richardcochran@gmail.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        simon.horman@corigine.com
-References: <1684969313-35503-1-git-send-email-justin.chen@broadcom.com>
- <1684969313-35503-4-git-send-email-justin.chen@broadcom.com>
- <20230525205454.1c766852@kernel.org>
-From:   Justin Chen <justin.chen@broadcom.com>
-In-Reply-To: <20230525205454.1c766852@kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c2460f05fc9fab7d"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCHv2 1/3] x86/mm: Allow guest.enc_status_change_prepare() to
+ fail
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        dave.hansen@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de
+Cc:     decui@microsoft.com, rick.p.edgecombe@intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230526120225.31936-1-kirill.shutemov@linux.intel.com>
+ <20230526120225.31936-2-kirill.shutemov@linux.intel.com>
+Content-Language: en-US
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230526120225.31936-2-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000c2460f05fc9fab7d
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
 
-
-On 5/25/23 8:54 PM, Jakub Kicinski wrote:
-> On Wed, 24 May 2023 16:01:50 -0700 Justin Chen wrote:
->> Add support for the Broadcom ASP 2.0 Ethernet controller which is first
->> introduced with 72165. This controller features two distinct Ethernet
->> ports that can be independently operated.
->>
->> This patch supports:
->>
->> - Wake-on-LAN using magic packets
->> - basic ethtool operations (link, counters, message level)
->> - MAC destination address filtering (promiscuous, ALL_MULTI, etc.)
+On 5/26/23 5:02 AM, Kirill A. Shutemov wrote:
+> TDX code is going to provide guest.enc_status_change_prepare() that is
+> able to fail. TDX will use the call to convert the GPA range from shared
+> to private. This operation can fail.
 > 
->> +static netdev_tx_t bcmasp_xmit(struct sk_buff *skb, struct net_device *dev)
->> +{
->> +	struct bcmasp_intf *intf = netdev_priv(dev);
->> +	int spb_index, nr_frags, ret, i, j;
->> +	unsigned int total_bytes, size;
->> +	struct bcmasp_tx_cb *txcb;
->> +	dma_addr_t mapping, valid;
->> +	struct bcmasp_desc *desc;
->> +	bool csum_hw = false;
->> +	struct device *kdev;
->> +	skb_frag_t *frag;
->> +
->> +	kdev = &intf->parent->pdev->dev;
->> +
->> +	spin_lock(&intf->tx_lock);
+> Add a way to return an error from the callback.
 > 
-> What is the tx_lock for? netdevs already have a tx lock, unless you
-> declare the device as lockless.
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: stable@vger.kernel.org
+> ---
+
+Looks good to me.
+
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+
+
+>  arch/x86/include/asm/x86_init.h | 2 +-
+>  arch/x86/kernel/x86_init.c      | 2 +-
+>  arch/x86/mm/mem_encrypt_amd.c   | 4 +++-
+>  arch/x86/mm/pat/set_memory.c    | 3 ++-
+>  4 files changed, 7 insertions(+), 4 deletions(-)
 > 
+> diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
+> index 88085f369ff6..1ca9701917c5 100644
+> --- a/arch/x86/include/asm/x86_init.h
+> +++ b/arch/x86/include/asm/x86_init.h
+> @@ -150,7 +150,7 @@ struct x86_init_acpi {
+>   * @enc_cache_flush_required	Returns true if a cache flush is needed before changing page encryption status
+>   */
+>  struct x86_guest {
+> -	void (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
+> +	bool (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
+>  	bool (*enc_status_change_finish)(unsigned long vaddr, int npages, bool enc);
+>  	bool (*enc_tlb_flush_required)(bool enc);
+>  	bool (*enc_cache_flush_required)(void);
+> diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
+> index d82f4fa2f1bf..f230d4d7d8eb 100644
+> --- a/arch/x86/kernel/x86_init.c
+> +++ b/arch/x86/kernel/x86_init.c
+> @@ -130,7 +130,7 @@ struct x86_cpuinit_ops x86_cpuinit = {
+>  
+>  static void default_nmi_init(void) { };
+>  
+> -static void enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { }
+> +static bool enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { return true; }
+>  static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return false; }
+>  static bool enc_tlb_flush_required_noop(bool enc) { return false; }
+>  static bool enc_cache_flush_required_noop(void) { return false; }
+> diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
+> index e0b51c09109f..4f95c449a406 100644
+> --- a/arch/x86/mm/mem_encrypt_amd.c
+> +++ b/arch/x86/mm/mem_encrypt_amd.c
+> @@ -319,7 +319,7 @@ static void enc_dec_hypercall(unsigned long vaddr, int npages, bool enc)
+>  #endif
+>  }
+>  
+> -static void amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool enc)
+> +static bool amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool enc)
+>  {
+>  	/*
+>  	 * To maintain the security guarantees of SEV-SNP guests, make sure
+> @@ -327,6 +327,8 @@ static void amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool
+>  	 */
+>  	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP) && !enc)
+>  		snp_set_memory_shared(vaddr, npages);
+> +
+> +	return true;
+>  }>  
+>  /* Return true unconditionally: return value doesn't matter for the SEV side */
+> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> index 7159cf787613..b8f48ebe753c 100644
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@ -2151,7 +2151,8 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+>  		cpa_flush(&cpa, x86_platform.guest.enc_cache_flush_required());
+>  
+>  	/* Notify hypervisor that we are about to set/clr encryption attribute. */
+> -	x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
+> +	if (!x86_platform.guest.enc_status_change_prepare(addr, numpages, enc))
+> +		return -EIO;
+>  
+>  	ret = __change_page_attr_set_clr(&cpa, 1);
+>  
 
-Will remove.
-
->> +static void bcmasp_tx_timeout(struct net_device *dev, unsigned int txqueue)
->> +{
->> +	struct bcmasp_intf *intf = netdev_priv(dev);
->> +
->> +	netif_dbg(intf, tx_err, dev, "transmit timeout!\n");
->> +
->> +	netif_trans_update(dev);
->> +	dev->stats.tx_errors++;
->> +
->> +	netif_wake_queue(dev);
-> 
-> If the queue is full xmit will just put it back to sleep.
-> You want to try to reap completions if anything, no?
-> 
-
-I can remove the wake. As you mentioned it won't do anything here. There 
-isn't anything to reap if we are in the timeout condition. If it is some 
-HW stall, we could flush and restart the ring, but if that is the case I 
-rather figure out why the HW is stalling. I think we can leave it as a 
-"tell the user we are stalled" and leave it as that.
-
->> +static struct net_device_stats *bcmasp_get_stats(struct net_device *dev)
->> +{
->> +	return &dev->stats;
->> +}
-> 
-> you don't have to do this, core will use device stats if there's no ndo
-> 
->> +	ndev = alloc_etherdev(sizeof(struct bcmasp_intf));
->> +	if (!dev) {
-> 
-> *blink* condition is typo'ed
-> 
-
-Oops. Good catch.
-
-Thanks,
-Justin
-
->> +		dev_warn(dev, "%s: unable to alloc ndev\n", ndev_dn->name);
->> +		goto err;
->> +	}
-> 
-
---000000000000c2460f05fc9fab7d
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-NhTY3E+cXCB11wty89QStajwXdhGJTYEvUgvsq1h8CwJj9w/38ldAQf5WjhPmApYeJR2ewFrBMCM
-4lHkdRJ6TDc9nXoEkypUfjJkJHe7Eal06tosh6JpAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
-BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
-NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
-A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
-aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
-cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
-MBqBGGp1c3Rpbi5jaGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
-GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIWGeYuaTsnIada5Xx8TR3cheUbgw
-DQYJKoZIhvcNAQELBQADggEBAHNQlMqQOFYPYFO71A+8t+qWMmtOdd2iGswSOvpSZ/pmGlfw8ZvY
-dRTkl27m37la84AxRkiVMes14JyOZJoMh/g7fbgPlU14eBc6WQWkIA6AmNkduFWTr1pRezkjpeo6
-xVmdBLM4VY1TFDYj7S8H2adPuypd62uHMY/MZi+BIUys4uAFA+N3NuUBNjcVZXYPplYxxKEuIFq6
-sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
-VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
-ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
-bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFl+PmxGjR3ebWGPsCEzaP2KRUiSPqjLCaDP
-rSWBtqSNMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUyNjIx
-NDYzNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
-AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQB2cQdpGNrlxd1mJzBy5RX+g5U1eCL0epKfdZFJE3cEgNZ//Oz/DV9k
-l1WOcaq8OxdnOcg0aMrXhdqHDM0Xtqf7hjK7hmUjzhsH902r3WDaICw0tmeomu6o33BfsHcwR2/f
-CI/IiRza7UQyhmGTYyV2uTkyyi+c1sEc723yGLl4lhe0E2zx/2/xN95c8RC20tXVV0Ri4ethKP0z
-3r+KoSi1QC1DI6dyLLdz6+QmCzvY3D8W+91yiZUqK/rIXFqJr8BXU0Tl7c1XzEIRMq6jNEvekXjl
-3NNbw0xQg7QNo/45dq+AWtWdar00hMI2cpze7d4R81hixCh0rYHIkiA8umNs
---000000000000c2460f05fc9fab7d--
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
