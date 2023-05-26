@@ -2,355 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6FD7124A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B7A71249D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243097AbjEZK1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        id S243057AbjEZK2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjEZK1d (ORCPT
+        with ESMTP id S243149AbjEZK2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:27:33 -0400
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4233A19C
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:27:28 -0700 (PDT)
-Received: from local
-        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1q2UfM-00062F-0J;
-        Fri, 26 May 2023 10:27:24 +0000
-Date:   Fri, 26 May 2023 11:27:15 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Jia-wei Chang =?utf-8?B?KOW8teS9s+WBiSk=?= 
-        <Jia-wei.Chang@mediatek.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "vincent@systemli.org" <vincent@systemli.org>,
-        "hsinyi@google.com" <hsinyi@google.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        Rex-BC Chen =?utf-8?B?KOmZs+afj+i+sCk=?= 
-        <Rex-BC.Chen@mediatek.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen Zhong =?utf-8?B?KOmSn+i+sCk=?= <Chen.Zhong@mediatek.com>,
-        "error27@gmail.com" <error27@gmail.com>
-Subject: Re: [PATCH v2 4/4] cpufreq: mediatek: Raise proc and sram max
- voltage for MT7622/7623
-Message-ID: <ZHCJg2rTW0UilMa6@makrotopia.org>
-References: <20230324101130.14053-1-jia-wei.chang@mediatek.com>
- <20230324101130.14053-5-jia-wei.chang@mediatek.com>
- <ZGuuVPCqgpUO6p0Q@makrotopia.org>
- <a1793745-eae3-cae5-49fc-2e75fe0847f0@collabora.com>
- <ZGz55oEEAhlWZajK@makrotopia.org>
- <3054e2d9-7f77-a22a-293d-382f19494079@collabora.com>
- <4e5a8202f7446481def19e5926d1bfd6e6568dd7.camel@mediatek.com>
- <ZG4GNpxdbZ4TNq3K@makrotopia.org>
- <5dc13e13143aaffc4477fb9dcf565070cf1a9822.camel@mediatek.com>
+        Fri, 26 May 2023 06:28:10 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4688712F;
+        Fri, 26 May 2023 03:28:02 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b01dac1a82so241075ad.2;
+        Fri, 26 May 2023 03:28:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685096882; x=1687688882;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aZO0rJalJeJGbkGsp4THesp5QJNmk1G4UdTf0ECue4c=;
+        b=XhH0D0v1D/gUuJkfVBmEkCkn/0BSN48AWwvSmsd+5pVdMFtBBLC/dvLZnlBouhnPju
+         9yeJO6EJs/28rK/qxSILPALQbfmLRr5TNmhdLjrTl1FfwLQa83GSujmXyXH0zxaWqJHk
+         7ggmKZX3lEo+puMyDfNTDXxmhq24wueKtHN01UmJ5FqeC1Pf1GcDQMY4oT7mh1B7MDlv
+         +rOYfgl0VMjRT6xpUdn07HoVVgUF/MdDVY5JmP7PccYq3+XDeGfEubQ7xSn4T1VVlP5l
+         k/7xETTehE74AE+xQvqz31C3LiFnqWO2ZqCj4cF6jpYxqj7vbpoZN0JD6hb6LvElsE7C
+         ghsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685096882; x=1687688882;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aZO0rJalJeJGbkGsp4THesp5QJNmk1G4UdTf0ECue4c=;
+        b=ic88I3WwiyU7vNIQw1gRws1hHEYHaYU2orGJ2HBXW5Bvt+juWJlmkkGReP/DXcz429
+         /UjKz1ARZReWrxMfkrRRX4o1fpT36k+0scUyGvGvi2uVNdIACzcTfWgFH/eP4+LHP88W
+         rAAhieyCdk/laUaKJh45EQCuDWnxKWNxiTlO4kZ06OE+BoFwJ/5Z0x19YSuwTXLwFVRP
+         xIXR+OIXuHtttvHR1795PkJQ8j4lGcz6bUner+T9oQy6/hB6hTgCbDyTKa/MS8MCVRT2
+         RJgCQ4btqrECX3fqqo/c8qhytEbEh1XEuB8mKPLrZC3I5o6Wwqru8rJBqOFn5aTrHDp/
+         Y0WQ==
+X-Gm-Message-State: AC+VfDwVw5+gDtqfBVzXSFQZqPUTt69MCm/8NHp6UgYO68HbFcQois//
+        JUA2RNcnmeoyWf4O6G/O5ZY=
+X-Google-Smtp-Source: ACHHUZ7Z98CHq6GRXCmsrPlmgwgS2hYtAkiYLAcZOxn45HkkIC+P8mR6M1Tvt3fDPIJZvnVBfa5AoA==
+X-Received: by 2002:a17:902:cecd:b0:1af:f751:1be9 with SMTP id d13-20020a170902cecd00b001aff7511be9mr2156719plg.32.1685096881595;
+        Fri, 26 May 2023 03:28:01 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id n2-20020a170902e54200b001ae268978cfsm2929008plf.259.2023.05.26.03.27.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 03:28:01 -0700 (PDT)
+Message-ID: <a5405368-d04c-f95c-ad18-95f429120dbe@gmail.com>
+Date:   Fri, 26 May 2023 19:27:56 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5dc13e13143aaffc4477fb9dcf565070cf1a9822.camel@mediatek.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 24/26] locking/atomic: scripts: generate kerneldoc
+ comments
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+        boqun.feng@gmail.com, corbet@lwn.net, keescook@chromium.org,
+        linux-arch@vger.kernel.org, linux@armlinux.org.uk,
+        linux-doc@vger.kernel.org, paulmck@kernel.org,
+        sstabellini@kernel.org, will@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20230522122429.1915021-1-mark.rutland@arm.com>
+ <20230522122429.1915021-25-mark.rutland@arm.com>
+ <96d6930b-78b1-4b4c-63e3-c385a764d6e3@gmail.com>
+ <20230524141152.GL4253@hirez.programming.kicks-ass.net>
+ <e76c924a-762c-061d-02b8-13be884ab344@gmail.com>
+ <c9399722-b2df-52ee-cefe-338b118aeb1e@infradead.org>
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <c9399722-b2df-52ee-cefe-338b118aeb1e@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 08:27:25AM +0000, Jia-wei Chang (張佳偉) wrote:
-> On Wed, 2023-05-24 at 13:42 +0100, Daniel Golle wrote:
-> > On Wed, May 24, 2023 at 08:43:31AM +0000, Jia-wei Chang (張佳偉) wrote:
-> > > On Wed, 2023-05-24 at 09:28 +0200, AngeloGioacchino Del Regno wrote:
-> > > > Il 23/05/23 19:37, Daniel Golle ha scritto:
-> > > > > On Tue, May 23, 2023 at 04:56:47PM +0200, AngeloGioacchino Del
-> > > > > Regno wrote:
-> > > > > > Il 22/05/23 20:03, Daniel Golle ha scritto:
-> > > > > > > Hi Jia-Wei,
-> > > > > > > Hi AngeloGioacchino,
-> > > > > > > 
-> > > > > > > On Fri, Mar 24, 2023 at 06:11:30PM +0800, jia-wei.chang
-> > > > > > > wrote:
-> > > > > > > > From: AngeloGioacchino Del Regno <
-> > > > > > > > angelogioacchino.delregno@collabora.com>
-> > > > > > > > 
-> > > > > > > > During the addition of SRAM voltage tracking for CCI
-> > > > > > > > scaling,
-> > > > > > > > this
-> > > > > > > > driver got some voltage limits set for the vtrack
-> > > > > > > > algorithm:
-> > > > > > > > these
-> > > > > > > > were moved to platform data first, then enforced in a
-> > > > > > > > later
-> > > > > > > > commit
-> > > > > > > > 6a17b3876bc8 ("cpufreq: mediatek: Refine
-> > > > > > > > mtk_cpufreq_voltage_tracking()")
-> > > > > > > > using these as max values for the regulator_set_voltage()
-> > > > > > > > calls.
-> > > > > > > > 
-> > > > > > > > In this case, the vsram/vproc constraints for MT7622 and
-> > > > > > > > MT7623
-> > > > > > > > were supposed to be the same as MT2701 (and a number of
-> > > > > > > > other
-> > > > > > > > SoCs),
-> > > > > > > > but that turned out to be a mistake because the
-> > > > > > > > aforementioned two
-> > > > > > > > SoCs' maximum voltage for both VPROC and VPROC_SRAM is
-> > > > > > > > 1.36V.
-> > > > > > > > 
-> > > > > > > > Fix that by adding new platform data for MT7622/7623
-> > > > > > > > declaring the
-> > > > > > > > right {proc,sram}_max_volt parameter.
-> > > > > > > > 
-> > > > > > > > Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage
-> > > > > > > > limits
-> > > > > > > > to platform data")
-> > > > > > > > Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine
-> > > > > > > > mtk_cpufreq_voltage_tracking()")
-> > > > > > > > Signed-off-by: AngeloGioacchino Del Regno <
-> > > > > > > > angelogioacchino.delregno@collabora.com>
-> > > > > > > > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > > > > > > > ---
-> > > > > > > >    drivers/cpufreq/mediatek-cpufreq.c | 13 +++++++++++--
-> > > > > > > >    1 file changed, 11 insertions(+), 2 deletions(-)
-> > > > > > > > 
-> > > > > > > > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
-> > > > > > > > b/drivers/cpufreq/mediatek-cpufreq.c
-> > > > > > > > index 764e4fbdd536..9a39a7ccfae9 100644
-> > > > > > > > --- a/drivers/cpufreq/mediatek-cpufreq.c
-> > > > > > > > +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> > > > > > > > @@ -693,6 +693,15 @@ static const struct
-> > > > > > > > mtk_cpufreq_platform_data mt2701_platform_data = {
-> > > > > > > >            .ccifreq_supported = false,
-> > > > > > > >    };
-> > > > > > > > +static const struct mtk_cpufreq_platform_data
-> > > > > > > > mt7622_platform_data = {
-> > > > > > > > +  .min_volt_shift = 100000,
-> > > > > > > > +  .max_volt_shift = 200000,
-> > > > > > > > +  .proc_max_volt = 1360000,
-> > > > > > > > +  .sram_min_volt = 0,
-> > > > > > > > +  .sram_max_volt = 1360000,
-> > > > > > > 
-> > > > > > > This change breaks cpufreq (with ondemand scheduler) on my
-> > > > > > > BPi
-> > > > > > > R64
-> > > > > > > board (having MT7622AV SoC with MT6380N PMIC).
-> > > > > > > ...
-> > > > > > > [    2.540091] cpufreq: __target_index: Failed to change
-> > > > > > > cpu
-> > > > > > > frequency: -22
-> > > > > > > [    2.556985] cpu cpu0: cpu0: failed to scale up voltage!
-> > > > > > > ...
-> > > > > > > (repeating a lot, every time the highest operating point is
-> > > > > > > selected
-> > > > > > > by the cpufreq governor)
-> > > > > > > 
-> > > > > > > The reason is that the MT6380N doesn't support 1360000uV on
-> > > > > > > the
-> > > > > > > supply
-> > > > > > > outputs used for SRAM and processor.
-> > > > > > > 
-> > > > > > > As for some reason cpufreq-mediatek tries to rise the SRAM
-> > > > > > > supply
-> > > > > > > voltage to the maximum for a short moment (probably a side-
-> > > > > > > effect of
-> > > > > > > the voltage tracking algorithm), this fails because the
-> > > > > > > PMIC
-> > > > > > > only
-> > > > > > > supports up to 1350000uV. As the highest operating point is
-> > > > > > > anyway
-> > > > > > > using only 1310000uV the simple fix is setting 1350000uV as
-> > > > > > > the
-> > > > > > > maximum
-> > > > > > > instead for both proc_max_volt and sram_max_volt.
-> > > > > > > 
-> > > > > > > A similar situation applies also for BPi R2 (MT7623NI with
-> > > > > > > MT6323L
-> > > > > > > PMIC), here the maximum supported voltage of the PMIC which
-> > > > > > > also only
-> > > > > > > supports up to 1350000uV, and the SoC having its highest
-> > > > > > > operating
-> > > > > > > voltage defined at 1300000uV.
-> > > > > > > 
-> > > > > > > If all agree with the simple fix I will post a patch for
-> > > > > > > that.
-> > > > > > > 
-> > > > > > > However, to me it feels fishy to begin with that the
-> > > > > > > tracking
-> > > > > > > algorithm
-> > > > > > > tries to rise the voltage above the highest operating point
-> > > > > > > defined in
-> > > > > > > device tree, see here:
-> > > > > > > 
-> > > > > > > 6a17b3876bc830 drivers/cpufreq/mediatek-cpufreq.c (Jia-Wei
-> > > > > > > Chang              2022-05-05 19:52:20 +0800
-> > > > > > > 100)    new_vsram
-> > > > > > > = clamp(new_vproc + soc_data->min_volt_shift,
-> > > > > > > 6a17b3876bc830 drivers/cpufreq/mediatek-cpufreq.c (Jia-Wei
-> > > > > > > Chang              2022-05-05 19:52:20 +0800
-> > > > > > > 101)                      soc_data->sram_min_volt,
-> > > > > > > soc_data-
-> > > > > > > > sram_max_volt);
-> > > > > > > 
-> > > > > > > However, I did not investigate in depth the purpose of this
-> > > > > > > initial rise and can impossibly test my modifications to
-> > > > > > > the
-> > > > > > > tracking algorithm on all supported SoCs.
-> > > > > > > 
-> > > > > > 
-> > > > > > Thanks for actually reporting that, I don't think that
-> > > > > > there's
-> > > > > > any
-> > > > > > valid reason why the algorithm should set a voltage higher
-> > > > > > than
-> > > > > > the
-> > > > > > maximum votage specified in the fastest OPP.
-> > > > > > 
-> > > > > > Anyway - the logic for the platform data of this driver is to
-> > > > > > declare
-> > > > > > the maximum voltage that SoC model X supports, regardless of
-> > > > > > the
-> > > > > > actual
-> > > > > > board-specific OPPs, so that part is right; to solve this
-> > > > > > issue,
-> > > > > > I guess
-> > > > > > that the only way is for this driver to parse the OPPs during
-> > > > > > .probe()
-> > > > > > and then always use in the algorithm
-> > > > > > 
-> > > > > >      vproc_max = max(proc_max_volt, opp_vproc_max);
-> > > > > >      vsram_max = max(sram_max_volt, vsram_vreg_max);
-> > > 
-> > > Hi Daniel, Angelo Sir,
-> > > 
-> > > Thanks for the issue report and suggestions.
-> > > 
-> > > Is it possible to modify the value of proc_max_volt and
-> > > sram_max_volt
-> > > to 1310000 in mt7622_platform_data as the highest voltage declared
-> > > in
-> > > mt7622.dtsi and then give it a try?
-> > > 
-> > > Sorry, I need someone help to check this on mt7622 since I don't
-> > > have
-> > > mt7622 platform..
-> > 
-> > Unfortunately also setting proc_max_volt and sram_max_volt to 1310000
-> > doesn't work:
-> > [    1.983325] cpu cpu0: cpu0: failed to scale up voltage!
-> > [    1.988621] cpufreq: __target_index: Failed to change cpu
-> > frequency: -22
-> > ::repeating infinitely::
-> > 
-> > This is because in mt6380-regulator.c you can see
-> > static const unsigned int ldo_volt_table1[] = {
-> >         1400000, 1350000, 1300000, 1250000, 1200000, 1150000,
-> > 1100000, 1050000,
-> > };
-> > 
-> > So 1310000 is not among the supported voltages but mediatek-cpufreq.c
-> > will repeatedly call
-> > regulator_set_voltage(sram_reg, 1310000, 1310000);
-> > which will fail for obvious reasons.
-> > 
-> > Using 1350000 for proc_max_volt and sram_max_volt like I have
-> > suggested
-> > as a simple work-around does work because 1350000 is among the
-> > supported
-> > voltages of the MT6380 regulator.
-> > 
-> > On MT7623 the whole problem is anyway non-existent because there is
-> > no
-> > separate sram-supply, hence the tracking algorithm isn't used at all.
-> > 
+Hi Randy,
+
+On 2023/05/26 13:51, Randy Dunlap wrote:
+> Hi Akira,
 > 
-> Exactly.
+> On 5/25/23 20:17, Akira Yokosawa wrote:
+>> On Wed, 24 May 2023 16:11:52 +0200, Peter Zijlstra wrote:
+>>> On Wed, May 24, 2023 at 11:03:58PM +0900, Akira Yokosawa wrote:
+>>>
+>>>>> * All ops are described as an expression using their usual C operator.
+>>>>>   For example:
+>>>>>
+>>>>>   andnot: "Atomically updates @v to (@v & ~@i)"
+>>>>
+>>>> The kernel-doc script converts "~@i" into reST source of "~**i**",
+>>>> where the emphasis of i is not recognized by Sphinx.
+>>>>
+>>>> For the "@" to work as expected, please say "~(@i)" or "~ @i".
+>>>> My preference is the former.
+>>>
+>>> And here we start :-/ making the actual comment less readable because
+>>> retarded tooling.
+>>>
+>>>>>   inc:    "Atomically updates @v to (@v + 1)"
+>>>>>
+>>>>>   Which may be clearer to non-naative English speakers, and allows all
+>>>>                             non-native
+>>>>
+>>>>>   the operations to be described in the same style.
+>>>>>
+>>>>> * All conditional ops have their condition described as an expression
+>>>>>   using the usual C operators. For example:
+>>>>>
+>>>>>   add_unless: "If (@v != @u), atomically updates @v to (@v + @i)"
+>>>>>   cmpxchg:    "If (@v == @old), atomically updates @v to @new"
+>>>>>
+>>>>>   Which may be clearer to non-naative English speakers, and allows all
+>>>>
+>>>> Ditto.
+>>>
+>>> How about we just keep it as is, and all the rst and html weenies learn
+>>> to use a text editor to read code comments?
+>>
+>> :-) :-) :-)
+>>
+>> It turns out that kernel-doc is aware of !@var [1].
+>> Similar tricks can be added for ~@var.
+>> So let's keep it as is!
+>>
+>> I'll ask documentation forks for updating kernel-doc when this change
+>> is merged eventually.
 > 
-> For MT7622 platform data, I think it is proper to configure as:
-> .proc_max_volt = 1310000,
-> .sram_max_volt = 1350000,  // since mt6380_vm_reg ldo only supporting
-> {..., 1300000, 1350000, 1400000} as you mentioned.
+> What do you mean by that?
+> What needs to be updated and how?
+ 
+I mean, scripts/kernel-doc needs to be updated so that "~@var"
+is converted into "**~var**".
 
-Unfortunately that also doesn't work. The tracking algorithm then
-apparently still tries to set unsupported voltages, I assume that
-your suggestion will result in SRAM voltage being requested as
-1310000uV (proc_max_volt) + 200000uV (max_step_size) = 1330000uV
-which also isn't supported by the regulator.
+I think adding "~" to the substitution pattern added in [1] as follows
+should do the trick (not well tested):
 
-[    1.972654] cpu cpu0: cpu0: failed to scale up voltage!
-[    1.977951] cpufreq: __target_index: Failed to change cpu frequency: -22
-[    1.984776] cpu cpu0: cpu0: failed to scale up voltage!
-[    1.990039] cpufreq: __target_index: Failed to change cpu frequency: -22
-...
+diff --git a/scripts/kernel-doc b/scripts/kernel-doc
+index 2486689ffc7b..eb70c1fd4e86 100755
+--- a/scripts/kernel-doc
++++ b/scripts/kernel-doc
+@@ -64,7 +64,7 @@ my $type_constant = '\b``([^\`]+)``\b';
+ my $type_constant2 = '\%([-_\w]+)';
+ my $type_func = '(\w+)\(\)';
+ my $type_param = '\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
+-my $type_param_ref = '([\!]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
++my $type_param_ref = '([\!~]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
+ my $type_fp_param = '\@(\w+)\(\)';  # Special RST handling for func ptr params
+ my $type_fp_param2 = '\@(\w+->\S+)\(\)';  # Special RST handling for structs with func ptr params
+ my $type_env = '(\$\w+)';
 
-With my initial suggestion to set both, proc_max_volt and sram_max_volt
-to 1350000 it does work.
+Thoughts?
 
-However, I think we are now botching around with work-arounds not
-addressing the underlying problems which are that
- a) the tracking algorithm initially tries to raise the SRAM voltage to
-    be **exactly** the minimum of proc_max_volt + max_step_size or
-    sram_max_volt.
- b) requesting an exact voltage, ie. regulator_set_voltage(reg, X, X),
-    is always problematic in case of regulators only supporting a
-    limited set of supported voltages.
-
-While adjusting the voltages in the SoC's platform data as a
-work-around may be good enough as a hot-fix for now, imho the best
-would be to re-write the tracking algorithm addressing both of the
-above flaws.
-
-> For MT7623 platform data, it is required to add a new one.
-> .proc_max_volt = 1300000,
-> .sram_max_volt = 0,  // since no sram-supply like you said.
-> 
-> If MT7622 and MT7623 supplied voltage issues can be fixed by above
-> platform data, feel free to send the fix patch or inform me to do that.
-
-I've introduced dedicated platform_data for MT7623 setting
-proc_max_volt to 1300000, and yes, that does work.
-However, on MT7623 there has not been any problem before as well.
-
+        Thanks, Akira
 
 > 
-> Thanks for your help! :)
 > 
-> > > 
-> > > Thanks.
-> > > 
-> > > > > 
-> > > > > You probably meant to write
-> > > > > vproc_max = min(proc_max_volt, opp_vproc_max);
-> > > > > vsram_max = min(sram_max_volt, vsram_vreg_max);
-> > > > > 
-> > > > > right?
-> > > > > 
-> > > > 
-> > > > Apparently, some of my braincells was apparently taking a break.
-> > > > :-)
-> > > > 
-> > > > Yes, I was meaning min(), not max() :-)
-> > > > 
-> > > > Cheers!
-> > > > 
-> > > > > > 
-> > > > > > Jia-Wei, can you please handle this?
-> > > > > > 
-> > > > > > Thanks,
-> > > > > > Angelo
-> > > > > > 
-> > > > 
-> > > > 
-> > > > 
+>> [1]: ee2aa7590398 ("scripts: kernel-doc: accept negation like !@var")
+> 
+> thanks.
