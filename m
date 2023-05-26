@@ -2,193 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2715E712FC2
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 00:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2358712FC5
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 00:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244102AbjEZWLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 18:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S238041AbjEZWO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 18:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbjEZWK7 (ORCPT
+        with ESMTP id S230521AbjEZWO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 18:10:59 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC68D8;
-        Fri, 26 May 2023 15:10:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685139058; x=1716675058;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=DY5NsYdEM14/qoHMw4y56aAWs6TvL0qHN+cTi8SiYVM=;
-  b=LvaxQf3e82k62R//h7BiPnwvaVNjS7IC+Bz2GidrNT/S8lUrYLNze9gj
-   6pmHp8qw5N4P+JcT6GgnmgBAjgb9Vb+vqa4Y3T2Wx+1K2ljPgeVlWnGOM
-   6xNRZccDXLfhS6KbQO/FVPkrIK5vPH5HBCBnQUkSWc5Xx/BeHa/HQQluk
-   lGUIc9sYaIw49vCB2if2LlG0O4sjhrDs64hUY75+VmNxeNjlmTquDl84V
-   8jf/4s8AK4A+l3XL+4GR34opPlEVlAAlkE1Vtae4QR0WlOjPGN+EQGIyS
-   N8csxKKj2Ju9CVGhrF9igdw0BDXXG7Ium4T9IHRXZnshPnR/b3W39H4Dw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="357566316"
-X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
-   d="scan'208";a="357566316"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 15:10:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="775219198"
-X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
-   d="scan'208";a="775219198"
-Received: from svepakom-mobl1.amr.corp.intel.com (HELO [10.252.139.203]) ([10.252.139.203])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 15:10:56 -0700
-Message-ID: <19d9977f-bf07-2948-1b45-456af9c09e2f@linux.intel.com>
-Date:   Fri, 26 May 2023 15:10:56 -0700
+        Fri, 26 May 2023 18:14:56 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439D683
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 15:14:55 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id bb89b88c-fc12-11ed-abf4-005056bdd08f;
+        Sat, 27 May 2023 01:14:50 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Sat, 27 May 2023 01:14:50 +0300
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v6 5/5] firmware: qcom_scm: Add multiple download mode
+ support
+Message-ID: <ZHEvWpCqg_oyWyZW@surfacebook>
+References: <1680076012-10785-1-git-send-email-quic_mojha@quicinc.com>
+ <1680076012-10785-6-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCHv2 2/3] x86/tdx: Fix race between set_memory_encrypted()
- and load_unaligned_zeropad()
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        dave.hansen@intel.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de
-Cc:     decui@microsoft.com, rick.p.edgecombe@intel.com, seanjc@google.com,
-        thomas.lendacky@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20230526120225.31936-1-kirill.shutemov@linux.intel.com>
- <20230526120225.31936-3-kirill.shutemov@linux.intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230526120225.31936-3-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1680076012-10785-6-git-send-email-quic_mojha@quicinc.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Wed, Mar 29, 2023 at 01:16:52PM +0530, Mukesh Ojha kirjoitti:
+> Currently, scm driver only supports full dump when download
+> mode is selected. Add support to enable minidump as well as
+> enable it along with fulldump.
 
+...
 
-On 5/26/23 5:02 AM, Kirill A. Shutemov wrote:
-> Touching privately mapped GPA that is not properly converted to private
-> with MapGPA and accepted leads to unrecoverable exit to VMM.
-> 
-> load_unaligned_zeropad() can touch memory that is not owned by the
-> caller, but just happened to next after the owned memory.
+>  #define QCOM_DOWNLOAD_MODE_MASK 0x30
+>  #define QCOM_DOWNLOAD_FULLDUMP	0x1
+> +#define QCOM_DOWNLOAD_MINIDUMP  0x2
+> +#define QCOM_DOWNLOAD_BOTHDUMP	(QCOM_DOWNLOAD_FULLDUMP | QCOM_DOWNLOAD_MINIDUMP)
 
-/s/to/to be ?
+Now order is broken.
 
-> This load_unaligned_zeropad() behaviour makes it important when kernel
-> asks VMM to convert a GPA from shared to private or back. Kernel must
-> never have a page mapped into direct mapping (and aliases) as private
-> when the GPA is already converted to shared or when GPA is not yet
-> converted to private.
+>  #define QCOM_DOWNLOAD_NODUMP	0x0
 
-I am wondering whether this issue exist in the AMD code? 
+...
 
-IMO, you can add some info on the window in set_memory_encrypted()
-where this race exists.
-
-> 
-> guest.enc_status_change_prepare() called before adjusting direct mapping
-> and therefore it is responsible for converting the memory to private.
-> 
-> guest.enc_status_change_finish() called after adjusting direct mapping
-> and it converts the memory to shared.
-> 
-> It is okay to have a shared mapping of memory that is not converted
-> properly. handle_mmio() knows how to deal with load_unaligned_zeropad()
-> stepping on it.
-
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Fixes: 7dbde7631629 ("x86/mm/cpa: Add support for TDX shared memory")
-> Cc: stable@vger.kernel.org
-> ---
->  arch/x86/coco/tdx/tdx.c | 56 ++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 53 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index e146b599260f..59cc13e41aa6 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -840,6 +840,30 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
->  	return true;
+> @@ -1420,13 +1422,16 @@ static irqreturn_t qcom_scm_irq_handler(int irq, void *data)
+>  	return IRQ_HANDLED;
 >  }
 >  
-> +static bool tdx_enc_status_change_prepare(unsigned long vaddr, int numpages,
-> +					  bool enc)
-> +{
-> +	/*
-> +	 * Only handle shared->private conversion here.
-> +	 * See the comment in tdx_early_init().
-> +	 */
-> +	if (enc)
-> +		return tdx_enc_status_changed(vaddr, numpages, enc);
-> +	return true;
-> +}
-> +
-> +static bool tdx_enc_status_change_finish(unsigned long vaddr, int numpages,
-> +					 bool enc)
-> +{
-> +	/*
-> +	 * Only handle private->shared conversion here.
-> +	 * See the comment in tdx_early_init().
-> +	 */
-> +	if (!enc)
-> +		return tdx_enc_status_changed(vaddr, numpages, enc);
-> +	return true;
-> +}
-> +
->  void __init tdx_early_init(void)
->  {
->  	u64 cc_mask;
-> @@ -867,9 +891,35 @@ void __init tdx_early_init(void)
->  	 */
->  	physical_mask &= cc_mask - 1;
->  
-> -	x86_platform.guest.enc_cache_flush_required = tdx_cache_flush_required;
-> -	x86_platform.guest.enc_tlb_flush_required   = tdx_tlb_flush_required;
+> -
 
-I think you don't need to change the order here.
+Stray change and ping-pong style at the same time.
 
-> -	x86_platform.guest.enc_status_change_finish = tdx_enc_status_changed;
-> +	/*
-> +	 * Touching privately mapped GPA that is not properly converted to
-> +	 * private with MapGPA and accepted leads to unrecoverable exit
-> +	 * to VMM.
-> +	 *
-> +	 * load_unaligned_zeropad() can touch memory that is not owned by
-> +	 * the caller, but just happened to next after the owned memory.
-> +	 * This load_unaligned_zeropad() behaviour makes it important when
-> +	 * kernel asks VMM to convert a GPA from shared to private or back.
-> +	 * Kernel must never have a page mapped into direct mapping (and
-> +	 * aliases) as private when the GPA is already converted to shared or
-> +	 * when GPA is not yet converted to private.
-> +	 *
-> +	 * guest.enc_status_change_prepare() called before adjusting direct
-> +	 * mapping and therefore it is responsible for converting the memory
-> +	 * to private.
-> +	 *
-> +	 * guest.enc_status_change_finish() called after adjusting direct
-> +	 * mapping and it converts the memory to shared.
-> +	 *
-> +	 * It is okay to have a shared mapping of memory that is not converted
-> +	 * properly. handle_mmio() knows how to deal with load_unaligned_zeropad()
-> +	 * stepping on it.
-> +	 */
-> +	x86_platform.guest.enc_status_change_prepare = tdx_enc_status_change_prepare;
-> +	x86_platform.guest.enc_status_change_finish  = tdx_enc_status_change_finish;
-> +
-> +	x86_platform.guest.enc_cache_flush_required  = tdx_cache_flush_required;
-> +	x86_platform.guest.enc_tlb_flush_required    = tdx_tlb_flush_required;
->  
->  	pr_info("Guest detected\n");
->  }
+...
+
+>  	if (download_mode == QCOM_DOWNLOAD_FULLDUMP)
+>  		len = sysfs_emit(buffer, "full\n");
+> +	else if (download_mode == QCOM_DOWNLOAD_MINIDUMP)
+> +		len = sysfs_emit(buffer, "mini\n");
+> +	else if (download_mode == QCOM_DOWNLOAD_BOTHDUMP)
+
+> +		len = sysfs_emit(buffer, "full,mini\n");
+
+Why not "both" ?
+
+>  	else if (download_mode == QCOM_DOWNLOAD_NODUMP)
+>  		len = sysfs_emit(buffer, "off\n");
+
+
+With an array (for streq_match_string() call suggested earlier) this become as
+simple as
+
+	if (mode >= ARRAY_SIZE(...))
+		return sysfs_emit("Oh heh!\n");
+
+	return sysfs_emit("%s\n", array[mode]);
+
+...
+
+> -	if (sysfs_streq(val, "full")) {
+
+Why changing this line?
+
+> +	if (sysfs_streq(val, "full,mini") || sysfs_streq(val, "mini,full")) {
+> +		download_mode = QCOM_DOWNLOAD_BOTHDUMP;
+
+It's way too hard, esp. taking into account that once user enters wrong order,
+user can't simply validate this by reading value back.
+
+Use "both" and that's it.
+
+> +	} else if (sysfs_streq(val, "full")) {
+>  		download_mode = QCOM_DOWNLOAD_FULLDUMP;
+> +	} else if (sysfs_streq(val, "mini")) {
+> +		download_mode = QCOM_DOWNLOAD_MINIDUMP;
+
+...
+
+>  module_param_cb(download_mode, &download_mode_param_ops, NULL, 0644);
+>  MODULE_PARM_DESC(download_mode,
+> -		 "Download mode: off/full or 0/1 for existing users");
+> +		"download mode: off/full/mini/full,mini or mini,full and 0/1 for existing users");
+
+You really must be consistent with at least a couple of things:
+1) capitalization;
+2) indentation.
 
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+With Best Regards,
+Andy Shevchenko
+
+
