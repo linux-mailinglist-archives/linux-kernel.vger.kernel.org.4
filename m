@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9762A7129D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792837129D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244158AbjEZPm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
+        id S244159AbjEZPnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244130AbjEZPm4 (ORCPT
+        with ESMTP id S243818AbjEZPnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:42:56 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A2610A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:42:53 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6dfc4dffaso6682135e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:42:53 -0700 (PDT)
+        Fri, 26 May 2023 11:43:05 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3D410A;
+        Fri, 26 May 2023 08:43:03 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-970028cfb6cso166452466b.1;
+        Fri, 26 May 2023 08:43:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20221208.gappssmtp.com; s=20221208; t=1685115772; x=1687707772;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CQw+zfZTmj3Rrv2z68fRpRd9uvWpwcM+LxwxnhqEPSc=;
-        b=O8tXlthhBgjEbO1XpEqH7NlZTs+2M3Y+z9Bi4BJz+glfTwjV57YuE3j/vS/GCCr8b0
-         bAziTwsMOOggSsOc90DoDDi2QrbytKM+faq7nGVYvPD/AaelwXY9jHCiKi2XJ6PXiC/d
-         QnlMWyiZecupq7QnD8y4liWV9HKxePbVkKSopDBwY85zbg9Lweju7J/hWkiz/7AenKOw
-         X/45v15UzzQWChHdc5WI1b6ZEmxMNFDTybImmGlvIkNNuip2hXMS5xsCMjWn8FYVyiFD
-         z6guOz701BjiQppy3mkeL5xzOuMOK8o3/vqGVIdNBc43krCl8rFl92ElBaNiiFoWnueU
-         mtYQ==
+        d=gmail.com; s=20221208; t=1685115782; x=1687707782;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rVpwhBhZjm4u1PvolKtSrwJ++hTN+rljYI2eWWd/rv0=;
+        b=g1pKCw2HscEcTD2GSPzJcYYGnMv+ROG4mE/6/SigjSTX8eiwhWxP0BhCD/H4icUkHo
+         r6IuwTfsrmcU4LAIJVM2PyWwd1bjjyBBr034WXEIrlxXQI/LVBM+E7EA0elIQDJ8Djtb
+         N1wlACq8KMzwqpp2rfsQ9kL9GQYnAiEPPQIstlU7wg0AJ2zqHuo1am4MzLj4YdNLdQct
+         /cOWOV/PTUtDKBa9rsYWxTuzYvyrgn8b/8WfUUnYgbaI+GfsAdesMSD87roP64nEs6pI
+         pgHKPgiUm+GSZ9nCCBXCnp0Fx24vq8yR6H+DBI3k8a4/lJIQEgJk0VYRpcVzZLd3Ev3u
+         vcwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685115772; x=1687707772;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CQw+zfZTmj3Rrv2z68fRpRd9uvWpwcM+LxwxnhqEPSc=;
-        b=QZiYD2T4Y9yDrv9MSPUP4fsecKsaqOcBHKJTyUydnH8xo9i8ju74W9KNM2zrW78+Ja
-         v6bQnX9TgeJK/CY9Um79+MjXzeVJ3aQ8l9TpXGX4b4NQoIz2Y4XOmkuoLIfIJsOrvBpm
-         U68YTLd8z5IkPe2RS+qgKSqW6ao10hEDQv/HVIZC6VAG5gpkdE0kLRDPM+eOwFSe+8o8
-         dtG8SnK/jdPx6i6tEEYk0cIoPzKsBmajoDrD3pPpcCVYh8IXF2D5BQCiecuT62zN7cQK
-         Mtfmu6mfGN1yPZMap0eAJeufpNbu5GWo2MgV9x8UMQczBPkcibGjbaP4qOI2mCEvzBEM
-         ul5w==
-X-Gm-Message-State: AC+VfDyxEf7WDVFOf8IjKTxMjt0XZiva2O620e7UfI2DS2v+wySDANls
-        LAPjztqZd203EmyDFw+fAiCWjXgst4chGg+jFjQ=
-X-Google-Smtp-Source: ACHHUZ438yXRK5wT8tUO+6PCb06t7sypVhoVCPPpwgAqaqggPoqzquUPLXg0ZIVMzMpbthYUwg1ZVw==
-X-Received: by 2002:adf:e792:0:b0:309:51ec:9ce0 with SMTP id n18-20020adfe792000000b0030951ec9ce0mr1942254wrm.69.1685115772372;
-        Fri, 26 May 2023 08:42:52 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id u3-20020adfdb83000000b0030aded83385sm533922wri.27.2023.05.26.08.42.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 08:42:51 -0700 (PDT)
-Message-ID: <cf03b068-2d2d-45e4-f724-83304992550e@nexus-software.ie>
-Date:   Fri, 26 May 2023 16:42:50 +0100
+        d=1e100.net; s=20221208; t=1685115782; x=1687707782;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rVpwhBhZjm4u1PvolKtSrwJ++hTN+rljYI2eWWd/rv0=;
+        b=E2vRz+UKdGbsGrc8kNEf3C22KjQjkTvQIovowA9ovTop7v/OX9C93TBondWgkeIXFk
+         v1lTwR6fkfd1lRo7MvKF3hPE1kZP8447IouQIN2KS4vI/5soWl5IxUl+kxp97/NXrTWF
+         qRNl7J4bppUqXPLTlA2p22C7Q8MT5LDoJayUvuT2QDxksp2D0h5G5vY0PGYhkbtTgnaj
+         pde47VgsiStCCFrYZ4pvuXZC7wl38I+BlIiLy8AUeadfp3A8UyFPWwX3W25InnNBuXVC
+         5NQ8N/VFUDXwSq99UiDdA1rSpu58z+xwGRTiVbJvqrYeEqgOeTLAYwOTHSHtl8lf62le
+         9KLQ==
+X-Gm-Message-State: AC+VfDzxz8BLcZWGZkW6MV9KdGTT4aGXciwtrCg7SnxiqYB4XexH7xsU
+        VExfRNxudo08PnCqr3JrBAM=
+X-Google-Smtp-Source: ACHHUZ7ENqk+5BVzxKJXJxcqn1R2u/aOB0IQFM/e6/2oz6itZMbKG26Hj93JeZvFUEvEL21RD2w5Sw==
+X-Received: by 2002:a17:906:ee82:b0:96f:7af5:9e9e with SMTP id wt2-20020a170906ee8200b0096f7af59e9emr2410888ejb.53.1685115781493;
+        Fri, 26 May 2023 08:43:01 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id gr4-20020a170906e2c400b009660449b9a3sm2266901ejb.25.2023.05.26.08.42.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 08:43:01 -0700 (PDT)
+Date:   Fri, 26 May 2023 18:42:58 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 24/30] net: dsa: mt7530: rename MT7530_MFC to
+ MT753X_MFC
+Message-ID: <20230526154258.skbkk4p34ro5uivr@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-25-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 3/8] arm64: dts: qcom: msm8916: Fix regulator constraints
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
- <20230510-msm8916-regulators-v1-3-54d4960a05fc@gerhold.net>
-From:   Bryan O'Donoghue <pure.logic@nexus-software.ie>
-In-Reply-To: <20230510-msm8916-regulators-v1-3-54d4960a05fc@gerhold.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522121532.86610-25-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 19:48, Stephan Gerhold wrote:
-> The regulator constraints for most MSM8916 devices (except DB410c) were
-> originally taken from Qualcomm's msm-3.10 vendor device tree (for lack
-> of better documentation). Unfortunately it turns out that Qualcomm's
-> voltages are slightly off as well and do not match the voltage
-> constraints applied by the RPM firmware.
-> 
-> This means that we sometimes request a specific voltage but the RPM
-> firmware actually applies a much lower or higher voltage. This is
-> particularly critical for pm8916_l11 which is used as SD card VMMC
-> regulator: The SD card can choose a voltage from the current range of
-> 1.8 - 2.95V. If it chooses to run at 1.8V we pretend that this is fine
-> but the RPM firmware will still silently end up configuring 2.95V.
-> This can be easily reproduced with a multimeter or by checking the
-> SPMI hardware registers of the regulator.
-> 
-> Fix this by making the voltages match the actual "specified range" in
-> the PM8916 Device Specification which is enforced by the RPM firmware.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+On Mon, May 22, 2023 at 03:15:26PM +0300, arinc9.unal@gmail.com wrote:
+>  	/* Disable flooding on all ports */
+> -	mt7530_clear(priv, MT7530_MFC, BC_FFP_MASK | UNM_FFP_MASK |
+> -		     UNU_FFP_MASK);
+> +	mt7530_clear(priv, MT753X_MFC, MT753X_BC_FFP_MASK | MT753X_UNM_FFP_MASK
+> +		     | MT753X_UNU_FFP_MASK);
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+The preferred coding style is not to start new lines with operators.
 
+> +/* Register for CPU forward control */
+>  #define MT7531_CFC			0x4
+>  #define  MT7531_MIRROR_EN		BIT(19)
+> -#define  MT7531_MIRROR_MASK		(MIRROR_MASK << 16)
+> -#define  MT7531_MIRROR_PORT_GET(x)	(((x) >> 16) & MIRROR_MASK)
+> -#define  MT7531_MIRROR_PORT_SET(x)	(((x) & MIRROR_MASK) << 16)
+> +#define  MT7531_MIRROR_MASK		(0x7 << 16)
+
+minor nitpick: if you express this as GENMASK(18, 16), it will be a bit
+easier to cross-check with the datasheet, since both 18 and 16 are more
+representative than 0x7.
+
+> +#define  MT7531_MIRROR_PORT_GET(x)	(((x) >> 16) & 0x7)
+
+also here: (((x) & GENMASK(18, 16)) >> 16)
+
+> +#define  MT7531_MIRROR_PORT_SET(x)	(((x) & 0x7) << 16)
+
+and here: (((x) << 16) & GENMASK(18, 16))
