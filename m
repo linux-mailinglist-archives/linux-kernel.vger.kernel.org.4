@@ -2,90 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C4C712AAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4F9712AE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjEZQcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S236841AbjEZQmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjEZQcS (ORCPT
+        with ESMTP id S229790AbjEZQm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:32:18 -0400
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50107DF;
-        Fri, 26 May 2023 09:32:17 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5147f32df82so124209a12.0;
-        Fri, 26 May 2023 09:32:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685118736; x=1687710736;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XXhdKxqSFYkKSH0aln6Zruim3OwYUDkaSG2oPvequ0Q=;
-        b=E7tBbNNi6e2BoeWzw50KrLgVmt4zS+rj3qEKUwcYfve+9or4tM6TZVZRPcmDkG4pIF
-         3aIpmguDCe1BX14p6LaJODtSlSe9J3Vr4xU6o7WQullCJbLaIHVLbNxv88joEV+Q6TX/
-         PGTIiXO5yUqsR3DhhEjvgPkyuc50ozmZZOzikMQ07hkuJCCBhdOsaX+3mdgvuUhS5Ndu
-         XGjEY/kpwvVEPeyY47nP4yH/hatEWbpvl9j0Wf7/CQQWFEnTpHRQ6chdhHI2EFRYY1C4
-         P7Ir+sfjKk82LOd4tjJc7HJS2xwXxj7olW+7sutAtBCRqcYZmOV1Urii+MpZFJpmYV6Z
-         dVAQ==
-X-Gm-Message-State: AC+VfDx272739pZCS4CwC57fR2++ILc41T3dayn8uGJjvDzpPnHCC6Eq
-        mK9DVnbnRkExqWiC3eORFtj3EB5MQropiJID3VNskPhqKUw=
-X-Google-Smtp-Source: ACHHUZ5xB8PBLY5c725ADRoJAV35GRPW13xpNZv99hwoJn6PUt98y1V/jlsrwPua3ewK6gpSbV/QEo8kALLN47UZ5XE=
-X-Received: by 2002:a17:906:729e:b0:94f:66af:b1f7 with SMTP id
- b30-20020a170906729e00b0094f66afb1f7mr2442638ejl.1.1685118735347; Fri, 26 May
- 2023 09:32:15 -0700 (PDT)
+        Fri, 26 May 2023 12:42:29 -0400
+Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C691A8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:42:26 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QSVpc2hLFzMq9gR;
+        Fri, 26 May 2023 18:33:12 +0200 (CEST)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QSVpV20JTzMskdH;
+        Fri, 26 May 2023 18:33:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1685118792;
+        bh=HJQhmbmtbBhKQKuJigfXUA3I5dGt5vNd+kwPhAR19ZE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QqUfw9dzLlsE/jUv5i4Jbgo6yOquEH/LNulEp4j1bWACweWhxdKLOxVud95fbWB4E
+         npEnxoPtqyuJGwkskhuE2oFCSu10WcSFOgyuW8dZTYuf1lnresczWPQXS0hze8B1ou
+         boYfLZK8RC3g7VGc+V2WpOIG30d240jDxiyeRn5Q=
+Message-ID: <75b4746d-d41e-7c9f-4bb0-42a46bda7f17@digikod.net>
+Date:   Fri, 26 May 2023 18:33:05 +0200
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 26 May 2023 18:32:02 +0200
-Message-ID: <CAJZ5v0gV=NM2Tg7x2fEM8imVQ15D5KpZeP+EyaOEnjwPCmF9gg@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.4-rc4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH -next 0/2] lsm: Change inode_setattr() to take struct
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        viro@zeniv.linux.org.uk, dhowells@redhat.com, code@tyhicks.com,
+        hirofumi@mail.parknet.co.jp, linkinjeon@kernel.org,
+        sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
+        chuck.lever@oracle.com, jlayton@kernel.org, miklos@szeredi.hu,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, dchinner@redhat.com,
+        john.johansen@canonical.com, mcgrof@kernel.org,
+        mortonm@chromium.org, fred@cloudflare.com, mpe@ellerman.id.au,
+        nathanl@linux.ibm.com, gnoack3000@gmail.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-cachefs@redhat.com,
+        ecryptfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        wangweiyang2@huawei.com
+References: <20230505081200.254449-1-xiujianfeng@huawei.com>
+ <20230515-nutzen-umgekehrt-eee629a0101e@brauner>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <20230515-nutzen-umgekehrt-eee629a0101e@brauner>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-Please pull from the tag
+On 15/05/2023 17:12, Christian Brauner wrote:
+> On Fri, May 05, 2023 at 04:11:58PM +0800, Xiu Jianfeng wrote:
+>> Hi,
+>>
+>> I am working on adding xattr/attr support for landlock [1], so we can
+>> control fs accesses such as chmod, chown, uptimes, setxattr, etc.. inside
+>> landlock sandbox. the LSM hooks as following are invoved:
+>> 1.inode_setattr
+>> 2.inode_setxattr
+>> 3.inode_removexattr
+>> 4.inode_set_acl
+>> 5.inode_remove_acl
+>> which are controlled by LANDLOCK_ACCESS_FS_WRITE_METADATA.
+>>
+>> and
+>> 1.inode_getattr
+>> 2.inode_get_acl
+>> 3.inode_getxattr
+>> 4.inode_listxattr
+>> which are controlled by LANDLOCK_ACCESS_FS_READ_METADATA
+> 
+> It would be helpful to get the complete, full picture.
+> 
+> Piecemeal extending vfs helpers with struct path arguments is costly,
+> will cause a lot of churn and will require a lot of review time from us.
+> 
+> Please give us the list of all security hooks to which you want to pass
+> a struct path (if there are more to come apart from the ones listed
+> here). Then please follow all callchains and identify the vfs helpers
+> that would need to be updated. Then please figure out where those
+> vfs helpers are called from and follow all callchains finding all
+> inode_operations that would have to be updated and passed a struct path
+> argument. So ultimately we'll end up with a list of vfs helpers and
+> inode_operations that would have to be changed.
+> 
+> I'm very reluctant to see anything merged without knowing _exactly_ what
+> you're getting us into.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.4-rc4
+Ultimately we'd like the path-based LSMs to reach parity with the 
+inode-based LSMs. This proposal's goal is to provide users the ability 
+to control (in a complete and easy way) file metadata access. For these 
+we need to extend the inode_*attr hooks and inode_*acl hooks to handle 
+paths. The chown/chmod hooks are already good.
 
-with top-most commit 3bf8c6307bad5c0cc09cde982e146d847859b651
+In the future, I'd also like to be able to control directory traversals 
+(e.g. chdir), which currently only calls inode_permission().
 
- cpufreq: amd-pstate: Update policy->cur in amd_pstate_adjust_perf()
-
-on top of commit 44c026a73be8038f03dbdeef028b642880cf1511
-
- Linux 6.4-rc3
-
-to receive power management fixes for 6.4-rc4.
-
-These fix 3 issues related to the ->fast_switch callback in the AMD
-P-state cpufreq driver (Gautham R. Shenoy and Wyes Karny).
-
-Thanks!
-
-
----------------
-
-Gautham R. Shenoy (1):
-      cpufreq: amd-pstate: Add ->fast_switch() callback
-
-Wyes Karny (2):
-      cpufreq: amd-pstate: Remove fast_switch_possible flag from active driver
-      cpufreq: amd-pstate: Update policy->cur in amd_pstate_adjust_perf()
-
----------------
-
- drivers/cpufreq/amd-pstate.c | 46 +++++++++++++++++++++++++++++++++++---------
- 1 file changed, 37 insertions(+), 9 deletions(-)
+What would be the best way to reach this goal?
