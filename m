@@ -2,114 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56922711BAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 02:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFC9711BAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 02:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbjEZAun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 20:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
+        id S236275AbjEZAvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 20:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234276AbjEZAul (ORCPT
+        with ESMTP id S236055AbjEZAu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 20:50:41 -0400
-Received: from out-47.mta1.migadu.com (out-47.mta1.migadu.com [IPv6:2001:41d0:203:375::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38523195
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:50:39 -0700 (PDT)
-Date:   Thu, 25 May 2023 20:50:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685062237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XccFcqhRV9oVZ2BhjoWlowoz0O43NBdleRYrqpo+tGk=;
-        b=te1MA/PDmp4dIRH1TY49m1pWccvyo+kxGKHIAX3+k8t98qQbEiPCWJYi4Gkczlt1aIn7En
-        cHq/akYRgnPKxFNi2vHECVpzXGpjZ3XraNt/Yalda8BuacVJcdSo4hYF5j3kzlTDgdIB0w
-        GQUPt6jslW3+faac2EkPdAimK2RxUyY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     linux-kernel@vger.kernel.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH 5/7] block: Rework bio_for_each_folio_all()
-Message-ID: <ZHACWWNIUR6Ohh/8@moria.home.lan>
-References: <20230525214822.2725616-1-kent.overstreet@linux.dev>
- <20230525214822.2725616-6-kent.overstreet@linux.dev>
- <ZG/+88/G+hX5DyCX@dread.disaster.area>
+        Thu, 25 May 2023 20:50:59 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 70A4F1B4
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:50:54 -0700 (PDT)
+Received: (qmail 276368 invoked by uid 1000); 25 May 2023 20:50:53 -0400
+Date:   Thu, 25 May 2023 20:50:53 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Roy Luo <royluo@google.com>
+Cc:     raychi@google.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Douglas Anderson <dianders@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH v1] usb: core: add sysfs entry for usb device state
+Message-ID: <dfaa91d3-1169-4381-a2ef-83443ee3e4ce@rowland.harvard.edu>
+References: <20230525173818.219633-1-royluo@google.com>
+ <408575c0-2967-4cdb-92c7-1b2845038d20@rowland.harvard.edu>
+ <CA+zupgwz8Mbd8=7ep7t0OU-34bbwsc9fMK4dHip0rgqD7FSd2A@mail.gmail.com>
+ <89cf2c61-a55e-4c35-93b2-35fa7ab0266b@rowland.harvard.edu>
+ <CA+zupgyErTsDEZYerfAeEyVF073x+aTW6HiWZRA+2Y=a7U4XVg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZG/+88/G+hX5DyCX@dread.disaster.area>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+zupgyErTsDEZYerfAeEyVF073x+aTW6HiWZRA+2Y=a7U4XVg@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 10:36:03AM +1000, Dave Chinner wrote:
-> On Thu, May 25, 2023 at 05:48:20PM -0400, Kent Overstreet wrote:
-> > This reimplements bio_for_each_folio_all() on top of the newly-reworked
-> > bvec_iter_all, and since it's now trivial we also provide
-> > bio_for_each_folio.
-> > 
-> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> > Cc: Matthew Wilcox <willy@infradead.org>
-> > Cc: linux-block@vger.kernel.org
-> > ---
-> >  fs/crypto/bio.c        |  9 +++--
-> >  fs/iomap/buffered-io.c | 14 ++++---
-> >  fs/verity/verify.c     |  9 +++--
-> >  include/linux/bio.h    | 91 +++++++++++++++++++++---------------------
-> >  include/linux/bvec.h   | 15 +++++--
-> >  5 files changed, 75 insertions(+), 63 deletions(-)
-> ....
-> > diff --git a/include/linux/bio.h b/include/linux/bio.h
-> > index f86c7190c3..7ced281734 100644
-> > --- a/include/linux/bio.h
-> > +++ b/include/linux/bio.h
-> > @@ -169,6 +169,42 @@ static inline void bio_advance(struct bio *bio, unsigned int nbytes)
-> >  #define bio_for_each_segment(bvl, bio, iter)				\
-> >  	__bio_for_each_segment(bvl, bio, iter, (bio)->bi_iter)
-> >  
-> > +struct folio_vec {
-> > +	struct folio	*fv_folio;
-> > +	size_t		fv_offset;
-> > +	size_t		fv_len;
-> > +};
+On Thu, May 25, 2023 at 01:31:17PM -0700, Roy Luo wrote:
+> On Thu, May 25, 2023 at 12:10 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Thu, May 25, 2023 at 11:46:23AM -0700, Roy Luo wrote:
+> > > Alan, thanks for the quick response!
+> > > Yes, port_dev->state is indeed the same as port_dev->child->state. However,
+> > > I still add port_dev->state because port_dev->child won't be assigned until
+> > > the corresponding usb_device is in ADDRESS state.
+> > > I wish I can assign get port_dev->child assigned earlier, but I think
+> > > the current design - assign port_dev->child and device_add() after ADDRESS
+> > > state - also makes sense because there are many ways that the enumeration
+> > > could fail in the early stage. By adding port_dev->state, I can link
+> > > usb_device->state to usb_port as soon as the usb_device is created to get
+> > > around the limitation of port_dev->child.
+> > > I would be very happy to hear other ideas.
+> >
+> > Is there any real reason not to set port_dev->child as soon as the
+> > usb_device structure is created?  If enumeration fails, the pointer can
+> > be cleared.
+> >
+> > Alan Stern
 > 
-> Can we drop the "fv_" variable prefix here? It's just unnecessary
-> verbosity when we know we have a folio_vec structure. i.e fv->folio
-> is easier to read and type than fv->fv_folio...
+> Currently the usb core assumes the usb_device that port_dev->child points
+> to is enumerated and port_dev->child->dev is registered when
+> port_dev->child is present. Setting port_dev->child early would break this
+> fundamental assumption, hence I'm a bit reluctant to go this way.
 
-That's actually one of the things I like about bio/biovec, it's been
-handy in the past for grepping and block layer refactorings...
+Well, you could remove that assumption by adding a "child_is_registered" 
+flag and explicitly checking it.
 
-(I would _kill_ for a tool that let me do that kind of type-aware grep.
-ctags can in theory produce that kind of an index but I never figured
-out how to get vim to use it properly. I believe the lsp-server stuff
-that uses the compiler as a backend can do it; I've started using that
-stuff for Rust coding and it works amazingly, don't think I've tried it
-for struct members - I wonder if that stuff works at all on a codebase
-the size of the kernel or just dies...)
-
-> Hmmm, this is probably not a good name considering "struct pagevec" is
-> something completely different - the equivalent is "struct
-> folio_batch" but I can see this being confusing for people who
-> largely expect some symmetry between page<->folio naming
-> conventions...
-
-Yeah, good point. folio_seg, perhaps?
-
-(I think Matthew may have already made that suggestion...)
-
-> Also, why is this in bio.h and not in a mm/folio related header
-> file?
-
-Is it worth moving it there considering it's only used in bio.h/bvec.h?
-Perhaps we could keep it where it's used for now and move it if it gains
-more users?
+Alan Stern
