@@ -2,117 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F59E712E7E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465B3712E9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240830AbjEZUvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 16:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
+        id S242853AbjEZVBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 17:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243883AbjEZUvN (ORCPT
+        with ESMTP id S230467AbjEZVBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 16:51:13 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BFDE57
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:51:09 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2af30a12e84so12183691fa.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:51:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685134267; x=1687726267;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z5AatKw6EtxzG9E4dF0UYt5pzjSCEqOZGHssidQMlz4=;
-        b=CFWTVoeRCdniU+x2qGDJhodKgGHp1JKCle+Ga8fFPMpQ7B4BhuvPLNIgT2gNcBWdm/
-         rmJ7+zhRGA6CfusOOvkE6UET4zEm7HKXXbh+9AR7VUFcS0AeuvvYB0dTERm7ZO1Z9tnc
-         Ea39RjrFKznDv7D/pH8AQScSp3cSmSY6qfHGxmiizl+fCTnqfwLwzekBcTLkIXWr8+nk
-         TF0zAPIqz8VKE6uVTAYzgP/RSPXJyH6SwKZgXPHq/6/QyY8TEkLNUQC4bN0/lnh3XQs+
-         Oui3IOpPCgrKQs5GJUUM2HLW2rjR1OFZQ+3SlBpjkO8AUkNMsVv7gAwxub1v1K0pVseJ
-         0Qxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685134267; x=1687726267;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z5AatKw6EtxzG9E4dF0UYt5pzjSCEqOZGHssidQMlz4=;
-        b=WRamGBCPydSUc+BEKsJ1snmCwg2qAl4kMWdjL3Oga0ap092cz1L3RZ4u1urRGyyJIT
-         0Bu4M5jevY1AhiV6ovZbomt62Hb1MJXKDE91Fzvy/VpCkZ/5I3O6MorSPV/y7Eel4uRW
-         nb2h5T8DX08pTgeCoZXlnJu1Jqz/poaXLKJLnUQm9rikmSI+hHfoJRzsCXY2dAoThAa5
-         iyIsN2T3JDjHSox68R28J48KVBDDOM5dYjQo5PKKiZzgOaoJU8tJPOMKAuZRXMRr3mjk
-         /Dz0xDU0+giIVq30Z/nlkGRhkJL334HqI8XwUdwOFz9DpAoRQ2Gcq4c9dJ0+XMs1dqCq
-         80fg==
-X-Gm-Message-State: AC+VfDx3vvUk+AlizeVDbzNHkTIf4MIfqYbpal52saNrSUOwfFTrISZ/
-        hC/8REH1FVVR3lJk7E1++5Tubw==
-X-Google-Smtp-Source: ACHHUZ7eoEEQ+WYgy29uaLJ4siKa8UDIyEBc1moLD4g7vHo2xRi2pXCLl62zxT4o/c1z5ryQM/t2NA==
-X-Received: by 2002:a2e:9e8e:0:b0:29f:58c6:986e with SMTP id f14-20020a2e9e8e000000b0029f58c6986emr821078ljk.52.1685134267123;
-        Fri, 26 May 2023 13:51:07 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id p19-20020a2e9a93000000b002ad8fc8dda6sm935227lji.17.2023.05.26.13.51.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 13:51:06 -0700 (PDT)
-Message-ID: <83465b41-3894-3490-e030-a523073e498f@linaro.org>
-Date:   Fri, 26 May 2023 22:51:05 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] clk: qcom: gcc-ipq6018: update UBI32 PLL
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, andersson@kernel.org,
-        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230526190855.2941291-1-robimarko@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230526190855.2941291-1-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 26 May 2023 17:01:12 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5907719C;
+        Fri, 26 May 2023 14:01:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=urvfHsJBOS8zyeLyl+UdJT8Nl0X+FyS97M0e5Nc2t34=; b=nMUfxulQfyDRFhMgPquBzy1JMU
+        7OITUm6XBSHDal5ty4OzC+zkpOof2p0Exb/t6YKVC/OylO9uWEcykEdgS5R4KjvddxsOLJSSk3/sI
+        20YmYkOhdP3+uKSAjKK509Nxl+SAUjL8AB/HtnWV6yD4o4/9dXoINaa15zo9O4IQZHdKXdX/s8hga
+        kTH/FrvlpQrK1ePCQNDgRykI/bsR+q0NLWc/PYlUtf1TG97P4phZb0r6O8trCLHehDEr5KTgvd2kO
+        y7q5ldrzn68zsAGwag8ee8jftSV19rdL5hj596WQuecBK6ZJoMojx0WM3fDtWz5YmYr3I6Kmbk08A
+        L495JIMw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2eYG-007hpR-2z;
+        Fri, 26 May 2023 21:00:45 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 06CB23002F0;
+        Fri, 26 May 2023 23:00:41 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id AF53F205BBDB2; Fri, 26 May 2023 23:00:41 +0200 (CEST)
+Message-ID: <20230526205204.861311518@infradead.org>
+User-Agent: quilt/0.66
+Date:   Fri, 26 May 2023 22:52:04 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     torvalds@linux-foundation.org, keescook@chromium.org,
+        gregkh@linuxfoundation.org, pbonzini@redhat.com
+Cc:     linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        ndesaulniers@google.com, peterz@infradead.org, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de
+Subject: [PATCH v2 0/2] Lock and Pointer guards
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+By popular demand, a new and improved version :-)
+
+New since -v1 ( https://lkml.kernel.org/r/20230526150549.250372621@infradead.org )
+
+ - much improved interface for lock guards: guard() and scoped () { }
+   as suggested by Linus.
+ - moved the ';' for the 'last' additional guard members into the definition
+   as suggested by Kees.
+ - put __cleanup in the right place with the suggested comment
+   as suggested by Kees and Miguel
+ - renamed the definition macros DEFINE_LOCK_GUARD_[012] to indicate
+   the number of arguments the lock function takes
+ - added comments to guards.h
+ - renamed pretty much all guard types
+
+Again compile and boot tested x86_64-defconfig
 
 
-On 26.05.2023 21:08, Robert Marko wrote:
-> Update the UBI32 alpha PLL config to the latest values from the downstream
-> QCA 5.4 kernel.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
->  drivers/clk/qcom/gcc-ipq6018.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/qcom/gcc-ipq6018.c b/drivers/clk/qcom/gcc-ipq6018.c
-> index 350ead66914ca..abd97b939850f 100644
-> --- a/drivers/clk/qcom/gcc-ipq6018.c
-> +++ b/drivers/clk/qcom/gcc-ipq6018.c
-> @@ -4149,15 +4149,20 @@ static struct clk_branch gcc_dcc_clk = {
->  
->  static const struct alpha_pll_config ubi32_pll_config = {
->  	.l = 0x3e,
-> -	.alpha = 0x57,
-> +	.alpha = 0x6667,
->  	.config_ctl_val = 0x240d6aa8,
->  	.config_ctl_hi_val = 0x3c2,
-> +	.config_ctl_val = 0x240d4828,
-> +	.config_ctl_hi_val = 0x6,
->  	.main_output_mask = BIT(0),
->  	.aux_output_mask = BIT(1),
->  	.pre_div_val = 0x0,
->  	.pre_div_mask = BIT(12),
->  	.post_div_val = 0x0,
->  	.post_div_mask = GENMASK(9, 8),
-> +	.alpha_en_mask = BIT(24),
-> +	.test_ctl_val = 0x1C0000C0,
-Please use lowercase hex.
-
-Konrad
-> +	.test_ctl_hi_val = 0x4000,
->  };
->  
->  static const struct alpha_pll_config nss_crypto_pll_config = {
