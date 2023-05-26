@@ -2,90 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17032712B47
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E974712B78
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236684AbjEZQ74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
+        id S242372AbjEZRLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjEZQ7q (ORCPT
+        with ESMTP id S242299AbjEZRLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:59:46 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895FFA3;
-        Fri, 26 May 2023 09:59:43 -0700 (PDT)
-X-GND-Sasl: maxime.chevallier@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685120381;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VZ4try5mxxCJlBunlZdGkrN9b4onog+w6GD5OBfPZ7k=;
-        b=P9YxnulzHQAoElHA1eGhvpXma1e61ONUekwqIi37lQ4rGilzyW0Ixv3nmGR3cuA1955htB
-        CleYfzQ+DVF8Kzp33TFBmiQPmPRAd0WCU4SNRsR/xrGoNDQiTWJMI9OTzutuUy7lhENix2
-        aUxmIn/Qz0p0VtcWwS6rkG7k7gyZWyaeQUVmgKjrZ5UDwXUgqvxKfznXhWSFgFdZ61ipL7
-        7zQAf83MjminoiClr/xlj7CsqqbZKVtrsfqvXvbBzWWzScxdBTE/yQ9S+yEChojsQEYV/Y
-        P8zx/MXsfmbcMHX76y4VdfW15Z5d02mV7fvffMh4/HREhwzr8w1SEpOZpmFU7w==
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 840FC1BF208;
-        Fri, 26 May 2023 16:59:37 +0000 (UTC)
-Date:   Fri, 26 May 2023 18:59:36 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Mark Brown <broonie@kernel.org>, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH net-next v3 1/4] net: mdio: Introduce a regmap-based
- mdio driver
-Message-ID: <20230526185936.0a95b9e9@pc-7.home>
-In-Reply-To: <20230526102139.dwttilkquihvp7bs@skbuf>
-References: <20230526074252.480200-1-maxime.chevallier@bootlin.com>
-        <20230526074252.480200-2-maxime.chevallier@bootlin.com>
-        <20230526102139.dwttilkquihvp7bs@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Fri, 26 May 2023 13:11:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383711B7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:11:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EFCD651BE
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 17:11:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FCC7C433AA;
+        Fri, 26 May 2023 17:11:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685121071;
+        bh=sQf8nvL0qon3rojAWzrVu8GvM6yNzwhTLBg4MCurido=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hv54ZxcXVKtKv17i3AEUpmzl9SWIGIcLpo2GNRqvoxU2UD1Yi2b9rqR6gqoFsgOoj
+         PGtah19agVR5zsZrFgR4gfRptCpu+K9TGmmFAloRVWVy+DsFhDhA10psD7uaTmsNQI
+         yvWPu/7WvOof6S4bSD+9OQt5r1P80vdruJ6KQW2uHdJ8Vr54EAiHcxrEFMzm4Dpe1p
+         WDi3gyeLEky9rTKaUbkMFNi4EANajxna/wBVazl0/relBIHVmTHZS1kMOZeTFmTSC/
+         qAv6XY9/NqZoy1p4Wwmy7xL1SMU/b1h2GuBioJ62pAL3Yl1DFhz00G6n2OWL50jW3R
+         EEngp5IjwgnXg==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH 0/6] riscv: Reduce ARCH_KMALLOC_MINALIGN to 8
+Date:   Sat, 27 May 2023 00:59:52 +0800
+Message-Id: <20230526165958.908-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,108 +54,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Vlad,
+Currently, riscv defines ARCH_DMA_MINALIGN as L1_CACHE_BYTES, I.E
+64Bytes, if CONFIG_RISCV_DMA_NONCOHERENT=y. To support unified kernel
+Image, usually we have to enable CONFIG_RISCV_DMA_NONCOHERENT, thus
+it brings some bad effects to for coherent platforms:
 
-On Fri, 26 May 2023 13:21:39 +0300
-Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
+Firstly, it wastes memory, kmalloc-96, kmalloc-32, kmalloc-16 and
+kmalloc-8 slab caches don't exist any more, they are replaced with
+either kmalloc-128 or kmalloc-64.
 
-> >  M:	William Breathitt Gray <william.gray@linaro.org>
-> >  L:	linux-iio@vger.kernel.org
-> > diff --git a/drivers/net/ethernet/altera/Kconfig
-> > b/drivers/net/ethernet/altera/Kconfig index
-> > dd7fd41ccde5..0a7c0a217536 100644 ---
-> > a/drivers/net/ethernet/altera/Kconfig +++
-> > b/drivers/net/ethernet/altera/Kconfig @@ -5,6 +5,8 @@ config
-> > ALTERA_TSE select PHYLIB
-> >  	select PHYLINK
-> >  	select PCS_ALTERA_TSE
-> > +	select MDIO_REGMAP
-> > +	depends on REGMAP  
-> 
-> I don't think this bit belongs in this patch.
-> Also: depends on REGMAP or select REGMAP?
+Secondly, larger than necessary kmalloc aligned allocations results
+in unnecessary cache/TLB pressure.
 
-Ugh sorry about that... I'll address both the dependency and the wrong
-patch splitting in next revision.
+This issue also exists on arm64 platforms. From last year, Catalin
+tried to solve this issue by decoupling ARCH_KMALLOC_MINALIGN from
+ARCH_DMA_MINALIGN, limiting kmalloc() minimum alignment to
+dma_get_cache_alignment() and replacing ARCH_KMALLOC_MINALIGN usage
+in various drivers with ARCH_DMA_MINALIGN etc.
 
-> >  	help
-> >  	  This driver supports the Altera Triple-Speed (TSE)
-> > Ethernet MAC. 
-> > diff --git a/drivers/net/mdio/Kconfig b/drivers/net/mdio/Kconfig
-> > index 9ff2e6f22f3f..aef39c89cf44 100644
-> > --- a/drivers/net/mdio/Kconfig
-> > +++ b/drivers/net/mdio/Kconfig
-> > @@ -185,6 +185,16 @@ config MDIO_IPQ8064
-> >  	  This driver supports the MDIO interface found in the
-> > network interface units of the IPQ8064 SoC
-> >  
-> > +config MDIO_REGMAP
-> > +	tristate
-> > +	help
-> > +	  This driver allows using MDIO devices that are not
-> > sitting on a
-> > +	  regular MDIO bus, but still exposes the standard 802.3
-> > register
-> > +	  layout. It's regmap-based so that it can be used on
-> > integrated,
-> > +	  memory-mapped PHYs, SPI PHYs and so on. A new virtual
-> > MDIO bus is
-> > +	  created, and its read/write operations are mapped to the
-> > underlying
-> > +	  regmap.  
-> 
-> It would probably be helpful to state that those who select this
-> option should also explicitly select REGMAP.
+One fact we can make use of for riscv: if the CPU doesn't support
+ZICBOM or T-HEAD CMO, we know the platform is coherent. Based on
+Catalin's work and above fact, we can easily solve the kmalloc align
+issue for riscv: we can override dma_get_cache_alignment(), then let
+it return ARCH_DMA_MINALIGN at the beginning and return 1 once we know
+the underlying HW neither supports ZICBOM nor supports T-HEAD CMO.
 
-You're right, I'll update this
+So what about if the CPU supports ZICBOM and T-HEAD CMO, but all the
+devices are dma coherent? Well, we use ARCH_DMA_MINALIGN as the
+kmalloc minimum alignment, nothing changed in this case. This case
+can be improved in the future.
 
-> > +
-> >  config MDIO_THUNDER
-> >  	tristate "ThunderX SOCs MDIO buses"
-> >  	depends on 64BIT
-> > diff --git a/drivers/net/mdio/Makefile b/drivers/net/mdio/Makefile
-> > index 7d4cb4c11e4e..1015f0db4531 100644
-> > --- a/drivers/net/mdio/Makefile
-> > +++ b/drivers/net/mdio/Makefile
-> > @@ -19,6 +19,7 @@ obj-$(CONFIG_MDIO_MOXART)		+=
-> > mdio-moxart.o obj-$(CONFIG_MDIO_MSCC_MIIM)		+=
-> > mdio-mscc-miim.o obj-$(CONFIG_MDIO_MVUSB)		+=
-> > mdio-mvusb.o obj-$(CONFIG_MDIO_OCTEON)		+=
-> > mdio-octeon.o +obj-$(CONFIG_MDIO_REGMAP)		+=
-> > mdio-regmap.o obj-$(CONFIG_MDIO_SUN4I)		+=
-> > mdio-sun4i.o obj-$(CONFIG_MDIO_THUNDER)		+=
-> > mdio-thunder.o obj-$(CONFIG_MDIO_XGENE)		+=
-> > mdio-xgene.o diff --git a/include/linux/mdio/mdio-regmap.h
-> > b/include/linux/mdio/mdio-regmap.h new file mode 100644
-> > index 000000000000..b8508f152552
-> > --- /dev/null
-> > +++ b/include/linux/mdio/mdio-regmap.h
-> > @@ -0,0 +1,24 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/* Driver for MMIO-Mapped MDIO devices. Some IPs expose internal
-> > PHYs or PCS
-> > + * within the MMIO-mapped area
-> > + *
-> > + * Copyright (C) 2023 Maxime Chevallier
-> > <maxime.chevallier@bootlin.com>
-> > + */
-> > +#ifndef MDIO_REGMAP_H
-> > +#define MDIO_REGMAP_H
-> > +
-> > +struct device;
-> > +struct regmap;
-> > +
-> > +struct mdio_regmap_config {
-> > +	struct device *parent;
-> > +	struct regmap *regmap;
-> > +	char name[MII_BUS_ID_SIZE];  
-> 
-> don't we need a header included for the MII_BUS_ID_SIZE macro?
-> An empty C file which includes just <linux/mdio/mdio-regmap.h> must
-> build without errors.
+After this patch, a simple test of booting to a small buildroot rootfs
+on qemu shows:
 
-You're correct, I'll include the proper header.
+kmalloc-96           5041    5041     96  ...
+kmalloc-64           9606    9606     64  ...
+kmalloc-32           5128    5128     32  ...
+kmalloc-16           7682    7682     16  ...
+kmalloc-8           10246   10246      8  ...
 
-Thanks,
+So we save about 1268KB memory. The saving will be much larger in normal
+OS env on real HW platforms.
 
-Maxime
+
+patch 1,2,3,4 are either clean up or preparation patches.
+patch5 allows kmalloc() caches aligned to the smallest value.
+patch6 enables DMA_BOUNCE_UNALIGNED_KMALLOC.
+
+After this series:
+
+As for coherent platforms, kmalloc-{8,16,32,96} caches come back on
+coherent both RV32 and RV64 platforms, I.E !ZICBOM and !THEAD_CMO.
+
+As for noncoherent RV32 platforms, nothing changed.
+
+As for noncoherent RV64 platforms, I.E either ZICBOM or THEAD_CMO, the
+above kmalloc caches also come back if > 4GB memory or users pass
+"swiotlb=mmnn,force" to force swiotlb creation if <= 4GB memory. How
+much mmnn should be depends on the specific platform, it need to be
+tried and tested all possible usage case on the specific hardware. For
+example, I can use the minimal I/O TLB slabs on Sipeed M1S Dock.
+
+[1] Link: https://lore.kernel.org/linux-arm-kernel/20230524171904.3967031-1-catalin.marinas@arm.com/
+
+
+Jisheng Zhang (6):
+  riscv: errata: thead: only set cbom size & noncoherent during boot
+  riscv: mm: mark CBO relate initialization funcs as __init
+  riscv: mm: mark noncoherent_supported as __ro_after_init
+  riscv: mm: pass noncoherent or not to riscv_noncoherent_supported()
+  riscv: allow kmalloc() caches aligned to the smallest value
+  riscv: enable DMA_BOUNCE_UNALIGNED_KMALLOC for !dma_coherent
+
+ arch/riscv/Kconfig                  |  1 +
+ arch/riscv/errata/thead/errata.c    | 22 ++++++++++++++--------
+ arch/riscv/include/asm/cache.h      | 14 ++++++++++++++
+ arch/riscv/include/asm/cacheflush.h |  4 ++--
+ arch/riscv/kernel/setup.c           |  6 +++++-
+ arch/riscv/mm/cacheflush.c          |  8 ++++----
+ arch/riscv/mm/dma-noncoherent.c     | 16 +++++++++++-----
+ 7 files changed, 51 insertions(+), 20 deletions(-)
+
+-- 
+2.40.1
+
