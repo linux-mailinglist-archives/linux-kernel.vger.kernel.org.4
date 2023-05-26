@@ -2,84 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97943712BD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBDF712BD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjEZReI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
+        id S237124AbjEZRer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEZReF (ORCPT
+        with ESMTP id S230064AbjEZRep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:34:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E18099;
-        Fri, 26 May 2023 10:34:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=V7pSq7PJnnV+17c0PLHAsV81o6PiUmwa5c8k+OK0j2c=; b=HKC5GqVxZdX8wRhS+hcBeYXxlV
-        UI5ei/MYN07YXASmtoH6v/hoXh1Z8WEJPAFULInxGzMig6H2DvnQbp8R6exL/GuEEF9na0UaYo3mF
-        feu8hcR1fY/coNq+BfeGDyrVIxdo+3Zr2xL1BkgKf4SGlbCiKxNzebiwgVD0ZIhF5OLWP6VVp1dTg
-        i6lT2nciuafF13kv1/76VfXv8qQK1HKnByvMoN0YpS67HFjhUyV2wx1t8SLakmsRFiyTVOFo80sqU
-        +6/TDGsJ463twtBFUdkp/BgnQrLfbuKgPP9CDetYozGKolTok9W2usghuCeSXCuz7iF5CZgfsLndp
-        A8DElMFw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q2bK5-003Jgz-38;
-        Fri, 26 May 2023 17:33:53 +0000
-Date:   Fri, 26 May 2023 10:33:53 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     hughd@google.com, akpm@linux-foundation.org, brauner@kernel.org,
-        djwong@kernel.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        rohan.puri@samsung.com, rpuri.linux@gmail.com,
-        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
-        keescook@chromium.org, hare@suse.de, kbusch@kernel.org,
-        patches@lists.linux.dev, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC v2 0/8] add support for blocksize > PAGE_SIZE
-Message-ID: <ZHDtgdhauy0RZPeU@bombadil.infradead.org>
-References: <20230526075552.363524-1-mcgrof@kernel.org>
- <ZHC6BM+ehSC5Atv8@casper.infradead.org>
+        Fri, 26 May 2023 13:34:45 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81040A4;
+        Fri, 26 May 2023 10:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685122484; x=1716658484;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aBPytJReVH8Ulrvcrruu/P0Ev+N0fGdkCGCZ+F2RSsI=;
+  b=Ww3Mu8d7J2CMp7BzdH1WlNB5lxPsEJZVKaDFrlD6DQqz0xbkIeZucTRY
+   hKrScSPU0wthH4QIiSiZP38LC4GGtwfslhueKanxWHTBKgAwCvXKtHm8/
+   AOIQuWnE/3UU19YNddiHwqHIHSri+hDBgX5R/IjI31gHpPIbqohwjE5JA
+   +nmJxzWdlcLhICL6tVeoleF1xTK4zYlCTYk/Xc6nJhosnufdET6vtiL8+
+   4AOWwkGdWfQRhlBCkxnJHvkfiS/TFRftpwI6puvXX52znKhPShv5yMRG4
+   j98CjnDIoUUbDCtjQW0D0VHrWLT3lBjq2Htf7Q5ZS+PD6MaNXInnIN0Cf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="354273886"
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="scan'208";a="354273886"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 10:34:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="879610852"
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="scan'208";a="879610852"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 26 May 2023 10:34:40 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q2bKp-000JVc-2N;
+        Fri, 26 May 2023 17:34:39 +0000
+Date:   Sat, 27 May 2023 01:34:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liang Chen <liangchen.linux@gmail.com>, jasowang@redhat.com,
+        mst@redhat.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com,
+        kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
+        pabeni@redhat.com, alexander.duyck@gmail.com,
+        Liang Chen <liangchen.linux@gmail.com>
+Subject: Re: [PATCH net-next 5/5] virtio_net: Implement DMA pre-handler
+Message-ID: <202305270110.TbNSDh0Z-lkp@intel.com>
+References: <20230526054621.18371-5-liangchen.linux@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZHC6BM+ehSC5Atv8@casper.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230526054621.18371-5-liangchen.linux@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 02:54:12PM +0100, Matthew Wilcox wrote:
-> On Fri, May 26, 2023 at 12:55:44AM -0700, Luis Chamberlain wrote:
-> > This is an initial attempt to add support for block size > PAGE_SIZE for tmpfs.
-> > Why would you want this? It helps us experiment with higher order folio uses
-> > with fs APIS and helps us test out corner cases which would likely need
-> > to be accounted for sooner or later if and when filesystems enable support
-> > for this. Better review early and burn early than continue on in the wrong
-> > direction so looking for early feedback.
-> 
-> I think this is entirely the wrong direction to go in.
+Hi Liang,
 
-Any recommendations for alternative directions?
+kernel test robot noticed the following build errors:
 
-> You're coming at this from a block layer perspective, and we have two
-> ways of doing large block devices -- qemu nvme and brd.  tmpfs should
-> be like other filesystems and opportunistically use folios of whatever
-> size makes sense.
+[auto build test ERROR on net-next/main]
 
-I figured the backing block size would be a good reason to use high
-order folios for filesystems, and this mimicks that through the super
-block block size. Although usage of the block size would be moved to
-the block device and tmpfs use an page order, what other alternatives
-were you thinking?
+url:    https://github.com/intel-lab-lkp/linux/commits/Liang-Chen/virtio_net-Add-page_pool-support-to-improve-performance/20230526-135805
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230526054621.18371-5-liangchen.linux%40gmail.com
+patch subject: [PATCH net-next 5/5] virtio_net: Implement DMA pre-handler
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230527/202305270110.TbNSDh0Z-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e968bb5cacd30b672d0ccf705a24f1a792ff45aa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liang-Chen/virtio_net-Add-page_pool-support-to-improve-performance/20230526-135805
+        git checkout e968bb5cacd30b672d0ccf705a24f1a792ff45aa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-  Luis
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305270110.TbNSDh0Z-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "iommu_get_dma_domain" [drivers/net/virtio_net.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
