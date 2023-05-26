@@ -2,213 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7062712678
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515C071267E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243377AbjEZMVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
+        id S243398AbjEZMWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbjEZMVD (ORCPT
+        with ESMTP id S231270AbjEZMWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:21:03 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CA8116
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:20:58 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-565a63087e9so10968057b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1685103658; x=1687695658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V+jEjLEDhD2buRllEMJKw4DppQentdfOLHhdcxi/Kfc=;
-        b=zQHkvx/HeZmD96OlXDZBLe5P/IBWByLfgikdHJZa7KkJrAVKX9LNEjw56ZJ5RRkx4Q
-         GkyFmsrCW/t7/z+lQ3IUHbATqFiRVBwtnw08WCKgqZPNycHLp1GYAM+49qQCPps6T/Em
-         tGlZv1Yi+U64e31VvIoVSAP+H7IIcgi2rl89dRkr5xwbFNVLK9QFMXcT2xMFETuxTx/J
-         abgjK92x93JFeKtt7CknT/ZVkrXrVKubVmpTfsbdFzTSJGdN4SBFM7PXCtRRthhF57QC
-         oPXqQrcb/wqjfvLegBMF4xAi4rIuTjg/bmCq4YocueMctvKGCAKVkvEuBQ6Qw6jfEFxt
-         XJ7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685103658; x=1687695658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V+jEjLEDhD2buRllEMJKw4DppQentdfOLHhdcxi/Kfc=;
-        b=mFWXwvm3WfOBkKvuC/8k7Kf8vXea9OBwsI4Co6S54+NXZLmPZrfK23WPa7snRq0Wb6
-         W1/Zj1K/cW9vmUMUwsGGRgP7BzayqsN6XNXGmPSKvFLnSexXDL1nqEosJGe0qm0byAid
-         tG6eD6mwWr7uMA348hAewXjp85gmhKaWKgP/0OSDp8DQiB+kKM+pmT8ft+2zc2C9wCEn
-         CxAP/6xcIUZ+E+pxiOkX4hW+iQLgc6U5A6Scvad6qV6jOBUAbnySf17d7abtFtI/jncZ
-         TJC8k8thYLcBvX7n3P05R19KvhrhnP+NM8QaWHorYuKligHs0U9DLq0X22ZveM06EsCi
-         91wA==
-X-Gm-Message-State: AC+VfDxkIrx9tU2Vo/MlrWtA1H2wQdclCfzmHItM4biSvXln1P9Ccdq4
-        FZs5QXWv+AnDNYhitTBuQvgKaxkykqIrqRaCx64eLg==
-X-Google-Smtp-Source: ACHHUZ5tv9zaKf/t6HunrV+Ybq+VV3MhHulgaS/YrK7AQXQeUfEtohCwKIIP2QYdkOSQEWfiizzvYxwQHU9btyb0g7c=
-X-Received: by 2002:a0d:d645:0:b0:54f:b6af:ac15 with SMTP id
- y66-20020a0dd645000000b0054fb6afac15mr2006001ywd.51.1685103658035; Fri, 26
- May 2023 05:20:58 -0700 (PDT)
+        Fri, 26 May 2023 08:22:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C32D8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685103753; x=1716639753;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WoAHVXyuE6np/EKIFTHT4tNOz1b9QNRjA+bAUCpRqjM=;
+  b=g7AeT6LgxrMJJpMFFAHly+02/uslUWuTGxjG4uw58CcDsyuCSU59ovmD
+   mlu3nhu9ZbCCJwzCC92CCu8mA4Z8zimId5OIiRFbNIYNV5jtl6uboLwpV
+   M9g4yfaz1RGotlJYaif39gWutCsST6N7sxFuc6AMbyjzo+HeF6eKZTXAq
+   d7gz2kAEvY+iCUO/svl1i+Jou+b/SwVRbPxVtpjpMvG/7CHwo8XsrQ1BS
+   xFoKzRxlIScvJNWV/dtltjzm3okSUkw3pzTz1kb0Hqk7sld2AABcqpnOY
+   Ayw0PkUvUzKp9B4dNg4DY+hhn8HObPJ18IRvBUzfmNuJsUHBBis1nOKW1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="354204788"
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="scan'208";a="354204788"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 05:22:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="735990589"
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="scan'208";a="735990589"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 26 May 2023 05:22:31 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q2WSk-000JKW-1B;
+        Fri, 26 May 2023 12:22:30 +0000
+Date:   Fri, 26 May 2023 20:22:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Noah Goldstein <goldstein.w.n@gmail.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [tip:x86/misc 1/1] arch/x86/lib/csum-partial_64.c:74:20: warning:
+ variable 'result' is uninitialized when used here
+Message-ID: <202305262039.3HUYjWJk-lkp@intel.com>
 MIME-Version: 1.0
-References: <cover.1684887977.git.peilin.ye@bytedance.com> <429357af094297abbc45f47b8e606f11206df049.1684887977.git.peilin.ye@bytedance.com>
- <faaeb0b0-8538-9dfa-4c1e-8a225e3534f4@mojatatu.com>
-In-Reply-To: <faaeb0b0-8538-9dfa-4c1e-8a225e3534f4@mojatatu.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Fri, 26 May 2023 08:20:46 -0400
-Message-ID: <CAM0EoM=3iYmmLjnifx_FDcJfRbN31tRnCE0ZvqQs5xSBPzaqXQ@mail.gmail.com>
-Subject: Re: [PATCH v5 net 6/6] net/sched: qdisc_destroy() old ingress and
- clsact Qdiscs before grafting
-To:     Pedro Tammela <pctammela@mojatatu.com>
-Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 11:39=E2=80=AFAM Pedro Tammela <pctammela@mojatatu.=
-com> wrote:
->
-> On 23/05/2023 22:20, Peilin Ye wrote:
-> > From: Peilin Ye <peilin.ye@bytedance.com>
-> >
-> > mini_Qdisc_pair::p_miniq is a double pointer to mini_Qdisc, initialized=
- in
-> > ingress_init() to point to net_device::miniq_ingress.  ingress Qdiscs
-> > access this per-net_device pointer in mini_qdisc_pair_swap().  Similar =
-for
-> > clsact Qdiscs and miniq_egress.
-> >
-> > Unfortunately, after introducing RTNL-unlocked RTM_{NEW,DEL,GET}TFILTER
-> > requests (thanks Hillf Danton for the hint), when replacing ingress or
-> > clsact Qdiscs, for example, the old Qdisc ("@old") could access the sam=
-e
-> > miniq_{in,e}gress pointer(s) concurrently with the new Qdisc ("@new"),
-> > causing race conditions [1] including a use-after-free bug in
-> > mini_qdisc_pair_swap() reported by syzbot:
-> >
-> >   BUG: KASAN: slab-use-after-free in mini_qdisc_pair_swap+0x1c2/0x1f0 n=
-et/sched/sch_generic.c:1573
-> >   Write of size 8 at addr ffff888045b31308 by task syz-executor690/1490=
-1
-> > ...
-> >   Call Trace:
-> >    <TASK>
-> >    __dump_stack lib/dump_stack.c:88 [inline]
-> >    dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
-> >    print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:3=
-19
-> >    print_report mm/kasan/report.c:430 [inline]
-> >    kasan_report+0x11c/0x130 mm/kasan/report.c:536
-> >    mini_qdisc_pair_swap+0x1c2/0x1f0 net/sched/sch_generic.c:1573
-> >    tcf_chain_head_change_item net/sched/cls_api.c:495 [inline]
-> >    tcf_chain0_head_change.isra.0+0xb9/0x120 net/sched/cls_api.c:509
-> >    tcf_chain_tp_insert net/sched/cls_api.c:1826 [inline]
-> >    tcf_chain_tp_insert_unique net/sched/cls_api.c:1875 [inline]
-> >    tc_new_tfilter+0x1de6/0x2290 net/sched/cls_api.c:2266
-> > ...
-> >
-> > @old and @new should not affect each other.  In other words, @old shoul=
-d
-> > never modify miniq_{in,e}gress after @new, and @new should not update
-> > @old's RCU state.  Fixing without changing sch_api.c turned out to be
-> > difficult (please refer to Closes: for discussions).  Instead, make sur=
-e
-> > @new's first call always happen after @old's last call, in
-> > qdisc_destroy(), has finished:
-> >
-> > In qdisc_graft(), return -EAGAIN and tell the caller to replay
-> > (suggested by Vlad Buslov) if @old has any ongoing RTNL-unlocked filter
-> > requests, and call qdisc_destroy() for @old before grafting @new.
-> >
-> > Introduce qdisc_refcount_dec_if_one() as the counterpart of
-> > qdisc_refcount_inc_nz() used for RTNL-unlocked filter requests.  Introd=
-uce
-> > a non-static version of qdisc_destroy() that does a TCQ_F_BUILTIN check=
-,
-> > just like qdisc_put() etc.
-> >
-> > Depends on patch "net/sched: Refactor qdisc_graft() for ingress and cls=
-act
-> > Qdiscs".
-> >
-> > [1] To illustrate, the syzkaller reproducer adds ingress Qdiscs under
-> > TC_H_ROOT (no longer possible after patch "net/sched: sch_ingress: Only
-> > create under TC_H_INGRESS") on eth0 that has 8 transmission queues:
-> >
-> >    Thread 1 creates ingress Qdisc A (containing mini Qdisc a1 and a2), =
-then
-> >    adds a flower filter X to A.
-> >
-> >    Thread 2 creates another ingress Qdisc B (containing mini Qdisc b1 a=
-nd
-> >    b2) to replace A, then adds a flower filter Y to B.
-> >
-> >   Thread 1               A's refcnt   Thread 2
-> >    RTM_NEWQDISC (A, RTNL-locked)
-> >     qdisc_create(A)               1
-> >     qdisc_graft(A)                9
-> >
-> >    RTM_NEWTFILTER (X, RTNL-unlocked)
-> >     __tcf_qdisc_find(A)          10
-> >     tcf_chain0_head_change(A)
-> >     mini_qdisc_pair_swap(A) (1st)
-> >              |
-> >              |                         RTM_NEWQDISC (B, RTNL-locked)
-> >           RCU sync                2     qdisc_graft(B)
-> >              |                    1     notify_and_destroy(A)
-> >              |
-> >     tcf_block_release(A)          0    RTM_NEWTFILTER (Y, RTNL-unlocked=
-)
-> >     qdisc_destroy(A)                    tcf_chain0_head_change(B)
-> >     tcf_chain0_head_change_cb_del(A)    mini_qdisc_pair_swap(B) (2nd)
-> >     mini_qdisc_pair_swap(A) (3rd)                |
-> >             ...                                 ...
-> >
-> > Here, B calls mini_qdisc_pair_swap(), pointing eth0->miniq_ingress to i=
-ts
-> > mini Qdisc, b1.  Then, A calls mini_qdisc_pair_swap() again during
-> > ingress_destroy(), setting eth0->miniq_ingress to NULL, so ingress pack=
-ets
-> > on eth0 will not find filter Y in sch_handle_ingress().
-> >
-> > This is only one of the possible consequences of concurrently accessing
-> > miniq_{in,e}gress pointers.  The point is clear though: again, A should
-> > never modify those per-net_device pointers after B, and B should not
-> > update A's RCU state.
-> >
-> > Fixes: 7a096d579e8e ("net: sched: ingress: set 'unlocked' flag for Qdis=
-c ops")
-> > Fixes: 87f373921c4e ("net: sched: ingress: set 'unlocked' flag for clsa=
-ct Qdisc ops")
-> > Reported-by: syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
-> > Closes: https://lore.kernel.org/r/0000000000006cf87705f79acf1a@google.c=
-om/
-> > Cc: Hillf Danton <hdanton@sina.com>
-> > Cc: Vlad Buslov <vladbu@mellanox.com>
-> > Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
->
-> Tested-by: Pedro Tammela <pctammela@mojatatu.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/misc
+head:   688eb8191b475db5acfd48634600b04fd3dda9ad
+commit: 688eb8191b475db5acfd48634600b04fd3dda9ad [1/1] x86/csum: Improve performance of `csum_partial`
+config: x86_64-randconfig-x073-20230525 (https://download.01.org/0day-ci/archive/20230526/202305262039.3HUYjWJk-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=688eb8191b475db5acfd48634600b04fd3dda9ad
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip x86/misc
+        git checkout 688eb8191b475db5acfd48634600b04fd3dda9ad
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305262039.3HUYjWJk-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/lib/csum-partial_64.c:74:20: warning: variable 'result' is uninitialized when used here [-Wuninitialized]
+                   return csum_tail(result, temp64, odd);
+                                    ^~~~~~
+   arch/x86/lib/csum-partial_64.c:48:22: note: initialize the variable 'result' to silence this warning
+           unsigned odd, result;
+                               ^
+                                = 0
+   1 warning generated.
 
 
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+vim +/result +74 arch/x86/lib/csum-partial_64.c
 
+    33	
+    34	/*
+    35	 * Do a checksum on an arbitrary memory area.
+    36	 * Returns a 32bit checksum.
+    37	 *
+    38	 * This isn't as time critical as it used to be because many NICs
+    39	 * do hardware checksumming these days.
+    40	 *
+    41	 * Still, with CHECKSUM_COMPLETE this is called to compute
+    42	 * checksums on IPv6 headers (40 bytes) and other small parts.
+    43	 * it's best to have buff aligned on a 64-bit boundary
+    44	 */
+    45	__wsum csum_partial(const void *buff, int len, __wsum sum)
+    46	{
+    47		u64 temp64 = (__force u64)sum;
+    48		unsigned odd, result;
+    49	
+    50		odd = 1 & (unsigned long) buff;
+    51		if (unlikely(odd)) {
+    52			if (unlikely(len == 0))
+    53				return sum;
+    54			temp64 = ror32((__force u32)sum, 8);
+    55			temp64 += (*(unsigned char *)buff << 8);
+    56			len--;
+    57			buff++;
+    58		}
+    59	
+    60		/*
+    61		 * len == 40 is the hot case due to IPv6 headers, but annotating it likely()
+    62		 * has noticeable negative affect on codegen for all other cases with
+    63		 * minimal performance benefit here.
+    64		 */
+    65		if (len == 40) {
+    66			asm("addq 0*8(%[src]),%[res]\n\t"
+    67			    "adcq 1*8(%[src]),%[res]\n\t"
+    68			    "adcq 2*8(%[src]),%[res]\n\t"
+    69			    "adcq 3*8(%[src]),%[res]\n\t"
+    70			    "adcq 4*8(%[src]),%[res]\n\t"
+    71			    "adcq $0,%[res]"
+    72			    : [res] "+r"(temp64)
+    73			    : [src] "r"(buff), "m"(*(const char(*)[40])buff));
+  > 74			return csum_tail(result, temp64, odd);
+    75		}
+    76		if (unlikely(len >= 64)) {
+    77			/*
+    78			 * Extra accumulators for better ILP in the loop.
+    79			 */
+    80			u64 tmp_accum, tmp_carries;
+    81	
+    82			asm("xorl %k[tmp_accum],%k[tmp_accum]\n\t"
+    83			    "xorl %k[tmp_carries],%k[tmp_carries]\n\t"
+    84			    "subl $64, %[len]\n\t"
+    85			    "1:\n\t"
+    86			    "addq 0*8(%[src]),%[res]\n\t"
+    87			    "adcq 1*8(%[src]),%[res]\n\t"
+    88			    "adcq 2*8(%[src]),%[res]\n\t"
+    89			    "adcq 3*8(%[src]),%[res]\n\t"
+    90			    "adcl $0,%k[tmp_carries]\n\t"
+    91			    "addq 4*8(%[src]),%[tmp_accum]\n\t"
+    92			    "adcq 5*8(%[src]),%[tmp_accum]\n\t"
+    93			    "adcq 6*8(%[src]),%[tmp_accum]\n\t"
+    94			    "adcq 7*8(%[src]),%[tmp_accum]\n\t"
+    95			    "adcl $0,%k[tmp_carries]\n\t"
+    96			    "addq $64, %[src]\n\t"
+    97			    "subl $64, %[len]\n\t"
+    98			    "jge 1b\n\t"
+    99			    "addq %[tmp_accum],%[res]\n\t"
+   100			    "adcq %[tmp_carries],%[res]\n\t"
+   101			    "adcq $0,%[res]"
+   102			    : [tmp_accum] "=&r"(tmp_accum),
+   103			      [tmp_carries] "=&r"(tmp_carries), [res] "+r"(temp64),
+   104			      [len] "+r"(len), [src] "+r"(buff)
+   105			    : "m"(*(const char *)buff));
+   106		}
+   107	
+   108		if (len & 32) {
+   109			asm("addq 0*8(%[src]),%[res]\n\t"
+   110			    "adcq 1*8(%[src]),%[res]\n\t"
+   111			    "adcq 2*8(%[src]),%[res]\n\t"
+   112			    "adcq 3*8(%[src]),%[res]\n\t"
+   113			    "adcq $0,%[res]"
+   114			    : [res] "+r"(temp64)
+   115			    : [src] "r"(buff), "m"(*(const char(*)[32])buff));
+   116			buff += 32;
+   117		}
+   118		if (len & 16) {
+   119			asm("addq 0*8(%[src]),%[res]\n\t"
+   120			    "adcq 1*8(%[src]),%[res]\n\t"
+   121			    "adcq $0,%[res]"
+   122			    : [res] "+r"(temp64)
+   123			    : [src] "r"(buff), "m"(*(const char(*)[16])buff));
+   124			buff += 16;
+   125		}
+   126		if (len & 8) {
+   127			asm("addq 0*8(%[src]),%[res]\n\t"
+   128			    "adcq $0,%[res]"
+   129			    : [res] "+r"(temp64)
+   130			    : [src] "r"(buff), "m"(*(const char(*)[8])buff));
+   131			buff += 8;
+   132		}
+   133		if (len & 7) {
+   134			unsigned int shift = (-len << 3) & 63;
+   135			unsigned long trail;
+   136	
+   137			trail = (load_unaligned_zeropad(buff) << shift) >> shift;
+   138	
+   139			asm("addq %[trail],%[res]\n\t"
+   140			    "adcq $0,%[res]"
+   141			    : [res] "+r"(temp64)
+   142			    : [trail] "r"(trail));
+   143		}
+   144		return csum_tail(result, temp64, odd);
+   145	}
+   146	EXPORT_SYMBOL(csum_partial);
+   147	
 
-cheers,
-jamal
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
