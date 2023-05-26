@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82897122B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B881A7122B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242592AbjEZIwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S242822AbjEZIxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjEZIwe (ORCPT
+        with ESMTP id S242649AbjEZIxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:52:34 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E45699
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:52:32 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b0160c7512so1523925ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:52:32 -0700 (PDT)
+        Fri, 26 May 2023 04:53:32 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E17C9B
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:53:31 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1afbc02c602so14569125ad.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:53:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685091152; x=1687683152;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=myThaSogk232yycDyen+b2SvG/3hJJTWj1TLCB46r9k=;
-        b=XRCWHtL5xyfIAKN4c78XkWLSyaWYWc0fNFshtIprx6S/mTeyG9+tVUGLvVIXghEPtr
-         3Ge+Y/SAGlcW7MbcfFnd6hwc0b8Z/rxyhG6tp05fSnUhvUPI59jHU5pnietfo8aRiWOE
-         cxWiTom8W+Z6UfedExFntI6t3yXGxYp77coEpCBAtCR7pPGKDuMANvkSHRICVu0oekRk
-         mWKTMz2hrzOXKYwXj31sf5BLyyxBOicdJFIzPBuhl8hpG0BUuYOscFB+UyJnUcbzg9eT
-         dymmwp48UxFojv5RpbpSvbcary5Yj4vRSANIh9y0B84quGpV0ZQAvoMkWwJiFrHodRjM
-         KgLA==
+        d=shopee.com; s=shopee.com; t=1685091211; x=1687683211;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vULi8wP3cxO4TEAm2rbpl3Qmvd6xJYVlkRF7oAxYgxQ=;
+        b=ZE2T2CWUJ8fXrRdBuSxPnMkGmKH352ocr4/VgManWjp7N3POEfQ5B8IvhDcAtTJGLB
+         ThDPY6JboiSIzxSskqNIa0/KYwVb4UK6lZZ/LQDgdCWPrRqXazsKIteW4P4gMSRmo5bL
+         HB6RGmbwANNSjoZvuYiwvc2k2/VqnBRedk6pReISAUfpuhYz0p3rC9QnMgfofFH4OR9A
+         uruWHE5HSQNPuR0El4DHtx8bzKE2C5r+MdDLcRoTmg7VEklCbFg1+b+y18f5ekAaUp2x
+         c25eXq9xsnnY6GfgDyQ3tSlP9oBeZbz6UZCFhigMbA0Kkay+1I5rXas7FVdBQLVthnuU
+         FiTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685091152; x=1687683152;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=myThaSogk232yycDyen+b2SvG/3hJJTWj1TLCB46r9k=;
-        b=gYnOO2OHfKcVMy7rUPa3OoC4+9YIMz3uAGz43zAYsy06T3IJoLqxw65eYTHmpT7tvc
-         eqZt9hnq8jcWHk+2FU+y+27L5jLg3y8vwrZWCewsNDoNdzMVO9hzw18GYrcEktw7psyA
-         vidH+yhOWs9pgD4X6TTlZxxemFhEXwjjuKmGArtSehpKrhjZclzh7K/iRxmE1xdKMoXC
-         UKe2kIpM9xgRbDV4OAySFNjXSC0sfGJk1l3UtVdlmVAQ/e8aFvnS8GvRVrhAiA+CDEgF
-         s48bIV8J1NOM+zNepCmQfC5hCJgpdjClHpR9/PwIc/+uh3F9Z51HRX3ZDfnovtryzPKg
-         OvUA==
-X-Gm-Message-State: AC+VfDxeOkYyBKuVwCoeSh/l7SJJnz40iQ8d1gy/juBI39CPNqG2P8vq
-        JDBsaeRbjKYe3QvlnUoIk8OcV8tt5BpgZZky+So=
-X-Google-Smtp-Source: ACHHUZ4+Acw0hQayR5iTaOexay2YkWvNk++DbCP1PhU5ELVlYtMT0MvzoTlfbv1hblWzvc2Nkv1MlUlskbp+rLX+XYU=
-X-Received: by 2002:a17:90a:394a:b0:255:6133:f561 with SMTP id
- n10-20020a17090a394a00b002556133f561mr1635780pjf.10.1685091151411; Fri, 26
- May 2023 01:52:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685091211; x=1687683211;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vULi8wP3cxO4TEAm2rbpl3Qmvd6xJYVlkRF7oAxYgxQ=;
+        b=PojfcC+z8b8uUnkGgogdc0xUNF0ir2mO7fYIm1/IgnztdqwKtuiBy5MuUbyVMLHk5l
+         usu0TSK4PmwXltSwdk/fbZLtlc0iRV5cEVM1FXdGyL+hzilRsPdqvTv0xCiuHkY6Hzbs
+         u+LI6jS8YZ+gQ8SmNJqhFzYI4s1XfzupG3wYPuYdW1qGLboqimiumM81hu3qG5TlmMv/
+         Pl2B7kuPnzdImJCzdjVSPVuej6gybgaaWjNLN/ibzc6NAPUtWsoamCu+XopZgx0vxYIb
+         q8euxY8ArGtHx45oUq5b7sTpEs0zuA4P8uFeLhu4gekkcnT5Y22rXtHlF/c2zPXBa68J
+         2l9Q==
+X-Gm-Message-State: AC+VfDytlgPOK3ZQPeo7QlZAhJ3KxhvvPfbRrsI0ezmiDLi+ycwnowiy
+        NhQkzk4bSBjcislLUH81ea+8Eg==
+X-Google-Smtp-Source: ACHHUZ7i9Uo5IejiNNDJhMv1eKhCiZVnnIJJfyGnzZMigjzGlsUMnijNc1cjuVgvuJ3wRqNNAv5FXg==
+X-Received: by 2002:a17:903:44c:b0:1ae:4dda:c2e with SMTP id iw12-20020a170903044c00b001ae4dda0c2emr4829720plb.13.1685091211144;
+        Fri, 26 May 2023 01:53:31 -0700 (PDT)
+Received: from ubuntu-hf2.default.svc.cluster.local ([101.127.248.173])
+        by smtp.gmail.com with ESMTPSA id t13-20020a170902b20d00b0019ee045a2b3sm2713911plr.308.2023.05.26.01.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 01:53:30 -0700 (PDT)
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+To:     rppt@kernel.org
+Cc:     akpm@linux-foundation.org, mhocko@suse.com, david@redhat.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Haifeng Xu <haifeng.xu@shopee.com>
+Subject: [PATCH v2 1/2] mm/mm_init.c: introduce reset_memoryless_node_totalpages()
+Date:   Fri, 26 May 2023 08:52:50 +0000
+Message-Id: <20230526085251.1977-1-haifeng.xu@shopee.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230524065051.6328-1-cerasuolodomenico@gmail.com>
- <CAJD7tkY0j4xzstf=OCX-k-mujzbXf_nt=H4F5JCZNZ8N1iEEcg@mail.gmail.com>
- <CA+CLi1gzVop3=kmARn09NKKh6yW=bt9KYrzc0AfXB64J0r-9Ew@mail.gmail.com> <CAJD7tkaJAPhHVwepUeiAmSwomNmUKiYUR2gixsvLwHxB6k7UZA@mail.gmail.com>
-In-Reply-To: <CAJD7tkaJAPhHVwepUeiAmSwomNmUKiYUR2gixsvLwHxB6k7UZA@mail.gmail.com>
-From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Date:   Fri, 26 May 2023 10:52:20 +0200
-Message-ID: <CA+CLi1i02o+ZzWEgK-U=wftqQ9DgijZWUnEAeGNAZ17SeBh9ig@mail.gmail.com>
-Subject: Re: [PATCH] mm: zswap: shrink until can accept
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
-        hannes@cmpxchg.org, kernel-team@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,258 +70,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 9:10=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com>=
- wrote:
->
-> On Thu, May 25, 2023 at 9:53=E2=80=AFAM Domenico Cerasuolo
-> <cerasuolodomenico@gmail.com> wrote:
-> >
-> > On Thu, May 25, 2023 at 2:59=E2=80=AFAM Yosry Ahmed <yosryahmed@google.=
-com> wrote:
-> > >
-> > > Hi Domenico,
-> > >
-> > > On Tue, May 23, 2023 at 11:50=E2=80=AFPM Domenico Cerasuolo
-> > > <cerasuolodomenico@gmail.com> wrote:
-> > > >
-> > > > This update addresses an issue with the zswap reclaim mechanism, wh=
-ich
-> > > > hinders the efficient offloading of cold pages to disk, thereby
-> > > > compromising the preservation of the LRU order and consequently
-> > > > diminishing, if not inverting, its performance benefits.
-> > > >
-> > > > The functioning of the zswap shrink worker was found to be inadequa=
-te,
-> > > > as shown by basic benchmark test. For the test, a kernel build was
-> > > > utilized as a reference, with its memory confined to 1G via a cgrou=
-p and
-> > > > a 5G swap file provided. The results are presented below, these are
-> > > > averages of three runs without the use of zswap:
-> > > >
-> > > > real 46m26s
-> > > > user 35m4s
-> > > > sys 7m37s
-> > > >
-> > > > With zswap (zbud) enabled and max_pool_percent set to 1 (in a 32G
-> > > > system), the results changed to:
-> > > >
-> > > > real 56m4s
-> > > > user 35m13s
-> > > > sys 8m43s
-> > > >
-> > > > written_back_pages: 18
-> > > > reject_reclaim_fail: 0
-> > > > pool_limit_hit:1478
-> > > >
-> > > > Besides the evident regression, one thing to notice from this data =
-is
-> > > > the extremely low number of written_back_pages and pool_limit_hit.
-> > > >
-> > > > The pool_limit_hit counter, which is increased in zswap_frontswap_s=
-tore
-> > > > when zswap is completely full, doesn't account for a particular
-> > > > scenario: once zswap hits his limit, zswap_pool_reached_full is set=
- to
-> > > > true; with this flag on, zswap_frontswap_store rejects pages if zsw=
-ap is
-> > > > still above the acceptance threshold. Once we include the rejection=
-s due
-> > > > to zswap_pool_reached_full && !zswap_can_accept(), the number goes =
-from
-> > > > 1478 to a significant 21578266.
-> > > >
-> > > > Zswap is stuck in an undesirable state where it rejects pages becau=
-se
-> > > > it's above the acceptance threshold, yet fails to attempt memory
-> > > > reclaimation. This happens because the shrink work is only queued w=
-hen
-> > > > zswap_frontswap_store detects that it's full and the work itself on=
-ly
-> > > > reclaims one page per run.
-> > > >
-> > > > This state results in hot pages getting written directly to disk,
-> > > > while cold ones remain memory, waiting only to be invalidated. The =
-LRU
-> > > > order is completely broken and zswap ends up being just an overhead
-> > > > without providing any benefits.
-> > > >
-> > > > This commit applies 2 changes: a) the shrink worker is set to recla=
-im
-> > > > pages until the acceptance threshold is met and b) the task is also
-> > > > enqueued when zswap is not full but still above the threshold.
-> > > >
-> > > > Testing this suggested update showed much better numbers:
-> > > >
-> > > > real 36m37s
-> > > > user 35m8s
-> > > > sys 9m32s
-> > > >
-> > > > written_back_pages: 10459423
-> > > > reject_reclaim_fail: 12896
-> > > > pool_limit_hit: 75653
-> > >
-> > > Impressive numbers, and great find in general!
-> > >
-> > > I wonder how other workloads benefit/regress from this change.
-> > > Anything else that you happened to run? :)
-> > >
-> > Hi Yosry,
-> >
-> > thanks for the quick feedback!
-> >
-> > Besides stressers, I haven't tested any other actual workload, we don't=
- have
-> > writeback in production yet so I can't provide any data from there. I w=
-as
-> > wondering what kind of actual workload I could use to test this on my d=
-esktop,
-> > but I couldn't think of anything relevant, I'm open to suggestions thou=
-gh :)
->
-> Nothing in mind in particular as well. Perhaps others have ideas.
->
-> > > >
-> > > > Fixes: 45190f01dd40 ("mm/zswap.c: add allocation hysteresis if pool=
- limit is hit")
-> > > > Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> > > > ---
-> > > >  mm/zswap.c | 10 +++++++---
-> > > >  1 file changed, 7 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/mm/zswap.c b/mm/zswap.c
-> > > > index 59da2a415fbb..2ee0775d8213 100644
-> > > > --- a/mm/zswap.c
-> > > > +++ b/mm/zswap.c
-> > > > @@ -587,9 +587,13 @@ static void shrink_worker(struct work_struct *=
-w)
-> > > >  {
-> > > >         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
-> > > >                                                 shrink_work);
-> > > > +       int ret;
-> > > >
-> > > > -       if (zpool_shrink(pool->zpool, 1, NULL))
-> > > > -               zswap_reject_reclaim_fail++;
-> > > > +       do {
-> > > > +               ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> > > > +               if (ret)
-> > > > +                       zswap_reject_reclaim_fail++;
-> > > > +       } while (!zswap_can_accept() && ret !=3D -EINVAL);
-> > >
-> > > One question/comment here about the retry logic.
-> > >
-> > > So I looked through the awfully convoluted writeback code, and there
-> > > are multiple layers, and some of them tend to overwrite the return
-> > > value of the layer underneath :(
-> > >
-> > > For zsmalloc (as an example):
-> > > zpool_shrink()->zs_zpool_shrink()->zs_reclaim_page()->zpool_ops.evict=
-()->zswap_writeback_entry().
-> > >
-> > > First of all, that zpool_ops is an unnecessarily confusing
-> > > indirection, but anyway.
-> > >
-> > > - zswap_writeback_entry() will either return -ENOMEM or -EEXIST on er=
-ror
-> > > - zs_reclaim_page()/zbud_reclaim_page() will return -EINVAL if the lr=
-u
-> > > is empty, and -EAGAIN on other errors.
-> > > - zs_zpool_shrink()/zbud_zpool_shrink() will mostly propagate the
-> > > return value of  zs_reclaim_page()/zbud_reclaim_page().
-> > > - zpool_shrink() will return -EINVAL if the driver does not support
-> > > shrinking, otherwise it will propagate the return value from the
-> > > driver.
-> > >
-> > > So it looks like we will get -EINVAL only if the driver lru is empty
-> > > or the driver does not support writeback, so rightfully we should not
-> > > retry.
-> > >
-> > > If zswap_writeback_entry() returns -EEXIST, it probably means that we
-> > > raced with another task decompressing the page, so rightfully we
-> > > should retry to writeback another page instead.
-> > >
-> > > If zswap_writeback_entry() returns -ENOMEM, it doesn't necessarily
-> > > mean that we couldn't allocate memory (unfortunately), it looks like
-> > > we will return -ENOMEM in other cases as well. Arguably, we can retry
-> > > in all cases, because even if we were actually out of memory, we are
-> > > trying to make an allocation that will eventually free more memory.
-> > >
-> > > In all cases, I think it would be nicer if we retry if ret =3D=3D -EA=
-GAIN
-> > > instead. It is semantically more sane. In this specific case it is
-> > > functionally NOP as zs_reclaim_page()/zbud_reclaim_page() will mostly
-> > > return -EAGAIN anyway, but in case someone tries to use saner errnos
-> > > in the future, this will age better.
-> > Retrying if ret =3D=3D -EAGAIN seems much nicer indeed, will change it.
-> > >
-> > > Also, do we intentionally want to keep retrying forever on failure? D=
-o
-> > > we want to add a max number of retries?
-> > If the drivers guaranteed that zpool_shrink will remove at least an ent=
-ry
-> > from their LRU, the retry wouldn't be needed because the LRU will
-> > eventually be emptied. But this is an assumption on the implementation =
-of
->
-> I don't think any zpool driver can guarantee to writeback at least one
-> page. It can fail for reasons beyond their control (e.g. cannot
-> allocate a page to decompress to).
->
-> > the zpool, so yes, we could use a max retries. I think that being a san=
-ity
-> > check, it should overshoot the required number of iterations in order t=
-o
-> > avoid a premature break, what about retrying a max of
-> > zswap_stored_pages times?
->
-> Why is it just a sanity check? Consider a case where the system is
-> under extreme memory pressure that the drivers cannot allocate pages
-> to decompress to. The drivers would be continuously competing with all
-> other allocations on the machine. I think we should give up at some
-> point. In any case, you changed the zswap_frontswap_store() to goto
-> shrink if !zswap_can_accept(), so next time we try to compress a page
-> to zswap we will invoke try again anyway -- perhaps under better
-> circumstances.
->
-> I think zswap_stored_pages is too much, keep in mind that it also
-> includes same-filled pages which are not even stored in the zpool
-> drivers. Maybe we should allow a fixed number of failures. If
-> zpool_shrink() is successful, keep going until zswap_can_accept().
-> Otherwise allow a fixed number of failures before giving up.
->
+Currently, no matter whether a node actually has memory or not,
+calculate_node_totalpages() is used to account number of pages
+in zone/node. However, for node without memory, these unnecessary
+calculations can be skipped. All the zone/node page counts can be
+set to 0 directly. So introduce reset_memoryless_node_totalpages()
+to perform this action.
 
-Yes, I think I got carried away by a writeback frenzy, while testing the LR=
-U
-refactor I had to fight to get a decent amount of writebacks, and ended up
-being too afraid the shrink work would stop.
-What about using MAX_RECLAIM_RETRIES? I like the idea of putting a limit bu=
-t
-I wouldn't know how to pick a fixed number.
+Furthermore, calculate_node_totalpages() only gets called for the
+node with memory.
 
-> Maybe we can improve the error codes propagated through the writeback
-> code as well to improve the retry logic. For example, if
-> zswap_writeback_entry() returns EEXIST then retrying should be
-> harmless, but ENOMEM might be harmful. Both of which are propagated as
-> EAGAIN from zs_zpool_shrink()/zbud_zpool_shrink().
->
+Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+Suggested-by: Mike Rapoport <rppt@kernel.org>
+---
+v2:
+- drop patch 2 in v1
+- inroduce new function reset_memoryless_node_totalpages()
+- call calculate_node_totalpages only if node actually has
+  memory
+---
+ mm/mm_init.c | 31 ++++++++++++++++++++++---------
+ 1 file changed, 22 insertions(+), 9 deletions(-)
 
-That would be a nice improvement indeed, I'd queue it after the LRU refacto=
-r
-though.
+diff --git a/mm/mm_init.c b/mm/mm_init.c
+index 7f7f9c677854..f674e5798f7d 100644
+--- a/mm/mm_init.c
++++ b/mm/mm_init.c
+@@ -1174,10 +1174,6 @@ static unsigned long __init zone_absent_pages_in_node(int nid,
+ 	unsigned long zone_start_pfn, zone_end_pfn;
+ 	unsigned long nr_absent;
+ 
+-	/* When hotadd a new node from cpu_up(), the node should be empty */
+-	if (!node_start_pfn && !node_end_pfn)
+-		return 0;
+-
+ 	zone_start_pfn = clamp(node_start_pfn, zone_low, zone_high);
+ 	zone_end_pfn = clamp(node_end_pfn, zone_low, zone_high);
+ 
+@@ -1227,9 +1223,6 @@ static unsigned long __init zone_spanned_pages_in_node(int nid,
+ {
+ 	unsigned long zone_low = arch_zone_lowest_possible_pfn[zone_type];
+ 	unsigned long zone_high = arch_zone_highest_possible_pfn[zone_type];
+-	/* When hotadd a new node from cpu_up(), the node should be empty */
+-	if (!node_start_pfn && !node_end_pfn)
+-		return 0;
+ 
+ 	/* Get the start and end of the zone */
+ 	*zone_start_pfn = clamp(node_start_pfn, zone_low, zone_high);
+@@ -1250,6 +1243,24 @@ static unsigned long __init zone_spanned_pages_in_node(int nid,
+ 	return *zone_end_pfn - *zone_start_pfn;
+ }
+ 
++static void __init reset_memoryless_node_totalpages(struct pglist_data *pgdat)
++{
++	struct zone *z;
++
++	for (z = pgdat->node_zones; z < pgdat->node_zones + MAX_NR_ZONES; z++) {
++		z->zone_start_pfn = 0;
++		z->spanned_pages = 0;
++		z->present_pages = 0;
++#if defined(CONFIG_MEMORY_HOTPLUG)
++		z->present_early_pages = 0;
++#endif
++	}
++
++	pgdat->node_spanned_pages = 0;
++	pgdat->node_present_pages = 0;
++	pr_debug("On node %d totalpages: 0\n", pgdat->node_id);
++}
++
+ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
+ 						unsigned long node_start_pfn,
+ 						unsigned long node_end_pfn)
+@@ -1702,11 +1713,13 @@ static void __init free_area_init_node(int nid)
+ 		pr_info("Initmem setup node %d [mem %#018Lx-%#018Lx]\n", nid,
+ 			(u64)start_pfn << PAGE_SHIFT,
+ 			end_pfn ? ((u64)end_pfn << PAGE_SHIFT) - 1 : 0);
++
++		calculate_node_totalpages(pgdat, start_pfn, end_pfn);
+ 	} else {
+ 		pr_info("Initmem setup node %d as memoryless\n", nid);
+-	}
+ 
+-	calculate_node_totalpages(pgdat, start_pfn, end_pfn);
++		reset_memoryless_node_totalpages(pgdat);
++	}
+ 
+ 	alloc_node_mem_map(pgdat);
+ 	pgdat_set_deferred_range(pgdat);
+-- 
+2.25.1
 
-> > >
-> > > >         zswap_pool_put(pool);
-> > > >  }
-> > > >
-> > > > @@ -1188,7 +1192,7 @@ static int zswap_frontswap_store(unsigned typ=
-e, pgoff_t offset,
-> > > >         if (zswap_pool_reached_full) {
-> > > >                if (!zswap_can_accept()) {
-> > > >                         ret =3D -ENOMEM;
-> > > > -                       goto reject;
-> > > > +                       goto shrink;
-> > > >                 } else
-> > > >                         zswap_pool_reached_full =3D false;
-> > > >         }
-> > > > --
-> > > > 2.34.1
-> > > >
