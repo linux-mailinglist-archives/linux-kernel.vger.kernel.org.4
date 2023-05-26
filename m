@@ -2,164 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7769712AF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC464712AF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjEZQqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
+        id S237027AbjEZQrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236942AbjEZQqU (ORCPT
+        with ESMTP id S236975AbjEZQrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:46:20 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729A8125
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:46:18 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f5dbd8f677so325e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:46:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685119577; x=1687711577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OQypiCBwLug/0iNSH44aWt+z5fa/mlixwMi4GartHM0=;
-        b=Gl+ikmk2cb05CjmCFREepzfL7BWw54b7H+Ki+DPwzP0esDIW+1wgi9TpO63y9oRMB0
-         nh5s+qCsdOX+FDsPf901C0+qjRnScLo7OaTt5B0G9eneJ/gkWJMtsBBz3NWgDASdcD4c
-         u7M3hoaZfNn5gHEt+UeS5zPFg0NjUkNJOVGn9XmwPuqoUttyizJQjXeBynCG/z0E/1+8
-         IyvyilgyWsK3UPx7JjnTizNwPQAtyiDpqI1LL9Es9PFIKVlj8Ots/OqHWePWnc3cUWPT
-         fu++w0sTarD1t3FIgbVcFUCLV7hFxkqcxufAU7bwKPcFjNvUzP2OKemzXBkgO6znv9v9
-         ugFA==
+        Fri, 26 May 2023 12:47:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758B7DF
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:46:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685119579;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=15hzoN1grDfhUpQizKd1JzLnEjMUd9UXGO5wVqE9Ya8=;
+        b=buTYW36R81B+8NP3ZqBXB+jw6W9K9AstPJj5A4eEnLEyLUhYH8X0NGPHkGIgiervB6NCYd
+        6SN2TTIaMt2dtZGirjqLkRPIiqzyfDXq9+8NsybxjHMwnqmsYNHZl6MulC8ZkSsfVxPsWn
+        QWTNuL3h9nJO81i6mDm1ZrYZLraUnRg=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-463-kCWLTbx6M6emalZSFKRk3w-1; Fri, 26 May 2023 12:46:18 -0400
+X-MC-Unique: kCWLTbx6M6emalZSFKRk3w-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30ac89cc4faso587035f8f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:46:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1685119577; x=1687711577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OQypiCBwLug/0iNSH44aWt+z5fa/mlixwMi4GartHM0=;
-        b=DPV/wr9zASL1ORXT5IY+bbFcm1ljrY1V+eHScg8SQu0FTkheVXQia74dYDXFnOVPNY
-         Etn1pEUg21NydhrEd/+hqmq2pN43KWdPTdAhdQNRIE5XjjiH2ht+X7ZzhbFEquTXxacs
-         Q/4HWfypeExK0ZDHo7Tr6T2yeJ7oUMlxqnWtq4m1f9ccJ/wmtCgvW/TkwAX2G4JE6cL9
-         3d08rrOflfafKyr9Vcl2wgaKWdMESaedyjCGsMZruuUzIUOl1+yQr1Kjx9HqsP65uh/c
-         oTPO850c1vYixJKCPZ7BSyUfot3llfNaZLkOQ0JY3s/WF0mhkx4cM5dEjtqaZRe5Aap7
-         pJeQ==
-X-Gm-Message-State: AC+VfDxn3EeiElpvq/GIMJOiEErzq+6Pl4XHv1aFmPORZgyt8f8DcYRG
-        gNqUiNOsoN6/kg3gHgD6CzMMGBVHcKDOl5ktvfJfRg==
-X-Google-Smtp-Source: ACHHUZ5Wz/wSuq/oW49oQmUQ7iTkDQCBshFiL2NwSFmUI/iPX+jRlImuRkfcFaF5AjXhiuSBhWKpoGKSzLUrvZ8mF0Q=
-X-Received: by 2002:a05:600c:3c93:b0:3f4:2594:118a with SMTP id
- bg19-20020a05600c3c9300b003f42594118amr134216wmb.2.1685119576702; Fri, 26 May
- 2023 09:46:16 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=15hzoN1grDfhUpQizKd1JzLnEjMUd9UXGO5wVqE9Ya8=;
+        b=L8ARuuNhM8a3YT1ST/cs038bWYhP8Ifof27leEup3vSXTrwZyljNRXj1/TpOOr2wau
+         FYss3Z2Fp6M8A/eLIA5aAO33A6BjSn964mxmv3in65J95Vh3WAoPJr1RUqSQqhT2riia
+         uydjguaoY8Sd90+sPIoYSFMSoBu+HLU6ZMgJPfb3Nd6jxabQOksYEHrav0olcwKbxGie
+         UocEKc5UhodRSnD5scYQ/qmylP25r0QO8XZ5gB1MSLXu77aJtE/HT/DcGXfPSJm5iC7p
+         Fz2kFX8Zq0nH+BFySXxC6+D0qopbq8O4P4Smw75zVztuA7BeD/Zaduo/JwqvzF/3iSQU
+         L4wg==
+X-Gm-Message-State: AC+VfDyHeNIokl5vEj1ZyCL6++VrJ6yg7F8A42YwiXJh3YCjqsVmTDZb
+        m4yW1fUzeC7aqnpJuwlMq6ocmwzIOBuV+GINyF4MsxbiqIG4t+0MKpn9EK90WvEZe0jJsg9/fkD
+        alB9qD9xHQjXIY5tAgAPulJ2KITDgQBVs
+X-Received: by 2002:a5d:6e53:0:b0:30a:3ae0:f455 with SMTP id j19-20020a5d6e53000000b0030a3ae0f455mr1989815wrz.2.1685119576893;
+        Fri, 26 May 2023 09:46:16 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4kcRipuP320lWaCy4ny+PW8DKtULjLxKrNnDpClSlTBkygY/JXSFoIljwXwyg6UTRZw+hEew==
+X-Received: by 2002:a5d:6e53:0:b0:30a:3ae0:f455 with SMTP id j19-20020a5d6e53000000b0030a3ae0f455mr1989795wrz.2.1685119576490;
+        Fri, 26 May 2023 09:46:16 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
+        by smtp.gmail.com with ESMTPSA id r14-20020adfce8e000000b00307925ff35bsm5571809wrn.49.2023.05.26.09.46.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 09:46:16 -0700 (PDT)
+Message-ID: <f5a37f8d-d888-9085-2f2b-1e350a267396@redhat.com>
+Date:   Fri, 26 May 2023 18:46:15 +0200
 MIME-Version: 1.0
-References: <20230526150806.1457828-1-VEfanov@ispras.ru> <CANn89i+p7_UB8Z5FQ+iWg4G_caAnUf9W4P-t+VOzigUuJo+qRw@mail.gmail.com>
- <c63e08fc-7abf-24fb-fc1e-9ecf36618aa6@ispras.ru>
-In-Reply-To: <c63e08fc-7abf-24fb-fc1e-9ecf36618aa6@ispras.ru>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 26 May 2023 18:46:04 +0200
-Message-ID: <CANn89iJkOOcombRniD7PP4KY=5Z6tx5QMQ-M24KS_AZ0h4nAcg@mail.gmail.com>
-Subject: Re: [PATCH] udp6: Fix race condition in udp6_sendmsg & connect
-To:     Vlad Efanov <vefanov@ispras.ru>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4] mm, compaction: Skip all non-migratable pages during
+ scan
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     Steven Sistare <steven.sistare@oracle.com>,
+        akpm@linux-foundation.org, ying.huang@intel.com,
+        mgorman@techsingularity.net, baolin.wang@linux.alibaba.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Khalid Aziz <khalid@kernel.org>
+References: <20230525191507.160076-1-khalid.aziz@oracle.com>
+ <ZG+99h3zg7POIits@casper.infradead.org>
+ <ee093583-71c3-51ba-980f-0facb03b0e23@oracle.com>
+ <ZG/I7tYY4uV/32hP@casper.infradead.org>
+ <ZG/To8Z3StoVoenU@casper.infradead.org>
+ <60367660-f4a3-06dc-4d17-4dbdc733ef74@oracle.com>
+ <ZHDh4Jeb/vKY+nGU@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZHDh4Jeb/vKY+nGU@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 6:09=E2=80=AFPM Vlad Efanov <vefanov@ispras.ru> wro=
-te:
->
-> Eric,
->
->
-> udp6_sendmsg() currently still locks the socket (on line 1595).
->
+On 26.05.23 18:44, Matthew Wilcox wrote:
+> On Fri, May 26, 2023 at 09:44:34AM -0600, Khalid Aziz wrote:
+>>> Oh, I think I found it!  pin_user_pages_remote() is called by
+>>> vaddr_get_pfns().  If these are the pages you're concerned about,
+>>> then the efficient way to do what you want is simply to call
+>>> folio_maybe_dma_pinned().  Far more efficient than the current mess
+>>> of total_mapcount().
+>>
+>> vfio pinned pages triggered this change. Wouldn't checking refcounts against
+>> mapcount provide a more generalized way of detecting non-migratable pages?
+> 
+> Well, you changed the comment to say that we were concerned about
+> long-term pins.  If we are, than folio_maybe_dma_pinned() is how to test
+> for long-term pins.  If we want to skip pages which are short-term pinned,
+> then we need to not change the comment, and keep using mapcount/refcount
+> differences.
+> 
 
-Not really, look more closely at lines 1580 -> 1594
+folio_maybe_dma_pinned() is all about FOLL_PIN, not FOLL_LONGTERM.
 
+folio_maybe_dma_pinned() would skip migrating any page that has more 
+than 1024 references. (shared libraries?)
 
->
-> Best regards,
->
-> Vlad.
->
->
-> On 26.05.2023 18:29, Eric Dumazet wrote:
-> > On Fri, May 26, 2023 at 5:08=E2=80=AFPM Vladislav Efanov <VEfanov@ispra=
-s.ru> wrote:
-> >> Syzkaller got the following report:
-> >> BUG: KASAN: use-after-free in sk_setup_caps+0x621/0x690 net/core/sock.=
-c:2018
-> >> Read of size 8 at addr ffff888027f82780 by task syz-executor276/3255
-> > Please include a full report.
-> >
-> >> The function sk_setup_caps (called by ip6_sk_dst_store_flow->
-> >> ip6_dst_store) referenced already freed memory as this memory was
-> >> freed by parallel task in udpv6_sendmsg->ip6_sk_dst_lookup_flow->
-> >> sk_dst_check.
-> >>
-> >>            task1 (connect)              task2 (udp6_sendmsg)
-> >>          sk_setup_caps->sk_dst_set |
-> >>                                    |  sk_dst_check->
-> >>                                    |      sk_dst_set
-> >>                                    |      dst_release
-> >>          sk_setup_caps references  |
-> >>          to already freed dst_entry|
-> >
-> >> The reason for this race condition is: udp6_sendmsg() calls
-> >> ip6_sk_dst_lookup() without lock for sock structure and tries to
-> >> allocate/add dst_entry structure to sock structure in parallel with
-> >> "connect" task.
-> >>
-> >> Found by Linux Verification Center (linuxtesting.org) with syzkaller.
-> >>
-> >> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > This is a bogus Fixes: tag
-> >
-> > In old times, UDP sendmsg() was using the socket lock.
-> >
-> > Then, in linux-4.0 Vlad Yasevich made UDP v6 sendmsg() lockless (and
-> > racy in many points)
-> >
-> >
-> >> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
-> >> ---
-> >>   net/ipv6/udp.c | 3 +++
-> >>   1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-> >> index e5a337e6b970..a5ecd5d93b0a 100644
-> >> --- a/net/ipv6/udp.c
-> >> +++ b/net/ipv6/udp.c
-> >> @@ -1563,12 +1563,15 @@ int udpv6_sendmsg(struct sock *sk, struct msgh=
-dr *msg, size_t len)
-> >>
-> >>          fl6->flowlabel =3D ip6_make_flowinfo(ipc6.tclass, fl6->flowla=
-bel);
-> >>
-> >> +       lock_sock(sk);
-> >>          dst =3D ip6_sk_dst_lookup_flow(sk, fl6, final_p, connected);
-> >>          if (IS_ERR(dst)) {
-> >>                  err =3D PTR_ERR(dst);
-> >>                  dst =3D NULL;
-> >> +               release_sock(sk);
-> >>                  goto out;
-> >>          }
-> >> +       release_sock(sk);
-> >>
-> >>          if (ipc6.hlimit < 0)
-> >>                  ipc6.hlimit =3D ip6_sk_dst_hoplimit(np, fl6, dst);
-> >> --
-> >> 2.34.1
-> >>
-> > There must be another way really.
-> > You just killed UDP performance.
+-- 
+Thanks,
+
+David / dhildenb
+
