@@ -2,125 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F4D712E20
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FBC712E23
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237441AbjEZUZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 16:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S230048AbjEZUaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 16:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjEZUZV (ORCPT
+        with ESMTP id S229900AbjEZUa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 16:25:21 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B70E7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:25:20 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-babb79a17b8so1580326276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:25:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685132720; x=1687724720;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wxOQ4gCfGSTF1dpRyqdlhwmp7zJADkZ+djJftuD+6KU=;
-        b=bv8Q200Y/wyD/a4gX1QQFcREfDoKLvd7WokdjdD5nz8PpN/+7BVVXYN29de96CWsln
-         I/ECPDziCYNJEHmBHMMkIq+h61MgVtYTqWcUDZH4D/TQU++myPkUdMX9R30L0vZdQEwh
-         LUMPUgenfwpTZZ3tINAAVhldkz0yyiolHqUZseh63bci8Cbu0h3/8SHb4sUOk/r6TYQd
-         FW2hIj5DsvBoOUUqC6x99Ao6ObVtQCFTqpq4nSQ2seC5yWIZJRcuVQEFj+2i6PfuaqDW
-         fgX35MqvtJikQAX7YvaRp4vS7dsJVzxqGwJuP/C34ubjHLYVuI/Fyi9AiV+9RPNJMek1
-         R22Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685132720; x=1687724720;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wxOQ4gCfGSTF1dpRyqdlhwmp7zJADkZ+djJftuD+6KU=;
-        b=h+Bga6+vAKfrDOww1QtVYNHhpbfzJkMx8hBs/TzbpPnBYrcOlPa9/U01pfeq47MzsS
-         eiGQvpMQjBI/t/zIhGNn0JyiLLJNKK/qfM5Gnb6Wb1JKUAW9/pjLfD0SfnXYptYNFVqU
-         gWekTZjeZxanKmDmfCsapcmpZkvhMblyw2yGA/pyULCJBt0Io9KOPGMYj1E9kAfbUl4p
-         lZwzZmJCFcTxhnK+3vD4pXfKSm1QCDseG9KjpuqkhWrYjhpN60QhUYUTMIhlWP89sbx0
-         +l7svTKYzcR+zH/Adr9+B6Xtw4z4rvl6qwmR6vwxfyx8Klr6KTKRbqEfpWepknIqNnvi
-         /wNQ==
-X-Gm-Message-State: AC+VfDyFCO82UCB6pqO72Qrhx3hQduA1w8x9kvbH+O6tTim+ckQh5RAG
-        Jg3/DMo+uM5qywB6ujxjyGv1iccWiOQ=
-X-Google-Smtp-Source: ACHHUZ6ah9AHKvfFOMGqWcnXv0bilVsz0AIcmTATSpO0d1/88Bq2t/Bl4Eibgwmo7HC2aCPXJG9WDZYIiqk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:3cb:0:b0:bad:99d:f087 with SMTP id
- 194-20020a2503cb000000b00bad099df087mr1578238ybd.6.1685132719909; Fri, 26 May
- 2023 13:25:19 -0700 (PDT)
-Date:   Fri, 26 May 2023 13:25:18 -0700
-In-Reply-To: <20230413175844.21760-1-itazur@amazon.com>
-Mime-Version: 1.0
-References: <20230413175844.21760-1-itazur@amazon.com>
-Message-ID: <ZHEVrowZsi2j6dVI@google.com>
-Subject: Re: [PATCH v2] KVM: x86: Update KVM_GET_CPUID2 to return valid entry count
-From:   Sean Christopherson <seanjc@google.com>
-To:     Takahiro Itazuri <itazur@amazon.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, Takahiro Itazuri <zulinx86@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 26 May 2023 16:30:27 -0400
+Received: from dvalin.narfation.org (dvalin.narfation.org [IPv6:2a00:17d8:100::8b1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E8BE7;
+        Fri, 26 May 2023 13:30:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
+        s=20121; t=1685133022;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nrJocbC9yujvo/q/Zvs4to1pf3VWKChUTxeNN8aTAa0=;
+        b=I/LSxf9eXH1Ikzq1flOLF5C80S7pH/0I/Jm0EFS5cz2h5bm7XpXIbRPK2L0iu7XbaFTqTq
+        eNci93A+CRVdDUe6klTXO/tCMUkmTXTEk34RO8c3ohoKfnzOqMwP+DzxhjOBweZcZAYypG
+        B8AS5+F3I3PkNhHN5zgPby7OKPsQst0=
+From:   Sven Eckelmann <sven@narfation.org>
+To:     Marek Lindner <mareklindner@neomailbox.ch>,
+        Vladislav Efanov <VEfanov@ispras.ru>
+Cc:     Simon Wunderlich <sw@simonwunderlich.de>,
+        Antonio Quartulli <a@unstable.cc>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] batman-adv: Broken sync while rescheduling delayed work
+Date:   Fri, 26 May 2023 22:30:16 +0200
+Message-ID: <7526514.EvYhyI6sBW@sven-l14>
+In-Reply-To: <20230526161632.1460753-1-VEfanov@ispras.ru>
+References: <20230526161632.1460753-1-VEfanov@ispras.ru>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="nextPart3740035.kQq0lBPeGt";
+ micalg="pgp-sha512"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 13, 2023, Takahiro Itazuri wrote:
-> Modify the KVM_GET_CPUID2 API to return the number of valid entries in
-> nent field of kvm_cpuid2 even on success.
+--nextPart3740035.kQq0lBPeGt
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Sven Eckelmann <sven@narfation.org>
+Date: Fri, 26 May 2023 22:30:16 +0200
+Message-ID: <7526514.EvYhyI6sBW@sven-l14>
+In-Reply-To: <20230526161632.1460753-1-VEfanov@ispras.ru>
+References: <20230526161632.1460753-1-VEfanov@ispras.ru>
+MIME-Version: 1.0
+
+On Friday, 26 May 2023 18:16:32 CEST Vladislav Efanov wrote:
+> Syzkaller got a lot of crashes like:
+> KASAN: use-after-free Write in *_timers*
 > 
-> Previously, the KVM_GET_CPUID2 API only updated the nent field when an
-> error was returned. If the API was called with an entry count larger
-> than necessary (e.g., KVM_MAX_CPUID_ENTRIES), it would succeed, but the
-> nent field would continue to show a value larger than the actual number
-> of entries filled by the KVM_GET_CPUID2 API. With this change, users can
-> rely on the updated nent field and there is no need to traverse
-> unnecessary entries and check whether an entry is valid or not.
+> All of these crashes point to the same memory area:
 > 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Takahiro Itazuri <itazur@amazon.com>
+> The buggy address belongs to the object at ffff88801f870000
+>  which belongs to the cache kmalloc-8k of size 8192
+> The buggy address is located 5320 bytes inside of
+>  8192-byte region [ffff88801f870000, ffff88801f872000)
+> 
+> This area belongs to :
+>         batadv_priv->batadv_priv_dat->delayed_work->timer_list
+> 
+> The reason for these issues is the lack of synchronization. Delayed
+> work (batadv_dat_purge) schedules new timer/work while the device
+> is being deleted. As the result new timer/delayed work is set after
+> cancel_delayed_work_sync() was called. So after the device is freed
+> the timer list contains pointer to already freed memory.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with syzkaller.
+> 
+> Fixes: 2f1dfbe18507 ("batman-adv: Distributed ARP Table - implement local storage")
+> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
 > ---
-> Changes
-> v1 -> v2
-> * Capitalize "kvm" in the commit title.
-> * Remove a scratch "nent" variable.
-> * Link to v1: https://lore.kernel.org/all/20230410141820.57328-1-itazur@amazon.com/
-> 
->  arch/x86/kvm/cpuid.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 599aebec2d52..20d28ebdc672 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -523,18 +523,18 @@ int kvm_vcpu_ioctl_get_cpuid2(struct kvm_vcpu *vcpu,
->  			      struct kvm_cpuid2 *cpuid,
->  			      struct kvm_cpuid_entry2 __user *entries)
->  {
-> -	int r;
-> +	int r = 0;
->  
-> -	r = -E2BIG;
->  	if (cpuid->nent < vcpu->arch.cpuid_nent)
-> -		goto out;
-> -	r = -EFAULT;
-> -	if (copy_to_user(entries, vcpu->arch.cpuid_entries,
-> +		r = -E2BIG;
-> +	else if (copy_to_user(entries, vcpu->arch.cpuid_entries,
->  			 vcpu->arch.cpuid_nent * sizeof(struct kvm_cpuid_entry2)))
-> -		goto out;
-> -	return 0;
-> +		r = -EFAULT;
->  
-> -out:
-> +	/*
-> +	 * Update "nent" even on failure, e.g. so that userspace can fix an
-> +	 * -E2BIG issue by allocating a larger array.
-> +	 */
 
-Gah, this is wrong.  The caller only copies @cpuid to userspace on success.  My
-fault for not seeing this in v1, but this is exactly why we write tests.
 
-I've written a test and a fix, I'll post 'em shortly.
+Acked-by: Sven Eckelmann <sven@narfation.org>
+
+Thanks,
+	Sven
+--nextPart3740035.kQq0lBPeGt
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAmRxFtgACgkQXYcKB8Em
+e0ZD0RAAp8e/HTANDtMQF/tKm+CEosGlP+Hp8Aqdd8nNfTXXC2DJAouO/TO2ycmq
+G0N393ff6vuTkebzzuM8QqOQxFVMGCH/VDGZEkOAr+Qyq8V6Vq50uCJUyi1TkCEk
+lhM/wvBXJbadpikiJdkYdfJFBMUcNqRnMsmvDU3ASPw8g4/ZlTfRDKPn56UUUjb1
+juIiGBWFTQ0tzcEh5p9YgrArb/jI7YkZR4BNfheFEoPZqZRkP5CaonXE436uQIjz
+raVe+QnxlGHVFUGpIyebNEB5/ZtWN1gsOXetqLcjFgjkwh9Qvow8tjNv13VqbTd5
+rUHp8HoTwrq3UGNW3xUzRWuxJtQBOwKrNmebw2CN179C4qEZjipY14XnfGngZLyE
+27QcB6s4wWz1UMjIiZ8OnN7gAzDmHKde1LqdQQp9WaAfLwFKCEeNMECg1QhQExaD
+vsfUr5aNuaLNk9KV/l+sus4hOCzeGCgmlUsrw9rWR3yk5PEjpUeg0IkJmZr7nFkx
+ykj5yPFHvgFi6q0VV7ppV4iXEoPTP7s4uZqCeHn8MQ1jVNZio/l7YhwZBYN3pfbK
+5nv2jKXsK079UHV9qzmhQH31jZEh//jwcupyMF+k63RpQM8sfENKb25EkUJN5ebQ
+gNnzdr1ElKsPD8TUQ1B9SVI0QKNpTGMXWsiNjX/BMVblnUvcxKE=
+=sHaT
+-----END PGP SIGNATURE-----
+
+--nextPart3740035.kQq0lBPeGt--
+
+
+
