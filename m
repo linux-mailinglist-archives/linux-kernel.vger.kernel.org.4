@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B76712ADF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F49F712AE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236777AbjEZQlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S236784AbjEZQmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjEZQlL (ORCPT
+        with ESMTP id S229664AbjEZQmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:41:11 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCF3194;
-        Fri, 26 May 2023 09:41:09 -0700 (PDT)
-Received: from [10.10.2.69] (unknown [10.10.2.69])
-        by mail.ispras.ru (Postfix) with ESMTPSA id C65D844C1026;
-        Fri, 26 May 2023 16:41:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru C65D844C1026
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1685119267;
-        bh=RAtqNYbh7M5s0Zh77kXZkFyvhVnNh8Ig8hf9ng8Oukk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=G6VyIKAu6nhnyF2F96l1FQtH5ux+1Km4ytWdzol4QcM8Y5R9yqHb7EO02P1vRMi1X
-         8+JVda2cJtSw7Qxw946OzJ+T4bvyKVqvlHSLgPxLQGa+Nn40li3+ptBXQNwnwnbazY
-         BGCoQr/Sk2khjpQcwnUG3G75te8L0h8HQ5j3AXaA=
-Message-ID: <d3fccbd0-c92e-9aff-8c32-48c1171746c3@ispras.ru>
-Date:   Fri, 26 May 2023 19:41:07 +0300
+        Fri, 26 May 2023 12:42:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB777BC;
+        Fri, 26 May 2023 09:42:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/2QSTLGqD4iT4FdYiOFZiER0pBrlULh2+1/cvz6IreM=; b=iTZt2k9etvAGrB42jErQZIlq9M
+        rBI0aflYiIqy6tAsDZmmQONBFt8owIQj+EIovr1U68zHfLJWg1VrxkF5ud1yg1dXpE+bgWe/9knP0
+        R7S9hvAFuqWq11R2s9yd/py4UTJYMl4g1rRo/n1cb135zW2DuOqQsDEZRN5z9ONPzHa8tX60LUQSh
+        y3u0OMhufNpUGUq0Roxm0wvXWCBnGjzB8mal1/TEYXDaO0OMBJy48jdp1j9o7LYneEogdV7lo5tAz
+        5+zG4as0eaiocVGvPyeyoE9M6ZUrbvoxqjUaT7e0M7WvWrGxp3xk72+zzfs5WxpB05CGd5+wX4NI5
+        M9qSiJSA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q2aVS-002xkV-23; Fri, 26 May 2023 16:41:34 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55ECB3002F0;
+        Fri, 26 May 2023 18:41:31 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 103F522163BD2; Fri, 26 May 2023 18:41:31 +0200 (CEST)
+Date:   Fri, 26 May 2023 18:41:30 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        qiang1.zhang@intel.com, rcu@vger.kernel.org, tj@kernel.org,
+        tglx@linutronix.de
+Subject: Re: [RFC][PATCH 2/2] sched: Use fancy new guards
+Message-ID: <20230526164130.GA4053578@hirez.programming.kicks-ass.net>
+References: <20230526150549.250372621@infradead.org>
+ <20230526151947.027972233@infradead.org>
+ <2023052626-blunderer-delegator-4b82@gregkh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] udp6: Fix race condition in udp6_sendmsg & connect
-Content-Language: ru
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-References: <20230526150806.1457828-1-VEfanov@ispras.ru>
- <27614af23cd7ae4433b909194062c553a6ae16ac.camel@redhat.com>
- <027d28a0-b31b-ab42-9eb6-2826c04c9364@ispras.ru>
- <CANn89iLGOVwW-KHBuJ94E+QoVARWw5EBKyfh0mPkOT+5ws31Fw@mail.gmail.com>
-From:   Vlad Efanov <vefanov@ispras.ru>
-In-Reply-To: <CANn89iLGOVwW-KHBuJ94E+QoVARWw5EBKyfh0mPkOT+5ws31Fw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023052626-blunderer-delegator-4b82@gregkh>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,42 +70,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sk_dst_set() is called by sk_setup_caps().
+On Fri, May 26, 2023 at 05:25:58PM +0100, Greg KH wrote:
+> On Fri, May 26, 2023 at 05:05:51PM +0200, Peter Zijlstra wrote:
+> > Convert kernel/sched/core.c to use the fancy new guards to simplify
+> > the error paths.
+> 
+> That's slightly crazy...
+> 
+> I like the idea, but is this really correct:
+> 
+> 
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> >  kernel/sched/core.c  | 1223 +++++++++++++++++++++++----------------------------
+> >  kernel/sched/sched.h |   39 +
+> >  2 files changed, 595 insertions(+), 667 deletions(-)
+> > 
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -1097,24 +1097,21 @@ int get_nohz_timer_target(void)
+> >  
+> >  	hk_mask = housekeeping_cpumask(HK_TYPE_TIMER);
+> >  
+> > -	rcu_read_lock();
+> > -	for_each_domain(cpu, sd) {
+> > -		for_each_cpu_and(i, sched_domain_span(sd), hk_mask) {
+> > -			if (cpu == i)
+> > -				continue;
+> > +	void_scope(rcu) {
+> > +		for_each_domain(cpu, sd) {
+> > +			for_each_cpu_and(i, sched_domain_span(sd), hk_mask) {
+> > +				if (cpu == i)
+> > +					continue;
+> >  
+> > -			if (!idle_cpu(i)) {
+> > -				cpu = i;
+> > -				goto unlock;
+> > +				if (!idle_cpu(i))
+> > +					return i;
+> 
+> You can call return from within a "scope" and it will clean up properly?
 
-sk_dst_set() replaces dst in socket using xchg() call and we still have 
-two tasks use one socket but expect different dst in sk_dst_cache.
+Yep, that's the main feature here.
 
+> I tried to read the cpp "mess" but couldn't figure out how to validate
+> this at all, have a set of tests for this somewhere?
 
-__sk_dst_set() is rcu protected, but it checks for socket lock.
+I have it in userspace with printf, but yeah, I'll go make a selftest
+somewhere.
 
+One advantage of using the scheduler locks as testbed is that if you get
+it wrong it burns *real* fast -- been there done that etc.
 
-static inline void
-__sk_dst_set(struct sock *sk, struct dst_entry *dst)
-{
-     struct dst_entry *old_dst;
+> Anyway, the naming is whack, but I don't have a proposed better name,
+> except you might want to put "scope_" as the prefix not the suffix, but
+> then that might look odd to, so who knows.
 
-     sk_tx_queue_clear(sk);
-     sk->sk_dst_pending_confirm = 0;
-     old_dst = rcu_dereference_protected(sk->sk_dst_cache,
-                         lockdep_sock_is_held(sk));
-     rcu_assign_pointer(sk->sk_dst_cache, dst);
-     dst_release(old_dst);
-}
+Yeah, naming is certainly crazy, but I figured I should get it all
+working before spending too much time on that.
 
+I can certainly do 's/lock_scope/scope_lock/g' on it all.
 
-Best regards.
+> But again, the idea is good, it might save us lots of "you forgot to
+> clean this up on the error path" mess that we are getting constant churn
+> for these days...
 
-Vlad.
-
-
-On 26.05.2023 19:00, Eric Dumazet wrote:
-> On Fri, May 26, 2023 at 5:58 PM Ефанов Владислав Александрович
-> <vefanov@ispras.ru> wrote:
->> Paolo,
->>
->>
->> I don't think that we can just move sk_dst_set() call.
->>
->> I think we can destroy dst of sendmsg task in this case.
->>
-> dst are RCU protected, it should be easy to make sure we respect all the rules.
+That's the goal...
