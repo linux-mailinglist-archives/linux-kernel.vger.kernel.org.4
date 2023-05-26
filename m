@@ -2,106 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EE8711AED
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 02:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78015711AF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 02:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235723AbjEZAAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 20:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
+        id S241861AbjEZAEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 20:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233951AbjEZAAR (ORCPT
+        with ESMTP id S230099AbjEZAEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 20:00:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C751018D
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:00:11 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 504FF6606E63;
-        Fri, 26 May 2023 01:00:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685059210;
-        bh=SJiEXd6/8oMzmDefTMLfhXe8tjYP1lEXfOKt07RVh+U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ouQrKVkPYOoksse8vSJLLilFmm3rUE5tAp0uH/QPgCx0r7KOXq1mdDZMEhJsZEvkv
-         LnVhDac9w2ZN+kR7QZYKuabi5VmIRirjwaKpEJZb9wgYfcsy214O+32o7aQilmYk82
-         235JnKj6taV6USIumqXUUt4CFN/rsV1v19Jhav0vXbChJ2KaIHs76PtOdwSRk4P596
-         vVuCiJajLFZQ7V3b3pmoM7ZpqFk3K4bXIkW9bpPxlXfjFN4ov8WohO6+c0Z9bzy5Yl
-         K8ACV30Qq0WY2312YFcfejFnVtfu6Z2fNg9BrLVeTLCutG9K0iRPQw7HEP/k2M73Jx
-         jvhaoHuWZNd3g==
-Received: by mercury (Postfix, from userid 1000)
-        id 2FA031060A51; Fri, 26 May 2023 02:00:07 +0200 (CEST)
-Date:   Fri, 26 May 2023 02:00:07 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Milo Spadacini <milo.spadacini@gmail.com>
-Cc:     heiko@sntech.de, lee@kernel.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] driver: mfd: admit rk805 driver registration without
- interrupt support
-Message-ID: <20230526000007.mt3opbr4zocm5j7r@mercury.elektranox.org>
-References: <20230525070011.23761-1-milo.spadacini@gmail.com>
+        Thu, 25 May 2023 20:04:44 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40199C;
+        Thu, 25 May 2023 17:04:42 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PNsGSO016759;
+        Thu, 25 May 2023 19:04:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type;
+ s=PODMain02222019; bh=jTAjC6w0E17uXA85LdmOi45eFKPWHp+38y4g2iSpRbI=;
+ b=AU6Y79geaGg5Yvu+0Jq8EYuHNyypmkff5CSfpRdViBtqIMmrfZTwyybbZnqg6BjtZBpC
+ B/o3BgO8yqExeq/l36iNVOjHbjXSabXpcWY5trJ7iNMyhHA50VooPgiPyyL+hbnFWjqj
+ VfZMeN1/9oiQCqZ4N7fSZ+iS0YYrtj8O1kNdsfiC/VTt8B9m5/6ZNgluai4zFwl0/6Mp
+ FKwl8RM8EzNI0xYZaBMeYD4np2d053FYd3QGDsBTSYX8Hr+v7MYESfIwFonWBFLyoCuT
+ L+Hf5PdjYJiCA+qn6UVV6F+bXE1gcy5ijSv8oHbHMaQpiM5RnhS/lwfCQZ7Dkos7n9u/ 2g== 
+Received: from ausex01.ad.cirrus.com ([141.131.3.19])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qptmm7qhn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 25 May 2023 19:04:36 -0500
+Received: from ausex02.ad.cirrus.com (141.131.37.96) by ausex01.ad.cirrus.com
+ (141.131.37.95) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 25 May
+ 2023 19:04:35 -0500
+Received: from ftrev.crystal.cirrus.com (141.131.38.212) by
+ anon-ausex02.ad.cirrus.com (141.131.37.96) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 25 May 2023 19:04:35 -0500
+From:   Fred Treven <fred.treven@cirrus.com>
+To:     Fred Treven <fred.treven@cirrus.com>,
+        Ben Bright <ben.bright@cirrus.com>,
+        James Ogletree <james.ogletree@cirrus.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        <patches@opensource.cirrus.com>, <linux-input@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <lee@kernel.org>
+Subject: [PATCH v2 1/5] dt-bindings: input: cirrus,cs40l26: Support for CS40L26
+Date:   Thu, 25 May 2023 19:04:27 -0500
+Message-ID: <1685059471-9598-1-git-send-email-fred.treven@cirrus.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nbwy45zghn6666mw"
-Content-Disposition: inline
-In-Reply-To: <20230525070011.23761-1-milo.spadacini@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: SfDZn0Lm3-5hMH6U450QRAmUFsbFaJpk
+X-Proofpoint-GUID: SfDZn0Lm3-5hMH6U450QRAmUFsbFaJpk
+X-Proofpoint-Spam-Reason: orgsafe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Introduce required basic devicetree parameters for the
+initial commit of CS40L26.
 
---nbwy45zghn6666mw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Fred Treven <fred.treven@cirrus.com>
+---
+ .../devicetree/bindings/input/cirrus,cs40l26.yaml  | 102 +++++++++++++++++++++
+ MAINTAINERS                                        |  10 ++
+ 2 files changed, 112 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/cirrus,cs40l26.yaml
 
-Hi,
+diff --git a/Documentation/devicetree/bindings/input/cirrus,cs40l26.yaml b/Documentation/devicetree/bindings/input/cirrus,cs40l26.yaml
+new file mode 100644
+index 000000000000..9cbc964ebded
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/cirrus,cs40l26.yaml
+@@ -0,0 +1,102 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/cirrus,cs40l26.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Cirrus Logic CS40L26 Boosted Haptic Amplifier
++
++maintainers:
++  - Fred Treven <fred.treven@cirrus.com>
++
++description:
++  CS40L26 is a Boosted Haptic Driver with Integrated DSP and Waveform Memory
++  with Advanced Closed Loop Algorithms and LRA protection
++
++properties:
++  compatible:
++    enum:
++      - cirrus,cs40l26a
++      - cirrus,cs40l26b
++      - cirrus,cs40l27a
++      - cirrus,cs40l27b
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  reset-gpios:
++    maxItems: 1
++
++  VA-supply:
++    description: Regulator for VA analog voltage
++
++  VP-supply:
++    description: Regulator for VP peak voltage
++
++  cirrus,bst-ipk-microamp:
++    description:
++      Maximum amount of current that can be drawn by the device's boost converter.
++    multipleOf: 50000
++    minimum: 1600000
++    maximum: 4800000
++    default: 4500000
++
++  cirrus,bst-ctl-microvolt:
++    description: Maximum target voltage to which DSP may increase the VBST supply.
++    multipleOf: 50000
++    minimum: 2550000
++    maximum: 11000000
++    default: 11000000
++
++  cirrus,bst-exploratory-mode-disable:
++    description:
++      Disable boost exploratory mode.
++
++      In exploratory mode the analog maximum peak current limit of 4.5 A
++      (tolerance of + 160 mA) will be applied. This is required for the
++      device to successfully detect a boost inductor short.
++
++      Boost exploratory mode allows the device to overshoot the set boost peak
++      current limit (i.e. if current peak limit is set to 2.5 A to protect the
++      battery inductor, the current limit will be opened up to 4.5 A for
++      several milliseconds at boost startup).
++      This has potential to damage the boost inductor.
++
++      Disabling this mode will prevent this from happening; it will also
++      prevent the device from detecting boost inductor short errors.
++    type: boolean
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - reset-gpios
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/input/input.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      cs40l26@58 {
++        compatible = "cirrus,cs40l26a";
++        reg = <0x58>;
++        interrupt-parent = <&gpio>;
++        interrupts = <57 IRQ_TYPE_LEVEL_LOW>;
++        reset-gpios = <&gpio 54 GPIO_ACTIVE_LOW>;
++        VA-supply = <&dummy_vreg>;
++        VP-supply = <&dummy_vreg>;
++        cirrus,bst-ctl-microvolt = <2600000>;
++        cirrus,bst-ipk-microamp = <1650000>;
++        cirrus,bst-exploratory-mode-disable;
++      };
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2b073facf399..d72ed4957b0b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4926,6 +4926,16 @@ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/net/ethernet/cirrus/ep93xx_eth.c
+ 
++CIRRUS LOGIC HAPTICS DRIVER
++M:	Fred Treven <fred.treven@cirrus.com>
++M:	Ben Bright <ben.bright@cirrus.com>
++M:	James Ogletree <james.ogletree@cirrus.com>
++L:	patches@opensource.cirrus.com
++S:	Supported
++W:	https://github.com/CirrusLogic/linux-drivers/wiki
++T:	git https://github.com/CirrusLogic/linux-drivers.git
++F:	Documentation/devicetree/bindings/input/cirrus,cs40l26.yaml
++
+ CIRRUS LOGIC LOCHNAGAR DRIVER
+ M:	Charles Keepax <ckeepax@opensource.cirrus.com>
+ M:	Richard Fitzgerald <rf@opensource.cirrus.com>
+-- 
+2.7.4
 
-On Thu, May 25, 2023 at 09:00:11AM +0200, Milo Spadacini wrote:
-> rk805 use interrupt only for "rk808-rtc" and "rk805-pwrkey" drivers.
-> On custom board these drivers could be not used and the irq gpio
-> could be not connected.
-> Force the usage of a not used gpio, that could be floating, could cause
-> spurious interrupt.
->=20
-> Signed-off-by: Milo Spadacini <milo.spadacini@gmail.com>
-> ---
->  drivers/mfd/rk808.c | 39 +++++++++++++++++++++++++++------------
-
-This will not apply to for-mfd-next, since the file has been renamed
-to rk8xx-core.c in my patchset adding rk806/spi support.
-
-Greetings,
-
--- Sebastian
-
---nbwy45zghn6666mw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRv9oMACgkQ2O7X88g7
-+po2qg//bDED4zrnREwdImHOlhboonEKRrrBCkRwOsISToq+lwXai2TC7JGZCseU
-Le7IpJNssGuZ0TC8bUblZc+5JUv9JKzFORjeIdUAWnHGMcTC0TtS6rR2toiE11Yu
-+vnAht13ybz3ljIm5ysiclGdbZbe0mRTrCgRwthrC+q7aqDObXEwDuzcUlnLkATV
-ambH5yWQcA8yTGQ1tP+hPeYE6QN9c7S3cPJUgVpI0dME5P4jLq84ycqhU8eH646D
-QsoKWSOCoAjOslLVwss7tzuZYmwG36cAgYR6i69hlRUQbY6/TlhIeN45cnTs+EQ/
-ucyRpRR3QVm7YAptFSfoWe0XUCh/f00YnpClmPbYmgyYvhE3BQE4W/3sS1RLST9x
-FBGPEwe6YkjAoS+tsR+VtZBD3CjZkAwY5giwS2Fs0KXxqDqKGLq21Yn0hi9wRERb
-y0aoHpW80H9uVO/WwxfIKKmTE1MobEXYSjYypc8VhvHpsRB68fjhNEg/FDm/fTsT
-tiPfL3dYdHikRQlb8hQFENgLGoyUeR9rjHORJMpXw1YXM4xnYh8aa/lrwYcKR8ZD
-/BSqIhuk5Af8vo+WIWKlrEAjkptp3laqY46vHGAzkrtXQOnWc+jS8ACuV9kuTYcp
-WKKvWbzRBVU8JpmzGDjMIhXzQCJG1XAUf1Cxh9etNNcAm+7Cjo8=
-=uJKS
------END PGP SIGNATURE-----
-
---nbwy45zghn6666mw--
