@@ -2,131 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C0B71279A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D861E712787
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243745AbjEZNc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
+        id S243588AbjEZNbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243722AbjEZNc4 (ORCPT
+        with ESMTP id S237093AbjEZNbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:32:56 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E5A194;
-        Fri, 26 May 2023 06:32:34 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QBmEAf029350;
-        Fri, 26 May 2023 13:32:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=VSVVcA3UWTFx99cnnj2ecn2APXXTbw+x7Nd1w9DzUNU=;
- b=Btq4GyADrWK7cZIQKhsrnRh7c69G8x2mNUKH7q/l8jMzk1L3S1mPAAQYxM2UHeb1MS7u
- Qe7mJgrKNwGlbVDaUQjH1LPDSrVqQvzXAZGhkg04kp6UuMUb6RaLiYjYk3qTT42RcEDE
- PAQDOVz86nfjWhq4uB56qj/R0q6+o44lvJ+5luXqYM1kLMSpG86WtxSOmQi2QVxtiR76
- IpWxPUOmQosEVFoiGdMZXABiA9Ta68xAqv52OjoSMd+D18QZYjmhFOn9Q3PqAj7JsO4p
- jxwax8Uks8GegsBmZjgYwD4DPUtuFykZgRSJ3auR/eTR+PI/YoU06ifFomL+hawmb/Ya dQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qtpsp8wk9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 13:32:31 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34QDWVk6006374
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 13:32:31 GMT
-Received: from hu-shazhuss-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 26 May 2023 06:32:27 -0700
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <konrad.dybcio@linaro.org>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 5/5] arm64: dts: qcom: sa8775p-ride: enable i2c11
-Date:   Fri, 26 May 2023 19:01:21 +0530
-Message-ID: <20230526133122.16443-6-quic_shazhuss@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230526133122.16443-1-quic_shazhuss@quicinc.com>
-References: <20230526133122.16443-1-quic_shazhuss@quicinc.com>
+        Fri, 26 May 2023 09:31:42 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A752D12F
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:31:39 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id ada2fe7eead31-4397b040c8fso420483137.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:31:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1685107898; x=1687699898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ksL0wfKrSI+58DAMm3woqLByXvazoTPFTjGEkGyXGLM=;
+        b=RC8p2GNj4Amb+TIOYSRzmtzfF1Hi452s0NmrMr0ir6Z/1xoz7S6lcKJyA3tw0unC4b
+         vUlnYS0ypMkOvn8tw5dldyJaD4HrK0T7j103FD0IZjEYUZhSJvJivua4mOWsIF1dAxwQ
+         rt+sbWXcoJ7AWowdlbkhBhENAcx30ywi2IQjlZltDJUfPRagyknt/1FmYacHZi+xK1m3
+         4J6uaD9sCTGHD43NeYXIK/KcBTqtoSgVYflrAkUvG1DUJMqD9r8WyOJi801qgIPc09H/
+         90tcj5TOnXZ56EoAMs5ZfhSypSxUgfJLbbepZXtCtGwPwbjX8XDANPPEDnKz6dwml7aN
+         HfBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685107898; x=1687699898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ksL0wfKrSI+58DAMm3woqLByXvazoTPFTjGEkGyXGLM=;
+        b=aHo1S32/35Zw8HPW1GZJR+ro3NPGgCLpzWLBOIXSE/XE98/c8uSpWEFHrKHbHE+IQh
+         ibgHi8NfjjbnzAMSknZ7Q1DRXCKCHIjh23ZsH9vG88derieR2d03HTdk4Pd7fu9X5WMt
+         rNehz5kRYiDZl+nUklowiac91FRpLxKl/Sl1gxRGhjs8YRcjLICKtE+aswy6RHGS29g6
+         WnkQ65fIRhdI9Lk0F3N6GRyP5AF0nexJQkSRnDg7fYO2nSf9J1F5Lnr1tvzK3A6VTPDy
+         /B9LjpxV0FH0sPvl3JmbRwzGBiUtjrZd4RBm394PjHLpf57eI195Virjy0c3tnaQEyby
+         Xgzw==
+X-Gm-Message-State: AC+VfDxRHtj52glG8nwg69Uv6ZJSgLVrmqCJtgu2STvcgl1KHfxyXMM+
+        c87kdxwVBaMVifvQHwGuklxtaVlToiowaL+SyB0f+A==
+X-Google-Smtp-Source: ACHHUZ4b6AlaYHY4dcIa+ndk9KCrOMlYjzKoloAfeyNYHVFPnj83RPIoXXiITBm0TMiF44XgOcOZQ1eAjjvcNJPJUao=
+X-Received: by 2002:a67:f5c3:0:b0:439:5a25:2e39 with SMTP id
+ t3-20020a67f5c3000000b004395a252e39mr502884vso.34.1685107898701; Fri, 26 May
+ 2023 06:31:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: AgdW1uKOA-wunjIC5mfJrgcF5h4JAaMe
-X-Proofpoint-GUID: AgdW1uKOA-wunjIC5mfJrgcF5h4JAaMe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- priorityscore=1501 bulkscore=0 impostorscore=0 mlxlogscore=951
- lowpriorityscore=0 clxscore=1015 phishscore=0 malwarescore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305260114
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230511-tps65219-add-gpio-support-v2-0-60feb64d649a@baylibre.com>
+ <20230511-tps65219-add-gpio-support-v2-1-60feb64d649a@baylibre.com>
+ <CAMRc=Md-CzrG3QPtnh0OxYaHTAYZ2aUfMKhkAOeRm2Zn30qE0A@mail.gmail.com>
+ <ZGiWdQcR6Zq6Aw65@surfacebook> <9fa1a6e8-368a-3e22-aa84-8cad09f72a32@baylibre.com>
+ <CAHp75Vf0hW6sMXeGSVXRVoW1mxFufWmbJNzt7_10xPj_k5SNkA@mail.gmail.com> <0cf870f1-8cdb-df74-79d6-a4004cdfcc2f@baylibre.com>
+In-Reply-To: <0cf870f1-8cdb-df74-79d6-a4004cdfcc2f@baylibre.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 26 May 2023 15:31:27 +0200
+Message-ID: <CAMRc=MfFASi0v-B3FRy=57_1hn46wwXJZ=b9Dzf0nM-4_Jo9aQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
+To:     jerome Neanne <jneanne@baylibre.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        Jonathan Cormier <jcormier@criticallink.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This enables the i2c11 node on sa8775p-ride board for A2B controller
-and audio port expander.
+On Tue, May 23, 2023 at 11:09=E2=80=AFAM jerome Neanne <jneanne@baylibre.co=
+m> wrote:
+>
+>
+>
+> On 22/05/2023 13:18, Andy Shevchenko wrote:
+> > On Mon, May 22, 2023 at 10:47=E2=80=AFAM jerome Neanne <jneanne@baylibr=
+e.com> wrote:
+> >> On 20/05/2023 11:44, andy.shevchenko@gmail.com wrote:
+> >>> Mon, May 15, 2023 at 05:36:46PM +0200, Bartosz Golaszewski kirjoitti:
+> >>>> On Thu, May 11, 2023 at 4:09=E2=80=AFPM Jerome Neanne <jneanne@bayli=
+bre.com> wrote:
+> >
+> > ...
+> >
+> >>>>> +       gpio->gpio_chip =3D tps65219_gpio_chip;
+> >>>>
+> >>>> Aren't you getting any warnings here about dropping the 'const' from
+> >>>> the global structure?
+> >>>
+> >>> But this is a copy of the contents and not the simple pointer.
+> >
+> > I commented on Bart's question.
+> >
+> >> In many other places where this is done, the struct is declared like:
+> >>
+> >> static const struct gpio_chip template_chip =3D {
+> >>
+> >> After internal review, I changed this to:
+> >>
+> >> static const struct gpio_chip tps65219_gpio_chip =3D {
+> >>
+> >> This is because I didn't want to have this "template" that sounds to m=
+e
+> >> like "dummy". Maybe I misunderstood and this "template" was used on
+> >> purpose because this const struct is just copied once to initialize
+> >> tps65219_gpio->gpio_chip during probe.
+> >>
+> >> Introducing tps65219_gpio_chip name is maybe confusing with
+> >> tps65219_gpio struct.
+> >>
+> >> I think the const should not be a problem here but the naming I used
+> >> might be misleading. If you have a suggestion of what is a good practi=
+ce
+> >> to make this piece of code clearer. I'll follow your suggestion (use
+> >> template? more_explicit name like ???).
+> >
+> > It's up to Bart.
+> >
+> Bart, should I keep the code like this or do you suggest a name change
+> so that's it's more appealing?
 
-Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Yes, I prefer it to be named something something template for clarity.
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index 4c000a5cb3c4..ab767cfa51ff 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -19,6 +19,7 @@
- 		serial0 = &uart10;
- 		serial1 = &uart12;
- 		serial2 = &uart17;
-+		i2c11 = &i2c11;
- 		i2c18 = &i2c18;
- 		spi16 = &spi16;
- 		ufshc1 = &ufs_mem_hc;
-@@ -260,6 +261,13 @@
- 	};
- };
- 
-+&i2c11 {
-+	clock-frequency = <400000>;
-+	pinctrl-0 = <&qup_i2c11_default>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
- &i2c18 {
- 	clock-frequency = <400000>;
- 	pinctrl-0 = <&qup_i2c18_default>;
-@@ -370,6 +378,13 @@
- 		bias-disable;
- 	};
- 
-+	qup_i2c11_default: qup-i2c11-state {
-+		pins = "gpio48", "gpio49";
-+		function = "qup1_se4";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
- 	qup_i2c18_default: qup-i2c18-state {
- 		pins = "gpio95", "gpio96";
- 		function = "qup2_se4";
--- 
-2.17.1
+tps65219_template_chip would be great.
 
+Bart
