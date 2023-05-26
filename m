@@ -2,83 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75342712BD9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1C4712BDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237577AbjEZRfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
+        id S236615AbjEZRjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242084AbjEZRfi (ORCPT
+        with ESMTP id S229847AbjEZRjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:35:38 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A3019A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:35:36 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id ffacd0b85a97d-30a8fa6e6fcso665462f8f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:35:36 -0700 (PDT)
+        Fri, 26 May 2023 13:39:00 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC5E99;
+        Fri, 26 May 2023 10:38:58 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-96fab30d1e1so232516466b.0;
+        Fri, 26 May 2023 10:38:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685122535; x=1687714535;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GWfAX3wP0d/3WFj3wkMH7vLqftqTMpkK6w5fJ1VRa64=;
-        b=KWQV+16YSuoqhW4grf/1UpmnF7XLDLv5j2W30dvJhCHYgzgCBoYSO2ew0an+MGMEMP
-         HcLzfxTeJvAUkBBec0cGTnRCy4OqCZn0lg2e1sx11Nhe/V3OKwX0kZSINUxXc+KvVjdA
-         v1NaX5SxQPnmkBiEwR5c7FF9SW80egju4JlKqspdNOa7+1XwZIG1pSmju3WHYO7uEd7q
-         V7si0Bto8TLOvBYJJ1OHw4MyKAB9uLa/cMqqW84tmpBHr4jtdJCurtprwyDqjDau9hqL
-         FTYtg3x1f/UV5en96BiQnf23lJ4CRlIA7kT6P+7OR51nIOZ/K/pUDqJUJuYYlTazwNzm
-         ptPA==
+        d=gmail.com; s=20221208; t=1685122737; x=1687714737;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PTiLq4ygH0IvGpIu6yVKyZxG0Q1NzCebyg9n2MhnoWM=;
+        b=bwvKFcmzuCcjiY8UjRyGDFyDfiRO4TxeBvS+aOYa/Krvw0DQQ/A/QAR7XfbpE2cr59
+         cdDJlv9ERgQfVXA9QhbbHL7q11EMuj8eGZfNQz6+unf2MmVUBykymvQ4jE35p1jis4di
+         +GVUtSXRjAxgLjv2rvLHOKDI7VLjva6g1V4ILoYIpkzmvzLSYQTZVSlRPA9t7ylHrwNu
+         /d1r48lydgy64JZFUD5VDP2vAIhxZ3/+lbZlV9LNAsX692/FlVXD6vZYfWFtbJhZryzl
+         34RJYBCxsW20gJlsdowmvZYLdwDrnqRXBQwU2wBJVEyf31gEJDLeVyYTk9VnNER+lHKn
+         2WTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685122535; x=1687714535;
-        h=to:subject:message-id:date:from:sender:mime-version
+        d=1e100.net; s=20221208; t=1685122737; x=1687714737;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GWfAX3wP0d/3WFj3wkMH7vLqftqTMpkK6w5fJ1VRa64=;
-        b=jQoNXdzcIQ3+qsoKV4mAleWAhS32d91Te+xTc0aXH4kXYd0Hvf+zISZlLOawITD9aU
-         YMWix4L5qixkDPe3GkS2e2ZVe917LnmsWrdZdHDpJtga5miI/tQTre4WXmfoF7SUqLJD
-         SL+ORqwI5D9kt73GVwvrYifrcoxxrf2QhykIX3ui30G1mIohB5HItmWnTVQoIgE//+TX
-         kdzeEqn/0M8K7FjpzyAIh6jHhTar2FFd5nqtZjKuuUTP49H0ujvADdvCbeNHHP0Yt7/p
-         ZlbbcrSgUgh8IpTQLKY49FDMr2Mk+BgR+lG9GAdxI/NzCWETGA3yMGpV/5ewEd0IikN7
-         ZgZg==
-X-Gm-Message-State: AC+VfDwVCJwn2PA4LkrJfEfFzax5+tiwDlGnaAiLlkKLIJq2MM8tY3KR
-        keaFXPf2kNg+PzlIzmhVVg+2TZqtJGf5WXn3J8s=
-X-Google-Smtp-Source: ACHHUZ4fFiAuYjlspXSXVi634NiHuUB9cRfffGi10rf/WfS9KVRTyqgh2xwjN06N37ftirZEYJ5PXSMHnrgo2aiKGrc=
-X-Received: by 2002:a5d:6545:0:b0:309:1c89:c618 with SMTP id
- z5-20020a5d6545000000b003091c89c618mr1827915wrv.56.1685122534584; Fri, 26 May
- 2023 10:35:34 -0700 (PDT)
+        bh=PTiLq4ygH0IvGpIu6yVKyZxG0Q1NzCebyg9n2MhnoWM=;
+        b=PaIO17GEyK3Q5VOPSQDF3pMX0qd+zxVbM8R0GFcoIrlq/WHt+rpckMZ3hEmRNzKcrA
+         Z2q6bNlA2DmilY3OS3tpPqRv6cTIj8bQe0+cKG8nanIFpTjFfnbj6C6qf2spgcAhLvGB
+         t09QIOM2imbPNF60rIPMRvQ8Go+BImiO1QdMkyTl2jC/+qiK8LDJ6mJ7P6yTO8CLaj5W
+         FkCbDzHg7KrP5/pogMCbuW0CTP/K1fOB35iE6sIDUeKNj01rq0YRyuA7suLRyEp1mDTo
+         u6xAaO/6oI81lB5W4p2iQh40Crx/ZMeQopTDsSzmgzoebIJe2b7b/NVd5xOAcBzexA59
+         V4FA==
+X-Gm-Message-State: AC+VfDy4dSK9EtEKtpP6wn5mP0f830AR7UA8FxwLpXuflF4sNimcGLP8
+        s1wl1EcJkwOjv/q3wZfTqFU=
+X-Google-Smtp-Source: ACHHUZ4PFyKyc2QUHAnlcpOFn+49tIH6s0K2Tb/i0az8Bqph4zclDagFl+Zci851eE1HSGF8K9cw0w==
+X-Received: by 2002:a17:907:3603:b0:969:c354:7d9a with SMTP id bk3-20020a170907360300b00969c3547d9amr4363175ejc.12.1685122737125;
+        Fri, 26 May 2023 10:38:57 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id z9-20020a1709060f0900b0094e1344ddfdsm2394951eji.34.2023.05.26.10.38.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 10:38:56 -0700 (PDT)
+Date:   Fri, 26 May 2023 20:38:54 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 30/30] MAINTAINERS: add me as maintainer of
+ MEDIATEK SWITCH DRIVER
+Message-ID: <20230526173854.ubaz2yojpt6k6rxj@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-31-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Sender: so623467@gmail.com
-Received: by 2002:a5d:40cf:0:b0:309:5a9b:c10b with HTTP; Fri, 26 May 2023
- 10:35:33 -0700 (PDT)
-From:   Sophia Erick <sdltdkggl3455@gmail.com>
-Date:   Fri, 26 May 2023 19:35:33 +0200
-X-Google-Sender-Auth: gZsUoWBRLzGb100a6TBgZMeQvWo
-Message-ID: <CAHrira-zh8SkjnQKuNc8ksxoMhW_jTjWv6bUD028_VobrvLOqQ@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,HK_RANDOM_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230522121532.86610-31-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please forgive me for stressing you with my predicaments as I directly
-believe that you will be honest to fulfill my final wish before i die.
+On Mon, May 22, 2023 at 03:15:32PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> Add me as a maintainer of the MediaTek MT7530 DSA subdriver.
+> 
+> List maintainers in alphabetical order by first name.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
 
-I am Mrs.Sophia Erick, and i was Diagnosed with Cancer about 2 years
-ago, before i go for a surgery i have to do this by helping the
-Orphanages home, Motherless babies home, less privileged and disable
-citizens and widows around the world,
+Well, I suppose we need more active people maintaining this driver, so yeah:
 
-So If you are interested to fulfill my final wish by using the sum of
-$ 11,000,000.00, to help them as I mentioned, kindly get back to me
-for more information on how the fund will be transferred to your
-account.
-
-Sincerely Mrs. Sophia Erick.
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
