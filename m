@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278A1712F4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56696712F4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244333AbjEZV4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 17:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
+        id S244273AbjEZV4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 17:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244239AbjEZVzp (ORCPT
+        with ESMTP id S244263AbjEZVzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 17:55:45 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EA1E7D
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:55:15 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565a33c35b1so24835517b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:55:15 -0700 (PDT)
+        Fri, 26 May 2023 17:55:47 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63B510C4
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:55:19 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba8338f20bdso1621449276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:55:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685138101; x=1687730101;
+        d=google.com; s=20221208; t=1685138103; x=1687730103;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9JhuPa0yYdr5XE/axPY0rbTmGM2hgd+SHnXF4ixe3X8=;
-        b=p0hBHqS/kbJjbfJGwxuRUo04ZHzZbtiNWdu0VCN16lg2GCJKFhldQ3gID0UCNDrGb1
-         JOWxsmzR3ywCY/Gm3Pl4YYD/zV4eBhbkic6TCsvAflXi4lTIB61pRixmuNxGz8vI/qkf
-         yyjNMq9HSpljKwvyxhiZhmK2eWeI33/fERKy4D1iHYrlE8l2KpG1UK6pqoShCsXX0vB7
-         XzVUxo2tDj66XT77zGSdnRNR2gw3KzJJCdlpmTB3UHpxKKMYfZGvkp1ul1/VX0nANezt
-         wyAB/4em/wmseHezl+U2xh+KsmCgIkQFD1MHX051cfvrYUKz6dfR1r8WtHXKO5Hvh6Ed
-         ZVVA==
+        bh=FOWg7xv6khXlnHXVYLJhfsnkHXaBKspybsIekBElbCY=;
+        b=W0sbXBZjTNC5elb4bFAzWrSj03V+jXeRptyRfgeZBFfYPiQ/kEzaCQ7ecf978AgSai
+         7dK1N5NXfuK1R9jZezbIg9o5SyfFUKxumw+dUzdIhalmB74iFOxurgajxQuXAZAb/dRP
+         oDMO6/hPF58YGXDmNCIjdv26YtzsU7CLgiqPkgFHcYlf8Gj5dCs2oj2wC+yXLvPxVUSt
+         1M0AyuCe82OcLft1ytjm52Sxl6YZcYlxUf2ldW7RjcEBeRXxJgGg59inv3KhNfknnJUv
+         1hyUVVzxLc2ZmQ0kJ52A36IGJPJ9wc+hKSDW/zqy3tffkBZWKsoIldeGy2inRZ+2gdl1
+         AYUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685138101; x=1687730101;
+        d=1e100.net; s=20221208; t=1685138103; x=1687730103;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9JhuPa0yYdr5XE/axPY0rbTmGM2hgd+SHnXF4ixe3X8=;
-        b=kejc4FOesye8hY1GQ74CLZGG4XEJRhYc6wrt9/ATKKPPMsRx1gyfp7tsqvWdpN25Ix
-         pPsQ+mYAWDM+MLA+JUCABS+ksra6cVH717GU8z3EO+1eV66FgXPnagad8hNduidiwJkZ
-         Qe3I6D3lhod2ttPYfhIS6Ilb8Jd03HHqNeAPXcs8AAuzQiqY5hBJPz0ZF+wJOE91hKpH
-         UJRWjCiQCFuc2oA8RTpZcmVoQktpM8UAxbkeVYuxwIFg9E7cIVUSB9gFhl2aD+kaFn6l
-         WoD893CICR3yOVMIQi6elqyl3acKOvLS8DHshN1+X3F5gtU7A9HarSi6KsLqif4qVTpN
-         OAIA==
-X-Gm-Message-State: AC+VfDwF0bN77OvGQLULU9Zo4icuXB3Chl+gfpEV9LvwuyS5T0uTLY/j
-        a12H8Yv4yFbpXZJ9RRziHhKfHSnj6Vj/
-X-Google-Smtp-Source: ACHHUZ4A0QwFGk16QfrxzwtIBAupC8GjSkfGg2PYWQQdvdXEGuWw24/+woiJ/4Rrhd0rgNdBl/p0Z5U9NhWo
+        bh=FOWg7xv6khXlnHXVYLJhfsnkHXaBKspybsIekBElbCY=;
+        b=RL80Rr40c9hpwCEo23RY1a5cYyrUP1mi79iPix82E0s6HNcORmAY4tidjMJt5MLb1N
+         AYts904y3h99/7eMzBFWtuwO8fKewBGbokLj6uMKUaXBRWyfTicmlb5BzazsH9x8fPDa
+         ARN5HBjzNncV0/6Uy3tJEBFPOoWgZz02byae4ubFx0jqWSKB0HjUwDx98snfKU96Vdax
+         BGMKEKtoC4sOmom3q4ZcxJZhXtYeO1NQIvzrILj4U1Iwoft7wlTo7jeksy39aaB69bqD
+         GVrtXm68Np0AA+iHu0Pqh7Y4F+9n1TTXILmrO0i9d/Ft2wfJl+tlhYwTie5idepemVhW
+         2OBw==
+X-Gm-Message-State: AC+VfDyGl0w9R3PxJwtNrGzI5planv1PbneSgPPhdcE3gv7kkA/U1OAm
+        dKJO2Bs6Hu4oyEfzr0FHOL2cbH17TbkT
+X-Google-Smtp-Source: ACHHUZ43XEAJO3f00pn7wWSBbjxBs6NDSOWGch/bUqBzmufYwYUeVNJDfIIp13hDPrkPN+Pth1/fwjjLgClD
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a81:ce01:0:b0:565:9e73:f92f with SMTP id
- t1-20020a81ce01000000b005659e73f92fmr1805177ywi.10.1685138100933; Fri, 26 May
- 2023 14:55:00 -0700 (PDT)
-Date:   Fri, 26 May 2023 14:53:56 -0700
+ (user=irogers job=sendgmr) by 2002:a25:ad93:0:b0:ba8:37f6:a586 with SMTP id
+ z19-20020a25ad93000000b00ba837f6a586mr1668359ybi.3.1685138103181; Fri, 26 May
+ 2023 14:55:03 -0700 (PDT)
+Date:   Fri, 26 May 2023 14:53:57 -0700
 In-Reply-To: <20230526215410.2435674-1-irogers@google.com>
-Message-Id: <20230526215410.2435674-22-irogers@google.com>
+Message-Id: <20230526215410.2435674-23-irogers@google.com>
 Mime-Version: 1.0
 References: <20230526215410.2435674-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v4 21/35] perf header: Avoid hybrid PMU list in write_pmu_caps
+Subject: [PATCH v4 22/35] perf metrics: Remove perf_pmu__is_hybrid use
 From:   Ian Rogers <irogers@google.com>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -98,57 +98,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid perf_pmu__for_each_hybrid_pmu by iterating all PMUs are dumping
-the core ones. This will eventually allow removal of the hybrid PMU
-list.
+Switch from perf_pmu__is_hybrid to avoid implicitly using the hybrid
+PMU list.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- tools/perf/util/header.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ tools/perf/util/metricgroup.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-index 276870221ce0..e24cc8f316cd 100644
---- a/tools/perf/util/header.c
-+++ b/tools/perf/util/header.c
-@@ -51,7 +51,6 @@
- #include "bpf-event.h"
- #include "bpf-utils.h"
- #include "clockid.h"
+diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+index 80ffd6da70c7..3f04a686d1cd 100644
+--- a/tools/perf/util/metricgroup.c
++++ b/tools/perf/util/metricgroup.c
+@@ -11,7 +11,6 @@
+ #include "evsel.h"
+ #include "strbuf.h"
+ #include "pmu.h"
 -#include "pmu-hybrid.h"
+ #include "print-events.h"
+ #include "smt.h"
+ #include "expr.h"
+@@ -274,7 +273,7 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
+ 	const char *metric_id;
+ 	struct evsel *ev;
+ 	size_t ids_size, matched_events, i;
+-	bool all_pmus = !strcmp(pmu, "all") || !perf_pmu__is_hybrid(pmu);
++	bool all_pmus = !strcmp(pmu, "all") || !perf_pmu__has_hybrid() || !is_pmu_hybrid(pmu);
  
- #include <linux/ctype.h>
- #include <internal/lib.h>
-@@ -1589,17 +1588,21 @@ static int write_pmu_caps(struct feat_fd *ff,
- 	 * Write hybrid pmu caps first to maintain compatibility with
- 	 * older perf tool.
- 	 */
--	pmu = NULL;
--	perf_pmu__for_each_hybrid_pmu(pmu) {
--		ret = __write_pmu_caps(ff, pmu, true);
--		if (ret < 0)
--			return ret;
-+	if (perf_pmu__has_hybrid()) {
-+		pmu = NULL;
-+		while ((pmu = perf_pmu__scan(pmu))) {
-+			if (!pmu->is_core)
-+				continue;
-+
-+			ret = __write_pmu_caps(ff, pmu, true);
-+			if (ret < 0)
-+				return ret;
-+		}
- 	}
+ 	*out_metric_events = NULL;
+ 	ids_size = hashmap__size(ids);
+@@ -288,8 +287,7 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
+ 		struct expr_id_data *val_ptr;
  
- 	pmu = NULL;
- 	while ((pmu = perf_pmu__scan(pmu))) {
--		if (!pmu->name || !strcmp(pmu->name, "cpu") ||
--		    !pmu->nr_caps || perf_pmu__is_hybrid(pmu->name))
-+		if (pmu->is_core || !pmu->nr_caps)
+ 		/* Don't match events for the wrong hybrid PMU. */
+-		if (!all_pmus && ev->pmu_name &&
+-		    perf_pmu__is_hybrid(ev->pmu_name) &&
++		if (!all_pmus && ev->pmu_name && evsel__is_hybrid(ev) &&
+ 		    strcmp(ev->pmu_name, pmu))
  			continue;
- 
- 		ret = __write_pmu_caps(ff, pmu, true);
+ 		/*
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
