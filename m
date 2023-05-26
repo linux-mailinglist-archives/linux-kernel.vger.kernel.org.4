@@ -2,171 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D03712043
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8DA71204F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242149AbjEZGiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 02:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S242256AbjEZGkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 02:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236274AbjEZGiv (ORCPT
+        with ESMTP id S233393AbjEZGkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 02:38:51 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5F31B3;
-        Thu, 25 May 2023 23:38:45 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f380cd1019so350480e87.1;
-        Thu, 25 May 2023 23:38:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685083124; x=1687675124;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fnb9dxQpabXcqKFtwXirNw4zge4/PVN/rpFJ7Cz83LM=;
-        b=LpwqhHvGK5SSL6RTCR97kfc10ze/o9Lp0eR/armCRpwC617whkVt6uHhF7PgghMYcy
-         0lhZtU5P0joOmyI/SZgmyKYFhVUOdM1EkEBn/TMuS9byx9JJoQzNoph+LieI5/CJtVMY
-         D8e4n6D79v6TpC/NRc4CswPdqexkUSeiu8WgGfLmEgezX1s/01sJ8GO1G2WKjK8jfXfA
-         LdeF0nD6U746okKqTlF0DeQ9wMeVkaJdSg89JEBz3r4YrvCnOl3lzEOjTmrzm3hl7CTE
-         139VB0WpuF5OR/MYna20UhJTqwRUY1i9QZmkMP8nqUnr0TY/U4SLqRpD/cXfzjJK2uHl
-         CgSw==
+        Fri, 26 May 2023 02:40:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1457319D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 23:39:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685083149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x+bs/EeksfHI43M3AGFfTiuW/uRtRdXfogNY4shc8y0=;
+        b=WLMbS94xPsz+u7Wie7Ayi82I70i2vj2Rr7bz452sX4SdjFMpS9nufnsXPcxZhrLqRlZLEJ
+        ZFThEwWBZXOJS7Rmki9rZ/YeBxDsUXoGLzbLeA23YBK00NcXIaFJX0/bVTHAz1Doj5w4UZ
+        cZjUta8gbKrja2bJj8tnJrOL5kcTkXY=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-279-WnTrTTXAOMOI_IfSkuWpTw-1; Fri, 26 May 2023 02:39:07 -0400
+X-MC-Unique: WnTrTTXAOMOI_IfSkuWpTw-1
+Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4f4b7b4e7c5so181979e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 23:39:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685083124; x=1687675124;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fnb9dxQpabXcqKFtwXirNw4zge4/PVN/rpFJ7Cz83LM=;
-        b=UjfBUg+e40XnTAB+0I6U3GhFFxK1bEKShEu7lQG9UVYqZz6EUZCpnJwPBKFs6fTENn
-         XRZgy6HLSlQATsmjx3Ud6daGkcIB3bCt3Y8/kK0ONF/zQqRwhEDcEOqDaL2/OEpfSDrj
-         4JunbjJ/KvjYm49AjSXlQv2WJa5utOKh6ViRml87lvyF/yPN+biV1Bi3Nj/ks2xHguiM
-         JafCPAJT8u8Uw97shL/bhNV7tEQpK7hin8cijB/MkX8MpH2eZ3T5SZrj3MYFZqEkFjmf
-         hPKP2NNntUZ9Kwe28/OUtg/uNyFXsjv0KjxbLm+5i0yMHy6h/iQYZYZr2bfkJAcngerU
-         DSqQ==
-X-Gm-Message-State: AC+VfDyyPPqWlq5cPhbxIUi46Yxgi2Lnto4rDVrx2hdl9KHfrzR0+tLk
-        YqtRDaQB3+52CM05fD5rZYs=
-X-Google-Smtp-Source: ACHHUZ5ImTEa7PavhV91maK0eLFhL+AAsBWGbqmK/QJoUj0CaHVhJETZEcyMg3v8zsbdo+Gbw3HjUg==
-X-Received: by 2002:a05:6512:49e:b0:4f4:cacb:4b4b with SMTP id v30-20020a056512049e00b004f4cacb4b4bmr204448lfq.18.1685083123710;
-        Thu, 25 May 2023 23:38:43 -0700 (PDT)
-Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id c18-20020a197612000000b004f122a378d4sm483847lff.163.2023.05.25.23.38.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 23:38:43 -0700 (PDT)
-Date:   Fri, 26 May 2023 09:38:39 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v6 5/8] pinctrl: ingenic: relax return value check for IRQ get
-Message-ID: <c4d877dd94cb528a39dd9c7403159a036934d3b1.1685082026.git.mazziesaccount@gmail.com>
-References: <cover.1685082026.git.mazziesaccount@gmail.com>
+        d=1e100.net; s=20221208; t=1685083146; x=1687675146;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x+bs/EeksfHI43M3AGFfTiuW/uRtRdXfogNY4shc8y0=;
+        b=Lnben8ZfjYlpNs6YHeSgIUoKKM+wlcMqkbSp0BRnnw+qjZHakN5zuoCjPOaP3khTnB
+         O+hbL6avT7fhuJHa2KOLxPcwuwanX6ZfSlp9iSRwIRlH4w5FOvZNpbs0quyjKgts4W7P
+         9HCdVjJfkjRWECAE1jX14iLqC4T//8bwSm3vbsWMKuOdAiZnA76JeF/noKa8K43OzPZO
+         pzuf4/Tt6B6tmVLYCXXBu6A0rSmvCPJOEG6btpVDNK3/4hiekT/rSc3DBcgFPbz+QsI4
+         7I2QIs/6L9hq8oAlA0gTe6WOoRLWSOYdgh2lo1KCPRHWMMPIYJBn27pGMOJMsAzHnd7O
+         6+Mw==
+X-Gm-Message-State: AC+VfDzLMVFfykmoKpkKHanZANyaCADMO4QcWNikfnB+W9TP//UpPyC0
+        ICVUUHUIve0PhFMzGwI84ZckVlpaRd0RIRhralivgUXFHXJVED90J3hZeTBbWVzirshs63hwbWt
+        1035POd5iVqN/NVbQBQtDXoGD1l0hl94xoPD8Riw8
+X-Received: by 2002:ac2:5584:0:b0:4f3:ba53:35f2 with SMTP id v4-20020ac25584000000b004f3ba5335f2mr348199lfg.49.1685083145940;
+        Thu, 25 May 2023 23:39:05 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7ZGMBvmDOnk6A1M9x8uXTgZpQopDuFIrCe6DF0zYSEQVhyP15JnRWL7SWoXzSYalkqHdBnvbODVvBx4F4Izbo=
+X-Received: by 2002:ac2:5584:0:b0:4f3:ba53:35f2 with SMTP id
+ v4-20020ac25584000000b004f3ba5335f2mr348187lfg.49.1685083145623; Thu, 25 May
+ 2023 23:39:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+4Ol/5oJ1HP2706K"
-Content-Disposition: inline
-In-Reply-To: <cover.1685082026.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230526054621.18371-1-liangchen.linux@gmail.com>
+In-Reply-To: <20230526054621.18371-1-liangchen.linux@gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 26 May 2023 14:38:54 +0800
+Message-ID: <CACGkMEuUTNfHXQPg29eUZFnVBRJEmjjKN4Jmr3=Qnkgjj0B9PQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/5] virtio_net: Fix an unsafe reference to the
+ page chain
+To:     Liang Chen <liangchen.linux@gmail.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, pabeni@redhat.com, alexander.duyck@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 26, 2023 at 1:46=E2=80=AFPM Liang Chen <liangchen.linux@gmail.c=
+om> wrote:
+>
+> "private" of buffer page is currently used for big mode to chain pages.
+> But in mergeable mode, that offset of page could mean something else,
+> e.g. when page_pool page is used instead. So excluding mergeable mode to
+> avoid such a problem.
 
---+4Ol/5oJ1HP2706K
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If this issue happens only in the case of page_pool, it would be
+better to squash it there.
 
-fwnode_irq_get[_byname]() were changed to not return 0 anymore.
+Thanks
 
-Drop check for return value 0.
+>
+> Signed-off-by: Liang Chen <liangchen.linux@gmail.com>
+> ---
+>  drivers/net/virtio_net.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 5a7f7a76b920..c5dca0d92e64 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -497,7 +497,7 @@ static struct sk_buff *page_to_skb(struct virtnet_inf=
+o *vi,
+>                         return NULL;
+>
+>                 page =3D (struct page *)page->private;
+> -               if (page)
+> +               if (!vi->mergeable_rx_bufs && page)
+>                         give_pages(rq, page);
+>                 goto ok;
+>         }
+> --
+> 2.31.1
+>
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
----
-Revision history:
- - No changes
-
-Please note, I took Linus' reply to v4 cover-letter as ack && added the
-tag. Please let me know if this was not Ok.
-
-The first patch of the series changes the fwnode_irq_get() so this depends
-on the first patch of the series and should not be applied alone.
----
- drivers/pinctrl/pinctrl-ingenic.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-in=
-genic.c
-index 2f220a47b749..86e71ad703a5 100644
---- a/drivers/pinctrl/pinctrl-ingenic.c
-+++ b/drivers/pinctrl/pinctrl-ingenic.c
-@@ -4201,8 +4201,6 @@ static int __init ingenic_gpio_probe(struct ingenic_p=
-inctrl *jzpc,
- 	err =3D fwnode_irq_get(fwnode, 0);
- 	if (err < 0)
- 		return err;
--	if (!err)
--		return -EINVAL;
- 	jzgc->irq =3D err;
-=20
- 	girq =3D &jzgc->gc.irq;
---=20
-2.40.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---+4Ol/5oJ1HP2706K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRwU+8ACgkQeFA3/03a
-ocVKFQf9Fzo+YL9A0466zLL5jgGlSHVE02sJ5WI378VoK/fGi2vG1UpG6toFO3jN
-/WsHsJhcbOmrAlH+7gTHLdGQ82zcUi7LzoxjriJhNQ6dZetmA3D65WohrWOYc3gR
-dxHSGBCB7nEvOwae64sV+zVCKwy5C5PEZhNcghZKjqaBjyLtS7KY5NJ2O2coNaEO
-mFddumon2TjWhcztM00lP/E8ziSoTCRDMeje0//4bu1BBZNwjztyhg+pduNh7zNf
-QlecO+VQ2Qkee7j+pIK2bN1jo7cJptMdLfmWD/MukKnI9hYa/unmWGSTWZgRQyTs
-n9hYMjJTXQc/wM58qJvy8mkTOsfUmg==
-=5aQX
------END PGP SIGNATURE-----
-
---+4Ol/5oJ1HP2706K--
