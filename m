@@ -2,161 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211C6712775
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA58712777
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243676AbjEZNZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        id S243708AbjEZN0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243518AbjEZNZY (ORCPT
+        with ESMTP id S243700AbjEZN0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:25:24 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7F912F;
-        Fri, 26 May 2023 06:25:22 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f606a80d34so5685965e9.0;
-        Fri, 26 May 2023 06:25:22 -0700 (PDT)
+        Fri, 26 May 2023 09:26:11 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF6119D
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:26:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685107521; x=1687699521;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HShHppzRiA2afD7idA0kDlCaSnR/8d/LIwnMexDz04E=;
-        b=R2isuQULlkXH0YYBi5gD32Fkr3TG8yDVfJ1SZVV7em4NfGBjX4bVPG+FKg55+DboUy
-         xNw1y4PLZ0pqrv9V9WHS0FvRqBiarXByunSM8MzLauQE/bKpywSlCjLB9FSL4V0IukLp
-         UQABcDgtNu9b1uRocJofhh/dRXZ+9UBOOLmZSySCchW2lCveBWzVvdxkYOkj/6bA2OEo
-         Yy1ak5MiXh3QWYBLjiukrpaN0L0BzetweArXCOoOg47X1Eja1Jsrt2XjjW5c+lv+wNCU
-         b4TLGokRtye3X/Fz1mKsDRFAKggAbXFrCDBYnrqtTOWOg3PZ/5DFdvpNsTt5XHOTSeVe
-         qHjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685107521; x=1687699521;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HShHppzRiA2afD7idA0kDlCaSnR/8d/LIwnMexDz04E=;
-        b=iIkR2QOxwFGBRXuVogB+APaIddbitey9W41ygGVR/JfDS5pytJvf7yWm9KZRWA+Sue
-         rcLLoxY5Gjt4WuXj5xq4Kt9Kypr8/vP4+U0VVUaBeY6KL2f4WTyByYSG3gMoERvrgt+k
-         8MyblJkriUtqzOsw9Nuv20UhWbUuSRaT1Oe1UcNBSY5KFj4TX+uGUskTNV+JYAPtK+hy
-         p5JGqPmnck/KVm+bhT+azc8oXkVIMdbsctfcXyfQDd/SgU51zgjhKZS8XaQ1nCFXBzd/
-         tvvrEoKXPhkhdV+J4N2vCs1MQ2hN4F2FSy5V8xveZhUF0txMLIfwztxAK4L3Lv00yE/j
-         cdCg==
-X-Gm-Message-State: AC+VfDyA17dHfEZXr7tORlGAytkYkRkVVrc1R9efQ7KYLYViCF9QK07u
-        v/FoLMpCkgxuXI1m8G/S29hraqZXCD0=
-X-Google-Smtp-Source: ACHHUZ5cUYpuKwSC5GNuQI4L1b0LxRQJaktaM3pMyNQhA9flteuuGt++y+NANX2R5ob81DqhZYQgAQ==
-X-Received: by 2002:a5d:420c:0:b0:306:36ef:2e3b with SMTP id n12-20020a5d420c000000b0030636ef2e3bmr1329543wrq.70.1685107520644;
-        Fri, 26 May 2023 06:25:20 -0700 (PDT)
-Received: from suse.localnet (host-95-248-204-235.retail.telecomitalia.it. [95.248.204.235])
-        by smtp.gmail.com with ESMTPSA id i13-20020a5d522d000000b00307c8d6b4a0sm5128776wra.26.2023.05.26.06.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 06:25:19 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jan Kara <jack@suse.cz>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [git pull] vfs.git sysv pile
-Date:   Fri, 26 May 2023 15:25:18 +0200
-Message-ID: <2886258.e9J7NaK4W3@suse>
-In-Reply-To: <5939173.lOV4Wx5bFT@suse>
-References: <Y/gugbqq858QXJBY@ZenIV> <20230525201046.cth6qizdh7lwobxj@quack3>
- <5939173.lOV4Wx5bFT@suse>
+  d=axis.com; q=dns/txt; s=axis-central1; t=1685107568;
+  x=1716643568;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=qs3VDmnWU6hqfo1HF5Y48lix59HfX8Y5haEAbPbx0uA=;
+  b=NPcdIDTGZB/ZCyhFWh4Z8Vwxk7eBRGtRphwQiMEfpYaHMzzOWx79UGqE
+   clkWUQ178q/kEmCkku7Kv3XdZUjGH2XzXb4Q9NuZZaS6I66a5TqRoLy1a
+   wP0wOsGujukqRNmxP2y7BmqZve1wgBnDa7zYluB7bc6D+dUTxDlJ7fcT9
+   7if5ZjsdsII4G6CmfDP5dTkRXIMFWoLKVmBVrsUmhm7jjZ5jv2YD1xzgI
+   TvugA6siX6+6ThlMY0r3vHO7fWQKXb+1acbU3Euabmb91zkBGRW8OA89N
+   y2VCsYuBdBUF3VEHA7RADgd0VBxI4itbrGL91g/F6AxTtGr6Sfy4C7SYd
+   w==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+Subject: [PATCH mm-nonmm-unstable 0/2] squashfs: fixups for caching
+Date:   Fri, 26 May 2023 15:25:44 +0200
+Message-ID: <20230526-squashfs-cache-fixup-v1-0-d54a7fa23e7b@axis.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFizcGQC/x2NQQrCMBBFr1Jm7UCTRkGvIi4m6dQE7KRmjIild
+ zd18+HxebwVlEtihUu3QuF30pSlgTl0ECLJnTGNjcH2duiP9oT6rKRxUgwUIuOUPnVBc3ZuMCM
+ 7yx6a6kkZfSEJcZennD1992Mp3Ix/7wrzjJKlbRV9kX8w3LbtBzIjcDmSAAAA
+To:     Phillip Lougher <phillip@squashfs.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <hch@lst.de>, <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
+        "Vincent Whitchurch" <vincent.whitchurch@axis.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On venerd=EC 26 maggio 2023 12:32:59 CEST Fabio M. De Francesco wrote:
-> On gioved=EC 25 maggio 2023 22:10:46 CEST Jan Kara wrote:
-> > On Mon 27-03-23 12:29:56, Fabio M. De Francesco wrote:
-> > > On luned=EC 20 marzo 2023 13:47:25 CEST Jan Kara wrote:
-> > > > On Mon 20-03-23 12:18:38, Fabio M. De Francesco wrote:
-> > > > > On gioved=EC 16 marzo 2023 11:30:21 CET Fabio M. De Francesco wro=
-te:
-> > > > > > On gioved=EC 16 marzo 2023 10:00:35 CET Jan Kara wrote:
-> > > > > > > On Wed 15-03-23 19:08:57, Fabio M. De Francesco wrote:
-> > > > > > > > On mercoled=EC 1 marzo 2023 15:14:16 CET Al Viro wrote:
-> > > [snip]
-> > >=20
-> > > > > > > > > I think I've pushed a demo patchset to vfs.git at some po=
-int
-> > > > > > > > > back
-> > >=20
-> > > in
-> > >=20
-> > > > > > > > > January... Yep - see #work.ext2 in there; completely=20
-untested,
-> > > > > > > > > though.
-> > >=20
-> > > Al,
-> > >=20
-> > > I reviewed and tested your patchset (please see below).
-> > >=20
-> > > I think that you probably also missed Jan's last message about how you
-> > > prefer
-> > > they to be treated.
-> > >=20
-> > > Jan asked you whether you will submit these patches or he should just=
-=20
-pull
-> > > your branch into his tree.
-> > >=20
-> > > Please look below for my tags and Jan's question.
-> >=20
-> > Ok, Al didn't reply
->=20
-> I noticed it...
->=20
-> > so I've just pulled the patches from Al's tree,
->=20
-> Thank you very much for doing this :-)
->=20
-> > added
-> > your Tested-by tag
->=20
-> Did you also notice the Reviewed-by tags?
->=20
+These are a couple of fixups for
+squashfs-cache-partial-compressed-blocks.patch which is currently in
+mm-nonmm-unstable.
 
-Well, it looks like you missed my Reviewed-by tags at https://lore.kernel.o=
-rg/
-lkml/3019063.4lk9UinFSI@suse/
+---
+Vincent Whitchurch (2):
+      squashfs: fix page update race
+      squashfs: fix page indices
 
-=46WIW, I'd just like to say that I did the review of Al's patchset because=
- I=20
-know the code that is modeled after a similar series to fs/sysv, which in t=
-urn=20
-I made following Al's suggestions.
+ fs/squashfs/block.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+---
+base-commit: 84cc8b966a3d4cde585761d05cc448dc1da0824f
+change-id: 20230526-squashfs-cache-fixup-194431de42eb
 
-However, I suppose it's up to you to decide whether or not is worth mention=
-ing=20
-my reviews :-)
-
-Thanks,
-
-=46abio
-
-> > and push out the result into linux-next.
->=20
-> Great!
-> Again thanks,
->=20
-> Fabio
->=20
->=20
-> Honza
->=20
-> > --
-> > Jan Kara <jack@suse.com>
-> > SUSE Labs, CR
-
-
-
+Best regards,
+-- 
+Vincent Whitchurch <vincent.whitchurch@axis.com>
 
