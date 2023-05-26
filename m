@@ -2,125 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCF271228D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCBD7712285
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242779AbjEZIpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S242776AbjEZIoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242800AbjEZIok (ORCPT
+        with ESMTP id S242761AbjEZIoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:44:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4911B3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685090625;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rO5u1LT/DkSYeKOoJRR+C9ZUgArTLbgJfPbLRFgEFXo=;
-        b=QXn9MWUk2FPbUN3jbknddRY9KLSzIVSi2VA++cjTuC1pSTGNTU6wiIvEmFmOzFz/wKl/2k
-        PF/3Z/76NEB5E9/heGq3r5261iOCDKsBI47a0BLzPHZ+JZeCpwhaLnC+8umFunhknviHxQ
-        LeDUUKyQjO2xApm7khqkC/6gnN9pc3U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-533-R5eE5ngcPYCRxtk71bmDRg-1; Fri, 26 May 2023 04:43:40 -0400
-X-MC-Unique: R5eE5ngcPYCRxtk71bmDRg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AB26D8007D9;
-        Fri, 26 May 2023 08:43:39 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A07FA1121314;
-        Fri, 26 May 2023 08:43:36 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <89c7f535-8fc5-4480-845f-de94f335d332@lucifer.local>
-References: <89c7f535-8fc5-4480-845f-de94f335d332@lucifer.local> <20230525223953.225496-1-dhowells@redhat.com> <20230525223953.225496-2-dhowells@redhat.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH v2 1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
+        Fri, 26 May 2023 04:44:09 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D1D128
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:44:07 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3078cc99232so391737f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:44:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1685090646; x=1687682646;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=d+EoENykicvVhtEx+udnXdT2B4JfjP100xbZZvVxTGI=;
+        b=UenbCjy/I9HgH2jdm7xkNf6QaTPRnGD3oJYBWp5gW4oKpljuc7vfgywIdXGGlztlNg
+         WBf0GoDaqIVfpEVdwdc5TtB6YVVb0Az0KZa2PFh52MKWCOO7ZOVqX12Fe0P6bEm9nYuD
+         7rik9Qe5TOHIQfHDdGe0FR+WPexBQKohZ3LdAXszvji4181FMT+PMnsh75WOkYxHAc6B
+         uJXTQ/PBWyvmWnsm4Ii+AX7brHBuF63Bus1NWZyvhiJejHNCZExGzqs9+im3YcQqnE19
+         YFt7Yu3IlZpyaIOy/Ks3dLgIR8yXPRN40wjaR9XsNed5xJy67QJFvhrT3y9PYA48il12
+         dxBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685090646; x=1687682646;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d+EoENykicvVhtEx+udnXdT2B4JfjP100xbZZvVxTGI=;
+        b=Fvl6Pxxy7xReWEnKXSlHie3gkYGpMbtG4fxvYMr0K7K4zoul4+9GKjIB6eS4qY+roI
+         sOJEwlF5iWyi0TbTLDGW+977tIpRyEfCKkfcvB2CSH6lmJ/jCZ9jq3TGy2NwH1u+KSQH
+         XKXlhlXiHGoU/CXHfBDeTCi9/X/JMcKpgTmWHc/59z1rVU2ZXn1SXT3VYv0ZTe9Y0snF
+         3B78/Uc1KfkaMUkWdJBiE/+23d04zAAIufDfnl/FyZ5Ui5jiwDUQ89yPjAqQxtbEm62r
+         6zA3XBKZIeU7gQAW5bY/Vv5WD//cAozubQfQ+QiARQUO6cFHkuKRkgHoGLYOcwScBtHN
+         Vfiw==
+X-Gm-Message-State: AC+VfDzAttNhvG5r9CRZKC3HwPJkfMsZbt88AS1EICZne7rN+G5U5/gg
+        uIFljPzxskqG+aSn6fSwR/cqeg==
+X-Google-Smtp-Source: ACHHUZ7RVhrzhanSXX26T3aKZBacngzR1xiMWVIi1+n3GAfzb+yNlrKHcOySJ8/US+hibf/xDoZPYg==
+X-Received: by 2002:a5d:6291:0:b0:309:e24:57b3 with SMTP id k17-20020a5d6291000000b003090e2457b3mr826087wru.4.1685090646345;
+        Fri, 26 May 2023 01:44:06 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id x6-20020a5d6506000000b0030639a86f9dsm4312201wru.51.2023.05.26.01.44.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 01:44:06 -0700 (PDT)
+Date:   Fri, 26 May 2023 10:44:05 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <xiaobo55x@gmail.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
+        oliver.upton@linux.dev, seanjc@google.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v2 09/11] KVM: riscv: selftests: Make check_supported
+ arch specific
+Message-ID: <20230526-d8d768a23cd6bdc274bc165c@orel>
+References: <cover.1684999824.git.haibo1.xu@intel.com>
+ <26dea518fc5e8da51e61db279d175364bfecd009.1684999824.git.haibo1.xu@intel.com>
+ <20230525-705ddcbcd43aa63e3fd356c8@orel>
+ <CAJve8onF9MFuaVsThFnhjWr6ZomB0Lhr9WXGvMiJDt5vrjeKLg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <520729.1685090615.1@warthog.procyon.org.uk>
-Date:   Fri, 26 May 2023 09:43:35 +0100
-Message-ID: <520730.1685090615@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJve8onF9MFuaVsThFnhjWr6ZomB0Lhr9WXGvMiJDt5vrjeKLg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lorenzo Stoakes <lstoakes@gmail.com> wrote:
-
-> I guess we're not quite as concerned about FOLL_GET because FOLL_GET should
-> be ephemeral and FOLL_PIN (horrifically) adds GUP_PIN_COUNTING_BIAS each
-> time?
-
-It's not that - it's that iov_iter_get_pages*() is a lot more commonly used at
-the moment, and we'd have to find *all* the places that things using that hand
-refs around.
-
-iov_iter_extract_pages(), on the other hand, is only used in two places with
-these patches and the pins are always released with unpin_user_page*() so it's
-a lot easier to audit.
-
-I could modify put_page(), folio_put(), etc. to ignore the zero pages, but
-that might have a larger performance impact.
-
-> > +		if (is_zero_page(page))
-> > +			return page_folio(page);
-> > +
+On Fri, May 26, 2023 at 03:50:32PM +0800, Haibo Xu wrote:
+> On Fri, May 26, 2023 at 12:40 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> >
+> > On Thu, May 25, 2023 at 03:38:33PM +0800, Haibo Xu wrote:
+> > > check_supported() was used to verify whether a feature/extension was
+> > > supported in a guest in the get-reg-list test. Currently this info
+> > > can be retrieved through the KVM_CAP_ARM_* API in aarch64, but in
+> > > riscv, this info was only exposed through the KVM_GET_ONE_REG on
+> > > KVM_REG_RISCV_ISA_EXT pseudo registers.
+> > >
+> > > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+> > > ---
+> > >  tools/testing/selftests/kvm/get-reg-list.c | 32 +++++++++++-----------
+> > >  1 file changed, 16 insertions(+), 16 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
+> > > index f6ad7991a812..f1fc113e9719 100644
+> > > --- a/tools/testing/selftests/kvm/get-reg-list.c
+> > > +++ b/tools/testing/selftests/kvm/get-reg-list.c
+> > > @@ -99,6 +99,20 @@ void __weak print_reg(const char *prefix, __u64 id)
+> > >  }
+> > >
+> > >  #ifdef __aarch64__
+> > > +static void check_supported(struct vcpu_reg_list *c)
+> > > +{
+> > > +     struct vcpu_reg_sublist *s;
+> > > +
+> > > +     for_each_sublist(c, s) {
+> > > +             if (!s->capability)
+> > > +                     continue;
+> >
+> > I was going to say that making this function aarch64 shouldn't be
+> > necessary, since riscv leaves capability set to zero and this function
+> > doesn't do anything, but then looking ahead I see riscv is abusing
+> > capability by putting isa extensions in it. IMO, capability should
+> > only be set to KVM_CAP_* values. Since riscv doesn't use it, then it
+> > should be left zero.
+> >
+> > If we're going to abuse something, then I'd rather abuse the 'feature'
+> > member, but since it's only an int (not an unsigned long), then let's
+> > just add an 'unsigned long extension' member.
+> >
 > 
-> This will capture huge page cases too which have folio->_pincount and thus
-> don't suffer the GUP_PIN_COUNTING_BIAS issue, however it is equally logical
-> to simply skip these when pinning.
-
-I'm not sure I understand.  The zero page(s) is/are single-page folios?
-
-> This does make me think that we should just skip pinning for FOLL_GET cases
-> too - there's literally no sane reason we should be pinning zero pages in
-> any case (unless I'm missing something!)
-
-As mentioned above, there's a code auditing issue and a potential performance
-issue, depending on how it's done.
-
-> Another nitty thing that I noticed is, in is_longterm_pinnable_page():-
+> Good idea!
 > 
-> 	/* The zero page may always be pinned */
-> 	if (is_zero_pfn(page_to_pfn(page)))
-> 		return true;
-> 
-> Which, strictly speaking I suppose we are 'pinning' it or rather allowing
-> the pin to succeed without actually pinning, but to be super pedantic
-> perhaps it's worth updating this comment too.
+> For the new 'extension' member in riscv, I think its use case should be
+> identical to the 'feature' member in aarch64(KVM_RISCV_ISA_EXT_F
+> was similar to KVM_ARM_VCPU_SVE)? If so, I think we can just reuse
+> the 'feature' member since the data type was not a big deal.
 
-Yeah.  It is "pinnable" but no pin will actually be added.
+You're right. An int is fine for the isa extension index, which is all we
+need to represent.
 
-David
-
+Thanks,
+drew
