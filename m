@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EB1712BFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC77B712C02
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242739AbjEZRmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
+        id S242800AbjEZRnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237022AbjEZRmW (ORCPT
+        with ESMTP id S237022AbjEZRnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:42:22 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20817F7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:42:01 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d30ab1f89so892972b3a.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:42:01 -0700 (PDT)
+        Fri, 26 May 2023 13:43:53 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E831C9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:43:51 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-25345ca8748so1095706a91.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:43:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685122920; x=1687714920;
+        d=chromium.org; s=google; t=1685123030; x=1687715030;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzkLCtK6sSR84gGu0pHUyFqZuhAc6wVW3zGt3fCHd8A=;
-        b=QT6t4K12P7rnXTLcm5Lx1LIZR1MPJa9FlTsCngYetkrHw3sW46rIqrAG1AFjR8sWb6
-         kIvHb3q2cPGCw6h3OkWVbOiBxVeSEpSTqOqfM+xcIz7QH+jBL8MQ9P0vdtnqEraXN+Yt
-         QJqA79OMHWrFkJtTGNVC03Dm7r4+gPEB2HJnY=
+        bh=hg9Y1Zeqm2LukQubiT8t4V/vqubtiFOiCTgTYUMaUVs=;
+        b=lta3MXHxjS1c7AJAUPLUOeHcr5x4Zo3I0sh7vWvpASJEc8uOh/eMfflNOlqqurTpiC
+         y1tn4GMr/aIo9mLeE/wroXnkfagYh0cxm5KsTTxf2BD+1Xlltby4ztTCm4k6kClJA5qo
+         sIYWv8PJerV3mljMW1vWIqC1jQcttRocREL9A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685122920; x=1687714920;
+        d=1e100.net; s=20221208; t=1685123030; x=1687715030;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mzkLCtK6sSR84gGu0pHUyFqZuhAc6wVW3zGt3fCHd8A=;
-        b=GiBoYt5fAJEnsJZSW5kMhx8ZJYxzteWqihy55NY97hRbnJ+KNL+B5yv77pZ25W0/wp
-         8YjQxSk1Q+FOD1dHGFc6iOruvfNxOQ8zgaenyhJJMTObh8DLY9w9j+XQ7ISlMgqyZKrO
-         OV8n/Nc8hHJLLV73O0Ku4y20aNeJhW++7cVL3VGn4LAtNmQQwdcpVSTUdgsdvPRZgfD/
-         kw7q2PR/NOZ8FNlAxiU1qbg/Rhf7yYoZNcbi6f0AJaT9GJ0PRpu0OAhqDniMfR9fm6fR
-         F06WuNe/smAtA4zw3h4ognP1bWy3jw68qxM/p416qkKc5zB+4Z+EaSXCNxn8QnfmOorJ
-         3tqQ==
-X-Gm-Message-State: AC+VfDzXwrLN02nJ/U80bVB/8NYkARrVLv4A7l0kijsm1l4Lz2rCckwW
-        Zd2VDWCCAvH053mrbPhPdBXvKg==
-X-Google-Smtp-Source: ACHHUZ7p9OpMzdYLLWHwtPA3GpWN9Mb1f0Jb0YPuUcHlrUWjMSB7QL9tkgbq8shEv5eS5UX10tipJA==
-X-Received: by 2002:a05:6a00:98e:b0:64a:c673:d064 with SMTP id u14-20020a056a00098e00b0064ac673d064mr4744620pfg.17.1685122920652;
-        Fri, 26 May 2023 10:42:00 -0700 (PDT)
+        bh=hg9Y1Zeqm2LukQubiT8t4V/vqubtiFOiCTgTYUMaUVs=;
+        b=JpGDAv4xaZ7wfeQkIjrpgEsxcucgzaot63nnw632F2c0Twt6mFO/zzXttt6L42cD2A
+         fIBeGPZAnO0Hn71Fi6GU4xeWva+t7BqFBzgwNCFogopuGLu4AoixVvKtvBBUFHUQ/hAv
+         /a0lXJs/fEuPR/hxCADxOqrjFF/3P2GekCis6CGPZpPeoJgdFQGgsPA5irtx9mMZyR8T
+         E5fE3vw2v5z2E+ZH4AH8NsC2LL0+XPIfT093ZSmNIpfdQ2eUiaZX5P3PjheTzaZEdYAX
+         ztSS2pjaZcK4rSF0XxNCJPyzabeSpB2ojLr7EYsGPLFHmewC8EoOtreKA0MTyefYU9es
+         j8qQ==
+X-Gm-Message-State: AC+VfDwhsk6dPG9hTYe25qCwgFri4qnp05ylGPa0KG00Qb1YDW8rlvDy
+        1f2SeZVoRvJ0GX+5Zn72ccvdlw==
+X-Google-Smtp-Source: ACHHUZ7/7bJzxKpXODcLcQHpGpV/j9si5r5SwPI1mqbMjnGFBZlzEi+VmgCEu3f6lGaHSTOA1ark4A==
+X-Received: by 2002:a17:90a:55c9:b0:253:27b4:cd4d with SMTP id o9-20020a17090a55c900b0025327b4cd4dmr2849789pjm.27.1685123030618;
+        Fri, 26 May 2023 10:43:50 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id n17-20020aa78a51000000b0064389eab4c8sm2947098pfa.126.2023.05.26.10.42.00
+        by smtp.gmail.com with ESMTPSA id 127-20020a630385000000b0051b5d0fe708sm3074081pgd.43.2023.05.26.10.43.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 10:42:00 -0700 (PDT)
-Date:   Fri, 26 May 2023 10:41:59 -0700
+        Fri, 26 May 2023 10:43:50 -0700 (PDT)
+Date:   Fri, 26 May 2023 10:43:49 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Justin Tee <justintee8345@gmail.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Justin Tee <justin.tee@broadcom.com>
-Subject: Re: [PATCH v2][next] scsi: lpfc: Use struct_size() helper
-Message-ID: <202305261041.4C23B96F@keescook>
-References: <ZG0fDdY/PPQ/ijlt@work>
- <CABPRKS9ykHvaOGUboDXZ261LLPS78+YFpOZAcJEeLKGfEUe21g@mail.gmail.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Andy Walls <awalls@md.metrocast.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] media: pci: cx18-av-vbi: Replace one-element array
+ with flexible-array member
+Message-ID: <202305261043.A86E75BD5B@keescook>
+References: <ZG1YVji9thTLWeRm@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABPRKS9ykHvaOGUboDXZ261LLPS78+YFpOZAcJEeLKGfEUe21g@mail.gmail.com>
+In-Reply-To: <ZG1YVji9thTLWeRm@work>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:25:20PM -0700, Justin Tee wrote:
-> no_of_objects may be hardcoded to 1 right now, but does it make more
-> sense to use?
+On Tue, May 23, 2023 at 06:20:38PM -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element arrays with flexible-array
+> members in struct vbi_anc_data.
 > 
-> struct_size(rap, obj, be32_to_cpu(rap->no_of_objects));
+> This results in no differences in binary output.
+> 
+> Link: https://github.com/KSPP/linux/issues/79
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Oh yeah, that's nicer. :)
-
-> We probably should have declared no_of_objects as __be32 to have
-> avoided this confusion.
-
-Perhaps this patch can add that too?
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
