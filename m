@@ -2,99 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0819C7124F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB957124FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243143AbjEZKkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
+        id S236878AbjEZKnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242977AbjEZKkH (ORCPT
+        with ESMTP id S230525AbjEZKnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:40:07 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00321FB
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:40:06 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-561d611668eso10458447b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:40:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685097606; x=1687689606;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8Um1UKc6m4BdE36Z1im121lfRoHu7Yl1ObhXNqm6trM=;
-        b=ohJIo1Juhen6tk/HYDRDNHLMTtBS9nw8MMHFlfqC2IeY4+bzVAn8ulnO0xtO2yGiCl
-         etaI36h0fR7ozc6Js9NP6DUk2SdWr8koFF8jh6lvSvQELCjAYzIyFGwnfqCmXcy9bUkn
-         57qZZQiSzqwpanesT3R+3196uWB/r43ejGX2tul/+tfwxmxBbpOPalxutSbSbWFTzInk
-         ZIJXtrFWRwa5XhIgNwTdfk40deyxGkrKZFQWco/LChwtjeW2vuzMMT2oJT35yPL5R4sl
-         jKgGwae/eorCUF6BEX2RNob5yCjawmWbzXdS5HZTuFbNPIRa1mIwmsQPyhQaeuGuooof
-         j6WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685097606; x=1687689606;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8Um1UKc6m4BdE36Z1im121lfRoHu7Yl1ObhXNqm6trM=;
-        b=kTNqv+uxYuQiFT9aq9rTZNH5nj1mbnqYwln0Is1kgYQl4lwSD8IZaZlnoPlkVtinC5
-         TlMBJ4MCrJi7kUESiTnuKbGHa/VzMzNm1HjHzCkZlGAgfxkQmcLyoezPhPOln4NYaNgl
-         n5sKq/yJxsyVhuLS91ptTbfYPoDDVCcuTVuSLIomikqmwkQigzaT7b28X98p4al+OdHc
-         mGFiIKeNx/b7io9gEzPgDKLfTdnAJpZPDjOSWqudLe/qQfO57W0O2O3JJBrhh5zS/Wgr
-         TXDDao50rUndrObFiDuuRrkcBzSVaC6OQ46XGF3+50X0IC4l+C5wBi83rAFQWPS7BtF5
-         n03A==
-X-Gm-Message-State: AC+VfDwQ4tgEuDiABd/N03XhYltv7G+RzoE+YsMPD28bwejW+cUIV7+f
-        3CuJtFUTeyR77yOFgWYvbNNI00EQQDyxB3qU7O/6yuWGb5g=
-X-Google-Smtp-Source: ACHHUZ5/Z3LtOJXlIQJRUFXgO7Ly4Dz7VWN4V2S7zNwonhIZPsk0xeASWC5xOCfrzsA4JsNZoegGu9815lL3gJd4zfw=
-X-Received: by 2002:a0d:e2c7:0:b0:55a:7c7:6ff7 with SMTP id
- l190-20020a0de2c7000000b0055a07c76ff7mr1646862ywe.11.1685097606157; Fri, 26
- May 2023 03:40:06 -0700 (PDT)
+        Fri, 26 May 2023 06:43:00 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646AE13D;
+        Fri, 26 May 2023 03:42:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=p6gZGYkzEZra90Ov53s4Zo39rKzj5xOBW7Fj0aYklb4=; b=z2SVF97U2nzlAUNoG+MftZHkYL
+        PMhR8msg2OhhdCekSckaC6W7w/6SkvnvTV6f7iJTsmO+AjyOCYQpLqOfT1SqLqZE34AIAOLnttl5d
+        ACLXlDb2uXTtDQOmHjcJL4HVKdVoaPUVYaG71gb5XNtP3BG+JsXvce+g3yU+HXqlpefXMZCAX/MMG
+        5O/JDZeB3CVN6dFwgFIgbJtb5MD5GomD5byTvFGwRnmGtAjAuSgDb0VqJwv90NnELymwnlU2S1RoS
+        2zfVNxzXIQGXBSVt3vHaDKiY71T0YSfVXAmYuDn73enIqJ+w6RkSLg10gZp5GSFfmev5ifto0pnRK
+        d+EfC/FQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35688)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q2UuK-0005Sz-S2; Fri, 26 May 2023 11:42:52 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q2UuI-0003fU-VC; Fri, 26 May 2023 11:42:50 +0100
+Date:   Fri, 26 May 2023 11:42:50 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Mark Brown <broonie@kernel.org>, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>
+Subject: Re: [PATCH net-next v3 2/4] net: ethernet: altera-tse: Convert to
+ mdio-regmap and use PCS Lynx
+Message-ID: <ZHCNKjMFd4bu4Cmz@shell.armlinux.org.uk>
+References: <20230526074252.480200-1-maxime.chevallier@bootlin.com>
+ <20230526074252.480200-3-maxime.chevallier@bootlin.com>
+ <ZHBwLBnKacQCG2/U@corigine.com>
+ <ZHB2Tfn9yZPs6l56@shell.armlinux.org.uk>
 MIME-Version: 1.0
-References: <20230525205840.734432-1-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230525205840.734432-1-u.kleine-koenig@pengutronix.de>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 26 May 2023 12:39:55 +0200
-Message-ID: <CANiq72=qi4yXH+24zFHFatBdUHy_ekNrFoYnpZL0fSMa76kpug@mail.gmail.com>
-Subject: Re: [PATCH] auxdisplay: Switch i2c drivers back to use .probe()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Miguel Ojeda <ojeda@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHB2Tfn9yZPs6l56@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 10:58=E2=80=AFPM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type"), all drivers being converted to .probe_new() and then
-> 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
-> convert back to (the new) .probe() to be able to eventually drop
-> .probe_new() from struct i2c_driver.
->
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+On Fri, May 26, 2023 at 10:05:17AM +0100, Russell King (Oracle) wrote:
+> On Fri, May 26, 2023 at 10:39:08AM +0200, Simon Horman wrote:
+> > On Fri, May 26, 2023 at 09:42:50AM +0200, Maxime Chevallier wrote:
+> > > The newly introduced regmap-based MDIO driver allows for an easy mapping
+> > > of an mdiodevice onto the memory-mapped TSE PCS, which is actually a
+> > > Lynx PCS.
+> > > 
+> > > Convert Altera TSE to use this PCS instead of the pcs-altera-tse, which
+> > > is nothing more than a memory-mapped Lynx PCS.
+> > > 
+> > > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> > 
+> > Hi Maxime,
+> > 
+> > I have some concerns about the error paths in this patch.
+> 
+> We've had similar problems with mdio_device_create() vs the XPCS
+> driver.
+> 
+> I think it's time that we made this easier for users.
 
-Thanks for this! The conversion has taken a while given the date of
-the first commit :)
+Patch series here:
+https://lore.kernel.org/all/ZHCGZ8IgAAwr8bla@shell.armlinux.org.uk/
 
-The wording of the message was a bit confusing, perhaps a ";
-finally/now" before "convert" would have helped, but no big deal.
-
-If somebody is taking all the patches treewide, then:
-
-    Acked-by: Miguel Ojeda <ojeda@kernel.org>
-
-Otherwise, I will queue it.
-
-Thanks!
-
-Cheers,
-Miguel
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
