@@ -2,157 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3860C712995
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E463071297F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244094AbjEZPdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
+        id S243803AbjEZP37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243860AbjEZPdj (ORCPT
+        with ESMTP id S244148AbjEZP34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:33:39 -0400
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B679189;
-        Fri, 26 May 2023 08:33:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685115169; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=GBZZbiF7ruXKJwRU/UKRSvUduto2+nmr4tXorwsczmiQgYX5e6umskk2/+tQhriO9AZJe+ftvfTVGPPJgN/YK7iutS10S2cp/wr/Og4mmoDK2oENdQeFS9o1jv42hN/xJCiZpSZ9qBZ687gwRW465DRV7vz9XlH2dte/6iTb1/o=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1685115169; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=u7/zPgaI11esUwuCZ9ANb4+ClUiUCXAYGeOO9rKo5Z4=; 
-        b=ZM6/lRZvtjrUDMmygJ2k0TEchfTsmI4414dS4hXzJM786P3m0vmHy1WAjo8ekPvy1ii8GlwE82D7ve1P7Stv7Y3xUEeB8WRGed0ieug1FztMp3FTPk+SFlyQk1t7PcHDegAqDhcP6shJhwZizRkFkiA0B9MC2zSpJrr/3Fl5v40=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685115169;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Date:Message-Id:Reply-To;
-        bh=u7/zPgaI11esUwuCZ9ANb4+ClUiUCXAYGeOO9rKo5Z4=;
-        b=XirbvXIgZTqaZCkasaoHW07kTVH/k1kyf9zy1EJryUVey0lrjOlEwmiJ5HfGPpFc
-        RKi2On/gJAM8lRIJjgE9+0SEB0YgSc0QM03OCevQH/UopUICPeo+dLOAFio8xlt393w
-        Yrw9GdiGGzDaqTPbj+F4UVZfTA2FMvynOpXMgG0E=
-Received: from edelgard.fodlan.icenowy.me (120.85.97.71 [120.85.97.71]) by mx.zohomail.com
-        with SMTPS id 1685115168167230.90243257128157; Fri, 26 May 2023 08:32:48 -0700 (PDT)
-Message-ID: <0803e9037a8a2ce96fdad6ec209991dcda2a30ca.camel@icenowy.me>
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8173-elm: remove panel model
- number in DT
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Doug Anderson <dianders@chromium.org>,
-        Pin-yen Lin <treapking@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
-In-Reply-To: <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
-References: <20230526100801.16310-1-uwu@icenowy.me>
-         <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
-Organization: Anthon Open-Source Community
+        Fri, 26 May 2023 11:29:56 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EF510A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:29:54 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f5dbd8f677so58015e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685114992; x=1687706992;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=11kvH2/w8+/j27zICJ7H+elZ2FOLnEq/iHQYQEgeVyU=;
+        b=Xk/GvjBDVdqc+7jqhKEG3aIsPCmQ+0jViFDIaERZ7pysnS+oInnRks/1a2hNnsPX0e
+         LpqZi+qhKBPgBAMNCNf3qVeY1UnEj8OPYwqsI4YALxpXPbJQ8jISsH47Yf36HyH8eNXi
+         7PnSrcKGSlk7VyyGLQkCkz5QFeHRYlU4PoLk7S4yNBmvGO7JuITjeNZxf9Dsvyhk6zCb
+         t6JipA3vXrgfF5ugk4gUIPKGhyNQ3xWLiLGlROuVAKH6NsfKQhHtWfYHdtsY+tDoF2BT
+         Mle7Z0+er7X78IRUr9LHj8rO/OwYfxBhvl1qx4eZ1/agCnwVcfkOPxqduq9rmP0sHR9+
+         kVoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685114992; x=1687706992;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=11kvH2/w8+/j27zICJ7H+elZ2FOLnEq/iHQYQEgeVyU=;
+        b=XNGZKf0UBHGaREcAQ9VlqKLNEWDzpp1WmOJhswgRFZfTWjQRwX17rkJ49cVWEVcXv0
+         NrEF8PbSUTtw2yT6PqFHwS0/i5fR3tWIOr2q8+V5Qal9RYrK3vLSvP3TrKGhILEq4Zpi
+         rTSLQyPr3xFAJQBmTEaO0MSKSykeIIsj/REcYuj+318sCvRgVhL0rJBIEbt+Yu/U/0M6
+         PyuKzFSlZwdzmZLhvVkTBubGHA3VjIhY0KTgx7yvzBfspi3h0v+3xlGn4m7q+U3Yu0+C
+         RlJiBI4KrkAYqIJ0PFhqDPyrPB8f4yhYVnpdOTw4vkXtuEhHuCc1TNun5f+PbY7GGp0A
+         Z3CA==
+X-Gm-Message-State: AC+VfDyeGM83ZY6g9RWWI+AC1+gfLbRi/P6FLA0I8ZoKaZATd/OEYxrG
+        Xqq2ARpuWZrGRaeJiT/RoNH+ZboMgLaWBMaWNfyCAQ==
+X-Google-Smtp-Source: ACHHUZ7/PW5oi1QxByQp+2dnJSmeNg5G3WW6rGN9o5Q5Y7U7JvrxNI5F50BfkNMxcYP0mt7Aq9GozHET7p34VjflXM0=
+X-Received: by 2002:a05:600c:cca:b0:3f1:70d1:21a6 with SMTP id
+ fk10-20020a05600c0cca00b003f170d121a6mr120145wmb.0.1685114992299; Fri, 26 May
+ 2023 08:29:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230526150806.1457828-1-VEfanov@ispras.ru>
+In-Reply-To: <20230526150806.1457828-1-VEfanov@ispras.ru>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 26 May 2023 17:29:40 +0200
+Message-ID: <CANn89i+p7_UB8Z5FQ+iWg4G_caAnUf9W4P-t+VOzigUuJo+qRw@mail.gmail.com>
+Subject: Re: [PATCH] udp6: Fix race condition in udp6_sendmsg & connect
+To:     Vladislav Efanov <VEfanov@ispras.ru>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-Date:   Fri, 26 May 2023 23:29:11 +0800
-User-Agent: Evolution 3.44.4 
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2023-05-26=E6=98=9F=E6=9C=9F=E4=BA=94=E7=9A=84 07:24 -0700=EF=BC=
-=8CDoug Anderson=E5=86=99=E9=81=93=EF=BC=9A
-> Hi,
->=20
-> On Fri, May 26, 2023 at 3:09=E2=80=AFAM Icenowy Zheng <uwu@icenowy.me> wr=
-ote:
-> >=20
-> > Currently a specific panel number is used in the Elm DTSI, which is
-> > corresponded to a 12" panel. However, according to the official
-> > Chrome
-> > OS devices document, Elm refers to Acer Chromebook R13, which, as
-> > the
-> > name specifies, uses a 13.3" panel, which comes with EDID
-> > information.
-> >=20
-> > As the kernel currently prioritizes the hardcoded timing parameters
-> > matched with the panel number compatible, a wrong timing will be
-> > applied
-> > to the 13.3" panel on Acer Chromebook R13, which leads to blank
-> > display.
-> >=20
-> > Because the Elm DTSI is shared with Hana board, and Hana
-> > corresponds to
-> > multiple devices from 11" to 14", a certain panel model number
-> > shouldn't
-> > be present, and driving the panel according to its EDID information
-> > is
-> > necessary.
-> >=20
-> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > ---
-> > =C2=A0arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 2 +-
-> > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> We went through a bunch of back-and-forth here but in the end in the
-> ChromeOS tree we have "edp-panel" as the "compatible" here in the
-> ChromeOS 5.15 tree and this makes sense.
+On Fri, May 26, 2023 at 5:08=E2=80=AFPM Vladislav Efanov <VEfanov@ispras.ru=
+> wrote:
+>
+> Syzkaller got the following report:
+> BUG: KASAN: use-after-free in sk_setup_caps+0x621/0x690 net/core/sock.c:2=
+018
+> Read of size 8 at addr ffff888027f82780 by task syz-executor276/3255
 
-I only have Elm, so I am curious that do all Hana's only rely on panel
-EDID to use different displays?
+Please include a full report.
 
-BTW The Chrome OS document say that Elm and Hana are both board based
-on Oak baseboard, should the DTSI be renamed mt8173-oak.dtsi, and still
-let mt8173-elm.dts include it and then set model information?
-
->=20
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->=20
-> ...in theory one would wish for a "Fixes" tag, but I think in
-> previous
-> discussions it was decided that it was too complicated. Hardcoding
-> the
-> other compatible string has always been technically wrong, but I
-> guess
-> it worked at some point in time. The more correct way (as you're
-> doing
-> here) needs the DP AUX bus support and the generic eDP panels, both
-> of
-> which are significantly newer than the elm dts. So I guess leaving no
-> "Fixes" tag is OK, or perhaps you could do the somewhat weak:
-
-Well I remembered when I was developing the support for Pine64
-Pinebook, which is also an ARM64 laptop with an eDP panel (via a DPI-
-eDP bridge, ANX6345). At first I didn't use any panel node in the DT,
-and the kernel maintainers argued to the bridge that seems to be
-connected to nothing (because DP is a discoverable port), and
-fortunately 2 Pinebook SKUs (11.6" and 14") is finally reduced to one,
-and it's then possible to hardcode a panel model in the Pinebook DT.
-According to my memory, the need to specify the panel is to properly
-handle eDP panel power up timing, because it's not a very standard
-thing. (Well, in my memory, when I was testing that code, on a
-(engineering sample) 14" Pinebook, the EDID timing overrided the
-hardcoded 11.6" timing and it properly works, the 14" panel is 1366x768
-but the 11.6" panel is 1920x1080.)
-
-(BTW when I checked the DT of Olimex TERES-I, which uses the same DPI-
-eDP bridge, it is still in the status of a dangling bridge, and of
-course it works ;-) )
-
->=20
-> Fixes: c2d94f72140a ("arm64: dts: mediatek: mt8173-elm: Move display
-> to ps8640 auxiliary bus")
-
-Well this sound quite reasonable, as the kernel should have proper AUX
-support at this commit.
+>
+> The function sk_setup_caps (called by ip6_sk_dst_store_flow->
+> ip6_dst_store) referenced already freed memory as this memory was
+> freed by parallel task in udpv6_sendmsg->ip6_sk_dst_lookup_flow->
+> sk_dst_check.
+>
+>           task1 (connect)              task2 (udp6_sendmsg)
+>         sk_setup_caps->sk_dst_set |
+>                                   |  sk_dst_check->
+>                                   |      sk_dst_set
+>                                   |      dst_release
+>         sk_setup_caps references  |
+>         to already freed dst_entry|
 
 
+>
+> The reason for this race condition is: udp6_sendmsg() calls
+> ip6_sk_dst_lookup() without lock for sock structure and tries to
+> allocate/add dst_entry structure to sock structure in parallel with
+> "connect" task.
+>
+> Found by Linux Verification Center (linuxtesting.org) with syzkaller.
+>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+
+This is a bogus Fixes: tag
+
+In old times, UDP sendmsg() was using the socket lock.
+
+Then, in linux-4.0 Vlad Yasevich made UDP v6 sendmsg() lockless (and
+racy in many points)
+
+
+> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
+> ---
+>  net/ipv6/udp.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+> index e5a337e6b970..a5ecd5d93b0a 100644
+> --- a/net/ipv6/udp.c
+> +++ b/net/ipv6/udp.c
+> @@ -1563,12 +1563,15 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr =
+*msg, size_t len)
+>
+>         fl6->flowlabel =3D ip6_make_flowinfo(ipc6.tclass, fl6->flowlabel)=
+;
+>
+> +       lock_sock(sk);
+>         dst =3D ip6_sk_dst_lookup_flow(sk, fl6, final_p, connected);
+>         if (IS_ERR(dst)) {
+>                 err =3D PTR_ERR(dst);
+>                 dst =3D NULL;
+> +               release_sock(sk);
+>                 goto out;
+>         }
+> +       release_sock(sk);
+>
+>         if (ipc6.hlimit < 0)
+>                 ipc6.hlimit =3D ip6_sk_dst_hoplimit(np, fl6, dst);
+> --
+> 2.34.1
+>
+
+There must be another way really.
+You just killed UDP performance.
