@@ -2,114 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACD07120A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD0A7120A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236743AbjEZHFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 03:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S241985AbjEZHHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 03:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242408AbjEZHFc (ORCPT
+        with ESMTP id S229928AbjEZHHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 03:05:32 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819CE125;
-        Fri, 26 May 2023 00:05:22 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34Q4n43T020009;
-        Fri, 26 May 2023 07:05:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=RfgaJc53Gw9EffbmJccc4ii13aB4E4UfSgZJgAkH2iE=;
- b=CD332KT6uqfpCdqn/A/sLjzzI0nbOCzJNzppPbYWrOnCpelyT7hJ4CCXd0c4VW7mLMHJ
- 5pC1B+yDFezk8EhBDZURWar+kKP7TLfaF/4wFzAjaoo1z6wDyaYfbegXJyBIEKpSp1Yx
- YQOI1rZmbWYEawgh2jHvC/B2nCzLM5bmA508HwH/fBT9F07H+vMmwGpzQ3XrKRlcYFVS
- o0szK1+k+pId9GiTe+50o3oSpaxMYYhAW4mXsVUFGPuTcUKyyDELPdivFtP6jLoxdJJr
- 0CpjSPa3BGuc2XkaJ4PPLb3L0nTclagY/08gFdgj+MsteTjrWQChB+47Kl5xkk+B6d13 Yw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qtncsrbct-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 07:05:18 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34Q75H8T004160
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 07:05:17 GMT
-Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 26 May 2023 00:05:13 -0700
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH 4/4] arm64: dts: qcom: ipq9574: add QFPROM node
-Date:   Fri, 26 May 2023 12:34:21 +0530
-Message-ID: <20230526070421.25406-5-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230526070421.25406-1-quic_kathirav@quicinc.com>
-References: <20230526070421.25406-1-quic_kathirav@quicinc.com>
+        Fri, 26 May 2023 03:07:21 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372E8F7;
+        Fri, 26 May 2023 00:07:19 -0700 (PDT)
+Received: from van1shing-pc.localdomain ([10.12.182.0])
+        (user=silver_code@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 34Q75tik000939-34Q75til000939
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 26 May 2023 15:05:57 +0800
+From:   Wang Zhang <silver_code@hust.edu.cn>
+To:     Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>, Wolfram Sang <wsa@kernel.org>,
+        Andreas Larsson <andreas@gaisler.com>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Wang Zhang <silver_code@hust.edu.cn>,
+        Peter Korsgaard <jacmet@sunsite.dk>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] i2c: ocores: use devm_ managed clks
+Date:   Fri, 26 May 2023 15:05:33 +0800
+Message-Id: <20230526070534.76112-1-silver_code@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <b5c00122-0fe0-4020-9036-e4cc37d1b51a@lunn.ch>
+References: <b5c00122-0fe0-4020-9036-e4cc37d1b51a@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: OcP6KquCzCqYvbJ9vLsvuLbXwN8Xwq0M
-X-Proofpoint-ORIG-GUID: OcP6KquCzCqYvbJ9vLsvuLbXwN8Xwq0M
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 suspectscore=0 impostorscore=0 phishscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 clxscore=1015 bulkscore=0 adultscore=0
- mlxlogscore=823 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305260059
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: silver_code@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPQ9574 has efuse region to determine the various HW quirks. Lets
-add the initial support and the individual fuses will be added as they
-are required.
+Smatch complains that:
+drivers/i2c/busses/i2c-ocores.c:704 ocores_i2c_probe()
+warn: missing unwind goto?
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+If any wrong occurs in ocores_i2c_of_probe, the i2c->clk needs to be
+released. But the function returns directly without freeing the clock.
+
+Fix this by updating the code to use devm_clk_get_optional_enabled()
+instead. Use dev_err_probe() where appropriate as well since we are
+changing those statements.
+
+Fixes: f5f35a92e44a ("i2c: ocores: Add irq support for sparc")
+Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
 ---
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+v3->v4: use `dev_err_probe` to compact the code and add a fixes tag
+v2->v3: use `devm_clk_get_optional_enabled()` to manage clks
+v1->v2: change `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
+---
+ drivers/i2c/busses/i2c-ocores.c | 64 +++++++++++----------------------
+ 1 file changed, 21 insertions(+), 43 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 1a2c813ffd43..715fe51ff567 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -117,6 +117,13 @@
- 		#size-cells = <1>;
- 		ranges = <0 0 0 0xffffffff>;
+diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
+index 2e575856c5cd..e30df2b78fdf 100644
+--- a/drivers/i2c/busses/i2c-ocores.c
++++ b/drivers/i2c/busses/i2c-ocores.c
+@@ -552,28 +552,20 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
+ 							&clock_frequency);
+ 	i2c->bus_clock_khz = 100;
  
-+		qfprom: efuse@a4000 {
-+			compatible = "qcom,ipq9574-qfprom", "qcom,qfprom";
-+			reg = <0x000a4000 0x5a1>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+		};
+-	i2c->clk = devm_clk_get(&pdev->dev, NULL);
+-
+-	if (!IS_ERR(i2c->clk)) {
+-		int ret = clk_prepare_enable(i2c->clk);
+-
+-		if (ret) {
+-			dev_err(&pdev->dev,
+-				"clk_prepare_enable failed: %d\n", ret);
+-			return ret;
+-		}
+-		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
+-		if (clock_frequency_present)
+-			i2c->bus_clock_khz = clock_frequency / 1000;
+-	}
+-
++	i2c->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
++	if (IS_ERR(i2c->clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->clk),
++				     "devm_clk_get_optional_enabled failed\n");
 +
- 		tlmm: pinctrl@1000000 {
- 			compatible = "qcom,ipq9574-tlmm";
- 			reg = <0x01000000 0x300000>;
++	i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
++	if (clock_frequency_present)
++		i2c->bus_clock_khz = clock_frequency / 1000;
+ 	if (i2c->ip_clock_khz == 0) {
+ 		if (of_property_read_u32(np, "opencores,ip-clock-frequency",
+ 						&val)) {
+ 			if (!clock_frequency_present) {
+ 				dev_err(&pdev->dev,
+ 					"Missing required parameter 'opencores,ip-clock-frequency'\n");
+-				clk_disable_unprepare(i2c->clk);
+ 				return -ENODEV;
+ 			}
+ 			i2c->ip_clock_khz = clock_frequency / 1000;
+@@ -678,8 +670,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 		default:
+ 			dev_err(&pdev->dev, "Unsupported I/O width (%d)\n",
+ 				i2c->reg_io_width);
+-			ret = -EINVAL;
+-			goto err_clk;
++			return -EINVAL;
+ 		}
+ 	}
+ 
+@@ -710,13 +701,13 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 						   pdev->name, i2c);
+ 		if (ret) {
+ 			dev_err(&pdev->dev, "Cannot claim IRQ\n");
+-			goto err_clk;
++			return ret;
+ 		}
+ 	}
+ 
+ 	ret = ocores_init(&pdev->dev, i2c);
+ 	if (ret)
+-		goto err_clk;
++		return ret;
+ 
+ 	/* hook up driver to tree */
+ 	platform_set_drvdata(pdev, i2c);
+@@ -728,7 +719,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 	/* add i2c adapter to i2c tree */
+ 	ret = i2c_add_adapter(&i2c->adap);
+ 	if (ret)
+-		goto err_clk;
++		return ret;
+ 
+ 	/* add in known devices to the bus */
+ 	if (pdata) {
+@@ -737,10 +728,6 @@ static int ocores_i2c_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	return 0;
+-
+-err_clk:
+-	clk_disable_unprepare(i2c->clk);
+-	return ret;
+ }
+ 
+ static int ocores_i2c_remove(struct platform_device *pdev)
+@@ -755,9 +742,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
+ 	/* remove adapter & data */
+ 	i2c_del_adapter(&i2c->adap);
+ 
+-	if (!IS_ERR(i2c->clk))
+-		clk_disable_unprepare(i2c->clk);
+-
+ 	return 0;
+ }
+ 
+@@ -771,28 +755,22 @@ static int ocores_i2c_suspend(struct device *dev)
+ 	ctrl &= ~(OCI2C_CTRL_EN | OCI2C_CTRL_IEN);
+ 	oc_setreg(i2c, OCI2C_CONTROL, ctrl);
+ 
+-	if (!IS_ERR(i2c->clk))
+-		clk_disable_unprepare(i2c->clk);
++	clk_disable_unprepare(i2c->clk);
+ 	return 0;
+ }
+ 
+ static int ocores_i2c_resume(struct device *dev)
+ {
+ 	struct ocores_i2c *i2c = dev_get_drvdata(dev);
++	unsigned long rate;
++	int ret;
+ 
+-	if (!IS_ERR(i2c->clk)) {
+-		unsigned long rate;
+-		int ret = clk_prepare_enable(i2c->clk);
+-
+-		if (ret) {
+-			dev_err(dev,
+-				"clk_prepare_enable failed: %d\n", ret);
+-			return ret;
+-		}
+-		rate = clk_get_rate(i2c->clk) / 1000;
+-		if (rate)
+-			i2c->ip_clock_khz = rate;
+-	}
++	ret = clk_prepare_enable(i2c->clk);
++	if (ret)
++		return dev_err_probe(dev, ret, "clk_prepare_enable failed\n");
++	rate = clk_get_rate(i2c->clk) / 1000;
++	if (rate)
++		i2c->ip_clock_khz = rate;
+ 	return ocores_init(dev, i2c);
+ }
+ 
 -- 
-2.17.1
+2.34.1
 
