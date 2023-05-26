@@ -2,139 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD92712272
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12D571227A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236721AbjEZImu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
+        id S242555AbjEZInQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242271AbjEZImq (ORCPT
+        with ESMTP id S236168AbjEZInN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:42:46 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A3399
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:42:45 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BBF7E6606E87;
-        Fri, 26 May 2023 09:42:43 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685090564;
-        bh=BNXanvyep5uBi6HyQ6HtMJheZQ49LWV8bcssg3dk5Ok=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=monxsZb1jFoOfAva4Maz69K5HYQAK5M2i3PjAjre83bOc3jlL/vQBm/0OgDIZO7aV
-         uQcpW8/4KFqp06+S2hSO2lJpiAC+T5i06BOBWZTEAqkJt1ddf+a9SHpKwm1C0aePs8
-         FUEE5r2Z1qiRx/IulDxmqFkiGT5uT270F9euJHJewsnkx3GjZQA4oa1rNrrAjDn4tU
-         +QXwFSj3adBl7PBJQ7CGxDs+67OTfceKMr5jAb/W/1E6MZYpKjpQKfUOmSh4uLsp5Z
-         uBkZvzzlwEggr0P2xzyKsQByKDBoJTLdDc0VZBfX+t2aHu/l/7Elhzzy+KV/jIIVJc
-         oOv/81XHyDxyw==
-Message-ID: <52dc6b40-9676-6e6c-de5c-5fad40e432ab@collabora.com>
-Date:   Fri, 26 May 2023 10:42:41 +0200
+        Fri, 26 May 2023 04:43:13 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D4EE53
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:43:02 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f1411e8111so502662e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:43:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685090580; x=1687682580;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H5Kfhw+9CaJ0j/V6VRJ6bWfGNa0fy6gbb/Nv+Rehbro=;
+        b=lufWUASwRJoazthcTBLZC58sQdGPlHgAgHDTZyFwkiCwme590hANNyz8Alj9AaFKc/
+         +ABWkshV5xjFIP/C1OgDN6Q7DK6C2IbTehKPs7RatOW86oE41rms68c03eHPnPdQbuMp
+         b5zDP5j2VTrOPR+n+1l+wWAF3tLoOvFUqa0jUq1vedAsawwr7K++gubmcIfFo5hi1Vu9
+         2+ngUvCPQQscshVJS5rIWJXY5XCSQjEuSwj6zgo7sEQshInWOSS9Ja7dfaaPNhuR7m+k
+         ePs5J/OuB7A8jCz9JXA/AL+UpWop2v2FHExkIuAXFTOGM2ag/Pph1smxCz9rlXCd6MC4
+         uP+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685090580; x=1687682580;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H5Kfhw+9CaJ0j/V6VRJ6bWfGNa0fy6gbb/Nv+Rehbro=;
+        b=HcMiKPm6pIvjpOiY2v7B342wIs447UyEzeDAc37XlKbW+bSrF+MRH9kthvASttME/o
+         VhMQgOmuMa6ciYn5ohFVVq10Pv3MV9H2RB+xwQFw7pz0EhS52p765hlNZAN3Xsw6s82c
+         9pSahJTJSp8cc+kF9LWnVCbSb8JmwQp7iKDZfQwHWrs5Dh2Hfr1WUNCUbhdRd+IQD50l
+         HABZFyj73rIpFaxSQTrimgS1++LQmSKW5fJSN8QBSSGYXEmg6ECwAjhmJFkj2xP67czp
+         swlWZTO70UT5P8nEZ+ibAqodZixAoYYWBZuFHl3IRFMuufb+1+MJ2XMVGX1/j2SN2+hO
+         4Q7A==
+X-Gm-Message-State: AC+VfDz7sxEclLCJghNh+LeLQgDUmbtADGrw62A4h5cnw8eJFIbNOPu7
+        B27cXLQgeIpAhkUgWR3awjFRf4LbojbLyIUrtMQ=
+X-Google-Smtp-Source: ACHHUZ5QjAdqKQi45/6vwRz5lVDs1bwVz+ievEd0FHtpAv1KWZ8vWv4hA6/3H4ST0UD1AC8IfMEv1Q==
+X-Received: by 2002:a2e:84c1:0:b0:2ac:8a05:b2c7 with SMTP id q1-20020a2e84c1000000b002ac8a05b2c7mr469389ljh.7.1685090580528;
+        Fri, 26 May 2023 01:43:00 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id t4-20020a2e9c44000000b002ad99aa3fa8sm617332ljj.13.2023.05.26.01.42.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 01:43:00 -0700 (PDT)
+Message-ID: <ed1f3496-184c-c9e1-8c46-1602d35effde@linaro.org>
+Date:   Fri, 26 May 2023 10:42:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 06/11] drm/mediatek: gamma: Use bitfield macros
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 3/5] soc: qcom: smem: introduce qcom_smem_get_soc_id()
 Content-Language: en-US
-To:     =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
-References: <20230518104857.124265-1-angelogioacchino.delregno@collabora.com>
- <20230518104857.124265-7-angelogioacchino.delregno@collabora.com>
- <069cbd4c325949e4662cec2d8547b6fcd111faf6.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <069cbd4c325949e4662cec2d8547b6fcd111faf6.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, ansuelsmth@gmail.com
+References: <20230525210214.78235-1-robimarko@gmail.com>
+ <20230525210214.78235-3-robimarko@gmail.com>
+ <a196330e-9d70-1bbd-6fae-7d60eb06e478@linaro.org>
+ <20230526023325.y7iqygmbtjmbf4zo@ripper>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230526023325.y7iqygmbtjmbf4zo@ripper>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/05/23 07:32, CK Hu (胡俊光) ha scritto:
-> Hi, Angelo:
+
+
+On 26.05.2023 04:33, Bjorn Andersson wrote:
+> On Fri, May 26, 2023 at 01:18:17AM +0200, Konrad Dybcio wrote:
+>>
+>>
+>> On 25.05.2023 23:02, Robert Marko wrote:
+>>> Introduce a helper to return the SoC SMEM ID, which is used to identify the
+>>> exact SoC model as there may be differences in the same SoC family.
+>>>
+>>> Currently, cpufreq-nvmem does this completely in the driver and there has
+>>> been more interest expresed for other drivers to use this information so
+>>> lets expose a common helper to prevent redoing it in individual drivers
+>>> since this field is present on every SMEM table version.
+>>>
+>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>>> ---
+>>> Changes in v4:
+>>> * Change helper name to qcom_smem_get_soc_id()
+>>> * Remove len and just pass NULL, that is sufficient here
+>>>
+>>> Changes in v3:
+>>> * Change export to EXPORT_SYMBOL_GPL
+>>> * Use an argument for returning SoC ID
+>>> * Update kerneldoc
+>>> ---
+>>>  drivers/soc/qcom/smem.c       | 23 +++++++++++++++++++++++
+>>>  include/linux/soc/qcom/smem.h |  2 ++
+>>>  2 files changed, 25 insertions(+)
+>>>
+>>> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+>>> index bc98520c4969..78cf79ea4924 100644
+>>> --- a/drivers/soc/qcom/smem.c
+>>> +++ b/drivers/soc/qcom/smem.c
+>>> @@ -14,6 +14,7 @@
+>>>  #include <linux/sizes.h>
+>>>  #include <linux/slab.h>
+>>>  #include <linux/soc/qcom/smem.h>
+>>> +#include <linux/soc/qcom/socinfo.h>
+>>>  
+>>>  /*
+>>>   * The Qualcomm shared memory system is a allocate only heap structure that
+>>> @@ -772,6 +773,28 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(qcom_smem_virt_to_phys);
+>>>  
+>>> +/**
+>>> + * qcom_smem_get_soc_id() - return the SoC ID
+>>> + * @id:	On success, we return the SoC ID here.
+>>> + *
+>>> + * Look up SoC ID from HW/SW build ID and return it.
+>>> + *
+>>> + * Return: 0 on success, negative errno on failure.
+>>> + */
+>>> +int qcom_smem_get_soc_id(u32 *id)
+>> __le32 *id
+>>
 > 
-> On Thu, 2023-05-18 at 12:48 +0200, AngeloGioacchino Del Regno wrote:
->> External email : Please do not click links or open attachments until
->> you have verified the sender or the content.
->>
->>
->> Make the code more robust and improve readability by using bitfield
->> macros instead of open coding bit operations.
->> While at it, also add a definition for LUT_BITS_DEFAULT.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <
->> angelogioacchino.delregno@collabora.com>
->> Reviewed-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
->> ---
->>   drivers/gpu/drm/mediatek/mtk_disp_gamma.c | 41 ++++++++++++++-------
->> --
->>   1 file changed, 26 insertions(+), 15 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
->> b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
->> index 1592614b6de7..ed2aa1fb0171 100644
->> --- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
->> +++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
->> @@ -3,6 +3,7 @@
->>    * Copyright (c) 2021 MediaTek Inc.
->>    */
->>
->> +#include <linux/bitfield.h>
->>   #include <linux/clk.h>
->>   #include <linux/component.h>
->>   #include <linux/module.h>
->> @@ -22,9 +23,16 @@
->>   #define GAMMA_LUT_EN                                   BIT(1)
->>   #define
->> GAMMA_DITHERING                                        BIT(2)
->>   #define DISP_GAMMA_SIZE                                0x0030
->> +#define DISP_GAMMA_SIZE_HSIZE                          GENMASK(28,
->> 16)
->> +#define DISP_GAMMA_SIZE_VSIZE                          GENMASK(12,
->> 0)
->>   #define DISP_GAMMA_LUT                         0x0700
->>
->> +#define DISP_GAMMA_LUT_10BIT_R                 GENMASK(29, 20)
->> +#define DISP_GAMMA_LUT_10BIT_G                 GENMASK(19, 10)
->> +#define DISP_GAMMA_LUT_10BIT_B                 GENMASK(9, 0)
->> +
->>   #define LUT_10BIT_MASK                         0x03ff
->> +#define LUT_BITS_DEFAULT                       10
+> Why do you want this passed back to the user in little endian? When is
+> it not going to be compared to a cpu-endian constant?
+Ugh. You're right. This makes no sense.
+
+Konrad
 > 
-> This is used only for AAL after patch "drm/mediatek: gamma: Support
-> specifying number of bits per LUT component", so I would like move AAL
-> definition to AAL driver and pass it to gamma driver.
+>> LGTM otherwise!
+>>
+>> Konrad
+>>> +{
+>>> +	struct socinfo *info;
+>>> +
+>>> +	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, NULL);
+>>> +	if (IS_ERR(info))
+>>> +		return PTR_ERR(info);
+>>> +
+>>> +	*id = info->id;
 > 
-
-Like LUT_SIZE_DEFAULT, this definition is not only for AAL but also for
-the older gamma lut register layout.
-
-In any case, I'll check if there's any clean way to pass AAL's gamma
-size to this driver... it's a different "component", so this may get
-complicated.
-
-Let's see what I can come up with in v5...
-
-Thanks,
-Angelo
-
+> This should be __le32_to_cpu() though...
+> 
+> Regards,
+> Bjorn
+> 
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(qcom_smem_get_soc_id);
+>>> +
+>>>  static int qcom_smem_get_sbl_version(struct qcom_smem *smem)
+>>>  {
+>>>  	struct smem_header *header;
+>>> diff --git a/include/linux/soc/qcom/smem.h b/include/linux/soc/qcom/smem.h
+>>> index 86e1b358688a..223db6a9c733 100644
+>>> --- a/include/linux/soc/qcom/smem.h
+>>> +++ b/include/linux/soc/qcom/smem.h
+>>> @@ -11,4 +11,6 @@ int qcom_smem_get_free_space(unsigned host);
+>>>  
+>>>  phys_addr_t qcom_smem_virt_to_phys(void *p);
+>>>  
+>>> +int qcom_smem_get_soc_id(u32 *id);
+>>> +
+>>>  #endif
