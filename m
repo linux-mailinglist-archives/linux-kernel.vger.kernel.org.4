@@ -2,108 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DAA712D60
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91288712DDD
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjEZT0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S237100AbjEZTsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjEZT0d (ORCPT
+        with ESMTP id S230431AbjEZTsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:26:33 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E53E51
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:26:03 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30a8fa6e6fcso728876f8f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685129158; x=1687721158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+6DrHgCFY4VauCddEqvyJr/ELyZNf9sKAZHK7/qr+50=;
-        b=1fZcXW8cRHgMnWT4prXi7NLHFSMIWcDDBhXNjf7n46YyigPwVGzHTUB7Q4//p4Z1sB
-         wcSXYsG1ZQx2LBQrL/XVzl52+KYHCKN2cxvamiNZ6DfIxlHwnY4NNyQG5X8r8yh6IIyX
-         HO816t2FVu/g86954JmJkH8jFQMglKi5hzQMWj1Ul4Ie1M5ijrPgjLq8OFqrIgLRbVms
-         ikBopAqfYciPsMpVuMsT60IZ01rUm1xwh9F1/pzojr67AF4YIcpMr2KGqEUXJyOk7okj
-         gzIkzltmxldnw2p/PrFBipfW8Mg0to7bpXaXwrFLFCYo7DJAunQFkCfIf54lhaUi9x8c
-         MqeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685129158; x=1687721158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+6DrHgCFY4VauCddEqvyJr/ELyZNf9sKAZHK7/qr+50=;
-        b=C84J+Q6joZCz5Zbqa0+eDkCuP/AaRTxar4w7NNg2QBjnq+X6Zi1anUoHTlnHWfp0SZ
-         6din8zrv2UCIQuk66YhQYsTxtK/TTBDhuLDLL5PJpvoCRAfBuo/QTe6CMfCZYAPFX6h3
-         oF6Cy/gtTt2SBIHIg8ME2HWe90BzPwWEc1+3/f2ZQQPje/6U31Q50bIQTsSfRacgyjOU
-         mRjHdUrfREtFPX5n9AFZNYN5t8pw4jd01rn5XpxBXG3yJDLf0kGtVwAJwjVFblC3Bmeq
-         ry+fs3LYXRkaAgxoHao4v4HHxPfMpIw8zKHkdrVMFxUsG7vmnJSQfvTBumzf7TZmAoVJ
-         x0Sw==
-X-Gm-Message-State: AC+VfDxF33A7hKYlc/Do11eZWRCXWVauvZ8sTeWh1fRlUOhHyFSC+SnQ
-        egViL7hmGuXs+FnVW6eYtjIWOy+qnM6WLwXgIxP/4g==
-X-Google-Smtp-Source: ACHHUZ5RJ764F8x+H8Zvoem2nWjpzLlLe+acRLbm26xAm7v5HFVz+63/Y72Q6TjAzd/VFGDYJNLxOX+4DTC0ekA3sDw=
-X-Received: by 2002:adf:cd8e:0:b0:309:4620:e155 with SMTP id
- q14-20020adfcd8e000000b003094620e155mr2075261wrj.49.1685129157886; Fri, 26
- May 2023 12:25:57 -0700 (PDT)
+        Fri, 26 May 2023 15:48:37 -0400
+Received: from mcarnes.com.br (mx01.mcarnes.com.br [143.255.12.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67888B6
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:48:35 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mcarnes.com.br (Postfix) with ESMTP id BA26943D6572
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:25:38 -0300 (-03)
+Received: from mcarnes.com.br ([127.0.0.1])
+        by localhost (mcarnes.com.br [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id q6o2TMr7ak2W for <linux-kernel@vger.kernel.org>;
+        Fri, 26 May 2023 16:25:38 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by mcarnes.com.br (Postfix) with ESMTP id 2FEC743B3E44
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:25:38 -0300 (-03)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mcarnes.com.br 2FEC743B3E44
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mcarnes.com.br;
+        s=57560CA4-14EE-11ED-BE35-8FFAC263C415; t=1685129138;
+        bh=diWNn7p0TKlEirbLy6B4RNRI9lY4V0b+Ulc0eN/p0Iw=;
+        h=From:To:Date:Message-ID:MIME-Version;
+        b=BqeuOTu5kRM2HKTM/62pyXvBat50qJ7ABx4/TF7mgMlv+uVyrpW9R8PVQTBpW0bBe
+         DY/Y/0tqrilGPMRuTEEOy9VLFI7hs2tH7fSqhj1UQS0JklZoW9ihmTw0tyCXxYPEpq
+         DD+RkPhIrwiPePnZ34bUxiMrVhUXK1clt1E6eInrMOkujuFWVO2hUJzhOO8I1LRe6W
+         uyh5vKBjAo8xHFWKwIr/1ojOxXF6OF3pTwV4N8fsFgQ2gijUa/31qEPItSt785gyja
+         vcbz24xvd+g4np+iYO3hiQolCs4XNLUfaUHfD75K5ZTEXXBluM7fnx77OrHVTR3GD9
+         8AYtHKr1lStnA==
+X-Virus-Scanned: amavisd-new at mcarnes.com.br
+Received: from mcarnes.com.br ([127.0.0.1])
+        by localhost (mcarnes.com.br [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id TUx-A95zygQ1 for <linux-kernel@vger.kernel.org>;
+        Fri, 26 May 2023 16:25:38 -0300 (-03)
+Received: from [93.95.27.154] (unknown [93.95.27.154])
+        by mcarnes.com.br (Postfix) with ESMTPSA id 4FC3C436B790
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:25:37 -0300 (-03)
+Reply-To: bahrainorganization@gmail.com
+From:   katia@mcarnes.com.br
+To:     linux-kernel@vger.kernel.org
+Subject: Hello
+Date:   26 May 2023 12:25:33 -0700
+Message-ID: <20230526020042.2DCB9F536AABC3F6@mcarnes.com.br>
 MIME-Version: 1.0
-References: <20230525173818.219633-1-royluo@google.com> <2023052600-survey-fondness-27ce@gregkh>
- <CA+zupgzTe7pVhByLPVr4tn-94kCMZbzNHxf_iVyTa3qi6bzvAQ@mail.gmail.com> <2023052619-morbidly-expediter-ab80@gregkh>
-In-Reply-To: <2023052619-morbidly-expediter-ab80@gregkh>
-From:   Roy Luo <royluo@google.com>
-Date:   Fri, 26 May 2023 12:25:21 -0700
-Message-ID: <CA+zupgztYNMHLw1zZbzMw4KLtmSf7hUNZN_4-jsmFGPHU=3bDg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] usb: core: add sysfs entry for usb device state
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     raychi@google.com, badhri@google.com,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bastien Nocera <hadess@hadess.net>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Douglas Anderson <dianders@chromium.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=6.7 required=5.0 tests=ADVANCE_FEE_4_NEW,BAYES_50,
+        DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,
+        RCVD_IN_BL_SPAMCOP_NET,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: mcarnes.com.br]
+        *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?143.255.12.239>]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  2.3 ADVANCE_FEE_4_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 11:47=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, May 26, 2023 at 11:34:44AM -0700, Roy Luo wrote:
-> > > Also, what userspace code is now calling poll() on your new sysfs fil=
-e?
-> > >
-> >
-> > We are looking at adding the code to the generic userspace components
-> > if not hardware abstraction layer in the userspace.
->
-> I can not parse this at all, sorry.  Care to rephrase it and point to
-> some real source code?
->
-> thanks,
->
-> greg k-h
-
-I meant the userspace part is still in development and it largely depends o=
-n
-how the kernel part plays out. Hence I'm trying to get early feedback here.
-The use cases we're aiming at are described in the commit message, is
-there anything specific you're looking for in the userspace code? I'm happy
-to answer questions you might have.
-
-Thanks,
-Roy
+We are thrilled to inform you that you have won the grand prize=20
+in our latest donation drawing! Congratulations!
+Your ticket number [B912023-949] was selected as the lucky=20
+winner, and you are now entitled to the grand prize ! We know=20
+this will be a life-changing event for you, and we are equally=20
+excited to share in your joy.
+To claim your prize, please contact our customer service team=20
+within the next 7 working days. They will guide you through the=20
+process of claiming your prize, including the necessary paperwork=20
+and identification requirements.
+We look forward to hearing from you soon and once again,=20
+congratulations on your win!
+Best regards,
+Alvin Louis
+BAHRAIN GROUP
