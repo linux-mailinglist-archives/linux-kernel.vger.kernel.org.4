@@ -2,203 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289497122B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82897122B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242749AbjEZIwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
+        id S242592AbjEZIwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242817AbjEZIwo (ORCPT
+        with ESMTP id S229648AbjEZIwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:52:44 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2100.outbound.protection.outlook.com [40.107.94.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABEA12A;
-        Fri, 26 May 2023 01:52:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A6m2MHA9FG9YxXlVh1Oowqbnzvw6XtEpezjkVg4QksCHwQeC/KdrW9dM9Hv8Lj0xWkmvRtguhoHC2fQB5AqYsQd3UTZ09Wn2RVCjmUIWJ1mTOdP2Q/HOa3EqeISRqKzASKV7v0y7D1/nqby0wY3W4NITb8Y1xnJ2DmdHZCqahW21PEXCx2LTgfofKnHxgzYV06KxkZ3iV0xtybzlDBC2msRXzawVe1Zu44/BxgyTrK2HtOoI7ZGXrh4zQOuQa2rrPX2qlflzJ3oAViblUWsRq7EcIWcrA1CRr8s3o2yph0f1WZubA4X+3YCAExl3P7ExsAXyT2jLl3SLWBT6thFKWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nMQuDtDqYpSzHXM4fx/7xpuy58MBJ5bWGAyujrJwIn8=;
- b=adxEi1X8py/CEsQIk+7MpeXQ9ZHH433VXM5KdOUzoCakOxQr5MiAJA4dBkYsTVWpx5eiEunnFB3UAOQAnapGAMUnO+lBkIPBp3ZYXUhXrzZv+YaTVxcAmOqx+5ERlxA90Bmvtq8DDsg1+E4/ceHPfYOA14wQw47ixAfXD5kHssBHVqkdYNamXhOWCA1HyKyNTDt3Q9oCW47UPpCs3Od170txlwFUd0njrslfFkH9hQ/6raMOdgtW4ra7rw+fGKwnJXDcyuKlhbndKcXsCFYr2z8OjejXTUlC2rjIW+JUBTht+lQEAUZIpYYYWFyOrn3CUpzuG0DkjkWcwWmSo85ZBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 26 May 2023 04:52:34 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E45699
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:52:32 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b0160c7512so1523925ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:52:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nMQuDtDqYpSzHXM4fx/7xpuy58MBJ5bWGAyujrJwIn8=;
- b=rZBEbCYgl1uHFntWgDgdeByQPr6bwedWIEka2u3/ueSUIfV0SC8JSJuR+YuTXAuX1gDrOrRwOMrMMZhUGAkgVMOaCVw93LwJGzrb+xZbypCwpOm/aaNZOYA4HtYkujWbvZztEEoE2LU4t7b+9O9Jz/F9hNMcG1Ll7nFy1s4Bz80=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CO1PR13MB4808.namprd13.prod.outlook.com (2603:10b6:303:d9::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.17; Fri, 26 May
- 2023 08:52:37 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.017; Fri, 26 May 2023
- 08:52:37 +0000
-Date:   Fri, 26 May 2023 10:52:17 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Mark Brown <broonie@kernel.org>, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Subject: Re: [PATCH net-next v3 4/4] net: stmmac: dwmac-sogfpga: use the lynx
- pcs driver
-Message-ID: <ZHBzQaWi5oskThI2@corigine.com>
-References: <20230526074252.480200-1-maxime.chevallier@bootlin.com>
- <20230526074252.480200-5-maxime.chevallier@bootlin.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526074252.480200-5-maxime.chevallier@bootlin.com>
-X-ClientProxiedBy: AM0PR07CA0014.eurprd07.prod.outlook.com
- (2603:10a6:208:ac::27) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20221208; t=1685091152; x=1687683152;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=myThaSogk232yycDyen+b2SvG/3hJJTWj1TLCB46r9k=;
+        b=XRCWHtL5xyfIAKN4c78XkWLSyaWYWc0fNFshtIprx6S/mTeyG9+tVUGLvVIXghEPtr
+         3Ge+Y/SAGlcW7MbcfFnd6hwc0b8Z/rxyhG6tp05fSnUhvUPI59jHU5pnietfo8aRiWOE
+         cxWiTom8W+Z6UfedExFntI6t3yXGxYp77coEpCBAtCR7pPGKDuMANvkSHRICVu0oekRk
+         mWKTMz2hrzOXKYwXj31sf5BLyyxBOicdJFIzPBuhl8hpG0BUuYOscFB+UyJnUcbzg9eT
+         dymmwp48UxFojv5RpbpSvbcary5Yj4vRSANIh9y0B84quGpV0ZQAvoMkWwJiFrHodRjM
+         KgLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685091152; x=1687683152;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=myThaSogk232yycDyen+b2SvG/3hJJTWj1TLCB46r9k=;
+        b=gYnOO2OHfKcVMy7rUPa3OoC4+9YIMz3uAGz43zAYsy06T3IJoLqxw65eYTHmpT7tvc
+         eqZt9hnq8jcWHk+2FU+y+27L5jLg3y8vwrZWCewsNDoNdzMVO9hzw18GYrcEktw7psyA
+         vidH+yhOWs9pgD4X6TTlZxxemFhEXwjjuKmGArtSehpKrhjZclzh7K/iRxmE1xdKMoXC
+         UKe2kIpM9xgRbDV4OAySFNjXSC0sfGJk1l3UtVdlmVAQ/e8aFvnS8GvRVrhAiA+CDEgF
+         s48bIV8J1NOM+zNepCmQfC5hCJgpdjClHpR9/PwIc/+uh3F9Z51HRX3ZDfnovtryzPKg
+         OvUA==
+X-Gm-Message-State: AC+VfDxeOkYyBKuVwCoeSh/l7SJJnz40iQ8d1gy/juBI39CPNqG2P8vq
+        JDBsaeRbjKYe3QvlnUoIk8OcV8tt5BpgZZky+So=
+X-Google-Smtp-Source: ACHHUZ4+Acw0hQayR5iTaOexay2YkWvNk++DbCP1PhU5ELVlYtMT0MvzoTlfbv1hblWzvc2Nkv1MlUlskbp+rLX+XYU=
+X-Received: by 2002:a17:90a:394a:b0:255:6133:f561 with SMTP id
+ n10-20020a17090a394a00b002556133f561mr1635780pjf.10.1685091151411; Fri, 26
+ May 2023 01:52:31 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4808:EE_
-X-MS-Office365-Filtering-Correlation-Id: f829a2c1-a407-430a-3543-08db5dc68df1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w82s1LEN1uj/K/1drRPsSgl1tv5aNRBHV9gDNt33gEq19iqOAeBr0X6KL4nfuY4LKBsJZ9lXdzOq2KqdPoh3lJ34DixUQ/62v8gh1tILzbdJFPLVyTq2ceD5nmvOCEZTgVo+3lc9Rd+Fisk/6N0tVwNZp3UUCFASxAPGgffBgKVsjky+qf3/PkaLrad80MLNSlam1nAk9dhaLTxFnBBqagtiFxQh00z2ovgywbdQ3qIdvE7DREGSEVXg8BliLdtEQIRtcdHKJrYtlbWODaxM9EctmlYsSjRBsZ8X+nYlAek57kv7Dbc8xt6UTr3NjU2z/SfyXcQVlIF71UK8Sp1f9quKznIfSuDwsCRCbhuaBXwKYyuIbo4/Hhw5q9V/i//i/zTKx/7WDJaVXZLZldX3TSu79Re3Q+qxqeu5mjNr26YNrfFl8hk7qg7/gcuhQE5OyOcsYIaUOd/HejVP5OaWpwfsRh8MVFGwhOz+HyLwUP6EIV2E3US8Gear1hwW/41+Xf6l4MJJILNstEt5bhYTpigqBv/4Vka53nsR4FgYC1cCLiAoxDjOfcEsZsjGE44B52uqwffqyN5K93V6fl+qzQt0VpCb6gPnzV9KmVtqkyQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(136003)(39840400004)(376002)(451199021)(44832011)(7416002)(2616005)(6486002)(83380400001)(38100700002)(54906003)(478600001)(36756003)(2906002)(86362001)(6512007)(6506007)(6666004)(186003)(8676002)(8936002)(66946007)(4326008)(66476007)(66556008)(6916009)(41300700001)(316002)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6hsvvPuNnA26Z26uHGLUIVrTbnjlsYcnHiWMp7qeODOMaDkRk4vg6MH5HDbL?=
- =?us-ascii?Q?ozPuvzsBGWVNlGOjSW+YXICl7MtjBqnmrsf4silYTJsgcVVKylz0MaUyOImO?=
- =?us-ascii?Q?L8b8xKic0WMMSvf1jErPOj96gZubOSOSdNdy6Jnj5WwfosFEYr3l3AUa544e?=
- =?us-ascii?Q?u5qnXhi28ypVccBzXW3K4mSy4Ll0gRInEo+kK3aRkplb9NgWVDbDeL0cz/30?=
- =?us-ascii?Q?8q3pGw0nDzy5aDywC4Ey0V4V96LZWbTUBYwYfWPuSxkMf3UAMyVzvRm1d+H+?=
- =?us-ascii?Q?hHMO8s2AShIms/Qiqf+C3/1byIibiiXgwlqf3gMvnP3t3s6F8wrohu0u5PqX?=
- =?us-ascii?Q?OhyrWy5wWcgEabzEES+WV3XU23dtUesAf+1rqzgEvpIf+oP1n+MyLZFLZ891?=
- =?us-ascii?Q?73nhw0lFVNrdHCTeBhUMVlQ6eCWGQpwnAIRpLSbN1rKU3OHVrzXrrIWfKUdd?=
- =?us-ascii?Q?EkYYIKG5mWT1ixXRxqRAaAu+X4DKw4Ngay1XhkyCfWh/36aZU1R9E6+ssy1d?=
- =?us-ascii?Q?DYGJKzwA1y7TYnScYgTGEEmwgW1apyf0GtXnMRPao90zZUqhONpWUiqf0zOE?=
- =?us-ascii?Q?iM4WTwIP7lTKGtOPVo/7rVVKl9ky+CpKNwYL9eIlCwxnL/ECRrwaU1mWMQWh?=
- =?us-ascii?Q?/oTTLXkIU7sxylJqKeWxwb3HpFU7drIlzTFxZ7tn98lBolBLjqwThjz3+nhc?=
- =?us-ascii?Q?bCUn09PT+wVuHah/EaIxM5VckmzAlcIz2q0C/ekzSvBepaLOJoCPAYy3wT3n?=
- =?us-ascii?Q?O8GAJwBSiqeV/qBN1aE9hQ3V1rEysMQOQzONA19aA5zTTXmPLgNtDREI12EQ?=
- =?us-ascii?Q?FMqco9EBSpYWjp9cyM7iK+Yrxl0PlLbGNVCFHoSRO4/MIZtD1GMlPeUgS8Yq?=
- =?us-ascii?Q?5qpsQ2JFkTgBLakPvNYS3qK0MOul2Rei4XZxO2Is5k78m4dJ7S1p8cbR16gt?=
- =?us-ascii?Q?+1xmtQU/T0XsBQ5K35sqLQ/kbiemNExX9y/+xxbgleCTIIEbYjSjZ3X7Mn+0?=
- =?us-ascii?Q?CUFVY8iVXT1mFnxds0e5rnnEzOJ1TWyCT5HDT/73h38iT+BK/7AatKh+To4k?=
- =?us-ascii?Q?tVkYs+aa+IE7HsQ3psLWgIbmN9b+N6zK3dMa17+QkgoQHkKdJLZQNhEC1b23?=
- =?us-ascii?Q?U/T8CWoRlfSbKwG7p6IRZxKZvIdasoFVwId0z33gq9SwJBgY2A2uAJKtqQAN?=
- =?us-ascii?Q?ALVbd5BBmIHBOjpcaOWvG5izzH/9Tm6c4oDXMi0YvVr7QfH0qXhBRhOWuYdv?=
- =?us-ascii?Q?4M2SxLS/1CBWGVbfbCU80Jfsqh6ivME8pzH4jw656F2iLCBD4ZB9VRb2yG6v?=
- =?us-ascii?Q?X5FGn/hHTR4k2lFc8Xz2zxyhhGou78q22YeqKVSsx6jOCFJEygI0lNognL+S?=
- =?us-ascii?Q?rK+cQ9CK/sC9A8nfmyZCdlWQCqhlNfbm+ILjyLqAeXOlwE7VLOy+on3iSFvw?=
- =?us-ascii?Q?uSN93sb4/iGftmG7hiuKcVoIjlvckGp9jVTkSq3Lcc+c2q7OEeV9ubYp5GSN?=
- =?us-ascii?Q?tbaWNpnRhpwiKhmoC3aPbde7FCMifUHS0kv5TinyQ1/ENXIhTnjRmY5iztrP?=
- =?us-ascii?Q?Qhfv+APaVnjTEQEVjcVKLb2fxyJtvYxgfNTxV4iLfwFY4OgCCN++XkRH9a2l?=
- =?us-ascii?Q?Qd6G73L9XT8OlnRBemUo3mN/R8MZvkYlob3YISxeLC2k148xr6AI4aNp7iIx?=
- =?us-ascii?Q?n2iykg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f829a2c1-a407-430a-3543-08db5dc68df1
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 08:52:37.0620
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: klRf8QjjLfvsNzqr2A+NS8PhMTtbQUeuoqU6xA/VqiHMtkz6dVNi41q/J2E8hO83FPA6YzkzczC+HruJ6sEjfs6QHy+9Nyf7jtZyc2xjK+c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4808
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230524065051.6328-1-cerasuolodomenico@gmail.com>
+ <CAJD7tkY0j4xzstf=OCX-k-mujzbXf_nt=H4F5JCZNZ8N1iEEcg@mail.gmail.com>
+ <CA+CLi1gzVop3=kmARn09NKKh6yW=bt9KYrzc0AfXB64J0r-9Ew@mail.gmail.com> <CAJD7tkaJAPhHVwepUeiAmSwomNmUKiYUR2gixsvLwHxB6k7UZA@mail.gmail.com>
+In-Reply-To: <CAJD7tkaJAPhHVwepUeiAmSwomNmUKiYUR2gixsvLwHxB6k7UZA@mail.gmail.com>
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Date:   Fri, 26 May 2023 10:52:20 +0200
+Message-ID: <CA+CLi1i02o+ZzWEgK-U=wftqQ9DgijZWUnEAeGNAZ17SeBh9ig@mail.gmail.com>
+Subject: Re: [PATCH] mm: zswap: shrink until can accept
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        hannes@cmpxchg.org, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 09:42:52AM +0200, Maxime Chevallier wrote:
-> dwmac_socfpga re-implements support for the TSE PCS, which is identical
-> to the already existing TSE PCS, which in turn is the same as the Lynx
-> PCS. Drop the existing TSE re-implemenation and use the Lynx PCS
-> instead, relying on the regmap-mdio driver to translate MDIO accesses
-> into mmio accesses.
-> 
-> Instead of extending xpcs, allow using a generic phylink_pcs, populated
-> by lynx_pcs_create(), and use .mac_select_pcs() to return the relevant
-> PCS to be used.
-> 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> ---
-> V2->V3 : No changes
-> V1->V2 : No changes
-> 
->  drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
->  drivers/net/ethernet/stmicro/stmmac/Makefile  |   2 +-
->  .../ethernet/stmicro/stmmac/altr_tse_pcs.c    | 257 ------------------
->  .../ethernet/stmicro/stmmac/altr_tse_pcs.h    |  29 --
->  drivers/net/ethernet/stmicro/stmmac/common.h  |   1 +
->  .../ethernet/stmicro/stmmac/dwmac-socfpga.c   |  90 ++++--
->  .../net/ethernet/stmicro/stmmac/stmmac_main.c |  12 +-
->  7 files changed, 76 insertions(+), 316 deletions(-)
+On Thu, May 25, 2023 at 9:10=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com>=
+ wrote:
+>
+> On Thu, May 25, 2023 at 9:53=E2=80=AFAM Domenico Cerasuolo
+> <cerasuolodomenico@gmail.com> wrote:
+> >
+> > On Thu, May 25, 2023 at 2:59=E2=80=AFAM Yosry Ahmed <yosryahmed@google.=
+com> wrote:
+> > >
+> > > Hi Domenico,
+> > >
+> > > On Tue, May 23, 2023 at 11:50=E2=80=AFPM Domenico Cerasuolo
+> > > <cerasuolodomenico@gmail.com> wrote:
+> > > >
+> > > > This update addresses an issue with the zswap reclaim mechanism, wh=
+ich
+> > > > hinders the efficient offloading of cold pages to disk, thereby
+> > > > compromising the preservation of the LRU order and consequently
+> > > > diminishing, if not inverting, its performance benefits.
+> > > >
+> > > > The functioning of the zswap shrink worker was found to be inadequa=
+te,
+> > > > as shown by basic benchmark test. For the test, a kernel build was
+> > > > utilized as a reference, with its memory confined to 1G via a cgrou=
+p and
+> > > > a 5G swap file provided. The results are presented below, these are
+> > > > averages of three runs without the use of zswap:
+> > > >
+> > > > real 46m26s
+> > > > user 35m4s
+> > > > sys 7m37s
+> > > >
+> > > > With zswap (zbud) enabled and max_pool_percent set to 1 (in a 32G
+> > > > system), the results changed to:
+> > > >
+> > > > real 56m4s
+> > > > user 35m13s
+> > > > sys 8m43s
+> > > >
+> > > > written_back_pages: 18
+> > > > reject_reclaim_fail: 0
+> > > > pool_limit_hit:1478
+> > > >
+> > > > Besides the evident regression, one thing to notice from this data =
+is
+> > > > the extremely low number of written_back_pages and pool_limit_hit.
+> > > >
+> > > > The pool_limit_hit counter, which is increased in zswap_frontswap_s=
+tore
+> > > > when zswap is completely full, doesn't account for a particular
+> > > > scenario: once zswap hits his limit, zswap_pool_reached_full is set=
+ to
+> > > > true; with this flag on, zswap_frontswap_store rejects pages if zsw=
+ap is
+> > > > still above the acceptance threshold. Once we include the rejection=
+s due
+> > > > to zswap_pool_reached_full && !zswap_can_accept(), the number goes =
+from
+> > > > 1478 to a significant 21578266.
+> > > >
+> > > > Zswap is stuck in an undesirable state where it rejects pages becau=
+se
+> > > > it's above the acceptance threshold, yet fails to attempt memory
+> > > > reclaimation. This happens because the shrink work is only queued w=
+hen
+> > > > zswap_frontswap_store detects that it's full and the work itself on=
+ly
+> > > > reclaims one page per run.
+> > > >
+> > > > This state results in hot pages getting written directly to disk,
+> > > > while cold ones remain memory, waiting only to be invalidated. The =
+LRU
+> > > > order is completely broken and zswap ends up being just an overhead
+> > > > without providing any benefits.
+> > > >
+> > > > This commit applies 2 changes: a) the shrink worker is set to recla=
+im
+> > > > pages until the acceptance threshold is met and b) the task is also
+> > > > enqueued when zswap is not full but still above the threshold.
+> > > >
+> > > > Testing this suggested update showed much better numbers:
+> > > >
+> > > > real 36m37s
+> > > > user 35m8s
+> > > > sys 9m32s
+> > > >
+> > > > written_back_pages: 10459423
+> > > > reject_reclaim_fail: 12896
+> > > > pool_limit_hit: 75653
+> > >
+> > > Impressive numbers, and great find in general!
+> > >
+> > > I wonder how other workloads benefit/regress from this change.
+> > > Anything else that you happened to run? :)
+> > >
+> > Hi Yosry,
+> >
+> > thanks for the quick feedback!
+> >
+> > Besides stressers, I haven't tested any other actual workload, we don't=
+ have
+> > writeback in production yet so I can't provide any data from there. I w=
+as
+> > wondering what kind of actual workload I could use to test this on my d=
+esktop,
+> > but I couldn't think of anything relevant, I'm open to suggestions thou=
+gh :)
+>
+> Nothing in mind in particular as well. Perhaps others have ideas.
+>
+> > > >
+> > > > Fixes: 45190f01dd40 ("mm/zswap.c: add allocation hysteresis if pool=
+ limit is hit")
+> > > > Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> > > > ---
+> > > >  mm/zswap.c | 10 +++++++---
+> > > >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/mm/zswap.c b/mm/zswap.c
+> > > > index 59da2a415fbb..2ee0775d8213 100644
+> > > > --- a/mm/zswap.c
+> > > > +++ b/mm/zswap.c
+> > > > @@ -587,9 +587,13 @@ static void shrink_worker(struct work_struct *=
+w)
+> > > >  {
+> > > >         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
+> > > >                                                 shrink_work);
+> > > > +       int ret;
+> > > >
+> > > > -       if (zpool_shrink(pool->zpool, 1, NULL))
+> > > > -               zswap_reject_reclaim_fail++;
+> > > > +       do {
+> > > > +               ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> > > > +               if (ret)
+> > > > +                       zswap_reject_reclaim_fail++;
+> > > > +       } while (!zswap_can_accept() && ret !=3D -EINVAL);
+> > >
+> > > One question/comment here about the retry logic.
+> > >
+> > > So I looked through the awfully convoluted writeback code, and there
+> > > are multiple layers, and some of them tend to overwrite the return
+> > > value of the layer underneath :(
+> > >
+> > > For zsmalloc (as an example):
+> > > zpool_shrink()->zs_zpool_shrink()->zs_reclaim_page()->zpool_ops.evict=
+()->zswap_writeback_entry().
+> > >
+> > > First of all, that zpool_ops is an unnecessarily confusing
+> > > indirection, but anyway.
+> > >
+> > > - zswap_writeback_entry() will either return -ENOMEM or -EEXIST on er=
+ror
+> > > - zs_reclaim_page()/zbud_reclaim_page() will return -EINVAL if the lr=
+u
+> > > is empty, and -EAGAIN on other errors.
+> > > - zs_zpool_shrink()/zbud_zpool_shrink() will mostly propagate the
+> > > return value of  zs_reclaim_page()/zbud_reclaim_page().
+> > > - zpool_shrink() will return -EINVAL if the driver does not support
+> > > shrinking, otherwise it will propagate the return value from the
+> > > driver.
+> > >
+> > > So it looks like we will get -EINVAL only if the driver lru is empty
+> > > or the driver does not support writeback, so rightfully we should not
+> > > retry.
+> > >
+> > > If zswap_writeback_entry() returns -EEXIST, it probably means that we
+> > > raced with another task decompressing the page, so rightfully we
+> > > should retry to writeback another page instead.
+> > >
+> > > If zswap_writeback_entry() returns -ENOMEM, it doesn't necessarily
+> > > mean that we couldn't allocate memory (unfortunately), it looks like
+> > > we will return -ENOMEM in other cases as well. Arguably, we can retry
+> > > in all cases, because even if we were actually out of memory, we are
+> > > trying to make an allocation that will eventually free more memory.
+> > >
+> > > In all cases, I think it would be nicer if we retry if ret =3D=3D -EA=
+GAIN
+> > > instead. It is semantically more sane. In this specific case it is
+> > > functionally NOP as zs_reclaim_page()/zbud_reclaim_page() will mostly
+> > > return -EAGAIN anyway, but in case someone tries to use saner errnos
+> > > in the future, this will age better.
+> > Retrying if ret =3D=3D -EAGAIN seems much nicer indeed, will change it.
+> > >
+> > > Also, do we intentionally want to keep retrying forever on failure? D=
+o
+> > > we want to add a max number of retries?
+> > If the drivers guaranteed that zpool_shrink will remove at least an ent=
+ry
+> > from their LRU, the retry wouldn't be needed because the LRU will
+> > eventually be emptied. But this is an assumption on the implementation =
+of
+>
+> I don't think any zpool driver can guarantee to writeback at least one
+> page. It can fail for reasons beyond their control (e.g. cannot
+> allocate a page to decompress to).
+>
+> > the zpool, so yes, we could use a max retries. I think that being a san=
+ity
+> > check, it should overshoot the required number of iterations in order t=
+o
+> > avoid a premature break, what about retrying a max of
+> > zswap_stored_pages times?
+>
+> Why is it just a sanity check? Consider a case where the system is
+> under extreme memory pressure that the drivers cannot allocate pages
+> to decompress to. The drivers would be continuously competing with all
+> other allocations on the machine. I think we should give up at some
+> point. In any case, you changed the zswap_frontswap_store() to goto
+> shrink if !zswap_can_accept(), so next time we try to compress a page
+> to zswap we will invoke try again anyway -- perhaps under better
+> circumstances.
+>
+> I think zswap_stored_pages is too much, keep in mind that it also
+> includes same-filled pages which are not even stored in the zpool
+> drivers. Maybe we should allow a fixed number of failures. If
+> zpool_shrink() is successful, keep going until zswap_can_accept().
+> Otherwise allow a fixed number of failures before giving up.
+>
 
-Another nice diffstat :)
+Yes, I think I got carried away by a writeback frenzy, while testing the LR=
+U
+refactor I had to fight to get a decent amount of writebacks, and ended up
+being too afraid the shrink work would stop.
+What about using MAX_RECLAIM_RETRIES? I like the idea of putting a limit bu=
+t
+I wouldn't know how to pick a fixed number.
 
-...
+> Maybe we can improve the error codes propagated through the writeback
+> code as well to improve the retry logic. For example, if
+> zswap_writeback_entry() returns EEXIST then retrying should be
+> harmless, but ENOMEM might be harmful. Both of which are propagated as
+> EAGAIN from zs_zpool_shrink()/zbud_zpool_shrink().
+>
 
-> @@ -443,6 +454,35 @@ static int socfpga_dwmac_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto err_dvr_remove;
->  
-> +	memset(&pcs_regmap_cfg, 0, sizeof(pcs_regmap_cfg));
-> +	pcs_regmap_cfg.reg_bits = 16;
-> +	pcs_regmap_cfg.val_bits = 16;
-> +	pcs_regmap_cfg.reg_shift = REGMAP_UPSHIFT(1);
-> +
-> +	/* Create a regmap for the PCS so that it can be used by the PCS driver,
-> +	 * if we have such a PCS
-> +	 */
-> +	if (dwmac->tse_pcs_base) {
+That would be a nice improvement indeed, I'd queue it after the LRU refacto=
+r
+though.
 
-nit: perhaps the scope of pcs_regmap and pcs_bus could be reduced to
-     this block.
-
-> +		pcs_regmap = devm_regmap_init_mmio(&pdev->dev, dwmac->tse_pcs_base,
-> +						   &pcs_regmap_cfg);
-> +		if (IS_ERR(pcs_regmap)) {
-> +			ret = PTR_ERR(pcs_regmap);
-> +			goto err_dvr_remove;
-> +		}
-> +
-> +		mrc.regmap = pcs_regmap;
-> +
-> +		snprintf(mrc.name, MII_BUS_ID_SIZE, "%s-pcs-mii", ndev->name);
-> +		pcs_bus = devm_mdio_regmap_register(&pdev->dev, &mrc);
-> +		if (IS_ERR(pcs_bus)) {
-> +			ret = PTR_ERR(pcs_bus);
-> +			goto err_dvr_remove;
-> +		}
-> +
-> +		dwmac->pcs_mdiodev = mdio_device_create(pcs_bus, 0);
-> +		stpriv->hw->phylink_pcs = lynx_pcs_create(dwmac->pcs_mdiodev);
-> +	}
-> +
->  	return 0;
->  
->  err_dvr_remove:
-
-...
+> > >
+> > > >         zswap_pool_put(pool);
+> > > >  }
+> > > >
+> > > > @@ -1188,7 +1192,7 @@ static int zswap_frontswap_store(unsigned typ=
+e, pgoff_t offset,
+> > > >         if (zswap_pool_reached_full) {
+> > > >                if (!zswap_can_accept()) {
+> > > >                         ret =3D -ENOMEM;
+> > > > -                       goto reject;
+> > > > +                       goto shrink;
+> > > >                 } else
+> > > >                         zswap_pool_reached_full =3D false;
+> > > >         }
+> > > > --
+> > > > 2.34.1
+> > > >
