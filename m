@@ -2,116 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0D1711D13
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2883B711D19
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241931AbjEZBtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 21:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        id S233743AbjEZBur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 21:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjEZBtr (ORCPT
+        with ESMTP id S229523AbjEZBuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 21:49:47 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885B3189;
-        Thu, 25 May 2023 18:49:46 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-53202149ae2so115128a12.3;
-        Thu, 25 May 2023 18:49:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685065786; x=1687657786;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=isqQBR+LcWlcVRH5HFBLQWkUaienYbAAAetyeIPDhls=;
-        b=k2dzm5yzkCF4Rc7qVxjzw78OcNbInMHg8ZVFXrtpvi04aTUXF6NXmNooTQIlp1lVgM
-         hY4RruhfFdJiSRHiIiJnOzrLVxthQR5lB/6sUgJKGG47Cn6JPu/yQYiA9D3CRQqd2baO
-         0sgMSdphtLcVhgB/o/MJorMxe+CdUboiX+MVNbBqexRjmL7SS44CaWb2r33640lOTEE7
-         kFxsnyoLISGHAtIVPWq0KnihtcoYKDMUUhIEsGHIFeW5FjlqZc7c5bLbZpXFtDgCxBHh
-         2xb3UBd53g2wDuP/ivdKo6CwMmvUFdHkvY/vp69UAneTs231rjZJxKWguaLcHdwrmUEm
-         axCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685065786; x=1687657786;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=isqQBR+LcWlcVRH5HFBLQWkUaienYbAAAetyeIPDhls=;
-        b=MybFpu/Vxu9x8mMyxmkY99wy96tn6b/Uz7FFLcGxwzzA/K7QtaX2G8HJPmlGrBxjaA
-         3pxPzM/fBVDtO01NbQIvyylRTe8adYeT93oiZs9kRvbIraQpAk7bs7Es8RgWI9aaMvbE
-         3QsGTttlRF9CB7wQpcvitwTF5r0XZtspHpGJqAzqGFdVwUmRgN2SpfwskHgFi6joRmth
-         wfPOUeWjwYYrpKlUunRAwVvWkdz0qBVLgmCC/cGUHKOjhxdbL7J9vNHDH65bmWnNWKhp
-         VmA9nqY7kqm6zlqSx+3OpUlKG10fsxvavVPLEmJQf3FCt9eSWwC6AWYLdVeLQhH6hYHc
-         pmMQ==
-X-Gm-Message-State: AC+VfDzZs87j35LyS0SpBjoD3gZUEP6o0RkFVE5V5AnfwiTpnLT8mPKF
-        SKm3H4E8fniBih/Fke7YY+M=
-X-Google-Smtp-Source: ACHHUZ7qbsvJNn8QDeJJCs5gnBHMCXRdl2DwncOu4TEkMeQtqXDQ4W2J75wich3JreZHQXHw4yhe8Q==
-X-Received: by 2002:a17:902:8603:b0:1ab:1355:1a45 with SMTP id f3-20020a170902860300b001ab13551a45mr718292plo.30.1685065785844;
-        Thu, 25 May 2023 18:49:45 -0700 (PDT)
-Received: from [172.27.232.70] (ec2-16-163-40-128.ap-east-1.compute.amazonaws.com. [16.163.40.128])
-        by smtp.gmail.com with ESMTPSA id bg4-20020a1709028e8400b001a9873495f2sm1997572plb.233.2023.05.25.18.49.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 18:49:45 -0700 (PDT)
-Message-ID: <4dc14170-8e22-9da7-30ec-a5597acf1f8e@gmail.com>
-Date:   Fri, 26 May 2023 09:49:41 +0800
+        Thu, 25 May 2023 21:50:46 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93E5194;
+        Thu, 25 May 2023 18:50:43 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1685065838tfibdc44
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 26 May 2023 09:50:37 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: eSZ1CZgv+JCfU+Q/Ek/ByeU4a4AcvGPfBDxLuzVFFnBqpvoCh57Xxdo1gHof2
+        DKr4mZ4kV32WaG5tW5yVOn0mzE2srmKCy20Wly4IDPnhzsNIFzH8Ag5oMY2wbxji9SEJrIc
+        xvZ1OFXmdBbzmpsBzEhyTlrbTbAbTKbbKsQJuXoqqjwGsiKWOwV54KwCJ+GwOmWBSWxIqvX
+        TdyIfspVyKxfH/7TPKd/GL+n2HqFsSJ0wVBV5B+mE2RgJg6H5I9Qfk4fbp4GZNJDwC5iSGb
+        401ADIKHmUHRf0C55yg65WZ3Qde3Eqh2HXjK0SQixho7yC3iCwEd6oL4fZI1Maez5Dq55Ca
+        21pxKHG+TjqEZX04sB4RVmaRnlK+A==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 17809865514302005706
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        w@1wt.eu
+Subject: Re: [PATCH 11/13] tools/nolibc: sys_select: riscv: use __NR_pselect6_time64 for rv32
+Date:   Fri, 26 May 2023 09:50:37 +0800
+Message-Id: <20230526015037.6455-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <76a5f9a0-eec4-415a-9c5d-ac3bca4d4b0e@t-8ch.de>
+References: <76a5f9a0-eec4-415a-9c5d-ac3bca4d4b0e@t-8ch.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 5/6] KVM: x86: Keep a per-VM MTRR state
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Yan Zhao <yan.y.zhao@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com
-References: <20230509134825.1523-1-yan.y.zhao@intel.com>
- <20230509135300.1855-1-yan.y.zhao@intel.com>
- <3f09e751-33fd-7d60-78cd-6857d113e8bd@gmail.com>
- <ZGxbat2mM6AfOOVv@yzhao56-desk.sh.intel.com>
- <393b16f7-8359-5d77-7d5d-8942de987331@gmail.com>
- <ZG94Kmb8jMZKhtJW@google.com>
-From:   Robert Hoo <robert.hoo.linux@gmail.com>
-In-Reply-To: <ZG94Kmb8jMZKhtJW@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/2023 11:00 PM, Sean Christopherson wrote:
-[...]
-> The MTRRs are not system wide or per-package though, they are per logical CPU.
-> Yes, they "need" to be consistent with respect to one another, but only when the
-> CPU is actually accessing memory.  This is a big reason why trying to track MTRRs
-> as a per-VM asset in KVM is so difficult/messy.  Software doesn't rendezvous all
-> CPUs and then do the write on just one CPU, each CPU does its own writes more or
-> less independently.
-
-Ah, got it, thanks!
-
-(Some things of each logical processor seems just a shadow of an 
-consolidate global one, e.g. CR0.CD. Some things are really separated 
-setting of each logical processor, e.g. MTRR above. Really unfathomable 😅)
+> On 2023-05-25 15:10:21+0800, Zhangjin Wu wrote:
+> > Hi, Thomas
+> > 
+> > > On 2023-05-25 01:59:55+0800, Zhangjin Wu wrote:
+> > > > rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
+> > > > __NR_pselect6 after kernel commit d4c08b9776b3 ("riscv: Use latest
+> > > > system call ABI"), use __NR_pselect6_time64 instead.
+> > > > 
+> > > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > > ---
+> > > >  tools/include/nolibc/sys.h | 7 ++++++-
+> > > >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > > > index c0335a84f880..00c7197dcd50 100644
+> > > > --- a/tools/include/nolibc/sys.h
+> > > > +++ b/tools/include/nolibc/sys.h
+> > > > @@ -1041,8 +1041,13 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
+> > > >  		struct timeval *t;
+> > > >  	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
+> > > >  	return my_syscall1(__NR_select, &arg);
+> > > > -#elif defined(__ARCH_WANT_SYS_PSELECT6) && defined(__NR_pselect6)
+> > > > +#elif defined(__ARCH_WANT_SYS_PSELECT6) && (defined(__NR_pselect6) || defined(__NR_pselect6_time64))
+> > > > +#ifdef __NR_pselect6
+> > > >  	struct timespec t;
+> > > > +#else
+> > > > +	struct timespec64 t;
+> > > > +#define __NR_pselect6 __NR_pselect6_time64
+> > > 
+> > > Wouldn't this #define leak to the users of nolibc and lead to calls to
+> > > pselect6_time64 with the ABI of the __NR_pselect6 if userspace is doing
+> > > its own raw syscalls?
+> > >
+> > 
+> > Yeah, it would break the user-side raw __NR_pselect6 syscall for nolibc is a
+> > header-only libc, so, it is not safe to use such method like glibc.
+> > 
+> > Something like this will let the syscall call to pselect6_time64 instead of the
+> > user-required __NR_pselect6 and pass the wrong type of argument.
+> > 
+> >     #include "nolibc.h"  // If no __NR_pselect6 defined, __NR_pselect6 = __NR_pselect6_time64
+> > 
+> >     #ifdef __NR_pselect6
+> >         struct timespec t;  // come here for __NR_pselect6_time64, but t is not timespec64, broken
+> >         syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+> >     #else
+> >         struct timespec64 t;
+> >         syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
+> >     #endif
+> > 
+> > I have used something like __NR_pselect6_time3264 locally, before
+> > sending the patchset, I found a cleaner method already used in sys.h:
+> > 
+> >     #ifndef __NR__newselect
+> >     #define __NR__newselect __NR_select
+> >     #endif
+> > 
+> > But I forgot the arguments mixing issue, __NR__newselect and __NR_select
+> > share the same type of arguments, but __NR_pselect6 and
+> > __NR_pselect6_time64 not, so, I will use back the old method but still
+> > need to find a better string, just like __NR__newselect, __NR__pselect6
+> > may be used in kernel space in the future, and __NR_pselect6_time3264 is
+> > too long, what about this?
+> > 
+> >     #ifdef __NR_pselect6
+> >             struct timespec t;
+> >     #define __NR_pselect6__ __NR_pselect6
+> >     #else
+> >             struct timespec64 t;
+> >     #define __NR_pselect6__ __NR_pselect6_time64
+> >     #endif
+> > 
+> > Or even ___NR_pselect6?
 > 
->> BTW, with regard to KVM_X86_QUIRK_CD_NW_CLEARED, I see svm honors it while
->> vmx doesn't before it clear CR0.CD/NW.
->>
->> svm_set_cr0():
->>
->> 	if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
->> 		hcr0 &= ~(X86_CR0_CD | X86_CR0_NW);
->>
->>
->> vmx_set_cr0():
->>
->> 	hw_cr0 = (cr0 & ~KVM_VM_CR0_ALWAYS_OFF);
->>
->> Perhaps vmx side can be fixed passingly?
+> What about:
 > 
-> Sadly, no.  SVM and VMX manage guest memtype completely differently.  VMX doesn't
-> allow CR0.CD=1 when VMX is enabled, and so KVM needs to emulate CR0.CD via the EPT
-> memtype.
+> #ifdef __NR_pselect6
+>         struct timespec t;
+>         const long nr_pselect = __NR_pselect6;
+> #else
+>         struct timespec64 t;
+>         const long nr_pselect = __NR_pselect6_time64;
+> #endif
+>
 
-OK, get it, thanks. Wasn't aware of this through SDM.
+It looks better and cleaner, will apply this method, thanks!
+
+> > 
+> > The same issue is in this patch:
+> > 
+> >     [PATCH 13/13] tools/nolibc: sys_gettimeofday: riscv: use __NR_clock_gettime64
+> > 
+> > will solve it with the same method.
+>
+
+And also this one:
+
+    [PATCH 09/13] tools/nolibc: sys_poll: riscv: use __NR_ppoll_time64
+
+Have tested all of them, will send a v2 later.
+
+Best regards,
+Zhangjin
+
+> Thanks!
