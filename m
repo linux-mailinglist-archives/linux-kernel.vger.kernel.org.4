@@ -2,188 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944CE712327
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1194B71232C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242885AbjEZJNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
+        id S242929AbjEZJOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjEZJNL (ORCPT
+        with ESMTP id S236801AbjEZJOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:13:11 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785F212C
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:13:10 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so430734f8f.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:13:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685092389; x=1687684389;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R1U6XpxDvSih4ymgTpgV3kFrDpgdRbG2VFnRYHWBNJs=;
-        b=ivDTv96j8kH0dG6OxnbkkGSED/St7SA8wh2JOdYc36V0GOaDPoX+B7W4mdUzo/UBhJ
-         Wo5yXXRaHSyRUP3nMMDT+QLgN1vSQ4Ivr/VgLhTufKswkJmAEqMtC3Ky74vOo4WIbkKk
-         sdJpJWiIh+TgPvLh04ZMZ+Wk5lfSeMnKu00wRNSJkIrwv9FnkTra2n/E9INP13/yzde8
-         rfGkfiGVVsl1wFbV8YrSebJrrOgz6t62DjufKg9rz3X+3OwlIROpxwHnLLZBUC3ywNLi
-         ISdUIxGMWRXVcfBWNQO9mETwwb2EhHW3+mJ3UzaQWCeJxeCtV/aoTrdceUaT31pntrY5
-         iIdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685092389; x=1687684389;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R1U6XpxDvSih4ymgTpgV3kFrDpgdRbG2VFnRYHWBNJs=;
-        b=ZubYbyAyYQ/O1LaUwJhrKDStBp0/YsfSEOJ38ti9DybLd43GtuO+v4S3Di+MRJzcqH
-         BzMhNKMNZGi0KcNb2Swkz4LsYe703A7YoVR4TNoCooa8S3b8PiV8V7kvlcqO7/wKQYL8
-         pXChsCzAAFz4IJD1tFfwt0he76xI0VSZq9/ljfDwtvJ8S8OzimH68Ek7RjxxBYTuZZXE
-         E0DBkY1+aqsz37KiCfbAaGVOqay2sePHslYsyKJgqYEYK0o/bVuBmofFYMoaEbXJ7nVV
-         BKWn1IAOIv5FN2WNzw5ig0cKHxeFWpZXdYcv8kwYgdmHV49HG/l6mgxLNNGntI1hpM6x
-         0yOg==
-X-Gm-Message-State: AC+VfDw5qoP+mN6zBV1MX8krqZq+K2e6AeYmykuck3zj2ASbcJBR8Z/D
-        PjGCqIO74+m/TPPIB8JdmRc=
-X-Google-Smtp-Source: ACHHUZ7DIbuyHeioFWko7fZWbQQq71ahSBtGwNaANF/Weuj5m55L4H0xvPykQ8Rf3L5W/YBa+rCveg==
-X-Received: by 2002:a5d:6e53:0:b0:30a:ab38:30fe with SMTP id j19-20020a5d6e53000000b0030aab3830femr937975wrz.43.1685092388679;
-        Fri, 26 May 2023 02:13:08 -0700 (PDT)
-Received: from localhost (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
-        by smtp.gmail.com with ESMTPSA id r2-20020a5d4e42000000b003095bd71159sm989789wrt.7.2023.05.26.02.13.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 02:13:07 -0700 (PDT)
-Date:   Fri, 26 May 2023 10:10:56 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Uladzislau Rezki <urezki@gmail.com>
-Subject: Re: [PATCH] lib/test_vmalloc.c: avoid garbage in page array
-Message-ID: <368bbc1d-d810-4bc4-8091-7ed55631344f@lucifer.local>
-References: <20230524082424.10022-1-lstoakes@gmail.com>
- <ZG/4gVO9XPXccR5+@MiWiFi-R3L-srv>
- <b87ff2af-c89d-4ddd-8992-2ffb337fbe0c@lucifer.local>
- <ZHB0UTEYUMZVa23V@MiWiFi-R3L-srv>
+        Fri, 26 May 2023 05:14:09 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E710C135
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:14:07 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34Q8KF9t025769;
+        Fri, 26 May 2023 11:13:51 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=8ECcZ8YLu3GV0/3XQIPv5xdkAKG/KqseTjUWFHT/RUM=;
+ b=V4Qf6k0kx32/vWFJddoMA0LCr7yCwgVeW7GmWPYeXxSOhpJ0pXYke1/Q9PJZjifZ6efl
+ QtqyeZJYz64YR8wW9LkvsHZaQhCu2a1Xup17BxULJ22Ju+zotLXwIPM5gFgS4a7lVRpI
+ Z5aRa41CKxEBEAZXX5RgYcjiSKzlInMER3fB7dNZT6tqsqSM4SJm46rog0cF3cvSBLbm
+ ELpF/coD4NJAKz9ZhVrc/237S/Fkj8d4vow55Z/MXaPBVLz9f+GY4cdoW1khbZGKKeaQ
+ GI8zCW3EKYeolUHSD1ZdujsUmeDGXMVCcwXmNBYgHDHlNdzcFUDjRoZ7lBTepVPMeJL1 Og== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qt4avyfv1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 11:13:51 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5EDCF10002A;
+        Fri, 26 May 2023 11:13:48 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4C95F21BF59;
+        Fri, 26 May 2023 11:13:48 +0200 (CEST)
+Received: from [10.48.0.148] (10.48.0.148) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 26 May
+ 2023 11:13:47 +0200
+Message-ID: <3b2d4e17-cd4e-7fcc-e870-06d1ffc2bb90@foss.st.com>
+Date:   Fri, 26 May 2023 11:13:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHB0UTEYUMZVa23V@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RESEND] drm/stm: ltdc: fix late dereference check
+To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+References: <20230515123818.93971-1-raphael.gallais-pou@foss.st.com>
+Content-Language: en-US
+From:   Philippe CORNU <philippe.cornu@foss.st.com>
+In-Reply-To: <20230515123818.93971-1-raphael.gallais-pou@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.0.148]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 04:56:49PM +0800, Baoquan He wrote:
-> > Umm, the function literally opens with:-
-> >
-> > 	/*
-> > 	 * Skip populated array elements to determine if any pages need
-> > 	 * to be allocated before disabling IRQs.
-> > 	 */
-> > 	while (page_array && nr_populated < nr_pages && page_array[nr_populated])
-> > 		nr_populated++;
->
-> OK, suppose page_array[] alreasy has three pages populated, if not
-> initialized and there's garbage data in page_array[], it could have
-> nr_populated > 3 finally? This is really risky.
->
-> >
-> > And then later:-
-> >
-> > 		/* Skip existing pages */
-> > 		if (page_array && page_array[nr_populated]) {
-> > 			nr_populated++;
-> > 			continue;
-> > 		}
->
-> This is interesting, I thought this place of nr_populated checking and
-> updating is meaningless, in fact it's skipping the element with vlaue
-> in the middle of page_array. I realize this when I recheck the code when
-> replying to your mail. Not sure if we should restrict that, or it's
-> really existing reasonablly.
->
-> [x][x][x][][][][x][x][][]
-> x marks the element pointing to page.
 
-All of this is fine, the caller is expected to provide a zeroed array or an
-array that contains existing elements. We only need to use it with a zeroed
-array. We zero the array. Problem solved. Other users use the 'already
-allocated pages' functionality, we don't care.
 
->
-> >
-> > This explicitly skips populated array entries and reads page_array to see
-> > if entries already exist, and literally documents this in the comments
-> > above each line, exactly as I describe.
->
-> OK, I misread your words in log. While page_array[] is still output
-> parameter, just not pure output parameter? Not sure if I understand
-> output parameter correctly.
+On 5/15/23 14:38, Raphael Gallais-Pou wrote:
+> In ltdc_crtc_set_crc_source(), struct drm_crtc was dereferenced in a
+> container_of() before the pointer check. This could cause a kernel panic.
+> 
+> Fix this smatch warning:
+> drivers/gpu/drm/stm/ltdc.c:1124 ltdc_crtc_set_crc_source() warn: variable dereferenced before check 'crtc' (see line 1119)
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://lore.kernel.org/lkml/202212241802.zeLFZCXB-lkp@intel.com/
+> Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+> ---
+>   drivers/gpu/drm/stm/ltdc.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+> index 03c6becda795..b8be4c1db423 100644
+> --- a/drivers/gpu/drm/stm/ltdc.c
+> +++ b/drivers/gpu/drm/stm/ltdc.c
+> @@ -1145,7 +1145,7 @@ static void ltdc_crtc_disable_vblank(struct drm_crtc *crtc)
+>   
+>   static int ltdc_crtc_set_crc_source(struct drm_crtc *crtc, const char *source)
+>   {
+> -	struct ltdc_device *ldev = crtc_to_ltdc(crtc);
+> +	struct ltdc_device *ldev;
+>   	int ret;
+>   
+>   	DRM_DEBUG_DRIVER("\n");
+> @@ -1153,6 +1153,8 @@ static int ltdc_crtc_set_crc_source(struct drm_crtc *crtc, const char *source)
+>   	if (!crtc)
+>   		return -ENODEV;
+>   
+> +	ldev = crtc_to_ltdc(crtc);
+> +
+>   	if (source && strcmp(source, "auto") == 0) {
+>   		ldev->crc_active = true;
+>   		ret = regmap_set_bits(ldev->regmap, LTDC_GCR, GCR_CRCEN);
 
-Well, output implies output i.e. writing to something. If you also read it,
-it's not just an output parameter is it?
+Hi Raphael,
+and many thanks for your patch.
+Acked-by: Philippe Cornu <philippe.cornu@foss.st.com>
+Philippe :-)
 
-I don't really want to get into semantics here, the point is the test's
-expectation is that it'd be write-only and it's not so we have to zero the
-array, that's it.
-
->
-> Well, I meant adding sentence above __alloc_pages_bulk() to tell:
-> page_array[] could have garbage data stored if you don't initialize
-> it explicitly before calling __alloc_pages_bulk();
->
-
-As I said I literally state in multiple places this is about needing to
-initialise the array:-
-
-    lib/test_vmalloc.c: avoid garbage in page array
-
-...
-
-    This is somewhat unexpected and breaks this test, as we allocate the pages
-    array uninitialised on the assumption it will be overwritten.
-
-...
-
-    We solve both problems by simply using kcalloc() and referencing
-    sizeof(struct page *) rather than sizeof(struct page).
-
-So I completely disagree we need to add anything more.
-
-> This could happen in other place if they don't use kcalloc(),
-> kmalloc(GFP_ZERO) or something like this to allocate page_array[]?
-
-We don't care? I'm fixing a test here not auditing __alloc_bulk_array().
-
-> > A broader problem we might want to think about is how little anybody is
-> > running this test in order that it wasn't picked up before now... obviously
-> > there's an element of luck as to whether the page_array happens to be
-> > zeroed or not, but you'd think it'd be garbage filled at least a reasonable
-> > amount of the time.
->
-> Hmm, that's why we may need notice people that there's risk in
-> __alloc_pages_bulk() if page_array[] is not initialized and the garbage
-> could be mistaken as a effective page pointer. My personal opinion.
-> People may argue it's caller's responsibility to do that.
->
-> Thanks
-> Baoquan
->
-
-That's just irrelevant to this change. You're also not replying to my point here
-(that we're clearly not running this test very much).
-
-I find this review super bikesheddy. Let's try not to bog things down in
-lengthily discussions when literally all I am doing here is:-
-
-1. Function expects a zeroed array
-2. Change the code to zero the array
-3. Change the array to be smaller since it only needs to store pointers
-
-It's a two line change, can we try to be a little proportionate here?
-
-You're not even giving me a tag because... I'm not auditing all uses of
-__alloc_bulk_array() or something? Seriously.
