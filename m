@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3701712378
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4428712372
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243080AbjEZJZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S243039AbjEZJYh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 26 May 2023 05:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjEZJZN (ORCPT
+        with ESMTP id S243035AbjEZJYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:25:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101BE135
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:24:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685093063;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0hvsOWsTxhCAtK9wZGl3ItbtOHeNAmtLYxozsBT60tM=;
-        b=LOmgj6iW1lawQF5OJWYlTbC/irysm1be0LK7tY5gZA9YPMI+cw7tBhchsPXE5N9hKGOabd
-        lCx2OoI/bsxWPHG1pj5DufY1GJrGyF/IGauJUZPKI6GatPAcLHe+QVwxZnefhBgmuQX+WQ
-        qTzotwqQHlHSFSntSkd7r1cwPZUTCSc=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-583-FcaMM6bfPVGnW7cas30heA-1; Fri, 26 May 2023 05:24:21 -0400
-X-MC-Unique: FcaMM6bfPVGnW7cas30heA-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-307897bc279so313715f8f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:24:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685093060; x=1687685060;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0hvsOWsTxhCAtK9wZGl3ItbtOHeNAmtLYxozsBT60tM=;
-        b=IhmQAeAdhz+m2CrRbFXB/w4RDy82bYQoE+1l6fsj3DdaOWHG6vz7IRrbf8L0uA3dtw
-         t8ieWXUdILH56Bz4jVjL/85nxE3cH4t2/McqLFnqIXk7P43xZJNbBWfddppglpwdhCwE
-         9sGoRJMfpn5dBwsJtvU1BXKZ/Ae76PxvuPGLWzPPxy8mvUwC5elwvz8Tg6gAycPnfDVS
-         vgQfmAjFUUTbiQnueRr2dEtvpZlecur8H9gKMuvEyMJOWkIATi7H5cvP8cOVrcwzk+cB
-         RLr92+5EP814yJSDU/st0xMbsozXZI2JbKso1Ydo5vc/SSDHu4S71fcBNREa7Mh9KLn1
-         bp/g==
-X-Gm-Message-State: AC+VfDzSlT0PNxzA7YVHFtkXU9FHa73XC78qJRj2IlrjTwU178Wq5MJp
-        W8AiJQB+6faMYRrHBc2HQac8Q4cn6jOgpAzubRrZmhKEHEdBvUN3hdDo+c9DwAGNUH5UHrdATj7
-        WL9HBmGNHduusAs1takEWTmCq
-X-Received: by 2002:adf:e704:0:b0:306:459b:f575 with SMTP id c4-20020adfe704000000b00306459bf575mr994695wrm.12.1685093060457;
-        Fri, 26 May 2023 02:24:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7/DN4isxucuKpWnb3968aE5fezzmDpKs9YwOs8B5KHM5/+Y68dG7HuVKtISlXTfNhMp11ttA==
-X-Received: by 2002:adf:e704:0:b0:306:459b:f575 with SMTP id c4-20020adfe704000000b00306459bf575mr994681wrm.12.1685093060096;
-        Fri, 26 May 2023 02:24:20 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c710:9700:7003:7e4d:43dd:7bfd? (p200300cbc710970070037e4d43dd7bfd.dip0.t-ipconnect.de. [2003:cb:c710:9700:7003:7e4d:43dd:7bfd])
-        by smtp.gmail.com with ESMTPSA id v10-20020adfe28a000000b003063a1cdaf2sm4390604wri.48.2023.05.26.02.24.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 02:24:19 -0700 (PDT)
-Message-ID: <950f095f-5182-6f14-cdc3-ce5eb35884ca@redhat.com>
-Date:   Fri, 26 May 2023 11:24:18 +0200
+        Fri, 26 May 2023 05:24:35 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EAD1A2;
+        Fri, 26 May 2023 02:24:32 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QSKFc4JZkz67lH1;
+        Fri, 26 May 2023 17:22:28 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 26 May
+ 2023 10:24:29 +0100
+Date:   Fri, 26 May 2023 10:24:28 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Stephane Eranian <eranian@google.com>
+CC:     Namhyung Kim <namhyung@gmail.com>,
+        Liang Kan <kan.liang@linux.intel.com>,
+        <linux-cxl@vger.kernel.org>, <peterz@infradead.org>,
+        <mark.rutland@arm.com>, <will@kernel.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <dan.j.williams@intel.com>,
+        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Dave Jiang" <dave.jiang@intel.com>
+Subject: Re: [PATCH v6 4/5] perf: CXL Performance Monitoring Unit driver
+Message-ID: <20230526102428.00002b6a@Huawei.com>
+In-Reply-To: <CABPqkBQpXAq=uk5-vx-FkYJV1nrtugit_ExFqGgQCKGQC2no6w@mail.gmail.com>
+References: <20230413142617.15995-1-Jonathan.Cameron@huawei.com>
+        <20230413142617.15995-5-Jonathan.Cameron@huawei.com>
+        <CAM9d7ciPW67QRRwRsY3-ouEM6wM0YdX+qnkkqYmTXRLwJcgqkA@mail.gmail.com>
+        <CABPqkBQpXAq=uk5-vx-FkYJV1nrtugit_ExFqGgQCKGQC2no6w@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH v2 1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <4f479af6-2865-4bb3-98b9-78bba9d2065f@lucifer.local>
- <89c7f535-8fc5-4480-845f-de94f335d332@lucifer.local>
- <20230525223953.225496-1-dhowells@redhat.com>
- <20230525223953.225496-2-dhowells@redhat.com>
- <520730.1685090615@warthog.procyon.org.uk>
- <522654.1685092526@warthog.procyon.org.uk>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <522654.1685092526@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.05.23 11:15, David Howells wrote:
-> Lorenzo Stoakes <lstoakes@gmail.com> wrote:
+On Thu, 25 May 2023 18:18:55 -0700
+Stephane Eranian <eranian@google.com> wrote:
+
+> On Thu, May 25, 2023 at 6:06 PM Namhyung Kim <namhyung@gmail.com> wrote:
+> >
+> > Add Stephane to CC.
+> >
+> > On Thu, Apr 13, 2023 at 7:35 AM Jonathan Cameron
+> > <Jonathan.Cameron@huawei.com> wrote:  
+> > >
+> > > CXL rev 3.0 introduces a standard performance monitoring hardware
+> > > block to CXL. Instances are discovered using CXL Register Locator DVSEC
+> > > entries. Each CXL component may have multiple PMUs.
+> > >
+> > > This initial driver supports a subset of types of counter.
+> > > It supports counters that are either fixed or configurable, but requires
+> > > that they support the ability to freeze and write value whilst frozen.
+> > >
+> > > Development done with QEMU model which will be posted shortly.
+> > >
+> > > Example:
+> > >
+> > > $ perf stat -e cxl_pmu_mem0.0/h2d_req_snpcur/ -e cpmu0/h2d_req_snpdata/ -e cpmu0/clock_ticks/ sleep 1
+> > >
+> > > Performance counter stats for 'system wide':
+> > >  
 > 
->>> iov_iter_extract_pages(), on the other hand, is only used in two places
->>> with these patches and the pins are always released with
->>> unpin_user_page*() so it's a lot easier to audit.
->>
->> Thanks for the clarification. I guess these are the cases where you're
->> likely to see zero page usage, but since this is changing all PUP*() callers
->> don't you need to audit all of those too?
+> Unless I am mistaken, I don't think this output corresponds to the
+> cmdline above. I think the -a is missing.
+> I don't think you can measure CXL traffic per-thread. Please confirm.
+> Thanks.
+
+It doesn't seem to make any difference whether I include -a or not and
+the perf man page says 
+
+       -a, --all-cpus
+           system-wide collection from all CPUs (default if no target is
+           specified)
+
+However I'm not sure what target means in this case as there is no
+mention of it anywhere else in the perf-stat man page.  My guess is thread
+or process provided by -p or -t.  So default applies in the above command line.
+Doesn't hurt to be more explicit though, so I've added -a.
+
+The command line is wrong however as I failed to update the device name
+for the 2nd and 3rd events.
+
+
 > 
-> I don't think it should be necessary.  This only affects pages obtained from
-> gup with FOLL_PIN - and, so far as I know, those always have to be released
-> with unpin_user_page*() which is part of the gup API and thus it should be
-> transparent to the users.
-
-Right, and even code like like 873aefb376bb ("vfio/type1: Unpin zero 
-pages") would handle it transparently, because they also call 
-unpin_user_page().
-
-[we can remove 873aefb376bb even without this change way because it uses 
-FOLL_LONGTERM that shouldn't return the shared zeropage anymore ]
-
--- 
-Thanks,
-
-David / dhildenb
-
+> >  
+> > > 96,757,023,244,321      cxl_pmu_mem0.0/h2d_req_snpcur/
+> > > 96,757,023,244,365      cxl_pmu_mem0.0/h2d_req_snpdata/
+> > > 193,514,046,488,653      cxl_pmu_mem0.0/clock_ticks/
+> > >
+> > >        1.090539600 seconds time elapsed
