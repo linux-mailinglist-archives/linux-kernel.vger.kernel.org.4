@@ -2,101 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E5B712B83
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68279712B84
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236487AbjEZRNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
+        id S237586AbjEZRNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237418AbjEZRN2 (ORCPT
+        with ESMTP id S231679AbjEZRNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:13:28 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C6310D4;
-        Fri, 26 May 2023 10:13:07 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2af30d10d8fso9803421fa.0;
-        Fri, 26 May 2023 10:13:07 -0700 (PDT)
+        Fri, 26 May 2023 13:13:33 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55B9E55;
+        Fri, 26 May 2023 10:13:15 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53063897412so895232a12.0;
+        Fri, 26 May 2023 10:13:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685121185; x=1687713185;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jIXIP2zWjaYbZBFcIHQqMIYmOFHICRYr7cn3dtDGJTU=;
-        b=n4sM3hzT6GGKnEITLtm1o9V82TXZcmN1hewCOWUQF6BAofOLFelMmNYdKGYYrBHpJ9
-         OEWH0JmuHqPT9JK/ak327pp/koYwK1autAmEKpHZ1IIuzMaWYS7q4x80K8IaqdEvdg8E
-         2pQ1t78P1rhdU9nJulHW//XRHv1PDGDN4GjsiaWnBJLxa6l+vrWXE1G9edNJAsfIUtTo
-         UWq21QNwCLgodTlO2I6gt0WsYcPiMUptw3B/At1sjrjjBbyXa5MJ6fv2W1WLwmSeyzIv
-         3frbuDNSjVwHlKYW5BpVYKG7Zt5t1XXEk93ObK7GMwUJswqftl8B6nfPr8Xj+EE4FXAf
-         wgHQ==
+        d=gmail.com; s=20221208; t=1685121195; x=1687713195;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZlQHkKnfhl85SPjjrArwZ6AQVNhnLN/Xet9CRnwYrw0=;
+        b=A3Lh+N6fJO0IkjxwSqXx7EAW/qC9140wcOLmB3/aiO24+t5FtzDfFse4NueeariLTI
+         WJPzAS/1qFrbRR0T8+J9w2diOuCZMgPBSxi/FA+c2ceI9a53XnyIUbsiTNH/kJbD9J6E
+         2JqnHb+BX/gWS94rsRSYkqsghnNilSDYiiSvjbmgRn+D98CRl2sR4kgSS3WqReag53cX
+         AFMbdMAt1xjwYP0wI+Ri+GuqFt+2VbXyaojKkSzDcvzysSR/8ZxF1C0BhE56A43BJXKs
+         jMEYQ8QAkGGUiJmXYUfQh1HfGzdsUFx3vU/lNv05AG6fQdt2Nr22iwp9csmda84/k548
+         IR/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685121185; x=1687713185;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jIXIP2zWjaYbZBFcIHQqMIYmOFHICRYr7cn3dtDGJTU=;
-        b=OPzPy26Y7zrVn96XcOVlDdJE/dUqBN4KdpLB6kF8oRbVbVAtcmFHdoI/erFTXJZJFP
-         TaI8Rq8G3zCbXbiKSnGlvVeab+p6BKb1SAZP2Cqp0P9cWd7JdlBnrW0FdXTuQzZhBDfQ
-         kZH39h6/Y5d4+ItJlHKFJKxzCyJKXyVSz4Wlk3JJaitFfHMxhtevP5AbmI+3KLeM6Ih+
-         LPzYLsFhwDkxEpZxn42FDvDTuf+fpaeNPoyFC/P8a1aEwU14Xt7Ca3qs6KukDHwKF3/E
-         Ks9ZYHlc7213+MuYsa2lpbDl/SvL8e2+jlg3rV7GYMyfEyemIgQ7TSvhjZFwWrTTFTJt
-         3PNA==
-X-Gm-Message-State: AC+VfDyM6wHFlWtQUUoEFXJ2GYLA4Wtv4LkplKwIb4KPEQzODMDnFUzv
-        7zchYMQ2dH3jLphHkxLiZ2s=
-X-Google-Smtp-Source: ACHHUZ56M27lYSfafVDVv+8NEF4IosaIspdd/GcRS3lW/hVsbLDfoiz0n+98aspbTHOG8skXRJY5hw==
-X-Received: by 2002:a2e:8614:0:b0:2a7:a5f7:9651 with SMTP id a20-20020a2e8614000000b002a7a5f79651mr988300lji.23.1685121185135;
-        Fri, 26 May 2023 10:13:05 -0700 (PDT)
-Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id c22-20020a2e9496000000b002a7853b9339sm814026ljh.119.2023.05.26.10.13.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 10:13:04 -0700 (PDT)
-Message-ID: <aa1b7590-1105-b1f0-c0bd-784e8369913f@gmail.com>
-Date:   Fri, 26 May 2023 20:13:03 +0300
+        d=1e100.net; s=20221208; t=1685121195; x=1687713195;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZlQHkKnfhl85SPjjrArwZ6AQVNhnLN/Xet9CRnwYrw0=;
+        b=VoWCe0v6eGcn+e2klM/J1m9qngwVCHDgVjnfy1IdzZV4O4KolhmBXKdYgV6hNXPjKk
+         gp565uhiO1rAxRQiR3nQEYNgxhXcX+DjSLDJg7R9LzWjDaaIBeYQfBza5p92qmmWOfsp
+         Of6RivO6f1/dJ8ii/Uj+IcPOj/cDFg/WhWqx7CX3RKZaVlHTNghdYChEYtR4I1il75e8
+         K3NiVs2upnhbGAEww6SVQsB/Ya/VVRzFuBSDWXP0nIARkCqEg55h7Kj0kiowDuFAlwKH
+         hoGjkLUP+fp0hBK30iQK8LvjnzZenqginIwi2RqVGZOo9MS6ewnQ4TOQ2E4fmWf6ZJdq
+         LLYw==
+X-Gm-Message-State: AC+VfDzL/uVPMS35pmd0eoNUheK51zfR6F+uddTV3zq4NKkkKPefKLFv
+        xEZDbWpZGNhqKNHsatJiF0s=
+X-Google-Smtp-Source: ACHHUZ6z6YWhk46iYE/hP6ucChzj5Ph/02XwIeeQgx1zna6CPOkm/MJbWgn5imibuH81foXcpOhvHw==
+X-Received: by 2002:a17:903:228a:b0:1ae:536c:3d9c with SMTP id b10-20020a170903228a00b001ae536c3d9cmr3777231plh.37.1685121194707;
+        Fri, 26 May 2023 10:13:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170902c1ca00b001afccb29d69sm3491115plc.303.2023.05.26.10.13.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 10:13:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 26 May 2023 10:13:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Noah Wang <noahwang.wang@outlook.com>
+Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: mp2891: add MP2891 driver
+Message-ID: <c22c8d90-b26a-44db-9930-25f9d4a180fe@roeck-us.net>
+References: <TYZPR03MB7130A7F41D61BFB611DDF0C7FA479@TYZPR03MB7130.apcprd03.prod.outlook.com>
+ <44cf26ec-172d-41a8-a700-4b1e3307200b@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 7/7] iio: accel: Add support for Kionix/ROHM KX132-1211
- accelerometer
-Content-Language: en-US, en-GB
-To:     Mehdi Djait <mehdi.djait.k@gmail.com>, jic23@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <cover.1685111274.git.mehdi.djait.k@gmail.com>
- <d776c1dd5beef6ef812a4f7e4958eb6cb0f5e58e.1685111274.git.mehdi.djait.k@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <d776c1dd5beef6ef812a4f7e4958eb6cb0f5e58e.1685111274.git.mehdi.djait.k@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <44cf26ec-172d-41a8-a700-4b1e3307200b@roeck-us.net>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/23 17:30, Mehdi Djait wrote:
-> Kionix KX132-1211 is a tri-axis 16-bit accelerometer that can support
-> ranges from ±2G to ±16G, digital output through I²C/SPI.
-> Add support for basic accelerometer features such as reading acceleration
-> via IIO using raw reads, triggered buffer (data-ready), or the WMI IRQ.
+On Fri, May 26, 2023 at 09:23:12AM -0700, Guenter Roeck wrote:
+[ ... ]
 > 
-> Datasheet: https://kionixfs.azureedge.net/en/document/KX132-1211-Technical-Reference-Manual-Rev-5.0.pdf
-> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+> The above functions really do not make any sense whatsoever, meaning I do
+> not trust that any of the remaining functions are needed either. Please
+> only provide necessary private functions. For each function which is
+> actually needed please explain why the core function can not be used.
+> 
+> Note that access to the datasheet would help me to determine which of
+> those functions are really needed. Requiring me to create an account
+> just to read a non-descriptive one-page "datasheet" doesn't help at all
+> (and, FWIW, is really pointless).
+> 
 
-Acked-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Adding to that: An internal source with access to the datasheet stated
+that almost all registers/command would be standard, and that only VID
+handling would be special. Even for that I am not sure if that is really
+correct, and that the VID stepping is so far out of standard VID coding
+that it can't be modeled as standard VID stepping. As such, I am not
+inclined to accept a driver which re-implements pretty much all telemetry
+registers without some very specific and confirmable information that
+and why this is really needed. A vague reference to the datasheet won't
+help, sorry.
 
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Guenter
