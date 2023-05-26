@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E9C7120B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954187120B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242110AbjEZHKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 03:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        id S242220AbjEZHLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 03:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236824AbjEZHKV (ORCPT
+        with ESMTP id S230097AbjEZHLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 03:10:21 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F61125
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:10:16 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f3b5881734so411737e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:10:16 -0700 (PDT)
+        Fri, 26 May 2023 03:11:17 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE78CF7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:11:12 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3f7f864525fso3982941cf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:11:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ferroamp-se.20221208.gappssmtp.com; s=20221208; t=1685085015; x=1687677015;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PdSg9NNrGreQrCE+41nuiJXywFlMg6bfSTzQTeA3s0E=;
-        b=wV8hXAlTqXUsZbsSvOPXVKDD77Yds5Wc2nhgmK1XKx78K0YXTvRb7ImCIYu6fGBP1C
-         4ZGOG5EXz679whvOJcZVf9ayuTYDJkWfhJfGXZ1TTRlC12IFhRRJCudrcyocrGM8JsC7
-         gjApEvzwSGNhqtgBfYJikC7tHmBa/e1gRpecvurPwqj/N2DXnpienBYmThZ5EXymO7+S
-         qxqTg9udNGx1qMwuegqMdG4MtLTriQF/spcMcne+uAIaxTLAXYRZq9OyUvYnY8TcZg+r
-         fLRibuiWSK8ZbORI0XzQP9xpGZ372n4tO+ADw1Qkep36caoRbfOv2WwGk4hZ+KDY5MmL
-         PmKA==
+        d=gmail.com; s=20221208; t=1685085072; x=1687677072;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
+        b=GCXnf2r6VsBKAI5L0UXQTx3ZKJRfqkFUtVgaZCZ2CBuA9HK0KOrSIJ5pvj5CvLDqs9
+         tkcnlKafAkiN9WhXOpNLOuG0FuV/bApPY5uYKFeBoGqi/fk/lE3TEKe6UV9KbefjVo5o
+         pWuV3AVF4gJBQpLBZhhlWlF8+6smXyB4jnkHY5gJUr2ZgWJI6gP0Bxo2pF6/V54KSJeX
+         AhC/j6PTxvhbC4l7UAZbq4iEezmxsbY9FjsRxY7ECn44HNLUWp8tpYpIvnvOfnQ6g2Os
+         qARSxPuruSN7i0j7mKjC6I71ElsWIvJm6wlN5eQrstiT4ijInR2mhjFBekQyJcWOG2wE
+         kJQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685085015; x=1687677015;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PdSg9NNrGreQrCE+41nuiJXywFlMg6bfSTzQTeA3s0E=;
-        b=HS1ie7+TJlIxiscEA1BxgCay6XBY2jDrmrz9HD2k2YlsHJPQ6ni5YfMonrFXMInMpk
-         CxW20UYuFOprenZifFX6FreDL1fjTOBFMpZgvbrZZ/682ERq3iiUUfrTwdq1aMS7iMRo
-         5CdMq8CPHP5BEaGaEqJY+h/a8fHBS2/bpkeDnDdoR3Pw56ZAHTN5QpyZ6Jiyt5u1frRE
-         u6kFC+LMj+rmtNwgbrD0d46g38Mih3hIE2QI4046C8nA2bX7axZZqSuU3vYY8xmBjsqi
-         674N70CIgOnTuseBvo5Oj/KMlu5YGLPDiPpncbUK6f1kNqTEpnH7f7yFFgSsrBIOkaos
-         /KpQ==
-X-Gm-Message-State: AC+VfDz6iJI495ip2f6f4bU7C0thXHr5iDIMeNvdDWTBp6bAO4h3RNK4
-        /3Pn45GjE4bT+xURyjbWZbGAkw==
-X-Google-Smtp-Source: ACHHUZ7+mkpIO2s9Sgs7OSiBzlir4Snu1p566KlcrNwvuimRXpNtoLOjtVD7HEOHgLF77AZ+hLTZkw==
-X-Received: by 2002:a05:6512:15d:b0:4ec:7b87:931a with SMTP id m29-20020a056512015d00b004ec7b87931amr359152lfo.13.1685085015190;
-        Fri, 26 May 2023 00:10:15 -0700 (PDT)
-Received: from debian (151.236.202.107.c.fiberdirekt.net. [151.236.202.107])
-        by smtp.gmail.com with ESMTPSA id b27-20020a056512025b00b004f121c8beddsm501833lfo.124.2023.05.26.00.10.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 00:10:14 -0700 (PDT)
-Date:   Fri, 26 May 2023 09:10:12 +0200
-From:   =?iso-8859-1?Q?Ram=F3n?= Nordin Rodriguez 
-        <ramon.nordin.rodriguez@ferroamp.se>
-To:     Parthiban.Veerasooran@microchip.com
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Horatiu.Vultur@microchip.com,
-        Woojung.Huh@microchip.com, Nicolas.Ferre@microchip.com,
-        Thorsten.Kummermehr@microchip.com
-Subject: Re: [PATCH net-next v3 2/6] net: phy: microchip_t1s: replace
- read-modify-write code with phy_modify_mmd
-Message-ID: <ZHBbVNWeKK2di73h@debian>
-References: <20230524144539.62618-1-Parthiban.Veerasooran@microchip.com>
- <20230524144539.62618-3-Parthiban.Veerasooran@microchip.com>
- <ZG9599nfDnkcw8er@debian>
- <f81c80cb-fbe8-0c7e-f0f9-14509f47c653@microchip.com>
+        d=1e100.net; s=20221208; t=1685085072; x=1687677072;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
+        b=W7hX5lotBOAP/rOHbP9cI7zJqxYLlS2xvc2db4Nb/ZDoYTAnoHlKod6aqoV78Yn5Ec
+         0utGDn7pBv0lmR0b4D7P1Cw93JPUsQFM0G4psW1Fy/e1KgGF1lpz2GK/zyvGMAvmcdYT
+         0CBsLKOJ270jHI0GCz6M3sTlYvn1NbxAzpTHcQqL5kCMoYs8REfa+gfMMGnuHd9hOl4v
+         BNsu2mmMh7mgr56IAIWcahJkcDPb8nBF+OZe7R08z47+ZIuvoQL3Z2kDIcAysB+FaRZK
+         fTsMstWt4OcxTkIpiH5b4+/GF057m7Lwdf2zre5IayIVgHYrsTa5pBUs3/0bW1uBPlYD
+         JUOg==
+X-Gm-Message-State: AC+VfDxLhIPWUbtzz+fVQFrmpcMj4ttD25B6rWCQ+OtYI2QOjbC26HVy
+        rJMMxiTre6CAaTri8K3NQW6nz1Xlfk9ZSyFqJN8=
+X-Google-Smtp-Source: ACHHUZ5z8fhXalYwExjOCENeg/xJ6mERyzrZ5AZUx+YFz/zZbvcPfCTFBvlXZRQxJz/T3JVMVjAd5l0E9EoL0e2npss=
+X-Received: by 2002:a05:622a:1047:b0:3f6:b95e:f700 with SMTP id
+ f7-20020a05622a104700b003f6b95ef700mr831582qte.57.1685085071759; Fri, 26 May
+ 2023 00:11:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f81c80cb-fbe8-0c7e-f0f9-14509f47c653@microchip.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Sender: fataoouedraogo65@gmail.com
+Received: by 2002:a05:622a:38e:b0:3f6:b025:c0b5 with HTTP; Fri, 26 May 2023
+ 00:11:11 -0700 (PDT)
+From:   Dr Lisa Williams <lw4666555@gmail.com>
+Date:   Fri, 26 May 2023 00:11:11 -0700
+X-Google-Sender-Auth: Phwi4pSMI9VAOny-QmSnMBjhStU
+Message-ID: <CALAg1jQtfNjaTimpKmUGnoBSqQ+o9YrkCZ63tdzWJ+Nsb79Jow@mail.gmail.com>
+Subject: Hi,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_RANDOM_ENVFROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,43 +67,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 05:48:25AM +0000, Parthiban.Veerasooran@microchip.com wrote:
-> Hi Ramon,
-> > Nitpick, I think this block comment can be reduced to:
-> > /* The following block deviates from AN1699 which states that a values
-> >   * should be written back, even if unmodified.
-> >   * Which is not necessary, so it's safe to use phy_modify_mmd here.*/
-> > 
-> >   The comment I added was intended to describe why I was doing weird
-> >   things, but now I think it's more interesting to describe why we're
-> >   deviating from the AN.
-> > 
-> >   Or the block comment could be dropped all togheter, I'm guessing no one
-> >   is going to consult the AN if things 'just work'
-> > 
-> By consolidating all your comments in the other emails as well on this 
-> 2nd patch, do you agree for my below proposal?
-> 
-> We will remove all block comments and simply put AN1699 reference as we 
-> did for lan865x_revb0_config_init with a small addition on top of 
-> phy_modify_mmd for loop? so the comment will look like below,
-> 
-> /* Reference to AN1699
->   * 
-> https://ww1.microchip.com/downloads/aemDocuments/documents/AIS/ProductDocuments/SupportingCollateral/AN-LAN8670-1-2-config-60001699.pdf
->   * AN1699 says Read, Modify, Write, but the Write is not required if 
-> the  register already has the required value. So it is safe to use 
-> phy_modify_mmd here.
->   */
-> 
-> So in future, if someone wants to know about this configuration they can 
-> simply refer the AN1699.
-> 
-> What do you think?
-> 
+Hi,
 
-I'm not sure about the link, resources have a tendency to move.
-Otherwise LGTM
+My name is Dr. Lisa Williams, from the United States, currently living
+in the United Kingdom.
 
-> Best Regards,
-> Parthiban V
+I hope you consider my friend request. I will share some of my photos
+and more details about me when I get your reply.
+
+With love
+Lisa
