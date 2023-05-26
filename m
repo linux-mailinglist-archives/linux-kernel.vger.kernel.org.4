@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D10F711E29
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6819711E27
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjEZCzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 22:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S230126AbjEZCwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 22:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjEZCzp (ORCPT
+        with ESMTP id S229631AbjEZCwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 22:55:45 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99559BB;
-        Thu, 25 May 2023 19:55:43 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QS8gH5Hmxz4f3pCR;
-        Fri, 26 May 2023 10:55:39 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgD3X7OsH3BkvufoKA--.48588S3;
-        Fri, 26 May 2023 10:55:40 +0800 (CST)
-Subject: Re: [PATCH 2/3] md/raid10: fix incorrect done of recovery
-To:     Li Nan <linan666@huaweicloud.com>,
-        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org,
-        shli@fb.com, allenpeng@synology.com, alexwu@synology.com,
-        bingjingc@synology.com, neilb@suse.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230522115449.2203939-1-linan666@huaweicloud.com>
- <20230522115449.2203939-3-linan666@huaweicloud.com>
- <801a3a11-9a2c-dca2-cec4-4a9c71d3afb6@huaweicloud.com>
- <10e164cc-149f-baf6-de52-0b7d3c9468f6@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <1398a108-90ab-3790-eb43-faeaacda2c99@huaweicloud.com>
-Date:   Fri, 26 May 2023 10:55:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 25 May 2023 22:52:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB9CBC;
+        Thu, 25 May 2023 19:52:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4DFE64C6E;
+        Fri, 26 May 2023 02:52:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA50C433D2;
+        Fri, 26 May 2023 02:52:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685069526;
+        bh=elwavddJz+Fd/P1bINsLsw8TAd9fMQOUVxOVTcBdK10=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I0Iiy1YVBZpTpe4iomAH4Mt0xKIUb4LqW1IIoVCrPeCVxU7i4ftguEZVJUzBGNO05
+         o0g2K6fGEeIZL+1vTRwlhfLCVCvVgXIfqpBHLj58g0ME0AXOlSKOIHfd6myCxns747
+         RnOZ3okM2CpY84LzOeUqo1rlgN014TWJt8PFJWkMeROzF9ZG8PRCVdRZ6KApv2bMBt
+         KEUX5X2Q59UxiAEuCa5/ZKS+YsKu8n8D/KLNBIlUUxQHkUztWvvZ4Auk9wmAYlY0R5
+         VDLuIiqzakxqT7AV9ZAZ37+BaIjVb/u0Qdj0jQhAQSmAF6mf7rw4hAL9VZAVQpErkU
+         PzqtoZzmZQ6Sg==
+Date:   Thu, 25 May 2023 19:55:54 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com
+Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
+ for qcom wrapper
+Message-ID: <20230526025554.ni527gsr2bqxadl3@ripper>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-7-quic_kriskura@quicinc.com>
+ <20230515222730.7snn2i33gkg6ctd2@ripper>
 MIME-Version: 1.0
-In-Reply-To: <10e164cc-149f-baf6-de52-0b7d3c9468f6@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3X7OsH3BkvufoKA--.48588S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFW5XF45ZF1xAr4UCFWfKrg_yoW8KrW3pw
-        s7JFZIqryUG3s5Aw1jkryUAFyrt348t34UJr1xWa4fXFZIqryqgFy8Xr4vgFyDXr48tF1U
-        tw1jqFW3uFy2yaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
-        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-        BIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515222730.7snn2i33gkg6ctd2@ripper>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,66 +68,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2023/05/25 22:00, Li Nan 写道:
+On Mon, May 15, 2023 at 03:27:30PM -0700, Bjorn Andersson wrote:
+> On Sun, May 14, 2023 at 11:19:14AM +0530, Krishna Kurapati wrote:
+> > QCOM SoC SA8295P's tertiary quad port controller supports 2 HS+SS
+> > ports and 2 HS only ports. Add support for configuring PWR_EVENT_IRQ's
+> > for all the ports during suspend/resume.
+> > 
+> > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > ---
+> >  drivers/usb/dwc3/dwc3-qcom.c | 28 ++++++++++++++++++++++------
+> >  1 file changed, 22 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > index 959fc925ca7c..7a9bce66295d 100644
+> > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > @@ -37,7 +37,10 @@
+> >  #define PIPE3_PHYSTATUS_SW			BIT(3)
+> >  #define PIPE_UTMI_CLK_DIS			BIT(8)
+> >  
+> > -#define PWR_EVNT_IRQ_STAT_REG			0x58
+> > +#define PWR_EVNT_IRQ1_STAT_REG			0x58
+> > +#define PWR_EVNT_IRQ2_STAT_REG			0x1dc
+> > +#define PWR_EVNT_IRQ3_STAT_REG			0x228
+> > +#define PWR_EVNT_IRQ4_STAT_REG			0x238
+> >  #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
+> >  #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
+> >  
+> > @@ -93,6 +96,13 @@ struct dwc3_qcom {
+> >  	struct icc_path		*icc_path_apps;
+> >  };
+> >  
+> > +static u32 pwr_evnt_irq_stat_reg_offset[4] = {
+> > +			PWR_EVNT_IRQ1_STAT_REG,
+> > +			PWR_EVNT_IRQ2_STAT_REG,
+> > +			PWR_EVNT_IRQ3_STAT_REG,
+> > +			PWR_EVNT_IRQ4_STAT_REG,
 > 
+> Seems to be excessive indentation of these...
 > 
-> 在 2023/5/22 21:54, Yu Kuai 写道:
->> Hi,
->>
->> 在 2023/05/22 19:54, linan666@huaweicloud.com 写道:
->>> From: Li Nan <linan122@huawei.com>
->>>
->>> Recovery will go to giveup and let chunks_skipped++ in
->>> raid10_sync_request() if there are some bad_blocks, and it will return
->>> max_sector when chunks_skipped >= geo.raid_disks. Now, recovery fail and
->>> data is inconsistent but user think recovery is done, it is wrong.
->>>
->>> Fix it by set mirror's recovery_disabled and spare device shouln't be
->>> added to here.
->>>
->>> Signed-off-by: Li Nan <linan122@huawei.com>
->>> ---
->>>   drivers/md/raid10.c | 16 +++++++++++++++-
->>>   1 file changed, 15 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
->>> index e21502c03b45..70cc87c7ee57 100644
->>> --- a/drivers/md/raid10.c
->>> +++ b/drivers/md/raid10.c
->>> @@ -3303,6 +3303,7 @@ static sector_t raid10_sync_request(struct 
->>> mddev *mddev, sector_t sector_nr,
->>>       int chunks_skipped = 0;
->>>       sector_t chunk_mask = conf->geo.chunk_mask;
->>>       int page_idx = 0;
->>> +    int error_disk = -1;
->>>       /*
->>>        * Allow skipping a full rebuild for incremental assembly
->>> @@ -3386,7 +3387,18 @@ static sector_t raid10_sync_request(struct 
->>> mddev *mddev, sector_t sector_nr,
->>>           return reshape_request(mddev, sector_nr, skipped);
->>>       if (chunks_skipped >= conf->geo.raid_disks) {
->>> -        /* if there has been nothing to do on any drive,
->>> +        pr_err("md/raid10:%s: %s fail\n", mdname(mddev),
->>> +            test_bit(MD_RECOVERY_SYNC, &mddev->recovery) ?  "resync" 
->>> : "recovery");
->>
->> Line exceed 80 columns, and following.
->>> +        if (error_disk >= 0 && !test_bit(MD_RECOVERY_SYNC, 
->>> &mddev->recovery)) {
->>
->> Resync has the same problem, right?
->>
+> Can you also please confirm that these should be counted starting at 1 -
+> given that you otherwise talk about port0..N-1?
 > 
-> Yes. But I have no idea to fix it. md_error disk nor set 
-> recovery_disabled is a good solution. So, just print error message now.
-> Do you have any ideas?
+> > +};
+> > +
+> >  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
+> >  {
+> >  	u32 reg;
+> > @@ -413,13 +423,16 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+> >  {
+> >  	u32 val;
+> >  	int i, ret;
+> > +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> >  
+> >  	if (qcom->is_suspended)
+> >  		return 0;
+> >  
+> > -	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
+> > -	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
+> > -		dev_err(qcom->dev, "HS-PHY not in L2\n");
+> > +	for (i = 0; i < dwc->num_usb2_ports; i++) {
+> 
+> In the event that the dwc3 core fails to acquire or enable e.g. clocks
+> its drvdata will be NULL. If you then hit a runtime pm transition in the
+> dwc3-qcom glue you will dereference NULL here. (You can force this issue
+> by e.g. returning -EINVAL from dwc3_clk_enable()).
+> 
 
-I'll look into this, in the meadtime, I don't suggest to apply this
-patch because this is just temporary solution that only fix half of
-the problem.
+I looked at this once more, and realized that I missed the fact that
+dwc3_qcom_is_host() will happily dereference the drvdata() just a few
+lines further down...
 
-Thanks,
-Kuai
+So this is already broken.
 
+> So if you're peaking into qcom->dwc3 you need to handle the fact that
+> dwc might be NULL, here and in resume below.
+> 
+
+We need to fix the dwc3 glue design, so that the glue and the core can
+cooperate - and we have a few other use cases where this is needed (e.g.
+usb_role_switch propagation to the glue code).
+
+Regards,
+Bjorn
+
+> Regards,
+> Bjorn
