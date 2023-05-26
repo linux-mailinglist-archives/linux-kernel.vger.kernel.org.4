@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119347124BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD8F7124C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242920AbjEZKdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S242989AbjEZKef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjEZKdF (ORCPT
+        with ESMTP id S230035AbjEZKec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:33:05 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0653812A;
-        Fri, 26 May 2023 03:33:04 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30a8c4afa46so503374f8f.1;
-        Fri, 26 May 2023 03:33:03 -0700 (PDT)
+        Fri, 26 May 2023 06:34:32 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F01410A;
+        Fri, 26 May 2023 03:34:31 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96f53c06babso100060766b.3;
+        Fri, 26 May 2023 03:34:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685097182; x=1687689182;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7GMIbxSmACC58JY0s4Fx99cZ5L7LdXOL1wbSAxCBBMs=;
-        b=KnX4LPdzrVoYh1g88IfS6jHE1lmyQMFjkZHZDfkHT55O6QJ8dLc6GulwVzLk6FrZcL
-         BvdKsl+h/EX0Tz4kqo9AU5grM7X9SkoMazJ3QOB3cYYAskQrQIDZkVD6qPRBg7chxwfK
-         omg/2SkIDM5bpS0LIiEqW1uSvw0rXYC5/qwl3S7Yc4nGZ6VlpcuHxCr8GWkiNp7EFo+f
-         pWfvBGhVt+eCHt7N5/dgbgNVF+FBP2HdcgMHJ+fpJOifYsIMZ8O2QuiDdcckAy3MrdO5
-         KLbc9VgwRaGpr7T3aZ42GLGA5GevBLdZy/jLnfXBHFzrZrv/ngbca2LF0G4ZCExz+jwy
-         TYaQ==
+        d=gmail.com; s=20221208; t=1685097270; x=1687689270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pc/xijzYvFrrG8pDhhqIjVLLUDxG8WHPs4mXbRnCNFw=;
+        b=KuXaEvBHLCYZbPU8fEqT6U4czkmoTNkAWO01foV80tJsqHkP84fSzCf2biC3rSHNtk
+         /fc2BBM4agRWhUlt0EeDBaRaLXF2vpxhc2XdNqCDTGSbzhuw+9NMVh7rmmr9j4kpKN/9
+         mnmzrC+eBbFcUz9BKNktizxq6XFYX15fx1vyYIEQLDBuEKc2lX5d+fUXV7WbOn+a1wI7
+         rrsYurKWs2eXjKFwEP6vg+zJGVxoAHl7OReNNxybGRK8mstqhDp50EExjQ4PV/txo066
+         XZGwLaH3HWyxE3blKgp46cq4fzuk5l5MzRlb84UFDrfzjtbFopAouKYVHKDJRMZmsq4W
+         5PlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685097182; x=1687689182;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7GMIbxSmACC58JY0s4Fx99cZ5L7LdXOL1wbSAxCBBMs=;
-        b=V2EydWafPuamF1ggEaN3pjUGtSsnrafOAdIvkFlOnP5AHiGBvzp4WDL55mLG8cOmrJ
-         /pDn8Hka/Up87o8n5EURvvg7mhhYVUoin9Zlt8K0DeD0qfdZmBmC1u7UlNkGIDRfoUKb
-         oYoJv59CBDM9sMOauCRYzsaHqCzAX3Wg5gcMZ/Nf4onrC+lIfH2hleps37nhzCdkZwLY
-         3HjWjNiES4icX8am4SD1vVmzZOSG2uY7pbTGqvU+6ClGKtZWes6XftvTlS3tBmbGwGN7
-         BZGAnzLNVhHW4hXZu8RFP0iOfYe0b9oss99rGUqVVvBqHJCPzbKe+Fjgu4J6qQHhPWrN
-         ZGeQ==
-X-Gm-Message-State: AC+VfDy7gbxL8E7TJCUncnH803oL9b4tuFUEthKq2WUiylp1jUBIHnl3
-        Z4yCj/f2XDLR3dI+s0UP4rBc77uymfQ=
-X-Google-Smtp-Source: ACHHUZ62mVkAf+27IkrhdN6EwXoYAVcQ3q16snWYpA3QdQwxIFSSH4LCdtadf7UGwbc/g3pYsQKWjA==
-X-Received: by 2002:a5d:6ac4:0:b0:30a:8e6a:3d77 with SMTP id u4-20020a5d6ac4000000b0030a8e6a3d77mr1197818wrw.1.1685097182117;
-        Fri, 26 May 2023 03:33:02 -0700 (PDT)
-Received: from suse.localnet (host-95-248-204-235.retail.telecomitalia.it. [95.248.204.235])
-        by smtp.gmail.com with ESMTPSA id j10-20020a5d618a000000b0030631a599a0sm4647915wru.24.2023.05.26.03.33.00
+        d=1e100.net; s=20221208; t=1685097270; x=1687689270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pc/xijzYvFrrG8pDhhqIjVLLUDxG8WHPs4mXbRnCNFw=;
+        b=BFAfBrp0zBotoLm3FgCMoOn35mKXNBdyBQ6jb2zNNpc85vLGDD2jDfRrNmnprV9jAo
+         wWmL/953Mx2xa/Ww2DjJT8rIuyA9whXxc+aBLd1x7sG+PMq+WPTi2w6jS+xXyz08cD86
+         x/i8LN8abfbvLGR8DlGv0BmEP2fUu7gDQOQ9yHVyc2BEo/qChUsznBDy0ZHHudUB8F7X
+         5h+LfBQgS839JlczwGGGPxqei9HoIgkZt2hBB1/S4hKgBH2eyniXhv/FGn1SrXXtTBZr
+         OSTiRIHBwracyM9oy3wfykTVvM7/OCGYu85xWqHz2P1v9DuudY13AO1903cgJUgH5yjz
+         F81w==
+X-Gm-Message-State: AC+VfDxfkFN8HR4YaT8Jhg5a9/bbD5gNPRCcTRKSfuCnMtFJ4k/Bg3XR
+        bgZa3CDmiOFgn24N88OgkE8=
+X-Google-Smtp-Source: ACHHUZ4e455Ljo7KOTGT99o7XC8miLk+PvND+AzyvC4xOyeArsLMIwyc6VZpm3zq4rrwrslUtnvlUQ==
+X-Received: by 2002:a17:906:7310:b0:966:1fef:22d8 with SMTP id di16-20020a170906731000b009661fef22d8mr1759377ejc.7.1685097269435;
+        Fri, 26 May 2023 03:34:29 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation.station (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
+        by smtp.gmail.com with ESMTPSA id fi13-20020a170906da0d00b0096fbc516a93sm1984243ejb.211.2023.05.26.03.34.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 03:33:01 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [git pull] vfs.git sysv pile
-Date:   Fri, 26 May 2023 12:32:59 +0200
-Message-ID: <5939173.lOV4Wx5bFT@suse>
-In-Reply-To: <20230525201046.cth6qizdh7lwobxj@quack3>
-References: <Y/gugbqq858QXJBY@ZenIV> <3307436.0oRPG1VZx4@suse>
- <20230525201046.cth6qizdh7lwobxj@quack3>
+        Fri, 26 May 2023 03:34:29 -0700 (PDT)
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     tomm.merciai@gmail.com
+Cc:     jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        martin.hecht@avnet.eu, linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jason Chen <jason.z.chen@intel.com>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 0/2] media: i2c: Add support for alvium camera
+Date:   Fri, 26 May 2023 12:34:14 +0200
+Message-Id: <20230526103427.774226-1-tomm.merciai@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,64 +82,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=EC 25 maggio 2023 22:10:46 CEST Jan Kara wrote:
-> On Mon 27-03-23 12:29:56, Fabio M. De Francesco wrote:
-> > On luned=EC 20 marzo 2023 13:47:25 CEST Jan Kara wrote:
-> > > On Mon 20-03-23 12:18:38, Fabio M. De Francesco wrote:
-> > > > On gioved=EC 16 marzo 2023 11:30:21 CET Fabio M. De Francesco wrote:
-> > > > > On gioved=EC 16 marzo 2023 10:00:35 CET Jan Kara wrote:
-> > > > > > On Wed 15-03-23 19:08:57, Fabio M. De Francesco wrote:
-> > > > > > > On mercoled=EC 1 marzo 2023 15:14:16 CET Al Viro wrote:
-> > [snip]
-> >=20
-> > > > > > > > I think I've pushed a demo patchset to vfs.git at some point
-> > > > > > > > back
-> >=20
-> > in
-> >=20
-> > > > > > > > January... Yep - see #work.ext2 in there; completely untest=
-ed,
-> > > > > > > > though.
-> >=20
-> > Al,
-> >=20
-> > I reviewed and tested your patchset (please see below).
-> >=20
-> > I think that you probably also missed Jan's last message about how you
-> > prefer
-> > they to be treated.
-> >=20
-> > Jan asked you whether you will submit these patches or he should just p=
-ull
-> > your branch into his tree.
-> >=20
-> > Please look below for my tags and Jan's question.
->=20
-> Ok, Al didn't reply
+Hello All,
 
-I noticed it...=20
+This series add support for Allied Vision Alvium camera.
+The Alvium camera is shipped with sensor + isp in the same housing.
+The camera can be equipped with one out of various sensor and abstract
+the user from this. Camera is connected via MIPI CSI-2.
 
-> so I've just pulled the patches from Al's tree,
+Working on top of Ideas on Board (branch: ideasonboard/v6.2/isi)
+I'm able to test the driver on imx8mp-evk.
+I collect also some patches to enable HDMI on imx8mp-evk from Pengutronix
+(branch: pengutronix-imx8mp-hdmi)
 
-Thank you very much for doing this :-)
+I collect the patchset required to enable ISI + HDMI on imx8mp-evk into
+the following branch from Avnet Silica Software & Services EMEA [1].
 
-> added
-> your Tested-by tag
+Some documentation on testing ISP and ISI of imx8mp-evk here [2].
 
-Did you also notice the Reviewed-by tags?
+Thanks all for the great work!
 
-> and push out the result into linux-next.
+[1] - https://github.com/avs-sas/linux/tree/tm/ideasonboard/v6.4.0-rc2/isi/imx8mp_evk/alvium_drv_skel1e_v1
+[2] - https://gist.github.com/Scott31393/077a10024a6058536d3f2fdde476265a
 
-Great!
-Again thanks,
+Tommaso Merciai (2):
+  media: dt-bindings: alvium: add document YAML binding
+  media: i2c: Add support for alvium camera
 
-=46abio
+ .../media/i2c/alliedvision,alvium.yaml        |  117 +
+ drivers/media/i2c/Kconfig                     |    9 +
+ drivers/media/i2c/Makefile                    |    1 +
+ drivers/media/i2c/alvium.c                    | 3547 +++++++++++++++++
+ drivers/media/i2c/alvium.h                    |  500 +++
+ 5 files changed, 4174 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+ create mode 100644 drivers/media/i2c/alvium.c
+ create mode 100644 drivers/media/i2c/alvium.h
 
-> 							=09
-Honza
-> --
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
-
-
+-- 
+2.34.1
 
