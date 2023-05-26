@@ -2,321 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB3C711CAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0083C711CBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236413AbjEZBce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 21:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
+        id S241891AbjEZBgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 21:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235395AbjEZBcc (ORCPT
+        with ESMTP id S241569AbjEZBgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 21:32:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2894E125
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:31:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685064709;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H0kCOd6zZFv7bAvvBeo0wUHiEHw+jtzkrolNnIKKHFY=;
-        b=LjqsNPJHrTQfV0bIljMPetlrYtITwW87HUXYmfp7vMyBgTimaWBb9Eo9rQXaQC7sb2RxXZ
-        jKtr1eluZ6RQYQT9Hb7vzLcwFfVMS+CBskttvBm2H7RcgXlakAEkKRg71xoZAyd6Y4Mexu
-        zqjXllijs1+Uok1hjCVnXs0XD6OQY+Y=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-513-R-IQaO9JOJyEjIyhLcp9Hw-1; Thu, 25 May 2023 21:31:47 -0400
-X-MC-Unique: R-IQaO9JOJyEjIyhLcp9Hw-1
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4edc7406cb5so65530e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:31:47 -0700 (PDT)
+        Thu, 25 May 2023 21:36:15 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F85125
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:36:13 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d30ab1ef2so333880b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685064973; x=1687656973;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bR3UToISzSLbX8ZQkHUE42zju/u1Pd13Qxkfw1ihU0s=;
+        b=xBykKLfgpBaSvfRX3A2+FxT1KMrbnM15im+s6pEISEci1JWoy+6UGBvACHOKnzsNQr
+         afk90Xh/M4D33/CZyC3EusZmqc1ApG7JjLCpW6aX3SWhZt9ZYbyqO7WMBxqRgMWFTHtq
+         HSdOCN6vwq8iD2sZuRhSnYIqjspgSjnwj/JJkdgbMcgZZCUfDvhe0451GrKyYqY5eIvT
+         gbFjo76t5wzNhvbQD1+eZ6JBj+DjthvcCoZA0AU3MkAccbMC5I/5OCQHLQBwb95rcN0F
+         aZC1+itQVaJaNWNgoirfbLXH3K81rFtIImWJ/54lSzn69rMSJfSeM4eOwdpVzh8fi8GZ
+         2dwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685064706; x=1687656706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H0kCOd6zZFv7bAvvBeo0wUHiEHw+jtzkrolNnIKKHFY=;
-        b=e2EvGhUyH/vl96DC+Nlj709MOAvyCnnFxRWt31rSstg+vOD6OP0pttGcMTyWSC57l5
-         gqcvebl/fms2hO+QznRX86EVzanVrCGBaxwrnt+atf/LHgG1SM9alz2hf6kY+XV+TI5K
-         8lS7vNUDtzNz7Y6IMgopMk/7bzcAYFi3DMornwVjS8stI7GCwN9kn7Wx77/mmWSLlkcK
-         5wFjR0yY3zDkRD54BEb5Y1rwLHWewE8DDrbkrPCkkZWfGs7AwsYoUzgLqapv/YL6LQ05
-         5CC+o4NGvq0t52BUbH7lWl9blEwmAJTXanIhjUk5q7LIu/T6gT0mEQdUoc0AKqPxBp15
-         glmw==
-X-Gm-Message-State: AC+VfDw5eOIM+0IjSvQrhxf8XGCL0j3Hgn9x3fo2QN6u5q3muXf88u/n
-        A33hGrItXg1fz705v2NPi6NrnSyL9JoSFW/2FiSTombE++7w56B0eBVtWeJ3YdGOqqbH59UTQS5
-        iyRCETtrMLZzxGzauQiOGaHt9ZKf3qm3yDhwU9weD
-X-Received: by 2002:ac2:5926:0:b0:4f3:b258:fee4 with SMTP id v6-20020ac25926000000b004f3b258fee4mr4548lfi.59.1685064706409;
-        Thu, 25 May 2023 18:31:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ42AdCfrI+6WFJ/soB09uftcaVkd1k5xpC2LlL0MHfrmY7ShJUXBM/xwj8CeIYPn5vW0zmH4Zy4ClWMwUvdO1A=
-X-Received: by 2002:ac2:5926:0:b0:4f3:b258:fee4 with SMTP id
- v6-20020ac25926000000b004f3b258fee4mr4541lfi.59.1685064706005; Thu, 25 May
- 2023 18:31:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685064973; x=1687656973;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bR3UToISzSLbX8ZQkHUE42zju/u1Pd13Qxkfw1ihU0s=;
+        b=NO/jnpejRgh1UrOwUi3E1ZVdYQv0hAXFbjsFwvRynLwIv6NJnakpRDTGwLMgP0NU/E
+         0GMqQUhELVPWILUwG85AbFFq8b94bNIBMOlyRboHBRcOxw9W7UCGWa7m1Vs1elJOlkza
+         6hvFUNSOE1MCZ0CAgJ3UFA271VFr4HKps3qh8Nc7QzN4av6WEuM4wfmeM4TxMiqE40aR
+         Kg8tybXG+K5rhRG0mO/I89uTRRzhOtWr2voBsl4+6LtqAtYNxhgyCp8ss/eGT9Pqk2Cv
+         PUCJ2Flw7bUm8I9s/YoSzbih8T4eogqHIpZR9+A0MaWCQsiStfjwjC9pgC6KWUrOwfvg
+         nxlA==
+X-Gm-Message-State: AC+VfDzuooqyNAeNtWm6BluSpOCARXG1Q/OidTm9WH6Y+TlUwPZRigqM
+        UODOpIDxRALzd+L1sSf6VOfUlw==
+X-Google-Smtp-Source: ACHHUZ6sPdmuQonaj/olpSGroUfK3OoVqwjZ0hrzZiUIv4Qa66jySy12bySeqpIr9yyQSaUMpmfRQA==
+X-Received: by 2002:a05:6a00:124a:b0:643:96bc:b292 with SMTP id u10-20020a056a00124a00b0064396bcb292mr1061741pfi.5.1685064972718;
+        Thu, 25 May 2023 18:36:12 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
+        by smtp.gmail.com with ESMTPSA id g9-20020a62e309000000b0063efe2f3ecdsm1679539pfh.204.2023.05.25.18.36.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 18:36:11 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q2MNF-003wt9-15;
+        Fri, 26 May 2023 11:36:09 +1000
+Date:   Fri, 26 May 2023 11:36:09 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     Mike Snitzer <snitzer@kernel.org>, Joe Thornber <ejt@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZHANCbnHuhnwCrGz@dread.disaster.area>
+References: <ZGeKm+jcBxzkMXQs@redhat.com>
+ <ZGgBQhsbU9b0RiT1@dread.disaster.area>
+ <ZGu0LaQfREvOQO4h@redhat.com>
+ <ZGzIJlCE2pcqQRFJ@bfoster>
+ <ZGzbGg35SqMrWfpr@redhat.com>
+ <ZG1dAtHmbQ53aOhA@dread.disaster.area>
+ <ZG5taYoXDRymo/e9@redhat.com>
+ <ZG9JD+4Zu36lnm4F@dread.disaster.area>
+ <ZG+GKwFC7M3FfAO5@redhat.com>
+ <CAG9=OMNhCNFhTcktxSMYbc5WXkSZ-vVVPtb4ak6B3Z2-kEVX0Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230524081842.3060-1-jasowang@redhat.com> <20230524081842.3060-2-jasowang@redhat.com>
- <20230524050604-mutt-send-email-mst@kernel.org> <CACGkMEvm=MJz5e2C_7U=yjrvoo7pxsr=tRAL29OdxJDWhvtiSQ@mail.gmail.com>
- <20230525033750-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230525033750-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 26 May 2023 09:31:34 +0800
-Message-ID: <CACGkMEtCA0-NY=qq_FnGzoY+VXmixGmBV3y80nZWO=NmxdRWmw@mail.gmail.com>
-Subject: Re: [PATCH V3 net-next 1/2] virtio-net: convert rx mode setting to
- use workqueue
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     xuanzhuo@linux.alibaba.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alvaro.karsz@solid-run.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG9=OMNhCNFhTcktxSMYbc5WXkSZ-vVVPtb4ak6B3Z2-kEVX0Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 3:41=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
- wrote:
->
-> On Thu, May 25, 2023 at 11:43:34AM +0800, Jason Wang wrote:
-> > On Wed, May 24, 2023 at 5:15=E2=80=AFPM Michael S. Tsirkin <mst@redhat.=
-com> wrote:
+On Thu, May 25, 2023 at 03:47:21PM -0700, Sarthak Kukreti wrote:
+> On Thu, May 25, 2023 at 9:00 AM Mike Snitzer <snitzer@kernel.org> wrote:
+> > On Thu, May 25 2023 at  7:39P -0400,
+> > Dave Chinner <david@fromorbit.com> wrote:
+> > > On Wed, May 24, 2023 at 04:02:49PM -0400, Mike Snitzer wrote:
+> > > > On Tue, May 23 2023 at  8:40P -0400,
+> > > > Dave Chinner <david@fromorbit.com> wrote:
+> > > > > It's worth noting that XFS already has a coarse-grained
+> > > > > implementation of preferred regions for metadata storage. It will
+> > > > > currently not use those metadata-preferred regions for user data
+> > > > > unless all the remaining user data space is full.  Hence I'm pretty
+> > > > > sure that a pre-provisioning enhancment like this can be done
+> > > > > entirely in-memory without requiring any new on-disk state to be
+> > > > > added.
+> > > > >
+> > > > > Sure, if we crash and remount, then we might chose a different LBA
+> > > > > region for pre-provisioning. But that's not really a huge deal as we
+> > > > > could also run an internal background post-mount fstrim operation to
+> > > > > remove any unused pre-provisioning that was left over from when the
+> > > > > system went down.
+> > > >
+> > > > This would be the FITRIM with extension you mention below? Which is a
+> > > > filesystem interface detail?
 > > >
-> > > On Wed, May 24, 2023 at 04:18:41PM +0800, Jason Wang wrote:
-> > > > This patch convert rx mode setting to be done in a workqueue, this =
-is
-> > > > a must for allow to sleep when waiting for the cvq command to
-> > > > response since current code is executed under addr spin lock.
-> > > >
-> > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > ---
-> > > > Changes since V1:
-> > > > - use RTNL to synchronize rx mode worker
-> > > > ---
-> > > >  drivers/net/virtio_net.c | 55 ++++++++++++++++++++++++++++++++++++=
-+---
-> > > >  1 file changed, 52 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > index 56ca1d270304..5d2f1da4eaa0 100644
-> > > > --- a/drivers/net/virtio_net.c
-> > > > +++ b/drivers/net/virtio_net.c
-> > > > @@ -265,6 +265,12 @@ struct virtnet_info {
-> > > >       /* Work struct for config space updates */
-> > > >       struct work_struct config_work;
-> > > >
-> > > > +     /* Work struct for config rx mode */
+> > > No. We might reuse some of the internal infrastructure we use to
+> > > implement FITRIM, but that's about it. It's just something kinda
+> > > like FITRIM but with different constraints determined by the
+> > > filesystem rather than the user...
 > > >
-> > > With a bit less abbreviation maybe? setting rx mode?
+> > > As it is, I'm not sure we'd even need it - a preiodic userspace
+> > > FITRIM would acheive the same result, so leaked provisioned spaces
+> > > would get cleaned up eventually without the filesystem having to do
+> > > anything specific...
+> > >
+> > > > So dm-thinp would _not_ need to have new
+> > > > state that tracks "provisioned but unused" block?
+> > >
+> > > No idea - that's your domain. :)
+> > >
+> > > dm-snapshot, for certain, will need to track provisioned regions
+> > > because it has to guarantee that overwrites to provisioned space in
+> > > the origin device will always succeed. Hence it needs to know how
+> > > much space breaking sharing in provisioned regions after a snapshot
+> > > has been taken with be required...
 > >
-> > That's fine.
+> > dm-thinp offers its own much more scalable snapshot support (doesn't
+> > use old dm-snapshot N-way copyout target).
 > >
-> > >
-> > > > +     struct work_struct rx_mode_work;
-> > > > +
-> > > > +     /* Is rx mode work enabled? */
-> > >
-> > > Ugh not a great comment.
-> >
-> > Any suggestions for this. E.g we had:
-> >
-> >         /* Is delayed refill enabled? */
->
-> /* OK to queue work setting RX mode? */
+> > dm-snapshot isn't going to be modified to support this level of
+> > hardening (dm-snapshot is basically in "maintenance only" now).
 
-Ok.
+Ah, of course. Sorry for the confusion, I was kinda using
+dm-snapshot as shorthand for "dm-thinp + snapshots".
 
->
->
-> > >
-> > > > +     bool rx_mode_work_enabled;
-> > > > +
-> > >
-> > >
-> > >
-> > > >       /* Does the affinity hint is set for virtqueues? */
-> > > >       bool affinity_hint_set;
-> > > >
-> > > > @@ -388,6 +394,20 @@ static void disable_delayed_refill(struct virt=
-net_info *vi)
-> > > >       spin_unlock_bh(&vi->refill_lock);
-> > > >  }
-> > > >
-> > > > +static void enable_rx_mode_work(struct virtnet_info *vi)
-> > > > +{
-> > > > +     rtnl_lock();
-> > > > +     vi->rx_mode_work_enabled =3D true;
-> > > > +     rtnl_unlock();
-> > > > +}
-> > > > +
-> > > > +static void disable_rx_mode_work(struct virtnet_info *vi)
-> > > > +{
-> > > > +     rtnl_lock();
-> > > > +     vi->rx_mode_work_enabled =3D false;
-> > > > +     rtnl_unlock();
-> > > > +}
-> > > > +
-> > > >  static void virtqueue_napi_schedule(struct napi_struct *napi,
-> > > >                                   struct virtqueue *vq)
-> > > >  {
-> > > > @@ -2341,9 +2361,11 @@ static int virtnet_close(struct net_device *=
-dev)
-> > > >       return 0;
-> > > >  }
-> > > >
-> > > > -static void virtnet_set_rx_mode(struct net_device *dev)
-> > > > +static void virtnet_rx_mode_work(struct work_struct *work)
-> > > >  {
-> > > > -     struct virtnet_info *vi =3D netdev_priv(dev);
-> > > > +     struct virtnet_info *vi =3D
-> > > > +             container_of(work, struct virtnet_info, rx_mode_work)=
-;
-> > > > +     struct net_device *dev =3D vi->dev;
-> > > >       struct scatterlist sg[2];
-> > > >       struct virtio_net_ctrl_mac *mac_data;
-> > > >       struct netdev_hw_addr *ha;
-> > > > @@ -2356,6 +2378,8 @@ static void virtnet_set_rx_mode(struct net_de=
-vice *dev)
-> > > >       if (!virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_RX))
-> > > >               return;
-> > > >
-> > > > +     rtnl_lock();
-> > > > +
-> > > >       vi->ctrl->promisc =3D ((dev->flags & IFF_PROMISC) !=3D 0);
-> > > >       vi->ctrl->allmulti =3D ((dev->flags & IFF_ALLMULTI) !=3D 0);
-> > > >
-> > > > @@ -2373,14 +2397,19 @@ static void virtnet_set_rx_mode(struct net_=
-device *dev)
-> > > >               dev_warn(&dev->dev, "Failed to %sable allmulti mode.\=
-n",
-> > > >                        vi->ctrl->allmulti ? "en" : "dis");
-> > > >
-> > > > +     netif_addr_lock_bh(dev);
-> > > > +
-> > > >       uc_count =3D netdev_uc_count(dev);
-> > > >       mc_count =3D netdev_mc_count(dev);
-> > > >       /* MAC filter - use one buffer for both lists */
-> > > >       buf =3D kzalloc(((uc_count + mc_count) * ETH_ALEN) +
-> > > >                     (2 * sizeof(mac_data->entries)), GFP_ATOMIC);
-> > > >       mac_data =3D buf;
-> > > > -     if (!buf)
-> > > > +     if (!buf) {
-> > > > +             netif_addr_unlock_bh(dev);
-> > > > +             rtnl_unlock();
-> > > >               return;
-> > > > +     }
-> > > >
-> > > >       sg_init_table(sg, 2);
-> > > >
-> > > > @@ -2401,6 +2430,8 @@ static void virtnet_set_rx_mode(struct net_de=
-vice *dev)
-> > > >       netdev_for_each_mc_addr(ha, dev)
-> > > >               memcpy(&mac_data->macs[i++][0], ha->addr, ETH_ALEN);
-> > > >
-> > > > +     netif_addr_unlock_bh(dev);
-> > > > +
-> > > >       sg_set_buf(&sg[1], mac_data,
-> > > >                  sizeof(mac_data->entries) + (mc_count * ETH_ALEN))=
-;
-> > > >
-> > > > @@ -2408,9 +2439,19 @@ static void virtnet_set_rx_mode(struct net_d=
-evice *dev)
-> > > >                                 VIRTIO_NET_CTRL_MAC_TABLE_SET, sg))
-> > > >               dev_warn(&dev->dev, "Failed to set MAC filter table.\=
-n");
-> > > >
-> > > > +     rtnl_unlock();
-> > > > +
-> > > >       kfree(buf);
-> > > >  }
-> > > >
-> > > > +static void virtnet_set_rx_mode(struct net_device *dev)
-> > > > +{
-> > > > +     struct virtnet_info *vi =3D netdev_priv(dev);
-> > > > +
-> > > > +     if (vi->rx_mode_work_enabled)
-> > > > +             schedule_work(&vi->rx_mode_work);
-> > > > +}
-> > > > +
-> > >
-> > > >  static int virtnet_vlan_rx_add_vid(struct net_device *dev,
-> > > >                                  __be16 proto, u16 vid)
-> > > >  {
-> > > > @@ -3181,6 +3222,8 @@ static void virtnet_freeze_down(struct virtio=
-_device *vdev)
-> > > >
-> > > >       /* Make sure no work handler is accessing the device */
-> > > >       flush_work(&vi->config_work);
-> > > > +     disable_rx_mode_work(vi);
-> > > > +     flush_work(&vi->rx_mode_work);
-> > > >
-> > > >       netif_tx_lock_bh(vi->dev);
-> > > >       netif_device_detach(vi->dev);
-> > >
-> > > Hmm so queued rx mode work will just get skipped
-> > > and on restore we get a wrong rx mode.
-> > > Any way to make this more robust?
-> >
-> > It could be done by scheduling a work on restore.
+> > But I understand your meaning: what you said is 100% applicable to
+> > dm-thinp's snapshot implementation and needs to be accounted for in
+> > thinp's metadata (inherent 'provisioned' flag).
 
-Rethink this, I think we don't need to care about this case since the
-user processes should have been frozened. And that the reason we don't
-even need to hold RTNL here.
+*nod*
 
-Thanks
+> A bit orthogonal: would dm-thinp need to differentiate between
+> user-triggered provision requests (eg. from fallocate()) vs
+> fs-triggered requests?
 
-> >
-> > Thanks
->
->
-> > >
-> > >
-> > > > @@ -3203,6 +3246,7 @@ static int virtnet_restore_up(struct virtio_d=
-evice *vdev)
-> > > >       virtio_device_ready(vdev);
-> > > >
-> > > >       enable_delayed_refill(vi);
-> > > > +     enable_rx_mode_work(vi);
-> > > >
-> > > >       if (netif_running(vi->dev)) {
-> > > >               err =3D virtnet_open(vi->dev);
-> > > > @@ -4002,6 +4046,7 @@ static int virtnet_probe(struct virtio_device=
- *vdev)
-> > > >       vdev->priv =3D vi;
-> > > >
-> > > >       INIT_WORK(&vi->config_work, virtnet_config_changed_work);
-> > > > +     INIT_WORK(&vi->rx_mode_work, virtnet_rx_mode_work);
-> > > >       spin_lock_init(&vi->refill_lock);
-> > > >
-> > > >       if (virtio_has_feature(vdev, VIRTIO_NET_F_MRG_RXBUF)) {
-> > > > @@ -4110,6 +4155,8 @@ static int virtnet_probe(struct virtio_device=
- *vdev)
-> > > >       if (vi->has_rss || vi->has_rss_hash_report)
-> > > >               virtnet_init_default_rss(vi);
-> > > >
-> > > > +     enable_rx_mode_work(vi);
-> > > > +
-> > > >       /* serialize netdev register + virtio_device_ready() with ndo=
-_open() */
-> > > >       rtnl_lock();
-> > > >
-> > > > @@ -4207,6 +4254,8 @@ static void virtnet_remove(struct virtio_devi=
-ce *vdev)
-> > > >
-> > > >       /* Make sure no work handler is accessing the device. */
-> > > >       flush_work(&vi->config_work);
-> > > > +     disable_rx_mode_work(vi);
-> > > > +     flush_work(&vi->rx_mode_work);
-> > > >
-> > > >       unregister_netdev(vi->dev);
-> > > >
-> > > > --
-> > > > 2.25.1
-> > >
->
+Why?  How is the guarantee the block device has to provide to
+provisioned areas different for user vs filesystem internal
+provisioned space?
 
+> I would lean towards user provisioned areas not
+> getting dedup'd on snapshot creation,
+
+<twitch>
+
+Snapshotting is a clone operation, not a dedupe operation.
+
+Yes, the end result of both is that you have a block shared between
+multiple indexes that needs COW on the next overwrite, but the two
+operations that get to that point are very different...
+
+</pedantic mode disegaged>
+
+> but that would entail tracking
+> the state of the original request and possibly a provision request
+> flag (REQ_PROVISION_DEDUP_ON_SNAPSHOT) or an inverse flag
+> (REQ_PROVISION_NODEDUP). Possibly too convoluted...
+
+Let's not try to add everyone's favourite pony to this interface
+before we've even got it off the ground.
+
+It's the simple precision of the API, the lack of cross-layer
+communication requirements and the ability to implement and optimise
+the independent layers independently that makes this a very
+appealing solution.
+
+We need to start with getting the simple stuff working and prove the
+concept. Then once we can observe the behaviour of a working system
+we can start working on optimising individual layers for efficiency
+and performance....
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
