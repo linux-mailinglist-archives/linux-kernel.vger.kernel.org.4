@@ -2,79 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611DD71277B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E568B71277F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243410AbjEZN1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
+        id S243646AbjEZN2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243376AbjEZN06 (ORCPT
+        with ESMTP id S236925AbjEZN2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:26:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E636C1B1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:26:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 26 May 2023 09:28:21 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DC8B2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:28:20 -0700 (PDT)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E4B160F30
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B8B0C433EF;
-        Fri, 26 May 2023 13:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685107605;
-        bh=tYTStZfurhFXtLGWzsuf3KQ4eXs6w6ShgbVqVxBaAnE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XirUxCieKIurmpHSk/HUTgXzalsW/QzhWhYYQXE30vcmvv2qu+/vOGT2S/XyDVFbl
-         bVW6SqvaxcPrdN+Pd+8o7BJh9BbLVr9dlCK3rYuksnEs6nb+R2NUckGBBn7Jt2dO3N
-         gnj0lgWhlfEMxNqO/8Y3WzigFSZdnaF47kS4Rto4=
-Date:   Fri, 26 May 2023 14:26:41 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Samuel Iglesias =?iso-8859-1?Q?Gons=E1lvez?= 
-        <siglesias@igalia.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        Jens Taprogge <jens.taprogge@taprogge.org>,
-        industrypack-devel@lists.sourceforge.net
-Subject: Re: [PATCH] MAINTAINERS: Vaibhav Gupta is the new ipack maintainer
-Message-ID: <2023052607-surfer-dilute-2322@gregkh>
-References: <20230526100718.35531-1-siglesias@igalia.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2215B21B0A;
+        Fri, 26 May 2023 13:28:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1685107699; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=6yvhh592Q06cVFtClLtKEZXEcpjQOvzte1sHIMrItU0=;
+        b=EnHyiSYBs4ZUIosM4GKx272iFBJk01FgNBO4hiXNEc/pK8MFYCztsoVfNu7sK6AzbMJ9gI
+        P2e0uQ0j5TxEm3Bz7B3p4aFvPbk/78CtclTYWnyAAdfSGBQDeEMvI8a/vvTBO4TRTXw0Ic
+        RFbCOl9e8OUiTZO2eGm70gjlN6e8Q+0=
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id CB67613684;
+        Fri, 26 May 2023 13:28:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id qlW8LvKzcGSNaAAAGKfGzw
+        (envelope-from <nik.borisov@suse.com>); Fri, 26 May 2023 13:28:18 +0000
+From:   Nikolay Borisov <nik.borisov@suse.com>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, mhocko@suse.cz,
+        Nikolay Borisov <nik.borisov@suse.com>
+Subject: [RFC PATCH] x86/entry: Disable ia32 syscalls and introduce a boot time toggle
+Date:   Fri, 26 May 2023 16:28:06 +0300
+Message-Id: <20230526132806.1475900-1-nik.borisov@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230526100718.35531-1-siglesias@igalia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 12:07:18PM +0200, Samuel Iglesias Gonsálvez wrote:
-> MIME-Version: 1.0
-> Content-Type: text/plain; charset=UTF-8
-> Content-Transfer-Encoding: 8bit
+Distributions would like to reduce their attack surface as much as
+possible but at the same time they have to cater to a wide variety of
+legacy software. One such avenue where distros have to strike a balance
+is the support for 32bit syscalls on a 64bit kernel. Ideally the compat
+support should be disabled for the majority of the time, yet in the few
+cases where it might be needed it'd be good if there is some toggle
+which would allow users to turn on back compat support.
 
-Why are these lines in the body of your email?
+This patch aims to cater for this use case by disabling ia32 syscalls
+and introducing a boot time parameter 'ia32_enabled' which if set to
+'true' brings backs 32bit syscall support.
 
-> 
-> I have no longer access to the HW, nor time to properly maintain it.
-> 
-> Adding Vaibhav as maintainer as he currently has access to the HW, he
-> is working at CERN (user of these drivers) and he is maintaining them
-> internally there.
-> 
-> Signed-off-by: Samuel Iglesias Gonsálvez <siglesias@igalia.com>
+Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
+---
 
-For obvious reasons, I need an ack from Vaibhav :)
+Rather than being a final implementation I'd like this to serve as a conversation
+starter and agree on a final solution that's acceptable to everyone.
 
-And a resend, without the email headers in the body.
+ arch/x86/entry/common.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-thanks,
+diff --git a/arch/x86/entry/common.c b/arch/x86/entry/common.c
+index 6c2826417b33..6063727a75fe 100644
+--- a/arch/x86/entry/common.c
++++ b/arch/x86/entry/common.c
+@@ -19,6 +19,7 @@
+ #include <linux/nospec.h>
+ #include <linux/syscalls.h>
+ #include <linux/uaccess.h>
++#include <linux/init.h>
 
-greg k-h
+ #ifdef CONFIG_XEN_PV
+ #include <xen/xen-ops.h>
+@@ -96,6 +97,20 @@ static __always_inline int syscall_32_enter(struct pt_regs *regs)
+ 	return (int)regs->orig_ax;
+ }
+
++int ia32_enabled = 0;
++
++static int __init ia32_enabled_parsecmdline(char *arg)
++{
++	if (!strcmp(arg, "true"))
++		ia32_enabled = 1;
++	else
++		pr_crit("Unsupported ia32_enabled=%s, ia32 syscalls disabled\n",
++			arg);
++
++	return 0;
++}
++early_param("ia32_enabled", ia32_enabled_parsecmdline);
++
+ /*
+  * Invoke a 32-bit syscall.  Called with IRQs on in CONTEXT_KERNEL.
+  */
+@@ -107,7 +122,7 @@ static __always_inline void do_syscall_32_irqs_on(struct pt_regs *regs, int nr)
+ 	 */
+ 	unsigned int unr = nr;
+
+-	if (likely(unr < IA32_NR_syscalls)) {
++	if (likely(unr < IA32_NR_syscalls) && ia32_enabled) {
+ 		unr = array_index_nospec(unr, IA32_NR_syscalls);
+ 		regs->ax = ia32_sys_call_table[unr](regs);
+ 	} else if (nr != -1) {
+--
+2.34.1
+
