@@ -2,74 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07068712C1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0675A712C24
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242590AbjEZSC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57504 "EHLO
+        id S236624AbjEZSF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjEZSCY (ORCPT
+        with ESMTP id S229732AbjEZSFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:02:24 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A37AD3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:02:22 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685124141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JOmTTnUJ0QiDzTvM35S+su84JQ1WbaoWgG487kovL04=;
-        b=UHAE0Fl+cmDWIlGMUpGuIDafwMBLn0sGS3msBfhyI5iw+NYSBtc46e/muYjNbJMevX3+Lw
-        5zqbvPnRLvZuV6v5ObdpeZqrVzMgprEJImXXzN5dU8Ndk77tsnpAezJi3e1RnA4IQ/TBtV
-        TSCZCntpscGbvBetLbCFwjDLAQXTGnRBSJKnh22pxtqeM2FyrU3ftVMylF9gI60Hw+YuBt
-        pJcIfJI6M4xylW2xmG4IW6wDS/+SqyjNoK/VjQwPQj3hlFZOp2TLxWBqYPMk6kczEcR/dI
-        hmw/v0kB726TFsF20FasCp5HmH7JHNUzI0m/OJlnS7UzbglsDRhJGCaXc0OxIw==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E931C1C0006;
-        Fri, 26 May 2023 18:02:20 +0000 (UTC)
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        bbrezillon@kernel.org
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] mtd: rawnand: marvell: ensure timing values are written
-Date:   Fri, 26 May 2023 20:02:20 +0200
-Message-Id: <20230526180220.924379-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230525003154.2303012-1-chris.packham@alliedtelesis.co.nz>
-References: 
+        Fri, 26 May 2023 14:05:55 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE621FB
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:05:53 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6e68cc738so7593365e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:05:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685124352; x=1687716352;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zmks5D9YzLuOgQ4o4KupF4PncTQfxa4rpPQLmrc2P4w=;
+        b=hPKPdxoV2K/w95Ebq5q66gywMYlFfA8NeQwCFhVczUbR0q1zld0Uuw2gq9r1tdg24N
+         L9pt6uoSIgbhaBWJDcST5j0HH1Ds4ixc1FUbQhxU1gT3ut/fYvElHROBhD50ASeUCwOZ
+         hFjnV3Dl8nQl7I6RxUGaj0F1YMD+Ys5hyMuEmK1h1E/3JEJBjVqa5IdFIatn7gPTiNhs
+         TNYduoeTYO/tzml7tD6SKxoZHAlMIjK3RX+TLccIHRG/owHVY6eQainp53qn4RAMemjQ
+         GnyEY452tyr+8BRxDFjciPiXNo3tl7ddpfcAlFSLlDWZlJPHtIH2iRskDx7kyXDiWBeD
+         3MTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685124352; x=1687716352;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zmks5D9YzLuOgQ4o4KupF4PncTQfxa4rpPQLmrc2P4w=;
+        b=WNauY3aStUw8VtI9QM0O7SXqohqJhNPFLJJU5OJMxdYOD1oRsVuapHkXxcXBlj68uG
+         0Dj+2coG9HIgQZWTj20noeuZHenzx5xFcKEtIbYANufDaRdBXTOZUOa5nrHJJVLJGW9q
+         pEwrgtrmXTI2CLben/rctkyS7nq4Cw23Cf4lxYtCM8QfS6q9GQGmxFIzMT38c8tla2xq
+         UOH+uNjrYlIANn05HULKQ7CUewHfFOmE8Bfk7Vn8982/PyjM7ucdVJw8CXQrRpZdRbag
+         1smVkN5enJyLACtWWkSl+wloi50CBfRSeyeJifmKNrYUnyrI01uetsfXvr3pE1W+wDVB
+         3Ayg==
+X-Gm-Message-State: AC+VfDxd93QqVPJk4mHes583m5xI9yAxahM9dGTQAIfqVEhuHqKsrahC
+        ip+bGHKWbEloiIlbKQu22GDw8xxSeZOXv8KaWYaakQ==
+X-Google-Smtp-Source: ACHHUZ7vsAGjPlVGi85qcnin22UTF7YxET9BPyGVt/qqqwcG0G28PF3mJKcILgWDr6RoCFe6cYJbFQP4Oq0dxmQJ8lQ=
+X-Received: by 2002:a05:600c:3653:b0:3f6:1e6:d5a2 with SMTP id
+ y19-20020a05600c365300b003f601e6d5a2mr2172002wmq.4.1685124352120; Fri, 26 May
+ 2023 11:05:52 -0700 (PDT)
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'ce8a0b2602b221d564fee38847d15c1dbe05d382'
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230519214813.2593271-1-bhupesh.sharma@linaro.org>
+ <20230519214813.2593271-8-bhupesh.sharma@linaro.org> <ZG5WBr4gz2mzPoT-@gerhold.net>
+In-Reply-To: <ZG5WBr4gz2mzPoT-@gerhold.net>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Fri, 26 May 2023 23:35:27 +0530
+Message-ID: <CAH=2Nty+72uA7yWyXzY+eVqJpMo_rNVm9YGd4GzZjF=1OP1yQg@mail.gmail.com>
+Subject: Re: [PATCH v7 07/11] arm64: dts: qcom: sm6115: Add Crypto Engine support
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, konrad.dybcio@linaro.org,
+        vladimir.zapolskiy@linaro.org, rfoss@kernel.org,
+        neil.armstrong@linaro.org, djakov@kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-05-25 at 00:31:52 UTC, Chris Packham wrote:
-> When new timing values are calculated in marvell_nfc_setup_interface()
-> ensure that they will be applied in marvell_nfc_select_target() by
-> clearing the selected_chip pointer.
-> 
-> Fixes: b25251414f6e ("mtd: rawnand: marvell: Stop implementing ->select_chip()")
-> Suggested-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+On Wed, 24 May 2023 at 23:53, Stephan Gerhold <stephan@gerhold.net> wrote:
+>
+> On Sat, May 20, 2023 at 03:18:09AM +0530, Bhupesh Sharma wrote:
+> > Add crypto engine (CE) and CE BAM related nodes and definitions to
+> > 'sm6115.dtsi'.
+> >
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > Tested-by: Anders Roxell <anders.roxell@linaro.org>
+> > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sm6115.dtsi | 25 +++++++++++++++++++++++++
+> >  1 file changed, 25 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > index 631ca327e064..27ff42cf6066 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > @@ -661,6 +661,31 @@ usb_hsphy: phy@1613000 {
+> >                       status = "disabled";
+> >               };
+> >
+> > +             cryptobam: dma-controller@1b04000 {
+> > +                     compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
+> > +                     reg = <0x0 0x01b04000 0x0 0x24000>;
+> > +                     interrupts = <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>;
+> > +                     #dma-cells = <1>;
+> > +                     qcom,ee = <0>;
+> > +                     qcom,controlled-remotely;
+> > +                     num-channels = <8>;
+> > +                     qcom,num-ees = <2>;
+>
+> I would also add the RPM_SMD_CE1_CLK clock here and then omit
+> "num-channels" and "qcom,num-ees" (with [1]). It's not strictly
+> necessary but will guarantee that the clock is running whenever the BAM
+> is accessed (potentially avoiding crashes). And it seems to be the
+> typical approach so far, see e.g. sdm845. RPMH_CE_CLK is used on both
+> &cryptobam and &crypto there.
+>
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git/commit/?id=8975dd41a9dbca3b47f7b8dac5bc4dfb23011000
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
+Sure, I have fixed this in v8 which I will post shortly.
 
-Miquel
+Thanks,
+Bhupesh
