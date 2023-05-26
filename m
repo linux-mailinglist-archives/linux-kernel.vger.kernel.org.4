@@ -2,49 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994CE713036
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 01:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2891771303B
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 01:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjEZXFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 19:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
+        id S229999AbjEZXJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 19:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjEZXFR (ORCPT
+        with ESMTP id S229502AbjEZXJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 19:05:17 -0400
+        Fri, 26 May 2023 19:09:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B1EE7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:05:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FE4D3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:09:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E506614DE
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 23:05:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CD0C433EF;
-        Fri, 26 May 2023 23:05:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E61D61881
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 23:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC46AC4339C;
+        Fri, 26 May 2023 23:09:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685142315;
-        bh=o7r+d8qzwX9M3m6z3rdCF7BCtCqP4HTkRqtrPREaUUM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JZwCITr2YFhYNri4/dGDXFblt+6XlKP9TEe3b+489HHKlYRPXjrTUg796gOhh64sF
-         3w0stqbIgJtgjqrpznsVihZ7M3m7KVtyKRs7Ovzai854pxyPbBGouLU6v5veQUoMgr
-         W+whw8M85k/y9KWzu044ugGn50RSO76RcVR23tDiWN84fOiUaJQre2g1I+t9Jk+Qg3
-         w17wpNaB7z1tAOKNjbJyU8ijnlvn3PzSUBP33Jc6STe+wYvlRSvkN5Nh8tYeOXk8Hy
-         pSqBnwmx1ZEz1OltHv/Lbx9TvviHLbKnagXRKFHrkJ8xLlEUqk/SJarv2653YO2zbN
-         CcfvkKM8eZqtg==
-Date:   Fri, 26 May 2023 16:05:13 -0700
-From:   Chris Li <chrisl@kernel.org>
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
-        yosryahmed@google.com, hannes@cmpxchg.org, kernel-team@fb.com
-Subject: Re: [PATCH] mm: zswap: shrink until can accept
-Message-ID: <ZHE7KWId1fvXLpUy@google.com>
-References: <20230524065051.6328-1-cerasuolodomenico@gmail.com>
+        s=k20201202; t=1685142555;
+        bh=Hv/Mz68aappF/7aspxN/rwpWMy0Vm93OkMO579fOZDA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ndxp+4nD+QWTup0aJk3TopkGjfTDZkIlg1waaEnbn082ktkf/c6BYmiGAyo7ZGJj0
+         ms1w2K/K9GheVQcWzPzLUPyj7vxKl0Rcqb68dLZOIaszPvwaUhY6h5jCTaYkyKsKU0
+         C2QlYzVjI0UrJqbKIQ9j+GVbyXgyff8kDsB3zGV/xyMVXZxuDiC1LGjYCSzTf5C1a3
+         tMcaQhaUj0WuInp6H+7wbDqYuPBrbNPNYLpfNPOd2RkPQ6GPBGYFhj/vPdwxnNIbwY
+         DHKoUbDdNA92p4AiraD4mwhcVmBVBMK24YRpUgpDOaP3kZId6WbHtEDl3l04HXVHYD
+         WGx6fkF6TRivw==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f3a99b9177so1455864e87.1;
+        Fri, 26 May 2023 16:09:15 -0700 (PDT)
+X-Gm-Message-State: AC+VfDw+V7gUC9mjPmGmmtue82DkDutvxjs+GrtxgG2kvOu8Y8F2iXfM
+        uIJfSANowg7Ey2NsQA8sjCJt+D9McqCiGcA1kMo=
+X-Google-Smtp-Source: ACHHUZ7oNBMPkHum3nV3JyiF/+M6RMF0UATUSObYIASqQnX2ekIFOdmQkvAJ5MNzStOmaT0WgwHvl4ohnlZAIfsOlig=
+X-Received: by 2002:ac2:4d18:0:b0:4f1:43b9:a600 with SMTP id
+ r24-20020ac24d18000000b004f143b9a600mr959572lfi.60.1685142553635; Fri, 26 May
+ 2023 16:09:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524065051.6328-1-cerasuolodomenico@gmail.com>
+References: <20230526051529.3387103-1-song@kernel.org> <20230526051529.3387103-2-song@kernel.org>
+ <ZHEy5SkFwI+dZjOC@moria.home.lan>
+In-Reply-To: <ZHEy5SkFwI+dZjOC@moria.home.lan>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 26 May 2023 16:09:01 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5nbXozvBs1X7q_u=eTY0U=Ep32n1bM8bxR6h9UEU3AxQ@mail.gmail.com>
+Message-ID: <CAPhsuW5nbXozvBs1X7q_u=eTY0U=Ep32n1bM8bxR6h9UEU3AxQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] module: Introduce module_alloc_type
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        mcgrof@kernel.org, peterz@infradead.org, tglx@linutronix.de,
+        x86@kernel.org, rppt@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,120 +65,414 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:50:51AM +0200, Domenico Cerasuolo wrote:
-> This update addresses an issue with the zswap reclaim mechanism, which
-> hinders the efficient offloading of cold pages to disk, thereby
-> compromising the preservation of the LRU order and consequently
-> diminishing, if not inverting, its performance benefits.
-> 
-> The functioning of the zswap shrink worker was found to be inadequate,
-> as shown by basic benchmark test. For the test, a kernel build was
-> utilized as a reference, with its memory confined to 1G via a cgroup and
-> a 5G swap file provided. The results are presented below, these are
-> averages of three runs without the use of zswap:
-> 
-> real 46m26s
-> user 35m4s
-> sys 7m37s
-> 
-> With zswap (zbud) enabled and max_pool_percent set to 1 (in a 32G
-> system), the results changed to:
-> 
-> real 56m4s
-> user 35m13s
-> sys 8m43s
-> 
-> written_back_pages: 18
-> reject_reclaim_fail: 0
-> pool_limit_hit:1478
-> 
-> Besides the evident regression, one thing to notice from this data is
-> the extremely low number of written_back_pages and pool_limit_hit.
-> 
-> The pool_limit_hit counter, which is increased in zswap_frontswap_store
-> when zswap is completely full, doesn't account for a particular
-> scenario: once zswap hits his limit, zswap_pool_reached_full is set to
-> true; with this flag on, zswap_frontswap_store rejects pages if zswap is
-> still above the acceptance threshold. Once we include the rejections due
-> to zswap_pool_reached_full && !zswap_can_accept(), the number goes from
-> 1478 to a significant 21578266.
-> 
-> Zswap is stuck in an undesirable state where it rejects pages because
-> it's above the acceptance threshold, yet fails to attempt memory
-> reclaimation. This happens because the shrink work is only queued when
-> zswap_frontswap_store detects that it's full and the work itself only
-> reclaims one page per run.
-> 
-> This state results in hot pages getting written directly to disk,
-> while cold ones remain memory, waiting only to be invalidated. The LRU
-> order is completely broken and zswap ends up being just an overhead
-> without providing any benefits.
-> 
-> This commit applies 2 changes: a) the shrink worker is set to reclaim
-> pages until the acceptance threshold is met and b) the task is also
-> enqueued when zswap is not full but still above the threshold.
-> 
-> Testing this suggested update showed much better numbers:
-> 
-> real 36m37s
-> user 35m8s
-> sys 9m32s
-> 
-> written_back_pages: 10459423
-> reject_reclaim_fail: 12896
-> pool_limit_hit: 75653
-> 
-> Fixes: 45190f01dd40 ("mm/zswap.c: add allocation hysteresis if pool limit is hit")
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> ---
->  mm/zswap.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index 59da2a415fbb..2ee0775d8213 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -587,9 +587,13 @@ static void shrink_worker(struct work_struct *w)
->  {
->  	struct zswap_pool *pool = container_of(w, typeof(*pool),
->  						shrink_work);
-> +	int ret;
-Very minor nit pick, you can move the declare inside the do
-statement where it get used.
+On Fri, May 26, 2023 at 3:30=E2=80=AFPM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+>
+> On Thu, May 25, 2023 at 10:15:27PM -0700, Song Liu wrote:
+> > Introduce memory type aware module_alloc_type, which provides a unified
+> > allocator for all different archs. This work was discussed in [1].
+> >
+> > Each arch can configure the allocator to do the following:
+> >
+> >    1. Specify module_vaddr and module_end
+> >    2. Random module start address for KASLR
+> >    3. kasan_alloc_module_shadow()
+> >    4. kasan_reset_tag()
+> >    5. Preferred and secondary module address ranges
+> >
+> > enum mod_alloc_params_flags are used to control the behavior of
+> > module_alloc_type. Specifically: MOD_ALLOC_FALLBACK let module_alloc_ty=
+pe
+> > fallback to existing module_alloc. MOD_ALLOC_SET_MEMORY let
+> > module_alloc_type to protect the memory before returning to the user.
+> >
+> > module_allocator_init() call is added to start_kernel() to initialize
+> > module_alloc_type.
+> >
+>
+> ...
+>
+> > +/**
+> > + * struct vmalloc_params - Parameters to call __vmalloc_node_range()
+> > + * @start:          Address space range start
+> > + * @end:            Address space range end
+> > + * @gfp_mask:       The gfp_t mask used for this range
+> > + * @pgprot:         The page protection for this range
+> > + * @vm_flags        The vm_flag used for this range
+> > + */
+> > +struct vmalloc_params {
+> > +     unsigned long   start;
+> > +     unsigned long   end;
+> > +     gfp_t           gfp_mask;
+> > +     pgprot_t        pgprot;
+> > +     unsigned long   vm_flags;
+> > +};
+> > +
+> > +/**
+> > + * struct mod_alloc_params - Parameters for module allocation type
+> > + * @flags:          Properties in mod_alloc_params_flags
+> > + * @granularity:    The allocation granularity (PAGE/PMD) in bytes
+> > + * @alignment:      The allocation alignment requirement
+> > + * @vmp:            Parameters used to call vmalloc
+> > + * @fill:           Function to fill allocated space. If NULL, use mem=
+cpy()
+> > + * @invalidate:     Function to invalidate memory space.
+> > + *
+> > + * If @granularity > @alignment the allocation can reuse free space in
+> > + * previously allocated pages. If they are the same, then fresh pages
+> > + * have to be allocated.
+> > + */
+> > +struct mod_alloc_params {
+> > +     unsigned int            flags;
+> > +     unsigned int            granularity;
+> > +     unsigned int            alignment;
+> > +     struct vmalloc_params   vmp[MOD_MAX_ADDR_SPACES];
+> > +     void *                  (*fill)(void *dst, const void *src, size_=
+t len);
+> > +     void *                  (*invalidate)(void *ptr, size_t len);
+> > +};
+> > +
+> > +struct mod_type_allocator {
+> > +     struct mod_alloc_params params;
+> > +};
+> > +
+> > +struct mod_allocators {
+> > +     struct mod_type_allocator *types[MOD_MEM_NUM_TYPES];
+> > +};
+> > +
+> > +void *module_alloc_type(size_t size, enum mod_mem_type type);
+> > +void module_memfree_type(void *ptr, enum mod_mem_type type);
+> > +void module_memory_fill_type(void *dst, void *src, size_t len, enum mo=
+d_mem_type type);
+> > +void module_memory_invalidate_type(void *ptr, size_t len, enum mod_mem=
+_type type);
+> > +void module_memory_protect(void *ptr, size_t len, enum mod_mem_type ty=
+pe);
+> > +void module_memory_unprotect(void *ptr, size_t len, enum mod_mem_type =
+type);
+> > +void module_memory_force_protect(void *ptr, size_t len, enum mod_mem_t=
+ype type);
+> > +void module_memory_force_unprotect(void *ptr, size_t len, enum mod_mem=
+_type type);
+> > +void module_alloc_type_init(struct mod_allocators *allocators);
+>
+> This is a pretty big and complicated interface, and I haven't been able
+> to find any reasoning or justification for why it's needed.
+>
+> Why is this going in module.h? Don't do that, this is supposed to be a
+> general purpose allocator for executable memory so start a new file.
 
->  
-> -	if (zpool_shrink(pool->zpool, 1, NULL))
-> -		zswap_reject_reclaim_fail++;
-> +	do {
-> +		ret = zpool_shrink(pool->zpool, 1, NULL);
-> +		if (ret)
-> +			zswap_reject_reclaim_fail++;
-> +	} while (!zswap_can_accept() && ret != -EINVAL);
+The goal of this work is to build a memory allocator for modules, text,
+rw data, and ro data. So it is not the same as execmem_alloc or jitalloc.
 
-As others point out, this while loop can be problematic.
+>
+> What is vmalloc_params doing here? Why is it needed? Can we just get rid
+> of it?
 
-Have you find out what was the common reason causing the
-reclaim fail? Inside the shrink function there is a while
-loop that would be the place to perform try harder conditions.
-For example, if all the page in the LRU are already try once
-there's no reason to keep on calling the shrink function.
-The outer loop actually doesn't have this kind of visibilities.
+We need it to have an interface for all archs. They are all using different
+variations of vmalloc for module_alloc.
 
+>
+> module_memory_protect() and module_memory_unprotect() looks like a
+> completely broken interface for supporting sub-page allocations -
+> different threads with different allocations on the same page will race.
 
-Chris
+These two APIs allow the core code work with all archs. They won't break
+sub-page allocations. (not all archs will have sub-page allocations)
 
->  	zswap_pool_put(pool);
->  }
->  
-> @@ -1188,7 +1192,7 @@ static int zswap_frontswap_store(unsigned type, pgoff_t offset,
->  	if (zswap_pool_reached_full) {
->  	       if (!zswap_can_accept()) {
->  			ret = -ENOMEM;
-> -			goto reject;
-> +			goto shrink;
->  		} else
->  			zswap_pool_reached_full = false;
->  	}
-> -- 
-> 2.34.1
-> 
+OTOH, the "force" version of the two APIs should be removed later. In this
+set, we only need them for arch_prepare_bpf_trampoline(). I plan to remove
+this limitation for x86 soon.
+
+>
+> The text_poke() abstraction works; the exposed interface should look
+> like that.
+>
+> Please kill MOD_ALLOC_SET_MEMORY, and _only_ return memory that is
+> read-only. You should be able to kill mod_alloc_params entirely.
+>
+> Our other memory allocators don't expose kasan - why does this one?
+> Again, that looks wrong.
+>
+> I would like to see something much simpler (that doesn't encode awkward
+> assumptions from module and bpf!): please look at the code I sketched
+> out below and tell me why this interface won't work - or if it can, go
+> with _that_.
+
+I think we need to align the goal here. PS: we did align the goal about
+6 months ago when I proposed the execmem_alloc() set.
+
+My current goal is to build an allocator for all the use cases of modules,
+text, data, rodata, etc. Then the same allocator can be used by other
+dynamic kernel text: bpf, ftrace, kprobe, bcachefs, etc.
+
+OTOH, jit_alloc (as-is) solves a subset of the problem (only the text).
+We can probably use it (with some updates) instead of the vmap_area
+based allocator. But I guess we need to align the direction first.
+
+Thanks,
+Song
+
+>
+> commit 80ceffd6b1108afc7593bdf060954c73eaf0ffc4
+> Author: Kent Overstreet <kent.overstreet@linux.dev>
+> Date:   Wed May 17 01:22:06 2023 -0400
+>
+>     mm: jit/text allocator
+>
+>     This provides a new, very simple slab allocator for jit/text, i.e. bp=
+f,
+>     ftrace trampolines, or bcachefs unpack functions.
+>
+>     With this API we can avoid ever mapping pages both writeable and
+>     executable (not implemented in this patch: need to tweak
+>     module_alloc()), and it also supports sub-page sized allocations.
+>
+>     Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+>
+> diff --git a/include/linux/jitalloc.h b/include/linux/jitalloc.h
+> new file mode 100644
+> index 0000000000..f1549d60e8
+> --- /dev/null
+> +++ b/include/linux/jitalloc.h
+> @@ -0,0 +1,9 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_JITALLOC_H
+> +#define _LINUX_JITALLOC_H
+> +
+> +void jit_update(void *buf, void *new_buf, size_t len);
+> +void jit_free(void *buf);
+> +void *jit_alloc(void *buf, size_t len);
+> +
+> +#endif /* _LINUX_JITALLOC_H */
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 4751031f3f..ff26a4f0c9 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1202,6 +1202,9 @@ config LRU_GEN_STATS
+>           This option has a per-memcg and per-node memory overhead.
+>  # }
+>
+> +config JITALLOC
+> +       bool
+> +
+>  source "mm/damon/Kconfig"
+>
+>  endmenu
+> diff --git a/mm/Makefile b/mm/Makefile
+> index c03e1e5859..25e82db9e8 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -138,3 +138,4 @@ obj-$(CONFIG_IO_MAPPING) +=3D io-mapping.o
+>  obj-$(CONFIG_HAVE_BOOTMEM_INFO_NODE) +=3D bootmem_info.o
+>  obj-$(CONFIG_GENERIC_IOREMAP) +=3D ioremap.o
+>  obj-$(CONFIG_SHRINKER_DEBUG) +=3D shrinker_debug.o
+> +obj-$(CONFIG_JITALLOC) +=3D jitalloc.o
+> diff --git a/mm/jitalloc.c b/mm/jitalloc.c
+> new file mode 100644
+> index 0000000000..7c4d621802
+> --- /dev/null
+> +++ b/mm/jitalloc.c
+> @@ -0,0 +1,187 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/gfp.h>
+> +#include <linux/highmem.h>
+> +#include <linux/jitalloc.h>
+> +#include <linux/mm.h>
+> +#include <linux/moduleloader.h>
+> +#include <linux/mutex.h>
+> +#include <linux/set_memory.h>
+> +#include <linux/vmalloc.h>
+> +
+> +#include <asm/text-patching.h>
+> +
+> +static DEFINE_MUTEX(jit_alloc_lock);
+> +
+> +struct jit_cache {
+> +       unsigned                obj_size_bits;
+> +       unsigned                objs_per_slab;
+> +       struct list_head        partial;
+> +};
+> +
+> +#define JITALLOC_MIN_SIZE      16
+> +#define NR_JIT_CACHES          ilog2(PAGE_SIZE / JITALLOC_MIN_SIZE)
+> +
+> +static struct jit_cache jit_caches[NR_JIT_CACHES];
+> +
+> +struct jit_slab {
+> +       unsigned long           __page_flags;
+> +
+> +       struct jit_cache        *cache;
+> +       void                    *executably_mapped;;
+> +       unsigned long           *objs_allocated; /* bitmap of free object=
+s */
+> +       struct list_head        list;
+> +};
+> +
+> +#define folio_jit_slab(folio)          (_Generic((folio),               =
+       \
+> +       const struct folio *:           (const struct jit_slab *)(folio),=
+       \
+> +       struct folio *:                 (struct jit_slab *)(folio)))
+> +
+> +#define jit_slab_folio(s)              (_Generic((s),                   =
+       \
+> +       const struct jit_slab *:        (const struct folio *)s,         =
+       \
+> +       struct jit_slab *:              (struct folio *)s))
+> +
+> +static struct jit_slab *jit_slab_alloc(struct jit_cache *cache)
+> +{
+> +       void *executably_mapped =3D module_alloc(PAGE_SIZE);
+> +       struct page *page;
+> +       struct folio *folio;
+> +       struct jit_slab *slab;
+> +       unsigned long *objs_allocated;
+> +
+> +       if (!executably_mapped)
+> +               return NULL;
+> +
+> +       objs_allocated =3D kcalloc(BITS_TO_LONGS(cache->objs_per_slab), s=
+izeof(unsigned long), GFP_KERNEL);
+> +       if (!objs_allocated ) {
+> +               vfree(executably_mapped);
+> +               return NULL;
+> +       }
+> +
+> +       set_vm_flush_reset_perms(executably_mapped);
+> +       set_memory_rox((unsigned long) executably_mapped, 1);
+> +
+> +       page =3D vmalloc_to_page(executably_mapped);
+> +       folio =3D page_folio(page);
+> +
+> +       __folio_set_slab(folio);
+> +       slab                    =3D folio_jit_slab(folio);
+> +       slab->cache             =3D cache;
+> +       slab->executably_mapped =3D executably_mapped;
+> +       slab->objs_allocated =3D objs_allocated;
+> +       INIT_LIST_HEAD(&slab->list);
+> +
+> +       return slab;
+> +}
+> +
+> +static void *jit_cache_alloc(void *buf, size_t len, struct jit_cache *ca=
+che)
+> +{
+> +       struct jit_slab *s =3D
+> +               list_first_entry_or_null(&cache->partial, struct jit_slab=
+, list) ?:
+> +               jit_slab_alloc(cache);
+> +       unsigned obj_idx, nr_allocated;
+> +
+> +       if (!s)
+> +               return NULL;
+> +
+> +       obj_idx =3D find_first_zero_bit(s->objs_allocated, cache->objs_pe=
+r_slab);
+> +
+> +       BUG_ON(obj_idx >=3D cache->objs_per_slab);
+> +       __set_bit(obj_idx, s->objs_allocated);
+> +
+> +       nr_allocated =3D bitmap_weight(s->objs_allocated, s->cache->objs_=
+per_slab);
+> +
+> +       if (nr_allocated =3D=3D s->cache->objs_per_slab) {
+> +               list_del_init(&s->list);
+> +       } else if (nr_allocated =3D=3D 1) {
+> +               list_del(&s->list);
+> +               list_add(&s->list, &s->cache->partial);
+> +       }
+> +
+> +       return s->executably_mapped + (obj_idx << cache->obj_size_bits);
+> +}
+> +
+> +void jit_update(void *buf, void *new_buf, size_t len)
+> +{
+> +       text_poke_copy(buf, new_buf, len);
+> +}
+> +EXPORT_SYMBOL_GPL(jit_update);
+> +
+> +void jit_free(void *buf)
+> +{
+> +       struct page *page;
+> +       struct folio *folio;
+> +       struct jit_slab *s;
+> +       unsigned obj_idx, nr_allocated;
+> +       size_t offset;
+> +
+> +       if (!buf)
+> +               return;
+> +
+> +       page    =3D vmalloc_to_page(buf);
+> +       folio   =3D page_folio(page);
+> +       offset  =3D offset_in_folio(folio, buf);
+> +
+> +       if (!folio_test_slab(folio)) {
+> +               vfree(buf);
+> +               return;
+> +       }
+> +
+> +       s =3D folio_jit_slab(folio);
+> +
+> +       mutex_lock(&jit_alloc_lock);
+> +       obj_idx =3D offset >> s->cache->obj_size_bits;
+> +
+> +       __clear_bit(obj_idx, s->objs_allocated);
+> +
+> +       nr_allocated =3D bitmap_weight(s->objs_allocated, s->cache->objs_=
+per_slab);
+> +
+> +       if (nr_allocated =3D=3D 0) {
+> +               list_del(&s->list);
+> +               kfree(s->objs_allocated);
+> +               folio_put(folio);
+> +       } else if (nr_allocated + 1 =3D=3D s->cache->objs_per_slab) {
+> +               list_del(&s->list);
+> +               list_add(&s->list, &s->cache->partial);
+> +       }
+> +
+> +       mutex_unlock(&jit_alloc_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(jit_free);
+> +
+> +void *jit_alloc(void *buf, size_t len)
+> +{
+> +       unsigned jit_cache_idx =3D ilog2(roundup_pow_of_two(len) / 16);
+> +       void *p;
+> +
+> +       if (jit_cache_idx < NR_JIT_CACHES) {
+> +               mutex_lock(&jit_alloc_lock);
+> +               p =3D jit_cache_alloc(buf, len, &jit_caches[jit_cache_idx=
+]);
+> +               mutex_unlock(&jit_alloc_lock);
+> +       } else {
+> +               p =3D module_alloc(len);
+> +               if (p) {
+> +                       set_vm_flush_reset_perms(p);
+> +                       set_memory_rox((unsigned long) p, DIV_ROUND_UP(le=
+n, PAGE_SIZE));
+> +               }
+> +       }
+> +
+> +       if (p && buf)
+> +               jit_update(p, buf, len);
+> +
+> +       return p;
+> +}
+> +EXPORT_SYMBOL_GPL(jit_alloc);
+> +
+> +static int __init jit_alloc_init(void)
+> +{
+> +       for (unsigned i =3D 0; i < ARRAY_SIZE(jit_caches); i++) {
+> +               jit_caches[i].obj_size_bits     =3D ilog2(JITALLOC_MIN_SI=
+ZE) + i;
+> +               jit_caches[i].objs_per_slab     =3D PAGE_SIZE >> jit_cach=
+es[i].obj_size_bits;
+> +
+> +               INIT_LIST_HEAD(&jit_caches[i].partial);
+> +       }
+> +
+> +       return 0;
+> +}
+> +core_initcall(jit_alloc_init);
