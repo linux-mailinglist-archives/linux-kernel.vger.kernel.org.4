@@ -2,120 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADE1712771
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6A9712773
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243689AbjEZNXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S243137AbjEZNZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243675AbjEZNX1 (ORCPT
+        with ESMTP id S229882AbjEZNZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:23:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68D41B0;
-        Fri, 26 May 2023 06:23:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DEAE64FE8;
-        Fri, 26 May 2023 13:23:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 836ADC433D2;
-        Fri, 26 May 2023 13:23:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685107400;
-        bh=xJ6v8XRzEkgtwI83ON+sz5/7McQNk8B4qGX0hdyjKqY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qjr3H3fqi+SVS47haXuIZ7fkCKrAkom5cWvlWv8FraMeNxfr5JcmD7Iry0U5j73bP
-         lxcUDpPzwhzX++4rOV0D+HPh/sLUxLVd8Bmpn5/PnxAymKtyb2+e0c9kDwsLnDDxrN
-         9jKiF0XmmCCeZBjnDkwQ3pZFNIkfKQabZ16K+bYgwPz4z/zM47mm/1/rr0iiEk7Paq
-         GYDOny4fNArHrjgAIZGLbZwZpJNeS8LwZQanT0GXFK0nUNENYJYg2jJT1MnvMKGL3a
-         xz4k1bsCQg9za28FOK1nkvq5KZtNfI7wZ1lF+UJmek2E9cCQAWWftLbsY/WG136C/S
-         B7GopS+SZfPpw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q2XPo-0007Lg-Jj; Fri, 26 May 2023 15:23:32 +0200
-Date:   Fri, 26 May 2023 15:23:32 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        linus.walleij@linaro.org, maz@kernel.org, warthog618@gmail.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] gpiolib: Avoid side effects in gpio_is_visible()
-Message-ID: <ZHCy1PhyNAOCsalJ@hovoldconsulting.com>
-References: <20230519050702.3681791-1-chris.packham@alliedtelesis.co.nz>
- <CAHp75Vcd8Q+-XMyfg3Y_hv_AL00PGgqg0jo7Yd7TTC4GrxPOuQ@mail.gmail.com>
- <CAMRc=MdHMiqhcpd2rFwjfKvwMWtTeTxG4fK+7zbzgSq9MHmGew@mail.gmail.com>
+        Fri, 26 May 2023 09:25:14 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C63012C;
+        Fri, 26 May 2023 06:25:13 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51480d3e161so12413a12.3;
+        Fri, 26 May 2023 06:25:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685107512; x=1687699512;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=REExVQcWcE2QjJuxENKUcGpJCKWSMyccL07DCITDofY=;
+        b=qAyvFDmhsukPnn4WvAmi10pKd4n2FqmPW1UufHxkYNGGWR1dx/1llwEa2WCcXAF303
+         iZSKlaO95+NI673tZOCG378LltKAUkLJ43xWBX7PpV6ldciulJYU3G9VtFCQuIY3DzyQ
+         DIYkf63t3HV5ykQ5j3MzC+JC891jSE78LK9v+3J5+RUpfMUPue4tp0FVpG3njoUjYxGw
+         pWj12qVyTRMGMzVjmi0c9p6E0VbZFqWuW+aaLw8IfmRFgKyEt7+D8H9TJvhinsq6O0og
+         rYOf7VV/1stJPN98PqhwrStnYYw0Nha+46hA6GksIdoqlqVNlrQ8/4IDICYuTZV+dNjl
+         OiUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685107512; x=1687699512;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=REExVQcWcE2QjJuxENKUcGpJCKWSMyccL07DCITDofY=;
+        b=JzPrWh7Zw3hOkqOYXw3bSug2NreEA8ekjIOvWUD7byAr4t2er2xCEHHkiP94Obzuew
+         CwRdhuO6C97JejrLC4gasZTz+YfIveN+aHkCZoH26cd4Ip7BVKG0okQeeS4gxUDxs/fG
+         mPgC1AJg6oY5sZy6ZZNQGwc09r0iCDUMN2ux3AjiIefZRMG/EjuL5CuYAFXaoc3SLmUI
+         gPEHeybiTDlivYRaPQckKVe2+pLoyb3RYDGBXO/wITJVqOL0n3snEpgzFtsJuGfrfASm
+         u181Rh2idlVwzGRtkz6M4hg/ZNtaPH6RbLFz6d94ZNsz1yrEsIabABiX67QNMH59o+1b
+         X0kg==
+X-Gm-Message-State: AC+VfDyhtV6mrDpDcOZUby7XX42vfqHfidKjADO0TxAe4zuKx4AwtmAO
+        Nz6kUXeg1hxUpHjy+Rse73E=
+X-Google-Smtp-Source: ACHHUZ7q1MafXAsr6kPnoxH9sRKukcbZuU+ag0QnY9abimtOnkEmvW+csQfASzKbX2SjUCLFmdg0kQ==
+X-Received: by 2002:a17:907:9345:b0:973:9857:b98a with SMTP id bv5-20020a170907934500b009739857b98amr2330770ejc.55.1685107511683;
+        Fri, 26 May 2023 06:25:11 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id z17-20020a170906715100b0094e597f0e4dsm2123613ejj.121.2023.05.26.06.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 06:25:11 -0700 (PDT)
+Date:   Fri, 26 May 2023 16:25:08 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 19/30] net: dsa: mt7530: set interrupt register
+ only for MT7530
+Message-ID: <20230526132508.fxgljrpozuuzelal@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-20-arinc.unal@arinc9.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=MdHMiqhcpd2rFwjfKvwMWtTeTxG4fK+7zbzgSq9MHmGew@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230522121532.86610-20-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 03:01:01PM +0200, Bartosz Golaszewski wrote:
-> On Fri, May 19, 2023 at 12:09 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> >
-> > On Fri, May 19, 2023 at 8:07 AM Chris Packham
-> > <chris.packham@alliedtelesis.co.nz> wrote:
-> > >
-> > > On a system with pca9555 GPIOs that have been exported via sysfs the
-> > > following warning could be triggered on kexec().
-> > >
-> > >   WARNING: CPU: 0 PID: 265 at drivers/gpio/gpiolib.c:3411 gpiochip_disable_irq
-> > >   Call trace:
-> > >    gpiochip_disable_irq
-> > >    machine_crash_shutdown
-> > >    __crash_kexec
-> > >    panic
-> > >    sysrq_reset_seq_param_set
-> > >    __handle_sysrq
-> > >    write_sysrq_trigger
-> > >
-> > > The warning is triggered because there is an irq_desc for the GPIO but
-> > > it does not have the FLAG_USED_AS_IRQ set. This is because when the GPIO
-> > > is exported via gpiod_export(), gpio_is_visible() is used to determine
-> > > if the "edge" attribute should be provided but in doing so it ends up
-> > > calling gpiochip_to_irq() which creates the irq_desc.
-> > >
-> > > Remove the call to gpiod_to_irq() from gpio_is_visible(). The actual
-> > > intended creation of the irq_desc comes via edge_store() when requested
-> > > by the user.
-> >
-> > To me it still sounds like a hack and the real solution should be done
-> > differently/elsewhere.
-> >
-> > Also I'm worrying that not having this file visible or not may affect
-> > existing user space custom scripts we will never hear about.
-> >
-> > P.S. TBH, I don't care much about sysfs, so if this patch finds its
-> > way upstream, I won't be unhappy.
-> >
+On Mon, May 22, 2023 at 03:15:21PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> Same. Which is why - if there'll be no more objections, I will apply it.
+> Setting this register related to interrupts is only needed for the MT7530
+> switch. Make an exclusive check to ensure this.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Acked-by: Daniel Golle <daniel@makrotopia.org>
+> Tested-by: Daniel Golle <daniel@makrotopia.org>
+> ---
 
-I don't think this should be applied.
+Why does it matter? What prompted you to make this change? I guess it's
+not needed for MT7988? Or the register is not present? Or?...
 
-It's still not clear from the commit message why gpiochip_disable_irq()
-is called for a line which has not been requested. That seems like what
-should be fixed, not changing some behaviour in the gpio sysfs interface
-which has been there since forever (e.g. do not create the edge
-attributes for gpios that cannot be used as interrupts).
-
-There are other ways that mappings can be created (e.g. a gpio that
-requested as as interrupt and then released) which would trigger the
-same warning it seems.
-
-Fix the root cause, don't just paper over the symptom.
-
-Johan
+>  drivers/net/dsa/mt7530.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index 99f5da8b27be..0c261ef87bee 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -2029,7 +2029,7 @@ mt7530_setup_irq(struct mt7530_priv *priv)
+>  	}
+>  
+>  	/* This register must be set for MT7530 to properly fire interrupts */
+> -	if (priv->id != ID_MT7531)
+> +	if (priv->id == ID_MT7530 || priv->id == ID_MT7621)
+>  		mt7530_set(priv, MT7530_TOP_SIG_CTRL, TOP_SIG_CTRL_NORMAL);
+>  
+>  	ret = request_threaded_irq(priv->irq, NULL, mt7530_irq_thread_fn,
+> -- 
+> 2.39.2
+> 
