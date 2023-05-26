@@ -2,205 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3BE712481
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 702FD71248A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242774AbjEZKWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S242777AbjEZKYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242765AbjEZKWl (ORCPT
+        with ESMTP id S236752AbjEZKYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:22:41 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783C8FB;
-        Fri, 26 May 2023 03:22:37 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230526102225euoutp02f3ee4392ab1b2d57683ecb95db40883c~iqmFZZxFr0213402134euoutp02K;
-        Fri, 26 May 2023 10:22:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230526102225euoutp02f3ee4392ab1b2d57683ecb95db40883c~iqmFZZxFr0213402134euoutp02K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1685096545;
-        bh=E5j3mNncGUKQnVTagpyIHdEzaEGKl4d4KchUoa6tm8s=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=ieli2mS0rP58yAIJ+EDq/aGVemzZNhHrOwujB/tO/Jy96TEvoTca7XhdbkUCdhaSw
-         wxb+tH1Nd+3xVMwn0q4BUmnmUXqXAy4ozGV+b8UXNcrfVXswEPq1QGLabfQGmDJbik
-         jJsPv7/AVOsdKOtMg0HE0iw5XFETEbii88s3pEdc=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230526102225eucas1p2dd4eb7d91c12b5f7be915c7768048675~iqmFQvdZY1456714567eucas1p2m;
-        Fri, 26 May 2023 10:22:25 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 71.52.42423.16880746; Fri, 26
-        May 2023 11:22:25 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230526102224eucas1p140af5598f8323865da3bb5e39fdb5192~iqmEqgkW60550205502eucas1p1F;
-        Fri, 26 May 2023 10:22:24 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230526102224eusmtrp149fb1eb2c5a49727eabc3dadd11f28b2~iqmEp6aUF2919029190eusmtrp1x;
-        Fri, 26 May 2023 10:22:24 +0000 (GMT)
-X-AuditID: cbfec7f2-a3bff7000002a5b7-8d-647088616b8e
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id C9.7F.10549.06880746; Fri, 26
-        May 2023 11:22:24 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230526102224eusmtip18210e41d32b9a2e482bd9185d96079fd~iqmEbuqRA0765907659eusmtip1B;
-        Fri, 26 May 2023 10:22:24 +0000 (GMT)
-Received: from localhost (106.210.248.78) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Fri, 26 May 2023 11:22:23 +0100
-Date:   Fri, 26 May 2023 12:22:22 +0200
-From:   Joel Granados <j.granados@samsung.com>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-CC:     <mcgrof@kernel.org>, Christian Brauner <brauner@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: Re: [PATCH v4 7/8] sysctl: Refactor base paths registrations
-Message-ID: <20230526102222.c5anxpcfia5djnxe@localhost>
+        Fri, 26 May 2023 06:24:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1036610A;
+        Fri, 26 May 2023 03:24:35 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34Q5G3xX010009;
+        Fri, 26 May 2023 10:24:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=tJ86j8pCL7ZgEQ3Z76DQmpr0X4ZCPhxEw1z94AsghfA=;
+ b=Q6YH0K36djcvKG05L+IsQxHVYLnfWEAxSu/j+LsvG/g8lSVtdW5YvA2ypxE636S79ZYn
+ H9YPLfnfCGumiTi6wkhSSfJ9Y2xXHLAqpeyGOXHEBaYgMxl9pwloMcf58ocnbugOlhe9
+ /bQRkIfX0BmesX0D8LnB+9RCRYECCyIgyENtK6N6PiUWmLlvKlzj/xRlXt4vECnZ4Fr+
+ y+rR0PU5W+cy7IcgQyjPCRM2yYLraD/yMggGb2t2WAuAHEhw9JGPF0rcSUTxAjG/hEQ6
+ svupSuVbT/ZktdVtSZFl00xem4ZUXQoDbH0JOkwa87Y2bH07M00adeLthQoNHfQYS3V5 sg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt27n364v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 10:24:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34QAOEYb026782
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 10:24:14 GMT
+Received: from [10.201.192.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 26 May
+ 2023 03:24:11 -0700
+Message-ID: <97e06f9e-81cb-45ad-5b2a-d8de52d023f0@quicinc.com>
+Date:   Fri, 26 May 2023 15:54:08 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="s4khld4elb45pjku"
-Content-Disposition: inline
-In-Reply-To: <c97bfda5-cecf-4521-880b-02c6da987120@kili.mountain>
-X-Originating-IP: [106.210.248.78]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHKsWRmVeSWpSXmKPExsWy7djPc7qJHQUpBqsOS1u8PvyJ0eLDvFZ2
-        izPduRZ79p5ksbi8aw6bxY0JTxktDpyewmxx/u9xVotlO/0cOD1mN1xk8dg56y67x4JNpR6b
-        VnWyedy5tofN4/MmOY9NT94yBbBHcdmkpOZklqUW6dslcGXc/zqRtaBZsmLKzL3MDYwThbsY
-        OTkkBEwk7n1ZwdbFyMUhJLCCUeLmzQtMIAkhgS+MErNb1CASnxklZp1azwbTcfJuNztEYjmj
-        xLv3B5nhqpae/c0E4WxhlDjb+IYdpIVFQFWi81kXWDubgI7E+Td3mEFsESD739/JLCA2s8AS
-        Jolry2RBbGEBV4nL68+CxXkFzCWuXrzECGELSpyc+QSqvkJi7vIPQHEOIFtaYvk/DpAwp4Cj
-        xKnbx1khLlWS2Nr1jgnCrpU4teUW2G0SAus5JQ6tfcIOkXCR+POmmRHCFpZ4dXwLVFxG4vTk
-        HhaIhsmMEvv/fWCHcFYzSixr/Ao11lqi5QrIJA4g21Fi5gx9CJNP4sZbQYg7+SQmbZvODBHm
-        lehoE4JoVJNYfe8NywRG5VlIPpuF5LNZCJ9BhHUkFuz+xIYhrC2xbOFrZgjbVmLduvcsCxjZ
-        VzGKp5YW56anFhvmpZbrFSfmFpfmpesl5+duYgQmu9P/jn/awTj31Ue9Q4xMHIyHGFWAmh9t
-        WH2BUYolLz8vVUmEd0NOfooQb0piZVVqUX58UWlOavEhRmkOFiVxXm3bk8lCAumJJanZqakF
-        qUUwWSYOTqkGprr68Enr/DND5l/6lxz66f6qWJ9aPW3nsPurQ49b3ZA8JNXbe//jOq/+Jha+
-        bUryx1z/5f//7zfZcpu0WEfSWnfr3xyfC3unuSV237VymvTKYPfhhS9vWBfcc7xWxsu7b225
-        yunTaeapk2LthLXXzv20Z+G1/55HF7Pcr2n9ta1qRfnd6VdqZXJEm0wvS36czXtWk3FO5Ftm
-        j6rqs0frAt/3XNg231Ti7vqoNyfkNq6deuzsTSGHFd5RelO8TTmyWk9vir7evbVBfmO+2PRv
-        u+crd8WZnPkXp7KhJSBl+fbzyf4P7GZWmZ2fXSfZ6Fu5UEj+g2dYxza7d308jqusepj+TF2Z
-        lx7Lei3w3wz+xUosxRmJhlrMRcWJALdsrrbxAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDIsWRmVeSWpSXmKPExsVy+t/xu7oJHQUpButn6lm8PvyJ0eLDvFZ2
-        izPduRZ79p5ksbi8aw6bxY0JTxktDpyewmxx/u9xVotlO/0cOD1mN1xk8dg56y67x4JNpR6b
-        VnWyedy5tofN4/MmOY9NT94yBbBH6dkU5ZeWpCpk5BeX2CpFG1oY6RlaWugZmVjqGRqbx1oZ
-        mSrp29mkpOZklqUW6dsl6GUs6//PUtAoWXGyQ7WBsV+4i5GTQ0LAROLk3W72LkYuDiGBpYwS
-        k48eZIFIyEhs/HKVFcIWlvhzrYsNougjo8SaD5NZIJwtjBLvPpxjBKliEVCV6HwGUsXJwSag
-        I3H+zR1mEFsEyP73F6KBWWAJk8TCtmVgK4QFXCUurz8LZvMKmEtcvXiJEWLqH0aJKTOusUEk
-        BCVOznwCVsQsUCYxc00jUJwDyJaWWP6PAyTMKeAocer2cahTlSS2dr1jgrBrJT7/fcY4gVF4
-        FpJJs5BMmoUwCSKsJXHj30smDGFtiWULXzND2LYS69a9Z1nAyL6KUSS1tDg3PbfYUK84Mbe4
-        NC9dLzk/dxMjMOq3Hfu5eQfjvFcf9Q4xMnEwHmJUAep8tGH1BUYplrz8vFQlEd4NOfkpQrwp
-        iZVVqUX58UWlOanFhxhNgcE4kVlKNDkfmI7ySuINzQxMDU3MLA1MLc2MlcR5PQs6EoUE0hNL
-        UrNTUwtSi2D6mDg4pRqYtsyaPzsia9Wsh1t8/zrM3SAV3/STSUE6u+lI3ZyT1fvOR/Zrn5Pe
-        MPE3g3uzcGfsOrG+a88PX/oerfg4pfvv5Wu/GHwbVCozVDMu3jxp2Cd9ZuU5qZlm6dU3H/m1
-        XFYI4+icOfuk59x+fat94Zvtvt0Q14vaNWV65JSbyQLft3uKzt1yR3Ke2pYMNnZe/SmT39w6
-        e+KbTVaXZW3uF8a7NSe4zT6xHmsJ2v3/KsOthT823b+xN8l+9rL/dzLNI2fatV6r+Wn34a5A
-        c3XtXIZ38xwrDCzKH/1Q+L01/8supx3Kvz+ZTXvCe6Li1ImgeJ/HHxbzx08oEV0VvahTQrRf
-        WHJXqtBy3fjrWf4XdytPP6fEUpyRaKjFXFScCAApwMtUjwMAAA==
-X-CMS-MailID: 20230526102224eucas1p140af5598f8323865da3bb5e39fdb5192
-X-Msg-Generator: CA
-X-RootMTR: 20230523122236eucas1p17639bfdbfb30c9d751e0a8fc85fe2fd3
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230523122236eucas1p17639bfdbfb30c9d751e0a8fc85fe2fd3
-References: <20230523122220.1610825-1-j.granados@samsung.com>
-        <CGME20230523122236eucas1p17639bfdbfb30c9d751e0a8fc85fe2fd3@eucas1p1.samsung.com>
-        <20230523122220.1610825-8-j.granados@samsung.com>
-        <c97bfda5-cecf-4521-880b-02c6da987120@kili.mountain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: ipq9574: add QFPROM node
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230526070421.25406-1-quic_kathirav@quicinc.com>
+ <20230526070421.25406-5-quic_kathirav@quicinc.com>
+ <7d14db71-2279-e9b9-012d-47dc50fe797b@linaro.org>
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <7d14db71-2279-e9b9-012d-47dc50fe797b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: oIRaw4UUiGDZDTEEsHnTvtIDg4mqlI8d
+X-Proofpoint-GUID: oIRaw4UUiGDZDTEEsHnTvtIDg4mqlI8d
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ mlxlogscore=986 adultscore=0 priorityscore=1501 suspectscore=0
+ clxscore=1015 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305260090
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---s4khld4elb45pjku
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 25, 2023 at 11:37:47AM +0300, Dan Carpenter wrote:
-> On Tue, May 23, 2023 at 02:22:19PM +0200, Joel Granados wrote:
-> > This is part of the general push to deprecate register_sysctl_paths and
-> > register_sysctl_table. The old way of doing this through
-> > register_sysctl_base and DECLARE_SYSCTL_BASE macro is replaced with a
-> > call to register_sysctl_init. The 5 base paths affected are: "kernel",
-> > "vm", "debug", "dev" and "fs".
-> >=20
-> > We remove the register_sysctl_base function and the DECLARE_SYSCTL_BASE
-> > macro since they are no longer needed.
-> >=20
-> > In order to quickly acertain that the paths did not actually change I
-> > executed `find /proc/sys/ | sha1sum` and made sure that the sha was the
-> > same before and after the commit.
-> >=20
-> > We end up saving 563 bytes with this change:
-> >=20
-> > ./scripts/bloat-o-meter vmlinux.0.base vmlinux.1.refactor-base-paths
-> > add/remove: 0/5 grow/shrink: 2/0 up/down: 77/-640 (-563)
-> > Function                                     old     new   delta
-> > sysctl_init_bases                             55     111     +56
-> > init_fs_sysctls                               12      33     +21
-> > vm_base_table                                128       -    -128
-> > kernel_base_table                            128       -    -128
-> > fs_base_table                                128       -    -128
-> > dev_base_table                               128       -    -128
-> > debug_base_table                             128       -    -128
-> > Total: Before=3D21258215, After=3D21257652, chg -0.00%
-> >=20
-> > Signed-off-by: Joel Granados <j.granados@samsung.com>
-> > [mcgrof: modified to use register_sysctl_init() over register_sysctl()
-> >  and add bloat-o-meter stats]
-> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
->=20
-> This needs a Fixes tag so it doesn't get backported by some weird fluke.
-> Or you could just fold it in with the original patch which introduced
-I folded it into the original patch
+On 5/26/2023 2:49 PM, Konrad Dybcio wrote:
+>
+> On 26.05.2023 09:04, Kathiravan T wrote:
+>> IPQ9574 has efuse region to determine the various HW quirks. Lets
+>> add the initial support and the individual fuses will be added as they
+>> are required.
+>>
+>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> index 1a2c813ffd43..715fe51ff567 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> @@ -117,6 +117,13 @@
+>>   		#size-cells = <1>;
+>>   		ranges = <0 0 0 0xffffffff>;
+>>   
+>> +		qfprom: efuse@a4000 {
+>> +			compatible = "qcom,ipq9574-qfprom", "qcom,qfprom";
+>> +			reg = <0x000a4000 0x5a1>;
+> That's an odd size. Are you sure this is how long the corrected region is?
 
-thx
 
-Best
-> the bug.
->=20
-> Probably add a copy of the output from dmesg?  Maybe add some
-> Reported-by tags?
->=20
-> regards,
-> dan carpenter
-> >=20
+Yes, As per the HW document, this is the size.
 
---=20
 
-Joel Granados
-
---s4khld4elb45pjku
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmRwiF4ACgkQupfNUreW
-QU/Phgv/dM4OeXZoGMXjp7WJRASyGlFsDMvhxkoTWqze/5olOWjFw31231QWfvkr
-VWqUxm5CPzLt7/x0UNg/jiT5NrF72kVJssTuYUNPW/01J7NYhNSoEX0gGB2d7LOU
-DrHC+0LGLGYbvKIOg58xvQul3DPMk3sofThlyajSQVfH5zqJEZB7Pt9f8rrYAXZF
-wJrs+5lTtQ0uJjfA1NGYfom5tDJH9c0ekVR8SjfpflswiHSf1ZXarN+x6qy0LBv4
-wk6IDhCh4pZRrUSd3z6InRApXGnyFJpY4JrLVb7h9Beibs8QIBWBTQs1xIblAOKR
-wZzGfMZrps4RJumsIxxU6tP+yb5NjKIhx8z7MZ761uLW5j8agKzGLT4fSprQ7/H3
-WI29BR58yVyO0a5Kig3rmpqvR88KVCHy+1TEgJzMfL9wbEdxwX08iyRxNX/NhVs9
-e4dVJSBXnZoUuc2iVOV7j77d3fTQ5S0MwRuYmss/WNV2s2q4fW7kkAo6b3tsvM98
-LhlD2/fi
-=uLjI
------END PGP SIGNATURE-----
-
---s4khld4elb45pjku--
+>
+> Konrad
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +		};
+>> +
+>>   		tlmm: pinctrl@1000000 {
+>>   			compatible = "qcom,ipq9574-tlmm";
+>>   			reg = <0x01000000 0x300000>;
