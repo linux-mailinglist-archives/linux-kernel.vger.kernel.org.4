@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C354F712B1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B398A712B28
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237467AbjEZQzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50828 "EHLO
+        id S229816AbjEZQz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjEZQzG (ORCPT
+        with ESMTP id S237500AbjEZQzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:55:06 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9E0A3;
-        Fri, 26 May 2023 09:55:05 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id D091E846EF;
-        Fri, 26 May 2023 18:55:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1685120102;
-        bh=cKTPC7NLR+bUlQkhK5KxByysIc4mZo54tKRP17auFUI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QhIDWXJXStcEmnXV38Ng5kZJWd00HFalkT8KayTgOFZLVG5y+iCtPv2ioz3sjzVXQ
-         53K2Rf2asrVBEXTNXqlBcz5hwBa6xlsCCrUWl+UGEKDju7QBAer4wfSOrRrJJ4leqx
-         TEGyYwhq7QHwEcKXQbXIqNe5ThipdWqODbr+HZmu/d/CGwDdoNsI8Fllg/S6CzAvUz
-         b+CZyuNS5uxYMarcKoXVZnIyMQKSE5uNasCYh2BHnGbB/s9UQhlTc49+ow3Q8H/Xxl
-         uRtjmX2gjmwDmVhFncVTigQdgNMXxDDJ/JT5b5WDKqrbU39RS3z61/nOYJ518qJhqr
-         9py0Ak53Z8yYA==
-Message-ID: <b23ddf9e-6bba-68df-cf28-cc0e2c4218ac@denx.de>
-Date:   Fri, 26 May 2023 18:55:00 +0200
+        Fri, 26 May 2023 12:55:21 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCB1135;
+        Fri, 26 May 2023 09:55:19 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34QGt8Em062756;
+        Fri, 26 May 2023 11:55:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685120108;
+        bh=1Rp/YGPWQR5raUvf1gwaPCzH4H0z7g5XN7OjXo/G8W4=;
+        h=From:To:CC:Subject:Date;
+        b=IDp9399ehTmiUkuTEDPRKRTS2MYH742D9SyvZO35CdYx0Au7rXB95MQJk0w3VA6qq
+         n9gGwxW/xOTRZ+T6GzXHHXUvJ4IbRpqWsIjsS2vmzKOPrRKYT4TE6CRn62tD75Cvla
+         i9ug38lDcyVlq4321R46wCIke38sAvHY+xW4JSHo=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34QGt8Nm120452
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 26 May 2023 11:55:08 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 26
+ May 2023 11:55:08 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 26 May 2023 11:55:08 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34QGt6h0021277;
+        Fri, 26 May 2023 11:55:07 -0500
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <u-kumar1@ti.com>, <jm@ti.com>, <b-kapoor@ti.com>
+Subject: [PATCH v3] arm64: dts: ti: k3-j721s2: Add support for CAN instances 3 and 5 in main domain
+Date:   Fri, 26 May 2023 22:25:05 +0530
+Message-ID: <20230526165505.45172-1-b-kapoor@ti.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 3/3] ARM: dts: stm32: fix several DT warnings on
- stm32mp15
-Content-Language: en-US
-To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@dh-electronics.com
-References: <20230517143542.284029-1-raphael.gallais-pou@foss.st.com>
- <20230517143542.284029-4-raphael.gallais-pou@foss.st.com>
- <f64de05b-8854-4345-80c2-f424968defdc@denx.de>
- <e963370c-7018-243a-712d-62ca8463bfd8@foss.st.com>
- <5f201903-17cb-5054-763c-f03b1066db1d@denx.de>
- <32fafa74-8964-c9cf-f95b-f2cd084f46c6@foss.st.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <32fafa74-8964-c9cf-f95b-f2cd084f46c6@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,49 +64,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/23 10:14, Raphael Gallais-Pou wrote:
+CAN instances 3 and 5 in the main domain are brought on the common
+processor board through header J27 and J28. The CAN High and Low lines
+from the SoC are routed through a mux on the SoM. The select lines need
+to be set for the CAN signals to get connected to the transceivers on
+the common processor board. Threfore, add respective mux, transceiver
+dt nodes to add support for these CAN instances.
 
-Hi,
+Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+---
 
->> I think if you retain the stm32mp151.dtsi &ltdc { port { #address-cells = <1>;
->> #size-cells = <0>; }; }; part, then you wouldn't be getting any warnings
->> regarding LTDC , and you wouldn't have to remove the unit-address from
->> endpoint@0 .
->>
->> btw. I do use both endpoint@0/endpoint@1 in Avenger96 DTOs, but those are not
->> submitted yet, I have to clean them up a bit more first.
->>
->>> One way to do it would be to make the endpoint@0 go down in the device-tree with
->>> its dependencies, so that both endpoints are the same level without generating
->>> noise.
->>
->> I'm afraid I really don't quite understand which warning you're referring to.
->> Can you please share that warning and ideally how to trigger it (the
->> command-line incantation) ?
-> 
-> Using '$ make dtbs W=1', you can observe several of the followings:
-> 
-> arch/arm/boot/dts/stm32mp151.dtsi:1533.9-1536.6: Warning
-> (avoid_unnecessary_addr_size): /soc/display-controller@5a001000/port:
-> unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
-> arch/arm/boot/dts/stm32mp151.dtsi:1533.9-1536.6: Warning (graph_child_address):
-> /soc/display-controller@5a001000/port: graph node has single child node
-> 'endpoint@0', #address-cells/#size-cells are not necessary
-> 
-> This &ltdc { port { #address-cells = <1>; #size-cells = <0>; }; }; part is
-> actually annoying. This is because there is several device-trees that only got
-> one endpoint, and some other that includes two.
-> 
-> For instance: stm32mp15xx-dhcor-avenger96.dtsi vs stm32mp157c-dk2.dts.
-> 
-> I would like to remove to root part of address/size field and let only the lower
-> device-trees with with multiple endpoints handle their own fields. I hope this
-> explains a bit better my process.
+Changelog v2->v3: Removed tiL6.1 subject prefix
 
-After thinking about this some more, and digging through LTDC driver, 
-and testing on EV1, I think dropping the LTDC node endpoint@N and 
-reg=<N> altogether and just using port/endpoint (singular) is fine.
+Link to v2 : https://lore.kernel.org/all/20230523085021.22524-1-b-kapoor@ti.com/
 
-You might want to split the DSI node specific changes and the LTDC node 
-specific changes into separate patches (LTDC specific change like you 
-did in 1/3).
+ .../dts/ti/k3-j721s2-common-proc-board.dts    | 46 +++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  | 12 +++++
+ 2 files changed, 58 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+index a7aa6cf08acd..f07663bbea16 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+@@ -27,6 +27,8 @@ aliases {
+ 		can0 = &main_mcan16;
+ 		can1 = &mcu_mcan0;
+ 		can2 = &mcu_mcan1;
++		can3 = &main_mcan3;
++		can4 = &main_mcan5;
+ 	};
+ 
+ 	evm_12v0: fixedregulator-evm12v0 {
+@@ -107,6 +109,22 @@ transceiver2: can-phy2 {
+ 		standby-gpios = <&wkup_gpio0 2 GPIO_ACTIVE_HIGH>;
+ 	};
+ 
++	transceiver3: can-phy3 {
++		compatible = "ti,tcan1043";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		standby-gpios = <&exp2 7 GPIO_ACTIVE_LOW>;
++		enable-gpios = <&exp2 6 GPIO_ACTIVE_HIGH>;
++		mux-states = <&mux0 1>;
++	};
++
++	transceiver4: can-phy4 {
++		compatible = "ti,tcan1042";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		standby-gpios = <&exp_som 7 GPIO_ACTIVE_HIGH>;
++		mux-states = <&mux1 1>;
++	};
+ };
+ 
+ &main_pmx0 {
+@@ -144,6 +162,20 @@ vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
+ 			J721S2_IOPAD(0x020, PIN_INPUT, 7) /* (AA23) MCAN15_RX.GPIO0_8 */
+ 		>;
+ 	};
++
++	main_mcan3_pins_default: main-mcan3-pins-default {
++		pinctrl-single,pins = <
++			J721S2_IOPAD(0x080, PIN_INPUT, 0) /* (U26) MCASP0_AXR4.MCAN3_RX */
++			J721S2_IOPAD(0x07c, PIN_OUTPUT, 0) /* (T27) MCASP0_AXR3.MCAN3_TX */
++		>;
++	};
++
++	main_mcan5_pins_default: main-mcan5-pins-default {
++		pinctrl-single,pins = <
++			J721S2_IOPAD(0x03c, PIN_INPUT, 0) /* (U27) MCASP0_AFSX.MCAN5_RX */
++			J721S2_IOPAD(0x038, PIN_OUTPUT, 0) /* (AB28) MCASP0_ACLKX.MCAN5_TX */
++		>;
++	};
+ };
+ 
+ &wkup_pmx0 {
+@@ -309,3 +341,17 @@ &mcu_mcan1 {
+ 	pinctrl-0 = <&mcu_mcan1_pins_default>;
+ 	phys = <&transceiver2>;
+ };
++
++&main_mcan3 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_mcan3_pins_default>;
++	phys = <&transceiver3>;
++};
++
++&main_mcan5 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_mcan5_pins_default>;
++	phys = <&transceiver4>;
++};
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
+index 6930efff8a5a..e74bc5141903 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi
+@@ -31,6 +31,18 @@ secure_ddr: optee@9e800000 {
+ 		};
+ 	};
+ 
++	mux0: mux-controller0 {
++		compatible = "gpio-mux";
++		#mux-state-cells = <1>;
++		mux-gpios = <&exp_som 1 GPIO_ACTIVE_HIGH>;
++	};
++
++	mux1: mux-controller1 {
++		compatible = "gpio-mux";
++		#mux-state-cells = <1>;
++		mux-gpios = <&exp_som 2 GPIO_ACTIVE_HIGH>;
++	};
++
+ 	transceiver0: can-phy0 {
+ 		/* standby pin has been grounded by default */
+ 		compatible = "ti,tcan1042";
+-- 
+2.39.2
+
