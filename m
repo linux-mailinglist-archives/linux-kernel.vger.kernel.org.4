@@ -2,117 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6B4712743
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3436471274B
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243546AbjEZNNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
+        id S243579AbjEZNOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243549AbjEZNM6 (ORCPT
+        with ESMTP id S243549AbjEZNOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:12:58 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101CF19D
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:12:56 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-437df8c864bso174848137.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1685106775; x=1687698775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T8WfNbYjQtdKqhbV501fe9vtrkDkYbanF3BpFOEvVck=;
-        b=yqyG72qta2r79hHfhtKEsQGBuGunOd35hSHz3b0TCfsYaXQgZCOckNAVlNJDtbrYfi
-         iz9PEu7wdR8yxVI34ERSDlsTQQ/b0VzVMUiai3M+FOhRGKQcNnwCkPsCZi2ArY7YHWZZ
-         l4FiCmMvHZq15vh7o2fZWLASXG4TauDaD/ACnV5Pshwckf8j5l5K59DQXfTMbCsvUDUw
-         L20+aSIKQ/FGUh30jFY/222nBmCER4n/Vtx2CDBnFfQn1b6fomH+LziDAay4hK9W/esn
-         1XVrUM8U8d2D+ffLeLJEvXa9vOvVBHCbmFUvF+8Jh3sOkjWia1MVsF37y99P3WXi2AT1
-         wLYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685106775; x=1687698775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T8WfNbYjQtdKqhbV501fe9vtrkDkYbanF3BpFOEvVck=;
-        b=Moi3RuFZVnM47EBynwIo/bVXgWjmbxbWquyxZWqpRFjSs7w9xT3wdOIBzjYI6d/2oy
-         V9W2fgzjXezCiiRyTYx2I384dF7Nfs8P1RrUcfU/ExNJnMYtn3kEOG/uIZBT8tIDiEoi
-         GVMtmc6e+xBTD4aipFvvkAFWNumOyzjkU2IbvjmRYRBnI1wOpBpnIsEXpFMst02jGxFP
-         ubLE7NZlL0Htw6XL1KQXvT9b7NTvR/bJQVhX0VTaoymtmuDIT7jkiKOa2hi9ezkIXN7I
-         skXH7SRGc/77ZZrgDa4gD69ePvDa+gWysdd42Dd1TkfD8UZOLHQkjiuztzIKgjRdBVtt
-         kDog==
-X-Gm-Message-State: AC+VfDwuRs/27h00pwGfjnXnOUgiWb9+O021JjNxVXpaEixWBNxmwd8x
-        jyn5BcZzvjuzMoLrBTD9eetv/jVhXuic4FbHLBkTvQ==
-X-Google-Smtp-Source: ACHHUZ7xMhW0TO6j+s+yWfOAQ6PkrQZ+ULvXzzoNL2XvhjJ7iDF1cU25FIR94NStKsLdlLqb+WLgnQ/p80rTKuiTH4g=
-X-Received: by 2002:a05:6102:3019:b0:439:e3c:8ef8 with SMTP id
- s25-20020a056102301900b004390e3c8ef8mr426513vsa.28.1685106775067; Fri, 26 May
- 2023 06:12:55 -0700 (PDT)
+        Fri, 26 May 2023 09:14:34 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E852A12C;
+        Fri, 26 May 2023 06:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685106872; x=1716642872;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TaKFmPvcaWxL63IETqF5z2dA8t53A2LsdWOk3sZfXkU=;
+  b=eliijqDHfpkXIfz0x3Oi03fik49GAKI3iH2adKScOuGRXZ14xQq10nkW
+   CPO3aSjUuNpSnHvBs6chMvyO7ASlaAdVq2Ku0hvaV0N47GhUq1opFseGt
+   5sjTggGVFyvJ66iPwkxjInezVQUUeEDhRzKadYmR6SPGnYlQroDWCY6M5
+   AZ9eeqNUn9BAppmHf3/5Ytdf3r88FG5KeM8QNpRhW30ldGRk+vgoBk+XW
+   K781v3pHM3fJvfsHXg805cNuzxqOqtCwoaJlDSpktTcabw9U2RGt50JSK
+   EJX3WSi2Sl47WEtpKMeFN/MBX6g88dMSNj2IZD+gQ3P+wtXP2m5b5c4QX
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="asc'?scan'208";a="217467764"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2023 06:14:26 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 26 May 2023 06:14:16 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 26 May 2023 06:14:12 -0700
+Date:   Fri, 26 May 2023 14:13:50 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Minda Chen <minda.chen@starfivetech.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: Re: [PATCH v6 5/7] dt-bindings: usb: Add StarFive JH7110 USB
+ controller
+Message-ID: <20230526-grain-cubical-e0af96202007@wendy>
+References: <20230518112750.57924-1-minda.chen@starfivetech.com>
+ <20230518112750.57924-6-minda.chen@starfivetech.com>
+ <20230525-shopper-handbrake-27fc06aede32@spud>
+ <5124e6a8-8ca6-71a5-19d6-8c15e954c458@starfivetech.com>
 MIME-Version: 1.0
-References: <20230506085928.933737-1-haibo.chen@nxp.com> <20230506085928.933737-2-haibo.chen@nxp.com>
-In-Reply-To: <20230506085928.933737-2-haibo.chen@nxp.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 26 May 2023 15:12:44 +0200
-Message-ID: <CAMRc=Mc7xq5Psgx8VxkvydS+3bQZKfR6FHOKrifc1uH6p7H6Gw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] gpio: mxc: switch to dynamic allocat GPIO base
-To:     haibo.chen@nxp.com
-Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        christophe.leroy@csgroup.eu
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2Bn+39uGEqQUGUUq"
+Content-Disposition: inline
+In-Reply-To: <5124e6a8-8ca6-71a5-19d6-8c15e954c458@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 6, 2023 at 10:56=E2=80=AFAM <haibo.chen@nxp.com> wrote:
->
-> From: Haibo Chen <haibo.chen@nxp.com>
->
-> gpiolib want to get completely rid of static gpiobase allocation,
-> so switch to dynamic allocat GPIO base, also can avoid warning
-> message:
->
-> [    1.529974] gpio gpiochip0: Static allocation of GPIO base
-> is deprecated, use dynamic allocation.
->
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> ---
->  drivers/gpio/gpio-mxc.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-mxc.c b/drivers/gpio/gpio-mxc.c
-> index 9d0cec4b82a3..abc129a88a62 100644
-> --- a/drivers/gpio/gpio-mxc.c
-> +++ b/drivers/gpio/gpio-mxc.c
-> @@ -462,8 +462,7 @@ static int mxc_gpio_probe(struct platform_device *pde=
-v)
->         port->gc.request =3D gpiochip_generic_request;
->         port->gc.free =3D gpiochip_generic_free;
->         port->gc.to_irq =3D mxc_gpio_to_irq;
-> -       port->gc.base =3D (pdev->id < 0) ? of_alias_get_id(np, "gpio") * =
-32 :
-> -                                            pdev->id * 32;
-> +       port->gc.base =3D -1;
->
->         err =3D devm_gpiochip_add_data(&pdev->dev, &port->gc, port);
->         if (err)
-> --
-> 2.34.1
->
+--2Bn+39uGEqQUGUUq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is not the first time we're seeing someone submit this fix[1].
+On Fri, May 26, 2023 at 06:24:48PM +0800, Minda Chen wrote:
 
-Unfortunately it's been brought to our attention that this breaks
-existing user-space scripts that rely on fixed GPIO numbering in
-sysfs.
+> >> +title: StarFive JH7110 wrapper module for the Cadence USBSS-DRD contr=
+oller
+> >=20
+> > I think you told Krzysztof you'd rename this to "StarFive JH7110 Cadence
+> > USBSS-DRD SoC controller"?
+> >=20
+> The previous title describe whole USB controller for previous dts node is
+> merged. Now the dts node is split.=20
+> "starfive,jh7110-usb" just contain starfive wrapper layer dts configurati=
+on.
 
-Bart
+Okay, I must have misunderstood the conversation on the previous
+version. Sorry about that.
 
-[1] https://lore.kernel.org/lkml/CACRpkdYV3mHNYvBg1nf+12Q2XZH_g4iTrA2YB1SVQ=
-=3DROriRRgg@mail.gmail.com/T/
+> > Otherwise, it looks like all the stuff from him and Rob have been sorted
+> > out, so other than $title this is
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+
+--2Bn+39uGEqQUGUUq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHCwjgAKCRB4tDGHoIJi
+0mgJAQClJBlPXs7N2vOvkTGSfZFOb6z47yAgyiaqavdIEp2UTQD9EB9gGDPr2W/F
+lNVtNtC8iRhO7w0elIt9BCJHjRITMwc=
+=AQaH
+-----END PGP SIGNATURE-----
+
+--2Bn+39uGEqQUGUUq--
