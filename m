@@ -2,212 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0406712631
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEBD71263A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjEZMEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
+        id S242870AbjEZME7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbjEZMEb (ORCPT
+        with ESMTP id S231158AbjEZMEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:04:31 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA2BE45
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:03:58 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f6ef9a928fso2175225e9.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685102634; x=1687694634;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mLfeU1cIQmeaVyRNtph06RZ6KBBxtb+vtfoTJMVHA+I=;
-        b=EK5OQPVj8e3zNjKENf4gj9bouD+LdJFHNW2qRgXx9SfCDVpoW01tNj+6tNykaCmobb
-         KM93mO9DOTcnWMd6Wb34QIjBwaQdDzHFqrlah9m3Lw5taIKJyF/qFo/AZps/WiMrqQRP
-         hU3+5U2xYO4NYYtIkD7a9M1p8LPF/YlBUzuRbx2luLbY1HQxCDSCZddEqEi7VetpyNw7
-         465Qmm6n7h1qKJrI2gcTVZNoQbNJzGNc0f3qhIP8q81rL4hroiKBOBg91z0iqlQQ7LmC
-         73y/bJxXa7V7/oyqiU6joOgrou5DqxpuluLqEhlb1IUksfJxX5PLz3DqwVnqdVZ36S2/
-         bnoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685102634; x=1687694634;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mLfeU1cIQmeaVyRNtph06RZ6KBBxtb+vtfoTJMVHA+I=;
-        b=XIj7WUzv/IZWBFnCHZTrESYGqPFtMX7xX8pKvsOJpqdgs1xRa9RUjA+GgQ8VHgxtsp
-         VZWH286bIrheXZuJcPXmbhWqvZ5qshLxd5nKLhEjLG1W0CXpRFw4wG1l3uolygEClCcC
-         XTsVLST+TiiDvKz6n4w1hRLUqLpBIULjqq2JBw/fvk3VhV7XtbpQwPUWOwfT0b5iWeoJ
-         AJAbI9vK5/kZsqu/VSwX7gTtZojaM4Ne0OrcLqh7cXYIqrmTwF6UcB4gMG2iGg1sZcmx
-         DfnCm1cvZ9BFzZwg7TRATu0FclH01Zx+yFtSi2y8E5MeaxwojO4sIVJtQXpHUGeC7vy+
-         EMWg==
-X-Gm-Message-State: AC+VfDyLaHZIIw+l1tPITDXxw0ebTQyRqhpckad4XRSb54ihCQRiXQBQ
-        3hdf04j8YYXdctyksO4xWD5wJ1BL6d4A1QEWX4k=
-X-Google-Smtp-Source: ACHHUZ7B6lulluaL0WmnVt8XWs3qPf4jeDtFeCQAMf+7PbzVh9yKDCfg5VeIGknvIgbiSoNxYKD/Yg==
-X-Received: by 2002:a7b:c006:0:b0:3f6:683:627e with SMTP id c6-20020a7bc006000000b003f60683627emr1210775wmb.9.1685102634168;
-        Fri, 26 May 2023 05:03:54 -0700 (PDT)
-Received: from hera (ppp089210114029.access.hol.gr. [89.210.114.29])
-        by smtp.gmail.com with ESMTPSA id y6-20020a05600c364600b003f420667807sm8564206wmq.11.2023.05.26.05.03.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 05:03:53 -0700 (PDT)
-Date:   Fri, 26 May 2023 15:03:51 +0300
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH net-next 1/2] page_pool: unify frag page and non-frag
- page handling
-Message-ID: <ZHCgJxTnm37qu3aY@hera>
-References: <20230526092616.40355-1-linyunsheng@huawei.com>
- <20230526092616.40355-2-linyunsheng@huawei.com>
+        Fri, 26 May 2023 08:04:44 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDE9E42;
+        Fri, 26 May 2023 05:04:34 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QB9RZk010987;
+        Fri, 26 May 2023 14:04:14 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=m3cJVkCFNQF2leqnS9Qg9XF0d/nmB54SuFFqMjaXqbc=;
+ b=RskGATPlhzQdHBxRTT8T+tyvofn6NYBLv46g3YoFniuh6BY4WVRBIbfgpFUcVJ9jPiqX
+ ZjVtahK0Ista0dD/OP8cq6L/aG9qcwH/2+QslBnVgMSStLZndPrEvcEIpvtKqKbvb7U9
+ kJFe7XKDnSqxtDscih73Nt4N7jXKs0a3ZKta5xerWJ62T/tQIel1mLMXWUEs8uzZTde5
+ E5jbDCeVf6UpMQlgON54AOmshCvFjxlG+T2KVCbQiHBnKeRv6VCWAe/flR2mx01iFpmX
+ SxCpfVoU12u9wbBW8/KWQqoRmrjwHNSM34aKXRbv1O5367+SVmtJdQp/7KMY0T4nc+05 /w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qt2uyhjja-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 14:04:14 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5A02710002A;
+        Fri, 26 May 2023 14:04:13 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5172C22A6FC;
+        Fri, 26 May 2023 14:04:13 +0200 (CEST)
+Received: from [10.48.0.148] (10.48.0.148) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 26 May
+ 2023 14:04:12 +0200
+Message-ID: <d7fc3df2-aae7-d3b2-ea29-14d266289d1d@foss.st.com>
+Date:   Fri, 26 May 2023 14:04:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526092616.40355-2-linyunsheng@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] backlight: gpio_backlight: add new property
+ default-brightness-level
+Content-Language: en-US
+To:     Alexandru Ardelean <alex@shruggie.ro>,
+        <dri-devel@lists.freedesktop.org>, <linux-leds@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-fbdev@vger.kernel.org>
+CC:     <lee@kernel.org>, <daniel.thompson@linaro.org>,
+        <jingoohan1@gmail.com>, <pavel@ucw.cz>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <deller@gmx.de>, Yannick Fertre <yannick.fertre@foss.st.com>
+References: <20230519200520.10657-1-alex@shruggie.ro>
+From:   Philippe CORNU <philippe.cornu@foss.st.com>
+In-Reply-To: <20230519200520.10657-1-alex@shruggie.ro>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.0.148]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yunsheng
 
-Apologies for not replying to the RFC,  I was pretty busy with internal
-stuff
+On 5/19/23 22:05, Alexandru Ardelean wrote:
+> From: Yannick Fertre <yannick.fertre@foss.st.com>
+> 
+> Add new property to set a brightness by default at probe.
+> 
+> Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
 
-On Fri, May 26, 2023 at 05:26:14PM +0800, Yunsheng Lin wrote:
-> Currently page_pool_dev_alloc_pages() can not be called
-> when PP_FLAG_PAGE_FRAG is set, because it does not use
-> the frag reference counting.
->
-> As we are already doing a optimization by not updating
-> page->pp_frag_count in page_pool_defrag_page() for the
-> last frag user, and non-frag page only have one user,
-> so we utilize that to unify frag page and non-frag page
-> handling, so that page_pool_dev_alloc_pages() can also
-> be called with PP_FLAG_PAGE_FRAG set.
+Hi Alexandru,
 
-What happens here is clear.  But why do we need this?  Do you have a
-specific use case in mind where a driver will call
-page_pool_dev_alloc_pages() and the PP_FLAG_PAGE_FRAG will be set?
-If that's the case isn't it a better idea to unify the functions entirely?
+Many thanks for your patch.
 
-Thanks
-/Ilias
->
-> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-> CC: Lorenzo Bianconi <lorenzo@kernel.org>
-> CC: Alexander Duyck <alexander.duyck@gmail.com>
+You have sent a patch originally pushed on the STMicroelectronics github 
+as mentioned in your commit message (no problem with that :-). But, the 
+"Reviewed-by" inside this github patch is linked to our gerrit STM 
+internal server so you can not use it directly for mainlining this patch.
+
+So please, re-send your this patch without my "Reviewed-by".
+
+Many thanks
+Philippe :-)
+
+
+> Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
+> Signed-off-by: Alexandru Ardelean <alex@shruggie.ro>
 > ---
->  include/net/page_pool.h | 38 +++++++++++++++++++++++++++++++-------
->  net/core/page_pool.c    |  1 +
->  2 files changed, 32 insertions(+), 7 deletions(-)
->
-> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-> index c8ec2f34722b..ea7a0c0592a5 100644
-> --- a/include/net/page_pool.h
-> +++ b/include/net/page_pool.h
-> @@ -50,6 +50,9 @@
->  				 PP_FLAG_DMA_SYNC_DEV |\
->  				 PP_FLAG_PAGE_FRAG)
->
-> +#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT \
-> +		(sizeof(dma_addr_t) > sizeof(unsigned long))
-> +
->  /*
->   * Fast allocation side cache array/stack
->   *
-> @@ -295,13 +298,20 @@ void page_pool_put_defragged_page(struct page_pool *pool, struct page *page,
->   */
->  static inline void page_pool_fragment_page(struct page *page, long nr)
->  {
-> -	atomic_long_set(&page->pp_frag_count, nr);
-> +	if (!PAGE_POOL_DMA_USE_PP_FRAG_COUNT)
-> +		atomic_long_set(&page->pp_frag_count, nr);
->  }
->
-> +/* We need to reset frag_count back to 1 for the last user to allow
-> + * only one user in case the page is recycled and allocated as non-frag
-> + * page.
-> + */
->  static inline long page_pool_defrag_page(struct page *page, long nr)
->  {
->  	long ret;
->
-> +	BUILD_BUG_ON(__builtin_constant_p(nr) && nr != 1);
-> +
->  	/* If nr == pp_frag_count then we have cleared all remaining
->  	 * references to the page. No need to actually overwrite it, instead
->  	 * we can leave this to be overwritten by the calling function.
-> @@ -311,19 +321,36 @@ static inline long page_pool_defrag_page(struct page *page, long nr)
->  	 * especially when dealing with a page that may be partitioned
->  	 * into only 2 or 3 pieces.
->  	 */
-> -	if (atomic_long_read(&page->pp_frag_count) == nr)
-> +	if (atomic_long_read(&page->pp_frag_count) == nr) {
-> +		/* As we have ensured nr is always one for constant case
-> +		 * using the BUILD_BUG_ON() as above, only need to handle
-> +		 * the non-constant case here for frag count draining.
-> +		 */
-> +		if (!__builtin_constant_p(nr))
-> +			atomic_long_set(&page->pp_frag_count, 1);
-> +
->  		return 0;
-> +	}
->
->  	ret = atomic_long_sub_return(nr, &page->pp_frag_count);
->  	WARN_ON(ret < 0);
-> +
-> +	/* Reset frag count back to 1, this should be the rare case when
-> +	 * two users call page_pool_defrag_page() currently.
-> +	 */
-> +	if (!ret)
-> +		atomic_long_set(&page->pp_frag_count, 1);
-> +
->  	return ret;
->  }
->
->  static inline bool page_pool_is_last_frag(struct page_pool *pool,
->  					  struct page *page)
->  {
-> -	/* If fragments aren't enabled or count is 0 we were the last user */
-> -	return !(pool->p.flags & PP_FLAG_PAGE_FRAG) ||
-> +	/* When dma_addr_upper is overlapped with pp_frag_count
-> +	 * or we were the last page frag user.
-> +	 */
-> +	return PAGE_POOL_DMA_USE_PP_FRAG_COUNT ||
->  	       (page_pool_defrag_page(page, 1) == 0);
->  }
->
-> @@ -357,9 +384,6 @@ static inline void page_pool_recycle_direct(struct page_pool *pool,
->  	page_pool_put_full_page(pool, page, true);
->  }
->
-> -#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT	\
-> -		(sizeof(dma_addr_t) > sizeof(unsigned long))
-> -
->  static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
->  {
->  	dma_addr_t ret = page->dma_addr;
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index e212e9d7edcb..0868aa8f6323 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -334,6 +334,7 @@ static void page_pool_set_pp_info(struct page_pool *pool,
->  {
->  	page->pp = pool;
->  	page->pp_magic |= PP_SIGNATURE;
-> +	page_pool_fragment_page(page, 1);
->  	if (pool->p.init_callback)
->  		pool->p.init_callback(page, pool->p.init_arg);
->  }
-> --
-> 2.33.0
->
+> 
+> Link to original patch:
+>    https://github.com/STMicroelectronics/linux/commit/c4067d7bd883c6fa14ffd49892c4ce663cdafe98
+> 
+>   drivers/video/backlight/gpio_backlight.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/video/backlight/gpio_backlight.c b/drivers/video/backlight/gpio_backlight.c
+> index 6f78d928f054..d3fa3a8bef4d 100644
+> --- a/drivers/video/backlight/gpio_backlight.c
+> +++ b/drivers/video/backlight/gpio_backlight.c
+> @@ -53,6 +53,7 @@ static int gpio_backlight_probe(struct platform_device *pdev)
+>   	struct backlight_device *bl;
+>   	struct gpio_backlight *gbl;
+>   	int ret, init_brightness, def_value;
+> +	u32 value;
+>   
+>   	gbl = devm_kzalloc(dev, sizeof(*gbl), GFP_KERNEL);
+>   	if (gbl == NULL)
+> @@ -93,7 +94,11 @@ static int gpio_backlight_probe(struct platform_device *pdev)
+>   	else
+>   		bl->props.power = FB_BLANK_UNBLANK;
+>   
+> -	bl->props.brightness = 1;
+> +	ret = device_property_read_u32(dev, "default-brightness-level", &value);
+> +	if (!ret && value <= props.max_brightness)
+> +		bl->props.brightness = value;
+> +	else
+> +		bl->props.brightness = 1;
+>   
+>   	init_brightness = backlight_get_brightness(bl);
+>   	ret = gpiod_direction_output(gbl->gpiod, init_brightness);
