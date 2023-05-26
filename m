@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CD9C71332D
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069D37126CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbjE0Hys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 03:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
+        id S242864AbjEZMiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjE0Hyp (ORCPT
+        with ESMTP id S230221AbjEZMiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 03:54:45 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ADDBB;
-        Sat, 27 May 2023 00:54:44 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64f1f133c37so343487b3a.0;
-        Sat, 27 May 2023 00:54:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685174084; x=1687766084;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ps1IF/L3y0LuIXv1kuyXMXVV1V92IKkA4nkdR1TZzsU=;
-        b=J1k3fPaQZMPaMfdKrnm1zm7gzhHU3qdmAEgC4wn/zWlP5HZ6JqC5OlOYRpBy+aPcQg
-         yUhoygdEbaP/d6l50zsX+P2x/nCpG+WCQ3vo2jEYDG6kXl3wiY3GZCZeW+KK7JfJUpXb
-         vglxbKZsZSapWDZ6FUSrA82OzrEKw49uNha6r3OrW2h+wK+WUgqPh8mybzRX0ER05svx
-         YYA6tu4labf09OfctbtGzSUoFMvh+n05rb5TndVmhR89vfRWC7USJ3BZBiHfKfvK5I6A
-         uDJ1Kg6CpMzxNxSyjL2LyjV+88Akn+4O1hOLrEvQDDmCoLXemg9Gg6AS8g50KFwbTkEl
-         6+Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685174084; x=1687766084;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ps1IF/L3y0LuIXv1kuyXMXVV1V92IKkA4nkdR1TZzsU=;
-        b=MdtLaB7Exo9P2dk5ePZu+ThbHhs0/u5nPxdYjtyWJ+Btl9CQOsPmTZ6x0Nr6gBAIAu
-         sQAsOI21RtiCtVjWXlDjm0eNkI6lk88lCjk8qMHHiR6Sg+SQRi6BUQ62OSFuMUef7TBc
-         AoZdSDoTHuQqenT0NM4xIwzU+pSWojfjWYh3inN+36sdDVfTERVKKkCxgpsQLF3xRKcg
-         m24lQsWUzQnFe5uz4ra8gxV+Rt2G8u3EEwOE/70QCAtgSrH+L6MYMMvqzx56Gzc7zlfM
-         OxKMPnYS56Fgia9Dq4kbThK4KZbXW39tUh7eTldM1WcB+n+Mhde3hGhqiH8nH3CgUkOM
-         GKyw==
-X-Gm-Message-State: AC+VfDxoLp5zjGxMeY+qXF7gaG4UyH2ALrr0ekzTpFDb/mahK055WP8C
-        fhaBI15Wc5q931vaucjb++I=
-X-Google-Smtp-Source: ACHHUZ5Wl/x2AX2Bqkt5RQGo8lzJHVe2CTWpN35HVupnCmsS+crSB8FjThb8CWMDAlUiyAzTHgUY6Q==
-X-Received: by 2002:a05:6a00:349b:b0:64d:41f1:7c87 with SMTP id cp27-20020a056a00349b00b0064d41f17c87mr5793226pfb.2.1685174083809;
-        Sat, 27 May 2023 00:54:43 -0700 (PDT)
-Received: from ubuntu.localdomain ([103.114.158.1])
-        by smtp.gmail.com with ESMTPSA id v7-20020a63d547000000b0053f22b76cdcsm3770567pgi.82.2023.05.27.00.54.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 00:54:43 -0700 (PDT)
-From:   Min Li <lm0963hack@gmail.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, sumit.semwal@linaro.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH] drm/radeon: fix race condition UAF in radeon_gem_set_domain_ioctl
-Date:   Fri, 26 May 2023 20:37:53 +0800
-Message-Id: <20230526123753.16160-1-lm0963hack@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 26 May 2023 08:38:04 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4296D99;
+        Fri, 26 May 2023 05:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lNfxSHS1UMaBMZLwessrox7ClcoojfQo4u1G/gCVpRk=; b=F8i1N0MhDb2OY0IY6jpteaJjel
+        J+wgVsNwzbjVDy7D+oUdf56HV2XHl1ftpFFdeSNi4anvtzKDqtEvTvhUyW0hht2K1BNkcIYn/RCOa
+        pFuadvx3d8q7hjK1Wpnip457c4/5PzOodTRcehh57MNN8Dqtl4iBNPS2I4Wht4ZhXlhkypo21wOWL
+        zLYK5HJBJglOPbpotAWAk12sisYMojHMPav90HJkeECpSTPMIXgtqMfzmL4duyRKQ8WJItqg0iGs3
+        7Sh5BAZyWmVsPPZgz5Fx2pC7wch4F/7ZxuuxYr1IYLKgnQZMbmoQk5PDUunf4SO4R+IPyoSDN9j7w
+        naClZciw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2Whg-002VDl-2Y;
+        Fri, 26 May 2023 12:37:56 +0000
+Date:   Fri, 26 May 2023 05:37:56 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        op-tee@lists.trustedfirmware.org
+Subject: Re: [RFC PATCH 1/4] tee: Re-enable vmalloc page support for shared
+ memory
+Message-ID: <ZHCoJEkVinvsB2lZ@infradead.org>
+References: <20230523091350.292221-1-arnaud.pouliquen@foss.st.com>
+ <20230523091350.292221-2-arnaud.pouliquen@foss.st.com>
+ <ZG2yw0xZ6XGGp9E5@infradead.org>
+ <18a8528d-7d9d-6ed0-0045-5ee47dd39fb2@foss.st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <18a8528d-7d9d-6ed0-0045-5ee47dd39fb2@foss.st.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Userspace can race to free the gobj(robj converted from), robj should not
-be accessed again after drm_gem_object_put, otherwith it will result in
-use-after-free.
+On Wed, May 24, 2023 at 04:01:14PM +0200, Arnaud POULIQUEN wrote:
+> > As per the discussion back then: don't just blindly do the same dumb
+> > thing again and fix the interfae to actually pass in a page array,
+> > or iov_iter or an actually useful container that fits.
+> > 
+> 
+> I suppose your are speaking about this discussion:
+> https://lore.kernel.org/all/20221002002326.946620-3-ira.weiny@intel.com/
 
-Signed-off-by: Min Li <lm0963hack@gmail.com>
----
- drivers/gpu/drm/radeon/radeon_gem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes.
 
-diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
-index bdc5af23f005..450c7cbdd28a 100644
---- a/drivers/gpu/drm/radeon/radeon_gem.c
-+++ b/drivers/gpu/drm/radeon/radeon_gem.c
-@@ -478,7 +478,7 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
- 
- 	drm_gem_object_put(gobj);
- 	up_read(&rdev->exclusive_lock);
--	r = radeon_gem_handle_lockup(robj->rdev, r);
-+	r = radeon_gem_handle_lockup(rdev, r);
- 	return r;
- }
- 
--- 
-2.34.1
+> 
+> If I'm not mistaken, I should modify at tee_shm_register_kernel_buf API and
+> register_shm_helper inernal function, right?
+> 
+
+> What about having equivalent of shm_get_kernel_pages in an external helper (to
+> defined where to put it), could it be an alternative of the upadate of the
+> tee_shm API?
+
+I think the fundamentally right thing is to pass an iov_iter to
+register_shm_helper, and then use the new as of 6.3
+iov_iter_extract_pages helper to extract the pages from that.  For
+the kernel users you can then simply pass down an ITER_BVEC iter
+that you can fill with vmalloc pages if you want.
 
