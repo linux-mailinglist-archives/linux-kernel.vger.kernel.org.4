@@ -2,270 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E82713020
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 00:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B9E713029
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 00:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjEZWp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 18:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
+        id S230193AbjEZWuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 18:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjEZWpz (ORCPT
+        with ESMTP id S229704AbjEZWuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 18:45:55 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7DCA4;
-        Fri, 26 May 2023 15:45:54 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QMgGXa017915;
-        Fri, 26 May 2023 22:45:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=2gLJXTA1XDT+hIurGpTWON7QJm4XVcTcFoJyJZ95iXA=;
- b=i7ZM/NeCjXNpCJnk4GAUeKS3ZP6HPPHN7CpW7LO3n03f+yj7KhsMxT9NSA5vk9YsFo/z
- 3HXA+jpQJru156DLPZbq5ivQQmmuPVPIK5FY1IXBQ4agTeG4B4UrtLhQ7l5aQ9U94Ax3
- DX7bgD3LKTGXK8h3O9xGOTgK186ToeyBc4VGB/I1mm1n0GMiOdEurfGQonM1ZDgGiwb1
- i+Qy98rBx8Exy9V44X2c3C5ZMY/bxtF93EXyF62cFYnuauRhoBLyZYB6kuZry5zlpHYG
- 6V1vkGjhjXV1GLDvHBMDbyabI0dASTw+vv9cRozY2jVF7uSCnwJ9MVa1qvUm0N3K1ngU WA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qtvy29ahx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 22:45:51 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34QMjp3f016423;
-        Fri, 26 May 2023 22:45:51 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3qpq9mg1c8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 26 May 2023 22:45:51 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34QMjoXK016417;
-        Fri, 26 May 2023 22:45:50 GMT
-Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTP id 34QMjowE016416;
-        Fri, 26 May 2023 22:45:50 +0000
-Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
-        id 6EC5120E42; Fri, 26 May 2023 15:45:50 -0700 (PDT)
-From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
-To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: [PATCH v2 2/2] usb: dwc3: Modify runtime pm ops to handle bus suspend
-Date:   Fri, 26 May 2023 15:45:40 -0700
-Message-Id: <1685141140-26228-3-git-send-email-quic_eserrao@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1685141140-26228-1-git-send-email-quic_eserrao@quicinc.com>
-References: <1685141140-26228-1-git-send-email-quic_eserrao@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -ULLHTKeZdnN1btkz_L-tORyY9SKSmsl
-X-Proofpoint-ORIG-GUID: -ULLHTKeZdnN1btkz_L-tORyY9SKSmsl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-26_12,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- adultscore=0 priorityscore=1501 clxscore=1015 impostorscore=0
- lowpriorityscore=0 suspectscore=0 mlxlogscore=413 phishscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305260195
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 26 May 2023 18:50:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF909C;
+        Fri, 26 May 2023 15:50:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 035776146F;
+        Fri, 26 May 2023 22:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5953EC4339B;
+        Fri, 26 May 2023 22:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685141420;
+        bh=buJ0kg9TthoEcX/t2xhiboAClMDfGdVzjvAmmxVZnrU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CMHL6mnZHy+qC8VsU1uYE6yHPbYHewUKYPDIi2AhaW1wYAQz4LkaWhMoA5jpNP/qW
+         rb6cm1582dHZ1aXjQ/7yhhpxt63KaPPLngKlZqGCS1ltDEF6IBXuOj/O7Ruo6M9lWr
+         0vR/twDxtvsOhF/KQxLHs1OAQO78h26KhmpVbYZKxqGrPzU9i5U66wdXDkjYiSs8FD
+         BxkQ9xZsWs2ajkG/x4jCN3DUemcxOHdDtUjRO3rtkcB7jGFa+Cm5Vf9MU0ETd9ZnKf
+         TtVs/z2MroHEMiqTL2hLOQNc4o+KlodC8ZLUlUB2dYCF7bi6cdIMd4AJ0d/jZrLBuC
+         C6xuNhVZxk9GA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 341CAE22B06;
+        Fri, 26 May 2023 22:50:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [kernel PATCH v1] Bluetooth: L2CAP: Fix use-after-free
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <168514142020.22605.4446430781940089100.git-patchwork-notify@kernel.org>
+Date:   Fri, 26 May 2023 22:50:20 +0000
+References: <20230524170415.kernel.v1.1.I575ec21daa35ebba038fe38e164df60b6121c633@changeid>
+In-Reply-To: <20230524170415.kernel.v1.1.I575ec21daa35ebba038fe38e164df60b6121c633@changeid>
+To:     Zhengping Jiang <jiangzp@google.com>
+Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        luiz.dentz@gmail.com, chromeos-bluetooth-upstreaming@chromium.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        johan.hedberg@gmail.com, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For bus suspend scenario we should skip controller halt
-as we still have the usb cable connected. So modify the
-runtime pm ops to handle bus suspend scenario. Also invoke
-autosuspend when device receives U3 notification so that
-controller can enter runtime suspended state. Ensure that
-the controller is brought out of runtime suspend before
-triggering remote wakeup.
+Hello:
 
-Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
----
- drivers/usb/dwc3/core.c   | 19 +++++++++++++++++++
- drivers/usb/dwc3/gadget.c | 40 +++++++++++++++++++++++++++++++++-------
- 2 files changed, 52 insertions(+), 7 deletions(-)
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 278cd1c..7787805 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -2119,6 +2119,12 @@ static int dwc3_runtime_suspend(struct device *dev)
- {
- 	struct dwc3     *dwc = dev_get_drvdata(dev);
- 	int		ret;
-+	u32		reg;
-+
-+	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-+	/* For bus suspend case do not halt the controller */
-+	if (dwc->connected && (DWC3_DSTS_USBLNKST(reg) == DWC3_LINK_STATE_U3))
-+		return 0;
- 
- 	if (dwc3_runtime_checks(dwc))
- 		return -EBUSY;
-@@ -2135,6 +2141,12 @@ static int dwc3_runtime_resume(struct device *dev)
- 	struct dwc3     *dwc = dev_get_drvdata(dev);
- 	int		ret;
- 
-+	/* resume from bus suspend */
-+	if (dwc->connected) {
-+		dwc3_gadget_process_pending_events(dwc);
-+		goto resume;
-+	}
-+
- 	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
- 	if (ret)
- 		return ret;
-@@ -2149,6 +2161,7 @@ static int dwc3_runtime_resume(struct device *dev)
- 		break;
- 	}
- 
-+resume:
- 	pm_runtime_mark_last_busy(dev);
- 
- 	return 0;
-@@ -2157,9 +2170,14 @@ static int dwc3_runtime_resume(struct device *dev)
- static int dwc3_runtime_idle(struct device *dev)
- {
- 	struct dwc3     *dwc = dev_get_drvdata(dev);
-+	u32		reg;
- 
- 	switch (dwc->current_dr_role) {
- 	case DWC3_GCTL_PRTCAP_DEVICE:
-+		reg = dwc3_readl(dwc->regs, DWC3_DSTS);
-+		/* for bus suspend case return success */
-+		if (DWC3_DSTS_USBLNKST(reg) == DWC3_LINK_STATE_U3 && dwc->connected)
-+			goto autosuspend;
- 		if (dwc3_runtime_checks(dwc))
- 			return -EBUSY;
- 		break;
-@@ -2169,6 +2187,7 @@ static int dwc3_runtime_idle(struct device *dev)
- 		break;
- 	}
- 
-+autosuspend:
- 	pm_runtime_mark_last_busy(dev);
- 	pm_runtime_autosuspend(dev);
- 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 5965796..7587912 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2400,15 +2400,21 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
- 		return -EINVAL;
- 	}
- 
--	spin_lock_irqsave(&dwc->lock, flags);
- 	if (!dwc->gadget->wakeup_armed) {
- 		dev_err(dwc->dev, "not armed for remote wakeup\n");
--		spin_unlock_irqrestore(&dwc->lock, flags);
- 		return -EINVAL;
- 	}
--	ret = __dwc3_gadget_wakeup(dwc, true);
- 
-+	ret = pm_runtime_resume_and_get(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_set_suspended(dwc->dev);
-+		return ret;
-+	}
-+
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	ret = __dwc3_gadget_wakeup(dwc, true);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-+	pm_runtime_put_noidle(dwc->dev);
- 
- 	return ret;
- }
-@@ -2427,6 +2433,12 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
- 		return -EINVAL;
- 	}
- 
-+	ret = pm_runtime_resume_and_get(dwc->dev);
-+	if (ret < 0) {
-+		pm_runtime_set_suspended(dwc->dev);
-+		return ret;
-+	}
-+
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	/*
- 	 * If the link is in U3, signal for remote wakeup and wait for the
-@@ -2437,6 +2449,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
- 		ret = __dwc3_gadget_wakeup(dwc, false);
- 		if (ret) {
- 			spin_unlock_irqrestore(&dwc->lock, flags);
-+			pm_runtime_put_noidle(dwc->dev);
- 			return -EINVAL;
- 		}
- 		dwc3_resume_gadget(dwc);
-@@ -2450,6 +2463,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
- 		dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
- 
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-+	pm_runtime_put_noidle(dwc->dev);
- 
- 	return ret;
- }
-@@ -2711,21 +2725,23 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 	/*
- 	 * Avoid issuing a runtime resume if the device is already in the
- 	 * suspended state during gadget disconnect.  DWC3 gadget was already
--	 * halted/stopped during runtime suspend.
-+	 * halted/stopped during runtime suspend except for bus suspend case
-+	 * where we would have skipped the controller halt.
- 	 */
- 	if (!is_on) {
- 		pm_runtime_barrier(dwc->dev);
--		if (pm_runtime_suspended(dwc->dev))
-+		if (pm_runtime_suspended(dwc->dev) && !dwc->connected)
- 			return 0;
- 	}
- 
- 	/*
- 	 * Check the return value for successful resume, or error.  For a
- 	 * successful resume, the DWC3 runtime PM resume routine will handle
--	 * the run stop sequence, so avoid duplicate operations here.
-+	 * the run stop sequence except for bus resume case, so avoid
-+	 * duplicate operations here.
- 	 */
- 	ret = pm_runtime_get_sync(dwc->dev);
--	if (!ret || ret < 0) {
-+	if ((!ret && !dwc->connected) || ret < 0) {
- 		pm_runtime_put(dwc->dev);
- 		return 0;
- 	}
-@@ -4313,6 +4329,8 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
- 		dwc3_suspend_gadget(dwc);
- 
- 	dwc->link_state = next;
-+	pm_runtime_mark_last_busy(dwc->dev);
-+	pm_request_autosuspend(dwc->dev);
- }
- 
- static void dwc3_gadget_interrupt(struct dwc3 *dwc,
-@@ -4703,7 +4721,15 @@ void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
- {
- 	if (dwc->pending_events) {
- 		dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
-+		pm_runtime_put(dwc->dev);
- 		dwc->pending_events = false;
- 		enable_irq(dwc->irq_gadget);
-+		/*
-+		 * We have only stored the pending events as part
-+		 * of dwc3_interrupt() above, but those events are
-+		 * not yet handled. So explicitly invoke the
-+		 * interrupt handler for handling those events.
-+		 */
-+		dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
- 	}
- }
+On Wed, 24 May 2023 17:04:15 -0700 you wrote:
+> Fix potential use-after-free in l2cap_le_command_rej.
+> 
+> Signed-off-by: Zhengping Jiang <jiangzp@google.com>
+> ---
+> 
+> Changes in v1:
+> - Use l2cap_chan_hold_unless_zero to prevent adding refcnt when it is
+>   already 0.
+> 
+> [...]
+
+Here is the summary with links:
+  - [kernel,v1] Bluetooth: L2CAP: Fix use-after-free
+    https://git.kernel.org/bluetooth/bluetooth-next/c/a088d769ef3a
+
+You are awesome, thank you!
 -- 
-2.7.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
