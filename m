@@ -2,88 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93194712CF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EB6712CF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243651AbjEZS7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
+        id S243700AbjEZTAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243630AbjEZS67 (ORCPT
+        with ESMTP id S237379AbjEZTAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:58:59 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376BB13A;
-        Fri, 26 May 2023 11:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1685127536;
-        bh=n8UtLLL7MeH+WxjGi6mdHGUgV4zOAdY84/FWBVF10eQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EXAclzRSVyyGe4sxzeUw0gc1ic+L1C5A4r32bT+JVI5YkECYJPLa4XZQLvbgu08aU
-         2QMp7vFHEtW7KDcMynH/YPycEalNlBxrUt3FKyV9Rlp49M8UIgAMJ8J2jtTHqT4QDY
-         u2RogTX9vIX7qCF6taEdkcgh6hvt++Oa5V86UdXIajCV+IwBGsSMN1lwi2OAT0IJGl
-         +cQS15x6sVeuG4oTD7T2fXlRX0oXBagHm1WzxgcntvfArglXd/wxLboFubhEKJ0Ak/
-         gmYQAttcKBxYo1rqSxH7M+LOSwuI15zs/JIi3ULoDWCI7DMK+LF5zup6igmRPdL9V8
-         T3uWAGYHakHeg==
-Received: from [IPV6:2605:8d80:581:38b8:cb6e:1465:9ef2:4900] (unknown [IPv6:2605:8d80:581:38b8:cb6e:1465:9ef2:4900])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QSZ2k1x5kz1604;
-        Fri, 26 May 2023 14:58:54 -0400 (EDT)
-Message-ID: <e63ca3f4-283a-05fb-d637-c7428d87c8f2@efficios.com>
-Date:   Fri, 26 May 2023 14:58:53 -0400
+        Fri, 26 May 2023 15:00:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BBB135;
+        Fri, 26 May 2023 12:00:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC44165298;
+        Fri, 26 May 2023 19:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3023C433D2;
+        Fri, 26 May 2023 19:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685127612;
+        bh=RkwvzJ0I6kTJGMP25NGk1LAgsWO2YC303rMSAEU3yUM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rt4ONT9rfEwI+/VW3IFngphHioqiGFUeP0nzpC1oIfLQKKFFwZ38RmJb71ctES2ll
+         RXIZyfzkSnJmvpEgjjhZmuX8BEgqTu9TMBsuXtUOWVlF5STuOIWxVFdwS9lQGeX1ho
+         x77jskuQKzN8r0Tbxg8WEKssFp78G+8eJqaWc033XaQ+n2XNzEdhIi9cpGz4KT7d/k
+         uiIP+dWiFwPCMYRGJtsSOE8XjCJvCqwyxmtuERKVLTo5eNb0GiraJoXPHbGS6AXPco
+         Y5veEEQRWRnz9B6Kwe01Taj4Wc61aKinY2j4FoItoxYOlY45+ay9AgS5QtOTB5Hpoq
+         lfrTB+sLQNPEQ==
+Date:   Fri, 26 May 2023 20:00:05 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        martin.hecht@avnet.eu, linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <20230526-mural-expletive-76b9dd5db83b@spud>
+References: <20230526173955.797226-1-tomm.merciai@gmail.com>
+ <20230526173955.797226-2-tomm.merciai@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC][PATCH 1/2] locking: Introduce __cleanup__ based guards
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, pbonzini@redhat.com
-Cc:     linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        ndesaulniers@google.com, mingo@redhat.com, will@kernel.org,
-        boqun.feng@gmail.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        jiangshanlai@gmail.com, qiang1.zhang@intel.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de
-References: <20230526150549.250372621@infradead.org>
- <20230526151946.960406324@infradead.org>
- <cf20bbbc-c435-326d-f31a-86b1f4ce927a@redhat.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <cf20bbbc-c435-326d-f31a-86b1f4ce927a@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="O/CWvvC3u6tlMiiB"
+Content-Disposition: inline
+In-Reply-To: <20230526173955.797226-2-tomm.merciai@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/23 14:49, Waiman Long wrote:
-[...]
-> 
-> BTW, do we have a use case for double_lock_guard/double_lock_scope? I 
-> can envision a nested lock_scope inside a lock_scope, but taking 2 auto 
-> locks of the same type at init time and then unlock them at exit just 
-> doesn't make sense to me.
 
-AFAIU taking both runqueue locks for source and destination runqueues on 
-migration is one use-case for double_lock_guard/scope.
+--O/CWvvC3u6tlMiiB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
+Hey Tommaso,
 
-Mathieu
+On Fri, May 26, 2023 at 07:39:43PM +0200, Tommaso Merciai wrote:
+> Add documentation of device tree in YAML schema for the ALVIUM
+> Camera from Allied Vision Inc.
+>=20
+> References:
+>  - https://www.alliedvision.com/en/products/embedded-vision-solutions
+>=20
+> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> ---
+> Changes since v1:
+>  - Fixed build error as suggested by RHerring bot
+>=20
+>  .../media/i2c/alliedvision,alvium.yaml        | 115 ++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvis=
+ion,alvium.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alv=
+ium.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.=
+yaml
+> new file mode 100644
+> index 000000000000..81e9e560c99d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> @@ -0,0 +1,115 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
+No dual license?
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Alliedvision Alvium Camera
+> +
+> +maintainers:
+> +  - Tommaso Merciai <tomm.merciai@gmail.com>
+> +  - Martin Hecht <martin.hecht@avnet.eu>
+> +
+> +allOf:
+> +  - $ref: /schemas/media/video-interface-devices.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: alliedvision,alvium
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: XCLK Input Clock
 
+Description is a bit moot when you have the clock name and there's only
+one. No harm done I suppose.
+
+> +
+> +  clock-names:
+> +    const: xclk
+> +
+> +  powerdown-gpios:
+> +    maxItems: 1
+> +    description: >
+
+You don't have any newlines, so you don't need a >
+
+> +      Reference to the GPIO connected to the powerdown pin, if any.
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +    description: >
+> +      Reference to the GPIO connected to the reset pin, if any.
+> +
+> +  streamon-delay:
+> +    maxItems: 1
+> +    description: >
+> +      Delay before camera start capturing frames in us.
+> +
+> +  rotation:
+> +    enum:
+> +      - 0
+> +      - 180
+
+Could style this as enum: [0, 180], but I don't mind which you do.
+
+> +  port:
+> +    description: Digital Output Port
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      endpoint:
+> +        $ref: /schemas/media/video-interfaces.yaml#
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          clock-lanes:
+> +            const: 0
+> +          data-lanes:
+> +            minItems: 1
+> +            maxItems: 4
+> +          link-frequencies: true
+> +
+> +        required:
+> +          - data-lanes
+> +          - link-frequencies
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +      #include <dt-bindings/gpio/gpio.h>
+> +      #include <dt-bindings/clock/imx8mp-clock.h>
+> +
+> +      i2c {
+> +          #address-cells =3D <1>;
+> +          #size-cells =3D <0>;
+> +
+> +          camera: alvium@3c {
+
+Label does not seem to be used & the generic node name should probably
+be "camera", no?
+
+> +              compatible =3D "alliedvision,alvium";
+> +              pinctrl-names =3D "default";
+> +              pinctrl-0 =3D <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&=
+pinctrl_csi_mclk>;
+> +              reg =3D <0x3c>;
+> +              clocks =3D <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+> +              clock-names =3D "xclk";
+> +              assigned-clocks =3D <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+> +              assigned-clock-parents =3D <&clk IMX8MP_CLK_24M>;
+> +              assigned-clock-rates =3D <24000000>;
+> +              streamon-delay =3D <20>;
+> +              powerdown-gpios =3D <&gpio2 11 GPIO_ACTIVE_HIGH>;
+> +              reset-gpios =3D <&gpio1 6 GPIO_ACTIVE_LOW>;
+> +              status =3D "okay";
+> +
+> +              port {
+> +                  alvium_out: endpoint {
+
+Ditto here, drop the unused label?
+
+Otherwise, looks grand to me.
+
+Cheers,
+Conor.
+
+> +                      remote-endpoint =3D <&mipi_csi_0_in>;
+> +                      data-lanes =3D <1 2 3 4>;
+> +                      link-frequencies =3D /bits/ 64 <681250000>;
+> +                      clock-lanes =3D <0>;
+> +                  };
+> +              };
+> +          };
+> +      };
+> +
+> +...
+> --=20
+> 2.34.1
+>=20
+
+--O/CWvvC3u6tlMiiB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHEBtQAKCRB4tDGHoIJi
+0p0aAQD8rDkDEpqAiwoTDiEV5PZe1qUVNRoUGUKnrRa2Jj7yCwD+LnwGBEJ6AD/P
+UEZv+0h842TCtVATqCm4Cj9pPw/GtAg=
+=0OYh
+-----END PGP SIGNATURE-----
+
+--O/CWvvC3u6tlMiiB--
