@@ -2,151 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E463071297F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF26F712981
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243803AbjEZP37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S244017AbjEZPaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244148AbjEZP34 (ORCPT
+        with ESMTP id S243959AbjEZPaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:29:56 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EF510A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:29:54 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f5dbd8f677so58015e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:29:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685114992; x=1687706992;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=11kvH2/w8+/j27zICJ7H+elZ2FOLnEq/iHQYQEgeVyU=;
-        b=Xk/GvjBDVdqc+7jqhKEG3aIsPCmQ+0jViFDIaERZ7pysnS+oInnRks/1a2hNnsPX0e
-         LpqZi+qhKBPgBAMNCNf3qVeY1UnEj8OPYwqsI4YALxpXPbJQ8jISsH47Yf36HyH8eNXi
-         7PnSrcKGSlk7VyyGLQkCkz5QFeHRYlU4PoLk7S4yNBmvGO7JuITjeNZxf9Dsvyhk6zCb
-         t6JipA3vXrgfF5ugk4gUIPKGhyNQ3xWLiLGlROuVAKH6NsfKQhHtWfYHdtsY+tDoF2BT
-         Mle7Z0+er7X78IRUr9LHj8rO/OwYfxBhvl1qx4eZ1/agCnwVcfkOPxqduq9rmP0sHR9+
-         kVoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685114992; x=1687706992;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=11kvH2/w8+/j27zICJ7H+elZ2FOLnEq/iHQYQEgeVyU=;
-        b=XNGZKf0UBHGaREcAQ9VlqKLNEWDzpp1WmOJhswgRFZfTWjQRwX17rkJ49cVWEVcXv0
-         NrEF8PbSUTtw2yT6PqFHwS0/i5fR3tWIOr2q8+V5Qal9RYrK3vLSvP3TrKGhILEq4Zpi
-         rTSLQyPr3xFAJQBmTEaO0MSKSykeIIsj/REcYuj+318sCvRgVhL0rJBIEbt+Yu/U/0M6
-         PyuKzFSlZwdzmZLhvVkTBubGHA3VjIhY0KTgx7yvzBfspi3h0v+3xlGn4m7q+U3Yu0+C
-         RlJiBI4KrkAYqIJ0PFhqDPyrPB8f4yhYVnpdOTw4vkXtuEhHuCc1TNun5f+PbY7GGp0A
-         Z3CA==
-X-Gm-Message-State: AC+VfDyeGM83ZY6g9RWWI+AC1+gfLbRi/P6FLA0I8ZoKaZATd/OEYxrG
-        Xqq2ARpuWZrGRaeJiT/RoNH+ZboMgLaWBMaWNfyCAQ==
-X-Google-Smtp-Source: ACHHUZ7/PW5oi1QxByQp+2dnJSmeNg5G3WW6rGN9o5Q5Y7U7JvrxNI5F50BfkNMxcYP0mt7Aq9GozHET7p34VjflXM0=
-X-Received: by 2002:a05:600c:cca:b0:3f1:70d1:21a6 with SMTP id
- fk10-20020a05600c0cca00b003f170d121a6mr120145wmb.0.1685114992299; Fri, 26 May
- 2023 08:29:52 -0700 (PDT)
+        Fri, 26 May 2023 11:30:07 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2064.outbound.protection.outlook.com [40.107.20.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DABF3;
+        Fri, 26 May 2023 08:30:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JKcbaS48fFKs+KaEEyJkso7MIJ/K7FKZmqAKD5MFZdSBk8yKDM4qch5Oq4EDPM2R8qoHkDTTwCnQocnDmWsouG84uVJuybfO/BPxLF69l2UvTdpcMO4GJubB9UEdZLxQukhT5uz+avlY1leSgnkKLbcaS/SQI7aKWugAVyhMFSPq0mTPICamJXxeOrl8DFHvu6CD2xERSdeNoPDIrTJfzE6G6+65EvSVeYK+HFga0snOhBNZB0gsuBtoTTyjtWKO/7egtxahS9+zwj96DgT8Nr3XjATxJC2o8ck03g+XaFA0kgwRZOYa8jUHklzZiIcqfb7AzhyTGk9QlJ4KauuHbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OnEusWUUjn8aOaTWyDEATbbl1QYYxYONuaWet/tpWbs=;
+ b=W5rsGdTWNehXMCvjGptmFpsS9swC79rWQk0ee3tfZLMFJHKVHUOhgPgT0NjR54oBwUBSzO9I6JBDB1EJqi/PfOOkgVl7zNg1Wu56clH4oTbrFx21erDD9/tIssBm9Luzl+UDWWARltHAovtuxvDlnI247ycFGyS/5FqG/TWEpQMatS/xtkmByyqYQJzMYICK5wUHGfMhDOGRHcpwqYt7+evPujzORPaGWyoeIhFY+MQ9k43OprY5QpgVQIU1hqCD/fiXKIaMD5DNrbXiKMSJD0ihU8/NK8mEFJO4YnBeLFaacRLE45zTNGJ/PSNTEaaVZJOYZ7JXmWAjQU4yExtb7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=santannapisa.it; dmarc=pass action=none
+ header.from=santannapisa.it; dkim=pass header.d=santannapisa.it; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=santannapisa.it;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OnEusWUUjn8aOaTWyDEATbbl1QYYxYONuaWet/tpWbs=;
+ b=TBhVB8T+tXIAmijO3ZoeZWlX+DkFF+mEhlPiw5ISK+OHACjPPYheQ+SxFti/lNu5GtT9uW4hUtq6hVbeEq3rWStDGJhEe3L046Uupbjdp2CEprrrtgbGotnfji4o+wQeCLpGsFOlzEx3KFgedNS8sTu4NPcjLjZT5YFSVACR+Yc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=santannapisa.it;
+Received: from VI1PR03MB2880.eurprd03.prod.outlook.com (2603:10a6:802:2d::21)
+ by AS8PR03MB7463.eurprd03.prod.outlook.com (2603:10a6:20b:2e7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.18; Fri, 26 May
+ 2023 15:30:02 +0000
+Received: from VI1PR03MB2880.eurprd03.prod.outlook.com
+ ([fe80::8925:5293:e478:c934]) by VI1PR03MB2880.eurprd03.prod.outlook.com
+ ([fe80::8925:5293:e478:c934%6]) with mapi id 15.20.6433.016; Fri, 26 May 2023
+ 15:30:02 +0000
+Date:   Fri, 26 May 2023 17:29:59 +0200
+From:   luca abeni <luca.abeni@santannapisa.it>
+To:     Vineeth Pillai <vineeth@bitbyteword.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        youssefesmat@google.com,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] sched/deadline: Fix bandwidth reclaim equation
+ in GRUB
+Message-ID: <20230526172959.5440b9dd@nowhere>
+In-Reply-To: <20230526145519.2282062-1-vineeth@bitbyteword.org>
+References: <20230526145519.2282062-1-vineeth@bitbyteword.org>
+Organization: Scuola Superiore Sant'Anna
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR0P278CA0158.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:41::17) To VI1PR03MB2880.eurprd03.prod.outlook.com
+ (2603:10a6:802:2d::21)
 MIME-Version: 1.0
-References: <20230526150806.1457828-1-VEfanov@ispras.ru>
-In-Reply-To: <20230526150806.1457828-1-VEfanov@ispras.ru>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 26 May 2023 17:29:40 +0200
-Message-ID: <CANn89i+p7_UB8Z5FQ+iWg4G_caAnUf9W4P-t+VOzigUuJo+qRw@mail.gmail.com>
-Subject: Re: [PATCH] udp6: Fix race condition in udp6_sendmsg & connect
-To:     Vladislav Efanov <VEfanov@ispras.ru>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR03MB2880:EE_|AS8PR03MB7463:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31cec9b5-645d-4ada-16fa-08db5dfe12f9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pNNOlXDDvgq8JoAIFoqADYFpCUBwlUkzjAwMVGCM7zzHpHoqQ8UxaL1caaKrhwaue1JCDKUYEdxUP0Q1gNMb85S7qH5RTwn5tXvDy3cMI3bye92pxGxeP1eh8eQCOrAxEh0RzHYEBFwkZZVYNg1Kd81YH7UsrioYsQfjm8Yprg4pJv/WJTO0WXPXXdvnl9kuhbC/EEr4JYToP9TVI6499/AsMNzB2S+rmqx9iEBOY6RIUfcmXmgmXLI/mZwVY3NQgZUDJQJ1dmNEtJI/DbAeQBWofkbbTtSRC/vhOgp01aLbXGQRp7fCb+J3jBrZiK2bhfVO/7thrx6PqKM0vlOJ5rVCCqp9yqdNpY6I8rHOUYDDVRkIx5rfXIiqWmlXslLDxkCdOx/XIhSzd5sdtDNHXmrXzvrC7hIQe1vgUvMNk+LvYaH73JK/O2zsyIlni93eUhIup5sf4E+5Dz72z7alJfS/6IrosMSK4DQmvXgdLsONWKU8IKgyKLc3qhTzfx2DxCTpvTDRVyoZtLjYd70qUF0nPZXQZrOxRVrymQQAqBzwpd5OeNDxoGTU1pJKVkAF
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB2880.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(39850400004)(396003)(346002)(366004)(136003)(376002)(451199021)(2906002)(5660300002)(83380400001)(7416002)(8676002)(8936002)(66556008)(6486002)(41300700001)(66946007)(66476007)(4326008)(6916009)(54906003)(316002)(478600001)(6666004)(36916002)(786003)(33716001)(86362001)(26005)(1076003)(186003)(9686003)(6506007)(6512007)(38100700002)(41320700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kGsJeiUP5mS+h+5H+VzSIiCLASJ0zic//XCSwsYNqfxos87GGD3SnXBWgFL4?=
+ =?us-ascii?Q?1hwPyHEjgdcOVLDK0GAlokuSjivSIzWoG7R9SHyLfQOgiwuf594yfdxzdt/I?=
+ =?us-ascii?Q?Isgj8TJyBJBfSMVQ8rkqvJg3OX1XR8uuJzAxFyuRShC7icj2oYiMR/eiLg4N?=
+ =?us-ascii?Q?rG61XWo1232ZbUSlru4VjM44E3794IiEewk1jzTo6DkjphLLO9ufsrk0YW1R?=
+ =?us-ascii?Q?c3QC13IoEAerTftc8dkWCoCemWvHeCNAijnUjl7wbUt76p0f4UwvuWNm7oBQ?=
+ =?us-ascii?Q?jkHcsYrG/xoGXYS3fo2DFLkWQ4M7gRk2bb7uU1mLw1f2Swkqy7XYkV72t1Kv?=
+ =?us-ascii?Q?IA7ZofOdxQQWqOCe9ow+TGeIxqw9fO6SL+cgutcZeisLufB2hCDlzKkyH7wO?=
+ =?us-ascii?Q?GItqPqst4OhC99aaVeOw96EvSqQ6oU2U5RFpcMYp/FgGOY3tvmIbQZl9rcNM?=
+ =?us-ascii?Q?zDVTYRg3ZDoVhCf9KKKxBQc2oAzXnlXx4mWNIMyrGoEggiC25Dv3J2mBI66N?=
+ =?us-ascii?Q?/0HQ69+hVyxshMcZ4/FWv4cRcyUMcVCqkZkgQcwgkgV8UMXIlEj6Jr0EM1hL?=
+ =?us-ascii?Q?OSEkJA342Sk7HMLPdGOG+4jRJlB+U5quRpz/xq+faZAG3P58uZ5T5zw2XBW2?=
+ =?us-ascii?Q?OmjJLzV+46b88x20jVD1zI30HoiWwtQIRNUJbQd6JcInnatV+lv9YkGl+a1/?=
+ =?us-ascii?Q?ACi5Nv+fmMZzsB8g0l/wdXQQsbyKF8/woG3W2yDVDEQabenuvhNQPkY20Kdd?=
+ =?us-ascii?Q?QHnoXRQZqFX6kjTVjOLYJajQ0RCOVkWT2g3TSLhxdFy+5dkqk/60daWqeDVU?=
+ =?us-ascii?Q?cvwpmzG0/VX9U+YJu64F3SoJ0EqWIpb1aGApu0ckjKcL1hS4mwuFCOFthGd+?=
+ =?us-ascii?Q?rw6DRIPhwcmmW6Ge/BQAt0hQb6yXI/5MGQOngY2nqAUjq02qUuHxbV6UKmWr?=
+ =?us-ascii?Q?v/TOMpN99zUi/OvNnC5InMP6cKtE0Xh3H6uEbvqOmiwZ5l6EPLL4S8Z8nQhG?=
+ =?us-ascii?Q?FRXDdz4Knng8A1jhUCPMfFydSUiTzIX0NAgDzsSjRUnUfJc8wKI+xp4bdkmd?=
+ =?us-ascii?Q?ODLUIJ4YDOYvypbfMDOjp6YWJiVNitOdQxh3G4X4Qlz+AVuhO/iHHQpieBCI?=
+ =?us-ascii?Q?/Z/NQeQRdx3jxKBdkxqaoSaJqev6Js1nuwUkBPwgbG5cIOtz4OOrmRqxw8eJ?=
+ =?us-ascii?Q?0o3l0YAE4EeWZkXN7+LkZ3BA453z6yh/FiEhR0E6BwsOEdiPicoU3ypLyNDo?=
+ =?us-ascii?Q?d8Q9l6mw3J15huKL8nhSGgulrxUBmbcG1p5NGmH7wfvyIUR0vWL7H1RQtSTe?=
+ =?us-ascii?Q?ILqQ1KDfbyaJUO/h0ldVhJ83WEcevR1JISgos1INtQNWiPKDA3Y3wj3xl2CL?=
+ =?us-ascii?Q?C04NGbPpDbNKbiqJM5PL0I2Ab5Lqeizh+9tzZRPMh5E+hKRODjc1FS8iKccl?=
+ =?us-ascii?Q?jc7yk8tLavj2tbVW8kpMtTbvtazScWguxcI6Xzq33MYY4dDjeZcHC7Fg4eMf?=
+ =?us-ascii?Q?EePnRM3E5SDWKzPP+79selsAGbcZI6ixwYrJZf2AU/Z+Qh5RndL43lGDoIDF?=
+ =?us-ascii?Q?HezlMMIX+5FK9XsWJFGrbVZkal14eBgx2XcxKFYspiLRHVL9Y2ZeVSidNuYU?=
+ =?us-ascii?Q?GQ=3D=3D?=
+X-OriginatorOrg: santannapisa.it
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31cec9b5-645d-4ada-16fa-08db5dfe12f9
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB2880.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 15:30:02.5987
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d97360e3-138d-4b5f-956f-a646c364a01e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hJEbqZ3Rw53Bv/C6DqZnkNEK6M4YEhvCYsAvdEItctw8GFEHiuyLJHtQyp/xsLodBIq0GcCeoCAJ110WWDWC9s6YP4nJeSJIEO+hcCl+8Io=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB7463
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 5:08=E2=80=AFPM Vladislav Efanov <VEfanov@ispras.ru=
-> wrote:
->
-> Syzkaller got the following report:
-> BUG: KASAN: use-after-free in sk_setup_caps+0x621/0x690 net/core/sock.c:2=
-018
-> Read of size 8 at addr ffff888027f82780 by task syz-executor276/3255
+Hi,
 
-Please include a full report.
+I think the code changes look good. I only see a small issue in the
+comments.
 
->
-> The function sk_setup_caps (called by ip6_sk_dst_store_flow->
-> ip6_dst_store) referenced already freed memory as this memory was
-> freed by parallel task in udpv6_sendmsg->ip6_sk_dst_lookup_flow->
-> sk_dst_check.
->
->           task1 (connect)              task2 (udp6_sendmsg)
->         sk_setup_caps->sk_dst_set |
->                                   |  sk_dst_check->
->                                   |      sk_dst_set
->                                   |      dst_release
->         sk_setup_caps references  |
->         to already freed dst_entry|
+On Fri, 26 May 2023 10:55:18 -0400
+Vineeth Pillai <vineeth@bitbyteword.org> wrote:
+
+> According to the GRUB[1] rule, the runtime is depreciated as:
+>   "dq = -max{u, (1 - Uinact - Uextra)} dt" (1)
+> 
+> To guarantee that deadline tasks doesn't starve lower class tasks,
+> we do not allocate the full bandwidth of the cpu to deadline tasks.
+> Maximum bandwidth usable by deadline tasks is denoted by "Umax".
+> Considering Umax, equation (1) becomes:
+>   "dq = -(max{u, (Umax - Uinact - Uextra)} / Umax) dt" (2)
+
+This is correct...
+
+[...]
+>  /*
+> - * This function implements the GRUB accounting rule:
+> - * according to the GRUB reclaiming algorithm, the runtime is
+> - * not decreased as "dq = -dt", but as
+> - * "dq = -max{u / Umax, (1 - Uinact - Uextra)} dt",
+> + * This function implements the GRUB accounting rule. According to
+> the
+> + * GRUB reclaiming algorithm, the runtime is not decreased as "dq =
+> -dt",
+> + * but as "dq = -(max{u, (1 - Uinact - Uextra)} / Umax) dt",
+
+...But I think this is wrong (should be "Umax - ...", not "1 - ...").
+I think patch 2/2 has the same issue.
+
+[...]
+> +	if (u_inact + rq->dl.extra_bw > rq->dl.max_bw - dl_se->dl_bw)
+> +		u_act = dl_se->dl_bw;
+>  	else
+> -		u_act = BW_UNIT - u_inact - rq->dl.extra_bw;
+> +		u_act = rq->dl.max_bw - u_inact - rq->dl.extra_bw;
+
+This again is IMHO OK
 
 
->
-> The reason for this race condition is: udp6_sendmsg() calls
-> ip6_sk_dst_lookup() without lock for sock structure and tries to
-> allocate/add dst_entry structure to sock structure in parallel with
-> "connect" task.
->
-> Found by Linux Verification Center (linuxtesting.org) with syzkaller.
->
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-
-This is a bogus Fixes: tag
-
-In old times, UDP sendmsg() was using the socket lock.
-
-Then, in linux-4.0 Vlad Yasevich made UDP v6 sendmsg() lockless (and
-racy in many points)
-
-
-> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
-> ---
->  net/ipv6/udp.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-> index e5a337e6b970..a5ecd5d93b0a 100644
-> --- a/net/ipv6/udp.c
-> +++ b/net/ipv6/udp.c
-> @@ -1563,12 +1563,15 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr =
-*msg, size_t len)
->
->         fl6->flowlabel =3D ip6_make_flowinfo(ipc6.tclass, fl6->flowlabel)=
-;
->
-> +       lock_sock(sk);
->         dst =3D ip6_sk_dst_lookup_flow(sk, fl6, final_p, connected);
->         if (IS_ERR(dst)) {
->                 err =3D PTR_ERR(dst);
->                 dst =3D NULL;
-> +               release_sock(sk);
->                 goto out;
->         }
-> +       release_sock(sk);
->
->         if (ipc6.hlimit < 0)
->                 ipc6.hlimit =3D ip6_sk_dst_hoplimit(np, fl6, dst);
-> --
-> 2.34.1
->
-
-There must be another way really.
-You just killed UDP performance.
+			Thanks,
+				Luca
