@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D30712F33
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FEA7712F34
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237981AbjEZVyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 17:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S243786AbjEZVyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 17:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjEZVyQ (ORCPT
+        with ESMTP id S238005AbjEZVyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 17:54:16 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB228F3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:54:14 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bac6a453dd5so1641388276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:54:14 -0700 (PDT)
+        Fri, 26 May 2023 17:54:19 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3886410A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:54:17 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bac6a453dd5so1641423276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685138054; x=1687730054;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/VeaQPRlwfc+cfqeHAnnZK+9G9F+QnHDTT1HWy7dy+0=;
-        b=6bj4A8znRG1OQU3ZCyVR0H++Iov5wi2qcofQvQOsetiMglZCIcpGe33EymKXEOCMXU
-         7Grn/ztrUPjAkG5G7S9rfPDGkIbMSOyzklqvP/eTwmbBMoZhachtmDjNLPadIgr5ZywA
-         vkUCx57LAcSDWzT1TqDKWlSEjCI4yIUsQnRTlECL9V/G0SQ6BWPyD44ZEfba/kHxnnCh
-         WMuBeyAq4FtPvipnSFzE1zRdKGyEJp5kuQibkJJYJY3mmZsRERW5jz8Bpjk9H7gdHdi7
-         NXObPOyxthM0SfVcSOBeAcrvId6GH3UjkCqdKdVSpuQE7ETgFZzZojlgwqKyGJnO3/da
-         3Vww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685138054; x=1687730054;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20221208; t=1685138056; x=1687730056;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/VeaQPRlwfc+cfqeHAnnZK+9G9F+QnHDTT1HWy7dy+0=;
-        b=T4y/slPbIiHnXK8rxhjDdUX/x1w675pJ+K777T8yvxp5SlWB793T3U/FdEN4peUAKb
-         IToo4VQahtlB0o1i9mqSKklb5f8Din6WxJfXR/EflC+/wIvwzpkY1H9DrNIlTnlJYSxx
-         +MDwgwtiPEpHk4VqYq3RR4nHs1CXXkcvd9PpJqLQmlJXwyQ6SpXlSSx0O+YYqaXmwA19
-         tsk2CFGeOcFcSxALRoN17XaMQamfHfoZdjLA+aTfdrmEacoZ876XAJYmndakyHpnYNWZ
-         ofoTbQv0myhT109P9KB78eTP0MXvlMaFUyubHUmne9WZCygS5BlwvTNDqQtisqa/4j1X
-         fCUA==
-X-Gm-Message-State: AC+VfDz9LAZWzewU2dJsT5ReSRQQ28MyQVqXTIPI43iZZsg+JJrBfQ8R
-        iOpOnZCKAhP49/WRVvWzdjHIruuq1v5O
-X-Google-Smtp-Source: ACHHUZ7pzilsbkWjsEY/9b69o/a8X9JMVvQGe2hCRyOJKTwWLMIT4SaGiakVICpApGIIhC6kwUUlgct60p3f
+        bh=EneS6k0fHW+m74eWzDjwM1uOc1Pmt8jkSJOP/MXeXmY=;
+        b=cSJ9niReYqrmuFkcQ1ETRJue7gVxvLZ/VOGme3fOFi2IvXXWUxzlexmxLeii6Vk3H+
+         cLsn1mTS7p0IolvfXMXCCcSG3pZr2F0vHAvak0DcQV5u+qOEnJNZhQMG/grWoFWIcNlV
+         qkQI42YHK+Whwhvuvq8AivZYqoqweVvJQ7Ei0qponQWqFogbx04XrLqpVPanTUn1NU/U
+         vj7263FOe5ziX+J9eVs87CNz8I+o6jnzQk0wBzUrl7kKtV2etgGSU+ite4vgKFQILGPy
+         tKaxK+kyaRiZJkPyM0WTDFRe0cYQ/QeC2DTcPidpySU063Lmok8QQTA3Cs21Oexqgo27
+         KMHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685138056; x=1687730056;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EneS6k0fHW+m74eWzDjwM1uOc1Pmt8jkSJOP/MXeXmY=;
+        b=aNNQalp/XsW+SlKmltUbgqxQDubJa77ZeCaRNPlYEqwmWKyRMp9aO+RhhtdE0RK74z
+         L1/ZuaJJ15T/VMKRowFc6uDRj41zMAnca5dLzs46f3IMp91cJo+GMWQE/voftr4IheU4
+         qmfhMogXuRBxrRutSkyDYlSVI4YcNrB6CRk69fQ3OOBtZ5VhCNL9B1l038OdYUTaZud+
+         8BV4RnjNZdHFIuEkuVbCTrNzsYtrhaKaDXxvvaprB6nHTJ8eXDKLcmfBt8DYRp11C4bD
+         mCMX+zqwSGBw8NlQ1sPhABBi1OiM0s5PQJIyrzxmapCdb3COMyhI3IoRi29WQBO2D5/q
+         Lm6w==
+X-Gm-Message-State: AC+VfDxtCgyUizrLt+6HzBTh6qqW2NvwDs8r9MrDlHaVi4XWWfqmLg73
+        A7Nl3osBno5ae6lzzuBLYgJ9wjH47inU
+X-Google-Smtp-Source: ACHHUZ7pyOT9lS3V6y+iDxHsLZyo/eaK+QtOpy4IcWNjPJIW/GXPNefY54a7T1cr2UkcUpsBxEIiNInXknTM
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
  (user=irogers job=sendgmr) by 2002:a25:8204:0:b0:bac:fd63:b567 with SMTP id
- q4-20020a258204000000b00bacfd63b567mr1723856ybk.4.1685138054005; Fri, 26 May
- 2023 14:54:14 -0700 (PDT)
-Date:   Fri, 26 May 2023 14:53:35 -0700
-Message-Id: <20230526215410.2435674-1-irogers@google.com>
+ q4-20020a258204000000b00bacfd63b567mr1723894ybk.4.1685138056472; Fri, 26 May
+ 2023 14:54:16 -0700 (PDT)
+Date:   Fri, 26 May 2023 14:53:36 -0700
+In-Reply-To: <20230526215410.2435674-1-irogers@google.com>
+Message-Id: <20230526215410.2435674-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230526215410.2435674-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v4 00/35] PMU refactoring and improvements
+Subject: [PATCH v4 01/35] perf cpumap: Add intersect function
 From:   Ian Rogers <irogers@google.com>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -89,154 +91,159 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Separate the code in pmu.[ch] into the set/list of PMUs and the code
-for a particular PMU. Move the set/list of PMUs code into
-pmus.[ch]. Clean up hybrid code and remove hybrid PMU list, it is
-sufficient to scan PMUs looking for core ones. Add core PMU list and
-perf_pmus__scan_core that just reads core PMUs. Switch code that skips
-non-core PMUs during a perf_pmus__scan, to use the
-perf_pmus__scan_core variant. Don't scan sysfs for PMUs if all such
-PMUs have been previously scanned/loaded. Scanning just core PMUs, for
-the cases it is applicable, can improve the sysfs reading time by more
-than 4 fold on my laptop, as servers generally have many more uncore
-PMUs the improvement there should be larger:
+The merge function gives the union of two cpu maps. Add an intersect
+function which is necessary, for example, when intersecting a PMUs
+supported CPUs with user requested.
 
-```
-$ perf bench internals pmu-scan -i 1000
-Computing performance of sysfs PMU event scan for 1000 times
-  Average core PMU scanning took: 989.231 usec (+- 1.535 usec)
-  Average PMU scanning took: 4309.425 usec (+- 74.322 usec)
-```
+Signed-off-by: Ian Rogers <irogers@google.com>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+---
+ tools/lib/perf/cpumap.c              | 35 ++++++++++++++++++++++++
+ tools/lib/perf/include/perf/cpumap.h |  2 ++
+ tools/perf/tests/builtin-test.c      |  1 +
+ tools/perf/tests/cpumap.c            | 41 ++++++++++++++++++++++++++++
+ tools/perf/tests/tests.h             |  1 +
+ 5 files changed, 80 insertions(+)
 
-The patch "perf pmu: Separate pmu and pmus" moves and renames a lot of
-functions, and is consequently large. The changes are trivial, but
-kept together to keep the overall number of patches more reasonable.
-
-v4. On patch 16 (perf pmu: Remove perf_pmu__hybrid_mounted) remove the
-    handling of no cpus for a hybrid core PMU following discussion
-    with Kan:
-    https://lore.kernel.org/lkml/20230524221831.1741381-17-irogers@google.com/
-    On patch 9 (perf evlist: Propagate user CPU maps intersecting core
-    PMU maps) fix the comment on struct perf_evsel's system_wide
-    variable from conversation with Namhyung:
-    https://lore.kernel.org/lkml/20230524221831.1741381-10-irogers@google.com/
-v3. Address fixing hybrid user specified CPU maps by doing it in
-    propagate maps. Remove nearly all references to cpu_core/cpu_atom
-    in particular by removing is_pmu_hybrid - hybrid is now >1 core
-    PMU. Addresses comments by Kan and Namhyung.
-v2. Address Kan's review comments wrt "cycles" -> "cycles:P" and
-    "uncore_pmus" -> "other_pmus".
-
-Ian Rogers (35):
-  perf cpumap: Add intersect function
-  perf tests: Organize cpu_map tests into a single suite
-  perf cpumap: Add equal function
-  libperf cpumap: Add "any CPU"/dummy test function
-  perf pmu: Detect ARM and hybrid PMUs with sysfs
-  perf pmu: Add is_core to pmu
-  perf evsel: Add is_pmu_core inorder to interpret own_cpus
-  perf pmu: Add CPU map for "cpu" PMUs
-  perf evlist: Propagate user CPU maps intersecting core PMU maps
-  perf evlist: Allow has_user_cpus to be set on hybrid
-  perf target: Remove unused hybrid value
-  perf tools: Warn if no user requested CPUs match PMU's CPUs
-  perf evlist: Remove evlist__warn_hybrid_group
-  perf evlist: Remove __evlist__add_default
-  perf evlist: Reduce scope of evlist__has_hybrid
-  perf pmu: Remove perf_pmu__hybrid_mounted
-  perf pmu: Rewrite perf_pmu__has_hybrid to avoid list
-  perf x86: Iterate hybrid PMUs as core PMUs
-  perf topology: Avoid hybrid list for hybrid topology
-  perf evsel: Compute is_hybrid from PMU being core
-  perf header: Avoid hybrid PMU list in write_pmu_caps
-  perf metrics: Remove perf_pmu__is_hybrid use
-  perf stat: Avoid hybrid PMU list
-  perf mem: Avoid hybrid PMU list
-  perf pmu: Remove perf_pmu__hybrid_pmus list
-  perf pmus: Prefer perf_pmu__scan over perf_pmus__for_each_pmu
-  perf x86 mem: minor refactor to is_mem_loads_aux_event
-  perf pmu: Separate pmu and pmus
-  perf pmus: Split pmus list into core and other
-  perf pmus: Allow just core PMU scanning
-  perf pmus: Avoid repeated sysfs scanning
-  perf pmus: Ensure all PMUs are read for find_by_type
-  perf pmus: Add function to return count of core PMUs
-  perf pmus: Remove perf_pmus__has_hybrid
-  perf pmu: Remove is_pmu_hybrid
-
- tools/lib/perf/cpumap.c                 |  61 +++
- tools/lib/perf/evlist.c                 |  25 +-
- tools/lib/perf/include/internal/evsel.h |  15 +-
- tools/lib/perf/include/perf/cpumap.h    |  14 +
- tools/perf/arch/arm/util/auxtrace.c     |   7 +-
- tools/perf/arch/arm/util/cs-etm.c       |   4 +-
- tools/perf/arch/arm64/util/pmu.c        |   6 +-
- tools/perf/arch/x86/tests/hybrid.c      |   7 +-
- tools/perf/arch/x86/util/auxtrace.c     |   5 +-
- tools/perf/arch/x86/util/evlist.c       |  25 +-
- tools/perf/arch/x86/util/evsel.c        |  27 +-
- tools/perf/arch/x86/util/intel-bts.c    |   4 +-
- tools/perf/arch/x86/util/intel-pt.c     |   4 +-
- tools/perf/arch/x86/util/mem-events.c   |  17 +-
- tools/perf/arch/x86/util/perf_regs.c    |  15 +-
- tools/perf/arch/x86/util/topdown.c      |   5 +-
- tools/perf/bench/pmu-scan.c             |  60 +--
- tools/perf/builtin-c2c.c                |   9 +-
- tools/perf/builtin-list.c               |   4 +-
- tools/perf/builtin-mem.c                |   9 +-
- tools/perf/builtin-record.c             |  29 +-
- tools/perf/builtin-stat.c               |  14 +-
- tools/perf/builtin-top.c                |  10 +-
- tools/perf/tests/attr.c                 |  11 +-
- tools/perf/tests/builtin-test.c         |   4 +-
- tools/perf/tests/cpumap.c               |  92 ++++-
- tools/perf/tests/event_groups.c         |   7 +-
- tools/perf/tests/parse-events.c         |  15 +-
- tools/perf/tests/parse-metric.c         |   9 +-
- tools/perf/tests/pmu-events.c           |   6 +-
- tools/perf/tests/switch-tracking.c      |  14 +-
- tools/perf/tests/tests.h                |   4 +-
- tools/perf/tests/topology.c             |  16 +-
- tools/perf/util/Build                   |   2 -
- tools/perf/util/cpumap.c                |   4 +-
- tools/perf/util/cpumap.h                |   4 +-
- tools/perf/util/cputopo.c               |  12 +-
- tools/perf/util/env.c                   |   5 +-
- tools/perf/util/evlist-hybrid.c         | 162 --------
- tools/perf/util/evlist-hybrid.h         |  15 -
- tools/perf/util/evlist.c                |  64 +++-
- tools/perf/util/evlist.h                |   9 +-
- tools/perf/util/evsel.c                 |  60 +--
- tools/perf/util/evsel.h                 |   3 -
- tools/perf/util/header.c                |  27 +-
- tools/perf/util/mem-events.c            |  25 +-
- tools/perf/util/metricgroup.c           |   9 +-
- tools/perf/util/parse-events.c          |  25 +-
- tools/perf/util/parse-events.y          |   3 +-
- tools/perf/util/pfm.c                   |   6 +-
- tools/perf/util/pmu-hybrid.c            |  52 ---
- tools/perf/util/pmu-hybrid.h            |  32 --
- tools/perf/util/pmu.c                   | 470 +-----------------------
- tools/perf/util/pmu.h                   |  25 +-
- tools/perf/util/pmus.c                  | 465 ++++++++++++++++++++++-
- tools/perf/util/pmus.h                  |  15 +-
- tools/perf/util/print-events.c          |  15 +-
- tools/perf/util/python-ext-sources      |   1 -
- tools/perf/util/stat-display.c          |  19 +-
- tools/perf/util/target.h                |   1 -
- 60 files changed, 992 insertions(+), 1092 deletions(-)
- delete mode 100644 tools/perf/util/evlist-hybrid.c
- delete mode 100644 tools/perf/util/evlist-hybrid.h
- delete mode 100644 tools/perf/util/pmu-hybrid.c
- delete mode 100644 tools/perf/util/pmu-hybrid.h
-
+diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
+index 1229b18bcdb1..d4f3a1a12522 100644
+--- a/tools/lib/perf/cpumap.c
++++ b/tools/lib/perf/cpumap.c
+@@ -402,3 +402,38 @@ struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
+ 	perf_cpu_map__put(orig);
+ 	return merged;
+ }
++
++struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
++					     struct perf_cpu_map *other)
++{
++	struct perf_cpu *tmp_cpus;
++	int tmp_len;
++	int i, j, k;
++	struct perf_cpu_map *merged = NULL;
++
++	if (perf_cpu_map__is_subset(other, orig))
++		return perf_cpu_map__get(orig);
++	if (perf_cpu_map__is_subset(orig, other))
++		return perf_cpu_map__get(other);
++
++	tmp_len = max(orig->nr, other->nr);
++	tmp_cpus = malloc(tmp_len * sizeof(struct perf_cpu));
++	if (!tmp_cpus)
++		return NULL;
++
++	i = j = k = 0;
++	while (i < orig->nr && j < other->nr) {
++		if (orig->map[i].cpu < other->map[j].cpu)
++			i++;
++		else if (orig->map[i].cpu > other->map[j].cpu)
++			j++;
++		else {
++			j++;
++			tmp_cpus[k++] = orig->map[i++];
++		}
++	}
++	if (k)
++		merged = cpu_map__trim_new(k, tmp_cpus);
++	free(tmp_cpus);
++	return merged;
++}
+diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/include/perf/cpumap.h
+index 3f43f770cdac..0466c4216fbb 100644
+--- a/tools/lib/perf/include/perf/cpumap.h
++++ b/tools/lib/perf/include/perf/cpumap.h
+@@ -20,6 +20,8 @@ LIBPERF_API struct perf_cpu_map *perf_cpu_map__read(FILE *file);
+ LIBPERF_API struct perf_cpu_map *perf_cpu_map__get(struct perf_cpu_map *map);
+ LIBPERF_API struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
+ 						     struct perf_cpu_map *other);
++LIBPERF_API struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
++							 struct perf_cpu_map *other);
+ LIBPERF_API void perf_cpu_map__put(struct perf_cpu_map *map);
+ LIBPERF_API struct perf_cpu perf_cpu_map__cpu(const struct perf_cpu_map *cpus, int idx);
+ LIBPERF_API int perf_cpu_map__nr(const struct perf_cpu_map *cpus);
+diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+index b89d69afcef0..eef400025fca 100644
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -97,6 +97,7 @@ static struct test_suite *generic_tests[] = {
+ 	&suite__backward_ring_buffer,
+ 	&suite__cpu_map_print,
+ 	&suite__cpu_map_merge,
++	&suite__cpu_map_intersect,
+ 	&suite__sdt_event,
+ 	&suite__is_printable_array,
+ 	&suite__bitmap_print,
+diff --git a/tools/perf/tests/cpumap.c b/tools/perf/tests/cpumap.c
+index b1a924314e09..92232978fe5e 100644
+--- a/tools/perf/tests/cpumap.c
++++ b/tools/perf/tests/cpumap.c
+@@ -171,6 +171,47 @@ static int test__cpu_map_merge(struct test_suite *test __maybe_unused, int subte
+ 	return 0;
+ }
+ 
++static int __test__cpu_map_intersect(const char *lhs, const char *rhs, int nr, const char *expected)
++{
++	struct perf_cpu_map *a = perf_cpu_map__new(lhs);
++	struct perf_cpu_map *b = perf_cpu_map__new(rhs);
++	struct perf_cpu_map *c = perf_cpu_map__intersect(a, b);
++	char buf[100];
++
++	TEST_ASSERT_EQUAL("failed to intersect map: bad nr", perf_cpu_map__nr(c), nr);
++	cpu_map__snprint(c, buf, sizeof(buf));
++	TEST_ASSERT_VAL("failed to intersect map: bad result", !strcmp(buf, expected));
++	perf_cpu_map__put(a);
++	perf_cpu_map__put(b);
++	perf_cpu_map__put(c);
++	return 0;
++}
++
++static int test__cpu_map_intersect(struct test_suite *test __maybe_unused,
++				   int subtest __maybe_unused)
++{
++	int ret;
++
++	ret = __test__cpu_map_intersect("4,2,1", "4,5,7", 1, "4");
++	if (ret)
++		return ret;
++	ret = __test__cpu_map_intersect("1-8", "6-9", 3, "6-8");
++	if (ret)
++		return ret;
++	ret = __test__cpu_map_intersect("1-8,12-20", "6-9,15", 4, "6-8,15");
++	if (ret)
++		return ret;
++	ret = __test__cpu_map_intersect("4,2,1", "1", 1, "1");
++	if (ret)
++		return ret;
++	ret = __test__cpu_map_intersect("1", "4,2,1", 1, "1");
++	if (ret)
++		return ret;
++	ret = __test__cpu_map_intersect("1", "1", 1, "1");
++	return ret;
++}
++
+ DEFINE_SUITE("Synthesize cpu map", cpu_map_synthesize);
+ DEFINE_SUITE("Print cpu map", cpu_map_print);
+ DEFINE_SUITE("Merge cpu map", cpu_map_merge);
++DEFINE_SUITE("Intersect cpu map", cpu_map_intersect);
+diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
+index 9a0f3904e53d..b4e54f08bc39 100644
+--- a/tools/perf/tests/tests.h
++++ b/tools/perf/tests/tests.h
+@@ -127,6 +127,7 @@ DECLARE_SUITE(event_times);
+ DECLARE_SUITE(backward_ring_buffer);
+ DECLARE_SUITE(cpu_map_print);
+ DECLARE_SUITE(cpu_map_merge);
++DECLARE_SUITE(cpu_map_intersect);
+ DECLARE_SUITE(sdt_event);
+ DECLARE_SUITE(is_printable_array);
+ DECLARE_SUITE(bitmap_print);
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
