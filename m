@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89361712DA5
+	by mail.lfdr.de (Postfix) with ESMTP id D60F5712DA7
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243310AbjEZTfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S244054AbjEZTfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243809AbjEZTe5 (ORCPT
+        with ESMTP id S230263AbjEZTe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:34:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BF9A3;
-        Fri, 26 May 2023 12:34:56 -0700 (PDT)
+        Fri, 26 May 2023 15:34:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10A0A3;
+        Fri, 26 May 2023 12:34:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B9816530C;
-        Fri, 26 May 2023 19:34:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E94C433A0;
-        Fri, 26 May 2023 19:34:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5079F652F5;
+        Fri, 26 May 2023 19:34:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A508BC4339E;
+        Fri, 26 May 2023 19:34:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685129695;
-        bh=gT9IKrR0prQstcetiEJhX3nmV1xde8J90JVRdjDHsEA=;
+        s=k20201202; t=1685129696;
+        bh=mWooyFPpmQls+pW8WTQXRMHig5ua5iKNguf32X9lQ6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U4Z8sFB1uz2LsZIgyrwMRjwu6yEXVUo/R+l/xHjqrzasRTnO+dhaE15asdlqpr+Gv
-         wQJ+rd21J0jI0l/EKIH4vHoiGctVO4VHF5GvCsVFpY535Z1rIF2lZ+Zey5+cb6NnYs
-         Lzx86bjC/9TEE1x4sy8/wSG0xBPWeNbprfaqb3ztlnWcH8W25UuDdxoYNqdpVKJ/gR
-         r0hwBjFFoy6GFefyvd6UDDOqcUnX7Mkfnai36TbehzawMSbqqkhhRtZerRzqQAgzzs
-         sUZwC+09mg3ynZ714t8CYEgFlnDXqnwMMhcjHQWODpl5U/tyMSZp52gk5/Fyg3d0Wu
-         Ih2W8xwghkhLA==
+        b=gw8J9Ew9VSVA5T3oGEAUdsU1KPy5wm4C2g/TXpOlA8H6u75ddm7ARuYTAJqci5FHC
+         nW0aW0FJcysvikVxiwyNTtSAG179y5S5OIHkimltroRIIMNsT/rFX0+ww5t0TBGK+X
+         rvxVx5ni+jwdB1IzKUO7s/0CHKhyVeGRNQpCRURM3yw1+9aAuramabrutK3k9OP3XK
+         YD4zHBV1FWPBXi6kXeqFSrYK4FQFxEmJ9hbGBA+a9Mdv2lar7+Hc1U0m/J0k2EkqXR
+         3GcoNiMLug76c68MhF8siUC/i9q3D2TO+a37xPmP8bNDBc1PIYhUuofTTCc76XoQcj
+         Pbxr4OTWDEydg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@linaro.org, sboyd@kernel.org, robh+dt@kernel.org,
-        mturquette@baylibre.com, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org,
+To:     lgirdwood@gmail.com, agross@kernel.org, devicetree@vger.kernel.org,
+        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
         Devi Priya <quic_devipriy@quicinc.com>
-Cc:     quic_poovendh@quicinc.com, quic_kathirav@quicinc.com,
+Cc:     quic_kathirav@quicinc.com, quic_gokulsri@quicinc.com,
         quic_anusha@quicinc.com, quic_sjaganat@quicinc.com,
         quic_srichara@quicinc.com, quic_arajkuma@quicinc.com
-Subject: Re: (subset) [PATCH V3 0/6] Incremental patches on minimal boot support
-Date:   Fri, 26 May 2023 12:38:34 -0700
-Message-Id: <168512991477.248818.1956117241654375356.b4-ty@kernel.org>
+Subject: Re: (subset) [PATCH V4 0/5] Add regulator support for IPQ9574 SoC
+Date:   Fri, 26 May 2023 12:38:35 -0700
+Message-Id: <168512991476.248818.6075574733104138108.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230425084010.15581-1-quic_devipriy@quicinc.com>
-References: <20230425084010.15581-1-quic_devipriy@quicinc.com>
+In-Reply-To: <20230407155727.20615-1-quic_devipriy@quicinc.com>
+References: <20230407155727.20615-1-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,21 +60,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Apr 2023 14:10:04 +0530, Devi Priya wrote:
-> Patchset V9 of the series: Add minimal boot support for IPQ9574 has been
-> merged and is available in linux-next/master.
-> V12 being the latest revision posted in the series, the delta between
-> revisions V9 and V12 is posted as a separate series as suggested by
-> Bjorn to avoid possible confusions.
+On Fri, 7 Apr 2023 21:27:22 +0530, Devi Priya wrote:
+> IPQ9574 SoC uses the PMIC MP5496 and SMPA1 regulator for APSS voltage scaling.
+> This patch series adds support for the same and also enables the RPM
+> communication over the RPMSG framework.
 > 
-> This series adds the delta changes between revisions V9 and V12.
+> DTS patch depends on the below series
+> https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
 > 
 > [...]
 
 Applied, thanks!
 
-[6/6] arm64: dts: qcom: ipq9574: rename al02-c7 dts to rdp433
-      commit: d9556c5c6c51aad2c2f760ce953735afa9162f94
+[3/5] arm64: dts: qcom: ipq9574: Add RPM related nodes
+      commit: 8cc864a4375dd62023a2880050bf618a225cb907
+[4/5] arm64: dts: qcom: ipq9574: Add SMPA1 regulator node
+      commit: 56ba2b3aeb4b76549a7759e79bd44330cd9b885a
+[5/5] arm64: dts: qcom: ipq9574: Add cpufreq support
+      commit: 8f0ae6bc0098f63a008820f80c08b01ea2167da3
 
 Best regards,
 -- 
