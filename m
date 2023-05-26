@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3999D712F49
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B83712F4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244303AbjEZV4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 17:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
+        id S244223AbjEZV4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 17:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244198AbjEZVzf (ORCPT
+        with ESMTP id S244170AbjEZVzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 17:55:35 -0400
+        Fri, 26 May 2023 17:55:41 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85BCE58
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:55:04 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba82ed6e450so2611877276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:55:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7115BE6C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:55:12 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba8338f20bdso1621376276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685138097; x=1687730097;
+        d=google.com; s=20221208; t=1685138099; x=1687730099;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=csOWTo951DO4baytRGvCV+AGtywhGll+tnrLNxjPQY0=;
-        b=j9NAAVXq5iGO4JhTa7MDsqCpgld3dg374djTNEgrNq8tyZyjPTnlp3eazGoLfZr3RK
-         IkEh8Xa9RttPpnUSLFgXiMejZ6BUZ9sKk6d48yN9TF1JzCCP7dz5ClHlU8c9hD1mnKWh
-         DaSelOVeHG9WXCdD09QHcmDrSZs+iZW/DMyZEPx5xrgB6Xxp46jryiTZWUzt7auxYmP3
-         hTYCfePL36YKY3tU7vCBSGErERVzdvrcWnFVss48XlHn72LdegcAc+zpzq0N7mhbm5pU
-         B/wOu6p5OR7eXgI5UWfesif2QOnxNDkZRsg1N3u/6X6bJomR03NBuhOox9cbMslglvhs
-         u3bA==
+        bh=OgTQ1iEJGskpPHfEYybesE3qQwBGSnBu79Mg3GVHTdE=;
+        b=C06rKEXYr6sGGHXGQF8ebpofD61Y65PP7APe2G3FE3PQ0Jv6x1fX+I1wj77Jk98CpM
+         PnjT3pZ7n8nxr/Wu0o4zyMxXEOot7eKSkaPNu1dtuCE/+p3/ScGbByZjMr23kbsIJQ7W
+         SMBpK4soCaeBT2tRu/2pLgbUPMf9eERfAm/opO5P2N2U7VfJaSsc+QZNxjGk9udPensM
+         vJul9wllepIcufFPXTW97znuXfvxZuDaicIOUcfkbvQO/QpugIrJ6T+kI3X5Bg+pUnBc
+         dVWz84pYD0zBkL37vSCpRUGXSoMeGr15OswAs8gQH51GuWu8s0nL3ah2uixOqVCG2ZPa
+         aLMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685138097; x=1687730097;
+        d=1e100.net; s=20221208; t=1685138099; x=1687730099;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=csOWTo951DO4baytRGvCV+AGtywhGll+tnrLNxjPQY0=;
-        b=DuWIi+Uae/+Ww/UgG9unl7DAmK0rjIlYWVYvR3QNiH+VhFvQxXdvCe8YO4Ulr+qnSf
-         tiUCHKNKAXvgpcbw0qNV6qw1pEnOMh6t+ZKYm9GKTUYSh35k//scXTDXrCvJO0KY3bJS
-         6Vw0Wb8yKILscyRoIBXFjWmz8mPr0X/cB1wmY4QCkp8o35Sq+jcpFl251WIRANCnd+Ox
-         MrvxWwW5OOqkFJhU0WRRdvmCqpUl7ou/+mipML+ythuo8+0wDkklVf3/o4NQvoaZ/DcJ
-         q0e/kfLK2y+qp7lDj6G3QDRAv/qfSxQ2Z+i87xt988mnReyvhk7iO63GVSTMRNXALfzP
-         7Vjw==
-X-Gm-Message-State: AC+VfDyi15TSRZk4gcRWl83RUrO2draLadRita3vEVgMDJI0PvmHSyQi
-        0rAnrdS8u1TLNOi1d5mhYHcSOi0g7l0G
-X-Google-Smtp-Source: ACHHUZ6rK9vXFFe6bA1cOlIdln1XgJFys+yiHDV71eOLRBfjur55rI9Xe7Cku48l9+iEiobNEnOmOe69OKPH
+        bh=OgTQ1iEJGskpPHfEYybesE3qQwBGSnBu79Mg3GVHTdE=;
+        b=AUtXD+RfTD8rXBS9zswOkrcehl4lNDl+A9HIOPz1/WYokiLIJfXNrPuZs3522PHwoU
+         gmLi5Q4GLGlgKcSsS+KQUJZ9dOoNnz7TMX0Zy4MQVopPe3g2fUYKsgaTKinzAHwJdrkU
+         dWXpzUeH/drAeBMAWTOE/TmTKHllnYtVUnfkbpP++pgI77RvF2CGzNKmWfJY/OY7dzIX
+         Fx0Vx6v4JtSfx/0KMwUpeBsRcIV2VV7yBTELS3QrDp3ZMulgAN8jkwOO7mgD4qkHdY2t
+         TeBB4jLnXUkOW1zUxEfIv1BeaecDqc1yfOVQSqiwTgIAyXRW77cBpPbaAgZxdgFZOlMA
+         SoCA==
+X-Gm-Message-State: AC+VfDzaF50k14RIF0EYZUa+s/SKX1HWKP2fEv60HrJHMpLUFf1vXpDc
+        voPazdzMUpAA4HH/2CfywicpMHCjMjps
+X-Google-Smtp-Source: ACHHUZ4bB7g8nhd96w/L/fl4sYgmRAHWC+6YJnv5PjTZXis8me1qLpFi36zK9C/llTi90esMz0wguF7COqPi
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a05:6902:1341:b0:ba8:2e79:c193 with SMTP
- id g1-20020a056902134100b00ba82e79c193mr1253603ybu.12.1685138096930; Fri, 26
- May 2023 14:54:56 -0700 (PDT)
-Date:   Fri, 26 May 2023 14:53:54 -0700
+ (user=irogers job=sendgmr) by 2002:a25:8e06:0:b0:bac:fd27:28c1 with SMTP id
+ p6-20020a258e06000000b00bacfd2728c1mr1699730ybl.0.1685138098902; Fri, 26 May
+ 2023 14:54:58 -0700 (PDT)
+Date:   Fri, 26 May 2023 14:53:55 -0700
 In-Reply-To: <20230526215410.2435674-1-irogers@google.com>
-Message-Id: <20230526215410.2435674-20-irogers@google.com>
+Message-Id: <20230526215410.2435674-21-irogers@google.com>
 Mime-Version: 1.0
 References: <20230526215410.2435674-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v4 19/35] perf topology: Avoid hybrid list for hybrid topology
+Subject: [PATCH v4 20/35] perf evsel: Compute is_hybrid from PMU being core
 From:   Ian Rogers <irogers@google.com>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -98,62 +98,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid perf_pmu__for_each_hybrid_pmu in hybrid_topology__new by
-scanning all PMUs and processing the is_core ones. Add early exit for
-non-hybrid.
+Short-cut when has_hybrid is false, otherwise return if the evsel's
+PMU is core. Add a comment for the some what surprising no PMU cases
+of hardware and legacy cache events.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- tools/perf/util/cputopo.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+ tools/perf/util/evsel.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/cputopo.c b/tools/perf/util/cputopo.c
-index ca1d833a0c26..a5c259bd5cc0 100644
---- a/tools/perf/util/cputopo.c
-+++ b/tools/perf/util/cputopo.c
-@@ -12,7 +12,7 @@
- #include "cpumap.h"
- #include "debug.h"
- #include "env.h"
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 1df8f967d2eb..1c6e22e3f345 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -46,8 +46,8 @@
+ #include "memswap.h"
+ #include "util.h"
+ #include "util/hashmap.h"
 -#include "pmu-hybrid.h"
+ #include "off_cpu.h"
 +#include "pmu.h"
+ #include "../perf-sys.h"
+ #include "util/parse-branch-options.h"
+ #include "util/bpf-filter.h"
+@@ -3132,9 +3132,17 @@ void evsel__zero_per_pkg(struct evsel *evsel)
+ 	}
+ }
  
- #define PACKAGE_CPUS_FMT \
- 	"%s/devices/system/cpu/cpu%d/topology/package_cpus_list"
-@@ -469,11 +469,17 @@ static int load_hybrid_node(struct hybrid_topology_node *node,
- 
- struct hybrid_topology *hybrid_topology__new(void)
++/**
++ * evsel__is_hybrid - does the evsel have a known PMU that is hybrid. Note, this
++ *                    will be false on hybrid systems for hardware and legacy
++ *                    cache events.
++ */
+ bool evsel__is_hybrid(const struct evsel *evsel)
  {
--	struct perf_pmu *pmu;
-+	struct perf_pmu *pmu = NULL;
- 	struct hybrid_topology *tp = NULL;
--	u32 nr, i = 0;
-+	u32 nr = 0, i = 0;
- 
--	nr = perf_pmu__hybrid_pmu_num();
+-	return evsel->pmu_name && perf_pmu__is_hybrid(evsel->pmu_name);
 +	if (!perf_pmu__has_hybrid())
-+		return NULL;
++		return false;
 +
-+	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-+		if (pmu->is_core)
-+			nr++;
-+	}
- 	if (nr == 0)
- 		return NULL;
++	return evsel->core.is_pmu_core;
+ }
  
-@@ -482,7 +488,10 @@ struct hybrid_topology *hybrid_topology__new(void)
- 		return NULL;
- 
- 	tp->nr = nr;
--	perf_pmu__for_each_hybrid_pmu(pmu) {
-+	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-+		if (!pmu->is_core)
-+			continue;
-+
- 		if (load_hybrid_node(&tp->nodes[i], pmu)) {
- 			hybrid_topology__delete(tp);
- 			return NULL;
+ struct evsel *evsel__leader(const struct evsel *evsel)
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
