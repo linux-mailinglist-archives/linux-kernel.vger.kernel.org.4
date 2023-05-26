@@ -2,126 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6127712AEC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E9C712AEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236681AbjEZQoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S236871AbjEZQoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjEZQn6 (ORCPT
+        with ESMTP id S230104AbjEZQoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:43:58 -0400
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348BED9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:43:56 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VjX7bdM_1685119431;
-Received: from 192.168.2.5(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjX7bdM_1685119431)
-          by smtp.aliyun-inc.com;
-          Sat, 27 May 2023 00:43:53 +0800
-Message-ID: <ac8519fd-85f4-e778-0c6c-b2e893a37628@linux.alibaba.com>
-Date:   Sat, 27 May 2023 00:43:51 +0800
+        Fri, 26 May 2023 12:44:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA971B3;
+        Fri, 26 May 2023 09:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0/P6scZPRnOZeTZnTWwHw9LDgqvXYUYrAKTqdy4If4E=; b=MXY6KBzRmwjin89VlNauNsRz4+
+        2E3OVMOI7EA6gG2pYniBPc5cc5rU+3bGAtN3H7DAZvhulhVUbzz6vXhJHmxCP+rtITreDHevWibLV
+        C0Qe/k70jTej0esoQZQbV5bAaAXu51LZvEIAqrl+qsfdx/2rAi+iCwQHJOa0tXSpWvI75RzxlJQiq
+        NvA244XNtmIZUEdVSZ7ihpn/IKTJWWGs3axWMZBY45uwbDhpdB6K3n4Rc7d5tldzeCMz4nZYwBTZV
+        7wWKe4TCT/R+NGbxIPK70SZxgJzP8Bj9JTwnjj+ZrD8hRCloaMAqqarZfzQAVvNMq/MXAbiTshvbs
+        p7m3zusQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q2aXi-002xpM-5W; Fri, 26 May 2023 16:43:54 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B930D3002F0;
+        Fri, 26 May 2023 18:43:53 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A107622163BD2; Fri, 26 May 2023 18:43:53 +0200 (CEST)
+Date:   Fri, 26 May 2023 18:43:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, keescook@chromium.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        jiangshanlai@gmail.com, qiang1.zhang@intel.com,
+        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de
+Subject: Re: [RFC][PATCH 2/2] sched: Use fancy new guards
+Message-ID: <20230526164353.GB4053578@hirez.programming.kicks-ass.net>
+References: <20230526150549.250372621@infradead.org>
+ <20230526151947.027972233@infradead.org>
+ <2023052626-blunderer-delegator-4b82@gregkh>
+ <d806769b-c568-fa7c-f7aa-ded9ffea11b4@efficios.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: dm overlaybd: targets mapping OverlayBD image
-To:     Du Rui <durui@linux.alibaba.com>, alexl@redhat.com
-Cc:     agk@redhat.com, dm-devel@redhat.com, gscrivan@redhat.com,
-        linux-kernel@vger.kernel.org, snitzer@kernel.org
-References: <CAL7ro1FPEqXyOuX_WPMYdsT6rW-bD5EU=v=oWKsd6XscykLF6Q@mail.gmail.com>
- <20230526102633.31160-1-durui@linux.alibaba.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230526102633.31160-1-durui@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d806769b-c568-fa7c-f7aa-ded9ffea11b4@efficios.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 26, 2023 at 12:27:51PM -0400, Mathieu Desnoyers wrote:
 
-
-On 2023/5/26 03:26, Du Rui wrote:
-> Hi Alexander,
+> > Anyway, the naming is whack, but I don't have a proposed better name,
+> > except you might want to put "scope_" as the prefix not the suffix, but
+> > then that might look odd to, so who knows.
 > 
->> all the lvm volume changes and mounts during runtime caused
->> weird behaviour (especially at scale) that was painful to manage (just
->> search the docker issue tracker for devmapper backend). In the end
->> everyone moved to a filesystem based implementation (overlayfs based).
-> 
-> Yes, we had exactly the same experience. This is another reason why
-> this proposal is for dm and lvm, not for container.
-> (BTW, we are using TCMU and ublk for overlaybd in production. They are awesome.)
-> 
-> 
->> This solution doesn't even allow page cache sharing between shared
->> layers (like current containers do), much less between independent
->> layers.
-> 
-> Page cache sharing can be realized with DAX support of the dm targets
-> (and the inner file system), together with virtual pmem device backend.
+> FWIW C++ has std::scoped_lock. So perhaps using a similar wording may help ?
 
-First, here I'd suggest you could learn some kernel knowledge of what
-DAX is and what page cache is before you explain to a kernel mailing
-list.  For example, DAX memory cannot be reclaimed at all.
-
-Block drivers has nothing to do on filesystem page cache stuffs, also
-currently your approach has nothing to do with pmem stuffs (If you must
-mention "DAX" to proposal your "page cache sharing", please _here_
-write down your detailed design first and explain how it could work to
-ours if you really want to do.)
-
-Apart from unable to share page cache among filesystems, even with
-your approach all I/Os are duplicated among your qcow2-like layers.
-
-For example, there are 3 qcow2-like layers: A, B, C:
-
-filesystem 1:  A + B
-filesystem 2:  A + B + C
-
-Filesystem 1 and 2 are runtimely independent filesystems and your block
-driver can do nothing help: both duplicated I/Os and page cache for any
-data and metadata of layer A, B.
-
-If those container layers are even more (dozens or hundreds), your
-approach is more inefficient on duplicated I/Os.
-
-You could implement some internal block cache, but block level cache is
-not flexible compared with page cache on kernel memory reclaim and page
-migration.
-
-> 
->> Erofs already has some block-level support for container images
-> 
-> It is interesting. Erofs runs insider a block device in the first place,
-> like what many file systems do. But do you konw why it implements another
-> "some block-level support" by itself?
-> 
-
-That is funny honestly.  As for container image use cases, although OCI
-image tgz is unseekable but actually ext4 and btrfs images are seekable
-and on-demand load could be done with these raw images directly. In
-principle, you could dump your container image stuffs from tgz to raw
-ext4, btrfs, erofs, whatever.  Or if you like, you could dump to some
-"qcow2", "vhdx", "vmdx" wildly-used format, their ecosystem is more
-mature but all the above don't help on page cache sharing stuffs.
-
-Please don't say "I like erofs" and at the same time "why it implements
-another some block-level support" by itself".  Local filesystems must
-do their block-mapping theirselves: ext4 (extents or blockmap), XFS
-(extents), etc.
-
-I've explained internally to your team multiple times as a kernel
-developer, personally I don't want to repeat here again and again to
-your guys.
-
-Thanks,
-Gao Xiang
-
->> And this new approach doesn't help
-> No. It is intended for dm and lvm.> 
+Yeah, C++ is a lot more flexible than CPP crazies. But yeah, happy to
+change it that way.
