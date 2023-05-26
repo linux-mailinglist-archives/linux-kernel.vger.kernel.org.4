@@ -2,135 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAD7712AD7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E931712ADD
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjEZQkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S236752AbjEZQkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjEZQkd (ORCPT
+        with ESMTP id S229977AbjEZQkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:40:33 -0400
-Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1756FBC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:40:31 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QSVz13cjDzMqfBn;
-        Fri, 26 May 2023 18:40:29 +0200 (CEST)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QSVyz2XFlzMppDv;
-        Fri, 26 May 2023 18:40:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1685119229;
-        bh=qgneZctsmZu9NYVEqwCZ63IYebRwqPZkfQJshIM+ino=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=g8vn7bbw22o6LUCPBxp8u7iUChoXbXrE80j7X4tDjpPDGZ0CJMqSE7T8+XlA+teCx
-         ImuLqBbgQ0molZYHgkbRsstgprjuS6zYERZMvEKj3KrStLFOhClSCU2A/jKXfrDii2
-         i+FZof4I6D1lcDjYLsiTvh8LNbXn8dOv0y65+dPw=
-Message-ID: <8249dd59-ce08-2253-1697-301ad082d905@digikod.net>
-Date:   Fri, 26 May 2023 18:40:26 +0200
+        Fri, 26 May 2023 12:40:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BE5DF;
+        Fri, 26 May 2023 09:40:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62EC265150;
+        Fri, 26 May 2023 16:40:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F24EC433EF;
+        Fri, 26 May 2023 16:40:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685119248;
+        bh=t93pbrYm8876e2ZzCcWOn/DaROcwou/wyCtlhCi2DrQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DgQnPqZmoD+bHCn+EvLKPoPqcepWVbj1947EaciDPadsE6CD+fz6nJl7XQT26SIWp
+         tY0DSs8KnwhZQvp8vW3hDuWUMI5tq2QF1Dac8MJMcVWJGm4wkZda+C5HS/5nln7hpB
+         dJtfUMiIfkdJrHi/Phia4SyLf0AYMVaSWf+XmQlU=
+Date:   Fri, 26 May 2023 17:40:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
+        jslaby@suse.cz
+Subject: Re: Linux 5.15.104
+Message-ID: <2023052614-routing-jarring-50b6@gregkh>
+References: <1679511203203220@kroah.com>
+ <20230522102355.GA2009088@google.com>
+ <2023052236-passivism-equate-5cb8@gregkh>
+ <20230522162812.GQ404509@google.com>
+ <2023052236-clear-although-6495@gregkh>
+ <20230523091105.GE2174496@google.com>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v1 1/5] hostfs: Fix ephemeral inodes
-Content-Language: en-US
-To:     Richard Weinberger <richard@nod.at>
-Cc:     anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Christopher Obbard <chris.obbard@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
-        kuba <kuba@kernel.org>, James Morris <jmorris@namei.org>,
-        Jeff Xu <jeffxu@google.com>, Kees Cook <keescook@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Ritesh Raj Sarraf <ritesh@collabora.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sjoerd Simons <sjoerd@collabora.com>,
-        Willem de Bruijn <willemb@google.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-References: <20230309165455.175131-1-mic@digikod.net>
- <20230309165455.175131-2-mic@digikod.net>
- <133970354.9328381.1684703636966.JavaMail.zimbra@nod.at>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <133970354.9328381.1684703636966.JavaMail.zimbra@nod.at>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523091105.GE2174496@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 21/05/2023 23:13, Richard Weinberger wrote:
-> ----- Ursprüngliche Mail -----
->> Von: "Mickaël Salaün" <mic@digikod.net>
->> hostfs creates a new inode for each opened or created file, which created
->> useless inode allocations and forbade identifying a host file with a kernel
->> inode.
->>
->> Fix this uncommon filesystem behavior by tying kernel inodes to host
->> file's inode and device IDs.  Even if the host filesystem inodes may be
->> recycled, this cannot happen while a file referencing it is open, which
->> is the case with hostfs.  It should be noted that hostfs inode IDs may
->> not be unique for the same hostfs superblock because multiple host's
->> (backed) superblocks may be used.
->>
->> Delete inodes when dropping them to force backed host's file descriptors
->> closing.
->>
->> This enables to entirely remove ARCH_EPHEMERAL_INODES, and then makes
->> Landlock fully supported by UML.  This is very useful for testing
->> (ongoing and backported) changes.
+On Tue, May 23, 2023 at 10:11:05AM +0100, Lee Jones wrote:
+> On Mon, 22 May 2023, Greg Kroah-Hartman wrote:
 > 
-> Removing ARCH_EPHEMERAL_INODES should be a patch on its own, IMHO.
-
-OK, I'll do that in the next series.
-
+> > On Mon, May 22, 2023 at 05:28:12PM +0100, Lee Jones wrote:
+> > > On Mon, 22 May 2023, Greg Kroah-Hartman wrote:
+> > > 
+> > > > On Mon, May 22, 2023 at 11:23:55AM +0100, Lee Jones wrote:
+> > > > > On Wed, 22 Mar 2023, Greg Kroah-Hartman wrote:
+> > > > > 
+> > > > > > I'm announcing the release of the 5.15.104 kernel.
+> > > > > > 
+> > > > > > All users of the 5.15 kernel series must upgrade.
+> > > > > > 
+> > > > > > The updated 5.15.y git tree can be found at:
+> > > > > > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+> > > > > > and can be browsed at the normal kernel.org git web browser:
+> > > > > > 	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+> > > > > > 
+> > > > > > thanks,
+> > > > > > 
+> > > > > > greg k-h
+> > > > > > 
+> > > > > > ------------
+> > > > > 
+> > > > > [...]
+> > > > > 
+> > > > > > Budimir Markovic (1):
+> > > > > >       perf: Fix check before add_event_to_groups() in perf_group_detach()
+> > > > > 
+> > > > > Anyone know why this didn't make it into v5.10 with it's friends?
+> > > > > 
+> > > > > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=80102f2ee715ab07be476df443bba388d5458fd1
+> > > > 
+> > > > That's a merge point, how can that go into stable kernels?
+> > >  
+> > >  There are only 3 commits in the merge.
+> > > 
+> > > > What specific commits are you thinking were missed?
+> > > 
+> > > The one I quoted above:
+> > > 
+> > >   perf: Fix check before add_event_to_groups() in perf_group_detach()
+> > > 
+> > > The other two applied successfully to v5.10.y:
+> > > 
+> > >   perf: fix perf_event_context->time
+> > >   perf/core: Fix perf_output_begin parameter is incorrectly invoked in perf_event_bpf_output
+> > 
+> > Do you have git ids for these?
 > 
->> These changes also factor out and simplify some helpers thanks to the
->> new hostfs_inode_update() and the hostfs_iget() revamp: read_name(),
->> hostfs_create(), hostfs_lookup(), hostfs_mknod(), and
->> hostfs_fill_sb_common().
->>
->> A following commit with new Landlock tests check this new hostfs inode
->> consistency.
->>
->> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
->> Cc: Johannes Berg <johannes@sipsolutions.net>
->> Cc: Richard Weinberger <richard@nod.at>
->> Cc: <stable@vger.kernel.org> # 5.15.x: ce72750f04d6: hostfs: Fix writeback of
->> dirty pages
->> Cc: <stable@vger.kernel.org> # 5.15+
+> These are the v5.10.y commits (no further action required).
 > 
-> I'm not sure whether this patch qualifies as stable material.
-> While I fully agree that the current behavoir is odd, nothing user visible
-> is really broken so far.
-I added the ARCH_EPHEMERAL_INODES knob to avoid unexpected behavior. 
-Thanks to that there is no regression for Landlock, but it's unfortunate 
-that we could not use UML to test old kernel versions. According to this 
-odd behavior, I guess some user space may not work with hostfs because 
-of this issue, hence this Cc. I can remove it if you think it is not the 
-case.
-
-
+>   18dd825b86511 perf: fix perf_event_context->time
+>   ddcf832000363 perf/core: Fix perf_output_begin parameter is incorrectly invoked in perf_event_bpf_output
 > 
->> Signed-off-by: Mickaël Salaün <mic@digikod.net>
->> Link: https://lore.kernel.org/r/20230309165455.175131-2-mic@digikod.net
+> This one needs backporting from Mainline (please):
 > 
-> Other than that, patch looks good to me.
+>   fd0815f632c24 perf: Fix check before add_event_to_groups() in perf_group_detach()
 
-Good, I'll send a new series with your suggestions.
+Are you sure?  The commit it claims to fix is NOT in 5.10.y.
 
-> 
-> Thanks,
-> //richard
+Can you test it and submit the working backport if it really is needed
+in 5.10.y please?
+
+thanks,
+
+greg k-h
