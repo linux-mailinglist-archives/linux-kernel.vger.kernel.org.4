@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C550A712A71
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06DC9712A4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236712AbjEZQQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
+        id S230479AbjEZQMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjEZQQw (ORCPT
+        with ESMTP id S230369AbjEZQMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:16:52 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359B5BC;
-        Fri, 26 May 2023 09:16:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685117811; x=1716653811;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tFle62zzOw130eAw0UDs1o1U+rbjQMuBYyQ/MfXYpg0=;
-  b=VCu1WMMA6skKYPwsxaNpw7jflC1BcclZtiHxbBpsBeIxrVRYefMFyzst
-   hMUK6KJoT/tNkwjomkz6lH0LjXcpnbV8GvVWF+kjyBEeZXRKagx5Ys7pS
-   Vuq3h48ZwsGHek+IRvcR4OSsA5EOHGNZXZP8hQXpVtrIj3+gBxuuKLb51
-   ggJQIyswJ0WX7+UgKjXuyY1VsHd6n0GkWlvuqTWCbyV1HIDTAGkBySocc
-   Mbh/KaYriOkBNNVDbYaZeSav4hGJC+IM8VwYqEp/4Uc93+nqXxUYxhsB8
-   D6vQkbFzbWK6+0P9yYW14bzJ/ab4kckYGez6HRjl1/fIdFqqUE+2wGHn7
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="334593844"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="334593844"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 09:11:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="770387608"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="770387608"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 26 May 2023 09:11:36 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q2a2S-000JRq-0F;
-        Fri, 26 May 2023 16:11:36 +0000
-Date:   Sat, 27 May 2023 00:11:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Liang Chen <liangchen.linux@gmail.com>, jasowang@redhat.com,
-        mst@redhat.com
-Cc:     oe-kbuild-all@lists.linux.dev,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com,
-        kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
-        pabeni@redhat.com, alexander.duyck@gmail.com,
-        Liang Chen <liangchen.linux@gmail.com>
-Subject: Re: [PATCH net-next 2/5] virtio_net: Add page_pool support to
- improve performance
-Message-ID: <202305262334.GiFQ3wpG-lkp@intel.com>
-References: <20230526054621.18371-2-liangchen.linux@gmail.com>
+        Fri, 26 May 2023 12:12:08 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E11194;
+        Fri, 26 May 2023 09:12:07 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QC0bAA005049;
+        Fri, 26 May 2023 16:11:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=5f8QxYH454fr/3MxMEIQ6nF2pEfAdcsobX+bKB2IjKg=;
+ b=T1G1FjYpoa9v6lUKqxeqXD627zCd9BFxShXF6nuGEVF+Pp32FbEUcfd17Wi9jrRYqBHf
+ q2/4COpaB9ahmZA7+R66GUmK35/4pZSgoTVVmYArZdjzlZ23k1mHsj2z6uG7B61nAdl4
+ oX50lh9jAtmzVZMlb9YWFashWE3n+SzP9SxwmMcegKlDHy9KtMCeGBtnDRIvTV0r48xb
+ 8gpoflNRJTTUkyZUXmQUfdEyIsjATjH48jDDG8VnOfXn5P8JR3/W8u775pECRWO44y9/
+ yZ10pBLSbtq1mqPgSYqUt7t6XexFJ29DK99aANlAejGxuZIrBz1anmMMpBPWvgCR5eDS iQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qtq28h7cq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 16:11:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34QGBswW007244
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 16:11:54 GMT
+Received: from anusha-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 26 May 2023 09:11:47 -0700
+From:   Anusha Rao <quic_anusha@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <thara.gopinath@gmail.com>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
+        <bhupesh.sharma@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_poovendh@quicinc.com>
+Subject: [PATCH V4 0/4] Enable crypto for ipq9574
+Date:   Fri, 26 May 2023 21:41:25 +0530
+Message-ID: <20230526161129.1454-1-quic_anusha@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526054621.18371-2-liangchen.linux@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9zOKCWi4Men4E7VMFGjcRvDElveEPond
+X-Proofpoint-ORIG-GUID: 9zOKCWi4Men4E7VMFGjcRvDElveEPond
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-26_06,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 mlxlogscore=797 bulkscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1011 priorityscore=1501 phishscore=0
+ mlxscore=0 spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305260137
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liang,
+Update GCC driver to include clocks required for crypto.
+Enable crypto nodes in ipq9574.
 
-kernel test robot noticed the following build errors:
+DTS patch depends on the below series
+https://lore.kernel.org/linux-arm-msm/20230517072806.13170-1-quic_kathirav@quicinc.com/
 
-[auto build test ERROR on net-next/main]
+Changes in V4:
+	Detailed change logs are added to the respective patches.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Liang-Chen/virtio_net-Add-page_pool-support-to-improve-performance/20230526-135805
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230526054621.18371-2-liangchen.linux%40gmail.com
-patch subject: [PATCH net-next 2/5] virtio_net: Add page_pool support to improve performance
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20230526/202305262334.GiFQ3wpG-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/bfba563f43bba37181d8502cb2e566c32f96ec9e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Liang-Chen/virtio_net-Add-page_pool-support-to-improve-performance/20230526-135805
-        git checkout bfba563f43bba37181d8502cb2e566c32f96ec9e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+V3 can be found at:
+https://lore.kernel.org/linux-arm-msm/20230518141105.24741-1-quic_anusha@quicinc.com/
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305262334.GiFQ3wpG-lkp@intel.com/
+V2 can be found at:
+https://lore.kernel.org/linux-arm-msm/20230515150722.12196-1-quic_anusha@quicinc.com/
 
-All errors (new ones prefixed by >>):
+V1 can be found at
+https://lore.kernel.org/linux-arm-msm/20230512090134.9811-1-quic_anusha@quicinc.com/
 
-   ld: vmlinux.o: in function `virtnet_find_vqs':
->> virtio_net.c:(.text+0x901fb5): undefined reference to `page_pool_create'
-   ld: vmlinux.o: in function `add_recvbuf_mergeable.isra.0':
->> virtio_net.c:(.text+0x905618): undefined reference to `page_pool_alloc_pages'
-   ld: vmlinux.o: in function `xdp_linearize_page':
-   virtio_net.c:(.text+0x906b6b): undefined reference to `page_pool_alloc_pages'
-   ld: vmlinux.o: in function `mergeable_xdp_get_buf.isra.0':
-   virtio_net.c:(.text+0x90728f): undefined reference to `page_pool_alloc_pages'
+Anusha Rao (4):
+  dt-bindings: clock: Add crypto clock and reset definitions
+  clk: qcom: gcc-ipq9574: Enable crypto clocks
+  dt-bindings: qcom-qce: add SoC compatible string for ipq9574
+  arm64: dts: qcom: ipq9574: Enable crypto nodes
 
+ .../devicetree/bindings/crypto/qcom-qce.yaml  |  1 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 20 ++++++
+ drivers/clk/qcom/gcc-ipq9574.c                | 72 +++++++++++++++++++
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h  |  4 ++
+ include/dt-bindings/reset/qcom,ipq9574-gcc.h  |  1 +
+ 5 files changed, 98 insertions(+)
+
+
+base-commit: aabe491169befbe5481144acf575a0260939764a
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.17.1
+
