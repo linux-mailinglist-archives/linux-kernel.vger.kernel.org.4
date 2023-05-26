@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E9C712AEE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90291712AE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236871AbjEZQoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S236445AbjEZQoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjEZQoU (ORCPT
+        with ESMTP id S229790AbjEZQoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:44:20 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA971B3;
-        Fri, 26 May 2023 09:44:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0/P6scZPRnOZeTZnTWwHw9LDgqvXYUYrAKTqdy4If4E=; b=MXY6KBzRmwjin89VlNauNsRz4+
-        2E3OVMOI7EA6gG2pYniBPc5cc5rU+3bGAtN3H7DAZvhulhVUbzz6vXhJHmxCP+rtITreDHevWibLV
-        C0Qe/k70jTej0esoQZQbV5bAaAXu51LZvEIAqrl+qsfdx/2rAi+iCwQHJOa0tXSpWvI75RzxlJQiq
-        NvA244XNtmIZUEdVSZ7ihpn/IKTJWWGs3axWMZBY45uwbDhpdB6K3n4Rc7d5tldzeCMz4nZYwBTZV
-        7wWKe4TCT/R+NGbxIPK70SZxgJzP8Bj9JTwnjj+ZrD8hRCloaMAqqarZfzQAVvNMq/MXAbiTshvbs
-        p7m3zusQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q2aXi-002xpM-5W; Fri, 26 May 2023 16:43:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B930D3002F0;
-        Fri, 26 May 2023 18:43:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A107622163BD2; Fri, 26 May 2023 18:43:53 +0200 (CEST)
-Date:   Fri, 26 May 2023 18:43:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        torvalds@linux-foundation.org, keescook@chromium.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        jiangshanlai@gmail.com, qiang1.zhang@intel.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de
-Subject: Re: [RFC][PATCH 2/2] sched: Use fancy new guards
-Message-ID: <20230526164353.GB4053578@hirez.programming.kicks-ass.net>
-References: <20230526150549.250372621@infradead.org>
- <20230526151947.027972233@infradead.org>
- <2023052626-blunderer-delegator-4b82@gregkh>
- <d806769b-c568-fa7c-f7aa-ded9ffea11b4@efficios.com>
+        Fri, 26 May 2023 12:44:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB783D9;
+        Fri, 26 May 2023 09:43:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B32A617A1;
+        Fri, 26 May 2023 16:43:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE30C433EF;
+        Fri, 26 May 2023 16:43:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685119438;
+        bh=Z/ch5nJkQyaxrmN1rRuD6Zg08kQpZg1acmK+3khx85E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hT82lZ1GYXwKZ3QyfJyhu12TOwN6oQstsGuNbmlXcwBuDDULVbbZ1dh3lPvrex2DD
+         RF9Ig7Bx4mdzowwgjgWTQkXt9Xagfua8Xh9YmwXQTdHqkztG4L66CaHFmOoXcIJcDJ
+         S/JFEo91ouORTBBrIbDHSZe2CZc1ZIlgiOvUrDlE=
+Date:   Fri, 26 May 2023 17:43:55 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Lorenz Bauer <lmb@isovalent.com>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Martin KaFai Lau <martin.lau@kernel.org>,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        shuah@kernel.org, yhs@fb.com, eddyz87@gmail.com, sdf@google.com,
+        error27@gmail.com, iii@linux.ibm.com, memxor@gmail.com,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.2 08/30] selftests/bpf: check that modifier
+ resolves after pointer
+Message-ID: <2023052647-tacking-wince-85c5@gregkh>
+References: <20230320005258.1428043-1-sashal@kernel.org>
+ <20230320005258.1428043-8-sashal@kernel.org>
+ <CAN+4W8g6AcQQWe7rrBVOFYoqeQA-1VbUP_W7DPS3q0k-czOLfg@mail.gmail.com>
+ <ZBiAPngOtzSwDhFz@kroah.com>
+ <CAN+4W8jAyJTdFL=tgp3wCpYAjGOs5ggo6vyOg8PbaW+tJP8TKA@mail.gmail.com>
+ <CAN+4W8j5qe6p3YV90g-E0VhV7AmYyAvt0z50dfDSombbGghkww@mail.gmail.com>
+ <2023041100-oblong-enamel-5893@gregkh>
+ <CAN+4W8hmSgbb-wO4da4A=6B4y0oSjvUTTVia_0PpUXShP4NX4Q@mail.gmail.com>
+ <2023052435-xbox-dislike-0ab2@gregkh>
+ <CAN+4W8iMcwwVjmSekZ9txzZNxOZ0x98nBXo4cEoTU9G2zLe8HA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d806769b-c568-fa7c-f7aa-ded9ffea11b4@efficios.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAN+4W8iMcwwVjmSekZ9txzZNxOZ0x98nBXo4cEoTU9G2zLe8HA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 12:27:51PM -0400, Mathieu Desnoyers wrote:
-
-> > Anyway, the naming is whack, but I don't have a proposed better name,
-> > except you might want to put "scope_" as the prefix not the suffix, but
-> > then that might look odd to, so who knows.
+On Wed, May 24, 2023 at 06:04:43PM +0100, Lorenz Bauer wrote:
+> On Wed, May 24, 2023 at 5:04 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > Great, any specific commits that fix this issue would be appreciated to
+> > be pointed at so we can apply them.
 > 
-> FWIW C++ has std::scoped_lock. So perhaps using a similar wording may help ?
+> The problem was introduced by commit f4b8c0710ab6 ("selftests/bpf: Add
+> verifier test for release_reference()") in your tree. Seems like
+> fixup_map_ringbuf was introduced in upstream commit 4237e9f4a962
+> ("selftests/bpf: Add verifier test for PTR_TO_MEM spill") but that
+> wasn't backported.
 
-Yeah, C++ is a lot more flexible than CPP crazies. But yeah, happy to
-change it that way.
+So what tree(s) does this need to be backported to?  I'm confused, this
+is a 6.2 email thread which is long end-of-life.
+
+> To restate my original question: how can we avoid breaking BPF
+> selftests? From personal experience this happens somewhat regularly.
+
+It can be avoided by people testing and letting me know when things
+break :)
+
+thanks,
+
+greg k-h
