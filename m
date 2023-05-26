@@ -2,95 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F25712C51
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7F3712C58
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237444AbjEZSRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
+        id S242209AbjEZSSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjEZSRR (ORCPT
+        with ESMTP id S242160AbjEZSSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:17:17 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEB412A;
-        Fri, 26 May 2023 11:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685125032; x=1716661032;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=o3P5GMOHUbd1RynT+xVq4dnw3tawyMZSbeXlFyQDd1A=;
-  b=gbo5vNywOta5U3Bs9JQzwOXT2iy/h/g/29nVGUCnXCFjBwEZuonFCUOx
-   2QxMrDNgzWcb6B1WIKGgI+QOuV1WNYmQGD6nIoUL/qsgtSLuFgBIvJaa2
-   BxL0o+xcm8yDmCJba+iUc+46JLQScXsTztVMFSYa0iQtYEAERPUI0qFAD
-   3gHo0nJ62IKyFV3nqhfxjCTKAG4OOslPDFzWidMx4BAWoeriWqp5oQaZT
-   o8UE1VsOx0vEs/D7mePviJZosJIr5ogQOZQPhLPA9HzrGRCHV0HsKVOzg
-   1pLslJ+WbI3pYOQg+bHUBDayZQtkd5kZQOhul8pVfNSnY/wye1PhTaYOS
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="353113061"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="353113061"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 11:17:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="795170762"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="795170762"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 May 2023 11:17:09 -0700
-Received: from [10.209.100.85] (kliang2-mobl1.ccr.corp.intel.com [10.209.100.85])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id C6AC95807E2;
-        Fri, 26 May 2023 11:17:05 -0700 (PDT)
-Message-ID: <ff66c90b-b59e-5720-dd88-f15311a74e50@linux.intel.com>
-Date:   Fri, 26 May 2023 14:17:04 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH v3 00/35] PMU refactoring and improvements
+        Fri, 26 May 2023 14:18:30 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE08194;
+        Fri, 26 May 2023 11:18:27 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QIANIu018668;
+        Fri, 26 May 2023 18:18:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=cwrOHR9zrEcaqq60uaQ3/qdrKrGtjN0E+gVOwRdaoq4=;
+ b=fSc1ttpDxUmQYdBlT1mlhMkV+Lw8w3VAQiyga44Uh+n8b2PtTJNNWDWo12bgdPjsmDzN
+ DC6swaYEKvvZwclj7MDCME2N5ifCWF2QnLbM3vIo7g2obQ+HouSnahdLgNlBoNKuJuL3
+ LLhk247eIsUAlLCn+IABSLFc8EJaRR0n/TAl7nML2jPSLp4n+x7xDXwCOuVnz5Ban93f
+ oXY3d/P28Kyc7vRs8s64C5qqnS7Xo3PBk3+bw67QTzKJOLfTBkFJ/lJA59Mdlxwd32r7
+ ERKHTpM8pwVbF+1JgrTCE0P4ledvw/iusRsEaprcV7AJU7MMympIZgJpBuM19E8kHS8t Og== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qu1t800df-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 26 May 2023 18:18:03 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34QHL8jw029026;
+        Fri, 26 May 2023 18:18:03 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qqk2f9bh0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 26 May 2023 18:18:03 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LykWnuiRhMU0xNE/t5Qy5y7OT9aNKV5OAhShrbOP0PkCA3tcrpRFdRg2N7tdur/CPqXi5LAD5EJqBNvPerTWmsWvv2Bllt/79KJg4lBLGYmgNJL6xdEZKstykt/+PbJ2A5AoYIlpkkp07EbBVQzK42rAOOaBbVy9xQAE8/tKYDblX4Plj50hSpc0z7q+VHCxSHV34zrB6ZLxgLtoFCtI830a28Ewopjtq20JZ2zsOLzOCLCn5W/cX68cjX7oJd+zv+plhXxH+gkRtLFKPqfAvVd789KZ5sZQa9/Qr3S+5Njde1SOivyS3GH3TAKL3lcPiuarAkw0tlgxzIuNN0GxEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cwrOHR9zrEcaqq60uaQ3/qdrKrGtjN0E+gVOwRdaoq4=;
+ b=jKBiEpP8KtYI8pt7tbr6V9vA+w5P8qhjZHqivwjtVbRadDKHgCfi7+m24/QS8u0NfkfzQwa7mU4ATINNr6oVpcEAd9Itcb8ujGuRB1b6kXX4FSvaZxCnDzk2wq+8/TJxXDp9aAxyKA6p4BRdWalDqPzl2wsyRgzAAHd3kB2m+v7i63OM/THPXnRvuNwQIthG3tKYbtO2Zv9/MSM4LN4DD/YXedPAlP2QA8nyCgU4Of41AYVBBNsO4nVO+tV/IoHztfeFxYnxV51c+Jv+uzPeLML1dhMV8pYafqIx/viKqQ52+uQhlwwY+sn6V8BNe5v0NCgUZafAeEr7jj4R5oLx+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cwrOHR9zrEcaqq60uaQ3/qdrKrGtjN0E+gVOwRdaoq4=;
+ b=TyaOGOhnk3oGBIm8XwlXLHYX+qV7pms54OmP507OROwRqzO+RceO2u7j2GnJ6tv+yJTuGMSA37jFsWAhBE9gBi1mTg7p+okRRGU1xrU8wQwaOj8b/sCH+KrONadehep1x9Nt+Qrf/zMCnSrbQA7Ae912fV8anRCV/oMRgAC7oXM=
+Received: from BY5PR10MB4129.namprd10.prod.outlook.com (2603:10b6:a03:210::21)
+ by PH7PR10MB6251.namprd10.prod.outlook.com (2603:10b6:510:211::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.17; Fri, 26 May
+ 2023 18:18:00 +0000
+Received: from BY5PR10MB4129.namprd10.prod.outlook.com
+ ([fe80::e822:aab9:1143:bb19]) by BY5PR10MB4129.namprd10.prod.outlook.com
+ ([fe80::e822:aab9:1143:bb19%7]) with mapi id 15.20.6411.029; Fri, 26 May 2023
+ 18:18:00 +0000
+From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "david@fries.net" <david@fries.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "zbr@ioremap.net" <zbr@ioremap.net>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
+        "petrm@nvidia.com" <petrm@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v5 0/6] Process connector bug fixes & enhancements
+Thread-Topic: [PATCH v5 0/6] Process connector bug fixes & enhancements
+Thread-Index: AQHZc8Z+TzRauRSYIkGT22JFGQ9/Pa9ruxaAgAFaKQA=
+Date:   Fri, 26 May 2023 18:18:00 +0000
+Message-ID: <059D1F75-1A27-40E4-9F2F-EEEFF0B0F6AF@oracle.com>
+References: <20230420202709.3207243-1-anjali.k.kulkarni@oracle.com>
+ <20230525143901.dc8c3d8cced48e52d3b136c1@linux-foundation.org>
+In-Reply-To: <20230525143901.dc8c3d8cced48e52d3b136c1@linux-foundation.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ming Wang <wangming01@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org
-References: <20230524221831.1741381-1-irogers@google.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230524221831.1741381-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR10MB4129:EE_|PH7PR10MB6251:EE_
+x-ms-office365-filtering-correlation-id: 015dca73-4829-4f4f-9df4-08db5e158a1c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 23mSdis2QUREQJLYTydSuHzX5UYxAkYNMftWAuQCaEEmxi39lP/yOIKssqpU/amNyFP0ziPtgmLu+DyCDipNgZlGSb/WihmjsXbQKOrTz/qgV0K3Psr6qQalJEnKgeZn7dwyTMdJvW3nUgEyHA3huXlWFqUivzwoCajpXKQ5zRr55KqD6sHgh6tbvBc40fM/Uoo73QpgHCGD8B4076WeFooxKKz7baPZC0BmHOvNWBF5tc9FdImx7Mf12ZvQSD1QKEqcbKn7zUS4OQRROti2mF3Y3OFkU5I2pCGILKuyO90hnNETlKHjkZkw0l+Cr9j29SbCqDID7Z6CbZE4cE+LcZkjL/WlTuEHIDP1Zc5OdwXNXlx6ZMOdj7TtEXr9d+KFyijmedTDislvdnuv6HipVpfpHJ3xj9jigbPVwRo1z9k0l0kl8QQT+qZct9Zv3bTuoiTZkPqM+donp3kUWYCL4Xtyg2rBXcC04mZIrYB2qrT6nCz+7wT0Rb0c9drpAPtUFmc2A8K16GLZqgKTs5gRiN6ZlDDzc3ENIUwKQC5wpL38WefXPsh1uJbTYc35Q8gBhakHoJ6EX9hRS73DtCi1vsnMSZ2y2upJGmKNx3in3rGja6Vp42tlxSCau/QA4dgZ5mgp8ZNujm5I679YVIwSiQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4129.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(39860400002)(136003)(396003)(366004)(451199021)(6486002)(71200400001)(478600001)(83380400001)(33656002)(36756003)(186003)(6512007)(2616005)(38100700002)(6506007)(86362001)(38070700005)(122000001)(53546011)(41300700001)(316002)(66946007)(76116006)(66476007)(66556008)(66446008)(6916009)(4326008)(64756008)(4744005)(5660300002)(2906002)(7416002)(8676002)(8936002)(54906003)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ekMg1WMWYoIm7w9ozO4gIZWLC34YgptYnr0FEX+VUVC1t0K4SBzyS9DdJVBl?=
+ =?us-ascii?Q?qTog31DBA6LELXpPwcoAaesOfqaSxt+MA3+ZN0W1T71yHNjiEnq0xhvCUxTE?=
+ =?us-ascii?Q?eu1wfJzm41VuW2fFgBXkKw6AXvHKHmubJrhElYHPrrvgyt6looDXCByp+OK5?=
+ =?us-ascii?Q?RzENa2P/IMkvxhpnwyoaDr5PV6ASEROm86WzBHrDpWk+jrjFn1BAOcS4dV+U?=
+ =?us-ascii?Q?hq7mtBs68H7PvNsioSv4C6r4m288hvX+IWz5O/gPh5bwNUz0/Pfns9xVIsCX?=
+ =?us-ascii?Q?xLiaS100VGKTo1zIVWYhdVSNxBRv2gxmOvCH23REd97nFbl5nj49WB0Nrm1t?=
+ =?us-ascii?Q?q3wN0jcGrHS8omf3a1mFFUd3EnfVYjwqDQMOQECOozOFCgvYxOr2kVk3Su8y?=
+ =?us-ascii?Q?sucinhASyoEoOWXnwI3fEUskd0ExK3a23448nUvSxJfilQ859bDf2aD7H7fM?=
+ =?us-ascii?Q?CXho6SF6b3V3leLYrz4KqHk4UwYsYnuT0F9wMUZHH74fkcn30fRJ4fvGq4Xa?=
+ =?us-ascii?Q?XGSpgWO6Bp9tzT0T1lwtpilwgHO9jw3VzmMnOjJRoCkdtGQL/OTrVHzltJHV?=
+ =?us-ascii?Q?EJ707WcoG8z9k9TpkksCx1I0IVfrNlh/djuU9VRya9dZ+P+NM3CPJY8+tZ8X?=
+ =?us-ascii?Q?8c/kraz+W23KJHef6ugAkfE9Bwa+kd8tYOSip7bzaswchkxXDUr2rhfKbJHP?=
+ =?us-ascii?Q?+BkgjUDg8w97DUJcU/3gdIjCiv0unfP3OjElMGfKddnwok/XDonzWWXCUYnE?=
+ =?us-ascii?Q?caH8l6ztYwDG146wwLqGk0EKyOtfHzKpodkM52HaSOUuOG1ZASUJPEFR72ef?=
+ =?us-ascii?Q?jiC0sCNrBAJuPY4rxj8Hgl7cTEPPu0ZhEAXYe5Z+AplHn+IUR2L6okH60VTz?=
+ =?us-ascii?Q?P5mZZlLuRJf4gYBtKt30i6BCSEWIU6lbDM6l5yBMADYxRFVSEEVAlw38TnB7?=
+ =?us-ascii?Q?tvszqHs+Wy+Hv4L7AWzsZXLpfOqBlwybIUIZaBy4sji9qgLHCWidOyBpaubB?=
+ =?us-ascii?Q?rUr/6YkW9evvALQZhVsKP2wzesK6XBpm9o+RIgRDxZ8t3lIQrYOTpL4nkRyJ?=
+ =?us-ascii?Q?DNOp1oL2mE6+DIl9WTStfcTghIqFVog6NBiRy7tGit0UlYBf0h2+oPeP2y/2?=
+ =?us-ascii?Q?78xmQaiwlzCQgww/dhxfbFOGufuj/D8BGWQQH+elrPuasB5x4Rtb8ap01xmH?=
+ =?us-ascii?Q?vh3q9GiqeG6DujZarpN55EAx9dJt3k6wU84Dxe+AYmKA7fubEiAX1ppm/tX+?=
+ =?us-ascii?Q?L0YYWZD17jE3/L5FmU8OTSk+G5lvsUk392rlOEKQK+DCZFRenlCotSpKJaPq?=
+ =?us-ascii?Q?EnMxweXwseHlu2uIyahLCu+pOqGt/5k2QGo2N3WtzPNLKoYnjDKOJ+iFWhKf?=
+ =?us-ascii?Q?NX0kv9w9BQvGahODrlEnHWQ22JKqlgMqwnqRxrYTj1/UxvaPlLAQyreOXRoA?=
+ =?us-ascii?Q?YfAa6uGbHkeJ15LzU9cjFxh8cBkbVi2ooT0PrsXsbZxu8BE/+7vqvW7Wh5IB?=
+ =?us-ascii?Q?DApbVQE2Z6Ua+rIKKfD3US3NQAaTw+RDoyfjwhSqxJhwJfU2JiuzuYT1116F?=
+ =?us-ascii?Q?N0K4GKoXy2FYaqWlPDW4E54aUMrusdPWAOYC8XASDcf/2QHgE8sz62mZdtEr?=
+ =?us-ascii?Q?rFoI9e1721S/8n348R17A6Pk3H7ICISCW6qdw/5ByhpFszUkhhL2AgMQjzuy?=
+ =?us-ascii?Q?2IcAwPlwUNdJTXcVvRKjj5Ytfns=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <35D3DA2EAE129C4F85D0ED9530127B21@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?qmAP26aF82ubQV7OMmUW/7+RuZXOziK3mBQWpsT1cfjWeKobTwfyyvzB7Puh?=
+ =?us-ascii?Q?RYQWxJ1rOYNabVEn9IcMkXXNCE8ZFhXo3i5i2KamVvAWn93WW7UIbzfaAP7n?=
+ =?us-ascii?Q?ARMPHpupmiZ1H4/xVJjh8iMToEWXtOOFvvc0JCEFqgEA0g0lcc4yWJENm5rW?=
+ =?us-ascii?Q?2f4EXxk3M12NtQhRV+cJA3ir14q+awNKIUmwPYWZXndqK6PZIqMKeNLDZWnA?=
+ =?us-ascii?Q?05EZ6Cbabu97nBbpmIWDaqobU/snfHvZXYoPLw7XYYHSCqjkTuwPRRDC9S7B?=
+ =?us-ascii?Q?D6iztehwPOKlWebsR/5UwDQ/OZSPVwfCEsh1w/Zqc7dKvhUw17wV1WgTzMmi?=
+ =?us-ascii?Q?cCIOmEDqKUOH9TLpxGavHmgTlsLbmdtgbVNwy6Lxgb53F9aZNY+5P5LcRiw6?=
+ =?us-ascii?Q?y1hcSAYqUuBz7KpxHzZZrIZENfZHFTxfOTqZq1XpyDvUJ2eMmm+pRBq6Qv0q?=
+ =?us-ascii?Q?0vl3wnjbsM0A+NYTnJsJAmX95KrJ+5obVla8xTYBWc/va1bPAEDHhn/53uRO?=
+ =?us-ascii?Q?hNdU+N5arWJkpCkynUeubuOj+53am5kvgesIE21DIpW8Fgr6U1/7/99VR6Ek?=
+ =?us-ascii?Q?TruMXNsdaesd1VfMUJsHf0bLc1qx1v+QidQL1ndgdVWA5YOhI5xBKUqkmXPu?=
+ =?us-ascii?Q?+dNsY1wHGfebmmQ65NsB8333fzrK0OdaJUaqsgeqdaTI2re/Ynb761vnCZe9?=
+ =?us-ascii?Q?j3I9npvFx+/ZtRaqr9YBehuM8ORoeoSY0y8NhkiprvswTigUhMX2mSN/b60A?=
+ =?us-ascii?Q?MHMaDy1hvHhsXUUOk8BJT5YJH/kMMQoZ/0Oy9Jr7Tnu4oImd2WSJGuEzmEZP?=
+ =?us-ascii?Q?DAdQAYGOTIROuuL0xYaMGBOZtc0DEX3oQcor+O8Sp/FHCGP8sob0hXwJZAai?=
+ =?us-ascii?Q?OtSmCuVtLxoIsKIC0RixXwROkubkUKuqd9xfp99sLu7eXya3IbTIsx0lmRRv?=
+ =?us-ascii?Q?PpNezLU82oEZiUS19rNVf1i1VmBIRSLVhiCiNHHcYkarM7E7fPbeculiwp/C?=
+ =?us-ascii?Q?bkwLKBk/YN7WWpPB7QTKRYMgfZ9DqLVXB6HX429QAuLfs0+VwxFIAg9a/5BK?=
+ =?us-ascii?Q?IVbHFfkPPW9WM3FzckKmgO4NeOnPQPeVnRcAu25g2FQy0jGGfKrz7L9asl6e?=
+ =?us-ascii?Q?fDNsd/vjd7sSJZlHO96+U3FsEyhaMVTyGi6E9H7OBtNZsSDR4dFwrn8=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4129.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 015dca73-4829-4f4f-9df4-08db5e158a1c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 May 2023 18:18:00.7009
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YULCVNkU7ocizilFJ+zKxfJ6IFSPeJDu73gMHUuYrvgtLD0SDtbY6YpxjAdnnvJbAMFG7+p6FkcLOGRZvnzr9RFzNiPyraCudZWge8Dd1SI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6251
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-26_08,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
+ mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305260155
+X-Proofpoint-ORIG-GUID: Wf4gVI5atYJK3K3bP3ShEuh76g0yyxiV
+X-Proofpoint-GUID: Wf4gVI5atYJK3K3bP3ShEuh76g0yyxiV
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -99,146 +186,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023-05-24 6:17 p.m., Ian Rogers wrote:
-> Separate the code in pmu.[ch] into the set/list of PMUs and the code
-> for a particular PMU. Move the set/list of PMUs code into
-> pmus.[ch]. Clean up hybrid code and remove hybrid PMU list, it is
-> sufficient to scan PMUs looking for core ones. Add core PMU list and
-> perf_pmus__scan_core that just reads core PMUs. Switch code that skips
-> non-core PMUs during a perf_pmus__scan, to use the
-> perf_pmus__scan_core variant. Don't scan sysfs for PMUs if all such
-> PMUs have been previously scanned/loaded. Scanning just core PMUs, for
-> the cases it is applicable, can improve the sysfs reading time by more
-> than 4 fold on my laptop, as servers generally have many more uncore
-> PMUs the improvement there should be larger:
-> 
-> ```
-> $ perf bench internals pmu-scan -i 1000
-> Computing performance of sysfs PMU event scan for 1000 times
->   Average core PMU scanning took: 989.231 usec (+- 1.535 usec)
->   Average PMU scanning took: 4309.425 usec (+- 74.322 usec)
-> ```
-> 
-> The patch "perf pmu: Separate pmu and pmus" moves and renames a lot of
-> functions, and is consequently large. The changes are trivial, but
-> kept together to keep the overall number of patches more reasonable.
-> 
+> On May 25, 2023, at 2:39 PM, Andrew Morton <akpm@linux-foundation.org> wr=
+ote:
+>=20
+> On Thu, 20 Apr 2023 13:27:03 -0700 Anjali Kulkarni <anjali.k.kulkarni@ora=
+cle.com> wrote:
+>=20
+>> Oracle DB is trying to solve a performance overhead problem it has been
+>> facing for the past 10 years and using this patch series, we can fix thi=
+s=20
+>> issue. =20
+>=20
+> An update to Documentation/driver-api/connector.rst would be
+> appropriate.
+>=20
+Thanks so much! Will update and send out with my next revision.
 
-Other than the small suggestion in patch 16, the patch set looks good to
-me. Thanks Ian!
+> If you're feeling generous, please review the existing material in
+> there, check that it is complete and accurate.  Thanks.
+Will do.
+>=20
+Anjali
 
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-
-> v3. Address fixing hybrid user specified CPU maps by doing it in
->     propagate maps. Remove nearly all references to cpu_core/cpu_atom
->     in particular by removing is_pmu_hybrid - hybrid is now >1 core
->     PMU. Addresses comments by Kan and Namhyung.
-> v2. Address Kan's review comments wrt "cycles" -> "cycles:P" and
->     "uncore_pmus" -> "other_pmus".
-> 
-> Ian Rogers (35):
->   perf cpumap: Add intersect function
->   perf tests: Organize cpu_map tests into a single suite
->   perf cpumap: Add equal function
->   libperf cpumap: Add "any CPU"/dummy test function
->   perf pmu: Detect ARM and hybrid PMUs with sysfs
->   perf pmu: Add is_core to pmu
->   perf evsel: Add is_pmu_core inorder to interpret own_cpus
->   perf pmu: Add CPU map for "cpu" PMUs
->   perf evlist: Propagate user CPU maps intersecting core PMU maps
->   perf evlist: Allow has_user_cpus to be set on hybrid
->   perf target: Remove unused hybrid value
->   perf tools: Warn if no user requested CPUs match PMU's CPUs
->   perf evlist: Remove evlist__warn_hybrid_group
->   perf evlist: Remove __evlist__add_default
->   perf evlist: Reduce scope of evlist__has_hybrid
->   perf pmu: Remove perf_pmu__hybrid_mounted
->   perf pmu: Rewrite perf_pmu__has_hybrid to avoid list
->   perf x86: Iterate hybrid PMUs as core PMUs
->   perf topology: Avoid hybrid list for hybrid topology
->   perf evsel: Compute is_hybrid from PMU being core
->   perf header: Avoid hybrid PMU list in write_pmu_caps
->   perf metrics: Remove perf_pmu__is_hybrid use
->   perf stat: Avoid hybrid PMU list
->   perf mem: Avoid hybrid PMU list
->   perf pmu: Remove perf_pmu__hybrid_pmus list
->   perf pmus: Prefer perf_pmu__scan over perf_pmus__for_each_pmu
->   perf x86 mem: minor refactor to is_mem_loads_aux_event
->   perf pmu: Separate pmu and pmus
->   perf pmus: Split pmus list into core and other
->   perf pmus: Allow just core PMU scanning
->   perf pmus: Avoid repeated sysfs scanning
->   perf pmus: Ensure all PMUs are read for find_by_type
->   perf pmus: Add function to return count of core PMUs
->   perf pmus: Remove perf_pmus__has_hybrid
->   perf pmu: Remove is_pmu_hybrid
-> 
->  tools/lib/perf/cpumap.c                 |  61 +++
->  tools/lib/perf/evlist.c                 |  25 +-
->  tools/lib/perf/include/internal/evsel.h |   9 +
->  tools/lib/perf/include/perf/cpumap.h    |  14 +
->  tools/perf/arch/arm/util/auxtrace.c     |   7 +-
->  tools/perf/arch/arm/util/cs-etm.c       |   4 +-
->  tools/perf/arch/arm64/util/pmu.c        |   6 +-
->  tools/perf/arch/x86/tests/hybrid.c      |   7 +-
->  tools/perf/arch/x86/util/auxtrace.c     |   5 +-
->  tools/perf/arch/x86/util/evlist.c       |  25 +-
->  tools/perf/arch/x86/util/evsel.c        |  27 +-
->  tools/perf/arch/x86/util/intel-bts.c    |   4 +-
->  tools/perf/arch/x86/util/intel-pt.c     |   4 +-
->  tools/perf/arch/x86/util/mem-events.c   |  17 +-
->  tools/perf/arch/x86/util/perf_regs.c    |  15 +-
->  tools/perf/arch/x86/util/topdown.c      |   5 +-
->  tools/perf/bench/pmu-scan.c             |  60 +--
->  tools/perf/builtin-c2c.c                |   9 +-
->  tools/perf/builtin-list.c               |   4 +-
->  tools/perf/builtin-mem.c                |   9 +-
->  tools/perf/builtin-record.c             |  29 +-
->  tools/perf/builtin-stat.c               |  14 +-
->  tools/perf/builtin-top.c                |  10 +-
->  tools/perf/tests/attr.c                 |  11 +-
->  tools/perf/tests/builtin-test.c         |   4 +-
->  tools/perf/tests/cpumap.c               |  92 ++++-
->  tools/perf/tests/event_groups.c         |   7 +-
->  tools/perf/tests/parse-events.c         |  15 +-
->  tools/perf/tests/parse-metric.c         |   9 +-
->  tools/perf/tests/pmu-events.c           |   6 +-
->  tools/perf/tests/switch-tracking.c      |  14 +-
->  tools/perf/tests/tests.h                |   4 +-
->  tools/perf/tests/topology.c             |  16 +-
->  tools/perf/util/Build                   |   2 -
->  tools/perf/util/cpumap.c                |   4 +-
->  tools/perf/util/cpumap.h                |   4 +-
->  tools/perf/util/cputopo.c               |  12 +-
->  tools/perf/util/env.c                   |   5 +-
->  tools/perf/util/evlist-hybrid.c         | 162 --------
->  tools/perf/util/evlist-hybrid.h         |  15 -
->  tools/perf/util/evlist.c                |  64 +++-
->  tools/perf/util/evlist.h                |   9 +-
->  tools/perf/util/evsel.c                 |  60 +--
->  tools/perf/util/evsel.h                 |   3 -
->  tools/perf/util/header.c                |  27 +-
->  tools/perf/util/mem-events.c            |  25 +-
->  tools/perf/util/metricgroup.c           |   9 +-
->  tools/perf/util/parse-events.c          |  25 +-
->  tools/perf/util/parse-events.y          |   3 +-
->  tools/perf/util/pfm.c                   |   6 +-
->  tools/perf/util/pmu-hybrid.c            |  52 ---
->  tools/perf/util/pmu-hybrid.h            |  32 --
->  tools/perf/util/pmu.c                   | 483 ++----------------------
->  tools/perf/util/pmu.h                   |  25 +-
->  tools/perf/util/pmus.c                  | 465 ++++++++++++++++++++++-
->  tools/perf/util/pmus.h                  |  15 +-
->  tools/perf/util/print-events.c          |  15 +-
->  tools/perf/util/python-ext-sources      |   1 -
->  tools/perf/util/stat-display.c          |  19 +-
->  tools/perf/util/target.h                |   1 -
->  60 files changed, 1002 insertions(+), 1089 deletions(-)
->  delete mode 100644 tools/perf/util/evlist-hybrid.c
->  delete mode 100644 tools/perf/util/evlist-hybrid.h
->  delete mode 100644 tools/perf/util/pmu-hybrid.c
->  delete mode 100644 tools/perf/util/pmu-hybrid.h
-> 
