@@ -2,94 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C52712978
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3860C712995
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243928AbjEZP2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35516 "EHLO
+        id S244094AbjEZPdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243918AbjEZP2c (ORCPT
+        with ESMTP id S243860AbjEZPdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:28:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244A11BF;
-        Fri, 26 May 2023 08:28:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F72C650E5;
-        Fri, 26 May 2023 15:28:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A0DAC433EF;
-        Fri, 26 May 2023 15:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685114901;
-        bh=LCSRCtx+txpAlMWcHwFZ0OLjSSHA39brvSCzsYhZqJ8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mEdr5gtIfYVukLgXLz6UnzVWJUAoI0fVU2VjZsFbTyrxeXmkR2ZSNFdKpoPo9en1z
-         Apq9eKZ9dTBJ8tA40YrW8fcJyIw3gGsfyVpjGPEL51uSnDnCE4wok0EmdVGLdoPX+r
-         wGQ42fSYWV+Jparf8CDubBjXgHCIncC0m3RZAob61o2MY2xypt6k3eRxHU/m8q65Fd
-         bG8PAwa7rmFmEr4WX7qNbJIIF3xYxU4qBWzWqbcpqaLS5+OJSER6zKILW/i2/yuyGV
-         vTCQPG39gL77IX8r1toBhYxr8MvwMUWm+3H64ZzeHaoCy/ygZVXq8Gj8Vfr2HWmdgS
-         n2Jf/L5vKmJ2A==
-Date:   Fri, 26 May 2023 08:28:19 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Paul Rosswurm <paulros@microsoft.com>,
-        "olaf@aepfle.de" <olaf@aepfle.de>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        Long Li <longli@microsoft.com>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "shradhagupta@linux.microsoft.com" <shradhagupta@linux.microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH V2,net] net: mana: Fix perf regression: remove rx_cqes,
- tx_cqes counters
-Message-ID: <20230526082819.26ab0a9a@kernel.org>
-In-Reply-To: <PH7PR21MB311639268988CD72DA545774CA47A@PH7PR21MB3116.namprd21.prod.outlook.com>
-References: <1685025990-14598-1-git-send-email-haiyangz@microsoft.com>
-        <20230525202557.5a5f020b@kernel.org>
-        <PH7PR21MB311639268988CD72DA545774CA47A@PH7PR21MB3116.namprd21.prod.outlook.com>
+        Fri, 26 May 2023 11:33:39 -0400
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B679189;
+        Fri, 26 May 2023 08:33:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685115169; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=GBZZbiF7ruXKJwRU/UKRSvUduto2+nmr4tXorwsczmiQgYX5e6umskk2/+tQhriO9AZJe+ftvfTVGPPJgN/YK7iutS10S2cp/wr/Og4mmoDK2oENdQeFS9o1jv42hN/xJCiZpSZ9qBZ687gwRW465DRV7vz9XlH2dte/6iTb1/o=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1685115169; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=u7/zPgaI11esUwuCZ9ANb4+ClUiUCXAYGeOO9rKo5Z4=; 
+        b=ZM6/lRZvtjrUDMmygJ2k0TEchfTsmI4414dS4hXzJM786P3m0vmHy1WAjo8ekPvy1ii8GlwE82D7ve1P7Stv7Y3xUEeB8WRGed0ieug1FztMp3FTPk+SFlyQk1t7PcHDegAqDhcP6shJhwZizRkFkiA0B9MC2zSpJrr/3Fl5v40=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685115169;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Date:Message-Id:Reply-To;
+        bh=u7/zPgaI11esUwuCZ9ANb4+ClUiUCXAYGeOO9rKo5Z4=;
+        b=XirbvXIgZTqaZCkasaoHW07kTVH/k1kyf9zy1EJryUVey0lrjOlEwmiJ5HfGPpFc
+        RKi2On/gJAM8lRIJjgE9+0SEB0YgSc0QM03OCevQH/UopUICPeo+dLOAFio8xlt393w
+        Yrw9GdiGGzDaqTPbj+F4UVZfTA2FMvynOpXMgG0E=
+Received: from edelgard.fodlan.icenowy.me (120.85.97.71 [120.85.97.71]) by mx.zohomail.com
+        with SMTPS id 1685115168167230.90243257128157; Fri, 26 May 2023 08:32:48 -0700 (PDT)
+Message-ID: <0803e9037a8a2ce96fdad6ec209991dcda2a30ca.camel@icenowy.me>
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8173-elm: remove panel model
+ number in DT
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Doug Anderson <dianders@chromium.org>,
+        Pin-yen Lin <treapking@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
+In-Reply-To: <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
+References: <20230526100801.16310-1-uwu@icenowy.me>
+         <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Fri, 26 May 2023 23:29:11 +0800
+User-Agent: Evolution 3.44.4 
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 May 2023 14:42:07 +0000 Haiyang Zhang wrote:
-> > Horatiu's ask for more details was perfectly reasonable.
-> > Provide more details to give the distros and users an
-> > idea of the order of magnitude of the problem. Example
-> > workload and relative perf hit, anything.  
-> 
-> For example, a workload is iperf with 128 threads, and with RPS enabled.
-> We saw perf regression of 25% with the previous patch adding the counters.
-> And this patch eliminates the regression. 
+=E5=9C=A8 2023-05-26=E6=98=9F=E6=9C=9F=E4=BA=94=E7=9A=84 07:24 -0700=EF=BC=
+=8CDoug Anderson=E5=86=99=E9=81=93=EF=BC=9A
+> Hi,
+>=20
+> On Fri, May 26, 2023 at 3:09=E2=80=AFAM Icenowy Zheng <uwu@icenowy.me> wr=
+ote:
+> >=20
+> > Currently a specific panel number is used in the Elm DTSI, which is
+> > corresponded to a 12" panel. However, according to the official
+> > Chrome
+> > OS devices document, Elm refers to Acer Chromebook R13, which, as
+> > the
+> > name specifies, uses a 13.3" panel, which comes with EDID
+> > information.
+> >=20
+> > As the kernel currently prioritizes the hardcoded timing parameters
+> > matched with the panel number compatible, a wrong timing will be
+> > applied
+> > to the 13.3" panel on Acer Chromebook R13, which leads to blank
+> > display.
+> >=20
+> > Because the Elm DTSI is shared with Hana board, and Hana
+> > corresponds to
+> > multiple devices from 11" to 14", a certain panel model number
+> > shouldn't
+> > be present, and driving the panel according to its EDID information
+> > is
+> > necessary.
+> >=20
+> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> > ---
+> > =C2=A0arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 2 +-
+> > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> We went through a bunch of back-and-forth here but in the end in the
+> ChromeOS tree we have "edp-panel" as the "compatible" here in the
+> ChromeOS 5.15 tree and this makes sense.
 
-Exactly what I was looking for, thanks. Please put that in the commit
-message and post v3 (feel free to add the review tags which came in for
-v1 in the meantime).
+I only have Elm, so I am curious that do all Hana's only rely on panel
+EDID to use different displays?
+
+BTW The Chrome OS document say that Elm and Hana are both board based
+on Oak baseboard, should the DTSI be renamed mt8173-oak.dtsi, and still
+let mt8173-elm.dts include it and then set model information?
+
+>=20
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>=20
+> ...in theory one would wish for a "Fixes" tag, but I think in
+> previous
+> discussions it was decided that it was too complicated. Hardcoding
+> the
+> other compatible string has always been technically wrong, but I
+> guess
+> it worked at some point in time. The more correct way (as you're
+> doing
+> here) needs the DP AUX bus support and the generic eDP panels, both
+> of
+> which are significantly newer than the elm dts. So I guess leaving no
+> "Fixes" tag is OK, or perhaps you could do the somewhat weak:
+
+Well I remembered when I was developing the support for Pine64
+Pinebook, which is also an ARM64 laptop with an eDP panel (via a DPI-
+eDP bridge, ANX6345). At first I didn't use any panel node in the DT,
+and the kernel maintainers argued to the bridge that seems to be
+connected to nothing (because DP is a discoverable port), and
+fortunately 2 Pinebook SKUs (11.6" and 14") is finally reduced to one,
+and it's then possible to hardcode a panel model in the Pinebook DT.
+According to my memory, the need to specify the panel is to properly
+handle eDP panel power up timing, because it's not a very standard
+thing. (Well, in my memory, when I was testing that code, on a
+(engineering sample) 14" Pinebook, the EDID timing overrided the
+hardcoded 11.6" timing and it properly works, the 14" panel is 1366x768
+but the 11.6" panel is 1920x1080.)
+
+(BTW when I checked the DT of Olimex TERES-I, which uses the same DPI-
+eDP bridge, it is still in the status of a dangling bridge, and of
+course it works ;-) )
+
+>=20
+> Fixes: c2d94f72140a ("arm64: dts: mediatek: mt8173-elm: Move display
+> to ps8640 auxiliary bus")
+
+Well this sound quite reasonable, as the kernel should have proper AUX
+support at this commit.
+
+
