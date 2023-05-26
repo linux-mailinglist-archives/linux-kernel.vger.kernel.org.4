@@ -2,110 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1C4712BDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CB6712BE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236615AbjEZRjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S237584AbjEZRj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjEZRjA (ORCPT
+        with ESMTP id S230085AbjEZRjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:39:00 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC5E99;
-        Fri, 26 May 2023 10:38:58 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-96fab30d1e1so232516466b.0;
-        Fri, 26 May 2023 10:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685122737; x=1687714737;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PTiLq4ygH0IvGpIu6yVKyZxG0Q1NzCebyg9n2MhnoWM=;
-        b=bwvKFcmzuCcjiY8UjRyGDFyDfiRO4TxeBvS+aOYa/Krvw0DQQ/A/QAR7XfbpE2cr59
-         cdDJlv9ERgQfVXA9QhbbHL7q11EMuj8eGZfNQz6+unf2MmVUBykymvQ4jE35p1jis4di
-         +GVUtSXRjAxgLjv2rvLHOKDI7VLjva6g1V4ILoYIpkzmvzLSYQTZVSlRPA9t7ylHrwNu
-         /d1r48lydgy64JZFUD5VDP2vAIhxZ3/+lbZlV9LNAsX692/FlVXD6vZYfWFtbJhZryzl
-         34RJYBCxsW20gJlsdowmvZYLdwDrnqRXBQwU2wBJVEyf31gEJDLeVyYTk9VnNER+lHKn
-         2WTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685122737; x=1687714737;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PTiLq4ygH0IvGpIu6yVKyZxG0Q1NzCebyg9n2MhnoWM=;
-        b=PaIO17GEyK3Q5VOPSQDF3pMX0qd+zxVbM8R0GFcoIrlq/WHt+rpckMZ3hEmRNzKcrA
-         Z2q6bNlA2DmilY3OS3tpPqRv6cTIj8bQe0+cKG8nanIFpTjFfnbj6C6qf2spgcAhLvGB
-         t09QIOM2imbPNF60rIPMRvQ8Go+BImiO1QdMkyTl2jC/+qiK8LDJ6mJ7P6yTO8CLaj5W
-         FkCbDzHg7KrP5/pogMCbuW0CTP/K1fOB35iE6sIDUeKNj01rq0YRyuA7suLRyEp1mDTo
-         u6xAaO/6oI81lB5W4p2iQh40Crx/ZMeQopTDsSzmgzoebIJe2b7b/NVd5xOAcBzexA59
-         V4FA==
-X-Gm-Message-State: AC+VfDy4dSK9EtEKtpP6wn5mP0f830AR7UA8FxwLpXuflF4sNimcGLP8
-        s1wl1EcJkwOjv/q3wZfTqFU=
-X-Google-Smtp-Source: ACHHUZ4PFyKyc2QUHAnlcpOFn+49tIH6s0K2Tb/i0az8Bqph4zclDagFl+Zci851eE1HSGF8K9cw0w==
-X-Received: by 2002:a17:907:3603:b0:969:c354:7d9a with SMTP id bk3-20020a170907360300b00969c3547d9amr4363175ejc.12.1685122737125;
-        Fri, 26 May 2023 10:38:57 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id z9-20020a1709060f0900b0094e1344ddfdsm2394951eji.34.2023.05.26.10.38.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 10:38:56 -0700 (PDT)
-Date:   Fri, 26 May 2023 20:38:54 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 30/30] MAINTAINERS: add me as maintainer of
- MEDIATEK SWITCH DRIVER
-Message-ID: <20230526173854.ubaz2yojpt6k6rxj@skbuf>
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-31-arinc.unal@arinc9.com>
+        Fri, 26 May 2023 13:39:23 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C785AC9;
+        Fri, 26 May 2023 10:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=EVtoXAEMDy6OIa/WgDvWQDrR2tkjZNPgZSP3RRLS+io=; b=iN9yxKbCvPFS+c+eNY+VvRh50C
+        SGuiPHWQpnZRPgc2oRLQqcvKCLzl2LkUiEjDC5lTlo2LALP+Mp95Y5U37s3FQghkj93x9xLuLOUbF
+        6wTzPeeqabzYU1DV/5Mdy8xej21vPVpRX7KgsM8AjZiUJEdvb0nhltHYQKsJVzGYFG/PFBnMLxcuM
+        SJ1B6YPGp6Tr69x4JHzeB996BKGQhMaEmoKivW4unzJ9fsTtNNVcopSgUqT/ReXK4yLkKA5fT+MeN
+        PvB5rixoYCHIBF26Iho3K+Oyi0CI/tpUcSquVjhlSbpejk3PLAev9nNVRS+IbCVSsFcOiDATAmz+7
+        KAI2Ah9Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2bPJ-003KUo-1d;
+        Fri, 26 May 2023 17:39:17 +0000
+Date:   Fri, 26 May 2023 10:39:17 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Song Liu <song@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>, linux-modules@vger.kernel.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
+Message-ID: <ZHDuxYBsaGn7xJBn@bombadil.infradead.org>
+References: <20230517131820.936553-1-arnd@kernel.org>
+ <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
+ <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com>
+ <ZG27pExhUqFpGexM@bombadil.infradead.org>
+ <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
+ <ZHAmYSclm+5QlLcM@bombadil.infradead.org>
+ <2591bdc4-a198-446c-8bfe-37ea39c51964@app.fastmail.com>
+ <872b0c40-651e-6989-cd4c-8ca7f655dc79@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230522121532.86610-31-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <872b0c40-651e-6989-cd4c-8ca7f655dc79@oracle.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:15:32PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Fri, May 26, 2023 at 03:39:22PM +0100, Alan Maguire wrote:
+> On 26/05/2023 07:41, Arnd Bergmann wrote:
+> > On Fri, May 26, 2023, at 05:24, Luis Chamberlain wrote:
+> >> On Thu, May 25, 2023 at 06:45:35PM -0700, Song Liu wrote:
+> >>> On Wed, May 24, 2023 at 12:24 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >>>
+> >>> This change broke compilation of BPF selftests in modules-next
+> >>> branch:
+> >>>
+> >>> progs/bpf_iter_ksym.c:62:13: error: no member named 'pos_arch_end' in
+> >>> 'struct kallsym_iter'
+> >>>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+> >>>              ~~~~  ^
+> >>> progs/bpf_iter_ksym.c:62:35: error: no member named 'pos_arch_end' in
+> >>> 'struct kallsym_iter'
+> >>>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+> >>>                                    ~~~~  ^
+> >>>
+> >>> I haven't looked into the proper fix for it yet.
+> >>
+> >> A quick attempt:
+> >>
+> >> Arnd, can you verify?
+> >>
+> >> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c 
+> >> b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+> >> index 5ddcc46fd886..521267818f4d 100644
+> >> --- a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+> >> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
+> >> @@ -59,9 +59,7 @@ int dump_ksym(struct bpf_iter__ksym *ctx)
+> >>  	} else {
+> >>  		BPF_SEQ_PRINTF(seq, "0x%llx %c %s ", value, type, iter->name);
+> >>  	}
+> >> -	if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+> >> -		BPF_SEQ_PRINTF(seq, "CORE ");
+> >> -	else if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
+> >> +	if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
+> >>  		BPF_SEQ_PRINTF(seq, "MOD ");
+> >>  	else if (!iter->pos_ftrace_mod_end || iter->pos_ftrace_mod_end > 
+> >> iter->pos)
+> >>  		BPF_SEQ_PRINTF(seq, "FTRACE_MOD ");
+> > 
+> > This looks correct to me, but I'm still failing to cross-build
+> > the selftests on my randconfig build setup, so I can't confirm that
+> > this avoids the build failure, and I don't understand the code well
+> > enough to be sure.
+> >
 > 
-> Add me as a maintainer of the MediaTek MT7530 DSA subdriver.
+> Thanks for the fix! The change above works ; maybe having
+> anything less than iter->pos_mod_end marked as a "CORE/MOD " symbol
+> might be worth tweaking, but that's a minor thing.
 > 
-> List maintainers in alphabetical order by first name.
+> before:
 > 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
+>   CLNG-BPF [test_maps] bpf_iter_ksym.bpf.o
+> progs/bpf_iter_ksym.c:62:13: error: no member named 'pos_arch_end' in
+> 'struct kallsym_iter'
+>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+>              ~~~~  ^
+> progs/bpf_iter_ksym.c:62:35: error: no member named 'pos_arch_end' in
+> 'struct kallsym_iter'
+>         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
+>                                    ~~~~  ^
+> 2 errors generated.
+> 
+> after the above is applied, bpf selftests build and iter ksym test
+> passes:
+> 
+> $ sudo ./test_progs -t bpf_iter
+> ...
+> #12/37   bpf_iter/ksym:OK
+> ...
+> Summary: 3/39 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> Feel free to add a
+> 
+> Tested-by: Alan Maguire <alan.maguire@oracle.com>
 
-Well, I suppose we need more active people maintaining this driver, so yeah:
+I just folded this into Arnd's patch and pushed to modules-next.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Thanks!
+
+  Luis
