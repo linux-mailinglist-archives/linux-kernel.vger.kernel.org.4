@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E931712ADD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B76712ADF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236752AbjEZQkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S236777AbjEZQlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjEZQkv (ORCPT
+        with ESMTP id S229977AbjEZQlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:40:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BE5DF;
-        Fri, 26 May 2023 09:40:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62EC265150;
-        Fri, 26 May 2023 16:40:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F24EC433EF;
-        Fri, 26 May 2023 16:40:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685119248;
-        bh=t93pbrYm8876e2ZzCcWOn/DaROcwou/wyCtlhCi2DrQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DgQnPqZmoD+bHCn+EvLKPoPqcepWVbj1947EaciDPadsE6CD+fz6nJl7XQT26SIWp
-         tY0DSs8KnwhZQvp8vW3hDuWUMI5tq2QF1Dac8MJMcVWJGm4wkZda+C5HS/5nln7hpB
-         dJtfUMiIfkdJrHi/Phia4SyLf0AYMVaSWf+XmQlU=
-Date:   Fri, 26 May 2023 17:40:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
-        jslaby@suse.cz
-Subject: Re: Linux 5.15.104
-Message-ID: <2023052614-routing-jarring-50b6@gregkh>
-References: <1679511203203220@kroah.com>
- <20230522102355.GA2009088@google.com>
- <2023052236-passivism-equate-5cb8@gregkh>
- <20230522162812.GQ404509@google.com>
- <2023052236-clear-although-6495@gregkh>
- <20230523091105.GE2174496@google.com>
+        Fri, 26 May 2023 12:41:11 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCF3194;
+        Fri, 26 May 2023 09:41:09 -0700 (PDT)
+Received: from [10.10.2.69] (unknown [10.10.2.69])
+        by mail.ispras.ru (Postfix) with ESMTPSA id C65D844C1026;
+        Fri, 26 May 2023 16:41:07 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru C65D844C1026
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1685119267;
+        bh=RAtqNYbh7M5s0Zh77kXZkFyvhVnNh8Ig8hf9ng8Oukk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=G6VyIKAu6nhnyF2F96l1FQtH5ux+1Km4ytWdzol4QcM8Y5R9yqHb7EO02P1vRMi1X
+         8+JVda2cJtSw7Qxw946OzJ+T4bvyKVqvlHSLgPxLQGa+Nn40li3+ptBXQNwnwnbazY
+         BGCoQr/Sk2khjpQcwnUG3G75te8L0h8HQ5j3AXaA=
+Message-ID: <d3fccbd0-c92e-9aff-8c32-48c1171746c3@ispras.ru>
+Date:   Fri, 26 May 2023 19:41:07 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523091105.GE2174496@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] udp6: Fix race condition in udp6_sendmsg & connect
+Content-Language: ru
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+References: <20230526150806.1457828-1-VEfanov@ispras.ru>
+ <27614af23cd7ae4433b909194062c553a6ae16ac.camel@redhat.com>
+ <027d28a0-b31b-ab42-9eb6-2826c04c9364@ispras.ru>
+ <CANn89iLGOVwW-KHBuJ94E+QoVARWw5EBKyfh0mPkOT+5ws31Fw@mail.gmail.com>
+From:   Vlad Efanov <vefanov@ispras.ru>
+In-Reply-To: <CANn89iLGOVwW-KHBuJ94E+QoVARWw5EBKyfh0mPkOT+5ws31Fw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:11:05AM +0100, Lee Jones wrote:
-> On Mon, 22 May 2023, Greg Kroah-Hartman wrote:
-> 
-> > On Mon, May 22, 2023 at 05:28:12PM +0100, Lee Jones wrote:
-> > > On Mon, 22 May 2023, Greg Kroah-Hartman wrote:
-> > > 
-> > > > On Mon, May 22, 2023 at 11:23:55AM +0100, Lee Jones wrote:
-> > > > > On Wed, 22 Mar 2023, Greg Kroah-Hartman wrote:
-> > > > > 
-> > > > > > I'm announcing the release of the 5.15.104 kernel.
-> > > > > > 
-> > > > > > All users of the 5.15 kernel series must upgrade.
-> > > > > > 
-> > > > > > The updated 5.15.y git tree can be found at:
-> > > > > > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-> > > > > > and can be browsed at the normal kernel.org git web browser:
-> > > > > > 	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
-> > > > > > 
-> > > > > > thanks,
-> > > > > > 
-> > > > > > greg k-h
-> > > > > > 
-> > > > > > ------------
-> > > > > 
-> > > > > [...]
-> > > > > 
-> > > > > > Budimir Markovic (1):
-> > > > > >       perf: Fix check before add_event_to_groups() in perf_group_detach()
-> > > > > 
-> > > > > Anyone know why this didn't make it into v5.10 with it's friends?
-> > > > > 
-> > > > > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=80102f2ee715ab07be476df443bba388d5458fd1
-> > > > 
-> > > > That's a merge point, how can that go into stable kernels?
-> > >  
-> > >  There are only 3 commits in the merge.
-> > > 
-> > > > What specific commits are you thinking were missed?
-> > > 
-> > > The one I quoted above:
-> > > 
-> > >   perf: Fix check before add_event_to_groups() in perf_group_detach()
-> > > 
-> > > The other two applied successfully to v5.10.y:
-> > > 
-> > >   perf: fix perf_event_context->time
-> > >   perf/core: Fix perf_output_begin parameter is incorrectly invoked in perf_event_bpf_output
-> > 
-> > Do you have git ids for these?
-> 
-> These are the v5.10.y commits (no further action required).
-> 
->   18dd825b86511 perf: fix perf_event_context->time
->   ddcf832000363 perf/core: Fix perf_output_begin parameter is incorrectly invoked in perf_event_bpf_output
-> 
-> This one needs backporting from Mainline (please):
-> 
->   fd0815f632c24 perf: Fix check before add_event_to_groups() in perf_group_detach()
+sk_dst_set() is called by sk_setup_caps().
 
-Are you sure?  The commit it claims to fix is NOT in 5.10.y.
+sk_dst_set() replaces dst in socket using xchg() call and we still have 
+two tasks use one socket but expect different dst in sk_dst_cache.
 
-Can you test it and submit the working backport if it really is needed
-in 5.10.y please?
 
-thanks,
+__sk_dst_set() is rcu protected, but it checks for socket lock.
 
-greg k-h
+
+static inline void
+__sk_dst_set(struct sock *sk, struct dst_entry *dst)
+{
+     struct dst_entry *old_dst;
+
+     sk_tx_queue_clear(sk);
+     sk->sk_dst_pending_confirm = 0;
+     old_dst = rcu_dereference_protected(sk->sk_dst_cache,
+                         lockdep_sock_is_held(sk));
+     rcu_assign_pointer(sk->sk_dst_cache, dst);
+     dst_release(old_dst);
+}
+
+
+Best regards.
+
+Vlad.
+
+
+On 26.05.2023 19:00, Eric Dumazet wrote:
+> On Fri, May 26, 2023 at 5:58 PM Ефанов Владислав Александрович
+> <vefanov@ispras.ru> wrote:
+>> Paolo,
+>>
+>>
+>> I don't think that we can just move sk_dst_set() call.
+>>
+>> I think we can destroy dst of sendmsg task in this case.
+>>
+> dst are RCU protected, it should be easy to make sure we respect all the rules.
