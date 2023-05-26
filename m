@@ -2,107 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC62712673
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCEA712677
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243330AbjEZMTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
+        id S237216AbjEZMVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjEZMTp (ORCPT
+        with ESMTP id S229519AbjEZMVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:19:45 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55B8A4
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:19:43 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-ba827a34ba8so1189898276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:19:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1685103583; x=1687695583;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jHsdIxAYeMANZULb6GLWJmQC7c45qZjIT81elj1fddI=;
-        b=lSJYGnqeQY7cNwiJUUTnU31YRBaYTiGEAM5UbYyrnHolLQt+Z9wiJH08UyUunhr38K
-         1XO2+rS24yyFIv0efH1UnT+Ma8A5UB5ttQhwqoPodZEeLO9fJFq6AohUXp7/5HzvLnJq
-         OIeuNMtgdyCng6SAjiFmDrOfKUu0Aq+FEF/VPys5BwuJoogGjgfl1WpVUl6OzwsEqEYw
-         tdLi51TSe1RKUup5yvobDkGwWBrkP4Gb0tXRaYGLbXzEzFN96Q/p4CLl/yeZ7/ziSJnI
-         5ZIIDLmg5NRzqAoO74SANVIhACpt34SUt9eEa08lJhxmisg0p3DfbesRIZE8TfEKL1Yq
-         kmXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685103583; x=1687695583;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jHsdIxAYeMANZULb6GLWJmQC7c45qZjIT81elj1fddI=;
-        b=T0rThizC3edZPB9jSjLV5OPOfyj45nmKD3OuXt4+RH5uc1DYlOnjjkVctUVOxn2g+S
-         M35tqVuAxwq5jyMoP6+oZ6KwPaLdUcuIVd3k3SlrU1+7LJkVnkft6E6C8KiV9P2I8zfT
-         ZFghAj6W2m7BFqDbxotPmeGan/gQvuwbZk19e3lvdPmhof4FlpBbKygQf3Xk59tonkS4
-         bNw9r/sCDF/shNYbvzx/EmEQDIrcQDfVHR3UD/PQTyUKLp1+Xs48E2LpXR/MDOtnCPf4
-         agurffZ9DMmkAk0f0D8cqAqcHWs566sx6ut+6AlUd/4220zwq1s+pbRnvThqDZmGWALr
-         hdlQ==
-X-Gm-Message-State: AC+VfDzxPXEHTlnR+aThXSIlX0KA3YskDhdMRAeC9VBajMXVieC4u8nT
-        pJWyl/rKBA77vAwVMhH90bgn/d/fTsXVx//cE0DWsw==
-X-Google-Smtp-Source: ACHHUZ6TR8aeEsFNfAjEOuHAuaWt7JWI/7ObSKbm04REWHMNhaCJaos0b7KfEN3AtBAAwszyMAqtvmTJQixwwbC2zu0=
-X-Received: by 2002:a25:cbd3:0:b0:ba8:8162:2538 with SMTP id
- b202-20020a25cbd3000000b00ba881622538mr1640458ybg.42.1685103583132; Fri, 26
- May 2023 05:19:43 -0700 (PDT)
+        Fri, 26 May 2023 08:21:01 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65ECA4
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:20:55 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QBYFLH030993;
+        Fri, 26 May 2023 07:20:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=8FRvUnxeEwWZA99tu0bOyIubM9mJTTwebRYyDDCDp1M=;
+ b=d4TNlwFuHIF7v+/nQZCuH+xjWv7fnu4l2ynjznlpiJpCjLp//a+w9st69/po+suYGOBr
+ 1tBsUSS1cfykLtxbSannu7qDCXTVIXXBRaefxe4C7SDcW9D3rm8v5m191bF+72zAeIae
+ EOv4x96FQMufJqyLW4m86O+fgcVFj1rC0rt8UPLxFvqgF02S7ZdsQRHvD7huPSKZq7IC
+ iXlMZkT1CskFhZBBTMRbm5Qa3fZsc91Ugx2/fzrfBD2Oa3Zprc+tYi6xdollPVx/rMCH
+ FbOe0pNeVsOc9ZjF233FQeDeYorN6jcS57z/sYUbVwXjcyQPkdlB3f5UF4xiM+vBH9M5 Kg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qptmm8d5c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 07:20:34 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 26 May
+ 2023 07:20:32 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 26 May 2023 07:20:32 -0500
+Received: from [198.61.65.166] (EDIN4L06LR3.ad.cirrus.com [198.61.65.166])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 5F4F2B38;
+        Fri, 26 May 2023 12:20:32 +0000 (UTC)
+Message-ID: <7c5f776d-bf17-ea3d-a4ee-3ac54194a215@opensource.cirrus.com>
+Date:   Fri, 26 May 2023 13:20:32 +0100
 MIME-Version: 1.0
-References: <cover.1684887977.git.peilin.ye@bytedance.com> <429357af094297abbc45f47b8e606f11206df049.1684887977.git.peilin.ye@bytedance.com>
- <faaeb0b0-8538-9dfa-4c1e-8a225e3534f4@mojatatu.com> <CAM0EoM=T_p_-zRiPDPj2r9aX0BZ5Vtb5ugkNQ08Q+NrTWB+Kpg@mail.gmail.com>
- <c536fcd795f74016928469be16fe21df8079a129.camel@redhat.com>
-In-Reply-To: <c536fcd795f74016928469be16fe21df8079a129.camel@redhat.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Fri, 26 May 2023 08:19:32 -0400
-Message-ID: <CAM0EoMm5R1qmqz+Pn2_Mawur0_PK070p2zw4Y+EqDwYNF2A6=A@mail.gmail.com>
-Subject: Re: [PATCH v5 net 6/6] net/sched: qdisc_destroy() old ingress and
- clsact Qdiscs before grafting
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Pedro Tammela <pctammela@mojatatu.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 13/13] ALSA: hda/cs35l56: Add driver for Cirrus Logic
+ CS35L56 amplifier
+Content-Language: en-US
+To:     <Claudiu.Beznea@microchip.com>, <tiwai@suse.com>,
+        <broonie@kernel.org>, <perex@perex.cz>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>, <simont@opensource.cirrus.com>
+References: <20230525150659.25409-1-rf@opensource.cirrus.com>
+ <20230525150659.25409-14-rf@opensource.cirrus.com>
+ <6ff4235d-f8d0-3c3f-cc67-18aadee2afbc@microchip.com>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <6ff4235d-f8d0-3c3f-cc67-18aadee2afbc@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: RWDcGByEdYWf6UE-LrUN2hVXgR0W9kqc
+X-Proofpoint-GUID: RWDcGByEdYWf6UE-LrUN2hVXgR0W9kqc
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 5:25=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> On Wed, 2023-05-24 at 12:09 -0400, Jamal Hadi Salim wrote:
-> > When you have a moment - could you run tc monitor in parallel to the
-> > reproducer and double check it generates the correct events...
->
-> FTR, I'll wait a bit to apply this series, to allow for the above
-> tests. Unless someone will scream very loudly very soon, it's not going
-> to enter today's PR. Since the addressed issue is an ancient one, it
-> should not a problem, I hope.
+On 26/5/23 05:40, Claudiu.Beznea@microchip.com wrote:
+> On 25.05.2023 18:06, Richard Fitzgerald wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> From: Simon Trimmer <simont@opensource.cirrus.com>
+>>
+>> Add a driver for the Cirrus Logic CS35L56 amplifier. This uses the same
+>> component binding API as the CS35L41 driver. This is not a standalone
+>> HDA device; it provides control of the CS35L56 for systems that use a
+>> combination of an HDA codec and CS35L56 amplifiers with audio routed
+>> through the HDA codec.
+>>
 
-Sorry I do not mean to hold this back - I think we should have applied
-V1 then worried about making things better.  We can worry about events
-after.
-So Acking this.
+<SNIP>
 
-cheers,
-jamal
+>> +
+>> +       cs35l56->base.reset_gpio = devm_gpiod_get_index_optional(cs35l56->base.dev,
+>> +                                                                "reset",
+>> +                                                                cs35l56->index,
+>> +                                                                GPIOD_OUT_LOW);
+>> +       if (IS_ERR(cs35l56->base.reset_gpio)) {
+> 
+> devm_gpiod_get_index_optional() can also return NULL.
+> 
 
-> Cheers,
->
-> Paolo
->
+Yes, that is expected. It's optional. It's not an error.
+In that case cs35l56->base.reset_gpio will already be NULL.
+
+>> +               ret = PTR_ERR(cs35l56->base.reset_gpio);
+>> +
+>> +               /*
+>> +                * If RESET is shared the first amp to probe will grab the reset
+>> +                * line and reset all the amps
+>> +                */
+>> +               if (ret != -EBUSY)
+>> +                       return dev_err_probe(cs35l56->base.dev, ret, "Failed to get reset GPIO\n");
+>> +
+>> +               dev_info(cs35l56->base.dev, "Reset GPIO busy, assume shared reset\n");
+>> +               cs35l56->base.reset_gpio = NULL;
+>> +       }
+>> +
+>> +       return 0;
+>> +
+>> +err:
+>> +       dev_err(cs35l56->base.dev, "Failed property %s: %d\n", property, ret);
+>> +
+>> +       return ret;
+>> +}
