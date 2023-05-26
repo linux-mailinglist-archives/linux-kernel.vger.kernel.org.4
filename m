@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A36712EBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B13712EC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbjEZVLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 17:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
+        id S237905AbjEZVLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 17:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjEZVLB (ORCPT
+        with ESMTP id S244063AbjEZVLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 17:11:01 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5FFD9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:11:00 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64f47448aeaso1082179b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:11:00 -0700 (PDT)
+        Fri, 26 May 2023 17:11:52 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED97ADF
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:11:47 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f4b80bf93aso1308537e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:11:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685135459; x=1687727459;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7YP3yyXP3BrPlOcLWQwfs7ftvYdUlxaat2PcZaN8PaI=;
-        b=RbRIdItk3rmUWpwAwHhkJBkxJ7HNbzZYOvHUAlEgyDRDkzzXl6tEVqCWjaDWGvqVT4
-         HW7ZQd7F+HR2d1PvqI+BwzbMXiy7vMs2/kZQvXwktCc+fre+9ThkPR3Vdbpf5YohD7Oe
-         +7E/iI/sQzQ0U0VQm4X9Gaa0O8UNWmL3U9cklc363aIFhpg6/LBP4X5QI2NsOWRwmLxT
-         Netj9ErUJG/yyiMRywzrPT+7YBoYupGZ/UE69oS1zfbSki+eotLwHIVCW9aWR4HtFwWV
-         By1NhjUsGxAjPGso+7SlngXob7cteFyQqJg6MD5mxFVKQFwXEGqLdvJ21wlJlAa5FAO1
-         yMQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685135459; x=1687727459;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+        d=linaro.org; s=google; t=1685135506; x=1687727506;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7YP3yyXP3BrPlOcLWQwfs7ftvYdUlxaat2PcZaN8PaI=;
-        b=BhhTBiUVpfAHXJ43bpOkj0tOlwgEmFCSWemv4akYFEgxEAtdUI54z/RpmEPKyrtkLR
-         JilLRP4oRpukVoZkZ2nZsNlRahZP+L/UZbUe1lGsURVFc+lS6ApyL4BqzkRKvQF91QXo
-         c7QbEmceqW53LMznhwtWyHZ304w8REzDyGtrABP4CLzR0twhA1VBnHUKljdlZ7IoNQrj
-         6oRp45YZnYU0cIx39rUfT+p75nhGgE/IoRalGHpayAnTlrUgeOaagD5fuH8x9dGpAfgd
-         6ZAv3oPdu7ab+N+JN3PKlPsKBoxRXlj0WFZs8oPMr7Ij3z2QcyTaSWwDmHsGNatKkoGC
-         Tgxg==
-X-Gm-Message-State: AC+VfDyelEaDuObHdh2sbvBIIm0PxaGEAiw4wsUhZmKPteKdJcF7L9O0
-        lvcO7wLUMfCW8UlGPWqHncQ=
-X-Google-Smtp-Source: ACHHUZ7NzReL0jdgWVee4OpcX2fNJPkkO4WoT50OpJwqUHoFI3ZK2ptdQX3KSNOliKSlf4bVu/0vmw==
-X-Received: by 2002:a05:6a20:72a4:b0:104:45df:42db with SMTP id o36-20020a056a2072a400b0010445df42dbmr945333pzk.9.1685135459065;
-        Fri, 26 May 2023 14:10:59 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.95])
-        by smtp.gmail.com with ESMTPSA id h29-20020a63531d000000b0051afa49e07asm3121733pgb.50.2023.05.26.14.10.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 May 2023 14:10:58 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH v2] x86/lib: Do not use local symbols with
- SYM_CODE_START_LOCAL()
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20230526204559.GAZHEahxxnQaHhSUul@nazgul.local>
-Date:   Fri, 26 May 2023 14:10:47 -0700
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <D63AB9E6-BA52-4E24-B8EF-C7B9DB1595CC@gmail.com>
-References: <20230525184244.2311-1-namit@vmware.com>
- <38e24fd4-9213-229d-9919-7ae3bfb113bb@intel.com>
- <24E47178-C177-425F-A8EF-CFFAE22597D4@gmail.com>
- <20230526155336.GAZHDWAFi1FRqq83TP@nazgul.local>
- <0F07EEDB-8A3F-4224-9FF1-43A5300B1B8B@gmail.com>
- <20230526204559.GAZHEahxxnQaHhSUul@nazgul.local>
-To:     Borislav Petkov <bp@alien8.de>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=1L+ycxs8nT0k5qZvWSokMUtOJErTXYk5ocz+vVaSWnw=;
+        b=Dr45UR/vjmG+V2DhYmc/+Z94k1T50oJR3bZmR/3QdgjNmgX8VS+huSL+ilAYotiOWG
+         5VdCz5PEq2JwDhTLXslGE0StQ1HuAk3HhQlag3EHYkrelF/g2wyQaMtSrkLHaKxEbbWB
+         gpFB9raWzZQSLe3PNDaF71eC0btdoGnDru5LtEtAQXHDSICUtxPCVQsxQRcUaYsss0rk
+         13hajfXAkNVUjLa15uQHSc9w4KJu02h4mgP6N+yP6kIqNiqGFwPtW/gUjTlzCEQw8Jm5
+         +/ydHKgdZUmSAUAq3vXtd2abEFRWHioaWImcKfJ5atyD4UKPGUUBm5mChNxZo1a+jleh
+         Gcfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685135506; x=1687727506;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1L+ycxs8nT0k5qZvWSokMUtOJErTXYk5ocz+vVaSWnw=;
+        b=Jt63OJ/vqaAqGx1B8yR83IXvO7TgF4AkDpOa4CMUUMWGNv9bmJ6hYgzT8/AlVH+i0o
+         GADhWMAP286A5R4hWJV/FNokP17A3N9glcyOzfEFDbG3bIB9b8iME8/ON2ZFjzNd1Hpf
+         L6d6U+3vqnzIdo2QXnT4yAgIqS3LB0UdHrl7ly1yg5bWWzb6vZyTmbHehUdHdfkSWkEl
+         c6Rzypv1lVx10KRLxiBEyLZKP4RBZCq44L/WQ+/jzWfJKUpNeYRmvAm0Gi88P0LjtI3E
+         YLCcCjVwHRTFsMQ/nEdmh2bV0tHtrkggvgzlQac/zcuxvVEcWJJyi7ue+9HRZ/2XWzv6
+         F0OQ==
+X-Gm-Message-State: AC+VfDxckLeWqK7TaFrpgCWmW7y2w1vCtp4alWBpzlR1L6bRiKaA2aIS
+        oKD1vAjuSG+6cfByIuFfYIYyBA==
+X-Google-Smtp-Source: ACHHUZ5cemCoNqzhRRERX6I4HzjQMrvTEWDuDE93LE/pVDCsDJENXaFbS/q8p5n9/kFtuNQarEdlnQ==
+X-Received: by 2002:ac2:4c09:0:b0:4ef:6ed9:7af2 with SMTP id t9-20020ac24c09000000b004ef6ed97af2mr860215lfq.8.1685135506191;
+        Fri, 26 May 2023 14:11:46 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id y26-20020ac2447a000000b004f24ee39661sm787480lfl.137.2023.05.26.14.11.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 14:11:45 -0700 (PDT)
+Message-ID: <02543b3b-a94d-fd3a-7b28-3e55f4414137@linaro.org>
+Date:   Fri, 26 May 2023 23:11:44 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
+ <20230510-msm8916-regulators-v1-7-54d4960a05fc@gerhold.net>
+ <9f474fe8-523c-3668-540a-a8fc04ed64a6@linaro.org>
+ <ZHBV-mBPhoqy8yvs@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH 7/8] arm64: dts: qcom: msm8916: Define regulator
+ constraints next to usage
+In-Reply-To: <ZHBV-mBPhoqy8yvs@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,51 +85,105 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-> On May 26, 2023, at 1:45 PM, Borislav Petkov <bp@alien8.de> wrote:
->=20
-> On Fri, May 26, 2023 at 10:29:29AM -0700, Nadav Amit wrote:
->> Can you give me some examples for code whose address cannot be mapped
->> back to a symbol?
->=20
-> No, this is not what I'm talking about.
->=20
-> I'm talking about all the local labels the compiler uses. For example:
->=20
-> $ make kernel/sched/core.s
-> $ grep -E "^\.L" kernel/sched/core.s | wc -l
-> 2799
->=20
-> All those local labels are not in the symbol table (get discarded) and
-> the addresses they represent are shown as belonging to the containing
-> function.
+On 26.05.2023 08:47, Stephan Gerhold wrote:
+> On Fri, May 26, 2023 at 01:35:06AM +0200, Konrad Dybcio wrote:
+>> On 17.05.2023 20:48, Stephan Gerhold wrote:
+>>> Right now each MSM8916 device has a huge block of regulator constraints
+>>> with allowed voltages for each regulator. For lack of better
+>>> documentation these voltages are often copied as-is from the vendor
+>>> device tree, without much extra thought.
+>>>
+>>> Unfortunately, the voltages in the vendor device trees are often
+>>> misleading or even wrong, e.g. because:
+>>>
+>>>  - There is a large voltage range allowed and the actual voltage is
+>>>    only set somewhere hidden in some messy vendor driver. This is often
+>>>    the case for pm8916_{l14,l15,l16} because they have a broad range of
+>>>    1.8-3.3V by default.
+>>>
+>>>  - The voltage is actually wrong but thanks to the voltage constraints
+>>>    in the RPM firmware it still ends up applying the correct voltage.
+>>>
+>>> To have proper regulator constraints it is important to review them in
+>>> context of the usage. The current setup in the MSM8916 device trees
+>>> makes this quite hard because each device duplicates the standard
+>>> voltages for components of the SoC and mixes those with minor
+>>> device-specific additions and dummy voltages for completely unused
+>>> regulators.
+>>>
+>>> The actual usage of the regulators for the SoC components is in
+>>> msm8916-pm8916.dtsi, so it can and should also define the related
+>>> voltage constraints. These are not board-specific but defined in the
+>>> APQ8016E/PM8916 Device Specification. The board DT can then focus on
+>>> describing the actual board-specific regulators, which makes it much
+>>> easier to review and spot potential mistakes there.
+>>>
+>>> Note that this commit does not make any functional change. All used
+>>> regulators still have the same regulator constraints as before. Unused
+>>> regulators do not have regulator constraints anymore because most of
+>>> these were too broad or even entirely wrong. They should be added back
+>>> with proper voltage constraints when there is an actual usage.
+>>>
+>>> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+>>> ---
+>> I'm a bit torn between saying "this is very nice already" and "we should
+>> probably override each regulator individually" like so:
+>>
+>> &pm8916_l17 {
+>> 	[...]
+>> }
+>>
+>> to minimize mistakes..
+>>
+>> Not sure what to make of it, I see Bjorn already applied this, so I guess
+>> I'm just leaving some potential ideas for the future here.
+>>
+> 
+> Sorry, could you elaborate a bit on what changes you would make exactly?
+Assigning the voltage ranges through direct reference to each individual
+regulator, instead of overwriting them through referencing the
+pm8916_rpm_regulators label and (essentially) redefining them.
 
-Right. But the symbols I mentioned are not contained in any other =
-symbol.
-If you run gdb and try to disasm this bad_get_user_clac (its address),
-you=E2=80=99d currently get "No function contains specified address=E2=80=9D=
-.
+> 
+> The way it works in this patch is that regulators that are used by the
+> SoC are defined in msm8916-pm8916.dtsi. All other (board-specific)
+> regulators must be defined together with proper voltages in the board DT.
+> 
+> What kind of mistake are you thinking of?
+Fat fingers, mostly
 
-That what makes these 2 symbols different than the others.
+So suppose your device needs a different voltage on L18, so you do
 
->=20
->> I did not ask to make them global. Just to keep them as local after
->> linkage in the executable, like all other functions in the kernel.
->=20
-> Ok, not global. But local and present in the symbol table:
->=20
-> 105185: ffffffff81b89330    17 NOTYPE  LOCAL  DEFAULT    1 =
-bad_get_user_clac
->=20
-> And again, this helps how exactly?
+&pm8916_rpm_regulators {
+	l19 { //fat fingers burn devices
+		regulator-min-microvolt = <12341234>;
+		regulator-max-microvolt = <43143144>;
+	};
+};
 
-Allowing debuggers, tracers, disassemblers and instrumentation tools to
-work the same way they work as they work with any other piece of code in
-the kernel.
+DTC will happily eat that
 
-I personally work on code instrumentation and this makes my life hard =
-for
-no good reason.
 
-[ Perhaps the question should go the other way around: why addresses of
-code in these functions should not be mapped to any symbol? ]
+since we use labels, one would have to fatfinger twice, like so:
+&pm8916_rpm_regulators {
+	pm8916_l19: l19 { //this was still supposed to be l18
+...
 
+
+as these two combinations will trigger a build error
+
+
+&pm8916_rpm_regulators {
+	pm8916_l19: l18 { //duplicate label vs actual l19
+
+---
+
+&pm8916_rpm_regulators {
+	pm8916_l18: l19 { //duplicate label vs actual l18
+
+
+Konrad
+
+> 
+> Thanks,
+> Stephan
