@@ -2,244 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9C7712C4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725B7712C4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237302AbjEZSPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S237519AbjEZSQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjEZSP0 (ORCPT
+        with ESMTP id S237561AbjEZSQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:15:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363BE13A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:15:24 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q2bxv-0007vo-Md; Fri, 26 May 2023 20:15:03 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q2bxs-00089G-I9; Fri, 26 May 2023 20:15:00 +0200
-Date:   Fri, 26 May 2023 20:15:00 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Fedor Pchelkin <pchelkin@ispras.ru>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, kernel@pengutronix.de,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH 2/2] can: j1939: avoid possible use-after-free when
- j1939_can_rx_register fails
-Message-ID: <20230526181500.GA26860@pengutronix.de>
-References: <20230526171910.227615-1-pchelkin@ispras.ru>
- <20230526171910.227615-3-pchelkin@ispras.ru>
+        Fri, 26 May 2023 14:16:12 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566A4198
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:16:09 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96f6e83e12fso165674866b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685124968; x=1687716968;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ck6N4S4jiJu910yJXpyaQokUMWH4KKhSAsPW4EeI/fE=;
+        b=DOeSLj3zYkASws6boClAYXGxuNjRdIm5LlmNF2AU7fqwyEzricfQWmZ4ylo+VNtTpv
+         S7MnIj0t2qEqtkI+/722GXPNTAztrMPTUmFVfVF2on2cEClEIbSe1IDeUZXgEzEbYGDN
+         jqIRkPlZksHS3N8NJ0yKrR6PiNbaNUItKiug58U6BHtmuMCOUllH1EED7zFCvKS/bnay
+         Ocpwte5g7kWUpuikxYmgw4gEf7h6GJSWAJzybDwF0ZtYx2gPmjDhMaPfg5jSNMpcLLt0
+         InVE5bcMjqY1LH0s5tmA9uNXTy2qcAv7Zv9C3D4o5lQfz8vyDmBr45kEJBQ3csap2QMc
+         8J8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685124968; x=1687716968;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ck6N4S4jiJu910yJXpyaQokUMWH4KKhSAsPW4EeI/fE=;
+        b=Hcn1XTL3TLv+fkffySWugV6NoFZ5ykqdALtCtwJMKjn2s1/T2Ozxw+uQvJZBvMhmCm
+         xeGs8foVdQVBBnAZDcnrwio5SjeVQGmtwIzOkhxTd8h4D+ts9NhdIUM9L96nUYgz08In
+         nxg6dhjGAKF0vLsIqrYXENY+rJQa9waJ+zuXfdz0B/l/eka9WRX1yNFG4UCvH+JZLkDq
+         SMy8B39mbcgSJMB4lSoRKPFo9oidEPU622Q045lA5NcDWgiaJbbmnyM/1DKzpmSlEgit
+         Nwps1Zr55HGQ8qBXdIA39aGCv2NTbl3l7r6XSpd8YBau7tEhx6Uk89KDu5iUEiOqV7yw
+         R0Ig==
+X-Gm-Message-State: AC+VfDw903/Y3oX7nFJTGiEjVvOkXDCBpk+GtFf++LAnFZF5VISy2Mif
+        aEw0ZkKgPPZg+y1a3UHqCq3cOEFpGevA7WvTjjRHtQ==
+X-Google-Smtp-Source: ACHHUZ7bmJdZ/B7moM+bwuYRIKTMF0iIacS+JLxF+JNTLcpYnFSA1Zr3ohMkyz3HEFHj+DT9bNeVQpL5IkW7ZHx2CL0=
+X-Received: by 2002:a17:906:db0c:b0:96a:37af:ff37 with SMTP id
+ xj12-20020a170906db0c00b0096a37afff37mr2666854ejb.15.1685124967602; Fri, 26
+ May 2023 11:16:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230526171910.227615-3-pchelkin@ispras.ru>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230526173955.781115-1-cerasuolodomenico@gmail.com> <20230526181023.GA49039@cmpxchg.org>
+In-Reply-To: <20230526181023.GA49039@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 26 May 2023 11:15:31 -0700
+Message-ID: <CAJD7tkY55Z9n7Ue-4+a691t4YJAs+0e7gEZGocF7cp197gL+Dg@mail.gmail.com>
+Subject: Re: [PATCH v2] mm: zswap: shrink until can accept
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fedor,
+On Fri, May 26, 2023 at 11:10=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.or=
+g> wrote:
+>
+> On Fri, May 26, 2023 at 07:39:55PM +0200, Domenico Cerasuolo wrote:
+> > This update addresses an issue with the zswap reclaim mechanism, which
+> > hinders the efficient offloading of cold pages to disk, thereby
+> > compromising the preservation of the LRU order and consequently
+> > diminishing, if not inverting, its performance benefits.
+> >
+> > The functioning of the zswap shrink worker was found to be inadequate,
+> > as shown by basic benchmark test. For the test, a kernel build was
+> > utilized as a reference, with its memory confined to 1G via a cgroup an=
+d
+> > a 5G swap file provided. The results are presented below, these are
+> > averages of three runs without the use of zswap:
+> >
+> > real 46m26s
+> > user 35m4s
+> > sys 7m37s
+> >
+> > With zswap (zbud) enabled and max_pool_percent set to 1 (in a 32G
+> > system), the results changed to:
+> >
+> > real 56m4s
+> > user 35m13s
+> > sys 8m43s
+> >
+> > written_back_pages: 18
+> > reject_reclaim_fail: 0
+> > pool_limit_hit:1478
+> >
+> > Besides the evident regression, one thing to notice from this data is
+> > the extremely low number of written_back_pages and pool_limit_hit.
+> >
+> > The pool_limit_hit counter, which is increased in zswap_frontswap_store
+> > when zswap is completely full, doesn't account for a particular
+> > scenario: once zswap hits his limit, zswap_pool_reached_full is set to
+> > true; with this flag on, zswap_frontswap_store rejects pages if zswap i=
+s
+> > still above the acceptance threshold. Once we include the rejections du=
+e
+> > to zswap_pool_reached_full && !zswap_can_accept(), the number goes from
+> > 1478 to a significant 21578266.
+> >
+> > Zswap is stuck in an undesirable state where it rejects pages because
+> > it's above the acceptance threshold, yet fails to attempt memory
+> > reclaimation. This happens because the shrink work is only queued when
+> > zswap_frontswap_store detects that it's full and the work itself only
+> > reclaims one page per run.
+> >
+> > This state results in hot pages getting written directly to disk,
+> > while cold ones remain memory, waiting only to be invalidated. The LRU
+> > order is completely broken and zswap ends up being just an overhead
+> > without providing any benefits.
+> >
+> > This commit applies 2 changes: a) the shrink worker is set to reclaim
+> > pages until the acceptance threshold is met and b) the task is also
+> > enqueued when zswap is not full but still above the threshold.
+> >
+> > Testing this suggested update showed much better numbers:
+> >
+> > real 36m37s
+> > user 35m8s
+> > sys 9m32s
+> >
+> > written_back_pages: 10459423
+> > reject_reclaim_fail: 12896
+> > pool_limit_hit: 75653
+> >
+> > V2:
+> > - loop against =3D=3D -EAGAIN rather than !=3D -EINVAL and also break t=
+he loop
+> > on MAX_RECLAIM_RETRIES (thanks Yosry)
+> > - cond_resched() to ensure that the loop doesn't burn the cpu (thanks
+> > Vitaly)
+> >
+> > Fixes: 45190f01dd40 ("mm/zswap.c: add allocation hysteresis if pool lim=
+it is hit")
+> > Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> > ---
+> >  mm/zswap.c | 15 ++++++++++++---
+> >  1 file changed, 12 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/mm/zswap.c b/mm/zswap.c
+> > index 59da2a415fbb..f953dceaab34 100644
+> > --- a/mm/zswap.c
+> > +++ b/mm/zswap.c
+> > @@ -37,6 +37,7 @@
+> >  #include <linux/workqueue.h>
+> >
+> >  #include "swap.h"
+> > +#include "internal.h"
+> >
+> >  /*********************************
+> >  * statistics
+> > @@ -587,9 +588,17 @@ static void shrink_worker(struct work_struct *w)
+> >  {
+> >       struct zswap_pool *pool =3D container_of(w, typeof(*pool),
+> >                                               shrink_work);
+> > +     int ret, failures =3D 0;
+> >
+> > -     if (zpool_shrink(pool->zpool, 1, NULL))
+> > -             zswap_reject_reclaim_fail++;
+> > +     do {
+> > +             ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> > +             if (ret) {
+> > +                     zswap_reject_reclaim_fail++;
+> > +                     failures++;
+> > +             }
+> > +             cond_resched();
+> > +     } while (!zswap_can_accept() && ret =3D=3D -EAGAIN &&
+> > +              failures < MAX_RECLAIM_RETRIES);
+>
+> It should also loop on !ret, right?
+>
+> AFAIU Yosry's suggestion was that instead of breaking only on -EINVAL,
+> it should break on all failures but -EAGAIN. But it should still keep
+> going if the shrink was successful and the pool cannot accept yet.
+>
+> Basically, something like this?
+>
+>         do {
+>                 ret =3D zpool_shrink(pool->zpool, 1, NULL);
+>                 if (ret) {
+>                         zswap_reject_reclaim_fail++;
+>                         if (ret !=3D -EAGAIN)
+>                                 break;
+>                         if (++failures =3D=3D MAX_RECLAIM_RETRIES)
+>                                 break;
+>                 }
+>                 cond_resched();
+>         } while (!zswap_can_accept());
 
-On Fri, May 26, 2023 at 08:19:10PM +0300, Fedor Pchelkin wrote:
-> Syzkaller reports the following failure:
-> 
-> BUG: KASAN: use-after-free in kref_put include/linux/kref.h:64 [inline]
-> BUG: KASAN: use-after-free in j1939_priv_put+0x25/0xa0 net/can/j1939/main.c:172
-> Write of size 4 at addr ffff888141c15058 by task swapper/3/0
-> 
-> CPU: 3 PID: 0 Comm: swapper/3 Not tainted 5.10.144-syzkaller #0
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-> Call Trace:
->  <IRQ>
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x107/0x167 lib/dump_stack.c:118
->  print_address_description.constprop.0+0x1c/0x220 mm/kasan/report.c:385
->  __kasan_report mm/kasan/report.c:545 [inline]
->  kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
->  check_memory_region_inline mm/kasan/generic.c:186 [inline]
->  check_memory_region+0x145/0x190 mm/kasan/generic.c:192
->  instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
->  atomic_fetch_sub_release include/asm-generic/atomic-instrumented.h:220 [inline]
->  __refcount_sub_and_test include/linux/refcount.h:272 [inline]
->  __refcount_dec_and_test include/linux/refcount.h:315 [inline]
->  refcount_dec_and_test include/linux/refcount.h:333 [inline]
->  kref_put include/linux/kref.h:64 [inline]
->  j1939_priv_put+0x25/0xa0 net/can/j1939/main.c:172
->  j1939_sk_sock_destruct+0x44/0x90 net/can/j1939/socket.c:374
->  __sk_destruct+0x4e/0x820 net/core/sock.c:1784
->  rcu_do_batch kernel/rcu/tree.c:2485 [inline]
->  rcu_core+0xb35/0x1a30 kernel/rcu/tree.c:2726
->  __do_softirq+0x289/0x9a3 kernel/softirq.c:298
->  asm_call_irq_on_stack+0x12/0x20
->  </IRQ>
->  __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
->  run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
->  do_softirq_own_stack+0xaa/0xe0 arch/x86/kernel/irq_64.c:77
->  invoke_softirq kernel/softirq.c:393 [inline]
->  __irq_exit_rcu kernel/softirq.c:423 [inline]
->  irq_exit_rcu+0x136/0x200 kernel/softirq.c:435
->  sysvec_apic_timer_interrupt+0x4d/0x100 arch/x86/kernel/apic/apic.c:1095
->  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:635
-> 
-> Allocated by task 1141:
->  kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
->  kasan_set_track mm/kasan/common.c:56 [inline]
->  __kasan_kmalloc.constprop.0+0xc9/0xd0 mm/kasan/common.c:461
->  kmalloc include/linux/slab.h:552 [inline]
->  kzalloc include/linux/slab.h:664 [inline]
->  j1939_priv_create net/can/j1939/main.c:131 [inline]
->  j1939_netdev_start+0x111/0x860 net/can/j1939/main.c:268
->  j1939_sk_bind+0x8ea/0xd30 net/can/j1939/socket.c:485
->  __sys_bind+0x1f2/0x260 net/socket.c:1645
->  __do_sys_bind net/socket.c:1656 [inline]
->  __se_sys_bind net/socket.c:1654 [inline]
->  __x64_sys_bind+0x6f/0xb0 net/socket.c:1654
->  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
->  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> 
-> Freed by task 1141:
->  kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
->  kasan_set_track+0x1c/0x30 mm/kasan/common.c:56
->  kasan_set_free_info+0x1b/0x30 mm/kasan/generic.c:355
->  __kasan_slab_free+0x112/0x170 mm/kasan/common.c:422
->  slab_free_hook mm/slub.c:1542 [inline]
->  slab_free_freelist_hook+0xad/0x190 mm/slub.c:1576
->  slab_free mm/slub.c:3149 [inline]
->  kfree+0xd9/0x3b0 mm/slub.c:4125
->  j1939_netdev_start+0x5ee/0x860 net/can/j1939/main.c:300
->  j1939_sk_bind+0x8ea/0xd30 net/can/j1939/socket.c:485
->  __sys_bind+0x1f2/0x260 net/socket.c:1645
->  __do_sys_bind net/socket.c:1656 [inline]
->  __se_sys_bind net/socket.c:1654 [inline]
->  __x64_sys_bind+0x6f/0xb0 net/socket.c:1654
->  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
->  entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> 
-> It can be caused by this scenario:
-> 
-> CPU0					CPU1
-> j1939_sk_bind(socket0, ndev0, ...)
->   j1939_netdev_start()
-> 					j1939_sk_bind(socket1, ndev0, ...)
->                                           j1939_netdev_start()
->   mutex_lock(&j1939_netdev_lock)
->   j1939_priv_set(ndev0, priv)
->   mutex_unlock(&j1939_netdev_lock)
-> 					  if (priv_new)
-> 					    kref_get(&priv_new->rx_kref)
-> 					    return priv_new;
-> 					  /* inside j1939_sk_bind() */
-> 					  jsk->priv = priv
->   j1939_can_rx_register(priv) // fails
->   j1939_priv_set(ndev, NULL)
->   kfree(priv)
-> 					j1939_sk_sock_destruct()
-> 					j1939_priv_put() // <- uaf
-> 
-> To avoid this, call j1939_can_rx_register() under j1939_netdev_lock so
-> that a concurrent thread cannot process j1939_priv before
-> j1939_can_rx_register() returns.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-> 
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-> ---
->  net/can/j1939/main.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
-> index 6ed79afe19a5..ecff1c947d68 100644
-> --- a/net/can/j1939/main.c
-> +++ b/net/can/j1939/main.c
-> @@ -290,16 +290,18 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
->  		return priv_new;
->  	}
->  	j1939_priv_set(ndev, priv);
-> -	mutex_unlock(&j1939_netdev_lock);
->  
->  	ret = j1939_can_rx_register(priv);
->  	if (ret < 0)
->  		goto out_priv_put;
->  
-> +	mutex_unlock(&j1939_netdev_lock);
->  	return priv;
->  
->   out_priv_put:
->  	j1939_priv_set(ndev, NULL);
-> +	mutex_unlock(&j1939_netdev_lock);
-> +
->  	dev_put(ndev);
->  	kfree(priv);
->  
-> -- 
-> 2.34.1
-> 
-> 
-
-
-Thank you for your investigation. How about this change?
---- a/net/can/j1939/main.c
-+++ b/net/can/j1939/main.c
-@@ -285,8 +285,7 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
-                 */
-                kref_get(&priv_new->rx_kref);
-                spin_unlock(&j1939_netdev_lock);
--               dev_put(ndev);
--               kfree(priv);
-+               j1939_priv_put(priv);
-                return priv_new;
-        }
-        j1939_priv_set(ndev, priv);
-@@ -300,8 +299,7 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
- 
-  out_priv_put:
-        j1939_priv_set(ndev, NULL);
--       dev_put(ndev);
--       kfree(priv);
-+       j1939_priv_put(priv);
- 
-        return ERR_PTR(ret);
- }
-
-If I see it correctly, the problem is kfree() which is called without respecting
-the ref counting. If CPU1 has priv_new, refcounting is increased. The priv will
-not be freed on this place.
-
-Can you please test it?
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Yes, that's what I meant. Otherwise if shrink is successful we end up
+doing 1 page only, which is exactly what we are trying to avoid here.
