@@ -2,68 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC04712B2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF6D712B32
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242022AbjEZQzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
+        id S242086AbjEZQ4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236801AbjEZQzr (ORCPT
+        with ESMTP id S237228AbjEZQ4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:55:47 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676411B5;
-        Fri, 26 May 2023 09:55:42 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 246C8846EF;
-        Fri, 26 May 2023 18:55:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1685120141;
-        bh=6frG6Y6LuJoq+4JW6/RF24wFHuVYnnxTvxq9UXK5aGQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MBBgPDWNck7An4NuQmqGc4XC/iuXvMnwVSj55c2tTv1ZGtBzC7quNc17PtHo8IIvw
-         gOAZcncXU4izX0kG+dwyM5apVKmMfPNKf9DT3r2Tl7yQak8zkMuGuzaocTmo+dEbw/
-         OmOo3eonvGQxHR+5+8I2xIDfRj7mca2syvZjGr2vcfY9Hpt2b27etLqACwxhZWieUk
-         ygAa56W+tZ0OiESjTZDeFnMW8NKFXmd/V7IiBejKRwJTuP9mQUyWodvI/7dVXC0rBI
-         F0IEI2qqR/HLr7nEzDMdHxfPHDK/pSCZ95ppE1z4a8AMD8RtubAdHa6INGpH47N/9c
-         HY3GSGtbsZUlg==
-Message-ID: <2f8fde5e-68b6-6187-7051-7e51e58186c5@denx.de>
-Date:   Fri, 26 May 2023 18:55:39 +0200
+        Fri, 26 May 2023 12:56:03 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932C212A;
+        Fri, 26 May 2023 09:55:53 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-514859f3ffbso319530a12.1;
+        Fri, 26 May 2023 09:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685120152; x=1687712152;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BVB1oaEqb0nCh7/TkolrkD30I0YxpmZoZt03ZQMqTUU=;
+        b=HOONLSKAnH/QqPHu9WT2rWuKt7J+3VuaOtzRIn0ktdQRHt+mj3noIyD8rvM4NEKBQl
+         WMe/8Ik+L397mXmmOetDYl3Dk6BdBBRGfQj8TeFbdpfv9m+iui0umv+J07nt1IKaF0YC
+         B2AE8wTu7VvhuGrjCwwO52nHkz2NnGL78TWkuOA/znZ4IS/Ze8GjhmoyAIQm390K7gM3
+         LxpsB7Yzn+4pxiuKskquw40slwV2sRrES7up5wDCg/fh3PhlTBScEDFRlurN2sK+XtDf
+         kK2t4TawNMnAcGtv3LET3DG3PC0gmzxbAYb3el0EQMjjwd8kpJ2JCXTl2YnPlS702HEi
+         XfuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685120152; x=1687712152;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BVB1oaEqb0nCh7/TkolrkD30I0YxpmZoZt03ZQMqTUU=;
+        b=O9aKgkdrJPi2rai3Cprez5kkZTqY1tD0OuHCUgCUUFlioIC1PbYXjiI+zBgCbQt69H
+         HfWaySdeW8WwEer3N8Qv+l8O4uIlJ8IhSo5pgrq4Vci7sRkDpRCGCyKWJu/Sp3qTpVM8
+         E4xTLyjM4iww5FsBTTeUWdI0fiCnUJLDiawta7aVnYICALi4t6i1xlHS3/L4Y4BI+Bf4
+         7SjzlGxS7+yTrTyPtCdxRiITjHCm3zUWBI4t9OLE+sZGlTqIBl/Ghju62IFFpXnRCD6F
+         EPUrCp7g3j+RzRY26uEoxBAahe11zJ0UszbqioL16nALCmwdaSeAhHhaAOCur1lJ4drT
+         gCuA==
+X-Gm-Message-State: AC+VfDz+B/sd0QuOq0j7xko1BiRMLcmqNdMk6OAfZmwZ1yW4VSouYVhy
+        JME6X0g9flOQQLRWpN94wvg=
+X-Google-Smtp-Source: ACHHUZ4iTjI8KlCBHfyi32LLUWk745b3RNHS4iOVUUpprzoTVHgO/Ljbxr5EdgBITrwa1iNNyX9WyQ==
+X-Received: by 2002:a50:fb17:0:b0:514:7a67:44dc with SMTP id d23-20020a50fb17000000b005147a6744dcmr1516263edq.19.1685120151838;
+        Fri, 26 May 2023 09:55:51 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id w17-20020a056402071100b0050c03520f68sm127797edx.71.2023.05.26.09.55.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 09:55:51 -0700 (PDT)
+Date:   Fri, 26 May 2023 19:55:48 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 26/30] net: dsa: mt7530: properly set
+ MT7530_CPU_PORT
+Message-ID: <20230526165548.d6ewov743orxviz3@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-27-arinc.unal@arinc9.com>
+ <20230522121532.86610-27-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/3] dt-bindings: display: st,stm32-dsi: Remove
- unnecessary fields
-Content-Language: en-US
-To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@dh-electronics.com
-References: <20230517143542.284029-1-raphael.gallais-pou@foss.st.com>
- <20230517143542.284029-3-raphael.gallais-pou@foss.st.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20230517143542.284029-3-raphael.gallais-pou@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230522121532.86610-27-arinc.unal@arinc9.com>
+ <20230522121532.86610-27-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,12 +99,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/23 16:35, Raphael Gallais-Pou wrote:
-> "#address-cells" and "#size-cells" are two properties that are not
-> mandatory. For instance, the DSI could refer to a bridge outside the scope
-> of the node rather than include a 'panel@0' subnode. By doing so, address
-> and size fields become then unnecessary, creating a warning at build time.
+On Mon, May 22, 2023 at 03:15:28PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+> The MT7530_CPU_PORT bits represent the CPU port to trap frames to for the
+> MT7530 switch. There are two issues with the current way of setting these
+> bits. ID_MT7530 which is for the standalone MT7530 switch is not included.
 
-Reviewed-by: Marek Vasut <marex@denx.de>
+It's best to say in the commit title what the change does, rather than
+the equivalent of "here, this way is proper!". Commit titles should be
+uniquely identifiable, and "properly set MT7530_CPU_PORT" doesn't say a
+lot about how proper it is. It's enough to imagine a future person
+finding something else that's perfectible and writing another "net: dsa:
+mt7530: properly set MT7530_CPU_PORT" commit. Try to be less definitive
+and at the same time more specific.
+
+If there are 2 issues, there should be 2 changes with individual titles
+which each describes what was wrong and how that was changed.
+
+> When multiple CPU ports are being used, the trapped frames won't be
+> received when the DSA conduit interface, which the frames are supposed to
+> be trapped to, is down because it's not affine to any user port. This
+> requires the DSA conduit interface to be manually set up for the trapped
+> frames to be received.
+> 
+> Address these issues by implementing ds->ops->master_state_change() on this
+> subdriver and setting the MT7530_CPU_PORT bits there. Introduce the
+> active_cpu_ports field to store the information of active CPU ports.
+> Correct the macros, MT7530_CPU_PORT is bits 4 through 6 of the register.
+> 
+> Any frames set for trapping to CPU port will be trapped to the numerically
+> smallest CPU port which is affine to the DSA conduit interface that is set
+> up. To make the understatement obvious, the frames won't necessarily be
+> trapped to the CPU port the user port, which these frames are received
+> from, is affine to. This operation is only there to make sure the trapped
+> frames always reach the CPU.
+> 
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Co-developed-by: Vladimir Oltean <olteanv@gmail.com>
+> Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+
+A single Suggested-by: is fine. As a rule of thumb, I would use Co-developed-by
+when I'm working with a patch formally pre-formatted or committed by somebody else,
+that I've changed in a significant manner. Since all I did was to comment with
+a suggestion of how to handle this, and with a code snippet written in the email
+client to a patch of yours, I don't believe that's necessary here.
+
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
