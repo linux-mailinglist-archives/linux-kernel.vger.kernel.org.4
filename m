@@ -2,119 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BAA712705
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CC1712693
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243419AbjEZMxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S243462AbjEZM3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243379AbjEZMxh (ORCPT
+        with ESMTP id S237179AbjEZM3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:53:37 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6997D199;
-        Fri, 26 May 2023 05:53:33 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id C36BA5FD59;
-        Fri, 26 May 2023 15:32:45 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685104365;
-        bh=vjpgmyB3fJ0fvSTA01eeG607ZmMDcAUYXBQfuZPLoF4=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=ZAH9YvkPcF3G645UtXIYD3gHXqTq5Npnk0hASpHi68u/q9x6+B35D+aeSGzLj+ImW
-         gbJw+8oopgj/4YnPddqrrPCDJAF5tNrZSLaXzKXWfhICmJPjUemtPTkNxMAUmIik7n
-         XD82VIIiZeb6dM1aoR7rUwtX5vA7V2ZYbVhNjFHq0f0SLKdu3+QOUXZoxQU7FJghW8
-         R60OHEycv2S1875uJz3tAeLjM4hfB3sg81+lwxCoj5xgrqIg6rw4R8hAzKeiVEH1gN
-         w5eIi0OX5bckbk84NPT8T5VrwpFYqGZmjezWsUC0okh3cRCZhK+MJqJ3+HPftOFMH5
-         Vxisk4TJQj0ww==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 26 May 2023 15:32:41 +0300 (MSK)
-Message-ID: <85f50bf8-8b92-c0f8-d994-24b86be9de5b@sberdevices.ru>
-Date:   Fri, 26 May 2023 15:28:13 +0300
+        Fri, 26 May 2023 08:29:17 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F432198
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:29:13 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QC7FGs007721;
+        Fri, 26 May 2023 07:28:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=zbeX20arXQtFL1Oe3E/Iquzv2uaKy2zZxXDCKuIdoAI=;
+ b=lfnwCFB4qbLJV8esbbskxfwmtRR6x9XxW1QznShscd9Tb3lqJ104jc1Tm5glLHgRXLr9
+ kPriZcrNnjoIevMSfvqQloNjKNq3tTYdX3P8Vxgy2pTFq2YzCuzmBzSQa4iWGuyJNHnf
+ 6Zo+uUpvsEufaqNyb0DOne8e6H++XjcOnUXxCLbRGeqEHYLd6QyrK67Jdc2jn+OShebs
+ wXthAuU+ksLAqFI1y7fRKxUP45Rcldy93Yre6QsV49SUgNGKkFx45kLxWeDm7dxHL2s6
+ DkhZzyXRXZgMGvlcEnmSSy+BzAbm1X0GjcMUPjIYzCKWIgyR4CQ6Ft0uBD8RAPWZfj6K WQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qsde8k66v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 07:28:56 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 26 May
+ 2023 07:28:54 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Fri, 26 May 2023 07:28:54 -0500
+Received: from EDIN4L06LR3.ad.cirrus.com (EDIN4L06LR3.ad.cirrus.com [198.61.65.166])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 636B411A8;
+        Fri, 26 May 2023 12:28:54 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <tiwai@suse.com>, <broonie@kernel.org>, <perex@perex.cz>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH v3 00/12] ALSA: hda: Adding support for CS35L56 on HDA systems
+Date:   Fri, 26 May 2023 13:28:40 +0100
+Message-ID: <20230526122852.4552-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v3 00/17] vsock: MSG_ZEROCOPY flag support
-Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <20230522073950.3574171-1-AVKrasnov@sberdevices.ru>
- <76270fab-8af7-7597-9193-64cb553a543e@sberdevices.ru>
- <y5tgyj5awrd4hvlrsxsvrern6pd2sby2mdtskah2qp5hemmo2a@72nhcpilg7v2>
- <4baf786b-afe5-371d-9bc4-90226e5df3af@sberdevices.ru>
- <sdm43ibxqzdylwxaai4mjj2ucqpduc74ucyg3yrn75dxu2kix5@jynppv7kxyjz>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <sdm43ibxqzdylwxaai4mjj2ucqpduc74ucyg3yrn75dxu2kix5@jynppv7kxyjz>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/26 06:32:00 #21351256
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: bYQkcU_a5WKwe3nTPf_ZRlMnfsE3DBRp
+X-Proofpoint-GUID: bYQkcU_a5WKwe3nTPf_ZRlMnfsE3DBRp
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This set of patches adds support for using the CS35L56 boosted smart
+amplifier on HDA systems. In these systems the CS35L56 audio is
+routed through a HDA-to-I2S bridge codec.
 
+This doesn't include the changes to the Realtek driver to actually hook
+up the CS35L56 driver, because we don't yet have the QUIRK IDs to
+associate it with. But we want to publish the driver now so that it is
+available for bringing up hardware with the CS35L56.
 
-On 26.05.2023 15:23, Stefano Garzarella wrote:
-> On Fri, May 26, 2023 at 02:36:17PM +0300, Arseniy Krasnov wrote:
->>
->>
->> On 26.05.2023 13:30, Stefano Garzarella wrote:
->>> On Thu, May 25, 2023 at 06:56:42PM +0300, Arseniy Krasnov wrote:
->>>>
->>>>
->>>> On 22.05.2023 10:39, Arseniy Krasnov wrote:
->>>>
->>>> This patchset is unstable with SOCK_SEQPACKET. I'll fix it.
->>>
->>> Thanks for let us know!
->>>
->>> I'm thinking if we should start split this series in two, because it
->>> becomes too big.
->>>
->>> But let keep this for RFC, we can decide later. An idea is to send
->>> the first 7 patches with a preparation series, and the next ones with a
->>> second series.
->>
->> Hello, ok! So i'll split patchset in the following way:
->> 1) Patches which adds new fields/flags and checks. But all of this is not used,
->>   as it is preparation.
->> 2) Second part starts to use it and also carries tests.
-> 
-> As long as they're RFCs, maybe you can keep them together if they're
-> related, possibly specifying in the cover letter where you'd like to
-> split them. When we agree that we are in good shape, we can split it.
+The first 9 patches are moving code out of the ASoC driver and into the
+shared library so that it can be shared with the HDA driver.
 
-Sure! I'll add this information in cover letter of v4
+Patch #10 fixes missing #includes in the HDA headers so that the CS35L56
+driver doesn't have to #include headers that it doesn't use.
 
-Thanks, Arseniy
+Finally, #11 and #12 actually add the support for CS35L56 on HDA.
 
-> > Thanks,
-> Stefano
-> 
+CHANGES SINCE V2
+All in patch #12:
+- Add __maybe_unused to runtime suspend/resume callbacks to prevent build
+  error if CONFIG_PM is not defined
+- Removed __maybe_unused from system suspend/resume functions
+- Change i2c .probe_new to .probe
+- Removed unnecessary returns in cs35l56_hda_create_controls()
+- Change if (ret != 0) to if (ret)
+
+Richard Fitzgerald (4):
+  ASoC: cs35l56: Move runtime suspend/resume to shared library
+  ASoC: cs35l56: Move cs_dsp init into shared library
+  ASoC: cs35l56: Move part of cs35l56_init() to shared library
+  ALSA: hda: Fix missing header dependencies
+
+Simon Trimmer (8):
+  ASoC: cs35l56: Move shared data into a common data structure
+  ASoC: cs35l56: Make cs35l56_system_reset() code more generic
+  ASoC: cs35l56: Convert utility functions to use common data structure
+  ASoC: cs35l56: Move utility functions to shared file
+  ASoC: cs35l56: Make common function for control port wait
+  ASoC: cs35l56: Make a common function to shutdown the DSP
+  ALSA: hda: Add mute_hook to hda_component
+  ALSA: hda/cs35l56: Add driver for Cirrus Logic CS35L56 amplifier
+
+ include/sound/cs35l56.h           |  29 +-
+ sound/pci/hda/Kconfig             |  31 +
+ sound/pci/hda/Makefile            |   6 +
+ sound/pci/hda/cs35l56_hda.c       | 990 ++++++++++++++++++++++++++++++
+ sound/pci/hda/cs35l56_hda.h       |  48 ++
+ sound/pci/hda/cs35l56_hda_i2c.c   |  69 +++
+ sound/pci/hda/cs35l56_hda_spi.c   |  68 ++
+ sound/pci/hda/hda_auto_parser.h   |   2 +
+ sound/pci/hda/hda_component.h     |   1 +
+ sound/pci/hda/hda_generic.h       |   3 +
+ sound/soc/codecs/cs35l56-i2c.c    |  14 +-
+ sound/soc/codecs/cs35l56-sdw.c    |  72 +--
+ sound/soc/codecs/cs35l56-shared.c | 459 +++++++++++++-
+ sound/soc/codecs/cs35l56-spi.c    |  10 +-
+ sound/soc/codecs/cs35l56.c        | 648 ++++---------------
+ sound/soc/codecs/cs35l56.h        |  15 +-
+ 16 files changed, 1873 insertions(+), 592 deletions(-)
+ create mode 100644 sound/pci/hda/cs35l56_hda.c
+ create mode 100644 sound/pci/hda/cs35l56_hda.h
+ create mode 100644 sound/pci/hda/cs35l56_hda_i2c.c
+ create mode 100644 sound/pci/hda/cs35l56_hda_spi.c
+
+-- 
+2.30.2
+
