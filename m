@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37375712DA8
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3E2712DA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjEZTfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S244039AbjEZTfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244035AbjEZTex (ORCPT
+        with ESMTP id S244042AbjEZTey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:34:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386DFD9;
-        Fri, 26 May 2023 12:34:52 -0700 (PDT)
+        Fri, 26 May 2023 15:34:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F37B13D;
+        Fri, 26 May 2023 12:34:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70C6B6530B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96A45651B9;
+        Fri, 26 May 2023 19:34:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16015C433A0;
         Fri, 26 May 2023 19:34:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF9AAC433EF;
-        Fri, 26 May 2023 19:34:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685129690;
-        bh=G09ZTIzKPzsQdcjQ3fudG7fCISo/vDgzr6/S0QbLDvQ=;
+        s=k20201202; t=1685129692;
+        bh=auGaAhJ3gYADbZU1xnhReZDvPilOzS4YXc6T3mEquUE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gnttz+lvElRqBZa2N186qi7hx3sQxECPv03Vz1Eq7Ubfo2Q2QNrQLcFYbfNuxhd4R
-         NR7AujtVFgTBXibXxhFd07Disw4ZSeNMUk93gvsgF7h46oT+CcACIZh82f0ujii0xa
-         s8huHn6tRzKoEv7ZWeD8gqYWfWnS7ZsU3vjtfdQ2ciFpFSQJCOpJ61yY+8Pbrp7Y+L
-         I8iz/bOcZ4duiodJhjmBxtp3Qhe0w1zIiNoXnSe2ENUw5fOQ5S6n6NQ38mZ4Ihm5eg
-         7YztvvTdfTPHLLiXw9uoloYIKIsyJr2xi2+lDTo+mGmwe66EMleO4/4hHREZyp25a6
-         HN29Fc7QBJb5g==
+        b=aPBeKiWXo0vGy5Lf0sM9gTcAjMiP0WOLU511SRhC9zPaKeRjhd2tptL9Lir3h4Ogh
+         TIShwaNCdJMoWBl0eOMcvjWXsi88DHbP5WtT9806OgwljZvtD3iryvFv9YiCst2GzY
+         hDd1K3lt3AHoz6CG5ct9i8E/iavo8Pd3+7LEeoL/FkVacLSDZT6YXelJAVRTyVcgjh
+         F9xSFQXMVOdNmN0PAa5bGKt2HBGYlpsqQL7ixcQ8SSmq8hX0dsitdQDWgMaSyy3bK2
+         U+FhI5NDnO6lGJ41Wk2hMC9N3xYUuAQ3xa66t8ErDu+r7mr+Ckn7IC6lK/dEWDskXC
+         EDJjLE61HQP7w==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     agross@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, konrad.dybcio@linaro.org,
+        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
         conor+dt@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
         Devi Priya <quic_devipriy@quicinc.com>
 Cc:     quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
         quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
         quic_arajkuma@quicinc.com
-Subject: Re: [PATCH 0/2] Add initial support for RDP449 of IPQ9574 family
-Date:   Fri, 26 May 2023 12:38:31 -0700
-Message-Id: <168512991479.248818.14593270187862446581.b4-ty@kernel.org>
+Subject: Re: [PATCH 0/2] Add initial support for RDP453 of IPQ9574 family
+Date:   Fri, 26 May 2023 12:38:32 -0700
+Message-Id: <168512991479.248818.11535051961870996195.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516135013.3547-1-quic_devipriy@quicinc.com>
-References: <20230516135013.3547-1-quic_devipriy@quicinc.com>
+In-Reply-To: <20230526153152.777-1-quic_devipriy@quicinc.com>
+References: <20230526153152.777-1-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,9 +60,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 19:20:11 +0530, Devi Priya wrote:
+On Fri, 26 May 2023 21:01:50 +0530, Devi Priya wrote:
 > Add the initial device tree support for the Reference Design
-> Platform(RDP) 449 based on IPQ9574 family of SoCs. This patch series adds
+> Platform(RDP) 453 based on IPQ9574 family of SoCs. This patch series adds
 > support for Console UART, SPI NOR and SMPA1 regulator node.
 > 
 > The series depends on the below patch sets which adds support for
@@ -74,10 +74,10 @@ On Tue, 16 May 2023 19:20:11 +0530, Devi Priya wrote:
 
 Applied, thanks!
 
-[1/2] dt-bindings: arm: qcom: document AL02-C6 board based on IPQ9574 family
-      commit: 2e4cd263b97d0254e6bbd88b2feb4df6c4a9ad0d
-[2/2] arm64: dts: qcom: ipq9574: add support for RDP449 variant
-      commit: aa261f13dae60850be30de95c7eb6ffb6059a6b7
+[1/2] dt-bindings: arm: qcom: document AL02-C8 board based on IPQ9574 family
+      commit: b866fba43698479fef5dd301313e8a73e28c789e
+[2/2] arm64: dts: qcom: ipq9574: add support for RDP453 variant
+      commit: 8a465494d62215ca531dfa0cde993779a77e61aa
 
 Best regards,
 -- 
