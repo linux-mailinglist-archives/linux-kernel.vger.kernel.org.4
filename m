@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92855712C7E
+	by mail.lfdr.de (Postfix) with ESMTP id 45531712C7D
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242535AbjEZSec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
+        id S242763AbjEZSeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242548AbjEZSeX (ORCPT
+        with ESMTP id S242608AbjEZSeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:34:23 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43AEE42
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:17 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacfa4eefd3so1399023276.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:17 -0700 (PDT)
+        Fri, 26 May 2023 14:34:25 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108A6134
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:20 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1ae7eea1d5dso8281765ad.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685126057; x=1687718057;
+        d=google.com; s=20221208; t=1685126059; x=1687718059;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PQ6/7wH3wD+sz3l8jATNpn1TZP74J5iSNRHOLe9pzI0=;
-        b=AUsGHk1c9uTHOghP5ICbKsK1um7JsTzGLRPWZUjJIfN5E2WrVSOFdOrqJu/tv99hd8
-         ewuYNgOMwXmdbKIHQbdVpXweNIEL+jY7QjWrUeBKdHfCI1ck3e09pHpzzd63jjzW18Z1
-         kPT2/UDwNRh94p9o+F5V7XEwAJ84y224EelIL3IaP+cb9H7SQer0EwFev6vh6UdUoeCF
-         rBDj78sV7z3SLwRTYpKELGkD0sOqpNb5Nkqf+Nf5vtxruSzwDVY2/uMuO2yWujkVfBFu
-         82gPmmJBt2/rQlTpIJMfKKSBMFQYDVHBOj7f7Rx3a29OOyyD1hz2O8fniSlJId5vB3c3
-         u4YA==
+        bh=tJmwLfRRVr3ODHBN7zQ2hUxxptOi1p92mYZclHdiN44=;
+        b=ebkX03X6J7UXTqGhZi7TZ5tKSwDb5GlMRiV4qte2YYdvtTDfUDJZMnnIeCZRKUL3jp
+         b1IDDwyvTFTNgUsTeKE7Vf5/Q5wOKad7bGRsNgXfHaFe5wjlDnhdIg+pqIJ7nCoLVZ43
+         JXLgblf3SuR+iklvswplYjUli+LWd7aABOaCTNHShXdVPRBPuWAJRFyYD5KC3zVMh4I6
+         HdV5u0QmREQ7ub/VfuZiKGcboRmX2BrZ+G5lhrUgz9qVUCcDWix+D1YJX3mvA7gMEJ47
+         yOUHoM1N67qPM3C7sEJGxzsGtk8EPOK6U2y41Hv1+YrfycJXskuXonn0tOaIkjlTZ8Jt
+         jH0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685126057; x=1687718057;
+        d=1e100.net; s=20221208; t=1685126059; x=1687718059;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PQ6/7wH3wD+sz3l8jATNpn1TZP74J5iSNRHOLe9pzI0=;
-        b=C9zwWLp0rnw05xXESucgTYsA6iwiYSLCB2GzBFw7Kovu8zXsXKyV7f5+N3QTilrmUm
-         IGp9l8DCUuCyyCD505FtL4U+jv6qm6Q67U3DrWdF0pt/Twszegayn7y+oZLoSp+aACwD
-         PCiid7chsiEYxniJyOvbxKC9EEA/QfNkFvYP/2eZgXZbxM7wNAWiMtLDOByFZHA0a3V8
-         WcdWcNq8eifxaXqVwR2OlByRgLNkhm0B5WB2le/SjCTEUUPh1zhOw2HQP+yq8MH72+Ut
-         zC0sK/j5xvT7nNKLILtDbMb9YZnKwmu553x7ylcpnT08l2yJGRukXB/pbkJe7ve8czq6
-         qSxA==
-X-Gm-Message-State: AC+VfDy1y8z6lDhaije/9BVdIXD0vMKNoAg8K+4Sbzh6IiV+D4NN57Fb
-        fbt98zgqK3wuTyfDcfM/xUKyX9a3tV5O
-X-Google-Smtp-Source: ACHHUZ4zT9LUn7F28yS/jJQpZRHjLu6YwE5B/u1eMByll0FnuiZaqF3ZyXswJfnaDiLO+Qqj6Gts33K0tiQ7
+        bh=tJmwLfRRVr3ODHBN7zQ2hUxxptOi1p92mYZclHdiN44=;
+        b=dNvQQHSiGknHRgL19Iq3SGky8GqsNjDrkeE/qXXpizhbHpKB5+NajYKRzlLDVbm7KY
+         qBNXN9n3Ka3gnZpw/aitZjgUpoM9o/GbN2Dq0R4a5V170mic6SASUJi6nmDp+ccPbsuU
+         FtWrq2AICBilv2rnJkbxGVEa8Pa05OyrtwgmQ7xzkCaIDQIV5ASAkQ28tVnI4Lw1Vwiu
+         rL0fNpfaOB3sel6N7CtF/UVfmQHhOlBGTFgL2XIyLD5f0HjO+y+NbjyJkUYqfBd2OquN
+         +luyt73Ujzy1ZIucTCDSf3SsdJBxNBzHEdC1aTPTSpbKQO512AU3W/rukREtVtzf0lHk
+         nD7A==
+X-Gm-Message-State: AC+VfDyVM6H+W1bKKMluWvhYlOt2DhIVK6semWk4DGbTQue0YlQUVrz0
+        YxVr/Fe7/dOrmaJdiPTsg0+0EM6GqwdK
+X-Google-Smtp-Source: ACHHUZ66XVs9uuYY7Z8yFza1YhbpP/n+i9VBRWqOvdwvNtok78qODw9ody70xKdsTuJwZFl/tMHcBbWcFr8T
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a25:4542:0:b0:ba8:93c3:331a with SMTP id
- s63-20020a254542000000b00ba893c3331amr1404539yba.5.1685126056971; Fri, 26 May
- 2023 11:34:16 -0700 (PDT)
-Date:   Fri, 26 May 2023 11:33:48 -0700
+ (user=irogers job=sendgmr) by 2002:a17:903:2683:b0:1ae:531f:366a with SMTP id
+ jf3-20020a170903268300b001ae531f366amr691371plb.5.1685126059551; Fri, 26 May
+ 2023 11:34:19 -0700 (PDT)
+Date:   Fri, 26 May 2023 11:33:49 -0700
 In-Reply-To: <20230526183401.2326121-1-irogers@google.com>
-Message-Id: <20230526183401.2326121-4-irogers@google.com>
+Message-Id: <20230526183401.2326121-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20230526183401.2326121-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v2 03/16] perf test x86: intel-pt-test data is immutable so
- mark it const
+Subject: [PATCH v2 04/16] perf trace: Make some large static arrays const
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -88,79 +87,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows the movement of 5,808 bytes from .data to .rodata.
+Allows the movement of 33,128 bytes from .data to .data.rel.ro.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/arch/x86/tests/intel-pt-test.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ tools/perf/builtin-trace.c | 33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/tools/perf/arch/x86/tests/intel-pt-test.c b/tools/perf/arch/x86/tests/intel-pt-test.c
-index 70b7f79396b1..09d61fa736e3 100644
---- a/tools/perf/arch/x86/tests/intel-pt-test.c
-+++ b/tools/perf/arch/x86/tests/intel-pt-test.c
-@@ -22,7 +22,7 @@
-  * @new_ctx: expected new packet context
-  * @ctx_unchanged: the packet context must not change
-  */
--static struct test_data {
-+static const struct test_data {
- 	int len;
- 	u8 bytes[INTEL_PT_PKT_MAX_SZ];
- 	enum intel_pt_pkt_ctx ctx;
-@@ -186,7 +186,7 @@ static struct test_data {
- 	{0, {0}, 0, {0, 0, 0}, 0, 0 },
+diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+index b49d3abb1203..62c7c99a0fe4 100644
+--- a/tools/perf/builtin-trace.c
++++ b/tools/perf/builtin-trace.c
+@@ -914,7 +914,7 @@ static size_t syscall_arg__scnprintf_getrandom_flags(char *bf, size_t size,
+ #include "trace/beauty/socket_type.c"
+ #include "trace/beauty/waitid_options.c"
+ 
+-static struct syscall_fmt syscall_fmts[] = {
++static const struct syscall_fmt syscall_fmts[] = {
+ 	{ .name	    = "access",
+ 	  .arg = { [1] = { .scnprintf = SCA_ACCMODE,  /* mode */ }, }, },
+ 	{ .name	    = "arch_prctl",
+@@ -1176,18 +1176,21 @@ static int syscall_fmt__cmp(const void *name, const void *fmtp)
+ 	return strcmp(name, fmt->name);
+ }
+ 
+-static struct syscall_fmt *__syscall_fmt__find(struct syscall_fmt *fmts, const int nmemb, const char *name)
++static const struct syscall_fmt *__syscall_fmt__find(const struct syscall_fmt *fmts,
++						     const int nmemb,
++						     const char *name)
+ {
+ 	return bsearch(name, fmts, nmemb, sizeof(struct syscall_fmt), syscall_fmt__cmp);
+ }
+ 
+-static struct syscall_fmt *syscall_fmt__find(const char *name)
++static const struct syscall_fmt *syscall_fmt__find(const char *name)
+ {
+ 	const int nmemb = ARRAY_SIZE(syscall_fmts);
+ 	return __syscall_fmt__find(syscall_fmts, nmemb, name);
+ }
+ 
+-static struct syscall_fmt *__syscall_fmt__find_by_alias(struct syscall_fmt *fmts, const int nmemb, const char *alias)
++static const struct syscall_fmt *__syscall_fmt__find_by_alias(const struct syscall_fmt *fmts,
++							      const int nmemb, const char *alias)
+ {
+ 	int i;
+ 
+@@ -1199,7 +1202,7 @@ static struct syscall_fmt *__syscall_fmt__find_by_alias(struct syscall_fmt *fmts
+ 	return NULL;
+ }
+ 
+-static struct syscall_fmt *syscall_fmt__find_by_alias(const char *alias)
++static const struct syscall_fmt *syscall_fmt__find_by_alias(const char *alias)
+ {
+ 	const int nmemb = ARRAY_SIZE(syscall_fmts);
+ 	return __syscall_fmt__find_by_alias(syscall_fmts, nmemb, alias);
+@@ -1224,7 +1227,7 @@ struct syscall {
+ 	bool		    nonexistent;
+ 	struct tep_format_field *args;
+ 	const char	    *name;
+-	struct syscall_fmt  *fmt;
++	const struct syscall_fmt  *fmt;
+ 	struct syscall_arg_fmt *arg_fmt;
  };
  
--static int dump_packet(struct intel_pt_pkt *packet, u8 *bytes, int len)
-+static int dump_packet(const struct intel_pt_pkt *packet, const u8 *bytes, int len)
- {
- 	char desc[INTEL_PT_PKT_DESC_MAX];
- 	int ret, i;
-@@ -206,14 +206,14 @@ static int dump_packet(struct intel_pt_pkt *packet, u8 *bytes, int len)
- 	return TEST_OK;
+@@ -1673,7 +1676,7 @@ static int syscall__alloc_arg_fmts(struct syscall *sc, int nr_args)
+ 	return 0;
  }
  
--static void decoding_failed(struct test_data *d)
-+static void decoding_failed(const struct test_data *d)
- {
- 	pr_debug("Decoding failed!\n");
- 	pr_debug("Decoding:  ");
- 	dump_packet(&d->packet, d->bytes, d->len);
+-static struct syscall_arg_fmt syscall_arg_fmts__by_name[] = {
++static const struct syscall_arg_fmt syscall_arg_fmts__by_name[] = {
+ 	{ .name = "msr",	.scnprintf = SCA_X86_MSR,	  .strtoul = STUL_X86_MSR,	   },
+ 	{ .name = "vector",	.scnprintf = SCA_X86_IRQ_VECTORS, .strtoul = STUL_X86_IRQ_VECTORS, },
+ };
+@@ -1684,13 +1687,14 @@ static int syscall_arg_fmt__cmp(const void *name, const void *fmtp)
+        return strcmp(name, fmt->name);
  }
  
--static int fail(struct test_data *d, struct intel_pt_pkt *packet, int len,
-+static int fail(const struct test_data *d, struct intel_pt_pkt *packet, int len,
- 		enum intel_pt_pkt_ctx new_ctx)
+-static struct syscall_arg_fmt *
+-__syscall_arg_fmt__find_by_name(struct syscall_arg_fmt *fmts, const int nmemb, const char *name)
++static const struct syscall_arg_fmt *
++__syscall_arg_fmt__find_by_name(const struct syscall_arg_fmt *fmts, const int nmemb,
++				const char *name)
  {
- 	decoding_failed(d);
-@@ -242,7 +242,7 @@ static int fail(struct test_data *d, struct intel_pt_pkt *packet, int len,
- 	return TEST_FAIL;
+        return bsearch(name, fmts, nmemb, sizeof(struct syscall_arg_fmt), syscall_arg_fmt__cmp);
  }
  
--static int test_ctx_unchanged(struct test_data *d, struct intel_pt_pkt *packet,
-+static int test_ctx_unchanged(const struct test_data *d, struct intel_pt_pkt *packet,
- 			      enum intel_pt_pkt_ctx ctx)
+-static struct syscall_arg_fmt *syscall_arg_fmt__find_by_name(const char *name)
++static const struct syscall_arg_fmt *syscall_arg_fmt__find_by_name(const char *name)
  {
- 	enum intel_pt_pkt_ctx old_ctx = ctx;
-@@ -258,7 +258,7 @@ static int test_ctx_unchanged(struct test_data *d, struct intel_pt_pkt *packet,
- 	return TEST_OK;
- }
+        const int nmemb = ARRAY_SIZE(syscall_arg_fmts__by_name);
+        return __syscall_arg_fmt__find_by_name(syscall_arg_fmts__by_name, nmemb, name);
+@@ -1735,8 +1739,9 @@ syscall_arg_fmt__init_array(struct syscall_arg_fmt *arg, struct tep_format_field
+ 			 * 7 unsigned long
+ 			 */
+ 			arg->scnprintf = SCA_FD;
+-               } else {
+-			struct syscall_arg_fmt *fmt = syscall_arg_fmt__find_by_name(field->name);
++		} else {
++			const struct syscall_arg_fmt *fmt =
++				syscall_arg_fmt__find_by_name(field->name);
  
--static int test_one(struct test_data *d)
-+static int test_one(const struct test_data *d)
- {
- 	struct intel_pt_pkt packet;
- 	enum intel_pt_pkt_ctx ctx = d->ctx;
-@@ -307,7 +307,7 @@ static int test_one(struct test_data *d)
-  */
- int test__intel_pt_pkt_decoder(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
- {
--	struct test_data *d = data;
-+	const struct test_data *d = data;
- 	int ret;
+ 			if (fmt) {
+ 				arg->scnprintf = fmt->scnprintf;
+@@ -4458,7 +4463,7 @@ static void evsel__set_syscall_arg_fmt(struct evsel *evsel, const char *name)
+ 	struct syscall_arg_fmt *fmt = evsel__syscall_arg_fmt(evsel);
  
- 	for (d = data; d->len; d++) {
+ 	if (fmt) {
+-		struct syscall_fmt *scfmt = syscall_fmt__find(name);
++		const struct syscall_fmt *scfmt = syscall_fmt__find(name);
+ 
+ 		if (scfmt) {
+ 			int skip = 0;
+@@ -4525,7 +4530,7 @@ static int trace__parse_events_option(const struct option *opt, const char *str,
+ 	int len = strlen(str) + 1, err = -1, list, idx;
+ 	char *strace_groups_dir = system_path(STRACE_GROUPS_DIR);
+ 	char group_name[PATH_MAX];
+-	struct syscall_fmt *fmt;
++	const struct syscall_fmt *fmt;
+ 
+ 	if (strace_groups_dir == NULL)
+ 		return -1;
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
