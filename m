@@ -2,165 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C4E712154
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF57F71215C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242503AbjEZHmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 03:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
+        id S242514AbjEZHnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 03:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242504AbjEZHmn (ORCPT
+        with ESMTP id S242142AbjEZHnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 03:42:43 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC2819D
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:42:38 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f6cbdf16d2so2728445e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:42:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685086957; x=1687678957;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=NkTkGDMVJA48vFPtaSjIeYrGpqqTSqfQ3e0MrBnwrbs=;
-        b=xz3haS1KXQLY2AyRechw8Fk0OwpajCfzX8pzwP7F7lcIurYVEfVUSTIJ/6dMylYFSp
-         CF17Dhd+xW3AREahs3Gy7lsQEL/b6/XDEO4WZq+AFKAGxzrChCSf3bKWND9ZWwwVuVUr
-         MQrH7gWys3cygr092RBrAl7lGEFXv8ElesV248sw6PjhUqk0uge2kO+B0inreW6vdWmW
-         zqKNz3Vjm7ZkvcpUne4eZ9EMUANjjiKdQIE5jARMRa3G6Ot/Co51BhtRzrQ6KnNCQiae
-         FmjBGKDkJX1VwObvtvOW9Z/Xfz92iIxw/hdQMVczkgU0rUegLwDyVP8COWgqqVx1y9E4
-         442Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685086957; x=1687678957;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NkTkGDMVJA48vFPtaSjIeYrGpqqTSqfQ3e0MrBnwrbs=;
-        b=DEGGcXzt3g2iq9b5/yMujbRg1lpCfMloVP4CfdjxnaHq/s/anBN3N9F9/fQUBSa7HO
-         s/4kPO0TZKoMOu3jvxXVuRyWZxIPxe7c/VxKvu27EZD+fuahrneMTbcxplz8AVWuj+0P
-         veUUio6xQbx9K2LlVTbOwMn5lmJM4FaK3k0flxBXXQBDgU22z39kp2raTaXjPbr0jf+F
-         VwXHssLUhFV4THysRLI2ilCCBgZaIOOH4RDzg6pvG5udDque8vd5SZchEuLzybYmfPcT
-         Favsh/POu4C3G6OGy6iTuAXBCZjgyDmxxHB4tENdgfdrk67hkoQjOqzrYnKLoMZj0nc7
-         OuoA==
-X-Gm-Message-State: AC+VfDyo5O/a7d8q3zTA0wdoBdev18qRKTiAyOL259/Lo2pubHktF3vo
-        hK5dk682u5544vjONk/Ug7+VCw==
-X-Google-Smtp-Source: ACHHUZ78glX9owiGGfj2LcnoXd+JjAb5MfcnsGRZKu/lCr6am4/SgX/kuL7OXyh5yod59igD+QEHkA==
-X-Received: by 2002:a1c:7c19:0:b0:3f4:f4d1:5c28 with SMTP id x25-20020a1c7c19000000b003f4f4d15c28mr620538wmc.24.1685086957200;
-        Fri, 26 May 2023 00:42:37 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:15d9:4dfb:95d6:f5a0? ([2a01:e0a:982:cbb0:15d9:4dfb:95d6:f5a0])
-        by smtp.gmail.com with ESMTPSA id p19-20020a1c7413000000b003f60e143d38sm4305405wmc.11.2023.05.26.00.42.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 00:42:34 -0700 (PDT)
-Message-ID: <1c5dd13f-8221-09e6-5b7d-a06135ce97f7@linaro.org>
-Date:   Fri, 26 May 2023 09:42:33 +0200
+        Fri, 26 May 2023 03:43:03 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E8BB6;
+        Fri, 26 May 2023 00:42:58 -0700 (PDT)
+X-GND-Sasl: maxime.chevallier@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685086977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CD5MYQG/P9DJMQ6F69EVjqv9sqK9CsGsG57bFzikUnQ=;
+        b=FlJ92oUAtihkmjG7KIBvcWJ/aMq/FKssGkp03r4QeRvVj2JZy2JvTB742uVx0T6KVAOdZz
+        fSU/oqC3RJ5KcsEYoYuJeGJtmW/XaYdVUdVx1MZ0bdO63slhxLW+v4kRnS/cEFs/Hq1rDG
+        K6VTivOvJfamvdX8IrAYdhthvLJz6IUj744WbfpHvVMLV1oqqcbGFCtIb4AKrFoNqu3pd6
+        HFxdN07p6cNx2+mtwTYw7nAbmO7wDjDziKYLPemMhC5xb8xnBo/ikNJXD/XHKucrxjnVfJ
+        cLsGCQXxsCDs/w6n8CBmb3ZHEeL5x8XTWFWjd2ZUsASo34CekI0ILSK3nXCL0w==
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 02D191C000F;
+        Fri, 26 May 2023 07:42:53 +0000 (UTC)
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>, davem@davemloft.net
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH net-next v3 0/4] net: add a regmap-based mdio driver and drop TSE PCS
+Date:   Fri, 26 May 2023 09:42:48 +0200
+Message-Id: <20230526074252.480200-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 1/2] dt-bindings: display: panel: Add Visionox R66451
- AMOLED DSI panel bindings
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230516-b4-r66451-panel-driver-v1-0-4210bcbb1649@quicinc.com>
- <20230516-b4-r66451-panel-driver-v1-1-4210bcbb1649@quicinc.com>
- <dzekdzubv6y5evn4j62hnntjdexcdi5ar2wj6hcm3dffx5jei4@h32wgmfalzvl>
- <0d436948-b0b7-0727-0852-51f64aefa43f@linaro.org>
- <sf4fsrvuvgn42ucrwgqlrgprlr3sofq4wqeeuxryzeubxqs4kz@r4dmwzproti4>
-Organization: Linaro Developer Services
-In-Reply-To: <sf4fsrvuvgn42ucrwgqlrgprlr3sofq4wqeeuxryzeubxqs4kz@r4dmwzproti4>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/05/2023 16:51, Marijn Suijten wrote:
-> On 2023-05-22 11:05:38, Neil Armstrong wrote:
->> On 21/05/2023 12:30, Marijn Suijten wrote:
->>> On 2023-05-16 13:20:30, Jessica Zhang wrote:
->>>> Document the 1080x2340 Visionox R66451 AMOLED DSI panel bindings
->>>>
->>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>> ---
->>>>    .../bindings/display/panel/visionox,r66451.yaml    | 59 ++++++++++++++++++++++
->>>>    1 file changed, 59 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/display/panel/visionox,r66451.yaml b/Documentation/devicetree/bindings/display/panel/visionox,r66451.yaml
->>>> new file mode 100644
->>>> index 000000000000..6ba323683921
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/display/panel/visionox,r66451.yaml
->>>> @@ -0,0 +1,59 @@
->>>> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/display/panel/visionox,r66451.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Visionox R66451 AMOLED DSI Panel
->>>> +
->>>> +maintainers:
->>>> +  - Jessica Zhang <quic_jesszhan@quicinc.com>
->>>> +
->>>> +allOf:
->>>> +  - $ref: panel-common.yaml#
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: visionox,r66451
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +    description: DSI virtual channel
->>>> +
->>>> +  vddio-supply: true
->>>> +  vdd-supply: true
->>>> +  port: true
->>>> +  reset-gpios: true
->>>
->>> Normally for cmd-mode panels there is also a `disp-te` pin which is
->>> optionally registered in dsi_host.c as GPIOD_IN, but on **ALL** my Sony
->>> phones this breaks vsync (as in: mdp5 stops receiving the interrupt, but
->>> we can see disp-te in /proc/interrupts then).
->>
->> Describing it as a gpio is wrong, it should be described as a pinctrl state instead.
-> 
-> We defined both in our DTS, what weirdness does it cause when then
-> requested using GPIOD_IN?  It'd still be beneficial to see the vsync
-> interrupt raise in /proc/interrupts (but it's just a waste of CPU cycles
-> OTOH, this is all handled in the MDP hardware after all, so it's not
-> something I'd like to enable by default).
+Hello everyone,
 
-Sure, but it's a sw hack, the pin has a TE function which directly goes to
-the DSI logic, claiming it as a GPIO will set it as GPIO function.
+This is the V3 of a series that follows-up on the work [1] aiming to drop the
+altera TSE PCS driver, as it turns out to be a version of the Lynx PCS exposed
+as a memory-mapped block, instead of living on an MDIO bus.
 
-On some platforms, PINMUX is only on output and input is always directed
-to all HW blocks, seems it's not the case here !
+One step of this removal involved creating a regmap-based mdio driver
+that translates MDIO accesses into the actual underlying bus that
+exposes the register. The register layout must of course match the
+standard MDIO layout, but we can now account for differences in stride
+with recent work on the regmap subsystem [2].
 
-> 
-> Anyway, this is what we ended up doing to "fix" the bug (only bias the
-> pin via pinctrl, omit the disp-te DTS property).  Thanks for confirming!
-> 
-> - Marijn
-> 
->>
->> Neil
-> 
-> <snip>
+Mark, Net maintainers, this series depends on the patch e12ff2876493 that was
+recently merged into the regmap tree [3].
+
+For this series to be usable in net-next, this patch must be applied
+beforehand. Should Mark create a tag that would then be merged into
+net-next ?
+
+This series introduces a new MDIO driver, and uses it to convert Altera
+TSE from the actual TSE PCS driver to Lynx PCS.
+
+Since it turns out dwmac_socfpga also uses a TSE PCS block, port that
+driver to Lynx as well.
+
+Changes in V3 :
+ - Use a dedicated struct for the mii bus's priv data, to avoid
+   duplicating the whole struct mdio_regmap_config, from which 2 fields
+   only are necessary after init, as suggested by Russell
+ - Use ~0 instead of ~0UL for the no-scan bitmask, following Simon's
+   review.
+
+Changes in V2 :
+ - Use phy_mask to avoid unnecessarily scanning the whole mdio bus
+ - Go one step further and completely disable scanning if users
+   set the .autoscan flag to false, in case the mdiodevice isn't an
+   actual PHY (a PCS for example).
+
+Thanks,
+
+Maxime
+
+[1] : https://lore.kernel.org/all/20230324093644.464704-1-maxime.chevallier@bootlin.com/
+[2] : https://lore.kernel.org/all/20230407152604.105467-1-maxime.chevallier@bootlin.com/#t
+[3] : https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git/commit/?id=e12ff28764937dd58c8613f16065da60da149048
+
+
+
+Maxime Chevallier (4):
+  net: mdio: Introduce a regmap-based mdio driver
+  net: ethernet: altera-tse: Convert to mdio-regmap and use PCS Lynx
+  net: pcs: Drop the TSE PCS driver
+  net: stmmac: dwmac-sogfpga: use the lynx pcs driver
+
+ MAINTAINERS                                   |  14 +-
+ drivers/net/ethernet/altera/Kconfig           |   2 +
+ drivers/net/ethernet/altera/altera_tse.h      |   1 +
+ drivers/net/ethernet/altera/altera_tse_main.c |  57 +++-
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   2 +-
+ .../ethernet/stmicro/stmmac/altr_tse_pcs.c    | 257 ------------------
+ .../ethernet/stmicro/stmmac/altr_tse_pcs.h    |  29 --
+ drivers/net/ethernet/stmicro/stmmac/common.h  |   1 +
+ .../ethernet/stmicro/stmmac/dwmac-socfpga.c   |  90 ++++--
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  12 +-
+ drivers/net/mdio/Kconfig                      |  10 +
+ drivers/net/mdio/Makefile                     |   1 +
+ drivers/net/mdio/mdio-regmap.c                |  93 +++++++
+ drivers/net/pcs/Kconfig                       |   6 -
+ drivers/net/pcs/Makefile                      |   1 -
+ drivers/net/pcs/pcs-altera-tse.c              | 160 -----------
+ include/linux/mdio/mdio-regmap.h              |  26 ++
+ include/linux/pcs-altera-tse.h                |  17 --
+ 19 files changed, 267 insertions(+), 513 deletions(-)
+ delete mode 100644 drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
+ delete mode 100644 drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
+ create mode 100644 drivers/net/mdio/mdio-regmap.c
+ delete mode 100644 drivers/net/pcs/pcs-altera-tse.c
+ create mode 100644 include/linux/mdio/mdio-regmap.h
+ delete mode 100644 include/linux/pcs-altera-tse.h
+
+-- 
+2.40.1
 
