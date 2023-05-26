@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A34712B2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC04712B2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241794AbjEZQz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
+        id S242022AbjEZQzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237517AbjEZQzX (ORCPT
+        with ESMTP id S236801AbjEZQzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:55:23 -0400
+        Fri, 26 May 2023 12:55:47 -0400
 Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990FE1A8;
-        Fri, 26 May 2023 09:55:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676411B5;
+        Fri, 26 May 2023 09:55:42 -0700 (PDT)
 Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 6D0CE846EF;
-        Fri, 26 May 2023 18:55:19 +0200 (CEST)
+        by phobos.denx.de (Postfix) with ESMTPSA id 246C8846EF;
+        Fri, 26 May 2023 18:55:40 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1685120120;
-        bh=TDL/5pkk1HH5CR3koHDtyH//neQKpUvPrVWTDhNvaFo=;
+        s=phobos-20191101; t=1685120141;
+        bh=6frG6Y6LuJoq+4JW6/RF24wFHuVYnnxTvxq9UXK5aGQ=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PGNmN3NtYH5BzbQtpboTI29V3xodt+mYuEaFxTyztuaXPlp/d+mVMBnVjlnewkilF
-         Q6boCsoIlCDgBZcd4u4+owZ/ctOjIRmlAqB1YgnyE9ViGCeAnbCizvXO8ShP5cp1p4
-         +c1CEygRksUk75nIcE3LqDn6oBjXh71ZROTLZy6Zka6+Wc3svboRSJAINO8+69V9w1
-         V83Cgum4/kh0WDtEgvt2foyCUOz8LIFYo/KImXBOBB8qH2g0KgzcXYfLh5OHdeoZaz
-         ifcudq6PfV5l2iKbOdBXx29T3JLIe1GQ6RN43xJ9mOW11EknoORfEgM9S4lJ9AXjc7
-         FFrn6SZareSfQ==
-Message-ID: <e4973081-a0c3-dc82-7efd-ab94284c0813@denx.de>
-Date:   Fri, 26 May 2023 18:55:18 +0200
+        b=MBBgPDWNck7An4NuQmqGc4XC/iuXvMnwVSj55c2tTv1ZGtBzC7quNc17PtHo8IIvw
+         gOAZcncXU4izX0kG+dwyM5apVKmMfPNKf9DT3r2Tl7yQak8zkMuGuzaocTmo+dEbw/
+         OmOo3eonvGQxHR+5+8I2xIDfRj7mca2syvZjGr2vcfY9Hpt2b27etLqACwxhZWieUk
+         ygAa56W+tZ0OiESjTZDeFnMW8NKFXmd/V7IiBejKRwJTuP9mQUyWodvI/7dVXC0rBI
+         F0IEI2qqR/HLr7nEzDMdHxfPHDK/pSCZ95ppE1z4a8AMD8RtubAdHa6INGpH47N/9c
+         HY3GSGtbsZUlg==
+Message-ID: <2f8fde5e-68b6-6187-7051-7e51e58186c5@denx.de>
+Date:   Fri, 26 May 2023 18:55:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/3] ARM: dts: stm32: fix warnings on stm32f469-disco
- board
+Subject: Re: [PATCH v3 2/3] dt-bindings: display: st,stm32-dsi: Remove
+ unnecessary fields
 Content-Language: en-US
 To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
         David Airlie <airlied@gmail.com>,
@@ -54,9 +54,9 @@ Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         kernel@dh-electronics.com
 References: <20230517143542.284029-1-raphael.gallais-pou@foss.st.com>
- <20230517143542.284029-2-raphael.gallais-pou@foss.st.com>
+ <20230517143542.284029-3-raphael.gallais-pou@foss.st.com>
 From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20230517143542.284029-2-raphael.gallais-pou@foss.st.com>
+In-Reply-To: <20230517143542.284029-3-raphael.gallais-pou@foss.st.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
@@ -72,15 +72,10 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 5/17/23 16:35, Raphael Gallais-Pou wrote:
-> Several warnings appear when building and checking stm32f429 device-tree:
-> 
-> arch/arm/boot/dts/stm32f469-disco.dts:182.28-184.5: Warning (unit_address_vs_reg):
-> /soc/display-controller@40016800/port/endpoint@0: node has a unit name, but no reg or ranges property
-> 
-> .../arch/arm/boot/dts/stm32f469-disco.dtb: dsi@40016c00: Unevaluated properties are not allowed ('panel-dsi@0' was unexpected)
-> 	From schema: .../Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
-> 
-> Fix those.
+> "#address-cells" and "#size-cells" are two properties that are not
+> mandatory. For instance, the DSI could refer to a bridge outside the scope
+> of the node rather than include a 'panel@0' subnode. By doing so, address
+> and size fields become then unnecessary, creating a warning at build time.
 > 
 > Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
 
