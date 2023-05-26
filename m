@@ -2,114 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C4E712C3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5F4712C3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjEZSL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
+        id S229951AbjEZSNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjEZSL5 (ORCPT
+        with ESMTP id S229923AbjEZSNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:11:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B37B189;
-        Fri, 26 May 2023 11:11:55 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D2CE16602338;
-        Fri, 26 May 2023 19:11:52 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685124713;
-        bh=5Vp0v9CQLgFPufyyf5L+TVgF51WKnOgrP8cqPyMHWyw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PNXyJBIaI3wNOlNxvKig3Nns9gBXhDCdLGhkEmjiFdPPoMO4CmGS3ZXP6elNmMnSM
-         FBmzApVAKsvs1x8/kOWvEXfa5KNUYMmPh/PufmYGe+VGUA9yxNsQtPsV5kC4euP6vL
-         JMMSZa5ZaG2pye7g1wfIkffFAc4gvY/ts10Zso449C/OgpFh4TZHtQdXCQL31GIcsN
-         50CnWrHV2YdS7H5H6fYSRLTBjQGpJkgnc0h+iXMQS7RXZEcgLq7R5OXFWL1S2Bcbu2
-         0GTxa09nFJwItjotmi3xjGeDYkA6ckvWew7739V2zIcjbj+PM5EeW7wvKzNXVnbPKp
-         bqB/KdMupOOuQ==
-Message-ID: <3c6b67a4-4892-0057-3dfc-65ed6c7ebc37@collabora.com>
-Date:   Fri, 26 May 2023 21:11:49 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] ASoC: es8316: Increment max value for ALC Capture
- Target Volume control
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Zhu Ning <zhuning0077@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        David Yang <yangxiaohua@everest-semi.com>,
-        Daniel Drake <drake@endlessm.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, kernel@collabora.com
-References: <20230524074156.147387-1-cristian.ciocaltea@collabora.com>
- <20230524074156.147387-2-cristian.ciocaltea@collabora.com>
- <5dbcbf84-602a-44de-ad99-268d4d5b4b2f@sirena.org.uk>
- <cfa23203-1626-440b-ec27-efe56cb297d2@collabora.com>
- <01fd1a9f-56c7-4864-bb2b-8b004284c8cc@sirena.org.uk>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <01fd1a9f-56c7-4864-bb2b-8b004284c8cc@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 26 May 2023 14:13:05 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6946CD3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:13:03 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-5340957a1f1so695762a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685124783; x=1687716783;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8723Sfa2idjuBQyBmaDZ+sDNH51vHhk7kq9m2RHFfPo=;
+        b=phFaQo+YrscBxZ4dCTRlBjVL4pmD4DdWCACjQdTVYBaRZdnSp2rdTXqVB/UWwgr4M4
+         /xCclCbfcj/rmH54dDvHRJQJMFWVkDOrFJX9i17QTyocpAv55VhyK4bMV0RTKxPb9ove
+         Wss+h0JL9nsYapeRI+aMTvInNeBDtWl84Q2QbZZYT6VzRAHfq61xWYvnDbasvi/JWePI
+         ZGWQPvdvsTT6VRfjovZ2wf5WzCY63S02m6VLIGprrWqtaJ+IqtQA57EurgYvvEU4CUp+
+         PzWGGDCEL+J17Pvjx++8WmIi/2WC/WMLZnpp9g2nvWHRui1QMKMGLyHd9nkSOI4BMnQV
+         mMvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685124783; x=1687716783;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8723Sfa2idjuBQyBmaDZ+sDNH51vHhk7kq9m2RHFfPo=;
+        b=MnryzVBfsj4eKipZDpYwU76bwsF5xrkYB65inNuZRh3APoMUkL5OfCMqjnVOmF6JdR
+         CiScAHn7pm4Risa33c+pz9Y8YRULDyaqfa9IYhhmLhM+M0r0EBj0y0koWBYIkGxjvVdX
+         lQJNDqeVygGFDqWlZ6kAv8pMTojK96LXFMInuwZnJ08nxoiSzWHLlqKK+RtARuDQA+0I
+         plg6iS5xPwwDLTIMptD54jSRSa8DNHsTCGLEzZarwaO6amead/CNUZkGejm8z2elKyyp
+         k6AkbQLOTXWCLis9i4wI+XPZvaLA/RQwvD8f0xnEi3NGg0hT456m3hKrXUAmqyzb+kNk
+         49jQ==
+X-Gm-Message-State: AC+VfDwPNFLNjO3i2VDpe9lLPVMANGEZsYsuhkW5+0IwYowHxAJkZcF/
+        7eb7MSJA/tUJTq15egOd9ej1WTaZYQg=
+X-Google-Smtp-Source: ACHHUZ76Nlf0os6oArC9JsZPgT3KHXz0dP+otmezqCfGjdcj+1gOtdBh4RxUVCe0m5DonJ7AV1EEZxLe5ZE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:da82:b0:1a5:25db:5bc0 with SMTP id
+ j2-20020a170902da8200b001a525db5bc0mr786579plx.3.1685124782889; Fri, 26 May
+ 2023 11:13:02 -0700 (PDT)
+Date:   Fri, 26 May 2023 11:13:01 -0700
+In-Reply-To: <20230425113932.3148-1-ubizjak@gmail.com>
+Mime-Version: 1.0
+References: <20230425113932.3148-1-ubizjak@gmail.com>
+Message-ID: <ZHD2rYBCSe5OSYIU@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Add comment on try_cmpxchg64 usage in tdp_mmu_set_spte_atomic
+From:   Sean Christopherson <seanjc@google.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Matlack <dmatlack@google.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/23 16:59, Mark Brown wrote:
-> On Wed, May 24, 2023 at 04:49:37PM +0300, Cristian Ciocaltea wrote:
->> On 5/24/23 13:30, Mark Brown wrote:
+On Tue, Apr 25, 2023, Uros Bizjak wrote:
+> Commit aee98a6838d5 ("KVM: x86/mmu: Use try_cmpxchg64 in
+> tdp_mmu_set_spte_atomic") removed the comment that iter->old_spte is
+> updated when different logical CPU modifies the page table entry.
+> Although this is what try_cmpxchg does implicitly, it won't hurt
+> if this fact is explicitly mentioned in a restored comment.
 > 
->>> Presumably you can check the effects of changing the value?  It seems
->>> plausible that what's written in the code might be accurate and the
->>> higher values might actually change the gain but it'd be better to
->>> check.
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: David Matlack <dmatlack@google.com>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
->> I haven't noticed a (measurable) change in gain when switching between
->> 10 and 11, but my testing equipment is also not that great. Will try to
->> improve the tests accuracy.
-> 
-> I'd expect it should be really obvious with a scope if you've got one?
-> Testing with something consistent like a sine wave (eg, from
-> speaker-test) should also make a 1.5dB difference noticable enough to
-> check if there's at least a volume change by ear even if you can't
-> specifically quantify it.
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 7c25dbf32ecc..5d126b015086 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -655,8 +655,16 @@ static inline int tdp_mmu_set_spte_atomic(struct kvm *kvm,
+>  	 * Note, fast_pf_fix_direct_spte() can also modify TDP MMU SPTEs and
+>  	 * does not hold the mmu_lock.
+>  	 */
+> -	if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte))
+> +	if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte)) {
+> +		/*
+> +		 * The page table entry was modified by a different logical
+> +		 * CPU. In this case the above try_cmpxchg updates
+> +		 * iter->old_spte with the current value, so the caller
+> +		 * operates on fresh data, e.g. if it retries
+> +		 * tdp_mmu_set_spte_atomic().
+> +		 */
 
-Luckily arecord & aplay provide VU meter support (via -V,
---vumeter=TYPE'), so I could easily verify this without using any
-additional tools:
+If there's no objection, when applying I'll massage this to extend the comment
+above the try_cmpxchg64(), e.g.
 
- Volume  |  VU meter
----------+----------
--6.0 dB  |  30-31 %
--4.5 dB  |  35-36 %
--3.0 dB  |  42-43 %
--1.5 dB  |  50-51 %
--0.0 dB  |  50-51 %
-
-So it seems the specs are correct, and the problem is the hardware default.
-
-Is there a better approach to handle this than extending the volume range?
-
-Regards,
-Cristian
+	/*
+	 * Note, fast_pf_fix_direct_spte() can also modify TDP MMU SPTEs and
+	 * does not hold the mmu_lock.  On failure, i.e. if a different logical
+	 * CPU modified the SPTE, try_cmpxchg64() updates iter->old_spte with
+	 * the current value, so the caller operates on fresh data, e.g. if it
+	 * retries tdp_mmu_set_spte_atomic()
+	 */
+	if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte))
+		return -EBUSY;
