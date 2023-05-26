@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6ADD712590
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC06712593
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243302AbjEZLeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 07:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S243297AbjEZLed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 07:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243252AbjEZLeK (ORCPT
+        with ESMTP id S243313AbjEZLeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 07:34:10 -0400
+        Fri, 26 May 2023 07:34:23 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5141B0;
-        Fri, 26 May 2023 04:34:00 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QAP6x6001372;
-        Fri, 26 May 2023 11:33:52 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40138E58;
+        Fri, 26 May 2023 04:34:06 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QAfjwc028797;
+        Fri, 26 May 2023 11:33:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=RLF3gYeI3Zuw4Ph/T53yr4u0DzDGCB6zy7Q4Ks+IxEA=;
- b=LTsa/+7Q0MdYBmwik6cPA7b6ei4xnJfxPk0SyXwwB6tOqY1yABVGOLF/pZvRP2stveeL
- jnQScpPPi2ZUyVDciy+cXQZ0v8LQXZkIS8h2hIK05/UTckBOwEUDP6omdeY6BG71N30f
- ZqJOke1zoQqG7+RyLILN0mUUxLnwkm0zJ+vnB804ax+l3swrtOIXQqU75pOt/HRKYoJg
- 2B7qD8L/qOVoavS+et1B70L2c/zN6WOLAGSchzwN3KLc52UpkLoYV24qmYvP8o5OXpn4
- YWjY9Dx5pNUumaKVVhJnfhjmbRpI7nPdySS1H2WCwGyXQv9zEO0KPkFQr5PWrtfUgz1i Fw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qtrev8e4r-1
+ bh=p+wzYQ+wN/aRj1zUFCB9lOHA9948C58rbMTC9QRgZoc=;
+ b=EoYh7ZDBUuNHCLDUhbgwUg0HXexcayzGcTJMqDp8bww5IZod/v3LXyx+wWMku+x4+VWn
+ jbNjy3WYm/2sxCj0IcH3Piss2qe2fS9WhejTa7uLL6LOsJj4cRsEUtcAYeXs5jZz14Jw
+ GeYLoHqIY0qJCO8Xxn3gwK59r0OC+LBHd3SrKLh6t5rc87GZPF8A0AoGSTvHe42IHuKv
+ f1HM+xu+mOH4TPYRZcK1Frg8nFozn1QltkCMXIqiXZzYSnLV+TGeONFiEYVFcIg7MUKS
+ YBgs2yvPMrODJq6gOUOrjc8tlN0eos4EMGs8bCJnZi0lHE0rMle7QFwtbrIYYIZXFlRo 8w== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qtu0u03uy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 11:33:51 +0000
+        Fri, 26 May 2023 11:33:57 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34QBXovP023608
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34QBXuph019903
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 11:33:50 GMT
+        Fri, 26 May 2023 11:33:56 GMT
 Received: from hu-mohs-hyd.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 26 May 2023 04:33:44 -0700
+ 15.2.986.42; Fri, 26 May 2023 04:33:50 -0700
 From:   Mohammad Rafi Shaik <quic_mohs@quicinc.com>
 To:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
         <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ To:     <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
         <mka@chromium.org>, <quic_visr@quicinc.com>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
         Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Subject: [PATCH v6 4/8] arm64: dts: qcom: sc7280: Add sound node for crd-rev3 board
-Date:   Fri, 26 May 2023 17:02:54 +0530
-Message-ID: <20230526113258.1467276-5-quic_mohs@quicinc.com>
+Subject: [PATCH v6 5/8] arm64: dts: qcom: sc7280: Add LPASS PIL node
+Date:   Fri, 26 May 2023 17:02:55 +0530
+Message-ID: <20230526113258.1467276-6-quic_mohs@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230526113258.1467276-1-quic_mohs@quicinc.com>
 References: <20230526113258.1467276-1-quic_mohs@quicinc.com>
@@ -65,16 +65,16 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cBY6KY8TQCOWEV2-gZAs-hTrcYiiyJ8f
-X-Proofpoint-GUID: cBY6KY8TQCOWEV2-gZAs-hTrcYiiyJ8f
+X-Proofpoint-ORIG-GUID: k4DA7orYpn27KZ5BTPG0KrECHI7tfR2L
+X-Proofpoint-GUID: k4DA7orYpn27KZ5BTPG0KrECHI7tfR2L
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- mlxscore=0 priorityscore=1501 phishscore=0 adultscore=0 malwarescore=0
- suspectscore=0 lowpriorityscore=0 impostorscore=0 mlxlogscore=991
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305260098
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
+ impostorscore=0 phishscore=0 mlxscore=0 spamscore=0 bulkscore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305260098
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -87,130 +87,120 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 
-Add sound node for sc7280 ADSP based audioreach platforms
-such as crd-rev3 board.
+Add LPASS PIL node for sc7280 based audioreach platforms.
 
 Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
 ---
- .../sc7280-herobrine-audioreach-wcd9385.dtsi  | 108 ++++++++++++++++++
- 1 file changed, 108 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
+ .../sc7280-herobrine-audioreach-wcd9385.dtsi  | 90 +++++++++++++++++++
+ 1 file changed, 90 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
-new file mode 100644
-index 000000000000..95d3aa08ebde
---- /dev/null
+index 95d3aa08ebde..9daea1b25656 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audioreach-wcd9385.dtsi
-@@ -0,0 +1,108 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * sc7280 device tree source for boards using Max98360 and wcd9385 codec
-+ * along with ADSP
-+ *
-+ * Copyright (c) 2022, The Linux Foundation. All rights reserved.
-+ */
+@@ -7,6 +7,8 @@
+  */
+ 
+ #include <dt-bindings/sound/qcom,q6afe.h>
++#include <dt-bindings/clock/qcom,lpass-sc7280.h>
++#include <dt-bindings/soc/qcom,gpr.h>
+ 
+ /{
+ 	/* BOARD-SPECIFIC TOP LEVEL NODES */
+@@ -105,4 +107,92 @@ platform {
+ 			};
+ 		};
+ 	};
 +
-+#include <dt-bindings/sound/qcom,q6afe.h>
++	remoteproc_adsp: remoteproc@3000000 {
++		compatible = "qcom,sc7280-adsp-pil";
++		reg = <0 0x03000000 0 0x5000>, <0 0x0355b000 0 0x10>;
++		reg-names = "qdsp6ss_base", "lpass_efuse";
 +
-+/{
-+	/* BOARD-SPECIFIC TOP LEVEL NODES */
-+	sound: sound {
-+		compatible = "google,sc7280-herobrine";
-+		model = "AR-wcd938x-max98360a-1mic";
-+		audio-routing =
-+			"IN1_HPHL", "HPHL_OUT",
-+			"IN2_HPHR", "HPHR_OUT",
-+			"AMIC1", "MIC BIAS1",
-+			"AMIC2", "MIC BIAS2",
-+			"VA DMIC0", "MIC BIAS1",
-+			"VA DMIC1", "MIC BIAS1",
-+			"VA DMIC2", "MIC BIAS3",
-+			"VA DMIC3", "MIC BIAS3",
-+			"TX SWR_ADC0", "ADC1_OUTPUT",
-+			"TX SWR_ADC1", "ADC2_OUTPUT",
-+			"TX SWR_ADC2", "ADC3_OUTPUT",
-+			"TX SWR_DMIC0", "DMIC1_OUTPUT",
-+			"TX SWR_DMIC1", "DMIC2_OUTPUT",
-+			"TX SWR_DMIC2", "DMIC3_OUTPUT",
-+			"TX SWR_DMIC3", "DMIC4_OUTPUT",
-+			"TX SWR_DMIC4", "DMIC5_OUTPUT",
-+			"TX SWR_DMIC5", "DMIC6_OUTPUT",
-+			"TX SWR_DMIC6", "DMIC7_OUTPUT",
-+			"TX SWR_DMIC7", "DMIC8_OUTPUT";
++		interrupts-extended = <&pdc 6 IRQ_TYPE_LEVEL_HIGH>,
++				      <&adsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
++				      <&adsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
++				      <&adsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
++				      <&adsp_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
++				      <&adsp_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
 +
-+		#address-cells = <1>;
-+		#size-cells = <0>;
++		interrupt-names = "wdog", "fatal", "ready",
++				  "handover", "stop-ack",
++				  "shutdown-ack";
 +
-+		dai-link@0 {
-+			link-name = "WCD9385 Playback";
-+			reg = <0>;
++		qcom,qmp = <&aoss_qmp>;
 +
-+			cpu {
-+				sound-dai = <&q6apmbedai RX_CODEC_DMA_RX_0>;
-+			};
++		clocks = <&rpmhcc RPMH_CXO_CLK>,
++			 <&gcc GCC_CFG_NOC_LPASS_CLK>;
++		clock-names = "xo", "gcc_cfg_noc_lpass";
 +
-+			codec {
-+				sound-dai = <&wcd9385 0>, <&swr0 0>, <&lpass_rx_macro 0>;
-+			};
++		iommus = <&apps_smmu 0x1800 0x0>;
 +
-+			platform {
-+				sound-dai = <&q6apm>;
-+			};
-+		};
++		power-domains =	<&rpmhpd SC7280_CX>;
++		power-domain-names = "cx";
 +
-+		dai-link@1 {
-+			link-name = "WCD9385 Capture";
-+			reg = <1>;
++		required-opps = <&rpmhpd_opp_nom>;
 +
-+			cpu {
-+				sound-dai = <&q6apmbedai TX_CODEC_DMA_TX_3>;
-+			};
++		resets = <&pdc_reset PDC_AUDIO_SYNC_RESET>,
++			 <&aoss_reset AOSS_CC_LPASS_RESTART>;
++		reset-names =  "pdc_sync", "cc_lpass";
 +
-+			codec {
-+				sound-dai = <&wcd9385 1>, <&swr1 0>, <&lpass_tx_macro 0>;
-+			};
++		qcom,halt-regs = <&tcsr_1 0x3000 0x5000 0x8000 0x13000>;
 +
-+			platform {
-+				sound-dai = <&q6apm>;
-+			};
-+		};
++		memory-region = <&adsp_mem>;
 +
-+		dai-link@2 {
-+			link-name = "Amplifier Playback";
-+			reg = <2>;
++		qcom,smem-states = <&adsp_smp2p_out 0>;
++		qcom,smem-state-names = "stop";
 +
-+			cpu {
-+				sound-dai = <&q6apmbedai SECONDARY_MI2S_RX>;
-+			};
++		glink-edge {
++			interrupts-extended = <&ipcc IPCC_CLIENT_LPASS
++					      IPCC_MPROC_SIGNAL_GLINK_QMP
++					      IRQ_TYPE_EDGE_RISING>;
 +
-+			codec {
-+				sound-dai = <&max98360a>;
-+			};
++			mboxes = <&ipcc IPCC_CLIENT_LPASS
++				 IPCC_MPROC_SIGNAL_GLINK_QMP>;
 +
-+			platform {
-+				sound-dai = <&q6apm>;
-+			};
-+		};
++			label = "lpass";
++			qcom,remote-pid = <2>;
 +
-+		dai-link@3 {
-+			link-name = "DMIC";
-+			reg = <3>;
++			gpr {
++				compatible = "qcom,gpr";
++				qcom,glink-channels = "adsp_apps";
++				qcom,domain = <GPR_DOMAIN_ID_ADSP>;
++				qcom,intents = <512 20>;
++				#address-cells = <1>;
++				#size-cells = <0>;
 +
-+			cpu {
-+				sound-dai = <&q6apmbedai VA_CODEC_DMA_TX_0>;
-+			};
++				q6apm: service@1 {
++					compatible = "qcom,q6apm";
++					reg = <GPR_APM_MODULE_IID>;
++					#sound-dai-cells = <0>;
 +
-+			codec {
-+				sound-dai = <&lpass_va_macro 0>;
-+			};
++					q6apmdai: dais {
++						compatible = "qcom,q6apm-dais";
++						iommus = <&apps_smmu 0x1801 0x0>;
++					};
 +
-+			platform {
-+				sound-dai = <&q6apm>;
++					q6apmbedai: bedais {
++						compatible = "qcom,q6apm-lpass-dais";
++						#sound-dai-cells = <1>;
++					};
++				};
++
++				q6prm: service@2 {
++					compatible = "qcom,q6prm";
++					reg = <GPR_PRM_MODULE_IID>;
++
++					q6prmcc: clock-controller {
++						compatible = "qcom,q6prm-lpass-clocks";
++						#clock-cells = <2>;
++					};
++				};
 +			};
 +		};
 +	};
-+};
+ };
 -- 
 2.25.1
 
