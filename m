@@ -2,198 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1E67124C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378547124D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243256AbjEZKfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
+        id S235999AbjEZKgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243300AbjEZKey (ORCPT
+        with ESMTP id S243209AbjEZKf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:34:54 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4CA10A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:34:49 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-2563aaceda9so95694a91.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:34:49 -0700 (PDT)
+        Fri, 26 May 2023 06:35:56 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9916E46
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:35:32 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30789a4c537so316000f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685097289; x=1687689289;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ldXWYhO7Q382MDvpbUV2FG46TzZ5FmHjVuAzJ62WwFk=;
-        b=qUz0EY7XBVpgxTBH8CrZgHBeLmEZNNlSdpqoiWUPKHDXKqf7QkA100NZ9NUbzJKhQR
-         T8g6AdE+XUqvxklqRJVmzALG6OzvN7PU1Qe9RUD6WhAImPbY/YwMDIEm0wCfz3iglxz5
-         fDnW3yCup/plEbROCsxHhCaqXM2hR+PldHpDhl8aaFRB58yE0Wy1vPwU9OT/CNNEg1ne
-         tVSn31FawSe6oTfCKl8BfNVPNiXqRtxcCZ8HPHp94rMhN/zz9+tLhD0T6RzpsWdMo7Bv
-         3/MhehrxOPwrxAJ7ca8pAjY6Qh6gWPH5hb/6WeWFHdMt18UdjD1WrrfGhNf6aNcbs3lw
-         kqgQ==
+        d=linaro.org; s=google; t=1685097330; x=1687689330;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nBqku5q9vZ6Xc8ZaZQnGRftVBfKjrmfStPvoq/Z7tIE=;
+        b=smTVu85CUKKohcCM2dZok368NM60if6zrxbJOJps1F1bJe9WsF6ZMP9AKyWLYKyR2c
+         FvFdAH4nZbStiwbdSje5qJ62m1Kg2b5XtOu7XtCd5NmXXcQabQPO+bBUlJbDAK1z7uSi
+         c353VExyqov5R5cn6Sj2mpS45ggaPoATZkdeeTuekTZgBC/BjYWo9DHcZ+4HVSbDqiXX
+         8BU/BFg5PGdzFXmH1XmGKjC/gnKbdfO123jEYaGG1cVca4F7DZ0Fq2Wb0Lh3CM4IxQw/
+         1NA5mnOjuuElJAuKP2duGE/NLnQUAi0z10IuuipjreNrATHcpQzAKrdG8p1P5UqgYqHg
+         W4JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685097289; x=1687689289;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ldXWYhO7Q382MDvpbUV2FG46TzZ5FmHjVuAzJ62WwFk=;
-        b=jtkRvK6qpg2xYhgYyg78cLoYGl9tEzBMqiJS1jkfOxBFBU8qpbfEVsXgugeDPGfC81
-         OXi9cb+nyH6VKxSHi1bpL5Ld6J85J6WSjwxxhYIj9WO/QdJrguPMhHj+ShbS3P/lr8aC
-         OSDXEsHu8fZqTjo7AvSbrYBPqctHUMGuocHXdKdRyqE1T4zkbdqW5YWBdv5YRA5j5QSG
-         gUYFcwFPrWQUjsRug2EP6SavxDk7oxPqxQyiDwAlJROp5hJOIE/JHKphvetT6e04jVBf
-         Zi5I2fOB7ZSsFMy1lS3FAIWV64E9UIOm5VRWea6C5PQC+1dc3IMBOFEzw6tPm6J+Q61K
-         Ssrw==
-X-Gm-Message-State: AC+VfDwrqIiPrTlq9gHdS4QbO8IXJAU2HCgE5cwW7GHxichHOExEt0Dw
-        PsGb+G9HfrW9F4ekR6wZZMTinViAV1C8u6EHax6oRw==
-X-Google-Smtp-Source: ACHHUZ6IFfvPmkqMHGXgx6PDxy3x1f/sYNO4FybmScGYxPFAlyx04iQd5QZtPtJ1Iba6obW4HLaTWxQKSX02FaxX5gI=
-X-Received: by 2002:a17:90a:7525:b0:253:4e54:6761 with SMTP id
- q34-20020a17090a752500b002534e546761mr1802805pjk.34.1685097289138; Fri, 26
- May 2023 03:34:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685097330; x=1687689330;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nBqku5q9vZ6Xc8ZaZQnGRftVBfKjrmfStPvoq/Z7tIE=;
+        b=J1fxOntTrJFrsliHv8hBow0QHUHTO/8OFWxYJM4wDwfAlJyTuqdgC8TMm0F7N2O6lC
+         5FXubBhLnXazA9px22OLALHN13JE+1WgRyZFIgXCvDYAm5+fAIWI3VArAjEeGlzZoifj
+         cvYDA+zoInGdg437scaZu4WF4cfA3pXuQDT20AOKUBacqzNk41m2N7Bnw/Oudy64gLRD
+         ZFIQJaaKLOEoAc7wyOz0AgxEO0+SiPlPd5dKyLMokCTlyK6IVS4RVIytwwkX7s+NxK+a
+         0ReraXHrCKKZM3W887wBeMbqA3vzz6GPit69NqsU4Aqo+Qzklf5kLo5oH4RPYnpP8ElT
+         IM8Q==
+X-Gm-Message-State: AC+VfDzsZFPV96A90P1S53rhuwGzk0H9aiD/HtoLljFTmRYiQhjzMFLB
+        Dw0YNE1wpYOCzt9U2oBpsIrxwg==
+X-Google-Smtp-Source: ACHHUZ6AYKcJLt+byatanAoL/NXFYaied7fayFtzagQ+4cmKoccBEbRSJIIocsCnjrEb67L30dbJDA==
+X-Received: by 2002:a5d:6aca:0:b0:30a:dcb9:a0b9 with SMTP id u10-20020a5d6aca000000b0030adcb9a0b9mr429105wrw.46.1685097330287;
+        Fri, 26 May 2023 03:35:30 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id b14-20020adff90e000000b00307972e46fasm4520818wrr.107.2023.05.26.03.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 03:35:29 -0700 (PDT)
+Date:   Fri, 26 May 2023 11:35:27 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Artur Weber <aweber.kernel@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Helge Deller <deller@gmx.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Luca Weiss <luca@z3ntu.xyz>,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-pwm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: backlight: lp855x: convert to YAML
+ and modernize
+Message-ID: <20230526103527.GD626291@aspen.lan>
+References: <20230519180728.2281-1-aweber.kernel@gmail.com>
+ <20230519180728.2281-2-aweber.kernel@gmail.com>
 MIME-Version: 1.0
-References: <20230524072018.62204-1-yangyicong@huawei.com> <CAKfTPtDOvMqHW7sgw1Ht7pV27W-Up61uO+AfSNkGpoMuOF_gXQ@mail.gmail.com>
- <0decbc3a-ee1e-e84b-915d-d77b75ec1df6@huawei.com>
-In-Reply-To: <0decbc3a-ee1e-e84b-915d-d77b75ec1df6@huawei.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 26 May 2023 12:34:38 +0200
-Message-ID: <CAKfTPtB=Ms9Evu-aiBC2hO2ahvxfKZxXsnR+oqCHyU0ituwY4g@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Don't balance task to its current running CPU
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     yangyicong@hisilicon.com, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, yu.c.chen@intel.com, linuxarm@huawei.com,
-        prime.zeng@huawei.com, wangjie125@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519180728.2281-2-aweber.kernel@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 May 2023 at 10:18, Yicong Yang <yangyicong@huawei.com> wrote:
+On Fri, May 19, 2023 at 08:07:25PM +0200, Artur Weber wrote:
+> Notable changes:
+> - ROM child nodes use dashes instead of underscores; the driver
+>   reads all child nodes regardless of their names, so this doesn't
+>   break ABI.
+> - pwm-period argument is deprecated, as it effectively duplicates
+>   the period value provided in pwms. The driver continues to accept
+>   the property, so this should not break ABI.
 >
-> On 2023/5/25 23:13, Vincent Guittot wrote:
-> > On Wed, 24 May 2023 at 09:21, Yicong Yang <yangyicong@huawei.com> wrote:
-> >>
-> >> From: Yicong Yang <yangyicong@hisilicon.com>
-> >>
-> >> We've run into the case that the balancer tries to balance a migration
-> >> disabled task and trigger the warning in set_task_cpu() like below:
-> >>
-> >>  ------------[ cut here ]------------
-> >>  WARNING: CPU: 7 PID: 0 at kernel/sched/core.c:3115 set_task_cpu+0x188/0x240
-> >>  Modules linked in: hclgevf xt_CHECKSUM ipt_REJECT nf_reject_ipv4 <...snip>
-> >>  CPU: 7 PID: 0 Comm: swapper/7 Kdump: loaded Tainted: G           O       6.1.0-rc4+ #1
-> >>  Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B221.01 12/09/2021
-> >>  pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> >>  pc : set_task_cpu+0x188/0x240
-> >>  lr : load_balance+0x5d0/0xc60
-> >>  sp : ffff80000803bc70
-> >>  x29: ffff80000803bc70 x28: ffff004089e190e8 x27: ffff004089e19040
-> >>  x26: ffff007effcabc38 x25: 0000000000000000 x24: 0000000000000001
-> >>  x23: ffff80000803be84 x22: 000000000000000c x21: ffffb093e79e2a78
-> >>  x20: 000000000000000c x19: ffff004089e19040 x18: 0000000000000000
-> >>  x17: 0000000000001fad x16: 0000000000000030 x15: 0000000000000000
-> >>  x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000000
-> >>  x11: 0000000000000001 x10: 0000000000000400 x9 : ffffb093e4cee530
-> >>  x8 : 00000000fffffffe x7 : 0000000000ce168a x6 : 000000000000013e
-> >>  x5 : 00000000ffffffe1 x4 : 0000000000000001 x3 : 0000000000000b2a
-> >>  x2 : 0000000000000b2a x1 : ffffb093e6d6c510 x0 : 0000000000000001
-> >>  Call trace:
-> >>   set_task_cpu+0x188/0x240
-> >>   load_balance+0x5d0/0xc60
-> >>   rebalance_domains+0x26c/0x380
-> >>   _nohz_idle_balance.isra.0+0x1e0/0x370
-> >>   run_rebalance_domains+0x6c/0x80
-> >>   __do_softirq+0x128/0x3d8
-> >>   ____do_softirq+0x18/0x24
-> >>   call_on_irq_stack+0x2c/0x38
-> >>   do_softirq_own_stack+0x24/0x3c
-> >>   __irq_exit_rcu+0xcc/0xf4
-> >>   irq_exit_rcu+0x18/0x24
-> >>   el1_interrupt+0x4c/0xe4
-> >>   el1h_64_irq_handler+0x18/0x2c
-> >>   el1h_64_irq+0x74/0x78
-> >>   arch_cpu_idle+0x18/0x4c
-> >>   default_idle_call+0x58/0x194
-> >>   do_idle+0x244/0x2b0
-> >>   cpu_startup_entry+0x30/0x3c
-> >>   secondary_start_kernel+0x14c/0x190
-> >>   __secondary_switched+0xb0/0xb4
-> >>  ---[ end trace 0000000000000000 ]---
-> >>
-> >> Further investigation shows that the warning is superfluous, the migration
-> >> disabled task is just going to be migrated to its current running CPU.
-> >> This is because that on load balance if the dst_cpu is not allowed by the
-> >> task, we'll re-select a new_dst_cpu as a candidate. If no task can be
-> >> balanced to dst_cpu we'll try to balance the task to the new_dst_cpu
-> >> instead. In this case when the migration disabled task is not on CPU it
-> >> only allows to run on its current CPU, load balance will select its
-> >> current CPU as new_dst_cpu and later triggers the the warning above.
-> >>
-> >> This patch tries to solve this by not select the task's current running
-> >> CPU as new_dst_cpu in the load balance.
-> >>
-> >> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> >> ---
-> >> Thanks Valentin for the knowledge of migration disable. Previous discussion can
-> >> be found at
-> >> https://lore.kernel.org/all/20230313065759.39698-1-yangyicong@huawei.com/
-> >>
-> >>  kernel/sched/fair.c | 3 ++-
-> >>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> >> index 7a1b1f855b96..3c4f3a244c1d 100644
-> >> --- a/kernel/sched/fair.c
-> >> +++ b/kernel/sched/fair.c
-> >> @@ -8456,7 +8456,8 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
-> >>
-> >>                 /* Prevent to re-select dst_cpu via env's CPUs: */
-> >>                 for_each_cpu_and(cpu, env->dst_grpmask, env->cpus) {
-> >> -                       if (cpumask_test_cpu(cpu, p->cpus_ptr)) {
-> >> +                       if (cpumask_test_cpu(cpu, p->cpus_ptr) &&
-> >> +                           cpu != env->src_cpu) {
-> >
-> > So I'm a bit surprised that src_cpu can be part of the dst_grpmask and
-> > selected as new_dst_cpu. The only reason would be some numa
-> > overlapping domains. Is it the case for you ?
-> >
->
-> It's a 2P 4 NUMA machine, the groups in the top NUMA domains are overlapped, for example for CPU64:
->
-> [    3.147038] CPU64 attaching sched-domain(s):
-> [    3.147040]  domain-0: span=64-67 level=CLS
-> [    3.147043]   groups: 64:{ span=64 cap=1023 }, 65:{ span=65 cap=1023 }, 66:{ span=66 cap=1023 }, 67:{ span=67 }
-> [    3.147056]   domain-1: span=64-95 level=MC
-> [    3.147059]    groups: 64:{ span=64-67 cap=4093 }, 68:{ span=68-71 cap=4096 }, 72:{ span=72-75 cap=4096 }, 76:{ span=76-79 cap=4096 }, 80:{ span=80-83 cap=4096 }, 84:{ span=84-87 cap=4096 }, 88:{ span=88-91 cap=4096 }, 92:{ span=92-95 cap=4096 }
-> [    3.147085]    domain-2: span=64-127 level=NUMA
-> [    3.147087]     groups: 64:{ span=64-95 cap=32765 }, 96:{ span=96-127 cap=32767 }
-> [    3.147095]     domain-3: span=0-31,64-127 level=NUMA
-> [    3.147098]      groups: 64:{ span=64-127 cap=65532 }, 0:{ span=0-31 cap=32767 }
-> [    3.147106]      domain-4: span=0-127 level=NUMA
-> [    3.147109]       groups: 64:{ span=0-31,64-127 mask=64-95 cap=98300 }, 32:{ span=0-63 mask=32-63 cap=65531 }
->
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-Thanks for confirming this.
-
-So I wonder if a better solution would be to make env->dst_grpmask =
-group_balance_cpu(sd->groups) instead of
-sched_group_span(sd->groups),. The behavior remains the same for non
-overlapping groups because group_balance_cpu(sd->groups) ==
-sched_group_span(sd->groups) in this case and for overlapping group,
-we will try to find a dst_cpu that is not contained in src/busiest
-group and the load balance will effectively pull load from the
-busiest_group
-
-
-> >>                                 env->flags |= LBF_DST_PINNED;
-> >>                                 env->new_dst_cpu = cpu;
-> >>                                 break;
-> >> --
-> >> 2.24.0
-> >>
-> > .
-> >
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
