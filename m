@@ -2,103 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED30712ECF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD9B712ED2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244083AbjEZVPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 17:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
+        id S244085AbjEZVQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 17:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237512AbjEZVPM (ORCPT
+        with ESMTP id S237412AbjEZVQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 17:15:12 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C249CBC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:15:10 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75b08639930so138247985a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:15:10 -0700 (PDT)
+        Fri, 26 May 2023 17:16:40 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FFABC
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:16:39 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-565a6837a0bso18724237b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:16:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685135709; x=1687727709;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=NZs1ifsRVIrPuhehqNMplVsVFwlkOFVBkWyhYebsJ+c=;
-        b=do+W/wuggezssSHkDzH+Cr05dCJwG8868LDrIHwEalsU2HJoD0hSsZ/3wt5dHcmogF
-         wDR55b9KIHkfFglFylF+V4MVzGQg3YlkL2fW2UB+6YrF0x8jkmYDFLz/gvW37x2uUuOK
-         xSy66jZU6z4wPUawRZvTL9a6Z37nAFHMbt7Ux33TfVZrruEjka+T0wd4ARRpwpbQOV7J
-         WvgjC6BDpMh8lDCmrNOAzWFcewG/g5kxn2Oc9U5+ueYAEDMurN1L9zgS8xDRkZL6Ti88
-         +xb8i3z0bzuDxsSP7zhK5QlGOtdYuPFXVx5phvVu3BkbL7MqMRHhuGhD3589Iq6dOMHQ
-         Br1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685135709; x=1687727709;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1685135798; x=1687727798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NZs1ifsRVIrPuhehqNMplVsVFwlkOFVBkWyhYebsJ+c=;
-        b=KqpeB4XRgjmhEbiLQcY9zII8kpH+ovhtpEruS8eZPCWIkkJHPGhK5taNs4B50kqL/Y
-         eOwEpP7vzH4me9peXj1+bkKTpxRxiHmNstAfKG4zfWRqIX7MzYkwaYHOeUicEvw71sk8
-         AOBT/qEmQ8I/1KdffvCCrYyR/t3ka8Npey3ssLABkBsWWa4mlrOXdynqgpKWFJIXV6dp
-         jnDnhrYi8a9MWMTQehVkLIWclvzcLZTiiNugzv/3IcycU508RysRSF/9SCVouKHg0iQl
-         r9njYRJGwCc+awwcxBpdbSVIeZLujSF9wM41DLT+pwdlvf6rZH47xQT6I7oeOfFPBkQ9
-         u9RQ==
-X-Gm-Message-State: AC+VfDw5N1yTWP5Mw00Im92XArEqKHzSUn3F+5AFeNGSa6oD31clbmQk
-        JquG1/z2R9pfU4Pqvoi6SetSfLwyh/bxNA==
-X-Google-Smtp-Source: ACHHUZ66NgKJwbtKjniaQgtdLg1M31N7MR7QDUm66wsXjcsC6BROLi+lP/X2Y2oYlWl+TVPtcxIcYw==
-X-Received: by 2002:a05:6214:c4b:b0:625:aa49:ea00 with SMTP id r11-20020a0562140c4b00b00625aa49ea00mr190005qvj.29.1685135709520;
-        Fri, 26 May 2023 14:15:09 -0700 (PDT)
-Received: from skiffserv.dyndns.cscott.net ([172.56.193.158])
-        by smtp.gmail.com with ESMTPSA id k9-20020a05621414e900b0062142017f4csm1460548qvw.143.2023.05.26.14.15.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 14:15:09 -0700 (PDT)
-Sender: "C. Scott Ananian" <cananian@gmail.com>
-From:   "C. Scott Ananian" <cscott@cscott.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     "C. Scott Ananian" <cananian@alumni.princeton.edu>
-Subject: [PATCH] Update CREDITS for C. Scott Ananian
-Date:   Fri, 26 May 2023 17:14:54 -0400
-Message-Id: <20230526211454.192438-1-cscott@cscott.net>
-X-Mailer: git-send-email 2.30.2
+        bh=GMxB33ZwtJ62Rd3pdsfVx0QDMuGQJeUN8Db0SpoNE7c=;
+        b=WO8ETJpr3D8s+L8V7BZGdNHhdBMauE8nCTE+BKsOSVTHrKqsPSboOCcRv4PWnkjmEw
+         jK5L1C0daoeXuXDI7ZXrWWRm8Mrf2U0RNr2eT1JIM2bgFi/VV2R8C+nW5XPpKWVKHDdl
+         enKGgowQZCPHxHaosuumQ0IPA8EJvaTrHFjahnsa0CCW9I7TpoTIM4IKw4KFBeBzsias
+         G2qYE6Otw/RgQ11EASK9n7LTUiUFFtdpXj2NUNRYDBpkZNzKHDCXK+7kmxNeYeLj4FD0
+         /ViPAmBwjCpUrhWjNxBlomdfAP3b1tme0MH2qsrVPARPUzEW9+17V3gg92Z58EGEu/Tf
+         j8hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685135798; x=1687727798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GMxB33ZwtJ62Rd3pdsfVx0QDMuGQJeUN8Db0SpoNE7c=;
+        b=Gxb1OwxGNMEwzXMzBTGdEcIJtyw3oGFBOhSM/RnwJZxOU3Mza4n0hiCo0tT4D4EXyd
+         q/eV/kf2QbaKsMIZrRyHDyzy0oUaliOJvXYTTpifqKtEepJsttCfHFRTU3Ga4rB3l2z0
+         BNBTKu8OwH+E/VDRXYFS52TffxBrRLmGQ4SgaofLYQ7zqtDv8QJSDN4HgXvrEo2cQ4vq
+         zwOkPvXACEBJh26pT2NGHIyReKsLutVnE5tILn2NVVAcSbQKVuWMb9AaPVC1Pfgn8bYh
+         1/lQl+E+yawW6Dpon60ejcAG98kXISsINIHHBhJanEaOpb/KsHBWkmyZIpypE59XtTok
+         IiKg==
+X-Gm-Message-State: AC+VfDypCw3BYIIyYaZaYL0nf92GzNwUkeK55E2ReOfXz139RR6eN0y4
+        g+7u9RrGBHkloFGcynqGCBX+jci5Y8zBnky5qlw=
+X-Google-Smtp-Source: ACHHUZ6F3ZaUq0kBCJc2bnmLNDOInVmWlfumg7WpVPyqePHsklyhD8el7XV9QVkbgduMYUBCTMAfBzTmQWkzZMtAVRs=
+X-Received: by 2002:a81:8747:0:b0:552:a0fc:6827 with SMTP id
+ x68-20020a818747000000b00552a0fc6827mr3311805ywf.52.1685135798208; Fri, 26
+ May 2023 14:16:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230414101052.11012-1-ihuguet@redhat.com> <CANiq72=vTLT1PnbWu4pwNNyMO0S413G3O+_TLcCGLiDGr5fH7Q@mail.gmail.com>
+ <CACT4ouf2M1k7SaMgqv1Fj33Wen7UKuUyKp-Y9oer+THiWEebNg@mail.gmail.com>
+In-Reply-To: <CACT4ouf2M1k7SaMgqv1Fj33Wen7UKuUyKp-Y9oer+THiWEebNg@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 26 May 2023 23:16:26 +0200
+Message-ID: <CANiq72njUr2wv7CA7W9ziRUf8mrVQPFEQfS7=it3zTVhJFvf3A@mail.gmail.com>
+Subject: Re: [PATCH v3] Add .editorconfig file for basic formatting
+To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
+Cc:     ojeda@kernel.org, masahiroy@kernel.org, jgg@nvidia.com,
+        mic@digikod.net, danny@kdrag0n.dev, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, joe@perches.com, linux@rasmusvillemoes.dk,
+        willy@infradead.org, Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "C. Scott Ananian" <cananian@alumni.princeton.edu>
+On Mon, May 8, 2023 at 10:59=E2=80=AFAM =C3=8D=C3=B1igo Huguet <ihuguet@red=
+hat.com> wrote:
+>
+> Originally I sampled manually, but I have crafted a script to collect
+> more data. It's not 100% reliable, but good to get an idea. It reads
+> the leading whitespaces and if >80% of the lines have one kind of
+> indentation, it considers that it's the one used in that file. The
+> results, filtered to show only the relevant ones, are pasted at the
+> end.
 
-Update website and address.
+This is useful -- thanks a lot for working on collecting it!
 
-Signed-off-by: C. Scott Ananian <cananian@alumni.princeton.edu>
----
- CREDITS | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> These are some personal conclusions from the script's results:
+> - .py: although the official and most widely used style in the
+> community is 4-space indentation, in Linux tree many files use tabs.
+> What should we do here? 4-space is the clear standard for python...
 
-diff --git a/CREDITS b/CREDITS
-index de7e4dbbc599..1af62a56d714 100644
---- a/CREDITS
-+++ b/CREDITS
-@@ -85,13 +85,12 @@ S: United Kingdom
- 
- N: C. Scott Ananian
- E: cananian@alumni.princeton.edu
--W: http://www.pdos.lcs.mit.edu/~cananian
-+W: https://cscott.net
- P: 1024/85AD9EED AD C0 49 08 91 67 DF D7  FA 04 1A EE 09 E8 44 B0
- D: Unix98 pty support.
- D: APM update to 1.2 spec.
- D: /devfs hacking.
--S: 7 Kiwi Loop
--S: Howell, NJ 07731
-+S: Brookline, MA 02446
- S: USA
- 
- N: Erik Andersen
--- 
-2.30.2
+Yeah, this is the kind of thing that worries me and why I asked --
+what do editors do when they have the config saying it is 4-spaces,
+but the file is tabs? Do they adjust, do they convert the entire file,
+or do they simply start mixing indentation styles? Does the
+`.editorconfig` spec say anything about it? For instance, here is an
+issue about this sort of problem:
 
+    https://github.com/editorconfig/editorconfig-vscode/issues/329
+
+If the rule could be applied only to new files, then it would be
+fairly easy to decide, given the majority uses 4-spaces and it nicely
+aligns with PEP 8, Black, etc. But unless we are quite sure we are not
+annoying developers, I would avoid specifying anything in these cases.
+
+In some cases (e.g. few files), you may be able to propose to
+normalize the indentation style treewide for that extension.
+
+> - .rb: only one file in the whole tree
+> - .pm: only 3 files in the whole tree
+
+I guess you could also ignore extensions without many matches in order
+to simplify -- they can always be added later, ideally by their
+maintainers.
+
+> - Files with many different indentations, better not to specify them:
+> rst, cocci, tc, xsl, manual pages
+> - Files that we should specify, tab indented: awk, dts, dtsi, dtso, s, S
+> - Files that we might specify, with preference for tab indenting but
+> not 100% clear: sh, bash, pl
+> - Files in tools/perf/scripts/*/bin/*: there is no clear formatting
+> for any file type, only for .py files that are tab-indented. To get
+> these results I've run my script from tools/perf/scripts directory.
+
+If all Python tab-indented files are in a given folder, then would it
+be possible to provide an `.editorconfig` for that folder, and then
+4-spaces for the global one? i.e. splitting the problem across folders
+may be a solution (within reason, of course, i.e. as long as we don't
+fill the kernel with `.editorconfig` files... :)
+
+> I'm only aware of Clang and Rust formatter configs in Linux tree, and
+> I think this complies with them. Do you know about any other?
+
+There is `scripts/checkpatch.pl`, which I guess may be counted as one
+since one can fix what it complains about manually (and I think it has
+some "fix in place" support too).
+
+There is also `Documentation/devicetree/bindings/.yamllint`.
+
+In addition, some may be using formatters in a default config? e.g.
+Black for some of the Python scripts.
+
+Cheers,
+Miguel
