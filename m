@@ -2,132 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31252712409
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36E8712417
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243185AbjEZJtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
+        id S243196AbjEZJyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243225AbjEZJtv (ORCPT
+        with ESMTP id S236671AbjEZJyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:49:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F4CD9;
-        Fri, 26 May 2023 02:49:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A975B61248;
-        Fri, 26 May 2023 09:49:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFCCC4339B;
-        Fri, 26 May 2023 09:49:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685094588;
-        bh=4rlsbDU/W6bbh6jxRAewvlT8eB/L1MX7PjShMljsAF8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=IEoxOTmEcdpGmMTIpJ641rXpC63sF/0VHHlvSgJKQTdkA6ILfSFxdjOkQ5DA5OPMv
-         BFRf8HXxwRu10vPVfCZnIsgq5wGCQPLOyT08DbHqyPa+vR8dXM7ZuxtLM8inODLHB1
-         vVBi6HHEC3sLLR60QAkJBrw3VEpGYJk7tUNrwdeeEtNwoMCfKwIuz0lD+/dLLsAgyD
-         Lv5iX4x+DBbgeSflYMYahIj48bn8TV45j4DZhOeKOEM/9mdABwxMLz/AOcroGKLWbU
-         U9lu58Fz3ADOo0XzAFuherq5N7e3IZ/139h5tGFRtHUpwC+lFsXCNQZoTRLjjbk0sj
-         YcRUcBAuarjFg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 37B9ACE0CCF; Fri, 26 May 2023 02:49:44 -0700 (PDT)
-Date:   Fri, 26 May 2023 02:49:44 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Yujie Liu <yujie.liu@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [paulmck-rcu:dev.2023.05.20a] [rcuscale] 812195e4f7:
- BUG:kernel_NULL_pointer_dereference,address
-Message-ID: <59850ca7-aad7-4756-888e-12f62373198b@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202305241757.57c30887-yujie.liu@intel.com>
- <e4328f8b-6ec5-46eb-bc43-1217feba7ca2@paulmck-laptop>
- <ZHBm9IfDk1QGj8SY@yujie-X299>
+        Fri, 26 May 2023 05:54:41 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF67AA9;
+        Fri, 26 May 2023 02:54:40 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-510e90d785fso699831a12.2;
+        Fri, 26 May 2023 02:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685094879; x=1687686879;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4LLTisID6ZArwC9pPWjOyTEO98nNLz2NgV67bMxCZw=;
+        b=Hu1PWpUWsToVHTHaxs0/+cOLsK/XpBnubMnKLqcS6jcbigjKzor9pzDtEFcPU82F2k
+         gfYw1FaL1E0TkVLiOGhnwBNlaC8qdwXC8dzPKfHOA0cJC+f44wK8HR3LBtKjfYb8L2j2
+         BIBNaKmk0O/j+u8XtCOpE6WHBMCH9P0r9iriPj5gjUUE2Pm90eNDj4llZmIqiMeYq/0j
+         n+Awg/Kq/mZ9ePDWhb6Xdnuq9bHE8pkhN4gG2RffqVsp1dE1OpndwRvJG0L+pOLsHfpf
+         /0JdaDJGQnW9iW8qPiGW51YuAt3d8BlJP7VwxJQ6OstKXHbFtgwHUACsXMC1W20FKnCs
+         IEvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685094879; x=1687686879;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W4LLTisID6ZArwC9pPWjOyTEO98nNLz2NgV67bMxCZw=;
+        b=B/D14M0ba8ClfpOMOIFXe49VNVhaxHOeij3avObys2BHwtPz8ZYPH0BqazrfV+pXur
+         eWeMQ8+MOyd4qprGePNibo4bhqFIPLhUhu3mry9+eoti8Tt/hugythC96jitvYjHqy/0
+         r0Iwu93LRmnwW9vNRxD3sw8gSBDlTT/6TgVgYBK5fPxbI0YWKXJelv6zsCq9extwS6El
+         H5qdWkU6A65S1CKtL/Izjs8ADciZLrIf9EypapXPqnM3NYlN+gjqC7O2OyP8Ird5Wcex
+         a/Abp3Bzy2pGaSCl0lEbFMFlCcXz8BCdx7ZlEUf8G0xiD9WcXGtrBTXsrjnKtyTc2Qva
+         3pQw==
+X-Gm-Message-State: AC+VfDy2W5jWvGluddM9Pmr7rsFoFca62rq5r5CysHZG6hEKNq4ojVz4
+        QYo3n+Sx/PY5GylFic5kWR8=
+X-Google-Smtp-Source: ACHHUZ469jkIbu1fnw50ONMpvc1OJWI6cK3aVaGgxJ3mV/V/sPkL1KRk4cUHzyTIYMBTMAr9nAqwAQ==
+X-Received: by 2002:a05:6402:7c6:b0:514:7afc:67d4 with SMTP id u6-20020a05640207c600b005147afc67d4mr419435edy.39.1685094878921;
+        Fri, 26 May 2023 02:54:38 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id z16-20020aa7d410000000b00506addaaab0sm1369797edq.32.2023.05.26.02.54.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 02:54:38 -0700 (PDT)
+Date:   Fri, 26 May 2023 12:54:36 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+Subject: Re: [PATCH net-next v2 4/5] net: dsa: microchip: ksz8: Prepare
+ ksz8863_smi for regmap register access validation
+Message-ID: <20230526095436.j5vrcevul2p3557c@skbuf>
+References: <20230526073445.668430-1-o.rempel@pengutronix.de>
+ <20230526073445.668430-5-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZHBm9IfDk1QGj8SY@yujie-X299>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230526073445.668430-5-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 03:59:48PM +0800, Yujie Liu wrote:
-> Hi Paul,
+On Fri, May 26, 2023 at 09:34:44AM +0200, Oleksij Rempel wrote:
+> This patch prepares the ksz8863_smi part of ksz8 driver to utilize the
+> regmap register access validation feature.
 > 
-> On Thu, May 25, 2023 at 09:45:11AM -0700, Paul E. McKenney wrote:
-> > On Thu, May 25, 2023 at 01:37:13AM +0800, kernel test robot wrote:
-> > > Hello,
-> > > 
-> > > kernel test robot noticed "BUG:kernel_NULL_pointer_dereference,address" on:
-> > > 
-> > > commit: 812195e4f70ef0e9fc68127355c553c537749546 ("rcuscale: Measure grace-period kthread CPU time")
-> > > https://git.kernel.org/cgit/linux/kernel/git/paulmck/linux-rcu.git dev.2023.05.20a
-> > > 
-> > > in testcase: boot
-> > > 
-> > > compiler: clang-14
-> > > test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> > > 
-> > > (please refer to attached dmesg/kmsg for entire log/backtrace)
-> > > 
-> > > 
-> > > +---------------------------------------------+------------+------------+
-> > > |                                             | 2393139b67 | 812195e4f7 |
-> > > +---------------------------------------------+------------+------------+
-> > > | boot_successes                              | 8          | 0          |
-> > > | boot_failures                               | 0          | 8          |
-> > > | BUG:kernel_NULL_pointer_dereference,address | 0          | 8          |
-> > > | Oops:#[##]                                  | 0          | 8          |
-> > > | Kernel_panic-not_syncing:Fatal_exception    | 0          | 8          |
-> > > +---------------------------------------------+------------+------------+
-> > > 
-> > > 
-> > > If you fix the issue, kindly add following tag
-> > > | Reported-by: kernel test robot <yujie.liu@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-lkp/202305241757.57c30887-yujie.liu@intel.com
-> > 
-> > This commmit has since been replaced by this one, which should fix this
-> > problem:
-> > 
-> > 60901dadfadc ("rcuscale: Measure grace-period kthread CPU time")
-> > 
-> > Please let me know if the problem still exists with that commit.
-> 
-> The problem is gone on commit 60901dadfadc. Thanks.
-> 
-> Tested-by: Yujie Liu <yujie.liu@intel.com>
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
 
-And thank you again for your testing efforts!
-
-							Thanx, Paul
-
-> =========================================================================================
-> compiler/kconfig/rootfs/sleep/tbox_group/testcase:
->   clang-14/x86_64-randconfig-a015-20230522/debian-11.1-i386-20220923.cgz/300/vm-snb/boot
-> 
-> commit:
->   812195e4f70e ("rcuscale: Measure grace-period kthread CPU time")  <-- old commit from dev.2023.05.20a branch
->   60901dadfadc ("rcuscale: Measure grace-period kthread CPU time")  <-- new commit from rcu/next branch
-> 
-> 812195e4f70ef0e9 60901dadfadcc152ae5cad7ebae
-> ---------------- ---------------------------
->        fail:runs  %reproduction    fail:runs
->            |             |             |
->           6:6         -100%            :7     dmesg.BUG:kernel_NULL_pointer_dereference,address
->           6:6         -100%            :7     dmesg.Kernel_panic-not_syncing:Fatal_exception
->           6:6         -100%            :7     dmesg.Oops:#[##]
->           6:6         -100%            :7     dmesg.boot_failures
-> 
-> --
-> Best Regards,
-> Yujie
-> 
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
