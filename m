@@ -2,56 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B468712921
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC38C712927
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243856AbjEZPIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        id S243884AbjEZPIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjEZPIj (ORCPT
+        with ESMTP id S243860AbjEZPIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:08:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33398F7;
-        Fri, 26 May 2023 08:08:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAEAD650C0;
-        Fri, 26 May 2023 15:08:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5050EC433A4;
-        Fri, 26 May 2023 15:08:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685113717;
-        bh=jw06Bd9UnyKSbXh6qpPKPh6ve8zeePuDuifL3U5qGWw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JHZS/sgsqiCWxXuG+5tVlkySwRcBkVCppB+F9SO4qTwxFzzjyyFTmvlbiqz4s5a/v
-         dlBTNtwkrfVQaVi/k5/ZdvkHn51HqiW38by25WA7hx3MLTdW2lL+KlZsYjxmcXTAUj
-         gR75We/w7iAdfw0qXFV2wM+PMB1io6hVLGMkx18bQavV+DIJus06YZAF+QCcxpQtRY
-         1MbZwP9rttL297GwqwCdaQKOiETjFAD4HUej0/aiq+0elKNTXCuzi7PI84c6oDSEQ+
-         58/VF+4LwXVaXxVNLRwfkHLM2yfJmiAdSr+kOaVZkbsXi0m8UlKbFAkK2jVhk7ztKx
-         L2sE6WnK4xVwQ==
-Date:   Fri, 26 May 2023 16:08:32 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     conor.dooley@microchip.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de,
-        w@1wt.eu
-Subject: Re: [PATCH 06/13] selftests/nolibc: allow specify a bios for qemu
-Message-ID: <20230526-humongous-manifesto-3c44973f0df1@spud>
-References: <20230526-clover-litter-1f41398cd820@wendy>
- <20230526133825.198100-1-falcon@tinylab.org>
+        Fri, 26 May 2023 11:08:51 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963C0187
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:08:49 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30a8dc89c33so547029f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685113728; x=1687705728;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RQDPpbfKxYac4dFfl3UOiv7iiv3UKto2YwW9RD/lJd4=;
+        b=D8329d5gDBuupuw18ee7CiQedAqaHbalYu/5ad/0HLx8pzNJB/B/nXPqeXbg3zAn47
+         UPrnWRMAm7bG90BMHhmY3n+VpBQQlENz9uTjY0+zpdv1cT8jbn49d562/eYMTZuYqhaE
+         jYA1F+tj07JByXOexpqVnp32QWw6tjLsztNKTrHvXKu3Davn4xKVGIH1Y57SOpVjD20W
+         OMAE1twiDb3hwtTTAn3q+ncHQjS6yUWcoP8TeAY32wV4CwfQ8TRSn904UgqFpjjw7VBD
+         bzKazNedaXMHzxlBYF69bMm/ufjJ/1nFo4ejX/7ZVnMxqnyj/xDsr55nL9Aq142D8x7l
+         6whg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685113728; x=1687705728;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RQDPpbfKxYac4dFfl3UOiv7iiv3UKto2YwW9RD/lJd4=;
+        b=bg47rwqi4Z+OUiET3suVGYOcOtZqfEuw8f58sYUhLRZNyidyu+fdKXoFH3Qn8T1IIe
+         aPt2XZvXu/f25538gaZPt+r6YHMlpN/4FGToR43jGH4aSIoIMHQJUdoisHMQ+qfRtsuq
+         tnfvbt1sihFXOzk+HO+znHv3TDXTyl6Xt4s72NXNH4vNM1slQsz+f6b7bQu+5yu4W05n
+         GRJbpw5Vl4Rl3zLxTcogOMys0j59MIUUxcGV7SZi9KkQVxX1GfkLxwX/niuW3GIcf57a
+         mChnlSgTVWzGkfhe9Jw/Lo5E+BHO8uyAm6AHr7Ce83AVQYG55FG9UA9hmYBjrliSanw9
+         soXA==
+X-Gm-Message-State: AC+VfDzjcAtXrELMx8O3aU+X3zuHIAiNwa/tZoYXZfJMrc7RQfTozglz
+        Neh9O8x+LGhIgtnyQRzQn7cU0A==
+X-Google-Smtp-Source: ACHHUZ6Ur52z92yD9zQLf8/rpAwoOXof7X3dA6SmUIkLpPmI1FzD2sW7X7Z8flkFpqVtem4zLqfZ0w==
+X-Received: by 2002:a5d:6ac4:0:b0:309:e24:57b0 with SMTP id u4-20020a5d6ac4000000b003090e2457b0mr1955408wrw.30.1685113728030;
+        Fri, 26 May 2023 08:08:48 -0700 (PDT)
+Received: from [10.1.4.6] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id 10-20020a05600c228a00b003f42461ac75sm9055828wmf.12.2023.05.26.08.08.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 08:08:47 -0700 (PDT)
+Message-ID: <f605a653-ba94-7a8c-1bfa-4c18f5d25da7@baylibre.com>
+Date:   Fri, 26 May 2023 17:08:45 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WayLhPoiZx5ZZrQj"
-Content-Disposition: inline
-In-Reply-To: <20230526133825.198100-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 5/7] drm/apu: allow platform driver to implement their own
+ mmap function
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        airlied@gmail.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, jstephan@baylibre.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, khilman@baylibre.com,
+        nbelin@baylibre.com, bero@baylibre.com
+References: <20230517145237.295461-1-abailon@baylibre.com>
+ <20230517145237.295461-6-abailon@baylibre.com>
+ <032699a0-9a43-953a-60e9-59a515a26cef@linaro.org>
+Content-Language: en-US
+From:   Alexandre Bailon <abailon@baylibre.com>
+In-Reply-To: <032699a0-9a43-953a-60e9-59a515a26cef@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,91 +89,33 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---WayLhPoiZx5ZZrQj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 26, 2023 at 09:38:25PM +0800, Zhangjin Wu wrote:
-> Hi, Conor.
->=20
-> >=20
-> > On Fri, May 26, 2023 at 06:25:18PM +0800, Zhangjin Wu wrote:
-> >=20
-> > > > On 2023-05-25 01:52:29+0800, Zhangjin Wu wrote:
-> > > > > riscv qemu has a builtin bios (opensbi), but it may not match the=
- latest
-> > > > > kernel and some old versions may hang during boot, let's allow us=
-er pass
-> > > > > a newer version to qemu via the -bios option.
-> > > >
-> > > > Nitpick:
-> > > >
-> > > > This seems very specific and hopefully only necessary temporarily.
-> > > >
-> > >
-> > > RISC-V is such a new ISA and the Spec (especially the SBI) changes ve=
-ry
-> > > frequently ;-)
-> >=20
-> > Huh. Could you please expand on which versions of QEMU will hang while
-> > booting an upstream or stable kernel? Which kernels would be good to
-> > know too.
-> >=20
->=20
-> As the cover letter listed (in the Environment section), the softwares we
-> used are:
+On 5/17/23 21:45, Krzysztof Kozlowski wrote:
+> On 17/05/2023 16:52, Alexandre Bailon wrote:
+>> From: Julien Stephan <jstephan@baylibre.com>
+>>
+>> By default we will call drm_gem_mmap() unless the apu driver has
+>> declared it's own mmap handler.
+>>
+>> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
+>> Reviewed-by: Julien Stephan <jstephan@baylibre.com>
+> 
+> One does not have to review own code. We all assume that we send good
+> code which we do not have to review by ourselves (by the author). We
+> also assume we make mistakes, which we cannot find, thus other person's
+> review is important.
+I am sorry, I am the one who made the misstake.
+I squashed this patch with another one I made, lost my signedof and left 
+the reviewed by which indeed doesn't make any sense.
 
-Not super interested in those ones since they work ;)
-
-> The kernel version is the one this patchset based on (Willy's nolibc
-> repo), it is v6.4-rc1.
->=20
-> qemu v4.2.1 is the one systematically installed (/usr/bin) from the
-> qemu-system-misc package and used to test this patchset in my Ubuntu
-> 20.04 based test docker image.
-
-Okay, in the context of RISC-V, that is pretty ancient ;)
-
-> Just installed a v7.0.0 qemu from ppa:canonical-server/server-backports,
-> there is no default opensbi, and re-checked, there is one prebuilt
-> opensbi for rv64, but still no prebuilt opensbi for rv32.
-
-Ah, I see.
-
-> The hang issue I mentioned may be using one of my older prebuilt version =
-of
-> opensbi, I can not find which one it exactly is, so, please ignore that i=
-nfo,
-> will update that description too.
-
-Okay. If you do manage to reproduce it, LMK! I was/am just worried we
-have some regressions because you should be able to keep booting with
-those older opensbi versions, modulo some Kconfig changes - although if
-it is something like qemu 4.2.1 specific I don't think I care all that
-much about dinosaurs ;)
-
-> Btw, something not about this patch: qemu v8.0.0 seems not boot non-mmu
-> v6.3, both sides have issues, not dig into it carefully, so, not report
-> it yet.
-
-Cool. Feel free to CC me on whatever you discover. nommu gets little
-enough testing in mainline, and even less in stable kernels. That reminds
-me, I do need to add 32-bit nommu to the patchwork automation for
-linux-riscv.
-
-Thanks,
-Conor.
-
---WayLhPoiZx5ZZrQj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHDLcAAKCRB4tDGHoIJi
-0nCqAQCCgCmTkKTJmk/35FqltqEtnqj2/KKHc1XPAIfhmy4/DAD/dMTwgLHXhm2b
-t9fvm/hCLjoKAjt1pgKF97u2CcEfowU=
-=iJ17
------END PGP SIGNATURE-----
-
---WayLhPoiZx5ZZrQj--
+Best Regards,
+Alexandre
+> 
+> Adding own review tag suggests you added them mechanically, so I doubt
+> that they really happened.
+> 
+> Anyway, your SoB is missing.
+> 
+> Best regards,
+> Krzysztof
+> 
