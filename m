@@ -2,140 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065B9711E66
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 05:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29186711E6E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 05:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbjEZDY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 23:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S234304AbjEZD0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 23:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjEZDY0 (ORCPT
+        with ESMTP id S229568AbjEZD0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 23:24:26 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AC1E6;
-        Thu, 25 May 2023 20:24:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=FGc2DpRwzN2CfKjvI105cUP9f2PjEF2afGAtgtqFB38=; b=YTvd3rCSPD25KbM3zkOAIlVuR3
-        Y5s+ExS6tTZlXbDqpXmqzSK36KOhFcQlkX6awiu+skf+fogZ0Mcpnu5OYgnCeS3OIT7GxLGDygWoa
-        qmuQ0mRx4ABgpPWVLwjmXhZ9hhPGRpt0FiIdItqNzX/DNA/+o54fZWx1/w2uAXntceixEkzZyrPYP
-        fwZKLmMh/U1qV1o9VDbM3qWnfkydv7jpMGMgoWDk7f2FpzjpUmK00cBNsTez9m/FJPeddt6em4F0s
-        E1znANbwABARAz8t7GPcYarxWvxmj6SSdTYeWGaWacJlDaTvisgIISzBWC+P4bSe6cuqkd/3LHZ9H
-        NOaHeNQA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q2O3t-000rME-2a;
-        Fri, 26 May 2023 03:24:17 +0000
-Date:   Thu, 25 May 2023 20:24:17 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>, linux-modules@vger.kernel.org,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
-Message-ID: <ZHAmYSclm+5QlLcM@bombadil.infradead.org>
-References: <20230517131820.936553-1-arnd@kernel.org>
- <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
- <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com>
- <ZG27pExhUqFpGexM@bombadil.infradead.org>
- <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
+        Thu, 25 May 2023 23:26:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498EDE6;
+        Thu, 25 May 2023 20:26:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D846B6471F;
+        Fri, 26 May 2023 03:25:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F170C433EF;
+        Fri, 26 May 2023 03:25:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685071559;
+        bh=BTIaAcxw6JMw/kBG+7/ytX8/qt2HopHJ9Nqlbp6SrPU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eIztQ0pfSz7V7fBvUzeog84FT45VkAZ2Lae27wsJjMo2fG1neQr92ibbIFgGHsQ2d
+         r4JJTPcmgjMJnT+uzL6zfSlfkfBY8dFo++z67mnF7wrr/9P/KiWD0ShmXwko8V+SIE
+         zoqSY3IREiAbPn2Znwq2kn2tRNNV2Ly7FViIEibdDkP7RxB1FMhHu22yVTGyQYbsN2
+         OX4koaThdA9hIKe7/x64Ho3jdyINstDb+ujciIDpcmybpuL5c2X9JGIqtJNRCxc5Ni
+         jKHY5EnBMTUPsHPsGt8BBA+PoBgarYho9GcKQlrbQUIpEZqkQSQWDIuFJen+j5HryZ
+         CMMU/YZeGrRJQ==
+Date:   Thu, 25 May 2023 20:25:57 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Haiyang Zhang <haiyangz@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        decui@microsoft.com, kys@microsoft.com, paulros@microsoft.com,
+        olaf@aepfle.de, vkuznets@redhat.com, davem@davemloft.net,
+        wei.liu@kernel.org, edumazet@google.com, pabeni@redhat.com,
+        leon@kernel.org, longli@microsoft.com, ssengar@linux.microsoft.com,
+        linux-rdma@vger.kernel.org, daniel@iogearbox.net,
+        john.fastabend@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
+        sharmaajay@microsoft.com, hawk@kernel.org, tglx@linutronix.de,
+        shradhagupta@linux.microsoft.com, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH V2,net] net: mana: Fix perf regression: remove rx_cqes,
+ tx_cqes counters
+Message-ID: <20230525202557.5a5f020b@kernel.org>
+In-Reply-To: <1685025990-14598-1-git-send-email-haiyangz@microsoft.com>
+References: <1685025990-14598-1-git-send-email-haiyangz@microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 06:45:35PM -0700, Song Liu wrote:
-> + Alan Maguire
-> 
-> On Wed, May 24, 2023 at 12:24 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Wed, May 24, 2023 at 08:25:13AM +0200, Arnd Bergmann wrote:
-> > > On Wed, May 24, 2023, at 07:07, Luis Chamberlain wrote:
-> > > > On Wed, May 17, 2023 at 03:18:07PM +0200, Arnd Bergmann wrote:
-> > > >> From: Arnd Bergmann <arnd@arndb.de>
-> > > >>
-> > > >> The arch_get_kallsym() function was introduced so that x86 could override
-> > > >> it, but that override was removed in bf904d2762ee ("x86/pti/64: Remove
-> > > >> the SYSCALL64 entry trampoline"), so now this does nothing except causing
-> > > >> a warning about a missing prototype:
-> > > >>
-> > > >> kernel/kallsyms.c:662:12: error: no previous prototype for 'arch_get_kallsym' [-Werror=missing-prototypes]
-> > > >>   662 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-> > > >>
-> > > >> Restore the old behavior before d83212d5dd67 ("kallsyms, x86: Export
-> > > >> addresses of PTI entry trampolines") to simplify the code and avoid
-> > > >> the warning.
-> > > >>
-> > > >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > > >
-> > > > Shouldn't this go through x86 as this sort of fixesss commit
-> > > > bf904d2762ee ("x86/pti/64: Remove the SYSCALL64 entry trampoline")?
-> > >
-> > > That works for me as well, as long as someone picks it up. It's
-> > > not really x86 any more though since that commit is five years
-> > > old and removed the last reference from the x86 code.
-> >
-> > Fair enough.
-> >
-> > > I sent it to you since you are the one that merged most of
-> > > the kallsyms patches through the module tree, but I guess
-> > > you are not actually maintaining that file (not blaming you,
-> > > I'd also try to stay away from kallsyms).
-> > >
-> > > I can resend it to Andrew for the -mm tree.
-> >
-> > OK, I just took the patch in, it's on the train, better get on before
-> > it gets lost.
-> 
-> This change broke compilation of BPF selftests in modules-next
-> branch:
-> 
-> progs/bpf_iter_ksym.c:62:13: error: no member named 'pos_arch_end' in
-> 'struct kallsym_iter'
->         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
->              ~~~~  ^
-> progs/bpf_iter_ksym.c:62:35: error: no member named 'pos_arch_end' in
-> 'struct kallsym_iter'
->         if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
->                                    ~~~~  ^
-> 
-> I haven't looked into the proper fix for it yet.
+On Thu, 25 May 2023 07:46:30 -0700 Haiyang Zhang wrote:
+> lot caching and memory overhead, hence perf regression.
 
-A quick attempt:
+Horatiu's ask for more details was perfectly reasonable.
+Provide more details to give the distros and users an
+idea of the order of magnitude of the problem. Example
+workload and relative perf hit, anything.
 
-Arnd, can you verify?
-
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-index 5ddcc46fd886..521267818f4d 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_ksym.c
-@@ -59,9 +59,7 @@ int dump_ksym(struct bpf_iter__ksym *ctx)
- 	} else {
- 		BPF_SEQ_PRINTF(seq, "0x%llx %c %s ", value, type, iter->name);
- 	}
--	if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
--		BPF_SEQ_PRINTF(seq, "CORE ");
--	else if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
-+	if (!iter->pos_mod_end || iter->pos_mod_end > iter->pos)
- 		BPF_SEQ_PRINTF(seq, "MOD ");
- 	else if (!iter->pos_ftrace_mod_end || iter->pos_ftrace_mod_end > iter->pos)
- 		BPF_SEQ_PRINTF(seq, "FTRACE_MOD ");
+Please do not repost within 24 hours:
+https://www.kernel.org/doc/html/next/process/maintainer-netdev.html
+-- 
+pw-bot: cr
