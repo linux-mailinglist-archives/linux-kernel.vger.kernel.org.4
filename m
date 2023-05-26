@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306E6712BB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8822712BB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjEZRZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S231303AbjEZRZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjEZRZR (ORCPT
+        with ESMTP id S237116AbjEZRZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:25:17 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9724125
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:25:14 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b00f9c4699so7184295ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:25:14 -0700 (PDT)
+        Fri, 26 May 2023 13:25:40 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138601B0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:25:37 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f600a6a890so4105e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:25:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685121914; x=1687713914;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KfNMXGcl/NoZyU1TMuXBgw5Vf3pYoZn7mpjEnfq/Mik=;
-        b=a2oyvZaTloig24bEWaQzdNYWUOL6m4mXSiAbb6RBBz3Nc0GhC8q8035ImW8YDXfsUh
-         oGlubxkuDhTTF5XTYh+RJ/MelMM+4absRCAZcrauneIQ70uzQgAPm0DV/Rna0GC9XW0f
-         KuUeY+ky/cJoSnfql03OzSnmi4beNTvmrjrN0=
+        d=google.com; s=20221208; t=1685121935; x=1687713935;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l8g5Xna8j25EFmespE1bvOARSHuLS2nJdLVHo25mjSE=;
+        b=f23M39+X+33xnPxCbKYMOJ14/bCAA9KXeklSOwa8N+tHHQEeVXO9PG06uqnHlgbpvJ
+         yZcoi+2V0Rnvo3xNSbHS90ZINBSY8pxHi1Xm96Pc1OjyRBIMYwQg2pzWUKm9EvEGoqIg
+         mRQCwruUR1IwLekhmrhr2T58qvSw2Qkt3CloEtcqrhHH6VZq5NTF+ZeRAfTCprFOJPL7
+         s4ZPJ02tHgnaBv2DpSE42RD6H0VRLlp6RyMZXB3hJs1tYXQm0tIoHRpXpiEHXKluB88B
+         6iMsG8tJ8UdDub6koAvqI+jJOj4p/m1joTQtKjUwx/iR1zcf7M4i1WxdB9+hz7d0nCFk
+         KzDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685121914; x=1687713914;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KfNMXGcl/NoZyU1TMuXBgw5Vf3pYoZn7mpjEnfq/Mik=;
-        b=gLd+AbikjLO/fRwJhqvaNAhb7JQSzqNl9+4VJcqf3nb5HW+5mjGGYt2cULJTfG/b8u
-         3w9pFL1bw31OG/fxpnshgpFVlTaSzR26LFMFYjuBsCO7GDFxW8Wr6LjBjr/ci/aaSvyh
-         oECUqDfm1j7Cn9vMRsngjuBFj8ODQq8bGW8y+OBdNRj+V4iTcsboEWKLZAx3cPnHAAlV
-         R9Ja0pV3qAqsrWn2VhyerUKH1Sw9Ce7YCUwy1BSsuZjB2+m8tNKMIFS7hUxTJoHPqCjd
-         YV+I5R3mrUdKM84VoAQBPSF4Ev2ZwCzWFWckDkWUhKQ50LlnEUlo1RicmEeBV0k5a18s
-         /i4Q==
-X-Gm-Message-State: AC+VfDx9UvgP1CWzJc2RSOFWQUm/ibm+OxwKgY/CIQN4o+ruk8J2ZERL
-        6IYHMoJ9+710qyRSMlmueu24Bv7BpcZCnFsILF4=
-X-Google-Smtp-Source: ACHHUZ7akEKdSRLtn7ET8rqSs2dwk9Y3rO9LoKvADJjmViawMnhh116yZkVkCI78s7Mf0hw1qQBjxA==
-X-Received: by 2002:a17:902:db02:b0:1ac:750e:33ef with SMTP id m2-20020a170902db0200b001ac750e33efmr4095459plx.3.1685121913871;
-        Fri, 26 May 2023 10:25:13 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170902cecd00b001a064282b11sm3494052plg.151.2023.05.26.10.25.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 10:25:13 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Andy Whitcroft <apw@canonical.com>
-Cc:     Kees Cook <keescook@chromium.org>, Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] checkpatch: Check for strcpy and strncpy too
-Date:   Fri, 26 May 2023 10:25:11 -0700
-Message-Id: <20230526172508.gonna.793-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1685121935; x=1687713935;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l8g5Xna8j25EFmespE1bvOARSHuLS2nJdLVHo25mjSE=;
+        b=I2NbXET3F2qgSUDpo0gGUYtrSD/3ucgFy3p10+wu3iyAoR6UAV/kf5WLENXtedUfiY
+         hkz47KNe7ZIfinF08Ss51GWAr3eg8s9boBPp8t+Ouz5z0N8uhuYL4KC1gsi8/436LjlK
+         dlZj9cMPOMC2iy3NRzDa/WwP9gC155bnlqLjpci6Aw6H4Fe8qMhh7Dd9cF4//11+TdyV
+         6MVjXB1Hl3QLhnBjLNii8WMKwYJmPnfFIIeNHzLcy2rSUDHBnaOb9VlqpqA9SO4qmc08
+         Jo4ugnqBt+8Z8/3WscOE9MKI7JEbinu862erphpa69PQ+/G6ZctrkzZKfX5hP/okg2lN
+         847g==
+X-Gm-Message-State: AC+VfDz/QGtv0yHtpRFpCUN3itJODAy4rkM9vZYw43LJgC8JuFSDlE3I
+        tQpA7qDoUlc4xvR9pAjWQLCpyuKhVbIflXk2M/ZJLsQy2y/TDq7mJzU5eg==
+X-Google-Smtp-Source: ACHHUZ4Br5pF7X3UghPjBulDtJS9kb5PDC2rSf69Im3yVJUMPcC8EHvOTVaj+JsGIKn1he9aPepATioYeEtg/pDKIjs=
+X-Received: by 2002:a05:600c:458b:b0:3f1:758c:dd23 with SMTP id
+ r11-20020a05600c458b00b003f1758cdd23mr123345wmo.7.1685121935222; Fri, 26 May
+ 2023 10:25:35 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1830; h=from:subject:message-id; bh=gR1dVrDDLBhiUgLe7nt7jcC1so04DAJwfqgytUoUlaU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkcOt33rxJ0GO+/P9Nn4/quZbyds5yHyTRcxPEVafB 5vT4zqaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZHDrdwAKCRCJcvTf3G3AJsqnD/ wNivL/mRH0uKxIm3r4cWNygeKy4bnw9P3mIryMSk/WWOkkzk/n/JMP+xAB/eCsXtdaZHcqEyyFWlZx QQVvFKON49UxTBpwx6D1P6Vvfn5RgXs2nKoIAAqgdyuURSWCwL/EGnSxb18EvD7DvkQay/n+UYl2gr udS9AyFd34M/GO60vjhQFgdroTmb0l/d7zfvVATewDowfPiccY4x5TjsDhYGREjdkCdrbcueDTBQ+k XyYKMQugRGefzHhe+aRYVe8f+QKHyZV9rZrDEpmmIs+mWddmwKhkr3wkHupDhiyGqKAV6Y6SEF3YDQ qkr8SfRwc3f//P3C5/+MO3oCGez0hW1Wt0lggTcuqkGx7avoYaAQdvwGnrknuPFiMLNZQ+ndzZtGKu zRWQ6P57N6T/i0BgEfMJfJK3xKY/bfMCepxBbjgamK2ayCwUNokXl/++oNrRTboekxX1an0QR11Bpq Nnd7+U02kCEOcM3KvP3mtml/IPYjW+WmiAXXIHMFrPzgfLw6ZiZLxurHbu0I5bVxu1XxYY/5jc3NYd efV+1L8ZN14Dh9mqIf4o1cIb8IBp1cB6e/MjhxPUyt/OY9LFJV1angi8zm+zGPSCpBd6tZoryJb2Km WgHWm/5PYtgvXQ66+OpCb5oWS6lqpkl0VU5rc+H7CXpzv4L0qqns+PuZorLA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <CANn89iKUbyrJ=r2+_kK+sb2ZSSHifFZ7QkPLDpAtkJ8v4WUumA@mail.gmail.com>
+ <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
+ <CANn89i+bExb_P6A9ROmwqNgGdO5o8wawVZ5r3MHnz0qfhxvTtA@mail.gmail.com>
+ <CAHk-=wig6VizZHtRznz7uAWa-hHWjrCNANZ9B+1G=aTWPiVH4g@mail.gmail.com>
+ <CAHk-=whkci5ck5Him8Lx5ECKHEtj=bipYmOCGe8DWrrp8uDq5g@mail.gmail.com> <CAHk-=whtDupvWtj_ow11wU4_u=KvifTqno=5mW1VofyehjdVRA@mail.gmail.com>
+In-Reply-To: <CAHk-=whtDupvWtj_ow11wU4_u=KvifTqno=5mW1VofyehjdVRA@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 26 May 2023 19:25:23 +0200
+Message-ID: <CANn89i+u8jvfSQAQ=_JY0be56deJNhKgDWbqpDAvfm-i34qX9A@mail.gmail.com>
+Subject: Re: x86 copy performance regression
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,51 +74,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Warn about strcpy(), strncpy(), and strlcpy(). Suggest strscpy() and
-include pointers to the open KSPP issues for each, which has further
-details and replacement procedures.
+On Fri, May 26, 2023 at 7:17=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, May 26, 2023 at 10:00=E2=80=AFAM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > Let me go look at it some more. I *really* didn't want to make the
+> > code worse for ERMS
+>
+> Oh well. I'll think about it some more in the hope that I can come up
+> with something clever that doesn't make objtool hate me, but in the
+> meantime let me just give you the "not clever" patch.
+>
+> It generates an annoying six-byte jump when the small 2-byte one would
+> work just fine, but I guess only my pride is wounded.
 
-Cc: Andy Whitcroft <apw@canonical.com>
-Cc: Joe Perches <joe@perches.com>
-Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
-Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20230517201349.never.582-kees@kernel.org
----
-v2: change language to use "Prefer ... over ..." (joe)
-v1: https://lore.kernel.org/lkml/20230517201349.never.582-kees@kernel.org/
----
- scripts/checkpatch.pl | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+arch/x86/lib/copy_user_64.S:34:2: error: invalid instruction mnemonic
+'alternative'
+ alternative "jae .Lunrolled", "jae .Llarge", ( 9*32+ 9)
+ ^~~~~~~~~~~
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index b30114d637c4..30b0b4fdb3bf 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -6997,10 +6997,22 @@ sub process {
- #			}
- #		}
- 
-+# strcpy uses that should likely be strscpy
-+		if ($line =~ /\bstrcpy\s*\(/) {
-+			WARN("STRCPY",
-+			     "Prefer strscpy over strcpy - see: https://github.com/KSPP/linux/issues/88\n" . $herecurr);
-+		}
-+
- # strlcpy uses that should likely be strscpy
- 		if ($line =~ /\bstrlcpy\s*\(/) {
- 			WARN("STRLCPY",
--			     "Prefer strscpy over strlcpy - see: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw\@mail.gmail.com/\n" . $herecurr);
-+			     "Prefer strscpy over strlcpy - see: https://github.com/KSPP/linux/issues/89\n" . $herecurr);
-+		}
-+
-+# strncpy uses that should likely be strscpy or strscpy_pad
-+		if ($line =~ /\bstrncpy\s*\(/) {
-+			WARN("STRNCPY",
-+			     "Prefer strscpy, strscpy_pad, or __nonstring over strncpy - see: https://github.com/KSPP/linux/issues/90\n" . $herecurr);
- 		}
- 
- # typecasts on min/max could be min_t/max_t
--- 
-2.34.1
+I changed alternative to ALTERNATIVE to let it build.
 
+ SYM_FUNC_START(rep_movs_alternative)
+        cmpq $64,%rcx
+-       jae .Lunrolled
++       ALTERNATIVE "jae .Lunrolled", "jae .Llarge", X86_FEATURE_ERMS
+
+I will report test result soon, thanks !
