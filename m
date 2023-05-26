@@ -2,147 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0076F712C7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCA2712C7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242465AbjEZSd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
+        id S237607AbjEZSeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236450AbjEZSdy (ORCPT
+        with ESMTP id S242500AbjEZSeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:33:54 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F971B3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:33:45 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96fb1642b09so156749666b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:33:45 -0700 (PDT)
+        Fri, 26 May 2023 14:34:13 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754D0134
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:10 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-2534d7abebeso834111a91.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685126023; x=1687718023;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ptC6d5EWrHkNhGZSpOw3bJ7cmTKxwB6ClWZ/+djSvzY=;
-        b=eYFz6zqj/vwbgy7UP5WJImuZ4iYtRRI4LjBh1R0qJ3PKOuE1/Y0pGxopCwTNwQo8ou
-         yn5Hqd8FSTbBVJMzgnuvYl34BK+PP4ReYcxPgNEAzZ4N94bdAjrjVAq6WWp40kbqzVm0
-         z9yftudF/WuyICoR9+XvIyLE3n02IHeoTZdlA=
+        d=google.com; s=20221208; t=1685126050; x=1687718050;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IVzXsABWVrToZ7tRwJqLE05TXfsenHHrgF1lCArhyQ8=;
+        b=5DYIRQ/PY53leU21RViYdnXrQS4045s8ZG4DtABzUSV2B1DWp7Z+3Ng2a95y+VsNdG
+         /EOh0yYGdGZrs0Xoh3KnpybfJFL98Sh0oBEDUTpnL6TvVAsINKu4aBq3dxxaRToOyhB6
+         Kgs77o1IXKrk+QZ82PSejlOp6Jb1g9ImA5SIrSp2srHUQIofsTlDP3H4ek1nKt/HwpjZ
+         QisdWKCRIi4awYrSNgE2l9tJUX1vTaWOzq/AQLIEQIlOZplDj/OJ2fIEeTqEWTJwdm+a
+         QWJPuxE4nIsfMuO0lUgAKPiq3RQvpc85UZAySI6P+SL9+DLV7cIVuL0Q/8O5gjnNZVBe
+         ELGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685126023; x=1687718023;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ptC6d5EWrHkNhGZSpOw3bJ7cmTKxwB6ClWZ/+djSvzY=;
-        b=hWxyZuC8fjjbtBLgDC7wrMVqLpP3s54gknIb18x/A1s+3n45LHhACDjn+reVG/DOwA
-         e/MvfcJXl6kAPc+V9vDAdDu5dhKYSIXA82FFNoOJqAPzyvSOaFTRYEst5AuiXCp9K5J9
-         Av1GIvylvmge/e+lcW2/PEZ0lc4ZeyBm+6Sq1SPNfhUcfi/OFZSHsH4NnPebBtvvPc4L
-         1WuCp5rEYtrBKlyuLxPFyOzGUlOEFa4qts/I4bDMbdScLHgXi4d4meFnrS+SNFS4lI+a
-         rWFmL7KC30yIzAkEUKCF3ctSpuyi041FLLT5MmQZ2SzDxZ+p9o3w1JvDO+0e4ez7q3Lj
-         lMag==
-X-Gm-Message-State: AC+VfDwiulvQegXmpwUuBL76OVHddWyQuhl5sz7FU/unG2AJBEHq78H0
-        YDZ11HuBVMjtr7QxTpURSKz10qEQyUqdiYESkHD9X6uK
-X-Google-Smtp-Source: ACHHUZ77OnlZvXqx5MM6BJ+Aepwpe7lYbE/rFis1yMXoG1aIyerI7wUsQT6OhXVrF9PpVHlnfpd53Q==
-X-Received: by 2002:a17:907:9411:b0:973:9857:b9b7 with SMTP id dk17-20020a170907941100b009739857b9b7mr2768029ejc.40.1685126023535;
-        Fri, 26 May 2023 11:33:43 -0700 (PDT)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
-        by smtp.gmail.com with ESMTPSA id sa24-20020a170906edb800b0096595cc0810sm2457901ejb.72.2023.05.26.11.33.42
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 11:33:42 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-51440706e59so1522681a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:33:42 -0700 (PDT)
-X-Received: by 2002:a17:907:80b:b0:96f:9962:be19 with SMTP id
- wv11-20020a170907080b00b0096f9962be19mr2508836ejb.31.1685126022260; Fri, 26
- May 2023 11:33:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <CANn89iKUbyrJ=r2+_kK+sb2ZSSHifFZ7QkPLDpAtkJ8v4WUumA@mail.gmail.com>
- <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
- <CANn89i+bExb_P6A9ROmwqNgGdO5o8wawVZ5r3MHnz0qfhxvTtA@mail.gmail.com>
- <CAHk-=wig6VizZHtRznz7uAWa-hHWjrCNANZ9B+1G=aTWPiVH4g@mail.gmail.com>
- <CAHk-=whkci5ck5Him8Lx5ECKHEtj=bipYmOCGe8DWrrp8uDq5g@mail.gmail.com>
- <CAHk-=whtDupvWtj_ow11wU4_u=KvifTqno=5mW1VofyehjdVRA@mail.gmail.com>
- <CANn89i+u8jvfSQAQ=_JY0be56deJNhKgDWbqpDAvfm-i34qX9A@mail.gmail.com>
- <CAHk-=wh16fVwO2yZ4Fx0kyRHsNDhGddzNxfQQz2+x08=CPvk_Q@mail.gmail.com> <CANn89iJ3=OiZEABRQQLL6z+J-Wy8AvTJz6NPLQDOtzREiiYb4Q@mail.gmail.com>
-In-Reply-To: <CANn89iJ3=OiZEABRQQLL6z+J-Wy8AvTJz6NPLQDOtzREiiYb4Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 26 May 2023 11:33:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whZ23EHnBG4ox9QpHFDeiCSrA2H1wrYrfyg3KP=zK5Sog@mail.gmail.com>
-Message-ID: <CAHk-=whZ23EHnBG4ox9QpHFDeiCSrA2H1wrYrfyg3KP=zK5Sog@mail.gmail.com>
-Subject: Re: x86 copy performance regression
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="000000000000f5c99605fc9cf9b1"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685126050; x=1687718050;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IVzXsABWVrToZ7tRwJqLE05TXfsenHHrgF1lCArhyQ8=;
+        b=RYBLRwa+JSU6fkH6p9Fx5zU9oQQZDfOz90rXGHc/t1okfNq0kBUbqRQXsmihfsAaSZ
+         jKhAIam2QEClA5nP4dD5kihMxOP9y6Px56qlt5QeQycoQHOc62AzYuhmClb8aueG2/mg
+         0NRni/6JHqX+sGtlKpwE+mhQ50ji33ymdZK4L1pNB5QN/gUrfgGZ0O6Q86ZPycexye4L
+         t4U7pOUzCZCE4DBO0r/cnkp7HbcvKQxFMOpD9isRAdnIW0YS+wrx83+YM33ipRm3NfVE
+         QUCS9RzIXtUmRBu66Cu9CsS7LtS5r8jwrwlOh4jt3nh2aBNS5dQz8gJ+ODi3VXrIx6I+
+         Xzog==
+X-Gm-Message-State: AC+VfDyyy0hc09Zm/yhW+0TZFx7NL39tf4u3xFxmae1wG38lQSoGBR6D
+        gI53jT4AHsnMhw5DtzKZ+fnyd/spbtCl
+X-Google-Smtp-Source: ACHHUZ64A571kAdtoquIAqZhXYDAWk7Pcy8C1D6koWOlDQ3LjZVliWTNq+S9lKeEEbW0qROw3Le1Flt/WvXS
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
+ (user=irogers job=sendgmr) by 2002:a17:90a:9904:b0:246:6a3a:6aec with SMTP id
+ b4-20020a17090a990400b002466a3a6aecmr716829pjp.4.1685126049889; Fri, 26 May
+ 2023 11:34:09 -0700 (PDT)
+Date:   Fri, 26 May 2023 11:33:45 -0700
+Message-Id: <20230526183401.2326121-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Subject: [PATCH v2 00/16] Address some perf memory/data size issues
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Ross Zwisler <zwisler@chromium.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000f5c99605fc9cf9b1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Try to reduce the data size of the perf command. Before these patches
+a stripped non-debug binary was:
 
-On Fri, May 26, 2023 at 10:51=E2=80=AFAM Eric Dumazet <edumazet@google.com>=
- wrote:
->
-> Hmmm
->
-> [   25.532236] RIP: 0010:0xffffffffa5a85134
-> [   25.536173] Code: Unable to access opcode bytes at 0xffffffffa5a8510a.
+$ size -A perf
+perf  :
+section                  size       addr
+.interp                    28        848
+.note.gnu.property         32        880
+.note.gnu.build-id         36        912
+.note.ABI-tag              32        948
+.gnu.hash               24628        984
+.dynsym                 88920      25616
+.dynstr                 70193     114536
+.gnu.version             7410     184730
+.gnu.version_r            800     192144
+.rela.dyn              460824     192944
+.rela.plt               14784     653768
+.init                      23     671744
+.plt                     9872     671776
+.plt.got                   24     681648
+.text                 2279182     681680
+.noinstr.text             476    2960864
+.fini                       9    2961340
+.rodata               7042922    2961408
+.eh_frame_hdr           42844   10004332
+.eh_frame              226496   10047176
+.tbss                      48   10279720
+.init_array                16   10279720
+.fini_array                 8   10279736
+.data.rel.ro            53376   10279744
+.dynamic                  736   10333120
+.got                      328   10333856
+.got.plt                 4952   10334184
+.data                  391088   10339136
+.bss                   285776   10730240
+.comment                   31          0
+Total                11005894
 
-This was the other reason I really didn't want to use alternatives on
-the conditional branch instructions. The relocations are really not
-very natural, and we have odd rules for those things. So I suspect our
-instruction rewriting simply gets this wrong, because that's such a
-nasty pattern.
+And after:
+perf  :
+section                  size       addr
+.interp                    28        848
+.note.gnu.property         32        880
+.note.gnu.build-id         36        912
+.note.ABI-tag              32        948
+.gnu.hash               24628        984
+.dynsym                 88944      25616
+.dynstr                 70217     114560
+.gnu.version             7412     184778
+.gnu.version_r            816     192192
+.rela.dyn              460824     193008
+.rela.plt               14808     653832
+.init                      23     671744
+.plt                     9888     671776
+.plt.got                   24     681664
+.text                 2280446     681696
+.noinstr.text             476    2962144
+.fini                       9    2962620
+.rodata               7048746    2965504
+.eh_frame_hdr           42852   10014252
+.eh_frame              226568   10057104
+.tbss                      48   10285640
+.init_array                16   10285640
+.fini_array                 8   10285656
+.data.rel.ro           301408   10285664
+.dynamic                  736   10587072
+.got                      328   10587808
+.got.plt                 4960   10588136
+.data                  100464   10593152
+.bss                    22512   10693632
+.comment                   31          0
+Total                10707320
 
-I really wanted my "just hardcode the instruction bytes" to work. Not
-only did it get me the small 2-byte conditional jump, it meant that
-there was no relocation on it. But objtool really hates not
-understanding what the alternatives code does.
+The binary has reduced in size by 298,574 bytes. The .bss, that
+doesn't count toward file size, is reduced by 263,254 bytes. At
+runtime this could reduce the footprint up to 561,828 bytes. This is
+still just a fraction of the .rodata section's size of 7,048,746
+bytes, that mainly contains the converted json events. The .rodata
+section needn't all be mapped at the same time.
 
-Which is fair enough, but it's frustrating here when it only results
-in more problems.
+The changes are largely removing static variables and replacing them
+with local or dynamically allocated memory. A common issue was having
+paths in statics for the sake of returning a non-stack pointer to a
+buffer, so the APIs were changed to pass buffers in.
 
-Anyway, I guess *this* avoids all issues. It creates an extra jump to
-a jump for the case where the CPU doesn't have ERMS, but I guess we
-don't really care about those CPUs anyway.
+v2. Address review comments from Namhyung, thanks!
 
-And it avoids all the "alternative instructions have relocations"
-issues. And it creates all small two-byte jumps, and the "rep movsb"
-fits exactly on that same 2 bytes too. Which I guess all argues for
-this being what I should have started with.
+Ian Rogers (16):
+  perf header: Make nodes dynamic in write_mem_topology
+  perf test x86: insn-x86 test data is immutable so mark it const
+  perf test x86: intel-pt-test data is immutable so mark it const
+  perf trace: Make some large static arrays const
+  perf trace beauty: Make MSR arrays const
+  tools api fs: Avoid large static PATH_MAX arrays
+  tools lib api fs tracing_path: Remove two unused MAX_PATH paths
+  perf daemon: Dynamically allocate path to perf
+  perf lock: Dynamically allocate lockhash_table
+  perf timechart: Make large arrays dynamic
+  perf probe: Dynamically allocate params memory
+  perf path: Make mkpath thread safe
+  perf scripting-engines: Move static to local variable
+  tools api fs: Dynamically allocate cgroupfs mount point cache
+  perf test pmu: Avoid 2 static path arrays
+  libsubcmd: Avoid two path statics
 
-This time it *really* works.
+ tools/lib/api/fs/cgroup.c                     |  17 ++-
+ tools/lib/api/fs/fs.c                         |  25 +++-
+ tools/lib/api/fs/tracing_path.c               |  17 +--
+ tools/lib/subcmd/exec-cmd.c                   |  35 +++--
+ tools/perf/arch/x86/tests/insn-x86.c          |  10 +-
+ tools/perf/arch/x86/tests/intel-pt-test.c     |  14 +-
+ tools/perf/builtin-config.c                   |   4 +-
+ tools/perf/builtin-daemon.c                   |  44 +++---
+ tools/perf/builtin-help.c                     |   4 +-
+ tools/perf/builtin-lock.c                     |  20 ++-
+ tools/perf/builtin-probe.c                    | 133 ++++++++++--------
+ tools/perf/builtin-timechart.c                |  48 +++++--
+ tools/perf/builtin-trace.c                    |  33 +++--
+ tools/perf/tests/pmu.c                        |  17 +--
+ tools/perf/trace/beauty/beauty.h              |   2 +-
+ .../perf/trace/beauty/tracepoints/x86_msr.sh  |   6 +-
+ tools/perf/util/cache.h                       |   2 +-
+ tools/perf/util/config.c                      |   3 +-
+ tools/perf/util/header.c                      |  41 +++---
+ tools/perf/util/path.c                        |  35 +----
+ .../util/scripting-engines/trace-event-perl.c |   4 +-
+ .../scripting-engines/trace-event-python.c    |   5 +-
+ 22 files changed, 297 insertions(+), 222 deletions(-)
 
-Famous last words.
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
-                Linus
-
---000000000000f5c99605fc9cf9b1
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_li4whxwl0>
-X-Attachment-Id: f_li4whxwl0
-
-IGFyY2gveDg2L2xpYi9jb3B5X3VzZXJfNjQuUyB8IDEwICsrKysrKysrKy0KIDEgZmlsZSBjaGFu
-Z2VkLCA5IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9hcmNoL3g4
-Ni9saWIvY29weV91c2VyXzY0LlMgYi9hcmNoL3g4Ni9saWIvY29weV91c2VyXzY0LlMKaW5kZXgg
-NGZjNWMyZGUyZGU0Li4wMWM1ZGU0YzI3OWIgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2xpYi9jb3B5
-X3VzZXJfNjQuUworKysgYi9hcmNoL3g4Ni9saWIvY29weV91c2VyXzY0LlMKQEAgLTcsNiArNyw4
-IEBACiAgKi8KIAogI2luY2x1ZGUgPGxpbnV4L2xpbmthZ2UuaD4KKyNpbmNsdWRlIDxhc20vY3B1
-ZmVhdHVyZXMuaD4KKyNpbmNsdWRlIDxhc20vYWx0ZXJuYXRpdmUuaD4KICNpbmNsdWRlIDxhc20v
-YXNtLmg+CiAjaW5jbHVkZSA8YXNtL2V4cG9ydC5oPgogCkBAIC0yOSw3ICszMSw3IEBACiAgKi8K
-IFNZTV9GVU5DX1NUQVJUKHJlcF9tb3ZzX2FsdGVybmF0aXZlKQogCWNtcHEgJDY0LCVyY3gKLQlq
-YWUgLkx1bnJvbGxlZAorCWphZSAuTGxhcmdlCiAKIAljbXAgJDgsJWVjeAogCWphZSAuTHdvcmQK
-QEAgLTY1LDYgKzY3LDEyIEBAIFNZTV9GVU5DX1NUQVJUKHJlcF9tb3ZzX2FsdGVybmF0aXZlKQog
-CV9BU01fRVhUQUJMRV9VQSggMmIsIC5MY29weV91c2VyX3RhaWwpCiAJX0FTTV9FWFRBQkxFX1VB
-KCAzYiwgLkxjb3B5X3VzZXJfdGFpbCkKIAorLkxsYXJnZToKKzA6CUFMVEVSTkFUSVZFICJqbXAg
-Lkx1bnJvbGxlZCIsICJyZXAgbW92c2IiLCBYODZfRkVBVFVSRV9FUk1TCisxOglSRVQKKworICAg
-ICAgICBfQVNNX0VYVEFCTEVfVUEoIDBiLCAxYikKKwogCS5wMmFsaWduIDQKIC5MdW5yb2xsZWQ6
-CiAxMDoJbW92cSAoJXJzaSksJXI4Cg==
---000000000000f5c99605fc9cf9b1--
