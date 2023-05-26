@@ -2,201 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47CB7123DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DE77123DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243285AbjEZJjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
+        id S243296AbjEZJja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242719AbjEZJiy (ORCPT
+        with ESMTP id S243260AbjEZJjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:38:54 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6B510D1;
-        Fri, 26 May 2023 02:38:15 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QSKbl2h7sz4f403M;
-        Fri, 26 May 2023 17:38:11 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgBH_rECfnBk1Jn9KA--.30169S3;
-        Fri, 26 May 2023 17:38:12 +0800 (CST)
-Subject: Re: [PATCH -next v2 6/6] blk-sysfs: add a new attr_group for blk_mq
-To:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de, tj@kernel.org,
-        josef@toxicpanda.com, axboe@kernel.dk
-Cc:     lukas.bulwahn@gmail.com, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230512093554.911753-1-yukuai1@huaweicloud.com>
- <20230512093554.911753-7-yukuai1@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <8cafbd02-182a-4071-7e04-cc6f96045852@huaweicloud.com>
-Date:   Fri, 26 May 2023 17:38:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 26 May 2023 05:39:02 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2125.outbound.protection.outlook.com [40.107.92.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E2410D0;
+        Fri, 26 May 2023 02:38:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=be/cBxAh0G7YI3qu243Z2p5r7vuwUwP/jJO1BN53jhpdj0TXhgVbKNMVEnGRc2Sqir0+B/tJ0oOQOt7R7f3T0yfz2l1gPLL6F0nwbxgI8bks9nxNo9SLj8iEwhuvSC+r+/corbvx7xMWZXstUnzu7HOXYs09jhX0ZwHUikvHRw1ZHirc0+URtRFO8W9Nrqf3UEXyTY8HIUw0IcLEOV2yoLp7U0irIRzBteiQpFor1UFBR2CLQKxKejeGHec/+x2tLClC6cw5Vsa6tVfOiMVvREu1K6/J8EBQrnvs5C9LLJx3K0SVkvvDYjvEjJiWI8EAyxQvRpOVuMn3TPjU0z8ZwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zdEEbLBnQAanxuurg4uXzFS0onDBKoeUcecHJU2RcSQ=;
+ b=F6hJHPKJ7Qw/1cGvAcSWllheNGoIW3KVS1cEMu28cOQkj3XdOebDQviipC28RHWPRqMVk4Hf5yU6w8WvJikh7u5uKtO/EZubBLeEok7Bdw+9XswNM76IwGSlVIYNSB6NbHGYptGvpuvFw1HSZ7S/s7GMuewmNJEuPobELIskKm492RvRQXzSPbZh51mUhsQB7XTUzrTh6Cpdhutc5GUONAbytPMXDj1jLFN0lE+plVjvCONuQJyQpTstsrlpgOVLP4Wf/tV5r9qqZYJ5OJqszgQeN9p1DcTjkJhChFTqc4d+Afvi79hb5uzkIIIBYV+BtHTFiGl8ZCacMl9xi3u0IA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zdEEbLBnQAanxuurg4uXzFS0onDBKoeUcecHJU2RcSQ=;
+ b=g0K1ueUHU1NIeA1wT+ErgEJUnze/DmjtL31I+79WEunkievgPGPX7Psqkn3w0xHVkBZtX03PZxW0LjG6rgEWzwK6EEmMJGsPI3/XHadKiVahJ/RttN36xRsX0A27uInQ9EvQenNVHx48A4094ti4XntSB9kSQj7ggxe4DujfAvc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM6PR13MB3708.namprd13.prod.outlook.com (2603:10b6:5:22b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Fri, 26 May
+ 2023 09:38:24 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.017; Fri, 26 May 2023
+ 09:38:24 +0000
+Date:   Fri, 26 May 2023 11:38:16 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Kenny Ho <Kenny.Ho@amd.com>,
+        David Laight <David.Laight@aculab.com>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Kenny Ho <y2kenny@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        alexander.deucher@amd.com
+Subject: Re: [PATCH] Truncate UTS_RELEASE for rxrpc version
+Message-ID: <ZHB+COAmd3CzVGaJ@corigine.com>
+References: <20230525211346.718562-1-Kenny.Ho@amd.com>
+ <223250.1685052554@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <223250.1685052554@warthog.procyon.org.uk>
+X-ClientProxiedBy: AM9P193CA0012.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21e::17) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-In-Reply-To: <20230512093554.911753-7-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBH_rECfnBk1Jn9KA--.30169S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF47tw4rGF1fKrW8ZFyxKrg_yoWrAF4kpF
-        4DAFy8Zw10q3y7GayxJw4UXwsa9ryF9r43Xr97Kwn2kF12qw4fWryjy34UXrWxArWkWw43
-        ZF4DtrZ8ArZ3ZrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3708:EE_
+X-MS-Office365-Filtering-Correlation-Id: 845e3bfa-340e-4aef-8549-08db5dccf352
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tZ97vpIJd+kD9Dyvd6l6D76559SvzRXEWBJmiKEoYq3wIn1sbSQ8/UNO3zuxMmsVcm5qzQzylcBbyiAWUHcyqdN85Ujkul1nXluvOQdiH0rK3oj5wQFC1Y9fyxBtKpFDN+RmjWpuI53wgvzVfULRWSHWsK4XKrIwdUA6Op7ZMg24mcjk0AEyVpynwxhQlFCc53s+0Tk652Xk7s81ZG0VKMvgV5rGMyGHapdjRuXNqBoy5/NrgJD9/3O6q3tmo6JvVgSeRc6CrOLeBVKC9uq7tIfxTvPy87LPEdMLsBct7kVBajZI4owQLbwVnNqiNRBt5r6xjre6dZS9I4Gy0RkvHrZZP0nrS4EIzNZ8kaSZBKHUqCrf+g+G+OqGwgNtQs8Jp7j/kc5SXZ1t9x5pxdjRtECiswCVK9fgchFVuFohq6oyWet/T1yMhKa8vgJVpYmXzOGM/SC/Xmo5i/y6LnHTg+Cy2ITJ4w/tGK80YsNF4SjMKXgaVidm5+n+TDfx5TH4bSoUF6Sbjp46g5RbIjLQSpvNnQwgbqTBQXsGw2E7FNDHs1sief88p/R0VkAClh0JUTK+JfSzH0dx8tHLa86U+5imU6pybajYjePOMx3ibdA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39840400004)(346002)(396003)(366004)(136003)(451199021)(186003)(38100700002)(6506007)(7416002)(6512007)(2906002)(44832011)(2616005)(36756003)(83380400001)(66946007)(6666004)(478600001)(316002)(86362001)(66556008)(66476007)(6916009)(4326008)(41300700001)(54906003)(6486002)(8936002)(8676002)(966005)(5660300002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7NrP5p18s+GVvlM+Uo31A5RgtXAAlLbaJ0B+8YHEnFt0TdRHRzbFV0ph8PBW?=
+ =?us-ascii?Q?RcInzIfEA8WkWBCkD17P/Kz2Qtf7Hzgk1QKO9QIJ1Q444W82zjm7r/4UnVtF?=
+ =?us-ascii?Q?kRF74yFk9LCdj0X6I5Zbx4qICCEFbJg3aofcgWCykToAq7CgJgUdyZ9/M9IO?=
+ =?us-ascii?Q?Cnz326xMZ9lzdyxTPeaNvh4fYJsi++SOH+yjSXXLCGaTkmARDYKT4eMFIAMl?=
+ =?us-ascii?Q?ewzWdK2UtjEdcU/m4410FNdhqMd9UB0bsxMXwRMC9t8sGcZt2E/U23EHldag?=
+ =?us-ascii?Q?8E6vBn31S1ouZGGwHQyXyPnxV6CHh46xVs6qeJNE6vi8Nt23do0BspnuKnoD?=
+ =?us-ascii?Q?AkWk2GiaAtExPp9LFp487kIf/ro8EspiusXKIxutvPGNH0Pr4MdWbOgnsdd/?=
+ =?us-ascii?Q?+e97XwQzfYxAoB49iHX4Om0tqQ/W8hexpYOIWTLQjByJ4vzQfoXUrK5Mxf7z?=
+ =?us-ascii?Q?KgFuHQQKGqGpoBMP/ES94Zw0zGSMvDEYjtEASswLHuY/FbEliJgdaYBYPQaj?=
+ =?us-ascii?Q?EqtUodRxG0aRhSL51Cl4yy9zJiLVikhYQbVZIdjvfFVBhsiJBXK20xql292x?=
+ =?us-ascii?Q?jctSV4ILOqx4100Ts5BGGvIG2L2+xIEyzYiO1U5e7ONYLZgjzTxFpdnqEv+i?=
+ =?us-ascii?Q?dBUJY5v7WG9BTRpncQrxWbo8fo/4KNzy6VxqobEgRgUx+4aNhRTV6jtGktgZ?=
+ =?us-ascii?Q?tdUmwFUSUqnkwT9qcbcbo6io+Xne7ugereGf2ReJ8pu5precLfUMEq6K3rBU?=
+ =?us-ascii?Q?4v2eBnitJQNnpA9wghl/apzJAbj+/o1qY+GZd+k0gA8ODilznx3Saxu5Wqnd?=
+ =?us-ascii?Q?53QC8OnjmYkP39enL+k2lQeLUYOk2zoOylXUuXHirmDCqOMlBHGcP2amG2xb?=
+ =?us-ascii?Q?+Ftt6SBZUOnPnzeWZSnAkma0TfHPRTao3w3yaH8irAD1eWXfeM6HIL4ehV54?=
+ =?us-ascii?Q?+bk+2xyhvrnPpqtZPCDk2CDVeYl31ma1MPk7+7uctj2TV/dgtoQt/HoMOzo4?=
+ =?us-ascii?Q?5eJHfHHZCTd+lsG3h1gtCvJzLusDHFAGef1LRIICSCBdqdfbTKzasni+GJ+b?=
+ =?us-ascii?Q?BexwCzrNixAw448n2VZIAi09Vm4ljzXdahUbC+TnChkNKNoeGK8Bt6JoPPKv?=
+ =?us-ascii?Q?B79CRPgAGuxKeAI1IBhRnTUJjDt3miajOjPTaKdD8q85FEvP9IJxCO6TdDnE?=
+ =?us-ascii?Q?OlYuqIEZz/Vf1kQEjPICfzC65T0mI6HL3HmuuwIU/WspmUmLVLRziNF2tpt/?=
+ =?us-ascii?Q?OgIV7U37Zjq9gZtO0tQwhnv8EaYEy+6MNaAPS+UOJRaEMo01cxTXWSX9pJqq?=
+ =?us-ascii?Q?HeOKKxOagUU9lr5JvETI8Kv+gCvEqLRvUjVVmCImyrV0JEtSNNX0hB0Yhj0Q?=
+ =?us-ascii?Q?5Wa8J1jA02rAxPIIOvQto1tz28+L6/POSDdzFDM5R8EQoCiWEW8X9uxMA9db?=
+ =?us-ascii?Q?8Ss7bgc/evZVhYxLz0jo8szRF8zcpEfe3Px3Qj2PQtAlcKIYGK7G6RWwH/7L?=
+ =?us-ascii?Q?hgFL6jqu8PQ6yU+5fGqpH7wL2EHa/EIYh52rpfCcNi1C3r06bqanS90vBqSR?=
+ =?us-ascii?Q?RMdBRKvQcIt/8a1ZuIFP2QZxA8eQH2kh9pig1UTXG4yF+Eh7jlvt/WnELovM?=
+ =?us-ascii?Q?gF7vDhFniR44u0Y+RNvPg5usa0q61nfph1wa9bOme+/DuR74ugTmddPnlfzg?=
+ =?us-ascii?Q?zRaN6w=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 845e3bfa-340e-4aef-8549-08db5dccf352
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 09:38:24.1205
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5fsu9Q/5Y3sphXHTRzZPVlSjR52Lsqb+JR4uGoCb7KgHmeLZIe9VfNDOfEbyV75L+I6vI0zInas2ApoZ/fsPSSSf/gWZTccKTJc3l0r/8nw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3708
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Christoph
-
-ÔÚ 2023/05/12 17:35, Yu Kuai Ð´µÀ:
-> From: Yu Kuai <yukuai3@huawei.com>
+On Thu, May 25, 2023 at 11:09:14PM +0100, David Howells wrote:
+> Kenny Ho <Kenny.Ho@amd.com> wrote:
 > 
-> Currently wbt sysfs entry is created for bio based device, and wbt can
-> be enabled for such device through sysfs while it doesn't make sense
-> because wbt can only work for rq based device. In the meantime, there
-> are other similar sysfs entries.
+> > @@ -30,6 +28,7 @@ static void rxrpc_send_version_request(struct rxrpc_local *local,
+> >  	struct sockaddr_rxrpc srx;
+> >  	struct msghdr msg;
+> >  	struct kvec iov[2];
+> > +	static char rxrpc_version_string[65];
+> >  	size_t len;
+> >  	int ret;
+> >  
 > 
-> Fix this by adding a new attr_group for blk_mq, and sysfs entries will
-> only be created when the device is rq based.
+> That's not thread-safe.  If you have multiple endpoints each one of them could
+> be overwriting the string at the same time.  We can't guarantee that one
+> wouldn't corrupt the other.
 > 
-> Suggested-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> There's also no need to reprint it every time; just once during module init
+> will do.  How about the attached patch instead?
+> 
+> David
 
-Any comments about this patch?
+Thanks David ad Kenny,
 
-Thanks,
-Kuai
+can we arrange for a formal posting of the patch below?
+I suspect it will languish otherwise.
+
 > ---
->   block/blk-sysfs.c | 42 +++++++++++++++++++++++++++++++-----------
->   1 file changed, 31 insertions(+), 11 deletions(-)
+> rxrpc: Truncate UTS_RELEASE for rxrpc version
 > 
-> diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-> index 6c1c4ba66bc0..afc797fb0dfc 100644
-> --- a/block/blk-sysfs.c
-> +++ b/block/blk-sysfs.c
-> @@ -621,7 +621,6 @@ QUEUE_RW_ENTRY(queue_wb_lat, "wbt_lat_usec");
->   #endif
->   
->   static struct attribute *queue_attrs[] = {
-> -	&queue_requests_entry.attr,
->   	&queue_ra_entry.attr,
->   	&queue_max_hw_sectors_entry.attr,
->   	&queue_max_sectors_entry.attr,
-> @@ -629,7 +628,6 @@ static struct attribute *queue_attrs[] = {
->   	&queue_max_discard_segments_entry.attr,
->   	&queue_max_integrity_segments_entry.attr,
->   	&queue_max_segment_size_entry.attr,
-> -	&elv_iosched_entry.attr,
->   	&queue_hw_sector_size_entry.attr,
->   	&queue_logical_block_size_entry.attr,
->   	&queue_physical_block_size_entry.attr,
-> @@ -650,7 +648,6 @@ static struct attribute *queue_attrs[] = {
->   	&queue_max_open_zones_entry.attr,
->   	&queue_max_active_zones_entry.attr,
->   	&queue_nomerges_entry.attr,
-> -	&queue_rq_affinity_entry.attr,
->   	&queue_iostats_entry.attr,
->   	&queue_stable_writes_entry.attr,
->   	&queue_random_entry.attr,
-> @@ -658,11 +655,7 @@ static struct attribute *queue_attrs[] = {
->   	&queue_wc_entry.attr,
->   	&queue_fua_entry.attr,
->   	&queue_dax_entry.attr,
-> -#ifdef CONFIG_BLK_WBT
-> -	&queue_wb_lat_entry.attr,
-> -#endif
->   	&queue_poll_delay_entry.attr,
-> -	&queue_io_timeout_entry.attr,
->   #ifdef CONFIG_BLK_DEV_THROTTLING_LOW
->   	&blk_throtl_sample_time_entry.attr,
->   #endif
-> @@ -671,16 +664,23 @@ static struct attribute *queue_attrs[] = {
->   	NULL,
->   };
->   
-> +static struct attribute *blk_mq_queue_attrs[] = {
-> +	&queue_requests_entry.attr,
-> +	&elv_iosched_entry.attr,
-> +	&queue_rq_affinity_entry.attr,
-> +	&queue_io_timeout_entry.attr,
-> +#ifdef CONFIG_BLK_WBT
-> +	&queue_wb_lat_entry.attr,
-> +#endif
-> +	NULL,
-> +};
+> UTS_RELEASE has a maximum length of 64 which can cause rxrpc_version to
+> exceed the 65 byte message limit.
+> 
+> Per the rx spec[1]: "If a server receives a packet with a type value of 13,
+> and the client-initiated flag set, it should respond with a 65-byte payload
+> containing a string that identifies the version of AFS software it is
+> running."
+> 
+> The current implementation causes a compile error when WERROR is turned on
+> and/or UTS_RELEASE exceeds the length of 49 (making the version string more
+> than 64 characters).
+> 
+> Fix this by generating the string during module initialisation and limiting
+> the UTS_RELEASE segment of the string does not exceed 49 chars.  We need to
+> make sure that the 64 bytes includes "linux-" at the front and " AF_RXRPC" at
+> the back as this may be used in pattern matching.
+> 
+> Fixes: 44ba06987c0b ("RxRPC: Handle VERSION Rx protocol packets")
+> Reported-by: Kenny Ho <Kenny.Ho@amd.com>
+> Link: https://lore.kernel.org/r/20230523223944.691076-1-Kenny.Ho@amd.com/
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Link: https://web.mit.edu/kolya/afs/rx/rx-spec [1]
+> cc: Marc Dionne <marc.dionne@auristor.com>
+> cc: Andrew Lunn <andrew@lunn.ch>
+> cc: David Laight <David.Laight@ACULAB.COM>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: linux-afs@lists.infradead.org
+> cc: netdev@vger.kernel.org
+> ---
+>  net/rxrpc/af_rxrpc.c    |    1 +
+>  net/rxrpc/ar-internal.h |    1 +
+>  net/rxrpc/local_event.c |   11 ++++++++++-
+>  3 files changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
+> index 31f738d65f1c..da0b3b5157d5 100644
+> --- a/net/rxrpc/af_rxrpc.c
+> +++ b/net/rxrpc/af_rxrpc.c
+> @@ -980,6 +980,7 @@ static int __init af_rxrpc_init(void)
+>  	BUILD_BUG_ON(sizeof(struct rxrpc_skb_priv) > sizeof_field(struct sk_buff, cb));
+>  
+>  	ret = -ENOMEM;
+> +	rxrpc_gen_version_string();
+>  	rxrpc_call_jar = kmem_cache_create(
+>  		"rxrpc_call_jar", sizeof(struct rxrpc_call), 0,
+>  		SLAB_HWCACHE_ALIGN, NULL);
+> diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
+> index 5d44dc08f66d..e8e14c6f904d 100644
+> --- a/net/rxrpc/ar-internal.h
+> +++ b/net/rxrpc/ar-internal.h
+> @@ -1068,6 +1068,7 @@ int rxrpc_get_server_data_key(struct rxrpc_connection *, const void *, time64_t,
+>  /*
+>   * local_event.c
+>   */
+> +void rxrpc_gen_version_string(void);
+>  void rxrpc_send_version_request(struct rxrpc_local *local,
+>  				struct rxrpc_host_header *hdr,
+>  				struct sk_buff *skb);
+> diff --git a/net/rxrpc/local_event.c b/net/rxrpc/local_event.c
+> index 5e69ea6b233d..993c69f97488 100644
+> --- a/net/rxrpc/local_event.c
+> +++ b/net/rxrpc/local_event.c
+> @@ -16,7 +16,16 @@
+>  #include <generated/utsrelease.h>
+>  #include "ar-internal.h"
+>  
+> -static const char rxrpc_version_string[65] = "linux-" UTS_RELEASE " AF_RXRPC";
+> +static char rxrpc_version_string[65]; // "linux-" UTS_RELEASE " AF_RXRPC";
 > +
->   static umode_t queue_attr_visible(struct kobject *kobj, struct attribute *attr,
->   				int n)
->   {
->   	struct gendisk *disk = container_of(kobj, struct gendisk, queue_kobj);
->   	struct request_queue *q = disk->queue;
->   
-> -	if (attr == &queue_io_timeout_entry.attr &&
-> -		(!q->mq_ops || !q->mq_ops->timeout))
-> -			return 0;
-> -
->   	if ((attr == &queue_max_open_zones_entry.attr ||
->   	     attr == &queue_max_active_zones_entry.attr) &&
->   	    !blk_queue_is_zoned(q))
-> @@ -689,11 +689,30 @@ static umode_t queue_attr_visible(struct kobject *kobj, struct attribute *attr,
->   	return attr->mode;
->   }
->   
-> +static umode_t blk_mq_queue_attr_visible(struct kobject *kobj,
-> +					 struct attribute *attr, int n)
+> +/*
+> + * Generate the VERSION packet string.
+> + */
+> +void rxrpc_gen_version_string(void)
 > +{
-> +	struct gendisk *disk = container_of(kobj, struct gendisk, queue_kobj);
-> +	struct request_queue *q = disk->queue;
-> +
-> +	if (!queue_is_mq(q))
-> +		return 0;
-> +
-> +	if (attr == &queue_io_timeout_entry.attr && !q->mq_ops->timeout)
-> +		return 0;
-> +
-> +	return attr->mode;
+> +	snprintf(rxrpc_version_string, sizeof(rxrpc_version_string),
+> +		 "linux-%.49s AF_RXRPC", UTS_RELEASE);
 > +}
-> +
->   static struct attribute_group queue_attr_group = {
->   	.attrs = queue_attrs,
->   	.is_visible = queue_attr_visible,
->   };
->   
-> +static struct attribute_group blk_mq_queue_attr_group = {
-> +	.attrs = blk_mq_queue_attrs,
-> +	.is_visible = blk_mq_queue_attr_visible,
-> +};
->   
->   #define to_queue(atr) container_of((atr), struct queue_sysfs_entry, attr)
->   
-> @@ -738,6 +757,7 @@ static const struct sysfs_ops queue_sysfs_ops = {
->   
->   static const struct attribute_group *blk_queue_attr_groups[] = {
->   	&queue_attr_group,
-> +	&blk_mq_queue_attr_group,
->   	NULL
->   };
->   
+>  
+>  /*
+>   * Reply to a version request
 > 
-
+> 
