@@ -2,115 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4428712372
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC14712379
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243039AbjEZJYh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 26 May 2023 05:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
+        id S243104AbjEZJZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243035AbjEZJYf (ORCPT
+        with ESMTP id S236712AbjEZJZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:24:35 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EAD1A2;
-        Fri, 26 May 2023 02:24:32 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QSKFc4JZkz67lH1;
-        Fri, 26 May 2023 17:22:28 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 26 May
- 2023 10:24:29 +0100
-Date:   Fri, 26 May 2023 10:24:28 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Stephane Eranian <eranian@google.com>
-CC:     Namhyung Kim <namhyung@gmail.com>,
-        Liang Kan <kan.liang@linux.intel.com>,
-        <linux-cxl@vger.kernel.org>, <peterz@infradead.org>,
-        <mark.rutland@arm.com>, <will@kernel.org>, <mingo@redhat.com>,
-        <acme@kernel.org>, <dan.j.williams@intel.com>,
-        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Dave Jiang" <dave.jiang@intel.com>
-Subject: Re: [PATCH v6 4/5] perf: CXL Performance Monitoring Unit driver
-Message-ID: <20230526102428.00002b6a@Huawei.com>
-In-Reply-To: <CABPqkBQpXAq=uk5-vx-FkYJV1nrtugit_ExFqGgQCKGQC2no6w@mail.gmail.com>
-References: <20230413142617.15995-1-Jonathan.Cameron@huawei.com>
-        <20230413142617.15995-5-Jonathan.Cameron@huawei.com>
-        <CAM9d7ciPW67QRRwRsY3-ouEM6wM0YdX+qnkkqYmTXRLwJcgqkA@mail.gmail.com>
-        <CABPqkBQpXAq=uk5-vx-FkYJV1nrtugit_ExFqGgQCKGQC2no6w@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 26 May 2023 05:25:13 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D041A8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:25:02 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f3b9e54338so548915e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685093100; x=1687685100;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=52mmibDACLRMIh8RU4WtvXxPHcTWwwRXhF0d9Ge0SzQ=;
+        b=SWafjm1ssOiBH2WLljAAYcgvuaVfMDWsHaWwXlgB3trlEbpz90v5jhW+rzV1ID/oP9
+         g+rz1Kd+fS1laGsB+WJkDxOX853hiS4KwSKZQH4xkx+GuR3072NlkHNqFXdPcSTUt9bH
+         ZIzDk93zC8iF5sLrG5A/1o1fa2ju/pZYsQpnYsixSzTB6OClm8Gk2sZBFbjTnvYH6VnZ
+         rOFBrLVMuNWo4FcQFVV4mIqx/WEtgmw5ouIRXRVd7JU2QGBQdLfRgD+j86gf1G7vy4EG
+         XKy81SmVn15z5rrafeaOsbRSll61Y0B0YfVl1OR/Wjgvr76PLsRE1Ysi4C6wEUto2Ewj
+         i8GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685093100; x=1687685100;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=52mmibDACLRMIh8RU4WtvXxPHcTWwwRXhF0d9Ge0SzQ=;
+        b=EzrbM2koMXWb+KnllqRE+qBBB+4CQ1o8bjjARbGcwvAzw3kUPvvfwNBgVY/XETVJ/8
+         svMybdXH4JDudgIG9/NxN7w9VTbgUrwG1Dl09VpSPmd9eGiM7GeoYGPfxHZisDhIWBLQ
+         GsWU4wg7YkcufUuSVG90ddxPpGKBzMpF4vl6I+eQ8NRQYQP47WOLQzcrTK85LflY9uqF
+         bR5m8cfSwI0UYlfeWFyhe6J9xMsoyQ0GEDsiIoCG49rHMQpfFjVjedE53o+x4n8Q7K60
+         +SiWVhYBKGqwiF9V/1SERxv5C2r2KreQ9Whj2IADhoWyZHwdI2ZBcC4qYJli6iPYOGxn
+         r+bw==
+X-Gm-Message-State: AC+VfDyslN+0gswTktaMBXoqyYdtdgnYrnZWZ+6kCMP1BCjDjdbm5Wrc
+        VnH2ipogIqRbjpMe9Z/pVuRPoA==
+X-Google-Smtp-Source: ACHHUZ5eWBjMxaSbV0u8cTeCUf97RgS+TuJiJQSMYefmEf93NwMwzC5UXlGziD1OlJG3xRdpw30qnQ==
+X-Received: by 2002:ac2:4425:0:b0:4f2:7cb1:65fc with SMTP id w5-20020ac24425000000b004f27cb165fcmr281618lfl.64.1685093100324;
+        Fri, 26 May 2023 02:25:00 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id q9-20020ac25109000000b004f252003071sm543346lfb.37.2023.05.26.02.24.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 02:25:00 -0700 (PDT)
+Message-ID: <4e226295-e19f-9518-6dda-7f96665ada65@linaro.org>
+Date:   Fri, 26 May 2023 11:24:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: ipq6018: add QFPROM node
+Content-Language: en-US
+To:     Kathiravan T <quic_kathirav@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230526070421.25406-1-quic_kathirav@quicinc.com>
+ <20230526070421.25406-4-quic_kathirav@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230526070421.25406-4-quic_kathirav@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023 18:18:55 -0700
-Stephane Eranian <eranian@google.com> wrote:
 
-> On Thu, May 25, 2023 at 6:06 PM Namhyung Kim <namhyung@gmail.com> wrote:
-> >
-> > Add Stephane to CC.
-> >
-> > On Thu, Apr 13, 2023 at 7:35 AM Jonathan Cameron
-> > <Jonathan.Cameron@huawei.com> wrote:  
-> > >
-> > > CXL rev 3.0 introduces a standard performance monitoring hardware
-> > > block to CXL. Instances are discovered using CXL Register Locator DVSEC
-> > > entries. Each CXL component may have multiple PMUs.
-> > >
-> > > This initial driver supports a subset of types of counter.
-> > > It supports counters that are either fixed or configurable, but requires
-> > > that they support the ability to freeze and write value whilst frozen.
-> > >
-> > > Development done with QEMU model which will be posted shortly.
-> > >
-> > > Example:
-> > >
-> > > $ perf stat -e cxl_pmu_mem0.0/h2d_req_snpcur/ -e cpmu0/h2d_req_snpdata/ -e cpmu0/clock_ticks/ sleep 1
-> > >
-> > > Performance counter stats for 'system wide':
-> > >  
+
+On 26.05.2023 09:04, Kathiravan T wrote:
+> IPQ6018 has efuse region to determine the various HW quirks. Lets
+> add the initial support and the individual fuses will be added as they
+> are required.
 > 
-> Unless I am mistaken, I don't think this output corresponds to the
-> cmdline above. I think the -a is missing.
-> I don't think you can measure CXL traffic per-thread. Please confirm.
-> Thanks.
-
-It doesn't seem to make any difference whether I include -a or not and
-the perf man page says 
-
-       -a, --all-cpus
-           system-wide collection from all CPUs (default if no target is
-           specified)
-
-However I'm not sure what target means in this case as there is no
-mention of it anywhere else in the perf-stat man page.  My guess is thread
-or process provided by -p or -t.  So default applies in the above command line.
-Doesn't hurt to be more explicit though, so I've added -a.
-
-The command line is wrong however as I failed to update the device name
-for the 2nd and 3rd events.
-
-
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/ipq6018.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> >  
-> > > 96,757,023,244,321      cxl_pmu_mem0.0/h2d_req_snpcur/
-> > > 96,757,023,244,365      cxl_pmu_mem0.0/h2d_req_snpdata/
-> > > 193,514,046,488,653      cxl_pmu_mem0.0/clock_ticks/
-> > >
-> > >        1.090539600 seconds time elapsed
+> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> index f531797f2619..856879fd0207 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> @@ -206,6 +206,13 @@
+>  		dma-ranges;
+>  		compatible = "simple-bus";
+>  
+> +		qfprom: efuse@a4000 {
+This should be a bit lower down (0xa4000 > 0x59000)
+
+Konrad
+> +			compatible = "qcom,ipq6018-qfprom", "qcom,qfprom";
+> +			reg = <0x0 0x000a4000 0x0 0x2000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +		};
+> +
+>  		qusb_phy_1: qusb@59000 {
+>  			compatible = "qcom,ipq6018-qusb2-phy";
+>  			reg = <0x0 0x00059000 0x0 0x180>;
