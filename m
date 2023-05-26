@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B6F712E2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C8D712E2F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236920AbjEZUgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 16:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43870 "EHLO
+        id S236628AbjEZUhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 16:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjEZUgj (ORCPT
+        with ESMTP id S229628AbjEZUhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 16:36:39 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA94F3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:36:36 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f4b80bf93aso1276930e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:36:36 -0700 (PDT)
+        Fri, 26 May 2023 16:37:36 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FA6134
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:37:35 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96fa4a6a79bso172152866b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:37:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685133395; x=1687725395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0QFhrmXQWyPgc4s42uFYQSvB0IVUNfYN59jpnyyV6Vs=;
-        b=uJWgr7gdiQRVYWMqQwr6at476XhkdPRKqV5e+zq3kYUgSg+Vq0zR0rqKQvcdqE80zV
-         ySerW8QnhZC9QcacTabho3bPAe3k4220XZ/Rxpj//ImMZrbB/SlkXLS2aI4uYoGTu5rb
-         7O35mirEZq4n72JQaHdjN41K/PvVtNNIhQ6RcAcgKR+fyAhuxZJQFBFnkhWzhhoewP24
-         OMc+QXO/xSPVno7k8WwVL3Tf//PUC9Zx4LmRoskhFrdlf1v5CfhVGrjFp6jPc4DwRsC4
-         Es5S/5R6Lyk59x+EYckgmsk6fjoWaccyat0y7TYka4uXPxSShMjimp9GWblHiiq56uPj
-         dlBw==
+        d=linux-foundation.org; s=google; t=1685133453; x=1687725453;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eKtb5pF799Vf0zYkpYw5rmcT4zTxO2bOf/EKOzgAhcY=;
+        b=BOjN3c0mNuFLGaA8ph4Pbmp3phDLkFpEmpt7ob4g0VlG6IQxJqBcj42Dej6W8LeWYR
+         ql3RVtPvRxVf9j9PQKQl4EQewjdi4lBNwKNHhGhgUYmGJWUfOpULkOnvq2WUbMUju49c
+         XvBg68bgZ9/uoJaW3x1ZF5yJPaw1gS1utGf6s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685133395; x=1687725395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0QFhrmXQWyPgc4s42uFYQSvB0IVUNfYN59jpnyyV6Vs=;
-        b=Wcc0NL6+i4wW6x2uOe/v/Sq/39/ENAKsjUoDn4P1DYz+0FrFphm1d3VMERUnfA7vuD
-         KWj0Cy0I07hhaUDMm6+DLw0MVBPjOeuLSfWHlYeo2EfxEgPM2h7u3gUnX1Qbb9KFRDdO
-         o0npjZG9gq73AuMXIfPh+k7f4H+6luCWGqEdBytyUihJcJNGlXJ6rT97SO95z4CYTRUh
-         SkOcUyq7HJhnSmPtSMKAv3CFBJWyFjeHeFv8CMDSsVe4onuY7ZuwiGEbQbx6Gv3Inqs1
-         UjEgQ+BLPtyuI9aHxoxxAaangdWqS6ewP2Wvc+lUJFpdy4U9rt+gNgFcRlpQc2XuMDOd
-         5LsA==
-X-Gm-Message-State: AC+VfDxSgs9eqsdmH0lVlUwJg67DP5cshjWm6YcdY/FJR0+RA7CYSL+R
-        J5yvQdEb1eqXxpUjKpM65FQhDg==
-X-Google-Smtp-Source: ACHHUZ6lWok7qQ7Kt8GzUmHwRGY5EScRevrnB5nxrPp83bTTphSpwPirF9ZqNpltX2qMqoQ5yMBvYQ==
-X-Received: by 2002:ac2:5ed0:0:b0:4f3:b207:65ff with SMTP id d16-20020ac25ed0000000b004f3b20765ffmr833070lfq.24.1685133394986;
-        Fri, 26 May 2023 13:36:34 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id w25-20020a05651204d900b004cc8196a308sm774572lfq.98.2023.05.26.13.36.33
+        d=1e100.net; s=20221208; t=1685133453; x=1687725453;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eKtb5pF799Vf0zYkpYw5rmcT4zTxO2bOf/EKOzgAhcY=;
+        b=aYMP31XBEiNbCYz2c34ao73vL+NiqQ8AWPQs1k52b6I5h5nF/5FLgXIhPGwWM1VVhx
+         sFYEWiU/el56UU1fLpYnOcoXaKEW8J12vbVGByVc+6W36GR8QkPA5BA4yrRuakRAgSBc
+         kUI5phx6V2iPwYv8BF0EjsDMLjSYsZQAJAVSac5vfQ92Zk6XMthJ54Ed4025NBJ1LcgK
+         FQ5NoR8aOJUT8Id+6SyFGbXYwDT/Lo/gW6IBhDv/yYWAUCxycpCQjKwsARCExBCj+Ahy
+         r8WCEkdWwdn1C73+Igr96ydF+ivyVUUlFJKEaQb/9/T3CKq46I+/KtoTL99IQFLx1bgG
+         55UQ==
+X-Gm-Message-State: AC+VfDxJrs/JvEPoscpgM5BybpdPf0iOO0qDxdBEAT/j678nzCUNT5zz
+        850MeTIyZ/Xkyeat/GuKS04m1Rw0RjMRHpWiHI1VsFwE
+X-Google-Smtp-Source: ACHHUZ4c3J7U84KQkms9BhKCQFvNf5rQjGDOLDczSZHsoJP7pTkwv/m6n06rK5mss7YuR2BvfqkDEw==
+X-Received: by 2002:a17:907:6d1d:b0:973:daaa:f3e1 with SMTP id sa29-20020a1709076d1d00b00973daaaf3e1mr393603ejc.39.1685133453682;
+        Fri, 26 May 2023 13:37:33 -0700 (PDT)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
+        by smtp.gmail.com with ESMTPSA id x15-20020aa7d38f000000b005068fe6f3d8sm289651edq.87.2023.05.26.13.37.32
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 13:36:34 -0700 (PDT)
-Message-ID: <631e5eec-853b-dce2-c474-62e76e83d7e6@linaro.org>
-Date:   Fri, 26 May 2023 22:36:32 +0200
+        Fri, 26 May 2023 13:37:33 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-96652cb7673so174821266b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:37:32 -0700 (PDT)
+X-Received: by 2002:a17:907:3f92:b0:94e:dd30:54b5 with SMTP id
+ hr18-20020a1709073f9200b0094edd3054b5mr3679061ejc.6.1685133452593; Fri, 26
+ May 2023 13:37:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: media: camss: qcom,msm8996-camss: Add
- CAMSS power domain
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Conor Dooley <conor@kernel.org>
-Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hansverk@cisco.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230526180712.8481-1-y.oudjana@protonmail.com>
- <20230526180712.8481-2-y.oudjana@protonmail.com>
- <20230526-obstruct-venus-5833511a58af@spud>
- <838b134d-46cb-6237-49b0-0c287141ebb3@linaro.org>
- <20230526-street-pox-2ff5ee106c43@spud>
- <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CANn89iKUbyrJ=r2+_kK+sb2ZSSHifFZ7QkPLDpAtkJ8v4WUumA@mail.gmail.com>
+ <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
+ <CANn89i+bExb_P6A9ROmwqNgGdO5o8wawVZ5r3MHnz0qfhxvTtA@mail.gmail.com>
+ <CAHk-=wig6VizZHtRznz7uAWa-hHWjrCNANZ9B+1G=aTWPiVH4g@mail.gmail.com>
+ <CAHk-=whkci5ck5Him8Lx5ECKHEtj=bipYmOCGe8DWrrp8uDq5g@mail.gmail.com>
+ <CAHk-=whtDupvWtj_ow11wU4_u=KvifTqno=5mW1VofyehjdVRA@mail.gmail.com>
+ <CANn89i+u8jvfSQAQ=_JY0be56deJNhKgDWbqpDAvfm-i34qX9A@mail.gmail.com>
+ <CAHk-=wh16fVwO2yZ4Fx0kyRHsNDhGddzNxfQQz2+x08=CPvk_Q@mail.gmail.com>
+ <CANn89iJ3=OiZEABRQQLL6z+J-Wy8AvTJz6NPLQDOtzREiiYb4Q@mail.gmail.com> <CAHk-=whZ23EHnBG4ox9QpHFDeiCSrA2H1wrYrfyg3KP=zK5Sog@mail.gmail.com>
+In-Reply-To: <CAHk-=whZ23EHnBG4ox9QpHFDeiCSrA2H1wrYrfyg3KP=zK5Sog@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 26 May 2023 13:37:15 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wibWdTp-kdCKc-F3d4aVcHO40qqoxoATG+KhVivYE0TqA@mail.gmail.com>
+Message-ID: <CAHk-=wibWdTp-kdCKc-F3d4aVcHO40qqoxoATG+KhVivYE0TqA@mail.gmail.com>
+Subject: Re: x86 copy performance regression
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 26, 2023 at 11:33=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Anyway, I guess *this* avoids all issues. It creates an extra jump to
+> a jump for the case where the CPU doesn't have ERMS, but I guess we
+> don't really care about those CPUs anyway.
 
+Well, I'm obviously wrong, because my very own CPU (AMD Zen 2) doesn't do E=
+RMS.
 
-On 26.05.2023 22:21, Bryan O'Donoghue wrote:
-> On 26/05/2023 21:19, Conor Dooley wrote:
->> On Fri, May 26, 2023 at 09:05:47PM +0100, Bryan O'Donoghue wrote:
->>> On 26/05/2023 20:46, Conor Dooley wrote:
->>>>> +  - power-domain-names
->>>> Why is this now required?
->>>>
->>>> Thanks,
->>>> Conor.
->>>>
->>>
->>> Its an accurate description of the power/clock tree to have the top power
->>> domain be switched on prior to the clocks that depend on it.
->>
->> But what does that have to do with the *names* now being required?
-> 
-> oh the names
-> 
-> no toss that
-this should be
+But the extra 'jmp' doesn't seem to appreciably matter, so I guess I
+don't care. It does show up in profiles, but only barely.
 
-if:properties:compatible:blahblahmsm8996:then:required:power-domain-names
+I've committed and pushed out the fix.
 
-Konrad
-> 
->>
->>> I think Yassine, you could probably include the majority of your
->>> cover-letter text in this commit to explain this change a bit better.
->>
->> I think it would be good to have that regardless.
->>
->> Cheers,
->> Conor.
->>
->>> bod
->>    ^^^ I've been trying not to think about rugby since the weekend :(
-> 
-> Pockets O'Gara should have his paddy papers rescinded
+               Linus
