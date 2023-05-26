@@ -2,80 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC68712674
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6FE712670
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243384AbjEZMTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
+        id S243365AbjEZMSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjEZMTt (ORCPT
+        with ESMTP id S243348AbjEZMSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:19:49 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD7EA4
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:19:48 -0700 (PDT)
-Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QSP7g4t7YzsRnm;
-        Fri, 26 May 2023 20:17:35 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+        Fri, 26 May 2023 08:18:14 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1024419A;
+        Fri, 26 May 2023 05:18:12 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QSP362Jwlz18LbC;
+        Fri, 26 May 2023 20:13:38 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 26 May 2023 20:19:44 +0800
-From:   Huisong Li <lihuisong@huawei.com>
-To:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <sudeep.holla@arm.com>, <rafael.j.wysocki@intel.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <anshuman.khandual@arm.com>,
-        <wangkefeng.wang@huawei.com>, <liuyonglong@huawei.com>,
-        <lihuisong@huawei.com>
-Subject: [PATCH] arm64: acpi: Export symbol for acpi_os_ioremap
-Date:   Fri, 26 May 2023 20:17:51 +0800
-Message-ID: <20230526121751.41060-1-lihuisong@huawei.com>
-X-Mailer: git-send-email 2.33.0
+ 15.1.2507.23; Fri, 26 May 2023 20:18:09 +0800
+Message-ID: <e816734d-e6f5-b990-c86d-ac7d5f1c94c0@huawei.com>
+Date:   Fri, 26 May 2023 20:18:09 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Youquan Song <youquan.song@intel.com>
+CC:     <tony.luck@intel.com>, <naoya.horiguchi@nec.com>,
+        <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <akpm@linux-foundation.org>, <linux-edac@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <jane.chu@oracle.com>
+References: <20230526063242.133656-1-wangkefeng.wang@huawei.com>
+ <20230526070952.GAZHBbQNAWZJP6tOXv@nazgul.local>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20230526070952.GAZHBbQNAWZJP6tOXv@nazgul.local>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver who calls the acpi_os_ioremap() cannot be compiled if the 'M'
-is selected for the driver. The compiling log is as follows:
--->
-MODPOST Module.symvers
-ERROR: modpost: "acpi_os_ioremap" [drivers/soc/hisilicon/xxx.ko] undefined!
-scripts/Makefile.modpost:136: recipe for target 'Module.symvers' failed
-make[1]: *** [Module.symvers] Error 1
 
-So this patch exports symbol for acpi_os_ioremap.
 
-Signed-off-by: Huisong Li <lihuisong@huawei.com>
----
- arch/arm64/kernel/acpi.c | 1 +
- 1 file changed, 1 insertion(+)
+On 2023/5/26 15:09, Borislav Petkov wrote:
+> On Fri, May 26, 2023 at 02:32:42PM +0800, Kefeng Wang wrote:
+>> The best way to fix them is set MCE_IN_KERNEL_COPYIN for MC-Safe Copy,
+>> then let the core do_machine_check() to isolate corrupted page instead
+>> of doing it one-by-one.
+> 
+> No, this whole thing is confused.
+> 
+>   * Indicates an MCE that happened in kernel space while copying data
+>   * from user.
+> 
+> #define MCE_IN_KERNEL_COPYIN
+> 
+> This is a very specific exception type: EX_TYPE_COPY which got added by
+> 
+>    278b917f8cb9 ("x86/mce: Add _ASM_EXTABLE_CPY for copy user access")
+> 
+> but Linus then removed all such user copy exception points in
+> 
+>    034ff37d3407 ("x86: rewrite '__copy_user_nocache' function")
+> 
+> So now that EX_TYPE_COPY never happens.
 
-diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
-index dba8fcec7f33..ec0414caf3d1 100644
---- a/arch/arm64/kernel/acpi.c
-+++ b/arch/arm64/kernel/acpi.c
-@@ -354,6 +354,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
- 	}
- 	return ioremap_prot(phys, size, pgprot_val(prot));
- }
-+EXPORT_SYMBOL(acpi_os_ioremap);
- 
- /*
-  * Claim Synchronous External Aborts as a firmware first notification.
--- 
-2.33.0
+Is this broken the recover when kernel was copying from user space?
 
++ Youquan  could you help to check it?
+
+> 
+> And what you're doing is lumping the handling for
+> EX_TYPE_DEFAULT_MCE_SAFE and EX_TYPE_FAULT_MCE_SAFE together and saying
+> that the MCE happened while copying data from user.
+> 
+> And XSTATE_OP() is one example where this is not really the case.
+> 
+
+Oh, for XSTATE_OP(), it uses EX_TYPE_DEFAULT_MCE_SAFE, but I'm focus on 
+EX_TYPE_DEFAULT_MCE_SAFE, which use copy_mc (arch/x86/lib/copy_mc_64.S),
+like I maintained in changelog, CoW/Coredump/nvdimm/dax, they use 
+copy_mc_xxx function,  sorry for mixed them up.
+
+
+> So no, this is not correct.
+
+so only add MCE_IN_KERNEL_COPYIN for EX_TYPE_DEFAULT_MCE_SAFE?
+
+diff --git a/arch/x86/kernel/cpu/mce/severity.c 
+b/arch/x86/kernel/cpu/mce/severity.c
+index c4477162c07d..6d2587994623 100644
+--- a/arch/x86/kernel/cpu/mce/severity.c
++++ b/arch/x86/kernel/cpu/mce/severity.c
+@@ -293,11 +293,11 @@ static noinstr int error_context(struct mce *m, 
+struct pt_regs *regs)
+         case EX_TYPE_COPY:
+                 if (!copy_user)
+                         return IN_KERNEL;
++               fallthrough;
++       case EX_TYPE_DEFAULT_MCE_SAFE:
+                 m->kflags |= MCE_IN_KERNEL_COPYIN;
+                 fallthrough;
+-
+         case EX_TYPE_FAULT_MCE_SAFE:
+-       case EX_TYPE_DEFAULT_MCE_SAFE:
+                 m->kflags |= MCE_IN_KERNEL_RECOV;
+                 return IN_KERNEL_RECOV;
+
+Correct me if I am wrong, thanks for you reviewing.
+
+
+> 
