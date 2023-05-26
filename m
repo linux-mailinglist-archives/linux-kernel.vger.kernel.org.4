@@ -2,416 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBEC71221E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1173712221
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242325AbjEZIWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
+        id S242677AbjEZIXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236878AbjEZIWU (ORCPT
+        with ESMTP id S242221AbjEZIXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:22:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9914BD9;
-        Fri, 26 May 2023 01:22:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17F5064DF7;
-        Fri, 26 May 2023 08:22:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC7ECC433D2;
-        Fri, 26 May 2023 08:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685089337;
-        bh=z68pfjdEhosaPEsjtJpzRfNnBwTmmXtSizLI17MVt90=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tH0+LdPG5GHk0K0zQGVYcMQ8UUUtQaZUEQphsdeqeybxs3s+1gc8zbvKYQNfbaONw
-         GdaZr/F0LTinx+0VEbUq1tjNlfmI019nDWtxmg17yH0vMSzL1Tjii2n1ZWZyRYB/jo
-         HQPwBfUXpu8CWVDNvPDSdjvtDSotVV/9uXlCY1jsJIH7Ye266qrc/nqlXpzavPJekK
-         lTkxbamBP91cJMuaRBO3U/xg7zpXA8C+hC/N7QHNRX7gy8g4qWthaSdDGGu1+nOMRY
-         THWELS1p0rm4/PrKC0KEA3/GxzeHz+xl382KvvE3MWbpuUDP2RpMU/nIUW6hQGxR3N
-         gZi+wtkmeOfjA==
-From:   eballetbo@kernel.org
-To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Dana Elfassy <delfassy@redhat.com>,
-        linux-input@vger.kernel.org, phuttere@redhat.com,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Enric Balletbo i Serra <eballetbo@kernel.org>
-Subject: [PATCH] selftests/input: Introduce basic tests for evdev ioctls
-Date:   Fri, 26 May 2023 10:22:05 +0200
-Message-Id: <20230526082205.6297-1-eballetbo@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Fri, 26 May 2023 04:23:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF262FB;
+        Fri, 26 May 2023 01:23:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=prrh+Vu8nZehcp2nu1mWJdpU7JobgL09F7dm++keKyY=; b=umJlhCfPvB0nzbxm6ULM/0LnjH
+        oyH9rE6v2h2WrBu1/kmbwIMuqiJ0zfzxtbVHpaDRXW2zgaIpjI9v8Ye7FAEef53vR6XqbEizHzClG
+        q7840vr8smS/71lIbGsg/TxXmerP0FeUxx1Lv61qjxzvXnXdSztqLvix+Oz2u6xd8Hf42/cmR29J7
+        dHGKm6IJmYeDg6M4DDL+rML6LdIDMRtExJUx8pE+8k0380bLI1yD4Oak4EHIyaG/bmKuRkQK3BUV7
+        sC0eM0ZDHAwRuThs1EwByrXR7i9N4AC3xn6QXp9rCCynFxvkNbTGqejKiCH3KAb8YytnywAxqowQV
+        2dh8Y51Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2Sis-001ajq-1w;
+        Fri, 26 May 2023 08:22:54 +0000
+Date:   Fri, 26 May 2023 01:22:54 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [RFC PATCH v2 1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
+Message-ID: <ZHBsXnJcW3L9SXF4@infradead.org>
+References: <20230525223953.225496-1-dhowells@redhat.com>
+ <20230525223953.225496-2-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230525223953.225496-2-dhowells@redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Enric Balletbo i Serra <eballetbo@kernel.org>
-
-This provides a basic infrastructure for the creation of tests for the evdev
-interface. Most of this is code is adapted from the libevdev wrapper
-library. While most of evdev ioctls are covered and tested using
-libevdev tests there are some evdev ioctls that aren't because are not
-supported (and will not be supported) by libevdev. So, adding, at least
-those tests, would make sense.
-
-The test creates an uinput device (and an evdev device) so you can
-call the wanted ioctl from userspace. So, to run those tests you need
-to have support for uinput and evdev as well.
-
-Signed-off-by: Enric Balletbo i Serra <eballetbo@kernel.org>
----
- tools/testing/selftests/Makefile           |   1 +
- tools/testing/selftests/input/.gitignore   |   2 +
- tools/testing/selftests/input/Makefile     |   5 +
- tools/testing/selftests/input/config       |   3 +
- tools/testing/selftests/input/evioc-test.c | 282 +++++++++++++++++++++
- 5 files changed, 293 insertions(+)
- create mode 100644 tools/testing/selftests/input/.gitignore
- create mode 100644 tools/testing/selftests/input/Makefile
- create mode 100644 tools/testing/selftests/input/config
- create mode 100644 tools/testing/selftests/input/evioc-test.c
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 90a62cf75008..29fc77168aa7 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -28,6 +28,7 @@ TARGETS += futex
- TARGETS += gpio
- TARGETS += hid
- TARGETS += intel_pstate
-+TARGETS += input
- TARGETS += iommu
- TARGETS += ipc
- TARGETS += ir
-diff --git a/tools/testing/selftests/input/.gitignore b/tools/testing/selftests/input/.gitignore
-new file mode 100644
-index 000000000000..37f5dff3255b
---- /dev/null
-+++ b/tools/testing/selftests/input/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+evioc-test
-diff --git a/tools/testing/selftests/input/Makefile b/tools/testing/selftests/input/Makefile
-new file mode 100644
-index 000000000000..031729be0628
---- /dev/null
-+++ b/tools/testing/selftests/input/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS +=  -D_GNU_SOURCE -std=gnu99 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
-+
-+TEST_GEN_PROGS := evioc-test
-+include ../lib.mk
-diff --git a/tools/testing/selftests/input/config b/tools/testing/selftests/input/config
-new file mode 100644
-index 000000000000..b7512f3e6d8d
---- /dev/null
-+++ b/tools/testing/selftests/input/config
-@@ -0,0 +1,3 @@
-+CONFIG_INPUT=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_INPUT_UINPUT=m
-diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
-new file mode 100644
-index 000000000000..4c0c8ebed378
---- /dev/null
-+++ b/tools/testing/selftests/input/evioc-test.c
-@@ -0,0 +1,282 @@
-+// SPDX-License-Identifier: MIT
-+/*
-+ * Copyright © 2023 Red Hat, Inc.
-+ *
-+ * Part of the code in this file is inspired and copied from the libevdev wrapper library
-+ * for evdev devices written by Peter Hutterer.
-+ */
-+
-+#include <dirent.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/uinput.h>
-+#include <poll.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/stat.h>
-+#include <time.h>
-+#include <unistd.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#define TEST_DEVICE_NAME "selftest input device"
-+
-+struct selftest_uinput {
-+	int uinput_fd; /** file descriptor to uinput */
-+	int evdev_fd; /** file descriptor to evdev */
-+	char *name; /** device name */
-+	char *syspath; /** /sys path */
-+	char *devnode; /** device node */
-+};
-+
-+static int is_event_device(const struct dirent *dent)
-+{
-+	return strncmp("event", dent->d_name, 5) == 0;
-+}
-+
-+static char *fetch_device_node(const char *path)
-+{
-+	struct dirent **namelist;
-+	char *devnode = NULL;
-+	int ndev, i;
-+
-+	ndev = scandir(path, &namelist, is_event_device, alphasort);
-+	if (ndev <= 0)
-+		return NULL;
-+
-+	/* ndev should only ever be 1 */
-+
-+	for (i = 0; i < ndev; i++) {
-+		if (!devnode && asprintf(&devnode, "/dev/input/%s",
-+					 namelist[i]->d_name) == -1)
-+			devnode = NULL;
-+		free(namelist[i]);
-+	}
-+
-+	free(namelist);
-+
-+	return devnode;
-+}
-+
-+static int is_input_device(const struct dirent *dent)
-+{
-+	return strncmp("input", dent->d_name, 5) == 0;
-+}
-+
-+/*
-+ * Device node is guessed based on the sysfs path, the sysfs path contains a
-+ * eventN file, that corresponds to our /dev/input/eventN number.
-+ */
-+static int fetch_syspath_and_devnode(struct selftest_uinput *uidev)
-+{
-+#define SYS_INPUT_DIR "/sys/devices/virtual/input/"
-+	struct dirent **namelist;
-+	int ndev, i;
-+	int rc;
-+	char buf[sizeof(SYS_INPUT_DIR) + 64] = SYS_INPUT_DIR;
-+
-+	rc = ioctl(uidev->uinput_fd,
-+		   UI_GET_SYSNAME(sizeof(buf) - strlen(SYS_INPUT_DIR)),
-+		   &buf[strlen(SYS_INPUT_DIR)]);
-+	if (rc != -1) {
-+		uidev->syspath = strdup(buf);
-+		uidev->devnode = fetch_device_node(buf);
-+		return 0;
-+	}
-+
-+	ndev = scandir(SYS_INPUT_DIR, &namelist, is_input_device, alphasort);
-+	if (ndev <= 0)
-+		return -1;
-+
-+	for (i = 0; i < ndev; i++) {
-+		int fd, len;
-+
-+		rc = snprintf(buf, sizeof(buf), "%s%s/name", SYS_INPUT_DIR,
-+			      namelist[i]->d_name);
-+		if (rc < 0 || (size_t)rc >= sizeof(buf))
-+			continue;
-+
-+		/* created within time frame */
-+		fd = open(buf, O_RDONLY);
-+		if (fd < 0)
-+			continue;
-+
-+		len = read(fd, buf, sizeof(buf));
-+		close(fd);
-+		if (len <= 0)
-+			continue;
-+
-+		buf[len - 1] = '\0'; /* file contains \n */
-+		if (strcmp(buf, uidev->name) == 0) {
-+			if (uidev->syspath) {
-+				fprintf(stderr,
-+					"multiple identical devices found. syspath is unreliable\n");
-+				break;
-+			}
-+
-+			rc = snprintf(buf, sizeof(buf), "%s%s", SYS_INPUT_DIR,
-+				      namelist[i]->d_name);
-+
-+			if (rc < 0 || (size_t)rc >= sizeof(buf)) {
-+				fprintf(stderr,
-+					"Invalid syspath, syspath is unreliable\n");
-+				break;
-+			}
-+
-+			uidev->syspath = strdup(buf);
-+			uidev->devnode = fetch_device_node(buf);
-+		}
-+	}
-+
-+	for (i = 0; i < ndev; i++)
-+		free(namelist[i]);
-+	free(namelist);
-+
-+	return uidev->devnode ? 0 : -1;
-+#undef SYS_INPUT_DIR
-+}
-+
-+void selftest_uinput_destroy(struct selftest_uinput *uidev)
-+{
-+	if (!uidev)
-+		return;
-+
-+	if (uidev->uinput_fd >= 0)
-+		ioctl(uidev->uinput_fd, UI_DEV_DESTROY, NULL);
-+
-+	close(uidev->evdev_fd);
-+	close(uidev->uinput_fd);
-+
-+	free(uidev->syspath);
-+	free(uidev->devnode);
-+	free(uidev->name);
-+	free(uidev);
-+}
-+
-+int selftest_uinput_create_device(struct selftest_uinput **uidev, ...)
-+{
-+	struct selftest_uinput *new_device;
-+	struct uinput_setup setup;
-+	va_list args;
-+	int rc, fd;
-+	int type;
-+
-+	new_device = calloc(1, sizeof(struct selftest_uinput));
-+	if (!new_device)
-+		return -ENOMEM;
-+
-+	memset(&setup, 0, sizeof(setup));
-+	strncpy(setup.name, TEST_DEVICE_NAME, UINPUT_MAX_NAME_SIZE - 1);
-+	setup.id.vendor = 0x1234; /* sample vendor */
-+	setup.id.product = 0x5678; /* sample product */
-+	setup.id.bustype = BUS_USB;
-+
-+	fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
-+	if (fd < 0) {
-+		fprintf(stderr, "cannot open uinput (%d): %m\n", errno);
-+		goto error;
-+	}
-+
-+	va_start(args, uidev);
-+	rc = 0;
-+	do {
-+		type = va_arg(args, int);
-+		if (type == -1)
-+			break;
-+		rc = ioctl(fd, UI_SET_EVBIT, type);
-+	} while (rc == 0);
-+	va_end(args);
-+
-+	rc = ioctl(fd, UI_DEV_SETUP, &setup);
-+	if (rc == -1)
-+		goto error;
-+
-+	rc = ioctl(fd, UI_DEV_CREATE, NULL);
-+	if (rc == -1)
-+		goto error;
-+
-+	new_device->name = strdup(TEST_DEVICE_NAME);
-+	new_device->uinput_fd = fd;
-+
-+	if (fetch_syspath_and_devnode(new_device) == -1) {
-+		fprintf(stderr, "unable to fetch syspath or device node.\n");
-+		errno = ENODEV;
-+		goto error;
-+	}
-+
-+	fd = open(new_device->devnode, O_RDONLY);
-+	if (fd < 0) {
-+		fprintf(stderr, "cannot open uinput (%d): %m\n", errno);
-+		goto error;
-+	}
-+	new_device->evdev_fd = fd;
-+
-+	*uidev = new_device;
-+
-+	return 0;
-+
-+error:
-+	rc = -errno;
-+	selftest_uinput_destroy(new_device);
-+	return rc;
-+}
-+
-+const char *selftest_uinput_get_devnode(struct selftest_uinput *uidev)
-+{
-+	return uidev->devnode;
-+}
-+
-+TEST(eviocgname_get_device_name)
-+{
-+	struct selftest_uinput *uidev;
-+	char buf[256];
-+	int rc;
-+
-+	rc = selftest_uinput_create_device(&uidev);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	memset(buf, 0, sizeof(buf));
-+	/* ioctl to get the name */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGNAME(sizeof(buf) - 1), buf);
-+	ASSERT_GE(rc, 0);
-+	ASSERT_STREQ(TEST_DEVICE_NAME, buf);
-+
-+	selftest_uinput_destroy(uidev);
-+}
-+
-+TEST(eviocgrep_get_repeat_settings)
-+{
-+	struct selftest_uinput *uidev;
-+	int rep_values[2];
-+	int rc;
-+
-+	memset(rep_values, 0, sizeof(rep_values));
-+
-+	rc = selftest_uinput_create_device(&uidev);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to get the repeat rates values */
-+	rc = ioctl(uidev->evdev_fd, EVIOCSREP, rep_values);
-+	/* should fail because EV_REP is not set */
-+	ASSERT_EQ(-1, rc);
-+
-+	selftest_uinput_destroy(uidev);
-+
-+	rc = selftest_uinput_create_device(&uidev, EV_REP);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to get the repeat rates values */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGREP, rep_values);
-+	ASSERT_EQ(0, rc);
-+	/* should get the default delay an period values set by the kernel */
-+	ASSERT_EQ(rep_values[0], 250);
-+	ASSERT_EQ(rep_values[1], 33);
-+
-+	selftest_uinput_destroy(uidev);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.40.1
+Shouldn't unpin_user_pages and bio_release_page also be updated to
+skip a zero page here?
 
