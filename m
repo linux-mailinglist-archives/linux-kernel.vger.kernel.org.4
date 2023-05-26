@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33312712C84
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816F4712C8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243043AbjEZSfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S243298AbjEZSfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243247AbjEZSer (ORCPT
+        with ESMTP id S243257AbjEZSew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:34:47 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620F610C6
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:36 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacfa4eefd2so2754343276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:36 -0700 (PDT)
+        Fri, 26 May 2023 14:34:52 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E831210D8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:38 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-564f6099813so21292227b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685126075; x=1687718075;
+        d=google.com; s=20221208; t=1685126078; x=1687718078;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=lkJ/bHzmL4xpZrwTU9gjfUY7OChGt5DzdQsy3gr4s10=;
-        b=GmJSW1YJHVbBFCvJMoHwmLL0Bqu4UehFFio7tUJJ5jDQDcS+/CIiDIVujpmrFlKi16
-         gQZiyyLcPJlJa0FRXHU2Kded6W9MWJR3Tx4vuD5I4/79hKig9V0YzIzjIL7I21K7Co32
-         y4ImNbjUyJ1I8RQ3rQbphQ9ndtusFqrQRLC5/AVaBiAMia44At7vFxO34u7bm3k6KOTG
-         B+pBIgpnbYrLBmYlh/ar1EI54OoMc7dhigb7cXP0EAFHeBcjJnQincA6oGZzO9+VzNZB
-         q6Ou0CRNZM6sEKVD86SHHR+ReEAYEDxHoEKR4YS8VabbRDmyqP68Mxsn03cdbGw/uH3W
-         Zsiw==
+        bh=Bcu52ZFroNNUdqyZRIxQffX6dxZ/uHK2VwVobLtSsPQ=;
+        b=5o/Nx7rLPrNfsjQlkkwWwKM8wDGHmv5Dybvj9q2PYboM4W3EidbHkxN5I0Oo/rs7S0
+         khUL+qXGYgFBPOGZw1ae+0f82yoyabEVbgKZ/qilDA7Ug1LN0wdETQjZq8sReEFkF5Mv
+         slV7gSy5Zol+0tUuJlF3l4ebDn3ItoOkCofhzx67roW6klSVhkf7ihzbKKPLxMglfgnw
+         Y1av5YxUp3V8cTSuTyoO1q5tubptBAPkPxO7k0DDTlK9EAXklj+sSHCCQustodKl/2mk
+         N9qqMsUWaAmTRHrbC6zYr+ToTwBFtjy4OdY4Rt/VgF4zqdacRrr/XbD85TIDdPiEtydd
+         UZNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685126075; x=1687718075;
+        d=1e100.net; s=20221208; t=1685126078; x=1687718078;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lkJ/bHzmL4xpZrwTU9gjfUY7OChGt5DzdQsy3gr4s10=;
-        b=C4PGsbMwCDGA20kT+jmYc3Xee30W1gY8mWAgLgbhrfQcv3ErzXW6UxQj3RfgJjRLBU
-         Ycl/3SAlr5F40CJsLcpVFZ5uRgfUj5nRPzG7g074qgwAUTdst0g7PHZS8DRpxFwZZtT5
-         rqoaVU5SD/GNxZPU7HiAIs2GU9NxiofOkiByG3FxforTW2x/T+UcSJx708PPY4Cd80hi
-         Oef88OI8PqFSulH8AJwbO6l09wuHVWFL5Cw2YaCiU2L+xsCiysjAS2wzZ5wCm7hMM1Ue
-         ABc5Ti0KCMWFHuzWn/U7OYFk6VF2JV+uXTPcjb9baW9x3Uwx3tuR2wTWFDBOS1ugSb5m
-         Sgmg==
-X-Gm-Message-State: AC+VfDy4aPxQVFWJWdCZ3eedcqzosUPofN0t7SJNo8eCSQUADrZKyutL
-        wU+G4Yf7MQ4tygYP+5h+Fw45QvfuKotw
-X-Google-Smtp-Source: ACHHUZ6eJgBw1TNqSMNVyweXFFNi9rfq+PtK/7nqSqSets/phP/6WlFJXSaGMMK0qxOmEqKtGAzLy/FHXl7V
+        bh=Bcu52ZFroNNUdqyZRIxQffX6dxZ/uHK2VwVobLtSsPQ=;
+        b=IZDb0d6CUv9+HX7zZYijfqrq9ViZatweNOk6/ZKx3L5uamq4q7/0osphHj0nkcIMdZ
+         /CW2GQD3IlFItZYWPtixdHurkmvyV/pZ6e6mUE+/XY0kiFbRPCTSrSALE21O4Ilte79q
+         UFFIbQ2mRM2qnEOvrXHVJcfOHAaVMxh0SCgAQzQpHwbQ+q/jmHM9YjC8c7fjmVi7Aw3C
+         3ENDUbiJc/bYL6n3uZvzh6PmH21j6VvUVWjagR4/QDMMMoeennuAoUoQJoJAII/9syDK
+         Vinx6P7OzqYEipIjdHMbKopAKcXJk+yxvTaS/t9i42SS4jHhfzCHEPIcgUzg468rqJJs
+         oG8A==
+X-Gm-Message-State: AC+VfDyw/UyDcWzhCOI/sMwyZTVHgDP2fWaLUuF0+EOI4NWy2GdrN/pM
+        06u0KJwg4imLdbKqA+jhD2gAoj34nbDv
+X-Google-Smtp-Source: ACHHUZ40dfijm94RJq2Q31obwmB+WB5iBglw4oyCn9Mp3VcGTYG7tjYdBlampUIaFb0Y5I554ax/Hm8uUwv9
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a25:2494:0:b0:ba8:1e5f:850f with SMTP id
- k142-20020a252494000000b00ba81e5f850fmr976374ybk.10.1685126075505; Fri, 26
- May 2023 11:34:35 -0700 (PDT)
-Date:   Fri, 26 May 2023 11:33:56 -0700
+ (user=irogers job=sendgmr) by 2002:a81:4309:0:b0:561:987e:d22 with SMTP id
+ q9-20020a814309000000b00561987e0d22mr1566047ywa.1.1685126077827; Fri, 26 May
+ 2023 11:34:37 -0700 (PDT)
+Date:   Fri, 26 May 2023 11:33:57 -0700
 In-Reply-To: <20230526183401.2326121-1-irogers@google.com>
-Message-Id: <20230526183401.2326121-12-irogers@google.com>
+Message-Id: <20230526183401.2326121-13-irogers@google.com>
 Mime-Version: 1.0
 References: <20230526183401.2326121-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v2 11/16] perf probe: Dynamically allocate params memory
+Subject: [PATCH v2 12/16] perf path: Make mkpath thread safe
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -79,365 +79,170 @@ To:     Peter Zijlstra <peterz@infradead.org>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid 14,432 bytes in .bss by dynamically allocating params.
+Avoid 4 static arrays for paths, pass in a char[] buffer to use. Makes
+mkpath thread safe for the small number of users. Also removes 16,384
+bytes from .bss.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-probe.c | 133 ++++++++++++++++++++-----------------
- 1 file changed, 71 insertions(+), 62 deletions(-)
+ tools/perf/builtin-config.c |  4 +++-
+ tools/perf/builtin-help.c   |  4 +++-
+ tools/perf/util/cache.h     |  2 +-
+ tools/perf/util/config.c    |  3 ++-
+ tools/perf/util/path.c      | 35 +++++------------------------------
+ 5 files changed, 14 insertions(+), 34 deletions(-)
 
-diff --git a/tools/perf/builtin-probe.c b/tools/perf/builtin-probe.c
-index 4df05b992093..019fef8da6a8 100644
---- a/tools/perf/builtin-probe.c
-+++ b/tools/perf/builtin-probe.c
-@@ -47,29 +47,29 @@ static struct {
- 	char *target;
- 	struct strfilter *filter;
- 	struct nsinfo *nsi;
--} params;
-+} *params;
+diff --git a/tools/perf/builtin-config.c b/tools/perf/builtin-config.c
+index 2603015f98be..2e8363778935 100644
+--- a/tools/perf/builtin-config.c
++++ b/tools/perf/builtin-config.c
+@@ -12,6 +12,7 @@
+ #include "util/debug.h"
+ #include "util/config.h"
+ #include <linux/string.h>
++#include <limits.h>
+ #include <stdio.h>
+ #include <stdlib.h>
  
- /* Parse an event definition. Note that any error must die. */
- static int parse_probe_event(const char *str)
+@@ -157,7 +158,8 @@ int cmd_config(int argc, const char **argv)
  {
--	struct perf_probe_event *pev = &params.events[params.nevents];
-+	struct perf_probe_event *pev = &params->events[params->nevents];
- 	int ret;
+ 	int i, ret = -1;
+ 	struct perf_config_set *set;
+-	char *user_config = mkpath("%s/.perfconfig", getenv("HOME"));
++	char path[PATH_MAX];
++	char *user_config = mkpath(path, sizeof(path), "%s/.perfconfig", getenv("HOME"));
+ 	const char *config_filename;
+ 	bool changed = false;
  
--	pr_debug("probe-definition(%d): %s\n", params.nevents, str);
--	if (++params.nevents == MAX_PROBES) {
-+	pr_debug("probe-definition(%d): %s\n", params->nevents, str);
-+	if (++params->nevents == MAX_PROBES) {
- 		pr_err("Too many probes (> %d) were specified.", MAX_PROBES);
+diff --git a/tools/perf/builtin-help.c b/tools/perf/builtin-help.c
+index 3e7f52054fac..b2a368ae295a 100644
+--- a/tools/perf/builtin-help.c
++++ b/tools/perf/builtin-help.c
+@@ -19,6 +19,7 @@
+ #include <linux/string.h>
+ #include <linux/zalloc.h>
+ #include <errno.h>
++#include <limits.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -389,9 +390,10 @@ static int get_html_page_path(char **page_path, const char *page)
+ {
+ 	struct stat st;
+ 	const char *html_path = system_path(PERF_HTML_PATH);
++	char path[PATH_MAX];
+ 
+ 	/* Check that we have a perf documentation directory. */
+-	if (stat(mkpath("%s/perf.html", html_path), &st)
++	if (stat(mkpath(path, sizeof(path), "%s/perf.html", html_path), &st)
+ 	    || !S_ISREG(st.st_mode)) {
+ 		pr_err("'%s': not a documentation directory.", html_path);
  		return -1;
- 	}
- 
--	pev->uprobes = params.uprobes;
--	if (params.target) {
--		pev->target = strdup(params.target);
-+	pev->uprobes = params->uprobes;
-+	if (params->target) {
-+		pev->target = strdup(params->target);
- 		if (!pev->target)
- 			return -ENOMEM;
--		params.target_used = true;
-+		params->target_used = true;
- 	}
- 
--	pev->nsi = nsinfo__get(params.nsi);
-+	pev->nsi = nsinfo__get(params->nsi);
- 
- 	/* Parse a perf-probe command into event */
- 	ret = parse_perf_probe_command(str, pev);
-@@ -84,12 +84,12 @@ static int params_add_filter(const char *str)
- 	int ret = 0;
- 
- 	pr_debug2("Add filter: %s\n", str);
--	if (!params.filter) {
--		params.filter = strfilter__new(str, &err);
--		if (!params.filter)
-+	if (!params->filter) {
-+		params->filter = strfilter__new(str, &err);
-+		if (!params->filter)
- 			ret = err ? -EINVAL : -ENOMEM;
- 	} else
--		ret = strfilter__or(params.filter, str, &err);
-+		ret = strfilter__or(params->filter, str, &err);
- 
- 	if (ret == -EINVAL) {
- 		pr_err("Filter parse error at %td.\n", err - str + 1);
-@@ -112,17 +112,17 @@ static int set_target(const char *ptr)
- 	 * TODO: Support relative path, and $PATH, $LD_LIBRARY_PATH,
- 	 * short module name.
- 	 */
--	if (!params.target && ptr && *ptr == '/') {
--		params.target = strdup(ptr);
--		if (!params.target)
-+	if (!params->target && ptr && *ptr == '/') {
-+		params->target = strdup(ptr);
-+		if (!params->target)
- 			return -ENOMEM;
--		params.target_used = false;
-+		params->target_used = false;
- 
- 		found = 1;
- 		buf = ptr + (strlen(ptr) - 3);
- 
- 		if (strcmp(buf, ".ko"))
--			params.uprobes = true;
-+			params->uprobes = true;
- 
- 	}
- 
-@@ -172,15 +172,15 @@ static int opt_set_target(const struct option *opt, const char *str,
- 
- 	if  (str) {
- 		if (!strcmp(opt->long_name, "exec"))
--			params.uprobes = true;
-+			params->uprobes = true;
- 		else if (!strcmp(opt->long_name, "module"))
--			params.uprobes = false;
-+			params->uprobes = false;
- 		else
- 			return ret;
- 
- 		/* Expand given path to absolute path, except for modulename */
--		if (params.uprobes || strchr(str, '/')) {
--			tmp = nsinfo__realpath(str, params.nsi);
-+		if (params->uprobes || strchr(str, '/')) {
-+			tmp = nsinfo__realpath(str, params->nsi);
- 			if (!tmp) {
- 				pr_warning("Failed to get the absolute path of %s: %m\n", str);
- 				return ret;
-@@ -190,9 +190,9 @@ static int opt_set_target(const struct option *opt, const char *str,
- 			if (!tmp)
- 				return -ENOMEM;
- 		}
--		free(params.target);
--		params.target = tmp;
--		params.target_used = false;
-+		free(params->target);
-+		params->target = tmp;
-+		params->target_used = false;
- 		ret = 0;
- 	}
- 
-@@ -217,7 +217,7 @@ static int opt_set_target_ns(const struct option *opt __maybe_unused,
- 		}
- 		nsip = nsinfo__new(ns_pid);
- 		if (nsip && nsinfo__need_setns(nsip))
--			params.nsi = nsinfo__get(nsip);
-+			params->nsi = nsinfo__get(nsip);
- 		nsinfo__put(nsip);
- 
- 		ret = 0;
-@@ -238,14 +238,14 @@ static int opt_show_lines(const struct option *opt,
- 	if (!str)
- 		return 0;
- 
--	if (params.command == 'L') {
-+	if (params->command == 'L') {
- 		pr_warning("Warning: more than one --line options are"
- 			   " detected. Only the first one is valid.\n");
- 		return 0;
- 	}
- 
--	params.command = opt->short_name;
--	ret = parse_line_range_desc(str, &params.line_range);
-+	params->command = opt->short_name;
-+	ret = parse_line_range_desc(str, &params->line_range);
- 
- 	return ret;
- }
-@@ -253,7 +253,7 @@ static int opt_show_lines(const struct option *opt,
- static int opt_show_vars(const struct option *opt,
- 			 const char *str, int unset __maybe_unused)
- {
--	struct perf_probe_event *pev = &params.events[params.nevents];
-+	struct perf_probe_event *pev = &params->events[params->nevents];
- 	int ret;
- 
- 	if (!str)
-@@ -264,7 +264,7 @@ static int opt_show_vars(const struct option *opt,
- 		pr_err("  Error: '--vars' doesn't accept arguments.\n");
- 		return -EINVAL;
- 	}
--	params.command = opt->short_name;
-+	params->command = opt->short_name;
- 
- 	return ret;
- }
-@@ -276,7 +276,7 @@ static int opt_add_probe_event(const struct option *opt,
- 			      const char *str, int unset __maybe_unused)
- {
- 	if (str) {
--		params.command = opt->short_name;
-+		params->command = opt->short_name;
- 		return parse_probe_event(str);
- 	}
- 
-@@ -287,7 +287,7 @@ static int opt_set_filter_with_command(const struct option *opt,
- 				       const char *str, int unset)
- {
- 	if (!unset)
--		params.command = opt->short_name;
-+		params->command = opt->short_name;
- 
- 	if (str)
- 		return params_add_filter(str);
-@@ -306,20 +306,29 @@ static int opt_set_filter(const struct option *opt __maybe_unused,
- 
- static int init_params(void)
- {
--	return line_range__init(&params.line_range);
-+	int ret;
-+
-+	params = calloc(1, sizeof(*params));
-+	if (!params)
-+		return -ENOMEM;
-+
-+	ret = line_range__init(&params->line_range);
-+	if (ret)
-+		zfree(&params);
-+	return ret;
+diff --git a/tools/perf/util/cache.h b/tools/perf/util/cache.h
+index 9f2e36ef5072..0b61840d4226 100644
+--- a/tools/perf/util/cache.h
++++ b/tools/perf/util/cache.h
+@@ -26,6 +26,6 @@ static inline int is_absolute_path(const char *path)
+ 	return path[0] == '/';
  }
  
- static void cleanup_params(void)
- {
- 	int i;
+-char *mkpath(const char *fmt, ...) __printf(1, 2);
++char *mkpath(char *path_buf, size_t sz, const char *fmt, ...) __printf(3, 4);
  
--	for (i = 0; i < params.nevents; i++)
--		clear_perf_probe_event(params.events + i);
--	line_range__clear(&params.line_range);
--	free(params.target);
--	strfilter__delete(params.filter);
--	nsinfo__put(params.nsi);
--	memset(&params, 0, sizeof(params));
-+	for (i = 0; i < params->nevents; i++)
-+		clear_perf_probe_event(params->events + i);
-+	line_range__clear(&params->line_range);
-+	free(params->target);
-+	strfilter__delete(params->filter);
-+	nsinfo__put(params->nsi);
-+	zfree(&params);
+ #endif /* __PERF_CACHE_H */
+diff --git a/tools/perf/util/config.c b/tools/perf/util/config.c
+index 658170b8dcef..f340dc73db6d 100644
+--- a/tools/perf/util/config.c
++++ b/tools/perf/util/config.c
+@@ -543,6 +543,7 @@ static char *home_perfconfig(void)
+ 	const char *home = NULL;
+ 	char *config;
+ 	struct stat st;
++	char path[PATH_MAX];
+ 
+ 	home = getenv("HOME");
+ 
+@@ -554,7 +555,7 @@ static char *home_perfconfig(void)
+ 	if (!home || !*home || !perf_config_global())
+ 		return NULL;
+ 
+-	config = strdup(mkpath("%s/.perfconfig", home));
++	config = strdup(mkpath(path, sizeof(path), "%s/.perfconfig", home));
+ 	if (config == NULL) {
+ 		pr_warning("Not enough memory to process %s/.perfconfig, ignoring it.\n", home);
+ 		return NULL;
+diff --git a/tools/perf/util/path.c b/tools/perf/util/path.c
+index ce80b79be103..00adf872bf00 100644
+--- a/tools/perf/util/path.c
++++ b/tools/perf/util/path.c
+@@ -1,16 +1,4 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/*
+- * I'm tired of doing "vsnprintf()" etc just to open a
+- * file, so here's a "return static buffer with printf"
+- * interface for paths.
+- *
+- * It's obviously not thread-safe. Sue me. But it's quite
+- * useful for doing things like
+- *
+- *   f = open(mkpath("%s/%s.perf", base, name), O_RDONLY);
+- *
+- * which is what it's designed for.
+- */
+ #include "path.h"
+ #include "cache.h"
+ #include <linux/kernel.h>
+@@ -22,18 +10,6 @@
+ #include <dirent.h>
+ #include <unistd.h>
+ 
+-static char bad_path[] = "/bad-path/";
+-/*
+- * One hack:
+- */
+-static char *get_pathname(void)
+-{
+-	static char pathname_array[4][PATH_MAX];
+-	static int idx;
+-
+-	return pathname_array[3 & ++idx];
+-}
+-
+ static char *cleanup_path(char *path)
+ {
+ 	/* Clean it up */
+@@ -45,18 +21,17 @@ static char *cleanup_path(char *path)
+ 	return path;
  }
  
- static void pr_err_with_code(const char *msg, int err)
-@@ -346,7 +355,7 @@ static int perf_add_probe_events(struct perf_probe_event *pevs, int npevs)
- 	if (ret < 0)
- 		goto out_cleanup;
+-char *mkpath(const char *fmt, ...)
++char *mkpath(char *path_buf, size_t sz, const char *fmt, ...)
+ {
+ 	va_list args;
+ 	unsigned len;
+-	char *pathname = get_pathname();
  
--	if (params.command == 'D') {	/* it shows definition */
-+	if (params->command == 'D') {	/* it shows definition */
- 		if (probe_conf.bootconfig)
- 			ret = show_bootconfig_events(pevs, npevs);
- 		else
-@@ -635,7 +644,7 @@ __cmd_probe(int argc, const char **argv)
- 			usage_with_options_msg(probe_usage, options,
- 				"'-' is not supported.\n");
- 		}
--		if (params.command && params.command != 'a') {
-+		if (params->command && params->command != 'a') {
- 			usage_with_options_msg(probe_usage, options,
- 				"another command except --add is set.\n");
- 		}
-@@ -644,7 +653,7 @@ __cmd_probe(int argc, const char **argv)
- 			pr_err_with_code("  Error: Command Parse Error.", ret);
- 			return ret;
- 		}
--		params.command = 'a';
-+		params->command = 'a';
- 	}
+ 	va_start(args, fmt);
+-	len = vsnprintf(pathname, PATH_MAX, fmt, args);
++	len = vsnprintf(path_buf, sz, fmt, args);
+ 	va_end(args);
+-	if (len >= PATH_MAX)
+-		return bad_path;
+-	return cleanup_path(pathname);
++	if (len >= sz)
++		strncpy(path_buf, "/bad-path/", sz);
++	return cleanup_path(path_buf);
+ }
  
- 	ret = symbol__validate_sym_arguments();
-@@ -664,54 +673,54 @@ __cmd_probe(int argc, const char **argv)
- 	 * nor change running kernel. So if user gives offline vmlinux,
- 	 * ignore its buildid.
- 	 */
--	if (!strchr("lda", params.command) && symbol_conf.vmlinux_name)
-+	if (!strchr("lda", params->command) && symbol_conf.vmlinux_name)
- 		symbol_conf.ignore_vmlinux_buildid = true;
- 
--	switch (params.command) {
-+	switch (params->command) {
- 	case 'l':
--		if (params.uprobes) {
-+		if (params->uprobes) {
- 			pr_err("  Error: Don't use --list with --exec.\n");
- 			parse_options_usage(probe_usage, options, "l", true);
- 			parse_options_usage(NULL, options, "x", true);
- 			return -EINVAL;
- 		}
--		ret = show_perf_probe_events(params.filter);
-+		ret = show_perf_probe_events(params->filter);
- 		if (ret < 0)
- 			pr_err_with_code("  Error: Failed to show event list.", ret);
- 		return ret;
- 	case 'F':
--		ret = show_available_funcs(params.target, params.nsi,
--					   params.filter, params.uprobes);
-+		ret = show_available_funcs(params->target, params->nsi,
-+					   params->filter, params->uprobes);
- 		if (ret < 0)
- 			pr_err_with_code("  Error: Failed to show functions.", ret);
- 		return ret;
- #ifdef HAVE_DWARF_SUPPORT
- 	case 'L':
--		ret = show_line_range(&params.line_range, params.target,
--				      params.nsi, params.uprobes);
-+		ret = show_line_range(&params->line_range, params->target,
-+				      params->nsi, params->uprobes);
- 		if (ret < 0)
- 			pr_err_with_code("  Error: Failed to show lines.", ret);
- 		return ret;
- 	case 'V':
--		if (!params.filter)
--			params.filter = strfilter__new(DEFAULT_VAR_FILTER,
-+		if (!params->filter)
-+			params->filter = strfilter__new(DEFAULT_VAR_FILTER,
- 						       NULL);
- 
--		ret = show_available_vars(params.events, params.nevents,
--					  params.filter);
-+		ret = show_available_vars(params->events, params->nevents,
-+					  params->filter);
- 		if (ret < 0)
- 			pr_err_with_code("  Error: Failed to show vars.", ret);
- 		return ret;
- #endif
- 	case 'd':
--		ret = perf_del_probe_events(params.filter);
-+		ret = perf_del_probe_events(params->filter);
- 		if (ret < 0) {
- 			pr_err_with_code("  Error: Failed to delete events.", ret);
- 			return ret;
- 		}
- 		break;
- 	case 'D':
--		if (probe_conf.bootconfig && params.uprobes) {
-+		if (probe_conf.bootconfig && params->uprobes) {
- 			pr_err("  Error: --bootconfig doesn't support uprobes.\n");
- 			return -EINVAL;
- 		}
-@@ -719,25 +728,25 @@ __cmd_probe(int argc, const char **argv)
- 	case 'a':
- 
- 		/* Ensure the last given target is used */
--		if (params.target && !params.target_used) {
-+		if (params->target && !params->target_used) {
- 			pr_err("  Error: -x/-m must follow the probe definitions.\n");
- 			parse_options_usage(probe_usage, options, "m", true);
- 			parse_options_usage(NULL, options, "x", true);
- 			return -EINVAL;
- 		}
- 
--		ret = perf_add_probe_events(params.events, params.nevents);
-+		ret = perf_add_probe_events(params->events, params->nevents);
- 		if (ret < 0) {
- 
- 			/*
- 			 * When perf_add_probe_events() fails it calls
- 			 * cleanup_perf_probe_events(pevs, npevs), i.e.
--			 * cleanup_perf_probe_events(params.events, params.nevents), which
-+			 * cleanup_perf_probe_events(params->events, params->nevents), which
- 			 * will call clear_perf_probe_event(), so set nevents to zero
- 			 * to avoid cleanup_params() to call clear_perf_probe_event() again
- 			 * on the same pevs.
- 			 */
--			params.nevents = 0;
-+			params->nevents = 0;
- 			pr_err_with_code("  Error: Failed to add events.", ret);
- 			return ret;
- 		}
+ int path__join(char *bf, size_t size, const char *path1, const char *path2)
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
