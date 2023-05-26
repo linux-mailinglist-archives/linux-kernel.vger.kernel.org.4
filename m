@@ -2,150 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC07712AFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7083E712B08
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237101AbjEZQsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S237281AbjEZQty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236801AbjEZQs1 (ORCPT
+        with ESMTP id S237603AbjEZQtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:48:27 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DF32D9;
-        Fri, 26 May 2023 09:48:26 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 6525B20FBA9B;
-        Fri, 26 May 2023 09:48:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6525B20FBA9B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1685119705;
-        bh=oAXQnJwRTkY9f0udlO0e4Ej6x7Z3Xr0xO8MLKsRFeZ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lEqDvOlptHcL74A42gMy8Z16UH/AgtQqixKq2VwbQiNJhnAZ9kZdoX5aDd14GijVs
-         Sz5qHZH8K8jqMd+fVqm4yepK4H0Y3SAptrQjfAxok2XpnT0T8LAvVkPmEk5GGwP7AC
-         EqT0lSA4Vdio450gO4xBuRLDQp1g6QCKz5PmSCqw=
-Date:   Fri, 26 May 2023 09:48:19 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH V2] tracing/user_events: Prevent same name but different
- args event
-Message-ID: <20230526164819.GA74@W11-BEAU-MD.localdomain>
-References: <20230526100336.76934-1-sunliming@kylinos.cn>
+        Fri, 26 May 2023 12:49:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059DEBC
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685119743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sxic9C46g7G0xFpFyBBflZoBYb0LNNTJdlt5DOHiHJY=;
+        b=Vmc58cnZKWrvpz9BdGFE/YK+H6XRg4aydh9q977fYTwU/7ZFqRmLzR8Fdz8gIT+MrJczhp
+        tgd+SavUux/Kodb95xStHDxvWE04mu7asvDZK4/lZyIAL7TT9ABZCDeFyXLaC+b1sc98oH
+        Z2piPykM7wJVg+tHc0hx8xtFH6QA0Oo=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-111-piDNsAa4Oe-HkRLrttHJlg-1; Fri, 26 May 2023 12:48:54 -0400
+X-MC-Unique: piDNsAa4Oe-HkRLrttHJlg-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-75cb47e5507so4137085a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:48:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685119733; x=1687711733;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sxic9C46g7G0xFpFyBBflZoBYb0LNNTJdlt5DOHiHJY=;
+        b=jblXh2mgllqXNgAnjCaHJnefRoHbnrXUusuHw3ewFFjiXUxeulTCA82W0NY1Zvm53G
+         0CPK22CSnpo+k+IMAFVXPz4sAWG5LISrIBHN35a9y1ANp74IyAK2WBrI6FT3+3DEFzSO
+         7vORis78XbFkc832Sy9e4/VubcmvMauXg4RNpQLJetoTGy4Hrs3ed/Xa/Yp6GNkoM+8E
+         /gWeFS8u5hL5A/0rmNfRO9ct66uptJWZaj0JUJkLFktTnpXJzZDTCTb9MbBw2iWl5ShM
+         U3cOsF4E83EET2JJlm81RlabyqhknpH7HOWS+/48aPRR8/kdZrIvZ4vTj7BL5bf7L3pg
+         jHtQ==
+X-Gm-Message-State: AC+VfDxHLFMg60+yailqJYMJnFknxXX13mbYzUtE5RQZ1RQ3sMhUwqZa
+        NPWwCoVI0NYr5BoOEqYMmdh7oTLZdGRL3WR4rVKch5gJh+ntnUnNwn+K5LUhaJqGP9J2VKN405N
+        cQsi8xCrfHTZCBd4g9tCstMgr
+X-Received: by 2002:a05:620a:8f06:b0:75b:3a99:241c with SMTP id rh6-20020a05620a8f0600b0075b3a99241cmr1986886qkn.7.1685119733667;
+        Fri, 26 May 2023 09:48:53 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7Zj6MOk0fgSC2Gs+lb8bZgbtw6HOuPPCYdHF93Hvwa10uJ6LUEwh6R8dNOTYn7x41D4Dwn9g==
+X-Received: by 2002:a05:620a:8f06:b0:75b:3a99:241c with SMTP id rh6-20020a05620a8f0600b0075b3a99241cmr1986862qkn.7.1685119733280;
+        Fri, 26 May 2023 09:48:53 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id c22-20020ae9e216000000b0075b18a40a85sm1289471qkc.46.2023.05.26.09.48.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 09:48:52 -0700 (PDT)
+Date:   Fri, 26 May 2023 12:48:50 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 01/31] mm: use pmdp_get_lockless() without surplus
+ barrier()
+Message-ID: <ZHDi8q6N9BPElAMH@x1n>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+ <34467cca-58b6-3e64-1ee7-e3dc43257a@google.com>
+ <ZG6PwAvIO4Z7lpkq@x1n>
+ <427ea01f-345a-6086-d145-fe573894dbe@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230526100336.76934-1-sunliming@kylinos.cn>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <427ea01f-345a-6086-d145-fe573894dbe@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 06:03:36PM +0800, sunliming wrote:
-> User processes register name_args for events. If the same name but different
-> args event are registered. The trace outputs of second event are printed
-> as the first event. This is incorrect.
+On Thu, May 25, 2023 at 03:35:01PM -0700, Hugh Dickins wrote:
+> On Wed, 24 May 2023, Peter Xu wrote:
+> > On Sun, May 21, 2023 at 09:49:45PM -0700, Hugh Dickins wrote:
+> > > Use pmdp_get_lockless() in preference to READ_ONCE(*pmdp), to get a more
+> > > reliable result with PAE (or READ_ONCE as before without PAE); and remove
+> > > the unnecessary extra barrier()s which got left behind in its callers.
+> > 
+> > Pure question: does it mean that some of below path (missing barrier()
+> > ones) could have problem when CONFIG_PAE, hence this can be seen as a
+> > (potential) bug fix?
 > 
-> Return EADDRINUSE back to the user process if the same name but different args
-> event has being registered.
+> I don't think so; or at least, I am not claiming that this fixes any.
 > 
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
-> ---
->  kernel/trace/trace_events_user.c              | 34 +++++++++++++++----
->  .../selftests/user_events/ftrace_test.c       |  6 ++++
->  2 files changed, 33 insertions(+), 7 deletions(-)
+> It really depends on what use is made of the pmdval afterwards, and
+> I've not checked through them.  The READ_ONCE()s which were there,
+> were good enough to make sure that the compiler did not reevaluate
+> the pmdval later on, with perhaps a confusingly different result.
 > 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index b1ecd7677642..bd455052ccd0 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -1753,6 +1753,8 @@ static int user_event_parse(struct user_event_group *group, char *name,
->  	int ret;
->  	u32 key;
->  	struct user_event *user;
-> +	int argc = 0;
-> +	char **argv;
->  
->  	/* Prevent dyn_event from racing */
->  	mutex_lock(&event_mutex);
-> @@ -1760,13 +1762,31 @@ static int user_event_parse(struct user_event_group *group, char *name,
->  	mutex_unlock(&event_mutex);
->  
->  	if (user) {
-> -		*newuser = user;
-> -		/*
-> -		 * Name is allocated by caller, free it since it already exists.
-> -		 * Caller only worries about failure cases for freeing.
-> -		 */
-> -		kfree(name);
-> -		return 0;
-> +		if (args) {
-> +			argv = argv_split(GFP_KERNEL, args, &argc);
-> +			if (!argv)
-> +				return -ENOMEM;
+> But, at least in the x86 PAE case, they were not good enough to ensure
+> that the two halves of the entry match up; and, sad to say, nor is that
+> absolutely guaranteed by these conversions to pmdp_get_lockless() -
+> because of the "HOWEVER" below.  PeterZ's comments in linux/pgtable.h
+> are well worth reading through.
 
-This out of memory case needs a refcount_dec(), otherwise we leak a
-refcount here and the event won't ever be able to be deleted afterwards.
+Yes exactly - that's one major thing of my confusion on using
+{ptep|pmdp}_get_lockless().
 
-I would suggest having an error label for both the mismatch and out of
-memory case, which makes a single spot to do the refcount_dec().
+In irqoff ctx, AFAICT we can see a totally messed up pte/pmd with present
+bit set if extremely unlucky. E.g. it can race with something like
+"DONTNEED (contains tlbflush) then a POPULATE_WRITE" so we can have
+"present -> present" conversion of pte when reading, so we can read half
+pfn1 and then the other half pfn2.
 
-IE:
-ret = -ENOMEM;
-goto error;
+The other confusing thing on this _lockless trick on PAE is, I think it
+_might_ go wrong with devmap..
+
+The problem is here we assumed even if high & low may not match, we still
+can rely on most pte/pmd checks are done only on low bits (except _none()
+check) to guarantee at least the checks are still atomic on low bits.
+
+But it seems to me it's not true anymore if with pmd_trans_huge() after
+devmap introduced, e.g.:
+
+static inline int pmd_trans_huge(pmd_t pmd)
+{
+	return (pmd_val(pmd) & (_PAGE_PSE|_PAGE_DEVMAP)) == _PAGE_PSE;
+}
+
+#define _PAGE_PSE	(_AT(pteval_t, 1) << _PAGE_BIT_PSE)
+#define _PAGE_BIT_PSE		7	/* 4 MB (or 2MB) page */
+
+#define _PAGE_DEVMAP	(_AT(u64, 1) << _PAGE_BIT_DEVMAP)
+#define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
+#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
+
+So after devmap with CONFIG_PAE, pmd_trans_huge() checks more than low bits
+but also high bits.  I didn't go further to check whether there can be any
+real issue but IIUC that's not expected when the low/high trick introduced
+(originally introduced in commit e585513b76f7b05d sololy for x86 PAE
+fast-gup only).
+
+> 
+> You might question why I made these changes at all: some days
+> I question them too.  Better though imperfect?  Or deceptive?
+
+I think it's probably a separate topic to address in all cases, so I think
+this patch still make it slightly better on barrier() which I agree:
+
+Acked-by: Peter Xu <peterx@redhat.com>
 
 Thanks,
--Beau
 
-> +
-> +			ret = user_fields_match(user, argc, (const char **)argv);
-> +			argv_free(argv);
-> +
-> +		} else
-> +			ret = list_empty(&user->fields);
-> +
-> +		if (ret) {
-> +			*newuser = user;
-> +			/*
-> +			 * Name is allocated by caller, free it since it already exists.
-> +			 * Caller only worries about failure cases for freeing.
-> +			 */
-> +			kfree(name);
-> +			ret = 0;
-> +		} else {
-> +			refcount_dec(&user->refcnt);
-> +			ret = -EADDRINUSE;
-> +		}
-> +
-> +		return ret;
->  	}
->  
->  	user = kzalloc(sizeof(*user), GFP_KERNEL_ACCOUNT);
-> diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-> index 7c99cef94a65..6e8c4b47281c 100644
-> --- a/tools/testing/selftests/user_events/ftrace_test.c
-> +++ b/tools/testing/selftests/user_events/ftrace_test.c
-> @@ -228,6 +228,12 @@ TEST_F(user, register_events) {
->  	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
->  	ASSERT_EQ(0, reg.write_index);
->  
-> +	/* Multiple registers to same name but different args should fail */
-> +	reg.enable_bit = 29;
-> +	reg.name_args = (__u64)"__test_event u32 field1;";
-> +	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
-> +	ASSERT_EQ(EADDRINUSE, errno);
-> +
->  	/* Ensure disabled */
->  	self->enable_fd = open(enable_file, O_RDWR);
->  	ASSERT_NE(-1, self->enable_fd);
-> -- 
-> 2.25.1
+-- 
+Peter Xu
+
