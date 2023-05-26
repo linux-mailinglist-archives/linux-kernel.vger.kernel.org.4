@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138A1712FAD
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 00:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92049712FEF
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 00:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237699AbjEZWAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 18:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
+        id S236735AbjEZWWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 18:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244199AbjEZWAL (ORCPT
+        with ESMTP id S235695AbjEZWWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 18:00:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02475134;
-        Fri, 26 May 2023 14:59:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10C7B6541A;
-        Fri, 26 May 2023 21:58:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E23AC433D2;
-        Fri, 26 May 2023 21:58:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685138304;
-        bh=1nZsA+RKgqZot2LPxa0Mg83EqjS8d/7etUXcHXpdE0E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WnS+sewHPL2uqoRV2Jeuh6uKGYtRjy/Z0GF/vRKNNJm2AOOQsVPIcnwfLCCB9frxt
-         BBsFQwpF7P2bXRpYce0siyWRVkchC2WGmTFxaRsVOdEDcP9kGfQ1dSeqhvzqTC2n3p
-         Pja4ixHChAvAPfvU9oUnmJFt+jJ3BQgNpGULMVAxYcrBBDc+2hE2YdQQcgFHsd9+2l
-         vwWMByDpmqSQmLwZ0bmHbdDK/uZOuOFpylZVGIsH3PmU65vj+JRgFlq6yUE/oi+OQf
-         NZ2sM3eynl1OqSddf3gRIYD408D6zlK6UXdKzSwzYb2tUoKFFNeb3gy9lqtVDkz3Cr
-         AJTBkiw08YT7A==
-Date:   Fri, 26 May 2023 16:58:22 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Blakeney <mark.blakeney@bullet-systems.net>
-Subject: [GIT PULL] PCI fixes for v6.4
-Message-ID: <ZHErfurfF9cNIION@bhelgaas>
+        Fri, 26 May 2023 18:22:35 -0400
+Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0554C119
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 15:22:22 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
+        id c6010c4f-fc10-11ed-b972-005056bdfda7;
+        Sat, 27 May 2023 01:00:49 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Sat, 27 May 2023 01:00:48 +0300
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v6 1/5] firmware: qcom_scm: provide a read-modify-write
+ function
+Message-ID: <ZHEsELMsevxAR36x@surfacebook>
+References: <1680076012-10785-1-git-send-email-quic_mojha@quicinc.com>
+ <1680076012-10785-2-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1680076012-10785-2-git-send-email-quic_mojha@quicinc.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+Wed, Mar 29, 2023 at 01:16:48PM +0530, Mukesh Ojha kirjoitti:
+> It was realized by Srinivas K. that there is a need of
+> read-modify-write scm exported function so that it can
+> be used by multiple clients.
+> 
+> Let's introduce qcom_scm_io_update_field() which masks
+> out the bits and write the passed value to that
+> bit-offset. Subsequent patch will use this function.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+...
 
-are available in the Git repository at:
+> +	new = (old & ~mask) | val << (ffs(mask) - 1);
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git tags/pci-v6.4-fixes-1
+It's a bit non-standard to see left shift here instead of masking.
 
-for you to fetch changes up to 3b8803494a0612acdeee714cb72aa142b1e05ce5:
+	new = (old & ~mask) | (val & mask);
 
-  PCI/DPC: Quirk PIO log size for Intel Ice Lake Root Ports (2023-05-11 17:38:46 -0500)
+is usual pattern.
 
-----------------------------------------------------------------
-- Quirk Ice Lake Root Ports to work around DPC log size issue (Mika
-  Westerberg)
+Note as well that your code is prone to subtle mistakes when overflow may
+easily override bits outside the mask.
 
-----------------------------------------------------------------
-Mika Westerberg (1):
-      PCI/DPC: Quirk PIO log size for Intel Ice Lake Root Ports
+> +	return qcom_scm_io_writel(addr, new);
+> +}
 
- drivers/pci/quirks.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
