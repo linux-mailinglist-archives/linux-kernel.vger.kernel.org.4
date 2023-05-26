@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1194B71232C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA36712331
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242929AbjEZJOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
+        id S242954AbjEZJQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236801AbjEZJOJ (ORCPT
+        with ESMTP id S242739AbjEZJQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:14:09 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E710C135
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:14:07 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34Q8KF9t025769;
-        Fri, 26 May 2023 11:13:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=8ECcZ8YLu3GV0/3XQIPv5xdkAKG/KqseTjUWFHT/RUM=;
- b=V4Qf6k0kx32/vWFJddoMA0LCr7yCwgVeW7GmWPYeXxSOhpJ0pXYke1/Q9PJZjifZ6efl
- QtqyeZJYz64YR8wW9LkvsHZaQhCu2a1Xup17BxULJ22Ju+zotLXwIPM5gFgS4a7lVRpI
- Z5aRa41CKxEBEAZXX5RgYcjiSKzlInMER3fB7dNZT6tqsqSM4SJm46rog0cF3cvSBLbm
- ELpF/coD4NJAKz9ZhVrc/237S/Fkj8d4vow55Z/MXaPBVLz9f+GY4cdoW1khbZGKKeaQ
- GI8zCW3EKYeolUHSD1ZdujsUmeDGXMVCcwXmNBYgHDHlNdzcFUDjRoZ7lBTepVPMeJL1 Og== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qt4avyfv1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 11:13:51 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5EDCF10002A;
-        Fri, 26 May 2023 11:13:48 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4C95F21BF59;
-        Fri, 26 May 2023 11:13:48 +0200 (CEST)
-Received: from [10.48.0.148] (10.48.0.148) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 26 May
- 2023 11:13:47 +0200
-Message-ID: <3b2d4e17-cd4e-7fcc-e870-06d1ffc2bb90@foss.st.com>
-Date:   Fri, 26 May 2023 11:13:47 +0200
+        Fri, 26 May 2023 05:16:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0735212C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:15:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685092532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/vGFdqik0rBjuVyxRP6fkQFD2f5M7p6nEHdizh76LOg=;
+        b=Pyr9Vjlk030gJR2Znp75JklHos9N8E+WETEa9NfqwMsetrI3yvq/8uwVjV/Wbou+PPPcx5
+        ewFawdeJmNLiK3QhNqAq3NxdTf/g2iQMf45Lc7fXbBuZxC6h0XuOiPuPSjsNJNV351XLWU
+        /ZlCH3zQeCXtsCpTwyh4QNFCemtlpjk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-670-xsMc0qpcOM-rMmA8xGTNwA-1; Fri, 26 May 2023 05:15:31 -0400
+X-MC-Unique: xsMc0qpcOM-rMmA8xGTNwA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22CC71C08DAC;
+        Fri, 26 May 2023 09:15:30 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 756EE492B00;
+        Fri, 26 May 2023 09:15:27 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <4f479af6-2865-4bb3-98b9-78bba9d2065f@lucifer.local>
+References: <4f479af6-2865-4bb3-98b9-78bba9d2065f@lucifer.local> <89c7f535-8fc5-4480-845f-de94f335d332@lucifer.local> <20230525223953.225496-1-dhowells@redhat.com> <20230525223953.225496-2-dhowells@redhat.com> <520730.1685090615@warthog.procyon.org.uk>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [RFC PATCH v2 1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RESEND] drm/stm: ltdc: fix late dereference check
-To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>
-References: <20230515123818.93971-1-raphael.gallais-pou@foss.st.com>
-Content-Language: en-US
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-In-Reply-To: <20230515123818.93971-1-raphael.gallais-pou@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.0.148]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <522653.1685092526.1@warthog.procyon.org.uk>
+Date:   Fri, 26 May 2023 10:15:26 +0100
+Message-ID: <522654.1685092526@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,48 +76,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Lorenzo Stoakes <lstoakes@gmail.com> wrote:
 
+> > iov_iter_extract_pages(), on the other hand, is only used in two places
+> > with these patches and the pins are always released with
+> > unpin_user_page*() so it's a lot easier to audit.
+> 
+> Thanks for the clarification. I guess these are the cases where you're
+> likely to see zero page usage, but since this is changing all PUP*() callers
+> don't you need to audit all of those too?
 
-On 5/15/23 14:38, Raphael Gallais-Pou wrote:
-> In ltdc_crtc_set_crc_source(), struct drm_crtc was dereferenced in a
-> container_of() before the pointer check. This could cause a kernel panic.
-> 
-> Fix this smatch warning:
-> drivers/gpu/drm/stm/ltdc.c:1124 ltdc_crtc_set_crc_source() warn: variable dereferenced before check 'crtc' (see line 1119)
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://lore.kernel.org/lkml/202212241802.zeLFZCXB-lkp@intel.com/
-> Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-> ---
->   drivers/gpu/drm/stm/ltdc.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-> index 03c6becda795..b8be4c1db423 100644
-> --- a/drivers/gpu/drm/stm/ltdc.c
-> +++ b/drivers/gpu/drm/stm/ltdc.c
-> @@ -1145,7 +1145,7 @@ static void ltdc_crtc_disable_vblank(struct drm_crtc *crtc)
->   
->   static int ltdc_crtc_set_crc_source(struct drm_crtc *crtc, const char *source)
->   {
-> -	struct ltdc_device *ldev = crtc_to_ltdc(crtc);
-> +	struct ltdc_device *ldev;
->   	int ret;
->   
->   	DRM_DEBUG_DRIVER("\n");
-> @@ -1153,6 +1153,8 @@ static int ltdc_crtc_set_crc_source(struct drm_crtc *crtc, const char *source)
->   	if (!crtc)
->   		return -ENODEV;
->   
-> +	ldev = crtc_to_ltdc(crtc);
-> +
->   	if (source && strcmp(source, "auto") == 0) {
->   		ldev->crc_active = true;
->   		ret = regmap_set_bits(ldev->regmap, LTDC_GCR, GCR_CRCEN);
+I don't think it should be necessary.  This only affects pages obtained from
+gup with FOLL_PIN - and, so far as I know, those always have to be released
+with unpin_user_page*() which is part of the gup API and thus it should be
+transparent to the users.
 
-Hi Raphael,
-and many thanks for your patch.
-Acked-by: Philippe Cornu <philippe.cornu@foss.st.com>
-Philippe :-)
+Pages obtained FOLL_GET, on the other hand, aren't freed through the gup API -
+and there are a bunch of ways of releasing them - and getting additional refs
+too.
+
+David
 
