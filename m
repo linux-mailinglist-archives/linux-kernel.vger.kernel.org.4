@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4921712C8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E587712C90
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243497AbjEZSfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S235099AbjEZSgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243249AbjEZSf0 (ORCPT
+        with ESMTP id S243477AbjEZSfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:35:26 -0400
+        Fri, 26 May 2023 14:35:31 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9570D10FF
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:49 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb78a3daaso1411122276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBDCE77
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:58 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb78a3daaso1411155276.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685126084; x=1687718084;
-        h=content-transfer-encoding:to:from:subject:references:mime-version
-         :message-id:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bJF+qzVTbz8URltVyp28Lcb70/4s1v/RxMVJtiGJPTs=;
-        b=Oo93B8xhgldm2cYdd68btGpV2pdvkwlHBWlxS5icl4+MgjgBAVpiUfPCGdKNVjaXOy
-         nbHfYV37Ct84mF/lYACTfPM8+Y+S5tlr/K7ZfXUgfvjx+acs9EiplHZGGC281lJ16CL2
-         Rrwl7xcyB6QP+Pl7+72nAynawHHp4GqgTuZsZjj5k8BVPsqY5p+D2Y27WSTxTmq7DNmX
-         X13xkE85m9vha/HAfVfZxxuL3WCs0S75DgczoEJqeiKBYRbGG1UhmMBepHt60U4692/U
-         PSJZnP9nHn6WRIV9SPU7i1Sj9dXyhbsBB7wrhYKTQtO9RjYfyA1wEky8z6Bwq1tBIZry
-         WjWA==
+        d=google.com; s=20221208; t=1685126087; x=1687718087;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7VTTKtJ+YCmNAzWS6HH1h35ihzZOE/hPBS/qDm91hC0=;
+        b=RnExY6ZhiUsGU/Xentrdy3UMPkxwr6rNYwsycye1nTC7/8jZe1qfzeTGi8SBvaT+AV
+         s1p20pEAtLwnLMgJ6JYIucfFa8uAD1GbQ5Jr3trkadq5Mf8R1bEXVSq7rvpSJ6fYxyhm
+         i0DQjoDIb2JrxkF27AdoYZYTlIiCK4p/JIZv2TmSsaogeqt92G8VOk5D0VtrsRbHlKT6
+         RoL78G7gNEsM7X0ixUo7P18Hz0x6GOCwxyWj0/RZM5+6ev/AYhCS0PgNoZCdHZMWlkxy
+         cMdedvwrzsAqeNOl/mkmD5TyA5RgkJoCvN6+EKvxR2cp4DIA8F7BzRc+x92ihrDxDFf1
+         Pk7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685126084; x=1687718084;
-        h=content-transfer-encoding:to:from:subject:references:mime-version
-         :message-id:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bJF+qzVTbz8URltVyp28Lcb70/4s1v/RxMVJtiGJPTs=;
-        b=hq4w7L1mtIwnDhqn7AudDDj6EiI6+a9VfYS3G5CvLvGHWMNpa88pqM5WhegegZTgaO
-         ibBsHCwcpvfxM2avXQuvqaIXgyoQHhWGWzsx6gZSUB1gk8oS+oLPjD7sIDS4nYBt1z9+
-         0S4R3ViUGh0z6w5sDOWIolaGBZ7BL904HZH+2GGPOUpmkyHSejGb1CRdPibyqsZudGU5
-         9B6AbvyzFolfLpcbWCmRHzZCm/bRdS2UPZsSYQi9B7uZwfWyt5EbhgJdvLYqdhPNri52
-         I4Z7TqUxvDYxarJonexXsgcLlqBPoomwgq2ntryUUlHdH8LDNYc0caXN6JyCYJtiQsAX
-         PjJg==
-X-Gm-Message-State: AC+VfDzxwYTBeeeBW8b2ZrTA4o5FBT3Zq6KRDlJ8VzfQhf1czEK/haqu
-        Xr+o0tU3LIAYiGnT96+2bmrKjHTjdiE8
-X-Google-Smtp-Source: ACHHUZ7nUrl4nIdvoUhRMjP56HiICrfn58XtXvw8FJD4ZtvRrtJXUh6CGXhYHum1JvN6Q2M/EhdiEl8lmy73
+        d=1e100.net; s=20221208; t=1685126087; x=1687718087;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7VTTKtJ+YCmNAzWS6HH1h35ihzZOE/hPBS/qDm91hC0=;
+        b=hK2FDxzxqCx9XmTaAmSq9Wj3mBhTRsssGVaJVIvi4sF4AIM8nmP7n3vMQkZVo4/MQT
+         jJs2nBKBnvK9lH4XotL2wlD87peBfhb2lS+dCkvodYq0tSEil/nBVGpIF4qU5CC6+7zL
+         mcJllzikJvR8H+L8E6PaYNcErVqCswjT2pF10Nu5jxlLF4Tx7w+qDAY53dEhBiLqdv3P
+         K4IGbXuCGLR5xNYmWC0bvMflwjtBAHAyTzgqzCebx29ji8wwm+Eol1MRd05/EFEVajJo
+         tZc1QTWfKrFC9BNgpUZNbd5b8gDwSqmLy3UPl6JqY6PdC5uLtTbdSY2l4gvOpm65wgyl
+         kCug==
+X-Gm-Message-State: AC+VfDztCeiBc+usu2xVqMdfwW11MwWuMn9f1KQsPjA2zekijvjmydB/
+        +3jgknbudHQUGOwKSTQ9kkrRK1i558Sp
+X-Google-Smtp-Source: ACHHUZ6VjiV8Ug0wv3GGrTVFrA/kp7xEirEOm2PN7sV0f+t+HxN+6Uw2r4vd73pfoFtHjbVNoFkMaHWU/AVS
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a5b:644:0:b0:ba8:4c16:78b7 with SMTP id
- o4-20020a5b0644000000b00ba84c1678b7mr1394238ybq.12.1685126084648; Fri, 26 May
- 2023 11:34:44 -0700 (PDT)
-Date:   Fri, 26 May 2023 11:34:00 -0700
+ (user=irogers job=sendgmr) by 2002:a25:2403:0:b0:ba8:8ab3:3806 with SMTP id
+ k3-20020a252403000000b00ba88ab33806mr1305870ybk.13.1685126086892; Fri, 26 May
+ 2023 11:34:46 -0700 (PDT)
+Date:   Fri, 26 May 2023 11:34:01 -0700
 In-Reply-To: <20230526183401.2326121-1-irogers@google.com>
-Message-Id: <20230526183401.2326121-16-irogers@google.com>
+Message-Id: <20230526183401.2326121-17-irogers@google.com>
 Mime-Version: 1.0
 References: <20230526183401.2326121-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v2 15/16] perf test pmu: Avoid 2 static path arrays
+Subject: [PATCH v2 16/16] libsubcmd: Avoid two path statics
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -79,89 +77,95 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid two static paths that contributed 8,192 bytes to .bss are only
-used duing the perf parse pmu test. This change helps FORTIFY
-triggering 2 warnings like:
-
-```
-tests/pmu.c: In function =E2=80=98test__pmu=E2=80=99:
-tests/pmu.c:121:43: error: =E2=80=98%s=E2=80=99 directive output may be tru=
-ncated writing up to 4095 bytes into a region of size 4090 [-Werror=3Dforma=
-t-truncation=3D]
-  121 |         snprintf(buf, sizeof(buf), "rm -f %s/*\n", dir);
-```
-
-So make buf a little larger.
+Use a single stack allocated buffer and avoid 8,192 bytes in .bss.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/pmu.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ tools/lib/subcmd/exec-cmd.c | 35 ++++++++++++++++++++---------------
+ 1 file changed, 20 insertions(+), 15 deletions(-)
 
-diff --git a/tools/perf/tests/pmu.c b/tools/perf/tests/pmu.c
-index 3cf25f883df7..a4452639a3d4 100644
---- a/tools/perf/tests/pmu.c
-+++ b/tools/perf/tests/pmu.c
-@@ -86,17 +86,16 @@ static struct parse_events_term test_terms[] =3D {
-  * Prepare format directory data, exported by kernel
-  * at /sys/bus/event_source/devices/<dev>/format.
-  */
--static char *test_format_dir_get(void)
-+static char *test_format_dir_get(char *dir, size_t sz)
- {
--	static char dir[PATH_MAX];
- 	unsigned int i;
-=20
--	snprintf(dir, PATH_MAX, "/tmp/perf-pmu-test-format-XXXXXX");
-+	snprintf(dir, sz, "/tmp/perf-pmu-test-format-XXXXXX");
- 	if (!mkdtemp(dir))
- 		return NULL;
-=20
- 	for (i =3D 0; i < ARRAY_SIZE(test_formats); i++) {
--		static char name[PATH_MAX];
-+		char name[PATH_MAX];
- 		struct test_format *format =3D &test_formats[i];
- 		FILE *file;
-=20
-@@ -118,12 +117,13 @@ static char *test_format_dir_get(void)
- /* Cleanup format directory. */
- static int test_format_dir_put(char *dir)
- {
--	char buf[PATH_MAX];
--	snprintf(buf, PATH_MAX, "rm -f %s/*\n", dir);
-+	char buf[PATH_MAX + 20];
-+
-+	snprintf(buf, sizeof(buf), "rm -f %s/*\n", dir);
- 	if (system(buf))
- 		return -1;
-=20
--	snprintf(buf, PATH_MAX, "rmdir %s\n", dir);
-+	snprintf(buf, sizeof(buf), "rmdir %s\n", dir);
- 	return system(buf);
+diff --git a/tools/lib/subcmd/exec-cmd.c b/tools/lib/subcmd/exec-cmd.c
+index 5dbea456973e..7739b5217cf6 100644
+--- a/tools/lib/subcmd/exec-cmd.c
++++ b/tools/lib/subcmd/exec-cmd.c
+@@ -36,38 +36,40 @@ static int is_absolute_path(const char *path)
+ 	return path[0] == '/';
  }
-=20
-@@ -140,7 +140,8 @@ static struct list_head *test_terms_list(void)
-=20
- static int test__pmu(struct test_suite *test __maybe_unused, int subtest _=
-_maybe_unused)
+ 
+-static const char *get_pwd_cwd(void)
++static const char *get_pwd_cwd(char *buf, size_t sz)
  {
--	char *format =3D test_format_dir_get();
-+	char dir[PATH_MAX];
-+	char *format =3D test_format_dir_get(dir, sizeof(dir));
- 	LIST_HEAD(formats);
- 	struct list_head *terms =3D test_terms_list();
- 	int ret;
---=20
+-	static char cwd[PATH_MAX + 1];
+ 	char *pwd;
+ 	struct stat cwd_stat, pwd_stat;
+-	if (getcwd(cwd, PATH_MAX) == NULL)
++	if (getcwd(buf, sz) == NULL)
+ 		return NULL;
+ 	pwd = getenv("PWD");
+-	if (pwd && strcmp(pwd, cwd)) {
+-		stat(cwd, &cwd_stat);
++	if (pwd && strcmp(pwd, buf)) {
++		stat(buf, &cwd_stat);
+ 		if (!stat(pwd, &pwd_stat) &&
+ 		    pwd_stat.st_dev == cwd_stat.st_dev &&
+ 		    pwd_stat.st_ino == cwd_stat.st_ino) {
+-			strlcpy(cwd, pwd, PATH_MAX);
++			strlcpy(buf, pwd, sz);
+ 		}
+ 	}
+-	return cwd;
++	return buf;
+ }
+ 
+-static const char *make_nonrelative_path(const char *path)
++static const char *make_nonrelative_path(char *buf, size_t sz, const char *path)
+ {
+-	static char buf[PATH_MAX + 1];
+-
+ 	if (is_absolute_path(path)) {
+-		if (strlcpy(buf, path, PATH_MAX) >= PATH_MAX)
++		if (strlcpy(buf, path, sz) >= sz)
+ 			die("Too long path: %.*s", 60, path);
+ 	} else {
+-		const char *cwd = get_pwd_cwd();
++		const char *cwd = get_pwd_cwd(buf, sz);
++
+ 		if (!cwd)
+ 			die("Cannot determine the current working directory");
+-		if (snprintf(buf, PATH_MAX, "%s/%s", cwd, path) >= PATH_MAX)
++
++		if (strlen(cwd) + strlen(path) + 2 >= sz)
+ 			die("Too long path: %.*s", 60, path);
++
++		strcat(buf, "/");
++		strcat(buf, path);
+ 	}
+ 	return buf;
+ }
+@@ -133,8 +135,11 @@ static void add_path(char **out, const char *path)
+ 	if (path && *path) {
+ 		if (is_absolute_path(path))
+ 			astrcat(out, path);
+-		else
+-			astrcat(out, make_nonrelative_path(path));
++		else {
++			char buf[PATH_MAX];
++
++			astrcat(out, make_nonrelative_path(buf, sizeof(buf), path));
++		}
+ 
+ 		astrcat(out, ":");
+ 	}
+-- 
 2.41.0.rc0.172.g3f132b7071-goog
 
