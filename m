@@ -2,115 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B357128FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 16:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633A2712902
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 16:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243765AbjEZOzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 10:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
+        id S242638AbjEZO6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 10:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjEZOzs (ORCPT
+        with ESMTP id S230030AbjEZO6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 10:55:48 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62E3E68
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 07:55:25 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-6260d262b3fso1397546d6.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 07:55:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1685112925; x=1687704925;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nVYdErQmwOcZHGzqxcaNnogi2GW6TYxbftez0/A27pg=;
-        b=EXO2d4pePptGSQJTPQP12sseD7KyidWglTMGmjALxwMUzagRCgPcowS0J3GN0A2sc3
-         +P23X5/urWmlhsoPq/HyO0c75DwjQjfrxgNmXvqvklf/cTzPhCJ1WGMjk6SIWxFyt/De
-         q6ODrIFzxlxVMavr00m1w/mjpDioOSpZUL718NiJKt+kImczkPEZfHwYXZXeSCrrJF5V
-         FhVacFG6se8JdGKy+WUHMXtGt18MEaXVC0JtZLxdSe2rxZf9oEoa3Qe/uNPqL3qdq2PU
-         gbEFuQGxzcXsuj926i+9mhX+qxRZ7nbYWqMnIOEWi5VSBochUGK/LMCFyqiRhWWHrHs5
-         lhyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685112925; x=1687704925;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nVYdErQmwOcZHGzqxcaNnogi2GW6TYxbftez0/A27pg=;
-        b=ZUm4JnWhwgHcTk+VPBj9h6r6yz+53X188/eD42qQOlS/ntb0cS4IBaNy/R8qun7YNL
-         BL8MRTQXV+/tui0/BNs62UFmBdY0yeqhB37ac/U9g0Uu41+pA5FgG9JC5ymi6Gt1zo7g
-         2oC6cpUsuyFdNX6qQuSJnJ3SEJQi5TxpxlQRI6Yfkqj72mDEgorVatKfdRl44aS47Atk
-         e6935j2P1ahUkyGt99dxZpB1GWlcCNFC6rjPWABKiZRdluvocacBt8KXATAsQQ1jcycD
-         kWCq0aBnnc4BDd7g/1nZrOtMqAjWF0TmtpD9eo2WJInXYUVNAbm1vja0gwMBuTNxGTIr
-         mjLw==
-X-Gm-Message-State: AC+VfDxIg9SFWKfCzsR4OfpND17eko40rKQSt2gCdrmTYi+LV7nWl6MK
-        384yJH5CYMhkdebAidmrcnh3LA==
-X-Google-Smtp-Source: ACHHUZ4RYOwCRRUN62Y58DuX0b6rsS6FxA9MqxAQyhV0Tb/kYaUd6kp3+It5e9sjqUMGyE2QnsS2zg==
-X-Received: by 2002:a05:6214:242c:b0:625:83ab:8a42 with SMTP id gy12-20020a056214242c00b0062583ab8a42mr2284081qvb.46.1685112924905;
-        Fri, 26 May 2023 07:55:24 -0700 (PDT)
-Received: from vinz16.lan (c-73-143-21-186.hsd1.vt.comcast.net. [73.143.21.186])
-        by smtp.gmail.com with ESMTPSA id q5-20020a0cfa05000000b0061b73e331b2sm1271455qvn.30.2023.05.26.07.55.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 07:55:24 -0700 (PDT)
-From:   Vineeth Pillai <vineeth@bitbyteword.org>
-To:     luca.abeni@santannapisa.it, Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        youssefesmat@google.com,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>
-Cc:     Vineeth Pillai <vineeth@bitbyteword.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH v4 2/2] sched/deadline: Update GRUB description in the documentation
-Date:   Fri, 26 May 2023 10:55:19 -0400
-Message-Id: <20230526145519.2282062-2-vineeth@bitbyteword.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230526145519.2282062-1-vineeth@bitbyteword.org>
-References: <20230526145519.2282062-1-vineeth@bitbyteword.org>
+        Fri, 26 May 2023 10:58:47 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E79D8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 07:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1685113120;
+        bh=YevYWlOMrCE8MVbxPpymt3DSL9QuAaB/3N70/BR/kcA=;
+        h=Date:From:Subject:To:From;
+        b=K43Pwf9x7z7ykyBCgfquFJMfHuqCknmsogOCd5Jn1PFI1jRzrrwnYNlDejoDK7nEc
+         4c8gHPYQQevsBwBCe9Zc3l/abZcl/yNZwrA+RPIQ02wSKn9zJJapkzQQpzG0Tf+S8p
+         sOCMi6qwg0y+VO6ABZADSsGOuoGWgX98uohyP8qSSRzyft8951UbEmmbLXKhTZxdCd
+         kcHHYDLelUQ7TKWzQ8d9WprEUIHfenkKOIpkXPR5VMAWWe4bu00LpzkRUSFKU0C4OU
+         p61kNs4QAcaed0ULL84s/OYRYAQwV3YE+JDxskWXc4W9eC8QUvB8kzQ8JAbr2STprB
+         NoomLesbIzeyQ==
+Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QSSjX26V2z15kf;
+        Fri, 26 May 2023 10:58:40 -0400 (EDT)
+Message-ID: <9cee6e52-e476-4b93-cc25-5941a72275bd@efficios.com>
+Date:   Fri, 26 May 2023 10:58:41 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Tracing Summit 2023 CFP and Registration (Sept. 17-18, 2023)
+Content-Language: en-US
+To:     lwn@lwn.net, tracecompass-dev@eclipse.org,
+        tiwg@multicore-association.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linuxtools-dev@eclipse.org, diamon-discuss@linuxfoundation.org
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the details of GRUB to reflect the updated logic.
+Hello all,
 
-Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
----
- Documentation/scheduler/sched-deadline.rst | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Registration for the 2023 Tracing Summit [0] is now open! This year,
+the event is co-located with Open Source Summit Europe 2023 [1] and
+will be held in Bilbao, Spain on the 17th and 18th of September, 2023.
 
-diff --git a/Documentation/scheduler/sched-deadline.rst b/Documentation/scheduler/sched-deadline.rst
-index 9d9be52f221a..d9f9f10c2191 100644
---- a/Documentation/scheduler/sched-deadline.rst
-+++ b/Documentation/scheduler/sched-deadline.rst
-@@ -203,12 +203,15 @@ Deadline Task Scheduling
-   - Total bandwidth (this_bw): this is the sum of all tasks "belonging" to the
-     runqueue, including the tasks in Inactive state.
- 
-+  - Maximum usable bandwidth (max_bw): This is the maximum bandwidth usable by
-+    deadline tasks and is currently set to the RT capacity.
-+
- 
-  The algorithm reclaims the bandwidth of the tasks in Inactive state.
-  It does so by decrementing the runtime of the executing task Ti at a pace equal
-  to
- 
--           dq = -max{ Ui / Umax, (1 - Uinact - Uextra) } dt
-+           dq = -(max{ Ui, (1 - Uinact - Uextra) } / Umax) dt
- 
-  where:
- 
+There are several options for registration:
+- In-person ($80.00 USD):
+     - Add the Tracing Summit to your Open Source Summit Europe ticket [2]
+     - Register solely for the Tracing Summit [3]
+- Virtual (Free) [4]
+
+Applicant speakers may register now, and accepted speakers will have
+their ticket cost reimbursed.
+
+----
+
+The 2023 Tracing Summit is a two-day, single-track conference on the topic
+of tracing. The event focuses on software and hardware tracing, gathering
+developers and end-users of tracing and trace analysis tools. The main goal
+of the Tracing Summit is to provide space for discussion between people of
+the various areas that benefit from tracing, namely parallel, distributed
+and/or real-time systems, as well as kernel development.
+
+- Event dates: Sunday, September 17th - Monday, September 18th
+- Location: Bilbao, Spain and virtually (co-located with Open Source Summit
+   Europe)
+- Registration cost:
+     - In person: $80.00 USD (Free for speakers)
+     - Virtual: Free
+- Call for proposals link: [5]
+
+
+The Tracing Summit Call for proposals is currently open! We are welcoming
+30 minute presentations from both end users and developers, on topics such
+as live tracing and monitoring, investigation workflow of real-time latency
+issues, and more. Please refer to the CFP page [5] for a full list of topic
+suggestions.
+
+Important dates:
+- Call for proposals close: Friday, June 16th, at 11:59PM EDT
+- Call for proposals notifications: Friday, June 23rd
+- Schedule announcement: Tuesday, June 27th
+- Event dates: Sunday, September 17th - Monday, September 18th
+
+To receive updates about the Tracing Summit, you may subscribe to the event's
+mailing list [6].
+
+Please send any questions about this conference to <info@tracingsummit.org>.
+
+The 2023 Tracing Summit is sponsored by EfficiOS and organized by Erica Bugden
+(EfficiOS), Olivier Dion (EfficiOS), and Mathieu Desnoyers (EfficiOS) on the
+behalf of the Linux Foundation Diagnostic and Monitoring Workgroup [7].
+
+Thanks,
+
+Mathieu
+
+[0]: https://tracingsummit.org
+[1]: https://events.linuxfoundation.org/open-source-summit-europe/
+[2]: https://events.linuxfoundation.org/open-source-summit-europe/features/co-located-events/#tracing-summit
+[3]: https://cvent.me/Gn0nkR (In person)
+[4]: https://cvent.me/xywylX (Virtual)
+[5]: https://cfp.tracingsummit.org/ts2023/cfp
+[6]: https://eepurl.com/goakfv
+[7]: https://diamon.org/
+
+
 -- 
-2.40.1
-
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
