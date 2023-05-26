@@ -2,131 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F817124AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9B07124B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243253AbjEZK3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S236950AbjEZKbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243236AbjEZK3q (ORCPT
+        with ESMTP id S242547AbjEZKbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:29:46 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FD6189
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:29:43 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2af318fa2b8so5688831fa.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685096981; x=1687688981;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jiS9iHXCNDD3l5v3ycpvVXx+e/hAWgffv3FWQpgB8yU=;
-        b=TbYqScfDcWw/J88rETR+ljuTY3czF9ItUWnfkdxIYjjd7BLfvFGlv7ekEGgaqZlzfC
-         N6XKRbYdAwPiyduuoEzUFBNuK//JEWSrJOnI++Zy4frUdn3116lVoXtRO4+KhTsTvIQ2
-         KV2Eo0qAe0OH6POK5VHuw8wNmBw1PrEJ/mAdZBicbdVNSK3CM8Jg34cW2hLdQmFOyXkB
-         Lbquz0ke0p/zuOaxObexhxt90/y7KJyE8JUYxvNqcpHDMK2QVr5N7DrZBMEtVIsL9J68
-         hxOL1nzrW0lMwsA8NmU8sUwhdxvxwk2Mqd6ub4/qemfZwOPy5kj6SXaameAZCo6opZwF
-         QOIA==
+        Fri, 26 May 2023 06:31:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC261B1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685097018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mg7/ojhaSlvyz/vXgtSMO2mGG83UKNLR01zwLceFGek=;
+        b=QcUPxN3xtd+24baPvOtker6r8DYzyGnxxOjse6mdiSoaRWl/gSRoS8yij0OFqqfECZTJMK
+        mLCKkeWUQ4xV2oVUz593nHax42IwRXmnZ9hIZ3YHiCQqTmhAp2lZvh5v/jQ+6iiRBPyHfW
+        D3o5eHR/yltcZUEbC2T7wGR7Wem4wxc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-388-GLjU6kkHPyGQHuqeDnZiHQ-1; Fri, 26 May 2023 06:30:16 -0400
+X-MC-Unique: GLjU6kkHPyGQHuqeDnZiHQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f60481749eso4002105e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:30:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685096981; x=1687688981;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jiS9iHXCNDD3l5v3ycpvVXx+e/hAWgffv3FWQpgB8yU=;
-        b=DNbZU/KL2E9fDuehJn/eOwIXqlDA2zEc2MiI8uJnIIZyjblOpPhxeA1u0O4uSlIM0a
-         drA06qGq0AnUdrIi98Br8deK7fR51uqqnALvyLU6+eFNBzp1w/pKt5zUSGn3YU8f17cG
-         DSDczAu741Yt8c2HfbkrVDOC8fGbSQm2Q5KnWE0mI1V4HgeIyQex7+Fe/ZU9kMl1WSUi
-         IdH7r3W8n75NZfzo+E8zAlentclGfJznjaCv//DKd7C0uUpMQH0Utt9RI3TV5Lo7TXCL
-         alJrzOEWKvhsqOrB7Zo2bFN5Kq29tKXcAndbWjdrnxMzGWbh3fKq4YLcVEFd2wTVIN6M
-         qkuw==
-X-Gm-Message-State: AC+VfDy58UhKnnDOKrmy/p3gTsjEW3vR+BQlFk1sv1ps7+UqEDk8i5gY
-        cdw+M/v0EYoFbg6nbTby0FABVQ==
-X-Google-Smtp-Source: ACHHUZ6nrMnyF62iub5Hm9e7eRdsaCzvfCsZnOqAW+nS7Y0F5F5LnN+i10n/EylDiJfTM0oEYJS9DQ==
-X-Received: by 2002:a2e:7806:0:b0:2a8:eae2:d563 with SMTP id t6-20020a2e7806000000b002a8eae2d563mr637548ljc.53.1685096981200;
-        Fri, 26 May 2023 03:29:41 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id e11-20020a2e984b000000b002a9ebff8431sm657828ljj.94.2023.05.26.03.29.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 03:29:40 -0700 (PDT)
-Message-ID: <af725aab-5083-2f71-27a6-e1800fba293a@linaro.org>
-Date:   Fri, 26 May 2023 12:29:39 +0200
+        d=1e100.net; s=20221208; t=1685097015; x=1687689015;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mg7/ojhaSlvyz/vXgtSMO2mGG83UKNLR01zwLceFGek=;
+        b=CULegn3Ba7Rb02F9RhqT4rQoBS9bzjtVPymSiCaWlnnIYjz8djML6MaVAlUuNR0Zhc
+         I/u8B/hLeb0Z/24kclKkxgqGQKNTEoH51MZvTOYlW9HSUd+YxUcaYdnnA4NgHaVWNCjF
+         YOzRZkigj9T/CFpN6HVwN5Kuy8bho7xvZ/XalKZpMmUcNoiPjRd6DIGBTuOw4qlA2QDo
+         nPVgB7d733KuCrLSgcevW/Eax0K7S39U6u3pIw1i7R3QXA+Kz1PilNzNxXjo844g+Voq
+         e52fTfxMtgqL1hUP7wvvpA1KZVkHwHYVuazHAY14lN2GWNjFyWUj09dE+GobkiTadMre
+         PMPA==
+X-Gm-Message-State: AC+VfDwwqciUxayLGp1IV0G67tTDimEzbZ5WBG3cTRFrGtL/g0BApxG+
+        Wuo3eNbpuDRnkacbKmrEsZ5bxqEdG+347KTaDWbvZXkQDAfu/KxNcMPL+GE2OEYHVbFOuJjRCXC
+        kWbgrOoSuIF8U57JZ1tvTu3i7
+X-Received: by 2002:a05:600c:3b13:b0:3f6:f81:385e with SMTP id m19-20020a05600c3b1300b003f60f81385emr4386153wms.17.1685097015593;
+        Fri, 26 May 2023 03:30:15 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7azWOTs7u22NKP+c/72YjQZNnbnYXTsbR5Iqy6Gxd/0ppYvVT8VSjnd/KLYwpjJ1ml7uASbg==
+X-Received: by 2002:a05:600c:3b13:b0:3f6:f81:385e with SMTP id m19-20020a05600c3b1300b003f60f81385emr4386137wms.17.1685097015327;
+        Fri, 26 May 2023 03:30:15 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c214700b003f4f89bc48dsm8530412wml.15.2023.05.26.03.30.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 03:30:14 -0700 (PDT)
+Date:   Fri, 26 May 2023 12:30:11 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v3 00/17] vsock: MSG_ZEROCOPY flag support
+Message-ID: <y5tgyj5awrd4hvlrsxsvrern6pd2sby2mdtskah2qp5hemmo2a@72nhcpilg7v2>
+References: <20230522073950.3574171-1-AVKrasnov@sberdevices.ru>
+ <76270fab-8af7-7597-9193-64cb553a543e@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: ipq9574: add QFPROM node
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230526070421.25406-1-quic_kathirav@quicinc.com>
- <20230526070421.25406-5-quic_kathirav@quicinc.com>
- <7d14db71-2279-e9b9-012d-47dc50fe797b@linaro.org>
- <97e06f9e-81cb-45ad-5b2a-d8de52d023f0@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <97e06f9e-81cb-45ad-5b2a-d8de52d023f0@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <76270fab-8af7-7597-9193-64cb553a543e@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 25, 2023 at 06:56:42PM +0300, Arseniy Krasnov wrote:
+>
+>
+>On 22.05.2023 10:39, Arseniy Krasnov wrote:
+>
+>This patchset is unstable with SOCK_SEQPACKET. I'll fix it.
 
+Thanks for let us know!
 
-On 26.05.2023 12:24, Kathiravan T wrote:
-> 
-> On 5/26/2023 2:49 PM, Konrad Dybcio wrote:
->>
->> On 26.05.2023 09:04, Kathiravan T wrote:
->>> IPQ9574 has efuse region to determine the various HW quirks. Lets
->>> add the initial support and the individual fuses will be added as they
->>> are required.
->>>
->>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->>> ---
->>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 7 +++++++
->>>   1 file changed, 7 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> index 1a2c813ffd43..715fe51ff567 100644
->>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> @@ -117,6 +117,13 @@
->>>           #size-cells = <1>;
->>>           ranges = <0 0 0 0xffffffff>;
->>>   +        qfprom: efuse@a4000 {
->>> +            compatible = "qcom,ipq9574-qfprom", "qcom,qfprom";
->>> +            reg = <0x000a4000 0x5a1>;
->> That's an odd size. Are you sure this is how long the corrected region is?
-> 
-> 
-> Yes, As per the HW document, this is the size.
-Thanks for confirming
+I'm thinking if we should start split this series in two, because it
+becomes too big.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+But let keep this for RFC, we can decide later. An idea is to send
+the first 7 patches with a preparation series, and the next ones with a
+second series.
 
-Konrad
-> 
-> 
->>
->> Konrad
->>> +            #address-cells = <1>;
->>> +            #size-cells = <1>;
->>> +        };
->>> +
->>>           tlmm: pinctrl@1000000 {
->>>               compatible = "qcom,ipq9574-tlmm";
->>>               reg = <0x01000000 0x300000>;
+Thanks,
+Stefano
+
