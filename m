@@ -2,83 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DAA7122D7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B7C7122D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242857AbjEZJA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
+        id S236428AbjEZI7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242378AbjEZJA1 (ORCPT
+        with ESMTP id S242378AbjEZI6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:00:27 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63F8119;
-        Fri, 26 May 2023 02:00:25 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30ab87a1897so245417f8f.1;
-        Fri, 26 May 2023 02:00:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685091624; x=1687683624;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qss+zxEtzgocrouex16BhRqrU2936RxdIAYJmgdoCvo=;
-        b=MbStjYhHUzFc8ILRIy/UykQjsaI3qWMrTCSLE4yyRrdoWKoyQHKS18s+UxIXuXz0ob
-         1+tBeGkdZzgxM0fnFYmZo8klcndWIROQO8qqQnuSJYjvMYGO7jZreoeWx7uylUqKgEEp
-         8ZnZIXPXpM3/P0CryvcxTY1dk7JK/h0qAf6KRgES785Fj2V/aul/qY2OQmqLHtBTTiXR
-         6egji2GEcafG7yYfFUZfPwmiGiHaOZCetl1jjVVH0eN1lZYxVG/em58qiy1wHY8qbb9o
-         XWTtKi17FDMgoPMHhgYEaeFYHXdmmGQaQVjEy43D/xZNZHFj8mTyQ6mnAMNKxJDJSPk3
-         UafA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685091624; x=1687683624;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qss+zxEtzgocrouex16BhRqrU2936RxdIAYJmgdoCvo=;
-        b=KLjxMNdFiRVhITsdfxIXqZlHrH6qpoWPwp5VIboRVCpRswyS02r3ca8o4JwPwnKGAr
-         yugZYOabypEniLevsRDK4n0MHqhPBXiPS9VN8Q9ZpmU41KTCpN57HAvViJVp/2HwrQcl
-         odo34klLBSj0nf95ia3ry7/UdA/wHowgrC5YpPVHefQQGLXZiOjqoGJHTBtCepXgHuyg
-         JhsKk2zCBN118pm/NiIBYwWvT/KDVoCmc9DJhtmOD2oSDGsfWf1ajUa43qcoDGndGGvZ
-         VbEDQageq9yODyecNqtKTV/+WIl3u1wdIlZM2MiQLiSjc8svUrTHKzIA2m31aWDK83n5
-         7lsw==
-X-Gm-Message-State: AC+VfDy/heRQ8BlT+oxyZTWESaqh9iue+ic9aWaQxXLzwNTuRirUuCL+
-        h9ZsYaNc3xwX5u8eIHq4B44=
-X-Google-Smtp-Source: ACHHUZ5EkZrkFXdnKG+OsSeolqc727IKNW5Swk1R+LzKGKOjvK629ibzmcfNdrXmo0Z/6uqU4u/JlQ==
-X-Received: by 2002:adf:dfcc:0:b0:30a:dd15:bb69 with SMTP id q12-20020adfdfcc000000b0030add15bb69mr75933wrn.18.1685091623852;
-        Fri, 26 May 2023 02:00:23 -0700 (PDT)
-Received: from localhost (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
-        by smtp.gmail.com with ESMTPSA id k7-20020adfe3c7000000b003062b2c5255sm4448182wrm.40.2023.05.26.02.00.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 02:00:23 -0700 (PDT)
-Date:   Fri, 26 May 2023 09:58:12 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH v2 1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
-Message-ID: <4f479af6-2865-4bb3-98b9-78bba9d2065f@lucifer.local>
-References: <89c7f535-8fc5-4480-845f-de94f335d332@lucifer.local>
- <20230525223953.225496-1-dhowells@redhat.com>
- <20230525223953.225496-2-dhowells@redhat.com>
- <520730.1685090615@warthog.procyon.org.uk>
+        Fri, 26 May 2023 04:58:52 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85C712A;
+        Fri, 26 May 2023 01:58:49 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QSJd26cYrzqSZW;
+        Fri, 26 May 2023 16:54:14 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 26 May 2023 16:58:46 +0800
+Message-ID: <9025b93a-faec-bc84-00c4-34a3b1c01b35@huawei.com>
+Date:   Fri, 26 May 2023 16:58:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <520730.1685090615@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/2] cpufreq: CPPC: keep target core awake when reading
+ its cpufreq rate
+Content-Language: en-US
+To:     Pierre Gondois <pierre.gondois@arm.com>,
+        Ionela Voinescu <Ionela.Voinescu@arm.com>, <sumitg@nvidia.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <wangxiongfeng2@huawei.com>, <xiexiuqi@huawei.com>,
+        <liwei391@huawei.com>, <linux-acpi@vger.kernel.org>,
+        <lenb@kernel.org>, <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        Yang Shi <yang@os.amperecomputing.com>
+References: <20230516133248.712242-1-zengheng4@huawei.com>
+ <a1075da1-4ff1-4a8b-2902-3954db717ded@arm.com>
+From:   Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <a1075da1-4ff1-4a8b-2902-3954db717ded@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,78 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 09:43:35AM +0100, David Howells wrote:
-> Lorenzo Stoakes <lstoakes@gmail.com> wrote:
->
-> > I guess we're not quite as concerned about FOLL_GET because FOLL_GET should
-> > be ephemeral and FOLL_PIN (horrifically) adds GUP_PIN_COUNTING_BIAS each
-> > time?
->
-> It's not that - it's that iov_iter_get_pages*() is a lot more commonly used at
-> the moment, and we'd have to find *all* the places that things using that hand
-> refs around.
->
-> iov_iter_extract_pages(), on the other hand, is only used in two places with
-> these patches and the pins are always released with unpin_user_page*() so it's
-> a lot easier to audit.
 
-Thanks for the clarification. I guess these are the cases where you're likely to
-see zero page usage, but since this is changing all PUP*() callers don't you
-need to audit all of those too?
+在 2023/5/17 16:17, Pierre Gondois 写道:
+> +Ionela, Sumit, Yang,
+>
+> Hello Zeng,
+>
+> I think solutions around related issues were suggested at:
+>
+> [1] https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
+> [2] 
+> https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
+> [3] https://lore.kernel.org/all/ZEl1Fms%2FJmdEZsVn@arm.com/
+>
+> About this patch, it seems to mean that CPPC counters of CPUx are always
+> accessed from CPUx, even when they are not AMUs. For instance CPPC
+> counters could be memory mapped and accessible from any CPU.
+> cpu_has_amu_feat() should allow to probe if a CPU uses AMUs or not,
+> and [2] had an implementation using it.
+>
+> Another comment about PATCH 2/2 is that if the counters are accessed
+> through FFH, arm64 version of cpc_read_ffh() is calling
+> counters_read_on_cpu(), and a comment in counters_read_on_cpu() seems
+> to specify the function must be called with interrupt enabled.
+>
+> I think the best solution so far was the one at [3], suggested by Ionela,
+> but it doesn't seem to solve your issue. Indeed, it is not checked 
+> whether
+> the counters are AMU counters and that they must be remotely read (to
+> have the CPU awake),
+>
+> Regards,
+> Pierre
 
->
-> I could modify put_page(), folio_put(), etc. to ignore the zero pages, but
-> that might have a larger performance impact.
->
-> > > +		if (is_zero_page(page))
-> > > +			return page_folio(page);
-> > > +
-> >
-> > This will capture huge page cases too which have folio->_pincount and thus
-> > don't suffer the GUP_PIN_COUNTING_BIAS issue, however it is equally logical
-> > to simply skip these when pinning.
->
-> I'm not sure I understand.  The zero page(s) is/are single-page folios?
 
-I'm actually a little unsure of how huge zero pages are handled (not an area I'm
-hugely familiar with) so this might just be mistaken, I mean the point was more
-so that hugetlb calls into this, but seems then not an issue.
+Here is segment I picked from patch[3], and there is a modification is 
+deserved to be discussed:
 
->
-> > This does make me think that we should just skip pinning for FOLL_GET cases
-> > too - there's literally no sane reason we should be pinning zero pages in
-> > any case (unless I'm missing something!)
->
-> As mentioned above, there's a code auditing issue and a potential performance
-> issue, depending on how it's done.
+---------------------------------------------------------------------------
 
-Ack, makes sense. It'd be good to have this documented somewhere though in
-commit msg or docs so this trade-off is clear.
+@@ -1336,8 +1361,25 @@ int cppc_get_perf_ctrs(int cpunum, struct 
+cppc_perf_fb_ctrs *perf_fb_ctrs)
+          }
+      }
 
->
-> > Another nitty thing that I noticed is, in is_longterm_pinnable_page():-
-> >
-> > 	/* The zero page may always be pinned */
-> > 	if (is_zero_pfn(page_to_pfn(page)))
-> > 		return true;
-> >
-> > Which, strictly speaking I suppose we are 'pinning' it or rather allowing
-> > the pin to succeed without actually pinning, but to be super pedantic
-> > perhaps it's worth updating this comment too.
->
-> Yeah.  It is "pinnable" but no pin will actually be added.
+-    cpc_read(cpunum, delivered_reg, &delivered);
+-    cpc_read(cpunum, reference_reg, &reference);
++    ctrs.cpunum = cpunum;
++    ctrs.delivered_reg = delivered_reg;
++    ctrs.reference_reg = reference_reg;
++    ctrs.delivered = &delivered;
++    ctrs.reference = &reference;
++
 
-The comment striks me as misleading, previously it literally meant that you
-could pin the zero page. Now it means that we just don't. I do think for the
-sake of avoiding confusion this should be tweaked.
++    if (CPC_IN_FFH(delivered_reg) && CPC_IN_FFH(reference_reg)) {
 
-Obviously something of a nit, however!
+Here we call cpu_has_amu_feat() as precondition (like Sumit's mail 
+mentions), which could be compatible with
 
-I did dig into this change a fair bit and kept adding then deleting comments
-since you cover all the bases well, so overall this is nice + I can but nit it
-:) Nice to see further improvements to GUP which is crying out for that.
+any SoCs with AMU that could be accessible via sys-register and system 
+memory both.
 
->
-> David
->
->
+
++        ret = smp_call_on_cpu(cpunum, cppc_get_cycle_ctrs, &ctrs, false);
++    } else {
++        if (CPC_IN_SYSTEM_MEMORY(delivered_reg) &&
++            CPC_IN_SYSTEM_MEMORY(reference_reg)) {
++            local_irq_save(flags);
++            cppc_get_cycle_ctrs(&ctrs);
++            local_irq_restore(flags);
++        } else {
++            cppc_get_cycle_ctrs(&ctrs);
++        }
++    }
++
+      cpc_read(cpunum, ref_perf_reg, &ref_perf);
+
+-----------------------------------------------------------------------------------
+
+If there were a new version patch released, please loop me at that time.
+
+Thanks a lot in advance.
+
+
+B.R.,
+
+Zeng Heng
+
+
