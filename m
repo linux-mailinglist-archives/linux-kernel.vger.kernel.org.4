@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D24712DA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA71712DA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243209AbjEZTfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S243249AbjEZTf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243862AbjEZTe7 (ORCPT
+        with ESMTP id S243668AbjEZTfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:34:59 -0400
+        Fri, 26 May 2023 15:35:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9353D9;
-        Fri, 26 May 2023 12:34:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE7E19A;
+        Fri, 26 May 2023 12:35:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79AD6652FB;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C15E86530B;
+        Fri, 26 May 2023 19:34:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21C3DC4339E;
         Fri, 26 May 2023 19:34:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA3AC433A0;
-        Fri, 26 May 2023 19:34:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685129697;
-        bh=cjmHyTK+d5+u4Vy6UesDVUyflXR5kEhOwDcFRVpru9w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QMHbWCbWKzBVGcF9jKdQrrcB0XeRLiu6+mCIvslX5ig+UL5/cZ9Nvibn/lAXMf3+H
-         DG61kqh8OKvm6+8dmn7eEa/5rx4usYHjLhkwL+OXxkpXC4IxqCcZfSp22qlUCqcCXU
-         FxjavVuZZgmuk2MvLNGywUsIHaYkqqoj0GvbnNdRRxE33KGetfzebooER6KauixvJR
-         4ZZPoTdBYCeBgs/htcT2YMy7yw3MnBVA28je28v5KFeQUKaQfV4m3LyytMERJSH7Gz
-         PF3JcU2459nYtkvi8t9VIVQD9vynq3izmqIyz9kTP3vtJ6M5C1ZFCB1G9B1366Nk0B
-         OHryXWKCNqz6g==
+        s=k20201202; t=1685129698;
+        bh=QC/gLQrIWF9SsSIBK579yYw1z9IgxvBWc5x6hhQBn04=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=a22nk2VlvKG7gmt2/QXazV8GVFIaAk72DMrTBwzN96Wf2sf1CWYUWs29j8Bh2Wk3s
+         Wy/ZO/6YC0YOHe9ewaLy00J6izsLgU3wEnQMmOX3mjNVr2JpCLdi+0k3qVKvCZKyeY
+         8BTf3hkTms0qcQhW0/OriWPTTN4TTL3vv1itluEVvqglfyM1XLMdcSu9Pj1JmdW5Ac
+         JxY//zjBHjoKKcUnd1AGH0Xfovx8xdQA77aEE3OTKPkf3ZA6+jlkd9WUNpElTwWGwV
+         67BVRopSCSZrg6chUSCAcPCv+bcDHrgNN/ZBCtxv1D28XVErJ8gYXgLh1dMZuXtqug
+         EqTFByVDVaHFQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, devicetree@vger.kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        conor+dt@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        Devi Priya <quic_devipriy@quicinc.com>
-Cc:     quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
-        quic_arajkuma@quicinc.com
-Subject: Re: [PATCH V5 0/3] Add regulator support for IPQ9574 SoC
-Date:   Fri, 26 May 2023 12:38:36 -0700
-Message-Id: <168512991479.248818.8456786250611503122.b4-ty@kernel.org>
+To:     Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@linaro.org, linux-watchdog@vger.kernel.org,
+        wim@linux-watchdog.org, robh+dt@kernel.org, linux@roeck-us.net,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/2] Add few device nodes for IPQ9574 SoC
+Date:   Fri, 26 May 2023 12:38:37 -0700
+Message-Id: <168512991478.248818.9749939495960565023.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230517172527.1968-1-quic_devipriy@quicinc.com>
-References: <20230517172527.1968-1-quic_devipriy@quicinc.com>
+In-Reply-To: <20230329053726.14860-1-quic_kathirav@quicinc.com>
+References: <20230329053726.14860-1-quic_kathirav@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,24 +57,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 22:55:24 +0530, Devi Priya wrote:
-> IPQ9574 SoC uses the PMIC MP5496 and SMPA1 regulator for APSS voltage scaling.
-> This patch series adds support for the same and also enables the RPM
-> communication over the RPMSG framework.
+On Wed, 29 Mar 2023 11:07:24 +0530, Kathiravan T wrote:
+> This series adds the support for QUP peripherals, PRNG, WDT for IPQ9574
+> SoC.
 > 
-> DTS patch depends on the below series which applies cleanly on top of [1]
-> https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
+> This series depends on the below one
+> https://lore.kernel.org/linux-arm-msm/20230328102013.21361-2-quic_poovendh@quicinc.com/
+> 
+> Kathiravan T (2):
+>   dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-ipq9574 compatible
+>   arm64: dts: qcom: ipq9574: add few device nodes
 > 
 > [...]
 
 Applied, thanks!
 
-[1/3] arm64: dts: qcom: ipq9574: Add RPM related nodes
-      commit: 8cc864a4375dd62023a2880050bf618a225cb907
-[2/3] arm64: dts: qcom: ipq9574: Add SMPA1 regulator node
-      commit: 56ba2b3aeb4b76549a7759e79bd44330cd9b885a
-[3/3] arm64: dts: qcom: ipq9574: Add cpufreq support
-      commit: 8f0ae6bc0098f63a008820f80c08b01ea2167da3
+[2/2] arm64: dts: qcom: ipq9574: add few device nodes
+      commit: 9ef42640504e09ecc79530b6e532ebf48305516b
 
 Best regards,
 -- 
