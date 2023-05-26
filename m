@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AE6713035
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 01:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C681713039
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 01:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjEZXD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 19:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
+        id S231473AbjEZXF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 19:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjEZXD0 (ORCPT
+        with ESMTP id S229755AbjEZXFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 19:03:26 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB3CE7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:03:25 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b00f9c4699so9222925ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:03:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685142204; x=1687734204;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LfueZcPSyhu8TUF72Af0Wy3gIHyGRRQDvcS9MbJqSWg=;
-        b=FCDdoQ9T8cOC+RkskAGYsQtH7vWGpY6mvdDgDRWXSznwYAzGQeArsJ0h4TD9ZRfuUv
-         yVQAVvSxZtaMsIpBbNFo13x2jWrt77QIk1HpIN8gVaJeoRzLNg0THfazoRNrF8whNF+n
-         YsssqI+tYp3DwHvFnl0m3ZxArQM+WNitB5eilp++plop6Np0NiEWgJbK4D1OsgORBaHL
-         VQh1JlnWwIrJgEyE0wViwe6uw1zNXJWf1dFvsOBkTEGiHnW3yIRdc2wg/GbszCFDfV2r
-         lFE/ujraQDyD1rCrJT9l3mNy4RrGBzy1QJ5DT2IWuUvf9uO1BRvMaJt6BwUBU+cVQFIz
-         DEiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685142204; x=1687734204;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LfueZcPSyhu8TUF72Af0Wy3gIHyGRRQDvcS9MbJqSWg=;
-        b=KGfgFKs7h02ZKG1VDFrL+xRfB1hNl1CpoJI2veroMqk7Ta8uj7rww36lYee1Xbgte+
-         KhHHloqcaOkdABOCdNnyMAgR3grWW8K3ULGcJruub0Ufm7Jp/zDADsQQZJ2JqiMmCxAX
-         OqjAqvoA47O6saiN4tyhQZCj9ypgbxHNjfE7XQBwHIGy56pxhgVlv9D/2xawicZBHdLr
-         4KPDZBK02OY/ACvKKF6Ny7hn+4UFVUTyODnj4Fle1NEVxQQwhuWtL3DKRN+NmrYTgvOy
-         IyqoPMV1T38E68WpwpflU8+LfBWX04udQguw/g2NdAU94v4EKRYMD3A5q39K/2YQMAxO
-         GWZg==
-X-Gm-Message-State: AC+VfDxl+Brh1PIS7Fy+Moo0pU1FhEFMHPFbiSFNXliBeW7cOye3Oiqz
-        cA56B33dTxXpojAVehHaB7s=
-X-Google-Smtp-Source: ACHHUZ78TNaOLqLX0ixU7AqAVQaXmPIDSeHFWpC76lP5bkJGQVTH2iMH//nx9dUMBRPpUX9H5ep8GA==
-X-Received: by 2002:a17:902:b18f:b0:1ad:fc06:d7c0 with SMTP id s15-20020a170902b18f00b001adfc06d7c0mr3813622plr.1.1685142204347;
-        Fri, 26 May 2023 16:03:24 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:730f:f44f:d34b:ecf6])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902820100b001a5260a6e6csm3724191pln.206.2023.05.26.16.03.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 16:03:23 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Fri, 26 May 2023 16:03:21 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, ke.wang@unisoc.com
-Subject: Re: [PATCHv4] mm: skip CMA pages when they are not available
-Message-ID: <ZHE6uTZOVuYayet2@google.com>
-References: <1684737363-31554-1-git-send-email-zhaoyang.huang@unisoc.com>
+        Fri, 26 May 2023 19:05:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E8CAD;
+        Fri, 26 May 2023 16:05:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685142352; x=1716678352;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pvJQz74MnTdZRRPfhTypRddqinT3EDy3g2yrcXnBbtk=;
+  b=ZsL3nzskDBFyIoaHBcU3K/yYfdbEhqP/svf7iIQeDMJoDwzdiOG11ryG
+   0+qZTjfHAOvfqjYFXrcTsxQWRrx7PQshxb9Qq6qmKAtmNS+ZAhFP+vfr3
+   ftCoNjGHMDP2Sc7dEyGe/EHr9SQu4nLe/C137zoXA+LkHIJB0fzXKT2su
+   CES2bmwg++Ji3YHCenE60jIFVktsl+IPvzVja4/DQyQ8xxks6tGkYQFpt
+   /d4o852ZP/m0Z+P2RxwiitXA7Z5oav877KYh+nFpSF/pUHZ/HLac2vP8H
+   SBH8gyFdaIyttQqrMINmeu7a1plpYBCFaknPhhR46mjWkpPpNhR/D2bvv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="356709014"
+X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
+   d="scan'208";a="356709014"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 16:05:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="879689885"
+X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
+   d="scan'208";a="879689885"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 26 May 2023 16:05:47 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q2gVG-000JeU-0A;
+        Fri, 26 May 2023 23:05:46 +0000
+Date:   Sat, 27 May 2023 07:04:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Yang <mmyangfl@gmail.com>, linux-crypto@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, David Yang <mmyangfl@gmail.com>,
+        Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] crypto: hisilicon/advca - Add SHA support
+Message-ID: <202305270619.CZWqR9rV-lkp@intel.com>
+References: <20230525160446.43800-3-mmyangfl@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1684737363-31554-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <20230525160446.43800-3-mmyangfl@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,78 +70,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 02:36:03PM +0800, zhaoyang.huang wrote:
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> 
-> This patch fixes unproductive reclaiming of CMA pages by skipping them when they
-> are not available for current context. It is arise from bellowing OOM issue, which
-> caused by large proportion of MIGRATE_CMA pages among free pages.
-> 
-> [   36.172486] [03-19 10:05:52.172] ActivityManager: page allocation failure: order:0, mode:0xc00(GFP_NOIO), nodemask=(null),cpuset=foreground,mems_allowed=0
-> [   36.189447] [03-19 10:05:52.189] DMA32: 0*4kB 447*8kB (C) 217*16kB (C) 124*32kB (C) 136*64kB (C) 70*128kB (C) 22*256kB (C) 3*512kB (C) 0*1024kB 0*2048kB 0*4096kB = 35848kB
-> [   36.193125] [03-19 10:05:52.193] Normal: 231*4kB (UMEH) 49*8kB (MEH) 14*16kB (H) 13*32kB (H) 8*64kB (H) 2*128kB (H) 0*256kB 1*512kB (H) 0*1024kB 0*2048kB 0*4096kB = 3236kB
-> ...
-> [   36.234447] [03-19 10:05:52.234] SLUB: Unable to allocate memory on node -1, gfp=0xa20(GFP_ATOMIC)
-> [   36.234455] [03-19 10:05:52.234] cache: ext4_io_end, object size: 64, buffer size: 64, default order: 0, min order: 0
-> [   36.234459] [03-19 10:05:52.234] node 0: slabs: 53,objs: 3392, free: 0
-> 
-> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> ---
-> v2: update commit message and fix build error when CONFIG_CMA is not set
-> v3,v4: update code and comments
-> ---
-> ---
->  mm/vmscan.c | 23 ++++++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index bd6637f..20facec 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -2193,6 +2193,26 @@ static __always_inline void update_lru_sizes(struct lruvec *lruvec,
->  
->  }
->  
-> +#ifdef CONFIG_CMA
-> +/*
-> + * It is waste of effort to scan and reclaim CMA pages if it is not available
-> + * for current allocation context
-> + */
-> +static bool skip_cma(struct folio *folio, struct scan_control *sc)
-> +{
-> +	if (!current_is_kswapd() &&
+Hi David,
 
-The function is called by isolate_lru_folios which is used by both background
-and direct reclaims at the same time. And sc->reclaim_idx below to filter
-unproductive reclaim out is used for both cases but why does the cma is considering
-only direct reclaim path?
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on 44c026a73be8038f03dbdeef028b642880cf1511]
 
-> +			gfp_migratetype(sc->gfp_mask) != MIGRATE_MOVABLE &&
-> +			get_pageblock_migratetype(&folio->page) == MIGRATE_CMA)
-> +		return true;
-> +	return false;
-> +}
-> +#else
-> +static bool skip_cma(struct folio *folio, struct scan_control *sc)
-> +{
-> +	return false;
-> +}
-> +#endif
-> +
->  /*
->   * Isolating page from the lruvec to fill in @dst list by nr_to_scan times.
->   *
-> @@ -2239,7 +2259,8 @@ static unsigned long isolate_lru_folios(unsigned long nr_to_scan,
->  		nr_pages = folio_nr_pages(folio);
->  		total_scan += nr_pages;
->  
-> -		if (folio_zonenum(folio) > sc->reclaim_idx) {
-> +		if (folio_zonenum(folio) > sc->reclaim_idx ||
-> +				skip_cma(folio, sc)) {
->  			nr_skipped[folio_zonenum(folio)] += nr_pages;
->  			move_to = &folios_skipped;
->  			goto move;
-> -- 
-> 1.9.1
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Yang/crypto-hisilicon-Add-HiSilicon-ADVCA-Subsystem/20230526-002048
+base:   44c026a73be8038f03dbdeef028b642880cf1511
+patch link:    https://lore.kernel.org/r/20230525160446.43800-3-mmyangfl%40gmail.com
+patch subject: [PATCH v3 2/2] crypto: hisilicon/advca - Add SHA support
+config: alpha-randconfig-s033-20230526 (https://download.01.org/0day-ci/archive/20230527/202305270619.CZWqR9rV-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce:
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/e564a62a5be87775c20a4de84d42b8be79be9d11
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Yang/crypto-hisilicon-Add-HiSilicon-ADVCA-Subsystem/20230526-002048
+        git checkout e564a62a5be87775c20a4de84d42b8be79be9d11
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash drivers/crypto/hisilicon/advca/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305270619.CZWqR9rV-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/crypto/hisilicon/advca/hisi-advca-sha.c:163:32: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] b @@     got restricted __be32 [usertype] @@
+   drivers/crypto/hisilicon/advca/hisi-advca-sha.c:163:32: sparse:     expected unsigned int [usertype] b
+   drivers/crypto/hisilicon/advca/hisi-advca-sha.c:163:32: sparse:     got restricted __be32 [usertype]
+>> drivers/crypto/hisilicon/advca/hisi-advca-sha.c:269:25: sparse: sparse: cast to restricted __be32
+>> drivers/crypto/hisilicon/advca/hisi-advca-sha.c:269:25: sparse: sparse: cast to restricted __be32
+>> drivers/crypto/hisilicon/advca/hisi-advca-sha.c:269:25: sparse: sparse: cast to restricted __be32
+>> drivers/crypto/hisilicon/advca/hisi-advca-sha.c:269:25: sparse: sparse: cast to restricted __be32
+>> drivers/crypto/hisilicon/advca/hisi-advca-sha.c:269:25: sparse: sparse: cast to restricted __be32
+>> drivers/crypto/hisilicon/advca/hisi-advca-sha.c:269:25: sparse: sparse: cast to restricted __be32
+
+vim +163 drivers/crypto/hisilicon/advca/hisi-advca-sha.c
+
+   152	
+   153	/*
+   154	 * must be called before setting SHA_START
+   155	 * does nothing if import is not supported (SHA_TYPE_HASH)
+   156	 */
+   157	static void hica_sha_import(const struct hica_sha_priv *priv, const void *state)
+   158	{
+   159		if (priv->type != SHA_TYPE_MHASH)
+   160			return;
+   161	
+   162		for (unsigned int i = 0; i < SHA_DIGEST_SIZE; i += sizeof(u32))
+ > 163			writel_relaxed(cpu_to_be32(*(const u32 *) (state + i)),
+   164				       priv->base + SHA_INIT0 + i);
+   165	}
+   166	
+   167	static int hica_sha_init(const struct hica_sha_priv *priv,
+   168				 const struct hica_sha_ctrl *ctrl, bool state)
+   169	{
+   170		u32 val;
+   171		int ret;
+   172	
+   173		/* re-enable SHA_START */
+   174		ret = reset_control_assert(priv->rst) ?:
+   175		      reset_control_deassert(priv->rst);
+   176		if (ret)
+   177			return ret;
+   178	
+   179		/* config SHA_CTRL */
+   180		val = readl_relaxed(priv->base + SHA_CTRL);
+   181	
+   182		val &= ~SHA_SINGLE_READ;
+   183		val &= ~SHA_ALG;
+   184		val |= (ctrl->alg << 1) & SHA_ALG;
+   185		val &= ~SHA_HMAC;
+   186		val |= SHA_ENDIAN;
+   187	
+   188		if (priv->type == SHA_TYPE_HASH)
+   189			val |= SHA_USED_BY_ARM;
+   190		else if (state)
+   191			val |= SHA_SET_INIT;
+   192	
+   193		writel(val, priv->base + SHA_CTRL);
+   194	
+   195		/* test SHA_CTRL */
+   196		val = readl_relaxed(priv->base + SHA_CTRL);
+   197		if (val & SHA_USED_BY_C51)
+   198			return -EBUSY;
+   199	
+   200		/* wait ready */
+   201		if (hica_sha_wait(priv, SHA_HASH_READY))
+   202			return -ETIMEDOUT;
+   203	
+   204		/* ask device to set state */
+   205		writel(SHA_START_BIT, priv->base + SHA_START);
+   206	
+   207		pr_debug("%s: alg %u\n", __func__, ctrl->alg);
+   208		return 0;
+   209	}
+   210	
+   211	static int hica_sha_update(const struct hica_sha_priv *priv, const void *data,
+   212				   unsigned int len, bool may_sleep)
+   213	{
+   214		struct device *dev = priv->dev;
+   215		bool inplace = !((uintptr_t) data & 3);
+   216		u8 *buf = NULL;
+   217		dma_addr_t addr;
+   218		int ret;
+   219	
+   220		if (!len)
+   221			return 0;
+   222	
+   223		if (WARN_ON(len % SHA_BLOCK_SIZE))
+   224			return -EINVAL;
+   225	
+   226		if (inplace) {
+   227			addr = dma_map_single(dev, (void *) data, len, DMA_TO_DEVICE);
+   228			if (dma_mapping_error(dev, addr)) {
+   229				dev_err(dev, "error mapping src\n");
+   230				return -EIO;
+   231			}
+   232	
+   233			inplace = !(addr & 3);
+   234			if (!inplace)
+   235				dma_unmap_single(dev, addr, len, DMA_TO_DEVICE);
+   236		}
+   237	
+   238		if (!inplace) {
+   239			buf = dma_alloc_attrs(dev, len, &addr,
+   240					      may_sleep ? GFP_KERNEL : GFP_ATOMIC, 0);
+   241			if (!buf)
+   242				return -ENOMEM;
+   243			memcpy(buf, data, len);
+   244		}
+   245	
+   246		dma_sync_single_for_device(dev, addr, len, DMA_TO_DEVICE);
+   247		ret = hica_sha_record(priv, addr, len) ?:
+   248		      hica_sha_wait(priv, SHA_RECORD_READY);
+   249	
+   250		if (!buf)
+   251			dma_unmap_single(dev, addr, len, DMA_TO_DEVICE);
+   252		else {
+   253			memzero_explicit(buf, len);
+   254			dma_free_attrs(dev, len, buf, addr, 0);
+   255		}
+   256	
+   257		pr_debug("%s: read %u\n", __func__, len);
+   258		return ret;
+   259	}
+   260	
+   261	static int hica_sha_export(const struct hica_sha_priv *priv, void *out,
+   262				   unsigned int digestsize)
+   263	{
+   264		if (hica_sha_wait(priv, SHA_RECORD_READY))
+   265			return -ETIMEDOUT;
+   266	
+   267		for (unsigned int i = 0; i < digestsize; i += sizeof(u32))
+   268			*(u32 *) (out + i) =
+ > 269				be32_to_cpu(readl_relaxed(priv->base + SHA_OUT0 + i));
+   270	
+   271		return 0;
+   272	}
+   273	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
