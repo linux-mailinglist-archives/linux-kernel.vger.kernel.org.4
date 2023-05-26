@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED41712D82
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E506712D85
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243984AbjEZTaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
+        id S244004AbjEZTaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243944AbjEZTaR (ORCPT
+        with ESMTP id S243927AbjEZTam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:30:17 -0400
+        Fri, 26 May 2023 15:30:42 -0400
 Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B61189;
-        Fri, 26 May 2023 12:30:12 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30ae141785bso156759f8f.3;
-        Fri, 26 May 2023 12:30:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFFBE52;
+        Fri, 26 May 2023 12:30:33 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3063433fa66so726128f8f.3;
+        Fri, 26 May 2023 12:30:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685129410; x=1687721410;
+        d=gmail.com; s=20221208; t=1685129432; x=1687721432;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G9shYcdtaK4nijtLijnuwb1GLVaQieDPGIiKrHSPS3I=;
-        b=IEnOpkLquA63V7aL9EwvWkRW6y8hC7xY8mwkfZk7v3EJDiXlADO6zvp1gNXx8uTnYy
-         Icg08VwMyfo9AoZW16q3BJJ5IaKv2JZFKHC1mabW/IX1yKBxZXLTxRZ19lG4Dx0H2YHL
-         5mfkuSgkSI98hBgdITES9oXk+oDkJmldCIHW/OGOBDBwx+qUKCjD1LMjIy4X9UEoqBr5
-         +kzAezdiOwNDOAxcnMhVgBMU5rAFKgCSOuKKWsrWXgLIgSmsfTVADoWax83nly0KDMVM
-         VO+II6rn49PSs58M96SMdsNNxNCRWlx4/gCY5/ORiBOR3AFJe5WpPc70l8fOxTuDrbCz
-         4ZLg==
+        bh=1ERaIn3XiM9AIriWrH87W8nbH2+a+3f3XJN5bHFdNCI=;
+        b=JKJD1wuk4YHOZSdOUr8su8W8qcR+Up9+mzSoD+/THLj9ZgrkNZ4nSQd8siJMy58di4
+         t9d7YYs6xvJIx9OeCpHLn2++aij2793ZT+frMFFZ33BNgIgJiZlCRqlL0emyaTMY0QP4
+         b30v4qF6ZJUL7fFhmaip5t5N53xYIJWh2b99T1xjXOU+8SoRFvfuFVznHvU0mImoCVFg
+         6JIL99g2u5n/53WvDQgr0rsezSSDsaBwNYZAaxT8BC3L5i/BC7PlYboHJFb9DBJdmPY4
+         J3kObv66OhEHrK7SAZwfBUz4+i16w52DVm2B6kcJ7R1aQFKDcj8o70fOvDM9KgsqpVO5
+         Z8dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685129410; x=1687721410;
+        d=1e100.net; s=20221208; t=1685129432; x=1687721432;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G9shYcdtaK4nijtLijnuwb1GLVaQieDPGIiKrHSPS3I=;
-        b=NqgESx5iMkGKYhnqrFX391pDpQDJoHJv6N6BGodaFx7zB26dyS3wPKVg9+dDPxH3Fy
-         AF2MUT3BiFXtYvQvfPFoGAQ4lnvecbpM5vuzQ+zM32baFFqN/iSKAF8ebGV/jIjL7471
-         lyOdKhH3yjgP0mNO5E7oY3HgWhV7GaxU25FIP8HRdSsz/EOmFVP4EvFGK/Ku3n/fsNhM
-         N8FeJM0JXYSkUgEjexiH+SvvD4Xe56w4GYVtker+4oG8snGkcD+JIV/3+WiInjb0x0lO
-         bUWYA/LrawmkY4NMxc2U9dzADr2bz/3F9lXHACwwKwFw5RwThmrVx7Ou4lTg6SKp0Ie8
-         QBBQ==
-X-Gm-Message-State: AC+VfDwSQ0c+j2iPqJCb2sG4Wji+AByuz9mJ8IoP6tuDXZ5UsmuEv9F5
-        65SocaSLFW/7VZMmSnDFy3w=
-X-Google-Smtp-Source: ACHHUZ6XP1SNefrjxMwWDglY89pvDlMfDtYW+68R8ofvcxI8I/zXrTM5z9bLVpEODMux7ZSl5a+O+g==
-X-Received: by 2002:adf:dbc6:0:b0:2f1:e162:d48 with SMTP id e6-20020adfdbc6000000b002f1e1620d48mr2189372wrj.47.1685129410516;
-        Fri, 26 May 2023 12:30:10 -0700 (PDT)
+        bh=1ERaIn3XiM9AIriWrH87W8nbH2+a+3f3XJN5bHFdNCI=;
+        b=EiY88tac455nJw2r3i+p3pYJVhY1a55KxwEPRruCqYPXeSbUfL4z4MWkE2lVm6HHju
+         Q0zZIXyPeTNgmXKSLS79eB8N3zCH9hlIEdRtGFwkdj8HPzSfXlP80qae9O10VckFznru
+         bVx16GulsUJhmadcA01c6yoEvDvdvRN3veLlMtAY9sIN0i3do+EwnuCc/r5w22wgumUR
+         Om7JqvWi84ur8OHPj36Rm3+gf/1MkKyt/j/8eosI/ClIZ5nfdoWBS3IgzGvspKULqX80
+         W4sjuzHSeZDvmem502FMrdYXYfjyw6oeRG04uA/wogFpGTLSdLg16gDRLQmrQ8XDj2j5
+         swpQ==
+X-Gm-Message-State: AC+VfDxLdtsal0nVajrVkGmhcW+EnHt74sinYMEseIBRYi0nehORUAQ7
+        Ku8If1H/aFwk4C6ctjh0EY8=
+X-Google-Smtp-Source: ACHHUZ5Y9BIEgY6hh1+MgryrEo4ZPwrKPM/NN8XtiDO/UoAeb+EK13SSKGfwPgFuJXDetLcX9KUPbw==
+X-Received: by 2002:a5d:658d:0:b0:307:aa7c:58 with SMTP id q13-20020a5d658d000000b00307aa7c0058mr2111159wru.40.1685129432014;
+        Fri, 26 May 2023 12:30:32 -0700 (PDT)
 Received: from standask-GA-A55M-S2HP ([188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id x3-20020adfdcc3000000b0030ade1b9400sm1263164wrm.30.2023.05.26.12.30.09
+        by smtp.gmail.com with ESMTPSA id j10-20020a5d618a000000b0030631a599a0sm5956295wru.24.2023.05.26.12.30.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 12:30:10 -0700 (PDT)
-Date:   Fri, 26 May 2023 21:30:08 +0200
+        Fri, 26 May 2023 12:30:31 -0700 (PDT)
+Date:   Fri, 26 May 2023 21:30:30 +0200
 From:   Stanislav Jakubek <stano.jakubek@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -59,8 +59,8 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Scott Branden <sbranden@broadcom.com>
 Cc:     bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] ARM: dts: bcm11351/21664: add UART, I2C node labels
-Message-ID: <4c8bb3a725dad9048665d39d0ca728b52152e59e.1685127525.git.stano.jakubek@gmail.com>
+Subject: [PATCH 5/6] ARM: dts: bcm21664-garnet: use node labels
+Message-ID: <e9f1ac2e9aa0ef7e880b1c152cbd56ff6b151955.1685127525.git.stano.jakubek@gmail.com>
 References: <cover.1685127525.git.stano.jakubek@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -76,157 +76,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add node labels to serial (UART) and I2C nodes for BCM11351 and BCM21664.
+Use node labels instead of nodename@address for BCM21664 Garnet
+to simplify its DTS file.
 
 Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
 ---
- arch/arm/boot/dts/bcm11351.dtsi | 16 ++++++++--------
- arch/arm/boot/dts/bcm21664.dtsi | 14 +++++++-------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+ arch/arm/boot/dts/bcm21664-garnet.dts | 46 +++++++++++++--------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm11351.dtsi b/arch/arm/boot/dts/bcm11351.dtsi
-index 773d717de7f0..b271a9bf06a9 100644
---- a/arch/arm/boot/dts/bcm11351.dtsi
-+++ b/arch/arm/boot/dts/bcm11351.dtsi
-@@ -49,7 +49,7 @@ smc@3404c000 {
- 		reg = <0x3404c000 0x400>; /* 1 KiB in SRAM */
+diff --git a/arch/arm/boot/dts/bcm21664-garnet.dts b/arch/arm/boot/dts/bcm21664-garnet.dts
+index dead91d97b63..8789fae178bf 100644
+--- a/arch/arm/boot/dts/bcm21664-garnet.dts
++++ b/arch/arm/boot/dts/bcm21664-garnet.dts
+@@ -15,33 +15,33 @@ memory@80000000 {
+ 		device_type = "memory";
+ 		reg = <0x80000000 0x40000000>; /* 1 GB */
  	};
++};
  
 -	serial@3e000000 {
-+	uartb: serial@3e000000 {
- 		compatible = "brcm,bcm11351-dw-apb-uart", "snps,dw-apb-uart";
- 		reg = <0x3e000000 0x1000>;
- 		clocks = <&slave_ccu BCM281XX_SLAVE_CCU_UARTB>;
-@@ -59,7 +59,7 @@ serial@3e000000 {
- 		status = "disabled";
- 	};
+-		status = "okay";
+-	};
++&sdio1 {
++	max-frequency = <48000000>;
++	status = "okay";
++};
  
--	serial@3e001000 {
-+	uartb2: serial@3e001000 {
- 		compatible = "brcm,bcm11351-dw-apb-uart", "snps,dw-apb-uart";
- 		reg = <0x3e001000 0x1000>;
- 		clocks = <&slave_ccu BCM281XX_SLAVE_CCU_UARTB2>;
-@@ -69,7 +69,7 @@ serial@3e001000 {
- 		status = "disabled";
- 	};
+-	sdio1: mmc@3f180000 {
+-		max-frequency = <48000000>;
+-		status = "okay";
+-	};
++&sdio2 {
++	non-removable;
++	max-frequency = <48000000>;
++	status = "okay";
++};
  
--	serial@3e002000 {
-+	uartb3: serial@3e002000 {
- 		compatible = "brcm,bcm11351-dw-apb-uart", "snps,dw-apb-uart";
- 		reg = <0x3e002000 0x1000>;
- 		clocks = <&slave_ccu BCM281XX_SLAVE_CCU_UARTB3>;
-@@ -79,7 +79,7 @@ serial@3e002000 {
- 		status = "disabled";
- 	};
+-	sdio2: mmc@3f190000 {
+-		non-removable;
+-		max-frequency = <48000000>;
+-		status = "okay";
+-	};
++&sdio4 {
++	max-frequency = <48000000>;
++	cd-gpios = <&gpio 91 GPIO_ACTIVE_LOW>;
++	status = "okay";
++};
  
--	serial@3e003000 {
-+	uartb4: serial@3e003000 {
- 		compatible = "brcm,bcm11351-dw-apb-uart", "snps,dw-apb-uart";
- 		reg = <0x3e003000 0x1000>;
- 		clocks = <&slave_ccu BCM281XX_SLAVE_CCU_UARTB4>;
-@@ -161,7 +161,7 @@ pinctrl@35004800 {
- 		reg = <0x35004800 0x430>;
- 	};
+-	sdio4: mmc@3f1b0000 {
+-		max-frequency = <48000000>;
+-		cd-gpios = <&gpio 91 GPIO_ACTIVE_LOW>;
+-		status = "okay";
+-	};
++&uartb {
++	status = "okay";
++};
  
--	i2c@3e016000 {
-+	bsc1: i2c@3e016000 {
- 		compatible = "brcm,bcm11351-i2c", "brcm,kona-i2c";
- 		reg = <0x3e016000 0x80>;
- 		interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-@@ -171,7 +171,7 @@ i2c@3e016000 {
- 		status = "disabled";
- 	};
+-	usbotg: usb@3f120000 {
+-		status = "okay";
+-	};
++&usbotg {
++	status = "okay";
++};
  
--	i2c@3e017000 {
-+	bsc2: i2c@3e017000 {
- 		compatible = "brcm,bcm11351-i2c", "brcm,kona-i2c";
- 		reg = <0x3e017000 0x80>;
- 		interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
-@@ -181,7 +181,7 @@ i2c@3e017000 {
- 		status = "disabled";
- 	};
- 
--	i2c@3e018000 {
-+	bsc3: i2c@3e018000 {
- 		compatible = "brcm,bcm11351-i2c", "brcm,kona-i2c";
- 		reg = <0x3e018000 0x80>;
- 		interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
-@@ -191,7 +191,7 @@ i2c@3e018000 {
- 		status = "disabled";
- 	};
- 
--	i2c@3500d000 {
-+	pmu_bsc: i2c@3500d000 {
- 		compatible = "brcm,bcm11351-i2c", "brcm,kona-i2c";
- 		reg = <0x3500d000 0x80>;
- 		interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
-diff --git a/arch/arm/boot/dts/bcm21664.dtsi b/arch/arm/boot/dts/bcm21664.dtsi
-index 9e3835a0a7ef..2eb7f5b0c1dc 100644
---- a/arch/arm/boot/dts/bcm21664.dtsi
-+++ b/arch/arm/boot/dts/bcm21664.dtsi
-@@ -49,7 +49,7 @@ smc@3404e000 {
- 		reg = <0x3404e000 0x400>; /* 1 KiB in SRAM */
- 	};
- 
--	serial@3e000000 {
-+	uartb: serial@3e000000 {
- 		compatible = "brcm,bcm21664-dw-apb-uart", "snps,dw-apb-uart";
- 		reg = <0x3e000000 0x118>;
- 		clocks = <&slave_ccu BCM21664_SLAVE_CCU_UARTB>;
-@@ -59,7 +59,7 @@ serial@3e000000 {
- 		status = "disabled";
- 	};
- 
--	serial@3e001000 {
-+	uartb2: serial@3e001000 {
- 		compatible = "brcm,bcm21664-dw-apb-uart", "snps,dw-apb-uart";
- 		reg = <0x3e001000 0x118>;
- 		clocks = <&slave_ccu BCM21664_SLAVE_CCU_UARTB2>;
-@@ -69,7 +69,7 @@ serial@3e001000 {
- 		status = "disabled";
- 	};
- 
--	serial@3e002000 {
-+	uartb3: serial@3e002000 {
- 		compatible = "brcm,bcm21664-dw-apb-uart", "snps,dw-apb-uart";
- 		reg = <0x3e002000 0x118>;
- 		clocks = <&slave_ccu BCM21664_SLAVE_CCU_UARTB3>;
-@@ -144,7 +144,7 @@ sdio4: mmc@3f1b0000 {
- 		status = "disabled";
- 	};
- 
--	i2c@3e016000 {
-+	bsc1: i2c@3e016000 {
- 		compatible = "brcm,bcm21664-i2c", "brcm,kona-i2c";
- 		reg = <0x3e016000 0x70>;
- 		interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
-@@ -154,7 +154,7 @@ i2c@3e016000 {
- 		status = "disabled";
- 	};
- 
--	i2c@3e017000 {
-+	bsc2: i2c@3e017000 {
- 		compatible = "brcm,bcm21664-i2c", "brcm,kona-i2c";
- 		reg = <0x3e017000 0x70>;
- 		interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
-@@ -164,7 +164,7 @@ i2c@3e017000 {
- 		status = "disabled";
- 	};
- 
--	i2c@3e018000 {
-+	bsc3: i2c@3e018000 {
- 		compatible = "brcm,bcm21664-i2c", "brcm,kona-i2c";
- 		reg = <0x3e018000 0x70>;
- 		interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
-@@ -174,7 +174,7 @@ i2c@3e018000 {
- 		status = "disabled";
- 	};
- 
--	i2c@3e01c000 {
-+	bsc4: i2c@3e01c000 {
- 		compatible = "brcm,bcm21664-i2c", "brcm,kona-i2c";
- 		reg = <0x3e01c000 0x70>;
- 		interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
+-	usbphy: usb-phy@3f130000 {
+-		status = "okay";
+-	};
++&usbphy {
++	status = "okay";
+ };
 -- 
 2.25.1
 
