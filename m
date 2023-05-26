@@ -2,176 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA07711ED7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 06:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769B4711EDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 06:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241041AbjEZEYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 00:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        id S241914AbjEZEZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 00:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbjEZEYM (ORCPT
+        with ESMTP id S229480AbjEZEZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 00:24:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC3910CF
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 21:23:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685074980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U2epE74rgQGpSbchmdCJa1fM29pXtiET/OfLMRsBcJc=;
-        b=RPJv3cKjvcHp//1DnMydMYf2capru3t+pQZKj/1WFlK7qXPapoQ7T5UWVV1zV986DqzFax
-        UjmtezcZ7RAL+/HSOudZ3NNJlEDGr7DZ12++UFo9yNptpNBy0z9ZsSE4n34CPvVkUfkkz7
-        Nf8roHZCASv3jaIxE10L9lLNWXL089k=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-674-S2A3ZgtOOM-QvBWPx5kFIw-1; Fri, 26 May 2023 00:22:56 -0400
-X-MC-Unique: S2A3ZgtOOM-QvBWPx5kFIw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BAB5185A5A8;
-        Fri, 26 May 2023 04:22:55 +0000 (UTC)
-Received: from localhost (ovpn-12-35.pek2.redhat.com [10.72.12.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 080F52166B2B;
-        Fri, 26 May 2023 04:22:54 +0000 (UTC)
-Date:   Fri, 26 May 2023 12:22:51 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Tao Liu <ltao@redhat.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        Ard Biesheuvel <ardb@kernel.org>, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, linux-kernel@vger.kernel.org,
-        dyoung@redhat.com, kexec@lists.infradead.org,
-        linux-efi@vger.kernel.org
-Subject: Re: [PATCH] x86/kexec: Add EFI config table identity mapping for
- kexec kernel
-Message-ID: <ZHA0G/jS+XlMzi6N@MiWiFi-R3L-srv>
-References: <20230525094914.23420-1-ltao@redhat.com>
+        Fri, 26 May 2023 00:25:46 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B7313D;
+        Thu, 25 May 2023 21:25:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685075145; x=1716611145;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rnYAPF5QRecUV0o1s+Lp3V0Rv6Hpp5boRWupRwxXQ5o=;
+  b=I4R7h3/VXzSSL4wfPsLSQoWduyQNBmC2DVIhNu085eldm3XNS0aboX2B
+   7Mg6UGSi5KxjLFWEg2GJx+s2YX+4pcmpPbKVg2jCKq9vp9KobTJHYS7wg
+   mV93fjkW2wWZZBnpABKIuJYhNmxkB/9g3aEntb3qIa6tvdd8LVVMJPUS3
+   Uhm47FW5v3YBbzFRqeNU5HnJjkVRafwJtSXSKo1QIxv0d2yvkuZSaHAAY
+   8nDJ00/lEAXmA9deUPEOWeo62RsKFbVpYW4gE69dqQxNwpiqoW2Idt8r1
+   aBbBuz2KMkF29fbrf+M27U9TQz6YKUBpyjE2jwlPlBodRDCzY5gPFiRut
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="356495642"
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="scan'208";a="356495642"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 21:25:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="735845061"
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="scan'208";a="735845061"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by orsmga008.jf.intel.com with ESMTP; 25 May 2023 21:25:38 -0700
+Message-ID: <a968f730-4161-617c-e386-a7ff8532adc9@linux.intel.com>
+Date:   Fri, 26 May 2023 12:24:52 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525094914.23420-1-ltao@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Subject: Re: [PATCH v3 06/10] iommu/vt-d: Set the nested domain to a device
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>
+References: <20230511145110.27707-1-yi.l.liu@intel.com>
+ <20230511145110.27707-7-yi.l.liu@intel.com>
+ <BN9PR11MB52765BB617AB5611A8B54D328C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB52765BB617AB5611A8B54D328C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Ard to CC.
+On 5/24/23 3:22 PM, Tian, Kevin wrote:
+>> From: Liu, Yi L <yi.l.liu@intel.com>
+>> Sent: Thursday, May 11, 2023 10:51 PM
+>>
+>> +
+>> +static int intel_nested_attach_dev(struct iommu_domain *domain,
+>> +				   struct device *dev)
+>> +{
+>> +	struct device_domain_info *info = dev_iommu_priv_get(dev);
+>> +	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
+>> +	struct intel_iommu *iommu = info->iommu;
+>> +	unsigned long flags;
+>> +	int ret = 0;
+>> +
+>> +	if (info->domain)
+>> +		device_block_translation(dev);
+>> +
+>> +	/* Is s2_domain compatible with this IOMMU? */
+>> +	ret = prepare_domain_attach_device(&dmar_domain->s2_domain-
+>>> domain, dev);
+>> +	if (ret) {
+>> +		dev_err_ratelimited(dev, "s2 domain is not compatible\n");
+>> +		return ret;
+>> +	}
+> 
+> this also includes logic to trim higher page levels:
+> 
+> 	/*
+> 	 * Knock out extra levels of page tables if necessary
+> 	 */
+> 	while (iommu->agaw < dmar_domain->agaw) {
+> 		struct dma_pte *pte;
+> 
+> 		pte = dmar_domain->pgd;
+> 		if (dma_pte_present(pte)) {
+> 			dmar_domain->pgd = phys_to_virt(dma_pte_addr(pte));
+> 			free_pgtable_page(pte);
+> 		}
+> 		dmar_domain->agaw--;
+> 	}
+> 
+> What's the background of doing such truncation instead of simply
+> failing the request?
 
-On 05/25/23 at 05:49pm, Tao Liu wrote:
-> A kexec kernel bootup hang is observed on Intel Atom cpu due to unmapped
-> EFI config table.
-> 
-> Currently EFI system table is identity-mapped for the kexec kernel, but EFI
-> config table is not mapped explicitly:
-> 
->     commit 6bbeb276b71f ("x86/kexec: Add the EFI system tables and ACPI
->                           tables to the ident map")
-> 
-> Later in the following 2 commits, EFI config table will be accessed when
-> enabling sev at kernel startup. This may result in a page fault due to EFI
-> config table's unmapped address. Since the page fault occurs at an early
-> stage, it is unrecoverable and kernel hangs.
-> 
->     commit ec1c66af3a30 ("x86/compressed/64: Detect/setup SEV/SME features
->                           earlier during boot")
->     commit c01fce9cef84 ("x86/compressed: Add SEV-SNP feature
->                           detection/setup")
-> 
-> In addition, the issue doesn't appear on all systems, because the kexec
-> kernel uses Page Size Extension (PSE) for identity mapping. In most cases,
-> EFI config table can end up to be mapped into due to 1 GB page size.
-> However if nogbpages is set, or cpu doesn't support pdpe1gb feature
-> (e.g Intel Atom x6425RE cpu), EFI config table may not be mapped into
-> due to 2 MB page size, thus a page fault hang is more likely to happen.
-> 
-> In this patch, we will make sure the EFI config table is always mapped.
-> 
-> Signed-off-by: Tao Liu <ltao@redhat.com>
-> ---
->  arch/x86/kernel/machine_kexec_64.c | 35 ++++++++++++++++++++++++++----
->  1 file changed, 31 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-> index 1a3e2c05a8a5..755aa12f583f 100644
-> --- a/arch/x86/kernel/machine_kexec_64.c
-> +++ b/arch/x86/kernel/machine_kexec_64.c
-> @@ -28,6 +28,7 @@
->  #include <asm/setup.h>
->  #include <asm/set_memory.h>
->  #include <asm/cpu.h>
-> +#include <asm/efi.h>
->  
->  #ifdef CONFIG_ACPI
->  /*
-> @@ -86,10 +87,12 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
->  #endif
->  
->  static int
-> -map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
-> +map_efi_sys_cfg_tab(struct x86_mapping_info *info, pgd_t *level4p)
->  {
->  #ifdef CONFIG_EFI
->  	unsigned long mstart, mend;
-> +	void *kaddr;
-> +	int ret;
->  
->  	if (!efi_enabled(EFI_BOOT))
->  		return 0;
-> @@ -105,6 +108,30 @@ map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
->  	if (!mstart)
->  		return 0;
->  
-> +	ret = kernel_ident_mapping_init(info, level4p, mstart, mend);
-> +	if (ret)
-> +		return ret;
-> +
-> +	kaddr = memremap(mstart, mend - mstart, MEMREMAP_WB);
-> +	if (!kaddr) {
-> +		pr_err("Could not map UEFI system table\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	mstart = efi_config_table;
-> +
-> +	if (efi_enabled(EFI_64BIT)) {
-> +		efi_system_table_64_t *stbl = (efi_system_table_64_t *)kaddr;
-> +
-> +		mend = mstart + sizeof(efi_config_table_64_t) * stbl->nr_tables;
-> +	} else {
-> +		efi_system_table_32_t *stbl = (efi_system_table_32_t *)kaddr;
-> +
-> +		mend = mstart + sizeof(efi_config_table_32_t) * stbl->nr_tables;
-> +	}
-> +
-> +	memunmap(kaddr);
-> +
->  	return kernel_ident_mapping_init(info, level4p, mstart, mend);
->  #endif
->  	return 0;
-> @@ -244,10 +271,10 @@ static int init_pgtable(struct kimage *image, unsigned long start_pgtable)
->  	}
->  
->  	/*
-> -	 * Prepare EFI systab and ACPI tables for kexec kernel since they are
-> -	 * not covered by pfn_mapped.
-> +	 * Prepare EFI systab, config table and ACPI tables for kexec kernel
-> +	 * since they are not covered by pfn_mapped.
->  	 */
-> -	result = map_efi_systab(&info, level4p);
-> +	result = map_efi_sys_cfg_tab(&info, level4p);
->  	if (result)
->  		return result;
->  
-> -- 
-> 2.33.1
-> 
+This code existed a long time ago. I'm not sure if it's still reasonable
+so far.
 
+> In any means it's probably fine before the domain includes any mapping
+> but really unreasonable to apply it to an existing s2 when it's used as
+> a parent.
+
+But for the new nested translation, it is obviously unreasonable.
+
+Let me revisit it.
+
+Best regards,
+baolu
