@@ -2,141 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105DC7127B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E657127BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243763AbjEZNim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S243433AbjEZNr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbjEZNij (ORCPT
+        with ESMTP id S229895AbjEZNrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:38:39 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7572D8;
-        Fri, 26 May 2023 06:38:35 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1685108306txlguqb4
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 26 May 2023 21:38:25 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: D6RqbDSxuq6HnLLie3EOSagOrtQovMoO/c1ZDojJdhdkswrEDfVNTEkUj0kwK
-        lL0kA4K1R0ac0uzzRVCeWqKdDuUszTc4QMmQRhfY8GatL4fQhlXKCss68nOUn67913VG7mF
-        6g0HwKkHxQbjKdBP54BZX7IWEOVmxqArgAquJLmDkN1gUtxJqb7Mce1XtwBLxjaz223a1/8
-        lS2USjspSMnYcZQnJIa0lk4R5fYl+toH0r3XL3iA4dTRmsd3GrqAa59N6NJVYnO6jDGNJBJ
-        49it71G2yoeckv05RPq+XKAm7C8YmMGi60Q4daIC6bDhHCF+7SBMDMh5n5YtbJc/yQkih32
-        /kS05+mflHkytfSp5XZIYkQSCbpz6BzQTLpwWlBxrf/qCseFCT7OU/GrpJgCQiAHbfVrYaT
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10011161400852395735
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     conor.dooley@microchip.com
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de,
-        w@1wt.eu
-Subject: Re: [PATCH 06/13] selftests/nolibc: allow specify a bios for qemu
-Date:   Fri, 26 May 2023 21:38:25 +0800
-Message-Id: <20230526133825.198100-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230526-clover-litter-1f41398cd820@wendy>
-References: <20230526-clover-litter-1f41398cd820@wendy>
+        Fri, 26 May 2023 09:47:25 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB733F3;
+        Fri, 26 May 2023 06:47:22 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d293746e0so1156941b3a.2;
+        Fri, 26 May 2023 06:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685108842; x=1687700842;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9TW6tTngWb25r/POiswswB/QyhpYIVptjKJqMAEVpQI=;
+        b=piyIs9X8Ll5ISV/iWmt8KPgg0B7Tqe8eQT1TjmOyW1U1spGfaEnx6RVNxr8WFlmvzY
+         iwfhG4jTstzaotQklI39xA3D8/fduc9M1sNCOuHpjeTayB1hoHDg038i4bKmc+w3QFTt
+         0gQNSXptjrhT13Ya9vBaOpOYvudq89gi3n1vM4Dk0/VHwri3sYCD/ebivD1mSnA2jLga
+         BlLh/iKtdJHCNtp3bRfyvJRhgGXmgu1GXBqdhOwcxqsPa05UUWtnoTuLp7n/EA395Kk7
+         oqwqMtBB0IGl7ZrPUOx8ImIimXddQEYZ9giEYlRpuF3kpu9GhoQa+RwMTubagLy4GMi8
+         6ADA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685108842; x=1687700842;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9TW6tTngWb25r/POiswswB/QyhpYIVptjKJqMAEVpQI=;
+        b=EpcShi1tPXnkix4aLMVYIiElNlBoJnru7HOQnaGS/3n/8cS+M4FCjELiHpNgL7Bc46
+         oJu4AV512KITp03SeFaZ8PUb1vwbl61pI04FZZtrd5r07tzWX25jYgKxCLKk+AKPcqU8
+         rfeICuheoyJv26vuMruTgpBOFa3gRIWyYDHCI/1LP+JaHJdj+nwiP0neOAOgMLCk35eP
+         H06WXsHf1/rPPx45yhXWOEX5uyQrMvscZy3tjPZnAZmGWNQMhYjrlRtgmpEk5OcuG/Im
+         46rrpXDVGMRbOOJzsqANN6HpFb99xeWPoTlmsjxEJkosOmv6O8vG1fp9YIv7hlav5LLh
+         iVLw==
+X-Gm-Message-State: AC+VfDy2BssK+YS48qj1Ecbemtf0QnQXKea55ftCNowR0sVtw9Ihy2nj
+        h1f0yWuzkzhFYyfPQXYKTrX9yF5R6Vw=
+X-Google-Smtp-Source: ACHHUZ4K0GD+iAjkaF75NrVdiUroHsbTjcoay2+CJ/EytE3C7jNawfKrN4fA5I5u3rphgfmJhBAOLA==
+X-Received: by 2002:a05:6a00:b93:b0:64b:205:dbf3 with SMTP id g19-20020a056a000b9300b0064b0205dbf3mr3785656pfj.34.1685108842119;
+        Fri, 26 May 2023 06:47:22 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-61.three.co.id. [116.206.28.61])
+        by smtp.gmail.com with ESMTPSA id j1-20020aa78001000000b006437c0edf9csm2881304pfi.16.2023.05.26.06.47.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 06:47:21 -0700 (PDT)
+Message-ID: <288db372-9797-540f-e8bd-794a23648573@gmail.com>
+Date:   Fri, 26 May 2023 20:46:32 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Samsung SoC Support <linux-samsung-soc@vger.kernel.org>
+Cc:     Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andrew <quark@disroot.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: Does not work backlight on Chromebook XE303C12 with Kernel
+ version 6.3.4
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Conor.
+Hi,
 
-> 
-> On Fri, May 26, 2023 at 06:25:18PM +0800, Zhangjin Wu wrote:
-> 
-> > > On 2023-05-25 01:52:29+0800, Zhangjin Wu wrote:
-> > > > riscv qemu has a builtin bios (opensbi), but it may not match the latest
-> > > > kernel and some old versions may hang during boot, let's allow user pass
-> > > > a newer version to qemu via the -bios option.
-> > >
-> > > Nitpick:
-> > >
-> > > This seems very specific and hopefully only necessary temporarily.
-> > >
-> >
-> > RISC-V is such a new ISA and the Spec (especially the SBI) changes very
-> > frequently ;-)
-> 
-> Huh. Could you please expand on which versions of QEMU will hang while
-> booting an upstream or stable kernel? Which kernels would be good to
-> know too.
-> 
+I notice a regression report on Bugzilla [1]. Quoting from it:
 
-As the cover letter listed (in the Environment section), the softwares we
-used are:
+> I did check it by flashlight. Even with all available backlights drivers compiled as modules it does not work. With Kernel version 5.15.106 backlight works fine.
+> Kernels for Chomebook uses dtb files that have some backlight config set (used gpio), like exynos5250-snow-common.dtsi and dmesg of 6.3.4 gives some gpio warnings. Maybe cause in it.
 
-    // higher qemu version is better, latest version is v8.0.0+
-    $ qemu-system-riscv64  --version
-    QEMU emulator version 4.2.1 (Debian 1:4.2-3ubuntu6.18)
-    Copyright (c) 2003-2019 Fabrice Bellard and the QEMU Project developers
+See bugzilla for the full thread and attached dmesg & kernel config.
 
-    // opensbi version, higher is better, must match kernel version and qemu version
-    // rv64: used version is 1.2, latest is 1.2
-    $ head -2 /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/run.out | tail -1
-    OpenSBI v1.2-116-g7919530
-    // rv32: used version is v0.9, latest is 1.2
-    $ head -2 /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/run.out | tail -1
-    OpenSBI v0.9-152-g754d511
+Anyway, I'm adding it to regzbot:
 
-The kernel version is the one this patchset based on (Willy's nolibc
-repo), it is v6.4-rc1.
+#regzbot introduced: v5.15..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217489
+#regzbot title: Chromebook XE303C12 backlight stopped working with gpio warnings
 
-qemu v4.2.1 is the one systematically installed (/usr/bin) from the
-qemu-system-misc package and used to test this patchset in my Ubuntu
-20.04 based test docker image.
+Thanks.
 
-Just installed a v7.0.0 qemu from ppa:canonical-server/server-backports,
-there is no default opensbi, and re-checked, there is one prebuilt
-opensbi for rv64, but still no prebuilt opensbi for rv32.
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217489
 
-    $ sudo add-apt-repository ppa:canonical-server/server-backports
-    $ sudo apt install qemu-system-misc
-
-    $ sudo apt install opensbi
-    $ dpkg -S opensbi | grep -E "fw_*bin|elf"
-    qemu-system-data: /usr/share/qemu/opensbi-riscv64-generic-fw_dynamic.elf
-    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_dynamic.elf
-    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_jump.elf
-
-    $ qemu-system-riscv32 -display none -no-reboot -kernel build/riscv32/virt/linux/v6.4-rc1/arch/riscv/boot/Image -serial stdio -M virt -append "console=ttyS0 panic=-1"
-    qemu-system-riscv32: Unable to load the RISC-V firmware "opensbi-riscv32-generic-fw_dynamic.bin"
-
-I used the one built myself, If not want to build such opensbi manually,
-we can download one (1.2 currently) from qemu source code:
-
-    https://gitlab.com/qemu-project/qemu/-/blob/master/pc-bios/opensbi-riscv32-generic-fw_dynamic.bin
-
-Then, we can use it like this:
-
-    $ qemu-system-riscv32 -display none -no-reboot -kernel build/riscv32/virt/linux/v6.4-rc1/arch/riscv/boot/Image -serial stdio -M virt -append "console=ttyS0 panic=-1" -bios /path/to/opensbi-riscv32-generic-fw_dynamic.bin
-
-Will append this extra info in the commit message of the coming new
-revision of this patch, thanks a lot.
-
-The hang issue I mentioned may be using one of my older prebuilt version of
-opensbi, I can not find which one it exactly is, so, please ignore that info,
-will update that description too.
-
-Btw, something not about this patch: qemu v8.0.0 seems not boot non-mmu
-v6.3, both sides have issues, not dig into it carefully, so, not report
-it yet.
-
-Thanks,
-Zhangjin
-
-> Thanks,
-> Conor.
+-- 
+An old man doll... just what I always wanted! - Clara
