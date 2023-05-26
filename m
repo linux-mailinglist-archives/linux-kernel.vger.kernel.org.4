@@ -2,73 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21ACE711D4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE55711D38
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234071AbjEZCB4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 25 May 2023 22:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
+        id S235352AbjEZB5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 21:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbjEZCBy (ORCPT
+        with ESMTP id S229646AbjEZB5p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 22:01:54 -0400
-X-Greylist: delayed 385 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 25 May 2023 19:01:51 PDT
-Received: from mwp-bld-mts-003c1.ocn.ad.jp (mwp-bld-mts-003c1.ocn.ad.jp [153.128.188.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C77190;
-        Thu, 25 May 2023 19:01:51 -0700 (PDT)
-Received: from cmn-spm-mts-025c1.ocn.ad.jp (cmn-spm-mts-025c1.ocn.ad.jp [153.138.238.89])
-        by mwp-bld-mts-003c1.ocn.ad.jp (Postfix) with ESMTP id 5DDF8540018D5;
-        Fri, 26 May 2023 10:55:24 +0900 (JST)
-Received: from mgw-vc-mts-005c1.ocn.ad.jp ([153.138.238.156])
-        by cmn-spm-mts-025c1.ocn.ad.jp with ESMTP
-        id 2MfsqMZM96aVN2Mfsq7G0l; Fri, 26 May 2023 10:55:24 +0900
-X-BIZ-RELAY: yes
-Received: from mwp-sdgw-mts-007c1.ocn.ad.jp ([122.28.88.74])
-        by mgw-vc-mts-005c1.ocn.ad.jp with ESMTP
-        id 2MfsqcUz4dEGV2MfsqmmZC; Fri, 26 May 2023 10:55:24 +0900
-Received: from c15u1u5l.mwprem.net (c15u1u5l.mwprem.net [122.17.164.24])
-        by mwp-sdgw-mts-007c1.ocn.ad.jp (Postfix) with SMTP id E9D78800042A;
-        Fri, 26 May 2023 10:55:23 +0900 (JST)
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 25 May 2023 21:57:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98789E7;
+        Thu, 25 May 2023 18:57:43 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QS7H93JvJzqSSc;
+        Fri, 26 May 2023 09:53:09 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 26 May 2023 09:57:41 +0800
+Message-ID: <76b50214-fcf8-37fe-47c9-cfcaf7517048@huawei.com>
+Date:   Fri, 26 May 2023 09:57:40 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Project Proposal
-To:     Recipients <k-takahashi@maxis.ne.jp>
-From:   "T Peter" <k-takahashi@maxis.ne.jp>
-Date:   Thu, 25 May 2023 18:55:10 -0700
-Reply-To: tanglkpeter11@gmail.com
-Message-Id: <20230526015518.84F8440812CC@c15u1u5l.mwprem.net>
-X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_RANDOM_REPLYTO,
-        NIXSPAM_IXHASH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.0 HK_RANDOM_REPLYTO Reply-To username looks random
-        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [tanglkpeter11[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <jane.chu@oracle.com>
+References: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
+ <5570c23a-3b12-6685-cb0b-29fc1d58f541@intel.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <5570c23a-3b12-6685-cb0b-29fc1d58f541@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear, 
 
-Please Confirm the project proposition I sent to you has been duly received.
 
-Thank you
+On 2023/5/26 1:18, Dave Hansen wrote:
+> On 5/7/23 19:22, Kefeng Wang wrote:
+>> Both EX_TYPE_FAULT_MCE_SAFE and EX_TYPE_DEFAULT_MCE_SAFE exception
+>> fixup types are used to identify fixups which allow in kernel #MC
+>> recovery, that is the Machine Check Safe Copy.
+>>
+>> For now, the MCE_IN_KERNEL_COPYIN flag is only set for EX_TYPE_COPY
+>> and EX_TYPE_UACCESS when copy from user, and corrupted page is
+>> isolated in this case, for MC-safe copy, memory_failure() is not
+>> always called, some places, like __wp_page_copy_user, copy_subpage,
+>> copy_user_gigantic_page and ksm_might_need_to_copy manually call
+>> memory_failure_queue() to cope with such unhandled error pages,
+>> recently coredump hwposion recovery support[1] is asked to do the
+>> same thing, and there are some other already existed MC-safe copy
+>> scenarios, eg, nvdimm, dm-writecache, dax, which has similar issue.
+> 
+> That has to set some kind of record for run-on sentences.  Could you
+> please try to rewrite this coherently?
+> 
+>> The best way to fix them is set MCE_IN_KERNEL_COPYIN to MCE_SAFE
+>> exception, then kill_me_never() will be queued to call memory_failure()
+>> in do_machine_check() to isolate corrupted page, which avoid calling
+>> memory_failure_queue() after every MC-safe copy return.
+> 
+> Could you try to send a v2 of this with a clear problem statement?
+> 
 
-I anticipate your response
+:( will try to make it more clear.
 
-Regards,
+> What is the end user visible effect of the problem and of your solution?
 
-T LK Peter
+The corrupted page won't be isolated for MC-safe copy scenario, and it 
+could be accessed again by use application.
