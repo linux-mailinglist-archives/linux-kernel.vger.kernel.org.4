@@ -2,120 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CEF712E5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB88F712E5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242701AbjEZUrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 16:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
+        id S242689AbjEZUsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 16:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjEZUrk (ORCPT
+        with ESMTP id S237856AbjEZUsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 16:47:40 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D2B1B1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:47:38 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3078cc99232so1046265f8f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685134057; x=1687726057;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SWQNcyZP8KiazdiWKnaP5XYHweBHqUNg+1IkJ9O3dyY=;
-        b=HOP5yi8wL4uZwsx/lN1hkXHAUQcLlHwLeN1NrRSX66ZKHVibVzeVB1VA/mIvQfv5rt
-         pSzJCHCRifpmdaUu1G1hwXNtfwOihWzRtQZ3kRUKJLkJ6qSAZ6Opvv/qsHs0z7cWhCp8
-         YCq+jVuMuoCDwktcu0Vb1Z14142njMpAPjfHakDKuWsWg6D1aJaMwrAmAusd9Ooqlq9w
-         QvuJ7cU+Gl0/X4jgUf7qeQODEA8HIhkX3rAlms2ao9SFHxEnhCKINwjN/X1sTflpUjy1
-         +xOW2hUtRErNSti5nRKNBWvWKknNun1AuJBJRyqSwEydJKDgNY6Y9euyXSwrdPIXEqWk
-         KBXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685134057; x=1687726057;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SWQNcyZP8KiazdiWKnaP5XYHweBHqUNg+1IkJ9O3dyY=;
-        b=hEB3dV3fIktclmE1FAIVE1GP+/a/JP0gliv+DIDpkFrGw/cfkcHqNp1xzdkhsKihF/
-         acsE6GAh1M+zwGEgx6BIf0C1Lav0Wz9FUPC/D25sHbt0O7vhALVFo7G+iapXAaodpqHO
-         atfS3TSIespuit21C3vvkizQnwYZLIPW3s/hSU2oVRaLSZnAI9SMFwUAIyL3f7vguMpd
-         AwxlpcbL8SkqZ6LEAdemSy5JnV+ex/QQUuTluD1j7pmpBHTx+P199BwQ9NnJwRgez/IT
-         aD6ccKR1gl4u9Uz8+KjXPA5DugW6cbwIn0hX1QS8jNbx21m0zTxgHyO3GfRIaiuGv84H
-         ps8A==
-X-Gm-Message-State: AC+VfDzsc6X3mCbyoemJCX9X+e8jHltcPuGT2RcqkJco2a/GFlV2BUh0
-        LbaNYzLY3VjwCP4s9RgAu1dzmg==
-X-Google-Smtp-Source: ACHHUZ58exYPPq57b3uzGOTHpryl+KwllVGqwA4MIB3/qNNft8Red3AAA0R7RVOZ3ZBJrCXeM0EtkA==
-X-Received: by 2002:a05:6000:11c4:b0:306:2e04:5925 with SMTP id i4-20020a05600011c400b003062e045925mr2451387wrx.17.1685134057195;
-        Fri, 26 May 2023 13:47:37 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id p25-20020a7bcc99000000b003f1751016desm6319163wma.28.2023.05.26.13.47.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 13:47:36 -0700 (PDT)
-Message-ID: <2385b00f-3292-3d27-dba2-c1375e5d9dae@linaro.org>
-Date:   Fri, 26 May 2023 21:47:35 +0100
+        Fri, 26 May 2023 16:48:07 -0400
+Received: from out-59.mta1.migadu.com (out-59.mta1.migadu.com [IPv6:2001:41d0:203:375::3b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203D9E49
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:47:59 -0700 (PDT)
+Date:   Fri, 26 May 2023 20:47:52 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685134077;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tTm2WcrJtXgUhrQ3ARrtwiMqmV3Xwo18CAjwr9+QLWY=;
+        b=uvfcrkBUbEDQTPKSbgcgCTVg5y5DWONMaNXAcOakixAHywg4BZLgE0rXpYTC7kb8HKu3rH
+        /iS9JzWfI3CLzV7tEdkKLcCA74Jq7pfpsJX7Aqk1OCDLu7ggVft9xcHX+lFqRcTXjdjLvD
+        +GzCLvYPATDFTg7QvVtz2+1A0Dr9Ufc=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Mostafa Saleh <smostafa@google.com>
+Cc:     maz@kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        tabba@google.com, kaleshsingh@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com
+Subject: Re: [PATCH] KVM: arm64: Use different pointer authentication keys
+ for pKVM
+Message-ID: <ZHEa+HAixbYijQTA@linux.dev>
+References: <20230516141531.791492-1-smostafa@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: media: camss: qcom,msm8996-camss: Add
- CAMSS power domain
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Conor Dooley <conor@kernel.org>
-Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hansverk@cisco.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230526180712.8481-1-y.oudjana@protonmail.com>
- <20230526180712.8481-2-y.oudjana@protonmail.com>
- <20230526-obstruct-venus-5833511a58af@spud>
- <838b134d-46cb-6237-49b0-0c287141ebb3@linaro.org>
- <20230526-street-pox-2ff5ee106c43@spud>
- <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
- <631e5eec-853b-dce2-c474-62e76e83d7e6@linaro.org>
- <5dc28004-5ff4-2102-0bb3-8f7bee7cfca6@nexus-software.ie>
- <265d1c93-0740-cd87-3ba2-e1ddf70a0c65@linaro.org>
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <265d1c93-0740-cd87-3ba2-e1ddf70a0c65@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516141531.791492-1-smostafa@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/05/2023 21:43, Konrad Dybcio wrote:
+On Tue, May 16, 2023 at 02:15:31PM +0000, Mostafa Saleh wrote:
+> When the kernel is compiled with CONFIG_ARM64_PTR_AUTH_KERNEL, it
+> uses Armv8.3-Pauth for return address protection for the kernel code
+> including nvhe code in EL2.
 > 
+> Same keys are used in both kernel(EL1) and nvhe code(EL2), this is
+> fine for nvhe but not when running in protected mode(pKVM) as the host
+> can't be trusted.
+
+But we trust it enough to hand pKVM a fresh set of keys before firing
+off? I understand there is some degree of initialization required to get
+pKVM off the ground, but I question in this case if key handoff is
+strictly necessary.
+
+There are potentially other sources of random directly available at EL2,
+such as the SMCCC TRNG ABI or FEAT_RNG. Should pKVM prefer one of these
+random implementations and only fall back to host-provided keys if
+absolutely necessary?
+
+> The keys for the hypervisor are generated from the kernel before it
+> de-privileges, each cpu has different keys, this relies on nvhe code
+> not being migratable while running.
 > 
-> On 26.05.2023 22:40, Bryan O'Donoghue wrote:
->> On 26/05/2023 21:36, Konrad Dybcio wrote:
->>>> oh the names
->>>>
->>>> no toss that
->>> this should be
->>>
->>> if:properties:compatible:blahblahmsm8996:then:required:power-domain-names
->>>
->>> Konrad
->>
->> Hmm, we don't depend on the names though.
-> Check patch 3!
+> This patch adds host/hyp save/restore for the keys.
+> For guest/hyp, they are already handled in common kvm code in
+> __guest_enter, where they are saved/restored if they are not
+> trapped.
 
-Hmm but we already count the number of power domains in 
-camss_configure_pd().
+Try to avoid "this patch" or any self-referential language in the
+changelog. Just directly state what the patch does:
 
-There's no logic in counting it twice using two different methods.
+  Similar to guest entry/exit, start context switching the pointer
+  authentication keys on host/entry exit if the feature is in use.
 
+> Signed-off-by: Mostafa Saleh <smostafa@google.com>
+> ---
+>  arch/arm64/kvm/arm.c           | 26 +++++++++++++++++++++++++
+>  arch/arm64/kvm/hyp/nvhe/host.S | 35 +++++++++++++++++++++++++++++++++-
+>  2 files changed, 60 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 14391826241c..dd03b52f035d 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -51,6 +51,8 @@ DECLARE_KVM_HYP_PER_CPU(unsigned long, kvm_hyp_vector);
+>  DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
+>  DECLARE_KVM_NVHE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
+>  
+> +DECLARE_KVM_NVHE_PER_CPU(struct kvm_cpu_context, kvm_hyp_ctxt);
+> +
+>  static bool vgic_present;
+>  
+>  static DEFINE_PER_CPU(unsigned char, kvm_arm_hardware_enabled);
+> @@ -2067,6 +2069,26 @@ static int __init kvm_hyp_init_protection(u32 hyp_va_bits)
+>  	return 0;
+>  }
+>  
+> +static void pkvm_hyp_init_ptrauth(void)
+> +{
+> +	struct kvm_cpu_context *hyp_ctxt;
+> +	int cpu;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		hyp_ctxt = per_cpu_ptr_nvhe_sym(kvm_hyp_ctxt, cpu);
+> +		hyp_ctxt->sys_regs[APIAKEYLO_EL1] = get_random_long();
+> +		hyp_ctxt->sys_regs[APIAKEYHI_EL1] = get_random_long();
+> +		hyp_ctxt->sys_regs[APIBKEYLO_EL1] = get_random_long();
+> +		hyp_ctxt->sys_regs[APIBKEYHI_EL1] = get_random_long();
+> +		hyp_ctxt->sys_regs[APDAKEYLO_EL1] = get_random_long();
+> +		hyp_ctxt->sys_regs[APDAKEYHI_EL1] = get_random_long();
+> +		hyp_ctxt->sys_regs[APDBKEYLO_EL1] = get_random_long();
+> +		hyp_ctxt->sys_regs[APDBKEYHI_EL1] = get_random_long();
+> +		hyp_ctxt->sys_regs[APGAKEYLO_EL1] = get_random_long();
+> +		hyp_ctxt->sys_regs[APGAKEYHI_EL1] = get_random_long();
+> +	}
+> +}
+> +
+>  /* Inits Hyp-mode on all online CPUs */
+>  static int __init init_hyp_mode(void)
+>  {
+> @@ -2228,6 +2250,10 @@ static int __init init_hyp_mode(void)
+>  	kvm_hyp_init_symbols();
+>  
+>  	if (is_protected_kvm_enabled()) {
+> +		if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) &&
+> +		    cpus_have_const_cap(ARM64_HAS_ADDRESS_AUTH))
+> +			pkvm_hyp_init_ptrauth();
+> +
+>  		init_cpu_logical_map();
+>  
+>  		if (!init_psci_relay()) {
+> diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+> index b6c0188c4b35..255ba4af911b 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/host.S
+> +++ b/arch/arm64/kvm/hyp/nvhe/host.S
+> @@ -10,6 +10,7 @@
+>  #include <asm/kvm_arm.h>
+>  #include <asm/kvm_asm.h>
+>  #include <asm/kvm_mmu.h>
+> +#include <asm/kvm_ptrauth.h>
+>  
+>  	.text
+>  
+> @@ -37,10 +38,42 @@ SYM_FUNC_START(__host_exit)
+>  
+>  	/* Save the host context pointer in x29 across the function call */
+>  	mov	x29, x0
+> +
+> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
+> +alternative_if_not ARM64_HAS_ADDRESS_AUTH
+> +b __skip_pauth_save
+> +alternative_else_nop_endif
+> +
+> +alternative_if ARM64_KVM_PROTECTED_MODE
+> +	/* Save kernel ptrauth keys. */
+> +	add x18, x29, #CPU_APIAKEYLO_EL1
+> +	ptrauth_save_state x18, x19, x20
+> +
+> +	/* Use hyp keys. */
+> +	adr_this_cpu x18, kvm_hyp_ctxt, x19
+> +	add x18, x18, #CPU_APIAKEYLO_EL1
+> +	ptrauth_restore_state x18, x19, x20
+> +alternative_else_nop_endif
+> +__skip_pauth_save:
+> +#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
+> +
+>  	bl	handle_trap
+>  
+> -	/* Restore host regs x0-x17 */
+>  __host_enter_restore_full:
+> +	/* Restore kernel keys. */
+> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
+> +alternative_if_not ARM64_HAS_ADDRESS_AUTH
+> +b __skip_pauth_restore
+> +alternative_else_nop_endif
+> +
+> +alternative_if ARM64_KVM_PROTECTED_MODE
+> +	add x18, x29, #CPU_APIAKEYLO_EL1
+> +	ptrauth_restore_state x18, x19, x20
+> +alternative_else_nop_endif
+> +__skip_pauth_restore:
+> +#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
+> +
+> +	/* Restore host regs x0-x17 */
+>  	ldp	x0, x1,   [x29, #CPU_XREG_OFFSET(0)]
+>  	ldp	x2, x3,   [x29, #CPU_XREG_OFFSET(2)]
+>  	ldp	x4, x5,   [x29, #CPU_XREG_OFFSET(4)]
+> -- 
+> 2.40.1.606.ga4b1b128d6-goog
+> 
+
+-- 
+Thanks,
+Oliver
