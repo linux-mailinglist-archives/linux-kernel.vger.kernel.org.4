@@ -2,68 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5822C712CDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A4B712CE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243491AbjEZSxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S243537AbjEZSyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237506AbjEZSxp (ORCPT
+        with ESMTP id S237024AbjEZSyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:53:45 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BF513A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:53:44 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96aae59bbd6so186649766b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:53:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685127223; x=1687719223;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/dhx1N1TGbdvEAeyn+I2yRhyKZQXdgWDNWhZQJTXxzk=;
-        b=JlR2KKEcvO4TYDGY/qCKJnnEN1I6+TVVKBVzDxAwUXL5Szv6TJ2BVB1WoekEuG3xwd
-         92bYotG3atN7k+AOlirMP/bjRx41mEGDm6Hs29/0Ni5KVTd3uObR9WwN58p+4YlsFNPF
-         iSFsghph/aeCwCTO0MPEqjeK03a0YWsV0fCQnUUr/IxQ9q+rk9UdsFCt64+IQwXg3wCN
-         DtKNyXOlFQ9vcgiVhkyRz2Gzlm6yacd40kCKPe14XLLqdZw5V+hGqPw6v4wyVfl+jmVH
-         e9i2L4aHCUwiK5pNxBNRpY1AuI6W5YhV/mHV/ZrrHCBrA6Epu3tohkQI/A7PqcIMJ/C/
-         ZM+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685127223; x=1687719223;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/dhx1N1TGbdvEAeyn+I2yRhyKZQXdgWDNWhZQJTXxzk=;
-        b=PUiq93qqVc0IayottC5a2IMC3+DuvTB0U99ErDc13FysVshAEMl4lL6FngMGpClr0C
-         4vozCzWRA/wJWeSGe5Sar3JFOPnb6U2vwTgx9fk3eBUibeniD49FQaHsffRpU3Gnl1cf
-         JqFFK0n+ypQK4H2MP5IBQmXP+Ikres4X/ISmiyYLsBcu9YbEhOYNrvGu8MtPNUzOKvdS
-         lPJuuGokiucOGAO11xPOxlbpRD1dk+zmiicAV012D/vUKfQszHcnpbs3SComWjVDMsJI
-         C4LLdtL8GQmucbQPOdrokyhPKMSaJnRtIIH/8RG63NHyEHpCCOmI54cKYYIgkZrjjbzQ
-         wblw==
-X-Gm-Message-State: AC+VfDw87zJ6JIUZg7a1posiTLk7mMAaMANg1b+5X/kmrp1P0cl0m+y0
-        jcsDOg5B+kxydBW5J+pTP5O5HKg/mZchdzgDEB8LGmNbNNSllUftSEA=
-X-Google-Smtp-Source: ACHHUZ6IVKQsBrbRNLeTcBFPaNMVlPmDaJp7qf/a111fJNpbkC18GhU7zCZA2OXBXfrqmOqbLk+7iZoOJaWCQeF+uqo=
-X-Received: by 2002:a17:906:5d0c:b0:965:7fba:6bcf with SMTP id
- g12-20020a1709065d0c00b009657fba6bcfmr3288218ejt.67.1685127222651; Fri, 26
- May 2023 11:53:42 -0700 (PDT)
+        Fri, 26 May 2023 14:54:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE854135
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:54:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39EDD64D7D
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:54:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E393BC433D2;
+        Fri, 26 May 2023 18:54:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685127251;
+        bh=E9e4N+V8UJ4IwjvpQTzUrpD+e3V9ExGL3fz9H07QHkg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jKYbKSi1W0epzrz/uZ+5uBAwbhXUDj60Xs69d9NzD/+WYBYXm7hc2FwoIwumvrcnV
+         PLtGYGeHjQEn94LzxG5c+ckeveAO8T5XNmteMmvUKSf0l1FDYtM7FudRR6NvAHNQBx
+         JHr00v9zeLs6P3/UsPDS3gFQ/1pfqCu9kOj5ntbPq4LXvh6FBsza/jr2stO1T+ztFI
+         QHF4gKfc6jptIHM+u6mxdUmKv92Lie99oQeorBaI2TnNtseHJ4VYK0RXNje6OP2ixC
+         q4Md4mDX2vybOzenMsvNqr+gJDrnf/w159SCvCE82A8tgDKi/2ku0W1AE4qg7MGTkU
+         gFdB8GaOpInRw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     syzbot <syzbot+841a46899768ec7bec67@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, sj@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [damon?] divide error in damon_set_attrs
+Date:   Fri, 26 May 2023 18:54:09 +0000
+Message-Id: <20230526185409.92039-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <d127a181-b734-a6b1-5752-b8597f6adc92@huawei.com>
+References: 
 MIME-Version: 1.0
-References: <20230526183227.793977-1-cerasuolodomenico@gmail.com>
-In-Reply-To: <20230526183227.793977-1-cerasuolodomenico@gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 26 May 2023 11:53:05 -0700
-Message-ID: <CAJD7tkbh5k_sLtSFFJ9GmffiW2iB8kz7+0JjLA-Q3at4Z33aAA@mail.gmail.com>
-Subject: Re: [PATCH v3] mm: zswap: shrink until can accept
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
-        hannes@cmpxchg.org, kernel-team@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,135 +56,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 11:32=E2=80=AFAM Domenico Cerasuolo
-<cerasuolodomenico@gmail.com> wrote:
->
-> This update addresses an issue with the zswap reclaim mechanism, which
-> hinders the efficient offloading of cold pages to disk, thereby
-> compromising the preservation of the LRU order and consequently
-> diminishing, if not inverting, its performance benefits.
->
-> The functioning of the zswap shrink worker was found to be inadequate,
-> as shown by basic benchmark test. For the test, a kernel build was
-> utilized as a reference, with its memory confined to 1G via a cgroup and
-> a 5G swap file provided. The results are presented below, these are
-> averages of three runs without the use of zswap:
->
-> real 46m26s
-> user 35m4s
-> sys 7m37s
->
-> With zswap (zbud) enabled and max_pool_percent set to 1 (in a 32G
-> system), the results changed to:
->
-> real 56m4s
-> user 35m13s
-> sys 8m43s
->
-> written_back_pages: 18
-> reject_reclaim_fail: 0
-> pool_limit_hit:1478
->
-> Besides the evident regression, one thing to notice from this data is
-> the extremely low number of written_back_pages and pool_limit_hit.
->
-> The pool_limit_hit counter, which is increased in zswap_frontswap_store
-> when zswap is completely full, doesn't account for a particular
-> scenario: once zswap hits his limit, zswap_pool_reached_full is set to
-> true; with this flag on, zswap_frontswap_store rejects pages if zswap is
-> still above the acceptance threshold. Once we include the rejections due
-> to zswap_pool_reached_full && !zswap_can_accept(), the number goes from
-> 1478 to a significant 21578266.
->
-> Zswap is stuck in an undesirable state where it rejects pages because
-> it's above the acceptance threshold, yet fails to attempt memory
-> reclaimation. This happens because the shrink work is only queued when
-> zswap_frontswap_store detects that it's full and the work itself only
-> reclaims one page per run.
->
-> This state results in hot pages getting written directly to disk,
-> while cold ones remain memory, waiting only to be invalidated. The LRU
-> order is completely broken and zswap ends up being just an overhead
-> without providing any benefits.
->
-> This commit applies 2 changes: a) the shrink worker is set to reclaim
-> pages until the acceptance threshold is met and b) the task is also
-> enqueued when zswap is not full but still above the threshold.
->
-> Testing this suggested update showed much better numbers:
->
-> real 36m37s
-> user 35m8s
-> sys 9m32s
->
-> written_back_pages: 10459423
-> reject_reclaim_fail: 12896
-> pool_limit_hit: 75653
->
-> V2:
-> - loop against =3D=3D -EAGAIN rather than !=3D -EINVAL and also break the=
- loop
-> on MAX_RECLAIM_RETRIES (thanks Yosry)
-> - cond_resched() to ensure that the loop doesn't burn the cpu (thanks
-> Vitaly)
->
-> V3:
-> - fix wrong loop break, should continue on !ret (thanks Johannes)
->
-> Fixes: 45190f01dd40 ("mm/zswap.c: add allocation hysteresis if pool limit=
- is hit")
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Hi Kefeng and syzbot,
 
-Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+On Fri, 26 May 2023 20:59:12 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 
-> ---
->  mm/zswap.c | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
->
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index 59da2a415fbb..bcb82e09eb64 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -37,6 +37,7 @@
->  #include <linux/workqueue.h>
->
->  #include "swap.h"
-> +#include "internal.h"
->
->  /*********************************
->  * statistics
-> @@ -587,9 +588,19 @@ static void shrink_worker(struct work_struct *w)
->  {
->         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
->                                                 shrink_work);
-> +       int ret, failures =3D 0;
->
-> -       if (zpool_shrink(pool->zpool, 1, NULL))
-> -               zswap_reject_reclaim_fail++;
-> +       do {
-> +               ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> +               if (ret) {
-> +                       zswap_reject_reclaim_fail++;
-> +                       if (ret !=3D -EAGAIN)
-> +                               break;
-> +                       if (++failures =3D=3D MAX_RECLAIM_RETRIES)
-> +                               break;
-> +               }
-> +               cond_resched();
-> +       } while (!zswap_can_accept());
->         zswap_pool_put(pool);
->  }
->
-> @@ -1188,7 +1199,7 @@ static int zswap_frontswap_store(unsigned type, pgo=
-ff_t offset,
->         if (zswap_pool_reached_full) {
->                if (!zswap_can_accept()) {
->                         ret =3D -ENOMEM;
-> -                       goto reject;
-> +                       goto shrink;
->                 } else
->                         zswap_pool_reached_full =3D false;
->         }
-> --
-> 2.34.1
->
+> 
+> 
+> On 2023/5/26 19:51, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    44c026a73be8 Linux 6.4-rc3
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=13a92b31280000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f389ffdf4e9ba3f0
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=841a46899768ec7bec67
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > userspace arch: i386
+> > 
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> > 
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/35f16ee05df7/disk-44c026a7.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/10399498a570/vmlinux-44c026a7.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/5c72201ea4ba/bzImage-44c026a7.xz
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+841a46899768ec7bec67@syzkaller.appspotmail.com
+> > 
+> > divide error: 0000 [#1] PREEMPT SMP KASAN
+> > CPU: 1 PID: 13527 Comm: syz-executor.1 Not tainted 6.4.0-rc3-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+> > RIP: 0010:damon_nr_accesses_to_accesses_bp mm/damon/core.c:491 [inline]
+> > RIP: 0010:damon_nr_accesses_for_new_attrs mm/damon/core.c:497 [inline]
+> > RIP: 0010:damon_update_monitoring_result mm/damon/core.c:506 [inline]
+> > RIP: 0010:damon_update_monitoring_results mm/damon/core.c:534 [inline]
+> > RIP: 0010:damon_set_attrs+0x224/0x460 mm/damon/core.c:555
+
+Thank you for finding and reporting this bug!
+
+The code of the problem is as below:
+
+    /* convert nr_accesses to access ratio in bp (per 10,000) */
+    static unsigned int damon_nr_accesses_to_accesses_bp(
+                    unsigned int nr_accesses, struct damon_attrs *attrs)
+    {
+            unsigned int max_nr_accesses =
+                    attrs->aggr_interval / attrs->sample_interval;
+    
+            return nr_accesses * 10000 / max_nr_accesses;
+    }
+
+The problem can happen when 'aggr_interval' is smaller than 'sample_interval',
+because 'max_nr_accesses' becomes zero in the case, and resulting in divide by
+zero.
+
+Same problem is in damon_accesses_bp_to_nr_accesses().
+
+> 
+> make aggr_interval great than or equal sample_interval?
+> 
+> diff --git a/mm/damon/core.c b/mm/damon/core.c
+> index d9ef62047bf5..6fe1960f3d6b 100644
+> --- a/mm/damon/core.c
+> +++ b/mm/damon/core.c
+> @@ -525,8 +525,8 @@ static void damon_update_monitoring_results(struct 
+> damon_ctx *ctx,
+> 
+>          /* if any interval is zero, simply forgive conversion */
+>          if (!old_attrs->sample_interval || !old_attrs->aggr_interval ||
+> -                       !new_attrs->sample_interval ||
+> -                       !new_attrs->aggr_interval)
+> +           !new_attrs->sample_interval || !new_attrs->aggr_interval ||
+> +           new_attrs->aggr_interval < new_attrs->sample_interval)
+>                  return;
+
+Nice and effective fix!  Nevertheless, I think aggregation interval smaller
+than sample interval is just a wrong input.  How about adding the check in
+damon_set_attrs()'s already existing attributes validation, like below?
+
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -580,6 +580,8 @@ int damon_set_attrs(struct damon_ctx *ctx, struct damon_attrs *attrs)
+                return -EINVAL;
+        if (attrs->min_nr_regions > attrs->max_nr_regions)
+                return -EINVAL;
++       if (attrs->aggr_interval < attrs->sample_interval)
++               return -EINVAL;
+
+        damon_update_monitoring_results(ctx, attrs);
+        ctx->attrs = *attrs;
+
+Thanks,
+SJ
