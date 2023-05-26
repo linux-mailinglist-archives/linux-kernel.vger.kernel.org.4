@@ -2,120 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DA2712AB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B01712ABB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbjEZQfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S235979AbjEZQfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjEZQfR (ORCPT
+        with ESMTP id S232792AbjEZQfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:35:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0DFDF
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:35:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9179565029
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:35:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B209C433EF;
-        Fri, 26 May 2023 16:35:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685118915;
-        bh=dDtcjo2khBi8ymoa90ET2UZ26pR1HJAdtcLCQJ44+f4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jqgpkTpUOTSS7G21efDm78STIdWUG7tTVfcYM5JvNx8fxyqCL0w5sqiZYWDWGP6nl
-         iX678eZOZ9o4f66IuHfni5SfYzUyIzNmcT+mWm13ZS/48DL8La86KBl+atyw1zJvzm
-         0lV15AL9AF/jS+nKH9Pob8MLWG+0YIfXbGbD42jGUljLrP/srHgwdLwPqgwKpWRNMy
-         ZYtz6pUIbyLu0OLqIib6FZJjWvoxoIIBNgsY6SCSY81tk0qM2TaP04dm5geOMJKNlY
-         1wB3fM5DZEyJSnBJFa6lNL789Yf4D4ktKmnPF0Iviepc7ao39CxG7v2ZkkbueZ4UG8
-         uf1pFaHAbEctQ==
-Date:   Fri, 26 May 2023 17:35:10 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -fixes] riscv: Fix relocatable kernels with early
- alternatives using -fno-pie
-Message-ID: <20230526-rockfish-moody-f6d3e71f9d24@spud>
-References: <20230526154630.289374-1-alexghiti@rivosinc.com>
- <20230526-clergyman-wriggly-accc659a3fad@spud>
+        Fri, 26 May 2023 12:35:48 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA83CBC;
+        Fri, 26 May 2023 09:35:46 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3a873476bso995184e87.1;
+        Fri, 26 May 2023 09:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685118945; x=1687710945;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HZdVc8cg3rTwRQ3rUGrbIe2G7Mi0MzIoMDjJTPUXsKU=;
+        b=EmEi2d9UpDaO/uDti+2NYtSCgpRhj7sgXUxRN9Sx/VbofLPSxKJKwBca93UIYX5e3K
+         qkA5Pf35BlxUXq+gNVWg/SPLT4WsrDzIFYsj9/WGFM8Wbk78HQACFY1vFoeINfYqXn7M
+         /71C3vO2yLvOCb8VkZxdQ0JB6gUG3UfXZA/b93cAuH4jp6sKm2MgMksWoFvjK4wq4UWs
+         0ByhHBeCp0TcnRZTAA5m0wGoxDMK4zrx9EODcnC4CZOunVNA+PpFdzNDDFM+H8hRWKKr
+         rzfnOOt849X1iWQs+nquUgH2MmsOHZVGqzEjn6ACJ14OPXT+9CZdY2rdYNqBnm8BSsOc
+         Qc6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685118945; x=1687710945;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HZdVc8cg3rTwRQ3rUGrbIe2G7Mi0MzIoMDjJTPUXsKU=;
+        b=OZw/gswfJuh6P7tQ8G1gxxdrbw3PFGFhJSqwNDJbROqB1WHNbaSvknRKihyPeg8zA3
+         EnygA2XhO3WfNeaManNo48iGXTZmqVHrmtEnwv47Q3HbcCjdlB1bJwzD+WqTIJRDMkJt
+         3NcCRedwujB4Ast/AGJGueTwNXZMNl13c0KGStLkAObJy4ljX2f/nroFkbU+ITAHa7qe
+         bVB3MUhe6/e1UlucTYw2xEam5/aQeQRZgnMdweocmB2WOfuAbPvnq6SsR00cN0zm0eFs
+         Sq5GIFjprg0VBc7OsHx95nyuecsTOlCXPKl63nj8CLBIPsRLVpKXkYQKbsj3AFvtMNsY
+         UGcg==
+X-Gm-Message-State: AC+VfDwXYOpP+H5/vodgoR33LPBMBnzuE/nPHSnywcYKkDXamjdAKRZZ
+        e2huwFwBS4Ln9LNdaU/3wpc=
+X-Google-Smtp-Source: ACHHUZ5k55KO5kA8DfPcVtzmJBHus1jmL85c0KC+03dEOqFdaSdMVkyjM7UiGFCrWnesoACtTtH+qg==
+X-Received: by 2002:ac2:5ec4:0:b0:4f3:7a8c:d46c with SMTP id d4-20020ac25ec4000000b004f37a8cd46cmr778242lfq.66.1685118944902;
+        Fri, 26 May 2023 09:35:44 -0700 (PDT)
+Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id b15-20020ac2562f000000b004f13c3cb9ffsm681853lff.200.2023.05.26.09.35.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 09:35:44 -0700 (PDT)
+Message-ID: <0a816b1c-eef3-95c8-fb71-1c81251224e0@gmail.com>
+Date:   Fri, 26 May 2023 19:35:43 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="REENGAGNHgcCpbL0"
-Content-Disposition: inline
-In-Reply-To: <20230526-clergyman-wriggly-accc659a3fad@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 4/7] iio: accel: kionix-kx022a: Add an i2c_device_id
+ table
+Content-Language: en-US, en-GB
+To:     Mehdi Djait <mehdi.djait.k@gmail.com>, jic23@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
+        lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <cover.1685109507.git.mehdi.djait.k@gmail.com>
+ <ea14686bc9a9262ef9c370d9cd1a4a7b2902b4ea.1685109507.git.mehdi.djait.k@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <ea14686bc9a9262ef9c370d9cd1a4a7b2902b4ea.1685109507.git.mehdi.djait.k@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/26/23 17:30, Mehdi Djait wrote:
+> Add the missing i2c device id.
+> 
+> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+Acked-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
---REENGAGNHgcCpbL0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> ---
+> v4:
+> - no changes
+> 
+> v3:
+> - no changes, this patch is introduced in the v2
+> 
+>   drivers/iio/accel/kionix-kx022a-i2c.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/iio/accel/kionix-kx022a-i2c.c b/drivers/iio/accel/kionix-kx022a-i2c.c
+> index e6fd02d931b6..b5a85ce3a891 100644
+> --- a/drivers/iio/accel/kionix-kx022a-i2c.c
+> +++ b/drivers/iio/accel/kionix-kx022a-i2c.c
+> @@ -30,6 +30,12 @@ static int kx022a_i2c_probe(struct i2c_client *i2c)
+>   	return kx022a_probe_internal(dev);
+>   }
+>   
+> +static const struct i2c_device_id kx022a_i2c_id[] = {
+> +	{ .name = "kx022a" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, kx022a_i2c_id);
+> +
+>   static const struct of_device_id kx022a_of_match[] = {
+>   	{ .compatible = "kionix,kx022a", },
+>   	{ }
+> @@ -42,6 +48,7 @@ static struct i2c_driver kx022a_i2c_driver = {
+>   		.of_match_table = kx022a_of_match,
+>   	  },
+>   	.probe_new    = kx022a_i2c_probe,
+> +	.id_table     = kx022a_i2c_id,
+>   };
+>   module_i2c_driver(kx022a_i2c_driver);
+>   
 
-On Fri, May 26, 2023 at 05:24:41PM +0100, Conor Dooley wrote:
-> On Fri, May 26, 2023 at 05:46:30PM +0200, Alexandre Ghiti wrote:
-> > Early alternatives are called with the mmu disabled, and then should not
-> > access any global symbols through the GOT since it requires relocations,
-> > relocations that we do before but *virtually*. So only use medany code
-> > model for this early code.
-> >=20
-> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > ---
-> >=20
-> > Note that I'm not very happy with this fix, I think we need to put more
-> > effort into "harmonizing" this very early code (ie before the mmu is
-> > enabled) as it is spread between different locations and compiled
-> > differently.
->=20
-> Totally & I'll happily spend the time trying to review that work.
->=20
-> > I'll work on that later, but for now, this fix does what is
-> > needed to work (from my testing at least). Any Tested-by on the Unmatch=
-ed
-> > and T-head boards is welcome!
->=20
-> On 6.4-rc1 & v6.4-rc1 + this patch, with CONFIG_RELOCATABLE added to my
-> config, my Nezha fails to boot. There is no output whatsoever from the
-> kernel. Turning off CONFIG_RELOCATABLE boots again.
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-I don't know if this is better or worse news, but same thing happens on
-an icicle kit. What systems, other than QEMU, has the relocatable
-eries been tested with, btw?
+~~ When things go utterly wrong vim users can always type :help! ~~
 
-Cheers,
-Conor.
-
->=20
-> I didn't test on my unmatched.
->=20
-> Thanks,
-> Conor.
-
-
-
---REENGAGNHgcCpbL0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHDfvgAKCRB4tDGHoIJi
-0o5PAP4kGp6TYrXzx+SgO893FhzdwG2Eq5HmFYhREfw4DJSsfQD9GAf/u9yn78RL
-UejivzEp0vJSvQvVYzpd1U7jAPQTkgc=
-=Sb9T
------END PGP SIGNATURE-----
-
---REENGAGNHgcCpbL0--
