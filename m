@@ -2,158 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D4D71251E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68F871252C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjEZKzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
+        id S242936AbjEZLAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 07:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjEZKzK (ORCPT
+        with ESMTP id S242650AbjEZLA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:55:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EA7F7;
-        Fri, 26 May 2023 03:55:09 -0700 (PDT)
+        Fri, 26 May 2023 07:00:27 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076D4101
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 04:00:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685098509; x=1716634509;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685098827; x=1716634827;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=gsACS33QqbMepIsxf09vMS4nFee3rE52HroENxd1Rt4=;
-  b=KlQSrhS7Pu5r4Ojt79iRpGYe7Y+93C9EVAINnOiNy+O3qOSipPyurDnD
-   OEVKdfysKjUT2lqtf6Ocu3YW6QOMLcAmE99SA2hCwUPDnfklc4R5A00wf
-   Y9FpzeFm2Erm7yRCk4ecRHzt+kNrU0tA6vbkouAw/IhL4xLHM/twamHS7
-   uey1CpekNfJM5MSiKNfypeNwwar0vNutsr/sYEGyiDWX28yTlcidaqIe/
-   J8EHDNDcGPmPjfFUVVd+5JKM892cghSZ/3v2PXq31+Vk05DQ80FIuFmo0
-   J6K8GkeeaLrDqD9dn82GNLToCsX2pmTgelRuyA9llVX36JfPGv7ASgO1+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="353018168"
+  bh=qWz9IuIpPGye3RBkjnvRNmgujqz6lziLZvgBzgEKyBY=;
+  b=kdqLORZNSZjjksd/CgJpQjg1YK0ow5q7sYod3wNwXjJVTT28HkdIg1Z8
+   2UH4Nvg2Cim0BuP53XaDRMzLwdyCcifhFfnUHzUL2mhxOqBH7Zc7jPGVc
+   pER3UvjaECrS/A+1wsP5BgFaMG4ufpGCGPXA5MqT/cOhiHeo1BrfWaqNQ
+   JOxabuaocypBKY5R67nnp9DMMP8t4die9vRbqFpv1wQEW082Oc1Uu/LyA
+   RwYhW9QJ8raYjtMz4q14spiMwM1rfEZyE0yiRhhXK7Km0RDa5v5UQrJuq
+   PsyosBQ9JVF5SF7+GuyzPBedymCk2/NHUtoMnplqOpnjz7KKLHbb+zMV1
+   g==;
 X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="353018168"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 03:55:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="655599733"
-X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
-   d="scan'208";a="655599733"
-Received: from eandrei-mobl5.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.53.213])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 03:55:05 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Robert Baldyga <r.baldyga@samsung.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Richard Tresidder <rtresidd@electromag.com.au>,
-        stable@vger.kernel.org
-Subject: [PATCH] dmaengine: pl330: Return DMA_PAUSED when transaction is paused
-Date:   Fri, 26 May 2023 13:54:34 +0300
-Message-Id: <20230526105434.14959-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+   d="scan'208";a="154080381"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2023 04:00:26 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 26 May 2023 04:00:25 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Fri, 26 May 2023 04:00:23 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <palmer@dabbelt.com>
+CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
+        <atishp@atishpatra.org>, <anup@brainfault.org>, <alex@ghiti.fr>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <paul.walmsley@sifive.com>, Song Shuai <suagrfillet@gmail.com>,
+        JeeHeng Sia <jeeheng.sia@starfivetech.com>
+Subject: [PATCH v1] RISC-V: mark hibernation as nonportable
+Date:   Fri, 26 May 2023 11:59:08 +0100
+Message-ID: <20230526-astride-detonator-9ae120051159@wendy>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2441; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=qWz9IuIpPGye3RBkjnvRNmgujqz6lziLZvgBzgEKyBY=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCkFE34mJVWE3Z62p3fJyeAU8+8Tch+9/fhGYOqlY+arPNXf ppppdZSyMIhxMMiKKbIk3u5rkVr/x2WHc89bmDmsTCBDGLg4BWAiUVMZGdorIjPO1p/et/Cw9f6D3g EuEo/jfPVmsYto/rD++8xagYuRYR5HqfLMG5Uciyex710809pLNI3rYUX7mqvZUrHzxauecgIA
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pl330_pause() does not set anything to indicate paused condition which
-causes pl330_tx_status() to return DMA_IN_PROGRESS. This breaks 8250
-DMA flush after the fix in commit 57e9af7831dc ("serial: 8250_dma: Fix
-DMA Rx rearm race"). The function comment for pl330_pause() claims
-pause is supported but resume is not which is enough for 8250 DMA flush
-to work as long as DMA status reports DMA_PAUSED when appropriate.
+Hibernation support depends on firmware marking its reserved/PMP
+protected regions as not accessible from Linux.
+The latest versions of the de-facto SBI implementation (OpenSBI) do
+not do this, having dropped the no-map property to enable 1 GiB huge
+page mappings by the kernel.
+This was exposed by commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages
+for the linear mapping"), which made the first 2 MiB of DRAM (where SBI
+typically resides) accessible by the kernel.
+Attempting to hibernate with either OpenSBI, or other implementations
+following its lead, will lead to a kernel panic ([1], [2]) as the
+hibernation process will attempt to save/restore any mapped regions,
+including the PMP protected regions in use by the SBI implementation.
 
-Add PAUSED state for descriptor and mark BUSY descriptors with PAUSED
-in pl330_pause(). Return DMA_PAUSED from pl330_tx_status() when the
-descriptor is PAUSED.
+Mark hibernation as depending on "NONPORTABLE", as only a small subset
+of systems are capable of supporting it, until such time that an SBI
+implementation independent way to communicate what regions are in use
+has been agreed on.
 
-Reported-by: Richard Tresidder <rtresidd@electromag.com.au>
-Tested-by: Richard Tresidder <rtresidd@electromag.com.au>
-Fixes: 88987d2c7534 ("dmaengine: pl330: add DMA_PAUSE feature")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/linux-serial/f8a86ecd-64b1-573f-c2fa-59f541083f1a@electromag.com.au/
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+As hibernation support landed in v6.4-rc1, disabling it for most
+platforms does not constitute a regression. The alternative would have
+been reverting commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for
+the linear mapping").
+Doing so would permit hibernation on platforms with these SBI
+implementations, but would limit the options we have to solve the
+protection of the region without causing a regression in hibernation
+support.
+
+Reported-by: Song Shuai <suagrfillet@gmail.com>
+Link: https://lore.kernel.org/all/CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com/ [1]
+Reported-by: JeeHeng Sia <jeeheng.sia@starfivetech.com>
+Link: https://groups.google.com/a/groups.riscv.org/g/sw-dev/c/ITXwaKfA6z8 [2]
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
+ arch/riscv/Kconfig | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-$ diff -u <(git grep -l -e '\.device_pause' -e '->device_pause') <(git grep -l DMA_PAUSED)
-
-...tells there might a few other drivers which do not properly return
-DMA_PAUSED status despite having a pause function.
-
- drivers/dma/pl330.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/dma/pl330.c b/drivers/dma/pl330.c
-index 0d9257fbdfb0..daad25f2c498 100644
---- a/drivers/dma/pl330.c
-+++ b/drivers/dma/pl330.c
-@@ -403,6 +403,12 @@ enum desc_status {
- 	 * of a channel can be BUSY at any time.
- 	 */
- 	BUSY,
-+	/*
-+	 * Pause was called while descriptor was BUSY. Due to hardware
-+	 * limitations, only termination is possible for descriptors
-+	 * that have been paused.
-+	 */
-+	PAUSED,
- 	/*
- 	 * Sitting on the channel work_list but xfer done
- 	 * by PL330 core
-@@ -2041,7 +2047,7 @@ static inline void fill_queue(struct dma_pl330_chan *pch)
- 	list_for_each_entry(desc, &pch->work_list, node) {
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 13f058490608..117d53785560 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -800,8 +800,11 @@ menu "Power management options"
  
- 		/* If already submitted */
--		if (desc->status == BUSY)
-+		if (desc->status == BUSY || desc->status == PAUSED)
- 			continue;
+ source "kernel/power/Kconfig"
  
- 		ret = pl330_submit_req(pch->thread, desc);
-@@ -2326,6 +2332,7 @@ static int pl330_pause(struct dma_chan *chan)
- {
- 	struct dma_pl330_chan *pch = to_pchan(chan);
- 	struct pl330_dmac *pl330 = pch->dmac;
-+	struct dma_pl330_desc *desc;
- 	unsigned long flags;
++# Hibernation is only possible on systems where the SBI implementation has
++# marked its reserved memory as not accessible from, or does not run
++# from the same memory as, Linux
+ config ARCH_HIBERNATION_POSSIBLE
+-	def_bool y
++	def_bool NONPORTABLE
  
- 	pm_runtime_get_sync(pl330->ddma.dev);
-@@ -2335,6 +2342,10 @@ static int pl330_pause(struct dma_chan *chan)
- 	_stop(pch->thread);
- 	spin_unlock(&pl330->lock);
- 
-+	list_for_each_entry(desc, &pch->work_list, node) {
-+		if (desc->status == BUSY)
-+			desc->status = PAUSED;
-+	}
- 	spin_unlock_irqrestore(&pch->lock, flags);
- 	pm_runtime_mark_last_busy(pl330->ddma.dev);
- 	pm_runtime_put_autosuspend(pl330->ddma.dev);
-@@ -2425,7 +2436,7 @@ pl330_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
- 		else if (running && desc == running)
- 			transferred =
- 				pl330_get_current_xferred_count(pch, desc);
--		else if (desc->status == BUSY)
-+		else if (desc->status == BUSY || desc->status == PAUSED)
- 			/*
- 			 * Busy but not running means either just enqueued,
- 			 * or finished and not yet marked done
-@@ -2442,6 +2453,9 @@ pl330_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
- 			case DONE:
- 				ret = DMA_COMPLETE;
- 				break;
-+			case PAUSED:
-+				ret = DMA_PAUSED;
-+				break;
- 			case PREP:
- 			case BUSY:
- 				ret = DMA_IN_PROGRESS;
+ config ARCH_HIBERNATION_HEADER
+ 	def_bool HIBERNATION
 -- 
-2.30.2
+2.39.2
 
