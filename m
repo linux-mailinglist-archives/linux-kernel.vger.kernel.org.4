@@ -2,121 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EBF71292D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C5B71292F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243624AbjEZPM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S243720AbjEZPNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjEZPM5 (ORCPT
+        with ESMTP id S229849AbjEZPNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:12:57 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76077F7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:12:54 -0700 (PDT)
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0217DC0007;
-        Fri, 26 May 2023 15:12:46 +0000 (UTC)
-Message-ID: <f82e7d3d-a16d-593e-7513-753b5cbf28af@ghiti.fr>
-Date:   Fri, 26 May 2023 17:12:46 +0200
+        Fri, 26 May 2023 11:13:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2C4E7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:13:39 -0700 (PDT)
+Date:   Fri, 26 May 2023 17:13:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685114017;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iIhbo7U5bYYA5D+nU5U/U0dXC0GGh8X5zoP3O7uKmOg=;
+        b=Ayk/N/FMLAjF+gSUoME7I8Mjhyz0Wz3K0GAY9agEM4mUZO8rqKWD6SRZl4sFiWydoY3D4f
+        1hKYiEoWTOT5RNNQUtd8dlcBN7xk2X3XfjDLIDwTIa1L0e6UUe6aJ1PKCSZplcUlWFjXbn
+        fGbVaJPJRC2fV+yv9DIlekb3ExvH4/g1Uk2+UK/Du4OQc5h/iT/MnXrbOnRXq+OnwGDjJt
+        UyasWa0CJChrcKXq7my9A+8nJY+GFbnZ6J/oeTqyy2OMy/ucch1053ti9tk7XT6eak/wSi
+        DDPteN2jSMSQRG7VNVw6Z74akjUKjW/bwneVyVodlpMRFWGhb9OEzUO/8gzfqw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685114017;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iIhbo7U5bYYA5D+nU5U/U0dXC0GGh8X5zoP3O7uKmOg=;
+        b=xbGljKdQ9DCfRo/Pnp0a8/LfI3rntrTSiXBYTZEUyLQDHYfSpxKpaaol+OqnwT/LtiTO2I
+        dosgiowg2bSbN6DA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH] sched: Consider task_struct::saved_state in
+ wait_task_inactive().
+Message-ID: <20230526151335.oPeFiIdq@linutronix.de>
+References: <Y++UzubyNavLKFDP@linutronix.de>
+ <20230525165244.GV83892@hirez.programming.kicks-ass.net>
+ <20230526080543.GF38236@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: Bug report: kernel paniced when system hibernates
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Anup Patel <apatel@ventanamicro.com>, robh@kernel.org,
-        jeeheng.sia@starfivetech.com, linux-kernel@vger.kernel.org,
-        palmer@rivosinc.com, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Song Shuai <suagrfillet@gmail.com>,
-        linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>
-References: <20230525-shrapnel-precut-26500fca4a48@wendy>
- <CAAhSdy3SqeLdAfaojUki=ht21nr4ZUPMkW_t9M6ntQCt6Ds4Nw@mail.gmail.com>
- <20230525-citric-waged-a2f78d27eb0c@wendy>
- <CAOnJCULfC0jmiucLNMeJZwJf4QbGAN6r4B-ubUbP16KVpxrCfA@mail.gmail.com>
- <20230525-flaring-trading-f2bf0713ae26@spud>
- <CAOnJCUK_EgX-En1QNS8yX1WA1nj8w2kpvXMQcvgWuR3dvzEQYw@mail.gmail.com>
- <20230525-desecrate-imposing-d97ab34e06ad@spud>
- <CAOnJCUKfRv68Bh8ue=ZhMGxai9_UEHLpm3553g2c2NXh-RP-TQ@mail.gmail.com>
- <20230525-batting-botch-7e03393a2d97@spud>
- <CAHVXubiDezbwZO6X2btvgpq-XqHnxZjXzaMnSK2YrHc_ioLx8Q@mail.gmail.com>
- <20230526-steep-omen-a5a46a1086bf@spud>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230526-steep-omen-a5a46a1086bf@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230526080543.GF38236@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-05-26 10:05:43 [+0200], Peter Zijlstra wrote:
+> New day, new chances... How's this? Code-gen doesn't look totally
+> insane, but then, making sense of an optimizing compiler's output is
+> always a wee challenge.
 
-On 26/05/2023 16:59, Conor Dooley wrote:
-> On Fri, May 26, 2023 at 03:14:33PM +0200, Alexandre Ghiti wrote:
->> Hi everyone,
->>
->> On Thu, May 25, 2023 at 11:24 PM Conor Dooley <conor@kernel.org> wrote:
->>> On Thu, May 25, 2023 at 01:06:04PM -0700, Atish Patra wrote:
->>>> On Thu, May 25, 2023 at 11:39 AM Conor Dooley <conor@kernel.org> wrote:
->>>>> On Thu, May 25, 2023 at 11:37:40AM -0700, Atish Patra wrote:
->>>>>
->>>>>> Any testing of hibernation still needs to revert the patch until we
->>>>>> have the proper fix.
->>>>> "the patch" is what exactly? I assume you don't mean depending on
->>>>> NONPORTABLE, since that is a Kconfig option.
->>>> Nope. Sorry I meant the commit
->>>>
->>>> 3335068 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
->>> Ah, if your SBI implementation is one of the affected ones, yeah.
->>> If not, you can just set NONPORTABLE :)
->> @Björn Töpel emitted the idea of excluding from the hibernation all
->> the memory nodes in the "/reserved-memory" node
->> (https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml):
->> I have to admit that I don't see why it is not done by default by the
->> kernel.
-> My understanding was that it was perfectly fine to use reserved memory
-> nodes to fence off some memory to use in device drivers etc, which then
-> may need to be saved/restored.
+Noticed it too late but looks good. Tested, works.
 
-
-Agreed, but I would say that it's up to the driver then to take care of 
-that, see https://docs.kernel.org/driver-api/pm/notifiers.html
-
-
->> Unless there is stuff in this node that needs to be "hibernated", I
->> think that would be a very good solution since we would not rely on
->> the name of the "internal" nodes of "/reserved-memory" (i.e.
->> "mmode_resv").
->>
->> I'm digging into why it is not done by default, just wanted to have
->> your feedback before the week-end :)
+Sebastian
