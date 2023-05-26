@@ -2,122 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB027120CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78287120D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242282AbjEZHWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 03:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
+        id S242234AbjEZHXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 03:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242018AbjEZHWS (ORCPT
+        with ESMTP id S236681AbjEZHXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 03:22:18 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DDDE7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:22:15 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3063433fa66so195879f8f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:22:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685085734; x=1687677734;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=quLuDrImAY4dEXMU5Crf4TapiE3eFiJnHWi9mJIE9Zc=;
-        b=u7LIE4uCUGqqsAaj7BYUZivMeOFoTG9VAIYRkFSGFI8fqidD4WwZNBbs8stj+XgFIH
-         +Equ+MNb4C1+popYKd2y73amoQq8ocKI+4z7e3aTtJabw5JvkBGJ3+znwLw8I/ecTvoS
-         J1bF2+OEGXSea0uA9CkGLaYsKYphMtpkj4Upj6OJSEf2ag5UtTHXyIaPsC4vs0HJAf/f
-         4iDfmH0Swe1SVm3xfpa6Jhcg3VO0Bf4loFHdjPatH+ZWPWugMPM6j1x5tC7JhKnB0TSm
-         pXgY68/NjwpVl7XfR/9FlMJXy47gcNJrBs38dE2SKcBS1I+DY4snTQkvOwO50cqIX+/I
-         QwIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685085734; x=1687677734;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=quLuDrImAY4dEXMU5Crf4TapiE3eFiJnHWi9mJIE9Zc=;
-        b=mFgRci3PMNnbzt+a9ibtaTaGX+q383bfAkzvPK3minZ0DJAxK0EuCzyY2ZVpb83jiG
-         yjVQl78w+XXI16pmVtsM/WjDBV+bdCzv0D473XQU0wNs2/8zAwOfiLitRoWXnzy6UcMt
-         JxOnlgQ0gWrOL6UiwybSHUZ93fAYtUWf4fuuwnpzVjFprPG5crhWavjg0sPTwJy2LEEO
-         otL+csQLhNY6jWzZS+JEk+XSrQiMtWlEJHCajuUzbmVoL8JGxDgpeYhVAgpbvNtEL4T5
-         oiQ3uKMzYdO7qidtZlZamYC4Ts5CakXh8KmYGxetIv/ygb8l6xhYvO92LW0/FgsEAyCd
-         ogoQ==
-X-Gm-Message-State: AC+VfDzUWznRObxfpk+QPUVeLm2xNcs0zfX73n44ALLy7YaVzXs0UOR7
-        V3+/xqTuZ252kpwCRLUe3X/K8Td9mxNKY0qz9RMlaA==
-X-Google-Smtp-Source: ACHHUZ43Tr6ndY2wriomk6kcW8y+kKoegz3Q5DAUm3qWY6LzjvyaHCQbP0D0ugRAxLQWqwCOrRwvhA==
-X-Received: by 2002:a5d:45cf:0:b0:306:2656:66d4 with SMTP id b15-20020a5d45cf000000b00306265666d4mr593949wrs.58.1685085734423;
-        Fri, 26 May 2023 00:22:14 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id r6-20020adff706000000b0030903371ef9sm4115935wrp.22.2023.05.26.00.22.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 00:22:14 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     dri-devel@lists.freedesktop.org, Adam Ford <aford173@gmail.com>
-Cc:     aford@beaconembedded.com, Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marek Vasut <marex@denx.de>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230526030559.326566-1-aford173@gmail.com>
-References: <20230526030559.326566-1-aford173@gmail.com>
-Subject: Re: [PATCH V8 0/7] drm: bridge: samsung-dsim: Support variable
- clocking
-Message-Id: <168508573345.1449766.11809947722851001124.b4-ty@linaro.org>
-Date:   Fri, 26 May 2023 09:22:13 +0200
+        Fri, 26 May 2023 03:23:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16979B;
+        Fri, 26 May 2023 00:23:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EB5A64D88;
+        Fri, 26 May 2023 07:23:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D370C433D2;
+        Fri, 26 May 2023 07:23:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685085784;
+        bh=Z+s29jQiBKqU2l46jPccXJdvd9jdYJHsfjEWMx9TRx4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cO9AGl9ps5XpW7/aAs6LaRMSKLZ1cqcbu2Z+46QILzHNiwtf+EwAt9g9m5eSnbEqI
+         r1hv7FzcVRviZlyvezLBCR8xF52yBI8s7LWkZTZSidKN5OY3Ne3NJzcj7bo2IZ5Qbs
+         HvW1tCT4NqlDYUQXRyo5vbKNqwB1WIzNrZGoUahJ8IFi5b6dAgIrNM2ouWTK/W/PHl
+         suqEYo/I0NqUVeSf1wVwdUPMEFD48zm9+OmkkJJ9rUxHRzPTrUdJHGlSbBNvLBusDW
+         /JxJB6FvRBBemQWV1cwTv3exX0djxv0RnSgR6BnVJ99K9hJRB7P+Sx3SG5j0IWVNG4
+         GSjtfJJtfQY+Q==
+Date:   Fri, 26 May 2023 00:23:01 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dm-devel@redhat.com, elliott@hpe.com, gmazyland@gmail.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, tglx@linutronix.de,
+        bp@alien8.de, mingo@kernel.org, x86@kernel.org,
+        herbert@gondor.apana.org.au, ardb@kernel.org,
+        dan.j.williams@intel.com, bernie.keany@intel.com,
+        charishma1.gairuboyina@intel.com,
+        lalithambika.krishnakumar@intel.com, nhuck@google.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v7 12/12] crypto: x86/aes-kl - Implement the AES-XTS
+ algorithm
+Message-ID: <20230526072301.GC875@sol.localdomain>
+References: <20230410225936.8940-1-chang.seok.bae@intel.com>
+ <20230524165717.14062-1-chang.seok.bae@intel.com>
+ <20230524165717.14062-13-chang.seok.bae@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524165717.14062-13-chang.seok.bae@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, 25 May 2023 22:05:52 -0500, Adam Ford wrote:
-> This series fixes the blanking pack size and the PMS calculation.  It then
-> adds support to allows the DSIM to dynamically DPHY clocks, and support
-> non-burst mode while allowing the removal of the hard-coded clock values
-> for the PLL for imx8m mini/nano/plus, and it allows the removal of the
-> burst-clock device tree entry when burst-mode isn't supported by connected
-> devices like an HDMI brige.  In that event, the HS clock is set to the
-> value requested by the bridge chip.
+On Wed, May 24, 2023 at 09:57:17AM -0700, Chang S. Bae wrote:
+> == API Limitation ==
 > 
-> [...]
+> The setkey() function transforms an AES key into a handle. But, an
+> extended key is a usual outcome of setkey() in other AES cipher
+> implementations. For this reason, a setkey() failure does not fall
+> back to the other. So, expose AES-KL methods via synchronous
+> interfaces only.
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+I don't understand what this paragraph is trying to say.
 
-[1/7] drm: bridge: samsung-dsim: fix blanking packet size calculation
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=a617b33f7e513f25becf843bc97f8f1658c16337
-[2/7] drm: bridge: samsung-dsim: Fix PMS Calculator on imx8m[mnp]
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=54f1a83c72250b182fa7722b0c5f6eb5e769598d
-[3/7] drm: bridge: samsung-dsim: Fetch pll-clock-frequency automatically
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=33d8d14c83bf67aa0d262961a6fda9c40f3c1052
-[4/7] drm: bridge: samsung-dsim: Select GENERIC_PHY_MIPI_DPHY
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=171b3b1e0f8b8c894f2388e1cf765a56f831ee5e
-[5/7] drm: bridge: samsung-dsim: Dynamically configure DPHY timing
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=89691775f5735fca9dc40e119edcbb52a25b9612
-[6/7] drm: bridge: samsung-dsim: Support non-burst mode
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=bb0e13b9e223b218c9f242f8d340a332b4381042
-[7/7] dt-bindings: bridge: samsung-dsim: Make some flags optional
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=cfaf76d349837f695c8aa6d7077847fec4231fe5
+> +/*
+> + * The below wrappers for the encryption/decryption functions
+> + * incorporate the feature availability check:
+> + *
+> + * In the rare event of hardware failure, the wrapping key can be lost
+> + * after wake-up from a deep sleep state. Then, this check helps to
+> + * avoid any subsequent misuse with populating a proper error code.
+> + */
+> +
+> +static inline int aeskl_enc(const void *ctx, u8 *out, const u8 *in)
+> +{
+> +	if (!valid_keylocker())
+> +		return -ENODEV;
+> +
+> +	return __aeskl_enc(ctx, out, in);
+> +}
 
--- 
-Neil
+Is it not sufficient for the valid_keylocker() check to occur at the top level
+(in xts_encrypt() and xts_decrypt()), which would seem to be a better place to
+do it?  Is this because valid_keylocker() needs to be checked in every
+kernel_fpu_begin() section separately, to avoid a race condition?  If that's
+indeed the reason, can you explain that in the comment?
 
+> +static inline int xts_keylen(struct skcipher_request *req, u32 *keylen)
+> +{
+> +	struct aes_xts_ctx *ctx = aes_xts_ctx(crypto_skcipher_reqtfm(req));
+> +
+> +	if (ctx->crypt_ctx.key_length != ctx->tweak_ctx.key_length)
+> +		return -EINVAL;
+> +
+> +	*keylen = ctx->crypt_ctx.key_length;
+> +	return 0;
+> +}
+
+This is odd.  Why would the key lengths be different here?
+
+> +	err = simd_register_skciphers_compat(aeskl_skciphers, ARRAY_SIZE(aeskl_skciphers),
+> +					     aeskl_simd_skciphers);
+> +	if (err)
+> +		return err;
+> +
+> +	return 0;
+
+This can be simplified to:
+
+	return simd_register_skciphers_compat(aeskl_skciphers,
+					      ARRAY_SIZE(aeskl_skciphers),
+					      aeskl_simd_skciphers);
+
+- Eric
