@@ -2,135 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523DF712A9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC80B712AA4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjEZQ14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S230106AbjEZQaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjEZQ1y (ORCPT
+        with ESMTP id S229629AbjEZQaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:27:54 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BA5BC;
-        Fri, 26 May 2023 09:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1685118470;
-        bh=53Ui1FacFGLMIwxIRV2cMJLHjiRqHs6B8HmABbhs+ok=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WH+9Dt9InAm2ndwOMg6kV+/mrTfRoUe1yE4vvSuYItQNeK0QnIfP5TT3mblSN5BK3
-         d2DpBf8Epv0tZyrlbNet456RlhOhwVIM0LGsRdfcZd8Fz790NTHtjFGRkdy3O0ax1R
-         OU2QgzJncJ+jXDLlh1U5V05uTEWwRObdEcAkbr+p+7iwMu/fBKEqNc0LqwRMNpcXfi
-         C7yJ6yXPVVkizuOeQuXtM8u56xFAYA1mDZaO8Hmp9nxqPq104iSKRYpbQTlDMnpQV2
-         3Y5/k5zmn74yt3PvWIIz6G7HDOs4PK6FLr4I9tuCdxPbKraaHzFyqzI8PlaZGzFaql
-         3xGLWcxGDmZNw==
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QSVhP75bxz13hj;
-        Fri, 26 May 2023 12:27:49 -0400 (EDT)
-Message-ID: <d806769b-c568-fa7c-f7aa-ded9ffea11b4@efficios.com>
-Date:   Fri, 26 May 2023 12:27:51 -0400
+        Fri, 26 May 2023 12:30:22 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEF5D3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:30:20 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96fffe11714so162475466b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1685118618; x=1687710618;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rAOvIEHc+VxLUcDo7/1SZK+gxa4MgVK+c4EuJ+y9RwE=;
+        b=YcaPLRWb+kah2atBFobIiRcNatSkDYQ4p7u/K+mjE6SuJDCO43ImUXUhzPv9rc87je
+         5W6x61+BRC6F8gwdaTd++X/1WF/h75MEn2taPGGK7P4SNXyxcqKxRT6cKvETYoXjy3zZ
+         XADHo00VqKlozV4tn8k7mn4DMxIQDf8GUymO4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685118618; x=1687710618;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rAOvIEHc+VxLUcDo7/1SZK+gxa4MgVK+c4EuJ+y9RwE=;
+        b=FIlmKg2iYgUsa0oesnDn5dZudxSU5bBMtxUvOO6H76cfINxCta7LxCUGSGLzwcUUxN
+         1MZ45BdJdKUS9sJltVJKUr5gYL2ndQdf7aU9A38J2CQ54wUk7plg2lsFa2LrUY9Q2Lu8
+         midl7zGf6nMb5K4R0MUGQFJK0VnU+eZa40nNlMFOfWNcqc7CFZk/NqjD2+kCEPD3PCpF
+         rQBKC5sI6MHePypuyNeG79XeuYekbOEEgPnCHk1kEaM4oCfI9GENjze5WH3MXf4p5AoA
+         T3lHSRAGyl/pIW02tOWatCRFGsrR0/BtuhWuKSCOCUg+qDERi1rabRGqCXKo89a5n9HK
+         /9sQ==
+X-Gm-Message-State: AC+VfDyx5rG+UjOme9vzUiuLSYFZKkbBLsmvRfmoDlwko/flwgDHUT+7
+        IaiVvtR3eurokQQLFQ3ymT9Xl5j1MaaAdX5/koQ+vmUL
+X-Google-Smtp-Source: ACHHUZ6BD8MU/1Lbq3NHlhLptaR1z7E1RptevhFOZxBMzNcDmHhiSXxf5BaS5yNtFQCFK71A80eBMg==
+X-Received: by 2002:a17:906:fd8d:b0:96f:5f44:ea02 with SMTP id xa13-20020a170906fd8d00b0096f5f44ea02mr2729098ejb.8.1685118618368;
+        Fri, 26 May 2023 09:30:18 -0700 (PDT)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id l16-20020a056402125000b0050e01a965a3sm125214edw.5.2023.05.26.09.30.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 09:30:17 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-96f50e26b8bso160104966b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:30:17 -0700 (PDT)
+X-Received: by 2002:a17:906:fd8d:b0:96f:5f44:ea02 with SMTP id
+ xa13-20020a170906fd8d00b0096f5f44ea02mr2729037ejb.8.1685118617396; Fri, 26
+ May 2023 09:30:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC][PATCH 2/2] sched: Use fancy new guards
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        jiangshanlai@gmail.com, qiang1.zhang@intel.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de
-References: <20230526150549.250372621@infradead.org>
- <20230526151947.027972233@infradead.org>
- <2023052626-blunderer-delegator-4b82@gregkh>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <2023052626-blunderer-delegator-4b82@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <CANn89iKUbyrJ=r2+_kK+sb2ZSSHifFZ7QkPLDpAtkJ8v4WUumA@mail.gmail.com>
+In-Reply-To: <CANn89iKUbyrJ=r2+_kK+sb2ZSSHifFZ7QkPLDpAtkJ8v4WUumA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 26 May 2023 09:29:59 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
+Message-ID: <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
+Subject: Re: x86 copy performance regression
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000987cc805fc9b40ca"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/23 12:25, Greg KH wrote:
-> On Fri, May 26, 2023 at 05:05:51PM +0200, Peter Zijlstra wrote:
->> Convert kernel/sched/core.c to use the fancy new guards to simplify
->> the error paths.
-> 
-> That's slightly crazy...
-> 
-> I like the idea, but is this really correct:
-> 
-> 
->>
->> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> ---
->>   kernel/sched/core.c  | 1223 +++++++++++++++++++++++----------------------------
->>   kernel/sched/sched.h |   39 +
->>   2 files changed, 595 insertions(+), 667 deletions(-)
->>
->> --- a/kernel/sched/core.c
->> +++ b/kernel/sched/core.c
->> @@ -1097,24 +1097,21 @@ int get_nohz_timer_target(void)
->>   
->>   	hk_mask = housekeeping_cpumask(HK_TYPE_TIMER);
->>   
->> -	rcu_read_lock();
->> -	for_each_domain(cpu, sd) {
->> -		for_each_cpu_and(i, sched_domain_span(sd), hk_mask) {
->> -			if (cpu == i)
->> -				continue;
->> +	void_scope(rcu) {
->> +		for_each_domain(cpu, sd) {
->> +			for_each_cpu_and(i, sched_domain_span(sd), hk_mask) {
->> +				if (cpu == i)
->> +					continue;
->>   
->> -			if (!idle_cpu(i)) {
->> -				cpu = i;
->> -				goto unlock;
->> +				if (!idle_cpu(i))
->> +					return i;
-> 
-> You can call return from within a "scope" and it will clean up properly?
-> 
-> I tried to read the cpp "mess" but couldn't figure out how to validate
-> this at all, have a set of tests for this somewhere?
-> 
-> Anyway, the naming is whack, but I don't have a proposed better name,
-> except you might want to put "scope_" as the prefix not the suffix, but
-> then that might look odd to, so who knows.
+--000000000000987cc805fc9b40ca
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-FWIW C++ has std::scoped_lock. So perhaps using a similar wording may help ?
+On Fri, May 26, 2023 at 8:00=E2=80=AFAM Eric Dumazet <edumazet@google.com> =
+wrote:
+>
+> We can see rep_movs_alternative() using more cycles in kernel profiles
+> than the previous variant (copy_user_enhanced_fast_string, which was
+> simply using "rep  movsb"), and we can not reach line rate (as we
+> could before the series)
 
-Thanks,
+Hmm. I assume the attached patch ends up fixing the regression?
 
-Mathieu
+That hack to generate the two-byte 'jae' instruction even for the
+alternative is admittedly not pretty, but I just couldn't deal with
+the alternative that generated pointlessly bad code.
 
-> 
-> But again, the idea is good, it might save us lots of "you forgot to
-> clean this up on the error path" mess that we are getting constant churn
-> for these days...
-> 
-> thanks,
-> 
-> greg k-h
+We could make the constant in the comparison depend on whether it is
+for the unrolled or for the erms case too, I guess, but I think erms
+is probably "good enough" with 64-byte copies.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+I was really hoping we could avoid this, but hey, a regression is a regress=
+ion.
 
+Can you verify this patch fixes things for you?
+
+                  Linus
+
+--000000000000987cc805fc9b40ca
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_li4s3rll0>
+X-Attachment-Id: f_li4s3rll0
+
+IGFyY2gveDg2L2xpYi9jb3B5X3VzZXJfNjQuUyB8IDE2ICsrKysrKysrKysrKysrKy0KIDEgZmls
+ZSBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEv
+YXJjaC94ODYvbGliL2NvcHlfdXNlcl82NC5TIGIvYXJjaC94ODYvbGliL2NvcHlfdXNlcl82NC5T
+CmluZGV4IDRmYzVjMmRlMmRlNC4uMjFmMTFiZDM2Y2RjIDEwMDY0NAotLS0gYS9hcmNoL3g4Ni9s
+aWIvY29weV91c2VyXzY0LlMKKysrIGIvYXJjaC94ODYvbGliL2NvcHlfdXNlcl82NC5TCkBAIC03
+LDkgKzcsMTcgQEAKICAqLwogCiAjaW5jbHVkZSA8bGludXgvbGlua2FnZS5oPgorI2luY2x1ZGUg
+PGFzbS9hbHRlcm5hdGl2ZS5oPgogI2luY2x1ZGUgPGFzbS9hc20uaD4KICNpbmNsdWRlIDxhc20v
+ZXhwb3J0Lmg+CiAKKy8qCisgKiBEaXNndXN0aW5nIGhhY2sgdG8gZ2VuZXJhdGUgYSB0d28tYnl0
+ZSAnamFlJyBpbnN0cnVjdGlvbgorICogZm9yICdhbHRlcm5hdGl2ZXMnIHRoYXQgd291bGQgb3Ro
+ZXJ3aXNlIGdlbmVyYXRlIGEgcmVsb2NhdGlvbgorICogYW5kIGEgYmlnIGp1bXAuCisgKi8KKyNk
+ZWZpbmUgSkFFKHgpICIuYnl0ZSAweDczLCIgI3ggIi0wYi0yIgorCiAvKgogICogcmVwX21vdnNf
+YWx0ZXJuYXRpdmUgLSBtZW1vcnkgY29weSB3aXRoIGV4Y2VwdGlvbiBoYW5kbGluZy4KICAqIFRo
+aXMgdmVyc2lvbiBpcyBmb3IgQ1BVcyB0aGF0IGRvbid0IGhhdmUgRlNSTSAoRmFzdCBTaG9ydCBS
+ZXAgTW92cykKQEAgLTI5LDcgKzM3LDcgQEAKICAqLwogU1lNX0ZVTkNfU1RBUlQocmVwX21vdnNf
+YWx0ZXJuYXRpdmUpCiAJY21wcSAkNjQsJXJjeAotCWphZSAuTHVucm9sbGVkCiswOglhbHRlcm5h
+dGl2ZSBKQUUoLkx1bnJvbGxlZCksIEpBRSguTGxhcmdlKSwgWDg2X0ZFQVRVUkVfRVJNUwogCiAJ
+Y21wICQ4LCVlY3gKIAlqYWUgLkx3b3JkCkBAIC02NSw2ICs3MywxMiBAQCBTWU1fRlVOQ19TVEFS
+VChyZXBfbW92c19hbHRlcm5hdGl2ZSkKIAlfQVNNX0VYVEFCTEVfVUEoIDJiLCAuTGNvcHlfdXNl
+cl90YWlsKQogCV9BU01fRVhUQUJMRV9VQSggM2IsIC5MY29weV91c2VyX3RhaWwpCiAKKy5MbGFy
+Z2U6CiswOglyZXAgbW92c2IKKzE6CVJFVAorCisgICAgICAgIF9BU01fRVhUQUJMRV9VQSggMGIs
+IDFiKQorCiAJLnAyYWxpZ24gNAogLkx1bnJvbGxlZDoKIDEwOgltb3ZxICglcnNpKSwlcjgK
+--000000000000987cc805fc9b40ca--
