@@ -2,76 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAA5712A2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B909712A38
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjEZQJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S244115AbjEZQJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjEZQJg (ORCPT
+        with ESMTP id S230309AbjEZQJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:09:36 -0400
-Received: from smtp-42ae.mail.infomaniak.ch (smtp-42ae.mail.infomaniak.ch [IPv6:2001:1600:4:17::42ae])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF668189
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:09:33 -0700 (PDT)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QSVHH60KKzMqG8D;
-        Fri, 26 May 2023 18:09:31 +0200 (CEST)
-Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QSVHD3cfwzMpq8P;
-        Fri, 26 May 2023 18:09:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1685117371;
-        bh=GWA0mFQb+8wMidUB9IFkGhraKuBAw7wtqDQzDAqbLj0=;
+        Fri, 26 May 2023 12:09:45 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45392119;
+        Fri, 26 May 2023 09:09:43 -0700 (PDT)
+Received: from [10.10.2.69] (unknown [10.10.2.69])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 80F0544C100F;
+        Fri, 26 May 2023 16:09:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 80F0544C100F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1685117381;
+        bh=sc/e4YbfJ8QW8+zY9SQfw6Qah/OograOaVZz9GmWE6c=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SHueMjFNo3rqrLqDwx3uLeE8+X5tcivE1oEPiVsupYo6ZiLJ/vTPNLG6eFJuARjXz
-         EChyFftAMsPJ3se0xTmj43Dxi+ekN6Tb9V8ErOqv9uDvNm67z7yhPpfobsNkHwpj/z
-         M1TjsYiSKBpBQcpWBvcaYrXlssdnU8/pqhuOht+c=
-Message-ID: <4142c8dc-5385-fb1d-4f8b-2a98bb3f99af@digikod.net>
-Date:   Fri, 26 May 2023 18:09:14 +0200
+        b=iPZxKhTGz4uB7XNm8VErRhtWXm5gnlzFnp6XjJQFIigsvrE5I4Ai25bZKIc/7xIG+
+         qzaMwQzB2aBoQtPYqDVg/GmjOpo9Udyu3HNxR4UguqJI9m8e0zfXTObdfjG+ZtdVui
+         OIrH+yu4xDiucnHcTJ1Vnc9JHP5IXN6ik/YWrQrc=
+Message-ID: <c63e08fc-7abf-24fb-fc1e-9ecf36618aa6@ispras.ru>
+Date:   Fri, 26 May 2023 19:09:41 +0300
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [ANNOUNCE] KVM Microconference at LPC 2023
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        James Morris <jamorris@linux.microsoft.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Alexander Graf <graf@amazon.com>,
-        Forrest Yuan Yu <yuanyu@google.com>,
-        John Andersen <john.s.andersen@intel.com>,
-        Liran Alon <liran.alon@oracle.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Marian Rotariu <marian.c.rotariu@gmail.com>,
-        =?UTF-8?Q?Mihai_Don=c8=9bu?= <mdontu@bitdefender.com>,
-        =?UTF-8?B?TmljdciZb3IgQ8OuyJt1?= <nicu.citu@icloud.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Thara Gopinath <tgopinath@microsoft.com>,
-        Will Deacon <will@kernel.org>,
-        Zahra Tarkhani <ztarkhani@microsoft.com>,
-        =?UTF-8?Q?=c8=98tefan_=c8=98icleru?= <ssicleru@bitdefender.com>,
-        dev@lists.cloudhypervisor.org, kvm@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, qemu-devel@nongnu.org,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org
-References: <2f19f26e-20e5-8198-294e-27ea665b706f@redhat.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <2f19f26e-20e5-8198-294e-27ea665b706f@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] udp6: Fix race condition in udp6_sendmsg & connect
+Content-Language: ru
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+References: <20230526150806.1457828-1-VEfanov@ispras.ru>
+ <CANn89i+p7_UB8Z5FQ+iWg4G_caAnUf9W4P-t+VOzigUuJo+qRw@mail.gmail.com>
+From:   Vlad Efanov <vefanov@ispras.ru>
+In-Reply-To: <CANn89i+p7_UB8Z5FQ+iWg4G_caAnUf9W4P-t+VOzigUuJo+qRw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,104 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-See James Morris's proposal here: 
-https://lore.kernel.org/all/17f62cb1-a5de-2020-2041-359b8e96b8c0@linux.microsoft.com/
-
-On 26/05/2023 04:36, James Morris wrote:
- > [Side topic]
- >
- > Would folks be interested in a Linux Plumbers Conference MC on this
- > topic generally, across different hypervisors, VMMs, and architectures?
- >
- > If so, please let me know who the key folk would be and we can try 
-writing
- > up an MC proposal.
-
-The fine-grain memory management proposal from James Gowans looks 
-interesting, especially the "side-car" virtual machines: 
-https://lore.kernel.org/all/88db2d9cb42e471692ff1feb0b9ca855906a9d95.camel@amazon.com/
+Eric,
 
 
-On 09/05/2023 11:55, Paolo Bonzini wrote:
-> Hi all!
-> 
-> We are planning on submitting a CFP to host a KVM Microconference at
-> Linux Plumbers Conference 2023. To help justify the proposal, we would
-> like to gather a list of folks that would likely attend, and crowdsource
-> a list of topics to include in the proposal.
-> 
-> For both this year and future years, the intent is that a KVM
-> Microconference will complement KVM Forum, *NOT* supplant it. As you
-> probably noticed, KVM Forum is going through a somewhat radical change in
-> how it's organized; the conference is now free and (with some help from
-> Red Hat) organized directly by the KVM and QEMU communities. Despite the
-> unexpected changes and some teething pains, community response to KVM
-> Forum continues to be overwhelmingly positive! KVM Forum will remain
-> the venue of choice for KVM/userspace collaboration, for educational
-> content covering both KVM and userspace, and to discuss new features in
-> QEMU and other userspace projects.
-> 
-> At least on the x86 side, however, the success of KVM Forum led us
-> virtualization folks to operate in relative isolation. KVM depends on
-> and impacts multiple subsystems (MM, scheduler, perf) in profound ways,
-> and recently we’ve seen more and more ideas/features that require
-> non-trivial changes outside KVM and buy-in from stakeholders that
-> (typically) do not attend KVM Forum. Linux Plumbers Conference is a
-> natural place to establish such collaboration within the kernel.
-> 
-> Therefore, the aim of the KVM Microconference will be:
-> * to provide a setting in which to discuss KVM and kernel internals
-> * to increase collaboration and reduce friction with other subsystems
-> * to discuss system virtualization issues that require coordination with
-> other subsystems (such as VFIO, or guest support in arch/)
-> 
-> Below is a rough draft of the planned CFP submission.
-> 
-> Thanks!
-> 
-> Paolo Bonzini (KVM Maintainer)
-> Sean Christopherson (KVM x86 Co-Maintainer)
-> Marc Zyngier (KVM ARM Co-Maintainer)
-> 
-> 
-> ===================
-> KVM Microconference
-> ===================
-> 
-> KVM (Kernel-based Virtual Machine) enables the use of hardware features
-> to improve the efficiency, performance, and security of virtual machines
-> created and managed by userspace.  KVM was originally developed to host
-> and accelerate "full" virtual machines running a traditional kernel and
-> operating system, but has long since expanded to cover a wide array of use
-> cases, e.g. hosting real time workloads, sandboxing untrusted workloads,
-> deprivileging third party code, reducing the trusted computed base of
-> security sensitive workloads, etc.  As KVM's use cases have grown, so too
-> have the requirements placed on KVM and the interactions between it and
-> other kernel subsystems.
-> 
-> The KVM Microconference will focus on how to evolve KVM and adjacent
-> subsystems in order to satisfy new and upcoming requirements: serving
-> guest memory that cannot be accessed by host userspace[1], providing
-> accurate, feature-rich PMU/perf virtualization in cloud VMs[2], etc.
-> 
-> 
-> Potential Topics:
->     - Serving inaccessible/unmappable memory for KVM guests (protected VMs)
->     - Optimizing mmu_notifiers, e.g. reducing TLB flushes and spurious zapping
->     - Supporting multiple KVM modules (for non-disruptive upgrades)
->     - Improving and hardening KVM+perf interactions
->     - Implementing arch-agnostic abstractions in KVM (e.g. MMU)
->     - Defining KVM requirements for hardware vendors
->     - Utilizing "fault" injection to increase test coverage of edge cases
->     - KVM vs VFIO (e.g. memory types, a rather hot topic on the ARM side)
-> 
-> 
-> Key Attendees:
->     - Paolo Bonzini <pbonzini@redhat.com> (KVM Maintainer)
->     - Sean Christopherson <seanjc@google.com>  (KVM x86 Co-Maintainer)
->     - Your name could be here!
-> 
-> [1] https://lore.kernel.org/all/20221202061347.1070246-1-chao.p.peng@linux.intel.com
-> [2] https://lore.kernel.org/all/CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com
-> 
-> 
+udp6_sendmsg() currently still locks the socket (on line 1595).
+
+
+Best regards,
+
+Vlad.
+
+
+On 26.05.2023 18:29, Eric Dumazet wrote:
+> On Fri, May 26, 2023 at 5:08 PM Vladislav Efanov <VEfanov@ispras.ru> wrote:
+>> Syzkaller got the following report:
+>> BUG: KASAN: use-after-free in sk_setup_caps+0x621/0x690 net/core/sock.c:2018
+>> Read of size 8 at addr ffff888027f82780 by task syz-executor276/3255
+> Please include a full report.
+>
+>> The function sk_setup_caps (called by ip6_sk_dst_store_flow->
+>> ip6_dst_store) referenced already freed memory as this memory was
+>> freed by parallel task in udpv6_sendmsg->ip6_sk_dst_lookup_flow->
+>> sk_dst_check.
+>>
+>>            task1 (connect)              task2 (udp6_sendmsg)
+>>          sk_setup_caps->sk_dst_set |
+>>                                    |  sk_dst_check->
+>>                                    |      sk_dst_set
+>>                                    |      dst_release
+>>          sk_setup_caps references  |
+>>          to already freed dst_entry|
+>
+>> The reason for this race condition is: udp6_sendmsg() calls
+>> ip6_sk_dst_lookup() without lock for sock structure and tries to
+>> allocate/add dst_entry structure to sock structure in parallel with
+>> "connect" task.
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with syzkaller.
+>>
+>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> This is a bogus Fixes: tag
+>
+> In old times, UDP sendmsg() was using the socket lock.
+>
+> Then, in linux-4.0 Vlad Yasevich made UDP v6 sendmsg() lockless (and
+> racy in many points)
+>
+>
+>> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
+>> ---
+>>   net/ipv6/udp.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+>> index e5a337e6b970..a5ecd5d93b0a 100644
+>> --- a/net/ipv6/udp.c
+>> +++ b/net/ipv6/udp.c
+>> @@ -1563,12 +1563,15 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+>>
+>>          fl6->flowlabel = ip6_make_flowinfo(ipc6.tclass, fl6->flowlabel);
+>>
+>> +       lock_sock(sk);
+>>          dst = ip6_sk_dst_lookup_flow(sk, fl6, final_p, connected);
+>>          if (IS_ERR(dst)) {
+>>                  err = PTR_ERR(dst);
+>>                  dst = NULL;
+>> +               release_sock(sk);
+>>                  goto out;
+>>          }
+>> +       release_sock(sk);
+>>
+>>          if (ipc6.hlimit < 0)
+>>                  ipc6.hlimit = ip6_sk_dst_hoplimit(np, fl6, dst);
+>> --
+>> 2.34.1
+>>
+> There must be another way really.
+> You just killed UDP performance.
