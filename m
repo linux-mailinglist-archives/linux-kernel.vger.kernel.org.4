@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1F2712776
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4305C712778
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243578AbjEZN0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S243695AbjEZN0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237139AbjEZN0G (ORCPT
+        with ESMTP id S237139AbjEZN0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:26:06 -0400
+        Fri, 26 May 2023 09:26:09 -0400
 Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF8995
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:26:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B434198
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:26:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1685107561;
-  x=1716643561;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1685107567;
+  x=1716643567;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=vQ6s9WHOVRERw63K8NCydHFioykHH4Lnjaq5pXtH6Qw=;
-  b=BYQME4zL2VDlIAMPa3qQaGjq+liFxdWz55rihtik6M/neJ77i32R4rkT
-   riL/Uu93cQq9EiWy9zDqcjgGaszkayZ2eu29HA11suW/pZIFbEOnied67
-   KP39r9f1c/rd8BrxuyCMOUcX0fjvbvld195Vy+Ao79Clgx4J5YBlhyhu1
-   lqEZkDsr1v0lPQKZR9xIXYjGnmrRtkSuwBmuFoJmaSk5LDjJWRRToPYa3
-   wK8LAMSJhgc9diZ3Prlcm8Zws4tgBFMMQbhGV1r9TVFLT4FnSanT4XsJV
-   +Yl5RTxmHo3qvc8NWaduUTfVq0JErP3epHXP69Sdh0ajWDdP+b3w9jxkG
+  bh=kGcEORmcjqsDDRn5OZ/5Wb++WiIzuQvNjLEwUt1X/v0=;
+  b=U2fu9L9r7bpc9dUPuKYddjM+Gx75LNY0uyuVzjR7bd+OVv9r0d3NqdHh
+   ERkryOqhnXXznDSBUI3xCpYhC9QjA4kIMOFKCr3JtgbNAM6C8eKu5yI06
+   MtDXem4OqufNrboivXNZiuR+B8eH7CX8b3spyEp/bIctBj9we/PFab29G
+   Yv4dfCnPwzmwxVseVZqBU9rbxZJyDeLWgPvvODJJdGZC/iIr6X8LpmAyj
+   FGNJbrItp2pa0T3Fr1v7SEFfEGjKIFs7A45C2p8G3C+D+zqFlYXJuvvPA
+   myk0PqbTSYqv+r9fRHWo8sPfEjSRU4SEFiaZRPHNUbWdRkgGVadaMZ4Fe
    Q==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-Date:   Fri, 26 May 2023 15:25:45 +0200
-Subject: [PATCH mm-nonmm-unstable 1/2] squashfs: fix page update race
+Date:   Fri, 26 May 2023 15:25:46 +0200
+Subject: [PATCH mm-nonmm-unstable 2/2] squashfs: fix page indices
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20230526-squashfs-cache-fixup-v1-1-d54a7fa23e7b@axis.com>
+Message-ID: <20230526-squashfs-cache-fixup-v1-2-d54a7fa23e7b@axis.com>
 References: <20230526-squashfs-cache-fixup-v1-0-d54a7fa23e7b@axis.com>
 In-Reply-To: <20230526-squashfs-cache-fixup-v1-0-d54a7fa23e7b@axis.com>
 To:     Phillip Lougher <phillip@squashfs.org.uk>,
@@ -52,31 +52,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We only put the page into the cache after we've read it, so the
-PageUptodate() check should not be necessary.  In fact, it's actively
-harmful since the check could fail (since we used find_get_page() and
-not find_lock_page()) and we could end up submitting a page for I/O
-after it has been read and while it's actively being used, which could
-lead to corruption depending on what the block driver does with it.
+The page cache functions want the page index as an argument but we're
+currently passing in the byte address.
 
 Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
- fs/squashfs/block.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/squashfs/block.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/fs/squashfs/block.c b/fs/squashfs/block.c
-index 6285f5afb6c6..f2412e5fc84b 100644
+index f2412e5fc84b..447fb04f2b61 100644
 --- a/fs/squashfs/block.c
 +++ b/fs/squashfs/block.c
-@@ -92,7 +92,7 @@ static int squashfs_bio_read_cached(struct bio *fullbio,
- 	bio_for_each_segment_all(bv, fullbio, iter_all) {
- 		struct page *page = bv->bv_page;
+@@ -142,7 +142,7 @@ static int squashfs_bio_read_cached(struct bio *fullbio,
  
--		if (page->mapping == cache_mapping && PageUptodate(page)) {
-+		if (page->mapping == cache_mapping) {
- 			idx++;
- 			continue;
- 		}
+ 	if (head_to_cache) {
+ 		int ret = add_to_page_cache_lru(head_to_cache, cache_mapping,
+-						read_start, GFP_NOIO);
++						read_start >> PAGE_SHIFT, GFP_NOIO);
+ 
+ 		if (!ret) {
+ 			SetPageUptodate(head_to_cache);
+@@ -153,7 +153,7 @@ static int squashfs_bio_read_cached(struct bio *fullbio,
+ 
+ 	if (tail_to_cache) {
+ 		int ret = add_to_page_cache_lru(tail_to_cache, cache_mapping,
+-						read_end - PAGE_SIZE, GFP_NOIO);
++						(read_end >> PAGE_SHIFT) - 1, GFP_NOIO);
+ 
+ 		if (!ret) {
+ 			SetPageUptodate(tail_to_cache);
+@@ -192,7 +192,7 @@ static int squashfs_bio_read(struct super_block *sb, u64 index, int length,
+ 
+ 		if (cache_mapping)
+ 			page = find_get_page(cache_mapping,
+-					     read_start + i * PAGE_SIZE);
++					     (read_start >> PAGE_SHIFT) + i);
+ 		if (!page)
+ 			page = alloc_page(GFP_NOIO);
+ 
 
 -- 
 2.34.1
