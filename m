@@ -2,184 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EC471262C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28042712626
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237057AbjEZMC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
+        id S231293AbjEZMCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjEZMCp (ORCPT
+        with ESMTP id S230366AbjEZMB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:02:45 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AFA116;
-        Fri, 26 May 2023 05:02:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685102564; x=1716638564;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=niAd+MYPww6pzAj+PuY1sjn6jmYsE0NCxyfY/H+h0AI=;
-  b=C7R/2Oc+GfZKEmusvzmq4fwUCtsz0VO+Rr9VSxUoEe+qYqRhIPRibkCd
-   +0ngHSmb2Yu8LQ/xeCgxQ1le12iKgs/pv8hprcudnkhy9eiwv37hznlXP
-   Gistf6jJwSuwJqyd7PKZlK4vGchZlQz6mYApNKOKQtShQXR511CBE/Fqc
-   LrkzLhklQsnM/otGeZfA3Ecg1qXnXFSF7gFoHrWE2sUkN/3vmKtchjl2U
-   +86m0hfBLNxpowZLZn0u7sLO1XXt3RK4+Z/KMG97ckdvAjuTqeZxRySYz
-   3Dgq0KBRVoUz5Re55lb+4QEJI/6/ooRrZjea6x1aD9TlexHYclMpARlKe
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="333812773"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="333812773"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 05:02:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="738231141"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="738231141"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 May 2023 05:02:30 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q2W9N-000JJC-1f;
-        Fri, 26 May 2023 12:02:29 +0000
-Date:   Fri, 26 May 2023 20:01:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sungwoo Kim <iam@sung-woo.kim>
-Cc:     oe-kbuild-all@lists.linux.dev, wuruoyu@me.com, benquike@gmail.com,
-        daveti@purdue.edu, Sungwoo Kim <iam@sung-woo.kim>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Bluetooth: L2CAP: Fix use-after-free in
- l2cap_sock_ready_cb
-Message-ID: <202305261912.mKLcy6Fw-lkp@intel.com>
-References: <20230526084038.2199788-1-iam@sung-woo.kim>
+        Fri, 26 May 2023 08:01:58 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2094.outbound.protection.outlook.com [40.107.22.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276E1199;
+        Fri, 26 May 2023 05:01:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QOqbEPm1ezFPH+Yrk4iVCYhMjSLmzN5iRwiyQ8a2DYGI3TMIHK3TALKcYPhxVzx8glzwbPiFB4z/HdeHrZL1XXRDo4AvThuP5Z7ysH8HS3Fqy+Vg4WDly6l/66IeJy/entHuFXG+LZxcXk2izfPVSacQOWEx+/5ft+AMbIIL6hYEAXGBve6F1zGv+ggRU8RA7QWKS20JbCrCXC3aQ5px4TBEZkSm2v6LrXUY8M4JAWJJGsVcuHhIr5v/0+6zVHgHcYdcBZyY6nKKTIYaLc9dxrRLdG18SrNo3u31ELc7VMITZVLsQMeBL6xmIDvujH9q2aQCf4zN6kGLWQznkvp1eA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2gDPAk4gxgf7HtF42qvIHBcx3h97h4jWV6S67/zMkpI=;
+ b=Jewyt2REj6Timc07mnQbGmQgoA28rmdWtmwkgnBhOSepUHEvKGua3ZP7mXqHF77UyhauUlh3t/QlQx8LufKCtC9908HwpCghOrO0SvU1C80ARdE3UEjbozB3zbdm3XRkq6Y28whE9x1PQRsYTY3jX47lUQdlMwyNb2eBqRRHIy5DKdskp52zk1Ru9R0ZQjcxFUBUTDam/mweZi566Kye8FiIhfx0B3L1B8a39OEEaQKgJPAMkQYDE9EuVwBBV8/wgFSNikzZsx1mQSLqhCUoSD+VBXIV3dIgh70B7HSDH8yTaS8bkSPrhvMt36h7KamoVw7JWKBthwY2buVhtszDzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2gDPAk4gxgf7HtF42qvIHBcx3h97h4jWV6S67/zMkpI=;
+ b=EBUdSDQeNGpPzAWuq49enBZsw//QZ4U7gpfKrU6RMYaKiX4ZgCYM+pgTUBwxL1FqafnxjA8zFBzYEMAKlh9nR/xhM7CnAr4UR66klIL5Tf9xJ0SYwo8eZrT9RtJMGRt20BBsXauxaZ8n3LsMIw83JIWzXf3+EDwGYt3+4KnNCQQ=
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
+ by PA4P190MB1101.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:102::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.18; Fri, 26 May
+ 2023 12:01:50 +0000
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::398b:5b73:7509:65fc]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::398b:5b73:7509:65fc%3]) with mapi id 15.20.6433.016; Fri, 26 May 2023
+ 12:01:50 +0000
+From:   Vadym Kochan <vadym.kochan@plvision.eu>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Aviram Dali <aviramd@marvell.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Elad Nachman <enachman@marvell.com>
+Subject: Re: [PATCH 0/3] mtd: rawnand: marvell: add support for AC5 SoC
+Thread-Topic: [PATCH 0/3] mtd: rawnand: marvell: add support for AC5 SoC
+Thread-Index: AQHY45PNiQyYrdEWN06hu0A4/jLhu69rf3CAgAJMXSM=
+Date:   Fri, 26 May 2023 12:01:50 +0000
+Message-ID: <VI1P190MB031742E17BBA60A36FEF9CFB95479@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+References: <20221019082046.30160-1-vadym.kochan@plvision.eu>
+ <143fb1ff-b2d4-a6fe-e892-b55a7bbf56f8@alliedtelesis.co.nz>
+In-Reply-To: <143fb1ff-b2d4-a6fe-e892-b55a7bbf56f8@alliedtelesis.co.nz>
+Accept-Language: uk-UA, en-US
+Content-Language: uk-UA
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1P190MB0317:EE_|PA4P190MB1101:EE_
+x-ms-office365-filtering-correlation-id: 930d2d49-b382-4246-919b-08db5de0fd1d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dzOdD0w2sdEK+WXsotD0PZAm8qJmgql5zYGRhoGKLf2GslVSkOYDkVQzQzprFtbwTwhlUei7sC82LItdVebw2nSdH6wdEcTrgplYiwkFF4+mBTYKTaSt+Y8hX9V8TB2NnRbpNeiNNnx1ipysJfsGtmt4z0qoWq4M/NQu+6TooOTTQK65rrhyXZx5L/RxoLFlITWTvUk5gwv0uHV6zJUtHtsH/4RT7V7OyUqEm8WCFsPzitDciCdPIMjyWISS167mH9jLanux0J3UpuhhtIbaEl2qjOBcj2zQZBo3ne8AHvvNjeOneUxlPTIoIHdKByAGxyWvZbxgkLUDYCUUjTezAAn2EWe80Lh6FPbtfvyHMsY6CIHNHvfKEQ5uKY29cxQffEF4S22DeGhnkj4bLbzhUQ4NowSTXv6ESq0G8A6t34vBWdqcwYWT40tO/ndWAIqEFuC1n0gfg9CInPjLhk1bu0zXpAfPLO5FpndVibZZWoaA/7JoNKak3mJy8w3KlkWe7SzvIBHDif2qihGJTFkDft8PqTTAjCktV5UT/b7XZ6ICmXtOf2tNID6N3uI6gvCq/zF73GaoRdQmvEuOPiJ6F4U5CxyB478m516+F5SFUXc9MRyUw9zVg5TIo+RwSS04mN9V2ULDv8LbQ1ZHE1h/hg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(39830400003)(346002)(136003)(451199021)(2906002)(64756008)(76116006)(66556008)(66946007)(66476007)(66446008)(5660300002)(52536014)(83380400001)(7416002)(8676002)(8936002)(44832011)(316002)(41300700001)(4326008)(91956017)(33656002)(110136005)(478600001)(55016003)(7696005)(71200400001)(9686003)(53546011)(6506007)(921005)(186003)(26005)(38070700005)(86362001)(122000001)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?koi8-u?Q?+YT3yRQoXtCX4cjESbFFkFLJeKFWOeIeHB1MZxrITYIX4t2awEqUItL4akk9Z8?=
+ =?koi8-u?Q?ZYDZje/NfJu2osDkOIfiR2tmRHpUixMAK9xLH6SUE88uxujCX4tUm4vfrKTNyB?=
+ =?koi8-u?Q?WFba9ek77/TdX6yyAYEJKAL6QuW87q42Ax7fE9A1gT/KOHlMgQqabwlLjjiUU0?=
+ =?koi8-u?Q?qYc/pA3uhFlqHnqgmkH3PIEHvUSjtStwFjD2GOrgqqQuCafIunEvf5I/vQChI6?=
+ =?koi8-u?Q?gLiyXxUfBrRUxZRtWNLJ6vx3QvVIenN6oCC301QhpWSSRWHPHRmhGY4K7IUx5o?=
+ =?koi8-u?Q?S267ynZaZ8GbYenydzmCbYd6nvPfIC6nBM/a8d94jnNwAAyy0UFTLNg8yNF1wU?=
+ =?koi8-u?Q?RldoORDIsMqm7Ima5zsKQvB9mCns3gAmYbEu4TRSnzGHLm0IQ7v+ivL32Gnrbi?=
+ =?koi8-u?Q?jvZQCQRc67xYOrkuP6XkxawWsyrLVGxACMfRpdwR+W0BgO1Z7dzas4BCJHqe9X?=
+ =?koi8-u?Q?9OcS+yARcHLciqXQhNU08EhS7leS63UIWFGG+yc7i2ISvjrYToqhBSdjMCnNAc?=
+ =?koi8-u?Q?Qldvz5qGfGusAyy77qv1GoBrQgZSpszJewta6RoiTb1ND6ry4eALyt+xfOO5Lb?=
+ =?koi8-u?Q?15kzUNoHrBoiiKDH7YflV9GW5hy8bICDAp6GyyhMILQNtT3ntc6ZgPvf9KZU9d?=
+ =?koi8-u?Q?sXamtb/boKJUkqr2GWpGgc1VAt69eQ3uiULn+A3/KcDs46WkRcRWI4RSAA5Btz?=
+ =?koi8-u?Q?b52cIIeTPZxOwA25kyiDuJ2KXQIMKh30qpIdjowjHyEPlFM4tkNxHjW4xi9YRI?=
+ =?koi8-u?Q?piIgil1D+urdaZiW7C97l2uZGyxJ6IUAUU0qdMDZf50VE5VoqLTT43UoZTIIpE?=
+ =?koi8-u?Q?sTcfMe0Qp1aPT8C+kFyBiWrHveZJgEzF4ArYXTQVVsNqO7NhnoEP35Hs/BGywk?=
+ =?koi8-u?Q?QK241Pkok/Oc4+6DJnVf801iHihrLjuFR91CSkrdau5OBonnOU3GqmkPv1FQNi?=
+ =?koi8-u?Q?b5gEaMDT/oSka5g+gO8owq4NxQ1iC68nQHIFGfs7D/hza5JB9e3vVIvc7JCg2y?=
+ =?koi8-u?Q?eltWrU2Uple2I5MF9V23rDA5yPzN87mOJXJpsXxbEtbk2vZgQrMIJeilGlMB1+?=
+ =?koi8-u?Q?O42Lyn+EvGw8bLj3jfRHNXktU0VkUM+Nt8VQ25PAK5nXNj4Waj9lWg2x54ZozD?=
+ =?koi8-u?Q?iARmi/ZJGrYaNjXKxIIFSRUG3Qqct9VtIHP8jnQKDn6g69h0CFX0Vd+6/qLz3F?=
+ =?koi8-u?Q?KpT5r9xW8riTrVJWWYdDYH7Kq3/Ofr2HsJ/XSMwjJpGcP/R8tHL+ZmiMDwiX+6?=
+ =?koi8-u?Q?yMEwenUfAnt5qrKssbEd0bifU5oEAxeTC622JACKvq2NzlHmvpGXRJ4Rq7WIST?=
+ =?koi8-u?Q?gsFs3ZAcKfFO94aYOKhQMGUHtHoDeurKVUoPw4gW3dsxGCi/SC3bRPp4xIeS2F?=
+ =?koi8-u?Q?AI3nQjd36c8fdvAaPp1NxV7vM4Y0LNqTHjduX0mTulIbJHnaqpcyDySmKpiOQW?=
+ =?koi8-u?Q?jWEbyOFus7ugKvbejx2Gudso5Rv6oST/YjyRe2ahReNq1j6iKuVx9qX6MNh8K+?=
+ =?koi8-u?Q?ZbdwU8SI0cs1+KLcPewLLGbwNPMECpfCEaDsTMCtIneUpfahUL?=
+Content-Type: text/plain; charset="koi8-u"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526084038.2199788-1-iam@sung-woo.kim>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 930d2d49-b382-4246-919b-08db5de0fd1d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 May 2023 12:01:50.3318
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Zp8E30ppbzbpI86lkDgsLeQsrTb/MQy/bQEngoz6qlCtnGpLPaHr/7eMlOLUyqRPMa46ticZxJGaguSodW4ip5w9kPngVBxVpF+lFk9gq1Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4P190MB1101
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sungwoo,
+Hi Chris,
 
-kernel test robot noticed the following build errors:
+Sorry for the delay.
 
-[auto build test ERROR on bluetooth/master]
-[also build test ERROR on bluetooth-next/master linus/master v6.4-rc3 next-20230525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Currently I do not work with Marvell, so I can't do anything with that.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sungwoo-Kim/Bluetooth-L2CAP-Fix-use-after-free-in-l2cap_sock_ready_cb/20230526-164241
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/20230526084038.2199788-1-iam%40sung-woo.kim
-patch subject: [PATCH] Bluetooth: L2CAP: Fix use-after-free in l2cap_sock_ready_cb
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230526/202305261912.mKLcy6Fw-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c0c02b1afbe2667fe21aed47375c4e0d45713f38
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sungwoo-Kim/Bluetooth-L2CAP-Fix-use-after-free-in-l2cap_sock_ready_cb/20230526-164241
-        git checkout c0c02b1afbe2667fe21aed47375c4e0d45713f38
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash net/bluetooth/
+Regards,
+Vadym
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305261912.mKLcy6Fw-lkp@intel.com/
+________________________________________
+=F7=A6=C4: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+=EE=C1=C4=A6=D3=CC=C1=CE=CF: 25 =D4=D2=C1=D7=CE=D1 2023 =D2. 3:53
+=EB=CF=CD=D5: Vadym Kochan; Miquel Raynal; Richard Weinberger; Vignesh Ragh=
+avendra; Rob Herring; Krzysztof Kozlowski; Roger Quadros; Florian Fainelli;=
+ Wolfram Sang; Liang Yang; Thomas Bogendoerfer; Aviram Dali; linux-mtd@list=
+s.infradead.org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
+=EB=CF=D0=A6=D1: Elad Nachman
+=F4=C5=CD=C1: Re: [PATCH 0/3] mtd: rawnand: marvell: add support for AC5 So=
+C
 
-All error/warnings (new ones prefixed by >>):
+Hi Vadym,
 
-   net/bluetooth/l2cap_sock.c: In function 'l2cap_sock_release':
->> net/bluetooth/l2cap_sock.c:1418:9: error: implicit declaration of function 'l2cap_sock_cleanup_listen'; did you mean 'l2cap_sock_listen'? [-Werror=implicit-function-declaration]
-    1418 |         l2cap_sock_cleanup_listen(sk);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-         |         l2cap_sock_listen
-   net/bluetooth/l2cap_sock.c: At top level:
->> net/bluetooth/l2cap_sock.c:1436:13: warning: conflicting types for 'l2cap_sock_cleanup_listen'; have 'void(struct sock *)'
-    1436 | static void l2cap_sock_cleanup_listen(struct sock *parent)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
->> net/bluetooth/l2cap_sock.c:1436:13: error: static declaration of 'l2cap_sock_cleanup_listen' follows non-static declaration
-   net/bluetooth/l2cap_sock.c:1418:9: note: previous implicit declaration of 'l2cap_sock_cleanup_listen' with type 'void(struct sock *)'
-    1418 |         l2cap_sock_cleanup_listen(sk);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+On 19/10/22 21:20, Vadym Kochan wrote:
+> This series adds support for AC5 SoC.
+>
+> The following changes were made to add AC5 support:
+>
+>     1) Modify Marvell nand NFC timing set for mode 0
+>
+>     2) fix validation in AC5 Nand driver for ONFI timings values modes 1 =
+and 3
+>
+>     3) remove unnecessary nand timing-mode in device tree of ac5.dtsi
+>
+>     4) add nand missing AC5X layouts , add option to use ndtr predefined =
+values
+>
+>     5) Zero steps and total fields of ecc in ecc controller initializatio=
+n so
+>        nand_scan_tail() will calculate these two fields, otherwise
+>        NAND initialization will fail with kernel 5.15 and above.
+>
+> Aviram Dali (2):
+>    dt-bindings: mtd: Add AC5 specific binding
+>    mtd: rawnand: marvell: add support for AC5 SoC
 
+Are you still looking into this series? I see one part made it upstream
+as commit 68c18dae6888 ("mtd: rawnand: marvell: add missing layouts")
+and there was an off-shoot series around converting the DT binding.
 
-vim +1418 net/bluetooth/l2cap_sock.c
-
-  1406	
-  1407	static int l2cap_sock_release(struct socket *sock)
-  1408	{
-  1409		struct sock *sk = sock->sk;
-  1410		int err;
-  1411		struct l2cap_chan *chan;
-  1412	
-  1413		BT_DBG("sock %p, sk %p", sock, sk);
-  1414	
-  1415		if (!sk)
-  1416			return 0;
-  1417	
-> 1418		l2cap_sock_cleanup_listen(sk);
-  1419		bt_sock_unlink(&l2cap_sk_list, sk);
-  1420	
-  1421		err = l2cap_sock_shutdown(sock, SHUT_RDWR);
-  1422		chan = l2cap_pi(sk)->chan;
-  1423	
-  1424		l2cap_chan_hold(chan);
-  1425		l2cap_chan_lock(chan);
-  1426	
-  1427		sock_orphan(sk);
-  1428		l2cap_sock_kill(sk);
-  1429	
-  1430		l2cap_chan_unlock(chan);
-  1431		l2cap_chan_put(chan);
-  1432	
-  1433		return err;
-  1434	}
-  1435	
-> 1436	static void l2cap_sock_cleanup_listen(struct sock *parent)
-  1437	{
-  1438		struct sock *sk;
-  1439	
-  1440		BT_DBG("parent %p state %s", parent,
-  1441		       state_to_string(parent->sk_state));
-  1442	
-  1443		/* Close not yet accepted channels */
-  1444		while ((sk = bt_accept_dequeue(parent, NULL))) {
-  1445			struct l2cap_chan *chan = l2cap_pi(sk)->chan;
-  1446	
-  1447			BT_DBG("child chan %p state %s", chan,
-  1448			       state_to_string(chan->state));
-  1449	
-  1450			l2cap_chan_hold(chan);
-  1451			l2cap_chan_lock(chan);
-  1452	
-  1453			__clear_chan_timer(chan);
-  1454			l2cap_chan_close(chan, ECONNRESET);
-  1455			l2cap_sock_kill(sk);
-  1456	
-  1457			l2cap_chan_unlock(chan);
-  1458			l2cap_chan_put(chan);
-  1459		}
-  1460	}
-  1461	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Vadym Kochan (1):
+>    mtd: rawnand: Partially revert 4114f97c41cd ("mtd: rawnand: Get rid of
+>      a few unused definitions")
+>
+>   .../devicetree/bindings/mtd/marvell-nand.txt  |   1 +
+>   drivers/mtd/nand/raw/Kconfig                  |   2 +-
+>   drivers/mtd/nand/raw/marvell_nand.c           | 277 ++++++++++++++++--
+>   drivers/mtd/nand/raw/nand_timings.c           |  14 +
+>   include/linux/mtd/rawnand.h                   |   3 +
+>   5 files changed, 264 insertions(+), 33 deletions(-)
+>
