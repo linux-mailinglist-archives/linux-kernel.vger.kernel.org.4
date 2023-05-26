@@ -2,86 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC38C712927
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EBF71292D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243884AbjEZPIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
+        id S243624AbjEZPM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243860AbjEZPIv (ORCPT
+        with ESMTP id S229849AbjEZPM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:08:51 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963C0187
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:08:49 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30a8dc89c33so547029f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:08:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685113728; x=1687705728;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RQDPpbfKxYac4dFfl3UOiv7iiv3UKto2YwW9RD/lJd4=;
-        b=D8329d5gDBuupuw18ee7CiQedAqaHbalYu/5ad/0HLx8pzNJB/B/nXPqeXbg3zAn47
-         UPrnWRMAm7bG90BMHhmY3n+VpBQQlENz9uTjY0+zpdv1cT8jbn49d562/eYMTZuYqhaE
-         jYA1F+tj07JByXOexpqVnp32QWw6tjLsztNKTrHvXKu3Davn4xKVGIH1Y57SOpVjD20W
-         OMAE1twiDb3hwtTTAn3q+ncHQjS6yUWcoP8TeAY32wV4CwfQ8TRSn904UgqFpjjw7VBD
-         bzKazNedaXMHzxlBYF69bMm/ufjJ/1nFo4ejX/7ZVnMxqnyj/xDsr55nL9Aq142D8x7l
-         6whg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685113728; x=1687705728;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RQDPpbfKxYac4dFfl3UOiv7iiv3UKto2YwW9RD/lJd4=;
-        b=bg47rwqi4Z+OUiET3suVGYOcOtZqfEuw8f58sYUhLRZNyidyu+fdKXoFH3Qn8T1IIe
-         aPt2XZvXu/f25538gaZPt+r6YHMlpN/4FGToR43jGH4aSIoIMHQJUdoisHMQ+qfRtsuq
-         tnfvbt1sihFXOzk+HO+znHv3TDXTyl6Xt4s72NXNH4vNM1slQsz+f6b7bQu+5yu4W05n
-         GRJbpw5Vl4Rl3zLxTcogOMys0j59MIUUxcGV7SZi9KkQVxX1GfkLxwX/niuW3GIcf57a
-         mChnlSgTVWzGkfhe9Jw/Lo5E+BHO8uyAm6AHr7Ce83AVQYG55FG9UA9hmYBjrliSanw9
-         soXA==
-X-Gm-Message-State: AC+VfDzjcAtXrELMx8O3aU+X3zuHIAiNwa/tZoYXZfJMrc7RQfTozglz
-        Neh9O8x+LGhIgtnyQRzQn7cU0A==
-X-Google-Smtp-Source: ACHHUZ6Ur52z92yD9zQLf8/rpAwoOXof7X3dA6SmUIkLpPmI1FzD2sW7X7Z8flkFpqVtem4zLqfZ0w==
-X-Received: by 2002:a5d:6ac4:0:b0:309:e24:57b0 with SMTP id u4-20020a5d6ac4000000b003090e2457b0mr1955408wrw.30.1685113728030;
-        Fri, 26 May 2023 08:08:48 -0700 (PDT)
-Received: from [10.1.4.6] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id 10-20020a05600c228a00b003f42461ac75sm9055828wmf.12.2023.05.26.08.08.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 08:08:47 -0700 (PDT)
-Message-ID: <f605a653-ba94-7a8c-1bfa-4c18f5d25da7@baylibre.com>
-Date:   Fri, 26 May 2023 17:08:45 +0200
+        Fri, 26 May 2023 11:12:57 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76077F7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:12:54 -0700 (PDT)
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0217DC0007;
+        Fri, 26 May 2023 15:12:46 +0000 (UTC)
+Message-ID: <f82e7d3d-a16d-593e-7513-753b5cbf28af@ghiti.fr>
+Date:   Fri, 26 May 2023 17:12:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 5/7] drm/apu: allow platform driver to implement their own
- mmap function
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        airlied@gmail.com, daniel@ffwll.ch,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, jstephan@baylibre.com,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, khilman@baylibre.com,
-        nbelin@baylibre.com, bero@baylibre.com
-References: <20230517145237.295461-1-abailon@baylibre.com>
- <20230517145237.295461-6-abailon@baylibre.com>
- <032699a0-9a43-953a-60e9-59a515a26cef@linaro.org>
+ Thunderbird/102.11.0
+Subject: Re: Bug report: kernel paniced when system hibernates
 Content-Language: en-US
-From:   Alexandre Bailon <abailon@baylibre.com>
-In-Reply-To: <032699a0-9a43-953a-60e9-59a515a26cef@linaro.org>
+To:     Conor Dooley <conor@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Anup Patel <anup@brainfault.org>,
+        Anup Patel <apatel@ventanamicro.com>, robh@kernel.org,
+        jeeheng.sia@starfivetech.com, linux-kernel@vger.kernel.org,
+        palmer@rivosinc.com, leyfoon.tan@starfivetech.com,
+        mason.huo@starfivetech.com, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Song Shuai <suagrfillet@gmail.com>,
+        linux-riscv@lists.infradead.org,
+        Andrew Jones <ajones@ventanamicro.com>
+References: <20230525-shrapnel-precut-26500fca4a48@wendy>
+ <CAAhSdy3SqeLdAfaojUki=ht21nr4ZUPMkW_t9M6ntQCt6Ds4Nw@mail.gmail.com>
+ <20230525-citric-waged-a2f78d27eb0c@wendy>
+ <CAOnJCULfC0jmiucLNMeJZwJf4QbGAN6r4B-ubUbP16KVpxrCfA@mail.gmail.com>
+ <20230525-flaring-trading-f2bf0713ae26@spud>
+ <CAOnJCUK_EgX-En1QNS8yX1WA1nj8w2kpvXMQcvgWuR3dvzEQYw@mail.gmail.com>
+ <20230525-desecrate-imposing-d97ab34e06ad@spud>
+ <CAOnJCUKfRv68Bh8ue=ZhMGxai9_UEHLpm3553g2c2NXh-RP-TQ@mail.gmail.com>
+ <20230525-batting-botch-7e03393a2d97@spud>
+ <CAHVXubiDezbwZO6X2btvgpq-XqHnxZjXzaMnSK2YrHc_ioLx8Q@mail.gmail.com>
+ <20230526-steep-omen-a5a46a1086bf@spud>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20230526-steep-omen-a5a46a1086bf@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,33 +81,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 5/17/23 21:45, Krzysztof Kozlowski wrote:
-> On 17/05/2023 16:52, Alexandre Bailon wrote:
->> From: Julien Stephan <jstephan@baylibre.com>
+On 26/05/2023 16:59, Conor Dooley wrote:
+> On Fri, May 26, 2023 at 03:14:33PM +0200, Alexandre Ghiti wrote:
+>> Hi everyone,
 >>
->> By default we will call drm_gem_mmap() unless the apu driver has
->> declared it's own mmap handler.
->>
->> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
->> Reviewed-by: Julien Stephan <jstephan@baylibre.com>
-> 
-> One does not have to review own code. We all assume that we send good
-> code which we do not have to review by ourselves (by the author). We
-> also assume we make mistakes, which we cannot find, thus other person's
-> review is important.
-I am sorry, I am the one who made the misstake.
-I squashed this patch with another one I made, lost my signedof and left 
-the reviewed by which indeed doesn't make any sense.
+>> On Thu, May 25, 2023 at 11:24 PM Conor Dooley <conor@kernel.org> wrote:
+>>> On Thu, May 25, 2023 at 01:06:04PM -0700, Atish Patra wrote:
+>>>> On Thu, May 25, 2023 at 11:39 AM Conor Dooley <conor@kernel.org> wrote:
+>>>>> On Thu, May 25, 2023 at 11:37:40AM -0700, Atish Patra wrote:
+>>>>>
+>>>>>> Any testing of hibernation still needs to revert the patch until we
+>>>>>> have the proper fix.
+>>>>> "the patch" is what exactly? I assume you don't mean depending on
+>>>>> NONPORTABLE, since that is a Kconfig option.
+>>>> Nope. Sorry I meant the commit
+>>>>
+>>>> 3335068 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
+>>> Ah, if your SBI implementation is one of the affected ones, yeah.
+>>> If not, you can just set NONPORTABLE :)
+>> @Björn Töpel emitted the idea of excluding from the hibernation all
+>> the memory nodes in the "/reserved-memory" node
+>> (https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml):
+>> I have to admit that I don't see why it is not done by default by the
+>> kernel.
+> My understanding was that it was perfectly fine to use reserved memory
+> nodes to fence off some memory to use in device drivers etc, which then
+> may need to be saved/restored.
 
-Best Regards,
-Alexandre
-> 
-> Adding own review tag suggests you added them mechanically, so I doubt
-> that they really happened.
-> 
-> Anyway, your SoB is missing.
-> 
-> Best regards,
-> Krzysztof
-> 
+
+Agreed, but I would say that it's up to the driver then to take care of 
+that, see https://docs.kernel.org/driver-api/pm/notifiers.html
+
+
+>> Unless there is stuff in this node that needs to be "hibernated", I
+>> think that would be a very good solution since we would not rely on
+>> the name of the "internal" nodes of "/reserved-memory" (i.e.
+>> "mmode_resv").
+>>
+>> I'm digging into why it is not done by default, just wanted to have
+>> your feedback before the week-end :)
