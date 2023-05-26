@@ -2,78 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8451B712A1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F56712A1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244233AbjEZP7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S243777AbjEZQAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244228AbjEZP7E (ORCPT
+        with ESMTP id S236220AbjEZQAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:59:04 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF9B13D
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:59:01 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6b0d38ce700so245001a34.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:59:01 -0700 (PDT)
+        Fri, 26 May 2023 12:00:16 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E5A18D
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:00:15 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f5dbd8f677so60985e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:00:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1685116740; x=1687708740;
+        d=google.com; s=20221208; t=1685116814; x=1687708814;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NSRKBuS/oKd5fjIjvvaHlAtUo48fy4uJTXs+lCoN1vw=;
-        b=f2sBZne/vKtkK/lk4t0/gRtIMivIWl2baIqJVKH3a4vlR5gImoHRlGZ5G4JQYE3Dih
-         7nRNGmGkc9D8WsRBS+VyytzQmcV29mlOW9BIqa99N9baI+L3MPQCFI82HqV82+7+I1hx
-         yANj0IJ5arSptM8ldKylACvtHKX6OCVnrBmk27xyWyIhGnD5hIGk2/4WrIS4qXkvDKZ2
-         nLN7uYlvWNX9KMzNFsR0r2fwh/dhYKY2LmzQQsMcShmpJRZRWn76SeC2nShazTA5ostL
-         fzi3mb1bCqNjIMJXBizkLV8x+yuWpThkNRgOlKjAAd2TszLG3h+EkuW7yGOXHxxthQiG
-         +atg==
+        bh=xkU55uqzq+ekvAZs1dNWqR5r1+9lSZcOTbRvaL+8zq8=;
+        b=hBlcOZEbxJxr/uZ7ExB4Ijf6sDeFpdS+91daVKdRfd4tC2i6rfOq8hNIdhnbPMQjd/
+         0hbo/3YPl4iZfgszqgewLAHSpVuHtNQOMV0qZHNRaH/ySrwBpfTjWRnOFkSPgY9Bnt/0
+         7gZmY2g1tPX3jDxOONBzcJxlrMxrfJxDD/r0olxEQ6x1slRCycZebagXpIEQHkua9st1
+         Izu0v0sRzIiWzO8tNHLWUVfajkF0eNXG/lpzXVvrDoEgicZC+/6AjK8/13Ad3TGw9MKA
+         laWYCnOo+fBsQdcYzeKjPZgt+i4kwkS1oS3SiuMPfXqA8pwJAfB7fxVPwRk6lLrhjGIH
+         ZpCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685116740; x=1687708740;
+        d=1e100.net; s=20221208; t=1685116814; x=1687708814;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NSRKBuS/oKd5fjIjvvaHlAtUo48fy4uJTXs+lCoN1vw=;
-        b=dFVLDxmqAh3Gjz/+qgDkt1Ros4LAGlTKtY1oQxlEJiU8AmMqQlWp1NM6cTufryAFTU
-         +ELPJdvgcrbFgq1Mda3z9EHfA4PDieURbACJaba9S+7D8wPl+27AGSo2TRv627vIhIjL
-         pXO6GivNKZOjjrZJeaEophCxlG1bqQ+qe4HqH+wDbRu6exPX4SNLpGwihq37C7zStm4z
-         xrs3So/dZKhDQ7s7+4FD9brh5RhjnVRfnBxmS0kfzhUZ9p6C5Uyd6SHxvlOqBjRNYkig
-         GVqSjGrJtjQyEeY2qSR7S83oykWDv3evLg/qu35rP2LSHhxQ1hXrdPA0XuXzPf0I+lXZ
-         GvXQ==
-X-Gm-Message-State: AC+VfDxAGC8wXRb8fl+Pw5kQXbHdYDJINxZRb6JUBRwkdmQAd4n+n2yz
-        u8fT10VpOhwh7GXwOvC5VcnANvHE45tBrCwMc5R1UQ==
-X-Google-Smtp-Source: ACHHUZ5ZTSmP0QrHf7hz66nAsxeVVUQ0SpUHxrFTO+uHZWy73GDXXQ0RXqMJqWZ2a7+cV4JqymiWaY6rdgRoL1w+sZo=
-X-Received: by 2002:a05:6808:1405:b0:38d:fdf2:962e with SMTP id
- w5-20020a056808140500b0038dfdf2962emr1562135oiv.23.1685116740735; Fri, 26 May
- 2023 08:59:00 -0700 (PDT)
+        bh=xkU55uqzq+ekvAZs1dNWqR5r1+9lSZcOTbRvaL+8zq8=;
+        b=lYdVEZ7yT79JkmbHXYhMM4afyW3LLJMC0gnk+5zXHaM0HbJjc24aXNy8maGYpccx1V
+         QKagdrA77wUR7CsjXVuIsrj9F7m70I3asH/WygDNTVeOvHL+pY7YZ8LFf+xGZp848NlN
+         pJCWS5VFEu11Vh8LfIfOrWcQzXsWjM9c9ki0Pp06sytrnZ1MbnlhABQLuQA63so1UATS
+         T1dwiQd1hYTZAdIaZGzYYPsL+F0grneeADu/JIEomjyQrTj0VUW54EJ52TEHZlpHweN2
+         HFcRiL819vuUn9BTMZYowN3HZFJitiZlWNPY8xC6Cq2S69jgwAu/hzb/HBljotSAbmXT
+         70Wg==
+X-Gm-Message-State: AC+VfDwZag01mLrfYo5c6a5JyTBiT3SVUOZEVj7KCfHyeJYafElbtQR6
+        pWP+woG0u/kXqJa/GbUeldgft7qMhWI2RLHWPeXsiQ==
+X-Google-Smtp-Source: ACHHUZ6XtQA8ACi3DtsPxc19flWObiDAt96Wd0LOg+dJc6I+OFPcxRFZEks8pe8qaFLfXVuDuxzzc3sw/eebnQLlKx8=
+X-Received: by 2002:a05:600c:4f4a:b0:3f4:2736:b5eb with SMTP id
+ m10-20020a05600c4f4a00b003f42736b5ebmr103572wmq.1.1685116813579; Fri, 26 May
+ 2023 09:00:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230526145519.2282062-1-vineeth@bitbyteword.org>
- <20230526172959.5440b9dd@nowhere> <CAO7JXPgLFgXANqXY7L-YLbijxJCOgUKmd8nUQizb62JorOXGhA@mail.gmail.com>
-In-Reply-To: <CAO7JXPgLFgXANqXY7L-YLbijxJCOgUKmd8nUQizb62JorOXGhA@mail.gmail.com>
-From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Date:   Fri, 26 May 2023 11:58:50 -0400
-Message-ID: <CAO7JXPit6snFM2oW-uSs-mtbmKr9wpbX2exqAUF0iAiaAO6hOg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] sched/deadline: Fix bandwidth reclaim equation in GRUB
-To:     luca abeni <luca.abeni@santannapisa.it>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        youssefesmat@google.com,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
+References: <20230526150806.1457828-1-VEfanov@ispras.ru> <27614af23cd7ae4433b909194062c553a6ae16ac.camel@redhat.com>
+ <027d28a0-b31b-ab42-9eb6-2826c04c9364@ispras.ru>
+In-Reply-To: <027d28a0-b31b-ab42-9eb6-2826c04c9364@ispras.ru>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 26 May 2023 18:00:01 +0200
+Message-ID: <CANn89iLGOVwW-KHBuJ94E+QoVARWw5EBKyfh0mPkOT+5ws31Fw@mail.gmail.com>
+Subject: Re: [PATCH] udp6: Fix race condition in udp6_sendmsg & connect
+To:     =?UTF-8?B?0JXRhNCw0L3QvtCyINCS0LvQsNC00LjRgdC70LDQsiDQkNC70LXQutGB0LDQvdC00YDQvtCy0Lg=?=
+         =?UTF-8?B?0Yc=?= <vefanov@ispras.ru>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,26 +76,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca,
-
+On Fri, May 26, 2023 at 5:58=E2=80=AFPM =D0=95=D1=84=D0=B0=D0=BD=D0=BE=D0=
+=B2 =D0=92=D0=BB=D0=B0=D0=B4=D0=B8=D1=81=D0=BB=D0=B0=D0=B2 =D0=90=D0=BB=D0=
+=B5=D0=BA=D1=81=D0=B0=D0=BD=D0=B4=D1=80=D0=BE=D0=B2=D0=B8=D1=87
+<vefanov@ispras.ru> wrote:
 >
-> On Fri, May 26, 2023 at 11:30=E2=80=AFAM luca abeni <luca.abeni@santannap=
-isa.it> wrote:
-> > [...]
-> > > + * but as "dq =3D -(max{u, (1 - Uinact - Uextra)} / Umax) dt",
-> >
-> > ...But I think this is wrong (should be "Umax - ...", not "1 - ...").
-> > I think patch 2/2 has the same issue.
-> >
-> Oops sorry, I missed this. Will send the fixed patch as a
-> reply to the original v4.
+> Paolo,
 >
-On looking again, I think the description is correct. That line
-mentions the actual m-GRUB equation from the paper. And then the
-comment explains why we use Umax(because of limiting the bandwidth
-to RT capacity).
+>
+> I don't think that we can just move sk_dst_set() call.
+>
+> I think we can destroy dst of sendmsg task in this case.
+>
 
-Does it seem correct to you?
-
-Thanks,
-Vineeth
+dst are RCU protected, it should be easy to make sure we respect all the ru=
+les.
