@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C54B711E45
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 05:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A586D711E49
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 05:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241046AbjEZDGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 23:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
+        id S234114AbjEZDGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 23:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbjEZDGS (ORCPT
+        with ESMTP id S236000AbjEZDGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 25 May 2023 23:06:18 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20780E6;
-        Thu, 25 May 2023 20:06:12 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-33af56dfe35so255505ab.2;
-        Thu, 25 May 2023 20:06:12 -0700 (PDT)
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B16EE;
+        Thu, 25 May 2023 20:06:13 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-775ebe161c5so36749139f.1;
+        Thu, 25 May 2023 20:06:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685070371; x=1687662371;
+        d=gmail.com; s=20221208; t=1685070373; x=1687662373;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EZwQCaqcjy7RjxDAR2wRO2JGL84KcCiGYyuPBX57oTU=;
-        b=SL3yZ2bL+Fcnjpm+QQGYOdSO63Z0kU0R9qvNv2zZm16wB/iEfKcSRxYXszttr0yr/+
-         yLChq/wv4fq8KpJPBrAuvAqPSIHnJO0n1xZLx84TNfTkmze8WUBCfXpGetoqFOMMTI2U
-         Rp3sUocO/WAacUrvB0sMHMI+7yIxsQ8OMz/dbpi3yXmK3kVyLUKRtezLms1qYcvvpTnr
-         ZlsUdUWb1O4IWwZ2RnU6Ef1fiP38KMmgwhmIb448kKOyjZGyA6L0FqwajT5rP+zW6xx/
-         42WSZGPe8ciTPVJ1YPUqZyYJIscyY+cZlwvAeDG72/hrK9yHgm/e2sNntm47CBBo/je1
-         pNQA==
+        bh=t4m+SxN0F0Y0gWSy4hAB1qq6hSK5gmQVgTqdKocNkWU=;
+        b=G1+4wtnmneykm0K9b15UIaGEHefo++3tYOvy4KDpO0mPXGGmTm3ssccTpYpL1czgTP
+         gjYAvksSX14t7webtghb/eVRD9Uo3MHm5AZ2oRmb6aJReJLafMSZjYRz+mb6Q++ADstk
+         WkXiT/Khi4NtMFg8/jZ3A34BKnpsrazY3gU5SyEtQfWpGsGFHhhngAYoGlWeN5NOgDYn
+         GjRiSo0L/7lQsH6aSCuH0KLb5C+J3KzynHTaRmkVI+sJnktZFTN1PYwFdRBgB9tYnZDC
+         ZPTGU16O+b6e2nR4lLpJW4NeTu0ugd0oTdrfGAXB75twYltBpJHSSP+RkqYhOkA0OKC/
+         3vLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685070371; x=1687662371;
+        d=1e100.net; s=20221208; t=1685070373; x=1687662373;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EZwQCaqcjy7RjxDAR2wRO2JGL84KcCiGYyuPBX57oTU=;
-        b=SbKsjmP8t8ANAHrhMlB+iEmACxoEGnmn4I3BTvjRwkRte2pF+bdtnjAgOlIomCD0Z2
-         0TL1rdkTxsSNYY6Dg+A+/yCMYxa0nBQ7I6RIOwMhwjVHv0+rFU+r7+qNtNG+mEvK+8DR
-         nRYAoEze10SW7uGkdMhz3mtJdM3XT+pYFZi0pzAyVSqTtZ3wJmz3C6HIBpAaw0XDRILy
-         jK3eEl3/OcMrqHBEJ5iZbjYuwL8hVR8DTK0uU+TtDXYRspN55B9pz6hSvbU4eIgHO/xr
-         yagRDzT7TkmjzFqAJ6I6MdeeBzIhtttusXJ0Gjy9G0wJ2GW6yQrE53SxrurH0PV4nE4Y
-         DFDQ==
-X-Gm-Message-State: AC+VfDxv9MeFpdSy7ysJrxXjDKEjmKyvIbptUst5t877fuHH98G+NuT9
-        XEXojAfGpPEJr8lUl1/APaM=
-X-Google-Smtp-Source: ACHHUZ4FVaUBBSjmhB1EOfv0vtM23SiUMZy8GR/ohrRTv1x/DQIFwlpinrFYRpEET2fBs60KxFKezw==
-X-Received: by 2002:a6b:6510:0:b0:774:952a:1c09 with SMTP id z16-20020a6b6510000000b00774952a1c09mr69368iob.9.1685070371055;
-        Thu, 25 May 2023 20:06:11 -0700 (PDT)
+        bh=t4m+SxN0F0Y0gWSy4hAB1qq6hSK5gmQVgTqdKocNkWU=;
+        b=EVP4+LGBwQyfwDWMcjXhvbg07c94HNLK+A2M3pSe4EQZ1wv9/4MscbrK6IfKgicJzA
+         2+kTRjZFEcjISQh2zgDZNrXDtL2A4QG2kQ9WiJu8d4dG8MVGpE1m8EWQMWTsjuAglBRn
+         OyLsLYZemf6TigDhfEorkoCY3F2SB2Oeb6Tn8sHEk0VmmyZ9kilHbGTL98FsM74MG9PE
+         avNOKa9RGZ9PouJPECxkn74fPozNGwmdPzBs2K0LFe9Oq3+3a3QauZEusdSJwVfsLljc
+         43OTVp7pekE7kvZaEBbYT8ChiI4JJylqOh/uGe9hxUxS5wMjwfHX+4/O7lxxaxv69Pym
+         ah7A==
+X-Gm-Message-State: AC+VfDxn5AJ/YlBrAxrqrjnpJU+CpzjyodxjQ6sdl1lvk64DgJJnotVM
+        lRRMCBYemX4JPtouGe07J4Y=
+X-Google-Smtp-Source: ACHHUZ5HJkcQcD7QtO9eES+T8k3Crv2uiCgxRg2hT82XCPydi0MG+xerjTM7CtFCCYRzVQVpmA7bRQ==
+X-Received: by 2002:a05:6602:180f:b0:76c:4db8:c1ea with SMTP id t15-20020a056602180f00b0076c4db8c1eamr119297ioh.10.1685070373034;
+        Thu, 25 May 2023 20:06:13 -0700 (PDT)
 Received: from aford-B741.lan ([2601:447:d001:897f:3dd9:3f6c:9922:6420])
-        by smtp.gmail.com with ESMTPSA id i2-20020a5e8502000000b007702f55116fsm363189ioj.38.2023.05.25.20.06.09
+        by smtp.gmail.com with ESMTPSA id i2-20020a5e8502000000b007702f55116fsm363189ioj.38.2023.05.25.20.06.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 20:06:10 -0700 (PDT)
+        Thu, 25 May 2023 20:06:12 -0700 (PDT)
 From:   Adam Ford <aford173@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
         Chen-Yu Tsai <wenst@chromium.org>,
         Frieder Schrempf <frieder.schrempf@kontron.de>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -69,12 +68,11 @@ Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V8 2/7] drm: bridge: samsung-dsim: Fix PMS Calculator on imx8m[mnp]
-Date:   Thu, 25 May 2023 22:05:54 -0500
-Message-Id: <20230526030559.326566-3-aford173@gmail.com>
+Subject: [PATCH V8 3/7] drm: bridge: samsung-dsim: Fetch pll-clock-frequency automatically
+Date:   Thu, 25 May 2023 22:05:55 -0500
+Message-Id: <20230526030559.326566-4-aford173@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230526030559.326566-1-aford173@gmail.com>
 References: <20230526030559.326566-1-aford173@gmail.com>
@@ -90,29 +88,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to Table 13-45 of the i.MX8M Mini Reference Manual, the min
-and max values for M and the frequency range for the VCO_out
-calculator were incorrect.  This information was contradicted in other
-parts of the mini, nano and plus manuals.  After reaching out to my
-NXP Rep, when confronting him about discrepencies in the Nano manual,
-he responded with:
- "Yes it is definitely wrong, the one that is part
-  of the NOTE in MIPI_DPHY_M_PLLPMS register table against PMS_P,
-  PMS_M and PMS_S is not correct. I will report this to Doc team,
-  the one customer should be take into account is the Table 13-40
-  DPHY PLL Parameters and the Note above."
+Make the pll-clock-frequency optional.  If it's present, use it
+to maintain backwards compatibility with existing hardware.  If it
+is absent, read clock rate of "sclk_mipi" to determine the rate.
+Since it can be optional, change the message from an error to
+dev_info.
 
-These updated values also match what is used in the NXP downstream
-kernel.
-
-To fix this, make new variables to hold the min and max values of m
-and the minimum value of VCO_out, and update the PMS calculator to
-use these new variables instead of using hard-coded values to keep
-the backwards compatibility with other parts using this driver.
-
-Fixes: 4d562c70c4dc ("drm: bridge: samsung-dsim: Add i.MX8M Mini/Nano support")
 Signed-off-by: Adam Ford <aford173@gmail.com>
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
@@ -120,108 +102,60 @@ Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
 Tested-by: Jagan Teki <jagan@amarulasolutions.com> # imx8mm-icore
 ---
- drivers/gpu/drm/bridge/samsung-dsim.c | 22 ++++++++++++++++++++--
- include/drm/bridge/samsung-dsim.h     |  3 +++
- 2 files changed, 23 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/bridge/samsung-dsim.c | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
-index a2d1eaf0ed1c..ead922c3ce9f 100644
+index ead922c3ce9f..307f1c20cfb9 100644
 --- a/drivers/gpu/drm/bridge/samsung-dsim.c
 +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-@@ -407,6 +407,9 @@ static const struct samsung_dsim_driver_data exynos3_dsi_driver_data = {
- 	.num_bits_resol = 11,
- 	.pll_p_offset = 13,
- 	.reg_values = reg_values,
-+	.m_min = 41,
-+	.m_max = 125,
-+	.min_freq = 500,
+@@ -1719,11 +1719,11 @@ static const struct mipi_dsi_host_ops samsung_dsim_ops = {
  };
  
- static const struct samsung_dsim_driver_data exynos4_dsi_driver_data = {
-@@ -420,6 +423,9 @@ static const struct samsung_dsim_driver_data exynos4_dsi_driver_data = {
- 	.num_bits_resol = 11,
- 	.pll_p_offset = 13,
- 	.reg_values = reg_values,
-+	.m_min = 41,
-+	.m_max = 125,
-+	.min_freq = 500,
- };
+ static int samsung_dsim_of_read_u32(const struct device_node *np,
+-				    const char *propname, u32 *out_value)
++				    const char *propname, u32 *out_value, bool optional)
+ {
+ 	int ret = of_property_read_u32(np, propname, out_value);
  
- static const struct samsung_dsim_driver_data exynos5_dsi_driver_data = {
-@@ -431,6 +437,9 @@ static const struct samsung_dsim_driver_data exynos5_dsi_driver_data = {
- 	.num_bits_resol = 11,
- 	.pll_p_offset = 13,
- 	.reg_values = reg_values,
-+	.m_min = 41,
-+	.m_max = 125,
-+	.min_freq = 500,
- };
+-	if (ret < 0)
++	if (ret < 0 && !optional)
+ 		pr_err("%pOF: failed to get '%s' property\n", np, propname);
  
- static const struct samsung_dsim_driver_data exynos5433_dsi_driver_data = {
-@@ -443,6 +452,9 @@ static const struct samsung_dsim_driver_data exynos5433_dsi_driver_data = {
- 	.num_bits_resol = 12,
- 	.pll_p_offset = 13,
- 	.reg_values = exynos5433_reg_values,
-+	.m_min = 41,
-+	.m_max = 125,
-+	.min_freq = 500,
- };
+ 	return ret;
+@@ -1736,19 +1736,27 @@ static int samsung_dsim_parse_dt(struct samsung_dsim *dsi)
+ 	u32 lane_polarities[5] = { 0 };
+ 	struct device_node *endpoint;
+ 	int i, nr_lanes, ret;
++	struct clk *pll_clk;
  
- static const struct samsung_dsim_driver_data exynos5422_dsi_driver_data = {
-@@ -455,6 +467,9 @@ static const struct samsung_dsim_driver_data exynos5422_dsi_driver_data = {
- 	.num_bits_resol = 12,
- 	.pll_p_offset = 13,
- 	.reg_values = exynos5422_reg_values,
-+	.m_min = 41,
-+	.m_max = 125,
-+	.min_freq = 500,
- };
+ 	ret = samsung_dsim_of_read_u32(node, "samsung,pll-clock-frequency",
+-				       &dsi->pll_clk_rate);
+-	if (ret < 0)
+-		return ret;
++				       &dsi->pll_clk_rate, 1);
++	/* If it doesn't exist, read it from the clock instead of failing */
++	if (ret < 0) {
++		dev_dbg(dev, "Using sclk_mipi for pll clock frequency\n");
++		pll_clk = devm_clk_get(dev, "sclk_mipi");
++		if (!IS_ERR(pll_clk))
++			dsi->pll_clk_rate = clk_get_rate(pll_clk);
++		else
++			return PTR_ERR(pll_clk);
++	}
  
- static const struct samsung_dsim_driver_data imx8mm_dsi_driver_data = {
-@@ -471,6 +486,9 @@ static const struct samsung_dsim_driver_data imx8mm_dsi_driver_data = {
- 	 */
- 	.pll_p_offset = 14,
- 	.reg_values = imx8mm_dsim_reg_values,
-+	.m_min = 64,
-+	.m_max = 1023,
-+	.min_freq = 1050,
- };
+ 	ret = samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequency",
+-				       &dsi->burst_clk_rate);
++				       &dsi->burst_clk_rate, 0);
+ 	if (ret < 0)
+ 		return ret;
  
- static const struct samsung_dsim_driver_data *
-@@ -549,12 +567,12 @@ static unsigned long samsung_dsim_pll_find_pms(struct samsung_dsim *dsi,
- 			tmp = (u64)fout * (_p << _s);
- 			do_div(tmp, fin);
- 			_m = tmp;
--			if (_m < 41 || _m > 125)
-+			if (_m < driver_data->m_min || _m > driver_data->m_max)
- 				continue;
+ 	ret = samsung_dsim_of_read_u32(node, "samsung,esc-clock-frequency",
+-				       &dsi->esc_clk_rate);
++				       &dsi->esc_clk_rate, 0);
+ 	if (ret < 0)
+ 		return ret;
  
- 			tmp = (u64)_m * fin;
- 			do_div(tmp, _p);
--			if (tmp < 500 * MHZ ||
-+			if (tmp < driver_data->min_freq  * MHZ ||
- 			    tmp > driver_data->max_freq * MHZ)
- 				continue;
- 
-diff --git a/include/drm/bridge/samsung-dsim.h b/include/drm/bridge/samsung-dsim.h
-index 6a37d1e079bf..2c20b9460c9a 100644
---- a/include/drm/bridge/samsung-dsim.h
-+++ b/include/drm/bridge/samsung-dsim.h
-@@ -54,11 +54,14 @@ struct samsung_dsim_driver_data {
- 	unsigned int has_freqband:1;
- 	unsigned int has_clklane_stop:1;
- 	unsigned int num_clks;
-+	unsigned int min_freq;
- 	unsigned int max_freq;
- 	unsigned int wait_for_reset;
- 	unsigned int num_bits_resol;
- 	unsigned int pll_p_offset;
- 	const unsigned int *reg_values;
-+	u16 m_min;
-+	u16 m_max;
- };
- 
- struct samsung_dsim_host_ops {
 -- 
 2.39.2
 
