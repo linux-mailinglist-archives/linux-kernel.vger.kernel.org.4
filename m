@@ -2,105 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78D5F712194
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9B87121B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242577AbjEZHzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 03:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
+        id S242421AbjEZH40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 03:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242147AbjEZHzv (ORCPT
+        with ESMTP id S242595AbjEZH4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 03:55:51 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03233B6
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:55:50 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f6d7abe9a4so2950505e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685087748; x=1687679748;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EpL3uEFDFKjWPCzPHepbX3dXRR3FC7vQMJr4NbW5aP0=;
-        b=ZsmckDA7LsnkaxJrVK3tmKlQynqgJmjjQExD9NUJJQWMHTIEwcW7losOa7i2BN0h5I
-         MEZcxabmfA9WXWfq8eiIf3i8TL1R64xlt80d+FDLftZwo9jhgZBNHFHObX/A7IF//BZa
-         riuWVfy40aXz5gv+TbtkHR2uHquyS/5Y3+BVFhqYXN5gR0AR3tGoxA1Kv7i2wHfaOrpc
-         +fCC5wU5n6Lu8YhZZbMTRFaQkxHpQpahFj/TDlZddjgCRznjBebeDAa1l0xXBReAofdA
-         Yfv69f24tLTyzQHNVeRQUPEYB1Bam7qfEm+9L4GJkwMpH/O/LQV/17HO3n218QgkTFzF
-         wruw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685087748; x=1687679748;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EpL3uEFDFKjWPCzPHepbX3dXRR3FC7vQMJr4NbW5aP0=;
-        b=WDTXvO7jf7MOwdKa0AegXHej+GwFQ6Cbw0ViW+de+tCKoSwj5hSlfWo14+eQievm2G
-         r1GiOV4UVygeDXqXtXK/w66UrZBxMYlL4pniW27etHr+WW92uafLFNE6uCHnyQcB1tjF
-         /6SKMPH79/+8ZREax5fwRcZmflMflpVVNVazDXwLoCoPumRIyn4AXu5ZOWt00Bu+AUh+
-         /IUfgZV63g17woXwAInb/QLmLu/lJsryN4RnQ+P0AOYSBhr+Tj/ifRvVqr1vl/MEDoCW
-         LslN8WC8FzScvyy8bIqnqJRxIH3iR8Vf+HgaNlQ5wg7L3w+denospYaAIic5z65YdxUs
-         aw7Q==
-X-Gm-Message-State: AC+VfDwgHQL5mkiKAuHayugnlJNqLWKiHG1fZKQocDdWsiqobLuxrlIQ
-        w60VSemH4PcxlfescgJScmmRjw==
-X-Google-Smtp-Source: ACHHUZ6z8AFtLFz0PBmEeCqM+0XShGQbQjRhgt9gvT+iqFu5g6ijXhOgbPWqkWX/pxyhC6PMZxcd7w==
-X-Received: by 2002:a05:600c:283:b0:3f4:2897:4eb7 with SMTP id 3-20020a05600c028300b003f428974eb7mr901242wmk.38.1685087748449;
-        Fri, 26 May 2023 00:55:48 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id n14-20020a1c720e000000b003f4b6bcbd8bsm4390597wmc.31.2023.05.26.00.55.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 00:55:47 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     linux-kernel@vger.kernel.org,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Yannick Fertre <yannick.fertre@st.com>,
-        dri-devel@lists.freedesktop.org
-In-Reply-To: <20230516085039.3797303-1-dario.binacchi@amarulasolutions.com>
-References: <20230516085039.3797303-1-dario.binacchi@amarulasolutions.com>
-Subject: Re: [PATCH] drm/panel: simple: fix active size for Ampire
- AM-480272H3TMQW-T01H
-Message-Id: <168508774745.1495117.6907071154193975716.b4-ty@linaro.org>
-Date:   Fri, 26 May 2023 09:55:47 +0200
+        Fri, 26 May 2023 03:56:10 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64451A4;
+        Fri, 26 May 2023 00:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=YxL6e+4JH9PE9rFUlxHs00PcCr+DpK00UKDT/LTPvSQ=; b=Kg2LU+nCS6V/WHsqu4Zv73IGyh
+        2nlfdecqYINfvpx4snQrDk/Ga8HLc6qjEXZHKcFttUQa0Y65BUtUR8e+TmZmO6URv5/RN8bEUsQ/j
+        iVw45tdhtJhhQndIluIWdstGdaR+9nsXfvAtKQ1CeTUYBs4ztqd8vRK0IhC4ppv0agrsQsa34+qcK
+        CjlttKCbB7H76wb16hV44vAVBPFyLRn9vqDiqklO6qjnGGh0vDSiN6Ww0sOPKz4N5DRihdbEA8IGA
+        sd9KbZHM2C2FS8qRAa3UYD1HTQlEnOFaMi/2JTLsghE4DfJfxxQqGPgyrb+ljsHjBbVeaWPxQqQ6P
+        ETKUWerA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q2SIj-001WZr-2s;
+        Fri, 26 May 2023 07:55:53 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     hughd@google.com, akpm@linux-foundation.org, willy@infradead.org,
+        brauner@kernel.org, djwong@kernel.org
+Cc:     p.raghav@samsung.com, da.gomez@samsung.com, rohan.puri@samsung.com,
+        rpuri.linux@gmail.com, a.manzanares@samsung.com, dave@stgolabs.net,
+        yosryahmed@google.com, keescook@chromium.org, hare@suse.de,
+        kbusch@kernel.org, mcgrof@kernel.org, patches@lists.linux.dev,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [RFC v2 4/8] shmem: add helpers to get block size
+Date:   Fri, 26 May 2023 00:55:48 -0700
+Message-Id: <20230526075552.363524-5-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230526075552.363524-1-mcgrof@kernel.org>
+References: <20230526075552.363524-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Stuff the block size as a struct shmem_sb_info member as a block_order
+when CONFIG_TMPFS is enabled, but keep the current static value for now,
+and use helpers to get the blocksize. This will make the subsequent
+change easier to read.
 
-On Tue, 16 May 2023 10:50:39 +0200, Dario Binacchi wrote:
-> The previous setting was related to the overall dimension and not to the
-> active display area.
-> In the "PHYSICAL SPECIFICATIONS" section, the datasheet shows the
-> following parameters:
-> 
->  ----------------------------------------------------------
-> |       Item        |         Specifications        | unit |
->  ----------------------------------------------------------
-> | Display area      | 98.7 (W) x 57.5 (H)           |  mm  |
->  ----------------------------------------------------------
-> | Overall dimension | 105.5(W) x 67.2(H) x 4.96(D)  |  mm  |
->  ----------------------------------------------------------
-> 
-> [...]
+The static value for block order is PAGE_SHIFT and so the default block
+size is PAGE_SIZE.
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+The struct super_block s_blocksize_bits represents the blocksize in
+power of two, and that will match the shmem_sb_info block_order.
 
-[1/1] drm/panel: simple: fix active size for Ampire AM-480272H3TMQW-T01H
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=f24b49550814fdee4a98b9552e35e243ccafd4a8
+This commit introduces no functional changes other than extending the
+struct shmem_sb_info with the block_order.
 
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ include/linux/shmem_fs.h |  3 +++
+ mm/shmem.c               | 34 +++++++++++++++++++++++++++++++---
+ 2 files changed, 34 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
+index 9029abd29b1c..2d0a4311fdbf 100644
+--- a/include/linux/shmem_fs.h
++++ b/include/linux/shmem_fs.h
+@@ -36,6 +36,9 @@ struct shmem_inode_info {
+ #define SHMEM_FL_INHERITED		(FS_NODUMP_FL | FS_NOATIME_FL)
+ 
+ struct shmem_sb_info {
++#ifdef CONFIG_TMPFS
++	unsigned char block_order;
++#endif
+ 	unsigned long max_blocks;   /* How many blocks are allowed */
+ 	struct percpu_counter used_blocks;  /* How many are allocated */
+ 	unsigned long max_inodes;   /* How many inodes are allowed */
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 7bea4c5cb83a..c124997f8d93 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -122,7 +122,22 @@ struct shmem_options {
+ #define SHMEM_SEEN_NOSWAP 16
+ };
+ 
++static u64 shmem_default_block_order(void)
++{
++	return PAGE_SHIFT;
++}
++
+ #ifdef CONFIG_TMPFS
++static u64 shmem_block_order(struct shmem_sb_info *sbinfo)
++{
++	return sbinfo->block_order;
++}
++
++static u64 shmem_sb_blocksize(struct shmem_sb_info *sbinfo)
++{
++	return 1UL << sbinfo->block_order;
++}
++
+ static unsigned long shmem_default_max_blocks(void)
+ {
+ 	return totalram_pages() / 2;
+@@ -134,6 +149,17 @@ static unsigned long shmem_default_max_inodes(void)
+ 
+ 	return min(nr_pages - totalhigh_pages(), nr_pages / 2);
+ }
++#else
++static u64 shmem_block_order(struct shmem_sb_info *sbinfo)
++{
++	return PAGE_SHIFT;
++}
++
++static u64 shmem_sb_blocksize(struct shmem_sb_info *sbinfo)
++{
++	return PAGE_SIZE;
++}
++
+ #endif
+ 
+ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
+@@ -3062,7 +3088,7 @@ static int shmem_statfs(struct dentry *dentry, struct kstatfs *buf)
+ 	struct shmem_sb_info *sbinfo = SHMEM_SB(dentry->d_sb);
+ 
+ 	buf->f_type = TMPFS_MAGIC;
+-	buf->f_bsize = PAGE_SIZE;
++	buf->f_bsize = shmem_sb_blocksize(sbinfo);
+ 	buf->f_namelen = NAME_MAX;
+ 	if (sbinfo->max_blocks) {
+ 		buf->f_blocks = sbinfo->max_blocks;
+@@ -3972,6 +3998,7 @@ static int shmem_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	}
+ 	sb->s_export_op = &shmem_export_ops;
+ 	sb->s_flags |= SB_NOSEC | SB_I_VERSION;
++	sbinfo->block_order = shmem_default_block_order();
+ #else
+ 	sb->s_flags |= SB_NOUSER;
+ #endif
+@@ -3997,8 +4024,9 @@ static int shmem_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	INIT_LIST_HEAD(&sbinfo->shrinklist);
+ 
+ 	sb->s_maxbytes = MAX_LFS_FILESIZE;
+-	sb->s_blocksize = PAGE_SIZE;
+-	sb->s_blocksize_bits = PAGE_SHIFT;
++	sb->s_blocksize = shmem_sb_blocksize(sbinfo);
++	sb->s_blocksize_bits = shmem_block_order(sbinfo);
++	WARN_ON_ONCE(sb->s_blocksize_bits != PAGE_SHIFT);
+ 	sb->s_magic = TMPFS_MAGIC;
+ 	sb->s_op = &shmem_ops;
+ 	sb->s_time_gran = 1;
 -- 
-Neil
+2.39.2
 
