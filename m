@@ -2,256 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC98712A06
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36983712A10
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244109AbjEZPzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
+        id S244069AbjEZP5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244265AbjEZPzC (ORCPT
+        with ESMTP id S243971AbjEZP5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:55:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F35E116
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:54:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685116454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yvxKbFohSEsTJ6py9Z2WVJoxOwakRTNCjSwfmDukp7I=;
-        b=MzfDShTVTa7dWXJOul1ueljuYqZqwuoAkZEm3OEA76bTceY2obUIqLMeh8wtT6TdK044zZ
-        xtRjApPoZO7ScbOUcPs/2ZUkQTlXBlxZUxKqC/O9Dosh4yA9jq0nXuR/6c5gvcbqL8OOMC
-        UBTAl+3G/NC8uGU3uPqFSHhbqJq+xxQ=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-369-8HBP8S3_NR2Ht4weB56pYA-1; Fri, 26 May 2023 11:54:12 -0400
-X-MC-Unique: 8HBP8S3_NR2Ht4weB56pYA-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6260d4a9802so2459506d6.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:54:12 -0700 (PDT)
+        Fri, 26 May 2023 11:57:38 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DA5119
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:57:37 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30ac4e7f37bso558132f8f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:57:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685116655; x=1687708655;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IOSdHbR4Wu88gf7m1ZCJ5+Wng1YTJWHsPTDZi1tytEc=;
+        b=iZkGp3rzWyMeUUblP834O+UQ2YuoWf08u41UqDcS4Npz1dqcp1O/ImUgSLOxQcl/fc
+         UIWUsLhdRfav36oQ5CxIjNlaxUG2bCO0GxRPFWB4RGK+Qx/EVgMywpN7GBsa5ip2Kpx/
+         tGwc5QvVcRx5poX6nrgiiZ9HdKVC5vABK0y+ZKMbJgxce+ulQQZW58SbR+UIZrHuyXNc
+         hDHZxw4ICeSseGYaKBzAW3fduWCqZv2H7GwlT5YoF56Jwo3BT5f8ollDNt8pWGMQqMpy
+         pj/z1mgCX5HF4HwpNr48W8SGHlSoqgWEdNEulXC+JjA3mDB4Q68SbVIYsCT1ujWI7wSE
+         aDkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685116451; x=1687708451;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1685116655; x=1687708655;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yvxKbFohSEsTJ6py9Z2WVJoxOwakRTNCjSwfmDukp7I=;
-        b=WhLwACmwVNQZqtjeYm91BZK/bl0Lh7NqK89jrl+V9DHtjIkeP+t8qiBwrGOIDQyNN/
-         JCMiMK0JdWQZVKnPopMcscMyJtZIyHw6YOSP8e3DmWA1mmlY/Zl4QtPIo35btr4PaYfM
-         mXKS8jCLRDnr9M9ozNSvnPOTCTU0FYKPMXFrwxFUYpFeNoPPImAjmDbDf9H8xwWT4Yea
-         LUk3t0dl9dOKsPUkkAKH0esfF1I9ncx5MJcUVVPvAYFe9f38i0Kh5eujMiQRxIZgqIuf
-         CpFyStHuILKlzcaO9UqpDcDfPtssGtqL01gBkC5hEX9LhEN3s86RJ/fwx8ABWc71wGxm
-         i29Q==
-X-Gm-Message-State: AC+VfDxAm+S9HR3esAjUBmllU0FyFzZ94F875JkdGEjhl3GCLmqTYa2s
-        MWBkzKVt2rX5mY8MRL2Qh8z9klJFcK9++GPg7cQ34M9e2QmtnbYBUVElb+tlh4Zeg6T6jqWhmtj
-        8nZjIg91a1tQdTtc0lCrjljzo
-X-Received: by 2002:a05:6214:20e2:b0:621:6217:f528 with SMTP id 2-20020a05621420e200b006216217f528mr2129207qvk.30.1685116451610;
-        Fri, 26 May 2023 08:54:11 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7crxinp6L7mS4raZXU4iJU8lF1hK2z1fz8ghdfLF7RtzHOAE7Y1Kt0NJxyPfYsUfrY8tCFQg==
-X-Received: by 2002:a05:6214:20e2:b0:621:6217:f528 with SMTP id 2-20020a05621420e200b006216217f528mr2129188qvk.30.1685116451285;
-        Fri, 26 May 2023 08:54:11 -0700 (PDT)
-Received: from bfoster (c-24-61-119-116.hsd1.ma.comcast.net. [24.61.119.116])
-        by smtp.gmail.com with ESMTPSA id m6-20020a0ce8c6000000b006260bff22d7sm310600qvo.27.2023.05.26.08.54.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 08:54:10 -0700 (PDT)
-Date:   Fri, 26 May 2023 11:56:41 -0400
-From:   Brian Foster <bfoster@redhat.com>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joe Thornber <ejt@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Bart Van Assche <bvanassche@google.com>,
-        linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
-Message-ID: <ZHDWuac/IvLKgPbK@bfoster>
-References: <ZGu0LaQfREvOQO4h@redhat.com>
- <ZGzIJlCE2pcqQRFJ@bfoster>
- <ZGzbGg35SqMrWfpr@redhat.com>
- <ZG1dAtHmbQ53aOhA@dread.disaster.area>
- <ZG5taYoXDRymo/e9@redhat.com>
- <ZG9JD+4Zu36lnm4F@dread.disaster.area>
- <ZG+GKwFC7M3FfAO5@redhat.com>
- <CAG9=OMNhCNFhTcktxSMYbc5WXkSZ-vVVPtb4ak6B3Z2-kEVX0Q@mail.gmail.com>
- <ZHANCbnHuhnwCrGz@dread.disaster.area>
- <CAG9=OMPxHOzYcy8TQRnvNfNvPvvU=A1pceyL72JfyQwJSKNjQQ@mail.gmail.com>
+        bh=IOSdHbR4Wu88gf7m1ZCJ5+Wng1YTJWHsPTDZi1tytEc=;
+        b=f775LrUNfwNUL6PU9+afCvBgI5+vOCNlDCTl+U+kdLOEmFpupHBTV9gvlMNKYCQmgW
+         oN8ZBUK/9kE2+XDVuYb5rz+yfWOHEg7CEesms2PSYb2ZCAzwB+k4R9P/fXYWKDxlZCNj
+         fwMeVDO+Ji8wKCNN3uajMUrkQatJAKslg4x8T0KJ/oHgXSWunuliJ0mE+5An+klv+TWw
+         XSU8lnRpyK3cUifZzzPxHSSMVO7K/rPUu1Xps/0r2uAAmoxpC58xh7+8VwB7lCufFfb3
+         kYVaz47mTeFApS2z0PcAV56sF+NNPi4YULESPatGMsdRdzE2Q/8cbxgZKJftIhKQqn6e
+         YRzg==
+X-Gm-Message-State: AC+VfDxImY5YGNDHWiLMXK6cEpF2aIhP0ypCiKBXMd7sYHdLElaXpLEZ
+        aX0nFvxydFqpT3ZwrWRkt2wJdQ==
+X-Google-Smtp-Source: ACHHUZ4clmY49xiyKRDx/JFGL5Nn1+FPQLmtPlJxv0UmteciiyDR3G7oPw+szDGZaNj9kvtAynEOUw==
+X-Received: by 2002:a05:6000:1950:b0:2d1:3eb9:c3c2 with SMTP id e16-20020a056000195000b002d13eb9c3c2mr1872627wry.54.1685116655645;
+        Fri, 26 May 2023 08:57:35 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id y15-20020a5d4acf000000b002cea9d931e6sm5465424wrs.78.2023.05.26.08.57.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 08:57:35 -0700 (PDT)
+Message-ID: <58310306-2d70-eab4-4564-e77e1fb638a1@linaro.org>
+Date:   Fri, 26 May 2023 16:57:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V2 3/6] clk: qcom: clk-alpha-pll: Remove explicit CAL_L
+ configuration for EVO PLL
+Content-Language: en-US
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20230525172142.9039-1-quic_jkona@quicinc.com>
+ <20230525172142.9039-4-quic_jkona@quicinc.com>
+ <240fa683-afb1-eb60-c24f-2b3f1d7f1339@linaro.org>
+In-Reply-To: <240fa683-afb1-eb60-c24f-2b3f1d7f1339@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG9=OMPxHOzYcy8TQRnvNfNvPvvU=A1pceyL72JfyQwJSKNjQQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 07:35:14PM -0700, Sarthak Kukreti wrote:
-> On Thu, May 25, 2023 at 6:36 PM Dave Chinner <david@fromorbit.com> wrote:
-> >
-> > On Thu, May 25, 2023 at 03:47:21PM -0700, Sarthak Kukreti wrote:
-> > > On Thu, May 25, 2023 at 9:00 AM Mike Snitzer <snitzer@kernel.org> wrote:
-> > > > On Thu, May 25 2023 at  7:39P -0400,
-> > > > Dave Chinner <david@fromorbit.com> wrote:
-> > > > > On Wed, May 24, 2023 at 04:02:49PM -0400, Mike Snitzer wrote:
-> > > > > > On Tue, May 23 2023 at  8:40P -0400,
-> > > > > > Dave Chinner <david@fromorbit.com> wrote:
-> > > > > > > It's worth noting that XFS already has a coarse-grained
-> > > > > > > implementation of preferred regions for metadata storage. It will
-> > > > > > > currently not use those metadata-preferred regions for user data
-> > > > > > > unless all the remaining user data space is full.  Hence I'm pretty
-> > > > > > > sure that a pre-provisioning enhancment like this can be done
-> > > > > > > entirely in-memory without requiring any new on-disk state to be
-> > > > > > > added.
-> > > > > > >
-> > > > > > > Sure, if we crash and remount, then we might chose a different LBA
-> > > > > > > region for pre-provisioning. But that's not really a huge deal as we
-> > > > > > > could also run an internal background post-mount fstrim operation to
-> > > > > > > remove any unused pre-provisioning that was left over from when the
-> > > > > > > system went down.
-> > > > > >
-> > > > > > This would be the FITRIM with extension you mention below? Which is a
-> > > > > > filesystem interface detail?
-> > > > >
-> > > > > No. We might reuse some of the internal infrastructure we use to
-> > > > > implement FITRIM, but that's about it. It's just something kinda
-> > > > > like FITRIM but with different constraints determined by the
-> > > > > filesystem rather than the user...
-> > > > >
-> > > > > As it is, I'm not sure we'd even need it - a preiodic userspace
-> > > > > FITRIM would acheive the same result, so leaked provisioned spaces
-> > > > > would get cleaned up eventually without the filesystem having to do
-> > > > > anything specific...
-> > > > >
-> > > > > > So dm-thinp would _not_ need to have new
-> > > > > > state that tracks "provisioned but unused" block?
-> > > > >
-> > > > > No idea - that's your domain. :)
-> > > > >
-> > > > > dm-snapshot, for certain, will need to track provisioned regions
-> > > > > because it has to guarantee that overwrites to provisioned space in
-> > > > > the origin device will always succeed. Hence it needs to know how
-> > > > > much space breaking sharing in provisioned regions after a snapshot
-> > > > > has been taken with be required...
-> > > >
-> > > > dm-thinp offers its own much more scalable snapshot support (doesn't
-> > > > use old dm-snapshot N-way copyout target).
-> > > >
-> > > > dm-snapshot isn't going to be modified to support this level of
-> > > > hardening (dm-snapshot is basically in "maintenance only" now).
-> >
-> > Ah, of course. Sorry for the confusion, I was kinda using
-> > dm-snapshot as shorthand for "dm-thinp + snapshots".
-> >
-> > > > But I understand your meaning: what you said is 100% applicable to
-> > > > dm-thinp's snapshot implementation and needs to be accounted for in
-> > > > thinp's metadata (inherent 'provisioned' flag).
-> >
-> > *nod*
-> >
-> > > A bit orthogonal: would dm-thinp need to differentiate between
-> > > user-triggered provision requests (eg. from fallocate()) vs
-> > > fs-triggered requests?
-> >
-> > Why?  How is the guarantee the block device has to provide to
-> > provisioned areas different for user vs filesystem internal
-> > provisioned space?
-> >
-> After thinking this through, I stand corrected. I was primarily
-> concerned with how this would balloon thin snapshot sizes if users
-> potentially provision a large chunk of the filesystem but that's
-> putting the cart way before the horse.
+On 26/05/2023 16:54, Bryan O'Donoghue wrote:
+> On 25/05/2023 18:21, Jagadeesh Kona wrote:
+>> Fixes: 260e36606a03 ("clk: qcom: clk-alpha-pll: add Lucid EVO PLL 
+>> configuration interfaces")
 > 
-
-I think that's a legitimate concern. At some point to provide full
--ENOSPC protection the filesystem needs to provision space before it
-writes to it, whether it be data or metadata, right? At what point does
-that turn into a case where pretty much everything the fs wrote is
-provisioned, and therefore a snapshot is just a full copy operation?
-
-That might be Ok I guess, but if that's an eventuality then what's the
-need to track provision state at dm-thin block level? Using some kind of
-flag you mention below could be a good way to qualify which blocks you'd
-want to copy vs. which to share on snapshot and perhaps mitigate that
-problem.
-
-> Best
-> Sarthak
+> Is this a "Fixes" without the previous patch to stuff the CAL_L_VAL and 
+> VAL_L fields ?
 > 
-> > > I would lean towards user provisioned areas not
-> > > getting dedup'd on snapshot creation,
-> >
-> > <twitch>
-> >
-> > Snapshotting is a clone operation, not a dedupe operation.
-> >
-> > Yes, the end result of both is that you have a block shared between
-> > multiple indexes that needs COW on the next overwrite, but the two
-> > operations that get to that point are very different...
-> >
-> > </pedantic mode disegaged>
-> >
-> > > but that would entail tracking
-> > > the state of the original request and possibly a provision request
-> > > flag (REQ_PROVISION_DEDUP_ON_SNAPSHOT) or an inverse flag
-> > > (REQ_PROVISION_NODEDUP). Possibly too convoluted...
-> >
-> > Let's not try to add everyone's favourite pony to this interface
-> > before we've even got it off the ground.
-> >
-> > It's the simple precision of the API, the lack of cross-layer
-> > communication requirements and the ability to implement and optimise
-> > the independent layers independently that makes this a very
-> > appealing solution.
-> >
-> > We need to start with getting the simple stuff working and prove the
-> > concept. Then once we can observe the behaviour of a working system
-> > we can start working on optimising individual layers for efficiency
-> > and performance....
-> >
-
-I think to prove the concept may not necessarily require changes to
-dm-thin at all. If you want to guarantee preexisting metadata block
-writeability, just scan through and provision all metadata blocks at
-mount time. Hit the log, AG bufs, IIRC XFS already has btree walking
-code that can be used for btrees and associated metadata, etc. Maybe
-online scrub has something even better to hook into temporarily for this
-sort of thing?
-
-Mount performance would obviously be bad, but that doesn't matter for
-the purposes of a prototype. The goal should really be that once
-mounted, you have established expected writeability invariants and have
-the ability to test for reliable prevention of -ENOSPC errors from
-dm-thin from that point forward. If that ultimately works, then refine
-the ideal implementation from there and ask dm to do whatever
-writeability tracking and whatnot.
-
-FWIW, that may also help deal with things like the fact that xfs_repair
-can basically relocate the entire set of filesystem metadata to
-completely different ranges of free space, completely breaking any
-writeability guarantees tracked by previous provisions of those ranges.
-
-Brian
-
-> > Cheers,
-> >
-> > Dave.
-> > --
-> > Dave Chinner
-> > david@fromorbit.com
+> [PATCH V2 3/6] clk: qcom: clk-alpha-pll: Remove explicit CAL_L 
+> configuration for EVO PLL
 > 
+> Surely you need _both_ with this patch depending on the previous, per 
+> your comment ?
+> 
+> -    .l = 0x3e,
+> +    /* .l includes CAL_L_VAL, L_VAL fields */
+> +    .l = 0x0044003e,
+> 
+> ---
+> bod
 
+i.e. if you pick up this patch on its own you won't populate 
+CAL_L_VAL... right ?
+
+It would make more sense to squash the two patches.
+
+---
+bod
