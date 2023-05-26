@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96756711CFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C597123CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241940AbjEZBph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 21:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S242645AbjEZJhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233004AbjEZBpd (ORCPT
+        with ESMTP id S229488AbjEZJhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 21:45:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFDC18D
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:45:30 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QS73q44PqzYsns;
-        Fri, 26 May 2023 09:43:19 +0800 (CST)
-Received: from huawei.com (10.175.104.170) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 26 May
- 2023 09:45:28 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH] sched: remove unused macro SCHED_FIXEDPOINT_SCALE
-Date:   Fri, 26 May 2023 17:36:48 +0800
-Message-ID: <20230526093648.223590-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
+        Fri, 26 May 2023 05:37:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2567F3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:37:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 811DE64E9F
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:37:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC933C433D2;
+        Fri, 26 May 2023 09:37:31 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] arm64: Add decode of ISS2 to data abort reports
+Date:   Fri, 26 May 2023 10:37:29 +0100
+Message-Id: <168509384592.1547825.15647313372998051132.b4-ty@arm.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230417-arm64-iss2-dabt-decode-v3-0-c1fa503e503a@kernel.org>
+References: <20230417-arm64-iss2-dabt-decode-v3-0-c1fa503e503a@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.170]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SCHED_FIXEDPOINT_SCALE is unused now. Remove it.
+On Thu, 11 May 2023 15:05:13 +0900, Mark Brown wrote:
+> We provide fairly detailed decode of ESR for data aborts but do not
+> currently cover the information reported in ISS2 which has had quite a
+> bit of additional information added to it by recent architecture
+> extensions.  Add decode for this information to aid in debugging, for
+> completeness including features we don't actually use yet.
+> 
+> 
+> [...]
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- include/linux/sched.h | 1 -
- 1 file changed, 1 deletion(-)
+Applied to arm64 (for-next/iss2-decode), thanks!
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 2553918f0b61..5edd1d26cc18 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -400,7 +400,6 @@ struct sched_info {
-  * all these metrics based on that basic range.
-  */
- # define SCHED_FIXEDPOINT_SHIFT		10
--# define SCHED_FIXEDPOINT_SCALE		(1L << SCHED_FIXEDPOINT_SHIFT)
- 
- /* Increase resolution of cpu_capacity calculations */
- # define SCHED_CAPACITY_SHIFT		SCHED_FIXEDPOINT_SHIFT
+[1/2] arm64/esr: Use GENMASK() for the ISS mask
+      https://git.kernel.org/arm64/c/de847275449a
+[2/2] arm64/esr: Add decode of ISS2 to data abort reporting
+      https://git.kernel.org/arm64/c/1f9d4ba6839c
+
 -- 
-2.27.0
+Catalin
 
