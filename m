@@ -2,118 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323A57125EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA9F7125EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243399AbjEZLt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 07:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
+        id S243375AbjEZLt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 07:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243387AbjEZLtS (ORCPT
+        with ESMTP id S243395AbjEZLtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 May 2023 07:49:18 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6CC1B4;
-        Fri, 26 May 2023 04:49:10 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VjWOl8u_1685101745;
-Received: from h68b04305.sqa.eu95.tbsite.net(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0VjWOl8u_1685101745)
-          by smtp.aliyun-inc.com;
-          Fri, 26 May 2023 19:49:05 +0800
-From:   Wen Gu <guwen@linux.alibaba.com>
-To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net 2/2] net/smc: Don't use RMBs not mapped to new link in SMCRv2 ADD LINK
-Date:   Fri, 26 May 2023 19:49:01 +0800
-Message-Id: <1685101741-74826-3-git-send-email-guwen@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1685101741-74826-1-git-send-email-guwen@linux.alibaba.com>
-References: <1685101741-74826-1-git-send-email-guwen@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FF8E42;
+        Fri, 26 May 2023 04:49:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685101752; x=1716637752;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W+EPrAJSDWn4CQJBmzrJ2AEImuVypqMvuEFPEkmEPd4=;
+  b=EShhsox/W0wnXZbz4CuzSgNLjspH7cQFM/RxC9N11qmvslT/hH/Se9k9
+   PXD+LTr1ixlThtdkNmz4L0gqaUjRPKtBIpw3la2VjkwFfQFzR7+ou7sNq
+   2SgrRqBPSt4TIluqrvPWUqRSyTbdHmyzbvG6uJb3Q03yVIOWS0GmXcBMi
+   BBrHwylJnelXQUmkUE2K8SVZjX2KZ+gpiDuumUy4Ezh4Dd3jbSFVpsGz4
+   w0669xFK1cKNZT3nRB8Oq7leYWcTMlnw4C4KVZavvxgFwx1sRQ20LIdJL
+   7ZPj6lwVo+RPUqxOnj3rgHJz8gycu11ff5WsULcaiRcTHfOPTGxqW819X
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="440539338"
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="scan'208";a="440539338"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 04:49:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="770317223"
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="scan'208";a="770317223"
+Received: from fgarrona-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.208.169])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 04:49:08 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 5D8DC10C61D; Fri, 26 May 2023 14:49:05 +0300 (+03)
+Date:   Fri, 26 May 2023 14:49:05 +0300
+From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>, "Cui, Dexuan" <decui@microsoft.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/2] x86/mm: Allow guest.enc_status_change_prepare() to
+ fail
+Message-ID: <20230526114905.ios6la7foypydsbe@box.shutemov.name>
+References: <20230525225847.28592-1-kirill.shutemov@linux.intel.com>
+ <20230525225847.28592-2-kirill.shutemov@linux.intel.com>
+ <7e243a32436c1ef68f0fb191c098ba9b3fad30d1.camel@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e243a32436c1ef68f0fb191c098ba9b3fad30d1.camel@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We encountered a crash when using SMCRv2. It is caused by a logical
-error in smc_llc_fill_ext_v2().
+On Fri, May 26, 2023 at 02:17:12AM +0000, Huang, Kai wrote:
+> On Fri, 2023-05-26 at 01:58 +0300, Kirill A. Shutemov wrote:
+> > TDX code is going to provide guest.enc_status_change_prepare() that is
+> > able to fail.
+> > 
+> > Add a way to return an error from the callback.
+> > 
+> > While there, fix enc_status_change_finish_noop(). It is defined as
+> > always-fail now which doesn't make sense for noop.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  arch/x86/include/asm/x86_init.h | 2 +-
+> >  arch/x86/kernel/x86_init.c      | 4 ++--
+> >  arch/x86/mm/mem_encrypt_amd.c   | 4 +++-
+> >  arch/x86/mm/pat/set_memory.c    | 3 ++-
+> >  4 files changed, 8 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
+> > index 88085f369ff6..1ca9701917c5 100644
+> > --- a/arch/x86/include/asm/x86_init.h
+> > +++ b/arch/x86/include/asm/x86_init.h
+> > @@ -150,7 +150,7 @@ struct x86_init_acpi {
+> >   * @enc_cache_flush_required	Returns true if a cache flush is needed before changing page encryption status
+> >   */
+> >  struct x86_guest {
+> > -	void (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
+> > +	bool (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
+> > 
+> 
+> [...]
+> 
+> > @@ -2151,7 +2151,8 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
+> >  		cpa_flush(&cpa, x86_platform.guest.enc_cache_flush_required());
+> >  
+> >  	/* Notify hypervisor that we are about to set/clr encryption attribute. */
+> > -	x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
+> > +	if (!x86_platform.guest.enc_status_change_prepare(addr, numpages, enc))
+> > +		return -EIO;
+> 
+> The name "enc_status_change_prepare()" sounds like an action, but not some
+> true/false condition check.  I think it's more reasonable to make it return
+> 'int', and returning 0 means successful?
 
- BUG: kernel NULL pointer dereference, address: 0000000000000014
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 0 P4D 0
- Oops: 0000 [#1] PREEMPT SMP PTI
- CPU: 7 PID: 453 Comm: kworker/7:4 Kdump: loaded Tainted: G        W   E      6.4.0-rc3+ #44
- Workqueue: events smc_llc_add_link_work [smc]
- RIP: 0010:smc_llc_fill_ext_v2+0x117/0x280 [smc]
- RSP: 0018:ffffacb5c064bd88 EFLAGS: 00010282
- RAX: ffff9a6bc1c3c02c RBX: ffff9a6be3558000 RCX: 0000000000000000
- RDX: 0000000000000002 RSI: 0000000000000002 RDI: 000000000000000a
- RBP: ffffacb5c064bdb8 R08: 0000000000000040 R09: 000000000000000c
- R10: ffff9a6bc0910300 R11: 0000000000000002 R12: 0000000000000000
- R13: 0000000000000002 R14: ffff9a6bc1c3c02c R15: ffff9a6be3558250
- FS:  0000000000000000(0000) GS:ffff9a6eefdc0000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000000014 CR3: 000000010b078003 CR4: 00000000003706e0
- DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
- Call Trace:
-  <TASK>
-  smc_llc_send_add_link+0x1ae/0x2f0 [smc]
-  smc_llc_srv_add_link+0x2c9/0x5a0 [smc]
-  ? cc_mkenc+0x40/0x60
-  smc_llc_add_link_work+0xb8/0x140 [smc]
-  process_one_work+0x1e5/0x3f0
-  worker_thread+0x4d/0x2f0
-  ? __pfx_worker_thread+0x10/0x10
-  kthread+0xe5/0x120
-  ? __pfx_kthread+0x10/0x10
-  ret_from_fork+0x2c/0x50
-  </TASK>
+It copies convention of enc_status_change_finish(). I don't think we need
+anything more than binary pass/fail. We can change it in the future if
+needed.
 
-When an alernate RNIC is available in system, SMC will try to add a new
-link based on the RNIC for resilience. All the RMBs in use will be mapped
-to the new link. Then the RMBs' MRs corresponding to the new link will be
-filled into SMCRv2 LLC ADD LINK messages.
-
-However, smc_llc_fill_ext_v2() mistakenly accesses to unused RMBs which
-haven't been mapped to the new link and have no valid MRs, thus causing
-a crash. So this patch fixes the logic.
-
-Fixes: b4ba4652b3f8 ("net/smc: extend LLC layer for SMC-Rv2")
-Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
----
- net/smc/smc_llc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/smc/smc_llc.c b/net/smc/smc_llc.c
-index 8423e8e..7a8d916 100644
---- a/net/smc/smc_llc.c
-+++ b/net/smc/smc_llc.c
-@@ -617,6 +617,8 @@ static int smc_llc_fill_ext_v2(struct smc_llc_msg_add_link_v2_ext *ext,
- 		goto out;
- 	buf_pos = smc_llc_get_first_rmb(lgr, &buf_lst);
- 	for (i = 0; i < ext->num_rkeys; i++) {
-+		while (buf_pos && !(buf_pos)->used)
-+			buf_pos = smc_llc_get_next_rmb(lgr, &buf_lst, buf_pos);
- 		if (!buf_pos)
- 			break;
- 		rmb = buf_pos;
-@@ -626,8 +628,6 @@ static int smc_llc_fill_ext_v2(struct smc_llc_msg_add_link_v2_ext *ext,
- 			cpu_to_be64((uintptr_t)rmb->cpu_addr) :
- 			cpu_to_be64((u64)sg_dma_address(rmb->sgt[lnk_idx].sgl));
- 		buf_pos = smc_llc_get_next_rmb(lgr, &buf_lst, buf_pos);
--		while (buf_pos && !(buf_pos)->used)
--			buf_pos = smc_llc_get_next_rmb(lgr, &buf_lst, buf_pos);
- 	}
- 	len += i * sizeof(ext->rt[0]);
- out:
 -- 
-1.8.3.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
