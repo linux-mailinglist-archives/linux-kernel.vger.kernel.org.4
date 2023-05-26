@@ -2,88 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069D37126CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBCF7126D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242864AbjEZMiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38384 "EHLO
+        id S243318AbjEZMj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjEZMiE (ORCPT
+        with ESMTP id S231209AbjEZMjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:38:04 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4296D99;
-        Fri, 26 May 2023 05:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lNfxSHS1UMaBMZLwessrox7ClcoojfQo4u1G/gCVpRk=; b=F8i1N0MhDb2OY0IY6jpteaJjel
-        J+wgVsNwzbjVDy7D+oUdf56HV2XHl1ftpFFdeSNi4anvtzKDqtEvTvhUyW0hht2K1BNkcIYn/RCOa
-        pFuadvx3d8q7hjK1Wpnip457c4/5PzOodTRcehh57MNN8Dqtl4iBNPS2I4Wht4ZhXlhkypo21wOWL
-        zLYK5HJBJglOPbpotAWAk12sisYMojHMPav90HJkeECpSTPMIXgtqMfzmL4duyRKQ8WJItqg0iGs3
-        7Sh5BAZyWmVsPPZgz5Fx2pC7wch4F/7ZxuuxYr1IYLKgnQZMbmoQk5PDUunf4SO4R+IPyoSDN9j7w
-        naClZciw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q2Whg-002VDl-2Y;
-        Fri, 26 May 2023 12:37:56 +0000
-Date:   Fri, 26 May 2023 05:37:56 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org
-Subject: Re: [RFC PATCH 1/4] tee: Re-enable vmalloc page support for shared
- memory
-Message-ID: <ZHCoJEkVinvsB2lZ@infradead.org>
-References: <20230523091350.292221-1-arnaud.pouliquen@foss.st.com>
- <20230523091350.292221-2-arnaud.pouliquen@foss.st.com>
- <ZG2yw0xZ6XGGp9E5@infradead.org>
- <18a8528d-7d9d-6ed0-0045-5ee47dd39fb2@foss.st.com>
+        Fri, 26 May 2023 08:39:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745D89E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:39:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 040BE64FA5
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:39:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33198C4339C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:39:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685104763;
+        bh=qVWtLrpqxSAMuoK+Blatuo1LfDx/QcUFLtFcz/XngQ0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fPbF1xT56I/xjLLwnFt08KsRVGxjeR70URcD7RlZyLyGqE7PkQ1kc/Hx2LtPcDL4R
+         eHMuLzy5/PrY7vNjYAT/GtpJDjsGXOGGT7xpSboGALW1ha5mZRLlrOfpv6J6mOx4Mq
+         pFlLUSRNw5i4EFyFWZYGX/IlZPb0lA6TxD7LfrPMHSqHz9gyq3iTMClkhSB1ZajNzA
+         u2lebFLQBkaw7Djw4xUH8CAhwKPsIUl2GcWKChFFSahuYsHZEzyQe0s2Aoxt9RPqib
+         HyGOJA0rHv9Nty+AE4ri/XjEJ34Gwc3tV7DXBsRVXPSwHmxcpE2vOTBWgkKTB8NmYJ
+         DxipG2B+K7lRA==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f122ff663eso706858e87.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:39:23 -0700 (PDT)
+X-Gm-Message-State: AC+VfDx+eFh0HiANNFEvI2KBnGBZNv0ofueiErfDdYG+zUrDqS9k+21x
+        L/4N+2JXGrH1yOcgsoghxBPphH3NpsNFfudnxNs=
+X-Google-Smtp-Source: ACHHUZ5SuVphec9jazAFzKSa82E3QpzHzyFYAhQ7Z2rGPsCl0TEM+26kA3WWLnUMJUAKlMgmNrOxQpbw6saiGq2NAt0=
+X-Received: by 2002:ac2:443c:0:b0:4e9:9f10:b31d with SMTP id
+ w28-20020ac2443c000000b004e99f10b31dmr458171lfl.2.1685104761274; Fri, 26 May
+ 2023 05:39:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <18a8528d-7d9d-6ed0-0045-5ee47dd39fb2@foss.st.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230526121751.41060-1-lihuisong@huawei.com>
+In-Reply-To: <20230526121751.41060-1-lihuisong@huawei.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 26 May 2023 14:39:10 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHgPbzgPm1Sq5hqqz7RX6sj2axze5F+fvMyfPY=d9=Hhw@mail.gmail.com>
+Message-ID: <CAMj1kXHgPbzgPm1Sq5hqqz7RX6sj2axze5F+fvMyfPY=d9=Hhw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: acpi: Export symbol for acpi_os_ioremap
+To:     Huisong Li <lihuisong@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@linaro.org>
+Cc:     catalin.marinas@arm.com, will@kernel.org, sudeep.holla@arm.com,
+        rafael.j.wysocki@intel.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, anshuman.khandual@arm.com,
+        wangkefeng.wang@huawei.com, liuyonglong@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 04:01:14PM +0200, Arnaud POULIQUEN wrote:
-> > As per the discussion back then: don't just blindly do the same dumb
-> > thing again and fix the interfae to actually pass in a page array,
-> > or iov_iter or an actually useful container that fits.
-> > 
-> 
-> I suppose your are speaking about this discussion:
-> https://lore.kernel.org/all/20221002002326.946620-3-ira.weiny@intel.com/
+(cc Lorenzo)
 
-Yes.
+On Fri, 26 May 2023 at 14:20, Huisong Li <lihuisong@huawei.com> wrote:
+>
+> The driver who calls the acpi_os_ioremap() cannot be compiled if the 'M'
+> is selected for the driver. The compiling log is as follows:
+> -->
+> MODPOST Module.symvers
+> ERROR: modpost: "acpi_os_ioremap" [drivers/soc/hisilicon/xxx.ko] undefined!
+> scripts/Makefile.modpost:136: recipe for target 'Module.symvers' failed
+> make[1]: *** [Module.symvers] Error 1
+>
+> So this patch exports symbol for acpi_os_ioremap.
+>
 
-> 
-> If I'm not mistaken, I should modify at tee_shm_register_kernel_buf API and
-> register_shm_helper inernal function, right?
-> 
+That driver does not exist in mainline.
 
-> What about having equivalent of shm_get_kernel_pages in an external helper (to
-> defined where to put it), could it be an alternative of the upadate of the
-> tee_shm API?
+Why does it need to use acpi_os_ioremap() instead of the ordinary
+memremap/ioremap routines?
 
-I think the fundamentally right thing is to pass an iov_iter to
-register_shm_helper, and then use the new as of 6.3
-iov_iter_extract_pages helper to extract the pages from that.  For
-the kernel users you can then simply pass down an ITER_BVEC iter
-that you can fill with vmalloc pages if you want.
 
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>  arch/arm64/kernel/acpi.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
+> index dba8fcec7f33..ec0414caf3d1 100644
+> --- a/arch/arm64/kernel/acpi.c
+> +++ b/arch/arm64/kernel/acpi.c
+> @@ -354,6 +354,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+>         }
+>         return ioremap_prot(phys, size, pgprot_val(prot));
+>  }
+> +EXPORT_SYMBOL(acpi_os_ioremap);
+>
+>  /*
+>   * Claim Synchronous External Aborts as a firmware first notification.
+> --
+> 2.33.0
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
