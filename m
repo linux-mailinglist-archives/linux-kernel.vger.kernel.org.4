@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573DA712CFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD31A712CF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243739AbjEZTDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S243721AbjEZTAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242443AbjEZTDQ (ORCPT
+        with ESMTP id S236236AbjEZTAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:03:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34570194
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:03:13 -0700 (PDT)
+        Fri, 26 May 2023 15:00:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B4D13D;
+        Fri, 26 May 2023 12:00:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8657652B8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 19:03:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0567EC433EF;
-        Fri, 26 May 2023 19:03:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CE9165144;
+        Fri, 26 May 2023 19:00:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 419D9C433EF;
+        Fri, 26 May 2023 19:00:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685127792;
-        bh=ZjvhPKQtUcTX4Xt9wF63i/QsPv/6OBrkIE4KUZ6R8yI=;
+        s=k20201202; t=1685127649;
+        bh=OwGBBeqTi3pB0gviL0C1z2nfWpb8FMmWo3zLKT7MarI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tnzUp+ZW3g1hkfAPJWNn86Lnl+kz0PQAyFUbCionkP+Ig+yiZjxUPx64p+CF6KvR1
-         SFZzs/4l3QInegkeSovNyu4egjcmnlrMKklUhBkPhiOXFcoJNKa33z6B7ml8NIcw4G
-         T2pzTf4ajvzfALgGomC11V4c4/xhWstb6fg5ow3aPAmriy1eH4Zgb9/KzGAj28J0vQ
-         92L7v8CgBhNpr8h+H0m4237qNnzLkSmohwhzg0MzcSd7s38T8/cWmF+T+66cUMTIW0
-         himLTwb/VZbcPidxeLEnrki+UW72uNksRlUwlOnIHuSXb1O6ci7K3h6qB82NMM169t
-         lCWOOQj5UgPtA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 34B19403B5; Fri, 26 May 2023 16:03:09 -0300 (-03)
-Date:   Fri, 26 May 2023 16:03:09 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, acme@redhat.com, jolsa@kernel.org,
-        kernel-team@meta.com, Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH] perf: separate bpf_counter_list and bpf_filters
-Message-ID: <ZHECbcoVx6kK2tWQ@kernel.org>
-References: <20230519235757.3613719-1-song@kernel.org>
+        b=SNEkqlUUNQ86iDvEAzsq00H0pEF/yG3+MmmM0l37a9cYlJ7BaypvkufQ5YvV5oHOG
+         K2Z/hlBTskyHfTXE6HesqqrV3W2CDzNsAS60zHKjWxe4Dx1p52nf2PPjrKdYQau5b7
+         uZd+umnarv+G9FF8lCVpOQrrxr3qdcRUi4hBcJDvkCqvA2ClfOritDArzqMpiYPwxv
+         s+w96TmLtjOgvZgTCPw0hSulsZ8D5i4MAzeGgQTXkaS9fWFb1MmHCZo+wQsmR+Ewit
+         j2AUS4XKzhITSce1JrExpjRw9NlyoYa6VxGjYHPmTyMQS0ZVCTeisKLRYrCCUhzVEt
+         qj26cPqCZ/CRw==
+Date:   Fri, 26 May 2023 12:04:37 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, ilia.lin@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, ansuelsmth@gmail.com
+Subject: Re: [PATCH v4 3/5] soc: qcom: smem: introduce qcom_smem_get_soc_id()
+Message-ID: <20230526190437.yekx5ufpwxkowlrp@ripper>
+References: <20230525210214.78235-1-robimarko@gmail.com>
+ <20230525210214.78235-3-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230519235757.3613719-1-song@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230525210214.78235-3-robimarko@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,64 +57,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, May 19, 2023 at 04:57:57PM -0700, Song Liu escreveu:
-> evsel uses a union for the two lists. This turned out to be error prone.
-> For example:
+On Thu, May 25, 2023 at 11:02:12PM +0200, Robert Marko wrote:
+> Introduce a helper to return the SoC SMEM ID, which is used to identify the
+> exact SoC model as there may be differences in the same SoC family.
 > 
-> [root@quaco ~]# perf stat --bpf-prog 5246
-> Error: cpu-clock event does not have sample flags 66c660
-> failed to set filter "(null)" on event cpu-clock with 2 (No such file or
-> directory)
+> Currently, cpufreq-nvmem does this completely in the driver and there has
+> been more interest expresed for other drivers to use this information so
+> lets expose a common helper to prevent redoing it in individual drivers
+> since this field is present on every SMEM table version.
 > 
-> Fix this issue by separating the two lists.
-
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Fixes: 56ec9457a4a2 ("perf bpf filter: Implement event sample filtering")
-> Signed-off-by: Song Liu <song@kernel.org>
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
->  tools/perf/util/evsel.c | 1 +
->  tools/perf/util/evsel.h | 6 ++----
->  2 files changed, 3 insertions(+), 4 deletions(-)
+> Changes in v4:
+> * Change helper name to qcom_smem_get_soc_id()
+> * Remove len and just pass NULL, that is sufficient here
 > 
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index 2f5910b31fa9..c2dbb5647e75 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -282,6 +282,7 @@ void evsel__init(struct evsel *evsel,
->  	evsel->bpf_fd	   = -1;
->  	INIT_LIST_HEAD(&evsel->config_terms);
->  	INIT_LIST_HEAD(&evsel->bpf_counter_list);
-> +	INIT_LIST_HEAD(&evsel->bpf_filters);
->  	perf_evsel__object.init(evsel);
->  	evsel->sample_size = __evsel__sample_size(attr->sample_type);
->  	evsel__calc_id_pos(evsel);
-> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> index df8928745fc6..0f54f28a69c2 100644
-> --- a/tools/perf/util/evsel.h
-> +++ b/tools/perf/util/evsel.h
-> @@ -151,10 +151,8 @@ struct evsel {
->  	 */
->  	struct bpf_counter_ops	*bpf_counter_ops;
+> Changes in v3:
+> * Change export to EXPORT_SYMBOL_GPL
+> * Use an argument for returning SoC ID
+> * Update kerneldoc
+> ---
+>  drivers/soc/qcom/smem.c       | 23 +++++++++++++++++++++++
+>  include/linux/soc/qcom/smem.h |  2 ++
+>  2 files changed, 25 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+> index bc98520c4969..78cf79ea4924 100644
+> --- a/drivers/soc/qcom/smem.c
+> +++ b/drivers/soc/qcom/smem.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/sizes.h>
+>  #include <linux/slab.h>
+>  #include <linux/soc/qcom/smem.h>
+> +#include <linux/soc/qcom/socinfo.h>
 >  
-> -	union {
-> -		struct list_head	bpf_counter_list; /* for perf-stat -b */
-> -		struct list_head	bpf_filters; /* for perf-record --filter */
-> -	};
-> +	struct list_head	bpf_counter_list; /* for perf-stat -b */
-> +	struct list_head	bpf_filters; /* for perf-record --filter */
+>  /*
+>   * The Qualcomm shared memory system is a allocate only heap structure that
+> @@ -772,6 +773,28 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_smem_virt_to_phys);
 >  
->  	/* for perf-stat --use-bpf */
->  	int			bperf_leader_prog_fd;
+> +/**
+> + * qcom_smem_get_soc_id() - return the SoC ID
+> + * @id:	On success, we return the SoC ID here.
+> + *
+> + * Look up SoC ID from HW/SW build ID and return it.
+> + *
+> + * Return: 0 on success, negative errno on failure.
+> + */
+> +int qcom_smem_get_soc_id(u32 *id)
+> +{
+> +	struct socinfo *info;
+> +
+> +	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, NULL);
+> +	if (IS_ERR(info))
+> +		return PTR_ERR(info);
+> +
+> +	*id = info->id;
+
+So just to make the discussion between Konrad and me clear, please wrap
+the info->id access in __le32_to_cpu() and the series is ready to go.
+
+Thanks,
+Bjorn
+
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_smem_get_soc_id);
+> +
+>  static int qcom_smem_get_sbl_version(struct qcom_smem *smem)
+>  {
+>  	struct smem_header *header;
+> diff --git a/include/linux/soc/qcom/smem.h b/include/linux/soc/qcom/smem.h
+> index 86e1b358688a..223db6a9c733 100644
+> --- a/include/linux/soc/qcom/smem.h
+> +++ b/include/linux/soc/qcom/smem.h
+> @@ -11,4 +11,6 @@ int qcom_smem_get_free_space(unsigned host);
+>  
+>  phys_addr_t qcom_smem_virt_to_phys(void *p);
+>  
+> +int qcom_smem_get_soc_id(u32 *id);
+> +
+>  #endif
 > -- 
-> 2.34.1
+> 2.40.1
 > 
-
--- 
-
-- Arnaldo
