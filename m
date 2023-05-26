@@ -2,90 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6A9712773
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211C6712775
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243137AbjEZNZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
+        id S243676AbjEZNZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjEZNZO (ORCPT
+        with ESMTP id S243518AbjEZNZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:25:14 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C63012C;
-        Fri, 26 May 2023 06:25:13 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51480d3e161so12413a12.3;
-        Fri, 26 May 2023 06:25:13 -0700 (PDT)
+        Fri, 26 May 2023 09:25:24 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7F912F;
+        Fri, 26 May 2023 06:25:22 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f606a80d34so5685965e9.0;
+        Fri, 26 May 2023 06:25:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685107512; x=1687699512;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=REExVQcWcE2QjJuxENKUcGpJCKWSMyccL07DCITDofY=;
-        b=qAyvFDmhsukPnn4WvAmi10pKd4n2FqmPW1UufHxkYNGGWR1dx/1llwEa2WCcXAF303
-         iZSKlaO95+NI673tZOCG378LltKAUkLJ43xWBX7PpV6ldciulJYU3G9VtFCQuIY3DzyQ
-         DIYkf63t3HV5ykQ5j3MzC+JC891jSE78LK9v+3J5+RUpfMUPue4tp0FVpG3njoUjYxGw
-         pWj12qVyTRMGMzVjmi0c9p6E0VbZFqWuW+aaLw8IfmRFgKyEt7+D8H9TJvhinsq6O0og
-         rYOf7VV/1stJPN98PqhwrStnYYw0Nha+46hA6GksIdoqlqVNlrQ8/4IDICYuTZV+dNjl
-         OiUg==
+        d=gmail.com; s=20221208; t=1685107521; x=1687699521;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HShHppzRiA2afD7idA0kDlCaSnR/8d/LIwnMexDz04E=;
+        b=R2isuQULlkXH0YYBi5gD32Fkr3TG8yDVfJ1SZVV7em4NfGBjX4bVPG+FKg55+DboUy
+         xNw1y4PLZ0pqrv9V9WHS0FvRqBiarXByunSM8MzLauQE/bKpywSlCjLB9FSL4V0IukLp
+         UQABcDgtNu9b1uRocJofhh/dRXZ+9UBOOLmZSySCchW2lCveBWzVvdxkYOkj/6bA2OEo
+         Yy1ak5MiXh3QWYBLjiukrpaN0L0BzetweArXCOoOg47X1Eja1Jsrt2XjjW5c+lv+wNCU
+         b4TLGokRtye3X/Fz1mKsDRFAKggAbXFrCDBYnrqtTOWOg3PZ/5DFdvpNsTt5XHOTSeVe
+         qHjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685107512; x=1687699512;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=REExVQcWcE2QjJuxENKUcGpJCKWSMyccL07DCITDofY=;
-        b=JzPrWh7Zw3hOkqOYXw3bSug2NreEA8ekjIOvWUD7byAr4t2er2xCEHHkiP94Obzuew
-         CwRdhuO6C97JejrLC4gasZTz+YfIveN+aHkCZoH26cd4Ip7BVKG0okQeeS4gxUDxs/fG
-         mPgC1AJg6oY5sZy6ZZNQGwc09r0iCDUMN2ux3AjiIefZRMG/EjuL5CuYAFXaoc3SLmUI
-         gPEHeybiTDlivYRaPQckKVe2+pLoyb3RYDGBXO/wITJVqOL0n3snEpgzFtsJuGfrfASm
-         u181Rh2idlVwzGRtkz6M4hg/ZNtaPH6RbLFz6d94ZNsz1yrEsIabABiX67QNMH59o+1b
-         X0kg==
-X-Gm-Message-State: AC+VfDyhtV6mrDpDcOZUby7XX42vfqHfidKjADO0TxAe4zuKx4AwtmAO
-        Nz6kUXeg1hxUpHjy+Rse73E=
-X-Google-Smtp-Source: ACHHUZ7q1MafXAsr6kPnoxH9sRKukcbZuU+ag0QnY9abimtOnkEmvW+csQfASzKbX2SjUCLFmdg0kQ==
-X-Received: by 2002:a17:907:9345:b0:973:9857:b98a with SMTP id bv5-20020a170907934500b009739857b98amr2330770ejc.55.1685107511683;
-        Fri, 26 May 2023 06:25:11 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id z17-20020a170906715100b0094e597f0e4dsm2123613ejj.121.2023.05.26.06.25.10
+        d=1e100.net; s=20221208; t=1685107521; x=1687699521;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HShHppzRiA2afD7idA0kDlCaSnR/8d/LIwnMexDz04E=;
+        b=iIkR2QOxwFGBRXuVogB+APaIddbitey9W41ygGVR/JfDS5pytJvf7yWm9KZRWA+Sue
+         rcLLoxY5Gjt4WuXj5xq4Kt9Kypr8/vP4+U0VVUaBeY6KL2f4WTyByYSG3gMoERvrgt+k
+         8MyblJkriUtqzOsw9Nuv20UhWbUuSRaT1Oe1UcNBSY5KFj4TX+uGUskTNV+JYAPtK+hy
+         p5JGqPmnck/KVm+bhT+azc8oXkVIMdbsctfcXyfQDd/SgU51zgjhKZS8XaQ1nCFXBzd/
+         tvvrEoKXPhkhdV+J4N2vCs1MQ2hN4F2FSy5V8xveZhUF0txMLIfwztxAK4L3Lv00yE/j
+         cdCg==
+X-Gm-Message-State: AC+VfDyA17dHfEZXr7tORlGAytkYkRkVVrc1R9efQ7KYLYViCF9QK07u
+        v/FoLMpCkgxuXI1m8G/S29hraqZXCD0=
+X-Google-Smtp-Source: ACHHUZ5cUYpuKwSC5GNuQI4L1b0LxRQJaktaM3pMyNQhA9flteuuGt++y+NANX2R5ob81DqhZYQgAQ==
+X-Received: by 2002:a5d:420c:0:b0:306:36ef:2e3b with SMTP id n12-20020a5d420c000000b0030636ef2e3bmr1329543wrq.70.1685107520644;
+        Fri, 26 May 2023 06:25:20 -0700 (PDT)
+Received: from suse.localnet (host-95-248-204-235.retail.telecomitalia.it. [95.248.204.235])
+        by smtp.gmail.com with ESMTPSA id i13-20020a5d522d000000b00307c8d6b4a0sm5128776wra.26.2023.05.26.06.25.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 06:25:11 -0700 (PDT)
-Date:   Fri, 26 May 2023 16:25:08 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 19/30] net: dsa: mt7530: set interrupt register
- only for MT7530
-Message-ID: <20230526132508.fxgljrpozuuzelal@skbuf>
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-20-arinc.unal@arinc9.com>
+        Fri, 26 May 2023 06:25:19 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jan Kara <jack@suse.cz>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [git pull] vfs.git sysv pile
+Date:   Fri, 26 May 2023 15:25:18 +0200
+Message-ID: <2886258.e9J7NaK4W3@suse>
+In-Reply-To: <5939173.lOV4Wx5bFT@suse>
+References: <Y/gugbqq858QXJBY@ZenIV> <20230525201046.cth6qizdh7lwobxj@quack3>
+ <5939173.lOV4Wx5bFT@suse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230522121532.86610-20-arinc.unal@arinc9.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -96,36 +74,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:15:21PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> Setting this register related to interrupts is only needed for the MT7530
-> switch. Make an exclusive check to ensure this.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Acked-by: Daniel Golle <daniel@makrotopia.org>
-> Tested-by: Daniel Golle <daniel@makrotopia.org>
-> ---
+On venerd=EC 26 maggio 2023 12:32:59 CEST Fabio M. De Francesco wrote:
+> On gioved=EC 25 maggio 2023 22:10:46 CEST Jan Kara wrote:
+> > On Mon 27-03-23 12:29:56, Fabio M. De Francesco wrote:
+> > > On luned=EC 20 marzo 2023 13:47:25 CEST Jan Kara wrote:
+> > > > On Mon 20-03-23 12:18:38, Fabio M. De Francesco wrote:
+> > > > > On gioved=EC 16 marzo 2023 11:30:21 CET Fabio M. De Francesco wro=
+te:
+> > > > > > On gioved=EC 16 marzo 2023 10:00:35 CET Jan Kara wrote:
+> > > > > > > On Wed 15-03-23 19:08:57, Fabio M. De Francesco wrote:
+> > > > > > > > On mercoled=EC 1 marzo 2023 15:14:16 CET Al Viro wrote:
+> > > [snip]
+> > >=20
+> > > > > > > > > I think I've pushed a demo patchset to vfs.git at some po=
+int
+> > > > > > > > > back
+> > >=20
+> > > in
+> > >=20
+> > > > > > > > > January... Yep - see #work.ext2 in there; completely=20
+untested,
+> > > > > > > > > though.
+> > >=20
+> > > Al,
+> > >=20
+> > > I reviewed and tested your patchset (please see below).
+> > >=20
+> > > I think that you probably also missed Jan's last message about how you
+> > > prefer
+> > > they to be treated.
+> > >=20
+> > > Jan asked you whether you will submit these patches or he should just=
+=20
+pull
+> > > your branch into his tree.
+> > >=20
+> > > Please look below for my tags and Jan's question.
+> >=20
+> > Ok, Al didn't reply
+>=20
+> I noticed it...
+>=20
+> > so I've just pulled the patches from Al's tree,
+>=20
+> Thank you very much for doing this :-)
+>=20
+> > added
+> > your Tested-by tag
+>=20
+> Did you also notice the Reviewed-by tags?
+>=20
 
-Why does it matter? What prompted you to make this change? I guess it's
-not needed for MT7988? Or the register is not present? Or?...
+Well, it looks like you missed my Reviewed-by tags at https://lore.kernel.o=
+rg/
+lkml/3019063.4lk9UinFSI@suse/
 
->  drivers/net/dsa/mt7530.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index 99f5da8b27be..0c261ef87bee 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -2029,7 +2029,7 @@ mt7530_setup_irq(struct mt7530_priv *priv)
->  	}
->  
->  	/* This register must be set for MT7530 to properly fire interrupts */
-> -	if (priv->id != ID_MT7531)
-> +	if (priv->id == ID_MT7530 || priv->id == ID_MT7621)
->  		mt7530_set(priv, MT7530_TOP_SIG_CTRL, TOP_SIG_CTRL_NORMAL);
->  
->  	ret = request_threaded_irq(priv->irq, NULL, mt7530_irq_thread_fn,
-> -- 
-> 2.39.2
-> 
+=46WIW, I'd just like to say that I did the review of Al's patchset because=
+ I=20
+know the code that is modeled after a similar series to fs/sysv, which in t=
+urn=20
+I made following Al's suggestions.
+
+However, I suppose it's up to you to decide whether or not is worth mention=
+ing=20
+my reviews :-)
+
+Thanks,
+
+=46abio
+
+> > and push out the result into linux-next.
+>=20
+> Great!
+> Again thanks,
+>=20
+> Fabio
+>=20
+>=20
+> Honza
+>=20
+> > --
+> > Jan Kara <jack@suse.com>
+> > SUSE Labs, CR
+
+
+
+
