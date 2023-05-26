@@ -2,134 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECFB712D29
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D798C712D2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjEZTVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        id S237332AbjEZTWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEZTVo (ORCPT
+        with ESMTP id S229790AbjEZTWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:21:44 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A509E13A;
-        Fri, 26 May 2023 12:21:42 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 6D0D860204;
-        Fri, 26 May 2023 21:21:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1685128900; bh=gdnV35r+qZer6ioSJSPnjms1VtPejxd0IlIT7RFCCbg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IQ/qNCriuge2j3d/O+15dL1nZPwlXbH+pDg9rJjS16liWnpzqTXbR7RVINDaCWIjF
-         jmqP1qNdOImAt6lNiPow4lUeUIP+IPnTsYv0OSUTObsWiXQBdf76Q1BPZKSmxi726f
-         qmKBGTborb3ZPnQzRsDeX5ofYhGkevMRh7+UNE/HyMywPZI0xbNmdNA1I4HhlfwHF1
-         VB6nX75KaEXWShSXkIqZZIWkCVDlCXWBKVt92xyXFlq/GeFzcJ1Ajw1XJTl5tNEEd7
-         0dkZw8XQvEeNbzBC33JLKVPyXoLj4/abakkFtIoX9FwI+qGofhSI6uXOhvKg4ljcPn
-         G8BaBKky+fevw==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EjSdx_xuliag; Fri, 26 May 2023 21:21:38 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id EE76A60203;
-        Fri, 26 May 2023 21:21:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1685128898; bh=gdnV35r+qZer6ioSJSPnjms1VtPejxd0IlIT7RFCCbg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=W9FRbhl898RDurbIWAG9elsTFrdcuRfZcsxKAIHKgpgJqhBCwFuf1NlyfZnpB6ojj
-         PY0aBzU9IVi0yfT2ZO78/7KNaqzOvmsTuzoI4SgEDU2ZZQvxsxpFEoi882VNIG6GuP
-         Jc+D6Tv4ca2y0hwq7l/HMaoIATrcAswvWxt0yGSlK6NSw1EF4szHWzZjwVo927hBJi
-         2zSiAxrDTqvNYIOYnx1jVHgr9+gXrLxbqMnLq4efex86sixX8cTZdXX8D1iP04BkZV
-         MKjNbKNyGn/hDL+WgFF9J5KoH9i5G649CVKQ5ru7rlX2JHY6ow/PkacpRId2n/esWO
-         p/wjtDeu1AIOA==
-Message-ID: <8412fb0f-4b7c-b305-0947-ae68701bad20@alu.unizg.hr>
-Date:   Fri, 26 May 2023 21:21:03 +0200
+        Fri, 26 May 2023 15:22:31 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E717313A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:22:29 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b010338d82so7368745ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685128949; x=1687720949;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T+nxI7GPZEoJFRgou6P2z4SBcDHjxNDTiOjaHI6Wn/o=;
+        b=D4zSBO3k/0mf8IYmqpnT9IuWijp1im/HraRVVg+Aw2XGa7946paoNPnmqZtAU78t3Y
+         Jqk1hIvbaHUpkJyFTIHddeY+Inj4B/8l3qZIrnrqnpgQ2ttWOJzmQHOQCvBv5128pDPf
+         HBwpiR6ny9P0jRdfCljHJmRu4W3HEw9IQDb8lKd9WSkkIPaoen3DatK4XpMcTpqfJt9w
+         SoK4BjoQGm1f8uyLcI3+rCoEXTM9f71QvAQrF9VcWC562jcSWKFqmTP4d/pce6gVDdRY
+         ym9l4dGoNzr24Lj34srUhIJw/lP8w8EKXH/OaPYRs+F7BOPw4nHxtY6pG95B47pCppDu
+         AmCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685128949; x=1687720949;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T+nxI7GPZEoJFRgou6P2z4SBcDHjxNDTiOjaHI6Wn/o=;
+        b=QvbbUFbsAwFAddZ8dX8fRt5qpE7N7XeWzxjs1dbQNHPigHW322jJeTRPps9tQkfgaC
+         rWdNr8jAnT33lwAxgx/f/PN7IsvSqUhBhm17RhMLe6ickt25A6ndJAF4FIVbR/JBcyKK
+         jDeFx3OkUu9ccf1FXpDO4hBgke1PAB/UkHqRuW9WxbDHaOaK+s5VA7/xIjL63WhQGOSW
+         eQxJqPOcbpRMXvVKi273Br6e7qcewdgSrP92n37C4k1t32Zs6oSsl/zIIlzDcyG7otrE
+         1OlBkwW5nEm3HTI0wD3VaVm69ndAPUNbAh+Lo+rmQDw7j3vq+t5xTZ/KPqop939N4mgJ
+         k4dQ==
+X-Gm-Message-State: AC+VfDxOvRgdV6rYMlTHTsmXdFCsl4d7PIUac6q6rNVVNLmJWNuyff7z
+        JSouscYlHnsgJzqspcq6X1/zMQ==
+X-Google-Smtp-Source: ACHHUZ6+/1mU1U8CVP7Mhgj+OcO8VmiIArv2Xj5UKpThPqs8Tj68dI36BZs9/CTjR5gZQ3Zo4iQcsQ==
+X-Received: by 2002:a17:903:22cd:b0:1aa:f6e9:4cb3 with SMTP id y13-20020a17090322cd00b001aaf6e94cb3mr3882969plg.52.1685128949279;
+        Fri, 26 May 2023 12:22:29 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1f3a:6990:1a5c:b29f:f8cf:923c])
+        by smtp.gmail.com with ESMTPSA id q18-20020a17090311d200b001b008b3dee2sm1955079plh.287.2023.05.26.12.22.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 12:22:28 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, andersson@kernel.org,
+        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
+        rfoss@kernel.org, neil.armstrong@linaro.org, djakov@kernel.org,
+        stephan@gerhold.net
+Subject: [PATCH v8 00/11] arm64: qcom: Enable Crypto Engine for a few Qualcomm SoCs
+Date:   Sat, 27 May 2023 00:51:59 +0530
+Message-Id: <20230526192210.3146896-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH v5 2/3] test_firmware: fix a memory leak with reqs
- buffer
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        Dan Carpenter <error27@gmail.com>, Takashi Iwai <tiwai@suse.de>
-References: <20230509084746.48259-1-mirsad.todorovac@alu.unizg.hr>
- <20230509084746.48259-2-mirsad.todorovac@alu.unizg.hr>
- <256bc822-ba20-c41a-1f3b-5b6aacead32e@alu.unizg.hr>
- <f9212fd0-0a52-4076-a97a-c5af8de194cf@kili.mountain>
- <72257758-a0e6-1118-f397-431ac9ec3059@alu.unizg.hr>
- <828b1d4c-dac8-4a64-9f1d-452762dc07bd@kili.mountain>
- <ZG2h34KzhQWONNec@bombadil.infradead.org>
-Content-Language: en-US
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZG2h34KzhQWONNec@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/23 07:34, Luis Chamberlain wrote:
-> On Thu, May 18, 2023 at 06:20:37PM +0300, Dan Carpenter wrote:
->> On Fri, May 12, 2023 at 08:58:58PM +0200, Mirsad Goran Todorovac wrote:
->>> On 12. 05. 2023. 15:09, Dan Carpenter wrote:
->>>> On Fri, May 12, 2023 at 02:34:29PM +0200, Mirsad Todorovac wrote:
->>>>>> @@ -1011,6 +1016,11 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
->>>>>>     	mutex_lock(&test_fw_mutex);
->>>>>> +	if (test_fw_config->reqs) {
->>>>>> +		rc = -EBUSY;
->>>>>> +		goto out_bail;
->>>>>> +	}
->>>>>> +
->>>>>>     	test_fw_config->reqs =
->>>>>>     		vzalloc(array3_size(sizeof(struct test_batched_req),
->>>>>>     				    test_fw_config->num_requests, 2));
->>>>>
->>>>> I was just thinking, since returning -EBUSY for the case of already allocated
->>>>> test_fw_config->reqs was your suggestion and your idea, maybe it would be OK
->>>>> to properly reflect that in Co-developed-by: or Signed-off-by: , but if I
->>>>> understood well, the CoC requires that I am explicitly approved of those?
->>>>>
->>>>
->>>> If everyone else is okay, let's just apply this as-is.  You did all the
->>>> hard bits.
->>>>
->>>> regards,
->>>> dan carpenter
->>>
->>> If it is OK with you, then I hope I have your Reviewed-by:
->>>
->>
->> Wow.  Sorry for all the delay on this.
->>
->> Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
->>
-> 
-> Thanks for doing this work! It looks much better now split up!
+Changes since v7:
+-----------------
+- v7 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230519214813.2593271-1-bhupesh.sharma@linaro.org/
+- Addressed Stephan's comment about RPM clocks for sm6115 crypto block in dtsi.
+- Also fixed the iommu context ids for sm6115 crypto block in dtsi.
 
-No problem. It's a great exercise for the little grey cells :-)
+Changes since v6:
+-----------------
+- v6 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230405072836.1690248-1-bhupesh.sharma@linaro.org/
+- Collected Acks, R-Bs and Tested-by for various patches.
+- Addressed Konrad's comment about iommu sids for sm8150 and sm8250
+  crypto node entries.
+- Addressed Konrad's and Stephan's comments about adding RPM clock for
+  crypto blocks on qcm2290 and sm6115.
 
-> For all 3 patches:
-> 
-> Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+Changes since v5:
+-----------------
+- v5 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230402100509.1154220-1-bhupesh.sharma@linaro.org/
+- Collected Ack from Rob for [PATCH 01/11].
+- Addressed Georgi's comment about interconnect cells in [PATCH 10/11].
 
-Thanks,
-Mirsad
+Changes since v4:
+-----------------
+- v4 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230331164323.729093-1-bhupesh.sharma@linaro.org/
+- Collected R-Bs from Konrad for a couple of patches sent in v4.
+- Fixed incorrect email IDs for a couple of patches sent in v3, which I used for
+  some patches created on a different work machine.
+- No functional changes since v3.
 
-> Greg, can you pick these up?
-> 
->    Luis
+Changes since v3:
+-----------------
+- v3 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230328092815.292665-1-bhupesh.sharma@linaro.org/
+- Collected Acks from Krzysztof for a couple of patches sent in v3.
+- Fixed review comments from Krzysztof regarding DMA binding document
+  and also added a couple of new patches which are required to fix the
+  'dtbs_check' errors highlighted after this fix.
+
+Changes since v2:
+-----------------
+- v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230322114519.3412469-1-bhupesh.sharma@linaro.org/
+- No functional change since v2. As the sdm845 patch from v1 was accepted in linux-next,
+  dropped it from this version.
+
+Changes since v1:
+-----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230321190118.3327360-1-bhupesh.sharma@linaro.org/
+- Folded the BAM DMA dt-binding change.
+  (sent earlier as: https://lore.kernel.org/linux-arm-msm/20230321184811.3325725-1-bhupesh.sharma@linaro.org/)
+- Folded the QCE dt-binding change.
+  (sent earlier as: https://lore.kernel.org/linux-arm-msm/20230320073816.3012198-1-bhupesh.sharma@linaro.org/)
+- Folded Neil's SM8450 dts patch in this series.
+- Addressed review comments from Rob, Stephan and Konrad.
+- Collected Konrad's R-B for [PATCH 5/9].
+
+This patchset enables Crypto Engine support for Qualcomm SoCs like
+SM6115, SM8150, SM8250, SM8350 and SM8450.
+
+Note that:
+- SM8250 crypto engine patch utilizes the work already done by myself and
+  Vladimir.
+- SM8350 crypto engine patch utilizes the work already done by Robert.
+- SM8450 crypto engine patch utilizes the work already done by Neil.
+
+Also this patchset is rebased on linux-next/master.
+
+
+
+Bhupesh Sharma (10):
+  dt-bindings: dma: Add support for SM6115 and QCM2290 SoCs
+  dt-bindings: dma: Increase iommu maxItems for BAM DMA
+  arm64: dts: qcom: sdm8550: Fix the BAM DMA engine compatible string
+  arm64: dts: qcom: sdm845: Fix the slimbam DMA engine compatible string
+  dt-bindings: qcom-qce: Fix compatible combinations for SM8150 and
+    IPQ4019 SoCs
+  dt-bindings: qcom-qce: Add compatibles for SM6115 and QCM2290
+  arm64: dts: qcom: sm6115: Add Crypto Engine support
+  arm64: dts: qcom: sm8150: Add Crypto Engine support
+  arm64: dts: qcom: sm8250: Add Crypto Engine support
+  arm64: dts: qcom: sm8350: Add Crypto Engine support
+
+Neil Armstrong (1):
+  arm64: dts: qcom: sm8450: add crypto nodes
+
+ .../devicetree/bindings/crypto/qcom-qce.yaml  | 50 +++++++++++++++----
+ .../devicetree/bindings/dma/qcom,bam-dma.yaml | 22 +++++---
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  2 +-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 31 ++++++++++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          | 30 +++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 32 ++++++++++++
+ arch/arm64/boot/dts/qcom/sm8350.dtsi          | 22 ++++++++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          | 28 +++++++++++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          |  2 +-
+ 9 files changed, 200 insertions(+), 19 deletions(-)
+
+-- 
+2.38.1
+
