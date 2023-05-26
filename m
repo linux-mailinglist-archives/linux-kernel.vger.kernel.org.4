@@ -2,123 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91AD0712943
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 462F8712947
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243876AbjEZPU6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 26 May 2023 11:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
+        id S244011AbjEZPWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243725AbjEZPU4 (ORCPT
+        with ESMTP id S243981AbjEZPWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:20:56 -0400
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD66F7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:20:55 -0700 (PDT)
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-43932736509so531406137.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:20:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685114454; x=1687706454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b+SOwkMnAYLUhEyDhUUgTK3i7OucfEXqIXWQlJcLoVU=;
-        b=XB3ErZReV2GX4zZLuywx6MIZ6e/OdIa8CYFFHMJoN8FQe8c53mIqfGd2DgNXiO+WjA
-         mkjX2fyu6a2vqts7RE32YayRmvh4Eg9p/uCsvPZi6FsJBoWfGJTCoxFgbT5Is0BDpP9I
-         MQ74zt9aSzGH/epEX156Nh3gMdK/sVjlUWolekjcjAOHk4dO9hLrP/V9FK0Wvj5PbEtX
-         h1nUUYQ2q5ear7SqAAZg+RgGzkT/jd+OLonkJxhxn/5o4hXj57Y4h0Erjsms9AqHlZm+
-         rNwWQgcuZZWfy39oIwOraHO/4PWideYevlfda/henzEgf3vfxCd+IIWVhe10cKqLeqpQ
-         t5yA==
-X-Gm-Message-State: AC+VfDy5BPc7ZJnQuef+ssIlsnumaedNh91/LOGzNteJf8eCFGRIskTj
-        d2ul20j87tAJPffxt1LSkfS+HRTJcs8NT0II7OI=
-X-Google-Smtp-Source: ACHHUZ6ZlhFY7AADiHbWA1tNcXhU9OhjLGRqgcDbeU13+spfQOI9Yck0GdZSs3V5xPT9GKA0itjGIYseaGK56N8MAdk=
-X-Received: by 2002:a67:fb0c:0:b0:436:c4a:bcc4 with SMTP id
- d12-20020a67fb0c000000b004360c4abcc4mr644960vsr.21.1685114454682; Fri, 26 May
- 2023 08:20:54 -0700 (PDT)
+        Fri, 26 May 2023 11:22:12 -0400
+Received: from smtp-8faf.mail.infomaniak.ch (smtp-8faf.mail.infomaniak.ch [IPv6:2001:1600:3:17::8faf])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D7AF7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:22:09 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QSTDb2m0HzMqJtD;
+        Fri, 26 May 2023 17:22:07 +0200 (CEST)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QSTDW5jBkzMpq8r;
+        Fri, 26 May 2023 17:22:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1685114527;
+        bh=q+ImSjEjmZCszdCMwbCdSpVg4DvQ3poPxVGa8t7f7U4=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=tQXLni40CMr4EfzplXOAcaiNi5QkukQ3CoKpUm7sPlK7iwEW6fPx8nY8GaaUiadIG
+         M5KO5fQyWE3EVFklsTrG7jSk0ERYB4XC8Vvc3kkq30lc7cfnaZ5NXLcagUfQK3M2xQ
+         HRaKSJVPM1hu3rh60mZzFma3PA+dy4ElTuUEFWyU=
+Message-ID: <58a803f6-c3de-3362-673f-767767a43f9c@digikod.net>
+Date:   Fri, 26 May 2023 17:22:03 +0200
 MIME-Version: 1.0
-References: <20230526091052.2169044-1-kherbst@redhat.com>
-In-Reply-To: <20230526091052.2169044-1-kherbst@redhat.com>
-From:   Ilia Mirkin <imirkin@alum.mit.edu>
-Date:   Fri, 26 May 2023 11:20:43 -0400
-Message-ID: <CAKb7Uvha74HOvny25aqnwzvvRLpc7+DNQm6QEAk4oxfTa1urJg@mail.gmail.com>
-Subject: Re: [Nouveau] [PATCH v2] drm/nouveau: bring back blit subchannel for
- pre nv50 GPUs
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Ben Skeggs <bskeggs@redhat.com>,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: 
+Subject: Re: [RFC PATCH v1 0/9] Hypervisor-Enforced Kernel Integrity
+Content-Language: en-US
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "yuanyu@google.com" <yuanyu@google.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "marian.c.rotariu@gmail.com" <marian.c.rotariu@gmail.com>,
+        "Graf, Alexander" <graf@amazon.com>,
+        "Andersen, John S" <john.s.andersen@intel.com>,
+        "madvenka@linux.microsoft.com" <madvenka@linux.microsoft.com>,
+        "liran.alon@oracle.com" <liran.alon@oracle.com>,
+        "ssicleru@bitdefender.com" <ssicleru@bitdefender.com>,
+        "tgopinath@microsoft.com" <tgopinath@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "dev@lists.cloudhypervisor.org" <dev@lists.cloudhypervisor.org>,
+        "mdontu@bitdefender.com" <mdontu@bitdefender.com>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "nicu.citu@icloud.com" <nicu.citu@icloud.com>,
+        "ztarkhani@microsoft.com" <ztarkhani@microsoft.com>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <20230505152046.6575-1-mic@digikod.net>
+ <93726a7b9498ec66db21c5792079996d5fed5453.camel@intel.com>
+ <facfd178-3157-80b4-243b-a5c8dabadbfb@digikod.net>
+In-Reply-To: <facfd178-3157-80b4-243b-a5c8dabadbfb@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 5:11 AM Karol Herbst <kherbst@redhat.com> wrote:
->
-> 1ba6113a90a0 removed a lot of the kernel GPU channel, but method 0x128
-> was important as otherwise the GPU spams us with `CACHE_ERROR` messages.
->
-> We use the blit subchannel inside our vblank handling, so we should keep
-> at least this part.
->
-> v2: Only do it for NV11+ GPUs
->
-> Closes: https://gitlab.freedesktop.org/drm/nouveau/-/issues/201
-> Fixes: 4a16dd9d18a0 ("drm/nouveau/kms: switch to drm fbdev helpers")
-> Signed-off-by: Karol Herbst <kherbst@redhat.com>
-> ---
->  drivers/gpu/drm/nouveau/nouveau_chan.c |  1 +
->  drivers/gpu/drm/nouveau/nouveau_chan.h |  1 +
->  drivers/gpu/drm/nouveau/nouveau_drm.c  | 20 +++++++++++++++++---
->  3 files changed, 19 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_chan.c b/drivers/gpu/drm/nouveau/nouveau_chan.c
-> index e648ecd0c1a0..3dfbc374478e 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_chan.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_chan.c
-> @@ -90,6 +90,7 @@ nouveau_channel_del(struct nouveau_channel **pchan)
->                 if (cli)
->                         nouveau_svmm_part(chan->vmm->svmm, chan->inst);
->
-> +               nvif_object_dtor(&chan->blit);
->                 nvif_object_dtor(&chan->nvsw);
->                 nvif_object_dtor(&chan->gart);
->                 nvif_object_dtor(&chan->vram);
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_chan.h b/drivers/gpu/drm/nouveau/nouveau_chan.h
-> index e06a8ffed31a..bad7466bd0d5 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_chan.h
-> +++ b/drivers/gpu/drm/nouveau/nouveau_chan.h
-> @@ -53,6 +53,7 @@ struct nouveau_channel {
->         u32 user_put;
->
->         struct nvif_object user;
-> +       struct nvif_object blit;
->
->         struct nvif_event kill;
->         atomic_t killed;
-> diff --git a/drivers/gpu/drm/nouveau/nouveau_drm.c b/drivers/gpu/drm/nouveau/nouveau_drm.c
-> index cc7c5b4a05fd..9512f1c2f871 100644
-> --- a/drivers/gpu/drm/nouveau/nouveau_drm.c
-> +++ b/drivers/gpu/drm/nouveau/nouveau_drm.c
-> @@ -369,15 +369,29 @@ nouveau_accel_gr_init(struct nouveau_drm *drm)
->                 ret = nvif_object_ctor(&drm->channel->user, "drmNvsw",
->                                        NVDRM_NVSW, nouveau_abi16_swclass(drm),
->                                        NULL, 0, &drm->channel->nvsw);
-> +
-> +               if (ret == 0 && device->info.chipset >= 0x11) {
 
-Can you double-check that this is needed on NV15? IIRC there's some
-non-linearity of chipsets here which is why we had (some long time
-ago, not sure if it's still there), a chip class which would simplify
-such checks.
+On 25/05/2023 15:59, Mickaël Salaün wrote:
+> 
+> On 25/05/2023 00:20, Edgecombe, Rick P wrote:
+>> On Fri, 2023-05-05 at 17:20 +0200, Mickaël Salaün wrote:
+>>> # How does it work?
+>>>
+>>> This implementation mainly leverages KVM capabilities to control the
+>>> Second
+>>> Layer Address Translation (or the Two Dimensional Paging e.g.,
+>>> Intel's EPT or
+>>> AMD's RVI/NPT) and Mode Based Execution Control (Intel's MBEC)
+>>> introduced with
+>>> the Kaby Lake (7th generation) architecture. This allows to set
+>>> permissions on
+>>> memory pages in a complementary way to the guest kernel's managed
+>>> memory
+>>> permissions. Once these permissions are set, they are locked and
+>>> there is no
+>>> way back.
+>>>
+>>> A first KVM_HC_LOCK_MEM_PAGE_RANGES hypercall enables the guest
+>>> kernel to lock
+>>> a set of its memory page ranges with either the HEKI_ATTR_MEM_NOWRITE
+>>> or the
+>>> HEKI_ATTR_MEM_EXEC attribute. The first one denies write access to a
+>>> specific
+>>> set of pages (allow-list approach), and the second only allows kernel
+>>> execution
+>>> for a set of pages (deny-list approach).
+>>>
+>>> The current implementation sets the whole kernel's .rodata (i.e., any
+>>> const or
+>>> __ro_after_init variables, which includes critical security data such
+>>> as LSM
+>>> parameters) and .text sections as non-writable, and the .text section
+>>> is the
+>>> only one where kernel execution is allowed. This is possible thanks
+>>> to the new
+>>> MBEC support also brough by this series (otherwise the vDSO would
+>>> have to be
+>>> executable). Thanks to this hardware support (VT-x, EPT and MBEC),
+>>> the
+>>> performance impact of such guest protection is negligible.
+>>>
+>>> The second KVM_HC_LOCK_CR_UPDATE hypercall enables guests to pin some
+>>> of its
+>>> CPU control register flags (e.g., X86_CR0_WP, X86_CR4_SMEP,
+>>> X86_CR4_SMAP),
+>>> which is another complementary hardening mechanism.
+>>>
+>>> Heki can be enabled with the heki=1 boot command argument.
+>>>
+>>>
+>>
+>> Can the guest kernel ask the host VMM's emulated devices to DMA into
+>> the protected data? It should go through the host userspace mappings I
+>> think, which don't care about EPT permissions. Or did I miss where you
+>> are protecting that another way? There are a lot of easy ways to ask
+>> the host to write to guest memory that don't involve the EPT. You
+>> probably need to protect the host userspace mappings, and also the
+>> places in KVM that kmap a GPA provided by the guest.
+> 
+> Good point, I'll check this confused deputy attack. Extended KVM
+> protections should indeed handle all ways to map guests' memory. I'm
+> wondering if current VMMs would gracefully handle such new restrictions
+> though.
 
-Cheers,
-
-  -ilia
+I guess the host could map arbitrary data to the guest, so that need to 
+be handled, but how could the VMM (not the host kernel) bypass/update 
+EPT initially used for the guest (and potentially later mapped to the host)?
