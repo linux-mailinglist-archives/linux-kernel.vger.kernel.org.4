@@ -2,106 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F364671254B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FDE712550
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242957AbjEZLK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 07:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S243072AbjEZLNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 07:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjEZLKY (ORCPT
+        with ESMTP id S229747AbjEZLNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 07:10:24 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA5FF7;
-        Fri, 26 May 2023 04:10:23 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34QAi2qS002420;
-        Fri, 26 May 2023 11:10:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CRrNtT48/agfTTOGQnq/S02EfFlooFG80KnqCaI2A3Q=;
- b=aIcLdf1PWJBxzObO9/Jiz/fdEzXC3UyA4ZEG3988/LKbuihKAgp6v9//p6YIoN2YmbxJ
- 9fWDa7vm+VixIB0wv9x3yYJZcuX1vwIK8yMsdDrLb7KFNvEvhtfwnOCcY3KZr4cVZyV1
- Rlrln+RUX7iKdVIfRuIutAvAON3SBR+c0UC6rQs3Nht468Sgx/IueBExONxtzzIkPd1f
- Bhbmh4KTyEZn099Wm2fwNJ/oxprigSuYbkG5ksEdPzhQMu+3djsv29ySv1JCAKqwSvJO
- 1x0MKzzlITdJbs64qpPPGuClStOBCetnLoLtgPwjQeBnPC7xcFTF4y5w25x4Fngyv+86 RA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qtu0u02kk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 11:10:17 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34QBAGGB014757
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 11:10:16 GMT
-Received: from [10.50.37.96] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 26 May
- 2023 04:10:13 -0700
-Message-ID: <08a6ee40-0729-3573-9938-aa44a6ef297c@quicinc.com>
-Date:   Fri, 26 May 2023 16:40:09 +0530
+        Fri, 26 May 2023 07:13:04 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A70BF7;
+        Fri, 26 May 2023 04:13:03 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (p7097156-ipoefx.ipoe.ocn.ne.jp [153.231.19.155])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4CCF49B4;
+        Fri, 26 May 2023 13:12:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685099563;
+        bh=d3LVk7G1Bewsb4CigKlj5v/bqNRgnFoj2UDBwuFHOMI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LJJBDryPsmO4a0EUNxBhbiYBZZDze9O9NIh+PJM9FoStv1SGKfyAjotNIItezp733
+         zZWIftFhn8Tgfq0X4R4fknhuswScC/IRidiRq1JDhWsI8dcDbeteOD53IZJg12RRbn
+         wiSoaSAl5BG1ReGGJo5/qTl6hWvgnCx4fdLwWaHs=
+Date:   Fri, 26 May 2023 14:13:01 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Wang Yating <yating.wang@intel.com>,
+        Christoph Jechlitschek <christoph.jechlitschek@intel.com>,
+        Hao Yao <hao.yao@intel.com>, Andy Yeh <andy.yeh@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        linux-media@vger.kernel.org, Mark Pearson <markpearson@lenovo.com>,
+        Dell.Client.Kernel@dell.com, linux-kernel@vger.kernel.org,
+        Guenter Roeck <groeck@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Christian Schaller <cschalle@redhat.com>,
+        Wouter Bolsterlee <wouter@bolsterl.ee>,
+        Miguel Palhas <mpalhas@gmail.com>, it+linux-media@molgen.mpg.de
+Subject: Re: Missing MIPI IPU6 camera driver for Intel Alder Lake laptops
+Message-ID: <20230526111301.GA19530@pendragon.ideasonboard.com>
+References: <52c87d91-422d-fca0-4dd5-bbaa559c81b6@molgen.mpg.de>
+ <YvUKLbv/pOfbbeL+@pendragon.ideasonboard.com>
+ <YvUaEDMbZD70x+hD@kroah.com>
+ <Yyxd0BJw5syjVsvm@paasikivi.fi.intel.com>
+ <88033d6a-b1d6-a77d-cab7-1401d97ae8e2@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V2] clk: qcom: camcc-sc7180: Add parent dependency to all
- camera GDSCs
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <quic_tdas@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_cponnapa@quicinc.com>
-References: <20230501142932.13049-1-quic_tdas@quicinc.com>
- <f450c63a57fc5a9536d3c48df26244cf.sboyd@kernel.org>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_skakitap@quicinc.com>
-In-Reply-To: <f450c63a57fc5a9536d3c48df26244cf.sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Y_s3zw8lY4QNOhqq0TokKBzzywTgCWMT
-X-Proofpoint-GUID: Y_s3zw8lY4QNOhqq0TokKBzzywTgCWMT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 malwarescore=0 suspectscore=0 mlxlogscore=810
- impostorscore=0 phishscore=0 mlxscore=0 spamscore=0 bulkscore=0
- priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305260096
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <88033d6a-b1d6-a77d-cab7-1401d97ae8e2@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Fri, May 26, 2023 at 03:51:36PM +0500, Muhammad Usama Anjum wrote:
+> On 9/22/22 6:06 PM, Sakari Ailus wrote:
+> > On Thu, Aug 11, 2022 at 05:02:40PM +0200, Greg KH wrote:
+> >> On Thu, Aug 11, 2022 at 04:54:53PM +0300, Laurent Pinchart wrote:
+> >>> For the time being, I agree with your recommendation to not buy these
+> >>> devices if you care about camera support.
+> >>
+> >> I second this, don't buy these devices if the vendor is not willing to
+> >> get their drivers upstreamed properly.
+> > 
+> > I can now confirm that IPU6 driver upstreaming is now planned, with IPU6
+> > input system driver to be upstreamed first. The intent is that we would
+> > have patches for review on LMML around the end of the year.
+>
+> Is there any update on IPU6 driver? Probably it hasn't been sent upstream yet?
 
-On 5/11/2023 1:02 AM, Stephen Boyd wrote:
-> Quoting Taniya Das (2023-05-01 07:29:32)
->> Camera titan top GDSC is a parent supply to all other camera GDSCs. Titan
->> top GDSC is required to be enabled before enabling any other camera GDSCs
->> and it should be disabled only after all other camera GDSCs are disabled.
->> Ensure this behavior by marking titan top GDSC as parent of all other
->> camera GDSCs.
->>
->> Fixes: 15d09e830bbc ("clk: qcom: camcc: Add camera clock controller driver for SC7180")
->> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> Is something broken right now? The commit text doesn't tell me if we
-> need to backport this to stable kernels or merge it as soon as possible.
-> What's the priority of this fix?
+The IPU6 requires multiple drivers. The "easy" part (the IPU6 input
+system) has been submitted to the linux-media mailing list (see [1]).
+That driver will allow capturing raw frames from the camera sensors
+(assuming drivers for the sensors in your particular device are
+available).  Another driver has also be submitted to setup the IVSC (a
+chip present in some systems between the camera sensor and the IPU6),
+see [2].
 
+The hard part (the IPU6 processing system) will still take time, and
+once a driver for that is available, the userspace implementation in
+libcamera will also take time.
 
-Modularization of camx driver triggered this issue now, but there could 
-be some other scenarios which could trigger the same issue on stable 
-kernels.  Hence it needs to be back ported to stable kernels.
+[1] https://lore.kernel.org/linux-media/20230413100429.919622-1-bingbu.cao@intel.com/
+[2] https://lore.kernel.org/linux-media/1685022434-24609-1-git-send-email-wentong.wu@intel.com/
 
+> > The processing system driver will need more work to replace the custom
+> > interface. For a fully functional camera stack, also libcamera support for
+> > IPU6 will be needed.
+> > 
+> > I think I can say a major factor for why we're here is that the original
+> > intent was to use a different interface for upstream but as we don't have
+> > one yet and probably won't for quite some time, this doesn't really seem
+> > like a viable option anymore.
+> > 
+> > So I'm afraid I can't promise a quick fix but at the same time I can say
+> > work is being done to address this.
+
+-- 
+Regards,
+
+Laurent Pinchart
