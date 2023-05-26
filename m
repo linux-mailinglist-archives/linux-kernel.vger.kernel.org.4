@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C35711B26
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 02:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85368711B2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 02:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234090AbjEZA2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 20:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S234892AbjEZA3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 20:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjEZA2b (ORCPT
+        with ESMTP id S232528AbjEZA3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 20:28:31 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25FD18D
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:28:29 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-ba6d024a196so228935276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:28:29 -0700 (PDT)
+        Thu, 25 May 2023 20:29:42 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A5919D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:28:55 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f00c33c3d6so99405e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:28:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685060909; x=1687652909;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R4raorCV/k4j/KfC5TZ+3SxDxTpR/9GVfhD/np1Sjp4=;
-        b=0FlBV9gQskTLgn2L9BWaSCo74b0mrx8Ly8JPn03FKbQnKjr9WxcMsaSomCdwdcCs8f
-         wghYvFyazaqb+F/4D2hqOrPBYiY/8Y6bSDMCjXyEWF+XbZuLWI7RqocqUKtP0Nmc/xEX
-         LHQFkWDA0Fmzlv+h6r8CVDgWF/ApSZ2Hh71CqJsEHLCAcgBQ6GvSO3ZZm+1ZPe2Sb9Mm
-         sC5bEu9FR3UT2H3zpYvXCioti/xNSan/D4eHRQA/iTg7h6b5x2fzfFUrYC6ZLcxOrOOo
-         AkjC9tEUnyV+/RYmKoJfPiJe69abU13eTu0odKsLZHLydUZOltLsZ0nGphpk+bHkIEN1
-         BoyA==
+        d=linaro.org; s=google; t=1685060934; x=1687652934;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WHS1nKZQCzUqgGxJIZEyDSTgpeKovaxXS5dmIp7B7mY=;
+        b=hb48OX7YswDIW6bgXvhMyWEHilfEU4nfve7nE+bYuTZx0T9EUMAs+2M/7lpaR9rIvq
+         B3ni3hmdQFue8u+rzo2kPPA2xKblgMCKZSzfwtCjDDGZR4o5UEYJHPsf1tv5S3Ltjn+Y
+         PtWgsnH7aUvLbcSZ1zLSmZMuC4+ktixdpuG/STOZ8Jv1oEh+zFo98UvIaMFsYuoaUe7N
+         JhbYct/yNJGYIKlMr7ZDNK5rdWX930m2xVvqXsWDeUoLwY3DReIEFdty2QHlTdtcc19B
+         Xu8IWl02Vpaug1WY/qckzEnZHD0LEliLOJsStW+xsgvUs9VP/PGaVVvJWLBBf3XxZhoh
+         J/lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685060909; x=1687652909;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R4raorCV/k4j/KfC5TZ+3SxDxTpR/9GVfhD/np1Sjp4=;
-        b=MZ1Xyk5BUz8O8NMCQdrkgvvSdqAgSpblk+YjsJagTnoWarBsJNmJagDHDnKXM176Zi
-         wISgQg21jhroJw4uEObWCx6z1fcYEJghp2gmbkAF411RroGUczaoxkAk+3NjSyW835xs
-         Mdc9BUlFo5dJWGQYZKzWsiHbCueAI4zYP/82Fl70Upz1RVQOUrbhv6akfnSH+IKP2uhw
-         tT3T+PN1mU4JxAJRUbFVd8w2LlS7pmavDHYewu5uk/S2E+nd2XT5tfMy+9cEj+lGhcSR
-         HUb5omfigVuIG1iQTV/hzgfYxa/SmB8BiVtjL12Es0mYGX8mCZHtNn3JT04PlVpDOhxt
-         VNBg==
-X-Gm-Message-State: AC+VfDzgDt5ZefG4E1V3k6PznsTfYb7oTc65lF/4139Bz3Fz17WOiMin
-        D6gXdi7WRwumCdMWnwfVdby0isWHvhMOALP0LUw+NQ==
-X-Google-Smtp-Source: ACHHUZ4nG7Jkyk/tfSml6A5FggrLgGyyAESoFiw42YuFresYFAy6C1e84vcUbe6doQ4VEDrkEiI4FestEybPeBeJ+6g=
-X-Received: by 2002:a05:6902:1006:b0:bab:cd91:3639 with SMTP id
- w6-20020a056902100600b00babcd913639mr6269857ybt.55.1685060908646; Thu, 25 May
- 2023 17:28:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685060934; x=1687652934;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WHS1nKZQCzUqgGxJIZEyDSTgpeKovaxXS5dmIp7B7mY=;
+        b=XVJVSqT5Atp42c3EkjlTk+ZRo6mbiO6iQv1YJth4/8zVz/oZaTgOqm2fEJbr6hM4IO
+         wRFbYNGhfNq6JwH3YhNjDC7kB/+d99gy8L3XeO2DDIzwyIDg2Yrdxn5bPJAAKTsX7bEE
+         YN9hA300vHhJTugT3+sfoDUjQOnjo0XIK8IqkdoPZTZQwt2VrrxCRBoVlbAQaDsVoDLY
+         E8vjMnOwdpz7WgUAZfNnBc1Unpug7c7DbZrXNfCO1KgvdHBsWl86AkBHMqYEA240oKGJ
+         EVgIh+aGhF6ro+Gcjb0YoxYX8eVshkKkbFji5qLcwm2esy8N6pQjLIBaQB3Mtk66+ChQ
+         dU0Q==
+X-Gm-Message-State: AC+VfDyg+rvjmD+9T5mhaoZbDUmYs8hxDe1gQ9mnhQe0VTKcMOj9Yley
+        R+fhhgg620rjLpMOmn2QRhsZeg==
+X-Google-Smtp-Source: ACHHUZ7HMH2gfDV78qkYBjih+sKJV8C+EftnKAOlJTya/1eA3U1ovDXqiVBNax8yy9vDptHy2jzpmw==
+X-Received: by 2002:a19:f816:0:b0:4f3:a49b:121f with SMTP id a22-20020a19f816000000b004f3a49b121fmr7754951lff.40.1685060934020;
+        Thu, 25 May 2023 17:28:54 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id t28-20020ac2549c000000b004f3892d21a5sm390475lfk.69.2023.05.25.17.28.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 17:28:53 -0700 (PDT)
+Message-ID: <ef7b7335-d20c-3ddc-52df-b2801fa40283@linaro.org>
+Date:   Fri, 26 May 2023 02:28:52 +0200
 MIME-Version: 1.0
-References: <20230517160948.811355-1-jiaqiyan@google.com> <20230517160948.811355-2-jiaqiyan@google.com>
- <20230517235314.GB10757@monkey> <CACw3F52zNguJ-MvXOAJuMK+JfreLxorvHDPwO8w_gQdOzWj7eA@mail.gmail.com>
- <20230519224214.GB3581@monkey> <20230522044557.GA845371@hori.linux.bs1.fc.nec.co.jp>
- <CACw3F50rkrWkdMKo7yq35vDbGrcF4b0zohN3dORxL_h0KxZ7Bg@mail.gmail.com> <20230523024305.GA920098@hori.linux.bs1.fc.nec.co.jp>
-In-Reply-To: <20230523024305.GA920098@hori.linux.bs1.fc.nec.co.jp>
-From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Thu, 25 May 2023 17:28:17 -0700
-Message-ID: <CACw3F53C0f_Ph0etD+BgkAz4P8pX3YArjFgSPaLh_d6rUqMUCw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] mm/hwpoison: find subpage in hugetlb HWPOISON list
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "shy828301@gmail.com" <shy828301@gmail.com>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "duenwen@google.com" <duenwen@google.com>,
-        "axelrasmussen@google.com" <axelrasmussen@google.com>,
-        "jthoughton@google.com" <jthoughton@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 8/8] arm64: dts: qcom: msm8916-pm8916: Mark always-on
+ regulators
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
+ <20230510-msm8916-regulators-v1-8-54d4960a05fc@gerhold.net>
+ <ea53525b-749b-25e2-6dde-662a8e273597@linaro.org>
+In-Reply-To: <ea53525b-749b-25e2-6dde-662a8e273597@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,219 +82,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 7:43=E2=80=AFPM HORIGUCHI NAOYA(=E5=A0=80=E5=8F=A3=
-=E3=80=80=E7=9B=B4=E4=B9=9F)
-<naoya.horiguchi@nec.com> wrote:
->
-> On Mon, May 22, 2023 at 11:22:49AM -0700, Jiaqi Yan wrote:
-> > On Sun, May 21, 2023 at 9:50=E2=80=AFPM HORIGUCHI NAOYA(=E5=A0=80=E5=8F=
-=A3=E3=80=80=E7=9B=B4=E4=B9=9F)
-> > <naoya.horiguchi@nec.com> wrote:
-> > >
-> > > On Fri, May 19, 2023 at 03:42:14PM -0700, Mike Kravetz wrote:
-> > > > On 05/19/23 13:54, Jiaqi Yan wrote:
-> > > > > On Wed, May 17, 2023 at 4:53=E2=80=AFPM Mike Kravetz <mike.kravet=
-z@oracle.com> wrote:
-> > > > > >
-> > > > > > On 05/17/23 16:09, Jiaqi Yan wrote:
-> > > > > > > Adds the functionality to search a subpage's corresponding ra=
-w_hwp_page
-> > > > > > > in hugetlb page's HWPOISON list. This functionality can also =
-tell if a
-> > > > > > > subpage is a raw HWPOISON page.
-> > > > > > >
-> > > > > > > Exports this functionality to be immediately used in the read=
- operation
-> > > > > > > for hugetlbfs.
-> > > > > > >
-> > > > > > > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> > > > > > > ---
-> > > > > > >  include/linux/mm.h  | 23 +++++++++++++++++++++++
-> > > > > > >  mm/memory-failure.c | 26 ++++++++++++++++----------
-> > > > > > >  2 files changed, 39 insertions(+), 10 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > > > > > > index 27ce77080c79..f191a4119719 100644
-> > > > > > > --- a/include/linux/mm.h
-> > > > > > > +++ b/include/linux/mm.h
-> > > > > >
-> > > > > > Any reason why you decided to add the following to linux/mm.h i=
-nstead of
-> > > > > > linux/hugetlb.h?  Since it is hugetlb specific I would have tho=
-ught
-> > > > > > hugetlb.h was more appropriate.
-> > > > > >
-> > > > > > > @@ -3683,6 +3683,29 @@ enum mf_action_page_type {
-> > > > > > >   */
-> > > > > > >  extern const struct attribute_group memory_failure_attr_grou=
-p;
-> > > > > > >
-> > > > > > > +#ifdef CONFIG_HUGETLB_PAGE
-> > > > > > > +/*
-> > > > > > > + * Struct raw_hwp_page represents information about "raw err=
-or page",
-> > > > > > > + * constructing singly linked list from ->_hugetlb_hwpoison =
-field of folio.
-> > > > > > > + */
-> > > > > > > +struct raw_hwp_page {
-> > > > > > > +     struct llist_node node;
-> > > > > > > +     struct page *page;
-> > > > > > > +};
-> > > > > > > +
-> > > > > > > +static inline struct llist_head *raw_hwp_list_head(struct fo=
-lio *folio)
-> > > > > > > +{
-> > > > > > > +     return (struct llist_head *)&folio->_hugetlb_hwpoison;
-> > > > > > > +}
-> > > > > > > +
-> > > > > > > +/*
-> > > > > > > + * Given @subpage, a raw page in a hugepage, find its locati=
-on in @folio's
-> > > > > > > + * _hugetlb_hwpoison list. Return NULL if @subpage is not in=
- the list.
-> > > > > > > + */
-> > > > > > > +struct raw_hwp_page *find_raw_hwp_page(struct folio *folio,
-> > > > > > > +                                    struct page *subpage);
-> > > > > > > +#endif
-> > > > > > > +
-> > > > > > >  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_H=
-UGETLBFS)
-> > > > > > >  extern void clear_huge_page(struct page *page,
-> > > > > > >                           unsigned long addr_hint,
-> > > > > > > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> > > > > > > index 5b663eca1f29..c49e6c2d1f07 100644
-> > > > > > > --- a/mm/memory-failure.c
-> > > > > > > +++ b/mm/memory-failure.c
-> > > > > > > @@ -1818,18 +1818,24 @@ EXPORT_SYMBOL_GPL(mf_dax_kill_procs);
-> > > > > > >  #endif /* CONFIG_FS_DAX */
-> > > > > > >
-> > > > > > >  #ifdef CONFIG_HUGETLB_PAGE
-> > > > > > > -/*
-> > > > > > > - * Struct raw_hwp_page represents information about "raw err=
-or page",
-> > > > > > > - * constructing singly linked list from ->_hugetlb_hwpoison =
-field of folio.
-> > > > > > > - */
-> > > > > > > -struct raw_hwp_page {
-> > > > > > > -     struct llist_node node;
-> > > > > > > -     struct page *page;
-> > > > > > > -};
-> > > > > > >
-> > > > > > > -static inline struct llist_head *raw_hwp_list_head(struct fo=
-lio *folio)
-> > > > > > > +struct raw_hwp_page *find_raw_hwp_page(struct folio *folio,
-> > > > > > > +                                    struct page *subpage)
-> > > > > > >  {
-> > > > > > > -     return (struct llist_head *)&folio->_hugetlb_hwpoison;
-> > > > > > > +     struct llist_node *t, *tnode;
-> > > > > > > +     struct llist_head *raw_hwp_head =3D raw_hwp_list_head(f=
-olio);
-> > > > > > > +     struct raw_hwp_page *hwp_page =3D NULL;
-> > > > > > > +     struct raw_hwp_page *p;
-> > > > > > > +
-> > > > > > > +     llist_for_each_safe(tnode, t, raw_hwp_head->first) {
-> > > > > >
-> > > > > > IIUC, in rare error cases a hugetlb page can be poisoned WITHOU=
-T a
-> > > > > > raw_hwp_list.  This is indicated by the hugetlb page specific f=
-lag
-> > > > > > RawHwpUnreliable or folio_test_hugetlb_raw_hwp_unreliable().
-> > > > > >
-> > > > > > Looks like this routine does not consider that case.  Seems lik=
-e it should
-> > > > > > always return the passed subpage if folio_test_hugetlb_raw_hwp_=
-unreliable()
-> > > > > > is true?
-> > > > >
-> > > > > Thanks for catching this. I wonder should this routine consider
-> > > > > RawHwpUnreliable or should the caller do.
-> > > > >
-> > > > > find_raw_hwp_page now returns raw_hwp_page* in the llist entry to
-> > > > > caller (valid one at the moment), but once RawHwpUnreliable is se=
-t,
-> > > > > all the raw_hwp_page in the llist will be kfree(), and the return=
-ed
-> > > > > value becomes dangling pointer to caller (if the caller holds tha=
-t
-> > > > > caller long enough). Maybe returning a bool would be safer to the
-> > > > > caller? If the routine returns bool, then checking RawHwpUnreliab=
-le
-> > > > > can definitely be within the routine.
-> > > >
-> > > > I think the check for RawHwpUnreliable should be within this routin=
-e.
-> > > > Looking closer at the code, I do not see any way to synchronize thi=
-s.
-> > > > It looks like manipulation in the memory-failure code would be
-> > > > synchronized via the mf_mutex.  However, I do not see how traversal=
- and
-> > > > freeing of the raw_hwp_list  called from __update_and_free_hugetlb_=
-folio
-> > > > is synchronized against memory-failure code modifying the list.
-> > > >
-> > > > Naoya, can you provide some thoughts?
-> > >
-> > > Thanks for elaborating the issue.  I think that making find_raw_hwp_p=
-age() and
-> > > folio_clear_hugetlb_hwpoison() do their works within mf_mutex can be =
-one solution.
-> > > try_memory_failure_hugetlb(), one of the callers of folio_clear_huget=
-lb_hwpoison(),
-> > > already calls it within mf_mutex, so some wrapper might be needed to =
-implement
-> > > calling path from __update_and_free_hugetlb_folio() to take mf_mutex.
-> > >
-> > > It might be a concern that mf_mutex is a big lock to cover overall hw=
-poison
-> > > subsystem, but I think that the impact is not so big if the changed c=
-ode paths
-> > > take mf_mutex only after checking hwpoisoned hugepage.  Maybe using f=
-olio_lock
-> > > to synchronize accesses to the raw_hwp_list could be possible, but cu=
-rrently
-> > > __get_huge_page_for_hwpoison() calls folio_set_hugetlb_hwpoison() wit=
-hout
-> > > folio_lock, so this approach needs update on locking rule and it soun=
-ds more
-> > > error-prone to me.
-> >
-> > Thanks Naoya, since memory_failure is the main user of raw_hwp_list, I
-> > agree mf_mutex could help to sync its two del_all operations (one from
-> > try_memory_failure_hugetlb and one from
-> > __update_and_free_hugetlb_folio).
-> >
-> > I still want to ask a perhaps stupid question, somewhat related to how
-> > to implement find_raw_hwp_page() correctly. It seems
-> > llist_for_each_safe should only be used to traverse after list entries
-> > already *deleted* via llist_del_all. But the llist_for_each_safe calls
-> > in memory_failure today is used *directly* on the raw_hwp_list. This
-> > is quite different from other users of llist_for_each_safe (for
-> > example, kernel/bpf/memalloc.c).
->
-> Oh, I don't noticed that when writing the original code. (I just chose
-> llist_for_each_safe because I just wanted struct llist_node as a singly
-> linked list.)
 
-And maybe because you can avoid doing INIT_LIST_HEAD (which seems
-doable in folio_set_hugetlb_hwpoison if hugepage is hwpoison-ed for
-the first time)?
 
->
-> >  Why is it correct? I guess mostly
-> > because they are sync-ed under mf_mutex (except the missing coverage
-> > on __update_and_free_hugetlb_folio)?
->
-> Yes, and there seems no good reason to use the macro llist_for_each_safe
-> here.  I think it's OK to switch to simpler one like list_for_each which
-> should be supposed to be called directly.  To do this, struct raw_hwp_pag=
-e
-> need to have @node (typed struct list_head instead of struct llist_node).
+On 26.05.2023 01:39, Konrad Dybcio wrote:
+> 
+> 
+> On 17.05.2023 20:48, Stephan Gerhold wrote:
+>> Some of the regulators must be always-on to ensure correct operation of
+>> the system, e.g. PM8916 L2 for the LPDDR RAM, L5 for most digital I/O
+>> and L7 for the CPU PLL (strictly speaking the CPU PLL might only need
+>> an active-only vote but this is not supported for regulators in
+>> mainline currently).
+> Would you be interested in implementing this?
+Actually, I think currently all votes are active-only votes and what
+we're missing is sleep-only (and active-sleep if we vote on both)
 
-I will start to work on a separate patch to switch to list_head, and
-make sure operations from __update_and_free_hugetlb_folio and
-memory_failure are serialized (hopefully without intro new locks and
-just use mf_mutex).
-
->
-> Thanks,
-> Naoya Horiguchi
+Konrad
+> 
+> Ancient downstream defines a second device (vregname_ao) and basically
+> seems to select QCOM_SMD_(ACTIVE/SLEEP)_STATE based on that..
+> 
+> Looks like `struct regulator` stores voltage in an array that wouldn't
+> you know it, depends on the PM state. Perhaps that could be something
+> to explore!
+> 
+> Konrad
+> 
+>>
+>> The RPM firmware seems to enforce that internally, these supplies stay
+>> on even if we vote for them to power off (and there is no other
+>> processor running). This means it's pointless to keep sending
+>> enable/disable requests because they will just be ignored.
+>> Also, drivers are much more likely to get a wrong impression of the
+>> regulator status, because regulator_is_enabled() will return false when
+>> there are no users, even though the regulator is always on.
+>>
+>> Describe this properly by marking the regulators as always-on.
+>>
+>> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+>> ---
+>>  arch/arm64/boot/dts/qcom/apq8016-sbc.dts     | 5 -----
+>>  arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi | 5 +++++
+>>  2 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+>> index ab8dfd858025..1c5d55854893 100644
+>> --- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+>> +++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
+>> @@ -358,11 +358,6 @@ pm8916_l17: l17 {
+>>  	};
+>>  };
+>>  
+>> -&pm8916_s4 {
+>> -	regulator-always-on;
+>> -	regulator-boot-on;
+>> -};
+>> -
+>>  &sdhc_1 {
+>>  	status = "okay";
+>>  
+>> diff --git a/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
+>> index b38eecbd6253..64d7228bee07 100644
+>> --- a/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
+>> @@ -72,11 +72,13 @@ pm8916_rpm_regulators: regulators {
+>>  		pm8916_s3: s3 {
+>>  			regulator-min-microvolt = <1250000>;
+>>  			regulator-max-microvolt = <1350000>;
+>> +			regulator-always-on; /* Needed for L2 */
+>>  		};
+>>  
+>>  		pm8916_s4: s4 {
+>>  			regulator-min-microvolt = <1850000>;
+>>  			regulator-max-microvolt = <2150000>;
+>> +			regulator-always-on; /* Needed for L5/L7 */
+>>  		};
+>>  
+>>  		/*
+>> @@ -93,6 +95,7 @@ pm8916_s4: s4 {
+>>  		pm8916_l2: l2 {
+>>  			regulator-min-microvolt = <1200000>;
+>>  			regulator-max-microvolt = <1200000>;
+>> +			regulator-always-on; /* Needed for LPDDR RAM */
+>>  		};
+>>  
+>>  		/* pm8916_l3 is managed by rpmpd (MSM8916_VDDMX) */
+>> @@ -102,6 +105,7 @@ pm8916_l2: l2 {
+>>  		pm8916_l5: l5 {
+>>  			regulator-min-microvolt = <1800000>;
+>>  			regulator-max-microvolt = <1800000>;
+>> +			regulator-always-on; /* Needed for most digital I/O */
+>>  		};
+>>  
+>>  		pm8916_l6: l6 {
+>> @@ -112,6 +116,7 @@ pm8916_l6: l6 {
+>>  		pm8916_l7: l7 {
+>>  			regulator-min-microvolt = <1800000>;
+>>  			regulator-max-microvolt = <1800000>;
+>> +			regulator-always-on; /* Needed for CPU PLL */
+>>  		};
+>>  
+>>  		pm8916_l8: l8 {
+>>
