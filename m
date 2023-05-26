@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81059712654
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7244B712659
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242802AbjEZMMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S231337AbjEZMNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbjEZMMF (ORCPT
+        with ESMTP id S231270AbjEZMM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:12:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6378E128;
-        Fri, 26 May 2023 05:12:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D44615BE;
-        Fri, 26 May 2023 12:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE386C4339B;
-        Fri, 26 May 2023 12:12:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685103123;
-        bh=0OGgez+bxAhDWB3J6RtnFhQscw9kTUdRiuRLaL+k4+E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oz2Xi+dyCsvXKib4pJ3+bzEvLSbQo9vvNxHeSVKDOVh3+kgqpeUay2KsmkvJTWfFu
-         Ib12E54jAsNGXIMx801lVLhDiI4MM+FuaW+7J0kYlro3Q+T/L/YxXFRWBtqzE6EPyR
-         CLAqPqx30ceChoQs6A9S0pBN7TY+Yas1sAZfG3+95Q+nprdwKxBTIwPgtNnrwUmU3/
-         eiha+pU6HuSQ0Nhtsu0W9One5cu9KVekUNPeIXxUNmrCPhiS0G5VRNgWbBYSSEP2uH
-         /5o0wb4PrQINrI89YFslvlM4/YsfCjMiFp4gjEhnT1rkboF/W2XBTNHKiLF/npLOGL
-         VcJHmB9cgks8g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q2WIo-00073t-Vh; Fri, 26 May 2023 14:12:15 +0200
-Date:   Fri, 26 May 2023 14:12:14 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
-        agross@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] clk: qcom: Add lpass clock controller driver for
- SC8280XP
-Message-ID: <ZHCiHtVkVL7_ZwaK@hovoldconsulting.com>
-References: <20230525122930.17141-1-srinivas.kandagatla@linaro.org>
- <20230525122930.17141-4-srinivas.kandagatla@linaro.org>
+        Fri, 26 May 2023 08:12:59 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2121A4;
+        Fri, 26 May 2023 05:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685103178; x=1716639178;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3mF6zurg5dlS4/06LH1kw8Ah/Zk773sNRWv9o+cBqOA=;
+  b=YAgA8Lfe4wIO0aqhFink1Fbq2FkRg+EgJ0+WLBmull2koXjqd5zXyyJX
+   CF/Br24jilWAuf2jOqHM3YeXq4xHLOjzlP1t/Q99LFE54upTqPQ2Sl1CY
+   JWN6Xg9fL2/Ql/cu9amiYemQN7DwPZ8azyruj4o0N6BV6eGpd/cIkt3dm
+   swyStxP9SVT46FTXP1+Hp++wytOw/qEK88qAXIIcFRknnGX51hs27CJFA
+   AuKSd6s6Orel8i3Dkd2VmUMdWj+3nDsSrhaCC2NPIUtu1MYAGWDc72QLo
+   AOccGyUczBkfo2+feQmCHHCQeAThkX+pJhauvh8Td0+lNhAK2IUAjImzp
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="357441214"
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="scan'208";a="357441214"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 05:12:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="655611684"
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="scan'208";a="655611684"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 26 May 2023 05:12:37 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 85068413; Fri, 26 May 2023 15:12:41 +0300 (EEST)
+Date:   Fri, 26 May 2023 15:12:41 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        linux-pm@vger.kernel.org, Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH v4 1/2] PCI: Refactor pci_bridge_d3_possible()
+Message-ID: <20230526121241.GU45886@black.fi.intel.com>
+References: <20230524190726.17012-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230525122930.17141-4-srinivas.kandagatla@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230524190726.17012-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,76 +68,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 01:29:27PM +0100, Srinivas Kandagatla wrote:
-> Add support for the lpass clock controller found on SC8280XP based devices.
-> This would allow lpass peripheral loader drivers to control the clocks and
-> bring the subsystems out of reset.
+On Wed, May 24, 2023 at 02:07:25PM -0500, Mario Limonciello wrote:
+> All of the cases handled by pci_bridge_d3_possible() are specific
+> to these branches:
+> ```
+> 	case PCI_EXP_TYPE_ROOT_PORT:
+> 	case PCI_EXP_TYPE_UPSTREAM:
+> 	case PCI_EXP_TYPE_DOWNSTREAM:
+> ```
+> Drop a level of indentation by returning false in the default case
+> instead.  No intended functional changes.
 > 
-> Currently this patch only supports resets as the Q6DSP is in control of
-> LPASS IP which manages most of the clocks via Q6PRM service on GPR rpmsg
-> channel.
-> 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  drivers/clk/qcom/Kconfig            |  8 ++++
->  drivers/clk/qcom/Makefile           |  1 +
->  drivers/clk/qcom/lpasscc-sc8280xp.c | 63 +++++++++++++++++++++++++++++
->  3 files changed, 72 insertions(+)
->  create mode 100644 drivers/clk/qcom/lpasscc-sc8280xp.c
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-> --- /dev/null
-> +++ b/drivers/clk/qcom/lpasscc-sc8280xp.c
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022, Linaro Limited
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/err.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/regmap.h>
-
-Newline?
-
-> +#include <dt-bindings/clock/qcom,lpasscc-sc8280xp.h>
-> +
-> +#include "common.h"
-> +#include "reset.h"
-> +
-> +static const struct qcom_reset_map lpasscc_sc8280xp_resets[] = {
-> +	[LPASS_AUDIO_SWR_TX_CGCR] = { 0xc010, 1 },
-> +};
-> +
-> +static struct regmap_config lpasscc_sc8280xp_regmap_config = {
-> +	.reg_bits = 32,
-> +	.reg_stride = 4,
-> +	.val_bits = 32,
-> +	.name = "lpass-tcsr",
-> +	.max_register = 0x12000,
-> +};
-> +
-> +static const struct qcom_cc_desc lpasscc_reset_sc8280xp_desc = {
-
-Nit: Isn't "lpasscc_sc8280xp" the prefix you should use throughout
-(i.e. this should be lpasscc_sc8280xp_reset_desc or similar).
-
-> +	.config = &lpasscc_sc8280xp_regmap_config,
-> +	.resets = lpasscc_sc8280xp_resets,
-> +	.num_resets = ARRAY_SIZE(lpasscc_sc8280xp_resets),
-> +};
-> +
-> +static const struct of_device_id lpasscc_sc8280xp_match_table[] = {
-> +	{
-> +		.compatible = "qcom,sc8280xp-lpasscc",
-> +		.data = &lpasscc_reset_sc8280xp_desc,
-> +	},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, lpasscc_sc8280xp_match_table);
-
-Looks good otherwise:
-
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
