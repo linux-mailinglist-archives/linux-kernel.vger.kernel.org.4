@@ -2,100 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0D4712494
+	by mail.lfdr.de (Postfix) with ESMTP id 39CCE712493
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243022AbjEZKZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S243120AbjEZKZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236978AbjEZKZn (ORCPT
+        with ESMTP id S243072AbjEZKZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:25:43 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3ED3E46;
-        Fri, 26 May 2023 03:25:25 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1685096719te1p3ayz
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 26 May 2023 18:25:18 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: +ynUkgUhZJk/BOqp0oA9cBg1YsH89tL5W5qI5R9skNk3ZDlWFZ9Rn3nuDLHs6
-        r+jdJjJ6RsVhmT4f02tw/MUiR95J8ZHDs3wLyf7AK1WOAA4EIeTLghnosNldvidGC0l67Gg
-        2wYkd1Z5Tp0KBw74IMW4oY64DEXTsLZTXdoOMnfzfQfg3GspMKUW0w+aX/PB1XNeHKCJ7ki
-        rKwLr5llWwScHgLl/T/iRZLUbfPOilCzMWy+UioDCh9PuWaWLKFbQ7RhzPSDtCYJ0tJYlnv
-        QcwgLYeEKtu0tr1zpA4GKs/VRufTXnJiYTkUJXcC2xgJq1V6qzS/+WgbkejKpVxpTvwS0AE
-        pTyFJWz+eWpelE0SrSj+8C6mQRZa5VcSQVR8AnV0Hdew0584nkZshTSqBqhgn8mgsYKynPR
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12828852806642903950
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, w@1wt.eu
-Subject: Re: [PATCH 06/13] selftests/nolibc: allow specify a bios for qemu
-Date:   Fri, 26 May 2023 18:25:18 +0800
-Message-Id: <20230526102518.150058-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2ab94136-d341-4a26-964e-6d6c32e66c9b@t-8ch.de>
-References: <2ab94136-d341-4a26-964e-6d6c32e66c9b@t-8ch.de>
+        Fri, 26 May 2023 06:25:52 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4EC134
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:25:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=durui@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VjW4mAL_1685096732;
+Received: from localhost(mailfrom:durui@linux.alibaba.com fp:SMTPD_---0VjW4mAL_1685096732)
+          by smtp.aliyun-inc.com;
+          Fri, 26 May 2023 18:25:33 +0800
+From:   Du Rui <durui@linux.alibaba.com>
+To:     snitzer@kernel.org
+Cc:     agk@redhat.com, alexl@redhat.com, dm-devel@redhat.com,
+        durui@linux.alibaba.com, gscrivan@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: dm overlaybd: targets mapping OverlayBD image
+Date:   Fri, 26 May 2023 18:25:32 +0800
+Message-Id: <20230526102532.29276-1-durui@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
+In-Reply-To: <ZGz32yw7ecKhW+lj@redhat.com>
+References: <ZGz32yw7ecKhW+lj@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas
+Hi Mike:
 
-> On 2023-05-25 01:52:29+0800, Zhangjin Wu wrote:
-> > riscv qemu has a builtin bios (opensbi), but it may not match the latest
-> > kernel and some old versions may hang during boot, let's allow user pass
-> > a newer version to qemu via the -bios option.
-> 
-> Nitpick:
-> 
-> This seems very specific and hopefully only necessary temporarily.
->
+> I appreciate that this work is being done with an eye toward
+> containerd "community" and standardization 
 
-RISC-V is such a new ISA and the Spec (especially the SBI) changes very
-frequently ;-)
+> it appears that this format of OCI image storage/use is only
+> used by Alibaba? 
 
-> Instead it could be changed to some generic mechanim like
-> "QEMU_ARGS_EXTRA"?
->
+> But you'd do well to explain why the userspace solution isn't
+> acceptable.
 
-Good point, will apply it.
+Yes overlaybd has origins in container community, but this work (kernel 
+modules) does *NOT* actually target at container. Because on-demand lazy
+loading of container images involves complex interactions with the image 
+registry through HTTP(s) protocol, and possibly with other transport 
+serivces (like HTTP proxy, sock5 proxy, P2P, cache, etc.). This is better 
+implemented in user-space and finally exported to kernel as a virtual 
+block device like TCMU or ublk. The user-space impl of Overlaybd has a 
+very large install base in Alibaba, as well as some other big companies, 
+including another major cloud provider. (We'd better not unveil their
+names before we get their permissions). And We are pleased with the
+flexibility in user-space that allows for easy integration to various 
+systems / environments.
 
-Thanks,
-Zhangjin
+We implement this kernel module and try to contribute it to upstream
+because we belive it is useful for device mapper and LVM ecology:
 
-> > we can use it like this:
-> > 
-> >     $ make run BIOS=/path/to/new-bios ...
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/Makefile | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> > index 9adc8944dd80..9213763ab3b6 100644
-> > --- a/tools/testing/selftests/nolibc/Makefile
-> > +++ b/tools/testing/selftests/nolibc/Makefile
-> > @@ -70,7 +70,8 @@ QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> >  QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> >  QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> >  QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> > -QEMU_ARGS            = $(QEMU_ARGS_$(ARCH))
-> > +QEMU_ARGS_BIOS       = $(if $(BIOS),-bios $(BIOS))
-> > +QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_BIOS)
-> >  
-> >  # OUTPUT is only set when run from the main makefile, otherwise
-> >  # it defaults to this nolibc directory.
+(1) dm-overlaybd essentially implements generic redistributable snapshot
+    of an block device. This may enable LVM to push/pull individual 
+    snapshots to/from a volume repo globally distributed.
+
+(2) dm-overlaybd is highly efficent. Its index performance doesn't degrade 
+    with the number of snapshots increasing. In constrast, qcow2 (dm-qcow2) 
+    do not support efficient external snapshots. It has O(n) overhead in 
+    this case, where n is the number of (backing-file) snapshots.
+
+(3) dm-zfile is an efficient generic compressed block device. This allows
+    LVM to support compressed snapshot, in order to save disk space without
+    compromise much performance, and may even improve performance in some
+    cases.
+
+
+> I also have doubts that this solution is _actually_ more performant
+> than a proper filesystem based solution
+
+This proposal is not focused on performance, it's focused on new features
+to dm and LVM as described above, but I still advice you to run benchmarks
+and see the results. After all, ext4, xfs and other mature file systems are
+highly optimized as well.
+
+> solution that allows page cache sharing
+
+Page cache sharing can be realized with DAX support of the dm targets
+(and the inner file system), together with virtual pmem device backend.
+
+> There is an active discussion about, and active development effort
+> for, using overlayfs + erofs for container images.  I'm reluctant to
+> merge this DM based container image approach without wider consensus
+> from other container stakeholders.
+
+This proposal intends to help dm and lvm ecology, and is not related to 
+those file systems. It actually supports all kinds of file systems with 
+full capabilities. It is of little use in container, as the user-space 
+implementation is more feasible. And, there is nothing preventing the 
+container stakeholders to continue discussing and developing overlayfs, 
+erofs, composefs, etc.
