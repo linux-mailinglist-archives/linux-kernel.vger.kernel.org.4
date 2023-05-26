@@ -2,136 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEEE711D02
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0D1711D13
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjEZBqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 21:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
+        id S241931AbjEZBtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 21:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240667AbjEZBpx (ORCPT
+        with ESMTP id S229999AbjEZBtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 21:45:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A29189;
-        Thu, 25 May 2023 18:45:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C97A64C19;
-        Fri, 26 May 2023 01:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29D0C433D2;
-        Fri, 26 May 2023 01:45:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685065549;
-        bh=SfywDgpNkN5IEaAQx3kJcORg1Vipa1edhuqGcW7elzE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WLhGv7yxDbYxWFFp4yUNFtJ7lMvzXYowTM7++JqmBgWi6k6MZ8o2RddeyGaWkZz7d
-         jNOtyilWYfmLRYTecUy1F2axnIjal4XuAdfRBTzELPvpsc1E07fi82tXUx01NZ6YF/
-         pIe9DZsMgZcLjVxioA2pLcQhRSZW1DwFtMGvPH3R4P6M+ph90LNa4dkmTfU4weVm09
-         iLSgD6SS8cW1WH8RI3ch+usacYFeq7QkW7gksGjUCTwvHyn6sI54sm+NlTBsXB2g/V
-         /DNsdogy2Zt6JkJXUX1rvWvSfNEqW5LjSzHWA2J+99Q0dNDFl+FeJ1yzCxgfjs9PP9
-         I04F810tRKK8A==
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2af2db78b38so2061311fa.3;
-        Thu, 25 May 2023 18:45:49 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzgkqOGKRDxyHJOvVe4tvEieYojR+TLnWlt602p69G5ofkoszsk
-        Au+YW3q19vc57lUnHbOEAf+b4NwTO5p3ddSpNUg=
-X-Google-Smtp-Source: ACHHUZ7iExw/Wlf5nZx6NtGxubOcs37XcqxfbWbLz0xDm8IbHfNSgsR88uvVOSYAlpl07Ex0nPRU4Ntj63oxlWa5HDc=
-X-Received: by 2002:ac2:5471:0:b0:4f2:7b65:baf1 with SMTP id
- e17-20020ac25471000000b004f27b65baf1mr25328lfn.23.1685065547892; Thu, 25 May
- 2023 18:45:47 -0700 (PDT)
+        Thu, 25 May 2023 21:49:47 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885B3189;
+        Thu, 25 May 2023 18:49:46 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-53202149ae2so115128a12.3;
+        Thu, 25 May 2023 18:49:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685065786; x=1687657786;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=isqQBR+LcWlcVRH5HFBLQWkUaienYbAAAetyeIPDhls=;
+        b=k2dzm5yzkCF4Rc7qVxjzw78OcNbInMHg8ZVFXrtpvi04aTUXF6NXmNooTQIlp1lVgM
+         hY4RruhfFdJiSRHiIiJnOzrLVxthQR5lB/6sUgJKGG47Cn6JPu/yQYiA9D3CRQqd2baO
+         0sgMSdphtLcVhgB/o/MJorMxe+CdUboiX+MVNbBqexRjmL7SS44CaWb2r33640lOTEE7
+         kFxsnyoLISGHAtIVPWq0KnihtcoYKDMUUhIEsGHIFeW5FjlqZc7c5bLbZpXFtDgCxBHh
+         2xb3UBd53g2wDuP/ivdKo6CwMmvUFdHkvY/vp69UAneTs231rjZJxKWguaLcHdwrmUEm
+         axCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685065786; x=1687657786;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=isqQBR+LcWlcVRH5HFBLQWkUaienYbAAAetyeIPDhls=;
+        b=MybFpu/Vxu9x8mMyxmkY99wy96tn6b/Uz7FFLcGxwzzA/K7QtaX2G8HJPmlGrBxjaA
+         3pxPzM/fBVDtO01NbQIvyylRTe8adYeT93oiZs9kRvbIraQpAk7bs7Es8RgWI9aaMvbE
+         3QsGTttlRF9CB7wQpcvitwTF5r0XZtspHpGJqAzqGFdVwUmRgN2SpfwskHgFi6joRmth
+         wfPOUeWjwYYrpKlUunRAwVvWkdz0qBVLgmCC/cGUHKOjhxdbL7J9vNHDH65bmWnNWKhp
+         VmA9nqY7kqm6zlqSx+3OpUlKG10fsxvavVPLEmJQf3FCt9eSWwC6AWYLdVeLQhH6hYHc
+         pmMQ==
+X-Gm-Message-State: AC+VfDzZs87j35LyS0SpBjoD3gZUEP6o0RkFVE5V5AnfwiTpnLT8mPKF
+        SKm3H4E8fniBih/Fke7YY+M=
+X-Google-Smtp-Source: ACHHUZ7qbsvJNn8QDeJJCs5gnBHMCXRdl2DwncOu4TEkMeQtqXDQ4W2J75wich3JreZHQXHw4yhe8Q==
+X-Received: by 2002:a17:902:8603:b0:1ab:1355:1a45 with SMTP id f3-20020a170902860300b001ab13551a45mr718292plo.30.1685065785844;
+        Thu, 25 May 2023 18:49:45 -0700 (PDT)
+Received: from [172.27.232.70] (ec2-16-163-40-128.ap-east-1.compute.amazonaws.com. [16.163.40.128])
+        by smtp.gmail.com with ESMTPSA id bg4-20020a1709028e8400b001a9873495f2sm1997572plb.233.2023.05.25.18.49.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 18:49:45 -0700 (PDT)
+Message-ID: <4dc14170-8e22-9da7-30ec-a5597acf1f8e@gmail.com>
+Date:   Fri, 26 May 2023 09:49:41 +0800
 MIME-Version: 1.0
-References: <20230517131820.936553-1-arnd@kernel.org> <ZG2bfsr+LwrxqsUX@bombadil.infradead.org>
- <a3d01d39-3d45-4fdc-8f73-b6c33bcae24b@app.fastmail.com> <ZG27pExhUqFpGexM@bombadil.infradead.org>
-In-Reply-To: <ZG27pExhUqFpGexM@bombadil.infradead.org>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 25 May 2023 18:45:35 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
-Message-ID: <CAPhsuW4ZksuhhXqDNrb4fPqQFVgW+cfpNLGHOWoLoYWjCKZGpA@mail.gmail.com>
-Subject: Re: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Borislav Petkov <bp@suse.de>, linux-modules@vger.kernel.org,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 5/6] KVM: x86: Keep a per-VM MTRR state
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Yan Zhao <yan.y.zhao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com
+References: <20230509134825.1523-1-yan.y.zhao@intel.com>
+ <20230509135300.1855-1-yan.y.zhao@intel.com>
+ <3f09e751-33fd-7d60-78cd-6857d113e8bd@gmail.com>
+ <ZGxbat2mM6AfOOVv@yzhao56-desk.sh.intel.com>
+ <393b16f7-8359-5d77-7d5d-8942de987331@gmail.com>
+ <ZG94Kmb8jMZKhtJW@google.com>
+From:   Robert Hoo <robert.hoo.linux@gmail.com>
+In-Reply-To: <ZG94Kmb8jMZKhtJW@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Alan Maguire
+On 5/25/2023 11:00 PM, Sean Christopherson wrote:
+[...]
+> The MTRRs are not system wide or per-package though, they are per logical CPU.
+> Yes, they "need" to be consistent with respect to one another, but only when the
+> CPU is actually accessing memory.  This is a big reason why trying to track MTRRs
+> as a per-VM asset in KVM is so difficult/messy.  Software doesn't rendezvous all
+> CPUs and then do the write on just one CPU, each CPU does its own writes more or
+> less independently.
 
-On Wed, May 24, 2023 at 12:24=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.or=
-g> wrote:
->
-> On Wed, May 24, 2023 at 08:25:13AM +0200, Arnd Bergmann wrote:
-> > On Wed, May 24, 2023, at 07:07, Luis Chamberlain wrote:
-> > > On Wed, May 17, 2023 at 03:18:07PM +0200, Arnd Bergmann wrote:
-> > >> From: Arnd Bergmann <arnd@arndb.de>
-> > >>
-> > >> The arch_get_kallsym() function was introduced so that x86 could ove=
-rride
-> > >> it, but that override was removed in bf904d2762ee ("x86/pti/64: Remo=
-ve
-> > >> the SYSCALL64 entry trampoline"), so now this does nothing except ca=
-using
-> > >> a warning about a missing prototype:
-> > >>
-> > >> kernel/kallsyms.c:662:12: error: no previous prototype for 'arch_get=
-_kallsym' [-Werror=3Dmissing-prototypes]
-> > >>   662 | int __weak arch_get_kallsym(unsigned int symnum, unsigned lo=
-ng *value,
-> > >>
-> > >> Restore the old behavior before d83212d5dd67 ("kallsyms, x86: Export
-> > >> addresses of PTI entry trampolines") to simplify the code and avoid
-> > >> the warning.
-> > >>
-> > >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > Shouldn't this go through x86 as this sort of fixesss commit
-> > > bf904d2762ee ("x86/pti/64: Remove the SYSCALL64 entry trampoline")?
-> >
-> > That works for me as well, as long as someone picks it up. It's
-> > not really x86 any more though since that commit is five years
-> > old and removed the last reference from the x86 code.
->
-> Fair enough.
->
-> > I sent it to you since you are the one that merged most of
-> > the kallsyms patches through the module tree, but I guess
-> > you are not actually maintaining that file (not blaming you,
-> > I'd also try to stay away from kallsyms).
-> >
-> > I can resend it to Andrew for the -mm tree.
->
-> OK, I just took the patch in, it's on the train, better get on before
-> it gets lost.
+Ah, got it, thanks!
 
-This change broke compilation of BPF selftests in modules-next
-branch:
+(Some things of each logical processor seems just a shadow of an 
+consolidate global one, e.g. CR0.CD. Some things are really separated 
+setting of each logical processor, e.g. MTRR above. Really unfathomable 😅)
+> 
+>> BTW, with regard to KVM_X86_QUIRK_CD_NW_CLEARED, I see svm honors it while
+>> vmx doesn't before it clear CR0.CD/NW.
+>>
+>> svm_set_cr0():
+>>
+>> 	if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
+>> 		hcr0 &= ~(X86_CR0_CD | X86_CR0_NW);
+>>
+>>
+>> vmx_set_cr0():
+>>
+>> 	hw_cr0 = (cr0 & ~KVM_VM_CR0_ALWAYS_OFF);
+>>
+>> Perhaps vmx side can be fixed passingly?
+> 
+> Sadly, no.  SVM and VMX manage guest memtype completely differently.  VMX doesn't
+> allow CR0.CD=1 when VMX is enabled, and so KVM needs to emulate CR0.CD via the EPT
+> memtype.
 
-progs/bpf_iter_ksym.c:62:13: error: no member named 'pos_arch_end' in
-'struct kallsym_iter'
-        if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
-             ~~~~  ^
-progs/bpf_iter_ksym.c:62:35: error: no member named 'pos_arch_end' in
-'struct kallsym_iter'
-        if (!iter->pos_arch_end || iter->pos_arch_end > iter->pos)
-                                   ~~~~  ^
-
-I haven't looked into the proper fix for it yet.
-
-Thanks,
-Song
+OK, get it, thanks. Wasn't aware of this through SDM.
