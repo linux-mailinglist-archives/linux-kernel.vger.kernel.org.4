@@ -2,94 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2AD7126C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43927126C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243308AbjEZMf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S243128AbjEZMg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237243AbjEZMfy (ORCPT
+        with ESMTP id S237243AbjEZMgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:35:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B7410D1;
-        Fri, 26 May 2023 05:35:28 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QSPXB3F7MzTkdF;
-        Fri, 26 May 2023 20:35:22 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 26 May
- 2023 20:35:25 +0800
-Subject: Re: [PATCH net-next 1/2] page_pool: unify frag page and non-frag page
- handling
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Eric Dumazet <edumazet@google.com>
-References: <20230526092616.40355-1-linyunsheng@huawei.com>
- <20230526092616.40355-2-linyunsheng@huawei.com> <ZHCgJxTnm37qu3aY@hera>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <5640bab0-d2f9-50ee-f3e2-eb0f86b144dc@huawei.com>
-Date:   Fri, 26 May 2023 20:35:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Fri, 26 May 2023 08:36:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2543599;
+        Fri, 26 May 2023 05:36:53 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C845F1FD66;
+        Fri, 26 May 2023 12:36:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1685104611; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p+/ryCc/jVqNC/x4M8331SF9oIVJd7A5Ujt5a8BQi9E=;
+        b=WY+EmfEaF350yIwkRzxDP07Zk1RN8/tkWscLlzLc2PycMGLXJj8n5hELkbGzRMj/D9KtF3
+        /3KpgjaMthlb/0GiErFArvBIX8U1yQN4eZgsPgX0weH9CeM2WMH88SeowIWT0yBXf9E4tJ
+        0wJdkKI48GEwTErxBH8J6Dm+ghVFuyk=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E5CBE2D3BD;
+        Fri, 26 May 2023 12:36:50 +0000 (UTC)
+Date:   Fri, 26 May 2023 14:36:50 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
+        npiggin@gmail.com, davem@davemloft.net,
+        Marc Zyngier <maz@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
+        christophe.leroy@csgroup.eu,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
+        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        Masayoshi Mizuma <msys.mizuma@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: [PATCH v5 15/18] watchdog/perf: Add a weak function for an arch
+ to detect if perf can use NMIs
+Message-ID: <ZHCn4hNxFpY5-9Ki@alley>
+References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
+ <20230519101840.v5.15.Ic55cb6f90ef5967d8aaa2b503a4e67c753f64d3a@changeid>
 MIME-Version: 1.0
-In-Reply-To: <ZHCgJxTnm37qu3aY@hera>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519101840.v5.15.Ic55cb6f90ef5967d8aaa2b503a4e67c753f64d3a@changeid>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/26 20:03, Ilias Apalodimas wrote:
-> Hi Yunsheng
+On Fri 2023-05-19 10:18:39, Douglas Anderson wrote:
+> On arm64, NMI support needs to be detected at runtime. Add a weak
+> function to the perf hardlockup detector so that an architecture can
+> implement it to detect whether NMIs are available.
 > 
-> Apologies for not replying to the RFC,  I was pretty busy with internal
-> stuff
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> While I won't object to this patch landing, I consider it part of the
+> arm64 perf hardlockup effort. I would be OK with the earlier patches
+> in the series landing and then not landing ${SUBJECT} patch nor
+> anything else later.
 > 
-> On Fri, May 26, 2023 at 05:26:14PM +0800, Yunsheng Lin wrote:
->> Currently page_pool_dev_alloc_pages() can not be called
->> when PP_FLAG_PAGE_FRAG is set, because it does not use
->> the frag reference counting.
->>
->> As we are already doing a optimization by not updating
->> page->pp_frag_count in page_pool_defrag_page() for the
->> last frag user, and non-frag page only have one user,
->> so we utilize that to unify frag page and non-frag page
->> handling, so that page_pool_dev_alloc_pages() can also
->> be called with PP_FLAG_PAGE_FRAG set.
+> I'll also note that, as an alternative to this, it would be nice if we
+> could figure out how to make perf_event_create_kernel_counter() fail
+> on arm64 if NMIs aren't available. Maybe we could add a "must_use_nmi"
+> element to "struct perf_event_attr"?
 > 
-> What happens here is clear.  But why do we need this?  Do you have a
-> specific use case in mind where a driver will call
-> page_pool_dev_alloc_pages() and the PP_FLAG_PAGE_FRAG will be set?
+> --- a/kernel/watchdog_perf.c
+> +++ b/kernel/watchdog_perf.c
+> @@ -234,12 +234,22 @@ void __init hardlockup_detector_perf_restart(void)
+>  	}
+>  }
+>  
+> +bool __weak __init arch_perf_nmi_is_available(void)
+> +{
+> +	return true;
+> +}
+> +
+>  /**
+>   * watchdog_hardlockup_probe - Probe whether NMI event is available at all
+>   */
+>  int __init watchdog_hardlockup_probe(void)
+>  {
+> -	int ret = hardlockup_detector_event_create();
+> +	int ret;
+> +
+> +	if (!arch_perf_nmi_is_available())
+> +		return -ENODEV;
 
-Actually it is about calling page_pool_alloc_pages() in
-page_pool_alloc_frag() in patch 2, the use case is the
-veth using page frag support. see:
+My understanding is that this would block the perf hardlockup detector
+at runtime. Does it work with the "nmi_watchdog" sysctl. I see
+that it is made read-only when it is not enabled at build time,
+see NMI_WATCHDOG_SYSCTL_PERM.
 
-https://patchwork.kernel.org/project/netdevbpf/patch/d3ae6bd3537fbce379382ac6a42f67e22f27ece2.1683896626.git.lorenzo@kernel.org/
+> +
+> +	ret = hardlockup_detector_event_create();
+>  
+>  	if (ret) {
+>  		pr_info("Perf NMI watchdog permanently disabled\n");
 
-> If that's the case isn't it a better idea to unify the functions entirely?
-
-As about, page_pool_alloc_frag() does seems to be a superset of
-page_pool_alloc_pages() after this patchset as my understanding.
-If the page_pool_alloc_frag() API turns out to be a good API for
-the driver, maybe we can phase out *page_pool_alloc_pages() as
-time goes by?
-
-
+Best Regards,
+Petr
