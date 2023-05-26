@@ -2,111 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 390867124D6
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A0B7124DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242531AbjEZKg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S242523AbjEZKik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjEZKg5 (ORCPT
+        with ESMTP id S236409AbjEZKif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:36:57 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E855C13A;
-        Fri, 26 May 2023 03:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685097404; x=1716633404;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Jv3kgjC1n5+JrmCIQo2+tQziiqBHBuOGDCYusXZdTHk=;
-  b=dMI2kHnLo9lbrAEjhxEQix+oD1vBZ8xM7+OO8mkE+t5fyz4f4cK6UWSV
-   b3jiQBZnJWsEwwrNZVka7nq77vyBgZkcppvW19aCJRfHjCzvIjpwIjB4Q
-   R3Ra3zcZM2tqmJHRJTr02IpMZVpHXXgAiFYPGV4Tzwm1XKWID/f18pcYj
-   vrCvKtSqdNWDr+tnfQGEA9GZEXjEDgab9famTtKR9nilSVk3+TOFCvEeR
-   lqdO0XdQiB/CtnfCoL/yoKtWwRDy2Xjwr9wVjJRDFpgykyUwzmTvOLFaT
-   gmhKmU9luCHIvwfzaZfzlNwdgKDcRG9n9sUmxIXM1xl64nCxlEqhQvQKd
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
-   d="asc'?scan'208";a="154077255"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2023 03:36:43 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 26 May 2023 03:36:42 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 26 May 2023 03:36:40 -0700
-Date:   Fri, 26 May 2023 11:36:18 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Zhangjin Wu <falcon@tinylab.org>
-CC:     <thomas@t-8ch.de>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <palmer@dabbelt.com>,
-        <paul.walmsley@sifive.com>, <w@1wt.eu>
-Subject: Re: [PATCH 06/13] selftests/nolibc: allow specify a bios for qemu
-Message-ID: <20230526-clover-litter-1f41398cd820@wendy>
-References: <2ab94136-d341-4a26-964e-6d6c32e66c9b@t-8ch.de>
- <20230526102518.150058-1-falcon@tinylab.org>
+        Fri, 26 May 2023 06:38:35 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A71B13A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:38:32 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6d7abe934so4051235e9.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685097511; x=1687689511;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gqVVAm/y1HoALh+s361erx7bMZgCxQRFgtpi/v1PaKo=;
+        b=HJ7fBVJqCsT5R4//AmW9AScNLLApXJA8d/6S7+0FY9YgxHH74VnQpWwCehPoOdr0wq
+         SQ2JuvmK7sm2lA+i+BrspdAKh4JaEWD2AzLV6FIjF2d7I7ARoWcP75ZGPe3VoV3TouUX
+         IFsE/VaWeFtVv+mcA4umKZORliI1NLDFlPa8O/NLaC9owMTeCLNhJrzWzxkHyPF91Phg
+         Yw13DjWeDFiBMeKO94urScZMETTyzG7JWyUSgr0OIbueJhL17ZDbdm8bGjcQLXcB5Ps/
+         RB2Ey9BZUFnKYilXj0DM97vYkgULbKziaGJx4rJaRpxlyrTiwKssm4TGN1ASwks8GDMS
+         VZfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685097511; x=1687689511;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gqVVAm/y1HoALh+s361erx7bMZgCxQRFgtpi/v1PaKo=;
+        b=fGHWsrh8csFRp/8x3lWwyHWZyVuOgiu+a8FE/L4kzkIn/7oiwJnTqjd4Az+LUmUPbz
+         BErJURzSbDfE3514i0tbSMiSDV+Kgn0jVgCIGQ35YPSxAAgpP9BriRUc5oBngLUuN6JW
+         w7daMOOJw59v6EI7P1cFHvefl1tJJ8nTxs297h0QVC700/9+mwSJLRAQ2TYQQTBIvFh8
+         175L7BubVwdFXWNzEtsFgVSZAukSi4uHSevx4jHi3HMZgFal0NsM7k9SkYKw1cmnx1yt
+         ja8O5A1pII1s98ODA//StgGTPLe4q1xEcSnMn5D1xrwvQLc9fJ7WN9Iwve92wZGJoi5i
+         FVhQ==
+X-Gm-Message-State: AC+VfDzONysVZqg25gIHgs5RxQB+g+DiY80tg1wr1zKMqc09Y7pdNO7v
+        kVH2A8k0ixKaJ6F9N7wxMcGEOQ==
+X-Google-Smtp-Source: ACHHUZ656Zt2yUkAzWvrDGzkUWXOvr37WPMqjvtf1rRfMMcu9S7heLTHhVOVYRLwpW1FUroNPr92DQ==
+X-Received: by 2002:a1c:f40a:0:b0:3f4:e853:6a1 with SMTP id z10-20020a1cf40a000000b003f4e85306a1mr1350782wma.38.1685097510904;
+        Fri, 26 May 2023 03:38:30 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id x4-20020a05600c21c400b003f0aefcc457sm8460239wmj.45.2023.05.26.03.38.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 03:38:30 -0700 (PDT)
+Date:   Fri, 26 May 2023 11:38:28 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Artur Weber <aweber.kernel@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Helge Deller <deller@gmx.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Luca Weiss <luca@z3ntu.xyz>,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-pwm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v2 2/4] video: backlight: lp855x: get PWM for PWM mode
+ during probe
+Message-ID: <20230526103828.GE626291@aspen.lan>
+References: <20230519180728.2281-1-aweber.kernel@gmail.com>
+ <20230519180728.2281-3-aweber.kernel@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+DgvsBgu6jRefMs1"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230526102518.150058-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230519180728.2281-3-aweber.kernel@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---+DgvsBgu6jRefMs1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, May 19, 2023 at 08:07:26PM +0200, Artur Weber wrote:
+> Also deprecate the pwm-period DT property, as it is now redundant
+> (pwms property already contains period value).
+>
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 
-On Fri, May 26, 2023 at 06:25:18PM +0800, Zhangjin Wu wrote:
-
-> > On 2023-05-25 01:52:29+0800, Zhangjin Wu wrote:
-> > > riscv qemu has a builtin bios (opensbi), but it may not match the lat=
-est
-> > > kernel and some old versions may hang during boot, let's allow user p=
-ass
-> > > a newer version to qemu via the -bios option.
-> >=20
-> > Nitpick:
-> >=20
-> > This seems very specific and hopefully only necessary temporarily.
-> >
->=20
-> RISC-V is such a new ISA and the Spec (especially the SBI) changes very
-> frequently ;-)
-
-
-Huh. Could you please expand on which versions of QEMU will hang while
-booting an upstream or stable kernel? Which kernels would be good to
-know too.
-
-Thanks,
-Conor.
-
---+DgvsBgu6jRefMs1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHCLogAKCRB4tDGHoIJi
-0kjpAPwML0wLmXcsHy9jNdLnSR8p4LF+9ZCZ/8pv1hm0Fgq9IQEA7ZLOR0N6gyxT
-UTASO3uvvgtigCW04/NkCWF9NWVS1A8=
-=VBPR
------END PGP SIGNATURE-----
-
---+DgvsBgu6jRefMs1--
+Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
