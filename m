@@ -2,110 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BF97128B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 16:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AD07128BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 16:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244010AbjEZOkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 10:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S244047AbjEZOk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 10:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243917AbjEZOjo (ORCPT
+        with ESMTP id S244085AbjEZOkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 10:39:44 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57F210EB;
-        Fri, 26 May 2023 07:39:10 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 42F0CF14B1;
-        Fri, 26 May 2023 07:38:49 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bBdOD9a9ftPt; Fri, 26 May 2023 07:38:48 -0700 (PDT)
-From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1685111928; bh=dfF6XaE50ihs23TtTkgdj4tNvRZZ2hvvhNDTozYcucI=;
-        h=From:Date:Subject:To:Cc:From;
-        b=gseJCe7Eb3YHf7jqVIbSsYZjhanawrOeGdDn+kK067om4+ZohvVWAJZZYRWUMXrjz
-         8QSDjqE+DXUzGf/K0+bBP1OHQPGivFL2/Ye90cMeBuikDPJlnT1GZOe3ZZKIL1jD+E
-         l6xs2kZ+mg5PoPvDr2tqij0Re3xdU1PpjDktlrf3ABpWygu+YcytYdcR8qQwFUb+z8
-         3FhIBDU419omuX1I41s5g+9FkEB/tP8+Epf28fY8sKeU2k/WlHFI7jGJ5bKNuwa3gF
-         XZF1wAf9lCZf2n0Pjz7gh2yn3FM+sMYFg7FxHsnIq66YMzhcQU1tjL03R7PdNzulP/
-         FAj1Ede2VgDBw==
-Date:   Fri, 26 May 2023 16:38:11 +0200
-Subject: [PATCH] net: usb: qmi_wwan: Set DTR quirk for BroadMobi BM818
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230526-bm818-dtr-v1-1-64bbfa6ba8af@puri.sm>
-X-B4-Tracking: v=1; b=H4sIAFLEcGQC/x2NywqDMBBFf0Vm3YEkPgj+inSRxGkd0CiTthQk/
- +7g8lzO5ZxQSJgKjM0JQj8uvGcF+2ggLSG/CXlWBmdca3o3YNy89Th/BC11NjjfkzEJ1I+hEEY
- JOS36yN911fEQevH/DkzPWi/W/LmncAAAAA==
-To:     =?utf-8?q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Angus Ainslie (Purism)" <angus@akkea.ca>,
-        Bob Ham <bob.ham@puri.sm>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@puri.sm,
-        stable@vger.kernel.org,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1285;
- i=sebastian.krzyszkowiak@puri.sm; h=from:subject:message-id;
- bh=dfF6XaE50ihs23TtTkgdj4tNvRZZ2hvvhNDTozYcucI=;
- b=owEBbQKS/ZANAwAIAejyNc8728P/AcsmYgBkcMRvt0yPJ9mk/umNTjjMrTS5aXZ8PH+bsuxiZ
- d6PFy2DiLOJAjMEAAEIAB0WIQQi3Z+uAGoRQ1g2YXzo8jXPO9vD/wUCZHDEbwAKCRDo8jXPO9vD
- /7cHD/0QMo7yE+WKQsaWAm17cMslWLpDUFYE48RwGHMKWCcJlb6Jl5xFFLcrdJS3RtzwFbexVWy
- 6VGXuwecgDtlkiglY7v4TOP8dHdlwyG9nmHSTHlBVHLAAZfK9MEC1Pjex2M9078N8rRENBgiVH4
- 1c5/Khi3kjoYsaDH4rNvhys+dR40XSZ8fbN+n8v9S1NzPKfYNNg5bTt7/b0rwEDCy4ZKB4DQ1gY
- 5MASTnd1YxbPysx2RmopoIKW2GolJzoYTeUomEKYX3A99DQOXIoncNGzwLWWlUIwFo9zWKFOiMY
- PTenAbc/L0+iquI/FNI2DETkhvr+dG8+gT+ZI5NkePUIi3z6Amyumw8yf7QVCGGpUahxbnIfSIc
- WcmXHur0fVFt2mFBgHTWuAwFDJTeSxEMwwTdry588kcYaEnvMpLMOuTuzbY3PK/wtOx0PU4fn8u
- aclcyPQaa5aevucYdJhD8hdmIKWggWTKZZLqP+FmWd8GUJwzaBofR+HRObzafyU3TYKfk9PSfOh
- 1uBxGsZEf3YCd98fnDMgmN9YcUyUG/U6ImvEaqTWsXxnWgKASi8KW2+5wAyhfG+YOeDU/fh4Zqp
- Bd0fCyIg9Qnm7yvbUAj3VhxOdAPaR+UsRD8PBEGsVLvBTBaBWMTpD6ATdptOp41E/aqIq8/N6eK
- z9d8sPtTn94Z/CA==
-X-Developer-Key: i=sebastian.krzyszkowiak@puri.sm; a=openpgp;
- fpr=22DD9FAE006A11435836617CE8F235CF3BDBC3FF
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 26 May 2023 10:40:02 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635A5E54
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 07:39:25 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bacfa4eefcbso2164615276.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 07:39:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685111956; x=1687703956;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HNAPtYMKE2DwuE0/Om5XERH8unHdbvGM9xOlT/rQSiM=;
+        b=qsUncX2EbLctr4fP8gajSri5U1pxUkivvKJRV9QQZmG0n0CaNsLFJVwgtgSWDD+SMJ
+         2SdsjklIMX7MTPqTAJd6xEdCOhoRT1rQhi3AonOw5G76o0mFvMlyx2d+x+u3Lv3sR5XU
+         SpIntlAP1o1CdhXFFuU5KFnjUOPei3x70ZeBUQzhnzfj1yKSBUU7AwTHLeMWgZpAsbgh
+         zuODJ2RLL4JnK45BOaGIm4QWeVWqU00jBeMbuLaRDcz1u9yNd4/1VUeVhTAWMR5UXyCT
+         aY3ep4oSH6a2l8RdFYcyXK7LfRXeh/9jcPQiNaj/YT6UTvBvSzXnYlMJLGCqHwQVu6Ai
+         D9jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685111956; x=1687703956;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HNAPtYMKE2DwuE0/Om5XERH8unHdbvGM9xOlT/rQSiM=;
+        b=Tu93wzsx6kwQLur6FzSbyg/BwnZsSAzutop3CuxTGvdFMd8RIxRInI+ljnaZE1MTU3
+         /U+g0N+eGB0YwKdFnTBt7SsDqy+lKpEnVl+NT7AAl7PPvR/ygaCgYRdKH7MHUn0owanE
+         glT87j3EvlSV+0oGY6chzpH+lFZEObXNUi7YuHhWjTkRutysoo8LrwblAL/+x/fz15FQ
+         /tdNM//OUbixhK7JsbQwA3u+m2IkMhQTv4mrWENzOvsgkSQYxp2SVhEiylTUqYu7Nuk4
+         oOpHmBY6KfMLTEbc7KTQ3jRbAAn6flUpwkchkgkgnLsLA/2v98hI9mjgO3Iqk8fZQGA+
+         fm7Q==
+X-Gm-Message-State: AC+VfDxqIELxQKNDkVJpkBrmEjCMqtC1l0KMyBWCRXnsKwU1y9a3GX7e
+        XyKDLzBmlzFQwbrv5Xm5oM3txnCNkM8=
+X-Google-Smtp-Source: ACHHUZ47oCO6HwXqYzWIxcyvOS4fpxEXPkDQACfUzuqbBxss74rfmln5dAtL/xTF8sqWXxmiF1DIIzBlvQQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:8206:0:b0:b9e:7fbc:15e1 with SMTP id
+ q6-20020a258206000000b00b9e7fbc15e1mr4332600ybk.0.1685111955796; Fri, 26 May
+ 2023 07:39:15 -0700 (PDT)
+Date:   Fri, 26 May 2023 07:39:14 -0700
+In-Reply-To: <fc82a8a7-af38-5037-1862-ba2315c4e5af@amd.com>
+Mime-Version: 1.0
+References: <20230411125718.2297768-1-aik@amd.com> <20230411125718.2297768-6-aik@amd.com>
+ <ZGv9Td4p1vtXC0Hy@google.com> <719a6b42-fd91-8eb4-f773-9ed98d2fdb07@amd.com>
+ <ZGzfWQub4FQOrEtw@google.com> <fc82a8a7-af38-5037-1862-ba2315c4e5af@amd.com>
+Message-ID: <ZHDEkuaVjs/0kM6t@google.com>
+Subject: Re: [PATCH kernel v5 5/6] KVM: SEV: Enable data breakpoints in SEV-ES
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alexey Kardashevskiy <aik@amd.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Pankaj Gupta <pankaj.gupta@amd.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BM818 is based on Qualcomm MDM9607 chipset.
+On Fri, May 26, 2023, Alexey Kardashevskiy wrote:
+> 
+> On 24/5/23 01:44, Sean Christopherson wrote:
+> > On Tue, May 23, 2023, Alexey Kardashevskiy wrote:
+> > > > Actually, can't disabling #DB interception for DebugSwap SEV-ES guests be a
+> > > > separate patch?  KVM can still inject #DBs for SEV-ES guests, no?
+> > > 
+> > > Sorry for my ignorance but what is the point of injecting #DB if there is no
+> > > way of changing the guest's DR7?
+> > 
+> > Well, _injecting_ the #DB is necessary for correctness from the guest's perspective.
+> > "What's the point of _intercepting_ #DB" is the real question.  And for SEV-ES guests
+> > with DebugSwap, there is no point, which is why I agree that KVM should disable
+> > interception in that case.  What I'm calling out is that disabling #Db interception
+> > isn't _necessary_ for correctness (unless I'm missing something), which means that
+> > it can and should go in a separate patch.
+> 
+> 
+> About this. Instead of sev_es_init_vmcb(), I can toggle the #DB intercept
+> when toggling guest_debug, see below. This
+> kvm_x86_ops::update_exception_bitmap hook is called on vcpu reset and
+> kvm_arch_vcpu_ioctl_set_guest_debug (which skips this call if
+> guest_state_protected = true).
 
-Fixes: 9a07406b00cd ("net: usb: qmi_wwan: Add the BroadMobi BM818 card")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
----
- drivers/net/usb/qmi_wwan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+KVM also intercepts #DB when single-stepping over IRET to find an NMI window, so
+you'd also have to factor in nmi_singlestep, and update svm_enable_nmi_window()
+and disable_nmi_singlestep() to call svm_update_exception_bitmap().
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 571e37e67f9c..f1865d047971 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1325,7 +1325,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x2001, 0x7e3d, 4)},	/* D-Link DWM-222 A2 */
- 	{QMI_FIXED_INTF(0x2020, 0x2031, 4)},	/* Olicard 600 */
- 	{QMI_FIXED_INTF(0x2020, 0x2033, 4)},	/* BroadMobi BM806U */
--	{QMI_FIXED_INTF(0x2020, 0x2060, 4)},	/* BroadMobi BM818 */
-+	{QMI_QUIRK_SET_DTR(0x2020, 0x2060, 4)},	/* BroadMobi BM818 */
- 	{QMI_FIXED_INTF(0x0f3d, 0x68a2, 8)},    /* Sierra Wireless MC7700 */
- 	{QMI_FIXED_INTF(0x114f, 0x68a2, 8)},    /* Sierra Wireless MC7750 */
- 	{QMI_FIXED_INTF(0x1199, 0x68a2, 8)},	/* Sierra Wireless MC7710 in QMI mode */
+> Is there any downside?
 
----
-base-commit: 9b9e46aa07273ceb96866b2e812b46f1ee0b8d2f
-change-id: 20230526-bm818-dtr-1e41a285e00c
+Complexity is the main one.  The complexity is quite low, but the benefit to the
+guest is likely even lower.  A #DB in the guest isn't likely to be performance
+sensitive.  And on the flip side, opening an NMI window would be a tiny bit more
+expensive, though I doubt that would be meaningful either.
 
-Best regards,
--- 
-Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+All in all, I think it makes sense to just keep intercepting #DB for non-SEV-ES
+guests.
 
+Side topic, isn't there an existing bug regarding SEV-ES NMI windows?  KVM can't
+actually single-step an SEV-ES guest, but tries to set RFLAGS.TF anyways.  Blech,
+and suppressing EFER.SVME in efer_trap() is a bit gross, but I suppose since the
+GHCB doesn't allow for CLGI or STGI it's "fine".
+
+E.g. shouldn't KVM do this?
+
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index ca32389f3c36..4e4a49031efe 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3784,6 +3784,16 @@ static void svm_enable_nmi_window(struct kvm_vcpu *vcpu)
+        if (svm_get_nmi_mask(vcpu) && !svm->awaiting_iret_completion)
+                return; /* IRET will cause a vm exit */
+ 
++       /*
++        * KVM can't single-step SEV-ES guests and instead assumes that IRET
++        * in the guest will always succeed, i.e. clears NMI masking on the
++        * next VM-Exit.  Note, GIF is guaranteed to be '1' for SEV-ES guests
++        * as the GHCB doesn't allow for CLGI or STGI (and KVM suppresses
++        * EFER.SVME for good measure, see efer_trap()).
++        */
++       if (sev_es_guest(vcpu->kvm))
++               return;
++
+        if (!gif_set(svm)) {
+                if (vgif)
+                        svm_set_intercept(svm, INTERCEPT_STGI);
