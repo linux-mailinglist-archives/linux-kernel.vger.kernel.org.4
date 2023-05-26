@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF29712C19
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B57C5712C1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240535AbjEZR7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S236662AbjEZSCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbjEZR7o (ORCPT
+        with ESMTP id S229732AbjEZSCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:59:44 -0400
-Received: from p3plwbeout27-01.prod.phx3.secureserver.net (p3plsmtp27-01-2.prod.phx3.secureserver.net [216.69.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B195C9
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:59:43 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.144])
-        by :WBEOUT: with ESMTP
-        id 2bj4qA84BTkrI2bj5q5Ur5; Fri, 26 May 2023 10:59:43 -0700
-X-CMAE-Analysis: v=2.4 cv=PP7KRdmC c=1 sm=1 tr=0 ts=6470f38f
- a=wXHyRMViKMYRd//SnbHIqA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=3-RhneuVAAAA:8
- a=FXvPX3liAAAA:8 a=fedbvfDaUbvpSB96acMA:9 a=QEXdDO2ut3YA:10 a=SM4aVyO6fsoA:10
- a=7Bv5oc6oNHEA:10 a=VLVLkjT_5ZicWzSuYqSo:22 a=UObqyxdv-6Yh2QiB9mM_:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  2bj4qA84BTkrI
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.87])
-        by smtp02.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1q2bj8-0004uX-K9; Fri, 26 May 2023 18:59:46 +0100
-Message-ID: <dae2dd0f-5efd-499b-9684-1a6c2c01accb@squashfs.org.uk>
-Date:   Fri, 26 May 2023 18:59:41 +0100
+        Fri, 26 May 2023 14:02:20 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35F2D3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:02:19 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685124137;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D2WoWOQXtKlpe3ao06i3Mft9mNFnFGHReEa4645KcNU=;
+        b=RpibYJkcEKorvueyaca/oyFDtBa00jdSCdOf0UB9oNcHSbjCu1SsdlVqpTVjZV0wRf84uy
+        fNZyvD7onJYGEz8ydtDfv1l9xMfvmDBb3YKRLj+7cIgZ93XtjhpEuxfD94RcFae5UFJNFw
+        Y+ZydEqKXALC5gzlEHsD3xaqTztfqgf2DiWTQ39rzQla45jnHpIxZysGFk1wyO0kfuLhMC
+        eA0KIoRRDV7ISLcSy771TqS0JlgYniKI0Qp+qjiOcVFoFL4LdQ4OZdBUGRprtOxCyeHYd2
+        PEdjTCNoFLIcK1+wIgQnsJUyFYFZDQkSK/44HjjjvqXqyG1bxV2JgJZVc3kaLA==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2C6031C0003;
+        Fri, 26 May 2023 18:02:15 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        bbrezillon@kernel.org
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] mtd: rawnand: marvell: don't set the NAND frequency select
+Date:   Fri, 26 May 2023 20:02:15 +0200
+Message-Id: <20230526180215.924342-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230525003154.2303012-2-chris.packham@alliedtelesis.co.nz>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH mm-nonmm-unstable v2 2/2] squashfs: fix page indices
-Content-Language: en-GB
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     hch@lst.de, linux-kernel@vger.kernel.org, kernel@axis.com
-References: <20230526-squashfs-cache-fixup-v2-0-6fb7723c3647@axis.com>
- <20230526-squashfs-cache-fixup-v2-2-6fb7723c3647@axis.com>
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <20230526-squashfs-cache-fixup-v2-2-6fb7723c3647@axis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfEKsHEaOE6j4rLwKOv4uNke4uAODdFHfmUu/2oFgT8uXAjXr10GEQV5BgryBs+iDBU5+aiVVdp6sB0AHwfYiDuPn1pyNHvzmIfz3G/JjBlSKKuVFVDt7
- 9M/Ucfo9+Lo8puGT+yZfc3DNVvicEBnlcPUoGcdfkK9IBgT1UKW+WTp6XQPGhy26CqZuGgXZkmbZ021cULn10hmwuFjhlf0RHFE=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'87dee04f3c828dec34e94f1bd90ed423c3f9813f'
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/05/2023 14:57, Vincent Whitchurch wrote:
+On Thu, 2023-05-25 at 00:31:53 UTC, Chris Packham wrote:
+> marvell_nfc_setup_interface() uses the frequency retrieved from the
+> clock associated with the nand interface to determine the timings that
+> will be used. By changing the NAND frequency select without reflecting
+> this in the clock configuration this means that the timings calculated
+> don't correctly meet the requirements of the NAND chip. This hasn't been
+> an issue up to now because of a different bug that was stopping the
+> timings being updated after they were initially set.
+> 
+> Fixes: b25251414f6e ("mtd: rawnand: marvell: Stop implementing ->select_chip()")
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 
-> The page cache functions want the page index as an argument but we're
-> currently passing in the byte address.
->
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-Reviewed-by: Phillip Lougher <phillip@squashfs.org.uk>
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
+
+Miquel
