@@ -2,131 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E817130AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 01:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA617130C3
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 01:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjEZXwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 19:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S230329AbjEZX5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 19:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbjEZXwg (ORCPT
+        with ESMTP id S230025AbjEZX5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 19:52:36 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CCD19D
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:52:02 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba2b9ecfadaso2808512276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685145120; x=1687737120;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3gkL2ZysifCX6QuWFr+kemlXIPFMHwY6YLDYqUvek4g=;
-        b=zzD3toTUDIquQRqQxVbpkGZCNhAGQJVkVodWmJyBF5PKTm6ASrqgwxniGFDtinz9zZ
-         rboUSdqPDY+nHOBIzLtsP21/bNWzI9bLvYAmHorq/VHjS7xRK/yiS6CWXeIZjKevCtiA
-         rjoHoRVpwUMcwyr4JSKijQTllPlzGJ1wgpeE1BfSABrAFhBfXGQCtSDxLUmcfIgmcwLe
-         HXFGe62HDokUZj7jztEtEHeN4T9lgksA7NLqGeVeDc4sEP7PCe5unSRKAoiNSmfgzuvq
-         G0Y8e6sSFKWowXQUAQnE1h1qByiWfWeICT8bks9Kp2ja+EyUU/p+iGMDlXHUBJVk5+JN
-         HPmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685145120; x=1687737120;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3gkL2ZysifCX6QuWFr+kemlXIPFMHwY6YLDYqUvek4g=;
-        b=NF9KBnh/5dk03y5BNMlcw8U+fGtR66MLxeM3yoL2Sc1MhuRguhNmKzKCWFIs5+s6Vd
-         D9qdkcdLZkOGYceU03eIGNchko8lUkUf+sapSWHJzaAgUgUtG4oTIOwl/s+Cmcm4P3QH
-         HcXde2MjrzWLeUsl7dmGUfbS5v2qKSxmx819/7F4Xym6enoGV5E61OzBfNp6Z7DOp8PX
-         95b7tmXCTl9tFhNpRM5h3YDb8QvyIHiKYMeA4JBhgUyAi/YGG03RsixI7Ct0ZLxHb9qZ
-         rjtusUUC2cw2Yk8VucLpfKiMO7ttFkOhaSSNbwgLHyNz9SJrWf+QiENHXy0lDvH0JsJE
-         glAg==
-X-Gm-Message-State: AC+VfDxtgjCrMMqyKsLJ7Y7jiCRm0sQRqGuN8v9eTSCZuWcItSowFFRG
-        zSneQbniBQStkIM5anjH+aQEEgXBwBT4qw==
-X-Google-Smtp-Source: ACHHUZ5j0DjM8sq5pG0MJ56RrsWclxTU1KJd7CMJmIXPcL0xUwk9eY/XbzgabbsKPXKeyfU+QWGDnMxOSK626w==
-X-Received: from pranav-first.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:390b])
- (user=pranavpp job=sendgmr) by 2002:a25:4582:0:b0:ba8:91c2:268a with SMTP id
- s124-20020a254582000000b00ba891c2268amr1885823yba.0.1685145120249; Fri, 26
- May 2023 16:52:00 -0700 (PDT)
-Date:   Fri, 26 May 2023 23:51:55 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230526235155.433243-1-pranavpp@google.com>
-Subject: [PATCH v2] scsi: pm80xx: Add fatal error checks
-From:   Pranav Prasad <pranavpp@google.com>
-To:     Jack Wang <jinpu.wang@cloud.ionos.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Changyuan Lyu <changyuanl@google.com>,
-        Pranav Prasad <pranavpp@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 26 May 2023 19:57:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57E99E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:57:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685145469; x=1716681469;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bd0vOkW9GAA1zj7cXjrCTyo2DiKp+O9epyoH5QbgsgY=;
+  b=fTwL9xYBIK6oieb/XEAWqXn3l6xVc3U5cBKNBUx1VJ7EDzWvX1H/G0JC
+   Gm2RMLLHIEENsuQrSejVFY+fyKrM/ST7Lwl+snSTazRmwcZkHYxVQOrrE
+   wDPUERDNSotVz4/VRC6lWLY/tE0uA9sWbxwiyO8pL6ZNVfaNw7zqyChpJ
+   hqMgqCKCDCANLHEMufAR97Aecsw9ftFK3SWnOMgesdLOjk9mQ0OfX0nKB
+   TjSpLXR+ZCMXMy3yHTa9qWycv5P7ngpgPiUUGIYlXizCwbnfvl0v0aMSU
+   NgNMOo6sREzwm0ROSGP/skZOXJMkMQScPCo1ukSKo5ISUT8TY1NQyyE3K
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="353178747"
+X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
+   d="scan'208";a="353178747"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 16:57:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="736176273"
+X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
+   d="scan'208";a="736176273"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 26 May 2023 16:57:48 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q2hJa-000Jfe-2V;
+        Fri, 26 May 2023 23:57:46 +0000
+Date:   Sat, 27 May 2023 07:57:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: drivers/remoteproc/qcom_q6v5_pas.c:550:30: sparse: sparse: incorrect
+ type in assignment (different address spaces)
+Message-ID: <202305270724.6Mc2pZjw-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changyuan Lyu <changyuanl@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0d85b27b0cc6b5cf54567c5ad913a247a71583ce
+commit: 29814986b82e820ae9d3eb7474cdcf66605bd114 remoteproc: qcom_q6v5_pas: add support for dtb co-firmware loading
+date:   4 months ago
+config: arm64-randconfig-s031-20230526 (https://download.01.org/0day-ci/archive/20230527/202305270724.6Mc2pZjw-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=29814986b82e820ae9d3eb7474cdcf66605bd114
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 29814986b82e820ae9d3eb7474cdcf66605bd114
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
 
-This patch adds a fatal error check for the pm8001_phy_control()
-and pm8001_lu_reset() functions.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305270724.6Mc2pZjw-lkp@intel.com/
 
-Changes compared to v1:
-- Changed the patch series to a single patch.
-- Added empty "/*" line to the comments as requested
-  by Damien Le Moal.
-- Aligned function arguments in pm8001_dbg() as
-  requested by Damien Le Moal.
+sparse warnings: (new ones prefixed by >>)
+   drivers/remoteproc/qcom_q6v5_pas.c:528:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *mem_region @@     got void [noderef] __iomem * @@
+   drivers/remoteproc/qcom_q6v5_pas.c:528:26: sparse:     expected void *mem_region
+   drivers/remoteproc/qcom_q6v5_pas.c:528:26: sparse:     got void [noderef] __iomem *
+>> drivers/remoteproc/qcom_q6v5_pas.c:550:30: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *dtb_mem_region @@     got void [noderef] __iomem * @@
+   drivers/remoteproc/qcom_q6v5_pas.c:550:30: sparse:     expected void *dtb_mem_region
+   drivers/remoteproc/qcom_q6v5_pas.c:550:30: sparse:     got void [noderef] __iomem *
 
-Signed-off-by: Changyuan Lyu <changyuanl@google.com>
-Signed-off-by: Pranav Prasad <pranavpp@google.com>
----
- drivers/scsi/pm8001/pm8001_sas.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+vim +550 drivers/remoteproc/qcom_q6v5_pas.c
 
-diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
-index e5673c774f66..a5a31dfa4512 100644
---- a/drivers/scsi/pm8001/pm8001_sas.c
-+++ b/drivers/scsi/pm8001/pm8001_sas.c
-@@ -167,6 +167,17 @@ int pm8001_phy_control(struct asd_sas_phy *sas_phy, enum phy_func func,
- 	pm8001_ha = sas_phy->ha->lldd_ha;
- 	phy = &pm8001_ha->phy[phy_id];
- 	pm8001_ha->phy[phy_id].enable_completion = &completion;
-+
-+	if (PM8001_CHIP_DISP->fatal_errors(pm8001_ha)) {
-+		/*
-+		 * If the controller is in fatal error state,
-+		 * we will not get a response from the controller
-+		 */
-+		pm8001_dbg(pm8001_ha, FAIL,
-+			   "Phy control failed due to fatal errors\n");
-+		return -EFAULT;
-+	}
-+
- 	switch (func) {
- 	case PHY_FUNC_SET_LINK_RATE:
- 		rates = funcdata;
-@@ -908,6 +919,17 @@ int pm8001_lu_reset(struct domain_device *dev, u8 *lun)
- 	struct pm8001_device *pm8001_dev = dev->lldd_dev;
- 	struct pm8001_hba_info *pm8001_ha = pm8001_find_ha_by_dev(dev);
- 	DECLARE_COMPLETION_ONSTACK(completion_setstate);
-+
-+	if (PM8001_CHIP_DISP->fatal_errors(pm8001_ha)) {
-+		/*
-+		 * If the controller is in fatal error state,
-+		 * we will not get a response from the controller
-+		 */
-+		pm8001_dbg(pm8001_ha, FAIL,
-+			   "LUN reset failed due to fatal errors\n");
-+		return rc;
-+	}
-+
- 	if (dev_is_sata(dev)) {
- 		struct sas_phy *phy = sas_get_local_phy(dev);
- 		sas_execute_internal_abort_dev(dev, 0, NULL);
+   508	
+   509	static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
+   510	{
+   511		struct device_node *node;
+   512		struct resource r;
+   513		int ret;
+   514	
+   515		node = of_parse_phandle(adsp->dev->of_node, "memory-region", 0);
+   516		if (!node) {
+   517			dev_err(adsp->dev, "no memory-region specified\n");
+   518			return -EINVAL;
+   519		}
+   520	
+   521		ret = of_address_to_resource(node, 0, &r);
+   522		of_node_put(node);
+   523		if (ret)
+   524			return ret;
+   525	
+   526		adsp->mem_phys = adsp->mem_reloc = r.start;
+   527		adsp->mem_size = resource_size(&r);
+   528		adsp->mem_region = devm_ioremap_wc(adsp->dev, adsp->mem_phys, adsp->mem_size);
+   529		if (!adsp->mem_region) {
+   530			dev_err(adsp->dev, "unable to map memory region: %pa+%zx\n",
+   531				&r.start, adsp->mem_size);
+   532			return -EBUSY;
+   533		}
+   534	
+   535		if (!adsp->dtb_pas_id)
+   536			return 0;
+   537	
+   538		node = of_parse_phandle(adsp->dev->of_node, "memory-region", 1);
+   539		if (!node) {
+   540			dev_err(adsp->dev, "no dtb memory-region specified\n");
+   541			return -EINVAL;
+   542		}
+   543	
+   544		ret = of_address_to_resource(node, 0, &r);
+   545		if (ret)
+   546			return ret;
+   547	
+   548		adsp->dtb_mem_phys = adsp->dtb_mem_reloc = r.start;
+   549		adsp->dtb_mem_size = resource_size(&r);
+ > 550		adsp->dtb_mem_region = devm_ioremap_wc(adsp->dev, adsp->dtb_mem_phys, adsp->dtb_mem_size);
+   551		if (!adsp->dtb_mem_region) {
+   552			dev_err(adsp->dev, "unable to map dtb memory region: %pa+%zx\n",
+   553				&r.start, adsp->dtb_mem_size);
+   554			return -EBUSY;
+   555		}
+   556	
+   557		return 0;
+   558	}
+   559	
+
 -- 
-2.40.1.698.g37aff9b760-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
