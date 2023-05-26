@@ -2,94 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE3A711F71
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 07:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3C9714F8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236643AbjEZF5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 01:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S229645AbjE2TKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 15:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236489AbjEZF5i (ORCPT
+        with ESMTP id S229455AbjE2TKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 01:57:38 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D12125;
-        Thu, 25 May 2023 22:57:37 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34Q2pUNJ020505;
-        Fri, 26 May 2023 05:57:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=fb944hnk4OQxeG+6V2C3RbCCAeYGSq5eRoMdvRUqiso=;
- b=Sy8IZmyQIiMzoWnyeIOayl3Ouw0oyVoSLpWLHnuHSn2H6zCj+jdZKr5aLblVCAgo7Bl3
- HrANQNaIi1e1gtIySLWY8G2/lRQ90V21yRtnsF97TrQ/UgV8l7W9YGMLNfuHAc3XdfnL
- Y6FTl1rB6E11gBL+D0VEdp9XtecIVewNqVn64lRLZC0wVUHO05dOCeDIDa/9vAJb7xUP
- u+JuLHHwdhhhyiOGlcWgt08wIEzwG3CgsvpXqNDWxtDDCyUeTBZTAgv1uv68TzOzRSzj
- zSAc7iQ3gCoi8DdpF65BjQeGqiSjnwoKUivGXOJRiOtBQkjqywzxiJMKHjsXpN/izSjN SQ== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qt5uft5tp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 05:57:33 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34Q5vWgr016238
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 05:57:32 GMT
-Received: from [10.110.51.179] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
- 2023 22:57:31 -0700
-Message-ID: <f098c2c5-1fa3-0a74-b103-f38f5d68dd1d@quicinc.com>
-Date:   Thu, 25 May 2023 22:57:31 -0700
+        Mon, 29 May 2023 15:10:30 -0400
+X-Greylist: delayed 12004 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 29 May 2023 12:10:18 PDT
+Received: from pegase2.c-s.fr (unknown [92.175.17.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABC7BE
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 12:10:18 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4QSDjY4qvyz9skW;
+        Fri, 26 May 2023 07:57:53 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UX0gB1HwZOeH; Fri, 26 May 2023 07:57:53 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4QSDjY41Bvz9skT;
+        Fri, 26 May 2023 07:57:53 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 72CFA8B780;
+        Fri, 26 May 2023 07:57:53 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id d4Cyt6NbTa6b; Fri, 26 May 2023 07:57:53 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.54])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3B5F88B763;
+        Fri, 26 May 2023 07:57:53 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 34Q5vlQC2409970
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 26 May 2023 07:57:47 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 34Q5vjkP2409965;
+        Fri, 26 May 2023 07:57:45 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev@googlegroups.com, Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc/kcsan: Properly instrument arch_spin_unlock()
+Date:   Fri, 26 May 2023 07:57:33 +0200
+Message-Id: <57834a703dfa5d6c27c9de0a01329059636e5ab7.1685080579.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/1] vfio/nvgpu: Add vfio pci variant module for grace
- hopper
-Content-Language: en-US
-To:     <ankita@nvidia.com>, <jgg@nvidia.com>, <alex.williamson@redhat.com>
-CC:     <aniketa@nvidia.com>, <cjia@nvidia.com>, <kwankhede@nvidia.com>,
-        <targupta@nvidia.com>, <vsethi@nvidia.com>, <acurrid@nvidia.com>,
-        <apopple@nvidia.com>, <jhubbard@nvidia.com>, <danw@nvidia.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230509040734.24392-1-ankita@nvidia.com>
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <20230509040734.24392-1-ankita@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: UqHGV6hDi5sMR-ZR7xlZz7rrjnN1IQF6
-X-Proofpoint-GUID: UqHGV6hDi5sMR-ZR7xlZz7rrjnN1IQF6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
- adultscore=0 priorityscore=1501 mlxlogscore=692 spamscore=0 bulkscore=0
- impostorscore=0 phishscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305260049
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685080620; l=1725; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=CfZu93KMbju/LZ6ePfCOTshmQTWaMrm/rB4z3C92oIs=; b=+2PWX6nDdw/gAAX7fW08lO94CwMfTSoBkFH5UtBWw1jDJYxWf2c51uGUxZj8A8GYiczDC50Om 8+HisYWedKSBTWwJyGHw7Avdcacb0Rs2Quv8jSrKi/D7d32b3LC0PSB
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NO_DNS_FOR_FROM,
+        RDNS_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/8/2023 9:07 PM, ankita@nvidia.com wrote:
-> From: Ankit Agrawal <ankita@nvidia.com>
-> 
-> NVIDIA's upcoming Grace Hopper Superchip provides a PCI-like device
-> for the on-chip GPU that is the logical OS representation of the
-> internal propritary cache coherent interconnect.
+The following boottime error is encountered with SMP kernel:
 
-           ^proprietary
+  kcsan: improperly instrumented type=(0): arch_spin_unlock(&arch_spinlock)
+  kcsan: improperly instrumented type=(0): spin_unlock(&test_spinlock)
+  kcsan: improperly instrumented type=(KCSAN_ACCESS_WRITE): arch_spin_unlock(&arch_spinlock)
+  kcsan: improperly instrumented type=(KCSAN_ACCESS_WRITE): spin_unlock(&test_spinlock)
+  kcsan: improperly instrumented type=(KCSAN_ACCESS_WRITE | KCSAN_ACCESS_COMPOUND): arch_spin_unlock(&arch_spinlock)
+  kcsan: improperly instrumented type=(KCSAN_ACCESS_WRITE | KCSAN_ACCESS_COMPOUND): spin_unlock(&test_spinlock)
+  kcsan: selftest: test_barrier failed
+  kcsan: selftest: 2/3 tests passed
+  Kernel panic - not syncing: selftests failed
 
----Trilok Soni
+Properly instrument arch_spin_unlock() with kcsan_mb().
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/simple_spinlock.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/powerpc/include/asm/simple_spinlock.h b/arch/powerpc/include/asm/simple_spinlock.h
+index 9dcc7e9993b9..4dd12dcb9ef8 100644
+--- a/arch/powerpc/include/asm/simple_spinlock.h
++++ b/arch/powerpc/include/asm/simple_spinlock.h
+@@ -15,6 +15,7 @@
+  * (the type definitions are in asm/simple_spinlock_types.h)
+  */
+ #include <linux/irqflags.h>
++#include <linux/kcsan-checks.h>
+ #include <asm/paravirt.h>
+ #include <asm/paca.h>
+ #include <asm/synch.h>
+@@ -126,6 +127,7 @@ static inline void arch_spin_lock(arch_spinlock_t *lock)
+ 
+ static inline void arch_spin_unlock(arch_spinlock_t *lock)
+ {
++	kcsan_mb();
+ 	__asm__ __volatile__("# arch_spin_unlock\n\t"
+ 				PPC_RELEASE_BARRIER: : :"memory");
+ 	lock->slock = 0;
+-- 
+2.40.1
 
