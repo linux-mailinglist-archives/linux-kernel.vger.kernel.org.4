@@ -2,100 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAD9712B5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E60E712B60
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237450AbjEZRFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
+        id S237195AbjEZRFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjEZRFH (ORCPT
+        with ESMTP id S229523AbjEZRFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:05:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA3CBC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:05:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B6AD61A73
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 17:05:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EBD1C433EF;
-        Fri, 26 May 2023 17:05:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685120705;
-        bh=ePK1BfFlvFrWar0yL2hBGckKFKq2mnc2EzLSm0R6ijc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GXgdFunLkyGrpkIU9YdEqlG2fBFk9ls+vr4FDXPuJGWqELhwebezmSz8ZUR5HR2da
-         B8NYURXh77JegpXXuG8HPqF4UkB9PUu4sASuJEl1ME4u1LqzY47zim5rbmpJJmXHd2
-         vMAlAcqxK8UURKtgU5YSO0npZFMmsQwgjKjr6YUYY9JA1A+RfYkV38jDXerzOBg5M7
-         Z3/oTIeEuOK04HAm3otUSozyENpAkWbYyQhyavImhT1oTkYTDgTr3/jQZtXEV7WqKn
-         wR/rmo/c4CeOGo5oSTdlB0x2N7f2jLHsQZRS5CF/YPUJe0pGbAdK+M1LYBWippl8Zi
-         VVZlpvYs0S57w==
-Date:   Fri, 26 May 2023 10:05:03 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] f2fs: fix to set noatime and immutable flag for quota
- file
-Message-ID: <ZHDmv2hLR9WZ16Pl@google.com>
-References: <20230525082508.2320763-1-chao@kernel.org>
+        Fri, 26 May 2023 13:05:44 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCC4D9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:05:42 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d30ab1ef2so933376b3a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:05:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685120742; x=1687712742;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VxumJGI+OGOCoDB2FXTzXjZjGjRaDHCBUOgVAq+aAxc=;
+        b=KK3X5UgtcFObh5PcbJlgv5hNhaSbpvveePahsg/3eYw633NTX716Mb3rHM+txA1YXi
+         swZXm0EykOvkEDMYl9MjuGVFmg1ntONmZClOWvG3f6SSzfNrJiG1d5mCcXFMCzsQPYIC
+         Gh9qb6SZFxLfVlr9Zyawo8Ve8+SCsLzBmZ5eU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685120742; x=1687712742;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VxumJGI+OGOCoDB2FXTzXjZjGjRaDHCBUOgVAq+aAxc=;
+        b=Y2Bcc8zWK8EH2vdhIVtT4gksLJ/GXRSllN++KQLsiBgLme8p7jV7VINKuQDNdv0WdJ
+         mdEBTFAj2iecVlD6VJ2B1qxiy51xu3Cnz0npODo6TdyB4DF2JEqvDegDBp7L5SmrRq5h
+         s1V+7N6g5jh0qdQLyKuxkYMSZfwi7ySnGpEQ9FYbd/Vt2eYOBTzTL9OkZR+Hxlf8mESr
+         ZzEeJdDEXrKuENS2eDirdOE/pSSqIoFGgANm/tgsA/mNZj/JTzmGMABfm9CGOWfyfdzv
+         Jw6e5+OzwbZeFGxCwHj4koGr0POxzUblrxfIkOPFxRAM4GWwKrOp7uwf4h0fnrJ3oUP0
+         f5yw==
+X-Gm-Message-State: AC+VfDxPdBVXDvfAh1gTG3aUofrWHSr72jmhcDkVhhr1rWebh1zc+G2i
+        Ik58VsYdMTJCIdgn/XZmU8y/gA==
+X-Google-Smtp-Source: ACHHUZ5SULZKaIeSRdX1PzT2iAoQT3NNcr4NmHQUfNdZR5Kx+nii7FssW/i1OAa+4AqpJoxz9SARSQ==
+X-Received: by 2002:a05:6a20:8421:b0:10c:7676:73af with SMTP id c33-20020a056a20842100b0010c767673afmr3167678pzd.53.1685120742297;
+        Fri, 26 May 2023 10:05:42 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id u15-20020a62ed0f000000b00634b91326a9sm3036477pfh.143.2023.05.26.10.05.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 10:05:41 -0700 (PDT)
+Date:   Fri, 26 May 2023 10:05:41 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        qiang1.zhang@intel.com, rcu@vger.kernel.org, tj@kernel.org,
+        tglx@linutronix.de
+Subject: Re: [RFC][PATCH 1/2] locking: Introduce __cleanup__ based guards
+Message-ID: <202305260939.D33FE435D2@keescook>
+References: <20230526150549.250372621@infradead.org>
+ <20230526151946.960406324@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230525082508.2320763-1-chao@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230526151946.960406324@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/25, Chao Yu wrote:
-> We should set noatime bit for quota files, since no one cares about
-> atime of quota file, and we should set immutalbe bit as well, due to
-> nobody should write to the file through exported interfaces.
+On Fri, May 26, 2023 at 05:05:50PM +0200, Peter Zijlstra wrote:
+> Use __attribute__((__cleanup__(func))) to buid various guards:
 > 
-> Meanwhile this patch use inode_lock to avoid race condition during
-> inode->i_flags, f2fs_inode->i_flags update.
+>  - ptr_guard()
+>  - void_guard() / void_scope()
+>  - lock_guard() / lock_scope()
+>  - double_lock_guard() / double_lock_scope()
 > 
-> Signed-off-by: Chao Yu <chao@kernel.org>
+> Where the _guard thingies are variables with scope-based cleanup and
+> the _scope thingies are basically do-once for-loops with the same.
+
+This makes things much easier to deal with, rather than forcing loops
+into separate functions, etc, and hoping to get the cleanup right.
+
+> 
+> The CPP is rather impenetrable -- but I'll attempt to write proper
+> comments if/when people think this is worth pursuing.
+
+Yes please. Comments would help a lot. I was scratching my head over _G
+for a bit before I realized what was happening. :)
+
+> 
+> Actual usage in the next patch
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > ---
-> v2:
-> - fix to detect i_flags status correctly.
->  fs/f2fs/super.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  include/linux/compiler_attributes.h |    2 
+>  include/linux/irqflags.h            |    7 ++
+>  include/linux/guards.h          |  118 ++++++++++++++++++++++++++++++++++++
+>  include/linux/mutex.h               |    5 +
+>  include/linux/preempt.h             |    4 +
+>  include/linux/rcupdate.h            |    3 
+>  include/linux/sched/task.h          |    2 
+>  include/linux/spinlock.h            |   23 +++++++
+>  8 files changed, 164 insertions(+)
 > 
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index 51812f459581..1cf84c993d7c 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -2763,7 +2763,17 @@ static int f2fs_quota_enable(struct super_block *sb, int type, int format_id,
->  	}
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -366,4 +366,6 @@
+>   */
+>  #define __fix_address noinline __noclone
 >  
->  	/* Don't account quota for quota files to avoid recursion */
-> +	inode_lock(qf_inode);
->  	qf_inode->i_flags |= S_NOQUOTA;
+> +#define __cleanup(func)			__attribute__((__cleanup__(func)))
 > +
-> +	if (!(F2FS_I(qf_inode)->i_flags & F2FS_NOATIME_FL) ||
-> +		!(F2FS_I(qf_inode)->i_flags & F2FS_IMMUTABLE_FL)) {
+>  #endif /* __LINUX_COMPILER_ATTRIBUTES_H */
 
-What about this?
+nitpick: sorting. This needs to be moved up alphabetically; the comment
+at the start of the file says:
 
-if ((F2FS_I(qf_inode)->i_flags & qf_flag) != qf_flag)
+ ...
+ * This file is meant to be sorted (by actual attribute name,
+ * not by #define identifier). ...
 
-> +		F2FS_I(qf_inode)->i_flags |=
-> +				F2FS_NOATIME_FL | F2FS_IMMUTABLE_FL;
-> +		f2fs_set_inode_flags(qf_inode);
-> +	}
-> +	inode_unlock(qf_inode);
+> [...]
+> +#define DEFINE_VOID_GUARD(_type, _Lock, _Unlock, ...)				\
+> +typedef struct {								\
+> +	__VA_ARGS__								\
+> +} void_guard_##_type##_t;							\
+> +										\
+> [...]
+> +DEFINE_VOID_GUARD(irq, local_irq_disable(), local_irq_enable())
+> +DEFINE_VOID_GUARD(irqsave,
+> +		  local_irq_save(_G->flags),
+> +		  local_irq_restore(_G->flags),
+> +		  unsigned long flags;)
+
+Yeah, good trick for defining 0-or-more members to the guard struct. I
+expect the common cases to be 0 or 1, so perhaps move the final ";" to
+after __VA_ARGS__ to avoid needing it in the DEFINEs? (And even in this
+initial patch, there's only 1 non-empty argument...)
+
+> [...]
+> --- /dev/null
+> +++ b/include/linux/guards.h
+> @@ -0,0 +1,118 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __LINUX_GUARDS_H
+> +#define __LINUX_GUARDS_H
 > +
->  	err = dquot_load_quota_inode(qf_inode, type, format_id, flags);
->  	iput(qf_inode);
->  	return err;
-> -- 
-> 2.40.1
+> +#include <linux/compiler_attributes.h>
+> +
+> +/* Pointer Guard */
+> +
+> +#define DEFINE_PTR_GUARD(_type, _Type, _Put)				\
+> +typedef _Type *ptr_guard_##_type##_t;					\
+> +static inline void ptr_guard_##_type##_cleanup(_Type **_ptr)		\
+> +{									\
+> +	_Type *_G = *_ptr;						\
+> +	if (_G)								\
+> +		_Put(_G);						\
+> +}
+
+*loud forehead-smacking noise* __cleanup with inlines! I love it!
+
+> [...]
+> +#define void_scope(_type)							\
+> +	for (struct { void_guard_##_type##_t guard; bool done; } _scope		\
+> +	     __cleanup(void_guard_##_type##_cleanup) =				\
+> +	     { .guard = void_guard_##_type##_init() }; !_scope.done;		\
+> +	     _scope.done = true)
+
+Heh, yes, that'll work for a forced scope, and I bet compiler
+optimizations will collapse a bunch of this into a very clean execution
+path.
+
+> [...]
+> +DEFINE_VOID_GUARD(preempt, preempt_disable(), preempt_enable())
+> +DEFINE_VOID_GUARD(migrate, migrate_disable(), migrate_enable())
+> [...]
+> +DEFINE_VOID_GUARD(rcu, rcu_read_lock(), rcu_read_unlock())
+> [...]
+> +DEFINE_PTR_GUARD(put_task, struct task_struct, put_task_struct)
+> [...]
+
+It seems like there are some _really_ common code patterns you're
+targeting here, and I bet we could do some mechanical treewide changes
+with Coccinelle to remove a ton of boilerplate code.
+
+I like this API, and the CPP isn't very obfuscated at all, compared to
+some stuff we've already got in the tree. :)
+
+-Kees
+
+-- 
+Kees Cook
