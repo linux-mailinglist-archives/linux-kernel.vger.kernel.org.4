@@ -2,73 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B43C712E58
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CEF712E5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242394AbjEZUr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 16:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S242701AbjEZUrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 16:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjEZUr0 (ORCPT
+        with ESMTP id S229753AbjEZUrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 16:47:26 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD2FBC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:47:25 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b0160c7512so6155465ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:47:25 -0700 (PDT)
+        Fri, 26 May 2023 16:47:40 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D2B1B1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:47:38 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3078cc99232so1046265f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:47:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685134044; x=1687726044;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lfp02npkh0h/YWUAgBDsalIo85iCBRV6d/ctWRGEdlM=;
-        b=HWXQYRLK7ntwWtvuKa8oeGsD27iRIjXFFB3NKRgYTo6AbUXgLPeW3qK0kjBQERZ3A+
-         hpLbk5UD6xB7CAzhW10l0+DRI1R3CwdWx4tRagyUtmf6xVPsqRG9KuB8vBWnMxVh0omE
-         +Y+ZQrk4EVBT1bEzkphBCFItOUN81ElbIBCLY=
+        d=linaro.org; s=google; t=1685134057; x=1687726057;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SWQNcyZP8KiazdiWKnaP5XYHweBHqUNg+1IkJ9O3dyY=;
+        b=HOP5yi8wL4uZwsx/lN1hkXHAUQcLlHwLeN1NrRSX66ZKHVibVzeVB1VA/mIvQfv5rt
+         pSzJCHCRifpmdaUu1G1hwXNtfwOihWzRtQZ3kRUKJLkJ6qSAZ6Opvv/qsHs0z7cWhCp8
+         YCq+jVuMuoCDwktcu0Vb1Z14142njMpAPjfHakDKuWsWg6D1aJaMwrAmAusd9Ooqlq9w
+         QvuJ7cU+Gl0/X4jgUf7qeQODEA8HIhkX3rAlms2ao9SFHxEnhCKINwjN/X1sTflpUjy1
+         +xOW2hUtRErNSti5nRKNBWvWKknNun1AuJBJRyqSwEydJKDgNY6Y9euyXSwrdPIXEqWk
+         KBXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685134044; x=1687726044;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1685134057; x=1687726057;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lfp02npkh0h/YWUAgBDsalIo85iCBRV6d/ctWRGEdlM=;
-        b=ijluSoUJf98+n34bmZf+jl5HRK09EuuY3GzTpTaiQeH/OE5KUNu/3BdqEtaVAHK9SB
-         4ODT94YmbHchwUqO9LSlo6H0pFhUQl0AT/opbh90Lj1f9BMI9D+khTPaQxT59yhL5vXj
-         4d8lWhadIqIYum5yCMQTpJskpvsx9vnROxwL2XQFskP5iIx0J2lJafDb1ySJfGTJT3qE
-         TQ/TBjMAtwzYVFfBgtpt+zjBMXM/QsTMgne2ozxuMEg5Uw7uo4q00DOnd/3Caw2oME07
-         FqHIVTY9aazfjpajcTaLGN3/wZQLzKP8POsx84F3wEmaOlRhhNGVSMlwLl9ZCcvGJRlm
-         RnBQ==
-X-Gm-Message-State: AC+VfDztdpMYi5b88WGqfvE1F+qJP5miXGE9t/KmnmIxEp4ohgn1ibOf
-        oW5/yvLRQvuR5YUsWIjLc+7x4A==
-X-Google-Smtp-Source: ACHHUZ74jsM1296cY4bBvBCOf7HyRaDBLdiJgwSaoNdaJ9O57iSahTuW8wR3toOlGsGaHRgpudK/nQ==
-X-Received: by 2002:a17:903:27c3:b0:1ac:a02f:c9a4 with SMTP id km3-20020a17090327c300b001aca02fc9a4mr3542847plb.4.1685134044683;
-        Fri, 26 May 2023 13:47:24 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id h9-20020a170902f54900b001ac7c725c1asm3650623plf.6.2023.05.26.13.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 13:47:24 -0700 (PDT)
-Date:   Fri, 26 May 2023 13:47:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Fangrui Song <maskray@google.com>
-Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, ojeda@kernel.org,
-        qing.zhao@oracle.com, morbo@google.com, llvm@lists.linux.dev,
-        trix@redhat.com, linux-kernel@vger.kernel.org, nathan@kernel.org,
-        linux-hardening@vger.kernel.org, gustavoars@kernel.org,
-        ndesaulniers@google.com
-Subject: Re: [PATCH v2] Compiler Attributes: Add __counted_by macro
-Message-ID: <202305261344.A938E07789@keescook>
-References: <20230517190841.gonna.796-kees@kernel.org>
- <168512138720.187005.8346289423859319616.b4-ty@chromium.org>
- <CANiq72=38mdTnJ3cicgwPB2xWqtbnGsL8Rtr4pwq7xGRr-m=Wg@mail.gmail.com>
- <202305261156.67CDEE933D@keescook>
- <CAFP8O3JO42CD2EXk+DJ5pci8ieHvRifAZpKg4iR_NiqTaYfLdA@mail.gmail.com>
+        bh=SWQNcyZP8KiazdiWKnaP5XYHweBHqUNg+1IkJ9O3dyY=;
+        b=hEB3dV3fIktclmE1FAIVE1GP+/a/JP0gliv+DIDpkFrGw/cfkcHqNp1xzdkhsKihF/
+         acsE6GAh1M+zwGEgx6BIf0C1Lav0Wz9FUPC/D25sHbt0O7vhALVFo7G+iapXAaodpqHO
+         atfS3TSIespuit21C3vvkizQnwYZLIPW3s/hSU2oVRaLSZnAI9SMFwUAIyL3f7vguMpd
+         AwxlpcbL8SkqZ6LEAdemSy5JnV+ex/QQUuTluD1j7pmpBHTx+P199BwQ9NnJwRgez/IT
+         aD6ccKR1gl4u9Uz8+KjXPA5DugW6cbwIn0hX1QS8jNbx21m0zTxgHyO3GfRIaiuGv84H
+         ps8A==
+X-Gm-Message-State: AC+VfDzsc6X3mCbyoemJCX9X+e8jHltcPuGT2RcqkJco2a/GFlV2BUh0
+        LbaNYzLY3VjwCP4s9RgAu1dzmg==
+X-Google-Smtp-Source: ACHHUZ58exYPPq57b3uzGOTHpryl+KwllVGqwA4MIB3/qNNft8Red3AAA0R7RVOZ3ZBJrCXeM0EtkA==
+X-Received: by 2002:a05:6000:11c4:b0:306:2e04:5925 with SMTP id i4-20020a05600011c400b003062e045925mr2451387wrx.17.1685134057195;
+        Fri, 26 May 2023 13:47:37 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id p25-20020a7bcc99000000b003f1751016desm6319163wma.28.2023.05.26.13.47.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 13:47:36 -0700 (PDT)
+Message-ID: <2385b00f-3292-3d27-dba2-c1375e5d9dae@linaro.org>
+Date:   Fri, 26 May 2023 21:47:35 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFP8O3JO42CD2EXk+DJ5pci8ieHvRifAZpKg4iR_NiqTaYfLdA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: media: camss: qcom,msm8996-camss: Add
+ CAMSS power domain
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
+        Conor Dooley <conor@kernel.org>
+Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hansverk@cisco.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230526180712.8481-1-y.oudjana@protonmail.com>
+ <20230526180712.8481-2-y.oudjana@protonmail.com>
+ <20230526-obstruct-venus-5833511a58af@spud>
+ <838b134d-46cb-6237-49b0-0c287141ebb3@linaro.org>
+ <20230526-street-pox-2ff5ee106c43@spud>
+ <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
+ <631e5eec-853b-dce2-c474-62e76e83d7e6@linaro.org>
+ <5dc28004-5ff4-2102-0bb3-8f7bee7cfca6@nexus-software.ie>
+ <265d1c93-0740-cd87-3ba2-e1ddf70a0c65@linaro.org>
+Content-Language: en-US
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <265d1c93-0740-cd87-3ba2-e1ddf70a0c65@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,55 +97,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 12:48:26PM -0700, Fangrui Song wrote:
-> On Fri, May 26, 2023 at 11:56 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Fri, May 26, 2023 at 07:47:03PM +0200, Miguel Ojeda wrote:
-> > > On Fri, May 26, 2023 at 7:16 PM Kees Cook <keescook@chromium.org> wrote:
-> > > >
-> > > > FYI, applied to for-next/hardening:
-> > > >
-> > > > [1/1] Compiler Attributes: Add __counted_by macro
-> > > >       https://git.kernel.org/kees/c/86a76e91cbab
-> > >
-> > > Sorry, I was going to apply it soon -- in case you want it:
-> > >
-> > >     Acked-by: Miguel Ojeda <ojeda@kernel.org>
-> >
-> > Thanks!
-> >
-> > > And thanks Nathan for resubmitting the `Reviewed-by` from v1!
-> >
-> > Yes, apologies for missing this in my v2 submission!
-> >
-> > --
-> > Kees Cook
-> >
+On 26/05/2023 21:43, Konrad Dybcio wrote:
 > 
-> https://discourse.llvm.org/t/rfc-enforcing-bounds-safety-in-c-fbounds-safety/70854
-> proposes a macro __counted_by as well.
-> This patch uses the same name:
 > 
-> > # define __counted_by(member)          __attribute__((__element_count__(member)))
-> 
-> I wonder whether the two use cases are compatible so that using the
-> same macro name will be fine.
+> On 26.05.2023 22:40, Bryan O'Donoghue wrote:
+>> On 26/05/2023 21:36, Konrad Dybcio wrote:
+>>>> oh the names
+>>>>
+>>>> no toss that
+>>> this should be
+>>>
+>>> if:properties:compatible:blahblahmsm8996:then:required:power-domain-names
+>>>
+>>> Konrad
+>>
+>> Hmm, we don't depend on the names though.
+> Check patch 3!
 
-Yeah, I have suggest the name change for the GCC proposal. However,
-given that there is still no code to test for -fbounds-safety, I'm
-sticking with __element_count for the moment, as there is code
-implementing that name in both GCC and Clang today.
+Hmm but we already count the number of power domains in 
+camss_configure_pd().
 
-> #if defined(__has_feature) && __has_feature(bounds_safety)
-> #define __counted_by(T) __attribute__((__counted_by__(T)))
-> // ... other bounds annotations
-> #else
-> #define __counted_by(T) // defined as nothing // ... other bounds annotations
-> #endif
+There's no logic in counting it twice using two different methods.
 
-Right. My main consideration for getting __counted_by defined by the
-kernel at all is so that annotation can begin. We can adjust the
-define's contents as needed. :)
-
--- 
-Kees Cook
