@@ -2,91 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C85712022
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7377712034
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236000AbjEZGhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 02:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
+        id S229845AbjEZGiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 02:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236168AbjEZGhN (ORCPT
+        with ESMTP id S229736AbjEZGiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 02:37:13 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A3A12F;
-        Thu, 25 May 2023 23:37:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685083027; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=sOYCkzh74IzezBisb9hx7W1184exoAPd3LCsrHfWpsSc6IXf6iceRHLImevPNRYK/e
-    uDiMVWCpf4VvSXfprXNV9LxUQDd2ibDo1D8wPU7I6J7WycnUXik3NrPy4vwBSiECiX2e
-    XrxBfnT4mO01p/+0BS1ofYtc+XWM3tUlbz91cVLyptQByWO6d7N356OLoOrXm6IP0fBm
-    1+OmTUCO1ZfXaiczsWyDXr55KRtNojTP+p9zYDBwhVNJwdW2q9lrvNZqMSpVq+2OHiok
-    65nW0oS0c9rwKB8G/dkwg/XrZsjLpCl0jrZ2YDsiD/KD14r6xnM50Xd5guaDvXaNhS0x
-    wLrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685083027;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=KfNANOMCoK7SMpjZ/LaeUtfmlxbZC0YVqX755mC4yLI=;
-    b=jDc7V9sPRHzCahMduX/HhK4ub4Rd1ikpQm3AHBqQzisoV3zN5gH96tH18+ndoNshfH
-    3993ggvyQoRFcY4ZSgJ4/iTHMKxOhiWdJ50TAmGs7s6VRnXyUQWwdOCVhPlMX4hlWKkk
-    qTsCl/rNHOnBh6YoeYkw7BEhBZb3C35MnEynbSckz0xZ/Ce55T2h+0q6cHaK5xu48qQc
-    vT6FuPt5XlBu2ekZeeypGTslW9kQTYgmq6Aa5+dVELx6WhbuJ3zUMPIptT6eZdRxfNbT
-    TexHPIfyaRriqXfyCQ+N51OQnEWpoGbLP6PkgEk5ZGzOyDoyQzW0XmnnDurbdc6HwczF
-    2lmA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685083027;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=KfNANOMCoK7SMpjZ/LaeUtfmlxbZC0YVqX755mC4yLI=;
-    b=V/thZRWnHpWy0tZKcXZ4DN7Su2FPWL2+H79ynr59A1ej4DthEci+JwcBlrLDh5SUfb
-    3VW9BII81TN48ZFYIsfFSyTSA6nVh0EWmPdyf5xsoKIggb3udDeaaltLYoPL+Idas6uc
-    tJ/hBjFkgzxXQvG6iKpCZ7wZt+Ev9fCnnsORuyxi2BVAxQxvSPXXo+FKl0FTN/9gUbPT
-    uECrXm55HRRBIopqLDPPgjrvtoghM1MK9mutg6o0cK1LybDpxje1pM2b7Q+eWL1OZP1c
-    LdjsMbITOHSrnnNsPz/S0CfRLjkya4/5QjKJGk6HLBDHaIlFiSj/eNrixvCo37eNs775
-    2oIQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685083027;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=KfNANOMCoK7SMpjZ/LaeUtfmlxbZC0YVqX755mC4yLI=;
-    b=mZXaSwGzgu+Q2s4xwGLOAKCrXKM+sqdYTbeV8uc7eZcvw/+GQRitYl8jREO7bJd4KJ
-    gv+R4/2zLYoP9YhAQrCw==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA95nh"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4Q6b6ZDV
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 26 May 2023 08:37:06 +0200 (CEST)
-Date:   Fri, 26 May 2023 08:36:59 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 8/8] arm64: dts: qcom: msm8916-pm8916: Mark always-on
- regulators
-Message-ID: <ZHBTi-j657tW3jIu@gerhold.net>
-References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
- <20230510-msm8916-regulators-v1-8-54d4960a05fc@gerhold.net>
- <ea53525b-749b-25e2-6dde-662a8e273597@linaro.org>
- <ef7b7335-d20c-3ddc-52df-b2801fa40283@linaro.org>
+        Fri, 26 May 2023 02:38:21 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3430D12E;
+        Thu, 25 May 2023 23:38:20 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af318fa2b8so3735701fa.0;
+        Thu, 25 May 2023 23:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685083098; x=1687675098;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mILjjqW3e0J19x6hS+N8rbpkhGpdI9PUFEHSMRI8loY=;
+        b=QqXMhxrLSOQ7nywZmaV7FI8ymMNakypk/Dj49sU/2sDG0/483oULyJT6EobYi7rVba
+         8z9sE1Pprf0DjsFyPhYBCeJ5hj2PEc1OjxdGBMdpH3pb86B9hxgJTGVDp2nPZD7SOxsj
+         mhmPeXbd3LP5fqRLmSSLu5MbCZbUVbq81BHynri16/t8nwtTH06TyXpz5z30VuH5vizN
+         27bRI/gVnmIY8LM6JfAiuCvsJl57gdSWfiwwHb4W+qXG1vKqPI9oFS56Ta+NPvU501Wr
+         y9Sux0yIWvW9kkenQIowZeI7gvmimXrzszuOvcahFTAA6lpvw0YLtKKCP+dRbq4cXkdA
+         pE5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685083098; x=1687675098;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mILjjqW3e0J19x6hS+N8rbpkhGpdI9PUFEHSMRI8loY=;
+        b=P39P+AdThQjdw3yHzg9grSz8usuTVt6o6+3gIsBDSYH9iVV1L83gZdFMkeq3MrkxlW
+         VBs+ZTuWay+VH3aXtobjpQzZT3q8t5GvRQfdnedANF54h/ydPDZA2/ZP5UUngEXDe3nz
+         /7lxjVSt/lwB1TS51dCpH7G86jhwZ38BGg/nmQoHJ46FoctkratwGsQEhgKtfU5MaXhO
+         /pdR09S/gJ9SnvbjFNeCBeMMP3bMU/hhUmTPk4cSHxWYKgSxc+mcQmxxJ71gqFeN/OFd
+         sUwr0RTtQdWPV8F1KcrcCDI2EjsQuT09WWR4rQiQhMUhcLEoYZzBPcBFF3yWxGt2Pdoz
+         K+lg==
+X-Gm-Message-State: AC+VfDz2C/Q/jiQNYSONyQ58c/qxaIi5MXnxFJPWW2eId8EAhcYqHIi8
+        IfJDKscwyjQGaeMQdj+SPNs=
+X-Google-Smtp-Source: ACHHUZ6Gc496SV+lTjAWiPVY8wzrusV4Eabc166ebvaSq0fDx5nusWGt7ItFbzXWNBcCDtsqQ7WOfg==
+X-Received: by 2002:a2e:9ed9:0:b0:2ad:d949:dd39 with SMTP id h25-20020a2e9ed9000000b002add949dd39mr516174ljk.29.1685083098283;
+        Thu, 25 May 2023 23:38:18 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id q16-20020a2e84d0000000b002ad1ba6ee36sm557453ljh.140.2023.05.25.23.38.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 23:38:17 -0700 (PDT)
+Date:   Fri, 26 May 2023 09:38:05 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v6 4/8] pinctrl: wpcm450: relax return value check for IRQ get
+Message-ID: <830e6e61cf51d43cb7a99b846ab4676823e4e78a.1685082026.git.mazziesaccount@gmail.com>
+References: <cover.1685082026.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6vvqQD2xKOBSWZLp"
 Content-Disposition: inline
-In-Reply-To: <ef7b7335-d20c-3ddc-52df-b2801fa40283@linaro.org>
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <cover.1685082026.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,65 +96,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 02:28:52AM +0200, Konrad Dybcio wrote:
-> On 26.05.2023 01:39, Konrad Dybcio wrote:
-> > On 17.05.2023 20:48, Stephan Gerhold wrote:
-> >> Some of the regulators must be always-on to ensure correct operation of
-> >> the system, e.g. PM8916 L2 for the LPDDR RAM, L5 for most digital I/O
-> >> and L7 for the CPU PLL (strictly speaking the CPU PLL might only need
-> >> an active-only vote but this is not supported for regulators in
-> >> mainline currently).
-> > Would you be interested in implementing this?
 
-At least on MSM8916 there is currently no advantage implementing this.
-The "active-only" votes only have the CPU as limited use case. S1 (aka
-MSM8916_VDDCX) and L3 (MSM8916_VDDMX) are both used via rpmpd/power
-domains which already provides separate active-only variants. L7 (for
-the CPU PLL) is the only other regulator used in "active-only" mode.
-However, at least on MSM8916 L7 seems to stay always-on no matter what I
-do, so having an active-only vote on L7 doesn't provide any advantage.
+--6vvqQD2xKOBSWZLp
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Actually, I think currently all votes are active-only votes and what
-> we're missing is sleep-only (and active-sleep if we vote on both)
+fwnode_irq_get[_byname]() were changed to not return 0 anymore. The
+special error case where device-tree based IRQ mapping fails can't no
+longer be reliably detected from this return value. This yields a
+functional change in the driver where the mapping failure is treated as
+an error.
 
-If you only send the "active" votes but no "sleep" votes for a resource
-then the RPM firmware treats it as active+sleep, see [1].
-The active/sleep separation only starts once a separate sleep vote has
-been sent for a resource for the first time.
+The mapping failure can occur for example when the device-tree IRQ
+information translation call-back(s) (xlate) fail, IRQ domain is not
+found, IRQ type conflicts, etc. In most cases this indicates an error in
+the device-tree and special handling is not really required.
 
-Therefore, all requests from the SMD regulator driver apply for both
-active+sleep at the moment.
+One more thing to note is that ACPI APIs do not return zero for any
+failures so this special handling did only apply on device-tree based
+systems.
 
-[1]: https://git.codelinaro.org/clo/la/kernel/msm-3.10/-/blob/LA.BR.1.2.9.1-02310-8x16.0/drivers/regulator/rpm-smd-regulator.c#L202-204
+Drop the special (no error, just skip the IRQ) handling for DT mapping
+failures as these can no longer be separated from other errors at driver
+side.
 
-> > 
-> > Ancient downstream defines a second device (vregname_ao) and basically
-> > seems to select QCOM_SMD_(ACTIVE/SLEEP)_STATE based on that..
-> > 
-> > Looks like `struct regulator` stores voltage in an array that wouldn't
-> > you know it, depends on the PM state. Perhaps that could be something
-> > to explore!
-> > 
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Reviewed-by: Jonathan Neusch=E4fer <j.neuschaefer@gmx.net>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Don't get confused by the similar naming here. RPM sleep votes are
-unrelated to the "system suspend" voltages the regulator framework
-supports. :)
+---
+Revision history:
+v5 =3D> :
+ - No changes
+v4 =3D> v5:
+Fix typo in subject "elax" =3D> "relax"
 
-RPM sleep votes become active if the cpuidle reaches the deepest state
-for the (cpu/)cluster(/CCI). This can happen anytime at runtime when the
-system is idle long enough. On the other hand, the regulator suspend
-voltages are meant to become active during system suspend (where all the
-devices get suspended as well).
+Please note, I took Linus' reply to v4 cover-letter as ack && added the
+tag. Please let me know if this was not Ok.
 
-Since we do have "active-only" support in rpmpd I think the question is
-if it is worth bringing the feature also to regulators. Perhaps one
-could simply treat all regulators that are needed by the CPU as power
-domain.
+The first patch of the series changes the fwnode_irq_get() so this depends
+on the first patch of the series and should not be applied alone.
+---
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-For example, L7 on MSM8916 is fixed at 1.8V so while it doesn't have
-corners the simple enable/disable votes could also be sent via rpmpd.
-In some places in downstream L7 is also called VDDPX, similar to
-VDDCX and VDDMX which are already in rpmpd.
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/nu=
+voton/pinctrl-wpcm450.c
+index 2d1c1652cfd9..f9326210b5eb 100644
+--- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+@@ -1106,8 +1106,6 @@ static int wpcm450_gpio_register(struct platform_devi=
+ce *pdev,
+ 			irq =3D fwnode_irq_get(child, i);
+ 			if (irq < 0)
+ 				break;
+-			if (!irq)
+-				continue;
+=20
+ 			girq->parents[i] =3D irq;
+ 			girq->num_parents++;
+--=20
+2.40.1
 
-Thanks,
-Stephan
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--6vvqQD2xKOBSWZLp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRwU80ACgkQeFA3/03a
+ocXxUgf/SLySIkEMcLaMMaSXHiOnRCzYeYtYFaSw1z06LJxEARFu14wrAxfuj1TQ
+6BuIjSdrQVWNMgIVG3UEcj8X+MW1RFdb26IF4FgPNK5fcxfWpkwvala+rQESbgcM
+R2RqVTeKGQHJs1RGiX7wEGPBW/0hW8LGWmChnaRZlHvxtd3SBovbFWFs0/Vx6rNP
+3R4o5+xvoDTHn5f5V1xwZKmxvxuTvXmLe7D6AE384B2FVhuvsaWeYSgYGec6XdzS
+u/gTk1ccUgimpsuyTRnTPqLCJz3doPWjCRuxtTrBrGF+jZQgUEM0dbRtjniW6vhW
+f8zRyM0n2uPN0n5Rtu4kSuKjlUDbwg==
+=SI+v
+-----END PGP SIGNATURE-----
+
+--6vvqQD2xKOBSWZLp--
