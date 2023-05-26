@@ -2,52 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FE37125C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAA97125E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243367AbjEZLnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 07:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
+        id S243370AbjEZLtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 07:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237189AbjEZLnA (ORCPT
+        with ESMTP id S242638AbjEZLtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 07:43:00 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465CE116;
-        Fri, 26 May 2023 04:42:58 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QSNMf0tK6z4f4PNk;
-        Fri, 26 May 2023 19:42:54 +0800 (CST)
-Received: from ubuntu1804.huawei.com (unknown [10.67.174.58])
-        by APP4 (Coremail) with SMTP id gCh0CgBH_rE7m3BkX_gDKQ--.37908S4;
-        Fri, 26 May 2023 19:42:52 +0800 (CST)
-From:   Xiu Jianfeng <xiujianfeng@huaweicloud.com>
-To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiujianfeng@huaweicloud.com, cuigaosheng1@huawei.com
-Subject: [PATCH] cgroup: Stop task iteration when rebinding subsystem
-Date:   Fri, 26 May 2023 19:41:39 +0800
-Message-Id: <20230526114139.70274-1-xiujianfeng@huaweicloud.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: gCh0CgBH_rE7m3BkX_gDKQ--.37908S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ar17JFW5KF1fXw13Cw13twb_yoW7CryxpF
-        15u3y7Ars5Aw4qq3yfJ3sF9r9ag3ykuw1jgrWxtw4fKwnrtry7XF1jkr17XFyxAFZFgF47
-        tF4jk3yS9w4Dtr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUym14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-        v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-        14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: x0lxyxpdqiv03j6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Fri, 26 May 2023 07:49:00 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B18BA7;
+        Fri, 26 May 2023 04:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685101739; x=1716637739;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=a3wG2//AE5g6ej11oeRcir7XyPQe4vKlHzlqyjzy2Is=;
+  b=LQ3jsNoo/AbcKkdFvYmV2kxJJJ4tsJBf/fSzVGu9ZTfeUd1OsN9s7Htm
+   bg+I8h9gXGu/JfVpCgEg+9ZwzStGn9KoAp2cePbR9CiRscKp/f1xmAxeB
+   YzI6vlFOmXjEPE8ykXJHbTCZvVKDFFU44kUH4YFCVhLaDEPtbBvY1YP3v
+   tXjL5JfvYltvZ61fm/qi0+urhL8JLtZj7icpcy2ohwb6YhIZRdhBxiMin
+   do2IyWk474f8oLj2FOkyb21orM+MlbNK0H0Fo/wZvxdDLRux+T7KEDVoV
+   RDGMhnyc82OjxJQQ8zUiS584d7ML4ovG48I/hEvZGa8G9LZfbk9MierAK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="440539314"
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="scan'208";a="440539314"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 04:48:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="770317196"
+X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
+   d="scan'208";a="770317196"
+Received: from gschrom-mobl.amr.corp.intel.com ([10.251.223.174])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 04:48:50 -0700
+Date:   Fri, 26 May 2023 14:48:44 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?ISO-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal Kazior <michal.kazior@tieto.com>,
+        Janusz Dziedzic <janusz.dziedzic@tieto.com>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dean Luick <dean.luick@cornelisnetworks.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 9/9] wifi: ath10k: Use RMW accessors for changing
+ LNKCTL
+In-Reply-To: <ecdc8e85-786-db97-a7d4-bfd82c08714@linux.intel.com>
+Message-ID: <4a67bac-9b4c-1260-f7a-287f4c205dbb@linux.intel.com>
+References: <ZG4o/pYseBklnrTc@bhelgaas> <ecdc8e85-786-db97-a7d4-bfd82c08714@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; BOUNDARY="8323329-1451476970-1685097931=:1602"
+Content-ID: <f72023b2-74c2-48a1-fd5b-ca48b16d5030@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,155 +80,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We found a refcount UAF bug as follows:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-refcount_t: addition on 0; use-after-free.
-WARNING: CPU: 1 PID: 342 at lib/refcount.c:25 refcount_warn_saturate+0xa0/0x148
-Workqueue: events cpuset_hotplug_workfn
-Call trace:
- refcount_warn_saturate+0xa0/0x148
- __refcount_add.constprop.0+0x5c/0x80
- css_task_iter_advance_css_set+0xd8/0x210
- css_task_iter_advance+0xa8/0x120
- css_task_iter_next+0x94/0x158
- update_tasks_root_domain+0x58/0x98
- rebuild_root_domains+0xa0/0x1b0
- rebuild_sched_domains_locked+0x144/0x188
- cpuset_hotplug_workfn+0x138/0x5a0
- process_one_work+0x1e8/0x448
- worker_thread+0x228/0x3e0
- kthread+0xe0/0xf0
- ret_from_fork+0x10/0x20
+--8323329-1451476970-1685097931=:1602
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <f7a6cddb-c0a2-a85e-a615-b91ce664f3de@linux.intel.com>
 
-then a kernel panic will be triggered as below:
+On Thu, 25 May 2023, Ilpo Järvinen wrote:
 
-Unable to handle kernel paging request at virtual address 00000000c0000010
-Call trace:
- cgroup_apply_control_disable+0xa4/0x16c
- rebind_subsystems+0x224/0x590
- cgroup_destroy_root+0x64/0x2e0
- css_free_rwork_fn+0x198/0x2a0
- process_one_work+0x1d4/0x4bc
- worker_thread+0x158/0x410
- kthread+0x108/0x13c
- ret_from_fork+0x10/0x18
+> On Wed, 24 May 2023, Bjorn Helgaas wrote:
+> 
+> > On Wed, May 17, 2023 at 01:52:35PM +0300, Ilpo Järvinen wrote:
+> > > Don't assume that only the driver would be accessing LNKCTL. ASPM
+> > > policy changes can trigger write to LNKCTL outside of driver's control.
+> > > 
+> > > Use RMW capability accessors which does proper locking to avoid losing
+> > > concurrent updates to the register value. On restore, clear the ASPMC
+> > > field properly.
+> > > 
+> > > Fixes: 76d870ed09ab ("ath10k: enable ASPM")
+> > > Suggested-by: Lukas Wunner <lukas@wunner.de>
+> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > Cc: stable@vger.kernel.org
+> > > ---
+> > >  drivers/net/wireless/ath/ath10k/pci.c | 9 +++++----
+> > >  1 file changed, 5 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/net/wireless/ath/ath10k/pci.c b/drivers/net/wireless/ath/ath10k/pci.c
+> > > index a7f44f6335fb..9275a672f90c 100644
+> > > --- a/drivers/net/wireless/ath/ath10k/pci.c
+> > > +++ b/drivers/net/wireless/ath/ath10k/pci.c
+> > > @@ -1963,8 +1963,9 @@ static int ath10k_pci_hif_start(struct ath10k *ar)
+> > >  	ath10k_pci_irq_enable(ar);
+> > >  	ath10k_pci_rx_post(ar);
+> > >  
+> > > -	pcie_capability_write_word(ar_pci->pdev, PCI_EXP_LNKCTL,
+> > > -				   ar_pci->link_ctl);
+> > > +	pcie_capability_clear_and_set_word(ar_pci->pdev, PCI_EXP_LNKCTL,
+> > > +					   PCI_EXP_LNKCTL_ASPMC,
+> > > +					   ar_pci->link_ctl & PCI_EXP_LNKCTL_ASPMC);
+> > >  
+> > >  	return 0;
+> > >  }
+> > > @@ -2821,8 +2822,8 @@ static int ath10k_pci_hif_power_up(struct ath10k *ar,
+> > >  
+> > >  	pcie_capability_read_word(ar_pci->pdev, PCI_EXP_LNKCTL,
+> > >  				  &ar_pci->link_ctl);
+> > > -	pcie_capability_write_word(ar_pci->pdev, PCI_EXP_LNKCTL,
+> > > -				   ar_pci->link_ctl & ~PCI_EXP_LNKCTL_ASPMC);
+> > > +	pcie_capability_clear_word(ar_pci->pdev, PCI_EXP_LNKCTL,
+> > > +				   PCI_EXP_LNKCTL_ASPMC);
+> > 
+> > These ath drivers all have the form:
+> > 
+> >   1) read LNKCTL
+> >   2) save LNKCTL value in ->link_ctl
+> >   3) write LNKCTL with "->link_ctl & ~PCI_EXP_LNKCTL_ASPMC"
+> >      to disable ASPM
+> >   4) write LNKCTL with ->link_ctl, presumably to re-enable ASPM
+> > 
+> > These patches close the hole between 1) and 3) where other LNKCTL
+> > updates could interfere, which is definitely a good thing.
+> > 
+> > But the hole between 1) and 4) is much bigger and still there.  Any
+> > update by the PCI core in that interval would be lost.
+> 
+> Any update to PCI_EXP_LNKCTL_ASPMC field in that interval is lost yes, the 
+> updates to _the other fields_ in LNKCTL are not lost.
+> 
+> I know this might result in drivers/pci/pcie/aspm.c disagreeing what
+> the state of the ASPM is (as shown under sysfs) compared with LNKCTL 
+> value but the cause can no longer be due racing RMW. Essentially, 4) is 
+> seen as an override to what core did if it changed ASPMC in between. 
+> Technically, something is still "lost" like you say but for a different 
+> reason than this series is trying to fix.
+> 
+> > Straw-man proposal:
+> > 
+> >   - Change pci_disable_link_state() so it ignores aspm_disabled and
+> >     always disables ASPM even if platform firmware hasn't granted
+> >     ownership.  Maybe this should warn and taint the kernel.
+> > 
+> >   - Change drivers to use pci_disable_link_state() instead of writing
+> >     LNKCTL directly.
 
-The race that cause this bug can be shown as below:
+Now that I took a deeper look into what pci_disable_link_state() and 
+pci_enable_link_state() do, I realized they're not really disable/enable 
+pair like I had assumed from their names. Disable adds to ->aspm_disable 
+and flags are never removed from that because enable does not touch 
+aspm_disable at all but has it's own flag variable. This asymmetry looks 
+intentional.
 
-(hotplug cpu)                | (umount cpuset)
-mutex_lock(&cpuset_mutex)    | mutex_lock(&cgroup_mutex)
-cpuset_hotplug_workfn        |
- rebuild_root_domains        |  rebind_subsystems
-  update_tasks_root_domain   |   spin_lock_irq(&css_set_lock)
-   css_task_iter_start       |    list_move_tail(&cset->e_cset_node[ss->id]
-   while(css_task_iter_next) |                  &dcgrp->e_csets[ss->id]);
-   css_task_iter_end         |   spin_unlock_irq(&css_set_lock)
-mutex_unlock(&cpuset_mutex)  | mutex_unlock(&cgroup_mutex)
+So if ath drivers would do pci_disable_link_state() to realize 1)-3), 
+there is no way to undo it in 4). It looks as if ath drivers would 
+actually want to use pci_enable_link_state() with different state 
+parameters to realize what they want to do in 1)-4).
 
-Inside css_task_iter_start/next/end, css_set_lock is hold and then
-released, so when iterating task(left side), the css_set may be moved to
-another list(right side), then it->cset_head points to the old list head
-and it->cset_pos->next points to the head node of new list, which can't
-be used as struct css_set.
+Any suggestion which way I should go with these ath drivers here, use 
+pci_enable_link_state()?
 
-To fix this issue, introduce CSS_TASK_ITER_STOPPED flag for css_task_iter.
-when moving css_set to dcgrp->e_csets[ss->id] in rebind_subsystems(), stop
-the task iteration.
+(There are other drivers where pci_disable_link_state() is very much valid 
+thing to do.)
 
-Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-Link: https://www.spinics.net/lists/cgroups/msg37935.html
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
----
- include/linux/cgroup.h |  1 +
- kernel/cgroup/cgroup.c | 33 ++++++++++++++++++++++++++++++++-
- 2 files changed, 33 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index 567c547cf371..3f1557cb5758 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -47,6 +47,7 @@ struct kernel_clone_args;
- 
- /* internal flags */
- #define CSS_TASK_ITER_SKIPPED		(1U << 16)
-+#define CSS_TASK_ITER_STOPPED		(1U << 17)
- 
- /* a css_task_iter should be treated as an opaque object */
- struct css_task_iter {
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 8b8ca2e01019..7b16e8d34fca 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -240,6 +240,8 @@ static int cgroup_apply_control(struct cgroup *cgrp);
- static void cgroup_finalize_control(struct cgroup *cgrp, int ret);
- static void css_task_iter_skip(struct css_task_iter *it,
- 			       struct task_struct *task);
-+static void css_task_iter_stop(struct css_task_iter *it,
-+			       struct css_set *cset);
- static int cgroup_destroy_locked(struct cgroup *cgrp);
- static struct cgroup_subsys_state *css_create(struct cgroup *cgrp,
- 					      struct cgroup_subsys *ss);
-@@ -889,6 +891,19 @@ static void css_set_skip_task_iters(struct css_set *cset,
- 		css_task_iter_skip(it, task);
- }
- 
-+/*
-+ * @cset is moving to other list, it's not safe to continue the iteration,
-+ * because the cset_head of css_task_iter which is from the old list can
-+ * not be used as the stop condition of iteration.
-+ */
-+static void css_set_stop_iters(struct css_set *cset)
-+{
-+	struct css_task_iter *it, *pos;
-+
-+	list_for_each_entry_safe(it, pos, &cset->task_iters, iters_node)
-+		css_task_iter_stop(it, cset);
-+}
-+
- /**
-  * css_set_move_task - move a task from one css_set to another
-  * @task: task being moved
-@@ -1861,9 +1876,11 @@ int rebind_subsystems(struct cgroup_root *dst_root, u16 ss_mask)
- 		css->cgroup = dcgrp;
- 
- 		spin_lock_irq(&css_set_lock);
--		hash_for_each(css_set_table, i, cset, hlist)
-+		hash_for_each(css_set_table, i, cset, hlist) {
-+			css_set_stop_iters(cset);
- 			list_move_tail(&cset->e_cset_node[ss->id],
- 				       &dcgrp->e_csets[ss->id]);
-+		}
- 		spin_unlock_irq(&css_set_lock);
- 
- 		if (ss->css_rstat_flush) {
-@@ -4864,6 +4881,15 @@ static void css_task_iter_skip(struct css_task_iter *it,
- 	}
- }
- 
-+static void css_task_iter_stop(struct css_task_iter *it,
-+			       struct css_set *cset)
-+{
-+	lockdep_assert_held(&css_set_lock);
-+
-+	WARN_ONCE(it->cur_cset != cset, "invalid cur_set for css_task_iter\n");
-+	it->flags |= CSS_TASK_ITER_STOPPED;
-+}
-+
- static void css_task_iter_advance(struct css_task_iter *it)
- {
- 	struct task_struct *task;
-@@ -4967,6 +4993,11 @@ struct task_struct *css_task_iter_next(struct css_task_iter *it)
- 
- 	spin_lock_irq(&css_set_lock);
- 
-+	if (it->flags & CSS_TASK_ITER_STOPPED) {
-+		spin_unlock_irq(&css_set_lock);
-+		return NULL;
-+	}
-+
- 	/* @it may be half-advanced by skips, finish advancing */
- 	if (it->flags & CSS_TASK_ITER_SKIPPED)
- 		css_task_iter_advance(it);
 -- 
-2.17.1
-
+ i.
+	
+> I fully agree that's the direction we should be moving, yes. However, I'm 
+> a bit hesitant to take that leap in one step. These drivers currently not 
+> only disable ASPM but also re-enable it (assuming we guessed the intent
+> right).
+> 
+> If I directly implement that proposal, ASPM is not going to be re-enabled 
+> when PCI core does not allowing it. Could it cause some power related 
+> regression?
+> 
+> My plan is to make another patch series after these to realize exactly 
+> what you're proposing. It would allow better to isolate the problems that 
+> related to the lack of ASPM.
+> 
+> I hope this two step approach is an acceptable way forward? I can of 
+> course add those patches on top of these if that would be preferrable.
+--8323329-1451476970-1685097931=:1602--
