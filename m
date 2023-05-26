@@ -2,123 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3A7712190
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D3F7121B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242468AbjEZHzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 03:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S242352AbjEZH4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 03:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242595AbjEZHyy (ORCPT
+        with ESMTP id S242642AbjEZH4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 03:54:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AF812C;
-        Fri, 26 May 2023 00:54:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B3F064DBE;
-        Fri, 26 May 2023 07:54:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51903C433D2;
-        Fri, 26 May 2023 07:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685087692;
-        bh=r/fk7ywn0jZ7exIpVJ5GqN+idYj8JSycLJBNBKkY+To=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DSvxXar/RZIH1FoOJc/s0k6Qa+gNIwPaH8Ex5okX01QXiK6uVMuX8Om/62If8fUAE
-         ovlZKw6ujgSzuGfOdXj/7WsXOoX9EExtizR1AKOpG6kBpTvsQ+AQm0Z3wxxgwYrFhG
-         J0wBcoH9smDqA4hgRo3ygx/Gr5APCGW+Friptd4yEC3ELF3HHeClvYMs4GuUIsq8PR
-         9+rnI6UYkYfFviUuHSlezdK+URIy3tkQN3tTkF1d3Fy821oq7EGlmN06NxPajy3/AM
-         91riAScRnESGK++T/t9HJRiNIvz5tottLQD0IaFrgSrmchDo4x/VwzJ5XSua4hMkCO
-         J8RYE48HQ3a7Q==
-Date:   Fri, 26 May 2023 08:54:47 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Fred Treven <fred.treven@cirrus.com>
-Cc:     Ben Bright <ben.bright@cirrus.com>,
-        James Ogletree <james.ogletree@cirrus.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        patches@opensource.cirrus.com, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 5/5] mfd: cs40l26: Add CODEC driver component
-Message-ID: <20230526075447.GA449117@google.com>
-References: <1685059471-9598-1-git-send-email-fred.treven@cirrus.com>
- <1685059471-9598-5-git-send-email-fred.treven@cirrus.com>
+        Fri, 26 May 2023 03:56:20 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3536813D;
+        Fri, 26 May 2023 00:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685087769; x=1716623769;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i8SjRUVaH8UmFBJpxGhgn37bMQ5uZNZZ9RVzJ0t8KOk=;
+  b=CMjLFWSug9WFBZgsxtcgY0QIgwc/PpKSfGCQd3lCDHq3NDF31BlLEsVs
+   RBnzXsZKPeqqiCbsMQ8dhqsZ2otxZWqLLuAJWexj+B31JHVc/QSB9mgpe
+   FcpqcSWqjZgCr/3CzENywEn9SLOlr35meNrKsUEpWDHxq3PeBFRb80OnB
+   ObpdOCBir8YymhdsArSg+l+h3MtTdirxnltWUI+V/Fvdonr37Re05YQ2S
+   FRatgRUx+3h3VE1l4vafWhAt4BoMxDJiGw0EEfhveOvkZyvA8zE5Ds/fw
+   uDdwg6K1wxhfSsAq5yJII1oHJDcPMuhl2yqn0ClL0v2oW6hYPis3Vkh52
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="asc'?scan'208";a="154059732"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2023 00:56:08 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 26 May 2023 00:56:03 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 26 May 2023 00:56:01 -0700
+Date:   Fri, 26 May 2023 08:55:39 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <Claudiu.Beznea@microchip.com>
+CC:     <devicetree@vger.kernel.org>, <alexandre.belloni@bootlin.com>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <daniel.lezcano@linaro.org>, <conor+dt@kernel.org>,
+        <conor@kernel.org>, <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <tglx@linutronix.de>,
+        <wim@linux-watchdog.org>, <sebastian.reichel@collabora.com>,
+        <linux@roeck-us.net>
+Subject: Re: [PATCH 3/5] dt-bindings: timer: microchip,sam9x60-pit64b:
+ convert to yaml
+Message-ID: <20230526-unsubtle-chowtime-ce329d7e5627@wendy>
+References: <20230525125602.640855-1-claudiu.beznea@microchip.com>
+ <20230525125602.640855-4-claudiu.beznea@microchip.com>
+ <20230525-straw-fidgeting-4c1099aa16fe@spud>
+ <5edf3d3b-6f59-0af3-6414-940a278962bf@microchip.com>
+ <20230526-knickers-aim-e01220e6a7cd@wendy>
+ <5a5d25a2-e6b5-fd69-f615-cd3d6ed33b9f@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jq43FJ9NVzNRW92F"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1685059471-9598-5-git-send-email-fred.treven@cirrus.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5a5d25a2-e6b5-fd69-f615-cd3d6ed33b9f@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023, Fred Treven wrote:
+--jq43FJ9NVzNRW92F
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Use MFD interface to load the CODEC driver along
-> with the Input FF driver.
-> 
-> Signed-off-by: Fred Treven <fred.treven@cirrus.com>
-> ---
->  drivers/input/misc/cs40l26.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/input/misc/cs40l26.c b/drivers/input/misc/cs40l26.c
-> index 12c29cbd4ff0..35d15a6c2230 100644
-> --- a/drivers/input/misc/cs40l26.c
-> +++ b/drivers/input/misc/cs40l26.c
-> @@ -13,6 +13,7 @@
->  #include <linux/i2c.h>
->  #include <linux/interrupt.h>
->  #include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
+On Fri, May 26, 2023 at 06:41:39AM +0000, Claudiu.Beznea@microchip.com wrot=
+e:
+> On 26.05.2023 09:23, Conor Dooley wrote:
+> > On Fri, May 26, 2023 at 04:47:28AM +0000, Claudiu.Beznea@microchip.com =
+wrote:
+> >> On 25.05.2023 20:14, Conor Dooley wrote:
+> >>>> Convert Microchip PIT64B to YAML. Along with it clock-names binding =
+has
+> >>>> been added as the driver needs it to get PIT64B clocks.
+> >>> I don't think both of these PIT things need to have different binding
+> >>> files. 90% of it is the same, just the clock-names/number - so you can
+> >>
+> >> But these are different hardware blocks with different functionalities=
+ and
+> >> different drivers.
+> >=20
+> > Having different drivers doesn't preclude having them in the same
+> > binding provided the function/description etc are more or less
+> > identical. I was confused by:
+> >=20
+> > +description:
+> > +  The 64-bit periodic interval timer provides the operating system sch=
+eduler
+> > +  interrupt. It is designed to offer maximum accuracy and efficient ma=
+nagement,
+> > +  even for systems with long response times.
+> >=20
+> > +description:
+> > +  Atmel periodic interval timer provides the operating system=E2=80=99=
+s scheduler
+> > +  interrupt. It is designed to offer maximum accuracy and efficient ma=
+nagement,
+> > +  even for systems with long response time.
+> >=20
+> > Those seemed like they do the same thing to me!
+>=20
+> They do the same thing, they are timers... But the way they do it (from
+> hardware perspective) is totally different. With this would you still
+> prefer to have them merged?
 
-NACK.  Please do not use the MFD API outside of drivers/mfd.
+Yeah, one binding would be my preference.
 
->  #include <linux/pm_runtime.h>
->  #include <linux/string.h>
->  #include <linux/firmware/cirrus/wmfw.h>
-> @@ -2136,6 +2137,10 @@ static inline int cs40l26_worker_init(struct cs40l26_private *cs40l26)
->  	return 0;
->  }
->  
-> +static const struct mfd_cell cs40l26_devs[] = {
-> +	{ .name = "cs40l26-codec" },
+--jq43FJ9NVzNRW92F
+Content-Type: application/pgp-signature; name="signature.asc"
 
-This is one device.  Thus, not an MFD anyway.
+-----BEGIN PGP SIGNATURE-----
 
-> +};
-> +
->  static struct regulator_bulk_data cs40l26_supplies[] = {
->  	{ .supply = "VP" },
->  	{ .supply = "VA" },
-> @@ -2275,6 +2280,12 @@ int cs40l26_probe(struct cs40l26_private *cs40l26)
->  	if (error)
->  		goto err;
->  
-> +	error = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cs40l26_devs, 1, NULL, 0, NULL);
-> +	if (error) {
-> +		dev_err(dev, "Failed to MFD add device %s: %d\n", cs40l26_devs[0].name, error);
-> +		goto err;
-> +	}
-> +
->  	return 0;
->  err:
->  	cs40l26_remove(cs40l26);
-> -- 
-> 2.7.4
-> 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHBl8AAKCRB4tDGHoIJi
+0ipiAP98NbSsiQn027Mc4gJ0XQc+niD0ik1s1DA+bhuTimRCnwEAyuiOhfToapC1
+FlI8tu753UgyHiVKAvEh+UddupYYFAs=
+=od0H
+-----END PGP SIGNATURE-----
 
--- 
-Lee Jones [李琼斯]
+--jq43FJ9NVzNRW92F--
