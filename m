@@ -2,105 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7083E712B08
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D8C712B03
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237281AbjEZQty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
+        id S237201AbjEZQt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237603AbjEZQtt (ORCPT
+        with ESMTP id S237149AbjEZQtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:49:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059DEBC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:49:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685119743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sxic9C46g7G0xFpFyBBflZoBYb0LNNTJdlt5DOHiHJY=;
-        b=Vmc58cnZKWrvpz9BdGFE/YK+H6XRg4aydh9q977fYTwU/7ZFqRmLzR8Fdz8gIT+MrJczhp
-        tgd+SavUux/Kodb95xStHDxvWE04mu7asvDZK4/lZyIAL7TT9ABZCDeFyXLaC+b1sc98oH
-        Z2piPykM7wJVg+tHc0hx8xtFH6QA0Oo=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-111-piDNsAa4Oe-HkRLrttHJlg-1; Fri, 26 May 2023 12:48:54 -0400
-X-MC-Unique: piDNsAa4Oe-HkRLrttHJlg-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-75cb47e5507so4137085a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:48:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685119733; x=1687711733;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sxic9C46g7G0xFpFyBBflZoBYb0LNNTJdlt5DOHiHJY=;
-        b=jblXh2mgllqXNgAnjCaHJnefRoHbnrXUusuHw3ewFFjiXUxeulTCA82W0NY1Zvm53G
-         0CPK22CSnpo+k+IMAFVXPz4sAWG5LISrIBHN35a9y1ANp74IyAK2WBrI6FT3+3DEFzSO
-         7vORis78XbFkc832Sy9e4/VubcmvMauXg4RNpQLJetoTGy4Hrs3ed/Xa/Yp6GNkoM+8E
-         /gWeFS8u5hL5A/0rmNfRO9ct66uptJWZaj0JUJkLFktTnpXJzZDTCTb9MbBw2iWl5ShM
-         U3cOsF4E83EET2JJlm81RlabyqhknpH7HOWS+/48aPRR8/kdZrIvZ4vTj7BL5bf7L3pg
-         jHtQ==
-X-Gm-Message-State: AC+VfDxHLFMg60+yailqJYMJnFknxXX13mbYzUtE5RQZ1RQ3sMhUwqZa
-        NPWwCoVI0NYr5BoOEqYMmdh7oTLZdGRL3WR4rVKch5gJh+ntnUnNwn+K5LUhaJqGP9J2VKN405N
-        cQsi8xCrfHTZCBd4g9tCstMgr
-X-Received: by 2002:a05:620a:8f06:b0:75b:3a99:241c with SMTP id rh6-20020a05620a8f0600b0075b3a99241cmr1986886qkn.7.1685119733667;
-        Fri, 26 May 2023 09:48:53 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7Zj6MOk0fgSC2Gs+lb8bZgbtw6HOuPPCYdHF93Hvwa10uJ6LUEwh6R8dNOTYn7x41D4Dwn9g==
-X-Received: by 2002:a05:620a:8f06:b0:75b:3a99:241c with SMTP id rh6-20020a05620a8f0600b0075b3a99241cmr1986862qkn.7.1685119733280;
-        Fri, 26 May 2023 09:48:53 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id c22-20020ae9e216000000b0075b18a40a85sm1289471qkc.46.2023.05.26.09.48.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 09:48:52 -0700 (PDT)
-Date:   Fri, 26 May 2023 12:48:50 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 01/31] mm: use pmdp_get_lockless() without surplus
- barrier()
-Message-ID: <ZHDi8q6N9BPElAMH@x1n>
-References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
- <34467cca-58b6-3e64-1ee7-e3dc43257a@google.com>
- <ZG6PwAvIO4Z7lpkq@x1n>
- <427ea01f-345a-6086-d145-fe573894dbe@google.com>
+        Fri, 26 May 2023 12:49:23 -0400
+Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fa8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C258219A;
+        Fri, 26 May 2023 09:49:19 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QSW9963HFzMqBk5;
+        Fri, 26 May 2023 18:49:17 +0200 (CEST)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QSW954GcnzMpq7x;
+        Fri, 26 May 2023 18:49:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1685119757;
+        bh=aghhZZz/jAHNei4obfycQdpoNYo23x/hMTO/WYvr+D4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aNpuEEhr3qfgoQBoABl/c/Soy37k/dWbg29l53qY084NrLE1aBB96NeIw1GJ+t33V
+         pd9trvFbpyUukW/iVPpk0eBX/Jwsza/CoS5PoumlcDlW/vnInB0QV0Wjo7cpI7eeQk
+         00f3/lqql1UIb9Yq02grk2akHYn3y+PAXnI212IM=
+Message-ID: <7671b432-569a-d176-315b-d5f66fe205ef@digikod.net>
+Date:   Fri, 26 May 2023 18:49:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <427ea01f-345a-6086-d145-fe573894dbe@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: 
+Subject: Re: [PATCH v1 6/9] KVM: x86: Add Heki hypervisor support
+Content-Language: en-US
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Alexander Graf <graf@amazon.com>,
+        Forrest Yuan Yu <yuanyu@google.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        John Andersen <john.s.andersen@intel.com>,
+        Liran Alon <liran.alon@oracle.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Marian Rotariu <marian.c.rotariu@gmail.com>,
+        =?UTF-8?Q?Mihai_Don=c8=9bu?= <mdontu@bitdefender.com>,
+        =?UTF-8?B?TmljdciZb3IgQ8OuyJt1?= <nicu.citu@icloud.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Thara Gopinath <tgopinath@microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        Zahra Tarkhani <ztarkhani@microsoft.com>,
+        =?UTF-8?Q?=c8=98tefan_=c8=98icleru?= <ssicleru@bitdefender.com>,
+        dev@lists.cloudhypervisor.org, kvm@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, qemu-devel@nongnu.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org
+References: <20230505152046.6575-1-mic@digikod.net>
+ <20230505152046.6575-7-mic@digikod.net>
+ <ZFlnJRsJh2fX3IJb@liuwe-devbox-debian-v2>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <ZFlnJRsJh2fX3IJb@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,78 +81,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 03:35:01PM -0700, Hugh Dickins wrote:
-> On Wed, 24 May 2023, Peter Xu wrote:
-> > On Sun, May 21, 2023 at 09:49:45PM -0700, Hugh Dickins wrote:
-> > > Use pmdp_get_lockless() in preference to READ_ONCE(*pmdp), to get a more
-> > > reliable result with PAE (or READ_ONCE as before without PAE); and remove
-> > > the unnecessary extra barrier()s which got left behind in its callers.
-> > 
-> > Pure question: does it mean that some of below path (missing barrier()
-> > ones) could have problem when CONFIG_PAE, hence this can be seen as a
-> > (potential) bug fix?
+
+On 08/05/2023 23:18, Wei Liu wrote:
+> On Fri, May 05, 2023 at 05:20:43PM +0200, Mickaël Salaün wrote:
+>> From: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+>>
+>> Each supported hypervisor in x86 implements a struct x86_hyper_init to
+>> define the init functions for the hypervisor.  Define a new init_heki()
+>> entry point in struct x86_hyper_init.  Hypervisors that support Heki
+>> must define this init_heki() function.  Call init_heki() of the chosen
+>> hypervisor in init_hypervisor_platform().
+>>
+>> Create a heki_hypervisor structure that each hypervisor can fill
+>> with its data and functions. This will allow the Heki feature to work
+>> in a hypervisor agnostic way.
+>>
+>> Declare and initialize a "heki_hypervisor" structure for KVM so KVM can
+>> support Heki.  Define the init_heki() function for KVM.  In init_heki(),
+>> set the hypervisor field in the generic "heki" structure to the KVM
+>> "heki_hypervisor".  After this point, generic Heki code can access the
+>> KVM Heki data and functions.
+>>
+> [...]
+>> +static void kvm_init_heki(void)
+>> +{
+>> +	long err;
+>> +
+>> +	if (!kvm_para_available())
+>> +		/* Cannot make KVM hypercalls. */
+>> +		return;
+>> +
+>> +	err = kvm_hypercall3(KVM_HC_LOCK_MEM_PAGE_RANGES, -1, -1, -1);
 > 
-> I don't think so; or at least, I am not claiming that this fixes any.
-> 
-> It really depends on what use is made of the pmdval afterwards, and
-> I've not checked through them.  The READ_ONCE()s which were there,
-> were good enough to make sure that the compiler did not reevaluate
-> the pmdval later on, with perhaps a confusingly different result.
-> 
-> But, at least in the x86 PAE case, they were not good enough to ensure
-> that the two halves of the entry match up; and, sad to say, nor is that
-> absolutely guaranteed by these conversions to pmdp_get_lockless() -
-> because of the "HOWEVER" below.  PeterZ's comments in linux/pgtable.h
-> are well worth reading through.
+> Why not do a proper version check or capability check here? If the ABI
+> or supported features ever change then we have something to rely on?
 
-Yes exactly - that's one major thing of my confusion on using
-{ptep|pmdp}_get_lockless().
+The attributes will indeed get extended, but I wanted to have a simple 
+proposal for now.
 
-In irqoff ctx, AFAICT we can see a totally messed up pte/pmd with present
-bit set if extremely unlucky. E.g. it can race with something like
-"DONTNEED (contains tlbflush) then a POPULATE_WRITE" so we can have
-"present -> present" conversion of pte when reading, so we can read half
-pfn1 and then the other half pfn2.
+Do you mean to get the version of this hypercall e.g., with a dedicated 
+flag, like with the 
+landlock_create_ruleset/LANDLOCK_CREATE_RULESET_VERSION syscall?
 
-The other confusing thing on this _lockless trick on PAE is, I think it
-_might_ go wrong with devmap..
-
-The problem is here we assumed even if high & low may not match, we still
-can rely on most pte/pmd checks are done only on low bits (except _none()
-check) to guarantee at least the checks are still atomic on low bits.
-
-But it seems to me it's not true anymore if with pmd_trans_huge() after
-devmap introduced, e.g.:
-
-static inline int pmd_trans_huge(pmd_t pmd)
-{
-	return (pmd_val(pmd) & (_PAGE_PSE|_PAGE_DEVMAP)) == _PAGE_PSE;
-}
-
-#define _PAGE_PSE	(_AT(pteval_t, 1) << _PAGE_BIT_PSE)
-#define _PAGE_BIT_PSE		7	/* 4 MB (or 2MB) page */
-
-#define _PAGE_DEVMAP	(_AT(u64, 1) << _PAGE_BIT_DEVMAP)
-#define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
-#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
-
-So after devmap with CONFIG_PAE, pmd_trans_huge() checks more than low bits
-but also high bits.  I didn't go further to check whether there can be any
-real issue but IIUC that's not expected when the low/high trick introduced
-(originally introduced in commit e585513b76f7b05d sololy for x86 PAE
-fast-gup only).
 
 > 
-> You might question why I made these changes at all: some days
-> I question them too.  Better though imperfect?  Or deceptive?
-
-I think it's probably a separate topic to address in all cases, so I think
-this patch still make it slightly better on barrier() which I agree:
-
-Acked-by: Peter Xu <peterx@redhat.com>
-
-Thanks,
-
--- 
-Peter Xu
-
+> Thanks,
+> Wei.
