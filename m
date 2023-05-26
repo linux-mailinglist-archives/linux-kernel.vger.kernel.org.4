@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD7E7121BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A867121C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242142AbjEZICB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S242391AbjEZICm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236850AbjEZIB6 (ORCPT
+        with ESMTP id S236792AbjEZICk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:01:58 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D098ED3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:01:56 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30a4ebbda56so359906f8f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:01:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685088115; x=1687680115;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LSyxPKq6EWo4D7MkDUjCBW9xn+lNBx+ZT11wkIIdHB4=;
-        b=lERcr0PA/fbIoYPsA7Sw3mkjgj+AqH5n+Fy1US6weG8wZQqlv9mBphYKJ1d8+Sq9iH
-         YuQH0gX17Q5n7Vlb1A7PPE8zjhjnUDRCvwFmxqdDOpUOzEvUQ3U3DA+rYHxxdFffb2t2
-         t7FniiQlnSwN+fzlkT4b749qL0/kkS8KLlcMau0zoYEl1nTOQmrdBEtI7oYA77SL0r37
-         BJUJ5NLOvbi2nzIc/ag3OXRgBT7UeEqZh971zPaF5Wxo8r1OUkX9fX8V9jbB17pkArpf
-         rbWXOANt/wh9E/a4eHSkXbjl0tcPJmOg15l0ueLL0RCSdgD0vh9djt9PGv6pciBstUE+
-         h08g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685088115; x=1687680115;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LSyxPKq6EWo4D7MkDUjCBW9xn+lNBx+ZT11wkIIdHB4=;
-        b=bfb/aPElj5KEhp94q0jzhWGGOcByVYS5HAy/IKmqryORZpP+JUUmThPz6XCR5Lef0J
-         Sk2vhxHfTnVSwW0oz13v0LLXNDvnCtH1k83ZdBzXMhD/cZUB+JBOANboNOkI7eWyZEec
-         hqUGiDLT+RhEgmYk4hXlVGiXY32OF+pIdjb5TO6O3Ydj9wG7HbK82ECMkSmjRDCdQKhS
-         wdx/z52FX//68COQnPeC/WansPViGAG+HNRDFNcpAW5yCm/8H731XwzhwKTVLNIfWfNQ
-         XQDlwRTH8bdUZcEub85HXukOu2RbaI0Vwbu0TihNOZQpJvdK3CVmc3eZXgLa1kM2naQX
-         +iOw==
-X-Gm-Message-State: AC+VfDwGS939lJIV8JGrKhos5yHftb1OVGp2UeWHWaoeXkkg7uTYh6pH
-        y3T+i7uotMr/viIzpUrJb+nILA==
-X-Google-Smtp-Source: ACHHUZ7nhWjq8+8bFfH6uGh1zYKsCUqDvcd/yOlUAj7GTgZNdy3Cmviwqr0L/xYpMdiNLJgShurLfQ==
-X-Received: by 2002:adf:f6d0:0:b0:305:fbfb:c7d7 with SMTP id y16-20020adff6d0000000b00305fbfbc7d7mr800217wrp.44.1685088114754;
-        Fri, 26 May 2023 01:01:54 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id e18-20020a5d5312000000b0030922ba6d0csm4337294wrv.45.2023.05.26.01.01.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 01:01:53 -0700 (PDT)
-Date:   Fri, 26 May 2023 11:01:49 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] kunit: Move kunit_abort() call out of
- kunit_do_failed_assertion()
-Message-ID: <1dd943e3-cf3c-4928-8464-b02795092bc0@kili.mountain>
-References: <20230526075355.586335-1-davidgow@google.com>
+        Fri, 26 May 2023 04:02:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E5BD3;
+        Fri, 26 May 2023 01:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685088159; x=1716624159;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uUPmzyascHDc2Yhbxk2En/+7XKui32hlF6p4eUORT9A=;
+  b=A2Xlk2k+QyKpILjXGVIIxibZUv1Yy6LKHrdggeSbo4xu+dUaQ+WptxOM
+   tvHjlecvm44l4Ez+GlxvWz2N/zF3zuKEo97yk46RJUWp7/cCbi9VqQ6zw
+   uOYLjfpXXrxdlqLENP7cdHnS8bilN0O77xastW1D5I5TPLB7a/7rKXof5
+   MSwsU2oz4i9QiNPWE55l6XjqLSmRjcwd2QH8TywuHVJnAW8gyvDC9GtgO
+   QPCNr4K83bg/1bcQXwEiadvJfBPjh32y0TVj9UYeLsjKVX/oS+CElEyG4
+   kKbq0xUOzlMhX5Hw+ifxCDefxqA3AfO+pqGSuF3elz7tikQ0fitF3QGof
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="asc'?scan'208";a="154060890"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 May 2023 01:02:37 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 26 May 2023 01:02:37 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 26 May 2023 01:02:34 -0700
+Date:   Fri, 26 May 2023 09:02:12 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+CC:     Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Revert "dt-bindings: bridge: samsung-dsim: Make some
+ flags optional"
+Message-ID: <20230526-oppressor-cabbie-fd5332dbc2cc@wendy>
+References: <20230526-revert-bad-binding-v1-1-67329ad1bd80@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zfNhlKGJu8FDydZQ"
 Content-Disposition: inline
-In-Reply-To: <20230526075355.586335-1-davidgow@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20230526-revert-bad-binding-v1-1-67329ad1bd80@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,28 +79,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 03:53:54PM +0800, David Gow wrote:
-> KUnit aborts the current thread when an assertion fails. Currently, this
-> is done conditionally as part of the kunit_do_failed_assertion()
-> function, but this hides the kunit_abort() call from the compiler
-> (particularly if it's in another module). This, in turn, can lead to
-> both suboptimal code generation (the compiler can't know if
-> kunit_do_failed_assertion() will return), and to static analysis tools
-> like smatch giving false positives.
-> 
-> Moving the kunit_abort() call into the macro should give the compiler
-> and tools a better chance at understanding what's going on. Doing so
-> requires exporting kunit_abort(), though it's recommended to continue to
-> use assertions in lieu of aborting directly.
-> 
-> Suggested-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Signed-off-by: David Gow <davidgow@google.com>
+--zfNhlKGJu8FDydZQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Awesome thanks!  I had already hardcoded the current behavior but I'm
-happy to delete that code.  This works automatically and will continue
-to work if we change the parameters to kunit_do_failed_assertion() in
-the future.
+On Fri, May 26, 2023 at 09:27:16AM +0200, Neil Armstrong wrote:
+> This reverts commit cfaf76d349837f695c8aa6d7077847fec4231fe5 which was ap=
+plied
+> without review due to a bad tool manipulation.
 
-regards,
-dan carpenter
+Is it a dt-binding maintainer review that you are missing on that
+patch?
 
+For this one:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+>=20
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../devicetree/bindings/display/bridge/samsung,mipi-dsim.yaml    | 9 +++=
++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/display/bridge/samsung,mip=
+i-dsim.yaml b/Documentation/devicetree/bindings/display/bridge/samsung,mipi=
+-dsim.yaml
+> index 360fea81f4b6..9f61ebdfefa8 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/samsung,mipi-dsim.=
+yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/samsung,mipi-dsim.=
+yaml
+> @@ -70,9 +70,7 @@ properties:
+>    samsung,burst-clock-frequency:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description:
+> -      DSIM high speed burst mode frequency when connected to devices
+> -      that support burst mode. If absent, the driver will use the pixel
+> -      clock from the attached device or bridge.
+> +      DSIM high speed burst mode frequency.
+> =20
+>    samsung,esc-clock-frequency:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> @@ -82,8 +80,7 @@ properties:
+>    samsung,pll-clock-frequency:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description:
+> -      DSIM oscillator clock frequency. If absent, the driver will
+> -      use the clock frequency of sclk_mipi.
+> +      DSIM oscillator clock frequency.
+> =20
+>    phys:
+>      maxItems: 1
+> @@ -137,7 +134,9 @@ required:
+>    - compatible
+>    - interrupts
+>    - reg
+> +  - samsung,burst-clock-frequency
+>    - samsung,esc-clock-frequency
+> +  - samsung,pll-clock-frequency
+> =20
+>  allOf:
+>    - $ref: ../dsi-controller.yaml#
+>=20
+> ---
+> base-commit: cfaf76d349837f695c8aa6d7077847fec4231fe5
+> change-id: 20230526-revert-bad-binding-f77a3ca96419
+>=20
+> Best regards,
+> --=20
+> Neil Armstrong <neil.armstrong@linaro.org>
+>=20
+
+--zfNhlKGJu8FDydZQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHBnhAAKCRB4tDGHoIJi
+0tj/AP45IR5a9ay/LFvrrvJEvwTQVEmT/6yKORu+4heiuTw+gAEAhlTCczumzNgR
+CCuPfSf1QIq9ldlpHQCis7EMHdhUhg0=
+=h9HI
+-----END PGP SIGNATURE-----
+
+--zfNhlKGJu8FDydZQ--
