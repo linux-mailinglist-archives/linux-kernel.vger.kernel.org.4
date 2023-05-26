@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B01712ABB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B3B712AC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235979AbjEZQfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S236326AbjEZQh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbjEZQfs (ORCPT
+        with ESMTP id S230041AbjEZQh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:35:48 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA83CBC;
-        Fri, 26 May 2023 09:35:46 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3a873476bso995184e87.1;
-        Fri, 26 May 2023 09:35:46 -0700 (PDT)
+        Fri, 26 May 2023 12:37:26 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979F8D9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:37:23 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f600a6a890so765e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:37:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685118945; x=1687710945;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HZdVc8cg3rTwRQ3rUGrbIe2G7Mi0MzIoMDjJTPUXsKU=;
-        b=EmEi2d9UpDaO/uDti+2NYtSCgpRhj7sgXUxRN9Sx/VbofLPSxKJKwBca93UIYX5e3K
-         qkA5Pf35BlxUXq+gNVWg/SPLT4WsrDzIFYsj9/WGFM8Wbk78HQACFY1vFoeINfYqXn7M
-         /71C3vO2yLvOCb8VkZxdQ0JB6gUG3UfXZA/b93cAuH4jp6sKm2MgMksWoFvjK4wq4UWs
-         0ByhHBeCp0TcnRZTAA5m0wGoxDMK4zrx9EODcnC4CZOunVNA+PpFdzNDDFM+H8hRWKKr
-         rzfnOOt849X1iWQs+nquUgH2MmsOHZVGqzEjn6ACJ14OPXT+9CZdY2rdYNqBnm8BSsOc
-         Qc6g==
+        d=google.com; s=20221208; t=1685119042; x=1687711042;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EY8jNRNfAa0Ugc42QcvXpqkmlzbK+JbHaTZLZiADEaE=;
+        b=De6LirTmjImnmRKlEqNPvy3JPAo2CR65jhpJD0oGuGW8VgRXuVGyhNZyzKlQlSoak3
+         KVyRwC2UjOk5mnVr1vIjSAO1ZlaJp/OfszCysoCsP/OT00FJDh/y+gqaRGBqMhsNJdTs
+         mn0GEl71o/Q40nq6QmPpRmLFK3oWrjXTGN3mOpXhot4VTm4K6wNfdlF+3GxdsVZsFhsR
+         HsNwwe4vqovoNpqmAEWVAvI3D3jvR6xW4eGXZ0bUpD3yxdjx3frSyMI1r297n+BHEPnc
+         bGDaBGx78/R3AOxec3a2nzy+udYTBlMyerU05I7wpp9x3vLuPbYzrnw+ziQ5Xc+8PQ3e
+         +nVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685118945; x=1687710945;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HZdVc8cg3rTwRQ3rUGrbIe2G7Mi0MzIoMDjJTPUXsKU=;
-        b=OZw/gswfJuh6P7tQ8G1gxxdrbw3PFGFhJSqwNDJbROqB1WHNbaSvknRKihyPeg8zA3
-         EnygA2XhO3WfNeaManNo48iGXTZmqVHrmtEnwv47Q3HbcCjdlB1bJwzD+WqTIJRDMkJt
-         3NcCRedwujB4Ast/AGJGueTwNXZMNl13c0KGStLkAObJy4ljX2f/nroFkbU+ITAHa7qe
-         bVB3MUhe6/e1UlucTYw2xEam5/aQeQRZgnMdweocmB2WOfuAbPvnq6SsR00cN0zm0eFs
-         Sq5GIFjprg0VBc7OsHx95nyuecsTOlCXPKl63nj8CLBIPsRLVpKXkYQKbsj3AFvtMNsY
-         UGcg==
-X-Gm-Message-State: AC+VfDwXYOpP+H5/vodgoR33LPBMBnzuE/nPHSnywcYKkDXamjdAKRZZ
-        e2huwFwBS4Ln9LNdaU/3wpc=
-X-Google-Smtp-Source: ACHHUZ5k55KO5kA8DfPcVtzmJBHus1jmL85c0KC+03dEOqFdaSdMVkyjM7UiGFCrWnesoACtTtH+qg==
-X-Received: by 2002:ac2:5ec4:0:b0:4f3:7a8c:d46c with SMTP id d4-20020ac25ec4000000b004f37a8cd46cmr778242lfq.66.1685118944902;
-        Fri, 26 May 2023 09:35:44 -0700 (PDT)
-Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id b15-20020ac2562f000000b004f13c3cb9ffsm681853lff.200.2023.05.26.09.35.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 09:35:44 -0700 (PDT)
-Message-ID: <0a816b1c-eef3-95c8-fb71-1c81251224e0@gmail.com>
-Date:   Fri, 26 May 2023 19:35:43 +0300
+        d=1e100.net; s=20221208; t=1685119042; x=1687711042;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EY8jNRNfAa0Ugc42QcvXpqkmlzbK+JbHaTZLZiADEaE=;
+        b=ZL0iZCLFFwO7OK1kBp/qte5756KjkaImBr6N9DkQSxjRdgUOWwrMyGBqA4jm2V3bwu
+         RhSE/LBXLT69D/XYcoVEloUUe7sddSUfdQQUMjOP8G7UJnhmG1Biow5SHM8G09tfsj89
+         gPQxezK9kxkyicYRsSpnC3rbxF9ebOV3Hi7BwgZ4V30dBqYJ36stm0XnK9OND3+/rjFM
+         MxxUuJzK5kqoq7eQrJg/oeQMoeUAit4hQj/AooQQot0Hpu2YOCq+TIliJYC6iRoeXH3O
+         /af2rMSD9thEw+DMLVeIG8d6Z/tKUzwwt5hI6Tc8ATu96BU5JcU3K0Whu4LDc4zWWSUP
+         6dbw==
+X-Gm-Message-State: AC+VfDxqI9AjUZQGO9EU4bPFk/PwJEG7mDTHWeX3o+VjdYV9S5XEWK+D
+        lZUkbbhup4KKn4ZPniWcN8VExHQrXUOtp5Dckq80gQ==
+X-Google-Smtp-Source: ACHHUZ6luz3NVVUHHwLHkIApI6hqmLmBGSoFjISIyczkObu857DbTinAwsZjNBeumKUB6CavLiHhASOB1maa4I1JmkE=
+X-Received: by 2002:a05:600c:3c93:b0:3f4:2594:118a with SMTP id
+ bg19-20020a05600c3c9300b003f42594118amr132218wmb.2.1685119041804; Fri, 26 May
+ 2023 09:37:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 4/7] iio: accel: kionix-kx022a: Add an i2c_device_id
- table
-Content-Language: en-US, en-GB
-To:     Mehdi Djait <mehdi.djait.k@gmail.com>, jic23@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <cover.1685109507.git.mehdi.djait.k@gmail.com>
- <ea14686bc9a9262ef9c370d9cd1a4a7b2902b4ea.1685109507.git.mehdi.djait.k@gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <ea14686bc9a9262ef9c370d9cd1a4a7b2902b4ea.1685109507.git.mehdi.djait.k@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <CANn89iKUbyrJ=r2+_kK+sb2ZSSHifFZ7QkPLDpAtkJ8v4WUumA@mail.gmail.com>
+ <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 26 May 2023 18:37:09 +0200
+Message-ID: <CANn89i+bExb_P6A9ROmwqNgGdO5o8wawVZ5r3MHnz0qfhxvTtA@mail.gmail.com>
+Subject: Re: x86 copy performance regression
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,52 +71,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/23 17:30, Mehdi Djait wrote:
-> Add the missing i2c device id.
-> 
-> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
-Acked-by: Matti Vaittinen <mazziesaccount@gmail.com>
+On Fri, May 26, 2023 at 6:30=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Fri, May 26, 2023 at 8:00=E2=80=AFAM Eric Dumazet <edumazet@google.com=
+> wrote:
+> >
+> > We can see rep_movs_alternative() using more cycles in kernel profiles
+> > than the previous variant (copy_user_enhanced_fast_string, which was
+> > simply using "rep  movsb"), and we can not reach line rate (as we
+> > could before the series)
+>
+> Hmm. I assume the attached patch ends up fixing the regression?
+>
+> That hack to generate the two-byte 'jae' instruction even for the
+> alternative is admittedly not pretty, but I just couldn't deal with
+> the alternative that generated pointlessly bad code.
+>
+> We could make the constant in the comparison depend on whether it is
+> for the unrolled or for the erms case too, I guess, but I think erms
+> is probably "good enough" with 64-byte copies.
+>
+> I was really hoping we could avoid this, but hey, a regression is a regre=
+ssion.
+>
+> Can you verify this patch fixes things for you?
 
-> ---
-> v4:
-> - no changes
-> 
-> v3:
-> - no changes, this patch is introduced in the v2
-> 
->   drivers/iio/accel/kionix-kx022a-i2c.c | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/iio/accel/kionix-kx022a-i2c.c b/drivers/iio/accel/kionix-kx022a-i2c.c
-> index e6fd02d931b6..b5a85ce3a891 100644
-> --- a/drivers/iio/accel/kionix-kx022a-i2c.c
-> +++ b/drivers/iio/accel/kionix-kx022a-i2c.c
-> @@ -30,6 +30,12 @@ static int kx022a_i2c_probe(struct i2c_client *i2c)
->   	return kx022a_probe_internal(dev);
->   }
->   
-> +static const struct i2c_device_id kx022a_i2c_id[] = {
-> +	{ .name = "kx022a" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, kx022a_i2c_id);
-> +
->   static const struct of_device_id kx022a_of_match[] = {
->   	{ .compatible = "kionix,kx022a", },
->   	{ }
-> @@ -42,6 +48,7 @@ static struct i2c_driver kx022a_i2c_driver = {
->   		.of_match_table = kx022a_of_match,
->   	  },
->   	.probe_new    = kx022a_i2c_probe,
-> +	.id_table     = kx022a_i2c_id,
->   };
->   module_i2c_driver(kx022a_i2c_driver);
->   
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+Hmm.. my build environment does not like this yet :)
 
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+arch/x86/lib/copy_user_64.S:40:30: error: unexpected token in argument list
+0: alternative ".byte 0x73," ".Lunrolled" "-0b-2", ".byte 0x73,"
+".Llarge" "-0b-2", X86_FEATURE_ERMS
+                             ^
+make[3]: *** [scripts/Makefile.build:374: arch/x86/lib/copy_user_64.o] Erro=
+r 1
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [scripts/Makefile.build:494: arch/x86/lib] Error 2
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [Makefile:2026: .] Error 2
