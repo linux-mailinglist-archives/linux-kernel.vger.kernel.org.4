@@ -2,142 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0314E712C0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE80712C18
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242771AbjEZRvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
+        id S237638AbjEZR7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbjEZRvh (ORCPT
+        with ESMTP id S236289AbjEZR7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:51:37 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31995A4
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:51:36 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f600a6a890so5935e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685123494; x=1687715494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0D6WbSVOOoLij0lL6DdC5RpcoX/GKI6yMPGw+Ha3zz0=;
-        b=cZxEoVnFtH9NiD2VhDbf/zG5cfw9ZLaWOsXjjKtYs86XzN+vd3zszgQ7WFnG2eKSEI
-         DJF5CLmQBJSwfyatczR4yjuPOBgHEdAm+mIApIwfppx2GWCMGn4hUIF7kQlIWKIwEaMx
-         SplnfaKRSUvk2vFLJfbAgcFsMwhQx6B1yNnVKkbHQGy3w9J4eXr/cfK3/174TAISqCSq
-         ltOk5xF0GqI8dB1fzm8vW9S6Vnrm7+0Zb/NXrQG6Pwpbn55SP65CSA1TO7aitwo2o2MO
-         2Y7Jj2GM7g2qG+I3TDCt9Zj0IYCHdd94CY/If1Tc2KvvkoBgSs5hyY6/+kn0RujPAM/D
-         paKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685123494; x=1687715494;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0D6WbSVOOoLij0lL6DdC5RpcoX/GKI6yMPGw+Ha3zz0=;
-        b=f6T5oexSuGCsulq4L+eNd377aCcdiklKPUrujchwJOv+Vm84q/sjO2LwEaEXmxgdFC
-         lF/j2GD7rXG6j5/UYbrZSV6DOH1ny7+9SrpXP2f6BulLocXhOkNdm/X6ONwHBZ5gfm5J
-         +NCldhesCkQvH7W4Iox4UOFBuV8/tUSxJITge/PTGMu1sO71MlSVqmK7oepOcI8qJ0Hy
-         OlXoRSrfJ8kTvexVo0lTZ/6Cn0rVlY+BoXRy01WyrM2LAGfJA32oYP8XJznUYyy5QMJl
-         WsC0CSEU2La2XJbqrxK5xMYkNdYQ/tAuHH17JMiE6eIye1lzhesmZZmUYlck17swyuaB
-         aoiA==
-X-Gm-Message-State: AC+VfDwviAIRIRFm7CWxgl2V+1flAgw+44aGFC6zCKymt5CzlAwGqjwY
-        JkaXk961YnphFA7uFyuww6SUkOER2Bkka05ldizRKQ==
-X-Google-Smtp-Source: ACHHUZ6IhMwEkaB0zdwKNKvMcBfOX/4g3Ax2OtcP7PUZLXFQ9EgZFR1g/cuY90EGOgiggyNPl1SF616OYaws6lQFYBY=
-X-Received: by 2002:a05:600c:3b0d:b0:3f1:70d1:21a6 with SMTP id
- m13-20020a05600c3b0d00b003f170d121a6mr13262wms.0.1685123494510; Fri, 26 May
- 2023 10:51:34 -0700 (PDT)
+        Fri, 26 May 2023 13:59:03 -0400
+Received: from p3plwbeout18-05.prod.phx3.secureserver.net (p3plsmtp18-05-2.prod.phx3.secureserver.net [173.201.193.190])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3244CC9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:59:02 -0700 (PDT)
+Received: from mailex.mailcore.me ([94.136.40.142])
+        by :WBEOUT: with ESMTP
+        id 2biOq4rRItp5M2biPqxdQ3; Fri, 26 May 2023 10:59:01 -0700
+X-CMAE-Analysis: v=2.4 cv=cKYlDnSN c=1 sm=1 tr=0 ts=6470f365
+ a=s1hRAmXuQnGNrIj+3lWWVA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
+ a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=3-RhneuVAAAA:8
+ a=FXvPX3liAAAA:8 a=oceKJ4aG_Jk7OyBK0BMA:9 a=QEXdDO2ut3YA:10
+ a=VLVLkjT_5ZicWzSuYqSo:22 a=UObqyxdv-6Yh2QiB9mM_:22
+X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
+X-SID:  2biOq4rRItp5M
+Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.87])
+        by smtp11.mailcore.me with esmtpa (Exim 4.94.2)
+        (envelope-from <phillip@squashfs.org.uk>)
+        id 1q2biO-00049q-Mk; Fri, 26 May 2023 18:59:01 +0100
+Message-ID: <7a5088a8-b5dc-472d-4f43-29d68e3cde16@squashfs.org.uk>
+Date:   Fri, 26 May 2023 18:59:00 +0100
 MIME-Version: 1.0
-References: <CANn89iKUbyrJ=r2+_kK+sb2ZSSHifFZ7QkPLDpAtkJ8v4WUumA@mail.gmail.com>
- <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
- <CANn89i+bExb_P6A9ROmwqNgGdO5o8wawVZ5r3MHnz0qfhxvTtA@mail.gmail.com>
- <CAHk-=wig6VizZHtRznz7uAWa-hHWjrCNANZ9B+1G=aTWPiVH4g@mail.gmail.com>
- <CAHk-=whkci5ck5Him8Lx5ECKHEtj=bipYmOCGe8DWrrp8uDq5g@mail.gmail.com>
- <CAHk-=whtDupvWtj_ow11wU4_u=KvifTqno=5mW1VofyehjdVRA@mail.gmail.com>
- <CANn89i+u8jvfSQAQ=_JY0be56deJNhKgDWbqpDAvfm-i34qX9A@mail.gmail.com> <CAHk-=wh16fVwO2yZ4Fx0kyRHsNDhGddzNxfQQz2+x08=CPvk_Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wh16fVwO2yZ4Fx0kyRHsNDhGddzNxfQQz2+x08=CPvk_Q@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 26 May 2023 19:51:22 +0200
-Message-ID: <CANn89iJ3=OiZEABRQQLL6z+J-Wy8AvTJz6NPLQDOtzREiiYb4Q@mail.gmail.com>
-Subject: Re: x86 copy performance regression
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH mm-nonmm-unstable v2 1/2] squashfs: fix page update race
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     hch@lst.de, linux-kernel@vger.kernel.org, kernel@axis.com
+References: <20230526-squashfs-cache-fixup-v2-0-6fb7723c3647@axis.com>
+ <20230526-squashfs-cache-fixup-v2-1-6fb7723c3647@axis.com>
+Content-Language: en-GB
+From:   Phillip Lougher <phillip@squashfs.org.uk>
+In-Reply-To: <20230526-squashfs-cache-fixup-v2-1-6fb7723c3647@axis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailcore-Auth: 439999529
+X-Mailcore-Domain: 1394945
+X-123-reg-Authenticated:  phillip@squashfs.org.uk  
+X-Originating-IP: 82.69.79.175
+X-CMAE-Envelope: MS4xfAMLOAqD63ofpVwlW9P4MbZMqbkYrM3GnbTu2EJ0Qk85JEsisnhWAZaafEqmDoNODMt1kFraVCJSUbOJgnOKVydmvjB3Fd1RDBm1nQsa1kLXL8Q/gr0e
+ jmNXfjGLBwjrXXSNp1XKd0JQswZJs5+LW2PZDrtqK7nOZBZhR7JsJk04G341xtsCwNREOvrxZq9ABQOixM/I+Uz5u7pbBEYk72U=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 7:40=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, May 26, 2023 at 10:25=E2=80=AFAM Eric Dumazet <edumazet@google.co=
-m> wrote:
-> >
-> > arch/x86/lib/copy_user_64.S:34:2: error: invalid instruction mnemonic
-> > 'alternative'
->
-> Ok, that's just odd. For me, assembler mnemonics - very much including
-> macros - are case-insensitive.
->
-> It's actually documented that way, with the example given is for a
-> macro that is declared as "sum" and then used as "SUM":
->
->    https://sourceware.org/binutils/docs/as/Macro.html
->
-> And if you want to use macros as pseudo-instructions, that's what you
-> want, since typically assembler instructions are not case sensitive.
->
-> But yeah, your build environment is clearly different, and yes, we
-> declare the macro with all caps, and other places use it that way too.
->
-> Clang?
 
-Yes, we use clang here ...
+On 26/05/2023 14:57, Vincent Whitchurch wrote:
+> We only put the page into the cache after we've read it, so the
+> PageUptodate() check should not be necessary.  In fact, it's actively
+> harmful since the check could fail (since we used find_get_page() and
+> not find_lock_page()) and we could end up submitting a page for I/O
+> after it has been read and while it's actively being used, which could
+> lead to corruption depending on what the block driver does with it.
+>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-Hmmm
 
-[   25.532236] RIP: 0010:0xffffffffa5a85134
-[   25.536173] Code: Unable to access opcode bytes at 0xffffffffa5a8510a.
-[   25.542720] RSP: 0000:ffff92f08159bcd8 EFLAGS: 00050206
-[   25.547960] RAX: 00007ffc3b16c318 RBX: 0000000000000000 RCX: 00000000000=
-00170
-[   25.555118] RDX: 0000000000000170 RSI: ffff92f0944d4c28 RDI: 00007ffc3b1=
-6c1a8
-[   25.562275] RBP: ffff92f08159bce0 R08: fefefefefefefeff R09: 00000000000=
-0002c
-[   25.569432] R10: 000000000000002c R11: ffff92f0944d5bb0 R12: 00007ffc3b1=
-6cff2
-[   25.576588] R13: 00007ffc3b16c1a8 R14: 0000000000000001 R15: ffff92f0944=
-d4ac0
-[   25.583746] FS:  0000000000000000(0000) GS:ffff934e404c0000(0000)
-knlGS:0000000000000000
-[   25.591862] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   25.597624] CR2: ffffffffa5a8510a CR3: 000000010e33c003 CR4: 00000000003=
-706e0
-[   25.604780] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00000000000=
-00000
-[   25.611936] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 00000000000=
-00400
-[   25.619092] Call Trace:
-[   25.621545]  <TASK>
-[   25.623648]  ? _copy_to_user+0x20/0x30
-[   25.627409]  create_elf_tables+0x528/0x5a0
-[   25.631520]  load_elf_binary+0x9e7/0xce0
-[   25.635453]  bprm_execve+0x2bf/0x5c0
-[   25.639040]  kernel_execve+0x2ad/0x2d0
-[   25.642799]  run_init_process+0xa9/0xb0
-[   25.646648]  ? rest_init+0xc0/0xc0
-[   25.650059]  kernel_init+0x82/0x1a0
-[   25.653558]  ret_from
-_fork+0x1f/0x30
-[   25.657145]  </TASK>
+Reviewed-by: Phillip Lougher <phillip@squashfs.org.uk>
+
