@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A1A712DED
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139E4712DF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242778AbjEZTvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
+        id S237095AbjEZTxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237637AbjEZTvl (ORCPT
+        with ESMTP id S237050AbjEZTxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:51:41 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EAB9E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:51:39 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-777094e3d7bso18970939f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:51:39 -0700 (PDT)
+        Fri, 26 May 2023 15:53:11 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA88C1B1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:53:09 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2af177f12a5so11211721fa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:53:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685130697; x=1687722697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dtYzXAXeeNKykjIC6M7yJXXgCuPRoWwM64ZY3vwKseo=;
-        b=krrqjwzG0OD+yq/+F1IXnoT3w/i5wc3gnTF+joEnO72SMkKoReQHp+SZAyx0MVRFf/
-         QBLWlyR8PUAVM5TAEZ0oE7MM/3O3lxX/JgNOnwaBU22kKS+skkUD3ZWkEcly9esiMLTI
-         tCcupEPW+JUN+2aME/0mjDR5QqBxWso9OF/jQ=
+        d=linaro.org; s=google; t=1685130788; x=1687722788;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EdOxC7pmuf6A/Xakhco3OcLae3tnkD2fShwausc2Awo=;
+        b=HOrZeNPoR3ZYMQxO8fqChg/oAGdcW3K8v9RhXw3PAtxwsL3JS1D7LydUT65LwFS8rd
+         d8oanhI4eQEI5hcOLZ5PILzZm/xBDSbUUEiMz/bJtc5x1x0tgYnASt4sBHAhLnerxMiP
+         X9uJiiH05lY6LeC1Pg1nP49h/dzQH+A5tcltvwAQyR7NUB5a2r5UaaULBndvd5OmNq65
+         XAGy6ZRhI8ZTJAV5wOZz2JgXR1FrOlBVIRuVFk3dvsjulvIXqM/X84c02PpZhU6srX4E
+         KG/DohoNiI1JrAJBaWw6OFY2jly2qMhqe4f8ttYtqI/HpmKNgJaE7Fns3qDR5yAM/CGf
+         XbPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685130697; x=1687722697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dtYzXAXeeNKykjIC6M7yJXXgCuPRoWwM64ZY3vwKseo=;
-        b=TSBDpe0nACi36w3Xv1sI8rqsT4COO2sD1i8mqE942BI3c7LE8vdmdhX2iNk4tGYXag
-         n5MW5CM1p1ZXadfxIAqtelx4TjXEzuNhcHci1Gsq9UlEB5ug0NSWtA1SYb16N10ffvSU
-         hEeBoV5U8xrxAqdpt22XIOjrxXIM9l+GAhMoUJotnrdiZ/1XH6OvpXR4GTKJR/k8JBTe
-         +iPLQ5M58azjqyfWVVTAYHDJH0FrZMH/3mkvuGKUtxmosltlT8S8zuAeAPYKoyljTypW
-         jVbYWuahER2lYcikpdEZX2bFV1TPff2MkpJB/9NOd3owl7c4Rxa049FLm13ba02VDs0U
-         dblg==
-X-Gm-Message-State: AC+VfDxz4JiHu+56N6+TkVpM1RrdnI7i+RbGE6taXJQmDDgX44eN1CCd
-        VBdxB/QRmmjEi8pivJuwqIin3Glg4CwJ/+qPKxU=
-X-Google-Smtp-Source: ACHHUZ66nwzdgGnUaI3z392VUBIbpkCMaIs8r3Hut7pUF6cY6xYTfGDXcbfd5DTtzwaKQa08VypnBg==
-X-Received: by 2002:a5e:a710:0:b0:776:fc02:184e with SMTP id b16-20020a5ea710000000b00776fc02184emr1789006iod.14.1685130697003;
-        Fri, 26 May 2023 12:51:37 -0700 (PDT)
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com. [209.85.166.179])
-        by smtp.gmail.com with ESMTPSA id ca15-20020a0566381c0f00b0040fad7eb910sm1298638jab.176.2023.05.26.12.51.35
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1685130788; x=1687722788;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EdOxC7pmuf6A/Xakhco3OcLae3tnkD2fShwausc2Awo=;
+        b=VrH033sCMzuOT0cJW4FJpAC5fdiERTTSDLu13YzZJ6SkL3vsiGuvH6YnAXLfKyrwJ9
+         JlKwrwYyNXQDvqPewIFkyixlI+UMGAp24No9/8U5CO8yubBL5lZgxJmrNaMvajjVOM5s
+         RKm/6hkHTXwU8/NVSsYXe69ox/Sekf3XWKaBSvUazzV8EDyFz9+PR4yX5ht+VTqzc1B3
+         e1PS5/CQxVPE4VqZrvF25cN6YZJmV+xFjJYRH3jDWuQyO1tCqaB5mVdh4g72+oQJ3PyV
+         RAHndteU5Jkrfthb/y62hsW2q9iTqKG1DVv/s+7XJPeTA1F10j1obp+8FuX1M3g2Jino
+         O8FQ==
+X-Gm-Message-State: AC+VfDxUoekAzwbC3MosFZkIrugYaT4QeTiiIj4JTyX3nC169FUhe2NO
+        di/LlgFsbxyTLotl7rYnGrJWj6NkR24yaa0l84w=
+X-Google-Smtp-Source: ACHHUZ4khPTysmRopzYaR5zjx+FiCgvNlpBkbFBZniRUlr/Zm+W/qbEL2Eup6UXRtM1OFsiXiiwbAg==
+X-Received: by 2002:a2e:808c:0:b0:2ad:92b9:83b4 with SMTP id i12-20020a2e808c000000b002ad92b983b4mr1228070ljg.5.1685130787979;
+        Fri, 26 May 2023 12:53:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id f6-20020a2e3806000000b002adb36f7343sm900375lja.77.2023.05.26.12.53.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 12:51:36 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-33b0848c04aso4345ab.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:51:35 -0700 (PDT)
-X-Received: by 2002:a92:ca0a:0:b0:331:2623:c5f4 with SMTP id
- j10-20020a92ca0a000000b003312623c5f4mr30715ils.1.1685130695437; Fri, 26 May
- 2023 12:51:35 -0700 (PDT)
+        Fri, 26 May 2023 12:53:07 -0700 (PDT)
+Message-ID: <be3f426e-6831-9efd-19c3-1b679cc3ea7e@linaro.org>
+Date:   Fri, 26 May 2023 21:53:06 +0200
 MIME-Version: 1.0
-References: <20230526100801.16310-1-uwu@icenowy.me> <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
- <0803e9037a8a2ce96fdad6ec209991dcda2a30ca.camel@icenowy.me>
-In-Reply-To: <0803e9037a8a2ce96fdad6ec209991dcda2a30ca.camel@icenowy.me>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 26 May 2023 12:51:22 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WS5i4RYknEaOi+4448UASh9kNncU4mwnawqKPr7yGXRg@mail.gmail.com>
-Message-ID: <CAD=FV=WS5i4RYknEaOi+4448UASh9kNncU4mwnawqKPr7yGXRg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8173-elm: remove panel model
- number in DT
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Pin-yen Lin <treapking@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8550-qrd: enable PMIC Volume and
+ Power buttons
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v1-0-4d5d7602f290@linaro.org>
+ <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v1-4-4d5d7602f290@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v1-4-4d5d7602f290@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,107 +82,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, May 26, 2023 at 8:33=E2=80=AFAM Icenowy Zheng <uwu@icenowy.me> wrot=
-e:
->
-> =E5=9C=A8 2023-05-26=E6=98=9F=E6=9C=9F=E4=BA=94=E7=9A=84 07:24 -0700=EF=
-=BC=8CDoug Anderson=E5=86=99=E9=81=93=EF=BC=9A
-> > Hi,
-> >
-> > On Fri, May 26, 2023 at 3:09=E2=80=AFAM Icenowy Zheng <uwu@icenowy.me> =
-wrote:
-> > >
-> > > Currently a specific panel number is used in the Elm DTSI, which is
-> > > corresponded to a 12" panel. However, according to the official
-> > > Chrome
-> > > OS devices document, Elm refers to Acer Chromebook R13, which, as
-> > > the
-> > > name specifies, uses a 13.3" panel, which comes with EDID
-> > > information.
-> > >
-> > > As the kernel currently prioritizes the hardcoded timing parameters
-> > > matched with the panel number compatible, a wrong timing will be
-> > > applied
-> > > to the 13.3" panel on Acer Chromebook R13, which leads to blank
-> > > display.
-> > >
-> > > Because the Elm DTSI is shared with Hana board, and Hana
-> > > corresponds to
-> > > multiple devices from 11" to 14", a certain panel model number
-> > > shouldn't
-> > > be present, and driving the panel according to its EDID information
-> > > is
-> > > necessary.
-> > >
-> > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > > ---
-> > >  arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > We went through a bunch of back-and-forth here but in the end in the
-> > ChromeOS tree we have "edp-panel" as the "compatible" here in the
-> > ChromeOS 5.15 tree and this makes sense.
->
-> I only have Elm, so I am curious that do all Hana's only rely on panel
-> EDID to use different displays?
->
-> BTW The Chrome OS document say that Elm and Hana are both board based
-> on Oak baseboard, should the DTSI be renamed mt8173-oak.dtsi, and still
-> let mt8173-elm.dts include it and then set model information?
-
-I wasn't deeply involved in mt8173, so I'll let treapking@ comment. I
-think he's done some research here recently.
 
 
-> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> >
-> > ...in theory one would wish for a "Fixes" tag, but I think in
-> > previous
-> > discussions it was decided that it was too complicated. Hardcoding
-> > the
-> > other compatible string has always been technically wrong, but I
-> > guess
-> > it worked at some point in time. The more correct way (as you're
-> > doing
-> > here) needs the DP AUX bus support and the generic eDP panels, both
-> > of
-> > which are significantly newer than the elm dts. So I guess leaving no
-> > "Fixes" tag is OK, or perhaps you could do the somewhat weak:
->
-> Well I remembered when I was developing the support for Pine64
-> Pinebook, which is also an ARM64 laptop with an eDP panel (via a DPI-
-> eDP bridge, ANX6345). At first I didn't use any panel node in the DT,
-> and the kernel maintainers argued to the bridge that seems to be
-> connected to nothing (because DP is a discoverable port), and
-> fortunately 2 Pinebook SKUs (11.6" and 14") is finally reduced to one,
-> and it's then possible to hardcode a panel model in the Pinebook DT.
-> According to my memory, the need to specify the panel is to properly
-> handle eDP panel power up timing, because it's not a very standard
-> thing. (Well, in my memory, when I was testing that code, on a
-> (engineering sample) 14" Pinebook, the EDID timing overrided the
-> hardcoded 11.6" timing and it properly works, the 14" panel is 1366x768
-> but the 11.6" panel is 1920x1080.)
->
-> (BTW when I checked the DT of Olimex TERES-I, which uses the same DPI-
-> eDP bridge, it is still in the status of a dangling bridge, and of
-> course it works ;-) )
+On 25.05.2023 17:47, Neil Armstrong wrote:
+> The Volume Down & Power buttons are controlled by the PMIC via
+> the PON hardware, and the Volume Up is connected to a PMIC gpio.
+> 
+> Enable the necessary hardware and setup the GPIO state for the
+> Volume Up gpio key.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8550-qrd.dts | 36 +++++++++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> index b08a8201ad23..c354dcc12621 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> @@ -28,6 +28,22 @@ chosen {
+>  		stdout-path = "serial0:115200n8";
+>  	};
+>  
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&volume_up_n>;
+property-n
+property-names
 
-Before the generic eDP panel support, several devices worked according
-to the "little white lie" theory. They would pick some arbitrary panel
-to put in the DT because they had to, but then that panel would just
-be used for the power up / power down timing and everything else would
-be overridden. This was obviously not a great situation to be in, and
-so we had many discussions on the mailing list about how to do better.
-The end result was the generic edp-panel support.
+> +
+> +		key-volume-up {
+> +			label = "Volume Up";
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			gpios = <&pm8550_gpios 6 GPIO_ACTIVE_LOW>;
+> +			debounce-interval = <15>;
+> +			linux,can-disable;
+> +			wakeup-source;
+> +		};
+> +	};
+> +
+>  	pmic-glink {
+>  		compatible = "qcom,sm8550-pmic-glink", "qcom,pmic-glink";
+>  		#address-cells = <1>;
+> @@ -426,6 +442,16 @@ &pcie0_phy {
+>  	status = "okay";
+>  };
+>  
+> +&pon_pwrkey {
+> +	status = "okay";
+> +};
+> +
+> +&pon_resin {
+Not alphabetically ordered
 
-With eDP panel support, you still need to add the timings for your
-specific panel, but it was realized that in _most_ cases we could
-power up the panel enough to read the "panel ID" and then we could use
-that to lookup the timings. In the few cases where we needed a little
-extra help (if HPD is broken or not connected), the DP folks agreed to
-allow a few properties to specify it. :-) Hopefully today all new code
-uses the general panel-edp.
-
--Doug
+Konrad
+> +	linux,code = <KEY_VOLUMEDOWN>;
+> +
+> +	status = "okay";
+> +};
+> +
+>  &pm8550_flash {
+>  	status = "okay";
+>  
+> @@ -450,6 +476,16 @@ led-1 {
+>  	};
+>  };
+>  
+> +&pm8550_gpios {
+> +	volume_up_n: volume-up-n-state {
+> +		pins = "gpio6";
+> +		function = "normal";
+> +		power-source = <1>;
+> +		bias-pull-up;
+> +		input-enable;
+> +	};
+> +};
+> +
+>  &pm8550_pwm {
+>  	status = "okay";
+>  
+> 
