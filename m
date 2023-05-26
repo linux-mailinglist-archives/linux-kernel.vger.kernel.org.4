@@ -2,96 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EFC71262A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0406712631
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 14:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237265AbjEZMCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 08:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
+        id S230177AbjEZMEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 08:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236664AbjEZMCl (ORCPT
+        with ESMTP id S230226AbjEZMEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 08:02:41 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8C419A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685102559; x=1716638559;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=oo/dvf1ZlrvtcR59TYCugDRCyxgFSECoi5qSl2YCdyA=;
-  b=h9/tEo95eqkQAtdJ7/8gKFrwWVCwn7HX8Zg4WO2pd3Uwl4HnNy3I9nmU
-   obE3GMYy9im0KsbO1sOZ/axZFqWT2ORrr+X07FfJNmTPJCwEb+PfnKJLE
-   J85wqn6wHp8OjbL97kVJFYmMECXJdq+vfO+TFger+n63nlIir4fDEe44X
-   gwV2/EBXvcG6pReiASVrgQWijq1X6hMFjMV2zieOQFuHkbYZ/0kLznwB/
-   q1dWIleJ9MW3hb7uDDtXkxpB+3zhel1QPyUc0Xs/ccMHt6jigvCnzm/+m
-   WFnPmCWUE2Xetev99p1vkhVR3wgxagZ8k2YTwXvRsqo3CqUnBvTHlRsAu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="334538200"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="334538200"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 05:02:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="951854338"
-X-IronPort-AV: E=Sophos;i="6.00,194,1681196400"; 
-   d="scan'208";a="951854338"
-Received: from fgarrona-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.208.169])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 05:02:36 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 5785F10DC18; Fri, 26 May 2023 15:02:33 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     dave.hansen@intel.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de
-Cc:     decui@microsoft.com, rick.p.edgecombe@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        thomas.lendacky@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv2 3/3] x86/mm: Fix enc_status_change_finish_noop()
-Date:   Fri, 26 May 2023 15:02:25 +0300
-Message-Id: <20230526120225.31936-4-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20230526120225.31936-1-kirill.shutemov@linux.intel.com>
-References: <20230526120225.31936-1-kirill.shutemov@linux.intel.com>
+        Fri, 26 May 2023 08:04:31 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA2BE45
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:03:58 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f6ef9a928fso2175225e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 05:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685102634; x=1687694634;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mLfeU1cIQmeaVyRNtph06RZ6KBBxtb+vtfoTJMVHA+I=;
+        b=EK5OQPVj8e3zNjKENf4gj9bouD+LdJFHNW2qRgXx9SfCDVpoW01tNj+6tNykaCmobb
+         KM93mO9DOTcnWMd6Wb34QIjBwaQdDzHFqrlah9m3Lw5taIKJyF/qFo/AZps/WiMrqQRP
+         hU3+5U2xYO4NYYtIkD7a9M1p8LPF/YlBUzuRbx2luLbY1HQxCDSCZddEqEi7VetpyNw7
+         465Qmm6n7h1qKJrI2gcTVZNoQbNJzGNc0f3qhIP8q81rL4hroiKBOBg91z0iqlQQ7LmC
+         73y/bJxXa7V7/oyqiU6joOgrou5DqxpuluLqEhlb1IUksfJxX5PLz3DqwVnqdVZ36S2/
+         bnoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685102634; x=1687694634;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mLfeU1cIQmeaVyRNtph06RZ6KBBxtb+vtfoTJMVHA+I=;
+        b=XIj7WUzv/IZWBFnCHZTrESYGqPFtMX7xX8pKvsOJpqdgs1xRa9RUjA+GgQ8VHgxtsp
+         VZWH286bIrheXZuJcPXmbhWqvZ5qshLxd5nKLhEjLG1W0CXpRFw4wG1l3uolygEClCcC
+         XTsVLST+TiiDvKz6n4w1hRLUqLpBIULjqq2JBw/fvk3VhV7XtbpQwPUWOwfT0b5iWeoJ
+         AJAbI9vK5/kZsqu/VSwX7gTtZojaM4Ne0OrcLqh7cXYIqrmTwF6UcB4gMG2iGg1sZcmx
+         DfnCm1cvZ9BFzZwg7TRATu0FclH01Zx+yFtSi2y8E5MeaxwojO4sIVJtQXpHUGeC7vy+
+         EMWg==
+X-Gm-Message-State: AC+VfDyLaHZIIw+l1tPITDXxw0ebTQyRqhpckad4XRSb54ihCQRiXQBQ
+        3hdf04j8YYXdctyksO4xWD5wJ1BL6d4A1QEWX4k=
+X-Google-Smtp-Source: ACHHUZ7B6lulluaL0WmnVt8XWs3qPf4jeDtFeCQAMf+7PbzVh9yKDCfg5VeIGknvIgbiSoNxYKD/Yg==
+X-Received: by 2002:a7b:c006:0:b0:3f6:683:627e with SMTP id c6-20020a7bc006000000b003f60683627emr1210775wmb.9.1685102634168;
+        Fri, 26 May 2023 05:03:54 -0700 (PDT)
+Received: from hera (ppp089210114029.access.hol.gr. [89.210.114.29])
+        by smtp.gmail.com with ESMTPSA id y6-20020a05600c364600b003f420667807sm8564206wmq.11.2023.05.26.05.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 05:03:53 -0700 (PDT)
+Date:   Fri, 26 May 2023 15:03:51 +0300
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH net-next 1/2] page_pool: unify frag page and non-frag
+ page handling
+Message-ID: <ZHCgJxTnm37qu3aY@hera>
+References: <20230526092616.40355-1-linyunsheng@huawei.com>
+ <20230526092616.40355-2-linyunsheng@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526092616.40355-2-linyunsheng@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-enc_status_change_finish_noop() defined as always-fail now which
-doesn't make sense for noop.
+Hi Yunsheng
 
-The change doesn't have user-visible effect because it only gets
-called if the platform has CC_ATTR_MEM_ENCRYPT. All platforms with
-the attribute override the callback with own implementation.
+Apologies for not replying to the RFC,  I was pretty busy with internal
+stuff
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- arch/x86/kernel/x86_init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, May 26, 2023 at 05:26:14PM +0800, Yunsheng Lin wrote:
+> Currently page_pool_dev_alloc_pages() can not be called
+> when PP_FLAG_PAGE_FRAG is set, because it does not use
+> the frag reference counting.
+>
+> As we are already doing a optimization by not updating
+> page->pp_frag_count in page_pool_defrag_page() for the
+> last frag user, and non-frag page only have one user,
+> so we utilize that to unify frag page and non-frag page
+> handling, so that page_pool_dev_alloc_pages() can also
+> be called with PP_FLAG_PAGE_FRAG set.
 
-diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
-index f230d4d7d8eb..64664311ac2b 100644
---- a/arch/x86/kernel/x86_init.c
-+++ b/arch/x86/kernel/x86_init.c
-@@ -131,7 +131,7 @@ struct x86_cpuinit_ops x86_cpuinit = {
- static void default_nmi_init(void) { };
- 
- static bool enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { return true; }
--static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return false; }
-+static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return true; }
- static bool enc_tlb_flush_required_noop(bool enc) { return false; }
- static bool enc_cache_flush_required_noop(void) { return false; }
- static bool is_private_mmio_noop(u64 addr) {return false; }
--- 
-2.39.3
+What happens here is clear.  But why do we need this?  Do you have a
+specific use case in mind where a driver will call
+page_pool_dev_alloc_pages() and the PP_FLAG_PAGE_FRAG will be set?
+If that's the case isn't it a better idea to unify the functions entirely?
 
+Thanks
+/Ilias
+>
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> CC: Lorenzo Bianconi <lorenzo@kernel.org>
+> CC: Alexander Duyck <alexander.duyck@gmail.com>
+> ---
+>  include/net/page_pool.h | 38 +++++++++++++++++++++++++++++++-------
+>  net/core/page_pool.c    |  1 +
+>  2 files changed, 32 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+> index c8ec2f34722b..ea7a0c0592a5 100644
+> --- a/include/net/page_pool.h
+> +++ b/include/net/page_pool.h
+> @@ -50,6 +50,9 @@
+>  				 PP_FLAG_DMA_SYNC_DEV |\
+>  				 PP_FLAG_PAGE_FRAG)
+>
+> +#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT \
+> +		(sizeof(dma_addr_t) > sizeof(unsigned long))
+> +
+>  /*
+>   * Fast allocation side cache array/stack
+>   *
+> @@ -295,13 +298,20 @@ void page_pool_put_defragged_page(struct page_pool *pool, struct page *page,
+>   */
+>  static inline void page_pool_fragment_page(struct page *page, long nr)
+>  {
+> -	atomic_long_set(&page->pp_frag_count, nr);
+> +	if (!PAGE_POOL_DMA_USE_PP_FRAG_COUNT)
+> +		atomic_long_set(&page->pp_frag_count, nr);
+>  }
+>
+> +/* We need to reset frag_count back to 1 for the last user to allow
+> + * only one user in case the page is recycled and allocated as non-frag
+> + * page.
+> + */
+>  static inline long page_pool_defrag_page(struct page *page, long nr)
+>  {
+>  	long ret;
+>
+> +	BUILD_BUG_ON(__builtin_constant_p(nr) && nr != 1);
+> +
+>  	/* If nr == pp_frag_count then we have cleared all remaining
+>  	 * references to the page. No need to actually overwrite it, instead
+>  	 * we can leave this to be overwritten by the calling function.
+> @@ -311,19 +321,36 @@ static inline long page_pool_defrag_page(struct page *page, long nr)
+>  	 * especially when dealing with a page that may be partitioned
+>  	 * into only 2 or 3 pieces.
+>  	 */
+> -	if (atomic_long_read(&page->pp_frag_count) == nr)
+> +	if (atomic_long_read(&page->pp_frag_count) == nr) {
+> +		/* As we have ensured nr is always one for constant case
+> +		 * using the BUILD_BUG_ON() as above, only need to handle
+> +		 * the non-constant case here for frag count draining.
+> +		 */
+> +		if (!__builtin_constant_p(nr))
+> +			atomic_long_set(&page->pp_frag_count, 1);
+> +
+>  		return 0;
+> +	}
+>
+>  	ret = atomic_long_sub_return(nr, &page->pp_frag_count);
+>  	WARN_ON(ret < 0);
+> +
+> +	/* Reset frag count back to 1, this should be the rare case when
+> +	 * two users call page_pool_defrag_page() currently.
+> +	 */
+> +	if (!ret)
+> +		atomic_long_set(&page->pp_frag_count, 1);
+> +
+>  	return ret;
+>  }
+>
+>  static inline bool page_pool_is_last_frag(struct page_pool *pool,
+>  					  struct page *page)
+>  {
+> -	/* If fragments aren't enabled or count is 0 we were the last user */
+> -	return !(pool->p.flags & PP_FLAG_PAGE_FRAG) ||
+> +	/* When dma_addr_upper is overlapped with pp_frag_count
+> +	 * or we were the last page frag user.
+> +	 */
+> +	return PAGE_POOL_DMA_USE_PP_FRAG_COUNT ||
+>  	       (page_pool_defrag_page(page, 1) == 0);
+>  }
+>
+> @@ -357,9 +384,6 @@ static inline void page_pool_recycle_direct(struct page_pool *pool,
+>  	page_pool_put_full_page(pool, page, true);
+>  }
+>
+> -#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT	\
+> -		(sizeof(dma_addr_t) > sizeof(unsigned long))
+> -
+>  static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
+>  {
+>  	dma_addr_t ret = page->dma_addr;
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index e212e9d7edcb..0868aa8f6323 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -334,6 +334,7 @@ static void page_pool_set_pp_info(struct page_pool *pool,
+>  {
+>  	page->pp = pool;
+>  	page->pp_magic |= PP_SIGNATURE;
+> +	page_pool_fragment_page(page, 1);
+>  	if (pool->p.init_callback)
+>  		pool->p.init_callback(page, pool->p.init_arg);
+>  }
+> --
+> 2.33.0
+>
