@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F73711F65
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 07:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784DB711F6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 07:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234739AbjEZFvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 01:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
+        id S236441AbjEZF5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 01:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjEZFvE (ORCPT
+        with ESMTP id S229479AbjEZF5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 01:51:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F7FE7
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 22:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685080216;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/O7DGmGJR82LWQJp/HEBcwGojM1nXH9A+INA+Yqn88c=;
-        b=XzUEyGs2KMERiexIHc5SxjPHlAIJh+SY5m9CTdjEIyfzIVT5WuYjDyUgmgKGhapvnxS1Sx
-        yj/D5Dfv6Lhjl+lsprVx9DqENvP2jKGS5+7zGHNYP8a+zKOuc5cEze3Oi5W/x3vKdNNe8x
-        UQQdy64XC2qktQYo9pKlMY822QS+kkQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-465-6hOkj_HvOiqRrtk900f66Q-1; Fri, 26 May 2023 01:50:13 -0400
-X-MC-Unique: 6hOkj_HvOiqRrtk900f66Q-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9227A85A5A8;
-        Fri, 26 May 2023 05:50:12 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DA6072166B2B;
-        Fri, 26 May 2023 05:50:09 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=win3ttfr2xb1JcGroPSOoqGs0GooZq0DLsRtZzXUH5YeQ@mail.gmail.com>
-References: <CAHk-=win3ttfr2xb1JcGroPSOoqGs0GooZq0DLsRtZzXUH5YeQ@mail.gmail.com> <20230525223953.225496-1-dhowells@redhat.com> <20230525223953.225496-3-dhowells@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH v2 2/3] mm: Provide a function to get an additional pin on a page
+        Fri, 26 May 2023 01:57:06 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9FD13D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 22:57:03 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96f5d651170so275522966b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 22:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cilium-io.20221208.gappssmtp.com; s=20221208; t=1685080622; x=1687672622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nNIdMuQIYgzE1Jz9FBURvIpeHNJmM5cDxyczWDYYf7Q=;
+        b=tfo3U1+PkxoGweL4ZVJvAX4pztA/4fMHVCXP4T7gwGVmdMx3e9QA6bg3+1uuSohmBv
+         eOKaPEpE7ihgbgwn9DaFfCNeMbv6LARHBIgRl90TFIFeTNPg+LT1M1vbIOrcjlKpeniZ
+         8fGWgc6IHzDxM99ME43vuU9t9v0XVJJ/hlOzQHBv7bM5WONsQ9h3Q0N8n8myLu5niWTQ
+         EQn0KAU5nmo4EXgOFU1vFZJYXKxOX4ZplzFyTLUX1LbhfgNzjOdFYbvL+5m0qN9SpJl1
+         KDWXQaxJ6I4+LyTzV5fYqtl5AaXGvsCumdSuxYOlEFNVlaoh+dsghDoSJKz8yNx2NzoM
+         kyjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685080622; x=1687672622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nNIdMuQIYgzE1Jz9FBURvIpeHNJmM5cDxyczWDYYf7Q=;
+        b=Nx74Ki1pG01kTLfLAYJkDjXY4dCB+Md2UjgR2UN+4a37xB63CoKamHKSX/u3OenG6s
+         qKDYjBzBROVnCnArf2ZfHG4fnn3loyj1h2sSrmVuFkfN3Wk6olcBZizzACQ//f+pw8xm
+         HpqZjrOh6Ic9GlHyJ6eujq/nQdhreyjv9WIMh/GD6O4Mf7COnNt1lxgG863uqhfQStzl
+         mCWJ9TRnt5KL5X+H76nqnRiCSoqIAFTJLUV65rdPxlk2ttrXGCBwETvJ5oxAeA1R76r1
+         GXBn3bRQ77avJeJ3o7xutihtReNXw+p8qmh///VBgParUk185lXAecNp86kigPrB32pQ
+         waGQ==
+X-Gm-Message-State: AC+VfDx/GSlndGDs+OtWPBgzzoh0jSTtk9ilLO8VQlIbA/SkOAy1uh/R
+        udq3NMLqBcotcpzXFyjF+mXw3N1fL1bvkLb36SEtGw==
+X-Google-Smtp-Source: ACHHUZ5KmfhUXbrYS8TLJ0Gwz1Ss2f/i1r80Eo/oCUCBQp14qSa37S4MlUVGl6XYtrSRMYn4IOo3z2v4OMaDW4UATMI=
+X-Received: by 2002:a17:907:3d9f:b0:966:4669:7e8d with SMTP id
+ he31-20020a1709073d9f00b0096646697e8dmr3540030ejc.16.1685080621828; Thu, 25
+ May 2023 22:57:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <231194.1685080209.1@warthog.procyon.org.uk>
-Date:   Fri, 26 May 2023 06:50:09 +0100
-Message-ID: <231195.1685080209@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20230525081923.8596-1-lmb@isovalent.com>
+In-Reply-To: <20230525081923.8596-1-lmb@isovalent.com>
+From:   Joe Stringer <joe@cilium.io>
+Date:   Thu, 25 May 2023 22:56:50 -0700
+Message-ID: <CADa=RywoZZ9cAVPqa88mRNc2g1gQF743oEiSw2vnVHEFrN956g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
+To:     Lorenz Bauer <lmb@isovalent.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Joe Stringer <joe@wand.net.nz>, Joe Stringer <joe@cilium.io>,
+        Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,14 +85,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Thu, May 25, 2023 at 1:19=E2=80=AFAM Lorenz Bauer <lmb@isovalent.com> wr=
+ote:
+>
+> Currently the bpf_sk_assign helper in tc BPF context refuses SO_REUSEPORT
+> sockets. This means we can't use the helper to steer traffic to Envoy, wh=
+ich
+> configures SO_REUSEPORT on its sockets. In turn, we're blocked from remov=
+ing
+> TPROXY from our setup.
+>
+> The reason that bpf_sk_assign refuses such sockets is that the bpf_sk_loo=
+kup
+> helpers don't execute SK_REUSEPORT programs. Instead, one of the
+> reuseport sockets is selected by hash. This could cause dispatch to the
+> "wrong" socket:
+>
+>     sk =3D bpf_sk_lookup_tcp(...) // select SO_REUSEPORT by hash
+>     bpf_sk_assign(skb, sk) // SK_REUSEPORT wasn't executed
+>
+> Fixing this isn't as simple as invoking SK_REUSEPORT from the lookup
+> helpers unfortunately. In the tc context, L2 headers are at the start
+> of the skb, while SK_REUSEPORT expects L3 headers instead.
+>
+> Instead, we execute the SK_REUSEPORT program when the assigned socket
+> is pulled out of the skb, further up the stack. This creates some
+> trickiness with regards to refcounting as bpf_sk_assign will put both
+> refcounted and RCU freed sockets in skb->sk. reuseport sockets are RCU
+> freed. We can infer that the sk_assigned socket is RCU freed if the
+> reuseport lookup succeeds, but convincing yourself of this fact isn't
+> straight forward. Therefore we defensively check refcounting on the
+> sk_assign sock even though it's probably not required in practice.
+>
+> Fixes: 8e368dc ("bpf: Fix use of sk->sk_reuseport from sk_assign")
+> Fixes: cf7fbe6 ("bpf: Add socket assign support")
+> Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+> Cc: Joe Stringer <joe@cilium.io>
+> Link: https://lore.kernel.org/bpf/CACAyw98+qycmpQzKupquhkxbvWK4OFyDuuLMBN=
+ROnfWMZxUWeA@mail.gmail.com/
 
-> > +       if (page == ZERO_PAGE(0))
-> > +               return;
-> 
-> You added that nice "is_zero_folio()", and then you did the above anyway..
+Nice approach to fix this issue, wish I'd thought of it :)
 
-Bah.  Missed it because it was in a different patch.
+I pulled this and tested out in a little-vm-helper environment with
+kind and Cilium's examples/kubernetes/connectivity-check proxy suite,
+as well as cilium-cli's connectivity tests and the L7 features seem to
+be working as expected with SO_REUSEPORT.
 
-David
+Tested-by: Joe Stringer <joe@cilium.io>
 
+I also glanced through the commit, and the various protocols seem to
+be handled consistently at the very least, though I agree it'd be
+simpler for review and bisecting if broken down into more incremental
+changes.
