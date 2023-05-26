@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF39712C8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74AE712C89
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242548AbjEZSfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
+        id S243206AbjEZSfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243205AbjEZSek (ORCPT
+        with ESMTP id S242863AbjEZSel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:34:40 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77444E6F
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:32 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb76a9831so2254712276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:32 -0700 (PDT)
+        Fri, 26 May 2023 14:34:41 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39377134
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:34 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-564fb1018bcso26954997b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685126071; x=1687718071;
+        d=google.com; s=20221208; t=1685126073; x=1687718073;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xkY/jlHU8D/QUvZsW65703DMiaAstyzw0n4JGn1I7vM=;
-        b=MoGo2A46Zq0pgRI5fFfL3G0sZBkuPf6Gf6b+p740I+LJYvieH3dq3QaVNjLRDDNhI1
-         Yn9ltXeJuUEOhVtEquQdMsqzbUhRoJUGQtMqvA5bi2twF/0wV4+U6Ti2RnEUHasDnT3L
-         Z0Y9te2LZtpfdHrMnSf6cnEr9VAdFSIcAw3aoF2AN8VTTd7jqEvHIBvwzAFyGsFi6CbW
-         VSEd6JZrFDi0Q6+n4JnqrJ2B9WGImjQab1awVAfiGL/RJBuy8dgWdY4jpgQN2K2N3BU9
-         5TxdIBZypd2GK+vsDNuCUZtFUukdvtaq4DmE/lnqx0XiUwIugV6UzE2XCSxKURn5s76W
-         FG0w==
+        bh=K4mau+kNTkjearkZEwOGLqNrVUMBNYPnc3BA4EgUGCw=;
+        b=1Px+qIzRsUdsP2fgrQLU4KStunvwa9NLpoiulRIDIQ6fNeD/JSY5sLj6lKfDw2YQNn
+         hAhwLk2UDkapjkHomGS2RIYEXpcdCRoJxtVqr190r8nGLv9gtDUCWW7iYnKzge0yfFyX
+         dqfcp8cYoT3G55yCvYtOMtGzKWHrSJ2qeh5zia2bexPzDYVSfeCJQxCSuMFyFldWqbq3
+         U7VbtyR7Hped8uRJuRelNSl+6JXi9OF/y8m4a+FINFEz1dnA5AfVU9b+mvGgrX8bDEBG
+         QMyd5w4V8mfUupr2gWu5ZbTrShoWm3fOVr8QbhHhGuvUQlXvEdoHjLEf9NMkwlP7h5lM
+         Kx0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685126071; x=1687718071;
+        d=1e100.net; s=20221208; t=1685126073; x=1687718073;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xkY/jlHU8D/QUvZsW65703DMiaAstyzw0n4JGn1I7vM=;
-        b=Df1D9OfQwX6lkdWNQJqRiOZrgX2RxjiCnxRD5sKD27xkFaZL7putQyZDaiBLY0upVt
-         TX7nIX7ZeP3NMp4mzlj5yxSc2ALuxNS2vFAJxvlf0mDqNXGtwh6fzSrTeRcr+GJgvoMq
-         pA1dftISodX4UQHp24GTom1ZsBT3S4fJzTZ3ysGHvFtGA17N3DYmBRuWz3qdIWh5PF5q
-         TOwY2Tl5k4WRQ13tGGxFp2n7rj6UsJXzhvINZSdCzDpd0DIA94UEDHTC+A0LyM+JrLes
-         iKvaYGUKefW1j8iA40tWJSfZ8xbeGKGUtpN5hmuP1O+zL34WqQ7Ezz3MG447EhclfWo5
-         zCHA==
-X-Gm-Message-State: AC+VfDyIQdRRGZoiziq78EdSaPL3ehSdd05ECW5TxgiopIpZdiXLr9DN
-        NDD5uDg70GfWygdLO37axq7soszGHQas
-X-Google-Smtp-Source: ACHHUZ46CyhIFSMkGhxWip07ySTruzaJfa/BntRi5T2gFcKfTHUsjqalbBDoLuSWZ0sSotcB6zsIWcXS+ISA
+        bh=K4mau+kNTkjearkZEwOGLqNrVUMBNYPnc3BA4EgUGCw=;
+        b=L1N5T7hUw5e8dmOQQ+Qhwe7gfU7r2DkQh/LgPq0Xh6lv6k4boe59cTur9uMMnUlDAE
+         bKMi4Y9gJUFbhhJGfbiJr/xhwh3gxNSrbkiey0z1dC15KVI+gHk18zwlZN8KGUaWZplg
+         dXqT3UQa/9dPf4+HHS+JV7JLtSm5cl2G1y/ubIkJRDw7fjbTVs7EQTBwcRgA0m/TqN6U
+         /khEyjl0GTZ7wuozYCilY5tcbCcbivLr95t0upPO1YMXMpSFaGKS93MZ+4Wl+xh1p555
+         IhafvNZhi9q1PWdO3E7WsI6fS4jaSF0iR8wh7v2b15E9cLIE0YJON3m9Zc73LvW991Fh
+         lZSQ==
+X-Gm-Message-State: AC+VfDzsHJBJTQNFfCQHvfx35CmINa/or+J2ynYkMj6sEnxcohpK67FB
+        D5+W5KiYPE2kLC1CVJg2EYPXFjZ3MMAN
+X-Google-Smtp-Source: ACHHUZ4/ooV4uN9q1A338rkeLKvKvQrlTdkMU6a1DjOKnscVR49yyllBcTY0DiYg18FNUOwR0poOCFfbqAqH
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a25:fc1c:0:b0:bac:7086:c9b2 with SMTP id
- v28-20020a25fc1c000000b00bac7086c9b2mr992109ybd.12.1685126071162; Fri, 26 May
- 2023 11:34:31 -0700 (PDT)
-Date:   Fri, 26 May 2023 11:33:54 -0700
+ (user=irogers job=sendgmr) by 2002:a81:d84a:0:b0:562:837:122f with SMTP id
+ n10-20020a81d84a000000b005620837122fmr1614586ywl.9.1685126073356; Fri, 26 May
+ 2023 11:34:33 -0700 (PDT)
+Date:   Fri, 26 May 2023 11:33:55 -0700
 In-Reply-To: <20230526183401.2326121-1-irogers@google.com>
-Message-Id: <20230526183401.2326121-10-irogers@google.com>
+Message-Id: <20230526183401.2326121-11-irogers@google.com>
 Mime-Version: 1.0
 References: <20230526183401.2326121-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v2 09/16] perf lock: Dynamically allocate lockhash_table
+Subject: [PATCH v2 10/16] perf timechart: Make large arrays dynamic
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -80,95 +80,105 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lockhash_table is 32,768bytes in .bss, make it a memory allocation so
-that the space is freed for non-lock perf commands.
+Allocate start time and state arrays when command starts rather than
+using 114,688 bytes in .bss.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-lock.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ tools/perf/builtin-timechart.c | 48 +++++++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 9 deletions(-)
 
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index 70b14ba5fdd5..fc8356bd6e3a 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -48,7 +48,7 @@ static struct target target;
- #define LOCKHASH_BITS		12
- #define LOCKHASH_SIZE		(1UL << LOCKHASH_BITS)
+diff --git a/tools/perf/builtin-timechart.c b/tools/perf/builtin-timechart.c
+index bce1cf896f9c..829d99fecfd0 100644
+--- a/tools/perf/builtin-timechart.c
++++ b/tools/perf/builtin-timechart.c
+@@ -315,10 +315,10 @@ static void pid_put_sample(struct timechart *tchart, int pid, int type,
  
--static struct hlist_head lockhash_table[LOCKHASH_SIZE];
-+static struct hlist_head *lockhash_table;
+ #define MAX_CPUS 4096
  
- #define __lockhashfn(key)	hash_long((unsigned long)key, LOCKHASH_BITS)
- #define lockhashentry(key)	(lockhash_table + __lockhashfn((key)))
-@@ -1871,7 +1871,6 @@ static int __cmd_contention(int argc, const char **argv)
+-static u64 cpus_cstate_start_times[MAX_CPUS];
+-static int cpus_cstate_state[MAX_CPUS];
+-static u64 cpus_pstate_start_times[MAX_CPUS];
+-static u64 cpus_pstate_state[MAX_CPUS];
++static u64 *cpus_cstate_start_times;
++static int *cpus_cstate_state;
++static u64 *cpus_pstate_start_times;
++static u64 *cpus_pstate_state;
+ 
+ static int process_comm_event(struct perf_tool *tool,
+ 			      union perf_event *event,
+@@ -1981,12 +1981,34 @@ int cmd_timechart(int argc, const char **argv)
+ 		"perf timechart record [<options>]",
+ 		NULL
  	};
- 	struct lock_contention con = {
- 		.target = &target,
--		.result = &lockhash_table[0],
- 		.map_nr_entries = bpf_map_entries,
- 		.max_stack = max_stack_depth,
- 		.stack_skip = stack_skip,
-@@ -1880,10 +1879,17 @@ static int __cmd_contention(int argc, const char **argv)
- 		.owner = show_lock_owner,
- 	};
- 
-+	lockhash_table = calloc(LOCKHASH_SIZE, sizeof(*lockhash_table));
-+	if (!lockhash_table)
++	int ret;
++
++	cpus_cstate_start_times = calloc(MAX_CPUS, sizeof(*cpus_cstate_start_times));
++	if (!cpus_cstate_start_times)
 +		return -ENOMEM;
++	cpus_cstate_state = calloc(MAX_CPUS, sizeof(*cpus_cstate_state));
++	if (!cpus_cstate_state) {
++		ret = -ENOMEM;
++		goto out;
++	}
++	cpus_pstate_start_times = calloc(MAX_CPUS, sizeof(*cpus_pstate_start_times));
++	if (!cpus_pstate_start_times) {
++		ret = -ENOMEM;
++		goto out;
++	}
++	cpus_pstate_state = calloc(MAX_CPUS, sizeof(*cpus_pstate_state));
++	if (!cpus_pstate_state) {
++		ret = -ENOMEM;
++		goto out;
++	}
 +
-+	con.result = &lockhash_table[0];
-+
- 	session = perf_session__new(use_bpf ? NULL : &data, &eops);
- 	if (IS_ERR(session)) {
- 		pr_err("Initializing perf session failed\n");
--		return PTR_ERR(session);
-+		err = PTR_ERR(session);
-+		goto out_delete;
+ 	argc = parse_options_subcommand(argc, argv, timechart_options, timechart_subcommands,
+ 			timechart_usage, PARSE_OPT_STOP_AT_NON_OPTION);
+ 
+ 	if (tchart.power_only && tchart.tasks_only) {
+ 		pr_err("-P and -T options cannot be used at the same time.\n");
+-		return -1;
++		ret = -1;
++		goto out;
  	}
  
- 	con.machine = &session->machines.host;
-@@ -1983,6 +1989,7 @@ static int __cmd_contention(int argc, const char **argv)
- 	evlist__delete(con.evlist);
- 	lock_contention_finish();
- 	perf_session__delete(session);
-+	zfree(&lockhash_table);
- 	return err;
- }
+ 	if (argc && strlen(argv[0]) > 2 && strstarts("record", argv[0])) {
+@@ -1996,17 +2018,25 @@ int cmd_timechart(int argc, const char **argv)
  
-@@ -2348,6 +2355,10 @@ int cmd_lock(int argc, const char **argv)
- 	unsigned int i;
- 	int rc = 0;
+ 		if (tchart.power_only && tchart.tasks_only) {
+ 			pr_err("-P and -T options cannot be used at the same time.\n");
+-			return -1;
++			ret = -1;
++			goto out;
+ 		}
  
-+	lockhash_table = calloc(LOCKHASH_SIZE, sizeof(*lockhash_table));
-+	if (!lockhash_table)
-+		return -ENOMEM;
-+
- 	for (i = 0; i < LOCKHASH_SIZE; i++)
- 		INIT_HLIST_HEAD(lockhash_table + i);
+ 		if (tchart.io_only)
+-			return timechart__io_record(argc, argv);
++			ret = timechart__io_record(argc, argv);
+ 		else
+-			return timechart__record(&tchart, argc, argv);
++			ret = timechart__record(&tchart, argc, argv);
++		goto out;
+ 	} else if (argc)
+ 		usage_with_options(timechart_usage, timechart_options);
  
-@@ -2369,7 +2380,7 @@ int cmd_lock(int argc, const char **argv)
- 		rc = __cmd_report(false);
- 	} else if (!strcmp(argv[0], "script")) {
- 		/* Aliased to 'perf script' */
--		return cmd_script(argc, argv);
-+		rc = cmd_script(argc, argv);
- 	} else if (!strcmp(argv[0], "info")) {
- 		if (argc) {
- 			argc = parse_options(argc, argv,
-@@ -2403,5 +2414,6 @@ int cmd_lock(int argc, const char **argv)
- 		usage_with_options(lock_usage, lock_options);
- 	}
+ 	setup_pager();
  
-+	zfree(&lockhash_table);
- 	return rc;
+-	return __cmd_timechart(&tchart, output_name);
++	ret = __cmd_timechart(&tchart, output_name);
++out:
++	zfree(&cpus_cstate_start_times);
++	zfree(&cpus_cstate_state);
++	zfree(&cpus_pstate_start_times);
++	zfree(&cpus_pstate_state);
++	return ret;
  }
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
