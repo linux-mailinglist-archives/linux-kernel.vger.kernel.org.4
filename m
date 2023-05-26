@@ -2,123 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DE77123DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9207123E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243296AbjEZJja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
+        id S242747AbjEZJkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243260AbjEZJjC (ORCPT
+        with ESMTP id S243211AbjEZJja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:39:02 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2125.outbound.protection.outlook.com [40.107.92.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E2410D0;
-        Fri, 26 May 2023 02:38:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=be/cBxAh0G7YI3qu243Z2p5r7vuwUwP/jJO1BN53jhpdj0TXhgVbKNMVEnGRc2Sqir0+B/tJ0oOQOt7R7f3T0yfz2l1gPLL6F0nwbxgI8bks9nxNo9SLj8iEwhuvSC+r+/corbvx7xMWZXstUnzu7HOXYs09jhX0ZwHUikvHRw1ZHirc0+URtRFO8W9Nrqf3UEXyTY8HIUw0IcLEOV2yoLp7U0irIRzBteiQpFor1UFBR2CLQKxKejeGHec/+x2tLClC6cw5Vsa6tVfOiMVvREu1K6/J8EBQrnvs5C9LLJx3K0SVkvvDYjvEjJiWI8EAyxQvRpOVuMn3TPjU0z8ZwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zdEEbLBnQAanxuurg4uXzFS0onDBKoeUcecHJU2RcSQ=;
- b=F6hJHPKJ7Qw/1cGvAcSWllheNGoIW3KVS1cEMu28cOQkj3XdOebDQviipC28RHWPRqMVk4Hf5yU6w8WvJikh7u5uKtO/EZubBLeEok7Bdw+9XswNM76IwGSlVIYNSB6NbHGYptGvpuvFw1HSZ7S/s7GMuewmNJEuPobELIskKm492RvRQXzSPbZh51mUhsQB7XTUzrTh6Cpdhutc5GUONAbytPMXDj1jLFN0lE+plVjvCONuQJyQpTstsrlpgOVLP4Wf/tV5r9qqZYJ5OJqszgQeN9p1DcTjkJhChFTqc4d+Afvi79hb5uzkIIIBYV+BtHTFiGl8ZCacMl9xi3u0IA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 26 May 2023 05:39:30 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D351170F
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:38:57 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3063433fa66so296860f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:38:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zdEEbLBnQAanxuurg4uXzFS0onDBKoeUcecHJU2RcSQ=;
- b=g0K1ueUHU1NIeA1wT+ErgEJUnze/DmjtL31I+79WEunkievgPGPX7Psqkn3w0xHVkBZtX03PZxW0LjG6rgEWzwK6EEmMJGsPI3/XHadKiVahJ/RttN36xRsX0A27uInQ9EvQenNVHx48A4094ti4XntSB9kSQj7ggxe4DujfAvc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM6PR13MB3708.namprd13.prod.outlook.com (2603:10b6:5:22b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Fri, 26 May
- 2023 09:38:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.017; Fri, 26 May 2023
- 09:38:24 +0000
-Date:   Fri, 26 May 2023 11:38:16 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Kenny Ho <Kenny.Ho@amd.com>,
-        David Laight <David.Laight@aculab.com>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Kenny Ho <y2kenny@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        alexander.deucher@amd.com
-Subject: Re: [PATCH] Truncate UTS_RELEASE for rxrpc version
-Message-ID: <ZHB+COAmd3CzVGaJ@corigine.com>
-References: <20230525211346.718562-1-Kenny.Ho@amd.com>
- <223250.1685052554@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <223250.1685052554@warthog.procyon.org.uk>
-X-ClientProxiedBy: AM9P193CA0012.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:20b:21e::17) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685093935; x=1687685935;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c9FbcJ8ok/dJicjZGixTx1rLY7WoaIvuxCHaDotirU4=;
+        b=JL9AIH+1JLjqI1bMy4zyAC7GHDy/nihvR99pjHry6l2XVXgzqeSd/O9B6T2oGdIPvA
+         VkgZBzOgUU608sykszofbkMZecWAa0HoGE9t5egEInksaJ2dQoLSSbMUQWNa5bwOV1rx
+         ohf/QuYu7rZKisOi0K2vsLSoVlPGCAscrZLaxrq3if7gialce24YicNKzQ2ugRFFnmV2
+         jbxy7WDzGnpwoxmZmZvtFkTQa2PwwcuXAHHrU9gpVzAaDI2ry12Jwe4qqtx5CeILc0O4
+         MSzVeVif0r/3wOiSpEkLOskM81rNKfB4zCaZUeRdYCujEGGmUNjWaRbZrf28KaMAzkc0
+         5P0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685093935; x=1687685935;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c9FbcJ8ok/dJicjZGixTx1rLY7WoaIvuxCHaDotirU4=;
+        b=B6KAAtAa+uXGwirLzynxUDbj4hg69xj7YBvDK2udOWwCS88fUkdS3HwvsrVAZ3ekoM
+         ausAVVtRY/GnNLy7xEvPBltU4g17hS5+n7kyejUr2JK6n79m/DJ+Dfw+LI+QafWf6AJ+
+         zUSBlV/YIAEIxtmd8qbBHiP8yvUmdDP/rmbi7YOWyZIP6t6rGtQBQ1raWcKq1W9CP2So
+         3RL0koXJL7dcFfOC0kwonG9/OIzBc145DNg3uUfAkZ/sLQa32HV1LS8Su8EJ/BP4MiRE
+         GFMcaQfdeOqfqPK+FZJroCRrmBdtlK69iY6sbxnZ7OdT7rNTQ2298Ze1VXc8fia7cA8X
+         yieg==
+X-Gm-Message-State: AC+VfDytDlGyOUAd9R0QB+NYa5kuit9xfP1ovhSEEk5Lk+i1cv8xpoOX
+        7Ofepu2Hd+wYVWIc0ZlKK1ijVA==
+X-Google-Smtp-Source: ACHHUZ5Z/uuwFU/rDxZADcj66dYaAGt7iBmpqRVcOw6fAUTz20CCVBeanIlci2qhrpcJchgxcIz/3A==
+X-Received: by 2002:a5d:640c:0:b0:30a:6958:456 with SMTP id z12-20020a5d640c000000b0030a69580456mr1091222wru.4.1685093935490;
+        Fri, 26 May 2023 02:38:55 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id y15-20020a5d4acf000000b00306299be5a2sm4489937wrs.72.2023.05.26.02.38.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 02:38:55 -0700 (PDT)
+Message-ID: <d2ed4cce-108f-c861-5f84-0c7ac5954346@baylibre.com>
+Date:   Fri, 26 May 2023 11:38:53 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3708:EE_
-X-MS-Office365-Filtering-Correlation-Id: 845e3bfa-340e-4aef-8549-08db5dccf352
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tZ97vpIJd+kD9Dyvd6l6D76559SvzRXEWBJmiKEoYq3wIn1sbSQ8/UNO3zuxMmsVcm5qzQzylcBbyiAWUHcyqdN85Ujkul1nXluvOQdiH0rK3oj5wQFC1Y9fyxBtKpFDN+RmjWpuI53wgvzVfULRWSHWsK4XKrIwdUA6Op7ZMg24mcjk0AEyVpynwxhQlFCc53s+0Tk652Xk7s81ZG0VKMvgV5rGMyGHapdjRuXNqBoy5/NrgJD9/3O6q3tmo6JvVgSeRc6CrOLeBVKC9uq7tIfxTvPy87LPEdMLsBct7kVBajZI4owQLbwVnNqiNRBt5r6xjre6dZS9I4Gy0RkvHrZZP0nrS4EIzNZ8kaSZBKHUqCrf+g+G+OqGwgNtQs8Jp7j/kc5SXZ1t9x5pxdjRtECiswCVK9fgchFVuFohq6oyWet/T1yMhKa8vgJVpYmXzOGM/SC/Xmo5i/y6LnHTg+Cy2ITJ4w/tGK80YsNF4SjMKXgaVidm5+n+TDfx5TH4bSoUF6Sbjp46g5RbIjLQSpvNnQwgbqTBQXsGw2E7FNDHs1sief88p/R0VkAClh0JUTK+JfSzH0dx8tHLa86U+5imU6pybajYjePOMx3ibdA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39840400004)(346002)(396003)(366004)(136003)(451199021)(186003)(38100700002)(6506007)(7416002)(6512007)(2906002)(44832011)(2616005)(36756003)(83380400001)(66946007)(6666004)(478600001)(316002)(86362001)(66556008)(66476007)(6916009)(4326008)(41300700001)(54906003)(6486002)(8936002)(8676002)(966005)(5660300002)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7NrP5p18s+GVvlM+Uo31A5RgtXAAlLbaJ0B+8YHEnFt0TdRHRzbFV0ph8PBW?=
- =?us-ascii?Q?RcInzIfEA8WkWBCkD17P/Kz2Qtf7Hzgk1QKO9QIJ1Q444W82zjm7r/4UnVtF?=
- =?us-ascii?Q?kRF74yFk9LCdj0X6I5Zbx4qICCEFbJg3aofcgWCykToAq7CgJgUdyZ9/M9IO?=
- =?us-ascii?Q?Cnz326xMZ9lzdyxTPeaNvh4fYJsi++SOH+yjSXXLCGaTkmARDYKT4eMFIAMl?=
- =?us-ascii?Q?ewzWdK2UtjEdcU/m4410FNdhqMd9UB0bsxMXwRMC9t8sGcZt2E/U23EHldag?=
- =?us-ascii?Q?8E6vBn31S1ouZGGwHQyXyPnxV6CHh46xVs6qeJNE6vi8Nt23do0BspnuKnoD?=
- =?us-ascii?Q?AkWk2GiaAtExPp9LFp487kIf/ro8EspiusXKIxutvPGNH0Pr4MdWbOgnsdd/?=
- =?us-ascii?Q?+e97XwQzfYxAoB49iHX4Om0tqQ/W8hexpYOIWTLQjByJ4vzQfoXUrK5Mxf7z?=
- =?us-ascii?Q?KgFuHQQKGqGpoBMP/ES94Zw0zGSMvDEYjtEASswLHuY/FbEliJgdaYBYPQaj?=
- =?us-ascii?Q?EqtUodRxG0aRhSL51Cl4yy9zJiLVikhYQbVZIdjvfFVBhsiJBXK20xql292x?=
- =?us-ascii?Q?jctSV4ILOqx4100Ts5BGGvIG2L2+xIEyzYiO1U5e7ONYLZgjzTxFpdnqEv+i?=
- =?us-ascii?Q?dBUJY5v7WG9BTRpncQrxWbo8fo/4KNzy6VxqobEgRgUx+4aNhRTV6jtGktgZ?=
- =?us-ascii?Q?tdUmwFUSUqnkwT9qcbcbo6io+Xne7ugereGf2ReJ8pu5precLfUMEq6K3rBU?=
- =?us-ascii?Q?4v2eBnitJQNnpA9wghl/apzJAbj+/o1qY+GZd+k0gA8ODilznx3Saxu5Wqnd?=
- =?us-ascii?Q?53QC8OnjmYkP39enL+k2lQeLUYOk2zoOylXUuXHirmDCqOMlBHGcP2amG2xb?=
- =?us-ascii?Q?+Ftt6SBZUOnPnzeWZSnAkma0TfHPRTao3w3yaH8irAD1eWXfeM6HIL4ehV54?=
- =?us-ascii?Q?+bk+2xyhvrnPpqtZPCDk2CDVeYl31ma1MPk7+7uctj2TV/dgtoQt/HoMOzo4?=
- =?us-ascii?Q?5eJHfHHZCTd+lsG3h1gtCvJzLusDHFAGef1LRIICSCBdqdfbTKzasni+GJ+b?=
- =?us-ascii?Q?BexwCzrNixAw448n2VZIAi09Vm4ljzXdahUbC+TnChkNKNoeGK8Bt6JoPPKv?=
- =?us-ascii?Q?B79CRPgAGuxKeAI1IBhRnTUJjDt3miajOjPTaKdD8q85FEvP9IJxCO6TdDnE?=
- =?us-ascii?Q?OlYuqIEZz/Vf1kQEjPICfzC65T0mI6HL3HmuuwIU/WspmUmLVLRziNF2tpt/?=
- =?us-ascii?Q?OgIV7U37Zjq9gZtO0tQwhnv8EaYEy+6MNaAPS+UOJRaEMo01cxTXWSX9pJqq?=
- =?us-ascii?Q?HeOKKxOagUU9lr5JvETI8Kv+gCvEqLRvUjVVmCImyrV0JEtSNNX0hB0Yhj0Q?=
- =?us-ascii?Q?5Wa8J1jA02rAxPIIOvQto1tz28+L6/POSDdzFDM5R8EQoCiWEW8X9uxMA9db?=
- =?us-ascii?Q?8Ss7bgc/evZVhYxLz0jo8szRF8zcpEfe3Px3Qj2PQtAlcKIYGK7G6RWwH/7L?=
- =?us-ascii?Q?hgFL6jqu8PQ6yU+5fGqpH7wL2EHa/EIYh52rpfCcNi1C3r06bqanS90vBqSR?=
- =?us-ascii?Q?RMdBRKvQcIt/8a1ZuIFP2QZxA8eQH2kh9pig1UTXG4yF+Eh7jlvt/WnELovM?=
- =?us-ascii?Q?gF7vDhFniR44u0Y+RNvPg5usa0q61nfph1wa9bOme+/DuR74ugTmddPnlfzg?=
- =?us-ascii?Q?zRaN6w=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 845e3bfa-340e-4aef-8549-08db5dccf352
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 09:38:24.1205
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5fsu9Q/5Y3sphXHTRzZPVlSjR52Lsqb+JR4uGoCb7KgHmeLZIe9VfNDOfEbyV75L+I6vI0zInas2ApoZ/fsPSSSf/gWZTccKTJc3l0r/8nw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3708
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 2/2] clk: mediatek: mt8365: Fix index issue
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230517-fix-clk-index-v2-0-1b686cefcb7e@baylibre.com>
+ <20230517-fix-clk-index-v2-2-1b686cefcb7e@baylibre.com>
+ <2a60740f-782d-08d5-f62f-dcc67aaf4d32@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <2a60740f-782d-08d5-f62f-dcc67aaf4d32@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,117 +87,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:09:14PM +0100, David Howells wrote:
-> Kenny Ho <Kenny.Ho@amd.com> wrote:
-> 
-> > @@ -30,6 +28,7 @@ static void rxrpc_send_version_request(struct rxrpc_local *local,
-> >  	struct sockaddr_rxrpc srx;
-> >  	struct msghdr msg;
-> >  	struct kvec iov[2];
-> > +	static char rxrpc_version_string[65];
-> >  	size_t len;
-> >  	int ret;
-> >  
-> 
-> That's not thread-safe.  If you have multiple endpoints each one of them could
-> be overwriting the string at the same time.  We can't guarantee that one
-> wouldn't corrupt the other.
-> 
-> There's also no need to reprint it every time; just once during module init
-> will do.  How about the attached patch instead?
-> 
-> David
 
-Thanks David ad Kenny,
+On 26/05/2023 10:33, AngeloGioacchino Del Regno wrote:
+> Il 25/05/23 16:50, Alexandre Mergnat ha scritto:
+>> Before the patch [1], the clock probe was done directly in the
+>> clk-mt8365 driver. In this probe function, the array which stores the
+>> data clocks is sized using the higher defined numbers (*_NR_CLOCK) in
+>> the clock lists [2]. Currently, with the patch [1], the specific
+>> clk-mt8365 probe function is replaced by the mtk generic one [3], which
+>> size the clock data array by adding all the clock descriptor array size
+>> provided by the clk-mt8365 driver.
+>>
+>> Actually, all clock indexes come from the header file [2], that mean, if
+>> there are more clock (then more index) in the header file [2] than the
+>> number of clock declared in the clock descriptor arrays (which is the
+>> case currently), the clock data array will be undersized and then the
+>> generic probe function will overflow when it will try to write in
+>> "clk_data[CLK_INDEX]". Actually, instead of crashing at boot, the probe
+>> function returns an error in the log which looks like:
+>> "of_clk_hw_onecell_get: invalid index 135", then this clock isn't
+>> enabled.
+>>
+>> Solve this issue by adding in the driver the missing clocks declared in
+>> the header clock file [2].
+>>
+>> [1]: Commit ffe91cb28f6a ("clk: mediatek: mt8365: Convert to
+>>       mtk_clk_simple_{probe,remove}()")
+>> [2]: include/dt-bindings/clock/mediatek,mt8365-clk.h
+>> [3]: drivers/clk/mediatek/clk-mtk.c
+>>
+>> Fixes: ffe91cb28f6a ("clk: mediatek: mt8365: Convert to 
+>> mtk_clk_simple_{probe,remove}()")
+>
+> This is not fixing the conversion, but the clock driver, as it 
+> originally missed
+> clock entries and hence was not compliant with its binding (header).
+> It worked before, probably, but this doesn't mean that this driver 
+> didn't contain
+> a logic mistake from the beginning :-)
+>
+> So, add (or replace the current one with) the relevant Fixes tag...
+>
 
-can we arrange for a formal posting of the patch below?
-I suspect it will languish otherwise.
+Briefly and factually, the mt8365 clk probe mechanism was different
 
-> ---
-> rxrpc: Truncate UTS_RELEASE for rxrpc version
-> 
-> UTS_RELEASE has a maximum length of 64 which can cause rxrpc_version to
-> exceed the 65 byte message limit.
-> 
-> Per the rx spec[1]: "If a server receives a packet with a type value of 13,
-> and the client-initiated flag set, it should respond with a 65-byte payload
-> containing a string that identifies the version of AFS software it is
-> running."
-> 
-> The current implementation causes a compile error when WERROR is turned on
-> and/or UTS_RELEASE exceeds the length of 49 (making the version string more
-> than 64 characters).
-> 
-> Fix this by generating the string during module initialisation and limiting
-> the UTS_RELEASE segment of the string does not exceed 49 chars.  We need to
-> make sure that the 64 bytes includes "linux-" at the front and " AF_RXRPC" at
-> the back as this may be used in pattern matching.
-> 
-> Fixes: 44ba06987c0b ("RxRPC: Handle VERSION Rx protocol packets")
-> Reported-by: Kenny Ho <Kenny.Ho@amd.com>
-> Link: https://lore.kernel.org/r/20230523223944.691076-1-Kenny.Ho@amd.com/
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Link: https://web.mit.edu/kolya/afs/rx/rx-spec [1]
-> cc: Marc Dionne <marc.dionne@auristor.com>
-> cc: Andrew Lunn <andrew@lunn.ch>
-> cc: David Laight <David.Laight@ACULAB.COM>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: linux-afs@lists.infradead.org
-> cc: netdev@vger.kernel.org
-> ---
->  net/rxrpc/af_rxrpc.c    |    1 +
->  net/rxrpc/ar-internal.h |    1 +
->  net/rxrpc/local_event.c |   11 ++++++++++-
->  3 files changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
-> index 31f738d65f1c..da0b3b5157d5 100644
-> --- a/net/rxrpc/af_rxrpc.c
-> +++ b/net/rxrpc/af_rxrpc.c
-> @@ -980,6 +980,7 @@ static int __init af_rxrpc_init(void)
->  	BUILD_BUG_ON(sizeof(struct rxrpc_skb_priv) > sizeof_field(struct sk_buff, cb));
->  
->  	ret = -ENOMEM;
-> +	rxrpc_gen_version_string();
->  	rxrpc_call_jar = kmem_cache_create(
->  		"rxrpc_call_jar", sizeof(struct rxrpc_call), 0,
->  		SLAB_HWCACHE_ALIGN, NULL);
-> diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-> index 5d44dc08f66d..e8e14c6f904d 100644
-> --- a/net/rxrpc/ar-internal.h
-> +++ b/net/rxrpc/ar-internal.h
-> @@ -1068,6 +1068,7 @@ int rxrpc_get_server_data_key(struct rxrpc_connection *, const void *, time64_t,
->  /*
->   * local_event.c
->   */
-> +void rxrpc_gen_version_string(void);
->  void rxrpc_send_version_request(struct rxrpc_local *local,
->  				struct rxrpc_host_header *hdr,
->  				struct sk_buff *skb);
-> diff --git a/net/rxrpc/local_event.c b/net/rxrpc/local_event.c
-> index 5e69ea6b233d..993c69f97488 100644
-> --- a/net/rxrpc/local_event.c
-> +++ b/net/rxrpc/local_event.c
-> @@ -16,7 +16,16 @@
->  #include <generated/utsrelease.h>
->  #include "ar-internal.h"
->  
-> -static const char rxrpc_version_string[65] = "linux-" UTS_RELEASE " AF_RXRPC";
-> +static char rxrpc_version_string[65]; // "linux-" UTS_RELEASE " AF_RXRPC";
-> +
-> +/*
-> + * Generate the VERSION packet string.
-> + */
-> +void rxrpc_gen_version_string(void)
-> +{
-> +	snprintf(rxrpc_version_string, sizeof(rxrpc_version_string),
-> +		 "linux-%.49s AF_RXRPC", UTS_RELEASE);
-> +}
->  
->  /*
->   * Reply to a version request
-> 
-> 
+compared to the mtk clk driver. Even if it was an issue or not, it was
+
+working (for sure). When [1] improved the mt8365 clk driver by using
+
+the mtk clk generic probe, some clocks (USB here) no longer worked.
+
+So, IMHO, it still a functional regression introduced by [1], because it
+
+come from the switch of the probe function.
+
+
+I'm not blaming & shaming the author of [1], as you said, it originally
+
+missed clock entries and hence was not compliant with its binding
+
+(whereas other MTK SoC was I guess). This commit is pointed thanks
+
+to the bisect + test.
+
+
+-- 
+Regards,
+Alexandre
+
