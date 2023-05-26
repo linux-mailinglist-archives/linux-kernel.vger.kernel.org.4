@@ -2,467 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525FC713069
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 01:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC7171306B
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 01:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjEZXg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 19:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
+        id S231215AbjEZXjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 19:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjEZXgY (ORCPT
+        with ESMTP id S229716AbjEZXju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 19:36:24 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B31F7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:36:22 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f4db9987f8so2319960e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:36:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685144181; x=1687736181;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H8aHH4bwAIGi4TXqYQZBpRXn2xRLYPqkRwFmzcf8RQ0=;
-        b=moFYde6zXumMKz5aEaI0uk1nbXQpQh0uuVU0N7nOcW9bIN+E14KL40GGacKKdKlzSS
-         C7azggyeQcADIXum3OOM2sFl5USu6mX72UQq3Cx4cK7Xzn2dq2O9UsTcygC39DhVioz4
-         HSHZ6gcXHtkZluYkbUSaXvoOivO/1AECJzDkXNX5Hv9FmlkH4lEueiRBbwCPifsndRD2
-         EKsK52Y1S6Z0loWj7eSF1We/2stHFCbU+hZRV5XOBdZj/KX/Frdhx6M7O7eqtEy8AldY
-         jVncaYlOSWI4ZtFqY/t+BFKKIogi4v4YgV3vh4RkBVUdo7uXJCM1sbCY6oed/p0PoHkg
-         F6GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685144181; x=1687736181;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H8aHH4bwAIGi4TXqYQZBpRXn2xRLYPqkRwFmzcf8RQ0=;
-        b=LGu5glChBlGxUr6rAcInaZMwjxD6gth2geEdVd0AQdkteESwpLXGLgUijCr7rBDaRL
-         cbNapu/a8jMMg77o9taKCqxxHDm3vGc+nqHjt0Hmqjjkl/cIaPIDl5hkkrlXExY0K4V/
-         TYqVJDEVaGBJqp9V+kstbS8yU6DzfefDHF167jhk8XYeU2PbOrXsb+k1hRnLicgi2DEt
-         IOol3j5j7DOTVPThQAuMJFxNtJGe1RQSXS7/I3OgRExStMAe/hu38N2MJRg/ITUew0LG
-         T8mn6Gn69olRNYIC7MTEIjbJ+JIlSlyppGUu3ap4jJkAm1rar7KxO4NmRxJfdGV+ix6L
-         GAgg==
-X-Gm-Message-State: AC+VfDxNPIaVOcAHtazHHfF/9+Zr/9FPeeIPYozDNKburITLbNuOrZ8W
-        kF0YN4/KDXSh5CEeLmtJ0Bd4Uw==
-X-Google-Smtp-Source: ACHHUZ7IKzShJJud6IE5qi1orR9D9JjPUqaQtzqM51it7GaT9GyszcYoRVGVxRPY7Z8yv4xqM4X4RA==
-X-Received: by 2002:a05:6512:398b:b0:4f4:cb90:d2a0 with SMTP id j11-20020a056512398b00b004f4cb90d2a0mr137829lfu.22.1685144180796;
-        Fri, 26 May 2023 16:36:20 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id q26-20020ac24a7a000000b004ec83bc3e2dsm827243lfp.42.2023.05.26.16.36.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 16:36:20 -0700 (PDT)
-Message-ID: <947e3212-f6ef-f00d-19c2-4f629af0e791@linaro.org>
-Date:   Sat, 27 May 2023 01:36:18 +0200
+        Fri, 26 May 2023 19:39:50 -0400
+Received: from out-3.mta1.migadu.com (out-3.mta1.migadu.com [IPv6:2001:41d0:203:375::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE56BF7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:39:47 -0700 (PDT)
+Date:   Fri, 26 May 2023 19:39:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685144385;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+pmmu2l8SGWACfif5XIKHsHxMzv+ce/4e1/BfTEw4BM=;
+        b=ukQmXpei8AxbBkklcOc7JJjEsmeitSCac4BJKuAMh8TeKC2hAS47SrZ0PL71rpMf4M7DLZ
+        iIWCyVyoZHJIFRzS2PMOmMv1aFkeoqw7JLIQRVWjKWMPpGqmW3/8pDXH4lnJNZuFXZ1wnw
+        qxS/DXuyGMhBP/f+4NahZunW2ipB3oc=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        mcgrof@kernel.org, peterz@infradead.org, tglx@linutronix.de,
+        x86@kernel.org, rppt@kernel.org
+Subject: Re: [PATCH 1/3] module: Introduce module_alloc_type
+Message-ID: <ZHFDO/95KMXRdOWI@moria.home.lan>
+References: <20230526051529.3387103-1-song@kernel.org>
+ <20230526051529.3387103-2-song@kernel.org>
+ <ZHEy5SkFwI+dZjOC@moria.home.lan>
+ <CAPhsuW5nbXozvBs1X7q_u=eTY0U=Ep32n1bM8bxR6h9UEU3AxQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Rudraksha Gupta <guptarud@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     david@ixit.cz, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230524230459.120681-1-guptarud@gmail.com>
- <20230524230459.120681-5-guptarud@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH 5/5] ARM: Add Samsung Galaxy Express support
-In-Reply-To: <20230524230459.120681-5-guptarud@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW5nbXozvBs1X7q_u=eTY0U=Ep32n1bM8bxR6h9UEU3AxQ@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 25.05.2023 01:04, Rudraksha Gupta wrote:
-> This adds a very basic device tree file for the Samsung Galaxy Express
-> SGH-I437. Currently, the following things work: UART, eMMC, SD Card, and
-> USB.
+On Fri, May 26, 2023 at 04:09:01PM -0700, Song Liu wrote:
+> On Fri, May 26, 2023 at 3:30 PM Kent Overstreet
+> <kent.overstreet@linux.dev> wrote:
+> >
+> > On Thu, May 25, 2023 at 10:15:27PM -0700, Song Liu wrote:
+> > > Introduce memory type aware module_alloc_type, which provides a unified
+> > > allocator for all different archs. This work was discussed in [1].
+> > >
+> > > Each arch can configure the allocator to do the following:
+> > >
+> > >    1. Specify module_vaddr and module_end
+> > >    2. Random module start address for KASLR
+> > >    3. kasan_alloc_module_shadow()
+> > >    4. kasan_reset_tag()
+> > >    5. Preferred and secondary module address ranges
+> > >
+> > > enum mod_alloc_params_flags are used to control the behavior of
+> > > module_alloc_type. Specifically: MOD_ALLOC_FALLBACK let module_alloc_type
+> > > fallback to existing module_alloc. MOD_ALLOC_SET_MEMORY let
+> > > module_alloc_type to protect the memory before returning to the user.
+> > >
+> > > module_allocator_init() call is added to start_kernel() to initialize
+> > > module_alloc_type.
+> > >
+> >
+> > ...
+> >
+> > > +/**
+> > > + * struct vmalloc_params - Parameters to call __vmalloc_node_range()
+> > > + * @start:          Address space range start
+> > > + * @end:            Address space range end
+> > > + * @gfp_mask:       The gfp_t mask used for this range
+> > > + * @pgprot:         The page protection for this range
+> > > + * @vm_flags        The vm_flag used for this range
+> > > + */
+> > > +struct vmalloc_params {
+> > > +     unsigned long   start;
+> > > +     unsigned long   end;
+> > > +     gfp_t           gfp_mask;
+> > > +     pgprot_t        pgprot;
+> > > +     unsigned long   vm_flags;
+> > > +};
+> > > +
+> > > +/**
+> > > + * struct mod_alloc_params - Parameters for module allocation type
+> > > + * @flags:          Properties in mod_alloc_params_flags
+> > > + * @granularity:    The allocation granularity (PAGE/PMD) in bytes
+> > > + * @alignment:      The allocation alignment requirement
+> > > + * @vmp:            Parameters used to call vmalloc
+> > > + * @fill:           Function to fill allocated space. If NULL, use memcpy()
+> > > + * @invalidate:     Function to invalidate memory space.
+> > > + *
+> > > + * If @granularity > @alignment the allocation can reuse free space in
+> > > + * previously allocated pages. If they are the same, then fresh pages
+> > > + * have to be allocated.
+> > > + */
+> > > +struct mod_alloc_params {
+> > > +     unsigned int            flags;
+> > > +     unsigned int            granularity;
+> > > +     unsigned int            alignment;
+> > > +     struct vmalloc_params   vmp[MOD_MAX_ADDR_SPACES];
+> > > +     void *                  (*fill)(void *dst, const void *src, size_t len);
+> > > +     void *                  (*invalidate)(void *ptr, size_t len);
+> > > +};
+> > > +
+> > > +struct mod_type_allocator {
+> > > +     struct mod_alloc_params params;
+> > > +};
+> > > +
+> > > +struct mod_allocators {
+> > > +     struct mod_type_allocator *types[MOD_MEM_NUM_TYPES];
+> > > +};
+> > > +
+> > > +void *module_alloc_type(size_t size, enum mod_mem_type type);
+> > > +void module_memfree_type(void *ptr, enum mod_mem_type type);
+> > > +void module_memory_fill_type(void *dst, void *src, size_t len, enum mod_mem_type type);
+> > > +void module_memory_invalidate_type(void *ptr, size_t len, enum mod_mem_type type);
+> > > +void module_memory_protect(void *ptr, size_t len, enum mod_mem_type type);
+> > > +void module_memory_unprotect(void *ptr, size_t len, enum mod_mem_type type);
+> > > +void module_memory_force_protect(void *ptr, size_t len, enum mod_mem_type type);
+> > > +void module_memory_force_unprotect(void *ptr, size_t len, enum mod_mem_type type);
+> > > +void module_alloc_type_init(struct mod_allocators *allocators);
+> >
+> > This is a pretty big and complicated interface, and I haven't been able
+> > to find any reasoning or justification for why it's needed.
+> >
+> > Why is this going in module.h? Don't do that, this is supposed to be a
+> > general purpose allocator for executable memory so start a new file.
 > 
-> Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
-> ---
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../dts/qcom-msm8960-samsung-expressatt.dts   | 334 ++++++++++++++++++
->  2 files changed, 335 insertions(+)
->  create mode 100644 arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
+> The goal of this work is to build a memory allocator for modules, text,
+> rw data, and ro data. So it is not the same as execmem_alloc or jitalloc.
 > 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 59829fc90315..12c90f263142 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1081,6 +1081,7 @@ dtb-$(CONFIG_ARCH_QCOM) += \
->  	qcom-msm8916-samsung-grandmax.dtb \
->  	qcom-msm8916-samsung-serranove.dtb \
->  	qcom-msm8960-cdp.dtb \
-> +	qcom-msm8960-samsung-expressatt.dtb \
->  	qcom-msm8974-lge-nexus5-hammerhead.dtb \
->  	qcom-msm8974-sony-xperia-rhine-amami.dtb \
->  	qcom-msm8974-sony-xperia-rhine-honami.dtb \
-> diff --git a/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts b/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
-> new file mode 100644
-> index 000000000000..2d6f0def0589
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
-> @@ -0,0 +1,334 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <dt-bindings/input/input.h>
-> +
-> +#include "qcom-msm8960.dtsi"
-> +#include <dt-bindings/reset/qcom,gcc-msm8960.h>
-> +
-> +/ {
-> +	model = "Samsung Galaxy S3 SGH-I437";
-Googling the model name, it seems to be officially sold as
-"Samsung Galaxy Express", without any mention of the S3 bit.
-Is that on purpose?
+> >
+> > What is vmalloc_params doing here? Why is it needed? Can we just get rid
+> > of it?
+> 
+> We need it to have an interface for all archs. They are all using different
+> variations of vmalloc for module_alloc.
 
-> +	compatible = "samsung,expressatt", "qcom,msm8960";
-> +	chassis-type = "handset";
-> +
-> +	aliases {
-> +		serial0 = &gsbi5_serial;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +};
-> +
-> +&gsbi5 {
-> +	status = "okay";
-> +	qcom,mode = <GSBI_PROT_I2C_UART>;
-Please ensure status is the last property within each node
+But it should be an internal implementation detail, I don't think we
+want the external interface tied to vmalloc - 
 
-> +};
-> +
-> +&gsbi5_serial {
-> +	status = "okay";
-> +};
-> +
-> +/* eMMC */
-> +&sdcc1 {
-You may want to add aliases for mmc hosts (check e.g.
-arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts)
+> These two APIs allow the core code work with all archs. They won't break
+> sub-page allocations. (not all archs will have sub-page allocations)
 
-> +	status = "okay";
-> +	vmmc-supply = <&pm8921_l5>;
-> +};
-> +
-> +/* External micro SD card */
-> +&sdcc3 {
-> +	status = "okay";
-> +	vmmc-supply = <&pm8921_l6>;
-> +	vqmmc-supply = <&pm8921_l7>;
-> +};
-> +
-> +&gsbi1 {
-> +	status = "okay";
-> +	qcom,mode = <GSBI_PROT_SPI>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spi1_default>;
-Please do
+So yes, text_poke() doesn't work on all architectures, and we need a
+fallback.
 
-pinctrl-n
-pinctrl-names
+But if the fallback needs to go the unprotect/protect route, I think we
+need to put that in the helper, and not expose it. Part of what people
+are wanting is to limit or eliminate pages that are RWX, so we
+definitely shouldn't be creating new interfaces to flipping page
+permissions: that should be pushed down to as low a level as possible.
 
-> +};
-> +
-> +&gsbi1_spi{
-Add a space between 'i' and '{'
+E.g., with my jitalloc_update(), a more complete version would look like
 
-Konrad
-> +	status = "okay";
-> +};
-> +
-> +&msmgpio {
-> +	spi1_default: spi1_default {
-> +		mux {
-> +			pins = "gpio6", "gpio7", "gpio9";
-> +			function = "gsbi1";
-> +		};
-> +
-> +		mosi {
-> +			pins = "gpio6";
-> +			drive-strength = <12>;
-> +			bias-disable;
-> +		};
-> +
-> +		miso {
-> +			pins = "gpio7";
-> +			drive-strength = <12>;
-> +			bias-disable;
-> +		};
-> +
-> +		cs {
-> +			pins = "gpio8";
-> +			drive-strength = <12>;
-> +			bias-disable;
-> +			output-low;
-> +		};
-> +
-> +		clk {
-> +			pins = "gpio9";
-> +			drive-strength = <12>;
-> +			bias-disable;
-> +		};
-> +	};
-> +};
-> +
-> +
-> +&rpm {
-> +	regulators {
-> +		compatible = "qcom,rpm-pm8921-regulators";
-> +		vin_lvs1_3_6-supply = <&pm8921_s4>;
-> +		vin_lvs2-supply = <&pm8921_s4>;
-> +		vin_lvs4_5_7-supply = <&pm8921_s4>;
-> +		vdd_ncp-supply = <&pm8921_l6>;
-> +		vdd_l1_l2_l12_l18-supply = <&pm8921_s4>;
-> +		vdd_l21_l23_l29-supply = <&pm8921_s8>;
-> +		vdd_l24-supply = <&pm8921_s1>;
-> +		vdd_l25-supply = <&pm8921_s1>;
-> +		vdd_l27-supply = <&pm8921_s7>;
-> +		vdd_l28-supply = <&pm8921_s7>;
-> +
-> +		/* Buck SMPS */
-> +		pm8921_s1: s1 {
-> +			regulator-always-on;
-> +			regulator-min-microvolt = <1225000>;
-> +			regulator-max-microvolt = <1225000>;
-> +			qcom,switch-mode-frequency = <3200000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_s2: s2 {
-> +			regulator-min-microvolt = <1300000>;
-> +			regulator-max-microvolt = <1300000>;
-> +			qcom,switch-mode-frequency = <1600000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_s3: s3 {
-> +			regulator-min-microvolt = <500000>;
-> +			regulator-max-microvolt = <1150000>;
-> +			qcom,switch-mode-frequency = <4800000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_s4: s4 {
-> +			regulator-always-on;
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			qcom,switch-mode-frequency = <1600000>;
-> +			bias-pull-down;
-> +			qcom,force-mode = <QCOM_RPM_FORCE_MODE_AUTO>;
-> +		};
-> +
-> +		pm8921_s7: s7 {
-> +			regulator-min-microvolt = <1150000>;
-> +			regulator-max-microvolt = <1150000>;
-> +			qcom,switch-mode-frequency = <3200000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_s8: s8 {
-> +			regulator-always-on;
-> +			regulator-min-microvolt = <2050000>;
-> +			regulator-max-microvolt = <2050000>;
-> +			qcom,switch-mode-frequency = <1600000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		/* PMOS LDO */
-> +		pm8921_l1: l1 {
-> +			regulator-always-on;
-> +			regulator-min-microvolt = <1050000>;
-> +			regulator-max-microvolt = <1050000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l2: l2 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l3: l3 {
-> +			regulator-min-microvolt = <3075000>;
-> +			regulator-max-microvolt = <3300000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l4: l4 {
-> +			regulator-always-on;
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l5: l5 {
-> +			regulator-min-microvolt = <2950000>;
-> +			regulator-max-microvolt = <2950000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l6: l6 {
-> +			regulator-min-microvolt = <2950000>;
-> +			regulator-max-microvolt = <2950000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l7: l7 {
-> +			regulator-always-on;
-> +			regulator-min-microvolt = <1850000>;
-> +			regulator-max-microvolt = <2950000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l8: l8 {
-> +			regulator-min-microvolt = <3000000>;
-> +			regulator-max-microvolt = <3100000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l9: l9 {
-> +			regulator-min-microvolt = <2850000>;
-> +			regulator-max-microvolt = <2850000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l10: l10 {
-> +			regulator-min-microvolt = <3000000>;
-> +			regulator-max-microvolt = <3000000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l11: l11 {
-> +			regulator-min-microvolt = <2800000>;
-> +			regulator-max-microvolt = <3300000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l12: l12 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l14: l14 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l15: l15 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2950000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l16: l16 {
-> +			regulator-min-microvolt = <2800000>;
-> +			regulator-max-microvolt = <3000000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l17: l17 {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <3300000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l18: l18 {
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1500000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l21: l21 {
-> +			regulator-min-microvolt = <1900000>;
-> +			regulator-max-microvolt = <1900000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l22: l22 {
-> +			regulator-min-microvolt = <2750000>;
-> +			regulator-max-microvolt = <2750000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l23: l23 {
-> +			regulator-always-on;
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l24: l24 {
-> +			regulator-min-microvolt = <750000>;
-> +			regulator-max-microvolt = <1150000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_l25: l25 {
-> +			regulator-always-on;
-> +			regulator-min-microvolt = <1225000>;
-> +			regulator-max-microvolt = <1225000>;
-> +			bias-pull-down;
-> +		};
-> +
-> +		/* Low Voltage Switch */
-> +		pm8921_lvs1: lvs1 {
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_lvs2: lvs2 {
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_lvs3: lvs3 {
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_lvs4: lvs4 {
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_lvs5: lvs5 {
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_lvs6: lvs6 {
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_lvs7: lvs7 {
-> +			bias-pull-down;
-> +		};
-> +
-> +		pm8921_ncp: ncp {
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			qcom,switch-mode-frequency = <1600000>;
-> +		};
-> +	};
-> +};
-> +
-> +&usb_hs1_phy {
-> +	v3p3-supply = <&pm8921_l3>;
-> +	v1p8-supply = <&pm8921_l4>;
-> +};
-> +
-> +&usb1 {
-> +	status = "okay";
-> +	dr_mode = "otg";
-> +};
-> +
+void jitalloc_update(void *dst, void *src, size_t len)
+{
+	if (text_poke_available) {
+		text_poke(...);
+	} else {
+		unprotect();
+		memcpy();
+		protect();
+	}
+}
+
+See? We provide a simpler, safer interface, and this also lets us handle
+multiple threads racing to update/flip permissions on the same page in a
+single place (e.g. with sticking a lock somewhere in the jitalloc
+structures).
+
+Or ideally, we'd have a kmap_local() variant that actually creates a new
+mapping on all architectures, and we'd just use that to do the update
+without any arch-dependent code - if we get that, having this helper
+means we'll only have to change a single place later.
+
+> 
+> OTOH, the "force" version of the two APIs should be removed later. In this
+> set, we only need them for arch_prepare_bpf_trampoline(). I plan to remove
+> this limitation for x86 soon.
+> 
+> >
+> > The text_poke() abstraction works; the exposed interface should look
+> > like that.
+> >
+> > Please kill MOD_ALLOC_SET_MEMORY, and _only_ return memory that is
+> > read-only. You should be able to kill mod_alloc_params entirely.
+> >
+> > Our other memory allocators don't expose kasan - why does this one?
+> > Again, that looks wrong.
+> >
+> > I would like to see something much simpler (that doesn't encode awkward
+> > assumptions from module and bpf!): please look at the code I sketched
+> > out below and tell me why this interface won't work - or if it can, go
+> > with _that_.
+> 
+> I think we need to align the goal here. PS: we did align the goal about
+> 6 months ago when I proposed the execmem_alloc() set.
+
+Yeah, I know what it feels like to get yanked around by different
+reviewers who see and join in the discussion at different times. Sorry :)
+
+Having a rational/design doc in the header file would help a _lot_. 
+
+> My current goal is to build an allocator for all the use cases of modules,
+> text, data, rodata, etc. Then the same allocator can be used by other
+> dynamic kernel text: bpf, ftrace, kprobe, bcachefs, etc.
+
+This must have been part of the previous discussion since you started
+with execmem_alloc(), but I did scan through that and I'm still not
+seeing the justification for why this needs to handle non-text
+allocations.
+
+If I had to hazard a guess it would be because of tglx wanting to solve
+tlb fragmentation for modules, but to me that doesn't sound like a good
+enough reason and it looks like we're ending up with a messy "try to be
+all things to all people" interface as a result :/
+
+Do we _really_ need that?
+
+Mike was just saying at LSF that direct map fragmentation turned out to
+be a non issue for performance for non-text, so maybe we don't.
+
+Also - module_memory_fill_type(), module_memory_invalidate_type() - I
+know these are for BPF, but could you explain why we need them in the
+external interface here? Could they perhaps be small helpers in the bpf
+code that use something like jitalloc_update()?
+
+> OTOH, jit_alloc (as-is) solves a subset of the problem (only the text).
+> We can probably use it (with some updates) instead of the vmap_area
+> based allocator. But I guess we need to align the direction first.
+
+Let's see if we can get tglx to chime in again, since he was pretty
+vocal in the last discussion.
+
+It's also good practice to try to summarize all the relevant "whys" from
+the discussion that went into a feature and put that in at least the
+commit message - or even better, header file comments.
+
+Also, organization: the module code is a huge mess, let's _please_ do
+split this out and think about organization a bit more, not add to the
+mess :)
+
+Cheers,
+Kent
