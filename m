@@ -2,122 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9F8711DF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D19A711DDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234343AbjEZCat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 22:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
+        id S234915AbjEZC1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 22:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjEZCas (ORCPT
+        with ESMTP id S229689AbjEZC1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 22:30:48 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB2F9B
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:30:46 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f380cd1019so182842e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685068245; x=1687660245;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nQLcHKq7/SFjER0eIjTkSMaREA3ODO65yBluaNQD8EA=;
-        b=EZV208abTNd9TSPooerBLlxyXcfd+Opf8CGUyoSkfhfuFTEcGdyaRdfMrhYo2K2GvD
-         x0T6VxwdOIYMlgY++qFCXSNFKdZO7xAlFqr3XxFGgdFy1hw3OxTf51cfsZsO51WaFX7B
-         SvgShDqqKjd1jgsqMYoNv9hCdY3/P5z9ZlyRo5vRDh/TYkTkhhcdUTkUQfL0vMKMLzb0
-         SspAL3TvkimtnGUb+yzV7VIWICPDkyW0SRHTcOCTBY8j/AEa+pCs+i5jFPM77wl+QZAs
-         /TdTiCcAbosXP0XA3b9+b6gQxnJUETETgDh1wKsI27u2ZtsXSd94Wdzt22juCv6dN7Qa
-         nlHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685068245; x=1687660245;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nQLcHKq7/SFjER0eIjTkSMaREA3ODO65yBluaNQD8EA=;
-        b=BmA5G6UhVsU6qomAyfoYH+EhzCGb0+LDrE9daPxJSLAcqAdeQurTYZ6PwRgL3JjZ+S
-         n+F+o2YmZPJIkyRPMMipnH2ry5LrREsYMlucKV+mhMe0cLMpJNTPVqRs49Gt+zTqa92K
-         KTB3yOWpUF7xgjLjayaAote7nWtRKKiKK9VTq9BQIJP9GAycsvN+JFgcgjg1YNa9HOjH
-         01eO+88nWQwx6NTfamZJ0UUNiVq/KrXLCJ1kwn1+Y4uXo/27MpvXKWHKvG5DP3PGp8VI
-         j21R8/AUzlMxD/hkyf9nd4Afyp0EQcJVCYmMGhFtWPChZuKOw5pP9xl8bICmww/yUhrp
-         msWQ==
-X-Gm-Message-State: AC+VfDyQg/nSybwFU/DIl3dvwDbDoREkvCV1HjwL4QUjcGLSLyc+T/G/
-        XHIO5u6bOAJNeSrjgJMNtDhKMbNEfvctKWRNXwSReKIsNlw=
-X-Google-Smtp-Source: ACHHUZ5O0sUYgDgsHbvuem0g7AvqkZ0BzVDg9gOMDb4/e/UAj6vTL4IFg8jL5KNEont+m/BZSsfjl7ES7RNZ9JEuAqg=
-X-Received: by 2002:ac2:5ec7:0:b0:4f3:822e:f025 with SMTP id
- d7-20020ac25ec7000000b004f3822ef025mr41535lfq.49.1685068244415; Thu, 25 May
- 2023 19:30:44 -0700 (PDT)
+        Thu, 25 May 2023 22:27:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C122E9B;
+        Thu, 25 May 2023 19:27:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54C7264B7B;
+        Fri, 26 May 2023 02:27:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1015C433EF;
+        Fri, 26 May 2023 02:27:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685068037;
+        bh=IjyfqYdDittzF4tAOZQdZ6/Y82iHJkRqWBGwxbBg8oQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JFnVko+8k4pihJ0qM+7G/pCT8x9IQmKp/6xd/DnhPw/BE1BSWI0M9TRaOWKePlWVf
+         +lK01wchufp1ksgCy7BKqWVSW3VfAsNCC7+4sir0SlGl73T5YlaP6kw3CSsQKvpTgP
+         nLTz9NpNoBRx9UA2ibHnN2crMc6dpGR36hmizOw1HjDIYJstJHnoxmqKdYoUc6gL8z
+         079roSFb0XrDbXQWZxtR6aNXonDgCXPYrJXRqffLF38yF89yvAL6L65ge5zsky5Lq9
+         +bj3NEmO75zQzNozr1kyBUgqllnA1zYikpR+H3s0d7/1Js4FeMk/8PtN/1rokRYy73
+         tPaMLD1lOYqsw==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     konrad.dybcio@linaro.org, robh+dt@kernel.org, agross@kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org, djakov@kernel.org
+Cc:     stephan@gerhold.net, dmitry.baryshkov@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, benl@squareup.com,
+        linux-arm-msm@vger.kernel.org, leo.yan@linaro.org,
+        fabien.parent@linaro.org, shawn.guo@linaro.org
+Subject: Re: [PATCH v9 0/4] Add MSM8939 SoC support with two devices
+Date:   Thu, 25 May 2023 19:31:07 -0700
+Message-Id: <168506826317.164705.12122160122945640956.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230407194905.611461-1-bryan.odonoghue@linaro.org>
+References: <20230407194905.611461-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-References: <1684737363-31554-1-git-send-email-zhaoyang.huang@unisoc.com> <ZG+/EW9NzGsAcGfF@casper.infradead.org>
-In-Reply-To: <ZG+/EW9NzGsAcGfF@casper.infradead.org>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Fri, 26 May 2023 10:30:20 +0800
-Message-ID: <CAGWkznGz6w-56wye-0XG=bZMPLY21g33mcAHuWqYvpaHQJUJEw@mail.gmail.com>
-Subject: Re: [PATCHv4] mm: skip CMA pages when they are not available
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 4:03=E2=80=AFAM Matthew Wilcox <willy@infradead.org=
-> wrote:
->
-> On Mon, May 22, 2023 at 02:36:03PM +0800, zhaoyang.huang wrote:
-> > +#ifdef CONFIG_CMA
-> > +/*
-> > + * It is waste of effort to scan and reclaim CMA pages if it is not av=
-ailable
-> > + * for current allocation context
-> > + */
-> > +static bool skip_cma(struct folio *folio, struct scan_control *sc)
-> > +{
-> > +     if (!current_is_kswapd() &&
-> > +                     gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABL=
-E &&
-> > +                     get_pageblock_migratetype(&folio->page) =3D=3D MI=
-GRATE_CMA)
-> > +             return true;
-> > +     return false;
-> > +}
-> > +#else
-> > +static bool skip_cma(struct folio *folio, struct scan_control *sc)
-> > +{
-> > +     return false;
-> > +}
-> > +#endif
-> > +
-> >  /*
-> >   * Isolating page from the lruvec to fill in @dst list by nr_to_scan t=
-imes.
-> >   *
-> > @@ -2239,7 +2259,8 @@ static unsigned long isolate_lru_folios(unsigned =
-long nr_to_scan,
-> >               nr_pages =3D folio_nr_pages(folio);
-> >               total_scan +=3D nr_pages;
-> >
-> > -             if (folio_zonenum(folio) > sc->reclaim_idx) {
-> > +             if (folio_zonenum(folio) > sc->reclaim_idx ||
-> > +                             skip_cma(folio, sc)) {
-> >                       nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
-> >                       move_to =3D &folios_skipped;
-> >                       goto move;
->
-> I have no idea if what this patch is trying to accomplish is correct,
-> but I no longer object to how it is doing it.
-IMO, this is necessary as there could be such weird scenario, that is
-an GFP_KERNEL allocation might get 32 MIGRATE_CMA pages via
-direct_reclaim which lead to a low PSI_MEM/vmpressure value but return
-a NULL pointer
+On Fri, 7 Apr 2023 20:49:00 +0100, Bryan O'Donoghue wrote:
+> V9:
+> - Fixes name of tsens
+>   s4 is not present
+>   s4->s5
+>   s5->s6
+>   s6->s7
+>   s7->s8
+>   s8->s9
+>   I erroneously thought the last sensor needed to be brought in but,
+>   as has been pointed out to me, the last sensor isn't used, so
+>   no need to support the reading and reassembly of the non-contiguous
+>   calibration data - Stephan/Dmitry
+> 
+> [...]
+
+Applied, thanks!
+
+[1/5] dt-bindings: vendor-prefixes: Add Square
+      commit: 8051c8b83ac076ab7f4fc80cff5e7f8cc3b1eefb
+[2/5] arm64: dts: qcom: Add msm8939 SoC
+      commit: 61550c6c156c3715baf54ab2cdd678c8c35b3803
+[3/5] arm64: dts: qcom: Add msm8939-pm8916.dtsi include
+      commit: 1e6dfe47ba020a192d743c7c820b469fd7253813
+[4/5] arm64: dts: qcom: Add Square apq8039-t2 board
+      commit: 273a3dc13eb746c7b7abe7ea682811a8dacc89d6
+[5/5] arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
+      commit: f1134f738fad68c51a44216ab0f68a0f086a1a5e
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
