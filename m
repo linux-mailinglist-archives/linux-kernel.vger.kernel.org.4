@@ -2,170 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C8F71301B
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 00:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A9771301C
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 00:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbjEZWls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 18:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
+        id S231363AbjEZWnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 18:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbjEZWlq (ORCPT
+        with ESMTP id S230024AbjEZWnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 18:41:46 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFF410A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 15:41:44 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f6a6e9d90dso62141cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 15:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685140904; x=1687732904;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zwkGmpNLMpawlS1hBtryEj+jCY8h/pnAE4lAJWcxTi4=;
-        b=TaMAAV6xkMalo8ldUpPnsOinYazSt7ArN8neHplTXQd3QNNZqjh2vdzUuvQjDaGQZM
-         ikp14z6pbfFLw88G/8huqVTWct4i2LjNEb1HK0UImLhlg1ggf8nCC7rHGKCTlkfCXa+o
-         g39TZSYEpge8CXQr56Plau6Tl5AtXBLKTceJVumsIM+sMBOiCQr874Uo+ewRlcu9PI2G
-         gnGWn5G8x+YkI6DWzcehORahypzMAXvTdAxK/2WbnbsqhsII5sO3Tu/vsug0EqvySlBy
-         GmtMiiB3wOMynHUGA5l64qLKfojs75YKdoG3j7My/D4rPMSaC0r5WXrzTlqMNg1sR5Pz
-         I/PQ==
+        Fri, 26 May 2023 18:43:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EEA9C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 15:42:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685140945;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ogJ2tEtyBxgi9zLrPh+ylQ4Cvg3tJf/Wlr36DMH7FgE=;
+        b=Bn/ZX4lceAQ0YIeQR0OgxDF4ZJxDSrWPhcTJYyn/nUW7N0Ldi7l/xHv4nIk2pD0XJiBl+f
+        aK4H5qlffmBmab118K7DK/HfDNAc5tNIUnhq9uajgzcTz42zGUCTj4/RnTUbO7K0Akid5W
+        luXElEuZ2mMOPRwK1d5e1VKcC+3e5ls=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-436-AZnlJJOfOHmhJSP1HicDQw-1; Fri, 26 May 2023 18:42:24 -0400
+X-MC-Unique: AZnlJJOfOHmhJSP1HicDQw-1
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-3f6b1853e80so2078771cf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 15:42:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685140904; x=1687732904;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zwkGmpNLMpawlS1hBtryEj+jCY8h/pnAE4lAJWcxTi4=;
-        b=Pz+BxGmbimq8ITQqKEtDP14x/4wqfrzmUHgt2tnDfxO0DgYIfpMB/c0cjKAOnEB+7T
-         bX4bvPYwqBAfTyRYaHVWdqLcZAyDNcYVPDMhhssuf+XkSIsuEAl7LMSMBFm0oTtf24CT
-         ISGMVaDQWw0XzYOo7JgANu7v6GOHrm30Kv4nkszfroimwIJOipW7sc5Z/4b2Fa8ftYCF
-         nx3w48xyBGfqSagVqquyJNVoUhKVGiHbPedCpqAkhumM+KIHHZltUpRKadKOqtfHK92T
-         OPA8ruINIeT74zxgXGzgJoSkMNQS2xb7DV0PlDF3Ryj0K0X+OVKO4xL0rmlWZERB3tRv
-         lf0g==
-X-Gm-Message-State: AC+VfDzEiu26LfNgktOPqO3dP8qlNAIea65AP+GzwMpH8giy/4YOxUPw
-        EoI7AdBHAbgVNVKmFEV4rHFgXHOBKkjrKEKuHEWq/A==
-X-Google-Smtp-Source: ACHHUZ4dNXUIH5tFqniZBC5Q3UQeXlRCvoJ+PJF7hfLIL9YEqpTTdAG55WTuChgfsgcOAHQJKLuD2ctPWLy2FIwL6Eo=
-X-Received: by 2002:a05:622a:148e:b0:3f8:e0a:3e66 with SMTP id
- t14-20020a05622a148e00b003f80e0a3e66mr30166qtx.3.1685140903703; Fri, 26 May
- 2023 15:41:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230524210600.3095830-1-namhyung@kernel.org> <d06cac04-00b5-651d-14af-378fc25f37c4@amd.com>
-In-Reply-To: <d06cac04-00b5-651d-14af-378fc25f37c4@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 26 May 2023 15:41:29 -0700
-Message-ID: <CAP-5=fVMR0Y1=_W2scQBg_uWceOHrHaZ2GMwOai4Veq7OaGJ4A@mail.gmail.com>
-Subject: Re: [PATCH] perf test: Fix perf stat JSON output test
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
+        d=1e100.net; s=20221208; t=1685140944; x=1687732944;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ogJ2tEtyBxgi9zLrPh+ylQ4Cvg3tJf/Wlr36DMH7FgE=;
+        b=XJEWu9yboCuYmhFgeT8b1FGseE4/hb7qc7FTmmRZmtvtzct64tLLGpIvSuEmY1okVb
+         Cf8hFcKmwEWiN/qGwRVbEcXhrMGv0anwoOQb/MuGrYk3SnheSbNbSXR/kvmP6uXhthm+
+         0RxJC9+FKuOvEEI4/hSqSpsM9zxJy2rHhFiBAwoZZS7tES1vAJ2Yia8liGJSpOgKBd6a
+         Mjms0H0Cv/u8bOVb8Mu9yt8Wnvp6511ub56W5jOR77QXOVRgLsouo6B9RoCzoFvOTB9A
+         mVIzDaI5kUUQ+jsjBVV9B5yOHs4GfTzbz6rjXh5KG7mJ1bEPICkUURTuTuKUau3pE8Yx
+         /btQ==
+X-Gm-Message-State: AC+VfDzy1tj8c9jjuBbR4RiNtvIbkY1v2AtoVDY1NEV8OD3xJ02lWv10
+        pwBj4Ze28h9kRKDVVnN+MekYmZ9o6oBLJq3afMkAqaW8ODOTgXWG/hoGo3Rpz07k/jSQGWagPMP
+        86qUUGWEfh2GqGK63wYr5jEDH
+X-Received: by 2002:a05:622a:1a2a:b0:3f7:fab0:6308 with SMTP id f42-20020a05622a1a2a00b003f7fab06308mr3573140qtb.6.1685140944112;
+        Fri, 26 May 2023 15:42:24 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6fzQcmVW2FTI3qLiQfBN8GUfG9nK6tEXfVb1nTd651kqyVhFQIBfH15x41vMbgJWwi02Rfqw==
+X-Received: by 2002:a05:622a:1a2a:b0:3f7:fab0:6308 with SMTP id f42-20020a05622a1a2a00b003f7fab06308mr3573105qtb.6.1685140943796;
+        Fri, 26 May 2023 15:42:23 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id bw7-20020a05622a098700b003f6b32a1049sm1617002qtb.55.2023.05.26.15.42.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 15:42:23 -0700 (PDT)
+Date:   Fri, 26 May 2023 18:42:20 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 03/31] mm/pgtable: kmap_local_page() instead of
+ kmap_atomic()
+Message-ID: <ZHE1zLLF1jfcw8OI@x1n>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+ <9df4aba7-fd2f-2da3-1543-fc6b4b42f5b9@google.com>
+ <ZHExQo3KO5PcVR76@x1n>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZHExQo3KO5PcVR76@x1n>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 8:01=E2=80=AFPM K Prateek Nayak <kprateek.nayak@amd=
-.com> wrote:
->
-> Hello Namhyung,
->
-> On 5/25/2023 2:36 AM, Namhyung Kim wrote:
-> > The recent --per-cache option test caused a problem.  According to
-> > the option name, I think it should check args.per_cache instead of
-> > args.per_cache_instance.
-> >
-> >   $ sudo ./perf test -v 99
-> >    99: perf stat JSON output linter                                    =
-:
-> >   --- start ---
-> >   test child forked, pid 3086101
-> >   Checking json output: no args [Success]
-> >   Checking json output: system wide [Success]
-> >   Checking json output: interval [Success]
-> >   Checking json output: event [Success]
-> >   Checking json output: per thread [Success]
-> >   Checking json output: per node [Success]
-> >   Checking json output: system wide no aggregation [Success]
-> >   Checking json output: per core [Success]
-> >   Checking json output: per cache_instance Test failed for input:
-> >   ...
-> >   Traceback (most recent call last):
-> >     File "linux/tools/perf/tests/shell/lib/perf_json_output_lint.py", l=
-ine 88, in <module>
-> >       elif args.per_core or args.per_socket or args.per_node or args.pe=
-r_die or args.per_cache_instance:
-> >   AttributeError: 'Namespace' object has no attribute 'per_cache_instan=
-ce'
-> >   test child finished with -1
-> >   ---- end ----
-> >   perf stat JSON output linter: FAILED!
-> >
-> > Fixes: bfce728db317 ("pert tests: Add tests for new "perf stat --per-ca=
-che" aggregation option")
->
-> Another oversight on my part. Thank you for fixing this :)
->
->    $ sudo perf test -v 99
->    99: perf stat JSON output linter                                    :
->    --- start ---
->    test child forked, pid 25046
->    Checking json output: no args [Success]
->    Checking json output: system wide [Success]
->    Checking json output: interval [Success]
->    Checking json output: event [Success]
->    Checking json output: per thread [Success]
->    Checking json output: per node [Success]
->    Checking json output: system wide no aggregation [Success]
->    Checking json output: per core [Success]
->    Checking json output: per cache_instance [Success]
->    Checking json output: per die [Success]
->    Checking json output: per socket [Success]
->    test child finished with 0
->    ---- end ----
->    perf stat JSON output linter: Ok
->
-> Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
-
-Thanks Namhyung and Prateek, Arnaldo could we get this in
-perf-tools-next so that the failing test goes away?
-
-Acked-by: Ian Rogers <irogers@google.com>
-
-> > Cc: K Prateek Nayak <kprateek.nayak@amd.com>
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+On Fri, May 26, 2023 at 06:22:58PM -0400, Peter Xu wrote:
+> On Sun, May 21, 2023 at 09:52:31PM -0700, Hugh Dickins wrote:
+> > pte_offset_map() was still using kmap_atomic(): update it to the
+> > preferred kmap_local_page() before making further changes there, in case
+> > we need this as a bisection point; but I doubt it can cause any trouble.
+> > 
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
 > > ---
-> >  tools/perf/tests/shell/lib/perf_json_output_lint.py | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tool=
-s/perf/tests/shell/lib/perf_json_output_lint.py
-> > index 4acaaed5560d..b81582a89d36 100644
-> > --- a/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> > +++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> > @@ -85,7 +85,7 @@ Lines =3D args.file.readlines()
-> >      expected_items =3D 7
-> >    elif args.interval or args.per_thread or args.system_wide_no_aggr:
-> >      expected_items =3D 8
-> > -  elif args.per_core or args.per_socket or args.per_node or args.per_d=
-ie or args.per_cache_instance:
-> > +  elif args.per_core or args.per_socket or args.per_node or args.per_d=
-ie or args.per_cache:
-> >      expected_items =3D 9
-> >    else:
-> >      # If no option is specified, don't check the number of items.
->
-> --
-> Thanks and Regards,
-> Prateek
+> >  include/linux/pgtable.h | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> > index 8ec27fe69dc8..94235ff2706e 100644
+> > --- a/include/linux/pgtable.h
+> > +++ b/include/linux/pgtable.h
+> > @@ -96,9 +96,9 @@ static inline pte_t *pte_offset_kernel(pmd_t *pmd, unsigned long address)
+> >  
+> >  #if defined(CONFIG_HIGHPTE)
+> >  #define pte_offset_map(dir, address)				\
+> > -	((pte_t *)kmap_atomic(pmd_page(*(dir))) +		\
+> > +	((pte_t *)kmap_local_page(pmd_page(*(dir))) +		\
+> >  	 pte_index((address)))
+> > -#define pte_unmap(pte) kunmap_atomic((pte))
+> > +#define pte_unmap(pte) kunmap_local((pte))
+> >  #else
+> >  #define pte_offset_map(dir, address)	pte_offset_kernel((dir), (address))
+> >  #define pte_unmap(pte) ((void)(pte))	/* NOP */
+> 
+> (I think this could be a dumb question if this patch has been running there
+>  for years downstream, but still..)
+> 
+> I assume one major difference of using kmap_local() is page fault will not
+> be disabled, while kmap_atomic() will.
+> 
+> Meanwhile, pte_offset_map() is also used by pte_offset_map_lock(), which
+> means before this patch CONFIG_HIGHPTE systems will disable pgfault before
+> taking pgtable lock for it, while it will stop doing so after the change.
+> 
+> Then what happens if a page fault happens on the same pgtable lock range
+> that is already taken by the thread context?  What stops the deadlock from
+> happening?
+
+Ah, stupid me.  I think such a page fault just cannot happen when holding
+the pgtable lock..  I believe the same applies to !HIGHPTE..
+
+Sorry about the noise.
+
+-- 
+Peter Xu
+
