@@ -2,107 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB6C712DDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EDE712DDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjEZTrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
+        id S237511AbjEZTsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbjEZTrq (ORCPT
+        with ESMTP id S237407AbjEZTsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:47:46 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D630CBD
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:47:45 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bacf7060678so1969159276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:47:45 -0700 (PDT)
+        Fri, 26 May 2023 15:48:53 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F8FF3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:48:49 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-4d9b2045e1cso101a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:48:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1685130465; x=1687722465;
+        d=google.com; s=20221208; t=1685130528; x=1687722528;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eUz3cYZJzxYpChJac/7E7ylhZT6Nv4qatri6Adv31ts=;
-        b=nGEyT5uymfWQJUBAXIcnKOztcnh+nuA/ennn48fCHOEnED4St0CC/dOuSXWfnFHnau
-         OYFzPg0TT6M2J/Lpui/uacLJNLWJIdkWkyIR6c+CkLnelBPOKHQgBEhG/z4CURSHN+k3
-         eTNza7OJnInTM0DnCb0qGmgAHt4uQkBo3phHmfjrOlEDfrrUE0mH9ZOg6XyLZJaKTMpw
-         cvKT1v4O5DATyNtP0YOuj6kvKb6Y98tIATVyFD+CCCrgtAhk/FqzjiZ2y6kBbsoKTwNy
-         gJMEDUNYLsfNsX1i7r18sb2HVYDbcUUFcbsfRDFZK63jcxMkrOIAG/mG1IhCK+WYkyWL
-         6wTA==
+        bh=Lf4RRkiPUcNUs6sAKxHRjbAkQ4OPhmS/ejzXep+9w6w=;
+        b=CKJONIHYBHoJ36pk3behUlnsORLM/bdJ0rKRwmtMPp0jrr/61zx3jD87TcrsYqy7zg
+         k3biIDnQctHE5hJlWcQwUoZNxiDhYsAjQw9EkmEs47vBwpPKETPNuW5TQY/kHezVhRG5
+         +AEfGjsfL0QOFBMYQqDqo/12R+BmNy9QDg1/Ks8RYLufZoToWmyDVjZ9zNaJoOQ6tSbD
+         mkgN8Z+SQU/8xDSa7AfpFhM5yJiD0fDLr2W5b6q2WasXfoN5IHW3BEgVmKiSxiK3ELxR
+         G27OzqOCQh2nquF0d43d717kdH0nfRAkmnqFWwOZNIE5Ka6tq4XteFx/StgpU26cggge
+         QN4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685130465; x=1687722465;
+        d=1e100.net; s=20221208; t=1685130528; x=1687722528;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eUz3cYZJzxYpChJac/7E7ylhZT6Nv4qatri6Adv31ts=;
-        b=k6EKjf2WU2AQ0jyusSfT7w4PVhFm5vnOSS6Hu3EeFg5cRBovt7RvTa4r8Z3uFh3Yqy
-         yK2RM2gXIGI2+HXMz6BFSznPRTG3/8kIJ9XqehcXFtbZWdF+QGSLv28OqZRtsRMD2OQu
-         V0k4iZIGWUHPoCps/vxy8lMiiMMocbzRHlCTy0XNmM2VoodvQni7qsrvhPPu8dcaIMFq
-         ArrxvCQwkCRv0t9jgwjhjOpGFIDEXDDGxlyIuwP8IVr/3bkMipfMxXIoW6X00aOlyt0l
-         Pd5no4bdPfCTU3qFvtgIbOvQJYMNyJuq46yXM3zG43iqcmJ8alWU3zNitZlq/ft0Z4pa
-         45EA==
-X-Gm-Message-State: AC+VfDxjchiUNQ2GPZi/N7gjsvZBwbsjevde2aXebATKgAwZNaa0OYvV
-        h6Y1qMBC0DTixx46OobUeEvGppeU+ItAkO2d4WoQEA==
-X-Google-Smtp-Source: ACHHUZ4JH7SDDIfaBbEyxaE595kxzNqDoryzPH4uuMbFwu5yeZoTstauDgITfnvovwUAv+R6UqOtD4URMnbpHNYU4ak=
-X-Received: by 2002:a25:5cb:0:b0:b9e:c516:6e32 with SMTP id
- 194-20020a2505cb000000b00b9ec5166e32mr114111ybf.24.1685130465099; Fri, 26 May
- 2023 12:47:45 -0700 (PDT)
+        bh=Lf4RRkiPUcNUs6sAKxHRjbAkQ4OPhmS/ejzXep+9w6w=;
+        b=PKmmRCtepplsLkDzqbApP2jnZGgchdCF/q6xXHR3pJwyY1eNGdc5Ej+mzJM9tErk98
+         69btRoiNjJ1MpDzKGkX+YSLdEO1fUcYRI+vkItVJtcU8MCAy15GPpJC9NnNRpkH+mTsF
+         m9h7smiK+cqOguITo9900hqgve8XujAg2gN0fePmaT23DTf3L1HOqgPSZTF91zegT/gt
+         /JfvBJcIGOKqPzyOOqm3dhFb5TEvWyvx7kg7YzjWuXTIw8XSus4OrzYPH8/giZok68XB
+         afzuE/zF0WE2y8a6kegPoNpJnpV86nyzifO00f1s0ozFdFswQ0jsi42rYc2nQ7x2qNAE
+         cIZg==
+X-Gm-Message-State: AC+VfDwYq7rh9do5/WCM5lNen/E83KESSi9rX7USE8e8s86hzurW1OCe
+        edNPlhztODS29A7itrZRWsdBZEKlohI6aaWHgwmofw==
+X-Google-Smtp-Source: ACHHUZ6CxetlS1s0rTKhE7K29Vp+fVoMB7NYpov6+cDO8gK7BapHTfvlv5vmr5u3w5Oi3ADVrOxX4qb1dXamvqZdzWs=
+X-Received: by 2002:a50:aa93:0:b0:50b:c48c:8a25 with SMTP id
+ q19-20020a50aa93000000b0050bc48c8a25mr19788edc.6.1685130528276; Fri, 26 May
+ 2023 12:48:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1684887977.git.peilin.ye@bytedance.com> <429357af094297abbc45f47b8e606f11206df049.1684887977.git.peilin.ye@bytedance.com>
- <faaeb0b0-8538-9dfa-4c1e-8a225e3534f4@mojatatu.com> <CAM0EoM=3iYmmLjnifx_FDcJfRbN31tRnCE0ZvqQs5xSBPzaqXQ@mail.gmail.com>
-In-Reply-To: <CAM0EoM=3iYmmLjnifx_FDcJfRbN31tRnCE0ZvqQs5xSBPzaqXQ@mail.gmail.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Fri, 26 May 2023 15:47:33 -0400
-Message-ID: <CAM0EoM=FS2arxv0__aQXF1a7ViJnM0hST=TL9dcnJpkf-ipjvA@mail.gmail.com>
-Subject: Re: [PATCH v5 net 6/6] net/sched: qdisc_destroy() old ingress and
- clsact Qdiscs before grafting
-To:     Pedro Tammela <pctammela@mojatatu.com>
-Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+References: <20230517190841.gonna.796-kees@kernel.org> <168512138720.187005.8346289423859319616.b4-ty@chromium.org>
+ <CANiq72=38mdTnJ3cicgwPB2xWqtbnGsL8Rtr4pwq7xGRr-m=Wg@mail.gmail.com> <202305261156.67CDEE933D@keescook>
+In-Reply-To: <202305261156.67CDEE933D@keescook>
+From:   Fangrui Song <maskray@google.com>
+Date:   Fri, 26 May 2023 12:48:26 -0700
+Message-ID: <CAFP8O3JO42CD2EXk+DJ5pci8ieHvRifAZpKg4iR_NiqTaYfLdA@mail.gmail.com>
+Subject: Re: [PATCH v2] Compiler Attributes: Add __counted_by macro
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, ojeda@kernel.org,
+        qing.zhao@oracle.com, morbo@google.com, llvm@lists.linux.dev,
+        trix@redhat.com, linux-kernel@vger.kernel.org, nathan@kernel.org,
+        linux-hardening@vger.kernel.org, gustavoars@kernel.org,
+        ndesaulniers@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 8:20=E2=80=AFAM Jamal Hadi Salim <jhs@mojatatu.com>=
- wrote:
+On Fri, May 26, 2023 at 11:56=E2=80=AFAM Kees Cook <keescook@chromium.org> =
+wrote:
 >
-> On Wed, May 24, 2023 at 11:39=E2=80=AFAM Pedro Tammela <pctammela@mojatat=
-u.com> wrote:
+> On Fri, May 26, 2023 at 07:47:03PM +0200, Miguel Ojeda wrote:
+> > On Fri, May 26, 2023 at 7:16=E2=80=AFPM Kees Cook <keescook@chromium.or=
+g> wrote:
+> > >
+> > > FYI, applied to for-next/hardening:
+> > >
+> > > [1/1] Compiler Attributes: Add __counted_by macro
+> > >       https://git.kernel.org/kees/c/86a76e91cbab
 > >
-> > On 23/05/2023 22:20, Peilin Ye wrote:
-> > > From: Peilin Ye <peilin.ye@bytedance.com>
+> > Sorry, I was going to apply it soon -- in case you want it:
+> >
+> >     Acked-by: Miguel Ojeda <ojeda@kernel.org>
+>
+> Thanks!
+>
+> > And thanks Nathan for resubmitting the `Reviewed-by` from v1!
+>
+> Yes, apologies for missing this in my v2 submission!
+>
+> --
+> Kees Cook
+>
 
-> Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+https://discourse.llvm.org/t/rfc-enforcing-bounds-safety-in-c-fbounds-safet=
+y/70854
+proposes a macro __counted_by as well.
+This patch uses the same name:
 
-I apologize i am going to take this back, lets please hold the series for n=
-ow.
+> # define __counted_by(member)          __attribute__((__element_count__(m=
+ember)))
 
-In pursuit for the effect on events, Pedro and I spent a few _hours_
-chasing this - and regardless of the events, there are still
-challenges with the concurrency issue. The current reproducer
-unfortunately cant cause damage after patch 2, so really patch 6 was
-not being tested. We hacked the repro to hit codepath patch 6 fixes.
-We are not sure what the root cause is - but it certainly due to the
-series. Peilin, Pedro will post the new repro.
+I wonder whether the two use cases are compatible so that using the
+same macro name will be fine.
 
-cheers,
-jamal
+#if defined(__has_feature) && __has_feature(bounds_safety)
+#define __counted_by(T) __attribute__((__counted_by__(T)))
+// ... other bounds annotations
+#else
+#define __counted_by(T) // defined as nothing // ... other bounds annotatio=
+ns
+#endif
+
+
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
