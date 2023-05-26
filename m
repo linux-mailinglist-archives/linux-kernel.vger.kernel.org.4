@@ -2,62 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3514E712D70
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAB9712D72
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242258AbjEZT1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S242643AbjEZT2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjEZT1h (ORCPT
+        with ESMTP id S242775AbjEZT2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:27:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7729913D;
-        Fri, 26 May 2023 12:27:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEDDF652F2;
-        Fri, 26 May 2023 19:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8380CC4339B;
-        Fri, 26 May 2023 19:27:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685129249;
-        bh=3uRdBp40YhYXT8GRorK2WbmkmiCKqXai1mhNyaEzUFA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Aw8QBIKuDebB99fs+5bwbbOHNnpgYjXo39IRgpRsXFjDJFoXlZ3yvWBT5biMQF7HB
-         kA0pogT51fjNT2zANbz/7sWES5gNnooq5OeVozMFSOe20JT7RzuYqV4nXnmbItETkY
-         XLra+6Jv8yvPRki9CsWCWH2a2p1kYV+EziKTSBjjsDu6Do+1BAHj5Ux5JGYt7lZCpv
-         KYTzjn40wmg0i+W9pXMK+wX3IDHVDcCeFt5odv738KN3qat1BZPvgtQtD64JWWdaYl
-         2zyBuVWdr6St0Hq9qlsllQpUNzb2Vp8q9Lgusl+5XkCfVnFUrd5iuxkk5lH/i3n5kn
-         0AnMLFMVrLo9A==
-Date:   Fri, 26 May 2023 20:27:24 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Fred Treven <fred.treven@cirrus.com>
-Cc:     Ben Bright <ben.bright@cirrus.com>,
-        James Ogletree <james.ogletree@cirrus.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 26 May 2023 15:28:17 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6343D9;
+        Fri, 26 May 2023 12:28:13 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6e72a1464so8298805e9.1;
+        Fri, 26 May 2023 12:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685129292; x=1687721292;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8NMc/veCKzb+fUJONXklbAaF4wpMddgEx503WmdKbO4=;
+        b=MAquTvPOwAOleji5PY+c/03peBIcaDfLLbsklFvH+sVormIUAYHhcmvG/ydk6jzgm+
+         6r0oHmMSVcJm2VQSz/tlgmNNcnMn6ejJHdAVzFaZD1FbBwZC/09Q465i9xjxCtEQhV1J
+         8GPuQooPhaS/qmgPSCdLaEpGn2X2sgfbJ5uSUPvcp2xZqv4dmFx5GjuwV8QkMVHXghp2
+         0/4bhisp1Yg4gqWZg9QNploMamgif5V2XZkNmz3mRr2y6+jMkKpSkwMCWUKNp1n+JWsi
+         1SPNOfN9PrbyG7vr/pIRA9kJeMnaUL+qfg19f+p/0UDxvPMuTYyJsC8hIOo/M5BAGU0E
+         08Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685129292; x=1687721292;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8NMc/veCKzb+fUJONXklbAaF4wpMddgEx503WmdKbO4=;
+        b=Qhhd4szJjoN7FguJT4byTwbgZzDTwWkUiJa+xfACHZdhdjlz7wCMtfzWbBj8visBL3
+         yv2lKiH1KKEi7EBD93Htt3Jpt60JYyBG7bXNEQWNOJ5fpz/g+IofIEuFo0/vZhlw2p5D
+         aSr3ws1SbDshlgrYKnJLUBkOeYGBMR0p0ewr+aeVLO4fnlyPcTV/HC6FaWotmhSLsWBG
+         V9MZFA9U5f0W5c+D5tE1RV0dRZhcNaq8LyDC6IeVYJBbtf8c+nSggDwIQSR05KEXSRnQ
+         IwCCfxDWEuzNXmrKkITx7Ojvn2CERsUTcsFZSK195Cys5BtduFMXcoCDc9VzJtIOvP18
+         YnEQ==
+X-Gm-Message-State: AC+VfDzcJrOW+EdKJv77s/tQdytkfowOaZ3q4cfXeCu6gJgjJWdQG4YR
+        VYxh79xfyPoUNeIKb1l+dyAaxC1jMmY=
+X-Google-Smtp-Source: ACHHUZ7RgJzSyZQFT6x8v9v5O8cebN1xidwyGJhx9R7eh5EXcTrnyhKp8UDVE76cnTe84wBHdZOfow==
+X-Received: by 2002:a05:600c:2219:b0:3f6:2ee:698e with SMTP id z25-20020a05600c221900b003f602ee698emr2370974wml.7.1685129292033;
+        Fri, 26 May 2023 12:28:12 -0700 (PDT)
+Received: from standask-GA-A55M-S2HP ([188.123.113.247])
+        by smtp.gmail.com with ESMTPSA id x6-20020a5d6506000000b0030639a86f9dsm5905683wru.51.2023.05.26.12.28.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 12:28:11 -0700 (PDT)
+Date:   Fri, 26 May 2023 21:28:10 +0200
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        patches@opensource.cirrus.com, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lee@kernel.org
-Subject: Re: [PATCH v2 1/5] dt-bindings: input: cirrus,cs40l26: Support for
- CS40L26
-Message-ID: <20230526-swapping-clay-d114144380a4@spud>
-References: <1685059471-9598-1-git-send-email-fred.treven@cirrus.com>
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] ARM: dts: bcm-mobile: DT cleanup
+Message-ID: <cover.1685127525.git.stano.jakubek@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tV7bW6DEZdfhDFt9"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1685059471-9598-1-git-send-email-fred.treven@cirrus.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,238 +73,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series cleans up some parts of Broadcom Kona platform's DT files.
 
---tV7bW6DEZdfhDFt9
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No functional change intended.
 
-Yo Fred,
+Stanislav Jakubek (6):
+  ARM: dts: bcm-mobile: change "" includes to <> where applicable
+  ARM: dts: bcm21664/23550: use CCU compatibles directly
+  ARM: dts: bcm-mobile: move status properties to the end of nodes
+  ARM: dts: bcm11351/21664: add UART, I2C node labels
+  ARM: dts: bcm21664-garnet: use node labels
+  ARM: dts: bcm28155-ap: use node labels
 
-Tooling does not like your series very much, prob the missing v2's on
-some patches:
-	Grabbing thread from lore.kernel.org/all/1685059471-9598-1-git-send-email-=
-fred.treven%40cirrus.com/t.mbox.gz
-	Checking for newer revisions
-	Grabbing search results from lore.kernel.org
-	Analyzing 6 messages in the thread
-	Will use the latest revision: v2
-	You can pick other revisions using the -vN flag
-	Checking attestation on all messages, may take a moment...
-	---
-	  =E2=9C=93 [PATCH v2 1/5] dt-bindings: input: cirrus,cs40l26: Support for=
- CS40L26
-	    =E2=9C=93 Signed: DKIM/cirrus.com
-	    + Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-	  =E2=9C=93 [PATCH v2 2/5] Input: cs40l26 - Support for CS40L26 Haptic Dev=
-ice
-	    =E2=9C=93 Signed: DKIM/cirrus.com
-	    + Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-	  ERROR: missing [3/5]!
-	  ERROR: missing [4/5]!
-	  ERROR: missing [5/5]!
-=09
-On Thu, May 25, 2023 at 07:04:27PM -0500, Fred Treven wrote:
-> Introduce required basic devicetree parameters for the
-> initial commit of CS40L26.
->=20
-> Signed-off-by: Fred Treven <fred.treven@cirrus.com>
-> ---
->  .../devicetree/bindings/input/cirrus,cs40l26.yaml  | 102 +++++++++++++++=
-++++++
->  MAINTAINERS                                        |  10 ++
->  2 files changed, 112 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/cirrus,cs40l2=
-6.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/input/cirrus,cs40l26.yaml =
-b/Documentation/devicetree/bindings/input/cirrus,cs40l26.yaml
-> new file mode 100644
-> index 000000000000..9cbc964ebded
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/cirrus,cs40l26.yaml
-> @@ -0,0 +1,102 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/input/cirrus,cs40l26.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cirrus Logic CS40L26 Boosted Haptic Amplifier
-> +
-> +maintainers:
-> +  - Fred Treven <fred.treven@cirrus.com>
-> +
-> +description:
-> +  CS40L26 is a Boosted Haptic Driver with Integrated DSP and Waveform Me=
-mory
-> +  with Advanced Closed Loop Algorithms and LRA protection
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - cirrus,cs40l26a
-> +      - cirrus,cs40l26b
-> +      - cirrus,cs40l27a
-> +      - cirrus,cs40l27b
+ arch/arm/boot/dts/bcm11351.dtsi       |  27 +++----
+ arch/arm/boot/dts/bcm21664-garnet.dts |  46 +++++------
+ arch/arm/boot/dts/bcm21664.dtsi       |  31 ++++----
+ arch/arm/boot/dts/bcm23550.dtsi       |  19 +++--
+ arch/arm/boot/dts/bcm28155-ap.dts     | 110 +++++++++++++-------------
+ 5 files changed, 115 insertions(+), 118 deletions(-)
 
-I had a _brief_ look at the driver - you don't seem to have any match
-data, so are all of these devices actually compatible with eachother?
+-- 
+2.25.1
 
-IOW, should this be:
-properties:
-  compatible:
-    oneOf:
-      - items:
-          - enum:
-              - cirrus,cs40l26b
-              - cirrus,cs40l27a
-              - cirrus,cs40l27b
-          - const: cirrus,cs40l26a
-
-      - const: cirrus,cs40l26a
-
-And then drop all but the cs40l26a in the driver? Apologies if I missed
-some difference in there.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +
-> +  VA-supply:
-> +    description: Regulator for VA analog voltage
-> +
-> +  VP-supply:
-> +    description: Regulator for VP peak voltage
-> +
-> +  cirrus,bst-ipk-microamp:
-
-Are these namings ripped from a datasheet? "bst-ipk" doesn't immediately
-mean anything to me, but I am not familiar with these devices.
-
-> +    description:
-> +      Maximum amount of current that can be drawn by the device's boost =
-converter.
-> +    multipleOf: 50000
-> +    minimum: 1600000
-> +    maximum: 4800000
-> +    default: 4500000
-> +
-> +  cirrus,bst-ctl-microvolt:
-
-Ditto here. If there aren't rips, then maybe it'd be a good idea to use
-full words.
-
-> +    description: Maximum target voltage to which DSP may increase the VB=
-ST supply.
-> +    multipleOf: 50000
-> +    minimum: 2550000
-> +    maximum: 11000000
-> +    default: 11000000
-> +
-> +  cirrus,bst-exploratory-mode-disable:
-
-This one is a lot better ;)
-
-> +    description:
-> +      Disable boost exploratory mode.
-> +
-> +      In exploratory mode the analog maximum peak current limit of 4.5 A
-> +      (tolerance of + 160 mA) will be applied. This is required for the
-> +      device to successfully detect a boost inductor short.
-> +
-> +      Boost exploratory mode allows the device to overshoot the set boos=
-t peak
-> +      current limit (i.e. if current peak limit is set to 2.5 A to prote=
-ct the
-> +      battery inductor, the current limit will be opened up to 4.5 A for
-> +      several milliseconds at boost startup).
-> +      This has potential to damage the boost inductor.
-> +
-> +      Disabling this mode will prevent this from happening; it will also
-> +      prevent the device from detecting boost inductor short errors.
-> +    type: boolean
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - reset-gpios
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/input/input.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    i2c {
-> +      #address-cells =3D <1>;
-> +      #size-cells =3D <0>;
-> +
-> +      cs40l26@58 {
-
-Generally using generic node names what we want, so something matching
-the class of device. Section 2.2.2 "Generic Names Recommendation" of the
-dt spec contains a bunch of ones to pick from, but I don't really know
-where "haptic amplifier" fits in!
-
-Cheers,
-Conor.
-
-> +        compatible =3D "cirrus,cs40l26a";
-> +        reg =3D <0x58>;
-> +        interrupt-parent =3D <&gpio>;
-> +        interrupts =3D <57 IRQ_TYPE_LEVEL_LOW>;
-> +        reset-gpios =3D <&gpio 54 GPIO_ACTIVE_LOW>;
-> +        VA-supply =3D <&dummy_vreg>;
-> +        VP-supply =3D <&dummy_vreg>;
-> +        cirrus,bst-ctl-microvolt =3D <2600000>;
-> +        cirrus,bst-ipk-microamp =3D <1650000>;
-> +        cirrus,bst-exploratory-mode-disable;
-> +      };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 2b073facf399..d72ed4957b0b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4926,6 +4926,16 @@ L:	netdev@vger.kernel.org
->  S:	Maintained
->  F:	drivers/net/ethernet/cirrus/ep93xx_eth.c
-> =20
-> +CIRRUS LOGIC HAPTICS DRIVER
-> +M:	Fred Treven <fred.treven@cirrus.com>
-> +M:	Ben Bright <ben.bright@cirrus.com>
-> +M:	James Ogletree <james.ogletree@cirrus.com>
-> +L:	patches@opensource.cirrus.com
-> +S:	Supported
-> +W:	https://github.com/CirrusLogic/linux-drivers/wiki
-> +T:	git https://github.com/CirrusLogic/linux-drivers.git
-> +F:	Documentation/devicetree/bindings/input/cirrus,cs40l26.yaml
-> +
->  CIRRUS LOGIC LOCHNAGAR DRIVER
->  M:	Charles Keepax <ckeepax@opensource.cirrus.com>
->  M:	Richard Fitzgerald <rf@opensource.cirrus.com>
-> --=20
-> 2.7.4
->=20
-
---tV7bW6DEZdfhDFt9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHEIGwAKCRB4tDGHoIJi
-0t6QAP9E9dWzbERra4geP23ilLfikDeJOJuvzCU/Wj4emI0vxgEAijltpWlRkGHl
-sHf604wO5huXKXqOPeaKJeTN4KpeEQA=
-=Gwos
------END PGP SIGNATURE-----
-
---tV7bW6DEZdfhDFt9--
