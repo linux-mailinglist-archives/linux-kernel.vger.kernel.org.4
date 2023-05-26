@@ -2,108 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC4B712406
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31252712409
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjEZJse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S243185AbjEZJtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243185AbjEZJsX (ORCPT
+        with ESMTP id S243225AbjEZJtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:48:23 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0E5B3;
-        Fri, 26 May 2023 02:48:22 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51456387606so748518a12.1;
-        Fri, 26 May 2023 02:48:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685094501; x=1687686501;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RvBpCfcgBfq+TTHR4XXBywiR+cKDsO3EJnjHG46eiyI=;
-        b=TChFGd7Y1k6dSQ6LFy1/fB482Lf7c+I3XtPjqRvs1ibBWeyN1xWAzQR8IyEKPXcSbw
-         9xlqRWxOaIiia8xxZEG/VXqkThynX5agnxJfT3shAoAPTTZT0R1QINfHkrwdASQEzjIX
-         4NxQSmZPmcYC6ZyR3PqYwVP8bdXJTaP2tFDb4Ez4CY9473l+Nzg9Zjjm6U1PgDxF2zzw
-         sPW93TsfouXxomu4yFoEumPzSy6I1q/A+BUvPfUGvbmSitZKaRHOJqlZqMF0QV/zOLud
-         6vupxqFqHXn87zDyt4AHE5hseZCWf+BYn98mcVijxPsflgouhKUA0xQjR61yX/WkpiuT
-         ME/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685094501; x=1687686501;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RvBpCfcgBfq+TTHR4XXBywiR+cKDsO3EJnjHG46eiyI=;
-        b=RKj5MapZ0yTAMH/lSIjuMfd+ERoOpdujXlV2DCRyTPDYqael8eYD475FYc6qo6+8aR
-         7MERF6ZmB7W7nfhkf47fOSUstth08e9aaVE0ppQ11zzsWV7v9N8m0QaWU3U4OS2NZV3l
-         X6XXpiXw4u3wU8zwN6x82xpMW2CeS4IafV83IBZeqgJ3DaCUdvRXGxt5KEFWx1lmdlS/
-         FZF0TVh/zkLBLqsV4FZpW+NYNaIjp8JRNGHnxP9Lj/+gXXnR+cgShEakcV0zY+xgCB2J
-         GeuLC5ap0v06ctYa5QvmszVJYnzwIm2YyW8Rhkmwbl6BSMFsSmhE9YmQxyf2FoLRCwoU
-         stqQ==
-X-Gm-Message-State: AC+VfDxE8q/LwXgaCHpPtJnNGhmuuJJivFn89JJ3Uuxhi+oV53sqqYxk
-        vq6kS1GCpjK9erxw+pb0Qc8=
-X-Google-Smtp-Source: ACHHUZ5484ZTFeoU13Z6zr8eadz/N4C4k1DEp9LNRPLgprzBk63f1yfx7F/tqm20ABBQs7tdt21BiQ==
-X-Received: by 2002:aa7:cb50:0:b0:50c:358:1eba with SMTP id w16-20020aa7cb50000000b0050c03581ebamr808347edt.35.1685094500539;
-        Fri, 26 May 2023 02:48:20 -0700 (PDT)
-Received: from [192.168.0.107] ([77.124.85.177])
-        by smtp.gmail.com with ESMTPSA id d8-20020a50fb08000000b00502689a06b2sm1367218edq.91.2023.05.26.02.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 02:48:20 -0700 (PDT)
-Message-ID: <e1e3dea5-a393-180a-805a-a944ec778041@gmail.com>
-Date:   Fri, 26 May 2023 12:48:15 +0300
+        Fri, 26 May 2023 05:49:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F4CD9;
+        Fri, 26 May 2023 02:49:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A975B61248;
+        Fri, 26 May 2023 09:49:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFCCC4339B;
+        Fri, 26 May 2023 09:49:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685094588;
+        bh=4rlsbDU/W6bbh6jxRAewvlT8eB/L1MX7PjShMljsAF8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=IEoxOTmEcdpGmMTIpJ641rXpC63sF/0VHHlvSgJKQTdkA6ILfSFxdjOkQ5DA5OPMv
+         BFRf8HXxwRu10vPVfCZnIsgq5wGCQPLOyT08DbHqyPa+vR8dXM7ZuxtLM8inODLHB1
+         vVBi6HHEC3sLLR60QAkJBrw3VEpGYJk7tUNrwdeeEtNwoMCfKwIuz0lD+/dLLsAgyD
+         Lv5iX4x+DBbgeSflYMYahIj48bn8TV45j4DZhOeKOEM/9mdABwxMLz/AOcroGKLWbU
+         U9lu58Fz3ADOo0XzAFuherq5N7e3IZ/139h5tGFRtHUpwC+lFsXCNQZoTRLjjbk0sj
+         YcRUcBAuarjFg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 37B9ACE0CCF; Fri, 26 May 2023 02:49:44 -0700 (PDT)
+Date:   Fri, 26 May 2023 02:49:44 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Yujie Liu <yujie.liu@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [paulmck-rcu:dev.2023.05.20a] [rcuscale] 812195e4f7:
+ BUG:kernel_NULL_pointer_dereference,address
+Message-ID: <59850ca7-aad7-4756-888e-12f62373198b@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202305241757.57c30887-yujie.liu@intel.com>
+ <e4328f8b-6ec5-46eb-bc43-1217feba7ca2@paulmck-laptop>
+ <ZHBm9IfDk1QGj8SY@yujie-X299>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net] ice: Don't dereference NULL in ice_gns_read error
- path
-Content-Language: en-US
-To:     Simon Horman <horms@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Karol Kolacinski <karol.kolacinski@intel.com>,
-        Sudhansu Sekhar Mishra <sudhansu.mishra@intel.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230525-null-ice-v1-1-30d10557b91e@kernel.org>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20230525-null-ice-v1-1-30d10557b91e@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHBm9IfDk1QGj8SY@yujie-X299>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 25/05/2023 13:52, Simon Horman wrote:
-> If pf is NULL in ice_gns_read() then it will be dereferenced
-> in the error path by a call to dev_dbg(ice_pf_to_dev(pf), ...).
+On Fri, May 26, 2023 at 03:59:48PM +0800, Yujie Liu wrote:
+> Hi Paul,
 > 
-> Avoid this by simply returning in this case.
-> If logging is desired an alternate approach might be to
-> use pr_err() before returning.
+> On Thu, May 25, 2023 at 09:45:11AM -0700, Paul E. McKenney wrote:
+> > On Thu, May 25, 2023 at 01:37:13AM +0800, kernel test robot wrote:
+> > > Hello,
+> > > 
+> > > kernel test robot noticed "BUG:kernel_NULL_pointer_dereference,address" on:
+> > > 
+> > > commit: 812195e4f70ef0e9fc68127355c553c537749546 ("rcuscale: Measure grace-period kthread CPU time")
+> > > https://git.kernel.org/cgit/linux/kernel/git/paulmck/linux-rcu.git dev.2023.05.20a
+> > > 
+> > > in testcase: boot
+> > > 
+> > > compiler: clang-14
+> > > test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> > > 
+> > > (please refer to attached dmesg/kmsg for entire log/backtrace)
+> > > 
+> > > 
+> > > +---------------------------------------------+------------+------------+
+> > > |                                             | 2393139b67 | 812195e4f7 |
+> > > +---------------------------------------------+------------+------------+
+> > > | boot_successes                              | 8          | 0          |
+> > > | boot_failures                               | 0          | 8          |
+> > > | BUG:kernel_NULL_pointer_dereference,address | 0          | 8          |
+> > > | Oops:#[##]                                  | 0          | 8          |
+> > > | Kernel_panic-not_syncing:Fatal_exception    | 0          | 8          |
+> > > +---------------------------------------------+------------+------------+
+> > > 
+> > > 
+> > > If you fix the issue, kindly add following tag
+> > > | Reported-by: kernel test robot <yujie.liu@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-lkp/202305241757.57c30887-yujie.liu@intel.com
+> > 
+> > This commmit has since been replaced by this one, which should fix this
+> > problem:
+> > 
+> > 60901dadfadc ("rcuscale: Measure grace-period kthread CPU time")
+> > 
+> > Please let me know if the problem still exists with that commit.
 > 
-> Flagged by Smatch as:
+> The problem is gone on commit 60901dadfadc. Thanks.
 > 
->    .../ice_gnss.c:196 ice_gnss_read() error: we previously assumed 'pf' could be null (see line 131)
+> Tested-by: Yujie Liu <yujie.liu@intel.com>
+
+And thank you again for your testing efforts!
+
+							Thanx, Paul
+
+> =========================================================================================
+> compiler/kconfig/rootfs/sleep/tbox_group/testcase:
+>   clang-14/x86_64-randconfig-a015-20230522/debian-11.1-i386-20220923.cgz/300/vm-snb/boot
 > 
-> Fixes: 43113ff73453 ("ice: add TTY for GNSS module for E810T device")
-> Signed-off-by: Simon Horman <horms@kernel.org>
-> ---
-
-LGTM.
-
-
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+> commit:
+>   812195e4f70e ("rcuscale: Measure grace-period kthread CPU time")  <-- old commit from dev.2023.05.20a branch
+>   60901dadfadc ("rcuscale: Measure grace-period kthread CPU time")  <-- new commit from rcu/next branch
+> 
+> 812195e4f70ef0e9 60901dadfadcc152ae5cad7ebae
+> ---------------- ---------------------------
+>        fail:runs  %reproduction    fail:runs
+>            |             |             |
+>           6:6         -100%            :7     dmesg.BUG:kernel_NULL_pointer_dereference,address
+>           6:6         -100%            :7     dmesg.Kernel_panic-not_syncing:Fatal_exception
+>           6:6         -100%            :7     dmesg.Oops:#[##]
+>           6:6         -100%            :7     dmesg.boot_failures
+> 
+> --
+> Best Regards,
+> Yujie
+> 
