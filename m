@@ -2,55 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230D3712E04
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E49712E15
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbjEZUOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 16:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
+        id S229519AbjEZUTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 16:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjEZUOK (ORCPT
+        with ESMTP id S229502AbjEZUTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 16:14:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC913E7;
-        Fri, 26 May 2023 13:14:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7905565321;
-        Fri, 26 May 2023 20:14:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41783C433D2;
-        Fri, 26 May 2023 20:14:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685132048;
-        bh=+LH8uYOOMZ4oYEueEi03d6yn1VdMgPEVBQS7nznYJzA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FftT9q4m/nYrgDG4C/4vRIRMPuyG0OXKj/b3YdkqCsYW497NFdjClPgoqx/Ln3U3s
-         rs4m7DZaID6sDM+9Mg+QtuaDWgV2T4J9KjQIATOOppqT7LGc0aTtb39B5tX0hzGWOB
-         0Tub+A3SPzx2+BBvDVGB8a9COtcfLswA3R5gFazGh62R6uN9+hDO0wz18/pBkJmxz1
-         rDMh15cfNzosvRrER1dq1cWCvk9ZeDGPxFfvLI/TXbD7empLvHHTMYu8gwdBV5bHu4
-         tsaAXQvjPQPAKYeapcJTCEwbsTu2kXQZcLQeVzkex/PKViRsUdExDer49N9HD+aQ/o
-         1ui+1VDj6RZsg==
-Date:   Fri, 26 May 2023 13:17:57 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org,
-        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-Subject: Re: [PATCH v6 3/5] firmware: scm: Modify only the download bits in
- TCSR register
-Message-ID: <20230526201757.a37hcjbif5atbvmx@ripper>
-References: <1680076012-10785-1-git-send-email-quic_mojha@quicinc.com>
- <1680076012-10785-4-git-send-email-quic_mojha@quicinc.com>
+        Fri, 26 May 2023 16:19:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F14FF3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685132331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=K+NKhhSWMXaeALHcoBFkaKbpOK9/rzoJSpWkQXlKvtE=;
+        b=HyJfwSzWHnpul2hGYKn+cyV+x/P+5i0bpsrNdF3onQgzvwlhR9sXK/rYHzpHnz/4Zk5KAs
+        rxfIjZC+COdhA7VdPspTdiMW/QtK89DW8Ca5+1BYgjdz3HTt1Ao2KO4dVQHDycf0bdi1Aq
+        i/42habuYgRUiKvaQBWN7mUFIy9+IQQ=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-318-Qg-0G8r-PNWU6K1idrFprw-1; Fri, 26 May 2023 16:18:49 -0400
+X-MC-Unique: Qg-0G8r-PNWU6K1idrFprw-1
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-774efe8c0cfso85229739f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:18:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685132328; x=1687724328;
+        h=content-transfer-encoding:mime-version:organization:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K+NKhhSWMXaeALHcoBFkaKbpOK9/rzoJSpWkQXlKvtE=;
+        b=Apx35yMizIF283vruQgHlQTjaU7v+smUOQ6ZMUY6jlQKWkMn6Zbh04G4vgDKBY8X/i
+         TKqu4sUp9xrMox5DoC7pxNutaaQuJxJJ42kppxbwsmUV7wl8AzkQVCV1BKhen6rmgKB+
+         Ldmq9ovXiPCWycLGAitT3zKHv+dgaAjjaAJ/Z1wwT+DNmKyUU2bE+xTSMhn4wXB0bb79
+         it/cX2BiJEm4hWTbrSv6HIPD4p/UeI1nwWPQNNV/7eHaAgtnttRmO9KyH5tofYdgUqFW
+         Fj/wkUALaFXTJnSxuQ9p/2qGiSN43O4pcZpEZEHEnm3UDfnOo4d9R65CgJzuYaxg+WP4
+         SvIg==
+X-Gm-Message-State: AC+VfDz6XWO1iJAmBYf5rzAKNewifJd1mv2JCm/LHu9RaQa71H49+cTF
+        BUCkt9r9dohmurptwspsKrMZsH/E+TBC+ZDDwV3XSuWHRLA5xc3Yw/Q+HG0os5T2w5W81TUElv3
+        Cft6sSPWMISWNQmOUEylGgIEjWAYNnN8F
+X-Received: by 2002:a5e:8b4c:0:b0:76c:56fb:3c59 with SMTP id z12-20020a5e8b4c000000b0076c56fb3c59mr1794585iom.10.1685132328492;
+        Fri, 26 May 2023 13:18:48 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5NbeEx+NfDc/UMOu7Pl0K4c7vVOWs5JK9Whd5LODCKEHzWv2DLGvvkKN15/6kMTMira7yHMg==
+X-Received: by 2002:a5e:8b4c:0:b0:76c:56fb:3c59 with SMTP id z12-20020a5e8b4c000000b0076c56fb3c59mr1794570iom.10.1685132328108;
+        Fri, 26 May 2023 13:18:48 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id s16-20020a02b150000000b0040da7ae3ef9sm1340021jah.100.2023.05.26.13.18.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 13:18:47 -0700 (PDT)
+Date:   Fri, 26 May 2023 14:18:46 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: [GIT PULL] VFIO fix for v6.4-rc4
+Message-ID: <20230526141846.6f549439.alex.williamson@redhat.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1680076012-10785-4-git-send-email-quic_mojha@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,50 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 01:16:50PM +0530, Mukesh Ojha wrote:
-> CrashDump collection is based on the DLOAD bit of TCSR register.
-> To retain other bits, we read the register and modify only the
-> DLOAD bit as the other bits have their own significance.
-> 
-> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+Hi Linus,
 
-With Poovendhan being the first one to sign off the patch, was he the
-author? Or should this be Co-developed-by: Poovendhan ?
+The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
 
-Regards,
-Bjorn
+  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
 
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
->  drivers/firmware/qcom_scm.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index cb0bc32..8e39b97 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -30,6 +30,9 @@ module_param(download_mode, bool, 0);
->  #define SCM_HAS_IFACE_CLK	BIT(1)
->  #define SCM_HAS_BUS_CLK		BIT(2)
->  
-> +#define QCOM_DOWNLOAD_MODE_MASK 0x30
-> +#define QCOM_DOWNLOAD_FULLDUMP	0x1
-> +
->  struct qcom_scm {
->  	struct device *dev;
->  	struct clk *core_clk;
-> @@ -448,8 +451,9 @@ static void qcom_scm_set_download_mode(bool enable)
->  	if (avail) {
->  		ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
->  	} else if (__scm->dload_mode_addr) {
-> -		ret = qcom_scm_io_writel(__scm->dload_mode_addr,
-> -				enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
-> +		ret = qcom_scm_io_update_field(__scm->dload_mode_addr,
-> +				QCOM_DOWNLOAD_MODE_MASK,
-> +				enable ? QCOM_DOWNLOAD_FULLDUMP : 0);
->  	} else {
->  		dev_err(__scm->dev,
->  			"No available mechanism for setting download mode\n");
-> -- 
-> 2.7.4
-> 
+are available in the Git repository at:
+
+  https://github.com/awilliam/linux-vfio.git tags/vfio-v6.4-rc4
+
+for you to fetch changes up to 4752354af71043e6fd72ef5490ed6da39e6cab4a:
+
+  vfio/type1: check pfn valid before converting to struct page (2023-05-23 14:16:29 -0600)
+
+----------------------------------------------------------------
+VFIO fix for v6.4-rc4
+
+ - Test for and return error for invalid pfns through the pin pages
+   interface. (Yan Zhao)
+
+----------------------------------------------------------------
+Yan Zhao (1):
+      vfio/type1: check pfn valid before converting to struct page
+
+ drivers/vfio/vfio_iommu_type1.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
