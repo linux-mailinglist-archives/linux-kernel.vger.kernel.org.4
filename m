@@ -2,76 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F209D71277E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE57712783
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243436AbjEZN2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
+        id S242955AbjEZNaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236925AbjEZN2O (ORCPT
+        with ESMTP id S230221AbjEZNao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:28:14 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E0612C
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:28:13 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f4e71a09a7so586563e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:28:13 -0700 (PDT)
+        Fri, 26 May 2023 09:30:44 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7867B2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:30:42 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f4e71a09a7so589678e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685107691; x=1687699691;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1685107841; x=1687699841;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/qbnqfIGPie7oqC4HDbeJQDj333SMb559OfkHoAzXR4=;
-        b=KndLD42GaKMyXUblrSbC+42CEZDPHf8oFipzpDcw1w/cKU3c57tgba99dSQk0P8mA/
-         mbOIMLj97w9qgErftyaO7tvTTgJmIZOUcKO92K1Miut3Vxxw92eE1S6V0i/ROZLX4Ozr
-         8EzfN5b1fE+p7l7GRUdE6oZ/r/+xUJNjYLXoDKBmyYcHyQUu6ZuzZWDgPtRkJ23DJ9ug
-         nE+DXRm3afCuX2//BQufzRQ5vV8QGtXzTb9M8BumFgUrUEUAgqe7VjCXXY1Iga7AgYhN
-         RlRYJIxt+Qji5NEcK8XMyqU91QaoxGtqdPKS4OuqlTuz2tYpeAKGc2UWSXb0TiSjk2el
-         MJ7Q==
+        bh=YfZSE2VrEzidVH5V+y6HSH//6rsyLPAC+IpvXsNaa4g=;
+        b=z1TH196jDThDF+K2GrUKJEuvOdehfOAmJup6j2X3Xn8MsxbgsFn3+5y5Qc1z0da8de
+         a2mFhxPGcjte7ULSxfoN9L+NWQOq269NUWtzP3W8Sf7d2oRNzRTLe24/437oR4c1hBl4
+         QTzewqve2FprL77eVrhDakXF0El2Z9ilBKG3gM80D1XOkzuPBlcvmLha4IbONsffEF+n
+         wYPYckrs+KMWyYZ0XQNXFi87180oYl43vgci1GvJP922vZAERxXJ+T0XWbT4gLhccG5G
+         0KR+wKOSsy5XvSl49WAeqd+JpYY3Stt5CMSMnX0YBt/kt2b4+/cfRHNHpiAbnHBs0Ojo
+         KTTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685107691; x=1687699691;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1685107841; x=1687699841;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/qbnqfIGPie7oqC4HDbeJQDj333SMb559OfkHoAzXR4=;
-        b=aZ2WsF5Ji9YcdZ2V5Gsmkh0XW24tpABV9Cf1PUGF1L3yufFBrN6gQ4KOuRYeIm4sXf
-         JFwFgUiwYDO5b/hiHBk1ZXvfnuGMb8SWuIWBXrmcSjexeb+eWsvKv5ox+d8TypJh3Oeu
-         z2gCiR97EVDn5F8DgHAIQynnAl6E96BvWH64bTMSpDV0Kca0KkG2rNXfd1yKAIpCK3vT
-         nFA+TTJSomzfXr28t1PdqHjqLvBDT17u36PV4YhG75MPCRtSf3zxPaln3Q22E5mC8q2s
-         MdFEJgD1AijW5w8daEkZe+Mx46O926ZBtnqKm15pjXdI7DMWe2kBH9QhSEpplBLjYcq2
-         bwkg==
-X-Gm-Message-State: AC+VfDxkHp0iW6C9vDt/+wO1H+L8oxi7shcrg9GGITx56J/hLpdAksD6
-        iEDaDOn4+T03AwdA4F+8pvmbtQ==
-X-Google-Smtp-Source: ACHHUZ4xOQZRCUOitaNPco2TiscJGSYZnvLq7jAVqgmV194XJF1jip9t1zFNhRJ10USr0WelxYSWNw==
-X-Received: by 2002:a05:6512:318e:b0:4f4:b497:25ed with SMTP id i14-20020a056512318e00b004f4b49725edmr1955514lfe.27.1685107691375;
-        Fri, 26 May 2023 06:28:11 -0700 (PDT)
+        bh=YfZSE2VrEzidVH5V+y6HSH//6rsyLPAC+IpvXsNaa4g=;
+        b=AY38Rpj3eXntWB5dCusZyBCBSV5my6+sVDUVASOjY9XGM2nJL87kVNj79ZN3fsqP8u
+         9ytDjpaq6H+LXxW9qcE2n/8yu5WbxM3WAG9xBo0B8SEHp35PYTXcO8C4uFVRqYl8F5Qo
+         le2u0YS4OlB5TD5ZhhKpBEP8AETxObTdEI3aQgX5vc6gTng27g1MnEkMIwLU8BmtmZEW
+         zlSEROXxqdV4xIJVJ1HH6jRb7ZUkD9FjFUTDKsI7YhCQKPw1X8kqtnVG5x6ggn890fH4
+         hIkFwPLt8AjsU6NbhnEIRi4JfAG2zRKT9TeXcvSgj7EBZ+ehLVzVeMkUBgUEZ5uXl2Qi
+         OTEg==
+X-Gm-Message-State: AC+VfDxuiMgYpsvF0iOAA+gU+C48yu0g4y/bdmb+E+poD1KSYi/GLZD7
+        d3EdmsjaFHxch+NM9hh1RJqyVw==
+X-Google-Smtp-Source: ACHHUZ5Dwi5KJ7IYLyb5OYgYCB/qY8JncuCtVCHs3GNzJQ5cJOQO7LIEkCE27eiIwXRd5YmWBvtN9A==
+X-Received: by 2002:ac2:529b:0:b0:4f4:c6df:22a0 with SMTP id q27-20020ac2529b000000b004f4c6df22a0mr524702lfm.18.1685107840995;
+        Fri, 26 May 2023 06:30:40 -0700 (PDT)
 Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id t9-20020ac243a9000000b004f13634da05sm621531lfl.180.2023.05.26.06.28.10
+        by smtp.gmail.com with ESMTPSA id d12-20020ac241cc000000b004f2529c71c1sm616090lfi.260.2023.05.26.06.30.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 06:28:11 -0700 (PDT)
-Message-ID: <a6a69233-1a59-b775-9679-bdd7a95ce468@linaro.org>
-Date:   Fri, 26 May 2023 15:28:09 +0200
+        Fri, 26 May 2023 06:30:40 -0700 (PDT)
+Message-ID: <0e703d3c-7ad9-6265-fa71-b62650b96e79@linaro.org>
+Date:   Fri, 26 May 2023 15:30:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH V2 3/4] arm64: dts: qcom: ipq6018: add QFPROM node
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: msm8996: Improve GPU OPP table
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kathiravan T <quic_kathirav@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vivek Gautam <vivek.gautam@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230526125305.19626-1-quic_kathirav@quicinc.com>
- <20230526125305.19626-4-quic_kathirav@quicinc.com>
- <CAA8EJpqSsTxpafOQZBBSZts2ZvxR1Wb6LMdcwnTxZvmyN=OSQA@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJpqSsTxpafOQZBBSZts2ZvxR1Wb6LMdcwnTxZvmyN=OSQA@mail.gmail.com>
+        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>
+References: <20230329-topic-adreno_opp-v1-0-24d34ac6f007@linaro.org>
+ <20230329-topic-adreno_opp-v1-3-24d34ac6f007@linaro.org>
+ <CAA8EJpprgiXWZC2W3JSgG3jtTZDtbwoeQ6LBK=pqfpk0oMvNRw@mail.gmail.com>
+ <bc5dd7d1-e001-8bd2-55c6-b6827c418371@linaro.org>
+In-Reply-To: <bc5dd7d1-e001-8bd2-55c6-b6827c418371@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,53 +92,95 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 26.05.2023 15:22, Dmitry Baryshkov wrote:
-> On Fri, 26 May 2023 at 15:54, Kathiravan T <quic_kathirav@quicinc.com> wrote:
->>
->> IPQ6018 has efuse region to determine the various HW quirks. Lets
->> add the initial support and the individual fuses will be added as they
->> are required.
->>
->> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
->> ---
->> Changes in V2:
->>         - Reorder the node based on node address
->>
->>  arch/arm64/boot/dts/qcom/ipq6018.dtsi | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
->> index f531797f2619..0f6d6c6daed2 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
->> @@ -302,6 +302,13 @@
->>                         status = "disabled";
->>                 };
->>
->> +               qfprom: efuse@a4000 {
->> +                       compatible = "qcom,ipq6018-qfprom", "qcom,qfprom";
->> +                       reg = <0x0 0x000a4000 0x0 0x2000>;
->> +                       #address-cells = <1>;
->> +                       #size-cells = <1>;
->> +               };
->> +
->>                 prng: qrng@e1000 {
->>                         compatible = "qcom,prng-ee";
->>                         reg = <0x0 0x000e3000 0x0 0x1000>;
+On 30.03.2023 12:57, Konrad Dybcio wrote:
 > 
-> It looks like the prng node name is incorrect. It should be qrng@e3000
-> instead of qrng@e1000. Could you please send a followup to fix it?
-In case that wasn't clear, since I think this series will go in as-is,
-that fix would be sent separately, on top of this.
+> 
+> On 29.03.2023 23:32, Dmitry Baryshkov wrote:
+>> On Wed, 29 Mar 2023 at 22:17, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>>
+>>> Remove the self-explanatory comment about opp-supported-hw contents,
+>>> add required-opps to ensure reasonable power domain levels are voted
+>>> for (currently we've been piggybacking off of miracles and MDP votes)
+>>> and add newlines between each subnode.
+>>
+>> I'm not sure this is 100% correct. The values that you add are correct
+>> for the voltage scaling case. However, based on the vendor kernel
+>> sources I think that MX should only be scaled if the voltage is scaled
+>> too. I might be wrong here.
+> MX must be >= CX (and GX), so this should bring no harm.
+> 
+> (citation needed, but that seems to hold true..)
+With that in mind, would you ack these patches Dmitry?
 
 Konrad
 > 
-> For this patch:
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
->> --
->> 2.17.1
+> Konrad
 >>
-> 
-> 
+>>>
+>>> Fixes: 69cc3114ab0f ("arm64: dts: Add Adreno GPU definitions")
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>  arch/arm64/boot/dts/qcom/msm8996.dtsi | 18 +++++++++++++-----
+>>>  1 file changed, 13 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+>>> index 4dd37f72e018..62ad30e94f40 100644
+>>> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+>>> @@ -1244,37 +1244,45 @@ gpu: gpu@b00000 {
+>>>                         gpu_opp_table: opp-table {
+>>>                                 compatible = "operating-points-v2";
+>>>
+>>> -                               /*
+>>> -                                * 624Mhz is only available on speed bins 0 and 3.
+>>> -                                * 560Mhz is only available on speed bins 0, 2 and 3.
+>>> -                                * All the rest are available on all bins of the hardware.
+>>> -                                */
+>>>                                 opp-624000000 {
+>>>                                         opp-hz = /bits/ 64 <624000000>;
+>>> +                                       required-opps = <&rpmpd_opp_turbo>;
+>>>                                         opp-supported-hw = <0x09>;
+>>>                                 };
+>>> +
+>>>                                 opp-560000000 {
+>>>                                         opp-hz = /bits/ 64 <560000000>;
+>>> +                                       required-opps = <&rpmpd_opp_turbo>;
+>>>                                         opp-supported-hw = <0x0d>;
+>>>                                 };
+>>> +
+>>>                                 opp-510000000 {
+>>>                                         opp-hz = /bits/ 64 <510000000>;
+>>> +                                       required-opps = <&rpmpd_opp_nom>;
+>>>                                         opp-supported-hw = <0xff>;
+>>>                                 };
+>>> +
+>>>                                 opp-401800000 {
+>>>                                         opp-hz = /bits/ 64 <401800000>;
+>>> +                                       required-opps = <&rpmpd_opp_nom>;
+>>>                                         opp-supported-hw = <0xff>;
+>>>                                 };
+>>> +
+>>>                                 opp-315000000 {
+>>>                                         opp-hz = /bits/ 64 <315000000>;
+>>> +                                       required-opps = <&rpmpd_opp_svs>;
+>>>                                         opp-supported-hw = <0xff>;
+>>>                                 };
+>>> +
+>>>                                 opp-214000000 {
+>>>                                         opp-hz = /bits/ 64 <214000000>;
+>>> +                                       required-opps = <&rpmpd_opp_svs>;
+>>>                                         opp-supported-hw = <0xff>;
+>>>                                 };
+>>> +
+>>>                                 opp-133000000 {
+>>>                                         opp-hz = /bits/ 64 <133000000>;
+>>> +                                       required-opps = <&rpmpd_opp_svs>;
+>>>                                         opp-supported-hw = <0xff>;
+>>>                                 };
+>>>                         };
+>>>
+>>> --
+>>> 2.40.0
+>>>
+>>
+>>
