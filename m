@@ -2,156 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9272712069
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09CA71206D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236724AbjEZGph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 02:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S242306AbjEZGre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 02:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236735AbjEZGpf (ORCPT
+        with ESMTP id S236735AbjEZGrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 02:45:35 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F7DBC;
-        Thu, 25 May 2023 23:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685083534; x=1716619534;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IJu7yRqmaECoG+aUqI9gqOkbcGWsi1NNfVI1riIMsLk=;
-  b=jnvGkXV2jj7ELXJylaWO2oE/vW6V8LmVSo/Bs39Vj2SR/Dsxfp+E/lED
-   e+8GHyzXw/PrTx7iXpKtYuUA43VzCG3u7op8Pd1ZMoe7xuPXfiNZ1ktMG
-   x0XvZOwlkCkRImqxxTYAe3GC4+8GkrwWvMcQ3HkBl1wZmXUrBYR6DrjVq
-   5thcfyCW3jCkHMb2k7Sm80tKGZUv2++x26E+54HnN6+Co7yBw+2JKzrVJ
-   HW0ytnoCF/fKbuI908kxFwXSjCVFGc22yMdBmbBliDUVHrZYfyfijTwm5
-   p5p8jfLTDGmWdcrLk7J6Y5uKJEJRTG2yGZ+I5a96nqkXyVCq9JrCOzBel
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
-   d="scan'208";a="217418416"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 23:45:33 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 25 May 2023 23:45:32 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Thu, 25 May 2023 23:45:32 -0700
-Date:   Fri, 26 May 2023 08:45:31 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Paul Rosswurm <paulros@microsoft.com>,
-        "olaf@aepfle.de" <olaf@aepfle.de>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        Long Li <longli@microsoft.com>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH net] net: mana: Fix perf regression: remove rx_cqes,
- tx_cqes counters
-Message-ID: <20230526064531.zohcgjbaraq7c2ui@soft-dev3-1>
-References: <1684963320-25282-1-git-send-email-haiyangz@microsoft.com>
- <20230525064849.ca5p6npej7p2luw2@soft-dev3-1>
- <PH7PR21MB31161F3291FF951877355DA9CA46A@PH7PR21MB3116.namprd21.prod.outlook.com>
+        Fri, 26 May 2023 02:47:32 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A63125;
+        Thu, 25 May 2023 23:47:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685083643; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=cGFNG/Ocgdc+dGc7sNDnP7vWTbWW3rY57OYtVrFvT90iVgYGWtGgs6F56DuvWeDEFP
+    GrDEqUfrGRFBsplVwgx3g2/i3ITfRE4hjqNrbBwyIhRsQOHpyC9RsMtD5wyvEHzU6s2P
+    wHqBp7xgXhoIZ8uOfC89rlCelJsmZWifn1MPJiqU+oTmkilGx0S+w/BRJZOf69E3Ggs4
+    BWIvi/6VWdDxFOUM5Z3E7aPVJ+P/sg8mC1Niz3fZIU5i6wVkDyBO5wcawyT7nfig0Wt8
+    zV2/ENx0cMZb4ksIQexTZl/khgh5s55jEXuVYkG/AZCSdEojqPOX/Hc4UCr5EKPN3xzU
+    9HZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685083643;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=7/3hdjTLdwnUD4fcMlMWezGKin7mL9oy2oTZnbl8DKw=;
+    b=splIQfVuoDoN411bUPZ520MEKWVQazFwDJZsv29u0LeP32Z6p199s/II9/1WQSVXe0
+    ehOB4e8g6vVm1RKbOgFv0EE2aOhAO4UHZoVs9XPg5SVPLai2qIyXzxpuwnGH6ReP3wHQ
+    4eTWMdcxvlfaWycfImhYubLVOH58jMY3TgFT04queyUNAWT5Mqp1hg8XPQh5QEVtI3ij
+    FuoaZp9hWGi/HLpQxjFLt7TKkB0JgAu1np0CaY0dx8swYFVpSd04jrMAt8E+t5P/5a6j
+    SzMl6WvsXcTneQsJOe7KXfqRPSuRZ6880BFEfDxnDxJtwCGkqccvVunXrTLiolQQvB/C
+    Xpbg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685083643;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=7/3hdjTLdwnUD4fcMlMWezGKin7mL9oy2oTZnbl8DKw=;
+    b=DYc4nd6QHcrkspgh7v3YsOExpph17K2jV78DX5o1wVCQScVGnj5zaxkdK3USiUQL92
+    PFSVI0+780XvcMctRH5C4784ikj2AOglKtcJtT2d1DCkvouKDgKD0gzBc4A6fDHYo754
+    Ea30yzL6O/wICVtBgz0TlWT9FlcHHMRqufzpHBBsyeDsL7cLUUWLRf+E10i4yPVjlexG
+    SsEL48gYeUnxbPHR07PQdvXp+ZGS1cRPYSAeJnJk5fnKGzr6uNVdnn1pAri0Y3+1xD7k
+    O/ouBIBNQqDvhW4VP+hS7M2et0WnZXsCzTp9I1NAVeDdWS8zTYcE0c8NaruNhPxZjour
+    lLCA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685083643;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=7/3hdjTLdwnUD4fcMlMWezGKin7mL9oy2oTZnbl8DKw=;
+    b=VvYzGK5yvvo0GEomb2DLIj5qSBTDxEsg1uPBtcOpUAHKC4gmODToKrqZIxTuy0nkVh
+    tPbRLbdo0hE4pBdXxrAg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA95nh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az4Q6lNZGK
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 26 May 2023 08:47:23 +0200 (CEST)
+Date:   Fri, 26 May 2023 08:47:22 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH 7/8] arm64: dts: qcom: msm8916: Define regulator
+ constraints next to usage
+Message-ID: <ZHBV-mBPhoqy8yvs@gerhold.net>
+References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
+ <20230510-msm8916-regulators-v1-7-54d4960a05fc@gerhold.net>
+ <9f474fe8-523c-3668-540a-a8fc04ed64a6@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH7PR21MB31161F3291FF951877355DA9CA46A@PH7PR21MB3116.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9f474fe8-523c-3668-540a-a8fc04ed64a6@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 05/25/2023 14:34, Haiyang Zhang wrote:
+On Fri, May 26, 2023 at 01:35:06AM +0200, Konrad Dybcio wrote:
+> On 17.05.2023 20:48, Stephan Gerhold wrote:
+> > Right now each MSM8916 device has a huge block of regulator constraints
+> > with allowed voltages for each regulator. For lack of better
+> > documentation these voltages are often copied as-is from the vendor
+> > device tree, without much extra thought.
+> > 
+> > Unfortunately, the voltages in the vendor device trees are often
+> > misleading or even wrong, e.g. because:
+> > 
+> >  - There is a large voltage range allowed and the actual voltage is
+> >    only set somewhere hidden in some messy vendor driver. This is often
+> >    the case for pm8916_{l14,l15,l16} because they have a broad range of
+> >    1.8-3.3V by default.
+> > 
+> >  - The voltage is actually wrong but thanks to the voltage constraints
+> >    in the RPM firmware it still ends up applying the correct voltage.
+> > 
+> > To have proper regulator constraints it is important to review them in
+> > context of the usage. The current setup in the MSM8916 device trees
+> > makes this quite hard because each device duplicates the standard
+> > voltages for components of the SoC and mixes those with minor
+> > device-specific additions and dummy voltages for completely unused
+> > regulators.
+> > 
+> > The actual usage of the regulators for the SoC components is in
+> > msm8916-pm8916.dtsi, so it can and should also define the related
+> > voltage constraints. These are not board-specific but defined in the
+> > APQ8016E/PM8916 Device Specification. The board DT can then focus on
+> > describing the actual board-specific regulators, which makes it much
+> > easier to review and spot potential mistakes there.
+> > 
+> > Note that this commit does not make any functional change. All used
+> > regulators still have the same regulator constraints as before. Unused
+> > regulators do not have regulator constraints anymore because most of
+> > these were too broad or even entirely wrong. They should be added back
+> > with proper voltage constraints when there is an actual usage.
+> > 
+> > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> > ---
+> I'm a bit torn between saying "this is very nice already" and "we should
+> probably override each regulator individually" like so:
 > 
-> > -----Original Message-----
-> > From: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > Sent: Thursday, May 25, 2023 2:49 AM
-> > To: Haiyang Zhang <haiyangz@microsoft.com>
-> > Cc: linux-hyperv@vger.kernel.org; netdev@vger.kernel.org; Dexuan Cui
-> > <decui@microsoft.com>; KY Srinivasan <kys@microsoft.com>; Paul Rosswurm
-> > <paulros@microsoft.com>; olaf@aepfle.de; vkuznets@redhat.com;
-> > davem@davemloft.net; wei.liu@kernel.org; edumazet@google.com;
-> > kuba@kernel.org; pabeni@redhat.com; leon@kernel.org; Long Li
-> > <longli@microsoft.com>; ssengar@linux.microsoft.com; linux-
-> > rdma@vger.kernel.org; daniel@iogearbox.net; john.fastabend@gmail.com;
-> > bpf@vger.kernel.org; ast@kernel.org; Ajay Sharma
-> > <sharmaajay@microsoft.com>; hawk@kernel.org; linux-
-> > kernel@vger.kernel.org; stable@vger.kernel.org
-> > Subject: Re: [PATCH net] net: mana: Fix perf regression: remove rx_cqes,
-> > tx_cqes counters
-> >
-> > [Some people who received this message don't often get email from
-> > horatiu.vultur@microchip.com. Learn why this is important at
-> > https://aka.ms/LearnAboutSenderIdentification ]
-> >
-> > The 05/24/2023 14:22, Haiyang Zhang wrote:
-> >
-> > Hi Haiyang,
-> >
-> > >
-> > > The apc->eth_stats.rx_cqes is one per NIC (vport), and it's on the
-> > > frequent and parallel code path of all queues. So, r/w into this
-> > > single shared variable by many threads on different CPUs creates a
-> > > lot caching and memory overhead, hence perf regression. And, it's
-> > > not accurate due to the high volume concurrent r/w.
-> >
-> > Do you have any numbers to show the improvement of this change?
+> &pm8916_l17 {
+> 	[...]
+> }
 > 
-> The numbers are not published. The perf regression of the previous
-> patch is very significant, and this patch eliminates the regression.
+> to minimize mistakes..
 > 
-> >
-> > >
-> > > Since the error path of mana_poll_rx_cq() already has warnings, so
-> > > keeping the counter and convert it to a per-queue variable is not
-> > > necessary. So, just remove this counter from this high frequency
-> > > code path.
-> > >
-> > > Also, remove the tx_cqes counter for the same reason. We have
-> > > warnings & other counters for errors on that path, and don't need
-> > > to count every normal cqe processing.
-> >
-> > Will you not have problems with the counter 'apc->eth_stats.tx_cqe_err'?
-> > It is not in the hot path but you will have concurrent access to it.
-> 
-> Yes, but that error happens rarely, so a shared variable is good enough. So, I
-> don't change it in this patch.
-
-OK, I understand.
-Maybe this can be fixed in a different patch at a later point. Thanks.
-
-Reviwed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-
-> 
-> Thanks,
-> - Haiyang
+> Not sure what to make of it, I see Bjorn already applied this, so I guess
+> I'm just leaving some potential ideas for the future here.
 > 
 
--- 
-/Horatiu
+Sorry, could you elaborate a bit on what changes you would make exactly?
+
+The way it works in this patch is that regulators that are used by the
+SoC are defined in msm8916-pm8916.dtsi. All other (board-specific)
+regulators must be defined together with proper voltages in the board DT.
+
+What kind of mistake are you thinking of?
+
+Thanks,
+Stephan
