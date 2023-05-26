@@ -2,253 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A60711EB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 06:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D44711EBB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 06:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjEZERW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 00:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
+        id S229885AbjEZESB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 00:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjEZERS (ORCPT
+        with ESMTP id S232487AbjEZER6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 00:17:18 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E6C13D;
-        Thu, 25 May 2023 21:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685074636; x=1716610636;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KTmg2I4nPEC6foToIemOJIAAg3gx3UcD2Tt+b4elk9M=;
-  b=cvJ+g1VcpXu8THlrxq8uLIahT97LKxeg0sFtb/f/Noei5aeRJ9bwq7CI
-   4abvwxjof7ZAxhPstRjagjwI7lH71+lPVA3NQYVslFKhPhvG16C6WzWgl
-   FGp/XZGF153ky2KdwNALFT4QSyneCsg6RaSU8AQyDIDQJGKdyeO+XZKnn
-   HedJCYmLbgO7SRwtxlBM+g3ePVuTKXTdxW85nYQjfLYQ+DOlPdOq9GAHr
-   iQ9sbAEgL5sxxx9FL+L7o6E/BYTkm1QHeFYkhT+hDtXrh2xC3vgV/cCXx
-   Lk4ghRF2IMqdrlI5tln5SYLYKgC/ruKEJodAwzBeW5wRHBNfu+AnybF3l
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="351621968"
-X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
-   d="scan'208";a="351621968"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 21:17:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="951736116"
-X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
-   d="scan'208";a="951736116"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by fmsmga006.fm.intel.com with ESMTP; 25 May 2023 21:17:11 -0700
-Message-ID: <6fbf021b-5f53-0290-d565-f9e765b51f88@linux.intel.com>
-Date:   Fri, 26 May 2023 12:16:24 +0800
+        Fri, 26 May 2023 00:17:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E905195;
+        Thu, 25 May 2023 21:17:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E16D964CA1;
+        Fri, 26 May 2023 04:17:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAAAFC433D2;
+        Fri, 26 May 2023 04:17:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685074671;
+        bh=8JGNVNj1EZHAjY1/R8ICZ76vyLFmaEpzZTmWDtrVlC0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oPN5PdenUgoVwo6zExqG8iPaAKMZT+MKDH/hXA7xgRWUIR4rZ0iOziM0p9TzbR2Sx
+         E8mWBsliNDtAjxDjstOGjvRAYicdWIUkJ5qjQyh9AArXjO0yO52w7rXHOmeoyI4aat
+         R9vEUMYek12wM/M1cL+WTkmiTebRJRxEu2mbE4R5ve/e3wKRgLe9UjWOWISPFQYymn
+         bO8ZMz56lXZHP4Cs0KqWKxbwBOyCnbSSQczlSa0QBOiCGkgu4C45lJKl3TR0p6l6wO
+         /wzMkH2NiH0O1gZUVqinY+ZgWM6Pi6awBcHCSb4umWshMQZXga5OhvhT+dkDxB0zfD
+         ydotz3qn8AHJQ==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     linux-trace-kernel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH v13 00/12] tracing: Add fprobe/tracepoint events
+Date:   Fri, 26 May 2023 12:17:46 +0800
+Message-ID:  <168507466597.913472.10572827237387849017.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: Re: [PATCH v3 04/10] iommu/vt-d: Add helper to setup pasid nested
- translation
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-References: <20230511145110.27707-1-yi.l.liu@intel.com>
- <20230511145110.27707-5-yi.l.liu@intel.com>
- <BN9PR11MB5276A52907EDD2155D42B3C08C419@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276A52907EDD2155D42B3C08C419@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/24/23 3:16 PM, Tian, Kevin wrote:
->> From: Yi Liu <yi.l.liu@intel.com>
->> Sent: Thursday, May 11, 2023 10:51 PM
->>
->> +
->> +/**
->> + * intel_pasid_setup_nested() - Set up PASID entry for nested translation.
->> + * This could be used for guest shared virtual address. In this case, the
->> + * first level page tables are used for GVA-GPA translation in the guest,
->> + * second level page tables are used for GPA-HPA translation.
-> 
-> it's not just for guest SVA. Actually in this series it's RID_PASID nested
-> translation.
+Hi,
 
-Yes.
+Here is the 13th version of add a basic fprobe event support for
+ftrace (tracefs) and perf. Here is the previous version.
 
->> + *
->> + * @iommu:      IOMMU which the device belong to
->> + * @dev:        Device to be set up for translation
->> + * @pasid:      PASID to be programmed in the device PASID table
->> + * @domain:     User domain nested on a s2 domain
-> 
-> "User stage-1 domain"
+https://lore.kernel.org/all/168438749373.1517340.14083401972478496211.stgit@mhiramat.roam.corp.google.com/
 
-Yes.
+This version fixes some minor issues in the previous version.
+I found that TPARG_FL_FPROBE was not set and TPARG_FL_FENTRY and
+TPARG_FL_RETURN were not mutually exclusive, so fix it in [2/12] (new patch)
+and [3/12].
+I also fixed the fprobe-event selftest because it didn't found the syntax
+error that fprobe-event shouldn't access %reg [4/12].
+For the BTF var name feature, there is a bug that the BTF var name is used
+with fetch_type (e.g. varname:u8), it failed to apply the BTF var name as
+the event argument name. So fixed that in [7/12]. In [8/12], if user specified
+only '$argN' the kernel crashed, and if BTF is not there, it returned an error.
+So I fixed both bugs. [8/12] also had another bug that it convert $argN to
+$argN+1, that is also fixed.
 
->> + */
->> +int intel_pasid_setup_nested(struct intel_iommu *iommu, struct device
->> *dev,
->> +			     u32 pasid, struct dmar_domain *domain)
->> +{
->> +	struct iommu_hwpt_intel_vtd *s1_cfg = &domain->s1_cfg;
->> +	pgd_t *s1_gpgd = (pgd_t *)(uintptr_t)domain->s1_pgtbl;
->> +	struct dmar_domain *s2_domain = domain->s2_domain;
->> +	u16 did = domain_id_iommu(domain, iommu);
->> +	struct dma_pte *pgd = s2_domain->pgd;
->> +	struct pasid_entry *pte;
->> +	int agaw;
->> +
->> +	if (!ecap_nest(iommu->ecap)) {
->> +		pr_err_ratelimited("%s: No nested translation support\n",
->> +				   iommu->name);
->> +		return -ENODEV;
->> +	}
->> +
->> +	/*
->> +	 * Sanity checking performed by caller to make sure address width
-> 
-> "by caller"? it's checked in this function.
+You can also get this series from:
 
-This comment need to be updated.
+git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
 
->> +	 * matching in two dimensions: CPU vs. IOMMU, guest vs. host.
->> +	 */
->> +	switch (s1_cfg->addr_width) {
->> +	case ADDR_WIDTH_4LEVEL:
->> +		break;
->> +#ifdef CONFIG_X86
->> +	case ADDR_WIDTH_5LEVEL:
->> +		if (!cpu_feature_enabled(X86_FEATURE_LA57) ||
->> +		    !cap_fl5lp_support(iommu->cap)) {
->> +			dev_err_ratelimited(dev,
->> +					    "5-level paging not supported\n");
->> +			return -EINVAL;
->> +		}
->> +		break;
->> +#endif
->> +	default:
->> +		dev_err_ratelimited(dev, "Invalid guest address width %d\n",
->> +				    s1_cfg->addr_width);
->> +		return -EINVAL;
->> +	}
->> +
->> +	if ((s1_cfg->flags & IOMMU_VTD_PGTBL_SRE) && !ecap_srs(iommu-
->>> ecap)) {
->> +		pr_err_ratelimited("No supervisor request support on %s\n",
->> +				   iommu->name);
->> +		return -EINVAL;
->> +	}
->> +
->> +	if ((s1_cfg->flags & IOMMU_VTD_PGTBL_EAFE)
->> && !ecap_eafs(iommu->ecap)) {
->> +		pr_err_ratelimited("No extended access flag support
->> on %s\n",
->> +				   iommu->name);
->> +		return -EINVAL;
->> +	}
->> +
->> +	/*
->> +	 * Memory type is only applicable to devices inside processor
->> coherent
->> +	 * domain. Will add MTS support once coherent devices are available.
->> +	 */
->> +	if (s1_cfg->flags & IOMMU_VTD_PGTBL_MTS_MASK) {
->> +		pr_warn_ratelimited("No memory type support %s\n",
->> +				    iommu->name);
->> +		return -EINVAL;
->> +	}
-> 
-> If it's unsupported why exposing them in the uAPI at this point?
+With this fprobe events, we can continue to trace function entry/exit
+even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+it is not available if the architecture only supports
+CONFIG_DYNAMIC_FTRACE_WITH_ARGS (e.g. arm64). And that means kprobe
+events can not probe function entry/exit effectively on such architecture.
+But this problem can be solved if the dynamic events supports fprobe events
+because fprobe events doesn't use kprobe but ftrace via fprobe.
 
-Agreed. We can remove this flag for now.
+FPROBE EVENTS
+=============
 
->> +
->> +	agaw = iommu_skip_agaw(s2_domain, iommu, &pgd);
->> +	if (agaw < 0) {
->> +		dev_err_ratelimited(dev, "Invalid domain page table\n");
->> +		return -EINVAL;
->> +	}
-> 
-> this looks problematic.
-> 
-> static inline int iommu_skip_agaw(struct dmar_domain *domain,
->                                    struct intel_iommu *iommu,
->                                    struct dma_pte **pgd)
-> {
-> 	int agaw;
-> 
-> 	for (agaw = domain->agaw; agaw > iommu->agaw; agaw--) {
-> 		*pgd = phys_to_virt(dma_pte_addr(*pgd));
-> 		if (!dma_pte_present(*pgd))
-> 			return -EINVAL;
-> 	}
-> 
-> 	return agaw;
-> }
-> 
-> why is it safe to change pgd level of s2 domain when it's used as
-> the parent? this s2 pgtbl might be used by other devices behind
-> other iommus which already maps GPAs in a level which this
-> iommu doesn't support...
-> 
-> shouldn't we simply fail it as another incompatible condition?
+Fprobe events allows user to add new events on the entry and exit of kernel
+functions (which can be ftraced). Unlike kprobe events, the fprobe events
+can only probe the function entry and exit, and it can only trace the
+function args, return value, and stacks. (no registers)
+For probing function body, users can continue to use the kprobe events.
 
-You are right. We can change it to this:
+The tracepoint probe events (tprobe events) also allows user to add new
+events dynamically on the tracepoint. Most of the tracepoint already has
+trace-events, so this feature is useful if you only want to know a
+specific parameter, or trace the tracepoints which has no trace-events
+(e.g. sched_*_tp tracepoints only exposes the tracepoints.)
 
-	if (domain->agaw > iommu->agaw)
-		return -EINVAL;
+The fprobe events syntax is;
 
-> 
->> +
->> +	/* First level PGD (in GPA) must be supported by the second level. */
->> +	if ((uintptr_t)s1_gpgd > (1ULL << s2_domain->gaw)) {
->> +		dev_err_ratelimited(dev,
->> +				    "Guest PGD %lx not supported,
->> max %llx\n",
->> +				    (uintptr_t)s1_gpgd, s2_domain-
->>> max_addr);
->> +		return -EINVAL;
->> +	}
-> 
-> I'm not sure how useful this check is. Even if the pgd is sane the
-> lower level PTEs could include unsupported GPA's. If a guest really
-> doesn't want to follow the GPA restriction which vIOMMU reports,
-> it can easily cause IOMMU fault in many ways.
+ f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
+ f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
 
-You are right.
+And tracepoint probe events syntax is;
 
-> Then why treating pgd specially?
+ t[:[GRP/][EVENT]] TRACEPOINT [FETCHARGS]
 
-I have no memory about this check for now. Yi, any thought?
+This series includes BTF argument support for fprobe/tracepoint events,
+and kprobe events. This allows us to fetch a specific function parameter
+by name, and all parameters by '$arg*'.
+Note that enabling this feature, you need to enable CONFIG_BPF_SYSCALL and
+confirm that your arch supports CONFIG_HAVE_FUNCTION_ARG_ACCESS_API.
 
-Best regards,
-baolu
+E.g.
+
+ # echo 't kfree ptr' >> dynamic_events
+ # echo 'f kfree object' >> dynamic_events
+ # cat dynamic_events 
+t:tracepoints/kfree kfree ptr=ptr
+f:fprobes/kfree__entry kfree object=object
+ # echo 1 > events/fprobes/enable
+ # echo 1 > events/tracepoints/enable
+ # echo > trace
+ # head -n 20 trace | tail
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+            tail-84      [000] .....  1324.561958: kfree__entry: (kfree+0x4/0x140) object=0xffff888006383c00
+            tail-84      [000] ...1.  1324.561961: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff888006383c00
+            tail-84      [000] .....  1324.561988: kfree__entry: (kfree+0x4/0x140) object=0x0
+            tail-84      [000] ...1.  1324.561988: kfree: (__probestub_kfree+0x4/0x10) ptr=0x0
+            tail-84      [000] .....  1324.561989: kfree__entry: (kfree+0x4/0x140) object=0xffff88800671e600
+            tail-84      [000] ...1.  1324.561989: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff88800671e600
+            tail-84      [000] .....  1324.562368: kfree__entry: (kfree+0x4/0x140) object=0xffff8880065e0580
+            tail-84      [000] ...1.  1324.562369: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff8880065e0580
+
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (12):
+      fprobe: Pass return address to the handlers
+      tracing/probes: Avoid setting TPARG_FL_FENTRY and TPARG_FL_RETURN
+      tracing/probes: Add fprobe events for tracing function entry and exit.
+      selftests/ftrace: Add fprobe related testcases
+      tracing/probes: Add tracepoint support on fprobe_events
+      tracing/probes: Move event parameter fetching code to common parser
+      tracing/probes: Support function parameters if BTF is available
+      tracing/probes: Add $arg* meta argument for all function args
+      tracing/probes: Add BTF retval type support
+      selftests/ftrace: Add tracepoint probe test case
+      selftests/ftrace: Add BTF arguments test cases
+      Documentation: tracing/probes: Add fprobe event tracing document
+
+
+ Documentation/trace/fprobetrace.rst                |  188 +++
+ Documentation/trace/index.rst                      |    1 
+ Documentation/trace/kprobetrace.rst                |    2 
+ include/linux/fprobe.h                             |   11 
+ include/linux/rethook.h                            |    2 
+ include/linux/trace_events.h                       |    3 
+ include/linux/tracepoint-defs.h                    |    1 
+ include/linux/tracepoint.h                         |    5 
+ kernel/kprobes.c                                   |    1 
+ kernel/trace/Kconfig                               |   26 
+ kernel/trace/Makefile                              |    1 
+ kernel/trace/bpf_trace.c                           |    6 
+ kernel/trace/fprobe.c                              |   17 
+ kernel/trace/rethook.c                             |    3 
+ kernel/trace/trace.c                               |   13 
+ kernel/trace/trace.h                               |   11 
+ kernel/trace/trace_eprobe.c                        |   44 -
+ kernel/trace/trace_fprobe.c                        | 1199 ++++++++++++++++++++
+ kernel/trace/trace_kprobe.c                        |   35 -
+ kernel/trace/trace_probe.c                         |  652 +++++++++--
+ kernel/trace/trace_probe.h                         |   49 +
+ kernel/trace/trace_uprobe.c                        |    8 
+ lib/test_fprobe.c                                  |   10 
+ samples/fprobe/fprobe_example.c                    |    6 
+ .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   58 +
+ .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 
+ .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |  111 ++
+ .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 +
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   16 
+ 30 files changed, 2450 insertions(+), 164 deletions(-)
+ create mode 100644 Documentation/trace/fprobetrace.rst
+ create mode 100644 kernel/trace/trace_fprobe.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
