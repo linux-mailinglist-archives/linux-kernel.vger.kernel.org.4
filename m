@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC793711EA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 06:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 574B7711EAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 06:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235953AbjEZEJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 00:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
+        id S233448AbjEZEK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 00:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233859AbjEZEJA (ORCPT
+        with ESMTP id S229625AbjEZEKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 00:09:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD6C12F
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 21:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685074095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=281L+8rYh29YkUcSLnBXVJo3LDjuwmSmWQA4O0K9HTQ=;
-        b=EylzUAt6zxPPok2CSZUD86ERTbm+rWvRWw3wm0Wtl+/LqBVlvNP+d48Z+LTaiVr6/iFSIp
-        NpCvw+Oye3UJzaejAiNMwPh2kigYnWdLIAO0GrLfjngw/FwQhtOEWruuVwY3A/eFaxwYbe
-        aBy89391dcBfKwdDrmvJ3I6BoJ35K/g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-283-fezvmrDnPGGsIsfT4Pzcaw-1; Fri, 26 May 2023 00:08:10 -0400
-X-MC-Unique: fezvmrDnPGGsIsfT4Pzcaw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 26 May 2023 00:10:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D61E183
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 21:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 905F58032EF;
-        Fri, 26 May 2023 04:08:09 +0000 (UTC)
-Received: from localhost (ovpn-12-35.pek2.redhat.com [10.72.12.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 82B05492B0A;
-        Fri, 26 May 2023 04:08:08 +0000 (UTC)
-Date:   Fri, 26 May 2023 12:08:04 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Tao Liu <ltao@redhat.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, dyoung@redhat.com,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org
-Subject: Re: [PATCH] x86/kexec: Add EFI config table identity mapping for
- kexec kernel
-Message-ID: <ZHAwpL3wbKX9sWep@MiWiFi-R3L-srv>
-References: <20230525094914.23420-1-ltao@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9E1364CA8
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 04:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0D1A0C433A7;
+        Fri, 26 May 2023 04:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685074221;
+        bh=JQyCrb/AS2AU8eNQv+rZMtDQP68aB0ijNJNGaDOoPzg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=FIl7fGndcDdMNTUUBjQ/lxk9ckLrCRUIBlDx3quOHau9ufxJApcUj8W88eIZFB7ow
+         NPV4ejdISGmoGjkF9LzOSCCTD1DNzvOlNLaGPJHAgv22iI5Eu+153JBshgoDraOwj+
+         26yIfSIWsmdNoblJnu+D4wyEOyUBKpQDXYPMXboptdow27omZLy4+TcuKJtobn8EAO
+         31bcAsT+EDqcob6emXWeyzLwkrdjSGfxbcG8PlGWfZELjdd8OIszgA4N9DbwSURSjn
+         PHD3cfMoyzWS4u65abuCoxAtadl/sspFPWIR9Qe+rGa3utWna40RTLLUBctKwYOD9C
+         2ErQTwwp9jODQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E10A5E4F138;
+        Fri, 26 May 2023 04:10:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525094914.23420-1-ltao@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: stmmac: fix call trace when stmmac_xdp_xmit() is
+ invoked
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168507422091.22221.15153316764967144660.git-patchwork-notify@kernel.org>
+Date:   Fri, 26 May 2023 04:10:20 +0000
+References: <20230524125714.357337-1-wei.fang@nxp.com>
+In-Reply-To: <20230524125714.357337-1-wei.fang@nxp.com>
+To:     Wei Fang <wei.fang@nxp.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, sdf@google.com,
+        gerhard@engleder-embedded.com, lorenzo@kernel.org,
+        simon.horman@corigine.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,127 +66,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tao,
+Hello:
 
-On 05/25/23 at 05:49pm, Tao Liu wrote:
-> A kexec kernel bootup hang is observed on Intel Atom cpu due to unmapped
-> EFI config table.
-> 
-> Currently EFI system table is identity-mapped for the kexec kernel, but EFI
-> config table is not mapped explicitly:
-> 
->     commit 6bbeb276b71f ("x86/kexec: Add the EFI system tables and ACPI
->                           tables to the ident map")
-> 
-> Later in the following 2 commits, EFI config table will be accessed when
-> enabling sev at kernel startup. This may result in a page fault due to EFI
-> config table's unmapped address. Since the page fault occurs at an early
-> stage, it is unrecoverable and kernel hangs.
-> 
->     commit ec1c66af3a30 ("x86/compressed/64: Detect/setup SEV/SME features
->                           earlier during boot")
->     commit c01fce9cef84 ("x86/compressed: Add SEV-SNP feature
->                           detection/setup")
-> 
-> In addition, the issue doesn't appear on all systems, because the kexec
-> kernel uses Page Size Extension (PSE) for identity mapping. In most cases,
-> EFI config table can end up to be mapped into due to 1 GB page size.
-> However if nogbpages is set, or cpu doesn't support pdpe1gb feature
-> (e.g Intel Atom x6425RE cpu), EFI config table may not be mapped into
-> due to 2 MB page size, thus a page fault hang is more likely to happen.
-> 
-> In this patch, we will make sure the EFI config table is always mapped.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Nice work. While you may need to rephrase above sentence, x86
-maintainers don't like log with the 'this patch,' or 'we'. Please refer
-to 'Changelog' part of Documentation/process/maintainer-tip.rst and
-improve it.
-
+On Wed, 24 May 2023 20:57:14 +0800 you wrote:
+> From: Wei Fang <wei.fang@nxp.com>
 > 
-> Signed-off-by: Tao Liu <ltao@redhat.com>
-> ---
->  arch/x86/kernel/machine_kexec_64.c | 35 ++++++++++++++++++++++++++----
->  1 file changed, 31 insertions(+), 4 deletions(-)
+> We encountered a kernel call trace issue which was related to
+> ndo_xdp_xmit callback on our i.MX8MP platform. The reproduce
+> steps show as follows.
+> 1. The FEC port (eth0) connects to a PC port, and the PC uses
+> pktgen_sample03_burst_single_flow.sh to generate packets and
+> send these packets to the FEC port. Notice that the script must
+> be executed before step 2.
+> 2. Run the "./xdp_redirect eth0 eth1" command on i.MX8MP, the
+> eth1 interface is the dwmac. Then there will be a call trace
+> issue soon. Please see the log for more details.
+> The root cause is that the NETDEV_XDP_ACT_NDO_XMIT feature is
+> enabled by default, so when the step 2 command is exexcuted
+> and packets have already been sent to eth0, the stmmac_xdp_xmit()
+> starts running before the stmmac_xdp_set_prog() finishes. To
+> resolve this issue, we disable the NETDEV_XDP_ACT_NDO_XMIT
+> feature by default and turn on/off this feature when the bpf
+> program is installed/uninstalled which just like the other
+> ethernet drivers.
 > 
-> diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-> index 1a3e2c05a8a5..755aa12f583f 100644
-> --- a/arch/x86/kernel/machine_kexec_64.c
-> +++ b/arch/x86/kernel/machine_kexec_64.c
-> @@ -28,6 +28,7 @@
->  #include <asm/setup.h>
->  #include <asm/set_memory.h>
->  #include <asm/cpu.h>
-> +#include <asm/efi.h>
->  
->  #ifdef CONFIG_ACPI
->  /*
-> @@ -86,10 +87,12 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
->  #endif
->  
->  static int
-> -map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
-> +map_efi_sys_cfg_tab(struct x86_mapping_info *info, pgd_t *level4p)
+> [...]
 
-Can we call the function map_efi_tables() since we will map efi system
-table, system config table. If you need add another table mapping here,
-what would you call it, map_efi_sys_cfg_xxx_tab()?
+Here is the summary with links:
+  - [net] net: stmmac: fix call trace when stmmac_xdp_xmit() is invoked
+    https://git.kernel.org/netdev/net/c/ffb3322181d9
 
-Anyway, not very strong opinion as long as x86 maintainer likes it.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
->  {
->  #ifdef CONFIG_EFI
->  	unsigned long mstart, mend;
-> +	void *kaddr;
-> +	int ret;
->  
->  	if (!efi_enabled(EFI_BOOT))
->  		return 0;
-> @@ -105,6 +108,30 @@ map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
->  	if (!mstart)
->  		return 0;
->  
-> +	ret = kernel_ident_mapping_init(info, level4p, mstart, mend);
-> +	if (ret)
-> +		return ret;
-> +
-> +	kaddr = memremap(mstart, mend - mstart, MEMREMAP_WB);
-> +	if (!kaddr) {
-> +		pr_err("Could not map UEFI system table\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	mstart = efi_config_table;
-> +
-> +	if (efi_enabled(EFI_64BIT)) {
-> +		efi_system_table_64_t *stbl = (efi_system_table_64_t *)kaddr;
-> +
-> +		mend = mstart + sizeof(efi_config_table_64_t) * stbl->nr_tables;
-> +	} else {
-> +		efi_system_table_32_t *stbl = (efi_system_table_32_t *)kaddr;
-> +
-> +		mend = mstart + sizeof(efi_config_table_32_t) * stbl->nr_tables;
-> +	}
-> +
-> +	memunmap(kaddr);
-> +
->  	return kernel_ident_mapping_init(info, level4p, mstart, mend);
->  #endif
->  	return 0;
-> @@ -244,10 +271,10 @@ static int init_pgtable(struct kimage *image, unsigned long start_pgtable)
->  	}
->  
->  	/*
-> -	 * Prepare EFI systab and ACPI tables for kexec kernel since they are
-> -	 * not covered by pfn_mapped.
-> +	 * Prepare EFI systab, config table and ACPI tables for kexec kernel
-> +	 * since they are not covered by pfn_mapped.
->  	 */
-> -	result = map_efi_systab(&info, level4p);
-> +	result = map_efi_sys_cfg_tab(&info, level4p);
->  	if (result)
->  		return result;
->  
-> -- 
-> 2.33.1
-> 
 
