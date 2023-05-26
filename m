@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3B9712DE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E74712DE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242167AbjEZTug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
+        id S242221AbjEZTuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237640AbjEZTuc (ORCPT
+        with ESMTP id S242143AbjEZTuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:50:32 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023A59E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:50:31 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f4d6aee530so1182542e87.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:50:30 -0700 (PDT)
+        Fri, 26 May 2023 15:50:50 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E71BD
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:50:49 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4effb818c37so1194657e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685130629; x=1687722629;
+        d=linaro.org; s=google; t=1685130648; x=1687722648;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bptdLRnlIF+oTqXFA/f6wS8sjlEr0Ke0jCvaGBA4+pE=;
-        b=Bui0z+pRpvkINPAp8cS2BfqAj0tJiEpbXXMneIBGl3JEg7Pj/FoY4xunGNqZVB4jKa
-         BPoNKhkx22Cn/tT2GZ1plWZx/v+ucMuHCsTPQ+VXxGdNAAdXC0NfhA3dQc0K+gXCAlzg
-         Qx/x0o4/jp+TaH7M1PK+0M/2l4Pv+VdNGzajzlDEwkJ0gcmRIycY3Cza/TR1SNxyEwr5
-         3vK7uWPkQuCcUPWgmlI/heNTerMkV6oFpaDZrMl+uaCjqolZrvCp4eF0BGB6+5cy9SfS
-         inNwiyBCO6xW7MkwZY2aJUV5rxHIYFaMZZpbxqm3CmaP+zID87OVYSzUe/vtz0tLDVh2
-         UomQ==
+        bh=u+xUHXVQM9Dz8LrnzE+p2/PyuQIbjZpGsWxztNGcHQk=;
+        b=CgsLcznPR5dE74lkBawoKz+qUl7pE/jMyb1FtW3xODZVPUHsQtP5OLqW5Ec2y8FK6p
+         YvB1oRVNJkMc7J5+oRyYo+hAi+VhuN1f8e0C7VACsBQKLilTB4Aw+ZS5qF+Zkt9YO4/n
+         3TsSwELsu7yG272kyvn2b7NUTK6R4EbRRX4FkIVPNRjGEYSTMe32pzCDz+hF4atqRqq9
+         XZ8HYlbkHqbT5qe4atIc+lGgiSpntWQKUc2eGVTeTgw4fpxW7ch23vuoFMT0U08geYrY
+         7fVNguONdqKHgXv8u4fLXiGpYmpAe9hGjhAxBOGllfwNqOdZUUMvtosQzkRvSvrHbjEp
+         w3dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685130629; x=1687722629;
+        d=1e100.net; s=20221208; t=1685130648; x=1687722648;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bptdLRnlIF+oTqXFA/f6wS8sjlEr0Ke0jCvaGBA4+pE=;
-        b=A6tQajoVtcpNw/3RT46vkS5EDxql452opxmWelmxwvs/ZL6uNsFYUYpR1rBXqyyxXB
-         NslqqAnR0XUgGj5IyYzpqpVLhQPcfMYL9gYGr1MCGJFXBHBlnYZ+dq8RL7suZRPeL/A/
-         eYxJaRAx4hs0CKw38cnJhcG18xuZ1EkZbSjXnJYmIFNZZ5iDQYCueilzbtW4oC4FWH0y
-         P5/wnPZJ+aW/FMzphLGH59EGXN1ZDf6sQdTjS38xylt4X6kfIS7vOnJEOVn0915pjSJm
-         2KuhlLxsZ66x0ISyN0O2Y7Ys+RhRam3IVCmh/bFMsYIoVM0bI9qfEJajoK9PxrdMqO/g
-         lDJg==
-X-Gm-Message-State: AC+VfDwmOSGgJuhHpGdHUP3qPjn3qm39/mJu5XgM+GwzFeDImEpWQMgm
-        EdnmoB52ts+BgUjySXqaqzHpCA==
-X-Google-Smtp-Source: ACHHUZ7P53mmtIebsfVFiPAfw7IqoHPXyWIh60Vz4umL3ti79Xy60N1su2mzjUrd69LJuyDjzk1bIw==
-X-Received: by 2002:ac2:5219:0:b0:4f3:8269:7228 with SMTP id a25-20020ac25219000000b004f382697228mr682943lfl.68.1685130629265;
-        Fri, 26 May 2023 12:50:29 -0700 (PDT)
+        bh=u+xUHXVQM9Dz8LrnzE+p2/PyuQIbjZpGsWxztNGcHQk=;
+        b=W3k9hD/N+8NncYrWRbjUvSt6EwGTZ2aSA1u/XM/vynzWJtnwnZgDqbKzb+mvcvkR2o
+         vL/MojBhtBcUPgk2ympPjBaN27ha0enCK9XT+oZiGMZx8efIbw4kZt6benNbpSm9aW0f
+         cE+608ILZ4C0nm7x++v7pjpziRkUxDFWEZ8P5Vy/oiwse+gFA7+vckWMDKACrgyQb5qG
+         niIjm/albNfp0BpyvofAyCUu3CJnfEBKjPT7ZPty1Esw4qwPujcT8iHrm5/Svsks4JBs
+         qHe4/fRo4IqWjSQ3KcGKFx1akvznOeU7QckykspM3L2aYMm+azcAPlcrchRonx5V6Ws9
+         s6gg==
+X-Gm-Message-State: AC+VfDw34DAdihkdapQTFo00IEtEUWoxNMow0MQolpaIFS6pgz4rjunM
+        /g8kd1ky3VuC6RqyKh16Vjxqcg==
+X-Google-Smtp-Source: ACHHUZ4jL/1nS12nZu/haNGgLw6OPPmU/aFrqzWNtwXug2PxZOC7Y3wjlwJ/cQvcMN9zf8Jp6TQd5Q==
+X-Received: by 2002:a05:6512:513:b0:4f3:bad8:b7fc with SMTP id o19-20020a056512051300b004f3bad8b7fcmr839033lfb.29.1685130647892;
+        Fri, 26 May 2023 12:50:47 -0700 (PDT)
 Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id j5-20020ac253a5000000b004efae490c51sm750945lfh.240.2023.05.26.12.50.28
+        by smtp.gmail.com with ESMTPSA id y7-20020a2e7d07000000b002ad8174d025sm892875ljc.122.2023.05.26.12.50.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 12:50:28 -0700 (PDT)
-Message-ID: <e9adc0d3-922d-f4c8-6f09-94bdc44e6602@linaro.org>
-Date:   Fri, 26 May 2023 21:50:27 +0200
+        Fri, 26 May 2023 12:50:47 -0700 (PDT)
+Message-ID: <f417453d-4e11-4e9e-d24c-927772219ef5@linaro.org>
+Date:   Fri, 26 May 2023 21:50:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 1/4] arm64: dts: qcom: pm8550: add PWM controller
+Subject: Re: [PATCH 2/4] arm64: dts: qcom: sm8550-qrd: add notification RGB
+ LED
 Content-Language: en-US
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -66,9 +67,9 @@ To:     Neil Armstrong <neil.armstrong@linaro.org>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v1-0-4d5d7602f290@linaro.org>
- <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v1-1-4d5d7602f290@linaro.org>
+ <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v1-2-4d5d7602f290@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v1-1-4d5d7602f290@linaro.org>
+In-Reply-To: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v1-2-4d5d7602f290@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,35 +85,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 25.05.2023 17:47, Neil Armstrong wrote:
-> Add the PWM function to the pm8550 dtsi, this is usually used
-> to drive RGB leds on platforms using this PMIC.
+> The QRD features a notification LED connected to the pm8550.
+> Configure the RGB led controlled by the PMIC PWM controller.
 > 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  arch/arm64/boot/dts/qcom/pm8550.dtsi | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  arch/arm64/boot/dts/qcom/sm8550-qrd.dts | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/pm8550.dtsi b/arch/arm64/boot/dts/qcom/pm8550.dtsi
-> index 33f357a80636..db3d5c17a77d 100644
-> --- a/arch/arm64/boot/dts/qcom/pm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pm8550.dtsi
-> @@ -61,5 +61,15 @@ pm8550_flash: led-controller@ee00 {
->  			reg = <0xee00>;
->  			status = "disabled";
->  		};
-> +
-> +		pm8550_pwm: pwm {
-> +			compatible = "qcom,pm8550-pwm", "qcom,pm8350c-pwm";
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			#pwm-cells = <2>;
-> +
-> +			status = "disabled";
-> +		};
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> index ff61b8b36853..4a8177f99523 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> @@ -450,6 +450,33 @@ led-1 {
 >  	};
 >  };
+>  
+> +&pm8550_pwm {
+> +	status = "okay";
+> +
+> +	multi-led {
+> +		color = <LED_COLOR_ID_RGB>;
+> +		function = LED_FUNCTION_STATUS;
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		led@1 {
+> +			reg = <1>;
+> +			color = <LED_COLOR_ID_RED>;
+> +		};
+> +
+> +		led@2 {
+> +			reg = <2>;
+> +			color = <LED_COLOR_ID_GREEN>;
+> +		};
+> +
+> +		led@3 {
+> +			reg = <3>;
+> +			color = <LED_COLOR_ID_BLUE>;
+> +		};
+> +	};
+> +};
+> +
+>  &pm8550b_eusb2_repeater {
+>  	vdd18-supply = <&vreg_l15b_1p8>;
+>  	vdd3-supply = <&vreg_l5b_3p1>;
 > 
