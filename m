@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF4B712C81
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92855712C7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbjEZSe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
+        id S242535AbjEZSec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237598AbjEZSeW (ORCPT
+        with ESMTP id S242548AbjEZSeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:34:22 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C21B7
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:15 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba8337ade1cso2702455276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:15 -0700 (PDT)
+        Fri, 26 May 2023 14:34:23 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43AEE42
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:17 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacfa4eefd3so1399023276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685126054; x=1687718054;
+        d=google.com; s=20221208; t=1685126057; x=1687718057;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=rhs20KFbrBjMvIkaCaPHOIOyU5CqMAw5GkT0rX0TX0U=;
-        b=pDsfCR/qApd6BnNf5BC300XSLP2L05MlgSQ/+ZqWZ3VQmMjw4LHyrVtWRt03skSLoI
-         3ubDd7OwPnvf3CKmlqt9hJodEoCcRbQBzDr1oIaDNNewcZ5aJdnSGU1/LrGfohkCGu3u
-         GMUW+z2+VWYhlPciW/c3oBk78a+bx0ItNwaXGGh+UCAaaAKMfOcKbYrdNO5/tdC0rDzK
-         NU2qxy0/rSKHcTxt+lZuSrGE6rpmeqsegRhDeuXl0xf2VDShbDU1xAC+ba8Jpx2QFmQq
-         Q4tph4YXASgoo+KuJVAuenGVuKWZAGR/AWDGO4v0pSa69npEyf0nMDiz4NcUU9enCocq
-         TaFg==
+        bh=PQ6/7wH3wD+sz3l8jATNpn1TZP74J5iSNRHOLe9pzI0=;
+        b=AUsGHk1c9uTHOghP5ICbKsK1um7JsTzGLRPWZUjJIfN5E2WrVSOFdOrqJu/tv99hd8
+         ewuYNgOMwXmdbKIHQbdVpXweNIEL+jY7QjWrUeBKdHfCI1ck3e09pHpzzd63jjzW18Z1
+         kPT2/UDwNRh94p9o+F5V7XEwAJ84y224EelIL3IaP+cb9H7SQer0EwFev6vh6UdUoeCF
+         rBDj78sV7z3SLwRTYpKELGkD0sOqpNb5Nkqf+Nf5vtxruSzwDVY2/uMuO2yWujkVfBFu
+         82gPmmJBt2/rQlTpIJMfKKSBMFQYDVHBOj7f7Rx3a29OOyyD1hz2O8fniSlJId5vB3c3
+         u4YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685126054; x=1687718054;
+        d=1e100.net; s=20221208; t=1685126057; x=1687718057;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rhs20KFbrBjMvIkaCaPHOIOyU5CqMAw5GkT0rX0TX0U=;
-        b=WPV8IVAX7vd8j5CJxjFGe1WmRRNqFjpgpe9phs+MR00eFYzlFqujMgt1Lg2atnm7cs
-         vwExJn797ndpbCSbDIdfLDzsAQZIQIUZ4W+1CnMIEXEbfUBcBNFuw0sjk7f/OVsQhcPN
-         VIMFf/ag/hTC2US4Z+MXTUO9+6dFIiiJj3/Go8PIKEOIvXRKxIPiTYMvXPktZUYUrrnO
-         lc9SyFD47upEzxM/sA9CQ7NSl+sdHrV6ldIWTYZI0SOvvDwZ7FIYQNJA1C/hMcvY4RRj
-         HYqNjwt3s7ZCLC6ljzRdomFQtoBlOnOYIKbX6nfx5IAKfmkJG36qhnIUSOsGK8MfmLCP
-         aGnQ==
-X-Gm-Message-State: AC+VfDwV/emNGlytaPZTEK2asqEZvxEbpM3//q4rfLcn9oWK/1pvKyzR
-        P6Ell7prYCdnj1KztRG/vK/9ILjV3DGY
-X-Google-Smtp-Source: ACHHUZ6+rvkIOvNHoGwO95tDYhf6xgF/LAx36BZB1O5qRld+APf77syKzYKfTngPqwODAWdeN/l+yodizVw+
+        bh=PQ6/7wH3wD+sz3l8jATNpn1TZP74J5iSNRHOLe9pzI0=;
+        b=C9zwWLp0rnw05xXESucgTYsA6iwiYSLCB2GzBFw7Kovu8zXsXKyV7f5+N3QTilrmUm
+         IGp9l8DCUuCyyCD505FtL4U+jv6qm6Q67U3DrWdF0pt/Twszegayn7y+oZLoSp+aACwD
+         PCiid7chsiEYxniJyOvbxKC9EEA/QfNkFvYP/2eZgXZbxM7wNAWiMtLDOByFZHA0a3V8
+         WcdWcNq8eifxaXqVwR2OlByRgLNkhm0B5WB2le/SjCTEUUPh1zhOw2HQP+yq8MH72+Ut
+         zC0sK/j5xvT7nNKLILtDbMb9YZnKwmu553x7ylcpnT08l2yJGRukXB/pbkJe7ve8czq6
+         qSxA==
+X-Gm-Message-State: AC+VfDy1y8z6lDhaije/9BVdIXD0vMKNoAg8K+4Sbzh6IiV+D4NN57Fb
+        fbt98zgqK3wuTyfDcfM/xUKyX9a3tV5O
+X-Google-Smtp-Source: ACHHUZ4zT9LUn7F28yS/jJQpZRHjLu6YwE5B/u1eMByll0FnuiZaqF3ZyXswJfnaDiLO+Qqj6Gts33K0tiQ7
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a25:8211:0:b0:bad:14ac:f22e with SMTP id
- q17-20020a258211000000b00bad14acf22emr999303ybk.5.1685126054570; Fri, 26 May
- 2023 11:34:14 -0700 (PDT)
-Date:   Fri, 26 May 2023 11:33:47 -0700
+ (user=irogers job=sendgmr) by 2002:a25:4542:0:b0:ba8:93c3:331a with SMTP id
+ s63-20020a254542000000b00ba893c3331amr1404539yba.5.1685126056971; Fri, 26 May
+ 2023 11:34:16 -0700 (PDT)
+Date:   Fri, 26 May 2023 11:33:48 -0700
 In-Reply-To: <20230526183401.2326121-1-irogers@google.com>
-Message-Id: <20230526183401.2326121-3-irogers@google.com>
+Message-Id: <20230526183401.2326121-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20230526183401.2326121-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v2 02/16] perf test x86: insn-x86 test data is immutable so
+Subject: [PATCH v2 03/16] perf test x86: intel-pt-test data is immutable so
  mark it const
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -81,64 +81,86 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows the movement of some sizeable data arrays (168,624bytes)
-to .data.relro. Without PIE or the strings it could be moved to
-.rodata.
+This allows the movement of 5,808 bytes from .data to .rodata.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/arch/x86/tests/insn-x86.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ tools/perf/arch/x86/tests/intel-pt-test.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/tools/perf/arch/x86/tests/insn-x86.c b/tools/perf/arch/x86/tests/insn-x86.c
-index 735257d205b5..7b5eb8baf0f2 100644
---- a/tools/perf/arch/x86/tests/insn-x86.c
-+++ b/tools/perf/arch/x86/tests/insn-x86.c
-@@ -18,14 +18,14 @@ struct test_data {
- 	const char *asm_rep;
+diff --git a/tools/perf/arch/x86/tests/intel-pt-test.c b/tools/perf/arch/x86/tests/intel-pt-test.c
+index 70b7f79396b1..09d61fa736e3 100644
+--- a/tools/perf/arch/x86/tests/intel-pt-test.c
++++ b/tools/perf/arch/x86/tests/intel-pt-test.c
+@@ -22,7 +22,7 @@
+  * @new_ctx: expected new packet context
+  * @ctx_unchanged: the packet context must not change
+  */
+-static struct test_data {
++static const struct test_data {
+ 	int len;
+ 	u8 bytes[INTEL_PT_PKT_MAX_SZ];
+ 	enum intel_pt_pkt_ctx ctx;
+@@ -186,7 +186,7 @@ static struct test_data {
+ 	{0, {0}, 0, {0, 0, 0}, 0, 0 },
  };
  
--struct test_data test_data_32[] = {
-+const struct test_data test_data_32[] = {
- #include "insn-x86-dat-32.c"
- 	{{0x0f, 0x01, 0xee}, 3, 0, NULL, NULL, "0f 01 ee             \trdpkru"},
- 	{{0x0f, 0x01, 0xef}, 3, 0, NULL, NULL, "0f 01 ef             \twrpkru"},
- 	{{0}, 0, 0, NULL, NULL, NULL},
- };
- 
--struct test_data test_data_64[] = {
-+const struct test_data test_data_64[] = {
- #include "insn-x86-dat-64.c"
- 	{{0x0f, 0x01, 0xee}, 3, 0, NULL, NULL, "0f 01 ee             \trdpkru"},
- 	{{0x0f, 0x01, 0xef}, 3, 0, NULL, NULL, "0f 01 ef             \twrpkru"},
-@@ -97,7 +97,7 @@ static int get_branch(const char *branch_str)
- 	return -1;
+-static int dump_packet(struct intel_pt_pkt *packet, u8 *bytes, int len)
++static int dump_packet(const struct intel_pt_pkt *packet, const u8 *bytes, int len)
+ {
+ 	char desc[INTEL_PT_PKT_DESC_MAX];
+ 	int ret, i;
+@@ -206,14 +206,14 @@ static int dump_packet(struct intel_pt_pkt *packet, u8 *bytes, int len)
+ 	return TEST_OK;
  }
  
--static int test_data_item(struct test_data *dat, int x86_64)
-+static int test_data_item(const struct test_data *dat, int x86_64)
+-static void decoding_failed(struct test_data *d)
++static void decoding_failed(const struct test_data *d)
  {
- 	struct intel_pt_insn intel_pt_insn;
- 	int op, branch, ret;
-@@ -147,9 +147,9 @@ static int test_data_item(struct test_data *dat, int x86_64)
- 	return 0;
+ 	pr_debug("Decoding failed!\n");
+ 	pr_debug("Decoding:  ");
+ 	dump_packet(&d->packet, d->bytes, d->len);
  }
  
--static int test_data_set(struct test_data *dat_set, int x86_64)
-+static int test_data_set(const struct test_data *dat_set, int x86_64)
+-static int fail(struct test_data *d, struct intel_pt_pkt *packet, int len,
++static int fail(const struct test_data *d, struct intel_pt_pkt *packet, int len,
+ 		enum intel_pt_pkt_ctx new_ctx)
  {
--	struct test_data *dat;
-+	const struct test_data *dat;
- 	int ret = 0;
+ 	decoding_failed(d);
+@@ -242,7 +242,7 @@ static int fail(struct test_data *d, struct intel_pt_pkt *packet, int len,
+ 	return TEST_FAIL;
+ }
  
- 	for (dat = dat_set; dat->expected_length; dat++) {
+-static int test_ctx_unchanged(struct test_data *d, struct intel_pt_pkt *packet,
++static int test_ctx_unchanged(const struct test_data *d, struct intel_pt_pkt *packet,
+ 			      enum intel_pt_pkt_ctx ctx)
+ {
+ 	enum intel_pt_pkt_ctx old_ctx = ctx;
+@@ -258,7 +258,7 @@ static int test_ctx_unchanged(struct test_data *d, struct intel_pt_pkt *packet,
+ 	return TEST_OK;
+ }
+ 
+-static int test_one(struct test_data *d)
++static int test_one(const struct test_data *d)
+ {
+ 	struct intel_pt_pkt packet;
+ 	enum intel_pt_pkt_ctx ctx = d->ctx;
+@@ -307,7 +307,7 @@ static int test_one(struct test_data *d)
+  */
+ int test__intel_pt_pkt_decoder(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+ {
+-	struct test_data *d = data;
++	const struct test_data *d = data;
+ 	int ret;
+ 
+ 	for (d = data; d->len; d++) {
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
