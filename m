@@ -2,78 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0367125C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E69D7125C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 13:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243352AbjEZLlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 07:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        id S243364AbjEZLlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 07:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236875AbjEZLk5 (ORCPT
+        with ESMTP id S243319AbjEZLk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 07:40:57 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320DA13A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 04:40:56 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34Q9qKcf012829;
-        Fri, 26 May 2023 13:40:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=Q/cQ+s7tQtjC/OitTWv7XOq+cPm+R5vQ5zct/mEOgKY=;
- b=gHdi/t9om+jjKpDK0hLDKd5Nlzg/LS8AEPW7NN+OMtb+wZpLg2ii9nhCCrNANKniCc+I
- B/A7VLw9/476mOlSakzzP60KUl22NHIEKaLnt2oRgqiQhfNZgtUGhQmz676EAFR6t0vr
- lhCKEm9yXaTnEYeigzmrvL5Dys8MGMagqaY/KciWemvzDbeGLsOKda8DHf5KtzaPVmoM
- 1wsIbTuIBf1nLVFoLt8p/MRL2qlj0vj4veVIHNY/el1YsXFzPVTkgTTLNasDn+EgRMNG
- WGAsjSo/UWyU6JzgyBAVNx/i6Yd2LryQc0I2GVVahPtEjnrkRVDsMXk88/SMDCJUMueU 6g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qt39u1328-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 May 2023 13:40:44 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E049710002A;
-        Fri, 26 May 2023 13:40:42 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D7193229A9D;
-        Fri, 26 May 2023 13:40:42 +0200 (CEST)
-Received: from [10.48.0.148] (10.48.0.148) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 26 May
- 2023 13:40:42 +0200
-Message-ID: <62bd9682-b768-8be3-7a2f-0eceea6d9772@foss.st.com>
-Date:   Fri, 26 May 2023 13:40:41 +0200
+        Fri, 26 May 2023 07:40:59 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847E9194
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 04:40:57 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QSNKJ47RvzTkSH;
+        Fri, 26 May 2023 19:40:52 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 26 May 2023 19:40:54 +0800
+Message-ID: <847b9b8a-d9d5-3ee9-41f3-1171a4f73434@huawei.com>
+Date:   Fri, 26 May 2023 19:40:54 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RESEND] drm/stm: ltdc: fix late dereference check
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH -next] memblock: unify memblock dump and debugfs show
 Content-Language: en-US
-To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>
-References: <20230515123818.93971-1-raphael.gallais-pou@foss.st.com>
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-In-Reply-To: <20230515123818.93971-1-raphael.gallais-pou@foss.st.com>
+To:     kernel test robot <lkp@intel.com>, Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <oe-kbuild-all@lists.linux.dev>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <tsahu@linux.ibm.com>,
+        <anshuman.khandual@arm.com>, <ssawgyw@gmail.com>
+References: <20230525115856.124507-1-wangkefeng.wang@huawei.com>
+ <202305261822.ZFRYZVQk-lkp@intel.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <202305261822.ZFRYZVQk-lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.0.148]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,51 +55,27 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 5/15/23 14:38, Raphael Gallais-Pou wrote:
-> In ltdc_crtc_set_crc_source(), struct drm_crtc was dereferenced in a
-> container_of() before the pointer check. This could cause a kernel panic.
-> 
-> Fix this smatch warning:
-> drivers/gpu/drm/stm/ltdc.c:1124 ltdc_crtc_set_crc_source() warn: variable dereferenced before check 'crtc' (see line 1119)
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://lore.kernel.org/lkml/202212241802.zeLFZCXB-lkp@intel.com/
-> Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-> ---
->   drivers/gpu/drm/stm/ltdc.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-> index 03c6becda795..b8be4c1db423 100644
-> --- a/drivers/gpu/drm/stm/ltdc.c
-> +++ b/drivers/gpu/drm/stm/ltdc.c
-> @@ -1145,7 +1145,7 @@ static void ltdc_crtc_disable_vblank(struct drm_crtc *crtc)
->   
->   static int ltdc_crtc_set_crc_source(struct drm_crtc *crtc, const char *source)
->   {
-> -	struct ltdc_device *ldev = crtc_to_ltdc(crtc);
-> +	struct ltdc_device *ldev;
->   	int ret;
->   
->   	DRM_DEBUG_DRIVER("\n");
-> @@ -1153,6 +1153,8 @@ static int ltdc_crtc_set_crc_source(struct drm_crtc *crtc, const char *source)
->   	if (!crtc)
->   		return -ENODEV;
->   
-> +	ldev = crtc_to_ltdc(crtc);
-> +
->   	if (source && strcmp(source, "auto") == 0) {
->   		ldev->crc_active = true;
->   		ret = regmap_set_bits(ldev->regmap, LTDC_GCR, GCR_CRCEN);
 
-Hi Raphael,
-Applied on drm-misc-next.
+On 2023/5/26 19:09, kernel test robot wrote:
+> Hi Kefeng,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on next-20230525]
+> 
+Thank, I will drop __initdata_memblock .
 
-Note & fyi, I fixed the following warning, please be sure to follow this 
-rule next time :-)
-WARNING:BAD_REPORTED_BY_LINK: Reported-by: should be immediately 
-followed by Closes: with a URL to the report
-
-Many thanks for your patch,
-Philippe :-)
+> 
+> 
+> vim +1910 mm/memblock.c
+> 
+>    1909	
+>> 1910	static const char * const flagname[] __initdata_memblock = {
+>    1911		[ilog2(MEMBLOCK_HOTPLUG)]		= "HOTPLUG",
+>    1912		[ilog2(MEMBLOCK_MIRROR)]		= "MIRROR",
+>    1913		[ilog2(MEMBLOCK_NOMAP)]			= "NOMAP",
+>    1914		[ilog2(MEMBLOCK_DRIVER_MANAGED)]	= "DRV_MNG",
+>    1915		[ilog2(MEMBLOCK_MAX_UNKNOWN)]		= "UNKNOWN",
+>    1916	};
+>    1917	
+> 
