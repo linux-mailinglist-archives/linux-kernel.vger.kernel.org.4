@@ -2,208 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC0F712BBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4DE712BC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236875AbjEZR1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
+        id S242088AbjEZR3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjEZR1i (ORCPT
+        with ESMTP id S230226AbjEZR3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:27:38 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9818CF7;
-        Fri, 26 May 2023 10:27:36 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685122055;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sLLkkTARqYG2/kq9zm8hqhnR4AX8Ph/c88jn0yKAnqU=;
-        b=j6AmoKuokt9TL+mjt11P5LSYrljI4dAEec4BwDJ6vF3J5DeiGOkx5kcRtPk4dBcV1Q5l0i
-        uKGtfCsVvoD842m+YZ5yJXxCAlWb0/l9bSXIVd7Tn8YBNcKbBhoPOFdy4zk/wF19fFQ4Ix
-        wCnpJh9Og2gf/56IaDe/wkAtqvTd0hTF2BEncqDhoU4LiIXOSgPNR8eNN9AOt0Evro1Xak
-        y6GLycoh4ZHTY7pbaKunrX/+IvNuvthcRHGabMvvh6NnHaoqhGXw3fAKb4bU0C6N+dlKxW
-        OFR2lzz3nxyl7WK9CqUV7umUJrhKyiiCec2QEDFpGxv4BEr0frzgVVLSQ9727A==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 77D28C0003;
-        Fri, 26 May 2023 17:27:34 +0000 (UTC)
-Date:   Fri, 26 May 2023 19:27:33 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc:     <mani@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_srichara@quicinc.com>
-Subject: Re: [PATCH v2 2/5] mtd: rawnand: qcom: Add support for reset,
- readid, status exec_op
-Message-ID: <20230526192733.003b5293@xps-13>
-In-Reply-To: <a92d2d3f-34b5-9cf1-ed40-1c812cbd0125@quicinc.com>
-References: <20230511133017.6307-1-quic_mdalam@quicinc.com>
-        <20230511133017.6307-3-quic_mdalam@quicinc.com>
-        <20230522154507.0255d902@xps-13>
-        <a92d2d3f-34b5-9cf1-ed40-1c812cbd0125@quicinc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 26 May 2023 13:29:44 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9189C
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:29:42 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-2533ed4f1dcso809876a91.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685122182; x=1687714182;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2ECdzZZL86eJhjSdjI9LSM4GZH5FHRQRd7R2QuPlZFU=;
+        b=SWnwx7Rg5xkMoqvFnqVitXMTN5Tdof0PwAATkTNNiaocNy5T4unuaB/iL4w07jUu5O
+         og7U+R4FZ+OyQIOs7eqS/6NZWC6F4zXt/+U99gZoC8DDBzd685xykDFVvxa+LkZEeibB
+         w3wdlWx2rS2esBnVGbnBAlNFK7gDIRHG0+UL9EvXSkhUHUdGq2dp70Lck4QdhfyUjH18
+         jTcFWqN5ygJiMR+XoVc077o8CJIfR+M6aPDCmTB2fF7VIugiFiBiHyWRYlIRIUaRHQPH
+         iKmCz3tmsG8TWNFsVlz9CX3ji2PEjT3eXJJ8xxZXuC4eeCxSckCNO1jkFu/jsWKsDH2L
+         AoNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685122182; x=1687714182;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2ECdzZZL86eJhjSdjI9LSM4GZH5FHRQRd7R2QuPlZFU=;
+        b=CiEYjD5W17xQpdrsu927Bj3YlNjrhPtpoAgzgZft2Z8j4iZgrKsIA1oG6j9qbEyrH/
+         Xl7D5Ag8RdF/ilIyagKduLtMkoxJcCKnQ4PlksgVK0uGbp3cZJP4SRFSZLxYazMPXBHp
+         72AQ+oTttqa5plWh8lQz3aS1UsikUTmFLSgqcWixLTnxQy4GoC59gn4AmfMJmhL8qrVq
+         soWojuOoEtnnzbOWLXM5zY/OT7sU/QcQ6lpG1JlLseEdvX+sHfpbG/Te+KgAPwskE508
+         OL9BA+pcIH/7q66AFv4pucc/huEpNRAps0qIwPEjV+eIvazFiVSQQHtX410DJRcLK984
+         F1cw==
+X-Gm-Message-State: AC+VfDyyaycTDRAC42JSBZE7eE/C0P7MNZqQXKHKwwdxZn6OqIImhU9G
+        4hBwFM3kVapEJTQKlTTyl/E=
+X-Google-Smtp-Source: ACHHUZ4efWUt6aOiOCpOh4DLIyxIGndySrxgX+fK/GvP6JsbauvOYowVM7ihJhz9WwMDHYknbbbWZQ==
+X-Received: by 2002:a17:90a:5b01:b0:255:5a5e:df38 with SMTP id o1-20020a17090a5b0100b002555a5edf38mr3045404pji.33.1685122181624;
+        Fri, 26 May 2023 10:29:41 -0700 (PDT)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id 21-20020a17090a01d500b0024e2980574asm5270832pjd.4.2023.05.26.10.29.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 26 May 2023 10:29:41 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH v2] x86/lib: Do not use local symbols with
+ SYM_CODE_START_LOCAL()
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <20230526155336.GAZHDWAFi1FRqq83TP@nazgul.local>
+Date:   Fri, 26 May 2023 10:29:29 -0700
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <0F07EEDB-8A3F-4224-9FF1-43A5300B1B8B@gmail.com>
+References: <20230525184244.2311-1-namit@vmware.com>
+ <38e24fd4-9213-229d-9919-7ae3bfb113bb@intel.com>
+ <24E47178-C177-425F-A8EF-CFFAE22597D4@gmail.com>
+ <20230526155336.GAZHDWAFi1FRqq83TP@nazgul.local>
+To:     Borislav Petkov <bp@alien8.de>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Md,
 
-quic_mdalam@quicinc.com wrote on Wed, 24 May 2023 14:54:34 +0530:
 
-> On 5/22/2023 7:15 PM, Miquel Raynal wrote:
-> > Hi Md,
-> >=20
-> > quic_mdalam@quicinc.com wrote on Thu, 11 May 2023 19:00:14 +0530:
-> >  =20
-> >> This change will add exec_ops support for RESET , READ_ID, STATUS
-> >> command.
-> >>
-> >> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> >> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> >> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> >> ---
-> >> Change in [v2]
-> >>
-> >> * Missed to post Cover-letter, so posting v2 patch with cover-letter
-> >>
-> >>   drivers/mtd/nand/raw/qcom_nandc.c | 166 ++++++++++++++++++++++++++++=
-+-
-> >>   1 file changed, 163 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/=
-qcom_nandc.c
-> >> index dae460e2aa0b..d2f2a8971907 100644
-> >> --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> >> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> >> @@ -384,6 +384,9 @@ struct nandc_regs {
-> >>    * @reg_read_pos:		marker for data read in reg_read_buf
-> >>    *
-> >>    * @cmd1/vld:			some fixed controller register values
-> >> + *
-> >> + * @exec_opwrite:		flag to select correct number of code word
-> >> + *				while reading status
-> >>    */
-> >>   struct qcom_nand_controller {
-> >>   	struct device *dev;
-> >> @@ -434,6 +437,7 @@ struct qcom_nand_controller {
-> >>   	int reg_read_pos; =20
-> >>   >>   	u32 cmd1, vld; =20
-> >> +	bool exec_opwrite;
-> >>   }; =20
-> >>   >>   /* =20
-> >> @@ -2920,6 +2924,8 @@ static int qcom_op_cmd_mapping(struct qcom_nand_=
-controller *nandc, u8 cmd,
-> >>   		break;
-> >>   	case NAND_CMD_PAGEPROG:
-> >>   		ret =3D OP_PROGRAM_PAGE;
-> >> +		q_op->flag =3D NAND_CMD_PAGEPROG; =20
-> >=20
-> > Just use the instruction value? =20
->=20
->    Sure , will fix this in next patch V3.
-> >  =20
-> >> +		nandc->exec_opwrite =3D true;
-> >>   		break;
-> >>   	default:
-> >>   		break;
-> >> @@ -2982,10 +2988,95 @@ static void qcom_parse_instructions(struct nan=
-d_chip *chip,
-> >>   	}
-> >>   } =20
-> >>   >> +static void qcom_delay_ns(unsigned int ns) =20
-> >> +{
-> >> +	if (!ns)
-> >> +		return;
-> >> +
-> >> +	if (ns < 10000)
-> >> +		ndelay(ns);
-> >> +	else
-> >> +		udelay(DIV_ROUND_UP(ns, 1000));
-> >> +}
-> >> +
-> >> +static int qcom_wait_rdy_poll(struct nand_chip *chip, unsigned int ti=
-me_ms)
-> >> +{
-> >> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip=
-);
-> >> +	unsigned long start =3D jiffies + msecs_to_jiffies(time_ms);
-> >> +	u32 flash;
-> >> +
-> >> +	nandc_read_buffer_sync(nandc, true);
-> >> +
-> >> +	do {
-> >> +		flash =3D le32_to_cpu(nandc->reg_read_buf[0]);
-> >> +		if (flash & FS_READY_BSY_N)
-> >> +			return 0;
-> >> +		cpu_relax();
-> >> +	} while (time_after(start, jiffies));
-> >> +
-> >> +	dev_err(nandc->dev, "Timeout waiting for device to be ready:0x%08x\n=
-", flash);
-> >> +
-> >> +	return -ETIMEDOUT;
-> >> +}
-> >> +
-> >>   static int qcom_read_status_exec(struct nand_chip *chip,
-> >>   				 const struct nand_subop *subop)
-> >>   {
-> >> -	return 0;
-> >> +	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
-> >> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip=
-);
-> >> +	struct nand_ecc_ctrl *ecc =3D &chip->ecc;
-> >> +	struct qcom_op q_op;
-> >> +	const struct nand_op_instr *instr =3D NULL;
-> >> +	unsigned int op_id =3D 0;
-> >> +	unsigned int len =3D 0;
-> >> +	int ret =3D 0, num_cw =3D 1, i;
-> >> +	u32 flash_status;
-> >> +
-> >> +	host->status =3D NAND_STATUS_READY | NAND_STATUS_WP;
-> >> +
-> >> +	qcom_parse_instructions(chip, subop, &q_op);
-> >> +
-> >> +	if (nandc->exec_opwrite) { =20
-> >=20
-> > I definitely don't understand this flag at all. =20
->=20
->    This flag is to get the status for all code word in case of program pa=
-ge operation.
->    Since this read status is common for reading status for all kind of op=
-eration.
->    so in page program operation it needs to get status for all code word =
-i.e 4 in 2K page.
->    but for normal operation number of code word will be 1.
+> On May 26, 2023, at 8:53 AM, Borislav Petkov <bp@alien8.de> wrote:
+> 
+> On Thu, May 25, 2023 at 12:39:47PM -0700, Nadav Amit wrote:
+>> I do not think in this tradeoff not exposing local names worth
+>> preventing profilers (and their users) from understanding where a
+>> sample/trace is was taken. If for instance you look at a branch
+>> trace (e.g., using Intel PT) you want to see the symbol to which a
+>> branch goes to.
+> 
+> If those functions were written in C, you wouldn't see any
+> exception-handling symbols either. It is the fact that they're asm
+> and the exception labels are defined "out-of-line" so that you don't
+> have code duplication and thus are symbols outside of the respective
+> functions.
 
-Then you don't need that dark flag, just ask for a number of CW to
-check. It will always be 1 unless you're in a page helper and want as
-many CW as chunks.
+According to my experience any or virtually any code address, C or asm,
+can be mapped back to a symbol. I say virtually all, but it is actually
+all the code addresses that I encountered.
 
-> >  =20
-> >> +		num_cw =3D ecc->steps;
-> >> +		nandc->exec_opwrite =3D false;
-> >> +	}
-> >> +
+Can you give me some examples for code whose address cannot be mapped
+back to a symbol?
 
-Thanks,
-Miqu=C3=A8l
+> So you'd have to give a lot more detailed example where making those
+> symbols global, helps.
+
+I did not ask to make them global. Just to keep them as local after
+linkage in the executable, like all other functions in the kernel.
+
+> And if those symbols are going to be global, then they better have more
+> descriptive names as they're gonna be pretty much independent functions.
+> Something like __get_user_handle_exception() or so.
+
+I can do that.
+
