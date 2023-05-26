@@ -2,43 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC1C7129F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8DF7129F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244202AbjEZPvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S244210AbjEZPvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbjEZPvP (ORCPT
+        with ESMTP id S244179AbjEZPvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:51:15 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B6E114;
-        Fri, 26 May 2023 08:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=luSvtwFvYuWEDfQ0oWnh9KpQF4jauEGj7bA+0Z7dn4Y=; b=OA7OqI7gnvQqMRhLYwoLU6eBos
-        sXAQseXvyzb55q9L8L94gtuYNT8Q3H7U9yXwejTnWnRnekY8CFcbpe20VuZio0bz9+xZ8CAXCQOG+
-        gfZs40AURVleyDRDNerPyG6/TQ4FKgck+/Q0LsXFaV1mGaIqPnKtwmrFQ+CvRKlRt9Y5b9v3bNQOk
-        Tqs+BeduE/jGpym96MQOJNdqQBjOSuWzQN9w8Tn3VHf5N4wGR3Eh8Nn7oJc6R8qL2apVFgmDiiknu
-        NPG47lMmnGT3ZPzyN7T5KBeCDgkHW6QCAu1TLsjix32DIdLnt5IDBo910YXcYoMXyEUXkShsISgfh
-        WOtBoWtw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:44614)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q2ZiN-0005qz-1e; Fri, 26 May 2023 16:50:51 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q2ZiC-0003rr-Ob; Fri, 26 May 2023 16:50:40 +0100
-Date:   Fri, 26 May 2023 16:50:40 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     arinc9.unal@gmail.com, Sean Wang <sean.wang@mediatek.com>,
+        Fri, 26 May 2023 11:51:32 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9063187;
+        Fri, 26 May 2023 08:51:29 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96fe2a1db26so161235266b.0;
+        Fri, 26 May 2023 08:51:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685116288; x=1687708288;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4dgxGjGPq9B4BTMs3oBF79nFKdG/JfMIEAxOn4RCl9c=;
+        b=i0IAtIFhPzBl8gwRKkjpt8ZxONqxs+fOve/1EOjxDmnMugCzaxA2J6L/7fLUjsMhyO
+         enSKvTaetZqRF599KOD7chSziRIOv1IxlgE+zG2zG2lop8yhx/U4xUX6IyxMOseBJd0n
+         lROHBAnroUqG2MBQNrDh3DSdUTG4cevxIXgJ3P6d+4vmt8/iYIbgTt74SvTW108DrCXf
+         az/pqLgcWChfJo1ri8MCi64oC65GygxACwjtBkHZip/fZw7DUiOQQ2Zzy32aJ2x6as/7
+         ugeOFpcjV+2ZfyuQA6Nh8FmQ81CN9gskXpqxOBQejo9NXiLmdUds0cPL3NXUF6rFBcAK
+         Km4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685116288; x=1687708288;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4dgxGjGPq9B4BTMs3oBF79nFKdG/JfMIEAxOn4RCl9c=;
+        b=f4eZKliacPuuSfgNbu+HcKwIpXflNae4zi4d5xqrs6bupN8imTMGSdzUbE4ho81dCc
+         E05Jk+srrEaP1SWlaNuyvanCZuxWv8Ca42tSJOR2D2cs9ybwHG/91Y57IEF27j/KzxXM
+         NXFZLL2XhG76l0QbPExysRw3aNhX+dn4QzEyAywVwjpSdS7lb5iHQRj8/FZRaDp4I3ST
+         ta2jimj1wdJoHLrEivKFa6W07h4UcHi9wb8sDll9aD3PPusE/RAM+0ngTFsV0U8mgYQH
+         8GuSXdUORDS7bk10sn3f5GZrB/Od/nZCVaSr59cHM6qHGFRl0oDQfo/I/9UpCofFdSft
+         01Aw==
+X-Gm-Message-State: AC+VfDx5GGY7y7JEsQ+K8r0wAx0M2FKytPji/u3z/Og5+pXbvtc2XZUk
+        lFfc3G6bnZZQJueJUxBpJWA=
+X-Google-Smtp-Source: ACHHUZ5BbaM6qT+X4mipLLBDQrNNgEQTBj8wVNxUGWplmpGPdIn1TCwtHQVBX6Zt6AzlqGugCe+/IQ==
+X-Received: by 2002:a17:906:fe48:b0:973:9521:cd50 with SMTP id wz8-20020a170906fe4800b009739521cd50mr2117091ejb.41.1685116288079;
+        Fri, 26 May 2023 08:51:28 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id ja8-20020a170907988800b00961277a426dsm2283115ejc.205.2023.05.26.08.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 08:51:27 -0700 (PDT)
+Date:   Fri, 26 May 2023 18:51:24 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
         Landen Chao <Landen.Chao@mediatek.com>,
         DENG Qingfang <dqfext@gmail.com>,
         Daniel Golle <daniel@makrotopia.org>,
@@ -51,6 +66,7 @@ Cc:     arinc9.unal@gmail.com, Sean Wang <sean.wang@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
         =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
         Richard van Schagen <richard@routerhints.com>,
         Richard van Schagen <vschagen@cs.com>,
@@ -60,66 +76,119 @@ Cc:     arinc9.unal@gmail.com, Sean Wang <sean.wang@mediatek.com>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 24/30] net: dsa: mt7530: rename MT7530_MFC to
- MT753X_MFC
-Message-ID: <ZHDVUC1AqncfF2mK@shell.armlinux.org.uk>
+Subject: Re: [PATCH net-next 25/30] net: dsa: mt7530: properly set
+ MT7531_CPU_PMAP
+Message-ID: <20230526155124.sps74wayui6bydao@skbuf>
 References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-25-arinc.unal@arinc9.com>
- <20230526154258.skbkk4p34ro5uivr@skbuf>
+ <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-26-arinc.unal@arinc9.com>
+ <20230522121532.86610-26-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230526154258.skbkk4p34ro5uivr@skbuf>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230522121532.86610-26-arinc.unal@arinc9.com>
+ <20230522121532.86610-26-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 06:42:58PM +0300, Vladimir Oltean wrote:
-> On Mon, May 22, 2023 at 03:15:26PM +0300, arinc9.unal@gmail.com wrote:
-> >  	/* Disable flooding on all ports */
-> > -	mt7530_clear(priv, MT7530_MFC, BC_FFP_MASK | UNM_FFP_MASK |
-> > -		     UNU_FFP_MASK);
-> > +	mt7530_clear(priv, MT753X_MFC, MT753X_BC_FFP_MASK | MT753X_UNM_FFP_MASK
-> > +		     | MT753X_UNU_FFP_MASK);
+On Mon, May 22, 2023 at 03:15:27PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> The preferred coding style is not to start new lines with operators.
+> Every bit of the CPU port bitmap for MT7531 and the switch on the MT7988
+> SoC represents a CPU port to trap frames to. Currently only the bit that
+> corresponds to the first found CPU port is set on the bitmap. Introduce the
+> MT7531_CPU_PMAP macro to individually set the bits of the CPU port bitmap.
+> Set the CPU port bitmap for MT7531 and the switch on the MT7988 SoC on
+> mt753x_cpu_port_enable() which runs on a loop for each CPU port. Add
+> comments to explain this.
 > 
-> > +/* Register for CPU forward control */
-> >  #define MT7531_CFC			0x4
-> >  #define  MT7531_MIRROR_EN		BIT(19)
-> > -#define  MT7531_MIRROR_MASK		(MIRROR_MASK << 16)
-> > -#define  MT7531_MIRROR_PORT_GET(x)	(((x) >> 16) & MIRROR_MASK)
-> > -#define  MT7531_MIRROR_PORT_SET(x)	(((x) & MIRROR_MASK) << 16)
-> > +#define  MT7531_MIRROR_MASK		(0x7 << 16)
+> According to the document MT7531 Reference Manual for Development Board
+> v1.0, the MT7531_CPU_PMAP bits are unset after reset so no need to clear it
+> beforehand. Since there's currently no public document for the switch on
+> the MT7988 SoC, I assume this is also the case for this switch.
 > 
-> minor nitpick: if you express this as GENMASK(18, 16), it will be a bit
-> easier to cross-check with the datasheet, since both 18 and 16 are more
-> representative than 0x7.
-> 
-> > +#define  MT7531_MIRROR_PORT_GET(x)	(((x) >> 16) & 0x7)
-> 
-> also here: (((x) & GENMASK(18, 16)) >> 16)
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
 
-Even better are:
-#define  MT7531_MIRROR_PORT_GET(x)	FIELD_GET(MT7531_MIRROR_MASK, x)
+Is this supposed to be a bug fix? (incompatibility with past or future
+device trees also counts as bugs) If so, it needs a Fixes: tag and to be
+targeted towards the "net" tree. Also, the impact of the current behavior
+and of the change need to be explained better.
 
+>  drivers/net/dsa/mt7530.c | 15 ++++++++-------
+>  drivers/net/dsa/mt7530.h |  3 ++-
+>  2 files changed, 10 insertions(+), 8 deletions(-)
 > 
-> > +#define  MT7531_MIRROR_PORT_SET(x)	(((x) & 0x7) << 16)
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index 58d8738d94d3..0b513e3628fe 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -963,6 +963,13 @@ mt753x_cpu_port_enable(struct dsa_switch *ds, int port)
+>  		mt7530_rmw(priv, MT753X_MFC, MT7530_CPU_MASK, MT7530_CPU_EN |
+>  			   MT7530_CPU_PORT(port));
+>  
+> +	/* Add the CPU port to the CPU port bitmap for MT7531 and the switch on
+> +	 * the MT7988 SoC. Any frames set for trapping to CPU port will be
+> +	 * trapped to the CPU port the user port is affine to.
+> +	 */
+> +	if (priv->id == ID_MT7531 || priv->id == ID_MT7988)
+> +		mt7530_set(priv, MT7531_CFC, MT7531_CPU_PMAP(BIT(port)));
+> +
+
+Stylistically, the existence of an indirect call to priv->info->cpu_port_config()
+per switch family is a bit dissonant with an explicit check for device id later
+in the same function.
+
+>  	/* CPU port gets connected to all user ports of
+>  	 * the switch.
+>  	 */
+> @@ -2315,15 +2322,9 @@ static int
+>  mt7531_setup_common(struct dsa_switch *ds)
+>  {
+>  	struct mt7530_priv *priv = ds->priv;
+> -	struct dsa_port *cpu_dp;
+>  	int ret, i;
+>  
+> -	/* BPDU to CPU port */
+> -	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
+> -		mt7530_rmw(priv, MT7531_CFC, MT7531_CPU_PMAP_MASK,
+> -			   BIT(cpu_dp->index));
+> -		break;
+> -	}
+> +	/* Trap BPDUs to the CPU port(s) */
+>  	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
+>  		   MT753X_BPDU_CPU_ONLY);
+>  
+> diff --git a/drivers/net/dsa/mt7530.h b/drivers/net/dsa/mt7530.h
+> index 5ebb942b07ef..fd2a2f726b8a 100644
+> --- a/drivers/net/dsa/mt7530.h
+> +++ b/drivers/net/dsa/mt7530.h
+> @@ -53,7 +53,8 @@ enum mt753x_id {
+>  #define  MT7531_MIRROR_MASK		(0x7 << 16)
+>  #define  MT7531_MIRROR_PORT_GET(x)	(((x) >> 16) & 0x7)
+>  #define  MT7531_MIRROR_PORT_SET(x)	(((x) & 0x7) << 16)
+> -#define  MT7531_CPU_PMAP_MASK		GENMASK(7, 0)
+> +#define  MT7531_CPU_PMAP(x)		((x) & 0xff)
+
+You can leave this as ((x) & GENMASK(7, 0))
+
+> +#define  MT7531_CPU_PMAP_MASK		MT7531_CPU_PMAP(~0)
+
+There's no other user of MT7531_CPU_PMAP_MASK, you can remove this.
+
+>  
+>  #define MT753X_MIRROR_REG(id)		((((id) == ID_MT7531) || ((id) == ID_MT7988)) ?	\
+>  					 MT7531_CFC : MT753X_MFC)
+> -- 
+> 2.39.2
 > 
-> and here: (((x) << 16) & GENMASK(18, 16))
 
-#define  MT7531_MIRROR_PORT_SET(x)	FIELD_PREP(MT7531_MIRROR_MASK, x)
-
-No need to add parens around "x" in either of these uses as we're not
-doing anything with x other than passing it into another macro.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
