@@ -2,135 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E47711E21
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1D7711E1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236574AbjEZCuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 22:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S235394AbjEZCtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 22:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjEZCuC (ORCPT
+        with ESMTP id S230058AbjEZCtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 22:50:02 -0400
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276FD9C;
-        Thu, 25 May 2023 19:50:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1685069401; x=1716605401;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2k6LATmSEjQ87/ONfQdITiWFK2HdYH+jsh6Z7mJU0RU=;
-  b=rqVSCh5RFLYceZrZi13CA08HAcoo16Ikn7eOGBuR8DwrXCScPNYCxMZg
-   9nehmqWDYwj1uWkvqbEyZtfGEfLzEfFznDs2YfBUD9sCrNwtrfcy9gkIG
-   TuYMzFPZXuMHVHjDa8sGpv/1/sR1kQWa+Q8WYhH5sYp9CCnttZVq6YtyS
-   k=;
-X-IronPort-AV: E=Sophos;i="6.00,192,1681171200"; 
-   d="scan'208";a="287490348"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 02:49:53 +0000
-Received: from EX19MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-f253a3a3.us-west-2.amazon.com (Postfix) with ESMTPS id 7B9408064D;
-        Fri, 26 May 2023 02:49:50 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 26 May 2023 02:49:45 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.106.100.20) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 26 May 2023 02:49:40 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <kuniyu@amazon.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
-        <joe@cilium.io>, <joe@wand.net.nz>, <john.fastabend@gmail.com>,
-        <jolsa@kernel.org>, <kafai@fb.com>, <kpsingh@kernel.org>,
-        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lmb@isovalent.com>, <martin.lau@linux.dev>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@google.com>,
-        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
-Date:   Thu, 25 May 2023 19:49:31 -0700
-Message-ID: <20230526024931.88117-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230526014317.80715-1-kuniyu@amazon.com>
-References: <20230526014317.80715-1-kuniyu@amazon.com>
+        Thu, 25 May 2023 22:49:04 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA5D9C
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685069343; x=1716605343;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nKfvvNijiD3HGX1IG9gf/m7+0RqedZ9hxmzlg8rY6N0=;
+  b=HlHSiCZ0c0TX/kumkaDUNmUXaCEZy4/npebsL9P5mBgtVxxJYxd2BmqM
+   TQAh5UmRN0MgU0nXKnidUXHFc4Sl8NSkD8tg1wc06a8wHwEevKqYqn7gY
+   dl/NNptNzRXVLogWMxT7vIb6nQKZjvDgP9ndLBRs2KUdG7HAJKbODzeSq
+   GjmzoHtv0fTTGCOKL0lySgUyaAlF/KAhCDvvbKShJt+mZtvira13PClkg
+   RznOeU2PCsSb5MYF0k9I8KDBvcUDF6vjjAWcsQn10df3bcv1nd3OHy7rz
+   C0dch+1V4sYTrzYsqHdTsIMfNA1sAeLhRg01c4UrD9ZKIr/Y/RRlRcaBE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="351606649"
+X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
+   d="scan'208";a="351606649"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 19:49:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="699266269"
+X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
+   d="scan'208";a="699266269"
+Received: from linux-pnp-server-22.sh.intel.com ([10.239.147.143])
+  by orsmga007.jf.intel.com with ESMTP; 25 May 2023 19:49:00 -0700
+From:   Deng Pan <pan.deng@intel.com>
+To:     tim.c.chen@intel.com, peterz@infradead.org
+Cc:     vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
+        tianyou.li@intel.com, yu.ma@intel.com, lipeng.zhu@intel.com,
+        Deng Pan <pan.deng@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
+Subject: [PATCH] sched/task_group: Re-layout structure to reduce false sharing
+Date:   Fri, 26 May 2023 10:50:44 +0800
+Message-Id: <20230526025044.1660438-1-pan.deng@intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.100.20]
-X-ClientProxiedBy: EX19D032UWA004.ant.amazon.com (10.13.139.56) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-Date: Thu, 25 May 2023 18:43:17 -0700
-> From: Martin KaFai Lau <martin.lau@linux.dev>
-> Date: Thu, 25 May 2023 16:42:46 -0700
-> > On 5/25/23 1:19 AM, Lorenz Bauer wrote:
-> > > diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-> > > index 56f1286583d3..3ba4dc2703da 100644
-> > > --- a/include/net/inet6_hashtables.h
-> > > +++ b/include/net/inet6_hashtables.h
-> > > @@ -48,6 +48,13 @@ struct sock *__inet6_lookup_established(struct net *net,
-> > >   					const u16 hnum, const int dif,
-> > >   					const int sdif);
-> > >   
-> > > +struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
-> > > +				    struct sk_buff *skb, int doff,
-> > > +				    const struct in6_addr *saddr,
-> > > +				    __be16 sport,
-> > > +				    const struct in6_addr *daddr,
-> > > +				    unsigned short hnum);
-> > > +
-> > >   struct sock *inet6_lookup_listener(struct net *net,
-> > >   				   struct inet_hashinfo *hashinfo,
-> > >   				   struct sk_buff *skb, int doff,
-> > > @@ -85,14 +92,33 @@ static inline struct sock *__inet6_lookup_skb(struct inet_hashinfo *hashinfo,
-> > >   					      int iif, int sdif,
-> > >   					      bool *refcounted)
-> > >   {
-> > > -	struct sock *sk = skb_steal_sock(skb, refcounted);
-> > > -
-> > > +	bool prefetched;
-> > > +	struct sock *sk = skb_steal_sock(skb, refcounted, &prefetched);
-> > > +	struct net *net = dev_net(skb_dst(skb)->dev);
-> > > +	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
-> > > +
-> > > +	if (prefetched) {
-> > > +		struct sock *reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
-> > 
-> > If sk is TCP_ESTABLISHED, I suspect sk->sk_reuseport is 1 (from sk_clone)?
-> 
-> Exactly, it will cause null-ptr-deref in reuseport_select_sock().
+When running UnixBench/Pipe-based Context Switching case, we observed
+high false sharing for accessing ‘load_avg’ against rt_se and rt_rq.
 
-Sorry, this doesn't occur.  reuseport_select_sock() has null check.
+Pipe-based Context Switching case is a typical suspend/wakeup scenario,
+in which load_avg is frequenly loaded and stored, at the meantime,
+rt_se and rt_rq are frequently loaded. Unfortunately, they are in the
+same cacheline.
 
+This change re-layouts the structure:
+1.  Move rt_se and rt_rq to a 2nd cacheline.
+2.  Keep ‘parent’ field in the 2nd cacheline since it is also accessed
+very often when cgroups are nested, thanks Tim Chen for providing the
+insight.
 
-> We may want to use rcu_access_pointer(sk->sk_reuseport_cb) in
-> each lookup_reuseport() instead of adding sk_state check ?
+With this change, on Intel Icelake 2 sockets 80C/160T platform, based
+on v6.0-rc6, the 160 parallel score is improved ~5%, perf tool reported
+rt_se and rt_rq access cycles are reduced from ~6.0% to ~0.1%.
+Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+Signed-off-by: Deng Pan <pan.deng@intel.com>
+---
+ kernel/sched/sched.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-And if someone has a weird program that creates multiple listeners and
-disable SO_REUSEPORT for a listener that hits first in lhash2, checking
-sk_reuseport_cb might not work ?  I hope no one does such though, checking
-sk_reuseport and sk_state could be better.
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index ec7b3e0a2b20..a1dd289511b2 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -389,6 +389,13 @@ struct task_group {
+ #endif
+ #endif
+ 
++	struct rcu_head		rcu;
++	struct list_head	list;
++
++	struct list_head	siblings;
++	struct list_head	children;
++	struct task_group	*parent;
++
+ #ifdef CONFIG_RT_GROUP_SCHED
+ 	struct sched_rt_entity	**rt_se;
+ 	struct rt_rq		**rt_rq;
+@@ -396,13 +403,6 @@ struct task_group {
+ 	struct rt_bandwidth	rt_bandwidth;
+ #endif
+ 
+-	struct rcu_head		rcu;
+-	struct list_head	list;
+-
+-	struct task_group	*parent;
+-	struct list_head	siblings;
+-	struct list_head	children;
+-
+ #ifdef CONFIG_SCHED_AUTOGROUP
+ 	struct autogroup	*autogroup;
+ #endif
+-- 
+2.39.1
 
-> 
-> 
-> > 
-> > If it is, it should still work other than an extra inet6_ehashfn. Does it worth 
-> > an extra sk->sk_state check or it is overkill?
-> > 
-> > 
-> > > +							       &ip6h->saddr, sport,
-> > > +							       &ip6h->daddr, ntohs(dport));
