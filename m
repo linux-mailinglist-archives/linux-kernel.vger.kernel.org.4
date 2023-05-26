@@ -2,56 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3E2712DA4
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93299712DA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244039AbjEZTfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S243940AbjEZTfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244042AbjEZTey (ORCPT
+        with ESMTP id S244077AbjEZTez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:34:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F37B13D;
-        Fri, 26 May 2023 12:34:53 -0700 (PDT)
+        Fri, 26 May 2023 15:34:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1275ED9;
+        Fri, 26 May 2023 12:34:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96A45651B9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0023652F5;
+        Fri, 26 May 2023 19:34:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F963C433EF;
         Fri, 26 May 2023 19:34:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16015C433A0;
-        Fri, 26 May 2023 19:34:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685129692;
-        bh=auGaAhJ3gYADbZU1xnhReZDvPilOzS4YXc6T3mEquUE=;
+        s=k20201202; t=1685129694;
+        bh=HJf3MMP08NqgExlW0By+7QlG+fLNCiD32Vvjeap/5uo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aPBeKiWXo0vGy5Lf0sM9gTcAjMiP0WOLU511SRhC9zPaKeRjhd2tptL9Lir3h4Ogh
-         TIShwaNCdJMoWBl0eOMcvjWXsi88DHbP5WtT9806OgwljZvtD3iryvFv9YiCst2GzY
-         hDd1K3lt3AHoz6CG5ct9i8E/iavo8Pd3+7LEeoL/FkVacLSDZT6YXelJAVRTyVcgjh
-         F9xSFQXMVOdNmN0PAa5bGKt2HBGYlpsqQL7ixcQ8SSmq8hX0dsitdQDWgMaSyy3bK2
-         U+FhI5NDnO6lGJ41Wk2hMC9N3xYUuAQ3xa66t8ErDu+r7mr+Ckn7IC6lK/dEWDskXC
-         EDJjLE61HQP7w==
+        b=Kv6HXst9y7dwk7jK8PjbITJEVD8AJznzWCDN2I7axb2d+uQGDCEPWKDDTfuxemIxY
+         /gqeUwKjoEVR9ACopOp3xL2NwxexUWPPfIS5Zpd093owGFLSOLl0slL4F6fZvgBs8z
+         6e5SylZ5CQ8mSgVcPsYbvqDNZx+8Qg7DkW35DAUaa2JN+7Ug/caf+Evgftnk5WiioU
+         S/N6c6ZBba4wphAwk7NcHqCUDVJnYPoH0OXj9oURnkczvQ5oMbhlVLtUaUBpHDVqyY
+         zPTZP5+FGqId4FYrml5wW3g2XCdYVUZkw0/+YfH1+hu0E07rIrNiTzFAFSxxSzIH8V
+         rBAFLdfyq4fMA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     agross@kernel.org, devicetree@vger.kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        conor+dt@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        Devi Priya <quic_devipriy@quicinc.com>
-Cc:     quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
-        quic_arajkuma@quicinc.com
-Subject: Re: [PATCH 0/2] Add initial support for RDP453 of IPQ9574 family
-Date:   Fri, 26 May 2023 12:38:32 -0700
-Message-Id: <168512991479.248818.11535051961870996195.b4-ty@kernel.org>
+To:     konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        jassisinghbrar@gmail.com, nfraprado@collabora.com,
+        geert+renesas@glider.be, sboyd@kernel.org, mturquette@baylibre.com,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        rafal@milecki.pl, linux-arm-msm@vger.kernel.org,
+        Devi Priya <quic_devipriy@quicinc.com>,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        dmitry.baryshkov@linaro.org, broonie@kernel.org
+Cc:     quic_arajkuma@quicinc.com, quic_kathirav@quicinc.com,
+        quic_anusha@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_srichara@quicinc.com, quic_ipkumar@quicinc.com
+Subject: Re: (subset) [PATCH V3 0/5] Add APSS clock controller support for IPQ9574
+Date:   Fri, 26 May 2023 12:38:33 -0700
+Message-Id: <168512991479.248818.11621497605486086318.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230526153152.777-1-quic_devipriy@quicinc.com>
-References: <20230526153152.777-1-quic_devipriy@quicinc.com>
+In-Reply-To: <20230406061314.10916-1-quic_devipriy@quicinc.com>
+References: <20230406061314.10916-1-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,24 +65,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 May 2023 21:01:50 +0530, Devi Priya wrote:
-> Add the initial device tree support for the Reference Design
-> Platform(RDP) 453 based on IPQ9574 family of SoCs. This patch series adds
-> support for Console UART, SPI NOR and SMPA1 regulator node.
+On Thu, 6 Apr 2023 11:43:09 +0530, Devi Priya wrote:
+> APSS PLL found in IPQ9574 platform is of type Huayra.
+> This series adds support for the APSS clock to bump the CPU frequency
+> above 800MHz.
 > 
-> The series depends on the below patch sets which adds support for
-> SPI NOR and SMPA1 regulator nodes.
-> https://lore.kernel.org/linux-arm-msm/20230329053726.14860-3-quic_kathirav@quicinc.com/
-> https://lore.kernel.org/linux-arm-msm/20230407155727.20615-1-quic_devipriy@quicinc.com/
+> DTS patch is based on the below series
+> https://lore.kernel.org/linux-arm-msm/20230404164828.8031-1-quic_devipriy@quicinc.com/
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] dt-bindings: arm: qcom: document AL02-C8 board based on IPQ9574 family
-      commit: b866fba43698479fef5dd301313e8a73e28c789e
-[2/2] arm64: dts: qcom: ipq9574: add support for RDP453 variant
-      commit: 8a465494d62215ca531dfa0cde993779a77e61aa
+[5/5] arm64: defconfig: Enable ipq6018 apss clock and PLL controller
+      commit: 3098f34977480c9aa75cf328501f1b47ec49fec7
 
 Best regards,
 -- 
