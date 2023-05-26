@@ -2,118 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBFE712CD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EF9712CD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243250AbjEZSub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S242344AbjEZSvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjEZSu3 (ORCPT
+        with ESMTP id S237418AbjEZSvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:50:29 -0400
+        Fri, 26 May 2023 14:51:11 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D736A13D
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:49:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17962125
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685126979;
+        s=mimecast20190719; t=1685127024;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=l9gW2VXa2A5baAgf65KnUVTdVX+nM4KBjAb0pb4V13g=;
-        b=PZ6ay2ncrJ71tWI+Cj5VLMxaSb2PGJJuGsCafrPDbAXO7zscagrZz3Se9RHVvweQEukI5s
-        PFRx3drjun39obDmf+6SZD5qu2VFjHmu3o7kpEsVkVUn3gJOaJARYVCpziQ6VfUkLBwya2
-        dYZqQq70EmbcEJ1bK5G3lTfggl+5CwI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-498-Cu3RT8TzMue2tp8jbuO0pg-1; Fri, 26 May 2023 14:49:37 -0400
-X-MC-Unique: Cu3RT8TzMue2tp8jbuO0pg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 23081101A52C;
-        Fri, 26 May 2023 18:49:36 +0000 (UTC)
-Received: from [10.22.32.123] (unknown [10.22.32.123])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 87B37492B00;
-        Fri, 26 May 2023 18:49:34 +0000 (UTC)
-Message-ID: <cf20bbbc-c435-326d-f31a-86b1f4ce927a@redhat.com>
-Date:   Fri, 26 May 2023 14:49:33 -0400
+        bh=Iv1rySWpJ3wV63UZEQURnsupoRRaDiB4keiWDoZznIA=;
+        b=RHfFnOOPmx0sBIfNuQkQW5tcRToo2E61xiy4ErEW6YLrqqCnuiKZ8YkRPFby5VyOSpDYj/
+        SrsFnl1fpaZXrx5Rj7D25NX30jIuucwmo5P8z1kYpZGAJMuRP1+ICUke15vURMeoIWEKi3
+        JojhdByoMVfrWk4aiY2uct5Jgyf7ia4=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-284-EtUug-LQPkCc3aRU5U3Xgw-1; Fri, 26 May 2023 14:50:22 -0400
+X-MC-Unique: EtUug-LQPkCc3aRU5U3Xgw-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30a88ed463eso443409f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:50:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685127021; x=1687719021;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Iv1rySWpJ3wV63UZEQURnsupoRRaDiB4keiWDoZznIA=;
+        b=TdrjFOqKNivAm6iRUwEMqMVsbQTJKfkp7yvYIRqYbjl/L/2hr0DoExLQYHIrEKZtj+
+         a+N5dhTfoUSeAXx1c8sWrQDlkRdMtB7bUoLK80VJBMfmo3tBjCRJdjdZ8kMyvOSkeMw3
+         xtticCe9UfVcxGKVAld6Eb/iodkSVvvINTVgOV6OeEpwcwVfu5cpvM9AayyRxw/4I3iK
+         9h4Pjm3pLhluv/m4jfMcpACfuvlkXy8JH0Gs4Is92iAJ3a9QPWHtrwDZ46NEPdKyRipi
+         GQwexS6gdfHAshmzbHCA9rVIav9Xi7hPOGCCUexahMBlwY2glXloU/+Vx3s3ah0rKEz5
+         d7Dw==
+X-Gm-Message-State: AC+VfDx0EHFsiUIyTErSlf/gJnf7jzhhklOCdDfiPqGKbK0LH5B2wHPC
+        /HIsshxzHjCYqpJgJSpzKtTCBoSi/gqEXvNsBOCWZ+Jwh52dUIy+Vakip0/Sg/bxKsoPFng/oWv
+        aoFNVAyXWuQSnwDewLdPBIefWmiW2Z1oy
+X-Received: by 2002:a5d:4692:0:b0:306:3912:a7f0 with SMTP id u18-20020a5d4692000000b003063912a7f0mr1821711wrq.50.1685127021404;
+        Fri, 26 May 2023 11:50:21 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5AHGb2j2bC1dzW1ck3vYSHMHeI+g1bm2+xdrB6+cWUAioBUBvLaZef/1lx9/GXfgiMT/QPeg==
+X-Received: by 2002:a5d:4692:0:b0:306:3912:a7f0 with SMTP id u18-20020a5d4692000000b003063912a7f0mr1821696wrq.50.1685127021032;
+        Fri, 26 May 2023 11:50:21 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
+        by smtp.gmail.com with ESMTPSA id z13-20020adfd0cd000000b003048477729asm5796307wrh.81.2023.05.26.11.50.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 11:50:20 -0700 (PDT)
+Message-ID: <e31cd404-56ce-4cad-fcc3-3a6695f750fa@redhat.com>
+Date:   Fri, 26 May 2023 20:50:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC][PATCH 1/2] locking: Introduce __cleanup__ based guards
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4] mm, compaction: Skip all non-migratable pages during
+ scan
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, pbonzini@redhat.com
-Cc:     linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        ndesaulniers@google.com, mingo@redhat.com, will@kernel.org,
-        boqun.feng@gmail.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        qiang1.zhang@intel.com, rcu@vger.kernel.org, tj@kernel.org,
-        tglx@linutronix.de
-References: <20230526150549.250372621@infradead.org>
- <20230526151946.960406324@infradead.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230526151946.960406324@infradead.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Khalid Aziz <khalid.aziz@oracle.com>,
+        Steven Sistare <steven.sistare@oracle.com>,
+        akpm@linux-foundation.org, ying.huang@intel.com,
+        mgorman@techsingularity.net, baolin.wang@linux.alibaba.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Khalid Aziz <khalid@kernel.org>
+References: <20230525191507.160076-1-khalid.aziz@oracle.com>
+ <ZG+99h3zg7POIits@casper.infradead.org>
+ <ee093583-71c3-51ba-980f-0facb03b0e23@oracle.com>
+ <ZG/I7tYY4uV/32hP@casper.infradead.org>
+ <ZG/To8Z3StoVoenU@casper.infradead.org>
+ <60367660-f4a3-06dc-4d17-4dbdc733ef74@oracle.com>
+ <ZHDh4Jeb/vKY+nGU@casper.infradead.org>
+ <f5a37f8d-d888-9085-2f2b-1e350a267396@redhat.com>
+ <ZHD+eOMpZpWXNAig@casper.infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZHD+eOMpZpWXNAig@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/23 11:05, Peter Zijlstra wrote:
-> Use __attribute__((__cleanup__(func))) to buid various guards:
->
->   - ptr_guard()
->   - void_guard() / void_scope()
->   - lock_guard() / lock_scope()
->   - double_lock_guard() / double_lock_scope()
->
-> Where the _guard thingies are variables with scope-based cleanup and
-> the _scope thingies are basically do-once for-loops with the same.
->
-> The CPP is rather impenetrable -- but I'll attempt to write proper
-> comments if/when people think this is worth pursuing.
->
-> Actual usage in the next patch
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->   include/linux/compiler_attributes.h |    2
->   include/linux/irqflags.h            |    7 ++
->   include/linux/guards.h          |  118 ++++++++++++++++++++++++++++++++++++
->   include/linux/mutex.h               |    5 +
->   include/linux/preempt.h             |    4 +
->   include/linux/rcupdate.h            |    3
->   include/linux/sched/task.h          |    2
->   include/linux/spinlock.h            |   23 +++++++
->   8 files changed, 164 insertions(+)
+On 26.05.23 20:46, Matthew Wilcox wrote:
+> On Fri, May 26, 2023 at 06:46:15PM +0200, David Hildenbrand wrote:
+>> On 26.05.23 18:44, Matthew Wilcox wrote:
+>>> On Fri, May 26, 2023 at 09:44:34AM -0600, Khalid Aziz wrote:
+>>>>> Oh, I think I found it!  pin_user_pages_remote() is called by
+>>>>> vaddr_get_pfns().  If these are the pages you're concerned about,
+>>>>> then the efficient way to do what you want is simply to call
+>>>>> folio_maybe_dma_pinned().  Far more efficient than the current mess
+>>>>> of total_mapcount().
+>>>>
+>>>> vfio pinned pages triggered this change. Wouldn't checking refcounts against
+>>>> mapcount provide a more generalized way of detecting non-migratable pages?
+>>>
+>>> Well, you changed the comment to say that we were concerned about
+>>> long-term pins.  If we are, than folio_maybe_dma_pinned() is how to test
+>>> for long-term pins.  If we want to skip pages which are short-term pinned,
+>>> then we need to not change the comment, and keep using mapcount/refcount
+>>> differences.
+>>>
+>>
+>> folio_maybe_dma_pinned() is all about FOLL_PIN, not FOLL_LONGTERM.
+> 
+> But according to our documentation, FOLL_LONGTERM implies FOLL_PIN.
 
-That is an interesting idea and may help to simplify some of the common 
-code patterns that we have in the kernel. The macros are a bit hard to 
-read and understand though I thought I got a rough idea of what they are 
-trying to do.
+Yes. But folio_maybe_dma_pinned() will indicate both, long-term pins and 
+short-term pins. There really is no way to distinguish both, unfortunately.
 
-BTW, do we have a use case for double_lock_guard/double_lock_scope? I 
-can envision a nested lock_scope inside a lock_scope, but taking 2 auto 
-locks of the same type at init time and then unlock them at exit just 
-doesn't make sense to me.
+> Anyway, right now, the code skips any pages which are merely FOLL_GET,
+> so we'll skip fewer pages if we do only skip the FOLL_PIN ones,
+> regardless if we'd prefer to only skip the FOLL_LONGTERM ones.
+> 
+>> folio_maybe_dma_pinned() would skip migrating any page that has more than
+>> 1024 references. (shared libraries?)
+> 
+> True, but maybe we should be skipping any page with that many mappings,
+> given how disruptive it is to the rest of the system to unmap a page
+> from >1024 processes.
+> 
 
-Cheers,
-Longman
+So any user with 1024 processes can fragment physical memory? :/
+
+Sorry, I'd like to minimize the usage of folio_maybe_dma_pinned().
+
+It's all suboptimal but let's not try to make it worse.
+
+-- 
+Thanks,
+
+David / dhildenb
 
