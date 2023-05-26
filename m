@@ -2,321 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABC9712465
+	by mail.lfdr.de (Postfix) with ESMTP id C5888712466
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242578AbjEZKS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S242732AbjEZKSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbjEZKSZ (ORCPT
+        with ESMTP id S236878AbjEZKSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:18:25 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id D0689DF;
-        Fri, 26 May 2023 03:18:21 -0700 (PDT)
-Received: from [172.30.38.103] (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id CBC5B1801278C3;
-        Fri, 26 May 2023 18:18:09 +0800 (CST)
-Message-ID: <5f2f2e0e-506d-8527-dd8f-2ec6da4601a6@nfschina.com>
-Date:   Fri, 26 May 2023 18:18:09 +0800
+        Fri, 26 May 2023 06:18:35 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F9EE7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:18:32 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ae3a5dfa42so4088475ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:18:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google; t=1685096312; x=1687688312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RlqAXejfirMJTTl5iB2+w+HwiJoIEIC89FrsVWdTKhE=;
+        b=McV4SpinmODlndelrGvXMBwr77mQpGgQFCx/TjpCAOYysCLo1uBms1yuLxjx/a2atW
+         5s3QigePCD3UMiryzMkJPVGoGZT/icdDftgsqOTxRMCI0Pm9MjZXl1Mt+WPODPnjuTAH
+         PGX0MM28eYoVY7w+DAEn9gP8Q9zXCwpGHAEh8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685096312; x=1687688312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RlqAXejfirMJTTl5iB2+w+HwiJoIEIC89FrsVWdTKhE=;
+        b=E9lwGBhjqk2/zYplvr1ERRGT6AjjDef0FF7GuuDwATnJ0soQKKRjKBZ+zPRu7EEkgN
+         eFtMUnk80vU9Hoo7ZhJH6I67eQibLZZa4JlI38rds0qqCdkT5v+SG7ICNPQlgU5oy30O
+         5qhQHao6/upq3fnZhX6bYyhOlOwzLxX/FXgo6tyW/eqP/IMSHdux9IXbvxB4TfyQCQet
+         X+5QuS6k6YN393XRpZBzAsEBRXiCTIwiEYNx3JhdG0urAlxkhzxTiyR6VC92zTyHffdV
+         a7oSM3V0YA3IzGISVmfGl7ersJxyE3zrlZQ9rhWJB1HE1AjP4mv66ABLditj+oDLg/Da
+         6GTw==
+X-Gm-Message-State: AC+VfDzZQ688d3FHyYIfHugbcGO7tD67J+vEx+XMMb9pd+WOIS1IOc3U
+        LHUfvM+ZE3HqzNWJ4foGBUi3Eg2pe444VzSuTpJ2XQ==
+X-Google-Smtp-Source: ACHHUZ6hqAqRVb3mcOCYrOmRkmTU3PSJToOeDiWChZ+adogXMRZswpaYWn8rr61PmwxJ5R/+n16pDDyMzdVn1fTb12c=
+X-Received: by 2002:a17:903:1209:b0:1b0:6c3:e851 with SMTP id
+ l9-20020a170903120900b001b006c3e851mr2368882plh.18.1685096312458; Fri, 26 May
+ 2023 03:18:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] drm: Remove unnecessary (void*) conversions
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>, Xinhui.Pan@amd.com,
-        airlied@gmail.com, daniel@ffwll.ch, evan.quan@amd.com,
-        l.stach@pengutronix.de, linux+etnaviv@armlinux.org.uk,
-        christian.gmeiner@gmail.com, bskeggs@redhat.com,
-        kherbst@redhat.com, lyude@redhat.com, tomba@kernel.org,
-        emma@anholt.net, airlied@redhat.com, kraxel@redhat.com,
-        abrodkin@synopsys.com, ray.huang@amd.com,
-        gurchetansingh@chromium.org, olvaffe@gmail.com, zackr@vmware.com,
-        linux-graphics-maintainer@vmware.com, sumit.semwal@linaro.org
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, kernel-janitors@vger.kernel.org
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   Su Hui <suhui@nfschina.com>
-In-Reply-To: <5b5c7b06-ef99-d275-3693-b2e3d114cac9@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230524065051.6328-1-cerasuolodomenico@gmail.com>
+In-Reply-To: <20230524065051.6328-1-cerasuolodomenico@gmail.com>
+From:   Vitaly Wool <vitaly.wool@konsulko.com>
+Date:   Fri, 26 May 2023 12:18:21 +0200
+Message-ID: <CAM4kBBLA_DfAENfRD3QwfTOfvcDuyrkCwKHiuiZFVkt0c4ZR2Q@mail.gmail.com>
+Subject: Re: [PATCH] mm: zswap: shrink until can accept
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        sjenning@redhat.com, ddstreet@ieee.org, yosryahmed@google.com,
+        hannes@cmpxchg.org, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/26 15:27, Christian König wrote:
-> Am 26.05.23 um 05:32 schrieb Su Hui:
->> Pointer variables of (void*) type do not require type cast.
->
-> Please split that up by subsystem/driver. Taking it through the misc 
-> tree might just cause merge conflicts.
->
-Sorry for that, I will split it and send again.
-Thanks for your reply!
+Hi Domenico,
 
-Su Hui
-
-> Christian.
+On Wed, May 24, 2023 at 8:50=E2=80=AFAM Domenico Cerasuolo
+<cerasuolodomenico@gmail.com> wrote:
 >
->>
->> Signed-off-by: Su Hui <suhui@nfschina.com>
->> ---
->>   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c | 2 +-
->>   drivers/gpu/drm/amd/pm/amdgpu_pm.c                        | 2 +-
->>   drivers/gpu/drm/etnaviv/etnaviv_drv.c                     | 4 ++--
->>   drivers/gpu/drm/nouveau/nouveau_debugfs.c                 | 2 +-
->>   drivers/gpu/drm/omapdrm/omap_debugfs.c                    | 6 +++---
->>   drivers/gpu/drm/pl111/pl111_debugfs.c                     | 2 +-
->>   drivers/gpu/drm/qxl/qxl_debugfs.c                         | 4 ++--
->>   drivers/gpu/drm/tiny/arcpgu.c                             | 2 +-
->>   drivers/gpu/drm/ttm/ttm_resource.c                        | 3 +--
->>   drivers/gpu/drm/virtio/virtgpu_debugfs.c                  | 6 +++---
->>   drivers/gpu/drm/vmwgfx/ttm_object.c                       | 5 ++---
->>   drivers/gpu/drm/vmwgfx/vmwgfx_gem.c                       | 2 +-
->>   12 files changed, 19 insertions(+), 21 deletions(-)
->>
->> diff --git 
->> a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c 
->> b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
->> index 827fcb4fb3b3..8a2c39927167 100644
->> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
->> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
->> @@ -3312,7 +3312,7 @@ static ssize_t dtn_log_write(
->>     static int mst_topo_show(struct seq_file *m, void *unused)
->>   {
->> -    struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
->> +    struct amdgpu_device *adev = m->private;
->>       struct drm_device *dev = adev_to_drm(adev);
->>       struct drm_connector *connector;
->>       struct drm_connector_list_iter conn_iter;
->> diff --git a/drivers/gpu/drm/amd/pm/amdgpu_pm.c 
->> b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
->> index 58c2246918fd..e6c870bd307b 100644
->> --- a/drivers/gpu/drm/amd/pm/amdgpu_pm.c
->> +++ b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
->> @@ -3671,7 +3671,7 @@ static void amdgpu_parse_cg_state(struct 
->> seq_file *m, u64 flags)
->>     static int amdgpu_debugfs_pm_info_show(struct seq_file *m, void 
->> *unused)
->>   {
->> -    struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
->> +    struct amdgpu_device *adev = m->private;
->>       struct drm_device *dev = adev_to_drm(adev);
->>       u64 flags = 0;
->>       int r;
->> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c 
->> b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
->> index 31a7f59ccb49..dd57f7164e9a 100644
->> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
->> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
->> @@ -198,7 +198,7 @@ static int etnaviv_ring_show(struct etnaviv_gpu 
->> *gpu, struct seq_file *m)
->>     static int show_unlocked(struct seq_file *m, void *arg)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct drm_device *dev = node->minor->dev;
->>       int (*show)(struct drm_device *dev, struct seq_file *m) =
->>               node->info_ent->data;
->> @@ -208,7 +208,7 @@ static int show_unlocked(struct seq_file *m, void 
->> *arg)
->>     static int show_each_gpu(struct seq_file *m, void *arg)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct drm_device *dev = node->minor->dev;
->>       struct etnaviv_drm_private *priv = dev->dev_private;
->>       struct etnaviv_gpu *gpu;
->> diff --git a/drivers/gpu/drm/nouveau/nouveau_debugfs.c 
->> b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
->> index 2a36d1ca8fda..96b59d5d68ed 100644
->> --- a/drivers/gpu/drm/nouveau/nouveau_debugfs.c
->> +++ b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
->> @@ -37,7 +37,7 @@
->>   static int
->>   nouveau_debugfs_vbios_image(struct seq_file *m, void *data)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct nouveau_drm *drm = nouveau_drm(node->minor->dev);
->>       int i;
->>   diff --git a/drivers/gpu/drm/omapdrm/omap_debugfs.c 
->> b/drivers/gpu/drm/omapdrm/omap_debugfs.c
->> index a3d470468e5b..a94ce502e152 100644
->> --- a/drivers/gpu/drm/omapdrm/omap_debugfs.c
->> +++ b/drivers/gpu/drm/omapdrm/omap_debugfs.c
->> @@ -19,7 +19,7 @@
->>     static int gem_show(struct seq_file *m, void *arg)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct drm_device *dev = node->minor->dev;
->>       struct omap_drm_private *priv = dev->dev_private;
->>   @@ -33,7 +33,7 @@ static int gem_show(struct seq_file *m, void *arg)
->>     static int mm_show(struct seq_file *m, void *arg)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct drm_device *dev = node->minor->dev;
->>       struct drm_printer p = drm_seq_file_printer(m);
->>   @@ -45,7 +45,7 @@ static int mm_show(struct seq_file *m, void *arg)
->>   #ifdef CONFIG_DRM_FBDEV_EMULATION
->>   static int fb_show(struct seq_file *m, void *arg)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct drm_device *dev = node->minor->dev;
->>       struct drm_fb_helper *helper = dev->fb_helper;
->>       struct drm_framebuffer *fb;
->> diff --git a/drivers/gpu/drm/pl111/pl111_debugfs.c 
->> b/drivers/gpu/drm/pl111/pl111_debugfs.c
->> index 6744fa16f464..4df03ec5d368 100644
->> --- a/drivers/gpu/drm/pl111/pl111_debugfs.c
->> +++ b/drivers/gpu/drm/pl111/pl111_debugfs.c
->> @@ -32,7 +32,7 @@ static const struct {
->>     static int pl111_debugfs_regs(struct seq_file *m, void *unused)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *)m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct drm_device *dev = node->minor->dev;
->>       struct pl111_drm_dev_private *priv = dev->dev_private;
->>       int i;
->> diff --git a/drivers/gpu/drm/qxl/qxl_debugfs.c 
->> b/drivers/gpu/drm/qxl/qxl_debugfs.c
->> index 2d9ed3b94574..5b4fe3049529 100644
->> --- a/drivers/gpu/drm/qxl/qxl_debugfs.c
->> +++ b/drivers/gpu/drm/qxl/qxl_debugfs.c
->> @@ -38,7 +38,7 @@
->>   static int
->>   qxl_debugfs_irq_received(struct seq_file *m, void *data)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct qxl_device *qdev = to_qxl(node->minor->dev);
->>         seq_printf(m, "%d\n", atomic_read(&qdev->irq_received));
->> @@ -52,7 +52,7 @@ qxl_debugfs_irq_received(struct seq_file *m, void 
->> *data)
->>   static int
->>   qxl_debugfs_buffers_info(struct seq_file *m, void *data)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct qxl_device *qdev = to_qxl(node->minor->dev);
->>       struct qxl_bo *bo;
->>   diff --git a/drivers/gpu/drm/tiny/arcpgu.c 
->> b/drivers/gpu/drm/tiny/arcpgu.c
->> index e5b10e41554a..09f728355aba 100644
->> --- a/drivers/gpu/drm/tiny/arcpgu.c
->> +++ b/drivers/gpu/drm/tiny/arcpgu.c
->> @@ -338,7 +338,7 @@ static int arcpgu_unload(struct drm_device *drm)
->>   #ifdef CONFIG_DEBUG_FS
->>   static int arcpgu_show_pxlclock(struct seq_file *m, void *arg)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *)m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct drm_device *drm = node->minor->dev;
->>       struct arcpgu_drm_private *arcpgu = dev_to_arcpgu(drm);
->>       unsigned long clkrate = clk_get_rate(arcpgu->clk);
->> diff --git a/drivers/gpu/drm/ttm/ttm_resource.c 
->> b/drivers/gpu/drm/ttm/ttm_resource.c
->> index 7333f7a87a2f..540faabcf8a4 100644
->> --- a/drivers/gpu/drm/ttm/ttm_resource.c
->> +++ b/drivers/gpu/drm/ttm/ttm_resource.c
->> @@ -727,9 +727,8 @@ ttm_kmap_iter_linear_io_fini(struct 
->> ttm_kmap_iter_linear_io *iter_io,
->>     static int ttm_resource_manager_show(struct seq_file *m, void 
->> *unused)
->>   {
->> -    struct ttm_resource_manager *man =
->> -        (struct ttm_resource_manager *)m->private;
->>       struct drm_printer p = drm_seq_file_printer(m);
->> +    struct ttm_resource_manager *man = m->private;
->>       ttm_resource_manager_debug(man, &p);
->>       return 0;
->>   }
->> diff --git a/drivers/gpu/drm/virtio/virtgpu_debugfs.c 
->> b/drivers/gpu/drm/virtio/virtgpu_debugfs.c
->> index 853dd9aa397e..577691af9707 100644
->> --- a/drivers/gpu/drm/virtio/virtgpu_debugfs.c
->> +++ b/drivers/gpu/drm/virtio/virtgpu_debugfs.c
->> @@ -43,7 +43,7 @@ static void virtio_gpu_add_int(struct seq_file *m, 
->> const char *name, int value)
->>     static int virtio_gpu_features(struct seq_file *m, void *data)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *)m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct virtio_gpu_device *vgdev = node->minor->dev->dev_private;
->>         virtio_gpu_add_bool(m, "virgl", vgdev->has_virgl_3d);
->> @@ -68,7 +68,7 @@ static int virtio_gpu_features(struct seq_file *m, 
->> void *data)
->>   static int
->>   virtio_gpu_debugfs_irq_info(struct seq_file *m, void *data)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *) m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct virtio_gpu_device *vgdev = node->minor->dev->dev_private;
->>         seq_printf(m, "fence %llu %lld\n",
->> @@ -80,7 +80,7 @@ virtio_gpu_debugfs_irq_info(struct seq_file *m, 
->> void *data)
->>   static int
->>   virtio_gpu_debugfs_host_visible_mm(struct seq_file *m, void *data)
->>   {
->> -    struct drm_info_node *node = (struct drm_info_node *)m->private;
->> +    struct drm_info_node *node = m->private;
->>       struct virtio_gpu_device *vgdev = node->minor->dev->dev_private;
->>       struct drm_printer p;
->>   diff --git a/drivers/gpu/drm/vmwgfx/ttm_object.c 
->> b/drivers/gpu/drm/vmwgfx/ttm_object.c
->> index ddf8373c1d77..e9e3cc8f5b49 100644
->> --- a/drivers/gpu/drm/vmwgfx/ttm_object.c
->> +++ b/drivers/gpu/drm/vmwgfx/ttm_object.c
->> @@ -513,8 +513,7 @@ static void ttm_prime_refcount_release(struct 
->> ttm_base_object **p_base)
->>    */
->>   static void ttm_prime_dmabuf_release(struct dma_buf *dma_buf)
->>   {
->> -    struct ttm_prime_object *prime =
->> -        (struct ttm_prime_object *) dma_buf->priv;
->> +    struct ttm_prime_object *prime = dma_buf->priv;
->>       struct ttm_base_object *base = &prime->base;
->>       struct ttm_object_device *tdev = base->tfile->tdev;
->>   @@ -554,7 +553,7 @@ int ttm_prime_fd_to_handle(struct 
->> ttm_object_file *tfile,
->>       if (dma_buf->ops != &tdev->ops)
->>           return -ENOSYS;
->>   -    prime = (struct ttm_prime_object *) dma_buf->priv;
->> +    prime = dma_buf->priv;
->>       base = &prime->base;
->>       *handle = base->handle;
->>       ret = ttm_ref_object_add(tfile, base, NULL, false);
->> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c 
->> b/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
->> index c0da89e16e6f..3267a4e61382 100644
->> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
->> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
->> @@ -220,7 +220,7 @@ static void vmw_bo_print_info(int id, struct 
->> vmw_bo *bo, struct seq_file *m)
->>     static int vmw_debugfs_gem_info_show(struct seq_file *m, void 
->> *unused)
->>   {
->> -    struct vmw_private *vdev = (struct vmw_private *)m->private;
->> +    struct vmw_private *vdev = m->private;
->>       struct drm_device *dev = &vdev->drm;
->>       struct drm_file *file;
->>       int r;
+> This update addresses an issue with the zswap reclaim mechanism, which
+> hinders the efficient offloading of cold pages to disk, thereby
+> compromising the preservation of the LRU order and consequently
+> diminishing, if not inverting, its performance benefits.
+>
+> The functioning of the zswap shrink worker was found to be inadequate,
+> as shown by basic benchmark test. For the test, a kernel build was
+> utilized as a reference, with its memory confined to 1G via a cgroup and
+> a 5G swap file provided. The results are presented below, these are
+> averages of three runs without the use of zswap:
+>
+> real 46m26s
+> user 35m4s
+> sys 7m37s
+>
+> With zswap (zbud) enabled and max_pool_percent set to 1 (in a 32G
+> system), the results changed to:
+>
+> real 56m4s
+> user 35m13s
+> sys 8m43s
+>
+> written_back_pages: 18
+> reject_reclaim_fail: 0
+> pool_limit_hit:1478
+>
+> Besides the evident regression, one thing to notice from this data is
+> the extremely low number of written_back_pages and pool_limit_hit.
+>
+> The pool_limit_hit counter, which is increased in zswap_frontswap_store
+> when zswap is completely full, doesn't account for a particular
+> scenario: once zswap hits his limit, zswap_pool_reached_full is set to
+> true; with this flag on, zswap_frontswap_store rejects pages if zswap is
+> still above the acceptance threshold. Once we include the rejections due
+> to zswap_pool_reached_full && !zswap_can_accept(), the number goes from
+> 1478 to a significant 21578266.
+>
+> Zswap is stuck in an undesirable state where it rejects pages because
+> it's above the acceptance threshold, yet fails to attempt memory
+> reclaimation. This happens because the shrink work is only queued when
+> zswap_frontswap_store detects that it's full and the work itself only
+> reclaims one page per run.
+>
+> This state results in hot pages getting written directly to disk,
+> while cold ones remain memory, waiting only to be invalidated. The LRU
+> order is completely broken and zswap ends up being just an overhead
+> without providing any benefits.
+>
+> This commit applies 2 changes: a) the shrink worker is set to reclaim
+> pages until the acceptance threshold is met and b) the task is also
+> enqueued when zswap is not full but still above the threshold.
+>
+> Testing this suggested update showed much better numbers:
+>
+> real 36m37s
+> user 35m8s
+> sys 9m32s
+>
+> written_back_pages: 10459423
+> reject_reclaim_fail: 12896
+> pool_limit_hit: 75653
+>
+> Fixes: 45190f01dd40 ("mm/zswap.c: add allocation hysteresis if pool limit=
+ is hit")
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> ---
+>  mm/zswap.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/mm/zswap.c b/mm/zswap.c
+> index 59da2a415fbb..2ee0775d8213 100644
+> --- a/mm/zswap.c
+> +++ b/mm/zswap.c
+> @@ -587,9 +587,13 @@ static void shrink_worker(struct work_struct *w)
+>  {
+>         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
+>                                                 shrink_work);
+> +       int ret;
+>
+> -       if (zpool_shrink(pool->zpool, 1, NULL))
+> -               zswap_reject_reclaim_fail++;
+> +       do {
+> +               ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> +               if (ret)
+> +                       zswap_reject_reclaim_fail++;
+> +       } while (!zswap_can_accept() && ret !=3D -EINVAL);
+>         zswap_pool_put(pool);
+>  }
+
+while I do agree with your points, I have a concern about this
+shrinker logic change. The reason for not doing this as you do was
+possible real time/responsiveness characteristics degrade. Have you
+checked that it's not really the case?
+
+Thanks,
+Vitaly
+
+> @@ -1188,7 +1192,7 @@ static int zswap_frontswap_store(unsigned type, pgo=
+ff_t offset,
+>         if (zswap_pool_reached_full) {
+>                if (!zswap_can_accept()) {
+>                         ret =3D -ENOMEM;
+> -                       goto reject;
+> +                       goto shrink;
+>                 } else
+>                         zswap_pool_reached_full =3D false;
+>         }
+> --
+> 2.34.1
 >
