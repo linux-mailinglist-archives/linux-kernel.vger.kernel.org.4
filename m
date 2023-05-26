@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4527122A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B800A7122AC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242794AbjEZItW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S242811AbjEZIvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242614AbjEZItT (ORCPT
+        with ESMTP id S242749AbjEZIu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:49:19 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA92F119;
-        Fri, 26 May 2023 01:49:17 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-307d20548adso248866f8f.0;
-        Fri, 26 May 2023 01:49:17 -0700 (PDT)
+        Fri, 26 May 2023 04:50:59 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F84135;
+        Fri, 26 May 2023 01:50:58 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so759542a12.3;
+        Fri, 26 May 2023 01:50:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685091056; x=1687683056;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EUvWLoLJ7ecOqnvXeIvpdjcIeOwM/KgQz5/8pA9G8eQ=;
+        b=n84NiyNjWL1xHP6179rB/rjlflDf5X2HBFQ63nbtEgqvmk9lOoFy98AwhuuOGcGLLZ
+         sRC0lvwHR8T9j1pFRXiRzeIW7cJCYhJZUvJaYfEw7/ugrQzqpBIKVjvmZq2KsOAIbteM
+         QSD/sC+dRhzssEexVYJLwthLIZIMQlgKerWfGQIXgVsmMgL+CFd//j+mdPSTMylWg/mN
+         Z5SyA7v208OHyaDuH2s3qmioliEg5QOLjHPFbD154gszPG7OBzh4X0kccRieqw+uf/VF
+         XapyyMNJWhFSON2li3VQjCVZAlLiDtmKktG3bJbh0e+81e1YPcnOB65bU4pYFbDnq+ED
+         FN9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685090956; x=1687682956;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s4Sjrbm6d6EO6iQQ0zbM7JAHxdD9NnQEGIWbfdTn3q4=;
-        b=kxgIC8qndyOU6bBu/akOD1HMJGDqlMOtFDUf9zvh9AZM9TVABXXL2+0tIWkKt1fxyZ
-         lYBNooGA0eF5O+l3Y313YWx2f9JM/z1+M3/+BAOwy46EPzp+vNfqwKIFGEPTxFCNiYdB
-         V63mS88EBcXZoC559mhAnRlbvF9zfyyJbWLH5CJxxTJDNseyi1SywddrokGGl2sOaIpK
-         B9AxRL4cWMsxLCspdWxK1/W8ywpbyySVuCQ/MWxfU8sJ8s7y2yVlvEqGCOiUlXFSqW0q
-         BGc+byNO39HcbPKooV6WoeFT4ce1FiJtKzTBcRktMx0J/76CTdZ1MRsggBcs8Dy5/R+L
-         zM3A==
-X-Gm-Message-State: AC+VfDyi1IZP6u9nGOoA+9q+CAm6cs09BP3rP28LtSSyvYrruXB0Jbpe
-        2k2DXZ+hGkwWlFlLtflJOhk=
-X-Google-Smtp-Source: ACHHUZ7zycneQMT5MV6N2pE69nG7qYgQwCpYDyX2JqqJ+e0B9ZF6lJoMXa9DIxgrYpSDUMuFvhezxA==
-X-Received: by 2002:a05:6000:196b:b0:30a:b4e1:a89b with SMTP id da11-20020a056000196b00b0030ab4e1a89bmr731849wrb.67.1685090956051;
-        Fri, 26 May 2023 01:49:16 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-005.fbsv.net. [2a03:2880:31ff:5::face:b00c])
-        by smtp.gmail.com with ESMTPSA id y3-20020a5d4703000000b002f103ca90cdsm4338479wrq.101.2023.05.26.01.49.14
+        d=1e100.net; s=20221208; t=1685091056; x=1687683056;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EUvWLoLJ7ecOqnvXeIvpdjcIeOwM/KgQz5/8pA9G8eQ=;
+        b=WPm+JRA9n/pY0RefVd8eXAHXZsiL08MfEKW34WUzAhAIp0kGDIseVeZB3X0foHrnLk
+         F2OjAtwnJRUobVqHckvLPvjedar2recsk7DAqvmXwYI2SzOtYwiGC2bGDrijZwbwMaED
+         ZEmmft4AclV//DJes4pat04pmeQsK5pVsFXOj58CwvihHDcmOoL3/Lh7YO1XrcbtLRIN
+         u12TUcs08xOTBWiguxshCo+R9wLwwcSHDAqlPG5gKbqpOqEF2bFRDEukLVpLsYP5z4mx
+         lTKHby9HcXHig/buGUZoZAYPVmCoreYW+ry5shHwYr7qskiazqrhCfljsBzt4X/Ph8Ju
+         s9aA==
+X-Gm-Message-State: AC+VfDxnLDKL/1klitX+TPs+itzQAJdMMgufnV6vphyOUYbFvo+/5srn
+        NeSteESRlv8Otn997FcXyOo=
+X-Google-Smtp-Source: ACHHUZ5vLWV4BA5GbUd7uTb6R3TNt35h/LrNw5FK47z6XTA7FhoAMdRuoTd1JbFzYtOHZbAJyUOY9A==
+X-Received: by 2002:a17:907:7e81:b0:959:6fb2:1c3b with SMTP id qb1-20020a1709077e8100b009596fb21c3bmr1366954ejc.39.1685091055982;
+        Fri, 26 May 2023 01:50:55 -0700 (PDT)
+Received: from gmail.com (1F2EF43E.nat.pool.telekom.hu. [31.46.244.62])
+        by smtp.gmail.com with ESMTPSA id e14-20020a50ec8e000000b00509d1c6dcefsm1347783edr.13.2023.05.26.01.50.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 01:49:15 -0700 (PDT)
-Date:   Fri, 26 May 2023 01:49:10 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     dsahern@kernel.org, Remi Denis-Courmont <courmisch@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, leit@fb.com, axboe@kernel.dk,
-        asml.silence@gmail.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, dccp@vger.kernel.org,
-        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-sctp@vger.kernel.org
-Subject: Re: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-Message-ID: <ZHByhjt2xYf5xKAu@gmail.com>
-References: <20230525125503.400797-1-leitao@debian.org>
- <CAF=yD-LHQNkgPb-R==53-2auVxkP9r=xqrz2A8oe61vkoDdWjg@mail.gmail.com>
+        Fri, 26 May 2023 01:50:55 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Fri, 26 May 2023 10:50:50 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: linux-next: boot failure after merge of the tip tree
+Message-ID: <ZHBy6hkfQze53pOS@gmail.com>
+References: <20230524154459.48cda184@canb.auug.org.au>
+ <20230524093454.GI4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAF=yD-LHQNkgPb-R==53-2auVxkP9r=xqrz2A8oe61vkoDdWjg@mail.gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230524093454.GI4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 11:05:40AM -0400, Willem de Bruijn wrote:
-> On Thu, May 25, 2023 at 8:55 AM Breno Leitao <leitao@debian.org> wrote:
-> > @@ -1547,6 +1547,28 @@ int ip_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
-> >         return ret;
-> >  }
-> >
-> > +/* Execute if this ioctl is a special mroute ioctl */
-> > +int ipmr_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-> > +{
-> > +       switch (cmd) {
-> > +       /* These userspace buffers will be consumed by ipmr_ioctl() */
-> > +       case SIOCGETVIFCNT: {
-> > +               struct sioc_vif_req buffer;
-> > +
-> > +               return sock_ioctl_inout(sk, cmd, arg, &buffer,
-> > +                                     sizeof(buffer));
-> > +               }
+
+* Peter Zijlstra <peterz@infradead.org> wrote:
+
+> On Wed, May 24, 2023 at 03:44:59PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the tip tree, today's linux-next build (powerpc
+> > pseries_le_defconfig) failed to boot like this:
+> > 
+> >  Built 1 zonelists, mobility grouping on.  Total pages: 32736
+> >  Policy zone: Normal
+> >  mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+> >  Memory: 2027392K/2097152K available (17984K kernel code, 3328K rwdata, 14784K rodata, 6080K init, 1671K bss, 69760K reserved, 0K cma-reserved)
+> > 
+> > *crickets*
+> > 
+> > Bisected to commit
+> > 
+> >   f4ab23558310 ("slub: Replace cmpxchg_double()")
+> > 
+> > I have reverted that commit (and the following one) for today.
 > 
-> More importantly, if we go down the path of demultiplexing in protocol
-> independent code to call protocol specific handlers, then there there
-> is no need to have them call protocol independent helpers like
-> sock_ioct_inout again. Just call the protocol-specific ioctl handlers
-> directly?
+> Sorry about that; turns out I forgot to test the case where cmpxchg128
+> wasn't available.
+> 
+> Please see:
+> 
+>   https://lkml.kernel.org/r/20230524093246.GP83892@hirez.programming.kicks-ass.net
+> 
+> As stated there, I'm going to zap tip/locking/core for a few days and
+> let this fixed version run through the robots again before re-instating
+> it.
 
-That is what I was expecting, but, the code is exactly the same and I
-kept it in the generic section. This is what this code needs to do:
+Note to -next, this should now be resolved in the tip:auto-latest branch.
 
- * Copy X byte from userspace
- * sk->sk_prot->ioctl()
- * Copy X bytes back to userspace
+Thanks,
 
-I tried to keep the code generic enough that it could be reused.
-I can definitely push the same code to two different protocols, if you
-prefer, no strong opinion. 
+	Ingo
