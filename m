@@ -2,168 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B657122AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289497122B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242804AbjEZIvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
+        id S242749AbjEZIwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242614AbjEZIu7 (ORCPT
+        with ESMTP id S242817AbjEZIwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:50:59 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490B5119
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:50:56 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3ba703b67so451460e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:50:56 -0700 (PDT)
+        Fri, 26 May 2023 04:52:44 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2100.outbound.protection.outlook.com [40.107.94.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABEA12A;
+        Fri, 26 May 2023 01:52:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A6m2MHA9FG9YxXlVh1Oowqbnzvw6XtEpezjkVg4QksCHwQeC/KdrW9dM9Hv8Lj0xWkmvRtguhoHC2fQB5AqYsQd3UTZ09Wn2RVCjmUIWJ1mTOdP2Q/HOa3EqeISRqKzASKV7v0y7D1/nqby0wY3W4NITb8Y1xnJ2DmdHZCqahW21PEXCx2LTgfofKnHxgzYV06KxkZ3iV0xtybzlDBC2msRXzawVe1Zu44/BxgyTrK2HtOoI7ZGXrh4zQOuQa2rrPX2qlflzJ3oAViblUWsRq7EcIWcrA1CRr8s3o2yph0f1WZubA4X+3YCAExl3P7ExsAXyT2jLl3SLWBT6thFKWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nMQuDtDqYpSzHXM4fx/7xpuy58MBJ5bWGAyujrJwIn8=;
+ b=adxEi1X8py/CEsQIk+7MpeXQ9ZHH433VXM5KdOUzoCakOxQr5MiAJA4dBkYsTVWpx5eiEunnFB3UAOQAnapGAMUnO+lBkIPBp3ZYXUhXrzZv+YaTVxcAmOqx+5ERlxA90Bmvtq8DDsg1+E4/ceHPfYOA14wQw47ixAfXD5kHssBHVqkdYNamXhOWCA1HyKyNTDt3Q9oCW47UPpCs3Od170txlwFUd0njrslfFkH9hQ/6raMOdgtW4ra7rw+fGKwnJXDcyuKlhbndKcXsCFYr2z8OjejXTUlC2rjIW+JUBTht+lQEAUZIpYYYWFyOrn3CUpzuG0DkjkWcwWmSo85ZBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685091054; x=1687683054;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vFgq2+VVrviL7UALj9pqiFm5m6vdqKFWr7xuBpXEGgk=;
-        b=ME1+1zcdcnrW6W4YFgkJY1I+UtG6/knxC7rNTHRZcgSM65ZRaaM3RkNSBBfDbBa6FU
-         jw/VX2m07hj8QVYd2l74yQUINdMLICa9Oh4jqTlcVTA03+F9s3TdNzDcQIzxUdo40B9d
-         p/O8jNChmQHvRz4y2q7Oe8OzM2C2vfiNu0I+OUyqFXtkKwCX9c1yH8ViS4T6P3FC6SyT
-         NXF5XEPuQ3qeUM4dfs/pS88L7OJOsZE5uOeI7h6OsFYioA53ZA0vO9VC4NYpDB11xS9/
-         MzgWJuFbwum+WYKpWuVHsfpXi7+TAlqfG4Fr9XeObmZCsNWvF/W1mrLQnon99FphY4ix
-         raHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685091054; x=1687683054;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vFgq2+VVrviL7UALj9pqiFm5m6vdqKFWr7xuBpXEGgk=;
-        b=TYUYZzv+fnfW9kpToaP2IkPj0n40fPj5GqPbftXm7dZYsFVn/9EjIRyEKzWPnEdDZe
-         hrCNFbWTIaBRcwokMYFUsRaY9mmwpAT/B3U2d4mtJFUF9BDiXQKkN1cnmvEN0t/xVb7p
-         suHSenlPIRCgFQOxjjxe8ZuKz7dLC36f07ZUhvHLgeokTJria/2Ne5zErnVglqHtissw
-         lUz1QT/j4MN4Bv1zfD82d4z8YO1iWaE+VXeSdLwIIJvc1mnuUXr64Tv+s4TZE074ojs4
-         5i3EXgFCZsDRT67P/d7Utyi5JBnplrT5nfJMl396zDC239qGeWNqToSMvLaW+EkK314L
-         wTpw==
-X-Gm-Message-State: AC+VfDynIgEvmHgqO/p4bhwn4EZE20YJDVgleU5BTyqi4LI/xPv5xJd9
-        ZAbjvZ3QOxYQzZz6Exj7D7VBOPtEAP9oTZ5LoFE=
-X-Google-Smtp-Source: ACHHUZ6SBk/LbQLpRdgponALylw72ijErfTNlvdTRC9EnogFDghqyrnhNRt206k+lEMedSeVjT/SeQ==
-X-Received: by 2002:ac2:4571:0:b0:4f3:f98c:77fc with SMTP id k17-20020ac24571000000b004f3f98c77fcmr307628lfm.8.1685091054513;
-        Fri, 26 May 2023 01:50:54 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id d16-20020ac25450000000b004f3b2d3fc25sm542344lfn.10.2023.05.26.01.50.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 01:50:54 -0700 (PDT)
-Message-ID: <41f5b7a9-d927-e468-d1ea-291ad35ba943@linaro.org>
-Date:   Fri, 26 May 2023 10:50:53 +0200
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nMQuDtDqYpSzHXM4fx/7xpuy58MBJ5bWGAyujrJwIn8=;
+ b=rZBEbCYgl1uHFntWgDgdeByQPr6bwedWIEka2u3/ueSUIfV0SC8JSJuR+YuTXAuX1gDrOrRwOMrMMZhUGAkgVMOaCVw93LwJGzrb+xZbypCwpOm/aaNZOYA4HtYkujWbvZztEEoE2LU4t7b+9O9Jz/F9hNMcG1Ll7nFy1s4Bz80=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CO1PR13MB4808.namprd13.prod.outlook.com (2603:10b6:303:d9::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.17; Fri, 26 May
+ 2023 08:52:37 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.017; Fri, 26 May 2023
+ 08:52:37 +0000
+Date:   Fri, 26 May 2023 10:52:17 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     Mark Brown <broonie@kernel.org>, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>
+Subject: Re: [PATCH net-next v3 4/4] net: stmmac: dwmac-sogfpga: use the lynx
+ pcs driver
+Message-ID: <ZHBzQaWi5oskThI2@corigine.com>
+References: <20230526074252.480200-1-maxime.chevallier@bootlin.com>
+ <20230526074252.480200-5-maxime.chevallier@bootlin.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526074252.480200-5-maxime.chevallier@bootlin.com>
+X-ClientProxiedBy: AM0PR07CA0014.eurprd07.prod.outlook.com
+ (2603:10a6:208:ac::27) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
- <20230510-msm8916-regulators-v1-8-54d4960a05fc@gerhold.net>
- <ea53525b-749b-25e2-6dde-662a8e273597@linaro.org>
- <ef7b7335-d20c-3ddc-52df-b2801fa40283@linaro.org>
- <ZHBTi-j657tW3jIu@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH 8/8] arm64: dts: qcom: msm8916-pm8916: Mark always-on
- regulators
-In-Reply-To: <ZHBTi-j657tW3jIu@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4808:EE_
+X-MS-Office365-Filtering-Correlation-Id: f829a2c1-a407-430a-3543-08db5dc68df1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: w82s1LEN1uj/K/1drRPsSgl1tv5aNRBHV9gDNt33gEq19iqOAeBr0X6KL4nfuY4LKBsJZ9lXdzOq2KqdPoh3lJ34DixUQ/62v8gh1tILzbdJFPLVyTq2ceD5nmvOCEZTgVo+3lc9Rd+Fisk/6N0tVwNZp3UUCFASxAPGgffBgKVsjky+qf3/PkaLrad80MLNSlam1nAk9dhaLTxFnBBqagtiFxQh00z2ovgywbdQ3qIdvE7DREGSEVXg8BliLdtEQIRtcdHKJrYtlbWODaxM9EctmlYsSjRBsZ8X+nYlAek57kv7Dbc8xt6UTr3NjU2z/SfyXcQVlIF71UK8Sp1f9quKznIfSuDwsCRCbhuaBXwKYyuIbo4/Hhw5q9V/i//i/zTKx/7WDJaVXZLZldX3TSu79Re3Q+qxqeu5mjNr26YNrfFl8hk7qg7/gcuhQE5OyOcsYIaUOd/HejVP5OaWpwfsRh8MVFGwhOz+HyLwUP6EIV2E3US8Gear1hwW/41+Xf6l4MJJILNstEt5bhYTpigqBv/4Vka53nsR4FgYC1cCLiAoxDjOfcEsZsjGE44B52uqwffqyN5K93V6fl+qzQt0VpCb6gPnzV9KmVtqkyQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(136003)(39840400004)(376002)(451199021)(44832011)(7416002)(2616005)(6486002)(83380400001)(38100700002)(54906003)(478600001)(36756003)(2906002)(86362001)(6512007)(6506007)(6666004)(186003)(8676002)(8936002)(66946007)(4326008)(66476007)(66556008)(6916009)(41300700001)(316002)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6hsvvPuNnA26Z26uHGLUIVrTbnjlsYcnHiWMp7qeODOMaDkRk4vg6MH5HDbL?=
+ =?us-ascii?Q?ozPuvzsBGWVNlGOjSW+YXICl7MtjBqnmrsf4silYTJsgcVVKylz0MaUyOImO?=
+ =?us-ascii?Q?L8b8xKic0WMMSvf1jErPOj96gZubOSOSdNdy6Jnj5WwfosFEYr3l3AUa544e?=
+ =?us-ascii?Q?u5qnXhi28ypVccBzXW3K4mSy4Ll0gRInEo+kK3aRkplb9NgWVDbDeL0cz/30?=
+ =?us-ascii?Q?8q3pGw0nDzy5aDywC4Ey0V4V96LZWbTUBYwYfWPuSxkMf3UAMyVzvRm1d+H+?=
+ =?us-ascii?Q?hHMO8s2AShIms/Qiqf+C3/1byIibiiXgwlqf3gMvnP3t3s6F8wrohu0u5PqX?=
+ =?us-ascii?Q?OhyrWy5wWcgEabzEES+WV3XU23dtUesAf+1rqzgEvpIf+oP1n+MyLZFLZ891?=
+ =?us-ascii?Q?73nhw0lFVNrdHCTeBhUMVlQ6eCWGQpwnAIRpLSbN1rKU3OHVrzXrrIWfKUdd?=
+ =?us-ascii?Q?EkYYIKG5mWT1ixXRxqRAaAu+X4DKw4Ngay1XhkyCfWh/36aZU1R9E6+ssy1d?=
+ =?us-ascii?Q?DYGJKzwA1y7TYnScYgTGEEmwgW1apyf0GtXnMRPao90zZUqhONpWUiqf0zOE?=
+ =?us-ascii?Q?iM4WTwIP7lTKGtOPVo/7rVVKl9ky+CpKNwYL9eIlCwxnL/ECRrwaU1mWMQWh?=
+ =?us-ascii?Q?/oTTLXkIU7sxylJqKeWxwb3HpFU7drIlzTFxZ7tn98lBolBLjqwThjz3+nhc?=
+ =?us-ascii?Q?bCUn09PT+wVuHah/EaIxM5VckmzAlcIz2q0C/ekzSvBepaLOJoCPAYy3wT3n?=
+ =?us-ascii?Q?O8GAJwBSiqeV/qBN1aE9hQ3V1rEysMQOQzONA19aA5zTTXmPLgNtDREI12EQ?=
+ =?us-ascii?Q?FMqco9EBSpYWjp9cyM7iK+Yrxl0PlLbGNVCFHoSRO4/MIZtD1GMlPeUgS8Yq?=
+ =?us-ascii?Q?5qpsQ2JFkTgBLakPvNYS3qK0MOul2Rei4XZxO2Is5k78m4dJ7S1p8cbR16gt?=
+ =?us-ascii?Q?+1xmtQU/T0XsBQ5K35sqLQ/kbiemNExX9y/+xxbgleCTIIEbYjSjZ3X7Mn+0?=
+ =?us-ascii?Q?CUFVY8iVXT1mFnxds0e5rnnEzOJ1TWyCT5HDT/73h38iT+BK/7AatKh+To4k?=
+ =?us-ascii?Q?tVkYs+aa+IE7HsQ3psLWgIbmN9b+N6zK3dMa17+QkgoQHkKdJLZQNhEC1b23?=
+ =?us-ascii?Q?U/T8CWoRlfSbKwG7p6IRZxKZvIdasoFVwId0z33gq9SwJBgY2A2uAJKtqQAN?=
+ =?us-ascii?Q?ALVbd5BBmIHBOjpcaOWvG5izzH/9Tm6c4oDXMi0YvVr7QfH0qXhBRhOWuYdv?=
+ =?us-ascii?Q?4M2SxLS/1CBWGVbfbCU80Jfsqh6ivME8pzH4jw656F2iLCBD4ZB9VRb2yG6v?=
+ =?us-ascii?Q?X5FGn/hHTR4k2lFc8Xz2zxyhhGou78q22YeqKVSsx6jOCFJEygI0lNognL+S?=
+ =?us-ascii?Q?rK+cQ9CK/sC9A8nfmyZCdlWQCqhlNfbm+ILjyLqAeXOlwE7VLOy+on3iSFvw?=
+ =?us-ascii?Q?uSN93sb4/iGftmG7hiuKcVoIjlvckGp9jVTkSq3Lcc+c2q7OEeV9ubYp5GSN?=
+ =?us-ascii?Q?tbaWNpnRhpwiKhmoC3aPbde7FCMifUHS0kv5TinyQ1/ENXIhTnjRmY5iztrP?=
+ =?us-ascii?Q?Qhfv+APaVnjTEQEVjcVKLb2fxyJtvYxgfNTxV4iLfwFY4OgCCN++XkRH9a2l?=
+ =?us-ascii?Q?Qd6G73L9XT8OlnRBemUo3mN/R8MZvkYlob3YISxeLC2k148xr6AI4aNp7iIx?=
+ =?us-ascii?Q?n2iykg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f829a2c1-a407-430a-3543-08db5dc68df1
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 08:52:37.0620
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: klRf8QjjLfvsNzqr2A+NS8PhMTtbQUeuoqU6xA/VqiHMtkz6dVNi41q/J2E8hO83FPA6YzkzczC+HruJ6sEjfs6QHy+9Nyf7jtZyc2xjK+c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4808
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 26, 2023 at 09:42:52AM +0200, Maxime Chevallier wrote:
+> dwmac_socfpga re-implements support for the TSE PCS, which is identical
+> to the already existing TSE PCS, which in turn is the same as the Lynx
+> PCS. Drop the existing TSE re-implemenation and use the Lynx PCS
+> instead, relying on the regmap-mdio driver to translate MDIO accesses
+> into mmio accesses.
+> 
+> Instead of extending xpcs, allow using a generic phylink_pcs, populated
+> by lynx_pcs_create(), and use .mac_select_pcs() to return the relevant
+> PCS to be used.
+> 
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+> ---
+> V2->V3 : No changes
+> V1->V2 : No changes
+> 
+>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
+>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   2 +-
+>  .../ethernet/stmicro/stmmac/altr_tse_pcs.c    | 257 ------------------
+>  .../ethernet/stmicro/stmmac/altr_tse_pcs.h    |  29 --
+>  drivers/net/ethernet/stmicro/stmmac/common.h  |   1 +
+>  .../ethernet/stmicro/stmmac/dwmac-socfpga.c   |  90 ++++--
+>  .../net/ethernet/stmicro/stmmac/stmmac_main.c |  12 +-
+>  7 files changed, 76 insertions(+), 316 deletions(-)
 
+Another nice diffstat :)
 
-On 26.05.2023 08:36, Stephan Gerhold wrote:
-> On Fri, May 26, 2023 at 02:28:52AM +0200, Konrad Dybcio wrote:
->> On 26.05.2023 01:39, Konrad Dybcio wrote:
->>> On 17.05.2023 20:48, Stephan Gerhold wrote:
->>>> Some of the regulators must be always-on to ensure correct operation of
->>>> the system, e.g. PM8916 L2 for the LPDDR RAM, L5 for most digital I/O
->>>> and L7 for the CPU PLL (strictly speaking the CPU PLL might only need
->>>> an active-only vote but this is not supported for regulators in
->>>> mainline currently).
->>> Would you be interested in implementing this?
-> 
-> At least on MSM8916 there is currently no advantage implementing this.
-> The "active-only" votes only have the CPU as limited use case. S1 (aka
-> MSM8916_VDDCX) and L3 (MSM8916_VDDMX) are both used via rpmpd/power
-> domains which already provides separate active-only variants. L7 (for
-> the CPU PLL) is the only other regulator used in "active-only" mode.
-> However, at least on MSM8916 L7 seems to stay always-on no matter what I
-> do, so having an active-only vote on L7 doesn't provide any advantage.
-In this case it may be more important that we tell RPM that we want it
-to be active-only, even if it ultimately makes a different decision.
-You probably played with this more, but my guess would be that not letting
-off of an a-s vote could confuse the algos
+...
 
-> 
->> Actually, I think currently all votes are active-only votes and what
->> we're missing is sleep-only (and active-sleep if we vote on both)
-> 
-> If you only send the "active" votes but no "sleep" votes for a resource
-> then the RPM firmware treats it as active+sleep, see [1].
-> The active/sleep separation only starts once a separate sleep vote has
-> been sent for a resource for the first time.
-> 
-> Therefore, all requests from the SMD regulator driver apply for both
-> active+sleep at the moment.
-> 
-> [1]: https://git.codelinaro.org/clo/la/kernel/msm-3.10/-/blob/LA.BR.1.2.9.1-02310-8x16.0/drivers/regulator/rpm-smd-regulator.c#L202-204
-/me *dies*
+> @@ -443,6 +454,35 @@ static int socfpga_dwmac_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto err_dvr_remove;
+>  
+> +	memset(&pcs_regmap_cfg, 0, sizeof(pcs_regmap_cfg));
+> +	pcs_regmap_cfg.reg_bits = 16;
+> +	pcs_regmap_cfg.val_bits = 16;
+> +	pcs_regmap_cfg.reg_shift = REGMAP_UPSHIFT(1);
+> +
+> +	/* Create a regmap for the PCS so that it can be used by the PCS driver,
+> +	 * if we have such a PCS
+> +	 */
+> +	if (dwmac->tse_pcs_base) {
 
-that's a design decision if i've ever seen one..
+nit: perhaps the scope of pcs_regmap and pcs_bus could be reduced to
+     this block.
 
-> 
->>>
->>> Ancient downstream defines a second device (vregname_ao) and basically
->>> seems to select QCOM_SMD_(ACTIVE/SLEEP)_STATE based on that..
->>>
->>> Looks like `struct regulator` stores voltage in an array that wouldn't
->>> you know it, depends on the PM state. Perhaps that could be something
->>> to explore!
->>>
-> 
-> Don't get confused by the similar naming here. RPM sleep votes are
-> unrelated to the "system suspend" voltages the regulator framework
-> supports. :)
-> 
-> RPM sleep votes become active if the cpuidle reaches the deepest state
-> for the (cpu/)cluster(/CCI). This can happen anytime at runtime when the
-> system is idle long enough. On the other hand, the regulator suspend
-> voltages are meant to become active during system suspend (where all the
-> devices get suspended as well).
-Yes and pm_genpd tracks that very meticulously, at least in the case of PSCI.
+> +		pcs_regmap = devm_regmap_init_mmio(&pdev->dev, dwmac->tse_pcs_base,
+> +						   &pcs_regmap_cfg);
+> +		if (IS_ERR(pcs_regmap)) {
+> +			ret = PTR_ERR(pcs_regmap);
+> +			goto err_dvr_remove;
+> +		}
+> +
+> +		mrc.regmap = pcs_regmap;
+> +
+> +		snprintf(mrc.name, MII_BUS_ID_SIZE, "%s-pcs-mii", ndev->name);
+> +		pcs_bus = devm_mdio_regmap_register(&pdev->dev, &mrc);
+> +		if (IS_ERR(pcs_bus)) {
+> +			ret = PTR_ERR(pcs_bus);
+> +			goto err_dvr_remove;
+> +		}
+> +
+> +		dwmac->pcs_mdiodev = mdio_device_create(pcs_bus, 0);
+> +		stpriv->hw->phylink_pcs = lynx_pcs_create(dwmac->pcs_mdiodev);
+> +	}
+> +
+>  	return 0;
+>  
+>  err_dvr_remove:
 
-> 
-> Since we do have "active-only" support in rpmpd I think the question is
-> if it is worth bringing the feature also to regulators. Perhaps one
-> could simply treat all regulators that are needed by the CPU as power
-> domain.
-That would make sense..
-
-> 
-> For example, L7 on MSM8916 is fixed at 1.8V so while it doesn't have
-> corners the simple enable/disable votes could also be sent via rpmpd.
-> In some places in downstream L7 is also called VDDPX, similar to
-> VDDCX and VDDMX which are already in rpmpd.
-Yeah, anything available from RPM is only vaguely categorized as being
-a clock/regulator/bus, sometimes wrongly (see: bus clocks in rpmcc) so
-there's some flexibility here.
-
-Konrad
-> 
-> Thanks,
-> Stephan
+...
