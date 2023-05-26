@@ -2,166 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12929712B9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2107712B9A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236974AbjEZRRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S242600AbjEZRRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237418AbjEZRRU (ORCPT
+        with ESMTP id S237404AbjEZRRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:17:20 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4661CF2;
-        Fri, 26 May 2023 10:17:17 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id B319A5C00DC;
-        Fri, 26 May 2023 13:17:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 26 May 2023 13:17:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685121436; x=
-        1685207836; bh=a6e+m1dGX2S9IHv+LEb0KF8KfjhX5NO7nh1vFg/in2g=; b=T
-        NK1CLoTndCbe2AqPL2bBK38QMNjJTuAAbabkVZnzGUJEIjykcEzqFp11Ryor0BvB
-        eG8bfjobd/ERFsg7Okn4xtydB+al2wtbyv2RQ+ehTkboGGqgZ/5rbdyVN+kflsCL
-        3drRe3FZqoVThy6OeSIu0qdaXcPwly2l1XRCwF3CY8518xTlYN3R1mT5Q8UTIPh1
-        DooeJIAG1rWGWzatFU/nzvaGljhcH5Mr4lOvUBVvq4E4tq8XxE06XURa0dj5/6/3
-        AVZOE8iCxK06N5XQC82t8EOZG4u+0vEnRtoY7ir23Vm4cn6ztmXG5s59YwDIzepa
-        zZlSi7VEoGiniRz8TNg1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685121436; x=
-        1685207836; bh=a6e+m1dGX2S9IHv+LEb0KF8KfjhX5NO7nh1vFg/in2g=; b=Y
-        LVMY9FMRyfyLPM7j3KEP2oZ+xk/MFaHJMTkd+WsqZMlHRXKq4GE+mggW266UEflu
-        5EUi840C/1Mt6DRyGLkEeuklrsmAA2KnINPy+syT+PaByJ1MnEH6qB/tE65z+63X
-        fdT9EIwNTFj+Wwu1b6ZGPtz6pDUBbwuXhoHR+I2cxZccaryTEkUoxlRexD0WPtx/
-        ubdTJuHdwuRmR7OLjf/A+j+0uNDMano+KLaQfSkYruOXA/XflMaimL7g7gv9GhdC
-        PYG+oC1Zrq11+uaxhchiwVPGPXnsuAhpH59w3X4bi21oVOBnlmj3Z4xmHKX7aRPn
-        NocrBzsc5A/mjMUTFcDPw==
-X-ME-Sender: <xms:nOlwZOQ7tyASaxwaYubBS5bP0dDWlFpsPkCOXb-L1gHQvFqZle-WAg>
-    <xme:nOlwZDx0-cNjEq_Et3LppAqSxzV2FuhyoUELYFMkgyx6d5BbLDrJOao-qIEp0xiZ6
-    1gL_Ca1BBn59m6GroM>
-X-ME-Received: <xmr:nOlwZL29VLYanBats2rij568-qBr1fxzUKZrxKHm1xmuHBsDZ1xbFuaYUixkG9zDZm-9wPHelgBAEZzqGKqS4NpN3F6BPet6HzK2gemO1KPbFUPCc_NHLOv7Ow>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejledguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecuogetfedtuddqtdduucdludehmdenucfjughrpe
-    fhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforghrkhcurfgvrghr
-    shhonhcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggrqeenucggtf
-    frrghtthgvrhhnpeeftddvjeefleffvefhgfejjeehudetteeigeeugfekhffhgeejudeu
-    teehgfdvffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:nOlwZKADrNk0hq-M0npqA7N4tB-lvrqf6JwZ87d3g7bzqNbXllXj5A>
-    <xmx:nOlwZHgPQ432SqscBkbcOvU3wUbEZ068p_ziip-P0ek6ER7294bXyg>
-    <xmx:nOlwZGoC-jhRX5dGZm9HIGzIZO3-UWnoo_Ei9kQtHGjg4N1mLPm3Dg>
-    <xmx:nOlwZEuLtLTpUYkszUh0tdHvDZ9C17vLT9Ih04iMTwntuCVPmFzcdQ>
-Feedback-ID: ibe194615:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 26 May 2023 13:17:16 -0400 (EDT)
-From:   Mark Pearson <mpearson-lenovo@squebb.ca>
-To:     mpearson-lenovo@squebb.ca
-Cc:     hdegoede@redhat.com, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] platform/x86: think-lmi: mutex protection around multiple WMI calls
-Date:   Fri, 26 May 2023 13:16:58 -0400
-Message-Id: <20230526171658.3886-5-mpearson-lenovo@squebb.ca>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230526171658.3886-1-mpearson-lenovo@squebb.ca>
-References: <mpearson-lenovo@squebb.ca>
- <20230526171658.3886-1-mpearson-lenovo@squebb.ca>
+        Fri, 26 May 2023 13:17:32 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B78B194
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:17:23 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-973bf581759so167804666b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1685121442; x=1687713442;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2SDbH8jwxHalkcPD4Gq6t9y7De5VNrdlKn9k4tsGfLw=;
+        b=MW/im5IXrVqJSdFDGWSOK84wY4O3RxP+EURvoOQQHBAfvGOrslzA20/mwIm2C4u0kR
+         cK1Txc+qhLf5IwZiqNXj9N3x0ArpC7dps9Loty59MDYPLbPFfsjG6ABnRd/nU0jPXleN
+         FdPlR7eSep4csAWuqiHcaeA5bnNUKk4HKBh68=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685121442; x=1687713442;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2SDbH8jwxHalkcPD4Gq6t9y7De5VNrdlKn9k4tsGfLw=;
+        b=kGFNnTY1wRmf4747n3MfLaheSPvwWI2dx639LP03QVvp0deB1cX5Fuiux6co7Mr8Bd
+         XIpHAfbVJMqzMgTvGo+cncRQzaGMilMyHtNxda/yMLY+R+nm4e+VigOoHBmyt9CnZlNW
+         skHHYVJfrInto9xqPK3bEGbKXzROTrTyGa9Iwr7sfF0ptOFSxauh/80C+4drqvU2UuC7
+         DovuWknQb9OEr9ZMm1ve+wNoHWnY2H1xjaC+7Qb83fNn08NEwflBWwsKGIeTbIEqrPdd
+         J9QZt50kAWOwTGTONxnXKQ5K4JP/2IUNt2dAsWadgJXwvg7LJ6pqGiFYhb+lpvuMuyPN
+         SBSQ==
+X-Gm-Message-State: AC+VfDzvbEzsskapcWWzuBwJvf5Ow1nGmu4+6i97EkQzF29G04NrR6XB
+        gnRUxV12V35kiY23t4O9c6bjo0Fdrl1IEyy2EI+0uhfi
+X-Google-Smtp-Source: ACHHUZ7z4IbeciTxGpVkWIaypLiWdRUj7/FfdkAvvfqGzg8wUUsg5alvKtDWUio3Azg2AWvgynhGMg==
+X-Received: by 2002:a17:907:94cf:b0:973:93d6:189f with SMTP id dn15-20020a17090794cf00b0097393d6189fmr2814275ejc.61.1685121441698;
+        Fri, 26 May 2023 10:17:21 -0700 (PDT)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id j15-20020a170906830f00b009661cf921b4sm2334131ejx.202.2023.05.26.10.17.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 10:17:21 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-973bf581759so167796466b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:17:21 -0700 (PDT)
+X-Received: by 2002:a17:907:2684:b0:969:e55f:cca2 with SMTP id
+ bn4-20020a170907268400b00969e55fcca2mr2526701ejc.38.1685121440670; Fri, 26
+ May 2023 10:17:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CANn89iKUbyrJ=r2+_kK+sb2ZSSHifFZ7QkPLDpAtkJ8v4WUumA@mail.gmail.com>
+ <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
+ <CANn89i+bExb_P6A9ROmwqNgGdO5o8wawVZ5r3MHnz0qfhxvTtA@mail.gmail.com>
+ <CAHk-=wig6VizZHtRznz7uAWa-hHWjrCNANZ9B+1G=aTWPiVH4g@mail.gmail.com> <CAHk-=whkci5ck5Him8Lx5ECKHEtj=bipYmOCGe8DWrrp8uDq5g@mail.gmail.com>
+In-Reply-To: <CAHk-=whkci5ck5Him8Lx5ECKHEtj=bipYmOCGe8DWrrp8uDq5g@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 26 May 2023 10:17:03 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whtDupvWtj_ow11wU4_u=KvifTqno=5mW1VofyehjdVRA@mail.gmail.com>
+Message-ID: <CAHk-=whtDupvWtj_ow11wU4_u=KvifTqno=5mW1VofyehjdVRA@mail.gmail.com>
+Subject: Re: x86 copy performance regression
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000e02ff905fc9be809"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mutex protection around cases where an operation needs multiple
-WMI calls - e.g. setting password.
+--000000000000e02ff905fc9be809
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
----
-Changes in v2: New commit added after review of other patches in series.
-Changes in v3: Simplified mutex handling as recommended.
+On Fri, May 26, 2023 at 10:00=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Let me go look at it some more. I *really* didn't want to make the
+> code worse for ERMS
 
- drivers/platform/x86/think-lmi.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Oh well. I'll think about it some more in the hope that I can come up
+with something clever that doesn't make objtool hate me, but in the
+meantime let me just give you the "not clever" patch.
 
-diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-index 64cd453d6e7d..86185358dba2 100644
---- a/drivers/platform/x86/think-lmi.c
-+++ b/drivers/platform/x86/think-lmi.c
-@@ -14,6 +14,7 @@
- #include <linux/acpi.h>
- #include <linux/errno.h>
- #include <linux/fs.h>
-+#include <linux/mutex.h>
- #include <linux/string.h>
- #include <linux/types.h>
- #include <linux/dmi.h>
-@@ -195,6 +196,7 @@ static const char * const level_options[] = {
- };
- static struct think_lmi tlmi_priv;
- static struct class *fw_attr_class;
-+static DEFINE_MUTEX(tlmi_mutex);
- 
- /* ------ Utility functions ------------*/
- /* Strip out CR if one is present */
-@@ -437,6 +439,9 @@ static ssize_t new_password_store(struct kobject *kobj,
- 	/* Strip out CR if one is present, setting password won't work if it is present */
- 	strip_cr(new_pwd);
- 
-+	/* Use lock in case multiple WMI operations needed */
-+	mutex_lock(&tlmi_mutex);
-+
- 	pwdlen = strlen(new_pwd);
- 	/* pwdlen == 0 is allowed to clear the password */
- 	if (pwdlen && ((pwdlen < setting->minlen) || (pwdlen > setting->maxlen))) {
-@@ -493,6 +498,7 @@ static ssize_t new_password_store(struct kobject *kobj,
- 		kfree(auth_str);
- 	}
- out:
-+	mutex_unlock(&tlmi_mutex);
- 	kfree(new_pwd);
- 	return ret ?: count;
- }
-@@ -987,6 +993,9 @@ static ssize_t current_value_store(struct kobject *kobj,
- 	/* Strip out CR if one is present */
- 	strip_cr(new_setting);
- 
-+	/* Use lock in case multiple WMI operations needed */
-+	mutex_lock(&tlmi_mutex);
-+
- 	/* Check if certificate authentication is enabled and active */
- 	if (tlmi_priv.certificate_support && tlmi_priv.pwd_admin->cert_installed) {
- 		if (!tlmi_priv.pwd_admin->signature || !tlmi_priv.pwd_admin->save_signature) {
-@@ -1031,7 +1040,6 @@ static ssize_t current_value_store(struct kobject *kobj,
- 			if (ret)
- 				goto out;
- 		}
--
- 		ret = tlmi_save_bios_settings("");
- 	} else { /* old non opcode based authentication method (deprecated)*/
- 		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
-@@ -1071,6 +1079,7 @@ static ssize_t current_value_store(struct kobject *kobj,
- 		kobject_uevent(&tlmi_priv.class_dev->kobj, KOBJ_CHANGE);
- 	}
- out:
-+	mutex_unlock(&tlmi_mutex);
- 	kfree(auth_str);
- 	kfree(set_str);
- 	kfree(new_setting);
--- 
-2.40.1
+It generates an annoying six-byte jump when the small 2-byte one would
+work just fine, but I guess only my pride is wounded.
 
+              Linus
+
+--000000000000e02ff905fc9be809
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_li4tsaq50>
+X-Attachment-Id: f_li4tsaq50
+
+IGFyY2gveDg2L2xpYi9jb3B5X3VzZXJfNjQuUyB8IDEwICsrKysrKysrKy0KIDEgZmlsZSBjaGFu
+Z2VkLCA5IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9hcmNoL3g4
+Ni9saWIvY29weV91c2VyXzY0LlMgYi9hcmNoL3g4Ni9saWIvY29weV91c2VyXzY0LlMKaW5kZXgg
+NGZjNWMyZGUyZGU0Li43ZTk3MjIyNGIwYmEgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2xpYi9jb3B5
+X3VzZXJfNjQuUworKysgYi9hcmNoL3g4Ni9saWIvY29weV91c2VyXzY0LlMKQEAgLTcsNiArNyw4
+IEBACiAgKi8KIAogI2luY2x1ZGUgPGxpbnV4L2xpbmthZ2UuaD4KKyNpbmNsdWRlIDxhc20vY3B1
+ZmVhdHVyZXMuaD4KKyNpbmNsdWRlIDxhc20vYWx0ZXJuYXRpdmUuaD4KICNpbmNsdWRlIDxhc20v
+YXNtLmg+CiAjaW5jbHVkZSA8YXNtL2V4cG9ydC5oPgogCkBAIC0yOSw3ICszMSw3IEBACiAgKi8K
+IFNZTV9GVU5DX1NUQVJUKHJlcF9tb3ZzX2FsdGVybmF0aXZlKQogCWNtcHEgJDY0LCVyY3gKLQlq
+YWUgLkx1bnJvbGxlZAorCWFsdGVybmF0aXZlICJqYWUgLkx1bnJvbGxlZCIsICJqYWUgLkxsYXJn
+ZSIsIFg4Nl9GRUFUVVJFX0VSTVMKIAogCWNtcCAkOCwlZWN4CiAJamFlIC5Md29yZApAQCAtNjUs
+NiArNjcsMTIgQEAgU1lNX0ZVTkNfU1RBUlQocmVwX21vdnNfYWx0ZXJuYXRpdmUpCiAJX0FTTV9F
+WFRBQkxFX1VBKCAyYiwgLkxjb3B5X3VzZXJfdGFpbCkKIAlfQVNNX0VYVEFCTEVfVUEoIDNiLCAu
+TGNvcHlfdXNlcl90YWlsKQogCisuTGxhcmdlOgorMDoJcmVwIG1vdnNiCisxOglSRVQKKworICAg
+ICAgICBfQVNNX0VYVEFCTEVfVUEoIDBiLCAxYikKKwogCS5wMmFsaWduIDQKIC5MdW5yb2xsZWQ6
+CiAxMDoJbW92cSAoJXJzaSksJXI4Cg==
+--000000000000e02ff905fc9be809--
