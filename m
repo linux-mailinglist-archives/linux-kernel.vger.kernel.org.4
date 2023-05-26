@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0EF712A6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87569712A76
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242856AbjEZQQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
+        id S236836AbjEZQR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjEZQQD (ORCPT
+        with ESMTP id S229648AbjEZQR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:16:03 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E7ED8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:16:01 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6af6f5fc42aso1039431a34.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1685117761; x=1687709761;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yDlTDGbuKA41l4lwuGymi6rlTXSveie0ey6DiI9icGU=;
-        b=Euf4o/Ygy5/YJmgSUbCtF0/jd8I0XGXo124m4zSjqOcCspN+5euc9GO9amwQ8qbRRS
-         KTj1qRcNdtrAt/qeRlywDd3rnPFwtUZvDNb3x+srvwIFThIeJlCKlnZjzir9tjhIIlgf
-         Rx6dM8+nmjie2qXwVg03inZ5RXO4KVQSiK0QgPdtd+YYVEF/1MIAey999UPFNUvTPaew
-         0ne+Y/jdf59V/UQeTU1n4j9DOhPrT9ZHjOUalbwj4EO2DEJn7+Lqie1H01c79WyyLHqT
-         griEAuUytczKujqalE+3++1zozEHsZ8ztxkSnKmj3Yn9RmpzyoKcQxKBLSSqqK4hs4tC
-         ywog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685117761; x=1687709761;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yDlTDGbuKA41l4lwuGymi6rlTXSveie0ey6DiI9icGU=;
-        b=fi5iFF0kIdRjnAdvopFe+mhjLbNFTrtebrkAeArXUjYG2v5+qvJuHmk8jFCOeMc4dt
-         rVjmrdyFMLCtdFo6MpAfTJuGt9r7AYQCP5DP3Ns+/son1/hqd6lNTOZeHgUOw+UNGPZO
-         q4pjV19+HpEzgiRFV44FMSwp1m166m4fTP4WNz413XqkEXKtlEchFrKpOz4OyrJ8NFNe
-         jRDjmU5VWp4Utg97TfmWwEy2xABv8LwMCINH3o5FRBBSH8h/25/WV25uLBw7LPiUNOi7
-         jG7wNGnrYqCoD4HWgPg/zght3fPiduAkeSJiYkLv72hHT1m36iJpmic9Cjl7CZMhNcjs
-         9/xQ==
-X-Gm-Message-State: AC+VfDwrmO9AAuSOsbhZdMEOCah3x/2csD08obB9IhvTYk4lEFExvNcg
-        WI1EkYMpdAkRcHBS8JF1csiDScPHZTUcoww2MYSEuQ==
-X-Google-Smtp-Source: ACHHUZ4h1so23xGA2B3TC0WeilISx3hYkfkFiojRcVtTpd4y89tXJ9rmMtaDQ2e0iM3blS1V6Cdu7cPRH4w+bvXB/ZA=
-X-Received: by 2002:a9d:6ad3:0:b0:6af:7818:add2 with SMTP id
- m19-20020a9d6ad3000000b006af7818add2mr1056477otq.37.1685117760931; Fri, 26
- May 2023 09:16:00 -0700 (PDT)
+        Fri, 26 May 2023 12:17:26 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA94BC;
+        Fri, 26 May 2023 09:17:25 -0700 (PDT)
+Received: from vefanov-Precision-3650-Tower.intra.ispras.ru (unknown [10.10.2.69])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 878B644C100F;
+        Fri, 26 May 2023 16:17:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 878B644C100F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1685117843;
+        bh=aqS+SmgTj1O1ACMyKobn1Ejjd1RSyeh/KMYxC+E+Wpw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WWuzkfeeBYGRMal7EvzSPJ1GwuO9j5aqUIvjRD/XGiesQHPXHBQL4RuXh1Ed4gZfg
+         deRtyLECp5+T7H6Wyse4v5qDYMKCBT0wkBc1y0dCyY6AvrK7HuR9daK5FjFGmpG8yR
+         T57ZgSiCU27zWgZp6IXoHAuFKLuNIOAzmzY/nT8k=
+From:   Vladislav Efanov <VEfanov@ispras.ru>
+To:     Marek Lindner <mareklindner@neomailbox.ch>
+Cc:     Vladislav Efanov <VEfanov@ispras.ru>,
+        Simon Wunderlich <sw@simonwunderlich.de>,
+        Antonio Quartulli <a@unstable.cc>,
+        Sven Eckelmann <sven@narfation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] batman-adv: Broken sync while rescheduling delayed work
+Date:   Fri, 26 May 2023 19:16:32 +0300
+Message-Id: <20230526161632.1460753-1-VEfanov@ispras.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230526145519.2282062-1-vineeth@bitbyteword.org>
- <20230526172959.5440b9dd@nowhere> <CAO7JXPgLFgXANqXY7L-YLbijxJCOgUKmd8nUQizb62JorOXGhA@mail.gmail.com>
- <CAO7JXPit6snFM2oW-uSs-mtbmKr9wpbX2exqAUF0iAiaAO6hOg@mail.gmail.com>
-In-Reply-To: <CAO7JXPit6snFM2oW-uSs-mtbmKr9wpbX2exqAUF0iAiaAO6hOg@mail.gmail.com>
-From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Date:   Fri, 26 May 2023 12:15:50 -0400
-Message-ID: <CAO7JXPgf9ffVQ3n9iD8-1abuDSAZHWAZmz56BmM68uJZ7uy+Uw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] sched/deadline: Fix bandwidth reclaim equation in GRUB
-To:     luca abeni <luca.abeni@santannapisa.it>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        youssefesmat@google.com,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 11:58=E2=80=AFAM Vineeth Remanan Pillai
-<vineeth@bitbyteword.org> wrote:
->
-> > > ...But I think this is wrong (should be "Umax - ...", not "1 - ...").
-> > > I think patch 2/2 has the same issue.
-> > >
-> > Oops sorry, I missed this. Will send the fixed patch as a
-> > reply to the original v4.
-> >
-> On looking again, I think the description is correct. That line
-> mentions the actual m-GRUB equation from the paper. And then the
-> comment explains why we use Umax(because of limiting the bandwidth
-> to RT capacity).
->
-Ahh my bad again :-(, I was looking at the commit message. I see the
-issue in the code comment now.
+Syzkaller got a lot of crashes like:
+KASAN: use-after-free Write in *_timers*
 
-I have just sent the fix as a reply to the initial patch. I shall send a
-v5 if needed. Please let me know.
+All of these crashes point to the same memory area:
 
-Thanks,
-Vineeth
+The buggy address belongs to the object at ffff88801f870000
+ which belongs to the cache kmalloc-8k of size 8192
+The buggy address is located 5320 bytes inside of
+ 8192-byte region [ffff88801f870000, ffff88801f872000)
+
+This area belongs to :
+        batadv_priv->batadv_priv_dat->delayed_work->timer_list
+
+The reason for these issues is the lack of synchronization. Delayed
+work (batadv_dat_purge) schedules new timer/work while the device
+is being deleted. As the result new timer/delayed work is set after
+cancel_delayed_work_sync() was called. So after the device is freed
+the timer list contains pointer to already freed memory.
+
+Found by Linux Verification Center (linuxtesting.org) with syzkaller.
+
+Fixes: 2f1dfbe18507 ("batman-adv: Distributed ARP Table - implement local storage")
+Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
+---
+ net/batman-adv/distributed-arp-table.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/batman-adv/distributed-arp-table.c b/net/batman-adv/distributed-arp-table.c
+index 6968e55eb971..28a939d56090 100644
+--- a/net/batman-adv/distributed-arp-table.c
++++ b/net/batman-adv/distributed-arp-table.c
+@@ -101,7 +101,6 @@ static void batadv_dat_purge(struct work_struct *work);
+  */
+ static void batadv_dat_start_timer(struct batadv_priv *bat_priv)
+ {
+-	INIT_DELAYED_WORK(&bat_priv->dat.work, batadv_dat_purge);
+ 	queue_delayed_work(batadv_event_workqueue, &bat_priv->dat.work,
+ 			   msecs_to_jiffies(10000));
+ }
+@@ -819,6 +818,7 @@ int batadv_dat_init(struct batadv_priv *bat_priv)
+ 	if (!bat_priv->dat.hash)
+ 		return -ENOMEM;
+ 
++	INIT_DELAYED_WORK(&bat_priv->dat.work, batadv_dat_purge);
+ 	batadv_dat_start_timer(bat_priv);
+ 
+ 	batadv_tvlv_handler_register(bat_priv, batadv_dat_tvlv_ogm_handler_v1,
+-- 
+2.34.1
+
