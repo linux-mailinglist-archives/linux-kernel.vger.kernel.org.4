@@ -2,171 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FB7712427
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0AF71242B
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243204AbjEZKBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
+        id S243201AbjEZKDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242803AbjEZKBK (ORCPT
+        with ESMTP id S236870AbjEZKDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:01:10 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22478194;
-        Fri, 26 May 2023 03:00:59 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QSL3h0Glcz67bgN;
-        Fri, 26 May 2023 17:58:56 +0800 (CST)
-Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
- lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 26 May 2023 11:00:56 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Liang Kan <kan.liang@linux.intel.com>, <linux-cxl@vger.kernel.org>,
-        <peterz@infradead.org>, <mark.rutland@arm.com>, <will@kernel.org>,
-        <dan.j.williams@intel.com>
-CC:     <mingo@redhat.com>, <acme@kernel.org>, <linuxarm@huawei.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Namhyung Kim <namhyung@gmail.com>,
-        Stephane Eranian <eranian@google.com>
-Subject: [PATCH v7 5/5] docs: perf: Minimal introduction the the CXL PMU device and driver
-Date:   Fri, 26 May 2023 10:58:24 +0100
-Message-ID: <20230526095824.16336-6-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230526095824.16336-1-Jonathan.Cameron@huawei.com>
-References: <20230526095824.16336-1-Jonathan.Cameron@huawei.com>
+        Fri, 26 May 2023 06:03:44 -0400
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6969E;
+        Fri, 26 May 2023 03:03:42 -0700 (PDT)
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-53f158ecfe1so375065a12.0;
+        Fri, 26 May 2023 03:03:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685095422; x=1687687422;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MnY7ZrluZEkGW0ej4AdD1ihrdQ0ygMRjBp2cq55eo6Q=;
+        b=kFYWhREc5O5izIs4i+WPYE2orD6+B2c5frnBYsIVKrJlmU6ftaeuTtUmg2KQVzcTa3
+         sqaARrnYkTf5B4JoAc8l4R7vlc6VK3mSA6685XerQOxdp6He4WGNLOd3Lte1UdnpU4sb
+         Ym0rRoDRWlcBODwplafDZRx3rjfMeze/LxjIgm1v7jTVxvAY8uYddAUetPlS/y7+8RYv
+         OJPy3lV3+lpJRq/uJ20djAPzL6z5i941hgYJ4GwPsmCfL6+o5MyHaiZmNmnBGHy/3Aji
+         Q9+E0s+AdJWTfKYubMFKeHnSoiQ5FP286MfaMv16yguH/Cv8hXpyIEaZoId4iAtq+Jhn
+         HyXw==
+X-Gm-Message-State: AC+VfDyVxfZ4EnyB78gj5ifO9qGf3EpCkEG+Esmj5xt3IHL4QuqmjhCQ
+        MhXJj2dMvMhM5i2s9mOXkQ==
+X-Google-Smtp-Source: ACHHUZ7hjKQq2/mdMWJ09Ulse7m2pM6MN+XnX0EaQ4cHGBA5G6EjrNFoTMPaOE/4NmOirOhvJCOTig==
+X-Received: by 2002:a17:902:740b:b0:1b0:99:a22c with SMTP id g11-20020a170902740b00b001b00099a22cmr1859061pll.34.1685095422009;
+        Fri, 26 May 2023 03:03:42 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id y14-20020a17090322ce00b001a800e03cf9sm2875892plg.256.2023.05.26.03.03.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 03:03:41 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     rostedt@goodmis.org, mhiramat@kernel.org, beaub@linux.microsoft.com
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, sunliming <sunliming@kylinos.cn>
+Subject: [PATCH V2] tracing/user_events: Prevent same name but different args event
+Date:   Fri, 26 May 2023 18:03:36 +0800
+Message-Id: <20230526100336.76934-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Very basic introduction to the device and the current driver support
-provided. I expect to expand on this in future versions of this patch
-set.
+User processes register name_args for events. If the same name but different
+args event are registered. The trace outputs of second event are printed
+as the first event. This is incorrect.
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Return EADDRINUSE back to the user process if the same name but different args
+event has being registered.
 
+Signed-off-by: sunliming <sunliming@kylinos.cn>
 ---
-v7
-- Added explict -a to command line examples to make it obvious the
-  counters apply only to all CPUs (no per thread or per process).
----
- Documentation/admin-guide/perf/cxl.rst   | 68 ++++++++++++++++++++++++
- Documentation/admin-guide/perf/index.rst |  1 +
- MAINTAINERS                              |  1 +
- 3 files changed, 70 insertions(+)
+ kernel/trace/trace_events_user.c              | 34 +++++++++++++++----
+ .../selftests/user_events/ftrace_test.c       |  6 ++++
+ 2 files changed, 33 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/admin-guide/perf/cxl.rst b/Documentation/admin-guide/perf/cxl.rst
-new file mode 100644
-index 000000000000..9233ea0d0b10
---- /dev/null
-+++ b/Documentation/admin-guide/perf/cxl.rst
-@@ -0,0 +1,68 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======================================
-+CXL Performance Monitoring Unit (CPMU)
-+======================================
-+
-+The CXL rev 3.0 specification provides a definition of CXL Performance
-+Monitoring Unit in section 13.2: Performance Monitoring.
-+
-+CXL components (e.g. Root Port, Switch Upstream Port, End Point) may have
-+any number of CPMU instances. CPMU capabilities are fully discoverable from
-+the devices. The specification provides event definitions for all CXL protocol
-+message types and a set of additional events for things commonly counted on
-+CXL devices (e.g. DRAM events).
-+
-+CPMU driver
-+===========
-+
-+The CPMU driver registers a perf PMU with the name pmu_mem<X>.<Y> on the CXL bus
-+representing the Yth CPMU for memX.
-+
-+    /sys/bus/cxl/device/pmu_mem<X>.<Y>
-+
-+The associated PMU is registered as
-+
-+   /sys/bus/event_sources/devices/cxl_pmu_mem<X>.<Y>
-+
-+In common with other CXL bus devices, the id has no specific meaning and the
-+relationship to specific CXL device should be established via the device parent
-+of the device on the CXL bus.
-+
-+PMU driver provides description of available events and filter options in sysfs.
-+
-+The "format" directory describes all formats of the config (event vendor id,
-+group id and mask) config1 (threshold, filter enables) and config2 (filter
-+parameters) fields of the perf_event_attr structure.  The "events" directory
-+describes all documented events show in perf list.
-+
-+The events shown in perf list are the most fine grained events with a single
-+bit of the event mask set. More general events may be enable by setting
-+multiple mask bits in config. For example, all Device to Host Read Requests
-+may be captured on a single counter by setting the bits for all of
-+
-+* d2h_req_rdcurr
-+* d2h_req_rdown
-+* d2h_req_rdshared
-+* d2h_req_rdany
-+* d2h_req_rdownnodata
-+
-+Example of usage::
-+
-+  $#perf list
-+  cxl_pmu_mem0.0/clock_ticks/                        [Kernel PMU event]
-+  cxl_pmu_mem0.0/d2h_req_rdshared/                   [Kernel PMU event]
-+  cxl_pmu_mem0.0/h2d_req_snpcur/                     [Kernel PMU event]
-+  cxl_pmu_mem0.0/h2d_req_snpdata/                    [Kernel PMU event]
-+  cxl_pmu_mem0.0/h2d_req_snpinv/                     [Kernel PMU event]
-+  -----------------------------------------------------------
-+
-+  $# perf stat -a -e cxl_pmu_mem0.0/clock_ticks/ -e cxl_pmu_mem0.0/d2h_req_rdshared/
-+
-+Vendor specific events may also be available and if so can be used via
-+
-+  $# perf stat -a -e cxl_pmu_mem0.0/vid=VID,gid=GID,mask=MASK/
-+
-+The driver does not support sampling so "perf record" is unsupported.
-+It only supports system-wide counting so attaching to a task is
-+unsupported.
-diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
-index 9de64a40adab..f60be04e4e33 100644
---- a/Documentation/admin-guide/perf/index.rst
-+++ b/Documentation/admin-guide/perf/index.rst
-@@ -21,3 +21,4 @@ Performance monitor support
-    alibaba_pmu
-    nvidia-pmu
-    meson-ddr-pmu
-+   cxl
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 976b3e982d3a..5388b5c2e5bb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5195,6 +5195,7 @@ COMPUTE EXPRESS LINK PMU (CPMU)
- M:	Jonathan Cameron <jonathan.cameron@huawei.com>
- L:	linux-cxl@vger.kernel.org
- S:	Maintained
-+F:	Documentation/admin-guide/perf/cxl.rst
- F:	drivers/perf/cxl_pmu.c
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index b1ecd7677642..bd455052ccd0 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -1753,6 +1753,8 @@ static int user_event_parse(struct user_event_group *group, char *name,
+ 	int ret;
+ 	u32 key;
+ 	struct user_event *user;
++	int argc = 0;
++	char **argv;
  
- CONEXANT ACCESSRUNNER USB DRIVER
+ 	/* Prevent dyn_event from racing */
+ 	mutex_lock(&event_mutex);
+@@ -1760,13 +1762,31 @@ static int user_event_parse(struct user_event_group *group, char *name,
+ 	mutex_unlock(&event_mutex);
+ 
+ 	if (user) {
+-		*newuser = user;
+-		/*
+-		 * Name is allocated by caller, free it since it already exists.
+-		 * Caller only worries about failure cases for freeing.
+-		 */
+-		kfree(name);
+-		return 0;
++		if (args) {
++			argv = argv_split(GFP_KERNEL, args, &argc);
++			if (!argv)
++				return -ENOMEM;
++
++			ret = user_fields_match(user, argc, (const char **)argv);
++			argv_free(argv);
++
++		} else
++			ret = list_empty(&user->fields);
++
++		if (ret) {
++			*newuser = user;
++			/*
++			 * Name is allocated by caller, free it since it already exists.
++			 * Caller only worries about failure cases for freeing.
++			 */
++			kfree(name);
++			ret = 0;
++		} else {
++			refcount_dec(&user->refcnt);
++			ret = -EADDRINUSE;
++		}
++
++		return ret;
+ 	}
+ 
+ 	user = kzalloc(sizeof(*user), GFP_KERNEL_ACCOUNT);
+diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+index 7c99cef94a65..6e8c4b47281c 100644
+--- a/tools/testing/selftests/user_events/ftrace_test.c
++++ b/tools/testing/selftests/user_events/ftrace_test.c
+@@ -228,6 +228,12 @@ TEST_F(user, register_events) {
+ 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+ 	ASSERT_EQ(0, reg.write_index);
+ 
++	/* Multiple registers to same name but different args should fail */
++	reg.enable_bit = 29;
++	reg.name_args = (__u64)"__test_event u32 field1;";
++	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
++	ASSERT_EQ(EADDRINUSE, errno);
++
+ 	/* Ensure disabled */
+ 	self->enable_fd = open(enable_file, O_RDWR);
+ 	ASSERT_NE(-1, self->enable_fd);
 -- 
-2.39.2
+2.25.1
 
