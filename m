@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CF471224C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38674712245
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242744AbjEZIe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        id S242726AbjEZIeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242729AbjEZIep (ORCPT
+        with ESMTP id S236850AbjEZIeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:34:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F31D8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685090038;
+        Fri, 26 May 2023 04:34:19 -0400
+Received: from out-40.mta0.migadu.com (out-40.mta0.migadu.com [IPv6:2001:41d0:1004:224b::28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BDB128
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 01:34:18 -0700 (PDT)
+Date:   Fri, 26 May 2023 04:34:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685090056;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=HZdbB846VP2Mif8vkzLshswwvIDgJcVcn/Vxjtn6SVU=;
-        b=Xw6FrAweQiQZWgGCdrygbEAM46534Rd69zWxuN9WKBqID6WeRW/JSkdfWBHDhwgjKR5yda
-        diXH/8H7lA9IA/BwqL/tRdsjLQtvC5UF5MAwuuLaim/pLLl4ccKSekNXsckgoTtM9GcQIW
-        88wQvEozYo1qofynra7S+pGH42JgQxw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-31-7sMtwyH8MCSL5zzDtp_gYw-1; Fri, 26 May 2023 04:33:51 -0400
-X-MC-Unique: 7sMtwyH8MCSL5zzDtp_gYw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 626FE1C04180;
-        Fri, 26 May 2023 08:33:50 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E3E5C200AD47;
-        Fri, 26 May 2023 08:33:47 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <ZHBtGJ3SzJtr5HZP@infradead.org>
-References: <ZHBtGJ3SzJtr5HZP@infradead.org> <20230525223953.225496-1-dhowells@redhat.com> <20230525223953.225496-4-dhowells@redhat.com>
+        bh=a1+k8geEgB3EI42+JJ+lx1nGKMJgJ9cIZX0cMtf11v8=;
+        b=YmHfcSlC6Hj1py8HMz8oTzzq+ZfEqeBn9Pz/Ed/IQtvrF6RfexPzvh/A/8AYkicbAz78LB
+        o9z8e2ts1pjbylZmZNsPRSHfTV8H+Il0z8tQSYR9//uxbgsPVnS9Fvo4aqt9a7iMtin30f
+        oNKadLj96+v5lfZsEVRpmAnphhg6I7Y=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
 To:     Christoph Hellwig <hch@infradead.org>
-Cc:     dhowells@redhat.com, David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH v2 3/3] block: Use iov_iter_extract_pages() and page pinning in direct-io.c
+Cc:     Jan Kara <jack@suse.cz>, cluster-devel@redhat.com,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        linux-kernel@vger.kernel.org, dhowells@redhat.com,
+        linux-bcachefs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>
+Subject: Re: [Cluster-devel] [PATCH 06/32] sched: Add
+ task_struct->faults_disabled_mapping
+Message-ID: <ZHBvA9uy8A0YdK1p@moria.home.lan>
+References: <20230510010737.heniyuxazlprrbd6@quack3>
+ <ZFs3RYgdCeKjxYCw@moria.home.lan>
+ <20230523133431.wwrkjtptu6vqqh5e@quack3>
+ <ZGzoJLCRLk+pCKAk@infradead.org>
+ <ZGzrV5j7OUU6rYij@moria.home.lan>
+ <ZG2yFFcpE7w/Glge@infradead.org>
+ <ZG3GHoNnJJW4xX2H@moria.home.lan>
+ <ZG8jJRcwtx3JQf6Q@infradead.org>
+ <ZG/KH9cQluA5e30N@moria.home.lan>
+ <ZHBolpHP5JAmt65V@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <520476.1685090027.1@warthog.procyon.org.uk>
-Date:   Fri, 26 May 2023 09:33:47 +0100
-Message-ID: <520477.1685090027@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHBolpHP5JAmt65V@infradead.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> wrote:
+On Fri, May 26, 2023 at 01:06:46AM -0700, Christoph Hellwig wrote:
+> On Thu, May 25, 2023 at 04:50:39PM -0400, Kent Overstreet wrote:
+> > A cache that isn't actually consistent is a _bug_. You're being
+> > Obsequious. And any time this has come up in previous discussions
+> > (including at LSF), that was never up for debate, the only question has
+> > been whether it was even possible to practically fix it.
+> 
+> That is not my impression.  But again, if you think it is useful,
+> go ahead and seel people on the idea.  But please prepare a series
+> that includes the rationale, performance tradeoffs and real live
+> implications for it.  And do it on the existing code that people use
+> and not just your shiny new thing.
 
-> I'm not seeing where we skip the unpin of the zero page, as commented
-> in patch 1 (but maybe I'm not reviewing carefully enough as I'm at a
-> conference right now).
+When I'm ready to lift this to the VFS level I will; it should simplify
+locking overall and it'll be one less thing for people to worry about.
 
-It's done by unpin_user_page{,s}(), hidden away in gup.c.  See the commit
-message for patch 1:
+(i.e. the fact that even _readahead_ can pull in pages a dio is
+invalidating is a really nice footgun if not worked around).
 
-	Make pin_user_pages*() leave a ZERO_PAGE unpinned if it extracts a
-	pointer to it from the page tables and make unpin_user_page*()
-	correspondingly ignore a ZERO_PAGE when unpinning.
-
-David
-
+Right now though I've got more than enough on my plate just trying to
+finally get bcachefs merged, I'm happy to explain what this is for but
+I'm not ready for additional headaches or projects yet.
