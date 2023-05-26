@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F26711FCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3B7711FD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbjEZGXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 02:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S242124AbjEZGXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 02:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbjEZGXF (ORCPT
+        with ESMTP id S230058AbjEZGXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 02:23:05 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294AC125;
-        Thu, 25 May 2023 23:23:04 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-53482b44007so243271a12.2;
-        Thu, 25 May 2023 23:23:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685082183; x=1687674183;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7cCHBf3UytwZfxePPwE+jd6ort0sOdXbbuo1VvBkL64=;
-        b=In9JMr9pXJKdU4OFNrKA8VkqvzNERFgbkF1WTefIBpZGNH1cm6Wu4vy6gHMfTTbpH5
-         Bxt1r4RdI0sl2apwFfU9YncceU9jlq55r9HxXRy93MWRcYsVcXQ/3fCBv5QBexNmd25X
-         6G2yWYoM0MVRHQMx8eH0pxaCBL360ys2TBubCUiYCToafZ9wgibDjDx0qVGg1QlxwNOJ
-         mLFF8yI2zd7UosSjjmAmMe1b3OntVisxuNwReKnyR4cjSdQqdBe57OFiu7V+h7YbDTD9
-         gS4FVXbZxLBVK9nWMBpD7mMOq0v4voFCeypL5pXo+ai/vZiKklNlarHEiS6wZWvQStAQ
-         076A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685082183; x=1687674183;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7cCHBf3UytwZfxePPwE+jd6ort0sOdXbbuo1VvBkL64=;
-        b=ebjpIGkbPWxespbD+Cr1qrLtNWbdnKXnGoSUtbmExpJ+efkW42z1UxahXGHMk6bL2q
-         Oe0tBcwJdgZ13cKR82hBr8qf2SwVpOFTrm6fbO5gvgCxgUgG26PHSan8oYeJiJ6phP8v
-         isnc6grXZrUBi531so6PKCEigEYanYTBqaBRXLyowYkr/XbBVc52WT/9K1iS10UmRZ93
-         jmMbPTHANuPRj9Lw1yOxS+xMO+R0w8c/a3AbZzixx2XtQvQlN1OSMtgpHCtls9/OCIH7
-         QuHcMw3b2EQKlnOyE6VhsGmotkIpiLNPNWX0gDYlqQfWuh2Lgnaea08P1EsHGaor+3w1
-         2dww==
-X-Gm-Message-State: AC+VfDwIJ5B8DcD38FpUIMgWTPR3jbmeScYQXGpUAGBRPgUOhRFjysda
-        yK8SOegYjoDFpI6VCa6UHUrEgdxzb51lqL0RAxQ=
-X-Google-Smtp-Source: ACHHUZ5+adpq5bn8ccEuSJ16UorMQ11HQo3chgEmsUz3XwrAAvurJ6sIX+3y8mXx79RuaBedX3HqgDmU0iivyP2H1/M=
-X-Received: by 2002:a17:903:2285:b0:1ab:142a:3dd7 with SMTP id
- b5-20020a170903228500b001ab142a3dd7mr1537487plh.68.1685082183465; Thu, 25 May
- 2023 23:23:03 -0700 (PDT)
+        Fri, 26 May 2023 02:23:51 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D2F125;
+        Thu, 25 May 2023 23:23:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685082230; x=1716618230;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PkiUpbEtrpSgSrT760mu2pOdE426KTPZd6Y2xw/xBkg=;
+  b=NAlQ8mgXYXePT4WYcRqGkPJ2FI0gVGZ0iibYeCZrSJeIQzKZhdp+9mW3
+   V4scJJDVNbRWatNX52hvhz38lmGW1AaHuwqiEjfUqQdVabjYWHou/0DKP
+   Mbp50D8G4fQjEKkuJuLQSYhmeOl4QbTJmcMl3PlsL0l22o09Il5I7srJv
+   kXOG7RUUtmBoi8EH4RteVaxOvz3VlkblOoQ8apCshQaGRH5RfeXW+rqln
+   rNiEWSzPMn1sqp2au/0jwPwAbCh4P6SQWAHGub/esf7HL2RhV5t8EweL6
+   KVasuu4g6ggwJabXn05M6CudnvhYsj1RCKxnwyXeu/QrIhwuz8O4c0xN/
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="asc'?scan'208";a="154045927"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 23:23:49 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 25 May 2023 23:23:49 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 25 May 2023 23:23:47 -0700
+Date:   Fri, 26 May 2023 07:23:24 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <Claudiu.Beznea@microchip.com>
+CC:     <conor@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <daniel.lezcano@linaro.org>, <tglx@linutronix.de>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <sebastian.reichel@collabora.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH 3/5] dt-bindings: timer: microchip,sam9x60-pit64b:
+ convert to yaml
+Message-ID: <20230526-knickers-aim-e01220e6a7cd@wendy>
+References: <20230525125602.640855-1-claudiu.beznea@microchip.com>
+ <20230525125602.640855-4-claudiu.beznea@microchip.com>
+ <20230525-straw-fidgeting-4c1099aa16fe@spud>
+ <5edf3d3b-6f59-0af3-6414-940a278962bf@microchip.com>
 MIME-Version: 1.0
-References: <cover.1684999824.git.haibo1.xu@intel.com> <20230525-6e0855eb07086a96eaa82362@orel>
-In-Reply-To: <20230525-6e0855eb07086a96eaa82362@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Fri, 26 May 2023 14:22:52 +0800
-Message-ID: <CAJve8o=SdjMvsVn=3Vqw3QG5SuU8nqLVC_MRAgPX+GuFZj6jvA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/11] RISCV: Add KVM_GET_REG_LIST API
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/HQ42Kwig12uCxHh"
+Content-Disposition: inline
+In-Reply-To: <5edf3d3b-6f59-0af3-6414-940a278962bf@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,42 +75,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 1:20=E2=80=AFAM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
-> On Thu, May 25, 2023 at 03:38:24PM +0800, Haibo Xu wrote:
-> > KVM_GET_REG_LIST will dump all register IDs that are available to
-> > KVM_GET/SET_ONE_REG and It's very useful to identify some platform
-> > regression issue during VM migration.
-> >
-> > Patch 1-7 re-structured the get-reg-list test in aarch64 to make some
-> > of the code as common test framework that can be shared by riscv.
-> >
-> > Patch 8 enabled the KVM_GET_REG_LIST API in riscv and patch 9-11 added
-> > the corresponding kselftest for checking possible register regressions.
-> >
-> > The get-reg-list kvm selftest was ported from aarch64 and tested with
-> > Linux 6.4-rc1 on a Qemu riscv virt machine.
-> >
-> > ---
-> > Changed since v1:
-> >   * rebase to Andrew's changes
-> >   * fix coding style
-> >
-> > Andrew Jones (7):
-> >   KVM: arm64: selftests: Replace str_with_index with strdup_printf
-> >   KVM: arm64: selftests: Drop SVE cap check in print_reg
-> >   KVM: arm64: selftests: Remove print_reg's dependency on vcpu_config
-> >   KVM: arm64: selftests: Rename vcpu_config and add to kvm_util.h
-> >   KVM: arm64: selftests: Delete core_reg_fixup
-> >   KVM: arm64: selftests: Split get-reg-list test code
-> >   KVM: arm64: selftests: Finish generalizing get-reg-list
->
-> All the patches above should also have your s-o-b since your posting them=
-.
->
+--/HQ42Kwig12uCxHh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sure.
+Hey Claudiu,
 
-> Thanks,
-> drew
+On Fri, May 26, 2023 at 04:47:28AM +0000, Claudiu.Beznea@microchip.com wrot=
+e:
+> On 25.05.2023 20:14, Conor Dooley wrote:
+> >> Convert Microchip PIT64B to YAML. Along with it clock-names binding has
+> >> been added as the driver needs it to get PIT64B clocks.
+> > I don't think both of these PIT things need to have different binding
+> > files. 90% of it is the same, just the clock-names/number - so you can
+>=20
+> But these are different hardware blocks with different functionalities and
+> different drivers.
+
+Having different drivers doesn't preclude having them in the same
+binding provided the function/description etc are more or less
+identical. I was confused by:
+
++description:
++  The 64-bit periodic interval timer provides the operating system schedul=
+er
++  interrupt. It is designed to offer maximum accuracy and efficient manage=
+ment,
++  even for systems with long response times.
+
++description:
++  Atmel periodic interval timer provides the operating system=E2=80=99s sc=
+heduler
++  interrupt. It is designed to offer maximum accuracy and efficient manage=
+ment,
++  even for systems with long response time.
+
+Those seemed like they do the same thing to me!
+
+Cheers,
+Conor
+
+>=20
+> > combine the two into one file with an
+>=20
+
+--/HQ42Kwig12uCxHh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHBQXAAKCRB4tDGHoIJi
+0k0HAP4xl941rIgtYkOPgtuhLrM9Ru4hF5dv2W41bdPW1crkuwEAihbwcVZ/e3bx
+CQbjq4bx5WilTAiRH7n/bkxRmjRe4QA=
+=xmcQ
+-----END PGP SIGNATURE-----
+
+--/HQ42Kwig12uCxHh--
