@@ -2,172 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E28171272E
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F87E712730
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243535AbjEZNHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
+        id S243181AbjEZNHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbjEZNHL (ORCPT
+        with ESMTP id S231158AbjEZNHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:07:11 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F26119;
-        Fri, 26 May 2023 06:07:09 -0700 (PDT)
-X-GND-Sasl: herve.codina@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685106427;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o2J4eEM5RXIP4b+rP/8OD/qqkXSOa3635HqS8iL6gx8=;
-        b=WzpM75Segot68BM+UMKk6uK+WErmwQKY5qyywJZSqXmF+qnTvlpGH35vAa9h6Epog44iG/
-        8m1dH5Q9VTLZDgmDqYDwqMSyVaz2/u207HwBoHuT73nEXYAJ4D8u8GYiggK/yL2S0zGp4/
-        eYTZfGcvi/nIiAZw0Z10Jl7DaDCgVn9OSz8rJo0x2Cy8sxYsd5P1qCBfE71+EpcLqw1yDX
-        8Aq8tv2ynvm6CqTfdEso1ZVd8z4Om265ppGvsYMflNGj3LPY+2GfQVp84xmsqqB9sMFJDK
-        m30UQ6DP6OGGxrRwcWiy/xP7+Qj3CVvuyNkOm0aisl+ob4Kzmj4ibxfoF0R76w==
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9E9B2C0006;
-        Fri, 26 May 2023 13:07:03 +0000 (UTC)
-Date:   Fri, 26 May 2023 15:07:02 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 9/9] ASoC: simple-card: Handle additional devices
-Message-ID: <20230526150702.2555143c@bootlin.com>
-In-Reply-To: <87v8ghgtyu.wl-kuninori.morimoto.gx@renesas.com>
-References: <20230523151223.109551-1-herve.codina@bootlin.com>
-        <20230523151223.109551-10-herve.codina@bootlin.com>
-        <87mt1u7fql.wl-kuninori.morimoto.gx@renesas.com>
-        <20230524141411.28765782@bootlin.com>
-        <87v8ghgtyu.wl-kuninori.morimoto.gx@renesas.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Fri, 26 May 2023 09:07:34 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14C5198
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:07:29 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f611ccd06eso5319595e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685106448; x=1687698448;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3OYN7dZABhmYimN+TZxc/LvZq8eCNJGJVqa65c9esQQ=;
+        b=hVt1U943xtcdOo2EhnLU8fSa9SaQAhhJAK9fHvIygC7JJ8lzJKKxP4k7u5OHw8Cp4/
+         GsuhTsj7XzA72Zxe9iq2RfLMhyqlEB0pzSIDDgSSYWZsnp/ykcjQeDwPRVz7kDJvnGPl
+         KgZToumD2FoaSZR9jpQgonIffD2DIgJPuF4qX7LxLYn3tz66EN6ljaxsV+OcT9Ih0IGM
+         LzrS01FjPnYyjJyAtBTRPL8ZsTEM4QgBcxkM4ldHr/JZvlU2r/KZxoQquvr8tjs/l+mW
+         BJ0oV+JvPFQW+SJPIkGkl+u9pJ9qj152wZMxlg/TDIGZq+oeD3SUbA0kwEs4sgbvGxpB
+         je3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685106448; x=1687698448;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3OYN7dZABhmYimN+TZxc/LvZq8eCNJGJVqa65c9esQQ=;
+        b=TN6MqB2hc3000bkZou7EtbcmAZT3gyZZtZ9rMdlKOJXEop6EzELHpsnOIH+4sbdl+j
+         lFSQjjVvcob3gylvKdyLM/5hoSD5L2Xk+M/wiYiObaPjIdknBjWcBhPpvi3YvF+8fRv9
+         AYiSOlRQ0bwM6wznR28odQ4iI2xy7UHkHkw0e/WCh+9nz1dhHyOqHdqiXwiFMjQvRLWZ
+         BcSqWY9Jip2+owbRud1mOmc2Tv60no6AnviczV812gfbnlrXHQDXdpQ0OpItGR584buN
+         kDqSX/nDZpvy34yP/ejbDhzHxzqGrnD00WcRLGEZwtZdaQAYUBTxWZHW6CouocJf4oQN
+         ++Cw==
+X-Gm-Message-State: AC+VfDwvPd5K6p2n5pfhXl/uVZpK1fDaxmwFyRxAHmo4PMd+sN5PN1Dr
+        lgiQrhDEx37WSUd0k8Tf6I0Ibw==
+X-Google-Smtp-Source: ACHHUZ7YKORMpC4RuNFuNl96MUWxk3+APLsN1PXwJ89q18j6GEnvJOhIRtKVBHTuz15K85dTVUYMJQ==
+X-Received: by 2002:a05:600c:3658:b0:3f5:fb83:62b0 with SMTP id y24-20020a05600c365800b003f5fb8362b0mr1473701wmq.36.1685106448115;
+        Fri, 26 May 2023 06:07:28 -0700 (PDT)
+Received: from loic-ThinkPad-T470p.. ([2a01:e0a:82c:5f0:73c8:c098:1848:c7ac])
+        by smtp.gmail.com with ESMTPSA id i2-20020a05600c290200b003eddc6aa5fasm8731390wmd.39.2023.05.26.06.07.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 06:07:27 -0700 (PDT)
+From:   Loic Poulain <loic.poulain@linaro.org>
+To:     corbet@lwn.net, viro@zeniv.linux.org.uk, brauner@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>
+Subject: [PATCH] init: Add support for rootwait timeout parameter
+Date:   Fri, 26 May 2023 15:07:16 +0200
+Message-Id: <20230526130716.2932507-1-loic.poulain@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023 00:01:14 +0000
-Kuninori Morimoto <kuninori.morimoto.gx@renesas.com> wrote:
+Add an optional timeout arg to 'rootwait' as the maximum time in
+seconds to wait for the root device to show up before attempting
+forced mount of the root filesystem.
 
-> Hi Herve
-> 
-> Thank you for your reply.
-> 
-> > So, IMHO, calling simple_populate_aux() from __simple_for_each_link() is
-> > not correct as it has nothing to do with DAI links and must be call once
-> > per Card.  
-> 
-> My biggest concern is that this code is calling same code multiple times.
-> It is easy to forget such thing when updating in this kind of code.
-> We don't forget / take mistake if these are merged.
-> But we have such code everywhere ;) this is just my concern, not a big deal.
-> 
-> 	static int __simple_for_each_link (...)
-> 	{
-> 		...
-> =>		add_devs = of_get_child_by_name(top, PREFIX "additional-devs");  
-> 		...
-> 	}
-> 
-> 	static int simple_populate_aux(...)
-> 	{
-> 		...
-> =>		node = of_get_child_by_name(dev->of_node, PREFIX "additional-devs");  
-> 		...
-> 	}
-> 
+This can be helpful to force boot failure and restart in case the
+root device does not show up in time, allowing the bootloader to
+take any appropriate measures (e.g. recovery, A/B switch, retry...).
 
-Well, of_get_child_by_name() is called twice to retrieve the additional-devs
-node but for very different reason.
+In success case, mounting happens as soon as the root device is ready,
+contrary to the existing 'rootdelay' parameter (unconditional delay).
 
-In __simple_for_each_link() to filter out the node as it has nothing to do with a DAI.
-In simple_populate_aux() to take care of the devices declared in the node.
+Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+---
+ .../admin-guide/kernel-parameters.txt         |  4 ++++
+ init/do_mounts.c                              | 19 +++++++++++++++++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
-I am not sure that we should avoid that.
-It will lead to a more complex code and flags just to avoid this call.
-
-Not sure that it will be better.
-__simple_for_each_link() is called multiple times and is supposed to look at links.
-To avoid the of_get_child_by_name() filter-out call, __simple_for_each_link()
-will look at link *and* populate devices calling simple_populate_aux().
-And to do that correctly it will use a flag to be sure that simple_populate_aux()
-was called only once.
-
-
-In order to avoid some kind of duplication (at least the node name):
-
-	static struct device_node *simple_of_get_add_devs(struct device_node *node)
-	{
-		return of_get_child_by_name(node, PREFIX "additional-devs");
-	}
-
-	static int __simple_for_each_link (...)
-	{
-		...
-=>		add_devs = simple_of_get_add_devs(top);  
-		...
-	}
-
-	static int simple_populate_aux(...)
-	{
-		...
-=>		node = simple_of_get_add_devs(dev->of_node);  
-		...
-	}
-
-
-Does it look better ?
-
-Best regards,
-Hervé
-
-> Thank you for your help !!
-> 
-> Best regards
-> ---
-> Kuninori Morimoto
-
-
-
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 9e5bab29685f..6e351d4c84a5 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5465,6 +5465,10 @@
+ 			Useful for devices that are detected asynchronously
+ 			(e.g. USB and MMC devices).
+ 
++	rootwait=	[KNL] Maximum time (in seconds) to wait for root device
++			to show up before attempting to mount the root
++			filesystem.
++
+ 	rproc_mem=nn[KMG][@address]
+ 			[KNL,ARM,CMA] Remoteproc physical memory block.
+ 			Memory area to be used by remote processor image,
+diff --git a/init/do_mounts.c b/init/do_mounts.c
+index 811e94daf0a8..942458e7d1c0 100644
+--- a/init/do_mounts.c
++++ b/init/do_mounts.c
+@@ -18,6 +18,7 @@
+ #include <linux/slab.h>
+ #include <linux/ramfs.h>
+ #include <linux/shmem_fs.h>
++#include <linux/ktime.h>
+ 
+ #include <linux/nfs_fs.h>
+ #include <linux/nfs_fs_sb.h>
+@@ -306,12 +307,20 @@ static int __init rootwait_setup(char *str)
+ {
+ 	if (*str)
+ 		return 0;
+-	root_wait = 1;
++	root_wait = -1;
+ 	return 1;
+ }
+ 
+ __setup("rootwait", rootwait_setup);
+ 
++static int __init rootwait_timeout_setup(char *str)
++{
++	root_wait = simple_strtoul(str, NULL, 0);
++	return 1;
++}
++
++__setup("rootwait=", rootwait_timeout_setup);
++
+ static char * __initdata root_mount_data;
+ static int __init root_data_setup(char *str)
+ {
+@@ -633,11 +642,17 @@ void __init prepare_namespace(void)
+ 
+ 	/* wait for any asynchronous scanning to complete */
+ 	if ((ROOT_DEV == 0) && root_wait) {
++		const ktime_t end = ktime_add_ms(ktime_get_raw(), root_wait * MSEC_PER_SEC);
++
+ 		printk(KERN_INFO "Waiting for root device %s...\n",
+ 			saved_root_name);
+ 		while (driver_probe_done() != 0 ||
+-			(ROOT_DEV = name_to_dev_t(saved_root_name)) == 0)
++			(ROOT_DEV = name_to_dev_t(saved_root_name)) == 0) {
+ 			msleep(5);
++
++			if (root_wait > 0 && ktime_after(ktime_get_raw(), end))
++				break;
++		}
+ 		async_synchronize_full();
+ 	}
+ 
 -- 
-Hervé Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.34.1
+
