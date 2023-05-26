@@ -2,48 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2883B711D19
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9B5711D21
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbjEZBur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 21:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
+        id S241702AbjEZBwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 21:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjEZBuq (ORCPT
+        with ESMTP id S230140AbjEZBwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 21:50:46 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93E5194;
-        Thu, 25 May 2023 18:50:43 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1685065838tfibdc44
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 26 May 2023 09:50:37 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: eSZ1CZgv+JCfU+Q/Ek/ByeU4a4AcvGPfBDxLuzVFFnBqpvoCh57Xxdo1gHof2
-        DKr4mZ4kV32WaG5tW5yVOn0mzE2srmKCy20Wly4IDPnhzsNIFzH8Ag5oMY2wbxji9SEJrIc
-        xvZ1OFXmdBbzmpsBzEhyTlrbTbAbTKbbKsQJuXoqqjwGsiKWOwV54KwCJ+GwOmWBSWxIqvX
-        TdyIfspVyKxfH/7TPKd/GL+n2HqFsSJ0wVBV5B+mE2RgJg6H5I9Qfk4fbp4GZNJDwC5iSGb
-        401ADIKHmUHRf0C55yg65WZ3Qde3Eqh2HXjK0SQixho7yC3iCwEd6oL4fZI1Maez5Dq55Ca
-        21pxKHG+TjqEZX04sB4RVmaRnlK+A==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17809865514302005706
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        w@1wt.eu
-Subject: Re: [PATCH 11/13] tools/nolibc: sys_select: riscv: use __NR_pselect6_time64 for rv32
-Date:   Fri, 26 May 2023 09:50:37 +0800
-Message-Id: <20230526015037.6455-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <76a5f9a0-eec4-415a-9c5d-ac3bca4d4b0e@t-8ch.de>
-References: <76a5f9a0-eec4-415a-9c5d-ac3bca4d4b0e@t-8ch.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        Thu, 25 May 2023 21:52:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0246189;
+        Thu, 25 May 2023 18:52:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C112164C27;
+        Fri, 26 May 2023 01:52:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2E294C433D2;
+        Fri, 26 May 2023 01:52:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685065941;
+        bh=WZkzC8eOvIL1gDqVA1b/tL0KaoLdWVjEve/8h6k7Msc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=NoObV04Y3bYaU+Zc++EiVq/dvsHpdl2UOiHQdPKbtzALzBcVB4qkRwalprrAy6wSZ
+         gPEhq8lfTPOHZi9fzq3Emozh8dpE258uMoQvls1ITkAM0x2cO4Wpwz7tTg6LJagBJv
+         27IkayWLCuXJl3+wExj1zC8q11DDKFNWb2YeAAPr7P6ODXrtb1Z9EFk3FwMdVDFmoM
+         J4IRwn8V8xrdtbTAj8ZoQ4je7982Dslj2Slr6TvV8jIXdPO0dLiFu4ls32uL4mVsPD
+         JmGmWwqFrkdT2rEUq9ZVH6KvqQV2LttziihiyoDdvs5LnbKIkTJRcxyfM/rheJ7JXj
+         KpHfvkwrUNfjQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1B912C4166F;
+        Fri, 26 May 2023 01:52:21 +0000 (UTC)
+Subject: Re: [GIT PULL] parisc architecture fixes for v6.4-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZG/bQ/x4YOSPEdu0@p100>
+References: <ZG/bQ/x4YOSPEdu0@p100>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZG/bQ/x4YOSPEdu0@p100>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/parisc-for-6.4-3
+X-PR-Tracked-Commit-Id: 61e150fb310729c98227a5edf6e4a3619edc3702
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 192fe71ce5d17b184423b96d76ce648e1b848db4
+Message-Id: <168506594110.25050.18436345272585659427.pr-tracker-bot@kernel.org>
+Date:   Fri, 26 May 2023 01:52:21 +0000
+To:     Helge Deller <deller@gmx.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        John David Anglin <dave.anglin@bell.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,108 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 2023-05-25 15:10:21+0800, Zhangjin Wu wrote:
-> > Hi, Thomas
-> > 
-> > > On 2023-05-25 01:59:55+0800, Zhangjin Wu wrote:
-> > > > rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
-> > > > __NR_pselect6 after kernel commit d4c08b9776b3 ("riscv: Use latest
-> > > > system call ABI"), use __NR_pselect6_time64 instead.
-> > > > 
-> > > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > > > ---
-> > > >  tools/include/nolibc/sys.h | 7 ++++++-
-> > > >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > > > index c0335a84f880..00c7197dcd50 100644
-> > > > --- a/tools/include/nolibc/sys.h
-> > > > +++ b/tools/include/nolibc/sys.h
-> > > > @@ -1041,8 +1041,13 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
-> > > >  		struct timeval *t;
-> > > >  	} arg = { .n = nfds, .r = rfds, .w = wfds, .e = efds, .t = timeout };
-> > > >  	return my_syscall1(__NR_select, &arg);
-> > > > -#elif defined(__ARCH_WANT_SYS_PSELECT6) && defined(__NR_pselect6)
-> > > > +#elif defined(__ARCH_WANT_SYS_PSELECT6) && (defined(__NR_pselect6) || defined(__NR_pselect6_time64))
-> > > > +#ifdef __NR_pselect6
-> > > >  	struct timespec t;
-> > > > +#else
-> > > > +	struct timespec64 t;
-> > > > +#define __NR_pselect6 __NR_pselect6_time64
-> > > 
-> > > Wouldn't this #define leak to the users of nolibc and lead to calls to
-> > > pselect6_time64 with the ABI of the __NR_pselect6 if userspace is doing
-> > > its own raw syscalls?
-> > >
-> > 
-> > Yeah, it would break the user-side raw __NR_pselect6 syscall for nolibc is a
-> > header-only libc, so, it is not safe to use such method like glibc.
-> > 
-> > Something like this will let the syscall call to pselect6_time64 instead of the
-> > user-required __NR_pselect6 and pass the wrong type of argument.
-> > 
-> >     #include "nolibc.h"  // If no __NR_pselect6 defined, __NR_pselect6 = __NR_pselect6_time64
-> > 
-> >     #ifdef __NR_pselect6
-> >         struct timespec t;  // come here for __NR_pselect6_time64, but t is not timespec64, broken
-> >         syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
-> >     #else
-> >         struct timespec64 t;
-> >         syscall(__NR_pselect6, nfds, rfds, wfds, efds, timeout ? &t : NULL, NULL);
-> >     #endif
-> > 
-> > I have used something like __NR_pselect6_time3264 locally, before
-> > sending the patchset, I found a cleaner method already used in sys.h:
-> > 
-> >     #ifndef __NR__newselect
-> >     #define __NR__newselect __NR_select
-> >     #endif
-> > 
-> > But I forgot the arguments mixing issue, __NR__newselect and __NR_select
-> > share the same type of arguments, but __NR_pselect6 and
-> > __NR_pselect6_time64 not, so, I will use back the old method but still
-> > need to find a better string, just like __NR__newselect, __NR__pselect6
-> > may be used in kernel space in the future, and __NR_pselect6_time3264 is
-> > too long, what about this?
-> > 
-> >     #ifdef __NR_pselect6
-> >             struct timespec t;
-> >     #define __NR_pselect6__ __NR_pselect6
-> >     #else
-> >             struct timespec64 t;
-> >     #define __NR_pselect6__ __NR_pselect6_time64
-> >     #endif
-> > 
-> > Or even ___NR_pselect6?
-> 
-> What about:
-> 
-> #ifdef __NR_pselect6
->         struct timespec t;
->         const long nr_pselect = __NR_pselect6;
-> #else
->         struct timespec64 t;
->         const long nr_pselect = __NR_pselect6_time64;
-> #endif
->
+The pull request you sent on Fri, 26 May 2023 00:03:47 +0200:
 
-It looks better and cleaner, will apply this method, thanks!
+> git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/parisc-for-6.4-3
 
-> > 
-> > The same issue is in this patch:
-> > 
-> >     [PATCH 13/13] tools/nolibc: sys_gettimeofday: riscv: use __NR_clock_gettime64
-> > 
-> > will solve it with the same method.
->
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/192fe71ce5d17b184423b96d76ce648e1b848db4
 
-And also this one:
+Thank you!
 
-    [PATCH 09/13] tools/nolibc: sys_poll: riscv: use __NR_ppoll_time64
-
-Have tested all of them, will send a v2 later.
-
-Best regards,
-Zhangjin
-
-> Thanks!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
