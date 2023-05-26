@@ -2,547 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5837B7129AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5797B7129B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 17:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244110AbjEZPfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 11:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40596 "EHLO
+        id S237021AbjEZPgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 11:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243838AbjEZPfu (ORCPT
+        with ESMTP id S244058AbjEZPgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 11:35:50 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3662CFB;
-        Fri, 26 May 2023 08:35:47 -0700 (PDT)
+        Fri, 26 May 2023 11:36:01 -0400
+X-Greylist: delayed 94219 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 26 May 2023 08:35:52 PDT
+Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [185.125.25.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95867F3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 08:35:52 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QSTXP6kHdzMqPDr;
+        Fri, 26 May 2023 17:35:49 +0200 (CEST)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4QSTXL3K3rz1Sjg;
+        Fri, 26 May 2023 17:35:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1685115349;
+        bh=IVLXl6zuTaxu1Zgxrh25RMUzIB63fNH4/OIZK2HDhZ0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kVMTGpVqhamFd/35Tv8GgGxW+MQc9ut6C15rUQoLevvrCTeKGaS+bLkhx73UqS/CF
+         F+QUQYt6dTBHCqDv3OJzGYoC8livFVhydjlyIX+RYotxBnPtUyqUMczbhbmQDNz+Be
+         GJfCUWCNzFZiETlN+G79KrUNM0ssQag3MigoVxSk=
+Message-ID: <caa8c89c-cae4-5a40-d6a1-f93ba7045d83@digikod.net>
 Date:   Fri, 26 May 2023 17:35:45 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1685115345; bh=Ars8MeWlntprpLqpvJDcteAPNdouB6dkXCDOo5Zjq5M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hAW0fmNpWqkeaAigHJ8lTGNFun6/JIt4Kdoxlzn3qAiIzjfEiFe0YouWUbdhAN1WF
-         ydNImWxtZbqo9iTKVmcZ5sklRfGLfXwR3n1yi5hNC7qsaqHeSWqMnZWJ+tFjSdPkvT
-         ITb1UUc8Plxz4c9QCUaja9LPpXUcs/ZXB5xmWums=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com
-Subject: Re: [PATCH v15 05/13] hp-bioscfg: enum-attributes
-Message-ID: <0cbd158e-0742-4e04-9996-bd376f9b555b@t-8ch.de>
-References: <20230519201300.12964-1-jorge.lopez2@hp.com>
- <20230519201300.12964-6-jorge.lopez2@hp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519201300.12964-6-jorge.lopez2@hp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: 
+Subject: Re: [RFC PATCH v1 0/9] Hypervisor-Enforced Kernel Integrity
+Content-Language: en-US
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        "liran.alon@oracle.com" <liran.alon@oracle.com>,
+        "marian.c.rotariu@gmail.com" <marian.c.rotariu@gmail.com>,
+        "Graf, Alexander" <graf@amazon.com>,
+        "Andersen, John S" <john.s.andersen@intel.com>,
+        "madvenka@linux.microsoft.com" <madvenka@linux.microsoft.com>,
+        "ssicleru@bitdefender.com" <ssicleru@bitdefender.com>,
+        "yuanyu@google.com" <yuanyu@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tgopinath@microsoft.com" <tgopinath@microsoft.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "dev@lists.cloudhypervisor.org" <dev@lists.cloudhypervisor.org>,
+        "mdontu@bitdefender.com" <mdontu@bitdefender.com>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "nicu.citu@icloud.com" <nicu.citu@icloud.com>,
+        "ztarkhani@microsoft.com" <ztarkhani@microsoft.com>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <20230505152046.6575-1-mic@digikod.net>
+ <93726a7b9498ec66db21c5792079996d5fed5453.camel@intel.com>
+ <facfd178-3157-80b4-243b-a5c8dabadbfb@digikod.net>
+ <7cb6c4c28c077bb9f866c2d795e918610e77d49f.camel@intel.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <7cb6c4c28c077bb9f866c2d795e918610e77d49f.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-19 15:12:52-0500, Jorge Lopez wrote:
 
-<snip>
-
->  .../x86/hp/hp-bioscfg/enum-attributes.c       | 465 ++++++++++++++++++
->  1 file changed, 465 insertions(+)
->  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/enum-attributes.c
+On 25/05/2023 17:52, Edgecombe, Rick P wrote:
+> On Thu, 2023-05-25 at 15:59 +0200, Mickaël Salaün wrote:
+> [ snip ]
 > 
-> diff --git a/drivers/platform/x86/hp/hp-bioscfg/enum-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/enum-attributes.c
-> new file mode 100644
-> index 000000000000..80842835606d
-> --- /dev/null
-> +++ b/drivers/platform/x86/hp/hp-bioscfg/enum-attributes.c
-> @@ -0,0 +1,465 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Functions corresponding to enumeration type attributes under
-> + * BIOS Enumeration GUID for use with hp-bioscfg driver.
-> + *
-> + * Copyright (c) 2022 HP Development Company, L.P.
-> + */
-> +
-> +#include "bioscfg.h"
-> +
-> +GET_INSTANCE_ID(enumeration);
-> +
-> +static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
-> +{
-> +	int instance_id = get_enumeration_instance_id(kobj);
-> +
-> +	if (instance_id < 0)
-> +		return -EIO;
-> +
-> +	return sysfs_emit(buf, "%s\n",
-> +			 bioscfg_drv.enumeration_data[instance_id].current_value);
-> +}
-> +
-> +/**
-> + * validate_enumeration_input() -
-> + * Validate input of current_value against possible values
-> + *
-> + * @instance_id: The instance on which input is validated
-> + * @buf: Input value
-> + */
-> +static int validate_enumeration_input(int instance_id, const char *buf)
-> +{
-> +	int i;
-> +	int found = 0;
-> +	struct enumeration_data *enum_data = &bioscfg_drv.enumeration_data[instance_id];
-> +
-> +	/* Is it a read only attribute */
-> +	if (enum_data->common.is_readonly)
-> +		return -EIO;
-> +
-> +	for (i = 0; i < enum_data->possible_values_size && !found; i++)
-> +		if (!strcmp(enum_data->possible_values[i], buf))
-> +			found = 1;
-> +
-> +	if (!found)
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
-> +static void update_enumeration_value(int instance_id, char *attr_value)
-> +{
-> +	struct enumeration_data *enum_data = &bioscfg_drv.enumeration_data[instance_id];
-> +
-> +	strscpy(enum_data->current_value,
-> +		attr_value,
-> +		sizeof(enum_data->current_value));
-> +}
-> +
-> +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, enumeration);
-> +static struct kobj_attribute enumeration_display_name =
-> +		__ATTR_RO(display_name);
-> +
-> +ATTRIBUTE_PROPERTY_STORE(current_value, enumeration);
-> +static struct kobj_attribute enumeration_current_val =
-> +		__ATTR_RW(current_value);
-> +
-> +ATTRIBUTE_VALUES_PROPERTY_SHOW(possible_values, enumeration, SEMICOLON_SEP);
-> +static struct kobj_attribute enumeration_poss_val =
-> +		__ATTR_RO(possible_values);
-> +
-> +static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
-> +			 char *buf)
-> +{
-> +	return sysfs_emit(buf, "enumeration\n");
-> +}
-> +
-> +static struct kobj_attribute enumeration_type =
-> +		__ATTR_RO(type);
-> +
-> +static struct kobj_attribute common_display_langcode =
-> +	__ATTR_RO(display_name_language_code);
-> +
-> +static struct attribute *enumeration_attrs[] = {
-> +	&common_display_langcode.attr,
-> +	&enumeration_display_name.attr,
-> +	&enumeration_current_val.attr,
-> +	&enumeration_poss_val.attr,
-> +	&enumeration_type.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group enumeration_attr_group = {
-> +	.attrs = enumeration_attrs,
-> +};
-> +
-> +int hp_alloc_enumeration_data(void)
-> +{
-> +	bioscfg_drv.enumeration_instances_count =
-> +		hp_get_instance_count(HP_WMI_BIOS_ENUMERATION_GUID);
-> +
-> +	bioscfg_drv.enumeration_data = kcalloc(bioscfg_drv.enumeration_instances_count,
-> +					       sizeof(*bioscfg_drv.enumeration_data), GFP_KERNEL);
-> +	if (!bioscfg_drv.enumeration_data) {
-> +		bioscfg_drv.enumeration_instances_count = 0;
-> +		return -ENOMEM;
-> +	}
-> +	return 0;
-> +}
-> +
-> +/* Expected Values types associated with each element */
-> +static const acpi_object_type expected_enum_types[] = {
-> +	[NAME] = ACPI_TYPE_STRING,
-> +	[VALUE] = ACPI_TYPE_STRING,
-> +	[PATH] = ACPI_TYPE_STRING,
-> +	[IS_READONLY] = ACPI_TYPE_INTEGER,
-> +	[DISPLAY_IN_UI] = ACPI_TYPE_INTEGER,
-> +	[REQUIRES_PHYSICAL_PRESENCE] = ACPI_TYPE_INTEGER,
-> +	[SEQUENCE] = ACPI_TYPE_INTEGER,
-> +	[PREREQUISITES_SIZE] = ACPI_TYPE_INTEGER,
-> +	[PREREQUISITES] = ACPI_TYPE_STRING,
-> +	[SECURITY_LEVEL] = ACPI_TYPE_INTEGER,
-> +	[ENUM_CURRENT_VALUE] = ACPI_TYPE_STRING,
-> +	[ENUM_SIZE] = ACPI_TYPE_INTEGER,
-> +	[ENUM_POSSIBLE_VALUES] = ACPI_TYPE_STRING,
-> +};
-> +
-> +static int hp_populate_enumeration_elements_from_package(union acpi_object *enum_obj,
-> +							 int enum_obj_count,
-> +							 int instance_id)
-> +{
-> +	char *str_value = NULL;
-> +	int value_len;
-> +	u32 size = 0;
-> +	u32 int_value;
-> +	int elem = 0;
-> +	int reqs;
-> +	int pos_values;
-> +	int ret;
-> +	int eloc;
-> +	struct enumeration_data *enum_data = &bioscfg_drv.enumeration_data[instance_id];
-> +
-> +	for (elem = 1, eloc = 1; elem < enum_obj_count; elem++, eloc++) {
-> +		/* ONLY look at the first ENUM_ELEM_CNT elements */
-> +		if (eloc == ENUM_ELEM_CNT)
-> +			goto exit_enumeration_package;
-> +
-> +		switch (enum_obj[elem].type) {
-> +		case ACPI_TYPE_STRING:
-> +			if (PREREQUISITES != elem && ENUM_POSSIBLE_VALUES != elem) {
-> +				ret = hp_convert_hexstr_to_str(enum_obj[elem].string.pointer,
-> +							       enum_obj[elem].string.length,
-> +							       &str_value, &value_len);
-> +				if (ret)
-> +					return -EINVAL;
-> +			}
-> +			break;
-> +		case ACPI_TYPE_INTEGER:
-> +			int_value = (u32)enum_obj[elem].integer.value;
-> +			break;
-> +		default:
-> +			pr_warn("Unsupported object type [%d]\n", enum_obj[elem].type);
-> +			continue;
-> +		}
-> +
-> +		/* Check that both expected and read object type match */
-> +		if (expected_enum_types[eloc] != enum_obj[elem].type) {
-> +			pr_err("Error expected type %d for elem %d, but got type %d instead\n",
-> +			       expected_enum_types[eloc], elem, enum_obj[elem].type);
-> +			return -EIO;
-> +		}
-> +
-> +		/* Assign appropriate element value to corresponding field */
-> +		switch (eloc) {
-> +		case NAME:
-> +		case VALUE:
-> +			break;
-> +		case PATH:
-> +			strscpy(enum_data->common.path, str_value,
-> +				sizeof(enum_data->common.path));
-> +			break;
-> +		case IS_READONLY:
-> +			enum_data->common.is_readonly = int_value;
-> +			break;
-> +		case DISPLAY_IN_UI:
-> +			enum_data->common.display_in_ui = int_value;
-> +			break;
-> +		case REQUIRES_PHYSICAL_PRESENCE:
-> +			enum_data->common.requires_physical_presence = int_value;
-> +			break;
-> +		case SEQUENCE:
-> +			enum_data->common.sequence = int_value;
-> +			break;
-> +		case PREREQUISITES_SIZE:
-> +			enum_data->common.prerequisites_size = int_value;
-> +			if (int_value > MAX_PREREQUISITES_SIZE)
-> +				pr_warn("Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
-> +
-> +			/*
-> +			 * This HACK is needed to keep the expected
-> +			 * element list pointing to the right obj[elem].type
-> +			 * when the size is zero. PREREQUISITES
-> +			 * object is omitted by BIOS when the size is
-> +			 * zero.
-> +			 */
-> +			if (int_value == 0)
-> +				eloc++;
-> +			break;
-> +
-> +		case PREREQUISITES:
-> +			size = min_t(u32, enum_data->common.prerequisites_size, MAX_PREREQUISITES_SIZE);
-
-We cannot blindly truncate this to a maximum value.
-The firmware reported an amount of elements it would return.
-
-If this value is to big than we can not just intpret the data as if it
-was something the firmware did not return.
-
-An error needs to be reported to userspace.
-A default value is not enough as userspace can not interpret this
-properly.
-
-(Affects all attributes)
-
-> +			for (reqs = 0; reqs < size; reqs++) {
-> +				if (elem >= enum_obj_count) {
-> +					pr_err("Error enum-objects package is too small\n");
-> +					return -EINVAL;
-> +				}
-> +
-> +				ret = hp_convert_hexstr_to_str(enum_obj[elem + reqs].string.pointer,
-> +							       enum_obj[elem + reqs].string.length,
-> +							       &str_value, &value_len);
-> +
-> +				if (ret)
-> +					return -EINVAL;
-> +
-> +				strscpy(enum_data->common.prerequisites[reqs],
-> +					str_value,
-> +					sizeof(enum_data->common.prerequisites[reqs]));
-> +
-> +				kfree(str_value);
-> +			}
-> +			break;
-> +
-> +		case SECURITY_LEVEL:
-> +			enum_data->common.security_level = int_value;
-> +			break;
-> +
-> +		case ENUM_CURRENT_VALUE:
-> +			strscpy(enum_data->current_value,
-> +				str_value, sizeof(enum_data->current_value));
-> +			break;
-> +		case ENUM_SIZE:
-> +			enum_data->possible_values_size = int_value;
-> +			if (int_value > MAX_VALUES_SIZE)
-> +				pr_warn("Possible number values size value exceeded the maximum number of elements supported or data may be malformed\n");
-> +
-> +			/*
-> +			 * This HACK is needed to keep the expected
-> +			 * element list pointing to the right obj[elem].type
-> +			 * when the size is zero. POSSIBLE_VALUES
-> +			 * object is omitted by BIOS when the size is zero.
-> +			 */
-> +			if (int_value == 0)
-> +				eloc++;
-> +			break;
-> +
-> +		case ENUM_POSSIBLE_VALUES:
-> +			size = enum_data->possible_values_size;
-> +
-> +			for (pos_values = 0; pos_values < size && pos_values < MAX_VALUES_SIZE;
-> +			     pos_values++) {
-> +				if (elem >= enum_obj_count) {
-> +					pr_err("Error enum-objects package is too small\n");
-> +					return -EINVAL;
-> +				}
-> +
-> +				ret = hp_convert_hexstr_to_str(enum_obj[elem + pos_values].string.pointer,
-> +							       enum_obj[elem + pos_values].string.length,
-> +							       &str_value, &value_len);
-> +
-> +				if (ret)
-> +					return -EINVAL;
-> +
-> +				/*
-> +				 * ignore strings when possible values size
-> +				 * is greater than MAX_VALUES_SIZE
-> +				 */
-> +				if (size < MAX_VALUES_SIZE)
-> +					strscpy(enum_data->possible_values[pos_values],
-> +						str_value,
-> +						sizeof(enum_data->possible_values[pos_values]));
-> +			}
-> +			break;
-> +		default:
-> +			pr_warn("Invalid element: %d found in Enumeration attribute or data may be malformed\n", elem);
-> +			break;
-> +		}
-> +
-> +		kfree(str_value);
-> +	}
-> +
-> +exit_enumeration_package:
-> +	kfree(str_value);
-> +	return 0;
-> +}
-> +
-> +/**
-> + * hp_populate_enumeration_package_data() -
-> + * Populate all properties of an instance under enumeration attribute
-> + *
-> + * @enum_obj: ACPI object with enumeration data
-> + * @instance_id: The instance to enumerate
-> + * @attr_name_kobj: The parent kernel object
-> + */
-> +int hp_populate_enumeration_package_data(union acpi_object *enum_obj,
-> +					 int instance_id,
-> +					 struct kobject *attr_name_kobj)
-> +{
-> +	struct enumeration_data *enum_data = &bioscfg_drv.enumeration_data[instance_id];
-> +
-> +	enum_data->attr_name_kobj = attr_name_kobj;
-> +
-> +	hp_populate_enumeration_elements_from_package(enum_obj,
-> +						      enum_obj->package.count,
-> +						      instance_id);
-> +	hp_update_attribute_permissions(enum_data->common.is_readonly,
-> +					&enumeration_current_val);
-> +	/*
-> +	 * Several attributes have names such "MONDAY". Friendly
-> +	 * user nane is generated to make the name more descriptive
-> +	 */
-> +	hp_friendly_user_name_update(enum_data->common.path,
-> +				     attr_name_kobj->name,
-> +				     enum_data->common.display_name,
-> +				     sizeof(enum_data->common.display_name));
-> +	return sysfs_create_group(attr_name_kobj, &enumeration_attr_group);
-> +}
-> +
-> +static int hp_populate_enumeration_elements_from_buffer(u8 *buffer_ptr, u32 *buffer_size,
-> +							int instance_id)
-> +{
-> +	int reqs;
-> +	int values;
-> +	struct enumeration_data *enum_data = &bioscfg_drv.enumeration_data[instance_id];
-> +
-> +	/*
-> +	 * In earlier implementation, reported errors were ignored
-> +	 * causing the data to remain uninitialized. It is for this
-> +	 * reason functions may return an error and no validation
-> +	 * takes place.
-> +	 */
-
-Where is this error returned?
-
-> +
-> +	// VALUE:
-> +	hp_get_string_from_buffer(&buffer_ptr, buffer_size, enum_data->current_value,
-> +				  sizeof(enum_data->current_value));
-> +
-> +	// PATH:
-> +	hp_get_string_from_buffer(&buffer_ptr, buffer_size, enum_data->common.path,
-> +				  sizeof(enum_data->common.path));
-> +
-> +	// IS_READONLY:
-> +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-> +				   &enum_data->common.is_readonly);
-> +
-> +	//DISPLAY_IN_UI:
-> +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-> +				   &enum_data->common.display_in_ui);
-> +
-> +	// REQUIRES_PHYSICAL_PRESENCE:
-> +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-> +				   &enum_data->common.requires_physical_presence);
-> +
-> +	// SEQUENCE:
-> +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-> +				   &enum_data->common.sequence);
-> +
-> +	// PREREQUISITES_SIZE:
-> +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-> +				   &enum_data->common.prerequisites_size);
-> +
-> +	if (enum_data->common.prerequisites_size > MAX_PREREQUISITES_SIZE) {
-> +		/* Report a message and limit prerequisite size to maximum value */
-> +		pr_warn("Enum Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
-> +		enum_data->common.prerequisites_size = MAX_PREREQUISITES_SIZE;
-> +	}
-> +
-> +	// PREREQUISITES:
-> +	for (reqs = 0; reqs < enum_data->common.prerequisites_size; reqs++)
-> +		hp_get_string_from_buffer(&buffer_ptr, buffer_size,
-> +					  enum_data->common.prerequisites[reqs],
-> +					  sizeof(enum_data->common.prerequisites[reqs]));
-> +
-> +	// SECURITY_LEVEL:
-> +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-> +				   &enum_data->common.security_level);
-
-The reading of all the common elemtns can be extracted into a helper
-and reused from all the attributes.
-
-> +
-> +	// ENUM_CURRENT_VALUE:
-> +	hp_get_string_from_buffer(&buffer_ptr, buffer_size,
-> +				  enum_data->current_value,
-> +				  sizeof(enum_data->current_value));
-> +	// ENUM_SIZE:
-> +	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-> +				   &enum_data->possible_values_size);
-> +
-> +	if (enum_data->possible_values_size > MAX_VALUES_SIZE) {
-> +		/* Report a message and limit possible values size to maximum value */
-> +		pr_warn("Enum Possible size value exceeded the maximum number of elements supported or data may be malformed\n");
-> +		enum_data->possible_values_size = MAX_VALUES_SIZE;
-> +	}
-> +
-> +	// ENUM_POSSIBLE_VALUES:
-> +
-> +	for (values = 0; values < enum_data->possible_values_size; values++)
-> +		hp_get_string_from_buffer(&buffer_ptr, buffer_size,
-> +					  enum_data->possible_values[values],
-> +					  sizeof(enum_data->possible_values[values]));
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * hp_populate_enumeration_buffer_data() -
-> + * Populate all properties of an instance under enumeration attribute
-> + *
-> + * @buffer_ptr: Buffer pointer
-> + * @buffer_size: Buffer size
-> + * @instance_id: The instance to enumerate
-> + * @attr_name_kobj: The parent kernel object
-> + */
-> +int hp_populate_enumeration_buffer_data(u8 *buffer_ptr, u32 *buffer_size,
-> +					int instance_id,
-> +					struct kobject *attr_name_kobj)
-> +{
-> +	struct enumeration_data *enum_data = &bioscfg_drv.enumeration_data[instance_id];
-> +
-> +	enum_data->attr_name_kobj = attr_name_kobj;
-> +
-> +	/* Populate enumeration elements */
-> +	hp_populate_enumeration_elements_from_buffer(buffer_ptr, buffer_size, instance_id);
-> +
-> +	hp_update_attribute_permissions(enum_data->common.is_readonly,
-> +					&enumeration_current_val);
-> +	/*
-> +	 * Several attributes have names such "MONDAY". A Friendlier
-> +	 * user nane is generated to make the name more descriptive
-> +	 */
-> +	hp_friendly_user_name_update(enum_data->common.path,
-> +				     attr_name_kobj->name,
-> +				     enum_data->common.display_name,
-> +				     sizeof(enum_data->common.display_name));
-> +
-> +	return sysfs_create_group(attr_name_kobj, &enumeration_attr_group);
-> +}
-> +
-> +/**
-> + * hp_exit_enumeration_attributes() - Clear all attribute data
-> + *
-> + * Clears all data allocated for this group of attributes
-> + */
-> +void hp_exit_enumeration_attributes(void)
-> +{
-> +	int instance_id;
-> +
-> +	for (instance_id = 0; instance_id < bioscfg_drv.enumeration_instances_count;
-> +	     instance_id++) {
-> +		struct enumeration_data *enum_data = &bioscfg_drv.enumeration_data[instance_id];
-> +		struct kobject *attr_name_kobj = enum_data->attr_name_kobj;
-> +
-> +		if (attr_name_kobj)
-> +			sysfs_remove_group(attr_name_kobj, &enumeration_attr_group);
-> +	}
-> +	bioscfg_drv.enumeration_instances_count = 0;
-> +
-> +	kfree(bioscfg_drv.enumeration_data);
-> +	bioscfg_drv.enumeration_data = NULL;
-> +}
-> -- 
-> 2.34.1
+>>> The kernel often creates writable aliases in order to write to
+>>> protected data (kernel text, etc). Some of this is done right as
+>>> text
+>>> is being first written out (alternatives for example), and some
+>>> happens
+>>> way later (jump labels, etc). So for verification, I wonder what
+>>> stage
+>>> you would be verifying? If you want to verify the end state, you
+>>> would
+>>> have to maintain knowledge in the verifier of all the touch-ups the
+>>> kernel does. I think it would get very tricky.
+>>
+>> For now, in the static kernel case, all rodata and text GPA is
+>> restricted, so aliasing such memory in a writable way before or after
+>> the KVM enforcement would still restrict write access to this memory,
+>> which could be an issue but not a security one. Do you have such
+>> examples in mind?
+>>
 > 
+> On x86, look at all the callers of the text_poke() family. In
+> arch/x86/include/asm/text-patching.h.
+
+OK, thanks!
+
+
+> 
+>>
+>>>
+>>> It also seems it will be a decent ask for the guest kernel to keep
+>>> track of GPA permissions as well as normal virtual memory
+>>> pemirssions,
+>>> if this thing is not widely used.
+>>
+>> This would indeed be required to properly handle the dynamic cases.
+>>
+>>
+>>>
+>>> So I wondering if you could go in two directions with this:
+>>> 1. Make this a feature only for super locked down kernels (no
+>>> modules,
+>>> etc). Forbid any configurations that might modify text. But eBPF is
+>>> used for seccomp, so you might be turning off some security
+>>> protections
+>>> to get this.
+>>
+>> Good idea. For "super locked down kernels" :) , we should disable all
+>> kernel executable changes with the related kernel build configuration
+>> (e.g. eBPF JIT, kernel module, kprobes…) to make sure there is no
+>> such
+>> legitimate access. This looks like an acceptable initial feature.
+> 
+> How many users do you think will want this protection but not
+> protections that would have to be disabled? The main one that came to
+> mind for me is cBPF seccomp stuff.
+> 
+> But also, the alternative to JITing cBPF is the eBPF interpreter which
+> AFAIU is considered a juicy enough target for speculative attacks that
+> they created an option to compile it out. And leaving an interpreter in
+> the kernel means any data could be "executed" in the normal non-
+> speculative scenario, kind of working around the hypervisor executable
+> protections. Dropping e/cBPF entirely would be an option, but then I
+> wonder how many users you have left. Hopefully that is all correct,
+> it's hard to keep track with the pace of BPF development.
+
+seccomp-bpf doesn't rely on JIT, so it is not an issue. For eBPF, JIT is 
+optional, but other text changes may be required according to the eBPF 
+program type (e.g. using kprobes).
+
+
+> 
+> I wonder if it might be a good idea to POC the guest side before
+> settling on the KVM interface. Then you can also look at the whole
+> thing and judge how much usage it would get for the different options
+> of restrictions.
+
+The next step is to handle dynamic permissions, but it will be easier to 
+first implement that in KVM itself (which already has the required 
+authentication code). The current interface may be flexible enough 
+though, only new attribute flags should be required (and potentially an 
+async mode). Anyway, this will enable to look at the whole thing.
+
+
+> 
+>>
+>>
+>>> 2. Loosen the rules to allow the protections to not be so one-way
+>>> enable. Get less security, but used more widely.
+>>
+>> This is our goal. I think both static and dynamic cases are
+>> legitimate
+>> and have value according to the level of security sought. This should
+>> be
+>> a build-time configuration.
+> 
+> Yea, the proper way to do this is probably to move all text handling
+> stuff into a separate domain of some sort, like you mentioned
+> elsewhere. It would be quite a job.
+
+Not necessarily to move this code, but to make sure that the changes are 
+legitimate (e.g. text signatures, legitimate addresses). This doesn't 
+need to be perfect but it should improve the current state by increasing 
+the cost of attacks.
