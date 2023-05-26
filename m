@@ -2,90 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555CB711DE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB3E711E0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234880AbjEZC25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 22:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S229832AbjEZChT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 22:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233494AbjEZC2y (ORCPT
+        with ESMTP id S235295AbjEZChM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 22:28:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B536E13D;
-        Thu, 25 May 2023 19:28:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40E8A64C5C;
-        Fri, 26 May 2023 02:28:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15528C433D2;
-        Fri, 26 May 2023 02:28:47 +0000 (UTC)
-Date:   Thu, 25 May 2023 22:28:44 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     "Arnd Bergmann" <arnd@arndb.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-um@lists.infradead.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Borislav Petkov" <bp@alien8.de>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nadav Amit <namit@vmware.com>
-Subject: Re: [PATCH v2 2/3] compiler: inline does not imply notrace
-Message-ID: <20230525222844.6a0d84f8@rorschach.local.home>
-In-Reply-To: <20230525210040.3637-3-namit@vmware.com>
-References: <20230525210040.3637-1-namit@vmware.com>
-        <20230525210040.3637-3-namit@vmware.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 25 May 2023 22:37:12 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686BC13D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:37:06 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2af98eb6ef0so2377671fa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:37:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1685068624; x=1687660624;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eFUluCk6Yg3CJh7zCYAWn34AyV3ksw1s+RmFmqdT4VM=;
+        b=ZVVvNEeuRvv5sf0kqOR514LS1Iu+5Ia5iGdHgcuCiLHWeZh785cO8pEma86B0ZW0Kg
+         awOf49dZ5Tem6bJ35Rurh91k6U9qPXumeUMeJycnRO/1Jlk5WWD9sq4jUUA71xamEEAf
+         Mh7tU69J8JoTn3eZkjKGVXA4JsSM1ilICrrE4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685068624; x=1687660624;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eFUluCk6Yg3CJh7zCYAWn34AyV3ksw1s+RmFmqdT4VM=;
+        b=XSmGDrX/0gWiCnXKNz4DLYpoCGGC/14xl6EzTTufUYxqi9oNoJjKDkvzhyAZ332T8i
+         DLCqbNmP36hkhThpzS9k7bykVHNzpdFVzqE9GjCTsAowyuVWkipNmtvAFxOKgh2hjZl2
+         nKCd2eupZrl23Xlv3iA/dKnB656dYybCFZe6uTCLt7psDRtp5SHEw9shJBAAnY9C8P0E
+         hLAWIMIu7OJHQM2KW4lBt6lKzeMtDqz1nvrwaJiKxFsTQucdZ2v8fqJ/loOpXNLtISrm
+         Vm5ct/G7kApmm8pk8W1hJcaB+Qcwu1B2iqXtGseMEloT0ecoZwV+ZI3xtS1gKQa663LG
+         t6OQ==
+X-Gm-Message-State: AC+VfDziW4gZc6wkdeVi2WqWyDUJFeZFpoetMVEUJ5VApBrliiQYYZXN
+        unwoRJ4GeyG2Saw2YQinFuBWydEBilBFNDU8aVqq1jX4
+X-Google-Smtp-Source: ACHHUZ44T8X3NEDASeEC6YImyVDqUaOr6zJLZcQZzR33/8ilSpbKJskN20Z4+olVcZfeywguDwAd8Q==
+X-Received: by 2002:a05:651c:234:b0:2b0:5a04:a5bd with SMTP id z20-20020a05651c023400b002b05a04a5bdmr128690ljn.42.1685068624583;
+        Thu, 25 May 2023 19:37:04 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id l12-20020a2e3e0c000000b002b02e3f7ef9sm470221lja.61.2023.05.25.19.37.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 19:37:04 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4eed764a10cso183046e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:37:04 -0700 (PDT)
+X-Received: by 2002:a17:907:d10:b0:96f:d345:d100 with SMTP id
+ gn16-20020a1709070d1000b0096fd345d100mr533983ejc.59.1685068179297; Thu, 25
+ May 2023 19:29:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230525223953.225496-1-dhowells@redhat.com> <20230525223953.225496-3-dhowells@redhat.com>
+In-Reply-To: <20230525223953.225496-3-dhowells@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 25 May 2023 19:29:21 -0700
+X-Gmail-Original-Message-ID: <CAHk-=win3ttfr2xb1JcGroPSOoqGs0GooZq0DLsRtZzXUH5YeQ@mail.gmail.com>
+Message-ID: <CAHk-=win3ttfr2xb1JcGroPSOoqGs0GooZq0DLsRtZzXUH5YeQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/3] mm: Provide a function to get an additional
+ pin on a page
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023 14:00:39 -0700
-Nadav Amit <nadav.amit@gmail.com> wrote:
+On Thu, May 25, 2023 at 3:40=E2=80=AFPM David Howells <dhowells@redhat.com>=
+ wrote:
+>
+> +void page_get_additional_pin(struct page *page)
+> +{
+> +       struct folio *folio =3D page_folio(page);
+> +
+> +       if (page =3D=3D ZERO_PAGE(0))
+> +               return;
 
-> From: Nadav Amit <namit@vmware.com>
-> 
-> Functions that are marked as "inline" are currently also not tracable.
-> This limits tracing functionality for many functions for no reason.
-> Apparently, this has been done for two reasons.
-> 
-> First, as described in commit 5963e317b1e9d2a ("ftrace/x86: Do not
-> change stacks in DEBUG when calling lockdep"), it was intended to
-> prevent some functions that cannot be traced from being traced as these
-> functions were marked as inline (among others).
-> 
-> Yet, this change has been done a decade ago, and according to Steven
-> Rostedt, ftrace should have improved and hopefully resolved nested
-> tracing issues by now. Arguably, if functions that should be traced -
-> for instance since they are used during tracing - still exist, they
-> should be marked as notrace explicitly.
-> 
-> The second reason, which Steven raised, is that attaching "notrace" to
-> "inline" prevented tracing differences between different configs, which
-> caused various problem. This consideration is not very strong, and tying
-> "inline" and "notrace" does not seem very beneficial. The "inline"
-> keyword is just a hint, and many functions are currently not tracable
-> due to this reason.
-> 
-> Disconnect "inline" from "notrace".
+You added that nice "is_zero_folio()", and then you did the above anyway..
 
-FYI, I have a patch queued (still needs to go through testing) that
-already does this ;-)
-
-https://lore.kernel.org/all/20230502164102.1a51cdb4@gandalf.local.home/
-
--- Steve
+               Linus
