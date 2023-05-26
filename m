@@ -2,349 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8264712F10
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF30712F1D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243261AbjEZVnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 17:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
+        id S231187AbjEZVqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 17:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243360AbjEZVnT (ORCPT
+        with ESMTP id S229823AbjEZVqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 17:43:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD8719A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:42:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685137320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4Cmt7wVWF/53m28oT2gNRjy02BoBlgv0E5157juSdEU=;
-        b=RmIOcaaoWF1spfKLHF0afVEL3QEGCYfcYd13gkPZ5PJAHfAHi6E+DmPIA/baOVAn35VS7m
-        HaAkFH88y5Qe3jA8BHOUSniVRlf9aTfSZnnkE5pFzitqaL+457G35Xpd0kt+oyJgGZ8xWo
-        ZCoCiwCncHsjlAXmLCdZ+riS3SuvP0I=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-548-EQeH2I93OGuY2_IlSki5ZQ-1; Fri, 26 May 2023 17:41:57 -0400
-X-MC-Unique: EQeH2I93OGuY2_IlSki5ZQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDE0E1C068D1;
-        Fri, 26 May 2023 21:41:56 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 43B0940CFD45;
-        Fri, 26 May 2023 21:41:54 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v4 3/3] block: Use iov_iter_extract_pages() and page pinning in direct-io.c
-Date:   Fri, 26 May 2023 22:41:42 +0100
-Message-Id: <20230526214142.958751-4-dhowells@redhat.com>
-In-Reply-To: <20230526214142.958751-1-dhowells@redhat.com>
-References: <20230526214142.958751-1-dhowells@redhat.com>
+        Fri, 26 May 2023 17:46:38 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD616BC
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:46:35 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-75b015c0508so85119285a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:46:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1685137595; x=1687729595;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=OChS6CgIR0Z1Ev8N1EOc1Ac0D5tF3V/2F5CsXQVoVnI=;
+        b=gWLhTXGb6lIak9sKt9LrA+ikNkcM8FCEfiOg4McGvgfbX7WaoRP4jZ5MtRUOMuE/ss
+         w80PMARIDm/z6lkOy3tAwfTjzhfqdKBNtyKWxiJ39WdEmSi6XVYb4vCptC45bMZRp2Zq
+         ocIwkMBKHBkICfVSGAFkt0NuupvK/+7iLRM3s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685137595; x=1687729595;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OChS6CgIR0Z1Ev8N1EOc1Ac0D5tF3V/2F5CsXQVoVnI=;
+        b=L1y2ZFwpkh1Xn/rHtLHb7892tqMs8VRoLbpVVgvbI2v7mZokaRL2QsKEnAKrXwZmqj
+         B55G8+FIHaoFZ6Lc5dpwm97DWtVYAIByhBsWmXX8MryZ7fcbOOxf9OrhiBDTbEuwXkh7
+         //EjHAbGBhptSLobgDFiLIgWFO7jppribRN41YO8rrzrnYkKlTLPezqMvKj+85HmWLBA
+         GoTSs9u2srrvnQg12ls0XxAffsGLO6MNew2blEEXF3fv4N5MvnFraG7UIXvgV1cKZYmB
+         u66NJobAqQo6bUCJQ4eGvN0L3zynxDO+SsAzF2SNHzlTIJnLrhkZYJ++uN9+AQD+MMxG
+         Pn/g==
+X-Gm-Message-State: AC+VfDzBGP4VloIvY2GHxXA1g7VNOzoDWYBmaZJPcOMwDsIM+iQ3O89G
+        lDMMG/szYgTnjA9m68HpF4wSCQ==
+X-Google-Smtp-Source: ACHHUZ4YpFhjfwjTMTaB4BhpA42uDMWVCFllzXTJd8TXlEX58XG7NS0QutRyUjHLqY/6XVUpFBuOVA==
+X-Received: by 2002:a05:6214:e4c:b0:626:cbe:3c6d with SMTP id o12-20020a0562140e4c00b006260cbe3c6dmr2140675qvc.22.1685137594877;
+        Fri, 26 May 2023 14:46:34 -0700 (PDT)
+Received: from [10.69.71.77] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id x16-20020a0ce0d0000000b0062593051073sm1504220qvk.111.2023.05.26.14.46.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 14:46:34 -0700 (PDT)
+Message-ID: <e0b4ef62-2d80-d5b2-e0b0-b15c00b75143@broadcom.com>
+Date:   Fri, 26 May 2023 14:46:30 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH net-next v5 3/6] net: bcmasp: Add support for ASP2.0
+ Ethernet controller
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        opendmb@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, richardcochran@gmail.com,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        simon.horman@corigine.com
+References: <1684969313-35503-1-git-send-email-justin.chen@broadcom.com>
+ <1684969313-35503-4-git-send-email-justin.chen@broadcom.com>
+ <20230525205454.1c766852@kernel.org>
+From:   Justin Chen <justin.chen@broadcom.com>
+In-Reply-To: <20230525205454.1c766852@kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000c2460f05fc9fab7d"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change the old block-based direct-I/O code to use iov_iter_extract_pages()
-to pin user pages or leave kernel pages unpinned rather than taking refs
-when submitting bios.
+--000000000000c2460f05fc9fab7d
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This makes use of the preceding patches to not take pins on the zero page
-(thereby allowing insertion of zero pages in with pinned pages) and to get
-additional pins on pages, allowing an extracted page to be used in multiple
-bios without having to re-extract it.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Christoph Hellwig <hch@infradead.org>
-cc: David Hildenbrand <david@redhat.com>
-cc: Lorenzo Stoakes <lstoakes@gmail.com>
-cc: Andrew Morton <akpm@linux-foundation.org>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Jan Kara <jack@suse.cz>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: Jason Gunthorpe <jgg@nvidia.com>
-cc: Logan Gunthorpe <logang@deltatee.com>
-cc: Hillf Danton <hdanton@sina.com>
-cc: Christian Brauner <brauner@kernel.org>
-cc: Linus Torvalds <torvalds@linux-foundation.org>
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-block@vger.kernel.org
-cc: linux-kernel@vger.kernel.org
-cc: linux-mm@kvack.org
----
 
-Notes:
-    ver #3)
-     - Rename need_unpin to is_pinned in struct dio.
-     - page_get_additional_pin() was renamed to folio_add_pin().
-    
-    ver #2)
-     - Need to set BIO_PAGE_PINNED conditionally, not BIO_PAGE_REFFED.
+On 5/25/23 8:54 PM, Jakub Kicinski wrote:
+> On Wed, 24 May 2023 16:01:50 -0700 Justin Chen wrote:
+>> Add support for the Broadcom ASP 2.0 Ethernet controller which is first
+>> introduced with 72165. This controller features two distinct Ethernet
+>> ports that can be independently operated.
+>>
+>> This patch supports:
+>>
+>> - Wake-on-LAN using magic packets
+>> - basic ethtool operations (link, counters, message level)
+>> - MAC destination address filtering (promiscuous, ALL_MULTI, etc.)
+> 
+>> +static netdev_tx_t bcmasp_xmit(struct sk_buff *skb, struct net_device *dev)
+>> +{
+>> +	struct bcmasp_intf *intf = netdev_priv(dev);
+>> +	int spb_index, nr_frags, ret, i, j;
+>> +	unsigned int total_bytes, size;
+>> +	struct bcmasp_tx_cb *txcb;
+>> +	dma_addr_t mapping, valid;
+>> +	struct bcmasp_desc *desc;
+>> +	bool csum_hw = false;
+>> +	struct device *kdev;
+>> +	skb_frag_t *frag;
+>> +
+>> +	kdev = &intf->parent->pdev->dev;
+>> +
+>> +	spin_lock(&intf->tx_lock);
+> 
+> What is the tx_lock for? netdevs already have a tx lock, unless you
+> declare the device as lockless.
+> 
 
- fs/direct-io.c | 72 ++++++++++++++++++++++++++++++--------------------
- 1 file changed, 43 insertions(+), 29 deletions(-)
+Will remove.
 
-diff --git a/fs/direct-io.c b/fs/direct-io.c
-index ad20f3428bab..0643f1bb4b59 100644
---- a/fs/direct-io.c
-+++ b/fs/direct-io.c
-@@ -42,8 +42,8 @@
- #include "internal.h"
- 
- /*
-- * How many user pages to map in one call to get_user_pages().  This determines
-- * the size of a structure in the slab cache
-+ * How many user pages to map in one call to iov_iter_extract_pages().  This
-+ * determines the size of a structure in the slab cache
-  */
- #define DIO_PAGES	64
- 
-@@ -121,12 +121,13 @@ struct dio {
- 	struct inode *inode;
- 	loff_t i_size;			/* i_size when submitted */
- 	dio_iodone_t *end_io;		/* IO completion function */
-+	bool is_pinned;			/* T if we have pins on the pages */
- 
- 	void *private;			/* copy from map_bh.b_private */
- 
- 	/* BIO completion state */
- 	spinlock_t bio_lock;		/* protects BIO fields below */
--	int page_errors;		/* errno from get_user_pages() */
-+	int page_errors;		/* err from iov_iter_extract_pages() */
- 	int is_async;			/* is IO async ? */
- 	bool defer_completion;		/* defer AIO completion to workqueue? */
- 	bool should_dirty;		/* if pages should be dirtied */
-@@ -165,14 +166,14 @@ static inline unsigned dio_pages_present(struct dio_submit *sdio)
-  */
- static inline int dio_refill_pages(struct dio *dio, struct dio_submit *sdio)
- {
-+	struct page **pages = dio->pages;
- 	const enum req_op dio_op = dio->opf & REQ_OP_MASK;
- 	ssize_t ret;
- 
--	ret = iov_iter_get_pages2(sdio->iter, dio->pages, LONG_MAX, DIO_PAGES,
--				&sdio->from);
-+	ret = iov_iter_extract_pages(sdio->iter, &pages, LONG_MAX,
-+				     DIO_PAGES, 0, &sdio->from);
- 
- 	if (ret < 0 && sdio->blocks_available && dio_op == REQ_OP_WRITE) {
--		struct page *page = ZERO_PAGE(0);
- 		/*
- 		 * A memory fault, but the filesystem has some outstanding
- 		 * mapped blocks.  We need to use those blocks up to avoid
-@@ -180,8 +181,7 @@ static inline int dio_refill_pages(struct dio *dio, struct dio_submit *sdio)
- 		 */
- 		if (dio->page_errors == 0)
- 			dio->page_errors = ret;
--		get_page(page);
--		dio->pages[0] = page;
-+		dio->pages[0] = ZERO_PAGE(0);
- 		sdio->head = 0;
- 		sdio->tail = 1;
- 		sdio->from = 0;
-@@ -201,9 +201,9 @@ static inline int dio_refill_pages(struct dio *dio, struct dio_submit *sdio)
- 
- /*
-  * Get another userspace page.  Returns an ERR_PTR on error.  Pages are
-- * buffered inside the dio so that we can call get_user_pages() against a
-- * decent number of pages, less frequently.  To provide nicer use of the
-- * L1 cache.
-+ * buffered inside the dio so that we can call iov_iter_extract_pages()
-+ * against a decent number of pages, less frequently.  To provide nicer use of
-+ * the L1 cache.
-  */
- static inline struct page *dio_get_page(struct dio *dio,
- 					struct dio_submit *sdio)
-@@ -219,6 +219,18 @@ static inline struct page *dio_get_page(struct dio *dio,
- 	return dio->pages[sdio->head];
- }
- 
-+static void dio_pin_page(struct dio *dio, struct page *page)
-+{
-+	if (dio->is_pinned)
-+		folio_add_pin(page_folio(page));
-+}
-+
-+static void dio_unpin_page(struct dio *dio, struct page *page)
-+{
-+	if (dio->is_pinned)
-+		unpin_user_page(page);
-+}
-+
- /*
-  * dio_complete() - called when all DIO BIO I/O has been completed
-  *
-@@ -402,8 +414,8 @@ dio_bio_alloc(struct dio *dio, struct dio_submit *sdio,
- 		bio->bi_end_io = dio_bio_end_aio;
- 	else
- 		bio->bi_end_io = dio_bio_end_io;
--	/* for now require references for all pages */
--	bio_set_flag(bio, BIO_PAGE_REFFED);
-+	if (dio->is_pinned)
-+		bio_set_flag(bio, BIO_PAGE_PINNED);
- 	sdio->bio = bio;
- 	sdio->logical_offset_in_bio = sdio->cur_page_fs_offset;
- }
-@@ -444,8 +456,9 @@ static inline void dio_bio_submit(struct dio *dio, struct dio_submit *sdio)
-  */
- static inline void dio_cleanup(struct dio *dio, struct dio_submit *sdio)
- {
--	while (sdio->head < sdio->tail)
--		put_page(dio->pages[sdio->head++]);
-+	if (dio->is_pinned)
-+		unpin_user_pages(dio->pages + sdio->head,
-+				 sdio->tail - sdio->head);
- }
- 
- /*
-@@ -676,7 +689,7 @@ static inline int dio_new_bio(struct dio *dio, struct dio_submit *sdio,
-  *
-  * Return zero on success.  Non-zero means the caller needs to start a new BIO.
-  */
--static inline int dio_bio_add_page(struct dio_submit *sdio)
-+static inline int dio_bio_add_page(struct dio *dio, struct dio_submit *sdio)
- {
- 	int ret;
- 
-@@ -688,7 +701,7 @@ static inline int dio_bio_add_page(struct dio_submit *sdio)
- 		 */
- 		if ((sdio->cur_page_len + sdio->cur_page_offset) == PAGE_SIZE)
- 			sdio->pages_in_io--;
--		get_page(sdio->cur_page);
-+		dio_pin_page(dio, sdio->cur_page);
- 		sdio->final_block_in_bio = sdio->cur_page_block +
- 			(sdio->cur_page_len >> sdio->blkbits);
- 		ret = 0;
-@@ -743,11 +756,11 @@ static inline int dio_send_cur_page(struct dio *dio, struct dio_submit *sdio,
- 			goto out;
- 	}
- 
--	if (dio_bio_add_page(sdio) != 0) {
-+	if (dio_bio_add_page(dio, sdio) != 0) {
- 		dio_bio_submit(dio, sdio);
- 		ret = dio_new_bio(dio, sdio, sdio->cur_page_block, map_bh);
- 		if (ret == 0) {
--			ret = dio_bio_add_page(sdio);
-+			ret = dio_bio_add_page(dio, sdio);
- 			BUG_ON(ret != 0);
- 		}
- 	}
-@@ -804,13 +817,13 @@ submit_page_section(struct dio *dio, struct dio_submit *sdio, struct page *page,
- 	 */
- 	if (sdio->cur_page) {
- 		ret = dio_send_cur_page(dio, sdio, map_bh);
--		put_page(sdio->cur_page);
-+		dio_unpin_page(dio, sdio->cur_page);
- 		sdio->cur_page = NULL;
- 		if (ret)
- 			return ret;
- 	}
- 
--	get_page(page);		/* It is in dio */
-+	dio_pin_page(dio, page);		/* It is in dio */
- 	sdio->cur_page = page;
- 	sdio->cur_page_offset = offset;
- 	sdio->cur_page_len = len;
-@@ -825,7 +838,7 @@ submit_page_section(struct dio *dio, struct dio_submit *sdio, struct page *page,
- 		ret = dio_send_cur_page(dio, sdio, map_bh);
- 		if (sdio->bio)
- 			dio_bio_submit(dio, sdio);
--		put_page(sdio->cur_page);
-+		dio_unpin_page(dio, sdio->cur_page);
- 		sdio->cur_page = NULL;
- 	}
- 	return ret;
-@@ -926,7 +939,7 @@ static int do_direct_IO(struct dio *dio, struct dio_submit *sdio,
- 
- 				ret = get_more_blocks(dio, sdio, map_bh);
- 				if (ret) {
--					put_page(page);
-+					dio_unpin_page(dio, page);
- 					goto out;
- 				}
- 				if (!buffer_mapped(map_bh))
-@@ -971,7 +984,7 @@ static int do_direct_IO(struct dio *dio, struct dio_submit *sdio,
- 
- 				/* AKPM: eargh, -ENOTBLK is a hack */
- 				if (dio_op == REQ_OP_WRITE) {
--					put_page(page);
-+					dio_unpin_page(dio, page);
- 					return -ENOTBLK;
- 				}
- 
-@@ -984,7 +997,7 @@ static int do_direct_IO(struct dio *dio, struct dio_submit *sdio,
- 				if (sdio->block_in_file >=
- 						i_size_aligned >> blkbits) {
- 					/* We hit eof */
--					put_page(page);
-+					dio_unpin_page(dio, page);
- 					goto out;
- 				}
- 				zero_user(page, from, 1 << blkbits);
-@@ -1024,7 +1037,7 @@ static int do_direct_IO(struct dio *dio, struct dio_submit *sdio,
- 						  sdio->next_block_for_io,
- 						  map_bh);
- 			if (ret) {
--				put_page(page);
-+				dio_unpin_page(dio, page);
- 				goto out;
- 			}
- 			sdio->next_block_for_io += this_chunk_blocks;
-@@ -1039,8 +1052,8 @@ static int do_direct_IO(struct dio *dio, struct dio_submit *sdio,
- 				break;
- 		}
- 
--		/* Drop the ref which was taken in get_user_pages() */
--		put_page(page);
-+		/* Drop the pin which was taken in get_user_pages() */
-+		dio_unpin_page(dio, page);
- 	}
- out:
- 	return ret;
-@@ -1135,6 +1148,7 @@ ssize_t __blockdev_direct_IO(struct kiocb *iocb, struct inode *inode,
- 		/* will be released by direct_io_worker */
- 		inode_lock(inode);
- 	}
-+	dio->is_pinned = iov_iter_extract_will_pin(iter);
- 
- 	/* Once we sampled i_size check for reads beyond EOF */
- 	dio->i_size = i_size_read(inode);
-@@ -1259,7 +1273,7 @@ ssize_t __blockdev_direct_IO(struct kiocb *iocb, struct inode *inode,
- 		ret2 = dio_send_cur_page(dio, &sdio, &map_bh);
- 		if (retval == 0)
- 			retval = ret2;
--		put_page(sdio.cur_page);
-+		dio_unpin_page(dio, sdio.cur_page);
- 		sdio.cur_page = NULL;
- 	}
- 	if (sdio.bio)
+>> +static void bcmasp_tx_timeout(struct net_device *dev, unsigned int txqueue)
+>> +{
+>> +	struct bcmasp_intf *intf = netdev_priv(dev);
+>> +
+>> +	netif_dbg(intf, tx_err, dev, "transmit timeout!\n");
+>> +
+>> +	netif_trans_update(dev);
+>> +	dev->stats.tx_errors++;
+>> +
+>> +	netif_wake_queue(dev);
+> 
+> If the queue is full xmit will just put it back to sleep.
+> You want to try to reap completions if anything, no?
+> 
 
+I can remove the wake. As you mentioned it won't do anything here. There 
+isn't anything to reap if we are in the timeout condition. If it is some 
+HW stall, we could flush and restart the ring, but if that is the case I 
+rather figure out why the HW is stalling. I think we can leave it as a 
+"tell the user we are stalled" and leave it as that.
+
+>> +static struct net_device_stats *bcmasp_get_stats(struct net_device *dev)
+>> +{
+>> +	return &dev->stats;
+>> +}
+> 
+> you don't have to do this, core will use device stats if there's no ndo
+> 
+>> +	ndev = alloc_etherdev(sizeof(struct bcmasp_intf));
+>> +	if (!dev) {
+> 
+> *blink* condition is typo'ed
+> 
+
+Oops. Good catch.
+
+Thanks,
+Justin
+
+>> +		dev_warn(dev, "%s: unable to alloc ndev\n", ndev_dn->name);
+>> +		goto err;
+>> +	}
+> 
+
+--000000000000c2460f05fc9fab7d
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+NhTY3E+cXCB11wty89QStajwXdhGJTYEvUgvsq1h8CwJj9w/38ldAQf5WjhPmApYeJR2ewFrBMCM
+4lHkdRJ6TDc9nXoEkypUfjJkJHe7Eal06tosh6JpAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
+BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
+Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
+NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
+A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
+aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
+cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
+MBqBGGp1c3Rpbi5jaGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
+GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIWGeYuaTsnIada5Xx8TR3cheUbgw
+DQYJKoZIhvcNAQELBQADggEBAHNQlMqQOFYPYFO71A+8t+qWMmtOdd2iGswSOvpSZ/pmGlfw8ZvY
+dRTkl27m37la84AxRkiVMes14JyOZJoMh/g7fbgPlU14eBc6WQWkIA6AmNkduFWTr1pRezkjpeo6
+xVmdBLM4VY1TFDYj7S8H2adPuypd62uHMY/MZi+BIUys4uAFA+N3NuUBNjcVZXYPplYxxKEuIFq6
+sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
+VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
+ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
+bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
+YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFl+PmxGjR3ebWGPsCEzaP2KRUiSPqjLCaDP
+rSWBtqSNMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUyNjIx
+NDYzNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
+AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
+BgkqhkiG9w0BAQEFAASCAQB2cQdpGNrlxd1mJzBy5RX+g5U1eCL0epKfdZFJE3cEgNZ//Oz/DV9k
+l1WOcaq8OxdnOcg0aMrXhdqHDM0Xtqf7hjK7hmUjzhsH902r3WDaICw0tmeomu6o33BfsHcwR2/f
+CI/IiRza7UQyhmGTYyV2uTkyyi+c1sEc723yGLl4lhe0E2zx/2/xN95c8RC20tXVV0Ri4ethKP0z
+3r+KoSi1QC1DI6dyLLdz6+QmCzvY3D8W+91yiZUqK/rIXFqJr8BXU0Tl7c1XzEIRMq6jNEvekXjl
+3NNbw0xQg7QNo/45dq+AWtWdar00hMI2cpze7d4R81hixCh0rYHIkiA8umNs
+--000000000000c2460f05fc9fab7d--
