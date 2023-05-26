@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55B471275B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27417712761
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243575AbjEZNRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S243635AbjEZNUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjEZNRp (ORCPT
+        with ESMTP id S243605AbjEZNUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:17:45 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770EAB2;
-        Fri, 26 May 2023 06:17:44 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso138697766b.0;
-        Fri, 26 May 2023 06:17:44 -0700 (PDT)
+        Fri, 26 May 2023 09:20:23 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EC9187;
+        Fri, 26 May 2023 06:20:18 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51144dddd4cso1027400a12.1;
+        Fri, 26 May 2023 06:20:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685107063; x=1687699063;
+        d=gmail.com; s=20221208; t=1685107217; x=1687699217;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=sGqkPEwwAUavSeei9EN10EkpOiDwc0KPU98JvOkeGrg=;
-        b=oRZs12wPYDV4ZHJF/NGbRuAA3DQsHTN2rPOmwlG1CakdIAm4fFKv1vDezhcIABhLEM
-         ohp/IF6ZT7wftcQIwjZOdByfp84lhpPq+uQi6kEqGeIr1BMmfimLmQr1lFL6PR/YuFRF
-         NuksyP51Yr6YDpLOGPyarUIQvMJhFFY5wJ88JSbLd8C6UnlQQFtLktAncD5vfWllTUXZ
-         +t88BERHCrIa/t7QxHQgUvXT+31b9vG3K4HKKnPtEe00tJlFIe9rlBikFC0t2ysxB7as
-         PTxRbahr9QfrisjHshRtTsooX8IH9+5Qcw37OX4CEgXSqf5KfIIN1a/4jfWxwQo8/V/b
-         356w==
+        bh=l4MwRu+xy8iMy6y78CZiipQFPUpQ1fQNAnvOg9FBsTE=;
+        b=UEnJDMMAincGgk9uz3J9XzyuqVh8gU13UloLZk3DxqUfW1KsU/FwQHcKxVyVRQ/Hbt
+         tSARZdD1vS8OdcvVZCJSFqkEKRjnQXvhQzQtQ/28Cfg59fycBD5hiXzDaW60T6B9Ft2B
+         LG9uXrZbY7hX2He4PPhG6ZZbp1Q4QSTANq07Z4rtaTD1sF4OpjzbV0jbxrVdbWapt0GS
+         mvnogCeNVXwDbi131yWn83mEBKMyT9cPOr/y5cpGvOkasiN0bR7XClreHg571Ca//Zan
+         uebECgk+XYT7kMPf62Qt8115z5Aadfn8rTe+7/f+ul1D9GyhAWw0ju+lNcXQ7ao9ca4s
+         Wz8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685107063; x=1687699063;
+        d=1e100.net; s=20221208; t=1685107217; x=1687699217;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sGqkPEwwAUavSeei9EN10EkpOiDwc0KPU98JvOkeGrg=;
-        b=fw9J9tjRy0njJjPPzF+t78Uyyv4/Yw5Jn0u4tXu8q2+65B0XK0cD5SQQFxpojgRvLl
-         PiG9N1QKMdsnutN3G6/pb3d5wGihHJ2va2Bc5szWnYbapVhEnEe9PX8x3q2YWTHAJBvS
-         biFa2Bet92c+A2axt0jqkycnhrbVL0PBNxMgF06VRzYp/CuyA8hYU6yVyiiSgD9hdB/J
-         BHWs0oq40gM1lqcWF24BppJFOgVSNoeZPNe9ithZKCuNfeFb34hCY9G3WXowSLn9x1VS
-         DmohV4MxOV3PI+szdunS60nucObkXzEIsDbg4OFr4wZPTL0ELjZzU9h26B/UzNv2jb6+
-         642Q==
-X-Gm-Message-State: AC+VfDwJ8Ug9WFpDGnbOWyjlSeEU72RK/sGuAZxyJF7Fzr6afF7/0KO0
-        Q6FAg5/tAa3V6fnrE5NQlds=
-X-Google-Smtp-Source: ACHHUZ5L3LKf81sPQ1sp+T5rJCope7U7Ww9lPpw+UoLYYUsQolbeSqhC96HmdLhWRoMRFVYTrfanPA==
-X-Received: by 2002:a17:907:9345:b0:956:fbd7:bc5e with SMTP id bv5-20020a170907934500b00956fbd7bc5emr2084037ejc.64.1685107062608;
-        Fri, 26 May 2023 06:17:42 -0700 (PDT)
+        bh=l4MwRu+xy8iMy6y78CZiipQFPUpQ1fQNAnvOg9FBsTE=;
+        b=jt4ZH/qNyNJoeCO1Z9MgM+jUBXlEsQPam+/0+Q9RROLSxIX6E7IgCs+t80emQYzryJ
+         x0vALgb+GkFsL3T3FIA5qI3LBVtceBq1xSHvWDLRguVD0mb1j+yWYOoUObCUIACPywhL
+         lNG53BInX223hgILOW46SWVpRp6+Y6zcEoJ9dAQmgW4NNqIjCUZ5HrSTdryivtVJozKa
+         BsU3AL2EnYk3bQLCgpWENetFoQl6SEkBf/8voHiBQ4RVLMu16LC3sWJzmV4sjTnmdm1E
+         Ol1Y5xOPWpa2hfNW/bOUX2avcIonD1tnYfqiJl/wlDg6UfJ6gMFKgrwRv1bILtc3xjvv
+         y4NA==
+X-Gm-Message-State: AC+VfDyfEnsUi6MHXPX/Yd5Yj4bkWcE06us/wN5HOwZm3/zRTTjIYKoS
+        PrEek3tlxiGyMhrritPOm4Y=
+X-Google-Smtp-Source: ACHHUZ4ROYCRJ1eZ8pma/X20Mq4HcGhSL3Yh2wdZG+2/MlFdobcoKgHf+aai+j3QiY1AiU0L7R2RCg==
+X-Received: by 2002:a17:907:6d1b:b0:96a:f688:db6e with SMTP id sa27-20020a1709076d1b00b0096af688db6emr2058486ejc.74.1685107216953;
+        Fri, 26 May 2023 06:20:16 -0700 (PDT)
 Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id l13-20020a170906078d00b00968a2286749sm2168353ejc.77.2023.05.26.06.17.41
+        by smtp.gmail.com with ESMTPSA id lk15-20020a170906cb0f00b0096f5781205fsm2106665ejb.165.2023.05.26.06.20.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 06:17:42 -0700 (PDT)
-Date:   Fri, 26 May 2023 16:17:39 +0300
+        Fri, 26 May 2023 06:20:16 -0700 (PDT)
+Date:   Fri, 26 May 2023 16:20:13 +0300
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     arinc9.unal@gmail.com
 Cc:     Sean Wang <sean.wang@mediatek.com>,
@@ -76,19 +76,16 @@ Cc:     Sean Wang <sean.wang@mediatek.com>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 16/30] net: dsa: mt7530: move lowering port 5
- RGMII driving to mt7530_setup()
-Message-ID: <20230526131739.5mso5y2d3ieelasf@skbuf>
+Subject: Re: [PATCH net-next 17/30] net: dsa: mt7530: fix port capabilities
+ for MT7988
+Message-ID: <20230526132013.rnc7awhqsunnepxi@skbuf>
 References: <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-1-arinc.unal@arinc9.com>
- <20230522121532.86610-17-arinc.unal@arinc9.com>
- <20230522121532.86610-17-arinc.unal@arinc9.com>
+ <20230522121532.86610-18-arinc.unal@arinc9.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230522121532.86610-17-arinc.unal@arinc9.com>
- <20230522121532.86610-17-arinc.unal@arinc9.com>
+In-Reply-To: <20230522121532.86610-18-arinc.unal@arinc9.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -99,55 +96,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:15:18PM +0300, arinc9.unal@gmail.com wrote:
+On Mon, May 22, 2023 at 03:15:19PM +0300, arinc9.unal@gmail.com wrote:
 > From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> Move lowering Tx driving of rgmii on port 5 to right before lowering of Tx
-> driving of trgmii on port 6 on mt7530_setup().
+> On the switch on the MT7988 SoC, there are only 4 PHYs. That's port 0 to 3.
+> Set the internal phy cases to '0 ... 3'.
 > 
-> This way, the switch should consume less power regardless of port 5 being
-> used.
+> There's no need to clear the config->supported_interfaces bitmap before
+> reporting the supported interfaces as all bits in the bitmap will already
+> be initialized to zero when the phylink_config structure is allocated.
+> There's no code that would change the bitmap beforehand. Remove it.
 > 
-> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Fixes: 110c18bfed41 ("net: dsa: mt7530: introduce driver for MT7988 built-in switch")
 > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Acked-by: Daniel Golle <daniel@makrotopia.org>
 > ---
 
-This patch assumes that the MAC has its TXC ticking even when PMCR_TX_EN
-is unset. Why would it do that?
+Either there is a user visible bug and in that case the patch needs to
+go to the 'net' tree, or you need to drop the 'Fixes' tag.
 
->  drivers/net/dsa/mt7530.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+Also, 2 separate logical changes => 2 patches please. Thanks.
+
+>  drivers/net/dsa/mt7530.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
 > diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index f2c1aa9cf7f7..514e82299537 100644
+> index 514e82299537..f017cc028183 100644
 > --- a/drivers/net/dsa/mt7530.c
 > +++ b/drivers/net/dsa/mt7530.c
-> @@ -933,10 +933,6 @@ static void mt7530_setup_port5(struct dsa_switch *ds, phy_interface_t interface)
->  		/* P5 RGMII TX Clock Control: delay x */
->  		mt7530_write(priv, MT7530_P5RGMIITXCR,
->  			     CSR_RGMII_TXC_CFG(0x10 + tx_delay));
+> @@ -2533,10 +2533,8 @@ static void mt7531_mac_port_get_caps(struct dsa_switch *ds, int port,
+>  static void mt7988_mac_port_get_caps(struct dsa_switch *ds, int port,
+>  				     struct phylink_config *config)
+>  {
+> -	phy_interface_zero(config->supported_interfaces);
 > -
-> -		/* reduce P5 RGMII Tx driving, 8mA */
-> -		mt7530_write(priv, MT7530_IO_DRV_CR,
-> -			     P5_IO_CLK_DRV(1) | P5_IO_DATA_DRV(1));
->  	}
->  
->  	mt7530_write(priv, MT7530_MHWTRAP, val);
-> @@ -2209,6 +2205,10 @@ mt7530_setup(struct dsa_switch *ds)
->  
->  	mt7530_pll_setup(priv);
->  
-> +	/* Lower P5 RGMII Tx driving, 8mA */
-> +	mt7530_write(priv, MT7530_IO_DRV_CR,
-> +			P5_IO_CLK_DRV(1) | P5_IO_DATA_DRV(1));
-
-If you move code then preserve its alignment to the open parenthesis.
-
-> +
->  	/* Lower Tx driving for TRGMII path */
->  	for (i = 0; i < NUM_TRGMII_CTRL; i++)
->  		mt7530_write(priv, MT7530_TRGMII_TD_ODT(i),
+>  	switch (port) {
+> -	case 0 ... 4: /* Internal phy */
+> +	case 0 ... 3: /* Internal phy */
+>  		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
+>  			  config->supported_interfaces);
+>  		break;
 > -- 
 > 2.39.2
 > 
-
