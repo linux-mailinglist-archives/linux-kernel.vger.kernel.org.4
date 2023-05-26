@@ -2,215 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DFC7123F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF1F7123FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242982AbjEZJqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
+        id S242919AbjEZJrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjEZJqg (ORCPT
+        with ESMTP id S243128AbjEZJrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:46:36 -0400
-Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6C7A4;
-        Fri, 26 May 2023 02:46:32 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QSKX24sdvz9xFbR;
-        Fri, 26 May 2023 17:34:58 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwB3R17Yf3Bk2oXbAg--.2346S2;
-        Fri, 26 May 2023 10:46:12 +0100 (CET)
-Message-ID: <58cebdd9318bd4435df6c0cf45318abd3db0fff8.camel@huaweicloud.com>
-Subject: Re: [syzbot] [reiserfs?] INFO: task hung in flush_old_commits
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com>,
-        Jan Kara <jack@suse.cz>, Jeff Mahoney <jeffm@suse.com>
-Date:   Fri, 26 May 2023 11:45:57 +0200
-In-Reply-To: <CAHC9VhRoj3muyD0+pTwpJvCdmzz25C8k8eufWcjc8ZE4e2AOew@mail.gmail.com>
-References: <000000000000be039005fc540ed7@google.com>
-         <00000000000018faf905fc6d9056@google.com>
-         <CAHC9VhTM0a7jnhxpCyonepcfWbnG-OJbbLpjQi68gL2GVnKSRg@mail.gmail.com>
-         <813148798c14a49cbdf0f500fbbbab154929e6ed.camel@huaweicloud.com>
-         <CAHC9VhRoj3muyD0+pTwpJvCdmzz25C8k8eufWcjc8ZE4e2AOew@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Fri, 26 May 2023 05:47:09 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D241E64
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:46:53 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30a8c4afa46so467548f8f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:46:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685094411; x=1687686411;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nat2dXg+UOzIavY+WSMDfeXKleU0IIvcUkgX31+SwQ0=;
+        b=QClPu3uwppIpWhb4E3uBUouUHuGMdCDCap+TS3E6hGmLnA4VjA4bKSBHIHelGx0ccW
+         FEr0tengi50fv5JkQcvgU1KTRffYujLtgVjvOOvZFIGz7/sclzkeUoKurDBYRU7U4O+E
+         SqZapO1awa/OnzqqYNJX4m6EBvNJHwiV0MmIk2Fg6KECJgzQiaRlFOAckqdKWBEhO/rr
+         Zw2s3DnpcD0f9Xqt48cK4kdPbfgP6+ls3uZmqN3D0SfZahD/EwRw0v+HDDU6oOj8wjYV
+         Acdo8a+1fB2+ZoPrSuE8Lf6gCE7iWPqS8QXsj3t50cBRwpqKw4Lme7PRmLQwPNJLszhT
+         KLfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685094411; x=1687686411;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nat2dXg+UOzIavY+WSMDfeXKleU0IIvcUkgX31+SwQ0=;
+        b=SGeGtFKop9ohyCUq22DgcymIGDAcLPvgcH8+Qs0hcQlZdfH+tQYjOZr7f8ZnQgVyhR
+         TbdD2h903HDNC/RbhE9TkwJhykckqsIKMrBfdwJwTYC7yRLMqWg92rT3MKu2yvNtjvZa
+         QSbTTqY22i8Bh49Wqk1yHXcyLGPtMpOPvjSrvLCJQaIQr8VIS6QpYgSstrdw0dKmDNab
+         F4bO600+lMNo7yN1ICTFvOsIibA+lgS+IEiE8FUsTHOj7MWuDmWusetgFosxQzifCEQo
+         43PHNdcokfBZ3xmVEoHd4jMXvJ/d5ul0ZcCukZD9k4y39ugS8HUyd2Brn5DxSQL9M9W8
+         e2Tw==
+X-Gm-Message-State: AC+VfDzuPavyiV6PHEEBoGOyVkBx6mHbr8p7zEbBSrzh7lS64fIkSGxG
+        J/Le4pgPKqEG54iD7YZ3BUrMcw==
+X-Google-Smtp-Source: ACHHUZ7zzzPEEncZvQtOFznUC+/7QoK+Qxxmiu8AfkXUIs6gj8Ym6jXeyUI0v0C9XmNiOfMiKm+5OQ==
+X-Received: by 2002:a5d:5506:0:b0:309:491b:39ca with SMTP id b6-20020a5d5506000000b00309491b39camr1037698wrv.33.1685094410926;
+        Fri, 26 May 2023 02:46:50 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id u10-20020a5d514a000000b00307b5376b2csm4463662wrt.90.2023.05.26.02.46.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 02:46:50 -0700 (PDT)
+Message-ID: <160d8ea5-81bd-ece6-a4a6-b93a62b4d749@baylibre.com>
+Date:   Fri, 26 May 2023 11:46:49 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: mediatek: replace unusable
+ clock
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230517-fix-clk-index-v2-0-1b686cefcb7e@baylibre.com>
+ <20230517-fix-clk-index-v2-1-1b686cefcb7e@baylibre.com>
+ <f3f7df94-74f1-dd41-00d7-0ab4fa2e4d61@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <f3f7df94-74f1-dd41-00d7-0ab4fa2e4d61@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwB3R17Yf3Bk2oXbAg--.2346S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuw43XF1UtFW5tr1fGryfJFb_yoW3CFWxpF
-        WUtF1qkrWktr1UCrn7t3Z8J3WY9rnYvay7J34xGryjvanYgFnxJw4xKrW3G3yDXrs3CFZr
-        XFs5A3y2vw1rWaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4nAMwABsF
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-24 at 17:57 -0400, Paul Moore wrote:
-> On Wed, May 24, 2023 at 11:50 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > On Wed, 2023-05-24 at 11:11 -0400, Paul Moore wrote:
-> > > On Wed, May 24, 2023 at 5:59 AM syzbot
-> > > <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com> wrote:
-> > > > syzbot has bisected this issue to:
-> > > > 
-> > > > commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
-> > > > Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > Date:   Fri Mar 31 12:32:18 2023 +0000
-> > > > 
-> > > >     reiserfs: Add security prefix to xattr name in reiserfs_security_write()
-> > > > 
-> > > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11c39639280000
-> > > > start commit:   421ca22e3138 Merge tag 'nfs-for-6.4-2' of git://git.linux-..
-> > > > git tree:       upstream
-> > > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=13c39639280000
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=15c39639280000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=0a684c061589dcc30e51
-> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14312791280000
-> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12da8605280000
-> > > > 
-> > > > Reported-by: syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com
-> > > > Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reiserfs_security_write()")
-> > > > 
-> > > > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> > > 
-> > > Roberto, I think we need to resolve this somehow.  As I mentioned
-> > > earlier, I don't believe this to be a fault in your patch, rather that
-> > > patch simply triggered a situation that had not been present before,
-> > > likely because the reiserfs code always failed when writing LSM
-> > > xattrs.  Regardless, we still need to fix the deadlocks that sysbot
-> > > has been reporting.
-> > 
-> > Hi Paul
-> > 
-> > ok, I will try.
+On 26/05/2023 10:30, AngeloGioacchino Del Regno wrote:
+> Il 25/05/23 16:50, Alexandre Mergnat ha scritto:
+>> The “mcu_pm_bclk_ck_cg” clock is used by co-processors and should not be
+>> added to the kernel driver, otherwise the CPU just halt and the board is
+>> rebooted by the wathdog.
+>>
+>> Instead, add the "aes_top0_bclk_ck_cg" missing clock to prevent
+>> re-shuffling index and then preserve the ABI.
 > 
-> Thanks Roberto.  If it gets to be too challenging, let us know and we
-> can look into safely disabling the LSM xattrs for reiserfs, I'll be
-> shocked if anyone is successfully using LSM xattrs on reiserfs.
+> It's still a breakage. Besides, have you tried to add it as 
+> CLK_IS_CRITICAL? :-)
 
-Ok, at least I know what happens...
+As I said to Conor, I can fix the driver index issue (patch 2/2) without 
+fixing the binding (using CLK_IGNORE_UNUSED but CLK_IS_CRITICAL works too).
 
-+ Jan, Jeff
-
-I'm focusing on this reproducer, which works 100% of the times:
-
-https://syzkaller.appspot.com/text?tag=ReproSyz&x=163079f9280000
-
-This is the last lock, before things go wrong:
-
-Thread 5 hit Breakpoint 2, reiserfs_write_lock (s=s@entry=0xffff888066e28000) at fs/reiserfs/lock.c:24
-24	{
-(gdb) bt
-#0  reiserfs_write_lock (s=s@entry=0xffff888066e28000) at fs/reiserfs/lock.c:24
-#1  0xffffffff821a559a in reiserfs_get_block (inode=inode@entry=0xffff888069fd0190, block=block@entry=15, bh_result=bh_result@entry=0xffff888075940000, create=create@entry=1) at fs/reiserfs/inode.c:680
-#2  0xffffffff81f50254 in __block_write_begin_int (folio=0xffffea00019a9180, pos=pos@entry=61440, len=len@entry=1, get_block=get_block@entry=0xffffffff821a5390 <reiserfs_get_block>, iomap=iomap@entry=0x0 <fixed_percpu_data>) at fs/buffer.c:2064
-#3  0xffffffff81f5165a in __block_write_begin (page=page@entry=0xffffea00019a9180, pos=pos@entry=61440, len=len@entry=1, get_block=get_block@entry=0xffffffff821a5390 <reiserfs_get_block>) at ./arch/x86/include/asm/jump_label.h:27
-#4  0xffffffff821a3e3d in reiserfs_write_begin (file=<optimized out>, mapping=<optimized out>, pos=61440, len=1, pagep=<optimized out>, fsdata=<optimized out>) at fs/reiserfs/inode.c:2779
-#5  0xffffffff81aec252 in generic_perform_write (iocb=iocb@entry=0xffffc9002130fb60, i=i@entry=0xffffc9002130fd00) at mm/filemap.c:3923
-#6  0xffffffff81b0604e in __generic_file_write_iter (iocb=iocb@entry=0xffffc9002130fb60, from=from@entry=0xffffc9002130fd00) at mm/filemap.c:4051
-#7  0xffffffff81b06383 in generic_file_write_iter (iocb=0xffffc9002130fb60, from=0xffffc9002130fd00) at mm/filemap.c:4083
-#8  0xffffffff81e3240b in call_write_iter (file=0xffff888012692d00, iter=0xffffc9002130fd00, kio=0xffffc9002130fb60) at ./include/linux/fs.h:1868
-#9  do_iter_readv_writev (filp=filp@entry=0xffff888012692d00, iter=iter@entry=0xffffc9002130fd00, ppos=ppos@entry=0xffffc9002130fe90, type=type@entry=1, flags=flags@entry=0) at fs/read_write.c:735
-#10 0xffffffff81e33da4 in do_iter_write (flags=0, pos=0xffffc9002130fe90, iter=0xffffc9002130fd00, file=0xffff888012692d00) at fs/read_write.c:860
-#11 do_iter_write (file=0xffff888012692d00, iter=0xffffc9002130fd00, pos=0xffffc9002130fe90, flags=0) at fs/read_write.c:841
-#12 0xffffffff81e34611 in vfs_writev (file=file@entry=0xffff888012692d00, vec=vec@entry=0x20000480, vlen=vlen@entry=1, pos=pos@entry=0xffffc9002130fe90, flags=flags@entry=0) at fs/read_write.c:933
-#13 0xffffffff81e34fd6 in do_pwritev (fd=fd@entry=5, vec=vec@entry=0x20000480, vlen=vlen@entry=1, pos=pos@entry=61440, flags=flags@entry=0) at fs/read_write.c:1030
-#14 0xffffffff81e3b61f in __do_sys_pwritev2 (pos_h=<optimized out>, flags=0, pos_l=61440, vlen=1, vec=0x20000480, fd=5) at fs/read_write.c:1089
-#15 __se_sys_pwritev2 (pos_h=<optimized out>, flags=0, pos_l=61440, vlen=1, vec=536872064, fd=5) at fs/read_write.c:1080
-#16 __x64_sys_pwritev2 (regs=0xffffc9002130ff58) at fs/read_write.c:1080
-#17 0xffffffff880dd279 in do_syscall_x64 (nr=<optimized out>, regs=0xffffc9002130ff58) at arch/x86/entry/common.c:50
-#18 do_syscall_64 (regs=0xffffc9002130ff58, nr=<optimized out>) at arch/x86/entry/common.c:80
-#19 0xffffffff8820008b in entry_SYSCALL_64 () at arch/x86/entry/entry_64.S:120
-#20 0x0000000000406e00 in ?? ()
-#21 0x00007f99e21b5000 in ?? ()
-#22 0x0000000000000000 in ?? ()
-
-After that, there is a very long loop doing:
-
-Thread 5 hit Breakpoint 3, reiserfs_read_bitmap_block (sb=sb@entry=0xffff888066e28000, bitmap=bitmap@entry=1) at fs/reiserfs/bitmap.c:1417
-1417	{
-(gdb) c
-Continuing.
-
-Thread 5 hit Breakpoint 3, reiserfs_read_bitmap_block (sb=sb@entry=0xffff888066e28000, bitmap=bitmap@entry=2) at fs/reiserfs/bitmap.c:1417
-1417	{
-(gdb) 
-Continuing.
-
-and so on...
-
-[  628.589974][ T6003] REISERFS warning (device loop0): sh-2029: %s: bitmap block (#%u) reading failed reiserfs_read_bitmap_block: reiserfs_read_bitmap_block
-
-This message appears because we are here:
-
-struct buffer_head *reiserfs_read_bitmap_block(struct super_block *sb,
-                                               unsigned int bitmap)
-{
-
-[...]
-
-	bh = sb_bread(sb, block);
-	if (bh == NULL)
-		reiserfs_warning(sb, "sh-2029: %s: bitmap block (#%u) "
-		                 "reading failed", __func__, block);
-
-The hanging task (kthread) is trying to hold the same lock, which
-unfortunately is not going to be released soon:
-
-static int reiserfs_sync_fs(struct super_block *s, int wait)
-{
-
-[...]
-
-	reiserfs_write_lock(s);
-
-I didn't get yet if the reason of this long loop is because we cannot
-flush at this point, or just because of the test. I tried to
-synchronously flush, but didn't make any difference.
-
-I did a very simple change, which can be totally wrong:
-
-@@ -94,7 +96,7 @@ static void flush_old_commits(struct work_struct *work)
-         * trylock as reiserfs_cancel_old_flush() may be waiting for this work
-         * to complete with s_umount held.
-         */
--       if (!down_read_trylock(&s->s_umount)) {
-+       if (sbi->lock_owner || !down_read_trylock(&s->s_umount)) {
-                /* Requeue work if we are not cancelling it */
-                spin_lock(&sbi->old_work_lock);
-                if (sbi->work_queued == 1)
-
-
-If the lock is held, instead of waiting, reschedule the flush.
-
-Anyway, at least this report does not seem to be related to fixing
-security xattrs.
-
-Roberto
+-- 
+Regards,
+Alexandre
 
