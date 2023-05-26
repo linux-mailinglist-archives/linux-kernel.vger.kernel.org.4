@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84842711E0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E34711E15
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233507AbjEZCjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 22:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
+        id S230020AbjEZClL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 22:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjEZCjO (ORCPT
+        with ESMTP id S230058AbjEZClI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 22:39:14 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17869B2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:39:13 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f6a6b9bebdso34385e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:39:13 -0700 (PDT)
+        Thu, 25 May 2023 22:41:08 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52517E6
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:41:07 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f5dbd8f677so19755e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685068751; x=1687660751;
+        d=google.com; s=20221208; t=1685068866; x=1687660866;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ohn1R/J/AfVb3I/VEMDslEkxtOuOHHHyZhBzkm1KS9A=;
-        b=imnTHtCM9B41B34Y88WUIV9SySffeXBhGujLP09b8xEmkT8e1iCE0AQiCzbgEBX8Hh
-         uuodaiLmZkkuOCFLrbXKan08UU5d8uUhW8H3eNpe6aO9wOXbgX53HB8EPL1L81Y8wp9h
-         S6ZW4pTFmwL7EjwL7fIDcW6oyXD1dPy5NkeKgwmo3xvVkvnAp93fMRCFA8bcJC9c7moJ
-         xsg0gIKiMl3ze2wnd5rLrsSWSb4lev5SL0W/EJmYhgWCeaIbcQ/HhlKF1YtEjvai8Yzl
-         Qx6X0sfyvmIpX22LoHOZqnpDu4zvtDFIXPhLkOT1uAzHdv+PvYWILvYrOME8MNIoWLY0
-         ogyA==
+        bh=zUzk7xsdgJU7M6GKVkRONbmBW/W1VsolmG1MhtnbW4k=;
+        b=dewv9/nOBEAzMMod+HXOrJ8nBG3gmuVk08ABPHupoSdpSx+7jxn5yueVp3w2S3nQR5
+         dVwzByUhHIuOJwycmURLANkZpcqXcccLLvNNFiWCeYTktW72fiRXLExhXMq3Tg0gdLqQ
+         xqL+o3eBlXJjpy3ija2AJz09T0JXh6eMj+bLhfyWcE7+QhSZo+nxPSmLumbyMBvvyKYI
+         h0f28YcmKLp0GCEMCVKWRmn8ioJG8Bh4l5OGA8k3U3obCQdTmz6MFaV56wXuLV0CJU+P
+         kO/D0B9dSVRI7EXyi7s0TCWI1DFHS5yo/ge6o3eKNtIugLRDv9KId1tdAjQO3nu7wmoB
+         z58Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685068751; x=1687660751;
+        d=1e100.net; s=20221208; t=1685068866; x=1687660866;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ohn1R/J/AfVb3I/VEMDslEkxtOuOHHHyZhBzkm1KS9A=;
-        b=FBb3mpMp4ndZYN7m0VA9qEQD/eppBs1MKSln65P96nt03sJnnEWstmMzAmUd49r2MD
-         5tqgf/5VCs+6sc74L2cnlmLI+C7Bi2qj44BoJEkBjRhUeeeqrIKkgnjc2RawbIBP7AZN
-         5XTBQEjbuOBCErTC2rcgj2ynwg6ycRgFfr3qXscRb3OlmDnqJf5JLFjVIl7W9QT37QKY
-         r5tmeyD/sV2yIsc8muKh1fuUSFk2l4VkLYV6qke7x3AN3WIhsMLcOlqMaDPGWhvc40Q/
-         4PuFa39xxdsSr+EiGWjvifBMrg1cXYqjD21G0xbrARKzjltd8Te6cXWOdr8BALPDicMM
-         Ss0g==
-X-Gm-Message-State: AC+VfDwUJnc6D0VKphLhpkRC2eNcjb77/IeimL/xzyq1G6VwnB+LyATD
-        4whO/D2xtZ1TkfW9YhkgoWcjSqMQTN2K43ty0DfJlg==
-X-Google-Smtp-Source: ACHHUZ6UoviObZrMDQ9owiCul166V1WvP9U/Z3lUioxOIPvrkfVoIPMVX0b5IORZYmUZpkxmx4Ypx7OyNnLu3Wk1PDo=
-X-Received: by 2002:a05:600c:3c96:b0:3f4:1dce:3047 with SMTP id
- bg22-20020a05600c3c9600b003f41dce3047mr5863wmb.2.1685068751363; Thu, 25 May
- 2023 19:39:11 -0700 (PDT)
+        bh=zUzk7xsdgJU7M6GKVkRONbmBW/W1VsolmG1MhtnbW4k=;
+        b=CJbrC2+PGIDgIYGbaDq34j3OVILQJ8CAPKsywOkxy/OtTEgQSIhz/rlfHqHM9Xhye2
+         9R55EnL9hM747LL0HnrTxAdFCb0zVivP+tgSfb3ufmv890RSBgP2UHh+GXhheX/Fhi7g
+         MCafVvNL1Xn8epGo/F899xMrrzBhsKgk5vGkRSsPQrqsRe5eYX37C96ELTdriHtymJRp
+         uaLDHhV7gx1XZcXb0aGwuawY5g4Wr51jXMG03ef1p8Cx/ykF/+ef7ieK2l4bqI22Rg2t
+         NwbaSEegfbznGYDsAfo1WOnRUGk9yj4nbXv4JJFo5jvODLfoXCbimQRbZUNxqqPIffPM
+         y1jQ==
+X-Gm-Message-State: AC+VfDwUMsi38rkQfpziiLrsFWmUfz69QWT3kfx7tTgS8erhkbSTuojC
+        MULP8xN83JJcoqu/+4/xlRn4/5UCXaAkUIBKhAVtFQ==
+X-Google-Smtp-Source: ACHHUZ4QzeNdp7xwQYla9g2PgfBIKJhYYQ7jBl6vEfMdWSyheJWdeijLtuAek583y0Or3Q2gs+Jn36lvshbq/hm7nHU=
+X-Received: by 2002:a05:600c:4711:b0:3f5:f63:d490 with SMTP id
+ v17-20020a05600c471100b003f50f63d490mr2819wmo.5.1685068865714; Thu, 25 May
+ 2023 19:41:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230525071133.2066610-1-irogers@google.com> <20230525071133.2066610-2-irogers@google.com>
- <CAM9d7cgaSPbnjoA6bv8fwkpoyc6nCdXOOrbmBm_jGbZbm3a_4w@mail.gmail.com>
-In-Reply-To: <CAM9d7cgaSPbnjoA6bv8fwkpoyc6nCdXOOrbmBm_jGbZbm3a_4w@mail.gmail.com>
+References: <20230525071133.2066610-1-irogers@google.com> <20230525071133.2066610-9-irogers@google.com>
+ <CAM9d7ci5XB7-PdcXchWW7bBFO_64B0M76rpY8xgkBYr3-mGW0Q@mail.gmail.com>
+In-Reply-To: <CAM9d7ci5XB7-PdcXchWW7bBFO_64B0M76rpY8xgkBYr3-mGW0Q@mail.gmail.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 25 May 2023 19:38:57 -0700
-Message-ID: <CAP-5=fX0BnzQacr1NRQfis42osk07BuKJ9BqNTf7pGBMoj4ORA@mail.gmail.com>
-Subject: Re: [PATCH v1 01/16] perf header: Make nodes dynamic in write_mem_topology
+Date:   Thu, 25 May 2023 19:40:53 -0700
+Message-ID: <CAP-5=fX7_sFV=xGoefpLm_kRMSos7Ec5Df0WwL-k8x6Z4ZKjeg@mail.gmail.com>
+Subject: Re: [PATCH v1 08/16] perf daemon: Dynamically allocate path to perf
 To:     Namhyung Kim <namhyung@kernel.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -89,140 +89,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 12:15=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
+On Thu, May 25, 2023 at 12:17=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
  wrote:
 >
 > On Thu, May 25, 2023 at 12:12=E2=80=AFAM Ian Rogers <irogers@google.com> =
 wrote:
 > >
-> > Avoid a large static array, dynamically allocate the nodes avoiding a
-> > hard coded limited as well.
+> > Avoid a PATH_MAX array in __daemon (the .data section) by dynamically
+> > allocating the memory.
 > >
 > > Signed-off-by: Ian Rogers <irogers@google.com>
 > > ---
-> >  tools/perf/util/header.c | 33 +++++++++++++++++++++------------
-> >  1 file changed, 21 insertions(+), 12 deletions(-)
+> >  tools/perf/builtin-daemon.c | 15 +++++++++++++--
+> >  1 file changed, 13 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-> > index 2dde3ca20de5..80593ed8c79b 100644
-> > --- a/tools/perf/util/header.c
-> > +++ b/tools/perf/util/header.c
-> > @@ -24,6 +24,7 @@
-> >  #include <bpf/libbpf.h>
-> >  #endif
-> >  #include <perf/cpumap.h>
-> > +#include <tools/libc_compat.h> // reallocarray
-> >
-> >  #include "dso.h"
-> >  #include "evlist.h"
-> > @@ -1396,13 +1397,14 @@ static int memory_node__sort(const void *a, con=
-st void *b)
-> >         return na->node - nb->node;
+> > diff --git a/tools/perf/builtin-daemon.c b/tools/perf/builtin-daemon.c
+> > index 34cbe3e959aa..adb5751c3ed0 100644
+> > --- a/tools/perf/builtin-daemon.c
+> > +++ b/tools/perf/builtin-daemon.c
+> > @@ -90,7 +90,7 @@ struct daemon {
+> >         char                    *base;
+> >         struct list_head         sessions;
+> >         FILE                    *out;
+> > -       char                     perf[PATH_MAX];
+> > +       char                    *perf;
+> >         int                      signal_fd;
+> >         time_t                   start;
+> >  };
+> > @@ -1490,6 +1490,15 @@ static int __cmd_ping(struct daemon *daemon, str=
+uct option parent_options[],
+> >         return send_cmd(daemon, &cmd);
 > >  }
 > >
-> > -static int build_mem_topology(struct memory_node *nodes, u64 size, u64=
- *cntp)
-> > +static int build_mem_topology(struct memory_node **nodesp, u64 *cntp)
-> >  {
-> >         char path[PATH_MAX];
-> >         struct dirent *ent;
-> >         DIR *dir;
-> > -       u64 cnt =3D 0;
-> >         int ret =3D 0;
-> > +       size_t cnt =3D 0, size =3D 0;
-> > +       struct memory_node *nodes =3D NULL;
-> >
-> >         scnprintf(path, PATH_MAX, "%s/devices/system/node/",
-> >                   sysfs__mountpoint());
-> > @@ -1426,16 +1428,24 @@ static int build_mem_topology(struct memory_nod=
-e *nodes, u64 size, u64 *cntp)
-> >                 if (r !=3D 1)
-> >                         continue;
-> >
-> > -               if (WARN_ONCE(cnt >=3D size,
-> > -                       "failed to write MEM_TOPOLOGY, way too many nod=
-es\n")) {
-> > -                       closedir(dir);
-> > -                       return -1;
-> > -               }
-> > +               if (cnt >=3D size) {
-> > +                       struct memory_node *new_nodes =3D
-> > +                               reallocarray(nodes, cnt + 4, sizeof(*no=
-des));
-> >
-> > +                       if (!new_nodes) {
-> > +                               pr_err("Failed to write MEM_TOPOLOGY, s=
-ize %zd nodes\n", size);
-> > +                               free(nodes);
-> > +                               closedir(dir);
-> > +                               return -ENOMEM;
-> > +                       }
-> > +                       nodes =3D new_nodes;
-> > +                       size +=3D 4;
-> > +               }
-> >                 ret =3D memory_node__read(&nodes[cnt++], idx);
+> > +static char *set_perf_exe(void)
+> > +{
+> > +       char path[PATH_MAX];
+> > +
+> > +       perf_exe(path, sizeof(path));
+> > +       __daemon.perf =3D strdup(path);
+> > +       return __daemon.perf;
 >
-> I think you need to handle error cases here.
->
-> Thanks,
-> Namhyung
+> Then you need to free it somewhere.
 
-Not sure I follow. The reallocarray tests for failure, frees nodes and
-returns -ENOMEM on error.
+For leak sanitizer, if an allocation is reachable from a global then
+it isn't considered a leak. I'll address this in v2.
 
 Thanks,
 Ian
 
+> Thanks,
+> Namhyung
 >
-> >         }
-> >
-> >         *cntp =3D cnt;
-> > +       *nodesp =3D nodes;
-> >         closedir(dir);
-> >
-> >         if (!ret)
-> > @@ -1444,8 +1454,6 @@ static int build_mem_topology(struct memory_node =
-*nodes, u64 size, u64 *cntp)
-> >         return ret;
-> >  }
-> >
-> > -#define MAX_MEMORY_NODES 2000
-> > -
-> >  /*
-> >   * The MEM_TOPOLOGY holds physical memory map for every
-> >   * node in system. The format of data is as follows:
-> > @@ -1464,8 +1472,8 @@ static int build_mem_topology(struct memory_node =
-*nodes, u64 size, u64 *cntp)
-> >  static int write_mem_topology(struct feat_fd *ff __maybe_unused,
-> >                               struct evlist *evlist __maybe_unused)
+>
+> > +}
+> > +
+> >  int cmd_daemon(int argc, const char **argv)
 > >  {
-> > -       static struct memory_node nodes[MAX_MEMORY_NODES];
-> > -       u64 bsize, version =3D 1, i, nr;
-> > +       struct memory_node *nodes =3D NULL;
-> > +       u64 bsize, version =3D 1, i, nr =3D 0;
-> >         int ret;
+> >         struct option daemon_options[] =3D {
+> > @@ -1503,7 +1512,9 @@ int cmd_daemon(int argc, const char **argv)
+> >                 OPT_END()
+> >         };
 > >
-> >         ret =3D sysfs__read_xll("devices/system/memory/block_size_bytes=
-",
-> > @@ -1473,7 +1481,7 @@ static int write_mem_topology(struct feat_fd *ff =
-__maybe_unused,
-> >         if (ret)
-> >                 return ret;
+> > -       perf_exe(__daemon.perf, sizeof(__daemon.perf));
+> > +       if (!set_perf_exe())
+> > +               return -ENOMEM;
+> > +
+> >         __daemon.out =3D stdout;
 > >
-> > -       ret =3D build_mem_topology(&nodes[0], MAX_MEMORY_NODES, &nr);
-> > +       ret =3D build_mem_topology(&nodes, &nr);
-> >         if (ret)
-> >                 return ret;
-> >
-> > @@ -1508,6 +1516,7 @@ static int write_mem_topology(struct feat_fd *ff =
-__maybe_unused,
-> >         }
-> >
-> >  out:
-> > +       free(nodes);
-> >         return ret;
-> >  }
-> >
+> >         argc =3D parse_options(argc, argv, daemon_options, daemon_usage=
+,
 > > --
 > > 2.40.1.698.g37aff9b760-goog
 > >
