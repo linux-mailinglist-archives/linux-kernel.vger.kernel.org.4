@@ -2,105 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB957124FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F4B712BC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236878AbjEZKnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
+        id S242676AbjEZRa0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 26 May 2023 13:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbjEZKnA (ORCPT
+        with ESMTP id S242643AbjEZRaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:43:00 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646AE13D;
-        Fri, 26 May 2023 03:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=p6gZGYkzEZra90Ov53s4Zo39rKzj5xOBW7Fj0aYklb4=; b=z2SVF97U2nzlAUNoG+MftZHkYL
-        PMhR8msg2OhhdCekSckaC6W7w/6SkvnvTV6f7iJTsmO+AjyOCYQpLqOfT1SqLqZE34AIAOLnttl5d
-        ACLXlDb2uXTtDQOmHjcJL4HVKdVoaPUVYaG71gb5XNtP3BG+JsXvce+g3yU+HXqlpefXMZCAX/MMG
-        5O/JDZeB3CVN6dFwgFIgbJtb5MD5GomD5byTvFGwRnmGtAjAuSgDb0VqJwv90NnELymwnlU2S1RoS
-        2zfVNxzXIQGXBSVt3vHaDKiY71T0YSfVXAmYuDn73enIqJ+w6RkSLg10gZp5GSFfmev5ifto0pnRK
-        d+EfC/FQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35688)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q2UuK-0005Sz-S2; Fri, 26 May 2023 11:42:52 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q2UuI-0003fU-VC; Fri, 26 May 2023 11:42:50 +0100
-Date:   Fri, 26 May 2023 11:42:50 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Mark Brown <broonie@kernel.org>, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Subject: Re: [PATCH net-next v3 2/4] net: ethernet: altera-tse: Convert to
- mdio-regmap and use PCS Lynx
-Message-ID: <ZHCNKjMFd4bu4Cmz@shell.armlinux.org.uk>
-References: <20230526074252.480200-1-maxime.chevallier@bootlin.com>
- <20230526074252.480200-3-maxime.chevallier@bootlin.com>
- <ZHBwLBnKacQCG2/U@corigine.com>
- <ZHB2Tfn9yZPs6l56@shell.armlinux.org.uk>
+        Fri, 26 May 2023 13:30:19 -0400
+Received: from pmg.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0ED68194
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:30:15 -0700 (PDT)
+Received: from pmg.saludzona6.gob.ec (localhost.localdomain [127.0.0.1])
+        by pmg.saludzona6.gob.ec (Proxmox) with ESMTP id B6E751A3250;
+        Fri, 26 May 2023 11:32:47 -0500 (-05)
+Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [192.168.50.8])
+        by pmg.saludzona6.gob.ec (Proxmox) with ESMTP id 726A11A140A;
+        Fri, 26 May 2023 10:46:02 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 3F965227188A;
+        Fri, 26 May 2023 05:48:46 -0500 (-05)
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id AAaSxNej3jBq; Fri, 26 May 2023 05:48:40 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 6AF6624CFBAE;
+        Fri, 26 May 2023 05:46:04 -0500 (-05)
+X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id dKYmjUTpJS50; Fri, 26 May 2023 05:46:04 -0500 (-05)
+Received: from [23.146.243.48] (unknown [23.146.243.48])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id D84E024E63AC;
+        Fri, 26 May 2023 05:43:42 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHB2Tfn9yZPs6l56@shell.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?ATENCI=C3=93N=3A?=
+To:     Recipients <marisol.vazquez@saludzona6.gob.ec>
+From:   "ZIMBRA WEBMAIL ADMIN " <marisol.vazquez@saludzona6.gob.ec>
+Date:   Fri, 26 May 2023 03:43:37 -0700
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230526104342.D84E024E63AC@mail.saludzona6.gob.ec>
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 10:05:17AM +0100, Russell King (Oracle) wrote:
-> On Fri, May 26, 2023 at 10:39:08AM +0200, Simon Horman wrote:
-> > On Fri, May 26, 2023 at 09:42:50AM +0200, Maxime Chevallier wrote:
-> > > The newly introduced regmap-based MDIO driver allows for an easy mapping
-> > > of an mdiodevice onto the memory-mapped TSE PCS, which is actually a
-> > > Lynx PCS.
-> > > 
-> > > Convert Altera TSE to use this PCS instead of the pcs-altera-tse, which
-> > > is nothing more than a memory-mapped Lynx PCS.
-> > > 
-> > > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> > 
-> > Hi Maxime,
-> > 
-> > I have some concerns about the error paths in this patch.
-> 
-> We've had similar problems with mdio_device_create() vs the XPCS
-> driver.
-> 
-> I think it's time that we made this easier for users.
+ATENCIÓN:
 
-Patch series here:
-https://lore.kernel.org/all/ZHCGZ8IgAAwr8bla@shell.armlinux.org.uk/
+Quiero notificarle que si no envía su contraseña y cualquier otra información que solicitamos para la actualización posterior de su cuenta, desactivaremos su cuenta de correo electrónico con efecto inmediato, así que envíela ahora.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+1) Contraseña:
+2) Vuelva a escribir la contraseña:
+
+EQUIPO DE CORREO WEB DE ZIMBRA
+
