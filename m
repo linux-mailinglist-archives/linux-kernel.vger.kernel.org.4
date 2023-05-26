@@ -2,121 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E3B712F62
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138A1712FAD
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 00:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244393AbjEZV6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 17:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
+        id S237699AbjEZWAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 18:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244342AbjEZV6j (ORCPT
+        with ESMTP id S244199AbjEZWAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 17:58:39 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B966CE57;
-        Fri, 26 May 2023 14:58:12 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-39831cb47fbso870176b6e.1;
-        Fri, 26 May 2023 14:58:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685138198; x=1687730198;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oobY8Hnr+V4wGPCWsnIMgT9DHlRXZoBkbIC6BEX23SU=;
-        b=aWxVHnmKMVbtSgYUQYksmmw46grMNqXatXG37GenPMK6H2zm72YHpscZDwyPN8T/m1
-         Tecjxqo/3hceavTncqvVwiooAL9aqvP0Q4boolJrJzMvIMasnWtNDTbHcgVfVcD68LxZ
-         oA3lbIbMtjcQNCA+LK6FbF2oChOcTdMzhedMmlavhDXJ6Fzd/H0BiIs2L9s15HNyrKuw
-         2LCRpsRUDZjMlVzham69+vGuVb984kaoKlkPdtqfibEn2/zQFiOFGJ2y6oo+brMzSa45
-         +zOTYntAgaV2e59iBia3KAgwUNlxWlQc8SKKdNCfz5QzrBqpzq7il/w93zw/3lBiWvx4
-         lsAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685138198; x=1687730198;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oobY8Hnr+V4wGPCWsnIMgT9DHlRXZoBkbIC6BEX23SU=;
-        b=R/bwr0YRj3E6S9hL9/hf71FgHRt6UUsWzyp7MhtOLDWbfDuO0zrhJAjn7gdG0wMVa5
-         KIk0jmytE9vz+joxHzrpcLQw1VEBbVcqYoCVNTtFgZhjDDoiJDB7Q5L8DuEIBlZhTWtf
-         Td5DMGBNkkIb+ryhuAMuuU7kMuw40V6kFJpf6X1ILRG0nFA1l0g487VANZy4eomBoGpv
-         D+j5M05NTrwZeekP/JqM5Fg0UIQgf4kWIyY+0GycJ8yz2eDzHMm2SeZndjEhzkZrFiZG
-         FwK2D4VTuxZn3tIVAtI1+g2/KCQ99VyUn/33vj/tHexxQDh3svU5Q5GQWKUUOpQ0WkeI
-         D71w==
-X-Gm-Message-State: AC+VfDwPMA1EE5AJ5g0aCIiQYKBsUbQfCxwBhGpDBaj89i1gXzKeUvOD
-        DLVAabFZu4z/SV56roTIAJYdGniBwvY=
-X-Google-Smtp-Source: ACHHUZ5vqRPNUlPl/PxXDCBxq23GlkCHJUIAAGgBUV49sTtbrptu+KjfMeiPo/Vb3A3vPP0+oPWnDQ==
-X-Received: by 2002:a05:6808:8ca:b0:398:523a:f1ee with SMTP id k10-20020a05680808ca00b00398523af1eemr1741000oij.21.1685138198134;
-        Fri, 26 May 2023 14:56:38 -0700 (PDT)
-Received: from smeagol.fibertel.com.ar ([201.235.4.68])
-        by smtp.gmail.com with ESMTPSA id q6-20020acaf206000000b00399ee6330a9sm756978oih.52.2023.05.26.14.56.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 14:56:37 -0700 (PDT)
-From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-To:     linux@roeck-us.net
-Cc:     =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>, derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (oxp-sensors) Differentiate new BIOS for the Mini
-Date:   Fri, 26 May 2023 18:56:22 -0300
-Message-Id: <20230526215621.16075-1-samsagax@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Fri, 26 May 2023 18:00:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02475134;
+        Fri, 26 May 2023 14:59:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10C7B6541A;
+        Fri, 26 May 2023 21:58:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E23AC433D2;
+        Fri, 26 May 2023 21:58:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685138304;
+        bh=1nZsA+RKgqZot2LPxa0Mg83EqjS8d/7etUXcHXpdE0E=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WnS+sewHPL2uqoRV2Jeuh6uKGYtRjy/Z0GF/vRKNNJm2AOOQsVPIcnwfLCCB9frxt
+         BBsFQwpF7P2bXRpYce0siyWRVkchC2WGmTFxaRsVOdEDcP9kGfQ1dSeqhvzqTC2n3p
+         Pja4ixHChAvAPfvU9oUnmJFt+jJ3BQgNpGULMVAxYcrBBDc+2hE2YdQQcgFHsd9+2l
+         vwWMByDpmqSQmLwZ0bmHbdDK/uZOuOFpylZVGIsH3PmU65vj+JRgFlq6yUE/oi+OQf
+         NZ2sM3eynl1OqSddf3gRIYD408D6zlK6UXdKzSwzYb2tUoKFFNeb3gy9lqtVDkz3Cr
+         AJTBkiw08YT7A==
+Date:   Fri, 26 May 2023 16:58:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mark Blakeney <mark.blakeney@bullet-systems.net>
+Subject: [GIT PULL] PCI fixes for v6.4
+Message-ID: <ZHErfurfF9cNIION@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Newer BIOS got some other changes aside from string changes. Add a board
-enum to differentiate it from the old OneXplayer Mini AMD BIOS.
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
----
- drivers/hwmon/oxp-sensors.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index 0ec7588610ad..423307ed4930 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/hwmon/oxp-sensors.c
-@@ -47,6 +47,7 @@ enum oxp_board {
- 	aya_neo_air_pro,
- 	aya_neo_geek,
- 	oxp_mini_amd,
-+	oxp_mini_amd_a07,
- 	oxp_mini_amd_pro,
- };
- 
-@@ -104,7 +105,7 @@ static const struct dmi_system_id dmi_table[] = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
- 			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER mini A07"),
- 		},
--		.driver_data = (void *)oxp_mini_amd,
-+		.driver_data = (void *)oxp_mini_amd_a07,
- 	},
- 	{
- 		.matches = {
-@@ -206,6 +207,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 			case aya_neo_air_pro:
- 			case aya_neo_geek:
- 			case oxp_mini_amd:
-+			case oxp_mini_amd_a07:
- 				*val = (*val * 255) / 100;
- 				break;
- 			case oxp_mini_amd_pro:
-@@ -247,6 +249,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
- 			case aya_neo_air_pro:
- 			case aya_neo_geek:
- 			case oxp_mini_amd:
-+			case oxp_mini_amd_a07:
- 				val = (val * 100) / 255;
- 				break;
- 			case aok_zoe_a1:
--- 
-2.40.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git tags/pci-v6.4-fixes-1
+
+for you to fetch changes up to 3b8803494a0612acdeee714cb72aa142b1e05ce5:
+
+  PCI/DPC: Quirk PIO log size for Intel Ice Lake Root Ports (2023-05-11 17:38:46 -0500)
+
+----------------------------------------------------------------
+- Quirk Ice Lake Root Ports to work around DPC log size issue (Mika
+  Westerberg)
+
+----------------------------------------------------------------
+Mika Westerberg (1):
+      PCI/DPC: Quirk PIO log size for Intel Ice Lake Root Ports
+
+ drivers/pci/quirks.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
