@@ -2,206 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD0A7120A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0157120A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 09:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241985AbjEZHHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 03:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
+        id S242017AbjEZHHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 03:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjEZHHV (ORCPT
+        with ESMTP id S234676AbjEZHHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 03:07:21 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372E8F7;
-        Fri, 26 May 2023 00:07:19 -0700 (PDT)
-Received: from van1shing-pc.localdomain ([10.12.182.0])
-        (user=silver_code@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 34Q75tik000939-34Q75til000939
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 26 May 2023 15:05:57 +0800
-From:   Wang Zhang <silver_code@hust.edu.cn>
-To:     Peter Korsgaard <peter@korsgaard.com>,
-        Andrew Lunn <andrew@lunn.ch>, Wolfram Sang <wsa@kernel.org>,
-        Andreas Larsson <andreas@gaisler.com>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Wang Zhang <silver_code@hust.edu.cn>,
-        Peter Korsgaard <jacmet@sunsite.dk>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4] i2c: ocores: use devm_ managed clks
-Date:   Fri, 26 May 2023 15:05:33 +0800
-Message-Id: <20230526070534.76112-1-silver_code@hust.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <b5c00122-0fe0-4020-9036-e4cc37d1b51a@lunn.ch>
-References: <b5c00122-0fe0-4020-9036-e4cc37d1b51a@lunn.ch>
+        Fri, 26 May 2023 03:07:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3662910A
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:06:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685084804;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wBejMg+s8pn89tl0WoGSR+vknKwo5Dacmjq+sP5U8E0=;
+        b=EpFSkjRlX6FmDjJ6ynaLrsSIA9NHMJTAh7hbJgsnqGUpMmL8MbmoYgcVkWen7BwB48bSj3
+        MRzSm3tPAFJjXbR6fxmIXLrgEpvSVvRtVWUbHSfMjmBQgEd9hpjrjXOASIJDMvY7IZSFo3
+        wRnFQL2fmxKoPogcWcLWxZveUoo+ZLo=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-92-w-d3tkG9Noa7iENz06GXSA-1; Fri, 26 May 2023 03:06:42 -0400
+X-MC-Unique: w-d3tkG9Noa7iENz06GXSA-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2af25454033so1647041fa.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 00:06:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685084801; x=1687676801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wBejMg+s8pn89tl0WoGSR+vknKwo5Dacmjq+sP5U8E0=;
+        b=H/lrtfQDgIOozY9tWrrZjsQ30zCv9IlvBVffrxnCxDWdm/fPjTuDQJRohMAgJYNXip
+         EQOKgJe9g8ld8Gunw4DDtxfnEKCdXKFVu+VgSXA8GJ+7Y2SLpAOF9nA4aXwZf9Wy225M
+         DQRAyNbQeugJTWjJx4AMYffp32FiXbaiKsHJeT30+ddeCh7DmZULDKFdFM46ng0goLNh
+         EO1OsFE/1Wge5UfCNkIhwvBQu7kEozAIIO2+ATAEqujHDpa6pwaxjtcQEqNcvk4W0imh
+         7bSp85k8z7zUFzLRyIdJAIRRcgrF4APwQ9LTnmTIN3ywS9fLjv0qf6PRbt6s9TVshXPv
+         zFRQ==
+X-Gm-Message-State: AC+VfDxAthzr/zKq3Gz5dh8VYOunqEzHLsTYQt9jqkL0cRDeIwSfaZTw
+        mo+axrLqf+5qYsVM00P4mPluUNTYGmMhSWEsLW/jDgIKIc2T22NmOJJTm6IsEaZprOVmOaIyku5
+        Qwptmo3iYFUxjI/1HeptM39IrBqNtBClafKnt1qN0
+X-Received: by 2002:a2e:7817:0:b0:2ac:8c5e:e151 with SMTP id t23-20020a2e7817000000b002ac8c5ee151mr451668ljc.31.1685084801112;
+        Fri, 26 May 2023 00:06:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6sHDrHvdUXjE/f4RLyIFJiZ9+BIhhYVMPihHPnwvEGGl1gTbFH1d/Kkjl1jRuizOa84yxiFWZP2XxBPAfuKMg=
+X-Received: by 2002:a2e:7817:0:b0:2ac:8c5e:e151 with SMTP id
+ t23-20020a2e7817000000b002ac8c5ee151mr451649ljc.31.1685084800799; Fri, 26 May
+ 2023 00:06:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: silver_code@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230526054621.18371-1-liangchen.linux@gmail.com> <20230526054621.18371-5-liangchen.linux@gmail.com>
+In-Reply-To: <20230526054621.18371-5-liangchen.linux@gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 26 May 2023 15:06:29 +0800
+Message-ID: <CACGkMEsrr-3ArBgCksq=c60+5fZ-Xc-i653ix_vdr2f7c7wYfg@mail.gmail.com>
+Subject: Re: [PATCH net-next 5/5] virtio_net: Implement DMA pre-handler
+To:     Liang Chen <liangchen.linux@gmail.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, pabeni@redhat.com, alexander.duyck@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch complains that:
-drivers/i2c/busses/i2c-ocores.c:704 ocores_i2c_probe()
-warn: missing unwind goto?
+On Fri, May 26, 2023 at 1:47=E2=80=AFPM Liang Chen <liangchen.linux@gmail.c=
+om> wrote:
+>
+> Adding a DMA pre-handler that utilizes page pool for managing DMA mapping=
+s.
+> When IOMMU is enabled, turning on the page_pool_dma_map module parameter =
+to
+> select page pool for DMA mapping management gives a significant reduction
+> in the overhead caused by DMA mappings.
+>
+> In testing environments with a single core vm and qemu emulated IOMMU,
+> significant performance improvements can be observed:
+>   Upstream codebase: 1.76 Gbits/sec
+>   Upstream codebase with page pool fragmentation support: 1.81 Gbits/sec
+>   Upstream codebase with page pool fragmentation and DMA support: 19.3
+>   Gbits/sec
+>
+> Signed-off-by: Liang Chen <liangchen.linux@gmail.com>
+> ---
+>  drivers/net/virtio_net.c | 55 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index ac40b8c66c59..73cc4f9fe4fa 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -22,6 +22,7 @@
+>  #include <net/route.h>
+>  #include <net/xdp.h>
+>  #include <net/net_failover.h>
+> +#include <linux/iommu.h>
+>
+>  static int napi_weight =3D NAPI_POLL_WEIGHT;
+>  module_param(napi_weight, int, 0444);
+> @@ -33,8 +34,10 @@ module_param(napi_tx, bool, 0644);
+>
+>  static bool page_pool_enabled;
+>  static bool page_pool_frag;
+> +static bool page_pool_dma_map;
+>  module_param(page_pool_enabled, bool, 0400);
+>  module_param(page_pool_frag, bool, 0400);
+> +module_param(page_pool_dma_map, bool, 0400);
+>
+>  /* FIXME: MTU in config. */
+>  #define GOOD_PACKET_LEN (ETH_HLEN + VLAN_HLEN + ETH_DATA_LEN)
+> @@ -3830,6 +3833,49 @@ static void virtnet_del_vqs(struct virtnet_info *v=
+i)
+>         virtnet_free_queues(vi);
+>  }
+>
+> +static dma_addr_t virtnet_pp_dma_map_page(struct device *dev, struct pag=
+e *page,
+> +                                         unsigned long offset, size_t si=
+ze,
+> +                                         enum dma_data_direction dir, un=
+signed long attrs)
+> +{
+> +       struct page *head_page;
+> +
+> +       if (dir !=3D DMA_FROM_DEVICE)
+> +               return 0;
+> +
+> +       head_page =3D compound_head(page);
+> +       return page_pool_get_dma_addr(head_page)
+> +               + (page - head_page) * PAGE_SIZE
+> +               + offset;
 
-If any wrong occurs in ocores_i2c_of_probe, the i2c->clk needs to be
-released. But the function returns directly without freeing the clock.
+So it's not a map, it is just a query from the dma address from the pool.
 
-Fix this by updating the code to use devm_clk_get_optional_enabled()
-instead. Use dev_err_probe() where appropriate as well since we are
-changing those statements.
+> +}
+> +
+> +static bool virtnet_pp_dma_unmap_page(struct device *dev, dma_addr_t dma=
+_handle,
+> +                                     size_t size, enum dma_data_directio=
+n dir,
+> +                                     unsigned long attrs)
+> +{
+> +       phys_addr_t phys;
+> +
+> +       /* Handle only the RX direction, and sync the DMA memory only if =
+it's not
+> +        * a DMA coherent architecture.
+> +        */
+> +       if (dir !=3D DMA_FROM_DEVICE)
+> +               return false;
+> +
+> +       if (dev_is_dma_coherent(dev))
+> +               return true;
+> +
+> +       phys =3D iommu_iova_to_phys(iommu_get_dma_domain(dev), dma_handle=
+);
 
-Fixes: f5f35a92e44a ("i2c: ocores: Add irq support for sparc")
-Signed-off-by: Wang Zhang <silver_code@hust.edu.cn>
----
-v3->v4: use `dev_err_probe` to compact the code and add a fixes tag
-v2->v3: use `devm_clk_get_optional_enabled()` to manage clks
-v1->v2: change `ocores_i2c_of_probe` to use `devm_clk_get_enabled()`
----
- drivers/i2c/busses/i2c-ocores.c | 64 +++++++++++----------------------
- 1 file changed, 21 insertions(+), 43 deletions(-)
+This would be somehow slow. If we track the mapping by driver, it
+would be much faster.
 
-diff --git a/drivers/i2c/busses/i2c-ocores.c b/drivers/i2c/busses/i2c-ocores.c
-index 2e575856c5cd..e30df2b78fdf 100644
---- a/drivers/i2c/busses/i2c-ocores.c
-+++ b/drivers/i2c/busses/i2c-ocores.c
-@@ -552,28 +552,20 @@ static int ocores_i2c_of_probe(struct platform_device *pdev,
- 							&clock_frequency);
- 	i2c->bus_clock_khz = 100;
- 
--	i2c->clk = devm_clk_get(&pdev->dev, NULL);
--
--	if (!IS_ERR(i2c->clk)) {
--		int ret = clk_prepare_enable(i2c->clk);
--
--		if (ret) {
--			dev_err(&pdev->dev,
--				"clk_prepare_enable failed: %d\n", ret);
--			return ret;
--		}
--		i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
--		if (clock_frequency_present)
--			i2c->bus_clock_khz = clock_frequency / 1000;
--	}
--
-+	i2c->clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
-+	if (IS_ERR(i2c->clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(i2c->clk),
-+				     "devm_clk_get_optional_enabled failed\n");
-+
-+	i2c->ip_clock_khz = clk_get_rate(i2c->clk) / 1000;
-+	if (clock_frequency_present)
-+		i2c->bus_clock_khz = clock_frequency / 1000;
- 	if (i2c->ip_clock_khz == 0) {
- 		if (of_property_read_u32(np, "opencores,ip-clock-frequency",
- 						&val)) {
- 			if (!clock_frequency_present) {
- 				dev_err(&pdev->dev,
- 					"Missing required parameter 'opencores,ip-clock-frequency'\n");
--				clk_disable_unprepare(i2c->clk);
- 				return -ENODEV;
- 			}
- 			i2c->ip_clock_khz = clock_frequency / 1000;
-@@ -678,8 +670,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 		default:
- 			dev_err(&pdev->dev, "Unsupported I/O width (%d)\n",
- 				i2c->reg_io_width);
--			ret = -EINVAL;
--			goto err_clk;
-+			return -EINVAL;
- 		}
- 	}
- 
-@@ -710,13 +701,13 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 						   pdev->name, i2c);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Cannot claim IRQ\n");
--			goto err_clk;
-+			return ret;
- 		}
- 	}
- 
- 	ret = ocores_init(&pdev->dev, i2c);
- 	if (ret)
--		goto err_clk;
-+		return ret;
- 
- 	/* hook up driver to tree */
- 	platform_set_drvdata(pdev, i2c);
-@@ -728,7 +719,7 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	/* add i2c adapter to i2c tree */
- 	ret = i2c_add_adapter(&i2c->adap);
- 	if (ret)
--		goto err_clk;
-+		return ret;
- 
- 	/* add in known devices to the bus */
- 	if (pdata) {
-@@ -737,10 +728,6 @@ static int ocores_i2c_probe(struct platform_device *pdev)
- 	}
- 
- 	return 0;
--
--err_clk:
--	clk_disable_unprepare(i2c->clk);
--	return ret;
- }
- 
- static int ocores_i2c_remove(struct platform_device *pdev)
-@@ -755,9 +742,6 @@ static int ocores_i2c_remove(struct platform_device *pdev)
- 	/* remove adapter & data */
- 	i2c_del_adapter(&i2c->adap);
- 
--	if (!IS_ERR(i2c->clk))
--		clk_disable_unprepare(i2c->clk);
--
- 	return 0;
- }
- 
-@@ -771,28 +755,22 @@ static int ocores_i2c_suspend(struct device *dev)
- 	ctrl &= ~(OCI2C_CTRL_EN | OCI2C_CTRL_IEN);
- 	oc_setreg(i2c, OCI2C_CONTROL, ctrl);
- 
--	if (!IS_ERR(i2c->clk))
--		clk_disable_unprepare(i2c->clk);
-+	clk_disable_unprepare(i2c->clk);
- 	return 0;
- }
- 
- static int ocores_i2c_resume(struct device *dev)
- {
- 	struct ocores_i2c *i2c = dev_get_drvdata(dev);
-+	unsigned long rate;
-+	int ret;
- 
--	if (!IS_ERR(i2c->clk)) {
--		unsigned long rate;
--		int ret = clk_prepare_enable(i2c->clk);
--
--		if (ret) {
--			dev_err(dev,
--				"clk_prepare_enable failed: %d\n", ret);
--			return ret;
--		}
--		rate = clk_get_rate(i2c->clk) / 1000;
--		if (rate)
--			i2c->ip_clock_khz = rate;
--	}
-+	ret = clk_prepare_enable(i2c->clk);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "clk_prepare_enable failed\n");
-+	rate = clk_get_rate(i2c->clk) / 1000;
-+	if (rate)
-+		i2c->ip_clock_khz = rate;
- 	return ocores_init(dev, i2c);
- }
- 
--- 
-2.34.1
+More could be seen here:
+
+https://lists.linuxfoundation.org/pipermail/virtualization/2023-May/066778.=
+html
+
+Thanks
+
+> +       if (WARN_ON(!phys))
+> +               return false;
+> +
+> +       arch_sync_dma_for_cpu(phys, size, dir);
+> +       return true;
+> +}
+> +
+> +static struct virtqueue_pre_dma_ops virtnet_pp_pre_dma_ops =3D {
+> +       .map_page =3D virtnet_pp_dma_map_page,
+> +       .unmap_page =3D virtnet_pp_dma_unmap_page,
+> +};
+> +
+>  static void virtnet_alloc_page_pool(struct receive_queue *rq)
+>  {
+>         struct virtio_device *vdev =3D rq->vq->vdev;
+> @@ -3845,6 +3891,15 @@ static void virtnet_alloc_page_pool(struct receive=
+_queue *rq)
+>         if (page_pool_frag)
+>                 pp_params.flags |=3D PP_FLAG_PAGE_FRAG;
+>
+> +       /* Consider using page pool DMA support only when DMA API is used=
+. */
+> +       if (virtio_has_feature(vdev, VIRTIO_F_ACCESS_PLATFORM) &&
+> +           page_pool_dma_map) {
+> +               pp_params.flags |=3D PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_D=
+EV;
+> +               pp_params.dma_dir =3D DMA_FROM_DEVICE;
+> +               pp_params.max_len =3D PAGE_SIZE << pp_params.order;
+> +               virtqueue_register_pre_dma_ops(rq->vq, &virtnet_pp_pre_dm=
+a_ops);
+> +       }
+> +
+>         rq->page_pool =3D page_pool_create(&pp_params);
+>         if (IS_ERR(rq->page_pool)) {
+>                 dev_warn(&vdev->dev, "page pool creation failed: %ld\n",
+> --
+> 2.31.1
+>
 
