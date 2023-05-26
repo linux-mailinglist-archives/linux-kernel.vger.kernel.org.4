@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829FB712F3D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DACF7712F3E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244098AbjEZVzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 17:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        id S244151AbjEZVzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 17:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243916AbjEZVyf (ORCPT
+        with ESMTP id S244141AbjEZVyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 17:54:35 -0400
+        Fri, 26 May 2023 17:54:45 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF97135
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:54:31 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacfa4eefd2so3139223276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:54:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B261BB
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:54:33 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacfa4ef059so2814363276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:54:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685138070; x=1687730070;
+        d=google.com; s=20221208; t=1685138072; x=1687730072;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sTjkcSrIthqBGUF6JyF++nlWwrpLfc1jVqkJtlkt6PQ=;
-        b=w25K3uEgKsF2ESRt4NqswniKM+kqGVpYNbZAC3VV1XivKvawMUAL6LVTMMcJxXQBFb
-         FRg3ZkENeETKjEOtpf9Oxs3HEnHv9vC702x+tfxnLj0KCOpviMP/uuvf3eHH4eVmCXX2
-         QlWwQxHFuKt0+sC/rwn7FmT/72Cb28MCup5wqZ6c+ghLtyHyrLcxED5iu7/4pUMw2f/H
-         KP5tGz126hCsKh7w5htUiXSvgg5MhWi9cSbRfyC5lmpNzLrI3tHRUvnao8H/Zx7qap4I
-         o5VgvKPBtaw4iY+aMhbxnS+e4o240Y8rT5A92F2E7tu5l9Ys1HwNRKOdkI9yOfCgPgI/
-         P1XA==
+        bh=Augb3j/jljgyjV1KGpr82Z0gyjkQotdR/6uQepIkE7U=;
+        b=2kB3hJaQUgcEcaVDXNq/fd3gWdE2bSBqcIL0t1IGnwV28LbcccROJklvngJeFV4DSq
+         DufbTJ6/obrK8AhJrpMqL+XNuQmA06Avd4EHY87ZAOSlNYz3P8jqh8ujdXyqvxWOD6oT
+         HVHoOwHoHvlyWmr/ArSlJeVgBFTbnUVTL6MW00xvMB349pRYplMeGvpg1Nm965u1sBid
+         efvKaDXKZrijDyU9jIyvnlcEoeV5Dj2yo8ZtLt9ewIiMR6ZD+5WmT7YMIkSAyBr6QIbX
+         dl4kDKcouAq6ZfyDZjGoSUDivoA53h8d8tr2otGAoSiVcHTTDFqyvRrvZdX0w1EdZ74T
+         O48g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685138070; x=1687730070;
+        d=1e100.net; s=20221208; t=1685138072; x=1687730072;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sTjkcSrIthqBGUF6JyF++nlWwrpLfc1jVqkJtlkt6PQ=;
-        b=jb8114hHrlHWGum3zVBsmkRqXQz6yzk1THDQ6v43ddVZ/VJQCLrxTw6XbvGwgr3BVk
-         badRFPwwHgiya7jg3jrkhnBS7LtxKwPppON0gy7w5GIQKpYv02d7VEkAU7LDznV3dw6e
-         zoKfLmWE+SnofjaIBkWGLWmrvkwydxjrUrKmevjaxejjl0SNoJkYveZ/eZ01czt7IYN3
-         mIjZmG9aHgrBeWsYS6aDkZJkgyLwkryDhx0EvIvrXAn+8dwcI+RtxTt1KZngBnne+GMN
-         6pUlH9xbTks3qH+CuXS9Rgtyhl+RxCkf5I4l7QoNXjgkZpyOaDouJ04+f+o7bLMUUUuc
-         bQ0g==
-X-Gm-Message-State: AC+VfDzWwuKHd9Hh/wrd86x8I5o6Wv7eTWN4A2jdfjSvqBYg4TuuTbo6
-        l56qC6JQygkQGs1TXtnaE2gGF6iFo9sp
-X-Google-Smtp-Source: ACHHUZ5Y5u5GfQO+v2V+aKXbBLuLyabzsHyJ7UAvFYKMG8567omcANkCFynE5ebfsRhLLEDD5CY9TnAS+MCL
+        bh=Augb3j/jljgyjV1KGpr82Z0gyjkQotdR/6uQepIkE7U=;
+        b=E4R3gAus+ZXoUBjNdQOyudQAvvu2DMu4eLfdLtY5SBi8zvixREvm9moqw/tgCseJmL
+         NZEPwG4SRNuQEKSJboBjzGSYN0Zhzl1T/Vu6wFyzeNncqTEbzd1pj9rXqWUljPG3694J
+         muemDCTe7JNYcOBL9bXLKHTHC3urSIcookQX91BXqak95yIzs4PJBV2hnYkDurjvkQPX
+         awkKtu/mfszmD7ruxJfiMMD+GV4dMeC19CSg0f7C3ZstkBMUTD7MvmsBKKg3zdD0aW/5
+         NuPkl20GHFChE4PNeyNVU1D0F1VmxIb5QeXNfdcPWUkwwPsVe92QjIFekodbijWGhKTa
+         Z3vg==
+X-Gm-Message-State: AC+VfDy1ZvgqBlDSjJ8Jx6Lg316uNVukSM7lwV42yp3DH3FNaL5EXnz/
+        e6/SSIGYE9IUsAQ7xzlsLQYQmjep3e7c
+X-Google-Smtp-Source: ACHHUZ5Nc508/25y5ajVWer0jZNeXKoT9lajVUzrqi2/BXoSY3vyyg0yHWgTWVWgkvFow+yWC1Tg5DfwgH5c
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a25:e08b:0:b0:bad:939:77b9 with SMTP id
- x133-20020a25e08b000000b00bad093977b9mr1193175ybg.3.1685138070105; Fri, 26
- May 2023 14:54:30 -0700 (PDT)
-Date:   Fri, 26 May 2023 14:53:42 -0700
+ (user=irogers job=sendgmr) by 2002:a25:d690:0:b0:bad:4bb:c440 with SMTP id
+ n138-20020a25d690000000b00bad04bbc440mr1706799ybg.10.1685138072366; Fri, 26
+ May 2023 14:54:32 -0700 (PDT)
+Date:   Fri, 26 May 2023 14:53:43 -0700
 In-Reply-To: <20230526215410.2435674-1-irogers@google.com>
-Message-Id: <20230526215410.2435674-8-irogers@google.com>
+Message-Id: <20230526215410.2435674-9-irogers@google.com>
 Mime-Version: 1.0
 References: <20230526215410.2435674-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v4 07/35] perf evsel: Add is_pmu_core inorder to interpret own_cpus
+Subject: [PATCH v4 08/35] perf pmu: Add CPU map for "cpu" PMUs
 From:   Ian Rogers <irogers@google.com>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -98,74 +98,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The behaviour of handling cpu maps varies for core and other PMUs. For
-core PMUs the cpu map lists all valid CPUs, whereas for other PMUs the
-map is the default CPU. Add a flag in the evsel to indicate if a PMU
-is core to help with later interpreting of the cpu maps and populate
-it when the evsel is created during parsing. When propagating cpu
-maps, core PMUs should intersect the cpu map of the PMU with the user
-requested one.
+A typical "cpu" PMU has no "cpus" or "cpumask" file meaning the CPU
+map is set to NULL, which also encodes an empty CPU map. Update
+pmu_cpumask so that if the "cpu" PMU fails to load a CPU map, use a
+default of all online PMUs.
+
+Remove const from cpu_map__online for the sake of reference counting.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- tools/lib/perf/include/internal/evsel.h | 9 +++++++++
- tools/perf/util/evsel.c                 | 1 +
- tools/perf/util/parse-events.c          | 1 +
- 3 files changed, 11 insertions(+)
+ tools/perf/util/cpumap.c | 4 ++--
+ tools/perf/util/cpumap.h | 4 ++--
+ tools/perf/util/pmu.c    | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/lib/perf/include/internal/evsel.h b/tools/lib/perf/include/internal/evsel.h
-index a99a75d9e78f..4d6f2a032f45 100644
---- a/tools/lib/perf/include/internal/evsel.h
-+++ b/tools/lib/perf/include/internal/evsel.h
-@@ -41,7 +41,14 @@ struct perf_sample_id {
- struct perf_evsel {
- 	struct list_head	 node;
- 	struct perf_event_attr	 attr;
-+	/** The commonly used cpu map of CPUs the event should be opened upon, etc. */
- 	struct perf_cpu_map	*cpus;
-+	/**
-+	 * The cpu map read from the PMU. For core PMUs this is the list of all
-+	 * CPUs the event can be opened upon. For other PMUs this is the default
-+	 * cpu map for opening the event on, for example, the first CPU on a
-+	 * socket for an uncore event.
-+	 */
- 	struct perf_cpu_map	*own_cpus;
- 	struct perf_thread_map	*threads;
- 	struct xyarray		*fd;
-@@ -65,6 +72,8 @@ struct perf_evsel {
- 	 * i.e. it cannot be the 'any CPU' value of -1.
- 	 */
- 	bool			 requires_cpu;
-+	/** Is the PMU for the event a core one? Effects the handling of own_cpus. */
-+	bool			 is_pmu_core;
- 	int			 idx;
- };
+diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
+index 75d9c73e0184..75c5bed37805 100644
+--- a/tools/perf/util/cpumap.c
++++ b/tools/perf/util/cpumap.c
+@@ -663,9 +663,9 @@ size_t cpu_map__snprint_mask(struct perf_cpu_map *map, char *buf, size_t size)
+ 	return ptr - buf;
+ }
  
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 2f5910b31fa9..8c8f371ea2b5 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -415,6 +415,7 @@ struct evsel *evsel__clone(struct evsel *orig)
- 	evsel->core.nr_members = orig->core.nr_members;
- 	evsel->core.system_wide = orig->core.system_wide;
- 	evsel->core.requires_cpu = orig->core.requires_cpu;
-+	evsel->core.is_pmu_core = orig->core.is_pmu_core;
+-const struct perf_cpu_map *cpu_map__online(void) /* thread unsafe */
++struct perf_cpu_map *cpu_map__online(void) /* thread unsafe */
+ {
+-	static const struct perf_cpu_map *online = NULL;
++	static struct perf_cpu_map *online;
  
- 	if (orig->name) {
- 		evsel->name = strdup(orig->name);
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index b93264f8a37c..1a0be395c887 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -260,6 +260,7 @@ __add_event(struct list_head *list, int *idx,
- 	evsel->core.cpus = cpus;
- 	evsel->core.own_cpus = perf_cpu_map__get(cpus);
- 	evsel->core.requires_cpu = pmu ? pmu->is_uncore : false;
-+	evsel->core.is_pmu_core = pmu ? pmu->is_core : false;
- 	evsel->auto_merge_stats = auto_merge_stats;
- 	evsel->pmu = pmu;
- 	evsel->pmu_name = pmu && pmu->name ? strdup(pmu->name) : NULL;
+ 	if (!online)
+ 		online = perf_cpu_map__new(NULL); /* from /sys/devices/system/cpu/online */
+diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
+index e3426541e0aa..05201b31810c 100644
+--- a/tools/perf/util/cpumap.h
++++ b/tools/perf/util/cpumap.h
+@@ -48,7 +48,7 @@ struct perf_cpu_map *cpu_map__new_data(const struct perf_record_cpu_map_data *da
+ size_t cpu_map__snprint(struct perf_cpu_map *map, char *buf, size_t size);
+ size_t cpu_map__snprint_mask(struct perf_cpu_map *map, char *buf, size_t size);
+ size_t cpu_map__fprintf(struct perf_cpu_map *map, FILE *fp);
+-const struct perf_cpu_map *cpu_map__online(void); /* thread unsafe */
++struct perf_cpu_map *cpu_map__online(void); /* thread unsafe */
+ 
+ int cpu__setup_cpunode_map(void);
+ 
+@@ -59,7 +59,7 @@ struct perf_cpu cpu__max_present_cpu(void);
+ /**
+  * cpu_map__is_dummy - Events associated with a pid, rather than a CPU, use a single dummy map with an entry of -1.
+  */
+-static inline bool cpu_map__is_dummy(struct perf_cpu_map *cpus)
++static inline bool cpu_map__is_dummy(const struct perf_cpu_map *cpus)
+ {
+ 	return perf_cpu_map__nr(cpus) == 1 && perf_cpu_map__cpu(cpus, 0).cpu == -1;
+ }
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index e8c0762c311a..d992f5242d99 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -610,7 +610,7 @@ static struct perf_cpu_map *pmu_cpumask(int dirfd, const char *name)
+ 			return cpus;
+ 	}
+ 
+-	return NULL;
++	return !strcmp(name, "cpu") ? perf_cpu_map__get(cpu_map__online()) : NULL;
+ }
+ 
+ static bool pmu_is_uncore(int dirfd, const char *name)
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
