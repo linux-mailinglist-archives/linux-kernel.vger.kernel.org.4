@@ -2,59 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9EF712CA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96AD7712CB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbjEZSly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
+        id S242573AbjEZSmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjEZSlw (ORCPT
+        with ESMTP id S230058AbjEZSme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:41:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F130E56;
-        Fri, 26 May 2023 11:41:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37A8D65225;
-        Fri, 26 May 2023 18:41:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B14DFC433D2;
-        Fri, 26 May 2023 18:41:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685126476;
-        bh=5b2JyJNLieTChhmtAE4raBp+An+8BDiNRs/oMlONZAw=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=IqUr9Rc44MRQ1oCw8P2bGY9GlQfOpSETdMDtKPYY7spdFzZ5YDatmg6BydqJkor+N
-         35lWm2zBKjJ6G/Zs/Xe19C7XUm5twAF4yCKifnVbx37Fc4c9KQEE+SQS4kBkFYSD8E
-         c21SzLXr8qIeU+W7KcZsoJOZQ36d7xnsQSkAr17ss35klGsT11APzBSFJ0GZUFZbd3
-         2EwKGSyL3rvqKBkaWDSge6nA2j4414tAbC7OkUJnfKi2nwJCS/30vBSmgMQZZKz/9/
-         4D93Ji6xr+GB6p4QXGqUrK9xHwkp3SjmO5uOzyZN70Wfek2/pJRmrIPsszi2Oqs986
-         hnPLing7N9Zew==
-Date:   Fri, 26 May 2023 20:41:12 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        =?ISO-8859-15?Q?Filipe_La=EDns?= <lains@riseup.net>,
-        Bastien Nocera <hadess@hadess.net>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, guy.b@bluewin.ch
-Subject: Re: [regression] Since kernel 6.3.1 logitech unify receiver not
- working properly
-In-Reply-To: <nycvar.YFH.7.76.2305251308471.29760@cbobk.fhfr.pm>
-Message-ID: <nycvar.YFH.7.76.2305262040330.29760@cbobk.fhfr.pm>
-References: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info> <bec024d5-4088-00ae-f7b5-7188868b1707@leemhuis.info> <b7717c43-74bf-b91d-d3ce-874493df602c@gmail.com> <CAO-hwJ+At1J_yUpX2q_dJekzZ-PoTDAvxmkTk_e4Yu0Z338bEA@mail.gmail.com>
- <55dda0bb-fe42-6dee-28ea-00121554d092@leemhuis.info> <CAHk-=whvhkSk6m8_AidhofgR9nq0Md+HbNad5r1RE69tZgbv6Q@mail.gmail.com> <nycvar.YFH.7.76.2305231422180.29760@cbobk.fhfr.pm> <CAO-hwJ+MTRu9KxqwQc7UYFBsa0kkrnYfwVB30KsLZnw=wfcOMg@mail.gmail.com>
- <nycvar.YFH.7.76.2305251308471.29760@cbobk.fhfr.pm>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Fri, 26 May 2023 14:42:34 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ED4E71;
+        Fri, 26 May 2023 11:41:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mSsoE+0p2sc9kGpcn+WU5AUctLzpkgWUGD8f1AoBzvo=; b=ltD/wwR9voMJdzOfZ705IzKtCB
+        eZA7RNSbiHcpZdR1w/wBRURZPc/ijS/ori312B41S0Xufrmw922txQtPZmPY5+qP7FUIDuM4hr1ug
+        8d8UfgpK2eQOcxlveydCE6bMK2cbIXaKTL2pTOCI+ZAwJz2C2e8g7WFv21oqk8rYJaMQzBL2vqCsT
+        /FPZsbcufMQFKMJoeBRxZMGJQv8E5b41Ajp9qlQLTNUnWkA07uvkkW0OZ1+PePVtaAvQqQSBO8N0T
+        0raE2IBPXMiOsqaWqfVKuHy/9DDEOR8NyExErim0sjxvhnMKn/DdO77faDX89uXK5n7vdl26kjTRW
+        hATqoiAA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q2cNe-0032Q1-F3; Fri, 26 May 2023 18:41:38 +0000
+Date:   Fri, 26 May 2023 19:41:38 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     hughd@google.com, akpm@linux-foundation.org, brauner@kernel.org,
+        djwong@kernel.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        rohan.puri@samsung.com, rpuri.linux@gmail.com,
+        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
+        keescook@chromium.org, hare@suse.de, kbusch@kernel.org,
+        patches@lists.linux.dev, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC v2 2/8] shmem: convert to use is_folio_hwpoison()
+Message-ID: <ZHD9Yi04AvbawW8d@casper.infradead.org>
+References: <20230526075552.363524-1-mcgrof@kernel.org>
+ <20230526075552.363524-3-mcgrof@kernel.org>
+ <ZHDDFoXs51Be8FcZ@casper.infradead.org>
+ <ZHDvLD3vwt11EYFg@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHDvLD3vwt11EYFg@bombadil.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,45 +58,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023, Jiri Kosina wrote:
-
-> > > > That bug is pre-existing (ie the problem was not introduced by that
-> > > > commit), but who knows if the retry makes things worse (ie if it then
-> > > > triggers on a retry, the response data will be the *previous* response).
-> > > >
-> > > > The whole "goto exit" games should be removed too, because we're in a
-> > > > for-loop, and instead of "goto exit" it should just do "break".
-> > > >
-> > > > IOW, something like this might be worth testing.
-> > > >
-> > > > That said, while I think the code is buggy, I doubt this is the actual
-> > > > cause of the problem people are reporting. But it would be lovely to
-> > > > hear if the attached patch makes any difference, and I think this is
-> > > > fixing a real - but unlikely - problem anyway.
+On Fri, May 26, 2023 at 10:41:00AM -0700, Luis Chamberlain wrote:
+> On Fri, May 26, 2023 at 03:32:54PM +0100, Matthew Wilcox wrote:
+> > On Fri, May 26, 2023 at 12:55:46AM -0700, Luis Chamberlain wrote:
+> > > The PageHWPoison() call can be converted over to the respective folio
+> > > call is_folio_hwpoison(). This introduces no functional changes.
 > > 
-> > FWIW, Linus, your patch is
-> > Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > Yes, it very much does!
 > > 
-> > Feel free to submit it to us or to apply it directly if you prefer as
-> > this is clearly a fix for a code path issue.
+> > > @@ -4548,7 +4548,7 @@ struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
+> > >  		return &folio->page;
+> > >  
+> > >  	page = folio_file_page(folio, index);
+> > > -	if (PageHWPoison(page)) {
+> > > +	if (is_folio_hwpoison(folio)) {
+> > >  		folio_put(folio);
+> > 
+> > Imagine you have an order-9 folio and one of the pages in it gets
+> > HWPoison.  Before, you can read the other 511 pages in the folio.
 > 
-> It would be nice to hear from the people who were able to reproduce the 
-> issue whether this makes any observable difference in behavior though. I 
-> don't currently think it would, as it fixes a potential NULL pointer 
-> dereference, which is not what has been reported.
-> 
-> Has anyone of the affected people tried to bisect the issue?
+> But before we didn't use high order folios for reads on tmpfs?
 
-Could anyone who is able to reproduce the issue please check whether 
-reverting
-
-	586e8fede7953b16 ("HID: logitech-hidpp: Retry commands when device is busy")
-
-has any observable effect?
-
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
+Sure we did!  If SHMEM_HUGE_ALWAYS is set, we can see reads of THPs
+(order-9 folios) in this path.
 
