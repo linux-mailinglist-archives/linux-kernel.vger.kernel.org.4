@@ -2,80 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B65F713054
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 01:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25460713057
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 01:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbjEZXVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 19:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
+        id S229502AbjEZXWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 19:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEZXVr (ORCPT
+        with ESMTP id S230498AbjEZXWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 19:21:47 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6248313D;
-        Fri, 26 May 2023 16:21:46 -0700 (PDT)
-Received: from AZSP-HARGAR-02.corp.microsoft.com (unknown [131.107.147.31])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A5AE120FBE82;
-        Fri, 26 May 2023 16:21:45 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A5AE120FBE82
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1685143305;
-        bh=KeAv1SsqvhLKQ2kZnNqph3bIRr9A1qo0PI6I0BS1voc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PxtxmllNN4RsQNyL/pejoVLcQDB1rdI//xsA0z8SvBioWh2WnmI/z8alJJ56JveH2
-         gjen/ISdEsErk5VlcSU4u+q6tTwx2Bm5jhy+krQgX5EnsSdYPeO/GsMF67cjPKz7Ey
-         OLY8dWEf7iJVb65CNeVSiX0Oqwg71TpEvLxDz4cc=
-From:   Hardik Garg <hargar@linux.microsoft.com>
-To:     stable@vger.kernel.org
-Cc:     shuah@kernel.org, jeffxu@google.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        code@tyhicks.com, niyelchu@linux.microsoft.com
-Subject: [PATCH 6.1 5.15 5.10 5.4 4.19 4.14] selftests/memfd: Fix unknown type name build failure
-Date:   Fri, 26 May 2023 16:21:36 -0700
-Message-Id: <20230526232136.255244-1-hargar@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 26 May 2023 19:22:11 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAD41B1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:22:07 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2af2f4e719eso13264511fa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 16:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685143326; x=1687735326;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tgay1i2mWfKJgLUSALT2q6Por12IQIn4tLKG1lgFbi8=;
+        b=N6LNyydRX5rVJVxgw8IZEXoyjVATYEhuoVGRLpIVZIwbSipsrLf00upF2dDbB8w6pQ
+         TMj4CU1fw5rDFlTDzN09lYo27tehACTJ891pcWiyxNZz2UBTQDF+cGHYTUtYSGE7zZmS
+         SqOjA5l5gU6n155LMVT3JgvWF9sv3oF0/xG/N0DQOzxB66jlgYxG+81q/VecwPUxXd3A
+         ZxR6rn/BE3RE+vU5ALqA0wZ2sobeYlpQzF1Q3N4kgH8j05IbZPMuEEc4mzWwGYT8PYCI
+         QB8/u+s2D6N0fdYA4Z7t/tTpZMLKIIaucY/ocukPdBDbMr7UaUgyxqmbWYAzKe/qRZ5B
+         wdvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685143326; x=1687735326;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tgay1i2mWfKJgLUSALT2q6Por12IQIn4tLKG1lgFbi8=;
+        b=GngDRwSyZ2UDNgLxJcuy/5dBwdbd9vbBo2KW99fbF9z8F9nO2A1c8faHC1CPXraKDI
+         JhN2aFGCZsryshKpRcLzT6MOURX4DddbIdkBdn1s3CE2tWKOOm9N9OHTyx2sM6tbmWJo
+         Jeoj2c9o9hI5xWQM+Dgnb4ciJEmQ5nAkohsknPbSZ66YFQwx1Wbye/A0eMiYNrzc8zeS
+         eiifv1QdbvLg7adUyusVgz9R9FnXZbJHjEvRkVFFjHVSXpMyzSS3FpalTvTY8sK1KGyx
+         iqFF8qUekTvDnErgBxejb9EhG47m4QBDZQ8G+GxQv3uOiD/Vl7o/2TTFnTnW+rdGHrpJ
+         9gXA==
+X-Gm-Message-State: AC+VfDx773HnO8x404hwk/tu926vBmAry6ARh2nuqWB8fECKF+As1trQ
+        R3FRPC1T5JGYV/k2Pv9VZrM08Q==
+X-Google-Smtp-Source: ACHHUZ6gC0bFFFu7SfxVR6S+NbDsKo/pEXKrvN6NrzxUpnp0s3GKZfASwFUpkED6hwxU5CHA6VQ+4A==
+X-Received: by 2002:a19:f719:0:b0:4ef:ec6a:198c with SMTP id z25-20020a19f719000000b004efec6a198cmr948279lfe.26.1685143325692;
+        Fri, 26 May 2023 16:22:05 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id r2-20020ac24d02000000b004f3b1dd7989sm832962lfi.172.2023.05.26.16.22.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 16:22:05 -0700 (PDT)
+Message-ID: <76513a6b-a8c1-0bc3-a094-2cce1aa8ef87@linaro.org>
+Date:   Sat, 27 May 2023 01:22:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 4/4] arm64: dts: qcom: qdu1000-idp: add SDHCI for emmc
+Content-Language: en-US
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230523135733.3852-1-quic_kbajaj@quicinc.com>
+ <20230523135733.3852-5-quic_kbajaj@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230523135733.3852-5-quic_kbajaj@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Partially backport v6.3 commit 11f75a01448f ("selftests/memfd: add
-tests for MFD_NOEXEC_SEAL MFD_EXEC") to fix an unknown type name 
-build error.
-In some systems, the __u64 typedef is not present due to differences
-in system headers, causing compilation errors like this one:
 
-fuse_test.c:64:8: error: unknown type name '__u64'
-   64 | static __u64 mfd_assert_get_seals(int fd)
 
-This header includes the  __u64 typedef which increases the
-likelihood of successful compilation on a wider variety of systems.
+On 23.05.2023 15:57, Komal Bajaj wrote:
+> Add sdhci node for emmc in qdu1000-idp.
+> 
+> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+> index 9e9fd4b8023e..6e988e90aa50 100644
+> --- a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+> +++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+> @@ -448,6 +448,29 @@
+>  	status = "okay";
+>  };
+> 
+> +&sdhc {
+> +	pinctrl-names = "default", "sleep";
+> +	pinctrl-0 = <&sdc_on_state>;
+> +	pinctrl-1 = <&sdc_off_state>;
+Please do
 
-Signed-off-by: Hardik Garg <hargar@linux.microsoft.com>
----
- tools/testing/selftests/memfd/fuse_test.c | 1 +
- 1 file changed, 1 insertion(+)
+property-n
+property-names
 
-diff --git a/tools/testing/selftests/memfd/fuse_test.c b/tools/testing/selftests/memfd/fuse_test.c
-index be675002f918..93798c8c5d54 100644
---- a/tools/testing/selftests/memfd/fuse_test.c
-+++ b/tools/testing/selftests/memfd/fuse_test.c
-@@ -22,6 +22,7 @@
- #include <linux/falloc.h>
- #include <fcntl.h>
- #include <linux/memfd.h>
-+#include <linux/types.h>
- #include <sched.h>
- #include <stdio.h>
- #include <stdlib.h>
--- 
-2.25.1
+we've had a little bit of a mess over the years but we're trying
+to unify that.
 
+With that:
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+> +
+> +	cap-mmc-hw-reset;
+> +	mmc-ddr-1_8v;
+> +	mmc-hs200-1_8v;
+> +	mmc-hs400-1_8v;
+> +	mmc-hs400-enhanced-strobe;
+> +
+> +	non-removable;
+> +	no-sd;
+> +	no-sdio;
+> +
+> +	supports-cqe;
+> +
+> +	vmmc-supply = <&vreg_l10a_2p95>;
+> +	vqmmc-supply = <&vreg_l7a_1p8>;
+> +
+> +	status = "okay";
+> +};
+> +
+>  &uart7 {
+>  	status = "okay";
+>  };
+> --
+> 2.17.1
+> 
