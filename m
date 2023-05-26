@@ -2,98 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AC5712B4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170CE712B54
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjEZRAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:00:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
+        id S231881AbjEZRCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjEZRAo (ORCPT
+        with ESMTP id S229643AbjEZRC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:00:44 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB7ABC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:00:42 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5147a478c38so1104922a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:00:42 -0700 (PDT)
+        Fri, 26 May 2023 13:02:29 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CBAD9;
+        Fri, 26 May 2023 10:02:28 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96f53c06babso172257166b.3;
+        Fri, 26 May 2023 10:02:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685120441; x=1687712441;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HOgQ0laylSsSXUxakhP+bdUPB6O0yALSW2XM6n3Lc/w=;
-        b=hliNns/chJslYVsVGRU+ritAEJisLgPdTxqVtavxwK8qQ2f0id+NYmHbVOalnhRN9X
-         6RLID1TER8bJA8RJsoegGq3v8W5Uck5q3lDYkVgJ4XsG6tru4e7g+BKvd58o/nz/QR5g
-         sL/n0rAKWopq/dG1onDOdKTLqCwetL6Czhh7c=
+        d=gmail.com; s=20221208; t=1685120546; x=1687712546;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SS6kMs+u9yaM8ffbjosYMxdgJboVzMiJqPmKQK1XNCQ=;
+        b=FYcJg0QRD45Vj7/k3uaWJMQtzn9rB2pItBRDJkRbTotkXsg4f5QYHx0yOXaV1zcA2R
+         KzGQ1jCP6N3cX0T757RcOsr7vj1fBnAIjWTpRkIhMFsWvhXrgaz9Wwn3jTgl8Jct9Dnf
+         kxy2z5mX++KMGhTonEZKso80z5qhGVbwhvNdN5ZBh1FmjPLubRIbmIFp9U/uu6rdbhqP
+         f04eF7x47WIvMjZobgdsM3Yd03n5uqRrELll9hTawVeoXfKKpiZIHeKw/rqKZk2o3OPX
+         iAo0Rh+v9s7VLHqxx3HEWMSBWp3QlXNLSroFHB7tZvALUXsrWseavTVEU8tZwwCpiqPc
+         mRFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685120441; x=1687712441;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HOgQ0laylSsSXUxakhP+bdUPB6O0yALSW2XM6n3Lc/w=;
-        b=GpDU1W9cbxAKMEh3XulQHkEIjNMA6H8JWZJooo9CsIe3/fR/CUBt+zXOeEytYN9kOS
-         VeLVwek+iPre4RJ2AYba61BsNWjZj4JCmTsZJdFwQ/R23EfFkI+rTHTZiIBc65fIL3UW
-         a1GlZzlDGPaJJx0IuLAOCMIfHbohCnd6rFV9qkRX1TzDVIrbtZS9imB2ZWeqGj6FHpEK
-         slqSlYmfySohp5MkGFn/6YqpRJb2U2TudR+LXrC6W1Ds/H/ryYHpZRdJmCaB0I3IPbzw
-         DMQS673nqwM9+Bm1nZZ5xAI0orQHb4VV30ON3f1m9JoxXABwm36FEELdHexBksu+yeIN
-         1NEg==
-X-Gm-Message-State: AC+VfDx+0fjfLlRcQbgiSiuaKRFhAuGXIYeSkoDwgqwq2BLoy6La7Ig5
-        LUdndLsQ4HYqD9ZPQMPniCl85Yeh/6Weq6WmiJhihMIv
-X-Google-Smtp-Source: ACHHUZ5PmoBaJEhw3SuIvdzsoPDpBW++xrYH36vVcpWyQKBeqfSNOIiyrA/UYFQRL/sATKhC0wK8Gg==
-X-Received: by 2002:a17:907:3f8d:b0:966:61b3:f630 with SMTP id hr13-20020a1709073f8d00b0096661b3f630mr3191578ejc.9.1685120440661;
-        Fri, 26 May 2023 10:00:40 -0700 (PDT)
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
-        by smtp.gmail.com with ESMTPSA id c7-20020a170906154700b00965ec1faf27sm2358483ejd.74.2023.05.26.10.00.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 10:00:39 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso994870a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:00:39 -0700 (PDT)
-X-Received: by 2002:a17:907:94c9:b0:968:db2f:383 with SMTP id
- dn9-20020a17090794c900b00968db2f0383mr2744712ejc.53.1685120439249; Fri, 26
- May 2023 10:00:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685120546; x=1687712546;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SS6kMs+u9yaM8ffbjosYMxdgJboVzMiJqPmKQK1XNCQ=;
+        b=Jl1AUuuS7wqmTuspl7S8HOmnoIkq/KF4RkjrrwsocgBs7ziSJNeJrytZaPLxL/meAd
+         LKj6HOO9n3jZHQas0n0La/jzVwRwG8FV4Ggqhqz/50XN5cHk7t+9aV7YG9s3xRRw4VqI
+         3kd/B+HBCLf8mYrh9yT60fgCwvmyQTdM6+2TNMswZlXCXY1bLyZtdNo1EMN7i4zpP5Ji
+         4UtlE7XTUDSKodegbVepe3Rz8lzjv0UEYubz8G8uQodeFz2YR0xH1QjLn07ybZt4GiFH
+         v4uavZW5bZIxqw6r2vjjLveCbRMpASDwCXQrv/Ex5QlSN1CzxucCTykYWtYAh0iLW7i4
+         O7xQ==
+X-Gm-Message-State: AC+VfDyTLbL/usALFqL9We4j1GMeqFEY9x8qAA772Y5+aZuFmBif/JRY
+        m0kYK97/1AvXXcbGtLwOEjU=
+X-Google-Smtp-Source: ACHHUZ6RpU4KDLswYEExALywRUzB2t870g07ER7XqGgSAAKLHwX6vYLZhJ4U9D3LrLvFC7F3kYjJ8Q==
+X-Received: by 2002:a17:907:743:b0:969:9fd0:7cee with SMTP id xc3-20020a170907074300b009699fd07ceemr2636652ejb.10.1685120546389;
+        Fri, 26 May 2023 10:02:26 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id qw23-20020a170906fcb700b0096f71ace804sm2371847ejb.99.2023.05.26.10.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 10:02:26 -0700 (PDT)
+Date:   Fri, 26 May 2023 20:02:23 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 27/30] net: dsa: mt7530: introduce BPDU trapping
+ for MT7530 switch
+Message-ID: <20230526170223.gjdek6ob2w2kibzr@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-28-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-References: <CANn89iKUbyrJ=r2+_kK+sb2ZSSHifFZ7QkPLDpAtkJ8v4WUumA@mail.gmail.com>
- <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
- <CANn89i+bExb_P6A9ROmwqNgGdO5o8wawVZ5r3MHnz0qfhxvTtA@mail.gmail.com> <CAHk-=wig6VizZHtRznz7uAWa-hHWjrCNANZ9B+1G=aTWPiVH4g@mail.gmail.com>
-In-Reply-To: <CAHk-=wig6VizZHtRznz7uAWa-hHWjrCNANZ9B+1G=aTWPiVH4g@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 26 May 2023 10:00:22 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whkci5ck5Him8Lx5ECKHEtj=bipYmOCGe8DWrrp8uDq5g@mail.gmail.com>
-Message-ID: <CAHk-=whkci5ck5Him8Lx5ECKHEtj=bipYmOCGe8DWrrp8uDq5g@mail.gmail.com>
-Subject: Re: x86 copy performance regression
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230522121532.86610-28-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 9:56=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Ahh, I tested it in an allmodconfig build, but only building that one
-> file, and not trying to link it. And gas was apparent;y perfectly
-> happy just leaving that undefined feature as a relocation.
+On Mon, May 22, 2023 at 03:15:29PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> The MT753X switches are capable of trapping certain frames. Introduce
+> trapping BPDUs to the CPU port for the MT7530 switch.
+> 
+> BPDUs will be trapped to the numerically smallest CPU port which is affine
+> to the DSA conduit interface that is set up. The BPDUs won't necessarily be
+> trapped to the CPU port the user port, which these BPDUs are received from,
+> is affine to.
+> 
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  drivers/net/dsa/mt7530.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index cd16911fcb01..2fb4b0bc6335 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -2223,6 +2223,10 @@ mt7530_setup(struct dsa_switch *ds)
+>  	val |= MHWTRAP_MANUAL;
+>  	mt7530_write(priv, MT7530_MHWTRAP, val);
+>  
+> +	/* Trap BPDUs to the CPU port */
+> +	mt7530_rmw(priv, MT753X_BPC, MT753X_BPDU_PORT_FW_MASK,
+> +		   MT753X_BPDU_CPU_ONLY);
+> +
 
-Oh, never mind. Even with that fixed, objtool is very unhappy about my
-hack, because it knows about short jumps, and despite me encoding it
-as a sequence of bytes, objtool will just decode it anyway and say
-"that's not right".
+If the switch doesn't currently trap BPDUs, isn't STP broken?
 
-Grr, I tried so hard to get the exact asm I wanted, but our
-sanity-checking catches my cleverness and stops me in my tracks.
+ip link add br0 type bridge stp_state 1
+(with or without a userspace helper installed at /sbin/bridge-stp
+for more modern protocols than the original 802.1D STP)
 
-Let me go look at it some more. I *really* didn't want to make the
-code worse for ERSM.
-
-             Linus
+>  	/* Enable and reset MIB counters */
+>  	mt7530_mib_reset(ds);
+>  
+> -- 
+> 2.39.2
+> 
