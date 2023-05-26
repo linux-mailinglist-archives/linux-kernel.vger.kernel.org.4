@@ -2,65 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E174712042
+	by mail.lfdr.de (Postfix) with ESMTP id B2D03712043
 	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242241AbjEZGjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 02:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39084 "EHLO
+        id S242149AbjEZGiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 02:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242251AbjEZGjJ (ORCPT
+        with ESMTP id S236274AbjEZGiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 02:39:09 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8F2194
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 23:39:04 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2af2d092d7aso3897171fa.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 23:39:03 -0700 (PDT)
+        Fri, 26 May 2023 02:38:51 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5F31B3;
+        Thu, 25 May 2023 23:38:45 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f380cd1019so350480e87.1;
+        Thu, 25 May 2023 23:38:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685083142; x=1687675142;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aO8WcUZImZYEcXMmvb5XeqF4flNwtTh70ks9aqSmaXk=;
-        b=mHpg5DEb3GzDpprV5V5IDZq6Js+9J/DwLwh7rGPqTyOA1iUCYHiduK96ziHf8J3ud1
-         IsBlBQePcevpLOI/1WJHzRxO6uKJfGMCmrO0fTjtbSlJqpcw4dSKh970+24QqB8ihP4U
-         Kip9o8xw3HSXbVr3y/Dxp2pDU3y9m7s8VKpKn8LXvQ2tfRKdNQxRT+bsrv3/DvYH6lKQ
-         /ZhKBjI8ak5qpmW5kB6eegvGWGJxVVnFyyq11MBRg/cbkVQuYYgD+3cYliOhrMPfAkP1
-         tLieujOrM6SzhoqpMhDu1oFhB12/M9qKsghIWauBNkpfBl54VlqmU8oqsc3wrRrXY3mU
-         sMQQ==
+        d=gmail.com; s=20221208; t=1685083124; x=1687675124;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fnb9dxQpabXcqKFtwXirNw4zge4/PVN/rpFJ7Cz83LM=;
+        b=LpwqhHvGK5SSL6RTCR97kfc10ze/o9Lp0eR/armCRpwC617whkVt6uHhF7PgghMYcy
+         0lhZtU5P0joOmyI/SZgmyKYFhVUOdM1EkEBn/TMuS9byx9JJoQzNoph+LieI5/CJtVMY
+         D8e4n6D79v6TpC/NRc4CswPdqexkUSeiu8WgGfLmEgezX1s/01sJ8GO1G2WKjK8jfXfA
+         LdeF0nD6U746okKqTlF0DeQ9wMeVkaJdSg89JEBz3r4YrvCnOl3lzEOjTmrzm3hl7CTE
+         139VB0WpuF5OR/MYna20UhJTqwRUY1i9QZmkMP8nqUnr0TY/U4SLqRpD/cXfzjJK2uHl
+         CgSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685083142; x=1687675142;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aO8WcUZImZYEcXMmvb5XeqF4flNwtTh70ks9aqSmaXk=;
-        b=TpOmYaBFRNM6mt82xYCL5gXapqSL0OC2W+oTXcCh+Io0R2h3D5zJMNE2RBRgcBAZi8
-         DcrcdZLU7x1Yk+oj/C+qhyf0RahozEOmuvvrLa4wsL7C7Vok9xW67NU1NEWOV0rZIJYR
-         x7oub0MIXzXZ/ssRsqEQHjLDddn0RjDkjsY2NSUPePWtWBGX7gQDvxDf1c5FqQvXVABL
-         7ChiWh/SNYyYApeZdJHawlNv56OeauTgOYcfK6EiDlXdGns/slrBfmdpOMsleZzYRtHU
-         ZXUfkr2oobjoSCHWBZFVpJpAsWPpNHuPHNZRkrzlXgEH6A7LBowYyCggd5a2DMvYEybh
-         Yv1A==
-X-Gm-Message-State: AC+VfDzQmUlM3s2ajIVSc/v+eZd8HZiPdniwTIfj7DFIn6ddSFqja8oU
-        7re3CMrRKnEWhyphGrnET461npEfAZdNDkk1hgsexEnZJws=
-X-Google-Smtp-Source: ACHHUZ5UoldH91dZI3YzbotUTq6j2XG/Af7GeLCC3BUtAVi76GKznZCJxzzD1sru2vfAwM4zUtc0PICptIDgFXeKA60=
-X-Received: by 2002:a05:6512:14f:b0:4f3:3eeb:20dc with SMTP id
- m15-20020a056512014f00b004f33eeb20dcmr206839lfo.16.1685083142008; Thu, 25 May
- 2023 23:39:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685083124; x=1687675124;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fnb9dxQpabXcqKFtwXirNw4zge4/PVN/rpFJ7Cz83LM=;
+        b=UjfBUg+e40XnTAB+0I6U3GhFFxK1bEKShEu7lQG9UVYqZz6EUZCpnJwPBKFs6fTENn
+         XRZgy6HLSlQATsmjx3Ud6daGkcIB3bCt3Y8/kK0ONF/zQqRwhEDcEOqDaL2/OEpfSDrj
+         4JunbjJ/KvjYm49AjSXlQv2WJa5utOKh6ViRml87lvyF/yPN+biV1Bi3Nj/ks2xHguiM
+         JafCPAJT8u8Uw97shL/bhNV7tEQpK7hin8cijB/MkX8MpH2eZ3T5SZrj3MYFZqEkFjmf
+         hPKP2NNntUZ9Kwe28/OUtg/uNyFXsjv0KjxbLm+5i0yMHy6h/iQYZYZr2bfkJAcngerU
+         DSqQ==
+X-Gm-Message-State: AC+VfDyyPPqWlq5cPhbxIUi46Yxgi2Lnto4rDVrx2hdl9KHfrzR0+tLk
+        YqtRDaQB3+52CM05fD5rZYs=
+X-Google-Smtp-Source: ACHHUZ5ImTEa7PavhV91maK0eLFhL+AAsBWGbqmK/QJoUj0CaHVhJETZEcyMg3v8zsbdo+Gbw3HjUg==
+X-Received: by 2002:a05:6512:49e:b0:4f4:cacb:4b4b with SMTP id v30-20020a056512049e00b004f4cacb4b4bmr204448lfq.18.1685083123710;
+        Thu, 25 May 2023 23:38:43 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id c18-20020a197612000000b004f122a378d4sm483847lff.163.2023.05.25.23.38.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 23:38:43 -0700 (PDT)
+Date:   Fri, 26 May 2023 09:38:39 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v6 5/8] pinctrl: ingenic: relax return value check for IRQ get
+Message-ID: <c4d877dd94cb528a39dd9c7403159a036934d3b1.1685082026.git.mazziesaccount@gmail.com>
+References: <cover.1685082026.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-References: <1684919574-28368-1-git-send-email-zhaoyang.huang@unisoc.com> <20230525135407.GA31865@cmpxchg.org>
-In-Reply-To: <20230525135407.GA31865@cmpxchg.org>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Fri, 26 May 2023 14:38:38 +0800
-Message-ID: <CAGWkznE0bNS6bZE99s1PkWdC9UkTQCC0aWo0pS94n8_nkQv7Rg@mail.gmail.com>
-Subject: Re: [PATCH] mm: deduct the number of pages reclaimed by madvise from workingset
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="+4Ol/5oJ1HP2706K"
+Content-Disposition: inline
+In-Reply-To: <cover.1685082026.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,140 +96,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 9:54=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.org=
-> wrote:
->
-> On Wed, May 24, 2023 at 05:12:54PM +0800, zhaoyang.huang wrote:
-> > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> >
-> > The pages reclaimed by madvise_pageout are made of inactive and dropped=
- from LRU
-> > forcefully, which lead to the coming up refault pages possess a large r=
-efault
-> > distance than it should be. These could affect the accuracy of thrashin=
-g when
-> > madvise_pageout is used as a common way of memory reclaiming as ANDROID=
- does now.
->
-> This alludes to, but doesn't explain, a real world usecase.
-More block io(wait_on_page_bit_common) observed during APP start in
-latest android version where user space memory reclaiming changes from
-in-kernel PPR to madvise_pageout. We believe that it could be related
-with inaccuracy of workingset.
->
-> Yes, madvise_pageout() will record non-resident entries today. This
-> means refault and thrash detection is on for user-driven reclaim.
->
-> So why is that undesirable?
-Let's raise an extreme scenario, that is, the tail page of LRU could
-experience a given refault distance without any in-kernel reclaiming
-and be wrongly deemed as inactive and get less protection.
->
-> Today we measure and report the cost of reclaim and memory pressure
-> for physical memory shortages, cgroup limits, and user-driven cgroup
-> reclaim. Why should we not do the same for madv_pageout()? If the
-> userspace code that drives pageout has a bug and the result is extreme
-> thrashing, wouldn't you want to know that?
-Actually, the pages evicted by madv_cold/pageout from active_lru are
-not marked as WORKINGSET, which will surpass the thrashing account
-when it faults back and gets struck by IO. I think they should be
-treated in the same way in terms of SetPageWorkingset and
-lruvec->non-resident. Please refer to my previous patch "mm: mark
-folio as workingset in lru_deactivate_fn index 70e2063..4d1c14f
-100644"
+
+--+4Ol/5oJ1HP2706K
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+fwnode_irq_get[_byname]() were changed to not return 0 anymore.
+
+Drop check for return value 0.
+
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+---
+Revision history:
+ - No changes
+
+Please note, I took Linus' reply to v4 cover-letter as ack && added the
+tag. Please let me know if this was not Ok.
+
+The first patch of the series changes the fwnode_irq_get() so this depends
+on the first patch of the series and should not be applied alone.
+---
+ drivers/pinctrl/pinctrl-ingenic.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-in=
+genic.c
+index 2f220a47b749..86e71ad703a5 100644
+--- a/drivers/pinctrl/pinctrl-ingenic.c
++++ b/drivers/pinctrl/pinctrl-ingenic.c
+@@ -4201,8 +4201,6 @@ static int __init ingenic_gpio_probe(struct ingenic_p=
+inctrl *jzpc,
+ 	err =3D fwnode_irq_get(fwnode, 0);
+ 	if (err < 0)
+ 		return err;
+-	if (!err)
+-		return -EINVAL;
+ 	jzgc->irq =3D err;
+=20
+ 	girq =3D &jzgc->gc.irq;
+--=20
+2.40.1
 
 
->
-> Please explain the idea here better.
->
-> > Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > ---
-> >  include/linux/swap.h | 2 +-
-> >  mm/madvise.c         | 4 ++--
-> >  mm/vmscan.c          | 8 +++++++-
-> >  3 files changed, 10 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/include/linux/swap.h b/include/linux/swap.h
-> > index 2787b84..0312142 100644
-> > --- a/include/linux/swap.h
-> > +++ b/include/linux/swap.h
-> > @@ -428,7 +428,7 @@ extern unsigned long mem_cgroup_shrink_node(struct =
-mem_cgroup *mem,
-> >  extern int vm_swappiness;
-> >  long remove_mapping(struct address_space *mapping, struct folio *folio=
-);
-> >
-> > -extern unsigned long reclaim_pages(struct list_head *page_list);
-> > +extern unsigned long reclaim_pages(struct mm_struct *mm, struct list_h=
-ead *page_list);
-> >  #ifdef CONFIG_NUMA
-> >  extern int node_reclaim_mode;
-> >  extern int sysctl_min_unmapped_ratio;
-> > diff --git a/mm/madvise.c b/mm/madvise.c
-> > index b6ea204..61c8d7b 100644
-> > --- a/mm/madvise.c
-> > +++ b/mm/madvise.c
-> > @@ -420,7 +420,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t =
-*pmd,
-> >  huge_unlock:
-> >               spin_unlock(ptl);
-> >               if (pageout)
-> > -                     reclaim_pages(&page_list);
-> > +                     reclaim_pages(mm, &page_list);
-> >               return 0;
-> >       }
-> >
-> > @@ -516,7 +516,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t =
-*pmd,
-> >       arch_leave_lazy_mmu_mode();
-> >       pte_unmap_unlock(orig_pte, ptl);
-> >       if (pageout)
-> > -             reclaim_pages(&page_list);
-> > +             reclaim_pages(mm, &page_list);
-> >       cond_resched();
-> >
-> >       return 0;
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index 20facec..048c10b 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -2741,12 +2741,14 @@ static unsigned int reclaim_folio_list(struct l=
-ist_head *folio_list,
-> >       return nr_reclaimed;
-> >  }
-> >
-> > -unsigned long reclaim_pages(struct list_head *folio_list)
-> > +unsigned long reclaim_pages(struct mm_struct *mm, struct list_head *fo=
-lio_list)
-> >  {
-> >       int nid;
-> >       unsigned int nr_reclaimed =3D 0;
-> >       LIST_HEAD(node_folio_list);
-> >       unsigned int noreclaim_flag;
-> > +     struct lruvec *lruvec;
-> > +     struct mem_cgroup *memcg =3D get_mem_cgroup_from_mm(mm);
-> >
-> >       if (list_empty(folio_list))
-> >               return nr_reclaimed;
-> > @@ -2764,10 +2766,14 @@ unsigned long reclaim_pages(struct list_head *f=
-olio_list)
-> >               }
-> >
-> >               nr_reclaimed +=3D reclaim_folio_list(&node_folio_list, NO=
-DE_DATA(nid));
-> > +             lruvec =3D &memcg->nodeinfo[nid]->lruvec;
-> > +             workingset_age_nonresident(lruvec, -nr_reclaimed);
-> >               nid =3D folio_nid(lru_to_folio(folio_list));
-> >       } while (!list_empty(folio_list));
-> >
-> >       nr_reclaimed +=3D reclaim_folio_list(&node_folio_list, NODE_DATA(=
-nid));
-> > +     lruvec =3D &memcg->nodeinfo[nid]->lruvec;
-> > +     workingset_age_nonresident(lruvec, -nr_reclaimed);
->
-> The task might have moved cgroups in between, who knows what kind of
-> artifacts it will introduce if you wind back the wrong clock.
->
-> If there are reclaim passes that shouldn't participate in non-resident
-> tracking, that should be plumbed through the stack to __remove_mapping
-> (which already has that bool reclaimed param to not record entries).
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--+4Ol/5oJ1HP2706K
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRwU+8ACgkQeFA3/03a
+ocVKFQf9Fzo+YL9A0466zLL5jgGlSHVE02sJ5WI378VoK/fGi2vG1UpG6toFO3jN
+/WsHsJhcbOmrAlH+7gTHLdGQ82zcUi7LzoxjriJhNQ6dZetmA3D65WohrWOYc3gR
+dxHSGBCB7nEvOwae64sV+zVCKwy5C5PEZhNcghZKjqaBjyLtS7KY5NJ2O2coNaEO
+mFddumon2TjWhcztM00lP/E8ziSoTCRDMeje0//4bu1BBZNwjztyhg+pduNh7zNf
+QlecO+VQ2Qkee7j+pIK2bN1jo7cJptMdLfmWD/MukKnI9hYa/unmWGSTWZgRQyTs
+n9hYMjJTXQc/wM58qJvy8mkTOsfUmg==
+=5aQX
+-----END PGP SIGNATURE-----
+
+--+4Ol/5oJ1HP2706K--
