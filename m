@@ -2,187 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1640A7127C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF6C7127CD
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243652AbjEZNvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S243772AbjEZNvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237056AbjEZNvJ (ORCPT
+        with ESMTP id S237056AbjEZNvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:51:09 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069A7194
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:51:07 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30adc51b65cso399705f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:51:06 -0700 (PDT)
+        Fri, 26 May 2023 09:51:42 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E10F195
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:51:40 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-b9daef8681fso718219276.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:51:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685109065; x=1687701065;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J4070cfF5PAleKzRCTMiKt0VwtD6qDiaa/t3zF9r6Pw=;
-        b=pvGkeNBfoRheM12DuzPmXZ7ahlXtPI/eLYGPgDI+QWpbkSnRhVb/ljv7GjNBWelAOv
-         JLfoN7uasjATN3lYLg2sA5l1g2N5X5KpDb9WBbZCrNcqaa5eneVCa+pC3f3zTCaAstLX
-         awTb6Oy8js8ThYd5At6mPLUaoGEWcPJV8ZDjTGqKXRvp6sd8WbZ3jrgpZvZaDtRKCH6v
-         BpCY1hJRPonDwNP9zMttwGlCgJLaDoqgXr8yXPdyovn/RQ6bymgY2DMD6SpDULCpPY5r
-         COarShaZ9mBr7JClEXLBrjGYhmTSBTuWtVXn5/69GbBft65zptn5jScE63S/Vl2EuitN
-         35XQ==
+        d=linaro.org; s=google; t=1685109100; x=1687701100;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cPlKY5uQ1aD5fB1ZV1T/1xecwRvFHoEhDShM2qt5HQs=;
+        b=WhWvGdGt3gYVl7SZr4A3fo69aw1Am4Lsf4glnKImC7OUfaRorwNFo7iGKD80hf565q
+         SgwWpGioQHIWT/uk5ZFhrGmwtb3pLBAelmZcAwzsiNMF3pS8YTP8ZmycgfZ9pwAEt/ZZ
+         7rn9bLDHZFOWMcH9x2PmKRuVjeqg5lhrSOE7jNurTE2iglBEdYVAibyfweuXqzp7LPH8
+         ZDFePf4A2vmoEEkZj1BSbZl4/ObfSaNR4RzAdkAJJgHzdywzCtZRpQXt24EYojwUSIdb
+         wkPT9YSrpxhoruXv867R2D7jsnWc6+7Qjfsl98nQ6WtD1F6H1gvpui3lts2xAgFfFfeT
+         YIyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685109065; x=1687701065;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1685109100; x=1687701100;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=J4070cfF5PAleKzRCTMiKt0VwtD6qDiaa/t3zF9r6Pw=;
-        b=audpXB5Ikq/qYoIilbThXySZnzEu+m93LoPKPk7SY/r5Nd7wEMwSF7AySVrCOL5Mi2
-         Ze+EGq/9lURyidep7rayyDUC0Z2vfQD8ToYPtflU65MfapjuVhsbRP+plg/1gm6I/hlA
-         QoulfOqj/kg+h5zh/FBQ/+sEj5i1AT2b+KwD/UY6bblpBoKsjN4zKjIiVHwYaHmr+tEV
-         KTj2xbmDCFIn2+NsaKUXUVlQnFuK3epejfs3BqkNPRQ2bQOOUC6JYkbOL4aqk54utsjU
-         b8rxIf9Y6KzCXP4axZz9k25md4FXIuXgoOER5Uc/tJy+uOlDzaeQVsdXUhg/SLStHzak
-         IGLQ==
-X-Gm-Message-State: AC+VfDxM8w/5dgL99LPIwUXZL08YAH/feMo3CrDp5WsZ3OiDHlC9yx4x
-        +duJl9cr7AoL3ttflzwZYlJR0A==
-X-Google-Smtp-Source: ACHHUZ59GzzDMqpiu+zvEl5DmMgWH/+NYpooPinDueRtYO4GKCtFr2pcv/fUkO296/l8mRcn7QpijQ==
-X-Received: by 2002:a5d:6b86:0:b0:30a:d867:da29 with SMTP id n6-20020a5d6b86000000b0030ad867da29mr1175624wrx.33.1685109065377;
-        Fri, 26 May 2023 06:51:05 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id i2-20020a05600c290200b003eddc6aa5fasm8839828wmd.39.2023.05.26.06.51.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 06:51:04 -0700 (PDT)
-From:   Jerome Neanne <jneanne@baylibre.com>
-To:     tony@atomide.com, lee@kernel.org
-Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, nm@ti.com, afd@ti.com, msp@baylibre.com,
-        Jerome Neanne <jneanne@baylibre.com>
-Subject: [PATCH v3] mfd: tps65219: Add support for soft shutdown via sys-off API
-Date:   Fri, 26 May 2023 15:51:00 +0200
-Message-Id: <20230526135100.2867741-1-jneanne@baylibre.com>
-X-Mailer: git-send-email 2.34.1
+        bh=cPlKY5uQ1aD5fB1ZV1T/1xecwRvFHoEhDShM2qt5HQs=;
+        b=C8JiPf5UiqyDbafy0g1J3Y95hUNoKUuFDarj0eP86VKW/2CB61CrzhE25ZHVuVzwnR
+         TtlP/WpCVmnY+ugya/XRwiYSQXDVvjTswPtjOFlHXJ1zMdmAU0JwRMB+6a+1ekgDyWB6
+         oYsSTW3akaj/a9CgBVNO5b2zg0criSGw7pe05LaDMg4P1s5OeHaEbUcIHSy40OTwDmPH
+         6idWy7k4qCt7W3s8HuofwbFZK32ofABKatSzF4vH4lvP1rissJiPnNBgiYtVWWG8pJtJ
+         qypiB3LCNTQ9962TZVitoytWXnv29+OPKc8PA6Q+gEcJq4UDQjj2b7nKCsmoE+DkXwax
+         Kc8Q==
+X-Gm-Message-State: AC+VfDwmR/bYHKg2/knTQ/LvCE9hWoUyMvpKRYxH75EjOyS3Jr61nb9n
+        p9RQ4fwyQB/24AaA4H3RSxMcPorSXI8nTdy03DWF3oxbwZNXzupIwDo=
+X-Google-Smtp-Source: ACHHUZ7J7SrgIXTx1xRtqpmArFJ0Xvm2/Sg4jNq/X3ZOQg3nZPYtGW8frAJg1hjcnikyxyh0OJjUlqr0Gqtn6vaFKw0=
+X-Received: by 2002:a81:9e50:0:b0:565:347a:46ee with SMTP id
+ n16-20020a819e50000000b00565347a46eemr1998277ywj.7.1685109099847; Fri, 26 May
+ 2023 06:51:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230329-topic-adreno_opp-v1-0-24d34ac6f007@linaro.org>
+ <20230329-topic-adreno_opp-v1-3-24d34ac6f007@linaro.org> <CAA8EJpprgiXWZC2W3JSgG3jtTZDtbwoeQ6LBK=pqfpk0oMvNRw@mail.gmail.com>
+ <bc5dd7d1-e001-8bd2-55c6-b6827c418371@linaro.org> <0e703d3c-7ad9-6265-fa71-b62650b96e79@linaro.org>
+In-Reply-To: <0e703d3c-7ad9-6265-fa71-b62650b96e79@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 26 May 2023 16:51:28 +0300
+Message-ID: <CAA8EJpoiy-R8ZGL6csUzj9SWq=suORYTMN2WMQiOMEN8T-X9Vw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: msm8996: Improve GPU OPP table
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vivek Gautam <vivek.gautam@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use new API for power-off mode support:
-Link: https://lwn.net/Articles/894511/
-Link: https://lore.kernel.org/all/7hfseqa7l0.fsf@baylibre.com/
+On Fri, 26 May 2023 at 16:30, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 30.03.2023 12:57, Konrad Dybcio wrote:
+> >
+> >
+> > On 29.03.2023 23:32, Dmitry Baryshkov wrote:
+> >> On Wed, 29 Mar 2023 at 22:17, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+> >>>
+> >>> Remove the self-explanatory comment about opp-supported-hw contents,
+> >>> add required-opps to ensure reasonable power domain levels are voted
+> >>> for (currently we've been piggybacking off of miracles and MDP votes)
+> >>> and add newlines between each subnode.
+> >>
+> >> I'm not sure this is 100% correct. The values that you add are correct
+> >> for the voltage scaling case. However, based on the vendor kernel
+> >> sources I think that MX should only be scaled if the voltage is scaled
+> >> too. I might be wrong here.
+> > MX must be >= CX (and GX), so this should bring no harm.
+> >
+> > (citation needed, but that seems to hold true..)
+> With that in mind, would you ack these patches Dmitry?
 
-sys-off API allows support of shutdown handler and restart handler.
+I remember that we should not overwolt the memory, it might cause
+memory cells degradation. So MX >= CX & MX <= CX + delta.
 
-Shutdown was not supported before that enhancement.
-This is required for platform that are not using PSCI.
+I have pinged Jordan if he can provide feedback on my a530/540 voltage
+programming attempt ([1]), but got no response from him up to now.
 
-Test:
-- restart:
-  # reboot
-  Default is cold reset:
-  # cat /sys/kernel/reboot/mode
-  Switch boot mode to warm reset:
-  # echo warm > /sys/kernel/reboot/mode
-- power-off:
-  # halt
+[1] https://git.linaro.org/people/dmitry.baryshkov/kernel.git/log/?h=msm8996-upstream
 
-Tested on AM62-LP-SK board.
+I will try doing more experiments with the mentioned branch. Maybe it
+breaks because of the missing MX vote or because of something
+suchalike.
+I'm 80% sure in the voltage level (which were generated by the CPR3 on
+my db820c board) and 95% sure in the programming sequence.
 
-Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-Suggested-by: Andrew Davis <afd@ti.com>
-Reviewed-by: Andrew Davis <afd@ti.com>
----
+>
+> Konrad
+> >
+> > Konrad
+> >>
+> >>>
+> >>> Fixes: 69cc3114ab0f ("arm64: dts: Add Adreno GPU definitions")
+> >>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >>> ---
+> >>>  arch/arm64/boot/dts/qcom/msm8996.dtsi | 18 +++++++++++++-----
+> >>>  1 file changed, 13 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> >>> index 4dd37f72e018..62ad30e94f40 100644
+> >>> --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> >>> +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+> >>> @@ -1244,37 +1244,45 @@ gpu: gpu@b00000 {
+> >>>                         gpu_opp_table: opp-table {
+> >>>                                 compatible = "operating-points-v2";
+> >>>
+> >>> -                               /*
+> >>> -                                * 624Mhz is only available on speed bins 0 and 3.
+> >>> -                                * 560Mhz is only available on speed bins 0, 2 and 3.
+> >>> -                                * All the rest are available on all bins of the hardware.
+> >>> -                                */
+> >>>                                 opp-624000000 {
+> >>>                                         opp-hz = /bits/ 64 <624000000>;
+> >>> +                                       required-opps = <&rpmpd_opp_turbo>;
+> >>>                                         opp-supported-hw = <0x09>;
+> >>>                                 };
+> >>> +
+> >>>                                 opp-560000000 {
+> >>>                                         opp-hz = /bits/ 64 <560000000>;
+> >>> +                                       required-opps = <&rpmpd_opp_turbo>;
+> >>>                                         opp-supported-hw = <0x0d>;
+> >>>                                 };
+> >>> +
+> >>>                                 opp-510000000 {
+> >>>                                         opp-hz = /bits/ 64 <510000000>;
+> >>> +                                       required-opps = <&rpmpd_opp_nom>;
+> >>>                                         opp-supported-hw = <0xff>;
+> >>>                                 };
+> >>> +
+> >>>                                 opp-401800000 {
+> >>>                                         opp-hz = /bits/ 64 <401800000>;
+> >>> +                                       required-opps = <&rpmpd_opp_nom>;
+> >>>                                         opp-supported-hw = <0xff>;
+> >>>                                 };
+> >>> +
+> >>>                                 opp-315000000 {
+> >>>                                         opp-hz = /bits/ 64 <315000000>;
+> >>> +                                       required-opps = <&rpmpd_opp_svs>;
+> >>>                                         opp-supported-hw = <0xff>;
+> >>>                                 };
+> >>> +
+> >>>                                 opp-214000000 {
+> >>>                                         opp-hz = /bits/ 64 <214000000>;
+> >>> +                                       required-opps = <&rpmpd_opp_svs>;
+> >>>                                         opp-supported-hw = <0xff>;
+> >>>                                 };
+> >>> +
+> >>>                                 opp-133000000 {
+> >>>                                         opp-hz = /bits/ 64 <133000000>;
+> >>> +                                       required-opps = <&rpmpd_opp_svs>;
+> >>>                                         opp-supported-hw = <0xff>;
+> >>>                                 };
+> >>>                         };
+> >>>
+> >>> --
+> >>> 2.40.0
+> >>>
+> >>
+> >>
 
-Notes:
-    Change-log v3 to v2
-    v2: Link: https://lore.kernel.org/lkml/20230511122100.2225417-1-jneanne@baylibre.com/
-    Lee Jones Review:
-    nits: rm not needed line wraps and restore a cr deleted not related with the patch.
-    
-    Change-log v2 to v1
-    v1: Link: https://lore.kernel.org/all/20230203140150.13071-1-jneanne@baylibre.com/
-    Andrew Davis Review:
-    - Use new helpers devm_register_restart_handler and devm_register_power_off_handler
-    Vignesh Raghavendra:
-    - Fix typo on board name in commit message
 
- drivers/mfd/tps65219.c | 38 ++++++++++++++++++++++++++++----------
- 1 file changed, 28 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/mfd/tps65219.c b/drivers/mfd/tps65219.c
-index 0e402fda206b..3d9164491e20 100644
---- a/drivers/mfd/tps65219.c
-+++ b/drivers/mfd/tps65219.c
-@@ -25,13 +25,21 @@ static int tps65219_cold_reset(struct tps65219 *tps)
- 				  TPS65219_MFP_COLD_RESET_I2C_CTRL_MASK);
- }
- 
--static int tps65219_restart(struct notifier_block *this,
--			    unsigned long reboot_mode, void *cmd)
-+static int tps65219_soft_shutdown(struct tps65219 *tps)
- {
--	struct tps65219 *tps;
-+	return regmap_update_bits(tps->regmap, TPS65219_REG_MFP_CTRL,
-+				  TPS65219_MFP_I2C_OFF_REQ_MASK,
-+				  TPS65219_MFP_I2C_OFF_REQ_MASK);
-+}
- 
--	tps = container_of(this, struct tps65219, nb);
-+static int tps65219_power_off_handler(struct sys_off_data *data)
-+{
-+	tps65219_soft_shutdown(data->cb_data);
-+	return NOTIFY_DONE;
-+}
- 
-+static int tps65219_restart(struct tps65219 *tps, unsigned long reboot_mode)
-+{
- 	if (reboot_mode == REBOOT_WARM)
- 		tps65219_warm_reset(tps);
- 	else
-@@ -40,10 +48,11 @@ static int tps65219_restart(struct notifier_block *this,
- 	return NOTIFY_DONE;
- }
- 
--static struct notifier_block pmic_rst_restart_nb = {
--	.notifier_call = tps65219_restart,
--	.priority = 200,
--};
-+static int tps65219_restart_handler(struct sys_off_data *data)
-+{
-+	tps65219_restart(data->cb_data, data->mode);
-+	return NOTIFY_DONE;
-+}
- 
- static const struct resource tps65219_pwrbutton_resources[] = {
- 	DEFINE_RES_IRQ_NAMED(TPS65219_INT_PB_FALLING_EDGE_DETECT, "falling"),
-@@ -269,13 +278,22 @@ static int tps65219_probe(struct i2c_client *client)
- 		}
- 	}
- 
--	tps->nb = pmic_rst_restart_nb;
--	ret = register_restart_handler(&tps->nb);
-+	ret = devm_register_restart_handler(tps->dev,
-+					    tps65219_restart_handler,
-+					    tps);
-+
- 	if (ret) {
- 		dev_err(tps->dev, "cannot register restart handler, %d\n", ret);
- 		return ret;
- 	}
- 
-+	ret = devm_register_power_off_handler(tps->dev,
-+					      tps65219_power_off_handler,
-+					      tps);
-+	if (ret) {
-+		dev_err(tps->dev, "failed to register power-off handler: %d\n", ret);
-+		return ret;
-+	}
- 	return 0;
- }
- 
 -- 
-2.34.1
-
+With best wishes
+Dmitry
