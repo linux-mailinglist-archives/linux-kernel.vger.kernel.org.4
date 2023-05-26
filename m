@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4CA712C8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4921712C8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242819AbjEZSfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
+        id S243497AbjEZSfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242835AbjEZSfI (ORCPT
+        with ESMTP id S243249AbjEZSf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:35:08 -0400
+        Fri, 26 May 2023 14:35:26 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B72BE54
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:43 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb51cb4d4so2274054276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9570D10FF
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:49 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb78a3daaso1411122276.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685126082; x=1687718082;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZlCp8PAHlNCmunobQkdPrQHDqUHTnoSBSsPrysF0mwY=;
-        b=Plkd/xuqK7M9SwlLAM21/d2FaIm8z5gDewz3SZdNEOECc+gV7lFjw6+UKO10fmBMZB
-         pIXWE5awCZwwtkj1BDl0EmV/jGe2DVd34bup9DBTV9CgoWd5eeg+AbMzKlerhNR7X/Gw
-         705gC8RpQCNguftIohd3ITPASIdqZ3kZbzcMgE28J3d3Ucwo/ZMCZke1RsbUoVXb0caA
-         1vdqJ9f5BW4pqGgv/GFN30r/jEQnHeCvvO6RpFr+ppnBAyIBQIqTPKDgaeFxhAKwZVKu
-         ny4EnnAWZ0rbuqFG19Kx2w6R+3Eqg4AEaVFkyrlT/mdtSGwWjLf8PD5ulwuJj1DfqdQb
-         6/dw==
+        d=google.com; s=20221208; t=1685126084; x=1687718084;
+        h=content-transfer-encoding:to:from:subject:references:mime-version
+         :message-id:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bJF+qzVTbz8URltVyp28Lcb70/4s1v/RxMVJtiGJPTs=;
+        b=Oo93B8xhgldm2cYdd68btGpV2pdvkwlHBWlxS5icl4+MgjgBAVpiUfPCGdKNVjaXOy
+         nbHfYV37Ct84mF/lYACTfPM8+Y+S5tlr/K7ZfXUgfvjx+acs9EiplHZGGC281lJ16CL2
+         Rrwl7xcyB6QP+Pl7+72nAynawHHp4GqgTuZsZjj5k8BVPsqY5p+D2Y27WSTxTmq7DNmX
+         X13xkE85m9vha/HAfVfZxxuL3WCs0S75DgczoEJqeiKBYRbGG1UhmMBepHt60U4692/U
+         PSJZnP9nHn6WRIV9SPU7i1Sj9dXyhbsBB7wrhYKTQtO9RjYfyA1wEky8z6Bwq1tBIZry
+         WjWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685126082; x=1687718082;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZlCp8PAHlNCmunobQkdPrQHDqUHTnoSBSsPrysF0mwY=;
-        b=AIKPlW6JfGDxDK2wbKn9q/Ur29jWnzATzPwmjrpcLLnCG2dT/u1B9BYFTGRjqqEp6C
-         0f+Tt34muM43FCy4rYbsDLz8vrScDA9NarFCbgX6jjnrcFXfSo1EALK1eI14lFr4sPf9
-         qK1Ir9HYWyfZsc3k1fxdZBhZ1SxwLbIpXKu45CwB5wP1srkspNLGfkOK/Ra6fB61APiQ
-         9o5/ijLGKZWx6zSKwNFe2qT+sbiSPpXa3NoQoL7ClLeFUxWv/IbsemhXyDJphbiz+ktR
-         UW0XGolC4tWu7bw9ohbfJ7kM8iKS5imxe/xbm7PBe4tOt1xVc6Ao90ISGdgbgySM8gj3
-         NzgQ==
-X-Gm-Message-State: AC+VfDwTXASduv2qVQXAiW1jAnBGuSAIihNQEO0W+gLXxD/Z+WSRzTgs
-        axUs9fi9378AJRXZVy7gifWKDG20uTgc
-X-Google-Smtp-Source: ACHHUZ6QAA72EtRyWFuSRwlWtGxsChIoyKoEFA62TrkZKniW/edvWdeG+Lum4DcHWumM9PH4R0IeDIbeBU87
+        d=1e100.net; s=20221208; t=1685126084; x=1687718084;
+        h=content-transfer-encoding:to:from:subject:references:mime-version
+         :message-id:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bJF+qzVTbz8URltVyp28Lcb70/4s1v/RxMVJtiGJPTs=;
+        b=hq4w7L1mtIwnDhqn7AudDDj6EiI6+a9VfYS3G5CvLvGHWMNpa88pqM5WhegegZTgaO
+         ibBsHCwcpvfxM2avXQuvqaIXgyoQHhWGWzsx6gZSUB1gk8oS+oLPjD7sIDS4nYBt1z9+
+         0S4R3ViUGh0z6w5sDOWIolaGBZ7BL904HZH+2GGPOUpmkyHSejGb1CRdPibyqsZudGU5
+         9B6AbvyzFolfLpcbWCmRHzZCm/bRdS2UPZsSYQi9B7uZwfWyt5EbhgJdvLYqdhPNri52
+         I4Z7TqUxvDYxarJonexXsgcLlqBPoomwgq2ntryUUlHdH8LDNYc0caXN6JyCYJtiQsAX
+         PjJg==
+X-Gm-Message-State: AC+VfDzxwYTBeeeBW8b2ZrTA4o5FBT3Zq6KRDlJ8VzfQhf1czEK/haqu
+        Xr+o0tU3LIAYiGnT96+2bmrKjHTjdiE8
+X-Google-Smtp-Source: ACHHUZ7nUrl4nIdvoUhRMjP56HiICrfn58XtXvw8FJD4ZtvRrtJXUh6CGXhYHum1JvN6Q2M/EhdiEl8lmy73
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a25:fc1c:0:b0:bac:7086:c9b2 with SMTP id
- v28-20020a25fc1c000000b00bac7086c9b2mr992311ybd.12.1685126082416; Fri, 26 May
- 2023 11:34:42 -0700 (PDT)
-Date:   Fri, 26 May 2023 11:33:59 -0700
+ (user=irogers job=sendgmr) by 2002:a5b:644:0:b0:ba8:4c16:78b7 with SMTP id
+ o4-20020a5b0644000000b00ba84c1678b7mr1394238ybq.12.1685126084648; Fri, 26 May
+ 2023 11:34:44 -0700 (PDT)
+Date:   Fri, 26 May 2023 11:34:00 -0700
 In-Reply-To: <20230526183401.2326121-1-irogers@google.com>
-Message-Id: <20230526183401.2326121-15-irogers@google.com>
+Message-Id: <20230526183401.2326121-16-irogers@google.com>
 Mime-Version: 1.0
 References: <20230526183401.2326121-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v2 14/16] tools api fs: Dynamically allocate cgroupfs mount
- point cache
+Subject: [PATCH v2 15/16] perf test pmu: Avoid 2 static path arrays
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -78,6 +79,7 @@ To:     Peter Zijlstra <peterz@infradead.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
@@ -88,55 +90,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the cgroupfs_cache_entry 4128 byte array out of .bss.
+Avoid two static paths that contributed 8,192 bytes to .bss are only
+used duing the perf parse pmu test. This change helps FORTIFY
+triggering 2 warnings like:
+
+```
+tests/pmu.c: In function =E2=80=98test__pmu=E2=80=99:
+tests/pmu.c:121:43: error: =E2=80=98%s=E2=80=99 directive output may be tru=
+ncated writing up to 4095 bytes into a region of size 4090 [-Werror=3Dforma=
+t-truncation=3D]
+  121 |         snprintf(buf, sizeof(buf), "rm -f %s/*\n", dir);
+```
+
+So make buf a little larger.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/api/fs/cgroup.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ tools/perf/tests/pmu.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/tools/lib/api/fs/cgroup.c b/tools/lib/api/fs/cgroup.c
-index 1573dae4259d..250629a09423 100644
---- a/tools/lib/api/fs/cgroup.c
-+++ b/tools/lib/api/fs/cgroup.c
-@@ -14,7 +14,7 @@ struct cgroupfs_cache_entry {
- };
- 
- /* just cache last used one */
--static struct cgroupfs_cache_entry cached;
-+static struct cgroupfs_cache_entry *cached;
- 
- int cgroupfs_find_mountpoint(char *buf, size_t maxlen, const char *subsys)
+diff --git a/tools/perf/tests/pmu.c b/tools/perf/tests/pmu.c
+index 3cf25f883df7..a4452639a3d4 100644
+--- a/tools/perf/tests/pmu.c
++++ b/tools/perf/tests/pmu.c
+@@ -86,17 +86,16 @@ static struct parse_events_term test_terms[] =3D {
+  * Prepare format directory data, exported by kernel
+  * at /sys/bus/event_source/devices/<dev>/format.
+  */
+-static char *test_format_dir_get(void)
++static char *test_format_dir_get(char *dir, size_t sz)
  {
-@@ -24,9 +24,9 @@ int cgroupfs_find_mountpoint(char *buf, size_t maxlen, const char *subsys)
- 	char *p, *path;
- 	char mountpoint[PATH_MAX];
- 
--	if (!strcmp(cached.subsys, subsys)) {
--		if (strlen(cached.mountpoint) < maxlen) {
--			strcpy(buf, cached.mountpoint);
-+	if (cached && !strcmp(cached->subsys, subsys)) {
-+		if (strlen(cached->mountpoint) < maxlen) {
-+			strcpy(buf, cached->mountpoint);
- 			return 0;
- 		}
- 		return -1;
-@@ -91,8 +91,13 @@ int cgroupfs_find_mountpoint(char *buf, size_t maxlen, const char *subsys)
- 	free(line);
- 	fclose(fp);
- 
--	strncpy(cached.subsys, subsys, sizeof(cached.subsys) - 1);
--	strcpy(cached.mountpoint, mountpoint);
-+	if (!cached)
-+		cached = calloc(1, sizeof(*cached));
+-	static char dir[PATH_MAX];
+ 	unsigned int i;
+=20
+-	snprintf(dir, PATH_MAX, "/tmp/perf-pmu-test-format-XXXXXX");
++	snprintf(dir, sz, "/tmp/perf-pmu-test-format-XXXXXX");
+ 	if (!mkdtemp(dir))
+ 		return NULL;
+=20
+ 	for (i =3D 0; i < ARRAY_SIZE(test_formats); i++) {
+-		static char name[PATH_MAX];
++		char name[PATH_MAX];
+ 		struct test_format *format =3D &test_formats[i];
+ 		FILE *file;
+=20
+@@ -118,12 +117,13 @@ static char *test_format_dir_get(void)
+ /* Cleanup format directory. */
+ static int test_format_dir_put(char *dir)
+ {
+-	char buf[PATH_MAX];
+-	snprintf(buf, PATH_MAX, "rm -f %s/*\n", dir);
++	char buf[PATH_MAX + 20];
 +
-+	if (cached) {
-+		strncpy(cached->subsys, subsys, sizeof(cached->subsys) - 1);
-+		strcpy(cached->mountpoint, mountpoint);
-+	}
- 
- 	if (mountpoint[0] && strlen(mountpoint) < maxlen) {
- 		strcpy(buf, mountpoint);
--- 
++	snprintf(buf, sizeof(buf), "rm -f %s/*\n", dir);
+ 	if (system(buf))
+ 		return -1;
+=20
+-	snprintf(buf, PATH_MAX, "rmdir %s\n", dir);
++	snprintf(buf, sizeof(buf), "rmdir %s\n", dir);
+ 	return system(buf);
+ }
+=20
+@@ -140,7 +140,8 @@ static struct list_head *test_terms_list(void)
+=20
+ static int test__pmu(struct test_suite *test __maybe_unused, int subtest _=
+_maybe_unused)
+ {
+-	char *format =3D test_format_dir_get();
++	char dir[PATH_MAX];
++	char *format =3D test_format_dir_get(dir, sizeof(dir));
+ 	LIST_HEAD(formats);
+ 	struct list_head *terms =3D test_terms_list();
+ 	int ret;
+--=20
 2.41.0.rc0.172.g3f132b7071-goog
 
