@@ -2,117 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DB5712E4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74121712E53
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjEZUnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 16:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
+        id S237652AbjEZUoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 16:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjEZUnv (ORCPT
+        with ESMTP id S229753AbjEZUoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 16:43:51 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9591D187
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:43:49 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f1411e8111so1355562e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:43:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685133828; x=1687725828;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/6174Ber5Dhvq9PCiuf7/gpcmZX6TBZczzj1WyeVUqs=;
-        b=DLeHOHHN6h5+N/RAZjKMg4IFFEl2HxU8bvnY4oBeY32U/NZ1rscBtgCgX+JMTC1Ka0
-         4qsVyQg7cYE/pfubShzugG+qFZCNXMR/O4jzvhBIe8r5APXu+/tI/HCnpBnYnivsJbtG
-         PZ8OViniZoRnQabmJNUCmKR0DFk/3HxE8lzpTmwFUrVv1pbas0FLMFjTylUrXbfe1pNq
-         uS6pidrzgs0YJxXqWaMouprb41l40xT4oVRT2ujDxWtAjZwyL8/YaeBlpwAX7CVKIPel
-         E7oOuvcTJBruW7eyM4lPGCuvP3ydVUz6wT1QpIvPtxqihTnzN7m27VLqLilMaYvplkdg
-         kcLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685133828; x=1687725828;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/6174Ber5Dhvq9PCiuf7/gpcmZX6TBZczzj1WyeVUqs=;
-        b=g3zu+t4Q/s62U34mcKv405foN9v9BVEBTz/4crtMz1+YNFZpHfhBM+sM1cjO0uq/3Q
-         Al/hvs+/GBstv2PuVKUf0ZPxQIXfwJTL0gXHNndk/IOCQ599AL8aVHinHCrxTGIZ4YGw
-         k9Qmfs45iHMi/wuVdpZ85p34Npozn43d7pi/hlN9O7D/xkZbdSLmAAldZMuB/TrwhUJS
-         VJeaSJIvpZ+9SG4WfP61F0rLv1NwC31Rb3NtqYV86LWcghrfCZdld/DlsiSoZvXyVjij
-         4bgHVbG0ZVVpWgl+p155qjQINkE4LgR0r4WXYZaJacPLrM1aZRlfk5jivnJ9o2OoGadX
-         +kuQ==
-X-Gm-Message-State: AC+VfDyrE3WPjIXjCeIx/8XuH7f2BLfUbZGxoISZHt9Q1ImQmyzBnH8b
-        zOt5s4IqVlkmI16pCCv9Un76RA==
-X-Google-Smtp-Source: ACHHUZ4dsoFDZcDnlXVTIkaLAUNQzwlWZcpLdFsQ0CmU+dEqOnfFnPq9c11FVGDpUaepA/R+EjGfpA==
-X-Received: by 2002:ac2:547c:0:b0:4f4:af2c:97e with SMTP id e28-20020ac2547c000000b004f4af2c097emr721113lfn.11.1685133827858;
-        Fri, 26 May 2023 13:43:47 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id v17-20020a056512049100b004e9b307d2c8sm760594lfq.238.2023.05.26.13.43.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 13:43:47 -0700 (PDT)
-Message-ID: <265d1c93-0740-cd87-3ba2-e1ddf70a0c65@linaro.org>
-Date:   Fri, 26 May 2023 22:43:45 +0200
+        Fri, 26 May 2023 16:44:32 -0400
+Received: from out-6.mta1.migadu.com (out-6.mta1.migadu.com [IPv6:2001:41d0:203:375::6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E78114
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:44:30 -0700 (PDT)
+Date:   Fri, 26 May 2023 16:44:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685133868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8KhM7Tec91IIr/YDqGSLmg2UH0YLVPVmNhygxdKaLXo=;
+        b=YdBrJ6M5eG7UsaBjdAHMN8N/fTptPzh6l1+Uq1Fcfevf9lCW+dfJqr98mF+m0jbJYwflwj
+        lHEBizbTBG0X8AJzw7Xu9gRnmcXRyBJzYWy65UtzSffRlQM2c86ISnt/yBZ5YYkdURabYm
+        dv2YQuUwqMo5t/Fz6g9S9xxW6UCfZVo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 0/7] block layer patches for bcachefs
+Message-ID: <ZHEaKQH22Uxk9jPK@moria.home.lan>
+References: <20230525214822.2725616-1-kent.overstreet@linux.dev>
+ <ee03b7ce-8257-17f9-f83e-bea2c64aff16@kernel.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: media: camss: qcom,msm8996-camss: Add
- CAMSS power domain
-Content-Language: en-US
-To:     Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Conor Dooley <conor@kernel.org>
-Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hansverk@cisco.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230526180712.8481-1-y.oudjana@protonmail.com>
- <20230526180712.8481-2-y.oudjana@protonmail.com>
- <20230526-obstruct-venus-5833511a58af@spud>
- <838b134d-46cb-6237-49b0-0c287141ebb3@linaro.org>
- <20230526-street-pox-2ff5ee106c43@spud>
- <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
- <631e5eec-853b-dce2-c474-62e76e83d7e6@linaro.org>
- <5dc28004-5ff4-2102-0bb3-8f7bee7cfca6@nexus-software.ie>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <5dc28004-5ff4-2102-0bb3-8f7bee7cfca6@nexus-software.ie>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ee03b7ce-8257-17f9-f83e-bea2c64aff16@kernel.dk>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 26.05.2023 22:40, Bryan O'Donoghue wrote:
-> On 26/05/2023 21:36, Konrad Dybcio wrote:
->>> oh the names
->>>
->>> no toss that
->> this should be
->>
->> if:properties:compatible:blahblahmsm8996:then:required:power-domain-names
->>
->> Konrad
+On Fri, May 26, 2023 at 08:35:23AM -0600, Jens Axboe wrote:
+> On 5/25/23 3:48 PM, Kent Overstreet wrote:
+> > Jens, here's the full series of block layer patches needed for bcachefs:
+> > 
+> > Some of these (added exports, zero_fill_bio_iter?) can probably go with
+> > the bcachefs pull and I'm just including here for completeness. The main
+> > ones are the bio_iter patches, and the __invalidate_super() patch.
+> > 
+> > The bio_iter series has a new documentation patch.
+> > 
+> > I would still like the __invalidate_super() patch to get some review
+> > (from VFS people? unclear who owns this).
 > 
-> Hmm, we don't depend on the names though.
-Check patch 3!
-
-Konrad
+> I wanted to check the code generation for patches 4 and 5, but the
+> series doesn't seem to apply to current -git nor my for-6.5/block.
+> There's no base commit in this cover letter either, so what is this
+> against?
 > 
-> ---
-> bod
+> Please send one that applies to for-6.5/block so it's a bit easier
+> to take a closer look at this.
+
+Here you go:
+git pull https://evilpiepirate.org/git/bcachefs.git block-for-bcachefs
+
+changed folio_vec to folio_seg, build tested it and just pointed my CI
+at it, results will be showing up for xfs at
+https://evilpiepirate.org/~testdashboard/ci?branch=block-for-bcachefs
