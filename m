@@ -2,117 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEE1711DB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEF7711DBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 04:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbjEZCVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 22:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
+        id S230140AbjEZCVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 22:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjEZCVC (ORCPT
+        with ESMTP id S229530AbjEZCVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 22:21:02 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647C21A4
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:20:54 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b00ecabdf2so2479215ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685067654; x=1687659654;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QRIhUR+oTuFzicj0A9tTt5U7sXcp4Ft2BenovbdFSYY=;
-        b=b9b5Vz4NA+ou0L4F1w4MxfO5cZLFEG7HNxHx8qLvqjqv9XWEccnmQXdGvPHVTez9zZ
-         FxfhmwUloCdF58SRzGhb3Zm7KxwLsh+tAU3zR1C8ZgzDHqme//knfdkHyWHYvIXBXj9+
-         HyVz3yL4inYXfIFHSJFKezFk9Ep10SXPRWeNmz+4jI3TWgGD9/EdfwtNZSGtWegTyUS5
-         JrHp8kvQ3S1rRRRlJo0QJiLkvru+pL6nRJEX65UKsLMP1YzAA/P33YPszEB94vVDlutD
-         Nn3cw1UA7nSHONd242Z7jWMbdG1GrFLz42c5YOCm3XUw3MD0iFs93NgieiWc6LsAN5pp
-         lpQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685067654; x=1687659654;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QRIhUR+oTuFzicj0A9tTt5U7sXcp4Ft2BenovbdFSYY=;
-        b=RaO4hdUAFI3i2MQc3p4Xp3V2S4VjUWiUraI88u6plSB6jElXsSbg05zIabt62+oNGX
-         /lIhcN2saOUMIi258pSAPOFTnyRISP86+Fn/mFQleSX8QLWr4s5IfyqrZRY9RhfLMaX/
-         KbyIWZY+h9V2oUxld4i1s4bjUNPeIHreP+RRznVkuM6MKkb0EU8zV8fSWSIRjGDGrZvO
-         RYKyHh2fVMe0ygk+szsEHnAmQZ+lrcBZjlyPwUtCYeJDOwfEoPJ8ggcumXvkFKG3Nq31
-         NjLDwNCDihFrAzeND5Q+d8m2YXRaokGLV+aKluK6lMRoLP28O8t+mecigBuZ11Fax65+
-         rXOQ==
-X-Gm-Message-State: AC+VfDxLKOhA+IHVbOPOEnnqvU+/ihNgowuPkU6QRwBcPtuXwaR7Q0Cz
-        S6tni7aR37hhJbeOz16lzUM3cMlpxlh+34v/4ArE+vFp9iURHF7S
-X-Google-Smtp-Source: ACHHUZ7gD6R1Dpwrc8l71SCL6QbU1t4FAKHvtsRbaoaI3U1g7ZAl4FWTFj4R290tunMpRopUdlhg4l2IHUjyILRBFyQ=
-X-Received: by 2002:a17:903:32ca:b0:1b0:1095:f4f6 with SMTP id
- i10-20020a17090332ca00b001b01095f4f6mr484109plr.24.1685067653787; Thu, 25 May
- 2023 19:20:53 -0700 (PDT)
+        Thu, 25 May 2023 22:21:35 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A75B2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 19:21:34 -0700 (PDT)
+X-UUID: 05b73692fb6c11edb20a276fd37b9834-20230526
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=h85S7n4ra7y6C6Ku/nwotPpHkHNjrVtbzbA/qOuBRO0=;
+        b=c+9P3LcYRj61RuKVEOYVXyvfd8Rq71Kbz+WqnPm2go/+419inVbWXOGVuJ18kEi+yrnX5nWRxsUWuYcMLxs+bnQUpDVj2zLmysMNwd+ZaNsdkZxvQJIaDDeUJwf+xvBVHCxHL30aWlRP+ToZUXcKTyT77djtf/pDea3hOVK0YWo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:6b182a7c-d1c2-4651-a9c9-c6b374eb8e91,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:133f0c6d-2f20-4998-991c-3b78627e4938,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 05b73692fb6c11edb20a276fd37b9834-20230526
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <haibo.li@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2029102729; Fri, 26 May 2023 10:21:28 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 26 May 2023 10:21:27 +0800
+Received: from mszsdtlt102.gcn.mediatek.inc (10.16.4.142) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 26 May 2023 10:21:27 +0800
+From:   Haibo Li <haibo.li@mediatek.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <xiaoming.yu@mediatek.com>,
+        Haibo Li <haibo.li@mediatek.com>
+Subject: [PATCH] mm/gup_test:fix ioctl fail for compat task
+Date:   Fri, 26 May 2023 10:21:25 +0800
+Message-ID: <20230526022125.175728-1-haibo.li@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230525040038.12346-1-qiang.zhang1211@gmail.com> <ZG_JuzyP_1FHIC6L@slm.duckdns.org>
-In-Reply-To: <ZG_JuzyP_1FHIC6L@slm.duckdns.org>
-From:   Z qiang <qiang.zhang1211@gmail.com>
-Date:   Fri, 26 May 2023 10:20:42 +0800
-Message-ID: <CALm+0cUrSbSDtx7aenDJiy1xzpEZvDM528rXMJ1Tbz7TdHq-+Q@mail.gmail.com>
-Subject: Re: [PATCH v2] workqueue: Do not set CPU_INTENSIVE worker flags with wq_cpu_intensive_thresh_us=0
-To:     Tejun Heo <tj@kernel.org>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> Hello,
->
-> I rewrote the patch description and separated it out into a separate if
-> statement for readability. Applied to wq/for-6.5.
->
-> Thanks.
->
-> From 18c8ae813156a6855f026de80fffb91e1a28ab3d Mon Sep 17 00:00:00 2001
-> From: Zqiang <qiang.zhang1211@gmail.com>
-> Date: Thu, 25 May 2023 12:00:38 +0800
-> Subject: [PATCH] workqueue: Disable per-cpu CPU hog detection when
->  wq_cpu_intensive_thresh_us is 0
->
-> If workqueue.cpu_intensive_thresh_us is set to 0, the detection mechanism
-> for CPU-hogging per-cpu work item will keep triggering spuriously:
->
->   workqueue: process_srcu hogged CPU for >0us 4 times, consider switching to WQ_UNBOUND
->   workqueue: gc_worker hogged CPU for >0us 4 times, consider switching to WQ_UNBOUND
->   workqueue: gc_worker hogged CPU for >0us 8 times, consider switching to WQ_UNBOUND
->   workqueue: wait_rcu_exp_gp hogged CPU for >0us 4 times, consider switching to WQ_UNBOUND
->   workqueue: kfree_rcu_monitor hogged CPU for >0us 4 times, consider switching to WQ_UNBOUND
->   workqueue: kfree_rcu_monitor hogged CPU for >0us 8 times, consider switching to WQ_UNBOUND
->   workqueue: reg_todo hogged CPU for >0us 4 times, consider switching to WQ_UNBOUND
->
-> This commit therefore disables the CPU-hog detection mechanism when
-> workqueue.cpu_intensive_thresh_us is set to 0.
->
-> tj: Patch description updated and the condition check on
->     cpu_intensive_thresh_us separated into a separate if statement for
->     readability.
->
-> Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
->
-> Can you please use your full name as in "FIRST_NAME LAST_NAME <EMAIL>" when
-> signing-off patches in the future?
->
+When tools/testing/selftests/mm/gup_test.c is compiled as 32bit,
+then run on arm64 kernel,
+it reports "ioctl: Inappropriate ioctl for device".
 
-Because there are many people with the same name as me, so I use the
-abbreviation of the name to distinguish,
-but in the future I will use the full name  :) .
+Fix it by filling compat_ioctl in gup_test_fops
 
-Thanks
-Zqiang
+Signed-off-by: Haibo Li <haibo.li@mediatek.com>
+---
+ mm/gup_test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->
-> Thanks.
->
-> --
-> tejun
+diff --git a/mm/gup_test.c b/mm/gup_test.c
+index 8ae7307a1bb6..c0421b786dcd 100644
+--- a/mm/gup_test.c
++++ b/mm/gup_test.c
+@@ -381,6 +381,7 @@ static int gup_test_release(struct inode *inode, struct file *file)
+ static const struct file_operations gup_test_fops = {
+ 	.open = nonseekable_open,
+ 	.unlocked_ioctl = gup_test_ioctl,
++	.compat_ioctl = compat_ptr_ioctl,
+ 	.release = gup_test_release,
+ };
+ 
+-- 
+2.25.1
+
