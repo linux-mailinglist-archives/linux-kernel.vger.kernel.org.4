@@ -2,145 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2F0712451
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E06671245A
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 12:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242446AbjEZKOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 06:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
+        id S242278AbjEZKPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 06:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjEZKO1 (ORCPT
+        with ESMTP id S236577AbjEZKPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 06:14:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BDD10A;
-        Fri, 26 May 2023 03:14:24 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685096062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l0JCLWaWxAiVqnK2HID86lF3S13SCfgrB4rF/jITy/I=;
-        b=ip+IsKji95mPrphWLVAUcdYl0y7pMoo/0rzxXxKZorc2i1ogyDwgLlmNAyb0qqipND//Q9
-        mcdcjSKoJ1BmMv2yfve0Ih3RShF4W067n1L36VQOlRFjew11DbOIHP9BY3hPEmKWEMkYtF
-        3++Mlj3E1pedAPDLuSJp8O8yrjmKl61cO3sikLlCo0aFQA4sDzjqIug5Y2sHJzxAouulen
-        yWchVZzHYCyYvLl2IBhaE7LhZZ90HvEDnnYiIPfmZVnM5oPDhrPgISY7m926weiwqHfWOw
-        VMBPX/ASMwnX6UaU0XNMhsxdic6Oppo5GnIK5pHcSkZVNuJmv/nyAhmosdGW7Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685096062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l0JCLWaWxAiVqnK2HID86lF3S13SCfgrB4rF/jITy/I=;
-        b=mQPEsm7iwifOjyLdaiqWmBusXWewAsMMsfF7/82drVMMawEZjza+eT9dmICykmFbK9zGX6
-        K4OvjM1+WRhVDmDw==
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
-In-Reply-To: <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.962208640@linutronix.de>
- <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
-Date:   Fri, 26 May 2023 12:14:21 +0200
-Message-ID: <87y1lbl7r6.ffs@tglx>
+        Fri, 26 May 2023 06:15:53 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A499E
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 03:15:51 -0700 (PDT)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QSLR626C5zTkmh;
+        Fri, 26 May 2023 18:15:46 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 26 May 2023 18:15:48 +0800
+Subject: Re: [PATCH 1/4] mtd: ubi: block: don't return on error when removing
+To:     Daniel Golle <daniel@makrotopia.org>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+References: <cover.1683043928.git.daniel@makrotopia.org>
+ <4bca8ffa66fa094da37625e66f3a2681058531d6.1683043928.git.daniel@makrotopia.org>
+ <89f2a4a9-6054-80a8-285f-2be6c57c299d@huawei.com>
+ <ZG3bxMFxYM-dfN4r@makrotopia.org>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <d19c212c-da1f-a043-f97f-e4ce0629bec9@huawei.com>
+Date:   Fri, 26 May 2023 18:15:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZG3bxMFxYM-dfN4r@makrotopia.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24 2023 at 23:48, Kirill A. Shutemov wrote:
-> On Mon, May 08, 2023 at 09:44:17PM +0200, Thomas Gleixner wrote:
->>  #ifdef CONFIG_SMP
->> -/**
->> - * apic_id_is_primary_thread - Check whether APIC ID belongs to a primary thread
->> - * @apicid: APIC ID to check
->> - */
->> -bool apic_id_is_primary_thread(unsigned int apicid)
->> +static void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid)
->>  {
->> -	u32 mask;
->> -
->> -	if (smp_num_siblings == 1)
->> -		return true;
->>  	/* Isolate the SMT bit(s) in the APICID and check for 0 */
->> -	mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
->> -	return !(apicid & mask);
->> +	u32 mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
->> +
->> +	if (smp_num_siblings == 1 || !(apicid & mask))
->> +		cpumask_set_cpu(cpu, &__cpu_primary_thread_mask);
->>  }
->> +#else
->> +static inline void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid) { }
->>  #endif
->>  
->>  /*
+在 2023/5/24 17:41, Daniel Golle 写道:
+> On Wed, May 03, 2023 at 09:09:49PM +0800, Zhihao Cheng wrote:
+>> 在 2023/5/3 0:48, Daniel Golle 写道:
+>>> There is no point on returning the error from ubiblock_remove in case
+>>> it is being called due to a volume removal event -- the volume is gone,
+>>> we should destroy and remove the ubiblock device no matter what.
+>>>
+>>> Introduce a new boolean parameter 'force' to tell ubiblock_remove to go
+>>> on even in case the ubiblock device is still busy. Use that new option
+>>> when calling ubiblock_remove due to a UBI_VOLUME_REMOVED event.
+>>>
+>>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+>>> ---
+>>>    drivers/mtd/ubi/block.c | 6 +++---
+>>>    drivers/mtd/ubi/cdev.c  | 2 +-
+>>>    drivers/mtd/ubi/ubi.h   | 4 ++--
+>>>    3 files changed, 6 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/mtd/ubi/block.c b/drivers/mtd/ubi/block.c
+>>> index 3711d7f746003..6f5804f4b8f55 100644
+>>> --- a/drivers/mtd/ubi/block.c
+>>> +++ b/drivers/mtd/ubi/block.c
+>>> @@ -457,7 +457,7 @@ static void ubiblock_cleanup(struct ubiblock *dev)
+>>>    	idr_remove(&ubiblock_minor_idr, dev->gd->first_minor);
+>>>    }
+>>> -int ubiblock_remove(struct ubi_volume_info *vi)
+>>> +int ubiblock_remove(struct ubi_volume_info *vi, bool force)
+>>>    {
+>>>    	struct ubiblock *dev;
+>>>    	int ret;
+>>> @@ -471,7 +471,7 @@ int ubiblock_remove(struct ubi_volume_info *vi)
+>>>    	/* Found a device, let's lock it so we can check if it's busy */
+>>>    	mutex_lock(&dev->dev_mutex);
+>>> -	if (dev->refcnt > 0) {
+>>> +	if (dev->refcnt > 0 && !force) {
+>>>    		ret = -EBUSY;
+>>>    		goto out_unlock_dev;
+>>>    	}
+>>
+>> After looking through this series, I think we should pay attention to one
+>> problem: The lifetime of mtd device and ubi things(ubi device/volume/block
+>> device). It's difficult to decide whether or not to destroy ubi things when
+>> mtd driver is removed.
+>> If we destroy ubi things, one application may have opened an ubi volume
+>> early, then ubi device and all its volumes are destroyed by
+>> ubi_notify_remove(), later volume accessing by the application will trigger
+>> an UAF problem in kernel.
+>>        App              driver_remove
+>> fd = ubi_open_volume
+>>                     ubi_notify_remove
+>>                      ubi_detach_mtd_dev
+>>                       vfree(ubi->vtbl)
+>> ioctl(fd, UBI_IOCVOLUP)
+>>   ubi_start_update
+>>    set_update_marker
+>>     vtbl_rec = ubi->vtbl[vol->vol_id]  // UAF!
+>>
+>> If we reserve ubi things even mtd driver is removed. There exists mtd
+>> drivers releasing mtd device (eg. phram_remove), then upper application
+>> could accessing released mtd device by the ubi device, which also triggers
+>> UAF in kernel.
+> 
+> I agree this is a problem, and I also agree it is not a new problem
+> introduced by this series, but rather already exists in the kernel for
+> many years.
+> 
+
+Yes, the second UAF situation seems to exist a long time, maybe 
+disabling ubi device in ubi_notify_remove is a temp solution? Importing 
+new features based on the framework with known issues looks a little 
+weird, I suggest to solve the problem of mtd lifetime management before 
+applying this new feature. But I'm okay to this feature if maintainer 
+doesn't care about this problem.
+
+> An idea to get closer to a good state would be to try dropping the
+> 'anyway' parameter from ubi_detach_mtd_dev which is currently only
+> used in the module_exit. To avoid this, we should make sure the
+> module's refcnt is increased/decreased together with ubi->ref_count.
+> 
+
+Yes. Dropping 'anyway' param from ubi_detach_mtd_dev in 
+ubi_notify_remove can avoid the first UAF problem happening.
+
+> When it comes to the to-be-introduced ubi_notify_remove we still
+> face another problem, see below...
+> 
+>>
+>> After looking at nvme_free_ctrl, I found that nvme_dev is released when
+>> device refcnt becomes zero, so block device and nvme_dev won't be freed
+>> immediately when pci driver removed if upper filesystem being mounted on
+>> nvme device. And the mtd device's refcnt is held by ubi too, we may follow
+>> this method, but investigating all mtd drivers looks like unrealistic.
+> 
+> A good start would be deciding on and defining the way it should be.
+> I agree with your suggestion above, however, also note that in case of
+> MTD (in contrast to block devices) we have only a 'remove' notification
+> call returning void, see include/linux/mtd/mtd.h
+> 
+> struct mtd_notifier {
+>          void (*add)(struct mtd_info *mtd);
+>          void (*remove)(struct mtd_info *mtd);
+>          struct list_head list;
+> };
+> 
+> Also see del_mtd_device in drivers/mtd/mtdcore.c:
+> [...]
+>          /* No need to get a refcount on the module containing
+>                  the notifier, since we hold the mtd_table_mutex */
+>          list_for_each_entry(not, &mtd_notifiers, list)
+>                  not->remove(mtd);
+> 
+>          if (mtd->usecount) {
+>                  printk(KERN_NOTICE "Removing MTD device #%d (%s) with use count %d\n",
+>                         mtd->index, mtd->name, mtd->usecount);
+>                  ret = -EBUSY;
+>          } else {
+> [...]
+> 
+> So remove is called despite usecount could still be > 0.
+> 
+> Looks a bit like I've opened a can of worms...
 >
-> This patch causes boot regression on TDX guest. The guest crashes on SMP
-> bring up.
-
-I rather call it a security feature: It makes TDX unbreakably secure.
-
-> The change makes use of smp_num_siblings earlier than before: the mask get
-> constructed in acpi_boot_init() codepath. Later on smp_num_siblings gets
-> updated in detect_ht().
->
-> In my setup with 16 vCPUs, smp_num_siblings is 16 before detect_ht() and
-> set to 1 in detect_ht().
-
-  early_init_intel(c)
-    if (detect_extended_topology_early(c) < 0)
-       detect_ht_early(c);
-
-  acpi_boot_init()
-    ....
-
-  identify_boot_cpu(c)
-    detect_ht(c);
-
-Aaargh. That whole CPU identification code is a complete horrorshow.
-
-I'll have a look....
-
+> 
+>>
+>>> @@ -546,7 +546,7 @@ static int ubiblock_notify(struct notifier_block *nb,
+>>>    		 */
+>>>    		break;
+>>>    	case UBI_VOLUME_REMOVED:
+>>> -		ubiblock_remove(&nt->vi);
+>>> +		ubiblock_remove(&nt->vi, true);
+>>>    		break;
+>>>    	case UBI_VOLUME_RESIZED:
+>>>    		ubiblock_resize(&nt->vi);
+>>> diff --git a/drivers/mtd/ubi/cdev.c b/drivers/mtd/ubi/cdev.c
+>>> index f43430b9c1e65..bb55e863dd296 100644
+>>> --- a/drivers/mtd/ubi/cdev.c
+>>> +++ b/drivers/mtd/ubi/cdev.c
+>>> @@ -572,7 +572,7 @@ static long vol_cdev_ioctl(struct file *file, unsigned int cmd,
+>>>    		struct ubi_volume_info vi;
+>>>    		ubi_get_volume_info(desc, &vi);
+>>> -		err = ubiblock_remove(&vi);
+>>> +		err = ubiblock_remove(&vi, false);
+>>>    		break;
+>>>    	}
+>>> diff --git a/drivers/mtd/ubi/ubi.h b/drivers/mtd/ubi/ubi.h
+>>> index c8f1bd4fa1008..44c0eeaf1e1b0 100644
+>>> --- a/drivers/mtd/ubi/ubi.h
+>>> +++ b/drivers/mtd/ubi/ubi.h
+>>> @@ -979,7 +979,7 @@ static inline void ubi_fastmap_destroy_checkmap(struct ubi_volume *vol) {}
+>>>    int ubiblock_init(void);
+>>>    void ubiblock_exit(void);
+>>>    int ubiblock_create(struct ubi_volume_info *vi);
+>>> -int ubiblock_remove(struct ubi_volume_info *vi);
+>>> +int ubiblock_remove(struct ubi_volume_info *vi, bool force);
+>>>    #else
+>>>    static inline int ubiblock_init(void) { return 0; }
+>>>    static inline void ubiblock_exit(void) {}
+>>> @@ -987,7 +987,7 @@ static inline int ubiblock_create(struct ubi_volume_info *vi)
+>>>    {
+>>>    	return -ENOSYS;
+>>>    }
+>>> -static inline int ubiblock_remove(struct ubi_volume_info *vi)
+>>> +static inline int ubiblock_remove(struct ubi_volume_info *vi, bool force)
+>>>    {
+>>>    	return -ENOSYS;
+>>>    }
+>>>
+>>
+> 
+> .
+> 
 
