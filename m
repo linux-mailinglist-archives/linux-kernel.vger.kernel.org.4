@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCC5712B64
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DCE712B66
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 19:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237375AbjEZRIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 13:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
+        id S237618AbjEZRIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 13:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjEZRIn (ORCPT
+        with ESMTP id S237404AbjEZRIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 13:08:43 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F33F3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:08:40 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-52867360efcso635772a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:08:40 -0700 (PDT)
+        Fri, 26 May 2023 13:08:45 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0738F2
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:08:44 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-babb5e91ab4so2208991276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 10:08:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685120920; x=1687712920;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L63EKoAxWjoTSIB5GLdcWFgTRYmWwICpoIuOH6jdy4w=;
-        b=ULLHkgWDOcET9dqNzeiZjMLgZC5sr7XQER77zlEQfdKNtNGE/n2nG9nFFaMUhdO6jg
-         X33f0Abx1x24sEE9qWaVujLzEA7ff1WlReyHXvfq7wgWzi4UlmregYmzbTy7ynIZhdqx
-         /ilGuTIbyHMTj57cxDXxCsTIBBEe1LGU8TUR0=
+        d=google.com; s=20221208; t=1685120924; x=1687712924;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vGiA8RDXZNla+9oLRBME/ADstNGcLr0myZFsD2x+srs=;
+        b=q+q1fbB+HvtjpmCLptxf0KQdqQ7cCTrflxak5hyAfDyMsl8AwPsS/9dDGqqkCEAbUo
+         XPoOzeWmF2a8QKGAVE3Od0fimzYo47YvWifrxI2j0sYTNVKIGeQ4Rgm/6UwQRExZh02H
+         CozoI7wPYLqEdvkW+Ox56sAS9YqON7dKmdzRU+jS9uZL4g14DSC2+otYfVEr7fzBh359
+         eqO59zmFqtj+qxbx3xnCLVjkYgGbnACaUO2nWt0FFghfZ3TNh+K/3ZqbwH9Xf6JPwso2
+         QjzKIp/3sPi2X15/Z5NGp3sms/bOwF8FfDFAXHjXyIaO32GOw5v+L88cApu9MXYDvO4L
+         fbIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685120920; x=1687712920;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L63EKoAxWjoTSIB5GLdcWFgTRYmWwICpoIuOH6jdy4w=;
-        b=kAjqlCwBU+vXN8aMa6jbYqUw3Rvr1IaYUcZoEl3uNUs0Qs7tSnjynFPLiUzkTb75wB
-         j/QUU4keibBRhuqpfJiI8JiblrmGkrKL1/Kk4RR4l7+7QDI1QaHOeNd0DDpw7Nnl8N11
-         BbwiNXyCHmNuSMYjjdXbhGwlU1euT3JD4G3TFraBoqTseCl0BJ1gb+lfYkgjWXZY4RTw
-         Mlt8NIP1gf+oi1XsaniQ7+JTxJw8dJF7bSsgV49sxHgkZA57mzQAUTn5NKrnYol5GpMd
-         cP6syYprAj2EJ6p7+slKZVYfigMoB2mCri9SuR2nkcC6+y8a4Rlpki6FGVqJ7RSmaktv
-         UbjQ==
-X-Gm-Message-State: AC+VfDyBzLs6ZQaEOAHkZFv8hxGc3mtPa/AatJBdB1gqWdVoQcB7OHJF
-        2h4yfT7+5wICMSXZAW/4BNjf+A==
-X-Google-Smtp-Source: ACHHUZ63PKUp1aUysefPnUXc2g7FZO4vmhQkFDfovcfHvrklG1yM2pHtVu0nAmwDcs3ye1B/Pw+0xQ==
-X-Received: by 2002:a17:902:d483:b0:1b0:12e:3bfd with SMTP id c3-20020a170902d48300b001b0012e3bfdmr4003433plg.7.1685120919960;
-        Fri, 26 May 2023 10:08:39 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id t4-20020a170902b20400b001a6b2813c13sm3485454plr.172.2023.05.26.10.08.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 10:08:39 -0700 (PDT)
-Date:   Fri, 26 May 2023 10:08:39 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org, pbonzini@redhat.com,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        ndesaulniers@google.com, mingo@redhat.com, will@kernel.org,
-        longman@redhat.com, boqun.feng@gmail.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        jiangshanlai@gmail.com, qiang1.zhang@intel.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de
-Subject: Re: [RFC][PATCH 2/2] sched: Use fancy new guards
-Message-ID: <202305261006.01B34DB4C@keescook>
-References: <20230526150549.250372621@infradead.org>
- <20230526151947.027972233@infradead.org>
- <2023052626-blunderer-delegator-4b82@gregkh>
- <d806769b-c568-fa7c-f7aa-ded9ffea11b4@efficios.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d806769b-c568-fa7c-f7aa-ded9ffea11b4@efficios.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1685120924; x=1687712924;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vGiA8RDXZNla+9oLRBME/ADstNGcLr0myZFsD2x+srs=;
+        b=eJX1ZEmOQaNDLra5gIGzO7v9QMSOskh+y2Nz2L31n3s7/sruYLlzb0sl8Akc8q2iyK
+         Qc3eYJp4St5nwfoaLekndoCWLyiWqEcXSDVtX++VfkQh4En2/XXsObyZo4GOLqCow33G
+         ucgJdKogQfBk84Xn5VY+4wFjWbtOb+KmwyarX6qzYx5w7cmwawWnM/UTW/pH6Pe+8/Cn
+         od4VP+E/QJRQX2V/sx9/0OddIpEagxW5mTShwQV1ECmDDKLTqfbikuM4/4d6AnHtFwbN
+         jT+8Ns8K4VVGkLRLFDTe2EP39F75bxmqBvIG2BAMFE1dZcURwYPoP8CpZT4Xvq0S5BEb
+         I4qA==
+X-Gm-Message-State: AC+VfDwAcO6P865DWYdQuU9bVOZxaZupUtEIu/PzyVdjio/GzmaruVfU
+        Gqs/Aw0J3O5v7fxYgb09fFSURbiSnzA=
+X-Google-Smtp-Source: ACHHUZ7VjHLnfQxu/pU7xV959/3MV2Qr6me2Aeb/bJmRXm4sLgHq/1MYjPL1W1sqOE2PzCWjfoiItTSNzlA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:bf89:0:b0:bad:600:1833 with SMTP id
+ l9-20020a25bf89000000b00bad06001833mr1322707ybk.0.1685120923900; Fri, 26 May
+ 2023 10:08:43 -0700 (PDT)
+Date:   Fri, 26 May 2023 10:08:42 -0700
+In-Reply-To: <ZHDflnVNGw1fN6VD@google.com>
+Mime-Version: 1.0
+References: <2f19f26e-20e5-8198-294e-27ea665b706f@redhat.com>
+ <88db2d9cb42e471692ff1feb0b9ca855906a9d95.camel@amazon.com> <ZHDflnVNGw1fN6VD@google.com>
+Message-ID: <ZHDnmiyCIXFVxzh9@google.com>
+Subject: Re: [ANNOUNCE] KVM Microconference at LPC 2023
+From:   Sean Christopherson <seanjc@google.com>
+To:     James Gowans <jgowans@amazon.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>, Alexander Graf <graf@amazon.de>,
+        Nicolas Saenz Julienne <nsaenz@amazon.es>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,56 +71,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 12:27:51PM -0400, Mathieu Desnoyers wrote:
-> On 5/26/23 12:25, Greg KH wrote:
-> > On Fri, May 26, 2023 at 05:05:51PM +0200, Peter Zijlstra wrote:
-> > > Convert kernel/sched/core.c to use the fancy new guards to simplify
-> > > the error paths.
-> > 
-> > That's slightly crazy...
-> > 
-> > I like the idea, but is this really correct:
-> > 
-> > 
+On Fri, May 26, 2023, Sean Christopherson wrote:
+> On Fri, May 26, 2023, James Gowans wrote:
+> > On Tue, 2023-05-09 at 11:55 +0200, Paolo Bonzini wrote:
+> > > Hi all!
 > > > 
-> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > ---
-> > >   kernel/sched/core.c  | 1223 +++++++++++++++++++++++----------------------------
-> > >   kernel/sched/sched.h |   39 +
-> > >   2 files changed, 595 insertions(+), 667 deletions(-)
-> > > 
-> > > --- a/kernel/sched/core.c
-> > > +++ b/kernel/sched/core.c
-> > > @@ -1097,24 +1097,21 @@ int get_nohz_timer_target(void)
-> > >   	hk_mask = housekeeping_cpumask(HK_TYPE_TIMER);
-> > > -	rcu_read_lock();
-> > > -	for_each_domain(cpu, sd) {
-> > > -		for_each_cpu_and(i, sched_domain_span(sd), hk_mask) {
-> > > -			if (cpu == i)
-> > > -				continue;
-> > > +	void_scope(rcu) {
-> > > +		for_each_domain(cpu, sd) {
-> > > +			for_each_cpu_and(i, sched_domain_span(sd), hk_mask) {
-> > > +				if (cpu == i)
-> > > +					continue;
-> > > -			if (!idle_cpu(i)) {
-> > > -				cpu = i;
-> > > -				goto unlock;
-> > > +				if (!idle_cpu(i))
-> > > +					return i;
+> > > We are planning on submitting a CFP to host a KVM Microconference at
+> > > Linux Plumbers Conference 2023. To help justify the proposal, we would
+> > > like to gather a list of folks that would likely attend, and crowdsource
+> > > a list of topics to include in the proposal.
 > > 
-> > You can call return from within a "scope" and it will clean up properly?
+> > Hi Paolo,
 > > 
-> > I tried to read the cpp "mess" but couldn't figure out how to validate
-> > this at all, have a set of tests for this somewhere?
+> > This MC sounds great! There are two topics I'd be keen to discuss, both in
+> > the KVM + memory-management realm:
 > > 
-> > Anyway, the naming is whack, but I don't have a proposed better name,
-> > except you might want to put "scope_" as the prefix not the suffix, but
-> > then that might look odd to, so who knows.
+> > 1. Guest and kernel memory persistence across kexec for live update.
+> > Specifically focussing on the host IOMMU pgtable persistence for DMA-
+> > passthrough devices to support kexec while guest-driven DMA is still
+> > running. There is some discussion happening now about this [1] and
+> > hopefully the discussion and prototyping will continue in the run up to
+> > LPC.
 > 
-> FWIW C++ has std::scoped_lock. So perhaps using a similar wording may help ?
+> I don't think a KVM MC conference would be the right venue for this discussion.
+> IIUC, KVM does not need to be involved in preserving guest memory or the IOMMU
+> page tables.
 
-Yeah, I like "scoped_*" and "guarded_*" for naming. IMO, it reads better.
+Ah, I assume the KVM involvement comes from a potentially new filesystem for guest
+memory?
 
--- 
-Kees Cook
+  5. More "advanced" memory management APIs/ioctls for virtualisation: Being
+  able to support things like DMA-driven post-copy live migration, memory
+  oversubscription, carving out chunks of memory from a VM to launch side-
+  car VMs, more fine-grain control of IOMMU or MMU permissions, etc. This
+  may be easier to achieve with a new filesystem, rather than coupling to
+  tempfs semantics and ioctls.
