@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87569712A76
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3ED712A83
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236836AbjEZQR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
+        id S233339AbjEZQVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjEZQR0 (ORCPT
+        with ESMTP id S229833AbjEZQVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:17:26 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA94BC;
-        Fri, 26 May 2023 09:17:25 -0700 (PDT)
-Received: from vefanov-Precision-3650-Tower.intra.ispras.ru (unknown [10.10.2.69])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 878B644C100F;
-        Fri, 26 May 2023 16:17:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 878B644C100F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1685117843;
-        bh=aqS+SmgTj1O1ACMyKobn1Ejjd1RSyeh/KMYxC+E+Wpw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WWuzkfeeBYGRMal7EvzSPJ1GwuO9j5aqUIvjRD/XGiesQHPXHBQL4RuXh1Ed4gZfg
-         deRtyLECp5+T7H6Wyse4v5qDYMKCBT0wkBc1y0dCyY6AvrK7HuR9daK5FjFGmpG8yR
-         T57ZgSiCU27zWgZp6IXoHAuFKLuNIOAzmzY/nT8k=
-From:   Vladislav Efanov <VEfanov@ispras.ru>
-To:     Marek Lindner <mareklindner@neomailbox.ch>
-Cc:     Vladislav Efanov <VEfanov@ispras.ru>,
-        Simon Wunderlich <sw@simonwunderlich.de>,
-        Antonio Quartulli <a@unstable.cc>,
-        Sven Eckelmann <sven@narfation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        b.a.t.m.a.n@lists.open-mesh.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH] batman-adv: Broken sync while rescheduling delayed work
-Date:   Fri, 26 May 2023 19:16:32 +0300
-Message-Id: <20230526161632.1460753-1-VEfanov@ispras.ru>
-X-Mailer: git-send-email 2.34.1
+        Fri, 26 May 2023 12:21:15 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D006CD9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:21:13 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d24136663so850590b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:21:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685118073; x=1687710073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mX5+bjBBZlaoKw7taDUef0eZ0B/7aaJbLLfQ646in4U=;
+        b=dEjqUnr4j4gcR0Vx5ZawmCnVcL1lGxH3zJtPCZiuDv+vUCTSZi4+fTGf+Snya2As5j
+         E1B9A3kXDH5vKZDyHZkz2ycBza3FewyuJM9IfbCvHg8mGReom4T4ydBUpT68aAHMB+36
+         5JwVjDBMWVZQbIi5QwdVaSBHTffYQeIQmaOrM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685118073; x=1687710073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mX5+bjBBZlaoKw7taDUef0eZ0B/7aaJbLLfQ646in4U=;
+        b=My+3co9SxJj84rty6r1PRtryGELx5D6hMHB+IhVAxBrvHbGZ8wRpcXRdovp1iJalWb
+         uXf3KdR/82txWD7YMODKR7x2tiQtoJTR8VuqVsk6eLZtT8z48djahrpsawMKprr0HgMy
+         ugu1RQGaBlBfFgYVLDyEJUaGk5/ahO6Ofwde3u0wReHyK+b7ArwZCzeSsvdmBkdG2N7s
+         XOmrrntz7FjY4S27goZDV/MszQpPUPh9BGuVIH4d4wfoQOsxJ5C0hvCvSdMmxk+f4ThE
+         3PebFxVcZYJYrZ6n/AVuwj9657ckiB6FH9fQ9rx3u142q5vj63glMTqf5XZoZzUryk8p
+         5DOQ==
+X-Gm-Message-State: AC+VfDwnBpxzw0rQWRtBWTSas88VSJR+cUX1lGUYdqATk7AB7NvsMrMl
+        NN405CfoyuQmdSMCL+HETRE3BA==
+X-Google-Smtp-Source: ACHHUZ6SThSNDpsJaexFEwJQGQKuvbaxx80fqRKRO38s56UC7FukaoFZxBvofbaE4WeyWP+gyL/mUA==
+X-Received: by 2002:a05:6a20:9146:b0:10c:9773:5e6 with SMTP id x6-20020a056a20914600b0010c977305e6mr3121676pzc.47.1685118072839;
+        Fri, 26 May 2023 09:21:12 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id k17-20020aa78211000000b0064d4d11b8bfsm2916467pfi.59.2023.05.26.09.21.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 09:21:12 -0700 (PDT)
+Date:   Fri, 26 May 2023 09:21:11 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     cai@lca.pw, mcgrof@kernel.org, thunder.leizhen@huawei.com,
+        vincenzopalazzodev@gmail.com, wedsonaf@google.com,
+        pmladek@suse.com, ojeda@kernel.org, peterz@infradead.org,
+        alan.maguire@oracle.com, stephen.s.brennan@oracle.com,
+        samitolvanen@google.com, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, v.narang@samsung.com
+Subject: Re: [PATCH 1/1] kallsyms: remove unsed API lookup_symbol_attrs
+Message-ID: <202305260920.BE175FAD@keescook>
+References: <CGME20230526072134epcas5p12d0971c15890541639b4d2d85db84b43@epcas5p1.samsung.com>
+ <20230526072123.807160-1-maninder1.s@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526072123.807160-1-maninder1.s@samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller got a lot of crashes like:
-KASAN: use-after-free Write in *_timers*
+On Fri, May 26, 2023 at 12:51:23PM +0530, Maninder Singh wrote:
+> with commit '7878c231dae0 ("slab: remove /proc/slab_allocators")'
+> lookup_symbol_attrs usage is removed.
+> 
+> Thus removing redundant API.
+> 
+> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
 
-All of these crashes point to the same memory area:
+Yeah, looks like this is unused now.
 
-The buggy address belongs to the object at ffff88801f870000
- which belongs to the cache kmalloc-8k of size 8192
-The buggy address is located 5320 bytes inside of
- 8192-byte region [ffff88801f870000, ffff88801f872000)
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-This area belongs to :
-        batadv_priv->batadv_priv_dat->delayed_work->timer_list
-
-The reason for these issues is the lack of synchronization. Delayed
-work (batadv_dat_purge) schedules new timer/work while the device
-is being deleted. As the result new timer/delayed work is set after
-cancel_delayed_work_sync() was called. So after the device is freed
-the timer list contains pointer to already freed memory.
-
-Found by Linux Verification Center (linuxtesting.org) with syzkaller.
-
-Fixes: 2f1dfbe18507 ("batman-adv: Distributed ARP Table - implement local storage")
-Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
----
- net/batman-adv/distributed-arp-table.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/batman-adv/distributed-arp-table.c b/net/batman-adv/distributed-arp-table.c
-index 6968e55eb971..28a939d56090 100644
---- a/net/batman-adv/distributed-arp-table.c
-+++ b/net/batman-adv/distributed-arp-table.c
-@@ -101,7 +101,6 @@ static void batadv_dat_purge(struct work_struct *work);
-  */
- static void batadv_dat_start_timer(struct batadv_priv *bat_priv)
- {
--	INIT_DELAYED_WORK(&bat_priv->dat.work, batadv_dat_purge);
- 	queue_delayed_work(batadv_event_workqueue, &bat_priv->dat.work,
- 			   msecs_to_jiffies(10000));
- }
-@@ -819,6 +818,7 @@ int batadv_dat_init(struct batadv_priv *bat_priv)
- 	if (!bat_priv->dat.hash)
- 		return -ENOMEM;
- 
-+	INIT_DELAYED_WORK(&bat_priv->dat.work, batadv_dat_purge);
- 	batadv_dat_start_timer(bat_priv);
- 
- 	batadv_tvlv_handler_register(bat_priv, batadv_dat_tvlv_ogm_handler_v1,
 -- 
-2.34.1
-
+Kees Cook
