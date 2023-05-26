@@ -2,261 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E700712C79
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0076F712C7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237572AbjEZSdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
+        id S242465AbjEZSd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236450AbjEZSd3 (ORCPT
+        with ESMTP id S236450AbjEZSdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:33:29 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616E2134
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:33:27 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f600a6a890so8995e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:33:27 -0700 (PDT)
+        Fri, 26 May 2023 14:33:54 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F971B3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:33:45 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96fb1642b09so156749666b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:33:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685126006; x=1687718006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6JxMzvds2avNOsdPi6D0GZaG3j3Kl1uN/P97Wgte3QU=;
-        b=7xxgvyNUGXl5HU9jjrwJr/FubM7qSVcguv9rPoQB4Iz9na0uCeBSJHUnYpn0FbxE4M
-         2xbkZcJEOH/9oh5wezLYASGa6Rxx7XlxtBcKiIpbIXtvut1NGw0Pg6v553DULx9Gppgo
-         nKiaa6JEY+L80L3vqLz+b76lq+YEAOi/dXWcitgBPMew+E5HFW48U4YLvAATM8gDrFYi
-         K6bb7YJzUG9bZI3j6EF9DuSo8P1WswEByShxV85cYpJdWZfwjLgmuLX6JMxOHbVUGGI7
-         N1vkWH60WDUPtHkf+SU8gqjnzbD85CYOTrtOaQCMQS3piCgblVQSVTDap55M2xr+SmM8
-         5ZwQ==
+        d=linux-foundation.org; s=google; t=1685126023; x=1687718023;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ptC6d5EWrHkNhGZSpOw3bJ7cmTKxwB6ClWZ/+djSvzY=;
+        b=eYFz6zqj/vwbgy7UP5WJImuZ4iYtRRI4LjBh1R0qJ3PKOuE1/Y0pGxopCwTNwQo8ou
+         yn5Hqd8FSTbBVJMzgnuvYl34BK+PP4ReYcxPgNEAzZ4N94bdAjrjVAq6WWp40kbqzVm0
+         z9yftudF/WuyICoR9+XvIyLE3n02IHeoTZdlA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685126006; x=1687718006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6JxMzvds2avNOsdPi6D0GZaG3j3Kl1uN/P97Wgte3QU=;
-        b=T+pJkxtmbWKwLuRx6hjNhG9GakEmrnrEcQkOBP9uDn97ITGZP2U2nqbGYha6nsuRbU
-         0b8s0o9ViP7IoRdCwKKvBsCPpL1Li/37fCpufqAxgBWHl7nOC3yzG1OlAgRNg0/Fc0MC
-         MmG+DXnWcvE3NO5Q4TAGR7Hbe1XiBrnbPoregDg1xJi1+V+sFAQ8S7vQh/RC/G8livfZ
-         7qTBzbfXALQTw11a69ZSd+FRG2yFt6Xx4wn6f2IRhrVhUfrrIDFiF1BkrPI5g3qmv0fz
-         qTKVvePgV6jPxReQv1v5zjiLRfbW47lNZcifJoLWZyh5+13uUCt+DpwShrWMu8IJ/5P4
-         woAQ==
-X-Gm-Message-State: AC+VfDy1fGNSAZX/u4sQuZqa/zjyE46a1ykWdP+HUiZY8HJkxbK2oOiS
-        Kcq4fQFMAaIgo7ixSaMjaTswu5nBWNVsTVYpjfTnlQ==
-X-Google-Smtp-Source: ACHHUZ4Ht4O6eiX9Fvhjel4y4La3TeEMwH6xuB2HxJ1w7YnSgrBrraonrQVSiq0saRKb5PQDBjgaWsNxm+dPHOJnb6I=
-X-Received: by 2002:a05:600c:314a:b0:3f5:f63:d490 with SMTP id
- h10-20020a05600c314a00b003f50f63d490mr14241wmo.5.1685126005614; Fri, 26 May
- 2023 11:33:25 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685126023; x=1687718023;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ptC6d5EWrHkNhGZSpOw3bJ7cmTKxwB6ClWZ/+djSvzY=;
+        b=hWxyZuC8fjjbtBLgDC7wrMVqLpP3s54gknIb18x/A1s+3n45LHhACDjn+reVG/DOwA
+         e/MvfcJXl6kAPc+V9vDAdDu5dhKYSIXA82FFNoOJqAPzyvSOaFTRYEst5AuiXCp9K5J9
+         Av1GIvylvmge/e+lcW2/PEZ0lc4ZeyBm+6Sq1SPNfhUcfi/OFZSHsH4NnPebBtvvPc4L
+         1WuCp5rEYtrBKlyuLxPFyOzGUlOEFa4qts/I4bDMbdScLHgXi4d4meFnrS+SNFS4lI+a
+         rWFmL7KC30yIzAkEUKCF3ctSpuyi041FLLT5MmQZ2SzDxZ+p9o3w1JvDO+0e4ez7q3Lj
+         lMag==
+X-Gm-Message-State: AC+VfDwiulvQegXmpwUuBL76OVHddWyQuhl5sz7FU/unG2AJBEHq78H0
+        YDZ11HuBVMjtr7QxTpURSKz10qEQyUqdiYESkHD9X6uK
+X-Google-Smtp-Source: ACHHUZ77OnlZvXqx5MM6BJ+Aepwpe7lYbE/rFis1yMXoG1aIyerI7wUsQT6OhXVrF9PpVHlnfpd53Q==
+X-Received: by 2002:a17:907:9411:b0:973:9857:b9b7 with SMTP id dk17-20020a170907941100b009739857b9b7mr2768029ejc.40.1685126023535;
+        Fri, 26 May 2023 11:33:43 -0700 (PDT)
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
+        by smtp.gmail.com with ESMTPSA id sa24-20020a170906edb800b0096595cc0810sm2457901ejb.72.2023.05.26.11.33.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 11:33:42 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-51440706e59so1522681a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:33:42 -0700 (PDT)
+X-Received: by 2002:a17:907:80b:b0:96f:9962:be19 with SMTP id
+ wv11-20020a170907080b00b0096f9962be19mr2508836ejb.31.1685126022260; Fri, 26
+ May 2023 11:33:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230524221831.1741381-1-irogers@google.com> <20230524221831.1741381-17-irogers@google.com>
- <3d943607-645e-be8d-3a68-90e62e402c3d@linux.intel.com>
-In-Reply-To: <3d943607-645e-be8d-3a68-90e62e402c3d@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 26 May 2023 11:33:13 -0700
-Message-ID: <CAP-5=fWJXthOUF+ma1Z+MT2yfpA81did=-0hA3tREvAqNoAzww@mail.gmail.com>
-Subject: Re: [PATCH v3 16/35] perf pmu: Remove perf_pmu__hybrid_mounted
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ming Wang <wangming01@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CANn89iKUbyrJ=r2+_kK+sb2ZSSHifFZ7QkPLDpAtkJ8v4WUumA@mail.gmail.com>
+ <CAHk-=whqNMUPbjCyMjyxfH_5-Xass=DrMkPT5ZTJbFrtU=qDEQ@mail.gmail.com>
+ <CANn89i+bExb_P6A9ROmwqNgGdO5o8wawVZ5r3MHnz0qfhxvTtA@mail.gmail.com>
+ <CAHk-=wig6VizZHtRznz7uAWa-hHWjrCNANZ9B+1G=aTWPiVH4g@mail.gmail.com>
+ <CAHk-=whkci5ck5Him8Lx5ECKHEtj=bipYmOCGe8DWrrp8uDq5g@mail.gmail.com>
+ <CAHk-=whtDupvWtj_ow11wU4_u=KvifTqno=5mW1VofyehjdVRA@mail.gmail.com>
+ <CANn89i+u8jvfSQAQ=_JY0be56deJNhKgDWbqpDAvfm-i34qX9A@mail.gmail.com>
+ <CAHk-=wh16fVwO2yZ4Fx0kyRHsNDhGddzNxfQQz2+x08=CPvk_Q@mail.gmail.com> <CANn89iJ3=OiZEABRQQLL6z+J-Wy8AvTJz6NPLQDOtzREiiYb4Q@mail.gmail.com>
+In-Reply-To: <CANn89iJ3=OiZEABRQQLL6z+J-Wy8AvTJz6NPLQDOtzREiiYb4Q@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 26 May 2023 11:33:25 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whZ23EHnBG4ox9QpHFDeiCSrA2H1wrYrfyg3KP=zK5Sog@mail.gmail.com>
+Message-ID: <CAHk-=whZ23EHnBG4ox9QpHFDeiCSrA2H1wrYrfyg3KP=zK5Sog@mail.gmail.com>
+Subject: Re: x86 copy performance regression
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000f5c99605fc9cf9b1"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 11:14=E2=80=AFAM Liang, Kan <kan.liang@linux.intel.=
-com> wrote:
->
->
->
-> On 2023-05-24 6:18 p.m., Ian Rogers wrote:
-> > perf_pmu__hybrid_mounted is used to detect whether cpu_core or
-> > cpu_atom is mounted with a non-empty cpus file by
-> > pmu_lookup. pmu_lookup will attempt to read the cpus file too and so
-> > the check can be folded into this.
-> >
-> > Checking hybrid_mounted in pmu_is_uncore is redundant as the next
-> > cpumask read will fail returning false.
-> >
-> > Reduce the scope of perf_pmu__find_hybrid_pmu by making it static.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/pmu-hybrid.c | 15 +--------------
-> >  tools/perf/util/pmu-hybrid.h |  3 ---
-> >  tools/perf/util/pmu.c        | 26 ++++++++++++++------------
-> >  3 files changed, 15 insertions(+), 29 deletions(-)
-> >
-> > diff --git a/tools/perf/util/pmu-hybrid.c b/tools/perf/util/pmu-hybrid.=
-c
-> > index bc4cb0738c35..7fe943dd3217 100644
-> > --- a/tools/perf/util/pmu-hybrid.c
-> > +++ b/tools/perf/util/pmu-hybrid.c
-> > @@ -18,20 +18,7 @@
-> >
-> >  LIST_HEAD(perf_pmu__hybrid_pmus);
-> >
-> > -bool perf_pmu__hybrid_mounted(const char *name)
-> > -{
-> > -     int cpu;
-> > -     char pmu_name[PATH_MAX];
-> > -     struct perf_pmu pmu =3D {.name =3D pmu_name};
-> > -
-> > -     if (strncmp(name, "cpu_", 4))
-> > -             return false;
-> > -
-> > -     strlcpy(pmu_name, name, sizeof(pmu_name));
-> > -     return perf_pmu__scan_file(&pmu, "cpus", "%u", &cpu) > 0;
-> > -}
-> > -
-> > -struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name)
-> > +static struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name)
-> >  {
-> >       struct perf_pmu *pmu;
-> >
-> > diff --git a/tools/perf/util/pmu-hybrid.h b/tools/perf/util/pmu-hybrid.=
-h
-> > index 206b94931531..8dbcae935020 100644
-> > --- a/tools/perf/util/pmu-hybrid.h
-> > +++ b/tools/perf/util/pmu-hybrid.h
-> > @@ -13,9 +13,6 @@ extern struct list_head perf_pmu__hybrid_pmus;
-> >  #define perf_pmu__for_each_hybrid_pmu(pmu)   \
-> >       list_for_each_entry(pmu, &perf_pmu__hybrid_pmus, hybrid_list)
-> >
-> > -bool perf_pmu__hybrid_mounted(const char *name);
-> > -
-> > -struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name);
-> >  bool perf_pmu__is_hybrid(const char *name);
-> >
-> >  static inline int perf_pmu__hybrid_pmu_num(void)
-> > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> > index cd94abe7a87a..e9f3e6a777c0 100644
-> > --- a/tools/perf/util/pmu.c
-> > +++ b/tools/perf/util/pmu.c
-> > @@ -617,9 +617,6 @@ static bool pmu_is_uncore(int dirfd, const char *na=
-me)
-> >  {
-> >       int fd;
-> >
-> > -     if (perf_pmu__hybrid_mounted(name))
-> > -             return false;
-> > -
-> >       fd =3D perf_pmu__pathname_fd(dirfd, name, "cpumask", O_PATH);
-> >       if (fd < 0)
-> >               return false;
-> > @@ -900,6 +897,16 @@ static int pmu_max_precise(int dirfd, struct perf_=
-pmu *pmu)
-> >       return max_precise;
-> >  }
-> >
-> > +/**
-> > + * perf_pmu__skip_empty_cpus() - should pmu_lookup skip the named PMU =
-if the
-> > + *      cpus or cpumask file isn't present?
-> > + * @name: Name of PMU.
-> > + */
-> > +static bool perf_pmu__skip_empty_cpus(const char *name)
-> > +{
-> > +     return !strcmp(name, "cpu_core") || !strcmp(name, "cpu_atom");
->
-> Can we use the below to replace?
-> return !strncmp(name, "cpu_", 4);
->
-> Otherwise, anytime a new core PMU name is introduced, I have to patch
-> the function.
+--000000000000f5c99605fc9cf9b1
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I dislike this function but was carrying it forward, I think we can
-get rid of it. The point of erroring is to not have core PMUs when
-there are no online CPUs associated with it. For existing core PMUs
-this just isn't something that can happen as otherwise what CPU are
-you running on. For hybrid it can happen and we know we care because
-the PMU's type is core. So why not change the error to be when the cpu
-map is empty and the CPU is core? I'm going to assume that my logic is
-sound and change the code in v4, but please complain.
-
-Thanks,
-Ian
-
-> Thanks,
-> Kan
+On Fri, May 26, 2023 at 10:51=E2=80=AFAM Eric Dumazet <edumazet@google.com>=
+ wrote:
 >
-> > +}
-> > +
-> >  static struct perf_pmu *pmu_lookup(int dirfd, const char *lookup_name)
-> >  {
-> >       struct perf_pmu *pmu;
-> > @@ -907,15 +914,8 @@ static struct perf_pmu *pmu_lookup(int dirfd, cons=
-t char *lookup_name)
-> >       LIST_HEAD(aliases);
-> >       __u32 type;
-> >       char *name =3D pmu_find_real_name(lookup_name);
-> > -     bool is_hybrid =3D perf_pmu__hybrid_mounted(name);
-> >       char *alias_name;
-> >
-> > -     /*
-> > -      * Check pmu name for hybrid and the pmu may be invalid in sysfs
-> > -      */
-> > -     if (!strncmp(name, "cpu_", 4) && !is_hybrid)
-> > -             return NULL;
-> > -
-> >       /*
-> >        * The pmu data we store & need consists of the pmu
-> >        * type value and format definitions. Load both right
-> > @@ -935,8 +935,10 @@ static struct perf_pmu *pmu_lookup(int dirfd, cons=
-t char *lookup_name)
-> >               return NULL;
-> >
-> >       pmu->cpus =3D pmu_cpumask(dirfd, name);
-> > -     pmu->name =3D strdup(name);
-> > +     if (!pmu->cpus && perf_pmu__skip_empty_cpus(name))
-> > +             goto err;
-> >
-> > +     pmu->name =3D strdup(name);
-> >       if (!pmu->name)
-> >               goto err;
-> >
-> > @@ -967,7 +969,7 @@ static struct perf_pmu *pmu_lookup(int dirfd, const=
- char *lookup_name)
-> >       list_splice(&aliases, &pmu->aliases);
-> >       list_add_tail(&pmu->list, &pmus);
-> >
-> > -     if (is_hybrid)
-> > +     if (!strcmp(name, "cpu_core") || !strcmp(name, "cpu_atom"))
-> >               list_add_tail(&pmu->hybrid_list, &perf_pmu__hybrid_pmus);
-> >       else
-> >               INIT_LIST_HEAD(&pmu->hybrid_list);
+> Hmmm
+>
+> [   25.532236] RIP: 0010:0xffffffffa5a85134
+> [   25.536173] Code: Unable to access opcode bytes at 0xffffffffa5a8510a.
+
+This was the other reason I really didn't want to use alternatives on
+the conditional branch instructions. The relocations are really not
+very natural, and we have odd rules for those things. So I suspect our
+instruction rewriting simply gets this wrong, because that's such a
+nasty pattern.
+
+I really wanted my "just hardcode the instruction bytes" to work. Not
+only did it get me the small 2-byte conditional jump, it meant that
+there was no relocation on it. But objtool really hates not
+understanding what the alternatives code does.
+
+Which is fair enough, but it's frustrating here when it only results
+in more problems.
+
+Anyway, I guess *this* avoids all issues. It creates an extra jump to
+a jump for the case where the CPU doesn't have ERMS, but I guess we
+don't really care about those CPUs anyway.
+
+And it avoids all the "alternative instructions have relocations"
+issues. And it creates all small two-byte jumps, and the "rep movsb"
+fits exactly on that same 2 bytes too. Which I guess all argues for
+this being what I should have started with.
+
+This time it *really* works.
+
+Famous last words.
+
+                Linus
+
+--000000000000f5c99605fc9cf9b1
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_li4whxwl0>
+X-Attachment-Id: f_li4whxwl0
+
+IGFyY2gveDg2L2xpYi9jb3B5X3VzZXJfNjQuUyB8IDEwICsrKysrKysrKy0KIDEgZmlsZSBjaGFu
+Z2VkLCA5IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9hcmNoL3g4
+Ni9saWIvY29weV91c2VyXzY0LlMgYi9hcmNoL3g4Ni9saWIvY29weV91c2VyXzY0LlMKaW5kZXgg
+NGZjNWMyZGUyZGU0Li4wMWM1ZGU0YzI3OWIgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2xpYi9jb3B5
+X3VzZXJfNjQuUworKysgYi9hcmNoL3g4Ni9saWIvY29weV91c2VyXzY0LlMKQEAgLTcsNiArNyw4
+IEBACiAgKi8KIAogI2luY2x1ZGUgPGxpbnV4L2xpbmthZ2UuaD4KKyNpbmNsdWRlIDxhc20vY3B1
+ZmVhdHVyZXMuaD4KKyNpbmNsdWRlIDxhc20vYWx0ZXJuYXRpdmUuaD4KICNpbmNsdWRlIDxhc20v
+YXNtLmg+CiAjaW5jbHVkZSA8YXNtL2V4cG9ydC5oPgogCkBAIC0yOSw3ICszMSw3IEBACiAgKi8K
+IFNZTV9GVU5DX1NUQVJUKHJlcF9tb3ZzX2FsdGVybmF0aXZlKQogCWNtcHEgJDY0LCVyY3gKLQlq
+YWUgLkx1bnJvbGxlZAorCWphZSAuTGxhcmdlCiAKIAljbXAgJDgsJWVjeAogCWphZSAuTHdvcmQK
+QEAgLTY1LDYgKzY3LDEyIEBAIFNZTV9GVU5DX1NUQVJUKHJlcF9tb3ZzX2FsdGVybmF0aXZlKQog
+CV9BU01fRVhUQUJMRV9VQSggMmIsIC5MY29weV91c2VyX3RhaWwpCiAJX0FTTV9FWFRBQkxFX1VB
+KCAzYiwgLkxjb3B5X3VzZXJfdGFpbCkKIAorLkxsYXJnZToKKzA6CUFMVEVSTkFUSVZFICJqbXAg
+Lkx1bnJvbGxlZCIsICJyZXAgbW92c2IiLCBYODZfRkVBVFVSRV9FUk1TCisxOglSRVQKKworICAg
+ICAgICBfQVNNX0VYVEFCTEVfVUEoIDBiLCAxYikKKwogCS5wMmFsaWduIDQKIC5MdW5yb2xsZWQ6
+CiAxMDoJbW92cSAoJXJzaSksJXI4Cg==
+--000000000000f5c99605fc9cf9b1--
