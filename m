@@ -2,235 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FAF71241D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02DAE712419
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242761AbjEZJ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S242545AbjEZJzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242988AbjEZJ4i (ORCPT
+        with ESMTP id S229833AbjEZJzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:56:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D3E9E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685094949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XYCtA4RZQ08M+9pUkzTh3dY/9or9x6h7PoJOQ6GY4XM=;
-        b=c/EUhvycSxwPJgcIXhch9lA1L5fBctpLdnct9wwQlCDiFSzSLjwZZ4ZK9quKBMgMsOhOZO
-        gVnzevApMXI6Exee+SCa8pbSfptyg9zbX+Uif/N2ht6+01TqZOkhhLrzknwxUvRa321Avy
-        6GFr2WDVrqpwuPmrjIYIDIUhghQ8a0A=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-557-PNVPf3rlODCzDXFmFIOygQ-1; Fri, 26 May 2023 05:55:47 -0400
-X-MC-Unique: PNVPf3rlODCzDXFmFIOygQ-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-94a348facbbso69137566b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:55:46 -0700 (PDT)
+        Fri, 26 May 2023 05:55:44 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A90F9E;
+        Fri, 26 May 2023 02:55:41 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96f683e8855so71116766b.2;
+        Fri, 26 May 2023 02:55:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685094940; x=1687686940;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cf6s+pRtDPBWZvHwWYLt5G+cdZWXh4lFysYNJBncOIM=;
+        b=EiWwmP/O7rlmQZ7mEXSsgAAapMTg6qODs7Jwglc3YXEBfnsgbNnSdLVfcuulzzGUQ/
+         n2gilogO8U2iId0i5lYVx1Ll9wTvw/NfXMCKzLg+IcGWvhOtN5m8Pr7Y6QEg1tjG2C4V
+         3BJAepfumdkC0DSJZBKVi5ZD2VZ9s6YJ2poGdNgSImROCDzq2eCR1Us/KGn553oyUd5j
+         4YAvi4xZmEtQ9v1xOb12eU/gMDK5xGGDC7Sk5rB5pA28u7+hsSgmC5SVUIzy7ZTPdgaz
+         DEkQxEz0zR+g31H/K6QWnh85gSvo5y5wyj5CdcgAPYBObtzOFGNB7HM/syGpQpTk7FAE
+         w9gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685094946; x=1687686946;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XYCtA4RZQ08M+9pUkzTh3dY/9or9x6h7PoJOQ6GY4XM=;
-        b=B46e7HulwLi981W8BjApZlEuxMJ1z2uy/8SIw65/yKI0tWghj9W6LMESfH6xjF73J3
-         0IB6+KJefWy1K1pxSGFRsDkqHT/LUWQVvahZ+0jU5T2evIyMMEw7C1AaFf5mnENrn4X1
-         zSJhuESjhvr/jmY70kVnRdHRc8rTWDnpF8JaguHtEDl9pCt4X8WHlKzcmIZ8FPPKWu5W
-         Trng6qxKD34QzeYsdnnlCBqmcntxrB+1DH2tHweo9mRlA6f1cuNGpS6S1Gk9uo4+mc9L
-         r1aBTpc2CZXDD/CSblGHFIq+EioG1oJXg09/998HGIaTZk3JZyxvu+81BL2uPObOaHFC
-         zb2A==
-X-Gm-Message-State: AC+VfDzDYeFTATHMnWybFLmw0iH3eci6I99mu5517wP4GKeT6xO8gXSq
-        ZLoNdsAbZMMq2/zd5sAK4y9tL2xfp7Gf9bNL4y+seVtkT37fTYZU4XgyNeRyg5dSkuGUUVmJQUf
-        RDGpq+Y1JRPP9quGKDpCk1fEvc2Tazs4I6vcYruT2
-X-Received: by 2002:a17:906:58d3:b0:973:9522:c678 with SMTP id e19-20020a17090658d300b009739522c678mr1369560ejs.44.1685094946048;
-        Fri, 26 May 2023 02:55:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7zyHI44awmTn8JJhvOigbX6gmkA/LYXh0At/QzSDwuoAqvtAV8YEuh0jwMPf9fYx86u8OL8wESu6iTQJ2/QyM=
-X-Received: by 2002:a17:906:58d3:b0:973:9522:c678 with SMTP id
- e19-20020a17090658d300b009739522c678mr1369536ejs.44.1685094945667; Fri, 26
- May 2023 02:55:45 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685094940; x=1687686940;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cf6s+pRtDPBWZvHwWYLt5G+cdZWXh4lFysYNJBncOIM=;
+        b=LZ99ZIW7NMuCjrT2Fou8abxIxmlNxJAmapCs55iW4eJCv78m/dgCV7ZIcMN3rFgLAL
+         asJPQxzCq+I14YiDAWQ+v4CnvhlFZ8Z4140GOmDuWJDKVT/alu55YsYvMipq8qBpN6JM
+         /UGbAzuMY0WYixLIJh7SL4z/Xjlc31r3rXG/awarxNztwMn44HU+jbgHC7XJ59dcH7nL
+         E8qnmzMsOaop3WRqxjPoqngKPNpiBRT0Z/3TXoU2hSGQbQtJlUT7ln3tfqU0N0ZNl51M
+         1cIgJnOmenZzvIh7lWydICcp3YhUtqT45hQO2HvtfPZ+wm7FhaTkLOfgFbSUZ5fufn/r
+         1tTw==
+X-Gm-Message-State: AC+VfDyl8+BdRcbWK+4Fhu4GZ/dqaWJ5c+zeXDSRAYD4spqiKP+qjvZg
+        9znMgv6zVAmsKgSoY7rfTBM=
+X-Google-Smtp-Source: ACHHUZ6ARSbGs0hULYC/9+Y/bupDEUqbiFVEFDBv3GQLEIGyMZEq/7359++XFIzJy43TKSl6rpG3NA==
+X-Received: by 2002:a17:907:9627:b0:95e:d3f5:3d47 with SMTP id gb39-20020a170907962700b0095ed3f53d47mr1736888ejc.48.1685094939864;
+        Fri, 26 May 2023 02:55:39 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id gz15-20020a170906f2cf00b00965ac8f8a3dsm1932065ejb.173.2023.05.26.02.55.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 02:55:39 -0700 (PDT)
+Date:   Fri, 26 May 2023 12:55:37 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+Subject: Re: [PATCH net-next v2 3/5] net: dsa: microchip: remove ksz_port:on
+ variable
+Message-ID: <20230526095537.yaa3dgn56rwioxcv@skbuf>
+References: <20230526073445.668430-1-o.rempel@pengutronix.de>
+ <20230526073445.668430-1-o.rempel@pengutronix.de>
+ <20230526073445.668430-4-o.rempel@pengutronix.de>
+ <20230526073445.668430-4-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-References: <20230525094914.23420-1-ltao@redhat.com> <ZHAwpL3wbKX9sWep@MiWiFi-R3L-srv>
-In-Reply-To: <ZHAwpL3wbKX9sWep@MiWiFi-R3L-srv>
-From:   Tao Liu <ltao@redhat.com>
-Date:   Fri, 26 May 2023 17:55:09 +0800
-Message-ID: <CAO7dBbWhE3yqGk1szKF-7rH1Gk6uAEnLuMVCqqCwwctcrvpiNw@mail.gmail.com>
-Subject: Re: [PATCH] x86/kexec: Add EFI config table identity mapping for
- kexec kernel
-To:     Baoquan He <bhe@redhat.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, dyoung@redhat.com,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526073445.668430-4-o.rempel@pengutronix.de>
+ <20230526073445.668430-4-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baoquan,
+On Fri, May 26, 2023 at 09:34:43AM +0200, Oleksij Rempel wrote:
+> The only place where this variable would be set to false is the
+> ksz8_config_cpu_port() function. But it is done in a bogus way:
+> 
+>  	for (i = 0; i < dev->phy_port_cnt; i++) {
+> 		if (i == dev->phy_port_cnt) <--- will be never executed.
+> 			break;
+> 		p->on = 1;
+> 
+> So, we never have a situation where p->on = 0. In this case, we can just
+> remove it.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> ---
 
-On Fri, May 26, 2023 at 12:08=E2=80=AFPM Baoquan He <bhe@redhat.com> wrote:
->
-> Hi Tao,
->
-> On 05/25/23 at 05:49pm, Tao Liu wrote:
-> > A kexec kernel bootup hang is observed on Intel Atom cpu due to unmappe=
-d
-> > EFI config table.
-> >
-> > Currently EFI system table is identity-mapped for the kexec kernel, but=
- EFI
-> > config table is not mapped explicitly:
-> >
-> >     commit 6bbeb276b71f ("x86/kexec: Add the EFI system tables and ACPI
-> >                           tables to the ident map")
-> >
-> > Later in the following 2 commits, EFI config table will be accessed whe=
-n
-> > enabling sev at kernel startup. This may result in a page fault due to =
-EFI
-> > config table's unmapped address. Since the page fault occurs at an earl=
-y
-> > stage, it is unrecoverable and kernel hangs.
-> >
-> >     commit ec1c66af3a30 ("x86/compressed/64: Detect/setup SEV/SME featu=
-res
-> >                           earlier during boot")
-> >     commit c01fce9cef84 ("x86/compressed: Add SEV-SNP feature
-> >                           detection/setup")
-> >
-> > In addition, the issue doesn't appear on all systems, because the kexec
-> > kernel uses Page Size Extension (PSE) for identity mapping. In most cas=
-es,
-> > EFI config table can end up to be mapped into due to 1 GB page size.
-> > However if nogbpages is set, or cpu doesn't support pdpe1gb feature
-> > (e.g Intel Atom x6425RE cpu), EFI config table may not be mapped into
-> > due to 2 MB page size, thus a page fault hang is more likely to happen.
-> >
-> > In this patch, we will make sure the EFI config table is always mapped.
->
-> Nice work. While you may need to rephrase above sentence, x86
-> maintainers don't like log with the 'this patch,' or 'we'. Please refer
-> to 'Changelog' part of Documentation/process/maintainer-tip.rst and
-> improve it.
-
-OK, Thanks for the suggestion! I will get the sentence rephrased in v2.
-
->
-> >
-> > Signed-off-by: Tao Liu <ltao@redhat.com>
-> > ---
-> >  arch/x86/kernel/machine_kexec_64.c | 35 ++++++++++++++++++++++++++----
-> >  1 file changed, 31 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machi=
-ne_kexec_64.c
-> > index 1a3e2c05a8a5..755aa12f583f 100644
-> > --- a/arch/x86/kernel/machine_kexec_64.c
-> > +++ b/arch/x86/kernel/machine_kexec_64.c
-> > @@ -28,6 +28,7 @@
-> >  #include <asm/setup.h>
-> >  #include <asm/set_memory.h>
-> >  #include <asm/cpu.h>
-> > +#include <asm/efi.h>
-> >
-> >  #ifdef CONFIG_ACPI
-> >  /*
-> > @@ -86,10 +87,12 @@ const struct kexec_file_ops * const kexec_file_load=
-ers[] =3D {
-> >  #endif
-> >
-> >  static int
-> > -map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
-> > +map_efi_sys_cfg_tab(struct x86_mapping_info *info, pgd_t *level4p)
->
-> Can we call the function map_efi_tables() since we will map efi system
-> table, system config table. If you need add another table mapping here,
-> what would you call it, map_efi_sys_cfg_xxx_tab()?
->
-
-Yeah, map_efi_sys_cfg_xxx_tab() is surely a bad name. I agree with the
-map_efi_tables() name.
-
-Thanks,
-Tao Liu
-
-> Anyway, not very strong opinion as long as x86 maintainer likes it.
->
-> >  {
-> >  #ifdef CONFIG_EFI
-> >       unsigned long mstart, mend;
-> > +     void *kaddr;
-> > +     int ret;
-> >
-> >       if (!efi_enabled(EFI_BOOT))
-> >               return 0;
-> > @@ -105,6 +108,30 @@ map_efi_systab(struct x86_mapping_info *info, pgd_=
-t *level4p)
-> >       if (!mstart)
-> >               return 0;
-> >
-> > +     ret =3D kernel_ident_mapping_init(info, level4p, mstart, mend);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     kaddr =3D memremap(mstart, mend - mstart, MEMREMAP_WB);
-> > +     if (!kaddr) {
-> > +             pr_err("Could not map UEFI system table\n");
-> > +             return -ENOMEM;
-> > +     }
-> > +
-> > +     mstart =3D efi_config_table;
-> > +
-> > +     if (efi_enabled(EFI_64BIT)) {
-> > +             efi_system_table_64_t *stbl =3D (efi_system_table_64_t *)=
-kaddr;
-> > +
-> > +             mend =3D mstart + sizeof(efi_config_table_64_t) * stbl->n=
-r_tables;
-> > +     } else {
-> > +             efi_system_table_32_t *stbl =3D (efi_system_table_32_t *)=
-kaddr;
-> > +
-> > +             mend =3D mstart + sizeof(efi_config_table_32_t) * stbl->n=
-r_tables;
-> > +     }
-> > +
-> > +     memunmap(kaddr);
-> > +
-> >       return kernel_ident_mapping_init(info, level4p, mstart, mend);
-> >  #endif
-> >       return 0;
-> > @@ -244,10 +271,10 @@ static int init_pgtable(struct kimage *image, uns=
-igned long start_pgtable)
-> >       }
-> >
-> >       /*
-> > -      * Prepare EFI systab and ACPI tables for kexec kernel since they=
- are
-> > -      * not covered by pfn_mapped.
-> > +      * Prepare EFI systab, config table and ACPI tables for kexec ker=
-nel
-> > +      * since they are not covered by pfn_mapped.
-> >        */
-> > -     result =3D map_efi_systab(&info, level4p);
-> > +     result =3D map_efi_sys_cfg_tab(&info, level4p);
-> >       if (result)
-> >               return result;
-> >
-> > --
-> > 2.33.1
-> >
->
-
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
