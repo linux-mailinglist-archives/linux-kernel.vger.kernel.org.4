@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D7B712D09
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34455712D16
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243775AbjEZTFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        id S243814AbjEZTJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243780AbjEZTFP (ORCPT
+        with ESMTP id S243481AbjEZTJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:05:15 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328E51AC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:05:12 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64d30ab1ef2so1027323b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:05:12 -0700 (PDT)
+        Fri, 26 May 2023 15:09:02 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D0B187;
+        Fri, 26 May 2023 12:09:00 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-510f525e06cso1860846a12.2;
+        Fri, 26 May 2023 12:08:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685127911; x=1687719911;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lnFdA77YJYoNvaGSmM9SYTrfoWB/SryNK9HkuvxiNTM=;
-        b=OGBXkjOxdhzsn+GTp4skzKf/9mFAZR9igHQ85VIhE6oGqDNYCJyRhy6+YC1Bk6Vbpx
-         Hm2Ia41KfyuFx5YrmJNBSI1FgLDwCbCmGrzmMs2MKFhONCBI6wIOWFUooT+SP80dOwGm
-         IBIb/MW4cPCSwJWD81QPfC1dt5E4TYPxUfHRY=
+        d=gmail.com; s=20221208; t=1685128138; x=1687720138;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aVzy92SBUMkeNgqTWxtWDoFkJg92aZ4R1TOIJLd57RQ=;
+        b=iHtKIRTeumWIXEMU5r1wOj/WWNzofk21Ob8ZqpeIm+F4yNhfk4nRShLBkTbXwhwekF
+         fxtKu5Lg1/SSMuqu3pl8wvQooqugsQ5ED/VIFbbW/KDCn5JYf3CEl9ZGiHd5jmTv4ZGE
+         SxNfDO5lKW1u6eJBrQTvdYyZxM4O14gQFeNFY+lWTqBsGyGaxkW78bNgvZqCqMN2wHx8
+         kyvgfVd8W1Au+qh4Khhkm1Oh/+1Jp9XAeQ5t4ND9krC7/5C1CNaBWyvbrM9+Qw8VRscs
+         yCfxtKwpslqJuXytEyLSWSfJYeupzBWTaXqUTUGb8LieKIuPzyFgjyMQUgB+oVsb19LT
+         xKcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685127911; x=1687719911;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lnFdA77YJYoNvaGSmM9SYTrfoWB/SryNK9HkuvxiNTM=;
-        b=EAhPEI9eXGEON5B51xDNAhdqMg0RhZ+0UPq5oz+9Jom8rFw0cFySBf9Qhh95pmSvCO
-         z27b58MiePjn4OCaE5bbq4EnyTGSQJ1ULVB5GwU9tUPegK/BRsYIgxY6yf9VGyhDDkeY
-         ercIwRPrVKgvSELkXg6Kov7c50RDetACXqPypDlzYIfQaL5GUwgb/aPBV2qRQlIOQHlT
-         dEEYkeq4TJd8f2xOvLPWwsEReusFPmdsylFCrgLJ+IZ1p69QBUxuRgwYanRsLcYWIwmp
-         BX/KJoQiSJqWPRdn8+24Hqxl4Q1Dg6lsHCfcFsn3vSwTazIcZVFoko0TWS5H3oZdLxZT
-         eEEA==
-X-Gm-Message-State: AC+VfDySPVCljPM3NhKrm56lhmme2dOuD8LFHSMQKw33pQLU3tVTkhOQ
-        GR+h3KWMsKsPSiqYA0EDRrcFuql1MoiZUw1abDTlKrq/bfEgJ5F3
-X-Google-Smtp-Source: ACHHUZ4zNLZAxXKUdafod0VEFTQ+BADAdOr0aeEaChZydZH5qi1xIaFNWcWdQj7AyMqu7wIUTlqi6bg5OJUxmqAW4Yw=
-X-Received: by 2002:a05:6a20:728c:b0:10f:13bb:5d4f with SMTP id
- o12-20020a056a20728c00b0010f13bb5d4fmr508561pzk.2.1685127911498; Fri, 26 May
- 2023 12:05:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685128138; x=1687720138;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aVzy92SBUMkeNgqTWxtWDoFkJg92aZ4R1TOIJLd57RQ=;
+        b=idtiJ7Be+/N4QYKUDWFOQrQnG2w0nYPIXdOeqvHhIKLTBV5M8YdE6eodTFs0HYUJww
+         RH+0JNcvLIL61gTnp09Zd90OipX/pY111QW2x9JigrCYhoMVHLfeujOt0TwKjeJguBNU
+         Yh4s9UI1EdqRwS75uOJry52OJy0JHmEJQ1rXlKRKhekJinrOGBom2AgrQUqyxSfKBi3c
+         78OLKs/ztogxnq2Av/AAif/oLn7zuDFIDkPu0eXfYzSBvxGOwrXNXkdNKJSUPDwQ4hko
+         5FINVUmcXSQr+6ouGBE1EZjJ3+7jQ5dY4wvS/AKjIYqFX43rfP9pz59Xn21DUML7e3jT
+         y6xw==
+X-Gm-Message-State: AC+VfDxjPxPb6BeZcp/tFI1lftoOzxNpcADdXURrBTg21nChlzpVmEN/
+        rhkTsb8rKcBxs7xK9ZkP/Lg=
+X-Google-Smtp-Source: ACHHUZ5XSk2ILjGdLZteuicFA2+l9lIwrFaWtw5//Xo/jHy35YGqdGcVs/Mh1riYll17Z1eu+usSwg==
+X-Received: by 2002:a17:907:26c3:b0:969:e9ec:9a0 with SMTP id bp3-20020a17090726c300b00969e9ec09a0mr2656362ejc.77.1685128137481;
+        Fri, 26 May 2023 12:08:57 -0700 (PDT)
+Received: from fedora.. (dh207-98-6.xnet.hr. [88.207.98.6])
+        by smtp.googlemail.com with ESMTPSA id q18-20020a170906b29200b0095844605bb8sm2507439ejz.10.2023.05.26.12.08.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 12:08:56 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH 1/2] clk: qcom: gcc-ipq6018: update UBI32 PLL
+Date:   Fri, 26 May 2023 21:08:54 +0200
+Message-Id: <20230526190855.2941291-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230517150321.2890206-1-revest@chromium.org> <20230517150321.2890206-5-revest@chromium.org>
- <ZGzrcOeXc/slVpCY@arm.com>
-In-Reply-To: <ZGzrcOeXc/slVpCY@arm.com>
-From:   Florent Revest <revest@chromium.org>
-Date:   Fri, 26 May 2023 21:05:00 +0200
-Message-ID: <CABRcYmLt2KsCoD8WzyCTxuY=6ppuWEqyLSDRXSsmXSxPLHtEzQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] mm: Add a NO_INHERIT flag to the PR_SET_MDWE prctl
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
-        david@redhat.com, peterx@redhat.com, izbyshev@ispras.ru,
-        broonie@kernel.org, szabolcs.nagy@arm.com, kpsingh@kernel.org,
-        gthelen@google.com, toiwoton@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,119 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 6:36=E2=80=AFPM Catalin Marinas <catalin.marinas@ar=
-m.com> wrote:
->
-> On Wed, May 17, 2023 at 05:03:20PM +0200, Florent Revest wrote:
-> > diff --git a/kernel/sys.c b/kernel/sys.c
-> > index 339fee3eff6a..320eae3b12ab 100644
-> > --- a/kernel/sys.c
-> > +++ b/kernel/sys.c
-> > @@ -2368,9 +2368,25 @@ static inline int prctl_set_mdwe(unsigned long b=
-its, unsigned long arg3,
-> >       if (arg3 || arg4 || arg5)
-> >               return -EINVAL;
-> >
-> > -     if (bits & ~(PR_MDWE_REFUSE_EXEC_GAIN))
-> > +     if (bits & ~(PR_MDWE_REFUSE_EXEC_GAIN | PR_MDWE_NO_INHERIT))
-> >               return -EINVAL;
-> >
-> > +     /* NO_INHERIT only makes sense with REFUSE_EXEC_GAIN */
-> > +     if (bits & PR_MDWE_NO_INHERIT && !(bits & PR_MDWE_REFUSE_EXEC_GAI=
-N))
-> > +             return -EINVAL;
-> > +
-> > +     /* Can't gain NO_INHERIT from !NO_INHERIT */
-> > +     if (bits & PR_MDWE_NO_INHERIT &&
-> > +         test_bit(MMF_HAS_MDWE, &current->mm->flags) &&
-> > +         !test_bit(MMF_HAS_MDWE_NO_INHERIT, &current->mm->flags))
-> > +             return -EPERM;
-> > +
-> > +     if (bits & PR_MDWE_NO_INHERIT)
-> > +             set_bit(MMF_HAS_MDWE_NO_INHERIT, &current->mm->flags);
-> > +     else if (test_bit(MMF_HAS_MDWE_NO_INHERIT, &current->mm->flags)
-> > +              && !(bits & PR_MDWE_REFUSE_EXEC_GAIN))
-> > +             return -EPERM; /* Cannot unset the flag */
+Update the UBI32 alpha PLL config to the latest values from the downstream
+QCA 5.4 kernel.
 
-Ugh, I had to proofread this 3 times to figure out what I was trying
-to do, not great. :(
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ drivers/clk/qcom/gcc-ipq6018.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> Is this about not unsetting the MMF_HAS_MDWE bit? We already have a
-> check further down that covers this case.
+diff --git a/drivers/clk/qcom/gcc-ipq6018.c b/drivers/clk/qcom/gcc-ipq6018.c
+index 350ead66914ca..abd97b939850f 100644
+--- a/drivers/clk/qcom/gcc-ipq6018.c
++++ b/drivers/clk/qcom/gcc-ipq6018.c
+@@ -4149,15 +4149,20 @@ static struct clk_branch gcc_dcc_clk = {
+ 
+ static const struct alpha_pll_config ubi32_pll_config = {
+ 	.l = 0x3e,
+-	.alpha = 0x57,
++	.alpha = 0x6667,
+ 	.config_ctl_val = 0x240d6aa8,
+ 	.config_ctl_hi_val = 0x3c2,
++	.config_ctl_val = 0x240d4828,
++	.config_ctl_hi_val = 0x6,
+ 	.main_output_mask = BIT(0),
+ 	.aux_output_mask = BIT(1),
+ 	.pre_div_val = 0x0,
+ 	.pre_div_mask = BIT(12),
+ 	.post_div_val = 0x0,
+ 	.post_div_mask = GENMASK(9, 8),
++	.alpha_en_mask = BIT(24),
++	.test_ctl_val = 0x1C0000C0,
++	.test_ctl_hi_val = 0x4000,
+ };
+ 
+ static const struct alpha_pll_config nss_crypto_pll_config = {
+-- 
+2.40.1
 
-Actually, this was about not being able to unset _both_ NO_INHERIT and
-HAS_MDWE (this would gain capabilities)... While still being able to
-unset NO_INHERIT only (this reduces capabilities)
-
-> Related to this, do we want to allow unsetting MMF_HAS_MDWE_NO_INHERIT?
-> It looks like it can't be unset but no error either.
-
-But - sigh - as you point out, that second part wasn't implemented. It
-looks like I intended to add an:
-
-else
-  clear_bit(MMF_HAS_MDWE_NO_INHERIT, &current->mm->flags);
-
-after that block but forgot... The idea was that:
-- setting no_inherit is always allowed
-- unsetting it is allowed iff we don't also unset REFUSE_EXEC_GAIN
-
-The "consecutive_prctl_flags" selftests in patch 5 were supposed to
-make the assumptions here easier to read and verify. This logic was
-meant to be covered by  "cant_disable_mdwe_no_inherit" and
-"can_lower_privileges" but these tests only check that the "set" prctl
-succeeds and not that the end result is the expected one so I missed
-this. I'll improve the selftest in the next revision too so we can
-catch this more easily next time.
-
-> The above check,
-> IIUC, looks more like ensuring we don't clear MMF_HAS_MDWE.
-
-Indeed, without the else, it was useless.
-
-> Maybe we should tighten the logic here a bit and not allow any changes
-> after the initial flag setting:
->
-> current->mm->flags =3D=3D 0, we allow:
->         bits =3D=3D 0 or
->         bits =3D=3D PR_MDWE_REFUSE_EXEC_GAIN or
->         bits =3D=3D PR_MDWE_REFUSE_EXEC_GAIN | PR_MDWE_NO_INHERIT
->
-> current->mm->flags !=3D 0 (some bits were set), we only allow the exactly
-> the same bit combination or -EPERM.
->
-> So basically build the flags based on the PR_* input bits and compare
-> them with current->mm->flags when not 0, return -EPERM if different. I
-> think this preserves the ABI as we only have a single bit currently and
-> hopefully makes the logic here easier to parse.
-
-On one hand, I thought it would be nice to have the ability to
-transition from NO_INHERIT | REFUSE_EXEC_GAIN to REFUSE_EXEC_GAIN
-because, conceptually, it seems to me that we shouldn't prevent a
-process from dropping further capabilities.
-
-On the other hand, I don't think I have an actual need for that
-transition and I agree that if we don't try to handle it, the code
-here would become a lot easier to reason about. I'd certainly sleep
-better at night with the smaller likelihood of having screwed
-something up... :)
-
-Unless someone feels strongly otherwise, I'll do what you suggest in v3
-
-> > @@ -2385,8 +2401,10 @@ static inline int prctl_get_mdwe(unsigned long a=
-rg2, unsigned long arg3,
-> >       if (arg2 || arg3 || arg4 || arg5)
-> >               return -EINVAL;
-> >
-> > -     return test_bit(MMF_HAS_MDWE, &current->mm->flags) ?
-> > -             PR_MDWE_REFUSE_EXEC_GAIN : 0;
-> > +     return (test_bit(MMF_HAS_MDWE, &current->mm->flags) ?
-> > +             PR_MDWE_REFUSE_EXEC_GAIN : 0) |
-> > +             (test_bit(MMF_HAS_MDWE_NO_INHERIT, &current->mm->flags) ?
-> > +             PR_MDWE_NO_INHERIT : 0);
-> >  }
->
-> Just personal preference, use explicit 'if' blocks and add bits to a
-> local variable variable than multiple ternary operators.
-
-Will do!
