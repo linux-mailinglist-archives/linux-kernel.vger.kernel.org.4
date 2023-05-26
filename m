@@ -2,169 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96FC7123F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DFC7123F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242735AbjEZJqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S242982AbjEZJqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjEZJqb (ORCPT
+        with ESMTP id S230106AbjEZJqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:46:31 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A1DA4;
-        Fri, 26 May 2023 02:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685094389; x=1716630389;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wCWGZqjxmi5S7z4xOw6jSScIIJ8ZtfxFVm7rVDtgoOU=;
-  b=dW6nefangcRRlkdI941I+QPLc3cxI1xByis9KerUf40qvLYJzpb2Vam8
-   oPNKuF53o19epMDay/PKLZ4zXyAQoW5RSriz+FfsHhBWMEBP6OKCIxbSG
-   mkkiM7zIBhj/UKgrxWA6KAJs2Uf5vqQId2Jx3XlSEkrTEEPmYyGz4MvtB
-   iM8eg1rYhxsj+n3hdvBlpbZu+Strc6CVlgvD1VbFhVGZ3DVbB4bvQufT1
-   uhRoV2OvjscSiEY3Qvb3lfsVYL30NKHx8RjIyFlAdi2ziLyn9XntPJZKq
-   TtBGesvic28jS66yldcWJGP8LLMPPGh1BHF+l1/fwf3nONTSUjA718F1x
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="382409623"
-X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
-   d="scan'208";a="382409623"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 02:46:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="708337372"
-X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
-   d="scan'208";a="708337372"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 26 May 2023 02:46:25 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q2U1g-000JEN-32;
-        Fri, 26 May 2023 09:46:24 +0000
-Date:   Fri, 26 May 2023 17:45:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        linux-arch@vger.kernel.org, arnd@arndb.de,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Baoquan He <bhe@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: Re: [PATCH v4] mips: add <asm-generic/io.h> including
-Message-ID: <202305261736.cBisGOAz-lkp@intel.com>
-References: <20230519195135.79600-1-jiaxun.yang@flygoat.com>
+        Fri, 26 May 2023 05:46:36 -0400
+Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6C7A4;
+        Fri, 26 May 2023 02:46:32 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QSKX24sdvz9xFbR;
+        Fri, 26 May 2023 17:34:58 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwB3R17Yf3Bk2oXbAg--.2346S2;
+        Fri, 26 May 2023 10:46:12 +0100 (CET)
+Message-ID: <58cebdd9318bd4435df6c0cf45318abd3db0fff8.camel@huaweicloud.com>
+Subject: Re: [syzbot] [reiserfs?] INFO: task hung in flush_old_commits
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com>,
+        Jan Kara <jack@suse.cz>, Jeff Mahoney <jeffm@suse.com>
+Date:   Fri, 26 May 2023 11:45:57 +0200
+In-Reply-To: <CAHC9VhRoj3muyD0+pTwpJvCdmzz25C8k8eufWcjc8ZE4e2AOew@mail.gmail.com>
+References: <000000000000be039005fc540ed7@google.com>
+         <00000000000018faf905fc6d9056@google.com>
+         <CAHC9VhTM0a7jnhxpCyonepcfWbnG-OJbbLpjQi68gL2GVnKSRg@mail.gmail.com>
+         <813148798c14a49cbdf0f500fbbbab154929e6ed.camel@huaweicloud.com>
+         <CAHC9VhRoj3muyD0+pTwpJvCdmzz25C8k8eufWcjc8ZE4e2AOew@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519195135.79600-1-jiaxun.yang@flygoat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwB3R17Yf3Bk2oXbAg--.2346S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuw43XF1UtFW5tr1fGryfJFb_yoW3CFWxpF
+        WUtF1qkrWktr1UCrn7t3Z8J3WY9rnYvay7J34xGryjvanYgFnxJw4xKrW3G3yDXrs3CFZr
+        XFs5A3y2vw1rWaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBF1jj4nAMwABsF
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiaxun,
+On Wed, 2023-05-24 at 17:57 -0400, Paul Moore wrote:
+> On Wed, May 24, 2023 at 11:50 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > On Wed, 2023-05-24 at 11:11 -0400, Paul Moore wrote:
+> > > On Wed, May 24, 2023 at 5:59 AM syzbot
+> > > <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com> wrote:
+> > > > syzbot has bisected this issue to:
+> > > > 
+> > > > commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+> > > > Author: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > Date:   Fri Mar 31 12:32:18 2023 +0000
+> > > > 
+> > > >     reiserfs: Add security prefix to xattr name in reiserfs_security_write()
+> > > > 
+> > > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11c39639280000
+> > > > start commit:   421ca22e3138 Merge tag 'nfs-for-6.4-2' of git://git.linux-..
+> > > > git tree:       upstream
+> > > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=13c39639280000
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=15c39639280000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=0a684c061589dcc30e51
+> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14312791280000
+> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12da8605280000
+> > > > 
+> > > > Reported-by: syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com
+> > > > Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reiserfs_security_write()")
+> > > > 
+> > > > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> > > 
+> > > Roberto, I think we need to resolve this somehow.  As I mentioned
+> > > earlier, I don't believe this to be a fault in your patch, rather that
+> > > patch simply triggered a situation that had not been present before,
+> > > likely because the reiserfs code always failed when writing LSM
+> > > xattrs.  Regardless, we still need to fix the deadlocks that sysbot
+> > > has been reporting.
+> > 
+> > Hi Paul
+> > 
+> > ok, I will try.
+> 
+> Thanks Roberto.  If it gets to be too challenging, let us know and we
+> can look into safely disabling the LSM xattrs for reiserfs, I'll be
+> shocked if anyone is successfully using LSM xattrs on reiserfs.
 
-kernel test robot noticed the following build warnings:
+Ok, at least I know what happens...
 
-[auto build test WARNING on soc/for-next]
-[also build test WARNING on linus/master v6.4-rc3 next-20230525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
++ Jan, Jeff
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/mips-add-asm-generic-io-h-including/20230520-035318
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/20230519195135.79600-1-jiaxun.yang%40flygoat.com
-patch subject: [PATCH v4] mips: add <asm-generic/io.h> including
-config: mips-randconfig-r015-20230525 (https://download.01.org/0day-ci/archive/20230526/202305261736.cBisGOAz-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/4f10a6993ab8060829908b87cdeea41f7eae38e7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jiaxun-Yang/mips-add-asm-generic-io-h-including/20230520-035318
-        git checkout 4f10a6993ab8060829908b87cdeea41f7eae38e7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/mmc/
+I'm focusing on this reproducer, which works 100% of the times:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305261736.cBisGOAz-lkp@intel.com/
+https://syzkaller.appspot.com/text?tag=ReproSyz&x=163079f9280000
 
-All warnings (new ones prefixed by >>):
+This is the last lock, before things go wrong:
 
-   In file included from drivers/mmc/host/dw_mmc.c:41:
->> drivers/mmc/host/dw_mmc.h:506:9: warning: '__raw_writeq' macro redefined [-Wmacro-redefined]
-   #define __raw_writeq(__value, __reg) \
-           ^
-   arch/mips/include/asm/io.h:566:9: note: previous definition is here
-   #define __raw_writeq __raw_writeq
-           ^
-   In file included from drivers/mmc/host/dw_mmc.c:41:
->> drivers/mmc/host/dw_mmc.h:508:9: warning: '__raw_readq' macro redefined [-Wmacro-redefined]
-   #define __raw_readq(__reg) (*(volatile u64 __force *)(__reg))
-           ^
-   arch/mips/include/asm/io.h:562:9: note: previous definition is here
-   #define __raw_readq __raw_readq
-           ^
-   2 warnings generated.
+Thread 5 hit Breakpoint 2, reiserfs_write_lock (s=s@entry=0xffff888066e28000) at fs/reiserfs/lock.c:24
+24	{
+(gdb) bt
+#0  reiserfs_write_lock (s=s@entry=0xffff888066e28000) at fs/reiserfs/lock.c:24
+#1  0xffffffff821a559a in reiserfs_get_block (inode=inode@entry=0xffff888069fd0190, block=block@entry=15, bh_result=bh_result@entry=0xffff888075940000, create=create@entry=1) at fs/reiserfs/inode.c:680
+#2  0xffffffff81f50254 in __block_write_begin_int (folio=0xffffea00019a9180, pos=pos@entry=61440, len=len@entry=1, get_block=get_block@entry=0xffffffff821a5390 <reiserfs_get_block>, iomap=iomap@entry=0x0 <fixed_percpu_data>) at fs/buffer.c:2064
+#3  0xffffffff81f5165a in __block_write_begin (page=page@entry=0xffffea00019a9180, pos=pos@entry=61440, len=len@entry=1, get_block=get_block@entry=0xffffffff821a5390 <reiserfs_get_block>) at ./arch/x86/include/asm/jump_label.h:27
+#4  0xffffffff821a3e3d in reiserfs_write_begin (file=<optimized out>, mapping=<optimized out>, pos=61440, len=1, pagep=<optimized out>, fsdata=<optimized out>) at fs/reiserfs/inode.c:2779
+#5  0xffffffff81aec252 in generic_perform_write (iocb=iocb@entry=0xffffc9002130fb60, i=i@entry=0xffffc9002130fd00) at mm/filemap.c:3923
+#6  0xffffffff81b0604e in __generic_file_write_iter (iocb=iocb@entry=0xffffc9002130fb60, from=from@entry=0xffffc9002130fd00) at mm/filemap.c:4051
+#7  0xffffffff81b06383 in generic_file_write_iter (iocb=0xffffc9002130fb60, from=0xffffc9002130fd00) at mm/filemap.c:4083
+#8  0xffffffff81e3240b in call_write_iter (file=0xffff888012692d00, iter=0xffffc9002130fd00, kio=0xffffc9002130fb60) at ./include/linux/fs.h:1868
+#9  do_iter_readv_writev (filp=filp@entry=0xffff888012692d00, iter=iter@entry=0xffffc9002130fd00, ppos=ppos@entry=0xffffc9002130fe90, type=type@entry=1, flags=flags@entry=0) at fs/read_write.c:735
+#10 0xffffffff81e33da4 in do_iter_write (flags=0, pos=0xffffc9002130fe90, iter=0xffffc9002130fd00, file=0xffff888012692d00) at fs/read_write.c:860
+#11 do_iter_write (file=0xffff888012692d00, iter=0xffffc9002130fd00, pos=0xffffc9002130fe90, flags=0) at fs/read_write.c:841
+#12 0xffffffff81e34611 in vfs_writev (file=file@entry=0xffff888012692d00, vec=vec@entry=0x20000480, vlen=vlen@entry=1, pos=pos@entry=0xffffc9002130fe90, flags=flags@entry=0) at fs/read_write.c:933
+#13 0xffffffff81e34fd6 in do_pwritev (fd=fd@entry=5, vec=vec@entry=0x20000480, vlen=vlen@entry=1, pos=pos@entry=61440, flags=flags@entry=0) at fs/read_write.c:1030
+#14 0xffffffff81e3b61f in __do_sys_pwritev2 (pos_h=<optimized out>, flags=0, pos_l=61440, vlen=1, vec=0x20000480, fd=5) at fs/read_write.c:1089
+#15 __se_sys_pwritev2 (pos_h=<optimized out>, flags=0, pos_l=61440, vlen=1, vec=536872064, fd=5) at fs/read_write.c:1080
+#16 __x64_sys_pwritev2 (regs=0xffffc9002130ff58) at fs/read_write.c:1080
+#17 0xffffffff880dd279 in do_syscall_x64 (nr=<optimized out>, regs=0xffffc9002130ff58) at arch/x86/entry/common.c:50
+#18 do_syscall_64 (regs=0xffffc9002130ff58, nr=<optimized out>) at arch/x86/entry/common.c:80
+#19 0xffffffff8820008b in entry_SYSCALL_64 () at arch/x86/entry/entry_64.S:120
+#20 0x0000000000406e00 in ?? ()
+#21 0x00007f99e21b5000 in ?? ()
+#22 0x0000000000000000 in ?? ()
+
+After that, there is a very long loop doing:
+
+Thread 5 hit Breakpoint 3, reiserfs_read_bitmap_block (sb=sb@entry=0xffff888066e28000, bitmap=bitmap@entry=1) at fs/reiserfs/bitmap.c:1417
+1417	{
+(gdb) c
+Continuing.
+
+Thread 5 hit Breakpoint 3, reiserfs_read_bitmap_block (sb=sb@entry=0xffff888066e28000, bitmap=bitmap@entry=2) at fs/reiserfs/bitmap.c:1417
+1417	{
+(gdb) 
+Continuing.
+
+and so on...
+
+[  628.589974][ T6003] REISERFS warning (device loop0): sh-2029: %s: bitmap block (#%u) reading failed reiserfs_read_bitmap_block: reiserfs_read_bitmap_block
+
+This message appears because we are here:
+
+struct buffer_head *reiserfs_read_bitmap_block(struct super_block *sb,
+                                               unsigned int bitmap)
+{
+
+[...]
+
+	bh = sb_bread(sb, block);
+	if (bh == NULL)
+		reiserfs_warning(sb, "sh-2029: %s: bitmap block (#%u) "
+		                 "reading failed", __func__, block);
+
+The hanging task (kthread) is trying to hold the same lock, which
+unfortunately is not going to be released soon:
+
+static int reiserfs_sync_fs(struct super_block *s, int wait)
+{
+
+[...]
+
+	reiserfs_write_lock(s);
+
+I didn't get yet if the reason of this long loop is because we cannot
+flush at this point, or just because of the test. I tried to
+synchronously flush, but didn't make any difference.
+
+I did a very simple change, which can be totally wrong:
+
+@@ -94,7 +96,7 @@ static void flush_old_commits(struct work_struct *work)
+         * trylock as reiserfs_cancel_old_flush() may be waiting for this work
+         * to complete with s_umount held.
+         */
+-       if (!down_read_trylock(&s->s_umount)) {
++       if (sbi->lock_owner || !down_read_trylock(&s->s_umount)) {
+                /* Requeue work if we are not cancelling it */
+                spin_lock(&sbi->old_work_lock);
+                if (sbi->work_queued == 1)
 
 
-vim +/__raw_writeq +506 drivers/mmc/host/dw_mmc.h
+If the lock is held, instead of waiting, reschedule the flush.
 
-76184ac17edf3c Ben Dooks   2015-03-25  473  
-f95f3850f7a9e1 Will Newton 2011-01-02  474  /* Register access macros */
-f95f3850f7a9e1 Will Newton 2011-01-02  475  #define mci_readl(dev, reg)			\
-a2f17680f42878 Ben Dooks   2015-03-25  476  	readl_relaxed((dev)->regs + SDMMC_##reg)
-f95f3850f7a9e1 Will Newton 2011-01-02  477  #define mci_writel(dev, reg, value)			\
-a2f17680f42878 Ben Dooks   2015-03-25  478  	writel_relaxed((value), (dev)->regs + SDMMC_##reg)
-f95f3850f7a9e1 Will Newton 2011-01-02  479  
-f95f3850f7a9e1 Will Newton 2011-01-02  480  /* 16-bit FIFO access macros */
-f95f3850f7a9e1 Will Newton 2011-01-02  481  #define mci_readw(dev, reg)			\
-a2f17680f42878 Ben Dooks   2015-03-25  482  	readw_relaxed((dev)->regs + SDMMC_##reg)
-f95f3850f7a9e1 Will Newton 2011-01-02  483  #define mci_writew(dev, reg, value)			\
-a2f17680f42878 Ben Dooks   2015-03-25  484  	writew_relaxed((value), (dev)->regs + SDMMC_##reg)
-f95f3850f7a9e1 Will Newton 2011-01-02  485  
-f95f3850f7a9e1 Will Newton 2011-01-02  486  /* 64-bit FIFO access macros */
-f95f3850f7a9e1 Will Newton 2011-01-02  487  #ifdef readq
-f95f3850f7a9e1 Will Newton 2011-01-02  488  #define mci_readq(dev, reg)			\
-a2f17680f42878 Ben Dooks   2015-03-25  489  	readq_relaxed((dev)->regs + SDMMC_##reg)
-f95f3850f7a9e1 Will Newton 2011-01-02  490  #define mci_writeq(dev, reg, value)			\
-a2f17680f42878 Ben Dooks   2015-03-25  491  	writeq_relaxed((value), (dev)->regs + SDMMC_##reg)
-f95f3850f7a9e1 Will Newton 2011-01-02  492  #else
-f95f3850f7a9e1 Will Newton 2011-01-02  493  /*
-f95f3850f7a9e1 Will Newton 2011-01-02  494   * Dummy readq implementation for architectures that don't define it.
-f95f3850f7a9e1 Will Newton 2011-01-02  495   *
-f95f3850f7a9e1 Will Newton 2011-01-02  496   * We would assume that none of these architectures would configure
-f95f3850f7a9e1 Will Newton 2011-01-02  497   * the IP block with a 64bit FIFO width, so this code will never be
-f95f3850f7a9e1 Will Newton 2011-01-02  498   * executed on those machines. Defining these macros here keeps the
-f95f3850f7a9e1 Will Newton 2011-01-02  499   * rest of the code free from ifdefs.
-f95f3850f7a9e1 Will Newton 2011-01-02  500   */
-f95f3850f7a9e1 Will Newton 2011-01-02  501  #define mci_readq(dev, reg)			\
-892b1e312b1791 James Hogan 2011-06-24  502  	(*(volatile u64 __force *)((dev)->regs + SDMMC_##reg))
-f95f3850f7a9e1 Will Newton 2011-01-02  503  #define mci_writeq(dev, reg, value)			\
-892b1e312b1791 James Hogan 2011-06-24  504  	(*(volatile u64 __force *)((dev)->regs + SDMMC_##reg) = (value))
-76184ac17edf3c Ben Dooks   2015-03-25  505  
-76184ac17edf3c Ben Dooks   2015-03-25 @506  #define __raw_writeq(__value, __reg) \
-76184ac17edf3c Ben Dooks   2015-03-25  507  	(*(volatile u64 __force *)(__reg) = (__value))
-76184ac17edf3c Ben Dooks   2015-03-25 @508  #define __raw_readq(__reg) (*(volatile u64 __force *)(__reg))
-f95f3850f7a9e1 Will Newton 2011-01-02  509  #endif
-f95f3850f7a9e1 Will Newton 2011-01-02  510  
+Anyway, at least this report does not seem to be related to fixing
+security xattrs.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Roberto
+
