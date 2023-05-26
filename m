@@ -2,58 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33A9712401
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC4B712406
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 11:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243183AbjEZJsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 05:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S229488AbjEZJse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 05:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243155AbjEZJsN (ORCPT
+        with ESMTP id S243185AbjEZJsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 05:48:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA301D8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 02:48:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A1B46168E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:48:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B1BCC4339B;
-        Fri, 26 May 2023 09:48:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685094491;
-        bh=cLxbSg+XqqVsWSq9nyUiacTmkj48Tj2ek03PRtbVxJM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=pTlbvAFp15IpQc78BsTJsGCaOjcHUabJpdVvssTs3xS5BEhJreUTeS85HdEIoXZPJ
-         r8FapS4wAEssFHCDr5LRQzyj/2yDdW+Z47JKMpjowp0LLm+inWq6Zlq9o/OV8VISnv
-         yWEniSLOdqChDVJND54Dhf4PY573qYqNALcHKdBAYXURikCdMaooN6N6vR/KFXsrE8
-         0JoVWTx1OenrwTllyuc+3aTdNKmK95sAWXZfuNpErGMTYrQno265rGEkZvVS2o6/6m
-         PDx7OGBFyMR8YujMI+tO6uDEk1muaWHqOAoWKU8mwCaazHP0wtU38ZAw0kuRrUxw35
-         8eA/lCHGa03nQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A9085CE0CCF; Fri, 26 May 2023 02:48:06 -0700 (PDT)
-Date:   Fri, 26 May 2023 02:48:06 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Yujie Liu <yujie.liu@intel.com>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [paulmck-rcu:rcu/next 19/19] kernel/rcu/rcuscale.c:340:20:
- error: use of undeclared identifier 'get_rcu_tasks_trace_gp_kthread'; did
- you mean 'show_rcu_tasks_trace_gp_kthread'?
-Message-ID: <17429c26-d279-43ec-a297-232bc6301bec@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202305190259.Rm6JC6Nz-lkp@intel.com>
- <e51237d6-5b10-424d-a0d3-afe8ee24f530@paulmck-laptop>
- <ZHBeg7SyMQnWJ5Gd@yujie-X299>
+        Fri, 26 May 2023 05:48:23 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0E5B3;
+        Fri, 26 May 2023 02:48:22 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51456387606so748518a12.1;
+        Fri, 26 May 2023 02:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685094501; x=1687686501;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RvBpCfcgBfq+TTHR4XXBywiR+cKDsO3EJnjHG46eiyI=;
+        b=TChFGd7Y1k6dSQ6LFy1/fB482Lf7c+I3XtPjqRvs1ibBWeyN1xWAzQR8IyEKPXcSbw
+         9xlqRWxOaIiia8xxZEG/VXqkThynX5agnxJfT3shAoAPTTZT0R1QINfHkrwdASQEzjIX
+         4NxQSmZPmcYC6ZyR3PqYwVP8bdXJTaP2tFDb4Ez4CY9473l+Nzg9Zjjm6U1PgDxF2zzw
+         sPW93TsfouXxomu4yFoEumPzSy6I1q/A+BUvPfUGvbmSitZKaRHOJqlZqMF0QV/zOLud
+         6vupxqFqHXn87zDyt4AHE5hseZCWf+BYn98mcVijxPsflgouhKUA0xQjR61yX/WkpiuT
+         ME/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685094501; x=1687686501;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RvBpCfcgBfq+TTHR4XXBywiR+cKDsO3EJnjHG46eiyI=;
+        b=RKj5MapZ0yTAMH/lSIjuMfd+ERoOpdujXlV2DCRyTPDYqael8eYD475FYc6qo6+8aR
+         7MERF6ZmB7W7nfhkf47fOSUstth08e9aaVE0ppQ11zzsWV7v9N8m0QaWU3U4OS2NZV3l
+         X6XXpiXw4u3wU8zwN6x82xpMW2CeS4IafV83IBZeqgJ3DaCUdvRXGxt5KEFWx1lmdlS/
+         FZF0TVh/zkLBLqsV4FZpW+NYNaIjp8JRNGHnxP9Lj/+gXXnR+cgShEakcV0zY+xgCB2J
+         GeuLC5ap0v06ctYa5QvmszVJYnzwIm2YyW8Rhkmwbl6BSMFsSmhE9YmQxyf2FoLRCwoU
+         stqQ==
+X-Gm-Message-State: AC+VfDxE8q/LwXgaCHpPtJnNGhmuuJJivFn89JJ3Uuxhi+oV53sqqYxk
+        vq6kS1GCpjK9erxw+pb0Qc8=
+X-Google-Smtp-Source: ACHHUZ5484ZTFeoU13Z6zr8eadz/N4C4k1DEp9LNRPLgprzBk63f1yfx7F/tqm20ABBQs7tdt21BiQ==
+X-Received: by 2002:aa7:cb50:0:b0:50c:358:1eba with SMTP id w16-20020aa7cb50000000b0050c03581ebamr808347edt.35.1685094500539;
+        Fri, 26 May 2023 02:48:20 -0700 (PDT)
+Received: from [192.168.0.107] ([77.124.85.177])
+        by smtp.gmail.com with ESMTPSA id d8-20020a50fb08000000b00502689a06b2sm1367218edq.91.2023.05.26.02.48.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 02:48:20 -0700 (PDT)
+Message-ID: <e1e3dea5-a393-180a-805a-a944ec778041@gmail.com>
+Date:   Fri, 26 May 2023 12:48:15 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHBeg7SyMQnWJ5Gd@yujie-X299>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net] ice: Don't dereference NULL in ice_gns_read error
+ path
+Content-Language: en-US
+To:     Simon Horman <horms@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Karol Kolacinski <karol.kolacinski@intel.com>,
+        Sudhansu Sekhar Mishra <sudhansu.mishra@intel.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230525-null-ice-v1-1-30d10557b91e@kernel.org>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20230525-null-ice-v1-1-30d10557b91e@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,74 +85,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 03:23:47PM +0800, Yujie Liu wrote:
-> Hi Paul,
+
+
+On 25/05/2023 13:52, Simon Horman wrote:
+> If pf is NULL in ice_gns_read() then it will be dereferenced
+> in the error path by a call to dev_dbg(ice_pf_to_dev(pf), ...).
 > 
-> On Thu, May 18, 2023 at 07:11:33PM -0700, Paul E. McKenney wrote:
-> > On Fri, May 19, 2023 at 02:30:11AM +0800, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-> > > head:   9bb839a83e1bbbfd4f7f20827aafd0a39fad00c7
-> > > commit: 9bb839a83e1bbbfd4f7f20827aafd0a39fad00c7 [19/19] rcuscale: Measure grace-period kthread CPU time
-> > > config: x86_64-randconfig-a001
-> > > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> > > reproduce (this is a W=1 build):
-> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >         chmod +x ~/bin/make.cross
-> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=9bb839a83e1bbbfd4f7f20827aafd0a39fad00c7
-> > >         git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-> > >         git fetch --no-tags paulmck-rcu rcu/next
-> > >         git checkout 9bb839a83e1bbbfd4f7f20827aafd0a39fad00c7
-> > >         # save the config file
-> > >         mkdir build_dir && cp config build_dir/.config
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/rcu/
-> > > 
-> > > If you fix the issue, kindly add following tag where applicable
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202305190259.Rm6JC6Nz-lkp@intel.com/
-> > > 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > > >> kernel/rcu/rcuscale.c:340:20: error: use of undeclared identifier 'get_rcu_tasks_trace_gp_kthread'; did you mean 'show_rcu_tasks_trace_gp_kthread'?
-> > >            .rso_gp_kthread = get_rcu_tasks_trace_gp_kthread,
-> > >                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >                              show_rcu_tasks_trace_gp_kthread
-> > >    kernel/rcu/rcu.h:642:20: note: 'show_rcu_tasks_trace_gp_kthread' declared here
-> > >    static inline void show_rcu_tasks_trace_gp_kthread(void) {}
-> > >                       ^
-> > > >> kernel/rcu/rcuscale.c:340:20: error: incompatible function pointer types initializing 'struct task_struct *(*)(void)' with an expression of type 'void (void)' [-Werror,-Wincompatible-function-pointer-types]
-> > >            .rso_gp_kthread = get_rcu_tasks_trace_gp_kthread,
-> > >                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    2 errors generated.
-> > 
-> > Apologies for the hassle!  Does the diff below help at your end?
+> Avoid this by simply returning in this case.
+> If logging is desired an alternate approach might be to
+> use pr_err() before returning.
 > 
-> Sorry for the late reply. We noticed that rcu/next branch was respined
-> and the diff below has been applied. We tested the new head commit
-> 60901dadfadc ("rcuscale: Measure grace-period kthread CPU time")
-> and the build error is gone. Thanks.
+> Flagged by Smatch as:
 > 
-> Tested-by: Yujie Liu <yujie.liu@intel.com>
+>    .../ice_gnss.c:196 ice_gnss_read() error: we previously assumed 'pf' could be null (see line 131)
+> 
+> Fixes: 43113ff73453 ("ice: add TTY for GNSS module for E810T device")
+> Signed-off-by: Simon Horman <horms@kernel.org>
+> ---
 
-Very good, thank you!  I will apply on my next rebase.
+LGTM.
 
 
-						Thanx, Paul
-
-> > ------------------------------------------------------------------------
-> > 
-> > diff --git a/include/linux/rcupdate_trace.h b/include/linux/rcupdate_trace.h
-> > index 3a5a322939b6..eda493200663 100644
-> > --- a/include/linux/rcupdate_trace.h
-> > +++ b/include/linux/rcupdate_trace.h
-> > @@ -87,9 +87,7 @@ static inline void rcu_read_unlock_trace(void)
-> >  void call_rcu_tasks_trace(struct rcu_head *rhp, rcu_callback_t func);
-> >  void synchronize_rcu_tasks_trace(void);
-> >  void rcu_barrier_tasks_trace(void);
-> > -# ifdef CONFIG_RCU_SCALE_TEST
-> >  struct task_struct *get_rcu_tasks_trace_gp_kthread(void);
-> > -# endif
-> >  #else
-> >  /*
-> >   * The BPF JIT forms these addresses even when it doesn't call these
-> > 
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
