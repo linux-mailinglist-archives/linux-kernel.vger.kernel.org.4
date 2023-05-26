@@ -2,123 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC464712AF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCB1712AFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237027AbjEZQrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S237034AbjEZQr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236975AbjEZQrB (ORCPT
+        with ESMTP id S236801AbjEZQrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:47:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758B7DF
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:46:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685119579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=15hzoN1grDfhUpQizKd1JzLnEjMUd9UXGO5wVqE9Ya8=;
-        b=buTYW36R81B+8NP3ZqBXB+jw6W9K9AstPJj5A4eEnLEyLUhYH8X0NGPHkGIgiervB6NCYd
-        6SN2TTIaMt2dtZGirjqLkRPIiqzyfDXq9+8NsybxjHMwnqmsYNHZl6MulC8ZkSsfVxPsWn
-        QWTNuL3h9nJO81i6mDm1ZrYZLraUnRg=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-463-kCWLTbx6M6emalZSFKRk3w-1; Fri, 26 May 2023 12:46:18 -0400
-X-MC-Unique: kCWLTbx6M6emalZSFKRk3w-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30ac89cc4faso587035f8f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:46:17 -0700 (PDT)
+        Fri, 26 May 2023 12:47:52 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9275FD9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:47:50 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f606e111d3so525e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685119669; x=1687711669;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xgH2Cdrwxvw4IfwvJTzYeY7KIodASo/zB54J71C8SXg=;
+        b=kFmq4/Ubiomw+bSsqMt5jQCtPHuEgbhKdix+7oMl8jygp6e/xbdU1rHaWGp6XxzdFZ
+         eJyu4fpze/watbsoKe0EVFrHthAqk+FzLOywBlLBCK0ha9s7esYXtkSb36CewsJlO/gH
+         U0V2hQ26/1rnlmQp/Y86IHBxkv55Op0K74qXQ3beUTDGGF9NiS68oRIOvg24+kjl6mZU
+         pVXo53O392GyUDGU2GL+ZLpQ/z0IPKATdTRrt8M9ErhzbA2K57x2ioir4gm9fojNd1iQ
+         CedzWO/QzZNftE2cgMKMstgBGdQ3c0e4fBxqdD4kFobF30kjuBI9SUBRsZE9B/utpJlH
+         bt1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685119577; x=1687711577;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=15hzoN1grDfhUpQizKd1JzLnEjMUd9UXGO5wVqE9Ya8=;
-        b=L8ARuuNhM8a3YT1ST/cs038bWYhP8Ifof27leEup3vSXTrwZyljNRXj1/TpOOr2wau
-         FYss3Z2Fp6M8A/eLIA5aAO33A6BjSn964mxmv3in65J95Vh3WAoPJr1RUqSQqhT2riia
-         uydjguaoY8Sd90+sPIoYSFMSoBu+HLU6ZMgJPfb3Nd6jxabQOksYEHrav0olcwKbxGie
-         UocEKc5UhodRSnD5scYQ/qmylP25r0QO8XZ5gB1MSLXu77aJtE/HT/DcGXfPSJm5iC7p
-         Fz2kFX8Zq0nH+BFySXxC6+D0qopbq8O4P4Smw75zVztuA7BeD/Zaduo/JwqvzF/3iSQU
-         L4wg==
-X-Gm-Message-State: AC+VfDyHeNIokl5vEj1ZyCL6++VrJ6yg7F8A42YwiXJh3YCjqsVmTDZb
-        m4yW1fUzeC7aqnpJuwlMq6ocmwzIOBuV+GINyF4MsxbiqIG4t+0MKpn9EK90WvEZe0jJsg9/fkD
-        alB9qD9xHQjXIY5tAgAPulJ2KITDgQBVs
-X-Received: by 2002:a5d:6e53:0:b0:30a:3ae0:f455 with SMTP id j19-20020a5d6e53000000b0030a3ae0f455mr1989815wrz.2.1685119576893;
-        Fri, 26 May 2023 09:46:16 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4kcRipuP320lWaCy4ny+PW8DKtULjLxKrNnDpClSlTBkygY/JXSFoIljwXwyg6UTRZw+hEew==
-X-Received: by 2002:a5d:6e53:0:b0:30a:3ae0:f455 with SMTP id j19-20020a5d6e53000000b0030a3ae0f455mr1989795wrz.2.1685119576490;
-        Fri, 26 May 2023 09:46:16 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
-        by smtp.gmail.com with ESMTPSA id r14-20020adfce8e000000b00307925ff35bsm5571809wrn.49.2023.05.26.09.46.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 09:46:16 -0700 (PDT)
-Message-ID: <f5a37f8d-d888-9085-2f2b-1e350a267396@redhat.com>
-Date:   Fri, 26 May 2023 18:46:15 +0200
+        d=1e100.net; s=20221208; t=1685119669; x=1687711669;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xgH2Cdrwxvw4IfwvJTzYeY7KIodASo/zB54J71C8SXg=;
+        b=gK6Im7gedLIVg5PRgCnhVS6ioFaLdlvVhYSyTbOcoOPdAGYmqCV7hFkw9NJdLUVYCQ
+         nF9Ch10hqx9eVc9+ajqMrNR2L1bEBodywaYMSO7y0BUd+MYV+l1U71YviQmApkPsGsmn
+         tUUqcUQaHPuwdqh5okN11TQ2TWYOYK8wqTUdBj1IDwiP81R29/5kq3w8qFUDDyq8m+OJ
+         7Z2+Gfe8FIWIFzYOr3i9tDFFOE9dzzIExqIu/BEPn74cjdi8WGeJJhyoVR9ShGKZd+pi
+         pD8G62+FSGu9fUnNb34QDNDX0nJOhwJTz2kQKtc/f2p5qHXhF/WVEDILyAwoa634TSKq
+         bZVg==
+X-Gm-Message-State: AC+VfDw45xdsrmREQCbDWuiD7obueXDayXIn+pNi2DYiIUWHFRsZpXuE
+        6gw0R6ktUcjv694UO42b6+ITwJ5LW8A8pzbq5n6Vew==
+X-Google-Smtp-Source: ACHHUZ7/0H65ZD/H44M1y+JBCNzkWKJ3dgQZ+8Lbr2uPV0C4C5HK5fM5ucCTSf8USInqYp++NXhtlDOSXY2HHA4TS2g=
+X-Received: by 2002:a05:600c:539b:b0:3f4:df95:17e0 with SMTP id
+ hg27-20020a05600c539b00b003f4df9517e0mr118254wmb.5.1685119668896; Fri, 26 May
+ 2023 09:47:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4] mm, compaction: Skip all non-migratable pages during
- scan
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     Steven Sistare <steven.sistare@oracle.com>,
-        akpm@linux-foundation.org, ying.huang@intel.com,
-        mgorman@techsingularity.net, baolin.wang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Khalid Aziz <khalid@kernel.org>
-References: <20230525191507.160076-1-khalid.aziz@oracle.com>
- <ZG+99h3zg7POIits@casper.infradead.org>
- <ee093583-71c3-51ba-980f-0facb03b0e23@oracle.com>
- <ZG/I7tYY4uV/32hP@casper.infradead.org>
- <ZG/To8Z3StoVoenU@casper.infradead.org>
- <60367660-f4a3-06dc-4d17-4dbdc733ef74@oracle.com>
- <ZHDh4Jeb/vKY+nGU@casper.infradead.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ZHDh4Jeb/vKY+nGU@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230526150806.1457828-1-VEfanov@ispras.ru> <27614af23cd7ae4433b909194062c553a6ae16ac.camel@redhat.com>
+ <027d28a0-b31b-ab42-9eb6-2826c04c9364@ispras.ru> <CANn89iLGOVwW-KHBuJ94E+QoVARWw5EBKyfh0mPkOT+5ws31Fw@mail.gmail.com>
+ <d3fccbd0-c92e-9aff-8c32-48c1171746c3@ispras.ru>
+In-Reply-To: <d3fccbd0-c92e-9aff-8c32-48c1171746c3@ispras.ru>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 26 May 2023 18:47:36 +0200
+Message-ID: <CANn89i+UYRXD16epov9x7+Zr5vCKL+DTCidsOaQdMBjWMmK8CA@mail.gmail.com>
+Subject: Re: [PATCH] udp6: Fix race condition in udp6_sendmsg & connect
+To:     Vlad Efanov <vefanov@ispras.ru>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.05.23 18:44, Matthew Wilcox wrote:
-> On Fri, May 26, 2023 at 09:44:34AM -0600, Khalid Aziz wrote:
->>> Oh, I think I found it!  pin_user_pages_remote() is called by
->>> vaddr_get_pfns().  If these are the pages you're concerned about,
->>> then the efficient way to do what you want is simply to call
->>> folio_maybe_dma_pinned().  Far more efficient than the current mess
->>> of total_mapcount().
->>
->> vfio pinned pages triggered this change. Wouldn't checking refcounts against
->> mapcount provide a more generalized way of detecting non-migratable pages?
-> 
-> Well, you changed the comment to say that we were concerned about
-> long-term pins.  If we are, than folio_maybe_dma_pinned() is how to test
-> for long-term pins.  If we want to skip pages which are short-term pinned,
-> then we need to not change the comment, and keep using mapcount/refcount
-> differences.
-> 
+On Fri, May 26, 2023 at 6:41=E2=80=AFPM Vlad Efanov <vefanov@ispras.ru> wro=
+te:
+>
+> sk_dst_set() is called by sk_setup_caps().
+>
+> sk_dst_set() replaces dst in socket using xchg() call and we still have
+> two tasks use one socket but expect different dst in sk_dst_cache.
+>
+>
+> __sk_dst_set() is rcu protected, but it checks for socket lock.
+>
+>
+> static inline void
+> __sk_dst_set(struct sock *sk, struct dst_entry *dst)
+> {
+>      struct dst_entry *old_dst;
+>
+>      sk_tx_queue_clear(sk);
+>      sk->sk_dst_pending_confirm =3D 0;
+>      old_dst =3D rcu_dereference_protected(sk->sk_dst_cache,
+>                          lockdep_sock_is_held(sk));
+>      rcu_assign_pointer(sk->sk_dst_cache, dst);
+>      dst_release(old_dst);
+> }
 
-folio_maybe_dma_pinned() is all about FOLL_PIN, not FOLL_LONGTERM.
+I am quite familiar with this code.
 
-folio_maybe_dma_pinned() would skip migrating any page that has more 
-than 1024 references. (shared libraries?)
+What are you trying to say exactly ?
 
--- 
-Thanks,
-
-David / dhildenb
-
+Please come with a V2 without grabbing the socket lock.
