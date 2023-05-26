@@ -2,138 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F49F712AE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6127712AEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 18:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236784AbjEZQmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 12:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S236681AbjEZQoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 12:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjEZQmD (ORCPT
+        with ESMTP id S229790AbjEZQn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 12:42:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB777BC;
-        Fri, 26 May 2023 09:42:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/2QSTLGqD4iT4FdYiOFZiER0pBrlULh2+1/cvz6IreM=; b=iTZt2k9etvAGrB42jErQZIlq9M
-        rBI0aflYiIqy6tAsDZmmQONBFt8owIQj+EIovr1U68zHfLJWg1VrxkF5ud1yg1dXpE+bgWe/9knP0
-        R7S9hvAFuqWq11R2s9yd/py4UTJYMl4g1rRo/n1cb135zW2DuOqQsDEZRN5z9ONPzHa8tX60LUQSh
-        y3u0OMhufNpUGUq0Roxm0wvXWCBnGjzB8mal1/TEYXDaO0OMBJy48jdp1j9o7LYneEogdV7lo5tAz
-        5+zG4as0eaiocVGvPyeyoE9M6ZUrbvoxqjUaT7e0M7WvWrGxp3xk72+zzfs5WxpB05CGd5+wX4NI5
-        M9qSiJSA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q2aVS-002xkV-23; Fri, 26 May 2023 16:41:34 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 55ECB3002F0;
-        Fri, 26 May 2023 18:41:31 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 103F522163BD2; Fri, 26 May 2023 18:41:31 +0200 (CEST)
-Date:   Fri, 26 May 2023 18:41:30 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        qiang1.zhang@intel.com, rcu@vger.kernel.org, tj@kernel.org,
-        tglx@linutronix.de
-Subject: Re: [RFC][PATCH 2/2] sched: Use fancy new guards
-Message-ID: <20230526164130.GA4053578@hirez.programming.kicks-ass.net>
-References: <20230526150549.250372621@infradead.org>
- <20230526151947.027972233@infradead.org>
- <2023052626-blunderer-delegator-4b82@gregkh>
+        Fri, 26 May 2023 12:43:58 -0400
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348BED9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 09:43:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VjX7bdM_1685119431;
+Received: from 192.168.2.5(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjX7bdM_1685119431)
+          by smtp.aliyun-inc.com;
+          Sat, 27 May 2023 00:43:53 +0800
+Message-ID: <ac8519fd-85f4-e778-0c6c-b2e893a37628@linux.alibaba.com>
+Date:   Sat, 27 May 2023 00:43:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023052626-blunderer-delegator-4b82@gregkh>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: dm overlaybd: targets mapping OverlayBD image
+To:     Du Rui <durui@linux.alibaba.com>, alexl@redhat.com
+Cc:     agk@redhat.com, dm-devel@redhat.com, gscrivan@redhat.com,
+        linux-kernel@vger.kernel.org, snitzer@kernel.org
+References: <CAL7ro1FPEqXyOuX_WPMYdsT6rW-bD5EU=v=oWKsd6XscykLF6Q@mail.gmail.com>
+ <20230526102633.31160-1-durui@linux.alibaba.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230526102633.31160-1-durui@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 05:25:58PM +0100, Greg KH wrote:
-> On Fri, May 26, 2023 at 05:05:51PM +0200, Peter Zijlstra wrote:
-> > Convert kernel/sched/core.c to use the fancy new guards to simplify
-> > the error paths.
+
+
+On 2023/5/26 03:26, Du Rui wrote:
+> Hi Alexander,
 > 
-> That's slightly crazy...
+>> all the lvm volume changes and mounts during runtime caused
+>> weird behaviour (especially at scale) that was painful to manage (just
+>> search the docker issue tracker for devmapper backend). In the end
+>> everyone moved to a filesystem based implementation (overlayfs based).
 > 
-> I like the idea, but is this really correct:
+> Yes, we had exactly the same experience. This is another reason why
+> this proposal is for dm and lvm, not for container.
+> (BTW, we are using TCMU and ublk for overlaybd in production. They are awesome.)
 > 
 > 
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  kernel/sched/core.c  | 1223 +++++++++++++++++++++++----------------------------
-> >  kernel/sched/sched.h |   39 +
-> >  2 files changed, 595 insertions(+), 667 deletions(-)
-> > 
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -1097,24 +1097,21 @@ int get_nohz_timer_target(void)
-> >  
-> >  	hk_mask = housekeeping_cpumask(HK_TYPE_TIMER);
-> >  
-> > -	rcu_read_lock();
-> > -	for_each_domain(cpu, sd) {
-> > -		for_each_cpu_and(i, sched_domain_span(sd), hk_mask) {
-> > -			if (cpu == i)
-> > -				continue;
-> > +	void_scope(rcu) {
-> > +		for_each_domain(cpu, sd) {
-> > +			for_each_cpu_and(i, sched_domain_span(sd), hk_mask) {
-> > +				if (cpu == i)
-> > +					continue;
-> >  
-> > -			if (!idle_cpu(i)) {
-> > -				cpu = i;
-> > -				goto unlock;
-> > +				if (!idle_cpu(i))
-> > +					return i;
+>> This solution doesn't even allow page cache sharing between shared
+>> layers (like current containers do), much less between independent
+>> layers.
 > 
-> You can call return from within a "scope" and it will clean up properly?
+> Page cache sharing can be realized with DAX support of the dm targets
+> (and the inner file system), together with virtual pmem device backend.
 
-Yep, that's the main feature here.
+First, here I'd suggest you could learn some kernel knowledge of what
+DAX is and what page cache is before you explain to a kernel mailing
+list.  For example, DAX memory cannot be reclaimed at all.
 
-> I tried to read the cpp "mess" but couldn't figure out how to validate
-> this at all, have a set of tests for this somewhere?
+Block drivers has nothing to do on filesystem page cache stuffs, also
+currently your approach has nothing to do with pmem stuffs (If you must
+mention "DAX" to proposal your "page cache sharing", please _here_
+write down your detailed design first and explain how it could work to
+ours if you really want to do.)
 
-I have it in userspace with printf, but yeah, I'll go make a selftest
-somewhere.
+Apart from unable to share page cache among filesystems, even with
+your approach all I/Os are duplicated among your qcow2-like layers.
 
-One advantage of using the scheduler locks as testbed is that if you get
-it wrong it burns *real* fast -- been there done that etc.
+For example, there are 3 qcow2-like layers: A, B, C:
 
-> Anyway, the naming is whack, but I don't have a proposed better name,
-> except you might want to put "scope_" as the prefix not the suffix, but
-> then that might look odd to, so who knows.
+filesystem 1:  A + B
+filesystem 2:  A + B + C
 
-Yeah, naming is certainly crazy, but I figured I should get it all
-working before spending too much time on that.
+Filesystem 1 and 2 are runtimely independent filesystems and your block
+driver can do nothing help: both duplicated I/Os and page cache for any
+data and metadata of layer A, B.
 
-I can certainly do 's/lock_scope/scope_lock/g' on it all.
+If those container layers are even more (dozens or hundreds), your
+approach is more inefficient on duplicated I/Os.
 
-> But again, the idea is good, it might save us lots of "you forgot to
-> clean this up on the error path" mess that we are getting constant churn
-> for these days...
+You could implement some internal block cache, but block level cache is
+not flexible compared with page cache on kernel memory reclaim and page
+migration.
 
-That's the goal...
+> 
+>> Erofs already has some block-level support for container images
+> 
+> It is interesting. Erofs runs insider a block device in the first place,
+> like what many file systems do. But do you konw why it implements another
+> "some block-level support" by itself?
+> 
+
+That is funny honestly.  As for container image use cases, although OCI
+image tgz is unseekable but actually ext4 and btrfs images are seekable
+and on-demand load could be done with these raw images directly. In
+principle, you could dump your container image stuffs from tgz to raw
+ext4, btrfs, erofs, whatever.  Or if you like, you could dump to some
+"qcow2", "vhdx", "vmdx" wildly-used format, their ecosystem is more
+mature but all the above don't help on page cache sharing stuffs.
+
+Please don't say "I like erofs" and at the same time "why it implements
+another some block-level support" by itself".  Local filesystems must
+do their block-mapping theirselves: ext4 (extents or blockmap), XFS
+(extents), etc.
+
+I've explained internally to your team multiple times as a kernel
+developer, personally I don't want to repeat here again and again to
+your guys.
+
+Thanks,
+Gao Xiang
+
+>> And this new approach doesn't help
+> No. It is intended for dm and lvm.> 
