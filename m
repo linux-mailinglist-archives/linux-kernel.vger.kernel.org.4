@@ -2,204 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0083C711CBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2BD711CDD
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 03:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241891AbjEZBgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 21:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S233687AbjEZBki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 21:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241569AbjEZBgP (ORCPT
+        with ESMTP id S229827AbjEZBke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 21:36:15 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F85125
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:36:13 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d30ab1ef2so333880b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:36:13 -0700 (PDT)
+        Thu, 25 May 2023 21:40:34 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDE819D
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:40:33 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3baf04f0cso148814e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:40:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685064973; x=1687656973;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bR3UToISzSLbX8ZQkHUE42zju/u1Pd13Qxkfw1ihU0s=;
-        b=xBykKLfgpBaSvfRX3A2+FxT1KMrbnM15im+s6pEISEci1JWoy+6UGBvACHOKnzsNQr
-         afk90Xh/M4D33/CZyC3EusZmqc1ApG7JjLCpW6aX3SWhZt9ZYbyqO7WMBxqRgMWFTHtq
-         HSdOCN6vwq8iD2sZuRhSnYIqjspgSjnwj/JJkdgbMcgZZCUfDvhe0451GrKyYqY5eIvT
-         gbFjo76t5wzNhvbQD1+eZ6JBj+DjthvcCoZA0AU3MkAccbMC5I/5OCQHLQBwb95rcN0F
-         aZC1+itQVaJaNWNgoirfbLXH3K81rFtIImWJ/54lSzn69rMSJfSeM4eOwdpVzh8fi8GZ
-         2dwg==
+        d=linux-foundation.org; s=google; t=1685065231; x=1687657231;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mm58cdLmSJ5zDiAtA58RWN5FnFQJSGcvSIirliOWuIM=;
+        b=hM86DWSSrWcI/RPc3GLJogtgReoZ8OSKtimvjFZX6uP/eQHyPF3IZSAsICSYIhRTWD
+         qdTZl7Xqgffk+q70bYMwZR57LTQZkmuUCZye4RbORzO9Qn2Qqb4nUkmybl3drVTiLZ08
+         zkMJdVIAC7jtYv2RvdaBnVv8BpqNV8EgYkFqk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685064973; x=1687656973;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bR3UToISzSLbX8ZQkHUE42zju/u1Pd13Qxkfw1ihU0s=;
-        b=NO/jnpejRgh1UrOwUi3E1ZVdYQv0hAXFbjsFwvRynLwIv6NJnakpRDTGwLMgP0NU/E
-         0GMqQUhELVPWILUwG85AbFFq8b94bNIBMOlyRboHBRcOxw9W7UCGWa7m1Vs1elJOlkza
-         6hvFUNSOE1MCZ0CAgJ3UFA271VFr4HKps3qh8Nc7QzN4av6WEuM4wfmeM4TxMiqE40aR
-         Kg8tybXG+K5rhRG0mO/I89uTRRzhOtWr2voBsl4+6LtqAtYNxhgyCp8ss/eGT9Pqk2Cv
-         PUCJ2Flw7bUm8I9s/YoSzbih8T4eogqHIpZR9+A0MaWCQsiStfjwjC9pgC6KWUrOwfvg
-         nxlA==
-X-Gm-Message-State: AC+VfDzuooqyNAeNtWm6BluSpOCARXG1Q/OidTm9WH6Y+TlUwPZRigqM
-        UODOpIDxRALzd+L1sSf6VOfUlw==
-X-Google-Smtp-Source: ACHHUZ6sPdmuQonaj/olpSGroUfK3OoVqwjZ0hrzZiUIv4Qa66jySy12bySeqpIr9yyQSaUMpmfRQA==
-X-Received: by 2002:a05:6a00:124a:b0:643:96bc:b292 with SMTP id u10-20020a056a00124a00b0064396bcb292mr1061741pfi.5.1685064972718;
-        Thu, 25 May 2023 18:36:12 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
-        by smtp.gmail.com with ESMTPSA id g9-20020a62e309000000b0063efe2f3ecdsm1679539pfh.204.2023.05.25.18.36.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 18:36:11 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q2MNF-003wt9-15;
-        Fri, 26 May 2023 11:36:09 +1000
-Date:   Fri, 26 May 2023 11:36:09 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     Mike Snitzer <snitzer@kernel.org>, Joe Thornber <ejt@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
-Message-ID: <ZHANCbnHuhnwCrGz@dread.disaster.area>
-References: <ZGeKm+jcBxzkMXQs@redhat.com>
- <ZGgBQhsbU9b0RiT1@dread.disaster.area>
- <ZGu0LaQfREvOQO4h@redhat.com>
- <ZGzIJlCE2pcqQRFJ@bfoster>
- <ZGzbGg35SqMrWfpr@redhat.com>
- <ZG1dAtHmbQ53aOhA@dread.disaster.area>
- <ZG5taYoXDRymo/e9@redhat.com>
- <ZG9JD+4Zu36lnm4F@dread.disaster.area>
- <ZG+GKwFC7M3FfAO5@redhat.com>
- <CAG9=OMNhCNFhTcktxSMYbc5WXkSZ-vVVPtb4ak6B3Z2-kEVX0Q@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1685065231; x=1687657231;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mm58cdLmSJ5zDiAtA58RWN5FnFQJSGcvSIirliOWuIM=;
+        b=E9V7QD2otcQYWlAZyfEjl9ESWGf7N4wL9OP+1I32qFzfbEfRV000vua3g5aquTKMCN
+         cBCuG+3yL3T2dq0V4O8IxN9pMk0+XfM0nFIm9NyfltkmvmRWX0smqiOFTCCsfovIz5C8
+         t3zITC/YNZD2sbUqahY2cvRuhfLl1lNcw10jRawJ8wogJ7AQYyG9ihk9KgDcURB8ZA5l
+         4eN4aSzQJ2k7Z/mbWxTYXhprhrpvR56kkeICBkSd2ltX0WJscSEhOqcEyJuMGY/EoZux
+         iQToifLhCNh1RlC3pssYB5vGftxGCaHoy3/c9DAZTAac2XtMJkJ7CB/q/LuRzi2GZ/Xi
+         CsRQ==
+X-Gm-Message-State: AC+VfDzI6dxeQPswJ4nRTs+ubMjMqOGzc+mcKwZYHYyXeSB+QnEOIFtI
+        7h/XpncZzPE6DQlJTvK59davoOEXDcNz/HWQ3uNVhrkZ
+X-Google-Smtp-Source: ACHHUZ5yekqj6qPHSNVhQDMnMcRuUNy8QOJFadJzMvGrZ1v5/Gd/EEfsRtIViNSDwPuNX5cn66cQJQ==
+X-Received: by 2002:ac2:54a7:0:b0:4f3:872d:10ff with SMTP id w7-20020ac254a7000000b004f3872d10ffmr7789lfk.64.1685065231600;
+        Thu, 25 May 2023 18:40:31 -0700 (PDT)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id t20-20020ac243b4000000b004edc9da63bdsm404843lfl.160.2023.05.25.18.40.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 18:40:31 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2af1822b710so2056421fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 18:40:30 -0700 (PDT)
+X-Received: by 2002:a17:907:31c3:b0:96f:912d:7922 with SMTP id
+ xf3-20020a17090731c300b0096f912d7922mr478321ejb.53.1685065209995; Thu, 25 May
+ 2023 18:40:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG9=OMNhCNFhTcktxSMYbc5WXkSZ-vVVPtb4ak6B3Z2-kEVX0Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230524213620.3509138-1-mcgrof@kernel.org> <20230524213620.3509138-3-mcgrof@kernel.org>
+ <8fc5b26b-d2f6-0c8f-34a1-af085dbef155@suse.com> <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
+ <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
+ <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com> <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
+In-Reply-To: <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 25 May 2023 18:39:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+Message-ID: <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
+        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
+        lennart@poettering.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 03:47:21PM -0700, Sarthak Kukreti wrote:
-> On Thu, May 25, 2023 at 9:00 AM Mike Snitzer <snitzer@kernel.org> wrote:
-> > On Thu, May 25 2023 at  7:39P -0400,
-> > Dave Chinner <david@fromorbit.com> wrote:
-> > > On Wed, May 24, 2023 at 04:02:49PM -0400, Mike Snitzer wrote:
-> > > > On Tue, May 23 2023 at  8:40P -0400,
-> > > > Dave Chinner <david@fromorbit.com> wrote:
-> > > > > It's worth noting that XFS already has a coarse-grained
-> > > > > implementation of preferred regions for metadata storage. It will
-> > > > > currently not use those metadata-preferred regions for user data
-> > > > > unless all the remaining user data space is full.  Hence I'm pretty
-> > > > > sure that a pre-provisioning enhancment like this can be done
-> > > > > entirely in-memory without requiring any new on-disk state to be
-> > > > > added.
-> > > > >
-> > > > > Sure, if we crash and remount, then we might chose a different LBA
-> > > > > region for pre-provisioning. But that's not really a huge deal as we
-> > > > > could also run an internal background post-mount fstrim operation to
-> > > > > remove any unused pre-provisioning that was left over from when the
-> > > > > system went down.
-> > > >
-> > > > This would be the FITRIM with extension you mention below? Which is a
-> > > > filesystem interface detail?
-> > >
-> > > No. We might reuse some of the internal infrastructure we use to
-> > > implement FITRIM, but that's about it. It's just something kinda
-> > > like FITRIM but with different constraints determined by the
-> > > filesystem rather than the user...
-> > >
-> > > As it is, I'm not sure we'd even need it - a preiodic userspace
-> > > FITRIM would acheive the same result, so leaked provisioned spaces
-> > > would get cleaned up eventually without the filesystem having to do
-> > > anything specific...
-> > >
-> > > > So dm-thinp would _not_ need to have new
-> > > > state that tracks "provisioned but unused" block?
-> > >
-> > > No idea - that's your domain. :)
-> > >
-> > > dm-snapshot, for certain, will need to track provisioned regions
-> > > because it has to guarantee that overwrites to provisioned space in
-> > > the origin device will always succeed. Hence it needs to know how
-> > > much space breaking sharing in provisioned regions after a snapshot
-> > > has been taken with be required...
-> >
-> > dm-thinp offers its own much more scalable snapshot support (doesn't
-> > use old dm-snapshot N-way copyout target).
-> >
-> > dm-snapshot isn't going to be modified to support this level of
-> > hardening (dm-snapshot is basically in "maintenance only" now).
+On Thu, May 25, 2023 at 3:02=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
+> wrote:
+>
+> So yeah definitely a pretty good improvement. Sometimes the system boots
+> without any duplicates at all, for some reason Vs the previous attempt.
+>
+> Tested-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Ah, of course. Sorry for the confusion, I was kinda using
-dm-snapshot as shorthand for "dm-thinp + snapshots".
+Ok, I decided to just move it from my experimental tree to my main tree.
 
-> > But I understand your meaning: what you said is 100% applicable to
-> > dm-thinp's snapshot implementation and needs to be accounted for in
-> > thinp's metadata (inherent 'provisioned' flag).
+I think I used about three times the time and effort (and lines of
+text) on writing the commit message compared to what I did on the
+patch itself.
 
-*nod*
+I tried to lay out the background and the implications of the change -
+it may be pretty darn simple, but it does have some subtle issues.
 
-> A bit orthogonal: would dm-thinp need to differentiate between
-> user-triggered provision requests (eg. from fallocate()) vs
-> fs-triggered requests?
+Anyway: I've committed it to my tree. This is not necessarily the best
+time to do that, but let's get this behind us, and in particular,
+let's get it out and into wider testing asap.
 
-Why?  How is the guarantee the block device has to provide to
-provisioned areas different for user vs filesystem internal
-provisioned space?
+If it causes any problems what-so-ever, I'll just revert it very
+aggressively (unless the problem is trivially and obviously fixable).
+It is, after all, not a fix for a _kernel_ bug per se, and whil eI
+think the patch is very benign, it does change user-visible behavior.
+Very intentionally so, but still..
 
-> I would lean towards user provisioned areas not
-> getting dedup'd on snapshot creation,
-
-<twitch>
-
-Snapshotting is a clone operation, not a dedupe operation.
-
-Yes, the end result of both is that you have a block shared between
-multiple indexes that needs COW on the next overwrite, but the two
-operations that get to that point are very different...
-
-</pedantic mode disegaged>
-
-> but that would entail tracking
-> the state of the original request and possibly a provision request
-> flag (REQ_PROVISION_DEDUP_ON_SNAPSHOT) or an inverse flag
-> (REQ_PROVISION_NODEDUP). Possibly too convoluted...
-
-Let's not try to add everyone's favourite pony to this interface
-before we've even got it off the ground.
-
-It's the simple precision of the API, the lack of cross-layer
-communication requirements and the ability to implement and optimise
-the independent layers independently that makes this a very
-appealing solution.
-
-We need to start with getting the simple stuff working and prove the
-concept. Then once we can observe the behaviour of a working system
-we can start working on optimising individual layers for efficiency
-and performance....
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+                         Linus
