@@ -2,171 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1BD7127B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 105DC7127B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 15:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243761AbjEZNiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 09:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S243763AbjEZNim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 09:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243756AbjEZNiH (ORCPT
+        with ESMTP id S231533AbjEZNij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 09:38:07 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA09D8
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:38:04 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f603ff9c02so5484815e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 06:38:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685108283; x=1687700283;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kRNhz/1ssZp7GmMjGCU/2aCWcpCSy7S5uy3uYHdmw7Y=;
-        b=UK2zb07TRRz408dzHN0N/0vYmIJfV431IB7X8ANOYPkRHJPIfACk52Z+ortc1DPIGR
-         ym3FHdPARthYj9fHb1Y77DWDBlDDxcN6mz8VnzkIC83BfLSOozkYbj6WeZWqN84w5zhB
-         48eJuVq+F92uKNK/YsObvKq0i/YjH6oNpyqSFUqJOYhaJC+bb8iExFUzUgidocdy+UQ7
-         v+fwn+FgrB1OTSQpbGwM5C0/mHtFV4UHHIgIasF4MVW0cfxPC89wAdiYN3fUfwQ4kTEF
-         DjUMj8J6g4qvUnl762VOKsF3aEmswJ4TZUDK1gGmpRlkYSNOvnChdVdAh3HR0Oix55pz
-         EQHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685108283; x=1687700283;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kRNhz/1ssZp7GmMjGCU/2aCWcpCSy7S5uy3uYHdmw7Y=;
-        b=PCKaDzyP+cVpmgdrq5nKo332uqOA0wtI4zcbQ44ZlC/Lfok+rEuIX3SzY835P5H+j9
-         xgYsGZZx/Mw80C27finwGkjv4v6JX9mw4ALOgWh729lhiRguz1UOVVzszo75cqpmPtNe
-         M0Vce3cC+APx330x/8ltVAPBxA4zuR6GDdo+0wkcxatni/vqJLP22gXMpkUcCdAyAZHe
-         M1/eWmH6AZCKvTlzhDF9e4tVnJ3f6YDt2PEfZUBpwEh3WPAxne7q4UuUf6v+YJmkGZTC
-         0Yptm+H5P7xCqCFO4oP+yvBfh5j8aBsj0z1CzZhtW2JcLIjYJSlzHl8zagc+/tza/XCE
-         yoxw==
-X-Gm-Message-State: AC+VfDxQvH558qlcbSAtn5T3uFEk3w8rdoL97JBzsd41LJQxUw/HZgRG
-        gV/UxWa9dV4yf8Yi2igVVSrLmw==
-X-Google-Smtp-Source: ACHHUZ4/TvkidQGqm2je1FAQ3GSQm0puIZ2fO6yxBGt5bIoGb3dqxAif8j+LCNz9JMwYn75vWYsdtg==
-X-Received: by 2002:a7b:c412:0:b0:3f5:fa8e:aaa3 with SMTP id k18-20020a7bc412000000b003f5fa8eaaa3mr1595377wmi.28.1685108283226;
-        Fri, 26 May 2023 06:38:03 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id n11-20020a05600c294b00b003f6129d2e30sm8900220wmd.1.2023.05.26.06.38.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 06:38:02 -0700 (PDT)
-Message-ID: <cae30437-f9bc-6e7a-8371-bba7eeff1e8f@linaro.org>
-Date:   Fri, 26 May 2023 14:38:01 +0100
+        Fri, 26 May 2023 09:38:39 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7572D8;
+        Fri, 26 May 2023 06:38:35 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1685108306txlguqb4
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 26 May 2023 21:38:25 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: D6RqbDSxuq6HnLLie3EOSagOrtQovMoO/c1ZDojJdhdkswrEDfVNTEkUj0kwK
+        lL0kA4K1R0ac0uzzRVCeWqKdDuUszTc4QMmQRhfY8GatL4fQhlXKCss68nOUn67913VG7mF
+        6g0HwKkHxQbjKdBP54BZX7IWEOVmxqArgAquJLmDkN1gUtxJqb7Mce1XtwBLxjaz223a1/8
+        lS2USjspSMnYcZQnJIa0lk4R5fYl+toH0r3XL3iA4dTRmsd3GrqAa59N6NJVYnO6jDGNJBJ
+        49it71G2yoeckv05RPq+XKAm7C8YmMGi60Q4daIC6bDhHCF+7SBMDMh5n5YtbJc/yQkih32
+        /kS05+mflHkytfSp5XZIYkQSCbpz6BzQTLpwWlBxrf/qCseFCT7OU/GrpJgCQiAHbfVrYaT
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 10011161400852395735
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     conor.dooley@microchip.com
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de,
+        w@1wt.eu
+Subject: Re: [PATCH 06/13] selftests/nolibc: allow specify a bios for qemu
+Date:   Fri, 26 May 2023 21:38:25 +0800
+Message-Id: <20230526133825.198100-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230526-clover-litter-1f41398cd820@wendy>
+References: <20230526-clover-litter-1f41398cd820@wendy>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 3/8] arm64: dts: qcom: msm8916: Fix regulator constraints
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
- <20230510-msm8916-regulators-v1-3-54d4960a05fc@gerhold.net>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230510-msm8916-regulators-v1-3-54d4960a05fc@gerhold.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 19:48, Stephan Gerhold wrote:
-> The regulator constraints for most MSM8916 devices (except DB410c) were
-> originally taken from Qualcomm's msm-3.10 vendor device tree (for lack
-> of better documentation). Unfortunately it turns out that Qualcomm's
-> voltages are slightly off as well and do not match the voltage
-> constraints applied by the RPM firmware.
+Hi, Conor.
+
 > 
-> This means that we sometimes request a specific voltage but the RPM
-> firmware actually applies a much lower or higher voltage. This is
-> particularly critical for pm8916_l11 which is used as SD card VMMC
-> regulator: The SD card can choose a voltage from the current range of
-> 1.8 - 2.95V. If it chooses to run at 1.8V we pretend that this is fine
-> but the RPM firmware will still silently end up configuring 2.95V.
-> This can be easily reproduced with a multimeter or by checking the
-> SPMI hardware registers of the regulator.
+> On Fri, May 26, 2023 at 06:25:18PM +0800, Zhangjin Wu wrote:
 > 
-> Fix this by making the voltages match the actual "specified range" in
-> the PM8916 Device Specification which is enforced by the RPM firmware.
+> > > On 2023-05-25 01:52:29+0800, Zhangjin Wu wrote:
+> > > > riscv qemu has a builtin bios (opensbi), but it may not match the latest
+> > > > kernel and some old versions may hang during boot, let's allow user pass
+> > > > a newer version to qemu via the -bios option.
+> > >
+> > > Nitpick:
+> > >
+> > > This seems very specific and hopefully only necessary temporarily.
+> > >
+> >
+> > RISC-V is such a new ISA and the Spec (especially the SBI) changes very
+> > frequently ;-)
 > 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
->   arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts           | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts       | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts             | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts         | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts             | 12 ++++++------
->   arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts       | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts       | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi   | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi    | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts     | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi                  | 14 +++++++-------
->   arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts      | 12 ++++++------
->   13 files changed, 89 insertions(+), 89 deletions(-)
+> Huh. Could you please expand on which versions of QEMU will hang while
+> booting an upstream or stable kernel? Which kernels would be good to
+> know too.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts b/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-> index 13cd9ad167df..0d517804e44e 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-> @@ -159,13 +159,13 @@ &smd_rpm_regulators {
->   	vdd_l7-supply = <&pm8916_s4>;
->   
->   	s3 {
-> -		regulator-min-microvolt = <1200000>;
-> -		regulator-max-microvolt = <1300000>;
-> +		regulator-min-microvolt = <1250000>;
-> +		regulator-max-microvolt = <1350000>;
 
-Where are you getting these 5s from ?
+As the cover letter listed (in the Environment section), the softwares we
+used are:
 
->   	};
->   
->   	s4 {
-> -		regulator-min-microvolt = <1800000>;
-> -		regulator-max-microvolt = <2100000>;
-> +		regulator-min-microvolt = <1850000>;
-> +		regulator-max-microvolt = <2150000>;
->   	};
->   
->   	l1 {
-> @@ -199,7 +199,7 @@ l7 {
->   	};
->   
->   	l8 {
-> -		regulator-min-microvolt = <2850000>;
-> +		regulator-min-microvolt = <2900000>;
->   		regulator-max-microvolt = <2900000>;
->   	};
->   
-> @@ -209,12 +209,12 @@ l9 {
->   	};
->   
->   	l10 {
-> -		regulator-min-microvolt = <2700000>;
-> +		regulator-min-microvolt = <2800000>;
->   		regulator-max-microvolt = <2800000>;
->   	};
->   
->   	l11 {
-> -		regulator-min-microvolt = <1800000>;
-> +		regulator-min-microvolt = <2950000>;
+    // higher qemu version is better, latest version is v8.0.0+
+    $ qemu-system-riscv64  --version
+    QEMU emulator version 4.2.1 (Debian 1:4.2-3ubuntu6.18)
+    Copyright (c) 2003-2019 Fabrice Bellard and the QEMU Project developers
 
-Wouldn't 1v8 be the right voltage for eMMC !SD though have you tested 
-eMMC instead of SD ?
+    // opensbi version, higher is better, must match kernel version and qemu version
+    // rv64: used version is 1.2, latest is 1.2
+    $ head -2 /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/run.out | tail -1
+    OpenSBI v1.2-116-g7919530
+    // rv32: used version is v0.9, latest is 1.2
+    $ head -2 /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/run.out | tail -1
+    OpenSBI v0.9-152-g754d511
 
----
-bod
+The kernel version is the one this patchset based on (Willy's nolibc
+repo), it is v6.4-rc1.
 
+qemu v4.2.1 is the one systematically installed (/usr/bin) from the
+qemu-system-misc package and used to test this patchset in my Ubuntu
+20.04 based test docker image.
+
+Just installed a v7.0.0 qemu from ppa:canonical-server/server-backports,
+there is no default opensbi, and re-checked, there is one prebuilt
+opensbi for rv64, but still no prebuilt opensbi for rv32.
+
+    $ sudo add-apt-repository ppa:canonical-server/server-backports
+    $ sudo apt install qemu-system-misc
+
+    $ sudo apt install opensbi
+    $ dpkg -S opensbi | grep -E "fw_*bin|elf"
+    qemu-system-data: /usr/share/qemu/opensbi-riscv64-generic-fw_dynamic.elf
+    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_dynamic.elf
+    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_jump.elf
+
+    $ qemu-system-riscv32 -display none -no-reboot -kernel build/riscv32/virt/linux/v6.4-rc1/arch/riscv/boot/Image -serial stdio -M virt -append "console=ttyS0 panic=-1"
+    qemu-system-riscv32: Unable to load the RISC-V firmware "opensbi-riscv32-generic-fw_dynamic.bin"
+
+I used the one built myself, If not want to build such opensbi manually,
+we can download one (1.2 currently) from qemu source code:
+
+    https://gitlab.com/qemu-project/qemu/-/blob/master/pc-bios/opensbi-riscv32-generic-fw_dynamic.bin
+
+Then, we can use it like this:
+
+    $ qemu-system-riscv32 -display none -no-reboot -kernel build/riscv32/virt/linux/v6.4-rc1/arch/riscv/boot/Image -serial stdio -M virt -append "console=ttyS0 panic=-1" -bios /path/to/opensbi-riscv32-generic-fw_dynamic.bin
+
+Will append this extra info in the commit message of the coming new
+revision of this patch, thanks a lot.
+
+The hang issue I mentioned may be using one of my older prebuilt version of
+opensbi, I can not find which one it exactly is, so, please ignore that info,
+will update that description too.
+
+Btw, something not about this patch: qemu v8.0.0 seems not boot non-mmu
+v6.3, both sides have issues, not dig into it carefully, so, not report
+it yet.
+
+Thanks,
+Zhangjin
+
+> Thanks,
+> Conor.
