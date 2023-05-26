@@ -2,256 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAE4711F98
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA02711F9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 08:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242003AbjEZGEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 02:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S233071AbjEZGEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 02:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233071AbjEZGEV (ORCPT
+        with ESMTP id S242087AbjEZGEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 02:04:21 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4BE19A
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 23:04:16 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96f7bf29550so47308966b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 23:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685081055; x=1687673055;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=N+HEdzAqwWTEmlWoHrAywQzTrGYpO1deX73+YZ0gZnw=;
-        b=YlDyzmUFqhw+j2KaJct52quH7e38m5Nu8smfQw8ffIQrQ1YSaAdQwfG9b8oWdpOuM0
-         CT7SV6++lTlaA4rW6+8a50PXkQ9p+4MNmEoZZ9WRbla1Rn+7x0FyE7XBdvx0XOLNOoqI
-         EDavz+Lrl8HuzluPqkHe+GffuX9VONFIyeBLMH9skVcWDXr2vjog4L3bMHdvqIvbEtlh
-         PtudQC04Wsv3PlB6PUXwcT02c062R1uKUAM1L2vdYMA4DleKvvOIncvxuTxFy2TboecO
-         YBCaYOuRlTPGjb3f0jKMKXdREoMIkLMPPUHFR2uFFhYA+DtIWPI0Ty0inuo6IsZYJT25
-         uNPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685081055; x=1687673055;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N+HEdzAqwWTEmlWoHrAywQzTrGYpO1deX73+YZ0gZnw=;
-        b=eCtOifpUktn3mkd4PzPaofqp4GspSHt633sRSYDHnwvCD38ZTGi1AVWSGeR5ad3vQR
-         i/g0JtMYLVy/M8tAczA9QlTyjyBeSo/Ewc5XIYarr7lkp5nx8KIOhmI27cvgJQuc4TCs
-         DM11rI/5PEI7FRJqOMJsgZ5ZY1nXPAFavjWZQLVv17i0pVXJFmH3HDrRvWI5otSTR5yu
-         45A1rR+79vd5zPbY/+OPJw1X1HQs7wJddwhIOS+NV8r89RVy5YntKckLb3Lt0cmMP4DX
-         21GGb4NyneIikaM8pAdyhkxWAiL3ZF266K9nv74DMwnAPmxEZ3ONdfGolXQS66+DK2z9
-         4Y1A==
-X-Gm-Message-State: AC+VfDysv/Yg1u0/CC0YBDK5Lz9FAj78uHwAYPJ04+viCQHkskG0rLBz
-        AElbRLQ/B6rx7Jz2jXzaRZ5x54CXX8fa2EQcbCqPP+FCz7w=
-X-Google-Smtp-Source: ACHHUZ5l2yHNm4ofzw63KMfOw/dozdrD2Bd32y/dq/wclQ5Qv9u40SuJAZXBkKtG/DFRPtVGYrVqYwpSg4cSTiNSRYI=
-X-Received: by 2002:a17:907:9813:b0:94f:956:b3f7 with SMTP id
- ji19-20020a170907981300b0094f0956b3f7mr981841ejc.2.1685081054899; Thu, 25 May
- 2023 23:04:14 -0700 (PDT)
+        Fri, 26 May 2023 02:04:49 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9760F99
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 23:04:47 -0700 (PDT)
+Received: from dggpemm500003.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QSDpn74ZDzYspp;
+        Fri, 26 May 2023 14:02:25 +0800 (CST)
+Received: from [10.67.145.254] (10.67.145.254) by
+ dggpemm500003.china.huawei.com (7.185.36.56) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 26 May 2023 14:04:35 +0800
+Message-ID: <ba387464-59d5-0639-1d05-84bb7e764231@hisilicon.com>
+Date:   Fri, 26 May 2023 14:04:34 +0800
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 26 May 2023 16:04:02 +1000
-Message-ID: <CAPM=9twM2=jSRCZgoJDEcWypfGFuniRMEOa=S9pJvsWQR9dASQ@mail.gmail.com>
-Subject: [git pull] drm fixes for 6.4-rc4
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+To:     Marc Zyngier <maz@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+From:   wangwudi <wangwudi@hisilicon.com>
+Subject: [Question about gic vmovp cmd] Consider adding VINVALL after VMOVP
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.145.254]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500003.china.huawei.com (7.185.36.56)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Marc,
 
-This week's collection is pretty spread out, accel/qaic has a bunch of
-fixes, amdgpu, then lots of single fixes across a bunch of places.
+During vpe migration, VMOVP needs to be executed.
+If the vpe is migrated for the first time, especially before it is scheduled for the first time, there may be some unusual hanppens over kexec.
+We might consider adding a VINVALL cmd after VMOVP to increase robustness.
 
-Dave.
+@@ -1327,6 +1327,7 @@ static void its_send_vmovp(struct its_vpe *vpe)
 
-drm-fixes-2023-05-26:
-drm fixes for 6.4-rc4
+                desc.its_vmovp_cmd.col = &its->collections[col_id];
+                its_send_single_vcommand(its, its_build_vmovp_cmd, &desc);
++               its_send_vinvall(its, vpe);
+        }
 
-core:
-- fix drmm_mutex_init lock class
+Do you think it's all right?
 
-mgag200:
-- fix gamma lut initialisation
-
-pl111:
-- fix FB depth on IMPD-1 framebuffer
-
-amdgpu:
-- Fix missing BO unlocking in KIQ error path
-- Avoid spurious secure display error messages
-- SMU13 fix
-- Fix an OD regression
-- GPU reset display IRQ warning fix
-- MST fix
-
-radeon:
-- Fix a DP regression
-
-i915:
-- PIPEDMC disabling fix for bigjoiner config
-
-panel:
-- fix aya neo air plus quirk
-
-sched:
-- remove redundant NULL check
-
-qaic:
-- fix NNC message corruption
-- Grab ch_lock during QAIC_ATTACH_SLICE_BO
-- Flush the transfer list again
-- Validate if BO is sliced before slicing
-- Validate user data before grabbing any lock
-- initialize ret variable to 0
-- silence some uninitialized variable warnings
-The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
-
-  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-05-26
-
-for you to fetch changes up to 5502d1fab09df791a8b1208dea9defc418b9bbf7:
-
-  Merge tag 'drm-misc-fixes-2023-05-24' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes (2023-05-26
-15:38:31 +1000)
-
-----------------------------------------------------------------
-drm fixes for 6.4-rc4
-
-core:
-- fix drmm_mutex_init lock class
-
-mgag200:
-- fix gamma lut initialisation
-
-pl111:
-- fix FB depth on IMPD-1 framebuffer
-
-amdgpu:
-- Fix missing BO unlocking in KIQ error path
-- Avoid spurious secure display error messages
-- SMU13 fix
-- Fix an OD regression
-- GPU reset display IRQ warning fix
-- MST fix
-
-radeon:
-- Fix a DP regression
-
-i915:
-- PIPEDMC disabling fix for bigjoiner config
-
-panel:
-- fix aya neo air plus quirk
-
-sched:
-- remove redundant NULL check
-
-qaic:
-- fix NNC message corruption
-- Grab ch_lock during QAIC_ATTACH_SLICE_BO
-- Flush the transfer list again
-- Validate if BO is sliced before slicing
-- Validate user data before grabbing any lock
-- initialize ret variable to 0
-- silence some uninitialized variable warnings
-
-----------------------------------------------------------------
-Alan Liu (1):
-      drm/amd/display: Fix warning in disabling vblank irq
-
-Alex Deucher (1):
-      drm/radeon: reintroduce radeon_dp_work_func content
-
-Dan Carpenter (1):
-      accel/qaic: silence some uninitialized variable warnings
-
-Dave Airlie (3):
-      Merge tag 'drm-intel-fixes-2023-05-25' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-      Merge tag 'amd-drm-fixes-6.4-2023-05-24' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-misc-fixes-2023-05-24' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-
-Evan Quan (1):
-      drm/amd/pm: add missing NotifyPowerSource message mapping for SMU13.0.7
-
-Fangzhi Zuo (1):
-      drm/amd/display: Have Payload Properly Created After Resume
-
-Imre Deak (1):
-      drm/i915: Fix PIPEDMC disabling for a bigjoiner configuration
-
-Jeffrey Hugo (1):
-      accel/qaic: Fix NNC message corruption
-
-Jesse Zhang (1):
-      drm/amdgpu: don't enable secure display on incompatible platforms
-
-Jocelyn Falempe (1):
-      drm/mgag200: Fix gamma lut not initialized.
-
-Jonatas Esteves (1):
-      drm/amd/pm: Fix output of pp_od_clk_voltage
-
-Linus Walleij (1):
-      drm/pl111: Fix FB depth on IMPD-1 framebuffer
-
-Matthew Auld (1):
-      drm: fix drmm_mutex_init()
-
-Maxime Ripard (1):
-      Merge drm/drm-fixes into drm-misc-fixes
-
-Maya Matuszczyk (1):
-      drm: panel-orientation-quirks: Change Air's quirk to support Air Plus
-
-Pranjal Ramajor Asha Kanojiya (4):
-      accel/qaic: Validate user data before grabbing any lock
-      accel/qaic: Validate if BO is sliced before slicing
-      accel/qaic: Flush the transfer list again
-      accel/qaic: Grab ch_lock during QAIC_ATTACH_SLICE_BO
-
-Sukrut Bellary (1):
-      drm:amd:amdgpu: Fix missing buffer object unlock in failure path
-
-Tom Rix (1):
-      accel/qaic: initialize ret variable to 0
-
-Vladislav Efanov (1):
-      drm/sched: Remove redundant check
-
- drivers/accel/qaic/qaic_control.c                  | 41 ++++++----
- drivers/accel/qaic/qaic_data.c                     | 93 +++++++++++-----------
- drivers/accel/qaic/qaic_drv.c                      |  2 +-
- drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c             |  4 +-
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c              |  4 +-
- drivers/gpu/drm/amd/amdgpu/psp_v10_0.c             |  8 +-
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  | 25 +++---
- .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c | 16 +---
- drivers/gpu/drm/amd/pm/amdgpu_pm.c                 | 12 ++-
- .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c   |  1 +
- drivers/gpu/drm/drm_managed.c                      | 22 +----
- drivers/gpu/drm/drm_panel_orientation_quirks.c     |  2 +-
- drivers/gpu/drm/i915/display/intel_display.c       | 12 ++-
- drivers/gpu/drm/mgag200/mgag200_mode.c             |  5 ++
- drivers/gpu/drm/pl111/pl111_display.c              |  2 +-
- drivers/gpu/drm/pl111/pl111_drm.h                  |  4 +-
- drivers/gpu/drm/pl111/pl111_drv.c                  |  8 +-
- drivers/gpu/drm/pl111/pl111_versatile.c            | 10 +--
- drivers/gpu/drm/radeon/radeon_irq_kms.c            | 10 +++
- drivers/gpu/drm/scheduler/sched_main.c             |  3 -
- include/drm/drm_managed.h                          | 18 ++++-
- 21 files changed, 166 insertions(+), 136 deletions(-)
+Thanks,
+Wudi
