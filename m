@@ -2,207 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB88F712E5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF50712E67
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 22:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242689AbjEZUsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 16:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        id S243414AbjEZUsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 16:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237856AbjEZUsH (ORCPT
+        with ESMTP id S237856AbjEZUsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 16:48:07 -0400
-Received: from out-59.mta1.migadu.com (out-59.mta1.migadu.com [IPv6:2001:41d0:203:375::3b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203D9E49
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 13:47:59 -0700 (PDT)
-Date:   Fri, 26 May 2023 20:47:52 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685134077;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tTm2WcrJtXgUhrQ3ARrtwiMqmV3Xwo18CAjwr9+QLWY=;
-        b=uvfcrkBUbEDQTPKSbgcgCTVg5y5DWONMaNXAcOakixAHywg4BZLgE0rXpYTC7kb8HKu3rH
-        /iS9JzWfI3CLzV7tEdkKLcCA74Jq7pfpsJX7Aqk1OCDLu7ggVft9xcHX+lFqRcTXjdjLvD
-        +GzCLvYPATDFTg7QvVtz2+1A0Dr9Ufc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Mostafa Saleh <smostafa@google.com>
-Cc:     maz@kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        tabba@google.com, kaleshsingh@google.com, will@kernel.org,
-        catalin.marinas@arm.com, yuzenghui@huawei.com,
-        suzuki.poulose@arm.com, james.morse@arm.com
-Subject: Re: [PATCH] KVM: arm64: Use different pointer authentication keys
- for pKVM
-Message-ID: <ZHEa+HAixbYijQTA@linux.dev>
-References: <20230516141531.791492-1-smostafa@google.com>
+        Fri, 26 May 2023 16:48:11 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D979518D;
+        Fri, 26 May 2023 13:48:06 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso223940266b.0;
+        Fri, 26 May 2023 13:48:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685134085; x=1687726085;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0R0NrTV6Cqbu4tkPLJTMsGVN13FV0cFn1qP/yJKlxmM=;
+        b=X2rfpKXipfhG+PEUWJBDIQ1o5PogCoENlvEt+SGQ+7rF8iLBN7SFnV13wRnDdiXT2r
+         NGXjedeOg+tIWRV5stWzQa3BSAAozyh3AzsH/FSAw74GAmCkvfBcJlYAdFockCIgeLyY
+         dYGEp6v6D0GLNAOv5J5dg8XR5yXkpKP9SGDL+OqzS+PxMC2u9T9rVraYige205g+dtZt
+         pmBNSpBVUdbjRp6AA9k6XhyvMLy8LJg4ypDXmkMaLHhEbKP7Yy5XfV+vB2aaEQz+eI/R
+         Yx4YuvzAeRh1YCr4PkNRyTAj0mo6CJfDNjE2c+4pXYGZ3lWMy7HRCcg+UDZR2PJK2b5n
+         wjow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685134085; x=1687726085;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0R0NrTV6Cqbu4tkPLJTMsGVN13FV0cFn1qP/yJKlxmM=;
+        b=MHs1PYlZqemGFJ3laEajmlbC86p/ThusgY3bQv7UCfAYgp0iTiavJe28Zc/Ghn5+U3
+         cAdh9HzAHhH54NbfePNnty2ZOBQeBCd0CgfZxWXL288YE09UjFBHveS9kre7JeOf3d4P
+         CpqbjhBi67gbWaMMUrpPc5Rjb/vHj/8zXgnIZFtnKWgOJRRn79uC9D3m+Vy0B+Hhql3K
+         wKRvLFVPlVr7RA0t1u2KtlAy2JuC5LIYTBtxMlOluFjRZpvaxd2zYWYQZMQ50KaQC8Vs
+         JqhfhWsach1pF1tESj/25x59zDNbUZdkrtjhjhep31p0Fuxp1Pfo222L6ldfUoTyDNmD
+         k42A==
+X-Gm-Message-State: AC+VfDxVDTUjpW+2jLKpV5EZGoYsIC6GGfNsAAIXj4MwdMus8qOeTGlV
+        z0LieD2ybMr40eMXZH7WUSg=
+X-Google-Smtp-Source: ACHHUZ4tltghkDEs4H+WeAaNWWmoAVTk1B3YVlbFYjpOos6TovJcH77mpK7bVtLFFU/UdEgvlSV3eg==
+X-Received: by 2002:a17:907:60c9:b0:96f:cde5:5f5e with SMTP id hv9-20020a17090760c900b0096fcde55f5emr3233901ejc.29.1685134084976;
+        Fri, 26 May 2023 13:48:04 -0700 (PDT)
+Received: from fedora.. (dh207-98-6.xnet.hr. [88.207.98.6])
+        by smtp.googlemail.com with ESMTPSA id m13-20020a170906160d00b0095342bfb701sm2604413ejd.16.2023.05.26.13.48.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 13:48:04 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v5 1/5] soc: qcom: socinfo: move SMEM item struct and defines to a header
+Date:   Fri, 26 May 2023 22:47:58 +0200
+Message-Id: <20230526204802.3081168-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516141531.791492-1-smostafa@google.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 02:15:31PM +0000, Mostafa Saleh wrote:
-> When the kernel is compiled with CONFIG_ARM64_PTR_AUTH_KERNEL, it
-> uses Armv8.3-Pauth for return address protection for the kernel code
-> including nvhe code in EL2.
-> 
-> Same keys are used in both kernel(EL1) and nvhe code(EL2), this is
-> fine for nvhe but not when running in protected mode(pKVM) as the host
-> can't be trusted.
+Move SMEM item struct and related defines to a header in order to be able
+to reuse them in the SMEM driver instead of duplicating them.
 
-But we trust it enough to hand pKVM a fresh set of keys before firing
-off? I understand there is some degree of initialization required to get
-pKVM off the ground, but I question in this case if key handoff is
-strictly necessary.
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/soc/qcom/socinfo.c       | 67 +-----------------------------
+ include/linux/soc/qcom/socinfo.h | 70 ++++++++++++++++++++++++++++++++
+ 2 files changed, 71 insertions(+), 66 deletions(-)
+ create mode 100644 include/linux/soc/qcom/socinfo.h
 
-There are potentially other sources of random directly available at EL2,
-such as the SMCCC TRNG ABI or FEAT_RNG. Should pKVM prefer one of these
-random implementations and only fall back to host-provided keys if
-absolutely necessary?
-
-> The keys for the hypervisor are generated from the kernel before it
-> de-privileges, each cpu has different keys, this relies on nvhe code
-> not being migratable while running.
-> 
-> This patch adds host/hyp save/restore for the keys.
-> For guest/hyp, they are already handled in common kvm code in
-> __guest_enter, where they are saved/restored if they are not
-> trapped.
-
-Try to avoid "this patch" or any self-referential language in the
-changelog. Just directly state what the patch does:
-
-  Similar to guest entry/exit, start context switching the pointer
-  authentication keys on host/entry exit if the feature is in use.
-
-> Signed-off-by: Mostafa Saleh <smostafa@google.com>
-> ---
->  arch/arm64/kvm/arm.c           | 26 +++++++++++++++++++++++++
->  arch/arm64/kvm/hyp/nvhe/host.S | 35 +++++++++++++++++++++++++++++++++-
->  2 files changed, 60 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 14391826241c..dd03b52f035d 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -51,6 +51,8 @@ DECLARE_KVM_HYP_PER_CPU(unsigned long, kvm_hyp_vector);
->  DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
->  DECLARE_KVM_NVHE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
->  
-> +DECLARE_KVM_NVHE_PER_CPU(struct kvm_cpu_context, kvm_hyp_ctxt);
-> +
->  static bool vgic_present;
->  
->  static DEFINE_PER_CPU(unsigned char, kvm_arm_hardware_enabled);
-> @@ -2067,6 +2069,26 @@ static int __init kvm_hyp_init_protection(u32 hyp_va_bits)
->  	return 0;
->  }
->  
-> +static void pkvm_hyp_init_ptrauth(void)
-> +{
-> +	struct kvm_cpu_context *hyp_ctxt;
-> +	int cpu;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		hyp_ctxt = per_cpu_ptr_nvhe_sym(kvm_hyp_ctxt, cpu);
-> +		hyp_ctxt->sys_regs[APIAKEYLO_EL1] = get_random_long();
-> +		hyp_ctxt->sys_regs[APIAKEYHI_EL1] = get_random_long();
-> +		hyp_ctxt->sys_regs[APIBKEYLO_EL1] = get_random_long();
-> +		hyp_ctxt->sys_regs[APIBKEYHI_EL1] = get_random_long();
-> +		hyp_ctxt->sys_regs[APDAKEYLO_EL1] = get_random_long();
-> +		hyp_ctxt->sys_regs[APDAKEYHI_EL1] = get_random_long();
-> +		hyp_ctxt->sys_regs[APDBKEYLO_EL1] = get_random_long();
-> +		hyp_ctxt->sys_regs[APDBKEYHI_EL1] = get_random_long();
-> +		hyp_ctxt->sys_regs[APGAKEYLO_EL1] = get_random_long();
-> +		hyp_ctxt->sys_regs[APGAKEYHI_EL1] = get_random_long();
-> +	}
-> +}
-> +
->  /* Inits Hyp-mode on all online CPUs */
->  static int __init init_hyp_mode(void)
->  {
-> @@ -2228,6 +2250,10 @@ static int __init init_hyp_mode(void)
->  	kvm_hyp_init_symbols();
->  
->  	if (is_protected_kvm_enabled()) {
-> +		if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) &&
-> +		    cpus_have_const_cap(ARM64_HAS_ADDRESS_AUTH))
-> +			pkvm_hyp_init_ptrauth();
-> +
->  		init_cpu_logical_map();
->  
->  		if (!init_psci_relay()) {
-> diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
-> index b6c0188c4b35..255ba4af911b 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/host.S
-> +++ b/arch/arm64/kvm/hyp/nvhe/host.S
-> @@ -10,6 +10,7 @@
->  #include <asm/kvm_arm.h>
->  #include <asm/kvm_asm.h>
->  #include <asm/kvm_mmu.h>
-> +#include <asm/kvm_ptrauth.h>
->  
->  	.text
->  
-> @@ -37,10 +38,42 @@ SYM_FUNC_START(__host_exit)
->  
->  	/* Save the host context pointer in x29 across the function call */
->  	mov	x29, x0
-> +
-> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
-> +alternative_if_not ARM64_HAS_ADDRESS_AUTH
-> +b __skip_pauth_save
-> +alternative_else_nop_endif
-> +
-> +alternative_if ARM64_KVM_PROTECTED_MODE
-> +	/* Save kernel ptrauth keys. */
-> +	add x18, x29, #CPU_APIAKEYLO_EL1
-> +	ptrauth_save_state x18, x19, x20
-> +
-> +	/* Use hyp keys. */
-> +	adr_this_cpu x18, kvm_hyp_ctxt, x19
-> +	add x18, x18, #CPU_APIAKEYLO_EL1
-> +	ptrauth_restore_state x18, x19, x20
-> +alternative_else_nop_endif
-> +__skip_pauth_save:
-> +#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
-> +
->  	bl	handle_trap
->  
-> -	/* Restore host regs x0-x17 */
->  __host_enter_restore_full:
-> +	/* Restore kernel keys. */
-> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
-> +alternative_if_not ARM64_HAS_ADDRESS_AUTH
-> +b __skip_pauth_restore
-> +alternative_else_nop_endif
-> +
-> +alternative_if ARM64_KVM_PROTECTED_MODE
-> +	add x18, x29, #CPU_APIAKEYLO_EL1
-> +	ptrauth_restore_state x18, x19, x20
-> +alternative_else_nop_endif
-> +__skip_pauth_restore:
-> +#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
-> +
-> +	/* Restore host regs x0-x17 */
->  	ldp	x0, x1,   [x29, #CPU_XREG_OFFSET(0)]
->  	ldp	x2, x3,   [x29, #CPU_XREG_OFFSET(2)]
->  	ldp	x4, x5,   [x29, #CPU_XREG_OFFSET(4)]
-> -- 
-> 2.40.1.606.ga4b1b128d6-goog
-> 
-
+diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+index c2e4a57dd666..ee6bbf76d941 100644
+--- a/drivers/soc/qcom/socinfo.c
++++ b/drivers/soc/qcom/socinfo.c
+@@ -11,6 +11,7 @@
+ #include <linux/random.h>
+ #include <linux/slab.h>
+ #include <linux/soc/qcom/smem.h>
++#include <linux/soc/qcom/socinfo.h>
+ #include <linux/string.h>
+ #include <linux/stringify.h>
+ #include <linux/sys_soc.h>
+@@ -32,15 +33,6 @@
+ #define qcom_board_id(id) QCOM_ID_ ## id, __stringify(id)
+ #define qcom_board_id_named(id, name) QCOM_ID_ ## id, (name)
+ 
+-#define SMEM_SOCINFO_BUILD_ID_LENGTH           32
+-#define SMEM_SOCINFO_CHIP_ID_LENGTH            32
+-
+-/*
+- * SMEM item id, used to acquire handles to respective
+- * SMEM region.
+- */
+-#define SMEM_HW_SW_BUILD_ID            137
+-
+ #ifdef CONFIG_DEBUG_FS
+ #define SMEM_IMAGE_VERSION_BLOCKS_COUNT        32
+ #define SMEM_IMAGE_VERSION_SIZE                4096
+@@ -126,64 +118,7 @@ static const char *const pmic_models[] = {
+ 	[58] = "PM8450",
+ 	[65] = "PM8010",
+ };
+-#endif /* CONFIG_DEBUG_FS */
+-
+-/* Socinfo SMEM item structure */
+-struct socinfo {
+-	__le32 fmt;
+-	__le32 id;
+-	__le32 ver;
+-	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
+-	/* Version 2 */
+-	__le32 raw_id;
+-	__le32 raw_ver;
+-	/* Version 3 */
+-	__le32 hw_plat;
+-	/* Version 4 */
+-	__le32 plat_ver;
+-	/* Version 5 */
+-	__le32 accessory_chip;
+-	/* Version 6 */
+-	__le32 hw_plat_subtype;
+-	/* Version 7 */
+-	__le32 pmic_model;
+-	__le32 pmic_die_rev;
+-	/* Version 8 */
+-	__le32 pmic_model_1;
+-	__le32 pmic_die_rev_1;
+-	__le32 pmic_model_2;
+-	__le32 pmic_die_rev_2;
+-	/* Version 9 */
+-	__le32 foundry_id;
+-	/* Version 10 */
+-	__le32 serial_num;
+-	/* Version 11 */
+-	__le32 num_pmics;
+-	__le32 pmic_array_offset;
+-	/* Version 12 */
+-	__le32 chip_family;
+-	__le32 raw_device_family;
+-	__le32 raw_device_num;
+-	/* Version 13 */
+-	__le32 nproduct_id;
+-	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
+-	/* Version 14 */
+-	__le32 num_clusters;
+-	__le32 ncluster_array_offset;
+-	__le32 num_defective_parts;
+-	__le32 ndefective_parts_array_offset;
+-	/* Version 15 */
+-	__le32 nmodem_supported;
+-	/* Version 16 */
+-	__le32  feature_code;
+-	__le32  pcode;
+-	__le32  npartnamemap_offset;
+-	__le32  nnum_partname_mapping;
+-	/* Version 17 */
+-	__le32 oem_variant;
+-};
+ 
+-#ifdef CONFIG_DEBUG_FS
+ struct socinfo_params {
+ 	u32 raw_device_family;
+ 	u32 hw_plat_subtype;
+diff --git a/include/linux/soc/qcom/socinfo.h b/include/linux/soc/qcom/socinfo.h
+new file mode 100644
+index 000000000000..d1cbc49a2a2d
+--- /dev/null
++++ b/include/linux/soc/qcom/socinfo.h
+@@ -0,0 +1,70 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __QCOM_SOCINFO_H__
++#define __QCOM_SOCINFO_H__
++
++/*
++ * SMEM item id, used to acquire handles to respective
++ * SMEM region.
++ */
++#define SMEM_HW_SW_BUILD_ID		137
++
++#define SMEM_SOCINFO_BUILD_ID_LENGTH	32
++#define SMEM_SOCINFO_CHIP_ID_LENGTH	32
++
++/* Socinfo SMEM item structure */
++struct socinfo {
++	__le32 fmt;
++	__le32 id;
++	__le32 ver;
++	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
++	/* Version 2 */
++	__le32 raw_id;
++	__le32 raw_ver;
++	/* Version 3 */
++	__le32 hw_plat;
++	/* Version 4 */
++	__le32 plat_ver;
++	/* Version 5 */
++	__le32 accessory_chip;
++	/* Version 6 */
++	__le32 hw_plat_subtype;
++	/* Version 7 */
++	__le32 pmic_model;
++	__le32 pmic_die_rev;
++	/* Version 8 */
++	__le32 pmic_model_1;
++	__le32 pmic_die_rev_1;
++	__le32 pmic_model_2;
++	__le32 pmic_die_rev_2;
++	/* Version 9 */
++	__le32 foundry_id;
++	/* Version 10 */
++	__le32 serial_num;
++	/* Version 11 */
++	__le32 num_pmics;
++	__le32 pmic_array_offset;
++	/* Version 12 */
++	__le32 chip_family;
++	__le32 raw_device_family;
++	__le32 raw_device_num;
++	/* Version 13 */
++	__le32 nproduct_id;
++	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
++	/* Version 14 */
++	__le32 num_clusters;
++	__le32 ncluster_array_offset;
++	__le32 num_defective_parts;
++	__le32 ndefective_parts_array_offset;
++	/* Version 15 */
++	__le32 nmodem_supported;
++	/* Version 16 */
++	__le32  feature_code;
++	__le32  pcode;
++	__le32  npartnamemap_offset;
++	__le32  nnum_partname_mapping;
++	/* Version 17 */
++	__le32 oem_variant;
++};
++
++#endif
 -- 
-Thanks,
-Oliver
+2.40.1
+
