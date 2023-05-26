@@ -2,143 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD9B712ED2
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19076712ED9
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 23:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244085AbjEZVQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 17:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S237887AbjEZVRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 17:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237412AbjEZVQk (ORCPT
+        with ESMTP id S237412AbjEZVRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 17:16:40 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FFABC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:16:39 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-565a6837a0bso18724237b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:16:39 -0700 (PDT)
+        Fri, 26 May 2023 17:17:10 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DF299
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:17:09 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f60dfc6028so12318865e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 14:17:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685135798; x=1687727798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GMxB33ZwtJ62Rd3pdsfVx0QDMuGQJeUN8Db0SpoNE7c=;
-        b=WO8ETJpr3D8s+L8V7BZGdNHhdBMauE8nCTE+BKsOSVTHrKqsPSboOCcRv4PWnkjmEw
-         jK5L1C0daoeXuXDI7ZXrWWRm8Mrf2U0RNr2eT1JIM2bgFi/VV2R8C+nW5XPpKWVKHDdl
-         enKGgowQZCPHxHaosuumQ0IPA8EJvaTrHFjahnsa0CCW9I7TpoTIM4IKw4KFBeBzsias
-         G2qYE6Otw/RgQ11EASK9n7LTUiUFFtdpXj2NUNRYDBpkZNzKHDCXK+7kmxNeYeLj4FD0
-         /ViPAmBwjCpUrhWjNxBlomdfAP3b1tme0MH2qsrVPARPUzEW9+17V3gg92Z58EGEu/Tf
-         j8hw==
+        d=linaro.org; s=google; t=1685135828; x=1687727828;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OTZ2eTIi+dbM8D638/pa8mpVNPNj7JMHBYTJceqIyYw=;
+        b=HSdLPH4/oJa1eARDfOrecCl7rMzSudwuX7YbfKpsJepRkJEUTOtE7NAgeK7NmY6Mc+
+         QZKj2STMXSR7dTR+WXvkfvrUY66tuDLC4pnXt+BhgIFM48Z2VLWVXHq2vkGCiUeqKkX3
+         PCWQg4kIGzNQzpzxIibTFdtRjsv2+E9juaNW7D1xillrtYAGVXkDtQrZaETbUFSpu+aA
+         cLLk4s8M22vP8rA4k3RLIWHAyzHV75t74rB83Efu1Y3mA5ZICwRa1krG6HmUXx7IrJ9s
+         Ijozp6sNwGxh6UYfnRSPmaONvO5g2eAY68xxO0NplwRJuyHUIy8fqDMlR+Dfp1L4wnb7
+         S7sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685135798; x=1687727798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GMxB33ZwtJ62Rd3pdsfVx0QDMuGQJeUN8Db0SpoNE7c=;
-        b=Gxb1OwxGNMEwzXMzBTGdEcIJtyw3oGFBOhSM/RnwJZxOU3Mza4n0hiCo0tT4D4EXyd
-         q/eV/kf2QbaKsMIZrRyHDyzy0oUaliOJvXYTTpifqKtEepJsttCfHFRTU3Ga4rB3l2z0
-         BNBTKu8OwH+E/VDRXYFS52TffxBrRLmGQ4SgaofLYQ7zqtDv8QJSDN4HgXvrEo2cQ4vq
-         zwOkPvXACEBJh26pT2NGHIyReKsLutVnE5tILn2NVVAcSbQKVuWMb9AaPVC1Pfgn8bYh
-         1/lQl+E+yawW6Dpon60ejcAG98kXISsINIHHBhJanEaOpb/KsHBWkmyZIpypE59XtTok
-         IiKg==
-X-Gm-Message-State: AC+VfDypCw3BYIIyYaZaYL0nf92GzNwUkeK55E2ReOfXz139RR6eN0y4
-        g+7u9RrGBHkloFGcynqGCBX+jci5Y8zBnky5qlw=
-X-Google-Smtp-Source: ACHHUZ6F3ZaUq0kBCJc2bnmLNDOInVmWlfumg7WpVPyqePHsklyhD8el7XV9QVkbgduMYUBCTMAfBzTmQWkzZMtAVRs=
-X-Received: by 2002:a81:8747:0:b0:552:a0fc:6827 with SMTP id
- x68-20020a818747000000b00552a0fc6827mr3311805ywf.52.1685135798208; Fri, 26
- May 2023 14:16:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685135828; x=1687727828;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OTZ2eTIi+dbM8D638/pa8mpVNPNj7JMHBYTJceqIyYw=;
+        b=HI3iRCUcfB3d5xEz9TqRn8+qK+rJpg0G81h4g1v1YhM/801mFW/cnf65ObvsLfjfV5
+         QCDCuCGAXm/sZWT6Nun51DRGYEdy6q/5hGNxvvRPdQr7lvxGbAnmm/tFNrw6nEa3A1BZ
+         p5YhGwLAbUaOj5xjRfJDkS/3Xs4hnmdIUovhrRgiid+9oMpbcLPHc5dk5MyLhl3eZNK+
+         yOdZ2+sX+es4mD985cFcpTLSSqBpzPqyQftiKCDyxiphkPSXzVHwkWY13Ayk046o73OE
+         ax0h/vR29xxot+MLF8hQ4KZCILGPyNwnN4750E1MIw4Gdd9prMSe1+J8TpM5vAI9p+QT
+         Ti7A==
+X-Gm-Message-State: AC+VfDyvEOX3wPRPpQQBjUBHcwNRLWBVKf2EQc7DDJTNj0iVyTjA1//k
+        dArc2yqVYNDJa+z0fdW3kTzfiQ==
+X-Google-Smtp-Source: ACHHUZ7mmG08d1oCokGQ0OUOjjya3HeUe1ATW3LFm5q7dy7RvaiKWJRYLkGlsTmSEucp5+EGF0/NZA==
+X-Received: by 2002:a05:600c:228c:b0:3f6:1a9:b9db with SMTP id 12-20020a05600c228c00b003f601a9b9dbmr2388250wmf.21.1685135828039;
+        Fri, 26 May 2023 14:17:08 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id t11-20020a5d49cb000000b0030732d6e104sm6187025wrs.105.2023.05.26.14.17.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 14:17:07 -0700 (PDT)
+Message-ID: <7bbbf520-d70f-5df6-33ce-a888bf364aa5@linaro.org>
+Date:   Fri, 26 May 2023 22:17:06 +0100
 MIME-Version: 1.0
-References: <20230414101052.11012-1-ihuguet@redhat.com> <CANiq72=vTLT1PnbWu4pwNNyMO0S413G3O+_TLcCGLiDGr5fH7Q@mail.gmail.com>
- <CACT4ouf2M1k7SaMgqv1Fj33Wen7UKuUyKp-Y9oer+THiWEebNg@mail.gmail.com>
-In-Reply-To: <CACT4ouf2M1k7SaMgqv1Fj33Wen7UKuUyKp-Y9oer+THiWEebNg@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 26 May 2023 23:16:26 +0200
-Message-ID: <CANiq72njUr2wv7CA7W9ziRUf8mrVQPFEQfS7=it3zTVhJFvf3A@mail.gmail.com>
-Subject: Re: [PATCH v3] Add .editorconfig file for basic formatting
-To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
-Cc:     ojeda@kernel.org, masahiroy@kernel.org, jgg@nvidia.com,
-        mic@digikod.net, danny@kdrag0n.dev, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, joe@perches.com, linux@rasmusvillemoes.dk,
-        willy@infradead.org, Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 3/3] media: camss: Link CAMSS power domain
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hansverk@cisco.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230526180712.8481-1-y.oudjana@protonmail.com>
+ <20230526180712.8481-4-y.oudjana@protonmail.com>
+ <fa395680-0e6c-3eb0-9d5a-f90a95c394b8@linaro.org>
+ <e755eabf-f8d7-c2cd-aa5a-bc48c7a5d5ae@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <e755eabf-f8d7-c2cd-aa5a-bc48c7a5d5ae@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 8, 2023 at 10:59=E2=80=AFAM =C3=8D=C3=B1igo Huguet <ihuguet@red=
-hat.com> wrote:
->
-> Originally I sampled manually, but I have crafted a script to collect
-> more data. It's not 100% reliable, but good to get an idea. It reads
-> the leading whitespaces and if >80% of the lines have one kind of
-> indentation, it considers that it's the one used in that file. The
-> results, filtered to show only the relevant ones, are pasted at the
-> end.
+On 26/05/2023 21:57, Konrad Dybcio wrote:
+> This code contains a whole bunch of hacky counting logic that should have
+> been substituted with _byname, but now we're stuck with indices to keep
+> compatibility with old DTs :/
+> 
+> If CAMSS_GDSC (talking about pre-TITAN hw) was a parent of all the other
+> CAMSS-related GDSCs, we could make it their parent in the clock driver
+> and call it a day.
 
-This is useful -- thanks a lot for working on collecting it!
+I mean, it wouldn't make much sense from a hw design POV if that weren't 
+the case..
 
-> These are some personal conclusions from the script's results:
-> - .py: although the official and most widely used style in the
-> community is 4-space indentation, in Linux tree many files use tabs.
-> What should we do here? 4-space is the clear standard for python...
+Hmm looks like its already there.
 
-Yeah, this is the kind of thing that worries me and why I asked --
-what do editors do when they have the config saying it is 4-spaces,
-but the file is tabs? Do they adjust, do they convert the entire file,
-or do they simply start mixing indentation styles? Does the
-`.editorconfig` spec say anything about it? For instance, here is an
-issue about this sort of problem:
+static struct gdsc vfe0_gdsc = {
+         .gdscr = 0x3664,
+         .cxcs = (unsigned int []){ 0x36a8 },
+         .cxc_count = 1,
+         .pd = {
+                 .name = "vfe0",
+         },
+         .parent = &camss_gdsc.pd,
+         .pwrsts = PWRSTS_OFF_ON,
+};
 
-    https://github.com/editorconfig/editorconfig-vscode/issues/329
+static struct gdsc vfe1_gdsc = {
+         .gdscr = 0x3674,
+         .cxcs = (unsigned int []){ 0x36ac },
+         .cxc_count = 1,
+         .pd = {
+                 .name = "vfe1",
+         },
+         .parent = &camss_gdsc.pd,
+         .pwrsts = PWRSTS_OFF_ON,
+};
 
-If the rule could be applied only to new files, then it would be
-fairly easy to decide, given the majority uses 4-spaces and it nicely
-aligns with PEP 8, Black, etc. But unless we are quite sure we are not
-annoying developers, I would avoid specifying anything in these cases.
+I feel this is probably a problem in the description of dependencies for 
+the CSIPHY in the dts for the 8996..
 
-In some cases (e.g. few files), you may be able to propose to
-normalize the indentation style treewide for that extension.
+I.e. the CSIPHY requires some clocks and power-rails to be switched on ah..
 
-> - .rb: only one file in the whole tree
-> - .pm: only 3 files in the whole tree
+static const struct resources csiphy_res_8x96[] = {
+         /* CSIPHY0 */
+         {
+                 .regulators = {},
+                 .clock = { "top_ahb", "ispif_ahb", "ahb", 
+"csiphy0_timer" },
 
-I guess you could also ignore extensions without many matches in order
-to simplify -- they can always be added later, ideally by their
-maintainers.
 
-> - Files with many different indentations, better not to specify them:
-> rst, cocci, tc, xsl, manual pages
-> - Files that we should specify, tab indented: awk, dts, dtsi, dtso, s, S
-> - Files that we might specify, with preference for tab indenting but
-> not 100% clear: sh, bash, pl
-> - Files in tools/perf/scripts/*/bin/*: there is no clear formatting
-> for any file type, only for .py files that are tab-indented. To get
-> these results I've run my script from tools/perf/scripts directory.
+should probably look something like
 
-If all Python tab-indented files are in a given folder, then would it
-be possible to provide an `.editorconfig` for that folder, and then
-4-spaces for the global one? i.e. splitting the problem across folders
-may be a solution (within reason, of course, i.e. as long as we don't
-fill the kernel with `.editorconfig` files... :)
+static const struct resources csiphy_res_8x96[] = {
+         /* CSIPHY0 */
+         {
+                 .regulators = {},
+                 .clock = { "top_ahb", "ispif_ahb", "ahb", 
+"csiphy0_timer", "vfe0"},
 
-> I'm only aware of Clang and Rust formatter configs in Linux tree, and
-> I think this complies with them. Do you know about any other?
+But basically yeah, we haven't modeled the dependency to the CAMSS_GDSC 
+via the VFEx
 
-There is `scripts/checkpatch.pl`, which I guess may be counted as one
-since one can fix what it complains about manually (and I think it has
-some "fix in place" support too).
+Hmm wait - why haven't we included the CAMSS_GDSC in the dtsi for the 8996 ?
 
-There is also `Documentation/devicetree/bindings/.yamllint`.
+git diff
+diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi 
+b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+index 30257c07e1279..60e5d3f5336d4 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+@@ -2120,7 +2120,8 @@ camss: camss@a00000 {
+                                 "vfe0",
+                                 "vfe1";
+                         power-domains = <&mmcc VFE0_GDSC>,
+-                                       <&mmcc VFE1_GDSC>;
++                                       <&mmcc VFE1_GDSC>,
++                                       <&mmcc CAMSS_GDSC>;
 
-In addition, some may be using formatters in a default config? e.g.
-Black for some of the Python scripts.
+Either of those approaches should mitigate this patch.
 
-Cheers,
-Miguel
+---
+bod
