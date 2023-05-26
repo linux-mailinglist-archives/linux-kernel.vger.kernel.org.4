@@ -2,142 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3C7712D7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6727712D7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243605AbjEZT3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S243939AbjEZT35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243985AbjEZT3w (ORCPT
+        with ESMTP id S243615AbjEZT3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:29:52 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E200C1B3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:29:48 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2af29e51722so11727611fa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:29:48 -0700 (PDT)
+        Fri, 26 May 2023 15:29:54 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1821D9;
+        Fri, 26 May 2023 12:29:50 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6dfc4dffaso8122835e9.0;
+        Fri, 26 May 2023 12:29:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685129387; x=1687721387;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0ynDYbGdsZF04vCXi/fdD62cVu/XTnLlDnsDcsQE+gU=;
-        b=tDYpQbK97CNlp93ZtO102/5etvWLI+iwenW470Z0lkqaexV58qGOY4pSVIglOWqyTB
-         8TyAzZMNP+h4ImdIg2nqsAaUCgEVihijTgZv0yMBb7qBO2/yG6MKKcdA1zgWzvaF1yAe
-         6IE5ViHJkjV9sbrEmwYMF2aiwc/8rYpbyC260bHb9ezMHRxrF2IzyuvLf89PArkNh6K0
-         OP938Mv/CoAX3H3HoE76DG01Z0DhbPmpmtsZmXn/SNLXbvoBRPILmq+jWAhNM5skk0uA
-         PeYTM4idJcy/BaMqsx5GzewZK/SxbC3z8aSDltvjU0W3O/yeywDX3PsHnqWjBNIT/QSW
-         40jg==
+        d=gmail.com; s=20221208; t=1685129389; x=1687721389;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HlmZBmvK6IIaBS/qVLW3KxEFaAgrXTsTdTdo1nweowk=;
+        b=d53VfFrWMZ7SAVM//Fsuotoj3KVhiMsXoAuWha/ynRveKW+5wtydwUHQ0JoHg2dxBF
+         15hGKp3oIrxuqpBaVx/5feneUvPV/pKSfoBaZoVaX/rchEOJwXoaspSw5JOjuShkc6Kh
+         pD8Ak+HoTk4eJ+J685aH3afCSMFYJzuowH7jY30Ucqy66bVA64Metd0pUxynejtEdOU9
+         8Wxlrg9aud61ORpVsyMh6L0Tzw4ECL2jD06JEvYqRSiyC4wOgpPplYJL7ztLPG7W66+N
+         TEQ/RM08sz7V42/Algd2ajf4eCORJ7UUvE8LBIeVEpygAgko20VEEU//Yr65t0MaiGIo
+         S1UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685129387; x=1687721387;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ynDYbGdsZF04vCXi/fdD62cVu/XTnLlDnsDcsQE+gU=;
-        b=TRVSb3hdEa9TMwOBNp88YdM8ns3lMACjYqu9p/1U/1JltBqamYNcmpXXCMAu6VX2U3
-         aRSGVsn2+rIhASGPXIYO/d9MbtYe0h7Pa4ZW9BLiaiGVGzhHaG/qK8wtYW2lmpqHb/qy
-         G8qQh7NnOrFR+0z9yTvCNvGCJoZiCEpkr66+epXWBUURPSPcrPX285QwsiQueo7cBxKC
-         65n5+DG2FzjMOGOZSyYaVolJyk4jfVOVrSetREqvczsAzMXa0D7RxJRpdLzh/Lz5kcLd
-         O7CtZ5m0Bn6SGh8f0Gi02knAaRkiKEQNjD7Zq5FdsmjOwOYfs6NM557/88k3I3Ro95C+
-         753Q==
-X-Gm-Message-State: AC+VfDzqDr/5jmAMsBmdor39Nuvt+rp4RN+KF9EQ7Pztq4YEZVqkTaNi
-        pKFnpBIaBEkMy82zweO6OpYtFQ==
-X-Google-Smtp-Source: ACHHUZ5oiBIQA7Cc8vvOrtzZxw/Y5yQgzUfNrym68GiY4GckllJgnoA3zmZ8t8cNnVOcuy+UbltYaw==
-X-Received: by 2002:a2e:884a:0:b0:2ad:d9bd:1d2 with SMTP id z10-20020a2e884a000000b002add9bd01d2mr1012719ljj.16.1685129386991;
-        Fri, 26 May 2023 12:29:46 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id u4-20020a2ea164000000b002a929484fa0sm862756ljl.68.2023.05.26.12.29.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 12:29:46 -0700 (PDT)
-Message-ID: <0837856f-bdd5-e8b7-3a08-01244843dbd8@linaro.org>
-Date:   Fri, 26 May 2023 21:29:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/9] drm/panel and i2c-hid: Allow panels and touchscreens
- to power sequence together
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        d=1e100.net; s=20221208; t=1685129389; x=1687721389;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HlmZBmvK6IIaBS/qVLW3KxEFaAgrXTsTdTdo1nweowk=;
+        b=giYVPq9GvT3eqchv0sg7A3MTgf0GKfCaQRNPmhYEX2y4J1bLOI/F9sQtJqhiXzozPV
+         c9mbsybx51SvqWvwyfFzJRPNAgCboz4REdGgLLwQTeytDo7j9yXHLtz8WqcaIQTnwp1N
+         mlTJFMVX1hmNdTk5sA20EmksRcWC5ZhKmBoRktpD94BlWHMNx8dkRwheRwHg/PBcrIWs
+         ch8Po6L1IvFBhR836CgwDUPuFD7CSTdHGyOgUpDWm/nFHpCWOmBuTUHUIOMMZSyBp2B9
+         TYvyuo8LUHc5Qk2OsFAAfDQEgnsG3oSFEEd1W2WgIycAxq5iJ23/IYOZwtS0ImZz7HjZ
+         ZMjQ==
+X-Gm-Message-State: AC+VfDzQIdkZpOdB0B+nuqV1/IaTrYnsvPBYv9XWCbLA1Kw126NQSceV
+        ZZMySdAiJh6PCHZmiD/xpDs=
+X-Google-Smtp-Source: ACHHUZ6vmPtVr9r7wHBr9cyq3yevyGHVW5ekA0bW6WC5t7PngjTDr9APeK0DR6RfntQQBGFJ5DRBHw==
+X-Received: by 2002:a7b:c449:0:b0:3f6:7e6:44ea with SMTP id l9-20020a7bc449000000b003f607e644eamr2379254wmi.18.1685129388977;
+        Fri, 26 May 2023 12:29:48 -0700 (PDT)
+Received: from standask-GA-A55M-S2HP ([188.123.113.247])
+        by smtp.gmail.com with ESMTPSA id q5-20020a5d61c5000000b0030789698eebsm5886170wrv.89.2023.05.26.12.29.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 12:29:48 -0700 (PDT)
+Date:   Fri, 26 May 2023 21:29:47 +0200
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>, hsinyi@google.com,
-        devicetree@vger.kernel.org,
-        yangcong5@huaqin.corp-partner.google.com,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-arm-msm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org
-References: <20230523193017.4109557-1-dianders@chromium.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230523193017.4109557-1-dianders@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 3/6] ARM: dts: bcm-mobile: move status properties to the end
+ of nodes
+Message-ID: <d7060071cb1f4b36b06b6507a09b32c7751ca7f0.1685127525.git.stano.jakubek@gmail.com>
+References: <cover.1685127525.git.stano.jakubek@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1685127525.git.stano.jakubek@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Move some DT "status" properties so that they're the last specified
+property (before sub-nodes).
 
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+---
+ arch/arm/boot/dts/bcm11351.dtsi   | 8 ++++----
+ arch/arm/boot/dts/bcm21664.dtsi   | 6 +++---
+ arch/arm/boot/dts/bcm23550.dtsi   | 6 +++---
+ arch/arm/boot/dts/bcm28155-ap.dts | 8 ++++----
+ 4 files changed, 14 insertions(+), 14 deletions(-)
 
-On 23.05.2023 21:27, Douglas Anderson wrote:
-> 
-> The big motivation for this patch series is mostly described in the patch
-> ("drm/panel: Add a way for other devices to follow panel state"), but to
-> quickly summarize here: for touchscreens that are connected to a panel we
-> need the ability to power sequence the two device together. This is not a
-> new need, but so far we've managed to get by through a combination of
-> inefficiency, added costs, or perhaps just a little bit of brokenness.
-> It's time to do better. This patch series allows us to do better.
-Panels with integrated touchscreens have been shipping in mainstream devices
-since at least 2016. Thanks a lot for looking into this!
+diff --git a/arch/arm/boot/dts/bcm11351.dtsi b/arch/arm/boot/dts/bcm11351.dtsi
+index f395e95e0177..773d717de7f0 100644
+--- a/arch/arm/boot/dts/bcm11351.dtsi
++++ b/arch/arm/boot/dts/bcm11351.dtsi
+@@ -51,42 +51,42 @@ smc@3404c000 {
+ 
+ 	serial@3e000000 {
+ 		compatible = "brcm,bcm11351-dw-apb-uart", "snps,dw-apb-uart";
+-		status = "disabled";
+ 		reg = <0x3e000000 0x1000>;
+ 		clocks = <&slave_ccu BCM281XX_SLAVE_CCU_UARTB>;
+ 		interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
+ 		reg-shift = <2>;
+ 		reg-io-width = <4>;
++		status = "disabled";
+ 	};
+ 
+ 	serial@3e001000 {
+ 		compatible = "brcm,bcm11351-dw-apb-uart", "snps,dw-apb-uart";
+-		status = "disabled";
+ 		reg = <0x3e001000 0x1000>;
+ 		clocks = <&slave_ccu BCM281XX_SLAVE_CCU_UARTB2>;
+ 		interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
+ 		reg-shift = <2>;
+ 		reg-io-width = <4>;
++		status = "disabled";
+ 	};
+ 
+ 	serial@3e002000 {
+ 		compatible = "brcm,bcm11351-dw-apb-uart", "snps,dw-apb-uart";
+-		status = "disabled";
+ 		reg = <0x3e002000 0x1000>;
+ 		clocks = <&slave_ccu BCM281XX_SLAVE_CCU_UARTB3>;
+ 		interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
+ 		reg-shift = <2>;
+ 		reg-io-width = <4>;
++		status = "disabled";
+ 	};
+ 
+ 	serial@3e003000 {
+ 		compatible = "brcm,bcm11351-dw-apb-uart", "snps,dw-apb-uart";
+-		status = "disabled";
+ 		reg = <0x3e003000 0x1000>;
+ 		clocks = <&slave_ccu BCM281XX_SLAVE_CCU_UARTB4>;
+ 		interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+ 		reg-shift = <2>;
+ 		reg-io-width = <4>;
++		status = "disabled";
+ 	};
+ 
+ 	L2: l2-cache@3ff20000 {
+diff --git a/arch/arm/boot/dts/bcm21664.dtsi b/arch/arm/boot/dts/bcm21664.dtsi
+index 19ade84e42c1..9e3835a0a7ef 100644
+--- a/arch/arm/boot/dts/bcm21664.dtsi
++++ b/arch/arm/boot/dts/bcm21664.dtsi
+@@ -51,32 +51,32 @@ smc@3404e000 {
+ 
+ 	serial@3e000000 {
+ 		compatible = "brcm,bcm21664-dw-apb-uart", "snps,dw-apb-uart";
+-		status = "disabled";
+ 		reg = <0x3e000000 0x118>;
+ 		clocks = <&slave_ccu BCM21664_SLAVE_CCU_UARTB>;
+ 		interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
+ 		reg-shift = <2>;
+ 		reg-io-width = <4>;
++		status = "disabled";
+ 	};
+ 
+ 	serial@3e001000 {
+ 		compatible = "brcm,bcm21664-dw-apb-uart", "snps,dw-apb-uart";
+-		status = "disabled";
+ 		reg = <0x3e001000 0x118>;
+ 		clocks = <&slave_ccu BCM21664_SLAVE_CCU_UARTB2>;
+ 		interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
+ 		reg-shift = <2>;
+ 		reg-io-width = <4>;
++		status = "disabled";
+ 	};
+ 
+ 	serial@3e002000 {
+ 		compatible = "brcm,bcm21664-dw-apb-uart", "snps,dw-apb-uart";
+-		status = "disabled";
+ 		reg = <0x3e002000 0x118>;
+ 		clocks = <&slave_ccu BCM21664_SLAVE_CCU_UARTB3>;
+ 		interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
+ 		reg-shift = <2>;
+ 		reg-io-width = <4>;
++		status = "disabled";
+ 	};
+ 
+ 	L2: cache-controller@3ff20000 {
+diff --git a/arch/arm/boot/dts/bcm23550.dtsi b/arch/arm/boot/dts/bcm23550.dtsi
+index ed3ce2fabca6..445eadb8d871 100644
+--- a/arch/arm/boot/dts/bcm23550.dtsi
++++ b/arch/arm/boot/dts/bcm23550.dtsi
+@@ -129,32 +129,32 @@ slaves@3e000000 {
+ 
+ 		uartb: serial@0 {
+ 			compatible = "snps,dw-apb-uart";
+-			status = "disabled";
+ 			reg = <0x00000000 0x118>;
+ 			clocks = <&slave_ccu BCM21664_SLAVE_CCU_UARTB>;
+ 			interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
++			status = "disabled";
+ 		};
+ 
+ 		uartb2: serial@1000 {
+ 			compatible = "snps,dw-apb-uart";
+-			status = "disabled";
+ 			reg = <0x00001000 0x118>;
+ 			clocks = <&slave_ccu BCM21664_SLAVE_CCU_UARTB2>;
+ 			interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
++			status = "disabled";
+ 		};
+ 
+ 		uartb3: serial@2000 {
+ 			compatible = "snps,dw-apb-uart";
+-			status = "disabled";
+ 			reg = <0x00002000 0x118>;
+ 			clocks = <&slave_ccu BCM21664_SLAVE_CCU_UARTB3>;
+ 			interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
++			status = "disabled";
+ 		};
+ 
+ 		bsc1: i2c@16000 {
+diff --git a/arch/arm/boot/dts/bcm28155-ap.dts b/arch/arm/boot/dts/bcm28155-ap.dts
+index c496e33a71a6..0a8ad1d673d8 100644
+--- a/arch/arm/boot/dts/bcm28155-ap.dts
++++ b/arch/arm/boot/dts/bcm28155-ap.dts
+@@ -21,23 +21,23 @@ serial@3e000000 {
+ 	};
+ 
+ 	i2c@3e016000 {
+-		status = "okay";
+ 		clock-frequency = <400000>;
++		status = "okay";
+ 	};
+ 
+ 	i2c@3e017000 {
+-		status = "okay";
+ 		clock-frequency = <400000>;
++		status = "okay";
+ 	};
+ 
+ 	i2c@3e018000 {
+-		status = "okay";
+ 		clock-frequency = <400000>;
++		status = "okay";
+ 	};
+ 
+ 	i2c@3500d000 {
+-		status = "okay";
+ 		clock-frequency = <100000>;
++		status = "okay";
+ 
+ 		pmu: pmu@8 {
+ 			reg = <0x08>;
+-- 
+2.25.1
 
-Konrad
-> 
-> Assuming that people think this patch series looks OK, we'll have to
-> figure out the right way to land it. The panel patches and i2c-hid
-> patches will go through very different trees and so either we'll need
-> an Ack from one side or the other or someone to create a tag for the
-> other tree to pull in. This will _probably_ require the true drm-misc
-> maintainers to get involved, not a lowly committer. ;-)
-> 
-> 
-> Douglas Anderson (9):
->   dt-bindings: HID: i2c-hid: Add "panel" property to i2c-hid backed
->     panels
->   drm/panel: Check for already prepared/enabled in drm_panel
->   drm/panel: Add a way for other devices to follow panel state
->   HID: i2c-hid: Switch to SYSTEM_SLEEP_PM_OPS()
->   HID: i2c-hid: Rearrange probe() to power things up later
->   HID: i2c-hid: Make suspend and resume into helper functions
->   HID: i2c-hid: Support being a panel follower
->   HID: i2c-hid: Do panel follower work on the system_wq
->   arm64: dts: qcom: sc7180: Link trogdor touchscreens to the panels
-> 
->  .../bindings/input/elan,ekth6915.yaml         |   6 +
->  .../bindings/input/goodix,gt7375p.yaml        |   6 +
->  .../bindings/input/hid-over-i2c.yaml          |   6 +
->  .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |   1 +
->  .../dts/qcom/sc7180-trogdor-homestar.dtsi     |   1 +
->  .../boot/dts/qcom/sc7180-trogdor-lazor.dtsi   |   1 +
->  .../boot/dts/qcom/sc7180-trogdor-pompom.dtsi  |   1 +
->  .../qcom/sc7180-trogdor-quackingstick.dtsi    |   1 +
->  .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  |   1 +
->  drivers/gpu/drm/drm_panel.c                   | 194 +++++++++-
->  drivers/hid/i2c-hid/i2c-hid-core.c            | 330 +++++++++++++-----
->  include/drm/drm_panel.h                       |  89 +++++
->  12 files changed, 542 insertions(+), 95 deletions(-)
-> 
