@@ -2,63 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404B0711B57
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 02:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9793711B56
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 02:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241735AbjEZAgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 25 May 2023 20:36:14 -0400
+        id S241648AbjEZAgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 25 May 2023 20:36:12 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241012AbjEZAgM (ORCPT
+        with ESMTP id S236413AbjEZAgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 25 May 2023 20:36:12 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B6B1A6
-        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685061371; x=1716597371;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rdVWmFLqGcdqPJRp6HWDTAW4YZnKoHDjemJFuwShyT8=;
-  b=OIU6sqtXy+aDKEu0+M8WMvHS2gzE7Z87iu06Pu9PdG4WTb948NODeJWC
-   FhE36lWUBnF168cPRmT5+YO5BHd0p8SoK6d9ZIVd3oiHaKWPZy0mOKoFe
-   wRw9Wa1+3VlT6+tEnYjyW0Ge9wgxIcMZb7sYyWqZ03mvcFDUsHFZaX2Di
-   bjs2uTytrtSJeWFl2gcWI9GWuh+HR4mu16pEbKj4nc/OAXIM4t8RAQzTB
-   BszfYrORkIhosMG8AxZ2SUalFcoTKywSNbVdSKgOf3eAK9WF9SZ3lxpcC
-   4nWc7k89C0fSZXtJoIWh6LGLqEw2J5wymi2GjkUaInAH3A83uVEhlhi0y
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="382315557"
-X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
-   d="scan'208";a="382315557"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 17:35:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10721"; a="682537887"
-X-IronPort-AV: E=Sophos;i="6.00,192,1681196400"; 
-   d="scan'208";a="682537887"
-Received: from araj-dh-work.jf.intel.com (HELO araj-dh-work) ([10.165.157.158])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2023 17:35:51 -0700
-Date:   Thu, 25 May 2023 17:34:26 -0700
-From:   Ashok Raj <ashok_raj@linux.intel.com>
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCH] x86/microcode: move microcode_mutex declaration
-Message-ID: <ZG/+kqmiQKwtEmQz@araj-dh-work>
-References: <20230522062713.427998-1-christian.gmeiner@gmail.com>
+        Thu, 25 May 2023 20:36:09 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E671A8
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:36:07 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-253340db64fso334297a91.2
+        for <linux-kernel@vger.kernel.org>; Thu, 25 May 2023 17:36:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685061367; x=1687653367;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tJ9LyPTo053T3fijbdEEeajXM5b0nc+MBS0L4hj1F/Y=;
+        b=TDAx+dt6pUfaSHJbf2NrRNpfsbscdpyE5E6JoZa4h0wMlat3WMbVhXEVYxqXvIp4Zn
+         L/ZBdVhL4QzPQv2jjXt8wN5XNqHmUFaTb11tEOuzMiAEG/1IDCVoWbTQpGMwPMcaueNA
+         vPVPOhjA71jC4smZBdAUDi9GcD9+MBWOLfpKX+2KH6wZwt3Ox8zXjLhJZl0aCXBjRLV7
+         +1l5X6FhTRJmRgnmpLGr6XxF0d063vavFNvcrtoXsJt+uyXUooiUl4Ro2iGW+9UF3IQn
+         JmcWT/NDBMtg9GGqV/PiUmXYkvwGfMgammbN0RNn5tBb+i9p2JitRx2i/1E2zO8ct7vE
+         FC7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685061367; x=1687653367;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tJ9LyPTo053T3fijbdEEeajXM5b0nc+MBS0L4hj1F/Y=;
+        b=T3oU/kFfDOifjduXd3+CLXMOE5pu/NNsZgi6rXmSWgqJO2qUmYK4HQeQte1bEML10p
+         rshEdjYp64YOHEmRp8eh4yneBBZHdmsbOlMtzxl8LhYuo90uTAKPFV80w+cH+/W37TY9
+         2nm+tvhIynr7SJrJGJECd11theIL72wLtSj3qIwvpdBAhaFn/8bchIHgdc2ANtc/GDv8
+         x3707HAhdg1RPknW7xeJFm48lIcfV5YHFvcW+RocdkIylFtKjHvuN4R7odXmbvj+nH/C
+         vLlhLm4rjszA1NIEtgfPBbTITp3bmQOIfXdujTLyOyvWWnzQU9aegWcftIuk0ZLlkW5M
+         7UKg==
+X-Gm-Message-State: AC+VfDyqNvgWT4rw6zq1da7ldQxcLFLfrGKovVUj5Ng5jBuRO3a+33XT
+        j9srtiyV0Ns0+vH5jd0pxPLBoA==
+X-Google-Smtp-Source: ACHHUZ45T530Np/DKkM/YX0mFC5+v2YjaZ7Ka9v14tyOEH74llzKzA6gQNPz0SE1MkCc9RKZ+f8wxQ==
+X-Received: by 2002:a17:902:d511:b0:1af:cbb6:61ff with SMTP id b17-20020a170902d51100b001afcbb661ffmr589592plg.64.1685061367017;
+        Thu, 25 May 2023 17:36:07 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b00194caf3e975sm1979063pli.208.2023.05.25.17.36.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 17:36:06 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q2LR5-003vd3-20;
+        Fri, 26 May 2023 10:36:03 +1000
+Date:   Fri, 26 May 2023 10:36:03 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [PATCH 5/7] block: Rework bio_for_each_folio_all()
+Message-ID: <ZG/+88/G+hX5DyCX@dread.disaster.area>
+References: <20230525214822.2725616-1-kent.overstreet@linux.dev>
+ <20230525214822.2725616-6-kent.overstreet@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230522062713.427998-1-christian.gmeiner@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <20230525214822.2725616-6-kent.overstreet@linux.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,74 +77,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 08:27:12AM +0200, Christian Gmeiner wrote:
-> The microcode_mutex is only used when CONFIG_MICROCODE_LATE_LOADING
-> is enabled. Move it into the ifdef block.
+On Thu, May 25, 2023 at 05:48:20PM -0400, Kent Overstreet wrote:
+> This reimplements bio_for_each_folio_all() on top of the newly-reworked
+> bvec_iter_all, and since it's now trivial we also provide
+> bio_for_each_folio.
 > 
-> Fixes a compiler unused-variable warning seen on gcc.
-> 
-> Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
-
-Thanks Christian
-
-I tried to compile with W=1 but not sure why I'm not getting that error
-when CONFIG_MICROCODE_LATE_LOADING=n
-
-I'm using GCC 12.2.0 on a ubuntu system.
-
-But  your change seems fine.
-
-
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: linux-block@vger.kernel.org
 > ---
->  arch/x86/kernel/cpu/microcode/core.c | 28 ++++++++++++++--------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-> index 3afcf3de0dd4..4f6ebadba2fb 100644
-> --- a/arch/x86/kernel/cpu/microcode/core.c
-> +++ b/arch/x86/kernel/cpu/microcode/core.c
-> @@ -49,20 +49,6 @@ bool initrd_gone;
+>  fs/crypto/bio.c        |  9 +++--
+>  fs/iomap/buffered-io.c | 14 ++++---
+>  fs/verity/verify.c     |  9 +++--
+>  include/linux/bio.h    | 91 +++++++++++++++++++++---------------------
+>  include/linux/bvec.h   | 15 +++++--
+>  5 files changed, 75 insertions(+), 63 deletions(-)
+....
+> diff --git a/include/linux/bio.h b/include/linux/bio.h
+> index f86c7190c3..7ced281734 100644
+> --- a/include/linux/bio.h
+> +++ b/include/linux/bio.h
+> @@ -169,6 +169,42 @@ static inline void bio_advance(struct bio *bio, unsigned int nbytes)
+>  #define bio_for_each_segment(bvl, bio, iter)				\
+>  	__bio_for_each_segment(bvl, bio, iter, (bio)->bi_iter)
 >  
->  LIST_HEAD(microcode_cache);
->  
-> -/*
-> - * Synchronization.
-> - *
-> - * All non cpu-hotplug-callback call sites use:
-> - *
-> - * - microcode_mutex to synchronize with each other;
-> - * - cpus_read_lock/unlock() to synchronize with
-> - *   the cpu-hotplug-callback call sites.
-> - *
-> - * We guarantee that only a single cpu is being
-> - * updated at any particular moment of time.
-> - */
-> -static DEFINE_MUTEX(microcode_mutex);
-> -
->  struct ucode_cpu_info		ucode_cpu_info[NR_CPUS];
->  
->  struct cpu_info_ctx {
-> @@ -323,6 +309,20 @@ void reload_early_microcode(unsigned int cpu)
->  static struct platform_device	*microcode_pdev;
->  
->  #ifdef CONFIG_MICROCODE_LATE_LOADING
-> +/*
-> + * Synchronization.
-> + *
-> + * All non cpu-hotplug-callback call sites use:
-> + *
-> + * - microcode_mutex to synchronize with each other;
-> + * - cpus_read_lock/unlock() to synchronize with
-> + *   the cpu-hotplug-callback call sites.
-> + *
-> + * We guarantee that only a single cpu is being
-> + * updated at any particular moment of time.
-> + */
-> +static DEFINE_MUTEX(microcode_mutex);
-> +
->  /*
->   * Late loading dance. Why the heavy-handed stomp_machine effort?
->   *
-> -- 
-> 2.40.1
-> 
+> +struct folio_vec {
+> +	struct folio	*fv_folio;
+> +	size_t		fv_offset;
+> +	size_t		fv_len;
+> +};
+
+Can we drop the "fv_" variable prefix here? It's just unnecessary
+verbosity when we know we have a folio_vec structure. i.e fv->folio
+is easier to read and type than fv->fv_folio...
+
+Hmmm, this is probably not a good name considering "struct pagevec" is
+something completely different - the equivalent is "struct
+folio_batch" but I can see this being confusing for people who
+largely expect some symmetry between page<->folio naming
+conventions...
+
+Also, why is this in bio.h and not in a mm/folio related header
+file?
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
