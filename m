@@ -2,154 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D03712DD3
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB6C712DDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjEZTqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
+        id S232525AbjEZTrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjEZTqQ (ORCPT
+        with ESMTP id S231707AbjEZTrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:46:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F09B6;
-        Fri, 26 May 2023 12:46:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4625465300;
-        Fri, 26 May 2023 19:46:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63F0CC433EF;
-        Fri, 26 May 2023 19:46:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685130374;
-        bh=HXsQb8OTNsgkJnd1fl608LKgHplT+hhrh89UYaD87Fs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nirNaDI1awCONOmsX+vCTz6UYlNgLRVjjGbqThGHfDpj7l+c8utdYi7ucRpgLf7ju
-         2qDXOGkon1BQSUjYhrPs6uBgD+HmIFPd9iv8vQYCnlBwKI6s8WMTBGMYxXh7pbt0wo
-         KZspfv0bWJfc9vdb3t6sGfK9YjxADg4OsvY7Zbg7DCTP/UJMo5Lz/74W96o+4PSXb2
-         XPAeEYdLjL6Ui14MFTnfEfIBxgrUdTcSP3tf1wrsP4NraiTbjlz43juMhkMb/d7viU
-         LaMLkrPj9ElqNXbO5etcYDwmsWjqA6J6s2o9Yb9BFUkcc0jvcfrEYtvAsS+cnembd1
-         43YxktP77VdcA==
-Date:   Fri, 26 May 2023 20:46:08 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hansverk@cisco.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: media: camss: qcom,msm8996-camss:
- Add CAMSS power domain
-Message-ID: <20230526-obstruct-venus-5833511a58af@spud>
-References: <20230526180712.8481-1-y.oudjana@protonmail.com>
- <20230526180712.8481-2-y.oudjana@protonmail.com>
+        Fri, 26 May 2023 15:47:46 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D630CBD
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:47:45 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bacf7060678so1969159276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:47:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1685130465; x=1687722465;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eUz3cYZJzxYpChJac/7E7ylhZT6Nv4qatri6Adv31ts=;
+        b=nGEyT5uymfWQJUBAXIcnKOztcnh+nuA/ennn48fCHOEnED4St0CC/dOuSXWfnFHnau
+         OYFzPg0TT6M2J/Lpui/uacLJNLWJIdkWkyIR6c+CkLnelBPOKHQgBEhG/z4CURSHN+k3
+         eTNza7OJnInTM0DnCb0qGmgAHt4uQkBo3phHmfjrOlEDfrrUE0mH9ZOg6XyLZJaKTMpw
+         cvKT1v4O5DATyNtP0YOuj6kvKb6Y98tIATVyFD+CCCrgtAhk/FqzjiZ2y6kBbsoKTwNy
+         gJMEDUNYLsfNsX1i7r18sb2HVYDbcUUFcbsfRDFZK63jcxMkrOIAG/mG1IhCK+WYkyWL
+         6wTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685130465; x=1687722465;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eUz3cYZJzxYpChJac/7E7ylhZT6Nv4qatri6Adv31ts=;
+        b=k6EKjf2WU2AQ0jyusSfT7w4PVhFm5vnOSS6Hu3EeFg5cRBovt7RvTa4r8Z3uFh3Yqy
+         yK2RM2gXIGI2+HXMz6BFSznPRTG3/8kIJ9XqehcXFtbZWdF+QGSLv28OqZRtsRMD2OQu
+         V0k4iZIGWUHPoCps/vxy8lMiiMMocbzRHlCTy0XNmM2VoodvQni7qsrvhPPu8dcaIMFq
+         ArrxvCQwkCRv0t9jgwjhjOpGFIDEXDDGxlyIuwP8IVr/3bkMipfMxXIoW6X00aOlyt0l
+         Pd5no4bdPfCTU3qFvtgIbOvQJYMNyJuq46yXM3zG43iqcmJ8alWU3zNitZlq/ft0Z4pa
+         45EA==
+X-Gm-Message-State: AC+VfDxjchiUNQ2GPZi/N7gjsvZBwbsjevde2aXebATKgAwZNaa0OYvV
+        h6Y1qMBC0DTixx46OobUeEvGppeU+ItAkO2d4WoQEA==
+X-Google-Smtp-Source: ACHHUZ4JH7SDDIfaBbEyxaE595kxzNqDoryzPH4uuMbFwu5yeZoTstauDgITfnvovwUAv+R6UqOtD4URMnbpHNYU4ak=
+X-Received: by 2002:a25:5cb:0:b0:b9e:c516:6e32 with SMTP id
+ 194-20020a2505cb000000b00b9ec5166e32mr114111ybf.24.1685130465099; Fri, 26 May
+ 2023 12:47:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Uk9rvZ9fwek1OCj4"
-Content-Disposition: inline
-In-Reply-To: <20230526180712.8481-2-y.oudjana@protonmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1684887977.git.peilin.ye@bytedance.com> <429357af094297abbc45f47b8e606f11206df049.1684887977.git.peilin.ye@bytedance.com>
+ <faaeb0b0-8538-9dfa-4c1e-8a225e3534f4@mojatatu.com> <CAM0EoM=3iYmmLjnifx_FDcJfRbN31tRnCE0ZvqQs5xSBPzaqXQ@mail.gmail.com>
+In-Reply-To: <CAM0EoM=3iYmmLjnifx_FDcJfRbN31tRnCE0ZvqQs5xSBPzaqXQ@mail.gmail.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Fri, 26 May 2023 15:47:33 -0400
+Message-ID: <CAM0EoM=FS2arxv0__aQXF1a7ViJnM0hST=TL9dcnJpkf-ipjvA@mail.gmail.com>
+Subject: Re: [PATCH v5 net 6/6] net/sched: qdisc_destroy() old ingress and
+ clsact Qdiscs before grafting
+To:     Pedro Tammela <pctammela@mojatatu.com>
+Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 26, 2023 at 8:20=E2=80=AFAM Jamal Hadi Salim <jhs@mojatatu.com>=
+ wrote:
+>
+> On Wed, May 24, 2023 at 11:39=E2=80=AFAM Pedro Tammela <pctammela@mojatat=
+u.com> wrote:
+> >
+> > On 23/05/2023 22:20, Peilin Ye wrote:
+> > > From: Peilin Ye <peilin.ye@bytedance.com>
 
---Uk9rvZ9fwek1OCj4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
-Yo Yassine,
+I apologize i am going to take this back, lets please hold the series for n=
+ow.
 
-On Fri, May 26, 2023 at 09:07:10PM +0300, Yassine Oudjana wrote:
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
->=20
-> Add the CAMSS power domain which is needed for the proper operation of
-> CAMSS, and add power-domain-names to ease fetching it as well as the other
-> power domains.
->=20
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  .../bindings/media/qcom,msm8996-camss.yaml          | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.y=
-aml b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-> index 8a10aa1cafc5..27c9a11f0df9 100644
-> --- a/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-> +++ b/Documentation/devicetree/bindings/media/qcom,msm8996-camss.yaml
-> @@ -85,6 +85,13 @@ properties:
->      items:
->        - description: VFE0 GDSC - Video Front End, Global Distributed Swi=
-tch Controller.
->        - description: VFE1 GDSC - Video Front End, Global Distributed Swi=
-tch Controller.
-> +      - description: CAMSS GDSC - Camera Subsystem, Global Distributed S=
-witch Controller.
-> +
-> +  power-domain-names:
-> +    items:
-> +      - const: vfe0
-> +      - const: vfe1
-> +      - const: camss
-> =20
->    ports:
->      $ref: /schemas/graph.yaml#/properties/ports
-> @@ -209,6 +216,7 @@ required:
->    - interrupts
->    - iommus
->    - power-domains
-> +  - power-domain-names
+In pursuit for the effect on events, Pedro and I spent a few _hours_
+chasing this - and regardless of the events, there are still
+challenges with the concurrency issue. The current reproducer
+unfortunately cant cause damage after patch 2, so really patch 6 was
+not being tested. We hacked the repro to hit codepath patch 6 fixes.
+We are not sure what the root cause is - but it certainly due to the
+series. Peilin, Pedro will post the new repro.
 
-Why is this now required?
-
-Thanks,
-Conor.
-
->    - reg
->    - reg-names
->    - vdda-supply
-> @@ -326,7 +334,10 @@ examples:
->           <&vfe_smmu 3>;
-> =20
->        power-domains =3D <&mmcc VFE0_GDSC>,
-> -        <&mmcc VFE1_GDSC>;
-> +        <&mmcc VFE1_GDSC>,
-> +        <&mmcc CAMSS_GDSC>;
-> +
-> +      power-domain-names =3D "vfe0", "vfe1", "camss";
-> =20
->        reg =3D <0x00a34000 0x1000>,
->          <0x00a00030 0x4>,
-> --=20
-> 2.40.1
->=20
-
---Uk9rvZ9fwek1OCj4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHEMgAAKCRB4tDGHoIJi
-0mqGAQDnSs0kFgIjPFo7PgHn8Y5SILvoeUHvW3dbMPU5/SfohgD+MLqmFsqafGIP
-XDQJpXUjsm0aicwi1Tj3LbvTvLbf6gM=
-=d7a5
------END PGP SIGNATURE-----
-
---Uk9rvZ9fwek1OCj4--
+cheers,
+jamal
