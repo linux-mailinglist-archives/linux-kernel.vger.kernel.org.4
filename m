@@ -2,170 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E587712C90
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4735E712C87
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 20:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235099AbjEZSgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 14:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S242927AbjEZSfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 14:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243477AbjEZSfb (ORCPT
+        with ESMTP id S242415AbjEZSek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 14:35:31 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBDCE77
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:58 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb78a3daaso1411155276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685126087; x=1687718087;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7VTTKtJ+YCmNAzWS6HH1h35ihzZOE/hPBS/qDm91hC0=;
-        b=RnExY6ZhiUsGU/Xentrdy3UMPkxwr6rNYwsycye1nTC7/8jZe1qfzeTGi8SBvaT+AV
-         s1p20pEAtLwnLMgJ6JYIucfFa8uAD1GbQ5Jr3trkadq5Mf8R1bEXVSq7rvpSJ6fYxyhm
-         i0DQjoDIb2JrxkF27AdoYZYTlIiCK4p/JIZv2TmSsaogeqt92G8VOk5D0VtrsRbHlKT6
-         RoL78G7gNEsM7X0ixUo7P18Hz0x6GOCwxyWj0/RZM5+6ev/AYhCS0PgNoZCdHZMWlkxy
-         cMdedvwrzsAqeNOl/mkmD5TyA5RgkJoCvN6+EKvxR2cp4DIA8F7BzRc+x92ihrDxDFf1
-         Pk7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685126087; x=1687718087;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7VTTKtJ+YCmNAzWS6HH1h35ihzZOE/hPBS/qDm91hC0=;
-        b=hK2FDxzxqCx9XmTaAmSq9Wj3mBhTRsssGVaJVIvi4sF4AIM8nmP7n3vMQkZVo4/MQT
-         jJs2nBKBnvK9lH4XotL2wlD87peBfhb2lS+dCkvodYq0tSEil/nBVGpIF4qU5CC6+7zL
-         mcJllzikJvR8H+L8E6PaYNcErVqCswjT2pF10Nu5jxlLF4Tx7w+qDAY53dEhBiLqdv3P
-         K4IGbXuCGLR5xNYmWC0bvMflwjtBAHAyTzgqzCebx29ji8wwm+Eol1MRd05/EFEVajJo
-         tZc1QTWfKrFC9BNgpUZNbd5b8gDwSqmLy3UPl6JqY6PdC5uLtTbdSY2l4gvOpm65wgyl
-         kCug==
-X-Gm-Message-State: AC+VfDztCeiBc+usu2xVqMdfwW11MwWuMn9f1KQsPjA2zekijvjmydB/
-        +3jgknbudHQUGOwKSTQ9kkrRK1i558Sp
-X-Google-Smtp-Source: ACHHUZ6VjiV8Ug0wv3GGrTVFrA/kp7xEirEOm2PN7sV0f+t+HxN+6Uw2r4vd73pfoFtHjbVNoFkMaHWU/AVS
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a25:2403:0:b0:ba8:8ab3:3806 with SMTP id
- k3-20020a252403000000b00ba88ab33806mr1305870ybk.13.1685126086892; Fri, 26 May
- 2023 11:34:46 -0700 (PDT)
-Date:   Fri, 26 May 2023 11:34:01 -0700
-In-Reply-To: <20230526183401.2326121-1-irogers@google.com>
-Message-Id: <20230526183401.2326121-17-irogers@google.com>
-Mime-Version: 1.0
-References: <20230526183401.2326121-1-irogers@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v2 16/16] libsubcmd: Avoid two path statics
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Ross Zwisler <zwisler@chromium.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 26 May 2023 14:34:40 -0400
+Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755C7E6D
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 11:34:32 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
+        id f3177185-fbf3-11ed-b3cf-005056bd6ce9;
+        Fri, 26 May 2023 21:34:29 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Fri, 26 May 2023 21:34:29 +0300
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     andy.shevchenko@gmail.com, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v3 08/11] serial: sc16is7xx: fix regression with GPIO
+ configuration
+Message-ID: <ZHD7taBP0UthlPKp@surfacebook>
+References: <20230525040324.3773741-1-hugo@hugovil.com>
+ <20230525040324.3773741-9-hugo@hugovil.com>
+ <ZG9EWEwb077qyBIi@surfacebook>
+ <20230525110255.6ffe0a0c3f88ae03c3fc5f25@hugovil.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230525110255.6ffe0a0c3f88ae03c3fc5f25@hugovil.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use a single stack allocated buffer and avoid 8,192 bytes in .bss.
+Thu, May 25, 2023 at 11:02:55AM -0400, Hugo Villeneuve kirjoitti:
+> On Thu, 25 May 2023 14:19:52 +0300
+> andy.shevchenko@gmail.com wrote:
+> > Thu, May 25, 2023 at 12:03:22AM -0400, Hugo Villeneuve kirjoitti:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/lib/subcmd/exec-cmd.c | 35 ++++++++++++++++++++---------------
- 1 file changed, 20 insertions(+), 15 deletions(-)
+...
 
-diff --git a/tools/lib/subcmd/exec-cmd.c b/tools/lib/subcmd/exec-cmd.c
-index 5dbea456973e..7739b5217cf6 100644
---- a/tools/lib/subcmd/exec-cmd.c
-+++ b/tools/lib/subcmd/exec-cmd.c
-@@ -36,38 +36,40 @@ static int is_absolute_path(const char *path)
- 	return path[0] == '/';
- }
- 
--static const char *get_pwd_cwd(void)
-+static const char *get_pwd_cwd(char *buf, size_t sz)
- {
--	static char cwd[PATH_MAX + 1];
- 	char *pwd;
- 	struct stat cwd_stat, pwd_stat;
--	if (getcwd(cwd, PATH_MAX) == NULL)
-+	if (getcwd(buf, sz) == NULL)
- 		return NULL;
- 	pwd = getenv("PWD");
--	if (pwd && strcmp(pwd, cwd)) {
--		stat(cwd, &cwd_stat);
-+	if (pwd && strcmp(pwd, buf)) {
-+		stat(buf, &cwd_stat);
- 		if (!stat(pwd, &pwd_stat) &&
- 		    pwd_stat.st_dev == cwd_stat.st_dev &&
- 		    pwd_stat.st_ino == cwd_stat.st_ino) {
--			strlcpy(cwd, pwd, PATH_MAX);
-+			strlcpy(buf, pwd, sz);
- 		}
- 	}
--	return cwd;
-+	return buf;
- }
- 
--static const char *make_nonrelative_path(const char *path)
-+static const char *make_nonrelative_path(char *buf, size_t sz, const char *path)
- {
--	static char buf[PATH_MAX + 1];
--
- 	if (is_absolute_path(path)) {
--		if (strlcpy(buf, path, PATH_MAX) >= PATH_MAX)
-+		if (strlcpy(buf, path, sz) >= sz)
- 			die("Too long path: %.*s", 60, path);
- 	} else {
--		const char *cwd = get_pwd_cwd();
-+		const char *cwd = get_pwd_cwd(buf, sz);
-+
- 		if (!cwd)
- 			die("Cannot determine the current working directory");
--		if (snprintf(buf, PATH_MAX, "%s/%s", cwd, path) >= PATH_MAX)
-+
-+		if (strlen(cwd) + strlen(path) + 2 >= sz)
- 			die("Too long path: %.*s", 60, path);
-+
-+		strcat(buf, "/");
-+		strcat(buf, path);
- 	}
- 	return buf;
- }
-@@ -133,8 +135,11 @@ static void add_path(char **out, const char *path)
- 	if (path && *path) {
- 		if (is_absolute_path(path))
- 			astrcat(out, path);
--		else
--			astrcat(out, make_nonrelative_path(path));
-+		else {
-+			char buf[PATH_MAX];
-+
-+			astrcat(out, make_nonrelative_path(buf, sizeof(buf), path));
-+		}
- 
- 		astrcat(out, ":");
- 	}
+> > I'm wondering if we can avoid adding new ifdefferies...
+> 
+> I am simply following waht was already done in the existing driver.
+> 
+> Are you suggesting that we need to remove all these #defines? If not, what
+> exactly do you suggest?
+
+I was wondering and have nothing to suggest here. It seems a burden we have to
+cope with for now.
+
+> > > +	s->gpio_configured = devtype->nr_gpio;
+> > 
+> > The name of the variable is a bit vague WRT its content.
+> > Shouldn't be as simple as the rvalue, i.e. s->nr_gpio?
+> 
+> Maybe the name could be improved (and/or comments).
+> 
+> devtype->nr_gpio is the maximum "theoretical" number of GPIOs supported by
+> the chip.
+> 
+> s->gpio_configured is the number of GPIOs that are configured or requested
+> according to the presence (or not) of the modem-control-line-ports property.
+> 
+> I wanted to avoid using the same name to avoid potential confusion.
+> 
+> Maybe devtype->nr_gpio could be renamed to devtype->nr_gpio_max and
+> s->gpio_configured to s->nr_gpio_requested or s->nr_gpio_configured?
+
+Maybe, but first try the approach with valid mask being involved. It may be
+that we won't need this variable at all.
+
+...
+
+> > > +		of_property_for_each_u32(dev->of_node, "nxp,modem-control-line-ports",
+> > > +					 prop, p, u)
+> > 
+> > The driver so far is agnostic to property provider. Please keep it that way,
+> > i.e. no of_ APIs.
+> 
+> The driver, before my patches, was already using the exact same function
+> of_property_for_each_u32() to process the irda-mode-ports property, so I
+> don't understand your comment.
+
+This is unfortunate. I missed that one, but i don't care about IrDA so much.
+
+> But what do you suggest instead of of_property_for_each_u32()? And do we need
+> to change it also for processing the irda-mode-ports property?
+
+device_property_read_u32_array().
+
+Independently on the IrDA case, this one is more important and would have
+consequences if we avoid agnostic APIs.
+
+...
+
+> > > +			if (u < devtype->nr_uart) {
+> > 
+> > Hmm... What other can it be?
+> 
+> Again, this is similar to the handling of the irda-mode-ports property.
+> 
+> But I am not sure I understand your question/concern?
+> 
+> I think this check is important, because if someone puts the following
+> property in a DT:
+> 
+>     nxp,modem-control-line-ports = <0 1>;
+> 
+> but the variant only supports 1 port, then the check is usefull, no?
+
+But you have below checks for u value. Wouldn't be enough?
+
+> > > +				/* Use GPIO lines as modem control lines */
+> > > +				if (u == 0)
+> > > +					val |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
+> > > +				else if (u == 1)
+> > > +					val |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
+> > > +
+
 -- 
-2.41.0.rc0.172.g3f132b7071-goog
+With Best Regards,
+Andy Shevchenko
+
 
