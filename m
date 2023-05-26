@@ -2,123 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F425712DC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB866712DC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 21:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242286AbjEZTmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 15:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
+        id S237672AbjEZTmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 15:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237094AbjEZTmr (ORCPT
+        with ESMTP id S237094AbjEZTmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 15:42:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933E7FB
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685130124;
+        Fri, 26 May 2023 15:42:36 -0400
+Received: from out-31.mta1.migadu.com (out-31.mta1.migadu.com [IPv6:2001:41d0:203:375::1f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960F8E7
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:42:34 -0700 (PDT)
+Date:   Fri, 26 May 2023 19:42:27 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685130152;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AQbvDzRrNGGmJC0cFwixRt7YyXto2u7DcheHfHIL6TM=;
-        b=OYsU0+OjhamxJKamSgkSp/7bkjbZqPzBIg9R6Aqza2jiaiD5hJumOxDDsBEqZQzhGbyV4e
-        lD2TkJtptNBJo+/U1HIsJdTcRRX5JYrT4wf6kpsnVy7vA3GmDao3N/FZ32A5OTNS/SPEMw
-        xTlGRvZQSfjazl9IDak81+1foULFboM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-171-ENhkZAlEO86Y4ZQC1axtjg-1; Fri, 26 May 2023 15:42:03 -0400
-X-MC-Unique: ENhkZAlEO86Y4ZQC1axtjg-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f6eb8d3848so3855255e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 12:42:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685130122; x=1687722122;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AQbvDzRrNGGmJC0cFwixRt7YyXto2u7DcheHfHIL6TM=;
-        b=mDYwsGtzb+EXmSU6M4K3BbBbef8xANr4C2wUl5TYexXTwEzzzk3dFYreMWX/14Ypqi
-         8rVC4tkbRd9TuTmnQAN9XIm4HK2fYzOizNm+z6oc3G7z8Jh14Q1apfeDItXGC7SKmIDE
-         CyZenO1CW7e579JOOcw46iJDaAJ63gA1gkDEfa71K1VpEpbag2MXEFv97NFW3T+Vb4W5
-         r5pjoN4OUCd53yiM+Xx6Y+w6Z18C0HM1gym7Bx5GlQPeZX+WG+nGd+TazXl62gpji/F2
-         RbFOWIg8vh2AYb6cvE3CYKjk3WT74n9ZiSbq5/O783/AsBOf8ILnju0OYdLjd5FUMfDg
-         bJ8g==
-X-Gm-Message-State: AC+VfDzMm+p2uptT2691k05nFT/pu9y654jQZsx+o/sjA8tV5UNeyYkJ
-        OSrhUe7GbyAItgfwPRri1LtQVZmvU2SwJUgr6HWU1/SKCHwKU+HvymqibgMn9tQNJSgy9a/X511
-        +b6t1Pww2wjfl63AAM04O4eOH
-X-Received: by 2002:a1c:7407:0:b0:3f6:cfc7:8bce with SMTP id p7-20020a1c7407000000b003f6cfc78bcemr2507518wmc.22.1685130122171;
-        Fri, 26 May 2023 12:42:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7Fy1XekX9Vh+eeukEwm41budqTXKnvaC+Uc6qWThUB3TK1m5Tn41fjaNow0dI/Ly8Sf8pxmw==
-X-Received: by 2002:a1c:7407:0:b0:3f6:cfc7:8bce with SMTP id p7-20020a1c7407000000b003f6cfc78bcemr2507506wmc.22.1685130121842;
-        Fri, 26 May 2023 12:42:01 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
-        by smtp.gmail.com with ESMTPSA id 8-20020a05600c024800b003f4e8530696sm6035997wmj.46.2023.05.26.12.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 12:42:01 -0700 (PDT)
-Message-ID: <f232be95-74aa-8beb-0413-3dcc7e541ba5@redhat.com>
-Date:   Fri, 26 May 2023 21:42:00 +0200
+        bh=+HOhs+G8tayqS3761Ku9853mJxQmfAAb4L3el4gd5LE=;
+        b=bS1vv1nL1oS/LTlqvsDeymDsSStxmIRIHRiCTw+zLgtYEt9W3//Ckw/kZRjn9Fx+u+vmq2
+        wQ2gFOeTvz5CuCvK3SdmIsKNBOZ8vxk2iDEA60l2Q87I8+3btPx8fkVxTzZe72R3B+6MDS
+        KVgpD0I1sRp3shO7CjwLuP66nPmZpeE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Mostafa Saleh <smostafa@google.com>
+Cc:     maz@kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        tabba@google.com, qperret@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
+        gshan@redhat.com
+Subject: Re: [PATCH v2] KVM: arm64: Use BTI for nvhe
+Message-ID: <ZHELoziooIyk0d+t@linux.dev>
+References: <20230517173552.163711-1-smostafa@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] mm/gup_test:fix ioctl fail for compat task
-Content-Language: en-US
-To:     Haibo Li <haibo.li@mediatek.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, xiaoming.yu@mediatek.com
-References: <20230526022125.175728-1-haibo.li@mediatek.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230526022125.175728-1-haibo.li@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517173552.163711-1-smostafa@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.05.23 04:21, Haibo Li wrote:
+Hi Mostafa,
 
-Nit: "mm/gup_test: fix ioctl fail for compat task"
-
-> When tools/testing/selftests/mm/gup_test.c is compiled as 32bit,
-> then run on arm64 kernel,
-> it reports "ioctl: Inappropriate ioctl for device".
+On Wed, May 17, 2023 at 05:35:52PM +0000, Mostafa Saleh wrote:
+> CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
+> However, the nvhe code doesn't make use of it as it doesn't map any
+> pages with Guarded Page(GP) bit.
 > 
-> Fix it by filling compat_ioctl in gup_test_fops
+> This patch maps nvhe(and pKVM recreated mapping of) .text section
+> with GP bit which matches the kernel handling for BTI.
 > 
-> Signed-off-by: Haibo Li <haibo.li@mediatek.com>
+> A new flag is added to enum kvm_pgtable_prot: KVM_PGTABLE_PROT_GP_S1,
+> which represents BTI guarded page in hypervisor stage-1 page table.
+> 
+> At hyp init, SCTLR_EL2.BT is set to 1 to match EL1 configuration
+> (SCTLR_EL1.BT1) set in bti_enable().
+> 
+> hyp_init_valid_leaf_pte is added to avoid unnecessary considering GP
+> bit for stage-2.
+> 
+> Signed-off-by: Mostafa Saleh <smostafa@google.com>
 > ---
->   mm/gup_test.c | 1 +
->   1 file changed, 1 insertion(+)
+> v1 -> v2:
+> - Enable BTI for nvhe also.
+> - Only set GP bit for executable pages from pgtable code.
+> - Set SCTLR_EL2.BT when BTI is used.
+> - use system_supports_bti() for consistency.
+> - Add hyp_init_valid_leaf_pte.
+> v1: https://lore.kernel.org/all/20230516141846.792193-1-smostafa@google.com/
+> ---
+>  arch/arm64/include/asm/kvm_pgtable.h |  3 +++
+>  arch/arm64/include/asm/sysreg.h      |  1 +
+>  arch/arm64/kvm/arm.c                 |  7 ++++++-
+>  arch/arm64/kvm/hyp/nvhe/hyp-init.S   |  7 +++++++
+>  arch/arm64/kvm/hyp/nvhe/setup.c      |  8 ++++++--
+>  arch/arm64/kvm/hyp/pgtable.c         | 11 ++++++++++-
+>  6 files changed, 33 insertions(+), 4 deletions(-)
 > 
-> diff --git a/mm/gup_test.c b/mm/gup_test.c
-> index 8ae7307a1bb6..c0421b786dcd 100644
-> --- a/mm/gup_test.c
-> +++ b/mm/gup_test.c
-> @@ -381,6 +381,7 @@ static int gup_test_release(struct inode *inode, struct file *file)
->   static const struct file_operations gup_test_fops = {
->   	.open = nonseekable_open,
->   	.unlocked_ioctl = gup_test_ioctl,
-> +	.compat_ioctl = compat_ptr_ioctl,
->   	.release = gup_test_release,
->   };
->   
+> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> index 4cd6762bda80..5bcd06d664d3 100644
+> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> @@ -151,6 +151,7 @@ enum kvm_pgtable_stage2_flags {
+>   * @KVM_PGTABLE_PROT_W:		Write permission.
+>   * @KVM_PGTABLE_PROT_R:		Read permission.
+>   * @KVM_PGTABLE_PROT_DEVICE:	Device attributes.
+> + * @KVM_PGTABLE_PROT_GP_S1:	GP(guarded page) used for BTI in stage-1 only
+>   * @KVM_PGTABLE_PROT_SW0:	Software bit 0.
+>   * @KVM_PGTABLE_PROT_SW1:	Software bit 1.
+>   * @KVM_PGTABLE_PROT_SW2:	Software bit 2.
+> @@ -163,6 +164,8 @@ enum kvm_pgtable_prot {
+>  
+>  	KVM_PGTABLE_PROT_DEVICE			= BIT(3),
+>  
+> +	KVM_PGTABLE_PROT_GP_S1			= BIT(50),
+> +
 
-Acked-by: David Hildenbrand <david@redhat.com>
+This enumeration is used to generically describe permissions that could
+be applied to either stage-1 or stage-2.
+
+Can't we just have KVM_PGTABLE_PROT_X imply GP at hyp stage-1, assuming
+BTI is available and we're using it for the kernel?
+
+>  	KVM_PGTABLE_PROT_SW0			= BIT(55),
+>  	KVM_PGTABLE_PROT_SW1			= BIT(56),
+>  	KVM_PGTABLE_PROT_SW2			= BIT(57),
+
+[...]
+
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index 3d61bd3e591d..9f68e4ce6d14 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -152,6 +152,13 @@ static kvm_pte_t kvm_init_valid_leaf_pte(u64 pa, kvm_pte_t attr, u32 level)
+>  	return pte;
+>  }
+>  
+> +static kvm_pte_t hyp_init_valid_leaf_pte(u64 pa, kvm_pte_t attr, u32 level)
+> +{
+> +	kvm_pte_t pte = kvm_init_valid_leaf_pte(pa, attr, level);
+> +
+> +	return pte | (attr & KVM_PGTABLE_PROT_GP_S1);
+
+This is a bit of a hack to cram the GP bit back in. I'm guessing the
+fact that our ATTR_HI mask doesn't include bit 50 led you here.
+
+My interpretation DDI0487J D8.3.2 is that the upper attribute field is
+63:50 for both stages of translation, but bit 50 is RES0 for stage-2.
+
+So, rather than going this route, I'd recommend tweaking the ATTR_HI
+mask to include bit 50.
+
+> +}
+> +
+>  static kvm_pte_t kvm_init_invalid_leaf_owner(u8 owner_id)
+>  {
+>  	return FIELD_PREP(KVM_INVALID_PTE_OWNER_MASK, owner_id);
+> @@ -371,6 +378,8 @@ static int hyp_set_prot_attr(enum kvm_pgtable_prot prot, kvm_pte_t *ptep)
+>  
+>  		if (device)
+>  			return -EINVAL;
+> +
+> +		attr |= prot & KVM_PGTABLE_PROT_GP_S1;
+
+With the above suggestions, this would become:
+
+		if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) && system_supports_bti())
+			attr |= KVM_PTE_LEAF_ATTR_HI_S1_GP;
+
+>  	} else {
+>  		attr |= KVM_PTE_LEAF_ATTR_HI_S1_XN;
+>  	}
+> @@ -414,7 +423,7 @@ static bool hyp_map_walker_try_leaf(const struct kvm_pgtable_visit_ctx *ctx,
+>  		return false;
+>  
+>  	data->phys += granule;
+> -	new = kvm_init_valid_leaf_pte(phys, data->attr, ctx->level);
+> +	new = hyp_init_valid_leaf_pte(phys, data->attr, ctx->level);
+>  	if (ctx->old == new)
+>  		return true;
+>  	if (!kvm_pte_valid(ctx->old))
+> -- 
+> 2.40.1.698.g37aff9b760-goog
+> 
 
 -- 
 Thanks,
-
-David / dhildenb
-
+Oliver
