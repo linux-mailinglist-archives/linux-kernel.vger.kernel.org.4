@@ -2,280 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E4C712269
-	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B666B71226E
+	for <lists+linux-kernel@lfdr.de>; Fri, 26 May 2023 10:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242757AbjEZIjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 04:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
+        id S230113AbjEZIl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 04:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242506AbjEZIjX (ORCPT
+        with ESMTP id S229910AbjEZIlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 04:39:23 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2131.outbound.protection.outlook.com [40.107.237.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B632D9B;
-        Fri, 26 May 2023 01:39:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bU/fThrRz1Vkr4oe72xJgjuzkDfe8ZWX6vO8AncTe5lKdIKvZ9+6liO/5bSo9ecCDXfnrDXnJztraRZPPlHYNJyIlz99MVxUfPpT5VOYjBzd1HQpWOsYMgw+/2GTUHV2p9eu8g59jY4Et8cB2bsWcfGMkqIQwQWGaYSD9fpoquCchTa89xUUIzGNi/R2ZcbwWviG9by08p807FpKmV1E7Hcdp+tAUulkcHEQrL8h5JbVHBdqqQvcqaieEwqz+Z2700d+vn4LXnOZHzz+dKefneW2e6fCIe8kbmdX+qtFfA/YZMYQF2DhnHpEAM4mzioAHyDb0+KXB9vfVUitWfAxJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5yN27uWS7rRuhkEXJ4UAjJRkrCIE8o7VFGH7U103++Q=;
- b=lDEOSiIIgVKlfMU0s6wQYs+hB7Udy170/XysBxBCOme96YiLybS/XuPQTTtMABKq4zYlqtKgGG6QlBiaL1IreLNICgTXDT65hTxCPJQSmwD2n6GJL2UO8lzZ4F9JLJeoARpmD6JCbX1hVN+yZwSnVHU14YpcEzl4JN6U1IZGiORNSxEBQ3FIzeStNp+Kii1HXiKx2TRtY1a85qXruvlHohwlglKG7t/qylWjpq3VeinGSj7mbipBoWHKq2Zc1E0EdDwTOlB8WohcIlSwbMUpExvQue9mgwi3f1U3nqC6cZVzQGekpzkp4PCoscxxq9BsvzsPqh9FH6WcZ4Tg4lnPww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5yN27uWS7rRuhkEXJ4UAjJRkrCIE8o7VFGH7U103++Q=;
- b=haW9in/cY3vCBhkLVW+vEkVnCslatp5Zh3K59f09wQ+t2qMNkUzYQl+mU5aJh+omtFaaw3KE7eingk6wJ6FveR939aGXOQ5C61RbqVI0KXhzKpZNNYh7xDycYxeHHdkmkyj8ZrA5xczjV1prEVOqqndmhWsIaUW1MCkvlGShLRU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BY3PR13MB4947.namprd13.prod.outlook.com (2603:10b6:a03:357::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29; Fri, 26 May
- 2023 08:39:17 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.017; Fri, 26 May 2023
- 08:39:17 +0000
-Date:   Fri, 26 May 2023 10:39:08 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Mark Brown <broonie@kernel.org>, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Subject: Re: [PATCH net-next v3 2/4] net: ethernet: altera-tse: Convert to
- mdio-regmap and use PCS Lynx
-Message-ID: <ZHBwLBnKacQCG2/U@corigine.com>
-References: <20230526074252.480200-1-maxime.chevallier@bootlin.com>
- <20230526074252.480200-3-maxime.chevallier@bootlin.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526074252.480200-3-maxime.chevallier@bootlin.com>
-X-ClientProxiedBy: AM0PR04CA0121.eurprd04.prod.outlook.com
- (2603:10a6:208:55::26) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Fri, 26 May 2023 04:41:44 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D9499;
+        Fri, 26 May 2023 01:41:41 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-bacf9edc87bso923586276.1;
+        Fri, 26 May 2023 01:41:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685090501; x=1687682501;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xM5AJ8qMm7qyeevCIFbJCwVC5c/jjz1MV2TDi6QC8R8=;
+        b=E4/gHhSmwPvcvd3wWxr9l2qkNm0xpoT4vNXtXYm3gwDYmow6mw7PjQOi1XnBn5lBpQ
+         Bx0+1q6cxgnRMecFKqe+daH3GT4AjfWXUtDjRFKi9wQeDka+pQZvRv+QM6YgHqBgLbgx
+         a2HXr8yhNDWeR/twYmapttZoiCS3+HRTTIKi66Cj0NGTZ2vdYvI6anD2qWAt9kCRshCv
+         tC7gntCiI3mdysXDDqmEHEixi6ajd3nf+J/mad/IXCL4fkCz82QBJEa8B9QfHds+cVkm
+         kz+LrOtMjk8oGljqHvnNXobcvEZtfiSAxGCb4T7DjvujIx4IQ2aHbd7Jrexgp4NBuMvF
+         dj2w==
+X-Gm-Message-State: AC+VfDyStmEVUP8cT5xUIqb+SLXFLM8oqDoSPecQryinWhbc4go+SnYP
+        m9GkznKBWDYFORSvqkWQl1M=
+X-Google-Smtp-Source: ACHHUZ4DDhyq5RXx+58IA6LPPgqL6RDwKGZc5WFXv43HygN0nchlo3guaiYzSgApsuky3GMl737d9g==
+X-Received: by 2002:a81:7d05:0:b0:565:a3d1:be19 with SMTP id y5-20020a817d05000000b00565a3d1be19mr1279297ywc.31.1685090500856;
+        Fri, 26 May 2023 01:41:40 -0700 (PDT)
+Received: from tofu.cs.purdue.edu ([128.210.0.165])
+        by smtp.gmail.com with ESMTPSA id n5-20020a819c45000000b0054fba955474sm1034836ywa.17.2023.05.26.01.41.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 01:41:40 -0700 (PDT)
+From:   Sungwoo Kim <iam@sung-woo.kim>
+Cc:     wuruoyu@me.com, benquike@gmail.com, daveti@purdue.edu,
+        Sungwoo Kim <iam@sung-woo.kim>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Bluetooth: L2CAP: Fix use-after-free in l2cap_sock_ready_cb
+Date:   Fri, 26 May 2023 04:40:39 -0400
+Message-Id: <20230526084038.2199788-1-iam@sung-woo.kim>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY3PR13MB4947:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60680147-f093-4909-0021-08db5dc4b11e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bbyipk+r8WP6IySGJsHnjrziybmHB3zcE5SILc8E48nnYesoKUyD4pkXRLA1RmFmlBW2y5IRwWEAvKNWzoBntwCaZTZAp5i4nLGX8Keu98raHRePZCF/m/zF4cI9vx9Df4Tfb/US1l15SHWweRW3Q5cb0aqFo7yFApOJ6zvMKvbRRAVjVGg+ZZjrF9vH0+5GRJ93L9w99Nv3eCMYG0bh3dQiumIWyB4vx5QhefWtnKI2iXICnlaqPXmquHyK3eJUGUU6u6bOYZywjPuUvSraA5RSWmcfmlLK50OBdLLFiqLFUuO7T52DZsW/oqwcwxhd2LpYiojVvi5Bh8LAfifOM9/kWN8YZL1KUlfFcj8CT1dEILgsrBQrszrguodCDV3lSFYpgiRVcFWGJSMOB/xn/Y2TLAYXRIb+B7+CYHDyRFkJj2YkzEnVsz75VTJ75R2NCzbcnbiy2So6RMiRm9i6lD5mq1T1/4mbXjJ9hP8BqSBUhHnJVitdpA+6JtYBk4w1/2hqBz8EgsXIkPDGsyM4DJxWlETZUsRcVCsCt1vbusLVFVPzew16WMJ4EbA+UHRuVZanFPq0DKEuU18+zckB9kWFlr48v2v/OBXZ+7zMdzU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39840400004)(376002)(136003)(396003)(346002)(451199021)(86362001)(41300700001)(6486002)(478600001)(316002)(6916009)(54906003)(66476007)(66946007)(6666004)(4326008)(66556008)(5660300002)(8936002)(8676002)(6512007)(38100700002)(44832011)(7416002)(83380400001)(2906002)(2616005)(186003)(6506007)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QcjLbQfsQMgRobZf593uTCAoF0ijpBXf14lFN2ms5lc+IM2X+KBqWYTSFDa1?=
- =?us-ascii?Q?mFO32ymItdfekZLQnxY8BAmfqgD+Twfk8uRPrYFGFjoWjvcdV7/e4e9lbXDw?=
- =?us-ascii?Q?JvYcx1ZltSuGPj+xK1jvdlp1U1cmoEe99O+mwkgSZITXjkrBqHlu8P3OJevq?=
- =?us-ascii?Q?2S1KMM6KKH6AgW7kZEFAh7Cd9a68V/rgeqI31Ze4COxc9+zIhAP89L/krcwP?=
- =?us-ascii?Q?OD8OR4iKu4KK6QscFOtxm7mIdZwq2c/CkM27tD5tSf+WjmQI9FzsqrdjR8gS?=
- =?us-ascii?Q?QbMHbyDTyZPvUqsvbt3DMaT8/ksjQZU/7X89pTtAUi8G6U9S9nTJrxigjrmw?=
- =?us-ascii?Q?9hEAkqbC7LDKwqbH7UHlEEfaQybtTWeukQyfSVdwXcqGXvV0MhUcvofkMlWG?=
- =?us-ascii?Q?aQjmWNgc7H27biqsKloqeT4IJ6ef1MZjecBP4hzWohbbLf8EW8zFONMqfCHV?=
- =?us-ascii?Q?H/wZhJ+Mtzzm/QvMHaZSKXPbwai26cK6w/19I8+iSSKPa45QnnWQV2hPfafi?=
- =?us-ascii?Q?QGzge4J1sBI+4+wXgtGiO1rJhIzIQsUhR7ptYPBaJLxoHS4PND1skQFdhWLo?=
- =?us-ascii?Q?EVT4K2r+IhrT+HmcQkGi9BWA4d8R6VHoN7fTjnhBycTRXrNI/r0e9fC4VdXT?=
- =?us-ascii?Q?+fGdV6VLFLI/Toi0Dp4EHN+CtxQ3wLYq2JhoMjn0L9t0p2XXEfLVjQtuI3Sg?=
- =?us-ascii?Q?fuoKC06cF4xLH0GDEl15ASvq2ILgJXlvMGpbkM1anOPmm+M2c0L0CVYTG8WS?=
- =?us-ascii?Q?cYlzBHNnVVB+qcoHa2shlSTHSpS7nPEAmygcgsbSeG7AMWqSczPBnS4onuZ5?=
- =?us-ascii?Q?6BQNskHcVsSOEK3vl9ewrqqAQi6bSdl7RjuBUSVVnKlXTZpGYsLIPTwBEnpl?=
- =?us-ascii?Q?bI9R1b9K2ykcIhYkpd4o/nZJoPpnd619r6xTbwqP/EREGXSkHoW23weEv0+s?=
- =?us-ascii?Q?e5Nc9EJJhMPTO7wrBdtmv8aKz2mKKxmnk8Uj9OD6ABnEgp8QudLFYjCd4FbA?=
- =?us-ascii?Q?i0grRSEfUMGhQtRFbJJ4VVmcdw0AEjaDSXOrB00oMWvlcmhXwZ1BnbPg8nGx?=
- =?us-ascii?Q?TOavF4exPBHHiAuoEPIMQPbXcFLqkUFdRJ6usvWdOyN+U5uddZS6S19c3K7y?=
- =?us-ascii?Q?kD6yUH+e74V7YX2JxhFWS8e+L5hkJRuzEWo5vEX/9kfeh9o48O03CK9dzbA/?=
- =?us-ascii?Q?qqzeyUNqH2CLht+d55u2XAOl/KqPi1ZhZ/qUnUtGuUqua+SaXy+vmKqXMCPy?=
- =?us-ascii?Q?riXPs6tXjyZwx6ToCHmFmmKijINq8gxcg4Fx9wXtbppTAkBjbxWuIvpO3/Vb?=
- =?us-ascii?Q?a8n9GGH9wJ1mO0/sQf0ftAaLaNlzGoBPE+nk3PdrXdE6Ksu5OxmZNocx6TJ3?=
- =?us-ascii?Q?2Kfa792e6b6CP1E3fI+Q3FmUGfoJzHXCk3Lxw9aQzYsGVO4BtZhkK5L5vniY?=
- =?us-ascii?Q?rC2cm0O6nv67NvRNTmrs/4fydO4UNd1hIjyBEMcCupvHrQIpO6jeRKyQhw7o?=
- =?us-ascii?Q?Kui3xo1WtRnkSrC0A9LXKSqW2ScafpvzSmvOTGafuQ4I3h4JMDHzGjhhwzce?=
- =?us-ascii?Q?Kf6a3UG1bQ7eo1qGMVzq+vlwpVNoeVqWp6puu9lChshEPkQaBn6wjgP4G8wk?=
- =?us-ascii?Q?QagAe98myGY9CWEs4Mj0jT8HjUKwobsAwyJ2Ei3rILScs+qeHCpEsPhw3RrN?=
- =?us-ascii?Q?tYWejA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60680147-f093-4909-0021-08db5dc4b11e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 08:39:17.0726
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Tn3mOaq2/5xnmqIsHhAzVKG9DM+xYE6Lm8kUF2egyF6+IkOCstKkhZytu+XasnwfZOc7espnwtikul900ttds+oU41yB8bqMmmbHo4HrQo4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR13MB4947
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 09:42:50AM +0200, Maxime Chevallier wrote:
-> The newly introduced regmap-based MDIO driver allows for an easy mapping
-> of an mdiodevice onto the memory-mapped TSE PCS, which is actually a
-> Lynx PCS.
-> 
-> Convert Altera TSE to use this PCS instead of the pcs-altera-tse, which
-> is nothing more than a memory-mapped Lynx PCS.
-> 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+l2cap_sock_release(sk) frees sk. However, it's children are still alive
+and points to the parent's address that is invalid.
+To fix this, l2cap_sock_release(sk) also cleans sk's children.
 
-Hi Maxime,
+==================================================================
+BUG: KASAN: use-after-free in l2cap_sock_ready_cb+0xb7/0x100 net/bluetooth/l2cap_sock.c:1650
+Read of size 8 at addr ffff888104617aa8 by task kworker/u3:0/276
 
-I have some concerns about the error paths in this patch.
+CPU: 0 PID: 276 Comm: kworker/u3:0 Not tainted 6.2.0-00001-gef397bd4d5fb-dirty #59
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+Workqueue: hci2 hci_rx_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x72/0x95 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x175/0x478 mm/kasan/report.c:417
+ kasan_report+0xb1/0x130 mm/kasan/report.c:517
+ l2cap_sock_ready_cb+0xb7/0x100 net/bluetooth/l2cap_sock.c:1650
+ l2cap_chan_ready+0x10e/0x1e0 net/bluetooth/l2cap_core.c:1386
+ l2cap_config_req+0x753/0x9f0 net/bluetooth/l2cap_core.c:4480
+ l2cap_bredr_sig_cmd net/bluetooth/l2cap_core.c:5739 [inline]
+ l2cap_sig_channel net/bluetooth/l2cap_core.c:6509 [inline]
+ l2cap_recv_frame+0xe2e/0x43c0 net/bluetooth/l2cap_core.c:7788
+ l2cap_recv_acldata+0x6ed/0x7e0 net/bluetooth/l2cap_core.c:8506
+ hci_acldata_packet net/bluetooth/hci_core.c:3813 [inline]
+ hci_rx_work+0x66e/0xbc0 net/bluetooth/hci_core.c:4048
+ process_one_work+0x4ea/0x8e0 kernel/workqueue.c:2289
+ worker_thread+0x364/0x8e0 kernel/workqueue.c:2436
+ kthread+0x1b9/0x200 kernel/kthread.c:376
+ ret_from_fork+0x2c/0x50 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-...
+Allocated by task 288:
+ kasan_save_stack+0x22/0x50 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0x82/0x90 mm/kasan/common.c:383
+ kasan_kmalloc include/linux/kasan.h:211 [inline]
+ __do_kmalloc_node mm/slab_common.c:968 [inline]
+ __kmalloc+0x5a/0x140 mm/slab_common.c:981
+ kmalloc include/linux/slab.h:584 [inline]
+ sk_prot_alloc+0x113/0x1f0 net/core/sock.c:2040
+ sk_alloc+0x36/0x3c0 net/core/sock.c:2093
+ l2cap_sock_alloc.constprop.0+0x39/0x1c0 net/bluetooth/l2cap_sock.c:1852
+ l2cap_sock_create+0x10d/0x220 net/bluetooth/l2cap_sock.c:1898
+ bt_sock_create+0x183/0x290 net/bluetooth/af_bluetooth.c:132
+ __sock_create+0x226/0x380 net/socket.c:1518
+ sock_create net/socket.c:1569 [inline]
+ __sys_socket_create net/socket.c:1606 [inline]
+ __sys_socket_create net/socket.c:1591 [inline]
+ __sys_socket+0x112/0x200 net/socket.c:1639
+ __do_sys_socket net/socket.c:1652 [inline]
+ __se_sys_socket net/socket.c:1650 [inline]
+ __x64_sys_socket+0x40/0x50 net/socket.c:1650
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3f/0x90 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
-> @@ -1134,13 +1136,21 @@ static int altera_tse_probe(struct platform_device *pdev)
->  	const struct of_device_id *of_id = NULL;
->  	struct altera_tse_private *priv;
->  	struct resource *control_port;
-> +	struct regmap *pcs_regmap;
->  	struct resource *dma_res;
->  	struct resource *pcs_res;
-> +	struct mii_bus *pcs_bus;
->  	struct net_device *ndev;
->  	void __iomem *descmap;
-> -	int pcs_reg_width = 2;
->  	int ret = -ENODEV;
->  
-> +	struct regmap_config pcs_regmap_cfg;
+Freed by task 288:
+ kasan_save_stack+0x22/0x50 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x50 mm/kasan/generic.c:523
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free mm/kasan/common.c:200 [inline]
+ __kasan_slab_free+0x10a/0x190 mm/kasan/common.c:244
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook mm/slub.c:1807 [inline]
+ slab_free mm/slub.c:3787 [inline]
+ __kmem_cache_free+0x88/0x1f0 mm/slub.c:3800
+ sk_prot_free net/core/sock.c:2076 [inline]
+ __sk_destruct+0x347/0x430 net/core/sock.c:2168
+ sk_destruct+0x9c/0xb0 net/core/sock.c:2183
+ __sk_free+0x82/0x220 net/core/sock.c:2194
+ sk_free+0x7c/0xa0 net/core/sock.c:2205
+ sock_put include/net/sock.h:1991 [inline]
+ l2cap_sock_kill+0x256/0x2b0 net/bluetooth/l2cap_sock.c:1257
+ l2cap_sock_release+0x1a7/0x220 net/bluetooth/l2cap_sock.c:1428
+ __sock_release+0x80/0x150 net/socket.c:650
+ sock_close+0x19/0x30 net/socket.c:1368
+ __fput+0x17a/0x5c0 fs/file_table.c:320
+ task_work_run+0x132/0x1c0 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x113/0x120 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x21/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x4c/0x90 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
-nit: this probably belongs in with the bunch of declarations above it.
+The buggy address belongs to the object at ffff888104617800
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 680 bytes inside of
+ 1024-byte region [ffff888104617800, ffff888104617c00)
 
-> +
-> +	struct mdio_regmap_config mrc = {
-> +		.parent = &pdev->dev,
-> +		.valid_addr = 0x0,
-> +	};
+The buggy address belongs to the physical page:
+page:00000000dbca6a80 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888104614000 pfn:0x104614
+head:00000000dbca6a80 order:2 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
+flags: 0x200000000010200(slab|head|node=0|zone=2)
+raw: 0200000000010200 ffff888100041dc0 ffffea0004212c10 ffffea0004234b10
+raw: ffff888104614000 0000000000080002 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
 
-nit: maybe this too.
+Memory state around the buggy address:
+ ffff888104617980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888104617a00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888104617a80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                  ^
+ ffff888104617b00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888104617b80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-> +
->  	ndev = alloc_etherdev(sizeof(struct altera_tse_private));
->  	if (!ndev) {
->  		dev_err(&pdev->dev, "Could not allocate network device\n");
-> @@ -1258,10 +1268,29 @@ static int altera_tse_probe(struct platform_device *pdev)
->  	ret = request_and_map(pdev, "pcs", &pcs_res,
->  			      &priv->pcs_base);
->  	if (ret) {
-> +		/* If we can't find a dedicated resource for the PCS, fallback
-> +		 * to the internal PCS, that has a different address stride
-> +		 */
->  		priv->pcs_base = priv->mac_dev + tse_csroffs(mdio_phy0);
-> -		pcs_reg_width = 4;
-> +		pcs_regmap_cfg.reg_bits = 32;
-> +		/* Values are MDIO-like values, on 16 bits */
-> +		pcs_regmap_cfg.val_bits = 16;
-> +		pcs_regmap_cfg.reg_shift = REGMAP_UPSHIFT(2);
-> +	} else {
-> +		pcs_regmap_cfg.reg_bits = 16;
-> +		pcs_regmap_cfg.val_bits = 16;
-> +		pcs_regmap_cfg.reg_shift = REGMAP_UPSHIFT(1);
->  	}
->  
-> +	/* Create a regmap for the PCS so that it can be used by the PCS driver */
-> +	pcs_regmap = devm_regmap_init_mmio(&pdev->dev, priv->pcs_base,
-> +					   &pcs_regmap_cfg);
-> +	if (IS_ERR(pcs_regmap)) {
-> +		ret = PTR_ERR(pcs_regmap);
-> +		goto err_free_netdev;
-> +	}
-> +	mrc.regmap = pcs_regmap;
-> +
->  	/* Rx IRQ */
->  	priv->rx_irq = platform_get_irq_byname(pdev, "rx_irq");
->  	if (priv->rx_irq == -ENXIO) {
-> @@ -1384,7 +1413,20 @@ static int altera_tse_probe(struct platform_device *pdev)
->  			 (unsigned long) control_port->start, priv->rx_irq,
->  			 priv->tx_irq);
->  
-> -	priv->pcs = alt_tse_pcs_create(ndev, priv->pcs_base, pcs_reg_width);
-> +	snprintf(mrc.name, MII_BUS_ID_SIZE, "%s-pcs-mii", ndev->name);
-> +	pcs_bus = devm_mdio_regmap_register(&pdev->dev, &mrc);
-> +	if (IS_ERR(pcs_bus)) {
-> +		ret = PTR_ERR(pcs_bus);
-> +		goto err_init_phy;
-> +	}
-> +
-> +	priv->pcs_mdiodev = mdio_device_create(pcs_bus, 0);
+Ack: This bug is found by FuzzBT with a modified Syzkaller. Other
+contributors are Ruoyu Wu and Hui Peng.
+Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
+---
+ net/bluetooth/l2cap_sock.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-mdio_device_create() can fail. Should that be handled here?
+diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+index eebe25610..ddd940a46 100644
+--- a/net/bluetooth/l2cap_sock.c
++++ b/net/bluetooth/l2cap_sock.c
+@@ -1414,7 +1414,8 @@ static int l2cap_sock_release(struct socket *sock)
+ 
+ 	if (!sk)
+ 		return 0;
+-
++
++	l2cap_sock_cleanup_listen(sk);
+ 	bt_sock_unlink(&l2cap_sk_list, sk);
+ 
+ 	err = l2cap_sock_shutdown(sock, SHUT_RDWR);
+-- 
+2.34.1
 
-> +
-> +	priv->pcs = lynx_pcs_create(priv->pcs_mdiodev);
-> +	if (!priv->pcs) {
-> +		ret = -ENODEV;
-> +		goto err_init_phy;
-
-Does this leak priv->pcs_mdiodev?
-
-> +	}
->  
->  	priv->phylink_config.dev = &ndev->dev;
->  	priv->phylink_config.type = PHYLINK_NETDEV;
-> @@ -1407,11 +1449,12 @@ static int altera_tse_probe(struct platform_device *pdev)
->  	if (IS_ERR(priv->phylink)) {
->  		dev_err(&pdev->dev, "failed to create phylink\n");
->  		ret = PTR_ERR(priv->phylink);
-> -		goto err_init_phy;
-> +		goto err_pcs;
-
-Does this leak priv->pcs ?
-
->  	}
->  
->  	return 0;
-> -
-> +err_pcs:
-> +	mdio_device_free(priv->pcs_mdiodev);
->  err_init_phy:
->  	unregister_netdev(ndev);
->  err_register_netdev:
-> @@ -1433,6 +1476,8 @@ static int altera_tse_remove(struct platform_device *pdev)
->  	altera_tse_mdio_destroy(ndev);
->  	unregister_netdev(ndev);
->  	phylink_destroy(priv->phylink);
-> +	mdio_device_free(priv->pcs_mdiodev);
-> +
->  	free_netdev(ndev);
->  
->  	return 0;
-> diff --git a/include/linux/mdio/mdio-regmap.h b/include/linux/mdio/mdio-regmap.h
-> index b8508f152552..679d9069846b 100644
-> --- a/include/linux/mdio/mdio-regmap.h
-> +++ b/include/linux/mdio/mdio-regmap.h
-> @@ -7,6 +7,8 @@
->  #ifndef MDIO_REGMAP_H
->  #define MDIO_REGMAP_H
->  
-> +#include <linux/phy.h>
-> +
->  struct device;
->  struct regmap;
->  
-
-This hunk doesn't seem strictly related to the patch.
-Perhaps the include belongs elsewhere.
-Or the hunk belongs in another patch.
