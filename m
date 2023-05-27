@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14DF7131CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7B57131D3
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 04:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbjE0Bz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 21:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
+        id S237754AbjE0CBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 22:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjE0Bzz (ORCPT
+        with ESMTP id S229716AbjE0CBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 21:55:55 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E711114
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:55:54 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b0201d9a9eso4974315ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:55:54 -0700 (PDT)
+        Fri, 26 May 2023 22:01:09 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7510189
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 19:01:04 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b0218c979cso4256555ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 19:01:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685152554; x=1687744554;
+        d=chromium.org; s=google; t=1685152864; x=1687744864;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=50rkrbLJVVboYecgPYKgeMphE+OaVJjRPZM9miVDUhs=;
-        b=beCPuV/V7OuI1suBCjYxRtMGlT8BPdjHbEpyfLnUqawZaYHZufceQol3xzTW7DIa7C
-         4ON+4K3zgdZghca/FQpzCbilB2zdHd3r67P46lUIK+xbsmLyB4Vdp0lUtcu1U8BsuNSt
-         s1uFfCd0ZvhVhpPAmfRt8BR4MIZuNg8PXPSOq9cHDKIIPOhvm50GuFnB4dppetq4XS7P
-         ePc9Wuor+9IPHVhgxTBnWUAOAlYC6q4AG6TKBhfwAl2RVmUAhB2wp0+uDFSV2q7vLzHP
-         FU05kJXzYcR3WVTBrk/K9dZV8QHWcz2CIUXzAm7TMO+7MO02eBY6tE99QqEpZO287g6t
-         8glg==
+        bh=Z3YbAt9JjfLvKqD7ym0b4r1+hkDKL9O0I3I3mZ5235s=;
+        b=PG4NLHltyMPfbb4jzVRi5VCXYGRdpjmbMDYTsTkw5J6vyg/XRr1KresINXxLI57xOO
+         vEtUdQjRy08+0IVetoNywf0g0V/k4oRGaCgwquyCUMv3f1YX1nTYanjDTjG/TX51BfLM
+         RQxV+o8OUIxaPnp6aNMHIavpJB3O/xTixFbHo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685152554; x=1687744554;
+        d=1e100.net; s=20221208; t=1685152864; x=1687744864;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=50rkrbLJVVboYecgPYKgeMphE+OaVJjRPZM9miVDUhs=;
-        b=i5flE3JuZo6z9GWh3+TV8B3s6dWIb4d8E1DSyoD5BGVzi0cnXaJV5xxCRO+MkrIuDC
-         uGJ06+69ajff1rPvCMcbLUpvlmdFO8koETvUlIUDkrRv6UXFzWbu9tVHp/CyHNu5pI4r
-         mnS27npIHNC2l3cNbQgMTsTdAigbexdt4ujVjNFy2k9mKwiSHjMv6nx1yOGfTMhI1PnJ
-         rUh8xJ7s8zrGoViQ9Xguh7QrhcfGbMC094Nhe0mZNIbNRgorcEZ57hJdu8eKqIa7WeeY
-         RzT54ksqKL7uXAdQNFu/bPL0syxresrUK50PM2m77kzEfLjw36/853punCNim1d00UOu
-         5Cyw==
-X-Gm-Message-State: AC+VfDzVwQw7nfChZv6JD/ID1yj4KyZMbmP9utEUwRjR1y5SD7Uog/3e
-        K41OxceyqgMWx3+dWUG0hqoy9g==
-X-Google-Smtp-Source: ACHHUZ5cJy6CAykc9hMzO8zTqghMwRVEw6pl5aSVIDGDnBXSeoSTj2Ojvo+hf5XAxS+c2G4Hk0XjPA==
-X-Received: by 2002:a17:903:41c3:b0:1af:f253:24b1 with SMTP id u3-20020a17090341c300b001aff25324b1mr1095383ple.9.1685152553710;
-        Fri, 26 May 2023 18:55:53 -0700 (PDT)
-Received: from leoy-huanghe ([107.151.177.130])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170902ce8c00b0019aaab3f9d7sm3838026plg.113.2023.05.26.18.55.24
+        bh=Z3YbAt9JjfLvKqD7ym0b4r1+hkDKL9O0I3I3mZ5235s=;
+        b=ZhKGKuFRXCdfLYQ29tidEX1YoRE7fjXDE0BpOnbiWjjFvgJmnbEQwW6tB28BDD2kdC
+         qhAViDfyQtTLFFcvoyoT+wTO7mZWstuEyv9XPvidlyjYtxObmYZPSRDDFYVJLenYwYoA
+         yxcDBjG37fTQWuoYr2cig7bqsERXkBZBswEfuUN7auTCqF2qmE6zAnUSsGSIye5lU110
+         HqN27i9q7WlR1j+Sn2zN17BqcUL+KYTZwoiA0zRvzINyAtmo6bjsHHhJO9Y2AJcqzkNW
+         INn5IovbKuJly36PjqiKXrWLWh6brIBo+/AxKSRzimWmMFT6F/OPgjYnspfVH9pPDjPQ
+         cRmA==
+X-Gm-Message-State: AC+VfDyU8FTUrqviAGvyoxP9wrN1vGARE4mjZScpLA0nk2ILCiQTtUn0
+        OKQQ9DlBLZDVNTb30vPY2JTVaA==
+X-Google-Smtp-Source: ACHHUZ4MlU0pdFRrWT9QBhsuI4cYeLR3QxRmEAF73ZxP7YcwsNZO8xecUtsC5xjwVTfHUJpTsK4kZg==
+X-Received: by 2002:a17:902:c40c:b0:1af:f8a8:5bab with SMTP id k12-20020a170902c40c00b001aff8a85babmr4522123plk.52.1685152863998;
+        Fri, 26 May 2023 19:01:03 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id jj15-20020a170903048f00b001a922d43779sm3851246plb.27.2023.05.26.19.01.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 18:55:53 -0700 (PDT)
-Date:   Sat, 27 May 2023 09:55:20 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Hans-Peter Nilsson <hp@axis.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH 2/2] perf LoongArch: Simplify mksyscalltbl
-Message-ID: <20230527015520.GB188137@leoy-huanghe>
-References: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn>
- <1684837327-18203-3-git-send-email-yangtiezhu@loongson.cn>
+        Fri, 26 May 2023 19:01:03 -0700 (PDT)
+Date:   Fri, 26 May 2023 19:01:02 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] checkpatch: Warn about 0-length and 1-element arrays
+Message-ID: <202305261859.310EB2972A@keescook>
+References: <20230526173921.gonna.349-kees@kernel.org>
+ <c65be7a615f5cfa300289a6f251d97286c8d81e9.camel@perches.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1684837327-18203-3-git-send-email-yangtiezhu@loongson.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <c65be7a615f5cfa300289a6f251d97286c8d81e9.camel@perches.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,33 +72,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 06:22:07PM +0800, Tiezhu Yang wrote:
-> In order to print the numerical entries of the syscall table,
-> there is no need to call the host compiler to build and then
-> run a program, this can be done directly by the shell script.
+On Fri, May 26, 2023 at 06:38:27PM -0700, Joe Perches wrote:
+> On Fri, 2023-05-26 at 10:39 -0700, Kees Cook wrote:
+> > Fake flexible arrays have been deprecated since last millennium. Proper
+> > C99 flexible arrays must be used throughout the kernel so
+> > CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS can provide proper array
+> > bounds checking.
+> []
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> > []
+> > @@ -7430,6 +7430,21 @@ sub process {
+> >  			}
+> >  		}
+> >  
+> > +# check for array definition/declarations that should use flexible arrays instead
+> > +		if ($sline =~ /^[\+ ]\s*}\s*;\s*$/ &&
+> > +		    $prevline =~ /^\+\s*(?:(?:struct|union|enum)\s+$Ident|\}|$Type)\s*$Ident\s*\[\s*(0|1)\s*\]\s*;\s*$/) {
 > 
-> This is similar with commit 9854e7ad35fe ("perf arm64: Simplify
-> mksyscalltbl").
+> I think this is overly complicated and not necessary
 > 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  .../arch/loongarch/entry/syscalls/mksyscalltbl     | 32 ++++++----------------
->  1 file changed, 8 insertions(+), 24 deletions(-)
+> 		    $prevline =~ /^\+\s*$Type\s*$Ident\s*\[\s*(0|1)\s*\]\s*;\s*$/) {
 > 
-> diff --git a/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl b/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
-> index c52156f..d7d97d5 100755
-> --- a/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
-> +++ b/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
-> @@ -22,40 +22,24 @@ create_table_from_c()
+> should work no?
+> 
+> ($Type already includes this from @typeList):
+> 	qr{struct\s+$Ident},
+> 	qr{union\s+$Ident},
+> 	qr{enum\s+$Ident},
 
-Nitpick: since this patch tries to remove the temporary C program and
-simply use shell to generate syscall table, to avoid confusion, it's
-good to update the function name from create_table_from_c() to
-create_sc_table().
+Hm, I didn't when I originally tried it. I will double-check.
 
-I know Arm64's mksyscalltbl has the same issue, we can use a separate
-patch to address it.
+> 
+> > +			if ($1 == '0') {
+> > +				if (WARN("ZERO_LENGTH_ARRAY",
+> > +					 "Use C99 flexible arrays instead of zero-length arrays - see https://github.com/KSPP/linux/issues/78\n" . $hereprev) &&
+> > +				    $fix) {
+> > +					$fixed[$fixlinenr - 1] =~ s/\[0\]/[]/g;
+> 
+> And this $fix doesn't work if the line is struct foo bar[ 0 ];
+> and the use of /g is odd.
 
-Otherwise, this patch LGTM:
+Thanks!
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
+> Because the message is a WARN and not an ERR, please use
+> "Prefer/over" and not "Use/instead of"
+
+I will change to ERR, then. We must not use [0]-sized arrays ever.
+
+> 
+> 					$fixed[$fixlinenr - 1] =~ s/\[\s*0\s*\]/[]/;
+> > +				}
+> > +			} else {
+> > +				WARN("ONE_ELEMENT_ARRAY",
+> > +				     "Use C99 flexible arrays instead of one-element arrays - see https://github.com/KSPP/linux/issues/79\n" . $hereprev);
+> > +			}
+> 
+> And this could have a $fix change too
+> 
+> 				if (WARN("ONE_ELEMENT_ARRAY",
+> 					 ...) &&
+> 				    $fix) {
+> 					$fixed[$fixlinenr - 1] =~ s/\[\s*1\s*\]/[]/;
+
+Almost never is it possible to only fix the struct when it's a 1-element
+array (due to the impact of the size changes that be present in other
+code), so I left it out.
+
+I'll send a v3.
+
+-Kees
+
+-- 
+Kees Cook
