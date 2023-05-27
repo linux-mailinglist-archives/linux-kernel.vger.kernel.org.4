@@ -2,62 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51917131C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B14DF7131CD
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242720AbjE0Bs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 21:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S231309AbjE0Bz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 21:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjE0Bsz (ORCPT
+        with ESMTP id S229716AbjE0Bzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 21:48:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479D5114;
-        Fri, 26 May 2023 18:48:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6F2161032;
-        Sat, 27 May 2023 01:48:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 181FEC433D2;
-        Sat, 27 May 2023 01:48:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685152133;
-        bh=4mmYOZvNxvMfe1IUufij5Lxc6zDSw4qsl3m4tlE5ekc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q9vBh/ULEZy1gUw5IVHbetfP2uNUTMt6WwztNmEwPdbDzeAhiykNErou+fOo0jymS
-         ygkNNILUhxPWXIjEGH8B6vYDhP1UkRxPghCppxFS12KRDbjhn1OZ+TsNd9tgpVp6bE
-         di6CsMBtf82C/JMwVR7rBAyosrsPWvs3eZBkkX3sbe6F2UhMp3rhYoWmGstase/Sl0
-         6ao/GVhWc+oMWMqmxsUseEdFsTdmd2Yrcx7GKd7YUEK6BtPrFMtJV20dFdcYUBGCK7
-         saqfyd2G931ZZ4nNNAv2hLHg8uiMMTH2fl1DBL7DGe5uHeUMPp2IRvMwcRxmkd5+lJ
-         +wQkzwA0tKwUg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E6798403B5; Fri, 26 May 2023 22:48:50 -0300 (-03)
-Date:   Fri, 26 May 2023 22:48:50 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
-        Namhyung Kim <namhyung@kernel.org>,
+        Fri, 26 May 2023 21:55:55 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E711114
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:55:54 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b0201d9a9eso4974315ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685152554; x=1687744554;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=50rkrbLJVVboYecgPYKgeMphE+OaVJjRPZM9miVDUhs=;
+        b=beCPuV/V7OuI1suBCjYxRtMGlT8BPdjHbEpyfLnUqawZaYHZufceQol3xzTW7DIa7C
+         4ON+4K3zgdZghca/FQpzCbilB2zdHd3r67P46lUIK+xbsmLyB4Vdp0lUtcu1U8BsuNSt
+         s1uFfCd0ZvhVhpPAmfRt8BR4MIZuNg8PXPSOq9cHDKIIPOhvm50GuFnB4dppetq4XS7P
+         ePc9Wuor+9IPHVhgxTBnWUAOAlYC6q4AG6TKBhfwAl2RVmUAhB2wp0+uDFSV2q7vLzHP
+         FU05kJXzYcR3WVTBrk/K9dZV8QHWcz2CIUXzAm7TMO+7MO02eBY6tE99QqEpZO287g6t
+         8glg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685152554; x=1687744554;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=50rkrbLJVVboYecgPYKgeMphE+OaVJjRPZM9miVDUhs=;
+        b=i5flE3JuZo6z9GWh3+TV8B3s6dWIb4d8E1DSyoD5BGVzi0cnXaJV5xxCRO+MkrIuDC
+         uGJ06+69ajff1rPvCMcbLUpvlmdFO8koETvUlIUDkrRv6UXFzWbu9tVHp/CyHNu5pI4r
+         mnS27npIHNC2l3cNbQgMTsTdAigbexdt4ujVjNFy2k9mKwiSHjMv6nx1yOGfTMhI1PnJ
+         rUh8xJ7s8zrGoViQ9Xguh7QrhcfGbMC094Nhe0mZNIbNRgorcEZ57hJdu8eKqIa7WeeY
+         RzT54ksqKL7uXAdQNFu/bPL0syxresrUK50PM2m77kzEfLjw36/853punCNim1d00UOu
+         5Cyw==
+X-Gm-Message-State: AC+VfDzVwQw7nfChZv6JD/ID1yj4KyZMbmP9utEUwRjR1y5SD7Uog/3e
+        K41OxceyqgMWx3+dWUG0hqoy9g==
+X-Google-Smtp-Source: ACHHUZ5cJy6CAykc9hMzO8zTqghMwRVEw6pl5aSVIDGDnBXSeoSTj2Ojvo+hf5XAxS+c2G4Hk0XjPA==
+X-Received: by 2002:a17:903:41c3:b0:1af:f253:24b1 with SMTP id u3-20020a17090341c300b001aff25324b1mr1095383ple.9.1685152553710;
+        Fri, 26 May 2023 18:55:53 -0700 (PDT)
+Received: from leoy-huanghe ([107.151.177.130])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902ce8c00b0019aaab3f9d7sm3838026plg.113.2023.05.26.18.55.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 18:55:53 -0700 (PDT)
+Date:   Sat, 27 May 2023 09:55:20 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] perf test: Fix perf stat JSON output test
-Message-ID: <ZHFhghGjBRPH3UpB@kernel.org>
-References: <20230524210600.3095830-1-namhyung@kernel.org>
- <d06cac04-00b5-651d-14af-378fc25f37c4@amd.com>
- <CAP-5=fVMR0Y1=_W2scQBg_uWceOHrHaZ2GMwOai4Veq7OaGJ4A@mail.gmail.com>
+        Hans-Peter Nilsson <hp@axis.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH 2/2] perf LoongArch: Simplify mksyscalltbl
+Message-ID: <20230527015520.GB188137@leoy-huanghe>
+References: <1684837327-18203-1-git-send-email-yangtiezhu@loongson.cn>
+ <1684837327-18203-3-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fVMR0Y1=_W2scQBg_uWceOHrHaZ2GMwOai4Veq7OaGJ4A@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <1684837327-18203-3-git-send-email-yangtiezhu@loongson.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,81 +82,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, May 26, 2023 at 03:41:29PM -0700, Ian Rogers escreveu:
-> On Wed, May 24, 2023 at 8:01 PM K Prateek Nayak <kprateek.nayak@amd.com> wrote:
-> >
-> > Hello Namhyung,
-> >
-> > On 5/25/2023 2:36 AM, Namhyung Kim wrote:
-> > > The recent --per-cache option test caused a problem.  According to
-> > > the option name, I think it should check args.per_cache instead of
-> > > args.per_cache_instance.
-> > >
-> > >   $ sudo ./perf test -v 99
-> > >    99: perf stat JSON output linter                                    :
-> > >   --- start ---
-> > >   test child forked, pid 3086101
-> > >   Checking json output: no args [Success]
-> > >   Checking json output: system wide [Success]
-> > >   Checking json output: interval [Success]
-> > >   Checking json output: event [Success]
-> > >   Checking json output: per thread [Success]
-> > >   Checking json output: per node [Success]
-> > >   Checking json output: system wide no aggregation [Success]
-> > >   Checking json output: per core [Success]
-> > >   Checking json output: per cache_instance Test failed for input:
-> > >   ...
-> > >   Traceback (most recent call last):
-> > >     File "linux/tools/perf/tests/shell/lib/perf_json_output_lint.py", line 88, in <module>
-> > >       elif args.per_core or args.per_socket or args.per_node or args.per_die or args.per_cache_instance:
-> > >   AttributeError: 'Namespace' object has no attribute 'per_cache_instance'
-> > >   test child finished with -1
-> > >   ---- end ----
-> > >   perf stat JSON output linter: FAILED!
-> > >
-> > > Fixes: bfce728db317 ("pert tests: Add tests for new "perf stat --per-cache" aggregation option")
-> >
-> > Another oversight on my part. Thank you for fixing this :)
-> >
-> >    $ sudo perf test -v 99
-> >    99: perf stat JSON output linter                                    :
-> >    --- start ---
-> >    test child forked, pid 25046
-> >    Checking json output: no args [Success]
-> >    Checking json output: system wide [Success]
-> >    Checking json output: interval [Success]
-> >    Checking json output: event [Success]
-> >    Checking json output: per thread [Success]
-> >    Checking json output: per node [Success]
-> >    Checking json output: system wide no aggregation [Success]
-> >    Checking json output: per core [Success]
-> >    Checking json output: per cache_instance [Success]
-> >    Checking json output: per die [Success]
-> >    Checking json output: per socket [Success]
-> >    test child finished with 0
-> >    ---- end ----
-> >    perf stat JSON output linter: Ok
-> >
-> > Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+On Tue, May 23, 2023 at 06:22:07PM +0800, Tiezhu Yang wrote:
+> In order to print the numerical entries of the syscall table,
+> there is no need to call the host compiler to build and then
+> run a program, this can be done directly by the shell script.
 > 
-> Thanks Namhyung and Prateek, Arnaldo could we get this in
-> perf-tools-next so that the failing test goes away?
+> This is similar with commit 9854e7ad35fe ("perf arm64: Simplify
+> mksyscalltbl").
 > 
-> Acked-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  .../arch/loongarch/entry/syscalls/mksyscalltbl     | 32 ++++++----------------
+>  1 file changed, 8 insertions(+), 24 deletions(-)
+> 
+> diff --git a/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl b/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
+> index c52156f..d7d97d5 100755
+> --- a/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
+> +++ b/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
+> @@ -22,40 +22,24 @@ create_table_from_c()
 
-Applied and pushed to perf-tools-next, please continue from there.
+Nitpick: since this patch tries to remove the temporary C program and
+simply use shell to generate syscall table, to avoid confusion, it's
+good to update the function name from create_table_from_c() to
+create_sc_table().
 
-⬢[acme@toolbox perf-tools-next]$ git log --oneline -10
-540c910c65a94fb4 (HEAD -> perf-tools-next) perf test: Fix perf stat JSON output test
-5cebb33fd929dc67 perf tests: Organize cpu_map tests into a single suite
-237d41d4a2d7d45e perf cpumap: Add intersect function
-6ac2230b55d392e6 perf vendor events intel: Add metricgroup descriptions for all models
-66c6e0c100277175 perf jevents: Add support for metricgroup descriptions
-bfce728db3179042 pert tests: Add tests for new "perf stat --per-cache" aggregation option
-aab667ca8837e45f perf stat: Add "--per-cache" aggregation option and document it
-4b87406a3b590888 perf stat record: Save cache level information
-995ed074b829f293 perf stat: Setup the foundation to allow aggregation based on cache topology
-2b72cec9eef19d73 perf: Extract building cache level for a CPU into separate function
-⬢[acme@toolbox perf-tools-next]$
+I know Arm64's mksyscalltbl has the same issue, we can use a separate
+patch to address it.
 
-- Arnaldo
+Otherwise, this patch LGTM:
+
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
