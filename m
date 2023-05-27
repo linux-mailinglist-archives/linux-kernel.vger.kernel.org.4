@@ -2,111 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CADE71348C
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 13:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447BE713495
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 13:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbjE0LvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 07:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S232029AbjE0L7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 07:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbjE0LvU (ORCPT
+        with ESMTP id S229730AbjE0L7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 07:51:20 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D54F7
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 04:51:19 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d41763796so1361255b3a.2
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 04:51:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685188279; x=1687780279;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ps7W4euBnPTypuQ48jqWiVzSPldfhUMwv3snwxq59YY=;
-        b=AqYl7ViqxvBn8HqG78gKCD/7rKL7HfBq1/pAor38gVc2DQg5wu3paaZGGxS4V7ZXlS
-         2jedEA59iAcVm+XTq+abpom59mTFsWn9Faeodygf0CuJjOohBCvIds+IGzzMGs+xVbil
-         Z3UNroBt9DysnC6W+qovqNd+CTCvW/e+abPur5uFCWAqnrV4wLz5dLSdyxreUll9Ww/N
-         YwSHPevF6IFrhRlMqtXCErTxxkG+KurtaHOuzZCd9sCUKeDncUTIgMgFWoZtxopNwmmw
-         8jYDOnkRLvJ4qXiOMrsCF34giu8WNZ2fuGm1QvE5N3/dr+/U1plyjdDbR03S7rAzWeK1
-         dC/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685188279; x=1687780279;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ps7W4euBnPTypuQ48jqWiVzSPldfhUMwv3snwxq59YY=;
-        b=iLl4eZniywEnTcTd4kbLmBfczSvnIwpB6f6Aw79hh99vffDud9zSA8wS7ehwyHzrp7
-         jq17tn+r+7dOMTE6bdN/H/+RUCtCRk0gj1pQKATnfjPjMd3w8d2RqwAmM+ijq57LP8tW
-         OyCI8MuEN6CirxoAhTP7qgKa3+EhPDLAhnU9Iuzsi6cxEqSRpUeoeobit3z/qzIX0mZE
-         JG9ngYpkIpyBLX7vYeusDh4YGkTn7WuN1+h9z2vawZHST3RAYIS+YeZMXnoDsloXIHNz
-         zx5GBsnBvy0jypzjFSheMEquxeh2XDp0GsRswRXKTVDc+GMsyFXQoVVgWgCTiDZ6G6jZ
-         iQVw==
-X-Gm-Message-State: AC+VfDzyIjEbM0ihjeB3eb49DJXTYYM6vZtSqJqFeREEPokv+9lP22jn
-        e4tT2++10/oy7v4B2lgyskk=
-X-Google-Smtp-Source: ACHHUZ5zF+iygF5B/re2qY7V3eQMYr1cqIGaEaq0niqW5MExwb/4oKb4QmWjit3DZrE+2rrXv+iuSg==
-X-Received: by 2002:a05:6a20:5493:b0:10e:d90f:35d5 with SMTP id i19-20020a056a20549300b0010ed90f35d5mr2847160pzk.51.1685188278759;
-        Sat, 27 May 2023 04:51:18 -0700 (PDT)
-Received: from redkillpc.. ([49.207.219.227])
-        by smtp.gmail.com with ESMTPSA id x19-20020aa793b3000000b0064f97ff4506sm2988098pff.68.2023.05.27.04.51.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 04:51:18 -0700 (PDT)
-From:   Prathu Baronia <prathubaronia2011@gmail.com>
-To:     prathubaronia2011@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Khadija Kamran <kamrankhadijadj@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     dan.carpenter@linaro.org, error27@gmail.com, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, oe-kbuild@lists.linux.dev
-Subject: [PATCH v4 3/3] axis-fifo: cleanup space issues with fops struct
-Date:   Sat, 27 May 2023 17:21:00 +0530
-Message-Id: <20230527115101.47569-3-prathubaronia2011@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230527115101.47569-1-prathubaronia2011@gmail.com>
-References: <ZHHE/H2p4Go/Igc/@redkillpc>
- <20230527115101.47569-1-prathubaronia2011@gmail.com>
+        Sat, 27 May 2023 07:59:08 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C5BF3;
+        Sat, 27 May 2023 04:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685188746; x=1716724746;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1TPmWjxOFqFxwsJrDeSGVc93SPSkph7oWPfkq3d7EoY=;
+  b=F5xKAbIu1969PhFilFrU4AIrFQ398jTFhaS8bvB60B1a+52zMfSoyxTY
+   nRB4z2Q7LsAYWpP87Jjj0vjUh4ZNbF3bgm47Hc522rxIagRDAuncka3/H
+   7ktaihs/YtK0Ugwz4GqL+VEZ+4jS9lxOJuAbifqVZkL2n102pe04YsKRn
+   4dxV4yT3Bj56tCBO/PvSsnDzwax72KVMJ88Mshl1Xu4FGScHnTEkwmFG2
+   sx6vnRHsaHAqhMzuLa5c+fa+053j4tgTrXNFc+RacH8K/dmYvxeBj2yrg
+   /jhXWIPhr3dEV2Aoh6v5h8bYe83AScJbFOX9eDV7TyWeQFbaHAIHDU5m2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="353233929"
+X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
+   d="scan'208";a="353233929"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 04:59:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="817840389"
+X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
+   d="scan'208";a="817840389"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 27 May 2023 04:59:02 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q2sZZ-000Jwm-1H;
+        Sat, 27 May 2023 11:59:01 +0000
+Date:   Sat, 27 May 2023 19:58:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frank Li <Frank.Li@nxp.com>, vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peng.fan@nxp.com, joy.zou@nxp.com, shenwei.wang@nxp.com,
+        imx@lists.linux.dev
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v1 10/12] dmaengine: fsl-edma: move tcd into struct
+ fsl_dma_chan
+Message-ID: <202305271951.gmRobs3a-lkp@intel.com>
+References: <20230526143639.1037099-11-Frank.Li@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526143639.1037099-11-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add required spaces for proper formatting of fops members for better
-readability.
+Hi Frank,
 
-Signed-off-by: Prathu Baronia <prathubaronia2011@gmail.com>
----
- drivers/staging/axis-fifo/axis-fifo.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-index d71bdc6dd961..59e962467a3d 100644
---- a/drivers/staging/axis-fifo/axis-fifo.c
-+++ b/drivers/staging/axis-fifo/axis-fifo.c
-@@ -716,11 +716,11 @@ static int axis_fifo_close(struct inode *inod, struct file *f)
- }
- 
- static const struct file_operations fops = {
--	.owner = THIS_MODULE,
--	.open = axis_fifo_open,
-+	.owner   = THIS_MODULE,
-+	.open    = axis_fifo_open,
- 	.release = axis_fifo_close,
--	.read = axis_fifo_read,
--	.write = axis_fifo_write
-+	.read    = axis_fifo_read,
-+	.write   = axis_fifo_write
- };
- 
- /* read named property from the device tree */
+[auto build test WARNING on vkoul-dmaengine/next]
+[also build test WARNING on robh/for-next linus/master v6.4-rc3 next-20230525]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Frank-Li/dmaengine-fsl-edma-clean-up-EXPORT_SYMBOL_GPL-in-fsl-edma-common-c/20230526-224442
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20230526143639.1037099-11-Frank.Li%40nxp.com
+patch subject: [PATCH v1 10/12] dmaengine: fsl-edma: move tcd into struct fsl_dma_chan
+config: i386-randconfig-s003-20230526 (https://download.01.org/0day-ci/archive/20230527/202305271951.gmRobs3a-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/913c495a6c017a70bd6d7a518a9edbd361212985
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Frank-Li/dmaengine-fsl-edma-clean-up-EXPORT_SYMBOL_GPL-in-fsl-edma-common-c/20230526-224442
+        git checkout 913c495a6c017a70bd6d7a518a9edbd361212985
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash drivers/dma/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305271951.gmRobs3a-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/dma/fsl-edma-common.c:367:9: sparse: sparse: cast from restricted __le32
+   drivers/dma/fsl-edma-common.c:367:9: sparse: sparse: cast from restricted __le32
+   drivers/dma/fsl-edma-common.c:368:9: sparse: sparse: cast from restricted __le32
+   drivers/dma/fsl-edma-common.c:368:9: sparse: sparse: cast from restricted __le32
+   drivers/dma/fsl-edma-common.c:370:9: sparse: sparse: cast from restricted __le16
+   drivers/dma/fsl-edma-common.c:370:9: sparse: sparse: cast from restricted __le16
+   drivers/dma/fsl-edma-common.c:371:9: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short [usertype] val @@     got restricted __le16 [usertype] soff @@
+   drivers/dma/fsl-edma-common.c:371:9: sparse:     expected unsigned short [usertype] val
+   drivers/dma/fsl-edma-common.c:371:9: sparse:     got restricted __le16 [usertype] soff
+>> drivers/dma/fsl-edma-common.c:371:9: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __le16 [usertype] soff @@
+   drivers/dma/fsl-edma-common.c:371:9: sparse:     expected unsigned int [usertype] val
+   drivers/dma/fsl-edma-common.c:371:9: sparse:     got restricted __le16 [usertype] soff
+   drivers/dma/fsl-edma-common.c:373:9: sparse: sparse: cast from restricted __le32
+   drivers/dma/fsl-edma-common.c:373:9: sparse: sparse: cast from restricted __le32
+   drivers/dma/fsl-edma-common.c:374:9: sparse: sparse: cast from restricted __le32
+   drivers/dma/fsl-edma-common.c:374:9: sparse: sparse: cast from restricted __le32
+   drivers/dma/fsl-edma-common.c:376:9: sparse: sparse: cast from restricted __le16
+   drivers/dma/fsl-edma-common.c:376:9: sparse: sparse: cast from restricted __le16
+   drivers/dma/fsl-edma-common.c:377:9: sparse: sparse: cast from restricted __le16
+   drivers/dma/fsl-edma-common.c:377:9: sparse: sparse: cast from restricted __le16
+   drivers/dma/fsl-edma-common.c:378:9: sparse: sparse: cast from restricted __le16
+   drivers/dma/fsl-edma-common.c:378:9: sparse: sparse: cast from restricted __le16
+   drivers/dma/fsl-edma-common.c:380:9: sparse: sparse: cast from restricted __le32
+   drivers/dma/fsl-edma-common.c:380:9: sparse: sparse: cast from restricted __le32
+   drivers/dma/fsl-edma-common.c:388:9: sparse: sparse: cast from restricted __le16
+   drivers/dma/fsl-edma-common.c:388:9: sparse: sparse: cast from restricted __le16
+
+vim +371 drivers/dma/fsl-edma-common.c
+
+   353	
+   354	static void fsl_edma_set_tcd_regs(struct fsl_edma_chan *fsl_chan,
+   355					  struct fsl_edma_hw_tcd *tcd)
+   356	{
+   357		u16 csr = 0;
+   358	
+   359		/*
+   360		 * TCD parameters are stored in struct fsl_edma_hw_tcd in little
+   361		 * endian format. However, we need to load the TCD registers in
+   362		 * big- or little-endian obeying the eDMA engine model endian,
+   363		 * and this is performed from specific edma_write functions
+   364		 */
+   365		edma_write_tcdreg(fsl_chan, 0, csr);
+   366	
+   367		edma_write_tcdreg(fsl_chan, (s32)tcd->saddr, saddr);
+   368		edma_write_tcdreg(fsl_chan, (s32)tcd->daddr, daddr);
+   369	
+   370		edma_write_tcdreg(fsl_chan, (s16)tcd->attr, attr);
+ > 371		edma_write_tcdreg(fsl_chan, tcd->soff, soff);
+   372	
+   373		edma_write_tcdreg(fsl_chan, (s32)tcd->nbytes, nbytes);
+   374		edma_write_tcdreg(fsl_chan, (s32)tcd->slast, slast);
+   375	
+   376		edma_write_tcdreg(fsl_chan, (s16)tcd->citer, citer);
+   377		edma_write_tcdreg(fsl_chan, (s16)tcd->biter, biter);
+   378		edma_write_tcdreg(fsl_chan, (s16)tcd->doff, doff);
+   379	
+   380		edma_write_tcdreg(fsl_chan, (s32)tcd->dlast_sga, dlast_sga);
+   381	
+   382		if (fsl_chan->is_sw) {
+   383			csr = le16_to_cpu(tcd->csr);
+   384			csr |= EDMA_TCD_CSR_START;
+   385			tcd->csr = cpu_to_le16(csr);
+   386		}
+   387	
+   388		edma_write_tcdreg(fsl_chan, (s16)tcd->csr, csr);
+   389	}
+   390	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
