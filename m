@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D3A713321
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CB371331C
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbjE0HmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 03:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        id S232607AbjE0Hly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 03:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbjE0Hll (ORCPT
+        with ESMTP id S232321AbjE0Hll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 27 May 2023 03:41:41 -0400
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C317C9;
-        Sat, 27 May 2023 00:41:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA64BC;
+        Sat, 27 May 2023 00:41:39 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QStZN1r8Xz4f3w0G;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QStZN5Xq7z4f3w0L;
         Sat, 27 May 2023 15:23:56 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgD3rLAKsHFk67lAKQ--.30654S5;
+        by APP4 (Coremail) with SMTP id gCh0CgD3rLAKsHFk67lAKQ--.30654S6;
         Sat, 27 May 2023 15:23:57 +0800 (CST)
 From:   linan666@huaweicloud.com
 To:     song@kernel.org, bingjingc@synology.com, allenpeng@synology.com,
@@ -27,21 +27,21 @@ To:     song@kernel.org, bingjingc@synology.com, allenpeng@synology.com,
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
         houtao1@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v3 1/4] md/raid10: fix null-ptr-deref of mreplace in raid10_sync_request
-Date:   Sat, 27 May 2023 15:22:15 +0800
-Message-Id: <20230527072218.2365857-2-linan666@huaweicloud.com>
+Subject: [PATCH v3 2/4] md/raid10: improve code of mrdev in raid10_sync_request
+Date:   Sat, 27 May 2023 15:22:16 +0800
+Message-Id: <20230527072218.2365857-3-linan666@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230527072218.2365857-1-linan666@huaweicloud.com>
 References: <20230527072218.2365857-1-linan666@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3rLAKsHFk67lAKQ--.30654S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFWDZw45AFyrZr45uFy8Zrb_yoW5JrWDpa
-        y3tF9rJ34UG3yjka1DJ3ZruF1S9asrJw15Cry5W343Zr1agrWDCay8WFWYqFyDXF4Yvw4Y
-        qw1jyws8CFy7Xa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: gCh0CgD3rLAKsHFk67lAKQ--.30654S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxZrWxCw45uFWxtr45KFy8Xwb_yoW5Ar17p3
+        y3tFyayryUJ3yUGF1DA3WDuF1SvrWxtayYyrW7W34xGw1SgryDCa4rWFWYqF1UZFWrXw15
+        Xw1UJws8Ca4IqF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUm0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
         w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
         W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
         6rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrV
@@ -52,7 +52,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7CFWDZw45AFyrZr45uFy8Zrb_yoW5JrWDpa
         AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE
         2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
         C2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVj
-        vjDU0xZFpf9x07jYFALUUUUU=
+        vjDU0xZFpf9x07UNAwxUUUUU=
 X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -66,72 +66,92 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Li Nan <linan122@huawei.com>
 
-There are two check of 'mreplace' in raid10_sync_request(). In the first
-check, 'need_replace' will be set and 'mreplace' will be used later if
-no-Faulty 'mreplace' exists, In the second check, 'mreplace' will be
-set to NULL if it is Faulty, but 'need_replace' will not be changed
-accordingly. null-ptr-deref occurs if Faulty is set between two check.
+'need_recover' and 'mrdev' are equivalent in raid10_sync_request(), and
+inc mrdev->nr_pending is unreasonable if don't need recovery. Replace
+'need_recover' with 'mrdev', and only inc nr_pending when needed.
 
-Fix it by merging two checks into one. And replace 'need_replace' with
-'mreplace' because their values are always the same.
-
-Fixes: ee37d7314a32 ("md/raid10: Fix raid10 replace hang when new added disk faulty")
 Signed-off-by: Li Nan <linan122@huawei.com>
 Reviewed-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/raid10.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ drivers/md/raid10.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 4fcfcb350d2b..0acb4c103c10 100644
+index 0acb4c103c10..d93d8cb2b620 100644
 --- a/drivers/md/raid10.c
 +++ b/drivers/md/raid10.c
-@@ -3438,7 +3438,6 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+@@ -3437,7 +3437,6 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+ 			sector_t sect;
  			int must_sync;
  			int any_working;
- 			int need_recover = 0;
--			int need_replace = 0;
+-			int need_recover = 0;
  			struct raid10_info *mirror = &conf->mirrors[i];
  			struct md_rdev *mrdev, *mreplace;
  
-@@ -3450,11 +3449,10 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
- 			    !test_bit(Faulty, &mrdev->flags) &&
- 			    !test_bit(In_sync, &mrdev->flags))
- 				need_recover = 1;
--			if (mreplace != NULL &&
--			    !test_bit(Faulty, &mreplace->flags))
--				need_replace = 1;
-+			if (mreplace && test_bit(Faulty, &mreplace->flags))
-+				mreplace = NULL;
+@@ -3445,14 +3444,13 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+ 			mrdev = rcu_dereference(mirror->rdev);
+ 			mreplace = rcu_dereference(mirror->replacement);
  
--			if (!need_recover && !need_replace) {
-+			if (!need_recover && !mreplace) {
+-			if (mrdev != NULL &&
+-			    !test_bit(Faulty, &mrdev->flags) &&
+-			    !test_bit(In_sync, &mrdev->flags))
+-				need_recover = 1;
++			if (mrdev && (test_bit(Faulty, &mrdev->flags) ||
++			    test_bit(In_sync, &mrdev->flags)))
++				mrdev = NULL;
+ 			if (mreplace && test_bit(Faulty, &mreplace->flags))
+ 				mreplace = NULL;
+ 
+-			if (!need_recover && !mreplace) {
++			if (!mrdev && !mreplace) {
  				rcu_read_unlock();
  				continue;
  			}
-@@ -3470,8 +3468,6 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+@@ -3486,7 +3484,8 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
  				rcu_read_unlock();
  				continue;
  			}
--			if (mreplace && test_bit(Faulty, &mreplace->flags))
--				mreplace = NULL;
- 			/* Unless we are doing a full sync, or a replacement
- 			 * we only need to recover the block if it is set in
- 			 * the bitmap
-@@ -3594,11 +3590,11 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
- 				bio = r10_bio->devs[1].repl_bio;
- 				if (bio)
- 					bio->bi_end_io = NULL;
--				/* Note: if need_replace, then bio
-+				/* Note: if replace is not NULL, then bio
- 				 * cannot be NULL as r10buf_pool_alloc will
- 				 * have allocated it.
- 				 */
--				if (!need_replace)
-+				if (!mreplace)
- 					break;
- 				bio->bi_next = biolist;
- 				biolist = bio;
+-			atomic_inc(&mrdev->nr_pending);
++			if (mrdev)
++				atomic_inc(&mrdev->nr_pending);
+ 			if (mreplace)
+ 				atomic_inc(&mreplace->nr_pending);
+ 			rcu_read_unlock();
+@@ -3573,7 +3572,7 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+ 				r10_bio->devs[1].devnum = i;
+ 				r10_bio->devs[1].addr = to_addr;
+ 
+-				if (need_recover) {
++				if (mrdev) {
+ 					bio = r10_bio->devs[1].bio;
+ 					bio->bi_next = biolist;
+ 					biolist = bio;
+@@ -3618,7 +3617,7 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+ 					for (k = 0; k < conf->copies; k++)
+ 						if (r10_bio->devs[k].devnum == i)
+ 							break;
+-					if (!test_bit(In_sync,
++					if (mrdev && !test_bit(In_sync,
+ 						      &mrdev->flags)
+ 					    && !rdev_set_badblocks(
+ 						    mrdev,
+@@ -3644,12 +3643,14 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+ 				if (rb2)
+ 					atomic_dec(&rb2->remaining);
+ 				r10_bio = rb2;
+-				rdev_dec_pending(mrdev, mddev);
++				if (mrdev)
++					rdev_dec_pending(mrdev, mddev);
+ 				if (mreplace)
+ 					rdev_dec_pending(mreplace, mddev);
+ 				break;
+ 			}
+-			rdev_dec_pending(mrdev, mddev);
++			if (mrdev)
++				rdev_dec_pending(mrdev, mddev);
+ 			if (mreplace)
+ 				rdev_dec_pending(mreplace, mddev);
+ 			if (r10_bio->devs[0].bio->bi_opf & MD_FAILFAST) {
 -- 
 2.31.1
 
