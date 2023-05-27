@@ -2,154 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4FF713222
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA5B713211
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237788AbjE0DUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 23:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S231430AbjE0DEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 23:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjE0DT7 (ORCPT
+        with ESMTP id S229691AbjE0DEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 23:19:59 -0400
-Received: from out-29.mta0.migadu.com (out-29.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CA299
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 20:19:56 -0700 (PDT)
-Date:   Fri, 26 May 2023 23:19:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685157595;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zC6ZNRAMXSTd1zjJb1ou+NimilKWTlR9ciflQq7y0Bw=;
-        b=oWx2NpJvKxrzV3oXwp2njxlTCvxR3WH88zCPvD2fyst1ulzM9qe96PAlVTOQETHCG81FGd
-        rMVp8WLbEw6k0SPHd08q8Y611MvjKz8NUXREJBkL3JBxYqI+6GLH6qHyDUE0mMfEXCca0D
-        3yNNaKHa1oS6rPQunUyGJMxDV6Hcgig=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        mcgrof@kernel.org, peterz@infradead.org, tglx@linutronix.de,
-        x86@kernel.org, rppt@kernel.org
-Subject: Re: [PATCH 1/3] module: Introduce module_alloc_type
-Message-ID: <ZHF21CSxyjQy9C7F@moria.home.lan>
-References: <20230526051529.3387103-1-song@kernel.org>
- <20230526051529.3387103-2-song@kernel.org>
- <ZHEy5SkFwI+dZjOC@moria.home.lan>
- <CAPhsuW5nbXozvBs1X7q_u=eTY0U=Ep32n1bM8bxR6h9UEU3AxQ@mail.gmail.com>
- <ZHFDO/95KMXRdOWI@moria.home.lan>
- <CAPhsuW5CTANR_B57w5n3HvdDjvHXOCSGTDc=a4s+JR0pKCAOcw@mail.gmail.com>
+        Fri, 26 May 2023 23:04:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2482ED9;
+        Fri, 26 May 2023 20:04:47 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QSmlw1WkrzLnb3;
+        Sat, 27 May 2023 11:01:48 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sat, 27 May 2023 11:04:45 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <damon@lists.linux.dev>, <linux-mm@kvack.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        <syzbot+841a46899768ec7bec67@syzkaller.appspotmail.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v2] mm/damon/core: fix divide error in damon_nr_accesses_to_accesses_bp()
+Date:   Sat, 27 May 2023 11:21:01 +0800
+Message-ID: <20230527032101.167788-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW5CTANR_B57w5n3HvdDjvHXOCSGTDc=a4s+JR0pKCAOcw@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 05:03:18PM -0700, Song Liu wrote:
-> On Fri, May 26, 2023 at 4:39 PM Kent Overstreet
-> <kent.overstreet@linux.dev> wrote:
-> >
-> [...]
-> 
-> >
-> > But it should be an internal implementation detail, I don't think we
-> > want the external interface tied to vmalloc -
-> >
-> > > These two APIs allow the core code work with all archs. They won't break
-> > > sub-page allocations. (not all archs will have sub-page allocations)
-> >
-> > So yes, text_poke() doesn't work on all architectures, and we need a
-> > fallback.
-> >
-> > But if the fallback needs to go the unprotect/protect route, I think we
-> > need to put that in the helper, and not expose it. Part of what people
-> > are wanting is to limit or eliminate pages that are RWX, so we
-> > definitely shouldn't be creating new interfaces to flipping page
-> > permissions: that should be pushed down to as low a level as possible.
-> >
-> > E.g., with my jitalloc_update(), a more complete version would look like
-> >
-> > void jitalloc_update(void *dst, void *src, size_t len)
-> > {
-> >         if (text_poke_available) {
-> >                 text_poke(...);
-> >         } else {
-> >                 unprotect();
-> >                 memcpy();
-> >                 protect();
-> >         }
-> > }
-> 
-> I think this doesn't work for sub page allocation?
+If 'aggr_interval' is smaller than 'sample_interval', max_nr_accesses
+in damon_nr_accesses_to_accesses_bp() becomes zero which leads to divide
+error, let's validate the values of them in damon_set_attrs() to fix it,
+which similar to others attrs check.
 
-Perhaps I elided too much - it does if you add a single lock. You can't
-do that if it's not a common helper.
+Reported-by: syzbot+841a46899768ec7bec67@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=841a46899768ec7bec67
+Link: https://lore.kernel.org/damon/00000000000055fc4e05fc975bc2@google.com/
+Fixes: 2f5bef5a590b ("mm/damon/core: update monitoring results for new monitoring attributes")
+Cc: <stable@vger.kernel.org> # 6.3.x-
+Reviewed-by: SeongJae Park <sj@kernel.org>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+v2: close checkpatch warning, add RB/cc stable, per SJ
 
-> At the end of all this, we will have modules running from huge pages, data
-> and text. It will give significant performance benefit when some key driver
-> cannot be compiled into the kernel.
+ mm/damon/core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Yeah, I've seen the numbers for the perf impact of running as a module
-due to the extra TLB overhead - but Mike's recent data was showing that
-this doesn't matter nearly as much as data as it does for text.
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index d9ef62047bf5..91cff7f2997e 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -551,6 +551,8 @@ int damon_set_attrs(struct damon_ctx *ctx, struct damon_attrs *attrs)
+ 		return -EINVAL;
+ 	if (attrs->min_nr_regions > attrs->max_nr_regions)
+ 		return -EINVAL;
++	if (attrs->sample_interval > attrs->aggr_interval)
++		return -EINVAL;
+ 
+ 	damon_update_monitoring_results(ctx, attrs);
+ 	ctx->attrs = *attrs;
+-- 
+2.35.3
 
-> > Also - module_memory_fill_type(), module_memory_invalidate_type() - I
-> > know these are for BPF, but could you explain why we need them in the
-> > external interface here? Could they perhaps be small helpers in the bpf
-> > code that use something like jitalloc_update()?
-> 
-> These are used by all users, not just BPF. 1/3 uses them in
-> kernel/module/main.c. I didn't use them in 3/3 as it is arch code, but I can
-> use them instead of text_poke_* (and that is probably better code style).
-> As I am writing the email, I think I should use it in ftrace.c (2/3) to avoid
-> the __weak function.
-
-Ok. Could we make it clearer why they're needed and what they're for?
-
-I know bpf fills in invalid instructions initially; I didn't read
-through enough code to find the "why", and let's document that to save
-other people the same effort.
-
-And do they really need to be callbacks in mod_alloc_params...?
-
-Do we need the other things in mod_alloc_params/vmalloc_params?
- - your granularity field says it's for specifying PAGE/PMD size: we
-   definitely do not want that. We've had way too much code along the
-   lines of "implement hugepages for x", we need to stop doing that.
-   It's an internal mm/ detail.
-
- - vmalloc_params: we need gfp_t and pgprot_t, but those should be
-   normal arguments. start/end/vm_flags? They seem like historical
-   module baggage, can we get rid of them?
-
-> > > OTOH, jit_alloc (as-is) solves a subset of the problem (only the text).
-> > > We can probably use it (with some updates) instead of the vmap_area
-> > > based allocator. But I guess we need to align the direction first.
-> >
-> > Let's see if we can get tglx to chime in again, since he was pretty
-> > vocal in the last discussion.
-> >
-> > It's also good practice to try to summarize all the relevant "whys" from
-> > the discussion that went into a feature and put that in at least the
-> > commit message - or even better, header file comments.
-> >
-> > Also, organization: the module code is a huge mess, let's _please_ do
-> > split this out and think about organization a bit more, not add to the
-> > mess :)
-> 
-> I don't really think module code is very messy at the moment. If
-> necessary, we can put module_alloc_type related code in a
-> separate file.
-
-Hey, it's been organized since I last looked at it :) But I tihink this
-belongs in mm/, not module code.
