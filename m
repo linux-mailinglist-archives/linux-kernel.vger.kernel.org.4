@@ -2,160 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0A371349B
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B4C7134A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbjE0MAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 08:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S231458AbjE0MTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 08:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbjE0MAF (ORCPT
+        with ESMTP id S229637AbjE0MTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 08:00:05 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A8D9C;
-        Sat, 27 May 2023 05:00:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CbholruBdVlE2Gu0NEwi4CKud9EEkF36rulcYg4NDOg52B8H7ciP6WcHqPNGam1ZvddVTuJHVYV8eMiNApqWhKSpfCd+OFeY+MaFmfE91O3ALVTD1SFqfp4gyggnUBxaUqauHefrajPmBMWWqBgINWnsdgJVOe3ISagDaK+J+6wqc1q6FH/x2NcQbC1fqmhKPnm19H+l2kLdDtJ9C71aVf4xgjRwW/c8lA8AXkfxr9uPl8T+MVNE4JwH4PDT1AkZhuJ3moJ/+28l2nE3NqG4S6ENOeA7vgu2Oknk6qkQGrOTHXrNfLwsp5bFN/p76EUwEQAPhv1TukhJIvpksaLrXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=maQqIPdSgN9Tu09uprFT7zmFxrkmYWUW+S1vRlvA/uM=;
- b=JrPCzvbI1LGFr9b4Wyzvy8rdEkPIJPOkxnFN32rCRtRQYV73R4QAuDh6A/Dtxkvtsh02Sv0Bpf1r+BBju/UH4TGjKfKj/79xU6ofMLmfqEMmFdQffwz6iuLWgu+86+AclHrF+rzAhbFfL9PnsbL963nAhwDGH2n8s7BrgB14CDTHNFGqRGcA2XqoZe6TBBFHJKnQzIie0suv4f2D2u2eZDaza+N7pnS8oYiknIK6XTpdsbGIMJ4AE5pofObrEFpedKusOqGvRabooN7gkKmV2JXqDaS4XiJgUw6xkd0EeKnht75V99wXM0Ae7x6QzqdJH9sjv4WnOjquBv9f7KniLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Sat, 27 May 2023 08:19:18 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896D310A;
+        Sat, 27 May 2023 05:19:17 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b025d26f4fso5136805ad.1;
+        Sat, 27 May 2023 05:19:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=maQqIPdSgN9Tu09uprFT7zmFxrkmYWUW+S1vRlvA/uM=;
- b=OQ49p3ARuTwfjcNKe9ZuTAutH9XyrNWH7GsVJelYtRtZ5jIhIrKEXQbnVgbg7TkaqtbwvM0ArTmM2wJN1zo4v/8EHfXcyliScaLYviHV0Ljcu2I97xi/MsGlpvkLGE4lBlbWBNv/FqEassqwoJ96M6jdo97cKU80o1mcW5AaI0I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA1PR13MB5008.namprd13.prod.outlook.com (2603:10b6:806:1ab::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.21; Sat, 27 May
- 2023 11:59:59 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.018; Sat, 27 May 2023
- 11:59:59 +0000
-Date:   Sat, 27 May 2023 13:59:51 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, Kenny Ho <Kenny.Ho@amd.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        David Laight <David.Laight@aculab.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+        d=gmail.com; s=20221208; t=1685189957; x=1687781957;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qviKV3i3STE3AXCvfu5JTAs+Njj6W5y8a0etiB8eeTM=;
+        b=FHNuKZns2acgNCt2UqajVTGznoJuMCxYyEc9/3/gn28LTXlqpuRsZD0Xe0shZlcxrY
+         7pL1T1ljFDYgAxXDjD5HL+yk0evJsXDsRiZ5b0Q2mixXej00TcFBF/ojfbPK8JyJBYK+
+         ArLnu6oylmp4sYrJDqsuhHaQpIHn1svrNpTNn3qpFMIyeFINyGieQtoLIwanFGnxiz38
+         c9YdVQ5mVMT1U3WGHDmHkqEiD4GMGRlxaBXcKDiT6xnUWmyB6CBGSGQMVBS1RMEfIdbq
+         lmDJwJipTZuc55dph4qVejn+U+wj+VczRm8Y7ZKYiOb+kB8wYM70Db2kh0VhVRQwizqb
+         Jmrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685189957; x=1687781957;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qviKV3i3STE3AXCvfu5JTAs+Njj6W5y8a0etiB8eeTM=;
+        b=Ep8u6eGjE/+T552REv4azoogb9CSG57YP9CJPiiIHkqhicyzUkSEWNJ7B5xmnBtZE2
+         jMRSrqIK2OoaD5+TJzI3Z+DxStc8hTYx909sfmMNrruchMarL0SdRzS7UneaAvxoUuhm
+         4OT75HFPwzfa07y9xOSIrnXBapLrpaA2ycEvHz9f/Y4TUzr4vwuLeUp7a7TBHQ4ZbYrv
+         7kQOReN/wa4/EgW2zqCdmU/0jOgvPuD86FzM9NImU8nAluwRr8PjuUirddFwxXDGsclH
+         yq1RW7eka/sBSmvJpwFro7CZ2fGcaYkxczmq4PCL8ES4PAP5t/+q9ahmqxnlvH9rvn0M
+         diPQ==
+X-Gm-Message-State: AC+VfDw8TMBC0im2zAO4PNTYsdJrziukSNIy4vym3/oypX8LT1lvMjlF
+        uotVslvDr4YjRY46I2xi9HZKHA9ptSU=
+X-Google-Smtp-Source: ACHHUZ4/pJGfiQ7eVixpX97VETJ9hy3gJqn4yStODFzNC8TUbEehqxGImiTa2fKqrkWJhCdmlSYrjg==
+X-Received: by 2002:a17:903:18b:b0:1af:b682:7a78 with SMTP id z11-20020a170903018b00b001afb6827a78mr6036138plg.52.1685189956867;
+        Sat, 27 May 2023 05:19:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l7-20020a170903244700b001a9a3b3f931sm4804222pls.99.2023.05.27.05.19.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 05:19:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 27 May 2023 05:19:14 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Joaquin Aramendia <samsagax@gmail.com>
+Cc:     "Derek J. Clark" <derekjohn.clark@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] rxrpc: Truncate UTS_RELEASE for rxrpc version
-Message-ID: <ZHHwt5hnna64Vpn4@corigine.com>
-References: <654974.1685100894@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <654974.1685100894@warthog.procyon.org.uk>
-X-ClientProxiedBy: AS4P192CA0040.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:658::16) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Differentiate new BIOS for the Mini
+Message-ID: <f10a1c61-bc8b-420f-988d-ba0ebfccf00f@roeck-us.net>
+References: <20230526215621.16075-1-samsagax@gmail.com>
+ <430e7be0-26a9-43b0-a61f-66cb8dfc805e@roeck-us.net>
+ <CABgtM3jNVp63XB5A8Cf0KhB4So2==HLGa9_meuTn0vHYy=gBzQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB5008:EE_
-X-MS-Office365-Filtering-Correlation-Id: df13a201-0904-478b-3f92-08db5ea9e4ec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nr4gKrf45fcrCsyYj1IHDeyESS9lpqFLqW+N1hvRpHUzMryrxI/EuPWEg6sRz2bLziCSLv2JoalWCyCSm+7G1BUDUh4sGFKWT7UUx80LktHiCRDzpcEoEdaog/Gr36Bd35CYB9p2Fkjesfv10ZQSkNX9g1rntdxocC63tcl23vFEpXo4j8G+0DKcbaiIcXOsN3ueKlUNCdhxgsqUh9Ozhspkyd8N+Z1UmhrLYpoxew7oXqTr/l6KzsfN4f1HhZ7jIIMHx2lIiCtdBpNfqM8I/HGJMexiFI5CzAPcT9eZCjiPsofoiVMj67JH2Xl0b9KtiSbmiNejQ5xngW2cp2w6r+LVi++8FCgbYBRJrLdLrMI5pawHsP/4jbU81CC/q7mZ/LDwSyPfT2qqXc40EzEcQDhS7pylYufT278hMHp9PyWIc12RBMmf82IREOEFmDAnjSmd2kHEAHHA0uA/kiQNiKa6+IXO+7+CoruTqK42br4/m4qwsB7MJwnsvrP6Ty6UHjWhtN859Fs5MIvA5uxXQAyGQ3Bf8IWAR8UqMpYx3l8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(396003)(39830400003)(376002)(451199021)(8676002)(8936002)(44832011)(83380400001)(5660300002)(7416002)(38100700002)(6916009)(4326008)(41300700001)(2616005)(316002)(2906002)(6486002)(66476007)(54906003)(6666004)(966005)(86362001)(186003)(36756003)(478600001)(66946007)(66556008)(6506007)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3oN1Upr2b0C4oMqaUbiFfAv4u44+kbStdx2u3id9hPXiZN+QV1YNTbwRZAP6?=
- =?us-ascii?Q?vu2aTBOw3/MeIFcbQxLQDMiQjp5SGasgiBnLvnWpnK8YgJDSlyhSxqOi42qQ?=
- =?us-ascii?Q?yBI3v5DXXTNrXkJzOlVgxcrvSX5u3DIYMFN7IxFSaXmJISbJeSIulZgQuS5j?=
- =?us-ascii?Q?Ne5kuJJ7f+1VNXgnHsTqjPF+3K6cxl+WMVBH+LAJ7wgeLPT3uOJ9qib6YNxY?=
- =?us-ascii?Q?u21ZptXb1nV5BLOHMnV5rtRu7XzAhdmVXOJs3nRm/pRWEVBLei4dCed5l1La?=
- =?us-ascii?Q?OgAX1WOwuWzlcu5QRiDx522rlcNZUbaCbwRuUhilfC1JR+RFir95AGAjWqns?=
- =?us-ascii?Q?wpjrMQeZqRWVTm4zzrHvlIRp4Oh5aRJzQkTajR6ZCocvIxHVUkF6LJJeMww6?=
- =?us-ascii?Q?OHs8cPd5cd3RsrEjV6RQqEs98srHTYfRhpKMAxk9nHSgUeTC2zewRMsbXo+F?=
- =?us-ascii?Q?4ixdN9Sk+CTg+dSUYLiF7lJA3k47DYO+uxkPMu0FsBktW/tpg0i1ttt24c0v?=
- =?us-ascii?Q?sorh8OfisAJ09LRKTiypI8t2g36vyNfTx96X9NqYYW8/FHUTjDAhHzy5RUqv?=
- =?us-ascii?Q?UWpC8C8egEEfXywiEOtSWTsqV8CZazaw18vKm/XDE+3bWvkBY3VOshLmEtbW?=
- =?us-ascii?Q?6++Idf1wwsMRv6w84tPNh7gCKXzoUsVVR/5FYJ4Un03yMENs3RKo3ToIxTz3?=
- =?us-ascii?Q?8O23xmmWu6NvweUqV3OEgmu9iAz0VqFCAU5nRr4C9iWlWLXpK3D5dJfsk+jf?=
- =?us-ascii?Q?dWALR4AA2aUPiEmHzH4harFSznhpmEcQnEpZsST23GfrsaKI+FgvKORezjm+?=
- =?us-ascii?Q?3ufPlL/o3uWquNaysI6P2Y539pWS6PtaEg+l/ywlSwAtB2YFnIpwYnFU6xFF?=
- =?us-ascii?Q?kT6oxizdvJHZWgs6+bbcH8qvcyL4fseq9j4mxq+ueU5vM9bcvKuXFnLNE+4d?=
- =?us-ascii?Q?joZKujnF0swFPBiSDJPGLUJUAbgM3vhtPwAZGKL/3qA9PDjFp1bbVEbDztwH?=
- =?us-ascii?Q?Y2YRpe9ye/Ym2Tp4+agc8XEFO9ilOCOy78X9myj64+8PfBkkkbdXZ5Hs6S4Y?=
- =?us-ascii?Q?zORWdD9IJA3cn95VZxW5SU3AyDU598SeKS3zNzVk34wM+e/mElcQp28l58Dp?=
- =?us-ascii?Q?759YyBzNUo72xtYzyAeJt/Edd+gds70yobGfS9lVorWMq7VGgsuI6TlbiR0q?=
- =?us-ascii?Q?N4CDNFiqKzabqH2e9IQcQkFOLm58EUBFvBHrCcWGndyQHpy1PudR18813byP?=
- =?us-ascii?Q?VWHavmeZ/f6EFAB1WQF7e4VU3BY6ZcBbWwj9aCtKPXX+kU+tJshTMGsVWxjE?=
- =?us-ascii?Q?Zqv6gMgibKvciSweMKbY7fU4olKaRUf/LH3xtJ/pZj7bB4l/Wn+hL2WyhqBV?=
- =?us-ascii?Q?4pLx5vN2l5Cdf4gsIogK3vNVNnD1rzs1G+BzLZEMDMS0Qdld7+tPoQfmrI8V?=
- =?us-ascii?Q?wNixz4ecGHCzoNRcUjY0M5I2ig2jDiMtcisVQVqldyUmMgY9MCrRvQUDs+Tv?=
- =?us-ascii?Q?r6qEcLu7Sf1nhR0x/kZZjPu6xqBUZWQ4yQBxikhSeXc7k4MDK1Hw7PWiVfCm?=
- =?us-ascii?Q?96tyYBrwa8xtiW/dMXtg9Lx280c48szIPHF8jFUS05pWMEH5dTQyonACIqVb?=
- =?us-ascii?Q?Q9VPCs8IuzmpkI7aSTGxVNS3Q6tr9dH0QX1skhEvy6OAcCY4DnojeJ1LYSXu?=
- =?us-ascii?Q?c0Xbdw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: df13a201-0904-478b-3f92-08db5ea9e4ec
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2023 11:59:58.9723
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VHzpMLspaKsiU0GyTxUwPxkFfH1cGr2L2qVcuHBPzxKZcWH4+RgAEdDE1HaTyNB+FJudjA76Ul5NA393rI3b/q5SFVLSW86aKjzDLA7EgDI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB5008
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABgtM3jNVp63XB5A8Cf0KhB4So2==HLGa9_meuTn0vHYy=gBzQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 12:34:54PM +0100, David Howells wrote:
->     
-> UTS_RELEASE has a maximum length of 64 which can cause rxrpc_version to
-> exceed the 65 byte message limit.
+On Fri, May 26, 2023 at 08:42:51PM -0300, Joaquin Aramendia wrote:
+> > On Fri, May 26, 2023 at 06:56:22PM -0300, Joaquín Ignacio Aramendía wrote:
+> > > Newer BIOS got some other changes aside from string changes. Add a board
+> > > enum to differentiate it from the old OneXplayer Mini AMD BIOS.
+> > >
+> >
+> > I see no functional difference. What is the point of this change ?
+> >
+> > Thanks,
+> > Guenter
 > 
-> Per the rx spec[1]: "If a server receives a packet with a type value of 13,
-> and the client-initiated flag set, it should respond with a 65-byte payload
-> containing a string that identifies the version of AFS software it is
-> running."
+> It is nothing right now, honestly. But is necessary for a later change
+> i have queued and a bit of OCD on my part. Should I add this to the
+> other change?
 > 
-> The current implementation causes a compile error when WERROR is turned on
-> and/or UTS_RELEASE exceeds the length of 49 (making the version string more
-> than 64 characters).
-> 
-> Fix this by generating the string during module initialisation and limiting
-> the UTS_RELEASE segment of the string does not exceed 49 chars.  We need to
-> make sure that the 64 bytes includes "linux-" at the front and " AF_RXRPC"
-> at the back as this may be used in pattern matching.
-> 
-> Fixes: 44ba06987c0b ("RxRPC: Handle VERSION Rx protocol packets")
-> Reported-by: Kenny Ho <Kenny.Ho@amd.com>
-> Link: https://lore.kernel.org/r/20230523223944.691076-1-Kenny.Ho@amd.com/
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Acked-by: Kenny Ho <Kenny.Ho@amd.com>
-> cc: Marc Dionne <marc.dionne@auristor.com>
-> cc: Andrew Lunn <andrew@lunn.ch>
-> cc: David Laight <David.Laight@ACULAB.COM>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: linux-afs@lists.infradead.org
-> cc: netdev@vger.kernel.org
-> Link: https://web.mit.edu/kolya/afs/rx/rx-spec [1]
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+It can stay as separate patch, but please resubmit it together with
+the patch(es) actually using it.
 
+Guenter
