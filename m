@@ -2,152 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EA77132A4
+	by mail.lfdr.de (Postfix) with ESMTP id BCD4B7132A5
 	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 07:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjE0Fc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 01:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
+        id S230269AbjE0Ffv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 01:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjE0Fcy (ORCPT
+        with ESMTP id S229494AbjE0Fft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 01:32:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34E6114
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 22:32:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 27 May 2023 01:35:49 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3A5114
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 22:35:47 -0700 (PDT)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 848A560EF4
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 05:32:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB407C4339C
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 05:32:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685165571;
-        bh=NgYtuftywdY9FLSkoRc9as8wdNmR5QpobqvD812H/ew=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YZDzXUSAnP53o2yCWlLTATQDPY7oM6ePS4PJmOyH8A+2SdyjiUqRlA7ATj+trPwub
-         7UQFANjyzAhvoumjdwbWUhMQZhA97YH7y583/2BqaI7SnpRANDlHPPv7094TT/V4+a
-         h2EtDMTl1/Cu9BBAJqC93X+jYVHSHwLfdrwpT1iQz6lBpsNS0Rle7L+IY/3VzQdcKx
-         WfQ8/Tg4lC5JggZ1RB5MIPnWlsh1DbuqaQSqS6DIl7nwh9SglumQtZUqgGPWq0R6z4
-         xpMIdz0e4qSaWN1x/x5AhMq6Tt/Lshsbbz6Wiyc9g5YViOjEPZymmspQOBLh/6in6J
-         q+703Tgr9Wt4w==
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-96f7377c86aso258646766b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 22:32:51 -0700 (PDT)
-X-Gm-Message-State: AC+VfDx/FnL1pIt9Aj00wSwAoidq9b+Z7h3GBHz9Z/V34FLmmpm0BOWy
-        Bl3lJtaAdFmdZCOQLw+kR8uk0CdK/1gC0K3+Mos=
-X-Google-Smtp-Source: ACHHUZ5pS9iHDzXG6sv+ImhknySwnRojiU77ciwfhaWLXqIPZqUdu6433Ha3MYtb1cxY+363JNB0n7ngXTWfsjXM2Hs=
-X-Received: by 2002:a17:907:94cf:b0:973:93d6:189f with SMTP id
- dn15-20020a17090794cf00b0097393d6189fmr4286386ejc.61.1685165570124; Fri, 26
- May 2023 22:32:50 -0700 (PDT)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F2DAF1F381;
+        Sat, 27 May 2023 05:35:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1685165745; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=oSTN1BPSP9tLeSFNLAlCJe9fSQGY+JofX+1sr1rhixA=;
+        b=Ivl0RidbdCzC08rHVPLS4MR+BjtZ+BzVdtqVjHybO8r+ulA5IboiwPUlZ04IM4FzA84dIe
+        59yYLh39GkLsYjvNIncm6vW7hLlOfUmkNVaYBP5CAS1XGs/ciXQngBpBqXhLi/heor+AJi
+        bkuzGtfS8JdheiVtx9RVgVQ0s2QBjK8=
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id C6564134AB;
+        Sat, 27 May 2023 05:35:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id bi9+LrCWcWTnVwAAGKfGzw
+        (envelope-from <jgross@suse.com>); Sat, 27 May 2023 05:35:44 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        sstabellini@kernel.org
+Subject: [GIT PULL] xen: branch for v6.4-rc4
+Date:   Sat, 27 May 2023 07:35:44 +0200
+Message-Id: <20230527053544.31822-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20230524074132.10916-1-zhanghongchen@loongson.cn>
-In-Reply-To: <20230524074132.10916-1-zhanghongchen@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 27 May 2023 13:32:42 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4CC0S7ciLCqdb_AoQ+3-24uo6TZb9Pz7H1yu+mvspFDw@mail.gmail.com>
-Message-ID: <CAAhV-H4CC0S7ciLCqdb_AoQ+3-24uo6TZb9Pz7H1yu+mvspFDw@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: let pmd_present return true when splitting pmd
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Anshuman,
+Linus,
 
-Excuse me, but could you please tell me something that why commit
-b65399f6111b ("arm64/mm: Change THP helpers to comply with generic MM
-semantics") needn't be backported to 5.4LTS and 4.19LTS series. The
-discussion link you referred is as early as in 2018, before 4.19
-released. I think this information is important for us because we want
-to know how to handle our 4.19-loongarch codebase.
+Please git pull the following tag:
 
-Huacai
+ git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.4-rc4-tag
 
-On Wed, May 24, 2023 at 3:42=E2=80=AFPM Hongchen Zhang
-<zhanghongchen@loongson.cn> wrote:
->
-> when we split a pmd into ptes, pmd_present() and pmd_trans_huge() should
-> return true,otherwise it would be treated as a swap pmd.
-> As arm64 does in
-> commit b65399f6111b ("arm64/mm: Change THP helpers to comply with generic=
- MM semantics")
-> we add a _PAGE_PRESENT_INVALID bit for LoongArch.
->
-> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
-> ---
->  arch/loongarch/include/asm/pgtable-bits.h | 2 ++
->  arch/loongarch/include/asm/pgtable.h      | 3 ++-
->  2 files changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/loongarch/include/asm/pgtable-bits.h b/arch/loongarch/i=
-nclude/asm/pgtable-bits.h
-> index 8b98d22a145b..a7469d28d9d0 100644
-> --- a/arch/loongarch/include/asm/pgtable-bits.h
-> +++ b/arch/loongarch/include/asm/pgtable-bits.h
-> @@ -22,12 +22,14 @@
->  #define        _PAGE_PFN_SHIFT         12
->  #define        _PAGE_SWP_EXCLUSIVE_SHIFT 23
->  #define        _PAGE_PFN_END_SHIFT     48
-> +#define _PAGE_PRESENT_INVALID_SHIFT 60
->  #define        _PAGE_NO_READ_SHIFT     61
->  #define        _PAGE_NO_EXEC_SHIFT     62
->  #define        _PAGE_RPLV_SHIFT        63
->
->  /* Used by software */
->  #define _PAGE_PRESENT          (_ULCAST_(1) << _PAGE_PRESENT_SHIFT)
-> +#define _PAGE_PRESENT_INVALID  (_ULCAST_(1) << _PAGE_PRESENT_INVALID_SHI=
-FT)
->  #define _PAGE_WRITE            (_ULCAST_(1) << _PAGE_WRITE_SHIFT)
->  #define _PAGE_ACCESSED         (_ULCAST_(1) << _PAGE_ACCESSED_SHIFT)
->  #define _PAGE_MODIFIED         (_ULCAST_(1) << _PAGE_MODIFIED_SHIFT)
-> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/includ=
-e/asm/pgtable.h
-> index d28fb9dbec59..9a9f9ff9b709 100644
-> --- a/arch/loongarch/include/asm/pgtable.h
-> +++ b/arch/loongarch/include/asm/pgtable.h
-> @@ -213,7 +213,7 @@ static inline int pmd_bad(pmd_t pmd)
->  static inline int pmd_present(pmd_t pmd)
->  {
->         if (unlikely(pmd_val(pmd) & _PAGE_HUGE))
-> -               return !!(pmd_val(pmd) & (_PAGE_PRESENT | _PAGE_PROTNONE)=
-);
-> +               return !!(pmd_val(pmd) & (_PAGE_PRESENT | _PAGE_PROTNONE =
-| _PAGE_PRESENT_INVALID));
->
->         return pmd_val(pmd) !=3D (unsigned long)invalid_pte_table;
->  }
-> @@ -558,6 +558,7 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t ne=
-wprot)
->
->  static inline pmd_t pmd_mkinvalid(pmd_t pmd)
->  {
-> +       pmd_val(pmd) |=3D _PAGE_PRESENT_INVALID;
->         pmd_val(pmd) &=3D ~(_PAGE_PRESENT | _PAGE_VALID | _PAGE_DIRTY | _=
-PAGE_PROTNONE);
->
->         return pmd;
->
-> base-commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
-> --
-> 2.31.1
->
->
+xen: branch for v6.4-rc4
+
+It contains 3 fixes:
+
+- a double free fix in the Xen pvcalls backend driver
+
+- a fix for a regression causing the MSI related sysfs entries to not
+  being created in Xen PV guests
+
+- a fix in the Xen blkfront driver for handling insane input data better
+
+Thanks.
+
+Juergen
+
+ arch/x86/pci/xen.c           | 8 +++++---
+ drivers/block/xen-blkfront.c | 3 ++-
+ drivers/xen/pvcalls-back.c   | 9 ++++-----
+ include/linux/msi.h          | 9 ++++++++-
+ kernel/irq/msi.c             | 4 ++--
+ 5 files changed, 21 insertions(+), 12 deletions(-)
+
+Dan Carpenter (1):
+      xen/pvcalls-back: fix double frees with pvcalls_new_active_socket()
+
+Maximilian Heyne (1):
+      x86/pci/xen: populate MSI sysfs entries
+
+Ross Lagerwall (1):
+      xen/blkfront: Only check REQ_FUA for writes
