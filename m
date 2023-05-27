@@ -2,131 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D07713680
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 23:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22FF171368A
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 23:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbjE0VFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 17:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
+        id S229456AbjE0VmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 17:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjE0VFE (ORCPT
+        with ESMTP id S229437AbjE0VmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 17:05:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9F5BC;
-        Sat, 27 May 2023 14:05:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35798603F6;
-        Sat, 27 May 2023 21:05:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF29C433EF;
-        Sat, 27 May 2023 21:05:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685221502;
-        bh=pO4NwEQHJ6F7ZIjFw4Ym65Z1i7QKkvs9nTut+QbJV0A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RFB/48QllP9PKC6JBeIHhB8cfchqrGR7c4nAJ6tMi0BawiJRsjMHi/4JFYT3u/OOB
-         Mi45hGvJ7ztIYXYyVLXSXwxA9cMWrsdKnVRbsji+dSstDwYn/e112a3dy+M5bbEERO
-         bd+yD2fIc0vdw3iEEgBW66ACsLb7UahjLpt7i8zQIoqI5zeys2ZT7J0gXB5xbkmWh8
-         Z9vzq+qjt98cplsrW99OdpMAfVbShRlwVcs9JT+ieLqiMq8eUc1eJOOV7xTd5bL1bv
-         tCXrlHQPJISzUjJZVDWr6hDv4G9YcbykXjv7SkJ5yJtC+w7S08ePnqjmk/T9bnVkT/
-         P4fmSDWvQNjTA==
-Date:   Sat, 27 May 2023 14:08:49 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 04/10] nvmem: qfprom: Add support for secure reading
- on QDU1000/QRU1000
-Message-ID: <20230527210849.sd3ycp2pqyorpbpr@ripper>
-References: <20230512122134.24339-1-quic_kbajaj@quicinc.com>
- <20230512122134.24339-5-quic_kbajaj@quicinc.com>
- <68f9bee2-5a5b-2962-6c3d-e73ade371545@linaro.org>
- <CAA8EJppObh3h8sxB_f9SQy7EQ1Gfhe9EbzV=wsUbVNj9PtX=GA@mail.gmail.com>
- <257e11b5-29b5-78c6-882b-ec3bb64ee28b@quicinc.com>
+        Sat, 27 May 2023 17:42:10 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BA8A4;
+        Sat, 27 May 2023 14:42:07 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 2924C5FD05;
+        Sun, 28 May 2023 00:42:05 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1685223725;
+        bh=zmU0QPWcuI+QjTo74SKplYsoabitGqIxBH6oJBP+2UI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=ii5NBgjz5NCk3QYnd2XdVMDVL6kZ53KILjsmPugDyLRoprEttMOv6gmr2LseMaeAY
+         eCuu8egj1AcY0RveOi6Rs9rJilsZSJ5i0btJLya7qM4h2yfdgywrfY3K5xG4dIHyVE
+         8x2OOxuNv6DO/0yStBGO3LznGm5HwuTX1Qa5pdU9l8XGCQnE79ykhmxj+4FqR4ZO2W
+         7uTFgRuWSPR7DFboyr0vse+vpj6/XMZnlIeyUXncQmt3L6ipQ9hfFrN8Nn0uGpwRdR
+         sa6Mmmh92412MAUgNWclaYxpDroq4gPobK9W8axF+W6wecsJkN3w8uAKvPBpUNlTjC
+         cDRpkZvFbeduA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Sun, 28 May 2023 00:42:00 +0300 (MSK)
+Message-ID: <7485514e-4c10-361a-6468-050a5897f0d5@sberdevices.ru>
+Date:   Sun, 28 May 2023 00:37:49 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <257e11b5-29b5-78c6-882b-ec3bb64ee28b@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1] meson saradc: add iio device attrib to switch channel
+ 7 mux
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        "khilman@baylibre.com" <khilman@baylibre.com>,
+        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
+        "martin.blumenstingl@googlemail.com" 
+        <martin.blumenstingl@googlemail.com>,
+        "nuno.sa@analog.com" <nuno.sa@analog.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>, kernel <kernel@sberdevices.ru>
+References: <20230524000111.14370-1-gnstark@sberdevices.ru>
+ <ZHG9bYO1PNuPJhWn@smile.fi.intel.com>
+From:   George Stark <gnstark@sberdevices.ru>
+In-Reply-To: <ZHG9bYO1PNuPJhWn@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/27 20:13:00 #21359908
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 02:02:11PM +0530, Komal Bajaj wrote:
-> 
-> 
-> On 5/12/2023 11:01 PM, Dmitry Baryshkov wrote:
-> > On Fri, 12 May 2023 at 20:01, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> > > On 12/05/2023 14:21, Komal Bajaj wrote:
-> > > > Add qfprom driver support for QDU1000/QRU1000 SOCs.
-> > > > 
-> > > > Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
-> > > > ---
-> > > >   drivers/nvmem/qfprom.c | 5 +++++
-> > > >   1 file changed, 5 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/nvmem/qfprom.c b/drivers/nvmem/qfprom.c
-> > > > index 20662e2d3732..12a7981a8a71 100644
-> > > > --- a/drivers/nvmem/qfprom.c
-> > > > +++ b/drivers/nvmem/qfprom.c
-> > > > @@ -109,6 +109,10 @@ struct qfprom_soc_compatible_data {
-> > > >        bool secure;
-> > > >   };
-> > > > 
-> > > > +static const struct qfprom_soc_compatible_data qdu1000_qfprom = {
-> > > > +     .secure = true
-> > > > +};
-> > > > +
-> > > >   static const struct nvmem_keepout sc7180_qfprom_keepout[] = {
-> > > >        {.start = 0x128, .end = 0x148},
-> > > >        {.start = 0x220, .end = 0x228}
-> > > > @@ -490,6 +494,7 @@ static int qfprom_probe(struct platform_device *pdev)
-> > > > 
-> > > >   static const struct of_device_id qfprom_of_match[] = {
-> > > >        { .compatible = "qcom,qfprom",},
-> > > > +     { .compatible = "qcom,qdu1000-qfprom", .data = &qdu1000_qfprom},
-> > > >        { .compatible = "qcom,sc7180-qfprom", .data = &sc7180_qfprom},
-> > > I have doubts that this is still compatible with qcom,qfprom. It uses
-> > > entirely different read method. That's why generic fallbacks are bad,
-> > > one more case to my growing list of awesome examples. :)
-> Okay, will do that.
-> > Yes, it looks like it should be 'qcom,qdu1000-qfprom",
-> > "qcom,scm-qfprom". And possibly a separate driver for scm-qfprom.
-> The only difference here is in read method, which can be controlled by a
-> single property,
-> do we really need to write a separate driver for just reading secure feature
-> register.
+Hi Andy
 
-I presume that if reads are hidden behind scm, then the most of the
-driver - which deals with writing to qfprom - isn't going to be at all
-applicable.
+Thanks for review. I fixed it in patch v2
 
-So, I actually think it would make sense to put that in a separate
-qfprom-scm driver, which handles the generic fallback of
-"qcom,qfprom-scm".
+Best regards
+George
 
-Regards,
-Bjorn
 
-> 
-> Thanks,
-> Komal
-> > 
-> > 
-> 
+On 5/27/23 11:21, Andy Shevchenko wrote:
+> On Wed, May 24, 2023 at 03:01:11AM +0300, George Stark wrote:
+>> Patch adds two sysfs nodes: chan7_mux to set mux state
+>> and chan7_mux_available to show available mux states.
+>> Mux can be used to debug and calibrate adc by
+>> switching and measuring well-known inputs like gnd, vdd etc.
+> GND
+> Vdd
+>
+> ...
+>
+>> +static ssize_t chan7_mux_store(struct device *dev,
+>> +			       struct device_attribute *attr,
+>> +			       const char *buf, size_t count)
+>> +{
+>> +	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+>> +	int i;
+>> +
+>> +	for (i = 0; i < ARRAY_SIZE(chan7_vol); i++)
+>> +		if (!strcmp(chan7_vol[i], buf)) {
+>> +			meson_sar_adc_set_chan7_mux(indio_dev, i);
+>> +			return count;
+>> +		}
+>> +
+>> +	return -EINVAL;
+> NIH sysfs_match_string().
+>
+>> +}
+> ...
+>
+>> +static IIO_DEVICE_ATTR_RW(chan7_mux, -1);
+>> +static IIO_DEVICE_ATTR_RO(chan7_mux_available, -1);
+> Place each of them near to the respective callback(s),
+>
+> ...
+>
+>> +static struct attribute *meson_sar_adc_attrs[] = {
+>> +	&iio_dev_attr_chan7_mux_available.dev_attr.attr,
+>> +	&iio_dev_attr_chan7_mux.dev_attr.attr,
+>> +	NULL,
+> No comma for the terminator entry.
+>
+>> +};
+
+
