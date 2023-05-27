@@ -2,113 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB594713675
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 22:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC28F713676
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 22:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjE0Uqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 16:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
+        id S229762AbjE0Uqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 16:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjE0Uqm (ORCPT
+        with ESMTP id S229930AbjE0Uqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 16:46:42 -0400
-Received: from mout.web.de (mout.web.de [212.227.15.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39135AC;
-        Sat, 27 May 2023 13:46:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-        t=1685220387; i=spasswolf@web.de;
-        bh=XWibsJx1YJWrvyn917MRnpNsKgmfIeD/gR4idkU5SBI=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date;
-        b=QswUvaKcvlfm8HGmtJPrBVzDQmp2v0iYjBfPW/Y9kBWkq/vFhpa9/upIPLSJDLUvA
-         5N7rwU7ESo56vKdRZ67VcQxpFe067B3SbhfdpZtev+m3YtCNLu210QU+XRdEu9vQ78
-         gukPOihNK7e/SOvfQJoVJoQKwuZNU63YTv9+v3Tzy7VbRoJz/a2P/0OIjeLGQWbDhz
-         5+S5B4Uv0bFwMym7EojaCIU1B5HAma52yHiZ0sfkDI6Eu9JdlTc7WSAD8Wz0PV+vWC
-         3Pq7YE7YJe0NMOI6w7CDR7ASSJANUEJirLM4xjIc/ONTFOTnp+fTNntcVkHCNyr4bM
-         TPTpzUaXcKUPw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([176.198.191.160]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MPaMQ-1pgPkf35M2-00MvdR; Sat, 27
- May 2023 22:46:27 +0200
-Message-ID: <7ae8af63b1254ab51d45c870e7942f0e3dc15b1e.camel@web.de>
-Subject: [PATCH net] net: ipa: Use the correct value for IPA_STATUS_SIZE
-From:   Bert Karwatzki <spasswolf@web.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     elder@linaro.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sat, 27 May 2023 22:46:25 +0200
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        Sat, 27 May 2023 16:46:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C40CB1;
+        Sat, 27 May 2023 13:46:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38B22615BC;
+        Sat, 27 May 2023 20:46:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6919C4339C;
+        Sat, 27 May 2023 20:46:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685220405;
+        bh=D2oC4HfjT26KTZWAe8gA/JRbJNuOnSYmnk26i/r7Fdw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aTHU86AiAZEdXrNyZKQm5Wky7BSpOHYGKfV1K7/pAJxTmad48pKjiG/NXeAokNVm5
+         1mNuF5FC2Toue8P8MBkVYXQK08awDsVwtN7uYwhFO3w4BOwuG7xBgD/Qkvkh0wlJDO
+         F2jNlnFoFw4r9ue8K6x0RyuQFBQL/NTyykPhFeXoPkAJGuRNC3jEwrzkMDnM39WJer
+         oZzyfnnbTyVZCBGrR/AiSxtPoQ/1aGd1VbZEbsaME10o3F8pplnsDWzdGVbmK2axEe
+         pZYlIZJ4YPN4ZQRYnpY6f+BPuGpizpZiIEgfJHYuwAuHM7ikYfRk/Lr0gMRr7vberJ
+         6I1S1ecjLE1Uw==
+Date:   Sat, 27 May 2023 13:50:31 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 01/10] nvmem: qfprom: Add support for secure reading
+Message-ID: <20230527205031.iwsujvlbxazukwfy@ripper>
+References: <20230512122134.24339-1-quic_kbajaj@quicinc.com>
+ <20230512122134.24339-2-quic_kbajaj@quicinc.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:WzzljHKLMxZlZFbFaFNZREr/ziuHQOR5eZa5NtwND9WrUbHkFOF
- IBabxYZQ8cTHy+MmtFd3yULB2u+oIUAbrTEi6ERKrjR7SXmcM+HjB5wOymWtK56YWb3IujF
- i0yUaPs2BF6KhGHmTRIjfXJTgUxo2O1VS2MXUNX8hsY7vhedGhh8uc+i2ZvzCz1ODPBviTU
- 8sFsb4rfHv+rzpvLex4GA==
-UI-OutboundReport: notjunk:1;M01:P0:/isRWyVWTdQ=;wxuixlXgl9SeBwxuBGzOqJQZdwJ
- xjOKQTucDMeRZo5aiTobbISTPq/SC7IwUl3fuOY+DjLSJAcgIWFwzuh5zKoUm3y0pXPK7fjOG
- RHqJJiwX1oed5EqEVurKHA7HBsi6r2RgGyqU+njkIKyg0QQADjjkuXPrKw4ByDhRrxRr01AgX
- +x/Gck+LgHK7t8PN6kAtjZepTFOWU+0+i4udSBmTEekx/3kLtJg8nuuXvPEwL606Kv+TN8Y4s
- T/jKINECUwo8VJGbgAutlUmKnZ2WehnXe5h4dYu6dtMB9YHrinHSOYXlGFgY8+IUWTJ5Gq1wm
- zltaBKsxy4T9OYWQ/DdhYH1Ui9OvxijXBaFbKrhew/jKtCHaHSfGIEOkMHPxYGiS0QvOyNMfP
- 1NOeBXjdUIsHivPRAAoYfqTmZS/cUhuc4DYrQFYOt7Ixb/iR/Sq645mmgdSzAqx4J32++uliK
- 6YG9YdHqFIW0bd5uxfOhr5Auie1Oy49aHJsbXjuBI9KrkpCBLg5rT0xR/p7Nm+3/Einl9cLGE
- Cc/rW/J0qCDEMfcBIDVsdjdsXV73/RAD1WgTnPjR2elVPEFHQZ9OvTaAEEcfr8xHkuy3M0GR3
- lxJVMidslNH07h9u3czi9ZMbZHl/n2lyxhDqqOBIz5tNjPxv51C+ahqwIRtucJxLQTsrpE3E9
- s86InQJ67Vg8NwS3aitT+oJEv9IAl3L0smmE6FXyP2u/5Ocq9nzjmGDAoYo1FCd7A970ERdOv
- x4bXD4wljKACDyrSSzTlni1cfKrjWG0BwJl2ORHRrlJ/zIynPCKLyd+0smZpo2qSyfiDgs+k9
- 5uN/0JsZzF/iR9T32x6XJmoY7u2dMH6zVaCE0s0GFdQ8Wbbp5bewyi9Pj7pk82sYY+1enFCPB
- bPtHyP5Mf5W55ESKsf5Emee6aS37pQEU8IYmWcxTzkEcaAv4Gv9XILAifcu0KN2XMAxolcMzw
- ABzhwREg+roGOp5fOnJTBTtlLp8=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512122134.24339-2-quic_kbajaj@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit b8dc7d0eea5a7709bb534f1b3ca70d2d7de0b42c introduced
-IPA_STATUS_SIZE as a replacement for the size of the removed struct
-ipa_status. sizeof(struct ipa_status) was sizeof(__le32[8]), use this
-as IPA_STATUS_SIZE.
+On Fri, May 12, 2023 at 05:51:25PM +0530, Komal Bajaj wrote:
+> For some of the Qualcomm SoC's, it is possible that
+> some of the fuse regions or entire qfprom region is
+> protected from non-secure access. In such situations,
+> linux will have to use secure calls to read the region.
+> With that motivation, add the support of reading secure
+> regions in qfprom driver. Ensuring the address to read
+> is word aligned since our secure I/O only supports word
+> size I/O.
+> 
+> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+> ---
+>  drivers/nvmem/Kconfig  |  1 +
+>  drivers/nvmem/qfprom.c | 69 +++++++++++++++++++++++++++++++++---------
+>  2 files changed, 55 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+> index b291b27048c7..3d896ba29b89 100644
+> --- a/drivers/nvmem/Kconfig
+> +++ b/drivers/nvmem/Kconfig
+> @@ -209,6 +209,7 @@ config NVMEM_QCOM_QFPROM
+>  	tristate "QCOM QFPROM Support"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+>  	depends on HAS_IOMEM
+> +	select QCOM_SCM
+>  	help
+>  	  Say y here to enable QFPROM support. The QFPROM provides access
+>  	  functions for QFPROM data to rest of the drivers via nvmem interface.
+> diff --git a/drivers/nvmem/qfprom.c b/drivers/nvmem/qfprom.c
+> index c1e893c8a247..20662e2d3732 100644
+> --- a/drivers/nvmem/qfprom.c
+> +++ b/drivers/nvmem/qfprom.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/property.h>
+>  #include <linux/regulator/consumer.h>
+> +#include <linux/firmware/qcom/qcom_scm.h>
+> 
+>  /* Blow timer clock frequency in Mhz */
+>  #define QFPROM_BLOW_TIMER_OFFSET 0x03c
+> @@ -59,21 +60,22 @@ struct qfprom_soc_data {
+>  /**
+>   * struct qfprom_priv - structure holding qfprom attributes
+>   *
+> - * @qfpraw:       iomapped memory space for qfprom-efuse raw address space.
+> - * @qfpconf:      iomapped memory space for qfprom-efuse configuration address
+> - *                space.
+> + * @qfpraw: iomapped memory space for qfprom-efuse raw address space.
+> + * @qfpconf: iomapped memory space for qfprom-efuse configuration address space.
 
-From 0623148733819bb5d3648b1ed404d57c8b6b31d8 Mon Sep 17 00:00:00 2001
-From: Bert Karwatzki <spasswolf@web.de>
-Date: Sat, 27 May 2023 22:16:52 +0200
-Subject: [PATCH] Use the correct value for IPA_STATUS_SIZE.
-IPA_STATUS_SIZE
- was introduced in commit b8dc7d0eea5a7709bb534f1b3ca70d2d7de0b42c as a
- replacment for the size of the removed struct ipa_status which had
-size =3D
- sizeof(__le32[8]).
+Adjusting the indentation makes it unnecessarily hard to see what you
+actually changed.
 
-Signed-off-by: Bert Karwatzki <spasswolf@web.de>
----
- drivers/net/ipa/ipa_endpoint.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>   * @qfpcorrected: iomapped memory space for qfprom corrected address space.
+> - * @qfpsecurity:  iomapped memory space for qfprom security control space.
+> - * @dev:          qfprom device structure.
+> - * @secclk:       Clock supply.
+> - * @vcc:          Regulator supply.
+> - * @soc_data:     Data that for things that varies from SoC to SoC.
+> + * @qfpsecurity: iomapped memory space for qfprom security control space.
+> + * @qfpseccorrected: starting physical address for qfprom secure corrected address space.
+> + * @dev: qfprom device structure.
+> + * @secclk: Clock supply.
+> + * @vcc: Regulator supply.
+> + * @soc_data: Data that for things that varies from SoC to SoC.
+>   */
+>  struct qfprom_priv {
+>  	void __iomem *qfpraw;
+>  	void __iomem *qfpconf;
+>  	void __iomem *qfpcorrected;
+>  	void __iomem *qfpsecurity;
+> +	phys_addr_t qfpseccorrected;
+>  	struct device *dev;
+>  	struct clk *secclk;
+>  	struct regulator *vcc;
+> @@ -99,10 +101,12 @@ struct qfprom_touched_values {
+>   *
+>   * @keepout: Array of keepout regions for this SoC.
+>   * @nkeepout: Number of elements in the keepout array.
+> + * @secure: Is qfprom region for this SoC protected from non-secure access.
+>   */
+>  struct qfprom_soc_compatible_data {
+>  	const struct nvmem_keepout *keepout;
+>  	unsigned int nkeepout;
+> +	bool secure;
+>  };
+> 
+>  static const struct nvmem_keepout sc7180_qfprom_keepout[] = {
+> @@ -334,6 +338,34 @@ static int qfprom_reg_read(void *context,
+>  	return 0;
+>  }
+> 
+> +static int qfprom_sec_reg_read(void *context, unsigned int reg, void *_val, size_t bytes)
+> +{
+> +	struct qfprom_priv *priv = context;
+> +	u8 *val = _val;
+> +	int buf_start, buf_end, index, i = 0;
+> +	char *buffer;
+> +	u32 read_val;
+> +
+> +	buf_start = ALIGN_DOWN(reg, 4);
+> +	buf_end = ALIGN(reg + bytes, 4);
+> +	buffer = kzalloc(buf_end - buf_start, GFP_KERNEL);
+> +	if (!buffer)
+> +		return -ENOMEM;
 
-diff --git a/drivers/net/ipa/ipa_endpoint.c
-b/drivers/net/ipa/ipa_endpoint.c
-index 2ee80ed140b7..afa1d56d9095 100644
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -119,7 +119,7 @@ enum ipa_status_field_id {
- };
-=20
- /* Size in bytes of an IPA packet status structure */
--#define IPA_STATUS_SIZE			sizeof(__le32[4])
-+#define IPA_STATUS_SIZE			sizeof(__le32[8])
-=20
- /* IPA status structure decoder; looks up field values for a structure
-*/
- static u32 ipa_status_extract(struct ipa *ipa, const void *data,
---=20
-2.40.1
+I don't you need all these variables, the full temp buffer or the two
+memcpy... I think something like this should do the trick:
 
-Bert Karwatzki
+	unsigned int i;
+	u8 *val = _val;
+	u8 tmp[4];
 
+	for (i = 0; i < bytes; i++, reg++)
+		if (i == 0 || reg % 4 == 0)
+			qcom_scm_io_readl(qfpseccorrected + (reg & ~3), tmp);
+
+		val[i] = tmp[reg & 3];
+	}
+
+> +
+> +	for (index = buf_start; index < buf_end; index += 4, i += 4) {
+> +		if (qcom_scm_io_readl(priv->qfpseccorrected + index, &read_val)) {
+> +			dev_err(priv->dev, "Couldn't access feature register\n");
+
+What's a "feature register"?
+
+Regards,
+Bjorn
+
+> +			kfree_sensitive(buffer);
+> +			return -EINVAL;
+> +		}
+> +		memcpy(buffer + i, &read_val, 4);
+> +	}
+> +
+> +	memcpy(val, buffer + reg % 4, bytes);
+> +	kfree_sensitive(buffer);
+> +	return 0;
+> +}
+> +
+>  static void qfprom_runtime_disable(void *data)
+>  {
+>  	pm_runtime_disable(data);
+> @@ -373,13 +405,6 @@ static int qfprom_probe(struct platform_device *pdev)
+>  	if (!priv)
+>  		return -ENOMEM;
+> 
+> -	/* The corrected section is always provided */
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	priv->qfpcorrected = devm_ioremap_resource(dev, res);
+> -	if (IS_ERR(priv->qfpcorrected))
+> -		return PTR_ERR(priv->qfpcorrected);
+> -
+> -	econfig.size = resource_size(res);
+>  	econfig.dev = dev;
+>  	econfig.priv = priv;
+> 
+> @@ -390,6 +415,20 @@ static int qfprom_probe(struct platform_device *pdev)
+>  		econfig.nkeepout = soc_data->nkeepout;
+>  	}
+> 
+> +	/* The corrected section is always provided */
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +
+> +	if (soc_data && soc_data->secure) {
+> +		priv->qfpseccorrected = res->start;
+> +		econfig.reg_read = qfprom_sec_reg_read;
+> +	} else {
+> +		priv->qfpcorrected = devm_ioremap_resource(dev, res);
+> +		if (IS_ERR(priv->qfpcorrected))
+> +			return PTR_ERR(priv->qfpcorrected);
+> +	}
+> +
+> +	econfig.size = resource_size(res);
+> +
+>  	/*
+>  	 * If more than one region is provided then the OS has the ability
+>  	 * to write.
+> --
+> 2.17.1
+> 
