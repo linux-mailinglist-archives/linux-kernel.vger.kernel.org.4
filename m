@@ -2,70 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEF67132D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 08:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7867132DF
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjE0Gby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 02:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S229970AbjE0HGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 03:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjE0Gbw (ORCPT
+        with ESMTP id S229472AbjE0HGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 02:31:52 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D80B6;
-        Fri, 26 May 2023 23:31:51 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34R6VWDo086599;
-        Sat, 27 May 2023 01:31:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685169093;
-        bh=IOYx4mw7zintF8nEN+qfM8Dxs9EsGfWFPruAo4hnbd4=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=ZrDENuQqM9yy2kK3UFZH+PX9xh9uS+/PTKZ1GiFKu0ESzD5KMWNNZgBI5t55WbjS7
-         OaIRg/tBOm+UETYY7HBOWaxcF73ZWefeGLcaghwFjj6YgFsy06RQqvlWdO5Zi5pakf
-         yHArV575yVA5Mgoez2RLBzA8wkV1pwjfhtgbyvcY=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34R6VWMt026114
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 27 May 2023 01:31:32 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 27
- May 2023 01:31:32 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Sat, 27 May 2023 01:31:32 -0500
-Received: from [10.249.138.166] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34R6VSNu031014;
-        Sat, 27 May 2023 01:31:29 -0500
-Message-ID: <d030a431-933d-4f54-ba6a-f7bc5a12f843@ti.com>
-Date:   Sat, 27 May 2023 12:01:28 +0530
+        Sat, 27 May 2023 03:06:51 -0400
+X-Greylist: delayed 1470 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 27 May 2023 00:06:45 PDT
+Received: from mail.imsc.res.in (mail.imsc.res.in [61.95.189.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C1BFB;
+        Sat, 27 May 2023 00:06:45 -0700 (PDT)
+Received: from [10.96.65.76] (helo=banyan.imsc.res.in)
+        by mail.imsc.res.in with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <vishwajeet@imsc.res.in>)
+        id 1q2ncW-0006fO-Cu; Sat, 27 May 2023 12:11:44 +0530
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=imsc.res.in
+        ; s=20220322; h=Message-ID:Reply-To:Subject:To:From:Date:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=mE4sQOaQLPGDlr6eUvzNZvGjjV7bbhIH9Ix4fDc6Jxs=; b=j28tttxzIU7LKTnxd70YxKuteW
+        VUpjWrQhXsvNGzt86+t/AFrZx68e4/bEuXTFp0dTbwuZDC7G4aGcmnO05tsWAWT+WG3USgpix6PyV
+        yNGkBw6KuKXq53KQGcimB2tXfk/t3THOdqmdtdB1rkNNRBmrHTb8WOVeJ8c6HkMFH6CBHauPkv14D
+        tVdsCSef6O6zs2owNCu/yJ5KJwFgxeT/A2lPuDjCHNpfEuJWzmsf+/7f9vntuMmtWmaC3yWWHC/u7
+        LKl7HTlZ2IbvFH9OId+OvooF7Y1Ymb84UH7hFrUrZVv/JwI8gEeVdFUx1kf48d+xw4x5MM+RxAUX4
+        SoW7xT+Q==;
+Received: from wmail.imsc.res.in ([10.96.64.14])
+        by banyan.imsc.res.in with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <vishwajeet@imsc.res.in>)
+        id 1q2ncW-0006PO-8j; Sat, 27 May 2023 12:11:44 +0530
+Received: from localhost ([127.0.0.1] helo=webmail.imsc.res.in)
+        by wmail.imsc.res.in with esmtp (Exim 4.92)
+        (envelope-from <vishwajeet@imsc.res.in>)
+        id 1q2ncW-00007s-4z; Sat, 27 May 2023 12:11:44 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-am62-main: Remove power-domains from
- crypto node
-Content-Language: en-US
-To:     Francesco Dolcini <francesco@dolcini.it>,
-        Nishanth Menon <nm@ti.com>, <kamlesh@ti.com>
-CC:     <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230417133308.1990057-1-kamlesh@ti.com>
- <20230417134241.oj5cmrqjeoxj2sb2@power>
- <ZG90RS4KYo0bCwF7@francesco-nb.int.toradex.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <ZG90RS4KYo0bCwF7@francesco-nb.int.toradex.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,TVD_SUBJ_WIPE_DEBT,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 26 May 2023 23:41:44 -0700
+From:   ILLUMINATI <vishwajeet@imsc.res.in>
+To:     undisclosed-recipients:;
+Subject: MEMBERHSIP
+Organization: The Great Illuminati Organization 
+Reply-To: illuminatiinitiationcenter110@gmail.com
+Mail-Reply-To: illuminatiinitiationcenter110@gmail.com
+Message-ID: <1951ddafa93170e4541b032ccc62ee7e@imsc.res.in>
+X-Sender: vishwajeet@imsc.res.in
+User-Agent: Roundcube Webmail/1.3.17
+X-DKIM: DKIM passed: (address=vishwajeet@imsc.res.in domain=imsc.res.in), signature is good.
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,ODD_FREEM_REPTO,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,UPPERCASE_75_100
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [illuminatiinitiationcenter110[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
+        *  1.0 RDNS_DYNAMIC Delivered to internal network by host with
+        *      dynamic-looking rDNS
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.6 ODD_FREEM_REPTO Has unusual reply-to header
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,37 +93,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 25/05/23 8:14 pm, Francesco Dolcini wrote:
-> On Mon, Apr 17, 2023 at 08:42:41AM -0500, Nishanth Menon wrote:
->> On 19:03-20230417, kamlesh@ti.com wrote:
->>> From: Kamlesh Gurudasani <kamlesh@ti.com>
->>>
->>> With latest firmware update, we can no longer control power of SA3UL from
->>> main domain.
->>
->> How is this backward compatible?
-> 
-> I just stumbled across this commit since I had an issue with crypto@40900000
-> not being probed on Verdin AM62.
-> 
-> Not sure how this is supposed to work about backward/forward
-> compatibility, however this is needed for having it working with the
-> latest firmware.
-> 
+-- 
+DO YOU WANT TO BE RICH AND FAMOUS? JOIN THE GREAT ILLUMINATI ORDER OF
+RICHES, POWER/FAME  NOW AND ACHIEVE ALL YOUR DREAMS? IF YES EMAIL US :
+MAIL: illuminatiinitiationcenter110@gmail.com
 
-From what I understand, newer firmware seems to hate SA3UL PD control
-requests. But older firmwares just ignored the call as the SA3UL PD is
-on by default. So as such, this DT patch alone wont break
-forward/backward compatibility.
-
-It looks like newer firmware is broken wrt older kernel which is
-unfortunate.
-
-Kamlesh: can you resubmit this patch with appropriate "Fixes" tag so
-that it gets backported to stable kernels?
-
-> And if there is a proper way that take care of this, it should be
-> backported IMO.
-> 
-> Francesco
-> 
+YOUR FULL NAME:
+PHONE NUMBER :
+COUNTRY :
+GENDER:
