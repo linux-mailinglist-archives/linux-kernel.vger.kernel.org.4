@@ -2,167 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2538D713652
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 21:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6BB713662
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 22:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjE0Tzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 15:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
+        id S229498AbjE0UNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 16:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjE0Tzs (ORCPT
+        with ESMTP id S229501AbjE0UNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 15:55:48 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD3ED2
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 12:55:47 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30ad99fa586so1679497f8f.2
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 12:55:46 -0700 (PDT)
+        Sat, 27 May 2023 16:13:47 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3A0DE
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 13:13:44 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-33b0848c04aso88015ab.1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 13:13:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685217345; x=1687809345;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wldCh2gzutJjtiin9a0KZhvAVvGTa21cDzVwRJ3ttrg=;
-        b=ekEHq7WMTOElavxN9f/2NfgvQLD7rp3vsmwWHeWLl9jKx1r2ue7ULOWuM0AnQpenRU
-         VxcxLvKsgWWBD/oMuvZs7ckyC+wgpZrG2wIYJL80+eTrcUdMey5Aoz559rYQtldk0SvM
-         bWl2H3UYA/WK/oaRJ6Cbth8UG0hLTizeEsubQRFwsVA5umV75Qy/mnVWR7iEOr2QeqB9
-         dArPvkTLsW5kr6FCQVksoMeW4T5rf8MPP4DAxz6eRAaNrTgPjGSyH4WKvwDvFJ6jT/0j
-         sNd1fkg4B5a7sswdOYRNnyurIvroxJJZkZYwkWLlFPz6fE/klAN33hXA/2GB7EDmGxc/
-         p94Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685217345; x=1687809345;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1685218424; x=1687810424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wldCh2gzutJjtiin9a0KZhvAVvGTa21cDzVwRJ3ttrg=;
-        b=RVQ6tQ+k9gf1x0VdV091698JZBjrSH7KpiCBKT3j+9j33WA0o4OThP1qnonZgtewyK
-         8X5gFzxEJkC7UPGvdVjsQmBk/J2qWvn67JoHXdi9jYaTN2hTG1/pFQcps9SszoZgTkrG
-         PgDiMGNWmb1CTllfnaUY4uHtyqLi+caDbL8KpY7TMl9fIS1RXcUZdC2jAu55VsBgpmR+
-         8aZSCQflV5RDv0eYm87/+embAqGLmf42SrxwrYcwGgOH1txNeDDX4FXT1h0+NiNPjrF7
-         mVWTWiQYxxglXDP18fVpVKyJ+KijY1L1icj07n0K3c1/3sOxzsx9l6wNCjORYdWdjflj
-         EHdQ==
-X-Gm-Message-State: AC+VfDyxOE/QxJ5mpr9zqsQTAeXWF7Jfys3GDMYRTo/mA1K3RynjdjQ0
-        G1Pb2R/4wQC+EBtV4+nPsUs=
-X-Google-Smtp-Source: ACHHUZ6cfGOi6HpjKvFV31PjOro2m9xAkZ+MGwsCOfkLDEW1XnShLYkgqg1mb0fpXlnV5E+fSgfMrw==
-X-Received: by 2002:a5d:4522:0:b0:307:4836:64e4 with SMTP id j2-20020a5d4522000000b00307483664e4mr5765062wra.52.1685217344834;
-        Sat, 27 May 2023 12:55:44 -0700 (PDT)
-Received: from localhost (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
-        by smtp.gmail.com with ESMTPSA id z11-20020adff1cb000000b003093a412310sm8916050wro.92.2023.05.27.12.55.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 12:55:43 -0700 (PDT)
-Date:   Sat, 27 May 2023 20:55:43 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Dave Chinner <david@fromorbit.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH 1/9] mm: vmalloc: Add va_alloc() helper
-Message-ID: <96a75e2d-3108-4f9d-a90f-ad636f0401f1@lucifer.local>
-References: <20230522110849.2921-1-urezki@gmail.com>
- <20230522110849.2921-2-urezki@gmail.com>
+        bh=hK0j7POD8nRAsgGVVyJyo0UAU2zdW6aeJVN1+UjYElg=;
+        b=QKnbpAkfLda1TvWrqaHzwSET9fcih+s5ib+TdEQpynJiDGgVyvcDWnq3f1jN8iSFFh
+         i4wFHU4TObni6/73zZFM2D/pTSqgWk3+PPUYZMhIR48y37fhDEuDC9+d1+t2fRyrNgkr
+         ayuCVtu0XYwZQdosz7e+wfHDnmUd/KZvqBq519Uy5lfqbbTbuuKK9L+bNXaHlLVwpoUG
+         cBLrrDoSDWDEZ8OZLuLbQmUVgsGX8ts8KOPplFja+x5y6f4LRsCZW4nMJ6qgcp4bf8BG
+         SEOtEkefIHI1t2fsfFozpr5n9BYz9LMkdnQOauJRbx9hSkM/0nH1fRNwjjqiDsKIVZLy
+         cqTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685218424; x=1687810424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hK0j7POD8nRAsgGVVyJyo0UAU2zdW6aeJVN1+UjYElg=;
+        b=azU57B0PgNhq/7OAG6DwxMLlNoxam15xfRii93WwU36xdMDS5LbsUCTkxYJLfrdmRt
+         BdRN8dPS00+CxjRD2HiLRloUIBTxP29xgAzX7Be3suma8wRjGLm3eflYbykUAQf07vze
+         FATGFLpoQoyGwsXNRg/SpRsVeIS+Sl/VbdRuMNDH8SluzgAQFnZJZTswOi7NWliPs47j
+         JpR4uCjGvqI2VaO/iX1UQ3K4vKfXgUFXnu4KKbkRI2vWyfsFlxJA/d9y0O0H7evbeJ2W
+         sqrNQiK5rXAgVgnskoynxSnfKk0FSplQY4hWnOdZ/xJ94lEqaMq081A6r/5aJTBugtry
+         hQ4A==
+X-Gm-Message-State: AC+VfDya5NJ9boRi0BR9aZ5RiwrutNhRLoIAJiCDYtRD1QHkHWFsa3zc
+        Xnvqz16JG70zOXkAYZdNztJsrUpB7I4hWmFThjtw9Q==
+X-Google-Smtp-Source: ACHHUZ5RLdNfCuhTMMzeLnK0AkjXh46hEGbQ5DPXaiuA4QGSm27lLMiJSKz6HarBK0wHhmVvVqcZAJpytCQ/s6idEUA=
+X-Received: by 2002:a05:6e02:2185:b0:337:c9ec:4ca with SMTP id
+ j5-20020a056e02218500b00337c9ec04camr138001ila.2.1685218423829; Sat, 27 May
+ 2023 13:13:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522110849.2921-2-urezki@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230526234435.662652-1-yuzhao@google.com> <20230526234435.662652-5-yuzhao@google.com>
+ <ZHJHJPBF6euzOFdw@linux.dev>
+In-Reply-To: <ZHJHJPBF6euzOFdw@linux.dev>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Sat, 27 May 2023 14:13:07 -0600
+Message-ID: <CAOUHufa74CufHziHSquO5bZwbFXz2MNssBzW+AH7=Xo5RCnQ0A@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v2 04/10] kvm/arm64: make stage2 page tables
+ RCU safe
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 01:08:41PM +0200, Uladzislau Rezki (Sony) wrote:
-> Currently __alloc_vmap_area() function contains an open codded
-> logic that finds and adjusts a VA based on allocation request.
+On Sat, May 27, 2023 at 12:08=E2=80=AFPM Oliver Upton <oliver.upton@linux.d=
+ev> wrote:
 >
-> Introduce a va_alloc() helper that adjusts found VA only. It
-> will be used later at least in two places.
+> Yu,
 >
-> There is no a functional change as a result of this patch.
+> On Fri, May 26, 2023 at 05:44:29PM -0600, Yu Zhao wrote:
+> > Stage2 page tables are currently not RCU safe against unmapping or VM
+> > destruction. The previous mmu_notifier_ops members rely on
+> > kvm->mmu_lock to synchronize with those operations.
+> >
+> > However, the new mmu_notifier_ops member test_clear_young() provides
+> > a fast path that does not take kvm->mmu_lock. To implement
+> > kvm_arch_test_clear_young() for that path, unmapped page tables need
+> > to be freed by RCU and kvm_free_stage2_pgd() needs to be after
+> > mmu_notifier_unregister().
+> >
+> > Remapping, specifically stage2_free_removed_table(), is already RCU
+> > safe.
+> >
+> > Signed-off-by: Yu Zhao <yuzhao@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_pgtable.h |  2 ++
+> >  arch/arm64/kvm/arm.c                 |  1 +
+> >  arch/arm64/kvm/hyp/pgtable.c         |  8 ++++++--
+> >  arch/arm64/kvm/mmu.c                 | 17 ++++++++++++++++-
+> >  4 files changed, 25 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/=
+asm/kvm_pgtable.h
+> > index ff520598b62c..5cab52e3a35f 100644
+> > --- a/arch/arm64/include/asm/kvm_pgtable.h
+> > +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> > @@ -153,6 +153,7 @@ static inline bool kvm_level_supports_block_mapping=
+(u32 level)
+> >   * @put_page:                        Decrement the refcount on a page.=
+ When the
+> >   *                           refcount reaches 0 the page is automatica=
+lly
+> >   *                           freed.
+> > + * @put_page_rcu:            RCU variant of the above.
 >
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> ---
->  mm/vmalloc.c | 41 ++++++++++++++++++++++++++++-------------
->  1 file changed, 28 insertions(+), 13 deletions(-)
+> You don't need to add yet another hook to implement this. I was working
+> on lock-free walks in a separate context and arrived at the following:
 >
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 31ff782d368b..409285b68a67 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1482,6 +1482,32 @@ adjust_va_to_fit_type(struct rb_root *root, struct list_head *head,
->  	return 0;
->  }
+> commit f82d264a37745e07ee28e116c336f139f681fd7f
+> Author: Oliver Upton <oliver.upton@linux.dev>
+> Date:   Mon May 1 08:53:37 2023 +0000
 >
-> +static unsigned long
-> +va_alloc(struct vmap_area *va,
-> +	struct rb_root *root, struct list_head *head,
-> +	unsigned long size, unsigned long align,
-> +	unsigned long vstart, unsigned long vend)
-> +{
-> +	unsigned long nva_start_addr;
-> +	int ret;
-> +
-> +	if (va->va_start > vstart)
-> +		nva_start_addr = ALIGN(va->va_start, align);
-> +	else
-> +		nva_start_addr = ALIGN(vstart, align);
-> +
-> +	/* Check the "vend" restriction. */
-> +	if (nva_start_addr + size > vend)
-> +		return vend;
-> +
-> +	/* Update the free vmap_area. */
-> +	ret = adjust_va_to_fit_type(root, head, va, nva_start_addr, size);
-> +	if (WARN_ON_ONCE(ret))
-> +		return vend;
-> +
-> +	return nva_start_addr;
-> +}
-> +
->  /*
->   * Returns a start address of the newly allocated area, if success.
->   * Otherwise a vend is returned that indicates failure.
-> @@ -1494,7 +1520,6 @@ __alloc_vmap_area(struct rb_root *root, struct list_head *head,
->  	bool adjust_search_size = true;
->  	unsigned long nva_start_addr;
->  	struct vmap_area *va;
-> -	int ret;
+>     KVM: arm64: Consistently use free_removed_table() for stage-2
 >
->  	/*
->  	 * Do not adjust when:
-> @@ -1512,18 +1537,8 @@ __alloc_vmap_area(struct rb_root *root, struct list_head *head,
->  	if (unlikely(!va))
->  		return vend;
+>     free_removed_table() is essential to the RCU-protected parallel walki=
+ng
+>     scheme, as behind the scenes the cleanup is deferred until an RCU gra=
+ce
+>     period. Nonetheless, the stage-2 unmap path calls put_page() directly=
+,
+>     which leads to table memory being freed inline with the table walk.
 >
-> -	if (va->va_start > vstart)
-> -		nva_start_addr = ALIGN(va->va_start, align);
-> -	else
-> -		nva_start_addr = ALIGN(vstart, align);
-> -
-> -	/* Check the "vend" restriction. */
-> -	if (nva_start_addr + size > vend)
-> -		return vend;
-> -
-> -	/* Update the free vmap_area. */
-> -	ret = adjust_va_to_fit_type(root, head, va, nva_start_addr, size);
-> -	if (WARN_ON_ONCE(ret))
-> +	nva_start_addr = va_alloc(va, root, head, size, align, vstart, vend);
-> +	if (nva_start_addr == vend)
->  		return vend;
+>     This is safe for the time being, as the stage-2 unmap walker is calle=
+d
+>     while holding the write lock. A future change to KVM will further rel=
+ax
+>     the locking mechanics around the stage-2 page tables to allow lock-fr=
+ee
+>     walkers protected only by RCU. As such, switch to the RCU-safe mechan=
+ism
+>     for freeing table memory.
 >
->  #if DEBUG_AUGMENT_LOWEST_MATCH_CHECK
-> --
-> 2.30.2
+>     Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
 >
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index 3d61bd3e591d..bfbebdcb4ef0 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -1019,7 +1019,7 @@ static int stage2_unmap_walker(const struct kvm_pgt=
+able_visit_ctx *ctx,
+>                                                kvm_granule_size(ctx->leve=
+l));
+>
+>         if (childp)
+> -               mm_ops->put_page(childp);
+> +               mm_ops->free_removed_table(childp, ctx->level);
 
-LGTM,
+Thanks, Oliver.
 
-Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+A couple of things I haven't had the chance to verify -- I'm hoping
+you could help clarify:
+1. For unmapping, with free_removed_table(), wouldn't we have to look
+into the table we know it's empty unnecessarily?
+2. For remapping and unmapping, how does free_removed_table() put the
+final refcnt on the table passed in? (Previously we had
+put_page(childp) in stage2_map_walk_table_post(). So I'm assuming we'd
+have to do something equivalent with free_removed_table().)
