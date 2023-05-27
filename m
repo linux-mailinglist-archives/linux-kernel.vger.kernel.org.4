@@ -2,107 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D268B7134D0
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849AB7134EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 15:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbjE0Mor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 08:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
+        id S232650AbjE0NKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 09:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjE0Mop (ORCPT
+        with ESMTP id S232690AbjE0NJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 08:44:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CF4E4
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 05:44:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E4FD60DCB
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 12:44:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74D7AC433EF;
-        Sat, 27 May 2023 12:44:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685191483;
-        bh=kSeecO9Efyz5E9drHd9rNMxApa0b1iYO6sWDdA287fU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VThBUq+QFV3GPwN+S+T8k/f7LXIG18qqxD2fTz9PY1m9kAsCvBDfYWlK6SvbvyUDV
-         /WOMOFHupKBF5buvznDVEXEN3Hox6IuldCn7+mq2Ij3XMgob/BTsw0Py3Ol+7FxY/t
-         9pA72do8aGdtq2Kk1PdfaANHsOH/6iCu4fThkjYArv99v9u7ZrxH3dNbatIMRXbnyH
-         J+ooxX74Dr7v3gp+qBUYVglgFLxaSAJTvvPc6M1I+CpFhGTLv2n5qfjcO3QqbgaMDT
-         lyyX8ai0XhNj8VqmntEupCeIIkk7Te9+TAKN2Ki6zjafEVj7AFdOpotoneW2uTBYAv
-         5bB2+ln3Iq+Eg==
-Date:   Sat, 27 May 2023 20:44:28 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Otavio Salvador <otavio@ossystems.com.br>,
-        linux-arm-kernel@lists.infradead.org,
-        Alistair Francis <alistair@alistair23.me>,
-        Fabio Estevam <festevam@gmail.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Stefan Wahren <stefan.wahren@chargebyte.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: imx_v6_v7_defconfig: Remove KERNEL_LZO config
-Message-ID: <20230527124428.GT528183@dragon>
-References: <20230523212829.2539417-1-otavio@ossystems.com.br>
- <b8166ed7-2d3b-4bdd-b597-f0aeddb7ecdc@app.fastmail.com>
+        Sat, 27 May 2023 09:09:59 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8680A10A;
+        Sat, 27 May 2023 06:09:58 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f6da07ff00so18066445e9.3;
+        Sat, 27 May 2023 06:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685192997; x=1687784997;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=dvsLtNhlfL+kHe9BSiqT/A+Q9kXCPHk0gZKozzO0bJM=;
+        b=WLrKljfLhF8WFYgrKC/y30tAA2pSGGKV4VcMofR7v5HD8z8ltP7IC/WjFxokWL7HgF
+         Ir59YLn1mkvjIstCVoM9VWRoNNS1Hcg55ZYOlsJHc9P99nTnQIkpxUg3A7XXWO81BfBB
+         QZKfTbYaQcupe8Acqw/5YjKSjCYq0op1G1zVVNNMz7dSDqe3hz82EfdvsQ9jXseWVX81
+         3BTvivONwmpZs+7EbHmzBrSo88qXEkEaq7RZT/GeenA0fL1nc6D0MG6huWaMEPDt9TL6
+         0OXrm1uwPPdgWzlokG2DuGW2Ym44B3HMnVAVQFdEtSOCsROQjT5wmmaW2RRHkXKoMDMl
+         1s8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685192997; x=1687784997;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dvsLtNhlfL+kHe9BSiqT/A+Q9kXCPHk0gZKozzO0bJM=;
+        b=FBDQNnHrPjtKx1MdWer67BJy4n1/F8aMCPq4SIoJpcZ3dyTnX7/Sj+s1hK2bMeY6qh
+         RXwHj+QQcyhpzUjgNOLV3DC/iH6WdPzJ0ols0ANEhrFs76XwYtb9ASKEoXL4teWikgZ2
+         YKLy4LVPs5S8FSGtABtKHVY7G2KIQFivQehjXDa8ocdczcMZj7vX+dAXsSKqPPSXnAPo
+         +NT+VNChckTJK6D70/z+azs9/HEn9hcoKxetCLshpyiwyLgusex0lOkkf0tKYATvK9+b
+         EeOuYSsPv9QDR5GTCyCeQ6phFSTUbMRBgrLdMRcNNcfciCNfbY6zbXPrnX3/dRG+Xdoe
+         1Rfw==
+X-Gm-Message-State: AC+VfDxIDm6udd6z8IEG7sDAH8Y5ne4Zglbl061nJPt72Y02GNQRIjth
+        FG2XzS2Vu3Bz+RPhR8WIedo=
+X-Google-Smtp-Source: ACHHUZ6Di1EVMVg8fhpYJlJ/Zx/4oQfPI5BKRlP7kb/227vNEI/3wULi2RrPXkmBNdC3bmJK6GS10g==
+X-Received: by 2002:a05:600c:d5:b0:3f5:ce2:9c82 with SMTP id u21-20020a05600c00d500b003f50ce29c82mr4700669wmm.32.1685192996652;
+        Sat, 27 May 2023 06:09:56 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.gmail.com with ESMTPSA id l22-20020a1c7916000000b003f607875e5csm12005664wme.24.2023.05.27.06.09.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 06:09:56 -0700 (PDT)
+Message-ID: <64720124.1c0a0220.67a2a.c3cc@mx.google.com>
+X-Google-Original-Message-ID: <ZHH73fg9HdlPVB58@Ansuel-xps.>
+Date:   Sat, 27 May 2023 14:47:25 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [net PATCH] wireguard: allowedips: fix compilation warning for
+ stack limit exceeded
+References: <20230526204134.29058-1-ansuelsmth@gmail.com>
+ <ZHIAibPKikGjLD8+@corigine.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b8166ed7-2d3b-4bdd-b597-f0aeddb7ecdc@app.fastmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZHIAibPKikGjLD8+@corigine.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 08:48:26AM +0200, Arnd Bergmann wrote:
-> On Tue, May 23, 2023, at 23:28, Otavio Salvador wrote:
-> > The KERNEL_GZIP is used in most config and is the default, there is no
-> > clear reason to diverge so let default be used.
-> >
-> > Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+On Sat, May 27, 2023 at 03:07:21PM +0200, Simon Horman wrote:
+> On Fri, May 26, 2023 at 10:41:34PM +0200, Christian Marangi wrote:
+> > On some arch (for example IPQ8074) and other with
+> > KERNEL_STACKPROTECTOR_STRONG enabled, the following compilation error is
+> > triggered:
+> > drivers/net/wireguard/allowedips.c: In function 'root_remove_peer_lists':
+> > drivers/net/wireguard/allowedips.c:80:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> >    80 | }
+> >       | ^
+> > drivers/net/wireguard/allowedips.c: In function 'root_free_rcu':
+> > drivers/net/wireguard/allowedips.c:67:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> >    67 | }
+> >       | ^
+> > cc1: all warnings being treated as errors
+> > 
+> > Since these are free function and returns void, using function that can
+> > fail is not ideal since an error would result in data not freed.
+> > Since the free are under RCU lock, we can allocate the required stack
+> > array as static outside the function and memset when needed.
+> > This effectively fix the stack frame warning without changing how the
+> > function work.
+> > 
+> > Fixes: Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
 > 
-> I don't mind that change, but it seems odd to single this one out, as
-> there are many other options in that particular defconfig that
-> stick out more, picking LZO seems like a reasonable choice for slightly
-> faster booting, though ZSTD would be the more modern choice.
+> nit: Not sure if this can be fixed-up manually.
+>      But one instance of 'Fixes: ' is enough.
 > 
-> If you are looking into cleaning up this file, maybe see if we can
-> kill off these options:
-> 
-> CONFIG_EXPERT=y
-> CONFIG_ARCH_FORCE_MAX_ORDER=13
-> CONFIG_CMDLINE="noinitrd console=ttymxc0,115200"
-> CONFIG_CS89x0_PLATFORM=y # none of these four are in dts files
-> CONFIG_SMC91X=y
-> CONFIG_SMC911X=y
-> CONFIG_SMSC911X=y
-> CONFIG_STAGING=y
-> CONFIG_STAGING_MEDIA=y
-> CONFIG_VIDEO_IMX_MEDIA=y # not graduated from staging after 6 years
-> CONFIG_EXT2_FS=y
-> CONFIG_EXT3_FS=y # select EXT4 instead
-> CONFIG_ISO9660_FS=m
-> 
-> I have not investigated why any of them were added originally,
-> so it's likely that some are actually needed.
 
-Otavio,
+An oversight by me sorry. Will send v2 with the tag fixed after 24
+hours. Totally fine if the patch is OK to fix this when it's merged by
+the maintainers.
 
-Would you investigate the suggested options and see if we can clean up
-more than just KERNEL_LZO?
-
-Shawn
+-- 
+	Ansuel
