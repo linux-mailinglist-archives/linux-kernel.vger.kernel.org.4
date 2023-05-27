@@ -2,116 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880E07134CE
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D268B7134D0
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbjE0Mjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 08:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S231521AbjE0Mor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 08:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbjE0Mj2 (ORCPT
+        with ESMTP id S229571AbjE0Mop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 08:39:28 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A16713D
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 05:39:18 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34RCamUv025606;
-        Sat, 27 May 2023 12:39:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=ZA7rAmV7FT1BUimbvY8C5HycfwIgZxN51LCkAF7zIuc=;
- b=MsTt04a/3lCH8eFB/XszUc87pwMoQC3I5OyjrNe5k2W3Zgpi6CpXv4XdXHk/QyBL1/sJ
- LAwwxa5+ykOOWiAwD7a6cfs5WbHWKO1rzaRg6akyqobBJ5Jg+ySxDd039oEB+FkPQmWr
- DXQgoxB+L8RCLZNdc9VXWBJe/cw4zPBOzwugyrkJPUg4olfZTPeX3ijsW7eViFGeCp+f
- 8RcpMIkpKjZwkXgYYHBevug36CGTwot8+BsGjC6gHegBpB/tHe/X2EEjhTKewGLjj2Bd
- 89qvMryfpCcaH/6jeAaGWYdLmnsaBHcG9+cYvuSGLcflFQcWlfdtSUpc3xpJjw/+SkqZ 5A== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qub5dgdpa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 27 May 2023 12:39:11 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34RCdAEb016174
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 27 May 2023 12:39:10 GMT
-Received: from hu-pbaronia-blr.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Sat, 27 May 2023 05:39:08 -0700
-From:   Prathu Baronia <quic_pbaronia@quicinc.com>
-To:     <quic_pbaronia@quicinc.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] arm64/cpucaps: increase string width to properly format cpucaps.h
-Date:   Sat, 27 May 2023 18:08:58 +0530
-Message-ID: <20230527123900.680520-1-quic_pbaronia@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230527122734.GA677156@hu-pbaronia-blr.qualcomm.com>
-References: <20230527122734.GA677156@hu-pbaronia-blr.qualcomm.com>
+        Sat, 27 May 2023 08:44:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CF4E4
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 05:44:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E4FD60DCB
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 12:44:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74D7AC433EF;
+        Sat, 27 May 2023 12:44:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685191483;
+        bh=kSeecO9Efyz5E9drHd9rNMxApa0b1iYO6sWDdA287fU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VThBUq+QFV3GPwN+S+T8k/f7LXIG18qqxD2fTz9PY1m9kAsCvBDfYWlK6SvbvyUDV
+         /WOMOFHupKBF5buvznDVEXEN3Hox6IuldCn7+mq2Ij3XMgob/BTsw0Py3Ol+7FxY/t
+         9pA72do8aGdtq2Kk1PdfaANHsOH/6iCu4fThkjYArv99v9u7ZrxH3dNbatIMRXbnyH
+         J+ooxX74Dr7v3gp+qBUYVglgFLxaSAJTvvPc6M1I+CpFhGTLv2n5qfjcO3QqbgaMDT
+         lyyX8ai0XhNj8VqmntEupCeIIkk7Te9+TAKN2Ki6zjafEVj7AFdOpotoneW2uTBYAv
+         5bB2+ln3Iq+Eg==
+Date:   Sat, 27 May 2023 20:44:28 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Otavio Salvador <otavio@ossystems.com.br>,
+        linux-arm-kernel@lists.infradead.org,
+        Alistair Francis <alistair@alistair23.me>,
+        Fabio Estevam <festevam@gmail.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Stefan Hansson <newbie13xd@gmail.com>,
+        Stefan Wahren <stefan.wahren@chargebyte.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: imx_v6_v7_defconfig: Remove KERNEL_LZO config
+Message-ID: <20230527124428.GT528183@dragon>
+References: <20230523212829.2539417-1-otavio@ossystems.com.br>
+ <b8166ed7-2d3b-4bdd-b597-f0aeddb7ecdc@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8E1fs2-o094qY10oFZsgfpxODDPTrBzk
-X-Proofpoint-GUID: 8E1fs2-o094qY10oFZsgfpxODDPTrBzk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-27_09,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- mlxlogscore=715 spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 clxscore=1015 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305270109
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b8166ed7-2d3b-4bdd-b597-f0aeddb7ecdc@app.fastmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The lengthiest capability is `WORKAROUND_TRBE_OVERWRITE_FILL_MODE` and
-its length is 35 characters so increase the width of left justified
-strings to 40 and adjust the tab space for `ARM64_NCAPS` accordingly.
-Now the generated cpucaps.h is properly formatted.
+On Wed, May 24, 2023 at 08:48:26AM +0200, Arnd Bergmann wrote:
+> On Tue, May 23, 2023, at 23:28, Otavio Salvador wrote:
+> > The KERNEL_GZIP is used in most config and is the default, there is no
+> > clear reason to diverge so let default be used.
+> >
+> > Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+> 
+> I don't mind that change, but it seems odd to single this one out, as
+> there are many other options in that particular defconfig that
+> stick out more, picking LZO seems like a reasonable choice for slightly
+> faster booting, though ZSTD would be the more modern choice.
+> 
+> If you are looking into cleaning up this file, maybe see if we can
+> kill off these options:
+> 
+> CONFIG_EXPERT=y
+> CONFIG_ARCH_FORCE_MAX_ORDER=13
+> CONFIG_CMDLINE="noinitrd console=ttymxc0,115200"
+> CONFIG_CS89x0_PLATFORM=y # none of these four are in dts files
+> CONFIG_SMC91X=y
+> CONFIG_SMC911X=y
+> CONFIG_SMSC911X=y
+> CONFIG_STAGING=y
+> CONFIG_STAGING_MEDIA=y
+> CONFIG_VIDEO_IMX_MEDIA=y # not graduated from staging after 6 years
+> CONFIG_EXT2_FS=y
+> CONFIG_EXT3_FS=y # select EXT4 instead
+> CONFIG_ISO9660_FS=m
+> 
+> I have not investigated why any of them were added originally,
+> so it's likely that some are actually needed.
 
-Signed-off-by: Prathu Baronia <quic_pbaronia@quicinc.com>
----
-V1 -> V2: increase the width from 35 to 40
+Otavio,
 
- arch/arm64/tools/gen-cpucaps.awk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Would you investigate the suggested options and see if we can clean up
+more than just KERNEL_LZO?
 
-diff --git a/arch/arm64/tools/gen-cpucaps.awk b/arch/arm64/tools/gen-cpucaps.awk
-index 00c9e72a200a..8525980379d7 100755
---- a/arch/arm64/tools/gen-cpucaps.awk
-+++ b/arch/arm64/tools/gen-cpucaps.awk
-@@ -24,12 +24,12 @@ BEGIN {
- }
- 
- /^[vA-Z0-9_]+$/ {
--	printf("#define ARM64_%-30s\t%d\n", $0, cap_num++)
-+	printf("#define ARM64_%-40s\t%d\n", $0, cap_num++)
- 	next
- }
- 
- END {
--	printf("#define ARM64_NCAPS\t\t\t\t%d\n", cap_num)
-+	printf("#define ARM64_NCAPS\t\t\t\t\t%d\n", cap_num)
- 	print ""
- 	print "#endif /* __ASM_CPUCAPS_H */"
- }
-
-base-commit: 9d646009f65d62d32815f376465a3b92d8d9b046
--- 
-2.25.1
-
+Shawn
