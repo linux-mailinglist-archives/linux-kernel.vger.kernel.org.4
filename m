@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C667134F8
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 15:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D747134FE
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 15:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbjE0N2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 09:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S231967AbjE0N2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 09:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbjE0N21 (ORCPT
+        with ESMTP id S232491AbjE0N23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 09:28:27 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C87B1;
-        Sat, 27 May 2023 06:28:25 -0700 (PDT)
+        Sat, 27 May 2023 09:28:29 -0400
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC7BB8;
+        Sat, 27 May 2023 06:28:27 -0700 (PDT)
 Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4QT2fp11vSz9scm;
-        Sat, 27 May 2023 15:28:18 +0200 (CEST)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4QT2fr2GC4z9sWs;
+        Sat, 27 May 2023 15:28:20 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1685194098;
+        s=MBO0001; t=1685194100;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4E0//LKBNUllQfAtkiLIrhWN7vXYAzX6w6tTzQQg8xk=;
-        b=OvGVuYsKY7RuRPhxEsjloD+qLuaq7awbeJKTP8VfsQmuXdzIo5jrdutG53X3Lo2nnc+rpG
-        76ZGsRemAnDeuwaChPtGROHGTOXlVweQHvkn03uIuBEguEACkXmNr7MzE+KmkYbrdnkJeY
-        y30NivBAuv6lziTLewyWXYZprgOfcd0gwsXNTPf2LquA/K8NtM3YKv1luQ1cjJo2u8z/+y
-        gNwhnCk70+EoQKHm853UIogoYSwytYF9+j7EUAO7qFab5WvI4t3CcG4G0c+SfXI88DycWo
-        JtQeA69v9mbTY7igiAfe8A/hFN42x+8awJX66stHWJKYVDJ4ZIaFkQPjYlCviQ==
+        bh=gFF9ojQNgCDGStL3SMO101+doudWZ1WYnV6ZyOfRyN4=;
+        b=KVBUsqVLI+u86N2T/90YmIBDSi49QRWF13wM1NpuWj8HECM6v3EfKHDgZfufOaVrRoBTh5
+        98PrMXN/TKvQI48yPUwwCZCUs57tSHQaVs/SOla8ZbVWVerBTnzdoBifRXUmJqwEWjTcWf
+        71ZPtMqcLkmNVuUFsVkTB+AxkhDtESysYURXEEKNacZ73k4c408S/WVmjY13OJR3SGxeXv
+        ZX3Dp6MMn2hftYFG/TQYN2DEMqggCG99SJHvU/zqlZJX6Z/2VCov5MRQnBzwDW0GDQmQya
+        afb/eWQYobGElUufDZQNurknJlILcmJ879YwalttX2VpZlMOM8amZ6o9OMmj6Q==
 From:   Frank Oltmanns <frank@oltmanns.dev>
 To:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
@@ -45,9 +45,9 @@ Cc:     Frank Oltmanns <frank@oltmanns.dev>,
         Rob Herring <robh@kernel.org>,
         Samuel Holland <samuel@sholland.org>,
         Stephen Boyd <sboyd@kernel.org>
-Subject: [RFC PATCH 2/3] clk: sunxi-ng: Implement precalculated NKM rate selection
-Date:   Sat, 27 May 2023 15:27:46 +0200
-Message-Id: <20230527132747.83196-3-frank@oltmanns.dev>
+Subject: [RFC PATCH 3/3] clk: sunxi-ng: sun50i-a64: Precalculate NKM combinations for pll-mipi
+Date:   Sat, 27 May 2023 15:27:47 +0200
+Message-Id: <20230527132747.83196-4-frank@oltmanns.dev>
 In-Reply-To: <20230527132747.83196-1-frank@oltmanns.dev>
 References: <20230527132747.83196-1-frank@oltmanns.dev>
 MIME-Version: 1.0
@@ -62,182 +62,314 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new precalculation method for NKM clock rate selection in the
-sunxi-ng clock driver. Introduce ccu_nkm_find_best_precalc which uses a
-precalculated table of valid NKM combinations (struct clk_nkm_table and
-struct clk_nkm_combo) to find the best rate. This approach provides
-faster rate selection by searching a table of valid combinations rather
-than calculating for all possible combinations.
-
-The table of NKM combinations needs to be initialized with meaningful
-combinations only, i.e. removing redundant combinations that result in
-the same rate.
-
-Keep the existing ccu_nkm_find_best function in place and use it as a
-fallback if no precalculated table is provided.
+The NKM driver now support using a table of precalculated NKM
+combinations. Use this new method for sun50i-a64 for a faster selection
+of clock rates.
 
 Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
 ---
- drivers/clk/sunxi-ng/ccu_nkm.c | 84 +++++++++++++++++++++++++++-------
- drivers/clk/sunxi-ng/ccu_nkm.h | 26 +++++++++++
- 2 files changed, 94 insertions(+), 16 deletions(-)
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.c | 281 ++++++++++++++++++++++++++
+ 1 file changed, 281 insertions(+)
 
-diff --git a/drivers/clk/sunxi-ng/ccu_nkm.c b/drivers/clk/sunxi-ng/ccu_nkm.c
-index 94d2a83992b2..9652f6df17bd 100644
---- a/drivers/clk/sunxi-ng/ccu_nkm.c
-+++ b/drivers/clk/sunxi-ng/ccu_nkm.c
-@@ -54,6 +54,49 @@ static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned long rate,
- 	return best_rate;
- }
+diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-a64.c b/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
+index ff242bccc827..d201f9ec5378 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
++++ b/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
+@@ -165,6 +165,283 @@ static SUNXI_CCU_NM_WITH_FRAC_GATE_LOCK(pll_gpu_clk, "pll-gpu",
+  */
+ #define SUN50I_A64_PLL_MIPI_REG		0x040
  
-+static unsigned long ccu_nkm_find_best_precalc(unsigned long parent,
-+					       unsigned long rate,
-+					       struct _ccu_nkm *nkm,
-+					       struct clk_nkm_table *table)
-+{
-+	unsigned long best_rate = 0, best_diff = ULONG_MAX;
-+	unsigned long best_n = 0, best_k = 0, best_m = 0;
-+	int start = 0, end = table->num - 1, mid;
-+
-+	while (start <= end) {
-+		unsigned long tmp_rate;
-+		unsigned long tmp_diff;
-+
-+		mid = (start + end) / 2;
-+
-+		tmp_rate = parent * table->combos[mid].n * table->combos[mid].k /
-+			   table->combos[mid].m;
-+
-+		tmp_diff = abs(rate - tmp_rate);
-+
-+		if (tmp_diff < best_diff) {
-+			best_rate = tmp_rate;
-+			best_diff = tmp_diff;
-+			best_n = table->combos[mid].n;
-+			best_k = table->combos[mid].k;
-+			best_m = table->combos[mid].m;
-+			if (best_diff == 0)
-+				goto out;
-+		}
-+		if (rate < tmp_rate)
-+			end = mid - 1;
-+		else
-+			start = mid + 1;
-+	}
-+
-+out:
-+	nkm->n = best_n;
-+	nkm->k = best_k;
-+	nkm->m = best_m;
-+
-+	return best_rate;
-+}
-+
- static void ccu_nkm_disable(struct clk_hw *hw)
- {
- 	struct ccu_nkm *nkm = hw_to_ccu_nkm(hw);
-@@ -119,17 +162,22 @@ static unsigned long ccu_nkm_round_rate(struct ccu_mux_internal *mux,
- 	struct ccu_nkm *nkm = data;
- 	struct _ccu_nkm _nkm;
- 
--	_nkm.min_n = nkm->n.min ?: 1;
--	_nkm.max_n = nkm->n.max ?: 1 << nkm->n.width;
--	_nkm.min_k = nkm->k.min ?: 1;
--	_nkm.max_k = nkm->k.max ?: 1 << nkm->k.width;
--	_nkm.min_m = 1;
--	_nkm.max_m = nkm->m.max ?: 1 << nkm->m.width;
--
- 	if (nkm->common.features & CCU_FEATURE_FIXED_POSTDIV)
- 		rate *= nkm->fixed_post_div;
- 
--	rate = ccu_nkm_find_best(*parent_rate, rate, &_nkm);
-+	if (nkm->table.num)
-+		rate = ccu_nkm_find_best_precalc(*parent_rate, rate, &_nkm,
-+						 &nkm->table);
-+	else {
-+		_nkm.min_n = nkm->n.min ?: 1;
-+		_nkm.max_n = nkm->n.max ?: 1 << nkm->n.width;
-+		_nkm.min_k = nkm->k.min ?: 1;
-+		_nkm.max_k = nkm->k.max ?: 1 << nkm->k.width;
-+		_nkm.min_m = 1;
-+		_nkm.max_m = nkm->m.max ?: 1 << nkm->m.width;
-+
-+		rate = ccu_nkm_find_best(*parent_rate, rate, &_nkm);
-+	}
- 
- 	if (nkm->common.features & CCU_FEATURE_FIXED_POSTDIV)
- 		rate /= nkm->fixed_post_div;
-@@ -157,14 +205,18 @@ static int ccu_nkm_set_rate(struct clk_hw *hw, unsigned long rate,
- 	if (nkm->common.features & CCU_FEATURE_FIXED_POSTDIV)
- 		rate *= nkm->fixed_post_div;
- 
--	_nkm.min_n = nkm->n.min ?: 1;
--	_nkm.max_n = nkm->n.max ?: 1 << nkm->n.width;
--	_nkm.min_k = nkm->k.min ?: 1;
--	_nkm.max_k = nkm->k.max ?: 1 << nkm->k.width;
--	_nkm.min_m = 1;
--	_nkm.max_m = nkm->m.max ?: 1 << nkm->m.width;
--
--	ccu_nkm_find_best(parent_rate, rate, &_nkm);
-+	if (nkm->table.num)
-+		rate = ccu_nkm_find_best_precalc(*parent_rate, rate, &_nkm,
-+						 &nkm->table);
-+	else {
-+		_nkm.min_n = nkm->n.min ?: 1;
-+		_nkm.max_n = nkm->n.max ?: 1 << nkm->n.width;
-+		_nkm.min_k = nkm->k.min ?: 1;
-+		_nkm.max_k = nkm->k.max ?: 1 << nkm->k.width;
-+		_nkm.min_m = 1;
-+		_nkm.max_m = nkm->m.max ?: 1 << nkm->m.width;
-+		ccu_nkm_find_best(parent_rate, rate, &_nkm);
-+	}
- 
- 	spin_lock_irqsave(nkm->common.lock, flags);
- 
-diff --git a/drivers/clk/sunxi-ng/ccu_nkm.h b/drivers/clk/sunxi-ng/ccu_nkm.h
-index 6601defb3f38..fa5551724921 100644
---- a/drivers/clk/sunxi-ng/ccu_nkm.h
-+++ b/drivers/clk/sunxi-ng/ccu_nkm.h
-@@ -12,6 +12,30 @@
- #include "ccu_div.h"
- #include "ccu_mult.h"
- 
-+struct clk_nkm_combo {
-+	u8	n;
-+	u8	k;
-+	u8	m;
++static struct clk_nkm_combo pll_mipi_nkm_combos[] = {
++	{ .n =  1, .k =  2,  .m = 16 /* 0.1250000*/ },
++	{ .n =  1, .k =  2,  .m = 15 /* 0.1333333*/ },
++	{ .n =  1, .k =  2,  .m = 14 /* 0.1428571*/ },
++	{ .n =  1, .k =  2,  .m = 13 /* 0.1538462*/ },
++	{ .n =  1, .k =  2,  .m = 12 /* 0.1666667*/ },
++	{ .n =  1, .k =  2,  .m = 11 /* 0.1818182*/ },
++	{ .n =  1, .k =  3,  .m = 16 /* 0.1875000*/ },
++	{ .n =  1, .k =  2,  .m = 10 /* 0.2000000*/ },
++	{ .n =  1, .k =  3,  .m = 14 /* 0.2142857*/ },
++	{ .n =  1, .k =  2,  .m =  9 /* 0.2222222*/ },
++	{ .n =  1, .k =  3,  .m = 13 /* 0.2307692*/ },
++	{ .n =  1, .k =  2,  .m =  8 /* 0.2500000*/ },
++	{ .n =  2, .k =  2,  .m = 15 /* 0.2666667*/ },
++	{ .n =  1, .k =  3,  .m = 11 /* 0.2727273*/ },
++	{ .n =  1, .k =  2,  .m =  7 /* 0.2857143*/ },
++	{ .n =  1, .k =  3,  .m = 10 /* 0.3000000*/ },
++	{ .n =  2, .k =  2,  .m = 13 /* 0.3076923*/ },
++	{ .n =  1, .k =  2,  .m =  6 /* 0.3333333*/ },
++	{ .n =  2, .k =  2,  .m = 11 /* 0.3636364*/ },
++	{ .n =  3, .k =  2,  .m = 16 /* 0.3750000*/ },
++	{ .n =  1, .k =  2,  .m =  5 /* 0.4000000*/ },
++	{ .n =  3, .k =  2,  .m = 14 /* 0.4285714*/ },
++	{ .n =  2, .k =  2,  .m =  9 /* 0.4444444*/ },
++	{ .n =  3, .k =  2,  .m = 13 /* 0.4615385*/ },
++	{ .n =  1, .k =  2,  .m =  4 /* 0.5000000*/ },
++	{ .n =  4, .k =  2,  .m = 15 /* 0.5333333*/ },
++	{ .n =  3, .k =  2,  .m = 11 /* 0.5454545*/ },
++	{ .n =  3, .k =  3,  .m = 16 /* 0.5625000*/ },
++	{ .n =  2, .k =  2,  .m =  7 /* 0.5714286*/ },
++	{ .n =  3, .k =  2,  .m = 10 /* 0.6000000*/ },
++	{ .n =  4, .k =  2,  .m = 13 /* 0.6153846*/ },
++	{ .n =  5, .k =  2,  .m = 16 /* 0.6250000*/ },
++	{ .n =  3, .k =  3,  .m = 14 /* 0.6428571*/ },
++	{ .n =  1, .k =  2,  .m =  3 /* 0.6666667*/ },
++	{ .n =  3, .k =  3,  .m = 13 /* 0.6923077*/ },
++	{ .n =  5, .k =  2,  .m = 14 /* 0.7142857*/ },
++	{ .n =  4, .k =  2,  .m = 11 /* 0.7272727*/ },
++	{ .n =  3, .k =  2,  .m =  8 /* 0.7500000*/ },
++	{ .n =  5, .k =  2,  .m = 13 /* 0.7692308*/ },
++	{ .n =  2, .k =  2,  .m =  5 /* 0.8000000*/ },
++	{ .n =  3, .k =  3,  .m = 11 /* 0.8181818*/ },
++	{ .n =  5, .k =  2,  .m = 12 /* 0.8333333*/ },
++	{ .n =  3, .k =  2,  .m =  7 /* 0.8571429*/ },
++	{ .n =  7, .k =  2,  .m = 16 /* 0.8750000*/ },
++	{ .n =  4, .k =  2,  .m =  9 /* 0.8888889*/ },
++	{ .n =  3, .k =  3,  .m = 10 /* 0.9000000*/ },
++	{ .n =  5, .k =  2,  .m = 11 /* 0.9090909*/ },
++	{ .n =  6, .k =  2,  .m = 13 /* 0.9230769*/ },
++	{ .n =  7, .k =  2,  .m = 15 /* 0.9333333*/ },
++	{ .n =  5, .k =  3,  .m = 16 /* 0.9375000*/ },
++	{ .n =  1, .k =  2,  .m =  2 /* 1.0000000*/ },
++	{ .n =  8, .k =  2,  .m = 15 /* 1.0666667*/ },
++	{ .n =  5, .k =  3,  .m = 14 /* 1.0714286*/ },
++	{ .n =  7, .k =  2,  .m = 13 /* 1.0769231*/ },
++	{ .n =  6, .k =  2,  .m = 11 /* 1.0909091*/ },
++	{ .n =  5, .k =  2,  .m =  9 /* 1.1111111*/ },
++	{ .n =  9, .k =  2,  .m = 16 /* 1.1250000*/ },
++	{ .n =  4, .k =  2,  .m =  7 /* 1.1428571*/ },
++	{ .n =  5, .k =  3,  .m = 13 /* 1.1538462*/ },
++	{ .n =  7, .k =  2,  .m = 12 /* 1.1666667*/ },
++	{ .n =  3, .k =  2,  .m =  5 /* 1.2000000*/ },
++	{ .n =  8, .k =  2,  .m = 13 /* 1.2307692*/ },
++	{ .n =  5, .k =  2,  .m =  8 /* 1.2500000*/ },
++	{ .n =  7, .k =  2,  .m = 11 /* 1.2727273*/ },
++	{ .n =  9, .k =  2,  .m = 14 /* 1.2857143*/ },
++	{ .n =  7, .k =  3,  .m = 16 /* 1.3125000*/ },
++	{ .n =  2, .k =  2,  .m =  3 /* 1.3333333*/ },
++	{ .n =  5, .k =  3,  .m = 11 /* 1.3636364*/ },
++	{ .n = 11, .k =  2,  .m = 16 /* 1.3750000*/ },
++	{ .n =  9, .k =  2,  .m = 13 /* 1.3846154*/ },
++	{ .n =  7, .k =  2,  .m = 10 /* 1.4000000*/ },
++	{ .n =  5, .k =  2,  .m =  7 /* 1.4285714*/ },
++	{ .n =  8, .k =  2,  .m = 11 /* 1.4545455*/ },
++	{ .n = 11, .k =  2,  .m = 15 /* 1.4666667*/ },
++	{ .n =  3, .k =  2,  .m =  4 /* 1.5000000*/ },
++	{ .n = 10, .k =  2,  .m = 13 /* 1.5384615*/ },
++	{ .n =  7, .k =  2,  .m =  9 /* 1.5555556*/ },
++	{ .n = 11, .k =  2,  .m = 14 /* 1.5714286*/ },
++	{ .n =  4, .k =  2,  .m =  5 /* 1.6000000*/ },
++	{ .n =  7, .k =  3,  .m = 13 /* 1.6153846*/ },
++	{ .n = 13, .k =  2,  .m = 16 /* 1.6250000*/ },
++	{ .n =  9, .k =  2,  .m = 11 /* 1.6363636*/ },
++	{ .n =  5, .k =  2,  .m =  6 /* 1.6666667*/ },
++	{ .n =  9, .k =  3,  .m = 16 /* 1.6875000*/ },
++	{ .n = 11, .k =  2,  .m = 13 /* 1.6923077*/ },
++	{ .n =  6, .k =  2,  .m =  7 /* 1.7142857*/ },
++	{ .n = 13, .k =  2,  .m = 15 /* 1.7333333*/ },
++	{ .n =  7, .k =  2,  .m =  8 /* 1.7500000*/ },
++	{ .n =  8, .k =  2,  .m =  9 /* 1.7777778*/ },
++	{ .n =  9, .k =  2,  .m = 10 /* 1.8000000*/ },
++	{ .n = 10, .k =  2,  .m = 11 /* 1.8181818*/ },
++	{ .n = 11, .k =  2,  .m = 12 /* 1.8333333*/ },
++	{ .n = 12, .k =  2,  .m = 13 /* 1.8461538*/ },
++	{ .n = 13, .k =  2,  .m = 14 /* 1.8571429*/ },
++	{ .n = 14, .k =  2,  .m = 15 /* 1.8666667*/ },
++	{ .n = 15, .k =  2,  .m = 16 /* 1.8750000*/ },
++	{ .n =  7, .k =  3,  .m = 11 /* 1.9090909*/ },
++	{ .n =  9, .k =  3,  .m = 14 /* 1.9285714*/ },
++	{ .n =  1, .k =  2,  .m =  1 /* 2.0000000*/ },
++	{ .n = 11, .k =  3,  .m = 16 /* 2.0625000*/ },
++	{ .n =  9, .k =  3,  .m = 13 /* 2.0769231*/ },
++	{ .n =  7, .k =  3,  .m = 10 /* 2.1000000*/ },
++	{ .n = 16, .k =  2,  .m = 15 /* 2.1333333*/ },
++	{ .n = 15, .k =  2,  .m = 14 /* 2.1428571*/ },
++	{ .n = 14, .k =  2,  .m = 13 /* 2.1538462*/ },
++	{ .n = 13, .k =  2,  .m = 12 /* 2.1666667*/ },
++	{ .n = 12, .k =  2,  .m = 11 /* 2.1818182*/ },
++	{ .n = 11, .k =  2,  .m = 10 /* 2.2000000*/ },
++	{ .n = 10, .k =  2,  .m =  9 /* 2.2222222*/ },
++	{ .n =  9, .k =  2,  .m =  8 /* 2.2500000*/ },
++	{ .n =  8, .k =  2,  .m =  7 /* 2.2857143*/ },
++	{ .n = 15, .k =  2,  .m = 13 /* 2.3076923*/ },
++	{ .n =  7, .k =  2,  .m =  6 /* 2.3333333*/ },
++	{ .n = 11, .k =  3,  .m = 14 /* 2.3571429*/ },
++	{ .n = 13, .k =  2,  .m = 11 /* 2.3636364*/ },
++	{ .n =  6, .k =  2,  .m =  5 /* 2.4000000*/ },
++	{ .n = 13, .k =  3,  .m = 16 /* 2.4375000*/ },
++	{ .n = 11, .k =  2,  .m =  9 /* 2.4444444*/ },
++	{ .n =  9, .k =  3,  .m = 11 /* 2.4545455*/ },
++	{ .n = 16, .k =  2,  .m = 13 /* 2.4615385*/ },
++	{ .n =  5, .k =  2,  .m =  4 /* 2.5000000*/ },
++	{ .n = 11, .k =  3,  .m = 13 /* 2.5384615*/ },
++	{ .n = 14, .k =  2,  .m = 11 /* 2.5454545*/ },
++	{ .n =  9, .k =  2,  .m =  7 /* 2.5714286*/ },
++	{ .n = 13, .k =  2,  .m = 10 /* 2.6000000*/ },
++	{ .n =  7, .k =  3,  .m =  8 /* 2.6250000*/ },
++	{ .n =  4, .k =  2,  .m =  3 /* 2.6666667*/ },
++	{ .n =  9, .k =  3,  .m = 10 /* 2.7000000*/ },
++	{ .n = 15, .k =  2,  .m = 11 /* 2.7272727*/ },
++	{ .n = 11, .k =  2,  .m =  8 /* 2.7500000*/ },
++	{ .n = 12, .k =  3,  .m = 13 /* 2.7692308*/ },
++	{ .n = 13, .k =  3,  .m = 14 /* 2.7857143*/ },
++	{ .n =  7, .k =  2,  .m =  5 /* 2.8000000*/ },
++	{ .n = 15, .k =  3,  .m = 16 /* 2.8125000*/ },
++	{ .n = 10, .k =  2,  .m =  7 /* 2.8571429*/ },
++	{ .n = 13, .k =  2,  .m =  9 /* 2.8888889*/ },
++	{ .n = 16, .k =  2,  .m = 11 /* 2.9090909*/ },
++	{ .n = 11, .k =  4,  .m = 15 /* 2.9333333*/ },
++	{ .n =  3, .k =  2,  .m =  2 /* 3.0000000*/ },
++	{ .n = 10, .k =  4,  .m = 13 /* 3.0769231*/ },
++	{ .n = 14, .k =  2,  .m =  9 /* 3.1111111*/ },
++	{ .n = 11, .k =  2,  .m =  7 /* 3.1428571*/ },
++	{ .n =  8, .k =  2,  .m =  5 /* 3.2000000*/ },
++	{ .n = 15, .k =  3,  .m = 14 /* 3.2142857*/ },
++	{ .n = 14, .k =  3,  .m = 13 /* 3.2307692*/ },
++	{ .n = 13, .k =  2,  .m =  8 /* 3.2500000*/ },
++	{ .n = 12, .k =  3,  .m = 11 /* 3.2727273*/ },
++	{ .n = 11, .k =  3,  .m = 10 /* 3.3000000*/ },
++	{ .n =  5, .k =  2,  .m =  3 /* 3.3333333*/ },
++	{ .n =  9, .k =  3,  .m =  8 /* 3.3750000*/ },
++	{ .n = 11, .k =  4,  .m = 13 /* 3.3846154*/ },
++	{ .n = 12, .k =  2,  .m =  7 /* 3.4285714*/ },
++	{ .n = 15, .k =  3,  .m = 13 /* 3.4615385*/ },
++	{ .n = 13, .k =  4,  .m = 15 /* 3.4666667*/ },
++	{ .n =  7, .k =  2,  .m =  4 /* 3.5000000*/ },
++	{ .n = 13, .k =  3,  .m = 11 /* 3.5454545*/ },
++	{ .n = 16, .k =  2,  .m =  9 /* 3.5555556*/ },
++	{ .n =  9, .k =  2,  .m =  5 /* 3.6000000*/ },
++	{ .n = 10, .k =  4,  .m = 11 /* 3.6363636*/ },
++	{ .n = 11, .k =  2,  .m =  6 /* 3.6666667*/ },
++	{ .n = 16, .k =  3,  .m = 13 /* 3.6923077*/ },
++	{ .n = 13, .k =  2,  .m =  7 /* 3.7142857*/ },
++	{ .n = 14, .k =  4,  .m = 15 /* 3.7333333*/ },
++	{ .n = 15, .k =  2,  .m =  8 /* 3.7500000*/ },
++	{ .n = 14, .k =  3,  .m = 11 /* 3.8181818*/ },
++	{ .n =  9, .k =  3,  .m =  7 /* 3.8571429*/ },
++	{ .n = 13, .k =  3,  .m = 10 /* 3.9000000*/ },
++	{ .n =  2, .k =  2,  .m =  1 /* 4.0000000*/ },
++	{ .n = 15, .k =  3,  .m = 11 /* 4.0909091*/ },
++	{ .n = 11, .k =  3,  .m =  8 /* 4.1250000*/ },
++	{ .n =  7, .k =  3,  .m =  5 /* 4.2000000*/ },
++	{ .n = 16, .k =  4,  .m = 15 /* 4.2666667*/ },
++	{ .n = 15, .k =  2,  .m =  7 /* 4.2857143*/ },
++	{ .n = 14, .k =  4,  .m = 13 /* 4.3076923*/ },
++	{ .n = 13, .k =  2,  .m =  6 /* 4.3333333*/ },
++	{ .n = 16, .k =  3,  .m = 11 /* 4.3636364*/ },
++	{ .n = 11, .k =  2,  .m =  5 /* 4.4000000*/ },
++	{ .n = 10, .k =  4,  .m =  9 /* 4.4444444*/ },
++	{ .n =  9, .k =  2,  .m =  4 /* 4.5000000*/ },
++	{ .n = 16, .k =  2,  .m =  7 /* 4.5714286*/ },
++	{ .n = 15, .k =  4,  .m = 13 /* 4.6153846*/ },
++	{ .n =  7, .k =  2,  .m =  3 /* 4.6666667*/ },
++	{ .n = 11, .k =  3,  .m =  7 /* 4.7142857*/ },
++	{ .n = 13, .k =  4,  .m = 11 /* 4.7272727*/ },
++	{ .n = 12, .k =  2,  .m =  5 /* 4.8000000*/ },
++	{ .n = 13, .k =  3,  .m =  8 /* 4.8750000*/ },
++	{ .n = 11, .k =  4,  .m =  9 /* 4.8888889*/ },
++	{ .n = 16, .k =  4,  .m = 13 /* 4.9230769*/ },
++	{ .n =  5, .k =  2,  .m =  2 /* 5.0000000*/ },
++	{ .n = 14, .k =  4,  .m = 11 /* 5.0909091*/ },
++	{ .n = 12, .k =  3,  .m =  7 /* 5.1428571*/ },
++	{ .n = 13, .k =  2,  .m =  5 /* 5.2000000*/ },
++	{ .n =  7, .k =  3,  .m =  4 /* 5.2500000*/ },
++	{ .n =  8, .k =  2,  .m =  3 /* 5.3333333*/ },
++	{ .n =  9, .k =  3,  .m =  5 /* 5.4000000*/ },
++	{ .n = 15, .k =  4,  .m = 11 /* 5.4545455*/ },
++	{ .n = 11, .k =  2,  .m =  4 /* 5.5000000*/ },
++	{ .n = 13, .k =  3,  .m =  7 /* 5.5714286*/ },
++	{ .n = 14, .k =  2,  .m =  5 /* 5.6000000*/ },
++	{ .n = 15, .k =  3,  .m =  8 /* 5.6250000*/ },
++	{ .n = 10, .k =  4,  .m =  7 /* 5.7142857*/ },
++	{ .n = 13, .k =  4,  .m =  9 /* 5.7777778*/ },
++	{ .n = 16, .k =  4,  .m = 11 /* 5.8181818*/ },
++	{ .n =  3, .k =  2,  .m =  1 /* 6.0000000*/ },
++	{ .n = 14, .k =  4,  .m =  9 /* 6.2222222*/ },
++	{ .n = 11, .k =  4,  .m =  7 /* 6.2857143*/ },
++	{ .n = 16, .k =  2,  .m =  5 /* 6.4000000*/ },
++	{ .n = 15, .k =  3,  .m =  7 /* 6.4285714*/ },
++	{ .n = 13, .k =  2,  .m =  4 /* 6.5000000*/ },
++	{ .n = 11, .k =  3,  .m =  5 /* 6.6000000*/ },
++	{ .n = 10, .k =  2,  .m =  3 /* 6.6666667*/ },
++	{ .n =  9, .k =  3,  .m =  4 /* 6.7500000*/ },
++	{ .n = 16, .k =  3,  .m =  7 /* 6.8571429*/ },
++	{ .n =  7, .k =  2,  .m =  2 /* 7.0000000*/ },
++	{ .n = 16, .k =  4,  .m =  9 /* 7.1111111*/ },
++	{ .n = 12, .k =  3,  .m =  5 /* 7.2000000*/ },
++	{ .n = 11, .k =  2,  .m =  3 /* 7.3333333*/ },
++	{ .n = 13, .k =  4,  .m =  7 /* 7.4285714*/ },
++	{ .n = 15, .k =  2,  .m =  4 /* 7.5000000*/ },
++	{ .n = 13, .k =  3,  .m =  5 /* 7.8000000*/ },
++	{ .n =  4, .k =  2,  .m =  1 /* 8.0000000*/ },
++	{ .n = 11, .k =  3,  .m =  4 /* 8.2500000*/ },
++	{ .n = 14, .k =  3,  .m =  5 /* 8.4000000*/ },
++	{ .n = 15, .k =  4,  .m =  7 /* 8.5714286*/ },
++	{ .n = 13, .k =  2,  .m =  3 /* 8.6666667*/ },
++	{ .n = 11, .k =  4,  .m =  5 /* 8.8000000*/ },
++	{ .n =  9, .k =  2,  .m =  2 /* 9.0000000*/ },
++	{ .n = 16, .k =  4,  .m =  7 /* 9.1428571*/ },
++	{ .n = 14, .k =  2,  .m =  3 /* 9.3333333*/ },
++	{ .n = 16, .k =  3,  .m =  5 /* 9.6000000*/ },
++	{ .n = 13, .k =  3,  .m =  4 /* 9.7500000*/ },
++	{ .n =  5, .k =  2,  .m =  1 /*10.0000000*/ },
++	{ .n = 13, .k =  4,  .m =  5 /*10.4000000*/ },
++	{ .n =  7, .k =  3,  .m =  2 /*10.5000000*/ },
++	{ .n = 16, .k =  2,  .m =  3 /*10.6666667*/ },
++	{ .n = 11, .k =  2,  .m =  2 /*11.0000000*/ },
++	{ .n = 14, .k =  4,  .m =  5 /*11.2000000*/ },
++	{ .n = 15, .k =  3,  .m =  4 /*11.2500000*/ },
++	{ .n =  6, .k =  2,  .m =  1 /*12.0000000*/ },
++	{ .n = 16, .k =  4,  .m =  5 /*12.8000000*/ },
++	{ .n = 13, .k =  2,  .m =  2 /*13.0000000*/ },
++	{ .n = 10, .k =  4,  .m =  3 /*13.3333333*/ },
++	{ .n =  9, .k =  3,  .m =  2 /*13.5000000*/ },
++	{ .n =  7, .k =  2,  .m =  1 /*14.0000000*/ },
++	{ .n = 11, .k =  4,  .m =  3 /*14.6666667*/ },
++	{ .n = 15, .k =  2,  .m =  2 /*15.0000000*/ },
++	{ .n =  8, .k =  2,  .m =  1 /*16.0000000*/ },
++	{ .n = 11, .k =  3,  .m =  2 /*16.5000000*/ },
++	{ .n = 13, .k =  4,  .m =  3 /*17.3333333*/ },
++	{ .n =  9, .k =  2,  .m =  1 /*18.0000000*/ },
++	{ .n = 14, .k =  4,  .m =  3 /*18.6666667*/ },
++	{ .n = 13, .k =  3,  .m =  2 /*19.5000000*/ },
++	{ .n = 10, .k =  2,  .m =  1 /*20.0000000*/ },
++	{ .n =  7, .k =  3,  .m =  1 /*21.0000000*/ },
++	{ .n = 16, .k =  4,  .m =  3 /*21.3333333*/ },
++	{ .n = 11, .k =  2,  .m =  1 /*22.0000000*/ },
++	{ .n = 15, .k =  3,  .m =  2 /*22.5000000*/ },
++	{ .n = 12, .k =  2,  .m =  1 /*24.0000000*/ },
++	{ .n = 13, .k =  2,  .m =  1 /*26.0000000*/ },
++	{ .n =  9, .k =  3,  .m =  1 /*27.0000000*/ },
++	{ .n = 14, .k =  2,  .m =  1 /*28.0000000*/ },
++	{ .n = 15, .k =  2,  .m =  1 /*30.0000000*/ },
++	{ .n = 16, .k =  2,  .m =  1 /*32.0000000*/ },
++	{ .n = 11, .k =  3,  .m =  1 /*33.0000000*/ },
++	{ .n = 12, .k =  3,  .m =  1 /*36.0000000*/ },
++	{ .n = 13, .k =  3,  .m =  1 /*39.0000000*/ },
++	{ .n = 10, .k =  4,  .m =  1 /*40.0000000*/ },
++	{ .n = 14, .k =  3,  .m =  1 /*42.0000000*/ },
++	{ .n = 11, .k =  4,  .m =  1 /*44.0000000*/ },
++	{ .n = 15, .k =  3,  .m =  1 /*45.0000000*/ },
++	{ .n = 16, .k =  3,  .m =  1 /*48.0000000*/ },
++	{ .n = 13, .k =  4,  .m =  1 /*52.0000000*/ },
++	{ .n = 14, .k =  4,  .m =  1 /*56.0000000*/ },
++	{ .n = 15, .k =  4,  .m =  1 /*60.0000000*/ },
++	{ .n = 16, .k =  4,  .m =  1 /*64.0000000*/ },
 +};
-+
-+/**
-+ * struct clk_nkm_table - Table of all meaningful combinations for n, k, and m
-+ *
-+ * @num: Number of entries in the table
-+ * @combos: Array of combos (of size num) that are supported by this clock.
-+ *
-+ * This table shall contain all meaningful combinations of n, k, and m. That
-+ * means that combinations that result in the same clock rate shall only be
-+ * listed once. For example, if both
-+ * { .n = 1, .k = 2, .m = 2} and  { .n = 2, .k = 2, .m = 4}
-+ * are valid values for n, k, and m, only one of them would be allowed because
-+ * both result in a factor of 1.0.
-+ */
-+struct clk_nkm_table {
-+	size_t			num;
-+	struct clk_nkm_combo	*combos;
-+};
-+
- /*
-  * struct ccu_nkm - Definition of an N-K-M clock
-  *
-@@ -29,6 +53,8 @@ struct ccu_nkm {
- 	unsigned int		fixed_post_div;
- 
- 	struct ccu_common	common;
-+
-+	struct clk_nkm_table	table;
+ static struct ccu_nkm pll_mipi_clk = {
+ 	/*
+ 	 * The bit 23 and 22 are called "LDO{1,2}_EN" on the SoC's
+@@ -181,6 +458,10 @@ static struct ccu_nkm pll_mipi_clk = {
+ 		.hw.init	= CLK_HW_INIT("pll-mipi", "pll-video0",
+ 					      &ccu_nkm_ops, CLK_SET_RATE_UNGATE),
+ 	},
++	.table = {
++		.num	= 275,
++		.combos	= pll_mipi_nkm_combos,
++	},
  };
  
- #define SUNXI_CCU_NKM_WITH_MUX_GATE_LOCK(_struct, _name, _parents, _reg, \
+ static SUNXI_CCU_NM_WITH_FRAC_GATE_LOCK(pll_hsic_clk, "pll-hsic",
 -- 
 2.40.1
 
