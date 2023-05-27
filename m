@@ -2,202 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9B97135F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 20:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1B57135FB
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 20:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjE0SAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 14:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S230288AbjE0SCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 14:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjE0SAw (ORCPT
+        with ESMTP id S229498AbjE0SCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 14:00:52 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA5CD2;
-        Sat, 27 May 2023 11:00:49 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-561f23dc55aso28657797b3.3;
-        Sat, 27 May 2023 11:00:49 -0700 (PDT)
+        Sat, 27 May 2023 14:02:38 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B76CDE
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 11:02:37 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-783f88ce557so1422824241.3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 11:02:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685210448; x=1687802448;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vt+eQc1s6uNliAWjWvTTIC49OP6lTjf/+SrnhMuXg0Y=;
-        b=W0erXj+RPbnpcW7ElzKwBZltmDVaGYCicAuWq+OAyL0yswL83fU2bBCw+5eXBHMBTO
-         +RwSKHFTEFeuLuIjfb4kPw8/OQmqHEma3ioO+QoWzUxz7DmxBkaeQM6hKZCcpg+SeMmP
-         b1vPotZKQZwDq06In1Eml8jPsi1ziDMTFYK088eo3yKUr5xRTsS7UYmbucITaOMlcfu+
-         zCo3LLCc/F7jdmA8wT4E4r6s49UPyR0mncJIbWV9/6XWwkFlQS5PcTy0VOO9aAwAlu/H
-         nVj5/CC9mbJ/soa79kWzF0xTui7QLfPOpK9veEoQD6/Dv1Ofa49jffPiUcQkvFCC6aCq
-         Wm4A==
+        d=linaro.org; s=google; t=1685210556; x=1687802556;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z4zXxiVSdWRhj4THj+gBS0jQPwdd14vhiQA7WPxUcD4=;
+        b=JcIMYWbhBh3qDBKXhZ691qd/aFf1hDKR8M9uMpcySOFPclTV0mFqFRQkMGb3BerKSh
+         YS9WhtncNrI7DgHwbDuyuWXuW+YoTEXFPT4ELFNd26mNimfQuj4o/fphbi61vYzcdW3h
+         GhlO0O46KR+IYXKtNNzwASq/UmeAc8Chnl/ArJCZk17S7NepZxAFoMNfAgxXXCpSpT8J
+         o+U5khbPBP2oJjIh2klNykLShfZ0h4+YsDHupzYpcpjUrOdfIYkdY4No5pRTW+OdAs1L
+         1+MCzSzU8oBtN/VmmrhCt8KsWifW3+qiyJ0nPj7XnWXxeQsnPsrBhiMyLx/WX6JjwvKx
+         TzyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685210448; x=1687802448;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vt+eQc1s6uNliAWjWvTTIC49OP6lTjf/+SrnhMuXg0Y=;
-        b=Lrhy7U/fJwgpAuRLGLVGC1xFUBp9XNf6ybh7DJG+iIH/aOUAmxpd5YUMb0ASjtxxt9
-         Ldb2d1qQcBrmxS15MePRYP88djzPaxDwkQWtxHEXkji1hP9iMVeDj4yhaY/WxelD7sFn
-         e/9rI2MVYH9/pMCi3J0rYDF4PRsWu2ehcTe7L4IFdTFnI6T/HkETuZx82tli6owWA/1V
-         fUIQ3NDDLsdRRHhht04aZZsyF52yTt1bl+Y0kfTxcnH2EllgLlXGOfTIVvZO2NFbyg9B
-         2iz30l4MXH/iBOzv1aZHRRUV9oBbgHW1rk3MamaGSxf9lmpgxvGrQZORTcwDuqvKhlPJ
-         ShfA==
-X-Gm-Message-State: AC+VfDwcmqEjeoAEu5nuTdk+RK7oA/fcRUHAjbNeqWR9Du50yGpPmC4V
-        umsd4/2Q/4IYaF2OIUeDrfoOJWcOLu0kU5qgh9k=
-X-Google-Smtp-Source: ACHHUZ4CI6Iz9ict/bPm1CdSa3dsaVILtmTA6GyHgcjg0M24lP/1VlXwPOekK3xFYJmtFCL/sPwqIxU7jqdCCLc9wpE=
-X-Received: by 2002:a81:84c3:0:b0:559:f0ef:aac0 with SMTP id
- u186-20020a8184c3000000b00559f0efaac0mr6477972ywf.30.1685210448356; Sat, 27
- May 2023 11:00:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685210556; x=1687802556;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z4zXxiVSdWRhj4THj+gBS0jQPwdd14vhiQA7WPxUcD4=;
+        b=OWKqZFpekBp8VHJ5NUCdMl0KIJ20Vyv0h2D+J534aAkBZbIQHue5PaWbEGKwHku48x
+         LF9bRCwV0kG3jhh9BZ4yaLR510F4MDffAkQEWjuZXGB0Ai3+ZgM+/LGGD2zTjZsh8A0h
+         9DFEknSN5EJX/GB5u33yFrJ5D+pQrLqRf91oOfgzJXWuzUsfiU6tSZWCJI2s9bUGcy6L
+         fMG+kHXINzH2i2tgnGRhP8rSiK63WVgmUr3s3NHei6PYnw8efPOhaO0k5sgMVsOM5zvf
+         wn44EktmcUYGwlsBaldnVZjxqBlGfckReebmZmOE0wmpPRUMIkxOiHDdJAtlcUPmsajq
+         oP0Q==
+X-Gm-Message-State: AC+VfDwg3Yh56nMjGCy62IsfvyJvt+N7A12PhjfJOCRyCefpODX2lqSj
+        pwSIoVThrHTua47W5gFBC7eydkhLTjYakivqyNylyQ==
+X-Google-Smtp-Source: ACHHUZ6t+WqLh8dfDvAu6H23RAnvDFtCFcw4MX17ecPTOPcz4W6SJ69TrgQpcm6/WVp+qfNSXUr4owpAbGZCSwIYllk=
+X-Received: by 2002:a67:ee12:0:b0:436:e3:f6de with SMTP id f18-20020a67ee12000000b0043600e3f6demr1791452vsp.13.1685210556113;
+ Sat, 27 May 2023 11:02:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <efd6f2d4-547c-1378-1faa-53c044dbd297@gmail.com> <CAG8fp8SaHi0X-tZHnji_93wBADp1_=brjauWCVXuLaG7iP0p=A@mail.gmail.com>
-In-Reply-To: <CAG8fp8SaHi0X-tZHnji_93wBADp1_=brjauWCVXuLaG7iP0p=A@mail.gmail.com>
-From:   Akihiro Suda <suda.kyoto@gmail.com>
-Date:   Sun, 28 May 2023 03:00:37 +0900
-Message-ID: <CAG8fp8QXoEkndCzyaYZmg6+ZrszKOfh_YSi0o2_weV7y1_xYkQ@mail.gmail.com>
-Subject: Re: mix of ACPICA regression and EFISTUB regression (Was: kernel >=
- v6.2 no longer boots on Apple's Virtualization.framework (x86_64); likely to
- be related to ACPICA)
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, ardb@kernel.org,
-        linux-efi@vger.kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux x86 <x86@kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux ACPICA <acpica-devel@lists.linuxfoundation.org>,
-        Linux Stable <stable@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Robert Moore <robert.moore@intel.com>
+References: <20230526201607.54655398@kernel.org> <20230527034922.5542-1-kuniyu@amazon.com>
+ <f0194cbe-eb5b-40ee-8723-1927ebddefc1@app.fastmail.com>
+In-Reply-To: <f0194cbe-eb5b-40ee-8723-1927ebddefc1@app.fastmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 27 May 2023 23:32:23 +0530
+Message-ID: <CA+G9fYtzjP_EOjDFZYwTMjv5f3AK2pA_E6mk_mU5FQcZgo_qXQ@mail.gmail.com>
+Subject: Re: selftests: net: udpgso_bench.sh: RIP: 0010:lookup_reuseport
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, lkft-triage@lists.linaro.org,
+        Xin Long <lucien.xin@gmail.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
+        willemdebruijn.kernel@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Resending as a plain text email]
+Hi Arnd,
 
-Turned out that this is a mixture of an ACPICA issue and an EFISTUB issue.
+On Sat, 27 May 2023 at 15:03, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Sat, May 27, 2023, at 05:49, Kuniyuki Iwashima wrote:
+> > From: Jakub Kicinski <kuba@kernel.org>
+> > Date: Fri, 26 May 2023 20:16:07 -0700
+> >> On Wed, 24 May 2023 13:24:15 +0530 Naresh Kamboju wrote:
+> >> > While running selftests: net: udpgso_bench.sh on qemu-x86_64 the following
+> >> > kernel crash noticed on stable rc 6.3.4-rc2 kernel.
+> >>
+> >> Can you repro this or it's just a one-off?
+> >>
+> >> Adding some experts to CC.
+> >
+> > FWIW, I couldn't reproduce it on my x86_64 QEMU setup & 6.4.0-rc3
+> > at least 5 times, so maybe one-off ?
+>
+> This looks like one of several spurious reports that lkft has produced
+> recently, where an 'int3' trap instruction is executed in a function
+> that is live-patched, but at a point where the int3 is not expected.
+>
+> Anders managed to get a reproducer for one of these on his manchine
+> yesterday, and has narrowed it down to failing on qemu-7.2.2 but
+> not failing on qemu-8.0.
 
-Kernel v6.2 can boot by reverting the *both* of the following two commits:
-- 5c62d5aab8752e5ee7bfbe75ed6060db1c787f98 "ACPICA: Events: Support
-fixed PCIe wake event"
-- e346bebbd36b1576a3335331fed61bb48c6d8823 "efi: libstub: Always
-enable initrd command line loader and bump version"
+This is an added advantage to tests on multiple qemu versions
+and comparing the difference in test results.
+Thanks, Anders.
 
-Kernel v6.3 can boot by just reverting e346bebb, as 5c62d5a has been
-already reverted in 8e41e0a575664d26bb87e012c39435c4c3914ed9.
-The situation is the same for v6.4-rc3 too.
+>
+> The current theory right now is that this is a qemu bug when
+> dealing with self-modifying x86 code that has been fixed in
+> qemu-8.0 already, and my suggestion would be to ignore all bugs
+> found by lkft that involve an 'int3' trap, and instead change
+> the lkft setup to use either qemu-8.0 or run the test systems
+> in kvm (which would also be much faster and save resources).
 
-Note that in my test I let Virtualization.framework directly load
-bzImage without GRUB (akin to `qemu-system-x86_64 -kernel bzImage`).
-Apparently, reverting e346bebb is not necessary for loading bzImage via GRU=
-B.
+ I will send out an update to ignore the 'int3' trap email reports.
 
+>
+> Someone still needs to get to the bottom of this bug to see
+> if it's in qemu or in the kernel livepatching code, but I'm
+> sure it has nothing to do with the ipv6 stack.
 
-> Also, the reporter can't provide dmesg log (forget to attach serial conso=
-le?).
+Thank you Arnd.
 
-Uploaded v6.1 dmesg in the bugzilla.
-v6.2 dmesg can't be provided, as it hangs before printing something in
-console=3Dhvc0.
-(IIUC, console=3DttyS0 (RS-232C) is not implemented in Virtualization.frame=
-work.)
+- Naresh
 
-
-> 2023=E5=B9=B45=E6=9C=8825=E6=97=A5(=E6=9C=A8) 21:46 Bagas Sanjaya <bagasd=
-otme@gmail.com>:
->>
->> Hi,
->>
->> I notice a regression report on Bugzilla [1]. Quoting from it:
->>
->> > Linux kernel >=3D v6.2 no longer boots on Apple's Virtualization.frame=
-work (x86_64).
->> >
->> > It is reported that the issue is not reproducible on ARM64: https://gi=
-thub.com/lima-vm/lima/issues/1577#issuecomment-1561577694
->> >
->> >
->> > ## Reproduction
->> > - Checkout the kernel repo, and run `make defconfig bzImage`.
->> >
->> > - Create an initrd (see the attached `initrd-example.txt`)
->> >
->> > - Transfer the bzImage and initrd to an Intel Mac.
->> >
->> > - On Mac, download `RunningLinuxInAVirtualMachine.zip` from https://de=
-veloper.apple.com/documentation/virtualization/running_linux_in_a_virtual_m=
-achine , and build the `LinuxVirtualMachine` binary with Xcode.
->> >   Building this binary with Xcode requires logging in to Apple.
->> >   If you do not like logging in, a third party equivalent such as http=
-s://github.com/Code-Hex/vz/blob/v3.0.6/example/linux/main.go can be used.
->> >
->> > - Run `LinuxVirtualMachine /tmp/bzImage /tmp/initrd.img`.
->> >   v6.1 successfully boots into the busybox shell.
->> >   v6.2 just hangs before printing something in the console.
->> >
->> >
->> > ## Tested versions
->> > ```
->> > v6.1: OK
->> > ...
->> > v6.1.0-rc2-00002-g60f2096b59bc (included in v6.2-rc1): OK
->> > v6.1.0-rc2-00003-g5c62d5aab875 (included in v6.2-rc1): NG <-- This com=
-mit caused a regression
->> > ...
->> > v6.2-rc1: NG
->> > ...
->> > v6.2: NG
->> > ...
->> > v6.3.0-rc7-00181-g8e41e0a57566 (included in v6.3): NG     <-- Reverts =
-5c62d5aab875 but still NG
->> > ...
->> > v6.3: NG
->> > v6.4-rc3: NG
->> > ```
->> >
->> > Tested on MacBookPro 2020 (Intel(R) Core(TM) i7-1068NG7 CPU @ 2.30GHz)=
- running macOS 13.4.
->> >
->> >
->> > The issue seems a regression in [5c62d5aab8752e5ee7bfbe75ed6060db1c787=
-f98](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
-mit/?id=3D5c62d5aab8752e5ee7bfbe75ed6060db1c787f98) "ACPICA: Events: Suppor=
-t fixed PCIe wake event".
->> >
->> > This commit was introduced in v6.2-rc1, and apparently reverted in v6.=
-3 ([8e41e0a575664d26bb87e012c39435c4c3914ed9](https://git.kernel.org/pub/sc=
-m/linux/kernel/git/torvalds/linux.git/commit/?id=3D8e41e0a575664d26bb87e012=
-c39435c4c3914ed9)).
->> > However, v6.3 and the latest v6.4-rc3 still don't boot.
->>
->> See bugzilla for the full thread.
->>
->> Interestingly, this regression still occurs despite the culprit is
->> reverted in 8e41e0a575664d ("Revert "ACPICA: Events: Support fixed
->> PCIe wake event""), so this (obviously) isn't wake-on-lan regression,
->> but rather early boot one.
->>
->> Also, the reporter can't provide dmesg log (forget to attach serial
->> console?).
->>
->> Anyway, I'm adding it to regzbot:
->>
->> #regzbot introduced: 5c62d5aab8752e https://bugzilla.kernel.org/show_bug=
-.cgi?id=3D217485
->> #regzbot title: Linux v6.2+ (x86_64) no longer boots on Apple's Virtuali=
-zation framework (ACPICA issue)
->>
->> Thanks.
->>
->> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=3D217485
->>
->> --
->> An old man doll... just what I always wanted! - Clara
+>       Arnd
