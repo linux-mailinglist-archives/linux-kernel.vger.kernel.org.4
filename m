@@ -2,201 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6BB713662
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 22:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458A671366C
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 22:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbjE0UNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 16:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+        id S229512AbjE0UdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 16:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjE0UNr (ORCPT
+        with ESMTP id S229471AbjE0UdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 16:13:47 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3A0DE
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 13:13:44 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-33b0848c04aso88015ab.1
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 13:13:44 -0700 (PDT)
+        Sat, 27 May 2023 16:33:10 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE30B1;
+        Sat, 27 May 2023 13:33:08 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-4397b040c8fso1121258137.0;
+        Sat, 27 May 2023 13:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685218424; x=1687810424;
+        d=gmail.com; s=20221208; t=1685219588; x=1687811588;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hK0j7POD8nRAsgGVVyJyo0UAU2zdW6aeJVN1+UjYElg=;
-        b=QKnbpAkfLda1TvWrqaHzwSET9fcih+s5ib+TdEQpynJiDGgVyvcDWnq3f1jN8iSFFh
-         i4wFHU4TObni6/73zZFM2D/pTSqgWk3+PPUYZMhIR48y37fhDEuDC9+d1+t2fRyrNgkr
-         ayuCVtu0XYwZQdosz7e+wfHDnmUd/KZvqBq519Uy5lfqbbTbuuKK9L+bNXaHlLVwpoUG
-         cBLrrDoSDWDEZ8OZLuLbQmUVgsGX8ts8KOPplFja+x5y6f4LRsCZW4nMJ6qgcp4bf8BG
-         SEOtEkefIHI1t2fsfFozpr5n9BYz9LMkdnQOauJRbx9hSkM/0nH1fRNwjjqiDsKIVZLy
-         cqTQ==
+        bh=DphEniiV7+L9T07hsrZpWRu6Se0vRycld7BbJ4F2i5s=;
+        b=O7rUqk+3zdR02SJ3nc0i0gjUm5pD7ypN8bPLk+lpEOfkSamIjLqdcIOrFJnJlbSCTA
+         RDiaBSqFchS1EXo3a2H1RpsvowA5BEvvQUiucW7pqm+MyTXfNMeAeho2hu3j8ny+MhP7
+         zIICmLCp61XHa++z3WCZL/IQkYbS4nyTO8RFLhoMwv3DKxiJ7eWTQAKT4VupGNr4s/XI
+         OEWXm7aJb1rRiWY2XHan2WrpxzNO4M6L36E1adarpiQu0vyMAFQ0nffznAAwvDY2iP1m
+         ylTtFUjLLvtF2YJTUojoiiX2SrwnPPNzXRpZjyAf+w476QE3yeFuYxckR/0CTE4gkle9
+         NbAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685218424; x=1687810424;
+        d=1e100.net; s=20221208; t=1685219588; x=1687811588;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hK0j7POD8nRAsgGVVyJyo0UAU2zdW6aeJVN1+UjYElg=;
-        b=azU57B0PgNhq/7OAG6DwxMLlNoxam15xfRii93WwU36xdMDS5LbsUCTkxYJLfrdmRt
-         BdRN8dPS00+CxjRD2HiLRloUIBTxP29xgAzX7Be3suma8wRjGLm3eflYbykUAQf07vze
-         FATGFLpoQoyGwsXNRg/SpRsVeIS+Sl/VbdRuMNDH8SluzgAQFnZJZTswOi7NWliPs47j
-         JpR4uCjGvqI2VaO/iX1UQ3K4vKfXgUFXnu4KKbkRI2vWyfsFlxJA/d9y0O0H7evbeJ2W
-         sqrNQiK5rXAgVgnskoynxSnfKk0FSplQY4hWnOdZ/xJ94lEqaMq081A6r/5aJTBugtry
-         hQ4A==
-X-Gm-Message-State: AC+VfDya5NJ9boRi0BR9aZ5RiwrutNhRLoIAJiCDYtRD1QHkHWFsa3zc
-        Xnvqz16JG70zOXkAYZdNztJsrUpB7I4hWmFThjtw9Q==
-X-Google-Smtp-Source: ACHHUZ5RLdNfCuhTMMzeLnK0AkjXh46hEGbQ5DPXaiuA4QGSm27lLMiJSKz6HarBK0wHhmVvVqcZAJpytCQ/s6idEUA=
-X-Received: by 2002:a05:6e02:2185:b0:337:c9ec:4ca with SMTP id
- j5-20020a056e02218500b00337c9ec04camr138001ila.2.1685218423829; Sat, 27 May
- 2023 13:13:43 -0700 (PDT)
+        bh=DphEniiV7+L9T07hsrZpWRu6Se0vRycld7BbJ4F2i5s=;
+        b=l8FPo3Kid4r7EFOVute5tEA/DPPTpLGAm/6AMPbudV/q6WKTj6mEL7prvI5yyXTQz+
+         lk0+gaugzsrDNXSxI09HCHsmQarb0pK/kIwNn2I0h9S7bFxW+CQTbbKvza1NvdTVIBgP
+         fia5jI5WPqZD1szA1R1sw9hpxcXLdfT31DdlPh2bSz56KGu/RtPfyVeMB8uXR3nvmGkV
+         pHFmTe4u3OpzzZXyZuFRSGlKHw5FR7LGdnhmCcaa9PFSqZw8g0XL1m+BnrA4c7RHPlLr
+         c0IW4NoLUcymjOO+XJMEXTNKIar08KB2FmOFU5CwrWM7LBTvZSvalK7rsITg8Uw2R0SY
+         NC8A==
+X-Gm-Message-State: AC+VfDwSIEi/p8CMV8NBfL5SUrGygiMHBwuHfy47Qc79wglFO7u3HdO7
+        +9n6hs5ksy11HJKgNm/LfIaEC4Qau/kMYkyZE5k=
+X-Google-Smtp-Source: ACHHUZ7j1USGL3o1axHHccs3q8ZcTSSYWRerLMuMhHfd26USaqLqm73fyuhAS9F7rRZjTkKazWJv909u45/+K0wqiV8=
+X-Received: by 2002:a67:f2c9:0:b0:42c:543a:ab2a with SMTP id
+ a9-20020a67f2c9000000b0042c543aab2amr1973157vsn.35.1685219587791; Sat, 27 May
+ 2023 13:33:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230526234435.662652-1-yuzhao@google.com> <20230526234435.662652-5-yuzhao@google.com>
- <ZHJHJPBF6euzOFdw@linux.dev>
-In-Reply-To: <ZHJHJPBF6euzOFdw@linux.dev>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Sat, 27 May 2023 14:13:07 -0600
-Message-ID: <CAOUHufa74CufHziHSquO5bZwbFXz2MNssBzW+AH7=Xo5RCnQ0A@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v2 04/10] kvm/arm64: make stage2 page tables
- RCU safe
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
+References: <00000000000037341d05fc460fa6@google.com> <CAF=yD-JpUc3SLtd7MtULmKOcERf6EJZ0rPc7WmJB2nUNUQRBjA@mail.gmail.com>
+ <CAF=yD-+MxyoD1Mbekf93-XhAA2urAf5audD8HefmF8bfsu51iQ@mail.gmail.com>
+In-Reply-To: <CAF=yD-+MxyoD1Mbekf93-XhAA2urAf5audD8HefmF8bfsu51iQ@mail.gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Sat, 27 May 2023 16:32:31 -0400
+Message-ID: <CAF=yD-Ln94Nim0GkpLhZ7p7qQFUDE4Z-adrjRMRSh2y3iBmb+w@mail.gmail.com>
+Subject: Re: [syzbot] [net?] KASAN: invalid-access Read in __packet_get_status
+To:     syzbot <syzbot+64b0f633159fde08e1f1@syzkaller.appspotmail.com>
+Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 27, 2023 at 12:08=E2=80=AFPM Oliver Upton <oliver.upton@linux.d=
-ev> wrote:
+On Mon, May 22, 2023 at 12:19=E2=80=AFPM Willem de Bruijn
+<willemdebruijn.kernel@gmail.com> wrote:
 >
-> Yu,
->
-> On Fri, May 26, 2023 at 05:44:29PM -0600, Yu Zhao wrote:
-> > Stage2 page tables are currently not RCU safe against unmapping or VM
-> > destruction. The previous mmu_notifier_ops members rely on
-> > kvm->mmu_lock to synchronize with those operations.
+> On Mon, May 22, 2023 at 10:52=E2=80=AFAM Willem de Bruijn
+> <willemdebruijn.kernel@gmail.com> wrote:
 > >
-> > However, the new mmu_notifier_ops member test_clear_young() provides
-> > a fast path that does not take kvm->mmu_lock. To implement
-> > kvm_arch_test_clear_young() for that path, unmapped page tables need
-> > to be freed by RCU and kvm_free_stage2_pgd() needs to be after
-> > mmu_notifier_unregister().
+> > On Mon, May 22, 2023 at 6:51=E2=80=AFAM syzbot
+> > <syzbot+64b0f633159fde08e1f1@syzkaller.appspotmail.com> wrote:
+> > >
+> > > Hello,
+> > >
+> > > syzbot found the following issue on:
+> > >
+> > > HEAD commit:    2d1bcbc6cd70 Merge tag 'probes-fixes-v6.4-rc1' of git=
+://gi..
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D154b8fa12=
+80000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D51dd28037=
+b2a55f
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D64b0f633159=
+fde08e1f1
+> > > compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 202101=
+10, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > userspace arch: arm64
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12b6382=
+e280000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D17fd0aee2=
+80000
+> > >
+> > > Downloadable assets:
+> > > disk image (non-bootable): https://storage.googleapis.com/syzbot-asse=
+ts/384ffdcca292/non_bootable_disk-2d1bcbc6.raw.xz
+> > > vmlinux: https://storage.googleapis.com/syzbot-assets/d2e21a43e11e/vm=
+linux-2d1bcbc6.xz
+> > > kernel image: https://storage.googleapis.com/syzbot-assets/49e0b029f9=
+af/Image-2d1bcbc6.gz.xz
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the =
+commit:
+> > > Reported-by: syzbot+64b0f633159fde08e1f1@syzkaller.appspotmail.com
+> > >
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > BUG: KASAN: invalid-access in __packet_get_status+0x70/0xe0 net/packe=
+t/af_packet.c:438
 > >
-> > Remapping, specifically stage2_free_removed_table(), is already RCU
-> > safe.
+> > The offending line is the last one in
 > >
-> > Signed-off-by: Yu Zhao <yuzhao@google.com>
-> > ---
-> >  arch/arm64/include/asm/kvm_pgtable.h |  2 ++
-> >  arch/arm64/kvm/arm.c                 |  1 +
-> >  arch/arm64/kvm/hyp/pgtable.c         |  8 ++++++--
-> >  arch/arm64/kvm/mmu.c                 | 17 ++++++++++++++++-
-> >  4 files changed, 25 insertions(+), 3 deletions(-)
+> > "
+> > static int __packet_get_status(const struct packet_sock *po, void *fram=
+e)
+> > {
+> >         union tpacket_uhdr h;
 > >
-> > diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/=
-asm/kvm_pgtable.h
-> > index ff520598b62c..5cab52e3a35f 100644
-> > --- a/arch/arm64/include/asm/kvm_pgtable.h
-> > +++ b/arch/arm64/include/asm/kvm_pgtable.h
-> > @@ -153,6 +153,7 @@ static inline bool kvm_level_supports_block_mapping=
-(u32 level)
-> >   * @put_page:                        Decrement the refcount on a page.=
- When the
-> >   *                           refcount reaches 0 the page is automatica=
-lly
-> >   *                           freed.
-> > + * @put_page_rcu:            RCU variant of the above.
+> >         smp_rmb();
+> >
+> >         h.raw =3D frame;
+> >         switch (po->tp_version) {
+> >         case TPACKET_V1:
+> >                 flush_dcache_page(pgv_to_page(&h.h1->tp_status));
+> >                 return h.h1->tp_status;
+> >         case TPACKET_V2:
+> >                 flush_dcache_page(pgv_to_page(&h.h2->tp_status));
+> > "
+> >
+> > The reproducer is very small:
+> >
+> > "
+> > // socket(PF_PACKET, SOCK_DGRAM, htons(ETH_P_ALL);
+> > r0 =3D socket$packet(0x11, 0x2, 0x300)
+> >
+> > // setsockopt PACKET_RX_RING with same block and frame sizes and counts
+> > setsockopt$packet_rx_ring(r0, 0x107, 0x5,
+> > &(0x7f0000000040)=3D@req3=3D{0x8000, 0x200, 0x80, 0x20000}, 0x1c)
+> >
+> > // excessive length, too many bits in prot, MAP_SHARED | MAP_ANONYMOUS
+> > mmap(&(0x7f0000568000/0x2000)=3Dnil, 0x1000000, 0x20567fff, 0x11, r0, 0=
+x0)
+> > "
+> >
+> > What is odd here is that the program never sets packet version
+> > explicitly, and the default is TPACKET_V1.
 >
-> You don't need to add yet another hook to implement this. I was working
-> on lock-free walks in a separate context and arrived at the following:
+> The test is marked as repeat.
 >
-> commit f82d264a37745e07ee28e116c336f139f681fd7f
-> Author: Oliver Upton <oliver.upton@linux.dev>
-> Date:   Mon May 1 08:53:37 2023 +0000
+> One possibility is that there is a race between packet arrival calling
+> flush_dcache_page and user mmap setup/teardown. That would exhibit as
+> flakiness.
 >
->     KVM: arm64: Consistently use free_removed_table() for stage-2
->
->     free_removed_table() is essential to the RCU-protected parallel walki=
-ng
->     scheme, as behind the scenes the cleanup is deferred until an RCU gra=
-ce
->     period. Nonetheless, the stage-2 unmap path calls put_page() directly=
-,
->     which leads to table memory being freed inline with the table walk.
->
->     This is safe for the time being, as the stage-2 unmap walker is calle=
-d
->     while holding the write lock. A future change to KVM will further rel=
-ax
->     the locking mechanics around the stage-2 page tables to allow lock-fr=
-ee
->     walkers protected only by RCU. As such, switch to the RCU-safe mechan=
-ism
->     for freeing table memory.
->
->     Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
->
-> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> index 3d61bd3e591d..bfbebdcb4ef0 100644
-> --- a/arch/arm64/kvm/hyp/pgtable.c
-> +++ b/arch/arm64/kvm/hyp/pgtable.c
-> @@ -1019,7 +1019,7 @@ static int stage2_unmap_walker(const struct kvm_pgt=
-able_visit_ctx *ctx,
->                                                kvm_granule_size(ctx->leve=
-l));
->
->         if (childp)
-> -               mm_ops->put_page(childp);
-> +               mm_ops->free_removed_table(childp, ctx->level);
+> ARM flush_dcache_page is quite outside my networking comfort zone.
 
-Thanks, Oliver.
+The accessed memory is using ARM MTE tags. It appears that the memory
+is accessed with the wrong tag:
 
-A couple of things I haven't had the chance to verify -- I'm hoping
-you could help clarify:
-1. For unmapping, with free_removed_table(), wouldn't we have to look
-into the table we know it's empty unnecessarily?
-2. For remapping and unmapping, how does free_removed_table() put the
-final refcnt on the table passed in? (Previously we had
-put_page(childp) in stage2_map_walk_table_post(). So I'm assuming we'd
-have to do something equivalent with free_removed_table().)
+ do_tag_check_fault+0x78/0x8c arch/arm64/mm/fault.c:791
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:867
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
+ __packet_get_status+0x70/0xe0 net/packet/af_packet.c:438
