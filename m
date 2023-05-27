@@ -2,254 +2,452 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBB07133A5
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 11:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609787133B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 11:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbjE0JWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 05:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S231719AbjE0J3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 05:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjE0JWh (ORCPT
+        with ESMTP id S229684AbjE0J3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 05:22:37 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C855CE56;
-        Sat, 27 May 2023 02:22:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685179334; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=RmElqzQP3UoSHLQ5aLggZo4XqTAM5gRHTtRk+TzHI9xLJGMo8+L780UKXzzt/kssO5
-    XYUvohdj9HnOeromgMoyFyrla1ix1SPuALC7uanrbbrm7YT/skn7HezHIAD0rhvZ/P8Q
-    VleS4V6ygBYmlJzamDppLsGd9Fpt17/2LCKmHcJaRXf41fzV7StsZlsOx248cyTHt+wy
-    9WogF9yENQ+RsaK+PQ8VhK61Df+KE2OCQC7ko0rINPAEMXGRpK3RQ9tjzyCypKnKHZSO
-    PyVa6FY+IJMchIhMRTk+sAjQSXk2cHZKrnxLtEwXZKFr5Oo95+nipU8/PRa3IW2Z9i46
-    nV5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685179334;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=0mv/6sZ5x60Zkllf63JZEA+fDY4btmNRQkEJ+4wCjlc=;
-    b=sQs9bEmcWRYfHv32mjcgWnkkLC/ZJWnsij+N8KdqmrJcmKiaLvZd9RVy14hYrJunLS
-    k5uADU3ebYwTclrNph2TwTES0ri4GimEaVUg0vdgmGBxi2Rv2isXtAJDrTwNG0zONx4w
-    7aKhEUhb3R2KjaTDLui5YRQNDGfQDt0XeFRLcqqcOeNYa/SVoPxc/yQE5BjhJkGXGt9+
-    BwbaScgsDnn4VmyR+EOwXaRp52XjGmLZ6m+S3lher1LJk6Fqx+EPwbu0XK3kn457AmW1
-    O8ENCVp0Hl9pQ1KNRji0M9Jbinipe8Zf94vgPvjBTF9J/IsP+fFR2rmTZKSgM6y93mvQ
-    BFxg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685179334;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=0mv/6sZ5x60Zkllf63JZEA+fDY4btmNRQkEJ+4wCjlc=;
-    b=gHbO5fjsJ9CicUSKRUE5vHq7cZ4TYXXM27sDezE/I2AXI3vD9LrCaIb+J7p44WznDz
-    ezN9lJnLlr8LZHz5/Out4yUD3M0OrqobBk2fdwk74kJa0RCpMCe0PyyYwlPNeEo2FbBx
-    4HxkO0ttgoRi2FO0gFn6pSgM2WtNb+sQTeXl0d5KSpki0m0ICg4y1001RwDZ5YHg6WWT
-    97uELw0ljlTqE58qQLu0bVx9esTwRfDP/Aqtmjd1bfjCPiPKckqMWcJy36B8rBmn9P7u
-    MTPRsz2bM8c7czFtfLg5BbsaM9KCBJe5XUjfyG8jB6HAo9OeE9GnvZjRz7HP+jcGxRgg
-    mDAg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685179334;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=0mv/6sZ5x60Zkllf63JZEA+fDY4btmNRQkEJ+4wCjlc=;
-    b=EfJaKL3e11ZSVK5PIeRHv76ZOlm6CJDLoRgkf9ZVs3RSJhtOdh2mV+6qZGTqIivazn
-    2aip1IBpPjqR+AS4E7Dg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8p+F1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4R9MEccW
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 27 May 2023 11:22:14 +0200 (CEST)
-Date:   Sat, 27 May 2023 11:22:07 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 7/8] arm64: dts: qcom: msm8916: Define regulator
- constraints next to usage
-Message-ID: <ZHHLv-kW56GRJ1_0@gerhold.net>
-References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
- <20230510-msm8916-regulators-v1-7-54d4960a05fc@gerhold.net>
- <9f474fe8-523c-3668-540a-a8fc04ed64a6@linaro.org>
- <ZHBV-mBPhoqy8yvs@gerhold.net>
- <02543b3b-a94d-fd3a-7b28-3e55f4414137@linaro.org>
+        Sat, 27 May 2023 05:29:48 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71042D3;
+        Sat, 27 May 2023 02:29:45 -0700 (PDT)
+Received: from dggpeml500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QSxGD5whbzqSQ7;
+        Sat, 27 May 2023 17:25:08 +0800 (CST)
+Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
+ (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 27 May
+ 2023 17:29:42 +0800
+Subject: Re: [PATCH 1/3] drivers/perf: hisi: Add support for HiSilicon H60PA
+ and PAv3 PMU driver
+To:     Yicong Yang <yangyicong@huawei.com>, <will@kernel.org>,
+        <jonathan.cameron@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <mark.rutland@arm.com>
+References: <20230523131825.6102-1-hejunhao3@huawei.com>
+ <20230523131825.6102-2-hejunhao3@huawei.com>
+ <a7f03000-3f3f-efd3-9eec-e7f001b02742@huawei.com>
+CC:     <yangyicong@hisilicon.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <linuxarm@huawei.com>,
+        <shenyang39@huawei.com>, <prime.zeng@hisilicon.com>
+From:   hejunhao <hejunhao3@huawei.com>
+Message-ID: <8e760d98-4e68-dd7a-4799-f4a0b6a8070c@huawei.com>
+Date:   Sat, 27 May 2023 17:29:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <02543b3b-a94d-fd3a-7b28-3e55f4414137@linaro.org>
+In-Reply-To: <a7f03000-3f3f-efd3-9eec-e7f001b02742@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.103.44]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 11:11:44PM +0200, Konrad Dybcio wrote:
-> On 26.05.2023 08:47, Stephan Gerhold wrote:
-> > On Fri, May 26, 2023 at 01:35:06AM +0200, Konrad Dybcio wrote:
-> >> On 17.05.2023 20:48, Stephan Gerhold wrote:
-> >>> Right now each MSM8916 device has a huge block of regulator constraints
-> >>> with allowed voltages for each regulator. For lack of better
-> >>> documentation these voltages are often copied as-is from the vendor
-> >>> device tree, without much extra thought.
-> >>>
-> >>> Unfortunately, the voltages in the vendor device trees are often
-> >>> misleading or even wrong, e.g. because:
-> >>>
-> >>>  - There is a large voltage range allowed and the actual voltage is
-> >>>    only set somewhere hidden in some messy vendor driver. This is often
-> >>>    the case for pm8916_{l14,l15,l16} because they have a broad range of
-> >>>    1.8-3.3V by default.
-> >>>
-> >>>  - The voltage is actually wrong but thanks to the voltage constraints
-> >>>    in the RPM firmware it still ends up applying the correct voltage.
-> >>>
-> >>> To have proper regulator constraints it is important to review them in
-> >>> context of the usage. The current setup in the MSM8916 device trees
-> >>> makes this quite hard because each device duplicates the standard
-> >>> voltages for components of the SoC and mixes those with minor
-> >>> device-specific additions and dummy voltages for completely unused
-> >>> regulators.
-> >>>
-> >>> The actual usage of the regulators for the SoC components is in
-> >>> msm8916-pm8916.dtsi, so it can and should also define the related
-> >>> voltage constraints. These are not board-specific but defined in the
-> >>> APQ8016E/PM8916 Device Specification. The board DT can then focus on
-> >>> describing the actual board-specific regulators, which makes it much
-> >>> easier to review and spot potential mistakes there.
-> >>>
-> >>> Note that this commit does not make any functional change. All used
-> >>> regulators still have the same regulator constraints as before. Unused
-> >>> regulators do not have regulator constraints anymore because most of
-> >>> these were too broad or even entirely wrong. They should be added back
-> >>> with proper voltage constraints when there is an actual usage.
-> >>>
-> >>> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> >>> ---
-> >> I'm a bit torn between saying "this is very nice already" and "we should
-> >> probably override each regulator individually" like so:
-> >>
-> >> &pm8916_l17 {
-> >> 	[...]
-> >> }
-> >>
-> >> to minimize mistakes..
-> >>
-> >> Not sure what to make of it, I see Bjorn already applied this, so I guess
-> >> I'm just leaving some potential ideas for the future here.
-> > 
-> > Sorry, could you elaborate a bit on what changes you would make exactly?
-> Assigning the voltage ranges through direct reference to each individual
-> regulator, instead of overwriting them through referencing the
-> pm8916_rpm_regulators label and (essentially) redefining them.
-> > 
-> > The way it works in this patch is that regulators that are used by the
-> > SoC are defined in msm8916-pm8916.dtsi. All other (board-specific)
-> > regulators must be defined together with proper voltages in the board DT.
-> > 
-> > What kind of mistake are you thinking of?
-> Fat fingers, mostly
-> 
-> So suppose your device needs a different voltage on L18, so you do
-> 
-> &pm8916_rpm_regulators {
-> 	l19 { //fat fingers burn devices
-> 		regulator-min-microvolt = <12341234>;
-> 		regulator-max-microvolt = <43143144>;
-> 	};
-> };
-> 
-> DTC will happily eat that
-> 
-> since we use labels, one would have to fatfinger twice, like so:
-> &pm8916_rpm_regulators {
-> 	pm8916_l19: l19 { //this was still supposed to be l18
-> 
-> as these two combinations will trigger a build error
-> 
-> &pm8916_rpm_regulators {
-> 	pm8916_l19: l18 { //duplicate label vs actual l19
-> 
-> ---
-> 
-> &pm8916_rpm_regulators {
-> 	pm8916_l18: l19 { //duplicate label vs actual l18
-> 
+Hi Yicong,
 
-Yeah I was also a bit torn between (pre-)defining labels for all
-regulators vs the approach I chose in this patch. However, thinking
-about it some more I realized that having the pre-defined labels
-makes it far too easy to make another fairly hidden mistake:
+   Thanks for your comments.
 
-Let's assume we would define labels for all regulators in
-msm8916-pm8916.dtsi. That is, even for board-specific regulators
-we add:
+On 2023/5/25 21:04, Yicong Yang wrote:
+> Hi Junhao,
+>
+> On 2023/5/23 21:18, Junhao He wrote:
+>> Compared to the original PA device, H60PA offers higher bandwidth.
+>> The H60PA is a new device and we use HID to differentiate them.
+>>
+>> The events supported by PAv3 and PAv2 are different. They use the
+>> same HID. The PMU version register is used in the driver to
+>> distinguish different versions.
+>>
+>> For each H60PA PMU, except for the overflow interrupt register, other
+>> functions of the H60PA PMU are the same as the original PA PMU module.
+>> It has 8-programable counters and each counter is free-running.
+>> Interrupt is supported to handle counter (64-bits) overflow.
+>>
+>> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+>> ---
+>>   drivers/perf/hisilicon/hisi_uncore_pa_pmu.c | 138 +++++++++++++++++---
+>>   drivers/perf/hisilicon/hisi_uncore_pmu.h    |  36 ++++-
+>>   2 files changed, 157 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+>> index 71b6687d6696..e7e8cb999911 100644
+>> --- a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+>> +++ b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+>> @@ -22,9 +22,14 @@
+>>   #define PA_TT_CTRL			0x1c08
+>>   #define PA_TGTID_CTRL			0x1c14
+>>   #define PA_SRCID_CTRL			0x1c18
+>> +/* H32 PA interrupt registers */
+>>   #define PA_INT_MASK			0x1c70
+>>   #define PA_INT_STATUS			0x1c78
+>>   #define PA_INT_CLEAR			0x1c7c
+>> +/* H60 PA interrupt registers */
+>> +#define H60PA_INT_STATUS		0x1c70
+>> +#define H60PA_INT_MASK			0x1c74
+>> +/* End interrupt registers */
+> It'll be better to extract these version specific registers to a different
+> block and get rid of this comment.
 
-	/* ... */
-	pm8916_l10: l10 {};
-	/* ... */
-	pm8916_l14: l14 {};
-	pm8916:l15: l15 {};
-	pm8916_l16: l16 {};
-	/* ... */
+This comment is to distinguish between the two device.
+will to drop the H60 PA comment.
 
-Now someone new to device porting thinks "c'mon, gettin' camera workin'
-can't be *that* hard". They look at downstream and quickly define a
-device tree node with the necessary regulators:
+Thanks.
 
-	camera@1a {
-		compatible = "sony,imx214";
-		reg = <0x1a>;
-		vddo-supply = <&pm8916_l10>;
-		vdda-supply = <&pm8916_l16>;
-		vddd-supply = <&pm8916_l2>;
-		/* ... */
-	};
+>>   #define PA_EVENT_TYPE0			0x1c80
+>>   #define PA_PMU_VERSION			0x1cf0
+>>   #define PA_EVENT_CNT0_L			0x1d00
+>> @@ -46,6 +51,12 @@ HISI_PMU_EVENT_ATTR_EXTRACTOR(srcid_cmd, config1, 32, 22);
+>>   HISI_PMU_EVENT_ATTR_EXTRACTOR(srcid_msk, config1, 43, 33);
+>>   HISI_PMU_EVENT_ATTR_EXTRACTOR(tracetag_en, config1, 44, 44);
+>>   
+>> +struct hisi_pa_pmu_int_regs {
+>> +	u32 mask;
+>> +	u32 clear;
+>> +	u32 status;
+>> +};
+> These feels like values of the register but actually they're offset, it'll be clearer to
+> have a _offset suffix and a int_ prefix for "interrupt".
+>
+> is the offset for irq clear register keep the same for different version? If so, just drop it.
 
-They build this successfully and try to run it. Perhaps it even works
-somewhat but it's quite dangerous: They did not define any voltage
-constraints for l10 and l16! In this case, the regulator core does not
-allow *changing* the regulator voltage, but it still allows
-*enabling*/disabling the regulator with "who knows what RPM uses as
-default voltage". They might even submit it upstream and reviewers
-assume the voltages are already defined somewhere.
+We can know from the name of the structure that they are interrupt
+registers. Maybe we don't need this prefix.
+I will add the suffix of offset in next version.
 
-This cannot happen with my patch. The labels for the board-specific
-regulators are not defined anywhere, so they would immediately get a
-build error. They would probably look for examples how to define the
-additional regulators. For pm8916_l16 they find examples like:
+Thanks.
 
-	&pm8916_rpm_regulators {
-		pm8916_l16: l16 {
-			regulator-min-microvolt = <1800000>;
-			regulator-max-microvolt = <1800000>;
-		};
-	};
+>
+>> +
+>>   static void hisi_pa_pmu_enable_tracetag(struct perf_event *event)
+>>   {
+>>   	struct hisi_pmu *pa_pmu = to_hisi_pmu(event->pmu);
+>> @@ -219,44 +230,51 @@ static void hisi_pa_pmu_disable_counter(struct hisi_pmu *pa_pmu,
+>>   static void hisi_pa_pmu_enable_counter_int(struct hisi_pmu *pa_pmu,
+>>   					   struct hw_perf_event *hwc)
+>>   {
+>> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->present;
+>>   	u32 val;
+>>   
+>>   	/* Write 0 to enable interrupt */
+>> -	val = readl(pa_pmu->base + PA_INT_MASK);
+>> +	val = readl(pa_pmu->base + regs->mask);
+>>   	val &= ~(1 << hwc->idx);
+>> -	writel(val, pa_pmu->base + PA_INT_MASK);
+>> +	writel(val, pa_pmu->base + regs->mask);
+>>   }
+>>   
+>>   static void hisi_pa_pmu_disable_counter_int(struct hisi_pmu *pa_pmu,
+>>   					    struct hw_perf_event *hwc)
+>>   {
+>> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->present;
+>>   	u32 val;
+>>   
+>>   	/* Write 1 to mask interrupt */
+>> -	val = readl(pa_pmu->base + PA_INT_MASK);
+>> +	val = readl(pa_pmu->base + regs->mask);
+>>   	val |= 1 << hwc->idx;
+>> -	writel(val, pa_pmu->base + PA_INT_MASK);
+>> +	writel(val, pa_pmu->base + regs->mask);
+>>   }
+>>   
+>>   static u32 hisi_pa_pmu_get_int_status(struct hisi_pmu *pa_pmu)
+>>   {
+>> -	return readl(pa_pmu->base + PA_INT_STATUS);
+>> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->present;
+>> +
+>> +	return readl(pa_pmu->base + regs->status);
+>>   }
+>>   
+>>   static void hisi_pa_pmu_clear_int_status(struct hisi_pmu *pa_pmu, int idx)
+>>   {
+>> -	writel(1 << idx, pa_pmu->base + PA_INT_CLEAR);
+>> -}
+>> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->present;
+>>   
+>> -static const struct acpi_device_id hisi_pa_pmu_acpi_match[] = {
+>> -	{ "HISI0273", },
+>> -	{}
+>> -};
+>> -MODULE_DEVICE_TABLE(acpi, hisi_pa_pmu_acpi_match);
+>> +	writel(1 << idx, pa_pmu->base + regs->clear);
+>> +}
+>>   
+>>   static int hisi_pa_pmu_init_data(struct platform_device *pdev,
+>>   				   struct hisi_pmu *pa_pmu)
+>>   {
+>> +	const struct hisi_pmu_dev_info *pa_pmu_info;
+>> +	int idx;
+>> +
+>> +	pa_pmu_info = device_get_match_data(&pdev->dev);
+>> +	if (!pa_pmu_info)
+>> +		return -ENODEV;
+>> +
+> How can it happen? Every supported HID has attached a data pointer. If you do
+> need this add some message here, it'll be useful to see where's wrong.
 
-They copy this into their own board DT but (hopefully) wonder "Is this
-actually the correct voltage for my case?". They look closer at the
-downstream camera setup and see that vdda/l16 actually needs 2.7V.
+will add message,.
 
-For each additional regulator they need to actively add something and
-think about the changes before it will build successfully.
+>>   	/*
+>>   	 * As PA PMU is in a SICL, use the SICL_ID and the index ID
+>>   	 * to identify the PA PMU.
+>> @@ -284,6 +302,11 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
+>>   
+>>   	pa_pmu->identifier = readl(pa_pmu->base + PA_PMU_VERSION);
+>>   
+>> +	idx = hisi_uncore_pmu_ver2idx(pa_pmu);
+>> +	pa_pmu->dev_info = &pa_pmu_info[idx];
+>> +	if (!pa_pmu->dev_info || !pa_pmu->dev_info->name)
+>> +		return -EINVAL;
+>> +
+>>   	return 0;
+>>   }
+>>   
+>> @@ -314,6 +337,32 @@ static const struct attribute_group hisi_pa_pmu_v2_events_group = {
+>>   	.attrs = hisi_pa_pmu_v2_events_attr,
+>>   };
+>>   
+>> +static struct attribute *hisi_pa_pmu_v3_events_attr[] = {
+>> +	HISI_PMU_EVENT_ATTR(tx_req,	0x0),
+>> +	HISI_PMU_EVENT_ATTR(tx_dat,	0x1),
+>> +	HISI_PMU_EVENT_ATTR(tx_snp,	0x2),
+>> +	HISI_PMU_EVENT_ATTR(rx_req,	0x7),
+>> +	HISI_PMU_EVENT_ATTR(rx_dat,	0x8),
+>> +	HISI_PMU_EVENT_ATTR(rx_snp,	0x9),
+>> +	NULL
+>> +};
+>> +
+>> +static const struct attribute_group hisi_pa_pmu_v3_events_group = {
+>> +	.name = "events",
+>> +	.attrs = hisi_pa_pmu_v3_events_attr,
+>> +};
+>> +
+>> +static struct attribute *hisi_h60pa_pmu_events_attr[] = {
+>> +	HISI_PMU_EVENT_ATTR(rx_flit,	0x50),
+>> +	HISI_PMU_EVENT_ATTR(tx_flit,	0x65),
+>> +	NULL
+>> +};
+>> +
+>> +static const struct attribute_group hisi_h60pa_pmu_events_group = {
+>> +	.name = "events",
+>> +	.attrs = hisi_h60pa_pmu_events_attr,
+>> +};
+>> +
+>>   static DEVICE_ATTR(cpumask, 0444, hisi_cpumask_sysfs_show, NULL);
+>>   
+>>   static struct attribute *hisi_pa_pmu_cpumask_attrs[] = {
+>> @@ -345,6 +394,57 @@ static const struct attribute_group *hisi_pa_pmu_v2_attr_groups[] = {
+>>   	NULL
+>>   };
+>>   
+>> +static const struct attribute_group *hisi_pa_pmu_v3_attr_groups[] = {
+>> +	&hisi_pa_pmu_v2_format_group,
+>> +	&hisi_pa_pmu_v3_events_group,
+>> +	&hisi_pa_pmu_cpumask_attr_group,
+>> +	&hisi_pa_pmu_identifier_group,
+>> +	NULL
+>> +};
+>> +
+>> +static struct hisi_pa_pmu_int_regs hisi_pa_pmu_regs = {
+>> +	.mask = PA_INT_MASK,
+>> +	.clear = PA_INT_CLEAR,
+>> +	.status = PA_INT_STATUS,
+>> +};
+>> +
+>> +static const struct hisi_pmu_dev_info hisi_h32pa[] = {
+>> +	[1] = {
+>> +		.name = "pa",
+>> +		.attr_groups = hisi_pa_pmu_v2_attr_groups,
+>> +		.present = &hisi_pa_pmu_regs,
+>> +	},
+>> +	[2] = {
+>> +		.name = "pa",
+>> +		.attr_groups = hisi_pa_pmu_v3_attr_groups,
+>> +		.present = &hisi_pa_pmu_regs,
+>> +	},
+>> +	{}
+>> +};
+>> +
+>> +static const struct attribute_group *hisi_h60pa_pmu_attr_groups[] = {
+>> +	&hisi_pa_pmu_v2_format_group,
+>> +	&hisi_h60pa_pmu_events_group,
+>> +	&hisi_pa_pmu_cpumask_attr_group,
+>> +	&hisi_pa_pmu_identifier_group,
+>> +	NULL
+>> +};
+>> +
+>> +static struct hisi_pa_pmu_int_regs hisi_h60pa_pmu_regs = {
+>> +	.mask = H60PA_INT_MASK,
+>> +	.clear = H60PA_INT_STATUS, /* Clear on write */
+>> +	.status = H60PA_INT_STATUS,
+>> +};
+>> +
+>> +static const struct hisi_pmu_dev_info hisi_h60pa[] = {
+>> +	[1] = {
+>> +		.name = "h60pa",
+>> +		.attr_groups = hisi_h60pa_pmu_attr_groups,
+>> +		.present = &hisi_h60pa_pmu_regs,
+>> +	},
+>> +	{}
+>> +};
+>> +
+>>   static const struct hisi_uncore_ops hisi_uncore_pa_ops = {
+>>   	.write_evtype		= hisi_pa_pmu_write_evtype,
+>>   	.get_event_idx		= hisi_uncore_pmu_get_event_idx,
+>> @@ -375,7 +475,7 @@ static int hisi_pa_pmu_dev_probe(struct platform_device *pdev,
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	pa_pmu->pmu_events.attr_groups = hisi_pa_pmu_v2_attr_groups;
+>> +	pa_pmu->pmu_events.attr_groups = pa_pmu->dev_info->attr_groups;
+>>   	pa_pmu->num_counters = PA_NR_COUNTERS;
+>>   	pa_pmu->ops = &hisi_uncore_pa_ops;
+>>   	pa_pmu->check_event = 0xB0;
+>> @@ -400,8 +500,9 @@ static int hisi_pa_pmu_probe(struct platform_device *pdev)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%u_pa%u",
+>> -			      pa_pmu->sicl_id, pa_pmu->index_id);
+>> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%d_%s%u",
+>> +			      pa_pmu->sicl_id, pa_pmu->dev_info->name,
+>> +			      pa_pmu->index_id);
+>>   	if (!name)
+>>   		return -ENOMEM;
+>>   
+>> @@ -435,6 +536,13 @@ static int hisi_pa_pmu_remove(struct platform_device *pdev)
+>>   	return 0;
+>>   }
+>>   
+>> +static const struct acpi_device_id hisi_pa_pmu_acpi_match[] = {
+>> +	{ "HISI0273", (kernel_ulong_t)hisi_h32pa },
+>> +	{ "HISI0274", (kernel_ulong_t)hisi_h60pa },
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(acpi, hisi_pa_pmu_acpi_match);
+>> +
+>>   static struct platform_driver hisi_pa_pmu_driver = {
+>>   	.driver = {
+>>   		.name = "hisi_pa_pmu",
+>> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+>> index 07890a8e96ca..73574cc0a243 100644
+>> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
+>> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+>> @@ -23,7 +23,6 @@
+>>   #undef pr_fmt
+>>   #define pr_fmt(fmt)     "hisi_pmu: " fmt
+>>   
+>> -#define HISI_PMU_V2		0x30
+>>   #define HISI_MAX_COUNTERS 0x10
+>>   #define to_hisi_pmu(p)	(container_of(p, struct hisi_pmu, pmu))
+>>   
+>> @@ -43,6 +42,13 @@
+>>   		return FIELD_GET(GENMASK_ULL(hi, lo), event->attr.config);  \
+>>   	}
+>>   
+>> +enum hisi_pmu_version {
+>> +	HISI_PMU_V1,
+>> +	HISI_PMU_V2 = 0x30,
+>> +	HISI_PMU_V3 = 0x40,
+>> +	HISI_PMU_MAX
+>> +};
+>> +
+>>   struct hisi_pmu;
+>>   
+>>   struct hisi_uncore_ops {
+>> @@ -62,6 +68,13 @@ struct hisi_uncore_ops {
+>>   	void (*disable_filter)(struct perf_event *event);
+>>   };
+>>   
+>> +/* Describes the HISI PMU chip features information */
+>> +struct hisi_pmu_dev_info {
+>> +	const char *name;
+>> +	const struct attribute_group **attr_groups;
+>> +	void *present;
+> present is unclear. Better for another name.
 
-I believe that in this case being unaware of additional required changes
-is far more likely than making "fat finger" mistakes. Regulators is
-simply something one needs to be careful about. Even if we add
-fail-safes for regulator name typos, you could just as easily have typos
-in the specified voltages. I always look twice before testing regulator
-changes and would hope this applies to most people. :)
+Yes, I will do that.
 
-Thanks,
-Stephan
+>> +};
+>> +
+>>   struct hisi_pmu_hwevents {
+>>   	struct perf_event *hw_events[HISI_MAX_COUNTERS];
+>>   	DECLARE_BITMAP(used_mask, HISI_MAX_COUNTERS);
+>> @@ -72,6 +85,7 @@ struct hisi_pmu_hwevents {
+>>   struct hisi_pmu {
+>>   	struct pmu pmu;
+>>   	const struct hisi_uncore_ops *ops;
+>> +	const struct hisi_pmu_dev_info *dev_info;
+>>   	struct hisi_pmu_hwevents pmu_events;
+>>   	/* associated_cpus: All CPUs associated with the PMU */
+>>   	cpumask_t associated_cpus;
+>> @@ -92,7 +106,7 @@ struct hisi_pmu {
+>>   	int counter_bits;
+>>   	/* check event code range */
+>>   	int check_event;
+>> -	u32 identifier;
+>> +	enum hisi_pmu_version identifier;
+>>   };
+>>   
+>>   int hisi_uncore_pmu_get_event_idx(struct perf_event *event);
+>> @@ -122,4 +136,22 @@ int hisi_uncore_pmu_init_irq(struct hisi_pmu *hisi_pmu,
+>>   			     struct platform_device *pdev);
+>>   
+>>   void hisi_pmu_init(struct hisi_pmu *hisi_pmu, struct module *module);
+>> +
+>> +int hisi_uncore_pmu_ver2idx(struct hisi_pmu *pmu)
+> may need a "static inline" qualifier. This function is used only in the pa pmu,
+> don't need to put it in the header.
+
+Yes, I will do that.
+
+>> +{
+>> +	int idx;
+>> +
+>> +	switch (pmu->identifier) {
+> I see no advantage for defining the versions as enum, use macro is ok. You just
+> read the identifiers from the hardware and have no other handling. And this
+> function makes things even complex, just handle it as simple as possible is
+> preferred. maybe:
+>
+> switch (pmu->identifier) {
+> 	case HISI_PMU_V1:
+> 		pa_pmu->device_info = hisi_h32pa_v1;
+> 		break;
+> 	case HISI_PMU_V2:
+> 		pa_pmu->device_info = hisi_h32pa_v2;
+> 		break;
+> [...]
+>
+> Thanks.
+
+Sure, Will fix in next version.
+
+>> +	case HISI_PMU_V1:
+>> +		idx = 0; break;
+>> +	case HISI_PMU_V2:
+>> +		idx = 1; break;
+>> +	case HISI_PMU_V3:
+>> +	/* When running on later version, returns the largest supported version */
+>> +	default:
+>> +		idx = 2;
+>> +	}
+>> +
+>> +	return idx;
+>> +}
+>>   #endif /* __HISI_UNCORE_PMU_H__ */
+>>
+> .
+>
+
