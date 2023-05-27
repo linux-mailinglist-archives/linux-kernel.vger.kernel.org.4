@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E12B7135DF
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 19:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10C97135E0
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 19:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjE0RWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 13:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S230450AbjE0RWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 13:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjE0RWC (ORCPT
+        with ESMTP id S230486AbjE0RWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 13:22:02 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680DEBD;
-        Sat, 27 May 2023 10:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1685208118;
-        bh=5XMvPQIAG4VKqcOFjJ+4yenaaFoxa0cRI511fqDm5UY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AFELtOBKHt01Mq28TK/qi4+iHw8bdHZ8Lnu57iQc47QxW9+CaiAlURKJYPHwQ3pfR
-         vGh3Brz91qjpMjxHPt6olHY0AM986BYtLbGm8gRs+CxxZNlwzHLZJFxE5h1NfTZaDD
-         vIxUeK/0OJ2v+jz2fP9t8g1ixoiVywQ3f3F2haB2gsnhUIiFmOqBEksKZVCbZzjEmi
-         y/q+/6+O3YAiOumms1C4YLPQAMqnlaLLEUlJfAzdZEg196N8qLpMQFwQMWXhemeJLT
-         57De5rbEvIDF9AWj0wah2KEuOoXYNmcJlbuOzvJ6a2K97uL6F4jTI5lPdnR/XbzsIL
-         B7wD3P7NbihxA==
-Received: from [192.168.18.28] (unknown [198.16.212.139])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QT7rP6XnYz162G;
-        Sat, 27 May 2023 13:21:57 -0400 (EDT)
-Message-ID: <8b08772b-a69c-1f00-a43f-afcc5861ab4e@efficios.com>
-Date:   Sat, 27 May 2023 13:21:58 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, pbonzini@redhat.com
-Cc:     linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        ndesaulniers@google.com, mingo@redhat.com, will@kernel.org,
-        longman@redhat.com, boqun.feng@gmail.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        jiangshanlai@gmail.com, rcu@vger.kernel.org, tj@kernel.org,
-        tglx@linutronix.de
-References: <20230526205204.861311518@infradead.org>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230526205204.861311518@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Sat, 27 May 2023 13:22:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF78E1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 10:22:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA9D8603F7
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 17:22:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 17CC1C433D2;
+        Sat, 27 May 2023 17:22:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685208155;
+        bh=iLmQvKnR0W+7FxEY1A+v5WguoW1iSCLbA5KWnRCGKPw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=AHu3Z+8trOd0ClOKxvqkTTzNpWRx1bSts5AHV7HDO6qVSEdYY96pXN3wfcDR3uQVn
+         2lsYHdNlsTMZyhu8tN6IEO9sMjAHbOIIXCk4qYpdEXbXcRTeKgcH6p7BjntXpMRu2p
+         Wik+rvjWLFAZvsJ8m8WmNgxG5EFQ7r+B2G6UIh/HoAOfvNVe8LPCKp2WPfyO7jYsDZ
+         IT9W38B4eZp4U6K2ZkDPh73nvUNbwNzK/ZSu/GXl1E9RoU6admHgkwe4U8UMGq8nwI
+         hyK6Uh48bs5P+jHGfKIjt1+arTJIh+8hWjuT6V96LRBF2Po3U+aVDIhZSJwHsstmbf
+         vfO3lSPFLLstQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EBE86C4166F;
+        Sat, 27 May 2023 17:22:34 +0000 (UTC)
+Subject: Re: [GIT PULL] xen: branch for v6.4-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230527053544.31822-1-jgross@suse.com>
+References: <20230527053544.31822-1-jgross@suse.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230527053544.31822-1-jgross@suse.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.4-rc4-tag
+X-PR-Tracked-Commit-Id: 335b4223466dd75f9f3ea4918187afbadd22e5c8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 4e893b5aa4ac2c8a56a40d18fe87e9d2295e5dcf
+Message-Id: <168520815495.27218.6793284360828021541.pr-tracker-bot@kernel.org>
+Date:   Sat, 27 May 2023 17:22:34 +0000
+To:     Juergen Gross <jgross@suse.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org, sstabellini@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,39 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/23 16:52, Peter Zijlstra wrote:
-> By popular demand, a new and improved version :-)
-> 
-> New since -v1 ( https://lkml.kernel.org/r/20230526150549.250372621@infradead.org )
-> 
->   - much improved interface for lock guards: guard() and scoped () { }
->     as suggested by Linus.
+The pull request you sent on Sat, 27 May 2023 07:35:44 +0200:
 
-<name bikeshedding>
+> git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.4-rc4-tag
 
-I know I'm the one who hinted at C++ "std::scoped_lock" as a similar 
-preexisting API, but I find that "scoped()" is weird in the newly 
-proposed form. "scoped_lock" is fine considering that "scoped" is an 
-adjective applying to "lock", but in the case of e.g. scoped(rcu) { }, 
-then we are really declaring a "scope" of type "rcu". I suspect that in 
-this case:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/4e893b5aa4ac2c8a56a40d18fe87e9d2295e5dcf
 
-scope(rcu) { }
-
-would be less unexpected than the adjective form:
-
-scoped(rcu) { }
-
-Especially if we go for the name "guard()", rather than the adjective 
-guarded(), for its counterpart.
-
-Thanks,
-
-Mathieu
-
+Thank you!
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
