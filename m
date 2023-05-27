@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF6F7132E5
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50A27132E7
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjE0HWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 03:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S231616AbjE0HWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 03:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjE0HWh (ORCPT
+        with ESMTP id S230288AbjE0HWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 03:22:37 -0400
+        Sat, 27 May 2023 03:22:39 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0802912A
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 00:22:35 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561f201a646so36502407b3.1
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 00:22:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD0FB1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 00:22:37 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565c380565dso18757787b3.1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 00:22:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685172154; x=1687764154;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NKwlyXDvi4TAib/MQHOSHwUj1vOGQp2Gy0+IiR3d+yk=;
-        b=3wumILkNEhrY/9Q+oY5UUhrbJtDs5zxOJ1sDZiXZbiYFgYU356YvQ+XjLxrQeqX7Uh
-         f3/GBV0a+AXlicQodNnx9QJA+kIsthYO/x7ZJlT+A0X4ly49zE6CvjxL4rb/B4vaL9G7
-         LuZhZmgIKNzJ+cTooHtX7Emqz9cXm6x/tmQc6uM++7t9TRTwnehAYSjMhz0XPQ32+YJc
-         4zG++FGJzmcx0FQ7Aq1HaKdrs+l6Ff/5qyMUo5oAcXtcQL4LmT5qbHMhZ3E2qy6Hj9Ar
-         nUWEillBQssWjibj4y2LWlpPMHVGkyJiaH/9vRnk6sTlQW6XOvzx5K2zzGjRISHVGWMx
-         cjcQ==
+        d=google.com; s=20221208; t=1685172156; x=1687764156;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YmLTisiNizeIrXvrjhg9xDfBg2TQz5BFZHX1FeqqDUw=;
+        b=EoBHDkjVPKfZAdSXiiUd20zvhFzUg/tYFH+HyrLhGVARc5vROiiqN1i4oWDPmXgi9j
+         +0xs62mESMgE8b9umeAwcEnMYaxvZqa1biwzAQsrCrjmcDiGm+h6OZw+PVO3NOPBCzgC
+         Zpn5UZhSUpR9C32IQtp2dppGevbqjx20YdLSe39shf36hi/Xg+4Me1yPB0VId66Yd+yq
+         b92MyiGMgOr2Zm6SxW5z8lRxKKtAs8f6enyXr70EkxYwglAtBFWjgdh5nUpkorkK5rHV
+         6K0a81BsEXF2u3Fiy8b/+0zOuJy1L5Q0ER2hC6nJeg84gjLA9rtvyqnYl3dPd7trlOYf
+         AI8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685172154; x=1687764154;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NKwlyXDvi4TAib/MQHOSHwUj1vOGQp2Gy0+IiR3d+yk=;
-        b=PUU7clEEHkJapNreCJH8YiVx63eSlc6U99t43+f5hGP/darOcAvkV4cO1gIpWZk73y
-         7M94F8/HWWR2kMBbBpcJM1GBsoAr9NnTU9dHKUnQwHMHeNicHAoE/sreApooEFDKxT81
-         h1BMR7rQydj+rt5LdjgCcVjgyCqilyKd0YUXqMym97o+DH4ZXNu/9CnqG61IFZAu9a0X
-         zM98D4AfI4flmJyf9KkHdP7nOo8IVNiLvLEKKXHwyjekYLXdAIMauELp935cVWxH03cW
-         ByFcxVDjWoLUvk2Plr2CpOrlp7UoskQ2eTCFaYrF+FgiAM1l6YR2k1uYQIlF1YeYqjCN
-         P6WA==
-X-Gm-Message-State: AC+VfDxIK4NN8w/svNw0an+OOCSVCfyqm6MEOFzM0qnHb1ir0nTyJTU9
-        PFIBOtbJa+fqh7vAa2+WgqYHxo21AeCc
-X-Google-Smtp-Source: ACHHUZ5nn19zZfoX2OmJ785N7mYI0VfRvjROK/lia39ta2xMAHyKZpNv5WUFuWlL0Uc0XhHztbUVznHkidoO
+        d=1e100.net; s=20221208; t=1685172156; x=1687764156;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YmLTisiNizeIrXvrjhg9xDfBg2TQz5BFZHX1FeqqDUw=;
+        b=M+Fpd+EznCdCJ5F6Kq6c/sI+Va5s+Q1a/chbKhh0AHQPmhDgLjO+a6iiV4eSacNdXK
+         P3CGLcw3U8asOZbovO132NoS1MqRJ6FckaDJNtKAKzsKqhmBDSwjhR4EXwa49RbndZya
+         7dyZVS5eRb+XEAd4rhgVQgi7JeuGSMMsUeFZJ623EX6xGThBFxP6GIxJxtBbSACSPbUj
+         Us84AVoDu7EVghw/mx9mFIc/CYlg5m7uKyHByGIdHvz962naHcqsb+lVLZwhVktim0NE
+         LKFB69N8AXgHsflpLYmVLh4MCu2puxt4e3QY5jkW13miBB2xfKn9xGtITyILDcDb5N9R
+         TmXQ==
+X-Gm-Message-State: AC+VfDy4XHo4cRm9wiCPwEI501wOj7qhFQs1QJEjCvRIu3syvTVZsqmq
+        a8HgNVUkmXcoywaghu8KP4VworQrw0rw
+X-Google-Smtp-Source: ACHHUZ7EF+v83A4j5vcqObk72beR2nK+Str1BgMDIl73nSTXjDZKqr4ZRkyKHLaCwRmwJSSDv+8LEYBz6T7r
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a81:ef02:0:b0:565:bb48:2b57 with SMTP id
- o2-20020a81ef02000000b00565bb482b57mr2044422ywm.0.1685172154287; Sat, 27 May
- 2023 00:22:34 -0700 (PDT)
-Date:   Sat, 27 May 2023 00:21:37 -0700
+ (user=irogers job=sendgmr) by 2002:a81:4319:0:b0:55d:e173:8a73 with SMTP id
+ q25-20020a814319000000b0055de1738a73mr1011285ywa.2.1685172156731; Sat, 27 May
+ 2023 00:22:36 -0700 (PDT)
+Date:   Sat, 27 May 2023 00:21:38 -0700
 In-Reply-To: <20230527072210.2900565-1-irogers@google.com>
-Message-Id: <20230527072210.2900565-2-irogers@google.com>
+Message-Id: <20230527072210.2900565-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20230527072210.2900565-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v5 01/34] perf cpumap: Add internal nr and cpu accessors
+Subject: [PATCH v5 02/34] perf cpumap: Add equal function
 From:   Ian Rogers <irogers@google.com>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -87,7 +87,6 @@ To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
         linux-arm-kernel@lists.infradead.org,
         linux-perf-users@vger.kernel.org
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -99,192 +98,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These accessors assume the map is non-null. Rewrite functions to use
-rather than direct accesses. This also fixes a build regression for
-REFCNT_CHECKING in the intersect function.
+Equality is a useful property to compare after merging and
+intersecting maps.
 
-Suggested-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Ian Rogers <irogers@google.com>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- tools/lib/perf/cpumap.c | 74 +++++++++++++++++++++++++----------------
- 1 file changed, 45 insertions(+), 29 deletions(-)
+ tools/lib/perf/cpumap.c              | 21 ++++++++++++++++
+ tools/lib/perf/include/perf/cpumap.h |  2 ++
+ tools/perf/tests/cpumap.c            | 37 ++++++++++++++++++++++++++++
+ 3 files changed, 60 insertions(+)
 
 diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
-index d4f3a1a12522..ec3f4ac8b1e2 100644
+index ec3f4ac8b1e2..98d7cb24a158 100644
 --- a/tools/lib/perf/cpumap.c
 +++ b/tools/lib/perf/cpumap.c
-@@ -99,6 +99,11 @@ static int cmp_cpu(const void *a, const void *b)
- 	return cpu_a->cpu - cpu_b->cpu;
+@@ -335,6 +335,27 @@ bool perf_cpu_map__has(const struct perf_cpu_map *cpus, struct perf_cpu cpu)
+ 	return perf_cpu_map__idx(cpus, cpu) != -1;
  }
  
-+static struct perf_cpu __perf_cpu_map__cpu(const struct perf_cpu_map *cpus, int idx)
++bool perf_cpu_map__equal(const struct perf_cpu_map *lhs, const struct perf_cpu_map *rhs)
 +{
-+	return RC_CHK_ACCESS(cpus)->map[idx];
++	int nr;
++
++	if (lhs == rhs)
++		return true;
++
++	if (!lhs || !rhs)
++		return false;
++
++	nr = __perf_cpu_map__nr(lhs);
++	if (nr != __perf_cpu_map__nr(rhs))
++		return false;
++
++	for (int idx = 0; idx < nr; idx++) {
++		if (__perf_cpu_map__cpu(lhs, idx).cpu != __perf_cpu_map__cpu(rhs, idx).cpu)
++			return false;
++	}
++	return true;
 +}
 +
- static struct perf_cpu_map *cpu_map__trim_new(int nr_cpus, const struct perf_cpu *tmp_cpus)
- {
- 	size_t payload_size = nr_cpus * sizeof(struct perf_cpu);
-@@ -111,8 +116,12 @@ static struct perf_cpu_map *cpu_map__trim_new(int nr_cpus, const struct perf_cpu
- 		/* Remove dups */
- 		j = 0;
- 		for (i = 0; i < nr_cpus; i++) {
--			if (i == 0 || RC_CHK_ACCESS(cpus)->map[i].cpu != RC_CHK_ACCESS(cpus)->map[i - 1].cpu)
--				RC_CHK_ACCESS(cpus)->map[j++].cpu = RC_CHK_ACCESS(cpus)->map[i].cpu;
-+			if (i == 0 ||
-+			    __perf_cpu_map__cpu(cpus, i).cpu !=
-+			    __perf_cpu_map__cpu(cpus, i - 1).cpu) {
-+				RC_CHK_ACCESS(cpus)->map[j++].cpu =
-+					__perf_cpu_map__cpu(cpus, i).cpu;
-+			}
- 		}
- 		perf_cpu_map__set_nr(cpus, j);
- 		assert(j <= nr_cpus);
-@@ -269,26 +278,31 @@ struct perf_cpu_map *perf_cpu_map__new(const char *cpu_list)
- 	return cpus;
- }
- 
-+static int __perf_cpu_map__nr(const struct perf_cpu_map *cpus)
-+{
-+	return RC_CHK_ACCESS(cpus)->nr;
-+}
-+
- struct perf_cpu perf_cpu_map__cpu(const struct perf_cpu_map *cpus, int idx)
+ struct perf_cpu perf_cpu_map__max(const struct perf_cpu_map *map)
  {
  	struct perf_cpu result = {
- 		.cpu = -1
- 	};
+diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/include/perf/cpumap.h
+index b4c9a827a88a..cedfc26d944e 100644
+--- a/tools/lib/perf/include/perf/cpumap.h
++++ b/tools/lib/perf/include/perf/cpumap.h
+@@ -33,6 +33,8 @@ LIBPERF_API int perf_cpu_map__nr(const struct perf_cpu_map *cpus);
+ LIBPERF_API bool perf_cpu_map__empty(const struct perf_cpu_map *map);
+ LIBPERF_API struct perf_cpu perf_cpu_map__max(const struct perf_cpu_map *map);
+ LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_cpu cpu);
++LIBPERF_API bool perf_cpu_map__equal(const struct perf_cpu_map *lhs,
++				     const struct perf_cpu_map *rhs);
  
--	if (cpus && idx < RC_CHK_ACCESS(cpus)->nr)
--		return RC_CHK_ACCESS(cpus)->map[idx];
-+	if (cpus && idx < __perf_cpu_map__nr(cpus))
-+		return __perf_cpu_map__cpu(cpus, idx);
- 
- 	return result;
+ #define perf_cpu_map__for_each_cpu(cpu, idx, cpus)		\
+ 	for ((idx) = 0, (cpu) = perf_cpu_map__cpu(cpus, idx);	\
+diff --git a/tools/perf/tests/cpumap.c b/tools/perf/tests/cpumap.c
+index 83805690c209..7730fc2ab40b 100644
+--- a/tools/perf/tests/cpumap.c
++++ b/tools/perf/tests/cpumap.c
+@@ -211,11 +211,48 @@ static int test__cpu_map_intersect(struct test_suite *test __maybe_unused,
+ 	return ret;
  }
  
- int perf_cpu_map__nr(const struct perf_cpu_map *cpus)
- {
--	return cpus ? RC_CHK_ACCESS(cpus)->nr : 1;
-+	return cpus ? __perf_cpu_map__nr(cpus) : 1;
- }
++static int test__cpu_map_equal(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
++{
++	struct perf_cpu_map *any = perf_cpu_map__dummy_new();
++	struct perf_cpu_map *one = perf_cpu_map__new("1");
++	struct perf_cpu_map *two = perf_cpu_map__new("2");
++	struct perf_cpu_map *empty = perf_cpu_map__intersect(one, two);
++	struct perf_cpu_map *pair = perf_cpu_map__new("1-2");
++	struct perf_cpu_map *tmp;
++	struct perf_cpu_map *maps[] = {empty, any, one, two, pair};
++
++	for (size_t i = 0; i < ARRAY_SIZE(maps); i++) {
++		/* Maps equal themself. */
++		TEST_ASSERT_VAL("equal", perf_cpu_map__equal(maps[i], maps[i]));
++		for (size_t j = 0; j < ARRAY_SIZE(maps); j++) {
++			/* Maps dont't equal each other. */
++			if (i == j)
++				continue;
++			TEST_ASSERT_VAL("not equal", !perf_cpu_map__equal(maps[i], maps[j]));
++		}
++	}
++
++	/* Maps equal made maps. */
++	tmp = perf_cpu_map__merge(perf_cpu_map__get(one), two);
++	TEST_ASSERT_VAL("pair", perf_cpu_map__equal(pair, tmp));
++	perf_cpu_map__put(tmp);
++
++	tmp = perf_cpu_map__intersect(pair, one);
++	TEST_ASSERT_VAL("one", perf_cpu_map__equal(one, tmp));
++	perf_cpu_map__put(tmp);
++
++	for (size_t i = 0; i < ARRAY_SIZE(maps); i++)
++		perf_cpu_map__put(maps[i]);
++
++	return TEST_OK;
++}
++
+ static struct test_case tests__cpu_map[] = {
+ 	TEST_CASE("Synthesize cpu map", cpu_map_synthesize),
+ 	TEST_CASE("Print cpu map", cpu_map_print),
+ 	TEST_CASE("Merge cpu map", cpu_map_merge),
+ 	TEST_CASE("Intersect cpu map", cpu_map_intersect),
++	TEST_CASE("Equal cpu map", cpu_map_equal),
+ 	{	.name = NULL, }
+ };
  
- bool perf_cpu_map__empty(const struct perf_cpu_map *map)
- {
--	return map ? RC_CHK_ACCESS(map)->map[0].cpu == -1 : true;
-+	return map ? __perf_cpu_map__cpu(map, 0).cpu == -1 : true;
- }
- 
- int perf_cpu_map__idx(const struct perf_cpu_map *cpus, struct perf_cpu cpu)
-@@ -299,10 +313,10 @@ int perf_cpu_map__idx(const struct perf_cpu_map *cpus, struct perf_cpu cpu)
- 		return -1;
- 
- 	low = 0;
--	high = RC_CHK_ACCESS(cpus)->nr;
-+	high = __perf_cpu_map__nr(cpus);
- 	while (low < high) {
- 		int idx = (low + high) / 2;
--		struct perf_cpu cpu_at_idx = RC_CHK_ACCESS(cpus)->map[idx];
-+		struct perf_cpu cpu_at_idx = __perf_cpu_map__cpu(cpus, idx);
- 
- 		if (cpu_at_idx.cpu == cpu.cpu)
- 			return idx;
-@@ -328,7 +342,9 @@ struct perf_cpu perf_cpu_map__max(const struct perf_cpu_map *map)
- 	};
- 
- 	// cpu_map__trim_new() qsort()s it, cpu_map__default_new() sorts it as well.
--	return RC_CHK_ACCESS(map)->nr > 0 ? RC_CHK_ACCESS(map)->map[RC_CHK_ACCESS(map)->nr - 1] : result;
-+	return __perf_cpu_map__nr(map) > 0
-+		? __perf_cpu_map__cpu(map, __perf_cpu_map__nr(map) - 1)
-+		: result;
- }
- 
- /** Is 'b' a subset of 'a'. */
-@@ -336,15 +352,15 @@ bool perf_cpu_map__is_subset(const struct perf_cpu_map *a, const struct perf_cpu
- {
- 	if (a == b || !b)
- 		return true;
--	if (!a || RC_CHK_ACCESS(b)->nr > RC_CHK_ACCESS(a)->nr)
-+	if (!a || __perf_cpu_map__nr(b) > __perf_cpu_map__nr(a))
- 		return false;
- 
--	for (int i = 0, j = 0; i < RC_CHK_ACCESS(a)->nr; i++) {
--		if (RC_CHK_ACCESS(a)->map[i].cpu > RC_CHK_ACCESS(b)->map[j].cpu)
-+	for (int i = 0, j = 0; i < __perf_cpu_map__nr(a); i++) {
-+		if (__perf_cpu_map__cpu(a, i).cpu > __perf_cpu_map__cpu(b, j).cpu)
- 			return false;
--		if (RC_CHK_ACCESS(a)->map[i].cpu == RC_CHK_ACCESS(b)->map[j].cpu) {
-+		if (__perf_cpu_map__cpu(a, i).cpu == __perf_cpu_map__cpu(b, j).cpu) {
- 			j++;
--			if (j == RC_CHK_ACCESS(b)->nr)
-+			if (j == __perf_cpu_map__nr(b))
- 				return true;
- 		}
- 	}
-@@ -374,27 +390,27 @@ struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
- 		return perf_cpu_map__get(other);
- 	}
- 
--	tmp_len = RC_CHK_ACCESS(orig)->nr + RC_CHK_ACCESS(other)->nr;
-+	tmp_len = __perf_cpu_map__nr(orig) + __perf_cpu_map__nr(other);
- 	tmp_cpus = malloc(tmp_len * sizeof(struct perf_cpu));
- 	if (!tmp_cpus)
- 		return NULL;
- 
- 	/* Standard merge algorithm from wikipedia */
- 	i = j = k = 0;
--	while (i < RC_CHK_ACCESS(orig)->nr && j < RC_CHK_ACCESS(other)->nr) {
--		if (RC_CHK_ACCESS(orig)->map[i].cpu <= RC_CHK_ACCESS(other)->map[j].cpu) {
--			if (RC_CHK_ACCESS(orig)->map[i].cpu == RC_CHK_ACCESS(other)->map[j].cpu)
-+	while (i < __perf_cpu_map__nr(orig) && j < __perf_cpu_map__nr(other)) {
-+		if (__perf_cpu_map__cpu(orig, i).cpu <= __perf_cpu_map__cpu(other, j).cpu) {
-+			if (__perf_cpu_map__cpu(orig, i).cpu == __perf_cpu_map__cpu(other, j).cpu)
- 				j++;
--			tmp_cpus[k++] = RC_CHK_ACCESS(orig)->map[i++];
-+			tmp_cpus[k++] = __perf_cpu_map__cpu(orig, i++);
- 		} else
--			tmp_cpus[k++] = RC_CHK_ACCESS(other)->map[j++];
-+			tmp_cpus[k++] = __perf_cpu_map__cpu(other, j++);
- 	}
- 
--	while (i < RC_CHK_ACCESS(orig)->nr)
--		tmp_cpus[k++] = RC_CHK_ACCESS(orig)->map[i++];
-+	while (i < __perf_cpu_map__nr(orig))
-+		tmp_cpus[k++] = __perf_cpu_map__cpu(orig, i++);
- 
--	while (j < RC_CHK_ACCESS(other)->nr)
--		tmp_cpus[k++] = RC_CHK_ACCESS(other)->map[j++];
-+	while (j < __perf_cpu_map__nr(other))
-+		tmp_cpus[k++] = __perf_cpu_map__cpu(other, j++);
- 	assert(k <= tmp_len);
- 
- 	merged = cpu_map__trim_new(k, tmp_cpus);
-@@ -416,20 +432,20 @@ struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
- 	if (perf_cpu_map__is_subset(orig, other))
- 		return perf_cpu_map__get(other);
- 
--	tmp_len = max(orig->nr, other->nr);
-+	tmp_len = max(__perf_cpu_map__nr(orig), __perf_cpu_map__nr(other));
- 	tmp_cpus = malloc(tmp_len * sizeof(struct perf_cpu));
- 	if (!tmp_cpus)
- 		return NULL;
- 
- 	i = j = k = 0;
--	while (i < orig->nr && j < other->nr) {
--		if (orig->map[i].cpu < other->map[j].cpu)
-+	while (i < __perf_cpu_map__nr(orig) && j < __perf_cpu_map__nr(other)) {
-+		if (__perf_cpu_map__cpu(orig, i).cpu < __perf_cpu_map__cpu(other, j).cpu)
- 			i++;
--		else if (orig->map[i].cpu > other->map[j].cpu)
-+		else if (__perf_cpu_map__cpu(orig, i).cpu > __perf_cpu_map__cpu(other, j).cpu)
- 			j++;
- 		else {
- 			j++;
--			tmp_cpus[k++] = orig->map[i++];
-+			tmp_cpus[k++] = __perf_cpu_map__cpu(orig, i++);
- 		}
- 	}
- 	if (k)
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
