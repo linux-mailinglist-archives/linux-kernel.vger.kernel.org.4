@@ -2,158 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA307131F2
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 04:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09FD7131F5
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 04:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjE0C1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 22:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S237830AbjE0CcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 22:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjE0C1D (ORCPT
+        with ESMTP id S229762AbjE0CcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 22:27:03 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192AEC9;
-        Fri, 26 May 2023 19:27:02 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b011cffef2so11925005ad.3;
-        Fri, 26 May 2023 19:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685154421; x=1687746421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yGd3VhznQ2I/NQDk+4roFWXHVSOBmaxtJ+oHTP+UbGk=;
-        b=n7sDEKh6jt4tjfPVQPZjuftdEuC76pajkpfPSZEdFb7ieTmVQ5SpkxQNB5yMcm06QN
-         isB+1LbRGBHRIUuoBTXYa6Y702+fLmeOCqWjOutS3GZWlk7ZHJbef/Kcn2GDtcXt7Di5
-         B0F10QB32YuiJwlAvNLeESVDkmplddaavJBcbyNa2aP2XC3bQ0hI5yR8F/Yxwe5RODhi
-         Wb72xgb9IQXkByEhjLGwZbvv1kua9AC/H/Pkq96DLHrfA9rxhbQVjVHhbgkQ1B/bXkAB
-         aHgoCQgsq+/XaBn2ddmY+9Iwi18VcA5IRBqMr6/eWKC+vitweWJ0fDlo+tr2j1vcbrHE
-         eJ+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685154421; x=1687746421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yGd3VhznQ2I/NQDk+4roFWXHVSOBmaxtJ+oHTP+UbGk=;
-        b=RoreXIaO1cV//+dZ4Q5L7Jg8UBM/HBLCa8SGfk0qWsX6EpTCSaah62Kf8vj4rKnmOz
-         F+QKuNJw6QlmNm69UdiIQikMgE7PzRI5xYT8lpZhIiaktHgPPWISFYPvd7LvwJH405Wn
-         FdU5w7JqWPYTRX761kwzbeQQAkaswj1zjDADp5btEthHTwx4LMoeLx+kkuh+1xk6dPJI
-         MQj1c9cj+efcvUTZRq/Lu03rO4uHlym77QxuVpLFK7JIKbFqOHQtWcke7wAEHltSR2a2
-         YE4ydo0wZTNXA02Y4ZJ+CFbPkxKrpT1YQ8ZfdFEkmWgybqm6OOA0FPK1D4pYDeqNxDWc
-         mHnw==
-X-Gm-Message-State: AC+VfDyFEUPFdw8jQwcWdV8TZ5sTRBzMqHgTP5Xo0DbqyTScn/26JJAU
-        JFm3VKkeVBK2NBrhsA3wnhVBq40hgo4GOOI/xvg=
-X-Google-Smtp-Source: ACHHUZ6aAeSR4JF6rBXm5cC75wX5zCQJnq/3rFEcZQpE51VFfD85Rkd+KHCNiQAQXbtR9I84BTrFBx+V7cy+Ct2ere0=
-X-Received: by 2002:a17:903:2345:b0:1af:f4f5:6fae with SMTP id
- c5-20020a170903234500b001aff4f56faemr5778765plh.54.1685154421346; Fri, 26 May
- 2023 19:27:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1684999824.git.haibo1.xu@intel.com> <26dea518fc5e8da51e61db279d175364bfecd009.1684999824.git.haibo1.xu@intel.com>
- <20230525-705ddcbcd43aa63e3fd356c8@orel> <CAJve8onF9MFuaVsThFnhjWr6ZomB0Lhr9WXGvMiJDt5vrjeKLg@mail.gmail.com>
- <20230526-d8d768a23cd6bdc274bc165c@orel>
-In-Reply-To: <20230526-d8d768a23cd6bdc274bc165c@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Sat, 27 May 2023 10:26:51 +0800
-Message-ID: <CAJve8on=5NtnzR=iAQs2D4B2Ly=KFXF-0ZDtkXFuz-SdxTGGmA@mail.gmail.com>
-Subject: Re: [PATCH v2 09/11] KVM: riscv: selftests: Make check_supported arch specific
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 26 May 2023 22:32:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CEEC9
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 19:32:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8867F652D4
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 02:32:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C59C433EF;
+        Sat, 27 May 2023 02:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685154725;
+        bh=6yooBvheHKI+vBto37tEhoVjPjXcHeAsQbQFuaxF9SI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=Fi9HR5yOl26i1ImnXJq9YKMVKdwvNf8PKMJr/PTv24loJtVvdccwm1pP7BlgztHcc
+         skmqnJbpUTUBTX8aZKpcguYHBaiVLCkmXgKV4iXR8mrqnyJ8lG2vtoKUr1/dBe9hJk
+         RQE5NwYRG7uNO+r56Sb915yyysh08ZEwnJlcBCrYV38zZ8REA6sPBy8tC90K0aTQLg
+         J6mY39awDIlELoYkwX5M2Y1sRGhIfxac8cBGpBA5O+H/G9YIOaE3ijfX4/bfUm6Qas
+         h2PoWDGfCQtvwwZrxVVY5GhP2btwVt/kaz+L2diWB/pS+i/KnqFGmBMdoTCoIEgsOb
+         m0vgScZ8gQwpQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+841a46899768ec7bec67@syzkaller.appspotmail.com
+Subject: Re: [PATCH] mm/damon/core: fix divide error in damon_nr_accesses_to_accesses_bp()
+Date:   Fri, 26 May 2023 19:31:49 -0700
+Message-Id: <20230527023149.8441-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230527023330.23535-1-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 4:44=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
-om> wrote:
->
-> On Fri, May 26, 2023 at 03:50:32PM +0800, Haibo Xu wrote:
-> > On Fri, May 26, 2023 at 12:40=E2=80=AFAM Andrew Jones <ajones@ventanami=
-cro.com> wrote:
-> > >
-> > > On Thu, May 25, 2023 at 03:38:33PM +0800, Haibo Xu wrote:
-> > > > check_supported() was used to verify whether a feature/extension wa=
-s
-> > > > supported in a guest in the get-reg-list test. Currently this info
-> > > > can be retrieved through the KVM_CAP_ARM_* API in aarch64, but in
-> > > > riscv, this info was only exposed through the KVM_GET_ONE_REG on
-> > > > KVM_REG_RISCV_ISA_EXT pseudo registers.
-> > > >
-> > > > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > > > ---
-> > > >  tools/testing/selftests/kvm/get-reg-list.c | 32 +++++++++++-------=
-----
-> > > >  1 file changed, 16 insertions(+), 16 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/tes=
-ting/selftests/kvm/get-reg-list.c
-> > > > index f6ad7991a812..f1fc113e9719 100644
-> > > > --- a/tools/testing/selftests/kvm/get-reg-list.c
-> > > > +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> > > > @@ -99,6 +99,20 @@ void __weak print_reg(const char *prefix, __u64 =
-id)
-> > > >  }
-> > > >
-> > > >  #ifdef __aarch64__
-> > > > +static void check_supported(struct vcpu_reg_list *c)
-> > > > +{
-> > > > +     struct vcpu_reg_sublist *s;
-> > > > +
-> > > > +     for_each_sublist(c, s) {
-> > > > +             if (!s->capability)
-> > > > +                     continue;
-> > >
-> > > I was going to say that making this function aarch64 shouldn't be
-> > > necessary, since riscv leaves capability set to zero and this functio=
-n
-> > > doesn't do anything, but then looking ahead I see riscv is abusing
-> > > capability by putting isa extensions in it. IMO, capability should
-> > > only be set to KVM_CAP_* values. Since riscv doesn't use it, then it
-> > > should be left zero.
-> > >
-> > > If we're going to abuse something, then I'd rather abuse the 'feature=
-'
-> > > member, but since it's only an int (not an unsigned long), then let's
-> > > just add an 'unsigned long extension' member.
-> > >
-> >
-> > Good idea!
-> >
-> > For the new 'extension' member in riscv, I think its use case should be
-> > identical to the 'feature' member in aarch64(KVM_RISCV_ISA_EXT_F
-> > was similar to KVM_ARM_VCPU_SVE)? If so, I think we can just reuse
-> > the 'feature' member since the data type was not a big deal.
->
-> You're right. An int is fine for the isa extension index, which is all we
-> need to represent.
->
-> Thanks,
-> drew
+Hi Kefeng,
 
-Thanks for the suggestion! I will include the change in v3 soon.
+Thank you so much for this awesome patch!
+
+On Sat, 27 May 2023 10:33:30 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+
+> If 'aggr_interval' is smaller than 'sample_interval', max_nr_accesses becomes
+> zero which leads to divide error in damon_nr_accesses_to_accesses_bp(), let's
+> validate the values of them in damon_set_attrs() to fix it, which similar to
+> others attrs check.
+> 
+> Reported-by: syzbot+841a46899768ec7bec67@syzkaller.appspotmail.com
+
+I think it would be good to add the link to the report, e.g.,
+"Link: https://lore.kernel.org/damon/00000000000055fc4e05fc975bc2@google.com/"
+
+> Fixes: 2f5bef5a590b ("mm/damon/core: update monitoring results for new monitoring attributes")
+
+Could you please add 'Cc: <stable@vger.kernel.org> # 6.3.x-' ?
+
+Also, checkpatch.pl raises below warnings.
+
+```
+WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+#61: 
+If 'aggr_interval' is smaller than 'sample_interval', max_nr_accesses becomes
+
+WARNING: Reported-by: should be immediately followed by Closes: with a URL to the report
+#66: 
+Reported-by: syzbot+841a46899768ec7bec67@syzkaller.appspotmail.com
+Fixes: 2f5bef5a590b ("mm/damon/core: update monitoring results for new monitoring attributes")
+
+total: 0 errors, 2 warnings, 8 lines checked
+```
+
+Could you please resolve those by wrapping the commit messages and adding
+'Closes:' tag?  'Closes:' tag might be able to replace the 'Link:' tag I
+supposed above.  I have no strong opinions there but having both may harm
+nothing.
+
+Other than those,
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+
+Thanks,
+SJ
+
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  mm/damon/core.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/mm/damon/core.c b/mm/damon/core.c
+> index d9ef62047bf5..91cff7f2997e 100644
+> --- a/mm/damon/core.c
+> +++ b/mm/damon/core.c
+> @@ -551,6 +551,8 @@ int damon_set_attrs(struct damon_ctx *ctx, struct damon_attrs *attrs)
+>  		return -EINVAL;
+>  	if (attrs->min_nr_regions > attrs->max_nr_regions)
+>  		return -EINVAL;
+> +	if (attrs->sample_interval > attrs->aggr_interval)
+> +		return -EINVAL;
+>  
+>  	damon_update_monitoring_results(ctx, attrs);
+>  	ctx->attrs = *attrs;
+> -- 
+> 2.35.3
+> 
