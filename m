@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0878F7135C6
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335AE7135C7
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjE0Qp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 12:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S230056AbjE0Qpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 12:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjE0Qp0 (ORCPT
+        with ESMTP id S229494AbjE0Qp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 27 May 2023 12:45:26 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67DACE;
-        Sat, 27 May 2023 09:45:14 -0700 (PDT)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47443D3;
+        Sat, 27 May 2023 09:45:15 -0700 (PDT)
 X-GND-Sasl: contact@artur-rojek.eu
 X-GND-Sasl: contact@artur-rojek.eu
 X-GND-Sasl: contact@artur-rojek.eu
@@ -23,8 +23,8 @@ X-GND-Sasl: contact@artur-rojek.eu
 X-GND-Sasl: contact@artur-rojek.eu
 X-GND-Sasl: contact@artur-rojek.eu
 X-GND-Sasl: contact@artur-rojek.eu
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AFFEB20007;
-        Sat, 27 May 2023 16:45:10 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9D16920004;
+        Sat, 27 May 2023 16:45:12 +0000 (UTC)
 From:   Artur Rojek <contact@artur-rojek.eu>
 To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>,
@@ -33,95 +33,112 @@ To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
 Cc:     Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
         linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
         Artur Rojek <contact@artur-rojek.eu>
-Subject: [PATCH v2 0/3] SuperH DMAC fixes
-Date:   Sat, 27 May 2023 18:44:49 +0200
-Message-Id: <20230527164452.64797-1-contact@artur-rojek.eu>
+Subject: [PATCH v2 1/3] sh: dma: Fix dma channel offset calculation
+Date:   Sat, 27 May 2023 18:44:50 +0200
+Message-Id: <20230527164452.64797-2-contact@artur-rojek.eu>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230527164452.64797-1-contact@artur-rojek.eu>
+References: <20230527164452.64797-1-contact@artur-rojek.eu>
 MIME-Version: 1.0
-Was:    [v1] SH7709 DMA fixes
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NO_DNS_FOR_FROM,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Various SoCs of the SH3, SH4 and SH4A family, which use this driver,
+feature a differing number of DMA channels, which can be distributed
+between up to two DMAC modules. Existing implementation fails to
+correctly accommodate for all those variations, resulting in wrong
+channel offset calculations and leading to kernel panics.
 
-This is v2 of the DMAC fixes.
+Rewrite dma_base_addr() in order to properly calculate channel offsets
+in a DMAC module. Fix dmaor_read_reg() and dmaor_write_reg(), so that
+the correct DMAC module base is selected for the DMAOR register.
 
-Patch [1/3] now also addresses varying numbers of DMAC modules and
-channels.
+Fixes: 7f47c7189b3e8f19 ("sh: dma: More legacy cpu dma chainsawing.")
+Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+---
 
-Patch [2/3] removes SH_DMAC_BASE1 for SH4 family. To my knowledge, none
-of these SoCs feature two DMAC modules.
+v2: also handle differing numbers of DMAC modules and channels
 
-Patch [3/3] now also sorts all the targets and the description stays
-within 80 characters per line.
+ arch/sh/drivers/dma/dma-sh.c | 37 +++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 13 deletions(-)
 
-Tested on Jornada 680 (SH7709 compatible).
-
-I went ahead and verified the above changes against datasheets of all
-the SoCs that are currently supported. Only SoCs found in defconfigs
-which enable CONFIG_SH_DMA/CONFIG_SH_DMA_API have been surveyed.
-
----------+--------+--------+--------------+------------------+----------
- SoC     | Family | Refs.  | DMAC modules | Chans per module | Notes  
----------+--------+--------+--------------+------------------+----------
- SH7724  | SH4A   | [1]    | 2            | 6                |
- SH7780  | SH4A   | [2]    | 2            | 6                |
- SH7786  | SH4A   | [3]    | 1 (+ 1)      | 6 (+ 4)          | #1
- SH7091  | SH4    | [4][5] | 1            | 4                | #2
- SH7751R | SH4    | [6]    | 1            | 8                |
- SH7760  | SH4    | [7]    | 1            | 8                |
- SH4-202 | SH4    | n/a    | ?            | ?                | #3
- SH7709  | SH3    | [8]    | 1            | 4                |
- SH7720  | SH3    | [9]    | 1            | 6                |
----------+--------+--------+--------------+------------------+----------
-
-Note #1:
-Technically, SH7786 features 2 DMAC modules, for a total of 10 channels.
-However, only DMAC0 (6 channels) is hw register compatible with the
-existing dma-sh driver.
-
-Note #2:
-This SoC, used in SEGA Dreamcast, has no publicly available datasheet.
-Apparently it's an SH7750 [5] derivative. Number of modules/channels
-has been cross-referenced with the KallistiOS project's source code [4].
-
-Note #3:
-No publicly available datasheet for this SoC. Apparently this CPU is
-used in an FPGA-based board [10], so perhaps the DMAC properties are
-synthesized in FPGA bitstream? As this is SH4, it could potentially
-impact patch [2/3].
-
-[1] https://www.renesas.com/us/en/document/mat/sh7724-users-manual-hardware p. 537
-[2] https://www.renesas.com/us/en/document/mah/sh7780-hardware-manual p. 609
-[3] https://www.renesas.com/us/en/document/mah/sh7786-group-users-manual-hardware p. 1081
-[4] https://github.com/KallistiOS/KallistiOS/blob/ebf8d528cd8d1909150f60bef98e1a68318cbb95/kernel/arch/dreamcast/include/dc/asic.h#L91-L94
-[5] https://www.renesas.com/us/en/document/mah/sh7750-sh7750s-sh7750r-group-users-manual-hardware p. 597
-[6] https://www.renesas.com/us/en/document/mah/sh7751-group-sh7751r-group-users-manual-hardware p. 551
-[7] https://www.renesas.com/us/en/document/mah/sh7760-group-hardware-manual p. 463
-[8] https://www.renesas.com/us/en/document/mah/sh7709s-group-hardware-manual p. 373
-[9] https://www.renesas.com/us/en/document/mah/sh7720-group-sh7721-group-users-manual-hardware p. 467
-[10] https://web.archive.org/web/20050405021907/http://www.superh.com/products/microdev.htm
-
-Cheers,
-Artur
-
-Artur Rojek (3):
-  sh: dma: Fix dma channel offset calculation
-  sh: dma: Drop incorrect SH_DMAC_BASE1 for SH4
-  sh: dma: Correct the number of DMA channels in SH7709
-
- arch/sh/drivers/dma/Kconfig       | 14 +++++++-----
- arch/sh/drivers/dma/dma-sh.c      | 37 ++++++++++++++++++++-----------
- arch/sh/include/cpu-sh4/cpu/dma.h |  1 -
- 3 files changed, 32 insertions(+), 20 deletions(-)
-
+diff --git a/arch/sh/drivers/dma/dma-sh.c b/arch/sh/drivers/dma/dma-sh.c
+index 96c626c2cd0a..306fba1564e5 100644
+--- a/arch/sh/drivers/dma/dma-sh.c
++++ b/arch/sh/drivers/dma/dma-sh.c
+@@ -18,6 +18,18 @@
+ #include <cpu/dma-register.h>
+ #include <cpu/dma.h>
+ 
++/*
++ * Some of the SoCs feature two DMAC modules. In such a case, the channels are
++ * distributed equally among them.
++ */
++#ifdef	SH_DMAC_BASE1
++#define	SH_DMAC_NR_MD_CH	(CONFIG_NR_ONCHIP_DMA_CHANNELS / 2)
++#else
++#define	SH_DMAC_NR_MD_CH	CONFIG_NR_ONCHIP_DMA_CHANNELS
++#endif
++
++#define	SH_DMAC_CH_SZ		0x10
++
+ /*
+  * Define the default configuration for dual address memory-memory transfer.
+  * The 0x400 value represents auto-request, external->external.
+@@ -29,7 +41,7 @@ static unsigned long dma_find_base(unsigned int chan)
+ 	unsigned long base = SH_DMAC_BASE0;
+ 
+ #ifdef SH_DMAC_BASE1
+-	if (chan >= 6)
++	if (chan >= SH_DMAC_NR_MD_CH)
+ 		base = SH_DMAC_BASE1;
+ #endif
+ 
+@@ -40,13 +52,13 @@ static unsigned long dma_base_addr(unsigned int chan)
+ {
+ 	unsigned long base = dma_find_base(chan);
+ 
+-	/* Normalize offset calculation */
+-	if (chan >= 9)
+-		chan -= 6;
+-	if (chan >= 4)
+-		base += 0x10;
++	chan = (chan % SH_DMAC_NR_MD_CH) * SH_DMAC_CH_SZ;
++
++	/* DMAOR is placed inside the channel register space. Step over it. */
++	if (chan >= DMAOR)
++		base += SH_DMAC_CH_SZ;
+ 
+-	return base + (chan * 0x10);
++	return base + chan;
+ }
+ 
+ #ifdef CONFIG_SH_DMA_IRQ_MULTI
+@@ -250,12 +262,11 @@ static int sh_dmac_get_dma_residue(struct dma_channel *chan)
+ #define NR_DMAOR	1
+ #endif
+ 
+-/*
+- * DMAOR bases are broken out amongst channel groups. DMAOR0 manages
+- * channels 0 - 5, DMAOR1 6 - 11 (optional).
+- */
+-#define dmaor_read_reg(n)		__raw_readw(dma_find_base((n)*6))
+-#define dmaor_write_reg(n, data)	__raw_writew(data, dma_find_base(n)*6)
++#define dmaor_read_reg(n)		__raw_readw(dma_find_base((n) * \
++						    SH_DMAC_NR_MD_CH) + DMAOR)
++#define dmaor_write_reg(n, data)	__raw_writew(data, \
++						     dma_find_base((n) * \
++						     SH_DMAC_NR_MD_CH) + DMAOR)
+ 
+ static inline int dmaor_reset(int no)
+ {
 -- 
 2.40.1
 
