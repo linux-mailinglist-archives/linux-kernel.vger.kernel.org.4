@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7AA7131B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 776D67131B5
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjE0BnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 21:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
+        id S244183AbjE0BnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 21:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243783AbjE0Bmw (ORCPT
+        with ESMTP id S243948AbjE0Bmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 21:42:52 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91ED9E4E
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:42:32 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d1a0d640cso1223337b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:42:32 -0700 (PDT)
+        Fri, 26 May 2023 21:42:53 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E97CFB
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:42:34 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d2ca9ef0cso1124085b3a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:42:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685151752; x=1687743752;
+        d=chromium.org; s=google; t=1685151754; x=1687743754;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4CpMXuml+REzVPCV5YpF8KcdPL/FMQZnR1a5DDg0o94=;
-        b=lWWP/2wciP5Lcnvzvjsar/98gic2UMLjL7shy/u4jcBVbG5MnQbC3jVJH8wV32l4xR
-         /nrvT+VbnmoHL7WUx9Zoh+UT6oazi8OyVzo4oafQGAwcJbnMk2/Hi1w+wVB/DP/r1xpp
-         TGm6jAwztGOFKItK9wAegBPuXnpdHRPuC12Ys=
+        bh=JxNnTqvzGhDuJSCmbsa+rtoHfqlXA4TJSz9TjwxMeho=;
+        b=ShJfBqA9ft7ncDs0dOFd2RPnmhJyBiEjNx2LZ1p8J3ek51VUldJqNKK6EfAx/6LMhv
+         I51cZ9p9OhuJ3HYRQJPDRwiiLTttUI75WZhav7nrw8b5x+FhEcc5+eyfOPfL9y63jllh
+         02RO3yac0QfbIeTbVj1CHjUWHigjgjdAjKjnQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685151752; x=1687743752;
+        d=1e100.net; s=20221208; t=1685151754; x=1687743754;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4CpMXuml+REzVPCV5YpF8KcdPL/FMQZnR1a5DDg0o94=;
-        b=QM/FZCnPdj8IMFk5p6uUTPit2z72k+nXEPqPZNhxn9kyAyOo1HXWq4UwjxpO6VqNND
-         m8fIG0PGEWcyqmgIPX9dp+EIWvoPGS/xDSQxGgwWg19rzxONd2cZSOTZhko+tiMatGOb
-         EjaPampBClfWvwbvrKCzfO1ttH5Pc0T9DQOVg3iWLp5aJBPKpfzGwbyhf/IqYg/nl+M1
-         XItQzxQ5i2fSBOfwsQ8IjU5pWzS1BfJomo+H+L89n3nwf+TU2eylVMpN92ya6fEGrst3
-         lSIGnnMoW8IYhuNfRupftaGqW3GNUf44TPCCCvbwp9YhiNbCTgHCWm8QKcEeLRvH3JAD
-         bVaQ==
-X-Gm-Message-State: AC+VfDwyNx/cGKLbuXmyvnzCSFE+lXCrcz9Acf8IiKhjQAZHdFds4AJd
-        rYkwJB7/FWiw3JxSqXFjZa88gQ==
-X-Google-Smtp-Source: ACHHUZ6DB7hFCO3S8IN2pb5iImgPKyxBk6jrI7pr6oeNwgGoZm+rSryxNvvUZrHJqd9sGrPZ5NEogQ==
-X-Received: by 2002:a05:6a20:2d2a:b0:10c:7c72:bdd6 with SMTP id g42-20020a056a202d2a00b0010c7c72bdd6mr1357189pzl.59.1685151752164;
-        Fri, 26 May 2023 18:42:32 -0700 (PDT)
+        bh=JxNnTqvzGhDuJSCmbsa+rtoHfqlXA4TJSz9TjwxMeho=;
+        b=VzIh1678iMLYBESjl2IYSG289zORH0ssE7Of+QsG42LnU723DwlyaHG4iuoulYJFz0
+         xWquAe1tEDQiPd1F8Fd0UQiHyQld4R+lNE9+S7ejgxNhXziR5HDBn1hgX0PLfNNrehhS
+         1g/FU6w/OeZirBdWqidNJZHsaNsFhdBeRfIGjwR4aB4iTij+fJQbIM3VJv3/QkplWu7o
+         eOEyj9ZvqkHIiT8VPCRqfozgC1L6BbkANhW4qmbbvh2IcuTFv9Ph1G9SZK0LKetxXdGV
+         PhXwKzfcjwMOEUINwwqQNt22uAKCg6GTNK7etM6iIQ0bQSWexcya/N+swcB5vK19SiMr
+         KVhg==
+X-Gm-Message-State: AC+VfDyYd/Uh5J3Ga/+JLQ3cC5pF6DVKm4vTOczYwTyzOUIOy13Z0dHw
+        X8mtdM86BdbnuiGtP1zeEo6OXnvr9cUhfhsV/Z0=
+X-Google-Smtp-Source: ACHHUZ44oKfcxHCQB35NN8gNpgRMYCCD+rINnjdYYnIa0h9+Lp5g65zql8hV6FRXqlU+zWxTf6WHVg==
+X-Received: by 2002:a05:6a00:3911:b0:63b:7fc0:a4af with SMTP id fh17-20020a056a00391100b0063b7fc0a4afmr5852154pfb.26.1685151753915;
+        Fri, 26 May 2023 18:42:33 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:4015:7255:c79a:26d7])
-        by smtp.gmail.com with ESMTPSA id x25-20020aa79199000000b0063b8ddf77f7sm3202440pfa.211.2023.05.26.18.42.30
+        by smtp.gmail.com with ESMTPSA id x25-20020aa79199000000b0063b8ddf77f7sm3202440pfa.211.2023.05.26.18.42.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 18:42:31 -0700 (PDT)
+        Fri, 26 May 2023 18:42:33 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Petr Mladek <pmladek@suse.com>,
         Andrew Morton <akpm@linux-foundation.org>
@@ -59,9 +59,9 @@ Cc:     kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
         "David S . Miller" <davem@davemloft.net>,
         linux-perf-users@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH 09/10] watchdog/hardlockup: Move SMP barriers from common code to buddy code
-Date:   Fri, 26 May 2023 18:41:39 -0700
-Message-ID: <20230526184139.9.I5ab0a0eeb0bd52fb23f901d298c72fa5c396e22b@changeid>
+Subject: [PATCH 10/10] watchdog/hardlockup: Rename HAVE_HARDLOCKUP_DETECTOR_NON_ARCH to ..._PERF_OR_BUDDY
+Date:   Fri, 26 May 2023 18:41:40 -0700
+Message-ID: <20230526184139.10.I821fe7609e57608913fe05abd8f35b343e7a9aae@changeid>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 In-Reply-To: <20230527014153.2793931-1-dianders@chromium.org>
 References: <20230527014153.2793931-1-dianders@chromium.org>
@@ -77,88 +77,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's been suggested that since the SMP barriers are only potentially
-useful for the buddy hardlockup detector, not the perf hardlockup
-detector, that the barriers belong in the buddy code. Let's move them
-and add clearer comments about why they're needed.
+HAVE_HARDLOCKUP_DETECTOR_NON_ARCH is a mouthful and
+confusing. HAVE_HARDLOCKUP_DETECTOR_PERF_OR_BUDDY is even more of a
+mouthful, but probably less confusing. Rename the Kconfig names.
 
-Suggested-by: Petr Mladek <pmladek@suse.com>
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- kernel/watchdog.c       |  6 ------
- kernel/watchdog_buddy.c | 21 +++++++++++++++++++++
- 2 files changed, 21 insertions(+), 6 deletions(-)
+ lib/Kconfig.debug | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 6cc46b8e3d07..a351ab0c35eb 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -109,9 +109,6 @@ EXPORT_SYMBOL(arch_touch_nmi_watchdog);
- void watchdog_hardlockup_touch_cpu(unsigned int cpu)
- {
- 	per_cpu(watchdog_hardlockup_touched, cpu) = true;
--
--	/* Match with smp_rmb() in watchdog_hardlockup_check() */
--	smp_wmb();
- }
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index eb1edd5905bc..b9e162698a82 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1058,7 +1058,7 @@ config HARDLOCKUP_DETECTOR_BUDDY
+ # needs SMP). In either case, using the "non-arch" code conflicts with
+ # the NMI watchdog code (which is sometimes used directly and sometimes used
+ # by the arch-provided hardlockup detector).
+-config HAVE_HARDLOCKUP_DETECTOR_NON_ARCH
++config HAVE_HARDLOCKUP_DETECTOR_PERF_OR_BUDDY
+ 	bool
+ 	depends on (HAVE_HARDLOCKUP_DETECTOR_PERF || SMP) && !HAVE_NMI_WATCHDOG
+ 	default y
+@@ -1077,10 +1077,10 @@ config HARDLOCKUP_DETECTOR_PREFER_BUDDY
+ 	  an arch-specific hardlockup detector or if resources needed
+ 	  for the hardlockup detector are better used for other things.
  
- static bool is_hardlockup(unsigned int cpu)
-@@ -141,9 +138,6 @@ static void watchdog_hardlockup_kick(void)
+-# This will select the appropriate non-arch hardlockdup detector
+-config HARDLOCKUP_DETECTOR_NON_ARCH
++# This will select the appropriate non-arch hardlockup detector
++config HARDLOCKUP_DETECTOR_PERF_OR_BUDDY
+ 	bool
+-	depends on HAVE_HARDLOCKUP_DETECTOR_NON_ARCH
++	depends on HAVE_HARDLOCKUP_DETECTOR_PERF_OR_BUDDY
+ 	select HARDLOCKUP_DETECTOR_BUDDY if !HAVE_HARDLOCKUP_DETECTOR_PERF || HARDLOCKUP_DETECTOR_PREFER_BUDDY
+ 	select HARDLOCKUP_DETECTOR_PERF if HAVE_HARDLOCKUP_DETECTOR_PERF && !HARDLOCKUP_DETECTOR_PREFER_BUDDY
  
- void watchdog_hardlockup_check(unsigned int cpu, struct pt_regs *regs)
- {
--	/* Match with smp_wmb() in watchdog_hardlockup_touch_cpu() */
--	smp_rmb();
--
- 	if (per_cpu(watchdog_hardlockup_touched, cpu)) {
- 		per_cpu(watchdog_hardlockup_touched, cpu) = false;
- 		return;
-diff --git a/kernel/watchdog_buddy.c b/kernel/watchdog_buddy.c
-index 2ef88722c5e7..34dbfe091f4b 100644
---- a/kernel/watchdog_buddy.c
-+++ b/kernel/watchdog_buddy.c
-@@ -51,6 +51,13 @@ void watchdog_hardlockup_enable(unsigned int cpu)
- 	if (next_cpu < nr_cpu_ids)
- 		watchdog_hardlockup_touch_cpu(next_cpu);
+@@ -1098,9 +1098,9 @@ config HARDLOCKUP_CHECK_TIMESTAMP
+ config HARDLOCKUP_DETECTOR
+ 	bool "Detect Hard Lockups"
+ 	depends on DEBUG_KERNEL && !S390
+-	depends on HAVE_HARDLOCKUP_DETECTOR_NON_ARCH || HAVE_HARDLOCKUP_DETECTOR_ARCH
++	depends on HAVE_HARDLOCKUP_DETECTOR_PERF_OR_BUDDY || HAVE_HARDLOCKUP_DETECTOR_ARCH
+ 	select LOCKUP_DETECTOR
+-	select HARDLOCKUP_DETECTOR_NON_ARCH if HAVE_HARDLOCKUP_DETECTOR_NON_ARCH
++	select HARDLOCKUP_DETECTOR_PERF_OR_BUDDY if HAVE_HARDLOCKUP_DETECTOR_PERF_OR_BUDDY
  
-+	/*
-+	 * Makes sure that watchdog is touched on this CPU before
-+	 * other CPUs could see it in watchdog_cpus. The counter
-+	 * part is in watchdog_buddy_check_hardlockup().
-+	 */
-+	smp_wmb();
-+
- 	cpumask_set_cpu(cpu, &watchdog_cpus);
- }
- 
-@@ -68,6 +75,13 @@ void watchdog_hardlockup_disable(unsigned int cpu)
- 	if (next_cpu < nr_cpu_ids)
- 		watchdog_hardlockup_touch_cpu(next_cpu);
- 
-+	/*
-+	 * Makes sure that watchdog is touched on the next CPU before
-+	 * this CPU disappear in watchdog_cpus. The counter part is in
-+	 * watchdog_buddy_check_hardlockup().
-+	 */
-+	smp_wmb();
-+
- 	cpumask_clear_cpu(cpu, &watchdog_cpus);
- }
- 
-@@ -88,5 +102,12 @@ void watchdog_buddy_check_hardlockup(int hrtimer_interrupts)
- 	if (next_cpu >= nr_cpu_ids)
- 		return;
- 
-+	/*
-+	 * Make sure that the watchdog was touched on next CPU when
-+	 * watchdog_next_cpu() returned another one because of
-+	 * a change in watchdog_hardlockup_enable()/disable().
-+	 */
-+	smp_rmb();
-+
- 	watchdog_hardlockup_check(next_cpu, NULL);
- }
+ 	help
+ 	  Say Y here to enable the kernel to act as a watchdog to detect
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
