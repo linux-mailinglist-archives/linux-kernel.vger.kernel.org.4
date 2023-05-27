@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB32713386
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 10:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A4A713389
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 10:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjE0Ix2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 04:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S231814AbjE0IyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 04:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231727AbjE0IxY (ORCPT
+        with ESMTP id S229678AbjE0IyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 04:53:24 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49D7125
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 01:53:23 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d41d8bc63so1439473b3a.0
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 01:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685177603; x=1687769603;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=me+mae5cxaS7kwJrJiLva7wyhKeIFfRkkMj+lyKRxtU=;
-        b=RHL/T19yv7ny+SqvpezBVm7xumh3z17Ccv0BA2qbw8y6UxdgwyLO74/L5oM65/yRsR
-         1GL1EJ5FFUH4fpe2Uz+JuhImX2m5YpPoJVgjdYgF/kOcf1rKzgcKFnqLrfT+goUHIoV/
-         lbczMTJeM5HUTwZLqhTYd7DeIqydkSanTbWKjZkb7D00rEcs/choewNm1NTHve3dLJKk
-         utho2S8qwM1u50CwfrU9o0qn5zZ6iaYg/ehoL7AKSxnAhmTLV2DTnQjsAH2l8N5Obt6d
-         xx4WaBKsCmQeHqn7rgeTp0G7GMS972eq7PA9ccrnelBdlRH9IJhuy1YFHxHQktsvkmkd
-         pAHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685177603; x=1687769603;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=me+mae5cxaS7kwJrJiLva7wyhKeIFfRkkMj+lyKRxtU=;
-        b=aqT7jIsCU/4DNpA8TGorH0H/3Cak5/iRXh2OjbgK5op5mCBx44meg6jI56ABLCMiAb
-         s2SY10foEbyJJDolF5c0p7Vp5HNSjfjfN+TDeCrY75cfeZtn+SwdWsMCuDjWq1wBvyjG
-         xk2ZK/PR2liOKFl3VArpbc5WJOLr1OeVp07Qzzz2syuS+0zGXyWfZIodEaDnZUppVs0U
-         7xLTiDQ1MPkVX7BnuvsaQNHroNSNOY4PWx78i03NYG8ki0LAtH+QpynCaMLN9SNIzyu3
-         kNJK+6QwTq6TwEPGm0Z3GwNvMXAaC+mP46nQtTE8oeZdEfFxQvl81Zo8f95SDqOdKdc3
-         6RRQ==
-X-Gm-Message-State: AC+VfDz92Y/ElCx5aA2+g6d2UlU2NxX1TDpC+bel5EquU0qAP7f0s2Dh
-        zBY83SyTHOCWmh2GEuuvEjcF/GvwHbO34A==
-X-Google-Smtp-Source: ACHHUZ4way3YHn4UaZZCYSWMYhMU65cC4uwsS8WLVsLwojobEpcs5dNPiuMf3wLwT4xoAl6uF5YWFQ==
-X-Received: by 2002:a05:6a00:2308:b0:645:c730:f826 with SMTP id h8-20020a056a00230800b00645c730f826mr8469649pfh.24.1685177603249;
-        Sat, 27 May 2023 01:53:23 -0700 (PDT)
-Received: from redkillpc ([49.207.219.227])
-        by smtp.gmail.com with ESMTPSA id a15-20020aa780cf000000b00640defda6d2sm3702044pfn.207.2023.05.27.01.53.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 01:53:22 -0700 (PDT)
-Date:   Sat, 27 May 2023 14:23:16 +0530
-From:   Prathu Baronia <prathubaronia2011@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     dan.carpenter@linaro.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, oe-kbuild@lists.linux.dev,
-        Dan Carpenter <error27@gmail.com>
-Subject: Re: [PATCH v3 1/2] axis-fifo: use devm_kasprintf() for allocating
- formatted strings
-Message-ID: <ZHHE/H2p4Go/Igc/@redkillpc>
-References: <CAJp9fsfJxoY2=fFK3-R_XoDatMB9z5WT4BaeSw3-nMScicERJQ@mail.gmail.com>
- <20230518145154.33377-1-prathubaronia2011@gmail.com>
- <2023052705-modular-unpleased-0e62@gregkh>
+        Sat, 27 May 2023 04:54:14 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683A8124;
+        Sat, 27 May 2023 01:54:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685177653; x=1716713653;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ktI2GnKQXBYUpJgyqu0yKmTKYiR+/wbaze1GTqEtbk8=;
+  b=WyidlPJa1SYObJpyTZY10Q4Pe5gORZdzSiXbJzyEbkgxdPu/xPK6V30V
+   gxh5lklQbkQROrM0V9MCsuF4E9eO+FVqIgib0E5EfdeYEDSl9jFcgdETJ
+   /2mFler00w0FhF7gTQBKt3KwolLP/bxcMcbRrHA8exYGkjZEyQdiBhrKt
+   EKhofFmhXLiJJBbuA7AmP/89yy1wZtkFFY68JyhZlTSz+fM5ogG+0qt1J
+   uykebhtq9NzIX8wqIxxWkWBZsgJinb7OLO3LePYykg4fCN6doXg0/3RVi
+   74yjxtpIF7wdSwJVbOIjaro5AVA7M37YhCZgtp4+z5+x0sAaMBS0pZiK5
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="382629538"
+X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
+   d="scan'208";a="382629538"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 01:54:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="736262786"
+X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
+   d="scan'208";a="736262786"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 27 May 2023 01:54:10 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q2pgf-000Irv-0Y;
+        Sat, 27 May 2023 11:54:09 +0300
+Date:   Sat, 27 May 2023 11:54:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] leds: simatic-ipc-leds-gpio: add terminating
+ entries to gpio tables
+Message-ID: <ZHHFMPEYNz9jBBRd@smile.fi.intel.com>
+References: <20230524124628.32295-1-henning.schild@siemens.com>
+ <20230524124628.32295-2-henning.schild@siemens.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023052705-modular-unpleased-0e62@gregkh>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20230524124628.32295-2-henning.schild@siemens.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,31 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 27, 2023 at 08:35:57AM +0100, Greg KH wrote:
-> 
-> Maybe error-prone, but all is fine with the original code, right?
-> 
-Yes, all is fine with the original code. Replaced it only because it was error-prone.
+On Wed, May 24, 2023 at 02:46:25PM +0200, Henning Schild wrote:
+> The entries do not seem to be stricly needed when the number of entries
+> is given via the number of LEDs. But adding them is a safeguard should
+> anyone ever iterate over the tables to their end, it also gets us in
+> line with other drivers that register "leds-gpio" tables.
 
-> When you have "also" in a changelog commit, that usually means this
-> needs to be split out into a separate patch.  And that's the case here,
-> make the first patch of the series fix the problem.  Then do your
-> cleanups on later patches.
-> 
-Point taken, will split it in v4.
+Reported-by?
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> > Fixes: d2d7aa53891e ("staging: axis-fifo: convert to use miscdevice")
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> ---
+>  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> changing to a different string function does not fix anything.
-Right, this should only be part of the smatch warning fixing commit.
+> diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio.c b/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> index e8d329b5a68c..1a1cfdad6218 100644
+> --- a/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> +++ b/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> @@ -28,6 +28,7 @@ static struct gpiod_lookup_table simatic_ipc_led_gpio_table_127e = {
+>  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 51, NULL, 5, GPIO_ACTIVE_LOW),
+>  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 56, NULL, 6, GPIO_ACTIVE_LOW),
+>  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 59, NULL, 7, GPIO_ACTIVE_HIGH),
+> +		{} /* Terminating entry */
+>  	},
+>  };
+>  
+> @@ -42,6 +43,7 @@ static struct gpiod_lookup_table simatic_ipc_led_gpio_table_227g = {
+>  		GPIO_LOOKUP_IDX("gpio-f7188x-2", 5, NULL, 5, GPIO_ACTIVE_LOW),
+>  		GPIO_LOOKUP_IDX("gpio-f7188x-3", 6, NULL, 6, GPIO_ACTIVE_HIGH),
+>  		GPIO_LOOKUP_IDX("gpio-f7188x-3", 7, NULL, 7, GPIO_ACTIVE_HIGH),
+> +		{} /* Terminating entry */
+>  	}
+>  };
+>  
+> -- 
+> 2.39.3
+> 
 
-> 
-> > Reported-by: kernel test robot <lkp@intel.com>
-> 
-> It did not report that you need to replace a string function, right?
-> 
-> See, things got messy when you mixed in changes into one.  Please break
-> these up.
-Understood, will do.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Prathu
+
