@@ -2,230 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD416713729
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 01:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3232E713739
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 01:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjE0Xig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 19:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
+        id S229493AbjE0X4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 19:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjE0Xid (ORCPT
+        with ESMTP id S229441AbjE0X4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 19:38:33 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADEED9
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 16:38:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685230711; x=1716766711;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=agBI6GmZWjSS8VbTsbdQ65xvBco0PZrRd+r5Nx3xwcA=;
-  b=ji7dxC+3rGPLSKmgu5k4na/8wiGZaOmQ0jz41fr1NstvT/cQPF80Dlr2
-   kyzZNvFst3BMW6qrdpne2dEoIfndq5DQ3PHbOOXAME22sDAii8F+nDshs
-   RKyiMeC2rHH+eRxtottGgq0r/3T2uGZAQiYnU3Yjtu8N/2RdwiRvm86on
-   BD8U334kEiiS1saRNvFew2zvjH6nQpYZDa5G8LT7pkypgkkyBdK2TOirS
-   BL6VOvsEYsMv5i1sPEWF7jXtLh8415FWDmRStAic0+F2vPriy72TXMBCy
-   3a+u5vJ9WPsJB/hTF56gRlaHqV+4QcgTUhjy06l/W5Gk3CoGZ8xnmQvK8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="382709699"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="382709699"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 16:38:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="795472733"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="795472733"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 May 2023 16:38:28 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q33US-000KFy-0n;
-        Sat, 27 May 2023 23:38:28 +0000
-Date:   Sun, 28 May 2023 07:37:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yimin Gu <ustcymgu@gmail.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-        Jesse Taube <Mr.Bossman075@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: drivers/comedi/drivers/das1800.c:343:2: warning: performing pointer
- arithmetic on a null pointer has undefined behavior
-Message-ID: <202305280723.RB6YR0Ot-lkp@intel.com>
-MIME-Version: 1.0
+        Sat, 27 May 2023 19:56:15 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2055.outbound.protection.outlook.com [40.107.100.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EBFD8;
+        Sat, 27 May 2023 16:56:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O5NAbfel1Ryz+7EObSEcvJ6X7AZ8+My+Vnrm+7P2qWt4pQqhKx6OHEU22wJScWr4hQSBGFrnUxMnk8U7ZEWsD15x5/digHcs+NYF+CnImWQ4TFs1nf2kHLMgz1mti2rxAu79Q1ne5gmPhZ8vroC0iQ3whpLwkowBoRQR+GCsVNsXEEV1vnI94GNCJRuHZvcfbiW0lYWBjwYYI0XJXKvQl1C0MlHZgiFaJlMJZY1zlwN4RIFP4llRVY2+NY7e+2IFZoR36CgtOYmCSyWPXUEuuYRMCI1xh8R4MlUQdZprP6pRKOFzIMBdE+gg3JLGjTHGWM9X+ZMlGdbzHLtUd8pi3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XmAEx+cqMmhdq4g4e1XqUP33UszhnkQmwwCX5+N6ffI=;
+ b=SPEihRWIGQHq9dTkTDrx+WooxzoTJzDi8AF1UUZC6xmmcDRFPQAPER5NE6uvWjeSYwYdAIjilIBpd0zb1OHo6I/Xn3/WoN5J/B1BLveuMI3+da8b7bNazoIP0GgUSCe8baWXHyme8duXYmcgKv/cmjma/izohlAD7qOvVkANJZa51LY+CodUOwKRw7RHrFLEQgEm9uN46uCJGNW0WbTe4MNmZ8LT3Ch780qxs2IR9An99tnhWWFN/QC2CLMjZ9d8oWdf7G8sJs7ezo5k6cP1C3+eG7DbApDWp/YL5fPM3iNusmz6dzahtDaLTqt3uLe5rJvS2Y+lkDtofquR/qb4Ug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XmAEx+cqMmhdq4g4e1XqUP33UszhnkQmwwCX5+N6ffI=;
+ b=t81A7V7SVhEiUe7urkaArG7It7+LvlSL8Xn4cz3tMsQ/vrJnaZ6pm9VPITZ7ur+91dbB5aaIA+4qqnT3+eLX61jwpem64FNjQzEAsH7gq9CrDd2Ew9y0IFsDNre5KP/h/mSQkDmosOWz4nASFsWiRR+OqRFhdrc+HjkoqZpdrio2WTA61g8sEjqZHHHMnqEALZBqkGPhOMTJ3jdV+PoLEf9Dsi2gQTA3rGbRGOdf3MHJvVs4PK5MkE7UySCQwFMlkskux/iZC1EgV1a8ws/rX742APAPaiFMbXrQv4zhdurrt6pvsj85G+UEac6b8Le+7C/5zwtF5Lr4ACbDghYgvg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SN7PR12MB6692.namprd12.prod.outlook.com (2603:10b6:806:270::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Sat, 27 May
+ 2023 23:56:11 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6433.017; Sat, 27 May 2023
+ 23:56:11 +0000
+Date:   Sat, 27 May 2023 20:56:08 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>, will@kernel.org,
+        catalin.marinas@arm.com, David Rientjes <rientjes@google.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        robin.murphy@arm.com, nicolinc@nvidia.com,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        zhi.wang.linux@gmail.com, Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 1/2] mmu_notifiers: Restore documentation for
+ .invalidate_range()
+Message-ID: <ZHKYmOc/x+0w2Nd3@nvidia.com>
+References: <3cece716fc09724793aa832e755abfc9d70a8bb3.1684892404.git-series.apopple@nvidia.com>
+ <cb706d3f-1fa8-2047-e65c-e1dc1fa6821f@nvidia.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cb706d3f-1fa8-2047-e65c-e1dc1fa6821f@nvidia.com>
+X-ClientProxiedBy: BL1PR13CA0145.namprd13.prod.outlook.com
+ (2603:10b6:208:2bb::30) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB6692:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4178ea1-0505-4e46-715c-08db5f0df2a3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tr4H4sdeQCnmLupINX3r2xX2p/wk0i79CitwmWhDdHXglHY3W3OMDVK9ljJdcLCp4auPehR2W3xxP3OQhtg88b8zki+eYMF2PeaNjXwlSJQCUiHkcxpVoZfZ1XM8POOb/xObsV64md3xLqtnq/DxiuWlzwQRPEsBroJBN9rJ5FlJhbGhLaunoDxzbxXAG/JT/kfLnli2mfVhLiUiJ6z5KYu/XYcMQ+G9vC4w1uVQyQxcue4W9U5Eunk7w9Zh36wZjgd/d2negz5Kvbfamup/hooP8DABf8B3q86l3FPiO1McbDtsBrejimo9EiYORo8gMCiw1YoBaGUHqOpLsFNVhrlx6BuXnu95GFjf8nzVkR449So963GbOeUi4B4JzFw7NPUa384760YLYdn6UrtnQOrsIuUC4d4ZGQMYUct5wmrgFHZugfpxOJKydASctAcaL68j9DFkJJMyn1W12DFvCKh0Vz166RsMc7MxMMCJP7gdhtOtMEOt6LaXWHdaoHzth00H+ySrV0REBPskj1GSuX2HbkBavyHvGCuoSmATPLDwy/hlsqg5f9IVsHF7atlsIm/r/yN+hx5lOogjuolfr5oEsZjymWkNLmFSgt5o1WAPgZoyZxh019tgWcKR7AX3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(136003)(396003)(366004)(451199021)(2616005)(83380400001)(2906002)(186003)(36756003)(38100700002)(86362001)(37006003)(6486002)(6666004)(316002)(41300700001)(8936002)(7416002)(8676002)(5660300002)(6862004)(478600001)(54906003)(6636002)(66946007)(66556008)(26005)(53546011)(6506007)(6512007)(66476007)(4326008)(142923001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?H8a118EZulG665EjGKET8lrljgLqGdjROFfrlG14wAQzAZ/cqx63siD3b8uN?=
+ =?us-ascii?Q?yZsor5AJedRB9QOFUmQ9vwNy2k4gC3Ng3nBvdAfaGnvF99DtSq2R5FJa/APg?=
+ =?us-ascii?Q?YbMVb8j2gv4/mZ+NrjJxcvqcOyn31jMZyKMoAhu6nPO+dGndbizDtLHdVOBz?=
+ =?us-ascii?Q?Gdl7wBmCsrcjtSquXa5fZr+tkARlpC8YrlQsSFfQy2qi0Ag09JQv6rvDbALQ?=
+ =?us-ascii?Q?XNVdxIL+JpBsy1EC59l9OnNlwA4hDzZ0P/13WcdbdRDktoG0tmaUzitvY6Ce?=
+ =?us-ascii?Q?1XIIzxsTCeX1wfyGbb3fG25oYf9SVbl2SoRrk1LNLwy/j3eFDz/g+7XSeG96?=
+ =?us-ascii?Q?jPb607C6i8eHdOFVWK+c7ar9ErBS/QFrUF4I0yFnuKBzZSk23MFKVubMSwVb?=
+ =?us-ascii?Q?ArppKr6PvOtQ4k2OtWEJ8zCh/+sDOwg3t1L0PsjrmrQ+LkXatlliyYInrTJM?=
+ =?us-ascii?Q?6ATS6ue1aoJBPaXThU43AhPevWuiDZyhlh9Ds83XpdXGjTkE0Gd/C2XhwS0S?=
+ =?us-ascii?Q?WiYpYA74Wj5lVIMRIjyf3IHYkYHa1vi/bwhTRihOKyT+5+ZpC9Znz4frE/3Z?=
+ =?us-ascii?Q?ROv63INTuEs66AbLWWmvsrdAKWbjAWUBArX0kyGZq/ZiMJ4XeDVd61gt69qi?=
+ =?us-ascii?Q?4noIpMftvgSW7hgQXzKoDuyBM9mxPVlNSnFrgX9MMxLxPllx/ob8bgZyTjHF?=
+ =?us-ascii?Q?xSakHago7geXhJK77xlSnIh/GqCQqnoVHBbVSbGVh/tnZQM/Hg0Sal68IPzp?=
+ =?us-ascii?Q?Mr0rNX/zkhgwnqhazJXARI5PKNyEzdccslllWG03nRriKG1H1N9hJ0v9X0jm?=
+ =?us-ascii?Q?sRIIwRFdQf0S3W1WKM2lLQISe3dt6aUmQ/jebOVWk7Btwh7l3N5jGhSko53K?=
+ =?us-ascii?Q?qvuHa+iE7QA4J1EqceH4rSkt+aJpNVMNYTRmi2ppxhn/r7qMjvmIBQb9GTFs?=
+ =?us-ascii?Q?jJbE4jsBdcE2MG3ruPoitpxg9SB5xmHsPa3yWD5XlAOp8CB+Jj95zhhEpu5+?=
+ =?us-ascii?Q?vqontdw/m72VKsoG6GFqcQ9qW76evLgPQzcN+STZ5hNVwcN7PwwNWLeSHwR2?=
+ =?us-ascii?Q?uMYx1gjHZuv4U7M0t36jBJpkir2qi60+zibDlwoOfelUomEQf8VzmKcQ17re?=
+ =?us-ascii?Q?TlLyAba2PF4VTSUnOetGjkHis6iiA/Uhppt8p9QOUA+jEMebM4aQqm3zKGgq?=
+ =?us-ascii?Q?BT5XrtqybJFqvtxVsAZJhIxpRFYAQSmjdsWwgtxYTEancGDsv4I/RaSt2Ugb?=
+ =?us-ascii?Q?ZAcOevzcctvzsa11PRCH8GWVWTWVz3u8qU8Ft3JpaMSaye+YjMIocxlWTzR5?=
+ =?us-ascii?Q?HZS9XG3HHQSEfHQAfhai/xtmNOWekDRRcFBjwS0JJqxeTluXcejAXcenlpx+?=
+ =?us-ascii?Q?+++07jklvqOyDaZgr9NF7LuKqJ03sabpStPbHjmWa9UOkjK2d3TPoA6lUKgK?=
+ =?us-ascii?Q?0XEPXc4ujm99RNo0FKP0emgjEP4+bOMRIS0EgMrcdStmDCoMsHr84oNS522R?=
+ =?us-ascii?Q?9jHZIyIArcSGHKcsIuSRvvpG5gOCj8tcXVAbvxQrHOcKRb1e78wLw1EaT705?=
+ =?us-ascii?Q?VOahJ8MebC+dt0pyx9o=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4178ea1-0505-4e46-715c-08db5f0df2a3
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2023 23:56:11.5172
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xS6d4zE1ctTU9ls1A4G56OD5Q5FC/+vTszLplnASE5VYnWq0UXsoacUZVOF8P1cV
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6692
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yimin,
+On Tue, May 23, 2023 at 07:20:31PM -0700, John Hubbard wrote:
+> On 5/23/23 18:47, Alistair Popple wrote:
+> > The .invalidate_range() callback is called by
+> > mmu_notifier_invalidate_range() which is often called while holding
+> > the ptl spin-lock. Therefore any implementations of this callback must
+> > not sleep. This was originally documented when the call back was added
+> > in commit 0f0a327fa12c ("mmu_notifier: add the callback for
+> > mmu_notifier_invalidate_range()") but appears to have been
+> 
+> Thanks for digging into this. I expect that you're on the right
+> track, I'm just wondering about something still:
+> 
+> > inadvertently removed by commit 5ff7091f5a2c ("mm, mmu_notifier:
+> > annotate mmu notifiers with blockable invalidate callbacks").
+> 
+> Was it really inadvertent, though? The initial patch proposed said this:
+> 
+> "Also remove a bogus comment about invalidate_range() always being called
+> under the ptl spinlock." [1]
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Right, it is not always called under PTL spinlocks and the
+implementation cannot assume it, but that doesn't mean the
+implementation is allowed to block.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4e893b5aa4ac2c8a56a40d18fe87e9d2295e5dcf
-commit: b5e2c507b06c9d36411845149162a804ae7b04a9 riscv: Kconfig: Allow RV32 to build with no MMU
-date:   9 weeks ago
-config: riscv-randconfig-r042-20230528 (https://download.01.org/0day-ci/archive/20230528/202305280723.RB6YR0Ot-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b5e2c507b06c9d36411845149162a804ae7b04a9
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b5e2c507b06c9d36411845149162a804ae7b04a9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/comedi/drivers/
+That was one of the main motivating reasons to have both the
+invalidate_start/end and invalidate_range variations, start/end are
+allowed to block and range is not.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305280723.RB6YR0Ot-lkp@intel.com/
+invalidate_range really only exists for the iommu drivers to use it
+for SVA designs, there are a few other weird users, but iommu was the
+motivation to create it in the first place.
 
-All warnings (new ones prefixed by >>):
+So the comment should just clarify that it is not allowed to sleep and
+can't assume anything about its locking environment.
 
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insb(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/comedi/drivers/das1800.c:73:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insw(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/comedi/drivers/das1800.c:73:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insl(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/comedi/drivers/das1800.c:73:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsb(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/comedi/drivers/das1800.c:73:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsw(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/comedi/drivers/das1800.c:73:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsl(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/comedi/drivers/das1800.c:73:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/comedi/drivers/das1800.c:343:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insw(dev->iobase + DAS1800_FIFO, devpriv->fifo_buf, nsamples);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   14 warnings generated.
-
-
-vim +343 drivers/comedi/drivers/das1800.c
-
-a69cc3a9fae82f drivers/staging/comedi/drivers/das1800.c Frank Mori Hess   2009-02-19  336  
-73e183c347242c drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2012-05-23  337  static void das1800_handle_fifo_half_full(struct comedi_device *dev,
-73e183c347242c drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2012-05-23  338  					  struct comedi_subdevice *s)
-73e183c347242c drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2012-05-23  339  {
-9a1a6cf8ae5ca5 drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2012-10-15  340  	struct das1800_private *devpriv = dev->private;
-605d76f6eb007a drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2014-11-05  341  	unsigned int nsamples = comedi_nsamples_left(s, FIFO_SIZE / 2);
-a69cc3a9fae82f drivers/staging/comedi/drivers/das1800.c Frank Mori Hess   2009-02-19  342  
-1f190a73590ce0 drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2015-01-12 @343  	insw(dev->iobase + DAS1800_FIFO, devpriv->fifo_buf, nsamples);
-1f190a73590ce0 drivers/staging/comedi/drivers/das1800.c H Hartley Sweeten 2015-01-12  344  	comedi_buf_write_samples(s, devpriv->fifo_buf, nsamples);
-a69cc3a9fae82f drivers/staging/comedi/drivers/das1800.c Frank Mori Hess   2009-02-19  345  }
-a69cc3a9fae82f drivers/staging/comedi/drivers/das1800.c Frank Mori Hess   2009-02-19  346  
-
-:::::: The code at line 343 was first introduced by commit
-:::::: 1f190a73590ce0070d6a5b6ee0d50e076aafebd6 staging: comedi: das1800: separate AI FIFO bounce buffer from DMA buffer
-
-:::::: TO: H Hartley Sweeten <hsweeten@visionengravers.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jason
