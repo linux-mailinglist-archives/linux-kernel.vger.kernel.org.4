@@ -2,151 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472D17134AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B727134AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbjE0MZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 08:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S232360AbjE0M1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 08:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbjE0MZO (ORCPT
+        with ESMTP id S229577AbjE0M1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 08:25:14 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2111.outbound.protection.outlook.com [40.107.244.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FBEF3;
-        Sat, 27 May 2023 05:25:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R6UwMUBSa/SDh664K8NvK9q8T5ZKP4AFyabSrhMueBeEm6t9zN0J3ZLlzyjiIS2dFQP3HDm3MRlXNLYND23qve5M5F5qI1w9HghRg42NX6AYxZIp/CD8xmMu6W0Sw/LKg8biiox+ycegJc6bhK2rqTkkpDRGBvURCAYPg1wAQppfvK2IYWcMkU2n9c8ruZj2pUwj9w7zgzrSGzQxpNLchj+kiYeG5QKkH2Is5vg8YehEUuAU2gik63wvPq/7ui6wjzLSvxaaZlRmkLJ63ES3aaZIhao8n/zF3xRKmZCIzm5L0z59q6WdW1klf1nzjO4CA9sHC8pS1jDY01x95KpocQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fizieVRhPX3hj13JBmTQ5Gv/nPYafPqwV7hC0mC6chI=;
- b=RgW2wbAOAQxxrMToxRrRVBYuDSp90hiBjWIATd/3lTuBxmgRfrbeu22/FM8tBZbVG3JqOwHjO1ZxrXYkSGuRHY6Ce+ANSjRfaz3+dGTZEdINAFVM+jNAaBVVwcGKXzh8L1sX0pV3tpccSuMjXUtAsoEyTaG1yIRsPPqyHmcEjILJX4N8cX/UGGYYK91rmr8vabLEEHVxqlvWBb/gMobtrGMyC58XysxIKRMPZt6gLrcws1J7mUdlgTBJOk1vuq1BFAOQ7BxrFI9VFU97KdEm7IdftPeWy/7apUQqPOFKDEjnF5SKfUjntSAzx89Ayc4BhkhH+1sj0MrMUmOaw3HUGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Sat, 27 May 2023 08:27:14 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510ACF3;
+        Sat, 27 May 2023 05:27:13 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2564dc37c3eso214338a91.0;
+        Sat, 27 May 2023 05:27:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fizieVRhPX3hj13JBmTQ5Gv/nPYafPqwV7hC0mC6chI=;
- b=v31KmmquKvSIju5QOQAymwxYKwOPAnU/Ogp0tkzf2kSp/hO7QC0RevYeTVBSq7uhQx58pOSNHwTM5kz+r5AFoGv2KLKLCn2GtyScoi+M081RqqtyffAs/BnW5aJSgItMtVXL3kQ4Y6JN/uCrpFce9hrZozSN79tFMofmy2NevBU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5471.namprd13.prod.outlook.com (2603:10b6:510:12a::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.18; Sat, 27 May
- 2023 12:25:08 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.018; Sat, 27 May 2023
- 12:25:08 +0000
-Date:   Sat, 27 May 2023 14:24:57 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH net-next 2/8] Drop the netfs_ prefix from
- netfs_extract_iter_to_sg()
-Message-ID: <ZHH2mSRqeL4Gs1ft@corigine.com>
-References: <20230526143104.882842-1-dhowells@redhat.com>
- <20230526143104.882842-3-dhowells@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526143104.882842-3-dhowells@redhat.com>
-X-ClientProxiedBy: AM0PR10CA0123.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:e6::40) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20221208; t=1685190433; x=1687782433;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7VL5PuRes+RVCKdqZxW7v51sOkxve4QAPNm6Ttixc5s=;
+        b=Qh9kmF+GG6oZ9k/HBmLUW9NrdVhMPF6z2Ixu7aT4M98mSmUHXLNoslPmrcnSZu7y5M
+         6lw/nyO7E0GdD2glPtE6zy1+SxAA4DwwTFn4m1ZUsqPfhUZkZPOmmtG7NKbJ8c9u/Q92
+         /hahinmbZBMWJwdgp6xa2JuuljfGnkHLong1zEHA/xlO83yx/MPTm2ekYXsMuKmLpiX9
+         5i18zJQpjpPT0dU5Tu6y4SlpDHlICK/gabEv4i/7A9P55DAoaW879f6H4dzlaI9MhR0u
+         uvLAIpce+VK7PBX0r54gdQ56/zzUT2TBj7KyIxkug85umq2YO/HQcG2+wyV5X0Q05Qfk
+         zrOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685190433; x=1687782433;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7VL5PuRes+RVCKdqZxW7v51sOkxve4QAPNm6Ttixc5s=;
+        b=MffSsjsxLE/jCfONMWbvKKw47/HheeU2avPVRq/i14RvMaxR4AWnKK+YOojoFIpoai
+         fYx//ieBR7gEQMHky4BSNNmPgEBJyyvGtk1dW8xHp47AsJL6ZIQN3LsYgzCehuCf1Ar4
+         rezDTMSgn3I3K30PzfGReeXkOe9RYxb54nfv7smrBTifU1Zxof5lUS32LSb6Pb1UFY8k
+         yklmqa9IH5PPVMTg5e0W6FTa0xtapRRt9ymtkJrf8tgBRBvaPqHR9LSkQzacMK4ELnP0
+         DOZ8Q7oj+IAinfzqQ50uM9L10S/7fARPiYVGRAFx8hV+E0Jmf5XvTZdgBwlE3nRVgvWh
+         9I0A==
+X-Gm-Message-State: AC+VfDz2OhC6JFG11ehwe4Ld5JtcEBHrJcC1neUTm4tE/ukOeDhbILG1
+        jtXuaQ/ZTc/0PdWh3jQG4g==
+X-Google-Smtp-Source: ACHHUZ71gNc4koAU5A8gsl1WCb1bDvfFBOSXd9pmjKWQ1FUHbaJZSJ34Mi5d8AJjVHRw0AZ3gpQLMg==
+X-Received: by 2002:a17:902:74c1:b0:1ac:85b0:1bd8 with SMTP id f1-20020a17090274c100b001ac85b01bd8mr1916521plt.34.1685190432571;
+        Sat, 27 May 2023 05:27:12 -0700 (PDT)
+Received: from dan.. ([182.209.58.11])
+        by smtp.gmail.com with ESMTPSA id jj7-20020a170903048700b001a1d4a985eesm4831328plb.228.2023.05.27.05.27.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 05:27:12 -0700 (PDT)
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Song Liu <song@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: replace open code with for allocated object check
+Date:   Sat, 27 May 2023 21:27:06 +0900
+Message-Id: <20230527122706.59315-1-danieltimlee@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5471:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55200223-d275-414b-eb58-08db5ead68e6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y3+MoLq/14Ctzcat+G/USt33jdvYtkVasElOTf42r13hXoerUfrJHCRrvcWiaVAFmI3emFb69Rs1Abhoc+EzGgg2nD1h8u92t0McuCCh8cnFY0JPio77bP/P14mKHy79u/ONF4IIpqgeJR/OMCMRvOkeoMELLk1gpvO2UYYgFNmXWKId6dqLVSTUPmWfWKdA0Rlx9SF+qq7VKAKnuirvgc8o2kNA6BGWMzdZ4FFWsWyuuIkODaYkIVx05ZUWFHX979FURBrKT00HZVE7mOfNd3NkBndxcitnaBGL4uVh44GxwfwGpbwTSwUqvp2upjPt4uGmligskk41dJAnEivSjp9UWVfmVepkiUZBQGfx+DeViIAmJ4WHrxU3Y9Hfj76W3ia53VhQXWHNbcK2et7C55zklTdnHrIyqPANL+ObIqkctLT7VDG5qdTHqtV9JLFCJ8pnhjkcxmPgJPUIW8sgLq78Nr8s5x3vrDnCpQ0dAftQQmIdLbPQMIgAiGVjSIzBpK1QYsjIvecpvFpTajfRp6XEJhK7xgdS4ScICytc8MH6m5v90BcaEENaOPqSq7w7
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39830400003)(376002)(396003)(346002)(366004)(451199021)(86362001)(2616005)(2906002)(4744005)(186003)(4326008)(66946007)(41300700001)(66476007)(66556008)(36756003)(6916009)(6512007)(6506007)(44832011)(7416002)(8936002)(5660300002)(8676002)(38100700002)(6486002)(316002)(6666004)(478600001)(54906003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZzarhNN+vecew2zpFG7ovDCdHs/ZI+5MT3rGhzw2HSUymuonsU6I61SJzcFw?=
- =?us-ascii?Q?L08Dxf8MLcO0AcanKzn+TAia37eSgW8UKkjBe3K9wr0kOtVJKJVLCriR1vmf?=
- =?us-ascii?Q?OYi5Eq27K+j1qhURDnAZfk/th52gF2arvRSp4PoiinSqXLr9zQoz3iv1a/um?=
- =?us-ascii?Q?bXhBfXPHJ0cleT4vNfVWo3Nf9IGWB4UalV/5tebIUxPmY4SFM3FmQrTyy/lm?=
- =?us-ascii?Q?TzoO4kAeGetjqzU3a/gSYIr+b2iPbsNdEbrnDdLiTlKPfwWPdRf0JwUfPw6Y?=
- =?us-ascii?Q?3/CU7wvJKAwMeUA1KGfPqYfDfUX66C+TKfmc5qoPhMJjH7f3tjvEYINWcdxm?=
- =?us-ascii?Q?JCQt+libUg5KoXRLG5td4MO3THl5KQei2PbKCNpdCphTjkPZdnXTiLvkYuGN?=
- =?us-ascii?Q?jy4Jt4UXEJcXBlyp+8Ft32saZgeuv+A8McKoeKQBuFDzNRypIfJwPqHQQDw+?=
- =?us-ascii?Q?r6KpC51ASqAC22htGb1YbLoKSt/3FdlJIw22mHnAvoTfa1IIwVEYmRa91ym0?=
- =?us-ascii?Q?wmbGYNCipmvgmghxgS7HofKo7lV14GJyoQlrawenWBak1HrhoomCYMaa3SCN?=
- =?us-ascii?Q?UL4KeHLxq6D0Xglv39JBWt1xjkPjCNTya7nT2NBTeByFGWg8zqSWv6Yc88qn?=
- =?us-ascii?Q?vpaxKeXzihc4oIW4mA+NE4Htye3+IiTFm6MlAM7SKuvQI+VicJuGWvNe2goD?=
- =?us-ascii?Q?bEoYX/u41+wS3D0dJ5cDvzk4PUXcPmqrjIzYKRY9tvcXOrEMu7GX5RRb8sF7?=
- =?us-ascii?Q?aK5HkOqvph2kVGFFYU9SpVkRryguZZ2lqklf6N6kEes+pcD92aamQPcRCV7s?=
- =?us-ascii?Q?a+vsgwy3OCkoLWCB0dkWdIFnIXJxg64BbGmqQ1+Hj89tKXQBzcZdcAKgzGxj?=
- =?us-ascii?Q?YQ4SBpSMJvKUxy1d8Jez6Kh8gWEwSQHBri3eWpwoUyLaFm75JB08I4tOBUUC?=
- =?us-ascii?Q?IfWfPhMsTK8Wakwgg2+Vzwgj0ekPCRYUnvSEUcWJQSN4Uv5AEIEJdIKs5jIh?=
- =?us-ascii?Q?TQewNV6Ks+bCiVWQkRR7xYwLf00PlYzWLGIfDrgWJMu2MhUkpxqpQAWoio/R?=
- =?us-ascii?Q?0Y8idv6jjdzoMOItS6Kl7WDzG6f1A7znR3TIouoSaDGa9swn2Mli5tI9mmvZ?=
- =?us-ascii?Q?iRkjaktQ089AX6lgg5fBiR8Bq5T+bJo+rMlfF8F80+tlgpufWfYbarro7bm5?=
- =?us-ascii?Q?kZWuUjn8tS7cHMBGyPTrhL/juJLhniIkid6ukh7r//1c4lNU1+Rj6mRdQdbG?=
- =?us-ascii?Q?Jt+IuTmQHrfpTr3KPpBLEzDEu/S15Z4ajDEWfa3VEXnZFLvpEDx1zfSsr3hx?=
- =?us-ascii?Q?GS5PiD9OMi0DxmI4UhhfUI1oREAe5V4rORiaBFcCMaSCBka/q66Tudp2sOZu?=
- =?us-ascii?Q?JnMEsxoaZ/RWWXNByXUwnP90esiE7RRNPYt/g37ya6ffzEvpMOqXCcdsiO7U?=
- =?us-ascii?Q?NqwH6qRHozT3BuLN0kTuxQH7WgL/U7TLHOJtCVShNpPCk162hQF9EBS0KgLc?=
- =?us-ascii?Q?6lC1vPuMa/Ms61TmPf/9Xub3HVSSQ7U0J2P9Ha8r1UL12ZXeiplzVH25d2A0?=
- =?us-ascii?Q?sfK5mN5ynrmuGyRAd8svZyNGG7RPqDzK0yr8VZzHHHZ5ldtAvVvdYBS16sGX?=
- =?us-ascii?Q?14S+WkibBairQ6bknYOy++o8NUFZ8kPJq6Z2Kz8NVd/oJgmrwq+OP5FHxSh5?=
- =?us-ascii?Q?KZBVbg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55200223-d275-414b-eb58-08db5ead68e6
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2023 12:25:08.6580
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pLIHxkO10a28tXCgyB5GWmYYchoFQ/f0CGtqxDM6NuUPVvMgj+p1oMJK4nASZwfONJLfBut+UmIte3lrRUOS8E9A3RcrleaFgaF0F1LGwaA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5471
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 03:30:58PM +0100, David Howells wrote:
+From commit 282de143ead9 ("bpf: Introduce allocated objects support"),
+With this allocated object with BPF program, (PTR_TO_BTF_ID | MEM_ALLOC)
+has been a way of indicating to check the type is the allocated object.
 
-...
+commit d8939cb0a03c ("bpf: Loosen alloc obj test in verifier's
+reg_btf_record")
+From the commit, there has been helper function for checking this, named
+type_is_ptr_alloc_obj(). But still, some of the code use open code to
+retrieve this info. This commit replaces the open code with the
+type_is_alloc(), and the type_is_ptr_alloc_obj() function.
 
-> @@ -1307,7 +1307,7 @@ static ssize_t netfs_extract_xarray_to_sg(struct iov_iter *iter,
->  }
->  
->  /**
-> - * netfs_extract_iter_to_sg - Extract pages from an iterator and add ot an sglist
-> + * extract_iter_to_sg - Extract pages from an iterator and add ot an sglist
+Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+---
+ kernel/bpf/verifier.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-nit: While we are here, perhaps
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 086b2a14905b..97c714e8a8bf 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5891,7 +5891,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 		 * program allocated objects (which always have ref_obj_id > 0),
+ 		 * but not for untrusted PTR_TO_BTF_ID | MEM_ALLOC.
+ 		 */
+-		if (atype != BPF_READ && reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
++		if (atype != BPF_READ && !type_is_ptr_alloc_obj(reg->type)) {
+ 			verbose(env, "only read is supported\n");
+ 			return -EACCES;
+ 		}
+@@ -7511,7 +7511,7 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
+ 	if (base_type(arg_type) == ARG_PTR_TO_MEM)
+ 		type &= ~DYNPTR_TYPE_FLAG_MASK;
+ 
+-	if (meta->func_id == BPF_FUNC_kptr_xchg && type & MEM_ALLOC)
++	if (meta->func_id == BPF_FUNC_kptr_xchg && type_is_alloc(type))
+ 		type &= ~MEM_ALLOC;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(compatible->types); i++) {
+-- 
+2.34.1
 
-     s/and add ot an/and add to an/
-
->   * @iter: The iterator to extract from
->   * @maxsize: The amount of iterator to copy
->   * @sgtable: The scatterlist table to fill in
-
-..
