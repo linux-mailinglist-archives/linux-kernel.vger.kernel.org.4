@@ -2,485 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D831671370B
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 00:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E965713709
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 00:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbjE0WfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 18:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
+        id S229511AbjE0Wey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 18:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjE0WfD (ORCPT
+        with ESMTP id S229454AbjE0Wew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 18:35:03 -0400
-Received: from n169-110.mail.139.com (n169-110.mail.139.com [120.232.169.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22283E3;
-        Sat, 27 May 2023 15:34:58 -0700 (PDT)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM:                                                                                        
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[120.236.21.91])
-        by rmsmtp-lg-appmail-04-12082 (RichMail) with SMTP id 2f326472858447b-be564;
-        Sun, 28 May 2023 06:34:47 +0800 (CST)
-X-RM-TRANSID: 2f326472858447b-be564
-From:   Shenghao Ding <13916275206@139.com>
-To:     broonie@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com
-Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
-        navada@ti.com, gentuser@gmail.com, Ryan_Chu@wistron.com,
-        Sam_Wu@wistron.com, tiwai@suse.de,
-        Shenghao Ding <13916275206@139.com>
-Subject: [PATCH v4 1/6] ASoC: tas2781: Add Header file for tas2781 driver
-Date:   Sun, 28 May 2023 06:34:39 +0800
-Message-Id: <20230527223439.7741-1-13916275206@139.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 27 May 2023 18:34:52 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2112.outbound.protection.outlook.com [40.107.12.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04351AD;
+        Sat, 27 May 2023 15:34:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NF+J+V2KtCEd9LvH1cHSpcSlNUpyY/VdalPuwUbrwdwMKC5FqrWSXKlyjYaR4zGpm6GGHJJCmZMTCoWwRSwOn3ALMcTy9qXEohBZ8KBNdoPKwRcOyTbV9FUR21ITPfiDMkQ6GxjbsEp/nUFoXko3hL9Uo1et1sdPhGfwbdumfexlUWyEh/KA2WPVO8bILqDe+nvI7RYvUAyBSjFgQAFL3/B0mMEIjF9OuplA1EdaTgBCKbHvC7AFhnXHERKsPa4VUi737B1CU8zqZv7wQyr/IFzKlD0Qi7+xjWZrcxMMr8vAFxbNhvATGasj7W30Kp5as+FHiLqpoCUWXYQUyiK0RQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t+KayWd7+frViExUTaUyvlm+98YCyIHslSums7jvV/U=;
+ b=KvyWWjaYDE2EdaFZ9u1bKc58k4nTNSPQjZc22HEOzACQXgqg34eUm0Ot3brNtrJDujWZoSG+NF5isOwDCLtfZW1u73eK1x/3i6vDUC0eC+tFLZlu+xe+xYbJAVMqgcFgqce+V3JpJGja+zElHoeIH7o7GMgdzE2nMR4Or09RmvgMH0x6abdRX0vpdmRKR+iXDsmefd3ai0wBlIoGjQsOZVBgXz41ROzus5r3ZsJRyd3lGsaYl6mqbjAK+QdmeftywEEuatvmPJiYlsO841/Dt8HqdOo6Ub9xCT9YyttjzbJ5HwVcq0ksUlVldcLkW5R0Bt06DTqQKHymt54r1PiWIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=ekinops.com; dmarc=pass action=none header.from=ekinops.com;
+ dkim=pass header.d=ekinops.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ekinops.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t+KayWd7+frViExUTaUyvlm+98YCyIHslSums7jvV/U=;
+ b=pPQF6SejQrZHWfxZU91CGmKfe1IdDWgE3LagBJCTeoX9s7f2K9om2CpZaU8nTyytbXyROX1WU0GLHt1AXEhhAXSVOrY6gD2f8xtD7PipyJ23tT3SOyDfGRJNKRu7qrrnird8it5jYZbwzm00xeo/ZwZOLvxbF64sGZCOWVSXz8o=
+Received: from PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:141::6)
+ by MR1P264MB2255.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:11::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.21; Sat, 27 May
+ 2023 22:34:46 +0000
+Received: from PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::5442:2af6:2ce1:f8a]) by PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::5442:2af6:2ce1:f8a%4]) with mapi id 15.20.6433.020; Sat, 27 May 2023
+ 22:34:46 +0000
+From:   Ganesh Babu <ganesh.babu@ekinops.com>
+To:     Stephen Hemminger <stephen@networkplumber.org>,
+        Jakub Kicinski <kuba@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ganesh Babu <ganesh.babu@ekinops.com>
+Subject: RE: [PATCH] net: mroute6.h: change type of mif6c_pifi to __u32
+Thread-Topic: [PATCH] net: mroute6.h: change type of mif6c_pifi to __u32
+Thread-Index: AQHZYUP13XlrMpW17Ue8ZSjM0wOOK68RBfoAgCx+ieeACdaAAIAAIdAAgCd1/1A=
+Date:   Sat, 27 May 2023 22:34:46 +0000
+Message-ID: <PAZP264MB4064D9406001EB75D768D0E7FC449@PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM>
+References: <PAZP264MB4064279CBAB0D7672726F4A1FC889@PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM>
+        <20230328191456.43d2222e@kernel.org>
+        <PAZP264MB406414BA18689729DDE24F3DFC659@PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM>
+        <20230502085718.0551a86d@kernel.org> <20230502105820.2c27630d@hermes.local>
+In-Reply-To: <20230502105820.2c27630d@hermes.local>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=ekinops.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAZP264MB4064:EE_|MR1P264MB2255:EE_
+x-ms-office365-filtering-correlation-id: 0074e422-ac4a-4aa3-17ea-08db5f0292e9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IcXsoVjWGoMZwR9gUPym3HmXuYxDrs7TbX+iZ66owlkQbFc3QQ14t8DqqV4jH6Q3qCJJF1GFFIm5mESQPB98CeMlABt9+ovW1zEDg//WWwQlLNyFH25SaeKySXeVXPyaTjBcew/d2YboWgkOZDQWhHd0bblbaAd7z8u7g7AWgdYIyoXwWrMwBlsjQCCjAYeC/jRPCRcCipi7hp/3fWe4kjCN+b7rIi7nk3+t8Dx1NePeaUYQUnicvt/4QOn93TObAqwB3//0w3wkDXf6kLPn2+Iv1EwNYKpV7fG2OF2ot6S/0zys7fo1nVwx5GZ7PZnaJqwVq6/OxqOCkathUZnlWssO146xVirfw+a2o/alHrsaINSM0Lx9D+AQ27fEexIBP5ALuaZBAvPEWBy05Chbd7PNv9sPnROBrgmJ5vJaTV85LQmGqPHRISCJPvu58XFxa7oTrSMghDbHTRlmMbReKqxtp+NqsOHe80k4lECjp2Gg1+y6NjOZIssKuC9VgU0628DExmQbnlUa5LRccX/NNNf6fg3JiIZiJSUDVzKgYX3nUJSwe2HerZTjj+4iiexSLibVGpAVu5x+ahcqnb4U3cYFVFbEE3eLyMiT7scV48VE4B3qxltzDWr6a8duoTI/ma5TLIzyL0YFDXqdBC3zMw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(396003)(39840400004)(376002)(136003)(451199021)(55016003)(186003)(76116006)(66556008)(4326008)(83380400001)(66946007)(44832011)(41300700001)(38070700005)(5660300002)(86362001)(316002)(110136005)(54906003)(2906002)(9686003)(6506007)(107886003)(7696005)(66446008)(66476007)(64756008)(71200400001)(478600001)(55236004)(53546011)(33656002)(122000001)(8676002)(8936002)(26005)(52536014)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yaW4ItbjiU+iHeBY9HR+eFySVbYw4BFvU8KDO3Dc/par8Mr3l6yIw/0EfYXT?=
+ =?us-ascii?Q?cV8O5Ei0kQVyBQnnHWFDlJ0sboaNBKsTh/n0Oo1gcGFv9XN2q5pHIPEhuMq2?=
+ =?us-ascii?Q?k59PgTM3gfj/WN5oERNkI3FnPUVJuU2VNZekpRvhpN5xNDjctHjQjO7NoizU?=
+ =?us-ascii?Q?Ty1+VRzwoMAsUlLCMC1x19ggjKw7WUt59WlsRNoAdZ7v6Qhn2hRF7t+HbtEr?=
+ =?us-ascii?Q?6m70netzbC3xbnNOMFoEGLWGyMBK090ratbGvWSSt1ewlausUpiHcX0xwL1a?=
+ =?us-ascii?Q?9gbLFi2T0o87hBKY7TcgCkExAIJB/U1teWjPwAwGFfw4w5MKHY78H5T8NlK+?=
+ =?us-ascii?Q?eqeM22wWpzteLNdAag7eTV2dG8RVsJNp6S1y0tgCOIk/cE9CSiy7o6SvmSbl?=
+ =?us-ascii?Q?1q/M6s1NzH2sPy02ucaPh+pj1256EMC4WKgPltFMK+SxZR3QnXaHyf2W27z6?=
+ =?us-ascii?Q?ArLtJSgRMIqiqTPe300tf4Co418PNWnof2ATaaqqG2c9l1BwJo2fxfxhwHez?=
+ =?us-ascii?Q?e11078Q9XYlhLzfHQs3jg2NlxR249JwpmnklEW9PqA0fs7ShBBl7sxkAtPjq?=
+ =?us-ascii?Q?1oNu1sq7vmxS+qI7SdRMK/+/mrbCkH3o4WfFOlZ4VGDW2QWhyQ9yWPxDtU7c?=
+ =?us-ascii?Q?nMazGjtarjhW1LCxR+ZFkx2i9eIoP4Os1oHIndVLAXxgGmW+qC3EcwYxAodt?=
+ =?us-ascii?Q?KauM0MVFW3gwm2x9TCTgJJCbupvVQWeAe1J9x3WS/O+/szzoXF9Uj3erY7hP?=
+ =?us-ascii?Q?ytZC67Zlb4Tt9093vRsNzjpbANj08om4kwSVd/JsGWx34VuKJkB814W5wHqz?=
+ =?us-ascii?Q?kesZV3hGt2qDmardjZ7A7iX9gTmunBPDtcAB3sGIrGCvTZ7Ylf4QnhboMoYI?=
+ =?us-ascii?Q?TNt5bkd9QiO4bUmem/GFBJeNFb7RkQeuOeEOKCsyPTRH0PaA/nv3E/9LXgES?=
+ =?us-ascii?Q?VHN8+4zEjOXvEAxAs2nyfgM5otmtRidTbloE8zROmm+NpYfsEgpTU4UHqQmu?=
+ =?us-ascii?Q?1lE1sLJyYe+YOEckxCJnPAHrBro9X8RxBFRQnF8DQ47+h6EZRl2lJm1/zmq6?=
+ =?us-ascii?Q?aZ5620Gg2ZrQRsjXlT1/JMsENtond8uFRXBrTjpUqhiyhrJpXl2nV5vSTnBS?=
+ =?us-ascii?Q?+CDvgQ6rDfsl71Y1s4pXfabhWGTXCwC6k0iIZkj7Z0EqO5qkRVD5o8uHRfmO?=
+ =?us-ascii?Q?T31C2NNBBvmQSCUdRAnp7cUlgi6kU0s39hNbEi2h67Z9DgZBf1kSYVvWXiQG?=
+ =?us-ascii?Q?HiLS/s4yl2GAD/l/R7raP4EilT+XBiU7sG6wZQ7xF+C2HAL2tVrQcz4TkV0c?=
+ =?us-ascii?Q?5llrj/LlfUTaCrdlJTQKzkTTwFi0O6eonrRoOKCPZxdrsF38xCRLX1bFWtYQ?=
+ =?us-ascii?Q?AlR6wIxobbBq05RirbBMDtziw3WYgCwuYyvyXo0qQkZh76I5jPOYF6iuJtfc?=
+ =?us-ascii?Q?o3adQ0YrtgD1ELyICw3jnvaNyjwvYut/d19sfNl6L76cyJcm6dLlqMQsiuOp?=
+ =?us-ascii?Q?oa+S8Q6BGnyy0P0QmtFHBPVzbZFlzfnBxllXzs/g8JHcFBiEqu8R1xFNQ6ol?=
+ =?us-ascii?Q?sCqkGyDOTNOtgXXmVNIsu50LcD5UmMG+yadCqpff?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: ekinops.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAZP264MB4064.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0074e422-ac4a-4aa3-17ea-08db5f0292e9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 May 2023 22:34:46.2004
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f57b78a6-c654-4771-a72f-837275f46179
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZFOjae0F65PN7CaxkwOx5aOFVWF1jZ/l9GvotezSVLu+hR6gjqn6+AJiY3RXpkOrxRJhTMn2ryyec5wYs/CpJQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB2255
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create Header file for  tas2781 driver.
 
-Signed-off-by: Shenghao Ding <13916275206@139.com>
+> -----Original Message-----
+> From: Stephen Hemminger <stephen@networkplumber.org>
+> Sent: 02 May 2023 23:28
+> To: Jakub Kicinski <kuba@kernel.org>
+> Cc: Ganesh Babu <ganesh.babu@ekinops.com>; netdev@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH] net: mroute6.h: change type of mif6c_pifi to __u32
+>=20
+> On Tue, 2 May 2023 08:57:18 -0700
+> Jakub Kicinski <kuba@kernel.org> wrote:
+>=20
+> > On Tue, 2 May 2023 08:07:10 +0000 Ganesh Babu wrote:
+> > > Thank you for your response. Regarding the proposed change to the
+> > > mif6ctl structure in mroute6.h, I would like to clarify, that
+> > > changing the datatype of mif6c_pifi from __u16 to __u32 will not
+> > > change the offset of the structure members, which means that the
+> > > size of the structure remains the same and the ABI remains
+> > > compatible. Furthermore, ifindex is treated as an integer in all the
+> > > subsystems of the kernel and not as a 16-bit value. Therefore,
+> > > changing the datatype of mif6c_pifi from __u16 to __u32 is a natural
+> > > and expected change that aligns with the existing practice in the
+> > > kernel.
+> > > I understand that the mif6ctl structure is part of the uAPI and
+> > > changing its geometry is not allowed. However, in this case, we are
+> > > not changing the geometry of the structure, as the size of the
+> > > structure remains the same and the offset of the structure members
+> > > will not change. Thus, the proposed change will not affect the ABI
+> > > or the user API. Instead, it will allow the kernel to handle 32-bit
+> > > ifindex values without any issues, which is essential for the smooth
+> > > functioning of the PIM6 protocol. I hope this explanation clarifies
+> > > any concerns you may have had. Let me know if you have any further
+> > > questions or need any more details.
+> >
+> > Please don't top post on the list.
+> >
+> > How does the hole look on big endian? Does it occupy the low or the
+> > high bytes?
+> >
 
----
-Changes in v4:
- - correct some enums have capitalized Chn, chn to all
- Changes to be committed:
-	new file:   include/sound/tas2781-dsp.h
-	new file:   include/sound/tas2781-tlv.h
-	new file:   include/sound/tas2781.h
----
- include/sound/tas2781-dsp.h | 190 ++++++++++++++++++++++++++++++++++++
- include/sound/tas2781-tlv.h |  22 +++++
- include/sound/tas2781.h     | 182 ++++++++++++++++++++++++++++++++++
- 3 files changed, 394 insertions(+)
- create mode 100644 include/sound/tas2781-dsp.h
- create mode 100644 include/sound/tas2781-tlv.h
- create mode 100644 include/sound/tas2781.h
+We don't need to be concerned about the byte arrangement, whether it
+occupies the low or high bytes, in the big-endian machine. The reason
+is that the mif6c_pifi variable is only used when calling the
+dev_get_by_index() function to retrieve the device information of an
+interface. This function expects the interface index to be passed as
+an integer. Since both the mif6c_pifi variable and the expected
+argument of the dev_get_by_index() function are of the same data type,
+there is no possibility of data truncation.
 
-diff --git a/include/sound/tas2781-dsp.h b/include/sound/tas2781-dsp.h
-new file mode 100644
-index 000000000000..b05f20bc4a1f
---- /dev/null
-+++ b/include/sound/tas2781-dsp.h
-@@ -0,0 +1,190 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+//
-+// ALSA SoC Texas Instruments TAS2781 Audio Smart Amplifier
-+//
-+// Copyright (C) 2022 - 2023 Texas Instruments Incorporated
-+// https://www.ti.com
-+//
-+// The TAS2781 driver implements a flexible and configurable
-+// algo coefficient setting for one, two, or even multiple
-+// TAS2781 chips.
-+//
-+// Author: Shenghao Ding <shenghao-ding@ti.com>
-+// Author: Kevin Lu <kevin-lu@ti.com>
-+//
-+
-+#ifndef __TASDEVICE_DSP_H__
-+#define __TASDEVICE_DSP_H__
-+
-+#define MAIN_ALL_DEVICES			0x0d
-+#define MAIN_DEVICE_A				0x01
-+#define MAIN_DEVICE_B				0x08
-+#define MAIN_DEVICE_C				0x10
-+#define MAIN_DEVICE_D				0x14
-+#define COEFF_DEVICE_A				0x03
-+#define COEFF_DEVICE_B				0x0a
-+#define COEFF_DEVICE_C				0x11
-+#define COEFF_DEVICE_D				0x15
-+#define PRE_DEVICE_A				0x04
-+#define PRE_DEVICE_B				0x0b
-+#define PRE_DEVICE_C				0x12
-+#define PRE_DEVICE_D				0x16
-+
-+#define PPC3_VERSION				0x4100
-+#define PPC3_VERSION_TAS2781			0x14c00
-+#define RCA_CONFIGID_BYPASS_ALL			0
-+#define TASDEVICE_DEVICE_SUM			8
-+#define TASDEVICE_CONFIG_SUM			64
-+
-+enum channel {
-+	top_left_Chn,
-+	top_right_chn,
-+	bottom_left_Chn,
-+	bottom_right_chn,
-+	max_chn,
-+};
-+
-+enum tasdevice_dsp_dev_idx {
-+	TASDEVICE_DSP_TAS_2555 = 0,
-+	TASDEVICE_DSP_TAS_2555_STEREO,
-+	TASDEVICE_DSP_TAS_2557_MONO,
-+	TASDEVICE_DSP_TAS_2557_DUAL_MONO,
-+	TASDEVICE_DSP_TAS_2559,
-+	TASDEVICE_DSP_TAS_2563,
-+	TASDEVICE_DSP_TAS_2563_DUAL_MONO = 7,
-+	TASDEVICE_DSP_TAS_2563_QUAD,
-+	TASDEVICE_DSP_TAS_2563_21,
-+	TASDEVICE_DSP_TAS_2781,
-+	TASDEVICE_DSP_TAS_2781_DUAL_MONO,
-+	TASDEVICE_DSP_TAS_2781_21,
-+	TASDEVICE_DSP_TAS_2781_QUAD,
-+	TASDEVICE_DSP_TAS_MAX_DEVICE
-+};
-+
-+struct tasdevice_fw_fixed_hdr {
-+	unsigned int fwsize;
-+	unsigned int ppcver;
-+	unsigned int drv_ver;
-+};
-+
-+struct tasdevice_dspfw_hdr {
-+	struct tasdevice_fw_fixed_hdr fixed_hdr;
-+	unsigned short device_family;
-+	unsigned short device;
-+	unsigned char ndev;
-+};
-+
-+struct tasdev_blk {
-+	int nr_retry;
-+	unsigned int type;
-+	unsigned char is_pchksum_present;
-+	unsigned char pchksum;
-+	unsigned char is_ychksum_present;
-+	unsigned char ychksum;
-+	unsigned int nr_cmds;
-+	unsigned int blk_size;
-+	unsigned int nr_subblocks;
-+	unsigned char *data;
-+};
-+
-+struct tasdevice_data {
-+	char name[64];
-+	unsigned int nr_blk;
-+	struct tasdev_blk *dev_blks;
-+};
-+
-+struct tasdevice_prog {
-+	unsigned int prog_size;
-+	struct tasdevice_data dev_data;
-+};
-+
-+struct tasdevice_config {
-+	unsigned int cfg_size;
-+	char name[64];
-+	struct tasdevice_data dev_data;
-+};
-+
-+struct tasdevice_calibration {
-+	struct tasdevice_data dev_data;
-+};
-+
-+struct tasdevice_fw {
-+	struct tasdevice_dspfw_hdr fw_hdr;
-+	unsigned short nr_programs;
-+	struct tasdevice_prog *programs;
-+	unsigned short nr_configurations;
-+	struct tasdevice_config *configs;
-+	unsigned short nr_calibrations;
-+	struct tasdevice_calibration *calibrations;
-+	struct device *dev;
-+};
-+
-+enum tasdevice_dsp_fw_state {
-+	TASDEVICE_DSP_FW_NONE = 0,
-+	TASDEVICE_DSP_FW_PENDING,
-+	TASDEVICE_DSP_FW_FAIL,
-+	TASDEVICE_DSP_FW_ALL_OK,
-+};
-+
-+enum tasdevice_bin_blk_type {
-+	TASDEVICE_BIN_BLK_COEFF = 1,
-+	TASDEVICE_BIN_BLK_POST_POWER_UP,
-+	TASDEVICE_BIN_BLK_PRE_SHUTDOWN,
-+	TASDEVICE_BIN_BLK_PRE_POWER_UP,
-+	TASDEVICE_BIN_BLK_POST_SHUTDOWN
-+};
-+
-+struct tasdevice_rca_hdr {
-+	unsigned int img_sz;
-+	unsigned int checksum;
-+	unsigned int binary_version_num;
-+	unsigned int drv_fw_version;
-+	unsigned char plat_type;
-+	unsigned char dev_family;
-+	unsigned char reserve;
-+	unsigned char ndev;
-+	unsigned char devs[TASDEVICE_DEVICE_SUM];
-+	unsigned int nconfig;
-+	unsigned int config_size[TASDEVICE_CONFIG_SUM];
-+};
-+
-+struct tasdev_blk_data {
-+	unsigned char dev_idx;
-+	unsigned char block_type;
-+	unsigned short yram_checksum;
-+	unsigned int block_size;
-+	unsigned int n_subblks;
-+	unsigned char *regdata;
-+};
-+
-+struct tasdevice_config_info {
-+	unsigned int nblocks;
-+	unsigned int real_nblocks;
-+	unsigned char active_dev;
-+	struct tasdev_blk_data **blk_data;
-+};
-+
-+struct tasdevice_rca {
-+	struct tasdevice_rca_hdr fw_hdr;
-+	int ncfgs;
-+	struct tasdevice_config_info **cfg_info;
-+	int profile_cfg_id;
-+};
-+
-+void tasdevice_select_cfg_blk(void *context, int conf_no,
-+	unsigned char block_type);
-+void tasdevice_config_info_remove(void *context);
-+void tasdevice_dsp_remove(void *context);
-+int tasdevice_dsp_parser(void *context);
-+int tasdevice_rca_parser(void *context, const struct firmware *fmw);
-+void tasdevice_dsp_remove(void *context);
-+void tasdevice_calbin_remove(void *context);
-+int tasdevice_select_tuningprm_cfg(void *context, int prm,
-+	int cfg_no, int rca_conf_no);
-+int tasdevice_prmg_load(void *context, int prm_no);
-+int tasdevice_prmg_calibdata_load(void *context, int prm_no);
-+void tasdevice_tuning_switch(void *context, int state);
-+int tas2781_load_calibration(void *context, char *file_name,
-+	enum channel i);
-+
-+#endif
-diff --git a/include/sound/tas2781-tlv.h b/include/sound/tas2781-tlv.h
-new file mode 100644
-index 000000000000..f4310dce655a
---- /dev/null
-+++ b/include/sound/tas2781-tlv.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+//
-+// ALSA SoC Texas Instruments TAS2781 Audio Smart Amplifier
-+//
-+// Copyright (C) 2022 - 2023 Texas Instruments Incorporated
-+// https://www.ti.com
-+//
-+// The TAS2781 driver implements a flexible and configurable
-+// algo coefficient setting for one, two, or even multiple
-+// TAS2781 chips.
-+//
-+// Author: Shenghao Ding <shenghao-ding@ti.com>
-+// Author: Kevin Lu <kevin-lu@ti.com>
-+//
-+
-+#ifndef __TAS2781_TLV_H__
-+#define __TAS2781_TLV_H__
-+
-+static const DECLARE_TLV_DB_SCALE(dvc_tlv, -10000, 100, 0);
-+static const DECLARE_TLV_DB_SCALE(amp_vol_tlv, 1100, 50, 0);
-+
-+#endif /* __TAS2781_LIB_H__ */
-diff --git a/include/sound/tas2781.h b/include/sound/tas2781.h
-new file mode 100644
-index 000000000000..399bb8f9b54a
---- /dev/null
-+++ b/include/sound/tas2781.h
-@@ -0,0 +1,182 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+//
-+// ALSA SoC Texas Instruments TAS2781 Audio Smart Amplifier
-+//
-+// Copyright (C) 2022 - 2023 Texas Instruments Incorporated
-+// https://www.ti.com
-+//
-+// The TAS2781 driver implements a flexible and configurable
-+// algo coefficient setting for one, two, or even multiple
-+// TAS2781 chips.
-+//
-+// Author: Shenghao Ding <shenghao-ding@ti.com>
-+// Author: Kevin Lu <kevin-lu@ti.com>
-+//
-+
-+#ifndef __TAS2781_H__
-+#define __TAS2781_H__
-+
-+#include <linux/kernel.h>
-+#include "tas2781-dsp.h"
-+
-+/* version number */
-+#define TAS2781_DRV_VER			1
-+#define SMARTAMP_MODULE_NAME		"tas2781"
-+#define TAS2781_GLOBAL_ADDR	0x40
-+#define TASDEVICE_RATES			(SNDRV_PCM_RATE_44100 |\
-+	SNDRV_PCM_RATE_48000 | SNDRV_PCM_RATE_96000 |\
-+	SNDRV_PCM_RATE_88200)
-+#define TASDEVICE_MAX_CHANNELS		8
-+
-+#define TASDEVICE_FORMATS		(SNDRV_PCM_FMTBIT_S16_LE | \
-+	SNDRV_PCM_FMTBIT_S24_LE | \
-+	SNDRV_PCM_FMTBIT_S32_LE)
-+
-+/*PAGE Control Register (available in page0 of each book) */
-+#define TASDEVICE_PAGE_SELECT		0x00
-+#define TASDEVICE_BOOKCTL_PAGE		0x00
-+#define TASDEVICE_BOOKCTL_REG		127
-+#define TASDEVICE_BOOK_ID(reg)		(reg / (256 * 128))
-+#define TASDEVICE_PAGE_ID(reg)		((reg % (256 * 128)) / 128)
-+#define TASDEVICE_PAGE_REG(reg)		((reg % (256 * 128)) % 128)
-+#define TASDEVICE_PGRG(reg)		(reg % (256 * 128))
-+#define TASDEVICE_REG(book, page, reg)	(((book * 256 * 128) + \
-+					(page * 128)) + reg)
-+
-+/*Software Reset */
-+#define TAS2781_REG_SWRESET		TASDEVICE_REG(0x0, 0X0, 0x01)
-+#define TAS2781_REG_SWRESET_RESET	BIT(0)
-+
-+/* Enable Global addresses */
-+#define TAS2781_MISC_CFG2		TASDEVICE_REG(0x0, 0X0, 0x07)
-+#define TAS2781_GLOBAL_ADDR_MASK	BIT(1)
-+#define TAS2781_GLOBAL_ADDR_ENABLE	BIT(1)
-+
-+/*I2C Checksum */
-+#define TASDEVICE_I2CChecksum		TASDEVICE_REG(0x0, 0x0, 0x7E)
-+
-+/* Volume control */
-+#define TAS2781_DVC_LVL			TASDEVICE_REG(0x0, 0x0, 0x1A)
-+#define TAS2781_AMP_LEVEL		TASDEVICE_REG(0x0, 0x0, 0x03)
-+#define TAS2781_AMP_LEVEL_MASK		GENMASK(5, 1)
-+
-+#define TASDEVICE_CMD_SING_W		0x1
-+#define TASDEVICE_CMD_BURST		0x2
-+#define TASDEVICE_CMD_DELAY		0x3
-+#define TASDEVICE_CMD_FIELD_W		0x4
-+
-+enum audio_device {
-+	TAS2781	= 0,
-+};
-+
-+enum device_catlog_id {
-+	LENOVO = 0,
-+	OTHERS
-+};
-+
-+struct tasdevice {
-+	struct tasdevice_fw *cali_data_fmw;
-+	unsigned int dev_addr;
-+	unsigned int err_code;
-+	unsigned char cur_book;
-+	short cur_prog;
-+	short cur_conf;
-+	bool is_loading;
-+	bool is_loaderr;
-+};
-+
-+/*
-+ * This item is used to store the generic i2c address of
-+ * all the tas2781 devices for I2C broadcast during the multi-device
-+ * writes, useless in mono case.
-+ */
-+struct global_addr {
-+	int ref_cnt;
-+	unsigned int dev_addr;
-+	unsigned char cur_book;
-+};
-+
-+struct tasdevice_irqinfo {
-+	int irq_gpio;
-+	int irq;
-+};
-+
-+struct calidata {
-+	unsigned char *data;
-+	unsigned long total_sz;
-+};
-+
-+struct tasdevice_priv {
-+	struct tasdevice tasdevice[max_chn];
-+	struct tasdevice_irqinfo irq_info;
-+	struct global_addr glb_addr;
-+	struct tasdevice_rca rcabin;
-+	struct tasdevice_fw *fmw;
-+	struct regmap *regmap;
-+	struct mutex codec_lock;
-+	struct calidata cali_data;
-+	struct gpio_desc *reset;
-+	struct device *dev;
-+	struct tm tm;
-+
-+	enum device_catlog_id catlog_id;
-+	unsigned char crc8_lkp_tbl[CRC8_TABLE_SIZE];
-+	unsigned char cal_binaryname[max_chn][64];
-+	unsigned char coef_binaryname[64];
-+	unsigned char rca_binaryname[64];
-+	unsigned char dev_name[32];
-+	unsigned char ndev;
-+	unsigned int magic_num;
-+	unsigned int chip_id;
-+	unsigned int sysclk;
-+	const char *acpi_subsystem_id;
-+	int index;
-+	int cur_prog;
-+	int cur_conf;
-+	int fw_state;
-+	void *client;
-+	void *codec;
-+	bool isacpi;
-+	bool playback_started;
-+	void (*set_global_mode)(struct tasdevice_priv *tas_priv);
-+	int (*fw_parse_variable_header)(struct tasdevice_priv *tas_priv,
-+		const struct firmware *fmw, int offset);
-+	int (*fw_parse_program_data)(struct tasdevice_priv *tas_priv,
-+		struct tasdevice_fw *tas_fmw,
-+		const struct firmware *fmw, int offset);
-+	int (*fw_parse_configuration_data)(struct tasdevice_priv *tas_priv,
-+		struct tasdevice_fw *tas_fmw,
-+		const struct firmware *fmw, int offset);
-+	int (*tasdevice_load_block)(struct tasdevice_priv *tas_priv,
-+		struct tasdev_blk *block);
-+};
-+
-+void tas2781_reset(struct tasdevice_priv *tas_dev);
-+int tascodec_init(struct tasdevice_priv *tas_priv, void *codec,
-+	void (*cont)(const struct firmware *fw, void *context));
-+struct tasdevice_priv *tasdevice_kzalloc(struct i2c_client *i2c);
-+int tasdevice_init(struct tasdevice_priv *tas_priv);
-+void tasdevice_remove(struct tasdevice_priv *tas_priv);
-+int tasdevice_dev_read(struct tasdevice_priv *tas_priv,
-+	enum channel chn, unsigned int reg, unsigned int *value);
-+int tasdevice_dev_write(struct tasdevice_priv *tas_priv,
-+	enum channel chn, unsigned int reg, unsigned int value);
-+int tasdevice_dev_bulk_write(
-+	struct tasdevice_priv *tas_priv, enum channel chn,
-+	unsigned int reg, unsigned char *p_data, unsigned int n_length);
-+int tasdevice_dev_bulk_read(struct tasdevice_priv *tas_priv,
-+	enum channel chn, unsigned int reg, unsigned char *p_data,
-+	unsigned int n_length);
-+int tasdevice_dev_update_bits(
-+	struct tasdevice_priv *tasdevice, enum channel chn,
-+	unsigned int reg, unsigned int mask, unsigned int value);
-+int tasdevice_amp_putvol(struct tasdevice_priv *tas_priv,
-+	struct snd_ctl_elem_value *ucontrol, struct soc_mixer_control *mc);
-+int tasdevice_amp_getvol(struct tasdevice_priv *tas_priv,
-+	struct snd_ctl_elem_value *ucontrol, struct soc_mixer_control *mc);
-+int tasdevice_digital_putvol(struct tasdevice_priv *tas_priv,
-+	struct snd_ctl_elem_value *ucontrol, struct soc_mixer_control *mc);
-+int tasdevice_digital_getvol(struct tasdevice_priv *tas_priv,
-+	struct snd_ctl_elem_value *ucontrol, struct soc_mixer_control *mc);
-+
-+#endif /* __TAS2781_H__ */
--- 
-2.34.1
+It could have been problematic if mif6c_pifi were 32-bit and the
+interface index values passed as arguments to the dev_get_by_index()
+function were 16-bit, as this could result in unexpected behavior.
+However, the proposed change avoids this issue and ensures
+compatibility between the data types, eliminating any concerns about
+the byte arrangement in the big-endian machine.
 
+> > There's also the problem of old user space possibly not initializing
+> > the hole, and passing in garbage.
+>=20
+> Looks like multicast routing is one of the last places with no netlink AP=
+I, and
+> only ioctl. There is no API to modify multicast routes in iproute2.
 
+In open-source applications like FRR
+(https://github.com/FRRouting/frr/blob/master/pimd/pim_mroute.c) and
+pim6sd (https://github.com/troglobit/pim6sd.git), 32-bit interface
+indices are sometimes assigned to 16-bit variables, potentially causing dat=
+a
+loss. This can result in inaccurate or invalid interface indices being used=
+,
+leading to incorrect network interface identification and improper multicas=
+t
+forwarding. For instance, in FRR's pim_mroute_add_vif function, assigning a
+32-bit ifindex to a 16-bit vc_pifi variable truncates the value, risking da=
+ta
+loss. Similarly, in pim6sd's k_add_vif function, a 32-bit uv_ifindex=20
+assigned to a 16-bit mc.mif6c_pifi variable, also risking data loss if the
+value exceeds the 16-bit range.
+
+However, even if the userspace application still maintains the mif6c_pifi
+variable as 16-bit, the proposed patch ensures that no issues are created.
+This is because the size of the mif6ctl structure remains unchanged, even
+after converting the datatype of mif6c_pifi from _u16 to _u32. This guarant=
+ees
+that there is no risk of data truncation when copying the 16-bit mif6c_pifi
+userspace value to the 32-bit mif6c_pifi kernel variable.
