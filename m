@@ -2,176 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458A671366C
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 22:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB594713675
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 22:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjE0UdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 16:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S229698AbjE0Uqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 16:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjE0UdK (ORCPT
+        with ESMTP id S229761AbjE0Uqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 16:33:10 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE30B1;
-        Sat, 27 May 2023 13:33:08 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-4397b040c8fso1121258137.0;
-        Sat, 27 May 2023 13:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685219588; x=1687811588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DphEniiV7+L9T07hsrZpWRu6Se0vRycld7BbJ4F2i5s=;
-        b=O7rUqk+3zdR02SJ3nc0i0gjUm5pD7ypN8bPLk+lpEOfkSamIjLqdcIOrFJnJlbSCTA
-         RDiaBSqFchS1EXo3a2H1RpsvowA5BEvvQUiucW7pqm+MyTXfNMeAeho2hu3j8ny+MhP7
-         zIICmLCp61XHa++z3WCZL/IQkYbS4nyTO8RFLhoMwv3DKxiJ7eWTQAKT4VupGNr4s/XI
-         OEWXm7aJb1rRiWY2XHan2WrpxzNO4M6L36E1adarpiQu0vyMAFQ0nffznAAwvDY2iP1m
-         ylTtFUjLLvtF2YJTUojoiiX2SrwnPPNzXRpZjyAf+w476QE3yeFuYxckR/0CTE4gkle9
-         NbAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685219588; x=1687811588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DphEniiV7+L9T07hsrZpWRu6Se0vRycld7BbJ4F2i5s=;
-        b=l8FPo3Kid4r7EFOVute5tEA/DPPTpLGAm/6AMPbudV/q6WKTj6mEL7prvI5yyXTQz+
-         lk0+gaugzsrDNXSxI09HCHsmQarb0pK/kIwNn2I0h9S7bFxW+CQTbbKvza1NvdTVIBgP
-         fia5jI5WPqZD1szA1R1sw9hpxcXLdfT31DdlPh2bSz56KGu/RtPfyVeMB8uXR3nvmGkV
-         pHFmTe4u3OpzzZXyZuFRSGlKHw5FR7LGdnhmCcaa9PFSqZw8g0XL1m+BnrA4c7RHPlLr
-         c0IW4NoLUcymjOO+XJMEXTNKIar08KB2FmOFU5CwrWM7LBTvZSvalK7rsITg8Uw2R0SY
-         NC8A==
-X-Gm-Message-State: AC+VfDwSIEi/p8CMV8NBfL5SUrGygiMHBwuHfy47Qc79wglFO7u3HdO7
-        +9n6hs5ksy11HJKgNm/LfIaEC4Qau/kMYkyZE5k=
-X-Google-Smtp-Source: ACHHUZ7j1USGL3o1axHHccs3q8ZcTSSYWRerLMuMhHfd26USaqLqm73fyuhAS9F7rRZjTkKazWJv909u45/+K0wqiV8=
-X-Received: by 2002:a67:f2c9:0:b0:42c:543a:ab2a with SMTP id
- a9-20020a67f2c9000000b0042c543aab2amr1973157vsn.35.1685219587791; Sat, 27 May
- 2023 13:33:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <00000000000037341d05fc460fa6@google.com> <CAF=yD-JpUc3SLtd7MtULmKOcERf6EJZ0rPc7WmJB2nUNUQRBjA@mail.gmail.com>
- <CAF=yD-+MxyoD1Mbekf93-XhAA2urAf5audD8HefmF8bfsu51iQ@mail.gmail.com>
-In-Reply-To: <CAF=yD-+MxyoD1Mbekf93-XhAA2urAf5audD8HefmF8bfsu51iQ@mail.gmail.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Sat, 27 May 2023 16:32:31 -0400
-Message-ID: <CAF=yD-Ln94Nim0GkpLhZ7p7qQFUDE4Z-adrjRMRSh2y3iBmb+w@mail.gmail.com>
-Subject: Re: [syzbot] [net?] KASAN: invalid-access Read in __packet_get_status
-To:     syzbot <syzbot+64b0f633159fde08e1f1@syzkaller.appspotmail.com>
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        linux-arm-kernel@lists.infradead.org
+        Sat, 27 May 2023 16:46:42 -0400
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39135AC;
+        Sat, 27 May 2023 13:46:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+        t=1685220387; i=spasswolf@web.de;
+        bh=XWibsJx1YJWrvyn917MRnpNsKgmfIeD/gR4idkU5SBI=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date;
+        b=QswUvaKcvlfm8HGmtJPrBVzDQmp2v0iYjBfPW/Y9kBWkq/vFhpa9/upIPLSJDLUvA
+         5N7rwU7ESo56vKdRZ67VcQxpFe067B3SbhfdpZtev+m3YtCNLu210QU+XRdEu9vQ78
+         gukPOihNK7e/SOvfQJoVJoQKwuZNU63YTv9+v3Tzy7VbRoJz/a2P/0OIjeLGQWbDhz
+         5+S5B4Uv0bFwMym7EojaCIU1B5HAma52yHiZ0sfkDI6Eu9JdlTc7WSAD8Wz0PV+vWC
+         3Pq7YE7YJe0NMOI6w7CDR7ASSJANUEJirLM4xjIc/ONTFOTnp+fTNntcVkHCNyr4bM
+         TPTpzUaXcKUPw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([176.198.191.160]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MPaMQ-1pgPkf35M2-00MvdR; Sat, 27
+ May 2023 22:46:27 +0200
+Message-ID: <7ae8af63b1254ab51d45c870e7942f0e3dc15b1e.camel@web.de>
+Subject: [PATCH net] net: ipa: Use the correct value for IPA_STATUS_SIZE
+From:   Bert Karwatzki <spasswolf@web.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     elder@linaro.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sat, 27 May 2023 22:46:25 +0200
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.46.4-2 
+MIME-Version: 1.0
+X-Provags-ID: V03:K1:WzzljHKLMxZlZFbFaFNZREr/ziuHQOR5eZa5NtwND9WrUbHkFOF
+ IBabxYZQ8cTHy+MmtFd3yULB2u+oIUAbrTEi6ERKrjR7SXmcM+HjB5wOymWtK56YWb3IujF
+ i0yUaPs2BF6KhGHmTRIjfXJTgUxo2O1VS2MXUNX8hsY7vhedGhh8uc+i2ZvzCz1ODPBviTU
+ 8sFsb4rfHv+rzpvLex4GA==
+UI-OutboundReport: notjunk:1;M01:P0:/isRWyVWTdQ=;wxuixlXgl9SeBwxuBGzOqJQZdwJ
+ xjOKQTucDMeRZo5aiTobbISTPq/SC7IwUl3fuOY+DjLSJAcgIWFwzuh5zKoUm3y0pXPK7fjOG
+ RHqJJiwX1oed5EqEVurKHA7HBsi6r2RgGyqU+njkIKyg0QQADjjkuXPrKw4ByDhRrxRr01AgX
+ +x/Gck+LgHK7t8PN6kAtjZepTFOWU+0+i4udSBmTEekx/3kLtJg8nuuXvPEwL606Kv+TN8Y4s
+ T/jKINECUwo8VJGbgAutlUmKnZ2WehnXe5h4dYu6dtMB9YHrinHSOYXlGFgY8+IUWTJ5Gq1wm
+ zltaBKsxy4T9OYWQ/DdhYH1Ui9OvxijXBaFbKrhew/jKtCHaHSfGIEOkMHPxYGiS0QvOyNMfP
+ 1NOeBXjdUIsHivPRAAoYfqTmZS/cUhuc4DYrQFYOt7Ixb/iR/Sq645mmgdSzAqx4J32++uliK
+ 6YG9YdHqFIW0bd5uxfOhr5Auie1Oy49aHJsbXjuBI9KrkpCBLg5rT0xR/p7Nm+3/Einl9cLGE
+ Cc/rW/J0qCDEMfcBIDVsdjdsXV73/RAD1WgTnPjR2elVPEFHQZ9OvTaAEEcfr8xHkuy3M0GR3
+ lxJVMidslNH07h9u3czi9ZMbZHl/n2lyxhDqqOBIz5tNjPxv51C+ahqwIRtucJxLQTsrpE3E9
+ s86InQJ67Vg8NwS3aitT+oJEv9IAl3L0smmE6FXyP2u/5Ocq9nzjmGDAoYo1FCd7A970ERdOv
+ x4bXD4wljKACDyrSSzTlni1cfKrjWG0BwJl2ORHRrlJ/zIynPCKLyd+0smZpo2qSyfiDgs+k9
+ 5uN/0JsZzF/iR9T32x6XJmoY7u2dMH6zVaCE0s0GFdQ8Wbbp5bewyi9Pj7pk82sYY+1enFCPB
+ bPtHyP5Mf5W55ESKsf5Emee6aS37pQEU8IYmWcxTzkEcaAv4Gv9XILAifcu0KN2XMAxolcMzw
+ ABzhwREg+roGOp5fOnJTBTtlLp8=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 12:19=E2=80=AFPM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> On Mon, May 22, 2023 at 10:52=E2=80=AFAM Willem de Bruijn
-> <willemdebruijn.kernel@gmail.com> wrote:
-> >
-> > On Mon, May 22, 2023 at 6:51=E2=80=AFAM syzbot
-> > <syzbot+64b0f633159fde08e1f1@syzkaller.appspotmail.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    2d1bcbc6cd70 Merge tag 'probes-fixes-v6.4-rc1' of git=
-://gi..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D154b8fa12=
-80000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D51dd28037=
-b2a55f
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D64b0f633159=
-fde08e1f1
-> > > compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 202101=
-10, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > userspace arch: arm64
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12b6382=
-e280000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D17fd0aee2=
-80000
-> > >
-> > > Downloadable assets:
-> > > disk image (non-bootable): https://storage.googleapis.com/syzbot-asse=
-ts/384ffdcca292/non_bootable_disk-2d1bcbc6.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/d2e21a43e11e/vm=
-linux-2d1bcbc6.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/49e0b029f9=
-af/Image-2d1bcbc6.gz.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the =
-commit:
-> > > Reported-by: syzbot+64b0f633159fde08e1f1@syzkaller.appspotmail.com
-> > >
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > BUG: KASAN: invalid-access in __packet_get_status+0x70/0xe0 net/packe=
-t/af_packet.c:438
-> >
-> > The offending line is the last one in
-> >
-> > "
-> > static int __packet_get_status(const struct packet_sock *po, void *fram=
-e)
-> > {
-> >         union tpacket_uhdr h;
-> >
-> >         smp_rmb();
-> >
-> >         h.raw =3D frame;
-> >         switch (po->tp_version) {
-> >         case TPACKET_V1:
-> >                 flush_dcache_page(pgv_to_page(&h.h1->tp_status));
-> >                 return h.h1->tp_status;
-> >         case TPACKET_V2:
-> >                 flush_dcache_page(pgv_to_page(&h.h2->tp_status));
-> > "
-> >
-> > The reproducer is very small:
-> >
-> > "
-> > // socket(PF_PACKET, SOCK_DGRAM, htons(ETH_P_ALL);
-> > r0 =3D socket$packet(0x11, 0x2, 0x300)
-> >
-> > // setsockopt PACKET_RX_RING with same block and frame sizes and counts
-> > setsockopt$packet_rx_ring(r0, 0x107, 0x5,
-> > &(0x7f0000000040)=3D@req3=3D{0x8000, 0x200, 0x80, 0x20000}, 0x1c)
-> >
-> > // excessive length, too many bits in prot, MAP_SHARED | MAP_ANONYMOUS
-> > mmap(&(0x7f0000568000/0x2000)=3Dnil, 0x1000000, 0x20567fff, 0x11, r0, 0=
-x0)
-> > "
-> >
-> > What is odd here is that the program never sets packet version
-> > explicitly, and the default is TPACKET_V1.
->
-> The test is marked as repeat.
->
-> One possibility is that there is a race between packet arrival calling
-> flush_dcache_page and user mmap setup/teardown. That would exhibit as
-> flakiness.
->
-> ARM flush_dcache_page is quite outside my networking comfort zone.
+commit b8dc7d0eea5a7709bb534f1b3ca70d2d7de0b42c introduced
+IPA_STATUS_SIZE as a replacement for the size of the removed struct
+ipa_status. sizeof(struct ipa_status) was sizeof(__le32[8]), use this
+as IPA_STATUS_SIZE.
 
-The accessed memory is using ARM MTE tags. It appears that the memory
-is accessed with the wrong tag:
+From 0623148733819bb5d3648b1ed404d57c8b6b31d8 Mon Sep 17 00:00:00 2001
+From: Bert Karwatzki <spasswolf@web.de>
+Date: Sat, 27 May 2023 22:16:52 +0200
+Subject: [PATCH] Use the correct value for IPA_STATUS_SIZE.
+IPA_STATUS_SIZE
+ was introduced in commit b8dc7d0eea5a7709bb534f1b3ca70d2d7de0b42c as a
+ replacment for the size of the removed struct ipa_status which had
+size =3D
+ sizeof(__le32[8]).
 
- do_tag_check_fault+0x78/0x8c arch/arm64/mm/fault.c:791
- do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:867
- el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
- el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
- el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:586
- __packet_get_status+0x70/0xe0 net/packet/af_packet.c:438
+Signed-off-by: Bert Karwatzki <spasswolf@web.de>
+---
+ drivers/net/ipa/ipa_endpoint.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ipa/ipa_endpoint.c
+b/drivers/net/ipa/ipa_endpoint.c
+index 2ee80ed140b7..afa1d56d9095 100644
+--- a/drivers/net/ipa/ipa_endpoint.c
++++ b/drivers/net/ipa/ipa_endpoint.c
+@@ -119,7 +119,7 @@ enum ipa_status_field_id {
+ };
+=20
+ /* Size in bytes of an IPA packet status structure */
+-#define IPA_STATUS_SIZE			sizeof(__le32[4])
++#define IPA_STATUS_SIZE			sizeof(__le32[8])
+=20
+ /* IPA status structure decoder; looks up field values for a structure
+*/
+ static u32 ipa_status_extract(struct ipa *ipa, const void *data,
+--=20
+2.40.1
+
+Bert Karwatzki
+
