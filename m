@@ -2,131 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50CE7134B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56737134B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjE0Mcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 08:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
+        id S232435AbjE0Mdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 08:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjE0Mcp (ORCPT
+        with ESMTP id S229593AbjE0Mdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 08:32:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E141F3;
-        Sat, 27 May 2023 05:32:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B530A60C70;
-        Sat, 27 May 2023 12:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8E4C433D2;
-        Sat, 27 May 2023 12:32:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685190763;
-        bh=k53h9mOVcjFm3tFTg03/p1aeDvR4fzTEE2ku4cPFeHo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LlsVX14e2T2IKMSZk8c+Iq/IVscFUPjlKZr1Il0NGAcTluQUcCYXaoeYbew9KHq1v
-         X1IGzuG8NTBrGQC71K0+xHiH5/Uv8XBEhxkXWeRS/zx346Vxwfmi5XJaeDNgWAWnOZ
-         giGsVscqG14Z5p95CG7VhctDflj8INqDMDZo63l4vuAHMrx/Ijaz9BlsULJIcZE2yz
-         pcGU4k87eXTPECvZ4lwc/lExV9yByIU6fycFW0hJvmroSu00L10vOWjoR+pDyyzKeT
-         K38U0E5KZnzZmTwlMNj8l9yp/XensfzQxIcXagf6Xu9bY8ydrXWulLZsHDu7mZQhUx
-         da3R65XZ8V4BQ==
-Date:   Sat, 27 May 2023 20:32:31 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, aford@beaconembedded.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: imx8mn-beacon: Migrate sound card to
- simple-audio-card
-Message-ID: <20230527123231.GS528183@dragon>
-References: <20230521231055.167351-1-aford173@gmail.com>
+        Sat, 27 May 2023 08:33:45 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534ACF3;
+        Sat, 27 May 2023 05:33:44 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b03d3e41fcso31837011fa.0;
+        Sat, 27 May 2023 05:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685190822; x=1687782822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=luEVOxwc+hf1I6vnh0OMg4uHH06RianYGAZT40fbv6Q=;
+        b=B36wSsFQrmHI133lMAzYbT/95M8XFCG5dcna7rLtoQT7qTWUkLxMO9uDXQfa0JpkFz
+         faXPMxbI+2Uq5rE3ruOQKeEI200212EZZlFde2tAf5QjLGFO1UeVLw0S2NdhHu6MIDDf
+         yKZgePb7HQxDP0XudTRIylVRhogwCRfW12v8BUAP0c4FGRZjnuXCYf6cddQcmbEejMiP
+         BGNs8G2CeK5h4CehPTvq5KNkwcpubHCJlDU3ZZ4BsrvVCSEWmNZNcYDDTLVYWKhhJi2Z
+         EUBkj+jfKLkkg9G4ktk+rfkZgm9QhLL5xhQv+N9t3guIB4lqB7b8+fRe2zKg0Kb7YEcQ
+         lBVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685190822; x=1687782822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=luEVOxwc+hf1I6vnh0OMg4uHH06RianYGAZT40fbv6Q=;
+        b=ezV5LTnn0jyL9sHYvCanxJJrcpszlIs0SdgCLsm+cbL8k25FvEu1sqWTQ87D0ZSpsF
+         e6N9ytndh6gTJ4lTsqgVUbJgoe7GqG1FUR3J25v5+/bNF5LNYLowONpmsve5Jp5xzWvb
+         IVJ6TM1dXJqNAGFDtuE0KBLAoZzyNC7ISwjxyx2LoOuxoM6YERMu91hkDKQsAkP47Onb
+         7t/toQH8EHFXnw4wJukiaD38HDpHjXNuukQfzG77zcB91ZPRVE2qDOR961lYjhBP8Okl
+         b6j3rI77ZsSR+0oTpR0PeSQvNBqczVWiSy8lNSqljbAMZlvqMYxIyg3uCtoDgkOTwVpN
+         piRg==
+X-Gm-Message-State: AC+VfDwRA4BatJxeP1zgtcP7sytRMZTnc3B3Ud79Z9toanVKMeXbD7uo
+        f9O2cX6OZw1txAdbw9HNQi/nVfbGJmV3F5tGviE=
+X-Google-Smtp-Source: ACHHUZ687E19sFwfiVTq1KucDmWlzuq9ui7gdIxsrM7EyejJ5muKnlmEMqvbDs1wA7jDUKIkelHwH8HSxz4eb/Sp06w=
+X-Received: by 2002:a2e:b94a:0:b0:2a7:b0b2:29 with SMTP id 10-20020a2eb94a000000b002a7b0b20029mr723614ljs.22.1685190822334;
+ Sat, 27 May 2023 05:33:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230521231055.167351-1-aford173@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230526054621.18371-1-liangchen.linux@gmail.com> <CACGkMEuUTNfHXQPg29eUZFnVBRJEmjjKN4Jmr3=Qnkgjj0B9PQ@mail.gmail.com>
+In-Reply-To: <CACGkMEuUTNfHXQPg29eUZFnVBRJEmjjKN4Jmr3=Qnkgjj0B9PQ@mail.gmail.com>
+From:   Liang Chen <liangchen.linux@gmail.com>
+Date:   Sat, 27 May 2023 20:33:30 +0800
+Message-ID: <CAKhg4tKGnXh32a8M1V-r7sP8uCSnyMYhoFXZTv3ixJOcJ1mWOg@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/5] virtio_net: Fix an unsafe reference to the
+ page chain
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, pabeni@redhat.com, alexander.duyck@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 06:10:54PM -0500, Adam Ford wrote:
-> Instead of using a custom glue layer connecting the wm8962 CODEC
-> to the SAI3 sound-dai, migrate the sound card to simple-audio-card.
-> 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
+On Fri, May 26, 2023 at 2:39=E2=80=AFPM Jason Wang <jasowang@redhat.com> wr=
+ote:
+>
+> On Fri, May 26, 2023 at 1:46=E2=80=AFPM Liang Chen <liangchen.linux@gmail=
+.com> wrote:
+> >
+> > "private" of buffer page is currently used for big mode to chain pages.
+> > But in mergeable mode, that offset of page could mean something else,
+> > e.g. when page_pool page is used instead. So excluding mergeable mode t=
+o
+> > avoid such a problem.
+>
+> If this issue happens only in the case of page_pool, it would be
+> better to squash it there.
+>
+> Thanks
 
-Can you double check both patches?  The changes do not seem to match
-subject and commit log.
+Sure, thanks!
 
-Shawn
 
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> index bd84db550053..8be8f090e8b8 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> @@ -1069,13 +1069,6 @@ lcdif: lcdif@32e00000 {
->  					 <&clk IMX8MN_CLK_DISP_APB_ROOT>,
->  					 <&clk IMX8MN_CLK_DISP_AXI_ROOT>;
->  				clock-names = "pix", "axi", "disp_axi";
-> -				assigned-clocks = <&clk IMX8MN_CLK_DISP_PIXEL_ROOT>,
-> -						  <&clk IMX8MN_CLK_DISP_AXI>,
-> -						  <&clk IMX8MN_CLK_DISP_APB>;
-> -				assigned-clock-parents = <&clk IMX8MN_CLK_DISP_PIXEL>,
-> -							 <&clk IMX8MN_SYS_PLL2_1000M>,
-> -							 <&clk IMX8MN_SYS_PLL1_800M>;
-> -				assigned-clock-rates = <594000000>, <500000000>, <200000000>;
->  				interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
->  				power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_LCDIF>;
->  				status = "disabled";
-> @@ -1093,12 +1086,6 @@ mipi_dsi: dsi@32e10000 {
->  				clocks = <&clk IMX8MN_CLK_DSI_CORE>,
->  					 <&clk IMX8MN_CLK_DSI_PHY_REF>;
->  				clock-names = "bus_clk", "sclk_mipi";
-> -				assigned-clocks = <&clk IMX8MN_CLK_DSI_CORE>,
-> -						  <&clk IMX8MN_CLK_DSI_PHY_REF>;
-> -				assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_266M>,
-> -							 <&clk IMX8MN_CLK_24M>;
-> -				assigned-clock-rates = <266000000>, <24000000>;
-> -				samsung,pll-clock-frequency = <24000000>;
->  				interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
->  				power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_MIPI_DSI>;
->  				status = "disabled";
-> @@ -1142,6 +1129,21 @@ disp_blk_ctrl: blk-ctrl@32e28000 {
->  					      "lcdif-axi", "lcdif-apb", "lcdif-pix",
->  					      "dsi-pclk", "dsi-ref",
->  					      "csi-aclk", "csi-pclk";
-> +				assigned-clocks = <&clk IMX8MN_CLK_DSI_CORE>,
-> +						  <&clk IMX8MN_CLK_DSI_PHY_REF>,
-> +						  <&clk IMX8MN_CLK_DISP_PIXEL>,
-> +						  <&clk IMX8MN_CLK_DISP_AXI>,
-> +						  <&clk IMX8MN_CLK_DISP_APB>;
-> +				assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_266M>,
-> +							 <&clk IMX8MN_CLK_24M>,
-> +							 <&clk IMX8MN_VIDEO_PLL1_OUT>,
-> +							 <&clk IMX8MN_SYS_PLL2_1000M>,
-> +							 <&clk IMX8MN_SYS_PLL1_800M>;
-> +				assigned-clock-rates = <266000000>,
-> +						       <24000000>,
-> +						       <594000000>,
-> +						       <500000000>,
-> +						       <200000000>;
->  				#power-domain-cells = <1>;
->  			};
->  
-> -- 
-> 2.39.2
-> 
+>
+> >
+> > Signed-off-by: Liang Chen <liangchen.linux@gmail.com>
+> > ---
+> >  drivers/net/virtio_net.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 5a7f7a76b920..c5dca0d92e64 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -497,7 +497,7 @@ static struct sk_buff *page_to_skb(struct virtnet_i=
+nfo *vi,
+> >                         return NULL;
+> >
+> >                 page =3D (struct page *)page->private;
+> > -               if (page)
+> > +               if (!vi->mergeable_rx_bufs && page)
+> >                         give_pages(rq, page);
+> >                 goto ok;
+> >         }
+> > --
+> > 2.31.1
+> >
+>
