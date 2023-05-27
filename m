@@ -2,89 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F1871323D
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8D6713242
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjE0DyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 23:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
+        id S230456AbjE0D4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 23:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjE0DyO (ORCPT
+        with ESMTP id S229548AbjE0D4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 23:54:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE86116
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 20:54:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53A746163C
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 03:54:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1899AC433EF;
-        Sat, 27 May 2023 03:54:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685159651;
-        bh=4VBv7cj0/3RmXKILqJxI8XT4lU0273xO3MquSuWGEwk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CyhrMX609RlDwkP1Ry9yaWcXvsO6Z/j8CnJT02pDXPXqBuEwqrAzgwokVRLvlGzLE
-         MhWQt633AyUyd37gALmn3Wy9bUXEqt7Me7dHABGZqxveHlritOulBu58dHzNmbA85j
-         09F5hm/8hG4J/jqTRpchwln0XD1QT8/DlDFPaVjAL6mzKThf/rOdvGBwY73AsbZZCb
-         0jbeBhIeRJwzSQWYTj2mIHUpRgosRlqStxfhmyGAmqHQ+jbBtZYrzGcsaaPK4+rJ3n
-         ibxPUB/gVAjV+dTTHk0H2Lx3HO1A9376maxeUN8FBnBRLVXUNPnXjFwu2H9czjeWU3
-         tYvV+k1pGhWfQ==
-Date:   Fri, 26 May 2023 20:54:10 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 06/12] net: skbuff: don't include
- <net/page_pool.h> into <linux/skbuff.h>
-Message-ID: <20230526205410.3f849071@kernel.org>
-In-Reply-To: <20230525125746.553874-7-aleksander.lobakin@intel.com>
-References: <20230525125746.553874-1-aleksander.lobakin@intel.com>
-        <20230525125746.553874-7-aleksander.lobakin@intel.com>
+        Fri, 26 May 2023 23:56:02 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9618E125
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 20:56:00 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-95fde138693so486329266b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 20:56:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685159759; x=1687751759;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EIU3ApG2t6G3Om8A3cojlnR0RAZfWHqg0wkrw6J9EhQ=;
+        b=7anKzrx54MpIV/vXgrNEGJ+XZ3nR4S6+xWVOb3/Tt5YzVkbt7WPWY4f/AUP5W2UVr9
+         K530DnGhnTIFcYiYmBbo+tPqqc0Ukj9QD1CkrX7XYrabbntH5JpVHcroD+SlRHKtx3Rc
+         kY9L1c3K7NoOo4hOq0VERwTXnGOaLU2O0SqU/NyahwGPOOUbS5EUDCZArHOouWnL9tEg
+         LeojmsUC/tR7MDeCs6MFcte8HBoOGbF4eHruYHv8bCvGelALDHxcGpq7H+s6hSYEOfkY
+         E9QwDQeUZPLWNJY8DCUHU9Ztj6DnJmr57JCEklUa3J76GNHAbm8Up0Y+fc+yiJ39usxW
+         MKHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685159759; x=1687751759;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EIU3ApG2t6G3Om8A3cojlnR0RAZfWHqg0wkrw6J9EhQ=;
+        b=XtKT5lpifaCT3P8+6KqJIwsF8wkgBm0VBQmrIldCFer4ytA5JSZ2UqlSo4CTEVG4wA
+         XaPECWF5nxxdEX8uT2bwYl8sgxYxaEodZPq8+QFVZs0cOUW1kJk8pjzU6kDVSM20+K9M
+         d915LJOeDz968omkvM78KeHb2n5JISmHrYwY8UO59wLk35mIbA4SoU6+RQdXklV6F/2m
+         2AXr6cuDnlQvLLaYeL5X302WjXxbidl0D4A/ruQ7tGhcX33io3FHwXr3NcJxT/kmgucr
+         fH1YAF23gzMbjp1UiiHLBvPB3uaJtHhyiAOvoY1Lh486CZkblZGXDW7Pjc97V5x0upXP
+         0CdQ==
+X-Gm-Message-State: AC+VfDzTkCpegHq3twii8GNkZFQuPsrq4BOjJqKW+YR0dSdWE1ML9aGC
+        AKoK0Fy3EnrxJD2bvtV5eMVdQbWJhnfA/sQeSTucag==
+X-Google-Smtp-Source: ACHHUZ7SopEnz/q4gRtKqNlLV+UWGEEECBRV2t4umB2KkFa2iCrFA+Z7MsdbSgcdVxUu8YqiHjj2qSfN4oUKBpBNgPI=
+X-Received: by 2002:a17:906:9751:b0:971:5a79:29f2 with SMTP id
+ o17-20020a170906975100b009715a7929f2mr981232ejy.15.1685159758897; Fri, 26 May
+ 2023 20:55:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230527103126.398267-1-linmiaohe@huawei.com>
+In-Reply-To: <20230527103126.398267-1-linmiaohe@huawei.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 26 May 2023 20:55:22 -0700
+Message-ID: <CAJD7tkZhUB9N6R-1mWAPGV=awEO0Y0cmi9OmGiVhjSfdFBCirQ@mail.gmail.com>
+Subject: Re: [PATCH] memcg: remove unused mem_cgroup_from_obj()
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev,
+        shakeelb@google.com, akpm@linux-foundation.org,
+        muchun.song@linux.dev, cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 May 2023 14:57:40 +0200 Alexander Lobakin wrote:
-> Currently, touching <net/page_pool.h> triggers a rebuild of more than
-> a half of the kernel. That's because it's included in <linux/skbuff.h>.
-> 
-> In 6a5bcd84e886 ("page_pool: Allow drivers to hint on SKB recycling"),
-> Matteo included it to be able to call a couple functions defined there.
-> Then, in 57f05bc2ab24 ("page_pool: keep pp info as long as page pool
-> owns the page") one of the calls was removed, so only one left.
-> It's call to page_pool_return_skb_page() in napi_frag_unref(). The
-> function is external and doesn't have any dependencies. Having include
-> of very niche page_pool.h only for that looks like an overkill.
-> Instead, move the declaration of that function to skbuff.h itself, with
-> a small comment that it's a special guest and should not be touched.
-> Now, after a few include fixes in the drivers, touching page_pool.h
-> only triggers rebuilding of the drivers using it and a couple core
-> networking files.
+On Fri, May 26, 2023 at 7:40=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> w=
+rote:
+>
+> The function mem_cgroup_from_obj() is not used anymore. Remove it and
+> clean up relevant comments.
+>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  include/linux/memcontrol.h |  6 ------
+>  mm/memcontrol.c            | 31 -------------------------------
+>  2 files changed, 37 deletions(-)
+>
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 00a88cf947e1..ce8c2355ed9f 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1813,7 +1813,6 @@ static inline int memcg_kmem_id(struct mem_cgroup *=
+memcg)
+>         return memcg ? memcg->kmemcg_id : -1;
+>  }
+>
+> -struct mem_cgroup *mem_cgroup_from_obj(void *p);
+>  struct mem_cgroup *mem_cgroup_from_slab_obj(void *p);
+>
+>  static inline void count_objcg_event(struct obj_cgroup *objcg,
+> @@ -1876,11 +1875,6 @@ static inline int memcg_kmem_id(struct mem_cgroup =
+*memcg)
+>         return -1;
+>  }
+>
+> -static inline struct mem_cgroup *mem_cgroup_from_obj(void *p)
+> -{
+> -       return NULL;
+> -}
+> -
+>  static inline struct mem_cgroup *mem_cgroup_from_slab_obj(void *p)
+>  {
+>         return NULL;
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 6a3d4ce87b8a..532b29c9a0fe 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -2972,37 +2972,6 @@ struct mem_cgroup *mem_cgroup_from_obj_folio(struc=
+t folio *folio, void *p)
+>  /*
+>   * Returns a pointer to the memory cgroup to which the kernel object is =
+charged.
+>   *
+> - * A passed kernel object can be a slab object, vmalloc object or a gene=
+ric
+> - * kernel page, so different mechanisms for getting the memory cgroup po=
+inter
+> - * should be used.
+> - *
+> - * In certain cases (e.g. kernel stacks or large kmallocs with SLUB) the=
+ caller
+> - * can not know for sure how the kernel object is implemented.
+> - * mem_cgroup_from_obj() can be safely used in such cases.
+> - *
+> - * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lo=
+ck(),
+> - * cgroup_mutex, etc.
+> - */
+> -struct mem_cgroup *mem_cgroup_from_obj(void *p)
+> -{
+> -       struct folio *folio;
+> -
+> -       if (mem_cgroup_disabled())
+> -               return NULL;
+> -
+> -       if (unlikely(is_vmalloc_addr(p)))
+> -               folio =3D page_folio(vmalloc_to_page(p));
+> -       else
+> -               folio =3D virt_to_folio(p);
+> -
+> -       return mem_cgroup_from_obj_folio(folio, p);
+> -}
+> -
+> -/*
+> - * Returns a pointer to the memory cgroup to which the kernel object is =
+charged.
+> - * Similar to mem_cgroup_from_obj(), but faster and not suitable for obj=
+ects,
+> - * allocated using vmalloc().
 
-drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+Perhaps keep the line about not being suitable for objects allocated
+using vmalloc()? To be fair it's obvious from the function name, but I
+am guessing whoever added it did for a reason.
 
-came in the meantime, and did not bother including page_pool.h.
--- 
-pw-bot: cr
+I don't feel strongly either way, LGTM. I can't see any references in
+Linus's tree or mm-unstable.
+
+Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+
+
+> - *
+>   * A passed kernel object must be a slab object or a generic kernel page=
+.
+>   *
+>   * The caller must ensure the memcg lifetime, e.g. by taking rcu_read_lo=
+ck(),
+> --
+> 2.27.0
+>
