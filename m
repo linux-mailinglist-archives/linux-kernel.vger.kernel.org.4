@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E6A71314D
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD817713163
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjE0BIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 21:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53520 "EHLO
+        id S230159AbjE0BNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 21:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjE0BIs (ORCPT
+        with ESMTP id S229762AbjE0BNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 21:08:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D265189
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:08:47 -0700 (PDT)
+        Fri, 26 May 2023 21:13:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE05218D
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:13:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23C71654A8
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 01:08:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CECFFC433D2;
-        Sat, 27 May 2023 01:08:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49B1D63FD0
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 01:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EE4C433EF;
+        Sat, 27 May 2023 01:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685149726;
-        bh=5zHdJvK0bRkHVe/BmCiGndweGuWhBH6cjRIMmLkfBi8=;
+        s=k20201202; t=1685150019;
+        bh=bnZn/fQHYsSl0pv4U7PItA9rlBxxlQgsJQwYXNj4rNk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Yn5ttwEb4eOBNsxFRNaaKLoRAE0oaarcy3jczitqa0fQZz9JIWsPlV+QDEjoOazUV
-         JeoDyIHBJEW1zs0+LkrRU3D4B0eb3PvBLeuri5uSFyD5UMg3QdX2JV9y3IYQv1BIlW
-         puUR5KhLkbtSPGR9HUhR6ZxrtxZFOot1yo8YBVmOye1fNsuPh4kzZgl00bOSU+vZfh
-         ayjW+kLDNYEYmSznXcLjQdTM/yIdiJUuil/DoaFN58Sb1dn8KIrXrU8jSNZSlfdLQB
-         RjyQ+iwmAxl/x94z8JS5lAZ5YBOa8lBvYztVJQOGK15c70HVS62KyyB566CnEW0lHQ
-         sm6Xh/p7tt7xw==
-Date:   Fri, 26 May 2023 18:08:44 -0700
+        b=T0S4ZXibwLE948S8DRkzaDSL0v6FqP/y6telzB9wrL9huYI6cKGaMzFhOr+Pgqhyr
+         L52M64xyEB3qyUrRqc9lOSlGxwf8O/Evs//Dr8tmDSQ5zDmrZSjnSFtpG+SvcbGg21
+         AlC2Dd7CT/iaW9EuBn6kFNvboA3TIQ+KXblFHF/ZJWEAvn8cEmp2EQmcyMYtlxhJGH
+         znZxp/KUtnS5hM/pWGE7sp+VZD+tvEC2616y+RGcnb2UuXbhkalLlcRbIuArJ6AKs/
+         vLIopOHNRkuWFx1VTcwciH0SAVhfg8LT6eOvHa0PhwGMsvVJXNSOHDEr7blO/kBIep
+         049T+tKPBZfvQ==
+Date:   Fri, 26 May 2023 18:13:38 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     David Howells <dhowells@redhat.com>
 Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
@@ -45,16 +45,17 @@ Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
         linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
         Boris Pismenny <borisp@nvidia.com>,
         John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH net-next 09/12] tls/sw: Support MSG_SPLICE_PAGES
-Message-ID: <20230526180844.73745d78@kernel.org>
-In-Reply-To: <20230524153311.3625329-10-dhowells@redhat.com>
+Subject: Re: [PATCH net-next 10/12] tls/sw: Convert tls_sw_sendpage() to use
+ MSG_SPLICE_PAGES
+Message-ID: <20230526181338.03a99016@kernel.org>
+In-Reply-To: <20230524153311.3625329-11-dhowells@redhat.com>
 References: <20230524153311.3625329-1-dhowells@redhat.com>
-        <20230524153311.3625329-10-dhowells@redhat.com>
+        <20230524153311.3625329-11-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,9 +64,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023 16:33:08 +0100 David Howells wrote:
-> +static int rls_sw_sendmsg_splice(struct sock *sk, struct msghdr *msg,
+On Wed, 24 May 2023 16:33:09 +0100 David Howells wrote:
+> Convert tls_sw_sendpage() and tls_sw_sendpage_locked() to use sendmsg()
+> with MSG_SPLICE_PAGES rather than directly splicing in the pages itself.
+> 
+> [!] Note that tls_sw_sendpage_locked() appears to have the wrong locking
+>     upstream.  I think the caller will only hold the socket lock, but it
+>     should hold tls_ctx->tx_lock too.
 
-s/rls/tls/ ?
+Lock ordering, as you probably discovered. It is what it is :|
 
-Will the TLS selftests under tools/.../net/tls.c exercise this?
+> +	if (msg->msg_flags & ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL |
+> +			       MSG_CMSG_COMPAT | MSG_SPLICE_PAGES |
+> +			       MSG_SENDPAGE_NOTLAST | MSG_SENDPAGE_NOPOLICY))
+> +		return -EOPNOTSUPP;
+
+Now MSG_SENDPAGE_* can leak in thru the sendmsg() call?
+Letting MSG_SENDPAGE_NOPOLICY in seems pretty suspicious, no?
