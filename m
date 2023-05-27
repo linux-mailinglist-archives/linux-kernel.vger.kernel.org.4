@@ -2,101 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AFB7135C9
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E6F7135CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjE0Qpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 12:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
+        id S229801AbjE0Qsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 12:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjE0Qp0 (ORCPT
+        with ESMTP id S229649AbjE0Qsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 12:45:26 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABAED8;
-        Sat, 27 May 2023 09:45:18 -0700 (PDT)
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-X-GND-Sasl: contact@artur-rojek.eu
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C5A4A20003;
-        Sat, 27 May 2023 16:45:15 +0000 (UTC)
-From:   Artur Rojek <contact@artur-rojek.eu>
-To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Subject: [PATCH v2 3/3] sh: dma: Correct the number of DMA channels in SH7709
-Date:   Sat, 27 May 2023 18:44:52 +0200
-Message-Id: <20230527164452.64797-4-contact@artur-rojek.eu>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230527164452.64797-1-contact@artur-rojek.eu>
-References: <20230527164452.64797-1-contact@artur-rojek.eu>
+        Sat, 27 May 2023 12:48:35 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A4EBB
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:48:32 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f4b384c09fso2122915e87.3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685206111; x=1687798111;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T6rAaidgfhu4LJ/9WLpglx2aFfzxycQ5nHQBVSzrKzU=;
+        b=Jxy99EooV3oHM9GDBQV7S+OdsS+4pp14Mp5FoDHTse/a6McfcG2gxqJHw4IMrMQ+57
+         QfYFrglJnreJGjQD/T4OImtHWYJVN3lYoe9bHdY0pTQ7hSDuYetfL6q2kk3p0N36Zi3b
+         51oCw2lCKFTiPymV/kqOu951Qsl7T8zkYglghKVE6HCbuXqoCRoC5pwmKg/hYVw2bsci
+         CWSGc3KwS660nTiJgOjrUBgwLeFlEGkKm6hBdaWwmTQjJIU1bPyi839qWnoDmvNY7TFB
+         6pqFtsSUWwiERAJbyyi22MuzjulItvAbIwRSl5u4ZN0Ab7IZ08ifegN40LTaxvDMczXV
+         DzGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685206111; x=1687798111;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T6rAaidgfhu4LJ/9WLpglx2aFfzxycQ5nHQBVSzrKzU=;
+        b=il6/r1Em4XZcfGU0Qc6fwxfatSdTOGrbSxUBOToIScAEAocRUJMj8Mt2J4BSWKQFTl
+         vecypBlNGOD5CxJob9XfYVfFrj5ooPoxys3AmFYfey6RlDrmkb14PKZtbkcCUVVgtYPc
+         qF3NKWrA2h/xE/cdQxGae9WpdWiTFgcZE/wHzoMyrTXMzhDoRJlx3Gca1/5x1b0Yf3Ed
+         vTZuydZUc2eqs+VQl14krA78rytX8OHSGthL+ril3ifIzQVM6e82OYxZSf1/2s6bJXVk
+         eTtrPCzyH6MBhT1GgeeAKmLopxQ7uQqZY06PpyVAgccm0dGftlPlLV6gYvyakvtNXeKF
+         Z6Ng==
+X-Gm-Message-State: AC+VfDzdoV56yQUI+52PzXErClRko3lfVZZ4hU7/oEaAF+VligImlM2g
+        V5Gh84LIJddFH6i2FJgKMwOvjg==
+X-Google-Smtp-Source: ACHHUZ7qmVREHbrmpTvboz+uVUuwjkFjM+MQdm/aETeh+HLW8R3WSw3JpWtJkCIWRQ155pAvdk+AbA==
+X-Received: by 2002:ac2:4a86:0:b0:4f4:b41c:a8c1 with SMTP id l6-20020ac24a86000000b004f4b41ca8c1mr1793758lfp.69.1685206110871;
+        Sat, 27 May 2023 09:48:30 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id m25-20020ac24ad9000000b004f391369ccbsm1198856lfp.55.2023.05.27.09.48.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 May 2023 09:48:30 -0700 (PDT)
+Message-ID: <aeaef3fd-3347-1843-4038-fb6b6d52d266@linaro.org>
+Date:   Sat, 27 May 2023 18:48:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NO_DNS_FOR_FROM,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 12/17] media: venus: firmware: Correct IS_V6() checks
+Content-Language: en-US
+To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230228-topic-venus-v3-0-6092ae43b58f@linaro.org>
+ <20230228-topic-venus-v3-12-6092ae43b58f@linaro.org>
+ <76f0d91e-eff0-3044-fd99-9371a9ce0cb3@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <76f0d91e-eff0-3044-fd99-9371a9ce0cb3@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the hardware manual [1], the DMAC found in SH7709 features
-only 4 channels.
 
-While at it, also sort the existing targets and clarify that
-NR_ONCHIP_DMA_CHANNELS must be a multiply of two.
 
-[1] https://www.renesas.com/us/en/document/mah/sh7709s-group-hardware-manual (p. 373)
+On 26.05.2023 09:03, Dikshita Agarwal wrote:
+> 
+> 
+> On 5/18/2023 2:44 AM, Konrad Dybcio wrote:
+>> Most of these checks should have checked for TZ presence (or well,
+>> absence), as we shouldn't really be doing things that the black box
+>> does for us on non-CrOS platforms.
+>>
+>> The IS_V6() check in venus_shutdown_no_tz() should have checked
+>> whether the core version is IRIS2_1 (so, SC7280). Correct that.
+>>
+>> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  drivers/media/platform/qcom/venus/firmware.c | 12 ++++++++----
+>>  1 file changed, 8 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+>> index 572b649c56f3..ceb917f2e0d4 100644
+>> --- a/drivers/media/platform/qcom/venus/firmware.c
+>> +++ b/drivers/media/platform/qcom/venus/firmware.c
+>> @@ -29,7 +29,11 @@ static void venus_reset_cpu(struct venus_core *core)
+>>  	u32 fw_size = core->fw.mapped_mem_size;
+>>  	void __iomem *wrapper_base;
+>>  
+>> -	if (IS_V6(core))
+>> +	/*
+>> +	 * When there's no Qualcomm TZ (like on Chromebooks), the OS is
+>> +	 * responsible for bringing up the hardware instead.
+>> +	 */
+>> +	if (!core->use_tz)
+>>  		wrapper_base = core->wrapper_tz_base;
+>>  	else
+>>  		wrapper_base = core->wrapper_base;
+> this is invoked only for platforms not using TZ.
+> The version checks are kept to differentiate between different TZ base offset.
+> wrapper base offset for V6 (IRIS2_1) is calculated as
+> 	wrapper_base = core->wrapper_tz_base
+> while for others (non V6) wrapper base is calculated as
+> 	wrapper_base = core->wrapper_base;
+OK I see, this patch is bad indeed..
 
-Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
----
+The IS_V6 should be IRIS2_1 as you mentioned, I'll do that instead.
 
-v2: - sort existing targets
-    - clarify that the value must be a multiply of two
+We should however think about whether assuming every SC7180/SC7280
+doesn't use TZ (reminder: not all SC7[12]80 are Chromebooks, there are
+quite a lot of WoA laptops with WP firmware that has PAS), but that's
+a problem that we may discuss separately.
 
- arch/sh/drivers/dma/Kconfig | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/arch/sh/drivers/dma/Kconfig b/arch/sh/drivers/dma/Kconfig
-index 7d54f284ce10..382fbb189fcf 100644
---- a/arch/sh/drivers/dma/Kconfig
-+++ b/arch/sh/drivers/dma/Kconfig
-@@ -28,17 +28,19 @@ config SH_DMA_API
- config NR_ONCHIP_DMA_CHANNELS
- 	int
- 	depends on SH_DMA
--	default "4" if CPU_SUBTYPE_SH7750  || CPU_SUBTYPE_SH7751  || \
--		       CPU_SUBTYPE_SH7750S || CPU_SUBTYPE_SH7091
-+	default "4" if CPU_SUBTYPE_SH7709 || CPU_SUBTYPE_SH7750  || \
-+		       CPU_SUBTYPE_SH7750S || CPU_SUBTYPE_SH7751 || \
-+		       CPU_SUBTYPE_SH7091
- 	default "8" if CPU_SUBTYPE_SH7750R || CPU_SUBTYPE_SH7751R || \
- 		       CPU_SUBTYPE_SH7760
--	default "12" if CPU_SUBTYPE_SH7723 || CPU_SUBTYPE_SH7780  || \
--			CPU_SUBTYPE_SH7785 || CPU_SUBTYPE_SH7724
-+	default "12" if CPU_SUBTYPE_SH7723 || CPU_SUBTYPE_SH7724  || \
-+			CPU_SUBTYPE_SH7780 || CPU_SUBTYPE_SH7785
- 	default "6"
- 	help
- 	  This allows you to specify the number of channels that the on-chip
--	  DMAC supports. This will be 4 for SH7750/SH7751/Sh7750S/SH7091 and 8 for the
--	  SH7750R/SH7751R/SH7760, 12 for the SH7723/SH7780/SH7785/SH7724, default is 6.
-+	  DMAC supports. This will be 4 for SH7709/SH7750/SH7750S/SH7751/SH7091,
-+	  8 for SH7750R/SH7751R/SH7760, and 12 for SH7723/SH7724/SH7780/SH7785.
-+	  Default is 6. Must be an even number.
- 
- config SH_DMABRG
- 	bool "SH7760 DMABRG support"
--- 
-2.40.1
-
+Konrad
+> 
+> so this change in not correct.
+> V6 check can be replaced with VPU version(IRIS2_1) check.
+> 
+>> @@ -41,7 +45,7 @@ static void venus_reset_cpu(struct venus_core *core)
+>>  	writel(fw_size, wrapper_base + WRAPPER_NONPIX_START_ADDR);
+>>  	writel(fw_size, wrapper_base + WRAPPER_NONPIX_END_ADDR);
+>>  
+>> -	if (IS_V6(core)) {
+>> +	if (!core->use_tz) {
+>>  		/* Bring XTSS out of reset */
+>>  		writel(0, wrapper_base + WRAPPER_TZ_XTSS_SW_RESET);
+>>  	} else {
+>> @@ -67,7 +71,7 @@ int venus_set_hw_state(struct venus_core *core, bool resume)
+>>  	if (resume) {
+>>  		venus_reset_cpu(core);
+>>  	} else {
+>> -		if (IS_V6(core))
+>> +		if (!core->use_tz)
+>>  			writel(WRAPPER_XTSS_SW_RESET_BIT,
+>>  			       core->wrapper_tz_base + WRAPPER_TZ_XTSS_SW_RESET);
+>>  		else
+> 
+> this part of the code will only be executed for non TZ platform.
+> for TZ based platforms it will return few instructions earlier in the same API.
+> Again, version checks are kept to differentiate between different TZ base
+> offset. V6 check can be replaced with VPU version(IRIS2_1) check.
+> 
+> Thanks,
+> Dikshita
+>> @@ -179,7 +183,7 @@ static int venus_shutdown_no_tz(struct venus_core *core)
+>>  	void __iomem *wrapper_base = core->wrapper_base;
+>>  	void __iomem *wrapper_tz_base = core->wrapper_tz_base;
+>>  
+>> -	if (IS_V6(core)) {
+>> +	if (IS_IRIS2_1(core)) {
+>>  		/* Assert the reset to XTSS */
+>>  		reg = readl(wrapper_tz_base + WRAPPER_TZ_XTSS_SW_RESET);
+>>  		reg |= WRAPPER_XTSS_SW_RESET_BIT;
+>>
+> 
+> 
+> 
+> 
+> 
