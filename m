@@ -2,142 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CDD713500
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 15:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289BD713506
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 15:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjE0N3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 09:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S232453AbjE0Nc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 09:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbjE0N3j (ORCPT
+        with ESMTP id S231186AbjE0Nc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 09:29:39 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D55125
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 06:29:18 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-bacfcc7d1b2so2647509276.2
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 06:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ossystems-com-br.20221208.gappssmtp.com; s=20221208; t=1685194158; x=1687786158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
-         :references:mime-version:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bk/35MSXwnwDqOa61NfULS56WT2D8JtdWj0kdSLNcj0=;
-        b=tCoC/u1XjYnbyj3DD2ZDjaIJ7Q9zi1avxPjobFhr++5lJf7O9qPOpPlVFWD+XBJZ1l
-         2oerB6h5IPdRGhUrdqpCVmh/uU+ReNoU4Jthpp32hneetjE7Ny7bOr/KL6QWwLjpli1W
-         reWvHGF0zdPuMsmvwfysI6vuq+PUlSZ5jRlhBKAsjZAOKSBIg/82denruqUtVFuNOd/Z
-         yLlDcAn+5/kbm/HPkQjmn6wz9t/+sLYRWwcGH77E6Upo9c19TwSpHaLej14IcYWqGiAS
-         DAojz8pzrF30xUgNMYdDIk5/2Nw4QtjJKDqv+FnTPNXaJBsQAeKdEcUG2ebSzTc2aMj8
-         95gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685194158; x=1687786158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
-         :references:mime-version:from:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Bk/35MSXwnwDqOa61NfULS56WT2D8JtdWj0kdSLNcj0=;
-        b=aexYLzvJXmMBvPW5EyIg/s7sqsz1s7AqwEJt6Pd86AyQUH2/b6BqdVM4dIC1sgLniN
-         6mrYzNQynrF1c77ZPptkI1zB7/nrfKIZ+ZPC9KV/GBmjJnq3/UMaoQRQ6HHx/ZoOGVMf
-         aeITGDlRNtuS6kjKfkzIPG8fxC7L5VI34Oby42JRTnpTOTyXy1hrsHJ+BufyI4pplZhc
-         8BimmtKu99ai8MBgv8gU8EKmNYXFr+DsrtPHDrRfuJ7swpCQEGYD59CmZ/aUm0I8Xtrr
-         MBQlEIYegLkPRElcMuPKEy34YHAj1e5Ho0eC/R91+A0J6WZurnw9P8JjmQ5uGt4OrRC5
-         hG5g==
-X-Gm-Message-State: AC+VfDwfPVr1VSchBxHqnlcR3hv9SPo7otZo5UyJsa7ehttEmhy96Zd7
-        uyQ1bzYmdDAklEOT0qdp8X5HgKhn9kxCGbtCDcZvgw==
-X-Google-Smtp-Source: ACHHUZ5Hqu2IXSDby1TPtJ4gAWC3nK14XziSss84tKRoy+cspAnFKVbFa8uPgg6XJoshFObCdVHSIA==
-X-Received: by 2002:a25:2484:0:b0:b92:32aa:be46 with SMTP id k126-20020a252484000000b00b9232aabe46mr5131518ybk.22.1685194157915;
-        Sat, 27 May 2023 06:29:17 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id 5-20020a251605000000b00ba83a9755f1sm1634238ybw.43.2023.05.27.06.29.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 May 2023 06:29:16 -0700 (PDT)
-From:   Otavio Salvador <otavio.salvador@ossystems.com.br>
-X-Google-Original-From: Otavio Salvador <otavio@ossystems.com.br>
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-565cdb77b01so7897597b3.0
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 06:29:16 -0700 (PDT)
-X-Received: by 2002:a81:4986:0:b0:565:7025:610a with SMTP id
- w128-20020a814986000000b005657025610amr5240750ywa.27.1685194156049; Sat, 27
- May 2023 06:29:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230523212829.2539417-1-otavio@ossystems.com.br>
- <b8166ed7-2d3b-4bdd-b597-f0aeddb7ecdc@app.fastmail.com> <20230527124428.GT528183@dragon>
-In-Reply-To: <20230527124428.GT528183@dragon>
-Date:   Sat, 27 May 2023 10:29:04 -0300
-X-Gmail-Original-Message-ID: <CAP9ODKociRAi9WP-R_-JoKmMWtSN2JwJJ+7n-cn4u-G-vktS3A@mail.gmail.com>
-Message-ID: <CAP9ODKociRAi9WP-R_-JoKmMWtSN2JwJJ+7n-cn4u-G-vktS3A@mail.gmail.com>
-Subject: Re: [PATCH] ARM: imx_v6_v7_defconfig: Remove KERNEL_LZO config
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Otavio Salvador <otavio@ossystems.com.br>,
-        linux-arm-kernel@lists.infradead.org,
-        Alistair Francis <alistair@alistair23.me>,
-        Fabio Estevam <festevam@gmail.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        Stefan Wahren <stefan.wahren@chargebyte.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Sat, 27 May 2023 09:32:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A20C3;
+        Sat, 27 May 2023 06:32:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50F7861472;
+        Sat, 27 May 2023 13:32:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7AD8C4339C;
+        Sat, 27 May 2023 13:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685194374;
+        bh=2TNQEbJxCXNtnSuWUh8ETIiBTaEmLYOWvno0ZcYi0QU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qbzt+NhsrBrEBI2Er2jDNqD8FG0knKYp6WP7OFfJ1+iITD54Vvz7g6MNG4/4Ig5fl
+         qE3X+pVnzPgsBctUKz2quZ3pOoGr+qrS5R3EFZ5jydxqB2g3ES/hfmoJbeM2eYbzWr
+         fmipr3mjLbjWr0J3nB/yBeohPM+35YWkrN0zNo0y3znFpRsH1nDBTzzEsPwnKN2rvR
+         PuarY+iX1O6y+VzZDm6YrS+dIOFCj72wwmp6o+MX2JTgzIiXFgj5Y5FFBnP9+LmnTE
+         ZcujOrKgsDZC22UM6Awr0g5rAgBzoFeDsC8eCl/TpZRjkZPLDoFzEfAqN7QjbfV2w1
+         tqKh/el+41XQA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q2u2O-000l67-1p;
+        Sat, 27 May 2023 14:32:52 +0100
+Date:   Sat, 27 May 2023 14:32:51 +0100
+Message-ID: <86jzwtdhmk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Nathan Chancellor <nathan@kernel.org>, namhyung@kernel.org,
+        eranian@google.com, acme@kernel.org, mark.rutland@arm.com,
+        jolsa@kernel.org, bp@alien8.de, kan.liang@linux.intel.com,
+        adrian.hunter@intel.com, maddy@linux.ibm.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v4 3/4] perf/core: Remove pmu linear searching code
+In-Reply-To: <CAP-5=fWYbzmTETgqJ11y22=JaXDM0gnb4qR6KYeRGmFXw08f-Q@mail.gmail.com>
+References: <20230504110003.2548-1-ravi.bangoria@amd.com>
+        <20230504110003.2548-4-ravi.bangoria@amd.com>
+        <20230524214133.GA2359762@dev-arch.thelio-3990X>
+        <f02c78e2-34b9-4985-640a-279dae1004a9@amd.com>
+        <ZG8KLbZSECiYaKFc@linux.dev>
+        <20230525142031.GU83892@hirez.programming.kicks-ass.net>
+        <ZG+FLdP2kkfI1m2Z@linux.dev>
+        <CAP-5=fWYbzmTETgqJ11y22=JaXDM0gnb4qR6KYeRGmFXw08f-Q@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: irogers@google.com, oliver.upton@linux.dev, peterz@infradead.org, ravi.bangoria@amd.com, nathan@kernel.org, namhyung@kernel.org, eranian@google.com, acme@kernel.org, mark.rutland@arm.com, jolsa@kernel.org, bp@alien8.de, kan.liang@linux.intel.com, adrian.hunter@intel.com, maddy@linux.ibm.com, x86@kernel.org, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, sandipan.das@amd.com, ananth.narayan@amd.com, santosh.shukla@amd.com, kvmarm@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Shawn,
-
-Em s=C3=A1b., 27 de mai. de 2023 =C3=A0s 09:44, Shawn Guo <shawnguo@kernel.=
-org> escreveu:
->
-> On Wed, May 24, 2023 at 08:48:26AM +0200, Arnd Bergmann wrote:
-> > On Tue, May 23, 2023, at 23:28, Otavio Salvador wrote:
-> > > The KERNEL_GZIP is used in most config and is the default, there is n=
-o
-> > > clear reason to diverge so let default be used.
+On Sat, 27 May 2023 00:00:47 +0100,
+Ian Rogers <irogers@google.com> wrote:
+>=20
+> On Thu, May 25, 2023 at 8:56=E2=80=AFAM Oliver Upton <oliver.upton@linux.=
+dev> wrote:
+> >
+> > On Thu, May 25, 2023 at 04:20:31PM +0200, Peter Zijlstra wrote:
+> > > On Thu, May 25, 2023 at 07:11:41AM +0000, Oliver Upton wrote:
 > > >
-> > > Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+> > > > The PMUv3 driver does pass a name, but it relies on getting back an
+> > > > allocated pmu id as @type is -1 in the call to perf_pmu_register().
+> > > >
+> > > > What actually broke is how KVM probes for a default core PMU to use=
+ for
+> > > > a guest. kvm_pmu_probe_armpmu() creates a counter w/ PERF_TYPE_RAW =
+and
+> > > > reads the pmu from the returned perf_event. The linear search had t=
+he
+> > > > effect of eventually stumbling on the correct core PMU and succeedi=
+ng.
+> > > >
+> > > > Perf folks: is this WAI for heterogenous systems?
+> > >
+> > > TBH, I'm not sure. hetero and virt don't mix very well AFAIK and I'm =
+not
+> > > sure what ARM64 does here.
+> > >
+> > > IIRC the only way is to hard affine things; that is, force vCPU of
+> > > 'type' to the pCPU mask of 'type' CPUs.
 > >
-> > I don't mind that change, but it seems odd to single this one out, as
-> > there are many other options in that particular defconfig that
-> > stick out more, picking LZO seems like a reasonable choice for slightly
-> > faster booting, though ZSTD would be the more modern choice.
+> > We provide absolutely no illusion of consistency across implementations.
+> > Userspace can select the PMU type, and then it is a userspace problem
+> > affining vCPUs to the right pCPUs.
 > >
-> > If you are looking into cleaning up this file, maybe see if we can
-> > kill off these options:
+> > And if they get that wrong, we just bail and refuse to run the vCPU.
 > >
-> > CONFIG_EXPERT=3Dy
-> > CONFIG_ARCH_FORCE_MAX_ORDER=3D13
-> > CONFIG_CMDLINE=3D"noinitrd console=3Dttymxc0,115200"
-> > CONFIG_CS89x0_PLATFORM=3Dy # none of these four are in dts files
-> > CONFIG_SMC91X=3Dy
-> > CONFIG_SMC911X=3Dy
-> > CONFIG_SMSC911X=3Dy
-> > CONFIG_STAGING=3Dy
-> > CONFIG_STAGING_MEDIA=3Dy
-> > CONFIG_VIDEO_IMX_MEDIA=3Dy # not graduated from staging after 6 years
-> > CONFIG_EXT2_FS=3Dy
-> > CONFIG_EXT3_FS=3Dy # select EXT4 instead
-> > CONFIG_ISO9660_FS=3Dm
+> > > If you don't do that; or let userspace 'override' that, things go
+> > > sideways *real* fast.
 > >
-> > I have not investigated why any of them were added originally,
-> > so it's likely that some are actually needed.
->
-> Would you investigate the suggested options and see if we can clean up
-> more than just KERNEL_LZO?
+> > Oh yeah, and I wish PMUs were the only problem with these hetero
+> > systems...
+>=20
+> Just to add some context from what I understand. There are inbuilt
+> type numbers for PMUs:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/inclu=
+de/uapi/linux/perf_event.h?h=3Dperf-tools-next#n34
+> so the PMU generally called /sys/devices/cpu should have type 4 (ARM
+> give it another name). For heterogeneous ARM there is a single PMU and
+> the same events are programmed regardless of whether it is a big or a
+> little core - the cpumask lists all CPUs.
 
-Sure. I'll view them. I'll prepare more patches for it.
+I think you misunderstood the way heterogeneous arm64 systems are
+described . Each CPU type gets its own PMU type, and its own event
+list. Case in point:
+
+$ grep . /sys/devices/*pmu/{type,cpus}
+/sys/devices/apple_avalanche_pmu/type:9
+/sys/devices/apple_blizzard_pmu/type:8
+/sys/devices/apple_avalanche_pmu/cpus:4-9
+/sys/devices/apple_blizzard_pmu/cpus:0-3
+
+Type 4 (aka PERF_EVENT_RAW) is AFAICT just a way to encode the raw
+event number, nothing else.
+
+Thanks,
+
+	M.
 
 --=20
-Otavio Salvador                             O.S. Systems
-http://www.ossystems.com.br        http://code.ossystems.com.br
-Mobile: +55 (53) 9 9981-7854          Mobile: +1 (347) 903-9750
+Without deviation from the norm, progress is not possible.
