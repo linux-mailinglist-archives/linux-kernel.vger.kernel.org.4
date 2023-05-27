@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA1E71315F
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE9F71311A
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjE0BKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 21:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
+        id S237862AbjE0BDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 21:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbjE0BKW (ORCPT
+        with ESMTP id S229985AbjE0BDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 21:10:22 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8712189;
-        Fri, 26 May 2023 18:10:20 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QSkHD5Qdlz4f3pCT;
-        Sat, 27 May 2023 09:10:16 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgCH77J0WHFkNZwtKQ--.29147S9;
-        Sat, 27 May 2023 09:10:17 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     hch@lst.de, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: [PATCH -next v3 5/5] blk-sysfs: add a new attr_group for blk_mq
-Date:   Sat, 27 May 2023 09:06:44 +0800
-Message-Id: <20230527010644.647900-6-yukuai1@huaweicloud.com>
+        Fri, 26 May 2023 21:03:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2FCA135;
+        Fri, 26 May 2023 18:03:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CFB065498;
+        Sat, 27 May 2023 01:03:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BB3CC433EF;
+        Sat, 27 May 2023 01:03:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685149425;
+        bh=G72MIr3ZkLK2Bg8p3M3TKDBLKRjaxr14jHV7eQK6YUc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CVsTvtNK5ERx6X7DXnzCb9QDAGfMcw6IBlWEfLgXKHFoW9IOliLGXJf+zrwrWHow4
+         XJ1yBRHa+ZtnISsQ3g32BCzhW2Ebqdgpc7efNyb0vIUi/VaeLOk5ZqhDOvF7/ao5IW
+         qi9iYDBXw7Itivvsc3R7L6Pb0r/wkA/3Ips5gzhqwXHGXPOkuQXh5cVyG7msqJ9LCz
+         mxTxoV57g+BwDseu/XyPQS9ylVi4xZlUtLok774xHjWDwg0p/v+VBSxrgG76VBu0Fu
+         nfsXX7HoITpkNgeC1EA/j5M1qhZ4qPlQuJ0V5OxiYPId5n6dw2tgTP9dD/mzpMJ9eS
+         atXKnA6AwM8qQ==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     djakov@kernel.org, agross@kernel.org, linux-crypto@vger.kernel.org,
+        robh+dt@kernel.org, neil.armstrong@linaro.org,
+        vladimir.zapolskiy@linaro.org, krzysztof.kozlowski@linaro.org,
+        bhupesh.linux@gmail.com, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, rfoss@kernel.org, stephan@gerhold.net
+Subject: Re: (subset) [PATCH v8 00/11] arm64: qcom: Enable Crypto Engine for a few Qualcomm SoCs
+Date:   Fri, 26 May 2023 18:07:20 -0700
+Message-Id: <168514964949.348612.17426430561348201035.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230527010644.647900-1-yukuai1@huaweicloud.com>
-References: <20230527010644.647900-1-yukuai1@huaweicloud.com>
+In-Reply-To: <20230526192210.3146896-1-bhupesh.sharma@linaro.org>
+References: <20230526192210.3146896-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCH77J0WHFkNZwtKQ--.29147S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw4ktFWUWF1UZF48tr17GFg_yoWrWr15pF
-        4DAa4UZwsYvw42qayxJw4UXwnI9ry09r43Xr97Kr1vyF12q34fWFy0yryjqrWxArWkGw43
-        JF4DtrWDArZ7ZrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAv
-        wI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOBTYUUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,130 +59,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On Sat, 27 May 2023 00:51:59 +0530, Bhupesh Sharma wrote:
+> Changes since v7:
+> -----------------
+> - v7 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230519214813.2593271-1-bhupesh.sharma@linaro.org/
+> - Addressed Stephan's comment about RPM clocks for sm6115 crypto block in dtsi.
+> - Also fixed the iommu context ids for sm6115 crypto block in dtsi.
+> 
+> Changes since v6:
+> -----------------
+> - v6 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230405072836.1690248-1-bhupesh.sharma@linaro.org/
+> - Collected Acks, R-Bs and Tested-by for various patches.
+> - Addressed Konrad's comment about iommu sids for sm8150 and sm8250
+>   crypto node entries.
+> - Addressed Konrad's and Stephan's comments about adding RPM clock for
+>   crypto blocks on qcm2290 and sm6115.
+> 
+> [...]
 
-Currently wbt sysfs entry is created for bio based device, and wbt can
-be enabled for such device through sysfs while it doesn't make sense
-because wbt can only work for rq based device. In the meantime, there
-are other similar sysfs entries.
+Applied, thanks!
 
-Fix this by adding a new attr_group for blk_mq, and sysfs entries will
-only be created when the device is rq based.
+[03/11] arm64: dts: qcom: sdm8550: Fix the BAM DMA engine compatible string
+        commit: 31dfb8014f6bbebf06ca5084a072f755d8dd9797
+[04/11] arm64: dts: qcom: sdm845: Fix the slimbam DMA engine compatible string
+        commit: 20bf3ac438fd2f6f9a98bc5cbddb5024cd31560f
+[07/11] arm64: dts: qcom: sm6115: Add Crypto Engine support
+        commit: 61baef687d81ffda97ac26db8f100b5b27069477
+[08/11] arm64: dts: qcom: sm8150: Add Crypto Engine support
+        commit: f7f485f3dc09d21c58f46756a7e6463c29a0f85b
+[09/11] arm64: dts: qcom: sm8250: Add Crypto Engine support
+        commit: c58be6c87f482b6bdba804ee0a2d7b588e6a2d6a
+[10/11] arm64: dts: qcom: sm8350: Add Crypto Engine support
+        commit: f1040a7fe8f069d2259ab3dab9190210005ceb33
+[11/11] arm64: dts: qcom: sm8450: add crypto nodes
+        commit: b92b0d2f75820540182e4edf9b57ead7ef344d45
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
----
- block/blk-sysfs.c | 42 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 31 insertions(+), 11 deletions(-)
-
-diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-index 6c1c4ba66bc0..afc797fb0dfc 100644
---- a/block/blk-sysfs.c
-+++ b/block/blk-sysfs.c
-@@ -621,7 +621,6 @@ QUEUE_RW_ENTRY(queue_wb_lat, "wbt_lat_usec");
- #endif
- 
- static struct attribute *queue_attrs[] = {
--	&queue_requests_entry.attr,
- 	&queue_ra_entry.attr,
- 	&queue_max_hw_sectors_entry.attr,
- 	&queue_max_sectors_entry.attr,
-@@ -629,7 +628,6 @@ static struct attribute *queue_attrs[] = {
- 	&queue_max_discard_segments_entry.attr,
- 	&queue_max_integrity_segments_entry.attr,
- 	&queue_max_segment_size_entry.attr,
--	&elv_iosched_entry.attr,
- 	&queue_hw_sector_size_entry.attr,
- 	&queue_logical_block_size_entry.attr,
- 	&queue_physical_block_size_entry.attr,
-@@ -650,7 +648,6 @@ static struct attribute *queue_attrs[] = {
- 	&queue_max_open_zones_entry.attr,
- 	&queue_max_active_zones_entry.attr,
- 	&queue_nomerges_entry.attr,
--	&queue_rq_affinity_entry.attr,
- 	&queue_iostats_entry.attr,
- 	&queue_stable_writes_entry.attr,
- 	&queue_random_entry.attr,
-@@ -658,11 +655,7 @@ static struct attribute *queue_attrs[] = {
- 	&queue_wc_entry.attr,
- 	&queue_fua_entry.attr,
- 	&queue_dax_entry.attr,
--#ifdef CONFIG_BLK_WBT
--	&queue_wb_lat_entry.attr,
--#endif
- 	&queue_poll_delay_entry.attr,
--	&queue_io_timeout_entry.attr,
- #ifdef CONFIG_BLK_DEV_THROTTLING_LOW
- 	&blk_throtl_sample_time_entry.attr,
- #endif
-@@ -671,16 +664,23 @@ static struct attribute *queue_attrs[] = {
- 	NULL,
- };
- 
-+static struct attribute *blk_mq_queue_attrs[] = {
-+	&queue_requests_entry.attr,
-+	&elv_iosched_entry.attr,
-+	&queue_rq_affinity_entry.attr,
-+	&queue_io_timeout_entry.attr,
-+#ifdef CONFIG_BLK_WBT
-+	&queue_wb_lat_entry.attr,
-+#endif
-+	NULL,
-+};
-+
- static umode_t queue_attr_visible(struct kobject *kobj, struct attribute *attr,
- 				int n)
- {
- 	struct gendisk *disk = container_of(kobj, struct gendisk, queue_kobj);
- 	struct request_queue *q = disk->queue;
- 
--	if (attr == &queue_io_timeout_entry.attr &&
--		(!q->mq_ops || !q->mq_ops->timeout))
--			return 0;
--
- 	if ((attr == &queue_max_open_zones_entry.attr ||
- 	     attr == &queue_max_active_zones_entry.attr) &&
- 	    !blk_queue_is_zoned(q))
-@@ -689,11 +689,30 @@ static umode_t queue_attr_visible(struct kobject *kobj, struct attribute *attr,
- 	return attr->mode;
- }
- 
-+static umode_t blk_mq_queue_attr_visible(struct kobject *kobj,
-+					 struct attribute *attr, int n)
-+{
-+	struct gendisk *disk = container_of(kobj, struct gendisk, queue_kobj);
-+	struct request_queue *q = disk->queue;
-+
-+	if (!queue_is_mq(q))
-+		return 0;
-+
-+	if (attr == &queue_io_timeout_entry.attr && !q->mq_ops->timeout)
-+		return 0;
-+
-+	return attr->mode;
-+}
-+
- static struct attribute_group queue_attr_group = {
- 	.attrs = queue_attrs,
- 	.is_visible = queue_attr_visible,
- };
- 
-+static struct attribute_group blk_mq_queue_attr_group = {
-+	.attrs = blk_mq_queue_attrs,
-+	.is_visible = blk_mq_queue_attr_visible,
-+};
- 
- #define to_queue(atr) container_of((atr), struct queue_sysfs_entry, attr)
- 
-@@ -738,6 +757,7 @@ static const struct sysfs_ops queue_sysfs_ops = {
- 
- static const struct attribute_group *blk_queue_attr_groups[] = {
- 	&queue_attr_group,
-+	&blk_mq_queue_attr_group,
- 	NULL
- };
- 
+Best regards,
 -- 
-2.39.2
-
+Bjorn Andersson <andersson@kernel.org>
