@@ -2,130 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB1B71338C
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 10:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B163B713391
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 11:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbjE0I6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 04:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S230183AbjE0JCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 05:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjE0I6L (ORCPT
+        with ESMTP id S229717AbjE0JCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 04:58:11 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DA2E3;
-        Sat, 27 May 2023 01:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685177890; x=1716713890;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gf5TMgt0bAt/QkheoJ/9bYtBlW8oMT6dV0D08HIpbKo=;
-  b=CF7qYxvLrseBoLef4SXhZ3LXhw0OFafammubut8gfEp265Yps7zdmVZV
-   cYELbQkxLYeI1gAZLgf56ZeqwyosS0hqzkzgqJgS3HDj1uPrkChcEx3vC
-   mp053MKLQNURCLWRRhZSgdINwbuKmhSEafog6ISQI3BTOIxxk79f71z8Y
-   UNDnqUXwaHkeHIyjEOgCBYTEJxi50el97da0P9yo/rNkSBxmIDsOHvFo5
-   D12nkG6iezVU+j5dTiE1NiRGAz0xsrrnhZLSVtQYHgY9vvh8HC2fkJCc4
-   dbI1mhbey01Q5glnbsWZLjo1+Lqc6egSdSO3c7EKasW2M9AGdYNNvpmd8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="382629754"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="382629754"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 01:58:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="736263444"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="736263444"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 27 May 2023 01:58:06 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q2pkS-000Is8-1e;
-        Sat, 27 May 2023 11:58:04 +0300
-Date:   Sat, 27 May 2023 11:58:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] leds: simatic-ipc-leds-gpio: split up
-Message-ID: <ZHHGHEL4OqSvox70@smile.fi.intel.com>
-References: <20230524124628.32295-1-henning.schild@siemens.com>
+        Sat, 27 May 2023 05:02:12 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9A1124
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 02:02:10 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f51ea3a062so61111cf.1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 02:02:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685178129; x=1687770129;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x4mYc+5P7xLv/3nDjP8/NukFC/EP2kNlXAJ8peaiKoM=;
+        b=Ngr68t0OybRZlznOAZcG4RmjJl5s292ixJ0IWNI1+ds18AsEkT6daf/2TEyv6bUF/g
+         Owc/XDS2vBH0dXVZ+08SfZrbyJDdHawRmpMMfphpwvvfYUHGbIeSUTEDWVXd9e+rpS4x
+         HR150XJcifJ+ZjseUu0oiLR4/8ICWuURPcHzkqPHlfcyXCIAfco8exUN6aWHN6c9I8w1
+         ryicADFlY5JAjhwBOmSrFCFHn2EuY6APWP3Iohg5OFcq5ca43gNSnBEfIOn7gyjU9A+m
+         fDhe0G0EjSBCvtNUofxe0FwZhQPYMcWFNOrh/ddRY79ffNG31Tbg9myejA6XEDJrTCEo
+         byxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685178129; x=1687770129;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x4mYc+5P7xLv/3nDjP8/NukFC/EP2kNlXAJ8peaiKoM=;
+        b=ShVyCxHNeKvupPKugGeMXWlxV7bjePqVHzHr9eJic6je/K4bOuxG/CFCBcl+aN5I/1
+         OOUCQjuspj71JBWbu849srDfcdgyGfQlKpMjEH6zH2EgNFrOi76iaSLm0RY2ba3H2sK0
+         G8FdcRTeiVLoZdKdqS73iU05J7bDYBRSe75136mSdEEarlOLpFE2WS8n/ioj0wUTZfeB
+         /LWuziKwHdMRiSq8YfiZ5RrVPD2sP/CvWoXPhOnuQ8bTOl7fRoSrdbImnoglUGOl1fM8
+         BoSLC1kAibuP13Nj8IuVwRboi9VqXCH2X6o90Ya77z/R4J7M7+/+HzA0Q7IPmxSltl8w
+         X1Rw==
+X-Gm-Message-State: AC+VfDyKbtTY7rnEU7Ar9HBI4Caauxb9m7KdbXY9g1lZN+GP1753tatg
+        dzY8VIR+/AuYPoxdSEcOdQkSm6Wf35HG8np+20GnTQ==
+X-Google-Smtp-Source: ACHHUZ7pB8UxTMgbgOeUbvVYCMmnpqS58LanaGmRiPvPWVG//rvDvjmu7Hw9WyN7YO1lIVm84uEjgHOa+C3eZ8QQiR4=
+X-Received: by 2002:ac8:5808:0:b0:3ee:d8fe:6f5c with SMTP id
+ g8-20020ac85808000000b003eed8fe6f5cmr78560qtg.1.1685178129083; Sat, 27 May
+ 2023 02:02:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524124628.32295-1-henning.schild@siemens.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230527085100.4114825-1-gaoxingwang1@huawei.com>
+In-Reply-To: <20230527085100.4114825-1-gaoxingwang1@huawei.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sat, 27 May 2023 11:01:57 +0200
+Message-ID: <CANn89iLzMBJE31VBL3jtu-ojdoAYwV_KLo1Qo+L6LWZ+5UKMtg@mail.gmail.com>
+Subject: Re: ip6_gre: paninc in ip6gre_header
+To:     gaoxingwang <gaoxingwang1@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
+        pabeni@redhat.com, liaichun@huawei.com, yanan@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 02:46:24PM +0200, Henning Schild wrote:
-> changes since v3:
->  - add terminator entries to all gpio lookup tables as new p1
-> 
-> changes since v2:
->  - some more style changes from review
-> 
-> changes since v1:
->  - move from header- to -core.c-based implementation
->  - style changes from review
-> 
-> This series mainly splits the one GPIO driver into two. The split allows
-> to clearly model runtime and compile time dependencies on the GPIO chip
-> drivers.
-> 
-> p2 is kind of not too related to that split but also prepares for more
-> GPIO based drivers to come.
-> 
-> p3 takes the driver we had and puts some of its content into a -core,
-> to be used by the two drivers.
-> 
-> p4 deals with more fine-grained configuration posibilities and compile
-> time dependencies.
+On Sat, May 27, 2023 at 10:51=E2=80=AFAM gaoxingwang <gaoxingwang1@huawei.c=
+om> wrote:
+>
+> Hello:
+>   I am doing some fuzz test for kernel, the following crash was triggered=
+.
+>   My kernel version is 5.10.0.Have you encountered similar problems?
+>   If there is a fix, please let me know.
+>   Thank you very much.
 
-For non-commented patches
+Please do not report fuzzer tests on old kernels.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Yes, there is a fix already.
 
-> Henning Schild (4):
->   leds: simatic-ipc-leds-gpio: add terminating entries to gpio tables
->   leds: simatic-ipc-leds-gpio: move two extra gpio pins into another
->     table
->   leds: simatic-ipc-leds-gpio: split up into multiple drivers
->   leds: simatic-ipc-leds-gpio: introduce more Kconfig switches
-> 
->  drivers/leds/simple/Kconfig                   |  31 +++-
->  drivers/leds/simple/Makefile                  |   5 +-
->  .../simple/simatic-ipc-leds-gpio-apollolake.c |  66 +++++++++
->  .../leds/simple/simatic-ipc-leds-gpio-core.c  | 104 +++++++++++++
->  .../simple/simatic-ipc-leds-gpio-f7188x.c     |  66 +++++++++
->  drivers/leds/simple/simatic-ipc-leds-gpio.c   | 139 ------------------
->  drivers/leds/simple/simatic-ipc-leds-gpio.h   |  22 +++
->  drivers/leds/simple/simatic-ipc-leds.c        |   1 -
->  drivers/platform/x86/simatic-ipc.c            |   7 +-
->  9 files changed, 293 insertions(+), 148 deletions(-)
->  create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio-apollolake.c
->  create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio-core.c
->  create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio-f7188x.c
->  delete mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio.c
->  create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio.h
-> 
-> -- 
-> 2.39.3
-> 
+Make sure to use at least v5.10.180
 
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks.
 
-
+>
+> skbuff: skb_under_panic: text:ffffffff8ad94c6b len:-2047924812 put:-20479=
+24888 head:ffff888034c9c000 data:ffff887faeda9bf8 tail:0x1ac end:0xec0 dev:=
+team1
+> ------------[ cut here ]------------
+> kernel BUG at net/core/skbuff.c:110!
+> invalid opcode: 0000 [#1] SMP KASAN PTI
+> CPU: 1 PID: 1546 Comm: syz-fuzzer Not tainted 5.10.0 #1
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubunt=
+u1.1 04/01/2014
+> RIP: 0010:skb_panic+0x171/0x183 net/core/skbuff.c:110
+> Code: f5 4c 8b 4c 24 10 41 56 8b 4b 70 45 89 e8 4c 89 e2 41 57 48 89 ee 4=
+8 c7 c7 20 f2 2d 8e ff 74 24 10 ff 74 24 20 e8 da 59 62 ff <0f> 0b 48 c7 c7=
+ 00 2f 5e 92 48 83 c4 20 e8 cb 6f 6d ff e8 9c c5 5b
+> RSP: 0000:ffff8880bcc096f0 EFLAGS: 00010282
+> RAX: 0000000000000099 RBX: ffff88801e080f00 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff815ffb62 RDI: ffffed10179812d0
+> RBP: ffffffff8e2df720 R08: 0000000000000099 R09: ffffed1017981267
+> R10: ffff8880bcc09337 R11: ffffed1017981266 R12: ffffffff8ad94c6b
+> R13: 0000000085ef2568 R14: ffff888062b8c000 R15: 0000000000000ec0
+> FS:  000000c01741c490(0000) GS:ffff8880bcc00000(0000) knlGS:0000000000000=
+000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 000000c021635000 CR3: 000000001fdb6000 CR4: 0000000000150ee0
+> Call Trace:
+>  <IRQ>
+>  skb_under_panic net/core/skbuff.c:120 [inline]
+>  skb_push.cold+0x24/0x24 net/core/skbuff.c:1942
+>  ip6gre_header+0xcb/0xaf0 net/ipv6/ip6_gre.c:1380
+>  dev_hard_header include/linux/netdevice.h:3210 [inline]
+>  neigh_connected_output+0x2a4/0x400 net/core/neighbour.c:1541
+>  neigh_output include/net/neighbour.h:524 [inline]
+>  ip6_finish_output2+0xa20/0x1d20 net/ipv6/ip6_output.c:145
+>  __ip6_finish_output net/ipv6/ip6_output.c:210 [inline]
+>  __ip6_finish_output+0x35d/0x920 net/ipv6/ip6_output.c:189
+>  ip6_finish_output+0x38/0x1c0 net/ipv6/ip6_output.c:220
+>  NF_HOOK_COND include/linux/netfilter.h:293 [inline]
+>  ip6_output+0x1cc/0x400 net/ipv6/ip6_output.c:243
+>  dst_output include/net/dst.h:453 [inline]
+>  NF_HOOK include/linux/netfilter.h:304 [inline]
+>  mld_sendpack+0x5ca/0xb80 net/ipv6/mcast.c:1679
+>  mld_send_cr net/ipv6/mcast.c:1975 [inline]
+>  mld_ifc_timer_expire+0x3c0/0x810 net/ipv6/mcast.c:2474
+>  call_timer_fn+0x3f/0x200 kernel/time/timer.c:1414
+>  expire_timers+0x21c/0x3b0 kernel/time/timer.c:1459
+>  __run_timers kernel/time/timer.c:1753 [inline]
+>  run_timer_softirq+0x2ad/0x7f0 kernel/time/timer.c:1766
+>  __do_softirq+0x19b/0x612 kernel/softirq.c:322
+>  asm_call_irq_on_stack+0x12/0x20
+>  </IRQ>
+>  __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
+>  run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
+>  do_softirq_own_stack+0x37/0x50 arch/x86/kernel/irq_64.c:77
+>  invoke_softirq kernel/softirq.c:417 [inline]
+>  __irq_exit_rcu kernel/softirq.c:447 [inline]
+>  irq_exit_rcu+0x1a2/0x240 kernel/softirq.c:459
+>  sysvec_apic_timer_interrupt+0x36/0x80 arch/x86/kernel/apic/apic.c:1116
+>  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.=
+h:635
+> RIP: 0033:0x41e83e
+> Code: 44 89 c1 45 89 d5 41 d3 ea 41 0f ba e2 04 0f 83 ec 00 00 00 48 89 4=
+4 24 58 41 0f a3 cd 0f 83 87 00 00 00 4e 8d 14 20 4d 8b 12 <66> 90 4d 85 d2=
+ 74 79 4d 89 d5 4d 29 e2 4c 39 d2 77 6e 89 4c 24 3c
+> RSP: 002b:000000c002629e88 EFLAGS: 00000207
+> RAX: 0000000000000008 RBX: 000000c000041698 RCX: 0000000000000001
+> RDX: 0000000000000040 RSI: 0000000000203002 RDI: 000000c0205f4800
+> RBP: 000000c002629f10 R08: 0000000000000001 R09: 00007f954fcd92d0
+> R10: 000000c00350bee0 R11: 00007f954fe52fff R12: 000000c0090c5a00
+> R13: 00000000000000fa R14: 000000c007b66ea0 R15: ffffffffffffffff
+> Modules linked in:
+> kernel fault(0x1) notification starting on CPU 1
+> kernel fault(0x1) notification finished on CPU 1
+> ---[ end trace 854b3d6f97989351 ]---
+> RIP: 0010:skb_panic+0x171/0x183 net/core/skbuff.c:110
+> Code: f5 4c 8b 4c 24 10 41 56 8b 4b 70 45 89 e8 4c 89 e2 41 57 48 89 ee 4=
+8 c7 c7 20 f2 2d 8e ff 74 24 10 ff 74 24 20 e8 da 59 62 ff <0f> 0b 48 c7 c7=
+ 00 2f 5e 92 48 83 c4 20 e8 cb 6f 6d ff e8 9c c5 5b
+> RSP: 0000:ffff8880bcc096f0 EFLAGS: 00010282
+> RAX: 0000000000000099 RBX: ffff88801e080f00 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff815ffb62 RDI: ffffed10179812d0
+> RBP: ffffffff8e2df720 R08: 0000000000000099 R09: ffffed1017981267
+> R10: ffff8880bcc09337 R11: ffffed1017981266 R12: ffffffff8ad94c6b
+> R13: 0000000085ef2568 R14: ffff888062b8c000 R15: 0000000000000ec0
+> FS:  000000c01741c490(0000) GS:ffff8880bcc00000(0000) knlGS:0000000000000=
+000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 000000c021635000 CR3: 000000001fdb6000 CR4: 0000000000150ee0
