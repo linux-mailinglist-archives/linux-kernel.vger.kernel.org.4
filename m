@@ -2,181 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CC5713690
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 23:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B43E713691
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 23:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjE0Vtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 17:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S229488AbjE0Vua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 17:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjE0Vta (ORCPT
+        with ESMTP id S229437AbjE0Vu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 17:49:30 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8613CD8;
-        Sat, 27 May 2023 14:49:28 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id CD88A5FD05;
-        Sun, 28 May 2023 00:49:26 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685224166;
-        bh=uwW7K4cfFXdf+jokRdWQHLSxAVdT45vfjiDQ4hUhzgg=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=KlFCzbHL2FA+v5Zv8EyvgScQE7bfqs4jIfCA9E9aG3+2QukzPXZw380GbZoUqNwJa
-         T4z61Pfta5IX5kNaqcXAWxaALnNQHULKzY1Tz+cT2k8INB5RTklEXBWs1dGy/M4Nai
-         xXChRfVX991qfFGg1wRahBLpj7gyiu+LaQ+yFLsqyMZfmUuGMxpHM2LGTqjoGsZrdb
-         DUj5ZJ+u6uH74oWHoJU5Ddl7QybWy5ZK1BmOqfDLFX1/mb2+U2GSiBGN3FRIJojRvk
-         SS9s6gZzKvxe5AU74Pn66Q77AX2pSV1Jg7hgxoeAbLdkGmiAJ2y1xpOErG9jKZ7REx
-         mF073ASciavcg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Sun, 28 May 2023 00:49:25 +0300 (MSK)
-From:   George Stark <gnstark@sberdevices.ru>
-To:     <jic23@kernel.org>, <lars@metafoo.de>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>,
-        <andriy.shevchenko@linux.intel.com>, <nuno.sa@analog.com>,
-        <gnstark@sberdevices.ru>
-CC:     <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>,
-        George Stark <GNStark@sberdevices.ru>
-Subject: [PATCH v2] meson saradc: add iio device attrib to switch channel 7 mux
-Date:   Sun, 28 May 2023 00:48:54 +0300
-Message-ID: <20230527214854.126517-1-gnstark@sberdevices.ru>
-X-Mailer: git-send-email 2.40.1
+        Sat, 27 May 2023 17:50:28 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79D6E1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 14:50:26 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6e1394060so13138975e9.3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 14:50:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685224225; x=1687816225;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HTsVdUYETUvQYhUsw1vPQ/A3pGTfainUln+I/qbbldc=;
+        b=CQgaY0bmsaNbweVhEC0EK6GXufe06allmuKFEgeGlfGP9QY+P6tncaRLlow9wr+dJm
+         Mx+iiysTQEZnoWlNMRz8e5xU2nCLr0d3HfcGL+HtuRCabqOOtFALGjticDrsVQQrD+0y
+         +0lySbjFg+qZmklNrU+6HS6Sg4UOu9DIgyoTAX+NRrQ+Wrb++UfBGrMeyb4JGsu6uAd9
+         zwuKp4uT3YUh4Jjque+4SRcMj9WhJCQlVPpODZbNZhRW38+/28OUVW3sWLSnWeHJ22jk
+         zN96CH7Z6W1C5DdBb9hM2HpZRWkORsdGHGmLxICUk00a1Up7mAXkAc+K3rcU94B4EXdQ
+         W9fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685224225; x=1687816225;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HTsVdUYETUvQYhUsw1vPQ/A3pGTfainUln+I/qbbldc=;
+        b=G2A8/9IdDi2wwV27KUy1pYSuaIHl09xWnIcS2XcIQ6Qu9aWi7koNK6E27SuXBL0Lqu
+         8nWVd0YAqNpramwiSwgP9Zywxq+FrAMPZaTJgxysdr0fkei3HzRGNUNoaTHhfAMEQEDz
+         mgKBsN4akVbSKU7hw9AdU+4ePJXQ6v6La+06UHJJbboO2lHrswhpv3z1fpmByU2PIWy+
+         7Mxta0QI158pmazqJh4qDCb5XKgosLyyJL89Jvi+UJOeRPkten5H5fcm1SiRHq7xNbXp
+         0ilacS97j8XLrUpUD0WEwLdZWZ8MEyVicCUlxMSa19IERcVFy2/aMi/O8Jy2n9AcUHw5
+         IzvA==
+X-Gm-Message-State: AC+VfDyrEoVaOFmpS36Zwd3cmuQil3iLn6T0wFTQF63sA+yj379Awu5A
+        zSBx3vw/VPZsFshIJsI1Kps=
+X-Google-Smtp-Source: ACHHUZ6iYmBy5nvwNicNEHak52BAfb3Xn61RNndtwukSHqCQVlO+DGtBHKytR6CyIp8smldrBn3WzA==
+X-Received: by 2002:a7b:cd8e:0:b0:3f6:113a:2023 with SMTP id y14-20020a7bcd8e000000b003f6113a2023mr5496015wmj.12.1685224224699;
+        Sat, 27 May 2023 14:50:24 -0700 (PDT)
+Received: from localhost (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
+        by smtp.gmail.com with ESMTPSA id r8-20020adfdc88000000b003077f3dfcc8sm8977794wrj.32.2023.05.27.14.50.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 14:50:23 -0700 (PDT)
+Date:   Sat, 27 May 2023 22:50:22 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 2/9] mm: vmalloc: Rename adjust_va_to_fit_type() function
+Message-ID: <7afd7647-15c2-4398-89a6-ed50b4115b84@lucifer.local>
+References: <20230522110849.2921-1-urezki@gmail.com>
+ <20230522110849.2921-3-urezki@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/27 20:13:00 #21359908
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522110849.2921-3-urezki@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patch adds two sysfs nodes: chan7_mux to set mux state
-and chan7_mux_available to show available mux states.
-Mux can be used to debug and calibrate adc by
-switching and measuring well-known inputs like GND, Vdd etc.
+On Mon, May 22, 2023 at 01:08:42PM +0200, Uladzislau Rezki (Sony) wrote:
+> This patch renames the adjust_va_to_fit_type() function
+> to a shorter variant and more expressive. A new name is
+> va_clip().
+>
+> There is no a functional change as a result of this patch.
 
-Signed-off-by: George Stark <GNStark@sberdevices.ru>
----
- drivers/iio/adc/meson_saradc.c | 65 ++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+Small nit - I think:-
 
-diff --git a/drivers/iio/adc/meson_saradc.c b/drivers/iio/adc/meson_saradc.c
-index e05e51900c35..6959a0064551 100644
---- a/drivers/iio/adc/meson_saradc.c
-+++ b/drivers/iio/adc/meson_saradc.c
-@@ -11,6 +11,7 @@
- #include <linux/delay.h>
- #include <linux/io.h>
- #include <linux/iio/iio.h>
-+#include <linux/iio/sysfs.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/nvmem-consumer.h>
-@@ -320,6 +321,7 @@ struct meson_sar_adc_priv {
- 	bool					temperature_sensor_calibrated;
- 	u8					temperature_sensor_coefficient;
- 	u16					temperature_sensor_adc_val;
-+	u8					chan7_mux_sel;
- };
- 
- static const struct regmap_config meson_sar_adc_regmap_config_gxbb = {
-@@ -483,6 +485,7 @@ static void meson_sar_adc_set_chan7_mux(struct iio_dev *indio_dev,
- 	regmap_update_bits(priv->regmap, MESON_SAR_ADC_REG3,
- 			   MESON_SAR_ADC_REG3_CTRL_CHAN7_MUX_SEL_MASK, regval);
- 
-+	priv->chan7_mux_sel = sel;
- 	usleep_range(10, 20);
- }
- 
-@@ -1130,8 +1133,70 @@ static int meson_sar_adc_calib(struct iio_dev *indio_dev)
- 	return ret;
- }
- 
-+static const char * const chan7_vol[] = {
-+	"gnd",
-+	"vdd/4",
-+	"vdd/2",
-+	"vdd*3/4",
-+	"vdd",
-+	"ch7_input",
-+};
-+
-+static ssize_t chan7_mux_show(struct device *dev, struct device_attribute *attr,
-+			      char *buf)
-+{
-+	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
-+	struct meson_sar_adc_priv *priv = iio_priv(indio_dev);
-+	unsigned int index = priv->chan7_mux_sel;
-+
-+	if (index >= ARRAY_SIZE(chan7_vol))
-+		index = ARRAY_SIZE(chan7_vol) - 1;
-+
-+	return sysfs_emit(buf, "%s\n", chan7_vol[index]);
-+}
-+
-+static ssize_t chan7_mux_store(struct device *dev,
-+			       struct device_attribute *attr,
-+			       const char *buf, size_t count)
-+{
-+	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
-+	int i;
-+
-+	i = sysfs_match_string(chan7_vol, buf);
-+	if (i < 0)
-+		return -EINVAL;
-+	meson_sar_adc_set_chan7_mux(indio_dev, i);
-+	return count;
-+}
-+
-+static IIO_DEVICE_ATTR_RW(chan7_mux, -1);
-+
-+static ssize_t chan7_mux_available_show(struct device *dev, struct device_attribute *attr,
-+			      char *buf)
-+{
-+	int i, len = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(chan7_vol); i++)
-+		len += sysfs_emit_at(buf, len, "%s ", chan7_vol[i]);
-+
-+	return len;
-+}
-+
-+static IIO_DEVICE_ATTR_RO(chan7_mux_available, -1);
-+
-+static struct attribute *meson_sar_adc_attrs[] = {
-+	&iio_dev_attr_chan7_mux_available.dev_attr.attr,
-+	&iio_dev_attr_chan7_mux.dev_attr.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group meson_sar_adc_attr_group = {
-+	.attrs = meson_sar_adc_attrs,
-+};
-+
- static const struct iio_info meson_sar_adc_iio_info = {
- 	.read_raw = meson_sar_adc_iio_info_read_raw,
-+	.attrs = &meson_sar_adc_attr_group,
- };
- 
- static const struct meson_sar_adc_param meson_sar_adc_meson8_param = {
--- 
-2.38.4
+'This patch renames the adjust_va_to_fit_type() function to va_clip() which
+is shorter and more expressive.'
 
+Reads better here.
+
+>
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> ---
+>  mm/vmalloc.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
+>
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 409285b68a67..5f900efec6a9 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -1383,9 +1383,9 @@ classify_va_fit_type(struct vmap_area *va,
+>  }
+>
+>  static __always_inline int
+> -adjust_va_to_fit_type(struct rb_root *root, struct list_head *head,
+> -		      struct vmap_area *va, unsigned long nva_start_addr,
+> -		      unsigned long size)
+> +va_clip(struct rb_root *root, struct list_head *head,
+> +	struct vmap_area *va, unsigned long nva_start_addr,
+> +	unsigned long size)
+>  {
+>  	struct vmap_area *lva = NULL;
+>  	enum fit_type type = classify_va_fit_type(va, nva_start_addr, size);
+> @@ -1501,7 +1501,7 @@ va_alloc(struct vmap_area *va,
+>  		return vend;
+>
+>  	/* Update the free vmap_area. */
+> -	ret = adjust_va_to_fit_type(root, head, va, nva_start_addr, size);
+> +	ret = va_clip(root, head, va, nva_start_addr, size);
+>  	if (WARN_ON_ONCE(ret))
+>  		return vend;
+>
+> @@ -3979,9 +3979,8 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
+>  			/* It is a BUG(), but trigger recovery instead. */
+>  			goto recovery;
+>
+> -		ret = adjust_va_to_fit_type(&free_vmap_area_root,
+> -					    &free_vmap_area_list,
+> -					    va, start, size);
+> +		ret = va_clip(&free_vmap_area_root,
+> +			&free_vmap_area_list, va, start, size);
+>  		if (WARN_ON_ONCE(unlikely(ret)))
+>  			/* It is a BUG(), but trigger recovery instead. */
+>  			goto recovery;
+> --
+> 2.30.2
+>
+
+Otherwise,
+
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
