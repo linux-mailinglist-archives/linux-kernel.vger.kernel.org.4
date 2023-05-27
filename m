@@ -2,82 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4887134D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2967134D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjE0Mz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 08:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S232598AbjE0M4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 08:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjE0MzZ (ORCPT
+        with ESMTP id S229571AbjE0M4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 08:55:25 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B80F7;
-        Sat, 27 May 2023 05:55:24 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-565a3cdba71so26416247b3.0;
-        Sat, 27 May 2023 05:55:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685192123; x=1687784123;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R6FD39z6/yzoWxqjGj5l/A+h56k6dEgj9IgVq61xwoo=;
-        b=njcTblcgpVxv3wI4hpd9wHTEM8Am8OYyAQqarleNmhfvLAcrn3ek09x1cJqIalePA9
-         YQCyEfV185krG1CcSZS9a1H/Ek6dWNXWrLz7BnDb+Gz+LM4xqykAMVEmBMTUd6A5ZtGN
-         b2r6CYrtGlJHsqPgueGlIMb0gnbOnIfdhhgDQuyP8cuPrtLsXtOli2erlm9mvIkv/HEB
-         XmoB+YtSUfYRivpsWQO6U9ZrcAU8AxzvBTrKhFGWv007eIC6lJJMNpyLmp1ZehPy5+bl
-         Td9UXd4ahJiZPLqNF2prRO6RV+H88CR0knbutnewIl2jQaSrxuZ+0Gr6uCs0GOG3+rMY
-         BPWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685192123; x=1687784123;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R6FD39z6/yzoWxqjGj5l/A+h56k6dEgj9IgVq61xwoo=;
-        b=j+wQ3AWgMThiWz9FSEqTUjBU110aB7vaumd4vzZU8x9hJ89IYHVzWa2Xmz/LGnM8fO
-         RWT92p6YRwykB9w5i81lThsZ4HUL1PRK9JJhoMh82noMVuNVtIO3BOB6xfRpttlbkGFC
-         VTkytYgQTiCzYtUqLqJii5hxc/KMm12dDYRFj8ViJvMZdqMZbReeCezE5cEz8CU8quc7
-         XDRgY2aHY94EF7LD+mKMKbz040Y7dlcMq7mqKT189PEpLYzyB1hhNRYlpCnZkb9DzmhH
-         d2gluXR4qwM2yUJK1lttNNhP4O+BLjh1Shkee+u0SEbLZvHGeuFUSmE0p7mRlT0vgta2
-         +jlg==
-X-Gm-Message-State: AC+VfDzKnpAa+f+76ltQ4/lfaDMy+265tjHuuRyobQnDBXHl9ejyTG8i
-        QcX3an0QkrgrBksBjoJlcz99QlXvUfDjpJv0G6swC0Kl
-X-Google-Smtp-Source: ACHHUZ4vt9yh9LDs6HIeVo3ri8/CSWJ2oOKU3vIEjXRB4dphoMZZaHfWXEzl5IdUwPmqIx2S4YoMXFDD7kgWJjpIeB8=
-X-Received: by 2002:a0d:eb48:0:b0:55a:72f6:a451 with SMTP id
- u69-20020a0deb48000000b0055a72f6a451mr5834226ywe.41.1685192123526; Sat, 27
- May 2023 05:55:23 -0700 (PDT)
+        Sat, 27 May 2023 08:56:50 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45310EC;
+        Sat, 27 May 2023 05:56:48 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1685192205;
+        bh=/cOHkF1z6kJm7Qrk+U5UtijhFyzbqdb92nwDXeYrX4Q=;
+        h=From:Date:Subject:To:Cc:From;
+        b=MhVn1r8UMG8I3x2MU1QsYHUC/32ynwqv4V8P66tMD2vetPKUSYjzb70QsCsI2MwQV
+         XMacNKNXSSIenEoxfLEYa4laE7EgQVFEQBDS9mjbBMpdDS7uTQGaMZBRuDQnCPLpXj
+         ArdFWac/qsZOZ7/LXBNmWoioo5RnmHebPL5d/mdc=
+Date:   Sat, 27 May 2023 14:56:42 +0200
+Subject: [PATCH] tools/nolibc: support nanoseconds in stat()
 MIME-Version: 1.0
-Received: by 2002:a05:7000:4cc2:b0:4c8:422c:a99d with HTTP; Sat, 27 May 2023
- 05:55:23 -0700 (PDT)
-In-Reply-To: <f10a1c61-bc8b-420f-988d-ba0ebfccf00f@roeck-us.net>
-References: <20230526215621.16075-1-samsagax@gmail.com> <430e7be0-26a9-43b0-a61f-66cb8dfc805e@roeck-us.net>
- <CABgtM3jNVp63XB5A8Cf0KhB4So2==HLGa9_meuTn0vHYy=gBzQ@mail.gmail.com> <f10a1c61-bc8b-420f-988d-ba0ebfccf00f@roeck-us.net>
-From:   Joaquin Aramendia <samsagax@gmail.com>
-Date:   Sat, 27 May 2023 09:55:23 -0300
-Message-ID: <CABgtM3i9rmrqCzMiAcdi5zowPM9b8g8vNDY7WVhO+f7h7Tpp7w@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (oxp-sensors) Differentiate new BIOS for the Mini
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Derek J. Clark" <derekjohn.clark@gmail.com>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230527-nolibc-stat-nanoseconds-v1-1-3f7825caae68@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAAn+cWQC/x2N0QrCMAwAf2Xk2UDXbg78FfEhbaMLlFSaTYSxf
+ 7f4eAfHHWDchA1uwwGNP2JStcN4GSCtpC9GyZ3BOx/c7BfUWiQmtI02VNJqnKpmwzBnHqfrQlN
+ w0OtIxhgbaVp7r3spXb4bP+X7390f5/kD6e4YNn4AAAA=
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685192204; l=4809;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=/cOHkF1z6kJm7Qrk+U5UtijhFyzbqdb92nwDXeYrX4Q=;
+ b=0XVCyD6rNUL0DpnaiEPU/gzx2e9D4W5QnpfV/aUbIUjQZho97buJ58YMPtxASvrDRa0wpV2+W
+ 8J420vmmXZuBr6tU5+eJzwu1KsSaquliLuC+J/b/8IruMI3CNvToBIG
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have resubmitted the change that uses this that includes this change. So
-drip this one and let's continue the review on the other.
+Keep backwards compatibility through unions.
 
-Thanks!
-Joaqu=C3=ADn I Aramend=C3=ADa
+The compatibility macros like
 
---=20
-Joaqu=C3=ADn I. Aramend=C3=ADa
+ #define st_atime st_atim.tv_sec
+
+as documented in stat(3type) don't work for nolibc because it would
+break with other stat-like structures that contain the field st_atime.
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/include/nolibc/sys.h                   | 29 +++++++++++++++-------------
+ tools/include/nolibc/types.h                 |  6 +++---
+ tools/testing/selftests/nolibc/nolibc-test.c | 23 ++++++++++++++++++++++
+ 3 files changed, 42 insertions(+), 16 deletions(-)
+
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 7874062bea95..11b354e26861 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -1187,19 +1187,22 @@ int sys_stat(const char *path, struct stat *buf)
+ #else
+ #error Neither __NR_newfstatat nor __NR_stat defined, cannot implement sys_stat()
+ #endif
+-	buf->st_dev     = stat.st_dev;
+-	buf->st_ino     = stat.st_ino;
+-	buf->st_mode    = stat.st_mode;
+-	buf->st_nlink   = stat.st_nlink;
+-	buf->st_uid     = stat.st_uid;
+-	buf->st_gid     = stat.st_gid;
+-	buf->st_rdev    = stat.st_rdev;
+-	buf->st_size    = stat.st_size;
+-	buf->st_blksize = stat.st_blksize;
+-	buf->st_blocks  = stat.st_blocks;
+-	buf->st_atime   = stat.st_atime;
+-	buf->st_mtime   = stat.st_mtime;
+-	buf->st_ctime   = stat.st_ctime;
++	buf->st_dev          = stat.st_dev;
++	buf->st_ino          = stat.st_ino;
++	buf->st_mode         = stat.st_mode;
++	buf->st_nlink        = stat.st_nlink;
++	buf->st_uid          = stat.st_uid;
++	buf->st_gid          = stat.st_gid;
++	buf->st_rdev         = stat.st_rdev;
++	buf->st_size         = stat.st_size;
++	buf->st_blksize      = stat.st_blksize;
++	buf->st_blocks       = stat.st_blocks;
++	buf->st_atim.tv_sec  = stat.st_atime;
++	buf->st_atim.tv_nsec = stat.st_atime_nsec;
++	buf->st_mtim.tv_sec  = stat.st_mtime;
++	buf->st_mtim.tv_nsec = stat.st_mtime_nsec;
++	buf->st_ctim.tv_sec  = stat.st_ctime;
++	buf->st_ctim.tv_nsec = stat.st_ctime_nsec;
+ 	return ret;
+ }
+ #endif
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index 15b0baffd336..f96e28bff4ba 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -198,9 +198,9 @@ struct stat {
+ 	off_t     st_size;    /* total size, in bytes */
+ 	blksize_t st_blksize; /* blocksize for file system I/O */
+ 	blkcnt_t  st_blocks;  /* number of 512B blocks allocated */
+-	time_t    st_atime;   /* time of last access */
+-	time_t    st_mtime;   /* time of last modification */
+-	time_t    st_ctime;   /* time of last status change */
++	union { time_t st_atime; struct timespec st_atim; }; /* time of last access */
++	union { time_t st_mtime; struct timespec st_mtim; }; /* time of last modification */
++	union { time_t st_ctime; struct timespec st_ctim; }; /* time of last status change */
+ };
+ 
+ /* WARNING, it only deals with the 4096 first majors and 256 first minors */
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 6e0a4dbe321e..8de72c87b7b7 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -500,6 +500,28 @@ static int test_fork(void)
+ 	}
+ }
+ 
++static int test_stat_timestamps(void)
++{
++	struct stat st;
++
++	if (sizeof(st.st_atim.tv_sec) != sizeof(st.st_atime))
++		return 1;
++
++	if (stat("/proc/self/", &st))
++		return 1;
++
++	if (st.st_atim.tv_sec != st.st_atime || st.st_atim.tv_nsec > 1000000000)
++		return 1;
++
++	if (st.st_mtim.tv_sec != st.st_mtime || st.st_mtim.tv_nsec > 1000000000)
++		return 1;
++
++	if (st.st_ctim.tv_sec != st.st_ctime || st.st_ctim.tv_nsec > 1000000000)
++		return 1;
++
++	return 0;
++}
++
+ /* Run syscall tests between IDs <min> and <max>.
+  * Return 0 on success, non-zero on failure.
+  */
+@@ -587,6 +609,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(select_fault);      EXPECT_SYSER(1, select(1, (void *)1, NULL, NULL, 0), -1, EFAULT); break;
+ 		CASE_TEST(stat_blah);         EXPECT_SYSER(1, stat("/proc/self/blah", &stat_buf), -1, ENOENT); break;
+ 		CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
++		CASE_TEST(stat_timestamps);   EXPECT_SYSZR(1, test_stat_timestamps()); break;
+ 		CASE_TEST(symlink_root);      EXPECT_SYSER(1, symlink("/", "/"), -1, EEXIST); break;
+ 		CASE_TEST(unlink_root);       EXPECT_SYSER(1, unlink("/"), -1, EISDIR); break;
+ 		CASE_TEST(unlink_blah);       EXPECT_SYSER(1, unlink("/proc/self/blah"), -1, ENOENT); break;
+
+---
+base-commit: 1974a2b5fd434812b32952b09df7b79fdee8104d
+change-id: 20230527-nolibc-stat-nanoseconds-35de1467a430
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
