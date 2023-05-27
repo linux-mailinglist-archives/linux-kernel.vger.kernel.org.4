@@ -2,452 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609787133B0
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 11:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DC47133BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 11:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbjE0J3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 05:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S230526AbjE0Jd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 05:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjE0J3s (ORCPT
+        with ESMTP id S229684AbjE0Jdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 05:29:48 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71042D3;
-        Sat, 27 May 2023 02:29:45 -0700 (PDT)
-Received: from dggpeml500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QSxGD5whbzqSQ7;
-        Sat, 27 May 2023 17:25:08 +0800 (CST)
-Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
- (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 27 May
- 2023 17:29:42 +0800
-Subject: Re: [PATCH 1/3] drivers/perf: hisi: Add support for HiSilicon H60PA
- and PAv3 PMU driver
-To:     Yicong Yang <yangyicong@huawei.com>, <will@kernel.org>,
-        <jonathan.cameron@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <mark.rutland@arm.com>
-References: <20230523131825.6102-1-hejunhao3@huawei.com>
- <20230523131825.6102-2-hejunhao3@huawei.com>
- <a7f03000-3f3f-efd3-9eec-e7f001b02742@huawei.com>
-CC:     <yangyicong@hisilicon.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <linuxarm@huawei.com>,
-        <shenyang39@huawei.com>, <prime.zeng@hisilicon.com>
-From:   hejunhao <hejunhao3@huawei.com>
-Message-ID: <8e760d98-4e68-dd7a-4799-f4a0b6a8070c@huawei.com>
-Date:   Sat, 27 May 2023 17:29:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
-MIME-Version: 1.0
-In-Reply-To: <a7f03000-3f3f-efd3-9eec-e7f001b02742@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.44]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500002.china.huawei.com (7.185.36.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 27 May 2023 05:33:54 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3F2DE;
+        Sat, 27 May 2023 02:33:52 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 624303200952;
+        Sat, 27 May 2023 05:33:49 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 27 May 2023 05:33:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1685180028; x=1685266428; bh=K5
+        HSzSXgcT98s5lBDkCfWoTpmYhsHpXg6HrwUgDT17w=; b=TT7EEIyxeFeWNuLBVT
+        yW32yXFDncBwoZWU3EymCA/AKmOIkj6LUWqmYTVPTxUMXf1232uP7Pj5iX/i4feg
+        sBTIvlP8tvmGHyVo/LupLQ49LSIFr7HlWHBuVXZQ7tR8ib4ACs5+rNfB243xeN0z
+        FwHF8XnOmvCBEH1osHTEzQGY4Ep5dCvIdkW3Vir3CzUaNcAQN5YDWF0K6eM9WRK1
+        34tArmyNIlH2DCuPp3502I+N+BjxCMU4287xLVME5LtLDWc2uEJ+orKv/w0rm2yC
+        54GoVGOa+Zo8pxKKT15z+LCAHcQJUtupPPz4l5MPj1ygmp5KrjemJDFUkWdlzM+B
+        Saig==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685180028; x=1685266428; bh=K5HSzSXgcT98s
+        5lBDkCfWoTpmYhsHpXg6HrwUgDT17w=; b=rM1q1rcBDxeTqZMmlqXVSXMgkPcbr
+        ZodW4gGD/nDBS6ste/jBse17h1XICdAud9JmPW8nDWTXO9MN/0iJrfTXKBfDbDIB
+        XlCw40q8nLV9D112QCDsRdRMiBioszqlClt23GM77kVuPnsMAm+72+YBeU85/s7l
+        QeauHWThHvgphCWpeXxX5XoitJ5vrnf9O0oWA1+o7e5Q7t755H0KkD0YhVq3gwuh
+        FpzI77DogSNSnDMtyT9pBEgOJQJ1MCh5eDz9theV20t+oIrQnsZoxiuyXRXXKiXM
+        TKrREGAJkvom4lxH6dmkyIsj8jIiDMII6+X+6sNbH8r9xbj0wctiNfltQ==
+X-ME-Sender: <xms:fM5xZIfrpannk7OuaOWRnfYeHbGziUIZ8rHJ_jc38jXvMJ_cd3YZ3w>
+    <xme:fM5xZKOuqsfbsPbzBodeWicTj9SMK7HOHnAwD8-RrBo9yK7GEMN6TPvBqwXPhkMbC
+    FH-jsyYt5aagorCZNA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekuddgudejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:fM5xZJglN6zEfoim9oo81tFrVKSItNlwhUQC3HPidvkPIR-kHQScPA>
+    <xmx:fM5xZN_9RJwuUa7Fgf5HczKXazCEoGAPNwSBT55iJa6fcYnismDRiQ>
+    <xmx:fM5xZEs2Ti3DHKi-dMZQURU7iWmVfZvdPBRUysSgNsaZmK9TuKYp8w>
+    <xmx:fM5xZFnxqmd_ESz3W7DqJHvfFiudTt-IMXoRbbfV0o1H0yqoLxPu8Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 941FBB60089; Sat, 27 May 2023 05:33:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <f0194cbe-eb5b-40ee-8723-1927ebddefc1@app.fastmail.com>
+In-Reply-To: <20230527034922.5542-1-kuniyu@amazon.com>
+References: <20230526201607.54655398@kernel.org>
+ <20230527034922.5542-1-kuniyu@amazon.com>
+Date:   Sat, 27 May 2023 11:33:28 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Kuniyuki Iwashima" <kuniyu@amazon.com>,
+        "Naresh Kamboju" <naresh.kamboju@linaro.org>
+Cc:     "Jakub Kicinski" <kuba@kernel.org>,
+        "Anders Roxell" <anders.roxell@linaro.org>,
+        "Dan Carpenter" <dan.carpenter@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, lkft-triage@lists.linaro.org,
+        "Xin Long" <lucien.xin@gmail.com>,
+        "Martin KaFai Lau" <martin.lau@linux.dev>,
+        Netdev <netdev@vger.kernel.org>, stable@vger.kernel.org,
+        willemdebruijn.kernel@gmail.com
+Subject: Re: selftests: net: udpgso_bench.sh: RIP: 0010:lookup_reuseport
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yicong,
-
-   Thanks for your comments.
-
-On 2023/5/25 21:04, Yicong Yang wrote:
-> Hi Junhao,
+On Sat, May 27, 2023, at 05:49, Kuniyuki Iwashima wrote:
+> From: Jakub Kicinski <kuba@kernel.org>
+> Date: Fri, 26 May 2023 20:16:07 -0700
+>> On Wed, 24 May 2023 13:24:15 +0530 Naresh Kamboju wrote:
+>> > While running selftests: net: udpgso_bench.sh on qemu-x86_64 the following
+>> > kernel crash noticed on stable rc 6.3.4-rc2 kernel.
+>> 
+>> Can you repro this or it's just a one-off?
+>> 
+>> Adding some experts to CC.
 >
-> On 2023/5/23 21:18, Junhao He wrote:
->> Compared to the original PA device, H60PA offers higher bandwidth.
->> The H60PA is a new device and we use HID to differentiate them.
->>
->> The events supported by PAv3 and PAv2 are different. They use the
->> same HID. The PMU version register is used in the driver to
->> distinguish different versions.
->>
->> For each H60PA PMU, except for the overflow interrupt register, other
->> functions of the H60PA PMU are the same as the original PA PMU module.
->> It has 8-programable counters and each counter is free-running.
->> Interrupt is supported to handle counter (64-bits) overflow.
->>
->> Signed-off-by: Junhao He <hejunhao3@huawei.com>
->> ---
->>   drivers/perf/hisilicon/hisi_uncore_pa_pmu.c | 138 +++++++++++++++++---
->>   drivers/perf/hisilicon/hisi_uncore_pmu.h    |  36 ++++-
->>   2 files changed, 157 insertions(+), 17 deletions(-)
->>
->> diff --git a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
->> index 71b6687d6696..e7e8cb999911 100644
->> --- a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
->> +++ b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
->> @@ -22,9 +22,14 @@
->>   #define PA_TT_CTRL			0x1c08
->>   #define PA_TGTID_CTRL			0x1c14
->>   #define PA_SRCID_CTRL			0x1c18
->> +/* H32 PA interrupt registers */
->>   #define PA_INT_MASK			0x1c70
->>   #define PA_INT_STATUS			0x1c78
->>   #define PA_INT_CLEAR			0x1c7c
->> +/* H60 PA interrupt registers */
->> +#define H60PA_INT_STATUS		0x1c70
->> +#define H60PA_INT_MASK			0x1c74
->> +/* End interrupt registers */
-> It'll be better to extract these version specific registers to a different
-> block and get rid of this comment.
+> FWIW, I couldn't reproduce it on my x86_64 QEMU setup & 6.4.0-rc3
+> at least 5 times, so maybe one-off ?
 
-This comment is to distinguish between the two device.
-will to drop the H60 PA comment.
+This looks like one of several spurious reports that lkft has produced
+recently, where an 'int3' trap instruction is executed in a function
+that is live-patched, but at a point where the int3 is not expected.
 
-Thanks.
+Anders managed to get a reproducer for one of these on his manchine
+yesterday, and has narrowed it down to failing on qemu-7.2.2 but
+not failing on qemu-8.0.
 
->>   #define PA_EVENT_TYPE0			0x1c80
->>   #define PA_PMU_VERSION			0x1cf0
->>   #define PA_EVENT_CNT0_L			0x1d00
->> @@ -46,6 +51,12 @@ HISI_PMU_EVENT_ATTR_EXTRACTOR(srcid_cmd, config1, 32, 22);
->>   HISI_PMU_EVENT_ATTR_EXTRACTOR(srcid_msk, config1, 43, 33);
->>   HISI_PMU_EVENT_ATTR_EXTRACTOR(tracetag_en, config1, 44, 44);
->>   
->> +struct hisi_pa_pmu_int_regs {
->> +	u32 mask;
->> +	u32 clear;
->> +	u32 status;
->> +};
-> These feels like values of the register but actually they're offset, it'll be clearer to
-> have a _offset suffix and a int_ prefix for "interrupt".
->
-> is the offset for irq clear register keep the same for different version? If so, just drop it.
+The current theory right now is that this is a qemu bug when
+dealing with self-modifying x86 code that has been fixed in
+qemu-8.0 already, and my suggestion would be to ignore all bugs
+found by lkft that involve an 'int3' trap, and instead change
+the lkft setup to use either qemu-8.0 or run the test systems
+in kvm (which would also be much faster and save resources).
 
-We can know from the name of the structure that they are interrupt
-registers. Maybe we don't need this prefix.
-I will add the suffix of offset in next version.
+Someone still needs to get to the bottom of this bug to see
+if it's in qemu or in the kernel livepatching code, but I'm
+sure it has nothing to do with the ipv6 stack.
 
-Thanks.
-
->
->> +
->>   static void hisi_pa_pmu_enable_tracetag(struct perf_event *event)
->>   {
->>   	struct hisi_pmu *pa_pmu = to_hisi_pmu(event->pmu);
->> @@ -219,44 +230,51 @@ static void hisi_pa_pmu_disable_counter(struct hisi_pmu *pa_pmu,
->>   static void hisi_pa_pmu_enable_counter_int(struct hisi_pmu *pa_pmu,
->>   					   struct hw_perf_event *hwc)
->>   {
->> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->present;
->>   	u32 val;
->>   
->>   	/* Write 0 to enable interrupt */
->> -	val = readl(pa_pmu->base + PA_INT_MASK);
->> +	val = readl(pa_pmu->base + regs->mask);
->>   	val &= ~(1 << hwc->idx);
->> -	writel(val, pa_pmu->base + PA_INT_MASK);
->> +	writel(val, pa_pmu->base + regs->mask);
->>   }
->>   
->>   static void hisi_pa_pmu_disable_counter_int(struct hisi_pmu *pa_pmu,
->>   					    struct hw_perf_event *hwc)
->>   {
->> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->present;
->>   	u32 val;
->>   
->>   	/* Write 1 to mask interrupt */
->> -	val = readl(pa_pmu->base + PA_INT_MASK);
->> +	val = readl(pa_pmu->base + regs->mask);
->>   	val |= 1 << hwc->idx;
->> -	writel(val, pa_pmu->base + PA_INT_MASK);
->> +	writel(val, pa_pmu->base + regs->mask);
->>   }
->>   
->>   static u32 hisi_pa_pmu_get_int_status(struct hisi_pmu *pa_pmu)
->>   {
->> -	return readl(pa_pmu->base + PA_INT_STATUS);
->> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->present;
->> +
->> +	return readl(pa_pmu->base + regs->status);
->>   }
->>   
->>   static void hisi_pa_pmu_clear_int_status(struct hisi_pmu *pa_pmu, int idx)
->>   {
->> -	writel(1 << idx, pa_pmu->base + PA_INT_CLEAR);
->> -}
->> +	struct hisi_pa_pmu_int_regs *regs = pa_pmu->dev_info->present;
->>   
->> -static const struct acpi_device_id hisi_pa_pmu_acpi_match[] = {
->> -	{ "HISI0273", },
->> -	{}
->> -};
->> -MODULE_DEVICE_TABLE(acpi, hisi_pa_pmu_acpi_match);
->> +	writel(1 << idx, pa_pmu->base + regs->clear);
->> +}
->>   
->>   static int hisi_pa_pmu_init_data(struct platform_device *pdev,
->>   				   struct hisi_pmu *pa_pmu)
->>   {
->> +	const struct hisi_pmu_dev_info *pa_pmu_info;
->> +	int idx;
->> +
->> +	pa_pmu_info = device_get_match_data(&pdev->dev);
->> +	if (!pa_pmu_info)
->> +		return -ENODEV;
->> +
-> How can it happen? Every supported HID has attached a data pointer. If you do
-> need this add some message here, it'll be useful to see where's wrong.
-
-will add message,.
-
->>   	/*
->>   	 * As PA PMU is in a SICL, use the SICL_ID and the index ID
->>   	 * to identify the PA PMU.
->> @@ -284,6 +302,11 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
->>   
->>   	pa_pmu->identifier = readl(pa_pmu->base + PA_PMU_VERSION);
->>   
->> +	idx = hisi_uncore_pmu_ver2idx(pa_pmu);
->> +	pa_pmu->dev_info = &pa_pmu_info[idx];
->> +	if (!pa_pmu->dev_info || !pa_pmu->dev_info->name)
->> +		return -EINVAL;
->> +
->>   	return 0;
->>   }
->>   
->> @@ -314,6 +337,32 @@ static const struct attribute_group hisi_pa_pmu_v2_events_group = {
->>   	.attrs = hisi_pa_pmu_v2_events_attr,
->>   };
->>   
->> +static struct attribute *hisi_pa_pmu_v3_events_attr[] = {
->> +	HISI_PMU_EVENT_ATTR(tx_req,	0x0),
->> +	HISI_PMU_EVENT_ATTR(tx_dat,	0x1),
->> +	HISI_PMU_EVENT_ATTR(tx_snp,	0x2),
->> +	HISI_PMU_EVENT_ATTR(rx_req,	0x7),
->> +	HISI_PMU_EVENT_ATTR(rx_dat,	0x8),
->> +	HISI_PMU_EVENT_ATTR(rx_snp,	0x9),
->> +	NULL
->> +};
->> +
->> +static const struct attribute_group hisi_pa_pmu_v3_events_group = {
->> +	.name = "events",
->> +	.attrs = hisi_pa_pmu_v3_events_attr,
->> +};
->> +
->> +static struct attribute *hisi_h60pa_pmu_events_attr[] = {
->> +	HISI_PMU_EVENT_ATTR(rx_flit,	0x50),
->> +	HISI_PMU_EVENT_ATTR(tx_flit,	0x65),
->> +	NULL
->> +};
->> +
->> +static const struct attribute_group hisi_h60pa_pmu_events_group = {
->> +	.name = "events",
->> +	.attrs = hisi_h60pa_pmu_events_attr,
->> +};
->> +
->>   static DEVICE_ATTR(cpumask, 0444, hisi_cpumask_sysfs_show, NULL);
->>   
->>   static struct attribute *hisi_pa_pmu_cpumask_attrs[] = {
->> @@ -345,6 +394,57 @@ static const struct attribute_group *hisi_pa_pmu_v2_attr_groups[] = {
->>   	NULL
->>   };
->>   
->> +static const struct attribute_group *hisi_pa_pmu_v3_attr_groups[] = {
->> +	&hisi_pa_pmu_v2_format_group,
->> +	&hisi_pa_pmu_v3_events_group,
->> +	&hisi_pa_pmu_cpumask_attr_group,
->> +	&hisi_pa_pmu_identifier_group,
->> +	NULL
->> +};
->> +
->> +static struct hisi_pa_pmu_int_regs hisi_pa_pmu_regs = {
->> +	.mask = PA_INT_MASK,
->> +	.clear = PA_INT_CLEAR,
->> +	.status = PA_INT_STATUS,
->> +};
->> +
->> +static const struct hisi_pmu_dev_info hisi_h32pa[] = {
->> +	[1] = {
->> +		.name = "pa",
->> +		.attr_groups = hisi_pa_pmu_v2_attr_groups,
->> +		.present = &hisi_pa_pmu_regs,
->> +	},
->> +	[2] = {
->> +		.name = "pa",
->> +		.attr_groups = hisi_pa_pmu_v3_attr_groups,
->> +		.present = &hisi_pa_pmu_regs,
->> +	},
->> +	{}
->> +};
->> +
->> +static const struct attribute_group *hisi_h60pa_pmu_attr_groups[] = {
->> +	&hisi_pa_pmu_v2_format_group,
->> +	&hisi_h60pa_pmu_events_group,
->> +	&hisi_pa_pmu_cpumask_attr_group,
->> +	&hisi_pa_pmu_identifier_group,
->> +	NULL
->> +};
->> +
->> +static struct hisi_pa_pmu_int_regs hisi_h60pa_pmu_regs = {
->> +	.mask = H60PA_INT_MASK,
->> +	.clear = H60PA_INT_STATUS, /* Clear on write */
->> +	.status = H60PA_INT_STATUS,
->> +};
->> +
->> +static const struct hisi_pmu_dev_info hisi_h60pa[] = {
->> +	[1] = {
->> +		.name = "h60pa",
->> +		.attr_groups = hisi_h60pa_pmu_attr_groups,
->> +		.present = &hisi_h60pa_pmu_regs,
->> +	},
->> +	{}
->> +};
->> +
->>   static const struct hisi_uncore_ops hisi_uncore_pa_ops = {
->>   	.write_evtype		= hisi_pa_pmu_write_evtype,
->>   	.get_event_idx		= hisi_uncore_pmu_get_event_idx,
->> @@ -375,7 +475,7 @@ static int hisi_pa_pmu_dev_probe(struct platform_device *pdev,
->>   	if (ret)
->>   		return ret;
->>   
->> -	pa_pmu->pmu_events.attr_groups = hisi_pa_pmu_v2_attr_groups;
->> +	pa_pmu->pmu_events.attr_groups = pa_pmu->dev_info->attr_groups;
->>   	pa_pmu->num_counters = PA_NR_COUNTERS;
->>   	pa_pmu->ops = &hisi_uncore_pa_ops;
->>   	pa_pmu->check_event = 0xB0;
->> @@ -400,8 +500,9 @@ static int hisi_pa_pmu_probe(struct platform_device *pdev)
->>   	if (ret)
->>   		return ret;
->>   
->> -	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%u_pa%u",
->> -			      pa_pmu->sicl_id, pa_pmu->index_id);
->> +	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%d_%s%u",
->> +			      pa_pmu->sicl_id, pa_pmu->dev_info->name,
->> +			      pa_pmu->index_id);
->>   	if (!name)
->>   		return -ENOMEM;
->>   
->> @@ -435,6 +536,13 @@ static int hisi_pa_pmu_remove(struct platform_device *pdev)
->>   	return 0;
->>   }
->>   
->> +static const struct acpi_device_id hisi_pa_pmu_acpi_match[] = {
->> +	{ "HISI0273", (kernel_ulong_t)hisi_h32pa },
->> +	{ "HISI0274", (kernel_ulong_t)hisi_h60pa },
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(acpi, hisi_pa_pmu_acpi_match);
->> +
->>   static struct platform_driver hisi_pa_pmu_driver = {
->>   	.driver = {
->>   		.name = "hisi_pa_pmu",
->> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
->> index 07890a8e96ca..73574cc0a243 100644
->> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
->> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
->> @@ -23,7 +23,6 @@
->>   #undef pr_fmt
->>   #define pr_fmt(fmt)     "hisi_pmu: " fmt
->>   
->> -#define HISI_PMU_V2		0x30
->>   #define HISI_MAX_COUNTERS 0x10
->>   #define to_hisi_pmu(p)	(container_of(p, struct hisi_pmu, pmu))
->>   
->> @@ -43,6 +42,13 @@
->>   		return FIELD_GET(GENMASK_ULL(hi, lo), event->attr.config);  \
->>   	}
->>   
->> +enum hisi_pmu_version {
->> +	HISI_PMU_V1,
->> +	HISI_PMU_V2 = 0x30,
->> +	HISI_PMU_V3 = 0x40,
->> +	HISI_PMU_MAX
->> +};
->> +
->>   struct hisi_pmu;
->>   
->>   struct hisi_uncore_ops {
->> @@ -62,6 +68,13 @@ struct hisi_uncore_ops {
->>   	void (*disable_filter)(struct perf_event *event);
->>   };
->>   
->> +/* Describes the HISI PMU chip features information */
->> +struct hisi_pmu_dev_info {
->> +	const char *name;
->> +	const struct attribute_group **attr_groups;
->> +	void *present;
-> present is unclear. Better for another name.
-
-Yes, I will do that.
-
->> +};
->> +
->>   struct hisi_pmu_hwevents {
->>   	struct perf_event *hw_events[HISI_MAX_COUNTERS];
->>   	DECLARE_BITMAP(used_mask, HISI_MAX_COUNTERS);
->> @@ -72,6 +85,7 @@ struct hisi_pmu_hwevents {
->>   struct hisi_pmu {
->>   	struct pmu pmu;
->>   	const struct hisi_uncore_ops *ops;
->> +	const struct hisi_pmu_dev_info *dev_info;
->>   	struct hisi_pmu_hwevents pmu_events;
->>   	/* associated_cpus: All CPUs associated with the PMU */
->>   	cpumask_t associated_cpus;
->> @@ -92,7 +106,7 @@ struct hisi_pmu {
->>   	int counter_bits;
->>   	/* check event code range */
->>   	int check_event;
->> -	u32 identifier;
->> +	enum hisi_pmu_version identifier;
->>   };
->>   
->>   int hisi_uncore_pmu_get_event_idx(struct perf_event *event);
->> @@ -122,4 +136,22 @@ int hisi_uncore_pmu_init_irq(struct hisi_pmu *hisi_pmu,
->>   			     struct platform_device *pdev);
->>   
->>   void hisi_pmu_init(struct hisi_pmu *hisi_pmu, struct module *module);
->> +
->> +int hisi_uncore_pmu_ver2idx(struct hisi_pmu *pmu)
-> may need a "static inline" qualifier. This function is used only in the pa pmu,
-> don't need to put it in the header.
-
-Yes, I will do that.
-
->> +{
->> +	int idx;
->> +
->> +	switch (pmu->identifier) {
-> I see no advantage for defining the versions as enum, use macro is ok. You just
-> read the identifiers from the hardware and have no other handling. And this
-> function makes things even complex, just handle it as simple as possible is
-> preferred. maybe:
->
-> switch (pmu->identifier) {
-> 	case HISI_PMU_V1:
-> 		pa_pmu->device_info = hisi_h32pa_v1;
-> 		break;
-> 	case HISI_PMU_V2:
-> 		pa_pmu->device_info = hisi_h32pa_v2;
-> 		break;
-> [...]
->
-> Thanks.
-
-Sure, Will fix in next version.
-
->> +	case HISI_PMU_V1:
->> +		idx = 0; break;
->> +	case HISI_PMU_V2:
->> +		idx = 1; break;
->> +	case HISI_PMU_V3:
->> +	/* When running on later version, returns the largest supported version */
->> +	default:
->> +		idx = 2;
->> +	}
->> +
->> +	return idx;
->> +}
->>   #endif /* __HISI_UNCORE_PMU_H__ */
->>
-> .
->
-
+      Arnd
