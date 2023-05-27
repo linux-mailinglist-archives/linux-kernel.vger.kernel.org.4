@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D9B7135C8
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AFB7135C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjE0Qpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 12:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        id S230335AbjE0Qpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 12:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjE0Qp0 (ORCPT
+        with ESMTP id S229649AbjE0Qp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 27 May 2023 12:45:26 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95189E;
-        Sat, 27 May 2023 09:45:16 -0700 (PDT)
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABAED8;
+        Sat, 27 May 2023 09:45:18 -0700 (PDT)
 X-GND-Sasl: contact@artur-rojek.eu
 X-GND-Sasl: contact@artur-rojek.eu
 X-GND-Sasl: contact@artur-rojek.eu
@@ -23,8 +23,8 @@ X-GND-Sasl: contact@artur-rojek.eu
 X-GND-Sasl: contact@artur-rojek.eu
 X-GND-Sasl: contact@artur-rojek.eu
 X-GND-Sasl: contact@artur-rojek.eu
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3FB2020008;
-        Sat, 27 May 2023 16:45:14 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C5A4A20003;
+        Sat, 27 May 2023 16:45:15 +0000 (UTC)
 From:   Artur Rojek <contact@artur-rojek.eu>
 To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>,
@@ -33,9 +33,9 @@ To:     Yoshinori Sato <ysato@users.sourceforge.jp>,
 Cc:     Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
         linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org,
         Artur Rojek <contact@artur-rojek.eu>
-Subject: [PATCH v2 2/3] sh: dma: Drop incorrect SH_DMAC_BASE1 for SH4
-Date:   Sat, 27 May 2023 18:44:51 +0200
-Message-Id: <20230527164452.64797-3-contact@artur-rojek.eu>
+Subject: [PATCH v2 3/3] sh: dma: Correct the number of DMA channels in SH7709
+Date:   Sat, 27 May 2023 18:44:52 +0200
+Message-Id: <20230527164452.64797-4-contact@artur-rojek.eu>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230527164452.64797-1-contact@artur-rojek.eu>
 References: <20230527164452.64797-1-contact@artur-rojek.eu>
@@ -50,29 +50,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-None of the supported SH4 family SoCs features a second DMAC module. As
-this define negatively impacts DMA channel calculation for the above
-targets, remove it from the code.
+According to the hardware manual [1], the DMAC found in SH7709 features
+only 4 channels.
+
+While at it, also sort the existing targets and clarify that
+NR_ONCHIP_DMA_CHANNELS must be a multiply of two.
+
+[1] https://www.renesas.com/us/en/document/mah/sh7709s-group-hardware-manual (p. 373)
 
 Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
 ---
 
-v2: new patch
+v2: - sort existing targets
+    - clarify that the value must be a multiply of two
 
- arch/sh/include/cpu-sh4/cpu/dma.h | 1 -
- 1 file changed, 1 deletion(-)
+ arch/sh/drivers/dma/Kconfig | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/arch/sh/include/cpu-sh4/cpu/dma.h b/arch/sh/include/cpu-sh4/cpu/dma.h
-index 38187d06b234..e97fb2c79177 100644
---- a/arch/sh/include/cpu-sh4/cpu/dma.h
-+++ b/arch/sh/include/cpu-sh4/cpu/dma.h
-@@ -13,6 +13,5 @@
- #define DMAE0_IRQ	evt2irq(0x6c0)
+diff --git a/arch/sh/drivers/dma/Kconfig b/arch/sh/drivers/dma/Kconfig
+index 7d54f284ce10..382fbb189fcf 100644
+--- a/arch/sh/drivers/dma/Kconfig
++++ b/arch/sh/drivers/dma/Kconfig
+@@ -28,17 +28,19 @@ config SH_DMA_API
+ config NR_ONCHIP_DMA_CHANNELS
+ 	int
+ 	depends on SH_DMA
+-	default "4" if CPU_SUBTYPE_SH7750  || CPU_SUBTYPE_SH7751  || \
+-		       CPU_SUBTYPE_SH7750S || CPU_SUBTYPE_SH7091
++	default "4" if CPU_SUBTYPE_SH7709 || CPU_SUBTYPE_SH7750  || \
++		       CPU_SUBTYPE_SH7750S || CPU_SUBTYPE_SH7751 || \
++		       CPU_SUBTYPE_SH7091
+ 	default "8" if CPU_SUBTYPE_SH7750R || CPU_SUBTYPE_SH7751R || \
+ 		       CPU_SUBTYPE_SH7760
+-	default "12" if CPU_SUBTYPE_SH7723 || CPU_SUBTYPE_SH7780  || \
+-			CPU_SUBTYPE_SH7785 || CPU_SUBTYPE_SH7724
++	default "12" if CPU_SUBTYPE_SH7723 || CPU_SUBTYPE_SH7724  || \
++			CPU_SUBTYPE_SH7780 || CPU_SUBTYPE_SH7785
+ 	default "6"
+ 	help
+ 	  This allows you to specify the number of channels that the on-chip
+-	  DMAC supports. This will be 4 for SH7750/SH7751/Sh7750S/SH7091 and 8 for the
+-	  SH7750R/SH7751R/SH7760, 12 for the SH7723/SH7780/SH7785/SH7724, default is 6.
++	  DMAC supports. This will be 4 for SH7709/SH7750/SH7750S/SH7751/SH7091,
++	  8 for SH7750R/SH7751R/SH7760, and 12 for SH7723/SH7724/SH7780/SH7785.
++	  Default is 6. Must be an even number.
  
- #define SH_DMAC_BASE0	0xffa00000
--#define SH_DMAC_BASE1	0xffa00070
- 
- #endif /* __ASM_CPU_SH4_DMA_H */
+ config SH_DMABRG
+ 	bool "SH7760 DMABRG support"
 -- 
 2.40.1
 
