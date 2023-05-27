@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E59F71330C
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45172713313
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbjE0H2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 03:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S232161AbjE0HkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 03:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjE0H2E (ORCPT
+        with ESMTP id S232478AbjE0HkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 03:28:04 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116721BDA
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 00:27:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685172435; x=1716708435;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iyNVlXjfQwacZ7X/zuK+HMPBvKI11zROleMOhRosigs=;
-  b=HMz9nJYRGIXvUnAvmW+FGdqaMJ5MNYXhj1ex6foug9XOFJA31g5StQs9
-   9niYDtUpYgirMXK36qVn21cD2Q8BrleJZutXsi+5aMCwtzBH5OJ93nsbe
-   icZ6ryqrcCsL5v6XPbRHJFUG6bytPBGy9aQx0xE3HZuJ18aDA9ZQkfO3Y
-   rTT6A/6rbi7nv+FeYthMviVkVrCXVsB3TDIRtHpEpg9cYVWsX9Kkqe+ah
-   72LDtrtkMikL9OM1tboCv3IKnxLeSHNlhJ+KJhd3Sh//glbGUfMQNld/z
-   Nl+eqtru4h5ZQkh8kqq3zRzVFykrJ5YN9DlKmnRir9W0RYrLXFrs24pfT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="354386490"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="354386490"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 00:25:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="770541545"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="770541545"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 27 May 2023 00:25:56 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q2oJH-000Jpu-0m;
-        Sat, 27 May 2023 07:25:55 +0000
-Date:   Sat, 27 May 2023 15:25:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steve French <stfrench@microsoft.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: fs/smb/client/ioctl.c:324:17: warning: variable 'caps' set but not
- used
-Message-ID: <202305271550.A77PrVv9-lkp@intel.com>
+        Sat, 27 May 2023 03:40:08 -0400
+Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A660C10A
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 00:40:05 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 2oPXqAGCabOsk2oPXqWnKS; Sat, 27 May 2023 09:32:24 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685172744;
+        bh=1DnlnxUFmb7Ce2qQomfF/gfxLcnmnomwsXhnW/Y+iQc=;
+        h=From:To:Cc:Subject:Date;
+        b=YabGio0sAEIf5b3AOEYIBoyE/y6rGkRNrsKyEzHCn/Qjvj8u6eK//P3rpc2P4/yy2
+         SNO9EIhjPRAUcvKGYB1zASP9Y5/xf42oklYIeGd/Q7tloqQmIQptzrJz0B85mXPY9U
+         q/d9tEewX67XPpOn0IvOQmw3VWpBP2/n6Bwbw0klhfVuwMeHYgPrO/WYRRBPfJJ62Q
+         EXggz4fWpvZs33IHFUfiYHdbsUtF8YfhYlXrXAXYeCgwNQFQ7aIEHBCPRukpbzi1HX
+         Df5AukzanHz/ryaqjWhVtgWMSCZFZnNssrVP+9Ys1n1JPmD9ve4ggp0n1mC5qfVbCe
+         uZt+IR3Fx6HgQ==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 27 May 2023 09:32:24 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] When 'mcf_edma' is allocated, some space is allocated for a flexible array at the end of the struct. 'chans' item are allocated, that is to say 'pdata->dma_channels'.
+Date:   Sat, 27 May 2023 09:32:22 +0200
+Message-Id: <f55d9154b7c600828f6fad3ea5fa791a5f17b9a4.1685172449.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,60 +53,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
+Then, this number of item is stored in 'mcf_edma->n_chans'.
 
-First bad commit (maybe != root cause):
+A few lines later, if 'mcf_edma->n_chans' is 0, then a default value of 64
+is set.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   49572d5361298711207ab387a6c318407deb963a
-commit: 38c8a9a52082579090e34c033d439ed2cd1a462d smb: move client and server files to common directory fs/smb
-date:   2 days ago
-config: i386-randconfig-i063-20230526 (https://download.01.org/0day-ci/archive/20230527/202305271550.A77PrVv9-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=38c8a9a52082579090e34c033d439ed2cd1a462d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 38c8a9a52082579090e34c033d439ed2cd1a462d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/smb/client/
+This ends to no space allocated by devm_kzalloc() because chans was 0, but
+64 items are read and/or written in some not allocated memory.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305271550.A77PrVv9-lkp@intel.com/
+Change the logic to define a default value before allocating the memory.
 
-All warnings (new ones prefixed by >>):
+Fixes: e7a3ff92eaf1 ("dmaengine: fsl-edma: add ColdFire mcf5441x edma support")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+If I'm correct, then:
 
-   fs/smb/client/ioctl.c: In function 'cifs_ioctl':
->> fs/smb/client/ioctl.c:324:17: warning: variable 'caps' set but not used [-Wunused-but-set-variable]
-     324 |         __u64   caps;
-         |                 ^~~~
+   - the default value is hard-coded as 64. There is also a
+        #define EDMA_CHANNELS 64
+     which maybe could be used, or renamed as EDMA_DEFAULT_CHANNELS
 
+   - mcf_edma_err_handler() looks bogus, because it considers that
+     mcf_edma->chans has EDMA_CHANNELS items.
+     I guess that something related to mcf_edma->n_chans is what is
+     expected, but how should this be done?
 
-vim +/caps +324 fs/smb/client/ioctl.c
+Maybe, the EDMA_CHANNELS value should be used all the time?
+Maybe, the number of chans should be limited to EDMA_CHANNELS?
+Maybe, the number of chans should be at least EDMA_CHANNELS?
 
-7ba3d1cdb7988c fs/cifs/ioctl.c Steve French    2021-05-02  312  
-f9ddcca4cf7d95 fs/cifs/ioctl.c Steve French    2008-05-15  313  long cifs_ioctl(struct file *filep, unsigned int command, unsigned long arg)
-^1da177e4c3f41 fs/cifs/ioctl.c Linus Torvalds  2005-04-16  314  {
-496ad9aa8ef448 fs/cifs/ioctl.c Al Viro         2013-01-23  315  	struct inode *inode = file_inode(filep);
-7e7db86c7e1088 fs/cifs/ioctl.c Steve French    2019-09-19  316  	struct smb3_key_debug_info pkey_inf;
-^1da177e4c3f41 fs/cifs/ioctl.c Linus Torvalds  2005-04-16  317  	int rc = -ENOTTY; /* strange error - but the precedent */
-6d5786a34d98bf fs/cifs/ioctl.c Pavel Shilovsky 2012-06-20  318  	unsigned int xid;
-ba00ba64cf0895 fs/cifs/ioctl.c Jeff Layton     2010-09-20  319  	struct cifsFileInfo *pSMBFile = filep->private_data;
-96daf2b09178d8 fs/cifs/ioctl.c Steve French    2011-05-27  320  	struct cifs_tcon *tcon;
-a77592a70081ed fs/cifs/ioctl.c Ronnie Sahlberg 2020-07-09  321  	struct tcon_link *tlink;
-d26c2ddd335696 fs/cifs/ioctl.c Steve French    2020-02-06  322  	struct cifs_sb_info *cifs_sb;
-f654bac2227adc fs/cifs/ioctl.c Steve French    2005-04-28  323  	__u64	ExtAttrBits = 0;
-618763958b2291 fs/cifs/ioctl.c Jeff Layton     2010-11-08 @324  	__u64   caps;
+Maybe, maybe, maybe, but me, I don't know :(
 
-:::::: The code at line 324 was first introduced by commit
-:::::: 618763958b2291a09057dbfa553da6ded93dcfad cifs: make cifs_ioctl handle NULL filp->private_data correctly
+All I know is that this patch compiles :)
+and that it can gives Dan an idea for smatch for checking access to un-allocated
+memory related to flexible array :)
+---
+ drivers/dma/mcf-edma.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-:::::: TO: Jeff Layton <jlayton@redhat.com>
-:::::: CC: Steve French <sfrench@us.ibm.com>
-
+diff --git a/drivers/dma/mcf-edma.c b/drivers/dma/mcf-edma.c
+index ebd8733f72ad..9413fad08a60 100644
+--- a/drivers/dma/mcf-edma.c
++++ b/drivers/dma/mcf-edma.c
+@@ -190,7 +190,13 @@ static int mcf_edma_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
+-	chans = pdata->dma_channels;
++	if (!pdata->dma_channels) {
++		dev_info(&pdev->dev, "setting default channel number to 64");
++		chans = 64;
++	} else {
++		chans = pdata->dma_channels;
++	}
++
+ 	len = sizeof(*mcf_edma) + sizeof(*mcf_chan) * chans;
+ 	mcf_edma = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
+ 	if (!mcf_edma)
+@@ -202,11 +208,6 @@ static int mcf_edma_probe(struct platform_device *pdev)
+ 	mcf_edma->drvdata = &mcf_data;
+ 	mcf_edma->big_endian = 1;
+ 
+-	if (!mcf_edma->n_chans) {
+-		dev_info(&pdev->dev, "setting default channel number to 64");
+-		mcf_edma->n_chans = 64;
+-	}
+-
+ 	mutex_init(&mcf_edma->fsl_edma_mutex);
+ 
+ 	mcf_edma->membase = devm_platform_ioremap_resource(pdev, 0);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
