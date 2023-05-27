@@ -2,49 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4186171317A
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0424671317F
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjE0B0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 21:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
+        id S237904AbjE0B2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 21:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjE0B0o (ORCPT
+        with ESMTP id S229528AbjE0B2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 21:26:44 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D39A7;
-        Fri, 26 May 2023 18:26:41 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1685150796tdnayj8x
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 27 May 2023 09:26:35 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 9OErQKpad8Ah4wDP7YPNO7QIfLzqVaIj39oiToOIFCl/lX+DycsdTBM8Ex7Kk
-        eJ59fku2p51B8hYhutt6eR8eIcIn0t+/tXE/IvPC80t9G9yoORp08hlnV9Qzj2Uu4HldiP8
-        ZBM/pinCiUcNrMWLLmZsKocoT1aPXrV0Ci0EjY06fLmeAlibElW1l5QQd8RAvkdWHP1meri
-        uXol+yQlqbsEO0vtzIEGb8492pfRgMOKBSfFCV0k5agdp33uqmUzpjJFwemyHMQHmot6yoE
-        WOXqa2Wb04JuXJuyzORamvdmzBuGEZsXaciS4LgUaFnINwv2smGSYwy8fmnbET8pul21Hg5
-        6OnM9QCJvKHpOgscvptubCTZGoV710+50hGGEVB5OdlqDmGT+hFkOhfgXfAZg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8717417676330824894
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com
-Subject: Re: [PATCH 13/13] tools/nolibc: sys_gettimeofday: riscv: use __NR_clock_gettime64 for rv32
-Date:   Sat, 27 May 2023 09:26:35 +0800
-Message-Id: <20230527012635.19595-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <29e4b23d-27cb-4101-bfe9-c6b412222578@t-8ch.de>
-References: <29e4b23d-27cb-4101-bfe9-c6b412222578@t-8ch.de>
+        Fri, 26 May 2023 21:28:50 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328CAA7;
+        Fri, 26 May 2023 18:28:49 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QSkhW0vGtz4f3mJ2;
+        Sat, 27 May 2023 09:28:43 +0800 (CST)
+Received: from [10.174.179.247] (unknown [10.174.179.247])
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7PKXHFkcpAuKQ--.1515S3;
+        Sat, 27 May 2023 09:28:44 +0800 (CST)
+Message-ID: <b7d7b9f9-51f1-5ee4-db38-86afff3a8352@huaweicloud.com>
+Date:   Sat, 27 May 2023 09:28:42 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/4] md/raid10: fix null-ptr-deref of mreplace in
+ raid10_sync_request
+To:     Song Liu <song@kernel.org>, linan666@huaweicloud.com
+Cc:     bingjingc@synology.com, allenpeng@synology.com,
+        alexwu@synology.com, shli@fb.com, neilb@suse.de,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com
+References: <20230526074551.669792-1-linan666@huaweicloud.com>
+ <20230526074551.669792-2-linan666@huaweicloud.com>
+ <CAPhsuW5ThXyAL2rAyWZC31etY27fqsG+eFHcHtzfCS9Da4bosw@mail.gmail.com>
+From:   Li Nan <linan666@huaweicloud.com>
+In-Reply-To: <CAPhsuW5ThXyAL2rAyWZC31etY27fqsG+eFHcHtzfCS9Da4bosw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-CM-TRANSID: gCh0CgD3X7PKXHFkcpAuKQ--.1515S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tw13Aw1xJr4ruFy5CF1fXrb_yoW8ur1kp3
+        yIqF9rKr1UGayjk3WDZ3WDWFySvw17Jr15Cr98Xa4fZrnIvFZFkFW8KFWYqF1DXF1Fqa1Y
+        qw1jqwsxuFWIqaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBI14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
+        F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r
+        4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v
+        4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
+        04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbHa0DUUUUU==
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,177 +69,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas, Willy
 
-> On 2023-05-25 02:03:32+0800, Zhangjin Wu wrote:
-> > rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
-> > __NR_gettimeofday and __NR_clock_gettime after kernel commit d4c08b9776b3
-> > ("riscv: Use latest system call ABI"), use __NR_clock_gettime64 instead.
-> > 
-> > This code is based on src/time/gettimeofday.c of musl and
-> > sysdeps/unix/sysv/linux/clock_gettime.c of glibc.
-> > 
-> > Both __NR_clock_gettime and __NR_clock_gettime64 are added for
-> > sys_gettimeofday() for they share most of the code.
-> > 
-> > Notes:
-> > 
-> > * Both tv and tz are not directly passed to kernel clock_gettime*
-> >   syscalls, so, it isn't able to check the pointer automatically with the
-> >   get_user/put_user helpers just like kernel gettimeofday syscall does.
-> >   instead, we emulate (but not completely) such checks in our new
-> >   __NR_clock_gettime* branch of nolibc.
-> > 
-> > * kernel clock_gettime* syscalls can not get tz info, just like musl and
-> >   glibc do, we set tz to zero to avoid a random number.
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/include/nolibc/sys.h | 46 ++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 46 insertions(+)
-> > 
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index 2642b380c6aa..ad38cc3856be 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -26,6 +26,7 @@
-> >  
-> >  #include "arch.h"
-> >  #include "errno.h"
-> > +#include "string.h"
-> >  #include "types.h"
-> >  
-> >  
-> > @@ -51,6 +52,11 @@
-> >   * should not be placed here.
-> >   */
-> >  
-> > +/*
-> > + * This is the first address past the end of the text segment (the program code).
-> > + */
-> > +
-> > +extern char etext;
-> >  
-> >  /*
-> >   * int brk(void *addr);
-> > @@ -554,7 +560,47 @@ long getpagesize(void)
-> >  static __attribute__((unused))
-> >  int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
-> >  {
-> > +#ifdef __NR_gettimeofday
-> >  	return my_syscall2(__NR_gettimeofday, tv, tz);
-> > +#elif defined(__NR_clock_gettime) || defined(__NR_clock_gettime64)
-> > +#ifdef __NR_clock_gettime
-> > +	struct timespec ts;
-> > +#else
-> > +	struct timespec64 ts;
-> > +#define __NR_clock_gettime __NR_clock_gettime64
-> > +#endif
-> > +	int ret;
-> > +
-> > +	/* make sure tv pointer is at least after code segment */
-> > +	if (tv != NULL && (char *)tv <= &etext)
-> > +		return -EFAULT;
+
+在 2023/5/27 5:38, Song Liu 写道:
+> On Fri, May 26, 2023 at 12:47 AM <linan666@huaweicloud.com> wrote:
+>>
+>> From: Li Nan <linan122@huawei.com>
+>>
+>> need_replace will be set to 1 if no-Faulty mreplace exists, and mreplace
+>> will be deref later. However, the latter check of mreplace might set
+>> mreplace to NULL, null-ptr-deref occurs if need_replace is 1 at this time.
+>>
+>> Fix it by merging two checks into one. And replace 'need_replace' with
+>> 'mreplace' because their values are always the same.
+>>
+>> Fixes: ee37d7314a32 ("md/raid10: Fix raid10 replace hang when new added disk faulty")
+>> Signed-off-by: Li Nan <linan122@huawei.com>
+>> ---
+>>   drivers/md/raid10.c | 13 +++++--------
+>>   1 file changed, 5 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+>> index 4fcfcb350d2b..e21502c03b45 100644
+>> --- a/drivers/md/raid10.c
+>> +++ b/drivers/md/raid10.c
+>> @@ -3438,7 +3438,6 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+>>                          int must_sync;
+>>                          int any_working;
+>>                          int need_recover = 0;
+>> -                       int need_replace = 0;
+>>                          struct raid10_info *mirror = &conf->mirrors[i];
+>>                          struct md_rdev *mrdev, *mreplace;
+>>
+>> @@ -3451,10 +3450,10 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+>>                              !test_bit(In_sync, &mrdev->flags))
+>>                                  need_recover = 1;
+>>                          if (mreplace != NULL &&
+>> -                           !test_bit(Faulty, &mreplace->flags))
+>> -                               need_replace = 1;
+>> +                           test_bit(Faulty, &mreplace->flags))
+>> +                               mreplace = NULL;
+>>
+>> -                       if (!need_recover && !need_replace) {
+>> +                       if (!need_recover && !mreplace) {
+>>                                  rcu_read_unlock();
+>>                                  continue;
+>>                          }
+>> @@ -3470,8 +3469,6 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
+>>                                  rcu_read_unlock();
+>>                                  continue;
+>>                          }
 > 
-> To me the weird etext comparisions don't seem to be worth it, to be
-> honest.
->
-
-This is the issue we explained in commit message:
-
-    * Both tv and tz are not directly passed to kernel clock_gettime*
-      syscalls, so, it isn't able to check the pointer automatically with the
-      get_user/put_user helpers just like kernel gettimeofday syscall does.
-      instead, we emulate (but not completely) such checks in our new
-      __NR_clock_gettime* branch of nolibc.
-
-but not that deeply described the direct cause, the direct cause is that the
-test case passes a '(void *)1' and the kernel space of gettimeofday can simply
-'fixup' this issue by the get_user/put_user helpers, but our user-space tv and
-tz code has no such function, just emulate such 'fixup' by a stupid etext
-compare to at least make sure the data pointer is in data range. Welcome better
-solution.
-
-    CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
-    CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
-
-Without this ugly check, the above cases would get such error:
-
-    35 gettimeofday_bad1init[1]: unhandled signal 11 code 0x1 at 0x00000002 in init[10000+5000]
-    CPU: 0 PID: 1 Comm: init Not tainted 6.4.0-rc1-00134-gf929c7b7184f-dirty #20
-    Hardware name: riscv-virtio,qemu (DT)
-    epc : 00012ccc ra : 00012ca8 sp : 9d254d90
-     gp : 00016800 tp : 00000000 t0 : 00000000
-     t1 : 0000000a t2 : 00000000 s0 : 00000001
-     s1 : 00016008 a0 : 00000000 a1 : 9d254da8
-     a2 : 00000014 a3 : 00000000 a4 : 00000000
-     a5 : 00000000 a6 : 00000001 a7 : 00000193
-     s2 : 00000023 s3 : 9d254da4 s4 : 00000000
-     s5 : 00000000 s6 : 0000541b s7 : 00000007
-     s8 : 9d254dcc s9 : 000144e8 s10: 00016000
-     s11: 00000006 t3 : 00000000 t4 : ffffffff
-     t5 : 00000000 t6 : 00000000
-    status: 00000020 badaddr: 00000002 cause: 0000000f
-
-Will at least append this test error in the commit message of the coming new
-revision of this patch.
-
-Hi, Willy, this also require your discussion, simply remove the above
-two test cases may be not a good idea too, the check for gettimeofday is
-perfectly ok.
-
-The same 'emulate' method is used in the waitid patch, but that only
-requires to compare 'pid == INT_MIN', which is not that weird.
-
-> > +
-> > +	/* set tz to zero to avoid random number */
-> > +	if (tz != NULL) {
-> > +		if ((char *)tz > &etext)
-> > +			memset(tz, 0, sizeof(struct timezone));
-> > +		else
-> > +			return -EFAULT;
-> > +	}
-> > +
-
-The same issue here.
-
-> > +	if (tv == NULL)
-> > +		return 0;
-> > +
-> > +	ret = my_syscall2(__NR_clock_gettime, CLOCK_REALTIME, &ts);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	tv->tv_sec = (time_t) ts.tv_sec;
-> > +#ifdef __NR_clock_gettime64
+> To make sure I understand the issue correctly:
 > 
-> Nitpick:
+> The null-ptr-deref only happens when the Faulty bit was set after the
+> last check and before this check below, right?
 > 
-> While this ifdef works and is correct its logic is a bit indirect.
-> If it is copied to some other function in the future it may be incorrect
-> there.
-> 
-> Without the #ifdef the compiler should still be able to optimize the
-> code away.
 
-Ok, will remove the #ifdef wrapper, let the compiler optimize itself.
+Yes. I will improve log in next version.
 
+-- 
 Thanks,
-Zhangjin
+Nan
 
-> 
-> > +	if (tv->tv_sec != ts.tv_sec)
-> > +		return -EOVERFLOW;
-> > +#endif
-> > +
-> > +	tv->tv_usec = ts.tv_nsec / 1000;
-> > +	return 0;
-> > +#else
-> > +#error None of __NR_gettimeofday, __NR_clock_gettime and __NR_clock_gettime64 defined, cannot implement sys_gettimeofday()
-> > +#endif
-> >  }
-> >  
-> >  static __attribute__((unused))
-> > -- 
-> > 2.25.1
-> > 
