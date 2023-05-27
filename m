@@ -2,226 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BC3713726
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 01:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C7971372A
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 01:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjE0XTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 19:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S229556AbjE0Xif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 19:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjE0XTu (ORCPT
+        with ESMTP id S229437AbjE0Xic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 19:19:50 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002F9D3;
-        Sat, 27 May 2023 16:19:48 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-6261a1a7454so3501186d6.3;
-        Sat, 27 May 2023 16:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685229588; x=1687821588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mmP1Wdih2jmgBNgRuCig0lHf98Ze9PVsZQRiONBAQjA=;
-        b=cCTy9nvcJ9criXQ2j7Lz+pQJSyBaMFLoiyppyEHcrcL+DY7QzoLAlrXhyU2EPtNWcI
-         O79vXDay9SIYQFNzO/t/qMhucaSz2FQYz2AhjbOgbxfxkmaosfVZcZV7OSS6fkl7cykW
-         vJ9En8xx29w1kTpgAoF4azHYTarhmxf9BNszzGmHSwogXBlYLLYR2wY1nG0i58NXrwlS
-         r8SY35fqHW3T6x/Mdm8WW62lW/fAos/JcBfLy0EmL5+GOYUbbMw9BgT+dse3YIHh7naz
-         3O0GGlRSCr0MVVRdlmeAu3FvgFpWdO/92/a+5bBL1hSNcRQXxxEX1h+FAlAJd/sRzpAh
-         k5lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685229588; x=1687821588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mmP1Wdih2jmgBNgRuCig0lHf98Ze9PVsZQRiONBAQjA=;
-        b=EiH0pSQZ03eI4KwSZVrJ4rgGd1EReblzfZWIny4f2SopCnbQfc4pa98H4+inJo9U8k
-         GK3iLNAMfcQJ1f/jguO1OYl2VeQK6Wi45h0w7tUkcz/dBd7UC62PzgN+whAOGHCf4u9H
-         bkZq252DncyIXFLHQWescWNOzFkuFodycDZvCW/FgcOY4l9MfOMeKC7XtCA3q5YAPj+h
-         m+dK96v9AmDdZhg3l+U9l5v1Gm7VVhW/PuJW1O1CAgLdVFN/fEjzWsM7z5/iSiHChQyQ
-         /lHqtnVVDhoVZH+b/X2YeW2dH3Fd/NbJuuuORT1ZZojEUCZOk6iDOp/9NkZIfLho6Iay
-         V5CA==
-X-Gm-Message-State: AC+VfDxjTQhuz7RXd68R2ndRArtz7M+syIkPaqP5kZux6yEXu2vndhCB
-        jr34lQd4vxTXczqxKwDj+pGIB8ayte1/BSbX7jY=
-X-Google-Smtp-Source: ACHHUZ4MCtxUZFmkT+8bmXt4CiwAFqv/7/SCQ8/6kvUZrRdEdOFHgryDuAvZCnH8gitKstn1hxlben+HE603wHzNJ44=
-X-Received: by 2002:a05:6214:29e9:b0:625:aa49:c341 with SMTP id
- jv9-20020a05621429e900b00625aa49c341mr5556910qvb.53.1685229587968; Sat, 27
- May 2023 16:19:47 -0700 (PDT)
+        Sat, 27 May 2023 19:38:32 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EA6D8
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 16:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685230710; x=1716766710;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fF5KDF5UHs5tEKjxbrjJ//x1LcJL+cMM+fX7s+kqRDI=;
+  b=JI6rkPI0+uV++deHhYZVQUV+mtst0yRVLa0VLIuF8Z1DiIr5+5bJPjh0
+   LdO3s91LSH4Oqzrtiu7gisSs042LlF+rGHBl7LMGGSHhofxiIZFzmwdEY
+   +WKJR7CP2DvlgeBrmKo9enR9lGp25BENh++dzymIyv0hw7e2dSKsvxhjp
+   KGGe64QSNGgFsQeqH4UNOKYfY+vsivbwzq3itDc3Wu5dlLRSYUvqVYSC6
+   bimZO/JNBYVyfuTFJirpf+1F8j6GYJirnO2PBjRyxaUnCdxmcLCxpVift
+   yPAUaw4/Arl8nl33Q4rSUCinj1YochcIijMyaQoAeCB/R92hgqe9z7KuD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="382709696"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="382709696"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 16:38:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="795472731"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="795472731"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 May 2023 16:38:28 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q33US-000KFs-0f;
+        Sat, 27 May 2023 23:38:28 +0000
+Date:   Sun, 28 May 2023 07:37:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Joerg Roedel <jroedel@suse.de>
+Subject: drivers/iommu/ipmmu-vmsa.c:946:34: warning: 'ipmmu_of_ids' defined
+ but not used
+Message-ID: <202305280730.ejrHBC6n-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230527132747.83196-1-frank@oltmanns.dev> <20230527132747.83196-3-frank@oltmanns.dev>
-In-Reply-To: <20230527132747.83196-3-frank@oltmanns.dev>
-From:   Julian Calaby <julian.calaby@gmail.com>
-Date:   Sun, 28 May 2023 09:19:36 +1000
-Message-ID: <CAGRGNgWP6McbfORNQrrdvktEOVMgS-KCXuhC5GRYz-+SgsFx1w@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/3] clk: sunxi-ng: Implement precalculated NKM rate selection
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+Hi Robin,
 
-On Sat, May 27, 2023 at 11:37=E2=80=AFPM Frank Oltmanns <frank@oltmanns.dev=
-> wrote:
->
-> Add a new precalculation method for NKM clock rate selection in the
-> sunxi-ng clock driver. Introduce ccu_nkm_find_best_precalc which uses a
-> precalculated table of valid NKM combinations (struct clk_nkm_table and
-> struct clk_nkm_combo) to find the best rate. This approach provides
-> faster rate selection by searching a table of valid combinations rather
-> than calculating for all possible combinations.
->
-> The table of NKM combinations needs to be initialized with meaningful
-> combinations only, i.e. removing redundant combinations that result in
-> the same rate.
->
-> Keep the existing ccu_nkm_find_best function in place and use it as a
-> fallback if no precalculated table is provided.
->
-> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
-> ---
->  drivers/clk/sunxi-ng/ccu_nkm.c | 84 +++++++++++++++++++++++++++-------
->  drivers/clk/sunxi-ng/ccu_nkm.h | 26 +++++++++++
->  2 files changed, 94 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/clk/sunxi-ng/ccu_nkm.c b/drivers/clk/sunxi-ng/ccu_nk=
-m.c
-> index 94d2a83992b2..9652f6df17bd 100644
-> --- a/drivers/clk/sunxi-ng/ccu_nkm.c
-> +++ b/drivers/clk/sunxi-ng/ccu_nkm.c
-> @@ -54,6 +54,49 @@ static unsigned long ccu_nkm_find_best(unsigned long p=
-arent, unsigned long rate,
->         return best_rate;
->  }
->
-> +static unsigned long ccu_nkm_find_best_precalc(unsigned long parent,
-> +                                              unsigned long rate,
-> +                                              struct _ccu_nkm *nkm,
-> +                                              struct clk_nkm_table *tabl=
-e)
-> +{
-> +       unsigned long best_rate =3D 0, best_diff =3D ULONG_MAX;
-> +       unsigned long best_n =3D 0, best_k =3D 0, best_m =3D 0;
-> +       int start =3D 0, end =3D table->num - 1, mid;
-> +
-> +       while (start <=3D end) {
-> +               unsigned long tmp_rate;
-> +               unsigned long tmp_diff;
-> +
-> +               mid =3D (start + end) / 2;
-> +
-> +               tmp_rate =3D parent * table->combos[mid].n * table->combo=
-s[mid].k /
-> +                          table->combos[mid].m;
-> +
-> +               tmp_diff =3D abs(rate - tmp_rate);
-> +
-> +               if (tmp_diff < best_diff) {
-> +                       best_rate =3D tmp_rate;
-> +                       best_diff =3D tmp_diff;
-> +                       best_n =3D table->combos[mid].n;
-> +                       best_k =3D table->combos[mid].k;
-> +                       best_m =3D table->combos[mid].m;
-> +                       if (best_diff =3D=3D 0)
-> +                               goto out;
-> +               }
+FYI, the error/warning still remains.
 
-If the table was sorted by n * k / m, this could just be a process of
-searching through until we either:
-- find that the first rate in the table is too high
-- find an exact rate
-- go above the requested rate, then there's only two to compare: our
-current rate and the previous one
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4e893b5aa4ac2c8a56a40d18fe87e9d2295e5dcf
+commit: b87d6d7fa405e23478f1e1dff6d66b5a533a5433 iommu/ipmmu-vmsa: Clean up bus_set_iommu()
+date:   9 months ago
+config: x86_64-buildonly-randconfig-r001-20230528 (https://download.01.org/0day-ci/archive/20230528/202305280730.ejrHBC6n-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b87d6d7fa405e23478f1e1dff6d66b5a533a5433
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b87d6d7fa405e23478f1e1dff6d66b5a533a5433
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iommu/
 
-This should massively simplify this function and would still work with
-a binary search.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305280730.ejrHBC6n-lkp@intel.com/
 
-> +               if (rate < tmp_rate)
-> +                       end =3D mid - 1;
-> +               else
-> +                       start =3D mid + 1;
-> +       }
-> +
-> +out:
-> +       nkm->n =3D best_n;
-> +       nkm->k =3D best_k;
-> +       nkm->m =3D best_m;
-> +
-> +       return best_rate;
-> +}
-> +
->  static void ccu_nkm_disable(struct clk_hw *hw)
->  {
->         struct ccu_nkm *nkm =3D hw_to_ccu_nkm(hw);
-> diff --git a/drivers/clk/sunxi-ng/ccu_nkm.h b/drivers/clk/sunxi-ng/ccu_nk=
-m.h
-> index 6601defb3f38..fa5551724921 100644
-> --- a/drivers/clk/sunxi-ng/ccu_nkm.h
-> +++ b/drivers/clk/sunxi-ng/ccu_nkm.h
-> @@ -12,6 +12,30 @@
->  #include "ccu_div.h"
->  #include "ccu_mult.h"
->
-> +struct clk_nkm_combo {
-> +       u8      n;
-> +       u8      k;
-> +       u8      m;
-> +};
-> +
-> +/**
-> + * struct clk_nkm_table - Table of all meaningful combinations for n, k,=
- and m
-> + *
-> + * @num: Number of entries in the table
-> + * @combos: Array of combos (of size num) that are supported by this clo=
-ck.
-> + *
-> + * This table shall contain all meaningful combinations of n, k, and m. =
-That
-> + * means that combinations that result in the same clock rate shall only=
- be
-> + * listed once. For example, if both
-> + * { .n =3D 1, .k =3D 2, .m =3D 2} and  { .n =3D 2, .k =3D 2, .m =3D 4}
-> + * are valid values for n, k, and m, only one of them would be allowed b=
-ecause
-> + * both result in a factor of 1.0.
-> + */
-> +struct clk_nkm_table {
-> +       size_t                  num;
-> +       struct clk_nkm_combo    *combos;
+All warnings (new ones prefixed by >>):
 
-Should this be a "flex" array, i.e.
+>> drivers/iommu/ipmmu-vmsa.c:946:34: warning: 'ipmmu_of_ids' defined but not used [-Wunused-const-variable=]
+     946 | static const struct of_device_id ipmmu_of_ids[] = {
+         |                                  ^~~~~~~~~~~~
 
-struct clk_nkm_combo combos[]
 
-> +};
-> +
->  /*
->   * struct ccu_nkm - Definition of an N-K-M clock
->   *
+vim +/ipmmu_of_ids +946 drivers/iommu/ipmmu-vmsa.c
 
-Thanks,
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  945  
+33f3ac9b511612 Magnus Damm             2017-10-16 @946  static const struct of_device_id ipmmu_of_ids[] = {
+33f3ac9b511612 Magnus Damm             2017-10-16  947  	{
+33f3ac9b511612 Magnus Damm             2017-10-16  948  		.compatible = "renesas,ipmmu-vmsa",
+33f3ac9b511612 Magnus Damm             2017-10-16  949  		.data = &ipmmu_features_default,
+60fb0083c9d43b Fabrizio Castro         2018-08-23  950  	}, {
+60fb0083c9d43b Fabrizio Castro         2018-08-23  951  		.compatible = "renesas,ipmmu-r8a774a1",
+60fb0083c9d43b Fabrizio Castro         2018-08-23  952  		.data = &ipmmu_features_rcar_gen3,
+757f26a3a9ec2c Biju Das                2019-09-27  953  	}, {
+757f26a3a9ec2c Biju Das                2019-09-27  954  		.compatible = "renesas,ipmmu-r8a774b1",
+757f26a3a9ec2c Biju Das                2019-09-27  955  		.data = &ipmmu_features_rcar_gen3,
+b6d39cd82241bf Fabrizio Castro         2018-12-13  956  	}, {
+b6d39cd82241bf Fabrizio Castro         2018-12-13  957  		.compatible = "renesas,ipmmu-r8a774c0",
+b6d39cd82241bf Fabrizio Castro         2018-12-13  958  		.data = &ipmmu_features_rcar_gen3,
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  959  	}, {
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  960  		.compatible = "renesas,ipmmu-r8a774e1",
+4b2aa7a6f9b793 Marian-Cristian Rotariu 2020-07-14  961  		.data = &ipmmu_features_rcar_gen3,
+58b8e8bf409236 Magnus Damm             2017-10-16  962  	}, {
+58b8e8bf409236 Magnus Damm             2017-10-16  963  		.compatible = "renesas,ipmmu-r8a7795",
+0b8ac1409641e1 Magnus Damm             2018-06-14  964  		.data = &ipmmu_features_rcar_gen3,
+0b8ac1409641e1 Magnus Damm             2018-06-14  965  	}, {
+0b8ac1409641e1 Magnus Damm             2018-06-14  966  		.compatible = "renesas,ipmmu-r8a7796",
+0b8ac1409641e1 Magnus Damm             2018-06-14  967  		.data = &ipmmu_features_rcar_gen3,
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  968  	}, {
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  969  		.compatible = "renesas,ipmmu-r8a77961",
+17fe1618163980 Yoshihiro Shimoda       2020-06-11  970  		.data = &ipmmu_features_rcar_gen3,
+98dbffd39a6513 Jacopo Mondi            2018-06-14  971  	}, {
+98dbffd39a6513 Jacopo Mondi            2018-06-14  972  		.compatible = "renesas,ipmmu-r8a77965",
+98dbffd39a6513 Jacopo Mondi            2018-06-14  973  		.data = &ipmmu_features_rcar_gen3,
+3701c123e1c13c Simon Horman            2018-06-14  974  	}, {
+3701c123e1c13c Simon Horman            2018-06-14  975  		.compatible = "renesas,ipmmu-r8a77970",
+3701c123e1c13c Simon Horman            2018-06-14  976  		.data = &ipmmu_features_rcar_gen3,
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  977  	}, {
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  978  		.compatible = "renesas,ipmmu-r8a77980",
+1cdeb52e5c245b Nikita Yushchenko       2021-09-23  979  		.data = &ipmmu_features_rcar_gen3,
+b0c32912150565 Hai Nguyen Pham         2018-10-17  980  	}, {
+b0c32912150565 Hai Nguyen Pham         2018-10-17  981  		.compatible = "renesas,ipmmu-r8a77990",
+b0c32912150565 Hai Nguyen Pham         2018-10-17  982  		.data = &ipmmu_features_rcar_gen3,
+3701c123e1c13c Simon Horman            2018-06-14  983  	}, {
+3701c123e1c13c Simon Horman            2018-06-14  984  		.compatible = "renesas,ipmmu-r8a77995",
+3701c123e1c13c Simon Horman            2018-06-14  985  		.data = &ipmmu_features_rcar_gen3,
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  986  	}, {
+7a62ced8ebd0e1 Yoshihiro Shimoda       2021-09-07  987  		.compatible = "renesas,ipmmu-r8a779a0",
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  988  		.data = &ipmmu_features_rcar_gen4,
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  989  	}, {
+9f7d09fe23a011 Yoshihiro Shimoda       2022-06-17  990  		.compatible = "renesas,rcar-gen4-ipmmu-vmsa",
+ae684caf465b7d Yoshihiro Shimoda       2022-02-08  991  		.data = &ipmmu_features_rcar_gen4,
+33f3ac9b511612 Magnus Damm             2017-10-16  992  	}, {
+33f3ac9b511612 Magnus Damm             2017-10-16  993  		/* Terminator */
+33f3ac9b511612 Magnus Damm             2017-10-16  994  	},
+33f3ac9b511612 Magnus Damm             2017-10-16  995  };
+33f3ac9b511612 Magnus Damm             2017-10-16  996  
 
---=20
-Julian Calaby
+:::::: The code at line 946 was first introduced by commit
+:::::: 33f3ac9b511612153bae1d328b0c84c0367cd08d iommu/ipmmu-vmsa: Introduce features, break out alias
 
-Email: julian.calaby@gmail.com
-Profile: http://www.google.com/profiles/julian.calaby/
+:::::: TO: Magnus Damm <damm+renesas@opensource.se>
+:::::: CC: Alex Williamson <alex.williamson@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
