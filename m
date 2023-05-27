@@ -2,48 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16004713257
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F5C713258
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjE0D5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 23:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S229963AbjE0D5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 23:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbjE0D47 (ORCPT
+        with ESMTP id S231313AbjE0D47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 May 2023 23:56:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6C2125;
-        Fri, 26 May 2023 20:56:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC173A3;
+        Fri, 26 May 2023 20:56:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3145364D9F;
-        Sat, 27 May 2023 03:56:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2EA1C433A1;
-        Sat, 27 May 2023 03:56:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8120F64FF3;
+        Sat, 27 May 2023 03:56:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D7EC433D2;
+        Sat, 27 May 2023 03:56:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685159814;
-        bh=tWN64kIF0t+cA+oVEY5wveVh5FHe12E2Y8s9FFl8jdM=;
+        s=k20201202; t=1685159815;
+        bh=gYYuQfw+qiqjwRtGrHsitvZtkzNXkhUWtUh+q9gcwxg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XZv4H5uQs+n/Y0utWjXQHpZ96O0CFFgch7BEwWO5RE36bSXdn/fdKzeeWJObAR6OV
-         o+0nHaAmBiObru5rfNG/HN18qFvi0kuPjECQTTa5masleSq+Gvxj7wGG5KCep6QUtG
-         VZHyt9kveBf6od2uP5G6vpfTWY9eqax8SgzjrYq+ynGM/boWGkWzlRT9VEdP/wI7Vd
-         hqjJYYGzUjib2Zx+3Z4S6eQz1LD+unnuosh7YMnghZRPAb1DMGjafOaRRVSBTru4Eb
-         XmS/8gwN8gxAt+irBPqEmEPrrdd+4lRaRdt/2a8dhPVP1JVe13NLJXWdg0fk+AKHrK
-         K9RspCrR1ws3A==
+        b=f2DBWNKSxIxZy9UI2Acbi4FkUe5d2UWgCfNAG/gs1FYF/9109I/FYCwG9PS2kE1Ez
+         Y589NqoGj9y6oPBacA5S2UMRxWfiCZrzUA6GC51cfrdj4TNK+f+6B4QZmJW4tneypF
+         1gd+DZBLjbvzyy3GAwiCKym9TEI626lkn0k8PSPsWZYVevjuwIk0IK041PViSSMm3P
+         jWaTGy+6ALHNjNqsfC9sjs4rKS+w3+bCKMcR8yi6c9g/+pfp83sx1sHSeQ3MCZx+Cx
+         iH/JZFcLm8tciAcB/zFuENmflZm11gkVNgM4Hv4t54HXwS4Kb0L4XaptZGxeJAMAYu
+         X/8WG0Ghp8bxw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     bp@alien8.de, mchehab@kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     dmitry.baryshkov@linaro.org, james.morse@arm.com, rric@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-edac@vger.kernel.org
-Subject: Re: [PATCH v8 0/2] Fix crash when using Qcom LLCC/EDAC drivers
-Date:   Fri, 26 May 2023 21:00:36 -0700
-Message-Id: <168516003598.405989.12832976179577504012.b4-ty@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-clk@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Imran Shaik <quic_imrashai@quicinc.com>
+Subject: Re: (subset) [PATCH V2 0/3] Add graphics clock controller support for SM8550
+Date:   Fri, 26 May 2023 21:00:37 -0700
+Message-Id: <168516003598.405989.523653148468388499.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230517114635.76358-1-manivannan.sadhasivam@linaro.org>
-References: <20230517114635.76358-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20230524181800.28717-1-quic_jkona@quicinc.com>
+References: <20230524181800.28717-1-quic_jkona@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,23 +66,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 17:16:33 +0530, Manivannan Sadhasivam wrote:
-> This series fixes the crash seen on the Qualcomm SM8450 chipset with the
-> LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
-> fixed LLCC register offsets for detecting the LLCC errors.
+On Wed, 24 May 2023 23:47:57 +0530, Jagadeesh Kona wrote:
+> Add bindings, driver and devicetree node for graphics clock controller on SM8550.
 > 
-> This seems to have worked for SoCs till SM8450. But in SM8450, the LLCC
-> register offsets were changed. So accessing the fixed offsets causes the
-> crash on this platform.
+> Depends on [1] and [2] for PLL_TEST_CTL_U2 programming and SM8450 GPUCC YAML file
+> [1] https://patchwork.kernel.org/project/linux-clk/list/?series=750700
+> [2] https://patchwork.kernel.org/project/linux-clk/list/?series=748562
+> 
+> Jagadeesh Kona (3):
+>   dt-bindings: clock: qcom: Add SM8550 graphics clock controller
+>   clk: qcom: gpucc-sm8550: Add support for graphics clock controller
+>   arm64: dts: qcom: sm8550: Add graphics clock controller
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] EDAC/qcom: Remove superfluous return variable assignment in qcom_llcc_core_setup()
-      commit: 3d49f7406b5d9822c1411c6658bac2ae55ba19a2
-[2/2] EDAC/qcom: Get rid of hardcoded register offsets
-      commit: cbd77119b6355872cd308a60e99f9ca678435d15
+[3/3] arm64: dts: qcom: sm8550: Add graphics clock controller
+      commit: 9f7579423d2d619064dc84cfa8068e3c83b09e3f
 
 Best regards,
 -- 
