@@ -2,138 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8887133D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 11:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290F37133D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 11:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbjE0Jk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 05:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36898 "EHLO
+        id S230110AbjE0JpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 05:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbjE0JkZ (ORCPT
+        with ESMTP id S229706AbjE0Jo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 05:40:25 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC0418D;
-        Sat, 27 May 2023 02:40:23 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96f850b32caso305550666b.3;
-        Sat, 27 May 2023 02:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685180421; x=1687772421;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RnO2+f52DGNhkJXeV3dwSMun1/oWC09Jx7AM2r6DtMM=;
-        b=bhBfYdtLAdF6L9i7h/QEU4O1n2pyT0ratFM/0CCSnFZ+1ag/9kGSXIVWY+JPRlZuU6
-         8sIuzlmUqGslfpnquwD2dzgiThRbA8Ig20vFlcatq6xaS4ZX4kE329bJ55BLmNLCC4MQ
-         RW8UrzI16v/4RPahN1+UKDFtJgWDhX1a+cF3JXPGtacKP3CZBFoe1z9ndNv0JUzSfQfQ
-         yK/Cxt78lIf+81MyyQ92LhOZXhgcY8vn5c9ujmdvLgH2BFj9A2RCxwCIxC7oYAiDUlBc
-         OjyjtSTKQW76iDlejBV6SO0ER9PbS3dP8Gnn1DMGCeNeQTmn9CqJQTgYKA0N52wYRONI
-         Hxpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685180421; x=1687772421;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RnO2+f52DGNhkJXeV3dwSMun1/oWC09Jx7AM2r6DtMM=;
-        b=bMFVsNxC3txMIfjv1Dyto5ByyPWGf8HdZ1TrhXP2+SgA4p9LhxjXcTDIocWGtON5KE
-         ZM/OskFDMXCFDI6ED8WzHbTUr77BAoyP5g8cjYncDy97jvFDuv4O6a5NscuEUDeH6NEm
-         sQpiV0Aq8tYx53jJ5o8beo3dJgEpqVj/DJ0KRS5oCd9m6aJQJqseWS3uvNL1jI2l2hgB
-         5AF06I2YltN2D1qjweKImYbJ9OZZdGjurz2FpTIn+4dLlYubFs8+rxT/oNAKA146ptYP
-         U7a0CPBkrI46d39PtW7zLiZhxC5lSAxOpVyTQLhuSMfxCJGysrHW2LDTDkdrQFvO9nTb
-         rP8g==
-X-Gm-Message-State: AC+VfDz45CRyRy3O1oup4RddHKehOcWF+puJrT7CVKzjpWoMZP5eLBvd
-        Y4tAGZ3GIyDbMOeIoEHbptE=
-X-Google-Smtp-Source: ACHHUZ75m2h7jCFKbjxh54OtTIyPOiFEaOUI6ExlmRmORTaiabRV2QhaoiuLmbLCXbW9uA5/5Vfziw==
-X-Received: by 2002:a17:907:9289:b0:966:63ac:3706 with SMTP id bw9-20020a170907928900b0096663ac3706mr4018706ejc.26.1685180421286;
-        Sat, 27 May 2023 02:40:21 -0700 (PDT)
-Received: from localhost.localdomain ([95.183.227.33])
-        by smtp.gmail.com with ESMTPSA id kq12-20020a170906abcc00b009596e7e0dbasm3163623ejb.162.2023.05.27.02.40.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 02:40:20 -0700 (PDT)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] clk: qcom: cbf-msm8996: Add support for MSM8996 Pro
-Date:   Sat, 27 May 2023 12:39:34 +0300
-Message-Id: <20230527093934.101335-4-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230527093934.101335-1-y.oudjana@protonmail.com>
-References: <20230527093934.101335-1-y.oudjana@protonmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 27 May 2023 05:44:58 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9A4DF
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 02:44:56 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 11A2932005CA;
+        Sat, 27 May 2023 05:44:56 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 27 May 2023 05:44:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1685180695; x=1685267095; bh=nvA2vDZl2SPGXHo2WcXVIlS7D8yrJkcG6w5
+        G5u7QuH0=; b=xKiKoalyfPGPXoBmx++UjYO72Wv8YBGJDNP3t7VUVI3GwCc5fyu
+        wSJPYhmeAbNj6Pz/oVQxdZSqWeuHh3J5kwJ6l4T8ssAgCXey1vkoVYznEdg5JVGh
+        M0rI2HVhOME+gX/w5xrhdikIYICSZSuIP27pT0IVzs4yJ7+Abk1u1/wwrtwKtY3x
+        z/uiYv9Sz1T/rOgeRNSamkNC449Jmn9XZlBlpsdOVgEE2j2MG71Ed14OmchRYxi5
+        AVp+OBP0qKFJx4vOUzLoYpY4wHCJNz6drlBofVDyydA82WephYl0LmuiRT1pzHDT
+        z9oIpNhX+SXCToE29N+iu5likvnfwZHvy2w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1685180695; x=1685267095; bh=nvA2vDZl2SPGXHo2WcXVIlS7D8yrJkcG6w5
+        G5u7QuH0=; b=LBBICecVPWl7kqAfIpN1WToWoH37RE50Ef3U54SZaY119uBVudT
+        AbLPCFmflByUyP2/ux1N3QfS3tBpvttvFbzPc2Numba/SjPI8PnLpme9MBhr6bPZ
+        XviGHTdedsIAdZYcXAVh7fzxQmUijhZmVfDoymaCirHEyLzimAF8QWazO9OkQR6N
+        HJ6CtMZZKCNa3f3ACzc6lZLkcxjuL8uybhvAQCf41zXKSbPfvcGCM23aD8fACQ3E
+        lZprxKOdR1FYyfy7O34GlYJfSsV/0GLjWwMAMLHIrs9uhyzGaa0zmtQJN1wFCZPn
+        DZrIKgfi1fTk5LZc3CTGckFSvbUBcUndCOA==
+X-ME-Sender: <xms:F9FxZJKi66mIyp4kv4fjd7iL-bNP3Gres_4Iz8rzkwXWCNGblbN1SQ>
+    <xme:F9FxZFKA8c_QbaAzpR2PzCU8c1UjccdtUfSTsSL6p7hZyyZbxcdSco7UBXIDiNvsv
+    8Ld2jT2m3rU78xGOaI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekuddgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:F9FxZBunFeJ1WU4vkWBYGwx_SPzNJoNJAFw0Lti7-l6ur9S0DR_FPg>
+    <xmx:F9FxZKbUIXOeTTZa8-0yrSH3hzEDXD3aZn0cQRabIYrk4Bx5YBoUBw>
+    <xmx:F9FxZAZzwKOxodnInd1NOAlkgM13NNJR81G5j_XvkIFyXowJYD-ybA>
+    <xmx:F9FxZLyOxMvDJYGZPdaDhh7jAoRLJLzQDdwfQ-iEVfi0hvPTZm-q3g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6B357B60086; Sat, 27 May 2023 05:44:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <b1435818-2cba-4270-9933-282029f5449c@app.fastmail.com>
+In-Reply-To: <20230527005539.5b06df24@mocarz>
+References: <20220605224347.481e2fb4@mocarz> <20230527005539.5b06df24@mocarz>
+Date:   Sat, 27 May 2023 11:44:35 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Aleksander Mazur" <deweloper@wp.pl>,
+        "Sergey Senozhatsky" <senozhatsky@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, "Jiri Olsa" <jolsa@kernel.org>
+Subject: Re: [PATCH] /proc/modules: honor kptr_restrict even without CONFIG_KALLSYMS
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yassine Oudjana <y.oudjana@protonmail.com>
+On Sat, May 27, 2023, at 00:55, Aleksander Mazur wrote:
+> Have you had a chance to review my patch?
 
-The CBF PLL on MSM8996 Pro has a /4 post divisor instead of /2. Handle the
-difference accordingly.
+I don't seem to have the original submission from you.
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
----
- drivers/clk/qcom/clk-cbf-8996.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> Dnia 2022-06-05, o godz. 22:43:47
+> Aleksander Mazur <deweloper@wp.pl> napisa=C5=82(a):
+>
+>> Commit e4a8ca3baa55 fixed building without CONFIG_KALLSYMS by providi=
+ng
+>> dummy kallsyms_show_value(). Unfortunately -- due to hard-coded "fals=
+e"
+>> being returned -- access to addresses in /proc/modules became permane=
+ntly
+>> disabled.
+>>=20
+>> My proposal is to change this unconditional "false" to !kptr_restrict.
+>> This re-enables addresses in /proc/modules even without CONFIG_KALLSY=
+SMS
+>> unless restricted by means of sysctl (kernel.kptr_restrict).
 
-diff --git a/drivers/clk/qcom/clk-cbf-8996.c b/drivers/clk/qcom/clk-cbf-8996.c
-index cfd567636f4e..ab988e6f1976 100644
---- a/drivers/clk/qcom/clk-cbf-8996.c
-+++ b/drivers/clk/qcom/clk-cbf-8996.c
-@@ -48,7 +48,7 @@ static const u8 cbf_pll_regs[PLL_OFF_MAX_REGS] = {
- 	[PLL_OFF_STATUS] = 0x28,
- };
- 
--static const struct alpha_pll_config cbfpll_config = {
-+static struct alpha_pll_config cbfpll_config = {
- 	.l = 72,
- 	.config_ctl_val = 0x200d4828,
- 	.config_ctl_hi_val = 0x006,
-@@ -137,7 +137,7 @@ static int clk_cbf_8996_mux_determine_rate(struct clk_hw *hw,
- {
- 	struct clk_hw *parent;
- 
--	if (req->rate < (DIV_THRESHOLD / 2))
-+	if (req->rate < (DIV_THRESHOLD / cbf_pll_postdiv.div))
- 		return -EINVAL;
- 
- 	if (req->rate < DIV_THRESHOLD)
-@@ -265,6 +265,11 @@ static int qcom_msm8996_cbf_probe(struct platform_device *pdev)
- 	/* Switch CBF to use the primary PLL */
- 	regmap_update_bits(regmap, CBF_MUX_OFFSET, CBF_MUX_PARENT_MASK, 0x1);
- 
-+	if (of_device_is_compatible(dev->of_node, "qcom,msm8996pro-cbf")) {
-+		cbfpll_config.post_div_val = 0x3 << 8;
-+		cbf_pll_postdiv.div = 4;
-+	}
-+
- 	for (i = 0; i < ARRAY_SIZE(cbf_msm8996_hw_clks); i++) {
- 		ret = devm_clk_hw_register(dev, cbf_msm8996_hw_clks[i]);
- 		if (ret)
-@@ -286,6 +291,7 @@ static int qcom_msm8996_cbf_probe(struct platform_device *pdev)
- 
- static const struct of_device_id qcom_msm8996_cbf_match_table[] = {
- 	{ .compatible = "qcom,msm8996-cbf" },
-+	{ .compatible = "qcom,msm8996pro-cbf" },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, qcom_msm8996_cbf_match_table);
--- 
-2.40.1
+I just looked at the original 516fb7f2e73dc ("/proc/module: use the
+same logic as /proc/kallsyms for address exposure") commit again,
+the intention here was to use the same logic for /proc/modules
+and /proc/kallsyms.
 
+I agree that this means my patch went too far, but I'm not sure
+about yours either. Maybe we can just move kallsyms_show_value()
+into a different location that is always built and rename it
+accordingly. Then it can be used by both kallsyms and /proc/modules
+regardless of which combination of these two is enabled in the
+kernel.
+
+     Arnd
