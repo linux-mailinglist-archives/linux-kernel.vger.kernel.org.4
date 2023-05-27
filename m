@@ -2,134 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FF171368A
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 23:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251A471368E
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 23:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjE0VmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 17:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
+        id S229473AbjE0Vsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 17:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjE0VmK (ORCPT
+        with ESMTP id S229437AbjE0Vsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 17:42:10 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BA8A4;
-        Sat, 27 May 2023 14:42:07 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 2924C5FD05;
-        Sun, 28 May 2023 00:42:05 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685223725;
-        bh=zmU0QPWcuI+QjTo74SKplYsoabitGqIxBH6oJBP+2UI=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=ii5NBgjz5NCk3QYnd2XdVMDVL6kZ53KILjsmPugDyLRoprEttMOv6gmr2LseMaeAY
-         eCuu8egj1AcY0RveOi6Rs9rJilsZSJ5i0btJLya7qM4h2yfdgywrfY3K5xG4dIHyVE
-         8x2OOxuNv6DO/0yStBGO3LznGm5HwuTX1Qa5pdU9l8XGCQnE79ykhmxj+4FqR4ZO2W
-         7uTFgRuWSPR7DFboyr0vse+vpj6/XMZnlIeyUXncQmt3L6ipQ9hfFrN8Nn0uGpwRdR
-         sa6Mmmh92412MAUgNWclaYxpDroq4gPobK9W8axF+W6wecsJkN3w8uAKvPBpUNlTjC
-         cDRpkZvFbeduA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Sun, 28 May 2023 00:42:00 +0300 (MSK)
-Message-ID: <7485514e-4c10-361a-6468-050a5897f0d5@sberdevices.ru>
-Date:   Sun, 28 May 2023 00:37:49 +0300
+        Sat, 27 May 2023 17:48:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FCFD8;
+        Sat, 27 May 2023 14:48:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC50761163;
+        Sat, 27 May 2023 21:48:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39E65C4339E;
+        Sat, 27 May 2023 21:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685224123;
+        bh=Vm5/RmUcnEK73zeR+XV3P+M+ZQNPsr35kUTRoGQH2Ak=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IlRR9K/iSeiwMxZsnkKtAKw+FzR8F640PZNRtZy4jL2z8G/LQxeUKTZZulxRs5pwb
+         vzHJP2IAivX7dq6e9dhIttasrfBUJSSyQWmLAg9dAO1y0OQxh2oNxwFcj7o0sjkzqM
+         cTq5roEB18oDJURqIhgIGZF934TMnZoNcHzo1y8HukJ6nhUQQauwg9Zu/hMCExfG75
+         Q3kPVMR8yBhX4Uw7bHwbmJaBCdZl4iB1yezgggdCU4fWg7mwxuHXt+MLc5Tn2gQZfF
+         CwgZEjnLYrgCzZmz5bsynQeirqOJlIu547xVJ4ohsFRrqr7r6y7DryfyUqcsGyJIa/
+         sEl7eXRxr/mNg==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f3bb395e69so2233671e87.2;
+        Sat, 27 May 2023 14:48:43 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzltJ1BxzKKByr6fMfBr47+YEN6DfT0BwqsY+v6AAwr8HTOfw33
+        UczWlYmA/SHYIj/solPwcM5Z7h+3bo3nTGNbAyw=
+X-Google-Smtp-Source: ACHHUZ4x5V1PwRYsguEGtRU0AgtCFOOulS6BqdKB3dehXOgv8BjOWtkUPXfmDjBOd9nnthkV717fKxGD8IYMxB+9cNA=
+X-Received: by 2002:ac2:551b:0:b0:4f3:bbb2:c185 with SMTP id
+ j27-20020ac2551b000000b004f3bbb2c185mr2162804lfk.3.1685224121168; Sat, 27 May
+ 2023 14:48:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1] meson saradc: add iio device attrib to switch channel
- 7 mux
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
-        "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "nuno.sa@analog.com" <nuno.sa@analog.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>, kernel <kernel@sberdevices.ru>
-References: <20230524000111.14370-1-gnstark@sberdevices.ru>
- <ZHG9bYO1PNuPJhWn@smile.fi.intel.com>
-From:   George Stark <gnstark@sberdevices.ru>
-In-Reply-To: <ZHG9bYO1PNuPJhWn@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/27 20:13:00 #21359908
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <efd6f2d4-547c-1378-1faa-53c044dbd297@gmail.com>
+ <CAG8fp8SaHi0X-tZHnji_93wBADp1_=brjauWCVXuLaG7iP0p=A@mail.gmail.com>
+ <CAG8fp8QXoEkndCzyaYZmg6+ZrszKOfh_YSi0o2_weV7y1_xYkQ@mail.gmail.com>
+ <CAMj1kXGjkKK-oHm64Y9P-AbYQWd9jnEdsNucRbY_-7mgJ_4yAA@mail.gmail.com>
+ <CAG8fp8ReYLaNYO9LYE1WeeSDg1pO1hz3f-8_WPZkLVWbzzyCvg@mail.gmail.com>
+ <CAMj1kXEGTJufrrcrqjjKqeR-FN+nLsbzx8xGgO+gPfc2YPsy2w@mail.gmail.com> <CAHk-=whKJoDVuUNhf3U7gPXKu4EeZRv-iwwhL0prQ=U3n8PHiw@mail.gmail.com>
+In-Reply-To: <CAHk-=whKJoDVuUNhf3U7gPXKu4EeZRv-iwwhL0prQ=U3n8PHiw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 27 May 2023 23:48:29 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHmRYkmJyfW5+B74dPyA1+yHvt9majpZ9Ut1p0i8zM+DA@mail.gmail.com>
+Message-ID: <CAMj1kXHmRYkmJyfW5+B74dPyA1+yHvt9majpZ9Ut1p0i8zM+DA@mail.gmail.com>
+Subject: Re: mix of ACPICA regression and EFISTUB regression (Was: kernel >=
+ v6.2 no longer boots on Apple's Virtualization.framework (x86_64); likely to
+ be related to ACPICA)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Akihiro Suda <suda.kyoto@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        linux-efi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux x86 <x86@kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux ACPICA <acpica-devel@lists.linuxfoundation.org>,
+        Linux Stable <stable@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Robert Moore <robert.moore@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy
+On Sat, 27 May 2023 at 21:40, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Sat, May 27, 2023 at 11:42=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org>=
+ wrote:
+> >
+> > Yes, that makes the most sense. If the existing virtual machine BIOS
+> > has a hardcoded check that the EFI stub version is 1.0 even if it does
+> > not boot via EFI to begin with, I don't see how we can reasonably
+> > treat this as a regression that needs fixing on the Linux side.
+>
+> Well, we consider firmware issues to be the same as any hardware
+> issue. If firmware has a bug that requires us to do things certain
+> ways, that's really no different from hardware that requires some
+> insane init sequence.
+>
+> So why not just say that LINUX_EFISTUB_MINOR_VERSION should be 0, and
+> just add the comment that versioning doesn't work?
+>
 
-Thanks for review. I fixed it in patch v2
+Fair enough. Or we could try bumping it from v1.1 to v2.0 (or v3.0 if
+we make it a bit mask).
 
-Best regards
-George
+Akihiro, would you mind checking if changing the major/minor to any of
+these values results in the same problem?
 
+Unfortunately, the only data point we have is that a non-EFI
+bootloader (which is unlikely to carry a PE/COFF loader) needs the
+byte at that specific offset to be 0x0, and we really have no idea
+why, or whether we could hit this in other ways (i.e., by changing the
+PE/COFF header to comply with new MS requirements for secure boot,
+which is another thing that is in progress)
 
-On 5/27/23 11:21, Andy Shevchenko wrote:
-> On Wed, May 24, 2023 at 03:01:11AM +0300, George Stark wrote:
->> Patch adds two sysfs nodes: chan7_mux to set mux state
->> and chan7_mux_available to show available mux states.
->> Mux can be used to debug and calibrate adc by
->> switching and measuring well-known inputs like gnd, vdd etc.
-> GND
-> Vdd
+> I'm not sure why this was tied into always enabling the initrd command
+> line loader.
 >
-> ...
->
->> +static ssize_t chan7_mux_store(struct device *dev,
->> +			       struct device_attribute *attr,
->> +			       const char *buf, size_t count)
->> +{
->> +	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
->> +	int i;
->> +
->> +	for (i = 0; i < ARRAY_SIZE(chan7_vol); i++)
->> +		if (!strcmp(chan7_vol[i], buf)) {
->> +			meson_sar_adc_set_chan7_mux(indio_dev, i);
->> +			return count;
->> +		}
->> +
->> +	return -EINVAL;
-> NIH sysfs_match_string().
->
->> +}
-> ...
->
->> +static IIO_DEVICE_ATTR_RW(chan7_mux, -1);
->> +static IIO_DEVICE_ATTR_RO(chan7_mux_available, -1);
-> Place each of them near to the respective callback(s),
->
-> ...
->
->> +static struct attribute *meson_sar_adc_attrs[] = {
->> +	&iio_dev_attr_chan7_mux_available.dev_attr.attr,
->> +	&iio_dev_attr_chan7_mux.dev_attr.attr,
->> +	NULL,
-> No comma for the terminator entry.
->
->> +};
 
+For x86, it doesn't actually make a difference, but on other
+architectures, the command line initrd=3D loader could be disabled, but
+that possibility was removed. The idea was that by bumping the version
+to v1.1 at the same time, generic EFI loaders would be able to
+identify this capability without arch specific conditionals in the
+logic.
 
+Currently, GRUB and systemd-stub check this version field, but only
+for v1.0 or higher. Upstream GRUB  switched to this generic version of
+the EFI loader just this week, but does not actually use initrd=3D at
+all for EFI boot (on any architecture).
+
+> Numbered version checks are a fundamentally broken and stupid concept
+> anyway. Don't do them. Just leave it at zero, and maybe some day there
+> is a sane model that actually has a bitfield of capabilities and
+> requirements.
+>
+
+Yeah, maybe you're right. Currently, only a single feature is tied to
+LINUX_EFISTUB_MAJOR_VERSION=3D=3D1 (LoadFile2 support for initrd loading),
+and this PE/COFF version field has no meaning to UEFI firmware itself,
+so we could simply treat these fields as bit masks if we wanted to
+(and setting the initrd command line loader bit for x86 would be
+redundant anyway)
+
+But not being able to freely set such a bit because some rarely used
+non-EFI BIOS implementation imposes requirements on the contents of
+the EFI specific image header is rather disappointing.
