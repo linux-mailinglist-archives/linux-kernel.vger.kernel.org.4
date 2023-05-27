@@ -2,115 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A4A713389
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 10:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2387F71338D
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 10:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbjE0IyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 04:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        id S229678AbjE0I6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 04:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjE0IyO (ORCPT
+        with ESMTP id S231842AbjE0I6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 04:54:14 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683A8124;
-        Sat, 27 May 2023 01:54:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685177653; x=1716713653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ktI2GnKQXBYUpJgyqu0yKmTKYiR+/wbaze1GTqEtbk8=;
-  b=WyidlPJa1SYObJpyTZY10Q4Pe5gORZdzSiXbJzyEbkgxdPu/xPK6V30V
-   gxh5lklQbkQROrM0V9MCsuF4E9eO+FVqIgib0E5EfdeYEDSl9jFcgdETJ
-   /2mFler00w0FhF7gTQBKt3KwolLP/bxcMcbRrHA8exYGkjZEyQdiBhrKt
-   EKhofFmhXLiJJBbuA7AmP/89yy1wZtkFFY68JyhZlTSz+fM5ogG+0qt1J
-   uykebhtq9NzIX8wqIxxWkWBZsgJinb7OLO3LePYykg4fCN6doXg0/3RVi
-   74yjxtpIF7wdSwJVbOIjaro5AVA7M37YhCZgtp4+z5+x0sAaMBS0pZiK5
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="382629538"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="382629538"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 01:54:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="736262786"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="736262786"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 27 May 2023 01:54:10 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q2pgf-000Irv-0Y;
-        Sat, 27 May 2023 11:54:09 +0300
-Date:   Sat, 27 May 2023 11:54:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] leds: simatic-ipc-leds-gpio: add terminating
- entries to gpio tables
-Message-ID: <ZHHFMPEYNz9jBBRd@smile.fi.intel.com>
-References: <20230524124628.32295-1-henning.schild@siemens.com>
- <20230524124628.32295-2-henning.schild@siemens.com>
+        Sat, 27 May 2023 04:58:19 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C38F124;
+        Sat, 27 May 2023 01:58:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=n+GV4mqY5PO+y28Ga5UeEH8byUiW40IwwmGZjwfXm+M=; b=nb/z7hsbJk8kAEklUDOiq/iL0V
+        RPG36Y70bR/6WrqZkjDW7edEuJUwpqjPs+gD0lWnZmq5iZ6QSPAJRSqklWI95lI2vkyqrDGI2zZV1
+        pQBlrVvCzG2QQNlA5/t+5MKju2OlAb/JaPulDZttSfBkO4Xkema7KUHEuGEZrqXUOCG7MqGK6QVFi
+        TZJA5AX+DT/D94t9Zw5yRbYfViFU+bZatM5cMPLAYYO3k7zhWR65Rgu1kZdHy+gpUnF5GQxR6R1fW
+        DSWHWSlpSqKy5WCeW9ZEfUw6HPvlkgsosphEVATePAqJ7PIdV0BPyYRb1ZpdrxhAKH8d6EfuwufXK
+        x8AgAkyA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q2pkF-003i7k-HP; Sat, 27 May 2023 08:57:51 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 76B21300155;
+        Sat, 27 May 2023 10:57:49 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2BD47212FC843; Sat, 27 May 2023 10:57:49 +0200 (CEST)
+Date:   Sat, 27 May 2023 10:57:49 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de
+Subject: Re: [PATCH v2 1/2] locking: Introduce __cleanup__ based guards
+Message-ID: <20230527085749.GA35187@hirez.programming.kicks-ass.net>
+References: <20230526205204.861311518@infradead.org>
+ <20230526205855.587341916@infradead.org>
+ <20230526212454.GB4057254@hirez.programming.kicks-ass.net>
+ <CAHk-=wgt=cq_fU33DCv0=xD30sH8eOGHsEQRJQi=2vtrWt7oPQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230524124628.32295-2-henning.schild@siemens.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wgt=cq_fU33DCv0=xD30sH8eOGHsEQRJQi=2vtrWt7oPQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 02:46:25PM +0200, Henning Schild wrote:
-> The entries do not seem to be stricly needed when the number of entries
-> is given via the number of LEDs. But adding them is a safeguard should
-> anyone ever iterate over the tables to their end, it also gets us in
-> line with other drivers that register "leds-gpio" tables.
-
-Reported-by?
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> ---
->  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
->  1 file changed, 2 insertions(+)
+On Fri, May 26, 2023 at 02:54:40PM -0700, Linus Torvalds wrote:
+> What's wrong with just writing it out:
 > 
-> diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio.c b/drivers/leds/simple/simatic-ipc-leds-gpio.c
-> index e8d329b5a68c..1a1cfdad6218 100644
-> --- a/drivers/leds/simple/simatic-ipc-leds-gpio.c
-> +++ b/drivers/leds/simple/simatic-ipc-leds-gpio.c
-> @@ -28,6 +28,7 @@ static struct gpiod_lookup_table simatic_ipc_led_gpio_table_127e = {
->  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 51, NULL, 5, GPIO_ACTIVE_LOW),
->  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 56, NULL, 6, GPIO_ACTIVE_LOW),
->  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 59, NULL, 7, GPIO_ACTIVE_HIGH),
-> +		{} /* Terminating entry */
->  	},
->  };
->  
-> @@ -42,6 +43,7 @@ static struct gpiod_lookup_table simatic_ipc_led_gpio_table_227g = {
->  		GPIO_LOOKUP_IDX("gpio-f7188x-2", 5, NULL, 5, GPIO_ACTIVE_LOW),
->  		GPIO_LOOKUP_IDX("gpio-f7188x-3", 6, NULL, 6, GPIO_ACTIVE_HIGH),
->  		GPIO_LOOKUP_IDX("gpio-f7188x-3", 7, NULL, 7, GPIO_ACTIVE_HIGH),
-> +		{} /* Terminating entry */
->  	}
->  };
->  
-> -- 
-> 2.39.3
+>     typedef struct fd guard_fdget_type_t;
+>     static inline struct fd guard_fdget_init(int fd)
+>     { return fdget(fd); }
+>     static inline void guard_fdget_exit(struct fd fd)
+>     { fdput(fd); }
 > 
 
--- 
-With Best Regards,
-Andy Shevchenko
+(wrong guard type, ptr_guard vs lock_guard) but yeah, I had this same
+realization during breakfast. Clearly the brain had already left last
+night.
 
+Specifically, I think we want ptr_guard() here (and possibly fdnull for
+__to_fd(0)) for things like do_sendfile() where a struct fd is
+initialized late.
 
+The below seems to compile...
+
+--- a/include/linux/file.h
++++ b/include/linux/file.h
+@@ -10,6 +10,7 @@
+ #include <linux/types.h>
+ #include <linux/posix_types.h>
+ #include <linux/errno.h>
++#include <linux/guards.h>
+ 
+ struct file;
+ 
+@@ -45,6 +46,13 @@ static inline void fdput(struct fd fd)
+ 		fput(fd.file);
+ }
+ 
++typedef struct fd ptr_guard_fdput_t;
++
++static inline void ptr_guard_fdput_cleanup(struct fd *fdp)
++{
++	fdput(*fdp);
++}
++
+ extern struct file *fget(unsigned int fd);
+ extern struct file *fget_raw(unsigned int fd);
+ extern struct file *fget_task(struct task_struct *task, unsigned int fd);
+@@ -58,6 +66,8 @@ static inline struct fd __to_fd(unsigned
+ 	return (struct fd){(struct file *)(v & ~3),v & 3};
+ }
+ 
++#define fdnull	__to_fd(0)
++
+ static inline struct fd fdget(unsigned int fd)
+ {
+ 	return __to_fd(__fdget(fd));
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -1180,7 +1180,8 @@ COMPAT_SYSCALL_DEFINE6(pwritev2, compat_ulong_t, fd,
+ static ssize_t do_sendfile(int out_fd, int in_fd, loff_t *ppos,
+ 		  	   size_t count, loff_t max)
+ {
+-	struct fd in, out;
++	ptr_guard(fdput, in) = fdnull;
++	ptr_guard(fdput, out) = fdnull;
+ 	struct inode *in_inode, *out_inode;
+ 	struct pipe_inode_info *opipe;
+ 	loff_t pos;
+@@ -1191,35 +1192,35 @@ static ssize_t do_sendfile(int out_fd, int in_fd, loff_t *ppos,
+ 	/*
+ 	 * Get input file, and verify that it is ok..
+ 	 */
+-	retval = -EBADF;
+ 	in = fdget(in_fd);
+ 	if (!in.file)
+-		goto out;
++		return -EBADF;
+ 	if (!(in.file->f_mode & FMODE_READ))
+-		goto fput_in;
+-	retval = -ESPIPE;
++		return -EBADF;
++
+ 	if (!ppos) {
+ 		pos = in.file->f_pos;
+ 	} else {
+ 		pos = *ppos;
+ 		if (!(in.file->f_mode & FMODE_PREAD))
+-			goto fput_in;
++			return -ESPIPE;
+ 	}
++
+ 	retval = rw_verify_area(READ, in.file, &pos, count);
+ 	if (retval < 0)
+-		goto fput_in;
++		return retval;
+ 	if (count > MAX_RW_COUNT)
+ 		count =  MAX_RW_COUNT;
+ 
+ 	/*
+ 	 * Get output file, and verify that it is ok..
+ 	 */
+-	retval = -EBADF;
+ 	out = fdget(out_fd);
+ 	if (!out.file)
+-		goto fput_in;
++		return -EBADF;
+ 	if (!(out.file->f_mode & FMODE_WRITE))
+-		goto fput_out;
++		return -EBADF;
++
+ 	in_inode = file_inode(in.file);
+ 	out_inode = file_inode(out.file);
+ 	out_pos = out.file->f_pos;
+@@ -1228,9 +1229,8 @@ static ssize_t do_sendfile(int out_fd, int in_fd, loff_t *ppos,
+ 		max = min(in_inode->i_sb->s_maxbytes, out_inode->i_sb->s_maxbytes);
+ 
+ 	if (unlikely(pos + count > max)) {
+-		retval = -EOVERFLOW;
+ 		if (pos >= max)
+-			goto fput_out;
++			return -EOVERFLOW;
+ 		count = max - pos;
+ 	}
+ 
+@@ -1249,7 +1249,7 @@ static ssize_t do_sendfile(int out_fd, int in_fd, loff_t *ppos,
+ 	if (!opipe) {
+ 		retval = rw_verify_area(WRITE, out.file, &out_pos, count);
+ 		if (retval < 0)
+-			goto fput_out;
++			return retval;
+ 		file_start_write(out.file);
+ 		retval = do_splice_direct(in.file, &pos, out.file, &out_pos,
+ 					  count, fl);
+@@ -1278,11 +1278,6 @@ static ssize_t do_sendfile(int out_fd, int in_fd, loff_t *ppos,
+ 	if (pos > max)
+ 		retval = -EOVERFLOW;
+ 
+-fput_out:
+-	fdput(out);
+-fput_in:
+-	fdput(in);
+-out:
+ 	return retval;
+ }
+ 
