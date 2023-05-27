@@ -2,419 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9238713376
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 10:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFF971337A
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 10:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjE0IpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 04:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        id S231592AbjE0IuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 04:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjE0IpT (ORCPT
+        with ESMTP id S229649AbjE0IuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 04:45:19 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC3DE3
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 01:45:18 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1afeec98a00so14552815ad.3
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 01:45:18 -0700 (PDT)
+        Sat, 27 May 2023 04:50:12 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF82EA;
+        Sat, 27 May 2023 01:50:09 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2af225e5b4bso15398981fa.3;
+        Sat, 27 May 2023 01:50:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685177117; x=1687769117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SxfTUXbnWmBRUc886FyVC6jPZyTD4gw8D2EeLiltj74=;
-        b=rJJNGoleoEj4PF5ihl8SaikjG59QvyBzhIRHpmVQWAhl9tdzQh8lMm0wkZBsd48a8P
-         vgewPCcX5+b4QgBKeW8i9ke/qfOqg54NIdcCp0zNjLk0KUgmuy54Q8WLzwjDQwK/vygd
-         nZswWRguk6aDwUg/MvvLw5/vmIMVmqDMFM17XVoOoHyAoSvXlqMQaXm7KbwhAIZ0N9el
-         TwZpkOXbljCc7meg5ZBP44Y7wP5bDJFs/8XyQFJez2i8gAODGce8wQnN+QUswlZKoJ/e
-         xsMpkidkH0MupFHE1bfsfFTB//GcLmhN+CU/t5DGjbr5NCMEAuRS6XIPNNLi2NUdQ6Zr
-         Oqfg==
+        d=gmail.com; s=20221208; t=1685177408; x=1687769408;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yp3RI4Ymku1/YTl+AMFgKSN+8aZ0zpxNMENvg1UhqjA=;
+        b=Ptt7JTiP4ZPv/1u0OMFVreaqBUiUkHNLIfEaJu7PkbNYH4ikhlYdpbxoH/NKBHdctE
+         CicAamTd0e4BcN+ze9KnxX6/ij6ipLLjFQc2I2HiBPBH+KhbTMljB+NefVJbK2HB32j1
+         4cc99aykBdTTklzs3OQlYZWUgdKEkssEL7bkxqEcTMHxC8E8DSNgNj4MBOGyvZoXIlSU
+         JIpnihend08kga4/RhGGRfRJtl0BdAjbnpuiGkl5qIgBuFq/eUFCtx2FqsUAbb0WwvMW
+         1iR7kfbLTgH3D7Pq8+lB/BQjjKuI1aDFXkWekYsM9MFx8e3xxB3Crl65oYlAewknLAve
+         +xNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685177117; x=1687769117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SxfTUXbnWmBRUc886FyVC6jPZyTD4gw8D2EeLiltj74=;
-        b=QEw4s9INltYGzEvRzlbYjWugYdPdInAroz61fEoC3F9Fx3Yj7zi3RXRRPXzwwunjCu
-         VS4dg5lmcZPEyiwAOjN9eGLbVq+664YSwIkYzU5DVixN64VUjzw7DFtzr8jgxC+PYBDC
-         u+SH4AKaZHqlW68xZi8zYq4tJKSp+7z29PujRsZZutqK0CPENqxqlss7+V49F5giu98e
-         VVAa4VpUxQT5wspsXtKOkAyZKK9FjB9naKkhwY3oyXROJ+GgOeU5kzjgrns5zH88zeA5
-         wBARLEfOhX4MFqKfmNCocFDBtIoAmEmXHp6oyS1BsuMYmqAn8+/XuVMUtBBm3m9aGD/l
-         h9Yw==
-X-Gm-Message-State: AC+VfDwdT2eUpMOJ79SJBpZT9uxZRplMAhpy3Rpb/IQq27yRY1WIkEUa
-        pViQQ6TUncC3vhJFqqiYuGYy3A==
-X-Google-Smtp-Source: ACHHUZ7PpiRCFC4cLVG7ZqBupOFxy0aKx+ktwgz6NXV5xlsp7a59vvro9tDIzg9pfAn04G0vjwNLFg==
-X-Received: by 2002:a17:902:f68e:b0:1b0:2658:db20 with SMTP id l14-20020a170902f68e00b001b02658db20mr1996760plg.53.1685177117367;
-        Sat, 27 May 2023 01:45:17 -0700 (PDT)
-Received: from leoy-yangtze.lan ([107.151.177.126])
-        by smtp.gmail.com with ESMTPSA id a2-20020a170902ecc200b001adfe981c77sm4432877plh.285.2023.05.27.01.45.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 01:45:16 -0700 (PDT)
-Date:   Sat, 27 May 2023 16:45:06 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org, denik@chromium.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] perf cs-etm: Only track threads instead of PID and
- TIDs
-Message-ID: <20230527084506.GA886420@leoy-yangtze.lan>
-References: <20230524131958.2139331-1-james.clark@arm.com>
- <20230524131958.2139331-2-james.clark@arm.com>
+        d=1e100.net; s=20221208; t=1685177408; x=1687769408;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yp3RI4Ymku1/YTl+AMFgKSN+8aZ0zpxNMENvg1UhqjA=;
+        b=c3OdZl+z7MV6GlehMLHIRIdV4q7I+IYe7AuztaioRzXtFrPkDfcIvLNUN/zNQ1iH0a
+         uj1XwMl5ymT3B2fGSRHz0RYhKzvjrkW0PomWQsi31Uke+UubPUVkTHXboUwYMwaJF+YA
+         TB3aTYiVt/QIeDd/23JVwicIUcm4FngHEOUFy8kgf4Q02glfykvR6Hqts004aqA1eUz3
+         cm05Zwc50NldBi8KANqSJK+FC0413nkVR+/5fHhlFE/eDUDCzMq0z1phuhY3zsuhskSG
+         Q+Z9i2qwY0PK+afTHc3en7zDdwM9ZRtylijQlvPQkd7yAilveqWkaJGDe/Rxpc2n3+Hy
+         4ulw==
+X-Gm-Message-State: AC+VfDwAC76wUqYWnUXklnHn4Bo4xR7gDYMhYsC/gs9iCykUgjtEecV8
+        yNAawbZPW5wtSqgVX8j48Ryu8kyKB8KHMRKyflru03AVkyepuQBY
+X-Google-Smtp-Source: ACHHUZ6QkiPpv5AuB1/46USO8iSC4c3midYAAHwtmaIdo1azEAfjDclNb/+7inM/jy7obHUTC44tV5lDNXm1AV/xOhA=
+X-Received: by 2002:a2e:7e04:0:b0:2ac:7e64:ef8 with SMTP id
+ z4-20020a2e7e04000000b002ac7e640ef8mr1778807ljc.16.1685177407243; Sat, 27 May
+ 2023 01:50:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524131958.2139331-2-james.clark@arm.com>
+References: <202305250056.oZhsJmdD-lkp@intel.com> <DM4PR21MB344103E6766B9D586C0D11B1E441A@DM4PR21MB3441.namprd21.prod.outlook.com>
+ <CAH2r5mteP0kHJN8SJzhU60q+TreP3AaMhVntEuXBiLQb49mBhw@mail.gmail.com>
+In-Reply-To: <CAH2r5mteP0kHJN8SJzhU60q+TreP3AaMhVntEuXBiLQb49mBhw@mail.gmail.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Sat, 27 May 2023 03:49:55 -0500
+Message-ID: <CAH2r5mujTOvAdu2uu=ypRA4ZUPjcMUdefF3b59WMwoUvJrDxRg@mail.gmail.com>
+Subject: Re: [EXTERNAL] [samba-ksmbd:for-next 4/7] fs/smb/client/ioctl.c:324:17:
+ warning: variable 'caps' set but not used
+To:     CIFS <linux-cifs@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="000000000000be618905fca8f028"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 02:19:55PM +0100, James Clark wrote:
-> PIDs and TIDs are already contained within the thread struct, so to
-> avoid inconsistencies drop the extra members on the etm queue and only
-> use the thread struct.
-> 
-> At the same time stop using the 'unknown' thread. In a later commit
-> we will be making samples from multiple machines so it will be better
-> to use the idle thread of each machine rather than overlapping unknown
-> threads. Using the idle thread is also better because kernel addresses
-> with a previously unknown thread will now be assigned to a real kernel
-> thread.
+--000000000000be618905fca8f028
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Using the idle thread to replace the 'unknown' thread is good thing
-for me, though we will introduce imprecise statistics for idle thread,
-but the inaccuration is not big in this case.
+Fix attached:
 
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  tools/perf/util/cs-etm.c | 124 ++++++++++++---------------------------
->  1 file changed, 38 insertions(+), 86 deletions(-)
-> 
-> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-> index 91299cc56bf7..ebffc9052561 100644
-> --- a/tools/perf/util/cs-etm.c
-> +++ b/tools/perf/util/cs-etm.c
-> @@ -46,8 +46,6 @@ struct cs_etm_auxtrace {
->  	struct auxtrace_heap heap;
->  	struct itrace_synth_opts synth_opts;
->  	struct perf_session *session;
-> -	struct machine *machine;
-> -	struct thread *unknown_thread;
->  	struct perf_tsc_conversion tc;
->  
->  	/*
-> @@ -84,7 +82,6 @@ struct cs_etm_auxtrace {
->  
->  struct cs_etm_traceid_queue {
->  	u8 trace_chan_id;
-> -	pid_t pid, tid;
->  	u64 period_instructions;
->  	size_t last_branch_pos;
->  	union perf_event *event_buf;
-> @@ -480,9 +477,9 @@ static int cs_etm__init_traceid_queue(struct cs_etm_queue *etmq,
->  	cs_etm__clear_packet_queue(&tidq->packet_queue);
->  
->  	queue = &etmq->etm->queues.queue_array[etmq->queue_nr];
-> -	tidq->tid = queue->tid;
-> -	tidq->pid = -1;
->  	tidq->trace_chan_id = trace_chan_id;
-> +	tidq->thread = machine__findnew_thread(&etm->session->machines.host, -1,
-> +					       queue->tid);
->  
->  	tidq->packet = zalloc(sizeof(struct cs_etm_packet));
->  	if (!tidq->packet)
-> @@ -863,7 +860,6 @@ static void cs_etm__free(struct perf_session *session)
->  	for (i = 0; i < aux->num_cpu; i++)
->  		zfree(&aux->metadata[i]);
->  
-> -	thread__zput(aux->unknown_thread);
->  	zfree(&aux->metadata);
->  	zfree(&aux);
->  }
-> @@ -882,7 +878,7 @@ static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address)
->  {
->  	struct machine *machine;
->  
-> -	machine = etmq->etm->machine;
-> +	machine = &etmq->etm->session->machines.host;
->  
->  	if (address >= machine__kernel_start(machine)) {
->  		if (machine__is_host(machine))
-> @@ -905,8 +901,6 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
->  	u8  cpumode;
->  	u64 offset;
->  	int len;
-> -	struct thread *thread;
-> -	struct machine *machine;
->  	struct addr_location al;
->  	struct dso *dso;
->  	struct cs_etm_traceid_queue *tidq;
-> @@ -914,20 +908,12 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
->  	if (!etmq)
->  		return 0;
->  
-> -	machine = etmq->etm->machine;
->  	cpumode = cs_etm__cpu_mode(etmq, address);
->  	tidq = cs_etm__etmq_get_traceid_queue(etmq, trace_chan_id);
->  	if (!tidq)
->  		return 0;
->  
-> -	thread = tidq->thread;
-> -	if (!thread) {
-> -		if (cpumode != PERF_RECORD_MISC_KERNEL)
-> -			return 0;
-> -		thread = etmq->etm->unknown_thread;
-> -	}
-> -
-> -	if (!thread__find_map(thread, cpumode, address, &al))
-> +	if (!thread__find_map(tidq->thread, cpumode, address, &al))
->  		return 0;
->  
->  	dso = map__dso(al.map);
-> @@ -942,7 +928,8 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
->  
->  	map__load(al.map);
->  
-> -	len = dso__data_read_offset(dso, machine, offset, buffer, size);
-> +	len = dso__data_read_offset(dso, maps__machine(tidq->thread->maps),
-> +				    offset, buffer, size);
->  
->  	if (len <= 0) {
->  		ui__warning_once("CS ETM Trace: Missing DSO. Use 'perf archive' or debuginfod to export data from the traced system.\n"
-> @@ -1303,39 +1290,31 @@ cs_etm__get_trace(struct cs_etm_queue *etmq)
->  	return etmq->buf_len;
->  }
->  
-> -static void cs_etm__set_pid_tid_cpu(struct cs_etm_auxtrace *etm,
-> -				    struct cs_etm_traceid_queue *tidq)
-> +static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
-> +			       struct cs_etm_traceid_queue *tidq, pid_t tid)
->  {
-> -	if ((!tidq->thread) && (tidq->tid != -1))
-> -		tidq->thread = machine__find_thread(etm->machine, -1,
-> -						    tidq->tid);
-> +	struct machine *machine = &etm->session->machines.host;
-> +
-> +	if (tid != -1) {
-> +		thread__zput(tidq->thread);
-> +		tidq->thread = machine__find_thread(machine, -1, tid);
-> +	}
->  
-> -	if (tidq->thread)
-> -		tidq->pid = tidq->thread->pid_;
-> +	/* Couldn't find a known thread */
-> +	if (!tidq->thread)
-> +		tidq->thread = machine__idle_thread(machine);
->  }
->  
->  int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
->  			 pid_t tid, u8 trace_chan_id)
->  {
-> -	int cpu, err = -EINVAL;
-> -	struct cs_etm_auxtrace *etm = etmq->etm;
->  	struct cs_etm_traceid_queue *tidq;
->  
->  	tidq = cs_etm__etmq_get_traceid_queue(etmq, trace_chan_id);
->  	if (!tidq)
-> -		return err;
-> -
-> -	if (cs_etm__get_cpu(trace_chan_id, &cpu) < 0)
-> -		return err;
-> -
-> -	err = machine__set_current_tid(etm->machine, cpu, tid, tid);
+Fix trivial unused variable warning (when SMB1 support disabled)
 
-If we don't invoke machine__set_current_tid(), 'thread->cpu' will not
-updated anymore.
+"ioctl.c:324:17: warning: variable 'caps' set but not used
+[-Wunused-but-set-variable]"
 
-Seems this is fine since cs-etm uses 'tidq->packet->cpu' to assign
-sample's cpu instead of using 'thread->cpu'.
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202305250056.oZhsJmdD-lkp@int=
+el.com/
 
-So the change LGTM:
+> From: kernel test robot <lkp@intel.com>
+> Sent: Wednesday, May 24, 2023 7:01:39 AM
+> To: Steven French <Steven.French@microsoft.com>
+> Cc: oe-kbuild-all@lists.linux.dev <oe-kbuild-all@lists.linux.dev>
+> Subject: [EXTERNAL] [samba-ksmbd:for-next 4/7] fs/smb/client/ioctl.c:324:=
+17: warning: variable 'caps' set but not used
+>
+> Hi Steve,
+>
+> First bad commit (maybe !=3D root cause):
+>
+> tree:   git://git.samba.org/ksmbd.git for-next
+> head:   d58a8a27a7cac75e82383c2a25704bd15b0045d5
+> commit: e3adc6b1f0d12b80a7a81fd4f345890a4fb483d6 [4/7] smb: move client a=
+nd server files to common directory fs/smb
+> config: i386-randconfig-i003-20230524
+> compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+> reproduce (this is a W=3D1 build):
+>         git remote add samba-ksmbd git://git.samba.org/ksmbd.git
+>         git fetch --no-tags samba-ksmbd for-next
+>         git checkout e3adc6b1f0d12b80a7a81fd4f345890a4fb483d6
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         make W=3D1 O=3Dbuild_dir ARCH=3Di386 olddefconfig
+>         make W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash fs/smb/cli=
+ent/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://nam06.safelinks.protection.outlook.com/?url=3Dhttps%3A%=
+2F%2Flore.kernel.org%2Foe-kbuild-all%2F202305250056.oZhsJmdD-lkp%40intel.co=
+m%2F&data=3D05%7C01%7CSteven.French%40microsoft.com%7Caf0e1ee950724b4eb2ce0=
+8db5c78aca3%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C638205445595592058=
+%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haW=
+wiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DmoaptwMZutTbXzs%2F65jeBFL8bJmVzWsj=
+oLBeuDAQaMc%3D&reserved=3D0
+>
+> All warnings (new ones prefixed by >>):
+>
+>    fs/smb/client/ioctl.c: In function 'cifs_ioctl':
+> >> fs/smb/client/ioctl.c:324:17: warning: variable 'caps' set but not use=
+d [-Wunused-but-set-variable]
+>      324 |         __u64   caps;
+>          |                 ^~~~
+>
+>
+> vim +/caps +324 fs/smb/client/ioctl.c
+>
+> 7ba3d1cdb7988c fs/cifs/ioctl.c Steve French    2021-05-02  312
+> f9ddcca4cf7d95 fs/cifs/ioctl.c Steve French    2008-05-15  313  long cifs=
+_ioctl(struct file *filep, unsigned int command, unsigned long arg)
+> ^1da177e4c3f41 fs/cifs/ioctl.c Linus Torvalds  2005-04-16  314  {
+> 496ad9aa8ef448 fs/cifs/ioctl.c Al Viro         2013-01-23  315   struct i=
+node *inode =3D file_inode(filep);
+> 7e7db86c7e1088 fs/cifs/ioctl.c Steve French    2019-09-19  316   struct s=
+mb3_key_debug_info pkey_inf;
+> ^1da177e4c3f41 fs/cifs/ioctl.c Linus Torvalds  2005-04-16  317   int rc =
+=3D -ENOTTY; /* strange error - but the precedent */
+> 6d5786a34d98bf fs/cifs/ioctl.c Pavel Shilovsky 2012-06-20  318   unsigned=
+ int xid;
+> ba00ba64cf0895 fs/cifs/ioctl.c Jeff Layton     2010-09-20  319   struct c=
+ifsFileInfo *pSMBFile =3D filep->private_data;
+> 96daf2b09178d8 fs/cifs/ioctl.c Steve French    2011-05-27  320   struct c=
+ifs_tcon *tcon;
+> a77592a70081ed fs/cifs/ioctl.c Ronnie Sahlberg 2020-07-09  321   struct t=
+con_link *tlink;
+> d26c2ddd335696 fs/cifs/ioctl.c Steve French    2020-02-06  322   struct c=
+ifs_sb_info *cifs_sb;
+> f654bac2227adc fs/cifs/ioctl.c Steve French    2005-04-28  323   __u64   =
+ExtAttrBits =3D 0;
+> 618763958b2291 fs/cifs/ioctl.c Jeff Layton     2010-11-08 @324   __u64   =
+caps;
+>
+> :::::: The code at line 324 was first introduced by commit
+> :::::: 618763958b2291a09057dbfa553da6ded93dcfad cifs: make cifs_ioctl han=
+dle NULL filp->private_data correctly
+>
+> :::::: TO: Jeff Layton <jlayton@redhat.com>
+> :::::: CC: Steve French <sfrench@us.ibm.com>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://nam06.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithu=
+b.com%2Fintel%2Flkp-tests%2Fwiki&data=3D05%7C01%7CSteven.French%40microsoft=
+.com%7Caf0e1ee950724b4eb2ce08db5c78aca3%7C72f988bf86f141af91ab2d7cd011db47%=
+7C1%7C0%7C638205445595592058%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLC=
+JQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3D4S7ypb=
+EmVEH0ItLaFq6203nT%2FVUHq%2FI%2B0DPIw8MLllw%3D&reserved=3D0
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
 
-> -	if (err)
-> -		return err;
-> -
-> -	tidq->tid = tid;
-> -	thread__zput(tidq->thread);
-> +		return -EINVAL;
->  
-> -	cs_etm__set_pid_tid_cpu(etm, tidq);
-> +	cs_etm__set_thread(etmq->etm, tidq, tid);
->  	return 0;
->  }
->  
-> @@ -1412,8 +1391,8 @@ static int cs_etm__synth_instruction_sample(struct cs_etm_queue *etmq,
->  	sample.time = cs_etm__resolve_sample_time(etmq, tidq);
->  
->  	sample.ip = addr;
-> -	sample.pid = tidq->pid;
-> -	sample.tid = tidq->tid;
-> +	sample.pid = tidq->thread->pid_;
-> +	sample.tid = tidq->thread->tid;
->  	sample.id = etmq->etm->instructions_id;
->  	sample.stream_id = etmq->etm->instructions_id;
->  	sample.period = period;
-> @@ -1471,8 +1450,8 @@ static int cs_etm__synth_branch_sample(struct cs_etm_queue *etmq,
->  	sample.time = cs_etm__resolve_sample_time(etmq, tidq);
->  
->  	sample.ip = ip;
-> -	sample.pid = tidq->pid;
-> -	sample.tid = tidq->tid;
-> +	sample.pid = tidq->thread->pid_;
-> +	sample.tid = tidq->thread->tid;
->  	sample.addr = cs_etm__first_executed_instr(tidq->packet);
->  	sample.id = etmq->etm->branches_id;
->  	sample.stream_id = etmq->etm->branches_id;
-> @@ -2466,11 +2445,6 @@ static int cs_etm__process_timeless_queues(struct cs_etm_auxtrace *etm,
->  		if (!etmq)
->  			continue;
->  
-> -		/*
-> -		 * Per-cpu mode has contextIDs in the trace and the decoder
-> -		 * calls cs_etm__set_pid_tid_cpu() automatically so no need
-> -		 * to do this here
-> -		 */
->  		if (etm->per_thread_decoding) {
->  			tidq = cs_etm__etmq_get_traceid_queue(
->  				etmq, CS_ETM_PER_THREAD_TRACEID);
-> @@ -2478,10 +2452,8 @@ static int cs_etm__process_timeless_queues(struct cs_etm_auxtrace *etm,
->  			if (!tidq)
->  				continue;
->  
-> -			if ((tid == -1) || (tidq->tid == tid)) {
-> -				cs_etm__set_pid_tid_cpu(etm, tidq);
-> +			if (tid == -1 || tidq->thread->tid == tid)
->  				cs_etm__run_per_thread_timeless_decoder(etmq);
-> -			}
->  		} else
->  			cs_etm__run_per_cpu_timeless_decoder(etmq);
->  	}
-> @@ -2611,10 +2583,12 @@ static int cs_etm__process_itrace_start(struct cs_etm_auxtrace *etm,
->  		return 0;
->  
->  	/*
-> -	 * Add the tid/pid to the log so that we can get a match when
-> -	 * we get a contextID from the decoder.
-> +	 * Add the tid/pid to the log so that we can get a match when we get a
-> +	 * contextID from the decoder. Only track for the host: only kernel
-> +	 * trace is supported for guests which wouldn't need pids so this should
-> +	 * be fine.
->  	 */
-> -	th = machine__findnew_thread(etm->machine,
-> +	th = machine__findnew_thread(&etm->session->machines.host,
->  				     event->itrace_start.pid,
->  				     event->itrace_start.tid);
->  	if (!th)
-> @@ -2647,10 +2621,12 @@ static int cs_etm__process_switch_cpu_wide(struct cs_etm_auxtrace *etm,
->  		return 0;
->  
->  	/*
-> -	 * Add the tid/pid to the log so that we can get a match when
-> -	 * we get a contextID from the decoder.
-> +	 * Add the tid/pid to the log so that we can get a match when we get a
-> +	 * contextID from the decoder. Only track for the host: only kernel
-> +	 * trace is supported for guests which wouldn't need pids so this should
-> +	 * be fine.
->  	 */
-> -	th = machine__findnew_thread(etm->machine,
-> +	th = machine__findnew_thread(&etm->session->machines.host,
->  				     event->context_switch.next_prev_pid,
->  				     event->context_switch.next_prev_tid);
->  	if (!th)
-> @@ -3259,7 +3235,6 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
->  	}
->  
->  	etm->session = session;
-> -	etm->machine = &session->machines.host;
->  
->  	etm->num_cpu = num_cpu;
->  	etm->pmu_type = (unsigned int) ((ptr[CS_PMU_TYPE_CPUS] >> 32) & 0xffffffff);
-> @@ -3286,27 +3261,6 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
->  	if (err)
->  		return err;
->  
-> -	etm->unknown_thread = thread__new(999999999, 999999999);
-> -	if (!etm->unknown_thread) {
-> -		err = -ENOMEM;
-> -		goto err_free_queues;
-> -	}
-> -
-> -	/*
-> -	 * Initialize list node so that at thread__zput() we can avoid
-> -	 * segmentation fault at list_del_init().
-> -	 */
-> -	INIT_LIST_HEAD(&etm->unknown_thread->node);
-> -
-> -	err = thread__set_comm(etm->unknown_thread, "unknown", 0);
-> -	if (err)
-> -		goto err_delete_thread;
-> -
-> -	if (thread__init_maps(etm->unknown_thread, etm->machine)) {
-> -		err = -ENOMEM;
-> -		goto err_delete_thread;
-> -	}
-> -
->  	etm->tc.time_shift = tc->time_shift;
->  	etm->tc.time_mult = tc->time_mult;
->  	etm->tc.time_zero = tc->time_zero;
-> @@ -3318,7 +3272,7 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
->  	}
->  	err = cs_etm__synth_events(etm, session);
->  	if (err)
-> -		goto err_delete_thread;
-> +		goto err_free_queues;
->  
->  	/*
->  	 * Map Trace ID values to CPU metadata.
-> @@ -3348,7 +3302,7 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
->  					session->header.data_size,
->  					cs_etm__process_aux_hw_id_cb, &aux_hw_id_found);
->  	if (err)
-> -		goto err_delete_thread;
-> +		goto err_free_queues;
->  
->  	/* if HW ID found then clear any unused metadata ID values */
->  	if (aux_hw_id_found)
-> @@ -3358,17 +3312,15 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
->  		err = cs_etm__map_trace_ids_metadata(num_cpu, metadata);
->  
->  	if (err)
-> -		goto err_delete_thread;
-> +		goto err_free_queues;
->  
->  	err = cs_etm__queue_aux_records(session);
->  	if (err)
-> -		goto err_delete_thread;
-> +		goto err_free_queues;
->  
->  	etm->data_queued = etm->queues.populated;
->  	return 0;
->  
-> -err_delete_thread:
-> -	thread__zput(etm->unknown_thread);
->  err_free_queues:
->  	auxtrace_queues__free(&etm->queues);
->  	session->auxtrace = NULL;
-> -- 
-> 2.34.1
-> 
+
+--=20
+Thanks,
+
+Steve
+
+--000000000000be618905fca8f028
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-cifs-address-unused-variable-warning.patch"
+Content-Disposition: attachment; 
+	filename="0001-cifs-address-unused-variable-warning.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_li5r27q50>
+X-Attachment-Id: f_li5r27q50
+
+RnJvbSBmZGQ3ZDFmZmY0ZTNiOTdjNDcwNmY0YzBlMDAwYTM4YjEzNGI3YWU1IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
+CkRhdGU6IFNhdCwgMjcgTWF5IDIwMjMgMDM6MzM6MjMgLTA1MDAKU3ViamVjdDogW1BBVENIXSBj
+aWZzOiBhZGRyZXNzIHVudXNlZCB2YXJpYWJsZSB3YXJuaW5nCgpGaXggdHJpdmlhbCB1bnVzZWQg
+dmFyaWFibGUgd2FybmluZyAod2hlbiBTTUIxIHN1cHBvcnQgZGlzYWJsZWQpCgoiaW9jdGwuYzoz
+MjQ6MTc6IHdhcm5pbmc6IHZhcmlhYmxlICdjYXBzJyBzZXQgYnV0IG5vdCB1c2VkIFstV3VudXNl
+ZC1idXQtc2V0LXZhcmlhYmxlXSIKClJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8bGtw
+QGludGVsLmNvbT4KQ2xvc2VzOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9vZS1rYnVpbGQtYWxs
+LzIwMjMwNTI1MDA1Ni5vWmhzSm1kRC1sa3BAaW50ZWwuY29tLwpTaWduZWQtb2ZmLWJ5OiBTdGV2
+ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+Ci0tLQogZnMvc21iL2NsaWVudC9pb2N0
+bC5jIHwgNiArKysrKy0KIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDEgZGVsZXRp
+b24oLSkKCmRpZmYgLS1naXQgYS9mcy9zbWIvY2xpZW50L2lvY3RsLmMgYi9mcy9zbWIvY2xpZW50
+L2lvY3RsLmMKaW5kZXggY2IzYmU1OGNkNTVlLi5mZmYwOTJiYmM3YTMgMTAwNjQ0Ci0tLSBhL2Zz
+L3NtYi9jbGllbnQvaW9jdGwuYworKysgYi9mcy9zbWIvY2xpZW50L2lvY3RsLmMKQEAgLTMyMSw3
+ICszMjEsMTEgQEAgbG9uZyBjaWZzX2lvY3RsKHN0cnVjdCBmaWxlICpmaWxlcCwgdW5zaWduZWQg
+aW50IGNvbW1hbmQsIHVuc2lnbmVkIGxvbmcgYXJnKQogCXN0cnVjdCB0Y29uX2xpbmsgKnRsaW5r
+OwogCXN0cnVjdCBjaWZzX3NiX2luZm8gKmNpZnNfc2I7CiAJX191NjQJRXh0QXR0ckJpdHMgPSAw
+OworI2lmZGVmIENPTkZJR19DSUZTX1BPU0lYCisjaWZkZWYgQ09ORklHX0NJRlNfQUxMT1dfSU5T
+RUNVUkVfTEVHQUNZCiAJX191NjQgICBjYXBzOworI2VuZGlmIC8qIENPTkZJR19DSUZTX0FMTE9X
+X0lOU0VDVVJFX0xFR0FDWSAqLworI2VuZGlmIC8qIENPTkZJR19DSUZTX1BPU0lYICovCiAKIAl4
+aWQgPSBnZXRfeGlkKCk7CiAKQEAgLTMzMSw5ICszMzUsOSBAQCBsb25nIGNpZnNfaW9jdGwoc3Ry
+dWN0IGZpbGUgKmZpbGVwLCB1bnNpZ25lZCBpbnQgY29tbWFuZCwgdW5zaWduZWQgbG9uZyBhcmcp
+CiAJCQlpZiAocFNNQkZpbGUgPT0gTlVMTCkKIAkJCQlicmVhazsKIAkJCXRjb24gPSB0bGlua190
+Y29uKHBTTUJGaWxlLT50bGluayk7Ci0JCQljYXBzID0gbGU2NF90b19jcHUodGNvbi0+ZnNVbml4
+SW5mby5DYXBhYmlsaXR5KTsKICNpZmRlZiBDT05GSUdfQ0lGU19QT1NJWAogI2lmZGVmIENPTkZJ
+R19DSUZTX0FMTE9XX0lOU0VDVVJFX0xFR0FDWQorCQkJY2FwcyA9IGxlNjRfdG9fY3B1KHRjb24t
+PmZzVW5peEluZm8uQ2FwYWJpbGl0eSk7CiAJCQlpZiAoQ0lGU19VTklYX0VYVEFUVFJfQ0FQICYg
+Y2FwcykgewogCQkJCV9fdTY0CUV4dEF0dHJNYXNrID0gMDsKIAkJCQlyYyA9IENJRlNHZXRFeHRB
+dHRyKHhpZCwgdGNvbiwKLS0gCjIuMzQuMQoK
+--000000000000be618905fca8f028--
