@@ -2,149 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC4A713584
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 17:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D34A713580
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 17:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232698AbjE0PxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 11:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
+        id S231875AbjE0Pyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 11:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbjE0PxA (ORCPT
+        with ESMTP id S230375AbjE0Pyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 11:53:00 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF6CBA
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 08:52:57 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f3baf04f0cso1962780e87.1
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 08:52:57 -0700 (PDT)
+        Sat, 27 May 2023 11:54:40 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022BDBA;
+        Sat, 27 May 2023 08:54:39 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d426e63baso2309457b3a.0;
+        Sat, 27 May 2023 08:54:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685202776; x=1687794776;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bLjznw17AJa9srYAX7PpPJBCrC7/RmyCURr/1TDqVk0=;
-        b=YjD4CVNN4Q9wjXOI4a9yl5Nc+SlRdce5X65sQhxiffmNp28FbhJt/4wKqttaZWPInb
-         v8cf2GqQFSQclKpy7/5mVC8/gevCHwnv2ECB1vh8zRcpXI5KpZ2+11KhHI/DpXW6ciq0
-         yiueB0EtdTxB/bfYjeWmX3es8zBjtg9b77ocKVhClx4hfhvNaP5thankfXKGs3INX6ST
-         aHKfxA++/42UMzlvZWodAuBu3Y/Qo4UnrJdP+rIlXEQXeyi7RhtRwi/20JR2v6dMXz7s
-         6YJanHPLgP1ds6fuwHrl/vfDNC7VCObvHRVTJMgEn9Xa0Y78X/1n6wGO1FvHNtH91Ibj
-         +iFw==
+        d=gmail.com; s=20221208; t=1685202878; x=1687794878;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=l+G4puGLv1p8z/Hlge1/6NOCJbk0UrLfWek2Xulcb84=;
+        b=gQhLpA9ZJ3MsbjBLRHKg/Bu7sQtUuFnFo0w9+0BYJ9KOLiAmaHm/m4Y4E06NNRB1dl
+         0q6K6DFbWeTb5Z/iyCZr4tT1ppDQtz7yJeeBl9m8r9FuOoRb1xD5m3BqBek2b4tbNxxa
+         pA67T941mfHhp1dUVfT2Jr+DVuBy/2445xXa8FHpcG7rg9eZAqCVjK74O2s10v+F/6ug
+         hMy8q4g8ddP/1iBz/DlNKwpEJann3ERIFh3Wn4PR1+/YgtOpHJkf01XWT69+1N+oMzVG
+         cQNsioSb+HO7UB/dsiirhUAhze1c1ZFpySoti411TJ3f8G7crCWmFMZf6m+agVEApcpW
+         vz+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685202776; x=1687794776;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bLjznw17AJa9srYAX7PpPJBCrC7/RmyCURr/1TDqVk0=;
-        b=idQMcNy6i7SuEtyH3F0ZqHABpCxHStQhE3EJ/bI7zIkzX6ecg6GPVJARck1hr8vfJ7
-         jTR67MrKxZs9IU5eUyOgXJOZDlYJM63V2y/6mwR7DGuQxV3ACaYUwW9flq8d/pOpPswE
-         DKxQfSR+fWXxCSiCG7GmVXEewfFU53kq7JPPrDVmfnI/TGBzTtL5n7NiKqPefpkaDFHg
-         u5bhVAaWdD1D8VaOBpHI0POd2zPPr/atvt89/TOytlzEtZd5CZIHx0qqd5ZDZ7ogtBnW
-         BCY3psSLc4xA7u/dOrzSS0xtSY0yo0A5vXeOrMEKSPwvwnIS71DnPaRDPSmgKO+pD/hh
-         8p9g==
-X-Gm-Message-State: AC+VfDyapw7o+Kv4qBy5zUbqdF4YfniXG+qhTUYITURL9m9e20E4B8UK
-        ddoAMnGADbf6NzqXL3TfBgdeuQ==
-X-Google-Smtp-Source: ACHHUZ6KnoHfXjU6y/OUhvxQQdvDRWrn3w/Nq4zoWpkMHmDXAq6Yc206wYHOv4Np18YwnN5iimBvew==
-X-Received: by 2002:ac2:53a6:0:b0:4f4:b138:e998 with SMTP id j6-20020ac253a6000000b004f4b138e998mr1647222lfh.68.1685202775848;
-        Sat, 27 May 2023 08:52:55 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id w9-20020ac24429000000b004f4ce1d4df6sm1166778lfl.47.2023.05.27.08.52.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 May 2023 08:52:55 -0700 (PDT)
-Message-ID: <1aca6f57-9342-dba1-368c-76e649cde95e@linaro.org>
-Date:   Sat, 27 May 2023 17:52:53 +0200
+        d=1e100.net; s=20221208; t=1685202878; x=1687794878;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l+G4puGLv1p8z/Hlge1/6NOCJbk0UrLfWek2Xulcb84=;
+        b=WTPzrS2QWir+LV+XT/8Atb4wF6jyotde2UUpSUxFuc33Oo+BjdhCCA5O7BCjq6uKzo
+         RKcwRWhdwkzEoWLpuuiW8QXIyIwZZJuNNn1R+xB3E2GcIEwS+ksgsVKGkG8ufUf2/pnM
+         hWnNCwIMcp25uvyH0ppOqloRsvMGRZ6DYDvtPKwDmwnodcGREJrqovxi720HmPz9GMLl
+         akrB0/5heuXRzXyd8qWd1crdxa3gDepJjf6u8n5YPIfLaZfb4kagqWWh0PYcOhby3M0J
+         G+687oTuAPAI2EuwqnfZW6RTfuzCR1z1z2ZWB28dQV6TID5VL/3Y35rR+fBervn6LHLo
+         iXJQ==
+X-Gm-Message-State: AC+VfDw9ZAL0YicsVRX+bjaFqdHMYje1VNW2fQeCy60Gjnaj5cbu4zOW
+        nyCrA5GkRbNVYEMv06uXUqQ=
+X-Google-Smtp-Source: ACHHUZ4eTm+gSTcfMJyzZbWF/OB3D5r515LcsPPvEz9Qas5w+qwp4srtHFosGb4KBrd58salPotjYw==
+X-Received: by 2002:a05:6a21:338b:b0:d5:73ad:87c2 with SMTP id yy11-20020a056a21338b00b000d573ad87c2mr3545769pzb.56.1685202878254;
+        Sat, 27 May 2023 08:54:38 -0700 (PDT)
+Received: from ?IPv6:2605:59c8:448:b800:82ee:73ff:fe41:9a02? ([2605:59c8:448:b800:82ee:73ff:fe41:9a02])
+        by smtp.googlemail.com with ESMTPSA id v12-20020a62a50c000000b0063f1430dd57sm4201560pfm.49.2023.05.27.08.54.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 08:54:37 -0700 (PDT)
+Message-ID: <51161740e832334594960ed43430b868a6f892c3.camel@gmail.com>
+Subject: Re: [PATCH net-next 03/12] mm: Make the page_frag_cache allocator
+ alignment param a pow-of-2
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Jeroen de Borst <jeroendb@google.com>,
+        Catherine Sullivan <csully@google.com>,
+        Shailend Chand <shailend@google.com>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org
+Date:   Sat, 27 May 2023 08:54:34 -0700
+In-Reply-To: <20230524153311.3625329-4-dhowells@redhat.com>
+References: <20230524153311.3625329-1-dhowells@redhat.com>
+         <20230524153311.3625329-4-dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: media: camss: qcom,msm8996-camss: Add
- CAMSS power domain
-Content-Language: en-US
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hansverk@cisco.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230526180712.8481-1-y.oudjana@protonmail.com>
- <20230526180712.8481-2-y.oudjana@protonmail.com>
- <20230526-obstruct-venus-5833511a58af@spud>
- <838b134d-46cb-6237-49b0-0c287141ebb3@linaro.org>
- <20230526-street-pox-2ff5ee106c43@spud>
- <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
- <631e5eec-853b-dce2-c474-62e76e83d7e6@linaro.org>
- <VKZAVR.M3FJVE7XKKY71@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <VKZAVR.M3FJVE7XKKY71@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2023-05-24 at 16:33 +0100, David Howells wrote:
+> Make the page_frag_cache allocator's alignment parameter a power of 2
+> rather than a mask and give a warning if it isn't.
+>=20
+> This means that it's consistent with {napi,netdec}_alloc_frag_align() and
+> allows __{napi,netdev}_alloc_frag_align() to be removed.
+>=20
 
+This goes against the original intention of these functions. One of the
+reasons why this is being used is because when somebody enables
+something like 2K jumbo frames they don't necessarily want to have to
+allocate 4K SLABs. Instead they can just add a bit of overhead and get
+almost twice the utilization out of an order 3 page.
 
-On 27.05.2023 08:05, Yassine Oudjana wrote:
-> 
-> On Fri, May 26 2023 at 10:36:32 PM +02:00:00, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->>
->> On 26.05.2023 22:21, Bryan O'Donoghue wrote:
->>>  On 26/05/2023 21:19, Conor Dooley wrote:
->>>>  On Fri, May 26, 2023 at 09:05:47PM +0100, Bryan O'Donoghue wrote:
->>>>>  On 26/05/2023 20:46, Conor Dooley wrote:
->>>>>>>  +  - power-domain-names
->>>>>>  Why is this now required?
->>>>>>
->>>>>>  Thanks,
->>>>>>  Conor.
->>>>>>
->>>>>
->>>>>  Its an accurate description of the power/clock tree to have the top power
->>>>>  domain be switched on prior to the clocks that depend on it.
->>>>
->>>>  But what does that have to do with the *names* now being required?
->>>
->>>  oh the names
->>>
->>>  no toss that
->> this should be
->>
->> if:properties:compatible:blahblahmsm8996:then:required:power-domain-names
-> 
-> The only compatible in this binding is qcom,msm8996-camss, so what would this achieve?
-You're right - I didn't notice and assumed it was a camss-common one.
-
-Konrad
-> 
->>
->> Konrad
->>>
->>>>
->>>>>  I think Yassine, you could probably include the majority of your
->>>>>  cover-letter text in this commit to explain this change a bit better.
->>>>
->>>>  I think it would be good to have that regardless.
->>>>
->>>>  Cheers,
->>>>  Conor.
->>>>
->>>>>  bod
->>>>     ^^^ I've been trying not to think about rugby since the weekend :(
->>>
->>>  Pockets O'Gara should have his paddy papers rescinded
-> 
-> 
+The requirement should only be cache alignment, not power of 2
+alignment. This isn't meant to be a slab allocator. We are just
+sectioning up pages to handle mixed workloads. In the case of
+networking we can end up getting everything from 60B packets, to 1514B
+in the standard cases. That was why we started sectioning up pages in
+the first place so putting a power of 2 requirement on it doens't fit
+our use case at all and is what we were trying to get away from with
+the SLAB allocators.
