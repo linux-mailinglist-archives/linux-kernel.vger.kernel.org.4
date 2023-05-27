@@ -2,56 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF536713256
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16004713257
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjE0D5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 23:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S231614AbjE0D5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 23:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjE0D46 (ORCPT
+        with ESMTP id S231372AbjE0D47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 23:56:58 -0400
+        Fri, 26 May 2023 23:56:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1AA116;
-        Fri, 26 May 2023 20:56:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6C2125;
+        Fri, 26 May 2023 20:56:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D5CC64FF1;
-        Sat, 27 May 2023 03:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4075C433D2;
-        Sat, 27 May 2023 03:56:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3145364D9F;
+        Sat, 27 May 2023 03:56:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2EA1C433A1;
+        Sat, 27 May 2023 03:56:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685159813;
-        bh=ZD7Ij+Drs1pqMm30ZIHkyCeAKzFLEQBg9YtscwC86Sg=;
+        s=k20201202; t=1685159814;
+        bh=tWN64kIF0t+cA+oVEY5wveVh5FHe12E2Y8s9FFl8jdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rBBMkQcvApk99FYiqc4zhW0EC+VurFT2Cr9fUuQTjLr1mYTVQQbV5YY1lHk7rgXhS
-         9LdHc8xZHImLpYCaohbVk5T8SCvOYZhG7Zlpp7CaSYtQF5nEyFB///nLG2HmFMTPTl
-         Pl1inO2qXz5vMsDS8M2MX1owRqE0CI8zp+65ErtkwtcMP8OkOg8LyS7iS5GdRaAhxd
-         ToISuSscUwaA3F7YLR386jeFcIdHpwVlrcczeXhMvu5QG4gvSDt2A3319CRR9jjmpo
-         F+eyL5zMIsasQITX+0iWTJxkP7Gw0Sc+O6PmFFvNYmrpDfO1cDYUINFh1krHjNOsKb
-         mRNg19EprQX9Q==
+        b=XZv4H5uQs+n/Y0utWjXQHpZ96O0CFFgch7BEwWO5RE36bSXdn/fdKzeeWJObAR6OV
+         o+0nHaAmBiObru5rfNG/HN18qFvi0kuPjECQTTa5masleSq+Gvxj7wGG5KCep6QUtG
+         VZHyt9kveBf6od2uP5G6vpfTWY9eqax8SgzjrYq+ynGM/boWGkWzlRT9VEdP/wI7Vd
+         hqjJYYGzUjib2Zx+3Z4S6eQz1LD+unnuosh7YMnghZRPAb1DMGjafOaRRVSBTru4Eb
+         XmS/8gwN8gxAt+irBPqEmEPrrdd+4lRaRdt/2a8dhPVP1JVe13NLJXWdg0fk+AKHrK
+         K9RspCrR1ws3A==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH 0/4] SM8450 GPUCC
-Date:   Fri, 26 May 2023 21:00:35 -0700
-Message-Id: <168516003598.405989.9713462057366695068.b4-ty@kernel.org>
+To:     bp@alien8.de, mchehab@kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     dmitry.baryshkov@linaro.org, james.morse@arm.com, rric@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-edac@vger.kernel.org
+Subject: Re: [PATCH v8 0/2] Fix crash when using Qcom LLCC/EDAC drivers
+Date:   Fri, 26 May 2023 21:00:36 -0700
+Message-Id: <168516003598.405989.12832976179577504012.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230517-topic-waipio-gpucc-v1-0-4f40e282af1d@linaro.org>
-References: <20230517-topic-waipio-gpucc-v1-0-4f40e282af1d@linaro.org>
+In-Reply-To: <20230517114635.76358-1-manivannan.sadhasivam@linaro.org>
+References: <20230517114635.76358-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -65,20 +57,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 18:40:37 +0200, Konrad Dybcio wrote:
-> Introduce hardware clock control to ultimately avoid spurious rcg
-> (re)configurations and introduce GPUCC for SM8450.
+On Wed, 17 May 2023 17:16:33 +0530, Manivannan Sadhasivam wrote:
+> This series fixes the crash seen on the Qualcomm SM8450 chipset with the
+> LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
+> fixed LLCC register offsets for detecting the LLCC errors.
 > 
+> This seems to have worked for SoCs till SM8450. But in SM8450, the LLCC
+> register offsets were changed. So accessing the fixed offsets causes the
+> crash on this platform.
 > 
+> [...]
 
 Applied, thanks!
 
-[2/4] clk: qcom: rcg2: Make hw_clk_ctrl toggleable
-      commit: a0e0ec7424c99a0459b44fbf0459de9728be37ab
-[3/4] clk: qcom: gcc-sm8450: Enable hw_clk_ctrl
-      commit: d4113d5f2bc9b58d3243df0edd2c42247181dbdd
-[4/4] clk: qcom: Add support for SM8450 GPUCC
-      commit: 728692d49edce3cdc77be92f3c79a6c56f81e531
+[1/2] EDAC/qcom: Remove superfluous return variable assignment in qcom_llcc_core_setup()
+      commit: 3d49f7406b5d9822c1411c6658bac2ae55ba19a2
+[2/2] EDAC/qcom: Get rid of hardcoded register offsets
+      commit: cbd77119b6355872cd308a60e99f9ca678435d15
 
 Best regards,
 -- 
