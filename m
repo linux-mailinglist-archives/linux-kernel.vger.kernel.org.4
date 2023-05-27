@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8991713136
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F7A713139
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242694AbjE0BEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 21:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
+        id S243360AbjE0BEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 21:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238055AbjE0BDy (ORCPT
+        with ESMTP id S238025AbjE0BDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 21:03:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9661A8;
-        Fri, 26 May 2023 18:03:53 -0700 (PDT)
+        Fri, 26 May 2023 21:03:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A9B19A;
+        Fri, 26 May 2023 18:03:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0C2C654D2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F20A1654C9;
+        Sat, 27 May 2023 01:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53C1FC4339B;
         Sat, 27 May 2023 01:03:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7565BC4331D;
-        Sat, 27 May 2023 01:03:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685149432;
-        bh=1YZMBlAxeMpfDXnXCePbfFkRQKb4pI+4S7UKHvuJhys=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=M0ITsRX31rY/lUUH+l3FFKz0SIvLBUT2tZUuemO677cN2Zp4OD3TdSvncswD3ax3f
-         UzquPoqV7xgY1tcoYOLvXlclJPGBDvq/tCvfNgPyKFlQxp5w/bqd/mIzi9ZyMu+a6z
-         XvlgfwvUpnBhOmshBmgIQmExUEGd1LYMY25LMh/1iZ7m1ALUMrC0bIGhW50Q6nlKwA
-         eplQkTeH3Saw5hmEoaM4mPSQGgH/YUVQXxYSU5+P5jjcQ7Zm5VKhZoyvY9IRjiiFWf
-         8MIQouklg67MqPBnHeyTOJ6Pgb7w1Y2X6QPsx7qVIlTKXX7+DzYN+GqqNlmgFgzL6i
-         kaqqEHozLUeHA==
+        s=k20201202; t=1685149433;
+        bh=fxYWXexHjqMsOELaFczQ5u72qTfpRnCt7eHfSifnC2k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Yuykaj5RKxbCSk+uxlKl2m0aQPZGNjZDtnLBMcy4KjHfVAqu0H7uYggJT5era2Cpo
+         u8lGXsajJdyjLbM9EIe79pWN3GhgB3jCyet4S6/rpRe0ZUcgdFEKl325VfpxqDncBh
+         VfYe64xLlAoQQyl3hhaO99ys4mg1l1d9VGsWLolsMwgFVz+1ZkMwFP91dOaRMmgYiF
+         yHLp9prljwstX/eaDUccOj3hKZ+uk0qFsE86Dho4buEJ7SnigRJjt3iRjCeHRxls51
+         pUMH3l5jYhQDxA2efs69Li/jEZT+0YK1xfpTkbl9mn+IRqJZJwqcqms5VBs+WmRs6F
+         0DgVp9tjMaiBw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
+To:     Rob Herring <robh+dt@kernel.org>, Dan Murphy <dmurphy@ti.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Luca Weiss <luca@z3ntu.xyz>, phone-devel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [RFT RFC PATCH] arm64: dts: qcom: sdm630-nile: correct duplicated reserved memory node
-Date:   Fri, 26 May 2023 18:07:27 -0700
-Message-Id: <168514964950.348612.12469992113660973985.b4-ty@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/5] Improvements for drv260x driver and add to Huawei Watch
+Date:   Fri, 26 May 2023 18:07:28 -0700
+Message-Id: <168514964951.348612.17473479796367169535.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230419211921.79871-1-krzysztof.kozlowski@linaro.org>
-References: <20230419211921.79871-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230430-drv260x-improvements-v1-0-1fb28b4cc698@z3ntu.xyz>
+References: <20230430-drv260x-improvements-v1-0-1fb28b4cc698@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,18 +63,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Apr 2023 23:19:21 +0200, Krzysztof Kozlowski wrote:
-> SoC DTSI already comes with 85800000 reserved memory node, so assume the
-> author wanted to update its length.  This fixes dtbs W=1 warning:
+On Sun, 30 Apr 2023 20:20:52 +0200, Luca Weiss wrote:
+> Clean up some issues with the driver I've noticed while working on it,
+> then fix the magnitude handling which previously resulted the driver
+> discarding the upper 8 bits of the magnitude value, and finally we can
+> add the drv260x to the APQ8026 Huawei Watch.
 > 
->   Warning (unique_unit_address_if_enabled): /reserved-memory/qhee-code@85800000: duplicate unit-address (also used in node /reserved-memory/reserved@85800000)
+> While the "fix magnitude handling" commit technically changes behavior
+> and could change behavior of existing user space applications that deal
+> with this quirky behavior, it's definitely not correct and results in
+> very unexpected behavior if the user space doesn't look out for it
+> (meaning only use 0x00-0xFF magnitude, and also know that the magnitude
+> was interpreted as signed value, see more details in the commit message
+> there).
 > 
-> 
+> [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sdm630-nile: correct duplicated reserved memory node
-      commit: 5b85de0d51776cae7c165ec2785d1be06ebc9f21
+[5/5] ARM: dts: qcom: apq8026-huawei-sturgeon: Add vibrator
+      commit: ad318f9ce5a2e815816bfcf7f187a3ac32905523
 
 Best regards,
 -- 
