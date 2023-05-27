@@ -2,138 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA2A7130DD
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 02:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6788D7130F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 02:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjE0AX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 20:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
+        id S237094AbjE0Asj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 20:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjE0AXz (ORCPT
+        with ESMTP id S236077AbjE0Ase (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 20:23:55 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F31AD;
-        Fri, 26 May 2023 17:23:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685147034; x=1716683034;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9JFuCLTPE45+Dw7KRi33f+v/1fe/HHVRaImO6qgC/ZE=;
-  b=VkezAr+FR06JqLwpowNCXhcmOaeed+YP3dUey+lcduBCzHSBg0r6P2E7
-   ab6eTdyYinhQcNhpxmW+cZ5yxQZ7IfPyhxYmKRoolItIVK6zA6mgVMsT0
-   G2qtxPutK2ElpGst6Od5Fw9YkI/6t6suAtUE6HzzAMdJhau1w4EYSv0FL
-   bih/6AMk0qR2z+i9Um6RN9Gn842kgGTfWzmrIsSHCbmjeyT/TsbMUc140
-   kEm51780CQw7KP3vomabyIHmf6gOnerd4bGDA39O+N2fYJtKC2NscmLRG
-   VRNvKbZjFgZ3VM7Q9ngtM/D9dFiGWYPFh+0HKBK3m9ChnN9pEoMf1Gl8L
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="420100394"
-X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
-   d="scan'208";a="420100394"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 17:23:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="736184196"
-X-IronPort-AV: E=Sophos;i="6.00,195,1681196400"; 
-   d="scan'208";a="736184196"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga008.jf.intel.com with ESMTP; 26 May 2023 17:23:53 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 26 May 2023 17:23:53 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 26 May 2023 17:23:53 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 26 May 2023 17:23:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CiIqLz3l+hkb6RuXxyOrRlRTQedHIQEEoI7SHcMwF+DeXewv7ereI0WU5usf6EASw4rNTep/Tk7phAL6g/O4d/6B+XGfDKuX4Qmw/NSwCdAjSW2kf5EXZ7oR7v/RkhLbGxbJE6sn16u437hq90z7Pj4t48agOVunMW/JY/lFvTr1MVpIBB/ckjt2sM0xgUFM4BfXiyuwKrAE3x3PkYgNS82fN+eEkw8B7WRJCBRumUf3OVFauLJsWyfZvPh4hZ0sqHIRxwz2Sejkl5uQ+J/ahZDUHrvQxgTkjfCqS5O6tm5tdnfg0m5zyvOtir2g3/KW2XbmBeLVkgIaQ9gzFl7EQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r8ny+7WifwcrP5RFnFqeu0SLE/hdqpj07qpMo1nyoCM=;
- b=XUqAeNWQSvFHM0CFtjU1DKeF9Wr1iFExfZxnWeVFvmkXMY6iGSS3Y0+pAWOzBm3HbQz89HMlCUrytMbbc/hcKo6oXNsEor+fCPi0pA8cvmaUTbSGc2BRhaMwe0TBEg09Bj0bBJ5iGmMVOACK1uNiI1ZFzPQb1GbNEcHEkdgXDIIxNFjKNEmg4Bw9xVKHO1YxNr++CiVHRiUIqV7th8Ggyz+fubfw56AveTfopuXEpv625WQtUgffErG9KwEZ9e9If61GsxIkJgEtZ8DYcb7KV24a4NOUzORG2kiR701Wipz5P6ZT4Vqvi4Zmtui+Z7dwH2NMtVaRGW3Dfj/JSIDhCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by SA1PR11MB7086.namprd11.prod.outlook.com (2603:10b6:806:2b3::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Sat, 27 May
- 2023 00:23:51 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::95c6:c77e:733b:eee5%5]) with mapi id 15.20.6433.017; Sat, 27 May 2023
- 00:23:51 +0000
-Date:   Fri, 26 May 2023 17:23:46 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     <torvalds@linux-foundation.org>
-CC:     <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] Compute Express Link (CXL) Fixes for 6.4-rc4
-Message-ID: <64714d92a5ba8_1ec11294c6@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-ClientProxiedBy: BYAPR06CA0043.namprd06.prod.outlook.com
- (2603:10b6:a03:14b::20) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+        Fri, 26 May 2023 20:48:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBBE135
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 17:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685148463;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X9b3vzINIXR1anUzVhEr78wZfx7TKxIm6CwvQnMGeGU=;
+        b=jDSXvIsWfFKzFQptBOU16nQa/jV7WqFbqEPTYNEjjZfzZBTZ5gz77EX/D3q+76ILtKKlYB
+        +C5/JPeF5IS+OSkK1WpNeAHpzHbp6g3P1h3/gFWwRmZRYCYj/0ny1TdAlgNJhr1Kq+uk+0
+        PcJpvf7N798bLHZMNfRsBQkQZZkt/EM=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-344-Tia2ZjGJNI60Mfn3WyoCrg-1; Fri, 26 May 2023 20:47:42 -0400
+X-MC-Unique: Tia2ZjGJNI60Mfn3WyoCrg-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f813917b42so420831cf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 17:47:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685148462; x=1687740462;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X9b3vzINIXR1anUzVhEr78wZfx7TKxIm6CwvQnMGeGU=;
+        b=OZQhA2MVfpiMXgzRJPjj+RyRm5hRJIAA7+Qni1jL/HD7sLH4nWNTbpfkmvkaHxh3gH
+         kibvBQ4xAgPR+YBgI2rJjdlysinIXwUYJzH/v2Yo0qsvM1bI12fDQtr1lyfmc0+IQbEE
+         SK+F9zFoGvnuCaqF2LSybk9ikG7nAndJkzyQEnxFexEfz/yIwnOWr9nhdpYJyyM+iaPy
+         80GhKK7Nl/WMQV3vNP5QnxqBk2qevIc9yFUD7sprlbbnEoimVrmEkePFVIVyPV65cZ1Q
+         yRbMXKJNOlvb0g1ZqfxZLLFmp+WzuKI2OrUqYssCpyK+FCIpHad/XsL8hCkMc+PZEyxj
+         rXBg==
+X-Gm-Message-State: AC+VfDwUT2ZMC6Bv4Ew3SXxzAWW379psaMZYMQcGRvfQ6zWbetLfQJy0
+        RRy3jsQ4b9+r6sOnD2uxFBqbp/VNpSbWs2FD2lH+r9zURiuB1PcEdQfQ6GGlt84pNOSa9QsPyu/
+        KXV+ynInXoV63OJpD+EIF0S3ur49Dc3+bj+xGM4v2
+X-Received: by 2002:a05:622a:86:b0:3f6:a490:49c0 with SMTP id o6-20020a05622a008600b003f6a49049c0mr3648216qtw.49.1685148461916;
+        Fri, 26 May 2023 17:47:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6HF6ptc85/qFKOadVoNN128ATBRgixZ9TzgK4szV2iFc9QcAgqllIS1WAphW/kC0r338Dd24DCMx6ic7EY3KQ=
+X-Received: by 2002:a05:622a:86:b0:3f6:a490:49c0 with SMTP id
+ o6-20020a05622a008600b003f6a49049c0mr3648186qtw.49.1685148461651; Fri, 26 May
+ 2023 17:47:41 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SA1PR11MB7086:EE_
-X-MS-Office365-Filtering-Correlation-Id: 173a8462-9475-4725-4609-08db5e48a54d
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dwKc8bJbdIHIqdXVUHVdjOMmrXh0jIDA0oLbbW1V/1NXHbh4+P2ZDQqFCkezSOHdkvdn4Q0Q57GYR+LxJlPDT333IxHv0r/lDfTmKWky3BcL0pSmEjTUXkaRdXjAgNvoq19KYRx+vO40AZ7zt8eNpjcNwIh9sAKfrMct/3StMQAtRXx+q5rinPCQa553I9dk9nEJo/BDBV4k+o785ptiy9ghoqJn1n82ifjNbecNNJjfMs3BDGpVlTPno8EE/BEuzJDJF4TSqn0ePHESDmjYH+1J1xQ+rZr4yIvQDQ23pO4amyODSxdXEoIo8HrFmkSyZSTOWzNj4tv2gunIGyyKrdjNv6NR3Yegx2NzE97zNGQX/paLoyFu95tcFgkMy+oAid7qNeDYAPRds61zaIrDQXciwxIeOQ+nvf+Iwx1Ej0z0btamsFZp+yHI174J6icVnhliH9fovkCOepD70KhEkq7yVPWMTQhz+A4r+q3M3sAHnhtrvxf4m7GxZ5OA4YY4u8eYDkyg5OgrWmM06QrJUDkaU/kzShYVQIB8w9hItayJcPEAUdr/YwmLqMZmXS40
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(376002)(346002)(39860400002)(136003)(451199021)(6506007)(26005)(9686003)(6512007)(2906002)(186003)(6666004)(83380400001)(316002)(66476007)(4326008)(6916009)(66556008)(38100700002)(66946007)(41300700001)(86362001)(6486002)(82960400001)(478600001)(5660300002)(8936002)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UxX+xwXoK5nNeKZ8a03HjuZhVL/i4RQyodEUa3epNwMo990Y0uWje2Dmy3gR?=
- =?us-ascii?Q?aKBDHzUYMUnZNWf7xMq55wZtrCuVTjjKcS/KfEfOrBJ97NJZUVgp2LCtBjfJ?=
- =?us-ascii?Q?XocfSVJxq057noX1fZnjC/udWhqP55hj4bBCSMkmsWIgR1bRegXXvM70bSyo?=
- =?us-ascii?Q?rib4FDRjs/ktZOYbBhS+pUIBCWQbSFoDnAzhVZsnQQx3oQE9SLu0vkQFvKYC?=
- =?us-ascii?Q?jxrx3Gg++LvTQPfXYWOASEwnip6GOuzU5u5AlJ7MR1f66CSLAsz3n/i3084j?=
- =?us-ascii?Q?OzmLhL2lR4kW3EvazcsgQ47U5Qk4EHN7s+gGQPBRxGUvmC8B1qMyyHpHw4M6?=
- =?us-ascii?Q?k8lz7pqMHsF5xgxjELb6Md2LHfAhQADmXrXjInq7WNUJLHbBXCVlRSqUdRSU?=
- =?us-ascii?Q?+UUWCD0DOmTlOAGOXhpSdQd62rv6UAtWgoBIbRY1v4SSezepdYot+lBIQ9yI?=
- =?us-ascii?Q?joYBCpp+3pOwZW18TX1PHH+K7WQhyy56B1vn+zUS/tCNNmLyRSfvcZARqBeP?=
- =?us-ascii?Q?1G0+EpMrolu5aZN3q4MnmU5uXWRExIv5XfRTX3+vlY1DXG5xfvhwh/TRynMe?=
- =?us-ascii?Q?ExKwcBEtSoKwWU/hOyxCd314mSvVcj/X97lPJNW1Hx5cDKBchKiNDtJNK7pN?=
- =?us-ascii?Q?vBviBi6b77hkds9E6ICUo+8j+CHzZR6CBn+gsmUKS5BXPjKA3dIJXja3IQja?=
- =?us-ascii?Q?TVLddQVMIR37oU2PiR4ryW73MIKJk2jimMJpJM/bk4KuU+mrSupZsjwsnYz5?=
- =?us-ascii?Q?P+og1ZxWzbA9VATc2dxBRCTh8FmCROpnYjeYppYzWXC4WQCaIxn9DK+mX0+e?=
- =?us-ascii?Q?Xktq38i4WfphEp0nGZ0EFm5pgcOKq6eF53Vy0lr7dFBki8nKTl9pUPLtOm+d?=
- =?us-ascii?Q?kIlj5xpx1ARohPZ8t1VKk/R2Bxh/CqlesKWSvD9cYIesh0E8lbnjEc1KM8Zv?=
- =?us-ascii?Q?VuLkhVHQ4T6TToX7wd3tMbKZ4wMRpRm9vxWJFTvO27X2D4S1tJNOgBnjeSlX?=
- =?us-ascii?Q?KQqmnK/c1xbzKWXD3kVt19rtoVASJuI6piS8cLY47abGZCntklGoetLvnwXh?=
- =?us-ascii?Q?Gj1Ho8W4wZ0wcGM4+WCthirAuOYfDa/LISljP8ZTLpv+5BUbMyCsX2SwxghQ?=
- =?us-ascii?Q?0Qbrd5DrVs+eMJ7QJ8qE7ni8wePi9lktQSweZwkEn53/8B1hUUjmq+mmsm1m?=
- =?us-ascii?Q?wETQQftr1TQtecRusEPhMW4Bcu2qAUpD9l7n7pJ5sq4FAULY6ek2V/YgqcW0?=
- =?us-ascii?Q?zfVlDp6q+y4s6DOp2vN7E4zDyY9YrZX3qKbi1KEXZUNssAne8b7YlvO49/nS?=
- =?us-ascii?Q?mKRfZIijC5iA9X94pa4HFsaXVjXys8RaRkLvpjC0SDnV43wMkoHQ76Rb1Zog?=
- =?us-ascii?Q?fVNTHUVZ9rT3q+5IoWS/eNj3GunzL/D6jbouC5GNlP6IB5aQ3xd0krQNQ9Ci?=
- =?us-ascii?Q?rmjHxgQ4g+uEEAd5APAtGH7y5Bnzk9/3XVYc4FgHJ8h+qqEIs19NLg5oKp+m?=
- =?us-ascii?Q?/YzWHcFHPZbDzeVdZxe8nHMuzutfEiv3mAROBen/qv1S8YqRQw+y+fk5fCqL?=
- =?us-ascii?Q?i6ogzDPeAE+uQLt5KmFT7sT0X9R1dem1qXMLTPw62FsFU3sS/nKiOtWC7mj6?=
- =?us-ascii?Q?bg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 173a8462-9475-4725-4609-08db5e48a54d
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2023 00:23:50.9311
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sfmJDiV2jn+SMJ/4dZ48mC4U22I4dIabHJKlEdMaKNE8ZwuQELuCelyTkgUsNTRLKB+HX8fukjkGUSWxqCB03LB30/sKzTVkMUfEI61Fucs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB7086
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20221013184028.129486-1-leobras@redhat.com> <20221013184028.129486-5-leobras@redhat.com>
+In-Reply-To: <20221013184028.129486-5-leobras@redhat.com>
+From:   Leonardo Bras Soares Passos <leobras@redhat.com>
+Date:   Fri, 26 May 2023 21:47:30 -0300
+Message-ID: <CAJ6HWG62EgsivTKFUwwtSEsozY40PO8CD9P9wP7=NfYwhpBbnw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] crypto/pcrypt: Do not use isolated CPUs for callback
+To:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Phil Auld <pauld@redhat.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wang Yufen <wangyufen@huawei.com>, mtosatti@redhat.com
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -142,64 +98,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus, please pull from:
+Friendly ping
+(for this single patch)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl tags/cxl-fixes-6.4-rc4
+On Thu, Oct 13, 2022 at 3:41=E2=80=AFPM Leonardo Bras <leobras@redhat.com> =
+wrote:
+>
+> Currently pcrypt_aead_init_tfm() will pick callback cpus (ctx->cb_cpu)
+> from any online cpus. Later padata_reorder() will queue_work_on() the
+> chosen cb_cpu.
+>
+> This is undesired if the chosen cb_cpu is listed as isolated (i.e. using
+> isolcpus=3D... or nohz_full=3D... kernel parameters), since the work queu=
+ed
+> will interfere with the workload on the isolated cpu.
+>
+> Make sure isolated cpus are not used for pcrypt.
+>
+> Signed-off-by: Leonardo Bras <leobras@redhat.com>
+> ---
+>  crypto/pcrypt.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/crypto/pcrypt.c b/crypto/pcrypt.c
+> index 9d10b846ccf73..0162629a03957 100644
+> --- a/crypto/pcrypt.c
+> +++ b/crypto/pcrypt.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/kobject.h>
+>  #include <linux/cpu.h>
+>  #include <crypto/pcrypt.h>
+> +#include <linux/sched/isolation.h>
+>
+>  static struct padata_instance *pencrypt;
+>  static struct padata_instance *pdecrypt;
+> @@ -175,13 +176,15 @@ static int pcrypt_aead_init_tfm(struct crypto_aead =
+*tfm)
+>         struct pcrypt_instance_ctx *ictx =3D aead_instance_ctx(inst);
+>         struct pcrypt_aead_ctx *ctx =3D crypto_aead_ctx(tfm);
+>         struct crypto_aead *cipher;
+> +       const cpumask_t *hk_wq =3D housekeeping_cpumask(HK_TYPE_WQ);
+>
+>         cpu_index =3D (unsigned int)atomic_inc_return(&ictx->tfm_count) %
+> -                   cpumask_weight(cpu_online_mask);
+> +                   cpumask_weight_and(hk_wq, cpu_online_mask);
+>
+> -       ctx->cb_cpu =3D cpumask_first(cpu_online_mask);
+> +       ctx->cb_cpu =3D cpumask_first_and(hk_wq, cpu_online_mask);
+>         for (cpu =3D 0; cpu < cpu_index; cpu++)
+> -               ctx->cb_cpu =3D cpumask_next(ctx->cb_cpu, cpu_online_mask=
+);
+> +               ctx->cb_cpu =3D cpumask_next_and(ctx->cb_cpu, hk_wq,
+> +                                              cpu_online_mask);
+>
+>         cipher =3D crypto_spawn_aead(&ictx->spawn);
+>
+> --
+> 2.38.0
+>
 
-...to receive a small collection of CXL fixes. The "media ready" series
-prevents the driver from acting on bad capacity information, and it
-moves some checks earlier in the init sequence which impacts topics in
-the queue for 6.5. Additional hotplug testing uncovered a missing enable
-for memory decode. A debug crash fix is also included.
-
-All but the last patch has appeared in -next with no issues. That last
-patch improves the readability of the fix and is low risk.
-
----
-
-The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
-
-  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl tags/cxl-fixes-6.4-rc4
-
-for you to fetch changes up to 793a539ac78843ef9378bb42a44edfbc552a67d5:
-
-  cxl: Explicitly initialize resources when media is not ready (2023-05-26 13:34:39 -0700)
-
-----------------------------------------------------------------
-cxl fixes for v6.4-rc4
-
-- Stop trusting capacity data before the "media ready" indication
-
-- Add missing HDM decoder capability enable for the cold-plug case
-
-- Fix a debug message induced crash
-
-----------------------------------------------------------------
-Dan Williams (1):
-      cxl/port: Enable the HDM decoder capability for switch ports
-
-Dave Jiang (3):
-      cxl: Wait Memory_Info_Valid before access memory related info
-      cxl: Move cxl_await_media_ready() to before capacity info retrieval
-      cxl: Explicitly initialize resources when media is not ready
-
-Robert Richter (1):
-      cxl/port: Fix NULL pointer access in devm_cxl_add_port()
-
- drivers/cxl/core/mbox.c       |  12 ++++-
- drivers/cxl/core/pci.c        | 112 +++++++++++++++++++++++++++++++++++++-----
- drivers/cxl/core/port.c       |   7 ++-
- drivers/cxl/cxl.h             |   1 +
- drivers/cxl/cxlmem.h          |   2 +
- drivers/cxl/cxlpci.h          |   2 +
- drivers/cxl/mem.c             |   3 ++
- drivers/cxl/pci.c             |   6 +++
- drivers/cxl/port.c            |  20 ++++----
- tools/testing/cxl/Kbuild      |   1 +
- tools/testing/cxl/test/mem.c  |   1 +
- tools/testing/cxl/test/mock.c |  15 ++++++
- 12 files changed, 153 insertions(+), 29 deletions(-)
