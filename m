@@ -2,67 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FCC71342E
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 13:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BF5713438
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 13:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjE0LHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 07:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
+        id S231360AbjE0LNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 07:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbjE0LHF (ORCPT
+        with ESMTP id S230042AbjE0LNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 07:07:05 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D07BF3;
-        Sat, 27 May 2023 04:07:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685185624; x=1716721624;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=L74hDA45q+pqqA8K9jTL0kklXJ0cef6Nic12DbO9aA4=;
-  b=W7r1xrX0XMDakvmxHy+Qurf70Cmc65P1B6KwTYSbDSfAcnrLGBoQe+hE
-   NpK0ORaeLaM2HtBzMutmK2bYVi1n5T08ADcie3bP59claNn01N6n2OQRk
-   CSR1RrA2et7v/sRLXlXpq/5e5JAKw2bYOlspTsMP+p/p8qfXPytZ/U0Ji
-   EzdajHeoe5NfPrfgdPmMDZpwuQgcQM8wRa00btU7829VJ77WCnRlzI2Ii
-   2+3/EBkMb55cUpC/QTL8Z72e4jNj1GyszlxUmQhPkG5+ONEJ7h1Adu9ad
-   +2+ZPccNZCmzriJ/utXYs9RLEOzC5LtmwVw8AsDu6XWyM2Ijd1dUAodJ/
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="334009503"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="334009503"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 04:07:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="708672893"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="708672893"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 27 May 2023 04:07:01 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q2rlE-000Jv6-0t;
-        Sat, 27 May 2023 11:07:00 +0000
-Date:   Sat, 27 May 2023 19:06:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Min Li <lm0963hack@gmail.com>, alexander.deucher@amd.com
-Cc:     oe-kbuild-all@lists.linux.dev, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        sumit.semwal@linaro.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH] drm/radeon: fix race condition UAF in
- radeon_gem_set_domain_ioctl
-Message-ID: <202305271806.VvOClWyB-lkp@intel.com>
-References: <20230526123753.16160-1-lm0963hack@gmail.com>
+        Sat, 27 May 2023 07:13:34 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79838F3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 04:13:30 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3093eb8cd1fso998581f8f.1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 04:13:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685186009; x=1687778009;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zNj5xIx+BSwromsYm9ia1o7bUGDaZEteHL4lXB89T5Q=;
+        b=bd1q/GQAB8FX8qvHFUw+YjkqOlULq8xcqP2lcTWb1p58RYfjHUYsGKk3kk+oaotI2n
+         lHZR+aB3Tp/ih7l/pGnYlyTx37Du23/EGbtzp2NyVof1zUBStBhCnDLnUkhFh4IdHK5c
+         qXOoqNHi5SRIEIYsRVa83OZ8lm+ZrmhCCsivO5olA1MEfzoEJMw/zewg8YWkj+15j3ez
+         p/x/iKgFvF21KqBV41QGtYbWzeL/J25PGnhxw9c3PLfzaD712YtRN1FpO16yiUL73Viz
+         UW/6MUFOverOsVy2rmy2dM5+YhZJSfvMH1wolbtkrllGe0IApaKplSaN9smjhWDV4QLV
+         Y4jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685186009; x=1687778009;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zNj5xIx+BSwromsYm9ia1o7bUGDaZEteHL4lXB89T5Q=;
+        b=Yoq9m7RAKc1bzNKzpBdvhdAMnDIZGreekMjWl0+jLJsyCMyX9EbCqwZ7c/nDHLmjTw
+         OAtR1dRw8yIS59acwaos4f8ZzM4JbDWwYDgER/mNjjzCOqNX68i0SSH9GRFSb1GUCP3Q
+         jRosV5rDH4EBQuiWio7+FtLMI4by9Ri3Eaq5UvL6AmvzyUBTZcjQDMeGkQ6si4ownPCw
+         QkEd5UYhGLEAa2MwQzMBkb7IpoCnZcOVXnrEzKQb0cuUk/L9BLPE1FR1a72kzLVkN27U
+         BjiUwM/zvDkOHWVpJooCM1pRmHUTDEk4+52T9WL+GcZkOuBFbAIEEWEriiTtUCshHzln
+         xLRg==
+X-Gm-Message-State: AC+VfDyj7b2Or5Rk9BxLzB0WgNsNA7ufWBmsh4iRvyAkFZoEKcnK3OqV
+        GcFRPJzP0SDQo3lLPM2bSXGaFA==
+X-Google-Smtp-Source: ACHHUZ656fhr7DfHYJLwVSn2SwLz4g3oSOi/Ftp4RjGh8gxHDAYhYorAxyhtTTTIga2lJwEcdRK2Ow==
+X-Received: by 2002:a5d:4911:0:b0:309:535c:c236 with SMTP id x17-20020a5d4911000000b00309535cc236mr3971606wrq.36.1685186008870;
+        Sat, 27 May 2023 04:13:28 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id v10-20020adfe28a000000b003063a1cdaf2sm7695793wri.48.2023.05.27.04.13.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 May 2023 04:13:28 -0700 (PDT)
+Message-ID: <b7e1d035-ee79-77c9-e81f-56fa8c2cf1df@linaro.org>
+Date:   Sat, 27 May 2023 12:13:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230526123753.16160-1-lm0963hack@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 3/3] media: camss: Link CAMSS power domain
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hansverk@cisco.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230526180712.8481-1-y.oudjana@protonmail.com>
+ <20230526180712.8481-4-y.oudjana@protonmail.com>
+ <fa395680-0e6c-3eb0-9d5a-f90a95c394b8@linaro.org>
+ <GFZAVR.8RI43MBQZ4HN3@gmail.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <GFZAVR.8RI43MBQZ4HN3@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,82 +88,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Min,
+On 27/05/2023 07:02, Yassine Oudjana wrote:
+>> Konrad pointed this out.
+>>
+>> Are you 100% sure you want to do this. We already have a way to count 
+>> the # of power-domains in camss_configure_pd().
+>>
+>> Your series is now adding a dependency on power-domain-names.
+>>
+>> Is there a good reason to add that dependency ? If not, then lets just 
+>> take the code from camss_configure_pd() and make it so that it can be 
+>> used/reused here.
+> 
+> Is there a good reason not to?I found that using the existing 
+> index-based method would unnecessarily complicate things since an extra 
+> layer of checks would be needed to differentiate between MSM8996 and 
+> TITAN SoCs, since those have the TITAN GDSC at the same index where the 
+> CAMSS GDSC is now added for MSM8996. The same checks will also have to 
+> be repeated in error paths and during cleanup.
+> 
+> I guessed the only reason we were still using this method for the 
+> existing PDs was to remain compatible with old DT as Konrad mentioned, 
+> and since this CAMSS PD is only added now, I thought it'd be a good 
+> opportunity to introduce power-domain-names and simplify things a bit.
 
-kernel test robot noticed the following build warnings:
+I think actually I agree with you but, I don't think you've gone far 
+enough with this patch.
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v6.4-rc3 next-20230525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Now that I look at this code a bit more, it looks like we need to place 
+the TITAN/CAMSS GDSC last in the list of power-domains or the magic 
+indices won't work. So my suggestion to you to place the CAMSS_GDSC in 
+the power-domain list wouldn't work, unless it was the last entry,..
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Min-Li/drm-radeon-fix-race-condition-UAF-in-radeon_gem_set_domain_ioctl/20230527-155623
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230526123753.16160-1-lm0963hack%40gmail.com
-patch subject: [PATCH] drm/radeon: fix race condition UAF in radeon_gem_set_domain_ioctl
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230527/202305271806.VvOClWyB-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/66fb975494d21e80b90235b7d8bf0953990c5c89
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Min-Li/drm-radeon-fix-race-condition-UAF-in-radeon_gem_set_domain_ioctl/20230527-155623
-        git checkout 66fb975494d21e80b90235b7d8bf0953990c5c89
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/gpu/
+Having magic indices doesn't make much sense to me. Aside from anything 
+else we don't document or require that indexing behavior in our 
+Documentation.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305271806.VvOClWyB-lkp@intel.com/
+In fact, I'm wondering what is the use case of a vfe_lite on its own - 
+without the TITAN_TOP GDSC switched on ? I'm looking at the block 
+diagram of the clocks for the sm8250 the IFE_LITE is buried well inside 
+of a series of other components..
 
-All warnings (new ones prefixed by >>):
+The reverse OTOH holds. Full fat VFE can be collapsed individually, 
+which is why they have their own GDSCs...
 
-   drivers/gpu/drm/radeon/radeon_gem.c: In function 'radeon_gem_set_domain_ioctl':
->> drivers/gpu/drm/radeon/radeon_gem.c:462:27: warning: variable 'robj' set but not used [-Wunused-but-set-variable]
-     462 |         struct radeon_bo *robj;
-         |                           ^~~~
+OK, we should get away from magic indices ASAP.
 
+This is a good find, thank you for bringing it up.
 
-vim +/robj +462 drivers/gpu/drm/radeon/radeon_gem.c
+Could you take a named pointer for the CAMSS/TITAN instead of an index ?
 
-f72a113a71ab08 Christian König 2014-08-07  453  
-771fe6b912fca5 Jerome Glisse   2009-06-05  454  int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
-771fe6b912fca5 Jerome Glisse   2009-06-05  455  				struct drm_file *filp)
-771fe6b912fca5 Jerome Glisse   2009-06-05  456  {
-771fe6b912fca5 Jerome Glisse   2009-06-05  457  	/* transition the BO to a domain -
-771fe6b912fca5 Jerome Glisse   2009-06-05  458  	 * just validate the BO into a certain domain */
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  459  	struct radeon_device *rdev = dev->dev_private;
-771fe6b912fca5 Jerome Glisse   2009-06-05  460  	struct drm_radeon_gem_set_domain *args = data;
-771fe6b912fca5 Jerome Glisse   2009-06-05  461  	struct drm_gem_object *gobj;
-4c7886791264f0 Jerome Glisse   2009-11-20 @462  	struct radeon_bo *robj;
-771fe6b912fca5 Jerome Glisse   2009-06-05  463  	int r;
-771fe6b912fca5 Jerome Glisse   2009-06-05  464  
-771fe6b912fca5 Jerome Glisse   2009-06-05  465  	/* for now if someone requests domain CPU -
-771fe6b912fca5 Jerome Glisse   2009-06-05  466  	 * just make sure the buffer is finished with */
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  467  	down_read(&rdev->exclusive_lock);
-771fe6b912fca5 Jerome Glisse   2009-06-05  468  
-771fe6b912fca5 Jerome Glisse   2009-06-05  469  	/* just do a BO wait for now */
-a8ad0bd84f9860 Chris Wilson    2016-05-09  470  	gobj = drm_gem_object_lookup(filp, args->handle);
-771fe6b912fca5 Jerome Glisse   2009-06-05  471  	if (gobj == NULL) {
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  472  		up_read(&rdev->exclusive_lock);
-bf79cb914dbfe8 Chris Wilson    2010-08-04  473  		return -ENOENT;
-771fe6b912fca5 Jerome Glisse   2009-06-05  474  	}
-7e4d15d90afe46 Daniel Vetter   2011-02-18  475  	robj = gem_to_radeon_bo(gobj);
-771fe6b912fca5 Jerome Glisse   2009-06-05  476  
-771fe6b912fca5 Jerome Glisse   2009-06-05  477  	r = radeon_gem_set_domain(gobj, args->read_domains, args->write_domain);
-771fe6b912fca5 Jerome Glisse   2009-06-05  478  
-f11fb66ae92193 Emil Velikov    2020-05-15  479  	drm_gem_object_put(gobj);
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  480  	up_read(&rdev->exclusive_lock);
-66fb975494d21e Min Li          2023-05-26  481  	r = radeon_gem_handle_lockup(rdev, r);
-771fe6b912fca5 Jerome Glisse   2009-06-05  482  	return r;
-771fe6b912fca5 Jerome Glisse   2009-06-05  483  }
-771fe6b912fca5 Jerome Glisse   2009-06-05  484  
+camss->genpd_camss_top * =
+camss->genpd_vfe[] =
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+These have a very obvious meaning. We can read a top-level struct camss 
+{} and immediately understand what is meant, whereas index = 0 doesn't 
+mean anything and isn't obvious from the code anyway.
+
+1. You're right we should introduce some kind of naming to
+    break the bonds of magic indices.
+
+    So lets do as you suggest and name the power-domains.
+
+    However we should refactor the code to drop magic indices.
+
+2. If and only if named power-domains are absent, fall back on
+    legacy indexing. In this case we will assume legacy indexing
+    assigns to our new named pointers.
+
+3. New CAMSS dts will need to have named power-domains as a result.
+
+---
+bod
