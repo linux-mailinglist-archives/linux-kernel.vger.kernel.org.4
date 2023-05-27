@@ -2,179 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3FB71359E
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC027135A2
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjE0QMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 12:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S231771AbjE0QNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 12:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjE0QMt (ORCPT
+        with ESMTP id S231161AbjE0QNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 12:12:49 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF003C7
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:12:47 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510f525e06cso3133754a12.2
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:12:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685203966; x=1687795966;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=I/bw27vS3UVZGByGOfLoz+Tva7cynCfUs6ZBWXI06bo=;
-        b=T9rdZ8CAEEk2bwYl04RlNrdIw1fR0aZAtgEkRhT1ywPBV5ljidGU1zkHPG7XuRkavG
-         0ldhVFgA/+nuYwudhD8SkCHF0F+9mZeET9tUkJ7H19OO7a436jmmsH02rfu9iXl6Mls6
-         +bQEh76AYnTrCMsvy42HbavxbjHEAJetWtPXM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685203966; x=1687795966;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I/bw27vS3UVZGByGOfLoz+Tva7cynCfUs6ZBWXI06bo=;
-        b=KCt86ikqzPKFR2prXQ0PzZTJYJ1e4EGxse0aEk/0Wd2ea8GXRtxqUB6IVCQrufJCLG
-         bZwCV4oHvQhJJ+Tp2TnpDwDLwGh5kN0zvapzBNzih9Krw7rUf8wEe3oNqqPveKrt0CsS
-         jmIPmat/iue9X+Tq0F6hCf+6x7f3yYOrO/wDDIb/zFQGPPxWqJIbi3vYxe9pgbEgI1Rh
-         ZHOnvE6UTU+B02Voq9jUBO+Omtkbb40d6tRmkb6ZdYLTgbOwAGHe5JgzqkfLGYPz8Ken
-         MfWANCXfottqEfDHocu3XitTR8GKV9aBxI5GIWKRAvqvKg1kkXf2/Wfcgmu72tzTy2i3
-         Cg9Q==
-X-Gm-Message-State: AC+VfDwVIh6XqpHrPRAXGNmLexlsDT9Rbh3hbGnLt/BnfU/q1UwI7GDG
-        kTkYQrg6zSWZLdf727E7S2a0EUc1WHheRGSBDsVXPzbi
-X-Google-Smtp-Source: ACHHUZ6Xum+ZvNOnDVNHjIWz1C8FVOZWleNm62mj39fiVrIc1rKRnGdqS8wnHA3+bzRghLTKYckK4g==
-X-Received: by 2002:a17:907:6092:b0:966:1984:9d21 with SMTP id ht18-20020a170907609200b0096619849d21mr6957302ejc.9.1685203966068;
-        Sat, 27 May 2023 09:12:46 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id r20-20020a170906365400b0094e7d196aa4sm3507700ejb.160.2023.05.27.09.12.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 May 2023 09:12:44 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-51478f6106cso2714843a12.1
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:12:44 -0700 (PDT)
-X-Received: by 2002:a17:907:3607:b0:96f:7b4a:2909 with SMTP id
- bk7-20020a170907360700b0096f7b4a2909mr5884052ejc.26.1685203964300; Sat, 27
- May 2023 09:12:44 -0700 (PDT)
+        Sat, 27 May 2023 12:13:12 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF30DE4;
+        Sat, 27 May 2023 09:13:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685203989; x=1716739989;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EDxDfGbnxz7XwsTpPsRv+ZA+4CNV0OhPsz+82L11lMA=;
+  b=Qp0Dcr4DVOvzZc58dD+6n+rE3l0RfpPm9Yug+woaDaTlob0Yzw7yif+D
+   P3J6V9Nem1c2X1QjCfV06KQQdCZ9wp/vEI9bdSnGlgslLqyniYDL9ofQv
+   Vet7Nvc+SictsiqzTiGnJYsRDTZEzuCPfKQvznJzhXibZu92aKX6TqZFi
+   fKS9uoPMTtajsvTDrT0XEH0WEdw4cnginP7EDIgEHeDyBV78jXWMWfQMI
+   /G2juzHJ0cNvS4lgscLCa3UZlISKpNodbAmukS1f/4tvh26OaQY8vzYza
+   y0zdNTFjg9/2X2m4kghY5aoM3xo14kHIqbkNHip8rKafGkXYvetgcfc0z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="356796425"
+X-IronPort-AV: E=Sophos;i="6.00,197,1681196400"; 
+   d="scan'208";a="356796425"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 09:13:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="1035682342"
+X-IronPort-AV: E=Sophos;i="6.00,197,1681196400"; 
+   d="scan'208";a="1035682342"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 27 May 2023 09:13:06 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q2wXS-000K3S-0o;
+        Sat, 27 May 2023 16:13:06 +0000
+Date:   Sun, 28 May 2023 00:12:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Bharat Bhushan <bbhushan2@marvell.com>
+Subject: Re: [PATCH 2/2 v8] Watchdog: Add marvell GTI watchdog driver
+Message-ID: <202305280038.Fo8aOfsW-lkp@intel.com>
+References: <20230526062626.1180-2-bbhushan2@marvell.com>
 MIME-Version: 1.0
-References: <20230522025124.5863-1-michael.christie@oracle.com>
- <20230522025124.5863-4-michael.christie@oracle.com> <20230522123029.GA22159@redhat.com>
- <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com> <20230522174757.GC22159@redhat.com>
- <20230523121506.GA6562@redhat.com> <87bkib6nxr.fsf@email.froward.int.ebiederm.org>
- <20230524141022.GA19091@redhat.com> <87ttw1zt4i.fsf@email.froward.int.ebiederm.org>
- <20230525115512.GA9229@redhat.com> <87y1lcxwcj.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wj4DS=2F5mW+K2P7cVqrsuGd3rKE_2k2BqnnPeeYhUCvg@mail.gmail.com> <87cz2mrtnk.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87cz2mrtnk.fsf@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 27 May 2023 09:12:27 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whsi9JFP-okH3jXHrA8rh8bMuuSt6ZgkmPwiDMAn437qA@mail.gmail.com>
-Message-ID: <CAHk-=whsi9JFP-okH3jXHrA8rh8bMuuSt6ZgkmPwiDMAn437qA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps regression
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Content-Type: multipart/mixed; boundary="000000000000aae9aa05fcaf1f14"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526062626.1180-2-bbhushan2@marvell.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000aae9aa05fcaf1f14
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi Bharat,
 
-On Sat, May 27, 2023 at 2:49=E2=80=AFAM Eric W. Biederman <ebiederm@xmissio=
-n.com> wrote:
->
-> The real sticky widget for me is how to handle one of these processes
-> coredumping.  It really looks like it will result in a reliable hang.
+kernel test robot noticed the following build errors:
 
-Well, if *that* is the main worry, I think that's trivial enough to deal wi=
-th.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on groeck-staging/hwmon-next linus/master v6.4-rc3 next-20230525]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-In particular, we could make the rule just be that user worker threads
-simply do not participate in core-dumps.
+url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230526-142851
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230526062626.1180-2-bbhushan2%40marvell.com
+patch subject: [PATCH 2/2 v8] Watchdog: Add marvell GTI watchdog driver
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230528/202305280038.Fo8aOfsW-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b5f326e7e3943850db45d2f06d737dc9ac37a575
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230526-142851
+        git checkout b5f326e7e3943850db45d2f06d737dc9ac37a575
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/
 
-THAT isn't hard.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305280038.Fo8aOfsW-lkp@intel.com/
 
-All we need to do is
+All errors (new ones prefixed by >>):
 
- (a) not count those threads in zap_threads()
+   drivers/watchdog/marvell_gti_wdt.c: In function 'gti_wdt_interrupt':
+>> drivers/watchdog/marvell_gti_wdt.c:89:9: error: implicit declaration of function 'writeq' [-Werror=implicit-function-declaration]
+      89 |         writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+         |         ^~~~~~
+   drivers/watchdog/marvell_gti_wdt.c: In function 'gti_wdt_start':
+>> drivers/watchdog/marvell_gti_wdt.c:126:18: error: implicit declaration of function 'readq' [-Werror=implicit-function-declaration]
+     126 |         regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+         |                  ^~~~~
+   cc1: some warnings being treated as errors
 
- (b) make sure that they don't add themselves to the "dumper" list by
-not calling "coredujmp_task_exit()"
 
- (c) not initiate core-dumping themselves.
+vim +/writeq +89 drivers/watchdog/marvell_gti_wdt.c
 
-and I think that's pretty much it.
+    82	
+    83	static irqreturn_t gti_wdt_interrupt(int irq, void *data)
+    84	{
+    85		struct watchdog_device *wdev = data;
+    86		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+    87	
+    88		/* Clear Interrupt Pending Status */
+  > 89		writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+    90		       priv->base + GTI_CWD_INT);
+    91	
+    92		watchdog_notify_pretimeout(wdev);
+    93	
+    94		return IRQ_HANDLED;
+    95	}
+    96	
+    97	static int gti_wdt_ping(struct watchdog_device *wdev)
+    98	{
+    99		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+   100	
+   101		writeq(GTI_CWD_POKE_VAL,
+   102		       priv->base + GTI_CWD_POKE(priv->wdt_timer_idx));
+   103	
+   104		return 0;
+   105	}
+   106	
+   107	static int gti_wdt_start(struct watchdog_device *wdev)
+   108	{
+   109		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+   110		u64 regval;
+   111	
+   112		if (!wdev->pretimeout)
+   113			return -EINVAL;
+   114	
+   115		set_bit(WDOG_HW_RUNNING, &wdev->status);
+   116	
+   117		/* Clear any pending interrupt */
+   118		writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+   119		       priv->base + GTI_CWD_INT);
+   120	
+   121		/* Enable Interrupt */
+   122		writeq(GTI_CWD_INT_ENA_SET_VAL(priv->wdt_timer_idx),
+   123		       priv->base + GTI_CWD_INT_ENA_SET);
+   124	
+   125		/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
+ > 126		regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+   127		regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
+   128		writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+   129	
+   130		return 0;
+   131	}
+   132	
 
-In fact, that really seems like a good model *regardless*, because
-honestly, a PF_IO_WORKER doesn't have valid register state for the
-core dump anyway, and anything that would have caused a IO thread to
-get a SIGSEGV *should* have caused a kernel oops already.
-
-So the only worry is that the core dump will now happen while an IO
-worker is still busy and so it's not "atomic" wrt possible VM changes,
-but while that used to be a big problem back in the dark ages when we
-didn't get the VM locks for core dumping, that got fixed a few years
-ago because it already caused lots of potential issues.
-
-End result: I think the attached patch is probably missing something,
-but the approach "FeelsRight(tm)" to me.
-
-Comments?
-
-                   Linus
-
---000000000000aae9aa05fcaf1f14
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_li66x0ln0>
-X-Attachment-Id: f_li66x0ln0
-
-IGZzL2NvcmVkdW1wLmMgICB8ICAyICstCiBrZXJuZWwvZXhpdC5jICAgfCAgNiArKysrKysKIGtl
-cm5lbC9zaWduYWwuYyB8IDE4ICsrKysrKysrKystLS0tLS0tLQogMyBmaWxlcyBjaGFuZ2VkLCAx
-NyBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2ZzL2NvcmVkdW1w
-LmMgYi9mcy9jb3JlZHVtcC5jCmluZGV4IGVjZTdiYWRmNzAxYi4uNDZmODE0NWIzOWU2IDEwMDY0
-NAotLS0gYS9mcy9jb3JlZHVtcC5jCisrKyBiL2ZzL2NvcmVkdW1wLmMKQEAgLTM2OCw3ICszNjgs
-NyBAQCBzdGF0aWMgaW50IHphcF9wcm9jZXNzKHN0cnVjdCB0YXNrX3N0cnVjdCAqc3RhcnQsIGlu
-dCBleGl0X2NvZGUpCiAKIAlmb3JfZWFjaF90aHJlYWQoc3RhcnQsIHQpIHsKIAkJdGFza19jbGVh
-cl9qb2JjdGxfcGVuZGluZyh0LCBKT0JDVExfUEVORElOR19NQVNLKTsKLQkJaWYgKHQgIT0gY3Vy
-cmVudCAmJiAhKHQtPmZsYWdzICYgUEZfUE9TVENPUkVEVU1QKSkgeworCQlpZiAodCAhPSBjdXJy
-ZW50ICYmICEodC0+ZmxhZ3MgJiAoUEZfUE9TVENPUkVEVU1QIHwgUEZfSU9fV09SS0VSKSkpIHsK
-IAkJCXNpZ2FkZHNldCgmdC0+cGVuZGluZy5zaWduYWwsIFNJR0tJTEwpOwogCQkJc2lnbmFsX3dh
-a2VfdXAodCwgMSk7CiAJCQlucisrOwpkaWZmIC0tZ2l0IGEva2VybmVsL2V4aXQuYyBiL2tlcm5l
-bC9leGl0LmMKaW5kZXggMzRiOTBlMmU3Y2Y3Li5mZGU1N2I5ZjQ0OTQgMTAwNjQ0Ci0tLSBhL2tl
-cm5lbC9leGl0LmMKKysrIGIva2VybmVsL2V4aXQuYwpAQCAtNDAwLDYgKzQwMCwxMiBAQCBzdGF0
-aWMgdm9pZCBjb3JlZHVtcF90YXNrX2V4aXQoc3RydWN0IHRhc2tfc3RydWN0ICp0c2spCiB7CiAJ
-c3RydWN0IGNvcmVfc3RhdGUgKmNvcmVfc3RhdGU7CiAKKwkvKgorCSAqIElPIHdvcmtlcnMgZG8g
-bm90IHBhcnRpY2lwYXRlIGluIGR1bXBpbmcgY29yZQorCSAqLworCWlmICh0c2stPmZsYWdzICYg
-UEZfSU9fV09SS0VSKQorCQlyZXR1cm47CisKIAkvKgogCSAqIFNlcmlhbGl6ZSB3aXRoIGFueSBw
-b3NzaWJsZSBwZW5kaW5nIGNvcmVkdW1wLgogCSAqIFdlIG11c3QgaG9sZCBzaWdsb2NrIGFyb3Vu
-ZCBjaGVja2luZyBjb3JlX3N0YXRlCmRpZmYgLS1naXQgYS9rZXJuZWwvc2lnbmFsLmMgYi9rZXJu
-ZWwvc2lnbmFsLmMKaW5kZXggOGY2MzMwZjBlOWNhLi5lMGFjYjExZDNhMWQgMTAwNjQ0Ci0tLSBh
-L2tlcm5lbC9zaWduYWwuYworKysgYi9rZXJuZWwvc2lnbmFsLmMKQEAgLTI4NDUsNiArMjg0NSwx
-NiBAQCBib29sIGdldF9zaWduYWwoc3RydWN0IGtzaWduYWwgKmtzaWcpCiAJCSAqLwogCQljdXJy
-ZW50LT5mbGFncyB8PSBQRl9TSUdOQUxFRDsKIAorCQkvKgorCQkgKiBQRl9JT19XT1JLRVIgdGhy
-ZWFkcyB3aWxsIGNhdGNoIGFuZCBleGl0IG9uIGZhdGFsIHNpZ25hbHMKKwkJICogdGhlbXNlbHZl
-cyBhbmQgZG8gbm90IHBhcnRpY2lwYXRlIGluIGNvcmUgZHVtcGluZy4KKwkJICoKKwkJICogVGhl
-eSBoYXZlIGNsZWFudXAgdGhhdCBtdXN0IGJlIHBlcmZvcm1lZCwgc28gd2UgY2Fubm90CisJCSAq
-IGNhbGwgZG9fZXhpdCgpIG9uIHRoZWlyIGJlaGFsZi4KKwkJICovCisJCWlmIChjdXJyZW50LT5m
-bGFncyAmIFBGX0lPX1dPUktFUikKKwkJCWdvdG8gb3V0OworCiAJCWlmIChzaWdfa2VybmVsX2Nv
-cmVkdW1wKHNpZ25yKSkgewogCQkJaWYgKHByaW50X2ZhdGFsX3NpZ25hbHMpCiAJCQkJcHJpbnRf
-ZmF0YWxfc2lnbmFsKGtzaWctPmluZm8uc2lfc2lnbm8pOwpAQCAtMjg2MCwxNCArMjg3MCw2IEBA
-IGJvb2wgZ2V0X3NpZ25hbChzdHJ1Y3Qga3NpZ25hbCAqa3NpZykKIAkJCWRvX2NvcmVkdW1wKCZr
-c2lnLT5pbmZvKTsKIAkJfQogCi0JCS8qCi0JCSAqIFBGX0lPX1dPUktFUiB0aHJlYWRzIHdpbGwg
-Y2F0Y2ggYW5kIGV4aXQgb24gZmF0YWwgc2lnbmFscwotCQkgKiB0aGVtc2VsdmVzLiBUaGV5IGhh
-dmUgY2xlYW51cCB0aGF0IG11c3QgYmUgcGVyZm9ybWVkLCBzbwotCQkgKiB3ZSBjYW5ub3QgY2Fs
-bCBkb19leGl0KCkgb24gdGhlaXIgYmVoYWxmLgotCQkgKi8KLQkJaWYgKGN1cnJlbnQtPmZsYWdz
-ICYgUEZfSU9fV09SS0VSKQotCQkJZ290byBvdXQ7Ci0KIAkJLyoKIAkJICogRGVhdGggc2lnbmFs
-cywgbm8gY29yZSBkdW1wLgogCQkgKi8K
---000000000000aae9aa05fcaf1f14--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
