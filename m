@@ -2,114 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849AB7134EB
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 15:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093A67134D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbjE0NKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 09:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
+        id S232324AbjE0Mxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 08:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbjE0NJ7 (ORCPT
+        with ESMTP id S229571AbjE0Mxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 09:09:59 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8680A10A;
-        Sat, 27 May 2023 06:09:58 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f6da07ff00so18066445e9.3;
-        Sat, 27 May 2023 06:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685192997; x=1687784997;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=dvsLtNhlfL+kHe9BSiqT/A+Q9kXCPHk0gZKozzO0bJM=;
-        b=WLrKljfLhF8WFYgrKC/y30tAA2pSGGKV4VcMofR7v5HD8z8ltP7IC/WjFxokWL7HgF
-         Ir59YLn1mkvjIstCVoM9VWRoNNS1Hcg55ZYOlsJHc9P99nTnQIkpxUg3A7XXWO81BfBB
-         QZKfTbYaQcupe8Acqw/5YjKSjCYq0op1G1zVVNNMz7dSDqe3hz82EfdvsQ9jXseWVX81
-         3BTvivONwmpZs+7EbHmzBrSo88qXEkEaq7RZT/GeenA0fL1nc6D0MG6huWaMEPDt9TL6
-         0OXrm1uwPPdgWzlokG2DuGW2Ym44B3HMnVAVQFdEtSOCsROQjT5wmmaW2RRHkXKoMDMl
-         1s8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685192997; x=1687784997;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dvsLtNhlfL+kHe9BSiqT/A+Q9kXCPHk0gZKozzO0bJM=;
-        b=FBDQNnHrPjtKx1MdWer67BJy4n1/F8aMCPq4SIoJpcZ3dyTnX7/Sj+s1hK2bMeY6qh
-         RXwHj+QQcyhpzUjgNOLV3DC/iH6WdPzJ0ols0ANEhrFs76XwYtb9ASKEoXL4teWikgZ2
-         YKLy4LVPs5S8FSGtABtKHVY7G2KIQFivQehjXDa8ocdczcMZj7vX+dAXsSKqPPSXnAPo
-         +NT+VNChckTJK6D70/z+azs9/HEn9hcoKxetCLshpyiwyLgusex0lOkkf0tKYATvK9+b
-         EeOuYSsPv9QDR5GTCyCeQ6phFSTUbMRBgrLdMRcNNcfciCNfbY6zbXPrnX3/dRG+Xdoe
-         1Rfw==
-X-Gm-Message-State: AC+VfDxIDm6udd6z8IEG7sDAH8Y5ne4Zglbl061nJPt72Y02GNQRIjth
-        FG2XzS2Vu3Bz+RPhR8WIedo=
-X-Google-Smtp-Source: ACHHUZ6Di1EVMVg8fhpYJlJ/Zx/4oQfPI5BKRlP7kb/227vNEI/3wULi2RrPXkmBNdC3bmJK6GS10g==
-X-Received: by 2002:a05:600c:d5:b0:3f5:ce2:9c82 with SMTP id u21-20020a05600c00d500b003f50ce29c82mr4700669wmm.32.1685192996652;
-        Sat, 27 May 2023 06:09:56 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id l22-20020a1c7916000000b003f607875e5csm12005664wme.24.2023.05.27.06.09.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 06:09:56 -0700 (PDT)
-Message-ID: <64720124.1c0a0220.67a2a.c3cc@mx.google.com>
-X-Google-Original-Message-ID: <ZHH73fg9HdlPVB58@Ansuel-xps.>
-Date:   Sat, 27 May 2023 14:47:25 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [net PATCH] wireguard: allowedips: fix compilation warning for
- stack limit exceeded
-References: <20230526204134.29058-1-ansuelsmth@gmail.com>
- <ZHIAibPKikGjLD8+@corigine.com>
+        Sat, 27 May 2023 08:53:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A35EC;
+        Sat, 27 May 2023 05:53:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9224F60E17;
+        Sat, 27 May 2023 12:53:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5449C433EF;
+        Sat, 27 May 2023 12:53:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685192026;
+        bh=N/EnLfHwO3WlFpOOLqPLdk8rGLmqTF0iXJQdX85aQDA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cPERW7uVGfSugxVvbAD51G8RwQVmSS0zFfNh83Y/o4ZRTpYrpblA0HR8tt7YuFBsR
+         HgmgBTNVJ3DVJL01gqmUda6y/9L92at0Ucs3xalIH6LctJ3QEYAZrmnZYhf1VxKMjN
+         ffxWm4uR2nosOZlkz6dDlzpQplxZiY9B+TGwjzwwnTaaOC026+Ja4fXexSJJ5RPrMp
+         Xj4fVggCH139CFfVZGujLPjKzivZ1swX6iKB729AO12ZHYXHoP0Ito+BmmGdv0kxvj
+         XNn5oOKg42zZG4NB4BzmSqHpV/VBueqWQxYE57EfElvdFgViiXei29Y9rplpKBRCsY
+         ECPWzg6nXnl6w==
+Date:   Sat, 27 May 2023 20:53:33 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>
+Subject: Re: [PATCH v2 2/4] arm64: dts: imx8mm-venice-gw700x: remove invalid
+ props from fan-controller
+Message-ID: <20230527125333.GU528183@dragon>
+References: <20230522193219.1477158-1-tharvey@gateworks.com>
+ <20230522193219.1477158-2-tharvey@gateworks.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZHIAibPKikGjLD8+@corigine.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230522193219.1477158-2-tharvey@gateworks.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 27, 2023 at 03:07:21PM +0200, Simon Horman wrote:
-> On Fri, May 26, 2023 at 10:41:34PM +0200, Christian Marangi wrote:
-> > On some arch (for example IPQ8074) and other with
-> > KERNEL_STACKPROTECTOR_STRONG enabled, the following compilation error is
-> > triggered:
-> > drivers/net/wireguard/allowedips.c: In function 'root_remove_peer_lists':
-> > drivers/net/wireguard/allowedips.c:80:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> >    80 | }
-> >       | ^
-> > drivers/net/wireguard/allowedips.c: In function 'root_free_rcu':
-> > drivers/net/wireguard/allowedips.c:67:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> >    67 | }
-> >       | ^
-> > cc1: all warnings being treated as errors
-> > 
-> > Since these are free function and returns void, using function that can
-> > fail is not ideal since an error would result in data not freed.
-> > Since the free are under RCU lock, we can allocate the required stack
-> > array as static outside the function and memset when needed.
-> > This effectively fix the stack frame warning without changing how the
-> > function work.
-> > 
-> > Fixes: Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
+On Mon, May 22, 2023 at 12:32:17PM -0700, Tim Harvey wrote:
+> Remove the invalid #address-cells and #size-cells nodes from
+> the fan-controller.
 > 
-> nit: Not sure if this can be fixed-up manually.
->      But one instance of 'Fixes: ' is enough.
-> 
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 
-An oversight by me sorry. Will send v2 with the tag fixed after 24
-hours. Totally fine if the patch is OK to fix this when it's merged by
-the maintainers.
-
--- 
-	Ansuel
+Applied 2/4, 3/4 and 4/4, thanks!
