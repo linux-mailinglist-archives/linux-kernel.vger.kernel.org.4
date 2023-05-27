@@ -2,145 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB1F713170
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746D1713173
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237506AbjE0BVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 21:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58410 "EHLO
+        id S237793AbjE0BWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 21:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjE0BVd (ORCPT
+        with ESMTP id S229528AbjE0BWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 21:21:33 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EDDD9;
-        Fri, 26 May 2023 18:21:31 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QSkX66FCPz4f3s5k;
-        Sat, 27 May 2023 09:21:26 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHvbAXW3Fk4y8uKQ--.56326S3;
-        Sat, 27 May 2023 09:21:28 +0800 (CST)
-Subject: Re: [PATCH v2 1/4] md/raid10: fix null-ptr-deref of mreplace in
- raid10_sync_request
-To:     linan666@huaweicloud.com, song@kernel.org, bingjingc@synology.com,
-        allenpeng@synology.com, alexwu@synology.com, shli@fb.com,
-        neilb@suse.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230526074551.669792-1-linan666@huaweicloud.com>
- <20230526074551.669792-2-linan666@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <261a87ef-341e-67ff-f804-9e6f354452dc@huaweicloud.com>
-Date:   Sat, 27 May 2023 09:21:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 26 May 2023 21:22:04 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00529BC;
+        Fri, 26 May 2023 18:22:02 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 14D0E3200495;
+        Fri, 26 May 2023 21:22:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Fri, 26 May 2023 21:22:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tyhicks.com; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1685150521; x=1685236921; bh=np
+        +SdouGYtmY64V5pK+hyAwy83SCQcDxynb0nhR32BA=; b=XUlKda0YE4GJZGIw4V
+        QeHdSYVjCMQxPt+BmZZZNP+5nwUdoxIOkUVkSns8u5vgrDVufiRvRNwGsFsTR1L8
+        hOn6waYa56qddxfsVI6QhhoGBNH99EV3ILN/M5a2efq+ja28TcGSPXRvzsnAxV5K
+        XNoNdxJnL7N5/rSMiCUj5VSI647WWWde9zX0ReknfpYxzP1GwIkKp3u0nc/QrkQ2
+        RWVOOrD/0g7d3DB9yyChgvw+O6zOTV6YqqhSXt9/kaHIT8Y2wxDv/sa34XhiXZyV
+        GAR8g17ctwW6Z8TD/AjEiOQZwIdoqPXXSlFcit+03R1hzWXQGNn27789mWn3XV7u
+        OJzA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685150521; x=1685236921; bh=np+SdouGYtmY6
+        4V5pK+hyAwy83SCQcDxynb0nhR32BA=; b=bRdR7BVjOnjLE3mtJ6d9WlqQvF4If
+        LWE2OiY44OCNPNJGcMVKQYJKhlRt0z6tDwIUo122qnDrivXhM6rlCEILiBZh904b
+        UDkj+prLG7kMkNpA7EUEnEKRk8iz8eOqiZvZS25c0ltlq185PZN4kfMaRlTFCodm
+        Gam73veVcTZlhV8wLyS6Syw2+SGvobWI0CFyLQlZC6nrwEHtGARgewFmj2YajCGG
+        GM92x//YyDbqQmpZWj7XePJ9EbZ3AjzWuh291yGTeDYR4kAPnOSBiJLE1NpsNk8A
+        iUUhuMdrZVPFeJ+dl8C131vRgu2VQXnG97Mvm1ovrTQOqgI/srkE38hiw==
+X-ME-Sender: <xms:OVtxZLcGvom7qMmaPPFsuAFe3kUZwTOc1BTbvHtC3TZxhWwkDBXWxQ>
+    <xme:OVtxZBNim4rekYYnCLRmEwLFd2f0dP768sKPaUjwxta-l3hX4UBYOG2pvCgfnXAwJ
+    YQHk5366yW_5aej5rQ>
+X-ME-Received: <xmr:OVtxZEgsKnmCNcSB4nYmkyqOaUN6MvOs8wckEwh_0B31fNs82lFbn-Z4loE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeektddggeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihlhgv
+    rhcujfhitghkshcuoegtohguvgesthihhhhitghkshdrtghomheqnecuggftrfgrthhtvg
+    hrnhepvdehvddttdfhfefhtdfgleehfeeggfdujeeuveekudevkedvgeejtddtfefgleei
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheptghoug
+    gvsehthihhihgtkhhsrdgtohhm
+X-ME-Proxy: <xmx:OVtxZM_2AALTXv7jRoLET7t5ck_Vpzkv4ymkusqttk6bOpVXXGjO6A>
+    <xmx:OVtxZHvUPv1SWWXBlscpY4i6DNXfPD3WUS9SfIeXlViYT0F4c50DJg>
+    <xmx:OVtxZLGW8VLhtHKjtVmC2RHQSLJFJl_xkB6jYSkElaBkcSVmBlPDAA>
+    <xmx:OVtxZNXelmlU_vWpBZiKOIo-34Ef91OmQObcFsgCHJt-LdciPzqd1A>
+Feedback-ID: i78e14604:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 26 May 2023 21:22:00 -0400 (EDT)
+Date:   Fri, 26 May 2023 20:21:59 -0500
+From:   Tyler Hicks <code@tyhicks.com>
+To:     Hardik Garg <hargar@linux.microsoft.com>
+Cc:     stable@vger.kernel.org, shuah@kernel.org, jeffxu@google.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        niyelchu@linux.microsoft.com
+Subject: Re: [PATCH 6.1 5.15 5.10 5.4 4.19 4.14] selftests/memfd: Fix unknown
+ type name build failure
+Message-ID: <ZHFbN7lVu7gdwCcE@sequoia>
+References: <20230526232136.255244-1-hargar@linux.microsoft.com>
 MIME-Version: 1.0
-In-Reply-To: <20230526074551.669792-2-linan666@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHvbAXW3Fk4y8uKQ--.56326S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF1xuF43tr1DWr43Zr4UCFg_yoW5JFW8p3
-        y7JF97Gr1UJ3yjk3WDA3ZrWFyS93Z7J3s8Cry5W34fAr1agrZrCFW0gFWYvF1DZF4Fqw4Y
-        q3Wjyws5uFWIqa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8Jw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWr
-        Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526232136.255244-1-hargar@linux.microsoft.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-ÔÚ 2023/05/26 15:45, linan666@huaweicloud.com Ð´µÀ:
-> From: Li Nan <linan122@huawei.com>
+On 2023-05-26 16:21:36, Hardik Garg wrote:
+> Partially backport v6.3 commit 11f75a01448f ("selftests/memfd: add
+> tests for MFD_NOEXEC_SEAL MFD_EXEC") to fix an unknown type name 
+> build error.
+> In some systems, the __u64 typedef is not present due to differences
+> in system headers, causing compilation errors like this one:
 > 
-> need_replace will be set to 1 if no-Faulty mreplace exists, and mreplace
-> will be deref later. However, the latter check of mreplace might set
-> mreplace to NULL, null-ptr-deref occurs if need_replace is 1 at this time.
+> fuse_test.c:64:8: error: unknown type name '__u64'
+>    64 | static __u64 mfd_assert_get_seals(int fd)
 > 
-> Fix it by merging two checks into one. And replace 'need_replace' with
-> 'mreplace' because their values are always the same.
+> This header includes the  __u64 typedef which increases the
+> likelihood of successful compilation on a wider variety of systems.
 > 
-> Fixes: ee37d7314a32 ("md/raid10: Fix raid10 replace hang when new added disk faulty")
-> Signed-off-by: Li Nan <linan122@huawei.com>
+> Signed-off-by: Hardik Garg <hargar@linux.microsoft.com>
 
-Other than some nits below, this patch looks good to me, feel free too
-add:
+Reviewed-by: Tyler Hicks (Microsoft) <code@tyhicks.com>
 
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+Tyler
+
 > ---
->   drivers/md/raid10.c | 13 +++++--------
->   1 file changed, 5 insertions(+), 8 deletions(-)
+>  tools/testing/selftests/memfd/fuse_test.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index 4fcfcb350d2b..e21502c03b45 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -3438,7 +3438,6 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
->   			int must_sync;
->   			int any_working;
->   			int need_recover = 0;
-> -			int need_replace = 0;
->   			struct raid10_info *mirror = &conf->mirrors[i];
->   			struct md_rdev *mrdev, *mreplace;
->   
-> @@ -3451,10 +3450,10 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
->   			    !test_bit(In_sync, &mrdev->flags))
->   				need_recover = 1;
->   			if (mreplace != NULL &&
-> -			    !test_bit(Faulty, &mreplace->flags))
-> -				need_replace = 1;
-> +			    test_bit(Faulty, &mreplace->flags))
-This can be keeped in one line.
-
-> +				mreplace = NULL;
->   
-> -			if (!need_recover && !need_replace) {
-> +			if (!need_recover && !mreplace) {
->   				rcu_read_unlock();
->   				continue;
->   			}
-> @@ -3470,8 +3469,6 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
->   				rcu_read_unlock();
->   				continue;
->   			}
-> -			if (mreplace && test_bit(Faulty, &mreplace->flags))
-> -				mreplace = NULL;
->   			/* Unless we are doing a full sync, or a replacement
->   			 * we only need to recover the block if it is set in
->   			 * the bitmap
-> @@ -3594,11 +3591,11 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
->   				bio = r10_bio->devs[1].repl_bio;
->   				if (bio)
->   					bio->bi_end_io = NULL;
-> -				/* Note: if need_replace, then bio
-> +				/* Note: if replace is not NULL, then bio
->   				 * cannot be NULL as r10buf_pool_alloc will
->   				 * have allocated it.
->   				 */
-> -				if (!need_replace)
-> +				if (!mreplace)
->   					break;
->   				bio->bi_next = biolist;
->   				biolist = bio;
+> diff --git a/tools/testing/selftests/memfd/fuse_test.c b/tools/testing/selftests/memfd/fuse_test.c
+> index be675002f918..93798c8c5d54 100644
+> --- a/tools/testing/selftests/memfd/fuse_test.c
+> +++ b/tools/testing/selftests/memfd/fuse_test.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/falloc.h>
+>  #include <fcntl.h>
+>  #include <linux/memfd.h>
+> +#include <linux/types.h>
+>  #include <sched.h>
+>  #include <stdio.h>
+>  #include <stdlib.h>
+> -- 
+> 2.25.1
 > 
-
