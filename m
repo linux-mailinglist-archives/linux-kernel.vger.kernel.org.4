@@ -2,72 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8373E713233
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F84E71323B
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjE0DoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 23:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
+        id S230266AbjE0Dtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 23:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjE0Dnx (ORCPT
+        with ESMTP id S229548AbjE0Dtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 23:43:53 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315B0198
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 20:43:51 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565d6824f2dso1681927b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 20:43:51 -0700 (PDT)
+        Fri, 26 May 2023 23:49:45 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CE5116;
+        Fri, 26 May 2023 20:49:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685159030; x=1687751030;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4yvnrpEe2huDW+hchGpet0pGN4yM12JCmRSaRQwE34o=;
-        b=vdiA+trob+vQwP/l9vkYEO9/z+6U1/nBEc0wU3JdgwguFq/5kezVdXsk02KtLWokic
-         jtJreMGHT9MVlRplIvKdvswFPCDUeXNkYxrFl04Xx1hGU5kHz2z3sLpamee0nh/RrOVI
-         viBOVpD596XUao9fsS4EeOEBtVMwghxosbyEPpZtX4JNhLSEfcL0wOtlv10Kg4p/dXau
-         NkkT0UwPv0AZ2aBwmuokplOO+N00TAIddsDVI3u4RfDaT6FgTuPAzVfa5dzTk8Yfc6wV
-         029oV8TOze6RTO2N7r1o0vCDMPnWgvQ3bwIbYujMjtLmDtk1Ybas1ucjEbaCOQQnwSxQ
-         tiGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685159030; x=1687751030;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4yvnrpEe2huDW+hchGpet0pGN4yM12JCmRSaRQwE34o=;
-        b=M1bcdRFQv4dZqfB1g07kx0yrvORIxUH+M5rsrR8coVFHJEz+Ii34AWEEluWVTNMGUO
-         2Q5l/rwaqXJED1rLARmMJREJP0SZNzn53xm2S0+T9pNKi+PqUlqHFXZBhi9BqziWuO+x
-         poiIygKP6CtqkVo+MyrcM6MBCMKklSKcU7p8a0i4AbnmfMooR7Ifzz4lMvklsmrX9TSk
-         BrUrOJvu+He6dSW8XGYK0GGOGWfyp9I2ioJWXMzCB4AhMPWSkTvz/dXBMi+NV1xvy5V0
-         ae+BXIHQfuZSr7IeC6E2ffRdMl0PRLr317SfWvzGaeHKCRrRqxO/au6G00JFrRFsXFkK
-         U/6g==
-X-Gm-Message-State: AC+VfDy3hvtMN+/ZwW2foR5YX159oW0x0zli4aBq/IxDgeNkL3Ngoql0
-        AOG4hlGw54x+3yS0A9YFwX0dfobpGUNd
-X-Google-Smtp-Source: ACHHUZ4Zsr/NqIVSUKSFW44V5X/YdTceRVOHBh7ZeU4ozH2kjIPNTkmdKhb86VBC89V8M7NU9xpcWemAwXDt
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
- (user=irogers job=sendgmr) by 2002:a05:690c:711:b0:565:cfac:6d15 with SMTP id
- bs17-20020a05690c071100b00565cfac6d15mr502739ywb.8.1685159030508; Fri, 26 May
- 2023 20:43:50 -0700 (PDT)
-Date:   Fri, 26 May 2023 20:43:22 -0700
-In-Reply-To: <20230527034324.2597593-1-irogers@google.com>
-Message-Id: <20230527034324.2597593-5-irogers@google.com>
-Mime-Version: 1.0
-References: <20230527034324.2597593-1-irogers@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v1 4/4] perf inject: Lazily allocate guest_event event_buf
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1685159384; x=1716695384;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KvElY90d1TvMYJXJinvHmqkGCajQbcaMX+yFXT7cExc=;
+  b=U9QbaW1RCrGM06GBRVQwoQM9G7m58OJd+rYAtcYx2zcO0oDhdzCPi6T9
+   9IoT1q5MQpVOI+eFBpa0Y5AC65QTCvXVi3n2n125a6eEWqkW/bf+yGy17
+   7GFB2hGLjZO5JO4eydFjUI3Ertcka0nzbdXk7gi0xkn2phOJ5rqgu/9iz
+   o=;
+X-IronPort-AV: E=Sophos;i="6.00,195,1681171200"; 
+   d="scan'208";a="216987546"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 03:49:40 +0000
+Received: from EX19MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1d-m6i4x-d7759ebe.us-east-1.amazon.com (Postfix) with ESMTPS id 26BC145BF6;
+        Sat, 27 May 2023 03:49:34 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Sat, 27 May 2023 03:49:34 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.142.145.230) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Sat, 27 May 2023 03:49:31 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <naresh.kamboju@linaro.org>
+CC:     <kuba@kernel.org>, <anders.roxell@linaro.org>, <arnd@arndb.de>,
+        <dan.carpenter@linaro.org>, <davem@davemloft.net>,
+        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
+        <lkft-triage@lists.linaro.org>, <lucien.xin@gmail.com>,
+        <martin.lau@linux.dev>, <netdev@vger.kernel.org>,
+        <stable@vger.kernel.org>, <willemdebruijn.kernel@gmail.com>
+Subject: Re: selftests: net: udpgso_bench.sh: RIP: 0010:lookup_reuseport
+Date:   Fri, 26 May 2023 20:49:22 -0700
+Message-ID: <20230527034922.5542-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230526201607.54655398@kernel.org>
+References: <20230526201607.54655398@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.142.145.230]
+X-ClientProxiedBy: EX19D038UWC002.ant.amazon.com (10.13.139.238) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,57 +70,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The event_buf is 64kb (PERF_SAMPLE_SIZE_MAX) and stack allocated in
-struct perf_inject. It is used for guest events that may not exist in
-a file. Make the array allocation lazy to cut down on the stack usage.
+From: Jakub Kicinski <kuba@kernel.org>
+Date: Fri, 26 May 2023 20:16:07 -0700
+> On Wed, 24 May 2023 13:24:15 +0530 Naresh Kamboju wrote:
+> > While running selftests: net: udpgso_bench.sh on qemu-x86_64 the following
+> > kernel crash noticed on stable rc 6.3.4-rc2 kernel.
+> 
+> Can you repro this or it's just a one-off?
+> 
+> Adding some experts to CC.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/builtin-inject.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+FWIW, I couldn't reproduce it on my x86_64 QEMU setup & 6.4.0-rc3
+at least 5 times, so maybe one-off ?
 
-diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-index da8c89fefa3a..d68d25575b6c 100644
---- a/tools/perf/builtin-inject.c
-+++ b/tools/perf/builtin-inject.c
-@@ -47,7 +47,7 @@
- struct guest_event {
- 	struct perf_sample		sample;
- 	union perf_event		*event;
--	char				event_buf[PERF_SAMPLE_MAX_SIZE];
-+	char				*event_buf;
- };
- 
- struct guest_id {
-@@ -1372,11 +1372,19 @@ static void guest_session__convert_time(struct guest_session *gs, u64 guest_time
- 
- static int guest_session__fetch(struct guest_session *gs)
- {
--	void *buf = gs->ev.event_buf;
--	struct perf_event_header *hdr = buf;
-+	void *buf;
-+	struct perf_event_header *hdr;
- 	size_t hdr_sz = sizeof(*hdr);
- 	ssize_t ret;
- 
-+	buf = gs->ev.event_buf;
-+	if (!buf) {
-+		buf = malloc(PERF_SAMPLE_MAX_SIZE);
-+		if (!buf)
-+			return -ENOMEM;
-+		gs->ev.event_buf = buf;
-+	}
-+	hdr = buf;
- 	ret = readn(gs->tmp_fd, buf, hdr_sz);
- 	if (ret < 0)
- 		return ret;
-@@ -2399,5 +2407,6 @@ int cmd_inject(int argc, const char **argv)
- 		perf_data__close(&inject.output);
- 	free(inject.itrace_synth_opts.vm_tm_corr_args);
- 	free(inject.event_copy);
-+	free(inject.guest_session.ev.event_buf);
- 	return ret;
- }
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+---8<---
+[root@localhost ~]# ./udpgso_bench.sh
+...
+udpgso_bench.sh: PASS=18 SKIP=0 FAIL=0
+udpgso_bench.sh: PASS
+---8<---
 
+And it seems the vmlinux does not have debuginfo...
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2QCeuW0pJ8XVzYeG3rpgza2cZDW/
+
+---8<---
+$ echo lookup_reuseport+0x4a/0x200 | ../net-next/scripts/decode_stacktrace.sh vmlinux
+lookup_reuseport (udp.c:?)
+---8<---
+
+
+> 
+> > Test run log:
+> > =========
+> > 
+> > <12>[   38.049122] kselftest: Running tests in net
+> > TAP version 13
+> > 1..16
+> > # selftests: net: udpgso_bench.sh
+> > # ipv4
+> > # tcp
+> > # tcp tx:    230 MB/s     3905 calls/s   3905 msg/s
+> [...]
+> > # tcp tx:    191 MB/s     3254 calls/s   3254 msg/s
+> > # udp
+> > <4>[   88.821235] int3: 0000 [#1] PREEMPT SMP PTI
+> > <4>[   88.821491] CPU: 1 PID: 561 Comm: udpgso_bench_tx Not tainted 6.3.4-rc2 #1
+> > <4>[   88.821576] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+> > BIOS 1.14.0-2 04/01/2014
+> > <4>[   88.821685] RIP: 0010:lookup_reuseport+0x4a/0x200
+> > <4>[   88.822122] Code: 74 0b 49 89 f6 0f b6 46 12 3c 01 75 07 31 c0
+> > e9 ed 00 00 00 4d 89 cf 44 89 c5 49 89 cd 49 89 fc 0f 1f 44 00 00 8b
+> > 5c 24 50 0f <1f> 44 00 00 41 8b 45 04 41 33 45 00 8b 0d b0 c5 ed 00 44
+> > 8d 04 08
+> > <4>[   88.822175] RSP: 0018:ffffa95c800c0b90 EFLAGS: 00000206
+> > <4>[   88.822215] RAX: 0000000000000007 RBX: 0000000000001f40 RCX:
+> > ffff966c02b66020
+> > <4>[   88.822228] RDX: ffff966c01a9aa00 RSI: ffff966c02801500 RDI:
+> > ffff966c03ae2e80
+> > <4>[   88.822241] RBP: 00000000000093bf R08: 00000000000093bf R09:
+> > ffffffffb0b2c8a0
+> > <4>[   88.822254] R10: 0000000042388386 R11: 00000000000093bf R12:
+> > ffff966c03ae2e80
+> > <4>[   88.822266] R13: ffff966c02b66020 R14: ffff966c02801500 R15:
+> > ffffffffb0b2c8a0
+> > <4>[   88.822312] FS:  00007f4e6ede4740(0000)
+> > GS:ffff966c7bd00000(0000) knlGS:0000000000000000
+> > <4>[   88.822330] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > <4>[   88.822343] CR2: 000055a1c0b90bf0 CR3: 0000000103b0e000 CR4:
+> > 00000000000006e0
+> > <4>[   88.822438] Call Trace:
+> > <4>[   88.823080]  <IRQ>
+> > <4>[   88.823274]  udp6_lib_lookup2+0xf8/0x1c0
+> > <4>[   88.823368]  __udp6_lib_lookup+0x113/0x3c0
+> > <4>[   88.823382]  ? __wake_up_common_lock+0x79/0x190
+> > <4>[   88.823403]  __udp6_lib_lookup_skb+0x76/0x90
+> > <4>[   88.823426]  __udp6_lib_rcv+0x295/0x400
+> > <4>[   88.823440]  ip6_protocol_deliver_rcu+0x34e/0x5c0
+> > <4>[   88.823483]  ip6_input+0x60/0x110
+> > <4>[   88.823496]  ? ip6_rcv_core+0x311/0x450
+> > <4>[   88.823509]  ipv6_rcv+0x47/0xf0
+> > <4>[   88.823523]  __netif_receive_skb+0x65/0x170
+> > <4>[   88.823539]  process_backlog+0xd7/0x180
+> > <4>[   88.823553]  __napi_poll+0x2c/0x1b0
+> > <4>[   88.823565]  net_rx_action+0x178/0x2e0
+> > <4>[   88.823580]  __do_softirq+0xc4/0x274
+> > <4>[   88.823595]  do_softirq+0x7e/0xb0
+> > <4>[   88.823751]  </IRQ>
+> > <4>[   88.823769]  <TASK>
+> > <4>[   88.823773]  __local_bh_enable_ip+0x6e/0x70
+> > <4>[   88.823786]  ip6_finish_output2+0x3fc/0x560
+> > <4>[   88.823803]  ip6_finish_output+0x1ab/0x320
+> > <4>[   88.823816]  ip6_output+0x6b/0x130
+> > <4>[   88.823827]  ? __pfx_ip6_finish_output+0x10/0x10
+> > <4>[   88.823839]  ip6_send_skb+0x1e/0x80
+> > <4>[   88.823850]  udp_v6_send_skb+0x26e/0x400
+> > <4>[   88.823865]  udpv6_sendmsg+0xb33/0xc60
+> > <4>[   88.823879]  ? __pfx_ip_generic_getfrag+0x10/0x10
+> > <4>[   88.823902]  sock_sendmsg+0x42/0xa0
+> > <4>[   88.823915]  __sys_sendto+0x281/0x2f0
+> > <4>[   88.823938]  __x64_sys_sendto+0x21/0x30
+> > <4>[   88.823949]  do_syscall_64+0x48/0xa0
+> > <4>[   88.823969]  ? exit_to_user_mode_prepare+0x2a/0x80
+> > <4>[   88.823981]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> > <4>[   88.824104] RIP: 0033:0x7f4e6eef1973
+> > <4>[   88.824267] Code: 8b 15 91 74 0c 00 f7 d8 64 89 02 48 c7 c0 ff
+> > ff ff ff eb b8 0f 1f 00 80 3d 71 fc 0c 00 00 41 89 ca 74 14 b8 2c 00
+> > 00 00 0f 05 <48> 3d 00 f0 ff ff 77 75 c3 0f 1f 40 00 55 48 83 ec 30 44
+> > 89 4c 24
+> > <4>[   88.824276] RSP: 002b:00007ffc3a3d79f8 EFLAGS: 00000202
+> > ORIG_RAX: 000000000000002c
+> > <4>[   88.824293] RAX: ffffffffffffffda RBX: 00005596927cf110 RCX:
+> > 00007f4e6eef1973
+> > <4>[   88.824298] RDX: 00000000000005ac RSI: 00005596927cf110 RDI:
+> > 0000000000000005
+> > <4>[   88.824304] RBP: 0000000000000000 R08: 0000000000000000 R09:
+> > 0000000000000000
+> > <4>[   88.824309] R10: 0000000000000000 R11: 0000000000000202 R12:
+> > 0000000000000002
+> > <4>[   88.824313] R13: 0000000000000005 R14: 000000000000e628 R15:
+> > 00000000000005ac
+> > <4>[   88.824335]  </TASK>
+> > <4>[   88.824377] Modules linked in: mptcp_diag tcp_diag inet_diag
+> > ip_tables x_tables
+> > <4>[   88.845108] ---[ end trace 0000000000000000 ]---
+> > <4>[   88.845178] RIP: 0010:lookup_reuseport+0x4a/0x200
+> > <4>[   88.845216] Code: 74 0b 49 89 f6 0f b6 46 12 3c 01 75 07 31 c0
+> > e9 ed 00 00 00 4d 89 cf 44 89 c5 49 89 cd 49 89 fc 0f 1f 44 00 00 8b
+> > 5c 24 50 0f <1f> 44 00 00 41 8b 45 04 41 33 45 00 8b 0d b0 c5 ed 00 44
+> > 8d 04 08
+> > <4>[   88.845232] RSP: 0018:ffffa95c800c0b90 EFLAGS: 00000206
+> > <4>[   88.845249] RAX: 0000000000000007 RBX: 0000000000001f40 RCX:
+> > ffff966c02b66020
+> > <4>[   88.845257] RDX: ffff966c01a9aa00 RSI: ffff966c02801500 RDI:
+> > ffff966c03ae2e80
+> > <4>[   88.845266] RBP: 00000000000093bf R08: 00000000000093bf R09:
+> > ffffffffb0b2c8a0
+> > <4>[   88.845273] R10: 0000000042388386 R11: 00000000000093bf R12:
+> > ffff966c03ae2e80
+> > <4>[   88.845281] R13: ffff966c02b66020 R14: ffff966c02801500 R15:
+> > ffffffffb0b2c8a0
+> > <4>[   88.845290] FS:  00007f4e6ede4740(0000)
+> > GS:ffff966c7bd00000(0000) knlGS:0000000000000000
+> > <4>[   88.845302] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > <4>[   88.845311] CR2: 000055a1c0b90bf0 CR3: 0000000103b0e000 CR4:
+> > 00000000000006e0
+> > <0>[   88.845862] Kernel panic - not syncing: Fatal exception in interrupt
+> > <0>[   88.848258] Kernel Offset: 0x2e800000 from 0xffffffff81000000
+> > (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
