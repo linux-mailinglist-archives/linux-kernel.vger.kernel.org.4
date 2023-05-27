@@ -2,81 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFF8713220
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4FF713222
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236852AbjE0DSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 23:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        id S237788AbjE0DUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 23:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjE0DSd (ORCPT
+        with ESMTP id S229522AbjE0DT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 23:18:33 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1057B99
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 20:18:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hirSS0lNlrtCE60q+oZ9YkZaBfSH5GDFvjqZfjQXkZc=; b=Rb7ZgsJYO4YhTxAlvvlGehrro+
-        +JFMNAO1Zax7qSZTOS/BYLujt/b8zOzWAY45Uo6Df5cWgU9uxaCP0tEtfK0UvyYEnC4E6TCgtMr3o
-        9I99EQqiaVYROKPMiZq06hBJZHb2FQYof7FgdiyS6LMU9kzLxzjHh+PyTsJpEF5mU+lEJVanhaFAQ
-        B34hWYASoYl28bJmL5dHEO/PhjBvMda92T6DA23T59v63v8AP8jzQEzdzit0mQdnFbsF9EMDZ+C73
-        iVXIb2cuE+dlQdfFL/SVRDB/mI+wgjw4lC2sauksxu8awaBM6q85px3ixYnoh+btzgUQRs0VBLsLO
-        6pWyIXwg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q2kRT-003TLK-ER; Sat, 27 May 2023 03:18:07 +0000
-Date:   Sat, 27 May 2023 04:18:07 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        Steven Sistare <steven.sistare@oracle.com>,
-        akpm@linux-foundation.org, ying.huang@intel.com,
-        mgorman@techsingularity.net, baolin.wang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Khalid Aziz <khalid@kernel.org>
-Subject: Re: [PATCH v4] mm, compaction: Skip all non-migratable pages during
- scan
-Message-ID: <ZHF2byaRlaX3W6Md@casper.infradead.org>
-References: <ZG+99h3zg7POIits@casper.infradead.org>
- <ee093583-71c3-51ba-980f-0facb03b0e23@oracle.com>
- <ZG/I7tYY4uV/32hP@casper.infradead.org>
- <ZG/To8Z3StoVoenU@casper.infradead.org>
- <60367660-f4a3-06dc-4d17-4dbdc733ef74@oracle.com>
- <ZHDh4Jeb/vKY+nGU@casper.infradead.org>
- <f5a37f8d-d888-9085-2f2b-1e350a267396@redhat.com>
- <ZHD+eOMpZpWXNAig@casper.infradead.org>
- <e31cd404-56ce-4cad-fcc3-3a6695f750fa@redhat.com>
- <846b770c-9f63-90a2-0435-ec82484e3f74@nvidia.com>
+        Fri, 26 May 2023 23:19:59 -0400
+Received: from out-29.mta0.migadu.com (out-29.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CA299
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 20:19:56 -0700 (PDT)
+Date:   Fri, 26 May 2023 23:19:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685157595;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zC6ZNRAMXSTd1zjJb1ou+NimilKWTlR9ciflQq7y0Bw=;
+        b=oWx2NpJvKxrzV3oXwp2njxlTCvxR3WH88zCPvD2fyst1ulzM9qe96PAlVTOQETHCG81FGd
+        rMVp8WLbEw6k0SPHd08q8Y611MvjKz8NUXREJBkL3JBxYqI+6GLH6qHyDUE0mMfEXCca0D
+        3yNNaKHa1oS6rPQunUyGJMxDV6Hcgig=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        mcgrof@kernel.org, peterz@infradead.org, tglx@linutronix.de,
+        x86@kernel.org, rppt@kernel.org
+Subject: Re: [PATCH 1/3] module: Introduce module_alloc_type
+Message-ID: <ZHF21CSxyjQy9C7F@moria.home.lan>
+References: <20230526051529.3387103-1-song@kernel.org>
+ <20230526051529.3387103-2-song@kernel.org>
+ <ZHEy5SkFwI+dZjOC@moria.home.lan>
+ <CAPhsuW5nbXozvBs1X7q_u=eTY0U=Ep32n1bM8bxR6h9UEU3AxQ@mail.gmail.com>
+ <ZHFDO/95KMXRdOWI@moria.home.lan>
+ <CAPhsuW5CTANR_B57w5n3HvdDjvHXOCSGTDc=a4s+JR0pKCAOcw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <846b770c-9f63-90a2-0435-ec82484e3f74@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW5CTANR_B57w5n3HvdDjvHXOCSGTDc=a4s+JR0pKCAOcw@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 07:11:05PM -0700, John Hubbard wrote:
-> > So any user with 1024 processes can fragment physical memory? :/
-> > 
-> > Sorry, I'd like to minimize the usage of folio_maybe_dma_pinned().
+On Fri, May 26, 2023 at 05:03:18PM -0700, Song Liu wrote:
+> On Fri, May 26, 2023 at 4:39 PM Kent Overstreet
+> <kent.overstreet@linux.dev> wrote:
+> >
+> [...]
 > 
-> I was actually thinking that we should minimize any more cases of
-> fragile mapcount and refcount comparison, which then leads to
-> Matthew's approach here!
+> >
+> > But it should be an internal implementation detail, I don't think we
+> > want the external interface tied to vmalloc -
+> >
+> > > These two APIs allow the core code work with all archs. They won't break
+> > > sub-page allocations. (not all archs will have sub-page allocations)
+> >
+> > So yes, text_poke() doesn't work on all architectures, and we need a
+> > fallback.
+> >
+> > But if the fallback needs to go the unprotect/protect route, I think we
+> > need to put that in the helper, and not expose it. Part of what people
+> > are wanting is to limit or eliminate pages that are RWX, so we
+> > definitely shouldn't be creating new interfaces to flipping page
+> > permissions: that should be pushed down to as low a level as possible.
+> >
+> > E.g., with my jitalloc_update(), a more complete version would look like
+> >
+> > void jitalloc_update(void *dst, void *src, size_t len)
+> > {
+> >         if (text_poke_available) {
+> >                 text_poke(...);
+> >         } else {
+> >                 unprotect();
+> >                 memcpy();
+> >                 protect();
+> >         }
+> > }
+> 
+> I think this doesn't work for sub page allocation?
 
-I was wondering if we shouldn't make folio_maybe_dma_pinned() a little
-more accurate.  eg:
+Perhaps I elided too much - it does if you add a single lock. You can't
+do that if it's not a common helper.
 
-        if (folio_test_large(folio))
-                return atomic_read(&folio->_pincount) > 0;
-	return (unsigned)(folio_ref_count(folio) - folio_mapcount(folio)) >=
-			GUP_PIN_COUNTING_BIAS;
+> At the end of all this, we will have modules running from huge pages, data
+> and text. It will give significant performance benefit when some key driver
+> cannot be compiled into the kernel.
+
+Yeah, I've seen the numbers for the perf impact of running as a module
+due to the extra TLB overhead - but Mike's recent data was showing that
+this doesn't matter nearly as much as data as it does for text.
+
+> > Also - module_memory_fill_type(), module_memory_invalidate_type() - I
+> > know these are for BPF, but could you explain why we need them in the
+> > external interface here? Could they perhaps be small helpers in the bpf
+> > code that use something like jitalloc_update()?
+> 
+> These are used by all users, not just BPF. 1/3 uses them in
+> kernel/module/main.c. I didn't use them in 3/3 as it is arch code, but I can
+> use them instead of text_poke_* (and that is probably better code style).
+> As I am writing the email, I think I should use it in ftrace.c (2/3) to avoid
+> the __weak function.
+
+Ok. Could we make it clearer why they're needed and what they're for?
+
+I know bpf fills in invalid instructions initially; I didn't read
+through enough code to find the "why", and let's document that to save
+other people the same effort.
+
+And do they really need to be callbacks in mod_alloc_params...?
+
+Do we need the other things in mod_alloc_params/vmalloc_params?
+ - your granularity field says it's for specifying PAGE/PMD size: we
+   definitely do not want that. We've had way too much code along the
+   lines of "implement hugepages for x", we need to stop doing that.
+   It's an internal mm/ detail.
+
+ - vmalloc_params: we need gfp_t and pgprot_t, but those should be
+   normal arguments. start/end/vm_flags? They seem like historical
+   module baggage, can we get rid of them?
+
+> > > OTOH, jit_alloc (as-is) solves a subset of the problem (only the text).
+> > > We can probably use it (with some updates) instead of the vmap_area
+> > > based allocator. But I guess we need to align the direction first.
+> >
+> > Let's see if we can get tglx to chime in again, since he was pretty
+> > vocal in the last discussion.
+> >
+> > It's also good practice to try to summarize all the relevant "whys" from
+> > the discussion that went into a feature and put that in at least the
+> > commit message - or even better, header file comments.
+> >
+> > Also, organization: the module code is a huge mess, let's _please_ do
+> > split this out and think about organization a bit more, not add to the
+> > mess :)
+> 
+> I don't really think module code is very messy at the moment. If
+> necessary, we can put module_alloc_type related code in a
+> separate file.
+
+Hey, it's been organized since I last looked at it :) But I tihink this
+belongs in mm/, not module code.
