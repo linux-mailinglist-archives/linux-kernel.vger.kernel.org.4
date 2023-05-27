@@ -2,204 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B874E71359D
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3FB71359E
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjE0QLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 12:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S231713AbjE0QMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 12:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjE0QLW (ORCPT
+        with ESMTP id S229501AbjE0QMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 12:11:22 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F73C3
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:11:20 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f3a873476bso1934327e87.1
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:11:19 -0700 (PDT)
+        Sat, 27 May 2023 12:12:49 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF003C7
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:12:47 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510f525e06cso3133754a12.2
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685203878; x=1687795878;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kkvrHNpBMUTnaYMgMUQv6qZfUHsxfknPU0klRB3RUA8=;
-        b=bv2y3zkD2Vg19TXG+MM+TJxYh10uHuqosbx5ULLaPP8gaj/vEI2VX5ur/iBfHJU9e4
-         NWMrpwFfdn7uZ0EK5QnupBWU2NqdEo56Bb8bPaLVkkAHXu1IlakP1alO56JZDQvM7ZMr
-         rE3k+xLX00Fd1q1w6ps27Z/bl0/B8V44QIMlMNDPm54RoMcWjlDnhLudjTqyEqgEHpTV
-         +b/6qvfEUSTo5t4zn+6aodUqnXQ2w4iazc0JbKItLFdQNDuurQfmLTx2SwyXwIcJjdAE
-         4tlDGjV5LZzFHMzXmLxtsXY0Md7OpwcREygYdoOjvCP0aKSj7Zd///5Fh29yMn0aoyuv
-         BuXA==
+        d=linux-foundation.org; s=google; t=1685203966; x=1687795966;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=I/bw27vS3UVZGByGOfLoz+Tva7cynCfUs6ZBWXI06bo=;
+        b=T9rdZ8CAEEk2bwYl04RlNrdIw1fR0aZAtgEkRhT1ywPBV5ljidGU1zkHPG7XuRkavG
+         0ldhVFgA/+nuYwudhD8SkCHF0F+9mZeET9tUkJ7H19OO7a436jmmsH02rfu9iXl6Mls6
+         +bQEh76AYnTrCMsvy42HbavxbjHEAJetWtPXM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685203878; x=1687795878;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kkvrHNpBMUTnaYMgMUQv6qZfUHsxfknPU0klRB3RUA8=;
-        b=TWCoD2++7u29wLaTPPB3rFa734Y6Lj+VA4WMpUEp20yMJb38SyJ6/9oswDoHxY6tCb
-         Qkk+h0hmcWXaNbB+U1u+xQcyK+RbvHZNUB7RbwlqmFZWTRmbrWEl+FMY7uGZhe5poQoz
-         zf53FALn/JweWthxsA681q6tFfCeXaY1UB21kz+XLugqqcXYUOgKO9lFXM2cJGsy8YkF
-         D7+I/tpLu2OvFE/FzF3ejubdpm9IJ1L7mo4DVIPUNplbagRGHNVfVpj3NG574W5ryzyX
-         MesS4ECBLvvYt2Grfj9BWgHF0sUUW34OhAPJPePeOaVfVzjoaQ6jVSAgEK+TZx5MDjWi
-         Yj8A==
-X-Gm-Message-State: AC+VfDyq3ceOgd+1tJNBHHUnZb4Ibn+wh+Iy/IrrfYYAiyMPdKRAG0RN
-        r6ACCfVTvzxTY0Ms9HRxJqbX3w==
-X-Google-Smtp-Source: ACHHUZ46pmSZAsVWYmsgETygRY9QIHvAgFhFuQWZm8gR5dMFg8PAyLdloNZWcS1ljwmx00gropxqJA==
-X-Received: by 2002:ac2:43bb:0:b0:4f3:ab4b:4d99 with SMTP id t27-20020ac243bb000000b004f3ab4b4d99mr1525664lfl.19.1685203878252;
-        Sat, 27 May 2023 09:11:18 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id n17-20020a2eb791000000b002ad8bccceb2sm1467502ljo.57.2023.05.27.09.11.17
+        d=1e100.net; s=20221208; t=1685203966; x=1687795966;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I/bw27vS3UVZGByGOfLoz+Tva7cynCfUs6ZBWXI06bo=;
+        b=KCt86ikqzPKFR2prXQ0PzZTJYJ1e4EGxse0aEk/0Wd2ea8GXRtxqUB6IVCQrufJCLG
+         bZwCV4oHvQhJJ+Tp2TnpDwDLwGh5kN0zvapzBNzih9Krw7rUf8wEe3oNqqPveKrt0CsS
+         jmIPmat/iue9X+Tq0F6hCf+6x7f3yYOrO/wDDIb/zFQGPPxWqJIbi3vYxe9pgbEgI1Rh
+         ZHOnvE6UTU+B02Voq9jUBO+Omtkbb40d6tRmkb6ZdYLTgbOwAGHe5JgzqkfLGYPz8Ken
+         MfWANCXfottqEfDHocu3XitTR8GKV9aBxI5GIWKRAvqvKg1kkXf2/Wfcgmu72tzTy2i3
+         Cg9Q==
+X-Gm-Message-State: AC+VfDwVIh6XqpHrPRAXGNmLexlsDT9Rbh3hbGnLt/BnfU/q1UwI7GDG
+        kTkYQrg6zSWZLdf727E7S2a0EUc1WHheRGSBDsVXPzbi
+X-Google-Smtp-Source: ACHHUZ6Xum+ZvNOnDVNHjIWz1C8FVOZWleNm62mj39fiVrIc1rKRnGdqS8wnHA3+bzRghLTKYckK4g==
+X-Received: by 2002:a17:907:6092:b0:966:1984:9d21 with SMTP id ht18-20020a170907609200b0096619849d21mr6957302ejc.9.1685203966068;
+        Sat, 27 May 2023 09:12:46 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id r20-20020a170906365400b0094e7d196aa4sm3507700ejb.160.2023.05.27.09.12.44
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 May 2023 09:11:17 -0700 (PDT)
-Message-ID: <82072c2b-8483-6fb6-a9d1-c9882825c9cb@linaro.org>
-Date:   Sat, 27 May 2023 18:11:16 +0200
+        Sat, 27 May 2023 09:12:44 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-51478f6106cso2714843a12.1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:12:44 -0700 (PDT)
+X-Received: by 2002:a17:907:3607:b0:96f:7b4a:2909 with SMTP id
+ bk7-20020a170907360700b0096f7b4a2909mr5884052ejc.26.1685203964300; Sat, 27
+ May 2023 09:12:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230427150717.20860-1-ansuelsmth@gmail.com>
- <20230427150717.20860-3-ansuelsmth@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH v4 2/3] clk: qcom: clk-rcg2: add support for rcg2 freq
- multi ops
-In-Reply-To: <20230427150717.20860-3-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230522025124.5863-1-michael.christie@oracle.com>
+ <20230522025124.5863-4-michael.christie@oracle.com> <20230522123029.GA22159@redhat.com>
+ <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com> <20230522174757.GC22159@redhat.com>
+ <20230523121506.GA6562@redhat.com> <87bkib6nxr.fsf@email.froward.int.ebiederm.org>
+ <20230524141022.GA19091@redhat.com> <87ttw1zt4i.fsf@email.froward.int.ebiederm.org>
+ <20230525115512.GA9229@redhat.com> <87y1lcxwcj.fsf@email.froward.int.ebiederm.org>
+ <CAHk-=wj4DS=2F5mW+K2P7cVqrsuGd3rKE_2k2BqnnPeeYhUCvg@mail.gmail.com> <87cz2mrtnk.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87cz2mrtnk.fsf@email.froward.int.ebiederm.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 27 May 2023 09:12:27 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whsi9JFP-okH3jXHrA8rh8bMuuSt6ZgkmPwiDMAn437qA@mail.gmail.com>
+Message-ID: <CAHk-=whsi9JFP-okH3jXHrA8rh8bMuuSt6ZgkmPwiDMAn437qA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps regression
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+Content-Type: multipart/mixed; boundary="000000000000aae9aa05fcaf1f14"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--000000000000aae9aa05fcaf1f14
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Sat, May 27, 2023 at 2:49=E2=80=AFAM Eric W. Biederman <ebiederm@xmissio=
+n.com> wrote:
+>
+> The real sticky widget for me is how to handle one of these processes
+> coredumping.  It really looks like it will result in a reliable hang.
 
-On 27.04.2023 17:07, Christian Marangi wrote:
-> Some RCG frequency can be reached by multiple configuration.
-> 
-> Add clk_rcg2_fm_ops ops to support these special RCG configurations.
-> 
-> These alternative ops will select the frequency using a CEIL policy.
-> 
-> When the correct frequency is found, the correct config is selected by
-> calculating the final rate (by checking the defined parent and values
-> in the config that is being checked) and deciding based on the one that
-> is less different than the requested one.
-> 
-> These check are skipped if there is just on config for the requested
-> freq.
-> 
-> qcom_find_freq_multi is added to search the freq with the new struct
-> freq_multi_tbl.
-> __clk_rcg2_select_conf is used to select the correct conf by simulating
-> the final clock.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
->  drivers/clk/qcom/clk-rcg.h  |   1 +
->  drivers/clk/qcom/clk-rcg2.c | 152 ++++++++++++++++++++++++++++++++++++
->  drivers/clk/qcom/common.c   |  18 +++++
->  drivers/clk/qcom/common.h   |   2 +
->  4 files changed, 173 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-> index dc85b46b0d79..f8ec989ed3d9 100644
-> --- a/drivers/clk/qcom/clk-rcg.h
-> +++ b/drivers/clk/qcom/clk-rcg.h
-> @@ -188,6 +188,7 @@ struct clk_rcg2_gfx3d {
->  
->  extern const struct clk_ops clk_rcg2_ops;
->  extern const struct clk_ops clk_rcg2_floor_ops;
-> +extern const struct clk_ops clk_rcg2_fm_ops;
->  extern const struct clk_ops clk_rcg2_mux_closest_ops;
->  extern const struct clk_ops clk_edp_pixel_ops;
->  extern const struct clk_ops clk_byte_ops;
-> diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-> index 76551534f10d..4f2fe012ef5f 100644
-> --- a/drivers/clk/qcom/clk-rcg2.c
-> +++ b/drivers/clk/qcom/clk-rcg2.c
-> @@ -266,6 +266,104 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
->  	return 0;
->  }
->  
-> +static const struct freq_conf *
-> +__clk_rcg2_select_conf(struct clk_hw *hw, const struct freq_multi_tbl *f,
-> +		       unsigned long req_rate)
-> +{
-> +	unsigned long best_rate = 0, parent_rate, rate;
-> +	const struct freq_conf *conf, *best_conf;
-> +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-> +	struct clk_hw *p;
-> +	int index, i;
-> +
-> +	/* Exit early if only one config is defined */
-> +	if (f->num_confs == 1)
-> +		return f->confs;
-> +
-> +	/* Search in each provided config the one that is near the wanted rate */
-> +	for (i = 0, conf = f->confs; i < f->num_confs; i++, conf++) {
-> +		index = qcom_find_src_index(hw, rcg->parent_map, conf->src);
-> +		if (index < 0)
-> +			continue;
-> +
-> +		p = clk_hw_get_parent_by_index(hw, index);
-> +		if (!p)
-> +			continue;
-> +
-> +		parent_rate =  clk_hw_get_rate(p);
-> +		rate = calc_rate(parent_rate, conf->n, conf->m, conf->n, conf->pre_div);
-> +
-> +		if (rate == req_rate) {
-> +			best_conf = conf;
-> +			break;
-> +		}
-> +
-> +		if (abs(req_rate - rate) < abs(best_rate - rate)) {
-Shouldn't this be:
+Well, if *that* is the main worry, I think that's trivial enough to deal wi=
+th.
 
-if (abs(req_rate - rate) < abs(best_rate - req_rate)
+In particular, we could make the rule just be that user worker threads
+simply do not participate in core-dumps.
 
-?
+THAT isn't hard.
 
-this way it'd say
+All we need to do is
 
-"if this iteration's rate is closer to the requested one than the
-best one we've found yet, it's better"
+ (a) not count those threads in zap_threads()
 
-> +			best_rate = rate;
-> +			best_conf = conf;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Very unlikely.
-> +	 * Force the first conf if we can't find a correct config.
-> +	 */
-> +	if (unlikely(i == f->num_confs))
-> +		best_conf = f->confs;
-Is that a supported scenario or would it be a device driver / clock
-driver error?
+ (b) make sure that they don't add themselves to the "dumper" list by
+not calling "coredujmp_task_exit()"
 
-> +
-> +	return best_conf;
-> +}
-> +
-> +static int _freq_tbl_fm_determine_rate(struct clk_hw *hw, const struct freq_multi_tbl *f,
-> +				       struct clk_rate_request *req)
-> +{
-> +	unsigned long clk_flags, rate = req->rate;
-> +	const struct freq_conf *conf;
-> +	struct clk_hw *p;
-> +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-swap lines 2, 3, 4 to 4, 2, 3 and you'll get a revers-Christmas-tree!
+ (c) not initiate core-dumping themselves.
 
-Konrad
+and I think that's pretty much it.
 
+In fact, that really seems like a good model *regardless*, because
+honestly, a PF_IO_WORKER doesn't have valid register state for the
+core dump anyway, and anything that would have caused a IO thread to
+get a SIGSEGV *should* have caused a kernel oops already.
+
+So the only worry is that the core dump will now happen while an IO
+worker is still busy and so it's not "atomic" wrt possible VM changes,
+but while that used to be a big problem back in the dark ages when we
+didn't get the VM locks for core dumping, that got fixed a few years
+ago because it already caused lots of potential issues.
+
+End result: I think the attached patch is probably missing something,
+but the approach "FeelsRight(tm)" to me.
+
+Comments?
+
+                   Linus
+
+--000000000000aae9aa05fcaf1f14
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_li66x0ln0>
+X-Attachment-Id: f_li66x0ln0
+
+IGZzL2NvcmVkdW1wLmMgICB8ICAyICstCiBrZXJuZWwvZXhpdC5jICAgfCAgNiArKysrKysKIGtl
+cm5lbC9zaWduYWwuYyB8IDE4ICsrKysrKysrKystLS0tLS0tLQogMyBmaWxlcyBjaGFuZ2VkLCAx
+NyBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2ZzL2NvcmVkdW1w
+LmMgYi9mcy9jb3JlZHVtcC5jCmluZGV4IGVjZTdiYWRmNzAxYi4uNDZmODE0NWIzOWU2IDEwMDY0
+NAotLS0gYS9mcy9jb3JlZHVtcC5jCisrKyBiL2ZzL2NvcmVkdW1wLmMKQEAgLTM2OCw3ICszNjgs
+NyBAQCBzdGF0aWMgaW50IHphcF9wcm9jZXNzKHN0cnVjdCB0YXNrX3N0cnVjdCAqc3RhcnQsIGlu
+dCBleGl0X2NvZGUpCiAKIAlmb3JfZWFjaF90aHJlYWQoc3RhcnQsIHQpIHsKIAkJdGFza19jbGVh
+cl9qb2JjdGxfcGVuZGluZyh0LCBKT0JDVExfUEVORElOR19NQVNLKTsKLQkJaWYgKHQgIT0gY3Vy
+cmVudCAmJiAhKHQtPmZsYWdzICYgUEZfUE9TVENPUkVEVU1QKSkgeworCQlpZiAodCAhPSBjdXJy
+ZW50ICYmICEodC0+ZmxhZ3MgJiAoUEZfUE9TVENPUkVEVU1QIHwgUEZfSU9fV09SS0VSKSkpIHsK
+IAkJCXNpZ2FkZHNldCgmdC0+cGVuZGluZy5zaWduYWwsIFNJR0tJTEwpOwogCQkJc2lnbmFsX3dh
+a2VfdXAodCwgMSk7CiAJCQlucisrOwpkaWZmIC0tZ2l0IGEva2VybmVsL2V4aXQuYyBiL2tlcm5l
+bC9leGl0LmMKaW5kZXggMzRiOTBlMmU3Y2Y3Li5mZGU1N2I5ZjQ0OTQgMTAwNjQ0Ci0tLSBhL2tl
+cm5lbC9leGl0LmMKKysrIGIva2VybmVsL2V4aXQuYwpAQCAtNDAwLDYgKzQwMCwxMiBAQCBzdGF0
+aWMgdm9pZCBjb3JlZHVtcF90YXNrX2V4aXQoc3RydWN0IHRhc2tfc3RydWN0ICp0c2spCiB7CiAJ
+c3RydWN0IGNvcmVfc3RhdGUgKmNvcmVfc3RhdGU7CiAKKwkvKgorCSAqIElPIHdvcmtlcnMgZG8g
+bm90IHBhcnRpY2lwYXRlIGluIGR1bXBpbmcgY29yZQorCSAqLworCWlmICh0c2stPmZsYWdzICYg
+UEZfSU9fV09SS0VSKQorCQlyZXR1cm47CisKIAkvKgogCSAqIFNlcmlhbGl6ZSB3aXRoIGFueSBw
+b3NzaWJsZSBwZW5kaW5nIGNvcmVkdW1wLgogCSAqIFdlIG11c3QgaG9sZCBzaWdsb2NrIGFyb3Vu
+ZCBjaGVja2luZyBjb3JlX3N0YXRlCmRpZmYgLS1naXQgYS9rZXJuZWwvc2lnbmFsLmMgYi9rZXJu
+ZWwvc2lnbmFsLmMKaW5kZXggOGY2MzMwZjBlOWNhLi5lMGFjYjExZDNhMWQgMTAwNjQ0Ci0tLSBh
+L2tlcm5lbC9zaWduYWwuYworKysgYi9rZXJuZWwvc2lnbmFsLmMKQEAgLTI4NDUsNiArMjg0NSwx
+NiBAQCBib29sIGdldF9zaWduYWwoc3RydWN0IGtzaWduYWwgKmtzaWcpCiAJCSAqLwogCQljdXJy
+ZW50LT5mbGFncyB8PSBQRl9TSUdOQUxFRDsKIAorCQkvKgorCQkgKiBQRl9JT19XT1JLRVIgdGhy
+ZWFkcyB3aWxsIGNhdGNoIGFuZCBleGl0IG9uIGZhdGFsIHNpZ25hbHMKKwkJICogdGhlbXNlbHZl
+cyBhbmQgZG8gbm90IHBhcnRpY2lwYXRlIGluIGNvcmUgZHVtcGluZy4KKwkJICoKKwkJICogVGhl
+eSBoYXZlIGNsZWFudXAgdGhhdCBtdXN0IGJlIHBlcmZvcm1lZCwgc28gd2UgY2Fubm90CisJCSAq
+IGNhbGwgZG9fZXhpdCgpIG9uIHRoZWlyIGJlaGFsZi4KKwkJICovCisJCWlmIChjdXJyZW50LT5m
+bGFncyAmIFBGX0lPX1dPUktFUikKKwkJCWdvdG8gb3V0OworCiAJCWlmIChzaWdfa2VybmVsX2Nv
+cmVkdW1wKHNpZ25yKSkgewogCQkJaWYgKHByaW50X2ZhdGFsX3NpZ25hbHMpCiAJCQkJcHJpbnRf
+ZmF0YWxfc2lnbmFsKGtzaWctPmluZm8uc2lfc2lnbm8pOwpAQCAtMjg2MCwxNCArMjg3MCw2IEBA
+IGJvb2wgZ2V0X3NpZ25hbChzdHJ1Y3Qga3NpZ25hbCAqa3NpZykKIAkJCWRvX2NvcmVkdW1wKCZr
+c2lnLT5pbmZvKTsKIAkJfQogCi0JCS8qCi0JCSAqIFBGX0lPX1dPUktFUiB0aHJlYWRzIHdpbGwg
+Y2F0Y2ggYW5kIGV4aXQgb24gZmF0YWwgc2lnbmFscwotCQkgKiB0aGVtc2VsdmVzLiBUaGV5IGhh
+dmUgY2xlYW51cCB0aGF0IG11c3QgYmUgcGVyZm9ybWVkLCBzbwotCQkgKiB3ZSBjYW5ub3QgY2Fs
+bCBkb19leGl0KCkgb24gdGhlaXIgYmVoYWxmLgotCQkgKi8KLQkJaWYgKGN1cnJlbnQtPmZsYWdz
+ICYgUEZfSU9fV09SS0VSKQotCQkJZ290byBvdXQ7Ci0KIAkJLyoKIAkJICogRGVhdGggc2lnbmFs
+cywgbm8gY29yZSBkdW1wLgogCQkgKi8K
+--000000000000aae9aa05fcaf1f14--
