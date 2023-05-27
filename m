@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C93713428
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 12:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4278713217
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjE0K73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 06:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S236705AbjE0DM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 23:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjE0K71 (ORCPT
+        with ESMTP id S229691AbjE0DM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 06:59:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0712CD3;
-        Sat, 27 May 2023 03:59:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 976E660B39;
-        Sat, 27 May 2023 10:59:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640F2C433D2;
-        Sat, 27 May 2023 10:59:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685185164;
-        bh=OC4Rq902wh35fSKpBf4IfsUs4gYUwzgE2myu8k6Vmz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qQv12nBrz/UL21KtQWhpq2oa0lifmjnNIbCilcf007e2rRsYa/qALr5fUaopE+WOm
-         C3ReeseCU4sAiGxANmzDxqOcgn7UB8pGzuu0ESyo8ut/Az2MRZfghvgv2AisVKlhup
-         C25gATRCzgvsE9Xhs/+cQzgrRuqmzjne8Y8bdXGv2k86mLD2rZUJIHH8uzR0Z1EAyl
-         r4A1JBCDqH5hZusSj3rGfItm5cuTIaa2+Tr2pavpsOdEy4HpWOTixwEmR+ntQCaWZg
-         766fsS5nKcGEHuPtnYkgOC7gCUUyU5og90CU0JWVeQOAbobah+hf2tW7c8pE/mZROn
-         jv0IMgcNK2MGw==
-Date:   Sat, 27 May 2023 18:59:12 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH V2 1/2] dt-bindings: arm: Add Gateworks i.MX8M GW7905-2x
- board
-Message-ID: <20230527105912.GM528183@dragon>
-References: <20230516190041.476045-1-tharvey@gateworks.com>
+        Fri, 26 May 2023 23:12:57 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466DAE3;
+        Fri, 26 May 2023 20:12:56 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QSmvS304nzqSg2;
+        Sat, 27 May 2023 11:08:20 +0800 (CST)
+Received: from huawei.com (10.175.104.170) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 27 May
+ 2023 11:12:53 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] net: skbuff: fix missing a __noreturn annotation warning
+Date:   Sat, 27 May 2023 19:04:09 +0800
+Message-ID: <20230527110409.497408-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516190041.476045-1-tharvey@gateworks.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.170]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 12:00:40PM -0700, Tim Harvey wrote:
-> Add DT compatible string for a Gateworks GW7905-2x board based on
-> the i.MX8MPlus from NXP.
-> 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Add __noreturn annotation to fix the warning:
+ net/core/skbuff.o: warning: objtool: skb_push+0x3c: skb_panic() is missing a __noreturn annotation
+ net/core/skbuff.o: warning: objtool: skb_put+0x4e: skb_panic() is missing a __noreturn annotation
 
-Applied both, thanks!
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ net/core/skbuff.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 6724a84ebb09..12b525aa4783 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -181,8 +181,8 @@ EXPORT_SYMBOL_GPL(drop_reasons_unregister_subsys);
+  *	Keep out of line to prevent kernel bloat.
+  *	__builtin_return_address is not used because it is not always reliable.
+  */
+-static void skb_panic(struct sk_buff *skb, unsigned int sz, void *addr,
+-		      const char msg[])
++static void __noreturn skb_panic(struct sk_buff *skb, unsigned int sz, void *addr,
++				 const char msg[])
+ {
+ 	pr_emerg("%s: text:%px len:%d put:%d head:%px data:%px tail:%#lx end:%#lx dev:%s\n",
+ 		 msg, addr, skb->len, sz, skb->head, skb->data,
+-- 
+2.27.0
+
