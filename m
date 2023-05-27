@@ -2,108 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F104713487
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 13:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203DE71348A
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 13:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjE0LsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 07:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S231811AbjE0LvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 07:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbjE0LsG (ORCPT
+        with ESMTP id S231151AbjE0LvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 07:48:06 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6FEBB;
-        Sat, 27 May 2023 04:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685188084; x=1716724084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HduercbIudkggjRz+jUJoxBAuOs1kh2dy/JWAQRuJ1A=;
-  b=AJF9oalWwT5MrVh3Vqve0ySTGfSTWc9/5LYM30EHkyrcWOp2emOR/wZd
-   hlp8Hahm0cSynLQmheQcXZkeeOANa/OrGTrLrYgMsDl7y049xxe4iEGqB
-   yQQIgAs+Q6R1LB8YorA9Bj54qCJIJdctNLd1bQrb1v0KLb5/fA1MDMz6Z
-   UvwFu68JwAT7RbyFajpoUJ9osxurxj9MU7XbvU5Af9E8kOSP61TIoGFWp
-   5ZMWuTllxNTSdGoDzeN+TgQxytKUgporKZmhZ4WIHHpniXoaipdDNu8rl
-   cAfysNmj05hRVsbSerP9V8yYesjzSJgC/r0fOiuLXwaBtAmK1HWMLweFT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="353233280"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="353233280"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 04:48:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="849822661"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="849822661"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 27 May 2023 04:48:02 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q2sOv-000JwM-0c;
-        Sat, 27 May 2023 11:48:01 +0000
-Date:   Sat, 27 May 2023 19:47:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lizhi Hou <lizhi.hou@amd.com>, vkoul@kernel.org,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Nishad Saraf <nishads@amd.com>,
-        max.zhen@amd.com, sonal.santan@amd.com, nishad.saraf@amd.com,
-        Lizhi Hou <lizhi.hou@amd.com>
-Subject: Re: [PATCH V1 QDMA 1/1] dmaengine: amd: qdma: Add AMD QDMA driver
-Message-ID: <202305271937.niKlwa4h-lkp@intel.com>
-References: <1685119795-11729-2-git-send-email-lizhi.hou@amd.com>
+        Sat, 27 May 2023 07:51:14 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E88BB
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 04:51:08 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d2e8a842cso1401429b3a.3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 04:51:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685188268; x=1687780268;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M60H7z7OzZaor7WG8Tl37IOGxzGrsGYe7qShJ598B1U=;
+        b=eLTkkEMv24hkGpArLFJoQSm2dRo2aZ6VF7iXm2+b7wV6soXO3wlvk4dACyXkuo5wzj
+         vuxTGec3F8+p6kfXshI+Cmer0dheDH78ZaF4nbnsbJdQmhjUBGsRCGTKiVW1qAqJk/ce
+         BgY1TScQx7Pcnp04VaQLX5p0gYxgpX00I4rUQB2f35Mq8hEVwvitmccsFniarnP6Tebt
+         5jowgfa2FZmTHAfvtNhaFYi5/IuC7lLzFgD28c6KAAJR0gMqCRiwFV3YqiXa9fHUDU/G
+         rlx9pIfLQ/adgoWtN9jbUuS/sfF1LlNEEjOsuXC6TfzolufnWOmobpd1KmgbK+EXucID
+         2HHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685188268; x=1687780268;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M60H7z7OzZaor7WG8Tl37IOGxzGrsGYe7qShJ598B1U=;
+        b=kSapwwVlXKLjqS89LMIHzUBBftgKRkhyEfd/BxoL1YE04zLTf8eCDngQKv6TebssOa
+         jZJLoqf+5UTFLm8gfBGeSzyhthoeGgQgnBSOYdjPXOIh+xDDEXYMxDiR81lsndLacYmF
+         el/vETkTZNt4/TFVoBT52u7pg9+qNddlpVTZhdKRg2zWR/J90Gxpa2fGDg+51P5avKcJ
+         Wo9AFHWEjn9VYcWQYXyoZGOjVHtV1Xe4ty7w65m7YyJdpO7ap1/gyEe/GisHdOLvTRc9
+         jesLYrYURoW0sOxnKCXXA1ocpnyw3rcXTFX4LomED14BJV2TpV7eFRfZcgvVPLBfO9Xz
+         cBZQ==
+X-Gm-Message-State: AC+VfDxYFK9Jysnmwg7cxPtVPnEyDUM0hLnDKNx4WKX3K3F/r6kYtQ5+
+        aDhPysw584ygVPClFs/Y67s=
+X-Google-Smtp-Source: ACHHUZ4QxAWCn3xuC6rLDt7vgW0oNL4lcvxTBwBD3SNf5vot9f+iW9ovjbAY4yk3I+5dfqUN5cCtQQ==
+X-Received: by 2002:a05:6a00:cc5:b0:643:bb16:7ca6 with SMTP id b5-20020a056a000cc500b00643bb167ca6mr9083610pfv.21.1685188268122;
+        Sat, 27 May 2023 04:51:08 -0700 (PDT)
+Received: from redkillpc.. ([49.207.219.227])
+        by smtp.gmail.com with ESMTPSA id x19-20020aa793b3000000b0064f97ff4506sm2988098pff.68.2023.05.27.04.51.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 04:51:07 -0700 (PDT)
+From:   Prathu Baronia <prathubaronia2011@gmail.com>
+To:     prathubaronia2011@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Khadija Kamran <kamrankhadijadj@gmail.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     dan.carpenter@linaro.org, error27@gmail.com, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, oe-kbuild@lists.linux.dev
+Subject: [PATCH v4 1/3] axis-fifo: fix smatch warning for format specifier
+Date:   Sat, 27 May 2023 17:20:58 +0530
+Message-Id: <20230527115101.47569-1-prathubaronia2011@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ZHHE/H2p4Go/Igc/@redkillpc>
+References: <ZHHE/H2p4Go/Igc/@redkillpc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1685119795-11729-2-git-send-email-lizhi.hou@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lizhi,
+Fix an old smatch warning reported by lkp introduced by commit
+d2d7aa53891e. In the mentioned commit we had used "%pa" format specifier
+for a void* type and hence smatch complained about its use instead of
+"%p".
 
-kernel test robot noticed the following build errors:
+Fixes: d2d7aa53891e ("staging: axis-fifo: convert to use miscdevice")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/r/202305150358.nt1BkbXz-lkp@intel.com/
+Signed-off-by: Prathu Baronia <prathubaronia2011@gmail.com>
+---
+V3 -> V4: Split into warning fixing and cleanup commits
+V2 -> V3: Fix smatch warnings from kernel test robot
+V1 -> V2: Split into logical commits and fix commit message
 
-[auto build test ERROR on vkoul-dmaengine/next]
-[also build test ERROR on linus/master v6.4-rc3 next-20230525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ drivers/staging/axis-fifo/axis-fifo.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lizhi-Hou/dmaengine-amd-qdma-Add-AMD-QDMA-driver/20230527-005214
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-patch link:    https://lore.kernel.org/r/1685119795-11729-2-git-send-email-lizhi.hou%40amd.com
-patch subject: [PATCH V1 QDMA 1/1] dmaengine: amd: qdma: Add AMD QDMA driver
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230527/202305271937.niKlwa4h-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d300fd23b7ecbcc89512dba3fa745941c1c03fac
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lizhi-Hou/dmaengine-amd-qdma-Add-AMD-QDMA-driver/20230527-005214
-        git checkout d300fd23b7ecbcc89512dba3fa745941c1c03fac
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
+index 7a21f2423204..271cab805cad 100644
+--- a/drivers/staging/axis-fifo/axis-fifo.c
++++ b/drivers/staging/axis-fifo/axis-fifo.c
+@@ -906,8 +906,8 @@ static int axis_fifo_probe(struct platform_device *pdev)
+ 	if (rc < 0)
+ 		goto err_initial;
+ 
+-	dev_info(fifo->dt_device, "axis-fifo created at %pa mapped to 0x%pa, irq=%i\n",
+-		 &r_mem->start, &fifo->base_addr, fifo->irq);
++	dev_info(fifo->dt_device, "axis-fifo created at %pa mapped to 0x%p, irq=%i\n",
++		 &r_mem->start, fifo->base_addr, fifo->irq);
+ 
+ 	return 0;
+ 
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305271937.niKlwa4h-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__ffsdi2" [drivers/dma/amd/amd-qdma.ko] undefined!
-
+base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
