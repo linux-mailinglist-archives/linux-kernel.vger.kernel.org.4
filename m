@@ -2,374 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D747134FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 15:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CDD713500
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 15:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbjE0N2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 09:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        id S232498AbjE0N3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 09:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbjE0N23 (ORCPT
+        with ESMTP id S231387AbjE0N3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 09:28:29 -0400
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC7BB8;
-        Sat, 27 May 2023 06:28:27 -0700 (PDT)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4QT2fr2GC4z9sWs;
-        Sat, 27 May 2023 15:28:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1685194100;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gFF9ojQNgCDGStL3SMO101+doudWZ1WYnV6ZyOfRyN4=;
-        b=KVBUsqVLI+u86N2T/90YmIBDSi49QRWF13wM1NpuWj8HECM6v3EfKHDgZfufOaVrRoBTh5
-        98PrMXN/TKvQI48yPUwwCZCUs57tSHQaVs/SOla8ZbVWVerBTnzdoBifRXUmJqwEWjTcWf
-        71ZPtMqcLkmNVuUFsVkTB+AxkhDtESysYURXEEKNacZ73k4c408S/WVmjY13OJR3SGxeXv
-        ZX3Dp6MMn2hftYFG/TQYN2DEMqggCG99SJHvU/zqlZJX6Z/2VCov5MRQnBzwDW0GDQmQya
-        afb/eWQYobGElUufDZQNurknJlILcmJ879YwalttX2VpZlMOM8amZ6o9OMmj6Q==
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Cc:     Frank Oltmanns <frank@oltmanns.dev>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [RFC PATCH 3/3] clk: sunxi-ng: sun50i-a64: Precalculate NKM combinations for pll-mipi
-Date:   Sat, 27 May 2023 15:27:47 +0200
-Message-Id: <20230527132747.83196-4-frank@oltmanns.dev>
-In-Reply-To: <20230527132747.83196-1-frank@oltmanns.dev>
-References: <20230527132747.83196-1-frank@oltmanns.dev>
+        Sat, 27 May 2023 09:29:39 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D55125
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 06:29:18 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-bacfcc7d1b2so2647509276.2
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 06:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ossystems-com-br.20221208.gappssmtp.com; s=20221208; t=1685194158; x=1687786158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
+         :references:mime-version:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bk/35MSXwnwDqOa61NfULS56WT2D8JtdWj0kdSLNcj0=;
+        b=tCoC/u1XjYnbyj3DD2ZDjaIJ7Q9zi1avxPjobFhr++5lJf7O9qPOpPlVFWD+XBJZ1l
+         2oerB6h5IPdRGhUrdqpCVmh/uU+ReNoU4Jthpp32hneetjE7Ny7bOr/KL6QWwLjpli1W
+         reWvHGF0zdPuMsmvwfysI6vuq+PUlSZ5jRlhBKAsjZAOKSBIg/82denruqUtVFuNOd/Z
+         yLlDcAn+5/kbm/HPkQjmn6wz9t/+sLYRWwcGH77E6Upo9c19TwSpHaLej14IcYWqGiAS
+         DAojz8pzrF30xUgNMYdDIk5/2Nw4QtjJKDqv+FnTPNXaJBsQAeKdEcUG2ebSzTc2aMj8
+         95gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685194158; x=1687786158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
+         :references:mime-version:from:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Bk/35MSXwnwDqOa61NfULS56WT2D8JtdWj0kdSLNcj0=;
+        b=aexYLzvJXmMBvPW5EyIg/s7sqsz1s7AqwEJt6Pd86AyQUH2/b6BqdVM4dIC1sgLniN
+         6mrYzNQynrF1c77ZPptkI1zB7/nrfKIZ+ZPC9KV/GBmjJnq3/UMaoQRQ6HHx/ZoOGVMf
+         aeITGDlRNtuS6kjKfkzIPG8fxC7L5VI34Oby42JRTnpTOTyXy1hrsHJ+BufyI4pplZhc
+         8BimmtKu99ai8MBgv8gU8EKmNYXFr+DsrtPHDrRfuJ7swpCQEGYD59CmZ/aUm0I8Xtrr
+         MBQlEIYegLkPRElcMuPKEy34YHAj1e5Ho0eC/R91+A0J6WZurnw9P8JjmQ5uGt4OrRC5
+         hG5g==
+X-Gm-Message-State: AC+VfDwfPVr1VSchBxHqnlcR3hv9SPo7otZo5UyJsa7ehttEmhy96Zd7
+        uyQ1bzYmdDAklEOT0qdp8X5HgKhn9kxCGbtCDcZvgw==
+X-Google-Smtp-Source: ACHHUZ5Hqu2IXSDby1TPtJ4gAWC3nK14XziSss84tKRoy+cspAnFKVbFa8uPgg6XJoshFObCdVHSIA==
+X-Received: by 2002:a25:2484:0:b0:b92:32aa:be46 with SMTP id k126-20020a252484000000b00b9232aabe46mr5131518ybk.22.1685194157915;
+        Sat, 27 May 2023 06:29:17 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id 5-20020a251605000000b00ba83a9755f1sm1634238ybw.43.2023.05.27.06.29.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 May 2023 06:29:16 -0700 (PDT)
+From:   Otavio Salvador <otavio.salvador@ossystems.com.br>
+X-Google-Original-From: Otavio Salvador <otavio@ossystems.com.br>
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-565cdb77b01so7897597b3.0
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 06:29:16 -0700 (PDT)
+X-Received: by 2002:a81:4986:0:b0:565:7025:610a with SMTP id
+ w128-20020a814986000000b005657025610amr5240750ywa.27.1685194156049; Sat, 27
+ May 2023 06:29:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230523212829.2539417-1-otavio@ossystems.com.br>
+ <b8166ed7-2d3b-4bdd-b597-f0aeddb7ecdc@app.fastmail.com> <20230527124428.GT528183@dragon>
+In-Reply-To: <20230527124428.GT528183@dragon>
+Date:   Sat, 27 May 2023 10:29:04 -0300
+X-Gmail-Original-Message-ID: <CAP9ODKociRAi9WP-R_-JoKmMWtSN2JwJJ+7n-cn4u-G-vktS3A@mail.gmail.com>
+Message-ID: <CAP9ODKociRAi9WP-R_-JoKmMWtSN2JwJJ+7n-cn4u-G-vktS3A@mail.gmail.com>
+Subject: Re: [PATCH] ARM: imx_v6_v7_defconfig: Remove KERNEL_LZO config
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Otavio Salvador <otavio@ossystems.com.br>,
+        linux-arm-kernel@lists.infradead.org,
+        Alistair Francis <alistair@alistair23.me>,
+        Fabio Estevam <festevam@gmail.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Stefan Hansson <newbie13xd@gmail.com>,
+        Stefan Wahren <stefan.wahren@chargebyte.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NKM driver now support using a table of precalculated NKM
-combinations. Use this new method for sun50i-a64 for a faster selection
-of clock rates.
+Hello Shawn,
 
-Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
----
- drivers/clk/sunxi-ng/ccu-sun50i-a64.c | 281 ++++++++++++++++++++++++++
- 1 file changed, 281 insertions(+)
+Em s=C3=A1b., 27 de mai. de 2023 =C3=A0s 09:44, Shawn Guo <shawnguo@kernel.=
+org> escreveu:
+>
+> On Wed, May 24, 2023 at 08:48:26AM +0200, Arnd Bergmann wrote:
+> > On Tue, May 23, 2023, at 23:28, Otavio Salvador wrote:
+> > > The KERNEL_GZIP is used in most config and is the default, there is n=
+o
+> > > clear reason to diverge so let default be used.
+> > >
+> > > Signed-off-by: Otavio Salvador <otavio@ossystems.com.br>
+> >
+> > I don't mind that change, but it seems odd to single this one out, as
+> > there are many other options in that particular defconfig that
+> > stick out more, picking LZO seems like a reasonable choice for slightly
+> > faster booting, though ZSTD would be the more modern choice.
+> >
+> > If you are looking into cleaning up this file, maybe see if we can
+> > kill off these options:
+> >
+> > CONFIG_EXPERT=3Dy
+> > CONFIG_ARCH_FORCE_MAX_ORDER=3D13
+> > CONFIG_CMDLINE=3D"noinitrd console=3Dttymxc0,115200"
+> > CONFIG_CS89x0_PLATFORM=3Dy # none of these four are in dts files
+> > CONFIG_SMC91X=3Dy
+> > CONFIG_SMC911X=3Dy
+> > CONFIG_SMSC911X=3Dy
+> > CONFIG_STAGING=3Dy
+> > CONFIG_STAGING_MEDIA=3Dy
+> > CONFIG_VIDEO_IMX_MEDIA=3Dy # not graduated from staging after 6 years
+> > CONFIG_EXT2_FS=3Dy
+> > CONFIG_EXT3_FS=3Dy # select EXT4 instead
+> > CONFIG_ISO9660_FS=3Dm
+> >
+> > I have not investigated why any of them were added originally,
+> > so it's likely that some are actually needed.
+>
+> Would you investigate the suggested options and see if we can clean up
+> more than just KERNEL_LZO?
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-a64.c b/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
-index ff242bccc827..d201f9ec5378 100644
---- a/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun50i-a64.c
-@@ -165,6 +165,283 @@ static SUNXI_CCU_NM_WITH_FRAC_GATE_LOCK(pll_gpu_clk, "pll-gpu",
-  */
- #define SUN50I_A64_PLL_MIPI_REG		0x040
- 
-+static struct clk_nkm_combo pll_mipi_nkm_combos[] = {
-+	{ .n =  1, .k =  2,  .m = 16 /* 0.1250000*/ },
-+	{ .n =  1, .k =  2,  .m = 15 /* 0.1333333*/ },
-+	{ .n =  1, .k =  2,  .m = 14 /* 0.1428571*/ },
-+	{ .n =  1, .k =  2,  .m = 13 /* 0.1538462*/ },
-+	{ .n =  1, .k =  2,  .m = 12 /* 0.1666667*/ },
-+	{ .n =  1, .k =  2,  .m = 11 /* 0.1818182*/ },
-+	{ .n =  1, .k =  3,  .m = 16 /* 0.1875000*/ },
-+	{ .n =  1, .k =  2,  .m = 10 /* 0.2000000*/ },
-+	{ .n =  1, .k =  3,  .m = 14 /* 0.2142857*/ },
-+	{ .n =  1, .k =  2,  .m =  9 /* 0.2222222*/ },
-+	{ .n =  1, .k =  3,  .m = 13 /* 0.2307692*/ },
-+	{ .n =  1, .k =  2,  .m =  8 /* 0.2500000*/ },
-+	{ .n =  2, .k =  2,  .m = 15 /* 0.2666667*/ },
-+	{ .n =  1, .k =  3,  .m = 11 /* 0.2727273*/ },
-+	{ .n =  1, .k =  2,  .m =  7 /* 0.2857143*/ },
-+	{ .n =  1, .k =  3,  .m = 10 /* 0.3000000*/ },
-+	{ .n =  2, .k =  2,  .m = 13 /* 0.3076923*/ },
-+	{ .n =  1, .k =  2,  .m =  6 /* 0.3333333*/ },
-+	{ .n =  2, .k =  2,  .m = 11 /* 0.3636364*/ },
-+	{ .n =  3, .k =  2,  .m = 16 /* 0.3750000*/ },
-+	{ .n =  1, .k =  2,  .m =  5 /* 0.4000000*/ },
-+	{ .n =  3, .k =  2,  .m = 14 /* 0.4285714*/ },
-+	{ .n =  2, .k =  2,  .m =  9 /* 0.4444444*/ },
-+	{ .n =  3, .k =  2,  .m = 13 /* 0.4615385*/ },
-+	{ .n =  1, .k =  2,  .m =  4 /* 0.5000000*/ },
-+	{ .n =  4, .k =  2,  .m = 15 /* 0.5333333*/ },
-+	{ .n =  3, .k =  2,  .m = 11 /* 0.5454545*/ },
-+	{ .n =  3, .k =  3,  .m = 16 /* 0.5625000*/ },
-+	{ .n =  2, .k =  2,  .m =  7 /* 0.5714286*/ },
-+	{ .n =  3, .k =  2,  .m = 10 /* 0.6000000*/ },
-+	{ .n =  4, .k =  2,  .m = 13 /* 0.6153846*/ },
-+	{ .n =  5, .k =  2,  .m = 16 /* 0.6250000*/ },
-+	{ .n =  3, .k =  3,  .m = 14 /* 0.6428571*/ },
-+	{ .n =  1, .k =  2,  .m =  3 /* 0.6666667*/ },
-+	{ .n =  3, .k =  3,  .m = 13 /* 0.6923077*/ },
-+	{ .n =  5, .k =  2,  .m = 14 /* 0.7142857*/ },
-+	{ .n =  4, .k =  2,  .m = 11 /* 0.7272727*/ },
-+	{ .n =  3, .k =  2,  .m =  8 /* 0.7500000*/ },
-+	{ .n =  5, .k =  2,  .m = 13 /* 0.7692308*/ },
-+	{ .n =  2, .k =  2,  .m =  5 /* 0.8000000*/ },
-+	{ .n =  3, .k =  3,  .m = 11 /* 0.8181818*/ },
-+	{ .n =  5, .k =  2,  .m = 12 /* 0.8333333*/ },
-+	{ .n =  3, .k =  2,  .m =  7 /* 0.8571429*/ },
-+	{ .n =  7, .k =  2,  .m = 16 /* 0.8750000*/ },
-+	{ .n =  4, .k =  2,  .m =  9 /* 0.8888889*/ },
-+	{ .n =  3, .k =  3,  .m = 10 /* 0.9000000*/ },
-+	{ .n =  5, .k =  2,  .m = 11 /* 0.9090909*/ },
-+	{ .n =  6, .k =  2,  .m = 13 /* 0.9230769*/ },
-+	{ .n =  7, .k =  2,  .m = 15 /* 0.9333333*/ },
-+	{ .n =  5, .k =  3,  .m = 16 /* 0.9375000*/ },
-+	{ .n =  1, .k =  2,  .m =  2 /* 1.0000000*/ },
-+	{ .n =  8, .k =  2,  .m = 15 /* 1.0666667*/ },
-+	{ .n =  5, .k =  3,  .m = 14 /* 1.0714286*/ },
-+	{ .n =  7, .k =  2,  .m = 13 /* 1.0769231*/ },
-+	{ .n =  6, .k =  2,  .m = 11 /* 1.0909091*/ },
-+	{ .n =  5, .k =  2,  .m =  9 /* 1.1111111*/ },
-+	{ .n =  9, .k =  2,  .m = 16 /* 1.1250000*/ },
-+	{ .n =  4, .k =  2,  .m =  7 /* 1.1428571*/ },
-+	{ .n =  5, .k =  3,  .m = 13 /* 1.1538462*/ },
-+	{ .n =  7, .k =  2,  .m = 12 /* 1.1666667*/ },
-+	{ .n =  3, .k =  2,  .m =  5 /* 1.2000000*/ },
-+	{ .n =  8, .k =  2,  .m = 13 /* 1.2307692*/ },
-+	{ .n =  5, .k =  2,  .m =  8 /* 1.2500000*/ },
-+	{ .n =  7, .k =  2,  .m = 11 /* 1.2727273*/ },
-+	{ .n =  9, .k =  2,  .m = 14 /* 1.2857143*/ },
-+	{ .n =  7, .k =  3,  .m = 16 /* 1.3125000*/ },
-+	{ .n =  2, .k =  2,  .m =  3 /* 1.3333333*/ },
-+	{ .n =  5, .k =  3,  .m = 11 /* 1.3636364*/ },
-+	{ .n = 11, .k =  2,  .m = 16 /* 1.3750000*/ },
-+	{ .n =  9, .k =  2,  .m = 13 /* 1.3846154*/ },
-+	{ .n =  7, .k =  2,  .m = 10 /* 1.4000000*/ },
-+	{ .n =  5, .k =  2,  .m =  7 /* 1.4285714*/ },
-+	{ .n =  8, .k =  2,  .m = 11 /* 1.4545455*/ },
-+	{ .n = 11, .k =  2,  .m = 15 /* 1.4666667*/ },
-+	{ .n =  3, .k =  2,  .m =  4 /* 1.5000000*/ },
-+	{ .n = 10, .k =  2,  .m = 13 /* 1.5384615*/ },
-+	{ .n =  7, .k =  2,  .m =  9 /* 1.5555556*/ },
-+	{ .n = 11, .k =  2,  .m = 14 /* 1.5714286*/ },
-+	{ .n =  4, .k =  2,  .m =  5 /* 1.6000000*/ },
-+	{ .n =  7, .k =  3,  .m = 13 /* 1.6153846*/ },
-+	{ .n = 13, .k =  2,  .m = 16 /* 1.6250000*/ },
-+	{ .n =  9, .k =  2,  .m = 11 /* 1.6363636*/ },
-+	{ .n =  5, .k =  2,  .m =  6 /* 1.6666667*/ },
-+	{ .n =  9, .k =  3,  .m = 16 /* 1.6875000*/ },
-+	{ .n = 11, .k =  2,  .m = 13 /* 1.6923077*/ },
-+	{ .n =  6, .k =  2,  .m =  7 /* 1.7142857*/ },
-+	{ .n = 13, .k =  2,  .m = 15 /* 1.7333333*/ },
-+	{ .n =  7, .k =  2,  .m =  8 /* 1.7500000*/ },
-+	{ .n =  8, .k =  2,  .m =  9 /* 1.7777778*/ },
-+	{ .n =  9, .k =  2,  .m = 10 /* 1.8000000*/ },
-+	{ .n = 10, .k =  2,  .m = 11 /* 1.8181818*/ },
-+	{ .n = 11, .k =  2,  .m = 12 /* 1.8333333*/ },
-+	{ .n = 12, .k =  2,  .m = 13 /* 1.8461538*/ },
-+	{ .n = 13, .k =  2,  .m = 14 /* 1.8571429*/ },
-+	{ .n = 14, .k =  2,  .m = 15 /* 1.8666667*/ },
-+	{ .n = 15, .k =  2,  .m = 16 /* 1.8750000*/ },
-+	{ .n =  7, .k =  3,  .m = 11 /* 1.9090909*/ },
-+	{ .n =  9, .k =  3,  .m = 14 /* 1.9285714*/ },
-+	{ .n =  1, .k =  2,  .m =  1 /* 2.0000000*/ },
-+	{ .n = 11, .k =  3,  .m = 16 /* 2.0625000*/ },
-+	{ .n =  9, .k =  3,  .m = 13 /* 2.0769231*/ },
-+	{ .n =  7, .k =  3,  .m = 10 /* 2.1000000*/ },
-+	{ .n = 16, .k =  2,  .m = 15 /* 2.1333333*/ },
-+	{ .n = 15, .k =  2,  .m = 14 /* 2.1428571*/ },
-+	{ .n = 14, .k =  2,  .m = 13 /* 2.1538462*/ },
-+	{ .n = 13, .k =  2,  .m = 12 /* 2.1666667*/ },
-+	{ .n = 12, .k =  2,  .m = 11 /* 2.1818182*/ },
-+	{ .n = 11, .k =  2,  .m = 10 /* 2.2000000*/ },
-+	{ .n = 10, .k =  2,  .m =  9 /* 2.2222222*/ },
-+	{ .n =  9, .k =  2,  .m =  8 /* 2.2500000*/ },
-+	{ .n =  8, .k =  2,  .m =  7 /* 2.2857143*/ },
-+	{ .n = 15, .k =  2,  .m = 13 /* 2.3076923*/ },
-+	{ .n =  7, .k =  2,  .m =  6 /* 2.3333333*/ },
-+	{ .n = 11, .k =  3,  .m = 14 /* 2.3571429*/ },
-+	{ .n = 13, .k =  2,  .m = 11 /* 2.3636364*/ },
-+	{ .n =  6, .k =  2,  .m =  5 /* 2.4000000*/ },
-+	{ .n = 13, .k =  3,  .m = 16 /* 2.4375000*/ },
-+	{ .n = 11, .k =  2,  .m =  9 /* 2.4444444*/ },
-+	{ .n =  9, .k =  3,  .m = 11 /* 2.4545455*/ },
-+	{ .n = 16, .k =  2,  .m = 13 /* 2.4615385*/ },
-+	{ .n =  5, .k =  2,  .m =  4 /* 2.5000000*/ },
-+	{ .n = 11, .k =  3,  .m = 13 /* 2.5384615*/ },
-+	{ .n = 14, .k =  2,  .m = 11 /* 2.5454545*/ },
-+	{ .n =  9, .k =  2,  .m =  7 /* 2.5714286*/ },
-+	{ .n = 13, .k =  2,  .m = 10 /* 2.6000000*/ },
-+	{ .n =  7, .k =  3,  .m =  8 /* 2.6250000*/ },
-+	{ .n =  4, .k =  2,  .m =  3 /* 2.6666667*/ },
-+	{ .n =  9, .k =  3,  .m = 10 /* 2.7000000*/ },
-+	{ .n = 15, .k =  2,  .m = 11 /* 2.7272727*/ },
-+	{ .n = 11, .k =  2,  .m =  8 /* 2.7500000*/ },
-+	{ .n = 12, .k =  3,  .m = 13 /* 2.7692308*/ },
-+	{ .n = 13, .k =  3,  .m = 14 /* 2.7857143*/ },
-+	{ .n =  7, .k =  2,  .m =  5 /* 2.8000000*/ },
-+	{ .n = 15, .k =  3,  .m = 16 /* 2.8125000*/ },
-+	{ .n = 10, .k =  2,  .m =  7 /* 2.8571429*/ },
-+	{ .n = 13, .k =  2,  .m =  9 /* 2.8888889*/ },
-+	{ .n = 16, .k =  2,  .m = 11 /* 2.9090909*/ },
-+	{ .n = 11, .k =  4,  .m = 15 /* 2.9333333*/ },
-+	{ .n =  3, .k =  2,  .m =  2 /* 3.0000000*/ },
-+	{ .n = 10, .k =  4,  .m = 13 /* 3.0769231*/ },
-+	{ .n = 14, .k =  2,  .m =  9 /* 3.1111111*/ },
-+	{ .n = 11, .k =  2,  .m =  7 /* 3.1428571*/ },
-+	{ .n =  8, .k =  2,  .m =  5 /* 3.2000000*/ },
-+	{ .n = 15, .k =  3,  .m = 14 /* 3.2142857*/ },
-+	{ .n = 14, .k =  3,  .m = 13 /* 3.2307692*/ },
-+	{ .n = 13, .k =  2,  .m =  8 /* 3.2500000*/ },
-+	{ .n = 12, .k =  3,  .m = 11 /* 3.2727273*/ },
-+	{ .n = 11, .k =  3,  .m = 10 /* 3.3000000*/ },
-+	{ .n =  5, .k =  2,  .m =  3 /* 3.3333333*/ },
-+	{ .n =  9, .k =  3,  .m =  8 /* 3.3750000*/ },
-+	{ .n = 11, .k =  4,  .m = 13 /* 3.3846154*/ },
-+	{ .n = 12, .k =  2,  .m =  7 /* 3.4285714*/ },
-+	{ .n = 15, .k =  3,  .m = 13 /* 3.4615385*/ },
-+	{ .n = 13, .k =  4,  .m = 15 /* 3.4666667*/ },
-+	{ .n =  7, .k =  2,  .m =  4 /* 3.5000000*/ },
-+	{ .n = 13, .k =  3,  .m = 11 /* 3.5454545*/ },
-+	{ .n = 16, .k =  2,  .m =  9 /* 3.5555556*/ },
-+	{ .n =  9, .k =  2,  .m =  5 /* 3.6000000*/ },
-+	{ .n = 10, .k =  4,  .m = 11 /* 3.6363636*/ },
-+	{ .n = 11, .k =  2,  .m =  6 /* 3.6666667*/ },
-+	{ .n = 16, .k =  3,  .m = 13 /* 3.6923077*/ },
-+	{ .n = 13, .k =  2,  .m =  7 /* 3.7142857*/ },
-+	{ .n = 14, .k =  4,  .m = 15 /* 3.7333333*/ },
-+	{ .n = 15, .k =  2,  .m =  8 /* 3.7500000*/ },
-+	{ .n = 14, .k =  3,  .m = 11 /* 3.8181818*/ },
-+	{ .n =  9, .k =  3,  .m =  7 /* 3.8571429*/ },
-+	{ .n = 13, .k =  3,  .m = 10 /* 3.9000000*/ },
-+	{ .n =  2, .k =  2,  .m =  1 /* 4.0000000*/ },
-+	{ .n = 15, .k =  3,  .m = 11 /* 4.0909091*/ },
-+	{ .n = 11, .k =  3,  .m =  8 /* 4.1250000*/ },
-+	{ .n =  7, .k =  3,  .m =  5 /* 4.2000000*/ },
-+	{ .n = 16, .k =  4,  .m = 15 /* 4.2666667*/ },
-+	{ .n = 15, .k =  2,  .m =  7 /* 4.2857143*/ },
-+	{ .n = 14, .k =  4,  .m = 13 /* 4.3076923*/ },
-+	{ .n = 13, .k =  2,  .m =  6 /* 4.3333333*/ },
-+	{ .n = 16, .k =  3,  .m = 11 /* 4.3636364*/ },
-+	{ .n = 11, .k =  2,  .m =  5 /* 4.4000000*/ },
-+	{ .n = 10, .k =  4,  .m =  9 /* 4.4444444*/ },
-+	{ .n =  9, .k =  2,  .m =  4 /* 4.5000000*/ },
-+	{ .n = 16, .k =  2,  .m =  7 /* 4.5714286*/ },
-+	{ .n = 15, .k =  4,  .m = 13 /* 4.6153846*/ },
-+	{ .n =  7, .k =  2,  .m =  3 /* 4.6666667*/ },
-+	{ .n = 11, .k =  3,  .m =  7 /* 4.7142857*/ },
-+	{ .n = 13, .k =  4,  .m = 11 /* 4.7272727*/ },
-+	{ .n = 12, .k =  2,  .m =  5 /* 4.8000000*/ },
-+	{ .n = 13, .k =  3,  .m =  8 /* 4.8750000*/ },
-+	{ .n = 11, .k =  4,  .m =  9 /* 4.8888889*/ },
-+	{ .n = 16, .k =  4,  .m = 13 /* 4.9230769*/ },
-+	{ .n =  5, .k =  2,  .m =  2 /* 5.0000000*/ },
-+	{ .n = 14, .k =  4,  .m = 11 /* 5.0909091*/ },
-+	{ .n = 12, .k =  3,  .m =  7 /* 5.1428571*/ },
-+	{ .n = 13, .k =  2,  .m =  5 /* 5.2000000*/ },
-+	{ .n =  7, .k =  3,  .m =  4 /* 5.2500000*/ },
-+	{ .n =  8, .k =  2,  .m =  3 /* 5.3333333*/ },
-+	{ .n =  9, .k =  3,  .m =  5 /* 5.4000000*/ },
-+	{ .n = 15, .k =  4,  .m = 11 /* 5.4545455*/ },
-+	{ .n = 11, .k =  2,  .m =  4 /* 5.5000000*/ },
-+	{ .n = 13, .k =  3,  .m =  7 /* 5.5714286*/ },
-+	{ .n = 14, .k =  2,  .m =  5 /* 5.6000000*/ },
-+	{ .n = 15, .k =  3,  .m =  8 /* 5.6250000*/ },
-+	{ .n = 10, .k =  4,  .m =  7 /* 5.7142857*/ },
-+	{ .n = 13, .k =  4,  .m =  9 /* 5.7777778*/ },
-+	{ .n = 16, .k =  4,  .m = 11 /* 5.8181818*/ },
-+	{ .n =  3, .k =  2,  .m =  1 /* 6.0000000*/ },
-+	{ .n = 14, .k =  4,  .m =  9 /* 6.2222222*/ },
-+	{ .n = 11, .k =  4,  .m =  7 /* 6.2857143*/ },
-+	{ .n = 16, .k =  2,  .m =  5 /* 6.4000000*/ },
-+	{ .n = 15, .k =  3,  .m =  7 /* 6.4285714*/ },
-+	{ .n = 13, .k =  2,  .m =  4 /* 6.5000000*/ },
-+	{ .n = 11, .k =  3,  .m =  5 /* 6.6000000*/ },
-+	{ .n = 10, .k =  2,  .m =  3 /* 6.6666667*/ },
-+	{ .n =  9, .k =  3,  .m =  4 /* 6.7500000*/ },
-+	{ .n = 16, .k =  3,  .m =  7 /* 6.8571429*/ },
-+	{ .n =  7, .k =  2,  .m =  2 /* 7.0000000*/ },
-+	{ .n = 16, .k =  4,  .m =  9 /* 7.1111111*/ },
-+	{ .n = 12, .k =  3,  .m =  5 /* 7.2000000*/ },
-+	{ .n = 11, .k =  2,  .m =  3 /* 7.3333333*/ },
-+	{ .n = 13, .k =  4,  .m =  7 /* 7.4285714*/ },
-+	{ .n = 15, .k =  2,  .m =  4 /* 7.5000000*/ },
-+	{ .n = 13, .k =  3,  .m =  5 /* 7.8000000*/ },
-+	{ .n =  4, .k =  2,  .m =  1 /* 8.0000000*/ },
-+	{ .n = 11, .k =  3,  .m =  4 /* 8.2500000*/ },
-+	{ .n = 14, .k =  3,  .m =  5 /* 8.4000000*/ },
-+	{ .n = 15, .k =  4,  .m =  7 /* 8.5714286*/ },
-+	{ .n = 13, .k =  2,  .m =  3 /* 8.6666667*/ },
-+	{ .n = 11, .k =  4,  .m =  5 /* 8.8000000*/ },
-+	{ .n =  9, .k =  2,  .m =  2 /* 9.0000000*/ },
-+	{ .n = 16, .k =  4,  .m =  7 /* 9.1428571*/ },
-+	{ .n = 14, .k =  2,  .m =  3 /* 9.3333333*/ },
-+	{ .n = 16, .k =  3,  .m =  5 /* 9.6000000*/ },
-+	{ .n = 13, .k =  3,  .m =  4 /* 9.7500000*/ },
-+	{ .n =  5, .k =  2,  .m =  1 /*10.0000000*/ },
-+	{ .n = 13, .k =  4,  .m =  5 /*10.4000000*/ },
-+	{ .n =  7, .k =  3,  .m =  2 /*10.5000000*/ },
-+	{ .n = 16, .k =  2,  .m =  3 /*10.6666667*/ },
-+	{ .n = 11, .k =  2,  .m =  2 /*11.0000000*/ },
-+	{ .n = 14, .k =  4,  .m =  5 /*11.2000000*/ },
-+	{ .n = 15, .k =  3,  .m =  4 /*11.2500000*/ },
-+	{ .n =  6, .k =  2,  .m =  1 /*12.0000000*/ },
-+	{ .n = 16, .k =  4,  .m =  5 /*12.8000000*/ },
-+	{ .n = 13, .k =  2,  .m =  2 /*13.0000000*/ },
-+	{ .n = 10, .k =  4,  .m =  3 /*13.3333333*/ },
-+	{ .n =  9, .k =  3,  .m =  2 /*13.5000000*/ },
-+	{ .n =  7, .k =  2,  .m =  1 /*14.0000000*/ },
-+	{ .n = 11, .k =  4,  .m =  3 /*14.6666667*/ },
-+	{ .n = 15, .k =  2,  .m =  2 /*15.0000000*/ },
-+	{ .n =  8, .k =  2,  .m =  1 /*16.0000000*/ },
-+	{ .n = 11, .k =  3,  .m =  2 /*16.5000000*/ },
-+	{ .n = 13, .k =  4,  .m =  3 /*17.3333333*/ },
-+	{ .n =  9, .k =  2,  .m =  1 /*18.0000000*/ },
-+	{ .n = 14, .k =  4,  .m =  3 /*18.6666667*/ },
-+	{ .n = 13, .k =  3,  .m =  2 /*19.5000000*/ },
-+	{ .n = 10, .k =  2,  .m =  1 /*20.0000000*/ },
-+	{ .n =  7, .k =  3,  .m =  1 /*21.0000000*/ },
-+	{ .n = 16, .k =  4,  .m =  3 /*21.3333333*/ },
-+	{ .n = 11, .k =  2,  .m =  1 /*22.0000000*/ },
-+	{ .n = 15, .k =  3,  .m =  2 /*22.5000000*/ },
-+	{ .n = 12, .k =  2,  .m =  1 /*24.0000000*/ },
-+	{ .n = 13, .k =  2,  .m =  1 /*26.0000000*/ },
-+	{ .n =  9, .k =  3,  .m =  1 /*27.0000000*/ },
-+	{ .n = 14, .k =  2,  .m =  1 /*28.0000000*/ },
-+	{ .n = 15, .k =  2,  .m =  1 /*30.0000000*/ },
-+	{ .n = 16, .k =  2,  .m =  1 /*32.0000000*/ },
-+	{ .n = 11, .k =  3,  .m =  1 /*33.0000000*/ },
-+	{ .n = 12, .k =  3,  .m =  1 /*36.0000000*/ },
-+	{ .n = 13, .k =  3,  .m =  1 /*39.0000000*/ },
-+	{ .n = 10, .k =  4,  .m =  1 /*40.0000000*/ },
-+	{ .n = 14, .k =  3,  .m =  1 /*42.0000000*/ },
-+	{ .n = 11, .k =  4,  .m =  1 /*44.0000000*/ },
-+	{ .n = 15, .k =  3,  .m =  1 /*45.0000000*/ },
-+	{ .n = 16, .k =  3,  .m =  1 /*48.0000000*/ },
-+	{ .n = 13, .k =  4,  .m =  1 /*52.0000000*/ },
-+	{ .n = 14, .k =  4,  .m =  1 /*56.0000000*/ },
-+	{ .n = 15, .k =  4,  .m =  1 /*60.0000000*/ },
-+	{ .n = 16, .k =  4,  .m =  1 /*64.0000000*/ },
-+};
- static struct ccu_nkm pll_mipi_clk = {
- 	/*
- 	 * The bit 23 and 22 are called "LDO{1,2}_EN" on the SoC's
-@@ -181,6 +458,10 @@ static struct ccu_nkm pll_mipi_clk = {
- 		.hw.init	= CLK_HW_INIT("pll-mipi", "pll-video0",
- 					      &ccu_nkm_ops, CLK_SET_RATE_UNGATE),
- 	},
-+	.table = {
-+		.num	= 275,
-+		.combos	= pll_mipi_nkm_combos,
-+	},
- };
- 
- static SUNXI_CCU_NM_WITH_FRAC_GATE_LOCK(pll_hsic_clk, "pll-hsic",
--- 
-2.40.1
+Sure. I'll view them. I'll prepare more patches for it.
 
+--=20
+Otavio Salvador                             O.S. Systems
+http://www.ossystems.com.br        http://code.ossystems.com.br
+Mobile: +55 (53) 9 9981-7854          Mobile: +1 (347) 903-9750
