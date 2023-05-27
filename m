@@ -2,124 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACA37132CE
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 08:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBAB7132D0
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 08:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjE0GW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 02:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
+        id S230217AbjE0G0l convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 27 May 2023 02:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjE0GW1 (ORCPT
+        with ESMTP id S229472AbjE0G0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 02:22:27 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10742EC
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 23:22:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685168545; x=1716704545;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UEUfNo8vSQVHjoqAZjViTd9hunkPQrbIOmvUwlgY6jA=;
-  b=XyDjs3obllbOyOPVLMXDC3BDY10MNkJliLmXhF9lhkSNYlu1MZb1MrRJ
-   WkGgr3/ZEwLuCHmtJhzt0hsRbgw/putpYgOvFpv5JKADHX4/EKyuH7cZf
-   LUYBfc8Pd+LwjDirIGA6SKuNpn66WLa7UguRMbmaeH7VWSe8NKvt4L8D1
-   ZjTT3/t6IxnPuF1uGW2ngS6mNKn4DnROu0XdpRtwu2cpdDGFR/KYE4h4Q
-   rWJ3xexkWL5DD8Z3P32ZZVGIyR1S1xk+1bl/YwgZJqbDQz6/UTSuKN7ZZ
-   LucJOKv0HICk7+zGjXZTGTGvzfzG2Jj7TGsqwaei/2L+cDj1tMrcyel5a
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="354383195"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="354383195"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2023 23:22:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10722"; a="708628452"
-X-IronPort-AV: E=Sophos;i="6.00,196,1681196400"; 
-   d="scan'208";a="708628452"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 26 May 2023 23:21:55 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q2nJK-000JoS-1P;
-        Sat, 27 May 2023 06:21:54 +0000
-Date:   Sat, 27 May 2023 14:21:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Steve French <stfrench@microsoft.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: fs/smb/client/ioctl.c:324:10: warning: variable 'caps' set but not
- used
-Message-ID: <202305271421.pwX0wfIT-lkp@intel.com>
+        Sat, 27 May 2023 02:26:36 -0400
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9F1116;
+        Fri, 26 May 2023 23:26:34 -0700 (PDT)
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-786470fd7a3so443942241.3;
+        Fri, 26 May 2023 23:26:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685168794; x=1687760794;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K1Vo/4/ITtOwqXGKuD1nMtQeDHz1HuSSJxIWcuEXzLo=;
+        b=TbAdKBIgSrv3BNl1t5qhDNT8Y4YVzdBt7yOxDRkjk1eLHXJWSXRUoxnosuQM5G8zRI
+         /lnKEnZ7hNYqj7tjLTT6tsW5LBdtnAP0sVBJ5VmvNT4F89rbqpFxRgJ01EgQZFUdnUMM
+         vYS3AEUOTIPrIFAL1kTaLRQS0i6RymhjsAnXMkRHbYBatqhuJ10Xcdy+JlBH7ENbnEXx
+         23foDNEdnvqZn1KNLdGrsBLoG74B7WoJt95pv7PrVZotOtETDfbHoc6kkcTysmz7qxXh
+         w45e/Tle3JAubrNN4EePjFFreWaurTYtoSwhzb1CrjWys5FhrgzobHFUUBIpz+byhms3
+         2b3w==
+X-Gm-Message-State: AC+VfDxJnS1OB4tusxKwSZMer55TA8+Ovr7unZ+VKaIPK3RF0SzQei3p
+        lgMpRCpziUrn/iK44QlWlpTI3zrgZQenf+5qXSBduaED
+X-Google-Smtp-Source: ACHHUZ4qiF9t3D55NoKQ9D5GwJSNuwvnwC0H6JaWL4e3r96sJzQGoM3aFS2cNc5htnvlCr58J7n6PEi7SwemCwUAnv8=
+X-Received: by 2002:a1f:cac6:0:b0:45a:8582:126d with SMTP id
+ a189-20020a1fcac6000000b0045a8582126dmr438138vkg.8.1685168793866; Fri, 26 May
+ 2023 23:26:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230526095824.16336-1-Jonathan.Cameron@huawei.com> <20230526095824.16336-5-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20230526095824.16336-5-Jonathan.Cameron@huawei.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 26 May 2023 23:26:22 -0700
+Message-ID: <CAM9d7cgYZs4DqLmjPZCYDVrp-KVYoZYDyJHLwB1fOM7ZdzM2Pg@mail.gmail.com>
+Subject: Re: [PATCH v7 4/5] perf: CXL Performance Monitoring Unit driver
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Liang Kan <kan.liang@linux.intel.com>, linux-cxl@vger.kernel.org,
+        peterz@infradead.org, mark.rutland@arm.com, will@kernel.org,
+        dan.j.williams@intel.com, mingo@redhat.com, acme@kernel.org,
+        linuxarm@huawei.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
+On Fri, May 26, 2023 at 3:00 AM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> CXL rev 3.0 introduces a standard performance monitoring hardware
+> block to CXL. Instances are discovered using CXL Register Locator DVSEC
+> entries. Each CXL component may have multiple PMUs.
+>
+> This initial driver supports a subset of types of counter.
+> It supports counters that are either fixed or configurable, but requires
+> that they support the ability to freeze and write value whilst frozen.
+>
+> Development done with QEMU model which will be posted shortly.
+>
+> Example:
+>
+> $ perf stat -a -e cxl_pmu_mem0.0/h2d_req_snpcur/ -e cxl_pmu_mem0.0/h2d_req_snpdata/ -e cxl_pmu_mem0.0/clock_ticks/ sleep 1
+>
+> Performance counter stats for 'system wide':
+>
+> 96,757,023,244,321      cxl_pmu_mem0.0/h2d_req_snpcur/
+> 96,757,023,244,365      cxl_pmu_mem0.0/h2d_req_snpdata/
+> 193,514,046,488,653      cxl_pmu_mem0.0/clock_ticks/
+>
+>        1.090539600 seconds time elapsed
+>
+> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+> v7: THanks to Namhyung and Stephane for reviews
+>  - Set the cpu for an event only after validation checks.
+>  - Added -a to make perf default of all CPUs explicit in command line.
+>  - Fix wrong event names in example.
+> ---
 
-First bad commit (maybe != root cause):
+[SNIP]
+> +static void cxl_pmu_event_start(struct perf_event *event, int flags)
+> +{
+> +       struct cxl_pmu_info *info = pmu_to_cxl_pmu_info(event->pmu);
+> +       struct hw_perf_event *hwc = &event->hw;
+> +       void __iomem *base = info->base;
+> +       u64 cfg;
+> +
+> +       /*
+> +        * All paths to here should either set these flags directly or
+> +        * call cxl_pmu_event_stop() which will ensure the correct state.
+> +        */
+> +       if (WARN_ON_ONCE(!(hwc->state & PERF_HES_STOPPED)))
+> +               return;
+> +
+> +       WARN_ON_ONCE(!(hwc->state & PERF_HES_UPTODATE));
+> +       hwc->state = 0;
+> +
+> +       /*
+> +        * Currently only hdm filter control is implemnted, this code will
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   49572d5361298711207ab387a6c318407deb963a
-commit: 38c8a9a52082579090e34c033d439ed2cd1a462d smb: move client and server files to common directory fs/smb
-date:   2 days ago
-config: i386-randconfig-i054-20230527 (https://download.01.org/0day-ci/archive/20230527/202305271421.pwX0wfIT-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=38c8a9a52082579090e34c033d439ed2cd1a462d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 38c8a9a52082579090e34c033d439ed2cd1a462d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/smb/client/
+Typo: implemented
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305271421.pwX0wfIT-lkp@intel.com/
+> +        * want generalizing when more filters are added.
+> +        */
+> +       if (info->filter_hdm) {
+> +               if (cxl_pmu_config1_hdm_filter_en(event))
+> +                       cfg = cxl_pmu_config2_get_hdm_decoder(event);
+> +               else
+> +                       cfg = GENMASK(15, 0); /* No filtering if 0xFFFF_FFFF */
+> +               writeq(cfg, base + CXL_PMU_FILTER_CFG_REG(hwc->idx, 0));
+> +       }
+> +
+> +       cfg = readq(base + CXL_PMU_COUNTER_CFG_REG(hwc->idx));
+> +       cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_INT_ON_OVRFLW, 1);
+> +       cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_FREEZE_ON_OVRFLW, 1);
+> +       cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_ENABLE, 1);
+> +       cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_EDGE,
+> +                         cxl_pmu_config1_get_edge(event) ? 1 : 0);
+> +       cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_INVERT,
+> +                         cxl_pmu_config1_get_invert(event) ? 1 : 0);
+> +
+> +       /* Fixed purpose counters have next two fields RO */
+> +       if (test_bit(hwc->idx, info->conf_counter_bm)) {
+> +               cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_EVENT_GRP_ID_IDX_MSK,
+> +                                 hwc->event_base);
+> +               cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_EVENTS_MSK,
+> +                                 cxl_pmu_config_get_mask(event));
+> +       }
+> +       cfg &= ~CXL_PMU_COUNTER_CFG_THRESHOLD_MSK;
+> +       /*
+> +        * For events that generate only 1 count per clock the CXL 3.0 spec
+> +        * states the threshold shall be set to 1 but if set to 0 it will
+> +        * count the raw value anwyay?
 
-All warnings (new ones prefixed by >>):
+Typo: anyway?
 
->> fs/smb/client/ioctl.c:324:10: warning: variable 'caps' set but not used [-Wunused-but-set-variable]
-           __u64   caps;
-                   ^
-   1 warning generated.
+> +        * There is no definition of what events will count multiple per cycle
+> +        * and hence to which non 1 values of threshold can apply.
+> +        * (CXL 3.0 8.2.7.2.1 Counter Configuration - threshold field definition)
+> +        */
+> +       cfg |= FIELD_PREP(CXL_PMU_COUNTER_CFG_THRESHOLD_MSK,
+> +                         cxl_pmu_config1_get_threshold(event));
+> +       writeq(cfg, base + CXL_PMU_COUNTER_CFG_REG(hwc->idx));
+> +
+> +       local64_set(&hwc->prev_count, 0);
+> +       writeq(0, base + CXL_PMU_COUNTER_REG(hwc->idx));
+> +
+> +       perf_event_update_userpage(event);
+> +}
+> +
+
+[SNIP]
+> +
+> +static int cxl_pmu_online_cpu(unsigned int cpu, struct hlist_node *node)
+> +{
+> +       struct cxl_pmu_info *info = hlist_entry_safe(node, struct cxl_pmu_info, node);
+> +
+> +       if (info->on_cpu != -1)
+> +               return 0;
+> +
+> +       info->on_cpu = cpu;
+> +       /*
+> +        * CPU HP lock is held so we should be guaranteed that the CPU hasn't yet
+> +        * gone away again.
+> +        */
+> +       WARN_ON(irq_set_affinity(info->irq, cpumask_of(cpu)));
+> +
+> +       return 0;
+> +}
+> +
+> +static int cxl_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+> +{
+> +       struct cxl_pmu_info *info = hlist_entry_safe(node, struct cxl_pmu_info, node);
+> +       unsigned int target;
+> +
+> +       if (info->on_cpu != cpu)
+> +               return 0;
+> +
+> +       info->on_cpu = -1;
+> +       target = cpumask_any_but(cpu_online_mask, cpu);
+> +       if (target >= nr_cpu_ids) {
+> +               dev_err(info->pmu.dev, "Unable to find a suitable CPU\n");
+> +               return 0;
+> +       }
+> +
+> +       perf_pmu_migrate_context(&info->pmu, cpu, target);
+> +       info->on_cpu = target;
+> +       /*
+> +        * CPU HP lock is held so we should be guaranteed that this CPU hasn't yet
+> +        * gone away.
+> +        */
+> +       WARN_ON(irq_set_affinity(info->irq, cpumask_of(target)));
+> +
+> +       return 0;
+> +}
+
+IIUC a CXL PMU hardware (say cxl_pmu_mem0.0) is shared across
+all CPUs and it would return the same value when read from any CPU,
+right?
+
+Thanks,
+Namhyung
 
 
-vim +/caps +324 fs/smb/client/ioctl.c
-
-7ba3d1cdb7988c fs/cifs/ioctl.c Steve French    2021-05-02  312  
-f9ddcca4cf7d95 fs/cifs/ioctl.c Steve French    2008-05-15  313  long cifs_ioctl(struct file *filep, unsigned int command, unsigned long arg)
-^1da177e4c3f41 fs/cifs/ioctl.c Linus Torvalds  2005-04-16  314  {
-496ad9aa8ef448 fs/cifs/ioctl.c Al Viro         2013-01-23  315  	struct inode *inode = file_inode(filep);
-7e7db86c7e1088 fs/cifs/ioctl.c Steve French    2019-09-19  316  	struct smb3_key_debug_info pkey_inf;
-^1da177e4c3f41 fs/cifs/ioctl.c Linus Torvalds  2005-04-16  317  	int rc = -ENOTTY; /* strange error - but the precedent */
-6d5786a34d98bf fs/cifs/ioctl.c Pavel Shilovsky 2012-06-20  318  	unsigned int xid;
-ba00ba64cf0895 fs/cifs/ioctl.c Jeff Layton     2010-09-20  319  	struct cifsFileInfo *pSMBFile = filep->private_data;
-96daf2b09178d8 fs/cifs/ioctl.c Steve French    2011-05-27  320  	struct cifs_tcon *tcon;
-a77592a70081ed fs/cifs/ioctl.c Ronnie Sahlberg 2020-07-09  321  	struct tcon_link *tlink;
-d26c2ddd335696 fs/cifs/ioctl.c Steve French    2020-02-06  322  	struct cifs_sb_info *cifs_sb;
-f654bac2227adc fs/cifs/ioctl.c Steve French    2005-04-28  323  	__u64	ExtAttrBits = 0;
-618763958b2291 fs/cifs/ioctl.c Jeff Layton     2010-11-08 @324  	__u64   caps;
-
-:::::: The code at line 324 was first introduced by commit
-:::::: 618763958b2291a09057dbfa553da6ded93dcfad cifs: make cifs_ioctl handle NULL filp->private_data correctly
-
-:::::: TO: Jeff Layton <jlayton@redhat.com>
-:::::: CC: Steve French <sfrench@us.ibm.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +
+> +static __init int cxl_pmu_init(void)
+> +{
+> +       int rc;
+> +
+> +       rc = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
+> +                                    "AP_PERF_CXL_PMU_ONLINE",
+> +                                    cxl_pmu_online_cpu, cxl_pmu_offline_cpu);
+> +       if (rc < 0)
+> +               return rc;
+> +       cxl_pmu_cpuhp_state_num = rc;
+> +
+> +       rc = cxl_driver_register(&cxl_pmu_driver);
+> +       if (rc)
+> +               cpuhp_remove_multi_state(cxl_pmu_cpuhp_state_num);
+> +
+> +       return rc;
+> +}
+> +
+> +static __exit void cxl_pmu_exit(void)
+> +{
+> +       cxl_driver_unregister(&cxl_pmu_driver);
+> +       cpuhp_remove_multi_state(cxl_pmu_cpuhp_state_num);
+> +}
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(CXL);
+> +module_init(cxl_pmu_init);
+> +module_exit(cxl_pmu_exit);
+> +MODULE_ALIAS_CXL(CXL_DEVICE_PMU);
+> --
+> 2.39.2
+>
