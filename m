@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56E07134B2
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31AD7134B3
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232396AbjE0M2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 08:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
+        id S232114AbjE0M3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 08:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjE0M2c (ORCPT
+        with ESMTP id S229593AbjE0M33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 08:28:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A296F3;
-        Sat, 27 May 2023 05:28:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Sat, 27 May 2023 08:29:29 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0E8F3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 05:29:27 -0700 (PDT)
+Received: from nazgul.tnic (dynamic-002-247-254-198.2.247.pool.telefonica.de [2.247.254.198])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F18460C1B;
-        Sat, 27 May 2023 12:28:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0DACC433D2;
-        Sat, 27 May 2023 12:28:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685190510;
-        bh=1iMnQe4ZeKEJMWC5skppQHzR97BKQlp3LeIvmwoswQ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DdFBxippZT2hxK1NKSkVGdw9Ndco1MYWBGfWsAu2B4rWIZR6CVrM+vQh2mWEzttsD
-         nx9DmRz7RRgpqflMekaqmASx/H/C8ULtbakpnBEH4FG2z3DyY+41eubKhPzMYiZBLf
-         6H+V7nTNrBiQFSqSAlZIeKfGvo7p58BFdsTv3cn3iv+lJbkMa5cS7j6TEHaXm0M7lG
-         wRRPKHoZoJHQrypIlXA0kXSExbyhW/Hfmp9VhwTjBMZk8o6agxgdw8qTCoVToL8TTo
-         DYS1rIF/xWGtCQ549YamNPkDtIqf/+XXGfvmw0n8uPvPv1gXdeegqhT2YdwlwqJIXI
-         NobRXP0UGEFBg==
-Date:   Sat, 27 May 2023 20:28:19 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, aford@beaconembedded.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: imx8mp-beacon-kit: Enable WM8962 Audio CODEC
-Message-ID: <20230527122819.GR528183@dragon>
-References: <20230521230902.167280-1-aford173@gmail.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 052DD1EC03DB;
+        Sat, 27 May 2023 14:29:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1685190565;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lGAalMcI44BoMUnHyiT4dUVVsCE5jDHOSSKWuauwHLM=;
+        b=MhDztrkHT7uHlxzsiEPOHv25IadCJLvky+z53VoiRCMmF/wavFqbAwp1FYybSV4nvHnxjf
+        +QtTN3/mH8adv7bjrwDwnBEZ45EWGqpwyd5XmgzskIRUNFC1Pvp0oM8aEhd43D6zutl3en
+        JYXSlsyc4ZPAzKGryAWlrFtF/vhqPpg=
+Date:   Sat, 27 May 2023 14:29:16 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] x86/lib: Do not use local symbols with
+ SYM_CODE_START_LOCAL()
+Message-ID: <20230527122916.GAZHH3nHk7kkUA7CeM@nazgul.local>
+References: <38e24fd4-9213-229d-9919-7ae3bfb113bb@intel.com>
+ <24E47178-C177-425F-A8EF-CFFAE22597D4@gmail.com>
+ <20230526155336.GAZHDWAFi1FRqq83TP@nazgul.local>
+ <0F07EEDB-8A3F-4224-9FF1-43A5300B1B8B@gmail.com>
+ <20230526204559.GAZHEahxxnQaHhSUul@nazgul.local>
+ <D63AB9E6-BA52-4E24-B8EF-C7B9DB1595CC@gmail.com>
+ <e6cd1909-2776-28d2-ccc0-4b3d2d09e9ce@intel.com>
+ <49861038-B8CA-4CDD-BD44-73066FF453F3@gmail.com>
+ <20230527072338.GAZHGv+no2LZASyLWM@nazgul.local>
+ <9A302EB1-308A-4904-801C-DC70D9908E11@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230521230902.167280-1-aford173@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9A302EB1-308A-4904-801C-DC70D9908E11@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,153 +66,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 06:09:02PM -0500, Adam Ford wrote:
-> The baseboard has an WM8962 Audio CODEC connected to the SAI3
-> peripheral.  The CODEC supports stereo in and out
-> and a microphone input connected to the headphone jack.
-> Route this CODEC through the simple-audio-card driver.
-> 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts b/arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts
-> index cdae45a48c2c..3480fb522230 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-beacon-kit.dts
-> @@ -118,6 +118,15 @@ pcie0_refclk: clock-pcie {
->  		clock-frequency = <100000000>;
->  	};
->  
-> +	reg_audio: regulator-wm8962 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "3v3_aud";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		gpio = <&pca6416_1 11 GPIO_ACTIVE_HIGH>;
-> +		enable-active-high;
-> +	};
-> +
->  	reg_usdhc2_vmmc: regulator-usdhc2 {
->  		compatible = "regulator-fixed";
->  		regulator-name = "VSD_3V3";
-> @@ -137,6 +146,30 @@ reg_usb1_host_vbus: regulator-usb1-vbus {
->  		gpio = <&pca6416_1 0 GPIO_ACTIVE_HIGH>;
->  		enable-active-high;
->  	};
-> +
-> +	sound-wm8962 {
-> +		compatible = "simple-audio-card";
-> +		simple-audio-card,name = "wm8962";
-> +		simple-audio-card,format = "i2s";
-> +		simple-audio-card,widgets = "Headphone", "Headphones",
-> +					    "Microphone", "Headset Mic",
-> +					    "Speaker", "Speaker";
-> +		simple-audio-card,routing = "Headphones", "HPOUTL",
-> +					    "Headphones", "HPOUTR",
-> +					    "Speaker", "SPKOUTL",
-> +					    "Speaker", "SPKOUTR",
-> +					    "Headset Mic", "MICBIAS",
-> +					    "IN3R", "Headset Mic";
+On Sat, May 27, 2023 at 02:17:43AM -0700, Nadav Amit wrote:
+> That’s not according to the symbol table - that’s in your mind.
 
-Have a newline between property list and child node.
+s/your mind/objdump/
 
-> +		simple-audio-card,cpu {
-> +			sound-dai = <&sai3>;
-> +		};
+Objdump takes the next symbol's address as the end of the previous one.
 
-Have a newline between nodes.
+> Anyhow, the argument that __get_user_nocheck_8 and bad_get_user_clac are
+> related makes no sense even conceptually.
 
-Shawn
+I don't think anyone's making that argument. Maybe you should read again what I
+said:
 
-> +		simple-audio-card,codec {
-> +			sound-dai = <&wm8962>;
-> +			clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO1>;
-> +			frame-master;
-> +			bitclock-master;
-> +		};
-> +	};
->  };
->  
->  &ecspi2 {
-> @@ -239,6 +272,34 @@ &i2c4 {
->  	clock-frequency = <384000>;
->  	status = "okay";
->  
-> +	wm8962: audio-codec@1a {
-> +		compatible = "wlf,wm8962";
-> +		reg = <0x1a>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_wm8962>;
-> +		clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO1>;
-> +		assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO1>;
-> +		assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL2_OUT>;
-> +		assigned-clock-rates = <22576000>;
-> +		DCVDD-supply = <&reg_audio>;
-> +		DBVDD-supply = <&reg_audio>;
-> +		AVDD-supply = <&reg_audio>;
-> +		CPVDD-supply = <&reg_audio>;
-> +		MICVDD-supply = <&reg_audio>;
-> +		PLLVDD-supply = <&reg_audio>;
-> +		SPKVDD1-supply = <&reg_audio>;
-> +		SPKVDD2-supply = <&reg_audio>;
-> +		gpio-cfg = <
-> +			0x0000 /* 0:Default */
-> +			0x0000 /* 1:Default */
-> +			0x0000 /* 2:FN_DMICCLK */
-> +			0x0000 /* 3:Default */
-> +			0x0000 /* 4:FN_DMICCDAT */
-> +			0x0000 /* 5:Default */
-> +		>;
-> +		#sound-dai-cells = <0>;
-> +	};
-> +
->  	pca6416: gpio@20 {
->  		compatible = "nxp,pcal6416";
->  		reg = <0x20>;
-> @@ -315,6 +376,16 @@ &pcie_phy {
->  	status = "okay";
->  };
->  
-> +&sai3 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_sai3>;
-> +	assigned-clocks = <&clk IMX8MP_CLK_SAI3>;
-> +	assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL2_OUT>;
-> +	assigned-clock-rates = <12288000>;
-> +	fsl,sai-mclk-direction-output;
-> +	status = "okay";
-> +};
-> +
->  &snvs_pwrkey {
->  	status = "okay";
->  };
-> @@ -477,6 +548,16 @@ MX8MP_IOMUXC_SD2_RESET_B__GPIO2_IO19	0x40
->  		>;
->  	};
->  
-> +	pinctrl_sai3: sai3grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_SAI3_TXFS__AUDIOMIX_SAI3_TX_SYNC	0xd6
-> +			MX8MP_IOMUXC_SAI3_TXC__AUDIOMIX_SAI3_TX_BCLK	0xd6
-> +			MX8MP_IOMUXC_SAI3_RXD__AUDIOMIX_SAI3_RX_DATA00	0xd6
-> +			MX8MP_IOMUXC_SAI3_TXD__AUDIOMIX_SAI3_TX_DATA00	0xd6
-> +			MX8MP_IOMUXC_SAI3_MCLK__AUDIOMIX_SAI3_MCLK	0xd6
-> +		>;
-> +	};
-> +
->  	pinctrl_tpm: tpmgrp {
->  		fsl,pins = <
->  			MX8MP_IOMUXC_SAI1_RXFS__GPIO4_IO00	0x19 /* Reset */
-> @@ -547,4 +628,10 @@ pinctrl_usdhc2_gpio: usdhc2gpiogrp {
->  			MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12	0x1c4
->  		>;
->  	};
-> +
-> +	pinctrl_wm8962: wm8962grp {
-> +		fsl,pins = <
-> +			MX8MP_IOMUXC_GPIO1_IO14__CCM_CLKO1	0x59
-> +		>;
-> +	};
->  };
-> -- 
-> 2.39.2
-> 
+"the exception handling ends up being part of __get_user_nocheck_8"
+
+> Some people would even say “elementary”. I was sure it was already clear.
+
+Your cocky attitude will get you nowhere. But whatever you prefer.
+
+> I appreciate your help, but I have reasonable workarounds for my use-case
+> (and for the record, no, I don’t think that this solution that you
+> propose is reasonable).
+
+I'm simply stating what objdump does. I guess objdump is not good enough
+for you.
+
+> It is not “a new tool". You screw up every tool that tries to understand
+
+I'm not screwing up anything - that's your claim.
+
+> All the other local symbols are irrelevant to the discussion as they fall
+> within some other symbol's range.
+
+As does this one if you deal with it just like objdump does.
+
+> You are not (not) helping me. I am trying to help you (and other users).
+
+Gee, thanks. I didn't know this needed any help.
+
+> So just don’t do such weird things.
+
+Yah, good luck with that. If it needs to be done in a weird way and it
+is the *right* thing to do for the kernel, I couldn't care less about
+some external tools.
+
+As to what you want to address, I'll talk to toolchain folks first and
+get back to you.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
