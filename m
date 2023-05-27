@@ -2,113 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D525E713624
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 20:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5EE71362A
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 20:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjE0Smj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 14:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
+        id S230399AbjE0Sze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 14:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjE0Smh (ORCPT
+        with ESMTP id S229898AbjE0Szc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 14:42:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A10099;
-        Sat, 27 May 2023 11:42:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD7DB615B0;
-        Sat, 27 May 2023 18:42:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11A77C433EF;
-        Sat, 27 May 2023 18:42:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685212955;
-        bh=ILLm7sjS2AUbgX5ZU3V6OvdwznjKgFXN4a/oNoiqZNE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NUkjfs+FLPecL9MScQaHcjH42z08/Anpuon7d1M1eUg6dsY+F0Orwnz+00gcUcPVx
-         U0XH+Oce0uRcTtKwG5Bebcm2vgVFN30IF5We+cbfmYS5TIP5uS/qz+wUodCkoisbqH
-         8O/fmbZt1Rp2kMn1pPxyA13RdSiJwxe+ITqKtq3KZAxxCcCgIZm65bcRFYvcbN4XBF
-         uUjKrgT4w9we1CU/hIAODtjR/fj3hV9t7mqGRc030Ap8U2O1dGj/Z5cAJR/fCqEZYg
-         H4v+6DMcmIZ3edMQH4QKiMSkJPzIBYDFrBf10HdwD5xZ9iaM819AdydDMg/679U6K0
-         FaYBLjaaZijhA==
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2af2602848aso18691191fa.2;
-        Sat, 27 May 2023 11:42:34 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwLXdx2QImlWGSuWoE3ERd7j4XgxqHGwG81/HE2wQupLrHmnqtI
-        6+7cyynGDJG15R1uQNm+MuiWlS4AGDLlISHz3fc=
-X-Google-Smtp-Source: ACHHUZ6cjZTU+MaVWVZBdrSI6NnR4VUENr+IJy/gE11EQm0JbKPhjcTfU05GXxO9wspVLC8vMwpOFa/iC3DfdJ1ePoM=
-X-Received: by 2002:a2e:7c18:0:b0:2af:23c2:5dce with SMTP id
- x24-20020a2e7c18000000b002af23c25dcemr2054843ljc.25.1685212952230; Sat, 27
- May 2023 11:42:32 -0700 (PDT)
+        Sat, 27 May 2023 14:55:32 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02F7C3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 11:55:28 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-95fde138693so587449366b.0
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 11:55:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685213727; x=1687805727;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=viejgcOJYhUdOPohgf97i0Wzf+D67gj8ZGmzRX0nO/k=;
+        b=yoIXKiJP/PQuOCyvUbfZpPOpmciaL4BClmV5u9FWAJav2Ab8Fs/ZHqJC6/HGAiO13m
+         ZIKUvlIZjCopV2HwNAgU5hBgWXN5Gx9UGuVLxhZwd1XDlIeFS7Tn4kU/+WQ1PkaFuTMY
+         SeJaaK3wWFUBTd7wOLVlxB+V0ZsQNdY7xTCxKpHi8oVAv/QbU19qZaeZFlnP416z3z4Y
+         97dqvyvsgJ/TPe+wKMayqSIW9aw2RQStv1GRQGRjUFhJpNPxuYp8wqTpzr5hv3o/Y/Od
+         aGCh+n3C6XasvgpZvPguvSXjnuqn7Coq7+UHWRY1PscVJpDxDqfIBI/dDcKQ0EzCIj/p
+         /PbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685213727; x=1687805727;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=viejgcOJYhUdOPohgf97i0Wzf+D67gj8ZGmzRX0nO/k=;
+        b=QJUIoQJ8QhQHlhXikxKk0CZyar/i2buiPMpYNIWc/mRh8/AX1KpC40pZyrjHjVGTe0
+         ch3gAef3fcEJZscHrRRrLW1yfDSWEBzgta5CFC7RE17PuUImfy6GGuDNtEy+Nrqzcma4
+         pZCCuYNvGMYYERzg6egI7N2D77j9j18Q2YD3cpqkve/Fn5Cu8g0cNUhRY+FC61kVB2O6
+         qZnzVEbWq4geViYQ5EYk3EX9QnI92/31CBlQJij/tA5y4bSavGpdtd5b/7+STOfttBHw
+         etA5H+QsRyAJklndu0CArPi7iubqsbciro3BjDbd3LtR8dYL9mVZhLjHHKB0GpFJVLoT
+         PWrQ==
+X-Gm-Message-State: AC+VfDyNIL2j+IpLrGWnc4UUysmQ+iISLWRLlhD64RMHcJGbV1R2WYti
+        U+NATSvXj66dYs1SSu73g7eavGk3INy4NwTZHogugg==
+X-Google-Smtp-Source: ACHHUZ4cY+YKzf3kGgpArZ+DgkkS5ZM4pAPkMnZnRR17ridTfoFJR5pJ7FXcCmsuCaJJNY7AG22LsT0cACVD3aVaxHI=
+X-Received: by 2002:a17:907:6d0c:b0:96f:aed9:2520 with SMTP id
+ sa12-20020a1709076d0c00b0096faed92520mr2426610ejc.21.1685213727057; Sat, 27
+ May 2023 11:55:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <efd6f2d4-547c-1378-1faa-53c044dbd297@gmail.com>
- <CAG8fp8SaHi0X-tZHnji_93wBADp1_=brjauWCVXuLaG7iP0p=A@mail.gmail.com>
- <CAG8fp8QXoEkndCzyaYZmg6+ZrszKOfh_YSi0o2_weV7y1_xYkQ@mail.gmail.com>
- <CAMj1kXGjkKK-oHm64Y9P-AbYQWd9jnEdsNucRbY_-7mgJ_4yAA@mail.gmail.com> <CAG8fp8ReYLaNYO9LYE1WeeSDg1pO1hz3f-8_WPZkLVWbzzyCvg@mail.gmail.com>
-In-Reply-To: <CAG8fp8ReYLaNYO9LYE1WeeSDg1pO1hz3f-8_WPZkLVWbzzyCvg@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 27 May 2023 20:42:21 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEGTJufrrcrqjjKqeR-FN+nLsbzx8xGgO+gPfc2YPsy2w@mail.gmail.com>
-Message-ID: <CAMj1kXEGTJufrrcrqjjKqeR-FN+nLsbzx8xGgO+gPfc2YPsy2w@mail.gmail.com>
-Subject: Re: mix of ACPICA regression and EFISTUB regression (Was: kernel >=
- v6.2 no longer boots on Apple's Virtualization.framework (x86_64); likely to
- be related to ACPICA)
-To:     Akihiro Suda <suda.kyoto@gmail.com>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-efi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux x86 <x86@kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux ACPICA <acpica-devel@lists.linuxfoundation.org>,
-        Linux Stable <stable@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Robert Moore <robert.moore@intel.com>
+References: <20230527103126.398267-1-linmiaohe@huawei.com> <ZHGAcaqOx/e8lqwV@casper.infradead.org>
+ <CAJD7tkYSrVkAONXko0eE6LWS__kK_Xeto9MVGwTxuqT5j6N8RQ@mail.gmail.com> <ZHIcnOV/mrkcerlG@casper.infradead.org>
+In-Reply-To: <ZHIcnOV/mrkcerlG@casper.infradead.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Sat, 27 May 2023 11:54:50 -0700
+Message-ID: <CAJD7tkZ2Q1ZCqNchpiiC6FCE08dYH6tzANA=VqujeDgT8YhRUA@mail.gmail.com>
+Subject: Re: [PATCH] memcg: remove unused mem_cgroup_from_obj()
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+        Vasily Averin <vasily.averin@linux.dev>, hannes@cmpxchg.org,
+        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
+        akpm@linux-foundation.org, muchun.song@linux.dev,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 May 2023 at 20:34, Akihiro Suda <suda.kyoto@gmail.com> wrote:
+On Sat, May 27, 2023 at 8:07=E2=80=AFAM Matthew Wilcox <willy@infradead.org=
+> wrote:
 >
-> > Are you using OVMF? Which versions of qemu and OVMF are you using?
+> On Fri, May 26, 2023 at 09:13:05PM -0700, Yosry Ahmed wrote:
+> > On Fri, May 26, 2023 at 9:01=E2=80=AFPM Matthew Wilcox <willy@infradead=
+.org> wrote:
+> > >
+> > > On Sat, May 27, 2023 at 06:31:26PM +0800, Miaohe Lin wrote:
+> > > > The function mem_cgroup_from_obj() is not used anymore. Remove it a=
+nd
+> > > > clean up relevant comments.
+> > >
+> > > You should have looked at the git history to see why it was created
+> > > and who used it.
+> > >
+> > > Shakeel, Vasily, are you going to retry adding commit 1d0403d20f6c?
+> >
+> > That commit did not introduce the function though, no? It was
+> > introduced before it and replaced by other variants over time (like
+> > mem_cgroup_from_slab_obj()). It looks like that commit was reverted ~9
+> > months ago. We can always bring it back if/when needed.
 >
-> I'm using Apple's Virtualization.framework, not QEMU.
+> The commit immediately preceding it is fc4db90fe71e.
 >
-> It doesn't use UEFI when it directly loads bzImage.
-> ( dmesg: https://bugzilla.kernel.org/attachment.cgi?id=304323 )
+> Of course we can bring it back.  It's just code.  But avoiding
+> unnecessary churn is also good.  Let's wait to hear from Vasily.
 >
-> Despite that, it still expects LINUX_EFISTUB_MINOR_VERSION
-> (include/linux/pe.h) referred from arch/x86/boot/header.S to be 0x0.
-> I confirmed that the kernel can boot by just setting
-> LINUX_EFISTUB_MINOR_VERSION to 0x0.
+> > It also looks to me that 1d0403d20f6c was using mem_cgroup_from_obj()
+> > on a struct net object, which is allocated in net_alloc() from a slab
+> > cache, so mem_cgroup_from_slab_obj() should be sufficient, no?
 >
+> Clearly not.
 
-Thanks for checking that, that is very helpful/
+I dived deeper into the history on LKML, and you are right:
+https://lore.kernel.org/all/Yp4F6n2Ie32re7Ed@qian/
 
-> Would it be possible to revert the LINUX_EFISTUB_MINOR_VERSION value
-> (not the actual code) to 0x0?
-> Or will it break something else?
->
-> Anyway, I'll try to make a request to Apple to remove the
-> LINUX_EFISTUB_MINOR_VERSION check.
->
+I still do not understand why mem_cgroup_from_slab_obj() would not be
+sufficient, so I am hoping Vasily or Shakeel can help me understand
+here. Seems to be something arch-specific.
 
-Yes, that makes the most sense. If the existing virtual machine BIOS
-has a hardcoded check that the EFI stub version is 1.0 even if it does
-not boot via EFI to begin with, I don't see how we can reasonably
-treat this as a regression that needs fixing on the Linux side.
-
-The version bump to PE image version v1.1 sets a baseline across all
-Linux archifectures that can boot via EFI that initrd loading is
-supported via the command line as well as via the LoadFile2 protocol.
-Reverting that would substantially reduce the value of having this
-identification embedded into the image.
+Thanks for digging this up, Matthew.
