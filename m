@@ -2,125 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907E47132EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532C771331D
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbjE0HXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 03:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
+        id S232500AbjE0Hlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 03:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjE0HXD (ORCPT
+        with ESMTP id S232077AbjE0Hlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 03:23:03 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3939CE59;
-        Sat, 27 May 2023 00:22:51 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f8115ca685so3642651cf.1;
-        Sat, 27 May 2023 00:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685172170; x=1687764170;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bx/DAb75BmWuNXNDQ1rY8cIudjVwuu30lJjKuSeJlqc=;
-        b=npExarejaqJFOfFqRRWCyJ7CrKVUBbdXr3ajIhmZjcIBticCEnAhcvmmODxfgqsRYN
-         eKRegheiUnCr62U2YxnPVqxnSWODmTIMxhIj3zUdeyqEKxHfyBSkiqGaiacsIg6I4Aj1
-         m+Az0HNwPSFy9bScE3HaUzkemlNcrQeJXiF0HSNJPl8KxNK99ZWjrqeNVVETaYkxF3Rg
-         ws54dPWKK6oc3eXyRpJW0eB/VY9jTBEG195EKBZBp5dGRUSCM2bo1vwqQV5MSlGMsAyj
-         LLkGikrL2za/jibP1N/tQawUQOve48If+ZP9zKfxxmJDhqnO6QTLQDOH6mcZz0pjXYvX
-         QfdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685172170; x=1687764170;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bx/DAb75BmWuNXNDQ1rY8cIudjVwuu30lJjKuSeJlqc=;
-        b=geFt9e6GjuU2zYhBgwLbZnFV450z9/vhwtdzFpdnRdDmXQJk2zD7Ma7Kg7Q9xpn6Ou
-         avl45RrkkCYJC8F99Vm7nUQfEwIA/0LLEnS2hG852QoIHSsIng5l1/YKr+rTZ2LHSSza
-         iTN4P95MQrtwoMYtkuGX5sXuhpqYkYOwn/KTp3St7Dvcba49et6O1LXDFnmlOYJ2sI66
-         mEi01XxlZrkmvC7HVidMXkLVDJ/7uxRkqKNaia4hR3jUJk9uSmxcN04gUQtUx0z7jYh4
-         qwIJesKXUp2ZZcuPG6610/8vAEOEHgGQbxPPxAz4GwI/WLybQOVkXZ/0ieULikVf5Rmj
-         NGiQ==
-X-Gm-Message-State: AC+VfDwOFiRQs5IVepozdI2okKY6qA1SytfOaHf7qwHX27sPd3pbjDZF
-        1lFMLfg4JuJT+aC/akP7WCwxYcRxqY/YStFbWW6Rnz8Q
-X-Google-Smtp-Source: ACHHUZ47LC+rnJutHRaHuYMA6YdyCUdF7xHk5jZFfPhaCiQ7KFpnzQ7XGX94UjuzaOIbz3vue29M5PXDKCQBO9u6JJI=
-X-Received: by 2002:ac8:5a8e:0:b0:3f6:a6a7:706 with SMTP id
- c14-20020ac85a8e000000b003f6a6a70706mr4173576qtc.7.1685172170448; Sat, 27 May
- 2023 00:22:50 -0700 (PDT)
+        Sat, 27 May 2023 03:41:40 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82153A3;
+        Sat, 27 May 2023 00:41:38 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QStZM5Dy8z4f3w0H;
+        Sat, 27 May 2023 15:23:55 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgD3rLAKsHFk67lAKQ--.30654S4;
+        Sat, 27 May 2023 15:23:56 +0800 (CST)
+From:   linan666@huaweicloud.com
+To:     song@kernel.org, bingjingc@synology.com, allenpeng@synology.com,
+        shli@fb.com, alexwu@synology.com, neilb@suse.de
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
+        houtao1@huawei.com, yangerkun@huawei.com
+Subject: [PATCH v3 0/4] raid10 bugfix
+Date:   Sat, 27 May 2023 15:22:14 +0800
+Message-Id: <20230527072218.2365857-1-linan666@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <1680076012-10785-1-git-send-email-quic_mojha@quicinc.com>
- <1680076012-10785-6-git-send-email-quic_mojha@quicinc.com>
- <ZHEvWpCqg_oyWyZW@surfacebook> <20230526233604.3eiqbfrkecir3ga5@ripper>
-In-Reply-To: <20230526233604.3eiqbfrkecir3ga5@ripper>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 27 May 2023 10:22:13 +0300
-Message-ID: <CAHp75VfcvNpdSP_XvbB42ZUxCik3v-jhR7WFjsaJVr3AZR=nJg@mail.gmail.com>
-Subject: Re: [PATCH v6 5/5] firmware: qcom_scm: Add multiple download mode support
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
-        konrad.dybcio@linaro.org, linus.walleij@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3rLAKsHFk67lAKQ--.30654S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrurWUGry3XFWDtw4xur1xZrb_yoWxKrbEga
+        4DAa45tryxtF43Za4DJr17Xa4UuF4qgr9rJFyDKrWUA3WUWr12qFW5JrWxZw45WF9Fvr1v
+        qrnYkryxAFnFvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUba8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l
+        5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67
+        AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7Cj
+        xVA2Y2ka0xkIwI1lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcS
+        sGvfC2KfnxnUUI43ZEXa7IU1kpnJUUUUU==
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 27, 2023 at 2:32=E2=80=AFAM Bjorn Andersson <andersson@kernel.o=
-rg> wrote:
-> On Sat, May 27, 2023 at 01:14:50AM +0300, andy.shevchenko@gmail.com wrote=
-:
-> > Wed, Mar 29, 2023 at 01:16:52PM +0530, Mukesh Ojha kirjoitti:
+From: Li Nan <linan122@huawei.com>
 
-...
+Changes in v3:
+ - in patch 1, change check 'mreplace != NULL' to 'mreplace', improve log.
+ - in patch 2, change check 'mrdev != NULL' to 'mrdev'.
 
-> > >     if (download_mode =3D=3D QCOM_DOWNLOAD_FULLDUMP)
-> > >             len =3D sysfs_emit(buffer, "full\n");
-> > > +   else if (download_mode =3D=3D QCOM_DOWNLOAD_MINIDUMP)
-> > > +           len =3D sysfs_emit(buffer, "mini\n");
-> > > +   else if (download_mode =3D=3D QCOM_DOWNLOAD_BOTHDUMP)
-> >
-> > > +           len =3D sysfs_emit(buffer, "full,mini\n");
-> >
-> > Why not "both" ?
+Changes in v2:
+ - add patch "md/raid10: improve code of mrdev in raid10_sync_request".
+ - in patch 3, break lines longer than 80 columns and improve log.
 
-> "both" isn't very future proof (and I think we've had additional
-> variations in the past already), so I asked for this form.
+Li Nan (4):
+  md/raid10: fix null-ptr-deref of mreplace in raid10_sync_request
+  md/raid10: improve code of mrdev in raid10_sync_request
+  md/raid10: fix incorrect done of recovery
+  md/raid10: fix io loss while replacement replace rdev
 
-Okay, so this should be the bit flags and we should parse a list of
-the values. In that case I may agree with the approach.
+ drivers/md/raid10.c | 75 ++++++++++++++++++++++++++++++---------------
+ 1 file changed, 51 insertions(+), 24 deletions(-)
 
-> >       if (mode >=3D ARRAY_SIZE(...))
-> >               return sysfs_emit("Oh heh!\n");
-> >
-> >       return sysfs_emit("%s\n", array[mode]);
+-- 
+2.31.1
 
-...
-
-> > > +   if (sysfs_streq(val, "full,mini") || sysfs_streq(val, "mini,full"=
-)) {
-> > > +           download_mode =3D QCOM_DOWNLOAD_BOTHDUMP;
-> >
-> > It's way too hard, esp. taking into account that once user enters wrong=
- order,
-> > user can't simply validate this by reading value back.
-> >
-> > Use "both" and that's it.
-> >
-> > > +   } else if (sysfs_streq(val, "full")) {
-> > >             download_mode =3D QCOM_DOWNLOAD_FULLDUMP;
-> > > +   } else if (sysfs_streq(val, "mini")) {
-> > > +           download_mode =3D QCOM_DOWNLOAD_MINIDUMP;
-
-As per above.
-
---=20
-With Best Regards,
-Andy Shevchenko
