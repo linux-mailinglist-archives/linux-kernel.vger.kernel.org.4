@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1949C7134DA
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA997134E5
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 15:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjE0M7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 08:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52628 "EHLO
+        id S232620AbjE0NHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 09:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjE0M7S (ORCPT
+        with ESMTP id S231387AbjE0NHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 08:59:18 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0BFB2;
-        Sat, 27 May 2023 05:59:17 -0700 (PDT)
+        Sat, 27 May 2023 09:07:34 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2124.outbound.protection.outlook.com [40.107.244.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37289F3;
+        Sat, 27 May 2023 06:07:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kZx7CPrwTngD51PcORJJQnWPmtr4DuK7G5aZk0cQI6LeZgGDPvxr04SaaRGUnQbH/rD1Hse3xzyElwVBnVmKX1Ux/WxlT8ll9WlzV6mcH7YNs+cs/fxvwWtMzf2xOHoKk9jNbpWrxDxl5QkhBgfo0vZOqfxKkXeqDmbRi4lXDNv1NPlo7OqpVS/GjUOVYsq5TOGSMmGOMacSofHKDhukjvNIsozlR4I+3zaG6iMAV6Fmol9iP9G/56vPSUa9K0jSMY5waH3EzX4BNA66uTM2ZHfFsAnGXFHkRIeAmAy/GX1G9gUP+SXfchCFcB4vVpn/KlgrpsyLSQUtK4kW3njYGg==
+ b=QUXmwBy0+zS9r8dPrncpv7PY86BCYh4mC1xXXbBncYW+a7Cr11sFV4aUnnvEmHguoQA4gSLXUlbrZ7jVDhKsxZDuP/zxAY3yq3xj1e837iK6D8WryKR5vcsLkGHzd0YOhSru/Bdocu1GnTjD420FpihNPXNCyzoDgDXW0mCdSk1Tu6VTfZcP5x6DQGoMEwIo+88E+JjYeB90DQK/FLOsiKKg6Ne4WmIuqLjzZAmBnGS/2oJAW5LUfaUCdY4NZVfOobVUQjwHRdNLN5G5+oFa4CzdssK4kJGQK4J5IRnzIJ5xS8wa39V9Ii8QofSxlKrlKpt26H1iNsTp1fx/sINLkQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F1ZPR0fypTa4v+oR9VRgrk8dmV8nGEX8YLaKeoluXJ4=;
- b=XncVaqat4Oddyn41BvVlrF9lfi9/J7S5doJ2XU+LVnqmaBy4hApa2g1A7S9xAtDS6HRckDROVCW0p75YAJ2/Tf83MclCAcHL3x4NCBwM/EbTOmVbRasaP1rSF4SNl/chAcH1DxsnPS+m9iJE8Qy5ES2jxRhrEEBqvnJFJCRq7Bb3U469/2AxmJARO3RPGnE3IiioB6nQ9ng7omjHeHQuWNT73KyfLEsxo5AL0xga+X8gMPvylbqEXzqBIuIMw5jR65wqzz487wMy2uvsKwKjCdB/qnpYrAkZYHmUljQzlXZuvHiJfmq1TVr7qGXSykGt4LEGTY0qx9ETMsaRDuc6RA==
+ bh=jLspsEb63WH9WFsaKHPrMjsvF3ZrzIk9uLADg3jrqwI=;
+ b=O8Epq1hHoOSt4Nb5A7fUoqcwuPn6lunVijq5MsLbZGy6GLy71LpYirSvnpfDBw5WbQSoaBL7UdYVPdSgflWH3J35P0dMww6YB836/sPsuB3DwoGXFugHjKpZLGHHHvIb3xlPy3VaYZIFvXJrGqnm6XhqfABI3kjWNSxk++9lH5xhxtJgM6gFQ/eTY7w+UPmM1rZJCWdo0lKcvEhlAy3/H83/Ja44ides+Ma+sR3LKGVjaKIu7j2m0mUslyLeX4e+JDsDzQmJ3I4RyPn1a46k2mEJTGZu+9rZSjxlOxfDWXIFrP53npx9zwnmrfrIuIAOL11H82jAPobJvh3aMg4Sfw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
  dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F1ZPR0fypTa4v+oR9VRgrk8dmV8nGEX8YLaKeoluXJ4=;
- b=DqGiJ+rfN6GrcWF+DdwS3ZV42CCStwdxl8rEY9E/fGQAQyjfhy+glpsoYlANN1rcTauvxYY2G14jp25yOfbEFgDncgLRCBZ7jhwpuWUqLVTm6JlVwsoYmEaYQCiwMloTvoFL1uJP8XGE0J8vwEnUCAyv0KgTw5AUd5WX0kufSYY=
+ bh=jLspsEb63WH9WFsaKHPrMjsvF3ZrzIk9uLADg3jrqwI=;
+ b=rfMDlPUgkgKPe9Yya3kjAVdT3mBU/o4wb+nvcLdm0EgNkllVMtG1f32L9sWTdH0s8NzWdgpQ6w730cN24p9HuNaaECSmEdioQzd4QBMvDDYK63nZzIUBQP+SctLc/FZcCRzgaCO3MmrUhBggVFLnQ9rJLFvJRBxQlPvK27VXC2A=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=corigine.com;
 Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ0PR13MB5676.namprd13.prod.outlook.com (2603:10b6:a03:403::9) with
+ by BLAPR13MB4643.namprd13.prod.outlook.com (2603:10b6:208:30e::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16; Sat, 27 May
- 2023 12:59:12 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.18; Sat, 27 May
+ 2023 13:07:29 +0000
 Received: from PH0PR13MB4842.namprd13.prod.outlook.com
  ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
  ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.018; Sat, 27 May 2023
- 12:59:11 +0000
-Date:   Sat, 27 May 2023 14:59:04 +0200
+ 13:07:29 +0000
+Date:   Sat, 27 May 2023 15:07:21 +0200
 From:   Simon Horman <simon.horman@corigine.com>
-To:     Sungwoo Kim <iam@sung-woo.kim>
-Cc:     benquike@gmail.com, davem@davemloft.net, daveti@purdue.edu,
-        edumazet@google.com, happiness.sung.woo@gmail.com,
-        johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, wuruoyu@me.com
-Subject: Re: [PATCH] Bluetooth: L2CAP: Fix use-after-free in
- l2cap_sock_ready_cb
-Message-ID: <ZHH+l73YeZd9iq52@corigine.com>
-References: <20230202120902.2827191-1-iam@sung-woo.kim>
- <20230526181647.3074391-1-iam@sung-woo.kim>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [net PATCH] wireguard: allowedips: fix compilation warning for
+ stack limit exceeded
+Message-ID: <ZHIAibPKikGjLD8+@corigine.com>
+References: <20230526204134.29058-1-ansuelsmth@gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230526181647.3074391-1-iam@sung-woo.kim>
-X-ClientProxiedBy: AM4PR05CA0009.eurprd05.prod.outlook.com (2603:10a6:205::22)
- To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+In-Reply-To: <20230526204134.29058-1-ansuelsmth@gmail.com>
+X-ClientProxiedBy: AS4P190CA0012.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5de::12) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB5676:EE_
-X-MS-Office365-Filtering-Correlation-Id: e5290033-ccbb-49f5-010b-08db5eb22ab4
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BLAPR13MB4643:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7a836f3b-c214-4dca-7463-08db5eb3533a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eaPYz0i9cNrCzVfJHtXoL9K6BdocDRGJ153nX3s+6vFKManF1ckIaiWjPtSqliJr8BzjJ5/i9SYLkcTgWW4/alv5BxS+iiV6IhVo6e9ZW50WkFJiPXbAL2cfgwNDvaEPBkAvrA7rHItHVs8/nuTKlHCrgoVz0tvsbfs2UGDZc7dqnXXOsLFwOWGA1s4/LKGtOJdMu2rQJs39BjrCJji0zQcb3mc2raQBcZ8Ehz9vHU9r/s2ZORSUjTSceUtymRC3X36GcODJ3tSaIenVzmyJyDiwwVgUWZPHzxKvekGnJzQlubi3yf+BHQBf8Fqx48gc8IVfE7kLHSxAJsoCh8AbWh3d5ZQPyjW8IJIYUvfEi4rU+4BHjea13GMT91bCvNw0Tc6csK9TZ2BR8O1y3aAmSMFwOLuei5OEFNUKmKAWtugwbahP6t9gokbuWpAlZoYQEtFNjGOL7VGgnpAkr1AS00SAU+sokOKtEKQnjgQsj8kULOUixQQjzaCatQh4r0+S5JOqGsm8qaEv4YZAqkAuDqjVFjRMNnCHXwEov+dUMtTSmYCl0sI90cou7IEUCAV/R0y3XGV1jaofJ4syI6GKB1voNEYjkZHbKIPyB1ewllYyheZ4b5VMTLEYxPQjmionkucHJZ/vkJ0PTQm7UOYZcG9g4dTIy01GLGyFc2K/1X4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39830400003)(376002)(346002)(136003)(366004)(451199021)(478600001)(41300700001)(6486002)(4326008)(66556008)(66476007)(8676002)(8936002)(66946007)(6916009)(5660300002)(2906002)(186003)(83380400001)(2616005)(316002)(6666004)(38100700002)(86362001)(6512007)(7416002)(36756003)(6506007)(44832011)(67856001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: JHHz1X/+EQGaejhaZt+kEgmWB4jN6gxZrrDPyy2JaNGzEr6ANbOdnLIjGin7aL6s4GbUTGIwKe242kiWG+U5YFI8dJZpZuckMj7jGqYa1oWDqdU97OHOwUq0mRIs2VQnNHhHGSVMvlSKSHzCLZISB9qMAJFO5tKa8Q6qdXhbmvtxH76iOBhenXN6eePQjT1sv1ke3ZSsjwtAbjm+aLfXldv4VDtyHcduXAeK+ciTZMTisTCcbB5e1HVrIkIPzrwWrHuplN5K1g6QC6311zRbvmoi4/eNeWURLrbfdgDXe/HYdqsO1Kziwu69engixv9HyMXPBnOxKLNMxcQY8MoUAb4L9t32jY7N7B7EVBfNdZvBDgtZxErXb/a835u8bMdctS1SezaJ8Q6nOVnSG3Cud4u8ZBZKibIBfSzM1EIZJfJqdeIJ96QWlA/5cR0wYt92SetVIhV6FCZZthMz6I5mDUIhxevoIuxtL9qandAF1oxBlayXrWda6hBA51CJsknxcGV3Xa2i7bDrGjmPf5fSv8AVH3jLOZxaJp2efPt5Sg3IirHPpex72Yb9QxabA7XXH6Otuudn1uYSl9zd7fCLlC2VqgM8vaLOac2BUC+VoaI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(39830400003)(396003)(136003)(376002)(451199021)(6666004)(316002)(6486002)(41300700001)(2906002)(44832011)(8676002)(6506007)(6512007)(7416002)(38100700002)(8936002)(83380400001)(5660300002)(36756003)(2616005)(86362001)(186003)(6916009)(4326008)(66946007)(66476007)(66556008)(54906003)(478600001)(66899021);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dbhldYBIydpfK/xSkl1Rluy+wwGX5Br7Kq9KpJQ2kjAS0ulCVl+wReHHxFey?=
- =?us-ascii?Q?+Jmkc5cXO1zuympuKYUVkieIzN1pPZuNalYR15ZtGsdPu3BmLoxW8WUSqbAv?=
- =?us-ascii?Q?Rq7MxoGIWyDi/h0qvVZXlgNyb47gdiUnc0XA0SyG6oLk/GSeAE4y1F82WOGC?=
- =?us-ascii?Q?8u3Qwrvmu7yuJfEAlcxC37WBgz4d5G32H5/arMgu9UuDE9x9wkz5FWrRE+0O?=
- =?us-ascii?Q?/z5xwLKBB2mCranWIZv9oI96F1AJdzuVs+tnG73fYnRyawAlSi2678tve6Gn?=
- =?us-ascii?Q?0sI+o2gU1HmaR2T0MUmWeSOv9a8Z62GxYAhwPHtYXaAfLQVsNIgFViCLu5KT?=
- =?us-ascii?Q?EkhTOhr8sxr9ugt7KtkjabS52uDwbnoY1OLTrk2IFqsFYYxQcTGYaFULv4ev?=
- =?us-ascii?Q?X/ogoPfpwMQJB7PFM3R1cioO1BWqWNF0PUTbCFOpTg/iTfQS252zE0dTVgnG?=
- =?us-ascii?Q?hL/H6uBbQROtQikrlLq9XRp8F6Iumy7E012Js7slwby18yqcotXpNHa9DfLY?=
- =?us-ascii?Q?h70TNx+QDgg5BvFbo/aP2ZBt9XpuhpLv4i9vl8yxr+q8At9HBuGqE7cJdbO3?=
- =?us-ascii?Q?hrYvrHB9v5gprKLPRI4gBK0f+gssAYWRx6A7OTmJ5dxxoP81soI3oU7vDIGb?=
- =?us-ascii?Q?TSmQ4XgOcdIcOJuwKoPQgWHXevc0TNKz4M4rcqN/DvVgZ37bGv0gcy0eNQq7?=
- =?us-ascii?Q?zhgkKTE9tUgVKMFJjUlb1pZogrNBdpaL526GMoYTdEkKuhdEs2B2xOqixcoo?=
- =?us-ascii?Q?156YrIEy9qxFtmDdfIEUxb/geH/SSz8adbCGX/73FlxRr1V1aELxs7VwyAmv?=
- =?us-ascii?Q?WAaDrF5gUU7xudeBkBZhuUaV0P5sSCuWhXydXegx+C8ELq6XnF0im+z3Spdw?=
- =?us-ascii?Q?54mkpaVbPmISyOuY51kDGi6Fcw8fjtuCaqz/cxCVzrnmGW9huZvlmlKAYzMj?=
- =?us-ascii?Q?zLFCCMJGYht/VJAVAhgm1Z2TwEVE5vRW2NrBzaRmjTIAUYgitrXRcwDSxDdt?=
- =?us-ascii?Q?IeGS5ODZUk9mUi78WJgH94QlLfqoJoem9MY9SBa08AXndLYSbbjdt4nuKms9?=
- =?us-ascii?Q?tPHopK84Ukz0IEU7/2yxrLrQkGHIQUDYX6umzdJwb2e4k7Tx1qNhl0virIaN?=
- =?us-ascii?Q?nlCtcmpr9U5ki+fhA9MK11KkWeoKTKWJWTCpIIjUhga/AuUAtVBFexQnW0GW?=
- =?us-ascii?Q?+xnYLZ4JoL4pO3UGuXyDD3NVrlJ0Lyjm5c0chuD7wbec8tzzZ002AuTtzgmh?=
- =?us-ascii?Q?+o/9NnGawE2zwk35WkFP4v91aj/phOI/wH2eIMm9LLUkYgqikqWjrLjDfhfH?=
- =?us-ascii?Q?b3jkDKFqaLScYeGAV57FjrUvsJ4e1UtSkUS7/Fjvcxhb6h92x6BZEZzmUzq/?=
- =?us-ascii?Q?IxpH3Ks4AeJTzleiq5DahS/m3DmSeViY9G54zfyPE1VypfExOzRcTBo6r5hf?=
- =?us-ascii?Q?HVRO+kgWRi2WlkX1iNrKRL2jtkSpYC1FzWB+D9b5qOK0NlhowLYl+TOCBVjh?=
- =?us-ascii?Q?d0uawhTxGvtlAI3N4acv+yD0rnv5RLne/NXR7jQa2eKBV7xErPy9LEHgnQEz?=
- =?us-ascii?Q?462ucxyNubgOBALjHollJiS4XlGsCCP0NpFZzyl7hVa1tl7HbkNoHugCL4uZ?=
- =?us-ascii?Q?5tmtqfP7UG037ORaebdjtwH2PtvkTSUVFG7+jRWVuXHdOYkRneqWO6pX6xjU?=
- =?us-ascii?Q?P+ty6w=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Np4hPBc1+IQ976NY0Fk2DKKpwyuapfeW3qb6/FpSTMG2K6qROZVEAMHYb6pu?=
+ =?us-ascii?Q?iFv6g7J4tOIdN+raAjYO2HdxuBJU7D1acNA405sevWcsTmAau/qHKS+IGOgF?=
+ =?us-ascii?Q?ZwMRMGUVW8maCKxoLEE/uX97SJUHuDG/GkPxbekB1xJ747kmcudkXnKD/41u?=
+ =?us-ascii?Q?r1jK/USyFjdJD5OyXnraV0t+rbVJ4PlNPPB1WbOpLbE1iq25mVBmEc7lPj1/?=
+ =?us-ascii?Q?U5t6g41v0chUCxRLZoXR+VxRuZwURsT9SjhwpodARtweVLzMQGoJudnZTj+V?=
+ =?us-ascii?Q?WdfBrZXodvBavv4dSeaoTsx82YrY6BtHPxznbxeG6ZZL4o3qF7iZIwYZFZ/X?=
+ =?us-ascii?Q?w4kQTIYTzT5iHQZNdzKWPX3fCjqJRzgKKQPO1Q6RAHRhh/NIxcrYD6j44BaF?=
+ =?us-ascii?Q?ti8c9JSwB+Dmm2U2UVacbwk+dP8VKPFQZu+t61uZvANqAhTd+UTlpI75TPjC?=
+ =?us-ascii?Q?I3xmJWYoB6PascDdyErASROSQ8B/EugsFhlS43+jChZbLeG9Cna2nm8hG0EK?=
+ =?us-ascii?Q?m4FCdBPRTCkpKHZLUvTMZr6Mo8A/UUEpf4kHaEks+axaiShEhtb/5zIFl5g1?=
+ =?us-ascii?Q?sa2Uu+U2xkPubRi1SWoKIxWhmHQ0PQCnOfts5JUlPcrSvne0skaqjYb4OZHw?=
+ =?us-ascii?Q?wQUDvb72y3Jeqj1Hp3dKHgL0r5WpStUuSyj+TKOph6ZsBBjWlYjbJAK2g1I8?=
+ =?us-ascii?Q?CA59m52oJDOFRRNaE34D96tuw2CgxAZAy9xsxDZigR98eIwIS/wDhvFm6hQ+?=
+ =?us-ascii?Q?0ifV6PIe1iyAGuof6zaMCQ1j5gYET44VQqzpYldUFX19yy48rxWP60vf/Xoe?=
+ =?us-ascii?Q?I1JTgCVLcBsfLjZGjbnRYqIr0Vhao7dndb5X+v9WTSNfIxt9A8h63Un6Ykqi?=
+ =?us-ascii?Q?0zQC8rLx7P+zLX2Uc7SvnZrW8zd4PWcH8NEIxYapsySBRvtt3lFjUpyR2qK8?=
+ =?us-ascii?Q?5ixcSoGERlq04qeBLFJD3uLsgALMCZ2bs14Oyg+/tPeEGJE2OMIrrAmLapPP?=
+ =?us-ascii?Q?3OENkTxlx2J7Uw4hHVog2I+k3Z+RcnaPJfx64w1Nce3NgwCYhiDS67Nkhh6Z?=
+ =?us-ascii?Q?oLYcMX4KCoswGq3ykjU4vEUAbDtyRoa6dIK+9zqQlqosLGmbTL9Z+yCN84SA?=
+ =?us-ascii?Q?68fV6PnEMJVhMIWAaKhBGbeUObQnwjLhbb2bvw20qyWtRUlLOZNSgNLaWq5C?=
+ =?us-ascii?Q?R5Cr7gKKfUh9Q6ZwLj7v15er5UtYQhFkTzu8CeGuY8BLcvAn4K0OQvp84QUP?=
+ =?us-ascii?Q?cvYfNwgptRFkS9bAnX1LZ4X40r6zKFiBgAu3PVZmoMlOs5TXcAfP3P1XZwud?=
+ =?us-ascii?Q?QeuJYUY8XeuoA5QjgPXY4c8LdfQqUzC7a3QTCZsXUfgboE7PEaAABgox76SC?=
+ =?us-ascii?Q?CXsk7pbPsCKKWAAfYygKGOoN43gbKKIZL3h48hylLEXcIm+N69K/mXqt7xno?=
+ =?us-ascii?Q?C034W/G77Bt+a+IgtzY24tlTINcFhBzFXVxej9ImMZ53yRZ2LmLKiVAWYrH6?=
+ =?us-ascii?Q?5xMPDccJYKM0E25sCGNPtKEKfvZApyrDc0S0UzTKeqm0GvVDlqwVMJgRYFVi?=
+ =?us-ascii?Q?TlxieLtHyRxc0ExWiJac6LhuNrJ/FV8KdtqgxRlMwcHIqLmHG/v9Pg+OosgH?=
+ =?us-ascii?Q?0NC2ZUjWmjk2DkGHjAyz0xYJ4CmNEMT6pbaZOsvIxQ9RgcSRLEWkEva5aqnO?=
+ =?us-ascii?Q?uW6TGQ=3D=3D?=
 X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5290033-ccbb-49f5-010b-08db5eb22ab4
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a836f3b-c214-4dca-7463-08db5eb3533a
 X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2023 12:59:11.8325
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2023 13:07:29.2973
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ppney/tHzl+Nwimtmew19D0jpSJjg1wErtmpVn0llfodNViLDsyfAqE5sX5qZyYWrYlRWRN0luPgZQn2ALH6iAIxxIJyKkSf4IOnyEuSUXg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB5676
+X-MS-Exchange-CrossTenant-UserPrincipalName: EXbwCLCdmoV7afS88FTJdovZC4pp3vWQKQhmu4See1W3wmEmKl++WfNgy/tFNTWNhy3pQ5FnJolU6QHHKfZCJUzKDQdfJwd3+tpzTnDbKIA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR13MB4643
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -119,71 +120,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 02:16:48PM -0400, Sungwoo Kim wrote:
-> >    net/bluetooth/l2cap_sock.c: In function 'l2cap_sock_release':
-> > >> net/bluetooth/l2cap_sock.c:1418:9: error: implicit declaration of function 'l2cap_sock_cleanup_listen'; did you mean 'l2cap_sock_listen'? [-Werror=implicit-function-declaration]
+On Fri, May 26, 2023 at 10:41:34PM +0200, Christian Marangi wrote:
+> On some arch (for example IPQ8074) and other with
+> KERNEL_STACKPROTECTOR_STRONG enabled, the following compilation error is
+> triggered:
+> drivers/net/wireguard/allowedips.c: In function 'root_remove_peer_lists':
+> drivers/net/wireguard/allowedips.c:80:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+>    80 | }
+>       | ^
+> drivers/net/wireguard/allowedips.c: In function 'root_free_rcu':
+> drivers/net/wireguard/allowedips.c:67:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+>    67 | }
+>       | ^
+> cc1: all warnings being treated as errors
 > 
-> Fix this error
+> Since these are free function and returns void, using function that can
+> fail is not ideal since an error would result in data not freed.
+> Since the free are under RCU lock, we can allocate the required stack
+> array as static outside the function and memset when needed.
+> This effectively fix the stack frame warning without changing how the
+> function work.
 > 
-> >     1418 |         l2cap_sock_cleanup_listen(sk);
-> >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-> >          |         l2cap_sock_listen
-> >    net/bluetooth/l2cap_sock.c: At top level:
-> > >> net/bluetooth/l2cap_sock.c:1436:13: warning: conflicting types for 'l2cap_sock_cleanup_listen'; have 'void(struct sock *)'
-> >     1436 | static void l2cap_sock_cleanup_listen(struct sock *parent)
-> >          |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > >> net/bluetooth/l2cap_sock.c:1436:13: error: static declaration of 'l2cap_sock_cleanup_listen' follows non-static declaration
-> >    net/bluetooth/l2cap_sock.c:1418:9: note: previous implicit declaration of 'l2cap_sock_cleanup_listen' with type 'void(struct sock *)'
-> >     1418 |         l2cap_sock_cleanup_listen(sk);
-> >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-> >    cc1: some warnings being treated as errors
-> 
-> Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
+> Fixes: Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
 
-Hi,
+nit: Not sure if this can be fixed-up manually.
+     But one instance of 'Fixes: ' is enough.
 
-I am confused about why this error occurs.
-In bluetooth-next [1] I see that l2cap_sock_cleanup_listen() is defined
-on line  1435 of l2cap_sock.c. And then used on line 1574.
-So there should be no need for a forward declaration.
-
-[1] a088d769ef3a ("Bluetooth: L2CAP: Fix use-after-free")
-
-> ---
->  net/bluetooth/l2cap_sock.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
-> index eebe25610..3818e11a8 100644
-> --- a/net/bluetooth/l2cap_sock.c
-> +++ b/net/bluetooth/l2cap_sock.c
-> @@ -46,6 +46,7 @@ static const struct proto_ops l2cap_sock_ops;
->  static void l2cap_sock_init(struct sock *sk, struct sock *parent);
->  static struct sock *l2cap_sock_alloc(struct net *net, struct socket *sock,
->  				     int proto, gfp_t prio, int kern);
-> +static void l2cap_sock_cleanup_listen(struct sock *parent);
->  
->  bool l2cap_is_socket(struct socket *sock)
->  {
-> @@ -1414,7 +1415,8 @@ static int l2cap_sock_release(struct socket *sock)
->  
->  	if (!sk)
->  		return 0;
-> -
-> +		
-
-nit: The white-space on the line above was correct (no white-space)
-     Now there are trailing tabs.
-
-> +	l2cap_sock_cleanup_listen(sk);
-
-This change may match the patch subject
-but seems unrelated to the patch description.
-
->  	bt_sock_unlink(&l2cap_sk_list, sk);
->  
->  	err = l2cap_sock_shutdown(sock, SHUT_RDWR);
-> -- 
-> 2.34.1
-> 
-> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Cc: stable@vger.kernel.org
