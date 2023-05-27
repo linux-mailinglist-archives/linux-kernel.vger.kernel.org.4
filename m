@@ -2,262 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71879713439
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 13:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA02713448
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 13:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbjE0LON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 07:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S232310AbjE0L3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 07:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbjE0LOL (ORCPT
+        with ESMTP id S229730AbjE0L3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 07:14:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F3CEB;
-        Sat, 27 May 2023 04:14:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24FEE60A67;
-        Sat, 27 May 2023 11:14:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F8EC433D2;
-        Sat, 27 May 2023 11:14:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685186048;
-        bh=8lS5P5G7+ed2XAfQO36H5TkRWeFxg24U8d5lDJYnpGI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=N8ErpLvHVJqQJvzLJtuyll5Ie+vMSL9FPGkAI1/qRl+EzwSAbFNp27jHBY466zTqI
-         5NajK88xMih+9QaBiAkC5sBYLTyz1et2yEJN2C/8Z2eguzphH3iWZZO3dYxURUiswe
-         S4VLelwd9N8QttJDqB/nSc4FexEggGnoxMS8ByE37ALCKSQ9Gb7A250AgeUOZppHzL
-         fuHK0CgvkFl89TcFTW/pJLPR+4wgRENAgbujihED3vIRDv98j9PSUPg8KK9pkheA57
-         irnO6iImrRpKO5qOIl974oaVx3gsj5+UDwrJfntat8OXIyVAJwjw0SU/LbYjy9tQtJ
-         12uB8DYw9vU+w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 01298CE0DB0; Sat, 27 May 2023 04:14:05 -0700 (PDT)
-Date:   Sat, 27 May 2023 04:14:05 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Qi Zheng <qi.zheng@linux.dev>
-Cc:     RCU <rcu@vger.kernel.org>, Yujie Liu <yujie.liu@intel.com>,
-        oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Kirill Tkhai <tkhai@ya.ru>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        David Hildenbrand <david@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org,
-        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com
-Subject: Re: [linus:master] [mm] f95bdb700b: stress-ng.ramfs.ops_per_sec
- -88.8% regression
-Message-ID: <44407892-b7bc-4d6c-8e4a-6452f0ee88b9@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202305230837.db2c233f-yujie.liu@intel.com>
- <eba38fce-2454-d7a4-10ef-240b4686f23d@linux.dev>
- <ZG29ULGNJdErnatI@yujie-X299>
- <896bbb09-d400-ec73-ba3a-b64c6e9bbe46@linux.dev>
- <e5fb8b34-c1ad-92e0-e7e5-f7ed1605dbc6@linux.dev>
- <bfb36563-fac9-4c84-96db-87dd28892088@linux.dev>
- <be04dc3e-a671-ec70-6cf6-70dc702f4184@linux.dev>
+        Sat, 27 May 2023 07:29:18 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5236EB;
+        Sat, 27 May 2023 04:29:16 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f6d7abe9a4so11264145e9.2;
+        Sat, 27 May 2023 04:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685186955; x=1687778955;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=49u9uYR1lSYJCMJKXyUifMM9gUKq9GWhoR8pU9TMHaM=;
+        b=lJzNHF0XuCNgdGnZ10Scc9Oqnrxt+o0kVNsZh53pcmMokaeneuCUs1U4HQzc2uCf8V
+         oc6bEPZAXzsVqpHyUTvQCr49LvfEzqTFL8g+OlTZQNqjU4wHA8VyTUx+4lgDQl0qBEME
+         ESdrwLuswEHwQcTmHF8U5UNG8IfAeIS2KwE3l1Dk7JiSpauvMSp1F4brS5/IWDaa8/4B
+         K/JWuGP1z1fZXMjRvvt6Lr1VLTFK73mLDZJ8RT17GT44Lw5TY8UtdzcVyhm66MpzaZ5z
+         rJVX8aYYEwUj/tiGn31EdnK5M+1seRsWYs1L0+m+VOra7rEG4k3fXp2+aqtY8nm1BTi/
+         i8nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685186955; x=1687778955;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=49u9uYR1lSYJCMJKXyUifMM9gUKq9GWhoR8pU9TMHaM=;
+        b=fQhalIeTjv+3zET1bwqHxsi6Ms6wxVed0w6W9tYcL2luHMncLo0BlCRcZnqfN1D6l5
+         i/nqZzy5/YzrVl21AQN27jeOfLrD1B9z+VVihWvU5cbsQ7Akoc2X4lP56u3Yhco27Lmm
+         lfWsQcDmFTlnNqAtKXTO2wpnlBGJVCfTsgxS0V+CmM78q+zkEov4V9Cp+yoeTkjoy1r/
+         Tq3F2nUifpQNUJczwSsrceB27XotajmDT0I9BNY+iF7HMyN6V7Eu8WD67rqnZqg1+UZs
+         QbqsmY429+VC8ZjZZwhrgSByYrCvwV1lAPdD65DktbUy+hQIgUM6JDYRwReMGps1cEUj
+         AwOQ==
+X-Gm-Message-State: AC+VfDwJIw5MXFnFoIXF7+Kgo/FaqZu8F5J9CVNM4EhLFd9uEhcyDQQi
+        w6+MKV1xo114LfqNAcDawiY=
+X-Google-Smtp-Source: ACHHUZ5QcZFHMIVPP9Z4u1UveGhYexle/qp8Q/3XdQy1e/gdYC+76gWnFD2augCukIEfWir/PwxE+A==
+X-Received: by 2002:a1c:e901:0:b0:3f6:148f:5867 with SMTP id q1-20020a1ce901000000b003f6148f5867mr3545473wmc.4.1685186954707;
+        Sat, 27 May 2023 04:29:14 -0700 (PDT)
+Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.googlemail.com with ESMTPSA id q13-20020a7bce8d000000b003f43f82001asm11711000wmj.31.2023.05.27.04.29.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 04:29:14 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        linux-leds@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [net-next PATCH v3 00/13] leds: introduce new LED hw control APIs
+Date:   Sat, 27 May 2023 13:28:41 +0200
+Message-Id: <20230527112854.2366-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <be04dc3e-a671-ec70-6cf6-70dc702f4184@linux.dev>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 12:03:16PM +0800, Qi Zheng wrote:
-> On 2023/5/24 19:56, Qi Zheng wrote:
-> > On 2023/5/24 19:08, Qi Zheng wrote:
-> > 
-> > [...]
-> > 
-> > > 
-> > > Well, I just ran the following command and reproduced the result:
-> > > 
-> > > stress-ng --timeout 60 --times --verify --metrics-brief --ramfs 9 &
-> > > 
-> > > 1) with commit 42c9db3970483:
-> > > 
-> > > stress-ng: info:  [11023] setting to a 60 second run per stressor
-> > > stress-ng: info:  [11023] dispatching hogs: 9 ramfs
-> > > stress-ng: info:  [11023] stressor       bogo ops real time  usr
-> > > time sys time   bogo ops/s     bogo ops/s
-> > > stress-ng: info:  [11023]                           (secs)    (secs)
-> > > (secs)   (real time) (usr+sys time)
-> > > stress-ng: info:  [11023] ramfs            774966     60.00    
-> > > 10.18 169.45     12915.89        4314.26
-> > > stress-ng: info:  [11023] for a 60.00s run time:
-> > > stress-ng: info:  [11023]    1920.11s available CPU time
-> > > stress-ng: info:  [11023]      10.18s user time   (  0.53%)
-> > > stress-ng: info:  [11023]     169.44s system time (  8.82%)
-> > > stress-ng: info:  [11023]     179.62s total time  (  9.35%)
-> > > stress-ng: info:  [11023] load average: 8.99 2.69 0.93
-> > > stress-ng: info:  [11023] successful run completed in 60.00s (1 min,
-> > > 0.00 secs)
-> > > 
-> > > 2) with commit f95bdb700bc6b:
-> > > 
-> > > stress-ng: info:  [37676] dispatching hogs: 9 ramfs
-> > > stress-ng: info:  [37676] stressor       bogo ops real time  usr
-> > > time sys time   bogo ops/s     bogo ops/s
-> > > stress-ng: info:  [37676]                           (secs)    (secs)
-> > > (secs)   (real time) (usr+sys time)
-> > > stress-ng: info:  [37676] ramfs            168673     60.00     
-> > > 1.61   39.66      2811.08        4087.47
-> > > stress-ng: info:  [37676] for a 60.10s run time:
-> > > stress-ng: info:  [37676]    1923.36s available CPU time
-> > > stress-ng: info:  [37676]       1.60s user time   (  0.08%)
-> > > stress-ng: info:  [37676]      39.66s system time (  2.06%)
-> > > stress-ng: info:  [37676]      41.26s total time  (  2.15%)
-> > > stress-ng: info:  [37676] load average: 7.69 3.63 2.36
-> > > stress-ng: info:  [37676] successful run completed in 60.10s (1 min,
-> > > 0.10 secs)
-> > > 
-> > > The bogo ops/s (real time) did drop significantly.
-> > > 
-> > > And the memory reclaimation was not triggered in the whole process. so
-> > > theoretically no one is in the read critical section of shrinker_srcu.
-> > > 
-> > > Then I found that some stress-ng-ramfs processes were in
-> > > TASK_UNINTERRUPTIBLE state for a long time:
-> > > 
-> > > root       42313  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
-> > > stress-ng-ramfs [run]
-> > > root       42314  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
-> > > stress-ng-ramfs [run]
-> > > root       42315  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
-> > > stress-ng-ramfs [run]
-> > > root       42316  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
-> > > stress-ng-ramfs [run]
-> > > root       42317  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
-> > > stress-ng-ramfs [run]
-> > > root       42318  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
-> > > stress-ng-ramfs [run]
-> > > root       42319  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
-> > > stress-ng-ramfs [run]
-> > > root       42320  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
-> > > stress-ng-ramfs [run]
-> > > root       42321  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
-> > > stress-ng-ramfs [run]
-> > > root       42322  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
-> > > stress-ng-ramfs [run]
-> > > root       42323  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
-> > > stress-ng-ramfs [run]
-> > > root       42324  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
-> > > stress-ng-ramfs [run]
-> > > root       42325  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
-> > > stress-ng-ramfs [run]
-> > > root       42326  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
-> > > stress-ng-ramfs [run]
-> > > root       42327  7.9  0.0  69592  1812 pts/0    D    19:00   0:02
-> > > stress-ng-ramfs [run]
-> > > root       42328  7.9  0.0  69592  1812 pts/0    D    19:00   0:02
-> > > stress-ng-ramfs [run]
-> > > root       42329  7.9  0.0  69592  1812 pts/0    D    19:00   0:02
-> > > stress-ng-ramfs [run]
-> > > root       42330  7.9  0.0  69592  1556 pts/0    D    19:00   0:02
-> > > stress-ng-ramfs [run]
-> > > 
-> > > Their call stack is as follows:
-> > > 
-> > > cat /proc/42330/stack
-> > > 
-> > > [<0>] __synchronize_srcu.part.21+0x83/0xb0
-> > > [<0>] unregister_shrinker+0x85/0xb0
-> > > [<0>] deactivate_locked_super+0x27/0x70
-> > > [<0>] cleanup_mnt+0xb8/0x140
-> > > [<0>] task_work_run+0x65/0x90
-> > > [<0>] exit_to_user_mode_prepare+0x1ba/0x1c0
-> > > [<0>] syscall_exit_to_user_mode+0x1b/0x40
-> > > [<0>] do_syscall_64+0x44/0x80
-> > > [<0>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > 
-> > > + RCU folks, Is this result as expected? I would have thought that
-> > > synchronize_srcu() should return quickly if no one is in the read
-> > > critical section. :(
+Since this series is cross subsystem between LED and netdev,
+a stable branch was created to facilitate merging process.
 
-In theory, it would indeed be nice if synchronize_srcu() would do that.
-In practice, the act of checking to see if there is anyone in an SRCU
-read-side critical section is a heavy-weight operation, involving at
-least one cache miss per CPU along with a number of full memory barriers.
+This is based on top of branch ib-leds-netdev-v6.5 present here [1]
+and rebased on top of net-next since the LED stable branch got merged.
 
-So SRCU has to be careful to not check too frequently.
+This is a continue of [2]. It was decided to take a more gradual
+approach to implement LEDs support for switch and phy starting with
+basic support and then implementing the hw control part when we have all
+the prereq done.
 
-However, if SRCU has been idle for some time, normal synchronize_srcu()
-will do an immediate check.  And this will of course mark SRCU as
-non-idle.
+This is the main part of the series, the one that actually implement the
+hw control API.
 
-> > With the following changes, ops/s can return to previous levels:
-> 
-> Or just set rcu_expedited to 1:
-> 	echo 1 > /sys/kernel/rcu_expedited
+Some history about this feature and why
+=======================================
 
-This does cause SRCU to be much more aggressive.  This can be a good
-choice for small systems, but please keep in mind that this affects normal
-RCU as well as SRCU.  It will cause RCU to also be much more aggressive,
-sending IPIs to CPUs that are (or might be) in RCU read-side critical
-sections.  Depending on your workload, this might or might not be what
-you want RCU to be doing.  For example, if you are running aggressive
-real-time workloads, it most definitely is not what you want.
+This proposal is highly requested by the entire net community but the API
+is not strictly designed for net usage but for a more generic usage.
 
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index db2ed6e08f67..90f541b07cd1 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -763,7 +763,7 @@ void unregister_shrinker(struct shrinker *shrinker)
-> >          debugfs_entry = shrinker_debugfs_remove(shrinker);
-> >          up_write(&shrinker_rwsem);
-> > 
-> > -       synchronize_srcu(&shrinker_srcu);
-> > +       synchronize_srcu_expedited(&shrinker_srcu);
+Initial version were very flexible and designed to try to support every
+aspect of the LED driver with many complex function that served multiple
+purpose. There was an idea to have sw only and hw only LEDs and sw only
+and hw only LEDs.
 
-If shrinkers are unregistered only occasionally, this is an entirely
-reasonable change.
+With some heads up from Andrew from the net mailing list, it was suggested
+to implement a more basic yet easy to implement system.
 
-> >          debugfs_remove_recursive(debugfs_entry);
-> > 
-> > stress-ng: info:  [13159] dispatching hogs: 9 ramfs
-> > stress-ng: info:  [13159] stressor       bogo ops real time  usr time
-> > sys time   bogo ops/s     bogo ops/s
-> > stress-ng: info:  [13159]                           (secs)    (secs)
-> > (secs)   (real time) (usr+sys time)
-> > stress-ng: info:  [13159] ramfs            710062     60.00      9.63
-> > 157.26     11834.18        4254.75
-> > stress-ng: info:  [13159] for a 60.00s run time:
-> > stress-ng: info:  [13159]    1920.14s available CPU time
-> > stress-ng: info:  [13159]       9.62s user time   (  0.50%)
-> > stress-ng: info:  [13159]     157.26s system time (  8.19%)
-> > stress-ng: info:  [13159]     166.88s total time  (  8.69%)
-> > stress-ng: info:  [13159] load average: 9.49 4.02 1.65
-> > stress-ng: info:  [13159] successful run completed in 60.00s (1 min,
-> > 0.00 secs)
-> > 
-> > Can we make synchronize_srcu() call synchronize_srcu_expedited() when no
-> > one is in the read critical section?
+These API strictly work with a designated trigger to offload their
+function.
+This may be confused with hw blink offload but LED may have an even more
+advanced configuration where the entire aspect of the trigger is
+offloaded and completely handled by the hardware.
 
-Yes, in theory we could, but this would be a bad thing in practice.
-After all, the point of having synchronize_srcu() be separate from
-synchronize_srcu_expedited() is to allow uses that are OK with longer
-latency avoid consuming too much CPU.  In addition, that longer
-SRCU grace-period latency allows the next grace period to handle more
-synchronize_srcu() and call_srcu() requests.  This amortizes the
-overhead of that next grace period over a larger number of updates.
+An example of this usage are PHY or switch port LEDs. Almost every of
+these kind of device have multiple LED attached and provide info of the
+current port state.
 
-However, your use of synchronize_srcu_expedited() does have that effect,
-but only for this call point.  Which has the advantage of avoiding
-burning excessive quantities of CPU for the other 50+ call points.
+Currently we lack any support of them but these device always provide a
+way to configure them, from basic feature like turning the LED off or no
+(implemented in previous series related to this feature) or even entirely
+driven by the hw and power on/off/blink based on some events, like tx/rx
+traffic, ethernet cable attached, link speed of 10mbps, 100mbps, 1000mbps
+or more. They can also support multiple logic like blink with traffic only
+if a particular link speed is attached. (an example of this is when a LED
+is designated to be turned on only with 100mbps link speed and configured
+to blink on traffic and a secondary LED of a different color is present to
+serve the same function but only when the link speed is 1000mbps)
 
-							Thanx, Paul
+These case are very common for a PHY or a switch but they were never
+standardized so OEM support all kind of variant and configuration.
+
+Again with Andrew we compared some feature and we reached a common set
+of modes that are for sure present in every kind of devices.
+
+And this concludes history and why.
+
+What is present in this series
+==============================
+
+This patch contain the required API to support this feature, I decided on
+the name of hw control to quickly describe this feature.
+
+I documented each require API in the related Documentation for leds-class
+so I think it might me redundant to expose them here. Feel free to tell me
+how to improve it if anything is not clear.
+
+On an abstract idea, this feature require this:
+
+    - The trigger needs to make use of it, this is currently implemented
+      for the netdev trigger but other trigger can be expanded if the
+      device expose these function. An idea might be a anything that
+      handle a storage disk and have the LED configurable to blink when
+      there is any activity to the disk.
+
+    - The LED driver needs to expose and implement these new API.
+
+Currently a LED driver supports only a trigger. The trigger should use
+the related helper to check if the LED can be driven hy hardware.
+
+The different modes a trigger support are exposed in the kernel include
+leds.h header and are used by the LED driver to understand what to do.
+
+From a user standpoint, he should enable modes as usual from sysfs and if
+anything is not supported warned.
+
+Final words and missing piece from this series
+==============================================
+
+I honestly hope this feature can finally be implemented.
+
+This series originally had also additional modes and logic to add to the
+netdev trigger, but I decided to strip them and implement only the API
+and support basic tx and rx. After this is merged, I will quickly propose
+these additional modes.
+
+Currently this is limited to tx and rx and this is what the current user
+qca8k use. Marvell PHY support link and a generic blink with any kind of
+traffic (both rx and tx). qca8k switch supports keeping the LED on based on
+link speed.
+
+The next series will add the concept of hw control only modes to the netdev
+trigger and support for these additional modes:
+- link_10
+- link_100
+- link_1000
+- activity
+
+The current implementation is voluntary basic and limited to put the ground
+work and have something easy to implement and usable. 99% part of the logic
+is done on the trigger side, leaving to the LED driver only the validating
+and the apply part.
+
+As shown for the PHY led binding, people are really intrested in this
+feature as quickly after they were merged, people were already working on
+adding support for it.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git/?h=ib-leds-netdev-6.5
+[2] https://lore.kernel.org/lkml/20230216013230.22978-1-ansuelsmth@gmail.com/
+
+Changes in v3:
+- Rebased on top of net-next
+
+Changes in v2:
+- Drop helper as currently used only by one trigger
+- Improve Documentation and document return error of some functions
+- Squash some patch to reduce series size
+- Drop trigger mode mask as currently not used
+- Rework hw control validating function to a simple implementation
+
+Changes from previous v8 series:
+- Rewrite Documentation from scratch and move to separate commit
+- Strip additional trigger modes (to propose in a different series)
+- Strip from qca8k driver additional modes (to implement in the different
+  series)
+- Split the netdev chages to smaller piece to permit easier review
+
+Changelog in the previous v8 series: (stripped of unrelated changes)
+v8:
+- Improve the documentation of the new feature
+- Rename to a more symbolic name
+- Fix some bug in netdev trigger (not using BIT())
+- Add more define for qca8k-leds driver
+- Drop interval support
+- Fix many bugs in the validate option in the netdev trigger
+v7:
+- Fix qca8k leds documentation warning
+- Remove RFC tag
+v6:
+- Back to RFC.
+- Drop additional trigger
+- Rework netdev trigger to support common modes used by switch and
+  hardware only triggers
+- Refresh qca8k leds logic and driver
+v5:
+- Move out of RFC. (no comments from Andrew this is the right path?)
+- Fix more spelling mistake (thx Randy)
+- Fix error reported by kernel test bot
+- Drop the additional HW_CONTROL flag. It does simplify CONFIG
+  handling and hw control should be available anyway to support
+  triggers as module.
+v4:
+- Rework implementation and drop hw_configure logic.
+  We now expand blink_set.
+- Address even more spelling mistake. (thx a lot Randy)
+- Drop blink option and use blink_set delay.
+v3:
+- Rework start/stop as Andrew asked.
+- Use test_bit API to check flag passed to hw_control_configure.
+- Added a new cmd to hw_control_configure to reset any active blink_mode.
+- Refactor all the patches to follow this new implementation.
+v2:
+- Fix spelling mistake (sorry)
+- Drop patch 02 "permit to declare supported offload triggers".
+  Change the logic, now the LED driver declare support for them
+  using the configure_offload with the cmd TRIGGER_SUPPORTED.
+- Rework code to follow this new implementation.
+- Update Documentation to better describe how this offload
+  implementation work.
+
+Andrew Lunn (4):
+  leds: add API to get attached device for LED hw control
+  leds: trigger: netdev: refactor code setting device name
+  leds: trigger: netdev: validate configured netdev
+  net: dsa: qca8k: add op to get ports netdev
+
+Christian Marangi (9):
+  leds: add APIs for LEDs hw control
+  Documentation: leds: leds-class: Document new Hardware driven LEDs
+    APIs
+  leds: trigger: netdev: introduce check for possible hw control
+  leds: trigger: netdev: add basic check for hw control support
+  leds: trigger: netdev: reject interval store for hw_control
+  leds: trigger: netdev: add support for LED hw control
+  leds: trigger: netdev: init mode if hw control already active
+  leds: trigger: netdev: expose netdev trigger modes in linux include
+  net: dsa: qca8k: implement hw_control ops
+
+ Documentation/leds/leds-class.rst     |  80 ++++++++++++
+ drivers/leds/trigger/ledtrig-netdev.c | 137 ++++++++++++++++---
+ drivers/net/dsa/qca/qca8k-leds.c      | 181 ++++++++++++++++++++++++++
+ include/linux/leds.h                  |  53 ++++++++
+ 4 files changed, 433 insertions(+), 18 deletions(-)
+
+-- 
+2.39.2
+
