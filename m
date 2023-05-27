@@ -2,343 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5926A713177
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4186171317A
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237340AbjE0BYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 21:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        id S231182AbjE0B0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 21:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjE0BYa (ORCPT
+        with ESMTP id S229528AbjE0B0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 21:24:30 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57893A7;
-        Fri, 26 May 2023 18:24:29 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6af7a84b2bdso1136544a34.2;
-        Fri, 26 May 2023 18:24:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685150668; x=1687742668;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tKKQUdhvmst45itFXxTG/3YLpUX8lObiN8yQaG6Ix/k=;
-        b=kZ75hBo+9r3Zj16dkx2//i5QIFfHyKciEjn50EnOVARf0uuFGxnxI8shFC2FFQQRJQ
-         x4SBHOPJKl34aJHlYXX5AS4BOZrQK6s9T2AVCuOWy6PsGNYjGW4FcfSOnkS6Vk10/thd
-         KwevDKlQcuAay+IFk6UC7K/AXb2Lg6Wj1D4dvdOj8Xbecac2XUzY3WDK00h3+MNJzycU
-         3se8SDciUz8/SgP1YSg4qhEJKBQ48jkkq//wLugqlRh8s5ajaLhc1UNWaLwwz2z3gKOn
-         Dl75+gCQv+nwRFVbyxA4k35u10EhqCR2YP7IiNnFiWo/AEezuQ+fIcEXGQDiK0T4UBMb
-         vuZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685150668; x=1687742668;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tKKQUdhvmst45itFXxTG/3YLpUX8lObiN8yQaG6Ix/k=;
-        b=VI/1EdjKhYf4eR87mTK8Wa6VqWuEKHyoCEJHKEtOZx+D8liC2UKvYbAmPewjgnxrbZ
-         MqUHeiMSdGm7qAPoN31awHrosxSONbdneqar54l9L0WQio6DfvgiVEvRUOLGiMRF6LlJ
-         hPGG79A6kw0+Yd/taRx06etpvk58IrMUoq/wODtTyDbmLQJhd+8XdfjYSArWjQubbu+h
-         oSQafIKhOcUWRQH3C+wgjB5M0QXc8R8n5N23DbQZSxevvuhd48PpB+Oc50Oi80dTCAYj
-         GNvOP73MQVxSVd5iQ3/Rq0iblX3vS4ztFJUMI2LqzNC/QICusVqVdjeM9YkoZwM85u3U
-         zT4Q==
-X-Gm-Message-State: AC+VfDzh26LT5aP9/4CUmhA4071K27iuM4itxVqpDv0dm6nJK/1x7P5P
-        pURkRyHBunXjXH4PVQq/W7CWeaANCQU=
-X-Google-Smtp-Source: ACHHUZ6kS//nLc2/9XTcy6It+EacIZsdCc8dkZewyHI7hi7bXtfFqTS2RzJBwraX2YK2kgVs4vHSCg==
-X-Received: by 2002:a9d:7d18:0:b0:6a4:4252:47aa with SMTP id v24-20020a9d7d18000000b006a4425247aamr1829222otn.21.1685150668442;
-        Fri, 26 May 2023 18:24:28 -0700 (PDT)
-Received: from smeagol.fibertel.com.ar ([201.235.4.68])
-        by smtp.gmail.com with ESMTPSA id d3-20020a0568301b6300b006af99ac5832sm2345700ote.47.2023.05.26.18.24.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 May 2023 18:24:27 -0700 (PDT)
-From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>
-To:     linux@roeck-us.net
-Cc:     =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>, derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
-Date:   Fri, 26 May 2023 22:22:06 -0300
-Message-Id: <20230527012206.133464-1-samsagax@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Fri, 26 May 2023 21:26:44 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D39A7;
+        Fri, 26 May 2023 18:26:41 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1685150796tdnayj8x
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 27 May 2023 09:26:35 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: 9OErQKpad8Ah4wDP7YPNO7QIfLzqVaIj39oiToOIFCl/lX+DycsdTBM8Ex7Kk
+        eJ59fku2p51B8hYhutt6eR8eIcIn0t+/tXE/IvPC80t9G9yoORp08hlnV9Qzj2Uu4HldiP8
+        ZBM/pinCiUcNrMWLLmZsKocoT1aPXrV0Ci0EjY06fLmeAlibElW1l5QQd8RAvkdWHP1meri
+        uXol+yQlqbsEO0vtzIEGb8492pfRgMOKBSfFCV0k5agdp33uqmUzpjJFwemyHMQHmot6yoE
+        WOXqa2Wb04JuXJuyzORamvdmzBuGEZsXaciS4LgUaFnINwv2smGSYwy8fmnbET8pul21Hg5
+        6OnM9QCJvKHpOgscvptubCTZGoV710+50hGGEVB5OdlqDmGT+hFkOhfgXfAZg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8717417676330824894
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com
+Subject: Re: [PATCH 13/13] tools/nolibc: sys_gettimeofday: riscv: use __NR_clock_gettime64 for rv32
+Date:   Sat, 27 May 2023 09:26:35 +0800
+Message-Id: <20230527012635.19595-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <29e4b23d-27cb-4101-bfe9-c6b412222578@t-8ch.de>
+References: <29e4b23d-27cb-4101-bfe9-c6b412222578@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OneXPlayer boards from the last generation (both for OneXPlayer and AOK
-ZOE brands) have a toggle in the EC to switch the "Turbo/Silent" button
-into a different keyboard event.
+Hi, Thomas, Willy
 
-Add a means to use that "Turbo button takeover" function and expose it
-to userspace in a custom sysfs `tt_toggle` attribute. It can be read to
-take the current state. Write 1|0 to activate the function. The specific
-keycode is dependent on the board but can be checked by running
-`evtest` utility.
+> On 2023-05-25 02:03:32+0800, Zhangjin Wu wrote:
+> > rv32 uses the generic include/uapi/asm-generic/unistd.h and it has no
+> > __NR_gettimeofday and __NR_clock_gettime after kernel commit d4c08b9776b3
+> > ("riscv: Use latest system call ABI"), use __NR_clock_gettime64 instead.
+> > 
+> > This code is based on src/time/gettimeofday.c of musl and
+> > sysdeps/unix/sysv/linux/clock_gettime.c of glibc.
+> > 
+> > Both __NR_clock_gettime and __NR_clock_gettime64 are added for
+> > sys_gettimeofday() for they share most of the code.
+> > 
+> > Notes:
+> > 
+> > * Both tv and tz are not directly passed to kernel clock_gettime*
+> >   syscalls, so, it isn't able to check the pointer automatically with the
+> >   get_user/put_user helpers just like kernel gettimeofday syscall does.
+> >   instead, we emulate (but not completely) such checks in our new
+> >   __NR_clock_gettime* branch of nolibc.
+> > 
+> > * kernel clock_gettime* syscalls can not get tz info, just like musl and
+> >   glibc do, we set tz to zero to avoid a random number.
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/include/nolibc/sys.h | 46 ++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 46 insertions(+)
+> > 
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index 2642b380c6aa..ad38cc3856be 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -26,6 +26,7 @@
+> >  
+> >  #include "arch.h"
+> >  #include "errno.h"
+> > +#include "string.h"
+> >  #include "types.h"
+> >  
+> >  
+> > @@ -51,6 +52,11 @@
+> >   * should not be placed here.
+> >   */
+> >  
+> > +/*
+> > + * This is the first address past the end of the text segment (the program code).
+> > + */
+> > +
+> > +extern char etext;
+> >  
+> >  /*
+> >   * int brk(void *addr);
+> > @@ -554,7 +560,47 @@ long getpagesize(void)
+> >  static __attribute__((unused))
+> >  int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
+> >  {
+> > +#ifdef __NR_gettimeofday
+> >  	return my_syscall2(__NR_gettimeofday, tv, tz);
+> > +#elif defined(__NR_clock_gettime) || defined(__NR_clock_gettime64)
+> > +#ifdef __NR_clock_gettime
+> > +	struct timespec ts;
+> > +#else
+> > +	struct timespec64 ts;
+> > +#define __NR_clock_gettime __NR_clock_gettime64
+> > +#endif
+> > +	int ret;
+> > +
+> > +	/* make sure tv pointer is at least after code segment */
+> > +	if (tv != NULL && (char *)tv <= &etext)
+> > +		return -EFAULT;
+> 
+> To me the weird etext comparisions don't seem to be worth it, to be
+> honest.
+>
 
-Newer BIOS on the OneXPlayer added this function aside from string changes.
-Add a board enum to differentiate it from the old OneXplayer Mini AMD BIOS.
+This is the issue we explained in commit message:
 
-Currently known supported boards:
-- AOK ZOE A1
-- OneXPlayer Mini AMD (only newer BIOS version supported)
-- OneXPlayer Mini Pro
+    * Both tv and tz are not directly passed to kernel clock_gettime*
+      syscalls, so, it isn't able to check the pointer automatically with the
+      get_user/put_user helpers just like kernel gettimeofday syscall does.
+      instead, we emulate (but not completely) such checks in our new
+      __NR_clock_gettime* branch of nolibc.
 
-Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
----
-This patch includes the one in https://lore.kernel.org/linux-hwmon/20230526215621.16075-1-samsagax@gmail.com/
-so it should be discarded.
----
- Documentation/hwmon/oxp-sensors.rst |  16 ++++
- drivers/hwmon/oxp-sensors.c         | 140 +++++++++++++++++++++++++++-
- 2 files changed, 153 insertions(+), 3 deletions(-)
+but not that deeply described the direct cause, the direct cause is that the
+test case passes a '(void *)1' and the kernel space of gettimeofday can simply
+'fixup' this issue by the get_user/put_user helpers, but our user-space tv and
+tz code has no such function, just emulate such 'fixup' by a stupid etext
+compare to at least make sure the data pointer is in data range. Welcome better
+solution.
 
-diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/oxp-sensors.rst
-index 4ab442301415..131c89fad03a 100644
---- a/Documentation/hwmon/oxp-sensors.rst
-+++ b/Documentation/hwmon/oxp-sensors.rst
-@@ -19,6 +19,11 @@ out the EC registers and values to write to since the EC layout and model is
- different. Aya Neo devices preceding the AIR may not be supportable as the EC
- model is different and do not appear to have manual control capabilities.
- 
-+Some models have a toggle for changing the behaviour of the "Turbo/Silent"
-+button of the device. It will change the key event that it triggers with
-+a flip of the `tt_toggle` attribute. See below for boards that support this
-+function.
-+
- Supported devices
- -----------------
- 
-@@ -33,6 +38,11 @@ Currently the driver supports the following handhelds:
-  - OneXPlayer mini AMD
-  - OneXPlayer mini AMD PRO
- 
-+"Turbo/Silent" button behaviour toggle is only supported on:
-+ - AOK ZOE A1
-+ - OneXPlayer mini AMD (only with updated alpha BIOS)
-+ - OneXPlayer mini AMD PRO
-+
- Sysfs entries
- -------------
- 
-@@ -49,3 +59,9 @@ pwm1
-   Read Write. Read this attribute to see current duty cycle in the range [0-255].
-   When pwm1_enable is set to "1" (manual) write any value in the range [0-255]
-   to set fan speed.
-+
-+tt_toggle
-+  Read Write. Read this attribute to check the status of the turbo/silent
-+  button behaviour function. Write "1" to activate the switch and "0" to
-+  deactivate it. The specific keycodes and behaviour is specific to the device
-+  both with this function on and off.
-diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index 0ec7588610ad..80fd153253fc 100644
---- a/drivers/hwmon/oxp-sensors.c
-+++ b/drivers/hwmon/oxp-sensors.c
-@@ -47,15 +47,29 @@ enum oxp_board {
- 	aya_neo_air_pro,
- 	aya_neo_geek,
- 	oxp_mini_amd,
-+	oxp_mini_amd_a07,
- 	oxp_mini_amd_pro,
- };
- 
- static enum oxp_board board;
- 
-+/* Fan reading and PWM */
- #define OXP_SENSOR_FAN_REG		0x76 /* Fan reading is 2 registers long */
- #define OXP_SENSOR_PWM_ENABLE_REG	0x4A /* PWM enable is 1 register long */
- #define OXP_SENSOR_PWM_REG		0x4B /* PWM reading is 1 register long */
- 
-+/* Turbo button takeover function
-+ * Older boards have different values and EC registers
-+ * for the same function
-+ */
-+#define OXP_OLD_TURBO_SWITCH_REG	0x1E
-+#define OXP_OLD_TURBO_TAKE_VAL		0x01
-+#define OXP_OLD_TURBO_RETURN_VAL	0x00
-+
-+#define OXP_TURBO_SWITCH_REG		0xF1
-+#define OXP_TURBO_TAKE_VAL		0x40
-+#define OXP_TURBO_RETURN_VAL		0x00
-+
- static const struct dmi_system_id dmi_table[] = {
- 	{
- 		.matches = {
-@@ -104,7 +118,7 @@ static const struct dmi_system_id dmi_table[] = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
- 			DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER mini A07"),
- 		},
--		.driver_data = (void *)oxp_mini_amd,
-+		.driver_data = (void *)oxp_mini_amd_a07,
- 	},
- 	{
- 		.matches = {
-@@ -156,6 +170,108 @@ static int write_to_ec(u8 reg, u8 value)
- 	return ret;
- }
- 
-+/* Turbo button toggle functions */
-+static int tt_toggle_enable(void)
-+{
-+	u8 reg;
-+	u8 val;
-+
-+	switch (board) {
-+	case oxp_mini_amd_a07:
-+		reg = OXP_OLD_TURBO_SWITCH_REG;
-+		val = OXP_OLD_TURBO_TAKE_VAL;
-+		break;
-+	case oxp_mini_amd_pro:
-+	case aok_zoe_a1:
-+		reg = OXP_TURBO_SWITCH_REG;
-+		val = OXP_TURBO_TAKE_VAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return write_to_ec(reg, val);
-+}
-+
-+static int tt_toggle_disable(void)
-+{
-+	u8 reg;
-+	u8 val;
-+
-+	switch (board) {
-+	case oxp_mini_amd_a07:
-+		reg = OXP_OLD_TURBO_SWITCH_REG;
-+		val = OXP_OLD_TURBO_RETURN_VAL;
-+		break;
-+	case oxp_mini_amd_pro:
-+	case aok_zoe_a1:
-+		reg = OXP_TURBO_SWITCH_REG;
-+		val = OXP_TURBO_RETURN_VAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+	return write_to_ec(reg, val);
-+}
-+
-+/* Callbacks for turbo toggle attribute */
-+static ssize_t tt_toggle_store(struct device *dev,
-+			       struct device_attribute *attr, const char *buf,
-+			       size_t count)
-+{
-+	int rval;
-+	unsigned int value;
-+
-+	rval = kstrtouint(buf, 10, &value);
-+	if (rval)
-+		return rval;
-+
-+	switch (value) {
-+	case 0:
-+		rval = tt_toggle_disable();
-+		if (rval)
-+			return rval;
-+		return count;
-+	case 1:
-+		rval = tt_toggle_enable();
-+		if (rval)
-+			return rval;
-+		return count;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static ssize_t tt_toggle_show(struct device *dev,
-+			      struct device_attribute *attr, char *buf)
-+{
-+	int retval;
-+	u8 reg;
-+	long val;
-+
-+	switch (board) {
-+	case oxp_mini_amd_a07:
-+		reg = OXP_OLD_TURBO_SWITCH_REG;
-+		val = OXP_OLD_TURBO_RETURN_VAL;
-+		break;
-+	case oxp_mini_amd_pro:
-+	case aok_zoe_a1:
-+		reg = OXP_TURBO_SWITCH_REG;
-+		val = OXP_TURBO_RETURN_VAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	retval = read_from_ec(reg, 1, &val);
-+	if (retval)
-+		return retval;
-+
-+	return sysfs_emit(buf, "%ld\n", val);
-+}
-+
-+static DEVICE_ATTR_RW(tt_toggle);
-+
-+/* PWM enable/disable functions */
- static int oxp_pwm_enable(void)
- {
- 	return write_to_ec(OXP_SENSOR_PWM_ENABLE_REG, 0x01);
-@@ -206,6 +322,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 			case aya_neo_air_pro:
- 			case aya_neo_geek:
- 			case oxp_mini_amd:
-+			case oxp_mini_amd_a07:
- 				*val = (*val * 255) / 100;
- 				break;
- 			case oxp_mini_amd_pro:
-@@ -247,6 +364,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
- 			case aya_neo_air_pro:
- 			case aya_neo_geek:
- 			case oxp_mini_amd:
-+			case oxp_mini_amd_a07:
- 				val = (val * 100) / 255;
- 				break;
- 			case aok_zoe_a1:
-@@ -274,6 +392,13 @@ static const struct hwmon_channel_info * const oxp_platform_sensors[] = {
- 	NULL,
- };
- 
-+static struct attribute *oxp_ec_attrs[] = {
-+	&dev_attr_tt_toggle.attr,
-+	NULL
-+};
-+
-+ATTRIBUTE_GROUPS(oxp_ec);
-+
- static const struct hwmon_ops oxp_ec_hwmon_ops = {
- 	.is_visible = oxp_ec_hwmon_is_visible,
- 	.read = oxp_platform_read,
-@@ -305,8 +430,17 @@ static int oxp_platform_probe(struct platform_device *pdev)
- 
- 	board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
- 
--	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
--						     &oxp_ec_chip_info, NULL);
-+	switch (board) {
-+	case aok_zoe_a1:
-+	case oxp_mini_amd_a07:
-+	case oxp_mini_amd_pro:
-+		hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
-+							     &oxp_ec_chip_info, oxp_ec_groups);
-+		break;
-+	default:
-+		hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
-+							     &oxp_ec_chip_info, NULL);
-+	}
- 
- 	return PTR_ERR_OR_ZERO(hwdev);
- }
--- 
-2.40.1
+    CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
+    CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
 
+Without this ugly check, the above cases would get such error:
+
+    35 gettimeofday_bad1init[1]: unhandled signal 11 code 0x1 at 0x00000002 in init[10000+5000]
+    CPU: 0 PID: 1 Comm: init Not tainted 6.4.0-rc1-00134-gf929c7b7184f-dirty #20
+    Hardware name: riscv-virtio,qemu (DT)
+    epc : 00012ccc ra : 00012ca8 sp : 9d254d90
+     gp : 00016800 tp : 00000000 t0 : 00000000
+     t1 : 0000000a t2 : 00000000 s0 : 00000001
+     s1 : 00016008 a0 : 00000000 a1 : 9d254da8
+     a2 : 00000014 a3 : 00000000 a4 : 00000000
+     a5 : 00000000 a6 : 00000001 a7 : 00000193
+     s2 : 00000023 s3 : 9d254da4 s4 : 00000000
+     s5 : 00000000 s6 : 0000541b s7 : 00000007
+     s8 : 9d254dcc s9 : 000144e8 s10: 00016000
+     s11: 00000006 t3 : 00000000 t4 : ffffffff
+     t5 : 00000000 t6 : 00000000
+    status: 00000020 badaddr: 00000002 cause: 0000000f
+
+Will at least append this test error in the commit message of the coming new
+revision of this patch.
+
+Hi, Willy, this also require your discussion, simply remove the above
+two test cases may be not a good idea too, the check for gettimeofday is
+perfectly ok.
+
+The same 'emulate' method is used in the waitid patch, but that only
+requires to compare 'pid == INT_MIN', which is not that weird.
+
+> > +
+> > +	/* set tz to zero to avoid random number */
+> > +	if (tz != NULL) {
+> > +		if ((char *)tz > &etext)
+> > +			memset(tz, 0, sizeof(struct timezone));
+> > +		else
+> > +			return -EFAULT;
+> > +	}
+> > +
+
+The same issue here.
+
+> > +	if (tv == NULL)
+> > +		return 0;
+> > +
+> > +	ret = my_syscall2(__NR_clock_gettime, CLOCK_REALTIME, &ts);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	tv->tv_sec = (time_t) ts.tv_sec;
+> > +#ifdef __NR_clock_gettime64
+> 
+> Nitpick:
+> 
+> While this ifdef works and is correct its logic is a bit indirect.
+> If it is copied to some other function in the future it may be incorrect
+> there.
+> 
+> Without the #ifdef the compiler should still be able to optimize the
+> code away.
+
+Ok, will remove the #ifdef wrapper, let the compiler optimize itself.
+
+Thanks,
+Zhangjin
+
+> 
+> > +	if (tv->tv_sec != ts.tv_sec)
+> > +		return -EOVERFLOW;
+> > +#endif
+> > +
+> > +	tv->tv_usec = ts.tv_nsec / 1000;
+> > +	return 0;
+> > +#else
+> > +#error None of __NR_gettimeofday, __NR_clock_gettime and __NR_clock_gettime64 defined, cannot implement sys_gettimeofday()
+> > +#endif
+> >  }
+> >  
+> >  static __attribute__((unused))
+> > -- 
+> > 2.25.1
+> > 
