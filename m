@@ -2,121 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74AD713244
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA1F713262
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 05:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjE0D4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 23:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60940 "EHLO
+        id S231876AbjE0D7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 23:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbjE0D4a (ORCPT
+        with ESMTP id S231611AbjE0D7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 26 May 2023 23:56:30 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C9919A
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 20:56:26 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96fa4a6a79bso207409166b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 20:56:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685159785; x=1687751785;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zcxx+uBeHJ8GiGdDOZOOVVIqwP9cLUm7L1SVeB9sLvM=;
-        b=xE6160P9Zr4wEkT61Vr5IkbHXpmY1HjWeK774oQn5uOLjZ2QEShy9mhrvVb4HqrxNS
-         Z6YAg0LrJSUZi4tWr0CbVwQP+J5RhaPpDHoV4HUQHCB33J/wh1mvABD2dO+suyipiw9p
-         QCz+GmmD3/0o1Pyp7lX+CznaXnTzdYR0Id4oWQEPZ5F2ga6slqiCNJPehrr+OrqLM2d1
-         Whe/YslfEdc084vxdVSFYv/Jl+2Z69RrvRZpAXfhZZiPq2ClZnt9quqrkENE6BIROcRp
-         P+9RUjet0hlHRR4Qtj6bY4XtxobK8M7zWElCDxcqPoakr+NiUD5EL3rinGOj0K2M14QT
-         nKRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685159785; x=1687751785;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zcxx+uBeHJ8GiGdDOZOOVVIqwP9cLUm7L1SVeB9sLvM=;
-        b=WuEu1PlEVtprW76RgR/Cjv0HGMRYhrJOcoSxqc8FZZ1TQS4Ax+/uuCdpZPKMjpZCh0
-         Ixws9/AS6H6FA94/8FQRe8VegwtBIr9F5wEvvnT1rgnQnshSEN/UDIZ5u0hUWfQTJJfs
-         aiVWaG2QvaX1b+zDyoTnQs5k6tAGrKrN7DRDmPGd3wovDNaPbw7m9wbrbJl4MZMPgJJz
-         HPXm5TTrI2KtmuAxZGdG1qJNLg04vwDOVX5NBRMYJRAEkmAiMizOfu21oc+4F22HAdNG
-         Xs34dwud8ioncwDoRZB/vewHlQGLHY7+ZCavBE+qMFPGNL2b7y0d79KgfmZO0gnSGgzs
-         oWAg==
-X-Gm-Message-State: AC+VfDwcHcaiRxk/XMubH8/gZAs2cRyEBwLQYBq/xGnUnxiDTETSbHqf
-        +x49x34KC36sGMxdaQD2VdarwoRnrJN/IKADgzsZnw==
-X-Google-Smtp-Source: ACHHUZ6Frq44/ZM1/LAefqKVo+JOcYtTAHNn83kaMix4r51rZzunIi70oDj7h1R4lHYEPc3BxQhVVEKHW1NueeZXB+8=
-X-Received: by 2002:a17:907:9455:b0:94f:1c90:cb71 with SMTP id
- dl21-20020a170907945500b0094f1c90cb71mr5112500ejc.65.1685159785332; Fri, 26
- May 2023 20:56:25 -0700 (PDT)
+        Fri, 26 May 2023 23:59:04 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B972B125;
+        Fri, 26 May 2023 20:58:38 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34R3q8fY008468;
+        Sat, 27 May 2023 03:58:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0QF93uSv/DLQZOFi/xWf93K/LVY+8cfaVZEUODalsG0=;
+ b=c925ZmCzzmiFsT4YbXYn7cZOrvf3a4Qf8GLMrw0HTfY2VJ/gFyTeDAKpkvZNsNKofdqG
+ cGdTxkO7CS/vvNyU7Q6YYfUK0oriR/cFQeIno/nyv4lo27N3qd9ijnUg8tfN9bHb4SBh
+ VugYhQSL2NM4ktNxz+7ensY7p8f8IzSyRT7YSAWCYEJ390pOaV1yxmoSbSCwVNCuQi4c
+ OZij5iSJO848oalsMKeEhkH941rdCIltY/VUl/aoK2+G2XV0TVjmhbs+44SJx0fzUyZr
+ r+ATZbFKSoGgWa51jEbX5Rxxi9Iq9IGgsYbbhjUBaBFXrM4RAvSuCW0weTXcEVGju/WQ 6Q== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qu7jn0614-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 May 2023 03:58:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34R3wSKW009270
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 May 2023 03:58:28 GMT
+Received: from [10.216.21.92] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 26 May
+ 2023 20:58:23 -0700
+Message-ID: <353f6b1e-4729-19a8-d792-5acc66cb2a1b@quicinc.com>
+Date:   Sat, 27 May 2023 09:28:18 +0530
 MIME-Version: 1.0
-References: <20230527093353.153078-1-linmiaohe@huawei.com>
-In-Reply-To: <20230527093353.153078-1-linmiaohe@huawei.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 26 May 2023 20:55:49 -0700
-Message-ID: <CAJD7tkbY0kXbb3r3ObgOjmSa5kmw7n1uhN=Opvumty3=i9Ev0g@mail.gmail.com>
-Subject: Re: [PATCH] cgroup: remove unused macro for_each_e_css()
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     lizefan.x@bytedance.com, tj@kernel.org, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v5 3/5] soc: qcom: smem: introduce qcom_smem_get_soc_id()
+To:     Robert Marko <robimarko@gmail.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <ilia.lin@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <ansuelsmth@gmail.com>
+References: <20230526204802.3081168-1-robimarko@gmail.com>
+ <20230526204802.3081168-3-robimarko@gmail.com>
+Content-Language: en-US
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <20230526204802.3081168-3-robimarko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: lpbRshXcyH0KDu74ctXbWJjkzk3B52O0
+X-Proofpoint-GUID: lpbRshXcyH0KDu74ctXbWJjkzk3B52O0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-27_01,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 mlxlogscore=999 spamscore=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 phishscore=0 suspectscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305270031
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 6:43=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> w=
-rote:
+
+On 5/27/2023 2:18 AM, Robert Marko wrote:
+> Introduce a helper to return the SoC SMEM ID, which is used to identify the
+> exact SoC model as there may be differences in the same SoC family.
 >
-> for_each_e_css() is unused now. Remove it.
+> Currently, cpufreq-nvmem does this completely in the driver and there has
+> been more interest expresed for other drivers to use this information so
+> lets expose a common helper to prevent redoing it in individual drivers
+> since this field is present on every SMEM table version.
+
+
+LGTM,
+
+Reviewed-by: Kathiravan T <quic_kathirav@quicinc.com>
+
+
 >
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-
-LGTM. I can't see any references in Linus's tree or mm-unstable.
-
-Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
-
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
->  kernel/cgroup/cgroup.c | 15 ---------------
->  1 file changed, 15 deletions(-)
+> Changes in v5:
+> * Convert the __le32 ID to CPU endinaness
 >
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 625d7483951c..413b4f1f1b70 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -689,21 +689,6 @@ EXPORT_SYMBOL_GPL(of_css);
->                                 lockdep_is_held(&cgroup_mutex)))) { }   \
->                 else
+> Changes in v4:
+> * Change helper name to qcom_smem_get_soc_id()
+> * Remove len and just pass NULL, that is sufficient here
 >
-> -/**
-> - * for_each_e_css - iterate all effective css's of a cgroup
-> - * @css: the iteration cursor
-> - * @ssid: the index of the subsystem, CGROUP_SUBSYS_COUNT after reaching=
- the end
-> - * @cgrp: the target cgroup to iterate css's of
-> - *
-> - * Should be called under cgroup_[tree_]mutex.
-> - */
-> -#define for_each_e_css(css, ssid, cgrp)                                 =
-           \
-> -       for ((ssid) =3D 0; (ssid) < CGROUP_SUBSYS_COUNT; (ssid)++)       =
-     \
-> -               if (!((css) =3D cgroup_e_css_by_mask(cgrp,               =
-     \
-> -                                                  cgroup_subsys[(ssid)])=
-)) \
-> -                       ;                                                =
-   \
-> -               else
-> -
->  /**
->   * do_each_subsys_mask - filter for_each_subsys with a bitmask
->   * @ss: the iteration cursor
-> --
-> 2.27.0
+> Changes in v3:
+> * Change export to EXPORT_SYMBOL_GPL
+> * Use an argument for returning SoC ID
+> * Update kerneldoc
+> ---
+>   drivers/soc/qcom/smem.c       | 23 +++++++++++++++++++++++
+>   include/linux/soc/qcom/smem.h |  2 ++
+>   2 files changed, 25 insertions(+)
 >
+> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+> index bc98520c4969..b0d59e815c3b 100644
+> --- a/drivers/soc/qcom/smem.c
+> +++ b/drivers/soc/qcom/smem.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/sizes.h>
+>   #include <linux/slab.h>
+>   #include <linux/soc/qcom/smem.h>
+> +#include <linux/soc/qcom/socinfo.h>
+>   
+>   /*
+>    * The Qualcomm shared memory system is a allocate only heap structure that
+> @@ -772,6 +773,28 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
+>   }
+>   EXPORT_SYMBOL_GPL(qcom_smem_virt_to_phys);
+>   
+> +/**
+> + * qcom_smem_get_soc_id() - return the SoC ID
+> + * @id:	On success, we return the SoC ID here.
+> + *
+> + * Look up SoC ID from HW/SW build ID and return it.
+> + *
+> + * Return: 0 on success, negative errno on failure.
+> + */
+> +int qcom_smem_get_soc_id(u32 *id)
+> +{
+> +	struct socinfo *info;
+> +
+> +	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, NULL);
+> +	if (IS_ERR(info))
+> +		return PTR_ERR(info);
+> +
+> +	*id = __le32_to_cpu(info->id);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_smem_get_soc_id);
+> +
+>   static int qcom_smem_get_sbl_version(struct qcom_smem *smem)
+>   {
+>   	struct smem_header *header;
+> diff --git a/include/linux/soc/qcom/smem.h b/include/linux/soc/qcom/smem.h
+> index 86e1b358688a..223db6a9c733 100644
+> --- a/include/linux/soc/qcom/smem.h
+> +++ b/include/linux/soc/qcom/smem.h
+> @@ -11,4 +11,6 @@ int qcom_smem_get_free_space(unsigned host);
+>   
+>   phys_addr_t qcom_smem_virt_to_phys(void *p);
+>   
+> +int qcom_smem_get_soc_id(u32 *id);
+> +
+>   #endif
