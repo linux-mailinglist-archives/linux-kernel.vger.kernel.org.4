@@ -2,153 +2,405 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3C07135A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4954C7135B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 18:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbjE0QNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 12:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S229586AbjE0QQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 12:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbjE0QNN (ORCPT
+        with ESMTP id S229497AbjE0QQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 12:13:13 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0FDC7;
-        Sat, 27 May 2023 09:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685203992; x=1716739992;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=HRz+uuIx0+xElN7wrpO41PLA0XnkoBsOOVf57+jeZVs=;
-  b=ZZMBbPpx1urJOoHlk0vM/AqUaNE/ODOB4pvalvXDp3HJGbYuu+Wyfkdf
-   yUPy06tqRlWatytujwB7wmoMia3wY6CmDVwg/hr+XYbAtch5r3CB1moca
-   q/BYabtFaq30THFruo1zQLoB/8uRO2DTYlxVYV1souoeQJSolfIhME59Q
-   8HRgRffyep8c8bL1axPH5+gCay7vQWTo30uMVZmpwnwpOu+V0LnZoZzhd
-   j74nJfD7tQmfmODr73d+mPiR0jmtLCnkEZj3R43xpziy2p/aDeRmOYwtf
-   RSdUPoRkQlB+jtTI+4JBKhf7Nfp9idVPiabVAqjhf7AGcSySlOEd1zFp9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="356796430"
-X-IronPort-AV: E=Sophos;i="6.00,197,1681196400"; 
-   d="scan'208";a="356796430"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 09:13:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="1035682343"
-X-IronPort-AV: E=Sophos;i="6.00,197,1681196400"; 
-   d="scan'208";a="1035682343"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 27 May 2023 09:13:06 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q2wXS-000K3U-0t;
-        Sat, 27 May 2023 16:13:06 +0000
-Date:   Sun, 28 May 2023 00:12:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Min Li <lm0963hack@gmail.com>, alexander.deucher@amd.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, sumit.semwal@linaro.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH] drm/radeon: fix race condition UAF in
- radeon_gem_set_domain_ioctl
-Message-ID: <202305272311.JHzuoUJZ-lkp@intel.com>
-References: <20230526123753.16160-1-lm0963hack@gmail.com>
+        Sat, 27 May 2023 12:16:17 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F426DF
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:16:13 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f4f8b94c06so30427e87.1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 09:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685204171; x=1687796171;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JzqcMXV8aXA/E+ztgmw9/NYRg5djZnCXl7rg+fvKKrc=;
+        b=TtMAQUviQJGDF72CxJTvYtB5tPNXNF9VrGvM7O32PAiE28IptQtNzU5U1Ci0pS3Q91
+         Fg28aqMjXlZQrZU9jIig/mffAquE6EuETpOdOd0ASBJ38c3w8sntsNI3Q7qlIBep++eA
+         /xo70HT+P2aanYp0tqSCWWpa+ojpMu5E6y96isiGlQKtweI1GfYpj86fbpKPF6XqlxvA
+         KmWfi5J7Xa0Cox/8FKrUNRiREiEyGFB0cUjBPxk1PiQbpk4jl8fCMShVHa8uIZlQWY1Q
+         QlQPHeuZsGvBLoaf+QSN77hPQt3+z+iNnPWtyxCQa61eIDmU8rG43o7aVUpYPN5WfVpn
+         a94g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685204171; x=1687796171;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JzqcMXV8aXA/E+ztgmw9/NYRg5djZnCXl7rg+fvKKrc=;
+        b=ZcE/Rd0qZPzSD9dv05ySqE76gVxDu3qSupDrzRUASP5TkXqANtUNQdY0r8mQ+Ezeb/
+         hVJzZCIKjwdDZbaEw7bvvm9ON6HW1ovV0cGTTVHg2ozdhROa8aeiQQZTqJLeVwH0x6YL
+         ZjfT28D8smDZHstumrV+C5FzpJ9Po5+pV9D0RWdvxrWUn+B6lCAms+9NXF2I34EncnNM
+         Ydaz0fIloTKSfZ6dVx/9jICROtJCL4bOQkLsgg61QPfAn1kT4bUGsjCG3AH96KbbQsYc
+         ixCXDCz2VJpC9NJh67M9tn5dMoIs9av5+8kdlzOIQoaTeoOakmQ0KVlYQ1OqUofhXZb+
+         7o6w==
+X-Gm-Message-State: AC+VfDzJyYhwnKzbiRWkOIIJMS4PgvN1Urx71hPii3/D90mYDLQUo7M/
+        NqyXkz2oRQPc1WD02S9zN58PHA==
+X-Google-Smtp-Source: ACHHUZ4VFGTXe0x62XEJ3vBr9o9yIQ7A76CQBcp/c/JXEH03cAQIi/MjgGe/3z2upGj/n3XlhGanVg==
+X-Received: by 2002:a05:6512:64:b0:4f0:c18:5114 with SMTP id i4-20020a056512006400b004f00c185114mr1623049lfo.26.1685204171275;
+        Sat, 27 May 2023 09:16:11 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id x14-20020a19f60e000000b004efe9a169d2sm1175071lfe.64.2023.05.27.09.16.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 May 2023 09:16:10 -0700 (PDT)
+Message-ID: <f2ed6b88-13df-8df7-55e0-5d11bf5a1ef0@linaro.org>
+Date:   Sat, 27 May 2023 18:16:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230526123753.16160-1-lm0963hack@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 2/3] arm64: dts: qcom: msm8996pro: Add CBF scaling
+ support
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230527093934.101335-1-y.oudjana@protonmail.com>
+ <20230527093934.101335-3-y.oudjana@protonmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230527093934.101335-3-y.oudjana@protonmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Min,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v6.4-rc3 next-20230525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Min-Li/drm-radeon-fix-race-condition-UAF-in-radeon_gem_set_domain_ioctl/20230527-155623
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230526123753.16160-1-lm0963hack%40gmail.com
-patch subject: [PATCH] drm/radeon: fix race condition UAF in radeon_gem_set_domain_ioctl
-config: riscv-randconfig-r042-20230526 (https://download.01.org/0day-ci/archive/20230527/202305272311.JHzuoUJZ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/66fb975494d21e80b90235b7d8bf0953990c5c89
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Min-Li/drm-radeon-fix-race-condition-UAF-in-radeon_gem_set_domain_ioctl/20230527-155623
-        git checkout 66fb975494d21e80b90235b7d8bf0953990c5c89
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/radeon/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305272311.JHzuoUJZ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/radeon/radeon_gem.c:462:20: warning: variable 'robj' set but not used [-Wunused-but-set-variable]
-           struct radeon_bo *robj;
-                             ^
-   1 warning generated.
 
 
-vim +/robj +462 drivers/gpu/drm/radeon/radeon_gem.c
+On 27.05.2023 11:39, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> Add opp-peak-kBps to CPU OPPs to allow for CBF scaling, and change the
+> CBF compatible to reflect the difference between it and the one on
+> MSM8996.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-f72a113a71ab08 Christian König 2014-08-07  453  
-771fe6b912fca5 Jerome Glisse   2009-06-05  454  int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
-771fe6b912fca5 Jerome Glisse   2009-06-05  455  				struct drm_file *filp)
-771fe6b912fca5 Jerome Glisse   2009-06-05  456  {
-771fe6b912fca5 Jerome Glisse   2009-06-05  457  	/* transition the BO to a domain -
-771fe6b912fca5 Jerome Glisse   2009-06-05  458  	 * just validate the BO into a certain domain */
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  459  	struct radeon_device *rdev = dev->dev_private;
-771fe6b912fca5 Jerome Glisse   2009-06-05  460  	struct drm_radeon_gem_set_domain *args = data;
-771fe6b912fca5 Jerome Glisse   2009-06-05  461  	struct drm_gem_object *gobj;
-4c7886791264f0 Jerome Glisse   2009-11-20 @462  	struct radeon_bo *robj;
-771fe6b912fca5 Jerome Glisse   2009-06-05  463  	int r;
-771fe6b912fca5 Jerome Glisse   2009-06-05  464  
-771fe6b912fca5 Jerome Glisse   2009-06-05  465  	/* for now if someone requests domain CPU -
-771fe6b912fca5 Jerome Glisse   2009-06-05  466  	 * just make sure the buffer is finished with */
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  467  	down_read(&rdev->exclusive_lock);
-771fe6b912fca5 Jerome Glisse   2009-06-05  468  
-771fe6b912fca5 Jerome Glisse   2009-06-05  469  	/* just do a BO wait for now */
-a8ad0bd84f9860 Chris Wilson    2016-05-09  470  	gobj = drm_gem_object_lookup(filp, args->handle);
-771fe6b912fca5 Jerome Glisse   2009-06-05  471  	if (gobj == NULL) {
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  472  		up_read(&rdev->exclusive_lock);
-bf79cb914dbfe8 Chris Wilson    2010-08-04  473  		return -ENOENT;
-771fe6b912fca5 Jerome Glisse   2009-06-05  474  	}
-7e4d15d90afe46 Daniel Vetter   2011-02-18  475  	robj = gem_to_radeon_bo(gobj);
-771fe6b912fca5 Jerome Glisse   2009-06-05  476  
-771fe6b912fca5 Jerome Glisse   2009-06-05  477  	r = radeon_gem_set_domain(gobj, args->read_domains, args->write_domain);
-771fe6b912fca5 Jerome Glisse   2009-06-05  478  
-f11fb66ae92193 Emil Velikov    2020-05-15  479  	drm_gem_object_put(gobj);
-dee53e7fb3ee01 Jerome Glisse   2012-07-02  480  	up_read(&rdev->exclusive_lock);
-66fb975494d21e Min Li          2023-05-26  481  	r = radeon_gem_handle_lockup(rdev, r);
-771fe6b912fca5 Jerome Glisse   2009-06-05  482  	return r;
-771fe6b912fca5 Jerome Glisse   2009-06-05  483  }
-771fe6b912fca5 Jerome Glisse   2009-06-05  484  
+Now let's sprinkle some BWMON, CPR and GPMU and 8996 will be
+fairly complete as far as the core hw goes.. At last!
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
+>  arch/arm64/boot/dts/qcom/msm8996pro.dtsi | 51 ++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8996pro.dtsi b/arch/arm64/boot/dts/qcom/msm8996pro.dtsi
+> index a679a9c0cf99..b74cff06f300 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8996pro.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8996pro.dtsi
+> @@ -24,101 +24,121 @@ opp-307200000 {
+>  			opp-hz = /bits/ 64 <307200000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <192000>;
+>  		};
+>  		opp-384000000 {
+>  			opp-hz = /bits/ 64 <384000000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <192000>;
+>  		};
+>  		opp-460800000 {
+>  			opp-hz = /bits/ 64 <460800000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <192000>;
+>  		};
+>  		opp-537600000 {
+>  			opp-hz = /bits/ 64 <537600000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <192000>;
+>  		};
+>  		opp-614400000 {
+>  			opp-hz = /bits/ 64 <614400000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <192000>;
+>  		};
+>  		opp-691200000 {
+>  			opp-hz = /bits/ 64 <691200000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <307200>;
+>  		};
+>  		opp-768000000 {
+>  			opp-hz = /bits/ 64 <768000000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <307200>;
+>  		};
+>  		opp-844800000 {
+>  			opp-hz = /bits/ 64 <844800000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <384000>;
+>  		};
+>  		opp-902400000 {
+>  			opp-hz = /bits/ 64 <902400000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <441600>;
+>  		};
+>  		opp-979200000 {
+>  			opp-hz = /bits/ 64 <979200000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <537600>;
+>  		};
+>  		opp-1056000000 {
+>  			opp-hz = /bits/ 64 <1056000000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <614400>;
+>  		};
+>  		opp-1132800000 {
+>  			opp-hz = /bits/ 64 <1132800000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <691200>;
+>  		};
+>  		opp-1209600000 {
+>  			opp-hz = /bits/ 64 <1209600000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <768000>;
+>  		};
+>  		opp-1286400000 {
+>  			opp-hz = /bits/ 64 <1286400000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <844800>;
+>  		};
+>  		opp-1363200000 {
+>  			opp-hz = /bits/ 64 <1363200000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <902400>;
+>  		};
+>  		opp-1440000000 {
+>  			opp-hz = /bits/ 64 <1440000000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <979200>;
+>  		};
+>  		opp-1516800000 {
+>  			opp-hz = /bits/ 64 <1516800000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1132800>;
+>  		};
+>  		opp-1593600000 {
+>  			opp-hz = /bits/ 64 <1593600000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1190400>;
+>  		};
+>  		opp-1996800000 {
+>  			opp-hz = /bits/ 64 <1996800000>;
+>  			opp-supported-hw = <0x20>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1516800>;
+>  		};
+>  		opp-2188800000 {
+>  			opp-hz = /bits/ 64 <2188800000>;
+>  			opp-supported-hw = <0x10>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1593600>;
+>  		};
+>  	};
+>  
+> @@ -131,136 +151,163 @@ opp-307200000 {
+>  			opp-hz = /bits/ 64 <307200000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <192000>;
+>  		};
+>  		opp-384000000 {
+>  			opp-hz = /bits/ 64 <384000000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <192000>;
+>  		};
+>  		opp-460800000 {
+>  			opp-hz = /bits/ 64 <460800000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <192000>;
+>  		};
+>  		opp-537600000 {
+>  			opp-hz = /bits/ 64 <537600000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <192000>;
+>  		};
+>  		opp-614400000 {
+>  			opp-hz = /bits/ 64 <614400000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <192000>;
+>  		};
+>  		opp-691200000 {
+>  			opp-hz = /bits/ 64 <691200000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <307200>;
+>  		};
+>  		opp-748800000 {
+>  			opp-hz = /bits/ 64 <748800000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <307200>;
+>  		};
+>  		opp-825600000 {
+>  			opp-hz = /bits/ 64 <825600000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <384000>;
+>  		};
+>  		opp-902400000 {
+>  			opp-hz = /bits/ 64 <902400000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <441600>;
+>  		};
+>  		opp-979200000 {
+>  			opp-hz = /bits/ 64 <979200000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <441600>;
+>  		};
+>  		opp-1056000000 {
+>  			opp-hz = /bits/ 64 <1056000000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <537600>;
+>  		};
+>  		opp-1132800000 {
+>  			opp-hz = /bits/ 64 <1132800000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <614400>;
+>  		};
+>  		opp-1209600000 {
+>  			opp-hz = /bits/ 64 <1209600000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <691200>;
+>  		};
+>  		opp-1286400000 {
+>  			opp-hz = /bits/ 64 <1286400000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <768000>;
+>  		};
+>  		opp-1363200000 {
+>  			opp-hz = /bits/ 64 <1363200000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <844800>;
+>  		};
+>  		opp-1440000000 {
+>  			opp-hz = /bits/ 64 <1440000000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <902400>;
+>  		};
+>  		opp-1516800000 {
+>  			opp-hz = /bits/ 64 <1516800000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <979200>;
+>  		};
+>  		opp-1593600000 {
+>  			opp-hz = /bits/ 64 <1593600000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1056000>;
+>  		};
+>  		opp-1670400000 {
+>  			opp-hz = /bits/ 64 <1670400000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1132800>;
+>  		};
+>  		opp-1747200000 {
+>  			opp-hz = /bits/ 64 <1747200000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1190400>;
+>  		};
+>  		opp-1824000000 {
+>  			opp-hz = /bits/ 64 <1824000000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1286400>;
+>  		};
+>  		opp-1900800000 {
+>  			opp-hz = /bits/ 64 <1900800000>;
+>  			opp-supported-hw = <0x70>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1363200>;
+>  		};
+>  		opp-1977600000 {
+>  			opp-hz = /bits/ 64 <1977600000>;
+>  			opp-supported-hw = <0x30>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1440000>;
+>  		};
+>  		opp-2054400000 {
+>  			opp-hz = /bits/ 64 <2054400000>;
+>  			opp-supported-hw = <0x30>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1516800>;
+>  		};
+>  		opp-2150400000 {
+>  			opp-hz = /bits/ 64 <2150400000>;
+>  			opp-supported-hw = <0x30>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1593600>;
+>  		};
+>  		opp-2246400000 {
+>  			opp-hz = /bits/ 64 <2246400000>;
+>  			opp-supported-hw = <0x10>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1593600>;
+>  		};
+>  		opp-2342400000 {
+>  			opp-hz = /bits/ 64 <2342400000>;
+>  			opp-supported-hw = <0x10>;
+>  			clock-latency-ns = <200000>;
+> +			opp-peak-kBps = <1593600>;
+>  		};
+>  	};
+>  };
+> @@ -289,3 +336,7 @@ opp-560000000 {
+>  	};
+>  	/* The rest is inherited from msm8996 */
+>  };
+> +
+> +&cbf {
+> +	compatible = "qcom,msm8996pro-cbf";
+> +};
