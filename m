@@ -2,177 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B163B713391
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 11:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A259713393
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 11:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjE0JCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 05:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S231842AbjE0JGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 05:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjE0JCM (ORCPT
+        with ESMTP id S231433AbjE0JGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 05:02:12 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9A1124
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 02:02:10 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f51ea3a062so61111cf.1
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 02:02:10 -0700 (PDT)
+        Sat, 27 May 2023 05:06:46 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CF7E3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 02:06:45 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64d3578c25bso2103805b3a.3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 02:06:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685178129; x=1687770129;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x4mYc+5P7xLv/3nDjP8/NukFC/EP2kNlXAJ8peaiKoM=;
-        b=Ngr68t0OybRZlznOAZcG4RmjJl5s292ixJ0IWNI1+ds18AsEkT6daf/2TEyv6bUF/g
-         Owc/XDS2vBH0dXVZ+08SfZrbyJDdHawRmpMMfphpwvvfYUHGbIeSUTEDWVXd9e+rpS4x
-         HR150XJcifJ+ZjseUu0oiLR4/8ICWuURPcHzkqPHlfcyXCIAfco8exUN6aWHN6c9I8w1
-         ryicADFlY5JAjhwBOmSrFCFHn2EuY6APWP3Iohg5OFcq5ca43gNSnBEfIOn7gyjU9A+m
-         fDhe0G0EjSBCvtNUofxe0FwZhQPYMcWFNOrh/ddRY79ffNG31Tbg9myejA6XEDJrTCEo
-         byxA==
+        d=linaro.org; s=google; t=1685178405; x=1687770405;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Th/2CdkYSffxqn+a5kfATTdZzNBhiqjv8/1oEFRsaQ8=;
+        b=swpKci/XFYc82knSogXS3iRF6oaRbVxcKOC3km53iIFTc4IUoWmJLA5Ym/gTJVjirQ
+         IDmaUDmh3mK9Wgg4abfbgEMHihj1W3Kpb+XX16Supshd9Y1UFFRZapWsGbJ4eWUIKNnP
+         vXKFUU5W+Tl01eJeicZII5BFwIAhq2c5wgctdvDywSvxO519UV5GeX/wcfKFeD/ylHTp
+         97iv6To8vC0uc9iuhm1vXbUh3GrikszWBxu7CfJ3fi/ON5ktra8+b0GgLomyoGJPL/rY
+         HKICfPdWZxQj6nKtsquTYDZLzpFPo5XqhtKGwq+5VR944qkR2hI6ygkiygv2icjPnq6P
+         EULQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685178129; x=1687770129;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x4mYc+5P7xLv/3nDjP8/NukFC/EP2kNlXAJ8peaiKoM=;
-        b=ShVyCxHNeKvupPKugGeMXWlxV7bjePqVHzHr9eJic6je/K4bOuxG/CFCBcl+aN5I/1
-         OOUCQjuspj71JBWbu849srDfcdgyGfQlKpMjEH6zH2EgNFrOi76iaSLm0RY2ba3H2sK0
-         G8FdcRTeiVLoZdKdqS73iU05J7bDYBRSe75136mSdEEarlOLpFE2WS8n/ioj0wUTZfeB
-         /LWuziKwHdMRiSq8YfiZ5RrVPD2sP/CvWoXPhOnuQ8bTOl7fRoSrdbImnoglUGOl1fM8
-         BoSLC1kAibuP13Nj8IuVwRboi9VqXCH2X6o90Ya77z/R4J7M7+/+HzA0Q7IPmxSltl8w
-         X1Rw==
-X-Gm-Message-State: AC+VfDyKbtTY7rnEU7Ar9HBI4Caauxb9m7KdbXY9g1lZN+GP1753tatg
-        dzY8VIR+/AuYPoxdSEcOdQkSm6Wf35HG8np+20GnTQ==
-X-Google-Smtp-Source: ACHHUZ7pB8UxTMgbgOeUbvVYCMmnpqS58LanaGmRiPvPWVG//rvDvjmu7Hw9WyN7YO1lIVm84uEjgHOa+C3eZ8QQiR4=
-X-Received: by 2002:ac8:5808:0:b0:3ee:d8fe:6f5c with SMTP id
- g8-20020ac85808000000b003eed8fe6f5cmr78560qtg.1.1685178129083; Sat, 27 May
- 2023 02:02:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685178405; x=1687770405;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Th/2CdkYSffxqn+a5kfATTdZzNBhiqjv8/1oEFRsaQ8=;
+        b=TiP5RXydS1Z0rQ7yQV1POCTb58krefN/5rDUZND9RTekwygCEX91EMDZ5vzQNfJTVg
+         y79h8QEhPioRJvund4KuCpTpEpyB2UEnFUiiW7fGACnr0QO6a2Ddu2h9l55f9uAD0ul4
+         2c1NbP2TbN2TLyAcx3lPjxaTwZCvTilIlylBcepXGlp4SVdevG46FTQaTEW9p8VBsH0H
+         I9dpj+IZvtO2tVR+6Vf08xD3TCoCuggr2OpIFFDeEQSYa3d84uH3rnuoz2l8K7jJKmUD
+         FQWXMalU2zjPhN5HaKNWmCpmoyBmMvWIUOHJjHPrPDVZ/6JK8YdynGIn89vby7jQGJyT
+         UHLw==
+X-Gm-Message-State: AC+VfDyhrTOt+Gs9J+C2sapP86h/3J7mqOqNk2ZY0FxewcJHv7IHJcrT
+        Ny0wLOcKjgEyWqw3+wlN9+5ajg==
+X-Google-Smtp-Source: ACHHUZ63xJO8hiOlOALtVX+qtnyTR/xYlZeXvYN1YQQY4IJsTzbGd/KqW7Hj7EUIzCZiXPdl/kM2Jg==
+X-Received: by 2002:a05:6a00:891:b0:643:d40c:7db1 with SMTP id q17-20020a056a00089100b00643d40c7db1mr6866644pfj.3.1685178404926;
+        Sat, 27 May 2023 02:06:44 -0700 (PDT)
+Received: from leoy-yangtze.lan ([107.151.177.126])
+        by smtp.gmail.com with ESMTPSA id j12-20020aa78dcc000000b0064928cb5f03sm3797231pfr.69.2023.05.27.02.06.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 02:06:44 -0700 (PDT)
+Date:   Sat, 27 May 2023 17:06:35 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org, denik@chromium.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] perf cs-etm: Use previous thread for branch sample
+ source IP
+Message-ID: <20230527090635.GB886420@leoy-yangtze.lan>
+References: <20230524131958.2139331-1-james.clark@arm.com>
+ <20230524131958.2139331-3-james.clark@arm.com>
 MIME-Version: 1.0
-References: <20230527085100.4114825-1-gaoxingwang1@huawei.com>
-In-Reply-To: <20230527085100.4114825-1-gaoxingwang1@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Sat, 27 May 2023 11:01:57 +0200
-Message-ID: <CANn89iLzMBJE31VBL3jtu-ojdoAYwV_KLo1Qo+L6LWZ+5UKMtg@mail.gmail.com>
-Subject: Re: ip6_gre: paninc in ip6gre_header
-To:     gaoxingwang <gaoxingwang1@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, dsahern@kernel.org, yoshfuji@linux-ipv6.org,
-        pabeni@redhat.com, liaichun@huawei.com, yanan@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524131958.2139331-3-james.clark@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 27, 2023 at 10:51=E2=80=AFAM gaoxingwang <gaoxingwang1@huawei.c=
-om> wrote:
->
-> Hello:
->   I am doing some fuzz test for kernel, the following crash was triggered=
-.
->   My kernel version is 5.10.0.Have you encountered similar problems?
->   If there is a fix, please let me know.
->   Thank you very much.
+On Wed, May 24, 2023 at 02:19:56PM +0100, James Clark wrote:
+> Branch samples currently use the IP of the previous packet as the from
+> IP, and the IP of the current packet as the to IP. But it incorrectly
+> uses the current thread. In some cases like a jump into a different
+> exception level this will attribute to the incorrect process.
 
-Please do not report fuzzer tests on old kernels.
+It's about the timing that branch has taken or not taken :)
 
-Yes, there is a fix already.
+If we think the branch sample as 'branch has taken', then current code
+is doning right thing, otherwise, we need this fix.
 
-Make sure to use at least v5.10.180
+> Fix it by tracking the previous thread in the same way the previous
+> packet is tracked.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
+> ---
+>  tools/perf/util/cs-etm.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+> index ebffc9052561..a997fe79d458 100644
+> --- a/tools/perf/util/cs-etm.c
+> +++ b/tools/perf/util/cs-etm.c
+> @@ -86,6 +86,7 @@ struct cs_etm_traceid_queue {
+>  	size_t last_branch_pos;
+>  	union perf_event *event_buf;
+>  	struct thread *thread;
+> +	struct thread *prev_thread;
+>  	struct branch_stack *last_branch;
+>  	struct branch_stack *last_branch_rb;
+>  	struct cs_etm_packet *prev_packet;
+> @@ -480,6 +481,7 @@ static int cs_etm__init_traceid_queue(struct cs_etm_queue *etmq,
+>  	tidq->trace_chan_id = trace_chan_id;
+>  	tidq->thread = machine__findnew_thread(&etm->session->machines.host, -1,
+>  					       queue->tid);
+> +	tidq->prev_thread = machine__idle_thread(&etm->session->machines.host);
+>  
+>  	tidq->packet = zalloc(sizeof(struct cs_etm_packet));
+>  	if (!tidq->packet)
+> @@ -616,6 +618,8 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
+>  		tmp = tidq->packet;
+>  		tidq->packet = tidq->prev_packet;
+>  		tidq->prev_packet = tmp;
+> +		thread__put(tidq->prev_thread);
+> +		tidq->prev_thread = thread__get(tidq->thread);
 
-Thanks.
+Maybe cs_etm__packet_swap() is not the best place to update
+"tidq->prev_thread", since swapping packet doesn't mean it's necessarily
+thread switching; can we move this change into the cs_etm__set_thread()?
 
->
-> skbuff: skb_under_panic: text:ffffffff8ad94c6b len:-2047924812 put:-20479=
-24888 head:ffff888034c9c000 data:ffff887faeda9bf8 tail:0x1ac end:0xec0 dev:=
-team1
-> ------------[ cut here ]------------
-> kernel BUG at net/core/skbuff.c:110!
-> invalid opcode: 0000 [#1] SMP KASAN PTI
-> CPU: 1 PID: 1546 Comm: syz-fuzzer Not tainted 5.10.0 #1
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubunt=
-u1.1 04/01/2014
-> RIP: 0010:skb_panic+0x171/0x183 net/core/skbuff.c:110
-> Code: f5 4c 8b 4c 24 10 41 56 8b 4b 70 45 89 e8 4c 89 e2 41 57 48 89 ee 4=
-8 c7 c7 20 f2 2d 8e ff 74 24 10 ff 74 24 20 e8 da 59 62 ff <0f> 0b 48 c7 c7=
- 00 2f 5e 92 48 83 c4 20 e8 cb 6f 6d ff e8 9c c5 5b
-> RSP: 0000:ffff8880bcc096f0 EFLAGS: 00010282
-> RAX: 0000000000000099 RBX: ffff88801e080f00 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff815ffb62 RDI: ffffed10179812d0
-> RBP: ffffffff8e2df720 R08: 0000000000000099 R09: ffffed1017981267
-> R10: ffff8880bcc09337 R11: ffffed1017981266 R12: ffffffff8ad94c6b
-> R13: 0000000085ef2568 R14: ffff888062b8c000 R15: 0000000000000ec0
-> FS:  000000c01741c490(0000) GS:ffff8880bcc00000(0000) knlGS:0000000000000=
-000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000000c021635000 CR3: 000000001fdb6000 CR4: 0000000000150ee0
-> Call Trace:
->  <IRQ>
->  skb_under_panic net/core/skbuff.c:120 [inline]
->  skb_push.cold+0x24/0x24 net/core/skbuff.c:1942
->  ip6gre_header+0xcb/0xaf0 net/ipv6/ip6_gre.c:1380
->  dev_hard_header include/linux/netdevice.h:3210 [inline]
->  neigh_connected_output+0x2a4/0x400 net/core/neighbour.c:1541
->  neigh_output include/net/neighbour.h:524 [inline]
->  ip6_finish_output2+0xa20/0x1d20 net/ipv6/ip6_output.c:145
->  __ip6_finish_output net/ipv6/ip6_output.c:210 [inline]
->  __ip6_finish_output+0x35d/0x920 net/ipv6/ip6_output.c:189
->  ip6_finish_output+0x38/0x1c0 net/ipv6/ip6_output.c:220
->  NF_HOOK_COND include/linux/netfilter.h:293 [inline]
->  ip6_output+0x1cc/0x400 net/ipv6/ip6_output.c:243
->  dst_output include/net/dst.h:453 [inline]
->  NF_HOOK include/linux/netfilter.h:304 [inline]
->  mld_sendpack+0x5ca/0xb80 net/ipv6/mcast.c:1679
->  mld_send_cr net/ipv6/mcast.c:1975 [inline]
->  mld_ifc_timer_expire+0x3c0/0x810 net/ipv6/mcast.c:2474
->  call_timer_fn+0x3f/0x200 kernel/time/timer.c:1414
->  expire_timers+0x21c/0x3b0 kernel/time/timer.c:1459
->  __run_timers kernel/time/timer.c:1753 [inline]
->  run_timer_softirq+0x2ad/0x7f0 kernel/time/timer.c:1766
->  __do_softirq+0x19b/0x612 kernel/softirq.c:322
->  asm_call_irq_on_stack+0x12/0x20
->  </IRQ>
->  __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
->  run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
->  do_softirq_own_stack+0x37/0x50 arch/x86/kernel/irq_64.c:77
->  invoke_softirq kernel/softirq.c:417 [inline]
->  __irq_exit_rcu kernel/softirq.c:447 [inline]
->  irq_exit_rcu+0x1a2/0x240 kernel/softirq.c:459
->  sysvec_apic_timer_interrupt+0x36/0x80 arch/x86/kernel/apic/apic.c:1116
->  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.=
-h:635
-> RIP: 0033:0x41e83e
-> Code: 44 89 c1 45 89 d5 41 d3 ea 41 0f ba e2 04 0f 83 ec 00 00 00 48 89 4=
-4 24 58 41 0f a3 cd 0f 83 87 00 00 00 4e 8d 14 20 4d 8b 12 <66> 90 4d 85 d2=
- 74 79 4d 89 d5 4d 29 e2 4c 39 d2 77 6e 89 4c 24 3c
-> RSP: 002b:000000c002629e88 EFLAGS: 00000207
-> RAX: 0000000000000008 RBX: 000000c000041698 RCX: 0000000000000001
-> RDX: 0000000000000040 RSI: 0000000000203002 RDI: 000000c0205f4800
-> RBP: 000000c002629f10 R08: 0000000000000001 R09: 00007f954fcd92d0
-> R10: 000000c00350bee0 R11: 00007f954fe52fff R12: 000000c0090c5a00
-> R13: 00000000000000fa R14: 000000c007b66ea0 R15: ffffffffffffffff
-> Modules linked in:
-> kernel fault(0x1) notification starting on CPU 1
-> kernel fault(0x1) notification finished on CPU 1
-> ---[ end trace 854b3d6f97989351 ]---
-> RIP: 0010:skb_panic+0x171/0x183 net/core/skbuff.c:110
-> Code: f5 4c 8b 4c 24 10 41 56 8b 4b 70 45 89 e8 4c 89 e2 41 57 48 89 ee 4=
-8 c7 c7 20 f2 2d 8e ff 74 24 10 ff 74 24 20 e8 da 59 62 ff <0f> 0b 48 c7 c7=
- 00 2f 5e 92 48 83 c4 20 e8 cb 6f 6d ff e8 9c c5 5b
-> RSP: 0000:ffff8880bcc096f0 EFLAGS: 00010282
-> RAX: 0000000000000099 RBX: ffff88801e080f00 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff815ffb62 RDI: ffffed10179812d0
-> RBP: ffffffff8e2df720 R08: 0000000000000099 R09: ffffed1017981267
-> R10: ffff8880bcc09337 R11: ffffed1017981266 R12: ffffffff8ad94c6b
-> R13: 0000000085ef2568 R14: ffff888062b8c000 R15: 0000000000000ec0
-> FS:  000000c01741c490(0000) GS:ffff8880bcc00000(0000) knlGS:0000000000000=
-000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000000c021635000 CR3: 000000001fdb6000 CR4: 0000000000150ee0
+Thanks,
+Leo
+
+>  	}
+>  }
+>  
+> @@ -791,6 +795,7 @@ static void cs_etm__free_traceid_queues(struct cs_etm_queue *etmq)
+>  		/* Free this traceid_queue from the array */
+>  		tidq = etmq->traceid_queues[idx];
+>  		thread__zput(tidq->thread);
+> +		thread__zput(tidq->prev_thread);
+>  		zfree(&tidq->event_buf);
+>  		zfree(&tidq->last_branch);
+>  		zfree(&tidq->last_branch_rb);
+> @@ -1450,8 +1455,8 @@ static int cs_etm__synth_branch_sample(struct cs_etm_queue *etmq,
+>  	sample.time = cs_etm__resolve_sample_time(etmq, tidq);
+>  
+>  	sample.ip = ip;
+> -	sample.pid = tidq->thread->pid_;
+> -	sample.tid = tidq->thread->tid;
+> +	sample.pid = tidq->prev_thread->pid_;
+> +	sample.tid = tidq->prev_thread->tid;
+>  	sample.addr = cs_etm__first_executed_instr(tidq->packet);
+>  	sample.id = etmq->etm->branches_id;
+>  	sample.stream_id = etmq->etm->branches_id;
+> -- 
+> 2.34.1
+> 
