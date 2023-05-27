@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7F6713316
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC04713325
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 09:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjE0Hko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 03:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
+        id S232512AbjE0HoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 03:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbjE0Hkl (ORCPT
+        with ESMTP id S231178AbjE0Hnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 03:40:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953D61B3
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 00:40:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0252261182
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 07:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B004C4339E;
-        Sat, 27 May 2023 07:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685173231;
-        bh=glPRlksMtJ2Hb+GrjIgQbPVF8Ow+3Sn8rwCAHRqXvL4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xgXmcE37h0KC1uf7uXe8n6yJw/tPoUIKIAbaQ1Qw0etyEBNDJYiTPo3XlMm2YUJCm
-         O8XAuOhglujsN0sTZguQ4Rv6gBsTq5IqAvxnVkiaxRSW74TraL2R/a90rZEQVBKpEe
-         ZMc4REx5EyRYoZQjVei7kJ4fvh9ihSrS3R/2Yrts=
-Date:   Sat, 27 May 2023 08:40:28 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Deepanshu Kartikey <kartikey406@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v2] Staging: rts5208: rtsx: Moved else statement to same
- line with else if
-Message-ID: <2023052759-extrovert-resize-252d@gregkh>
-References: <20230519101920.27342-1-kartikey406@gmail.com>
- <20230519101920.27342-2-kartikey406@gmail.com>
+        Sat, 27 May 2023 03:43:55 -0400
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C08E4D
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 00:43:51 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 2oabqe6Y9wiD92oabqxMKz; Sat, 27 May 2023 09:43:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685173430;
+        bh=uyWOW8D3AJ7mCDV73zgAucJmFUmSlFpt34Ibvt6so7E=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=IyYZWLsKeM7pci4vGAotaHENz1XD92Y+YzWdHMd5zMr2yMgsopzM71wMcgKP8YPa8
+         W0uZlB9NOJ4W6ZoERcALcmwnDOWhwTNtyMIU1HCdxhnaBy1AGBTug1qfkEuUa21Jl0
+         9wIVN3y4IBL2ZmCNXQQZ9UXyH4SCj+um104csw8OMX1MNi2rUV88ccfohrzVMFoS2S
+         8g+Pn3S3yHAwTLANQ/a48bDVHmAQczSgwNz+hhuhSotYD6ktyXsEU97xnVMD0/HJPV
+         9pf5JwbDVRGjEwmD1n2lsP4rOCXh0BgBVjW6tBqJ1QLEeJob5YTk0C+lDEb2hDAz+E
+         mz1hH2EYNBUIQ==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 27 May 2023 09:43:50 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <963bad8f-11d7-ce02-ad01-d925a4ac8771@wanadoo.fr>
+Date:   Sat, 27 May 2023 09:43:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519101920.27342-2-kartikey406@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] When 'mcf_edma' is allocated, some space is allocated for
+ a flexible array at the end of the struct. 'chans' item are allocated, that
+ is to say 'pdata->dma_channels'.
+To:     vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <f55d9154b7c600828f6fad3ea5fa791a5f17b9a4.1685172449.git.christophe.jaillet@wanadoo.fr>
+Content-Language: fr
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <f55d9154b7c600828f6fad3ea5fa791a5f17b9a4.1685172449.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,20 +59,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 03:49:20PM +0530, Deepanshu Kartikey wrote:
-> Moved else statement to same line with else if,
-> this warning was given by checkpatch.pl
+Le 27/05/2023 à 09:32, Christophe JAILLET a écrit :
+> Then, this number of item is stored in 'mcf_edma->n_chans'.
 > 
-> Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
+> A few lines later, if 'mcf_edma->n_chans' is 0, then a default value of 64
+> is set.
 > 
+> This ends to no space allocated by devm_kzalloc() because chans was 0, but
+> 64 items are read and/or written in some not allocated memory.
+> 
+> Change the logic to define a default value before allocating the memory.
+> 
+> Fixes: e7a3ff92eaf1 ("dmaengine: fsl-edma: add ColdFire mcf5441x edma support")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
-> Changes in V2:
->             - Moved else to the same line with else if
->             - Moved comment on else statement to inside of it
+> If I'm correct, then:
+> 
+>     - the default value is hard-coded as 64. There is also a
+>          #define EDMA_CHANNELS 64
+>       which maybe could be used, or renamed as EDMA_DEFAULT_CHANNELS
+> 
+>     - mcf_edma_err_handler() looks bogus, because it considers that
+>       mcf_edma->chans has EDMA_CHANNELS items.
+>       I guess that something related to mcf_edma->n_chans is what is
+>       expected, but how should this be done?
+> 
+> Maybe, the EDMA_CHANNELS value should be used all the time?
+> Maybe, the number of chans should be limited to EDMA_CHANNELS?
+> Maybe, the number of chans should be at least EDMA_CHANNELS?
+> 
+> Maybe, maybe, maybe, but me, I don't know :(
+> 
+> All I know is that this patch compiles :)
+> and that it can gives Dan an idea for smatch for checking access to un-allocated
+> memory related to flexible array :)
+> ---
+>   drivers/dma/mcf-edma.c | 13 +++++++------
+>   1 file changed, 7 insertions(+), 6 deletions(-)
+> 
 
-I have 2 v2 patches in my mailbox, which are different, so obviously one
-of them is lying.  Please fix up and send a v4.
+NAK, subject line missing.
 
-thanks,
+A better V2 has been sent.
 
-greg k-h
