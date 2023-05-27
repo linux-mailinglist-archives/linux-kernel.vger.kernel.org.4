@@ -2,118 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B727134AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268C47134B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 14:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbjE0M1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 08:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
+        id S232376AbjE0M17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 08:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjE0M1O (ORCPT
+        with ESMTP id S229593AbjE0M15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 08:27:14 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510ACF3;
-        Sat, 27 May 2023 05:27:13 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2564dc37c3eso214338a91.0;
-        Sat, 27 May 2023 05:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685190433; x=1687782433;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7VL5PuRes+RVCKdqZxW7v51sOkxve4QAPNm6Ttixc5s=;
-        b=Qh9kmF+GG6oZ9k/HBmLUW9NrdVhMPF6z2Ixu7aT4M98mSmUHXLNoslPmrcnSZu7y5M
-         6lw/nyO7E0GdD2glPtE6zy1+SxAA4DwwTFn4m1ZUsqPfhUZkZPOmmtG7NKbJ8c9u/Q92
-         /hahinmbZBMWJwdgp6xa2JuuljfGnkHLong1zEHA/xlO83yx/MPTm2ekYXsMuKmLpiX9
-         5i18zJQpjpPT0dU5Tu6y4SlpDHlICK/gabEv4i/7A9P55DAoaW879f6H4dzlaI9MhR0u
-         uvLAIpce+VK7PBX0r54gdQ56/zzUT2TBj7KyIxkug85umq2YO/HQcG2+wyV5X0Q05Qfk
-         zrOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685190433; x=1687782433;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7VL5PuRes+RVCKdqZxW7v51sOkxve4QAPNm6Ttixc5s=;
-        b=MffSsjsxLE/jCfONMWbvKKw47/HheeU2avPVRq/i14RvMaxR4AWnKK+YOojoFIpoai
-         fYx//ieBR7gEQMHky4BSNNmPgEBJyyvGtk1dW8xHp47AsJL6ZIQN3LsYgzCehuCf1Ar4
-         rezDTMSgn3I3K30PzfGReeXkOe9RYxb54nfv7smrBTifU1Zxof5lUS32LSb6Pb1UFY8k
-         yklmqa9IH5PPVMTg5e0W6FTa0xtapRRt9ymtkJrf8tgBRBvaPqHR9LSkQzacMK4ELnP0
-         DOZ8Q7oj+IAinfzqQ50uM9L10S/7fARPiYVGRAFx8hV+E0Jmf5XvTZdgBwlE3nRVgvWh
-         9I0A==
-X-Gm-Message-State: AC+VfDz2OhC6JFG11ehwe4Ld5JtcEBHrJcC1neUTm4tE/ukOeDhbILG1
-        jtXuaQ/ZTc/0PdWh3jQG4g==
-X-Google-Smtp-Source: ACHHUZ71gNc4koAU5A8gsl1WCb1bDvfFBOSXd9pmjKWQ1FUHbaJZSJ34Mi5d8AJjVHRw0AZ3gpQLMg==
-X-Received: by 2002:a17:902:74c1:b0:1ac:85b0:1bd8 with SMTP id f1-20020a17090274c100b001ac85b01bd8mr1916521plt.34.1685190432571;
-        Sat, 27 May 2023 05:27:12 -0700 (PDT)
-Received: from dan.. ([182.209.58.11])
-        by smtp.gmail.com with ESMTPSA id jj7-20020a170903048700b001a1d4a985eesm4831328plb.228.2023.05.27.05.27.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 05:27:12 -0700 (PDT)
-From:   "Daniel T. Lee" <danieltimlee@gmail.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        KP Singh <kpsingh@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Song Liu <song@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] bpf: replace open code with for allocated object check
-Date:   Sat, 27 May 2023 21:27:06 +0900
-Message-Id: <20230527122706.59315-1-danieltimlee@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 27 May 2023 08:27:57 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5CBF3
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 05:27:56 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34RCFE7S013020;
+        Sat, 27 May 2023 12:27:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=IF/hiqRxf6vSljvbcIWa2mpjRo75YCgYwzVNchZ94k0=;
+ b=XMq2lDz17kovopHWpomrplEt+7Gj7TBUPr4Blex/RsDvl/clunWDla/RgOxtRSJhSoRK
+ HQVsb/YqqN5oKtaDJtg3BATqbDBf3Bfkqguu1BkUadZz/SVsAYdVf2SmQ4y1oz5YYhjp
+ FYP8k6pQC1AXaNFvTScTTeoczSYefuAUQFkn0EJn2CcQZn5IFqcRDhv+2CZIWb5JpSFa
+ E0GXB595ZMqbxO2D7JKwr33xJ/93dnUoL9NlgSZG3ltex2eIFrI0+M9uT5e4jIjXHoeK
+ WOTGEyqh6YYbxpDLyYHGjy8cVo7YPsFzkK17TPv86HuQXOZkHAfLE9AugsHwzzYZHHXQ dA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qub5dgdc7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 May 2023 12:27:40 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34RCReMm021826
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 27 May 2023 12:27:40 GMT
+Received: from hu-pbaronia-blr.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sat, 27 May 2023 05:27:38 -0700
+Date:   Sat, 27 May 2023 17:57:34 +0530
+From:   Prathu Baronia <quic_pbaronia@quicinc.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] arm64/cpucaps: increase string width to properly format
+ cpucaps.h
+Message-ID: <20230527122734.GA677156@hu-pbaronia-blr.qualcomm.com>
+References: <20230517100452.382174-1-quic_pbaronia@quicinc.com>
+ <ZHB7tvDa7d6T6SEq@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZHB7tvDa7d6T6SEq@arm.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 2d8fSMKJuQ_dfT25PzM1mCjl0bE4yeQG
+X-Proofpoint-GUID: 2d8fSMKJuQ_dfT25PzM1mCjl0bE4yeQG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-27_08,2023-05-25_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ mlxlogscore=403 spamscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 mlxscore=0 clxscore=1015 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305270108
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From commit 282de143ead9 ("bpf: Introduce allocated objects support"),
-With this allocated object with BPF program, (PTR_TO_BTF_ID | MEM_ALLOC)
-has been a way of indicating to check the type is the allocated object.
+On Fri, May 26, 2023 at 10:28:22AM +0100, Catalin Marinas wrote:
+> Why not make it larger, say 40, just in case.
+Sure Catalin, will do in v2.
 
-commit d8939cb0a03c ("bpf: Loosen alloc obj test in verifier's
-reg_btf_record")
-From the commit, there has been helper function for checking this, named
-type_is_ptr_alloc_obj(). But still, some of the code use open code to
-retrieve this info. This commit replaces the open code with the
-type_is_alloc(), and the type_is_ptr_alloc_obj() function.
-
-Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
----
- kernel/bpf/verifier.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 086b2a14905b..97c714e8a8bf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5891,7 +5891,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 		 * program allocated objects (which always have ref_obj_id > 0),
- 		 * but not for untrusted PTR_TO_BTF_ID | MEM_ALLOC.
- 		 */
--		if (atype != BPF_READ && reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
-+		if (atype != BPF_READ && !type_is_ptr_alloc_obj(reg->type)) {
- 			verbose(env, "only read is supported\n");
- 			return -EACCES;
- 		}
-@@ -7511,7 +7511,7 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
- 	if (base_type(arg_type) == ARG_PTR_TO_MEM)
- 		type &= ~DYNPTR_TYPE_FLAG_MASK;
- 
--	if (meta->func_id == BPF_FUNC_kptr_xchg && type & MEM_ALLOC)
-+	if (meta->func_id == BPF_FUNC_kptr_xchg && type_is_alloc(type))
- 		type &= ~MEM_ALLOC;
- 
- 	for (i = 0; i < ARRAY_SIZE(compatible->types); i++) {
--- 
-2.34.1
-
+Prathu
