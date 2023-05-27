@@ -2,153 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3F07132A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 07:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8687132A9
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 07:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjE0Fpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 01:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45002 "EHLO
+        id S230513AbjE0FrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 01:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjE0Fpe (ORCPT
+        with ESMTP id S229494AbjE0FrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 01:45:34 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52799114;
-        Fri, 26 May 2023 22:45:33 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id 71dfb90a1353d-45700c4b74dso975113e0c.0;
-        Fri, 26 May 2023 22:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685166332; x=1687758332;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PHU0CrQxUv9XQ01EpFpr1GgtiXoO/B7NjDPGrH20JTQ=;
-        b=fDez1bv3s5uhmZNuLiXHCHc5QY5B0HRbkIEsMtqx1j8JkSQeuU520jcybL8qT4RfaK
-         LsQq5GFzj/jC2895yicg+250RCojIsQhM/UIeCrlD3jNBTkq3SxAatA1Lb0M6D3fo8Ej
-         vcwk3oxqzOWX+4NwJIr1ED+6rJw2gC6JzKflX5wM64pb9Jws4M0v6K/8jpS+Ej/6ei9+
-         mIvhHov8Rs3KWSrZbbhrJtSAuqy3xgLTLWnf3B3kC4yscDIqLSvXtGV94fv5tssZ3GPz
-         JRkqm4BaRAyDif/I1M8B3srFzbk51E7dnRCDsBxwMY0EAZbkoWYG+rAQtG2ANQ1HgCfs
-         0xww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685166332; x=1687758332;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PHU0CrQxUv9XQ01EpFpr1GgtiXoO/B7NjDPGrH20JTQ=;
-        b=bLhVa8vEKyF0VL2WwegZlDDfOmQN5BI3dn1up4t/QbiAp+FHVLuGUqR0WNi/jjnCH3
-         nny7QEe7O8190IEU9kSDwkYu0xMwNXbZpv/MH9OV/TvxVAcuKO7nz4T7er/EAb1xNO6B
-         6nC5p7D7C6a7Luy5JwchdW28LiKnRqtAB7ouRT1Yf9EzELy8dzASpV8+yxHDphioG33F
-         +mOGG0Eehu2hUYn+48K9rumD7ZGQXDAFLF/W+hl8ex5s/DDuB57q4Kgwtw+/W6BhSmr8
-         aOQdsw4dsYbXb2n5aTyE0KBYJCzPhKb4vDGk0WUpeUx6kdEIO3H2O+tSSWRoQlfZis0r
-         By1w==
-X-Gm-Message-State: AC+VfDwP/JH2JYZsb3kPpKJlBHcwpmAkdbxsY7iouGgCXnfuhc0K2K88
-        NHyMsuhdfYL1k887tDNenbfBRjpxP1Sg8PtPei8=
-X-Google-Smtp-Source: ACHHUZ6bc/3YatIytTidxgERoKXrdCqaX7PxYV61a63fUCbC5DMt3+kghGZvVo+W4W3fwQ3rwLwGsDuYiWMt/aGFrLg=
-X-Received: by 2002:a1f:c144:0:b0:44f:be41:267a with SMTP id
- r65-20020a1fc144000000b0044fbe41267amr444071vkf.13.1685166332147; Fri, 26 May
- 2023 22:45:32 -0700 (PDT)
+        Sat, 27 May 2023 01:47:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C98114
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 22:47:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32E8F60F18
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 05:47:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB3F3C433D2;
+        Sat, 27 May 2023 05:46:54 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Juxin Gao <gaojuxin@loongson.cn>
+Subject: [PATCH 0/2] Add machanism to limit msi allocation for Loongson
+Date:   Sat, 27 May 2023 13:46:31 +0800
+Message-Id: <20230527054633.704916-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230413142617.15995-1-Jonathan.Cameron@huawei.com>
- <20230413142617.15995-5-Jonathan.Cameron@huawei.com> <CAM9d7ciPW67QRRwRsY3-ouEM6wM0YdX+qnkkqYmTXRLwJcgqkA@mail.gmail.com>
- <CABPqkBQpXAq=uk5-vx-FkYJV1nrtugit_ExFqGgQCKGQC2no6w@mail.gmail.com> <20230526102428.00002b6a@Huawei.com>
-In-Reply-To: <20230526102428.00002b6a@Huawei.com>
-From:   Namhyung Kim <namhyung@gmail.com>
-Date:   Fri, 26 May 2023 22:45:20 -0700
-Message-ID: <CAM9d7cgG8KL=CoEM3E1dXSMsC8RbYnCYQEBQOw3jPLS9YdC5PQ@mail.gmail.com>
-Subject: Re: [PATCH v6 4/5] perf: CXL Performance Monitoring Unit driver
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        peterz@infradead.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Liang Kan <kan.liang@linux.intel.com>,
-        linux-cxl@vger.kernel.org, mark.rutland@arm.com, will@kernel.org,
-        mingo@redhat.com, acme@kernel.org, dan.j.williams@intel.com,
-        linuxarm@huawei.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 2:24=E2=80=AFAM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Thu, 25 May 2023 18:18:55 -0700
-> Stephane Eranian <eranian@google.com> wrote:
->
-> > On Thu, May 25, 2023 at 6:06=E2=80=AFPM Namhyung Kim <namhyung@gmail.co=
-m> wrote:
-> > >
-> > > Add Stephane to CC.
-> > >
-> > > On Thu, Apr 13, 2023 at 7:35=E2=80=AFAM Jonathan Cameron
-> > > <Jonathan.Cameron@huawei.com> wrote:
-> > > >
-> > > > CXL rev 3.0 introduces a standard performance monitoring hardware
-> > > > block to CXL. Instances are discovered using CXL Register Locator D=
-VSEC
-> > > > entries. Each CXL component may have multiple PMUs.
-> > > >
-> > > > This initial driver supports a subset of types of counter.
-> > > > It supports counters that are either fixed or configurable, but req=
-uires
-> > > > that they support the ability to freeze and write value whilst froz=
-en.
-> > > >
-> > > > Development done with QEMU model which will be posted shortly.
-> > > >
-> > > > Example:
-> > > >
-> > > > $ perf stat -e cxl_pmu_mem0.0/h2d_req_snpcur/ -e cpmu0/h2d_req_snpd=
-ata/ -e cpmu0/clock_ticks/ sleep 1
-> > > >
-> > > > Performance counter stats for 'system wide':
-> > > >
-> >
-> > Unless I am mistaken, I don't think this output corresponds to the
-> > cmdline above. I think the -a is missing.
-> > I don't think you can measure CXL traffic per-thread. Please confirm.
-> > Thanks.
->
-> It doesn't seem to make any difference whether I include -a or not and
+Loongson machines can have as many as 256 logical cpus, but the maximum
+of msi vectors in one irqchip is also 256 (practically that is less than
+256, because pch-pic consumes some of them). Even on a 64-core machine,
+256 irqs can be easily exhausted if there are several NICs (NICs usually
+allocate msi irqs depending on the number of online cpus). So we want to
+limit the msi allocation.
 
-Hmm.. strange, I think it'd fail if you don't provide -a option
-because the cxl_pmu doesn't allow to attach to a task.
+Patch-1 adjusts the return value semanteme of msi_domain_prepare_irqs(),
+allowing us to modify the input "nvec" by overriding the msi_domain_ops
+::msi_prepare().
+    
+Patch-2 adds a machanism to limit msi allocation:
+1, Modify input "nvec" by overriding the msi_domain_ops::msi_prepare();
+2, The default limit is 256, which is compatible with the old behavior;
+3, Add a cmdline parameter "loongson_msi_limit=xxx" to control the limit.
 
+Huacai Chen and Juxin Gao(2):
+ PCI: Omit pci_disable_device() in .shutdown().
+ PCI: loongson: Improve the MRRS quirk for LS7A.
 
-> the perf man page says
->
->        -a, --all-cpus
->            system-wide collection from all CPUs (default if no target is
->            specified)
->
-> However I'm not sure what target means in this case as there is no
-> mention of it anywhere else in the perf-stat man page.  My guess is threa=
-d
-> or process provided by -p or -t.  So default applies in the above command=
- line.
-> Doesn't hurt to be more explicit though, so I've added -a.
+Signed-off-by: Juxin Gao <gaojuxin@loongson.cn> 
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+2.27.0
 
-Sorry, the man page was not clear.  The target can be CPUs (-a or -C)
-or tasks (-p or -t for existing tasks, command line argument for a
-new task).  So in the above example, the target is the sleep process.
-
-The command line argument also controls when to terminate the
-profiling session.  So `perf stat -a sleep 1` will collect system-wide
-profile (because of the -a option) for 1 second.
-
-I think the default mentioned in the man page is when you run
-
-  $ perf stat
-
-and Ctrl-C to exit.
-
-Thanks,
-Namhyung
