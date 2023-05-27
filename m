@@ -2,169 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB34713579
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 17:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC4A713584
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 17:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjE0PsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 11:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
+        id S232698AbjE0PxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 11:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjE0PsE (ORCPT
+        with ESMTP id S231164AbjE0PxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 11:48:04 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA4AA2;
-        Sat, 27 May 2023 08:48:02 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-256531ad335so322313a91.0;
-        Sat, 27 May 2023 08:48:02 -0700 (PDT)
+        Sat, 27 May 2023 11:53:00 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF6CBA
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 08:52:57 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f3baf04f0cso1962780e87.1
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 08:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685202482; x=1687794482;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=J49g5r+C8X2NVCkBgl8IzrTCMvTMcQQzUyfAMjxZsPg=;
-        b=bUL5aHRkLeXZgL9zLh88p3YSSEdIcCAWRafE5CCYjGxTY3b4C3Nvx9HyPTyr/MFIOy
-         XNJoF8YCF/UuX9K7KUHu0+XrePH07oMRCWX8Xbo1x7sNks0uPXrC7DyAE2YZ4nRJbxmX
-         R+vS/qobWvWDwbY/vp3IFGaoobPrHdxLodkySGURPv0utOVIMAyhkSVf+YGDr2He0s2+
-         mFeAz0s4hFMt6E5OhaapTV9xjhbS5h7hmrocjChFeleEtRzzQxiyNpffZQ1mkdD3wp6N
-         kwic0v4RCyjRUeyXdYulrgWtKqFCkPBnTY7+z+AWj+P7a+4sVK3Mo/U26rqt0pp8KAYf
-         6I9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685202482; x=1687794482;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        d=linaro.org; s=google; t=1685202776; x=1687794776;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=J49g5r+C8X2NVCkBgl8IzrTCMvTMcQQzUyfAMjxZsPg=;
-        b=PH50FTu4ko7yvm2Fk2JnQ26AuDnuOWGzIB6d8MfhR60zmBTY6wGlN5vQX0BpSkGxJJ
-         9Y7nVtKuwh4DkoRYr55ee60cswz3X3nxzdJ/tGYeTZlDBjagJFFn2jceKEOxBxsOZLiE
-         T1x7pnkkXutNV1J0wOYcxvpa4P+2EpotPbArR1ai7B4pXQcHJ0gl0RxuKB2qQM2+E9Ip
-         Lqpqwsx2kGncuZML3CrQ9sBRJvFST8vkGZ6EB7laypT21xOzb4oZbG4ir9qID6mQZPUX
-         c8O0StfYtd2ZXdQv33nuhUmp9UQT+VQGH9vtoieN7AiE2Gl/kp0Vwz2eqLMcT/sKfUrC
-         bTRQ==
-X-Gm-Message-State: AC+VfDzOydpZ7h6/FqkiKCvq2DJw7iX2h93/5WfnSuPoNr1CdtLQetZN
-        aa1rqM/9r86l/GpIoFGE5Y8=
-X-Google-Smtp-Source: ACHHUZ7QPh85GAe4qtDoAAFctO3cPI86At/IRUfb5BaooKwKJwDEqjmatrKZ0/p6N1NdUk4vgS+bMw==
-X-Received: by 2002:a17:90a:7021:b0:250:7d1f:938b with SMTP id f30-20020a17090a702100b002507d1f938bmr6504460pjk.23.1685202481899;
-        Sat, 27 May 2023 08:48:01 -0700 (PDT)
-Received: from ?IPv6:2605:59c8:448:b800:82ee:73ff:fe41:9a02? ([2605:59c8:448:b800:82ee:73ff:fe41:9a02])
-        by smtp.googlemail.com with ESMTPSA id 5-20020a17090a000500b00253311d508esm6598798pja.27.2023.05.27.08.47.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 08:48:01 -0700 (PDT)
-Message-ID: <f7919c2c9e1cb6218a0b0f55ddaa9a34f7d2b9a7.camel@gmail.com>
-Subject: Re: [PATCH net-next 04/12] mm: Make the page_frag_cache allocator
- use multipage folios
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Yunsheng Lin <linyunsheng@huawei.com>,
-        David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Jeroen de Borst <jeroendb@google.com>,
-        Catherine Sullivan <csully@google.com>,
-        Shailend Chand <shailend@google.com>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org
-Date:   Sat, 27 May 2023 08:47:58 -0700
-In-Reply-To: <a819dd80-54cc-695f-f142-e3d42ce815a7@huawei.com>
-References: <20230524153311.3625329-1-dhowells@redhat.com>
-         <20230524153311.3625329-5-dhowells@redhat.com>
-         <a819dd80-54cc-695f-f142-e3d42ce815a7@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
+        bh=bLjznw17AJa9srYAX7PpPJBCrC7/RmyCURr/1TDqVk0=;
+        b=YjD4CVNN4Q9wjXOI4a9yl5Nc+SlRdce5X65sQhxiffmNp28FbhJt/4wKqttaZWPInb
+         v8cf2GqQFSQclKpy7/5mVC8/gevCHwnv2ECB1vh8zRcpXI5KpZ2+11KhHI/DpXW6ciq0
+         yiueB0EtdTxB/bfYjeWmX3es8zBjtg9b77ocKVhClx4hfhvNaP5thankfXKGs3INX6ST
+         aHKfxA++/42UMzlvZWodAuBu3Y/Qo4UnrJdP+rIlXEQXeyi7RhtRwi/20JR2v6dMXz7s
+         6YJanHPLgP1ds6fuwHrl/vfDNC7VCObvHRVTJMgEn9Xa0Y78X/1n6wGO1FvHNtH91Ibj
+         +iFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685202776; x=1687794776;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bLjznw17AJa9srYAX7PpPJBCrC7/RmyCURr/1TDqVk0=;
+        b=idQMcNy6i7SuEtyH3F0ZqHABpCxHStQhE3EJ/bI7zIkzX6ecg6GPVJARck1hr8vfJ7
+         jTR67MrKxZs9IU5eUyOgXJOZDlYJM63V2y/6mwR7DGuQxV3ACaYUwW9flq8d/pOpPswE
+         DKxQfSR+fWXxCSiCG7GmVXEewfFU53kq7JPPrDVmfnI/TGBzTtL5n7NiKqPefpkaDFHg
+         u5bhVAaWdD1D8VaOBpHI0POd2zPPr/atvt89/TOytlzEtZd5CZIHx0qqd5ZDZ7ogtBnW
+         BCY3psSLc4xA7u/dOrzSS0xtSY0yo0A5vXeOrMEKSPwvwnIS71DnPaRDPSmgKO+pD/hh
+         8p9g==
+X-Gm-Message-State: AC+VfDyapw7o+Kv4qBy5zUbqdF4YfniXG+qhTUYITURL9m9e20E4B8UK
+        ddoAMnGADbf6NzqXL3TfBgdeuQ==
+X-Google-Smtp-Source: ACHHUZ6KnoHfXjU6y/OUhvxQQdvDRWrn3w/Nq4zoWpkMHmDXAq6Yc206wYHOv4Np18YwnN5iimBvew==
+X-Received: by 2002:ac2:53a6:0:b0:4f4:b138:e998 with SMTP id j6-20020ac253a6000000b004f4b138e998mr1647222lfh.68.1685202775848;
+        Sat, 27 May 2023 08:52:55 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id w9-20020ac24429000000b004f4ce1d4df6sm1166778lfl.47.2023.05.27.08.52.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 May 2023 08:52:55 -0700 (PDT)
+Message-ID: <1aca6f57-9342-dba1-368c-76e649cde95e@linaro.org>
+Date:   Sat, 27 May 2023 17:52:53 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: media: camss: qcom,msm8996-camss: Add
+ CAMSS power domain
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hansverk@cisco.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230526180712.8481-1-y.oudjana@protonmail.com>
+ <20230526180712.8481-2-y.oudjana@protonmail.com>
+ <20230526-obstruct-venus-5833511a58af@spud>
+ <838b134d-46cb-6237-49b0-0c287141ebb3@linaro.org>
+ <20230526-street-pox-2ff5ee106c43@spud>
+ <8d89c14f-b2c2-7db2-f637-aa6d90273f4d@linaro.org>
+ <631e5eec-853b-dce2-c474-62e76e83d7e6@linaro.org>
+ <VKZAVR.M3FJVE7XKKY71@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <VKZAVR.M3FJVE7XKKY71@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-05-26 at 19:56 +0800, Yunsheng Lin wrote:
-> On 2023/5/24 23:33, David Howells wrote:
-> > Change the page_frag_cache allocator to use multipage folios rather tha=
-n
-> > groups of pages.  This reduces page_frag_free to just a folio_put() or
-> > put_page().
->=20
-> Hi, David
->=20
-> put_page() is not used in this patch, perhaps remove it to avoid
-> the confusion?
-> Also, Is there any significant difference between __free_pages()
-> and folio_put()? IOW, what does the 'reduces' part means here?
->=20
-> I followed some disscusion about folio before, but have not really
-> understood about real difference between 'multipage folios' and
-> 'groups of pages' yet. Is folio mostly used to avoid the confusion
-> about whether a page is 'headpage of compound page', 'base page' or
-> 'tailpage of compound page'? Or is there any abvious benefit about
-> folio that I missed?
->=20
-> >=20
-> > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> > index 306a3d1a0fa6..d7c52a5979cc 100644
-> > --- a/include/linux/mm_types.h
-> > +++ b/include/linux/mm_types.h
-> > @@ -420,18 +420,13 @@ static inline void *folio_get_private(struct foli=
-o *folio)
-> >  }
-> > =20
-> >  struct page_frag_cache {
-> > -	void * va;
-> > -#if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
-> > -	__u16 offset;
-> > -	__u16 size;
-> > -#else
-> > -	__u32 offset;
-> > -#endif
-> > +	struct folio	*folio;
-> > +	unsigned int	offset;
-> >  	/* we maintain a pagecount bias, so that we dont dirty cache line
-> >  	 * containing page->_refcount every time we allocate a fragment.
-> >  	 */
-> > -	unsigned int		pagecnt_bias;
-> > -	bool pfmemalloc;
-> > +	unsigned int	pagecnt_bias;
-> > +	bool		pfmemalloc;
-> >  };
->=20
-> It seems 'va' and 'size' field is used to avoid touching 'stuct page' to
-> avoid possible cache bouncing when there is more frag can be allocated
-> from the page while other frags is freed at the same time before this pat=
-ch?
-> It might be worth calling that out in the commit log or split it into ano=
-ther
-> patch to make it clearer and easier to review?
 
-Yes, there is a cost for going from page to virtual address. That is
-why we only use the page when we finally get to freeing or resetting
-the pagecnt_bias.
 
-Also I have some concerns about going from page to folio as it seems
-like the folio_alloc setups the transparent hugepage destructor instead
-of using the compound page destructor. I would think that would slow
-down most users as it looks like there is a spinlock that is taken in
-the hugepage destructor that isn't there in the compound page
-destructor.
+On 27.05.2023 08:05, Yassine Oudjana wrote:
+> 
+> On Fri, May 26 2023 at 10:36:32 PM +02:00:00, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>>
+>> On 26.05.2023 22:21, Bryan O'Donoghue wrote:
+>>>  On 26/05/2023 21:19, Conor Dooley wrote:
+>>>>  On Fri, May 26, 2023 at 09:05:47PM +0100, Bryan O'Donoghue wrote:
+>>>>>  On 26/05/2023 20:46, Conor Dooley wrote:
+>>>>>>>  +  - power-domain-names
+>>>>>>  Why is this now required?
+>>>>>>
+>>>>>>  Thanks,
+>>>>>>  Conor.
+>>>>>>
+>>>>>
+>>>>>  Its an accurate description of the power/clock tree to have the top power
+>>>>>  domain be switched on prior to the clocks that depend on it.
+>>>>
+>>>>  But what does that have to do with the *names* now being required?
+>>>
+>>>  oh the names
+>>>
+>>>  no toss that
+>> this should be
+>>
+>> if:properties:compatible:blahblahmsm8996:then:required:power-domain-names
+> 
+> The only compatible in this binding is qcom,msm8996-camss, so what would this achieve?
+You're right - I didn't notice and assumed it was a camss-common one.
+
+Konrad
+> 
+>>
+>> Konrad
+>>>
+>>>>
+>>>>>  I think Yassine, you could probably include the majority of your
+>>>>>  cover-letter text in this commit to explain this change a bit better.
+>>>>
+>>>>  I think it would be good to have that regardless.
+>>>>
+>>>>  Cheers,
+>>>>  Conor.
+>>>>
+>>>>>  bod
+>>>>     ^^^ I've been trying not to think about rugby since the weekend :(
+>>>
+>>>  Pockets O'Gara should have his paddy papers rescinded
+> 
+> 
