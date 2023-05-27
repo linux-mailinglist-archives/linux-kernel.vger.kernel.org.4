@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480197132A8
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 07:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB3B7132B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 07:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbjE0Fr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 01:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S231319AbjE0Fza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 01:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbjE0Fr4 (ORCPT
+        with ESMTP id S231272AbjE0Fz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 01:47:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AB2114
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 22:47:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E0D560F27
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 05:47:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57772C433D2;
-        Sat, 27 May 2023 05:47:51 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Juxin Gao <gaojuxin@loongson.cn>
-Subject: [PATCH 2/2] irqchip/loongson-pch-msi: Add machanism to limit msi allocation
-Date:   Sat, 27 May 2023 13:46:33 +0800
-Message-Id: <20230527054633.704916-3-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230527054633.704916-1-chenhuacai@loongson.cn>
-References: <20230527054633.704916-1-chenhuacai@loongson.cn>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 27 May 2023 01:55:28 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E64116
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 22:55:27 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-565a33c35f6so20018217b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 22:55:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685166926; x=1687758926;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QXQxaED4vp6H14Psblq6TQZfsUPt84iSNNTs5r5nIVk=;
+        b=OEDp5myjnZeIgIl+eYSLbYatcxAxQpyiOtdmgkZg6uAStnx0PVtD+ICPFf1FV9osSw
+         uH2j1iaWKIkDplA/fZ9UjmqXves9T0v8NSv6GkvUwl4sGhOTNa/oFhWuhqwsBzxLWD3z
+         K4f7RRR/RCp9TOujLTd0QD2xScpb13H2oBNpj1aEJ48YwG08ezp5/UjL5tWzZcxOScrF
+         d6MrjsOTn3aFsE0kao1GpSljB6GRXYIztusfsNiAzq0eCaOVqz4TVCyWm8Bv5QyGEQcn
+         WjpM8QNwJauKgn8hOSmfkwFHYMkq5mpkoKzmtvBAOLMFeDGIHDgCCtiObw8BnJ+6R1Iq
+         R/2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685166926; x=1687758926;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QXQxaED4vp6H14Psblq6TQZfsUPt84iSNNTs5r5nIVk=;
+        b=N9y8zSSykKP0crOpypNX1jdcxQAjynYdKZOzz2dHw4rd8BopWg+xyHQOGOI390VrKk
+         ik03ZOnO3QUadVPByRoijOu4H/+Tig3YWjoy2mmGHPPO0VEx3/VYEiFK6mjNEmQEwV1f
+         XS+ZC4cCfMOaSIayQYuOzbHDjlKdaLCHR3xfP/aukdP+xkeqjyUBPyQat7/DH/Nu8nYA
+         P4rWbvhbADSA43UbS96MTfRGXl8q7bQ7N67zljAuJPr8GPQLMZ+17Ar3aDWdiSVyzvdz
+         BiyB9wQBgGpnhR04WLdUlIkot7FW+2oA1WzxvBSTxB9iXfW9qxdluFqFCKhc0SS//s3O
+         Gm9w==
+X-Gm-Message-State: AC+VfDxaj6ngrYS0KujJZF9oKtAczh6PK46qsaoitJptThiQeuZCVcnd
+        06o6BoDahNFyjI+2/Eue9A/VfRabJ7F5
+X-Google-Smtp-Source: ACHHUZ7Z2jZnaomLhv+CmPE/K5wVWznhPumiRtXyxfDPzjZ3Y4WJYmBxpEgtlp1KVvEaTkiQTR8rt68upOPP
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3b4e:312c:644:a642])
+ (user=irogers job=sendgmr) by 2002:a25:ad83:0:b0:ba9:9a4f:a40 with SMTP id
+ z3-20020a25ad83000000b00ba99a4f0a40mr2202137ybi.13.1685166926450; Fri, 26 May
+ 2023 22:55:26 -0700 (PDT)
+Date:   Fri, 26 May 2023 22:55:17 -0700
+Message-Id: <20230527055517.2711487-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Subject: [PATCH v1] perf test python: Put perf python at start of sys.path
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Loongson machines can have as many as 256 logical cpus, but the maximum
-of msi vectors in one irqchip is also 256 (practically that is less than
-256, because pch-pic consumes some of them). Even on a 64-core machine,
-256 irqs can be easily exhausted if there are several NICs (NICs usually
-allocate msi irqs depending on the number of online cpus). So we want to
-limit the msi allocation.
+This avoids picking up a system installed version of the perf python module.
 
-In this patch we add a machanism to limit msi allocation:
-1, Modify input "nvec" by overriding the msi_domain_ops::msi_prepare();
-2, The default limit is 256, which is compatible with the old behavior;
-3, Add a cmdline parameter "loongson_msi_limit=xxx" to control the limit.
-
-Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- drivers/irqchip/irq-loongson-pch-msi.c | 27 ++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ tools/perf/tests/python-use.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-loongson-pch-msi.c b/drivers/irqchip/irq-loongson-pch-msi.c
-index 6e1e1f011bb2..85e2e3468b8c 100644
---- a/drivers/irqchip/irq-loongson-pch-msi.c
-+++ b/drivers/irqchip/irq-loongson-pch-msi.c
-@@ -85,9 +85,36 @@ static void pch_msi_compose_msi_msg(struct irq_data *data,
- 	msg->data = data->hwirq;
- }
+diff --git a/tools/perf/tests/python-use.c b/tools/perf/tests/python-use.c
+index 6b990ee38575..0ebc22ac8d5b 100644
+--- a/tools/perf/tests/python-use.c
++++ b/tools/perf/tests/python-use.c
+@@ -14,7 +14,7 @@ static int test__python_use(struct test_suite *test __maybe_unused, int subtest
+ 	char *cmd;
+ 	int ret;
  
-+#define DEFAULT_MSI_LIMITS 256
-+
-+static int pch_msi_limits = DEFAULT_MSI_LIMITS;
-+
-+static int __init pch_msi_limit(char *str)
-+{
-+	get_option(&str, &pch_msi_limits);
-+
-+	if (pch_msi_limits <= 0)
-+		pch_msi_limits = DEFAULT_MSI_LIMITS;
-+
-+	return 0;
-+}
-+
-+early_param("loongson_msi_limit", pch_msi_limit);
-+
-+static int pch_msi_prepare(struct irq_domain *domain, struct device *dev, int nvec, msi_alloc_info_t *arg)
-+{
-+	memset(arg, 0, sizeof(*arg));
-+	return clamp_val(nvec, 0, pch_msi_limits);
-+}
-+
-+static struct msi_domain_ops pch_msi_ops = {
-+	.msi_prepare	= pch_msi_prepare,
-+};
-+
- static struct msi_domain_info pch_msi_domain_info = {
- 	.flags	= MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
- 		  MSI_FLAG_MULTI_PCI_MSI | MSI_FLAG_PCI_MSIX,
-+	.ops	= &pch_msi_ops,
- 	.chip	= &pch_msi_irq_chip,
- };
+-	if (asprintf(&cmd, "echo \"import sys ; sys.path.append('%s'); import perf\" | %s %s",
++	if (asprintf(&cmd, "echo \"import sys ; sys.path.insert(0, '%s'); import perf\" | %s %s",
+ 		     PYTHONPATH, PYTHON, verbose > 0 ? "" : "2> /dev/null") < 0)
+ 		return -1;
  
 -- 
-2.39.1
+2.41.0.rc0.172.g3f132b7071-goog
 
