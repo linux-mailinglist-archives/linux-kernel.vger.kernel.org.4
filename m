@@ -2,33 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF86D713192
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA47713190
 	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 03:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241582AbjE0BmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 26 May 2023 21:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S230414AbjE0BmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 21:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjE0BmB (ORCPT
+        with ESMTP id S230179AbjE0BmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 26 May 2023 21:42:01 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F160AF3
-        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:41:58 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QSktX5hpMz18Ldx;
-        Sat, 27 May 2023 09:37:24 +0800 (CST)
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA7AFB
+        for <linux-kernel@vger.kernel.org>; Fri, 26 May 2023 18:41:59 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QSky26JXzzLmPR;
+        Sat, 27 May 2023 09:40:26 +0800 (CST)
 Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
  (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 27 May
  2023 09:41:57 +0800
 From:   Ye Bin <yebin10@huawei.com>
 To:     <jack@suse.com>, <linux-kernel@vger.kernel.org>
-CC:     <yebin10@huawei.com>,
-        <syzbot+e633c79ceaecbf479854@syzkaller.appspotmail.com>
-Subject: [PATCH 1/2] quota: fix null-ptr-deref in ext4_acquire_dquot()
-Date:   Sat, 27 May 2023 09:40:17 +0800
-Message-ID: <20230527014018.47396-2-yebin10@huawei.com>
+CC:     <yebin10@huawei.com>
+Subject: [PATCH 2/2] quota: fix warning in dqgrab()
+Date:   Sat, 27 May 2023 09:40:18 +0800
+Message-ID: <20230527014018.47396-3-yebin10@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230527014018.47396-1-yebin10@huawei.com>
 References: <20230527014018.47396-1-yebin10@huawei.com>
@@ -48,64 +47,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot found the following issue:
-Unable to handle kernel paging request at virtual address dfff800000000005
-KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-[dfff800000000005] address between user and kernel address ranges
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+There's issue as follows when do fault injection:
+WARNING: CPU: 1 PID: 14870 at include/linux/quotaops.h:51 dquot_disable+0x13b7/0x18c0
 Modules linked in:
-CPU: 0 PID: 6080 Comm: syz-executor747 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : ext4_acquire_dquot+0x1d4/0x398 fs/ext4/super.c:6766
-lr : dquot_to_inode fs/ext4/super.c:6740 [inline]
-lr : ext4_acquire_dquot+0x1ac/0x398 fs/ext4/super.c:6766
-sp : ffff80001eb27280
-x29: ffff80001eb27280 x28: 1fffe0001c3c01fc x27: ffff800015d705b0
-x26: ffff0000dd93c000 x25: ffff0000dd93e000 x24: 1fffe0001c3c021c
-x23: dfff800000000000 x22: 0000000000000049 x21: 0000000000000028
-x20: 0000000000000000 x19: ffff0000e1e00fc0 x18: ffff0001b426cca8
-x17: 0000000000000000 x16: ffff8000089669b0 x15: 0000000000000001
-x14: 1ffff00002bae0b0 x13: dfff800000000000 x12: 0000000000000001
-x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-x8 : 0000000000000005 x7 : ffff800008c11f68 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff800012441b4c
-x2 : 0000000000000001 x1 : 0000000000000001 x0 : 0000000000000003
-Call trace:
- ext4_acquire_dquot+0x1d4/0x398 fs/ext4/super.c:6766
- dqget+0x844/0xc48 fs/quota/dquot.c:914
- __dquot_initialize+0x2cc/0xb54 fs/quota/dquot.c:1492
- dquot_initialize fs/quota/dquot.c:1550 [inline]
- dquot_file_open+0x90/0xc8 fs/quota/dquot.c:2181
- ext4_file_open+0x230/0x590 fs/ext4/file.c:903
- do_dentry_open+0x724/0xf90 fs/open.c:920
- vfs_open+0x7c/0x90 fs/open.c:1051
- do_open fs/namei.c:3560 [inline]
- path_openat+0x1f2c/0x27f8 fs/namei.c:3715
- do_filp_open+0x1bc/0x3cc fs/namei.c:3742
- do_sys_openat2+0x128/0x3d8 fs/open.c:1348
- do_sys_open fs/open.c:1364 [inline]
- __do_sys_openat fs/open.c:1380 [inline]
- __se_sys_openat fs/open.c:1375 [inline]
- __arm64_sys_openat+0x1f0/0x240 fs/open.c:1375
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-Code: 97e8a7df f94002a8 9100a115 d343fea8 (38776908)
----[ end trace 0000000000000000 ]---
+CPU: 1 PID: 14870 Comm: fsconfig Not tainted 6.3.0-next-20230505-00006-g5107a9c821af-dirty #541
+RIP: 0010:dquot_disable+0x13b7/0x18c0
+RSP: 0018:ffffc9000acc79e0 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff88825e41b980
+RDX: 0000000000000000 RSI: ffff88825e41b980 RDI: 0000000000000002
+RBP: ffff888179f68000 R08: ffffffff82087ca7 R09: 0000000000000000
+R10: 0000000000000001 R11: ffffed102f3ed026 R12: ffff888179f68130
+R13: ffff888179f68110 R14: dffffc0000000000 R15: ffff888179f68118
+FS:  00007f450a073740(0000) GS:ffff88882fc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffe96f2efd8 CR3: 000000025c8ad000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ dquot_load_quota_sb+0xd53/0x1060
+ dquot_resume+0x172/0x230
+ ext4_reconfigure+0x1dc6/0x27b0
+ reconfigure_super+0x515/0xa90
+ __x64_sys_fsconfig+0xb19/0xd20
+ do_syscall_64+0x39/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
 Above issue may happens as follows:
 ProcessA              ProcessB                    ProcessC
@@ -116,58 +82,59 @@ sys_fsconfig
       dquot_suspend -> suspend all type quota
 
                  sys_fsconfig
-		  vfs_fsconfig_locked
-		    reconfigure_super
-		     ext4_remount
-		      dquot_resume
-		       ret = dquot_load_quota_sb
+                  vfs_fsconfig_locked
+                    reconfigure_super
+                     ext4_remount
+                      dquot_resume
+                       ret = dquot_load_quota_sb
                         add_dquot_ref
-		                           do_open  -> open file O_RDWR
-					    vfs_open
-					     do_dentry_open
-					      get_write_access
-					       atomic_inc_unless_negative(&inode->i_writecount)
+                                           do_open  -> open file O_RDWR
+                                            vfs_open
+                                             do_dentry_open
+                                              get_write_access
+                                               atomic_inc_unless_negative(&inode->i_writecount)
                                               ext4_file_open
-					       dquot_file_open
-					        dquot_initialize
-						  __dquot_initialize
-						   dqget
-						    if (!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
+                                               dquot_file_open
+                                                dquot_initialize
+                                                  __dquot_initialize
+                                                   dqget
+						    atomic_inc(&dquot->dq_count);
 
-			  __dquot_initialize
-			   __dquot_initialize
-			    dqget
-			     if (!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
-	                       ext4_acquire_dquot -> Return error
-		       if (ret < 0)
-	                 vfs_cleanup_quota_inode
-			  dqopt->files[type] = NULL;
+                          __dquot_initialize
+                           __dquot_initialize
+                            dqget
+                             if (!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
+                               ext4_acquire_dquot
+			        -> Return error DQ_ACTIVE_B flag isn't set
+                         dquot_disable
+			  invalidate_dquots
+			   if (atomic_read(&dquot->dq_count))
+	                    dqgrab
+			     WARN_ON_ONCE(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
+	                      -> Trigger warning
 
-			                              ext4_acquire_dquot
-						       -->dquot_to_inode(dquot) is NULL
+In the above scenario, 'dquot->dq_flags' has no DQ_ACTIVE_B is normal when
+dqgrab().
+So just remove 'WARN_ON_ONCE(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))'
+in dqgrab().
 
-To solve above issue, if quota has been loaded, there's unneed to cleaup quota
-inode if dquot_load_quota_sb() return failed when do dquot_resume();
-
-Reported-by: syzbot+e633c79ceaecbf479854@syzkaller.appspotmail.com
 Signed-off-by: Ye Bin <yebin10@huawei.com>
 ---
- fs/quota/dquot.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/quotaops.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-index ffd40dc3e4e9..4b913faa48ec 100644
---- a/fs/quota/dquot.c
-+++ b/fs/quota/dquot.c
-@@ -2476,7 +2476,7 @@ int dquot_resume(struct super_block *sb, int type)
- 		flags = dquot_generic_flag(flags, cnt);
- 		ret = dquot_load_quota_sb(sb, cnt, dqopt->info[cnt].dqi_fmt_id,
- 					  flags);
--		if (ret < 0)
-+		if (ret < 0 && !sb_has_quota_loaded(sb, cnt))
- 			vfs_cleanup_quota_inode(sb, cnt);
- 	}
- 
+diff --git a/include/linux/quotaops.h b/include/linux/quotaops.h
+index 11a4becff3a9..cb5e4c11e503 100644
+--- a/include/linux/quotaops.h
++++ b/include/linux/quotaops.h
+@@ -48,7 +48,6 @@ static inline struct dquot *dqgrab(struct dquot *dquot)
+ {
+ 	/* Make sure someone else has active reference to dquot */
+ 	WARN_ON_ONCE(!atomic_read(&dquot->dq_count));
+-	WARN_ON_ONCE(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags));
+ 	atomic_inc(&dquot->dq_count);
+ 	return dquot;
+ }
 -- 
 2.31.1
 
