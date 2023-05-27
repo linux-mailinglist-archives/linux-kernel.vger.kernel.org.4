@@ -2,54 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD52713603
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 20:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6F371360A
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 20:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjE0SGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 14:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S229917AbjE0SIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 14:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjE0SGw (ORCPT
+        with ESMTP id S229516AbjE0SIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 14:06:52 -0400
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1FAD8
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 11:06:45 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 2yJMqqEHp8aX92yJMqPEHz; Sat, 27 May 2023 20:06:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1685210804;
-        bh=LJo0suhqS2HfE3uE26k/aOFLowEtiIxwmm1VGEPy9mU=;
-        h=From:To:Cc:Subject:Date;
-        b=GtlK9/SBhQJvW/RLCYpHPWPXzFqNL8XuXBBiKHP1H2vkKfA31txL/BLtCSyJRT8ej
-         rmFEyhSfEvKEj/UcNlGPKmndDT/d9FXM+wWhqdYDrdzIZeOCkVwnJxbrENX0ZdlD9r
-         ZXI4ERzvBEAWEhF9mFAYelsTMSf9w8G3kWLGa0NAcHtisIQEnDD/zFSgUzBz7QMifd
-         aeGM16vRAZeeCYQ6zyPe5c5CaqI47wjWFWtOKhzSGZNvWueBZcPnE/j9h/0W28EaeN
-         VCP+RAPPolitHxKpjtxiQOReUwU9YzoEGZQVHoJ1BaaX7am+g13Tn7iQl+NKZ/YUea
-         W9CKSq0eZ8VkQ==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 27 May 2023 20:06:44 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Satish Kharat <satishkh@cisco.com>,
-        Sesidhar Baddela <sebaddel@cisco.com>,
-        Karan Tilak Kumar <kartilak@cisco.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: fnic: Use vzalloc()
-Date:   Sat, 27 May 2023 20:06:37 +0200
-Message-Id: <a1179941a6d440140513e681f4f3a1b92c8d83ae.1685210773.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 27 May 2023 14:08:51 -0400
+Received: from out-39.mta0.migadu.com (out-39.mta0.migadu.com [91.218.175.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C780D2
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 11:08:48 -0700 (PDT)
+Date:   Sat, 27 May 2023 18:08:36 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685210926;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qro1ly8D0IN85bz01iVra27g5btF8pv3UlKO41a9+sM=;
+        b=llE6IRkx/n91QHSJfUuz8Lvf36Zsdvbsda8s4+YDAphela0hHMrM+udZgnGOhdOMmdcMem
+        6eMFZGQIhSrfmCXeAFxKmM8bvTDiACcfidzZol+st9/hDl3h5IknZGYlF6wWBlLroxmus0
+        h5pa83O4YLhVJG62l7K1d5yuFK61noU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Subject: Re: [PATCH mm-unstable v2 04/10] kvm/arm64: make stage2 page tables
+ RCU safe
+Message-ID: <ZHJHJPBF6euzOFdw@linux.dev>
+References: <20230526234435.662652-1-yuzhao@google.com>
+ <20230526234435.662652-5-yuzhao@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526234435.662652-5-yuzhao@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,48 +85,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use vzalloc() instead of hand writing it with vmalloc()+memset().
-This is less verbose.
+Yu,
 
-This also fixes some style issues :)
+On Fri, May 26, 2023 at 05:44:29PM -0600, Yu Zhao wrote:
+> Stage2 page tables are currently not RCU safe against unmapping or VM
+> destruction. The previous mmu_notifier_ops members rely on
+> kvm->mmu_lock to synchronize with those operations.
+> 
+> However, the new mmu_notifier_ops member test_clear_young() provides
+> a fast path that does not take kvm->mmu_lock. To implement
+> kvm_arch_test_clear_young() for that path, unmapped page tables need
+> to be freed by RCU and kvm_free_stage2_pgd() needs to be after
+> mmu_notifier_unregister().
+> 
+> Remapping, specifically stage2_free_removed_table(), is already RCU
+> safe.
+> 
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
+> ---
+>  arch/arm64/include/asm/kvm_pgtable.h |  2 ++
+>  arch/arm64/kvm/arm.c                 |  1 +
+>  arch/arm64/kvm/hyp/pgtable.c         |  8 ++++++--
+>  arch/arm64/kvm/mmu.c                 | 17 ++++++++++++++++-
+>  4 files changed, 25 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> index ff520598b62c..5cab52e3a35f 100644
+> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> @@ -153,6 +153,7 @@ static inline bool kvm_level_supports_block_mapping(u32 level)
+>   * @put_page:			Decrement the refcount on a page. When the
+>   *				refcount reaches 0 the page is automatically
+>   *				freed.
+> + * @put_page_rcu:		RCU variant of the above.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/scsi/fnic/fnic_debugfs.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+You don't need to add yet another hook to implement this. I was working
+on lock-free walks in a separate context and arrived at the following:
 
-diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
-index 6fedc3b7d1ab..c4d9ed0d7d75 100644
---- a/drivers/scsi/fnic/fnic_debugfs.c
-+++ b/drivers/scsi/fnic/fnic_debugfs.c
-@@ -201,25 +201,21 @@ static int fnic_trace_debugfs_open(struct inode *inode,
- 		return -ENOMEM;
+commit f82d264a37745e07ee28e116c336f139f681fd7f
+Author: Oliver Upton <oliver.upton@linux.dev>
+Date:   Mon May 1 08:53:37 2023 +0000
+
+    KVM: arm64: Consistently use free_removed_table() for stage-2
+    
+    free_removed_table() is essential to the RCU-protected parallel walking
+    scheme, as behind the scenes the cleanup is deferred until an RCU grace
+    period. Nonetheless, the stage-2 unmap path calls put_page() directly,
+    which leads to table memory being freed inline with the table walk.
+    
+    This is safe for the time being, as the stage-2 unmap walker is called
+    while holding the write lock. A future change to KVM will further relax
+    the locking mechanics around the stage-2 page tables to allow lock-free
+    walkers protected only by RCU. As such, switch to the RCU-safe mechanism
+    for freeing table memory.
+    
+    Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 3d61bd3e591d..bfbebdcb4ef0 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -1019,7 +1019,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
+ 					       kvm_granule_size(ctx->level));
  
- 	if (*rdata_ptr == fc_trc_flag->fnic_trace) {
--		fnic_dbg_prt->buffer = vmalloc(array3_size(3, trace_max_pages,
-+		fnic_dbg_prt->buffer = vzalloc(array3_size(3, trace_max_pages,
- 							   PAGE_SIZE));
- 		if (!fnic_dbg_prt->buffer) {
- 			kfree(fnic_dbg_prt);
- 			return -ENOMEM;
- 		}
--		memset((void *)fnic_dbg_prt->buffer, 0,
--		3 * (trace_max_pages * PAGE_SIZE));
- 		fnic_dbg_prt->buffer_len = fnic_get_trace_data(fnic_dbg_prt);
- 	} else {
- 		fnic_dbg_prt->buffer =
--			vmalloc(array3_size(3, fnic_fc_trace_max_pages,
-+			vzalloc(array3_size(3, fnic_fc_trace_max_pages,
- 					    PAGE_SIZE));
- 		if (!fnic_dbg_prt->buffer) {
- 			kfree(fnic_dbg_prt);
- 			return -ENOMEM;
- 		}
--		memset((void *)fnic_dbg_prt->buffer, 0,
--			3 * (fnic_fc_trace_max_pages * PAGE_SIZE));
- 		fnic_dbg_prt->buffer_len =
- 			fnic_fc_trace_get_data(fnic_dbg_prt, *rdata_ptr);
- 	}
--- 
-2.34.1
+ 	if (childp)
+-		mm_ops->put_page(childp);
++		mm_ops->free_removed_table(childp, ctx->level);
+ 
+ 	return 0;
+ }
 
+-- 
+Thanks,
+Oliver
