@@ -2,253 +2,543 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6292713529
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 16:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 176B371352E
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 16:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjE0OZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 10:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
+        id S231909AbjE0Ond (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 10:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjE0OYt (ORCPT
+        with ESMTP id S229586AbjE0Onb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 10:24:49 -0400
-X-Greylist: delayed 242 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 27 May 2023 07:24:46 PDT
-Received: from sequoia-grove.ad.secure-endpoints.com (sequoia-grove.ad.secure-endpoints.com [IPv6:2001:470:1f07:f77:70f5:c082:a96a:5685])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CF4A7
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 07:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
-        d=auristor.com; s=MDaemon; r=y; t=1685197242; x=1685802042;
-        i=jaltman@auristor.com; q=dns/txt; h=Message-ID:Date:
-        MIME-Version:User-Agent:Subject:To:Cc:References:
-        Content-Language:From:Organization:In-Reply-To:Content-Type;
-        bh=Vi9PzcyFFsaHlFnFOVoXC09Y/5y5HvFtbe/EXH+86Js=; b=Xsm5EGJM0xX97
-        nqzuUKg/I1ei0bpIFSj5thN6AcVZivE8XLoAiRfkloGh2wq9ER2MTxwU8NtylDXz
-        PS3xtzL0hI1jcf4CXK1z4ZaOR7AnvDwutJTSU0sDgrXy781di1F+PZm9OxcvWqow
-        mI8ZIvHEZYH5rsms3DihE6QTx1lcVs=
-X-MDAV-Result: clean
-X-MDAV-Processed: sequoia-grove.ad.secure-endpoints.com, Sat, 27 May 2023 10:20:42 -0400
-Received: from [IPV6:2603:7000:73c:9c99:401:2567:fdc3:c2b4] by auristor.com (IPv6:2001:470:1f07:f77:28d9:68fb:855d:c2a5) (MDaemon PRO v23.0.2c) 
-        with ESMTPSA id md5001003473501.msg; Sat, 27 May 2023 10:20:40 -0400
-X-Spam-Processed: sequoia-grove.ad.secure-endpoints.com, Sat, 27 May 2023 10:20:40 -0400
-        (not processed: message from trusted or authenticated source)
-X-MDRemoteIP: 2603:7000:73c:9c99:401:2567:fdc3:c2b4
-X-MDHelo: [IPV6:2603:7000:73c:9c99:401:2567:fdc3:c2b4]
-X-MDArrival-Date: Sat, 27 May 2023 10:20:40 -0400
-X-MDOrigin-Country: US, NA
-X-Authenticated-Sender: jaltman@auristor.com
-X-Return-Path: prvs=1511ba3f43=jaltman@auristor.com
-X-Envelope-From: jaltman@auristor.com
-X-MDaemon-Deliver-To: linux-kernel@vger.kernel.org
-Message-ID: <2a3bc88a-d851-b3c4-89d4-fdcc4378c2f5@auristor.com>
-Date:   Sat, 27 May 2023 10:20:33 -0400
+        Sat, 27 May 2023 10:43:31 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E9BE1;
+        Sat, 27 May 2023 07:43:29 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so1580600a12.2;
+        Sat, 27 May 2023 07:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685198609; x=1687790609;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hrPrq7jQ13X6gsw0ep79C70R5adI2Y/s+LGq0H1kKqk=;
+        b=iQDsw/leakTX3iOvsfVUPhh30Tt08QIClxcPUhbPwGVl6PcYn9sADXnhWYIRlhydvq
+         iKUz0FeLjaf2TQYFv658Oka2MxhyHB9LU7mLP24alPgS2QoGat30WWRLL4om4OlxTBmG
+         jX7Rs/YS6vbDMYUo9hVKfZFiJM5rzXHTQvJ6KJNvCd7YXgk/sMqtK0Of2YjlFmTS2iYp
+         W8NMeXDol+DuJgARXGXBJKNLroTJkZ2OkuLiaV4cjKmIB0BORdlIHfzvKDMexOzzVzKe
+         jBXfh3j1K7xqV7pNhawVmj8orw98eulDxHqvuqnlHo4Tlalnqh99yAl+D0GpxpPQ1KsI
+         GXJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685198609; x=1687790609;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hrPrq7jQ13X6gsw0ep79C70R5adI2Y/s+LGq0H1kKqk=;
+        b=arNsf0vUsR3pBaApPHYVwnnru15GEONSXMdYTOYEVCx98XiUQxNWrvX1/3yZsP7kik
+         t2MvwV257VZoNoLtiaT8ggHOZiiCE4Ilfd5+S0unVq18anSHOIeLSDjmw+oZx2Na1LHj
+         GglXcL7pj9HpeaUlOLg1APLG7942A9xg73qRPXXpWCG31Rh3LcXY9GWlIVwNigcZ0Cdh
+         v/yvP1JAcF7GD3ZqAGkl8u99UZP16ik23JBGlNayZ/p69/Imyg/zGZwOR4k6kaCBHoNZ
+         nTj0FVSjAXW4j8DgDzkzEL5MwhzzYkr0olb69E9tLNSbQY5WO65ttHpucEHpkKAM+L9L
+         TwUw==
+X-Gm-Message-State: AC+VfDySbg9+zN2eFYIxwVYHoZscQaXK6mP1DJpZ4rHGpAtEpr+mTfp2
+        Wm+OaTm60ahiHktiZLBptKo=
+X-Google-Smtp-Source: ACHHUZ6Jxa09IoXkVA8Cc5fzsx16fCI5JapMIhGEUA8LAgcIO38SBomLsrIZvjk3t4lVvozGNsSS0Q==
+X-Received: by 2002:a17:902:da85:b0:1af:f926:a662 with SMTP id j5-20020a170902da8500b001aff926a662mr6195839plx.52.1685198608678;
+        Sat, 27 May 2023 07:43:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j21-20020a170902c3d500b001ae8587d60csm4981532plj.265.2023.05.27.07.43.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 07:43:27 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 27 May 2023 07:43:26 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Noah Wang <noahwang.wang@outlook.com>
+Cc:     jdelvare@suse.com, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] hwmon: mp2891: add MP2891 driver
+Message-ID: <a40eeb84-ae35-460c-9794-7ea3c4768470@roeck-us.net>
+References: <TYZPR03MB7130A7F41D61BFB611DDF0C7FA479@TYZPR03MB7130.apcprd03.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH net] rxrpc: Truncate UTS_RELEASE for rxrpc version
-To:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
-Cc:     Kenny Ho <Kenny.Ho@amd.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        David Laight <David.Laight@ACULAB.COM>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <654974.1685100894@warthog.procyon.org.uk>
-Content-Language: en-US
-From:   Jeffrey E Altman <jaltman@auristor.com>
-Organization: AuriStor, Inc.
-In-Reply-To: <654974.1685100894@warthog.procyon.org.uk>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms030104000003030305050504"
-X-MDCFSigsAdded: auristor.com
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYZPR03MB7130A7F41D61BFB611DDF0C7FA479@TYZPR03MB7130.apcprd03.prod.outlook.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a cryptographically signed message in MIME format.
+On Fri, May 26, 2023 at 05:42:07PM +0800, Noah Wang wrote:
+> This driver is designed for MPS VR controller mp2891. The sum
+> of input voltage, output voltage, output current, input power,
+> output power and temperature of per rail can be obtained from
+> hwmon interfaces that the driver provided.
+> 
+> Firstly, the driver get the vid_step of output voltage and
+> current scale(iout_scale) from the mps specific register
+> MFR_VOUT_LOOP_CTRL(0xBD) and MFR_SVI3_IOUT_PRT(0x65). These
+> two parameters are used to calculate the output voltage and
+> output current. Then, if the hwmon interfaces that the driver
+> provided are read by the userspace, the driver will obtain
+> corresponding data from mp2891 and the data will be submitted
+> to the pmbus-core. Finally, userspace can obtain the result.
+> 
+> Signed-off-by: Noah Wang <noahwang.wang@outlook.com>
 
---------------ms030104000003030305050504
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+After getting some more information:
 
-On 5/26/2023 7:34 AM, David Howells wrote:
->      
-> UTS_RELEASE has a maximum length of 64 which can cause rxrpc_version to
-> exceed the 65 byte message limit.
->
-> Per the rx spec[1]: "If a server receives a packet with a type value of 13,
-> and the client-initiated flag set, it should respond with a 65-byte payload
-> containing a string that identifies the version of AFS software it is
-> running."
->
-> The current implementation causes a compile error when WERROR is turned on
-> and/or UTS_RELEASE exceeds the length of 49 (making the version string more
-> than 64 characters).
->
-> Fix this by generating the string during module initialisation and limiting
-> the UTS_RELEASE segment of the string does not exceed 49 chars.  We need to
-> make sure that the 64 bytes includes "linux-" at the front and " AF_RXRPC"
-> at the back as this may be used in pattern matching.
->
-> Fixes: 44ba06987c0b ("RxRPC: Handle VERSION Rx protocol packets")
-> Reported-by: Kenny Ho <Kenny.Ho@amd.com>
-> Link: https://lore.kernel.org/r/20230523223944.691076-1-Kenny.Ho@amd.com/
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Acked-by: Kenny Ho <Kenny.Ho@amd.com>
-> cc: Marc Dionne <marc.dionne@auristor.com>
-> cc: Andrew Lunn <andrew@lunn.ch>
-> cc: David Laight <David.Laight@ACULAB.COM>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: linux-afs@lists.infradead.org
-> cc: netdev@vger.kernel.org
-> Link: https://web.mit.edu/kolya/afs/rx/rx-spec [1]
+- POUT is reported in Linear11 mode and should be configured accordingly.
+  No driver specific code is required.
+- Per-rail PIN is indeed reported in register 0x94 in linear11 mode
+  and should be configured accordingly. If rail specific data is
+  desired, a comment should be added to the code explaining the
+  reason.
+- Per-rail IIN is reported in register 0x95 in linear11 mode.
+  The standard PMBus command to read the input current does not appear
+  to be supported. Since per-rail PIN is reported, per-rail IIN should
+  be supported as well.
+- Per-rail IOUT is reported in register 0x8c in linear11 mode. There
+  is no indication in the datasheet that this value would need to be
+  scaled in software. It should be configured as Linear11, and should
+  not require special processing.
+- VIN is reported in page 0 in Linear11 form. It should be configured
+  accordingly and not require any special processing.
+- Temperature is reported in Linear11 format. It should be configured
+  accordingly and not require any special processing.
+
+This leaves VOUT, which in practice reports values with an LSB as
+configured in MFR_VOUT_LOOP_CTRL. Instead of local conversions, the
+output voltage should be configured in direct mode, with coefficients
+configured to match the step size. Again, there should be no special
+processing in the driver.
+
+Additional note:
+
+- PMBUS_PHASE_VIRTUAL only makes sense for chips with per-phase telemetry
+  support. Setting the flag in this driver does not provide any value.
+
+Guenter
+
 > ---
->   net/rxrpc/af_rxrpc.c    |    1 +
->   net/rxrpc/ar-internal.h |    1 +
->   net/rxrpc/local_event.c |   11 ++++++++++-
->   3 files changed, 12 insertions(+), 1 deletion(-)
->
-> diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
-> index 31f738d65f1c..da0b3b5157d5 100644
-> --- a/net/rxrpc/af_rxrpc.c
-> +++ b/net/rxrpc/af_rxrpc.c
-> @@ -980,6 +980,7 @@ static int __init af_rxrpc_init(void)
->   	BUILD_BUG_ON(sizeof(struct rxrpc_skb_priv) > sizeof_field(struct sk_buff, cb));
->   
->   	ret = -ENOMEM;
-> +	rxrpc_gen_version_string();
->   	rxrpc_call_jar = kmem_cache_create(
->   		"rxrpc_call_jar", sizeof(struct rxrpc_call), 0,
->   		SLAB_HWCACHE_ALIGN, NULL);
-> diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-> index 5d44dc08f66d..e8e14c6f904d 100644
-> --- a/net/rxrpc/ar-internal.h
-> +++ b/net/rxrpc/ar-internal.h
-> @@ -1068,6 +1068,7 @@ int rxrpc_get_server_data_key(struct rxrpc_connection *, const void *, time64_t,
->   /*
->    * local_event.c
->    */
-> +void rxrpc_gen_version_string(void);
->   void rxrpc_send_version_request(struct rxrpc_local *local,
->   				struct rxrpc_host_header *hdr,
->   				struct sk_buff *skb);
-> diff --git a/net/rxrpc/local_event.c b/net/rxrpc/local_event.c
-> index 5e69ea6b233d..993c69f97488 100644
-> --- a/net/rxrpc/local_event.c
-> +++ b/net/rxrpc/local_event.c
-> @@ -16,7 +16,16 @@
->   #include <generated/utsrelease.h>
->   #include "ar-internal.h"
->   
-> -static const char rxrpc_version_string[65] = "linux-" UTS_RELEASE " AF_RXRPC";
-> +static char rxrpc_version_string[65]; // "linux-" UTS_RELEASE " AF_RXRPC";
+>  drivers/hwmon/pmbus/Kconfig  |  10 +
+>  drivers/hwmon/pmbus/Makefile |   1 +
+>  drivers/hwmon/pmbus/mp2891.c | 371 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 382 insertions(+)
+>  create mode 100644 drivers/hwmon/pmbus/mp2891.c
+> 
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 270b6336b76d..8e930c15aa89 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig
+> @@ -326,6 +326,16 @@ config SENSORS_MP5023
+>  	  This driver can also be built as a module. If so, the module will
+>  	  be called mp5023.
+>  
+> +config SENSORS_MP2891
+> +	tristate "MPS MP2891"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for MPS
+> +	  MP2891 Dual Loop Digital Multi-Phase Controller.
 > +
+> +	  This driver can also be built as a module. If so, the module will
+> +	  be called mp2891.
+> +
+> +
+>  config SENSORS_MPQ7932_REGULATOR
+>  	bool "Regulator support for MPQ7932"
+>  	depends on SENSORS_MPQ7932 && REGULATOR
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 84ee960a6c2d..1a3884fd4b1a 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -35,6 +35,7 @@ obj-$(CONFIG_SENSORS_MAX8688)	+= max8688.o
+>  obj-$(CONFIG_SENSORS_MP2888)	+= mp2888.o
+>  obj-$(CONFIG_SENSORS_MP2975)	+= mp2975.o
+>  obj-$(CONFIG_SENSORS_MP5023)	+= mp5023.o
+> +obj-$(CONFIG_SENSORS_MP2891)	+= mp2891.o
+>  obj-$(CONFIG_SENSORS_MPQ7932)	+= mpq7932.o
+>  obj-$(CONFIG_SENSORS_PLI1209BC)	+= pli1209bc.o
+>  obj-$(CONFIG_SENSORS_PM6764TR)	+= pm6764tr.o
+> diff --git a/drivers/hwmon/pmbus/mp2891.c b/drivers/hwmon/pmbus/mp2891.c
+> new file mode 100644
+> index 000000000000..07adf5f9871f
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/mp2891.c
+> @@ -0,0 +1,371 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
 > +/*
-> + * Generate the VERSION packet string.
+> + * Hardware monitoring driver for MPS Multi-phase Digital VR Controllers(MP2891)
+> + *
+> + * Copyright (C) 2023 MPS
 > + */
-> +void rxrpc_gen_version_string(void)
+> +
+> +#include <linux/err.h>
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include "pmbus.h"
+> +
+> +/* Vendor specific registers. */
+> +#define MFR_VOUT_LOOP_CTRL      0xBD
+> +#define MFR_SVI3_IOUT_PRT       0x65
+> +#define READ_PIN_EST            0x94
+> +
+> +#define VID_STEP_POS            14
+> +#define VID_STEP_MSK            (0x3 << VID_STEP_POS)
+> +#define DAC_2P5MV_POS           13
+> +#define DAC_2P5MV_MSK           (0x1 << DAC_2P5MV_POS)
+> +#define IOUT_SCALE_POS          0
+> +#define IOUT_SCALE_MSK          (0x7 << IOUT_SCALE_POS)
+> +
+> +#define MP2891_PAGE_NUM			2
+> +
+> +#define MP2891_RAIL1_FUNC	(PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | \
+> +							PMBUS_HAVE_IOUT | PMBUS_HAVE_TEMP | \
+> +							PMBUS_HAVE_POUT | PMBUS_HAVE_PIN | \
+> +							PMBUS_PHASE_VIRTUAL)
+> +
+> +#define MP2891_RAIL2_FUNC	(PMBUS_HAVE_VOUT | PMBUS_HAVE_IOUT | \
+> +							PMBUS_HAVE_TEMP | PMBUS_HAVE_POUT | \
+> +							PMBUS_PHASE_VIRTUAL)
+> +
+> +struct mp2891_data {
+> +	struct pmbus_driver_info info;
+> +	int vid_step[MP2891_PAGE_NUM];
+> +	int iout_scale[MP2891_PAGE_NUM];
+> +};
+> +
+> +#define to_mp2891_data(x) container_of(x, struct mp2891_data, info)
+> +
+> +static int
+> +mp2891_read_pout(struct i2c_client *client, int page, int phase, int reg)
 > +{
-> +	snprintf(rxrpc_version_string, sizeof(rxrpc_version_string),
-> +		 "linux-%.49s AF_RXRPC", UTS_RELEASE);
+> +	int ret;
+> +
+> +	ret = pmbus_read_word_data(client, page, phase, reg);
+> +
+> +	return ret;
 > +}
->   
->   /*
->    * Reply to a version request
->
-Reviewed-by: Jeffrey Altman <jaltman@auristor.com>
-
-
-
---------------ms030104000003030305050504
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCC
-DHEwggXSMIIEuqADAgECAhBAAYJpmi/rPn/F0fJyDlzMMA0GCSqGSIb3DQEBCwUAMDoxCzAJ
-BgNVBAYTAlVTMRIwEAYDVQQKEwlJZGVuVHJ1c3QxFzAVBgNVBAMTDlRydXN0SUQgQ0EgQTEz
-MB4XDTIyMDgwNDE2MDQ0OFoXDTI1MTAzMTE2MDM0OFowcDEvMC0GCgmSJomT8ixkAQETH0Ew
-MTQxMEQwMDAwMDE4MjY5OUEyRkQyMDAwMjMzQ0QxGTAXBgNVBAMTEEplZmZyZXkgRSBBbHRt
-YW4xFTATBgNVBAoTDEF1cmlTdG9yIEluYzELMAkGA1UEBhMCVVMwggEiMA0GCSqGSIb3DQEB
-AQUAA4IBDwAwggEKAoIBAQCkC7PKBBZnQqDKPtZPMLAy77zo2DPvwtGnd1hNjPvbXrpGxUb3
-xHZRtv179LHKAOcsY2jIctzieMxf82OMyhpBziMPsFAG/ukihBMFj3/xEeZVso3K27pSAyyN
-fO/wJ0rX7G+ges22Dd7goZul8rPaTJBIxbZDuaykJMGpNq4PQ8VPcnYZx+6b+nJwJJoJ46kI
-EEfNh3UKvB/vM0qtxS690iAdgmQIhTl+qfXq4IxWB6b+3NeQxgR6KLU4P7v88/tvJTpxIKkg
-9xj89ruzeThyRFd2DSe3vfdnq9+g4qJSHRXyTft6W3Lkp7UWTM4kMqOcc4VSRdufVKBQNXjG
-IcnhAgMBAAGjggKcMIICmDAOBgNVHQ8BAf8EBAMCBPAwgYQGCCsGAQUFBwEBBHgwdjAwBggr
-BgEFBQcwAYYkaHR0cDovL2NvbW1lcmNpYWwub2NzcC5pZGVudHJ1c3QuY29tMEIGCCsGAQUF
-BzAChjZodHRwOi8vdmFsaWRhdGlvbi5pZGVudHJ1c3QuY29tL2NlcnRzL3RydXN0aWRjYWEx
-My5wN2MwHwYDVR0jBBgwFoAULbfeG1l+KpguzeHUG+PFEBJe6RQwCQYDVR0TBAIwADCCASsG
-A1UdIASCASIwggEeMIIBGgYLYIZIAYb5LwAGAgEwggEJMEoGCCsGAQUFBwIBFj5odHRwczov
-L3NlY3VyZS5pZGVudHJ1c3QuY29tL2NlcnRpZmljYXRlcy9wb2xpY3kvdHMvaW5kZXguaHRt
-bDCBugYIKwYBBQUHAgIwga0MgapUaGlzIFRydXN0SUQgQ2VydGlmaWNhdGUgaGFzIGJlZW4g
-aXNzdWVkIGluIGFjY29yZGFuY2Ugd2l0aCBJZGVuVHJ1c3QncyBUcnVzdElEIENlcnRpZmlj
-YXRlIFBvbGljeSBmb3VuZCBhdCBodHRwczovL3NlY3VyZS5pZGVudHJ1c3QuY29tL2NlcnRp
-ZmljYXRlcy9wb2xpY3kvdHMvaW5kZXguaHRtbDBFBgNVHR8EPjA8MDqgOKA2hjRodHRwOi8v
-dmFsaWRhdGlvbi5pZGVudHJ1c3QuY29tL2NybC90cnVzdGlkY2FhMTMuY3JsMB8GA1UdEQQY
-MBaBFGphbHRtYW5AYXVyaXN0b3IuY29tMB0GA1UdDgQWBBQB+nzqgljLocLTsiUn2yWqEc2s
-gjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwDQYJKoZIhvcNAQELBQADggEBAJwV
-eycprp8Ox1npiTyfwc5QaVaqtoe8Dcg2JXZc0h4DmYGW2rRLHp8YL43snEV93rPJVk6B2v4c
-WLeQfaMrnyNeEuvHx/2CT44cdLtaEk5zyqo3GYJYlLcRVz6EcSGHv1qPXgDT0xB/25etwGYq
-utYF4Chkxu4KzIpq90eDMw5ajkexw+8ARQz4N5+d6NRbmMCovd7wTGi8th/BZvz8hgKUiUJo
-Qle4wDxrdXdnIhCP7g87InXKefWgZBF4VX21t2+hkc04qrhIJlHrocPG9mRSnnk2WpsY0MXt
-a8ivbVKtfpY7uSNDZSKTDi1izEFH5oeQdYRkgIGb319a7FjslV8wggaXMIIEf6ADAgECAhBA
-AXA7OrqBjMk8rp4OuNQSMA0GCSqGSIb3DQEBCwUAMEoxCzAJBgNVBAYTAlVTMRIwEAYDVQQK
-EwlJZGVuVHJ1c3QxJzAlBgNVBAMTHklkZW5UcnVzdCBDb21tZXJjaWFsIFJvb3QgQ0EgMTAe
-Fw0yMDAyMTIyMTA3NDlaFw0zMDAyMTIyMTA3NDlaMDoxCzAJBgNVBAYTAlVTMRIwEAYDVQQK
-EwlJZGVuVHJ1c3QxFzAVBgNVBAMTDlRydXN0SUQgQ0EgQTEzMIIBIjANBgkqhkiG9w0BAQEF
-AAOCAQ8AMIIBCgKCAQEAu6sUO01SDD99PM+QdZkNxKxJNt0NgQE+Zt6ixaNP0JKSjTd+SG5L
-wqxBWjnOgI/3dlwgtSNeN77AgSs+rA4bK4GJ75cUZZANUXRKw/et8pf9Qn6iqgB63OdHxBN/
-15KbM3HR+PyiHXQoUVIevCKW8nnlWnnZabT1FejOhRRKVUg5HACGOTfnCOONrlxlg+m1Vjgn
-o1uNqNuLM/jkD1z6phNZ/G9IfZGI0ppHX5AA/bViWceX248VmefNhSR14ADZJtlAAWOi2un0
-3bqrBPHA9nDyXxI8rgWLfUP5rDy8jx2hEItg95+ORF5wfkGUq787HBjspE86CcaduLka/Bk2
-VwIDAQABo4IChzCCAoMwEgYDVR0TAQH/BAgwBgEB/wIBADAOBgNVHQ8BAf8EBAMCAYYwgYkG
-CCsGAQUFBwEBBH0wezAwBggrBgEFBQcwAYYkaHR0cDovL2NvbW1lcmNpYWwub2NzcC5pZGVu
-dHJ1c3QuY29tMEcGCCsGAQUFBzAChjtodHRwOi8vdmFsaWRhdGlvbi5pZGVudHJ1c3QuY29t
-L3Jvb3RzL2NvbW1lcmNpYWxyb290Y2ExLnA3YzAfBgNVHSMEGDAWgBTtRBnA0/AGi+6ke75C
-5yZUyI42djCCASQGA1UdIASCARswggEXMIIBEwYEVR0gADCCAQkwSgYIKwYBBQUHAgEWPmh0
-dHBzOi8vc2VjdXJlLmlkZW50cnVzdC5jb20vY2VydGlmaWNhdGVzL3BvbGljeS90cy9pbmRl
-eC5odG1sMIG6BggrBgEFBQcCAjCBrQyBqlRoaXMgVHJ1c3RJRCBDZXJ0aWZpY2F0ZSBoYXMg
-YmVlbiBpc3N1ZWQgaW4gYWNjb3JkYW5jZSB3aXRoIElkZW5UcnVzdCdzIFRydXN0SUQgQ2Vy
-dGlmaWNhdGUgUG9saWN5IGZvdW5kIGF0IGh0dHBzOi8vc2VjdXJlLmlkZW50cnVzdC5jb20v
-Y2VydGlmaWNhdGVzL3BvbGljeS90cy9pbmRleC5odG1sMEoGA1UdHwRDMEEwP6A9oDuGOWh0
-dHA6Ly92YWxpZGF0aW9uLmlkZW50cnVzdC5jb20vY3JsL2NvbW1lcmNpYWxyb290Y2ExLmNy
-bDAdBgNVHQ4EFgQULbfeG1l+KpguzeHUG+PFEBJe6RQwHQYDVR0lBBYwFAYIKwYBBQUHAwIG
-CCsGAQUFBwMEMA0GCSqGSIb3DQEBCwUAA4ICAQB/7BKcygLX6Nl4a03cDHt7TLdPxCzFvDF2
-bkVYCFTRX47UfeomF1gBPFDee3H/IPlLRmuTPoNt0qjdpfQzmDWN95jUXLdLPRToNxyaoB5s
-0hOhcV6H08u3FHACBif55i0DTDzVSaBv0AZ9h1XeuGx4Fih1Vm3Xxz24GBqqVudvPRLyMJ7u
-6hvBqTIKJ53uCs3dyQLZT9DXnp+kJv8y7ZSAY+QVrI/dysT8avtn8d7k7azNBkfnbRq+0e88
-QoBnel6u+fpwbd5NLRHywXeH+phbzULCa+bLPRMqJaW2lbhvSWrMHRDy3/d8HvgnLCBFK2s4
-Spns4YCN4xVcbqlGWzgolHCKUH39vpcsDo1ymZFrJ8QR6ihIn8FmJ5oKwAnnd/G6ADXFC9bu
-db9+532phSAXOZrrecIQn+vtP366PC+aClAPsIIDJDsotS5z4X2JUFsNIuEgXGqhiKE7SuZb
-rFG9sdcLprSlJN7TsRDc0W2b9nqwD+rj/5MN0C+eKwha+8ydv0+qzTyxPP90KRgaegGowC4d
-UsZyTk2n4Z3MuAHX5nAZL/Vh/SyDj/ajorV44yqZBzQ3ChKhXbfUSwe2xMmygA2Z5DRwMRJn
-p/BscizYdNk2WXJMTnH+wVLN8sLEwEtQR4eTLoFmQvrK2AMBS9kW5sBkMzINt/ZbbcZ3F+eA
-MDGCAxQwggMQAgEBME4wOjELMAkGA1UEBhMCVVMxEjAQBgNVBAoTCUlkZW5UcnVzdDEXMBUG
-A1UEAxMOVHJ1c3RJRCBDQSBBMTMCEEABgmmaL+s+f8XR8nIOXMwwDQYJYIZIAWUDBAIBBQCg
-ggGXMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUyNzE0
-MjAzM1owLwYJKoZIhvcNAQkEMSIEIBxhlGJkASrECQ+WELnnl4qoQVeG0EoggCIMCZg2BpRN
-MF0GCSsGAQQBgjcQBDFQME4wOjELMAkGA1UEBhMCVVMxEjAQBgNVBAoTCUlkZW5UcnVzdDEX
-MBUGA1UEAxMOVHJ1c3RJRCBDQSBBMTMCEEABgmmaL+s+f8XR8nIOXMwwXwYLKoZIhvcNAQkQ
-AgsxUKBOMDoxCzAJBgNVBAYTAlVTMRIwEAYDVQQKEwlJZGVuVHJ1c3QxFzAVBgNVBAMTDlRy
-dXN0SUQgQ0EgQTEzAhBAAYJpmi/rPn/F0fJyDlzMMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZI
-AWUDBAEqMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZI
-hvcNAwICAUAwBwYFKw4DAgcwDQYIKoZIhvcNAwICASgwDQYJKoZIhvcNAQEBBQAEggEAXBt8
-wyUZPEV6JAAvOmiKEjKw2Zni+7jFCJg126C12VHTJW2eFLybkouVx55J4etDgLhRPZvnpiBx
-ntJPw75lE337jdDbrYn/D2T/e1WMY1Hwhd0q0eZtwZJ6lxXvu4M96ssQDIcJ3rKIQ4Fz9bH4
-zogfo3Bzj1MLMCR8QF9jrtsrn1e5oNG2ADH+1qE33DdgHPck06IAComO++CRZXl2XLJCyWnT
-ohpbt5sb9QCPYlrU02R1PKlL+7Rk0JFMRICzwXEb6TY3vnhZO+Tuxbbz0xuQP2nnbxBUXw+p
-VKT5D9eWCuSwOkYPsFUeS871pGrzeSQ4YuXa27f0sn0Je00XnAAAAAAAAA==
---------------ms030104000003030305050504--
-
+> +
+> +static int
+> +mp2891_read_pin(struct i2c_client *client, int page, int phase, int reg)
+> +{
+> +	int ret;
+> +
+> +	ret = pmbus_read_word_data(client, page, phase, reg);
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +mp2891_read_vin(struct i2c_client *client, int page, int phase, int reg)
+> +{
+> +	int ret;
+> +
+> +	ret = pmbus_read_word_data(client, page, phase, reg);
+> +	ret = ((ret & 0x7FF) * 1000) >> 5;
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +mp2891_read_vout(struct i2c_client *client, int page, int phase, int reg)
+> +{
+> +	int ret;
+> +
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct mp2891_data *data = to_mp2891_data(info);
+> +
+> +	ret = pmbus_read_word_data(client, page, phase, reg);
+> +	ret = (ret & 0x7FF) * data->vid_step[page] / 100;
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +mp2891_read_iout(struct i2c_client *client, int page, int phase, int reg)
+> +{
+> +	int ret;
+> +
+> +	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
+> +	struct mp2891_data *data = to_mp2891_data(info);
+> +
+> +	ret = pmbus_read_word_data(client, page, phase, reg);
+> +
+> +	if (((ret & 0x8000) >> 15) == 0)
+> +		ret = (ret & 0x7FF) * (((ret & 0x7800) >> 11) + 1);
+> +	else
+> +		ret = (ret & 0x7FF) >> (32 - ((ret & 0xF800) >> 11));
+> +
+> +	ret = ret * data->iout_scale[page];
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +mp2891_read_temperature(struct i2c_client *client, int page, int phase, int reg)
+> +{
+> +	int ret;
+> +
+> +	ret = pmbus_read_word_data(client, page, phase, reg);
+> +
+> +	if (((ret & 0x400) >> 10) == 0)
+> +		ret = ret & 0x7FF;
+> +	else
+> +		ret = ~(ret & 0x7FF) + 1;
+> +
+> +	return ret;
+> +}
+> +
+> +static int mp2891_read_byte_data(struct i2c_client *client, int page, int reg)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_VOUT_MODE:
+> +		/*
+> +		 * Enforce VOUT direct format, since device allows to set the
+> +		 * different formats for the different rails. Conversion from
+> +		 * VID to direct provided by driver internally, in case it is
+> +		 * necessary.
+> +		 */
+> +		ret = PB_VOUT_MODE_DIRECT;
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int mp2891_read_word_data(struct i2c_client *client, int page, int phase,
+> +			      int reg)
+> +{
+> +	int ret;
+> +
+> +	switch (reg) {
+> +	case PMBUS_READ_VIN:
+> +		ret = mp2891_read_vin(client, page, phase, reg);
+> +		break;
+> +	case PMBUS_READ_VOUT:
+> +		ret = mp2891_read_vout(client, page, phase, reg);
+> +		break;
+> +	case PMBUS_READ_IOUT:
+> +		ret = mp2891_read_iout(client, page, phase, reg);
+> +		break;
+> +	case PMBUS_READ_TEMPERATURE_1:
+> +		ret = mp2891_read_temperature(client, page, phase, reg);
+> +		break;
+> +	case PMBUS_READ_PIN:
+> +		ret = mp2891_read_pin(client, page, phase, READ_PIN_EST);
+> +		break;
+> +	case PMBUS_READ_POUT:
+> +		ret = mp2891_read_pout(client, page, phase, reg);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +		break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +mp2891_identify_vid(struct i2c_client *client, struct mp2891_data *data,
+> +						u32 reg, int page)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = i2c_smbus_read_word_data(client, reg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * Obtain vid_step from the register MFR_VOUT_LOOP_CTRL, bits 15-14,bit 13.
+> +	 * If MFR_VOUT_LOOP_CTRL[13] = 1, the vid_step is below:
+> +	 * 2.5mV/LSB
+> +	 * If MFR_VOUT_LOOP_CTRL[13] = 0, the vid_step is decided by
+> +	 * MFR_VOUT_LOOP_CTRL[15:14]:
+> +	 * 00b - 6.25mV/LSB, 01b - 5mV/LSB, 10b - 2mV/LSB, 11b - 1mV
+> +	 */
+> +	if (((ret & DAC_2P5MV_MSK) >> VID_STEP_POS))
+> +		data->vid_step[page] = 250;
+> +	else {
+> +		ret = ((ret & VID_STEP_MSK) >> VID_STEP_POS);
+> +		if (ret == 0)
+> +			data->vid_step[page] = 625;
+> +		else if (ret == 1)
+> +			data->vid_step[page] = 500;
+> +		else if (ret == 2)
+> +			data->vid_step[page] = 200;
+> +		else
+> +			data->vid_step[page] = 100;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +mp2891_identify_rails_vid(struct i2c_client *client, struct mp2891_data *data)
+> +{
+> +	int ret;
+> +
+> +	/* Identify vid_step from register  MFR_VOUT_LOOP_CTRL. */
+> +	/* Identify vid_step for rail 1. */
+> +	ret = mp2891_identify_vid(client, data, MFR_VOUT_LOOP_CTRL, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Identify vid_step for rail 2. */
+> +	ret = mp2891_identify_vid(client, data, MFR_VOUT_LOOP_CTRL, 1);
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +mp2891_iout_scale_get(struct i2c_client *client, struct mp2891_data *data,
+> +						u32 reg, int page)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, page);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = i2c_smbus_read_word_data(client, reg);
+> +
+> +	/*
+> +	 * Obtain iout_scale from the register MFR_SVI3_IOUT_PRT, bits 2-0.
+> +	 * The value is selected as below:
+> +	 * 000b - 1A/LSB, 001b - (1/32)A/LSB, 010b - (1/16)A/LSB,
+> +	 * 011b - (1/8)A/LSB, 100b - (1/4)A/LSB, 101b - (1/2)A/LSB
+> +	 * 110b - 1A/LSB, 111b - 2A/LSB
+> +	 */
+> +	ret = (ret & IOUT_SCALE_MSK) >> IOUT_SCALE_POS;
+> +	if ((ret == 0) | (ret == 6))
+> +		data->iout_scale[page] = 32;
+> +	else if (ret == 1)
+> +		data->iout_scale[page] = 1;
+> +	else if (ret == 2)
+> +		data->iout_scale[page] = 2;
+> +	else if (ret == 3)
+> +		data->iout_scale[page] = 4;
+> +	else if (ret == 4)
+> +		data->iout_scale[page] = 8;
+> +	else if (ret == 5)
+> +		data->iout_scale[page] = 16;
+> +	else
+> +		data->iout_scale[page] = 64;
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +mp2891_rails_iout_scale_get(struct i2c_client *client, struct mp2891_data *data)
+> +{
+> +	int ret;
+> +
+> +	/* Get iout_scale from register MFR_SVI3_IOUT_PRT. */
+> +	/* Get iout_scale for rail 1. */
+> +	ret = mp2891_iout_scale_get(client, data, MFR_SVI3_IOUT_PRT, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Get iout_scale for rail 2. */
+> +	ret = mp2891_iout_scale_get(client, data, MFR_SVI3_IOUT_PRT, 1);
+> +
+> +	return ret;
+> +}
+> +
+> +static struct pmbus_driver_info mp2891_info = {
+> +	.pages = MP2891_PAGE_NUM,
+> +	.format[PSC_VOLTAGE_IN] = direct,
+> +	.format[PSC_VOLTAGE_OUT] = direct,
+> +	.format[PSC_CURRENT_OUT] = direct,
+> +	.format[PSC_TEMPERATURE] = direct,
+> +	.format[PSC_POWER] = linear,
+> +
+> +	.m[PSC_VOLTAGE_IN] = 1,
+> +	.m[PSC_VOLTAGE_OUT] = 1,
+> +	.m[PSC_CURRENT_OUT] = 32,
+> +	.m[PSC_TEMPERATURE] = 1,
+> +	.R[PSC_VOLTAGE_IN] = 3,
+> +	.R[PSC_VOLTAGE_OUT] = 3,
+> +	.R[PSC_CURRENT_OUT] = 0,
+> +	.R[PSC_TEMPERATURE] = 0,
+> +	.b[PSC_VOLTAGE_IN] = 0,
+> +	.b[PSC_VOLTAGE_OUT] = 0,
+> +	.b[PSC_CURRENT_OUT] = 0,
+> +	.b[PSC_TEMPERATURE] = 0,
+> +
+> +	.func[0] = MP2891_RAIL1_FUNC,
+> +	.func[1] = MP2891_RAIL2_FUNC,
+> +	.read_word_data = mp2891_read_word_data,
+> +	.read_byte_data = mp2891_read_byte_data,
+> +};
+> +
+> +static int mp2891_probe(struct i2c_client *client, const struct i2c_device_id *id)
+> +{
+> +	struct pmbus_driver_info *info;
+> +	struct mp2891_data *data;
+> +	int ret;
+> +
+> +	data = devm_kzalloc(&client->dev, sizeof(struct mp2891_data), GFP_KERNEL);
+> +
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	memcpy(&data->info, &mp2891_info, sizeof(*info));
+> +	info = &data->info;
+> +
+> +	/* Identify VID setting per rail. */
+> +	ret = mp2891_identify_rails_vid(client, data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Get iout scale per rail. */
+> +	ret = mp2891_rails_iout_scale_get(client, data);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return pmbus_do_probe(client, info);
+> +}
+> +
+> +static const struct i2c_device_id mp2891_id[] = {
+> +	{"mp2891", 0},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, mp2891_id);
+> +
+> +static const struct of_device_id __maybe_unused mp2891_of_match[] = {
+> +	{.compatible = "mps,mp2891"},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, mp2891_of_match);
+> +
+> +static struct i2c_driver mp2891_driver = {
+> +	.driver = {
+> +		.name = "mp2891",
+> +		.of_match_table = mp2891_of_match,
+> +	},
+> +	.probe = mp2891_probe,
+> +	.id_table = mp2891_id,
+> +};
+> +
+> +module_i2c_driver(mp2891_driver);
+> +
+> +MODULE_AUTHOR("Noah Wang <noahwang.wang@outlook.com>");
+> +MODULE_DESCRIPTION("PMBus driver for MPS MP2891 device");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(PMBUS);
