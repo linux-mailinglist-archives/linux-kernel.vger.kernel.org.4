@@ -2,85 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BF5713438
-	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 13:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71879713439
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 13:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbjE0LNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 07:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
+        id S232031AbjE0LON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 07:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjE0LNe (ORCPT
+        with ESMTP id S229730AbjE0LOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 07:13:34 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79838F3
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 04:13:30 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3093eb8cd1fso998581f8f.1
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 04:13:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685186009; x=1687778009;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zNj5xIx+BSwromsYm9ia1o7bUGDaZEteHL4lXB89T5Q=;
-        b=bd1q/GQAB8FX8qvHFUw+YjkqOlULq8xcqP2lcTWb1p58RYfjHUYsGKk3kk+oaotI2n
-         lHZR+aB3Tp/ih7l/pGnYlyTx37Du23/EGbtzp2NyVof1zUBStBhCnDLnUkhFh4IdHK5c
-         qXOoqNHi5SRIEIYsRVa83OZ8lm+ZrmhCCsivO5olA1MEfzoEJMw/zewg8YWkj+15j3ez
-         p/x/iKgFvF21KqBV41QGtYbWzeL/J25PGnhxw9c3PLfzaD712YtRN1FpO16yiUL73Viz
-         UW/6MUFOverOsVy2rmy2dM5+YhZJSfvMH1wolbtkrllGe0IApaKplSaN9smjhWDV4QLV
-         Y4jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685186009; x=1687778009;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zNj5xIx+BSwromsYm9ia1o7bUGDaZEteHL4lXB89T5Q=;
-        b=Yoq9m7RAKc1bzNKzpBdvhdAMnDIZGreekMjWl0+jLJsyCMyX9EbCqwZ7c/nDHLmjTw
-         OAtR1dRw8yIS59acwaos4f8ZzM4JbDWwYDgER/mNjjzCOqNX68i0SSH9GRFSb1GUCP3Q
-         jRosV5rDH4EBQuiWio7+FtLMI4by9Ri3Eaq5UvL6AmvzyUBTZcjQDMeGkQ6si4ownPCw
-         QkEd5UYhGLEAa2MwQzMBkb7IpoCnZcOVXnrEzKQb0cuUk/L9BLPE1FR1a72kzLVkN27U
-         BjiUwM/zvDkOHWVpJooCM1pRmHUTDEk4+52T9WL+GcZkOuBFbAIEEWEriiTtUCshHzln
-         xLRg==
-X-Gm-Message-State: AC+VfDyj7b2Or5Rk9BxLzB0WgNsNA7ufWBmsh4iRvyAkFZoEKcnK3OqV
-        GcFRPJzP0SDQo3lLPM2bSXGaFA==
-X-Google-Smtp-Source: ACHHUZ656fhr7DfHYJLwVSn2SwLz4g3oSOi/Ftp4RjGh8gxHDAYhYorAxyhtTTTIga2lJwEcdRK2Ow==
-X-Received: by 2002:a5d:4911:0:b0:309:535c:c236 with SMTP id x17-20020a5d4911000000b00309535cc236mr3971606wrq.36.1685186008870;
-        Sat, 27 May 2023 04:13:28 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id v10-20020adfe28a000000b003063a1cdaf2sm7695793wri.48.2023.05.27.04.13.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 May 2023 04:13:28 -0700 (PDT)
-Message-ID: <b7e1d035-ee79-77c9-e81f-56fa8c2cf1df@linaro.org>
-Date:   Sat, 27 May 2023 12:13:27 +0100
+        Sat, 27 May 2023 07:14:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F3CEB;
+        Sat, 27 May 2023 04:14:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24FEE60A67;
+        Sat, 27 May 2023 11:14:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F8EC433D2;
+        Sat, 27 May 2023 11:14:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685186048;
+        bh=8lS5P5G7+ed2XAfQO36H5TkRWeFxg24U8d5lDJYnpGI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=N8ErpLvHVJqQJvzLJtuyll5Ie+vMSL9FPGkAI1/qRl+EzwSAbFNp27jHBY466zTqI
+         5NajK88xMih+9QaBiAkC5sBYLTyz1et2yEJN2C/8Z2eguzphH3iWZZO3dYxURUiswe
+         S4VLelwd9N8QttJDqB/nSc4FexEggGnoxMS8ByE37ALCKSQ9Gb7A250AgeUOZppHzL
+         fuHK0CgvkFl89TcFTW/pJLPR+4wgRENAgbujihED3vIRDv98j9PSUPg8KK9pkheA57
+         irnO6iImrRpKO5qOIl974oaVx3gsj5+UDwrJfntat8OXIyVAJwjw0SU/LbYjy9tQtJ
+         12uB8DYw9vU+w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 01298CE0DB0; Sat, 27 May 2023 04:14:05 -0700 (PDT)
+Date:   Sat, 27 May 2023 04:14:05 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Qi Zheng <qi.zheng@linux.dev>
+Cc:     RCU <rcu@vger.kernel.org>, Yujie Liu <yujie.liu@intel.com>,
+        oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Kirill Tkhai <tkhai@ya.ru>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        David Hildenbrand <david@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org,
+        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com
+Subject: Re: [linus:master] [mm] f95bdb700b: stress-ng.ramfs.ops_per_sec
+ -88.8% regression
+Message-ID: <44407892-b7bc-4d6c-8e4a-6452f0ee88b9@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202305230837.db2c233f-yujie.liu@intel.com>
+ <eba38fce-2454-d7a4-10ef-240b4686f23d@linux.dev>
+ <ZG29ULGNJdErnatI@yujie-X299>
+ <896bbb09-d400-ec73-ba3a-b64c6e9bbe46@linux.dev>
+ <e5fb8b34-c1ad-92e0-e7e5-f7ed1605dbc6@linux.dev>
+ <bfb36563-fac9-4c84-96db-87dd28892088@linux.dev>
+ <be04dc3e-a671-ec70-6cf6-70dc702f4184@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 3/3] media: camss: Link CAMSS power domain
-Content-Language: en-US
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans Verkuil <hansverk@cisco.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230526180712.8481-1-y.oudjana@protonmail.com>
- <20230526180712.8481-4-y.oudjana@protonmail.com>
- <fa395680-0e6c-3eb0-9d5a-f90a95c394b8@linaro.org>
- <GFZAVR.8RI43MBQZ4HN3@gmail.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <GFZAVR.8RI43MBQZ4HN3@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <be04dc3e-a671-ec70-6cf6-70dc702f4184@linux.dev>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,75 +78,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/05/2023 07:02, Yassine Oudjana wrote:
->> Konrad pointed this out.
->>
->> Are you 100% sure you want to do this. We already have a way to count 
->> the # of power-domains in camss_configure_pd().
->>
->> Your series is now adding a dependency on power-domain-names.
->>
->> Is there a good reason to add that dependency ? If not, then lets just 
->> take the code from camss_configure_pd() and make it so that it can be 
->> used/reused here.
+On Thu, May 25, 2023 at 12:03:16PM +0800, Qi Zheng wrote:
+> On 2023/5/24 19:56, Qi Zheng wrote:
+> > On 2023/5/24 19:08, Qi Zheng wrote:
+> > 
+> > [...]
+> > 
+> > > 
+> > > Well, I just ran the following command and reproduced the result:
+> > > 
+> > > stress-ng --timeout 60 --times --verify --metrics-brief --ramfs 9 &
+> > > 
+> > > 1) with commit 42c9db3970483:
+> > > 
+> > > stress-ng: info:  [11023] setting to a 60 second run per stressor
+> > > stress-ng: info:  [11023] dispatching hogs: 9 ramfs
+> > > stress-ng: info:  [11023] stressor       bogo ops real time  usr
+> > > time sys time   bogo ops/s     bogo ops/s
+> > > stress-ng: info:  [11023]                           (secs)    (secs)
+> > > (secs)   (real time) (usr+sys time)
+> > > stress-ng: info:  [11023] ramfs            774966     60.00    
+> > > 10.18 169.45     12915.89        4314.26
+> > > stress-ng: info:  [11023] for a 60.00s run time:
+> > > stress-ng: info:  [11023]    1920.11s available CPU time
+> > > stress-ng: info:  [11023]      10.18s user time   (  0.53%)
+> > > stress-ng: info:  [11023]     169.44s system time (  8.82%)
+> > > stress-ng: info:  [11023]     179.62s total time  (  9.35%)
+> > > stress-ng: info:  [11023] load average: 8.99 2.69 0.93
+> > > stress-ng: info:  [11023] successful run completed in 60.00s (1 min,
+> > > 0.00 secs)
+> > > 
+> > > 2) with commit f95bdb700bc6b:
+> > > 
+> > > stress-ng: info:  [37676] dispatching hogs: 9 ramfs
+> > > stress-ng: info:  [37676] stressor       bogo ops real time  usr
+> > > time sys time   bogo ops/s     bogo ops/s
+> > > stress-ng: info:  [37676]                           (secs)    (secs)
+> > > (secs)   (real time) (usr+sys time)
+> > > stress-ng: info:  [37676] ramfs            168673     60.00     
+> > > 1.61   39.66      2811.08        4087.47
+> > > stress-ng: info:  [37676] for a 60.10s run time:
+> > > stress-ng: info:  [37676]    1923.36s available CPU time
+> > > stress-ng: info:  [37676]       1.60s user time   (  0.08%)
+> > > stress-ng: info:  [37676]      39.66s system time (  2.06%)
+> > > stress-ng: info:  [37676]      41.26s total time  (  2.15%)
+> > > stress-ng: info:  [37676] load average: 7.69 3.63 2.36
+> > > stress-ng: info:  [37676] successful run completed in 60.10s (1 min,
+> > > 0.10 secs)
+> > > 
+> > > The bogo ops/s (real time) did drop significantly.
+> > > 
+> > > And the memory reclaimation was not triggered in the whole process. so
+> > > theoretically no one is in the read critical section of shrinker_srcu.
+> > > 
+> > > Then I found that some stress-ng-ramfs processes were in
+> > > TASK_UNINTERRUPTIBLE state for a long time:
+> > > 
+> > > root       42313  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+> > > stress-ng-ramfs [run]
+> > > root       42314  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+> > > stress-ng-ramfs [run]
+> > > root       42315  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+> > > stress-ng-ramfs [run]
+> > > root       42316  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+> > > stress-ng-ramfs [run]
+> > > root       42317  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
+> > > stress-ng-ramfs [run]
+> > > root       42318  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+> > > stress-ng-ramfs [run]
+> > > root       42319  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
+> > > stress-ng-ramfs [run]
+> > > root       42320  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+> > > stress-ng-ramfs [run]
+> > > root       42321  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
+> > > stress-ng-ramfs [run]
+> > > root       42322  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+> > > stress-ng-ramfs [run]
+> > > root       42323  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
+> > > stress-ng-ramfs [run]
+> > > root       42324  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+> > > stress-ng-ramfs [run]
+> > > root       42325  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
+> > > stress-ng-ramfs [run]
+> > > root       42326  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+> > > stress-ng-ramfs [run]
+> > > root       42327  7.9  0.0  69592  1812 pts/0    D    19:00   0:02
+> > > stress-ng-ramfs [run]
+> > > root       42328  7.9  0.0  69592  1812 pts/0    D    19:00   0:02
+> > > stress-ng-ramfs [run]
+> > > root       42329  7.9  0.0  69592  1812 pts/0    D    19:00   0:02
+> > > stress-ng-ramfs [run]
+> > > root       42330  7.9  0.0  69592  1556 pts/0    D    19:00   0:02
+> > > stress-ng-ramfs [run]
+> > > 
+> > > Their call stack is as follows:
+> > > 
+> > > cat /proc/42330/stack
+> > > 
+> > > [<0>] __synchronize_srcu.part.21+0x83/0xb0
+> > > [<0>] unregister_shrinker+0x85/0xb0
+> > > [<0>] deactivate_locked_super+0x27/0x70
+> > > [<0>] cleanup_mnt+0xb8/0x140
+> > > [<0>] task_work_run+0x65/0x90
+> > > [<0>] exit_to_user_mode_prepare+0x1ba/0x1c0
+> > > [<0>] syscall_exit_to_user_mode+0x1b/0x40
+> > > [<0>] do_syscall_64+0x44/0x80
+> > > [<0>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > 
+> > > + RCU folks, Is this result as expected? I would have thought that
+> > > synchronize_srcu() should return quickly if no one is in the read
+> > > critical section. :(
+
+In theory, it would indeed be nice if synchronize_srcu() would do that.
+In practice, the act of checking to see if there is anyone in an SRCU
+read-side critical section is a heavy-weight operation, involving at
+least one cache miss per CPU along with a number of full memory barriers.
+
+So SRCU has to be careful to not check too frequently.
+
+However, if SRCU has been idle for some time, normal synchronize_srcu()
+will do an immediate check.  And this will of course mark SRCU as
+non-idle.
+
+> > With the following changes, ops/s can return to previous levels:
 > 
-> Is there a good reason not to?I found that using the existing 
-> index-based method would unnecessarily complicate things since an extra 
-> layer of checks would be needed to differentiate between MSM8996 and 
-> TITAN SoCs, since those have the TITAN GDSC at the same index where the 
-> CAMSS GDSC is now added for MSM8996. The same checks will also have to 
-> be repeated in error paths and during cleanup.
-> 
-> I guessed the only reason we were still using this method for the 
-> existing PDs was to remain compatible with old DT as Konrad mentioned, 
-> and since this CAMSS PD is only added now, I thought it'd be a good 
-> opportunity to introduce power-domain-names and simplify things a bit.
+> Or just set rcu_expedited to 1:
+> 	echo 1 > /sys/kernel/rcu_expedited
 
-I think actually I agree with you but, I don't think you've gone far 
-enough with this patch.
+This does cause SRCU to be much more aggressive.  This can be a good
+choice for small systems, but please keep in mind that this affects normal
+RCU as well as SRCU.  It will cause RCU to also be much more aggressive,
+sending IPIs to CPUs that are (or might be) in RCU read-side critical
+sections.  Depending on your workload, this might or might not be what
+you want RCU to be doing.  For example, if you are running aggressive
+real-time workloads, it most definitely is not what you want.
 
-Now that I look at this code a bit more, it looks like we need to place 
-the TITAN/CAMSS GDSC last in the list of power-domains or the magic 
-indices won't work. So my suggestion to you to place the CAMSS_GDSC in 
-the power-domain list wouldn't work, unless it was the last entry,..
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index db2ed6e08f67..90f541b07cd1 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -763,7 +763,7 @@ void unregister_shrinker(struct shrinker *shrinker)
+> >          debugfs_entry = shrinker_debugfs_remove(shrinker);
+> >          up_write(&shrinker_rwsem);
+> > 
+> > -       synchronize_srcu(&shrinker_srcu);
+> > +       synchronize_srcu_expedited(&shrinker_srcu);
 
-Having magic indices doesn't make much sense to me. Aside from anything 
-else we don't document or require that indexing behavior in our 
-Documentation.
+If shrinkers are unregistered only occasionally, this is an entirely
+reasonable change.
 
-In fact, I'm wondering what is the use case of a vfe_lite on its own - 
-without the TITAN_TOP GDSC switched on ? I'm looking at the block 
-diagram of the clocks for the sm8250 the IFE_LITE is buried well inside 
-of a series of other components..
+> >          debugfs_remove_recursive(debugfs_entry);
+> > 
+> > stress-ng: info:  [13159] dispatching hogs: 9 ramfs
+> > stress-ng: info:  [13159] stressor       bogo ops real time  usr time
+> > sys time   bogo ops/s     bogo ops/s
+> > stress-ng: info:  [13159]                           (secs)    (secs)
+> > (secs)   (real time) (usr+sys time)
+> > stress-ng: info:  [13159] ramfs            710062     60.00      9.63
+> > 157.26     11834.18        4254.75
+> > stress-ng: info:  [13159] for a 60.00s run time:
+> > stress-ng: info:  [13159]    1920.14s available CPU time
+> > stress-ng: info:  [13159]       9.62s user time   (  0.50%)
+> > stress-ng: info:  [13159]     157.26s system time (  8.19%)
+> > stress-ng: info:  [13159]     166.88s total time  (  8.69%)
+> > stress-ng: info:  [13159] load average: 9.49 4.02 1.65
+> > stress-ng: info:  [13159] successful run completed in 60.00s (1 min,
+> > 0.00 secs)
+> > 
+> > Can we make synchronize_srcu() call synchronize_srcu_expedited() when no
+> > one is in the read critical section?
 
-The reverse OTOH holds. Full fat VFE can be collapsed individually, 
-which is why they have their own GDSCs...
+Yes, in theory we could, but this would be a bad thing in practice.
+After all, the point of having synchronize_srcu() be separate from
+synchronize_srcu_expedited() is to allow uses that are OK with longer
+latency avoid consuming too much CPU.  In addition, that longer
+SRCU grace-period latency allows the next grace period to handle more
+synchronize_srcu() and call_srcu() requests.  This amortizes the
+overhead of that next grace period over a larger number of updates.
 
-OK, we should get away from magic indices ASAP.
+However, your use of synchronize_srcu_expedited() does have that effect,
+but only for this call point.  Which has the advantage of avoiding
+burning excessive quantities of CPU for the other 50+ call points.
 
-This is a good find, thank you for bringing it up.
-
-Could you take a named pointer for the CAMSS/TITAN instead of an index ?
-
-camss->genpd_camss_top * =
-camss->genpd_vfe[] =
-
-These have a very obvious meaning. We can read a top-level struct camss 
-{} and immediately understand what is meant, whereas index = 0 doesn't 
-mean anything and isn't obvious from the code anyway.
-
-1. You're right we should introduce some kind of naming to
-    break the bonds of magic indices.
-
-    So lets do as you suggest and name the power-domains.
-
-    However we should refactor the code to drop magic indices.
-
-2. If and only if named power-domains are absent, fall back on
-    legacy indexing. In this case we will assume legacy indexing
-    assigns to our new named pointers.
-
-3. New CAMSS dts will need to have named power-domains as a result.
-
----
-bod
+							Thanx, Paul
