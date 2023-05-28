@@ -2,126 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F4E71380B
+	by mail.lfdr.de (Postfix) with ESMTP id EAFDE71380D
 	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 08:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjE1GKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 02:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
+        id S229533AbjE1GRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 02:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjE1GKq (ORCPT
+        with ESMTP id S229472AbjE1GR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 02:10:46 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D67CD8;
-        Sat, 27 May 2023 23:10:45 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b01bd7093aso10263255ad.1;
-        Sat, 27 May 2023 23:10:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685254245; x=1687846245;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xjbuJACxE78nceTqHgAJTs0Qk225dErZdIVdFRgaZoM=;
-        b=bjkO6JrkbuklVBIaOoD2J9EKHnzG/mZBOCTEraV2XKf9cHYqVs8Fzfkc/fZLBuObe4
-         vk3E3XwbH+XJbuPiPh5Qbudl4LsPHQcHBsXbi4ZygeR9ZJ3qYegIQ7CMYmjLjBG1exA4
-         ttkMfLDM5vig21AfgLOQjUaOffGZJlEad7kjj8HFnbmcV8qb4mzIgXRF8Hd7T/J87FZ8
-         4nqV6GiS2jsyVbnQkFeHCXDmkYzYuqTCwyRn8/YsuvepR/VY8pUp5M63tiddRwuNWaEk
-         5bPVx8p7TgUoi1EcD3FbBeRgSmxkOTNzC3WdpUsQjlbWe3FmEXdGp6XIz60ynwi8/4BS
-         0Eug==
+        Sun, 28 May 2023 02:17:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D2DD9
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 23:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685254601;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xyjjfsHJGz4btJpbkZnZFyAqXrjeVJSFODC6tRwjNqo=;
+        b=Kut2tu61HX2Nfi5BRC38uZHW8dcgpAkBXvnDPGjyWL59R7VDUYKoRxteiuLFnF5wJveDge
+        bJ3C2kvQUpI/vX6hv3rNmP8Tq4lDBBgHW51UuyraKTDnfsoWl4QfO01j40g8O1hvfSFsOc
+        irLf6rwVNglfN8fCiMKsBGKUUVELr8M=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-620-3-uzq6yVNPSoOGeLfMo8mw-1; Sun, 28 May 2023 02:16:39 -0400
+X-MC-Unique: 3-uzq6yVNPSoOGeLfMo8mw-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30a8f6d7bbdso672199f8f.0
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 23:16:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685254245; x=1687846245;
+        d=1e100.net; s=20221208; t=1685254598; x=1687846598;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xjbuJACxE78nceTqHgAJTs0Qk225dErZdIVdFRgaZoM=;
-        b=LBjtes7fXfMuHR+vQ2YwcDnZYEOxXtKoV42GHm2lgktzKNWAEtFnjYIWAjFk6DzyL8
-         q6PoXOsMqmZop/LfvoQhj/KFgokRLw59Tz/cuwZmNPqwH/OLaMRThU8rmWjJIMiTw9/N
-         VNLf75pSFiX6lLuOKcPnvetmdd1oaaexyDrCwPr07yrOqeUqJ46ODefpCn2bgIHpaHPa
-         FPAIZdkU0IpxUSif7K19WwWtC0LqJiWm1Z04uf6e8vmm5p2xSGHGYLn7jtb6P5QwnNmi
-         yvqHgGo33rFPc9/gocXmvg1o90EVwwaFrY79plqLXD2s5J6ggfeIonOl0kXXL5mCQfWK
-         9OyQ==
-X-Gm-Message-State: AC+VfDzC+0KxlLPWsoOceVGsI8rGBMId449MUTU2jODDlMgkvnDefm2s
-        0P2NeLmifzo/budrAwvfTYo=
-X-Google-Smtp-Source: ACHHUZ5YEdD+9gDbPe59k+yk3uBUX9BULbMJnPNZKAJwtdPhdl95VaEK4UR6sULyTPYncJHdBcyb7Q==
-X-Received: by 2002:a17:903:32ca:b0:1ae:8b4b:327d with SMTP id i10-20020a17090332ca00b001ae8b4b327dmr9206696plr.42.1685254244441;
-        Sat, 27 May 2023 23:10:44 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id ij13-20020a170902ab4d00b001a1a07d04e6sm5837393plb.77.2023.05.27.23.10.43
+        bh=xyjjfsHJGz4btJpbkZnZFyAqXrjeVJSFODC6tRwjNqo=;
+        b=JVMhVwYjLlAvQWKV/9kgEZeQnJb9ziYZXo/440JPAyq+uN5JHeNcSt+oarqf3bi7cm
+         kwqivqE12R2tMRrpddXtHZu/9T4Z1UaexpqKGngx/2hYwVhNYZpbWDwLQwb5tBU4NYMk
+         JVNCCYWklTbUmX4v8u3DkBEnUUc/xJsDFMOn7ys+OwE1bidfl63hckUgq5XbfXS+IyjE
+         bdoItXY9diJja6MAqkYIAkaMP/h4vjrsgPx9SjY5ARFtwf4ByKVg4QSYksmzP4KUu5Tx
+         b3wx76vyORr6I1mKwOK8UT1Th2Tp1tq6p1TCP5xepXLRXFeKn9x42EvfxnneAjH/W3gN
+         p4Ig==
+X-Gm-Message-State: AC+VfDy0rr5VcjjmE3VcIiDPiaVZO+xB5T74fnBh4fCG8R6o3VMM7gcp
+        WGwItEMXpoS1WW0Y+65vRo3gIiDdTY9kGCSYLTGRiaw7Xb3WWGluHxdCSzQbmjQxb4HUvqVx3Uc
+        g9QaiLrzd1ITkPEFpSHQ3B/tA
+X-Received: by 2002:adf:eccc:0:b0:306:2aa0:ce81 with SMTP id s12-20020adfeccc000000b003062aa0ce81mr6910620wro.30.1685254598297;
+        Sat, 27 May 2023 23:16:38 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7dFHG2HLfd2Q3dXDNjbmL0ir54ug1fj6Cozz0mkZHs3U/h67Qlj5dhak5C/0LI3cKmRJ/97g==
+X-Received: by 2002:adf:eccc:0:b0:306:2aa0:ce81 with SMTP id s12-20020adfeccc000000b003062aa0ce81mr6910604wro.30.1685254597977;
+        Sat, 27 May 2023 23:16:37 -0700 (PDT)
+Received: from redhat.com ([2.52.146.27])
+        by smtp.gmail.com with ESMTPSA id l21-20020a1c7915000000b003f603b8eb5asm10308080wme.7.2023.05.27.23.16.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 23:10:43 -0700 (PDT)
-Date:   Sat, 27 May 2023 23:10:42 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Wen, Qian" <qian.wen@intel.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>
-Subject: Re: [PATCH v13 002/113] KVM: x86/vmx: Refactor KVM VMX module
- init/exit functions
-Message-ID: <20230528061042.GA1234772@ls.amr.corp.intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <e4d32af22f0a540c62fffaa17fe478a723e109ea.1678643052.git.isaku.yamahata@intel.com>
- <676b2b3e-b836-4b55-9772-eb6c6db82542@intel.com>
+        Sat, 27 May 2023 23:16:37 -0700 (PDT)
+Date:   Sun, 28 May 2023 02:16:33 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Liang Chen <liangchen.linux@gmail.com>
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, pabeni@redhat.com, alexander.duyck@gmail.com
+Subject: Re: [PATCH net-next 1/5] virtio_net: Fix an unsafe reference to the
+ page chain
+Message-ID: <20230528021008-mutt-send-email-mst@kernel.org>
+References: <20230526054621.18371-1-liangchen.linux@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <676b2b3e-b836-4b55-9772-eb6c6db82542@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230526054621.18371-1-liangchen.linux@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 10:23:57AM +0800,
-"Wen, Qian" <qian.wen@intel.com> wrote:
-
-> > diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> > index a59559ff140e..3f49e8e38b6b 100644
-> > --- a/arch/x86/kvm/vmx/main.c
-> > +++ b/arch/x86/kvm/vmx/main.c
-> > @@ -165,3 +165,54 @@ struct kvm_x86_init_ops vt_init_ops __initdata = {
-> >  	.runtime_ops = &vt_x86_ops,
-> >  	.pmu_ops = &intel_pmu_ops,
-> >  };
-> > +
-> > +static int __init vt_init(void)
-> > +{
-> > +	unsigned int vcpu_size, vcpu_align;
-> > +	int r;
-> > +
-> > +	if (!kvm_is_vmx_supported())
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	/*
-> > +	 * Note, hv_init_evmcs() touches only VMX knobs, i.e. there's nothing
-> > +	 * to unwind if a later step fails.
-> > +	 */
-> > +	hv_init_evmcs();
-> > +
-> > +	r = kvm_x86_vendor_init(&vt_init_ops);
-> > +	if (r)
-> > +		return r;
-> > +
-> > +	r = vmx_init();
-> > +	if (r)
-> > +		goto err_vmx_init;
-> > +
-> > +	/*
-> > +	 * Common KVM initialization _must_ come last, after this, /dev/kvm is
-> > +	 * exposed to userspace!
-> > +	 */
-> > +	vt_x86_ops.vm_size = sizeof(struct kvm_vmx);
+On Fri, May 26, 2023 at 01:46:17PM +0800, Liang Chen wrote:
+> "private" of buffer page is currently used for big mode to chain pages.
+> But in mergeable mode, that offset of page could mean something else,
+> e.g. when page_pool page is used instead. So excluding mergeable mode to
+> avoid such a problem.
 > 
-> nit: why initialize vm_size again? I noticed that it has already been assigned a value when create vt_x86_ops.
+> Signed-off-by: Liang Chen <liangchen.linux@gmail.com>
 
-Thanks, will remove the line.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Ugh the subject makes it looks like current code has a problem
+but I don't think so because I don't think anything besides
+big packets uses page->private.
+
+The reason patch is needed is because follow up patches
+use page_pool.
+pls adjust commit log and subject to make all this clear.
+
+
+> ---
+>  drivers/net/virtio_net.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 5a7f7a76b920..c5dca0d92e64 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -497,7 +497,7 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+>  			return NULL;
+>  
+>  		page = (struct page *)page->private;
+> -		if (page)
+> +		if (!vi->mergeable_rx_bufs && page)
+
+To be safe let's limit to big packets too:
+
+	if (!vi->mergeable_rx_bufs && vi->big_packets && page)
+
+
+
+>  			give_pages(rq, page);
+>  		goto ok;
+>  	}
+> -- 
+> 2.31.1
+
