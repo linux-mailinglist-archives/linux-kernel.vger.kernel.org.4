@@ -2,136 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9551713B43
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 19:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BB7713B45
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 19:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjE1Rgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 13:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S229518AbjE1Rgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 13:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjE1RgV (ORCPT
+        with ESMTP id S229748AbjE1RgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 13:36:21 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13928109
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 10:36:12 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f6077660c6so16188625e9.0
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 10:36:12 -0700 (PDT)
+        Sun, 28 May 2023 13:36:23 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD51125;
+        Sun, 28 May 2023 10:36:20 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1ae8ecb4f9aso15940355ad.1;
+        Sun, 28 May 2023 10:36:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1685295371; x=1687887371;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dv/yh1ez4MwkuLkx8esU0Cb+ZDlD0gjn5YXP4X/VzdA=;
-        b=20jbrVmGwi4TuTnfu3xvKOsXYIn/VTHSr6q3sVvyvPG/QkjR4Sw/MXRUzH6Rmwghcd
-         doEj7GBVjVH51Zc4lQmCSAn/fuiZ7VMfzMK3+UTH42K1e8BrbrjvouachZzT3PRKp+mO
-         v7E1gV3hzGxur+ZKqPjaKd2yAOL8x4xeAPV5ZbUMR4YiER/Yn3IfTW/XvVbJnegONSwJ
-         N4dfiTvbeBslFAvsdlqWhN8iuzfaPgMkdkt7CN6u8AioTwyLTL+8SvZfeazFHFTlC1OV
-         WGDZGJwtaWec+oNCU0ZWnvile3cHge48sWDdf1xAUXf1HsfR5vEfG1ZqJip/VOMnAvdI
-         psyw==
+        d=gmail.com; s=20221208; t=1685295380; x=1687887380;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QT9S1V0tn+Qui24xPwzImeTWa71ArxoGK/RfxcM2d0g=;
+        b=DRIPVUuedYZtjirHGYj5dUvMQIum7vUn6Z71/nqVBaB0lVHj+RMRCsG2Fe+dupaXlY
+         1VBKgfxlvABZtmcYfkY8K7MiVMYHFAs0Tk/IMJjuplh9Qvz1S1VXcjROJ9gBFUyNMSRN
+         smEAms53NIZ1sXp+ibCs3wzLuKwSFtsEzuHGBEj26uDjPIcbXqw4iLObhTu79C7zdXVu
+         qqqwBlF3vQ8AeeC9LUOaXkb8XD9bqTxgU/udzGdFTC34d5aZeZEW8AoRqM0jitAIWASu
+         MvGZJvbf9L9uEDQHXP0JzndLFA8GcmMskYxmMPwLyJsHbuF3uF8Wj9VhIbLnuP1HEUa6
+         5IbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685295371; x=1687887371;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685295380; x=1687887380;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Dv/yh1ez4MwkuLkx8esU0Cb+ZDlD0gjn5YXP4X/VzdA=;
-        b=DV3ppd08eiqeqvipng2eTRryLmh0FBlwcr/I63JYGl+a5RwVvydjuwo/AN+ikRWAyH
-         g0ZylFUKvWbLVwDf2CIygKvD7W29KQWz30t6tdc4cqY5Fyzh54IK/jZ6d2nHqcKNBAIT
-         YaK77wlG5393InlZ3bg1Ulete8iLBEWCEzXEtI/WpaRNbLHW2MKzSxu7RNXfz0OVBGs5
-         ZIY+qEnOvk4fyeh/Axyz53HZn7E57UJBzvRTfhb14kfIagXIOqsFO4FcULdKByMzvioN
-         Su23+x80b+Z54BaWIHsVps2m92uL/EnQIDfdNigvij4iagUL6uD8CU544l1qlqAT6BQa
-         WhqA==
-X-Gm-Message-State: AC+VfDz1gOHnAn+wxyxHFG8hXvoAAVfiEtx/MXINjlsjw3QZ0cSeVqxn
-        8CIAD3HsExjwIegAuBXZnMSWTw==
-X-Google-Smtp-Source: ACHHUZ7dC2h3fvG5MNDtlL7Fkgjyh8JJtwzKCQ6vEoZk7kEMXIXObjLWpUoeFImTibNfDjbflG8bsw==
-X-Received: by 2002:a05:600c:2210:b0:3f4:2b13:f0fb with SMTP id z16-20020a05600c221000b003f42b13f0fbmr8320180wml.13.1685295371067;
-        Sun, 28 May 2023 10:36:11 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id z10-20020a7bc7ca000000b003f602e2b653sm15334523wmk.28.2023.05.28.10.36.10
+        bh=QT9S1V0tn+Qui24xPwzImeTWa71ArxoGK/RfxcM2d0g=;
+        b=HGJHCKg7uPRYV9tFuQ2QlqIqcCL4MHbCkqAnlD3CwDfS+qWzQ0KLqoMKdeigC/AHcD
+         V8esbzJwvyaqXsSogz5qZExWYwek1XHaHWvQzgWy8LW1TQLO8QmQtkfUl5f532F85WbL
+         XuH5ovCT6E83pfEJI2gb7ernM715ae07f7OKj/rbkcSTT4yX8xQQf+Mi0ye1JHiCkTky
+         OrHbb29Hpc45wJeYWQXL05zRj7DlovaazwXhMraHNNiWO+XnM/v0R5QmU3H/eG6ibJhJ
+         1zv/mMYoEyaB0I7BiX4MTp2u6TgpFJBg5CgKJCbyz7o/7DsFGAhhp3Ga/dDphAJoLw/r
+         KSfQ==
+X-Gm-Message-State: AC+VfDzkKTVnYT9xxw2W3m9YMy4nqPRz88+TqE34sOKFeCe9G5z8XN81
+        xkfgbp1P9/T4/AkHdCad5Uk=
+X-Google-Smtp-Source: ACHHUZ6qqGWC9hVv+TK7lpazsLsOWxoZOc/uttkq1ZXUkoJLGkiKn9TJqT5eH2JYww8vrvNBIWpOFg==
+X-Received: by 2002:a17:903:2451:b0:1b0:39d8:2fc2 with SMTP id l17-20020a170903245100b001b039d82fc2mr2702102pls.49.1685295379709;
+        Sun, 28 May 2023 10:36:19 -0700 (PDT)
+Received: from fedora.hsd1.wa.comcast.net ([2601:602:9300:2710::f1c9])
+        by smtp.gmail.com with ESMTPSA id d22-20020a170902b71600b001b03f208323sm828575pls.64.2023.05.28.10.36.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 10:36:10 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Sun, 28 May 2023 19:35:33 +0200
-Subject: [PATCH net 8/8] selftests: mptcp: userspace pm: skip if MPTCP is
- not supported
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230528-upstream-net-20230528-mptcp-selftests-support-old-kernels-part-1-v1-8-a32d85577fc6@tessares.net>
-References: <20230528-upstream-net-20230528-mptcp-selftests-support-old-kernels-part-1-v1-0-a32d85577fc6@tessares.net>
-In-Reply-To: <20230528-upstream-net-20230528-mptcp-selftests-support-old-kernels-part-1-v1-0-a32d85577fc6@tessares.net>
-To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Florian Westphal <fw@strlen.de>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Kishen Maloor <kishen.maloor@intel.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Sun, 28 May 2023 10:36:19 -0700 (PDT)
+From:   Prince Kumar Maurya <princekumarmaurya06@gmail.com>
+To:     skhan@linuxfoundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, chenzhongjin@huawei.com
+Cc:     Prince Kumar Maurya <princekumarmaurya06@gmail.com>,
         linux-kernel@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        stable@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1128;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=KmD6FWDokOOmgvkIHaO501SBS+m5bjw9eufDZhLROe8=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkc5EB0fds7CPvvv1yzueGAxIwy+BEXWt5telsx
- Es9ICH7W1yJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZHORAQAKCRD2t4JPQmmg
- czNXEACwTRfzBsR4CqhB9CChs90m1paBf8LijwU92DYy1hFF5RRvMpgUvOagqh/ECw+XEY2yZ8r
- eP90H0FcEQ4vXKcwDpmArjZVLOhXW4xx/BGyEruSOKgRgS8SyUGRnatPjd/oZTPA6XCQxN6Pqi9
- CfGGOhAQRZklZhx/r6yi+2aKboecxPhvtbFBBx3Ty/lRgSiWs6/05puflU7hutnlla3gCPfeq8q
- PXxK5bVrvkZ8hGVxKYGNdTY8/BNPseMQekCjRVLSA09UXStGVLcSHhzxB1Do4M8Dqm5pWwIIuC2
- GYvxBQLWNjPtVmU8ugP+yc4YGlpPq0v/ddffac148wal1l6/SWuBZd8s9eXNZpvqT5wsF3rDss0
- ZtMalRi/amRQBhAwOfpNCYM5aCGDVt7O4se99wOFU/wcdIJ8DMpBqbL3oruQ0duQHuuVg27SxpH
- 5AQiuQWVUK9Q36hMcMWx6qmJgwSATVaku2FGqd7vk6lobbBfO7IiG09ECwvljOChuVCh1r5HnDa
- pN/+I8uxTfMUEpY5qbxRW6KvTQpf7jYafL6otbyqP7L5qdi3ex5ieAHzJJbpp8NlNww5c1sh8YK
- R/cKXpb7vyi+2tFeF1JUGR9R7GD2oBWTb3fNVUGHb3nm++LSAMkAP2YwzTS8cnMRtGa3gzptR5X
- CrqQv1fsMg5Ic3Q==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzkaller-bugs@googlegroups.com, linux-fsdevel@vger.kernel.org
+Subject: [PATCH] Null check to prevent null-ptr-deref bug
+Date:   Sun, 28 May 2023 10:35:46 -0700
+Message-Id: <20230528173546.593511-1-princekumarmaurya06@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <000000000000cafb9305fc4fe588@google.com>
+References: <000000000000cafb9305fc4fe588@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Selftests are supposed to run on any kernels, including the old ones not
-supporting MPTCP.
+sb_getblk(inode->i_sb, parent) return a null ptr and taking lock on
+that leads to the null-ptr-deref bug.
 
-A new check is then added to make sure MPTCP is supported. If not, the
-test stops and is marked as "skipped".
-
-Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
-Fixes: 259a834fadda ("selftests: mptcp: functional tests for the userspace PM type")
-Cc: stable@vger.kernel.org
-Acked-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Signed-off-by: Prince Kumar Maurya <princekumarmaurya06@gmail.com>
 ---
- tools/testing/selftests/net/mptcp/userspace_pm.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+Change since v1: update the commit message.
+The bug was reproducible using the reproducer code and assets found in
+bug report:https://syzkaller.appspot.com/bug?extid=aad58150cbc64ba41bdc
+I used qemu to reproduce the bug and after the code fix I rebooted the 
+qemu with updated bzImage containing the fix.
 
-diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-index b1eb7bce599d..8092399d911f 100755
---- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
-+++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
-@@ -1,6 +1,10 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
-+. "$(dirname "${0}")/mptcp_lib.sh"
-+
-+mptcp_lib_check_mptcp
-+
- ip -Version > /dev/null 2>&1
- if [ $? -ne 0 ];then
- 	echo "SKIP: Cannot not run test without ip tool"
+qemu-system-x86_64 -m 4G -nographic -drive \
+file=./asset/disk-4d6d4c7f.raw,format=raw \
+-enable-kvm -net nic -net user,hostfwd=tcp::2222-:22
 
+ fs/sysv/itree.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/fs/sysv/itree.c b/fs/sysv/itree.c
+index b22764fe669c..3a6b66e719fd 100644
+--- a/fs/sysv/itree.c
++++ b/fs/sysv/itree.c
+@@ -145,6 +145,8 @@ static int alloc_branch(struct inode *inode,
+ 		 */
+ 		parent = block_to_cpu(SYSV_SB(inode->i_sb), branch[n-1].key);
+ 		bh = sb_getblk(inode->i_sb, parent);
++		if (!bh)
++			break;
+ 		lock_buffer(bh);
+ 		memset(bh->b_data, 0, blocksize);
+ 		branch[n].bh = bh;
 -- 
-2.39.2
+2.40.1
 
