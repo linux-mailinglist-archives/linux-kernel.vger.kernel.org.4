@@ -2,133 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F15713A07
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 16:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72A0713A02
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 16:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjE1OVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 10:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
+        id S229579AbjE1OVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 10:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjE1OVa (ORCPT
+        with ESMTP id S229451AbjE1OVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 10:21:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AEEBD;
-        Sun, 28 May 2023 07:21:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD5C460EA8;
-        Sun, 28 May 2023 14:21:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E57FC433EF;
-        Sun, 28 May 2023 14:21:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685283688;
-        bh=xzeWg9yS4+td3708ywNcgQZWVjHtPdkuS5u5qsvk90o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SF+pOVeri73IyxS9KFWa5KTq1fifX6lCs27mq8PGv9U1B+C+iLcPFe8MwD0XucNPn
-         2MoI6AoSt6Qm9NWVz4L47JCgqEfAk+91Gr3wxMFAnJUq8uqZo34eY1fXgqbXBc0vNe
-         oxDtg/vBeTojeC3B6ewLHBBIUhGcVIOh9F/BgfWA4w6X3mIIhHGGJdmM+i8mBES5fk
-         aXcKdXeMV9V5LYBB11/rx9ttXNqCHOoBKeig2P3pbGOCyXbORAzKBzmt8lQ42Hpq54
-         9aS5XNprDHyV/0ee4th2KyBcRfgWebg6QEJuQqC4syb+3c9k1prQOZi9KmiJgpMBJf
-         hZ44Gi3WZmRog==
-Date:   Sun, 28 May 2023 19:51:11 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_ipkumar@quicinc.com
-Subject: Re: [PATCH V4 0/6] Add PCIe support for IPQ9574
-Message-ID: <20230528142111.GC2814@thinkpad>
-References: <20230519090219.15925-1-quic_devipriy@quicinc.com>
- <ZGs0RJ2y+3lSZLIC@lpieralisi>
+        Sun, 28 May 2023 10:21:21 -0400
+Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8D9BE
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 07:21:20 -0700 (PDT)
+Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-565c3aa9e82so23912447b3.2
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 07:21:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685283679; x=1687875679;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lpvrPlmy26/nCGxjupHwuea6qY0IMkD2Kk2kNdMMxS4=;
+        b=lJvT0hP9xWTNAUDrX6cCe6wm9GSruixtz501j5iIc0zuAbSFI6MLWDF7bgjpZWxzxF
+         t1t/9fk9VjIaEFiC6k5avWKkn9G0pr4LGnvNQikBzqQLoMofRzWGz7Aj9i2zOGcgcQrK
+         em9NrSiakd7Gecdh+tMkvXE3nmd/80HwcpCAow4zUe2vmsOxs32XYkeBIUONZ2gWIWCN
+         tMPdzZnWjm96CfAolwgw2beJdkeThEkKvqPLG69tJGstJbeCoZRhbFlJSh5t/oKkuQ2w
+         eTkm83EVd/TDIlZNX22UvgLlCLFiU3p/DHyk933w//8XBc3oIJLycfGXIF6nb9D436HZ
+         6c/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685283679; x=1687875679;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lpvrPlmy26/nCGxjupHwuea6qY0IMkD2Kk2kNdMMxS4=;
+        b=VQ+VJDIj3gBwh1DBoVYec8deCTL8xQeayM4fgfoH/1TUn6TxncLUgQ3CJC3Vk9u1Uo
+         8TSyyaMGEi2O1r10mlziKA5pbGPgC4A69Lo+7DesbImOtxf/+pszi9+L4FBEKYydHqgp
+         ONOxc0ieLKYc3g9cI/N3+2/eyjz4wixbGhIngcnPODzaw/0pNV7yPdsh0LvxoHHhv7Of
+         /1s9T3yKTJflAMG3jiJnSLqhyNgjrCFVDhFKOOJbtG4yxIK5gMP/v3NkO6cFyWfYmapu
+         jpg0dg7Wv7ZAeOdJYiYcfjZYyvjmXfWT845XrAiY9iJGgFml9/o3jYNL2TiB+KD0D0zJ
+         OZoQ==
+X-Gm-Message-State: AC+VfDy7gv4rb6jEqPC5pm9URw3xPXqB7jEQQk3w0rkstpCGOrfk8Qvr
+        chQVgcD+0TTw87dLqMr06Y6fFqSsaSBYsFbIENU=
+X-Google-Smtp-Source: ACHHUZ6RVrYqlSyM8scgXBNWPQGw/EWqpuxFkADqM6P4Asfjryp8umxdQLjzNOXfVKP7Gxicuq/Zij0UKCxuBSbDKYk=
+X-Received: by 2002:a81:b40c:0:b0:544:9180:3104 with SMTP id
+ h12-20020a81b40c000000b0054491803104mr9767896ywi.34.1685283678945; Sun, 28
+ May 2023 07:21:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZGs0RJ2y+3lSZLIC@lpieralisi>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Reply-To: hewahsanli63@gmail.com
+Sender: mrs.joriahnatasha33@gmail.com
+Received: by 2002:a05:6918:a423:b0:17f:fc7a:1a6f with HTTP; Sun, 28 May 2023
+ 07:21:18 -0700 (PDT)
+From:   Mr Hewah Sanli <hewahsanli63@gmail.com>
+Date:   Sun, 28 May 2023 14:21:18 +0000
+X-Google-Sender-Auth: ix7ocYJz050eaBZiIbKqVHhjvgE
+Message-ID: <CABZwHwNyS4tY0-NTv9YQvEbnvvfmf-PmU1A0T71d=BH7MxEmdA@mail.gmail.com>
+Subject: I NEED YOUR URGENT RESPOND
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=ADVANCE_FEE_5_NEW_FORM,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,RCVD_IN_DNSWL_NONE,
+        RISK_FREE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_FILL_THIS_FORM_LOAN,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,T_SHARE_50_50,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1144 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrs.joriahnatasha33[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrs.joriahnatasha33[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [hewahsanli63[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_SHARE_50_50 Share the money 50/50
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 HK_SCAM No description available.
+        *  0.0 RISK_FREE No risk!
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+        *  1.0 ADVANCE_FEE_5_NEW_FORM Advance Fee fraud and a form
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 11:22:12AM +0200, Lorenzo Pieralisi wrote:
-> On Fri, May 19, 2023 at 02:32:13PM +0530, Devi Priya wrote:
-> > This series adds support for enabling the PCIe host devices (PCIe0, PCIe1,
-> > PCIe2, PCIe3) found on IPQ9574 platform.
-> > The PCIe0 & PCIe1 are 1-lane Gen3 host and PCIe2 & PCIe3 
-> > are 2-lane Gen3 host.
-> > 
-> > DTS patch is based on the below series
-> > https://lore.kernel.org/linux-arm-msm/20230517172527.1968-1-quic_devipriy@quicinc.com/
-> > 
-> > Changes in V4:
-> > 	- Rebased on the below series
-> > https://lore.kernel.org/linux-arm-msm/20230517172527.1968-1-quic_devipriy@quicinc.com/
-> > 	- Change logs are added to the respective patches.
-> 
-> Mani, all,
-> 
-> can I pick up patches 3 and 6 from this series ?
-> 
+Greetings Dearest Friend:
 
-Patch 3 needs to be reviewed by the DT maintainer and I have a comment too. So
-this series should be put on hold until then.
+With due respect, i have decided to contact you on a business
+transaction that will be beneficial to both of us. at the bank last
+account and auditing evaluation, my staffs came across an old account
+which was being maintained by a foreign client who we learn was among
+the deceased passengers of motor accident on November.2003, the
+deceased was unable to run this account since his death. The account
+has remained dormant without the knowledge of his family since it was
+put in a safe deposit account in the bank for future investment by the
+client.
 
-- Mani
+Since his demise, even the members of his family haven't applied for
+claims over this fund and it has been in the safe deposit account
+until i discovered that it cannot be claimed since our client is a
+foreign national and we are sure that he has no next of kin here to
+ile claims over the money. As the director of the department, this
+discovery was brought to my office so as to decide what is to be done.
+i decided to seek ways through which to transfer this money out of the
+bank and out of the country too.
 
-> Lorenzo
-> 
-> > [V3]
-> > https://lore.kernel.org/linux-arm-msm/20230421124938.21974-1-quic_devipriy@quicinc.com/
-> > 	- Dropped the phy driver and binding patches as they have been 
-> > 	  posted as a separate series.
-> > 	- Dropped the pinctrl binding fix patch as it is unrelated to the series
-> > 	  dt-bindings: pinctrl: qcom: Add few missing functions.
-> > 	- Rebased on linux-next/master.
-> > 	- Detailed change logs are added to the respective patches.
-> > 	
-> > [V2]
-> > https://lore.kernel.org/linux-arm-msm/20230404164828.8031-1-quic_devipriy@quicinc.com/
-> > 	- Reordered the patches and splitted the board DT changes
-> > 	  into a separate patch as suggested
-> > 	- Detailed change logs are added to the respective patches
-> > 
-> > [V1]
-> > https://lore.kernel.org/linux-arm-msm/20230214164135.17039-1-quic_devipriy@quicinc.com/
-> > 
-> > Devi Priya (6):
-> >   dt-bindings: clock: Add PCIe pipe clock definitions
-> >   clk: qcom: gcc-ipq9574: Add PCIe pipe clocks
-> >   dt-bindings: PCI: qcom: Add IPQ9574
-> >   arm64: dts: qcom: ipq9574: Add PCIe PHYs and controller nodes
-> >   arm64: dts: qcom: ipq9574: Enable PCIe PHYs and controllers
-> >   PCI: qcom: Add support for IPQ9574
-> > 
-> >  .../devicetree/bindings/pci/qcom,pcie.yaml    |  48 +++
-> >  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts   | 113 ++++++
-> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 365 ++++++++++++++++++
-> >  drivers/clk/qcom/gcc-ipq9574.c                |  76 ++++
-> >  drivers/pci/controller/dwc/pcie-qcom.c        |  57 ++-
-> >  include/dt-bindings/clock/qcom,ipq9574-gcc.h  |   4 +
-> >  6 files changed, 645 insertions(+), 18 deletions(-)
-> > 
-> > -- 
-> > 2.17.1
-> > 
+The total amount in the account is (18.6 million) with my positions as
+staffs of the bank, i am handicapped because i cannot operate foreign
+accounts and cannot lay benefice claim over this money. the client was
+a foreign national and you will only be asked to act as his next of
+kin and i will supply you with all the necessary information and bank
+data to assist you in being able to transfer this money to any bank of
+your choice where this money could be transferred into. The total sum
+will be shared as follows: 50% for me, 50% for you, and expenses
+incidental occur during the transfer will be incur by both of us. The
+transfer is risk free on both sides hence you are going to follow my
+instruction till the fund transfer to your account. Since i work in
+this bank that is why you should be confident in the success of this
+transaction because you will be updated with information as at when
+desired.
 
--- 
-மணிவண்ணன் சதாசிவம்
+I will wish you to keep this transaction secret and confidential as I
+am hoping to retire with my share of this money at the end of
+transaction which will be when this money is safety in your account. I
+will then come over to your country for sharing according to the
+previously agreed percentages. You might even have to advise me on
+possibilities of investment in your country or elsewhere of our
+choice. May God help you to help me to a restive retirement?
+
+(1) Your full name..............
+(2) Your age:................
+(3) Sex:.....................
+(4) Your telephone number:.................
+(5) Your occupation:.....................
+(6) Your country:.....................
+
+Yours sincerely,
+Mr Hewah Sanli
