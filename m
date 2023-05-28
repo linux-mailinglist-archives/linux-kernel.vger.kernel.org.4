@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2F8713E9E
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 21:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88311713FF9
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 22:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjE1ThM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 15:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
+        id S231436AbjE1UC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 16:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjE1ThL (ORCPT
+        with ESMTP id S229523AbjE1UCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 15:37:11 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4E5A8;
-        Sun, 28 May 2023 12:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=e9C5sp0JfDN0TOfD6vzNrxMlNWDxTkjAnRW3Cl3BwKc=; b=QrafmJMTDakEdl29f/4YCuqjSX
-        TaT+j+jNB/c9w16rhRp1JiKt+zted/BzWUU0uB+Np/k0UXpfVxSnECIFF8U62AHN8GRbHBq3d0OZu
-        bCE9Q93On8wlFEotIREI7fN5xjG8MxffyKcz7q4ySbQzxreKAOnwjqg0WQhtUUfzVaPHyRj0XFcrw
-        BvFaD61P/4HPB940FseNTpr8BYIjgmFkLuwrLthIPTpvYjcAUCmVe+b0xcIjAO3LZYTkBajbZxHEy
-        KR4zi1C+WuQQRmLyPIjWm7vW0+VlOsN1J/vaZ4NpvWzc+8sEYbTq1Ry6oiN5XalqcZKk4KAC6Tpwy
-        uxitormg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q3MC3-004lLt-5L; Sun, 28 May 2023 19:36:43 +0000
-Date:   Sun, 28 May 2023 20:36:43 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Muchun Song <muchun.song@linux.dev>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Vasily Averin <vasily.averin@linux.dev>, hannes@cmpxchg.org,
-        mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] memcg: remove unused mem_cgroup_from_obj()
-Message-ID: <ZHOtS67ZtMPsyNVk@casper.infradead.org>
-References: <20230527103126.398267-1-linmiaohe@huawei.com>
- <ZHGAcaqOx/e8lqwV@casper.infradead.org>
- <CAJD7tkYSrVkAONXko0eE6LWS__kK_Xeto9MVGwTxuqT5j6N8RQ@mail.gmail.com>
- <ZHIcnOV/mrkcerlG@casper.infradead.org>
- <CAJD7tkZ2Q1ZCqNchpiiC6FCE08dYH6tzANA=VqujeDgT8YhRUA@mail.gmail.com>
- <D2B59104-B602-45A3-B938-AE5DC67BAC98@linux.dev>
+        Sun, 28 May 2023 16:02:25 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421D1A8;
+        Sun, 28 May 2023 13:02:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1685304141; x=1685908941; i=rwarsow@gmx.de;
+ bh=AnNuo72Dy47T/QnE44EUI9tKC9Zk9Y9YDxgT07bWbeM=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+ b=t2SmhfuAGIXgw8OjQJszEzwj5ELWa5wCBNTU/VrZELhI5fyhC0XR492IahYkTyiLXy+yLEz
+ m6AOaLZHlTtL/G748ItEoNizkP+7dxOU/CFIqAwcHkPndYLKdWMXD/mej/vublTCnPU1W8XsY
+ DLEYObt6a0Pdcn6N4Uwj9wkSABxyZ12eVhaJ0X1R/TLYOhTInedb9S/ERKvf6wVWRurJHiImm
+ IIPCsNWXdZ+zJKr5My2ezZmDbV3PIUu7I1cOw2yqfNyY/J2wcX/+X1GPcu+87BITksy7qsbKK
+ qtkvkxRb+1b0xwS2g0mPOEQEKnIIVbXepr5Q5MSP6RLtGtOI2zpQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.34.217]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MA7Ka-1pwBb50ErS-00BdgL; Sun, 28
+ May 2023 22:02:21 +0200
+Message-ID: <54124c02-325a-068e-7b76-2d6787a8cf96@gmx.de>
+Date:   Sun, 28 May 2023 22:02:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D2B59104-B602-45A3-B938-AE5DC67BAC98@linux.dev>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE, en-US
+Subject: Re: [PATCH 6.3 000/127] 6.3.5-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:OhCMHlOuDxHRLqH7y0EIrH/IaMkXQW3sqZdP56ISO+lFNZW/CKI
+ vwesFkmILbq30Gp/jFA8zF8Z+Ps0Zzlqy66CtezFqfjljGtJVn5zUhoOn8irevIn/UPB4Ca
+ rSSDLi35g+7+WPUfo+fM5cHYO0XaNAmm8JFYvwz3p02x5gdZ2LofLYN9n3cHhOAM4nBS0nl
+ BfuTc+J7yDb96D/UbPGkg==
+UI-OutboundReport: notjunk:1;M01:P0:BNJ9AWtHDL0=;9i+5NaD+PwPb7jELtNl7HMGVIQn
+ kd2PC+gNAKLJS2BV3iobMb6xOSoRrkEKW7MCuJfIRE7Z3Al2PnnWGxG5xq2i4LqP9cVrBdW2b
+ t80prFY9tUmZ5V72h5pJXrZjSjFLrpTq+6/asuC+7uSAAaujpW115BPy/xiUiDnlm7So1mYcG
+ VGSbyuxArUD/nCZB0v3JhqS4mFwhkojOvBUrLRa+aKnVh/ozrqZVv6Yl/pp/zGTCmnTIkwUzY
+ F6ou/WpmxYSrdOv7S3tVueV3odcUuAUznsKqKORmUeCFabhpxQCYXi43n8lXopGcMvgPPuVhp
+ eJb1jwLBoz34yhSqAtYV/g3Wu87DNtDsDGwPO0FN3jAzGYUJV2krYybayuIjwCl67NJcIqfqO
+ TyVrhIzze6rCJFRAeMsV9D122+88RMgzjABUb978kXP7v7Szhw3whzwDzrv0eSl3+O5c5DsCR
+ ImY0ha7mg8NpT/0cEmz4yU46h2HLpVjlQ5ONe/F+Q2clJgSdx5btk+ym2D+ZhOZX4qqTgDMEZ
+ d93ZrO3r862NC+YtMgSW68ScnL0cxW+BrL/M4FqEHn2+94/gR9ionLc0nmH0EixkmAcMgLFKS
+ /Wl+3M5dmSTO0djG/XHtLU05zwZC0TPTPnotWzPHDZnWWnJQoABkNiUBqnT/POh/M192kTdfG
+ YelvTDz5OA9Z6sFZ3C2SKSJO3xEtGj4ZDRtcWAzr0iHf1CiItmF6OQkQhunsxGzfa0VIxlKU3
+ 1KEPBulTfq9PC1hN3R9eoF0dl63chfgVkoaV8+H54i/2sJ2sl6oZRI5tAERYu3we8Ysewu90d
+ aXJuqJU3CbDDVhRbJuU8iOpkIlRV6Amp2+xwk+fcyQU+HNCIbGzOmPQA/Y2N1u80j3rj0YhcK
+ KqvnKWpQP7+uMqnqblrWMsKelb1YFmAJu5rdaxCxymXRmtOo9FOp+iCT8u6YC6qi5h2pXkvjI
+ qUGgg8J3DuioZ+ggKzszwcwDAXY=
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_A1,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,9 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 09:01:37PM +0800, Muchun Song wrote:
-> with *init_net*. If Vasily does not want to bring commit 1d0403d20f6c back,
-> this patch LGTM. Otherwise, let's wait for Vasily.
+Hi Greg
 
-If we're not going to bring back 1d0403d20f6c then we should
-simply revert fc4db90fe71e instead of applying this patch.
+6.3.5-rc1
+
+compiles, boots and runs here on x86_64
+(Intel Rocket Lake)
+
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
+
