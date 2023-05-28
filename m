@@ -2,84 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DA17139AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 15:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A507139B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 15:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjE1Ngo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 09:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
+        id S229565AbjE1NnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 09:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjE1Ngm (ORCPT
+        with ESMTP id S229459AbjE1NnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 09:36:42 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FF4B2;
-        Sun, 28 May 2023 06:36:41 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-6260a2522d9so10543436d6.3;
-        Sun, 28 May 2023 06:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685281000; x=1687873000;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2n/WoDLxYIs5byxeZJLkV/uF8fU1oTZ8WCiBG786KWU=;
-        b=Ri6l7Zx7Zq5TyRhM1oOvRL6b6/CiRhjnyFwXpUFCKl9dN82foHPdn49IeTDonA+M4z
-         9IyzYufFo5m2DJv3Xj6qB55Ixp6cH6iceqSFDts2NNo/GgqJT4SYB2LC1rzr03lezx2s
-         C3U+sIIucSQKaxVIG8u2Y4K1xD3M1LJNfYeoW+pDSQ+koTLc+npw7WV7YY0AO+ck4r6s
-         zyLg12MI9QNCwrtGnChOV6mHEh7KYrNa1CSQhF2Bo2W3zhtw5M3hRFz9LdPq4FZdzyny
-         k/5RpJ8/gTqGr/S+c/nOolxJemNP6Vytr8OsUy6axFIBjSiOzMDM56HcwsoqwNTMIfX3
-         4vmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685281000; x=1687873000;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2n/WoDLxYIs5byxeZJLkV/uF8fU1oTZ8WCiBG786KWU=;
-        b=I06tL+XGztLmQ1B9SSMLe+WDP/mk1I1YLKvAjZJIRJNLuc1JAFypXpi+lSo2Gzu28U
-         J8Gpk0gTHzi3EhNF1tC8Pph6PiTT4LpMru4HFD6irkSirk3ep6nhSFwWUWQ371EJN0XT
-         LSJ5PA66/juXR/7egK6CFKWddgLP+7jIYdiqN9M4p6BmxTSGqUEzYKRbH1HTnO31TGO+
-         sd+pY109si5de+DRw2xxGcK3rjEjGzwqOYQsHEkpYye9a4g+dQxpdFEgqtzfw6EefPdk
-         diW0Y6yZckDSmd0J1I47qhnAamaXkdc8dK3QQPdPnC5e/5BXvwQ9yWOZCKt7gbI9ryr1
-         9QCg==
-X-Gm-Message-State: AC+VfDyVr7C9nNMMNiL9Ei+UaHD/HPP+5mUFQrUZlANnEvAkrC+A3ByZ
-        TSqNodgzG5MHqxVVLQqS/RC04kSaHxBhoA==
-X-Google-Smtp-Source: ACHHUZ6XUZe6ez6PJp2Vl27vedty0Ud/1hhdxDFc5ChSTJOKCw/jzUz5Qav5ZBXkf80FRvXpjxUbeA==
-X-Received: by 2002:a05:6214:500c:b0:626:1589:68e4 with SMTP id jo12-20020a056214500c00b00626158968e4mr4422550qvb.43.1685280999942;
-        Sun, 28 May 2023 06:36:39 -0700 (PDT)
-Received: from ?IPV6:2600:4040:2007:9800:ffda:b634:1d9d:77a8? ([2600:4040:2007:9800:ffda:b634:1d9d:77a8])
-        by smtp.gmail.com with ESMTPSA id k15-20020ad4450f000000b006260e7361ebsm1661935qvu.1.2023.05.28.06.36.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 May 2023 06:36:39 -0700 (PDT)
-Message-ID: <ad7a6ee3-cabb-6f92-a595-8791801cfe97@gmail.com>
-Date:   Sun, 28 May 2023 09:36:37 -0400
+        Sun, 28 May 2023 09:43:08 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2F6B1
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 06:43:06 -0700 (PDT)
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+X-GND-Sasl: alex@ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 928C6240002;
+        Sun, 28 May 2023 13:43:00 +0000 (UTC)
+Message-ID: <cf0d2d2a-c407-7b3d-a5ab-ea5c19e7b890@ghiti.fr>
+Date:   Sun, 28 May 2023 15:42:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/4] dt-bindings: arm: qcom: Add Samsung Galaxy Express
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-References: <20230527040905.stmnoshkdqgiaex6@ripper>
- <20230528001010.47868-2-guptarud@gmail.com>
- <20230528-decode-creasing-f5b3996163e5@spud>
+Subject: Re: [PATCH -fixes] riscv: Fix relocatable kernels with early
+ alternatives using -fno-pie
+To:     Conor Dooley <conor@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230526154630.289374-1-alexghiti@rivosinc.com>
+ <20230526-clergyman-wriggly-accc659a3fad@spud>
+ <20230526-rockfish-moody-f6d3e71f9d24@spud>
+ <f6522c82-01bd-8a03-579d-a5b294784480@ghiti.fr>
+ <20230527-hyperlink-doctrine-ef22cfcb508a@spud>
+ <CAHVXubgx3uBEjMLHXTxr0192ZHbSb=qK4NggZyWQTDfgrJt2-g@mail.gmail.com>
+ <20230528-darkness-grandly-6cb9e014391d@spud>
 Content-Language: en-US
-From:   Rudraksha Gupta <guptarud@gmail.com>
-In-Reply-To: <20230528-decode-creasing-f5b3996163e5@spud>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20230528-darkness-grandly-6cb9e014391d@spud>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,14 +60,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- > Where did the "att" come from in the compatible. Is this some carrier 
-specific model of the phone?
 
-This is the code name for the device. Since there are usually multiple 
-variants of a device, using the code name differentiates between those 
-variants. For example, if I left this as "samsung,express", it would be 
-unclear if I am referring to the GT-I8730 (code name: expresslte) or the 
-SGH-I437 model. This is typically done in postmarketOS: 
-https://wiki.postmarketos.org/wiki/Devices and XDA developers. I believe 
-it is a carrier specific model of the Samsung Galaxy Express.
+On 28/05/2023 15:12, Conor Dooley wrote:
+> On Sun, May 28, 2023 at 03:00:57PM +0200, Alexandre Ghiti wrote:
+>> On Sat, May 27, 2023 at 12:02 PM Conor Dooley <conor@kernel.org> wrote:
+>>> On Sat, May 27, 2023 at 11:13:18AM +0200, Alexandre Ghiti wrote:
+>>>> On 26/05/2023 18:35, Conor Dooley wrote:
+>>>>> On Fri, May 26, 2023 at 05:24:41PM +0100, Conor Dooley wrote:
+>>>>>> On Fri, May 26, 2023 at 05:46:30PM +0200, Alexandre Ghiti wrote:
+>>>>>>> Early alternatives are called with the mmu disabled, and then should not
+>>>>>>> access any global symbols through the GOT since it requires relocations,
+>>>>>>> relocations that we do before but *virtually*. So only use medany code
+>>>>>>> model for this early code.
+>>>>>>>
+>>>>>>> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>>>>>>> ---
+>>>>>>>
+>>>>>>> Note that I'm not very happy with this fix, I think we need to put more
+>>>>>>> effort into "harmonizing" this very early code (ie before the mmu is
+>>>>>>> enabled) as it is spread between different locations and compiled
+>>>>>>> differently.
+>>>>>> Totally & I'll happily spend the time trying to review that work.
+>>>>>>
+>>>>>>> I'll work on that later, but for now, this fix does what is
+>>>>>>> needed to work (from my testing at least). Any Tested-by on the Unmatched
+>>>>>>> and T-head boards is welcome!
+>>>>>> On 6.4-rc1 & v6.4-rc1 + this patch, with CONFIG_RELOCATABLE added to my
+>>>>>> config, my Nezha fails to boot. There is no output whatsoever from the
+>>>>>> kernel. Turning off CONFIG_RELOCATABLE boots again.
+>>>>> I don't know if this is better or worse news, but same thing happens on
+>>>>> an icicle kit. What systems, other than QEMU, has the relocatable
+>>>>> eries been tested with, btw?
+>>>>
+>>>> I tested it on the Unmatched (Andreas did too).
+>>> Cool. I cracked out my unmatched and it has the same issue as the
+>>> icicle. Ditto my Visionfive v2. Here's my config.
+>>> https://raw.githubusercontent.com/ConchuOD/riscv-env/dev/conf/defconfig
+>>>
+>>> A ~default qemu virt doesn't work either. (-m 2G -smp 5)
+>> I can boot with this config using:
+>>
+>> $ sudo ~/qemu/build/qemu-system-riscv64 -machine virt -cpu
+>> rv64,sv48=off -nographic -m 2G -smp 5 -kernel
+>> build_conor/arch/riscv/boot/Image -s
+> Just in case, that is my normal config that I use for testing random
+> stuff on LKML, I added CONFIG_RELOCATABLE in addition to that.
+>
+>> I noticed when trying to add this to our internal CI that I had local
+>> failures that did not happen in the CI because the CI was not using
+>> the same toolchain: can you give me the full .config? So that I can
+>> see if the compiler added stack guards or some other things I did not
+>> think of.
+> https://gist.githubusercontent.com/ConchuOD/655f9cc19fb3be63f1c9da7e7e3ab717/raw/a1aad3c0d307609b2062fd3a66705166aede9f9f/.config
+>
+> 90% of what I test for upstream stuff uses clang, since clang appears to
+> be a minority choice - but I could reproduce this with gcc-12 as well,
+> using the same defconfig as linked above + CONFIG_RELOCATABLE.
 
+
+Hmmm, it still works for me with both clang and gcc-9.
+
+
+You don't have to do that now but is there a way I could get your 
+compiled image? With the sha1 used to build it? Sorry, I don't see what 
+happens, I need to get my hands dirty in some debug!
+
+
+Thanks for being so quick Conor!
+
+
+> Cheers,
+> Conor.
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
