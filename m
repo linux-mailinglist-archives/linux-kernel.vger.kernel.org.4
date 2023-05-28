@@ -2,108 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C3471376A
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 03:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6733971376B
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 03:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbjE1Blk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 21:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S229481AbjE1BpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 21:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjE1Blj (ORCPT
+        with ESMTP id S229437AbjE1Bo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 21:41:39 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA12D8
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 18:41:39 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:38252)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q35Pd-004hje-8d; Sat, 27 May 2023 19:41:37 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:55318 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q35Pb-003vjS-Tg; Sat, 27 May 2023 19:41:36 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>, linux@leemhuis.info,
-        nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-References: <20230522025124.5863-1-michael.christie@oracle.com>
-        <20230522025124.5863-4-michael.christie@oracle.com>
-        <20230522123029.GA22159@redhat.com>
-        <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com>
-        <20230522174757.GC22159@redhat.com> <20230523121506.GA6562@redhat.com>
-        <c6e9a5db-798f-fa40-5ae2-a41f2d8ebab5@oracle.com>
-Date:   Sat, 27 May 2023 20:41:29 -0500
-In-Reply-To: <c6e9a5db-798f-fa40-5ae2-a41f2d8ebab5@oracle.com> (Mike
-        Christie's message of "Thu, 25 May 2023 11:15:59 -0500")
-Message-ID: <87a5xpkzau.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sat, 27 May 2023 21:44:59 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D493DDE
+        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 18:44:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685238295; x=1716774295;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Gll6v8zxfLENN56Xlc2FVXBXa2vDekhM1BJGuQkgYbQ=;
+  b=PvQ4C9p4jSa1+kClw9pXDRZ2OCL47BgUdCXTEo4x3Y+ny4yQMzxMGbdT
+   3QMPs3izgEYx6S4x0EkhQTs9uh0b1zZBRqrSQGtW8Pf7MXgP2ZUjEeLpe
+   tSIqAVGq38PwfpX7XjE5YZW0pSIoTfE1sC9TE0xfUy2p3n0VXB+5WrSXH
+   LTckMK6c1uoEjPbEFrB770VtY5U9/q0/EnQYDHNeRn0H0WX4PJiu8CSf7
+   TGY17iEQR25IDIBOxH+E8s9P3sdXq7qn8Yr4SbG6Uc1xTKAxqowdZoLx0
+   Ii0cY5xHoJ9BC5tvpJQhSdpS9LHhOx85D1KVR5pWjKBfhXW4jhBL9X2Z4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="343968771"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="343968771"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 18:44:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="736420199"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="736420199"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 27 May 2023 18:44:52 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q35Sl-000KMu-0y;
+        Sun, 28 May 2023 01:44:51 +0000
+Date:   Sun, 28 May 2023 09:44:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Baoquan He <bhe@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Michael Holzheu <holzheu@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Amerigo Wang <amwang@redhat.com>
+Subject: Re: [PATCH 5/6] kexec: add helper __crash_shrink_memory()
+Message-ID: <202305280949.yYtbjy5B-lkp@intel.com>
+References: <20230527123439.772-6-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1q35Pb-003vjS-Tg;;;mid=<87a5xpkzau.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX1+V2Qg3ULEu3+aeUbHP6A32iBYl7ldKMoo=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230527123439.772-6-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Mike Christie <michael.christie@oracle.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 721 ms - load_scoreonly_sql: 0.10 (0.0%),
-        signal_user_changed: 14 (2.0%), b_tie_ro: 12 (1.7%), parse: 1.60
-        (0.2%), extract_message_metadata: 5 (0.7%), get_uri_detail_list: 1.58
-        (0.2%), tests_pri_-2000: 5 (0.7%), tests_pri_-1000: 4.0 (0.5%),
-        tests_pri_-950: 1.95 (0.3%), tests_pri_-900: 1.59 (0.2%),
-        tests_pri_-200: 1.28 (0.2%), tests_pri_-100: 5 (0.7%), tests_pri_-90:
-        458 (63.5%), check_bayes: 455 (63.1%), b_tokenize: 8 (1.1%),
-        b_tok_get_all: 228 (31.6%), b_comp_prob: 3.4 (0.5%), b_tok_touch_all:
-        212 (29.4%), b_finish: 0.89 (0.1%), tests_pri_0: 200 (27.8%),
-        check_dkim_signature: 0.53 (0.1%), check_dkim_adsp: 3.0 (0.4%),
-        poll_dns_idle: 1.25 (0.2%), tests_pri_10: 2.2 (0.3%), tests_pri_500: 7
-        (1.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike Christie <michael.christie@oracle.com> writes:
+Hi Zhen,
 
-> On 5/23/23 7:15 AM, Oleg Nesterov wrote:
->> 
->> Now the main question. Whatever we do, SIGKILL/SIGSTOP/etc can come right
->> before we call work->fn(). Is it "safe" to run this callback with
->> signal_pending() or fatal_signal_pending() ?
->
-> The questions before this one I'll leave for the core vhost devs since
-> they know best.
+kernel test robot noticed the following build warnings:
 
-Let me ask a clarifying question:
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on linus/master v6.4-rc3 next-20230525]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Is it only the call to schedule() in vhost_worker that you are worried
-about not sleeping if signal_pending() or fatal_signal_pending()?
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kexec-fix-a-memory-leak-in-crash_shrink_memory/20230527-203821
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230527123439.772-6-thunder.leizhen%40huawei.com
+patch subject: [PATCH 5/6] kexec: add helper __crash_shrink_memory()
+config: mips-randconfig-r012-20230528 (https://download.01.org/0day-ci/archive/20230528/202305280949.yYtbjy5B-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/dea97cef503d26e05d0e11818ae44176056ddf64
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zhen-Lei/kexec-fix-a-memory-leak-in-crash_shrink_memory/20230527-203821
+        git checkout dea97cef503d26e05d0e11818ae44176056ddf64
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Is there concern that the worker functions aka "work->fn()" will also
-have killable or interruptible sleeps that also will misbehave.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305280949.yYtbjy5B-lkp@intel.com/
 
-We can handle schedule() in vhost_worker without problem.
+All warnings (new ones prefixed by >>):
 
-If a worker function has interruptible or killable sleeps that will turn
-into busy waits or worse not sleeping long enough that seems like a
-problem.  There is no way to guarantee that the outer loop of
-vhost_worker will protect the worker functions from signal_pending()
-or fatal_signal_pending() becoming true.
+>> kernel/kexec_core.c:1108:5: warning: no previous prototype for '__crash_shrink_memory' [-Wmissing-prototypes]
+    1108 | int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
+         |     ^~~~~~~~~~~~~~~~~~~~~
 
 
-Eric
+vim +/__crash_shrink_memory +1108 kernel/kexec_core.c
+
+  1107	
+> 1108	int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
+  1109	{
+  1110		struct resource *ram_res;
+  1111	
+  1112		ram_res = kzalloc(sizeof(*ram_res), GFP_KERNEL);
+  1113		if (!ram_res)
+  1114			return -ENOMEM;
+  1115	
+  1116		ram_res->start = old_res->start + new_size;
+  1117		ram_res->end   = old_res->end;
+  1118		ram_res->flags = IORESOURCE_BUSY | IORESOURCE_SYSTEM_RAM;
+  1119		ram_res->name  = "System RAM";
+  1120	
+  1121		if (!new_size) {
+  1122			release_resource(old_res);
+  1123			old_res->start = 0;
+  1124			old_res->end   = 0;
+  1125		} else {
+  1126			crashk_res.end = ram_res->start - 1;
+  1127		}
+  1128	
+  1129		crash_free_reserved_phys_range(ram_res->start, ram_res->end);
+  1130		insert_resource(&iomem_resource, ram_res);
+  1131	
+  1132		return 0;
+  1133	}
+  1134	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
