@@ -2,145 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF098714082
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 23:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42C07138FF
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 12:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjE1VNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 17:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S229478AbjE1KRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 06:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjE1VNL (ORCPT
+        with ESMTP id S229437AbjE1KR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 17:13:11 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BD8B8;
-        Sun, 28 May 2023 14:13:07 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30a1fdde3d6so2592300f8f.0;
-        Sun, 28 May 2023 14:13:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685308386; x=1687900386;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=q1Cwvb/GCCh0lg/6CXrsgL4T10DW9Bo8xMEsQZBh0JU=;
-        b=kdN1Z4KJ0bZPCKSFUeflr1BnPucv2axWl46oBkIb9YvXV04L03QKbdywqbJuN4iQfR
-         +O0QEH7fDwq7S71LsjHYp93iOKgj3lrkDtZDqTdiWdWVjkUNjmYBNw//MLV0ESpv4uX6
-         HaZyoBPe1WTPCyqOZBc5QLQm5bJs1eK5Z6dC/8M9fP44RTz8M851R+3DmPbjnoblVeZq
-         JPR9ab2basB/qsxXIu1QrTyhd2IgtShcxm3vdgbG9SMTe5F2uB/md6nhDiXV9d2V/O3e
-         ykjCQy7f0tT+LCzFRBKPqX1lvEVaakAyLCjkp2fo2UScG2lqRw5+rCMZr68K9sDkSmIn
-         HQzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685308386; x=1687900386;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q1Cwvb/GCCh0lg/6CXrsgL4T10DW9Bo8xMEsQZBh0JU=;
-        b=SKlSQdEcY66ruOEpbd3nCUov4iElZsw+dV9VTtAq5kKrUZyrDbHPsneV4dEXGM/+mh
-         +IB8MC10upbzWSkaW2obJhB64Z3jtb00umjaEFlkmtkkGRSZfO515c+KsdMJqrz0tSEH
-         Q7lZYuYQoEeaM/RbOU5XFLSBRJykBt+A9BF+GpojoTRs5Fz+nmI6hn3nyuYzZnDuSEhZ
-         apyflfZrF6KxJQIo+pwyFoxp7ZFGaZtORI3WV3bZCgcenqfG00JQGbftbN5h9zFIcMZj
-         agAlREKmA62xk7w3ij+cYmz3WtrKB48Yuabzh8LyYJeApXz8bmTu5YIQks55OcOZ274b
-         PHsQ==
-X-Gm-Message-State: AC+VfDw2c80UPEjk5sbaV2bUZBJeJ1Dbbbm2tqXtKHD5dY9ZqZOaQv7e
-        hHQIwBW01x3ZH5cCMuT29uY=
-X-Google-Smtp-Source: ACHHUZ4Y7DqZiFFDPeZAv1uMH7j5vP9ZWQPYLvuLknBgEf1tFxlG/8GVtBEQd7uHTRoEOx0salH7cA==
-X-Received: by 2002:adf:ea89:0:b0:30a:e7cb:793 with SMTP id s9-20020adfea89000000b0030ae7cb0793mr2868652wrm.15.1685308385931;
-        Sun, 28 May 2023 14:13:05 -0700 (PDT)
-Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id z16-20020adfe550000000b003063a92bbf5sm11829852wrm.70.2023.05.28.14.13.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 14:13:05 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>, stable@vger.kernel.org
-Subject: [net-next PATCH v2] wireguard: allowedips: fix compilation warning for stack limit exceeded
-Date:   Sun, 28 May 2023 12:11:57 +0200
-Message-Id: <20230528101157.20374-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Sun, 28 May 2023 06:17:29 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2AE9BB;
+        Sun, 28 May 2023 03:17:23 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 34SAH2PX002019;
+        Sun, 28 May 2023 12:17:02 +0200
+Date:   Sun, 28 May 2023 12:17:02 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com
+Subject: Re: [PATCH 00/13] tools/nolibc: riscv: Add full rv32 support
+Message-ID: <20230528101702.GG1956@1wt.eu>
+References: <cover.1684949267.git.falcon@tinylab.org>
+ <20230528075955.GE1956@1wt.eu>
+ <210e5ed9-be89-4e48-9c1e-3eb5b0dd288a@t-8ch.de>
+ <30bf1742-64ff-4f92-beab-332108d0201f@t-8ch.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <30bf1742-64ff-4f92-beab-332108d0201f@t-8ch.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some arch (for example IPQ8074) and other with
-KERNEL_STACKPROTECTOR_STRONG enabled, the following compilation error is
-triggered:
-drivers/net/wireguard/allowedips.c: In function 'root_remove_peer_lists':
-drivers/net/wireguard/allowedips.c:80:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-   80 | }
-      | ^
-drivers/net/wireguard/allowedips.c: In function 'root_free_rcu':
-drivers/net/wireguard/allowedips.c:67:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-   67 | }
-      | ^
-cc1: all warnings being treated as errors
+On Sun, May 28, 2023 at 11:41:53AM +0200, Thomas Weißschuh wrote:
+> > If you are fine with pushing more stuff to this branch, picking up 
+> > the fix for the duplicated test gettimeofday_bad2 (7) would be nice, too.
+> 
+> And the ppoll() argument cleanup (10) for that matter.
 
-Since these are free function and returns void, using function that can
-fail is not ideal since an error would result in data not freed.
-Since the free are under RCU lock, we can allocate the required stack
-array as static outside the function and memset when needed.
-This effectively fix the stack frame warning without changing how the
-function work.
+OK now both done, thank you.
 
-Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Cc: stable@vger.kernel.org
----
+> IMO it would be more convenient to move generic cleanup patches to the
+> beginning of the series.
+> When the reviewers are focussing on the real changes they won't be
+> interrupted by the cleanups. Also the maintainer can more easily pick
+> them up independently, so they are dealt with and nobody has to worry
+> about them anymore.
 
-Changes v2:
-- Fix double Fixes in fixes tag
+Agreed!
 
- drivers/net/wireguard/allowedips.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/wireguard/allowedips.c b/drivers/net/wireguard/allowedips.c
-index 5bf7822c53f1..c129082f04c6 100644
---- a/drivers/net/wireguard/allowedips.c
-+++ b/drivers/net/wireguard/allowedips.c
-@@ -53,12 +53,16 @@ static void node_free_rcu(struct rcu_head *rcu)
- 	kmem_cache_free(node_cache, container_of(rcu, struct allowedips_node, rcu));
- }
- 
-+static struct allowedips_node *tmpstack[MAX_ALLOWEDIPS_BITS];
-+
- static void root_free_rcu(struct rcu_head *rcu)
- {
--	struct allowedips_node *node, *stack[MAX_ALLOWEDIPS_BITS] = {
--		container_of(rcu, struct allowedips_node, rcu) };
-+	struct allowedips_node *node, **stack = tmpstack;
- 	unsigned int len = 1;
- 
-+	memset(stack, 0, sizeof(*stack) * MAX_ALLOWEDIPS_BITS);
-+	stack[0] = container_of(rcu, struct allowedips_node, rcu);
-+
- 	while (len > 0 && (node = stack[--len])) {
- 		push_rcu(stack, node->bit[0], &len);
- 		push_rcu(stack, node->bit[1], &len);
-@@ -68,9 +72,12 @@ static void root_free_rcu(struct rcu_head *rcu)
- 
- static void root_remove_peer_lists(struct allowedips_node *root)
- {
--	struct allowedips_node *node, *stack[MAX_ALLOWEDIPS_BITS] = { root };
-+	struct allowedips_node *node, **stack = tmpstack;
- 	unsigned int len = 1;
- 
-+	memset(stack, 0, sizeof(*stack) * MAX_ALLOWEDIPS_BITS);
-+	stack[0] = root;
-+
- 	while (len > 0 && (node = stack[--len])) {
- 		push_rcu(stack, node->bit[0], &len);
- 		push_rcu(stack, node->bit[1], &len);
--- 
-2.39.2
-
+Thanks!
+Willy
