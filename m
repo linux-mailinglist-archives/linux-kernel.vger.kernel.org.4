@@ -2,197 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C3A7138B6
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 10:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A62E7138B8
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 10:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjE1IZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 04:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
+        id S229624AbjE1I0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 04:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjE1IZ3 (ORCPT
+        with ESMTP id S229437AbjE1I0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 04:25:29 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAB899;
-        Sun, 28 May 2023 01:25:26 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1685262312tra33cp0
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 28 May 2023 16:25:10 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: An8j/rhzjdGajJeEXw9TkdV6lrxosyLeWWZ9VDBE9LOjDBmydLX7wTGYZYvYx
-        IwKElaEyNjmHyGHMKJab2Zt1BbXL2L2S9MY/mJeCcgY6mTf99g5K/h0OG/BKKizV3mavnde
-        ya71KdKJ28Ku7Hfo4T20IWMGVjd6BtGAvJaYTaAXwJofSuE9Ux/o2inHP7SnyfazeXi+gDz
-        VXqA7WmMfOdIlmM4yJeiy00K8pHgkMZ47UZcDbcTcelWgpAkerI87FRFSqmLXkrUAeublyI
-        uxdnjZsrucnpXKh79cSi7lK503yfp97zHAoNLr5w4dBiLEfibrDqfmByEJqB/fjADX4NueH
-        x2UMgq1b2R0TKKJT/AHXoqMQnWCFw==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 107622595535614610
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     arnd@arndb.de, thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com
-Subject: Re: [PATCH 09/13] tools/nolibc: sys_poll: riscv: use __NR_ppoll_time64 for rv32
-Date:   Sun, 28 May 2023 16:25:09 +0800
-Message-Id: <20230528082509.293250-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <83ab9f47-e1ed-463c-a717-26aad6bf2b71@app.fastmail.com>
-References: <83ab9f47-e1ed-463c-a717-26aad6bf2b71@app.fastmail.com>
+        Sun, 28 May 2023 04:26:09 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AF3DC;
+        Sun, 28 May 2023 01:26:05 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so2040510a12.2;
+        Sun, 28 May 2023 01:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685262365; x=1687854365;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=N6+DTVV6loeaE15ramj1mf1WcHodhXhBfUTYWqPaF2Q=;
+        b=Zd+RzCVUYoy0Vci8TjnR01H0gZ3uYqrknhR0CCz+8agwdl3C+LBAfzGgyd7I74IREf
+         bWQaq6rKNMdEEJ2VBvtIn37hQ1JEhtfMIluw4PYAsvVcNHY0zXefKL5HZlZsIaTZIbQq
+         xt5LLLT8qmwgJG4Ko/tj+nazSpF6KRrzPDoC2Irs9wGApwpbCn35kpbsXhiiaV0kmBgt
+         U4soZyeIwwaOWXk+r8ozXs3K0w1V7y8vuqVdgGq4vmg9KoSQ29rTJosLICoIF/APp8vK
+         Z+f66Wb9QfTikmWotezjnmhej8aopEyS8evxPmk29Z5gqb2ClVnM0bYM8YNZXDHU3rpN
+         xeeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685262365; x=1687854365;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N6+DTVV6loeaE15ramj1mf1WcHodhXhBfUTYWqPaF2Q=;
+        b=TGjhwPhrCYZq8JUS+ILiEc/CbWcSt8Me4ur3PjIBfLg2yu9ndpEYeuKUhYxAu4SVzR
+         KMvW/KnJ4hdDU4HkrPKnREtxIXDSRsMSfn38Gyz9gl7Vc+pX5AujNLP976c7VZc9V6/t
+         4V7I0j9LD/XJ23sOvxsK4ODKu6FS+AtnuGDmV1igb5sPI5w8aDJK0WffpLN9GvR4y7WB
+         bFOywl6A0BY5A/Enbwjmj/gUn8LrfstL9wLhxqkEUFvtFey2BRg1u6t+FJhWe7oDhbzC
+         /v8B292VhCmqpFQHiyxAfrmolJI2BydAFvH1Zamhvh9lkH0r+tTIHrd0jEulMRe6n73X
+         Kc7w==
+X-Gm-Message-State: AC+VfDyL0GOsi9wwkVneT8oj/1qzoIMKe8ebDY3ofsU7WhlzkoOzoS/G
+        GzTCesNjuGxQ99eKnMYyEWmo+yAA5Hg=
+X-Google-Smtp-Source: ACHHUZ6N9yZRVJve2dZbW8nQuaCnMQla7/zfL7gL5guLkGGbrF0+4aoo/XJnit36m+5PejGI6cvchQ==
+X-Received: by 2002:a05:6a20:2591:b0:10b:e88f:5983 with SMTP id k17-20020a056a20259100b0010be88f5983mr5846674pzd.43.1685262364681;
+        Sun, 28 May 2023 01:26:04 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id w13-20020a65534d000000b00476d1385265sm4619232pgr.25.2023.05.28.01.26.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 01:26:04 -0700 (PDT)
+Date:   Sun, 28 May 2023 01:26:02 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Zhi Wang <zhi.wang.linux@gmail.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>
+Subject: Re: [PATCH v13 021/113] KVM: TDX: Make pmu_intel.c ignore guest TD
+ case
+Message-ID: <20230528082602.GC1234772@ls.amr.corp.intel.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+ <017a06174fa054ae264a2caba6f7f55e00f258e8.1678643052.git.isaku.yamahata@intel.com>
+ <20230402115019.000046fd@gmail.com>
+ <36fb638a-c9ff-0139-3e8e-7e8ff0bbff1f@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <36fb638a-c9ff-0139-3e8e-7e8ff0bbff1f@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Arnd, Thomas, Willy
+On Wed, Apr 19, 2023 at 04:21:21PM +0800,
+Like Xu <like.xu.linux@gmail.com> wrote:
 
-> On Fri, May 26, 2023, at 09:15, Thomas Wei=C3=9Fschuh wrote:
-> > On 2023-05-25 01:57:24+0800, Zhangjin Wu wrote:
-> >> 
-> >> +/* needed by time64 syscalls */
-> >> +struct timespec64 {
-> >> +	time64_t	tv_sec;		/* seconds */
-> >> +	long		tv_nsec;	/* nanoseconds */
-> >> +};
-> >
-> > A question to you and Willy, as it's also done the same for other types:
-> >
-> > What is the advantage of custom definitions over using the one from the
-> > kernel (maybe via a typedef).
-> >
-> > From linux/time_types.h:
-> >
-> > struct __kernel_timespec {
-> > 	__kernel_time64_t tv_set;
-> > 	long long tv_nsec;
-> > };
+> On 2/4/2023 4:50 pm, Zhi Wang wrote:
+> > Hi Like:
+> > 
+> > Would you mind to take a look on this patch? It would be nice to have
+> > a r-b also from you. :)
+> > 
+> > On Sun, 12 Mar 2023 10:55:45 -0700
+> > isaku.yamahata@intel.com wrote:
+> > 
+> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > > 
+> > > Because TDX KVM doesn't support PMU yet (it's future work of TDX KVM
+> > > support as another patch series) and pmu_intel.c touches vmx specific
 > 
-> I agree the __kernel_* types are what we should be using when
-> interacting with system calls directly, that is definitely what
-> they are intended for.
+> It would be nice to have pmu support for tdx-guest from the very beginning.
+
+It's supported in the public github repo.
+https://github.com/intel/tdx/tree/kvm-upstream-workaround
+As this patch series has 100+ patches, I don't want to bloat this patch more.
+
+
+> If you guys are more open on the tdx development model, I'd like to help on
+> those features.
+
+This mainling list is the place.  
+
+
+> > > structure in vcpu initialization, as workaround add dummy structure to
+> > > struct vcpu_tdx and pmu_intel.c can ignore TDX case.
 > 
-> I would go further here and completely drop support for 32-bit
-> time_t/off_t and derived types in nolibc. Unfortunately, the
-> kernel's include/uapi/linux/time.h header still defines the
-> old types, this is one of the last remnants the time32 syscalls
-> definitions in the kernel headers, and this already conflicts
-> with the glibc and musl definitions, so anything that includes
-> this header is broken on real systems. I think it makes most
-> sense for nolibc to just use the linux/time_types.h header
-> instead and use something like
+> If the target is not to provide a workaround, how about other variants:
+> 	- struct lbr_desc lbr_desc;
+> 	- pebs ds_buffer;
+> ?
 > 
-> #define timespec   __kernel_timespec
-> #define itimerspec __kernel_itimerspec
-> typedef __kernel_time64_t time_t;
-> /* timeval is only provided for users, not compatible with syscalls */
-> struct timeval { __kernel_time64_t tv_sec; __s64 tv_nsec; };
-> 
-> so we can drop all the fallbacks for old 32-bit targets. This
-> also allows running with CONFIG_COMPAT_32BIT_TIME disabled.
+> We also need tdx selftest to verify the unavailability of these features.
+> Also, it would be great to have TDX's "System Profiling Mode" featue back in
+> the specification.
 
-Just a status update ...
-
-I'm working on the pure time64 and 64bit off_t syscalls support, it almost
-worked (tested on rv32/64, arm32/64), thanks very much for your suggestions.
-
-It includes:
-
-* Based on linux/types.h and
-    * Use 64bit off_t
-    * Use 64bit time_t
-    * the new std.h looks like this
-
-    typedef uint32_t __kernel_dev_t;
-    
-    typedef __kernel_dev_t          dev_t;
-    typedef __kernel_ulong_t        ino_t;
-    typedef __kernel_mode_t         mode_t;
-    typedef __kernel_pid_t          pid_t;
-    typedef __kernel_uid32_t        uid_t;
-    typedef __kernel_gid32_t        gid_t;
-    typedef __kernel_loff_t         off_t;
-    typedef __kernel_time64_t       time_t;
-    typedef uint32_t                nlink_t;
-    typedef uint64_t                blksize_t;
-    typedef uint64_t                blkcnt_t;
-
-* Use __kernel_timespec as timespec
-* Use 64bit time_t based struct timeval
-    * Disable gettimeofday syscall completely for 32bit platforms
-        * And disable the gettimeofday_bad1/2 test case too
-    * Remove the oldselect and newslect path completely
-    * The new types.h looks this:
-
-    /* always use time64 structs in user-space even on 32bit platforms */
-    #define timespec __kernel_timespec
-    #define itimerspec __kernel_itimerspec
-
-    /* timeval is only provided for users, not compatible with syscalls */
-    struct __timeval64 {
-    	__kernel_time64_t tv_sec;	/* seconds */
-    	__s64 tv_usec;			/* microseconds */
-    };
-    /* override the 32bit version of struct timeval in linux/time.h */
-    #define timeval __timeval64
-
-    /* itimerval is only provided for users, not compatible with syscalls */
-    struct __itimerval64 {
-    	struct __timeval64 it_interval;	/* timer interval */
-    	struct __timeval64 it_value;	/* current value */
-    };
-    /* override the 32bit version of struct itimerval in linux/time.h */
-    #define itimerval __itimerval64
-
-* Use __NR_*time64 for all 32bit platforms
-* Use __NR_pselect6/ppoll/clock_gettime only for 64bit platforms
-* New sizeof tests added to verify off_t, time_t, timespec, itimerspec...
-
-   	CASE_TEST(sizeof_time_t);           EXPECT_EQ(1, 8,   sizeof(time_t)); break;
-    	CASE_TEST(sizeof_timespec);         EXPECT_EQ(1, 16,  sizeof(struct timespec)); break;
-    #ifdef NOLIBC
-    	CASE_TEST(sizeof_itimerspec);       EXPECT_EQ(1, 32,  sizeof(struct itimerspec)); break;
-    #endif
-    	CASE_TEST(sizeof_timeval);          EXPECT_EQ(1, 16,  sizeof(struct timeval)); break;
-    	CASE_TEST(sizeof_itimerval);        EXPECT_EQ(1, 32,  sizeof(struct itimerval)); break;
-    	CASE_TEST(sizeof_off_t);            EXPECT_EQ(1, 8,   sizeof(off_t)); break;
-
-
-@Arnd, the above timeval/itimerval definitions are used to override the ones
-from linux/time.h to avoid such error:
-
-    error: redefinition of ‘struct timeval’
-
-    nolibc/sysroot/riscv/include/types.h:225:8: error: redefinition of ‘struct timeval’
-      225 | struct timeval {
-          |        ^~~~~~~
-    In file included from nolibc/sysroot/riscv/include/types.h:11,
-                     from nolibc/sysroot/riscv/include/nolibc.h:98,
-                     from nolibc/sysroot/riscv/include/errno.h:26,
-                     from nolibc/sysroot/riscv/include/stdio.h:14,
-                     from tools/testing/selftests/nolibc/nolibc-test.c:12:
-    nolibc/sysroot/riscv/include/linux/time.h:16:8: note: originally defined here
-       16 | struct timeval {
-
-@Arnd, As you commented in another reply, is it time for us to update
-include/uapi/linux/time.h together and let it provide time64 timeval/itimerval
-instead of the old ones? perhaps some libc's are still using them.
-
-Or perhaps we can add a switch like __ARCH_WANT_TIME32_SYSCALLS, add a
-__ARCH_WANT_TIME32_STRUCTS and simply bind it with __ARCH_WANT_TIME32_SYSCALLS?
-
-About the above ugly override code, What's your suggestion in v2? ;-)
-
-Best regards,
-Zhangjin
-
-> 
->      Arnd
+I don't think it's productive. Once merging this patch series, we can move on
+to TDX PMU support (or whatever still missing feature) as second (or later)
+step.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
