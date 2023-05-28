@@ -2,56 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833F8713A9D
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 18:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611FF713AEC
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 18:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjE1Qjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 12:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
+        id S229795AbjE1Q5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 12:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjE1Qjd (ORCPT
+        with ESMTP id S229782AbjE1Q5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 12:39:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AAEA7;
-        Sun, 28 May 2023 09:39:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E2A860E33;
-        Sun, 28 May 2023 16:39:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC594C433EF;
-        Sun, 28 May 2023 16:39:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685291971;
-        bh=hBlRxGA8aRr5jwPDvWB/SpUUZb6GUXDNcRFRO2a7688=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KKUH64CCUpz8rEA2ZI8nqmf2EzeTrj5oHHd/eKj3IC54D8S2kUPF3OiN8wKWabyFf
-         6QpE4pwLWAAPzyYtjDurxgWtXXbNr9IIT7NVCEV4p5fZDFhTiWA4lqPHtOJOuWpyZd
-         hs/1b5kytmAdh8ktJRnamu9jy0Z7k7NhgR6R/FXST+nRDDL92ngkrKkr3lz2orFu+Y
-         wqJD/AVXJgtY8gg1YyDGXBIvqBVjfZ/ni78iCJcA6m4LmxDXVlz0J8Zk6yhtXt2k5O
-         AHKggUckXe9RUSFOWhy3hZV8oLYVjSRANBntrlRIPsakasCvzpH4klGoibVQOSRZ+9
-         Nm4Ruiqnx9N4g==
-Date:   Sun, 28 May 2023 17:55:50 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Mehdi Djait <mehdi.djait.k@gmail.com>
-Cc:     mazziesaccount@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 5/7] iio: accel: kionix-kx022a: Refactor driver and
- add chip_info structure
-Message-ID: <20230528175550.4e58f90f@jic23-huawei>
-In-Reply-To: <de588a5a3ca311f6dc3a543bfa5cea7b590ae44c.1685109507.git.mehdi.djait.k@gmail.com>
-References: <cover.1685109507.git.mehdi.djait.k@gmail.com>
-        <de588a5a3ca311f6dc3a543bfa5cea7b590ae44c.1685109507.git.mehdi.djait.k@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Sun, 28 May 2023 12:57:47 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E32BE
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 09:57:46 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5346d150972so2259113a12.3
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 09:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685293066; x=1687885066;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mRkRsLTcaRXXNLPVC/pQddeZGsKSw4A/x3n+BNs4brA=;
+        b=tX4OvwkJGQGBWSoTLx5fhl6M7+eMOrecPg8ap1uooezx+6pSxN+tA0IyZHb8yY7You
+         l9SUV5WVWAnnaDZaIuEU0cW5bXEM/veQTjlD5YNxvAM23tyCoH5jnI034TRnt1c7MO7P
+         rpKoq6H8oC+ALQwb30pK0rkCDLyMdrGKY/TQj7k7gQwRAGVvQ4qjNfr58vuSZWh6XmcH
+         Bqml4mSiWqtS16VgYBBFyVkv/qgcUE7DHbqxbe03XYrvt4bWquvAjxSrZDlcU/Hcf3yb
+         J5gvZvSZNjWbjgapqsR0nEekRHLE8UmA5FeQiB5LfG+6X5aH8LBOGd6qzF0soxwTcLUg
+         BZgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685293066; x=1687885066;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mRkRsLTcaRXXNLPVC/pQddeZGsKSw4A/x3n+BNs4brA=;
+        b=XkaX9xA6dH/+cuA7M367yY9u7wGnJ6F4gVwSkQ9Zjb2NZ0E+13QW2o13C87pnZ7kn3
+         sotc+Dnh32s1hCgPBUWzsFmtomwLD0b/poL+bpPFee6j0TSJCOMfNzjfQ+GwtiBajbiD
+         i00Ce1TZ5PLWcBpsKGblFIbWGTnwmdb5ymDmvBg1L+m+0/6w5kfwd2pBgU/wZct1gmDk
+         6CT6LMEBkXW59uS/TGea4zyRcYtK2YxFBTtdRVI/VBGCYM2vt287u6xpZ2iRAbYwL0Ig
+         r/8kNTIrlDl7Uuzmdp66ObwfncoUV7MEgliVe2DrZo5i5fQS3Vis0UOnAn19ljgOESMr
+         XQeg==
+X-Gm-Message-State: AC+VfDxkqiCcjnmZj0AyORBkoQGtNXXGJjZxJd8VwtKvo23o1RXJ5TjB
+        HEIB1vSuGq9qZTLrLn9viF+WJUt9UiKOFIhcdA==
+X-Google-Smtp-Source: ACHHUZ7/k62dk4ZuvrJqPQctzbXQu9rlc3BvvCDXGNP3Ur6Q1O0PUWpRejzitcjoKLcsB+3h5/DZWA==
+X-Received: by 2002:a17:902:c949:b0:1aa:e425:2527 with SMTP id i9-20020a170902c94900b001aae4252527mr10118933pla.21.1685293065809;
+        Sun, 28 May 2023 09:57:45 -0700 (PDT)
+Received: from thinkpad ([117.248.1.157])
+        by smtp.gmail.com with ESMTPSA id jh9-20020a170903328900b001960706141fsm6531863plb.149.2023.05.28.09.57.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 09:57:45 -0700 (PDT)
+Date:   Sun, 28 May 2023 22:27:38 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ahmed S . Darwish" <darwi@linutronix.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>, linux-pci@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongson-kernel@lists.loongnix.cn,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pci: irq: Add an early parameter to limit pci irq numbers
+Message-ID: <20230528165738.GF2814@thinkpad>
+References: <20230524093623.3698134-1-chenhuacai@loongson.cn>
+ <ZG4rZYBKaWrsctuH@bhelgaas>
+ <CAAhV-H5u8qtXpr-mY+pKq7UfmyBgr3USRTQpo9-w28w8pHX8QQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H5u8qtXpr-mY+pKq7UfmyBgr3USRTQpo9-w28w8pHX8QQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,94 +85,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 May 2023 16:30:46 +0200
-Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
-
-> Add the chip_info structure to the driver's private data to hold all
-> the device specific infos.
-> Refactor the kx022a driver implementation to make it more generic and
-> extensible.
+On Thu, May 25, 2023 at 05:14:28PM +0800, Huacai Chen wrote:
+> Hi, Bjorn,
 > 
-> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+> On Wed, May 24, 2023 at 11:21 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > [+cc Marc, LKML]
+> >
+> > On Wed, May 24, 2023 at 05:36:23PM +0800, Huacai Chen wrote:
+> > > Some platforms (such as LoongArch) cannot provide enough irq numbers as
+> > > many as logical cpu numbers. So we should limit pci irq numbers when
+> > > allocate msi/msix vectors, otherwise some device drivers may fail at
+> > > initialization. This patch add a cmdline parameter "pci_irq_limit=xxxx"
+> > > to control the limit.
+> > >
+> > > The default pci msi/msix number limit is defined 32 for LoongArch and
+> > > NR_IRQS for other platforms.
+> >
+> > The IRQ experts can chime in on this, but this doesn't feel right to
+> > me.  I assume arch code should set things up so only valid IRQ numbers
+> > can be allocated.  This doesn't seem necessarily PCI-specific, I'd
+> > prefer to avoid an arch #ifdef here, and I'd also prefer to avoid a
+> > command-line parameter that users have to discover and supply.
+> The problem we meet: LoongArch machines can have as many as 256
+> logical cpus, and the maximum of msi vectors is 192. Even on a 64-core
+> machine, 192 irqs can be easily exhausted if there are several NICs
+> (NIC usually allocates msi irqs depending on the number of online
+> cpus). So we want to limit the msi allocation.
+> 
 
-Hi Mehdi,
+If the MSI allocation fails with multiple vectors, then the NIC driver should
+revert to a single MSI vector. Is that happening in your case?
 
-Just one trivial comment from me about missing docs / unused element.
+- Mani
 
-Thanks,
+> This is not a LoongArch-specific problem, because I think other
+> platforms can also meet if they have many NICs. But of course,
+> LoongArch can meet it more easily because the available msi vectors
+> are very few. So, adding a cmdline parameter is somewhat reasonable.
+> 
+> After some investigation, I think it may be possible to modify
+> drivers/irqchip/irq-loongson-pch-msi.c and override
+> msi_domain_info::domain_alloc_irqs() to limit msi allocation. However,
+> doing that need to remove the "static" before
+> __msi_domain_alloc_irqs(), which means revert
+> 762687ceb31fc296e2e1406559e8bb5 ("genirq/msi: Make
+> __msi_domain_alloc_irqs() static"), I don't know whether that is
+> acceptable.
+> 
+> If such a revert is not acceptable, it seems that we can only use the
+> method in this patch. Maybe rename pci_irq_limits to pci_msi_limits is
+> a little better.
+> 
+> Huacai
+> 
+> >
+> > > Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > ---
+> > >  drivers/pci/msi/msi.c | 26 +++++++++++++++++++++++++-
+> > >  1 file changed, 25 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+> > > index ef1d8857a51b..6617381e50e7 100644
+> > > --- a/drivers/pci/msi/msi.c
+> > > +++ b/drivers/pci/msi/msi.c
+> > > @@ -402,12 +402,34 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
+> > >       return ret;
+> > >  }
+> > >
+> > > +#ifdef CONFIG_LOONGARCH
+> > > +#define DEFAULT_PCI_IRQ_LIMITS 32
+> > > +#else
+> > > +#define DEFAULT_PCI_IRQ_LIMITS NR_IRQS
+> > > +#endif
+> > > +
+> > > +static int pci_irq_limits = DEFAULT_PCI_IRQ_LIMITS;
+> > > +
+> > > +static int __init pci_irq_limit(char *str)
+> > > +{
+> > > +     get_option(&str, &pci_irq_limits);
+> > > +
+> > > +     if (pci_irq_limits == 0)
+> > > +             pci_irq_limits = DEFAULT_PCI_IRQ_LIMITS;
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +early_param("pci_irq_limit", pci_irq_limit);
+> > > +
+> > >  int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec,
+> > >                          struct irq_affinity *affd)
+> > >  {
+> > >       int nvec;
+> > >       int rc;
+> > >
+> > > +     maxvec = clamp_val(maxvec, 0, pci_irq_limits);
+> > > +
+> > >       if (!pci_msi_supported(dev, minvec) || dev->current_state != PCI_D0)
+> > >               return -EINVAL;
+> > >
+> > > @@ -776,7 +798,9 @@ static bool pci_msix_validate_entries(struct pci_dev *dev, struct msix_entry *en
+> > >  int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries, int minvec,
+> > >                           int maxvec, struct irq_affinity *affd, int flags)
+> > >  {
+> > > -     int hwsize, rc, nvec = maxvec;
+> > > +     int hwsize, rc, nvec;
+> > > +
+> > > +     nvec = clamp_val(maxvec, 0, pci_irq_limits);
+> > >
+> > >       if (maxvec < minvec)
+> > >               return -ERANGE;
+> > > --
+> > > 2.39.1
+> > >
 
-Jonathan
-
-...
-
-> diff --git a/drivers/iio/accel/kionix-kx022a.h b/drivers/iio/accel/kionix-kx022a.h
-> index 12424649d438..c23b6f03409e 100644
-> --- a/drivers/iio/accel/kionix-kx022a.h
-> +++ b/drivers/iio/accel/kionix-kx022a.h
-> @@ -76,7 +76,56 @@
->  
->  struct device;
->  
-> -int kx022a_probe_internal(struct device *dev);
-> -extern const struct regmap_config kx022a_regmap;
-> +/**
-> + * struct kx022a_chip_info - Kionix accelerometer chip specific information
-> + *
-> + * @name:		name of the device
-> + * @regmap_config:	pointer to register map configuration
-> + * @channels:		pointer to iio_chan_spec array
-> + * @num_channels:	number of iio_chan_spec channels
-> + * @fifo_length:	number of 16-bit samples in a full buffer
-> + * @who:		WHO_AM_I register
-> + * @id:			WHO_AM_I register value
-> + * @cntl:		control register 1
-> + * @cntl2:		control register 2
-> + * @odcntl:		output data control register
-> + * @buf_cntl1:		buffer control register 1
-> + * @buf_cntl2:		buffer control register 2
-> + * @buf_clear:		buffer clear register
-> + * @buf_status1:	buffer status register 1
-
-Missing entry for buf_smp_lvl_mask.
-
-Mind you it's also not used in this patch and only seems to be used in the
-get_fifo_bytes() function in patch 7, so might not be needed at all?
-If it is, then introduce it in patch 7 where we can see how it is used.
-
-> + * @buf_read:		buffer read register
-> + * @inc1:		interrupt control register 1
-> + * @inc4:		interrupt control register 4
-> + * @inc5:		interrupt control register 5
-> + * @inc6:		interrupt control register 6
-> + * @xout_l:		x-axis output least significant byte
-> + */
-> +struct kx022a_chip_info {
-> +	const char *name;
-> +	const struct regmap_config *regmap_config;
-> +	const struct iio_chan_spec *channels;
-> +	unsigned int num_channels;
-> +	unsigned int fifo_length;
-> +	u8 who;
-> +	u8 id;
-> +	u8 cntl;
-> +	u8 cntl2;
-> +	u8 odcntl;
-> +	u8 buf_cntl1;
-> +	u8 buf_cntl2;
-> +	u8 buf_clear;
-> +	u8 buf_status1;
-> +	u16 buf_smp_lvl_mask;
-> +	u8 buf_read;
-> +	u8 inc1;
-> +	u8 inc4;
-> +	u8 inc5;
-> +	u8 inc6;
-> +	u8 xout_l;
-> +};
-> +
-> +int kx022a_probe_internal(struct device *dev, const struct kx022a_chip_info *chip_info);
-> +
-> +extern const struct kx022a_chip_info kx022a_chip_info;
->  
->  #endif
-
+-- 
+மணிவண்ணன் சதாசிவம்
