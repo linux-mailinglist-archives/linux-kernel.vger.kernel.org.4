@@ -2,110 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BB7713B45
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 19:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0074713B19
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 19:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbjE1Rgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 13:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
+        id S229584AbjE1RWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 13:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjE1RgX (ORCPT
+        with ESMTP id S229448AbjE1RWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 13:36:23 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD51125;
-        Sun, 28 May 2023 10:36:20 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1ae8ecb4f9aso15940355ad.1;
-        Sun, 28 May 2023 10:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685295380; x=1687887380;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QT9S1V0tn+Qui24xPwzImeTWa71ArxoGK/RfxcM2d0g=;
-        b=DRIPVUuedYZtjirHGYj5dUvMQIum7vUn6Z71/nqVBaB0lVHj+RMRCsG2Fe+dupaXlY
-         1VBKgfxlvABZtmcYfkY8K7MiVMYHFAs0Tk/IMJjuplh9Qvz1S1VXcjROJ9gBFUyNMSRN
-         smEAms53NIZ1sXp+ibCs3wzLuKwSFtsEzuHGBEj26uDjPIcbXqw4iLObhTu79C7zdXVu
-         qqqwBlF3vQ8AeeC9LUOaXkb8XD9bqTxgU/udzGdFTC34d5aZeZEW8AoRqM0jitAIWASu
-         MvGZJvbf9L9uEDQHXP0JzndLFA8GcmMskYxmMPwLyJsHbuF3uF8Wj9VhIbLnuP1HEUa6
-         5IbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685295380; x=1687887380;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QT9S1V0tn+Qui24xPwzImeTWa71ArxoGK/RfxcM2d0g=;
-        b=HGJHCKg7uPRYV9tFuQ2QlqIqcCL4MHbCkqAnlD3CwDfS+qWzQ0KLqoMKdeigC/AHcD
-         V8esbzJwvyaqXsSogz5qZExWYwek1XHaHWvQzgWy8LW1TQLO8QmQtkfUl5f532F85WbL
-         XuH5ovCT6E83pfEJI2gb7ernM715ae07f7OKj/rbkcSTT4yX8xQQf+Mi0ye1JHiCkTky
-         OrHbb29Hpc45wJeYWQXL05zRj7DlovaazwXhMraHNNiWO+XnM/v0R5QmU3H/eG6ibJhJ
-         1zv/mMYoEyaB0I7BiX4MTp2u6TgpFJBg5CgKJCbyz7o/7DsFGAhhp3Ga/dDphAJoLw/r
-         KSfQ==
-X-Gm-Message-State: AC+VfDzkKTVnYT9xxw2W3m9YMy4nqPRz88+TqE34sOKFeCe9G5z8XN81
-        xkfgbp1P9/T4/AkHdCad5Uk=
-X-Google-Smtp-Source: ACHHUZ6qqGWC9hVv+TK7lpazsLsOWxoZOc/uttkq1ZXUkoJLGkiKn9TJqT5eH2JYww8vrvNBIWpOFg==
-X-Received: by 2002:a17:903:2451:b0:1b0:39d8:2fc2 with SMTP id l17-20020a170903245100b001b039d82fc2mr2702102pls.49.1685295379709;
-        Sun, 28 May 2023 10:36:19 -0700 (PDT)
-Received: from fedora.hsd1.wa.comcast.net ([2601:602:9300:2710::f1c9])
-        by smtp.gmail.com with ESMTPSA id d22-20020a170902b71600b001b03f208323sm828575pls.64.2023.05.28.10.36.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 10:36:19 -0700 (PDT)
-From:   Prince Kumar Maurya <princekumarmaurya06@gmail.com>
-To:     skhan@linuxfoundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, chenzhongjin@huawei.com
-Cc:     Prince Kumar Maurya <princekumarmaurya06@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        syzkaller-bugs@googlegroups.com, linux-fsdevel@vger.kernel.org
-Subject: [PATCH] Null check to prevent null-ptr-deref bug
-Date:   Sun, 28 May 2023 10:35:46 -0700
-Message-Id: <20230528173546.593511-1-princekumarmaurya06@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <000000000000cafb9305fc4fe588@google.com>
-References: <000000000000cafb9305fc4fe588@google.com>
+        Sun, 28 May 2023 13:22:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C03B2;
+        Sun, 28 May 2023 10:22:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 961E660EBC;
+        Sun, 28 May 2023 17:22:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F97C433EF;
+        Sun, 28 May 2023 17:22:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685294558;
+        bh=a0bn35byPravsJL/aYIpPMkp2CEo3YyQfJm8G1Uhmj0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JcSvyNHSuJhMCIZhkT0NmgEV5yatXQOX99p2xnzxjucNbNZ6i+BarPWm+13xPevVd
+         KnycU6jKzIlvm7c2h7mYTACvih4blk1JQl65IJZfKFy9lzQDMiWBd9fp6RMx+4sZEG
+         ibDQ0gagPYT7jefM+FoWANzeB8YfacbrZ6le8iCjeL13sJyotz6bySx47Um43dQ9G3
+         bwo2hN2kWqgdJTsdpjEHJszC3HNRRx7MtHXZPm8Kuhj+8llDq9h56E4lsVZ6p0atQA
+         FzK0m/L8lOLn9PUhYRNtOciGzh5XjkBGF/zDc5GE6A52LX5sxmDOsGCALfgjU6O8xY
+         IzaFvxx+p9pXg==
+Date:   Sun, 28 May 2023 18:38:55 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 7/9] ASoC: codecs: Add support for the generic IIO
+ auxiliary devices
+Message-ID: <20230528183855.0c95d308@jic23-huawei>
+In-Reply-To: <20230523151223.109551-8-herve.codina@bootlin.com>
+References: <20230523151223.109551-1-herve.codina@bootlin.com>
+        <20230523151223.109551-8-herve.codina@bootlin.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sb_getblk(inode->i_sb, parent) return a null ptr and taking lock on
-that leads to the null-ptr-deref bug.
+On Tue, 23 May 2023 17:12:21 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-Signed-off-by: Prince Kumar Maurya <princekumarmaurya06@gmail.com>
----
-Change since v1: update the commit message.
-The bug was reproducible using the reproducer code and assets found in
-bug report:https://syzkaller.appspot.com/bug?extid=aad58150cbc64ba41bdc
-I used qemu to reproduce the bug and after the code fix I rebooted the 
-qemu with updated bzImage containing the fix.
+> Industrial I/O devices can be present in the audio path.
+> These devices needs to be used as audio components in order to be fully
+> integrated in the audio path.
+> 
+> This support allows to consider these Industrial I/O devices as auxliary
+> audio devices and allows to control them using mixer controls.
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
 
-qemu-system-x86_64 -m 4G -nographic -drive \
-file=./asset/disk-4d6d4c7f.raw,format=raw \
--enable-kvm -net nic -net user,hostfwd=tcp::2222-:22
+> diff --git a/sound/soc/codecs/audio-iio-aux.c b/sound/soc/codecs/audio-iio-aux.c
+> new file mode 100644
+> index 000000000000..21575c4b35fd
+> --- /dev/null
+> +++ b/sound/soc/codecs/audio-iio-aux.c
+> @@ -0,0 +1,302 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +//
+> +// audio-iio-aux.c  --  ALSA SoC glue to use IIO devices as audio components
+> +//
+> +// Copyright 2023 CS GROUP France
+> +//
+> +// Author: Herve Codina <herve.codina@bootlin.com>
+> +
+> +#include <linux/iio/consumer.h>
+> +#include <linux/module.h>
 
- fs/sysv/itree.c | 2 ++
- 1 file changed, 2 insertions(+)
+#include <linux/mod_devicetable.h> ideally to pick up
+the of_device_id definition without bouncing through some non 
+obvious header path.
 
-diff --git a/fs/sysv/itree.c b/fs/sysv/itree.c
-index b22764fe669c..3a6b66e719fd 100644
---- a/fs/sysv/itree.c
-+++ b/fs/sysv/itree.c
-@@ -145,6 +145,8 @@ static int alloc_branch(struct inode *inode,
- 		 */
- 		parent = block_to_cpu(SYSV_SB(inode->i_sb), branch[n-1].key);
- 		bh = sb_getblk(inode->i_sb, parent);
-+		if (!bh)
-+			break;
- 		lock_buffer(bh);
- 		memset(bh->b_data, 0, blocksize);
- 		branch[n].bh = bh;
--- 
-2.40.1
+
+> +#include <linux/slab.h>
+> +#include <sound/soc.h>
+> +#include <sound/tlv.h>
+
+Otherwise, the IIO elements of this look good.  So for those at least
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+I don't have enough knowledge of the snd stuff to review those
+parts.
+
+Jonathan
+
 
