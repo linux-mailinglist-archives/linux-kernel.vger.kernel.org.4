@@ -2,146 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF02713B74
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 20:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA3F713B7F
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 20:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjE1SGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 14:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
+        id S229565AbjE1SOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 14:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjE1SGV (ORCPT
+        with ESMTP id S229457AbjE1SOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 14:06:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83A8A3;
-        Sun, 28 May 2023 11:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685297179; x=1716833179;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n1G3073duu9zebJvOfP4bDW93rS2yyqVqrYzBTqEQVI=;
-  b=c8o37eg7aQNu+Uhv5Hx20n7/+23YNNaP3nbde+cTV+Bg165GWJeV2/AJ
-   YKIsZvy5wCu8aEAeSszvoQYM9cYA+xbgYkNKXU4Nb4JHYw8ylwZV9Mz6N
-   pKBKIVykgX1UAAmJmg+ps11vTl8DXeZaabf9JDN0a4ea6ubfSjCMT6obx
-   FxBY7GdBsIFcJ7ukrAjgxnKrw5r3/UWZbhWCeY9+dlYGNZnJy4g5Pwg8r
-   i+0G6gB1U+en+WMCKkOb7OTQvTkeRcIXrYjU/npyV4jFIXRWqGj/ISd0d
-   N4m9ZWcq6wfhJ1HHzh4mbpThazUyoaV8m7VtdN6Odp8kqc18eqrdWmAqE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="420302749"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="420302749"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 11:06:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="738897686"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="738897686"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 May 2023 11:06:13 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q3KmS-000KhW-1C;
-        Sun, 28 May 2023 18:06:12 +0000
-Date:   Mon, 29 May 2023 02:05:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Breno Leitao <leitao@debian.org>, dsahern@kernel.org,
-        willemdebruijn.kernel@gmail.com,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        netdev@vger.kernel.org, leit@fb.com, axboe@kernel.dk,
-        asml.silence@gmail.com, linux-kernel@vger.kernel.org,
-        dccp@vger.kernel.org, linux-wpan@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-sctp@vger.kernel.org
-Subject: Re: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-Message-ID: <202305290107.hs8sbfYc-lkp@intel.com>
-References: <20230525125503.400797-1-leitao@debian.org>
+        Sun, 28 May 2023 14:14:23 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7382DA7;
+        Sun, 28 May 2023 11:14:22 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so2265936a12.1;
+        Sun, 28 May 2023 11:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685297662; x=1687889662;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KylLFO78aG85tFCA5dfgDJk9LDpZhsbsPaumEd9VTYQ=;
+        b=dljeEtgXM7OWMKJz5q2ffWr4AzsROAeTGEpXJFO5tmLPoipmiKFrsu52RpFHS17llJ
+         trraqNJOi0jewEQMzjIKlOS4ZMhc3DHUk2LaWMAEE605RJu0vamfp+OX6UwGYZerHQRH
+         SSbadMRH5N5GOVwgUCeUYBiU0a+VMcoA3JmTYQcdg/UPsbVS8R8+qRjk7jf+Xxrihn/a
+         6pKEb4cAlxKCKIlPUp3M1pyLSTeo5F+8DVu9N/uFHHoAu8Bx+GlNZ7LoAhq1XaMxvq1d
+         AJJjmpg/m7eRUgr67TYmKGbBDG7BgxT8EXyOPltqTeEd24rwitHW6dAPIOX9aggZhsTf
+         0l/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685297662; x=1687889662;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KylLFO78aG85tFCA5dfgDJk9LDpZhsbsPaumEd9VTYQ=;
+        b=LyLASB/ZzJiBxCG5E2QdCStTqXuBKZo8hJf9MZfACwusQFGTm56HdkXcCVdOdR28bh
+         6bFURazgNCvYff83e/Usf6dB/lhcwJi0UZCSekeLx61x79rdQBZbPHHJTzlcVUGDRZQN
+         2hTcwCMJSkSOcmAJ+9nNszbSB8FdyyD2K20PvQdnRsXc05Kgtgey0oIHgrTF6isU537/
+         27u/hA84edVlwGIf+SbCcT+iytfyM47y+VoBFf4jDDlYvEI1YLdJxK5UiudZNdLcjXVz
+         gzhuDrwEq0xVF6+ux8fA+EE+2eiZTxDuSEudK230+jiUeJD7c16Q+hmPKB9J5oHdxi+B
+         hvIg==
+X-Gm-Message-State: AC+VfDxdISJDXs3K9QVK5fNThsODsJ1mh5nDJKgTjfAHe+rg3TEre4MJ
+        mUi+l0EZv8KX78ljiB3Xz+scd7sBdI++MEbXUoo=
+X-Google-Smtp-Source: ACHHUZ5rZHZVsQ7sM0uVNgsj9/lGptUCRRcH11dVAV7DRFVkW0y7/XGyIu5h1rC5D3P0L69OKDYf7jIgLbHzPjDpTqI=
+X-Received: by 2002:a17:902:9b84:b0:1ae:5914:cbec with SMTP id
+ y4-20020a1709029b8400b001ae5914cbecmr9237690plp.10.1685297661614; Sun, 28 May
+ 2023 11:14:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525125503.400797-1-leitao@debian.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230528132727.3933-1-aford173@gmail.com> <CAMty3ZB=XfMr7k31yHzZ+YHFxT0ifCbmR4+s5yw+YgTSJE0Jxg@mail.gmail.com>
+In-Reply-To: <CAMty3ZB=XfMr7k31yHzZ+YHFxT0ifCbmR4+s5yw+YgTSJE0Jxg@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Sun, 28 May 2023 13:14:10 -0500
+Message-ID: <CAHCN7xLUEYY0ZWVCO8SZSkPj8um7hj3uOtyyt+iWGLkc_XXdxw@mail.gmail.com>
+Subject: Re: [PATCH V2] dt-bindings: bridge: samsung-dsim: Make some flags optional
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Breno,
+On Sun, May 28, 2023 at 8:34=E2=80=AFAM Jagan Teki <jagan@amarulasolutions.=
+com> wrote:
+>
+> On Sun, May 28, 2023 at 6:57=E2=80=AFPM Adam Ford <aford173@gmail.com> wr=
+ote:
+> >
+> > In the event a device is connected to the samsung-dsim
+> > controller that doesn't support the burst-clock, the
+> > driver is able to get the requested pixel clock from the
+> > attached device or bridge.  In these instances, the
+> > samsung,burst-clock-frequency isn't needed, so remove
+> > it from the required list.
+> >
+> > The pll-clock frequency can be set by the device tree entry
+> > for samsung,pll-clock-frequency, but in some cases, the
+> > pll-clock may have the same clock rate as sclk_mipi clock.
+> > If they are equal, this flag is not needed since the driver
+> > will use the sclk_mipi rate as a fallback.
+> >
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> > V2:  Split from driver series.  Re-word updates for burst
+> > and pll-clock frequency.
+> >
+> > diff --git a/Documentation/devicetree/bindings/display/bridge/samsung,m=
+ipi-dsim.yaml b/Documentation/devicetree/bindings/display/bridge/samsung,mi=
+pi-dsim.yaml
+> > index 9f61ebdfefa8..06b6c44d4641 100644
+> > --- a/Documentation/devicetree/bindings/display/bridge/samsung,mipi-dsi=
+m.yaml
+> > +++ b/Documentation/devicetree/bindings/display/bridge/samsung,mipi-dsi=
+m.yaml
+> > @@ -70,7 +70,9 @@ properties:
+> >    samsung,burst-clock-frequency:
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> >      description:
+> > -      DSIM high speed burst mode frequency.
+> > +      DSIM high speed burst mode frequency.  If absent,
+> > +      the pixel clock from the attached device or bridge
+> > +      will be used instead.
+> >
+> >    samsung,esc-clock-frequency:
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> > @@ -80,7 +82,8 @@ properties:
+> >    samsung,pll-clock-frequency:
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> >      description:
+> > -      DSIM oscillator clock frequency.
+> > +      DSIM oscillator clock frequency. If absent, the clock frequency
+> > +      of sclk_mipi will be used instead.
+>
+> Maybe this explicit comment won't require as it is not listed in "require=
+d"
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230525-205741
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230525125503.400797-1-leitao%40debian.org
-patch subject: [PATCH net-next v3] net: ioctl: Use kernel memory on protocol ioctl callbacks
-config: i386-randconfig-i061-20230525 (https://download.01.org/0day-ci/archive/20230529/202305290107.hs8sbfYc-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/dbeb44f8503d11da0219fc6ef8a56c28cfde1511
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230525-205741
-        git checkout dbeb44f8503d11da0219fc6ef8a56c28cfde1511
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/phonet/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305290107.hs8sbfYc-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/phonet/af_phonet.c:43:5: error: redefinition of 'phonet_sk_ioctl'
-   int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-       ^
-   include/net/phonet/phonet.h:125:19: note: previous definition is here
-   static inline int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-                     ^
-   1 error generated.
-
-
-vim +/phonet_sk_ioctl +43 net/phonet/af_phonet.c
-
-    42	
-  > 43	int phonet_sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
-    44	{
-    45		int karg;
-    46	
-    47		switch (cmd) {
-    48		case SIOCPNADDRESOURCE:
-    49		case SIOCPNDELRESOURCE:
-    50			if (get_user(karg, (int __user *)arg))
-    51				return -EFAULT;
-    52	
-    53			return sk->sk_prot->ioctl(sk, cmd, &karg);
-    54		}
-    55		/* A positive return value means that the ioctl was not processed */
-    56		return 1;
-    57	}
-    58	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I mostly listed it here to explain why it's being removed from the
+required list and what happens if it's missing.
+>
+> Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
