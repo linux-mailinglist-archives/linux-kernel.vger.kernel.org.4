@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A050713B07
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 19:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A534D713B0B
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 19:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjE1RJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 13:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S229667AbjE1RNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 13:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjE1RJ3 (ORCPT
+        with ESMTP id S229453AbjE1RNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 13:09:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B620AD;
-        Sun, 28 May 2023 10:09:28 -0700 (PDT)
+        Sun, 28 May 2023 13:13:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B9AAF;
+        Sun, 28 May 2023 10:13:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3830760C43;
-        Sun, 28 May 2023 17:09:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E930C433D2;
-        Sun, 28 May 2023 17:09:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FA0B60DE8;
+        Sun, 28 May 2023 17:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E41BC433EF;
+        Sun, 28 May 2023 17:13:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685293767;
-        bh=2HpDsz16RbryZeSwk70hXDJ4gla3IAE1NdBPN6l1aP8=;
+        s=k20201202; t=1685294009;
+        bh=/zQ1SXUyOqCH+hELiORFYQYYg54iPtfk4cRc8oDWzVI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Gr7QOQt2l6vjbf3VM5hswjKooNeJfYxzibw4EBvFMzr6n1/GoC6PpJxvrJ/OSbiyc
-         +mKF1bnLp+ges7WvYmqyL7W2abCU90qn/i9l0fP4xb7qKF6wfRSh7saGoj6JTORp9v
-         5KsEMMULspxFSEltwBYRnArSLyi6T3YXQbVvAbU+6E0Cn1O3mZhj6AOa+Re9io82A0
-         bAL+LUT9h9y7xq1qEBrVNKXVTFEKyN/Ex25o8am3ApyPZLEcER9wLiabH1WIqw3ztq
-         cftIDCy+iZtZOBNoONnZOKsvPH2uQUDTw19nFruZATKPF/sytCKpatxgMXRSmXqHVk
-         gIqRX+UivGbDQ==
-Date:   Sun, 28 May 2023 18:25:43 +0100
+        b=WGvB5sTcnbN5aoP7Zzp22WKZS+b+CLMBribgneL+QDinJ0mqbJJP2zokEWJgk/XVe
+         8tZ9lg4Ol9fl16AmhWMtz0C1hU92tz/mdbdaoV+nqxEdXdcMTDGd/RypeFRGv3BQ4J
+         pgslLnUMgMnQzCrU/9wlU82HbCPU5vs+MgdX8OewEvJ6VGBKO2UPOvO6c/SGsxoO/5
+         DseTADbmR+Nxh+KlapbxmHYEYe+ibUpwOce1X9NGmzl1o2aIrNqFfzQzZRS/e5Wtzd
+         MUmNMDHlGKD1M/ANRJPkT8jdLMlRXwlN2lUx+08SiZyCpyUiHGCLPY28HmsR7J2UqA
+         Fd3PvKLoHjaxw==
+Date:   Sun, 28 May 2023 18:29:47 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v6 1/8] drivers: fwnode: fix fwnode_irq_get[_byname]()
-Message-ID: <20230528182543.656da0d1@jic23-huawei>
-In-Reply-To: <f457a106929e37638a87775d8d72adaff0f85cb6.1685082026.git.mazziesaccount@gmail.com>
-References: <cover.1685082026.git.mazziesaccount@gmail.com>
-        <f457a106929e37638a87775d8d72adaff0f85cb6.1685082026.git.mazziesaccount@gmail.com>
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 4/9] iio: consumer.h: Fix raw values documentation
+ notes
+Message-ID: <20230528182947.500eb9aa@jic23-huawei>
+In-Reply-To: <20230523151223.109551-5-herve.codina@bootlin.com>
+References: <20230523151223.109551-1-herve.codina@bootlin.com>
+        <20230523151223.109551-5-herve.codina@bootlin.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,82 +68,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 May 2023 09:35:30 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On Tue, 23 May 2023 17:12:18 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-> The fwnode_irq_get() and the fwnode_irq_get_byname() return 0 upon
-> device-tree IRQ mapping failure. This is contradicting the
-> fwnode_irq_get_byname() function documentation and can potentially be a
-> source of errors like:
+> The raw values notes mention 'ADC counts' and are not fully accurate.
 > 
-> int probe(...) {
-> 	...
+> Reword the notes in order to remove the 'ADC counts' and describe the
+> conversion needed between a raw value and a value in the standard units.
 > 
-> 	irq = fwnode_irq_get_byname();
-> 	if (irq <= 0)
-> 		return irq;
-> 
-> 	...
-> }
-> 
-> Here we do correctly check the return value from fwnode_irq_get_byname()
-> but the driver probe will now return success. (There was already one
-> such user in-tree).
-> 
-> Change the fwnode_irq_get_byname() to work as documented and make also the
-> fwnode_irq_get() follow same common convention returning a negative errno
-> upon failure.
-> 
-> Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
-> Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> 
-This bothers me a little because there may be drivers that haven't been
-caught yet that assume the zero value.   Still this is more consistent
-with what I'd expect to happen, so fair enough
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+I'm not 100% sure what path this will take - though hopefully and immutable
+branch I can pick up will be involved. On that basis I won't pick this up
+now and instead give
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > ---
-> I dropped the existing reviewed-by tags because change to
-> fwnode_irq_get() was added.
+>  include/linux/iio/consumer.h | 25 +++++++++++++++----------
+>  1 file changed, 15 insertions(+), 10 deletions(-)
 > 
-> Revision history:
-> v4 =>:
->  - No Changes
-> v3 => v4:
->  - Change also the fwnode_irq_get()
-> ---
->  drivers/base/property.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index f6117ec9805c..8c40abed7852 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -987,12 +987,18 @@ EXPORT_SYMBOL(fwnode_iomap);
->   * @fwnode:	Pointer to the firmware node
->   * @index:	Zero-based index of the IRQ
+> diff --git a/include/linux/iio/consumer.h b/include/linux/iio/consumer.h
+> index 6802596b017c..f536820b9cf2 100644
+> --- a/include/linux/iio/consumer.h
+> +++ b/include/linux/iio/consumer.h
+> @@ -201,8 +201,9 @@ struct iio_dev
+>   * @chan:		The channel being queried.
+>   * @val:		Value read back.
 >   *
-> - * Return: Linux IRQ number on success. Other values are determined
-> - * according to acpi_irq_get() or of_irq_get() operation.
-> + * Return: Linux IRQ number on success. Negative errno on failure.
+> - * Note raw reads from iio channels are in adc counts and hence
+> - * scale will need to be applied if standard units required.
+> + * Note, if standard units are required, raw reads from iio channels
+> + * need the offset (default 0) and scale (default 1) to be applied
+> + * as (raw + offset) * scale.
 >   */
->  int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
->  {
-> -	return fwnode_call_int_op(fwnode, irq_get, index);
-> +	int ret;
-> +
-> +	ret = fwnode_call_int_op(fwnode, irq_get, index);
-> +	/* We treat mapping errors as invalid case */
-> +	if (ret == 0)
-> +		return -EINVAL;
-> +
-> +	return ret;
->  }
->  EXPORT_SYMBOL(fwnode_irq_get);
+>  int iio_read_channel_raw(struct iio_channel *chan,
+>  			 int *val);
+> @@ -212,8 +213,9 @@ int iio_read_channel_raw(struct iio_channel *chan,
+>   * @chan:		The channel being queried.
+>   * @val:		Value read back.
+>   *
+> - * Note raw reads from iio channels are in adc counts and hence
+> - * scale will need to be applied if standard units required.
+> + * Note, if standard units are required, raw reads from iio channels
+> + * need the offset (default 0) and scale (default 1) to be applied
+> + * as (raw + offset) * scale.
+>   *
+>   * In opposit to the normal iio_read_channel_raw this function
+>   * returns the average of multiple reads.
+> @@ -281,8 +283,9 @@ int iio_read_channel_attribute(struct iio_channel *chan, int *val,
+>   * @chan:		The channel being queried.
+>   * @val:		Value being written.
+>   *
+> - * Note raw writes to iio channels are in dac counts and hence
+> - * scale will need to be applied if standard units required.
+> + * Note that for raw writes to iio channels, if the value provided is
+> + * in standard units, the affect of the scale and offset must be removed
+> + * as (value / scale) - offset.
+>   */
+>  int iio_write_channel_raw(struct iio_channel *chan, int val);
 >  
+> @@ -292,8 +295,9 @@ int iio_write_channel_raw(struct iio_channel *chan, int val);
+>   * @chan:		The channel being queried.
+>   * @val:		Value read back.
+>   *
+> - * Note raw reads from iio channels are in adc counts and hence
+> - * scale will need to be applied if standard units are required.
+> + * Note, if standard units are required, raw reads from iio channels
+> + * need the offset (default 0) and scale (default 1) to be applied
+> + * as (raw + offset) * scale.
+>   */
+>  int iio_read_max_channel_raw(struct iio_channel *chan, int *val);
+>  
+> @@ -308,8 +312,9 @@ int iio_read_max_channel_raw(struct iio_channel *chan, int *val);
+>   * For ranges, three vals are always returned; min, step and max.
+>   * For lists, all the possible values are enumerated.
+>   *
+> - * Note raw available values from iio channels are in adc counts and
+> - * hence scale will need to be applied if standard units are required.
+> + * Note, if standard units are required, raw available values from iio
+> + * channels need the offset (default 0) and scale (default 1) to be applied
+> + * as (raw + offset) * scale.
+>   */
+>  int iio_read_avail_channel_raw(struct iio_channel *chan,
+>  			       const int **vals, int *length);
 
