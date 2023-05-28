@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723EC713762
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 03:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3375A713766
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 03:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjE1BV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 21:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S229488AbjE1BZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 21:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjE1BV0 (ORCPT
+        with ESMTP id S229437AbjE1BZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 21:21:26 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E8CD3
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 18:21:25 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51492ae66a4so967428a12.1
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 18:21:24 -0700 (PDT)
+        Sat, 27 May 2023 21:25:46 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5EDD8;
+        Sat, 27 May 2023 18:25:44 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-53f158ecfe1so1302394a12.0;
+        Sat, 27 May 2023 18:25:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685236883; x=1687828883;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1685237144; x=1687829144;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XwTMqNXJxZngfAiFWVhcJnTq6nmvJ33/9Fzz5GiyWWk=;
-        b=HvdtVhLAR2W1pMjW56B3uOfnxErxKXMBHe25hDnziAGoKKyrn69dT85wVYtO6XW/aF
-         RJ1+2DEL9xyBI6PpLm4YDWEYvWMdZa9hQRcNtst5RjoQL0plq/YbQTe7hjgm1ddB0sdP
-         VaAQBLskb0r7tUwLLOZnGMkO2NZvMHH/mZ6es=
+        bh=b44Rf60oUaAcGpO0dqWTBH48dBelIzQdyh7QejEWNW4=;
+        b=kfln9wFDTku231dnl5jv9gXmGxBLGm+GeLHXFO5shj4wLFIQRB6HTAdTIm+c/wYKQr
+         ZMLsXHI/iwoAF4F5Q3Ng906IsSifrgE87Ki68CLmCGSYQ6so66zVJ5iVkJiy1AUR06ul
+         vwy68VfOB3iQs0OIYV/XTEr0a/F1Uv1RuCJzHdZUJjdLfZp+FhlWpHVrvrtvd7R/RQog
+         ekfPe7XAQeqFH/8KhvUnMpGZfhDWU8bhslgo80l3ZbiYnZK5M0ziWB+rBq476IrTzwli
+         M3PCQQu4xZ4lB8Mih9jznWZxSLnjMrVB/cwN61XHk+N3KZSpL3lhPikqjBG8icmW4cgv
+         xwng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685236883; x=1687828883;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685237144; x=1687829144;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XwTMqNXJxZngfAiFWVhcJnTq6nmvJ33/9Fzz5GiyWWk=;
-        b=I0YEUtyNgAngTCbMtKQk0pWugzOhn1ZBAKZ30IefezMZ1ltIoHQJ+oq+Za2oG8tbZH
-         2D23fLcwhDbmss/IU+S2JAZSmOLeUPSGXTAIk+lIV8nZ7JdL+ThXbqBful1RU0Krx9ZF
-         QEyQ6FVPKz1GaueCp+quTnJf3pRZhlA7LR8wfmIrFk6teP0mHVahlYg2PSKRa4SZ5nDy
-         23Cdv+tMSVTuzjrwfYM55Qy8E90k+NO0V0XeelJdkhEDP0RlSxMwCt+PCr2lPcHukxIU
-         DWHgclipqOwnNoQ5+lCEHdUgGl3GS8pRJEKLirj+e1DHWsM+93CZ+BcNl4O0pXb6HaRk
-         AiYw==
-X-Gm-Message-State: AC+VfDwIW4pIM/0IMJbE4ze7+WtI9FSjS02C/r3KtS92elfWyNN/D5uH
-        T3ybW9oygb3v0V2oZr1O8ucwmsIFAzu8p57qwDWokdiO
-X-Google-Smtp-Source: ACHHUZ4t7WkAEvaxruaz7WEvPxE8oV9YIyKVFzNjXqN5zwpwmJ98ZM0g1WeS3eE8ZDy9trPUcoHCqQ==
-X-Received: by 2002:a17:907:e86:b0:965:6d21:48bc with SMTP id ho6-20020a1709070e8600b009656d2148bcmr7035107ejc.75.1685236882965;
-        Sat, 27 May 2023 18:21:22 -0700 (PDT)
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
-        by smtp.gmail.com with ESMTPSA id k12-20020a170906128c00b00965a52d2bf6sm3960193ejb.88.2023.05.27.18.21.21
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 May 2023 18:21:21 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-96f8d485ef3so326863266b.0
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 18:21:21 -0700 (PDT)
-X-Received: by 2002:a17:907:2682:b0:96a:440b:d5c8 with SMTP id
- bn2-20020a170907268200b0096a440bd5c8mr5866751ejc.59.1685236880680; Sat, 27
- May 2023 18:21:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230522025124.5863-1-michael.christie@oracle.com>
- <20230522025124.5863-4-michael.christie@oracle.com> <20230522123029.GA22159@redhat.com>
- <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com> <20230522174757.GC22159@redhat.com>
- <20230523121506.GA6562@redhat.com> <87bkib6nxr.fsf@email.froward.int.ebiederm.org>
- <20230524141022.GA19091@redhat.com> <87ttw1zt4i.fsf@email.froward.int.ebiederm.org>
- <20230525115512.GA9229@redhat.com> <87y1lcxwcj.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wj4DS=2F5mW+K2P7cVqrsuGd3rKE_2k2BqnnPeeYhUCvg@mail.gmail.com>
- <87cz2mrtnk.fsf@email.froward.int.ebiederm.org> <CAHk-=whsi9JFP-okH3jXHrA8rh8bMuuSt6ZgkmPwiDMAn437qA@mail.gmail.com>
- <87mt1pmezu.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87mt1pmezu.fsf@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 27 May 2023 18:21:03 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjkLs3PU+MaF67TBQpUcZZEhoc9MB0iXYamb7FDPH6mOw@mail.gmail.com>
-Message-ID: <CAHk-=wjkLs3PU+MaF67TBQpUcZZEhoc9MB0iXYamb7FDPH6mOw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps regression
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
+        bh=b44Rf60oUaAcGpO0dqWTBH48dBelIzQdyh7QejEWNW4=;
+        b=iPkoumwHoV9K0dM5OD0wr5bUM2nfpxY9hU0LyGhS6dqNK6KdQPfS0Li1vD8E2Wi+gL
+         ZvFdDr+inw9rugMsbFm3m+brCcQKrIDXWlxvHMGgNh6A2wRRULs1AwKucchXcKzqWoFu
+         yET8UnQfn5N+SVr5QZXrTAMa+Tlob4/z9dqkLJihnPPOkxqJgCjCosYN66aGBXVtRGxh
+         kFhxn/VEw+m3F8MH35RzqlNNbPftmSI5y4Yix+02e0Kqzod2MiDdZtuf6jvIriGf9SFf
+         8YOGGGUOcOqFajlIYnPX48gekOJblOuCvcBtAg4YGoMI1fX05utrQ2+Kui6pRSm52sgo
+         eWgw==
+X-Gm-Message-State: AC+VfDz0svK84R1Dwo4Lpxiq7gHODMPRh+MZP7DCl+QarZtwKanzBiFN
+        h2j11JY+hHuGMc87hcJmySsuOw8hNLWe3g==
+X-Google-Smtp-Source: ACHHUZ6JuxPtigaUbnEpUtjjk1rUCSKj5kJKVbQCnvdh3E/PCl0hVDi9NO5g++x4rI44sENmtS9huw==
+X-Received: by 2002:a05:6a20:100a:b0:10d:8f40:6469 with SMTP id gs10-20020a056a20100a00b0010d8f406469mr4147880pzc.48.1685237143737;
+        Sat, 27 May 2023 18:25:43 -0700 (PDT)
+Received: from fedora.hsd1.wa.comcast.net ([2601:602:9300:2710::f1c9])
+        by smtp.gmail.com with ESMTPSA id m21-20020a638c15000000b0053449457a25sm4752313pgd.88.2023.05.27.18.25.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 18:25:43 -0700 (PDT)
+From:   Prince Kumar Maurya <princekumarmaurya06@gmail.com>
+To:     skhan@linuxfoundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, chenzhongjin@huawei.com
+Cc:     Prince Kumar Maurya <princekumarmaurya06@gmail.com>,
         linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzkaller-bugs@googlegroups.com, linux-fsdevel@vger.kernel.org
+Subject: [PATCH] Null check to prevent null-ptr-deref bug
+Date:   Sat, 27 May 2023 18:25:16 -0700
+Message-Id: <20230528012516.427126-1-princekumarmaurya06@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <000000000000cafb9305fc4fe588@google.com>
+References: <000000000000cafb9305fc4fe588@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 27, 2023 at 6:17=E2=80=AFPM Eric W. Biederman <ebiederm@xmissio=
-n.com> wrote:
->
-> It seems like a good approach for including in the -rc series.
-> I think the change should look more like my change below.
+sb_getblk(inode->i_sb, parent) return a null ptr and taking lock on that leads to the null-ptr-deref bug.
 
-I have no objections. My patch was a fairly "hack and slash" thing to
-just disassociate the IO workers entirely from the core dumping. Yours
-seems to be slightly more surgical.
+Signed-off-by: Prince Kumar Maurya <princekumarmaurya06@gmail.com>
+---
+ fs/sysv/itree.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-                  Linus
+diff --git a/fs/sysv/itree.c b/fs/sysv/itree.c
+index b22764fe669c..3a6b66e719fd 100644
+--- a/fs/sysv/itree.c
++++ b/fs/sysv/itree.c
+@@ -145,6 +145,8 @@ static int alloc_branch(struct inode *inode,
+ 		 */
+ 		parent = block_to_cpu(SYSV_SB(inode->i_sb), branch[n-1].key);
+ 		bh = sb_getblk(inode->i_sb, parent);
++		if (!bh)
++			break;
+ 		lock_buffer(bh);
+ 		memset(bh->b_data, 0, blocksize);
+ 		branch[n].bh = bh;
+-- 
+2.40.1
+
