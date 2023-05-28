@@ -2,133 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628767139AA
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 15:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DA17139AE
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 15:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjE1NeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 09:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S229626AbjE1Ngo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 09:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjE1NeP (ORCPT
+        with ESMTP id S229459AbjE1Ngm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 09:34:15 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5C3BD
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 06:34:14 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-565ee3d14c2so7313367b3.2
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 06:34:14 -0700 (PDT)
+        Sun, 28 May 2023 09:36:42 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FF4B2;
+        Sun, 28 May 2023 06:36:41 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-6260a2522d9so10543436d6.3;
+        Sun, 28 May 2023 06:36:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1685280853; x=1687872853;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UrEVsTM5vKIOld13EPKPZ9FVBGQ0zgJjZs6J4jvV/zQ=;
-        b=YEjaEvz9E26Gf7MMtO58BQM3WmZoF5U+bwreby0QKR26gtFeB1Foq5RusqLrwrXals
-         YXnJpK7564brgnQ7/jDKuyTTQAyKBZBzHi1PDgTEzl7zVqeF1DTC7tzvvqf8RUGsTM93
-         DcDy9hIRswj5ipNgSdPu78QG5pRLSjPl7YMqY=
+        d=gmail.com; s=20221208; t=1685281000; x=1687873000;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2n/WoDLxYIs5byxeZJLkV/uF8fU1oTZ8WCiBG786KWU=;
+        b=Ri6l7Zx7Zq5TyRhM1oOvRL6b6/CiRhjnyFwXpUFCKl9dN82foHPdn49IeTDonA+M4z
+         9IyzYufFo5m2DJv3Xj6qB55Ixp6cH6iceqSFDts2NNo/GgqJT4SYB2LC1rzr03lezx2s
+         C3U+sIIucSQKaxVIG8u2Y4K1xD3M1LJNfYeoW+pDSQ+koTLc+npw7WV7YY0AO+ck4r6s
+         zyLg12MI9QNCwrtGnChOV6mHEh7KYrNa1CSQhF2Bo2W3zhtw5M3hRFz9LdPq4FZdzyny
+         k/5RpJ8/gTqGr/S+c/nOolxJemNP6Vytr8OsUy6axFIBjSiOzMDM56HcwsoqwNTMIfX3
+         4vmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685280853; x=1687872853;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UrEVsTM5vKIOld13EPKPZ9FVBGQ0zgJjZs6J4jvV/zQ=;
-        b=Hm64Agrg5ON9SQJmVXHMCujPAvIApmtMLV8jK6zesfLQ0EXnS6ja3hL5KNB/4A6mLr
-         9rPtmvj0sLBcSiNhcaK4T2k8I8NDg0tUC+/T3szaLYp6aNw6u820QVtEh61AkLdZgMbD
-         OQhIUOEWr7JNMaEPnut3O8AL20E/YPz0HFi6qJkBKJVRGxMMEeba4XF/W0fWiKv2BX4p
-         TE7qmDFK+gbtRX2a/88Mfot2CKrYIl9XZup996sE49y2LAc70rmQ8yjvA+JQGcg1hELA
-         bHWrBGjOCd7QOmyCkhRTG9rqYFvDHfUNSSABN6+yfIQieeD50diT2VtAy48kCqeMi3nm
-         PE0g==
-X-Gm-Message-State: AC+VfDykoKDcO6QhhaNL3DZlc2E3JAvoZKqY//qeU5pUyPzhcU982AQI
-        AQAC77nLpMpebZJp3xwK+ui3MZKtBpFjxJFQracpbg==
-X-Google-Smtp-Source: ACHHUZ6rNq1797W4VSS1+Dgqg217ZXWZz44DxffkTuC/Vs+7FWyf4bszCFSBGg9ZFpxgoyZiB9LuVSp5sjU/rWSWyb8=
-X-Received: by 2002:a0d:e747:0:b0:561:43bf:fc8e with SMTP id
- q68-20020a0de747000000b0056143bffc8emr9154349ywe.10.1685280853448; Sun, 28
- May 2023 06:34:13 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685281000; x=1687873000;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2n/WoDLxYIs5byxeZJLkV/uF8fU1oTZ8WCiBG786KWU=;
+        b=I06tL+XGztLmQ1B9SSMLe+WDP/mk1I1YLKvAjZJIRJNLuc1JAFypXpi+lSo2Gzu28U
+         J8Gpk0gTHzi3EhNF1tC8Pph6PiTT4LpMru4HFD6irkSirk3ep6nhSFwWUWQ371EJN0XT
+         LSJ5PA66/juXR/7egK6CFKWddgLP+7jIYdiqN9M4p6BmxTSGqUEzYKRbH1HTnO31TGO+
+         sd+pY109si5de+DRw2xxGcK3rjEjGzwqOYQsHEkpYye9a4g+dQxpdFEgqtzfw6EefPdk
+         diW0Y6yZckDSmd0J1I47qhnAamaXkdc8dK3QQPdPnC5e/5BXvwQ9yWOZCKt7gbI9ryr1
+         9QCg==
+X-Gm-Message-State: AC+VfDyVr7C9nNMMNiL9Ei+UaHD/HPP+5mUFQrUZlANnEvAkrC+A3ByZ
+        TSqNodgzG5MHqxVVLQqS/RC04kSaHxBhoA==
+X-Google-Smtp-Source: ACHHUZ6XUZe6ez6PJp2Vl27vedty0Ud/1hhdxDFc5ChSTJOKCw/jzUz5Qav5ZBXkf80FRvXpjxUbeA==
+X-Received: by 2002:a05:6214:500c:b0:626:1589:68e4 with SMTP id jo12-20020a056214500c00b00626158968e4mr4422550qvb.43.1685280999942;
+        Sun, 28 May 2023 06:36:39 -0700 (PDT)
+Received: from ?IPV6:2600:4040:2007:9800:ffda:b634:1d9d:77a8? ([2600:4040:2007:9800:ffda:b634:1d9d:77a8])
+        by smtp.gmail.com with ESMTPSA id k15-20020ad4450f000000b006260e7361ebsm1661935qvu.1.2023.05.28.06.36.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 May 2023 06:36:39 -0700 (PDT)
+Message-ID: <ad7a6ee3-cabb-6f92-a595-8791801cfe97@gmail.com>
+Date:   Sun, 28 May 2023 09:36:37 -0400
 MIME-Version: 1.0
-References: <20230528132727.3933-1-aford173@gmail.com>
-In-Reply-To: <20230528132727.3933-1-aford173@gmail.com>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Sun, 28 May 2023 19:04:01 +0530
-Message-ID: <CAMty3ZB=XfMr7k31yHzZ+YHFxT0ifCbmR4+s5yw+YgTSJE0Jxg@mail.gmail.com>
-Subject: Re: [PATCH V2] dt-bindings: bridge: samsung-dsim: Make some flags optional
-To:     Adam Ford <aford173@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Inki Dae <inki.dae@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: arm: qcom: Add Samsung Galaxy Express
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+References: <20230527040905.stmnoshkdqgiaex6@ripper>
+ <20230528001010.47868-2-guptarud@gmail.com>
+ <20230528-decode-creasing-f5b3996163e5@spud>
+Content-Language: en-US
+From:   Rudraksha Gupta <guptarud@gmail.com>
+In-Reply-To: <20230528-decode-creasing-f5b3996163e5@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 6:57=E2=80=AFPM Adam Ford <aford173@gmail.com> wrot=
-e:
->
-> In the event a device is connected to the samsung-dsim
-> controller that doesn't support the burst-clock, the
-> driver is able to get the requested pixel clock from the
-> attached device or bridge.  In these instances, the
-> samsung,burst-clock-frequency isn't needed, so remove
-> it from the required list.
->
-> The pll-clock frequency can be set by the device tree entry
-> for samsung,pll-clock-frequency, but in some cases, the
-> pll-clock may have the same clock rate as sclk_mipi clock.
-> If they are equal, this flag is not needed since the driver
-> will use the sclk_mipi rate as a fallback.
->
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> V2:  Split from driver series.  Re-word updates for burst
-> and pll-clock frequency.
->
-> diff --git a/Documentation/devicetree/bindings/display/bridge/samsung,mip=
-i-dsim.yaml b/Documentation/devicetree/bindings/display/bridge/samsung,mipi=
--dsim.yaml
-> index 9f61ebdfefa8..06b6c44d4641 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/samsung,mipi-dsim.=
-yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/samsung,mipi-dsim.=
-yaml
-> @@ -70,7 +70,9 @@ properties:
->    samsung,burst-clock-frequency:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description:
-> -      DSIM high speed burst mode frequency.
-> +      DSIM high speed burst mode frequency.  If absent,
-> +      the pixel clock from the attached device or bridge
-> +      will be used instead.
->
->    samsung,esc-clock-frequency:
->      $ref: /schemas/types.yaml#/definitions/uint32
-> @@ -80,7 +82,8 @@ properties:
->    samsung,pll-clock-frequency:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description:
-> -      DSIM oscillator clock frequency.
-> +      DSIM oscillator clock frequency. If absent, the clock frequency
-> +      of sclk_mipi will be used instead.
+ > Where did the "att" come from in the compatible. Is this some carrier 
+specific model of the phone?
 
-Maybe this explicit comment won't require as it is not listed in "required"
+This is the code name for the device. Since there are usually multiple 
+variants of a device, using the code name differentiates between those 
+variants. For example, if I left this as "samsung,express", it would be 
+unclear if I am referring to the GT-I8730 (code name: expresslte) or the 
+SGH-I437 model. This is typically done in postmarketOS: 
+https://wiki.postmarketos.org/wiki/Devices and XDA developers. I believe 
+it is a carrier specific model of the Samsung Galaxy Express.
 
-Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
