@@ -2,82 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611FF713AEC
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 18:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B500713AA3
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 18:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjE1Q5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 12:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
+        id S229571AbjE1Qmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 12:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjE1Q5r (ORCPT
+        with ESMTP id S229451AbjE1Qmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 12:57:47 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E32BE
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 09:57:46 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5346d150972so2259113a12.3
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 09:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685293066; x=1687885066;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mRkRsLTcaRXXNLPVC/pQddeZGsKSw4A/x3n+BNs4brA=;
-        b=tX4OvwkJGQGBWSoTLx5fhl6M7+eMOrecPg8ap1uooezx+6pSxN+tA0IyZHb8yY7You
-         l9SUV5WVWAnnaDZaIuEU0cW5bXEM/veQTjlD5YNxvAM23tyCoH5jnI034TRnt1c7MO7P
-         rpKoq6H8oC+ALQwb30pK0rkCDLyMdrGKY/TQj7k7gQwRAGVvQ4qjNfr58vuSZWh6XmcH
-         Bqml4mSiWqtS16VgYBBFyVkv/qgcUE7DHbqxbe03XYrvt4bWquvAjxSrZDlcU/Hcf3yb
-         J5gvZvSZNjWbjgapqsR0nEekRHLE8UmA5FeQiB5LfG+6X5aH8LBOGd6qzF0soxwTcLUg
-         BZgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685293066; x=1687885066;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mRkRsLTcaRXXNLPVC/pQddeZGsKSw4A/x3n+BNs4brA=;
-        b=XkaX9xA6dH/+cuA7M367yY9u7wGnJ6F4gVwSkQ9Zjb2NZ0E+13QW2o13C87pnZ7kn3
-         sotc+Dnh32s1hCgPBUWzsFmtomwLD0b/poL+bpPFee6j0TSJCOMfNzjfQ+GwtiBajbiD
-         i00Ce1TZ5PLWcBpsKGblFIbWGTnwmdb5ymDmvBg1L+m+0/6w5kfwd2pBgU/wZct1gmDk
-         6CT6LMEBkXW59uS/TGea4zyRcYtK2YxFBTtdRVI/VBGCYM2vt287u6xpZ2iRAbYwL0Ig
-         r/8kNTIrlDl7Uuzmdp66ObwfncoUV7MEgliVe2DrZo5i5fQS3Vis0UOnAn19ljgOESMr
-         XQeg==
-X-Gm-Message-State: AC+VfDxkqiCcjnmZj0AyORBkoQGtNXXGJjZxJd8VwtKvo23o1RXJ5TjB
-        HEIB1vSuGq9qZTLrLn9viF+WJUt9UiKOFIhcdA==
-X-Google-Smtp-Source: ACHHUZ7/k62dk4ZuvrJqPQctzbXQu9rlc3BvvCDXGNP3Ur6Q1O0PUWpRejzitcjoKLcsB+3h5/DZWA==
-X-Received: by 2002:a17:902:c949:b0:1aa:e425:2527 with SMTP id i9-20020a170902c94900b001aae4252527mr10118933pla.21.1685293065809;
-        Sun, 28 May 2023 09:57:45 -0700 (PDT)
-Received: from thinkpad ([117.248.1.157])
-        by smtp.gmail.com with ESMTPSA id jh9-20020a170903328900b001960706141fsm6531863plb.149.2023.05.28.09.57.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 09:57:45 -0700 (PDT)
-Date:   Sun, 28 May 2023 22:27:38 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ahmed S . Darwish" <darwi@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>, linux-pci@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongson-kernel@lists.loongnix.cn,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pci: irq: Add an early parameter to limit pci irq numbers
-Message-ID: <20230528165738.GF2814@thinkpad>
-References: <20230524093623.3698134-1-chenhuacai@loongson.cn>
- <ZG4rZYBKaWrsctuH@bhelgaas>
- <CAAhV-H5u8qtXpr-mY+pKq7UfmyBgr3USRTQpo9-w28w8pHX8QQ@mail.gmail.com>
+        Sun, 28 May 2023 12:42:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773A4AD;
+        Sun, 28 May 2023 09:42:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 012DB61787;
+        Sun, 28 May 2023 16:42:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD628C433D2;
+        Sun, 28 May 2023 16:42:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685292170;
+        bh=jCQNHbdQ4Cz8cuC1CEhZkxmhx+KQ0b9AeZ7vLEFBkR8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GDFHxeXvfJpRQTnaeWoOL5n7VPjVcz9HXrV26+n7awuZoUoJhC28TcA+r4gaAtr4Y
+         Nmw4e88/3mc2FGny5mP8Gh9hUUp/kaBpdRtWkBxZ6kkXUEDZpzBgRL7X7NkMLfzFNh
+         pU2nwCt5xm4iMydEFCn0HQy9IYbehDquwooqvskqSJ3L5PzvWRnTq30TAtIcUyV1Cy
+         g5rqfVa5k3vx3mbECGX+7YqD83YDz8JIfpo/YxpNYpvKueG+lCGrrguBqu7Gebhvkv
+         F7BugQosLXai5YZPS9pCJ7i9EqMUc0GYq9rNsT9vb+uS5gzPY/gnwVgf+8t+6cas+H
+         Go0/XlBdcSOew==
+Date:   Sun, 28 May 2023 17:59:09 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Mehdi Djait <mehdi.djait.k@gmail.com>
+Cc:     mazziesaccount@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
+        lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 7/7] iio: accel: Add support for Kionix/ROHM
+ KX132-1211 accelerometer
+Message-ID: <20230528175909.245d5bfc@jic23-huawei>
+In-Reply-To: <d776c1dd5beef6ef812a4f7e4958eb6cb0f5e58e.1685111274.git.mehdi.djait.k@gmail.com>
+References: <cover.1685111274.git.mehdi.djait.k@gmail.com>
+        <d776c1dd5beef6ef812a4f7e4958eb6cb0f5e58e.1685111274.git.mehdi.djait.k@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H5u8qtXpr-mY+pKq7UfmyBgr3USRTQpo9-w28w8pHX8QQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,120 +59,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 05:14:28PM +0800, Huacai Chen wrote:
-> Hi, Bjorn,
-> 
-> On Wed, May 24, 2023 at 11:21 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > [+cc Marc, LKML]
-> >
-> > On Wed, May 24, 2023 at 05:36:23PM +0800, Huacai Chen wrote:
-> > > Some platforms (such as LoongArch) cannot provide enough irq numbers as
-> > > many as logical cpu numbers. So we should limit pci irq numbers when
-> > > allocate msi/msix vectors, otherwise some device drivers may fail at
-> > > initialization. This patch add a cmdline parameter "pci_irq_limit=xxxx"
-> > > to control the limit.
-> > >
-> > > The default pci msi/msix number limit is defined 32 for LoongArch and
-> > > NR_IRQS for other platforms.
-> >
-> > The IRQ experts can chime in on this, but this doesn't feel right to
-> > me.  I assume arch code should set things up so only valid IRQ numbers
-> > can be allocated.  This doesn't seem necessarily PCI-specific, I'd
-> > prefer to avoid an arch #ifdef here, and I'd also prefer to avoid a
-> > command-line parameter that users have to discover and supply.
-> The problem we meet: LoongArch machines can have as many as 256
-> logical cpus, and the maximum of msi vectors is 192. Even on a 64-core
-> machine, 192 irqs can be easily exhausted if there are several NICs
-> (NIC usually allocates msi irqs depending on the number of online
-> cpus). So we want to limit the msi allocation.
-> 
+On Fri, 26 May 2023 16:30:48 +0200
+Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
 
-If the MSI allocation fails with multiple vectors, then the NIC driver should
-revert to a single MSI vector. Is that happening in your case?
+> Kionix KX132-1211 is a tri-axis 16-bit accelerometer that can support
+> ranges from =C2=B12G to =C2=B116G, digital output through I=C2=B2C/SPI.
+> Add support for basic accelerometer features such as reading acceleration
+> via IIO using raw reads, triggered buffer (data-ready), or the WMI IRQ.
+>=20
+> Datasheet: https://kionixfs.azureedge.net/en/document/KX132-1211-Technica=
+l-Reference-Manual-Rev-5.0.pdf
+> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
 
-- Mani
+Hi Mehdi,
 
-> This is not a LoongArch-specific problem, because I think other
-> platforms can also meet if they have many NICs. But of course,
-> LoongArch can meet it more easily because the available msi vectors
-> are very few. So, adding a cmdline parameter is somewhat reasonable.
-> 
-> After some investigation, I think it may be possible to modify
-> drivers/irqchip/irq-loongson-pch-msi.c and override
-> msi_domain_info::domain_alloc_irqs() to limit msi allocation. However,
-> doing that need to remove the "static" before
-> __msi_domain_alloc_irqs(), which means revert
-> 762687ceb31fc296e2e1406559e8bb5 ("genirq/msi: Make
-> __msi_domain_alloc_irqs() static"), I don't know whether that is
-> acceptable.
-> 
-> If such a revert is not acceptable, it seems that we can only use the
-> method in this patch. Maybe rename pci_irq_limits to pci_msi_limits is
-> a little better.
-> 
-> Huacai
-> 
-> >
-> > > Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
-> > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > ---
-> > >  drivers/pci/msi/msi.c | 26 +++++++++++++++++++++++++-
-> > >  1 file changed, 25 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
-> > > index ef1d8857a51b..6617381e50e7 100644
-> > > --- a/drivers/pci/msi/msi.c
-> > > +++ b/drivers/pci/msi/msi.c
-> > > @@ -402,12 +402,34 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
-> > >       return ret;
-> > >  }
-> > >
-> > > +#ifdef CONFIG_LOONGARCH
-> > > +#define DEFAULT_PCI_IRQ_LIMITS 32
-> > > +#else
-> > > +#define DEFAULT_PCI_IRQ_LIMITS NR_IRQS
-> > > +#endif
-> > > +
-> > > +static int pci_irq_limits = DEFAULT_PCI_IRQ_LIMITS;
-> > > +
-> > > +static int __init pci_irq_limit(char *str)
-> > > +{
-> > > +     get_option(&str, &pci_irq_limits);
-> > > +
-> > > +     if (pci_irq_limits == 0)
-> > > +             pci_irq_limits = DEFAULT_PCI_IRQ_LIMITS;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +early_param("pci_irq_limit", pci_irq_limit);
-> > > +
-> > >  int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec,
-> > >                          struct irq_affinity *affd)
-> > >  {
-> > >       int nvec;
-> > >       int rc;
-> > >
-> > > +     maxvec = clamp_val(maxvec, 0, pci_irq_limits);
-> > > +
-> > >       if (!pci_msi_supported(dev, minvec) || dev->current_state != PCI_D0)
-> > >               return -EINVAL;
-> > >
-> > > @@ -776,7 +798,9 @@ static bool pci_msix_validate_entries(struct pci_dev *dev, struct msix_entry *en
-> > >  int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries, int minvec,
-> > >                           int maxvec, struct irq_affinity *affd, int flags)
-> > >  {
-> > > -     int hwsize, rc, nvec = maxvec;
-> > > +     int hwsize, rc, nvec;
-> > > +
-> > > +     nvec = clamp_val(maxvec, 0, pci_irq_limits);
-> > >
-> > >       if (maxvec < minvec)
-> > >               return -ERANGE;
-> > > --
-> > > 2.39.1
-> > >
+Comment is a follow on from the earlier one about buf_smp_lvl_mask.
 
--- 
-மணிவண்ணன் சதாசிவம்
+Jonathan
+
+>  /*
+>   * The sensor HW can support ODR up to 1600 Hz, which is beyond what mos=
+t of the
+>   * Linux CPUs can handle without dropping samples. Also, the low power m=
+ode is
+> @@ -613,6 +731,24 @@ static int kx022a_get_fifo_bytes(struct kx022a_data =
+*data)
+>  	return fifo_bytes;
+>  }
+> =20
+> +static int kx132_get_fifo_bytes(struct kx022a_data *data)
+> +{
+> +	__le16 buf_status;
+> +	int ret, fifo_bytes;
+> +
+> +	ret =3D regmap_bulk_read(data->regmap, data->chip_info->buf_status1,
+> +			       &buf_status, sizeof(buf_status));
+> +	if (ret) {
+> +		dev_err(data->dev, "Error reading buffer status\n");
+> +		return ret;
+> +	}
+> +
+> +	fifo_bytes =3D le16_to_cpu(buf_status);
+> +	fifo_bytes &=3D data->chip_info->buf_smp_lvl_mask;
+
+See below.
+
+> +
+> +	return fifo_bytes;
+> +}
+> +
+>  static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int sample=
+s,
+>  			       bool irq)
+>  {
+> @@ -1036,6 +1172,32 @@ const struct kx022a_chip_info kx022a_chip_info =3D=
+ {
+>  };
+>  EXPORT_SYMBOL_NS_GPL(kx022a_chip_info, IIO_KX022A);
+> =20
+> +const struct kx022a_chip_info kx132_chip_info =3D {
+> +	.name		  =3D "kx132-1211",
+> +	.regmap_config	  =3D &kx132_regmap_config,
+> +	.channels	  =3D kx132_channels,
+> +	.num_channels	  =3D ARRAY_SIZE(kx132_channels),
+> +	.fifo_length	  =3D KX132_FIFO_LENGTH,
+> +	.who		  =3D KX132_REG_WHO,
+> +	.id		  =3D KX132_ID,
+> +	.cntl		  =3D KX132_REG_CNTL,
+> +	.cntl2		  =3D KX132_REG_CNTL2,
+> +	.odcntl		  =3D KX132_REG_ODCNTL,
+> +	.buf_cntl1	  =3D KX132_REG_BUF_CNTL1,
+> +	.buf_cntl2	  =3D KX132_REG_BUF_CNTL2,
+> +	.buf_clear	  =3D KX132_REG_BUF_CLEAR,
+> +	.buf_status1	  =3D KX132_REG_BUF_STATUS_1,
+> +	.buf_smp_lvl_mask =3D KX132_MASK_BUF_SMP_LVL,
+As per earlier comment I think this is only set for this device...
+> +	.buf_read	  =3D KX132_REG_BUF_READ,
+> +	.inc1		  =3D KX132_REG_INC1,
+> +	.inc4		  =3D KX132_REG_INC4,
+> +	.inc5		  =3D KX132_REG_INC5,
+> +	.inc6		  =3D KX132_REG_INC6,
+> +	.xout_l		  =3D KX132_REG_XOUT_L,
+> +	.get_fifo_bytes	  =3D kx132_get_fifo_bytes,
+and only used in this device specific callback.
+Probably can just use it directly in the callback.
+> +};
+> +EXPORT_SYMBOL_NS_GPL(kx132_chip_info, IIO_KX022A);
+> +
+
