@@ -2,166 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D2871390D
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 12:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED51971390F
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 12:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjE1KkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 06:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
+        id S229496AbjE1Kqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 06:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjE1KkO (ORCPT
+        with ESMTP id S229437AbjE1Kqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 06:40:14 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E40BD;
-        Sun, 28 May 2023 03:40:08 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1685270402tn7r9bjp
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 28 May 2023 18:40:01 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: C46Rb8GPIEc3i9NQbefxus7uJhsbGj7wWQjkM18ZuivPIOs+P2X2tzb9jlSAh
-        fm810ccKyTSyEs51zSFavizl+tvu6GCSNqwfh7uIPWKDXX/A0FrnnJR/vbjaEaWizqy49nm
-        aN+gGik/zHVoAyDv+59J7GjHnT1T8ReAvCIhMYbCCh3m0V/+rM5WZxAMcJqR1fpPpxUn/7n
-        e17IMoNY1FPDk7OtyiWu/hXCKy5830VvtuWSVXFdRfJZ9GZ5xtfPEmanMfTPf9jutlMC+pP
-        yh7PvpBjcGA0pFvPemoum2tOtletEMzDLbJL1lTq2pCf5hqHfZhOx+y8hg3mFGJ6WbBqK0u
-        S1b4v18//PDXyud+7KaxfqJiWqdbUz3Y2Jr4Lnznmq6W2bWHoo=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17313421512748804189
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, thomas@t-8ch.de
-Subject: Re: [PATCH 00/13] tools/nolibc: riscv: Add full rv32 support
-Date:   Sun, 28 May 2023 18:39:57 +0800
-Message-Id: <20230528103957.318267-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230528075955.GE1956@1wt.eu>
-References: <20230528075955.GE1956@1wt.eu>
+        Sun, 28 May 2023 06:46:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D446A94;
+        Sun, 28 May 2023 03:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685270802; x=1716806802;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=12XnZdCMLf2ECdKc7jgZMRFCTIoyk3JXcdiX3xQZb+Q=;
+  b=irmPCYc5TVUOKtc/d/DxRU3LtE+AZmtBdFqiwqyQhOfLfhrtKEAIBlVQ
+   uj1uOJIY59ZeQsw4yE2RxhR2meEteNY69uJCMak4HMxp9lQ7dDShVA80K
+   nO883X3bnzP+x0Vbx+l6Pqe/etSoB2IRcBjtmSqRq8dFJD9dLeJvBY1gU
+   VdWXQEj2sT/GJlyCI86VOIjy4meVJlRJQR8uK5sdKbPE0Wzwe4L0iSoW/
+   U2dGv/8ZteTh4JhDv2jCKRgd54JHVYg5Lyf8ujjffXc8/rSG8gWZI86M3
+   iy+p6hTUtz+NqKGzcUOdfLYDP0+ghVwEtECw6u+6p1a0c+WT7DHJo82a6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="344006203"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="344006203"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 03:46:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="850056935"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="850056935"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 28 May 2023 03:46:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q3Dv3-000Jjg-0a;
+        Sun, 28 May 2023 13:46:37 +0300
+Date:   Sun, 28 May 2023 13:46:36 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     George Stark <gnstark@sberdevices.ru>
+Cc:     jic23@kernel.org, lars@metafoo.de, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com, nuno.sa@analog.com,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        kernel@sberdevices.ru
+Subject: Re: [PATCH v2] meson saradc: add iio device attrib to switch channel
+ 7 mux
+Message-ID: <ZHMxDHPBWQOJSuaZ@smile.fi.intel.com>
+References: <20230527214854.126517-1-gnstark@sberdevices.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230527214854.126517-1-gnstark@sberdevices.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy
+On Sun, May 28, 2023 at 12:48:54AM +0300, George Stark wrote:
+> Patch adds two sysfs nodes: chan7_mux to set mux state
+> and chan7_mux_available to show available mux states.
+> Mux can be used to debug and calibrate adc by
+> switching and measuring well-known inputs like GND, Vdd etc.
 
-> Hi Zhangjin,
-> 
-> On Thu, May 25, 2023 at 01:33:14AM +0800, Zhangjin Wu wrote:
-> > Hi, Willy
-> > 
-> > Thanks very mush for your kindly review, discuss and suggestion, now we
-> > get full rv32 support ;-)
-> > 
-> > In the first series [1], we have fixed up the compile errors about
-> > _start and __NR_llseek for rv32, but left compile errors about tons of
-> > time32 syscalls (removed after kernel commit d4c08b9776b3 ("riscv: Use
-> > latest system call ABI")) and the missing fstat in nolibc-test.c [2],
-> > now we have fixed up all of them.
-> 
-> (...)
-> 
-> I have read the comments that others made on the series and overall
-> agree. I've seen that you intend to prepare a v2. I think we must
-> first decide how to better deal with emulated syscalls as I said in
-> an earlier message. Probably that we should just add a specific test
-> case for EFAULT in nolibc-test since it's the only one (I think) that
-> risks to trigger crashes with emulated syscalls. We could also imagine
-> dealing with the signal ourselves but I'm not that keen on going to
-> implement signal() & longjmp() for now :-/
->
+Thank you for an update, my comments below.
 
-Yes, user-space signal() may be the right direction, we just need to let
-user-space not crash the kernel, what about this 'solution' for current stage
-(consider the pure time64 support too):
+...
 
-    #if defined(NOLIBC) && defined(__NR_gettimeofday) && __SIZEOF_LONG__ == 8
-		CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
-		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
-    #endif
+> ---
 
-This idea is from your commit 1da02f51088 ("selftests/nolibc: support glibc as
-well") for glibc, but the difference is of course glibc not crashes the kernel.
+Missing changelog, what has been done in v2, how it's different to v1.
 
-Btw, since the gettimeofday_null case may be optimized by compiler and not
-trigger such errors:
+>  drivers/iio/adc/meson_saradc.c | 65 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 65 insertions(+)
 
-    // rv32
-    nolibc-test.c:(.text.run_syscall+0x8c0): undefined reference to `__divdi3'
+...
 
-    // arm32
-    nolibc-test.c:(.text.run_syscall+0x820): undefined reference to `__aeabi_ldivmod'
+> +static const char * const chan7_vol[] = {
+> +	"gnd",
+> +	"vdd/4",
+> +	"vdd/2",
+> +	"vdd*3/4",
+> +	"vdd",
+> +	"ch7_input",
+> +};
+> +
+> +static ssize_t chan7_mux_show(struct device *dev, struct device_attribute *attr,
+> +			      char *buf)
+> +{
+> +	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+> +	struct meson_sar_adc_priv *priv = iio_priv(indio_dev);
+> +	unsigned int index = priv->chan7_mux_sel;
+> +
+> +	if (index >= ARRAY_SIZE(chan7_vol))
+> +		index = ARRAY_SIZE(chan7_vol) - 1;
 
-The above errors have been hidden after the disabling of the gettimeofday_bad1
-test case, so, still need to solve it before sending v2.
+I think this is incorrect and prone to error in the future in case this array
+will be extended. What I would expect is to return something like "unknown".
 
-The method used by musl may work, but the high bits may be lost (from long long
-to int)?
- 
-	tv->tv_usec = (int)ts.tv_nsec / 1000;
+> +	return sysfs_emit(buf, "%s\n", chan7_vol[index]);
+> +}
+> +
+> +static ssize_t chan7_mux_store(struct device *dev,
+> +			       struct device_attribute *attr,
+> +			       const char *buf, size_t count)
+> +{
+> +	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+> +	int i;
+> +
+> +	i = sysfs_match_string(chan7_vol, buf);
+> +	if (i < 0)
 
-Perhaps we really need to add the missing __divdi3 and __aeabi_ldivmod and the
-ones for the other architectures, or get one from lib/math/div64.c.
+> +		return -EINVAL;
 
-Will add such new test cases to detect the above issues:
+Do not shadow the error code if it's not justified.
 
-    CASE_TEST(gettimeofday_tv);   EXPECT_SYSZR(1, gettimeofday(&tv, NULL)); break;
-    CASE_TEST(gettimeofday_tz);   EXPECT_SYSZR(1, gettimeofday(NULL, &tz)); break;
-    CASE_TEST(gettimeofday_tv_tz);EXPECT_SYSZR(1, gettimeofday(&tv, &tz)); break;
+		return i;
 
-May still require to add 'used' attribute to 'struct timeval tv' and 'struct
-timeval tz' to let compiler not optimize them away.
+> +	meson_sar_adc_set_chan7_mux(indio_dev, i);
+> +	return count;
+> +}
 
-For the waitid syscall based waitpid INT_MIN test case, I have prepared such
-code:
+> +
 
-    #define IF_TEST(name) \
-    	if (strcmp(test, #name) == 0)
+Redundant blank line.
 
-    const int _errorno(const char *test)
-    {
-    #ifdef __NR_wait4
-    	IF_TEST(waitpid_min); return ESRCH;
-    #else /* __NR_waitid */
-    	IF_TEST(waitpid_min); return EINVAL;
-    #endif
-    	return 0;
-    }
+> +static IIO_DEVICE_ATTR_RW(chan7_mux, -1);
+> +
+> +static ssize_t chan7_mux_available_show(struct device *dev, struct device_attribute *attr,
+> +			      char *buf)
+> +{
+> +	int i, len = 0;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(chan7_vol); i++)
+> +		len += sysfs_emit_at(buf, len, "%s ", chan7_vol[i]);
+> +
+> +	return len;
+> +}
 
-    #define errorno(test) _errorno(#test)
+> +
 
-    CASE_TEST(waitpid_min);       EXPECT_SYSER(1, waitpid(INT_MIN, &tmp, WNOHANG), -1, errorno(waitpid_min)); break;
+Ditto.
 
-Instead of simply disabling this case, the above code allows to return
-different values for different syscalls.
+> +static IIO_DEVICE_ATTR_RO(chan7_mux_available, -1);
 
-is a standalone errorno_waitpid_min() better? I just want to let future test
-cases share some code, but it may be slower ;-)
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> Regardless, in order to clean the things up and relieve you from the
-> non-rv32 stuff, I've just reverted the two patches that your series
-> reverts (1 & 2), and added the EOVERFLOW one (3). I'm pushing this to
-> branch 20230528-nolibc-rv32+stkp5.
->
 
-Thanks very much and I have seen another two have been pushed too, will rebase
-everything on this new branch.
-
-Based on the other suggestions from you and Thomas, I plan to send some generic
-and independent changes at first, and then the left hard parts, It may simplify
-the whole progress.
-
-Best regards,
-Zhangjin
- 
-> Regards,
-> Willy
