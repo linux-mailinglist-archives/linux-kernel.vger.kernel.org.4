@@ -2,78 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8563713965
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 14:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5192671396C
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 14:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjE1MKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 08:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
+        id S229521AbjE1MVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 08:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjE1MKd (ORCPT
+        with ESMTP id S229445AbjE1MVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 08:10:33 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528B8AF
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 05:10:31 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-76c6c1b16d2so383692639f.1
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 05:10:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685275830; x=1687867830;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wm6IKPj1vMMJrUxmKpUlCDI+xA2XUJA6ZIRpAJeh0E8=;
-        b=O2c83ZFun5mqxe7LGtLp3KX5VzqtLAfzwB9XiLLKIljZKDFeCykbepaQj7ujWiLGTw
-         UOFd6UuDUPv3CcBRx4WSclzpmCrjF+Ek0nVQHFSUJWOZCdD4uzKU67Q5rDEc/kPkXngb
-         pcAwoyolWc720Ki2XhZVG+088kvipq6j98vIC1NP/9/cUtxPAj57eL25QDBDfyYvbYOs
-         Zx4/JbJWwe+TP59XbxS+j8BQj3cVnm2Fk926QXfFmoWndixEGlTLnKL/7+c4NYsu92V6
-         WeKj2VZ8LwiIg5MZZc7fExCTkQYRvbtcajZqIbW5z8rC78SFWbta5WL8ihgZe4eBHp60
-         NM0Q==
-X-Gm-Message-State: AC+VfDwqNDZ42xNS6EUyXTpftTs4K7Oqh+HxMNBZ9TLlDqugAKbfSYbn
-        l0O9my0dlTnNU5NIl+aewh/nWTPX76NZPcqqTzxdspLTxZDX
-X-Google-Smtp-Source: ACHHUZ4CR5b8H0wmXLm7aJuF4Tdf0/z5aCLMklVGTfClc5kah2GMYkAu7IYkwVnC9s8+LAyLxMv4TPJTEkHgsZglzH11TYR1f/JW
+        Sun, 28 May 2023 08:21:14 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C34B6;
+        Sun, 28 May 2023 05:21:12 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q3FOT-0003Co-9K; Sun, 28 May 2023 14:21:05 +0200
+Message-ID: <746720e5-318c-6d9e-2d5a-a6ebf6b4b0c6@leemhuis.info>
+Date:   Sun, 28 May 2023 14:21:02 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a02:948d:0:b0:41c:feac:7a9a with SMTP id
- x13-20020a02948d000000b0041cfeac7a9amr1722550jah.5.1685275830699; Sun, 28 May
- 2023 05:10:30 -0700 (PDT)
-Date:   Sun, 28 May 2023 05:10:30 -0700
-In-Reply-To: <000000000000540fc405f01401bf@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003ccc9b05fcbfdb68@google.com>
-Subject: Re: [syzbot] [xfs?] general protection fault in __xfs_free_extent
-From:   syzbot <syzbot+bfbc1eecdfb9b10e5792@syzkaller.appspotmail.com>
-To:     dchinner@redhat.com, djwong@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [regression] Since kernel 6.3.1 logitech unify receiver not
+ working properly
+Content-Language: en-US, de-DE
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
+        Bastien Nocera <hadess@hadess.net>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, guy.b@bluewin.ch
+References: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info>
+ <bec024d5-4088-00ae-f7b5-7188868b1707@leemhuis.info>
+ <b7717c43-74bf-b91d-d3ce-874493df602c@gmail.com>
+ <CAO-hwJ+At1J_yUpX2q_dJekzZ-PoTDAvxmkTk_e4Yu0Z338bEA@mail.gmail.com>
+ <55dda0bb-fe42-6dee-28ea-00121554d092@leemhuis.info>
+ <CAHk-=whvhkSk6m8_AidhofgR9nq0Md+HbNad5r1RE69tZgbv6Q@mail.gmail.com>
+ <nycvar.YFH.7.76.2305231422180.29760@cbobk.fhfr.pm>
+ <CAO-hwJ+MTRu9KxqwQc7UYFBsa0kkrnYfwVB30KsLZnw=wfcOMg@mail.gmail.com>
+ <nycvar.YFH.7.76.2305251308471.29760@cbobk.fhfr.pm>
+ <nycvar.YFH.7.76.2305262040330.29760@cbobk.fhfr.pm>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <nycvar.YFH.7.76.2305262040330.29760@cbobk.fhfr.pm>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1685276472;91502ff5;
+X-HE-SMSGID: 1q3FOT-0003Co-9K
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
 
-commit b2ccab3199aa7cea9154d80ea2585312c5f6eba0
-Author: Darrick J. Wong <djwong@kernel.org>
-Date:   Wed Apr 12 01:59:53 2023 +0000
 
-    xfs: pass per-ag references to xfs_free_extent
+On 26.05.23 20:41, Jiri Kosina wrote:
+> On Thu, 25 May 2023, Jiri Kosina wrote:
+> 
+>>>>> That bug is pre-existing (ie the problem was not introduced by that
+>>>>> commit), but who knows if the retry makes things worse (ie if it then
+>>>>> triggers on a retry, the response data will be the *previous* response).
+>>>>>
+>>>>> The whole "goto exit" games should be removed too, because we're in a
+>>>>> for-loop, and instead of "goto exit" it should just do "break".
+>>>>>
+>>>>> IOW, something like this might be worth testing.
+>>>>>
+>>>>> That said, while I think the code is buggy, I doubt this is the actual
+>>>>> cause of the problem people are reporting. But it would be lovely to
+>>>>> hear if the attached patch makes any difference, and I think this is
+>>>>> fixing a real - but unlikely - problem anyway.
+>>>
+>>> FWIW, Linus, your patch is
+>>> Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+>>>
+>>> Feel free to submit it to us or to apply it directly if you prefer as
+>>> this is clearly a fix for a code path issue.
+>>
+>> It would be nice to hear from the people who were able to reproduce the 
+>> issue whether this makes any observable difference in behavior though. I 
+>> don't currently think it would, as it fixes a potential NULL pointer 
+>> dereference, which is not what has been reported.
+>>
+>> Has anyone of the affected people tried to bisect the issue?
+> 
+> Could anyone
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1007e5c1280000
-start commit:   02bf43c7b7f7 Merge tag 'fs.xattr.simple.rework.rbtree.rwlo..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
-dashboard link: https://syzkaller.appspot.com/bug?extid=bfbc1eecdfb9b10e5792
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1798429d880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=161b948f880000
+Reminder: a lot of the affected users can only be reached through the
+bugzilla ticket (https://bugzilla.kernel.org/show_bug.cgi?id=217412 )
+that made me start this thread. Sorry for this mess, but I can't simply
+CC them because on account creation users are told that the "email
+address will never be displayed to logged out users". Bugbot will
+hopefully soon make this sort of problems history.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+> who is able to reproduce the issue please check whether 
+> reverting
+> 
+> 	586e8fede7953b16 ("HID: logitech-hidpp: Retry commands when device is busy")
+> 
+> has any observable effect?
 
-#syz fix: xfs: pass per-ag references to xfs_free_extent
+See https://bugzilla.kernel.org/show_bug.cgi?id=217412#c26 and later –
+it at least solved the problem for one user.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+But it's all a mess (at least afaics). Earlier in that ticket some other
+user said things work with 6.4-rc kernel, while for another confirmed
+things are still broken. So maybe we deal with more than one problem. Or
+testing went sideways for some of the users.
+
+Ciao, Thorsten
