@@ -2,160 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72A0713A02
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 16:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A103713A0B
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 16:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjE1OVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 10:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
+        id S229662AbjE1OVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 10:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjE1OVV (ORCPT
+        with ESMTP id S229559AbjE1OVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 10:21:21 -0400
-Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8D9BE
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 07:21:20 -0700 (PDT)
-Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-565c3aa9e82so23912447b3.2
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 07:21:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685283679; x=1687875679;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lpvrPlmy26/nCGxjupHwuea6qY0IMkD2Kk2kNdMMxS4=;
-        b=lJvT0hP9xWTNAUDrX6cCe6wm9GSruixtz501j5iIc0zuAbSFI6MLWDF7bgjpZWxzxF
-         t1t/9fk9VjIaEFiC6k5avWKkn9G0pr4LGnvNQikBzqQLoMofRzWGz7Aj9i2zOGcgcQrK
-         em9NrSiakd7Gecdh+tMkvXE3nmd/80HwcpCAow4zUe2vmsOxs32XYkeBIUONZ2gWIWCN
-         tMPdzZnWjm96CfAolwgw2beJdkeThEkKvqPLG69tJGstJbeCoZRhbFlJSh5t/oKkuQ2w
-         eTkm83EVd/TDIlZNX22UvgLlCLFiU3p/DHyk933w//8XBc3oIJLycfGXIF6nb9D436HZ
-         6c/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685283679; x=1687875679;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lpvrPlmy26/nCGxjupHwuea6qY0IMkD2Kk2kNdMMxS4=;
-        b=VQ+VJDIj3gBwh1DBoVYec8deCTL8xQeayM4fgfoH/1TUn6TxncLUgQ3CJC3Vk9u1Uo
-         8TSyyaMGEi2O1r10mlziKA5pbGPgC4A69Lo+7DesbImOtxf/+pszi9+L4FBEKYydHqgp
-         ONOxc0ieLKYc3g9cI/N3+2/eyjz4wixbGhIngcnPODzaw/0pNV7yPdsh0LvxoHHhv7Of
-         /1s9T3yKTJflAMG3jiJnSLqhyNgjrCFVDhFKOOJbtG4yxIK5gMP/v3NkO6cFyWfYmapu
-         jpg0dg7Wv7ZAeOdJYiYcfjZYyvjmXfWT845XrAiY9iJGgFml9/o3jYNL2TiB+KD0D0zJ
-         OZoQ==
-X-Gm-Message-State: AC+VfDy7gv4rb6jEqPC5pm9URw3xPXqB7jEQQk3w0rkstpCGOrfk8Qvr
-        chQVgcD+0TTw87dLqMr06Y6fFqSsaSBYsFbIENU=
-X-Google-Smtp-Source: ACHHUZ6RVrYqlSyM8scgXBNWPQGw/EWqpuxFkADqM6P4Asfjryp8umxdQLjzNOXfVKP7Gxicuq/Zij0UKCxuBSbDKYk=
-X-Received: by 2002:a81:b40c:0:b0:544:9180:3104 with SMTP id
- h12-20020a81b40c000000b0054491803104mr9767896ywi.34.1685283678945; Sun, 28
- May 2023 07:21:18 -0700 (PDT)
+        Sun, 28 May 2023 10:21:36 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3EEC7;
+        Sun, 28 May 2023 07:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685283692; x=1716819692;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZTkM6DTM94DRGqgS0Z6YEGqsq7Toa2hLcyOuCPilzRU=;
+  b=E9jdJlVRUlgZcuqYvLWva6ubop3k2zh5sM5ynuri/8LSC9gVUEhS6y7r
+   hQkmGGmOQPNVVlR7pjRtKGPdEr0v0mVEchwpCZGw6zbGoXXbcTXqMBrU+
+   F+nyO8T9dyJY+IIduhD3/5d9Rq4jZ4x9Nq73N4ArzACtMhQQfiE4Awex2
+   M1TKKS6cr0H9qrGdES8sXEd+LwW4Ge2X4txDnt0PXznNxqANdOZl8Ayh3
+   HeVn9FC492bgLT3xD6ULIcpBpfKVwX4OwUSc79EwKAGpUpeR+XRgi1T00
+   7CyKMqrT3qtvigT5qseNzDBVgsNrQXLaziZcwKuJgF0CNZ2RDRcdMpTW/
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="357767880"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="357767880"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 07:21:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="1035915909"
+X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
+   d="scan'208";a="1035915909"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 28 May 2023 07:21:27 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id B4FEA24F; Sun, 28 May 2023 17:21:31 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>
+Subject: [PATCH v1 1/1] gpiolib: Kill unused GPIOF_EXPORT and Co
+Date:   Sun, 28 May 2023 17:21:27 +0300
+Message-Id: <20230528142127.37330-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Reply-To: hewahsanli63@gmail.com
-Sender: mrs.joriahnatasha33@gmail.com
-Received: by 2002:a05:6918:a423:b0:17f:fc7a:1a6f with HTTP; Sun, 28 May 2023
- 07:21:18 -0700 (PDT)
-From:   Mr Hewah Sanli <hewahsanli63@gmail.com>
-Date:   Sun, 28 May 2023 14:21:18 +0000
-X-Google-Sender-Auth: ix7ocYJz050eaBZiIbKqVHhjvgE
-Message-ID: <CABZwHwNyS4tY0-NTv9YQvEbnvvfmf-PmU1A0T71d=BH7MxEmdA@mail.gmail.com>
-Subject: I NEED YOUR URGENT RESPOND
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=ADVANCE_FEE_5_NEW_FORM,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,RCVD_IN_DNSWL_NONE,
-        RISK_FREE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_FILL_THIS_FORM_LOAN,
-        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,T_SHARE_50_50,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1144 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrs.joriahnatasha33[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrs.joriahnatasha33[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [hewahsanli63[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_SHARE_50_50 Share the money 50/50
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 HK_SCAM No description available.
-        *  0.0 RISK_FREE No risk!
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
-        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
-        *  1.0 ADVANCE_FEE_5_NEW_FORM Advance Fee fraud and a form
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings Dearest Friend:
+There is no use of the  GPIOF_EXPORT in the kernel. Kill it for good.
 
-With due respect, i have decided to contact you on a business
-transaction that will be beneficial to both of us. at the bank last
-account and auditing evaluation, my staffs came across an old account
-which was being maintained by a foreign client who we learn was among
-the deceased passengers of motor accident on November.2003, the
-deceased was unable to run this account since his death. The account
-has remained dormant without the knowledge of his family since it was
-put in a safe deposit account in the bank for future investment by the
-client.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ Documentation/driver-api/gpio/legacy.rst                    | 3 ---
+ Documentation/translations/zh_CN/driver-api/gpio/legacy.rst | 3 ---
+ Documentation/translations/zh_TW/gpio.txt                   | 3 ---
+ drivers/gpio/gpiolib-legacy.c                               | 6 ------
+ include/linux/gpio.h                                        | 5 -----
+ 5 files changed, 20 deletions(-)
 
-Since his demise, even the members of his family haven't applied for
-claims over this fund and it has been in the safe deposit account
-until i discovered that it cannot be claimed since our client is a
-foreign national and we are sure that he has no next of kin here to
-ile claims over the money. As the director of the department, this
-discovery was brought to my office so as to decide what is to be done.
-i decided to seek ways through which to transfer this money out of the
-bank and out of the country too.
+diff --git a/Documentation/driver-api/gpio/legacy.rst b/Documentation/driver-api/gpio/legacy.rst
+index 78372853c6d4..c5f98a78499f 100644
+--- a/Documentation/driver-api/gpio/legacy.rst
++++ b/Documentation/driver-api/gpio/legacy.rst
+@@ -322,9 +322,6 @@ where 'flags' is currently defined to specify the following properties:
+ 	* GPIOF_OPEN_DRAIN	- gpio pin is open drain type.
+ 	* GPIOF_OPEN_SOURCE	- gpio pin is open source type.
+ 
+-	* GPIOF_EXPORT_DIR_FIXED	- export gpio to sysfs, keep direction
+-	* GPIOF_EXPORT_DIR_CHANGEABLE	- also export, allow changing direction
+-
+ since GPIOF_INIT_* are only valid when configured as output, so group valid
+ combinations as:
+ 
+diff --git a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+index 84ce2322fdba..8720970393fb 100644
+--- a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
++++ b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+@@ -297,9 +297,6 @@ gpio_request()前将这类细节配置好，例如使用引脚控制子系统的
+ 	* GPIOF_OPEN_DRAIN	- gpio引脚为开漏信号
+ 	* GPIOF_OPEN_SOURCE	- gpio引脚为源极开路信号
+ 
+-	* GPIOF_EXPORT_DIR_FIXED	- 将 gpio 导出到 sysfs，并保持方向
+-	* GPIOF_EXPORT_DIR_CHANGEABLE	- 同样是导出, 但允许改变方向
+-
+ 因为 GPIOF_INIT_* 仅有在配置为输出的时候才存在,所以有效的组合为:
+ 
+ 	* GPIOF_IN		- 配置为输入
+diff --git a/Documentation/translations/zh_TW/gpio.txt b/Documentation/translations/zh_TW/gpio.txt
+index 62e560ffe628..e0b96d897fa7 100644
+--- a/Documentation/translations/zh_TW/gpio.txt
++++ b/Documentation/translations/zh_TW/gpio.txt
+@@ -303,9 +303,6 @@ gpio_request()前將這類細節配置好，例如使用 pinctrl 子系統的映
+ 	* GPIOF_OPEN_DRAIN	- gpio引腳爲開漏信號
+ 	* GPIOF_OPEN_SOURCE	- gpio引腳爲源極開路信號
+ 
+-	* GPIOF_EXPORT_DIR_FIXED	- 將 gpio 導出到 sysfs，並保持方向
+-	* GPIOF_EXPORT_DIR_CHANGEABLE	- 同樣是導出, 但允許改變方向
+-
+ 因爲 GPIOF_INIT_* 僅有在配置爲輸出的時候才存在,所以有效的組合爲:
+ 
+ 	* GPIOF_IN		- 配置爲輸入
+diff --git a/drivers/gpio/gpiolib-legacy.c b/drivers/gpio/gpiolib-legacy.c
+index 028f7f504209..969f737012f6 100644
+--- a/drivers/gpio/gpiolib-legacy.c
++++ b/drivers/gpio/gpiolib-legacy.c
+@@ -50,12 +50,6 @@ int gpio_request_one(unsigned gpio, unsigned long flags, const char *label)
+ 	if (err)
+ 		goto free_gpio;
+ 
+-	if (flags & GPIOF_EXPORT) {
+-		err = gpiod_export(desc, flags & GPIOF_EXPORT_CHANGEABLE);
+-		if (err)
+-			goto free_gpio;
+-	}
+-
+ 	return 0;
+ 
+  free_gpio:
+diff --git a/include/linux/gpio.h b/include/linux/gpio.h
+index 8528353e073b..86963a00b018 100644
+--- a/include/linux/gpio.h
++++ b/include/linux/gpio.h
+@@ -38,11 +38,6 @@ struct device;
+ /* Gpio pin is open source */
+ #define GPIOF_OPEN_SOURCE	(1 << 4)
+ 
+-#define GPIOF_EXPORT		(1 << 5)
+-#define GPIOF_EXPORT_CHANGEABLE	(1 << 6)
+-#define GPIOF_EXPORT_DIR_FIXED	(GPIOF_EXPORT)
+-#define GPIOF_EXPORT_DIR_CHANGEABLE (GPIOF_EXPORT | GPIOF_EXPORT_CHANGEABLE)
+-
+ /**
+  * struct gpio - a structure describing a GPIO with configuration
+  * @gpio:	the GPIO number
+-- 
+2.40.0.1.gaa8946217a0b
 
-The total amount in the account is (18.6 million) with my positions as
-staffs of the bank, i am handicapped because i cannot operate foreign
-accounts and cannot lay benefice claim over this money. the client was
-a foreign national and you will only be asked to act as his next of
-kin and i will supply you with all the necessary information and bank
-data to assist you in being able to transfer this money to any bank of
-your choice where this money could be transferred into. The total sum
-will be shared as follows: 50% for me, 50% for you, and expenses
-incidental occur during the transfer will be incur by both of us. The
-transfer is risk free on both sides hence you are going to follow my
-instruction till the fund transfer to your account. Since i work in
-this bank that is why you should be confident in the success of this
-transaction because you will be updated with information as at when
-desired.
-
-I will wish you to keep this transaction secret and confidential as I
-am hoping to retire with my share of this money at the end of
-transaction which will be when this money is safety in your account. I
-will then come over to your country for sharing according to the
-previously agreed percentages. You might even have to advise me on
-possibilities of investment in your country or elsewhere of our
-choice. May God help you to help me to a restive retirement?
-
-(1) Your full name..............
-(2) Your age:................
-(3) Sex:.....................
-(4) Your telephone number:.................
-(5) Your occupation:.....................
-(6) Your country:.....................
-
-Yours sincerely,
-Mr Hewah Sanli
