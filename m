@@ -2,111 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18D17138B4
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 10:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C3A7138B6
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 10:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjE1IYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 04:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
+        id S229565AbjE1IZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 04:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjE1IYE (ORCPT
+        with ESMTP id S229437AbjE1IZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 04:24:04 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D41DC
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 01:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685262242; x=1716798242;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4X5Pxes6rCLeJv6kI7klyPxFXPIoEQenK9qRlQzxwL4=;
-  b=l3LRBPKD6KlSwt4GjMvTpD/U9IW9gUlMYI1W/FD4NaPqq9U5SuwTVbRP
-   /PlifNkL1j4TiKobr7dqk2CTq5HMUXkAZeZuKzyeGE1m/lob+qQzdvGdt
-   BVaLN95hZ7JBBzyRj9kAqBu7gjm198G7eBBGRB9s+QXOrEvRNbsqmTYHe
-   e30JCJwE9WRK2tKJG92IQXeaUn+Uf6cFrMhtNi9HiX+eyf3noLpGUB+LB
-   JoARXb8hRSYXAudZPRC2eFDfeG4RmFm1DK1duF/2iYvE7rrJL+60KBung
-   Xyhs/+0XzVvlBj60rVojBLT5YaMMQe7ebBwWKIcM4R1UTdCVEku2tXexv
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="343997180"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="343997180"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 01:24:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="952369592"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="952369592"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 May 2023 01:24:00 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q3Bh1-000KUk-0u;
-        Sun, 28 May 2023 08:23:59 +0000
-Date:   Sun, 28 May 2023 16:23:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: arch/riscv/include/asm/atomic.h:339 arch_atomic64_dec_if_positive()
- warn: inconsistent indenting
-Message-ID: <202305281649.3367YTx7-lkp@intel.com>
+        Sun, 28 May 2023 04:25:29 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAB899;
+        Sun, 28 May 2023 01:25:26 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1685262312tra33cp0
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 28 May 2023 16:25:10 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: An8j/rhzjdGajJeEXw9TkdV6lrxosyLeWWZ9VDBE9LOjDBmydLX7wTGYZYvYx
+        IwKElaEyNjmHyGHMKJab2Zt1BbXL2L2S9MY/mJeCcgY6mTf99g5K/h0OG/BKKizV3mavnde
+        ya71KdKJ28Ku7Hfo4T20IWMGVjd6BtGAvJaYTaAXwJofSuE9Ux/o2inHP7SnyfazeXi+gDz
+        VXqA7WmMfOdIlmM4yJeiy00K8pHgkMZ47UZcDbcTcelWgpAkerI87FRFSqmLXkrUAeublyI
+        uxdnjZsrucnpXKh79cSi7lK503yfp97zHAoNLr5w4dBiLEfibrDqfmByEJqB/fjADX4NueH
+        x2UMgq1b2R0TKKJT/AHXoqMQnWCFw==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 107622595535614610
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     arnd@arndb.de, thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com
+Subject: Re: [PATCH 09/13] tools/nolibc: sys_poll: riscv: use __NR_ppoll_time64 for rv32
+Date:   Sun, 28 May 2023 16:25:09 +0800
+Message-Id: <20230528082509.293250-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <83ab9f47-e1ed-463c-a717-26aad6bf2b71@app.fastmail.com>
+References: <83ab9f47-e1ed-463c-a717-26aad6bf2b71@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   416839029e3858f61dc7dd346559c03e74ed8380
-commit: 1d7f6932c522ea95668e14265175ce3d753d0c24 riscv: atomic: Optimize dec_if_positive functions
-date:   1 year ago
-config: riscv-randconfig-m031-20230526 (https://download.01.org/0day-ci/archive/20230528/202305281649.3367YTx7-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
+Hi, Arnd, Thomas, Willy
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305281649.3367YTx7-lkp@intel.com/
+> On Fri, May 26, 2023, at 09:15, Thomas Wei=C3=9Fschuh wrote:
+> > On 2023-05-25 01:57:24+0800, Zhangjin Wu wrote:
+> >> 
+> >> +/* needed by time64 syscalls */
+> >> +struct timespec64 {
+> >> +	time64_t	tv_sec;		/* seconds */
+> >> +	long		tv_nsec;	/* nanoseconds */
+> >> +};
+> >
+> > A question to you and Willy, as it's also done the same for other types:
+> >
+> > What is the advantage of custom definitions over using the one from the
+> > kernel (maybe via a typedef).
+> >
+> > From linux/time_types.h:
+> >
+> > struct __kernel_timespec {
+> > 	__kernel_time64_t tv_set;
+> > 	long long tv_nsec;
+> > };
+> 
+> I agree the __kernel_* types are what we should be using when
+> interacting with system calls directly, that is definitely what
+> they are intended for.
+> 
+> I would go further here and completely drop support for 32-bit
+> time_t/off_t and derived types in nolibc. Unfortunately, the
+> kernel's include/uapi/linux/time.h header still defines the
+> old types, this is one of the last remnants the time32 syscalls
+> definitions in the kernel headers, and this already conflicts
+> with the glibc and musl definitions, so anything that includes
+> this header is broken on real systems. I think it makes most
+> sense for nolibc to just use the linux/time_types.h header
+> instead and use something like
+> 
+> #define timespec   __kernel_timespec
+> #define itimerspec __kernel_itimerspec
+> typedef __kernel_time64_t time_t;
+> /* timeval is only provided for users, not compatible with syscalls */
+> struct timeval { __kernel_time64_t tv_sec; __s64 tv_nsec; };
+> 
+> so we can drop all the fallbacks for old 32-bit targets. This
+> also allows running with CONFIG_COMPAT_32BIT_TIME disabled.
 
-smatch warnings:
-arch/riscv/include/asm/atomic.h:339 arch_atomic64_dec_if_positive() warn: inconsistent indenting
+Just a status update ...
 
-vim +339 arch/riscv/include/asm/atomic.h
+I'm working on the pure time64 and 64bit off_t syscalls support, it almost
+worked (tested on rv32/64, arm32/64), thanks very much for your suggestions.
 
-fab957c11efe2f Palmer Dabbelt 2017-07-10  332  
-fab957c11efe2f Palmer Dabbelt 2017-07-10  333  #ifndef CONFIG_GENERIC_ATOMIC64
-1d7f6932c522ea Guo Ren        2022-05-05  334  static __always_inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
-fab957c11efe2f Palmer Dabbelt 2017-07-10  335  {
-0754211847d7a2 Mark Rutland   2019-05-22  336         s64 prev;
-0754211847d7a2 Mark Rutland   2019-05-22  337         long rc;
-fab957c11efe2f Palmer Dabbelt 2017-07-10  338  
-fab957c11efe2f Palmer Dabbelt 2017-07-10 @339  	__asm__ __volatile__ (
-5ce6c1f3535fa8 Andrea Parri   2018-03-09  340  		"0:	lr.d     %[p],  %[c]\n"
-1d7f6932c522ea Guo Ren        2022-05-05  341  		"	addi      %[rc], %[p], -1\n"
-5ce6c1f3535fa8 Andrea Parri   2018-03-09  342  		"	bltz     %[rc], 1f\n"
-5ce6c1f3535fa8 Andrea Parri   2018-03-09  343  		"	sc.d.rl  %[rc], %[rc], %[c]\n"
-5ce6c1f3535fa8 Andrea Parri   2018-03-09  344  		"	bnez     %[rc], 0b\n"
-5ce6c1f3535fa8 Andrea Parri   2018-03-09  345  		"	fence    rw, rw\n"
-5ce6c1f3535fa8 Andrea Parri   2018-03-09  346  		"1:\n"
-fab957c11efe2f Palmer Dabbelt 2017-07-10  347  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
-1d7f6932c522ea Guo Ren        2022-05-05  348  		:
-fab957c11efe2f Palmer Dabbelt 2017-07-10  349  		: "memory");
-1d7f6932c522ea Guo Ren        2022-05-05  350  	return prev - 1;
-fab957c11efe2f Palmer Dabbelt 2017-07-10  351  }
-fab957c11efe2f Palmer Dabbelt 2017-07-10  352  
+It includes:
 
-:::::: The code at line 339 was first introduced by commit
-:::::: fab957c11efe2f405e08b9f0d080524bc2631428 RISC-V: Atomic and Locking Code
+* Based on linux/types.h and
+    * Use 64bit off_t
+    * Use 64bit time_t
+    * the new std.h looks like this
 
-:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
-:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+    typedef uint32_t __kernel_dev_t;
+    
+    typedef __kernel_dev_t          dev_t;
+    typedef __kernel_ulong_t        ino_t;
+    typedef __kernel_mode_t         mode_t;
+    typedef __kernel_pid_t          pid_t;
+    typedef __kernel_uid32_t        uid_t;
+    typedef __kernel_gid32_t        gid_t;
+    typedef __kernel_loff_t         off_t;
+    typedef __kernel_time64_t       time_t;
+    typedef uint32_t                nlink_t;
+    typedef uint64_t                blksize_t;
+    typedef uint64_t                blkcnt_t;
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+* Use __kernel_timespec as timespec
+* Use 64bit time_t based struct timeval
+    * Disable gettimeofday syscall completely for 32bit platforms
+        * And disable the gettimeofday_bad1/2 test case too
+    * Remove the oldselect and newslect path completely
+    * The new types.h looks this:
+
+    /* always use time64 structs in user-space even on 32bit platforms */
+    #define timespec __kernel_timespec
+    #define itimerspec __kernel_itimerspec
+
+    /* timeval is only provided for users, not compatible with syscalls */
+    struct __timeval64 {
+    	__kernel_time64_t tv_sec;	/* seconds */
+    	__s64 tv_usec;			/* microseconds */
+    };
+    /* override the 32bit version of struct timeval in linux/time.h */
+    #define timeval __timeval64
+
+    /* itimerval is only provided for users, not compatible with syscalls */
+    struct __itimerval64 {
+    	struct __timeval64 it_interval;	/* timer interval */
+    	struct __timeval64 it_value;	/* current value */
+    };
+    /* override the 32bit version of struct itimerval in linux/time.h */
+    #define itimerval __itimerval64
+
+* Use __NR_*time64 for all 32bit platforms
+* Use __NR_pselect6/ppoll/clock_gettime only for 64bit platforms
+* New sizeof tests added to verify off_t, time_t, timespec, itimerspec...
+
+   	CASE_TEST(sizeof_time_t);           EXPECT_EQ(1, 8,   sizeof(time_t)); break;
+    	CASE_TEST(sizeof_timespec);         EXPECT_EQ(1, 16,  sizeof(struct timespec)); break;
+    #ifdef NOLIBC
+    	CASE_TEST(sizeof_itimerspec);       EXPECT_EQ(1, 32,  sizeof(struct itimerspec)); break;
+    #endif
+    	CASE_TEST(sizeof_timeval);          EXPECT_EQ(1, 16,  sizeof(struct timeval)); break;
+    	CASE_TEST(sizeof_itimerval);        EXPECT_EQ(1, 32,  sizeof(struct itimerval)); break;
+    	CASE_TEST(sizeof_off_t);            EXPECT_EQ(1, 8,   sizeof(off_t)); break;
+
+
+@Arnd, the above timeval/itimerval definitions are used to override the ones
+from linux/time.h to avoid such error:
+
+    error: redefinition of ‘struct timeval’
+
+    nolibc/sysroot/riscv/include/types.h:225:8: error: redefinition of ‘struct timeval’
+      225 | struct timeval {
+          |        ^~~~~~~
+    In file included from nolibc/sysroot/riscv/include/types.h:11,
+                     from nolibc/sysroot/riscv/include/nolibc.h:98,
+                     from nolibc/sysroot/riscv/include/errno.h:26,
+                     from nolibc/sysroot/riscv/include/stdio.h:14,
+                     from tools/testing/selftests/nolibc/nolibc-test.c:12:
+    nolibc/sysroot/riscv/include/linux/time.h:16:8: note: originally defined here
+       16 | struct timeval {
+
+@Arnd, As you commented in another reply, is it time for us to update
+include/uapi/linux/time.h together and let it provide time64 timeval/itimerval
+instead of the old ones? perhaps some libc's are still using them.
+
+Or perhaps we can add a switch like __ARCH_WANT_TIME32_SYSCALLS, add a
+__ARCH_WANT_TIME32_STRUCTS and simply bind it with __ARCH_WANT_TIME32_SYSCALLS?
+
+About the above ugly override code, What's your suggestion in v2? ;-)
+
+Best regards,
+Zhangjin
+
+> 
+>      Arnd
