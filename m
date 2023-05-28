@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07084713AB6
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 18:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2512C713A91
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 18:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjE1Qun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 12:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S229617AbjE1Qct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 12:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjE1Qul (ORCPT
+        with ESMTP id S229482AbjE1Qcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 12:50:41 -0400
+        Sun, 28 May 2023 12:32:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB392C4;
-        Sun, 28 May 2023 09:50:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A73AA7;
+        Sun, 28 May 2023 09:32:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B3E660B26;
-        Sun, 28 May 2023 16:50:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5878EC433EF;
-        Sun, 28 May 2023 16:50:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685292639;
-        bh=csNksqn/IdsviUBpssSbOkgkznb1eomYoKzxxWPxXvk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s/8wAz3s/NIbEVuUVe4auP8X8yIp3cfY5fJDYhCU5fNmk0m4t7q63GrtImgw88+9p
-         +5QiBzON7VaEyv7zEVmZs9R5slJAEjY8X1cUCwHI/pHtMxTYit4uIwrDhSK1l4ngXt
-         ZqpK/T5M7yKDf+FzVYQ68rSWzEYIgl2WT73wMWgs=
-Date:   Sun, 28 May 2023 17:46:39 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Prince Kumar Maurya <princekumarmaurya06@gmail.com>
-Cc:     skhan@linuxfoundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, chenzhongjin@huawei.com,
-        syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Null check to prevent null-ptr-deref bug
-Message-ID: <2023052822-mauve-gauging-0ab3@gregkh>
-References: <000000000000cafb9305fc4fe588@google.com>
- <20230528164400.592092-1-princekumarmaurya06@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E39EE60EAB;
+        Sun, 28 May 2023 16:32:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81DAC433D2;
+        Sun, 28 May 2023 16:32:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685291564;
+        bh=jfZ3hykkOZ0SU4PcgvnvJdy4PZrWwwVhDVQNGCS+xlc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rVIVkMiRdL+FKfQsKdL9k1zOefcA0mufm8J0I6XzvF18Soc3AoTihcWDfTBzApW67
+         yvqIs0oAGTQcqNMr1G6JjQONGxfPDrYReWOjDhJ4SFB9s0M/lrAroiCDqSuwtSFiaI
+         8viPBDwceK9vbTunyKryFVyJcSO59LvXRwaPPadjvE6gWswxy2Ln9El4I5zDZApslV
+         Z40o/6f6GF0mV4ovag4WX9IUSp85kBD4qsBeC26flUKf5uyOHjV3cdXaVdZ/xbJXYo
+         j4lnfqjWn2twcimnWXZp2oQ6pCfGrRdlVqVlMcy+DJePuGUFA7Wr31HR/rzRFCF007
+         5bAhEmIKRtZJw==
+Date:   Sun, 28 May 2023 17:49:03 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Mehdi Djait <mehdi.djait.k@gmail.com>,
+        krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
+        lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 5/7] iio: accel: kionix-kx022a: Refactor driver and
+ add chip_info structure
+Message-ID: <20230528174903.6a9c2533@jic23-huawei>
+In-Reply-To: <682e84b6-9912-ecb9-9ca2-9d96f511c22d@gmail.com>
+References: <cover.1685109507.git.mehdi.djait.k@gmail.com>
+        <de588a5a3ca311f6dc3a543bfa5cea7b590ae44c.1685109507.git.mehdi.djait.k@gmail.com>
+        <682e84b6-9912-ecb9-9ca2-9d96f511c22d@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230528164400.592092-1-princekumarmaurya06@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,33 +61,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 09:44:00AM -0700, Prince Kumar Maurya wrote:
-> sb_getblk(inode->i_sb, parent) return a null ptr and taking lock on that leads to the null-ptr-deref bug.
+
+...
+
+> > @@ -762,6 +763,8 @@ static int kx022a_fifo_disable(struct kx022a_data *data)
+> >   {
+> >   	int ret = 0;
+> >   
+> > +	kfree(data->fifo_buffer);  
 > 
-> Signed-off-by: Prince Kumar Maurya <princekumarmaurya06@gmail.com>
-> ---
->  fs/sysv/itree.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Should we have the kfree only after the sensor is disabled? I wonder if 
+> we in theory have here a time window where the buffer is freed but the 
+> measurement is still running and - with a lots of bad luck - can result 
+> measurement being written to a freed buffer? Perhaps move the kfree to 
+> be done only after the measurement has been stopped?
 > 
-> diff --git a/fs/sysv/itree.c b/fs/sysv/itree.c
-> index b22764fe669c..3a6b66e719fd 100644
-> --- a/fs/sysv/itree.c
-> +++ b/fs/sysv/itree.c
-> @@ -145,6 +145,8 @@ static int alloc_branch(struct inode *inode,
->  		 */
->  		parent = block_to_cpu(SYSV_SB(inode->i_sb), branch[n-1].key);
->  		bh = sb_getblk(inode->i_sb, parent);
-> +		if (!bh)
-> +			break;
->  		lock_buffer(bh);
->  		memset(bh->b_data, 0, blocksize);
->  		branch[n].bh = bh;
-> -- 
-> 2.40.1
+> Other than that, this is looking good to me.
+> 
+Agreed. Even if it's not a bug as such, it is better to keep the order
+of this function as close as possible to the reverse of what happens in
+*_fifo_enabled() as easier to reason about if that's the case.
 
-Why resend this when I already responded:
-	https://lore.kernel.org/r/2023052803-pucker-depress-5452@gregkh
+> > +
+> >   	ret = kx022a_turn_off_lock(data);
+> >   	if (ret)
+> >   		return ret;
+> > @@ -770,7 +773,7 @@ static int kx022a_fifo_disable(struct kx022a_data *data)
+> >   	if (ret)
+> >   		goto unlock_out;
+> >   
+> > -	ret = regmap_clear_bits(data->regmap, KX022A_REG_BUF_CNTL2,
+> > +	ret = regmap_clear_bits(data->regmap, data->chip_info->buf_cntl2,
+> >   				KX022A_MASK_BUF_EN);
+> >   	if (ret)
+> >   		goto unlock_out;
+> > @@ -801,6 +804,12 @@ static int kx022a_fifo_enable(struct kx022a_data *data)
+> >   {
+> >   	int ret;
+> >   
+> > +	data->fifo_buffer = kmalloc(data->chip_info->fifo_length *
+> > +				    KX022A_FIFO_SAMPLES_SIZE_BYTES, GFP_KERNEL);
+> > +
+> > +	if (!data->fifo_buffer)
+> > +		return -ENOMEM;
+> > +
+> >   	ret = kx022a_turn_off_lock(data);
+> >   	if (ret)
+> >   		return ret;
+> > @@ -811,7 +820,7 @@ static int kx022a_fifo_enable(struct kx022a_data *data)
+> >   		goto unlock_out;
+> >   
+> >   	/* Enable buffer */
+> > -	ret = regmap_set_bits(data->regmap, KX022A_REG_BUF_CNTL2,
+> > +	ret = regmap_set_bits(data->regmap, data->chip_info->buf_cntl2,
+> >   			      KX022A_MASK_BUF_EN);
+> >   	if (ret)
+> >   		goto unlock_out;
 
-confused,
+...
 
-greg k-h
+
