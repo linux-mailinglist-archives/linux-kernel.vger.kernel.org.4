@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C8C713BBB
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 20:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C45713C09
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 20:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjE1Siu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 14:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S229635AbjE1S7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 14:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjE1Sis (ORCPT
+        with ESMTP id S229498AbjE1S7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 14:38:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D179FAD;
-        Sun, 28 May 2023 11:38:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63B4D612EC;
-        Sun, 28 May 2023 18:38:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41DC3C433D2;
-        Sun, 28 May 2023 18:38:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685299126;
-        bh=Y1Ww4qK5/r9zCYcpnBGZ7qwWpTsyIaM5eqr/Ya7W1bc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SJuYBjuwADkZUZcrXaFx4CRaeAD6xhtrpw1PZ+GeSEpuK/psXVyzPtuQ9GtoLS9jD
-         RKgGlFl+97e7XSsDmZJHaB9v9wOsrtZ51GNecdzmHTLjGlkluYGC7UI4d32bq+f3+n
-         UTGBeVe6xKQpYuYdokECSGmPKK5BT8E93pF7irQUyRUB/AukwdgT4pAXdmevMazHCF
-         Nk7O0Bsj8xExFifOdJsuGZncW4osMkoOfqw5sS83jDvOH9jCy0tdh0RmyurQkjpjob
-         y649HJDRb1qbEa4CAiA7C86wE8vY9gA2nUuOCT6eXaC/vlQeVHYwRui/TZ3/W9H1LV
-         hmIsFTpWMovEg==
-Date:   Sun, 28 May 2023 19:55:03 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Arnd Bergmann <arnd@kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 14/44] iio: ad7606: Kconfig: add HAS_IOPORT
- dependencies
-Message-ID: <20230528195503.4dbeb358@jic23-huawei>
-In-Reply-To: <20230522105049.1467313-15-schnelle@linux.ibm.com>
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
-        <20230522105049.1467313-15-schnelle@linux.ibm.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        Sun, 28 May 2023 14:59:34 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 28 May 2023 11:59:32 PDT
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F145B90
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 11:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Mvnq6GLOTTGF3D7gWr44xLsL9av+ARP5UpYLZ3q1nQo=;
+  b=Cm/opXqEGw2dkC9K3AL8zHtoU2E/oIMkSR9nSLaKypQ/7I4hAY2wqIum
+   52gI7aU47i4g+di4Xs3MoUkvy+xPlqiKM+SvwPOm6uoeW8mPzhtJXfR7l
+   2G8V/M1fcc18Dx5mBFRFiEQ/F+lcnn1s6I5rg2mF8elL//9PqLYvtBGB0
+   4=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="6.00,198,1681164000"; 
+   d="scan'208";a="110065371"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 20:58:28 +0200
+Date:   Sun, 28 May 2023 20:58:27 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     linux-kernel@vger.kernel.org, Dave Jiang <dave.jiang@intel.com>
+cc:     Vinod Koul <vkoul@kernel.org>, Fenghua Yu <fenghua.yu@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: drivers/dma/idxd/device.c:774:8-26: WARNING: dma_alloc_coherent used
+ in (fwd)
+Message-ID: <alpine.DEB.2.22.394.2305282056200.2875@hadrien>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 12:50:19 +0200
-Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+The warning suggests that the memset in idxd_device_evl_setup may not be
+needed.  There is a possibility of allocation via function pointer,
+though, in dma_alloc_attrs, so I don't know what the possibilities are
+in this case.
 
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
-> 
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+julia
 
-I already picked this up for the IIO tree already as I don't think there are
-any dependencies.
+---------- Forwarded message ----------
+Date: Mon, 29 May 2023 01:34:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: oe-kbuild@lists.linux.dev
+Cc: lkp@intel.com, Julia Lawall <julia.lawall@inria.fr>
+Subject: drivers/dma/idxd/device.c:774:8-26: WARNING: dma_alloc_coherent used in
 
-Jonathan
+BCC: lkp@intel.com
+CC: oe-kbuild-all@lists.linux.dev
+CC: linux-kernel@vger.kernel.org
+TO: Dave Jiang <dave.jiang@intel.com>
+CC: Vinod Koul <vkoul@kernel.org>
+CC: Fenghua Yu <fenghua.yu@intel.com>
 
-> ---
->  drivers/iio/adc/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-> index eb2b09ef5d5b..53098aca06ea 100644
-> --- a/drivers/iio/adc/Kconfig
-> +++ b/drivers/iio/adc/Kconfig
-> @@ -145,7 +145,7 @@ config AD7606
->  
->  config AD7606_IFACE_PARALLEL
->  	tristate "Analog Devices AD7606 ADC driver with parallel interface support"
-> -	depends on HAS_IOMEM
-> +	depends on HAS_IOPORT
->  	select AD7606
->  	help
->  	  Say yes here to build parallel interface support for Analog Devices:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7877cb91f1081754a1487c144d85dc0d2e2e7fc4
+commit: 244da66cda359227d80ccb41dbcb99da40eae186 dmaengine: idxd: setup event log configuration
+date:   7 weeks ago
+:::::: branch date: 6 hours ago
+:::::: commit date: 7 weeks ago
+config: x86_64-randconfig-c022-20230528 (https://download.01.org/0day-ci/archive/20230529/202305290109.qddh20pB-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Julia Lawall <julia.lawall@inria.fr>
+| Closes: https://lore.kernel.org/r/202305290109.qddh20pB-lkp@intel.com/
+
+cocci warnings: (new ones prefixed by >>)
+>> drivers/dma/idxd/device.c:774:8-26: WARNING: dma_alloc_coherent used in
+   	 /*
+>> 	 * Address needs to be page aligned. However, dma_alloc_coherent() provides
+>> 	 * at minimal page size aligned address. No manual alignment required.
+   	 */
+>> 	 addr   already zeroes out memory, so memset is not needed
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
