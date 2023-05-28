@@ -2,151 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18344713851
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 09:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20187713858
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 09:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjE1H1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 03:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S229491AbjE1HaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 03:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjE1H1o (ORCPT
+        with ESMTP id S229457AbjE1HaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 03:27:44 -0400
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB378D9
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 00:27:39 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 3AoGqXVchfPUb3AoGqo1a5; Sun, 28 May 2023 09:27:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1685258851;
-        bh=In/HEnJ59JVxAKJendXeaSKCqtakbTMfNFHPW6oXzSM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=MuAsw2s5g/3h7TW9jl01gYvAvWtaOCnzFoiIGGU/C/DRTkFB+d6/erUx5o5JHlnlA
-         TvZe/NaX7goJCkhZWQzjtN1tARwGOu5GRQO7Ycm+CRNGLuAdoryIEwxNs4Az3p8jrn
-         kJR7F05dt0G5xnxPrYfBj5bjB/0dLgrJJinBS2kwmZg/kOcj0VISnLxqXoX8U9AYF1
-         OqBhQ17ffyXg4wE/CvA7viQyeQT8n2ZzudwvlhXnRuQPxQxzNZJGEUFtEfKI6RQmBp
-         CjWYkbfdKouaEVLow/Kg4hcK+sx95c71fGZGF+y4Xq6HyVY2GZoPWZs/1XF+FrcGML
-         ufNkOGwf/F3QQ==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 28 May 2023 09:27:31 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <afe12540-0980-f536-996d-28807937f36b@wanadoo.fr>
-Date:   Sun, 28 May 2023 09:27:23 +0200
+        Sun, 28 May 2023 03:30:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4E3D9;
+        Sun, 28 May 2023 00:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72C5360E9E;
+        Sun, 28 May 2023 07:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D943BC433D2;
+        Sun, 28 May 2023 07:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685259019;
+        bh=oGy/fpG9JCLiydgHe4qcscmOq33gjRh/dp/hY2T5fDM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ckh3SPGtTbB1cW25lV0oYSLn5B7ee3A8v1cJSjpi9CQC9vt8eCR7xCE0CPQW/7evT
+         sZW6HBxUEfidm+KJerIB0tQQAq4omyE1DIjyUPbCUWuIpPZfnlwM9qSTMb15mDN6l2
+         qHgkFf2RRomQAAA8IEUfAY+OdeKqQlDn89bcXxeRf9p3Pm8QD7hHY+bXALO59WWXU8
+         ptlbWFojGvWwpAARFzrf6zgZ8iG8HIXt19zJlysmjvmWdbLuO8f4nyRJTJV5O+HHdl
+         OeB9F1JzJMDrMpOJd89Z03cSSIrnevNmBNq1TYLOYhv7JGe1Mkm8YptGBrjg+io6vY
+         M95/2AluusXJg==
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6af8127031cso938388a34.2;
+        Sun, 28 May 2023 00:30:19 -0700 (PDT)
+X-Gm-Message-State: AC+VfDw8nhp/6zrnBDdNBQXjVTzEUIFdMkiEdHGXVlW9Tm6rp8NT9YEJ
+        wpUxK11547/IbD8O8cbQS/DUQGLFF3FJbKoxN0s=
+X-Google-Smtp-Source: ACHHUZ4civ0H8UhnroTGIXb+bes32eYRy1nhys7T6Kt9aS9Ut/Yi9rwuqn1KzCDwQv925j6siaFSR2N5tUHVEEVa724=
+X-Received: by 2002:a05:6870:3842:b0:19e:c953:d854 with SMTP id
+ z2-20020a056870384200b0019ec953d854mr2724186oal.52.1685259019161; Sun, 28 May
+ 2023 00:30:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 1/6] ASoC: tas2781: Add Header file for tas2781 driver
-To:     "13916275206@139.com >> Shenghao Ding" <13916275206@139.com>
-Cc:     Ryan_Chu@wistron.com, Sam_Wu@wistron.com,
-        alsa-devel@alsa-project.org, broonie@kernel.org,
-        devicetree@vger.kernel.org, gentuser@gmail.com, kevin-lu@ti.com,
-        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, navada@ti.com, peeyush@ti.com,
-        perex@perex.cz, pierre-louis.bossart@linux.intel.com,
-        robh+dt@kernel.org, shenghao-ding@ti.com, tiwai@suse.de,
-        x1077012@ti.com
-References: <20230527223439.7741-1-13916275206@139.com>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230527223439.7741-1-13916275206@139.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230521160426.1881124-1-masahiroy@kernel.org>
+ <20230521160426.1881124-21-masahiroy@kernel.org> <CAKwvOdmwb3a-YvA4qN6=ed1YeQY_yG0qJnboX23CjCMOH8HmMQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdmwb3a-YvA4qN6=ed1YeQY_yG0qJnboX23CjCMOH8HmMQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 28 May 2023 16:29:42 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQrzN2HR30rNM1Vx0S37X3t2b5rxELC=AVixQKrWu8y_w@mail.gmail.com>
+Message-ID: <CAK7LNAQrzN2HR30rNM1Vx0S37X3t2b5rxELC=AVixQKrWu8y_w@mail.gmail.com>
+Subject: Re: [PATCH v6 20/20] modpost: show offset from symbol for section
+ mismatch warnings
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 28/05/2023 à 00:34, Shenghao Ding a écrit :
-> Create Header file for  tas2781 driver.
-> 
-> Signed-off-by: Shenghao Ding <13916275206-7R9yAhoRP9E@public.gmane.org>
-> 
-> ---
-> Changes in v4:
->   - correct some enums have capitalized Chn, chn to all
->   Changes to be committed:
-> 	new file:   include/sound/tas2781-dsp.h
-> 	new file:   include/sound/tas2781-tlv.h
-> 	new file:   include/sound/tas2781.h
-> ---
->   include/sound/tas2781-dsp.h | 190 ++++++++++++++++++++++++++++++++++++
->   include/sound/tas2781-tlv.h |  22 +++++
->   include/sound/tas2781.h     | 182 ++++++++++++++++++++++++++++++++++
->   3 files changed, 394 insertions(+)
->   create mode 100644 include/sound/tas2781-dsp.h
->   create mode 100644 include/sound/tas2781-tlv.h
->   create mode 100644 include/sound/tas2781.h
+On Fri, May 26, 2023 at 3:27=E2=80=AFAM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
+.org> wrote:
+> >
+> > Currently, modpost only shows the symbol names and section names, so it
+> > repeats the same message if there are multiple relocations in the same
+> > symbol. It is common the relocation spans across multiple instructions.
+> >
+> > It is better to show the offset from the symbol.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/mod/modpost.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > index e7561fa57478..4da96746a03b 100644
+> > --- a/scripts/mod/modpost.c
+> > +++ b/scripts/mod/modpost.c
+> > @@ -1135,8 +1135,8 @@ static void default_mismatch_handler(const char *=
+modname, struct elf_info *elf,
+> >
+> >         sec_mismatch_count++;
+> >
+> > -       warn("%s: section mismatch in reference: %s (section: %s) -> %s=
+ (section: %s)\n",
+> > -            modname, fromsym, fromsec, tosym, tosec);
+> > +       warn("%s: section mismatch in reference: %s+0x%x (section: %s) =
+-> %s (section: %s)\n",
+> > +            modname, fromsym, (unsigned int)(faddr - from->st_value), =
+fromsec, tosym, tosec);
+>
+> Is the cast necessary if you use the %p format specifier instead of 0x%x?
 
-[...]
+No.
 
-> diff --git a/include/sound/tas2781-tlv.h b/include/sound/tas2781-tlv.h
-> new file mode 100644
-> index 000000000000..f4310dce655a
-> --- /dev/null
-> +++ b/include/sound/tas2781-tlv.h
-> @@ -0,0 +1,22 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +//
-> +// ALSA SoC Texas Instruments TAS2781 Audio Smart Amplifier
-> +//
-> +// Copyright (C) 2022 - 2023 Texas Instruments Incorporated
-> +// https://www.ti.com
-> +//
-> +// The TAS2781 driver implements a flexible and configurable
-> +// algo coefficient setting for one, two, or even multiple
-> +// TAS2781 chips.
-> +//
-> +// Author: Shenghao Ding <shenghao-ding-l0cyMroinI0@public.gmane.org>
-> +// Author: Kevin Lu <kevin-lu-l0cyMroinI0@public.gmane.org>
-> +//
-> +
-> +#ifndef __TAS2781_TLV_H__
-> +#define __TAS2781_TLV_H__
-> +
-> +static const DECLARE_TLV_DB_SCALE(dvc_tlv, -10000, 100, 0);
-> +static const DECLARE_TLV_DB_SCALE(amp_vol_tlv, 1100, 50, 0);
-> +
-> +#endif /* __TAS2781_LIB_H__ */
+faddr and from->st_value are offsets from
+the start of the section. They are not pointers.
 
-Nit: __TAS2781_TLV_H__ (or nothing as in the file above)
-
-> diff --git a/include/sound/tas2781.h b/include/sound/tas2781.h
-> new file mode 100644
-> index 000000000000..399bb8f9b54a
-> --- /dev/null
-> +++ b/include/sound/tas2781.h
-> @@ -0,0 +1,182 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +//
-> +// ALSA SoC Texas Instruments TAS2781 Audio Smart Amplifier
-> +//
-> +// Copyright (C) 2022 - 2023 Texas Instruments Incorporated
-> +// https://www.ti.com
-> +//
-> +// The TAS2781 driver implements a flexible and configurable
-> +// algo coefficient setting for one, two, or even multiple
-> +// TAS2781 chips.
-> +//
-> +// Author: Shenghao Ding <shenghao-ding-l0cyMroinI0@public.gmane.org>
-> +// Author: Kevin Lu <kevin-lu-l0cyMroinI0@public.gmane.org>
-> +//
-> +
-> +#ifndef __TAS2781_H__
-> +#define __TAS2781_H__
-> +
-> +#include <linux/kernel.h>
-
-I've not chekced in details, but is it really needed?
-
-I've been told once, that we should try to avoid kernel.h in /include/
+%p does not make sense.
 
 
-CJ
+
+
+
+
+>
+> >
+> >         if (mismatch->mismatch =3D=3D EXTABLE_TO_NON_TEXT) {
+> >                 if (match(tosec, mismatch->bad_tosec))
+> > --
+> > 2.39.2
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
