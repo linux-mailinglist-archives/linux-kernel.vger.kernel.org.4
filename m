@@ -2,60 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2027F713891
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 09:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01DAC713897
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 09:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjE1Hyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 03:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
+        id S229591AbjE1H57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 03:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjE1Hys (ORCPT
+        with ESMTP id S229450AbjE1H56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 03:54:48 -0400
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EE3F7
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 00:54:38 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 3BETqtnSL8aX93BETqQLQb; Sun, 28 May 2023 09:54:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1685260476;
-        bh=rlF+tPpF0RKAj6/8Ph4lFw7GmY9q1bfRc9wg4tDEi/8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=FuIyuO0fvGmU0+CFIolbOSXt80ZVi3UELAOj2gVeP4qoHOeJgkb0EY1DKR/eUxou5
-         +orvC68vwWdSD11FzJO9EmFM4IQREvrSzxYKC21Im3Kr+zaKY7J6Dv666WqHSlCjTx
-         1rFwExDuGEpxEvjYuv96bPRECDxUUJ5pbh21QBKaCbpfBOejiT3zrN9Ec9iLkEbfD7
-         hOMnDrC+TvCgzJCkZyXh9GpcmNKmoRvmiXaIsFglYVLSnUeZcgEp+21kmvetlyQ4Q1
-         0I+NFTP/S6XSw5+yIanEgsdWjST9ULWBnnmzY5NqQYMJZ0VDEcU5gskcJMvQXCPFQ1
-         aaCOzmh2wKk5A==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 28 May 2023 09:54:36 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <4f4da428-5fff-5fc9-2edf-aa74d556519c@wanadoo.fr>
-Date:   Sun, 28 May 2023 09:54:29 +0200
+        Sun, 28 May 2023 03:57:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3AAE1
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 00:57:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685260626;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CyBcNco0Gge4gbJKk143iR4E9OyphOPro7TAZfxT0Hc=;
+        b=GitCVOIf9M101iFz+moo2DSL/oSqlZV7nHEg6Dpl9e4rkUaNATNmD5ca/J5C63OzuM/5Lb
+        1jxg7jEQkd461Pexf7hzdwhHImNhVFYTx4Mim9mjd2qOX04gW9ItYTSXGnHs1xHOWzZPzX
+        xaMyvN9dNakxx3AlDaR3uITctvHsWoY=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-94-68v24Vq1MO-Eh9p-H3COsQ-1; Sun, 28 May 2023 03:57:05 -0400
+X-MC-Unique: 68v24Vq1MO-Eh9p-H3COsQ-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-2f2981b8364so1283355f8f.1
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 00:57:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685260623; x=1687852623;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CyBcNco0Gge4gbJKk143iR4E9OyphOPro7TAZfxT0Hc=;
+        b=NHEfQ+FHKuw1fXZetEqZvm1HIT3oKT4NgoiUn8NitoSwofTL/inNut4ZKmNWGdh0WD
+         dSGzvhaUC8AnKKQjZLiFW2rvmch3bl8jwLAn+lqOFw8Lrdm3VpozXdVgX77rEcSix7hJ
+         FPkVgPmuTmYtc/rPgvEloJS83k9XGZnzN8qbbTs+6Lf/CHz4uvU9OP07OgINgx61G4vX
+         Ng/oTbBAxuFI4Hztj13MzF8+48q/HIqggP5ysw+q9jGA5rLgvRnk3xZrnQHHf5SvylI0
+         HHe1RP8iy6SRzPIfCYqVMoC/eEnuFueYHScVtbADCodxUyaF2T0ziZS79B19ps69BeZH
+         d9CQ==
+X-Gm-Message-State: AC+VfDzM3twhkv9nnkjXHMGu/EEubfJERTxkrFFtCGekfu7kfUWz4KYu
+        hR9MUl8y5Vcd8WbHNf1KxiLgeM1SLl9+d+fvozNfQM88/yscOYbfHW5fLwlsbMujI5QSsrcjcck
+        7O+q2C4A6pj28Y+pQJK3XooYC/y1HlFcW
+X-Received: by 2002:adf:e792:0:b0:2ef:b4a9:202f with SMTP id n18-20020adfe792000000b002efb4a9202fmr7016235wrm.69.1685260623374;
+        Sun, 28 May 2023 00:57:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ767ZoQH/pG0ey6X7gF0Jmfrk6DqK79WVQkChFfUtJV6MOsypliJHSsmkZygA+OLw1Cb5+jbw==
+X-Received: by 2002:adf:e792:0:b0:2ef:b4a9:202f with SMTP id n18-20020adfe792000000b002efb4a9202fmr7016219wrm.69.1685260622976;
+        Sun, 28 May 2023 00:57:02 -0700 (PDT)
+Received: from redhat.com ([2.52.146.27])
+        by smtp.gmail.com with ESMTPSA id j13-20020a5d604d000000b00306344eaebfsm10100637wrt.28.2023.05.28.00.57.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 00:57:02 -0700 (PDT)
+Date:   Sun, 28 May 2023 03:56:59 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio_ring: validate used buffer length
+Message-ID: <20230528033037-mutt-send-email-mst@kernel.org>
+References: <20230526063041.18359-1-jasowang@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 5/6] ALSA: hda/tas2781: Add tas2781 HDA driver
-Content-Language: fr
-To:     Shenghao Ding <13916275206@139.com>
-Cc:     Ryan_Chu@wistron.com, Sam_Wu@wistron.com,
-        alsa-devel@alsa-project.org, broonie@kernel.org,
-        devicetree@vger.kernel.org, gentuser@gmail.com, kevin-lu@ti.com,
-        krzysztof.kozlowski+dt@linaro.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, navada@ti.com, peeyush@ti.com,
-        perex@perex.cz, pierre-louis.bossart@linux.intel.com,
-        robh+dt@kernel.org, shenghao-ding@ti.com, tiwai@suse.de,
-        x1077012@ti.com
-References: <20230527223613.11106-1-13916275206@139.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230527223613.11106-1-13916275206@139.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526063041.18359-1-jasowang@redhat.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,237 +78,264 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 28/05/2023 à 00:36, Shenghao Ding a écrit :
-> Create tas2781 HDA driver.
+On Fri, May 26, 2023 at 02:30:41PM +0800, Jason Wang wrote:
+> This patch validate
+
+validates
+
+> the used buffer length provided by the device
+> before trying to use it.
+
+before returning it to caller
+
+> This is done by remembering the in buffer
+> length in a dedicated array during virtqueue_add(), then we can fail
+> the virtqueue_get_buf() when we find the device is trying to give us a
+> used buffer length which is greater than we stored before.
+
+than what we stored
+
 > 
-> Signed-off-by: Shenghao Ding <13916275206-7R9yAhoRP9E@public.gmane.org>
+> This validation is disable
+
+disabled
+
+> by default via module parameter to unbreak
+> some existing devices since some legacy devices are known to report
+> buggy used length.
 > 
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+
+First I'm not merging this without more data about
+what is known to be broken and what is known to work well
+in the commit log. And how exactly do things work if used length
+is wrong?
+Second what's wrong with dma_desc_extra that we already maintain?
+Third motivation - it's part and parcel of the hardening effort yes?
+I'd like to know the fate of VIRTIO_HARDEN_NOTIFICATION before
+we do more hardening. If it's irrevocably broken let's rip it out?
+
+
 > ---
-> Changes in v4:
->   - Add tiwai-l3A5Bk7waGM@public.gmane.org into Cc list
->   - remove unused ret in tas2781_hda_playback
->   - in all *__put function, return 0, if the value is unchanged
->   - remove superfluous
->   - rewrite the subid judgement
->   - dev_info to dev_dbg
->   Changes to be committed:
-> 	modified:   sound/pci/hda/Kconfig
-> 	modified:   sound/pci/hda/Makefile
-> 	new file:   sound/pci/hda/tas2781_hda_i2c.c
+> Changes since V4:
+> - drop the flat for driver to suppress the check
+> - validation is disabled by default
+> - don't do validation for legacy device
+> - rebase and support virtqueue resize
 > ---
->   sound/pci/hda/Kconfig           |  15 +
->   sound/pci/hda/Makefile          |   2 +
->   sound/pci/hda/tas2781_hda_i2c.c | 834 ++++++++++++++++++++++++++++++++
->   3 files changed, 851 insertions(+)
->   create mode 100644 sound/pci/hda/tas2781_hda_i2c.c
-
-[...]
-
-> +static int tas2781_acpi_get_i2c_resource(struct acpi_resource
-> +	*ares, void *data)
-> +{
-> +	struct tasdevice_priv *tas_priv = (struct tasdevice_priv *)data;
-
-Nit: Is the cast really needed?
-(should you feel like removing it to ease reading, their are a few other 
-onces elsewhere)
-
-> +	struct acpi_resource_i2c_serialbus *sb;
+>  drivers/virtio/virtio_ring.c | 75 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+> 
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 143f380baa1c..5b151605aaf8 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -15,6 +15,9 @@
+>  #include <linux/spinlock.h>
+>  #include <xen/xen.h>
+>  
+> +static bool force_used_validation = false;
+> +module_param(force_used_validation, bool, 0444);
 > +
-> +	if (i2c_acpi_get_i2c_resource(ares, &sb)) {
-> +		if (sb->slave_address != TAS2781_GLOBAL_ADDR) {
-> +			tas_priv->tasdevice[tas_priv->ndev].dev_addr =
-> +				(unsigned int)sb->slave_address;
-> +			tas_priv->ndev++;
-> +		} else
-> +			tas_priv->glb_addr.dev_addr = TAS2781_GLOBAL_ADDR;
+>  #ifdef DEBUG
+>  /* For development, we want to crash whenever the ring is screwed. */
+>  #define BAD_RING(_vq, fmt, args...)				\
+> @@ -105,6 +108,9 @@ struct vring_virtqueue_split {
+>  	struct vring_desc_state_split *desc_state;
+>  	struct vring_desc_extra *desc_extra;
+>  
+> +	/* Maximum in buffer length, NULL means no used validation */
+> +	u32 *buflen;
 > +
-
-Nit: Unneeded NL (or missing {} around the 'else' branch if it is the 
-style you prefer)
-
+>  	/* DMA address and size information */
+>  	dma_addr_t queue_dma_addr;
+>  	size_t queue_size_in_bytes;
+> @@ -145,6 +151,9 @@ struct vring_virtqueue_packed {
+>  	struct vring_desc_state_packed *desc_state;
+>  	struct vring_desc_extra *desc_extra;
+>  
+> +	/* Maximum in buffer length, NULL means no used validation */
+> +	u32 *buflen;
+> +
+>  	/* DMA address and size information */
+>  	dma_addr_t ring_dma_addr;
+>  	dma_addr_t driver_event_dma_addr;
+> @@ -552,6 +561,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+>  	unsigned int i, n, avail, descs_used, prev, err_idx;
+>  	int head;
+>  	bool indirect;
+> +	u32 buflen = 0;
+>  
+>  	START_USE(vq);
+>  
+> @@ -635,6 +645,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+>  						     VRING_DESC_F_NEXT |
+>  						     VRING_DESC_F_WRITE,
+>  						     indirect);
+> +			buflen += sg->length;
+>  		}
+>  	}
+>  	/* Last one doesn't continue. */
+> @@ -675,6 +686,10 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+>  	else
+>  		vq->split.desc_state[head].indir_desc = ctx;
+>  
+> +	/* Store in buffer length if necessary */
+> +	if (vq->split.buflen)
+> +		vq->split.buflen[head] = buflen;
+> +
+>  	/* Put entry in available array (but don't update avail->idx until they
+>  	 * do sync). */
+>  	avail = vq->split.avail_idx_shadow & (vq->split.vring.num - 1);
+> @@ -861,6 +876,11 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
+>  		BAD_RING(vq, "id %u is not a head!\n", i);
+>  		return NULL;
+>  	}
+> +	if (vq->split.buflen && unlikely(*len > vq->split.buflen[i])) {
+> +		BAD_RING(vq, "used len %d is larger than max in buffer len %u\n",
+> +			*len, vq->split.buflen[i]);
+> +		return NULL;
 > +	}
-> +
-> +	return 1;
-> +}
-
-[...]
-
-> +static int tasdevice_set_profile_id(struct snd_kcontrol *kcontrol,
-> +		struct snd_ctl_elem_value *ucontrol)
+>  
+>  	/* detach_buf_split clears data, so grab it now. */
+>  	ret = vq->split.desc_state[i].data;
+> @@ -1085,10 +1105,25 @@ static void vring_free_split(struct vring_virtqueue_split *vring_split,
+>  			 vring_split->queue_dma_addr,
+>  			 dma_dev);
+>  
+> +	kfree(vring_split->buflen);
+>  	kfree(vring_split->desc_state);
+>  	kfree(vring_split->desc_extra);
+>  }
+>  
+> +static bool vring_needs_used_validation(const struct virtio_device *vdev)
 > +{
-> +	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-> +	int ret = 0;
-> +
-> +	if (tas_priv->rcabin.profile_cfg_id !=
-> +		ucontrol->value.integer.value[0]) {
-> +		tas_priv->rcabin.profile_cfg_id =
-> +			ucontrol->value.integer.value[0];
-> +		ret = 0;
-
-So ret is always 0?
-
-Either it is not needed and a "return 0;" below  would be enough, either 
-the function should be void (if changinf the prototype is possible, not 
-sure), either there is a typo.
-
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int tasdevice_create_control(struct tasdevice_priv *tas_priv)
-> +{
-> +	char prof_ctrl_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
-> +	struct hda_codec *codec = tas_priv->codec;
-> +	struct snd_kcontrol_new prof_ctrl = {
-> +		.name = prof_ctrl_name,
-> +		.iface = SNDRV_CTL_ELEM_IFACE_CARD,
-> +		.info = tasdevice_info_profile,
-> +		.get = tasdevice_get_profile_id,
-> +		.put = tasdevice_set_profile_id,
-> +	};
-> +	int ret;
-> +
-> +	/* Create a mixer item for selecting the active profile */
-> +	scnprintf(prof_ctrl_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN,
-> +		"spk-profile-id");
-> +	ret = snd_ctl_add(codec->card, snd_ctl_new1(&prof_ctrl, tas_priv));
-> +	if (ret) {
-> +		dev_err(tas_priv->dev, "Failed to add KControl %s = %d\n",
-
-Nit: KControl here, Control a few lines below. I guess they should be 
-the same.
-
-> +			prof_ctrl.name, ret);
-> +		goto out;
-> +	}
-> +
-> +	dev_dbg(tas_priv->dev, "Added Control %s\n", prof_ctrl.name);
-> +
-> +out:
-> +	return ret;
-> +}
-
-[...]
-
-> +static int tasdevice_program_put(struct snd_kcontrol *kcontrol,
-> +	struct snd_ctl_elem_value *ucontrol)
-> +{
-> +	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-> +	unsigned int nr_program = ucontrol->value.integer.value[0];
-> +	int ret = 0;
-> +
-> +	if (tas_priv->cur_prog != nr_program) {
-> +		tas_priv->cur_prog = nr_program;
-> +		ret = 1;
-
-(Base on this, I guess, that the answer above for 
-tasdevice_set_profile_id() is : typo s/0/1/)
-
-> +	}
-> +
-> +	return ret;
+> +	/*
+> +	 * Several legacy devices are known to produce buggy used
+> +	 * length. In order to let driver work, we won't validate used
+> +	 * buffer length in this case.
+> +	 */
+> +	if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+> +		return false;
+> +	if (force_used_validation)
+> +		return true;
+> +	return false;
 > +}
 > +
-> +static int tasdevice_config_get(struct snd_kcontrol *kcontrol,
-> +	struct snd_ctl_elem_value *ucontrol)
-> +{
-> +
-
-Nit: Unneeded NL
-
-> +	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
-> +
-> +	ucontrol->value.integer.value[0] = tas_priv->cur_conf;
-> +
-> +	return 0;
-> +}
-
-[...]
-
-> +static int tas2781_save_calibration(struct tasdevice_priv *tas_priv)
-> +{
-> +	efi_guid_t efi_guid = EFI_GUID(0x02f9af02, 0x7734, 0x4233, 0xb4, 0x3d,
-> +		0x93, 0xfe, 0x5a, 0xa3, 0x5d, 0xb3);
-> +	static efi_char16_t efi_name[] = L"CALI_DATA";
-> +	struct tm *tm = &tas_priv->tm;
-> +	unsigned int attr, crc;
-> +	unsigned int *tmp_val;
-> +	efi_status_t status;
-> +	int ret = 0;
-> +
-> +	//Lenovo devices
-
-Nit: why a different style for comment?
-
-> +	if (tas_priv->catlog_id == LENOVO)
-> +		efi_guid = EFI_GUID(0x1f52d2a1, 0xbb3a, 0x457d, 0xbc, 0x09,
-> +			0x43, 0xa3, 0xf4, 0x31, 0x0a, 0x92);
-> +
-> +	tas_priv->cali_data.total_sz = 0;
-> +	/* Get real size of UEFI variable */
-> +	status = efi.get_variable(efi_name, &efi_guid, &attr,
-> +		&tas_priv->cali_data.total_sz, tas_priv->cali_data.data);
-> +	if (status == EFI_BUFFER_TOO_SMALL) {
-> +		ret = -ENODEV;
-> +		/* Allocate data buffer of data_size bytes */
-> +		tas_priv->cali_data.data = devm_kzalloc(tas_priv->dev,
-> +			tas_priv->cali_data.total_sz, GFP_KERNEL);
-> +		if (!tas_priv->cali_data.data)
-> +			return -ENOMEM;
-> +		/* Get variable contents into buffer */
-> +		status = efi.get_variable(efi_name, &efi_guid, &attr,
-> +			&tas_priv->cali_data.total_sz,
-> +			tas_priv->cali_data.data);
-> +		if (status != EFI_SUCCESS) {
-> +			ret = -EINVAL;
-> +			goto out;
-
-Nit: return -EINVAL; as just a few lines above?
-
-> +		}
-
-If so, return -ENODEV; here would be more explicit.
-So, 'ret' becomes useless and return 0; at the end of the function looks 
-enough.
-
+>  static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
+>  				   struct virtio_device *vdev,
+>  				   u32 num,
+> @@ -1137,7 +1172,19 @@ static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
+>  	vring_split->vring_align = vring_align;
+>  	vring_split->may_reduce_num = may_reduce_num;
+>  
+> +	if (vring_needs_used_validation(vdev)) {
+> +		vring_split->buflen =
+> +			kmalloc_array(num, sizeof(*vring_split->buflen),
+> +				      GFP_KERNEL);
+> +		if (!vring_split->buflen)
+> +			goto err_buflen;
 > +	}
 > +
-> +	tmp_val = (unsigned int *)tas_priv->cali_data.data;
+>  	return 0;
 > +
-> +	crc = crc32(~0, tas_priv->cali_data.data, 84) ^ ~0;
-> +	dev_dbg(tas_priv->dev, "cali crc 0x%08x PK tmp_val 0x%08x\n",
-> +		crc, tmp_val[21]);
+> +err_buflen:
+> +	vring_free_split(vring_split, vdev, dma_dev);
+> +	return -ENOMEM;
+>  }
+>  
+>  static struct virtqueue *vring_create_virtqueue_split(
+> @@ -1297,6 +1344,7 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+>  	unsigned int i, n, err_idx;
+>  	u16 head, id;
+>  	dma_addr_t addr;
+> +	u32 buflen = 0;
+>  
+>  	head = vq->packed.next_avail_idx;
+>  	desc = alloc_indirect_packed(total_sg, gfp);
+> @@ -1325,6 +1373,8 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+>  			desc[i].addr = cpu_to_le64(addr);
+>  			desc[i].len = cpu_to_le32(sg->length);
+>  			i++;
+> +			if (n >= out_sgs)
+> +				buflen += sg->length;
+>  		}
+>  	}
+>  
+> @@ -1379,6 +1429,10 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+>  	vq->packed.desc_state[id].last = id;
+>  	vq->packed.desc_state[id].premapped = premapped;
+>  
+> +	/* Store in buffer length if necessary */
+> +	if (vq->packed.buflen)
+> +		vq->packed.buflen[id] = buflen;
 > +
-> +	if (crc == tmp_val[21]) {
-> +		time64_to_tm(tmp_val[20], 0, tm);
-> +		dev_dbg(tas_priv->dev, "%4ld-%2d-%2d, %2d:%2d:%2d\n",
-> +			tm->tm_year, tm->tm_mon, tm->tm_mday,
-> +			tm->tm_hour, tm->tm_min, tm->tm_sec);
-> +		tas2781_apply_calib(tas_priv);
+>  	vq->num_added += 1;
+>  
+>  	pr_debug("Added buffer head %i to %p\n", head, vq);
+> @@ -1416,6 +1470,7 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
+>  	__le16 head_flags, flags;
+>  	u16 head, id, prev, curr, avail_used_flags;
+>  	int err;
+> +	u32 buflen = 0;
+>  
+>  	START_USE(vq);
+>  
+> @@ -1498,6 +1553,8 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
+>  					1 << VRING_PACKED_DESC_F_AVAIL |
+>  					1 << VRING_PACKED_DESC_F_USED;
+>  			}
+> +			if (n >= out_sgs)
+> +				buflen += sg->length;
+>  		}
+>  	}
+>  
+> @@ -1518,6 +1575,10 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
+>  	vq->packed.desc_state[id].last = prev;
+>  	vq->packed.desc_state[id].premapped = premapped;
+>  
+> +	/* Store in buffer length if necessary */
+> +	if (vq->packed.buflen)
+> +		vq->packed.buflen[id] = buflen;
+> +
+>  	/*
+>  	 * A driver MUST NOT make the first descriptor in the list
+>  	 * available before all subsequent descriptors comprising
+> @@ -1718,6 +1779,11 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+>  		BAD_RING(vq, "id %u is not a head!\n", id);
+>  		return NULL;
+>  	}
+> +	if (vq->packed.buflen && unlikely(*len > vq->packed.buflen[id])) {
+> +		BAD_RING(vq, "used len %d is larger than max in buffer len %u\n",
+> +			*len, vq->packed.buflen[id]);
+> +		return NULL;
 > +	}
-> +out:
-> +	return ret;
-> +}
+>  
+>  	/* detach_buf_packed clears data, so grab it now. */
+>  	ret = vq->packed.desc_state[id].data;
+> @@ -1937,6 +2003,7 @@ static void vring_free_packed(struct vring_virtqueue_packed *vring_packed,
+>  				 vring_packed->device_event_dma_addr,
+>  				 dma_dev);
+>  
+> +	kfree(vring_packed->buflen);
+>  	kfree(vring_packed->desc_state);
+>  	kfree(vring_packed->desc_extra);
+>  }
+> @@ -1988,6 +2055,14 @@ static int vring_alloc_queue_packed(struct vring_virtqueue_packed *vring_packed,
+>  
+>  	vring_packed->vring.num = num;
+>  
+> +	if (vring_needs_used_validation(vdev)) {
+> +		vring_packed->buflen =
+> +			kmalloc_array(num, sizeof(*vring_packed->buflen),
+> +				      GFP_KERNEL);
+> +		if (!vring_packed->buflen)
+> +			goto err;
+> +	}
 > +
-> +static void tasdevice_fw_ready(const struct firmware *fmw,
-> +	void *context)
-> +{
-> +	struct tasdevice_priv *tas_priv = (struct tasdevice_priv *)context;
-> +	struct hda_codec *codec = tas_priv->codec;
-> +	int i, ret = 0;
-
-Nit: = 0 is not needed
-
-> +
-> +	pm_runtime_get_sync(tas_priv->dev);
-> +	mutex_lock(&tas_priv->codec_lock);
-> +
-> +	ret = tasdevice_rca_parser(tas_priv, fmw);
-> +	if (ret)
-> +		goto out;
-> +	tasdevice_create_control(tas_priv);
-
-CJ
+>  	return 0;
+>  
+>  err:
+> -- 
+> 2.25.1
 
