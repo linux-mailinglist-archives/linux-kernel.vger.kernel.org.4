@@ -2,114 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED6471394D
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 13:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CEE713952
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 13:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjE1Ll2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 07:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
+        id S229580AbjE1Lqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 07:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjE1Ll0 (ORCPT
+        with ESMTP id S229524AbjE1Lqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 07:41:26 -0400
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE27BC;
-        Sun, 28 May 2023 04:41:23 -0700 (PDT)
-Received: from local
-        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1q3Els-0006sD-0g;
-        Sun, 28 May 2023 11:41:12 +0000
-Date:   Sun, 28 May 2023 12:41:02 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: mt7986: use size of reserved partition for
- bl2
-Message-ID: <ZHM9zq9t2uRuvrK7@makrotopia.org>
-References: <20230528113343.7649-1-linux@fw-web.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230528113343.7649-1-linux@fw-web.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 28 May 2023 07:46:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D029CBC
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 04:46:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EA1361520
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 11:46:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C571DC4339B;
+        Sun, 28 May 2023 11:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685274402;
+        bh=Fvf8goOIG5+PPHA/5LzvugEhKT7kMPu2rrX3tyQz4sg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=UN11GPhycTTfwYOw9rZseYgTzQQrbTrlKeNbMQ0zu7i70OwMif58CFQWcH7m0g0U/
+         Si/hCNzzHEgIkWnIy++m1M43a4YGtVzEf8BTn6c4E8X8hQJ1kl7Ew76qInzmmrLM03
+         OsPtAUWbrIXP0Q4QemU3KjelCkAmxUYGvsCqAvvSCDYW6VWCq63vN7WEc7U4maqRsb
+         GCnr2csvzuoBG/exHxGWHdqQ8XqMQIeHvkxUr6hDGWBwHctQG82Rb/Bpl6l2ROCCuq
+         0eOe8mZaM4ADxkh7i8w2P6pfgAuktTxwmnJojf8TkdmMRZheo3httOowTOAt9Ul6kR
+         OpJTjzlHS0iLw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A5ED0E22AE9;
+        Sun, 28 May 2023 11:46:42 +0000 (UTC)
+Subject: Re: [GIT pull] irq/urgent for 6.4-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <168526035526.3457722.14103350194452732675.tglx@xen13>
+References: <168526035526.3457722.14103350194452732675.tglx@xen13>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <168526035526.3457722.14103350194452732675.tglx@xen13>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-urgent-2023-05-28
+X-PR-Tracked-Commit-Id: 4115af49d2c24e840461fb83027315e2d2de6db4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9bd5386c653f64755dc33f77793273ef0763fe63
+Message-Id: <168527440267.32373.12903641970206285911.pr-tracker-bot@kernel.org>
+Date:   Sun, 28 May 2023 11:46:42 +0000
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 01:33:42PM +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> To store uncompressed bl2 more space is required than partition is
-> actually defined.
-> 
-> There is currently no known usage of this reserved partition.
-> Openwrt uses same partition layout.
-> 
-> We added same change to u-boot with commit d7bb1099 [1].
-> 
-> [1] https://source.denx.de/u-boot/u-boot/-/commit/d7bb109900c1ca754a0198b9afb50e3161ffc21e
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 8e01fb15b815 ("arm64: dts: mt7986: add Bananapi R3")
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+The pull request you sent on Sun, 28 May 2023 09:52:56 +0200 (CEST):
 
-Reviewed-by: Daniel Golle <daniel@makrotopia.org>
+> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-urgent-2023-05-28
 
-> ---
-> If the bl2 does not fit into the bl2-partition (cut off), board does
-> not boot, thats why i want to increase it now. My current bl2 is 197K
-> for nor and i ran into this problem.
-> 
-> Openwrt uses also the first reserved partition to give bl2 more
-> space:
-> 
-> https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/mediatek/dts/mt7986a-bananapi-bpi-r3-nor.dts;h=f597b869abc80d1a73f44ebb85ad4da17376bb52;hb=HEAD#l22
-> 
-> so imho it should be same in mainline to not require complex bl2
-> compression.
-> 
-> have now sent the board-specific dts to uboot too:
-> https://source.denx.de/u-boot/u-boot/-/commit/d7bb109900c1ca754a0198b9afb50e3161ffc21e
-> ---
->  .../boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso     | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
-> index 84aa229e80f3..e48881be4ed6 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
-> @@ -27,15 +27,10 @@ partitions {
->  
->  					partition@0 {
->  						label = "bl2";
-> -						reg = <0x0 0x20000>;
-> +						reg = <0x0 0x40000>;
->  						read-only;
->  					};
->  
-> -					partition@20000 {
-> -						label = "reserved";
-> -						reg = <0x20000 0x20000>;
-> -					};
-> -
->  					partition@40000 {
->  						label = "u-boot-env";
->  						reg = <0x40000 0x40000>;
-> -- 
-> 2.34.1
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9bd5386c653f64755dc33f77793273ef0763fe63
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
