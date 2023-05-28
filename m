@@ -2,133 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92F1713961
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 14:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8563713965
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 14:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbjE1MIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 08:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S229481AbjE1MKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 08:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjE1MIM (ORCPT
+        with ESMTP id S229445AbjE1MKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 08:08:12 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D00AF
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 05:08:09 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51458e3af68so3952956a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 05:08:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685275688; x=1687867688;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NCK4pID7AezwcosN8lYup62mksPJs7beND49b/loKoc=;
-        b=V9B+QN+h2KyJX2igIuG4de2eBjN5rMsv//t46yFXRPIdkNQJyJCJUQGc2MCs6+bxho
-         waj6b39j+TRCyQV17NHg9lGK2x5rt116/+gyktBjwMxo8T7Jy2+ajnGDornF7j5Wp91u
-         oS1XK9Ye8jeFtoET+tMOGpnlLhGjQJROIYwC2RJR2iQIYFR3SDyXXNWa1xK6a9p2LNx1
-         DdnhXHE/1C2ZrRgjC6vQHFoA4GEduAeJppZzHqtyE4qDtpYzGhvPfOrJJ6T/xt4w+5OH
-         qsv2rz7gC7oATe/idKEerYNzTeziT0wct4uF/9YPHiLjKSmGYSzVTsxcLFJ1v/OMANH5
-         NUtA==
+        Sun, 28 May 2023 08:10:33 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528B8AF
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 05:10:31 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-76c6c1b16d2so383692639f.1
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 05:10:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685275688; x=1687867688;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NCK4pID7AezwcosN8lYup62mksPJs7beND49b/loKoc=;
-        b=QUzQpcLktSSxeaP2Zv1IjIFHTB06CKXr2sjzBPnbQA+VjtxYliaOQIVYG/AkceahlK
-         eebFJtYjFVpcBoeh/0xmmdCPTO9t2GxFDgf1CzdNRGgkjvLlTj5yIYe0EAvC+sL/qQnX
-         pMRI334jJMEzxSd7zmUflAietDrj9itIMutgzLMx1yNbC37gBTkDUIby6OfO9UcN6Jk6
-         +hkZ1x21VuRdedFmvMRzYbRV7GEQL8GVChhslfSPjzgUQ+AJDdNIsW8yAEIIa5w7fetf
-         Wke/rZQiXHvjT3THN3/JnC7kIC7uQx5jfoFXqq2/yWFkjZzEOhaWnTUIye2+96Xuy6O6
-         s5zQ==
-X-Gm-Message-State: AC+VfDwYNeJDXcRygg4YxRin9LvVZqlIp1euevHQT2mNB2PeG/kI8Btz
-        j/f3xTFxKJh1vF3v+r7umrJA/h/nIue5IqX2qUrZUmiSJP1CTBUx
-X-Google-Smtp-Source: ACHHUZ5iZg5soRN8IdL1vME9Lrd2HTMOY6QdPwqqunAa1BHNoVNnzSwzMr+ZttCWNEBLyzUNS3MRLAF061vbWtlCzTc=
-X-Received: by 2002:a17:907:9289:b0:973:8198:bbfb with SMTP id
- bw9-20020a170907928900b009738198bbfbmr8206431ejc.31.1685275688145; Sun, 28
- May 2023 05:08:08 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685275830; x=1687867830;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wm6IKPj1vMMJrUxmKpUlCDI+xA2XUJA6ZIRpAJeh0E8=;
+        b=O2c83ZFun5mqxe7LGtLp3KX5VzqtLAfzwB9XiLLKIljZKDFeCykbepaQj7ujWiLGTw
+         UOFd6UuDUPv3CcBRx4WSclzpmCrjF+Ek0nVQHFSUJWOZCdD4uzKU67Q5rDEc/kPkXngb
+         pcAwoyolWc720Ki2XhZVG+088kvipq6j98vIC1NP/9/cUtxPAj57eL25QDBDfyYvbYOs
+         Zx4/JbJWwe+TP59XbxS+j8BQj3cVnm2Fk926QXfFmoWndixEGlTLnKL/7+c4NYsu92V6
+         WeKj2VZ8LwiIg5MZZc7fExCTkQYRvbtcajZqIbW5z8rC78SFWbta5WL8ihgZe4eBHp60
+         NM0Q==
+X-Gm-Message-State: AC+VfDwqNDZ42xNS6EUyXTpftTs4K7Oqh+HxMNBZ9TLlDqugAKbfSYbn
+        l0O9my0dlTnNU5NIl+aewh/nWTPX76NZPcqqTzxdspLTxZDX
+X-Google-Smtp-Source: ACHHUZ4CR5b8H0wmXLm7aJuF4Tdf0/z5aCLMklVGTfClc5kah2GMYkAu7IYkwVnC9s8+LAyLxMv4TPJTEkHgsZglzH11TYR1f/JW
 MIME-Version: 1.0
-References: <20230527054633.704916-1-chenhuacai@loongson.cn>
- <20230527054633.704916-2-chenhuacai@loongson.cn> <87pm6llvm6.ffs@tglx> <86fs7gdhid.wl-maz@kernel.org>
-In-Reply-To: <86fs7gdhid.wl-maz@kernel.org>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sun, 28 May 2023 20:07:56 +0800
-Message-ID: <CAAhV-H6KpNhL5VvumvhcAKGOpe-EO0zfzm_xPprP0rTVf18Leg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] genirq/msi, platform-msi: Adjust return value of msi_domain_prepare_irqs()
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Received: by 2002:a02:948d:0:b0:41c:feac:7a9a with SMTP id
+ x13-20020a02948d000000b0041cfeac7a9amr1722550jah.5.1685275830699; Sun, 28 May
+ 2023 05:10:30 -0700 (PDT)
+Date:   Sun, 28 May 2023 05:10:30 -0700
+In-Reply-To: <000000000000540fc405f01401bf@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003ccc9b05fcbfdb68@google.com>
+Subject: Re: [syzbot] [xfs?] general protection fault in __xfs_free_extent
+From:   syzbot <syzbot+bfbc1eecdfb9b10e5792@syzkaller.appspotmail.com>
+To:     dchinner@redhat.com, djwong@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Marc,
+syzbot suspects this issue was fixed by commit:
 
-On Sun, May 28, 2023 at 3:47=E2=80=AFPM Marc Zyngier <maz@kernel.org> wrote=
-:
->
-> On Sat, 27 May 2023 15:03:29 +0100,
-> Thomas Gleixner <tglx@linutronix.de> wrote:
-> >
-> > On Sat, May 27 2023 at 13:46, Huacai Chen wrote:
-> > > Adjust the return value semanteme of msi_domain_prepare_irqs(), which
-> > > allows us to modify the input nvec by overriding the msi_domain_ops::
-> > > msi_prepare(). This is necessary for the later patch.
-> > >
-> > > Before:
-> > > 0 on success, others on error.
-> > >
-> > > After:
-> > > =3D 0: Success;
-> > >> 0: The modified nvec;
-> > > < 0: Error code.
-> >
-> > This explains what the patch does, but provides zero justification for
-> > this nor any analysis why this is correct for the existing use cases.
-> >
-> > That longsoon MSI domain is a PCI MSI domain. PCI/MSI has already a
-> > mechanism to return the actual possible number of vectors if the
-> > underlying space is exhausted.
-> >
-> > Why is that not sufficient for your problem at hand?
->
-> I've already made that point, but it seems that the argument is
-> falling on deaf ears.
-I'm very sorry that I didn't answer your question directly.
+commit b2ccab3199aa7cea9154d80ea2585312c5f6eba0
+Author: Darrick J. Wong <djwong@kernel.org>
+Date:   Wed Apr 12 01:59:53 2023 +0000
 
->
-> Being able to allocate MSIs is not a guarantee, and is always
-> opportunistic. If some drivers badly fail because the they don't get
-> the number of MSIs they need, then they need fixing.
-Yes, I know allocating MSIs is not a guarantee, and most existing
-drivers will fallback to use legacy irqs when failed. However, as I
-replied in an early mail, we want to do some proactive throttling in
-the loongson-pch-msi irqchip driver, rather than consume msi vectors
-aggressively. For example, if we have two NICs, we want both of them
-to get 32 msi vectors; not one exhaust all available vectors, and the
-other fallback to use legacy irq.
+    xfs: pass per-ag references to xfs_free_extent
 
-I hope I have explained clearly, thanks.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1007e5c1280000
+start commit:   02bf43c7b7f7 Merge tag 'fs.xattr.simple.rework.rbtree.rwlo..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
+dashboard link: https://syzkaller.appspot.com/bug?extid=bfbc1eecdfb9b10e5792
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1798429d880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=161b948f880000
 
-Huacai
+If the result looks correct, please mark the issue as fixed by replying with:
 
->
-> I really don't see the point in papering over this at the lowest level
-> of the stack.
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+#syz fix: xfs: pass per-ag references to xfs_free_extent
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
