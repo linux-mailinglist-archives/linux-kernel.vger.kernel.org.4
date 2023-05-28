@@ -2,105 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71253713989
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 15:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A007139A3
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 15:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjE1NT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 09:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        id S229612AbjE1N1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 09:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjE1NT0 (ORCPT
+        with ESMTP id S229459AbjE1N1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 09:19:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAB0B2;
-        Sun, 28 May 2023 06:19:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8F6160FC5;
-        Sun, 28 May 2023 13:19:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB901C433D2;
-        Sun, 28 May 2023 13:19:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685279964;
-        bh=SYztQZUYixZlZrxgpJOdXKy6B3XNpotZJslGGMY1kgk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DzPxMxjbds0l5fk1N8m0h5r2N0mFfwZgtgAaLe7Z+Ox1zg2n2/AvUkVfL/FiUnt/o
-         klGd5g0wFasLRc/Ek2uSoRhwf1pfhHUBLj/EhAspVovIhu5I+xPekxku7F/ljUXvfo
-         pGSf8sYid/RnCa22lS5nd/h0qUQDCr8pAtM40jt7IzFO/PbBlb+vEqK//Ajpvoy1xQ
-         34+0IHLdMSATuS5QCwaUX2/6k2U2Bh5rAEAzx22RNXJ89016Vw1ilOGNheDmXSWvIn
-         yHxgy7RGmhpEfr5yf7dU/WflZBLyZGBYRlCyjadFUFBdAsIR206YuF4uBaGhrnn/fU
-         8naDlk1A/TIcg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6BB59403B5; Sun, 28 May 2023 10:19:21 -0300 (-03)
-Date:   Sun, 28 May 2023 10:19:21 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Sandipan Das <sandipan.das@amd.com>,
-        James Clark <james.clark@arm.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Rob Herring <robh@kernel.org>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Fixes from evsel__group_pmu_name asan error
-Message-ID: <ZHNU2ULCyO/H6uWA@kernel.org>
-References: <20230526194442.2355872-1-irogers@google.com>
+        Sun, 28 May 2023 09:27:36 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD84B1;
+        Sun, 28 May 2023 06:27:35 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7749357e71cso70938739f.3;
+        Sun, 28 May 2023 06:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685280454; x=1687872454;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gEM2GqZ8OMei7ENhUmT/X40pgKCW19D6Zd4VJ4P8qcU=;
+        b=R8luGRAIhXl4kxrGq9klpfmLL7HVLRAa/SX6uXo7qUjSDp7ljH+HmXvDrigp26fNNM
+         Y1aTHI+PZx2p2Y6myKaWvQRpZcrF2mGS4i4/bb4OmmnpOnSY3Rftf+wSgzXYhru/szBg
+         WvZzyyrNjl3vPc0MtvSM5T4SFZP1r/c5DmrXaf8TdKbEbVZViNXrhHovdRLvewa8UJru
+         LbnHdaF1hxw9yFfg8R/uvFGhiSJD12OEvb3TRpjCO870OWsEA8TuSmZU2yOjd9OVKvjc
+         hl68D8s0r5CMmMqZt2m+xUJbwMuhiq05UkyozbAaTmCldXLdExAGThSaDnRRSAcRnfny
+         HLUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685280454; x=1687872454;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gEM2GqZ8OMei7ENhUmT/X40pgKCW19D6Zd4VJ4P8qcU=;
+        b=DobPtub9NarIzKNapWIUrDqcAHcMK4e9zOB0EcuL5TqbljCD38vsfrY6qY8ii9zf1E
+         6AhgOg9V/I3gbhH+QTyy4wfjC2+sVBqpgW1oNpH56PC5vwDDPxz9JSZ8K6g5lABkv5qF
+         GakCZYVjrzg3l7Vi8CxBuYqVYGJ8idWnH2t4JPU37dOfmZBfR1Jbtjtbo8Dwx9dzxs4A
+         JeCsXBCuraFotIPti7JLGGb+7r3ObL2IetW2HRWqbbxz9PmWLxdWhS0x54Tddnh2nwVU
+         U/iTLQ0rEaAUr4Bgy+3oiLrdkChpDGreewrE/lbgexeB0zJ24N5I6ksTLbM2TUU9sIXS
+         x0QQ==
+X-Gm-Message-State: AC+VfDwmGGCk/cnJnAvuRb4SF1LZr7z5HLrBjVy7YBpV9M/mEz07b0D0
+        po5zpnX+qQpAB2K04UC01hTOuvM64j6O1A==
+X-Google-Smtp-Source: ACHHUZ6GtMr4xqSpqmFvjtAU90VfNw84Yg1PZzFC6bTY+R7QA/BmfifhSOuJ0y13BfpDPWumnufYdQ==
+X-Received: by 2002:a6b:dd02:0:b0:76c:4ca6:34d7 with SMTP id f2-20020a6bdd02000000b0076c4ca634d7mr5679747ioc.19.1685280454476;
+        Sun, 28 May 2023 06:27:34 -0700 (PDT)
+Received: from aford-B741.lan ([2601:447:d001:897f:afd6:bf52:6c04:831a])
+        by smtp.gmail.com with ESMTPSA id p11-20020a02290b000000b004161fafff97sm2276330jap.136.2023.05.28.06.27.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 06:27:34 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2] dt-bindings: bridge: samsung-dsim: Make some flags optional
+Date:   Sun, 28 May 2023 08:27:27 -0500
+Message-Id: <20230528132727.3933-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526194442.2355872-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, May 26, 2023 at 12:44:40PM -0700, Ian Rogers escreveu:
-> evsel__group_pmu_name triggered an asan error as a list_head was cast
-> to an evsel, when it was the head, and the accessed as if it were a
-> full evsel. Further investigation showed problematic list iteration
-> for evsel__group_pmu_name whilst the list was being sorted so switch
-> to pre-computation.
-> 
-> v3: Rebase on perf-tools-next (branch getting ready for 6.5) rather
->     than perf-tools (fixes for 6.4).
-> v2: Address review comments/feedback from Adrian Hunter
->     <adrian.hunter@intel.com>.
+In the event a device is connected to the samsung-dsim
+controller that doesn't support the burst-clock, the
+driver is able to get the requested pixel clock from the
+attached device or bridge.  In these instances, the
+samsung,burst-clock-frequency isn't needed, so remove
+it from the required list.
 
-Thanks, applied.
+The pll-clock frequency can be set by the device tree entry
+for samsung,pll-clock-frequency, but in some cases, the
+pll-clock may have the same clock rate as sclk_mipi clock.
+If they are equal, this flag is not needed since the driver
+will use the sclk_mipi rate as a fallback.
 
-- Arnaldo
+Signed-off-by: Adam Ford <aford173@gmail.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+---
+V2:  Split from driver series.  Re-word updates for burst
+and pll-clock frequency.
 
+diff --git a/Documentation/devicetree/bindings/display/bridge/samsung,mipi-dsim.yaml b/Documentation/devicetree/bindings/display/bridge/samsung,mipi-dsim.yaml
+index 9f61ebdfefa8..06b6c44d4641 100644
+--- a/Documentation/devicetree/bindings/display/bridge/samsung,mipi-dsim.yaml
++++ b/Documentation/devicetree/bindings/display/bridge/samsung,mipi-dsim.yaml
+@@ -70,7 +70,9 @@ properties:
+   samsung,burst-clock-frequency:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description:
+-      DSIM high speed burst mode frequency.
++      DSIM high speed burst mode frequency.  If absent,
++      the pixel clock from the attached device or bridge
++      will be used instead.
  
-> Ian Rogers (2):
->   perf evsel: evsel__group_pmu_name fixes
->   perf evsel: for_each_group fixes
-> 
->  tools/perf/util/evsel.c         | 31 ++++-----------
->  tools/perf/util/evsel.h         | 26 +++++++-----
->  tools/perf/util/evsel_fprintf.c |  1 +
->  tools/perf/util/parse-events.c  | 70 +++++++++++++++++++++++++++------
->  4 files changed, 84 insertions(+), 44 deletions(-)
-> 
-> -- 
-> 2.41.0.rc0.172.g3f132b7071-goog
-> 
-
+   samsung,esc-clock-frequency:
+     $ref: /schemas/types.yaml#/definitions/uint32
+@@ -80,7 +82,8 @@ properties:
+   samsung,pll-clock-frequency:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description:
+-      DSIM oscillator clock frequency.
++      DSIM oscillator clock frequency. If absent, the clock frequency
++      of sclk_mipi will be used instead.
+ 
+   phys:
+     maxItems: 1
+@@ -134,9 +137,7 @@ required:
+   - compatible
+   - interrupts
+   - reg
+-  - samsung,burst-clock-frequency
+   - samsung,esc-clock-frequency
+-  - samsung,pll-clock-frequency
+ 
+ allOf:
+   - $ref: ../dsi-controller.yaml#
 -- 
+2.39.2
 
-- Arnaldo
