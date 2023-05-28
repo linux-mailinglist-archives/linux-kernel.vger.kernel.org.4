@@ -2,116 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DC3713899
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 09:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA9271389C
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 10:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjE1H7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 03:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S229606AbjE1IAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 04:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjE1H7K (ORCPT
+        with ESMTP id S229468AbjE1IAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 03:59:10 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FE6D8;
-        Sun, 28 May 2023 00:59:09 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-b9daef8681fso1766387276.1;
-        Sun, 28 May 2023 00:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685260749; x=1687852749;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RQ0EJ4YOOjKzukNaJdp3RRoDpGh0O633yjDT5laO8nE=;
-        b=dz4dOwD8yLWJsXuYSJDvP8Ot0Y+Y5dFBExUr8K+KpRfAL0oEsuh6WALEGRrQSdvYHB
-         tUtrkFRZi16ZydeDYYqBalKheEKbzHk7/Ev5302t8NWW2F6WVXae8BrH6CPetXgP0Fil
-         yH/VuRtzDmgZNtN49kgwkJsbfXeyKe9y4D7fV4BVL+f4nuUQKFl/VhEZfqiCEPQd3pLe
-         dgRliz30C6Z+5TwFqrC0e1oLpqT8q9Cf/YQRDLiftNQwUse3xzYA2lTIgX4t5PgjElAN
-         ng0g4Pw7bzfrV4xUkx7ijxQcT1wzJsKReUZXotT8PzI9mAIVd9qPtLcAqYXurjIRafvq
-         gmNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685260749; x=1687852749;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RQ0EJ4YOOjKzukNaJdp3RRoDpGh0O633yjDT5laO8nE=;
-        b=JAI5wDzWi33SkNraaoaC6Sc33mR53SdkcsykGw/90DUuXCLxlcVv6THlzVCPBMjEEl
-         Ptgu/UHYoR8OiGh19kCj67FB85JUKC0K3bFrPGAKikAsnx0+RLJyER+/o60stGdioJqN
-         q4BlHJxJGOpINdJCtz3c80U9qBib3F3uBRTYnVM52ldXwT48smIHaw7COrzDoyNYE3qL
-         510hUCollcJnKgtagEAwT09sP20oMxloqTCrMdBX1hjiR1/y1DIx1wAJmn7Pr+DG6luD
-         074blReq5HRiDvmwJqio15D3s15FsKrypOC+plK1AdDmljt3an4XYjXWwOqU54Axn2Qg
-         GRdg==
-X-Gm-Message-State: AC+VfDylPFfG11J3SGtTCzy5WQw+MJi3uNjHsMi4ngOeKvDCgyZMVHPY
-        EfFy+Xy1MLHy0OVh4J+vhJ151CbiTHk75B6DkxT+lDDrYPlymQ==
-X-Google-Smtp-Source: ACHHUZ6d2Hy2eys4UyO7fBXSgrJeaNJsmK63pdNNYPl3zwvRlXL4crt6OBTHN6wxJBY/TrBtEicIV2dxSAzIyKcpjsw=
-X-Received: by 2002:a81:4fcd:0:b0:561:8ffb:5b72 with SMTP id
- d196-20020a814fcd000000b005618ffb5b72mr7747342ywb.48.1685260748889; Sun, 28
- May 2023 00:59:08 -0700 (PDT)
+        Sun, 28 May 2023 04:00:10 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2B49DF;
+        Sun, 28 May 2023 01:00:08 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 34S7xt8x001992;
+        Sun, 28 May 2023 09:59:55 +0200
+Date:   Sun, 28 May 2023 09:59:55 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, thomas@t-8ch.de
+Subject: Re: [PATCH 00/13] tools/nolibc: riscv: Add full rv32 support
+Message-ID: <20230528075955.GE1956@1wt.eu>
+References: <cover.1684949267.git.falcon@tinylab.org>
 MIME-Version: 1.0
-From:   Akihiro Suda <suda.kyoto@gmail.com>
-Date:   Sun, 28 May 2023 16:58:57 +0900
-Message-ID: <CAG8fp8Te=oT1JJhTpOZvgWJrgcTq2DXan8UOVZ=KYCYNa8cKog@mail.gmail.com>
-Subject: [PATCH] efi: bump efistub version from 1.1 to 3.0 for
- VZLinuxBootLoader compatibility
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        Linux x86 <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1684949267.git.falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- LINUX_EFISTUB_MAJOR_VERSION is bumped from 1 (0b1) to 3 (0b11).
-  The value is now a bitfield. The next version will be 7 (0b111).
+Hi Zhangjin,
 
-- LINUX_EFISTUB_MINOR_VERSION is pinned to 0x0, because Apple's
-  VZLinuxBootLoader [1] cannot boot a kernel with other minor version value [2],
-  even though it does not use UEFI. Tested with macOS 13.4 (x86_64).
+On Thu, May 25, 2023 at 01:33:14AM +0800, Zhangjin Wu wrote:
+> Hi, Willy
+> 
+> Thanks very mush for your kindly review, discuss and suggestion, now we
+> get full rv32 support ;-)
+> 
+> In the first series [1], we have fixed up the compile errors about
+> _start and __NR_llseek for rv32, but left compile errors about tons of
+> time32 syscalls (removed after kernel commit d4c08b9776b3 ("riscv: Use
+> latest system call ABI")) and the missing fstat in nolibc-test.c [2],
+> now we have fixed up all of them.
 
-[1] https://developer.apple.com/documentation/virtualization/vzlinuxbootloader
-[2] https://lore.kernel.org/linux-efi/CAG8fp8Teu4G9JuenQrqGndFt2Gy+V4YgJ=hN1xX7AD940YKf3A@mail.gmail.com/
+(...)
 
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217485
-Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
----
- include/linux/pe.h | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+I have read the comments that others made on the series and overall
+agree. I've seen that you intend to prepare a v2. I think we must
+first decide how to better deal with emulated syscalls as I said in
+an earlier message. Probably that we should just add a specific test
+case for EFAULT in nolibc-test since it's the only one (I think) that
+risks to trigger crashes with emulated syscalls. We could also imagine
+dealing with the signal ourselves but I'm not that keen on going to
+implement signal() & longjmp() for now :-/
 
-diff --git a/include/linux/pe.h b/include/linux/pe.h
-index 5e1e11540870..ee5ade19b7eb 100644
---- a/include/linux/pe.h
-+++ b/include/linux/pe.h
-@@ -27,9 +27,25 @@
-  * On x86, LoadImage() and StartImage() can be omitted if the EFI handover
-  * protocol is implemented, which can be inferred from the version,
-  * handover_offset and xloadflags fields in the bootparams structure.
-+ *
-+ * Linux EFI stub v1.1 unconditionally enabled initrd command line loader,
-+ * which was previously gated by CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER.
-+ *
-+ * Linux EFI stub v3.0 changed the major version to be a bitfield (0b11).
-+ * The rightmost bit means that it is compatible with v1.0 at least.
-+ * The second rightmost bit means that initrd command line loader is enabled.
-+ * So, there is no v2.0 (0b10), and the next version will be v7.0 (0b111).
-+ */
-+#define LINUX_EFISTUB_MAJOR_VERSION            0x3
-+
-+/*
-+ * LINUX_EFISTUB_MINOR_VERSION is pinned to 0x0, because Apple's
-+ * VZLinuxBootLoader cannot boot a kernel with other minor version value, even
-+ * though it does not use UEFI. Tested with macOS 13.4 (x86_64).
-+ *
-+ * https://lore.kernel.org/linux-efi/CAG8fp8Teu4G9JuenQrqGndFt2Gy+V4YgJ=hN1xX7AD940YKf3A@mail.gmail.com/
-  */
--#define LINUX_EFISTUB_MAJOR_VERSION            0x1
--#define LINUX_EFISTUB_MINOR_VERSION            0x1
-+#define LINUX_EFISTUB_MINOR_VERSION            0x0
+Regardless, in order to clean the things up and relieve you from the
+non-rv32 stuff, I've just reverted the two patches that your series
+reverts (1 & 2), and added the EOVERFLOW one (3). I'm pushing this to
+branch 20230528-nolibc-rv32+stkp5.
 
- /*
-  * LINUX_PE_MAGIC appears at offset 0x38 into the MS-DOS header of EFI bootable
--- 
-2.39.2
+Regards,
+Willy
