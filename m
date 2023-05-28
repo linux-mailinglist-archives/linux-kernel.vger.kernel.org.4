@@ -2,130 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C54713A59
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 17:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1775A713A3B
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 16:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjE1PNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 11:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
+        id S229554AbjE1O4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 10:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjE1PNG (ORCPT
+        with ESMTP id S229448AbjE1O4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 11:13:06 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01077A7;
-        Sun, 28 May 2023 08:13:04 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-6261a8bbe5fso5352646d6.0;
-        Sun, 28 May 2023 08:13:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685286784; x=1687878784;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YvgNUPTdKFpPQ5giDMpHNmpnkLWBibax0OWyz2QXbcA=;
-        b=rWNef71eljSgJNTpHZZvr/0PITs0py2BIsbJu8tDe1yuH49P/VMQvvrKoBPHerk7Qy
-         XAc9xMfd7SloXxSYHN4hEgsrXMhv8XftqohBfQSCjmqkF7rAuzgxV9go3oawo5IscCtl
-         RoTWqzjnkolv/NxsulfRK+/hdd988kIZ+fkdM6ux5squD9Wp+gxNQMJlmGW0deOST2w0
-         WNh07oMtoKtuyNTtdVHGZJm4Tku7ME7uqDHVVUe/NeE4t4Gx1aF9taNihL2BzplcM4R+
-         PZT/gbVMcs+D3lbZyIA50K0c1CG+aVyLvN4GUzlSfNAkK/eaR4YTNak0xJ13bJE12kQP
-         VkIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685286784; x=1687878784;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YvgNUPTdKFpPQ5giDMpHNmpnkLWBibax0OWyz2QXbcA=;
-        b=Pglcl0Ql1sNGoRMtqjrBnjJmXVfzPplGB0OUdimCT5iEs2l1bm9m+A1bgteDAXqLpw
-         JmBL+XPwtIhDAbyKSz/vmE6kJnr2LkkIWrwfCMH2VCcu7eqj1HA8ElUyjgIvp6qzsQdA
-         hYT0yNMP6jpg2FClZ4LB0T6rlROoxwXpmQFzd8GanE7sVSYwVS57JMAL46aGqh6DfJSY
-         7pVOyDuo9a0nPGATe54FGyBfxgdkVWkmDvZbCC9K8g2aRvoTf2SWfXw+KuBunOyDPnuj
-         vYmMBWu69U41CQ3iJnB6OxFvl0H7HEREILXqcad87ztvPmXRVVE5qVKkzPzESV9NHJP2
-         ispw==
-X-Gm-Message-State: AC+VfDyKKk2us2HI6d+zz45hfAAF6U7evyA99ZUSgVdLq7FcHhGfePbs
-        D1V7PwXYxGBR5/lS4BEMrL2y1tsxKJdpad3c1BJt6IK5
-X-Google-Smtp-Source: ACHHUZ5BDFMR6zRPvR9sdy0ZOJBW8kO+xtM5hS9sIzPBR/TNcGYPGI9XI6+bRVES7IKU07nNnNeWRcbGc8KREcF02dA=
-X-Received: by 2002:a05:6214:2487:b0:621:83d:3a47 with SMTP id
- gi7-20020a056214248700b00621083d3a47mr9282949qvb.39.1685286783534; Sun, 28
- May 2023 08:13:03 -0700 (PDT)
+        Sun, 28 May 2023 10:56:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B27C9B;
+        Sun, 28 May 2023 07:56:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9947560D2E;
+        Sun, 28 May 2023 14:56:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8421C433D2;
+        Sun, 28 May 2023 14:56:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685285797;
+        bh=dYRUdw6cd80d3tuK/aTvNjJCPgSv66gl3Tan1xRID+Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ozKYerTIdU290Z5Ru5InZuObVJvZ7SRayUrYO6E1jm9GIjlKx3UL9+UkVSR2HwPkT
+         PV2nBCOF0IxrDlwqVWNPBRFsmHFVbpBo5jt+zl46YKbuaxCkA+hcnzAZJ/BJMgZNEZ
+         /iyhprd7ImIz+xH69Up6SKvCtRjuMo447Mz8DZmvpfr9DEIzJfzOBruUkXUNSGjFnC
+         aR9+7VzVF2F6VE1PBRHddvYZmCXoszln5131uQjS4D0AfAsVDw0FMygMpsU2tEU4uA
+         gMlndYp1VsE//TbFheeT+c7/cT52tKYKwcYVLld5bpe1dSCAUbbsmxnAdpwLropBic
+         beBWU9vY3JUfQ==
+Date:   Sun, 28 May 2023 16:12:55 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     George Stark <gnstark@sberdevices.ru>, lars@metafoo.de,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        nuno.sa@analog.com, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, kernel@sberdevices.ru
+Subject: Re: [PATCH v2] meson saradc: add iio device attrib to switch
+ channel 7 mux
+Message-ID: <20230528161255.216fee6f@jic23-huawei>
+In-Reply-To: <ZHMzGHsGEylDdgg7@smile.fi.intel.com>
+References: <20230527214854.126517-1-gnstark@sberdevices.ru>
+        <ZHMxDHPBWQOJSuaZ@smile.fi.intel.com>
+        <ZHMzGHsGEylDdgg7@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230524164210.20567-1-osmtendev@gmail.com> <20230526115340.295b1122@sal.lan>
-In-Reply-To: <20230526115340.295b1122@sal.lan>
-From:   Osama Muhammad <osmtendev@gmail.com>
-Date:   Sun, 28 May 2023 20:12:52 +0500
-Message-ID: <CAK6rUAO5PfprdShe3=6gnsUQ2rStpKxYvHcOek7A-CEJvaWO7A@mail.gmail.com>
-Subject: Re: [PATCH] smsdvb-debugfs.c: Fix error checking for debugfs_create_file
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, 28 May 2023 13:55:20 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-After researching more into it I have come to know that the debugfs
-API will not return null on error but an ERR_PTR. The modern wisdom
-about it is to ignore the errors returned by the function as stated in
-the comment  above the function debugfs_create_file.
+> On Sun, May 28, 2023 at 01:46:37PM +0300, Andy Shevchenko wrote:
+> > On Sun, May 28, 2023 at 12:48:54AM +0300, George Stark wrote:  
+> 
+> ...
+> 
+> > > +static const char * const chan7_vol[] = {
+> > > +	"gnd",
+> > > +	"vdd/4",
+> > > +	"vdd/2",
+> > > +	"vdd*3/4",
+> > > +	"vdd",
+> > > +	"ch7_input",
+> > > +};  
+> 
+> One more thing to discuss (Jonathan, what's your opinion?) I think the
+> following easier to understand and has less problematic characters in the names
+> (in case of sysfs direct use from shelll):
 
-> * NOTE: it's expected that most callers should _ignore_ the errors returned
- >* by this function. Other debugfs functions handle the fact that the "dentry"
- >* passed to them could be an error and they don't crash in that case.
-> * Drivers should generally work fine even if debugfs fails to init anyway.
-Here is the link to comment :-
-https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L451
+I suspect no one would use these particulary inputs directly from the shell,
+but agreed that avoiding / where not absolutely necessary is a good idea.
 
-Considering this, I will send the revision of the patch by removing
-error checks. Please correct me if  there are any concerns with this.
+Jonathan
+> 
+> static const char * const chan7_vol[] = {
+> 	"gnd", // alternatively GND
+> 	"0.25vdd", // alternatively 0.25_vdd, 0.25Vdd, 0.25_Vdd
+> 	"0.5vdd",
+> 	"0.75vdd",
+> 	"vdd", // Vdd
+> 	"ch7_input",
+> };
+> 
+> That said, my personal preference:
+> 
+> static const char * const chan7_vol[] = {
+> 	"GND",
+> 	"0.25Vdd",
+> 	"0.5Vdd",
+> 	"0.75Vdd",
+> 	"Vdd",
+> 	"ch7_input",
+> };
+> 
 
-Thanks,
-Osmten
-
-
-
-On Fri, 26 May 2023 at 15:53, Mauro Carvalho Chehab <mchehab@kernel.org> wrote:
->
-> Em Wed, 24 May 2023 21:42:10 +0500
-> Osama Muhammad <osmtendev@gmail.com> escreveu:
->
-> > This patch fixes the error checking in smsdvb-debugfs.c in
-> > debugfs_create_file. The correct way to check if an error occurred
-> > is using 'IS_ERR_OR_NULL' inline function.
-> >
-> > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
-> > ---
-> >  drivers/media/common/siano/smsdvb-debugfs.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/common/siano/smsdvb-debugfs.c b/drivers/media/common/siano/smsdvb-debugfs.c
-> > index 8916bb644756..0f8750d7993c 100644
-> > --- a/drivers/media/common/siano/smsdvb-debugfs.c
-> > +++ b/drivers/media/common/siano/smsdvb-debugfs.c
-> > @@ -469,7 +469,7 @@ int smsdvb_debugfs_create(struct smsdvb_client_t *client)
-> >
-> >       d = debugfs_create_file("stats", S_IRUGO | S_IWUSR, client->debugfs,
-> >                               client, &debugfs_stats_ops);
-> > -     if (!d) {
-> > +     if (IS_ERR_OR_NULL(d)) {
-> >               debugfs_remove(client->debugfs);
-> >               return -ENOMEM;
->
-> if IS_ERR, it is probably better to return PTR_ERR(d).
->
-> So, please change it accordingly, returning -ENOMEM only on NULL, e. g.
-> something like (untested):
->
->         if (IS_ERR_OR_NULL(d)) {
->                 debugfs_remove(client->debugfs);
->                 if (!d)
->                         return -ENOMEM;
->                 return PTR_ERR(d);
->         }
->
-> Regards,
-> Mauro
