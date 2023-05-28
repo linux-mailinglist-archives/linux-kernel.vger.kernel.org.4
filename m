@@ -2,154 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8422B71373F
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 02:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F68F713741
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 02:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjE1AJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 27 May 2023 20:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
+        id S229498AbjE1AKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 27 May 2023 20:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjE1AJd (ORCPT
+        with ESMTP id S229445AbjE1AKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 27 May 2023 20:09:33 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691BCA8
-        for <linux-kernel@vger.kernel.org>; Sat, 27 May 2023 17:09:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685232572; x=1716768572;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=a9gIudvxnsEuKt6ByRRnLGP+BwC0R1njnXJ4h3gya0I=;
-  b=WnQtGpu3hG8Is0fvpwd66kWIFqeou+d53Ka9ogVJv6IJyrE1Zbohi10I
-   K62FDvFi9iNnLkbUfom9BQhO9Pcp5acrS4PybaJPMNtcZ60FO+W5aNddW
-   +TbiqCEsreABIePCnU+QWCmI3LLiZeHnSyGZgg0dQZBvVIn4XRr+9HS03
-   34CXkd4D44btJdLVGXeePF9pYIfYTBc9iKa/oBq1TRtOxwkcn7VkBK9dp
-   pWEbnN5GTm9aXFRVpNFrsCS6ToP0q2HXHv3zAO5JmhF4/TkAsbGX8bPIz
-   Q7X34PjQorQUngmwraPLQ+Y0hI+gskgae72ZkF6HHuVX+HdvXETZELZbL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="334815480"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="334815480"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2023 17:09:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="849932954"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="849932954"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 27 May 2023 17:09:29 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q33yS-000KGk-2t;
-        Sun, 28 May 2023 00:09:28 +0000
-Date:   Sun, 28 May 2023 08:08:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Baoquan He <bhe@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Michael Holzheu <holzheu@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Amerigo Wang <amwang@redhat.com>
-Subject: Re: [PATCH 5/6] kexec: add helper __crash_shrink_memory()
-Message-ID: <202305280717.Pw06aLkz-lkp@intel.com>
-References: <20230527123439.772-6-thunder.leizhen@huawei.com>
+        Sat, 27 May 2023 20:10:38 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF58EA8;
+        Sat, 27 May 2023 17:10:37 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3f7a546efb1so11032271cf.2;
+        Sat, 27 May 2023 17:10:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685232636; x=1687824636;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lMCsGvkoxWSUFyaRQ4KyoqEeH9gxDpYDK1XiImU4CBA=;
+        b=r18LUXZbEyf295PSaklp4P9NGUmzPbTYzCAwdHwZtRNoSN4MoWP2YuVp0GrIvexMeR
+         0dvZK3/dzViFqtqSyIVKcS75h47Z0HTRdZULgLqHn2pijGNSXfYcVcXPL0hrV6LrRbm7
+         IX8y8whrqzZgXL+eL5zMEHBOGAGQtjUhnaRSRsbI9xAtH6fwP4sRU+lNPC64EJu6xyVN
+         EDKroP22n1mKX+NLw59ouc86TefbafTsydeKStJtYZOP8nCuX96jJIMZJft6AfGIcFcd
+         iOlQpbN0xsl0XMoaCYaseu5Hk9mHZgNMJPIabNvxynvvt+MYt2fjdaILPYyFh4JA3DMm
+         1phw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685232636; x=1687824636;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lMCsGvkoxWSUFyaRQ4KyoqEeH9gxDpYDK1XiImU4CBA=;
+        b=Bo7WLOQoSYEXQAivFGdTCmP7MLBwHYqasexNkDfiSmPU42HoQf4dPHC3U/okqRxJtO
+         iD6mQPE+y+crev5OO9K/4nuozRgzl2FKAhnAlDGNnlXOX3HEcLYFivNQBKQqGajeKxTd
+         ULVd6X10SAIzJrZ3j18th2IBoFc4T+JWRlp2+jmulhtTUxBt5o16OnzL+iTJW8KvpSw2
+         KwhPKc3ZYgBI9mn4dZZJvD6lhP+zFuc2pTIqzX7nCxGnM0IuHP+LySZnvAkGt1AgX9G9
+         CJagF8xuf5Wg1lfNWzz56Ir4YVQBHC5YQDUdj1wxCqGSH268xWGjBKik3y3mr8DLb2IV
+         aD5w==
+X-Gm-Message-State: AC+VfDwP50dyHrYPL4RMKEz+hldSGO9LOmJkv3bCjUCUfv1hNit9GKjv
+        yq3+pnj6Wex653yIhIpwRq9t546T7sf6MQ==
+X-Google-Smtp-Source: ACHHUZ7MIP/VcIjwshjdNl1IQZV0vU+2dA96XzmQnwrcz12nJc3u2smpOSknIIHBeMqz6BwKzt6pug==
+X-Received: by 2002:a05:622a:3d1:b0:3f2:f35:8e6f with SMTP id k17-20020a05622a03d100b003f20f358e6fmr6671214qtx.25.1685232636346;
+        Sat, 27 May 2023 17:10:36 -0700 (PDT)
+Received: from Latitude-E6420.mynetworksettings.com ([2600:4040:2007:9800:28b2:2867:6311:b7d0])
+        by smtp.gmail.com with ESMTPSA id t18-20020ac865d2000000b003f6a7ab1450sm2518454qto.30.2023.05.27.17.10.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 17:10:35 -0700 (PDT)
+From:   Rudraksha Gupta <guptarud@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Rudraksha Gupta <guptarud@gmail.com>
+Subject: [PATCH v2 0/4] Samsung Galaxy Express SGH-I437 Support
+Date:   Sat, 27 May 2023 20:10:05 -0400
+Message-Id: <20230528001010.47868-1-guptarud@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230527040905.stmnoshkdqgiaex6@ripper>
+References: <20230527040905.stmnoshkdqgiaex6@ripper>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230527123439.772-6-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhen,
+This patch series adds support for the Samsung Galaxy Express SGH-I437.
+Currently the following things work on this phone: UART, eMMC, SD Card, and USB.
 
-kernel test robot noticed the following build warnings:
+version 2:
+- Combined patch 1 into patch 4, as the sleep_clk label is specifically needed for the USB node.
+- Reformatted the commit messages to align with the style used in other commit messages that modify the same files.
+- Included a cover letter to provide an overview of the patch series.
+- Slight refactoring of the device tree source (DTS) file.
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v6.4-rc3 next-20230525]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Rudraksha Gupta (4):
+  dt-bindings: arm: qcom: Add Samsung Galaxy Express
+  dt-bindings: Add qcom,usb-hs-phy-msm8960
+  ARM: dts: qcom: msm8960: Add USB node
+  ARM: dts: qcom: Add Samsung Galaxy Express support
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kexec-fix-a-memory-leak-in-crash_shrink_memory/20230527-203821
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230527123439.772-6-thunder.leizhen%40huawei.com
-patch subject: [PATCH 5/6] kexec: add helper __crash_shrink_memory()
-config: riscv-randconfig-r042-20230526 (https://download.01.org/0day-ci/archive/20230528/202305280717.Pw06aLkz-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/dea97cef503d26e05d0e11818ae44176056ddf64
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhen-Lei/kexec-fix-a-memory-leak-in-crash_shrink_memory/20230527-203821
-        git checkout dea97cef503d26e05d0e11818ae44176056ddf64
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305280717.Pw06aLkz-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/kexec_core.c:1108:5: warning: no previous prototype for function '__crash_shrink_memory' [-Wmissing-prototypes]
-   int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
-       ^
-   kernel/kexec_core.c:1108:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/__crash_shrink_memory +1108 kernel/kexec_core.c
-
-  1107	
-> 1108	int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
-  1109	{
-  1110		struct resource *ram_res;
-  1111	
-  1112		ram_res = kzalloc(sizeof(*ram_res), GFP_KERNEL);
-  1113		if (!ram_res)
-  1114			return -ENOMEM;
-  1115	
-  1116		ram_res->start = old_res->start + new_size;
-  1117		ram_res->end   = old_res->end;
-  1118		ram_res->flags = IORESOURCE_BUSY | IORESOURCE_SYSTEM_RAM;
-  1119		ram_res->name  = "System RAM";
-  1120	
-  1121		if (!new_size) {
-  1122			release_resource(old_res);
-  1123			old_res->start = 0;
-  1124			old_res->end   = 0;
-  1125		} else {
-  1126			crashk_res.end = ram_res->start - 1;
-  1127		}
-  1128	
-  1129		crash_free_reserved_phys_range(ram_res->start, ram_res->end);
-  1130		insert_resource(&iomem_resource, ram_res);
-  1131	
-  1132		return 0;
-  1133	}
-  1134	
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ .../bindings/phy/qcom,usb-hs-phy.yaml         |   1 +
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../dts/qcom-msm8960-samsung-expressatt.dts   | 334 ++++++++++++++++++
+ arch/arm/boot/dts/qcom-msm8960.dtsi           |  35 +-
+ 5 files changed, 371 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm/boot/dts/qcom-msm8960-samsung-expressatt.dts
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
