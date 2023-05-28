@@ -2,82 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88311713FF9
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 22:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB26713FFB
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 22:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjE1UC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 16:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
+        id S231445AbjE1UC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 16:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjE1UCZ (ORCPT
+        with ESMTP id S229523AbjE1UC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 16:02:25 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421D1A8;
-        Sun, 28 May 2023 13:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1685304141; x=1685908941; i=rwarsow@gmx.de;
- bh=AnNuo72Dy47T/QnE44EUI9tKC9Zk9Y9YDxgT07bWbeM=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
- b=t2SmhfuAGIXgw8OjQJszEzwj5ELWa5wCBNTU/VrZELhI5fyhC0XR492IahYkTyiLXy+yLEz
- m6AOaLZHlTtL/G748ItEoNizkP+7dxOU/CFIqAwcHkPndYLKdWMXD/mej/vublTCnPU1W8XsY
- DLEYObt6a0Pdcn6N4Uwj9wkSABxyZ12eVhaJ0X1R/TLYOhTInedb9S/ERKvf6wVWRurJHiImm
- IIPCsNWXdZ+zJKr5My2ezZmDbV3PIUu7I1cOw2yqfNyY/J2wcX/+X1GPcu+87BITksy7qsbKK
- qtkvkxRb+1b0xwS2g0mPOEQEKnIIVbXepr5Q5MSP6RLtGtOI2zpQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.34.217]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MA7Ka-1pwBb50ErS-00BdgL; Sun, 28
- May 2023 22:02:21 +0200
-Message-ID: <54124c02-325a-068e-7b76-2d6787a8cf96@gmx.de>
-Date:   Sun, 28 May 2023 22:02:20 +0200
+        Sun, 28 May 2023 16:02:56 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13144A8;
+        Sun, 28 May 2023 13:02:55 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-970028cfb6cso521288166b.1;
+        Sun, 28 May 2023 13:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685304173; x=1687896173;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zo6CAhX/gKpTGl7xNzss4y9YGs7PPZhQ0B+6ZO4rHpo=;
+        b=lmyAX8YvijPl9JTnu/+1ez+IEbz4YIX0RKM0OEzi8J793Xt/s9RCgCl7j/nm2Ge50J
+         kKYDFBKL9WNE87XQdkgWWJiFktlw7XZpElXXGp/XQ9XBJ1EFmxgWgCHelRV1wqjbdrV4
+         AngIoQgk1xxWX/Cdw3tiTOu4g1ZI6pWpjvF8s2ckLO5giUYibQaVO+NC5FdWYE4nenO9
+         +FHom1aw+edwFW6s0Y+QaUhHtRAifMTuj2HGIyRgmUFrjwIv9iMAjEW6kuEYYnhFO9tY
+         xyLM63K5Zzg92QWMHd2aO4qscr9I2wK/Q8PzFPeH4rybNacWDLqFBFrmnjhi9BxQ4hIr
+         j2VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685304173; x=1687896173;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zo6CAhX/gKpTGl7xNzss4y9YGs7PPZhQ0B+6ZO4rHpo=;
+        b=eeb9lHRvkJGIkUGJ2I45xkApmYT5172Sjvr2t1BeAgFI9f4It4XknE2dODpX6HR0Dz
+         YCNTiYEP3xzdcZJ9DiOv9DcI5oYL0/izjBXIKQiRQ7BN+2Bu5rltvYStqkbYCUrV1IlL
+         a74KcRUMLRptfAJjCBEhTLRS2rY01aOQVi3ZTyHXm+GjX/NTw0vuiIy0tPFvEplMhAV7
+         g3dvbbgrT3JQe7BaSV3/bDCMp/VYdSMz/hivHt3u0+TsjksHz1nYZjNdI+/2nJRe5U8b
+         KBwBCs53G7pF/Cd8SjHOpqrmnDVU1a0vV7lwCGJmOQgZ7hoJWquDf2ag4YiOYl9amZsU
+         gjag==
+X-Gm-Message-State: AC+VfDzwYF+MojJipuFEr00l78b1t0DEKSZeQ0Ein9suvPh9q92KnR5O
+        iXrctYXVz3QaGgRC0MqKf1Y=
+X-Google-Smtp-Source: ACHHUZ7amSCeEjsuTpePFIraYwQK5RrXHcbx6rWKwrU9eJeY6Nyzlnvs4W+vU8kdZC3CUytueRKAyw==
+X-Received: by 2002:a17:907:7251:b0:973:d953:4bf7 with SMTP id ds17-20020a170907725100b00973d9534bf7mr6095191ejc.48.1685304173207;
+        Sun, 28 May 2023 13:02:53 -0700 (PDT)
+Received: from krava ([83.240.62.205])
+        by smtp.gmail.com with ESMTPSA id v19-20020a1709060b5300b0096621340285sm5027344ejg.198.2023.05.28.13.02.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 13:02:52 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sun, 28 May 2023 22:02:49 +0200
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        =?iso-8859-1?Q?Mah=E9?= Tardy <mahe.tardy@isovalent.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [RFC PATCH stable 5.4 0/8] bpf: Fix
+ bpf_probe_read/bpf_probe_read_str helpers
+Message-ID: <ZHOzaStC0WmTvwL9@krava>
+References: <20230522203352.738576-1-jolsa@kernel.org>
+ <2023052646-magnetize-equate-2b24@gregkh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE, en-US
-Subject: Re: [PATCH 6.3 000/127] 6.3.5-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:OhCMHlOuDxHRLqH7y0EIrH/IaMkXQW3sqZdP56ISO+lFNZW/CKI
- vwesFkmILbq30Gp/jFA8zF8Z+Ps0Zzlqy66CtezFqfjljGtJVn5zUhoOn8irevIn/UPB4Ca
- rSSDLi35g+7+WPUfo+fM5cHYO0XaNAmm8JFYvwz3p02x5gdZ2LofLYN9n3cHhOAM4nBS0nl
- BfuTc+J7yDb96D/UbPGkg==
-UI-OutboundReport: notjunk:1;M01:P0:BNJ9AWtHDL0=;9i+5NaD+PwPb7jELtNl7HMGVIQn
- kd2PC+gNAKLJS2BV3iobMb6xOSoRrkEKW7MCuJfIRE7Z3Al2PnnWGxG5xq2i4LqP9cVrBdW2b
- t80prFY9tUmZ5V72h5pJXrZjSjFLrpTq+6/asuC+7uSAAaujpW115BPy/xiUiDnlm7So1mYcG
- VGSbyuxArUD/nCZB0v3JhqS4mFwhkojOvBUrLRa+aKnVh/ozrqZVv6Yl/pp/zGTCmnTIkwUzY
- F6ou/WpmxYSrdOv7S3tVueV3odcUuAUznsKqKORmUeCFabhpxQCYXi43n8lXopGcMvgPPuVhp
- eJb1jwLBoz34yhSqAtYV/g3Wu87DNtDsDGwPO0FN3jAzGYUJV2krYybayuIjwCl67NJcIqfqO
- TyVrhIzze6rCJFRAeMsV9D122+88RMgzjABUb978kXP7v7Szhw3whzwDzrv0eSl3+O5c5DsCR
- ImY0ha7mg8NpT/0cEmz4yU46h2HLpVjlQ5ONe/F+Q2clJgSdx5btk+ym2D+ZhOZX4qqTgDMEZ
- d93ZrO3r862NC+YtMgSW68ScnL0cxW+BrL/M4FqEHn2+94/gR9ionLc0nmH0EixkmAcMgLFKS
- /Wl+3M5dmSTO0djG/XHtLU05zwZC0TPTPnotWzPHDZnWWnJQoABkNiUBqnT/POh/M192kTdfG
- YelvTDz5OA9Z6sFZ3C2SKSJO3xEtGj4ZDRtcWAzr0iHf1CiItmF6OQkQhunsxGzfa0VIxlKU3
- 1KEPBulTfq9PC1hN3R9eoF0dl63chfgVkoaV8+H54i/2sJ2sl6oZRI5tAERYu3we8Ysewu90d
- aXJuqJU3CbDDVhRbJuU8iOpkIlRV6Amp2+xwk+fcyQU+HNCIbGzOmPQA/Y2N1u80j3rj0YhcK
- KqvnKWpQP7+uMqnqblrWMsKelb1YFmAJu5rdaxCxymXRmtOo9FOp+iCT8u6YC6qi5h2pXkvjI
- qUGgg8J3DuioZ+ggKzszwcwDAXY=
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_A1,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023052646-magnetize-equate-2b24@gregkh>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Fri, May 26, 2023 at 07:54:17PM +0100, Greg KH wrote:
+> On Mon, May 22, 2023 at 10:33:44PM +0200, Jiri Olsa wrote:
+> > hi,
+> > we see broken access to user space with bpf_probe_read/bpf_probe_read_str
+> > helpers on arm64 with 5.4 kernel. The problem is that both helpers try to
+> > read user memory by calling probe_kernel_read, which seems to work on x86
+> > but fails on arm64.
+> 
+> Has this ever worked on arm64 for the 5.4 kernel tree?  If not, it's not
+> really a regression, and so, why not use a newer kernel that has this
+> new feature added to it there?
+> 
+> In other words, what requires you to use the 5.4.y tree and requires
+> feature parity across architectures?
 
-6.3.5-rc1
+we have a customer running ok on x86 v5.4, but arm64 is broken with
+the same bpf/user space code
 
-compiles, boots and runs here on x86_64
-(Intel Rocket Lake)
+upgrade is an option of course, but it's not a big change and we can
+have 5.4 working on arm64 as well
 
-Thanks
+I can send out the change that will be closer to upstream changes,
+if that's a concern.. with adding the new probe helpers, which I
+guess is not a problem, because it does not change current API
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-
+jirka
