@@ -2,164 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED51971390F
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 12:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3E3713911
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 12:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjE1Kqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 06:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
+        id S229512AbjE1Kwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 06:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjE1Kqn (ORCPT
+        with ESMTP id S229437AbjE1Kwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 06:46:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D446A94;
-        Sun, 28 May 2023 03:46:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685270802; x=1716806802;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=12XnZdCMLf2ECdKc7jgZMRFCTIoyk3JXcdiX3xQZb+Q=;
-  b=irmPCYc5TVUOKtc/d/DxRU3LtE+AZmtBdFqiwqyQhOfLfhrtKEAIBlVQ
-   uj1uOJIY59ZeQsw4yE2RxhR2meEteNY69uJCMak4HMxp9lQ7dDShVA80K
-   nO883X3bnzP+x0Vbx+l6Pqe/etSoB2IRcBjtmSqRq8dFJD9dLeJvBY1gU
-   VdWXQEj2sT/GJlyCI86VOIjy4meVJlRJQR8uK5sdKbPE0Wzwe4L0iSoW/
-   U2dGv/8ZteTh4JhDv2jCKRgd54JHVYg5Lyf8ujjffXc8/rSG8gWZI86M3
-   iy+p6hTUtz+NqKGzcUOdfLYDP0+ghVwEtECw6u+6p1a0c+WT7DHJo82a6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="344006203"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="344006203"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 03:46:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="850056935"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="850056935"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 28 May 2023 03:46:39 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q3Dv3-000Jjg-0a;
-        Sun, 28 May 2023 13:46:37 +0300
-Date:   Sun, 28 May 2023 13:46:36 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     George Stark <gnstark@sberdevices.ru>
-Cc:     jic23@kernel.org, lars@metafoo.de, neil.armstrong@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com, nuno.sa@analog.com,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        kernel@sberdevices.ru
-Subject: Re: [PATCH v2] meson saradc: add iio device attrib to switch channel
- 7 mux
-Message-ID: <ZHMxDHPBWQOJSuaZ@smile.fi.intel.com>
-References: <20230527214854.126517-1-gnstark@sberdevices.ru>
+        Sun, 28 May 2023 06:52:40 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4774A4;
+        Sun, 28 May 2023 03:52:38 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5147a478c38so3182103a12.0;
+        Sun, 28 May 2023 03:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1685271157; x=1687863157;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kagxpsAxAgnpED4d6ykd8A3dyeK6pLMNrLu4zz0Uk+k=;
+        b=EI9So7gO84YdZaGpdX+nFX2z6xlAmtEE93ciLwPcDTOSXSnQC4zE8CnNgUMmxXMGvE
+         BORLnxRT4ePYItjgxChPJMAuVLPgBkfgomvHOpJZgiyMJDMh1y31kpUdtfPYobhnmy88
+         Ct9s63x1+8/ut93LnmJfIbm0S5fYjk5XtMfw4woJUIPzfVJH37xoDz84Z9ur23/EKmQn
+         gitNL5URO/5zZ1lnoccLKU5KS4GU2v2SMRhzjJZTRTcV4ALXoZ2xNF6LOu0sxf1X3MyA
+         TuRgvkLjXmAHGWHb5+cjIKTwCSrrc170SHCIxRhaD1/wlLv+ceegnw802cW+y7BdEw0o
+         tKEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685271157; x=1687863157;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kagxpsAxAgnpED4d6ykd8A3dyeK6pLMNrLu4zz0Uk+k=;
+        b=kxqTlDUKk+7xKxQpWwcEBj4ll+BIFP8EhIf927a/J73376/JQ4EVMnVSQAmmO9iffp
+         seGefUSA+voVbpD+13HczRjOSkzId2qk24TQMH279fPhdpLX5UyqQpbQnLvq4spVsl3D
+         rsXdbkUGpgtPl8+8ML35SFzm0nuPppBCTAX4ku9ED9jlwdStRVljKtokVKA5PQIHJyUa
+         DpeqqTS6hFbnraUIaq9Z32O03up4lQUtvTp3vlTrbTo7h1dmN+vF9RgoaxEVuoNy82ED
+         WLPve941/8lnFkyGTpi3uwKqo9Ggh0VGeRteWTcPEm5ceTQITULo84lYDc5fVHG7EY9X
+         8L6w==
+X-Gm-Message-State: AC+VfDwLL+LIFPKTmPnJwludHsrlcVoHfA53xE1kEUIBTTELkIRfU51H
+        XxvVDtjeYoc5TbWiN3X9l1EhIp0lJlHGdw==
+X-Google-Smtp-Source: ACHHUZ5Vp5SKoLCI0EP1+W+ES1wcGpfttFaHUbZJ5g6PdVuSlK2Mmykws3HAHq4rzFIpuW0TedtiUw==
+X-Received: by 2002:a17:907:a40d:b0:968:1102:1fb7 with SMTP id sg13-20020a170907a40d00b0096811021fb7mr7069910ejc.6.1685271156675;
+        Sun, 28 May 2023 03:52:36 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:810a:9640:26a8:dc62:904c:418f:4328])
+        by smtp.gmail.com with ESMTPSA id j13-20020a170906254d00b0096a6be0b66dsm4494893ejb.208.2023.05.28.03.52.35
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 28 May 2023 03:52:36 -0700 (PDT)
+From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
+X-Google-Original-From: Franziska Naepelt <franziska.naepelt@gmail.com>
+To:     linux-iio@vger.kernel.org
+Cc:     lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Franziska Naepelt <franziska.naepelt@gmail.com>
+Subject: [PATCH] iio: amplifiers: ad8366 Fix whitespace issue
+Date:   Sun, 28 May 2023 12:48:02 +0200
+Message-Id: <20230528104802.22011-1-franziska.naepelt@gmail.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230527214854.126517-1-gnstark@sberdevices.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 12:48:54AM +0300, George Stark wrote:
-> Patch adds two sysfs nodes: chan7_mux to set mux state
-> and chan7_mux_available to show available mux states.
-> Mux can be used to debug and calibrate adc by
-> switching and measuring well-known inputs like GND, Vdd etc.
+This removes the following checkpatch issue:
+- ERROR: space prohibited before that ',' (ctx:WxW)
 
-Thank you for an update, my comments below.
+Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+---
+ drivers/iio/amplifiers/ad8366.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-...
+diff --git a/drivers/iio/amplifiers/ad8366.c b/drivers/iio/amplifiers/ad8366.c
+index f2c2ea79a07f..8d8c8ea94258 100644
+--- a/drivers/iio/amplifiers/ad8366.c
++++ b/drivers/iio/amplifiers/ad8366.c
+@@ -281,7 +281,7 @@ static int ad8366_probe(struct spi_device *spi)
+ 	indio_dev->info = &ad8366_info;
+ 	indio_dev->modes = INDIO_DIRECT_MODE;
+ 
+-	ret = ad8366_write(indio_dev, 0 , 0);
++	ret = ad8366_write(indio_dev, 0, 0);
+ 	if (ret < 0)
+ 		goto error_disable_reg;
+ 
 
-> ---
-
-Missing changelog, what has been done in v2, how it's different to v1.
-
->  drivers/iio/adc/meson_saradc.c | 65 ++++++++++++++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
-
-...
-
-> +static const char * const chan7_vol[] = {
-> +	"gnd",
-> +	"vdd/4",
-> +	"vdd/2",
-> +	"vdd*3/4",
-> +	"vdd",
-> +	"ch7_input",
-> +};
-> +
-> +static ssize_t chan7_mux_show(struct device *dev, struct device_attribute *attr,
-> +			      char *buf)
-> +{
-> +	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
-> +	struct meson_sar_adc_priv *priv = iio_priv(indio_dev);
-> +	unsigned int index = priv->chan7_mux_sel;
-> +
-> +	if (index >= ARRAY_SIZE(chan7_vol))
-> +		index = ARRAY_SIZE(chan7_vol) - 1;
-
-I think this is incorrect and prone to error in the future in case this array
-will be extended. What I would expect is to return something like "unknown".
-
-> +	return sysfs_emit(buf, "%s\n", chan7_vol[index]);
-> +}
-> +
-> +static ssize_t chan7_mux_store(struct device *dev,
-> +			       struct device_attribute *attr,
-> +			       const char *buf, size_t count)
-> +{
-> +	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
-> +	int i;
-> +
-> +	i = sysfs_match_string(chan7_vol, buf);
-> +	if (i < 0)
-
-> +		return -EINVAL;
-
-Do not shadow the error code if it's not justified.
-
-		return i;
-
-> +	meson_sar_adc_set_chan7_mux(indio_dev, i);
-> +	return count;
-> +}
-
-> +
-
-Redundant blank line.
-
-> +static IIO_DEVICE_ATTR_RW(chan7_mux, -1);
-> +
-> +static ssize_t chan7_mux_available_show(struct device *dev, struct device_attribute *attr,
-> +			      char *buf)
-> +{
-> +	int i, len = 0;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(chan7_vol); i++)
-> +		len += sysfs_emit_at(buf, len, "%s ", chan7_vol[i]);
-> +
-> +	return len;
-> +}
-
-> +
-
-Ditto.
-
-> +static IIO_DEVICE_ATTR_RO(chan7_mux_available, -1);
-
+base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.2 (Apple Git-143)
 
