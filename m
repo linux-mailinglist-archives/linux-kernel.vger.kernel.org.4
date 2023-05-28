@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15FB7138DE
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 11:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FF07138E4
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 11:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjE1J1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 05:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S229569AbjE1Jl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 05:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjE1J1F (ORCPT
+        with ESMTP id S229484AbjE1Jl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 05:27:05 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC236B9
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 02:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685266023; x=1716802023;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6mhlJqjhqlP4LY6Pvn9jWj1zGbcelYAc4Ee/JyCTqVY=;
-  b=A+jeOJ3Syf/FGve729YgVwUUFV1Wubn0aVoHR3oVcQffklKRWPtIwMNV
-   j+P2KyapUobD1swAzqYEypDV5aunLYEOw1dR0nXPdVYcm3fu0DcCc2Hae
-   hS6SfXHM3PNbOFqtHLabVhHlxt4dmQC5UyyU+jTsfUIyOIiJjtvxty5uj
-   7zHxe7JeVpePHnUVenNYotydfnY3x77PpRmj9393TH8RIjw8sEM0KTCUL
-   R6XEj3u2AVADSu5D6Hz+E7qnUSHn3t175w6b94x+YBzUuKhuxQWD1oPd4
-   /VxxzZ9rrGR1HnCubcGKwzn4+pPNituGD4kl4kxdxSLegwyogtsLioqhz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="353341386"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="353341386"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 02:27:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10723"; a="656142962"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="656142962"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 May 2023 02:27:01 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q3Cg0-000KWA-10;
-        Sun, 28 May 2023 09:27:00 +0000
-Date:   Sun, 28 May 2023 17:26:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guo Ren <guoren@linux.alibaba.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>
-Subject: arch/riscv/include/asm/syscall.h:87 syscall_handler() warn:
- inconsistent indenting
-Message-ID: <202305281715.WnNJQvvE-lkp@intel.com>
+        Sun, 28 May 2023 05:41:56 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EEAB9;
+        Sun, 28 May 2023 02:41:55 -0700 (PDT)
+Date:   Sun, 28 May 2023 11:41:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1685266914; bh=KfYW6zrk9bUzHSL1GVXFbu1Ry7vy9dldYOJGxwZi/mg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CmOHwghuAOKY2uzDsSrgfGLV0frdG3brN0uOXw4bVJU9EFD/8Ql6I+AvKmjLWnP2H
+         eYWckRvBRB6El8lYyEOAAY8t3DS4f9hRsLY1T2PZ0SFC5RnpbRnlP7pY4cVrIJIfKi
+         ANo3fbMa1tzuy9YRRx5zujJadbLd8YONmH/80As0=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>, Zhangjin Wu <falcon@tinylab.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com
+Subject: Re: [PATCH 00/13] tools/nolibc: riscv: Add full rv32 support
+Message-ID: <30bf1742-64ff-4f92-beab-332108d0201f@t-8ch.de>
+References: <cover.1684949267.git.falcon@tinylab.org>
+ <20230528075955.GE1956@1wt.eu>
+ <210e5ed9-be89-4e48-9c1e-3eb5b0dd288a@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <210e5ed9-be89-4e48-9c1e-3eb5b0dd288a@t-8ch.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   416839029e3858f61dc7dd346559c03e74ed8380
-commit: f0bddf50586da81360627a772be0e355b62f071e riscv: entry: Convert to generic entry
-date:   9 weeks ago
-config: riscv-randconfig-m031-20230528 (https://download.01.org/0day-ci/archive/20230528/202305281715.WnNJQvvE-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
+On 2023-05-28 10:42:39+0200, Thomas Weißschuh wrote:
+> On 2023-05-28 09:59:55+0200, Willy Tarreau wrote:
+> > On Thu, May 25, 2023 at 01:33:14AM +0800, Zhangjin Wu wrote:
+> > > Thanks very mush for your kindly review, discuss and suggestion, now we
+> > > get full rv32 support ;-)
+> > > 
+> > > In the first series [1], we have fixed up the compile errors about
+> > > _start and __NR_llseek for rv32, but left compile errors about tons of
+> > > time32 syscalls (removed after kernel commit d4c08b9776b3 ("riscv: Use
+> > > latest system call ABI")) and the missing fstat in nolibc-test.c [2],
+> > > now we have fixed up all of them.
+> > 
+> > (...)
+> > 
+> > I have read the comments that others made on the series and overall
+> > agree. I've seen that you intend to prepare a v2. I think we must
+> > first decide how to better deal with emulated syscalls as I said in
+> > an earlier message. Probably that we should just add a specific test
+> > case for EFAULT in nolibc-test since it's the only one (I think) that
+> > risks to trigger crashes with emulated syscalls. We could also imagine
+> > dealing with the signal ourselves but I'm not that keen on going to
+> > implement signal() & longjmp() for now :-/
+> > 
+> > Regardless, in order to clean the things up and relieve you from the
+> > non-rv32 stuff, I've just reverted the two patches that your series
+> > reverts (1 & 2), and added the EOVERFLOW one (3). I'm pushing this to
+> > branch 20230528-nolibc-rv32+stkp5.
+> 
+> If you are fine with pushing more stuff to this branch, picking up 
+> the fix for the duplicated test gettimeofday_bad2 (7) would be nice, too.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305281715.WnNJQvvE-lkp@intel.com/
+And the ppoll() argument cleanup (10) for that matter.
 
-smatch warnings:
-arch/riscv/include/asm/syscall.h:87 syscall_handler() warn: inconsistent indenting
+Zhangjin:
 
-vim +87 arch/riscv/include/asm/syscall.h
+IMO it would be more convenient to move generic cleanup patches to the
+beginning of the series.
+When the reviewers are focussing on the real changes they won't be
+interrupted by the cleanups. Also the maintainer can more easily pick
+them up independently, so they are dealt with and nobody has to worry
+about them anymore.
 
-    76	
-    77	typedef long (*syscall_t)(ulong, ulong, ulong, ulong, ulong, ulong, ulong);
-    78	static inline void syscall_handler(struct pt_regs *regs, ulong syscall)
-    79	{
-    80		syscall_t fn;
-    81	
-    82	#ifdef CONFIG_COMPAT
-    83		if ((regs->status & SR_UXL) == SR_UXL_32)
-    84			fn = compat_sys_call_table[syscall];
-    85		else
-    86	#endif
-  > 87			fn = sys_call_table[syscall];
-    88	
-    89		regs->a0 = fn(regs->orig_a0, regs->a1, regs->a2,
-    90			      regs->a3, regs->a4, regs->a5, regs->a6);
-    91	}
-    92	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thomas
