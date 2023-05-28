@@ -2,187 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0291713A17
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 16:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9158A713A26
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 16:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjE1O2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 10:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
+        id S229499AbjE1Oio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 10:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjE1O2T (ORCPT
+        with ESMTP id S229481AbjE1Oim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 10:28:19 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F80BE;
-        Sun, 28 May 2023 07:28:18 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 0638532002F9;
-        Sun, 28 May 2023 10:28:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 28 May 2023 10:28:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1685284096; x=1685370496; bh=iS
-        jyKKgZCeV7tTuvcwALF+6hypZ+TqctPSP3VLBkQYw=; b=TcFBOzwUGQTK8vsZJ4
-        XwNF/Y8P3SISUjF8LZEozB2RLo42tVAzFGM/Ns+9j7f7hCLfy75pQJTkVKqnvCLB
-        aviECnaYYmfnd2fVmU9LdcgjOTP3upvrTgkR38xiRvEb1CSXQmgg9TN5Di0MtXxF
-        JOoOeNYMRqwUakkle3/5ugDXdcq1ucr9xVF9o+lk64pn/37TmRzdeMQ1l7W8RjZ+
-        M7temEV5HZfasu/gnuUbfDCJis0kMwpEWAxjESg+ZygbY/tTOxx0dmCcLdEg1TrN
-        5AMtom8kuwsd9IJKJ1vvaYpbF+th722Kg9xgnVr9TN3odNFez6gyBt5KHJMPETZi
-        cgBw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685284096; x=1685370496; bh=iSjyKKgZCeV7t
-        TuvcwALF+6hypZ+TqctPSP3VLBkQYw=; b=oWruq4bTre2f7iTey9OGgG7lii56O
-        X8h2ZpDuLjJq/1AfaQF2Eqk13cthqFYS/4+quVFpI8Ia1i+/uG21rSMKYYeg+5cG
-        DZgX7lK8beA4sgJHa8B8ukKjQq4Pxw+TdyEV0gOTYsRmdmlQP5Cm2y3BzluvSFqL
-        lSJoVZo5tAzEv12UyOeBV1AKsxcGiEJK+B3CeQXWhC2mrQRh2htz4lQ72ubcey4B
-        OkmJbgUkD1y2SDXLSu6XV3hJ2SOYwGAC4fecgTSrmEbZZTZ31W2qCBAD0lAu3Qd7
-        Htotxw1GMBaML7H20CFit8kwcgO6lhdgFKjmuK4KbVcatt8Ma6NjP7zCg==
-X-ME-Sender: <xms:AGVzZHp-VdS1HbG7iK1dlFZJO7MgB_WN0ZgBKhj-n20YUQ0ZPs05PQ>
-    <xme:AGVzZBqSduQ2KPCkUWMgsDSGRJ757lZNMg8feysLtyVvsehJXmNqBQ4XrAkCljESi
-    1psc0-DeiQZgQ>
-X-ME-Received: <xmr:AGVzZEPpFwHTm6FATLtACU9lfO2qMx1F9fWF3rYKrQ0qxZmVKLX4hGxRezvP>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekfedgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:AGVzZK7vZ1uKnvp9viM4-ROexJs9HhSdmh6AbH8Y16ZrE-wj3-7SKA>
-    <xmx:AGVzZG4lQ2G8jmuhm4qBcZ0GgZlGNE3RKmEuW-q0INOujqIKCUSkDQ>
-    <xmx:AGVzZChghiPJKHb0aLl17cjF7dafVUqF1jm9fjax4nNuoDR-Ay64xA>
-    <xmx:AGVzZIuo74DaGZRlyQf-X80S6d-MRl16K5Ee2YvaqAWWxUhcQnDyjA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 28 May 2023 10:28:16 -0400 (EDT)
-Date:   Sun, 28 May 2023 15:28:14 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Message-ID: <2023052806-stout-revisable-311f@gregkh>
-References: <20230515125023.639f3ca3@canb.auug.org.au>
+        Sun, 28 May 2023 10:38:42 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06E3B8
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 07:38:40 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2af2b74d258so24942701fa.3
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 07:38:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685284719; x=1687876719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YAfNOgzmGHj2iulpU1MX94nyYnzy1xUiHwn7EpMMh1Q=;
+        b=qhTML6pAtTYXfvx2x8gNdM9FJC3dIdin3pnTwScsukhs4W/nadfvLmR+B6+KE4Pmc4
+         AyWHpUg8U9/BggjWSg5V7hU/0ywFYmlP9I5xroqJpQwWouCxw6FFMLk3uDtgDXALKOUp
+         zRHBNMmulFErq2dOhVxQXo+7QNXRJleJJOc1JmaBG9sbPHHRzqdgFx5t3r+g1/+ygLPV
+         65jrqxe6va3j+QX5Rpa47cY6qBkkeEWfUGbQdyKbEmzhoPmlTMlwEjtDVt6tbKFW4Ubh
+         KEV19rFR4eAuKbMo//yVb77G1bpKmZpEO1W6FoFnrbn+kyhVxzzmZ+lJ7h7VIzFcFYzt
+         2MNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685284719; x=1687876719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YAfNOgzmGHj2iulpU1MX94nyYnzy1xUiHwn7EpMMh1Q=;
+        b=GsrolvH8cMN6ZOQpiI5Vg2Jo6UI0R8bPqmZqwch3XulDc1wM5q7DowdcHE90ncdrUb
+         D0Jvhrfg3huza/m+U0TxDFw8FANzbRQ5Fe0IbEOHbMujWUhtYMbdVeDF5syPhlpyMhIw
+         H283ezjgOjn2LcuAAq4uYrXsRqf85wTuIz4bULjzDYp65nJ2PwcoCNagMgwx8cV8m5BL
+         WPx97Fxt5jN4f2AxZPo2mVNog2CnEr+xUeAVHdgSnm9MjFSvGN+I4j6/ycC9iV9erIgy
+         E7VSnJpvDMTyo84T9M/4bNIvjMwYbC7vdrK5FWI/q/4W2BSznqpSu8EjsMy8kSAaEFl7
+         vVvg==
+X-Gm-Message-State: AC+VfDxpxsiRbW079eiPvlM5Me+47gqouaRS67K1rz0WfThzaS4CVvMp
+        uPLO7LKuq6AtQ6wRcqgCowY7yFwj55+qIHWZ9kM=
+X-Google-Smtp-Source: ACHHUZ6L3vKwutaozdePAL2qOIEtCYNsOefvS4/Yc8v+KrPWV5S9wPNnkshnyBGN5B+kG3fTMiASrcNRzNQ5ZiZZCLc=
+X-Received: by 2002:a05:651c:1041:b0:2af:20d2:bb7b with SMTP id
+ x1-20020a05651c104100b002af20d2bb7bmr3531083ljm.43.1685284718826; Sun, 28 May
+ 2023 07:38:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515125023.639f3ca3@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230519105321.333-1-ssawgyw@gmail.com> <20230527103722.GG4967@kernel.org>
+In-Reply-To: <20230527103722.GG4967@kernel.org>
+From:   Yuwei Guan <ssawgyw@gmail.com>
+Date:   Sun, 28 May 2023 22:38:03 +0800
+Message-ID: <CALJQGLmn3JkYBZgkJXOc2mMy_2u4HZRUzdfaLm+uF8MQQCWsgg@mail.gmail.com>
+Subject: Re: [PATCH v4] memblock: Add flags and nid info in memblock debugfs
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     akpm@linux-foundation.org, tsahu@linux.ibm.com,
+        anshuman.khandual@arm.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, wangkefeng.wang@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 12:50:23PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   drivers/usb/gadget/udc/core.c
-> 
-> between commit:
-> 
->   f22e9b67f19c ("Revert "usb: gadget: udc: core: Invoke usb_gadget_connect only when started"")
-> 
-> from the usb.current tree and commit:
-> 
->   d34f9bafa78d ("usb: gadget: udc: Handle gadget_connect failure during bind operation")
-> 
-> from the usb tree.
-> 
-> I fixed it up (I think - see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/usb/gadget/udc/core.c
-> index 52e6d2e84e35,69041cca5d24..000000000000
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@@ -1078,12 -1121,17 +1078,16 @@@ EXPORT_SYMBOL_GPL(usb_gadget_set_state)
->   
->   /* ------------------------------------------------------------------------- */
->   
-> - static void usb_udc_connect_control(struct usb_udc *udc)
->  -/* Acquire connect_lock before calling this function. */
->  -static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
-> ++static int usb_udc_connect_control(struct usb_udc *udc)
->   {
-> + 	int ret;
-> + 
->  -	if (udc->vbus && udc->started)
->  -		ret = usb_gadget_connect_locked(udc->gadget);
->  +	if (udc->vbus)
-> - 		usb_gadget_connect(udc->gadget);
-> ++		ret = usb_gadget_connect(udc->gadget);
->   	else
-> - 		usb_gadget_disconnect(udc->gadget);
->  -		ret = usb_gadget_disconnect_locked(udc->gadget);
-> ++		ret = usb_gadget_disconnect(udc->gadget);
-> + 
-> + 	return ret;
->   }
->   
->   /**
-> @@@ -1523,15 -1580,28 +1527,23 @@@ static int gadget_bind_driver(struct de
->   	if (ret)
->   		goto err_bind;
->   
->  -	mutex_lock(&udc->connect_lock);
->  -	ret = usb_gadget_udc_start_locked(udc);
->  -	if (ret) {
->  -		mutex_unlock(&udc->connect_lock);
->  +	ret = usb_gadget_udc_start(udc);
->  +	if (ret)
->   		goto err_start;
->  -	}
->   	usb_gadget_enable_async_callbacks(udc);
-> - 	usb_udc_connect_control(udc);
->  -	ret = usb_udc_connect_control_locked(udc);
-> ++	ret = usb_udc_connect_control(udc);
-> + 	if (ret)
-> + 		goto err_connect_control;
->   
->  -	mutex_unlock(&udc->connect_lock);
->  -
->   	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
->   	return 0;
->   
-> +  err_connect_control:
-> + 	usb_gadget_disable_async_callbacks(udc);
-> + 	if (gadget->irq)
-> + 		synchronize_irq(gadget->irq);
->  -	usb_gadget_udc_stop_locked(udc);
-> ++	usb_gadget_udc_stop(udc);
-> + 
->    err_start:
->   	driver->unbind(udc->gadget);
->   
+Mike Rapoport <rppt@kernel.org> =E4=BA=8E2023=E5=B9=B45=E6=9C=8827=E6=97=A5=
+=E5=91=A8=E5=85=AD 18:37=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi Yuwei,
+>
+> On Fri, May 19, 2023 at 06:53:21PM +0800, Yuwei Guan wrote:
+> > Currently, the memblock debugfs can display the count of memblock_type =
+and
+> > the base and end of the reg. However, when memblock_mark_*() or
+> > memblock_set_node() is executed on some range, the information in the
+> > existing debugfs cannot make it clear why the address is not consecutiv=
+e.
+> >
+> > For example,
+> > cat /sys/kernel/debug/memblock/memory
+> >    0: 0x0000000080000000..0x00000000901fffff
+> >    1: 0x0000000090200000..0x00000000905fffff
+> >    2: 0x0000000090600000..0x0000000092ffffff
+> >    3: 0x0000000093000000..0x00000000973fffff
+> >    4: 0x0000000097400000..0x00000000b71fffff
+> >    5: 0x00000000c0000000..0x00000000dfffffff
+> >    6: 0x00000000e2500000..0x00000000f87fffff
+> >    7: 0x00000000f8800000..0x00000000fa7fffff
+> >    8: 0x00000000fa800000..0x00000000fd3effff
+> >    9: 0x00000000fd3f0000..0x00000000fd3fefff
+> >   10: 0x00000000fd3ff000..0x00000000fd7fffff
+> >   11: 0x00000000fd800000..0x00000000fd901fff
+> >   12: 0x00000000fd902000..0x00000000fd909fff
+> >   13: 0x00000000fd90a000..0x00000000fd90bfff
+> >   14: 0x00000000fd90c000..0x00000000ffffffff
+> >   15: 0x0000000880000000..0x0000000affffffff
+> >
+> > So we can add flags and nid to this debugfs.
+> >
+> > For example,
+> > cat /sys/kernel/debug/memblock/memory
+> >    0: 0x0000000080000000..0x00000000901fffff    0 NONE
+> >    1: 0x0000000090200000..0x00000000905fffff    0 NOMAP
+> >    2: 0x0000000090600000..0x0000000092ffffff    0 NONE
+> >    3: 0x0000000093000000..0x00000000973fffff    0 NOMAP
+> >    4: 0x0000000097400000..0x00000000b71fffff    0 NONE
+> >    5: 0x00000000c0000000..0x00000000dfffffff    0 NONE
+> >    6: 0x00000000e2500000..0x00000000f87fffff    0 NONE
+> >    7: 0x00000000f8800000..0x00000000fa7fffff    0 NOMAP
+> >    8: 0x00000000fa800000..0x00000000fd3effff    0 NONE
+> >    9: 0x00000000fd3f0000..0x00000000fd3fefff    0 NOMAP
+> >   10: 0x00000000fd3ff000..0x00000000fd7fffff    0 NONE
+> >   11: 0x00000000fd800000..0x00000000fd901fff    0 NOMAP
+> >   12: 0x00000000fd902000..0x00000000fd909fff    0 NONE
+> >   13: 0x00000000fd90a000..0x00000000fd90bfff    0 NOMAP
+> >   14: 0x00000000fd90c000..0x00000000ffffffff    0 NONE
+> >   15: 0x0000000880000000..0x0000000affffffff    0 NONE
+> >
+> > Signed-off-by: Yuwei Guan <ssawgyw@gmail.com>
+> > ---
+> > v4:
+> > - show string value for each memblock flag
+> > ---
+> >  mm/memblock.c | 24 ++++++++++++++++++++++--
+> >  1 file changed, 22 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/mm/memblock.c b/mm/memblock.c
+> > index 511d4783dcf1..10d0ddbeebc1 100644
+> > --- a/mm/memblock.c
+> > +++ b/mm/memblock.c
+> > @@ -2136,12 +2136,19 @@ void __init memblock_free_all(void)
+> >  }
+> >
+> >  #if defined(CONFIG_DEBUG_FS) && defined(CONFIG_ARCH_KEEP_MEMBLOCK)
+> > +static const char * const flagname[] =3D {
+> > +     [ilog2(MEMBLOCK_HOTPLUG)] =3D "HOTPLUG",
+> > +     [ilog2(MEMBLOCK_MIRROR)] =3D "MIRROR",
+> > +     [ilog2(MEMBLOCK_NOMAP)] =3D "NOMAP",
+> > +     [ilog2(MEMBLOCK_DRIVER_MANAGED)] =3D "DRV_MNG",
+> > +};
+> >
+> >  static int memblock_debug_show(struct seq_file *m, void *private)
+> >  {
+> >       struct memblock_type *type =3D m->private;
+> >       struct memblock_region *reg;
+> > -     int i;
+> > +     int i, j;
+> > +     unsigned int count =3D ARRAY_SIZE(flagname);
+> >       phys_addr_t end;
+> >
+> >       for (i =3D 0; i < type->cnt; i++) {
+> > @@ -2149,7 +2156,20 @@ static int memblock_debug_show(struct seq_file *=
+m, void *private)
+> >               end =3D reg->base + reg->size - 1;
+> >
+> >               seq_printf(m, "%4d: ", i);
+> > -             seq_printf(m, "%pa..%pa\n", &reg->base, &end);
+> > +             seq_printf(m, "%pa..%pa ", &reg->base, &end);
+> > +             seq_printf(m, "%4d ", memblock_get_region_node(reg));
+>
+> As Kefeng mentioned, the node id for reserved regions will be wrong, so
+> this needs to be updated so that when reg->nid =3D=3D MAX_NUMNODES we'll =
+print
+> e.g. 'x'.
+Hi Mike,
 
+How about print 'x' when reg->nid =3D=3D MAX_NUMNODES, base on this patch,
+https://lore.kernel.org/linux-mm/44ce007d-8049-1cc9-7e2e-4ccb51a2867d@huawe=
+i.com/T/#m6d214d4ea8912b64f5efc9c3f51ae71aa057d1f1
 
+diff --git a/mm/memblock.c b/mm/memblock.c
+index c5c80d9bcea3..3d449aaba052 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -2169,17 +2169,21 @@ static int memblock_debug_show(struct seq_file
+*m, void *private)
+ {
+  struct memblock_type *type =3D m->private;
+  struct memblock_region *reg;
+- int i, j;
++ int i, j, nid;
+  unsigned int count =3D ARRAY_SIZE(flagname);
+  phys_addr_t end;
 
-Should now be resolved in my branch.
+  for (i =3D 0; i < type->cnt; i++) {
+  reg =3D &type->regions[i];
+  end =3D reg->base + reg->size - 1;
++ nid =3D memblock_get_region_node(reg);
 
-thanks,
+  seq_printf(m, "%4d: ", i);
+  seq_printf(m, "%pa..%pa ", &reg->base, &end);
+- seq_printf(m, "%4d ", memblock_get_region_node(reg));
++ if (nid !=3D MAX_NUMNODES)
++ seq_printf(m, "%4d ", nid);
++ else
++ seq_printf(m, "%4c ", 'x');
+  if (reg->flags) {
+  for (j =3D 0; j < count; j++) {
+  if (reg->flags & (1U << j)) {
 
-greg k-h
+>
+> > +             if (reg->flags) {
+> > +                     for (j =3D 0; j < count; j++) {
+> > +                             if (reg->flags & (1U << j)) {
+> > +                                     seq_printf(m, "%s\n", flagname[j]=
+);
+> > +                                     break;
+> > +                             }
+> > +                     }
+> > +                     if (j =3D=3D count)
+> > +                             seq_printf(m, "%s\n", "UNKNOWN");
+> > +             } else {
+> > +                     seq_printf(m, "%s\n", "NONE");
+> > +             }
+> >       }
+> >       return 0;
+> >  }
+> > --
+> > 2.34.1
+> >
+>
+> --
+> Sincerely yours,
+> Mike.
