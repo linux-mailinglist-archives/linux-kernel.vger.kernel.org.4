@@ -2,232 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF15D714088
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 23:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE4871408E
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 23:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjE1VQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 17:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
+        id S229539AbjE1VTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 17:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjE1VQQ (ORCPT
+        with ESMTP id S229627AbjE1VTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 17:16:16 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B3EBE;
-        Sun, 28 May 2023 14:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685308573; x=1716844573;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y+BKlDevzCKXevCjvN6HMiTRWqU67ZdEh2bnFi5G5hM=;
-  b=COkOnpd1GGIUfY3ziqE2jHpxwLEPSnkosf07+D8zeU9fB0g3R6hq/SqG
-   PIdzhl40fHV4k0HwCUUPMHQMWLKuEh0mxWSQvDNS0ny2XOFj8bVbTbjD0
-   N1GypvAc/M5t07rPfb8WmtrruAHqOsN81iNKQd7tq7koUhOKlhRr5EYKt
-   hE26FRdPQRWqwt26GejsbfQzZah0nTvn08X86pul57FILPIPE6WWTCTfZ
-   WZaw0TSFyGSDtbWIGF3JMhn1VitwJvVbo0ZtnN+N0aHNPvyeVKMlQDyNO
-   og4ehN2f22JBnFWeR2tUbR6PT5BSOFgFOdrn7mZlQ126LgBhD9HnIXdBC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="440918217"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="440918217"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 14:16:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="738927868"
-X-IronPort-AV: E=Sophos;i="6.00,198,1681196400"; 
-   d="scan'208";a="738927868"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 14:16:07 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 32BBA12303D;
-        Mon, 29 May 2023 00:16:05 +0300 (EEST)
-Date:   Sun, 28 May 2023 21:16:05 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-        martin.hecht@avnet.eu, linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] media: dt-bindings: alvium: add document YAML
- binding
-Message-ID: <ZHPElYOeD2C1qo4R@kekkonen.localdomain>
-References: <20230526173955.797226-1-tomm.merciai@gmail.com>
- <20230526173955.797226-2-tomm.merciai@gmail.com>
+        Sun, 28 May 2023 17:19:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A504BE
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 14:18:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685308734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Um1A7pr7TdEip1EPUsNyisBw5ieK06CvDe/AUKbysUg=;
+        b=atsP641hQyfUoMXri2Dxf5b3v4FrGn8sOKI+Q8r83xrlAxqPVWI/877Jdr27Xul+xO511x
+        WGPVRb5IbKQhI0Y5ks8tQqfNOtwFyOwi+OxopE/BJxbNmZioJ9/ptWQnEgBWl1ZwgAJ5cA
+        4IzLAKBdWc9r2BxjTNVTbGIvCMFUaF0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-670-QgvzmYV3MZCBaFvfULKyeQ-1; Sun, 28 May 2023 17:18:53 -0400
+X-MC-Unique: QgvzmYV3MZCBaFvfULKyeQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D7EDA800BFF;
+        Sun, 28 May 2023 21:18:51 +0000 (UTC)
+Received: from [10.22.16.37] (unknown [10.22.16.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A48E4492B0A;
+        Sun, 28 May 2023 21:18:50 +0000 (UTC)
+Message-ID: <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
+Date:   Sun, 28 May 2023 17:18:50 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526173955.797226-2-tomm.merciai@gmail.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+References: <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
+ <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
+ <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
+ <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
+ <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
+ <ZFGOTHQj3k5rzmyR@blackbook>
+ <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
+ <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
+ <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
+ <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
+ <ZGvHUjOCjwat91Gq@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ZGvHUjOCjwat91Gq@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso,
+On 5/22/23 15:49, Tejun Heo wrote:
+> Hello, Waiman.
 
-On Fri, May 26, 2023 at 07:39:43PM +0200, Tommaso Merciai wrote:
-> Add documentation of device tree in YAML schema for the ALVIUM
-> Camera from Allied Vision Inc.
-> 
-> References:
->  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> 
-> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> ---
-> Changes since v1:
->  - Fixed build error as suggested by RHerring bot
-> 
->  .../media/i2c/alliedvision,alvium.yaml        | 115 ++++++++++++++++++
->  1 file changed, 115 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> new file mode 100644
-> index 000000000000..81e9e560c99d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> @@ -0,0 +1,115 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Alliedvision Alvium Camera
-> +
-> +maintainers:
-> +  - Tommaso Merciai <tomm.merciai@gmail.com>
-> +  - Martin Hecht <martin.hecht@avnet.eu>
-> +
-> +allOf:
-> +  - $ref: /schemas/media/video-interface-devices.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: alliedvision,alvium
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description: XCLK Input Clock
-> +
-> +  clock-names:
-> +    const: xclk
+Sorry for the late reply as I had been off for almost 2 weeks due to PTO.
 
-I'd also drop this as you have a single clock only: it's redundant.
 
-> +
-> +  powerdown-gpios:
-> +    maxItems: 1
-> +    description: >
-> +      Reference to the GPIO connected to the powerdown pin, if any.
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description: >
-> +      Reference to the GPIO connected to the reset pin, if any.
-> +
-> +  streamon-delay:
-> +    maxItems: 1
-> +    description: >
-> +      Delay before camera start capturing frames in us.
-> +
-> +  rotation:
-> +    enum:
-> +      - 0
-> +      - 180
-> +
-> +  port:
-> +    description: Digital Output Port
-> +    $ref: /schemas/graph.yaml#/$defs/port-base
-> +    additionalProperties: false
-> +
-> +    properties:
-> +      endpoint:
-> +        $ref: /schemas/media/video-interfaces.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          clock-lanes:
-> +            const: 0
+>
+> On Sun, May 07, 2023 at 09:03:44PM -0400, Waiman Long wrote:
+> ...
+>>    cpuset.cpus.reserve
+>>      A read-write multiple values file which exists only on root
+>>      cgroup.
+>>
+>>      It lists all the CPUs that are reserved for adjacent and remote
+>>      partitions created in the system.  See the next section for
+>>      more information on what an adjacent or remote partitions is.
+>>
+>>      Creation of adjacent partition does not require touching this
+>>      control file as CPU reservation will be done automatically.
+>>      In order to create a remote partition, the CPUs needed by the
+>>      remote partition has to be written to this file first.
+>>
+>>      A "+" prefix can be used to indicate a list of additional
+>>      CPUs that are to be added without disturbing the CPUs that are
+>>      originally there.  For example, if its current value is "3-4",
+>>      echoing ""+5" to it will change it to "3-5".
+>>
+>>      Once a remote partition is destroyed, its CPUs have to be
+>>      removed from this file or no other process can use them.  A "-"
+>>      prefix can be used to remove a list of CPUs from it.  However,
+>>      removing CPUs that are currently used in existing partitions
+>>      may cause those partitions to become invalid.  A single "-"
+>>      character without any number can be used to indicate removal
+>>      of all the free CPUs not allocated to any partitions to avoid
+>>      accidental partition invalidation.
+> Why is the syntax different from .cpus? Wouldn't it be better to keep them
+> the same?
 
-The driver can know this, no need to have it in DT, i.e. please drop it.
+Unlike cpuset.cpus, cpuset.cpus.reserve is supposed to contains CPUs 
+that are used in multiple partitions. Also automatic reservation of 
+adjacent partitions can happen in parallel. That is why I think it will 
+be safer if we allow incremental increase or decrease of reserve CPUs to 
+be used for remote partitions. I will include this reasoning into the 
+doc file.
 
-> +          data-lanes:
-> +            minItems: 1
-> +            maxItems: 4
-> +          link-frequencies: true
-> +
-> +        required:
-> +          - data-lanes
-> +          - link-frequencies
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - port
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +      #include <dt-bindings/gpio/gpio.h>
-> +      #include <dt-bindings/clock/imx8mp-clock.h>
-> +
-> +      i2c {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +
-> +          camera: alvium@3c {
-> +              compatible = "alliedvision,alvium";
-> +              pinctrl-names = "default";
-> +              pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
-> +              reg = <0x3c>;
-> +              clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
-> +              clock-names = "xclk";
-> +              assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
-> +              assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-> +              assigned-clock-rates = <24000000>;
-> +              streamon-delay = <20>;
-> +              powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
-> +              reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-> +              status = "okay";
-> +
-> +              port {
-> +                  alvium_out: endpoint {
-> +                      remote-endpoint = <&mipi_csi_0_in>;
-> +                      data-lanes = <1 2 3 4>;
-> +                      link-frequencies = /bits/ 64 <681250000>;
-> +                      clock-lanes = <0>;
-> +                  };
-> +              };
-> +          };
-> +      };
-> +
-> +...
 
--- 
-Kind regards,
+>>    cpuset.cpus.partition
+>>      A read-write single value file which exists on non-root
+>>      cpuset-enabled cgroups.  This flag is owned by the parent cgroup
+>>      and is not delegatable.
+>>
+>>      It accepts only the following input values when written to.
+>>
+>>        ==========    =====================================
+>>        "member"    Non-root member of a partition
+>>        "root"    Partition root
+>>        "isolated"    Partition root without load balancing
+>>        ==========    =====================================
+>>
+>>      A cpuset partition is a collection of cgroups with a partition
+>>      root at the top of the hierarchy and its descendants except
+>>      those that are separate partition roots themselves and their
+>>      descendants.  A partition has exclusive access to the set of
+>>      CPUs allocated to it.  Other cgroups outside of that partition
+>>      cannot use any CPUs in that set.
+>>
+>>      There are two types of partitions - adjacent and remote.  The
+>>      parent of an adjacent partition must be a valid partition root.
+>>      Partition roots of adjacent partitions are all clustered around
+>>      the root cgroup.  Creation of adjacent partition is done by
+>>      writing the desired partition type into "cpuset.cpus.partition".
+>>
+>>      A remote partition does not require a partition root parent.
+>>      So a remote partition can be formed far from the root cgroup.
+>>      However, its creation is a 2-step process.  The CPUs needed
+>>      by a remote partition ("cpuset.cpus" of the partition root)
+>>      has to be written into "cpuset.cpus.reserve" of the root
+>>      cgroup first.  After that, "isolated" can be written into
+>>      "cpuset.cpus.partition" of the partition root to form a remote
+>>      isolated partition which is the only supported remote partition
+>>      type for now.
+>>
+>>      All remote partitions are terminal as adjacent partition cannot
+>>      be created underneath it.
+> Can you elaborate this extra restriction a bit further?
 
-Sakari Ailus
+Are you referring to the fact that only remote isolated partitions are 
+supported? I do not preclude the support of load balancing remote 
+partitions. I keep it to isolated partitions for now for ease of 
+implementation and I am not currently aware of a use case where such a 
+remote partition type is needed.
+
+If you are talking about remote partition being terminal. It is mainly 
+because it can be more tricky to support hierarchical adjacent 
+partitions underneath it especially if it is not isolated. We can 
+certainly support it if a use case arises. I just don't want to 
+implement code that nobody is really going to use.
+
+BTW, with the current way the remote partition is created, it is not 
+possible to have another remote partition underneath it.
+
+>
+> In general, I think it'd be really helpful if the document explains the
+> reasoning behind the design decisions. ie. Why is reserving for? What
+> purpose does it serve that the regular isolated ones cannot? That'd help
+> clarifying the design decisions.
+
+I understand your concern. If you think it is better to support both 
+types of remote partitions or hierarchical adjacent partitions 
+underneath it for symmetry purpose, I can certain do that. It just needs 
+to take a bit more time.
+
+Cheers,
+Longman
+
