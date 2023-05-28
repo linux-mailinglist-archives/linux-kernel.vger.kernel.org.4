@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77453713A15
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 16:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0291713A17
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 16:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjE1O2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 10:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
+        id S229510AbjE1O2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 10:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjE1O2N (ORCPT
+        with ESMTP id S229526AbjE1O2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 10:28:13 -0400
+        Sun, 28 May 2023 10:28:19 -0400
 Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090BFB8;
-        Sun, 28 May 2023 07:28:08 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 0EE50320024A;
-        Sun, 28 May 2023 10:28:05 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sun, 28 May 2023 10:28:06 -0400
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F80BE;
+        Sun, 28 May 2023 07:28:18 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 0638532002F9;
+        Sun, 28 May 2023 10:28:16 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sun, 28 May 2023 10:28:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
         :cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1685284085; x=1685370485; bh=bO
-        uIPzG12g4gcSOpXVBNfgdgSQC3jGZB6+tVXF5BZVk=; b=f1Jky7Op27OksrZFCD
-        vQ0Al/TDdm+YKHS5v3n3kLZh7e/6Y87v4DgW6bvtGdJyHABVQHecKn7jxNRjj7PT
-        X1fxDRwOeNDz7j6JPQck322kbHsEfvvXaOEx5YZz/22+c08NECltzZHKXQqx1DJ4
-        af/e97FlhKYIWRkxo84uGrW4bAS/lhNVtwDTf68eQDJpdgFU47oD1b+GtEbBCbpa
-        pJ4LJtaCvwZJAKhZAp2xMmeJM4ucHbEsU6kQfFvdDClgdRtoi2B/sykUBPzINZns
-        wpsjBFzzS64JF2PuhYxDOc5bViaI1hTJVY47BrwebDbupCm7szM1GOuaPSbLRowT
-        6Jmw==
+        :subject:subject:to:to; s=fm1; t=1685284096; x=1685370496; bh=iS
+        jyKKgZCeV7tTuvcwALF+6hypZ+TqctPSP3VLBkQYw=; b=TcFBOzwUGQTK8vsZJ4
+        XwNF/Y8P3SISUjF8LZEozB2RLo42tVAzFGM/Ns+9j7f7hCLfy75pQJTkVKqnvCLB
+        aviECnaYYmfnd2fVmU9LdcgjOTP3upvrTgkR38xiRvEb1CSXQmgg9TN5Di0MtXxF
+        JOoOeNYMRqwUakkle3/5ugDXdcq1ucr9xVF9o+lk64pn/37TmRzdeMQ1l7W8RjZ+
+        M7temEV5HZfasu/gnuUbfDCJis0kMwpEWAxjESg+ZygbY/tTOxx0dmCcLdEg1TrN
+        5AMtom8kuwsd9IJKJ1vvaYpbF+th722Kg9xgnVr9TN3odNFez6gyBt5KHJMPETZi
+        cgBw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685284085; x=1685370485; bh=bOuIPzG12g4gc
-        SOpXVBNfgdgSQC3jGZB6+tVXF5BZVk=; b=zIWxzHLpDyEPbkPWrVuL5DdLo1j/U
-        FJoe26iyhouOJpAd3lHEs0HqycHZpG1Ow5Gd3ananFchXW5tJztMKIK3yT40c+YN
-        P7tfqSmRGTzUnCu1ArV3VVW2HybRvjMwvP7zg+i2raUbowG2lyoYZRkN5F9Ss4gB
-        lX2erYqTvYRD5hBjOgf2VeNL0lV4irto6cJkGhsOKVY30ZBdliR+9SYuLYojcmpw
-        KYMPhfBkkzjq3w0N5zzDn/EkjpLLMS6sqDRrZU6lJo+bQY1bJ9wnqsC8hxWCb1H3
-        HRG6WNJ3cDQtRDfA5y87gDFEpePPbF3vgN2IBcUnpqwcrUHuQ42qhOf7g==
-X-ME-Sender: <xms:9WRzZIf2nflnW_626wl-lP4HnPnwDk8B9xcTDbYcgDM4D46DO-gsPA>
-    <xme:9WRzZKNdKdIJ9wGKxpoZ3JEG7MXiN4fO3IMzwEeq6P2EI6lhl2XgZtI0IPZ5u07Mu
-    K3iAutrdpQNwg>
-X-ME-Received: <xmr:9WRzZJioYUmClCDHxHXq_OvW3818hR1BYfVt7aRiXKrctvH3E1HCAfDfrI7l>
+        :x-sasl-enc; s=fm1; t=1685284096; x=1685370496; bh=iSjyKKgZCeV7t
+        TuvcwALF+6hypZ+TqctPSP3VLBkQYw=; b=oWruq4bTre2f7iTey9OGgG7lii56O
+        X8h2ZpDuLjJq/1AfaQF2Eqk13cthqFYS/4+quVFpI8Ia1i+/uG21rSMKYYeg+5cG
+        DZgX7lK8beA4sgJHa8B8ukKjQq4Pxw+TdyEV0gOTYsRmdmlQP5Cm2y3BzluvSFqL
+        lSJoVZo5tAzEv12UyOeBV1AKsxcGiEJK+B3CeQXWhC2mrQRh2htz4lQ72ubcey4B
+        OkmJbgUkD1y2SDXLSu6XV3hJ2SOYwGAC4fecgTSrmEbZZTZ31W2qCBAD0lAu3Qd7
+        Htotxw1GMBaML7H20CFit8kwcgO6lhdgFKjmuK4KbVcatt8Ma6NjP7zCg==
+X-ME-Sender: <xms:AGVzZHp-VdS1HbG7iK1dlFZJO7MgB_WN0ZgBKhj-n20YUQ0ZPs05PQ>
+    <xme:AGVzZBqSduQ2KPCkUWMgsDSGRJ757lZNMg8feysLtyVvsehJXmNqBQ4XrAkCljESi
+    1psc0-DeiQZgQ>
+X-ME-Received: <xmr:AGVzZEPpFwHTm6FATLtACU9lfO2qMx1F9fWF3rYKrQ0qxZmVKLX4hGxRezvP>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekfedgjeejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -55,29 +55,28 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekfedgjeejucetufdoteggod
     evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
     thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
     hhrdgtohhm
-X-ME-Proxy: <xmx:9WRzZN_EEH0qKpInUKLeGkNvHVeJPuBPPJJjN8x0y73Po6Oe4aEx8w>
-    <xmx:9WRzZEvx22ymQP87oirK2HZhtmZVSwzYk7LuCWFgw1-_5Fbu50z7rA>
-    <xmx:9WRzZEG7efAqjL8Ifp2qg_QT2T11FY0yInoPH31HwJGGZ7bQ6oAuwg>
-    <xmx:9WRzZCDnqwEU5R7aIeh0jv1Nt2Iq8WbNiYos8kEUQSEkmpzPqFP0vA>
+X-ME-Proxy: <xmx:AGVzZK7vZ1uKnvp9viM4-ROexJs9HhSdmh6AbH8Y16ZrE-wj3-7SKA>
+    <xmx:AGVzZG4lQ2G8jmuhm4qBcZ0GgZlGNE3RKmEuW-q0INOujqIKCUSkDQ>
+    <xmx:AGVzZChghiPJKHb0aLl17cjF7dafVUqF1jm9fjax4nNuoDR-Ay64xA>
+    <xmx:AGVzZIuo74DaGZRlyQf-X80S6d-MRl16K5Ee2YvaqAWWxUhcQnDyjA>
 Feedback-ID: i787e41f1:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 28 May 2023 10:28:04 -0400 (EDT)
-Date:   Sun, 28 May 2023 15:28:03 +0100
+ 28 May 2023 10:28:16 -0400 (EDT)
+Date:   Sun, 28 May 2023 15:28:14 +0100
 From:   Greg KH <greg@kroah.com>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         Krishna Kurapati <quic_kriskura@quicinc.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: manual merge of the usb tree with the usb.current
  tree
-Message-ID: <2023052846-surfer-spore-e873@gregkh>
-References: <20230515123524.74e7bda3@canb.auug.org.au>
- <5082d743-54b1-7b4c-432c-dfdce1bb772a@kernel.org>
+Message-ID: <2023052806-stout-revisable-311f@gregkh>
+References: <20230515125023.639f3ca3@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5082d743-54b1-7b4c-432c-dfdce1bb772a@kernel.org>
+In-Reply-To: <20230515125023.639f3ca3@canb.auug.org.au>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -88,71 +87,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 02:01:08PM +0300, Roger Quadros wrote:
-> Hi Stephen,
+On Mon, May 15, 2023 at 12:50:23PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On 15/05/2023 05:35, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Today's linux-next merge of the usb tree got a conflict in:
-> > 
-> >   drivers/usb/dwc3/gadget.c
-> > 
-> > between commit:
-> > 
-> >   c8540870af4c ("usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()")
-> > 
-> > from the usb.current tree and commit:
-> > 
-> >   813f44d57e19 ("usb: dwc3: gadget: Bail out in pullup if soft reset timeout happens")
-> > 
-> > from the usb tree.
-> > 
-> > I fixed it up (I think - see below) and can carry the fix as
-> > necessary. This is now fixed as far as linux-next is concerned, but any
-> > non trivial conflicts should be mentioned to your upstream maintainer
-> > when your tree is submitted for merging.  You may also want to consider
-> > cooperating with the maintainer of the conflicting tree to minimise any
-> > particularly complex conflicts.
-> > 
+> Today's linux-next merge of the usb tree got a conflict in:
 > 
-> > diff --cc drivers/usb/dwc3/gadget.c
-> > index d831f5acf7b5,5965796bc5d5..000000000000
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@@ -2700,21 -2699,6 +2700,26 @@@ static int dwc3_gadget_soft_disconnect(
-> >   	return ret;
-> >   }
-> >   
-> >  +static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
-> >  +{
-> > ++	int	ret;
-> > ++
-> >  +	/*
-> >  +	 * In the Synopsys DWC_usb31 1.90a programming guide section
-> >  +	 * 4.1.9, it specifies that for a reconnect after a
-> >  +	 * device-initiated disconnect requires a core soft reset
-> >  +	 * (DCTL.CSftRst) before enabling the run/stop bit.
-> >  +	 */
-> >  +	dwc3_core_soft_reset(dwc);
+>   drivers/usb/gadget/udc/core.c
 > 
-> Please drop above call to dwc3_core_soft_reset().
+> between commit:
 > 
-> > ++	ret = dwc3_core_soft_reset(dwc);
-> > ++	if (ret)
-> > ++		return ret;
-> >  +
-> >  +	dwc3_event_buffers_setup(dwc);
-> >  +	__dwc3_gadget_start(dwc);
-> >  +	return dwc3_gadget_run_stop(dwc, true);
-> >  +}
-> >  +
-> >   static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
-> >   {
-> >   	struct dwc3		*dwc = gadget_to_dwc(g);
+>   f22e9b67f19c ("Revert "usb: gadget: udc: core: Invoke usb_gadget_connect only when started"")
 > 
+> from the usb.current tree and commit:
+> 
+>   d34f9bafa78d ("usb: gadget: udc: Handle gadget_connect failure during bind operation")
+> 
+> from the usb tree.
+> 
+> I fixed it up (I think - see below) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/usb/gadget/udc/core.c
+> index 52e6d2e84e35,69041cca5d24..000000000000
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@@ -1078,12 -1121,17 +1078,16 @@@ EXPORT_SYMBOL_GPL(usb_gadget_set_state)
+>   
+>   /* ------------------------------------------------------------------------- */
+>   
+> - static void usb_udc_connect_control(struct usb_udc *udc)
+>  -/* Acquire connect_lock before calling this function. */
+>  -static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
+> ++static int usb_udc_connect_control(struct usb_udc *udc)
+>   {
+> + 	int ret;
+> + 
+>  -	if (udc->vbus && udc->started)
+>  -		ret = usb_gadget_connect_locked(udc->gadget);
+>  +	if (udc->vbus)
+> - 		usb_gadget_connect(udc->gadget);
+> ++		ret = usb_gadget_connect(udc->gadget);
+>   	else
+> - 		usb_gadget_disconnect(udc->gadget);
+>  -		ret = usb_gadget_disconnect_locked(udc->gadget);
+> ++		ret = usb_gadget_disconnect(udc->gadget);
+> + 
+> + 	return ret;
+>   }
+>   
+>   /**
+> @@@ -1523,15 -1580,28 +1527,23 @@@ static int gadget_bind_driver(struct de
+>   	if (ret)
+>   		goto err_bind;
+>   
+>  -	mutex_lock(&udc->connect_lock);
+>  -	ret = usb_gadget_udc_start_locked(udc);
+>  -	if (ret) {
+>  -		mutex_unlock(&udc->connect_lock);
+>  +	ret = usb_gadget_udc_start(udc);
+>  +	if (ret)
+>   		goto err_start;
+>  -	}
+>   	usb_gadget_enable_async_callbacks(udc);
+> - 	usb_udc_connect_control(udc);
+>  -	ret = usb_udc_connect_control_locked(udc);
+> ++	ret = usb_udc_connect_control(udc);
+> + 	if (ret)
+> + 		goto err_connect_control;
+>   
+>  -	mutex_unlock(&udc->connect_lock);
+>  -
+>   	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+>   	return 0;
+>   
+> +  err_connect_control:
+> + 	usb_gadget_disable_async_callbacks(udc);
+> + 	if (gadget->irq)
+> + 		synchronize_irq(gadget->irq);
+>  -	usb_gadget_udc_stop_locked(udc);
+> ++	usb_gadget_udc_stop(udc);
+> + 
+>    err_start:
+>   	driver->unbind(udc->gadget);
+>   
 
-Can you verify I got this right in my usb-next branch now?
+
+
+Should now be resolved in my branch.
 
 thanks,
 
