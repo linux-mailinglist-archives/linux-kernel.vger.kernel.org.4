@@ -2,198 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D374C713936
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 13:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C545713934
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 13:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjE1Ld7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 07:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
+        id S229482AbjE1Ldy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 07:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjE1Ld4 (ORCPT
+        with ESMTP id S229445AbjE1Ldx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 07:33:56 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D42DCBB;
-        Sun, 28 May 2023 04:33:44 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 34SBXPBl002038;
-        Sun, 28 May 2023 13:33:25 +0200
-Date:   Sun, 28 May 2023 13:33:25 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, thomas@t-8ch.de
-Subject: Re: [PATCH 00/13] tools/nolibc: riscv: Add full rv32 support
-Message-ID: <20230528113325.GJ1956@1wt.eu>
-References: <20230528075955.GE1956@1wt.eu>
- <20230528103957.318267-1-falcon@tinylab.org>
+        Sun, 28 May 2023 07:33:53 -0400
+Received: from mxout4.routing.net (mxout4.routing.net [IPv6:2a03:2900:1:a::9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49CFBC;
+        Sun, 28 May 2023 04:33:50 -0700 (PDT)
+Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
+        by mxout4.routing.net (Postfix) with ESMTP id AAAFC10047A;
+        Sun, 28 May 2023 11:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1685273628;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wKL2OHRpM57lwNDHj3JRgnkVg9YanEJjJkWatc4415E=;
+        b=gGdaQZM0Gk6IFscFNfBqFaJ5YPjd9dy6lokKYou2PrEarVjzFH6XiIStRtC/ghSXzif641
+        kytNmZaV1lrLsORRg4C8z5MJqK+F9m2iwn0hsyo2eP5yCXED+kZiIl9X7o+YY5c4LXpk1w
+        keUjo0HC9S0qQGWy2/Rdoq7jUQSvHGU=
+Received: from frank-G5.. (fttx-pool-217.61.156.30.bambit.de [217.61.156.30])
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id C78F91003E5;
+        Sun, 28 May 2023 11:33:47 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
+Subject: [PATCH] arm64: dts: mt7986: use size of reserved partition for bl2
+Date:   Sun, 28 May 2023 13:33:42 +0200
+Message-Id: <20230528113343.7649-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230528103957.318267-1-falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 698df16c-71eb-4971-9a45-3611eae1be82
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 06:39:57PM +0800, Zhangjin Wu wrote:
-> > I have read the comments that others made on the series and overall
-> > agree. I've seen that you intend to prepare a v2. I think we must
-> > first decide how to better deal with emulated syscalls as I said in
-> > an earlier message. Probably that we should just add a specific test
-> > case for EFAULT in nolibc-test since it's the only one (I think) that
-> > risks to trigger crashes with emulated syscalls. We could also imagine
-> > dealing with the signal ourselves but I'm not that keen on going to
-> > implement signal() & longjmp() for now :-/
-> >
-> 
-> Yes, user-space signal() may be the right direction, we just need to let
-> user-space not crash the kernel, what about this 'solution' for current stage
-> (consider the pure time64 support too):
-> 
->     #if defined(NOLIBC) && defined(__NR_gettimeofday) && __SIZEOF_LONG__ == 8
-> 		CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
-> 		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
->     #endif
-> 
-> This idea is from your commit 1da02f51088 ("selftests/nolibc: support glibc as
-> well") for glibc, but the difference is of course glibc not crashes the kernel.
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Well, I was imagining implementing an EXPECT_EFAULT() macro that would
-rely on whatever other macros we'd set to indicate that a syscall got
-remapped. But I had another check grepping for EFAULT:
+To store uncompressed bl2 more space is required than partition is
+actually defined.
 
-      CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
-      CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
-      CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll((void *)1, 1, 0), -1, EFAULT); break;
-      CASE_TEST(prctl);             EXPECT_SYSER(1, prctl(PR_SET_NAME, (unsigned long)NULL, 0, 0, 0), -1, EFAULT); break;
-      CASE_TEST(select_fault);      EXPECT_SYSER(1, select(1, (void *)1, NULL, NULL, 0), -1, EFAULT); break;
-      CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
-      CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
+There is currently no known usage of this reserved partition.
+Openwrt uses same partition layout.
 
-In short, they're very few, and several of these could simply be dropped
-as irrelevant once we know that the libc is able to remap them and
-dereference the arguments itself.
+We added same change to u-boot with commit d7bb1099 [1].
 
-I'd be fine with dropping the two gettimeofday_bad ones, poll_fault,
-select_fault and stat_fault. These ones already have at least one or
-two other tests. These ones were initially added because they were
-easy to implement, but if they're not relevant we can drop them and
-stop wondering how to hack around the tests.
+[1] https://source.denx.de/u-boot/u-boot/-/commit/d7bb109900c1ca754a0198b9afb50e3161ffc21e
 
-If that's OK for you as well I can do that.
+Cc: stable@vger.kernel.org
+Fixes: 8e01fb15b815 ("arm64: dts: mt7986: add Bananapi R3")
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+If the bl2 does not fit into the bl2-partition (cut off), board does
+not boot, thats why i want to increase it now. My current bl2 is 197K
+for nor and i ran into this problem.
 
-> Btw, since the gettimeofday_null case may be optimized by compiler and not
-> trigger such errors:
-> 
->     // rv32
->     nolibc-test.c:(.text.run_syscall+0x8c0): undefined reference to `__divdi3'
-> 
->     // arm32
->     nolibc-test.c:(.text.run_syscall+0x820): undefined reference to `__aeabi_ldivmod'
-> 
-> The above errors have been hidden after the disabling of the gettimeofday_bad1
-> test case, so, still need to solve it before sending v2.
+Openwrt uses also the first reserved partition to give bl2 more
+space:
 
-Sorry, I don't understand what you mean, I'm not seeing such a divide in
-the code. Or maybe you're speaking about what you got after some of your
-proposed changes ?
+https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/mediatek/dts/mt7986a-bananapi-bpi-r3-nor.dts;h=f597b869abc80d1a73f44ebb85ad4da17376bb52;hb=HEAD#l22
 
-> The method used by musl may work, but the high bits may be lost (from long long
-> to int)?
->  
-> 	tv->tv_usec = (int)ts.tv_nsec / 1000;
+so imho it should be same in mainline to not require complex bl2
+compression.
 
-Yes, and it would be even cleaner to use a uint here since tv_nsec is
-always positive. This will simply result in a multiplication and a
-shift on most platforms. Of course that's the type of thing you normally
-don't want on a fast path for some small systems but here code compacity
-counts more and that's fine.
+have now sent the board-specific dts to uboot too:
+https://source.denx.de/u-boot/u-boot/-/commit/d7bb109900c1ca754a0198b9afb50e3161ffc21e
+---
+ .../boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso     | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-> Perhaps we really need to add the missing __divdi3 and __aeabi_ldivmod and the
-> ones for the other architectures, or get one from lib/math/div64.c.
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
+index 84aa229e80f3..e48881be4ed6 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
+@@ -27,15 +27,10 @@ partitions {
+ 
+ 					partition@0 {
+ 						label = "bl2";
+-						reg = <0x0 0x20000>;
++						reg = <0x0 0x40000>;
+ 						read-only;
+ 					};
+ 
+-					partition@20000 {
+-						label = "reserved";
+-						reg = <0x20000 0x20000>;
+-					};
+-
+ 					partition@40000 {
+ 						label = "u-boot-env";
+ 						reg = <0x40000 0x40000>;
+-- 
+2.34.1
 
-No, these ones come from the compiler via libgcc_s, we must not try to
-reimplement them. And we should do our best to avoid depending on them
-to avoid the error you got above.
-
-> Will add such new test cases to detect the above issues:
-> 
->     CASE_TEST(gettimeofday_tv);   EXPECT_SYSZR(1, gettimeofday(&tv, NULL)); break;
->     CASE_TEST(gettimeofday_tz);   EXPECT_SYSZR(1, gettimeofday(NULL, &tz)); break;
->     CASE_TEST(gettimeofday_tv_tz);EXPECT_SYSZR(1, gettimeofday(&tv, &tz)); break;
-> 
-> May still require to add 'used' attribute to 'struct timeval tv' and 'struct
-> timeval tz' to let compiler not optimize them away.
-
-Maybe, or turn them to volatile as well.
-
-> For the waitid syscall based waitpid INT_MIN test case, I have prepared such
-> code:
-> 
->     #define IF_TEST(name) \
->     	if (strcmp(test, #name) == 0)
-> 
->     const int _errorno(const char *test)
->     {
->     #ifdef __NR_wait4
->     	IF_TEST(waitpid_min); return ESRCH;
->     #else /* __NR_waitid */
->     	IF_TEST(waitpid_min); return EINVAL;
->     #endif
->     	return 0;
->     }
-> 
->     #define errorno(test) _errorno(#test)
-> 
->     CASE_TEST(waitpid_min);       EXPECT_SYSER(1, waitpid(INT_MIN, &tmp, WNOHANG), -1, errorno(waitpid_min)); break;
-> 
-> Instead of simply disabling this case, the above code allows to return
-> different values for different syscalls.
-
-I don't like this, it gets particularly complicated to follow, especially
-since it doesn't rely on the underlying syscall but on which ones are
-defined, and supposes that the underlying implementation will use exactly
-these ones. Do not forget that we're not trying to verify that the tests
-provoke a specific syscall return, but that our syscall implementation
-returns the errno the application expects. If we see that one of them
-breaks, it means either that our test is wrong or undefined, or that our
-mapping of the syscall is incorrect. But in either case it indicates that
-an application relying on a specific errno would see a different value.
-
-Many syscalls can return various values among a set, depending on which
-error is tested first. If that's the case for the ones above, I'd largely
-prefer to have EXPECT_SYSER2() that accepts any errno among a set of two
-(and maybe layer EXPECT_SYSER3() if 3 errno are possible).
-
-Also there's something to keep in mind: nolibc-test is just one userland
-application among others. This means that every time you need to modify
-it to shut up an error that pops up after a change to nolibc, it means
-that you're possibly breaking one application living on an edge case and
-explicitly checking for that errno value. It is not necessarily dramatic
-but that's still something to keep in mind. We've all seen some of our
-code fail after a syscall started to report a new errno value we didn't
-expect, so it's important to still be cautious here and not to rely too
-much on the ease of adapting error handling in nolibc-test.
-
-> Thanks very much and I have seen another two have been pushed too, will rebase
-> everything on this new branch.
-
-OK.
-
-> Based on the other suggestions from you and Thomas, I plan to send some generic
-> and independent changes at first, and then the left hard parts, It may simplify
-> the whole progress.
-
-Yes, thank you! As a general rule of thumb (which makes the handling
-easier for everyone including you), the least controversial changes should
-be proposed first. This often allows to merge the first half of the patches
-at once and saves you from having to reorder what's left.
-
-Willy
