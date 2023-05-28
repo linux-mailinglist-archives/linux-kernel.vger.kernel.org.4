@@ -2,92 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DA1713932
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 13:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D374C713936
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 13:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjE1Lag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 07:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
+        id S229502AbjE1Ld7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 07:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjE1Lad (ORCPT
+        with ESMTP id S229489AbjE1Ld4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 07:30:33 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503529C;
-        Sun, 28 May 2023 04:30:30 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34SBOPBM024011;
-        Sun, 28 May 2023 11:30:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jdM3HzsaV7JScZljybz8uxp47jRGdtnCoIrsyHQwbM0=;
- b=TfgCiPvzSdIi5Z+uc+xbTLjYSTFXb0mqTWsn8RDS1y2kg+aTf/yUlsc7uWN+NXhEQN2/
- ZIoJMO4ZM5o5bXVclCuCS+Ol5gSSw5F6FR5uV+sdAEYdsUTkBGWDub/wABhtav0vpkN7
- J5ZJIPEEN/aQX/Ss1fLosnNBGWmFhPKpHg7scxR9Mno7UEC6fDo2SCRb1BeSEhE/Xf0C
- GGCq1XooUTazixCwlp06+qQvYtu4ZriNib5inZgfr1QXOrtk85MSPJQtfCjsW+jBJ9wT
- LHQRm5asVC874Qc4C3gGMPsDRxUO/23zcM4/FxO1iaztTqnNilDmtHOUH9j8g71zRZZd fg== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3quanx9kdw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 28 May 2023 11:30:01 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34SBU0et003198
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 28 May 2023 11:30:00 GMT
-Received: from [10.216.57.186] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 28 May
- 2023 04:29:53 -0700
-Message-ID: <c2496855-113a-56e6-f6e2-9a9bd03a1267@quicinc.com>
-Date:   Sun, 28 May 2023 16:59:48 +0530
+        Sun, 28 May 2023 07:33:56 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D42DCBB;
+        Sun, 28 May 2023 04:33:44 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 34SBXPBl002038;
+        Sun, 28 May 2023 13:33:25 +0200
+Date:   Sun, 28 May 2023 13:33:25 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, thomas@t-8ch.de
+Subject: Re: [PATCH 00/13] tools/nolibc: riscv: Add full rv32 support
+Message-ID: <20230528113325.GJ1956@1wt.eu>
+References: <20230528075955.GE1956@1wt.eu>
+ <20230528103957.318267-1-falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 04/18] soc: qcom: Add Qualcomm minidump kernel driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
-References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
- <1683133352-10046-5-git-send-email-quic_mojha@quicinc.com>
- <c6f730b6-f702-91d4-4abd-71546e02f869@linaro.org>
- <23b493f4-1a01-8d03-fc12-d588b2c6fd74@quicinc.com>
- <575a422d-6224-06b7-628c-8487b47882e9@linaro.org>
- <500e5abc-fb71-8468-a6b0-3ced2676b57c@linaro.org>
- <e714566e-39b7-d46b-13bd-3c0e20e9f944@quicinc.com>
- <7777c016-4875-a6c9-cd5e-78c2ac686448@linaro.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <7777c016-4875-a6c9-cd5e-78c2ac686448@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Wq_YQJJaMTn_p0i8IQNdSFF-sgN61CTi
-X-Proofpoint-GUID: Wq_YQJJaMTn_p0i8IQNdSFF-sgN61CTi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-28_08,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxlogscore=999 malwarescore=0 suspectscore=0 phishscore=0 clxscore=1015
- mlxscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305280099
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230528103957.318267-1-falcon@tinylab.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,126 +42,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On 5/9/2023 12:41 PM, Krzysztof Kozlowski wrote:
-> On 08/05/2023 09:10, Mukesh Ojha wrote:
->>
->>
->> On 5/4/2023 10:04 PM, Krzysztof Kozlowski wrote:
->>> On 04/05/2023 17:21, Krzysztof Kozlowski wrote:
->>>>>>
->>>>>>> +	ret = qcom_minidump_init_apss_subsystem(md);
->>>>>>> +	if (ret) {
->>>>>>> +		dev_err(&pdev->dev, "apss minidump initialization failed: %d\n", ret);
->>>>>>> +		goto unlock;
->>>>>>> +	}
->>>>>>> +
->>>>>>> +	__md = md;
->>>>>>
->>>>>> No. This is a platform device, so it can have multiple instances.
->>>>>
->>>>> It can have only one instance that is created from SMEM driver probe.
->>>>
->>>> Anyone can instantiate more of them.... how did you solve it?
->>>
->>> To clarify - sprinkling more of singletons makes everything tightly
->>> coupled, difficult to debug and non-portable. You cannot have two
->>> instances, you have to control concurrent initialization by yourself in
->>> each of such singletons.
->>>
->>> I understand sometimes they are unavoidable, for example when this does
->>> not map to hardware property. However here you have the parent - smem -
->>> which can return you valid instance. Thus you avoid entire problem of
->>> file-scope variables.
->>
->> I get your point, why one's should avoid file scope variables.
->>
->>
->> This is infrastructure driver and will not have multiple instances and
->> even if it happens could be avoided with with the help of global mutex
->> and protect below function which i am already doing at the moment and
+On Sun, May 28, 2023 at 06:39:57PM +0800, Zhangjin Wu wrote:
+> > I have read the comments that others made on the series and overall
+> > agree. I've seen that you intend to prepare a v2. I think we must
+> > first decide how to better deal with emulated syscalls as I said in
+> > an earlier message. Probably that we should just add a specific test
+> > case for EFAULT in nolibc-test since it's the only one (I think) that
+> > risks to trigger crashes with emulated syscalls. We could also imagine
+> > dealing with the signal ourselves but I'm not that keen on going to
+> > implement signal() & longjmp() for now :-/
+> >
 > 
-> But we do not want global mutexes... so incorrect design is being
-> improved by more incorrect design.
+> Yes, user-space signal() may be the right direction, we just need to let
+> user-space not crash the kernel, what about this 'solution' for current stage
+> (consider the pure time64 support too):
 > 
->> fail the other probe if it is already initialized with proper logging..e.g
->>
->> "already initialized..."
->>
->>
->> ret = qcom_minidump_init_apss_subsystem(md);
->>
->>
->> And this will be in-lined with
->>
->> /* Pointer to the one and only smem handle */
->> static struct qcom_smem *__smem;
->>
->> Let me know if you still disagree...and have some other way ?
+>     #if defined(NOLIBC) && defined(__NR_gettimeofday) && __SIZEOF_LONG__ == 8
+> 		CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
+> 		CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+>     #endif
 > 
-> Why the parent - smem - cannot return every consumer the instance it
-> has? There will be one smem having only one minidump, so all problems
-> solved?
+> This idea is from your commit 1da02f51088 ("selftests/nolibc: support glibc as
+> well") for glibc, but the difference is of course glibc not crashes the kernel.
 
-Sorry, I am extending this discussion but it is needed to avoid rework
-in upcoming patches.
+Well, I was imagining implementing an EXPECT_EFAULT() macro that would
+rely on whatever other macros we'd set to indicate that a syscall got
+remapped. But I had another check grepping for EFAULT:
 
-I am inline with the thought of each smem has its own minidump instance, 
-which is basically one at this moment as SMEM has only instance in DT.
-In that way, Client driver calling qcom_apss_minidump_region_register()
-will also need to know the instance it need to register with right?
+      CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
+      CASE_TEST(gettimeofday_bad2); EXPECT_SYSER(1, gettimeofday(NULL, (void *)1), -1, EFAULT); break;
+      CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll((void *)1, 1, 0), -1, EFAULT); break;
+      CASE_TEST(prctl);             EXPECT_SYSER(1, prctl(PR_SET_NAME, (unsigned long)NULL, 0, 0, 0), -1, EFAULT); break;
+      CASE_TEST(select_fault);      EXPECT_SYSER(1, select(1, (void *)1, NULL, NULL, 0), -1, EFAULT); break;
+      CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
+      CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
 
-However, I do have a use case [1] where SMEM or similar region 
-supporting memory mapped region could be virtualized and guest vm does
-not have direct access to it, that way it will only have one backend at 
-a time.But even if they exist together that can be done with below approach.
+In short, they're very few, and several of these could simply be dropped
+as irrelevant once we know that the libc is able to remap them and
+dereference the arguments itself.
 
-File scope variable is still needed in minidump core but can be avoided 
-in backend drivers where each backend register with core and get added 
-itself in the list and for list protection, list mutex would be needed.
+I'd be fine with dropping the two gettimeofday_bad ones, poll_fault,
+select_fault and stat_fault. These ones already have at least one or
+two other tests. These ones were initially added because they were
+easy to implement, but if they're not relevant we can drop them and
+stop wondering how to hack around the tests.
 
+If that's OK for you as well I can do that.
 
-#define SMEM       0;
-#define MMIO       1;
-or enum may be..
-
-And client can call this to the instance it need to register with..
-int qcom_apss_minidump_region_register(region, SMEM);
-int qcom_apss_minidump_region_register(region, MMIO);
-
-Do you agree with this approach?
-
-[1]
-
-            +----------------+
-            |                |
-            | client A-Z     |
-            +-----+----------+
-                  |
-                  |
-                  |
-                  |
-                  v
-       +------------------------+
-       |                        |                other backends
-       |    minidump core       +----------------------------+
-       |                        |                            |
-       +--+---------------------+                            |
-          |                     |                            |
-          |                     |                            |
-          |                     |                            |e.g,
-          |                     |                            |gunyah-rm
-+--------v------+        +-----v-----------+             +--+---------+
-|               |        |                 |             |            |
-|minidump_smem  |        | minidump_mmio   |             | .....      |
-+---------------+        +-----------------+             +------------+
-  SMEM backend              mmio backend where
-                            smem may be virtualized
-
-
--- Mukesh
+> Btw, since the gettimeofday_null case may be optimized by compiler and not
+> trigger such errors:
 > 
-> Best regards,
-> Krzysztof
+>     // rv32
+>     nolibc-test.c:(.text.run_syscall+0x8c0): undefined reference to `__divdi3'
 > 
+>     // arm32
+>     nolibc-test.c:(.text.run_syscall+0x820): undefined reference to `__aeabi_ldivmod'
+> 
+> The above errors have been hidden after the disabling of the gettimeofday_bad1
+> test case, so, still need to solve it before sending v2.
+
+Sorry, I don't understand what you mean, I'm not seeing such a divide in
+the code. Or maybe you're speaking about what you got after some of your
+proposed changes ?
+
+> The method used by musl may work, but the high bits may be lost (from long long
+> to int)?
+>  
+> 	tv->tv_usec = (int)ts.tv_nsec / 1000;
+
+Yes, and it would be even cleaner to use a uint here since tv_nsec is
+always positive. This will simply result in a multiplication and a
+shift on most platforms. Of course that's the type of thing you normally
+don't want on a fast path for some small systems but here code compacity
+counts more and that's fine.
+
+> Perhaps we really need to add the missing __divdi3 and __aeabi_ldivmod and the
+> ones for the other architectures, or get one from lib/math/div64.c.
+
+No, these ones come from the compiler via libgcc_s, we must not try to
+reimplement them. And we should do our best to avoid depending on them
+to avoid the error you got above.
+
+> Will add such new test cases to detect the above issues:
+> 
+>     CASE_TEST(gettimeofday_tv);   EXPECT_SYSZR(1, gettimeofday(&tv, NULL)); break;
+>     CASE_TEST(gettimeofday_tz);   EXPECT_SYSZR(1, gettimeofday(NULL, &tz)); break;
+>     CASE_TEST(gettimeofday_tv_tz);EXPECT_SYSZR(1, gettimeofday(&tv, &tz)); break;
+> 
+> May still require to add 'used' attribute to 'struct timeval tv' and 'struct
+> timeval tz' to let compiler not optimize them away.
+
+Maybe, or turn them to volatile as well.
+
+> For the waitid syscall based waitpid INT_MIN test case, I have prepared such
+> code:
+> 
+>     #define IF_TEST(name) \
+>     	if (strcmp(test, #name) == 0)
+> 
+>     const int _errorno(const char *test)
+>     {
+>     #ifdef __NR_wait4
+>     	IF_TEST(waitpid_min); return ESRCH;
+>     #else /* __NR_waitid */
+>     	IF_TEST(waitpid_min); return EINVAL;
+>     #endif
+>     	return 0;
+>     }
+> 
+>     #define errorno(test) _errorno(#test)
+> 
+>     CASE_TEST(waitpid_min);       EXPECT_SYSER(1, waitpid(INT_MIN, &tmp, WNOHANG), -1, errorno(waitpid_min)); break;
+> 
+> Instead of simply disabling this case, the above code allows to return
+> different values for different syscalls.
+
+I don't like this, it gets particularly complicated to follow, especially
+since it doesn't rely on the underlying syscall but on which ones are
+defined, and supposes that the underlying implementation will use exactly
+these ones. Do not forget that we're not trying to verify that the tests
+provoke a specific syscall return, but that our syscall implementation
+returns the errno the application expects. If we see that one of them
+breaks, it means either that our test is wrong or undefined, or that our
+mapping of the syscall is incorrect. But in either case it indicates that
+an application relying on a specific errno would see a different value.
+
+Many syscalls can return various values among a set, depending on which
+error is tested first. If that's the case for the ones above, I'd largely
+prefer to have EXPECT_SYSER2() that accepts any errno among a set of two
+(and maybe layer EXPECT_SYSER3() if 3 errno are possible).
+
+Also there's something to keep in mind: nolibc-test is just one userland
+application among others. This means that every time you need to modify
+it to shut up an error that pops up after a change to nolibc, it means
+that you're possibly breaking one application living on an edge case and
+explicitly checking for that errno value. It is not necessarily dramatic
+but that's still something to keep in mind. We've all seen some of our
+code fail after a syscall started to report a new errno value we didn't
+expect, so it's important to still be cautious here and not to rely too
+much on the ease of adapting error handling in nolibc-test.
+
+> Thanks very much and I have seen another two have been pushed too, will rebase
+> everything on this new branch.
+
+OK.
+
+> Based on the other suggestions from you and Thomas, I plan to send some generic
+> and independent changes at first, and then the left hard parts, It may simplify
+> the whole progress.
+
+Yes, thank you! As a general rule of thumb (which makes the handling
+easier for everyone including you), the least controversial changes should
+be proposed first. This often allows to merge the first half of the patches
+at once and saves you from having to reorder what's left.
+
+Willy
