@@ -2,57 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA60B714020
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 22:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CBE714029
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 22:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjE1UZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 16:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S229576AbjE1UaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 16:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjE1UZs (ORCPT
+        with ESMTP id S229499AbjE1UaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 16:25:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAC499;
-        Sun, 28 May 2023 13:25:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EE06618FF;
-        Sun, 28 May 2023 20:25:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA952C433EF;
-        Sun, 28 May 2023 20:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685305545;
-        bh=e/BaBW7sBtQzZAFcqXZIr6cq7jQWmf347wE2UrNWXvo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FTEYgj2FnQEvAiguJAMacBw5p1NZqoD4NnK0xqagSVW2y+RV4Cy6CxnEkio28/hxW
-         NJmTo1snvbRMzSKbItYqw/k5XlB7TtrylKaWr/Y/ZTHzrXpEeywm9kGGvVU/9VcRiW
-         ula1LF2SKa1xNguOXil1199HZwd+escpztA2+cVA2hoo9oF7AbPGmubSYSH2JzWiCg
-         ktVvceTgB9onw2zpkPvieEACFgIPInxQcMgUI92WJqYsOD+VP0GRwp7UD+O/EDsWb7
-         DsTGJHBPgtElBetm/i5rZsDZ1XjyaR9+jsJWglnF834kL83xR1IsQp8YqfbbAvbJB/
-         BKBPsvFTpMCeQ==
-Date:   Sun, 28 May 2023 14:26:37 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] drm/amdgpu/discovery: Replace fake flex-arrays with
- flexible-array members
-Message-ID: <ZHO4/Z+iO+lqV4rW@work>
+        Sun, 28 May 2023 16:30:04 -0400
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F52AF;
+        Sun, 28 May 2023 13:30:03 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b04706c974so946405ad.2;
+        Sun, 28 May 2023 13:30:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685305802; x=1687897802;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3c7ui0/0zw8IQNoKpfcjNz481KA4SVJAj1O/dOTWz+I=;
+        b=Eawk4uMKEv96dj2SZoPKpvgEqfju/75vrNvdDte68yrUoO4jEd3cZ2PPKeSGVrHavK
+         F+Byo2ekaEvHGZMojcE56c5dQP38cAcfZKQCeDm06K966EYoVis2XFDfgSRlNcrjspGc
+         IkaXqNcEk5lZYkLZYekJaF/usCn/END1Q3A6nfgIhqEDiJMUIL19FHKi/k7K+l7UvxEj
+         diG9FWZHijgY26WL/ecgmmQrg0dfXeYHFe9iYc7U8HK93zNo7u8pDDQmFBUQz3HqX0bC
+         f4vCdXRdVGoJIxV7pRy625NiY+u8/pUqXscZPxJs3zqXuWoZihJAV089r2RbFDWF8U9N
+         IWng==
+X-Gm-Message-State: AC+VfDwyLW+wYL5dXN3gUopQ0L7iTglI1UNwlGLEXpSiEd0QANpw2uQE
+        ZjyvreaAbnv40NBZ5Nnha8sYXG4faDg=
+X-Google-Smtp-Source: ACHHUZ72JUTyDD3Z/8V2/4u60WttgODbYdRvA0+Cr7LqFxCiOzY4TKJqg0d4xnI/MlCQ9cZwrO009g==
+X-Received: by 2002:a17:903:2442:b0:1af:bbfd:1c07 with SMTP id l2-20020a170903244200b001afbbfd1c07mr9906437pls.57.1685305801890;
+        Sun, 28 May 2023 13:30:01 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id v2-20020a170902d68200b001b03842ab78sm1453118ply.89.2023.05.28.13.30.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 May 2023 13:30:01 -0700 (PDT)
+Message-ID: <c86f90b4-458a-3066-4a8e-6e510a41a37d@acm.org>
+Date:   Sun, 28 May 2023 13:30:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: scsi/stex time_after() build warnings
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-scsi@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <89df78d0-fb52-9045-2074-1d6f0afae4d9@infradead.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <89df78d0-fb52-9045-2074-1d6f0afae4d9@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,59 +63,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length and one-element arrays are deprecated, and we are moving
-towards adopting C99 flexible-array members, instead.
+On 5/27/23 16:08, Randy Dunlap wrote:
+> When I build stex.o for i386, I see these build warnings:
 
-Use the DECLARE_FLEX_ARRAY() helper macro to transform zero-length
-arrays in a union into flexible-array members. And replace a one-element
-array with a C99 flexible-array member.
+Are you perhaps using gcc 13?
 
-Address the following warnings found with GCC-13 and
--fstrict-flex-arrays=3 enabled:
-drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:1009:89: warning: array subscript kk is outside array bounds of ‘uint32_t[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
-drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:1007:94: warning: array subscript kk is outside array bounds of ‘uint64_t[0]’ {aka ‘long long unsigned int[]’} [-Warray-bounds=]
-drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:1310:94: warning: array subscript k is outside array bounds of ‘uint64_t[0]’ {aka ‘long long unsigned int[]’} [-Warray-bounds=]
-drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:1309:57: warning: array subscript k is outside array bounds of ‘uint32_t[0]’ {aka ‘unsigned int[]’} [-Warray-bounds=]
+Has the following alternative patch been considered? I think this patch 
+is lower risk than the patch in the original email:
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
+diff --git a/drivers/scsi/stex.c b/drivers/scsi/stex.c
+index 5b230e149c3d..8ffb75be99bc 100644
+--- a/drivers/scsi/stex.c
++++ b/drivers/scsi/stex.c
+@@ -109,7 +109,9 @@ enum {
+  	TASK_ATTRIBUTE_HEADOFQUEUE		= 0x1,
+  	TASK_ATTRIBUTE_ORDERED			= 0x2,
+  	TASK_ATTRIBUTE_ACA			= 0x4,
++};
 
-This results in no differences in binary output.
++enum {
+  	SS_STS_NORMAL				= 0x80000000,
+  	SS_STS_DONE				= 0x40000000,
+  	SS_STS_HANDSHAKE			= 0x20000000,
+@@ -121,7 +123,9 @@ enum {
+  	SS_I2H_REQUEST_RESET			= 0x2000,
 
-Link: https://github.com/KSPP/linux/issues/21
-Link: https://github.com/KSPP/linux/issues/193
-Link: https://github.com/KSPP/linux/issues/300
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/gpu/drm/amd/include/discovery.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+  	SS_MU_OPERATIONAL			= 0x80000000,
++};
 
-diff --git a/drivers/gpu/drm/amd/include/discovery.h b/drivers/gpu/drm/amd/include/discovery.h
-index 9181e57887db..f43e29722ef7 100644
---- a/drivers/gpu/drm/amd/include/discovery.h
-+++ b/drivers/gpu/drm/amd/include/discovery.h
-@@ -122,7 +122,7 @@ typedef struct ip_v3
- 	uint8_t sub_revision : 4;               /* HCID Sub-Revision */
- 	uint8_t variant : 4;                    /* HW variant */
- #endif
--	uint32_t base_address[1];               /* Base Address list. Corresponds to the num_base_address field*/
-+	uint32_t base_address[];		/* Base Address list. Corresponds to the num_base_address field*/
- } ip_v3;
- 
- typedef struct ip_v4 {
-@@ -140,8 +140,8 @@ typedef struct ip_v4 {
- 	uint8_t sub_revision : 4;               /* HCID Sub-Revision */
- #endif
- 	union {
--		uint32_t base_address[0];               /* 32-bit Base Address list. Corresponds to the num_base_address field*/
--		uint64_t base_address_64[0];            /* 64-bit Base Address list. Corresponds to the num_base_address field*/
-+		DECLARE_FLEX_ARRAY(uint32_t, base_address);	/* 32-bit Base Address list. Corresponds to the num_base_address field*/
-+		DECLARE_FLEX_ARRAY(uint64_t, base_address_64);	/* 64-bit Base Address list. Corresponds to the num_base_address field*/
- 	} __packed;
- } ip_v4;
- 
--- 
-2.34.1
++enum {
+  	STEX_CDB_LENGTH				= 16,
+  	STATUS_VAR_LEN				= 128,
 
+
+Thanks,
+
+Bart.
