@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0C871398A
-	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 15:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71253713989
+	for <lists+linux-kernel@lfdr.de>; Sun, 28 May 2023 15:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjE1NVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 09:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S229589AbjE1NT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 09:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjE1NVE (ORCPT
+        with ESMTP id S229447AbjE1NT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 09:21:04 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE77BE;
-        Sun, 28 May 2023 06:21:03 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f6c229b42bso11935981cf.0;
-        Sun, 28 May 2023 06:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685280062; x=1687872062;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4ggyLkGv6g0jo85hrXvJLdeY1eXxDxkX/cg7GhTS4sI=;
-        b=aIBF6b59zCRUAFbsviZO2vgNM+XM7mLFoWPVhWAuTOkeq320Ub6GSuS925yI0+uIQg
-         YZAPupRUPu36GoC6sG6P1NaOHkcR/qWgBwJJJoEzEcajnfkmSYZrrznxahNUUQ3O7jlj
-         A9REwphBY3TX2DE4xZ86Bmva0sn/eP2AffDJ24UtrivbhPdS6z+ScZqC5e8ueCubNNU2
-         x8zlgeMt4vdx2L5iirnlglRnYLof0b1zriQ6GwZg+6w/bIi1+XneBfV0kAhWgMOLIIH/
-         tn1pXiDs4p4HvW3TnYpCUuxMl8WZCWl4zIFK9QJl1XpufZsps3hNIwwQD9ySqGv4bRzi
-         reVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685280062; x=1687872062;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4ggyLkGv6g0jo85hrXvJLdeY1eXxDxkX/cg7GhTS4sI=;
-        b=WE36U8DVxVPJQV+Vp3TBQR+GzqqbjXyDUk+qBB0n1CRJDatD9aUhYBQEmsJDynRTDM
-         w582zKAqQhasig9xuNe/eGADydYqcjcQPsIeKo4VvV6bsUUkzolcxvDuRJ+/bG7zwu8M
-         imJTF0Gn9yb8/vkV+VNLc/msEYH+t9fZvxeUK/8tdr26MuegcNeOMmR61eiw63w9E8cE
-         /RD5hj5h5iOhJp2vJcf5ODdc/FseewLz9MCqTKD/G6AQDFzufvlsuFNoRkk9qcKkwotd
-         w9LyKzVvf9gxbv+jkEf1HOo2aXNVlWAuZpjl0JIx3S7pTiwNWSgJcBKQkHY63SqQD32H
-         7FwQ==
-X-Gm-Message-State: AC+VfDzHPwQhsrgmkuduXsQmrMaEbyL8arYf4xdknjlckocMV4FYDlqg
-        3c02KoQMvbdlgP177uKgDFM=
-X-Google-Smtp-Source: ACHHUZ5Z9y8gbyIHcZ/hfBctPRdliNDg9tOMLiNyj/Ez85Nq8VRnR3pN8fizYKYsBYAg+gP7l9WCvA==
-X-Received: by 2002:ad4:5f08:0:b0:626:1ca6:5efe with SMTP id fo8-20020ad45f08000000b006261ca65efemr1344446qvb.9.1685280062336;
-        Sun, 28 May 2023 06:21:02 -0700 (PDT)
-Received: from localhost.localdomain (2603-6000-8100-7fd4-0000-0000-0000-0619.res6.spectrum.com. [2603:6000:8100:7fd4::619])
-        by smtp.gmail.com with ESMTPSA id x5-20020ad44585000000b005dd8b9345b9sm87190qvu.81.2023.05.28.06.21.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 06:21:02 -0700 (PDT)
-From:   "Ethan D. Twardy" <ethan.twardy@gmail.com>
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Tiago Lam <tiagolam@gmail.com>,
-        Kees Cook <keescook@chromium.org>, Finn Behrens <me@kloenk.de>,
-        rust-for-linux@vger.kernel.org (open list:RUST),
-        linux-kernel@vger.kernel.org (open list),
-        llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT)
-Cc:     "Ethan D. Twardy" <ethan.twardy@gmail.com>
-Subject: [PATCH v2 1/1] scripts/rust_is_available: Fix clang version check
-Date:   Sun, 28 May 2023 08:18:02 -0500
-Message-Id: <20230528131802.6390-2-ethan.twardy@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230528131802.6390-1-ethan.twardy@gmail.com>
-References: <20230528131802.6390-1-ethan.twardy@gmail.com>
+        Sun, 28 May 2023 09:19:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAB0B2;
+        Sun, 28 May 2023 06:19:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8F6160FC5;
+        Sun, 28 May 2023 13:19:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB901C433D2;
+        Sun, 28 May 2023 13:19:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685279964;
+        bh=SYztQZUYixZlZrxgpJOdXKy6B3XNpotZJslGGMY1kgk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DzPxMxjbds0l5fk1N8m0h5r2N0mFfwZgtgAaLe7Z+Ox1zg2n2/AvUkVfL/FiUnt/o
+         klGd5g0wFasLRc/Ek2uSoRhwf1pfhHUBLj/EhAspVovIhu5I+xPekxku7F/ljUXvfo
+         pGSf8sYid/RnCa22lS5nd/h0qUQDCr8pAtM40jt7IzFO/PbBlb+vEqK//Ajpvoy1xQ
+         34+0IHLdMSATuS5QCwaUX2/6k2U2Bh5rAEAzx22RNXJ89016Vw1ilOGNheDmXSWvIn
+         yHxgy7RGmhpEfr5yf7dU/WflZBLyZGBYRlCyjadFUFBdAsIR206YuF4uBaGhrnn/fU
+         8naDlk1A/TIcg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6BB59403B5; Sun, 28 May 2023 10:19:21 -0300 (-03)
+Date:   Sun, 28 May 2023 10:19:21 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        James Clark <james.clark@arm.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Rob Herring <robh@kernel.org>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Fixes from evsel__group_pmu_name asan error
+Message-ID: <ZHNU2ULCyO/H6uWA@kernel.org>
+References: <20230526194442.2355872-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526194442.2355872-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During out-of-tree builds where the path to the kernel source tree
-contains a version string, scripts/rust_is_available.sh incorrectly
-identified the version string of libclang to be the version string in
-the kernel sources path, resulting in CONFIG_RUST_IS_AVAILABLE
-erroneously set to 'n'.
+Em Fri, May 26, 2023 at 12:44:40PM -0700, Ian Rogers escreveu:
+> evsel__group_pmu_name triggered an asan error as a list_head was cast
+> to an evsel, when it was the head, and the accessed as if it were a
+> full evsel. Further investigation showed problematic list iteration
+> for evsel__group_pmu_name whilst the list was being sorted so switch
+> to pre-computation.
+> 
+> v3: Rebase on perf-tools-next (branch getting ready for 6.5) rather
+>     than perf-tools (fixes for 6.4).
+> v2: Address review comments/feedback from Adrian Hunter
+>     <adrian.hunter@intel.com>.
 
-This issue was previously affecting builds on distributions, such as
-Gentoo Linux, where the kernel source tree is under version control,
-and placed under a path containing the current kernel version string
-in /usr/src.
+Thanks, applied.
 
-The fix is to take special care to match only the version string
-following the string 'clang version' in the output.
+- Arnaldo
 
-To reproduce:
+ 
+> Ian Rogers (2):
+>   perf evsel: evsel__group_pmu_name fixes
+>   perf evsel: for_each_group fixes
+> 
+>  tools/perf/util/evsel.c         | 31 ++++-----------
+>  tools/perf/util/evsel.h         | 26 +++++++-----
+>  tools/perf/util/evsel_fprintf.c |  1 +
+>  tools/perf/util/parse-events.c  | 70 +++++++++++++++++++++++++++------
+>  4 files changed, 84 insertions(+), 44 deletions(-)
+> 
+> -- 
+> 2.41.0.rc0.172.g3f132b7071-goog
+> 
 
-  $ cd ~/build && make -C ~/linux-6.2.0 O=$PWD LLVM=1 rustavailable
-  [...]
-  *** libclang (used by the Rust bindings generator 'bindgen') is too old.
-  ***   Your version:    6.2.0
-  ***   Minimum version: 11.0.0
-  [...]
-
-Fixes: 78521f3399ab ("scripts: add `rust_is_available.sh`")
-Signed-off-by: Ethan D. Twardy <ethan.twardy@gmail.com>
-
-diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
-index aebbf1913970..e8a1439be9f8 100755
---- a/scripts/rust_is_available.sh
-+++ b/scripts/rust_is_available.sh
-@@ -102,8 +102,8 @@ fi
- # Check that the `libclang` used by the Rust bindings generator is suitable.
- bindgen_libclang_version=$( \
- 	LC_ALL=C "$BINDGEN" $(dirname $0)/rust_is_available_bindgen_libclang.h 2>&1 >/dev/null \
--		| grep -F 'clang version ' \
--		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
-+		| grep -oE 'clang version [0-9]+\.[0-9]+\.[0-9]+' \
-+		| cut -d' ' -f3 \
- 		| head -n 1 \
- )
- bindgen_libclang_min_version=$($min_tool_version llvm)
 -- 
-2.40.1
 
+- Arnaldo
