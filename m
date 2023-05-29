@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BC5714247
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 05:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753F571424C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 05:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjE2DVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 23:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
+        id S229853AbjE2DYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 23:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjE2DVj (ORCPT
+        with ESMTP id S229572AbjE2DYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 23:21:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0498BB
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 20:21:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62BEA61524
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:21:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25E57C433EF;
-        Mon, 29 May 2023 03:21:36 +0000 (UTC)
-Date:   Sun, 28 May 2023 23:21:32 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] x86/alternatives: Add cond_resched() to
- text_poke_bp_batch()
-Message-ID: <20230528232132.14ab3201@rorschach.local.home>
-In-Reply-To: <20230529115246.a61734ce4e6d7644e2faec72@kernel.org>
-References: <20230528084652.5f3b48f0@rorschach.local.home>
-        <20230529115246.a61734ce4e6d7644e2faec72@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 28 May 2023 23:24:31 -0400
+Received: from out-57.mta1.migadu.com (out-57.mta1.migadu.com [IPv6:2001:41d0:203:375::39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317CAAF
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 20:24:30 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685330668;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HrRea8JyN4C0qVNp9YvhwrTuvrMqec00lyXuOgrJnAg=;
+        b=FLoAOT82LUNh+8YeB20/PYYrGEeG0cUJM7kyi1Qzm6DCphx44+EUwQVhJbBcn5wzrGvkHS
+        jQvoQ6H1xex3wP3VPvCk777n94ZY1VZ6LugvQCiEzhOb0t17tZdaVGvo631AB7Ymag81WR
+        Pn6BAQvvHk1W2eYKO0LQyOe1R6SDfM8=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     mani@kernel.org, fancer.lancer@gmail.com,
+        gustavo.pimentel@synopsys.com, vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cai Huoqing <cai.huoqing@linux.dev>
+Subject: [PATCH] MAINTAINERS: Add Cai Huoqing as dw-edma maintainer
+Date:   Mon, 29 May 2023 11:24:23 +0800
+Message-Id: <20230529032423.11650-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 May 2023 11:52:46 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+Since HDMA mode was merged, including the commits:
+commit e74c39573d35 ("dmaengine: dw-edma: Add support for native HDMA"),
+commit 353d5c241e83 ("dmaengine: dw-edma: Add HDMA DebugFS support"),
+I would like to add myself as maintainer of the dw-edma driver
+to recive patch for HDMA part. 
 
-> > +	/*
-> > +	 * Function tracing can enable thousands of places that need to be
-> > +	 * updated. This can take quite some time, and with full kernel debugging
-> > +	 * enabled, this could cause the softlockup watchdog to trigger.
-> > +	 * Add cond_resched() calls to each phase.
-> > +	 */
-> > +	cond_resched();  
-> 
-> Hmm, why don't you put this between the first step (put int3) and the
-> second step (put other bytes)? I guess those would takes more time.
+I can test HDMA part by our chip and cmodel and do some code review.
+I'm active in linux contribution, if possible, I want to
+take the dw-edma maintainership.
 
-Ah you're right. I still want this here to clear the 'need resched'
-flag before we start the process, but I did miss one after the first
-loop.
+Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks for the review!
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3a0504731524..541601feabd0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5881,6 +5881,7 @@ F:	drivers/mtd/nand/raw/denali*
+ 
+ DESIGNWARE EDMA CORE IP DRIVER
+ M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
++M:	Cai Huoqing <cai.huoqing@linux.dev>
+ R:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+ R:	Serge Semin <fancer.lancer@gmail.com>
+ L:	dmaengine@vger.kernel.org
+-- 
+2.34.1
 
--- Steve
