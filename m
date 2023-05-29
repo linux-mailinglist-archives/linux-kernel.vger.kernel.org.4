@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F301714E92
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44670714E9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjE2Qik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
+        id S229629AbjE2QqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjE2Qii (ORCPT
+        with ESMTP id S229468AbjE2QqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:38:38 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A5A109
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:38:11 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-75affb4d0f9so187671485a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:38:11 -0700 (PDT)
+        Mon, 29 May 2023 12:46:15 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8B2AD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:46:11 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-973e7c35eddso297400066b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685378287; x=1687970287;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5+bYmjm/h3lSQb6YeDlPhS20QMHi1e0gJPfH5ZggpcM=;
-        b=VjcnSTm21NLYuq3Hsb35yyozR88wKTebBbs9dHpvp+dCIlp6iyJHyLrsRWU6vvrkbG
-         4gAZcuffjQMzN6ybk3oKLBN9Z/z5P5KXbhxpkTMi9gzG/fJsJEUH4QCeKw3+ykIJr/l+
-         X1Eg5LdU/NffGKk4gHN066XjQiqD4YOcxktk+v5ofHaJ2DhiV3/zuawItrLKWvtvVJL2
-         kQQ0D/R1LkeiRtRfKLwblI/Hj1DjpRVbHsYa/xUVQpGcwyX186+67q2SrcoIwgFVYjUw
-         vMjdmkk99MGrvDd+ZIl3wTn64jx8aypK/3q4Cx+RWIMxyHSk2S8GiCQM71IIuRA7D1p2
-         GvEQ==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685378770; x=1687970770;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=P5W2InnJUP/UeKBwKYOBuhVJVSTGLUNK+LLVoQR0plI=;
+        b=1h1XpexRNcq/GARqspAA3SgX1lx9vLDK6+EnwpwTtJFPeMV7/8eQfB5/0Duo1jdbM0
+         zCmWVEoFh5y1cmnTFFbEb4XR5dTGF9oL8BTrYLjgNZEZ0zsbpFe5aC5sTu2n9ZSG0Cjz
+         NbmrjT73sF7cjE7sPH0pjCZavpTaTgfx3faWFv17/JCyXnOthchgA39p1Lu8QDrxIPdm
+         SzWueJlsMVOzzCnzQGNawipPcmqEU4jI6gt87OB5OFNlN9Etq4IJ/lBqNNnGrOrBAPzn
+         1byM6y1ing7jmIqFnZJj7IdKvBwZwxuUOoX8+ABU4l9zz725vX5Zyb/A1A06ABO6CshY
+         RYmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685378287; x=1687970287;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5+bYmjm/h3lSQb6YeDlPhS20QMHi1e0gJPfH5ZggpcM=;
-        b=ZqF44m5WIChL/rzi8+7cV8bqEYxp2uHXZnfSp9AIAQmFV2DzJktYuT32v6UuazzGeC
-         jeu52aPx/2vwhpJGTXET/QbVFHo6xuAr4sUVxXyKDg6pDw0YDF1v+P73n3+6fAdyNC5n
-         FkWOXeO3CWC0gQTe7H89TcWyytzQpkhQeRQ0UDKW/opNE/49o/DAlIHGKvz1bS86iE3x
-         DDzUIuQJLF3zQWnYKb6mKTXAtezT+ytrvMtALSKl1Nl44wi6PWL06kJYEGmrIhsNOMUQ
-         vDgjmNMa8ZOIjUc0MDbnnLXSebm5z3Ki7T+zizf8qVRcJ4zEswCa0uyp00FrBC0e+dpo
-         ATWg==
-X-Gm-Message-State: AC+VfDzGr+FqGsO8YY0o0rwV+wbePrKCZX10yaUPIPQuTeKwEdyNaFlZ
-        XrZQNr0ucpqC6HYMXZ8L3whLSb4xaIhyBLMBHi8=
-X-Google-Smtp-Source: ACHHUZ7eFEKc4LAfBL2BydTImTW8cO2OyoprqG9Z/iSmHb1f4gXFTT1bFTyReeN1fL6F2fzQ2sGpvA==
-X-Received: by 2002:a05:620a:1b92:b0:75b:23a0:e7d9 with SMTP id dv18-20020a05620a1b9200b0075b23a0e7d9mr8117975qkb.58.1685378286917;
-        Mon, 29 May 2023 09:38:06 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:8bb6])
-        by smtp.gmail.com with ESMTPSA id y23-20020a37e317000000b00759495bb52fsm3450186qki.39.2023.05.29.09.38.06
+        d=1e100.net; s=20221208; t=1685378770; x=1687970770;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P5W2InnJUP/UeKBwKYOBuhVJVSTGLUNK+LLVoQR0plI=;
+        b=KM0tO/e8ZxYv0uawkUM6+CngjKLlOzmM3RuFX1UzsrMO9leqAuMJUQLTQRy/+E1Aa6
+         uc2vnsl5kHQC3IIi3rM4Uf5qrk6wxmrCFvf5QK0CwDgPjak+lRK3poUK2QlJLlFSgHkE
+         dAsude+MloyPHYoZ4kMTa7uCZl60PNMrXr5Wucb8A/Kh3WqoRyAB+x/ik/7ET/la5oYo
+         qV+QOCpAztUJXOmBiFfhnKE+vniM/S5VJhmdmohvwYOMHKw7BzVEIaN/CgP84IWHlXe2
+         py2li2Kz7E6Rjzo0a7pSKxA86muHFNhMpIs9yGaxNmd+TqKRVxL4ZY7P9omC9Z4nF234
+         bFvw==
+X-Gm-Message-State: AC+VfDyrsl8VTifUwoWXaNzVPCFqpjfn0u0DBUlwopD1yclpkk4RNk9Q
+        aGELfvRYouduRcYIJfKF37jmaQ==
+X-Google-Smtp-Source: ACHHUZ5vN5ot2rMmDtaN9KdYMd2D30A8+m+MQ+eA0mtBsXo6xsAq+L7HqMIPyTkeUEcph2YC4AUhgg==
+X-Received: by 2002:a17:907:846:b0:96a:4ea0:a1ea with SMTP id ww6-20020a170907084600b0096a4ea0a1eamr10330693ejb.44.1685378769781;
+        Mon, 29 May 2023 09:46:09 -0700 (PDT)
+Received: from ph18.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id f4-20020aa7d844000000b0050d89daaa70sm3248578eds.2.2023.05.29.09.46.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 09:38:06 -0700 (PDT)
-Date:   Mon, 29 May 2023 12:38:05 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH 2/5] mm: compaction: simplify should_compact_retry()
-Message-ID: <20230529163805.GA84971@cmpxchg.org>
-References: <20230519123959.77335-1-hannes@cmpxchg.org>
- <20230519123959.77335-3-hannes@cmpxchg.org>
- <1c3c9305-a678-279e-f015-7aed544ab3c8@suse.cz>
+        Mon, 29 May 2023 09:46:09 -0700 (PDT)
+From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        wenst@chromium.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
+        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
+Subject: [PATCH v3 0/5] Add LVTS support for mt8192
+Date:   Mon, 29 May 2023 18:46:00 +0200
+Message-ID: <20230529164605.3552619-1-bero@baylibre.com>
+X-Mailer: git-send-email 2.41.0.rc2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1c3c9305-a678-279e-f015-7aed544ab3c8@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -74,57 +77,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 03:03:52PM +0200, Vlastimil Babka wrote:
-> On 5/19/23 14:39, Johannes Weiner wrote:
-> > The different branches for retry are unnecessarily complicated. There
-> > are really only three outcomes: progress (retry n times), skipped
-> > (retry if reclaim can help), failed (retry with higher priority).
-> > 
-> > Rearrange the branches and the retry counter to make it simpler.
-> > 
-> > v2:
-> > - fix trace point build (Mel)
-> > - fix max_retries logic for costly allocs (Huang)
-> > 
-> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > ---
-> >  mm/page_alloc.c | 53 +++++++++++++++----------------------------------
-> >  1 file changed, 16 insertions(+), 37 deletions(-)
-> > 
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 5a84a0bebc37..72660e924b95 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -3772,16 +3772,22 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
-> >  	 * Compaction managed to coalesce some page blocks, but the
-> >  	 * allocation failed presumably due to a race. Retry some.
-> >  	 */
-> > -	if (compact_result == COMPACT_SUCCESS)
-> > -		(*compaction_retries)++;
-> > +	if (compact_result == COMPACT_SUCCESS) {
-> > +		/*
-> > +		 * !costly requests are much more important than
-> > +		 * __GFP_RETRY_MAYFAIL costly ones because they are de
-> > +		 * facto nofail and invoke OOM killer to move on while
-> > +		 * costly can fail and users are ready to cope with
-> > +		 * that. 1/4 retries is rather arbitrary but we would
-> > +		 * need much more detailed feedback from compaction to
-> > +		 * make a better decision.
-> > +		 */
-> > +		if (order > PAGE_ALLOC_COSTLY_ORDER)
-> > +			max_retries /= 4;
-> >  
-> > -	/*
-> > -	 * All zones were scanned completely and still no result. It
-> > -	 * doesn't really make much sense to retry except when the
-> > -	 * failure could be caused by insufficient priority
-> > -	 */
-> > -	if (compact_result == COMPACT_COMPLETE)
-> > -		goto check_priority;
-> > +		ret = ++(*compaction_retries) <= max_retries;
-> > +		goto out;
-> 
-> I think you simplified this part too much, so now once it runs out of
-> retries, it will return false, while previously it would increase the priority.
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-Oops, I'll send a delta fix to Andrew tomorrow. Thanks!
+Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTek MT8192 SoC.
+Also, add Suspend and Resume support to LVTS Driver (all SoCs),
+and update the documentation that describes the Calibration Data Offsets.
+
+Changelog:
+    v3 : 
+        - Rebased :
+            base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
+        - Fix issues in v2 pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>:
+          Use filtered mode to make sure threshold interrupts are triggered,
+          protocol documentation, cosmetics
+        - I (bero@baylibre.com) will be taking care of this patchset
+          from now on, since Balsam has left BayLibre. Thanks for
+          getting it almost ready, Balsam!
+
+    v2 :
+        - Based on top of thermal/linux-next :
+            base-commit: 7ac82227ee046f8234471de4c12a40b8c2d3ddcc
+        - Squash "add thermal zones and thermal nodes" and
+            "add temperature mitigation threshold" commits together to form
+            "arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones" commit.
+        - Add Suspend and Resume support to LVTS Driver.
+        - Update Calibration Data documentation.
+        - Fix calibration data offsets for mt8192
+            (Thanks to "Chen-Yu Tsai" and "Nícolas F. R. A. Prado").
+        https://lore.kernel.org/all/20230425133052.199767-1-bchihi@baylibre.com/
+        Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+
+    v1 :
+        - The initial series "Add LVTS support for mt8192" :
+            "https://lore.kernel.org/all/20230307163413.143334-1-bchihi@baylibre.com/".
+
+Balsam CHIHI (5):
+  dt-bindings: thermal: mediatek: Add LVTS thermal controller definition
+    for mt8192
+  thermal/drivers/mediatek/lvts_thermal: Add suspend and resume
+  thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
+  arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones
+  thermal/drivers/mediatek/lvts_thermal: Update calibration data
+    documentation
+
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 454 ++++++++++++++++++
+ drivers/thermal/mediatek/lvts_thermal.c       | 160 +++++-
+ .../thermal/mediatek,lvts-thermal.h           |  19 +
+ 3 files changed, 631 insertions(+), 2 deletions(-)
+
+base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
+-- 
+2.41.0.rc2
+
