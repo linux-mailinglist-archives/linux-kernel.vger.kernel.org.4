@@ -2,101 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A22A7149C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0377149CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjE2NAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
+        id S229580AbjE2NB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjE2NAU (ORCPT
+        with ESMTP id S229659AbjE2NBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:00:20 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D24391;
-        Mon, 29 May 2023 06:00:18 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1685365209tn304cds
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 29 May 2023 21:00:07 +0800 (CST)
-X-QQ-SSF: 00200000000000D0V000000A0000000
-X-QQ-FEAT: rZJGTgY0+YPLNKIjmriA1LyRD/9GVh50DK49bFM+u4kQwihN+a4qP4/e9Lr+I
-        tlmnaNZ+nIUm6A2omPGy/+sSzZrOubvL+5ZvqVr3IsHscrGxbzvQRuwqG7viOZO6b+sh992
-        HUiH7R5VAiWB6QaViufuoxqSKbNbwowdK7F797RyTOJhl1+JgSrGd+24WyK7eVDXzu83zSv
-        eDNpUtxLJstDd39F4/RIIHuzZzCNldhAlJF4/t0rfGfd1dgRmCa3+IYz/wD7XfyhPtK57Ao
-        Rmvu4usRDG5AyT2Kj66AC6iBUeSMjXIqPJypayw8mcuGFHrB0/PmUIReymTHZVQCZWy2w7j
-        hLj7rV3KyYOR8VuFnHZ7q1HAwSUI7VPcjcPc9a8f6dEHBjOv8+WhJvLFKrnmy9ZVB6+7sNR
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 879951463538973120
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH v2 3/7] selftests/nolibc: fix up compile warning with glibc on x86_64
-Date:   Mon, 29 May 2023 21:00:01 +0800
-Message-Id: <aeb48b9cf6fc4674f7560166f22c7dc87d02302d.1685362482.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685362482.git.falcon@tinylab.org>
-References: <cover.1685362482.git.falcon@tinylab.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 29 May 2023 09:01:40 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BC4CD;
+        Mon, 29 May 2023 06:01:39 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QVFz15Fg2z4f3nwW;
+        Mon, 29 May 2023 21:01:33 +0800 (CST)
+Received: from ubuntu1804.huawei.com (unknown [10.67.174.58])
+        by APP4 (Coremail) with SMTP id gCh0CgAHvbAuonRkVCbnKQ--.22101S4;
+        Mon, 29 May 2023 21:01:35 +0800 (CST)
+From:   Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+To:     paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com
+Cc:     selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selinux: cleanup exit_sel_fs() declaration
+Date:   Mon, 29 May 2023 21:00:18 +0800
+Message-Id: <20230529130018.89391-1-xiujianfeng@huaweicloud.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: gCh0CgAHvbAuonRkVCbnKQ--.22101S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrZryxKF4UWF1fZw1DuFyDJrb_yoWfCwbE93
+        Z7Cr4kZr48ZF4Fyw1YyFn7ZF90g34xZ348W3WFqFyDXwn3ArW5G3W7JFyxJw4UGryjyrnF
+        gF17Cas7Ww1DXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbokYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: x0lxyxpdqiv03j6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compiling nolibc-test.c with gcc on x86_64 got such warning:
+exit_sel_fs() has been removed since commit f22f9aaf6c3d ("selinux:
+remove the runtime disable functionality").
 
-tools/testing/selftests/nolibc/nolibc-test.c: In function ‘expect_eq’:
-tools/testing/selftests/nolibc/nolibc-test.c:177:24: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
-  177 |  llen += printf(" = %lld ", expr);
-      |                     ~~~^    ~~~~
-      |                        |    |
-      |                        |    uint64_t {aka long unsigned int}
-      |                        long long int
-      |                     %ld
-
-It because that glibc defines uint64_t as "unsigned long int" when word
-size (means sizeof(long)) is 64bit (see include/bits/types.h), but
-nolibc directly use the 64bit "unsigned long long" (see
-tools/include/nolibc/stdint.h), which is simpler, seems kernel uses it
-too (include/uapi/asm-generic/int-ll64.h).
-
-It is able to do like glibc, defining __WORDSIZE for all of platforms
-and using "unsigned long int" to define uint64_t when __WORDSIZE is
-64bits, but here uses a simpler solution: nolibc always requires %lld to
-match "unsigned long long", for others, only require %lld when word size
-is 32bit.
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ security/selinux/include/security.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index d417ca5d976f..7f9b716fd9b1 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -174,7 +174,11 @@ static int expect_eq(uint64_t expr, int llen, uint64_t val)
- {
- 	int ret = !(expr == val);
- 
-+#if __SIZEOF_LONG__ == 4 || defined(NOLIBC)
- 	llen += printf(" = %lld ", expr);
-+#else
-+	llen += printf(" = %ld ", expr);
-+#endif
- 	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
- 	return ret;
- }
+diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
+index 8746fafeb778..815838ba7f2a 100644
+--- a/security/selinux/include/security.h
++++ b/security/selinux/include/security.h
+@@ -384,7 +384,6 @@ struct selinux_kernel_status {
+ extern void selinux_status_update_setenforce(int enforcing);
+ extern void selinux_status_update_policyload(int seqno);
+ extern void selinux_complete_init(void);
+-extern void exit_sel_fs(void);
+ extern struct path selinux_null;
+ extern void selnl_notify_setenforce(int val);
+ extern void selnl_notify_policyload(u32 seqno);
 -- 
-2.25.1
+2.17.1
 
