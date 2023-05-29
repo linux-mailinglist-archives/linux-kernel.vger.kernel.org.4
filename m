@@ -2,136 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A88C714C46
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2ED5714BF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjE2OkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S230099AbjE2OY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjE2OkR (ORCPT
+        with ESMTP id S229667AbjE2OYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:40:17 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E9A19D
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:39:55 -0700 (PDT)
-Received: from fsav111.sakura.ne.jp (fsav111.sakura.ne.jp [27.133.134.238])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 34TEdBcp017546;
-        Mon, 29 May 2023 23:39:11 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav111.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp);
- Mon, 29 May 2023 23:39:11 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav111.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 34TEdBWi017542
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 29 May 2023 23:39:11 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <1af29817-4698-c5ac-cf63-0dad289e740f@I-love.SAKURA.ne.jp>
-Date:   Mon, 29 May 2023 23:39:12 +0900
+        Mon, 29 May 2023 10:24:23 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749BAA0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:24:21 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QVHmh030kzLmPC;
+        Mon, 29 May 2023 22:22:44 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 29 May 2023 22:24:17 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Baoquan He <bhe@redhat.com>
+Subject: [PATCH -next] mm: page_alloc: simplify has_managed_dma()
+Date:   Mon, 29 May 2023 22:40:22 +0800
+Message-ID: <20230529144022.42927-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: [PATCH] debugobjects: turn off debug_objects_enabled from
- debug_objects_oom()
-Content-Language: en-US
-To:     syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <0000000000003a2f8505fcd5f06b@google.com>
-Cc:     linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        wuchi <wuchi.zero@gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <0000000000003a2f8505fcd5f06b@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot is reporting false positive ODEBUG message immediately after
-ODEBUG was disabled due to OOM.
+The ZONE_DMA should only exists on Node 0, only check NODE_DATA(0)
+is enough, so simplify has_managed_dma() and make it inline.
 
-  [ 1062.309646][T22911] ODEBUG: Out of memory. ODEBUG disabled
-  [ 1062.886755][ T5171] ------------[ cut here ]------------
-  [ 1062.892770][ T5171] ODEBUG: assert_init not available (active state 0) object: ffffc900056afb20 object type: timer_list hint: process_timeout+0x0/0x40
-
-This race happened because debug_objects_oom() emitted OOM message but did
-not turn off debug_objects_enabled, and debug_print_object() did not check
-debug_objects_enabled when calling WARN().
-
-  CPU 0 [ T5171]                CPU 1 [T22911]
-  --------------                --------------
-  debug_object_assert_init() {
-    if (!debug_objects_enabled)
-      return;
-    db = get_bucket((unsigned long) addr); // Finds a bucket, but...
-                                debug_objects_oom() {
-                                  pr_warn("Out of memory. ODEBUG disabled\n");
-                                  // all buckets get emptied here, and...
-                                  hlist_move_list(&db->list, &freelist);
-                                }
-    lookup_object_or_alloc(addr, db, descr, false, true) {
-      lookup_object(addr, b) {
-        return NULL; // this bucket is already empty.
-      }
-      if (!descr->is_static_object || !descr->is_static_object(addr))
-        return ERR_PTR(-ENOENT);
-    }
-    if (!obj) { // obj == ERR_PTR(-ENOENT) because non-static object.
-       debug_objects_oom();
-       return;
-    }
-    debug_print_object(&o, "assert_init") {
-      // False positive due to not checking debug_objects_enabled.
-      WARN(1, KERN_ERR "ODEBUG: %s %s (active state %u) "
-           "object: %p object type: %s hint: %pS\n", ...);
-    }
-  }
-
-Reported-by: syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>
-Closes: https://syzkaller.appspot.com/bug?extid=7937ba6a50bdd00fffdf
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc: Baoquan He <bhe@redhat.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- lib/debugobjects.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ include/linux/mmzone.h | 21 +++++++++++----------
+ mm/page_alloc.c        | 15 ---------------
+ 2 files changed, 11 insertions(+), 25 deletions(-)
 
-diff --git a/lib/debugobjects.c b/lib/debugobjects.c
-index 984985c39c9b..63974e9edac5 100644
---- a/lib/debugobjects.c
-+++ b/lib/debugobjects.c
-@@ -466,6 +466,7 @@ static void debug_objects_oom(void)
- 	unsigned long flags;
- 	int i;
- 
-+	debug_objects_enabled = 0;
- 	pr_warn("Out of memory. ODEBUG disabled\n");
- 
- 	for (i = 0; i < ODEBUG_HASH_SIZE; i++, db++) {
-@@ -502,10 +503,10 @@ static void debug_print_object(struct debug_obj *obj, char *msg)
- 		void *hint = descr->debug_hint ?
- 			descr->debug_hint(obj->object) : NULL;
- 		limit++;
--		WARN(1, KERN_ERR "ODEBUG: %s %s (active state %u) "
--				 "object: %p object type: %s hint: %pS\n",
--			msg, obj_states[obj->state], obj->astate,
--			obj->object, descr->name, hint);
-+		WARN(debug_objects_enabled, KERN_ERR
-+		     "ODEBUG: %s %s (active state %u) object: %p object type: %s hint: %pS\n",
-+		     msg, obj_states[obj->state], obj->astate,
-+		     obj->object, descr->name, hint);
- 	}
- 	debug_objects_warnings++;
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 5a7ada0413da..48e9fd8eccb4 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -1503,16 +1503,6 @@ static inline int is_highmem(struct zone *zone)
+ 	return is_highmem_idx(zone_idx(zone));
  }
+ 
+-#ifdef CONFIG_ZONE_DMA
+-bool has_managed_dma(void);
+-#else
+-static inline bool has_managed_dma(void)
+-{
+-	return false;
+-}
+-#endif
+-
+-
+ #ifndef CONFIG_NUMA
+ 
+ extern struct pglist_data contig_page_data;
+@@ -1527,6 +1517,17 @@ static inline struct pglist_data *NODE_DATA(int nid)
+ 
+ #endif /* !CONFIG_NUMA */
+ 
++static inline bool has_managed_dma(void)
++{
++#ifdef CONFIG_ZONE_DMA
++	struct zone *zone = NODE_DATA(0)->node_zones + ZONE_DMA;
++
++	if (managed_zone(zone))
++		return true;
++#endif
++	return false;
++}
++
+ extern struct pglist_data *first_online_pgdat(void);
+ extern struct pglist_data *next_online_pgdat(struct pglist_data *pgdat);
+ extern struct zone *next_zone(struct zone *zone);
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e671c747892f..e847b39939b8 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6613,18 +6613,3 @@ bool put_page_back_buddy(struct page *page)
+ 	return ret;
+ }
+ #endif
+-
+-#ifdef CONFIG_ZONE_DMA
+-bool has_managed_dma(void)
+-{
+-	struct pglist_data *pgdat;
+-
+-	for_each_online_pgdat(pgdat) {
+-		struct zone *zone = &pgdat->node_zones[ZONE_DMA];
+-
+-		if (managed_zone(zone))
+-			return true;
+-	}
+-	return false;
+-}
+-#endif /* CONFIG_ZONE_DMA */
 -- 
-2.18.4
+2.35.3
 
