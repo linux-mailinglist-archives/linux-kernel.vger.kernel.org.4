@@ -2,68 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985C2714D13
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECE4714D15
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjE2PdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
+        id S229663AbjE2Pda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjE2PdJ (ORCPT
+        with ESMTP id S229558AbjE2Pd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:33:09 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB169C;
-        Mon, 29 May 2023 08:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=PtPtNrUR40+d/bjThKT4BDA45ySJQf9zOuPOaID9KAA=; b=e+hCcMjECJkq9aRRfgiz9qX+IA
-        BW/6SusjicLNIDii901kebHVo/T1EbDRfud60woZDgmR/BaHED5uWME98KpCHZScfHNaECJN8BmtS
-        TMoA/Vu45MRnxOcv5E4vJlfFyHXYP0s3EVbCRhqtV6s4TLzV/qPpSzMP3qnylv6bdW44=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q3erk-00EEyF-II; Mon, 29 May 2023 17:33:00 +0200
-Date:   Mon, 29 May 2023 17:33:00 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-leds@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v3 06/13] leds: trigger: netdev: add basic check
- for hw control support
-Message-ID: <baf3b820-ea8e-4df7-9816-4f58a715a3db@lunn.ch>
-References: <20230527112854.2366-1-ansuelsmth@gmail.com>
- <20230527112854.2366-7-ansuelsmth@gmail.com>
+        Mon, 29 May 2023 11:33:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411D29C;
+        Mon, 29 May 2023 08:33:26 -0700 (PDT)
+Date:   Mon, 29 May 2023 15:33:22 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685374403;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=IVExDsKMOfQgMfJYMFd84Zl750/nZDXDFa/lLIGwQYw=;
+        b=Sl7uwjaIV0D/Dc0EbqsrHfanFriAqQARVDi2FNG6jwy1RosR5RfvXGJKzFMwyuH/9VRnSJ
+        0/douHIs9KnGNOjJ6nDW2eG3GJ1Qu3qovUBb4/M8cC4nrXB6BSWH2q+bLQJJ00KKmsYhMo
+        rD6s3SbZWjnYSzIWr+bk7LOobR3l7gmhcXBxoi/hbUhDybKwUgC/Pv18gzLPyO1ylmEVwe
+        stT5W3Sv89WxZuZF6ut8k0PykBATojSBY8nXtJ9hWiD7WjlylN/LYkKPMejc+bhQxg6VYB
+        icUnvxs5YZXogIcsOU7jiGCIIPP46cPFZKLoWO/hxaTALTyL1bvBs43LcaKKmw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685374403;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=IVExDsKMOfQgMfJYMFd84Zl750/nZDXDFa/lLIGwQYw=;
+        b=SHjjbwtDOW+vtTBTgNDsBUpe0mrQ5afnbhWCCjMZV/qz8k2BdzCUzG7lrWutdDifjhnc3b
+        084RPg4mafS02gCA==
+From:   "tip-bot2 for Nathan Chancellor" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/misc] x86/csum: Fix clang -Wuninitialized in csum_partial()
+Cc:     kernel test robot <lkp@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230527112854.2366-7-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168537440297.404.2900420539886506252.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 27, 2023 at 01:28:47PM +0200, Christian Marangi wrote:
-> Add basic check for hw control support. Check if the required API are
-> defined and check if the defined trigger supported in hw control for the
-> LED driver match netdev.
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+The following commit has been merged into the x86/misc branch of tip:
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Commit-ID:     2fe1e67e6987b6f05329740da79c8150a2205b0d
+Gitweb:        https://git.kernel.org/tip/2fe1e67e6987b6f05329740da79c8150a2205b0d
+Author:        Nathan Chancellor <nathan@kernel.org>
+AuthorDate:    Fri, 26 May 2023 08:47:40 -07:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Mon, 29 May 2023 06:52:32 -07:00
 
-    Andrew
+x86/csum: Fix clang -Wuninitialized in csum_partial()
+
+Clang warns:
+
+  arch/x86/lib/csum-partial_64.c:74:20: error: variable 'result' is uninitialized when used here [-Werror,-Wuninitialized]
+                  return csum_tail(result, temp64, odd);
+                                   ^~~~~~
+  arch/x86/lib/csum-partial_64.c:48:22: note: initialize the variable 'result' to silence this warning
+          unsigned odd, result;
+                              ^
+                               = 0
+  1 error generated.
+
+The only initialization and uses of result in csum_partial() were moved
+into csum_tail() but result is still being passed by value to
+csum_tail() (clang's -Wuninitialized does not do interprocedural
+analysis to realize that result is always assigned in csum_tail()
+however). Sink the declaration of result into csum_tail() to clear up
+the warning.
+
+Closes: https://lore.kernel.org/202305262039.3HUYjWJk-lkp@intel.com/
+Fixes: 688eb8191b47 ("x86/csum: Improve performance of `csum_partial`")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/all/20230526-csum_partial-wuninitialized-v1-1-ebc0108dcec1%40kernel.org
+---
+ arch/x86/lib/csum-partial_64.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
+index fe58619..cea25ca 100644
+--- a/arch/x86/lib/csum-partial_64.c
++++ b/arch/x86/lib/csum-partial_64.c
+@@ -21,8 +21,10 @@ static inline unsigned short from32to16(unsigned a)
+ 	return b;
+ }
+ 
+-static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
++static inline __wsum csum_tail(u64 temp64, int odd)
+ {
++	unsigned int result;
++
+ 	result = add32_with_carry(temp64 >> 32, temp64 & 0xffffffff);
+ 	if (unlikely(odd)) {
+ 		result = from32to16(result);
+@@ -45,7 +47,7 @@ static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
+ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ {
+ 	u64 temp64 = (__force u64)sum;
+-	unsigned odd, result;
++	unsigned odd;
+ 
+ 	odd = 1 & (unsigned long) buff;
+ 	if (unlikely(odd)) {
+@@ -71,7 +73,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ 		    "adcq $0,%[res]"
+ 		    : [res] "+r"(temp64)
+ 		    : [src] "r"(buff), "m"(*(const char(*)[40])buff));
+-		return csum_tail(result, temp64, odd);
++		return csum_tail(temp64, odd);
+ 	}
+ 	if (unlikely(len >= 64)) {
+ 		/*
+@@ -141,7 +143,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ 		    : [res] "+r"(temp64)
+ 		    : [trail] "r"(trail));
+ 	}
+-	return csum_tail(result, temp64, odd);
++	return csum_tail(temp64, odd);
+ }
+ EXPORT_SYMBOL(csum_partial);
+ 
