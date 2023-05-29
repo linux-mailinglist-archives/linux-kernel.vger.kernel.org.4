@@ -2,89 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0E7714C37
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC68714C42
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjE2OhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S230269AbjE2Oha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjE2Ogu (ORCPT
+        with ESMTP id S230088AbjE2OhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:36:50 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46691EA;
-        Mon, 29 May 2023 07:36:48 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-2563ca70f64so1805171a91.0;
-        Mon, 29 May 2023 07:36:48 -0700 (PDT)
+        Mon, 29 May 2023 10:37:12 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240FD115
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:36:54 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-568928af8f5so11034697b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:36:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685371007; x=1687963007;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3G0tjgLaByKBQEVUEO/ofZvDTdqBJJR2GepbSwtmumE=;
-        b=LAjzeJHAA9CM5w69GeU03Cn5J1WovnzG2udh0exv2HAtoBqx3a8F4DMeyE/rvVn1m6
-         Obdk1pGH2qKn2ejazQ6Vse6THwSrnfa6XwrlBy6X5nv7ujPxZXeaesNH6dSwrX7yCDQj
-         pHo5yGLvkCoC//hNjQSmO4zkq3ZM8a6fHkj2yWNkjqATc4exiHFqkkkN20/WcRANLf3A
-         5VO7ubcH2Q5wcXhHIA/d2QLz0TAQrezn6IQHyrH3AZWwFnBIv26LW/A9M7EGlTQFrqRY
-         TKvOB9MiRJKoZsDlTmvysmXI5Or6kTElIsDcMp3RQEy8+E5aXSm78mkZ6m3r4dJM0EyL
-         CdDQ==
+        d=google.com; s=20221208; t=1685371013; x=1687963013;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HIWQIR7wu23EvgpQrMt3Yo6E002JcBFAWWYI7+iQQZo=;
+        b=hcjUS9Azm3/0RU+gKaiie6ZifVpF/OCAFapGW8HSxUO0W2rMy4ULofPLAkozr5dK65
+         BDXwIAbVAuU/9a+lI2H3m13nnKdLi9zmmQuy+OAud0Tyk7LSzBGneDZiQGCG1giRjNu9
+         uNLOY9ugLp7w4phKfq/dZQoeuFCLLe61eTU31G57MHbDfFRtSZLl49v+kfNWsWi5cnow
+         WBeAUiF/9G+YnMzJ93YlNpiESaX402fmYTQ9v4+kFDL9TaoSMswWpzsbP6ko87Ro2qDL
+         jCa+etQGtPqZWRpF5v3idcRSj250qlhVNpCbJ+mqK5gUOrh2LrGExHBOAMEBuLDEOBy2
+         RzCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685371007; x=1687963007;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3G0tjgLaByKBQEVUEO/ofZvDTdqBJJR2GepbSwtmumE=;
-        b=W/FcKwMuXQ6fOsgG8Xz3Te3IZl77lbPEMRcIxMlFbEpCB2RkrSHdElQnKEe8VrBL9V
-         /wiFeu1d1juTSln78jyCXMDHW8h9j7SjKpYPf6KOuIic619VivGx2JsGRdVlMc0TJowh
-         FSHa/rZxRbmyaxPnXL1IoOFYgcR74muJ/X945f+3HGNKMVxj3ukj32xRdHHdKH0yKB2m
-         TMXfiCcVqOMn6PnrmnYvuEF6g9Kj9+j41kl/BovNGDhNDnoesx+VA1FeQYUzCtxhComz
-         vSGVCxe0F9KF7q5On+I+SatSz8DJOxNIoVEeBXg/OH5ZlzPA1M4mR6w8uhVt7W2H3xlM
-         v5UA==
-X-Gm-Message-State: AC+VfDzpg0x1ZKI3/juMJ5wGCOQUfxHhHswt/XrOkJstXseJtfdI7CuN
-        tC2+1HzBtDfA9kV691h0VFo=
-X-Google-Smtp-Source: ACHHUZ5VM6y04IN3OksdqB7DbO19L2kV9HAU4PZPtzg4slwt+oNKt06iEkgRR2Jdvfzap/6UREX6+Q==
-X-Received: by 2002:a17:90a:2a49:b0:256:4196:f722 with SMTP id d9-20020a17090a2a4900b002564196f722mr9121877pjg.47.1685371007630;
-        Mon, 29 May 2023 07:36:47 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id t3-20020a17090aba8300b00256833cd9a4sm1743987pjr.54.2023.05.29.07.36.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 07:36:47 -0700 (PDT)
-Message-ID: <7f3842a2-879b-2460-229e-745b7122b36a@gmail.com>
-Date:   Mon, 29 May 2023 22:36:39 +0800
+        d=1e100.net; s=20221208; t=1685371013; x=1687963013;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HIWQIR7wu23EvgpQrMt3Yo6E002JcBFAWWYI7+iQQZo=;
+        b=C2rCl2efckstYHB1/0WOHf7JKiJlo+nFLumR4wB73Fd0Zwzu3mps5NqCI42m+D6Et5
+         SHf1jPzzLpfFONf+p90F79F6UYedH6dvxEGAYrbd8Y0VJmNdn37xAK8nx6L2tG85pbBu
+         BQU9GozNA4DYZfTZ0HAtz/QjtaIWWFkPKJDruU4W+vREQqiDqda0S94snue93N/lN1Ut
+         Hk3YB+QrDNekAyat/T1u9EckvR+wpRZJMVxbxTm0kwhXZX1ALCN5M9y3wjEy0bCfwD9Y
+         tJNnE+DK9qX16p6ylsb5Q8CiIgXgRr3p+bxJ009FPaZga+dx4Q/+AF4iPdqklvQfHrF0
+         VCkQ==
+X-Gm-Message-State: AC+VfDzgYtzVjwj4KIRk+hpnUbV31mCRz8UJFBAGxlfm4VQCXUyNM4Fb
+        GwSGSEo0tpfM+eVfp7FWWX3IZg==
+X-Google-Smtp-Source: ACHHUZ7JQdplHPjQnLsPrFKY4x7o6203nPCvCFds9aIA594vHBEun4NndGVaRztw2DY/LseAyCeavw==
+X-Received: by 2002:a81:a60a:0:b0:565:350f:3332 with SMTP id i10-20020a81a60a000000b00565350f3332mr10401354ywa.9.1685371012657;
+        Mon, 29 May 2023 07:36:52 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id u189-20020a0dd2c6000000b00559be540b56sm3639714ywd.134.2023.05.29.07.36.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 07:36:52 -0700 (PDT)
+Date:   Mon, 29 May 2023 07:36:40 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 05/12] powerpc: add pte_free_defer() for pgtables sharing
+ page
+In-Reply-To: <ZHSwWgLWaEd+zi/g@casper.infradead.org>
+Message-ID: <a8df11d-55ae-64bc-edcb-d383a7a941ea@google.com>
+References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com> <28eb289f-ea2c-8eb9-63bb-9f7d7b9ccc11@google.com> <ZHSwWgLWaEd+zi/g@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH 5/5] KVM: x86/pmu: Hide guest counter updates from the
- VMRUN instruction
-Content-Language: en-US
-To:     Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230310105346.12302-1-likexu@tencent.com>
- <20230310105346.12302-6-likexu@tencent.com> <ZG6AUjci2J9WpT2z@google.com>
- <CALMp9eSe+kx8s5rkypvHWjFr45L_foXiDi1Vdp3R=AmRwA3RAQ@mail.gmail.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <CALMp9eSe+kx8s5rkypvHWjFr45L_foXiDi1Vdp3R=AmRwA3RAQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/5/2023 5:30 am, Jim Mattson wrote:
-> Note that there's a bug in the original code for this that has
-> probably never been fixed: it ignores CMASK and INV in the PerfEvtSel.
+On Mon, 29 May 2023, Matthew Wilcox wrote:
+> On Sun, May 28, 2023 at 11:20:21PM -0700, Hugh Dickins wrote:
+> > +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
+> > +{
+> > +	struct page *page;
+> > +
+> > +	page = virt_to_page(pgtable);
+> > +	call_rcu(&page->rcu_head, pte_free_now);
+> > +}
+> 
+> This can't be safe (on ppc).  IIRC you might have up to 16x4k page
+> tables sharing one 64kB page.  So if you have two page tables from the
+> same page being defer-freed simultaneously, you'll reuse the rcu_head
+> and I cannot imagine things go well from that point.
 
-Regarding the emulation of CMASK, INV and PIN_CONTROL bits on vPMU,
-please forgive me for never having the right expectations (so there will be no
-correct emulation), an share more *architecture* descriptions of those hw
-behavior, and it would be great to have corresponding selftests as a bug report.
+Oh yes, of course, thanks for catching that so quickly.
+So my s390 and sparc implementations will be equally broken.
+
+> 
+> I have no idea how to solve this problem.
+
+I do: I'll have to go back to the more complicated implementation we
+actually ran with on powerpc - I was thinking those complications just
+related to deposit/withdraw matters, forgetting the one-rcu_head issue.
+
+It uses large (0x10000) increments of the page refcount, avoiding
+call_rcu() when already active.
+
+It's not a complication I had wanted to explain or test for now,
+but we shall have to.  Should apply equally well to sparc, but s390
+more of a problem, since s390 already has its own refcount cleverness.
+
+Thanks, I must dash, out much of the day.
+
+Hugh
