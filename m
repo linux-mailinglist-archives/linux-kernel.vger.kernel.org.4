@@ -2,251 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B7A714E02
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D13B714E04
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjE2QQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        id S229741AbjE2QQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjE2QQf (ORCPT
+        with ESMTP id S229734AbjE2QQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:16:35 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B38B2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:16:32 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso6262468a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:16:32 -0700 (PDT)
+        Mon, 29 May 2023 12:16:48 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB9ECD;
+        Mon, 29 May 2023 09:16:44 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f6e13940daso36397715e9.0;
+        Mon, 29 May 2023 09:16:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorfullife-com.20221208.gappssmtp.com; s=20221208; t=1685376991; x=1687968991;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1685377002; x=1687969002;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=x9Wct7xO9SnRtB839Od+ilnX6yvbSUwAnQvf6TlnDk0=;
-        b=EJZ6fuxibG+QARg+qFrUAAdPBCAFkb/bnlhwgGpemrvAFodcSsXifEMu31rMwZ5br/
-         YWNNO4d5DSq7RE3COouJAZ5dZrL1Ycfph669wRRoPVse0udSS9zWIi5jr52ggPTCRETr
-         1t98QlzjPCmrJjGHwHZGFth+S7kRN60RNSlRT0dmF6P+NCKSAeRJa/FtaCEMFa8CaaNn
-         olLBHulWEMRi2uywJDTlEpuw75sv/dG6jufEe280bMPEQ9bwZ8PHThGPMMIrj5qaXWeY
-         n5mQK/6746S38hSWd6iO4+PXXTrFchWf1ZRuZ8m+Bp2CWZKAQp2LN8RnDlE4XbKX/CYy
-         0rYg==
+        bh=B6oEUPyDe6k6imC6sIUryh04ys93Tehf8o/RTmSion4=;
+        b=ICGdINm3mLMU2/7rwAV/0Uxi8M0SM8JdOb5gppFed94uXWCvdHUrPYCrJ8BWcjHlHe
+         zctcq0JIwa1/vkGO+PDpbS9q4f+v1BK7wP70DJpqDTv4buctUfZPm2jIW3lj4Jplzk9C
+         +oDvhJRoPROvApnrOheaSI7bfAykBSIfG1jg9k/qo5HYWJIkfh0tYEgASKds60omE4rc
+         GvylKXZhLyK/p/9sA+NKIfVvxMn98vDZEkQ4ptNIArNgP3fvudR20uWicFqt6A22EKOg
+         zZvSoT83TWa7GFqfQcbKZeUsP94FZpGH8J01x1ilR94gyGbGLPke/awnY1Rlm+XjMelM
+         TWGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685376991; x=1687968991;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1685377002; x=1687969002;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x9Wct7xO9SnRtB839Od+ilnX6yvbSUwAnQvf6TlnDk0=;
-        b=RoH25/r5NRdxYJQxH0HnT+ukikg5QVWzGgTjeMF2gcQBXO5v/MKS2x4zqBq9HgrlB0
-         unQsoc/g8zT5OyKmRghnlCIIgOkFwAkRrwOF6g6TRtWHWXWFU7ASgFPX+Au7jI2bg+Dr
-         0zUQhVS3pRQ7uUOzWAVs+utFHeSjLvHUO2UVcmYm1tdWutJLGPCTD2YFnZmMGDVoX+6n
-         csYDdk2KuV5SORb7hBWVPWX5IpEbiJD3hKPFJrT1r5QEqMuz5NEbI+PfNuOC6SXp+3lx
-         7jGGP7xEu406dZUYyU4C7d58Do/oACJfLwu5VuvhwQ3BPLg5RObLH6CvPeb7iyQgIW/C
-         rpuw==
-X-Gm-Message-State: AC+VfDxIF4elUr9FeuATa57iIdAWoPqHSXrMmIgX+fQemTjYWTxSrGmv
-        9bnW3Ov4VuudWLJW5GZIQH/IxQ==
-X-Google-Smtp-Source: ACHHUZ5703AgkrC0YfjdiR6RB6L0/mPghnO6w3UOBq6X+IT89WlR+1XQGJJRTPBriE8ntd2yBcVc/A==
-X-Received: by 2002:a17:907:d8c:b0:96f:5cb3:df66 with SMTP id go12-20020a1709070d8c00b0096f5cb3df66mr11827105ejc.18.1685376990923;
-        Mon, 29 May 2023 09:16:30 -0700 (PDT)
-Received: from ?IPV6:2003:d9:972e:ae00:3a2e:69fd:25d5:812f? (p200300d9972eae003a2e69fd25d5812f.dip0.t-ipconnect.de. [2003:d9:972e:ae00:3a2e:69fd:25d5:812f])
-        by smtp.googlemail.com with ESMTPSA id f11-20020a1709062c4b00b0096a6bf89259sm5995013ejh.167.2023.05.29.09.16.29
+        bh=B6oEUPyDe6k6imC6sIUryh04ys93Tehf8o/RTmSion4=;
+        b=kL5CpLqiT4BdyNdMmOn/NLI0LqV8P+iZZv0+lk4wyB9foGS6UahU63QOop/59b5KSo
+         zWc+w+9pqmwcKdGjG/hf8069kCWdHxcpMRcdnH301G7nCcIpwhiifBssbOKAHicXWIee
+         E8XI+2HVguQEnzOiQOaanY6OjWuMKyeEKelnjNH/SymfFQZd7nuOuRDUv7VrrGA5bi0/
+         ExzTNEuc0pDBL9Q/2Qxm9wnWRi524qgNPbzPouSEjVN/iwACHhBMJEpMEjoIGnQcSjH8
+         SV/eIEGAWvFwOU8tmyryQ3M/Lp+MQJ6ES9bCnf+E4/caWJeZiCHHsVFOm1EkD4meCjaj
+         +ISQ==
+X-Gm-Message-State: AC+VfDw+JutjIX33ND0osAyLmarp29W1fDQhwcMPVVmGhqrfNqrXESHA
+        5Le2qkqG+e5VERkGmtFEFpU=
+X-Google-Smtp-Source: ACHHUZ75AMsCYyTd9+rBATqxtSpmcQNLV+356SY+CSM0VG6B9tAy5IrbZs0dtJ5u5DjvQseiEntplw==
+X-Received: by 2002:a1c:4b10:0:b0:3f6:e79:3a8e with SMTP id y16-20020a1c4b10000000b003f60e793a8emr10807728wma.12.1685377002522;
+        Mon, 29 May 2023 09:16:42 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id m7-20020a056000180700b003062d815fa6sm394876wrh.85.2023.05.29.09.16.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 09:16:30 -0700 (PDT)
-Message-ID: <5c4040b2-fdbb-1897-e6a8-1c990226586c@colorfullife.com>
-Date:   Mon, 29 May 2023 18:16:29 +0200
+        Mon, 29 May 2023 09:16:41 -0700 (PDT)
+Message-ID: <abef0fe6-ef80-283f-cfeb-e0a4366691fb@gmail.com>
+Date:   Mon, 29 May 2023 18:16:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: LTP: shmget02 fails on compat mode - 64-bit kernel and 32-bit
- userspace
-To:     Li Wang <liwang@redhat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        LTP List <ltp@lists.linux.it>, lkft-triage@lists.linaro.org,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Davidlohr Bueso <dbueso@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        chrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>,
-        Martin Doucha <mdoucha@suse.cz>
-References: <CA+G9fYuKehraq_kcHdVgqWnwQWHN2QiE7ze53mXJvtL0DLc0uQ@mail.gmail.com>
- <9677ced3-8386-47f0-a2d6-de27ec84207e@app.fastmail.com>
- <b3b0d222-b745-07bc-8dcd-38f762343c84@colorfullife.com>
- <CAEemH2cKjmef+R=gF94J3VT8Kg0inQaWu93dybvPsJM+OM1fQA@mail.gmail.com>
-Content-Language: en-US
-From:   Manfred Spraul <manfred@colorfullife.com>
-In-Reply-To: <CAEemH2cKjmef+R=gF94J3VT8Kg0inQaWu93dybvPsJM+OM1fQA@mail.gmail.com>
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] arm64: dts: mt8173: Power on panel regulator on boot
+Content-Language: en-US, ca-ES, es-ES
+To:     Pin-yen Lin <treapking@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Doug Anderson <dianders@chromium.org>
+References: <20230417123956.926266-1-treapking@chromium.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230417123956.926266-1-treapking@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li,
-
-On 5/20/23 05:58, Li Wang wrote:
-> Hi Manfred,
->
-> On Sat, May 20, 2023 at 1:55 AM Manfred Spraul 
-> <manfred@colorfullife.com> wrote:
->
->     Hi all,
->
->     On 5/19/23 12:57, Arnd Bergmann wrote:
->     > On Fri, May 19, 2023, at 11:17, Naresh Kamboju wrote:
->     >> LTP running on compat mode where the tests run on
->     >> 64-bit kernel and 32-bit userspace are noticed on a list of
->     failures.
->     >>
->     >> What would be the best way to handle this rare combination of
->     failures ?
->     >>
->     >> * arm64: juno-r2-compat, qemu_arm64-compat and qemu_x86_64-compat
->     >>      - shmget02
->     >>
->     >> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->     >>
->     >> tst_hugepage.c:83: TINFO: 0 hugepage(s) reserved
->     >> tst_test.c:1558: TINFO: Timeout per run is 0h 02m 30s
->     >> tst_kconfig.c:87: TINFO: Parsing kernel config '/proc/config.gz'
->     >> shmget02.c:95: TPASS: shmget(1644199826, 2048, 1024) : ENOENT (2)
->     >> shmget02.c:95: TPASS: shmget(1627422610, 2048, 1536) : EEXIST (17)
->     >> <4>[   84.678150] __vm_enough_memory: pid: 513, comm: shmget02, not
->     >> enough memory for the allocation
->     >> shmget02.c:95: TPASS: shmget(1644199826, 0, 1536) : EINVAL (22)
->     >> shmget02.c:95: TFAIL: shmget(1644199826, 4278190080, 1536) expected
->     >> EINVAL: ENOMEM (12)
->     > Adding Liam Howlett, Davidlohr Bueso and Manfred Spraul to Cc, they
->     > have worked on the shm code in the past few years.
->     >
->     > This is the line
->     >
->     >       {&shmkey1, SHMMAX + 1, IPC_CREAT | IPC_EXCL, 0, 0, EINVAL},
->     >
->     > from
->     >
->     >
->     https://github.com/linux-test-project/ltp/blob/04e8f2f4fd949/testcases/kernel/syscalls/ipc/shmget/shmget02.c#LL59C1-L59C61
->     >
->     > right?
->     >
->     > I think this is a result of SHMMAX being defined as
->     > #define SHMMAX (ULONG_MAX - (1UL << 24)), so the kernel would
->     > likely use a large 64-bit value here, while the 32-bit user
->     > space uses a much smaller limit.
->     >
->     > The expected return code likely comes from
->     >
->     > static int newseg(struct ipc_namespace *ns, struct ipc_params
->     *params)
->     > {
->     > ...
->     >          if (size < SHMMIN || size > ns->shm_ctlmax)
->     >                  return -EINVAL;
->     >
->     > but if ns->shm_ctlmax is probably set to the 64-bit value here.
->     > It would then trigger the accounting limit in __shmem_file_setup():
->     >
->     >          if (shmem_acct_size(flags, size))
->     >                  return ERR_PTR(-ENOMEM);
->     >
->     > My feeling is that the kernel in this case works as expected,
->     > and I wouldn't see this as a bug. On the other hand, this
->     > can probably be addressed in the kernel by adding a check for
->     > compat tasks like
->     >
->     > --- a/ipc/shm.c
->     > +++ b/ipc/shm.c
->     > @@ -714,7 +714,8 @@ static int newseg(struct ipc_namespace *ns,
->     struct ipc_params *params)
->     >          char name[13];
->     >          vm_flags_t acctflag = 0;
->     >
->     > -       if (size < SHMMIN || size > ns->shm_ctlmax)
->     > +       if (size < SHMMIN || size > ns->shm_ctlmax ||
->     > +          in_compat_syscall() && size > COMPAT_SHMMAX))
->     >                  return -EINVAL;
->     >
->     >          if (numpages << PAGE_SHIFT < size)
->     >
->     I would consider this as ugly: ns->shm_ctlmax can be configured by
->     writing to /proc/sys/kernel/shmmax.
->
->     You can break the test case on 64-bit as well, just by writing
->     SHMMAX+1
->     to /proc/sys/kernel/shmmax
->
->     Thus I think the test case is flawed:
->
->     It is testing the overflow behavior for a configurable value by
->     testing
->     with default+1. But sometimes the actual value is not the default.
->
->     Are the tests running as root?
->
->
-> Yes.
->
->
->     What about intentionally setting the value to something useful?
->
->
->
-> This suggest sounds reasonable, but I have a question:
-> is there any upper limit for setting the /proc/sys/kernel/shmmax?
->
-The real limit is 0x7fffffffffffffff. Even if the value of shmmax is 
-higher, shmget() fails.
-
-I think this is due to MAX_LFS_FILESIZE in __shmem_file_setup(). I 
-didn't attach a debugger, thus I cannot rule out that there is another 
-check that also rejects >= 0x800<...>0
-
-The maximum useful size is probably even lower, shmat() would fail since 
-the virtual memory size is even smaller.
-
->
-> The test seems to try to test the bounder and as a
-> corner case for covering that scenario.
-But then just reduce shmmax:
-
-- test that shmget(5000) works
-
-- echo "4999" > /proc/sys/kernel/shmmax
-
-- test that shmget(5000) fails
-
-- echo "5000" > /proc/sys/kernel/shmmax
-
-- test that shmget(5000) works again.
 
 
+On 17/04/2023 14:39, Pin-yen Lin wrote:
+> Add "regulator-boot-on" to "panel_fixed_3v3" to save time on powering
+> the regulator during boot.  Also add "off-on-delay-us" to the node to
+> make sure the regulator never violates the panel timing requirements.
+> 
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> 
 
->
->     tmp=$(cat /proc/sys/kernel/shmmax)
->
->     echo "1234" > /proc/sys/kernel/shmmax
->
->     semget() based on {&shmkey1, 1234 + 1, IPC_CREAT | IPC_EXCL, 0, 0,
->     EINVAL},
->     echo $tmp >/proc/sys/kernel/shmmax
->
->     Or, alternatively: read /proc/sys/kernel/shmmax, and skip the test if
->     the value is larger than ULONG_MAX-1.
->
->     --
->             Manfred
->
->
->
->
-> -- 
-> Regards,
-> Li Wang
+Applied, thanks!
 
-
+> ---
+> 
+>   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+> index d77f6af19065..03d1ab2ca820 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+> @@ -96,6 +96,8 @@ panel_fixed_3v3: regulator1 {
+>   		regulator-min-microvolt = <3300000>;
+>   		regulator-max-microvolt = <3300000>;
+>   		enable-active-high;
+> +		regulator-boot-on;
+> +		off-on-delay-us = <500000>;
+>   		gpio = <&pio 41 GPIO_ACTIVE_HIGH>;
+>   		pinctrl-names = "default";
+>   		pinctrl-0 = <&panel_fixed_pins>;
