@@ -2,107 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A336B714D04
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D141714D07
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjE2PbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
+        id S229904AbjE2PbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjE2PbA (ORCPT
+        with ESMTP id S229881AbjE2PbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:31:00 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D69C4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:30:58 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30ad752f433so1978616f8f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:30:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685374257; x=1687966257;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BlRZJO0ut9c74lCgp5ZPN8m5Etsewg93lsfpnPM+vgs=;
-        b=gVwf/G88eNzL0qMQ/1ivzvl0XsXj9sJU+DXJbHKD2rZ1Y3lY9YdYeswXKln8SHZ7X2
-         /C76MlnE2px8HQNiJFFsJ3wXK6me4k3wBO3sPTrq9MQGyrbqdF2xSpNkmSv78B5XHt2X
-         BZPgTJORGPoQUBH1nTO12pexC1/2LmztkouxBO4bKrnWpGVWU1IDY9WTmuSQp/ATLY0P
-         d9FZpRrYvMOy43ARbAfTNNJLrlna2AITtydrEjN3BT6fHpSChUB2fwzFZjjN8JUv2RRn
-         NirKI7vY/AWGXOYrGjyBGq5IEahNOBdzU2upvYtwTIvoDKJ5VNECDZB7N4vVnl7Fqm/r
-         P4eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685374257; x=1687966257;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BlRZJO0ut9c74lCgp5ZPN8m5Etsewg93lsfpnPM+vgs=;
-        b=d3QYyoEaEnXoXzBLFw80LdtcTJr19FSGb7IHbOLRSST5flYxavMqe7vX6vTafYt8V1
-         AO7zKGALU8CtF92JgLlblpY5CL8aAaN2wlPjs/yd7meUAuVN3y1oYfg6Aq780pqKJ9qX
-         JwzBDCoFSe6LgZbRt5FJNia1y4azRZbEPbfKO88wqQtf1DlUaJ5vAYD0I9n4+YLsjsGl
-         2n4JJyO0PyJ1/25tMAM7MR+5B6mG4Qea1m0VnVdswIyHOKLXjIvKwsE6mA0tOM+SztmL
-         PeAArMEkW9vBTEp3p+S9ouOY9DFWOUCIQ2oc/w5YoBjwieyYiKLhBUimBz5+lOFRhSnV
-         pVUg==
-X-Gm-Message-State: AC+VfDwsUIWjo7XORMa799izD0os13voUN6GqnSgf/EZatuGAI40nqlm
-        /+e5jsQxGyTYMda4bE0t8js=
-X-Google-Smtp-Source: ACHHUZ4eFqwTB/2th5OmqHEyTwPBCv726w0w/8V7tz0hfE2Ltuwtb7NySmndjYIQGPqp+TiWL8DI4w==
-X-Received: by 2002:a5d:490b:0:b0:30a:e7c0:de86 with SMTP id x11-20020a5d490b000000b0030ae7c0de86mr5894515wrq.56.1685374256958;
-        Mon, 29 May 2023 08:30:56 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id x14-20020adff0ce000000b0030aedb8156esm258207wro.102.2023.05.29.08.30.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 08:30:55 -0700 (PDT)
-Message-ID: <1ae2e760-a06f-f76f-689c-804df00ea5f8@gmail.com>
-Date:   Mon, 29 May 2023 17:30:54 +0200
+        Mon, 29 May 2023 11:31:18 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8834DD9;
+        Mon, 29 May 2023 08:31:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685374271; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=ZWNNI8PyCR+d4i5F2P9GsPf0j+rqx7oQWPXBR2AgoFU8EXxZDqZmttHqmLxznOfMhA
+    cug+3TY3WFfeG6VMBvldrZ1F72EeF7H6xcWaNyzdKQv0HutluJpa6n+cj8GY7+ZNJ963
+    R3Z2dybFUvNef1KiiH8SobofruNZwNW7FA5iVRA6JPds0BprRuhFxN+xn6T6KimXXs2+
+    r+oHI0Y0xKBw5EjdnoM8g6Ss5+wU1imBldpVK1tfQwz12BtUVub1mcVsGOHcFWwqjr0z
+    TtAEBI8VXTMydclIabsZU2kqDgDgtr2Lm7Z3BwyARzqwr+Rh9brn0fTMBxz1JfDKxLsT
+    q8Aw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685374271;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=uhEl0+pbjdfQRz9s1ekPHu0lLoDCnjrJFq1o5JKvOJo=;
+    b=hVY3pULW+QjkA1hqPLjjxVgqKrRZlpGqrqdsWvdjqQrvhpRirAMWG7xt6lhaBBfs/E
+    BYnvfVcW5altB8zjCvMoQh1ylzZy7cIqJTMzW7DOjmF1iA0SbBsFYQWnQMLR3SyozQWv
+    kUI060FpqoExACC1vBOimB7oV0E581eP7KqWlhPeA09gbNwjjhnMsJhlIVamNAc/BlSj
+    jy97J75waFx06rGK3IRSSkOp7uOlrQ7fDtRv7R0SLVIMLPkJwDR1kZ3a6IMztRzgMwO5
+    fIaD1y10CtKw2Ah+cLxMEGC4+xGnmt58zqGPu1pvPgicnnzxBB5+Rovf7S4Og9w+NIR2
+    soUw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685374271;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=uhEl0+pbjdfQRz9s1ekPHu0lLoDCnjrJFq1o5JKvOJo=;
+    b=oxkxPJboe6874s3mgvvK5mCyiJfYijN+c4ZpPsihxZLm/2SDIzP9fAOS1nWHM7JTL5
+    YJS2caHzjwY+dIWuC0kYkKmQzF2pMyufdmfPKLVDcI+dUdIUc5/voxeCns9tVUxsfYJm
+    DXRkOpTNohakl4JrwozIWpuchnjF2Tv8Yac/oXaXspjLDAC/2KGrdZeXSqubuazPg+X2
+    G8Q8V4/SvJtYm2Giv+Yq902RkOngrBT0Lpc6EdTBViztf/yXzWY4ndDaKdyw1u639cNx
+    6vrT65xEjk1A1eIJbl9/WckFxx7qGjg2zOSpuWawkE/5yxMxtbLFqybH2QrHVNwrjHZe
+    a4xw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685374271;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=uhEl0+pbjdfQRz9s1ekPHu0lLoDCnjrJFq1o5JKvOJo=;
+    b=urc66XG1iByNukL4E01a7Kvrca0FnXy30XAvhG3Ycok47s8u0LdXANE8VA+OsHwkeW
+    TqBhUJ48LO3CMuSTmfCg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8pqP1A=="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az4TFVBfH1
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 29 May 2023 17:31:11 +0200 (CEST)
+Date:   Mon, 29 May 2023 17:31:05 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] arm64: dts: qcom: msm8916/39: Clean up MDSS labels
+Message-ID: <ZHTFOZFxq-JgLP-p@gerhold.net>
+References: <20230525-msm8916-labels-v1-0-bec0f5fb46fb@gerhold.net>
+ <20230525-msm8916-labels-v1-4-bec0f5fb46fb@gerhold.net>
+ <6f1954e6-e98d-6911-8721-c50082bfb1d7@linaro.org>
+ <ZHS-HSgaBxMXiKy9@gerhold.net>
+ <17f31258-bc38-245f-532f-fdaa1ee8ad33@linaro.org>
+ <343e2e95-17ee-f5e3-61e9-7e0b793859a6@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] soc: mediatek: mtk-mutex: Remove unnecessary .owner
-Content-Language: en-US, ca-ES, es-ES
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     angelogioacchino.delregno@collabora.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20230505061950.25977-1-jiapeng.chong@linux.alibaba.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230505061950.25977-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <343e2e95-17ee-f5e3-61e9-7e0b793859a6@linaro.org>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 05/05/2023 08:19, Jiapeng Chong wrote:
-> Remove .owner field if calls are used which set it automatically.
+On Mon, May 29, 2023 at 04:26:09PM +0100, Bryan O'Donoghue wrote:
+> On 29/05/2023 16:24, Bryan O'Donoghue wrote:
+> > On 29/05/2023 16:00, Stephan Gerhold wrote:
+> > > Do you mean update the examples in the yaml bindings
+> > 
+> > Yep.
+> > 
+> > grep dsi0_out Documentation/* -r | grep qcom
+> > grep dsi0_in Documentation/* -r | grep qcom
+> > 
+> > Consider splitting this patch out and fixing up[1] Documentation/* and
+> > arch/arm/boot/dts/*.dts[i] , arch/arm64/boot/dts/qcom/*.dts[i]
+> > 
+> > We may as well be consistent everywhere.
+> > 
+> > ---
+> > bod
 > 
-> ./drivers/soc/mediatek/mtk-mutex.c:1054:3-8: No need to set .owner here. The core will do it.
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4869
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-
-Applied, thanks!
-
-> ---
->   drivers/soc/mediatek/mtk-mutex.c | 1 -
->   1 file changed, 1 deletion(-)
+> [1] In a standalone series
 > 
-> diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-> index 26f3d9a41496..4aa0913817ae 100644
-> --- a/drivers/soc/mediatek/mtk-mutex.c
-> +++ b/drivers/soc/mediatek/mtk-mutex.c
-> @@ -1051,7 +1051,6 @@ static struct platform_driver mtk_mutex_driver = {
->   	.probe		= mtk_mutex_probe,
->   	.driver		= {
->   		.name	= "mediatek-mutex",
-> -		.owner	= THIS_MODULE,
->   		.of_match_table = mutex_driver_dt_match,
->   	},
->   };
+
+Right I will check this and try to adjust the documentation and/or the
+other SoCs in a separate series. I would still prefer to apply it for
+8916/8939 as part of this series since I have some unrelated follow-up
+changes that would just cause unnecessary conflicts for Bjorn otherwise.
+
+We already have most newer SoCs using the naming convention in this
+patch so it definitely does not make the existing situation any worse. :)
+
+Thanks,
+Stephan
