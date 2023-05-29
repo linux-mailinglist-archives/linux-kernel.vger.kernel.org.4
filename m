@@ -2,139 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED0071500F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2625715019
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjE2Ty4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 15:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
+        id S229501AbjE2T4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 15:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjE2Tyy (ORCPT
+        with ESMTP id S229536AbjE2T43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 15:54:54 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D05EE8;
-        Mon, 29 May 2023 12:54:34 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75affb4d0f9so198229485a.2;
-        Mon, 29 May 2023 12:54:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685390073; x=1687982073;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lxvQw36IJl6rfxc29dkpYIkomgzupnmi9RTlBUu4jpM=;
-        b=nKqoAUuPyVq/aJ9gd0zhUb3Y9lkz9zyKMSJYH89cH0l8Y1uYpphbHorz3yX374Yhpa
-         XufpTqweW4msVG6WxtYLw+3uPNdok9tCRoC4eTI/9MZTVFmomoHAHts2+cQpuTT6oSo/
-         30LUb6sogPqn4BTXo7rtxYSvZIeTSHCsy2qHxQKzbr8bgZwtxTDmdcdcMwX+kwmCTLT9
-         +VWatdrjpNtBF0AK6IZBcnqwZ74NBSdlLHMb3u6FulN/JaNN/I7h2D+EWVvXyApkpo/g
-         Wd8fPgSM/kY4osBaF1L3PCkZWeAF2Qv5vKJRNYhbDnvVmvhPqgmJnbEwk+lfrfzFNa0o
-         St9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685390073; x=1687982073;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lxvQw36IJl6rfxc29dkpYIkomgzupnmi9RTlBUu4jpM=;
-        b=Las01I5NFcyLgTG5ETLh6jUXxbRTYKE2HDKe7Wb3UPhWcxmTg/8LDQC56/fOWZ1DpV
-         e/6teTHf+ddiYiXC7p+LsAlyhHiMUyDr/OSn53j0pfaqZ75BAw+Dr9S/7rdU6ZTXGW5n
-         mRv6J9buVrbGySBZVt1U6SEx30hkEYibco2Vj6M1+QvAwXIwkE3aSb1HII62XwvSndr4
-         B4jghDzQccomh8NtfgHoEseqlaHN5uJuTKXlF2yYoDUo+/tKW21XAR14cMyAlpBPncv5
-         BlL1c9vBk4nNlx0Vz290m+9so3ts9yy+MpkUgG/eMZB1+Qtt4gy14Sdxqpk/Bt4cnuAJ
-         d8rA==
-X-Gm-Message-State: AC+VfDxaosqdQ4JKGTBirMdItjhPoBSYK8giO2zcpqCtkaavhp81quiE
-        gpR8OEpnSJlmju05eua+Aw==
-X-Google-Smtp-Source: ACHHUZ7SjJlMriPBR3mjMu9jZpO7EN8HYr0LZamkEpaENZvmNmcIZNeh7cOiOFG/uGzKAHZi0k5JdQ==
-X-Received: by 2002:a05:6214:1d2e:b0:626:1e95:2feb with SMTP id f14-20020a0562141d2e00b006261e952febmr6460529qvd.19.1685390073317;
-        Mon, 29 May 2023 12:54:33 -0700 (PDT)
-Received: from C02FL77VMD6R.bytedance.net ([2600:1700:d860:12b0:e554:e6:7140:9e6b])
-        by smtp.gmail.com with ESMTPSA id f12-20020ad442cc000000b0061b5ad0290asm3933355qvr.67.2023.05.29.12.54.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 May 2023 12:54:33 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-X-Google-Original-From: Peilin Ye <peilin.ye@bytedance.com>
-To:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH v6 net 4/4] net/sched: Prohibit regrafting ingress or clsact Qdiscs
-Date:   Mon, 29 May 2023 12:54:26 -0700
-Message-Id: <182b2a2be81ad5ac0f58effe34e3a320de04d6c7.1685388545.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <cover.1685388545.git.peilin.ye@bytedance.com>
-References: <cover.1685388545.git.peilin.ye@bytedance.com>
+        Mon, 29 May 2023 15:56:29 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D5B92;
+        Mon, 29 May 2023 12:56:26 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1685390175tmckq6oi
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 May 2023 03:56:14 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: CRJwvrMA7Ii5QGhWTR7gAjDn/im3cUJTMJLrKCItiu9//IedHrZO8VPqve9CI
+        JREbxHhECEfjcwj3iOLI7AtJRxZhcfwcuO1SA3a+CkIkUPFo9ONYVTiml7M01fxeghXu0CT
+        vdthD4zOS6F9DsGvD+yFqUeF+tsLVoWmREiNsqk8v4emuWimsNWz2q3X91Rr5bTzuDeRHu1
+        8SYxkOwE40helGX0uZm1e7sq9E+ub2TQrpXIWvhGbqB2tcaoNclftY75ysAHMxF/uv56ubI
+        q3Ha1mhj6elqdQbHhlOWR2LgMgKeKz4aGx+iiiglqpb3OKP3Sh2pYWRiEYiiIwD3rL2aP6Z
+        skaIKTfTv2vEIU7Boxl8Xp2wT5XTgRGw92F+cgkFVvRT1zRnHdRY8A885R47PP8mfLT54NQ
+        3BjvdTpJLo4=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 14858657345865464071
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: [PATCH v2 08/13] tools/nolibc: add pure 64bit time structs
+Date:   Tue, 30 May 2023 03:56:01 +0800
+Message-Id: <c6bf754329eeb61a1ffe8f9e04ec70cb02e1a2ed.1685387484.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1685387484.git.falcon@tinylab.org>
+References: <cover.1685387484.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+It's time to provide 64bit time structs for all platforms, for y2038 is
+near.
 
-Currently, after creating an ingress (or clsact) Qdisc and grafting it
-under TC_H_INGRESS (TC_H_CLSACT), it is possible to graft it again under
-e.g. a TBF Qdisc:
+There are still old "struct timeval" and "struct itimerval" in
+include/uapi/linux/time.h, remove "#include <linux/time.h>" and add our
+own pure 64bit ones.
 
-  $ ip link add ifb0 type ifb
-  $ tc qdisc add dev ifb0 handle 1: root tbf rate 20kbit buffer 1600 limit 3000
-  $ tc qdisc add dev ifb0 clsact
-  $ tc qdisc link dev ifb0 handle ffff: parent 1:1
-  $ tc qdisc show dev ifb0
-  qdisc tbf 1: root refcnt 2 rate 20Kbit burst 1600b lat 560.0ms
-  qdisc clsact ffff: parent ffff:fff1 refcnt 2
-                                      ^^^^^^^^
-
-clsact's refcount has increased: it is now grafted under both
-TC_H_CLSACT and 1:1.
-
-ingress and clsact Qdiscs should only be used under TC_H_INGRESS
-(TC_H_CLSACT).  Prohibit regrafting them.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Fixes: 1f211a1b929c ("net, sched: add clsact qdisc")
-Tested-by: Pedro Tammela <pctammela@mojatatu.com>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-riscv/9e4064fc-f0c5-4dd3-941f-344d2150e1cd@app.fastmail.com/
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- net/sched/sch_api.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/include/nolibc/sys.h   |  2 --
+ tools/include/nolibc/types.h | 49 +++++++++++++++++++++++++++++++++++-
+ 2 files changed, 48 insertions(+), 3 deletions(-)
 
-diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-index 383195955b7d..49b9c1bbfdd9 100644
---- a/net/sched/sch_api.c
-+++ b/net/sched/sch_api.c
-@@ -1596,6 +1596,11 @@ static int tc_modify_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
- 					NL_SET_ERR_MSG(extack, "Invalid qdisc name");
- 					return -EINVAL;
- 				}
-+				if (q->flags & TCQ_F_INGRESS) {
-+					NL_SET_ERR_MSG(extack,
-+						       "Cannot regraft ingress or clsact Qdiscs");
-+					return -EINVAL;
-+				}
- 				if (q == p ||
- 				    (p && check_loop(q, p, 0))) {
- 					NL_SET_ERR_MSG(extack, "Qdisc parent/child loop detected");
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index d0720af84b6d..1b3675d4c5fc 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -17,7 +17,6 @@
+ #include <asm/mman.h>
+ #include <linux/fs.h>
+ #include <linux/loop.h>
+-#include <linux/time.h>
+ #include <linux/auxvec.h>
+ #include <linux/fcntl.h> /* for O_* and AT_* */
+ #include <linux/stat.h>  /* for statx() */
+@@ -28,7 +27,6 @@
+ #include "errno.h"
+ #include "types.h"
+ 
+-
+ /* Functions in this file only describe syscalls. They're declared static so
+  * that the compiler usually decides to inline them while still being allowed
+  * to pass a pointer to one of their instances. Each syscall exists in two
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index 698d859fc6e2..4ff35b7ea2bb 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -8,10 +8,57 @@
+ #define _NOLIBC_TYPES_H
+ 
+ #include "std.h"
+-#include <linux/time.h>
++#include <linux/time_types.h>
+ #include <linux/stat.h>
+ #include <linux/wait.h>
+ 
++/* based on linux/time.h but with pure 64bit time structs */
++#define timespec __kernel_timespec
++#define itimerspec __kernel_itimerspec
++
++/* timeval is only provided for users, not compatible with syscalls */
++struct timeval {
++	__kernel_time64_t tv_sec;	/* seconds */
++	__s64 tv_usec;			/* microseconds */
++};
++
++struct timezone {
++	int tz_minuteswest;		/* minutes west of Greenwich */
++	int tz_dsttime;			/* type of dst correction */
++};
++
++/* itimerval is only provided for users, not compatible with syscalls */
++struct itimerval {
++	struct timeval it_interval;	/* timer interval */
++	struct timeval it_value;	/* current value */
++};
++
++/*
++ * Names of the interval timers, and structure
++ * defining a timer setting:
++ */
++#define ITIMER_REAL			0
++#define ITIMER_VIRTUAL			1
++#define ITIMER_PROF			2
++
++/*
++ * The IDs of the various system clocks (for POSIX.1b interval timers):
++ */
++#define CLOCK_REALTIME			0
++#define CLOCK_MONOTONIC			1
++#define CLOCK_PROCESS_CPUTIME_ID	2
++#define CLOCK_THREAD_CPUTIME_ID		3
++#define CLOCK_MONOTONIC_RAW		4
++#define CLOCK_REALTIME_COARSE		5
++#define CLOCK_MONOTONIC_COARSE		6
++#define CLOCK_BOOTTIME			7
++#define CLOCK_REALTIME_ALARM		8
++#define CLOCK_BOOTTIME_ALARM		9
++
++/*
++ * The various flags for setting POSIX.1b interval timers:
++ */
++#define TIMER_ABSTIME			0x01
+ 
+ /* Only the generic macros and types may be defined here. The arch-specific
+  * ones such as the O_RDONLY and related macros used by fcntl() and open(), or
 -- 
-2.20.1
+2.25.1
 
