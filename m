@@ -2,148 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B59714853
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 13:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862BC714840
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 12:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbjE2LI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 07:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
+        id S231436AbjE2K7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 06:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjE2LIy (ORCPT
+        with ESMTP id S229597AbjE2K7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 07:08:54 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F09CD
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 04:08:50 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230529110838epoutp0156a0d2017bc413672cfe970a760f37b9~jmKS1n3Pb2902729027epoutp01N
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 11:08:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230529110838epoutp0156a0d2017bc413672cfe970a760f37b9~jmKS1n3Pb2902729027epoutp01N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1685358518;
-        bh=dZVfotqZFrsokbs+wqGDWxA2HIP1xtUvpW9KT5S6V/g=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=mSik56PfWyps25P0F27uNOkKOxyJzsXVnUURn9lmV4y5b8ai/sDKbVAoVFHQsb3WE
-         lotiS4me6f9y3aDafyDvpHVV1abOM/qOM6tC+SZ4G3hAOE2CXOTkFA5kcxXoyjaYWV
-         idqSz0qyNhYihTZJazdfDEInFl+6L/tvKQFvV7HY=
-Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20230529110838epcas5p2aeb7ad05e010a427b9dccb1f0866323c~jmKSLeDPK3208332083epcas5p2a;
-        Mon, 29 May 2023 11:08:38 +0000 (GMT)
-X-AuditID: b6c32a49-db3fe700000011d7-a7-647487b56532
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C6.82.04567.5B784746; Mon, 29 May 2023 20:08:37 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH 1/1] arch:hexagon/powerpc: use KSYM_NAME_LEN in array
- size
-Reply-To: maninder1.s@samsung.com
-Sender: Maninder Singh <maninder1.s@samsung.com>
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC:     "bcain@quicinc.com" <bcain@quicinc.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "nathanl@linux.ibm.com" <nathanl@linux.ibm.com>,
-        "ustavoars@kernel.org" <ustavoars@kernel.org>,
-        "alex.gaynor@gmail.com" <alex.gaynor@gmail.com>,
-        "gary@garyguo.net" <gary@garyguo.net>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "wedsonaf@google.com" <wedsonaf@google.com>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Onkarnath <onkarnath.1@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <CANiq72ncDr68qeahrHuQ63dj1Va3=Us6ZSjGRkr6Zp8j+=yH_Q@mail.gmail.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230529105707epcms5p1418eac680ebe1736196706b0db80dd39@epcms5p1>
-Date:   Mon, 29 May 2023 16:27:07 +0530
-X-CMS-MailID: 20230529105707epcms5p1418eac680ebe1736196706b0db80dd39
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMKsWRmVeSWpSXmKPExsWy7bCmlu7W9pIUg81/rSz+zt7ObvFwdwuL
-        xZ1Jz9ktLp55zWhxpjvX4n3LDjaLy7vmsFn8/v6P1eLm9DfsFlsaDrFZbDgabPHzxQ0Wi5Xz
-        lzNarOj5wGrx//FXIPHuCJNFx+KVjA6CHrMbLrJ4fL15jslj0csGFo8lnb+YPHbOusvusWBT
-        qcemVZ1sHhMWHWD0OD9jIaPHxD11Hn1bVjF6rN9ylcXj8ya5AN4oLpuU1JzMstQifbsErozF
-        h9ILfnBXHNv0ibmB8RxnFyMnh4SAicTii+9Yuxi5OIQEdjNKnFowj62LkYODV0BQ4u8OYZAa
-        YYEAiQV7lzKC2EICihIXZqxhBCkRFjCQ+LVVAyTMJqAnsWrXHhYQW0TASOLa6d0sICOZBeaw
-        Sdzb2s0EsYtXYkb7UxYIW1pi+/KtYHM4BQIlnn5xgQiLStxc/ZYdxn5/bD4jhC0i0XrvLDOE
-        LSjx4OduqLiMxOrNvVAjqyWevj7HBrJXQqCFUWLfbpgic4n1S1aBDeUV8JV4PbkR7B4WAVWJ
-        /r1NUDUuEk+uTmUFsZkF5CW2v53DDHIbs4CmxPpd+hAlshJTT61jgijhk+j9/QTurR3zYGxV
-        iZabG1hhXvz88SPUbR4Sp76vYoUE4WlGiRNPRCcwKsxCBPQsJItnISxewMi8ilEytaA4Nz21
-        2LTAMC+1XK84Mbe4NC9dLzk/dxMjOB1qee5gvPvgg94hRiYOxkOMEhzMSiK8tonFKUK8KYmV
-        ValF+fFFpTmpxYcYpTlYlMR51W1PJgsJpCeWpGanphakFsFkmTg4pRqY8irfuT68Nf9+6Rvv
-        UL03P9NfZbkcvjV33ifuro0GLMdCp6zcO8urs8FYLSLT1+2M0Idp+rXavZ8mzJbi92aUEzTx
-        9Yt41etamlM6T/L45HsT7zLGfEyveFuZ9mP+tFlhs6+7vLywZd3yP81Z775+q++9cyek9Gf0
-        3MRtzJMFCp9qMn5/OCPFdu67sJfFD20TXO6Wab3n2P7L1/0zd0aoZr1wnFPb3J9Wm+R++TF0
-        1vdO6F5u92KW0H6fZfOmGXKI10+0LNtQc/rTVTZBtkPXohzOf3H8FPPUMcs7Mn7m41Naf15y
-        mx06cbhX9FzSffcfZTmR/70e3D11vumN1U/2jm+Woaz3V388uud1/zLTw0osxRmJhlrMRcWJ
-        AJjKocv2AwAA
-X-CMS-RootMailID: 20230529052832epcas5p4fa1b8cf25d9810d32bd2ccf012086fb3
-References: <CANiq72ncDr68qeahrHuQ63dj1Va3=Us6ZSjGRkr6Zp8j+=yH_Q@mail.gmail.com>
-        <20230529052821.58175-1-maninder1.s@samsung.com>
-        <CGME20230529052832epcas5p4fa1b8cf25d9810d32bd2ccf012086fb3@epcms5p1>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 29 May 2023 06:59:31 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4C5B2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:59:30 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d3fdcadb8so2321613b3a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685357970; x=1687949970;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5QRkls60EmwfQ094Jr/DUlSJC+fZUUu7sTN4HHKuK4E=;
+        b=hLPEdmjEn3Le+3iayfK0IFFeTrXuMhiSMq7EnaISokJmJIgx05EZOqn3PJsdmZ4DWJ
+         hLydpDmyTtF0McFS/B+inVIQa6oNItzj9uzg/mGq7mnYp2CwuNB4aAmWNHrUyFugWn1s
+         ENbAU7SLz9Oze6cyNXuYAsyqnk3IHwlUdFkbQqgfUKHcRciGQM4wNo7bvZn11Cz6SgqH
+         vcUHGn53MHErUGiSd6WlMq2p/gNKegUrZQhi3ES7XOZUIV5uZCuStijNcl3/KekbqYfr
+         TitfVnnNPtwkffVfWc0gLlFSpYlYSey7pCcDRvLgCGKM4pWXDg95IPyx8j52bALZy8JT
+         Sdaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685357970; x=1687949970;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5QRkls60EmwfQ094Jr/DUlSJC+fZUUu7sTN4HHKuK4E=;
+        b=fh1iw6v6JFvt+aindjE7GYgWPkswNw16nMKlnwBrIQMKJ9KudZ3//OzapCct4sZ15n
+         HVza5UAoweaZ+n25RNwFv4Knuyh6GjrWcmBZZVcys8UTsz7XaCV8g0+qaHZ/9pv7pbxM
+         RByzKC4T+JxnLkmZCCfpLsRzy4+CK3zW2LVWNg7F+h9PerfxwwqtqACKLgAxWMLMmIz1
+         s8ObKTIEK4ozg+gEszSSLy4u7hoJGb2OYRNvB226MEHoSPRHXHxKq30HOL4Xe+rHKy7J
+         S0flB7gleJiMvk/4whs32doxm5qKR82qp+Te/aZMGqkMP25+bCkKFcEkwQT4t4d6ZEIJ
+         FB1g==
+X-Gm-Message-State: AC+VfDxzTQ9XVnyxVV7lnB3R6/nKtSTnBffHiG15JPrXbWyZ39gLJrkE
+        IHVlY3ZOu3dmFAxbdqaNTu5Gblxge9VQObd7
+X-Google-Smtp-Source: ACHHUZ5GkpLFkPZpDSKTHi7pxwqcMH5Rk8T6rfmGorTWoXyzCcO47wWG6G7+wwUTgJPV3Sb2UVVPQg==
+X-Received: by 2002:a05:6a20:12d2:b0:10e:a8e6:35d1 with SMTP id v18-20020a056a2012d200b0010ea8e635d1mr8777665pzg.40.1685357969989;
+        Mon, 29 May 2023 03:59:29 -0700 (PDT)
+Received: from localhost.localdomain ([143.92.64.20])
+        by smtp.gmail.com with ESMTPSA id v7-20020a63d547000000b0053f22b76cdcsm6863110pgi.82.2023.05.29.03.59.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 03:59:29 -0700 (PDT)
+From:   "brookxu.cn" <brookxu.cn@gmail.com>
+To:     kbusch@kernel.org, axboe@kernel.dk, hch@lst.de, sagi@grimberg.me
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/4] nvme-tcp: fix hung issues for deleting
+Date:   Mon, 29 May 2023 18:59:22 +0800
+Message-Id: <cover.1685350577.git.chunguang.xu@shopee.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Chunguang Xu <chunguang.xu@shopee.com>
 
->>
->> kallsyms_lookup which in turn calls for kallsyms_lookup_buildid()
->> writes on index "KSYM_NAME_LEN - 1".
->>
->> Thus array size should be KSYM_NAME_LEN.
->>
->> for powerpc and hexagon it was defined as "128" directly.
->> and commit '61968dbc2d5d' changed define value to 512,
->> So both were missed to update with new size.
->>
->> Fixes: 61968dbc2d5d ("kallsyms: increase maximum kernel symbol length to 512")
->> Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
->> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+We found that nvme_remove_namespaces() may hang in flush_work(&ctrl->scan_work)
+while removing ctrl. The root cause may due to the state of ctrl changed to
+NVME_CTRL_DELETING while removing ctrl , which intterupt nvme_tcp_error_recovery_work()/
+nvme_reset_ctrl_work()/nvme_tcp_reconnect_or_remove().  At this time, ctrl is
+freezed and queue is quiescing . Since scan_work may continue to issue IOs to
+load partition table, make it blocked, and lead to nvme_tcp_error_recovery_work()
+hang in flush_work(&ctrl->scan_work).
 
-> Thanks for this!
-> 
-> There is no `From:` at the top. Since I cannot locate the patch in
-> Lore, did you mean to put both of you as authors perhaps? In that
-> case, please use a `Co-developed-by` as needed.
-> 
+After analyzation, we found that there are mainly two case: 
+1. Since ctrl is freeze, scan_work hang in __bio_queue_enter() while it issue
+   new IO to load partition table.
+2. Since queus is quiescing, requeue timeouted IO may hang in hctx->dispatch
+   queue, leading scan_work waiting for IO completion.
 
-I Will add co-developed-by` tag.
-because this change was identified while we were working on kallsyms some time back.
-https://lore.kernel.org/lkml/YonTOL4zC4CytVrn@infradead.org/t/
+CallTrace:
+Removing nvme_ctrl
+[<0>] __flush_work+0x14c/0x280
+[<0>] flush_work+0x14/0x20
+[<0>] nvme_remove_namespaces+0x45/0x100
+[<0>] nvme_do_delete_ctrl+0x79/0xa0
+[<0>] nvme_sysfs_delete+0x6b/0x80
+[<0>] dev_attr_store+0x18/0x30
+[<0>] sysfs_kf_write+0x3f/0x50
+[<0>] kernfs_fop_write_iter+0x141/0x1d0
+[<0>] vfs_write+0x25b/0x3d0
+[<0>] ksys_write+0x6b/0xf0
+[<0>] __x64_sys_write+0x1e/0x30
+[<0>] do_syscall_64+0x5d/0x90
+[<0>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
-this patch set is pending and we will start working on that again, so i thought better
-to send bugfix first.
+Scan_work:
+Stack 0
+[<0>] __bio_queue_enter+0x15a/0x210
+[<0>] blk_mq_submit_bio+0x260/0x5e0
+[<0>] __submit_bio+0xa6/0x1a0
+[<0>] submit_bio_noacct_nocheck+0x2e5/0x390
+[<0>] submit_bio_noacct+0x1cd/0x560
+[<0>] submit_bio+0x3b/0x60
+[<0>] submit_bh_wbc+0x137/0x160
+[<0>] block_read_full_folio+0x24d/0x470
+[<0>] blkdev_read_folio+0x1c/0x30
+[<0>] filemap_read_folio+0x44/0x2a0
+[<0>] do_read_cache_folio+0x135/0x390
+[<0>] read_cache_folio+0x16/0x20
+[<0>] read_part_sector+0x3e/0xd0
+[<0>] sgi_partition+0x35/0x1d0
+[<0>] bdev_disk_changed+0x1f6/0x650
+[<0>] blkdev_get_whole+0x7e/0x90
+[<0>] blkdev_get_by_dev+0x19c/0x2e0
+[<0>] disk_scan_partitions+0x72/0x100
+[<0>] device_add_disk+0x415/0x420
+[<0>] nvme_scan_ns+0x636/0xcd0
+[<0>] nvme_scan_work+0x26f/0x450
+[<0>] process_one_work+0x21c/0x430
+[<0>] worker_thread+0x4e/0x3c0
+[<0>] kthread+0xfb/0x130
+[<0>] ret_from_fork+0x29/0x50
 
-> Perhaps it is a good idea to submit each arch independently, too.
-> 
+Stack 1
+[<0>] filemap_read_folio+0x195/0x2a0
+[<0>] do_read_cache_folio+0x135/0x390
+[<0>] read_cache_folio+0x16/0x20
+[<0>] read_part_sector+0x3e/0xd0
+[<0>] read_lba+0xcc/0x1b0
+[<0>] efi_partition+0xec/0x7f0
+[<0>] bdev_disk_changed+0x1f6/0x650
+[<0>] blkdev_get_whole+0x7e/0x90
+[<0>] blkdev_get_by_dev+0x19c/0x2e0
+[<0>] disk_scan_partitions+0x72/0x100
+[<0>] device_add_disk+0x433/0x440
+[<0>] nvme_scan_ns+0x636/0xcd0
+[<0>] nvme_scan_work+0x26f/0x450
+[<0>] process_one_work+0x21c/0x430
+[<0>] worker_thread+0x4e/0x3c0
+[<0>] kthread+0xfb/0x130
+[<0>] ret_from_fork+0x29/0x50
 
-ok, I will share 2 separate patches.
+Here try to fix this issue by make sure ctrl is unfreezed and queue is quiescing
+while exit from error recovery or reset.
 
-> The changes themselves look fine on a quick inspection, though the
-> `xmon.c` one is a global buffer (and there is another equally-sized
-> buffer in `xmon.c` with a hard-coded `128` constant that would be nice
-> to clarify).
+Chunguang Xu (4):
+  nvme: unfreeze while exit from recovery or resetting
+  nvme: donot retry request for NVME_CTRL_DELETING_NOIO
+  nvme: optimize nvme_check_ready() for NVME_CTRL_DELETING_NOIO
+  nvme-tcp: remove admin_q quiescing from nvme_tcp_teardown_io_queues
 
-Yes, I think second buffer was not related to kallsyms, so I have not touched that.
+ drivers/nvme/host/core.c |  5 ++++-
+ drivers/nvme/host/nvme.h |  3 ++-
+ drivers/nvme/host/tcp.c  | 25 ++++++++++++++++---------
+ 3 files changed, 22 insertions(+), 11 deletions(-)
 
-Thanks,
-Maninder Singh
+-- 
+2.25.1
+
