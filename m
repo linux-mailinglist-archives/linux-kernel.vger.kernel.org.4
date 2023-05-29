@@ -2,73 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB83A7149D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B3C7149D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjE2NEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S229688AbjE2NEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjE2NDz (ORCPT
+        with ESMTP id S229568AbjE2NER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:03:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3762B5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:03:54 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 568761F88E;
-        Mon, 29 May 2023 13:03:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685365433; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tc5kSCmE2FMssHmpJJAR9HCJO9j6BfEH8BHbYAEXixc=;
-        b=AvJfha7PIKScylt2Z/almeX1F5TD0fU21Msa+qwAegXte80G6b+8M+99OOrFz4mt/SNK0s
-        T+gYD9w0lREPEW6qTnacnociAi7VKwntYyTsMPmYIpIGp+ZgzNAOtppIJZHHXvCKUtKm2j
-        bB972uronf/uWmCr7PlaAPVTGTCQJ2M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685365433;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tc5kSCmE2FMssHmpJJAR9HCJO9j6BfEH8BHbYAEXixc=;
-        b=RlzNCcpoH9Y2NmrGJQX69OAIR5iUyDmtNTwx5iyWcDylK+hlLd9CetIRX+rGGWRCbxYqC6
-        z2wTFHg3E44wRdBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3297C13466;
-        Mon, 29 May 2023 13:03:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NyL/CrmidGSaIQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 29 May 2023 13:03:53 +0000
-Message-ID: <1c3c9305-a678-279e-f015-7aed544ab3c8@suse.cz>
-Date:   Mon, 29 May 2023 15:03:52 +0200
+        Mon, 29 May 2023 09:04:17 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF3A9B;
+        Mon, 29 May 2023 06:04:14 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1685365445t75bgpzp
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 29 May 2023 21:04:04 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: i75H2eCteEjnLpMewxVxLDrNbTdZ6XaqgT62xHD7GAxbEuya2/NFVic9wlKR2
+        a5kdGwQlpfjJNaz/YzSlhC5cSA4kagQIt3PINNuT2Ab6n1K/Gb8hBWDDwrYBCvcAdM5teIy
+        tOKnMd4y8XFqHSNySJdqSIpkhrIGm9rMbckS9jbZuSK8O8MSz+MpEsOvJbYu+MaxqANEIjt
+        vVBzQ1uUopCjGW00WJxlZOp576mh7k5SXdUajNV+l44GGMjwWPAcNDE7bQDJ4oQTtNsnlxk
+        3AkOBDpTGFve+zAiy1AVAdMk3T6BxmWVv7KhdqlE8eHR7U2/3UDQRZ/couHwg6PX65e1LSr
+        Mlj0aFqMaSpMWk5ZYcCda4bZ5eGDUnulVfBmOJIeJawj0cMpMwj4MMUoH7DHgASCg7DhcO6
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 8875824386806725758
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: [PATCH v2 5/7] selftests/nolibc: use INT_MAX instead of __INT_MAX__
+Date:   Mon, 29 May 2023 21:04:02 +0800
+Message-Id: <330da9ee27aff3500831a936ffdedc08cc481b63.1685362482.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1685362482.git.falcon@tinylab.org>
+References: <cover.1685362482.git.falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 2/5] mm: compaction: simplify should_compact_retry()
-Content-Language: en-US
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-References: <20230519123959.77335-1-hannes@cmpxchg.org>
- <20230519123959.77335-3-hannes@cmpxchg.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230519123959.77335-3-hannes@cmpxchg.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,97 +52,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/23 14:39, Johannes Weiner wrote:
-> The different branches for retry are unnecessarily complicated. There
-> are really only three outcomes: progress (retry n times), skipped
-> (retry if reclaim can help), failed (retry with higher priority).
-> 
-> Rearrange the branches and the retry counter to make it simpler.
-> 
-> v2:
-> - fix trace point build (Mel)
-> - fix max_retries logic for costly allocs (Huang)
-> 
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> ---
->  mm/page_alloc.c | 53 +++++++++++++++----------------------------------
->  1 file changed, 16 insertions(+), 37 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 5a84a0bebc37..72660e924b95 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -3772,16 +3772,22 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
->  	 * Compaction managed to coalesce some page blocks, but the
->  	 * allocation failed presumably due to a race. Retry some.
->  	 */
-> -	if (compact_result == COMPACT_SUCCESS)
-> -		(*compaction_retries)++;
-> +	if (compact_result == COMPACT_SUCCESS) {
-> +		/*
-> +		 * !costly requests are much more important than
-> +		 * __GFP_RETRY_MAYFAIL costly ones because they are de
-> +		 * facto nofail and invoke OOM killer to move on while
-> +		 * costly can fail and users are ready to cope with
-> +		 * that. 1/4 retries is rather arbitrary but we would
-> +		 * need much more detailed feedback from compaction to
-> +		 * make a better decision.
-> +		 */
-> +		if (order > PAGE_ALLOC_COSTLY_ORDER)
-> +			max_retries /= 4;
->  
-> -	/*
-> -	 * All zones were scanned completely and still no result. It
-> -	 * doesn't really make much sense to retry except when the
-> -	 * failure could be caused by insufficient priority
-> -	 */
-> -	if (compact_result == COMPACT_COMPLETE)
-> -		goto check_priority;
-> +		ret = ++(*compaction_retries) <= max_retries;
-> +		goto out;
+nolibc now has INT_MAX in stdint.h, so, don't mix INT_MAX and
+__INT_MAX__, unify them to INT_MAX.
 
-I think you simplified this part too much, so now once it runs out of
-retries, it will return false, while previously it would increase the priority.
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +	}
->  
->  	/*
->  	 * Compaction was skipped due to a lack of free order-0
-> @@ -3793,35 +3799,8 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
->  	}
->  
->  	/*
-> -	 * If compaction backed due to being deferred, due to
-> -	 * contended locks in async mode, or due to scanners meeting
-> -	 * after a partial scan, retry with increased priority.
-> -	 */
-> -	if (compact_result == COMPACT_DEFERRED ||
-> -	    compact_result == COMPACT_CONTENDED ||
-> -	    compact_result == COMPACT_PARTIAL_SKIPPED)
-> -		goto check_priority;
-> -
-> -	/*
-> -	 * !costly requests are much more important than __GFP_RETRY_MAYFAIL
-> -	 * costly ones because they are de facto nofail and invoke OOM
-> -	 * killer to move on while costly can fail and users are ready
-> -	 * to cope with that. 1/4 retries is rather arbitrary but we
-> -	 * would need much more detailed feedback from compaction to
-> -	 * make a better decision.
-> -	 */
-> -	if (order > PAGE_ALLOC_COSTLY_ORDER)
-> -		max_retries /= 4;
-> -	if (*compaction_retries <= max_retries) {
-> -		ret = true;
-> -		goto out;
-> -	}
-> -
-> -	/*
-> -	 * Make sure there are attempts at the highest priority if we exhausted
-> -	 * all retries or failed at the lower priorities.
-> +	 * Compaction failed. Retry with increasing priority.
->  	 */
-> -check_priority:
->  	min_priority = (order > PAGE_ALLOC_COSTLY_ORDER) ?
->  			MIN_COMPACT_COSTLY_PRIORITY : MIN_COMPACT_PRIORITY;
->  
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index e75ce6b68565..9ff9d87cc78e 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -935,7 +935,7 @@ static const struct test test_names[] = {
+ int main(int argc, char **argv, char **envp)
+ {
+ 	int min = 0;
+-	int max = __INT_MAX__;
++	int max = INT_MAX;
+ 	int ret = 0;
+ 	int err;
+ 	int idx;
+@@ -983,7 +983,7 @@ int main(int argc, char **argv, char **envp)
+ 				 * here, which defaults to the full range.
+ 				 */
+ 				do {
+-					min = 0; max = __INT_MAX__;
++					min = 0; max = INT_MAX;
+ 					value = colon;
+ 					if (value && *value) {
+ 						colon = strchr(value, ':');
+-- 
+2.25.1
 
