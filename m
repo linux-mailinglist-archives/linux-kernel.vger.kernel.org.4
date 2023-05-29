@@ -2,138 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53A8714B7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF01714B86
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjE2OEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S230201AbjE2OFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjE2OE1 (ORCPT
+        with ESMTP id S229968AbjE2OFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:04:27 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4AE19F;
-        Mon, 29 May 2023 07:04:04 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 6D0693200976;
-        Mon, 29 May 2023 10:03:30 -0400 (EDT)
-Received: from imap52 ([10.202.2.102])
-  by compute5.internal (MEProxy); Mon, 29 May 2023 10:03:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1685369010; x=1685455410; bh=nvqrlHPnnrFfgBtplfsIN8YSU9SAn7OIOxJ
-        dEW6JUUw=; b=kn61Jo3stjP6LminfFKgeDnaf0b48DUFYk+akJRWF+wBEfuC1xp
-        go5XlwQ+87GxAORySg/c0E21RALfrA56B9HkDYqxwB8ktnOsakQiJHXCqBVqqsx0
-        e1enloHeoopjwOJGuCV7m7MScKa4woFIbBzH/ZLbV+PiIzuSD2CRGzrWqyywGh/r
-        /kFhFCbtIvz3ZmRPbdn8HBEXuGOM8rKUiwaiAEEdRlomynk3IF2/8xH9bGuuYYDI
-        s7qGDg/MwekDBZoVyKT8+tKlHjzMwOo8cWT44dHzKpMmfiTkysRxiTAJRsA+dcBR
-        UUMqFimNViXNoopYz8EAwLrYnZMvqy3qwWg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1685369010; x=1685455410; bh=nvqrlHPnnrFfgBtplfsIN8YSU9SAn7OIOxJ
-        dEW6JUUw=; b=ckTrPuoJHVnbe6revg6NpkA+JuGbnnKYCSYUrNihx66eEONsLyU
-        beIkM5oVZi0U+KMOfMfN/3pU1YUd9jF6fxe/LOYA1cMrNibqx0aFzinDCJVnNHXR
-        HIE7W/R+WW23y6GU7553jk1TVouUnIHbeRJCv/vkjsUUDcf3JJD7+mEf66dEMBXj
-        4XZncuF07Z2vZE6uXiI4hXjue5ErnXXYDWuzhts5BRiXElKeBiR3jzg2lYoiXZQO
-        tdz/63Mp1OmQY9HU2gUox2w/OI86t/KUISXfvOpFJ3MAaXcp050qtRK4h1/HeZA/
-        u7nKR9jW26F1lGp6XgVD6AGjfKc3E/jhdsw==
-X-ME-Sender: <xms:sbB0ZFPPADSqHAdXobUx9dm7AtzZnWsDLCwvjyHseNhOKsMnj3oPgw>
-    <xme:sbB0ZH_0FkFN3rJ8-WZQusQ5Lw46RnN6-nEoyp0GYd5sbZOpcp0hHY7TqPMo80F5R
-    NheYSfh8lBfZ0bH8yc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekhedgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfo
-    rghrkhcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsg
-    gsrdgtrgeqnecuggftrfgrthhtvghrnhephfefgedufeetgfetlefgkefgvdejleelvefg
-    hfejfffhtdeitdejfeekvdeugfeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgt
-    rg
-X-ME-Proxy: <xmx:sbB0ZESM5NRp3ADjISCwNOhm3pulIQ1Abz0Ve3EfUMu2TAZVdQZLIQ>
-    <xmx:sbB0ZBs96Ibxj7XA7sFazKv29EsluhoNat1s2IyBOBzXbXkzorjjag>
-    <xmx:sbB0ZNcK8BLDLaoj1qTo6aXXAEenA03WmSi2tYYKE0NjmDzvwCv4FQ>
-    <xmx:srB0ZOr7il7a_URGfqGH4v92w0rXo8jK7yXana217QBUm6HbybrSHw>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7C020C60091; Mon, 29 May 2023 10:03:29 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
-Mime-Version: 1.0
-Message-Id: <f69305de-b3f1-46ee-b8b5-a20729c8c1bb@app.fastmail.com>
-In-Reply-To: <27c7824e-ec90-c68f-3e76-92525ed7e393@linux.intel.com>
-References: <mpearson-lenovo@squebb.ca>
- <20230526171658.3886-1-mpearson-lenovo@squebb.ca>
- <20230526171658.3886-5-mpearson-lenovo@squebb.ca>
- <27c7824e-ec90-c68f-3e76-92525ed7e393@linux.intel.com>
-Date:   Mon, 29 May 2023 10:03:02 -0400
-From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     "Hans de Goede" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 5/5] platform/x86: think-lmi: mutex protection around multiple
- WMI calls
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 29 May 2023 10:05:46 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282DD11B;
+        Mon, 29 May 2023 07:05:24 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f60e730bf2so34415355e9.1;
+        Mon, 29 May 2023 07:05:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685369122; x=1687961122;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3IXsQpfygJCaGC5q2YIhqiT7SfrT6glvTqsb9kR3+tg=;
+        b=sdpUq6wtbzHzS8CgQpQdkR+hrukqOa0ISmZZ3Wa4z52ZeXjPlFEu2+gBtYJyxRIfXk
+         iF+hwNmP4E2q798O+VJ+qnu5RdUL3Usuqf+25mgaOmFQUjw+NrPMwOhbuzTce9yOFYmk
+         5oVOjVhSdqxaUI+utRJ1ZBEkYiy4BGUvd7qqfx3be/IBhbeVTynXCun1S40CDXLHBFH2
+         e6izo/1qqqx5+qMie+iSMm0zCCCqtww1FXoT76hSDofbssPi0x4a65NBF9S4iUO7kVu1
+         ERVfgkpK9LeNqI4EHA0XoK2MwnVEjFUubhoUMSp4p8Zvo83+1NxGu8oAW3nTAdt3+AzQ
+         EYRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685369122; x=1687961122;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3IXsQpfygJCaGC5q2YIhqiT7SfrT6glvTqsb9kR3+tg=;
+        b=MGgk2RNOM1F4iTZ/HZB9S4a1SiwkQl3x7pz42G1jWp40vHtEfmdIO1aHHecmXlMEB4
+         rmgISnUv2VjNzsBB+NzIbbGsqXCKi1K/Yyh8NbvVRl/fvTpiByaNyp7alSrK+7hIV1Jl
+         AJ44Jx51Aj9S9Qafv/t+DALYYv9ITnYWeWwWGnW2V9sTZuwDzW5ZiJ0W11jnJSXiE3qr
+         6ceEWB2HnfiBCW+oASQFYJmvYRAYxRbc7RRUrEUtaVPO+BWLJaw9qaCnnMsJ4LmqpnXj
+         IySLhVKfOrnLtq6hLFEoCImTz5mLprpRp6/LjM+8HKT1jgWe6SqlIbg2rE8mtSUsyXsB
+         gAZQ==
+X-Gm-Message-State: AC+VfDy/UOEJ0xSUGAmPvZpga1eDODtHz2wZuVF2fZdjiEMjA3CqvO8y
+        /p0B1FJXruga+2nhaFxI3Dk=
+X-Google-Smtp-Source: ACHHUZ7g9aINh4JUEKppDSWEt//njGKAVDLn3XhohW2qMJr2ADrXZo3WfUHZJbjvujUEDC7TDLkhcw==
+X-Received: by 2002:a5d:42c8:0:b0:309:4e37:51ed with SMTP id t8-20020a5d42c8000000b003094e3751edmr10601139wrr.27.1685369122506;
+        Mon, 29 May 2023 07:05:22 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id h9-20020a5d5489000000b0030ae6f2e696sm22893wrv.115.2023.05.29.07.05.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 07:05:20 -0700 (PDT)
+Message-ID: <201842f6-c209-201e-35d7-e9af3ff31080@gmail.com>
+Date:   Mon, 29 May 2023 16:05:18 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 02/27] dt-bindings: phy: mediatek,dsi-phy: Add compatible
+ for MT6795 Helio X10
+Content-Language: en-US, ca-ES, es-ES
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
+        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, jitao.shi@mediatek.com,
+        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
+        kernel@collabora.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
+ <20230412112739.160376-3-angelogioacchino.delregno@collabora.com>
+ <223fcf60-25aa-e45d-159e-6290eeeb6a55@linaro.org>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <223fcf60-25aa-e45d-159e-6290eeeb6a55@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilpo,
 
-On Mon, May 29, 2023, at 8:23 AM, Ilpo J=C3=A4rvinen wrote:
-> On Fri, 26 May 2023, Mark Pearson wrote:
->
->> Add mutex protection around cases where an operation needs multiple
->> WMI calls - e.g. setting password.
->
-> So you need this feature already for Patch 1/5? If that's the case, yo=
-u=20
-> should reorder the patches and put it before 1/5.
 
-You're right....I was being lazy and just adding it to the end of the se=
-ries as it was easier. I can re-order.
+On 14/04/2023 10:22, Krzysztof Kozlowski wrote:
+> On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
+>> Add a compatible string for MediaTek Helio X10 MT6795: this SoC uses
+>> the same DSI PHY as MT8173.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml | 4 ++++
+>>   1 file changed, 4 insertions(+)
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Best regards,
+> Krzysztof
+> 
 
-As a side note, the chances of two people changing things on a system at=
- the same time is rather unlikely - it just doesn't make sense as it's s=
-omething done by an administrator. But a fix is a fix.
-
->
-> That "e.g. setting password" sounds vague enough that I'm left to wond=
-er=20
-> if there are other cases in the driver which need locking too. It woul=
-d be=20
-> useful to be precise with wording here. It will help immensely when=20
-> somebody looks this changelog 5 years from now if you explain all case=
-s=20
-> that need locking up front.
-
-OK. There are two cases and I can list both cases explicitly.
-
->
-> So, is this needed also for some existing code, then Fixes tag might b=
-e in=20
-> order? (I'm looking e.g. that cert auth block in current_value_store()=20
-> which also does more than one call).
-
-True - I can add that.=20
-
-Thanks for the review. I'll hold off a couple of days before making thos=
-e changes in case there is any feedback
-
-Mark
+Applied, thanks!
