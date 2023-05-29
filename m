@@ -2,128 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A6E7141C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 03:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BEC7141C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 03:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjE2Bvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 21:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
+        id S229628AbjE2ByV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 21:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjE2Bvg (ORCPT
+        with ESMTP id S229453AbjE2ByU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 21:51:36 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050FEB8
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 18:51:36 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d44b198baso1907014b3a.0
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 18:51:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685325095; x=1687917095;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gPRHttCC09H4/tUnTXoXcgLVvVhSGfEl39Ynz6A4OtM=;
-        b=V519c/gbuue/T92+R4H0pBg1sxGlRJprFhuCh0JHMw49sp4ZQriafpp+D5tGr4f8Bm
-         UFcuu9nCVKRk+Xs5HY5AxGTNhbHM0hWC8ejexIMWeRuQbfULB6xjiJW36P39rxz1boJV
-         SQAbGk0eu/T/sEk/Rxd9CeB5US7iRzRPX8eEA8AITlH1rGZHia6KQybulgmCVsx70rSq
-         L809pQS6ffm6BMEIm5dJY2RFFsjiJOR2GJdeYL+PyOm3WXW1S45PD4ejG9rRkO9OMHft
-         5h1dWqtzCzQ0najzmjyTyxdoGljDz/dDAj/p+C2cX7o0K/Ookogd9CcNKOQFv8sV/iJK
-         YNdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685325095; x=1687917095;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gPRHttCC09H4/tUnTXoXcgLVvVhSGfEl39Ynz6A4OtM=;
-        b=eTMQ1qbCMTEsmdj2Uuii7hu8Gjx6z9IYFy6xOhLt5l3KP0lCYben9rSqrBs7ojU628
-         DEHIMv72yQ/9tzKmirD4K6JHMGmmiaAjwRiJNnFQKjxb8ZMCB2rWGSrpuBAsMczZx/32
-         E8qMtIxHbgwD61QIG3L5jK89K/FS/l6F3MNvNqJQRYUONc5N7880LYf/47NhY2xb5mjY
-         LUrC53RRx8WGZid/zWGv+sHpmnOltdpTkOrSbCke9xz2lL3wDsRO6PCd8jAbLbqrgevF
-         lBhFBP/pgZrmOfp9vQhDcHU+/3Ona6CqcxRoAjaJoOkrb1i2I24pwbHYrOXm42sqqHjw
-         fGuQ==
-X-Gm-Message-State: AC+VfDxuGiBJC8j6oiubDasENHClEvh0g3PtVLdzLNZZ1O/dN4I1tpq5
-        zVBEqPjFnmScrrchp1/3FT5t3LYgo2o=
-X-Google-Smtp-Source: ACHHUZ5eg9u2gFQ/NpsWDKl0x6LFq4+4SZ/VN1BEeZ26O2vXPPAebeK2u1iGkJbCbKUybu4MaidBHA==
-X-Received: by 2002:a05:6a00:1742:b0:647:157b:cb61 with SMTP id j2-20020a056a00174200b00647157bcb61mr7382873pfc.7.1685325095172;
-        Sun, 28 May 2023 18:51:35 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-34.three.co.id. [116.206.12.34])
-        by smtp.gmail.com with ESMTPSA id s22-20020aa78296000000b00627fafe49f9sm5661178pfm.106.2023.05.28.18.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 May 2023 18:51:34 -0700 (PDT)
-Message-ID: <6a10ec48-3940-cd8d-5e34-b9ade9f87b82@gmail.com>
-Date:   Mon, 29 May 2023 08:50:51 +0700
+        Sun, 28 May 2023 21:54:20 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 772AFB8;
+        Sun, 28 May 2023 18:54:18 -0700 (PDT)
+Received: from [172.30.38.103] (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 55BF918011D73F;
+        Mon, 29 May 2023 09:54:10 +0800 (CST)
+Message-ID: <5a51136c-43d6-10ea-e60d-f8ebf3b19dfc@nfschina.com>
+Date:   Mon, 29 May 2023 09:54:09 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] media: dvb_ringbuffer: Return -EFAULT if copy fails
 Content-Language: en-US
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux x86 <x86@kernel.org>
-Cc:     David Woodhouse <dwmw@amazon.co.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Helge Deller <deller@gmx.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Bert Karwatzki <spasswolf@web.de>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: kernel/cpu.c: linux misses the initialization of one CPU
- (off-by-one regression)
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     YongSu Yoo <yongsuyoo0215@gmail.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@linaro.org>
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Su Hui <suhui@nfschina.com>
+In-Reply-To: <20230526114539.0520dcbf@sal.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-I notice a regression report on Bugzilla [1]. Quoting from it:
+On 2023/5/26 18:45, Mauro Carvalho Chehab wrote:
+> Em Wed, 24 May 2023 10:20:38 +0300
+> Dan Carpenter <dan.carpenter@linaro.org> escreveu:
+>
+>> On Wed, May 24, 2023 at 01:20:27PM +0800, Su Hui wrote:
+>>> It's confusing about the comment on function declaration.
+>>>
+>>>      /**
+>>>       * dvb_ringbuffer_write_user - Writes a buffer received via a user
+>>> pointer
+>>>
+>>>      ..........
+>>>
+>>>       * Return: number of bytes transferred or -EFAULT
+>>>
+>>> But the function Only returns  the number of bytes transferred.
+>>>
+>>> Maybe the comment should be modified because it never returns -EFAULT.
+>> To be honest, I think that -EFAULT is probably a better return.  But
+>> there is no way we could apply the patch with that commit message.  The
+>> commit message doesn't explain the problem for the user or why returning
+>> the number of bytes copied is not correct in this case.
+>>
+>> I think that maybe it's not too late to change this to return -EFAULT,
+>> but it would have been easier to make the change in 2014 before there
+>> were many users.  Also it would be easier if you were testing this on
+>> real hardware.
+> It is too late to change the API here, as this could break userspace.
+>
+> Basically, DVB subsystem normally works with a Kernel-implemented ringbuffer
+> that transfers MPEG TS data between kernelspace/userspace. The size is
+> set via an ioctl (DMX_SET_BUFFER_SIZE). By the way, such uAPI is older
+> than 2014. It was added upstream on Kernel 2.6.
+>
+> The buffer size is usually big. For instance, dvbv5-zap uses:
+>
+> 	#define DVB_BUF_SIZE      (4096 * 8 * 188)
+>
+> The normal operation is that data will be received from a MPEG-TS
+> stream, although it is also possible to send data on cable TV, when
+> using dvb net interface.
+>
+> While on several boards, the hardware<->kernel transfer happens on
+> 188-bytes packages, there are some hardware out there where the
+> data passed from/to kernel is not 188-bytes aligned.
+>
+> The normal operation (receiving a TV broadcast) means that the Kernel
+> will be filling a ringbuffer containing the data passed from the
+> hardware. The size of the such buffer is adjusted via DMX_SET_BUFFER_SIZE
+> and contains MPEG TS packets of 188-bytes. Userspace will be in an
+> endless loop that will be waiting for data to arrive at the ringbuffer,
+> copying received data its own userspace buffer. If the buffer is not set
+> to a multiple of 188, it should be up to userspace to handle incomplete
+> frames. The same occurs if the data is 204-bytes aligned. Btw, userspace
+> can detect the packet size, based on the frame content.
+>
+> On such example, if a ringbuffer transfer would be passing 1554 bytes,
+> it means that 8 MPEG-TS frames are complete, and that 50 bytes of the
+> next frame was also transfered from/to userspace.
+>
+> It should be up to userspace to ensure that those extra 50 bytes will
+> be probably taken into account by the application and ensure that the
+> remaining 138 bytes will be handled at the next from/to userspace
+> data transfer.
+>
+> Not the best API, but any change there will break userspace.
+>
+> In particular, this patch will completely break transfers if the
+> buffer size is not 188-bytes aligned.
+>
+> so,
+>
+> NACK.
+>
+> Su,
+>
+> Did you find any real problem with this? On what hardware/application?
+There is no real problem.
+I understand, and this patch is wrong.
+Sorry to bother you.
 
-> Since commit 18415f33e2ac4ab382cbca8b5ff82a9036b5bd49 linux misses the initialization of 1 CPU when the CONFIG_NR_CPUS is equal to the actual number of CPUs in the system. One can work around the issue by increasing CONFIG_NR_CPUS or apply the following patch:
-> 
-> From aa5ef661936655f0d806fdbf2d28fc9513dd5c69 Mon Sep 17 00:00:00 2001
-> From: Bert Karwatzki <spasswolf@web.de>
-> Date: Sun, 28 May 2023 14:35:45 +0200
-> Subject: [PATCH] Fix CPU detection when CONFIG_NR_CPUS is equal to the actual
->  number of CPUs.
-> 
-> Signed-off-by: Bert Karwatzki <spasswolf@web.de>
-> ---
->  kernel/cpu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index 005f863a3d2b..5e900b531827 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -1770,7 +1770,7 @@ static void __init cpuhp_bringup_mask(const struct cpumask *mask, unsigned int n
->  	for_each_cpu(cpu, mask) {
->  		struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
->  
-> -		if (!--ncpus)
-> +		if (!ncpus--)
->  			break;
->  
->  		if (cpu_up(cpu, target) && can_rollback_cpu(st)) {
-> -- 
-> 2.40.1
+Su Hui
 
-Anyway, I'm adding it to regzbot:
-
-#regzbot introduced: 18415f33e2ac4a https://bugzilla.kernel.org/show_bug.cgi?id=217498
-#regzbot title: Off-by-one CPU initalization when CONFIG_NR_CPUS equal to actual system CPU count
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217498
-
--- 
-An old man doll... just what I always wanted! - Clara
+>
+> Regards,
+> Mauro
+>
