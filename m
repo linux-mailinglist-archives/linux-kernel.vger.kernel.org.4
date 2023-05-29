@@ -2,64 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2412714DEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24DE714DEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjE2QKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
+        id S229682AbjE2QLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjE2QKu (ORCPT
+        with ESMTP id S229607AbjE2QLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:10:50 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA6DA3;
-        Mon, 29 May 2023 09:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685376649; x=1716912649;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=uX5G8j5S3YoVRfqWgQ4v6q8WIzripHxImx8piZ0NEAo=;
-  b=FOeme0cI9qy/E0kKooYTx5IniMXMTK+faXijWeYhabLBVZ5qRPMTvJ/P
-   NUZMGzIi5ovD2xVtis/LjtybOSj17c4izKJMfawUvwwUoOEf23cyr24bT
-   3efdTI+iEiosA7oA+/+NL+kVdlXvE1LSV31n4Rc9m8w/opPIP9hjWFkG7
-   steeo5+dcIoG71smLKG4AwUItjrXnLV9An9esEI2kTATannumEMfpGyGU
-   mQObZ+1Wfu9m+s7kSzAPxCMsB8QJokH8IiUkYpWg1ItXWIgzVR0JohVFi
-   22/HtQDY//y4ntuQOHekjCnvNo7ro5DzK9PScUPgrZjSRux7bXbKda8tt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="352237454"
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="352237454"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 09:10:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="952808944"
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="952808944"
-Received: from btaubert-mobl1.ger.corp.intel.com ([10.252.55.237])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 09:10:45 -0700
-Date:   Mon, 29 May 2023 19:10:42 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v4 7/9] serial: sc16is7xx: fix regression with GPIO
- configuration
-In-Reply-To: <20230529140711.896830-8-hugo@hugovil.com>
-Message-ID: <27928546-e241-7ff9-5e48-56eabf6c3aaa@linux.intel.com>
-References: <20230529140711.896830-1-hugo@hugovil.com> <20230529140711.896830-8-hugo@hugovil.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1968919879-1685376460=:2737"
-Content-ID: <783c8dfd-8370-3f2-699d-4abf8892bc2@linux.intel.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Mon, 29 May 2023 12:11:21 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08BDA3;
+        Mon, 29 May 2023 09:11:19 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 061413200923;
+        Mon, 29 May 2023 12:11:18 -0400 (EDT)
+Received: from imap52 ([10.202.2.102])
+  by compute5.internal (MEProxy); Mon, 29 May 2023 12:11:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1685376678; x=1685463078; bh=zmFNdCUGHn2uCiz+5qQpRfAFFMQbxQoxap2
+        qHL8X/ms=; b=C8HsizJ7uHz8yNXOwpjTIeOaBKpIlfdzpPkWDnKe39J134TjyDc
+        pYUf8cH1TQb5m8WGTas9sWREUbvDqp5lbUooRI6zQipUjFobox3+QZ3roD5M/x2R
+        6uxtwTMCQsrqWiTXu84QF6VsIKYy+tMRDX7CgJFcyZCLqzF2IuQffTUNw4BYvC3c
+        mfRxftZlKZKoTC+d1DpAqGn+uwCSRzORf7x3YvsaCzrDn1z1bsqHXLFX3rKWILx9
+        WhIZCU0BuOaYG2bNRVx0evq3NqKneT/gtwsOBUBCStaooeIZfEEyM54vRBiiBd+v
+        6WO3OpILwhry9oY6Bfktp1gLToWbOTH4N/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1685376678; x=1685463078; bh=zmFNdCUGHn2uCiz+5qQpRfAFFMQbxQoxap2
+        qHL8X/ms=; b=GYSYw4qckWZe1ciWw1mw/TGOlFlcjy4V/u7xraqB5h1I724mX4x
+        oXRt+j9RQTlVhytOOtT0A6ntngY9lfK6T0Y1hjML4rTDQvwDP4c0WY5BBgtXSItK
+        lVFkc3BKxzmRUyXobJaUi7KLbd21r12Hikk8B2y2Q8SqMZ9A+BxCvkJtXfbKfnTO
+        idtbMFhxhwqVLrlR3kY0SRu/7JZg9/glzreStOfGvrk1KH9yJQ9aUSh3pfJ//MfN
+        hhXaMGE9XxvQ0loCJ4IhWUnq/KD+3AD9Q80nDa1ymHQnwhYF5QOwJ62k90EqWOPt
+        HURxHq91VLmyAFjryxkY7bKGurZU9qmII/w==
+X-ME-Sender: <xms:ps50ZHLn4HM2beE92_cIobMNFGeywAxaQ2nCQ7Bc36XznAVeF6Jwtg>
+    <xme:ps50ZLITwefxQZD5Uv8IgDk0k_0BcLYLU12ZN5hfshUzflONKPlQ1qfFN4uo0y8j7
+    pL1wU7LcExeQqMQ_js>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekhedgleejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfo
+    rghrkhcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsg
+    gsrdgtrgeqnecuggftrfgrthhtvghrnhephfefgedufeetgfetlefgkefgvdejleelvefg
+    hfejfffhtdeitdejfeekvdeugfeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgt
+    rg
+X-ME-Proxy: <xmx:ps50ZPumX6CIrdnVkoiWPuUIhirOZ3OdfI7XcfjViGbl352WwiU0Bw>
+    <xmx:ps50ZAYHBxfMbXLaei6oR2fdEThywcdnZzQpHfd5oxJLM-2ptHh_NQ>
+    <xmx:ps50ZOYlGQjBax0GenwfK1LEI-YtXHgve27PJNtWy7eYW_mK4JDR4A>
+    <xmx:ps50ZNnJ0LrXI9CTG_BaE12fk-l_w6EOg5DexujAbR1kpJp8nVM0HA>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 40533C60091; Mon, 29 May 2023 12:11:18 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <fe193fe8-5a3c-4aa6-bb75-5ac53dc5a8f7@app.fastmail.com>
+In-Reply-To: <3b2dfd18-a6f2-46a6-19dd-4ee95d5e9471@linux.intel.com>
+References: <mpearson-lenovo@squebb.ca>
+ <20230526171658.3886-1-mpearson-lenovo@squebb.ca>
+ <20230526171658.3886-2-mpearson-lenovo@squebb.ca>
+ <ff5513d9-ecf-50d3-1bb3-644a1d2c2347@linux.intel.com>
+ <e71b1911-5105-4e19-9c86-6146f07a6b00@app.fastmail.com>
+ <3b2dfd18-a6f2-46a6-19dd-4ee95d5e9471@linux.intel.com>
+Date:   Mon, 29 May 2023 12:10:57 -0400
+From:   "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     "Hans de Goede" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/5] platform/x86: think-lmi: Correct System password interface
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,251 +95,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1968919879-1685376460=:2737
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <b3f440cd-d687-4e96-1bfd-d69241eb8eb9@linux.intel.com>
+On Mon, May 29, 2023, at 11:50 AM, Ilpo J=C3=A4rvinen wrote:
+> On Mon, 29 May 2023, Mark Pearson wrote:
+>
+>> Thanks Ilpo
+>>=20
+>> On Mon, May 29, 2023, at 7:36 AM, Ilpo J=C3=A4rvinen wrote:
+>> > On Fri, 26 May 2023, Mark Pearson wrote:
+>> >
+>> >> The system password identification was incorrect. This means that =
+if
+>> >> the password was enabled it wouldn't be detected correctly; and se=
+tting
+>> >> it would not work.
+>> >> Also updated code to use TLMI_SMP_PWD instead of TLMI_SYS_PWD to b=
+e in
+>> >> sync with Lenovo documentation.
+>> >>=20
+>> >> Correct these mistakes.
+>> >>=20
+>> >> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+>> >
+>> > Missing Fixes tag?
+>>=20
+>> Yes - will add.
+>>=20
+>> >
+>> >> ---
+>> >> Changes in v2:
+>> >>  - Updated define name to be SMP_PWD instead of SYS_PWD
+>> >>  - Clarified in comments what each password type is.
+>> >> Changes in v3: None. Version bump with rest of series
+>> >>=20
+>> >>  drivers/platform/x86/think-lmi.c | 14 +++++++-------
+>> >>  1 file changed, 7 insertions(+), 7 deletions(-)
+>> >>=20
+>> >> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x=
+86/think-lmi.c
+>> >> index 2745224f62ab..c7e98fbe7c3d 100644
+>> >> --- a/drivers/platform/x86/think-lmi.c
+>> >> +++ b/drivers/platform/x86/think-lmi.c
+>> >> @@ -168,11 +168,11 @@ MODULE_PARM_DESC(debug_support, "Enable debu=
+g command support");
+>> >>   */
+>> >>  #define LENOVO_CERT_THUMBPRINT_GUID "C59119ED-1C0D-4806-A8E9-59AA=
+318176C4"
+>> >> =20
+>> >> -#define TLMI_POP_PWD (1 << 0)
+>> >> -#define TLMI_PAP_PWD (1 << 1)
+>> >> -#define TLMI_HDD_PWD (1 << 2)
+>> >> -#define TLMI_SYS_PWD (1 << 3)
+>> >> -#define TLMI_CERT    (1 << 7)
+>> >> +#define TLMI_POP_PWD (1 << 0) /* Supervisor */
+>> >> +#define TLMI_PAP_PWD (1 << 1) /* Power-on */
+>> >> +#define TLMI_HDD_PWD (1 << 2) /* HDD/NVME */
+>> >> +#define TLMI_SMP_PWD (1 << 6) /* System Management */
+>> >> +#define TLMI_CERT    (1 << 7) /* Certificate Based */
+>> >
+>> > Whe you're adding Fixes tag, please make this change minimal by jus=
+t=20
+>> > adding TLMI_SMP_PWD.
+>> >
+>> > The rest of these define changes are a good too but it's unrelated =
+to the=20
+>> > actual fix so they should be in a separate patch. And once you move=
+ it=20
+>> > into own change, convert to BIT() while at it.
+>>=20
+>> I was asked previously to clarify what SMP stood for so added the=20
+>> comment and it seemed odd to only clarify one and not the others.=20
+>> Can I push back on this request. Doing two separate patches for just=20
+>> that doesn't make sense to me.
+>
+> I did not mean removing TLMI_SMP_PWD's comment from this patch just to=
+ add=20
+> it in the another but the comments to the other bits which should go i=
+nto=20
+> their own patch. The thing here is that fixes should be made minimal t=
+o=20
+> comply with stable rules.
+>
+OK....seems odd to me to be honest,  but not something I'd lose sleep ov=
+er.=20
+I'll do that in amongst all the other changes.
 
-On Mon, 29 May 2023, Hugo Villeneuve wrote:
-
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> 
-> Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
-> and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
-> changed the function of the GPIOs pins to act as modem control
-> lines without any possibility of selecting GPIO function.
-> 
-> As a consequence, applications that depends on GPIO lines configured
-> by default as GPIO pins no longer work as expected.
-> 
-> Also, the change to select modem control lines function was done only
-> for channel A of dual UART variants (752/762). This was not documented
-> in the log message.
-> 
-> Allow to specify GPIO or modem control line function in the device
-> tree, and for each of the ports (A or B).
-> 
-> Do so by using the new device-tree property named
-> "modem-control-line-ports" (property added in separate patch).
-> 
-> When registering GPIO chip controller, mask-out GPIO pins declared as
-> modem control lines according to this new "modem-control-line-ports"
-> DT property.
-> 
-> Boards that need to have GPIOS configured as modem control lines
-> should add that property to their device tree. Here is a list of
-> boards using the sc16is7xx driver in their device tree and that may
-> need to be modified:
->     arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
->     mips/boot/dts/ingenic/cu1830-neo.dts
->     mips/boot/dts/ingenic/cu1000-neo.dts
-> 
-> Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
-> Fixes: 21144bab4f11 ("sc16is7xx: Handle modem status lines")
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
--- 
- i.
-
-
-> ---
->  drivers/tty/serial/sc16is7xx.c | 82 +++++++++++++++++++++++++---------
->  1 file changed, 62 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-> index 7a993add3f04..34739b31b44b 100644
-> --- a/drivers/tty/serial/sc16is7xx.c
-> +++ b/drivers/tty/serial/sc16is7xx.c
-> @@ -236,7 +236,8 @@
->  
->  /* IOControl register bits (Only 750/760) */
->  #define SC16IS7XX_IOCONTROL_LATCH_BIT	(1 << 0) /* Enable input latching */
-> -#define SC16IS7XX_IOCONTROL_MODEM_BIT	(1 << 1) /* Enable GPIO[7:4] as modem pins */
-> +#define SC16IS7XX_IOCONTROL_MODEM_A_BIT	(1 << 1) /* Enable GPIO[7:4] as modem A pins */
-> +#define SC16IS7XX_IOCONTROL_MODEM_B_BIT	(1 << 2) /* Enable GPIO[3:0] as modem B pins */
->  #define SC16IS7XX_IOCONTROL_SRESET_BIT	(1 << 3) /* Software Reset */
->  
->  /* EFCR register bits */
-> @@ -301,12 +302,12 @@
->  /* Misc definitions */
->  #define SC16IS7XX_FIFO_SIZE		(64)
->  #define SC16IS7XX_REG_SHIFT		2
-> +#define SC16IS7XX_GPIOS_PER_BANK	4
->  
->  struct sc16is7xx_devtype {
->  	char	name[10];
->  	int	nr_gpio;
->  	int	nr_uart;
-> -	int	has_mctrl;
->  };
->  
->  #define SC16IS7XX_RECONF_MD		(1 << 0)
-> @@ -336,6 +337,7 @@ struct sc16is7xx_port {
->  	struct clk			*clk;
->  #ifdef CONFIG_GPIOLIB
->  	struct gpio_chip		gpio;
-> +	unsigned long			gpio_valid_mask;
->  #endif
->  	unsigned char			buf[SC16IS7XX_FIFO_SIZE];
->  	struct kthread_worker		kworker;
-> @@ -447,35 +449,30 @@ static const struct sc16is7xx_devtype sc16is74x_devtype = {
->  	.name		= "SC16IS74X",
->  	.nr_gpio	= 0,
->  	.nr_uart	= 1,
-> -	.has_mctrl	= 0,
->  };
->  
->  static const struct sc16is7xx_devtype sc16is750_devtype = {
->  	.name		= "SC16IS750",
-> -	.nr_gpio	= 4,
-> +	.nr_gpio	= 8,
->  	.nr_uart	= 1,
-> -	.has_mctrl	= 1,
->  };
->  
->  static const struct sc16is7xx_devtype sc16is752_devtype = {
->  	.name		= "SC16IS752",
-> -	.nr_gpio	= 0,
-> +	.nr_gpio	= 8,
->  	.nr_uart	= 2,
-> -	.has_mctrl	= 1,
->  };
->  
->  static const struct sc16is7xx_devtype sc16is760_devtype = {
->  	.name		= "SC16IS760",
-> -	.nr_gpio	= 4,
-> +	.nr_gpio	= 8,
->  	.nr_uart	= 1,
-> -	.has_mctrl	= 1,
->  };
->  
->  static const struct sc16is7xx_devtype sc16is762_devtype = {
->  	.name		= "SC16IS762",
-> -	.nr_gpio	= 0,
-> +	.nr_gpio	= 8,
->  	.nr_uart	= 2,
-> -	.has_mctrl	= 1,
->  };
->  
->  static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned int reg)
-> @@ -1359,16 +1356,45 @@ static int sc16is7xx_gpio_direction_output(struct gpio_chip *chip,
->  	return 0;
->  }
->  
-> -static int sc16is7xx_setup_gpio_chip(struct device *dev)
-> +static int sc16is7xx_gpio_init_valid_mask(struct gpio_chip *chip,
-> +					  unsigned long *valid_mask,
-> +					  unsigned int ngpios)
-> +{
-> +	struct sc16is7xx_port *s = gpiochip_get_data(chip);
-> +
-> +	*valid_mask = s->gpio_valid_mask;
-> +
-> +	return 0;
-> +}
-> +
-> +static int sc16is7xx_setup_gpio_chip(struct device *dev, u8 mctrl_mask)
->  {
->  	struct sc16is7xx_port *s = dev_get_drvdata(dev);
->  
->  	if (!s->devtype->nr_gpio)
->  		return 0;
->  
-> +	switch (mctrl_mask) {
-> +	case 0:
-> +		s->gpio_valid_mask = 0xFF;
-> +		break;
-> +	case SC16IS7XX_IOCONTROL_MODEM_A_BIT:
-> +		s->gpio_valid_mask = 0x0F;
-> +		break;
-> +	case SC16IS7XX_IOCONTROL_MODEM_B_BIT:
-> +		s->gpio_valid_mask = 0xF0;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	if (!s->gpio_valid_mask)
-> +		return 0;
-> +
->  	s->gpio.owner		 = THIS_MODULE;
->  	s->gpio.parent		 = dev;
->  	s->gpio.label		 = dev_name(dev);
-> +	s->gpio.init_valid_mask	 = sc16is7xx_gpio_init_valid_mask;
->  	s->gpio.direction_input	 = sc16is7xx_gpio_direction_input;
->  	s->gpio.get		 = sc16is7xx_gpio_get;
->  	s->gpio.direction_output = sc16is7xx_gpio_direction_output;
-> @@ -1392,6 +1418,7 @@ static int sc16is7xx_probe(struct device *dev,
->  {
->  	unsigned long freq = 0, *pfreq = dev_get_platdata(dev);
->  	unsigned int val;
-> +	u8 mctrl_mask = 0;
->  	u32 uartclk = 0;
->  	int i, ret;
->  	struct sc16is7xx_port *s;
-> @@ -1493,12 +1520,6 @@ static int sc16is7xx_probe(struct device *dev,
->  				     SC16IS7XX_EFCR_RXDISABLE_BIT |
->  				     SC16IS7XX_EFCR_TXDISABLE_BIT);
->  
-> -		/* Use GPIO lines as modem status registers */
-> -		if (devtype->has_mctrl)
-> -			sc16is7xx_port_write(&s->p[i].port,
-> -					     SC16IS7XX_IOCONTROL_REG,
-> -					     SC16IS7XX_IOCONTROL_MODEM_BIT);
-> -
->  		/* Initialize kthread work structs */
->  		kthread_init_work(&s->p[i].tx_work, sc16is7xx_tx_proc);
->  		kthread_init_work(&s->p[i].reg_work, sc16is7xx_reg_proc);
-> @@ -1534,6 +1555,27 @@ static int sc16is7xx_probe(struct device *dev,
->  					 prop, p, u)
->  			if (u < devtype->nr_uart)
->  				s->p[u].irda_mode = true;
-> +
-> +		of_property_for_each_u32(dev->of_node, "nxp,modem-control-line-ports",
-> +					 prop, p, u) {
-> +			if (u >= devtype->nr_uart)
-> +				continue;
-> +
-> +			/* Use GPIO lines as modem control lines */
-> +			if (u == 0)
-> +				mctrl_mask |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
-> +			else if (u == 1)
-> +				mctrl_mask |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
-> +		}
-> +
-> +		if (mctrl_mask) {
-> +			regmap_update_bits(
-> +				s->regmap,
-> +				SC16IS7XX_IOCONTROL_REG << SC16IS7XX_REG_SHIFT,
-> +				SC16IS7XX_IOCONTROL_MODEM_A_BIT |
-> +				SC16IS7XX_IOCONTROL_MODEM_B_BIT,
-> +				mctrl_mask);
-> +		}
->  	}
->  
->  #ifdef CONFIG_GPIOLIB
-> @@ -1562,7 +1604,7 @@ static int sc16is7xx_probe(struct device *dev,
->  		return 0;
->  
->  #ifdef CONFIG_GPIOLIB
-> -	if (devtype->nr_gpio)
-> +	if (s->gpio_valid_mask)
->  		gpiochip_remove(&s->gpio);
->  
->  out_thread:
-> @@ -1588,7 +1630,7 @@ static void sc16is7xx_remove(struct device *dev)
->  	int i;
->  
->  #ifdef CONFIG_GPIOLIB
-> -	if (s->devtype->nr_gpio)
-> +	if (s->gpio_valid_mask)
->  		gpiochip_remove(&s->gpio);
->  #endif
->  
-> 
---8323329-1968919879-1685376460=:2737--
+Thanks
+Mark
