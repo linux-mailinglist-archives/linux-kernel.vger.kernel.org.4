@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D365714638
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C19071463C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjE2ITx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40462 "EHLO
+        id S230430AbjE2IV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjE2ITs (ORCPT
+        with ESMTP id S229572AbjE2IVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:19:48 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C873790
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685348386; x=1716884386;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GiIE/uGGQFdSa2NJDrGRY+RO7m2JHN27QODpnLXZVFE=;
-  b=Npz1EC5lgcUwufJ3VETmZjKJP6sBl7nWcMB9znsBj4A6Kixyiqu2x8U5
-   GeS4plHFeFVY/FLz+l+FnE5s0TLoNtdN1cP+SBIuuGn3nFDi+3CsgyHEC
-   GM+/P4vWh2day58Hgrht0SIQIqs6KrZphkU6ZLpuAEMt1zi2eufMlyfOi
-   4hd0yyqrtY/AgiYdyWODEjDBFDDd1pXUb9I8r5lp2xtqwAIYxBAD5LQIH
-   q6+j9fwnlXNZE5xSxSz4A/8lCCqR/k932AssDBbh/u9h4XVu3NX2odrk0
-   djSPl/mNTtKIQDtMv2P5kJSZ/Qe9jhCSzp000+G98XyC9Od+x99qEVOZ8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="418134388"
-X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
-   d="scan'208";a="418134388"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 01:19:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="775849942"
-X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
-   d="scan'208";a="775849942"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 29 May 2023 01:19:42 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q3Y6P-000KwU-1u;
-        Mon, 29 May 2023 08:19:41 +0000
-Date:   Mon, 29 May 2023 16:19:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sheng Yong <shengyong@oppo.com>, jaegeuk@kernel.org,
-        chao@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Sheng Yong <shengyong@oppo.com>
-Subject: Re: [PATCH] f2fs: add f2fs_ioc_[get|set]_extra_attr
-Message-ID: <202305291515.JQ8RLQH1-lkp@intel.com>
-References: <20230529013502.2230810-1-shengyong@oppo.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529013502.2230810-1-shengyong@oppo.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 29 May 2023 04:21:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB9EA7;
+        Mon, 29 May 2023 01:21:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C3866151B;
+        Mon, 29 May 2023 08:21:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B15FC433D2;
+        Mon, 29 May 2023 08:21:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685348512;
+        bh=hlRfSmclHorz/xxdGaOQVbJyEMbb50M9sLXS/0qDFBc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=F7aNNZ3mc+PZkqJA45ygSx+UJ6f/HCGNpzvlBHq9jxyRQqJRaZneWktBBFpKcbnDU
+         f4QKeXE4h/uITvXCEvSO10zjJ0Rc3DXxFblByeaPru1F3LSss44C/00fPnTWmCbm0O
+         h3il6LEKKXdQCfR8z+uRnfXKUYLDDtlDocAPWPr02GTbRks85+I66+/B29xgaAsqWb
+         zKywh495Z4voqVZe6OVzcrmrJTa7E7rwSt7YI21qbiGuEg2RD/pyCn68UfMRhEuXRU
+         YDCWxCUHQbIj3PxtycbFU8ylUXwC3CKsENdrqU1yVetzfy0bJiRu++oCACuhIkBa4Y
+         UZ2RZhQSNwIiA==
+Date:   Mon, 29 May 2023 17:21:49 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     rostedt@goodmis.org, beaub@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] tracing/user_events: Handle matching arguments that is
+ null from dyn_events
+Message-Id: <20230529172149.fec12da876356c1a679d8bcb@kernel.org>
+In-Reply-To: <20230529065110.303440-1-sunliming@kylinos.cn>
+References: <20230529065110.303440-1-sunliming@kylinos.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sheng,
+On Mon, 29 May 2023 14:51:10 +0800
+sunliming <sunliming@kylinos.cn> wrote:
 
-kernel test robot noticed the following build errors:
+> When A registering user event from dyn_events has no argments, it will pass the
+> matching check, regardless of whether there is a user event with the same name
+> and arguments. Add the matching check when the arguments of registering user
+> event is null.
 
-[auto build test ERROR on jaegeuk-f2fs/dev-test]
-[also build test ERROR on jaegeuk-f2fs/dev next-20230525]
-[cannot apply to linus/master v6.4-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+OK, since the user_events doesn't support multi-definitions on the same name
+event, this should be checked.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sheng-Yong/f2fs-add-f2fs_ioc_-get-set-_extra_attr/20230529-093611
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-patch link:    https://lore.kernel.org/r/20230529013502.2230810-1-shengyong%40oppo.com
-patch subject: [PATCH] f2fs: add f2fs_ioc_[get|set]_extra_attr
-config: x86_64-randconfig-x093-20230529 (https://download.01.org/0day-ci/archive/20230529/202305291515.JQ8RLQH1-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/519a8b3bbd4d743ae67c32dfef61e8bfa0951cc5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sheng-Yong/f2fs-add-f2fs_ioc_-get-set-_extra_attr/20230529-093611
-        git checkout 519a8b3bbd4d743ae67c32dfef61e8bfa0951cc5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305291515.JQ8RLQH1-lkp@intel.com/
+Thank you!
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+> 
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> ---
+>  kernel/trace/trace_events_user.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index e90161294698..0d91dac206ff 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -1712,6 +1712,8 @@ static bool user_event_match(const char *system, const char *event,
+>  
+>  	if (match && argc > 0)
+>  		match = user_fields_match(user, argc, argv);
+> +	else if (match && argc == 0)
+> +		match = list_empty(&user->fields);
+>  
+>  	return match;
+>  }
+> -- 
+> 2.25.1
+> 
 
->> ERROR: modpost: "zstd_max_clevel" [fs/f2fs/f2fs.ko] undefined!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
