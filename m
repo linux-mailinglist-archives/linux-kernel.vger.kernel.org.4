@@ -2,120 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0D4714E8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F301714E92
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjE2Qh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S229591AbjE2Qik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjE2QhZ (ORCPT
+        with ESMTP id S229579AbjE2Qii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:37:25 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACCC1BD;
-        Mon, 29 May 2023 09:36:49 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-565eb83efe4so24202567b3.0;
-        Mon, 29 May 2023 09:36:49 -0700 (PDT)
+        Mon, 29 May 2023 12:38:38 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A5A109
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:38:11 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-75affb4d0f9so187671485a.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:38:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685378184; x=1687970184;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XGlmlfpGRhYW8HjfyI5EG9tKXwTbZGzHl2Gw/X6ax14=;
-        b=gD4kPaLLf9pJV0lpw2cIWttEo9EVBn7x8f+92LW12OXCCFANe21Fg01PjDXO0UtxY2
-         Ub5I5H1SdDWAoWmUFNeFLAYHmxDq8YTSmOaqguooZLFZobRrzvTxGbtaD72knDH23eOR
-         MY6ARUPzlKzmyW1m+BBJysdYOhoJdDqFYBuSUXe+0EMClHkTcg4RjJwjoiWhoOTKM3Dt
-         9K997gDZQsyxazGzIDcLguDZimyccw5IT7vyORCRBHtiqJDhUH/qSIl0d7GezyQg513/
-         VW7HwcNry8jcfbS5LOs9BUzeIfyV4CP5ISfkACbfC7ABZjMV3VQHFd1Zf4JXCiU+XtDx
-         EW2g==
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685378287; x=1687970287;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5+bYmjm/h3lSQb6YeDlPhS20QMHi1e0gJPfH5ZggpcM=;
+        b=VjcnSTm21NLYuq3Hsb35yyozR88wKTebBbs9dHpvp+dCIlp6iyJHyLrsRWU6vvrkbG
+         4gAZcuffjQMzN6ybk3oKLBN9Z/z5P5KXbhxpkTMi9gzG/fJsJEUH4QCeKw3+ykIJr/l+
+         X1Eg5LdU/NffGKk4gHN066XjQiqD4YOcxktk+v5ofHaJ2DhiV3/zuawItrLKWvtvVJL2
+         kQQ0D/R1LkeiRtRfKLwblI/Hj1DjpRVbHsYa/xUVQpGcwyX186+67q2SrcoIwgFVYjUw
+         vMjdmkk99MGrvDd+ZIl3wTn64jx8aypK/3q4Cx+RWIMxyHSk2S8GiCQM71IIuRA7D1p2
+         GvEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685378184; x=1687970184;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XGlmlfpGRhYW8HjfyI5EG9tKXwTbZGzHl2Gw/X6ax14=;
-        b=GsNNlAKbeXflSyaAa6v79IOGVeQxbnXU1jT7PQgFL7HfCIJLIn0ORbsSofuQ+8WE4X
-         TUHtFu1vAFklN4LpJvxI2XwOF7lKxOrICDBk9tSqql2w69jZu+NN7c8X1w5f0RyvZdJd
-         pdcWa3h4ppCrAtpuEilCU1rbR665Yj3UKjvcfOZzqjuabu62r32VXzBqP5ZJbSIQbEMH
-         SFI4ZR2/NATus1f38WMMzSNzSfa31jmqF6MyxYHQN6FOXDaRX5xwQ3Xda+x/ns2ic8g+
-         lmKB2qR7LT5ZBI0rBzqOAb0ghe7n14LwyuQy4Bn/ZGQykhlAwaKRMXmXd/ypSxqkDKtI
-         hbbA==
-X-Gm-Message-State: AC+VfDxdASf+QV70XbJiWXTY1CpTM1L1BdwawKGia5e+249t5YtYodcX
-        b7D03l4EtXIVz6TuMUlQt5pPrCAMZd/eD6Bf9D8=
-X-Google-Smtp-Source: ACHHUZ7InCRLGF330bSJ+LMuRh4g/NfzTfd2m8OEywQty5+b+eU+JLZRKLHh0ktsR3qbMPwu4QSHwqAz7Ha/ifAXWSw=
-X-Received: by 2002:a0d:d88b:0:b0:565:bb04:53fa with SMTP id
- a133-20020a0dd88b000000b00565bb0453famr11663162ywe.10.1685378184319; Mon, 29
- May 2023 09:36:24 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685378287; x=1687970287;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5+bYmjm/h3lSQb6YeDlPhS20QMHi1e0gJPfH5ZggpcM=;
+        b=ZqF44m5WIChL/rzi8+7cV8bqEYxp2uHXZnfSp9AIAQmFV2DzJktYuT32v6UuazzGeC
+         jeu52aPx/2vwhpJGTXET/QbVFHo6xuAr4sUVxXyKDg6pDw0YDF1v+P73n3+6fAdyNC5n
+         FkWOXeO3CWC0gQTe7H89TcWyytzQpkhQeRQ0UDKW/opNE/49o/DAlIHGKvz1bS86iE3x
+         DDzUIuQJLF3zQWnYKb6mKTXAtezT+ytrvMtALSKl1Nl44wi6PWL06kJYEGmrIhsNOMUQ
+         vDgjmNMa8ZOIjUc0MDbnnLXSebm5z3Ki7T+zizf8qVRcJ4zEswCa0uyp00FrBC0e+dpo
+         ATWg==
+X-Gm-Message-State: AC+VfDzGr+FqGsO8YY0o0rwV+wbePrKCZX10yaUPIPQuTeKwEdyNaFlZ
+        XrZQNr0ucpqC6HYMXZ8L3whLSb4xaIhyBLMBHi8=
+X-Google-Smtp-Source: ACHHUZ7eFEKc4LAfBL2BydTImTW8cO2OyoprqG9Z/iSmHb1f4gXFTT1bFTyReeN1fL6F2fzQ2sGpvA==
+X-Received: by 2002:a05:620a:1b92:b0:75b:23a0:e7d9 with SMTP id dv18-20020a05620a1b9200b0075b23a0e7d9mr8117975qkb.58.1685378286917;
+        Mon, 29 May 2023 09:38:06 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:8bb6])
+        by smtp.gmail.com with ESMTPSA id y23-20020a37e317000000b00759495bb52fsm3450186qki.39.2023.05.29.09.38.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 09:38:06 -0700 (PDT)
+Date:   Mon, 29 May 2023 12:38:05 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH 2/5] mm: compaction: simplify should_compact_retry()
+Message-ID: <20230529163805.GA84971@cmpxchg.org>
+References: <20230519123959.77335-1-hannes@cmpxchg.org>
+ <20230519123959.77335-3-hannes@cmpxchg.org>
+ <1c3c9305-a678-279e-f015-7aed544ab3c8@suse.cz>
 MIME-Version: 1.0
-References: <20230522104146.2856-1-nj.shetty@samsung.com> <CGME20230522104536epcas5p23dd8108dd267ec588e5c36e8f9eb9fe8@epcas5p2.samsung.com>
- <20230522104146.2856-3-nj.shetty@samsung.com> <20230524154049.GD11607@frogsfrogsfrogs>
-In-Reply-To: <20230524154049.GD11607@frogsfrogsfrogs>
-From:   Nitesh Shetty <nitheshshetty@gmail.com>
-Date:   Mon, 29 May 2023 22:06:13 +0530
-Message-ID: <CAOSviJ2-=U+Y2vFOq6=8n=uHqXgoud3=7gaH7H7sw2jiPXtNPA@mail.gmail.com>
-Subject: Re: [dm-devel] [PATCH v11 2/9] block: Add copy offload support infrastructure
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Nitesh Shetty <nj.shetty@samsung.com>,
-        Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-block@vger.kernel.org, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-mm@kvack.org,
-        gost.dev@samsung.com, anuj20.g@samsung.com,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        ming.lei@redhat.com, James.Bottomley@hansenpartnership.com,
-        linux-fsdevel@vger.kernel.org, dlemoal@kernel.org,
-        joshi.k@samsung.com, bvanassche@acm.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1c3c9305-a678-279e-f015-7aed544ab3c8@suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > +/*
-> > + * @bdev_in: source block device
-> > + * @pos_in:  source offset
-> > + * @bdev_out:        destination block device
-> > + * @pos_out: destination offset
-> > + * @len:     length in bytes to be copied
-> > + * @endio:   endio function to be called on completion of copy operation,
-> > + *           for synchronous operation this should be NULL
-> > + * @private: endio function will be called with this private data, should be
-> > + *           NULL, if operation is synchronous in nature
-> > + * @gfp_mask:   memory allocation flags (for bio_alloc)
-> > + *
-> > + * Returns the length of bytes copied or error if encountered
-> > + *
-> > + * Description:
-> > + *   Copy source offset from source block device to destination block
-> > + *   device. Max total length of copy is limited to MAX_COPY_TOTAL_LENGTH
-> > + */
-> > +int blkdev_issue_copy(struct block_device *bdev_in, loff_t pos_in,
->
-> I'd have thought you'd return ssize_t here.  If the two block devices
-> are loopmounted xfs files, we can certainly reflink "copy" more than 2GB
-> at a time.
->
-> --D
->
+On Mon, May 29, 2023 at 03:03:52PM +0200, Vlastimil Babka wrote:
+> On 5/19/23 14:39, Johannes Weiner wrote:
+> > The different branches for retry are unnecessarily complicated. There
+> > are really only three outcomes: progress (retry n times), skipped
+> > (retry if reclaim can help), failed (retry with higher priority).
+> > 
+> > Rearrange the branches and the retry counter to make it simpler.
+> > 
+> > v2:
+> > - fix trace point build (Mel)
+> > - fix max_retries logic for costly allocs (Huang)
+> > 
+> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> > ---
+> >  mm/page_alloc.c | 53 +++++++++++++++----------------------------------
+> >  1 file changed, 16 insertions(+), 37 deletions(-)
+> > 
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index 5a84a0bebc37..72660e924b95 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -3772,16 +3772,22 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
+> >  	 * Compaction managed to coalesce some page blocks, but the
+> >  	 * allocation failed presumably due to a race. Retry some.
+> >  	 */
+> > -	if (compact_result == COMPACT_SUCCESS)
+> > -		(*compaction_retries)++;
+> > +	if (compact_result == COMPACT_SUCCESS) {
+> > +		/*
+> > +		 * !costly requests are much more important than
+> > +		 * __GFP_RETRY_MAYFAIL costly ones because they are de
+> > +		 * facto nofail and invoke OOM killer to move on while
+> > +		 * costly can fail and users are ready to cope with
+> > +		 * that. 1/4 retries is rather arbitrary but we would
+> > +		 * need much more detailed feedback from compaction to
+> > +		 * make a better decision.
+> > +		 */
+> > +		if (order > PAGE_ALLOC_COSTLY_ORDER)
+> > +			max_retries /= 4;
+> >  
+> > -	/*
+> > -	 * All zones were scanned completely and still no result. It
+> > -	 * doesn't really make much sense to retry except when the
+> > -	 * failure could be caused by insufficient priority
+> > -	 */
+> > -	if (compact_result == COMPACT_COMPLETE)
+> > -		goto check_priority;
+> > +		ret = ++(*compaction_retries) <= max_retries;
+> > +		goto out;
+> 
+> I think you simplified this part too much, so now once it runs out of
+> retries, it will return false, while previously it would increase the priority.
 
-Sure we will add this to make API future proof, but at present we do have
-a limit for copy. COPY_MAX_BYTES(=128MB) at present. This limit is based
-on our internal testing, we have plans to increase/remove with this
-limit in future phases.
-
-Thank you,
-Nitesh Shetty
+Oops, I'll send a delta fix to Andrew tomorrow. Thanks!
