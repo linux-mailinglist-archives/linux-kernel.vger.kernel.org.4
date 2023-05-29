@@ -2,48 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A283C71437D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 06:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908F971437A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 06:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbjE2Ev2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 00:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
+        id S231355AbjE2EpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 00:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbjE2EvH (ORCPT
+        with ESMTP id S231653AbjE2Eo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 00:51:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC1A549C3;
-        Sun, 28 May 2023 21:44:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10F6CAB6;
-        Sun, 28 May 2023 21:36:01 -0700 (PDT)
-Received: from [10.162.40.17] (a077893.blr.arm.com [10.162.40.17])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 168683F64C;
-        Sun, 28 May 2023 21:35:10 -0700 (PDT)
-Message-ID: <632289e3-6f3c-20b9-0454-77d6295c1c87@arm.com>
-Date:   Mon, 29 May 2023 10:05:07 +0530
+        Mon, 29 May 2023 00:44:29 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7194C26AD;
+        Sun, 28 May 2023 21:38:03 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id 41be03b00d2f7-52c84543902so284502a12.0;
+        Sun, 28 May 2023 21:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685334999; x=1687926999;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ljDXSZhLI5ptYG5XAswsWjP1Fj7Tcbc8VedPFNYBYoQ=;
+        b=m40D0lUwbnh9qpzZq3YJVGsio+MYTwloUDfNmu8pg9f2x53WC6W8FVyfJWwiBMbEEt
+         C3qF3N8Je6GWNLGU750Ia3qbTDJzvIlxFh1mGK4KCCxyxFZ0nKP1MHWzaDDSrZ10ubZS
+         sAFfo5cSSfIqHV2Maynd1DSDdOZuSGhrAtB3+ChTAFuSjLS8U5wCr2PNbmdLP8CQu6z+
+         tA1gBcyGMLo8RGPwKl9slQOREzwKgDWyEgk7yyKXLoRgSHHOKkN3rBYS8yI+zfdKt8iO
+         4FGossrGqXq5UFOY1XupyAg+QcheZUHmT2Ia5PvqiILDl2nZlwXJSfTOPjwTN4TqNC2s
+         Wgfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685334999; x=1687926999;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ljDXSZhLI5ptYG5XAswsWjP1Fj7Tcbc8VedPFNYBYoQ=;
+        b=QqlNhH8Pe9OKBKTSVuD8wz8D/ZmUjIJJaQ5+5hZcSPEMCnrtN9aP6ZJl4etK8booOI
+         lru3Hu9cPDGk3Vz6jcJscX9KR8r8b1lY8eTiwOKEclWQUWHqe8BjbGZRY2E/F32HEdRN
+         mBcxbb8UlEdHu9bSzWGIUWnUCEpMK1TQuCYXrxoQHf2uFqYDMN0PhNi4CQbLQTaS5sjh
+         oyPdh1Ymx9Ek3wrf4wmdXE3bieMBNE9Gb/ishxb2uxTHeKLOj+jxHIxOpog/zJgMmQ/M
+         DnlgsZivn/4DgTSWhznJBg34b9rO1efprPU+qTBvxfyL4I9AHqYxLSf53cZbmYZQgeYK
+         YaMA==
+X-Gm-Message-State: AC+VfDzG+kQQE50YBts12XcayiBm/8nKV4InZQQDSpFALBOkAl45aTUG
+        I7NyMfZQxcqVRRhTZ3+X3cU=
+X-Google-Smtp-Source: ACHHUZ4lTguLq8y8jj9KX9ucZq9zIctmBGh7gxd9yKo8+2IUU5w7rbqQFarEa3Iv4T5h9YkfClS6NQ==
+X-Received: by 2002:a05:6a00:1f0e:b0:64a:ed6d:53ac with SMTP id be14-20020a056a001f0e00b0064aed6d53acmr10772452pfb.2.1685334998968;
+        Sun, 28 May 2023 21:36:38 -0700 (PDT)
+Received: from hbh25y.. ([114.254.32.145])
+        by smtp.gmail.com with ESMTPSA id i3-20020aa78b43000000b0064f95bb8255sm5096984pfd.53.2023.05.28.21.36.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 21:36:38 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, simon.horman@netronome.com,
+        pieter.jansenvanvuuren@netronome.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] net: sched: fix possible OOB write in fl_set_geneve_opt()
+Date:   Mon, 29 May 2023 12:36:15 +0800
+Message-Id: <20230529043615.4761-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V10 00/10] arm64/perf: Enable branch stack sampling
-Content-Language: en-US
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
-Cc:     Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230517022410.722287-1-anshuman.khandual@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20230517022410.722287-1-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,33 +72,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+If we send two TCA_FLOWER_KEY_ENC_OPTS_GENEVE packets and their total
+size is 252 bytes(key->enc_opts.len = 252) then
+key->enc_opts.len = opt->length = data_len / 4 = 0 when the third
+TCA_FLOWER_KEY_ENC_OPTS_GENEVE packet enters fl_set_geneve_opt. This
+bypasses the next bounds check and results in an out-of-bounds.
 
+Fixes: 0a6e77784f49 ("net/sched: allow flower to match tunnel options")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ net/sched/cls_flower.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On 5/17/23 07:54, Anshuman Khandual wrote:
-> This series enables perf branch stack sampling support on arm64 platform
-> via a new arch feature called Branch Record Buffer Extension (BRBE). All
-> relevant register definitions could be accessed here.
-> 
-> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
-> 
-> This series applies on 6.4-rc2.
-> 
-> Changes in V10:
-> 
-> - Rebased the series on v6.4-rc2
-> - Moved ARMV8 PMUV3 changes inside drivers/perf/arm_pmuv3.c
-> - Moved BRBE driver changes inside drivers/perf/arm_brbe.[c|h]
-> - Moved the WARN_ON() inside the if condition in armv8pmu_handle_irq()
+diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
+index e960a46b0520..a326fbfe4339 100644
+--- a/net/sched/cls_flower.c
++++ b/net/sched/cls_flower.c
+@@ -1153,6 +1153,9 @@ static int fl_set_geneve_opt(const struct nlattr *nla, struct fl_flow_key *key,
+ 	if (option_len > sizeof(struct geneve_opt))
+ 		data_len = option_len - sizeof(struct geneve_opt);
+ 
++	if (key->enc_opts.len > FLOW_DIS_TUN_OPTS_MAX - 4)
++		return -ERANGE;
++
+ 	opt = (struct geneve_opt *)&key->enc_opts.data[key->enc_opts.len];
+ 	memset(opt, 0xff, option_len);
+ 	opt->length = data_len / 4;
+-- 
+2.34.1
 
-Hello Will/Mark,
-
-There was a crash reported on V9 (applicable here in V10 as well) because of
-accessing event->pmu_ctx->task_ctx_data during a PMU IRQ for per-cpu events,
-where it would not have been allocated in the first place. I have proposed a
-fix for that on the other thread [1]. Besides, does the series looks good in
-the current form ? Unless there are other comments, will respin with the fix
-later in the week. Thank you.
-
-[1] https://lore.kernel.org/linux-arm-kernel/d02df808-6d2b-c24b-bc8d-8f4859c0c71b@arm.com/
-
-- Anshuman
