@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228777145C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445007145C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbjE2Hvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 03:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        id S229592AbjE2Hxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 03:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjE2Hv2 (ORCPT
+        with ESMTP id S229574AbjE2Hxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 03:51:28 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66B0A7;
-        Mon, 29 May 2023 00:51:26 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126255106133.24.openmobile.ne.jp [126.255.106.133])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B71AD836;
-        Mon, 29 May 2023 09:51:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685346665;
-        bh=eFTNMtre/w6DIO0d6Af3j84MFjCZzQZiUGcvJ8Xr6e8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mb5hqQRK/y5pqKlNrIdNpcoWlZdX9EQD9/oXxWbGauZ3FBOiuiLKdxDEf4UBTmdTV
-         nfSx5AqkhGn2I2EWinr4UXh3HQidn+JOrmZBOUjYy9urTUIzMv/1SVTr8OzSjj9tRB
-         Heeb/wPxgLaucRUgqIddRVR9CSyULk2SxUJXrtLU=
-Date:   Mon, 29 May 2023 10:51:26 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] media: dt-bindings: alvium: add document YAML
- binding
-Message-ID: <20230529075126.GG25984@pendragon.ideasonboard.com>
-References: <20230526173955.797226-1-tomm.merciai@gmail.com>
- <20230526173955.797226-2-tomm.merciai@gmail.com>
- <ZHPElYOeD2C1qo4R@kekkonen.localdomain>
- <ZHRXI6c7G3Sh03i9@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+        Mon, 29 May 2023 03:53:30 -0400
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6DBAC
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:53:29 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 3Xh0qNNQ6bOsk3Xh0qatrx; Mon, 29 May 2023 09:53:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685346807;
+        bh=H3ch+1sM2uCmnqikyZRtBFR3E4UWkyikm5gSoo9tMEw=;
+        h=From:To:Cc:Subject:Date;
+        b=Ca+i/7Xd8fUTtOSPS5ZtF6/eN31g6TQw804cqrMM2lMjXpHJ9myreRtfPe0MwTz5H
+         gOwZ0qhXNQFMi8Vmb5TWrAlplx3j48gdpLdhvaoNgvx4QZj1bJrsQuOfcAmcMSTHXv
+         4fwrBXcJfSDMGMKkFVuLJzWhbBezJYol8FyxkAUxa8LxbHoTFUqVlf1yYjx7EBj795
+         OkfOXDBRObkLgAFMEWca4kMrXTi1z+xSV+9UmN2s85MhhnnrsGlgHIEztesd7bQuGo
+         0pzUzFUKdEEotX+ilQzPdO5Jw++pQ91CrHAy8IX6e64C6Ynx62yzVqV4LcmLQS/qQQ
+         YdnIjkd3bMDMw==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 29 May 2023 09:53:27 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Michal Simek <michal.simek@amd.com>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Tejas Patel <tejas.patel@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] soc: xilinx: Fix a memory leak in zynqmp_pm_remove()
+Date:   Mon, 29 May 2023 09:53:24 +0200
+Message-Id: <93ef923496b6c45a0baa59458099aed3a20b771a.1685346792.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZHRXI6c7G3Sh03i9@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,165 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso,
+'rx_chan' is known to be NULL here.
+Reverse the logic to free the mbox if it has been allocated.
 
-On Mon, May 29, 2023 at 09:41:23AM +0200, Tommaso Merciai wrote:
-> On Sun, May 28, 2023 at 09:16:05PM +0000, Sakari Ailus wrote:
-> > On Fri, May 26, 2023 at 07:39:43PM +0200, Tommaso Merciai wrote:
-> > > Add documentation of device tree in YAML schema for the ALVIUM
-> > > Camera from Allied Vision Inc.
-> > > 
-> > > References:
-> > >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> > > 
-> > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> > > ---
-> > > Changes since v1:
-> > >  - Fixed build error as suggested by RHerring bot
-> > > 
-> > >  .../media/i2c/alliedvision,alvium.yaml        | 115 ++++++++++++++++++
-> > >  1 file changed, 115 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> > > new file mode 100644
-> > > index 000000000000..81e9e560c99d
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> > > @@ -0,0 +1,115 @@
-> > > +# SPDX-License-Identifier: GPL-2.0
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Alliedvision Alvium Camera
-> > > +
-> > > +maintainers:
-> > > +  - Tommaso Merciai <tomm.merciai@gmail.com>
-> > > +  - Martin Hecht <martin.hecht@avnet.eu>
-> > > +
-> > > +allOf:
-> > > +  - $ref: /schemas/media/video-interface-devices.yaml#
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: alliedvision,alvium
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  clocks:
-> > > +    description: XCLK Input Clock
-> > > +
-> > > +  clock-names:
-> > > +    const: xclk
-> > 
-> > I'd also drop this as you have a single clock only: it's redundant.
-> 
-> Then you suggest also to drop devm_clk_get(dev, "xclk");
-> into the driver code and use devm_clk_get(&pdev->dev, NULL);
-> right?
+Fixes: ffdbae28d9d1 ("drivers: soc: xilinx: Use mailbox IPI callback")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+'rx_chan' may be NULL, but mbox_free_channel() handles it.
+Maybe it is more informative to keep a (useless) "if (rx_chan)" to tell
+that it may not be allocated.
 
-Actually, I don't see any clock input pin in the 22-pins FPC connector.
-Are you sure the camera module needs an external clock ?
 
-> > > +
-> > > +  powerdown-gpios:
-> > > +    maxItems: 1
-> > > +    description: >
-> > > +      Reference to the GPIO connected to the powerdown pin, if any.
-> > > +
-> > > +  reset-gpios:
-> > > +    maxItems: 1
-> > > +    description: >
-> > > +      Reference to the GPIO connected to the reset pin, if any.
-> > > +
-> > > +  streamon-delay:
-> > > +    maxItems: 1
-> > > +    description: >
-> > > +      Delay before camera start capturing frames in us.
-> > > +
-> > > +  rotation:
-> > > +    enum:
-> > > +      - 0
-> > > +      - 180
-> > > +
-> > > +  port:
-> > > +    description: Digital Output Port
-> > > +    $ref: /schemas/graph.yaml#/$defs/port-base
-> > > +    additionalProperties: false
-> > > +
-> > > +    properties:
-> > > +      endpoint:
-> > > +        $ref: /schemas/media/video-interfaces.yaml#
-> > > +        unevaluatedProperties: false
-> > > +
-> > > +        properties:
-> > > +          clock-lanes:
-> > > +            const: 0
-> > 
-> > The driver can know this, no need to have it in DT, i.e. please drop it.
-> 
-> Oks.
-> 
-> > 
-> > > +          data-lanes:
-> > > +            minItems: 1
-> > > +            maxItems: 4
-> > > +          link-frequencies: true
-> > > +
-> > > +        required:
-> > > +          - data-lanes
-> > > +          - link-frequencies
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - clocks
-> > > +  - clock-names
-> > > +  - port
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +      #include <dt-bindings/gpio/gpio.h>
-> > > +      #include <dt-bindings/clock/imx8mp-clock.h>
-> > > +
-> > > +      i2c {
-> > > +          #address-cells = <1>;
-> > > +          #size-cells = <0>;
-> > > +
-> > > +          camera: alvium@3c {
-> > > +              compatible = "alliedvision,alvium";
-> > > +              pinctrl-names = "default";
-> > > +              pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
-> > > +              reg = <0x3c>;
-> > > +              clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
-> > > +              clock-names = "xclk";
-> > > +              assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
-> > > +              assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-> > > +              assigned-clock-rates = <24000000>;
-> > > +              streamon-delay = <20>;
-> > > +              powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
-> > > +              reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-> > > +              status = "okay";
-> > > +
-> > > +              port {
-> > > +                  alvium_out: endpoint {
-> > > +                      remote-endpoint = <&mipi_csi_0_in>;
-> > > +                      data-lanes = <1 2 3 4>;
-> > > +                      link-frequencies = /bits/ 64 <681250000>;
-> > > +                      clock-lanes = <0>;
-> > > +                  };
-> > > +              };
-> > > +          };
-> > > +      };
-> > > +
-> > > +...
+On my machine, compilation fails with gcc (Ubuntu 12.1.0-2ubuntu1~22.04):
 
+  CC      drivers/soc/xilinx/zynqmp_power.o
+drivers/soc/xilinx/zynqmp_power.c: In function ‘zynqmp_pm_probe’:
+drivers/soc/xilinx/zynqmp_power.c:193:12: error: ‘pm_api_version’ is used uninitialized [-Werror=uninitialized]
+  193 |         if (pm_api_version < ZYNQMP_PM_VERSION)
+      |            ^
+drivers/soc/xilinx/zynqmp_power.c:187:13: note: ‘pm_api_version’ was declared here
+  187 |         u32 pm_api_version;
+      |             ^~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+I think that this warning is bogus and gcc is wrong.
+
+But I don't know what to do with it :/
+Anyway, it is un-realated to this patch.
+---
+ drivers/soc/xilinx/zynqmp_power.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/soc/xilinx/zynqmp_power.c b/drivers/soc/xilinx/zynqmp_power.c
+index 641dcc958911..62a7f6af9544 100644
+--- a/drivers/soc/xilinx/zynqmp_power.c
++++ b/drivers/soc/xilinx/zynqmp_power.c
+@@ -280,8 +280,7 @@ static int zynqmp_pm_remove(struct platform_device *pdev)
+ 	if (event_registered)
+ 		xlnx_unregister_event(PM_INIT_SUSPEND_CB, 0, 0, suspend_event_callback, NULL);
+ 
+-	if (!rx_chan)
+-		mbox_free_channel(rx_chan);
++	mbox_free_channel(rx_chan);
+ 
+ 	return 0;
+ }
 -- 
-Regards,
+2.34.1
 
-Laurent Pinchart
