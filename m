@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6A2714CC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12716714CC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjE2POl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
+        id S229708AbjE2PQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjE2POj (ORCPT
+        with ESMTP id S229543AbjE2PQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:14:39 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36FBC4;
-        Mon, 29 May 2023 08:14:38 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f623adec61so35139445e9.0;
-        Mon, 29 May 2023 08:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685373277; x=1687965277;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H1KMg1Gh4zz7JnBw0046XM2DKaYNxDcHqxWVJX30Ru0=;
-        b=Nh5o4eUQPvEkj8np21rWFW592NTi/HveYWx2/MbveBUkmHmO2cKIDGvAcQa0aX+cDw
-         A0jCa4ioo+hFHvLfG1glTnwtJjTMP05sj5R75i/OFbkMvv9MA+qETGFpyU/vTQUeGVR6
-         p7XWeX5xCLNclglpwxjBrLCPaDfRAu4LRC0nhGk3WSdgs8qAXK3lmxTxLeyKtXJhbsx8
-         O/OYr2tuOEBQr1ydBX9lP8PjSmFRJLm8lptKzAiHaE80ryLS1pzEEMf1wSDnQgGBWxBs
-         6uFcbKolwHZp330okeIrE3IJIx37a3PA8osXpdI4giCngUBK/9yG+Z7cSGQpM+nMosth
-         kEQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685373277; x=1687965277;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H1KMg1Gh4zz7JnBw0046XM2DKaYNxDcHqxWVJX30Ru0=;
-        b=B6//5+Jsj4d5DiTlrALjn2Zl6ZZTaJT9978INr6UsG6l+fAlVHbn2641GXooKSTsm+
-         akeO0Oc+zrLx4SFD/OtHq+nuRQ06OAhLWOp9sd4+rITvmEJrjviXMASyiAg+p/Oc1Doc
-         y8PqC9aS0e8/WRJw5o4jkQ8ji2OEG5SbFIrQN57euYzlrSI8tV9EILIWqawXmIspJ8QM
-         /DPjouZgYEcHrBEcQwAaR5HqfG9g6CRDdWVRkksDqiFYLsbxmEbx/ys+4jfZBHvj/vj/
-         3cTDqvN3uanpCZ/ftYAFbQhYa/HN12i+RjvaKPxYgfFw2jieJHTAg3rMNMvQIyCpxnrf
-         BqKg==
-X-Gm-Message-State: AC+VfDzfFnlnV+hVPurYqBYHcKY6DRa9ntY6qpalJs2KTQG1moFmXibd
-        VYbaEBX1qnvuh+vDo44EL4A=
-X-Google-Smtp-Source: ACHHUZ6xoIrct99/EDij7HwB9El8wTsztw/AS5YvNdVtO4OP71ye5SlHvavzE7cclIWQG9ZWOc1kow==
-X-Received: by 2002:adf:e592:0:b0:30a:dce8:f8b5 with SMTP id l18-20020adfe592000000b0030adce8f8b5mr9054514wrm.58.1685373277175;
-        Mon, 29 May 2023 08:14:37 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id m17-20020a056000009100b00304adbeeabbsm217867wrx.99.2023.05.29.08.14.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 08:14:36 -0700 (PDT)
-Message-ID: <063c425d-c6da-3e03-0f52-2cc9288ba4cb@gmail.com>
-Date:   Mon, 29 May 2023 17:14:34 +0200
+        Mon, 29 May 2023 11:16:03 -0400
+Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954D4D2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:15:57 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 3ebBqRDyGfPgg3ebBqe9kc; Mon, 29 May 2023 17:15:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685373355;
+        bh=BltMKT3kn+lp68ycQvoOpDcBVtIurMfM0OHRUsxk4vg=;
+        h=From:To:Cc:Subject:Date;
+        b=Je23+tjFXIoQFK7nljsPigyn8btd5HgWlTRRcug7vc0TAY6XIxdjphHuC107i9Mky
+         CrseczmHneG/8QLu1s2ax/qTB5lMGB3duWGtHvm5igrbr/UH8fbaNUVyMyihdnUpvJ
+         Y4A8LSAsFBEra+B75VdrSE5ze7VDe3hhhgcGkSGU6LyKX7TDtWqjDncTccYylX13sx
+         PKx7dwpl72hW0MPGX2ba/P2H2yWsza8wPwHzBm/QKaESbgPVQo6jK3skPdAP9mbQ0E
+         jvpm4ThqKDPoW1IyF3RCWf8NVybC0GtqCYlLVGwqMK0rBCy+SKKGm/xdk/bX4p4hSP
+         NGuQg16efvztw==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 29 May 2023 17:15:55 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Robert Moore <robert.moore@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-acpi@vger.kernel.org, acpica-devel@lists.linuxfoundation.org
+Subject: [PATCH V2] ACPICA: Slightly simplify an error message in acpi_ds_result_push()
+Date:   Mon, 29 May 2023 17:15:52 +0200
+Message-Id: <1464371bc72147e10a392a18734e6c8dff330a9c.1685341309.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/4] arm64: dts: mediatek: mt8195: Assign dp-intf
- aliases
-Content-Language: en-US, ca-ES, es-ES
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230424112523.1436926-1-angelogioacchino.delregno@collabora.com>
- <20230424112523.1436926-3-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230424112523.1436926-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+'object' is known to be NULL at this point. There is little value to log
+it twice in the error message.
 
+Link: https://github.com/acpica/acpica/pull/875
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+v2: Add a link to the PR on github
+Patch below and in the PR are slightly different because if CamelCase.
 
-On 24/04/2023 13:25, AngeloGioacchino Del Regno wrote:
-> Assign aliases for the primary and secondary dp-intf IP to properly
-> and reliably enable DisplayPort functionality.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+ drivers/acpi/acpica/dswstate.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied, thanks
+diff --git a/drivers/acpi/acpica/dswstate.c b/drivers/acpi/acpica/dswstate.c
+index d3841ded3a81..75338a13c802 100644
+--- a/drivers/acpi/acpica/dswstate.c
++++ b/drivers/acpi/acpica/dswstate.c
+@@ -146,8 +146,8 @@ acpi_ds_result_push(union acpi_operand_object *object,
+ 
+ 	if (!object) {
+ 		ACPI_ERROR((AE_INFO,
+-			    "Null Object! Obj=%p State=%p Num=%u",
+-			    object, walk_state, walk_state->result_count));
++			    "Null Object! State=%p Num=%u",
++			    walk_state, walk_state->result_count));
+ 		return (AE_BAD_PARAMETER);
+ 	}
+ 
+-- 
+2.34.1
 
-> ---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index a44aae4ab953..b03a42fe27a6 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -24,6 +24,8 @@ / {
->   	#size-cells = <2>;
->   
->   	aliases {
-> +		dp-intf0 = &dp_intf0;
-> +		dp-intf1 = &dp_intf1;
->   		gce0 = &gce0;
->   		gce1 = &gce1;
->   		ethdr0 = &ethdr0;
