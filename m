@@ -2,93 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFB371469B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8C17146A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbjE2Iu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
+        id S231449AbjE2IvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbjE2Iuu (ORCPT
+        with ESMTP id S231745AbjE2IvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:50:50 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19339B5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:50:47 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-77729fb6c62so159273739f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:50:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685350246; x=1687942246;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+Pzz//WLGisQRMA9EGKGwqNxwnucK0kg6ldl5wEv+QQ=;
-        b=BBpptuZlhJYmFxIh4ugMVVOO5GzwYJI6hV+iWFNTxo5swTC1eZBqTK5SUGgwhH9K5V
-         LbBbzjBa2WL9ZNr6tf9wmua2wyN7EItIZVyDfZAYlhAsfWrgzqFamxLsRAKyC5iFvaXn
-         rgstdwFwOJyKpiYpx4tbjEfyCo97AFG0iboBykPSaTeav3R0M8pUnFN72n1G373YZC5X
-         LHrXsSjTqE8ncqge0KWnTamA5RyaaVxnIP4boDMeYjDZiYSns01bUUbBQHziY5LLkLTH
-         GM9znyf4Ce1CoZJ09hrEcCaFx868uOqaq7H30LdLY8vHGZp3caV/i94YeMdHxdnsZ0Ne
-         A17w==
-X-Gm-Message-State: AC+VfDygiR56vhtnWgCKREUX+3ca0HBAU/RciCVp1I+7cezdE75rjh+g
-        zRkliBKqD2M+a4L6nRaofSwjiBgpFbClXOpqN00mAoMR7LAr
-X-Google-Smtp-Source: ACHHUZ7R5D27DvtOZs60rj3g1XmpdKg+EQ2CMLp/eBrrsJw7DjzN7Fl57zdlWtSWfEmPXaHomr6+OpG9TeWidPoXMdrpuQsEnZ7f
+        Mon, 29 May 2023 04:51:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93546C2;
+        Mon, 29 May 2023 01:50:55 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 86F9E6605961;
+        Mon, 29 May 2023 09:50:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685350254;
+        bh=jtQ3UzAAL9SWJIafGv8zGAcWl+Tvfd/waNo7frdU8ns=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NDptBfeV6vql8MIEM5QwYBfSorO2E/aNOk11MUi0WgNVihvFcC30yxaXBK2BG6Cwf
+         hWfuHgtyQGUzqQ2NGpY0Zo8wXEqN477MTTdR2yd+d5GK9S1HKWyU22vEqw2Z6t8gMz
+         yk35QRpPw+/sH5iuq0l597lv95EnufaqrWvHLAEhGixyO3vstzyOKdLNBgLB4nxgj1
+         D0oLsol8kV2xoELZPp4PXPX2hfqTa07UiKpScpWN492iHieI6FhMAe2BIS5rcDuaDU
+         sLZEMFVjbst1wn1scDKbu4/24md9DeKrS7nzB7HM3/UXrCBpS7bvg1nbX8qj37Dhp3
+         2Vxbem/RuvvlQ==
+Message-ID: <89b3e3bb-d725-1f92-7a0d-b5bc1109dafc@collabora.com>
+Date:   Mon, 29 May 2023 10:50:50 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a6b:f20d:0:b0:759:25eb:210d with SMTP id
- q13-20020a6bf20d000000b0075925eb210dmr3456023ioh.0.1685350246468; Mon, 29 May
- 2023 01:50:46 -0700 (PDT)
-Date:   Mon, 29 May 2023 01:50:46 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c358c205fcd12e02@google.com>
-Subject: [syzbot] Monthly nilfs report (May 2023)
-From:   syzbot <syzbot+list49de8182d696bb4d450d@syzkaller.appspotmail.com>
-To:     konishi.ryusuke@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 1/2] clk: composite: Fix handling of high clock rates
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Christopher Obbard <chris.obbard@collabora.com>,
+        David Laight <David.Laight@ACULAB.COM>, kernel@collabora.com,
+        stable@vger.kernel.org
+References: <20230526171057.66876-1-sebastian.reichel@collabora.com>
+ <20230526171057.66876-2-sebastian.reichel@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230526171057.66876-2-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello nilfs maintainers/developers,
+Il 26/05/23 19:10, Sebastian Reichel ha scritto:
+> ULONG_MAX is used by a few drivers to figure out the highest available
+> clock rate via clk_round_rate(clk, ULONG_MAX). Since abs() takes a
+> signed value as input, the current logic effectively calculates with
+> ULONG_MAX = -1, which results in the worst parent clock being chosen
+> instead of the best one.
+> 
+> For example on Rockchip RK3588 the eMMC driver tries to figure out
+> the highest available clock rate. There are three parent clocks
+> available resulting in the following rate diffs with the existing
+> logic:
+> 
+> GPLL:   abs(18446744073709551615 - 1188000000) = 1188000001
+> CPLL:   abs(18446744073709551615 - 1500000000) = 1500000001
+> XIN24M: abs(18446744073709551615 -   24000000) =   24000001
+> 
+> As a result the clock framework will promote a maximum supported
+> clock rate of 24 MHz, even though 1.5GHz are possible. With the
+> updated logic any casting between signed and unsigned is avoided
+> and the numbers look like this instead:
+> 
+> GPLL:   18446744073709551615 - 1188000000 = 18446744072521551615
+> CPLL:   18446744073709551615 - 1500000000 = 18446744072209551615
+> XIN24M: 18446744073709551615 -   24000000 = 18446744073685551615
+> 
+> As a result the parent with the highest acceptable rate is chosen
+> instead of the parent clock with the lowest one.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 49502408007b ("mmc: sdhci-of-dwcmshc: properly determine max clock on Rockchip")
+> Tested-by: Christopher Obbard <chris.obbard@collabora.com>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-This is a 31-day syzbot report for the nilfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/nilfs
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-During the period, 1 new issues were detected and 3 were fixed.
-In total, 14 issues are still open and 29 have been fixed so far.
-
-Some of the still happening issues:
-
-Ref Crashes Repro Title
-<1> 718     Yes   WARNING in nilfs_btree_assign
-                  https://syzkaller.appspot.com/bug?extid=31837fe952932efc8fb9
-<2> 324     Yes   WARNING in nilfs_sufile_set_segment_usage
-                  https://syzkaller.appspot.com/bug?extid=14e9f834f6ddecece094
-<3> 203     No    INFO: task hung in path_openat (7)
-                  https://syzkaller.appspot.com/bug?extid=950a0cdaa2fdd14f5bdc
-<4> 60      Yes   INFO: task hung in nilfs_detach_log_writer
-                  https://syzkaller.appspot.com/bug?extid=e3973c409251e136fdd0
-<5> 31      Yes   kernel BUG in folio_end_writeback
-                  https://syzkaller.appspot.com/bug?extid=7e5cf1d80677ec185e63
-<6> 3       Yes   general protection fault in folio_create_empty_buffers
-                  https://syzkaller.appspot.com/bug?extid=0ad741797f4565e7e2d2
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
