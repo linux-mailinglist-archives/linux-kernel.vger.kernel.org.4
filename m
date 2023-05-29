@@ -2,156 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF90714672
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30DC714677
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbjE2Ipr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S231597AbjE2IqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjE2Ipq (ORCPT
+        with ESMTP id S229512AbjE2IqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:45:46 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB95AC;
-        Mon, 29 May 2023 01:45:43 -0700 (PDT)
-Date:   Mon, 29 May 2023 10:45:40 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1685349941; bh=AZqKCb/+43xkqfj70QjDvCRDiRJdpJQUwxDZaDYt4jg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L3aOYJzcyvdIdIUgyaTdb0YVI5MQzneNbZD1/Csp3GEdw0xlvN0SrWmgTjQoHjUOg
-         dVzqbLntxX75qsmEnL1gYvZ+ibMMRe5gnMrw9CDb/iM+mdcKfrcMYYzNyAN0hIUIbe
-         pgx/4VncQWRMYNRRnPcffTRSAQACzC4Qz7X46PSU=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com
-Subject: Re: [PATCH 00/13] tools/nolibc: riscv: Add full rv32 support
-Message-ID: <f7332511-bb3f-4067-a0af-b6880294eded@t-8ch.de>
-References: <b25f79f0-a8fb-428a-ad54-fc4afe0df6ff@t-8ch.de>
- <20230528183906.22547-1-falcon@tinylab.org>
+        Mon, 29 May 2023 04:46:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B24AC2;
+        Mon, 29 May 2023 01:46:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82F6C612FB;
+        Mon, 29 May 2023 08:46:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5181C4339B;
+        Mon, 29 May 2023 08:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685349980;
+        bh=/V+SLKdvaHtCYTQwLxo45gaPakkF4D8ubWUXjKcsgvQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LrQixWfnMt+yEPDB9h2XI2CwlaOtVIZySVDvok3CKpeqKtBzv6elnzL5duj96HIua
+         mvZnNhHyQcL04IG5J2uPpotmvNzNG2+FO0wnTiPCE54cXMKT89v6cQgZ3DSJo1Skyq
+         QV5+oqtMW88EAq6jQulWdWC75VvFm+bcrmg7FPPkNuXw+6iwt7cpS+cp+nLYYLzhv8
+         ESHZILORDrFboBFuQhYb2GlrC4DRV6miEsSFFpALvXNjkWWB361dchGm9qmOWEDgpA
+         Ukfx+DRTC8qoC/ep9/s/FV3RhvxsrIyPIg3EJn+eSytM3Hbj6+NqyZG+TQ9co+F+Ud
+         H6vfmhpteK2fg==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        bjorn@kernel.org, greentime.hu@sifive.com, vincent.chen@sifive.com,
+        andy.chiu@sifive.com, paul.walmsley@sifive.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V12 0/3] riscv: Add independent irq/softirq stacks
+Date:   Mon, 29 May 2023 04:45:57 -0400
+Message-Id: <20230529084600.2878130-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230528183906.22547-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhangjin,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-On 2023-05-29 02:39:06+0800, Zhangjin Wu wrote:
-> > May 28, 2023 12:40:31 Zhangjin Wu <falcon@tinylab.org>:
-> > >> On Thu, May 25, 2023 at 01:33:14AM +0800, Zhangjin Wu wrote:
-> > >>> Hi, Willy
-> > >>>
-> > >>> Thanks very mush for your kindly review, discuss and suggestion, now we
-> > >>> get full rv32 support ;-)
-> > >>>
-> > >>> In the first series [1], we have fixed up the compile errors about
-> > >>> _start and __NR_llseek for rv32, but left compile errors about tons of
-> > >>> time32 syscalls (removed after kernel commit d4c08b9776b3 ("riscv: Use
-> > >>> latest system call ABI")) and the missing fstat in nolibc-test.c [2],
-> > >>> now we have fixed up all of them.
-> > >>
-> > >> (...)
-> > >>
-> > >> I have read the comments that others made on the series and overall
-> > >> agree. I've seen that you intend to prepare a v2. I think we must
-> > >> first decide how to better deal with emulated syscalls as I said in
-> > >> an earlier message. Probably that we should just add a specific test
-> > >> case for EFAULT in nolibc-test since it's the only one (I think) that
-> > >> risks to trigger crashes with emulated syscalls. We could also imagine
-> > >> dealing with the signal ourselves but I'm not that keen on going to
-> > >> implement signal() & longjmp() for now :-/
-> > >>
-> > >
-> > > Yes, user-space signal() may be the right direction, we just need to let
-> > > user-space not crash the kernel, what about this 'solution' for current stage
-> > > (consider the pure time64 support too):
-> >
-> > If you did manage to crash the actual kernel than that would be a bug in the kernel that needs to be fixed.
-> > Feel free to describe how it happened and I'll take a look.
-> >
-> 
-> Sorry, my description above is not really right, the sigsegv (11) signal will
-> be sent to our program when it tries to write something to the address: (void
-> *)1 for this test case tries to do/test so:
-> 
->     CASE_TEST(gettimeofday_bad1); EXPECT_SYSER(1, gettimeofday((void *)1, NULL), -1, EFAULT); break;
+This patch series adds independent irq/softirq stacks to decrease the
+press of the thread stack. Also, add a thread STACK_SIZE config for
+users to adjust the proper size during compile time.
 
-<snip>
+This patch series belonged to the generic entry, which has been merged
+to for-next now.
 
->    35 gettimeofday_bad1init[1]: unhandled signal 11 code 0x1 at 0x00000002 in init[10000+5000]
->         CPU: 0 PID: 1 Comm: init Not tainted 6.4.0-rc1-00137-gfdc311fa22ed-dirty #60
->         Hardware name: riscv-virtio,qemu (DT)
->         epc : 00012c90 ra : 00012c6c sp : 9d097d90
->          gp : 00016800 tp : 00000000 t0 : 00000000
->          t1 : 0000000a t2 : 00000000 s0 : 00000001
->          s1 : 00016008 a0 : 00000000 a1 : 9d097da8
->          a2 : 00000014 a3 : 00000000 a4 : 00000000
->          a5 : 00000000 a6 : 00000001 a7 : 00000193
->          s2 : 00000023 s3 : 00000000 s4 : 9d097da4
->          s5 : 00000000 s6 : 0000541b s7 : 00000007
->          s8 : 9d097dcc s9 : 00014474 s10: 00016000
->          s11: 00000006 t3 : 00000000 t4 : ffffffff
->          t5 : 00000000 t6 : 00000000
->         status: 00000020 badaddr: 00000002 cause: 0000000f
->         Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> 
-> Because our test run nolibc-test as init of initramfs on qemu, when init exit
-> but not reboot as normally, then it 'crashes' the kernel (kernel panic above).
+v12:
+ - Rebase on palmer/for-next (20230529)
+ - Move DECLARE_PER_CPU(ulong *, irq_stack_ptr) into irq_stack.h (Thx Conor)
+ - Optimize commit msg
 
-This makes sense, thanks. I just wanted to make sure no kernel bugs were
-going unhandeld.
+v11:
+https://lore.kernel.org/linux-riscv/20230324071239.151677-1-guoren@kernel.org/
+ - Rebase on palmer/for-next (20230324)
+ - Separate from generic entry patch series.
 
-> If we have sigaction()/sigsetjmp/siglongjump support, then, we can call
-> 'reboot()' in sigsegv signal handler, and event let it continue the other test
-> cases. sigaction seems only work to trigger when to call siglongjump,
-> siglongjump ask sigsetjmp to do the real recover action.
-> 
-> I did find some useful urls, and wrote such an exception restore logic, not
-> completely, not support NOLIBC_TEST environment variables yet.
+v10:
+https://lore.kernel.org/linux-riscv/20221208025816.138712-1-guoren@kernel.org/
+ - Rebase on palmer/for-next branch (20221208)
+ - Remove unrelated patches from the series (Suggested-by: Bjorn)
+ - Fixup Typos.
 
-<lots of implementation>
+v9:
+https://lore.kernel.org/linux-riscv/20221130034059.826599-1-guoren@kernel.org/
+ - Fixup NR_syscalls check (by Ben Hutchings)
+ - Add Tested-by: Jisheng Zhang
 
-> usage:
-> 
->     $ gcc -o nolibc-test tools/testing/selftests/nolibc/nolibc-test.c
->     $ ./nolibc-test
->     ...
->     35 gettimeofday_tz = 0                                           [OK]
->     36 gettimeofday_tv_tz = 0                                        [OK]
->     37 gettimeofday_bad1 = -1                                       [FAIL] (continued by sigaction/siglongjmp/sigsetjmp)
->     38 gettimeofday_bad2 = -1                                       [FAIL] (continued by sigaction/siglongjmp/sigsetjmp)
->     39 getpagesize = 0                                               [OK]
->     40 ioctl_tiocinq = 0                                             [OK]
->     41 ioctl_tiocinq = 0                                             [OK]
->     ...
-> 
-> It did work as expected, but for nolibc, we still need to add sigaction/siglongjump/sigsetjmp support.
-> 
-> Will send a patch based on Willy's latest branch, perhaps this may help us to
-> verify the future sigaction/siglongjump/sigsetjmp for nolibc.
-> 
-> ref: https://www.ibm.com/docs/en/i/7.1?topic=ssw_ibm_i_71/apis/sigsetj.html
->      https://www.ibm.com/docs/en/zos/2.1.0?topic=functions-siglongjmp-restore-stack-environment-signal-mask
+v8:
+https://lore.kernel.org/linux-riscv/20221103075047.1634923-1-guoren@kernel.org/
+ - Rebase on palmer/for-next branch (20221102)
+ - Add save/restore_from_x5_to_x31 .macro (JishengZhang)
+ - Consolidate ret_from_kernel_thread into ret_from_fork (JishengZhang)
+ - Optimize __noinstr_section comment (JiangshanLai)
 
-This seems very complicated for fairly limited gain to be honest.
+v7:
+https://lore.kernel.org/linux-riscv/20221015114702.3489989-1-guoren@kernel.org/
+ - Fixup regs_irqs_disabled with SR_PIE
+ - Optimize stackleak_erase -> stackleak_erase_on_task_stack (Thx Mark
+   Rutland)
+ - Add BUG_ON(!irqs_disabled()) in trap handlers
+ - Using regs_irqs_disabled in __do_page_fault
+ - Remove unnecessary irq disable in ret_from_exception and add comment
 
-If we really want to keep the current testcase we could also ensure that
-the pointer does not fall into the first page, as the first page is not
-mapped under Linux:
+v6:
+https://lore.kernel.org/linux-riscv/20221002012451.2351127-1-guoren@kernel.org/
+ - Use THEAD_SIZE_ORDER for thread size adjustment in kconfig (Thx Arnd)
+ - Move call_on_stack to inline style (Thx Peter Zijlstra)
+ - Fixup fp chain broken (Thx Chen Zhongjin)
+ - Remove common entry modification, and fixup page_fault entry (Thx
+   Peter Zijlstra)
+ - Treat some traps as nmi entry (Thx Peter Zijlstra)
 
-0 <= addr < PAGE_SIZE
+v5:
+https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/
+ - Add riscv own stackleak patch instead of generic entry modification
+   (by Mark Rutland)
+ - Add EXPERT dependency for THREAD_SIZE (by Arnd)
+ - Add EXPERT dependency for IRQ_STACK (by Sebastian, David Laight)
+ - Corrected __trap_section (by Peter Zijlstra)
+ - Add Tested-by (Yipeng Zou)
+ - Use CONFIG_SOFTIRQ_ON_OWN_STACK replace "#ifndef CONFIG_PREEMPT_RT"
+ - Fixup systrace_enter compile error
+ - Fixup exit_to_user_mode_prepare preempt_disable warning
 
-Or instead of PAGE_SIZE just hardcode 4096, as that should be the
-minimum size and and does not require a lookup.
+V4:
+https://lore.kernel.org/linux-riscv/20220908022506.1275799-1-guoren@kernel.org/
+ - Fixup entry.S with "la" bug (by Conor.Dooley)
+ - Fixup missing noinstr bug (by Peter Zijlstra)
 
-Thomas
+V3:
+https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
+ - Fixup CONFIG_COMPAT=n compile error
+ - Add THREAD_SIZE_ORDER config
+ - Optimize elf_kexec.c warning fixup
+ - Add static to irq_stack_ptr definition
+
+V2:
+https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
+ - Fixup compile error by include "riscv: ptrace: Remove duplicate
+   operation"
+ - Fixup compile warning
+   Reported-by: kernel test robot <lkp@intel.com>
+ - Add test repo link in cover letter
+
+V1:
+https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
+
+Guo Ren (3):
+  riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+  riscv: stack: Support HAVE_SOFTIRQ_ON_OWN_STACK
+  riscv: stack: Add config of thread stack size
+
+ arch/riscv/Kconfig                   | 19 ++++++++
+ arch/riscv/include/asm/irq_stack.h   | 32 +++++++++++++
+ arch/riscv/include/asm/thread_info.h | 14 ++----
+ arch/riscv/kernel/irq.c              | 68 ++++++++++++++++++++++++++++
+ arch/riscv/kernel/traps.c            | 35 +++++++++++++-
+ 5 files changed, 155 insertions(+), 13 deletions(-)
+ create mode 100644 arch/riscv/include/asm/irq_stack.h
+
+-- 
+2.36.1
+
