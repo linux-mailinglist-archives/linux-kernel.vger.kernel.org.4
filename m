@@ -2,129 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A87B714F60
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 20:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C84B714F64
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 20:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjE2Sag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 14:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
+        id S229661AbjE2Sd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 14:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjE2Sae (ORCPT
+        with ESMTP id S229472AbjE2Sd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 14:30:34 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D90C9;
-        Mon, 29 May 2023 11:30:33 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34TIMZpj003686;
-        Mon, 29 May 2023 18:30:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jbF1B37nEmfiytg9SdwDXlLSnVdieoTI7oty96nMits=;
- b=MkufKIPwU4lPLQlawsIXjn/OnfhPFq5Q5T84XvG4JDcrx3tRzYA+EAsMsEKmmkLHDiG+
- 2asklxCQX1K+21mmP25g/WyX9fDnCBr66kQ53H6SG1cCEIjfxLNhMS4zqjGhgBUcDVFH
- z8aM+7AK7jAHnog+Ro7aUbYq3XFLzonkgUKIauiauyeSa2v/yzOf8nkM56louVXTt2d9
- +cpb5ECW+BWSIiK9S/3rNuM3EwuuLbSBEezkwiRPYTGrFA4tY48u3i8hqOM0F6HKEorU
- bmR3y7gf+hgkvoUyXwNOLFdHa6f+9m0Da1icG6OBi7DgzWlMWWkzAHP9wizcHL3sJ9rM JA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qw03q036f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 May 2023 18:30:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34TIUO5X015971
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 May 2023 18:30:24 GMT
-Received: from [10.216.59.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 29 May
- 2023 11:30:20 -0700
-Message-ID: <a86f3bd4-8c87-de67-bdb6-fbe88dc23a56@quicinc.com>
-Date:   Tue, 30 May 2023 00:00:15 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1685004825-30157-1-git-send-email-quic_prashk@quicinc.com>
- <2023052513-gestate-tartar-bf15@gregkh>
- <5f144d80-0439-d014-c845-1cfb1adb840a@quicinc.com>
- <2023052801-immersion-venus-ad0f@gregkh>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <2023052801-immersion-venus-ad0f@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Mon, 29 May 2023 14:33:26 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199FAC4;
+        Mon, 29 May 2023 11:33:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=D77Hp7t1go5Z1+uiXCnF4+amc9MTSKwzfWot6WkdpQ4=; b=AQ7wO3nT0rdk7HhZCzs9yl3o95
+        7PX7MqBvhhWzf60ICDGY6gtko2gjHK1n4s2mpwqrdQenX8U12HLvBlaM+nw1EfQ354lSuWdscyvt2
+        fVDbTbH1BLTgixXiTce6v8btFuKpMUdq2Ugkb2yWXPJrihltP0b6zZCw+/l0KBOM7p04=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:35702 helo=debian-acer)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q3hgB-0005hM-DM; Mon, 29 May 2023 14:33:16 -0400
+Date:   Mon, 29 May 2023 14:33:14 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230529143314.ac8e6bc1dbf79671cf38e9a1@hugovil.com>
+In-Reply-To: <20230529-verify-sympathy-4a486a6cb2c9@spud>
+References: <20230529140711.896830-1-hugo@hugovil.com>
+        <20230529140711.896830-7-hugo@hugovil.com>
+        <20230529-verify-sympathy-4a486a6cb2c9@spud>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: r2HkCREzlJAtRH8KPFQcxuWkJl5nc6gK
-X-Proofpoint-ORIG-GUID: r2HkCREzlJAtRH8KPFQcxuWkJl5nc6gK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-29_10,2023-05-29_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- lowpriorityscore=0 suspectscore=0 spamscore=0 impostorscore=0
- clxscore=1015 mlxlogscore=795 adultscore=0 phishscore=0 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305290154
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v4 6/9] dt-bindings: sc16is7xx: Add property to change
+ GPIO function
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 29 May 2023 19:19:27 +0100
+Conor Dooley <conor@kernel.org> wrote:
 
-
-On 28-05-23 05:03 pm, Greg Kroah-Hartman wrote:
->>>> diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
->>>> index e20874c..30bdb81 100644
->>>> --- a/drivers/usb/common/usb-conn-gpio.c
->>>> +++ b/drivers/usb/common/usb-conn-gpio.c
->>>> @@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
->>>>    	platform_set_drvdata(pdev, info);
->>>>    	device_set_wakeup_capable(&pdev->dev, true);
->>>> +	/* Set last role to unknown before performing the initial detection */
->>>> +	info->last_role = USB_ROLE_UNKNOWN;
->>>
->>> Shouldn't last_role have already been set to 0?  If so, why not just
->>> have this enum value be 0?
->> Last role would be 0 during first detection, that's the problem here.
->> During initial detection, if the the new role is detected as USB_ROLE_NONE
->> (0), then we wouldn't call the set_role(). But it should send the current
->> role to gadget after the inital detection.
+> On Mon, May 29, 2023 at 10:07:08AM -0400, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > Some variants in this series of UART controllers have GPIO pins that
+> > are shared between GPIO and modem control lines.
+> > 
+> > The pin mux mode (GPIO or modem control lines) can be set for each
+> > ports (channels) supported by the variant.
+> > 
+> > This adds a property to the device tree to set the GPIO pin mux to
+> > modem control lines on selected ports if needed.
+> > 
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  .../bindings/serial/nxp,sc16is7xx.txt         | 46 +++++++++++++++++++
+> >  1 file changed, 46 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> > index 0fa8e3e43bf8..74dfbbf7b2cb 100644
+> > --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> > +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> > @@ -23,6 +23,9 @@ Optional properties:
+> >      1 = active low.
+> >  - irda-mode-ports: An array that lists the indices of the port that
+> >  		   should operate in IrDA mode.
+> > +- nxp,modem-control-line-ports: An array that lists the indices of the port that
+> > +				should have shared GPIO lines configured as
+> > +				modem control lines.
+> >  
+> >  Example:
+> >          sc16is750: sc16is750@51 {
+> > @@ -35,6 +38,26 @@ Example:
+> >                  #gpio-cells = <2>;
+> >          };
+> >  
+> > +	sc16is752: sc16is752@54 {
+> > +		compatible = "nxp,sc16is752";
+> > +		reg = <0x54>;
+> > +		clocks = <&clk20m>;
+> > +		interrupt-parent = <&gpio3>;
+> > +		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
+> > +		nxp,modem-control-line-ports = <1>; /* Port 1 as modem control lines */
+> > +		gpio-controller; /* Port 0 as GPIOs */
+> > +		#gpio-cells = <2>;
+> > +	};
+> > +
+> > +	sc16is752: sc16is752@54 {
+> > +		compatible = "nxp,sc16is752";
+> > +		reg = <0x54>;
 > 
-> So you are hoping that the old enum type is still assigned to 0?  That's
-> brave, please make it explicit otherwise it's very hard to follow or
-> ensure that this really will happen.  And most of all, document it so
-> that that value remains 0 in the future, otherwise a list of enum types
-> without explicit values are seen as if the values do not matter.
-> 
-> thanks,
-> 
-> greg k-h
+> If this were not a txt binding, dt_binding_check would likely complain
+> that you have two nodes with the same node address & 3 below.
+> If you end up re-submitting, could you change that please?
+> Otherwise,
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-So I think it would be better to add USB_ROLE_UNKNOWN towards the end of 
-enum usb_role, so that we can avoid explicit declaration. Is that fine?
+Hi Conor,
+for the I2C section, I will use addresse 51, 52 and 54.
 
-  enum usb_role {
-  	USB_ROLE_NONE,
-  	USB_ROLE_HOST,
-  	USB_ROLE_DEVICE,
-+	USB_ROLE_UNKNOWN,
-   }
+For the SPI section, I will use addresse 0, 1 and 2.
 
-Thanks,
-Prashanth K
+I will resubmit if there is a v5.
 
+Thank you, Hugo.
