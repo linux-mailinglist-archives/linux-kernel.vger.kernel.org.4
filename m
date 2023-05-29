@@ -2,72 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05A4714EF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8B6714EF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjE2Rdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 13:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S229556AbjE2Re0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 13:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjE2Rdj (ORCPT
+        with ESMTP id S229453AbjE2ReY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 13:33:39 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C953BE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:33:38 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51478f6106cso5720068a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:33:38 -0700 (PDT)
+        Mon, 29 May 2023 13:34:24 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10278AB;
+        Mon, 29 May 2023 10:34:24 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-2566ed9328eso1376267a91.2;
+        Mon, 29 May 2023 10:34:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685381616; x=1687973616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5SnnxOPGDcq5IgZITbMgF+/5A6j86ONCYACpYZC4l3I=;
-        b=Ba/UoowdP5Dt1gcZhoPhL64PQGgRI/QvrlUi1tHUH2pEeJ06J4goEfGdzKZOMWYPvb
-         suPVSAS459z2FchfuO+dSgaUSm02N/qbzcgi0A0lFib1aHON7VoSA0ArqFzp/qnKtMII
-         Qb6S7BAmVyCar00ns4w0oXFH6tIAsgf3ISU9c=
+        d=gmail.com; s=20221208; t=1685381663; x=1687973663;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wjXhXfKhF2yk36YQMCuS8AIma0LdxrDbNwpb9Q4Wbp4=;
+        b=P4cNhvUPQQrPZ27uoNkGo6AyGHJtpXLSkcnhvCAk4czGo5S5rev3y4kaUEBHOp6T85
+         HGUJPFyWPt90DuSjjbv1Z3nQHvSQRfx65OHpfnBrpb+RUKF7i2U3PkRGH0f1G3FtFE4k
+         MsE8xSxZka1KjHDav9yn0kYCl9x1PhxxIr83/44H/gdgfkn/wmbVbXuf3AZtLQ4JLHSH
+         NOktvReRq3IsCtUAh5N+chWtKpsVIiXZYky00FZkS5j87mFDfK85NOCrO/RmUrjM8GwS
+         +0xTXJGTNyuehR5XdSItokcBM2HvNQGMsuN+1aE1r6Jg5vd1DYwbKat+J/AnxVs89X3A
+         N9KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685381616; x=1687973616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685381663; x=1687973663;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5SnnxOPGDcq5IgZITbMgF+/5A6j86ONCYACpYZC4l3I=;
-        b=bsL17AXOyz2ry12Ynbunsr1qaeqI0UxZVWkZxYwtaJf5MW2YtDxpuAZ9P2wz6uEjGn
-         puXB0xdbrf+HFZvpgkwu2yWMlqzWx1gGx4x6/MuPsLKN1wQzaEuXKe201tWHR47h9OsR
-         m34aA5T0dc6/fmWcjx9nsv3MhhAVx2gHowsEw9HSQhM/cT+OD71Jazuf1gMjkJHwLe6P
-         PagM5P/XXvEa2uZHmBJ6OhdnBHGNZ8vH9v12t2SgISshAhFYQsHXMDePbIA3LbYQzRPP
-         dgiY4O4rzZxasACWH2I4UsFZRn/Q0yxkiKOxaeANXhk3nJ1i2ElYSet9rAagxlB619SA
-         oRWw==
-X-Gm-Message-State: AC+VfDzYXsWBrfgj0Wa/apM42z66icZR/L0Ickh6I2q9dzBDWQzJwwuc
-        /wWvyzRNkIOthdQrsZXPsGlekHqYurmVA2dtE4rHD5Mg
-X-Google-Smtp-Source: ACHHUZ6vipbJY8lDZ+9x1m/kVC+X5IZTtdEtUpcK5s/mkxOH+Hr63IiEEn3Uda7bBwJ9+2caSf0HKA==
-X-Received: by 2002:aa7:da03:0:b0:514:9e61:18ab with SMTP id r3-20020aa7da03000000b005149e6118abmr325816eds.14.1685381616496;
-        Mon, 29 May 2023 10:33:36 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id a10-20020aa7cf0a000000b00506987c5c71sm3259968edy.70.2023.05.29.10.33.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 10:33:35 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96f818c48fbso663215266b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:33:35 -0700 (PDT)
-X-Received: by 2002:a17:906:ee83:b0:94f:2a13:4e01 with SMTP id
- wt3-20020a170906ee8300b0094f2a134e01mr9672114ejb.74.1685381615429; Mon, 29
- May 2023 10:33:35 -0700 (PDT)
+        bh=wjXhXfKhF2yk36YQMCuS8AIma0LdxrDbNwpb9Q4Wbp4=;
+        b=gm4MuRlb7NKn/bUIc/+1yAIOjDHF2Bq2uro47ClBuIrvF0zK46zof52vH6uZfb2oVr
+         cedOqWyER+d6biG5uTno6N9QzCtnmQg+XHsoQwAVJd52cVQSjh4rZgB7yb6jqTW8FCx6
+         eTET1jLOc4q7dQ66KJJVWAIKOg2UuSCv7IA3VauWBAu7IVJYsGv5MX6maYjkrTqAA3vz
+         VVrdKbktoD1YNzQJxAhjbfzqMsqdg8YeqEmLI0Pr7YhXTU64Oj562ocufy18GtVPoZyr
+         qWZx8cq5Mj6L+c5LZG9pTlbaylOpFutbNlkSAXeF+6omvki9TZiCTbzrB1b4AuI+ohG6
+         E6QQ==
+X-Gm-Message-State: AC+VfDwi+UCu34i16iAKg/uj4wgfC3xPNWvZACjJZdzoHZNWwUdY4l5v
+        xOnPethgccow4W2kRU8K2Y0=
+X-Google-Smtp-Source: ACHHUZ6sPom/NcIrUcHdPzwJWrwk2F9VMAsUUJ1L2FYw2L/0c7UeGSjOZM9kKjWHoh+5L2cezAcRNw==
+X-Received: by 2002:a17:902:6bc4:b0:1aa:cddd:57d8 with SMTP id m4-20020a1709026bc400b001aacddd57d8mr10626402plt.30.1685381663435;
+        Mon, 29 May 2023 10:34:23 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c2-20020a170902b68200b001aaf2e7b06csm8451575pls.132.2023.05.29.10.34.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 10:34:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 29 May 2023 10:34:20 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 4.19 000/133] 4.19.284-rc2 review
+Message-ID: <371de68a-36a9-4b87-a847-f8fba1516a23@roeck-us.net>
+References: <20230529153919.729418186@linuxfoundation.org>
 MIME-Version: 1.0
-References: <CA+icZUVZSBx-=Sm8ZM12dWY4hmpnfDdhmg6UwXsR4OLSgPXY2w@mail.gmail.com>
-In-Reply-To: <CA+icZUVZSBx-=Sm8ZM12dWY4hmpnfDdhmg6UwXsR4OLSgPXY2w@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 29 May 2023 13:33:18 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wjpb_j4xJoKLivHFkrruR2TRcicEUkNVfXkY3xV5ybRSA@mail.gmail.com>
-Message-ID: <CAHk-=wjpb_j4xJoKLivHFkrruR2TRcicEUkNVfXkY3xV5ybRSA@mail.gmail.com>
-Subject: Re: Revert "module: error out early on concurrent load of the same
- module file"
-To:     sedat.dilek@gmail.com
-Cc:     Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529153919.729418186@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,25 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 12:18=E2=80=AFPM Sedat Dilek <sedat.dilek@gmail.com=
-> wrote:
->
-> Building from scratch with latest Linus Git including:
->
-> Revert "module: error out early on concurrent load of the same module fil=
-e"
-> https://git.kernel.org/linus/ac2263b588dffd3a1efd7ed0b156ea6c5aea200d
+On Mon, May 29, 2023 at 04:40:38PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.284 release.
+> There are 133 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 31 May 2023 15:39:00 +0000.
+> Anything received after that time might be too late.
+> 
 
-So just to confirm: both plain 6.4 _and_ with that revert hangs?
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 431 pass: 431 fail: 0
 
-The revert is pure "go back to old state", so the revert really
-shouldn't cause any problems what-so-ever.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-So if rc4 doesn't boot for you, and the revert also didn't fix it for
-you, then there is something else going on.
-
-There have been other module changes during the merge window, and
-obviously it might be entirely unrelated to modules too. Can you try
-to narrow down when it started failing?
-
-          Linus
+Guenter
