@@ -2,200 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B619C714432
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1FB714439
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjE2GUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 02:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S231536AbjE2GVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 02:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjE2GUm (ORCPT
+        with ESMTP id S230332AbjE2GVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 02:20:42 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E65B2
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685341241; x=1716877241;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mY2erTeWwo8KLcT3K3FPJaJOXqKJMG+PRsSCo6Oc9A8=;
-  b=lb4B+B3t0Wam1xF+IdwV1LWH6jRzf4xcmjNlDqfnl5oVUITMhxbDA3lM
-   NcFjAQvX0zwHG0E49h2x8WCL2Z2zJ61/O4hlalkG41OuIscxa7ZYUEw5x
-   xuFEADRX9OF1ocHEjrFydFpv1Em4h2QZtbEok2ThPRIEoqUXTZ2DGnC2j
-   lRj5D2FD2h3SLHRC0s7CbwZqgYWiq/RF6p0M/F5gaHFqWh+nVNZTMKlJA
-   DPzXwVWKkxcPZqCm25OmZHkWBzUGF29xNa/4xc0DFYur8DEOkf6hPzVc0
-   kM8BUfe+tTfiBA8eXQFjN5zjy+P2Xf8w+k417lHll6feW7n6QmaWbvQMU
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="344130748"
-X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
-   d="scan'208";a="344130748"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 23:20:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="952613634"
-X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
-   d="scan'208";a="952613634"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 May 2023 23:20:38 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q3WFC-000Kug-0G;
-        Mon, 29 May 2023 06:20:38 +0000
-Date:   Mon, 29 May 2023 14:20:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sheng Yong <shengyong@oppo.com>, jaegeuk@kernel.org,
-        chao@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Sheng Yong <shengyong@oppo.com>
-Subject: Re: [PATCH] f2fs: add f2fs_ioc_[get|set]_extra_attr
-Message-ID: <202305291408.kdy2Itan-lkp@intel.com>
-References: <20230529013502.2230810-1-shengyong@oppo.com>
+        Mon, 29 May 2023 02:21:37 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04329B5
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:21:34 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-ba86ec8047bso4309360276.3
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685341293; x=1687933293;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kjV6xBD8+Z39YuH4hgrLfpItULNEjB3if/M/mkAbsVQ=;
+        b=rWUgEbcRxN+0lh7aV7n4UOuWoW/akkZOM/gqoHjVcxn/6hheszcuPJOLVJ4sguWyP8
+         nkQlUMJmy6e/Jx9YVzvAF7u4UBrtQ7Gt8z6ETj5pN1DYiBGqn6irZMUv2C9TbfCBC78I
+         xaCU0qKIPP/XwpIBhRQPgPdjxQJW6d4VJskC/kyJTtslu2euOqK8ik9oIKBYFLT0OWAQ
+         hthSfePHY1Fj36lFOt87PpfGm9V25DdJkUjrx5h6k5n/1x83JounXfxF7b0VnDNmT3pg
+         /B3jbAdtHb1fjyAf9CqPVGMMMvFfo7sNqLyn5ELpZamilbHqPMk5v4bK33lqW9qB8lmS
+         adrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685341293; x=1687933293;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kjV6xBD8+Z39YuH4hgrLfpItULNEjB3if/M/mkAbsVQ=;
+        b=GnJwADKq6FsjwvYkhnnB/HTC2KcupIJ3lw2hILwtuM7Bm64dxumjGyEC+9CEKjV48H
+         osPo2emiSnswvnqmrJDbtaR8dP4oVJ7XdQnPAtnM6q4zKSyzomO4WCgUFRBjoWYAF1ev
+         0vgHF1AfUGx8LQrBFqI0BuPW2605FkvylUp0vzQSUf09eeH/22olPM/dvExRQzD/EbyN
+         gvNSXm7U/AcX8ogZNVujiCQ+v1tDzCypQSFiBZy0+kL3gnNXJsDcw0BQbX3aVVgna8Ju
+         zTXyEgIpReYpH94u8sAyStAn7MeShPD6IgLnuHVpOHZ7QUyXphv8ADqNbLDoGUGjhYj5
+         Sybw==
+X-Gm-Message-State: AC+VfDy0yTr2oZBwE8G9Az5YDQNpBiC4E3w2WcI6Bg8XrJPfjujXERuv
+        mWoC5egjS15RjqvMLl28C2F0Wg==
+X-Google-Smtp-Source: ACHHUZ6EPD4pm5LL+EWBEb/p2RZtAUzDMPbUfE7F4FXgHJQ8XYwzEv8l0puT9pEGX6+B6Mzd+dzTzw==
+X-Received: by 2002:a25:d796:0:b0:ba8:3e89:bd69 with SMTP id o144-20020a25d796000000b00ba83e89bd69mr9536233ybg.12.1685341292952;
+        Sun, 28 May 2023 23:21:32 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id m205-20020a2571d6000000b00ba87bc06fe5sm2712527ybc.52.2023.05.28.23.21.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 23:21:32 -0700 (PDT)
+Date:   Sun, 28 May 2023 23:21:27 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 06/12] sparc: add pte_free_defer() for pgtables sharing
+ page
+In-Reply-To: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
+Message-ID: <f8d84fb8-eb9-6649-7137-715c6010468c@google.com>
+References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529013502.2230810-1-shengyong@oppo.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sheng,
+Add sparc-specific pte_free_defer(), to call pte_free() via call_rcu().
+pte_free_defer() will be called inside khugepaged's retract_page_tables()
+loop, where allocating extra memory cannot be relied upon.  This precedes
+the generic version to avoid build breakage from incompatible pgtable_t.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ arch/sparc/include/asm/pgalloc_64.h |  4 ++++
+ arch/sparc/mm/init_64.c             | 16 ++++++++++++++++
+ 2 files changed, 20 insertions(+)
 
-[auto build test WARNING on jaegeuk-f2fs/dev-test]
-[also build test WARNING on jaegeuk-f2fs/dev next-20230525]
-[cannot apply to linus/master v6.4-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sheng-Yong/f2fs-add-f2fs_ioc_-get-set-_extra_attr/20230529-093611
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-patch link:    https://lore.kernel.org/r/20230529013502.2230810-1-shengyong%40oppo.com
-patch subject: [PATCH] f2fs: add f2fs_ioc_[get|set]_extra_attr
-config: arc-buildonly-randconfig-r004-20230529 (https://download.01.org/0day-ci/archive/20230529/202305291408.kdy2Itan-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/519a8b3bbd4d743ae67c32dfef61e8bfa0951cc5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sheng-Yong/f2fs-add-f2fs_ioc_-get-set-_extra_attr/20230529-093611
-        git checkout 519a8b3bbd4d743ae67c32dfef61e8bfa0951cc5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/f2fs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305291408.kdy2Itan-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   fs/f2fs/file.c: In function 'f2fs_ioc_get_extra_attr':
->> fs/f2fs/file.c:4312:44: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-    4312 |                                            (void __user *)attr.attr))
-         |                                            ^
-   fs/f2fs/file.c:4316:48: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-    4316 |                                                (void __user *)attr.attr))
-         |                                                ^
-
-
-vim +4312 fs/f2fs/file.c
-
-  4262	
-  4263	static int f2fs_ioc_get_extra_attr(struct file *filp, unsigned long arg)
-  4264	{
-  4265		struct inode *inode = file_inode(filp);
-  4266		struct f2fs_inode_info *fi = F2FS_I(inode);
-  4267		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-  4268		struct f2fs_extra_attr attr;
-  4269		u32 chksum;
-  4270		int ret = 0;
-  4271	
-  4272		if (!f2fs_has_extra_attr(inode))
-  4273			return -EOPNOTSUPP;
-  4274	
-  4275		if (copy_from_user(&attr, (void __user *)arg, sizeof(attr)))
-  4276			return -EFAULT;
-  4277	
-  4278		if (attr.field >= F2FS_EXTRA_ATTR_MAX)
-  4279			return -EINVAL;
-  4280	
-  4281		if (!extra_attr_fits_in_inode(inode, attr.field))
-  4282			return -EOPNOTSUPP;
-  4283	
-  4284		switch (attr.field) {
-  4285		case F2FS_EXTRA_ATTR_TOTAL_SIZE:
-  4286			attr.attr = F2FS_TOTAL_EXTRA_ATTR_SIZE;
-  4287			break;
-  4288		case F2FS_EXTRA_ATTR_ISIZE:
-  4289			attr.attr = fi->i_extra_isize;
-  4290			break;
-  4291		case F2FS_EXTRA_ATTR_INLINE_XATTR_SIZE:
-  4292			if (!f2fs_has_inline_xattr(inode))
-  4293				return -EOPNOTSUPP;
-  4294			attr.attr = get_inline_xattr_addrs(inode);
-  4295			break;
-  4296		case F2FS_EXTRA_ATTR_PROJID:
-  4297			if (!f2fs_sb_has_project_quota(F2FS_I_SB(inode)))
-  4298				return -EOPNOTSUPP;
-  4299			attr.attr = from_kprojid(&init_user_ns, fi->i_projid);
-  4300			break;
-  4301		case F2FS_EXTRA_ATTR_INODE_CHKSUM:
-  4302			ret = f2fs_inode_chksum_get(sbi, inode, &chksum);
-  4303			if (ret)
-  4304				return ret;
-  4305			attr.attr = chksum;
-  4306			break;
-  4307		case F2FS_EXTRA_ATTR_CRTIME:
-  4308			if (!f2fs_sb_has_inode_crtime(sbi))
-  4309				return -EOPNOTSUPP;
-  4310			if (attr.attr_size == sizeof(struct timespec64)) {
-  4311				if (put_timespec64(&fi->i_crtime,
-> 4312						   (void __user *)attr.attr))
-  4313					return -EFAULT;
-  4314			} else if (attr.attr_size == sizeof(struct old_timespec32)) {
-  4315				if (put_old_timespec32(&fi->i_crtime,
-  4316						       (void __user *)attr.attr))
-  4317					return -EFAULT;
-  4318			} else {
-  4319				return -EINVAL;
-  4320			}
-  4321			break;
-  4322		case F2FS_EXTRA_ATTR_COMPR_BLOCKS:
-  4323			ret = f2fs_get_compress_blocks(filp, attr.attr_size);
-  4324			attr.attr = ret;
-  4325			break;
-  4326		case F2FS_EXTRA_ATTR_COMPR_OPTION:
-  4327			ret = f2fs_get_compress_option_v2(filp, attr.attr,
-  4328							  &attr.attr_size);
-  4329			break;
-  4330		default:
-  4331			return -EINVAL;
-  4332		}
-  4333	
-  4334		if (ret < 0)
-  4335			return ret;
-  4336	
-  4337		if (copy_to_user((void __user *)arg, &attr, sizeof(attr)))
-  4338			return -EFAULT;
-  4339	
-  4340		return 0;
-  4341	}
-  4342	
-
+diff --git a/arch/sparc/include/asm/pgalloc_64.h b/arch/sparc/include/asm/pgalloc_64.h
+index 7b5561d17ab1..caa7632be4c2 100644
+--- a/arch/sparc/include/asm/pgalloc_64.h
++++ b/arch/sparc/include/asm/pgalloc_64.h
+@@ -65,6 +65,10 @@ pgtable_t pte_alloc_one(struct mm_struct *mm);
+ void pte_free_kernel(struct mm_struct *mm, pte_t *pte);
+ void pte_free(struct mm_struct *mm, pgtable_t ptepage);
+ 
++/* arch use pte_free_defer() implementation in arch/sparc/mm/init_64.c */
++#define pte_free_defer pte_free_defer
++void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
++
+ #define pmd_populate_kernel(MM, PMD, PTE)	pmd_set(MM, PMD, PTE)
+ #define pmd_populate(MM, PMD, PTE)		pmd_set(MM, PMD, PTE)
+ 
+diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+index 04f9db0c3111..b7c6aa085ef6 100644
+--- a/arch/sparc/mm/init_64.c
++++ b/arch/sparc/mm/init_64.c
+@@ -2930,6 +2930,22 @@ void pgtable_free(void *table, bool is_page)
+ }
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
++static void pte_free_now(struct rcu_head *head)
++{
++	struct page *page;
++
++	page = container_of(head, struct page, rcu_head);
++	__pte_free((pgtable_t)page_to_virt(page));
++}
++
++void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
++{
++	struct page *page;
++
++	page = virt_to_page(pgtable);
++	call_rcu(&page->rcu_head, pte_free_now);
++}
++
+ void update_mmu_cache_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 			  pmd_t *pmd)
+ {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.35.3
+
