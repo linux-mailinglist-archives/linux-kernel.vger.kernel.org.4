@@ -2,97 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C322B714DD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB6A714DDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjE2QHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
+        id S229638AbjE2QHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjE2QG7 (ORCPT
+        with ESMTP id S229601AbjE2QHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:06:59 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8740F4;
-        Mon, 29 May 2023 09:06:49 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-25676b4fb78so829589a91.2;
-        Mon, 29 May 2023 09:06:49 -0700 (PDT)
+        Mon, 29 May 2023 12:07:13 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C36E4;
+        Mon, 29 May 2023 09:07:09 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30aebe2602fso664548f8f.3;
+        Mon, 29 May 2023 09:07:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685376409; x=1687968409;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u833MBzdB2wFYwPyayytWh2DQl30cp0T10eYrBaLK8Y=;
-        b=iAzy4j6NJKd33RPpforkXAfvd/NJI0wwPOKhqyDwRZoAhRCmhYplt1WPSdNEKJqmtb
-         pXPFYnYgZuNbo9W9Rm7siqnyxmS7+F8hYArMuFUEUoDbkkg0UFdiZTs8GQmYBPlZFnc2
-         RKGMMNgmkjxD1EbpUYFIvABTvCB20qazuCh8RvnfgV7plpIynG2EYQICAiw+SeA10Slh
-         aKIrsDOkDTEqnQkWNdsd0Cdj/bwR29mjhfx0gpkA1YLkjUU0JnrTBDQgI5duY2g+7uND
-         mBByCuPQPujiOBKaT/tEVmsNIrH9516dsV+8Uoph57J96xOpvl1Bo0XkLoK/yQQUf4VL
-         4Lcw==
+        d=gmail.com; s=20221208; t=1685376428; x=1687968428;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G0Rq7Kdt+FXMB2JN2FXvVxRrTv3nqYTFy/3wNrpRfJs=;
+        b=YxuHKkvBdLGTLf3EO/LC+KYTauVGEsOAQ+PYdCWH6ZWv08mjoQDAitkZOivGOYR7kI
+         fJsZt7OQEzN5Gk7Fte8yBy5VMClPkL3e5QGobEkM17KSpO3W7BdbREgYbcNnVAUbaxsu
+         hVn4/TnuIcaFUXNedBCBABV5wEEURxRaLWOL5X1V+0/Dr5jiUpTc8+7+PMBCqluX6yOc
+         a0o4nns376cJMATR40eqOmc/ScjUCsfDmr7IQYuERbvdseQdoeUlQpqEl2JIXq8vBTj5
+         mrHNJwnAAqbg7C6XP83NOLinltqXxoXS63xODhZ0JTDqDAYuA+pQau4MmNgyIjQLThFf
+         NrqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685376409; x=1687968409;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=u833MBzdB2wFYwPyayytWh2DQl30cp0T10eYrBaLK8Y=;
-        b=MuG/RAM+8UcBmAfT21rMbVcvc8II7kSOdZ1bsoS3+OK0JNKgVuaBaqG3l7iIp7Yda6
-         zBCY1cGhaMZ1pZ0/osp1YReSWh+ZbqFgS/ZeyRDjZj7HBty+vdlKYTI6xHCDDvIWSNGA
-         lX4Gm5xgOtmCxV1M7YEnZxAoIJaG7Wa+qAa6aaPg46mprm6iq5/209rWafSBt6PwKqk3
-         SI1vIWEnT+GyBtzQQpri4yquG97QnA1schIV9OUGNRw0HMFNlq3bHmYbOZOoMMrLErob
-         8qdxLtRo3CILCTFu6uBrWVguLkeqGWMRcEmGNG1qPTQiF64ERnyoiMm84XpfoMYbgETA
-         B5ug==
-X-Gm-Message-State: AC+VfDzIvcUVHn9NRim+/C3yWG5XhQWnQp3UURc0I0wLZi9xJ8kwLMG3
-        k0FcXZ7ite2dmRpyUO8VoJI=
-X-Google-Smtp-Source: ACHHUZ4BeuetqwPYGlcAaL07UlMwKRwAkqQ52mBbSC6nsQSP7D85iA2YeSUIdf9g6MO4bBrt996MXw==
-X-Received: by 2002:a17:90a:1b69:b0:252:bb8d:3dce with SMTP id q96-20020a17090a1b6900b00252bb8d3dcemr11267134pjq.39.1685376409031;
-        Mon, 29 May 2023 09:06:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o2-20020a17090a3d4200b0024e227828a9sm9739944pjf.24.2023.05.29.09.06.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 09:06:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 May 2023 09:06:47 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 00/69] 5.15.114-rc1 review
-Message-ID: <75c964cf-e293-412b-962a-ee5580d3a15f@roeck-us.net>
-References: <20230528190828.358612414@linuxfoundation.org>
+        d=1e100.net; s=20221208; t=1685376428; x=1687968428;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G0Rq7Kdt+FXMB2JN2FXvVxRrTv3nqYTFy/3wNrpRfJs=;
+        b=JswOi/DsxMNdquGM+TXRGn8M1Wc2nNAML7uURGamDboTI90eEtd0pZ9dQz0Ld+k/wO
+         mapPfL0XrcKpVGs4cWfNY2kjYXJHBb5g3JdZj9MP5WzQ9UTQDM+ADtJA5PIc6rSwomSV
+         nmUDCZRbx2kWDMjTOoyMzFbh2Z6vh5+tht3yKSS71w7vBYJpRtQH22fy2BaLDnC6vTZW
+         BHgqAXqTlEtYKUWQ6l4ELGJNrvPWElNTDvmunjC4mzJlBwlpaAqVoAen4SJ8j7/855Zn
+         vmTY7/YmRfiKdPLzDFa3hGm7ooMwQB+6g4TX4LmAnuXeNvSG+ooKU2TUJay5xAZbyjc8
+         YCQA==
+X-Gm-Message-State: AC+VfDxxFWE75qUu0vRp28pz0czQhbynIKUC8duuPa+4oTfqVjUp2nok
+        Cn4VmvFZY48FAg4afd9cjmE=
+X-Google-Smtp-Source: ACHHUZ6Sf1QKdF5Zj9s2dDaTja5Wwp1KRz+78nxr/peoDGaDbgftVGZpAFwrZtWWnB0F2hcoA7k2vw==
+X-Received: by 2002:adf:f045:0:b0:30a:de1b:93e5 with SMTP id t5-20020adff045000000b0030ade1b93e5mr7871567wro.52.1685376428032;
+        Mon, 29 May 2023 09:07:08 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id x11-20020a5d490b000000b003063a92bbf5sm374441wrq.70.2023.05.29.09.07.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 09:07:06 -0700 (PDT)
+Message-ID: <09f04ff7-50ae-6e36-2b41-21dae04415ad@gmail.com>
+Date:   Mon, 29 May 2023 18:07:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230528190828.358612414@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Aw: Re: [PATCH] arm64: dts: mt7986: set Wifi Leds low-active for
+ BPI-R3
+Content-Language: en-US, ca-ES, es-ES
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <20230205174833.107050-1-linux@fw-web.de>
+ <8f04f2b5-320e-50d4-9517-6dac989f63b3@gmail.com>
+ <3a43ce55-ff6a-0cd2-b020-d5fefe8aca0a@collabora.com>
+ <trinity-8c109262-658a-4a4e-a807-1cd8f640fdc4-1684743994291@3c-app-gmx-bs66>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <trinity-8c109262-658a-4a4e-a807-1cd8f640fdc4-1684743994291@3c-app-gmx-bs66>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 08:11:20PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.114 release.
-> There are 69 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+
+
+On 22/05/2023 10:26, Frank Wunderlich wrote:
+>> Gesendet: Dienstag, 07. Februar 2023 um 17:17 Uhr
+>> Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.com>
+>> Il 06/02/23 21:20, Matthias Brugger ha scritto:
+>>>
+>>>
+>>> On 05/02/2023 18:48, Frank Wunderlich wrote:
+>>>> From: Frank Wunderlich <frank-w@public-files.de>
+>>>>
+>>>> Leds for Wifi are low-active, so add property to devicetree.
+>>>>
+>>>> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+>>>> ---
+>>>>    arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts | 4 ++++
+>>>>    1 file changed, 4 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
+>>>> b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
+>>>> index 33bd6febc160..2b028141f1f7 100644
+>>>> --- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
+>>>> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
+>>>> @@ -446,5 +446,9 @@ &wifi {
+>>>>        pinctrl-names = "default", "dbdc";
+>>>>        pinctrl-0 = <&wf_2g_5g_pins>, <&wf_led_pins>;
+>>>>        pinctrl-1 = <&wf_dbdc_pins>, <&wf_led_pins>;
+>>>> +
+>>>> +    led {
+>>>> +        led-active-low;
+>>>> +    };
+>>>
+>>> The binding is missing this property also the driver implements it. Could you
+>>> please update the bindind description properly?
+>>> Thanks
+>>> Matthias
+>>
+>>
+>> After and only after [1] is picked,
+>>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>
+>> [1]:
+>> https://patchwork.kernel.org/project/linux-mediatek/patch/20230207133504.21826-1-linux@fw-web.de/
 > 
-> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
-> Anything received after that time might be too late.
+> Hi Matthias,
+> 
+> Can you take this patch into your tree? binding is already merged
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/wireless/mediatek,mt76.yaml#n114
 > 
 
-Build results:
-	total: 160 pass: 160 fail: 0
-Qemu test results:
-	total: 499 pass: 499 fail: 0
+Applied now :)
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Regards,
+Matthias
