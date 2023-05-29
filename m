@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F7B7149CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F59F7149D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjE2NDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S229552AbjE2NEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjE2NCf (ORCPT
+        with ESMTP id S229700AbjE2NDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:02:35 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3429C91;
-        Mon, 29 May 2023 06:02:33 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1685365342tgfgvsv1
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 29 May 2023 21:02:21 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: +oIWmpEafD/1SqjkUeuYFcNqK90OlfDLXNiAJ5k1Wnyer2qCp/+ny5nDVHYkd
-        cX1xZFAq9ucrpyANdNe8Io272fJ0+PuH2kL6v47R6n0t83tJ+VBGkAEef0GGZCPQZ0Q28n8
-        xezzkkkTRBZ9aLiQwOpMOJPSPD1OfcZ/9CIOqAStBW+TL2qDVJh+bhoNE5vKC0YNcoKjMm6
-        8rtZojZxswijly3RzFGLsCkIByPwcZPFkmXTZUVdbBRpsn7nEAOjI+pUkIUPLoyVIN3/y8O
-        EqCiltl4ViNyfeFXt2VEKAiPet7iQ3B+/RfP1fk8phhdGDurokqvXrXWvFbgfyAttU3XYMx
-        nhdeFkFQ7oVRIqk/E13oeHTi0HecHF8FK6+Hu5UdmujjQ2GmeCzZhnok3wJ05JEOH7k+32v
-        zEIyK0zQY3k=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9933290494645403043
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 4/7] selftests/nolibc: not include limits.h for nolibc
-Date:   Mon, 29 May 2023 21:02:15 +0800
-Message-Id: <14a6240d3e5b50760b70d42e9b502e9716c7f2e3.1685362482.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685362482.git.falcon@tinylab.org>
-References: <cover.1685362482.git.falcon@tinylab.org>
+        Mon, 29 May 2023 09:03:43 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D86E4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:03:40 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-565aa2cc428so27494967b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685365419; x=1687957419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gOGDHYdGQK7t/hA+cE8novKJysT3cGX//NvgFDoFqfU=;
+        b=qrXNr4vZh8m1YRuJ7HWlrxf1+8gea/IdBqPmXgnd02OLNFXiPFVRyZvydHtXNq5DSe
+         BRWX3TASk2pmqU6WDxbWibIl4BadONoPp5+PSfdBwC7nFpdzhEg/eHFv9WYXp/LUbTjN
+         6ko1wlRwnt3sL1kc5lRLx6xGS4rQH1RxbjXfuUCddwMRIV6B2n5DxE3TW0oXqn8B1vFT
+         2nw1sp991psgiLkKwFJBqlN9bO1l/IUc412T9BTR6lPyfXfXekoJdslivq69dMkIdm+/
+         bBuQlGKr1ZojlFRMtS4WwWai6lVUYth8Dmq237CtyOLop7yZj6XtZdmAOptBA0wf97dM
+         f1xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685365419; x=1687957419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gOGDHYdGQK7t/hA+cE8novKJysT3cGX//NvgFDoFqfU=;
+        b=gCG75BwTvKdb3CRYgef3ZBONjUWVlvAI0Behy0GzstdORWlK2oUqhOGaPOOQIrk+gS
+         du8jwA6bfOhWYWdY+rzWYHnD/PAvqdo+cGGZdHQ5nGIybp9mtqJr6ew1bRg/AMghi0Tg
+         dA9bZ1r5zIv+mGmvwzmFOwWdc8e4RPd99WK6ic1AAMulIBpNJiMAnkqoUAOXiFFBZj52
+         47/FMRhCteYeMSOpCWwvJUEMGkSrSg8BCUGq3U9u3JO347IllUMmuyOUOi332duwSWm8
+         mKWTHwd08Uc2YYVfXi08wypAX+/eUXjTCV0GIbncZNt7sc5SFizltbZpsQALLxWoxPZ5
+         5sJg==
+X-Gm-Message-State: AC+VfDxB0kbpyLaPtDVKhayct8uWV92mpLexsiJe+cLBtJRuHY9iKp6t
+        Z5HoCKwFUkT4cf5yUF/ofnhIqDTYhLkJGn4J0wqB8Q==
+X-Google-Smtp-Source: ACHHUZ6TOMJItrg6UaVcj6LVDeDYGKLJHI3huaBgcjqWbzJK5s+TdWz7dhM7U33fdBViX1rfDnsa9gDANX6eKrKzX1g=
+X-Received: by 2002:a0d:f106:0:b0:565:ba53:e79a with SMTP id
+ a6-20020a0df106000000b00565ba53e79amr11580133ywf.45.1685365419471; Mon, 29
+ May 2023 06:03:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+References: <20230529025011.2806-1-xingtong_wu@163.com> <20230529025011.2806-2-xingtong_wu@163.com>
+ <ZHSZ9cK78qc5QeZD@localhost>
+In-Reply-To: <ZHSZ9cK78qc5QeZD@localhost>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 29 May 2023 15:03:28 +0200
+Message-ID: <CACRpkdbiRsJqxVZPNLvLPK-MzEhyjSBGffuaTgP7tt40pGGoRw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] gpio-f7188x: fix base values conflicts with other
+ gpio pins
+To:     simon.guinot@sequanux.org
+Cc:     xingtong_wu@163.com, brgl@bgdev.pl, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, henning.schild@siemens.com,
+        xingtong.wu@siemens.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,81 +72,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When compile nolibc-test.c with 2.31 glibc, we got such error:
+On Mon, May 29, 2023 at 2:27=E2=80=AFPM <simon.guinot@sequanux.org> wrote:
 
-    In file included from /usr/riscv64-linux-gnu/include/sys/cdefs.h:452,
-                     from /usr/riscv64-linux-gnu/include/features.h:461,
-                     from /usr/riscv64-linux-gnu/include/bits/libc-header-start.h:33,
-                     from /usr/riscv64-linux-gnu/include/limits.h:26,
-                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:194,
-                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/syslimits.h:7,
-                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:34,
-                     from /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/nolibc-test.c:6:
-    /usr/riscv64-linux-gnu/include/bits/wordsize.h:28:3: error: #error "rv32i-based targets are not supported"
-       28 | # error "rv32i-based targets are not supported"
+> It would be nice if a pin number found in the device datasheet could
+> still be converted into a Linux GPIO number by adding the base of the
+> first bank.
 
-Glibc (>= 2.33) commit 5b6113d62efa ("RISC-V: Support the 32-bit ABI
-implementation") fixed up above error.
+We actively discourage this kind of mapping because of reasons stated
+in drivers/gpio/TODO: we want dynamic number allocation to be the
+norm.
 
-As suggested by Thomas, defining INT_MIN/INT_MAX for nolibc can remove
-the including of limits.h, and therefore no above error. of course, the
-other libcs still require limits.h, move it to the right place.
-
-The LONG_MIN/LONG_MAX are also defined too.
-
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/linux-riscv/20230524182431.268908-1-falcon@tinylab.org/T/#
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/stdint.h                | 14 ++++++++++++++
- tools/testing/selftests/nolibc/nolibc-test.c |  4 +---
- 2 files changed, 15 insertions(+), 3 deletions(-)
-
-diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
-index c1ce4f5e0603..31a5264539ae 100644
---- a/tools/include/nolibc/stdint.h
-+++ b/tools/include/nolibc/stdint.h
-@@ -96,4 +96,18 @@ typedef uint64_t          uintmax_t;
- #define UINT_FAST32_MAX  SIZE_MAX
- #define UINT_FAST64_MAX  SIZE_MAX
- 
-+#ifndef INT_MIN
-+#define INT_MIN          (-__INT_MAX__ - 1)
-+#endif
-+#ifndef INT_MAX
-+#define INT_MAX          __INT_MAX__
-+#endif
-+
-+#ifndef LONG_MIN
-+#define LONG_MIN         (-__LONG_MAX__ - 1)
-+#endif
-+#ifndef LONG_MAX
-+#define LONG_MAX         __LONG_MAX__
-+#endif
-+
- #endif /* _NOLIBC_STDINT_H */
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 7f9b716fd9b1..e75ce6b68565 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -2,9 +2,6 @@
- 
- #define _GNU_SOURCE
- 
--/* platform-specific include files coming from the compiler */
--#include <limits.h>
--
- /* libc-specific include files
-  * The program may be built in 3 ways:
-  *   $(CC) -nostdlib -include /path/to/nolibc.h => NOLIBC already defined
-@@ -39,6 +36,7 @@
- #include <stddef.h>
- #include <stdint.h>
- #include <unistd.h>
-+#include <limits.h>
- #endif
- #endif
- 
--- 
-2.25.1
-
+Yours,
+Linus Walleij
