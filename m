@@ -2,143 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B04714628
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0844171462B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbjE2IME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        id S231683AbjE2IMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjE2IMC (ORCPT
+        with ESMTP id S230168AbjE2IMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:12:02 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1681890;
-        Mon, 29 May 2023 01:11:59 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-53202149ae2so1805177a12.3;
-        Mon, 29 May 2023 01:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685347918; x=1687939918;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ITRflIOmLkq0lkA6U0VtIoupb3ZXWfiBF04AqIIoi9o=;
-        b=EiieOEYW0qWqoR2XSztxvUhDXIvJwpk4VldiYlBD8rZ/atZqlf1ixEo+4Pq1ifvKsu
-         7OZTF3u8iFOZz9hW7pM3iBAr+SzAR2bLaEgUW0hGuaVeXFTyJgE8KSIkSF/3JB++/02g
-         XhphLaz0RqaiNbrxI6XoDsXUBagig+dCEUt3DCwwR5laM0cp22bGuaRlFAS0vmb8sGHS
-         Qu9/a4yK1/E6WijthNXi7bVUD7oN984AmuLhmmvrJkAMvaIBigDuuDGf4sjK+ik2pORh
-         0zs8q8twwlrEcp8/G3/Q5KhXCkXaoAKLESTKl4vEVaDZZNsY6tD5EaLoJuoPHsjCWEOn
-         QjJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685347918; x=1687939918;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ITRflIOmLkq0lkA6U0VtIoupb3ZXWfiBF04AqIIoi9o=;
-        b=hM8YUC7guNBMXJDQQM6uZMbCm8cGIPucbg7VpcU+RJVjWX7vKulw6BvD+7muD3fFsY
-         La3SACHMIm/OOkXNUhUjqoVFZ11w3FikSs+tS45FzZL4l6fxn4gDR9oNdqr8LVQ4SPap
-         aCf6V5VTNxKN1eeacoZaP6ClR/6bcs1yJd7xOO2JVd+ISG3N5RL5fyf9yiibe9qFDdsg
-         Uo+xEtcZfnBuztnmXG/XA3hbwnhTkJWGwhUe31DM8tahexvDavsXnQDN7ccfAeUxkNYD
-         rKCMC+iAtO7Nh7iB9wrGTWgqSE+MxcpvYxZwP3TOPS7Tw2yVxlDW3mwImQKaA+7UzbOd
-         C2gw==
-X-Gm-Message-State: AC+VfDx1ljNWxH+Xxn0hnTqIbPOYZ2RDzqRl3PZHWOLVT4Xt6UpuBmwR
-        u50i82yMFW+pKWmsLsFnyzw=
-X-Google-Smtp-Source: ACHHUZ7QZU0efRghNTC1uA2xMtvWd8GuQtAjRwoNf4tH35DbcLShCgaZ3fR5ZrBl4aw4/bJ1Hg8LkA==
-X-Received: by 2002:a17:90a:fd09:b0:24d:ebf8:b228 with SMTP id cv9-20020a17090afd0900b0024debf8b228mr9564707pjb.19.1685347918446;
-        Mon, 29 May 2023 01:11:58 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-78.three.co.id. [180.214.232.78])
-        by smtp.gmail.com with ESMTPSA id a2-20020a17090abe0200b002565a84c848sm2655118pjs.43.2023.05.29.01.11.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 01:11:58 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 691BC106A11; Mon, 29 May 2023 15:11:55 +0700 (WIB)
-Date:   Mon, 29 May 2023 15:11:55 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Hao Zhang <quic_hazha@quicinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] Add support to configure Coresight Dummy subunit
-Message-ID: <ZHReS1qkktqziCxM@debian.me>
-References: <20230526100753.34581-1-quic_hazha@quicinc.com>
- <5c56a874-dc41-c68c-6f70-efcbc67c29b2@quicinc.com>
+        Mon, 29 May 2023 04:12:20 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2A890;
+        Mon, 29 May 2023 01:12:16 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685347935;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gDcQFJJFfV1Siup4q6p4OZgQniQ046aFw0ogwoYkvUs=;
+        b=IJcLwSpdqY/S84uOjPw4mCXhRQWiUo2wiEp6u12X0zgjXdUfl6QFEMfT6iSI4RpjDwgrr6
+        zQpruIZUAGkBu8NkfM0mLoEglwlMO5gK4glbPp6jkOBwOpcr36RjULZNtXefw/qrjxZH5J
+        d2EEfJUjcGDrcRllXYnasz8rittgSOac7nbyFdkRmDuNN++OPMBP9lJqZAvl+cxQtgKI+Q
+        lQeYypHwFMI/3KfRmm1XMlIkRrK+UczFia+7js0ErmgoUGcUJK5t4YB7otsnwYts/X5VX9
+        HBrBlL/prkHHBEUvMM4E6kUHaFQddwcRGAp7jsyPMx/9iSFwsQXXOlIPXMxjmw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2184660002;
+        Mon, 29 May 2023 08:12:13 +0000 (UTC)
+Date:   Mon, 29 May 2023 10:12:13 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Stefan Schmidt <stefan@datenfreihafen.org>,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Aring <alex.aring@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v1 1/1] ieee802154: ca8210: Remove stray
+ gpiod_unexport() call
+Message-ID: <20230529101213.46f4f2b1@xps-13>
+In-Reply-To: <20230528140938.34034-1-andriy.shevchenko@linux.intel.com>
+References: <20230528140938.34034-1-andriy.shevchenko@linux.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6QXsBYr0FX1el6tf"
-Content-Disposition: inline
-In-Reply-To: <5c56a874-dc41-c68c-6f70-efcbc67c29b2@quicinc.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andy,
 
---6QXsBYr0FX1el6tf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+andriy.shevchenko@linux.intel.com wrote on Sun, 28 May 2023 17:09:38
++0300:
 
-On Mon, May 29, 2023 at 03:17:32PM +0800, Hao Zhang wrote:
-> Hi,
+> There is no gpiod_export() and gpiod_unexport() looks pretty much stray.
+> The gpiod_export() and gpiod_unexport() shouldn't be used in the code,
+> GPIO sysfs is deprecated. That said, simply drop the stray call.
 >=20
-> Add the missing information for this patch series.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Any reason not to consider a backport into stable kernels?
+Cc: stable + Fixes would certainly be welcome in this case?
+
+> ---
+>  drivers/net/ieee802154/ca8210.c | 1 -
+>  1 file changed, 1 deletion(-)
 >=20
-> Thanks,
-> Hao
->=20
-> On 5/26/2023 6:07 PM, Hao Zhang wrote:
->=20
-> Introduction of Coresight Dummy subunit
-> The Coresight Dummy subunit is for Coresight Dummy component, there are
-> some specific Coresight devices that HLOS don't have permission to access.
-> Such as some TPDMs, they would be configured in NON-HLOS side, but it's
-> necessary to build Coresight path for it to debug. So there need driver to
-> register dummy devices as Coresight devices.
->=20
-> Commit link:
-> https://git.codelinaro.org/clo/linux-kernel/coresight/-/tree/coresight-du=
-mmy-v5
+> diff --git a/drivers/net/ieee802154/ca8210.c b/drivers/net/ieee802154/ca8=
+210.c
+> index a2d242034220..f9b10e84de06 100644
+> --- a/drivers/net/ieee802154/ca8210.c
+> +++ b/drivers/net/ieee802154/ca8210.c
+> @@ -2855,7 +2855,6 @@ static int ca8210_interrupt_init(struct spi_device =
+*spi)
+>  	);
+>  	if (ret) {
+>  		dev_crit(&spi->dev, "request_irq %d failed\n", pdata->irq_id);
+> -		gpiod_unexport(gpio_to_desc(pdata->gpio_irq));
+>  		gpio_free(pdata->gpio_irq);
+>  	}
+> =20
 
-OK, please reroll.
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---6QXsBYr0FX1el6tf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHReSwAKCRD2uYlJVVFO
-o8nGAQCXX1l4ccCpzdDZVWr0b1HG+nQadNo2EQnbSJPsqEGQDwEApvpm9ytnx3IE
-z1SjTimJHr/KkJAqU93pxteEYEpV9wQ=
-=d+Dp
------END PGP SIGNATURE-----
-
---6QXsBYr0FX1el6tf--
+Thanks,
+Miqu=C3=A8l
