@@ -2,199 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F78714955
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5B9714953
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjE2MVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S231602AbjE2MVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjE2MV1 (ORCPT
+        with ESMTP id S229965AbjE2MVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:21:27 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2088.outbound.protection.outlook.com [40.107.220.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BCAD8;
-        Mon, 29 May 2023 05:21:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e9rir+lBmKaQn9/heKNz6WSNCvsLAcp34l2d+GKPPjamkklU2MpWrU1XOmbnapiSAvKdV3wEkrKESUjXsLIp4psMHW1psramYwqMhChMSr62jBC3ZKhg8ia0CzmYwqPIFQexqEVdvsjSdtFwD68ka8ysnC7H0gjJuVRzDYpIbEjChzfv80a7dpLdFHn6AtDZDwmpPMTsmeGEMKqarfrYeVVAuWUnIcqfONWm0vWrZFBglOfsVHFv/8/XTFebqu9Y2zKwdLmtZ0G6C+/zEG7KijEW6VkQdPmBXSptKH2gQAMeLDCPi8YLzu/a2uTtUIoCCgjKqOOVr+edlztJuAC8fw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=evFuvQFKEzQkY71godVaQxvaiKLxBd3WQf+cex88TRY=;
- b=jNabTALaCsRdZPHHUtxIQUVqwlVN6c12+BIiZqgP487DNB0yKOhWft/6l7sjNEHrjAWR1MAaB/d+UDxj7/N7pO8QjXR/hT7Vc4q8X33x3U1D3Bh+M4jdUGtT24Da3Ob9+c4Ktn8M/5HxJm4lBzvIDnup0EYvOvi5LhsPHaFCnJRRy95swpUt1+jrCmfpq1it5OOn+mufYcgzqvXJ+hls2PqGivlfvna2HoptjN65JxQAvBX5xONs7NfstuA7NfUJzikrpVZtfIovipEHpRYjjYIfCy22bv4pUWLOd7fGyywVAwJyb+SXZsxSL2XXBOcPgQhb5K1bWifn4wYHvkWIDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lunn.ch smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=evFuvQFKEzQkY71godVaQxvaiKLxBd3WQf+cex88TRY=;
- b=QKWXt1AtfCg2TLy2krRjWIOBRQABOblsYWME3RL0RhvnnwT/MgFEhdnmeJIhuHCPgBylIuDAkVbQKQOgCej6h7f7QH83+cbej2UsxAwuYCaZJbOBJeAyQWbycepS/ZuCs00ohFCtPky/dlWjXflEVfmD6XvGB0kN4B4KGEAf3oU=
-Received: from MW4PR04CA0362.namprd04.prod.outlook.com (2603:10b6:303:81::7)
- by SA3PR12MB8802.namprd12.prod.outlook.com (2603:10b6:806:312::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Mon, 29 May
- 2023 12:21:21 +0000
-Received: from CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:81:cafe::d8) by MW4PR04CA0362.outlook.office365.com
- (2603:10b6:303:81::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23 via Frontend
- Transport; Mon, 29 May 2023 12:21:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT040.mail.protection.outlook.com (10.13.174.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.21 via Frontend Transport; Mon, 29 May 2023 12:21:20 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 29 May
- 2023 07:20:37 -0500
-Received: from xhdharinik40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Mon, 29 May 2023 07:20:33 -0500
-From:   Harini Katakam <harini.katakam@amd.com>
-To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <edumazet@google.com>,
-        <pabeni@redhat.com>, <vladimir.oltean@nxp.com>,
-        <wsa+renesas@sang-engineering.com>, <simon.horman@corigine.com>,
-        <david.epping@missinglinkelectronics.com>,
-        <mk+kernel@armlinux.org.uk>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <harinikatakamlinux@gmail.com>, <michal.simek@amd.com>,
-        <harini.katakam@amd.com>, <radhey.shyam.pandey@amd.com>
-Subject: [PATCH net-next v5 2/2] phy: mscc: Add support for RGMII delay configuration
-Date:   Mon, 29 May 2023 17:50:17 +0530
-Message-ID: <20230529122017.10620-3-harini.katakam@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230529122017.10620-1-harini.katakam@amd.com>
-References: <20230529122017.10620-1-harini.katakam@amd.com>
+        Mon, 29 May 2023 08:21:11 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0E2AB;
+        Mon, 29 May 2023 05:21:10 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b03b9f02b4so7027045ad.3;
+        Mon, 29 May 2023 05:21:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685362870; x=1687954870;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D1Xvm17u+rCjsDQtsTRP4IW4hFNIZBwFcy3OF7utEfQ=;
+        b=Iztf9BjgqoBy2nQa3hkO+Tngf5xL010erKXp2+fhMwz3aX9O/8sSXatTJ3RNWPKclo
+         g2l+VY5BGH9IhFLnqtVx86UQ73tyBQSH9LS5AvJDga5jLPu3osDLC/hgypHvEYpHJSAs
+         hQivyn1v/BqgEftAJZygsVyp9VbYp1ODqY+9qjs7zM8XiFp83jqB0CATWAzDoEC1+sxC
+         QKr/Bfh3+hjkXgFSx0wr57sFBwgsOOltT3nqi8RjRAMiS3KN0hlaGn+104yyCuexGKSn
+         4IBQLshG/UjbrGgRrJGUbvnm66TINLet3rtQUncCJXsvkeug+HzRBpXvwAjx/02XD5G3
+         6Z8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685362870; x=1687954870;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D1Xvm17u+rCjsDQtsTRP4IW4hFNIZBwFcy3OF7utEfQ=;
+        b=CDDVk3g39zP61mNMxVmhuUG0Q8ZgbrknFimqffs3xJV5kNsGKTUjXjFxkHW/aYSPnj
+         kpUOLa0HEgSKOPhOUuFk8Cm+8YajGm+rKKJlkeK7YemEOlMiZbsxqhLFMHXg8ZULNOzc
+         F3qFCokcj9+P8UiFV6R/0I5JH7GXSPlFQ6GpNXcsZKoQ86dxlpsJ3R2DWejDGQSFCggJ
+         Pc16DOt9um/d7UNAYCorcruwV0Ct173Qbhm8LlgcR9L5kn67uEHQ+baCQLVRu1T/dyVh
+         npNNo/8KD2icNhPWtiebPkUsh6v3mTZEpm+8Xmraowuj8TIHU0sDaxYovYVokh2A4u/e
+         8Azw==
+X-Gm-Message-State: AC+VfDzc79n7qstOVaWuDkGhjY85xg9VyVwbYXmsC534drJBKinUs/GW
+        VlQi1iRVlPm/p3vtX3rQJUPG5GHLmOwUb1ipokg=
+X-Google-Smtp-Source: ACHHUZ6OkV3SZbwpjCqJa57IyIdEql6pFjbanDcFk7ZJ7Rj1kSsJag0dj6+D0yo7FilJN1xbZcoFIMZn3k8nj6DrI08=
+X-Received: by 2002:a17:902:8218:b0:1af:bcf7:2bd8 with SMTP id
+ x24-20020a170902821800b001afbcf72bd8mr8700574pln.52.1685362869847; Mon, 29
+ May 2023 05:21:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT040:EE_|SA3PR12MB8802:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2058c530-5729-4c36-faaa-08db603f35be
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OT/WfUdB5sdQ/lRyAX0ybCXFJ+GT1MqbPeoSzCPJpFZ2xtMPoT54IcDg2/EG2MCl3l73ZUAByRxNCQG3ennfyV+FDlv6JJ7hkRm0vJbSLP15lmralR9HM8wyvpnkhsMWS1QxRAsFxeh84tlo0ZFlP4477wUbfFnJaYLhYsdXLHK41Oacrlb/ghp0P1FG48+KSgm+We8Uwe66J1+nyJbsl0lBWqx7HmQi2PTP2d9o43gihfizArxg5ejcOMpjyoE5yjtLyWGL0xk80lX0oiM2+fa8dTmcN3xqrwIjCYYmKtAzqmBJ7+idLeZRrg1zvID7hMqyM/XX1RqWeDFtevwRhdLpcX9yNm7ZQFRv+UjdNgR2YyeOMkS5yI8RqaQeiOxKqU3j/V5dNPv+y9LYlnbfnYivWSlkQ0SNln8DmJJFkA6M2qkU1mgwucs/0NYwwXU0O5aQBBXXpld/4W2uK3Q8FerjHzbQCY1l+0Nr94L6nHA4N87o/c0ZiC3r/PLiteCFsQdhwvC+OH42mGQq5Hnu2gDMqx7+l2VsNZrXbnwY/AssCNT7OrIrxWFKyswXEiqz6CWkoGhI/6JZVJVjETbITICJlyLAst42O+34LuvG6BUmHvqTywuWpVr6f7QVAPgDIl0fqncLGddNinxHGKhxDOzzJo3pEmDSP9oBOl15Jc5v9e2jinnEN1yvAeLU+bm2Jl5mzl/vjBxqT+u+86z6pt6CG4XGhfObjoBsE9il27naHDZZOn2xR2uayy8rcWQIdgp4zOPvQndtnllOX85e0Q==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(396003)(376002)(346002)(451199021)(40470700004)(36840700001)(46966006)(40140700001)(26005)(36860700001)(1076003)(41300700001)(966005)(6666004)(186003)(47076005)(83380400001)(336012)(426003)(2616005)(478600001)(110136005)(40460700003)(54906003)(82740400003)(4326008)(70586007)(921005)(356005)(70206006)(40480700001)(316002)(81166007)(5660300002)(2906002)(8676002)(8936002)(7416002)(44832011)(86362001)(82310400005)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2023 12:21:20.2565
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2058c530-5729-4c36-faaa-08db603f35be
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8802
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1684999824.git.haibo1.xu@intel.com> <da390e6200e838fce320a2a43b2f87951b4e0bbb.1684999824.git.haibo1.xu@intel.com>
+ <20230525-2bab5376987792eab73507ac@orel> <CAJve8o=5ji5D-S8k+GaGd7sH7KXNWxDaWhD3jyxtHizKSMtjbA@mail.gmail.com>
+ <20230529-7b3e41e6aca55f9e90dd6cd3@orel>
+In-Reply-To: <20230529-7b3e41e6aca55f9e90dd6cd3@orel>
+From:   Haibo Xu <xiaobo55x@gmail.com>
+Date:   Mon, 29 May 2023 20:20:58 +0800
+Message-ID: <CAJve8o=wX+Lb84YeGBa9anp+eZnrgvTW6AOVgoeUnHZu7eWswA@mail.gmail.com>
+Subject: Re: [PATCH v2 11/11] KVM: riscv: selftests: Add get-reg-list test
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
+        oliver.upton@linux.dev, seanjc@google.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for optional rx/tx-internal-delay-ps from devicetree.
-- When rx/tx-internal-delay-ps is/are specified, these take priority
-- When either is absent,
-1) use 2ns for respective settings if rgmii-id/rxid/txid is/are present
-2) use 0.2ns for respective settings if mode is rgmii
+On Mon, May 29, 2023 at 3:08=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
+> On Sat, May 27, 2023 at 12:39:57PM +0800, Haibo Xu wrote:
+> > On Fri, May 26, 2023 at 1:18=E2=80=AFAM Andrew Jones <ajones@ventanamic=
+ro.com> wrote:
+> > >
+> > > On Thu, May 25, 2023 at 03:38:35PM +0800, Haibo Xu wrote:
+> ...
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.a6),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.a7),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.s2),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.s3),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.s4),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.s5),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.s6),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.s7),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.s8),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.s9),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.s10),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.s11),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.t3),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.t4),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.t5),
+> > > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_R=
+EG_RISCV_CORE_REG(regs.t6),
+> > >
+> > > ...all the above would just be indices rather than named registers. I
+> > > guess that's better for these registers.
+> > >
+> >
+> > You mean to show it as KVM_REG_RISCV_CORE_REG(regs.regs[0]) ...
+> > KVM_REG_RISCV_CORE_REG(regs.regs[31])?
+> >
+>
+> I'm OK with these registers using their names in this list, it does look
+> better. However the original idea for these lists was that they would be
+> generated from print_reg(). In this case, print_reg() is generating them
+> with their number instead of name. Either print_reg() could learn how to
+> generate their names by handling the offset ranges of each register type,
+> e.g.
+>
+> switch (reg_off) {
+> case 10 ... 17:
+>    strdup_printf("... KVM_REG_RISCV_CORE_REG(regs.a%d),", reg_off - 10);
+>
+> or we can use the numbers here in this list, or we can leave it as you
+> have it (i.e. done manually).
+>
 
-Signed-off-by: Harini Katakam <harini.katakam@amd.com>
----
-v5:
-- Rebase on top VSC8501 series, to avoid conflicts
-- Rename _internal_delay to use vsc86xx, move declaration and
-simplify format of pointer to above
-- Acquire DT delay values in vsc85xx_update_rgmii_cntl instead of
-vsc85xx_config_init to accommodate all VSC phy versions
-v4:
-Fix type of rx_delay and tx_delay
-Reported by Simon Horman and
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202305140248.lh4LUw2j-lkp@intel.com/
-v3 - Patch split:
-- Use rx/tx-internal-delay-ps with phy_get_internal_delay
-- Change RGMII delay selection precedence
-- Update commit description and subject everywhere to say RGMII delays
-instead of RGMII tuning.
+I agree that the print_reg() should print the register name instead of
+the register offset.
+It may be better to manually encode/decode the register offset to name
+case by case
+in the print_reg() since we just need to handle it once. Will update it in =
+v3.
 
- drivers/net/phy/mscc/mscc_main.c | 35 ++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+Thanks,
+Haibo
 
-diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
-index fc074bcc894d..669a4a7a28ce 100644
---- a/drivers/net/phy/mscc/mscc_main.c
-+++ b/drivers/net/phy/mscc/mscc_main.c
-@@ -107,6 +107,9 @@ static const struct vsc8531_edge_rate_table edge_table[] = {
- };
- #endif
- 
-+static const int vsc85xx_internal_delay[] = {200, 800, 1100, 1700, 2000, 2300,
-+					     2600, 3400};
-+
- static int vsc85xx_phy_read_page(struct phy_device *phydev)
- {
- 	return __phy_read(phydev, MSCC_EXT_PAGE_ACCESS);
-@@ -525,8 +528,12 @@ static int vsc85xx_update_rgmii_cntl(struct phy_device *phydev, u32 rgmii_cntl,
- {
- 	u16 rgmii_rx_delay_pos = ffs(rgmii_rx_delay_mask) - 1;
- 	u16 rgmii_tx_delay_pos = ffs(rgmii_tx_delay_mask) - 1;
-+	int delay_size = ARRAY_SIZE(vsc85xx_internal_delay);
-+	struct device *dev = &phydev->mdio.dev;
- 	u16 reg_val = 0;
- 	u16 mask = 0;
-+	s32 rx_delay;
-+	s32 tx_delay;
- 	int rc = 0;
- 
- 	/* For traffic to pass, the VSC8502 family needs the RX_CLK disable bit
-@@ -541,12 +548,28 @@ static int vsc85xx_update_rgmii_cntl(struct phy_device *phydev, u32 rgmii_cntl,
- 	if (phy_interface_is_rgmii(phydev))
- 		mask |= rgmii_rx_delay_mask | rgmii_tx_delay_mask;
- 
--	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
--	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
--		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_rx_delay_pos;
--	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
--	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
--		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_tx_delay_pos;
-+	rx_delay = phy_get_internal_delay(phydev, dev, vsc85xx_internal_delay,
-+					  delay_size, true);
-+	if (rx_delay < 0) {
-+		if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
-+		    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-+			rx_delay = RGMII_CLK_DELAY_2_0_NS;
-+		else
-+			rx_delay = RGMII_CLK_DELAY_0_2_NS;
-+	}
-+
-+	tx_delay = phy_get_internal_delay(phydev, dev, vsc85xx_internal_delay,
-+					  delay_size, false);
-+	if (tx_delay < 0) {
-+		if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
-+		    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-+			rx_delay = RGMII_CLK_DELAY_2_0_NS;
-+		else
-+			rx_delay = RGMII_CLK_DELAY_0_2_NS;
-+	}
-+
-+	reg_val |= rx_delay << rgmii_rx_delay_pos;
-+	reg_val |= tx_delay << rgmii_tx_delay_pos;
- 
- 	if (mask)
- 		rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_2,
--- 
-2.17.1
-
+> Thanks,
+> drew
