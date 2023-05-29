@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E660714691
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C824714694
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjE2IsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S231514AbjE2Itx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjE2IsN (ORCPT
+        with ESMTP id S231549AbjE2Itv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:48:13 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8F9CA
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:47:56 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-77732fd66f1so49551239f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:47:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685350076; x=1687942076;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IbHpzrqgBAsJqGDHS3MPrS3ZW+nNib8fMwdVh4fuRHA=;
-        b=WEbX83DzeeL5YJF3a7IvkomNV4v8hvYkLMLWkWDGg8ehvimjEChPA5D1oeZeADjg4o
-         1bZIi3YkoXSKULYejNbUCxE2gqSjZAy4kPqU1BruvUl36cRjU83uE2OsaijwBn4Eae8n
-         4VbXFNhDTLUwFh5i8g5IK7oBuH2nURiRs5yG1C7LAcYg8jzoP2ExEXCZcbhhBQL08Pnm
-         QvzrNGIal/TDGV1+gn+v32oAeoDE5FxMzIs/UVoBGN4qdWBX8Kx0vQ2iDmTeDtz+Ss/k
-         +pEb9gW9M2j0jJWvxq3kN5hrGUqlyULDYnesITIyaSPj+0EIOYHTbVAQ9AuBNSsToEg7
-         dovw==
-X-Gm-Message-State: AC+VfDz15x9u54ap7JJLpH79h9ODA2x+xaqO2LNlA2e17CiyPoR3T2Jr
-        WC6AKzfHfMB5i1/HJYdwr72VFJAv0/ZX0AGA/vzVn/DlnHaO
-X-Google-Smtp-Source: ACHHUZ6zeFwwZP5TLdA7JZzbIJ5uSjQ/t4rKCf707qsAPscDziQNun43ikPCoHPixjkvPKICSgW4HBGJzglIEhVwfw4BXf4yHDkM
-MIME-Version: 1.0
-X-Received: by 2002:a92:d392:0:b0:33a:4f71:b9c5 with SMTP id
- o18-20020a92d392000000b0033a4f71b9c5mr2708975ilo.1.1685350075862; Mon, 29 May
- 2023 01:47:55 -0700 (PDT)
-Date:   Mon, 29 May 2023 01:47:55 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000098177b05fcd124f6@google.com>
-Subject: [syzbot] Monthly reiserfs report (May 2023)
-From:   syzbot <syzbot+listc7e3fffb336c714441aa@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Mon, 29 May 2023 04:49:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BBC126
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:49:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4152612D8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:48:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A2EC433D2;
+        Mon, 29 May 2023 08:48:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685350131;
+        bh=a9fs1pM2YgM3QuXRlFpAtQOQDhaVfJxzaCl+ycL5Qvs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VPX56d+DnRtw4rWjiqfXO/mJt3lRjKlKp6xypCusJHZYLG4KqHT30C6M3hdRtXXSz
+         sDPT+wg9tFDHl+1jBP/cZH6JiUyHqM6Y/fg+HjwoByXtGdYIal0DFOcb6cILPqmAIc
+         IK6ewBAL5pxbmqcb5g8frb6eUf+PXqyxd4poABSsKKBVOOlDC0dNdBMPIU0gw1aZOo
+         LirBfRnOfog4STiBQ2oYw5UQ71QWuT7iW6NPZg6NuaO2SpqWterPgWZYjrR44YISoy
+         nuiatrqXJ3DwZEaM3O6pqGEqct933fSYhkf7Ge+Y8+9HzsWRZ3ZKNGojDzqYLUgA8T
+         fFNwf/EdeuQQQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q3YYa-0011z9-N1;
+        Mon, 29 May 2023 09:48:48 +0100
+Date:   Mon, 29 May 2023 09:48:48 +0100
+Message-ID: <86cz2jcykv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Liao, Chang" <liaochang1@huawei.com>
+Cc:     Shanker Donthineni <sdonthineni@nvidia.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michael Walle <michael@walle.cc>,
+        <linux-kernel@vger.kernel.org>, Vikram Sethi <vsethi@nvidia.com>,
+        Jason Sequeira <jsequeira@nvidia.com>
+Subject: Re: [PATCH v5 1/3] genirq: Use hlist for managing resend handlers
+In-Reply-To: <6dc6642a-1e7c-f111-1fa2-be54826ecef6@huawei.com>
+References: <20230519134902.1495562-1-sdonthineni@nvidia.com>
+        <20230519134902.1495562-2-sdonthineni@nvidia.com>
+        <6dc6642a-1e7c-f111-1fa2-be54826ecef6@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: liaochang1@huawei.com, sdonthineni@nvidia.com, tglx@linutronix.de, bigeasy@linutronix.de, michael@walle.cc, linux-kernel@vger.kernel.org, vsethi@nvidia.com, jsequeira@nvidia.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,48 +73,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello reiserfs maintainers/developers,
+On Mon, 29 May 2023 08:57:07 +0100,
+"Liao, Chang" <liaochang1@huawei.com> wrote:
+>=20
+> Hi, Shanker
+>=20
+> =E5=9C=A8 2023/5/19 21:49, Shanker Donthineni =E5=86=99=E9=81=93:
+> > The current implementation utilizes a bitmap for managing IRQ resend
+> > handlers, which is allocated based on the SPARSE_IRQ/NR_IRQS macros.
+> > However, this method may not efficiently utilize memory during runtime,
+> > particularly when IRQ_BITMAP_BITS is large.
+> >=20
+> > Address this issue by using the hlist to manage IRQ resend handlers
+> > instead of relying on a static bitmap memory allocation. Additionally,
+> > a new function, clear_irq_resend(), is introduced and called from
+> > irq_shutdown to ensure a graceful teardown of the interrupt.
+> >=20
+> > Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
+> > ---
+> >  include/linux/irqdesc.h |  3 +++
+> >  kernel/irq/chip.c       |  1 +
+> >  kernel/irq/internals.h  |  2 ++
+> >  kernel/irq/irqdesc.c    |  2 ++
+> >  kernel/irq/resend.c     | 47 ++++++++++++++++++++++++++---------------
+> >  5 files changed, 38 insertions(+), 17 deletions(-)
+> >=20
+> > diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+> > index 844a8e30e6de..d9451d456a73 100644
+> > --- a/include/linux/irqdesc.h
+> > +++ b/include/linux/irqdesc.h
+> > @@ -102,6 +102,9 @@ struct irq_desc {
+> >  	int			parent_irq;
+> >  	struct module		*owner;
+> >  	const char		*name;
+> > +#ifdef CONFIG_HARDIRQS_SW_RESEND
+> > +	struct hlist_node	resend_node;
+> > +#endif
+> >  } ____cacheline_internodealigned_in_smp;
+>=20
+> Although there is no documented rule that limits the change of the KABI
+> struct irq_desc, it is still better to keep the irq_desc definition stabl=
+e.
 
-This is a 31-day syzbot report for the reiserfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/reiserfs
+On what grounds? There is no such thing as a stable in-kernel ABI,
+specially for things as internal as irq_desc.
 
-During the period, 2 new issues were detected and 1 were fixed.
-In total, 71 issues are still open and 16 have been fixed so far.
+> > =20
+> >  #ifdef CONFIG_SPARSE_IRQ
+> > diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+> > index 49e7bc871fec..2eac5532c3c8 100644
+> > --- a/kernel/irq/chip.c
+> > +++ b/kernel/irq/chip.c
+> > @@ -306,6 +306,7 @@ static void __irq_disable(struct irq_desc *desc, bo=
+ol mask);
+> >  void irq_shutdown(struct irq_desc *desc)
+> >  {
+> >  	if (irqd_is_started(&desc->irq_data)) {
+> > +		clear_irq_resend(desc);
+> >  		desc->depth =3D 1;
+> >  		if (desc->irq_data.chip->irq_shutdown) {
+> >  			desc->irq_data.chip->irq_shutdown(&desc->irq_data);
+> > diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+> > index 5fdc0b557579..51fc8c497c22 100644
+> > --- a/kernel/irq/internals.h
+> > +++ b/kernel/irq/internals.h
+> > @@ -113,6 +113,8 @@ irqreturn_t handle_irq_event(struct irq_desc *desc);
+> > =20
+> >  /* Resending of interrupts :*/
+> >  int check_irq_resend(struct irq_desc *desc, bool inject);
+> > +void clear_irq_resend(struct irq_desc *desc);
+> > +void irq_resend_init(struct irq_desc *desc);
+> >  bool irq_wait_for_poll(struct irq_desc *desc);
+> >  void __irq_wake_thread(struct irq_desc *desc, struct irqaction *action=
+);
+> > =20
+> > diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+> > index 240e145e969f..b401b89b226a 100644
+> > --- a/kernel/irq/irqdesc.c
+> > +++ b/kernel/irq/irqdesc.c
+> > @@ -415,6 +415,7 @@ static struct irq_desc *alloc_desc(int irq, int nod=
+e, unsigned int flags,
+> >  	desc_set_defaults(irq, desc, node, affinity, owner);
+> >  	irqd_set(&desc->irq_data, flags);
+> >  	kobject_init(&desc->kobj, &irq_kobj_type);
+> > +	irq_resend_init(desc);
+> > =20
+> >  	return desc;
+> > =20
+> > @@ -581,6 +582,7 @@ int __init early_irq_init(void)
+> >  		mutex_init(&desc[i].request_mutex);
+> >  		init_waitqueue_head(&desc[i].wait_for_threads);
+> >  		desc_set_defaults(i, &desc[i], node, NULL, NULL);
+> > +		irq_resend_init(desc);
+> >  	}
+> >  	return arch_early_irq_init();
+> >  }
+> > diff --git a/kernel/irq/resend.c b/kernel/irq/resend.c
+> > index 0c46e9fe3a89..edec335c0a7a 100644
+> > --- a/kernel/irq/resend.c
+> > +++ b/kernel/irq/resend.c
+> > @@ -21,8 +21,9 @@
+> > =20
+> >  #ifdef CONFIG_HARDIRQS_SW_RESEND
+> > =20
+> > -/* Bitmap to handle software resend of interrupts: */
+> > -static DECLARE_BITMAP(irqs_resend, IRQ_BITMAP_BITS);
+> > +/* hlist_head to handle software resend of interrupts: */
+> > +static HLIST_HEAD(irq_resend_list);
+> > +static DEFINE_RAW_SPINLOCK(irq_resend_lock);
+>=20
+> What is the benefit of using hlist here? If you want to enjoy the
+> low latency of querying elements by key, you must define a hlist table
+> with a reasonable number of buckets. Otherwise, I don't think the time
+> complexity of hlist is better than a regular double-linked list, right?
 
-Some of the still happening issues:
+You do realise that the list is processed in order, one element after
+the other, without ever querying any arbitrary element? Have you read
+the code?
 
-Ref  Crashes Repro Title
-<1>  1958    Yes   possible deadlock in open_xa_dir
-                   https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
-<2>  1597    No    KASAN: slab-out-of-bounds Read in search_by_key (2)
-                   https://syzkaller.appspot.com/bug?extid=b3b14fb9f8a14c5d0267
-<3>  1455    Yes   kernel BUG in do_journal_begin_r
-                   https://syzkaller.appspot.com/bug?extid=2da5e132dd0268a9c0e4
-<4>  1315    Yes   kernel BUG at fs/reiserfs/journal.c:LINE!
-                   https://syzkaller.appspot.com/bug?extid=6820505ae5978f4f8f2f
-<5>  1184    Yes   WARNING in reiserfs_lookup
-                   https://syzkaller.appspot.com/bug?extid=392ac209604cc18792e5
-<6>  597     Yes   possible deadlock in mnt_want_write_file
-                   https://syzkaller.appspot.com/bug?extid=1047e42179f502f2b0a2
-<7>  242     Yes   possible deadlock in reiserfs_ioctl
-                   https://syzkaller.appspot.com/bug?extid=79c303ad05f4041e0dad
-<8>  218     Yes   possible deadlock in do_journal_begin_r
-                   https://syzkaller.appspot.com/bug?extid=5e385bfa7d505b075d9f
-<9>  187     Yes   KASAN: out-of-bounds Read in leaf_paste_entries (2)
-                   https://syzkaller.appspot.com/bug?extid=38b79774b6c990637f95
-<10> 159     Yes   WARNING in journal_end
-                   https://syzkaller.appspot.com/bug?extid=d43f346675e449548021
+>
+> > =20
+> >  /*
+> >   * Run software resends of IRQ's
+> > @@ -30,18 +31,17 @@ static DECLARE_BITMAP(irqs_resend, IRQ_BITMAP_BITS);
+> >  static void resend_irqs(struct tasklet_struct *unused)
+> >  {
+> >  	struct irq_desc *desc;
+> > -	int irq;
+> > -
+> > -	while (!bitmap_empty(irqs_resend, nr_irqs)) {
+> > -		irq =3D find_first_bit(irqs_resend, nr_irqs);
+> > -		clear_bit(irq, irqs_resend);
+> > -		desc =3D irq_to_desc(irq);
+> > -		if (!desc)
+> > -			continue;
+> > -		local_irq_disable();
+> > +
+> > +	raw_spin_lock_irq(&irq_resend_lock);
+> > +	while (!hlist_empty(&irq_resend_list)) {
+> > +		desc =3D hlist_entry(irq_resend_list.first, struct irq_desc,
+> > +				   resend_node);
+> > +		hlist_del_init(&desc->resend_node);
+> > +		raw_spin_unlock(&irq_resend_lock);
+> >  		desc->handle_irq(desc);
+> > -		local_irq_enable();
+> > +		raw_spin_lock(&irq_resend_lock);
+> >  	}
+> > +	raw_spin_unlock_irq(&irq_resend_lock);
+> >  }
+> > =20
+> >  /* Tasklet to handle resend: */
+> > @@ -49,8 +49,6 @@ static DECLARE_TASKLET(resend_tasklet, resend_irqs);
+> > =20
+> >  static int irq_sw_resend(struct irq_desc *desc)
+> >  {
+> > -	unsigned int irq =3D irq_desc_get_irq(desc);
+> > -
+> >  	/*
+> >  	 * Validate whether this interrupt can be safely injected from
+> >  	 * non interrupt context
+> > @@ -70,16 +68,31 @@ static int irq_sw_resend(struct irq_desc *desc)
+> >  		 */
+> >  		if (!desc->parent_irq)
+> >  			return -EINVAL;
+> > -		irq =3D desc->parent_irq;
+>=20
+> Why delete this code?
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+OK, now I know you haven't read this code at all :-(.
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+>=20
+> >  	}
+> > =20
+> > -	/* Set it pending and activate the softirq: */
+> > -	set_bit(irq, irqs_resend);
+> > +	/* Add to resend_list and activate the softirq: */
+> > +	raw_spin_lock(&irq_resend_lock);
+> > +	hlist_add_head(&desc->resend_node, &irq_resend_list);
+> > +	raw_spin_unlock(&irq_resend_lock);
+>=20
+> Do you conside a situation where irq_sw_resend() is running on two CPUs c=
+oncurrently?
+> If so, the same desc could be added into irq_resend_list twice by mistake.
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
+Have you looked at the calling site (stress on singular), the locking
+requirements, and the role IRQS_REPLAY plays when it comes to queuing
+an interrupt for resend?
 
-You may send multiple commands in a single email message.
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
