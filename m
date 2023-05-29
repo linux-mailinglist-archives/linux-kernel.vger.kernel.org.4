@@ -2,175 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08758714BF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E69714BF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjE2OXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S229491AbjE2OZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjE2OXv (ORCPT
+        with ESMTP id S229997AbjE2OZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:23:51 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4190FA0;
-        Mon, 29 May 2023 07:23:50 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-2566e60cc5aso1217693a91.3;
-        Mon, 29 May 2023 07:23:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685370230; x=1687962230;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QqJeUFI0e/XUEdlHTY4e2wDrM7CepfDC9k/Dx+kj8ME=;
-        b=b+E42wo3vgI4jYGQ3xuQ9baGkNjBVT1Kt5aR+UQ0p2b8Fln0i8SIoxVZDgLgpfSulN
-         zsmDLiWsxJfjgX9laEEmTKAcQ0e7Vd/Raii9SNkwCEauNF19mzefCuZPT+xdNLPND9RV
-         JGd/dJ9+oSoaUtEfyoHWdZfv0FajPjkp9gCvFulxVr04ke7Gq+WWzuDQOibektfWx+Sf
-         pCKTLK7CT9RFBrdD97d6KaEQ4uc9QcI6jtWt6eCbNsqG3E6saQagHN+q9+rNtznE6Gi0
-         C+jUSLACU5VuZ0ofiuRBSy7gJlTcuiBbFrB8j95CahtlVUlG9V2YLvZM52+M3elMCvYx
-         PEFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685370230; x=1687962230;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QqJeUFI0e/XUEdlHTY4e2wDrM7CepfDC9k/Dx+kj8ME=;
-        b=eL2/vflUl17UqlH9IPsJYJoIMu9VXmfI/nvrU8dvkHSaTdpyUuSQA1CMPwjuFkmWIg
-         wXD8Ky9E7890eCeZs3i3g0RiNkbO6xnot4Hqh2cuTsJmwWEN2Phq5+9jLr5wBiJZlfdZ
-         y3dt7pTXXDRBo/pxHT27sMiznExdTgZDKUcM3zR7RA5jPdGbWiMBK/a3ujH9EHDBRwCN
-         fio9ZhvKnb20j2MNu4kEJ5rCEC37PJXnwOBLhMORFIaxIVBc5JZUN9LTTl8QIYdwli+N
-         9iHzEs+OyIKTSEQkYDF6/ZXQcXm+T2gQh399mDRLIp926RGbJgYsjh/QJYUF6t+f8WYu
-         yIIQ==
-X-Gm-Message-State: AC+VfDxaozpLBRybV57UUZEGHCFpk6TnwYyodyAsxsT281lOcRdV1GON
-        gJD6eobKwitChR81XUafbkU=
-X-Google-Smtp-Source: ACHHUZ6/DiWFb6+BGVzq9xdTbPAP5aNtypk8M4u2Z+kqbqRBFIXQBRs7+9cy1Ks97fWUToCt7hYrAQ==
-X-Received: by 2002:a17:90a:748:b0:24d:f992:5286 with SMTP id s8-20020a17090a074800b0024df9925286mr10873036pje.36.1685370229465;
-        Mon, 29 May 2023 07:23:49 -0700 (PDT)
-Received: from [172.30.1.35] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id 25-20020a17090a199900b0024e4f169931sm9846519pji.2.2023.05.29.07.23.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 07:23:48 -0700 (PDT)
-Message-ID: <1d8df8d2-f44a-dd66-8e01-7e50fa147660@gmail.com>
-Date:   Mon, 29 May 2023 23:23:45 +0900
+        Mon, 29 May 2023 10:25:20 -0400
+Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A574BAD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:25:18 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 3do5q6Lcz8SAU3do5q9HQ0; Mon, 29 May 2023 16:25:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685370311;
+        bh=5yfUn5aZ5gZKP/nhY40FYtwu0ci8KYjAyPkzFYglPAY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ocKRv9z8VmqirNHXYT3ft22j4i53Wl5OzK9+JBimzQrGz8StOZ2seQUQVb3Mjx55+
+         eEwidnlTa7CZNj0HArLAkMHP5WrFyawvkyimebViWx4dAtGI3u/BC3O49K0uHWNNXz
+         XVTskrcoItUxVyT6N/6/o9kxuIGMsKpb/2IHwc0nX2L7VcvhdifWlykD8/Xk32y1zy
+         vNhHx/M9vlzkDDDrsryHxEfTvzKlf0Lg0KIzuFCOZMdRl/4p4nVKo7canxVijNs4AL
+         NJ1VRX8R6igaagjwS38Kpwalq0Ygq83+iFXXk76sLWkFOuuLpC3OPC6UhKQH74+4Dm
+         V/Mub43l7Fq9A==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 29 May 2023 16:25:11 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <fdf6ab76-cd2c-6596-41c1-369c176decad@wanadoo.fr>
+Date:   Mon, 29 May 2023 16:25:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] PM / devfreq: Reorder fields in 'struct
- devfreq_dev_status'
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <6b1611f1440c8b73feb475723ad25f390cad3480.1683531691.git.christophe.jaillet@wanadoo.fr>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Content-Language: en-US
-In-Reply-To: <6b1611f1440c8b73feb475723ad25f390cad3480.1683531691.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3] hv_netvsc: Allocate rx indirection table size
+ dynamically
+Content-Language: fr, en-US
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Simon Horman <simon.horman@corigine.com>
+References: <1685080949-18316-1-git-send-email-shradhagupta@linux.microsoft.com>
+ <92bc6f3e-4463-e0fe-5cab-54c6c5eecd3f@wanadoo.fr>
+ <20230529133019.GB21447@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230529133019.GB21447@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23. 5. 8. 16:42, Christophe JAILLET wrote:
-> Group some variables based on their sizes to reduce holes.
-> On x86_64, this shrinks the size of 'struct devfreq_dev_status' from 72 to
-> 64 bytes.
-> 
-> This structure is used both to allocate static variables or is embedded in
-> some other structures. In both cases, reducing its size is nice to have.
-> 
-> Moreover, the whole structure now fits in a single cache line on x86_64.
-> 
-> Finally, it makes the order of code match the order of the above kernel
-> doc.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Using pahole
-> 
-> Before:
-> ======
-> struct devfreq_dev_profile {
-> 	long unsigned int          initial_freq;         /*     0     8 */
-> 	unsigned int               polling_ms;           /*     8     4 */
-> 	enum devfreq_timer         timer;                /*    12     4 */
-> 	bool                       is_cooling_device;    /*    16     1 */
-> 
-> 	/* XXX 7 bytes hole, try to pack */
-> 
-> 	int                        (*target)(struct device *, long unsigned int *, u32); /*    24     8 */
-> 	int                        (*get_dev_status)(struct device *, struct devfreq_dev_status *); /*    32     8 */
-> 	int                        (*get_cur_freq)(struct device *, long unsigned int *); /*    40     8 */
-> 	void                       (*exit)(struct device *); /*    48     8 */
-> 	long unsigned int *        freq_table;           /*    56     8 */
-> 	/* --- cacheline 1 boundary (64 bytes) --- */
-> 	unsigned int               max_state;            /*    64     4 */
-> 
-> 	/* size: 72, cachelines: 2, members: 10 */
-> 	/* sum members: 61, holes: 1, sum holes: 7 */
-> 	/* padding: 4 */
-> 	/* last cacheline: 8 bytes */
-> };
-> 
-> 
-> After:
-> =====
-> struct devfreq_dev_profile {
-> 	long unsigned int          initial_freq;         /*     0     8 */
-> 	unsigned int               polling_ms;           /*     8     4 */
-> 	enum devfreq_timer         timer;                /*    12     4 */
-> 	int                        (*target)(struct device *, long unsigned int *, u32); /*    16     8 */
-> 	int                        (*get_dev_status)(struct device *, struct devfreq_dev_status *); /*    24     8 */
-> 	int                        (*get_cur_freq)(struct device *, long unsigned int *); /*    32     8 */
-> 	void                       (*exit)(struct device *); /*    40     8 */
-> 	long unsigned int *        freq_table;           /*    48     8 */
-> 	unsigned int               max_state;            /*    56     4 */
-> 	bool                       is_cooling_device;    /*    60     1 */
-> 
-> 	/* size: 64, cachelines: 1, members: 10 */
-> 	/* padding: 3 */
-> };
-> ---
->  include/linux/devfreq.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index 7fd704bb8f3d..d312ffbac4dd 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -108,7 +108,6 @@ struct devfreq_dev_profile {
->  	unsigned long initial_freq;
->  	unsigned int polling_ms;
->  	enum devfreq_timer timer;
-> -	bool is_cooling_device;
->  
->  	int (*target)(struct device *dev, unsigned long *freq, u32 flags);
->  	int (*get_dev_status)(struct device *dev,
-> @@ -118,6 +117,8 @@ struct devfreq_dev_profile {
->  
->  	unsigned long *freq_table;
->  	unsigned int max_state;
-> +
-> +	bool is_cooling_device;
->  };
->  
->  /**
+Le 29/05/2023 à 15:30, Shradha Gupta a écrit :
+> Thanks for the comment Christophe.
+> On Mon, May 29, 2023 at 02:49:15PM +0200, Christophe JAILLET wrote:
+>> Le 26/05/2023 ?? 08:02, Shradha Gupta a ??crit??:
+>>> Allocate the size of rx indirection table dynamically in netvsc
+>> >from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
+>>> query instead of using a constant value of ITAB_NUM.
+>>>
+>>> Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+>>> Tested-on: Ubuntu22 (azure VM, SKU size: Standard_F72s_v2)
+>>> Testcases:
+>>> 1. ethtool -x eth0 output
+>>> 2. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-Synthetic
+>>> 3. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-SRIOV
+>>>
+>>> ---
+>>
+>> [...]
+>>
+>>> @@ -1596,11 +1608,18 @@ void rndis_filter_device_remove(struct hv_device *dev,
+>>>   				struct netvsc_device *net_dev)
+>>>   {
+>>>   	struct rndis_device *rndis_dev = net_dev->extension;
+>>> +	struct net_device *net = hv_get_drvdata(dev);
+>>> +	struct net_device_context *ndc = netdev_priv(net);
+>>>   	/* Halt and release the rndis device */
+>>>   	rndis_filter_halt_device(net_dev, rndis_dev);
+>>>   	netvsc_device_remove(dev);
+>>> +
+>>> +	ndc->rx_table_sz = 0;
+>>> +	kfree(ndc->rx_table);
+>>> +	ndc->rx_table = NULL;
+>>> +
+>>
+>> Nit: useless empty NL
+> This is to prevent any potential double free, or accessing freed memory, etc.
+> As requested by Haiyang in v2 patch
 
+Setting ndc->rx_table to NULL is fine, but there is a useless *newline* 
+(NL) just after.
+If you have to send a v4, you can save a line of code.
 
-Applied it.
+CJ
 
-Thanks.
-
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+>>
+>>>   }
+>>>   int rndis_filter_open(struct netvsc_device *nvdev)
+> 
 
