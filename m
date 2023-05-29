@@ -2,130 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EA4714917
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2002A71491A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbjE2MIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
+        id S231667AbjE2MJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231648AbjE2MIa (ORCPT
+        with ESMTP id S230342AbjE2MJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:08:30 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77F9E3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:08:22 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2af2602848aso32717761fa.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685362101; x=1687954101;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6N4laHrxcBKrO6d+ex168wZrn7XIXcKY1PLtyo+eeeQ=;
-        b=xl3LGI/KATO58nyEhF3efLAVdsd5fzMsg1ndnuSLwdETkQ3cHu1BKl8OrD3SPizH1e
-         bZADKGAGzDBUPcuZQ53occ59IYE1bJhzCvVjcpLiNHRE1Pl1FpEU/duiZvsxfFTIZkbz
-         PWxigzhQWgHwEJw3mWH7w6IOb6wE+dts2wD2Z57Anys6jEPGDC4Wl4hf3KO1eWZxo9fe
-         saFbCRGovkVEBRjm7zh8zG0GZ9pzSDybfj4YKVYg/CSmR0FFJtLdZjy8Ui2y0Uu7UXfM
-         Re55DAT6xmg6Sa8pP7Rw9S65VuKR8y9AIdPJKCnRUkstrp4/O/YsEe+U0dduw1pNpTYo
-         vACg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685362101; x=1687954101;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6N4laHrxcBKrO6d+ex168wZrn7XIXcKY1PLtyo+eeeQ=;
-        b=ajVRaIJkqnLdPS3gHx91wHoQNa+jbztnDRPEVEiPiKGy8Kqf3Os9LAtmzse+R8l5NF
-         53I2DCxYkVgSzoryHC4NXpZXvReFeTDEW0hplStSWKNe5rYIyFOBmMvm89zeSYS4PpgM
-         b9jipddX+lI9XN7U2Ued5AslaJv15rqhKdNCYUOOV9UHSv6KOgBJDermNE0V1aR7b1Bl
-         C0mI3z3MDNY7ocZVZzKzz6Xm8KzZspqGA7rIb/Skrf/CtKgdSsy7MRwoYxXKXOXqHXN7
-         198vOATn1TlHkFU+MpCl1exKPdTyewcZ/dImPjWHxCJElgLhPNgDrC3wa4cbhq8YZ6kp
-         NfhQ==
-X-Gm-Message-State: AC+VfDzA16HfvGlDADL4lbMLlJcaBxvcPSMX9wC40Qp1sTQaZrzi4XnS
-        Zvln5OYDxJRYVIvOm+3fvntpmg==
-X-Google-Smtp-Source: ACHHUZ4uum7Tu0iR7zATFyLuJQq5xux61yqQsRwmNNMm9BV9bTZ7ZRrezf4Gx3jdtD/dOpMWekhgsg==
-X-Received: by 2002:a19:f60e:0:b0:4f4:b3eb:80f7 with SMTP id x14-20020a19f60e000000b004f4b3eb80f7mr3332241lfe.6.1685362100879;
-        Mon, 29 May 2023 05:08:20 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id q9-20020ac25109000000b004f252003071sm1946136lfb.37.2023.05.29.05.08.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 05:08:20 -0700 (PDT)
-Message-ID: <c75fd8fa-65ba-db7a-5a38-776d19fe197d@linaro.org>
-Date:   Mon, 29 May 2023 14:08:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 5/7] drm/msm/dsi: Add configuration for MSM8226
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Mon, 29 May 2023 08:09:39 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC0CC7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:09:38 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 56C1F200BB;
+        Mon, 29 May 2023 14:09:35 +0200 (CEST)
+Date:   Mon, 29 May 2023 14:09:34 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        devicetree@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230308-msm8226-mdp-v1-0-679f335d3d5b@z3ntu.xyz>
- <20230308-msm8226-mdp-v1-5-679f335d3d5b@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230308-msm8226-mdp-v1-5-679f335d3d5b@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 2/2] drm/panel: Add driver for Visionox r66451 panel
+Message-ID: <6enrlcmw6a2vxwzocsdbcx7yaltzh3kv4w3yiydzx7ylrtdozn@xzwdj35uj7na>
+References: <20230516-b4-r66451-panel-driver-v1-0-4210bcbb1649@quicinc.com>
+ <20230516-b4-r66451-panel-driver-v1-2-4210bcbb1649@quicinc.com>
+ <3cca2809-fa26-f0cf-2ccc-6737d150b43d@linaro.org>
+ <kc65fjf5xibvszx4afomzbmfrlld4vcnwfxqxefrupkaxw74fa@j2op4bj2recm>
+ <2d9d7454-0e7d-b6f2-93ff-9eca69380e47@quicinc.com>
+ <9d50bc4e-e747-47fa-03cf-4dbd33f778dd@quicinc.com>
+ <5becf303-8a23-6ace-2379-0a002e9b48f7@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5becf303-8a23-6ace-2379-0a002e9b48f7@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 29.05.2023 11:44, Luca Weiss wrote:
-> Add the config for the v1.0.2 DSI found on MSM8226. We can reuse
-> existing bits from other revisions that are identical for v1.0.2.
+On 2023-05-26 09:32:45, Neil Armstrong wrote:
+<snip>
+> >>>>> +static int visionox_r66451_bl_update_status(struct backlight_device *bl)
+> >>>>> +{
+> >>>>> +    struct mipi_dsi_device *dsi = bl_get_data(bl);
+> >>>>> +    u16 brightness = backlight_get_brightness(bl);
+> >>>>> +
+> >>>>> +    return mipi_dsi_dcs_set_display_brightness(dsi, cpu_to_le16(brightness));
+> >>>>
+> >>>> mipi_dsi_dcs_set_display_brightness() already converts the brightness,
+> >>>> so you don't need cpu_to_le16 here.
+> >>>
+> >>> Tread carefully here: we've had the same issue and conversation on our
+> >>> Sony panels where this extra inversion is required.
+> >>> set_display_brightness() sends the bytes as little-endian to the panel
+> >>> (and it even assumes little-endian in get_display_brightness()) but the
+> >>> spec for 16-bit brightness values states that they have to be sent in
+> >>> big-endian.  This is why c9d27c6be518b ("drm/mipi-dsi: Fix byte order of
+> >>> 16-bit DCS set/get brightness") added
+> >>> mipi_dsi_dcs_set_display_brightness_large().
+> >>>
+> >>> Jessica, if you need to have the endian swap here (should be very easy
+> >>> to test with a real panel, but it should be given the max_brightness
+> >>> value being over 8 bits) please switch to the _large() variant.
+> >>
+> >> Got it, thanks for the heads up!
+> > 
+> > Hi Marijn,
+> > 
+> > Just wanted to update this thread -- I've checked the backlight brightness values in the sysfs and it matches the value being given in the panel driver (255), so I think it should be fine to use *_set_display_brightness() without the _large() variant.
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Sure, I was also misleaded by you using cpu_to_le16() but as Dmitry said it's already
+> done in mipi_dsi_dcs_set_display_brightness() and a no-op on LE arm64 platforms anyway.
 
-Konrad
->  drivers/gpu/drm/msm/dsi/dsi_cfg.c | 2 ++
->  drivers/gpu/drm/msm/dsi/dsi_cfg.h | 1 +
->  2 files changed, 3 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.c b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> index 29ccd755cc2e..8a5fb6df7210 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> @@ -245,6 +245,8 @@ static const struct msm_dsi_cfg_handler dsi_cfg_handlers[] = {
->  		&apq8064_dsi_cfg, &msm_dsi_v2_host_ops},
->  	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V1_0,
->  		&msm8974_apq8084_dsi_cfg, &msm_dsi_6g_host_ops},
-> +	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V1_0_2,
-> +		&msm8974_apq8084_dsi_cfg, &msm_dsi_6g_host_ops},
->  	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V1_1,
->  		&msm8974_apq8084_dsi_cfg, &msm_dsi_6g_host_ops},
->  	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V1_1_1,
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.h b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> index 91bdaf50bb1a..43f0dd74edb6 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> @@ -11,6 +11,7 @@
->  #define MSM_DSI_VER_MAJOR_V2	0x02
->  #define MSM_DSI_VER_MAJOR_6G	0x03
->  #define MSM_DSI_6G_VER_MINOR_V1_0	0x10000000
-> +#define MSM_DSI_6G_VER_MINOR_V1_0_2	0x10000002
->  #define MSM_DSI_6G_VER_MINOR_V1_1	0x10010000
->  #define MSM_DSI_6G_VER_MINOR_V1_1_1	0x10010001
->  #define MSM_DSI_6G_VER_MINOR_V1_2	0x10020000
-> 
+Yuck, right, it's cpu_to_le16 here and not cpu_to_be16.  @Jessica, can
+you please remove this misleading conversion?
+mipi_dsi_dcs_set_display_brightness() takes a native u16, not a specific
+__le16.
+
+- Marijn
