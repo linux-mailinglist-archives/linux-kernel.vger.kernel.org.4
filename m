@@ -2,122 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53797146B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFC87146BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjE2I43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S231739AbjE2I47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbjE2I4Z (ORCPT
+        with ESMTP id S230390AbjE2I45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:56:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4361199;
-        Mon, 29 May 2023 01:56:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C80F5612FB;
-        Mon, 29 May 2023 08:56:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA784C433D2;
-        Mon, 29 May 2023 08:56:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685350581;
-        bh=0cLtWu67FXIhxvYRUFzDzmVUVv/hQM6Kyg5IDS4Dw2Y=;
+        Mon, 29 May 2023 04:56:57 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B443E91;
+        Mon, 29 May 2023 01:56:55 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126255106133.24.openmobile.ne.jp [126.255.106.133])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9ED086D5;
+        Mon, 29 May 2023 10:56:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685350594;
+        bh=rayQWHHa9JlAPYgWdLbLAtmB25Gu7jfFbx7UIlsifWY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gQ/1oiwKWZCSV5blbjwIC6h4tswcVf4vfo+Zm1tEwx3Zyu5bhCxUlKnKOYDDv9jFx
-         VHivQ5EIacPWBk3vvHbkLq9gDiN9jlAYkUQIk47R/OAQ8ixkEn+uEq0tGo0iWLyeh6
-         Uit2RC7qols2pvaiG4OQzm8KvSipDo+iii2lvWTvPssiadVx+5Q4SDdFbaJR6LLDDq
-         mC7SESOHviEf1QX7HTONmOlVKv4xGMphywjZitb4HDGHFa7hD6lFBAB0w+UpR0Tcgz
-         HDNk95yvoaRAvgVXEClBNhPxtE4YI48M021r5g6awoWsUBx4ryn9wWYeXIly0nCC6s
-         qn5ikVRJHuRAg==
-Date:   Mon, 29 May 2023 14:26:07 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
-        robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, steev@kali.org,
-        quic_srichara@quicinc.com,
-        Dmitry Baryshkov <dmitry.baryshkov@gmail.com>
-Subject: Re: [PATCH v2 2/8] PCI: qcom: Disable write access to read only
- registers for IP v2.9.0
-Message-ID: <20230529085607.GC5633@thinkpad>
-References: <20230519143117.23875-1-manivannan.sadhasivam@linaro.org>
- <20230519143117.23875-3-manivannan.sadhasivam@linaro.org>
- <CAA8EJpoEPN9rAefZWxUSG50qsz-GZxtUsYS4xoVX4VUh2ig-og@mail.gmail.com>
+        b=N4tsmrQbXzVDFOdg6rvkoOiQXwAGtY7NUvlO0LH0E4OgVqRbRbWo87EWVWgkn12dl
+         B1FeKY7mekQXcKApavsWKEkkRAuFc19CXGEIBegHs6YqVc/zXd1FcoHH9TVpoHeEf2
+         8OlP0oAWEbMlc6ixPCr5N72Twecjg8nUfz+rulWA=
+Date:   Mon, 29 May 2023 11:56:56 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Zheng Wang <zyytlz.wz@163.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
+ {modprobe,bind} error
+Message-ID: <20230529085656.GL25984@pendragon.ideasonboard.com>
+References: <20230526143615.372338-1-biju.das.jz@bp.renesas.com>
+ <20230529061714.GA25984@pendragon.ideasonboard.com>
+ <OS0PR01MB592296756992262EC6D382D0864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAA8EJpoEPN9rAefZWxUSG50qsz-GZxtUsYS4xoVX4VUh2ig-og@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <OS0PR01MB592296756992262EC6D382D0864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 04:00:51PM +0300, Dmitry Baryshkov wrote:
-> On Fri, 19 May 2023 at 17:31, Manivannan Sadhasivam
-> <manivannan.sadhasivam@linaro.org> wrote:
-> >
-> > In the post init sequence of v2.9.0, write access to read only registers
-> > are not disabled after updating the registers. Fix it by disabling the
-> > access after register update.
-> >
-> > Fixes: 0cf7c2efe8ac ("PCI: qcom: Add IPQ60xx support")
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@gmail.com>
-> 
-> Could you please drop the @gmail R-B tags? I was mistaken when sending
-> them (I'm not even sure that this email exists).
-> 
+Hi Biju,
 
-b4 picked them up. Will drop this tag from all patches.
-
-- Mani
-
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-qcom.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index 01795ee7ce45..391a45d1e70a 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -1136,6 +1136,7 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> >         writel(0, pcie->parf + PARF_Q2A_FLUSH);
-> >
-> >         dw_pcie_dbi_ro_wr_en(pci);
-> > +
-> >         writel(PCIE_CAP_SLOT_VAL, pci->dbi_base + offset + PCI_EXP_SLTCAP);
-> >
-> >         val = readl(pci->dbi_base + offset + PCI_EXP_LNKCAP);
-> > @@ -1145,6 +1146,8 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> >         writel(PCI_EXP_DEVCTL2_COMP_TMOUT_DIS, pci->dbi_base + offset +
-> >                         PCI_EXP_DEVCTL2);
-> >
-> > +       dw_pcie_dbi_ro_wr_dis(pci);
-> > +
-> >         for (i = 0; i < 256; i++)
-> >                 writel(0, pcie->parf + PARF_BDF_TO_SID_TABLE_N + (4 * i));
-> >
-> > --
-> > 2.25.1
-> >
+On Mon, May 29, 2023 at 08:42:34AM +0000, Biju Das wrote:
+> > Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
+> > {modprobe,bind} error
+> > 
+> > Hi Biju,
+> > 
+> > Thank you for the patch.
+> > 
+> > On Fri, May 26, 2023 at 03:36:15PM +0100, Biju Das wrote:
+> > > Currently {modprobe, bind} after {rmmod, unbind} results in probe
+> > failure.
+> > >
+> > > genirq: Flags mismatch irq 22. 00000004 (85070400.usb3drd) vs.
+> > > 00000004 (85070400.usb3drd)
+> > > renesas_usb3: probe of 85070000.usb3peri failed with error -16
+> > >
+> > > Fix this issue by replacing "parent dev"->"dev" as the irq resource is
+> > > managed by this driver.
+> > 
+> > If the dev pointer passed to devm_request_irq() is not the correct one,
+> > how does it work the first time the driver is loaded ?
 > 
+> + Marc/ Kernel.org to give some feedback on this issue
 > 
-> -- 
-> With best wishes
-> Dmitry
+> I believe there may be a bug in the genirq (kernel/irq) driver.
+> first time it works ok. Maybe this driver is caching on unload
+> with null value and comparing with actual one (irq 22) during reload??
+> 
+> Maybe genirq expert can comment what went wrong here??
+
+I'm curious to understand this (an update to the commit message would
+then be nice), but regardless, I think the code change is fine.
+
+> > > Fixes: 9cad72dfc556 ("usb: gadget: Add support for RZ/V2M USB3DRD
+> > driver"
+> > 
+> > There's a missing ')' at the end of the line.
+> 
+> Oops missed it.
+> 
+> > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > > ---
+> > >  drivers/usb/gadget/udc/renesas_usb3.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/usb/gadget/udc/renesas_usb3.c
+> > > b/drivers/usb/gadget/udc/renesas_usb3.c
+> > > index aac8bc185afa..4a37b2e4b9b3 100644
+> > > --- a/drivers/usb/gadget/udc/renesas_usb3.c
+> > > +++ b/drivers/usb/gadget/udc/renesas_usb3.c
+> > > @@ -2877,7 +2877,7 @@ static int renesas_usb3_probe(struct platform_device *pdev)
+> > >  		struct rzv2m_usb3drd *ddata = dev_get_drvdata(pdev->dev.parent);
+> > >
+> > >  		usb3->drd_reg = ddata->reg;
+> > > -		ret = devm_request_irq(ddata->dev, ddata->drd_irq,
+> > > +		ret = devm_request_irq(&pdev->dev, ddata->drd_irq,
+> > >  				       renesas_usb3_otg_irq, 0,
+> > >  				       dev_name(ddata->dev), usb3);
+> > 
+> > Shouldn't you use dev_name(&pdev->dev) too ?
+> 
+> This irq resource belongs to usb3drd driver and is managed by renesas_usb3 driver.
+> It is just representation of irqname and cat /proc/interrupts shows the correct 
+> irq resource name. with dev_name(ddata->dev), it displays correct resource name
+> associated with the handler.
+> 
+> root@rzv2m:~# cat /proc/interrupts | grep usb
+>  22:          0     GICv2 274 Level     85070400.usb3drd
+>  23:        353     GICv2 277 Level     xhci-hcd:usb1
+>  28:          0     GICv2 278 Level     85070000.usb3peri
+
+The name is just informative so I suppose it's ok. It makes me wonder,
+though, if the usb3drd driver shouldn't register the interrupt handler
+itself.
+
+> > >  		if (ret < 0)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Regards,
+
+Laurent Pinchart
