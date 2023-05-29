@@ -2,216 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5619714ED0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEE8714ED3
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjE2RN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 13:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S229592AbjE2ROZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 13:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjE2RNy (ORCPT
+        with ESMTP id S229489AbjE2ROW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 13:13:54 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5811B5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:13:52 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77732fd66f1so72024739f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:13:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685380432; x=1687972432;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ebxk1Up7SOQpJbCMXXPHyjff+XCGPo0IXGxHF8GOp5Y=;
-        b=N2l0YHCzW/vpTcvt8ZJkieE9SLaC9xlUqO4p1HqFPZamS3ICoJPUREUhNGLyHRBLIC
-         pG1Rkj6S4G7Iv/cbIx8sh012fjA0Ok8zxIVYx/uy8292bN5wEXqPl/dfeLidIHKIp8HL
-         p3RZgr7/Ib7tw7IutKas6PeZsU+H9+F234MZFLmf/Orxv3s5iQ28N3TWkYCNOmmd92Z/
-         B0y05PyyHpEQy3LmNaV459F1wXrN6uCQSqyzvIl6QRuEOQtvbITpK0NShzm91qautSOV
-         xVbesGdo/N30+OTs0a65su9kfGVrUU7FBzA4T6OJKXEYF5gl3uODwkOdWrC7NEttTahc
-         O18Q==
-X-Gm-Message-State: AC+VfDyQugHzpkOZdystV5rFTcSjCEY3KFzFpuhESmMYE2DvYm7FPPtJ
-        kaTZxJOMZEurFNYg8cLA4EZaYvK4pnNkriyvmSX05OL/NS6T
-X-Google-Smtp-Source: ACHHUZ719JgOvsWUXMznoKZghQiAyD4AFO0DDl21J8oAwcAXIwlmKvxeoIITN21nDCTOS9J3sSTgcOfjRfbWhKoOr3HVcoZRMCtg
+        Mon, 29 May 2023 13:14:22 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70826BE
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:14:19 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Cx_Opq3XRkj0kCAA--.846S3;
+        Tue, 30 May 2023 01:14:18 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxD79p3XRkLUJ_AA--.10654S2;
+        Tue, 30 May 2023 01:14:17 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn,
+        Li Yi <liyi@loongson.cn>
+Subject: [PATCH v4 0/6] drm/etnaviv: add pci device driver support
+Date:   Tue, 30 May 2023 01:14:11 +0800
+Message-Id: <20230529171417.2146323-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:2a47:0:b0:41a:bb82:ddc0 with SMTP id
- w68-20020a022a47000000b0041abb82ddc0mr2965834jaw.4.1685380432263; Mon, 29 May
- 2023 10:13:52 -0700 (PDT)
-Date:   Mon, 29 May 2023 10:13:52 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fa007305fcd83579@google.com>
-Subject: [syzbot] [reiserfs?] possible deadlock in do_unlinkat
-From:   syzbot <syzbot+ada12d2d935bbc82aa7f@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxD79p3XRkLUJ_AA--.10654S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uFy8XF4UZFyDXr1rGF1Dtrb_yoW8GF1rpF
+        47JFyYyry0vrW2k343AFn8XFy3C3WxWF9Yk3srt3sI9w4rAr1jvryDKa15Jr9xJr1fJr42
+        qrnIkry3WF17ArJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bVkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JF0_JFyl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AKxVWUJVW8JwAaw2AF
+        wI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE
+        14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02
+        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
+        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8sL
+        05UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+There is a Vivante GC1000 (v5037) in LS2K1000 and LS7A1000, this GPU is a
+PCI device, and it has 2D and 3D cores in the same device. Thus, this
+series is trying to add PCI device driver support to etnaviv.
 
-syzbot found the following issue on:
+Sui Jingfeng (6):
+  drm/etnaviv: add a dedicated function to register an irq handler
+  drm/etnaviv: add a dedicated function to get various clocks
+  drm/etnaviv: add dedicated functions to create and destroy platform
+    devices
+  drm/etnaviv: add helpers for private data construction and destruction
+  drm/etnaviv: expand driver support for the PCI devices
+  drm/etnaviv: allow usperspace create cached coherent bo
 
-HEAD commit:    933174ae28ba Merge tag 'spi-fix-v6.4-rc3' of git://git.ker..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=167d464d280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
-dashboard link: https://syzkaller.appspot.com/bug?extid=ada12d2d935bbc82aa7f
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=106e6d19280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13cf84e5280000
+ drivers/gpu/drm/etnaviv/Makefile            |   1 +
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c       | 183 +++++++++++++------
+ drivers/gpu/drm/etnaviv/etnaviv_drv.h       |   7 +
+ drivers/gpu/drm/etnaviv/etnaviv_gem.c       |  22 ++-
+ drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |   9 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c       | 185 ++++++++++++++------
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.h       |  13 ++
+ drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c   |  88 ++++++++++
+ drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h   |  10 ++
+ include/uapi/drm/etnaviv_drm.h              |  11 +-
+ 10 files changed, 415 insertions(+), 114 deletions(-)
+ create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
+ create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/189d556c105e/disk-933174ae.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/498458304963/vmlinux-933174ae.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/68bcd9d7c04c/bzImage-933174ae.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/a89e85025777/mount_0.gz
+-- 
+2.25.1
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ada12d2d935bbc82aa7f@syzkaller.appspotmail.com
-
-REISERFS (device loop0): Created .reiserfs_priv - reserved for xattr storage.
-======================================================
-WARNING: possible circular locking dependency detected
-6.4.0-rc3-syzkaller-00032-g933174ae28ba #0 Not tainted
-------------------------------------------------------
-syz-executor392/4995 is trying to acquire lock:
-ffff888022309090 (&sbi->lock){+.+.}-{3:3}, at: reiserfs_write_lock+0x7a/0xd0 fs/reiserfs/lock.c:27
-
-but task is already holding lock:
-ffff8880759902e0 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
-ffff8880759902e0 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: do_unlinkat+0x26a/0x950 fs/namei.c:4378
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}:
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
-       down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
-       inode_lock_nested include/linux/fs.h:810 [inline]
-       do_unlinkat+0x26a/0x950 fs/namei.c:4378
-       __do_sys_unlinkat fs/namei.c:4436 [inline]
-       __se_sys_unlinkat fs/namei.c:4429 [inline]
-       __x64_sys_unlinkat+0xce/0xf0 fs/namei.c:4429
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #1 (sb_writers#9){.+.+}-{0:0}:
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1494 [inline]
-       sb_start_write+0x4d/0x1c0 include/linux/fs.h:1569
-       mnt_want_write_file+0x5e/0x1f0 fs/namespace.c:438
-       reiserfs_ioctl+0x174/0x340 fs/reiserfs/ioctl.c:103
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&sbi->lock){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3108 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
-       validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
-       __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
-       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
-       __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x7a/0xd0 fs/reiserfs/lock.c:27
-       reiserfs_lookup+0x162/0x580 fs/reiserfs/namei.c:364
-       lookup_one_qstr_excl+0x11b/0x250 fs/namei.c:1605
-       do_unlinkat+0x298/0x950 fs/namei.c:4379
-       __do_sys_unlinkat fs/namei.c:4436 [inline]
-       __se_sys_unlinkat fs/namei.c:4429 [inline]
-       __x64_sys_unlinkat+0xce/0xf0 fs/namei.c:4429
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
-Chain exists of:
-  &sbi->lock --> sb_writers#9 --> &type->i_mutex_dir_key#6/1
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&type->i_mutex_dir_key#6/1);
-                               lock(sb_writers#9);
-                               lock(&type->i_mutex_dir_key#6/1);
-  lock(&sbi->lock);
-
- *** DEADLOCK ***
-
-2 locks held by syz-executor392/4995:
- #0: ffff88807d18c460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3f/0x90 fs/namespace.c:394
- #1: ffff8880759902e0 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
- #1: ffff8880759902e0 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: do_unlinkat+0x26a/0x950 fs/namei.c:4378
-
-stack backtrace:
-CPU: 0 PID: 4995 Comm: syz-executor392 Not tainted 6.4.0-rc3-syzkaller-00032-g933174ae28ba #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/16/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3108 [inline]
- check_prevs_add kernel/locking/lockdep.c:3227 [inline]
- validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3842
- __lock_acquire+0x1295/0x2000 kernel/locking/lockdep.c:5074
- lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
- __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
- reiserfs_write_lock+0x7a/0xd0 fs/reiserfs/lock.c:27
- reiserfs_lookup+0x162/0x580 fs/reiserfs/namei.c:364
- lookup_one_qstr_excl+0x11b/0x250 fs/namei.c:1605
- do_unlinkat+0x298/0x950 fs/namei.c:4379
- __do_sys_unlinkat fs/namei.c:4436 [inline]
- __se_sys_unlinkat fs/namei.c:4429 [inline]
- __x64_sys_unlinkat+0xce/0xf0 fs/namei.c:4429
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ffa0fa838f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
