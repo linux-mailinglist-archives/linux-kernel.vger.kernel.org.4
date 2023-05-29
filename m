@@ -2,172 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA2771500B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F5971500D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjE2TyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 15:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
+        id S229779AbjE2TyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 15:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjE2TyG (ORCPT
+        with ESMTP id S229782AbjE2TyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 15:54:06 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A3BE3;
-        Mon, 29 May 2023 12:54:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=II4Ze8D1bBl6eaifHrJj+2GSDtaI9i02ce2PCvMh+glVPxBciY1Be5PURsXxiWgKi4p4kHQJayrjSI0GBuvYSEr0gPhHkYke2AD2FCi3BmqbDtpKWYf8BpfntSode/cTRVC3ePanLt7+MUgRaG8xbZZD18797XX7hZ9HYRyBhO8ahlctgRJqKPpDQhG7Fj2EiyiXeR/GNf1fqV3iz+U1fHo6kz6Zp07xXXIH86rb1DM/WIoQiFg5E76k9QGG2QDLiNJFmDj35aOseTTAfbFHfPZy6e+Gz9JCM09ySUTvd+fKXtHyGQ0zqUzjsv8m8Ep8RTiQVH2tCqd6NgWV+05cfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A+AfPmGaUE/yskb661oKdRI0Dn2unM3QaRPwJV1x1ME=;
- b=PbFhFGzo06IcxuZg5qWcU2fBZJrCu7jmyu9AirDJiQgrFZoeye6mgojS9fjfdK8WcB2KYB82PzGKnMawY0/qocO77tctXa0xmSdN4OFRD6JKvD9on/c5vdH02mtOfWroPf+7508BPmFvhl5nelVrmdb2V0JPAn+LWiZg1f/LLERlmtiUISLiRoT1kJ2WT5e3EoifQWKbe8g1qyvn1PvhqTv/CaS6nSMHSOvUm5nSvP0n2K7dFkJjOwaSWJmcb9PEt+WQvunV+z8dLygXi1gDHfrlhCNVYK5GaB7+zg/YucPyN90PgnzbKRkus+LLxz1lWPs0fVaLu8uxXwrnwIJbjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A+AfPmGaUE/yskb661oKdRI0Dn2unM3QaRPwJV1x1ME=;
- b=OHqHIn+hDahLIP8xpPHPxBdF42MXMXKdfxK8+WA9poNato9JsRRYeOey1+/VXG6HvEaaSmPJBjCA2MTo4GhTa9A49y/jLrim2GS01YK/FjzONDxh5QggD5rnfvnjE52fThcnxYN1s1yxwhaeAgZB28jO9dk9bp8kGnvDuf0D9Wphg2Ab+9708ghA29cKaecB0XPvOVpp/o8BTzjDXvK8FfbxLsqOIVHnpbIRkP1MpsgPoz0ek6ONUg7NcDgWvmoODn40JhRpaSs3V9ofV96mMaSaihdgcP5QSGaBWsVioSmM+I8emHb3nHmF7xfBWJQjdwsME4PzFr4ZVjUzWBWI5Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BL1PR12MB5753.namprd12.prod.outlook.com (2603:10b6:208:390::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Mon, 29 May
- 2023 19:54:00 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6433.017; Mon, 29 May 2023
- 19:54:00 +0000
-Date:   Mon, 29 May 2023 16:53:58 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
-        robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
-        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
-        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com
-Subject: Re: [PATCH v3 01/10] iommufd: Add data structure for Intel VT-d
- stage-1 domain allocation
-Message-ID: <ZHUC1it98cHN9lM3@nvidia.com>
-References: <20230511145110.27707-1-yi.l.liu@intel.com>
- <20230511145110.27707-2-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511145110.27707-2-yi.l.liu@intel.com>
-X-ClientProxiedBy: YT4PR01CA0384.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:fd::13) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 29 May 2023 15:54:16 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FAFE0;
+        Mon, 29 May 2023 12:54:10 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f6b2af4558so16257821cf.1;
+        Mon, 29 May 2023 12:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685390049; x=1687982049;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7FZY15pEe0NjM5Jr08KJ51YB/R7U/3/VlPZt7QWcMwE=;
+        b=fspSHPXacGWltyWHTmapjKwSkgD7xj7by6rbxIFXKGHkssw++u2SS1XxkVjEMxsxdG
+         S2099d3Oe9ji6rV23/1eOBj2WsdetpqS6e52oPR3k8zhijKp8VoqaFdOJsa6JPm5lgXt
+         SAiFWfy7/lYhjuY8IuaqUQLIYOdAoVNUJVcgfmi1F+iRh41PVU0VlVOV2Qx5I5A4N441
+         r/K50IgPpzIna9cinx13cPeprcI8ZwPvyYUBITqFnLnWMmJP6nMTfhTPXi4GjdvK2Xdn
+         TykgYdMk16iDrKG7zet2ngsgBf1UHsVRDkoEVeTsq2TTU3LoGeC7UAfe/XpOsfuhNuyV
+         aaMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685390049; x=1687982049;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7FZY15pEe0NjM5Jr08KJ51YB/R7U/3/VlPZt7QWcMwE=;
+        b=O92h7qi/JxfFFZjNza9jdtV7wmpyy2j1BKDhl1ffCj5X0oVJLr3NlKVtHD7thX9btD
+         3ON5k99MYsPts4YSKGcafH1N1Uhnk1lbBDe4bi0WuPopzEzS5ct8DklzbFlh8fhjT4t7
+         vJiyTg+uMwSiupdq3V1b/xGQhAgM3+UgbvhYwn4+wXbQBBjwGPAsvthU+aEq7BCENUCd
+         bHrbX+P5bxAvvXZeRQWsGxNHKnrGofxQMiFN1+2mraX6h0kmjPFAzPX9JGVCTr0m3MFr
+         GSKC8PKb0NC5rvnts5NgWrVMPjPveIaCkt/X44r+7+dIWy0bSQ/0X36OU7VlPA0Qp22U
+         3PMw==
+X-Gm-Message-State: AC+VfDwAOv6rfICXpcLoHRbor4arh3nQ3aUmbhk2ZlpR3gtw7cdMaiTV
+        qRh/5770blD+yNcF8IJPPQ==
+X-Google-Smtp-Source: ACHHUZ7xr+/eolxx4r4iPzgCyfZAvZlt2DT5FtXsnbk+HhgQVbkPW3ohwvxvntV882jxF3QPVlIIoA==
+X-Received: by 2002:a05:6214:e43:b0:616:4b40:5ea9 with SMTP id o3-20020a0562140e4300b006164b405ea9mr12496422qvc.40.1685390049473;
+        Mon, 29 May 2023 12:54:09 -0700 (PDT)
+Received: from C02FL77VMD6R.bytedance.net ([2600:1700:d860:12b0:e554:e6:7140:9e6b])
+        by smtp.gmail.com with ESMTPSA id ne12-20020a056214424c00b00625da789003sm3845984qvb.110.2023.05.29.12.54.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 May 2023 12:54:09 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+X-Google-Original-From: Peilin Ye <peilin.ye@bytedance.com>
+To:     Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH v6 net 3/4] net/sched: Reserve TC_H_INGRESS (TC_H_CLSACT) for ingress (clsact) Qdiscs
+Date:   Mon, 29 May 2023 12:54:03 -0700
+Message-Id: <e8de0ef360ff907f807b72b44a74e209952a80c5.1685388545.git.peilin.ye@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <cover.1685388545.git.peilin.ye@bytedance.com>
+References: <cover.1685388545.git.peilin.ye@bytedance.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL1PR12MB5753:EE_
-X-MS-Office365-Filtering-Correlation-Id: eeae3df1-5986-4763-a920-08db607e7213
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qoqPY2vWth9ZxswKMigITNbfNa5RS2u3Xcc/yz+FulPV+FTSJGBSoR0YTe48zTzJ61F9Tyk5fJdSNH8dRuaibUG2Y+fqE0Dyq4sOqH2680Ea/gyVAI92CCX7b8m1y1X22hB6Bpl3R/SIniNLk3N2EU3wPUiaN1VVbR37n/m6dfzeS9z0zaLR+Zo1uu0OZtjNHNUyonwyGt4GJ4eh0K6Cop9giO/XMBXV8Srmp6+n5iYIXCvtWJTTe/PycS/4FYHmnqZEN70Q256jAdIy7fihvXiZIoJgEcFw4fitqTas3wZ9tMCLoqK1jPGYYnjbI/L3qRWiBpjkgrT1bWrF/SFryWt5o73dLw7e03Y/ehAviWl8u91LLC7gAlXox4tNPFUWQBmBfA/BZ2y1TjMqDq+pOUnetv729XO7zHlTz2mrXaNbmxGOjKupFe1akgmbdGo/kKCs860f4+kLeLDfI288x1M9zmRKYuQOXc09YDGXNkOxdE0MdUVlPKv2lmYtfDI+NlvCMLrzFdEZ8icmSsSr6CJVo8ExLULhf6YWQnGcNKxqndwENG/XSp8hQkdLd4c4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(366004)(39860400002)(376002)(346002)(451199021)(478600001)(38100700002)(66556008)(66476007)(66946007)(6486002)(41300700001)(7416002)(8676002)(5660300002)(86362001)(8936002)(26005)(2906002)(186003)(6506007)(6512007)(6916009)(4326008)(316002)(2616005)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OwNSZK2cntSl+d97+fOGfKmlJ0KOJoJ2pSPiWlOIFU5NGNNVpGYmldrkkjP7?=
- =?us-ascii?Q?OmH+ey+FC88utrmHEwgoJu+k0SPFC0PrD7ImgodhNHUKFgYL4WlkpBhVZeSH?=
- =?us-ascii?Q?OYZR4c1YiiUOryd/vjATVaSbLFhE2KSmvhYbqDpX1JPMPwFapkn5jq1wCNaG?=
- =?us-ascii?Q?kQBBAGh4GRx7+0ePkkGV1nq28FgBONIsq1gvlKGpUcgF39scChfj9hDbUpzg?=
- =?us-ascii?Q?UNSb/oaphMNHgNg09zrPqxj/pM7CGDkTGfQADVd9JgpzGW9NuxtMVzSYL9OS?=
- =?us-ascii?Q?JAq6iTA+Eh8wMGZKg9XOD/+t3frFTrY7jaGa4hT18fi8Xu8fStAojbJKmCmA?=
- =?us-ascii?Q?qK+tWzQ5K2LOzrDp4KpbJyHYuAYRbdSVbJ6VBGEEHyt+by3Cv94zhbcUcht+?=
- =?us-ascii?Q?tkbpmqOiq/sSs0+rYSOI+WomEkAJbfaj2A/TIGxSDynAMrnI3U60cfc6Is61?=
- =?us-ascii?Q?MW9YhGRic/QJkaQHjCg3K/sznnb1B7Wmqwn6mERxsErJzpN90WPqcdYU/Fa9?=
- =?us-ascii?Q?QzMxVjxG3zr0eODjZAaa2/N3S/zKACQCh6lmCfVdvDyKQYa9mW5hSfGDpu29?=
- =?us-ascii?Q?+cPNStLS/59329uXLz8G9cns/REG7tunZjfoCI/j5PLoK6rwkppI9Yp0wdv1?=
- =?us-ascii?Q?DsKpabDhUCpfSe+v4Iqcyj4TXQHvFecvgVyjQUIRgHZ2bYEXD3lVxYg+r67G?=
- =?us-ascii?Q?dfkRf1SCAFwF58fhBWe/Byr/lVHMXtR4i9MB5L5CjnIr7Ru+YDZ29fBcvbUM?=
- =?us-ascii?Q?yV0Za+0mI7CsjYZJPIi/jzoNVgktup7Q8kk4WMekZDDCilo4yaxsuD6oC8sD?=
- =?us-ascii?Q?aV2g9pbgViqiZX8fT3nfJIUsKdPRiVqznra0UgP1D2ahfDwplJvVXOFa5k9w?=
- =?us-ascii?Q?bh1U2/djJ+/fmqgu5McqhNyxXdTlvff+TLWHikv6QEX5cxp9PlwUSeNw2k2I?=
- =?us-ascii?Q?BaBO/KPBAbgY+td8i7Xvmt85+vT7IZ4iqn3+XTFUdbVM8c2KMsVxBSpgHxwP?=
- =?us-ascii?Q?tsfDIPKb0UTNIIXyI3l8PKA8WziRW5zMIodzehMY241Keo17rzxaZ2nzrtxD?=
- =?us-ascii?Q?bjdJgkzw0a2EZoOBENHmQGv/M6NUWRFaYb/h6k6RauVUHtCI1tRqHbSAB4yT?=
- =?us-ascii?Q?fG5cCEoTl+ZzOnRNgnYkL6EvIx5pVIWXzT8vQYSCy2MiFcIaRb87hxjmi0ex?=
- =?us-ascii?Q?ah/u76QbdvMpAvadawB3v+yHZf3L0N5fYuet+RseBVHk5WVgXA1TAq6fZxMT?=
- =?us-ascii?Q?2YdteXPubXV3NbmeNDFx9U/syFEMnqImW3ebyJOc1RyERoo2gjpz8hBbYreb?=
- =?us-ascii?Q?sCp5CPeljVq/o4gypYV3hzPioJQfzTTrrNe0GTqjOdvzcj38w0YuW8F7TZx8?=
- =?us-ascii?Q?VY/jwJm3WC6y3XbA3PvXUqBF4wBn6IkLHuyatjhdpYI4yIhmC8SND7OT8AgL?=
- =?us-ascii?Q?DP0sdIhdzNHTZlwXFEzyAe23a2hq5/zQKwHbOg805G6xzorBVvFbrzSIbEFj?=
- =?us-ascii?Q?hF0r/aX5nYYJWQTEqCEpq/sQthIPGK8NxJE6tpFLiKi0faM1cz6TF8b0viVm?=
- =?us-ascii?Q?SxZGnq4LKBHlOBmGKWwa2cGCZ+Hw3mS8nYWzLQqx?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eeae3df1-5986-4763-a920-08db607e7213
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2023 19:54:00.0302
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: baAyoxB2k8fUWd03DX8zPq5Iob/zj+C1fRdCvLRBd6yUju6an0rKdUyvVak5+bfs
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5753
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 07:51:01AM -0700, Yi Liu wrote:
-> This adds IOMMU_HWPT_TYPE_VTD_S1 for stage-1 hw_pagetable of Intel VT-d
-> +/**
-> + * struct iommu_hwpt_intel_vtd - Intel VT-d specific user-managed
-> + *                               stage-1 page table info
-> + * @flags: Combination of enum iommu_hwpt_intel_vtd_flags
-> + * @pgtbl_addr: The base address of the user-managed stage-1 page table.
-> + * @pat: Page attribute table data to compute effective memory type
-> + * @emt: Extended memory type
-> + * @addr_width: The address width of the untranslated addresses that are
-> + *              subjected to the user-managed stage-1 page table.
-> + * @__reserved: Must be 0
-> + *
-> + * The Intel VT-d specific data for creating hw_pagetable to represent
-> + * the user-managed stage-1 page table that is used in nested translation.
-> + *
-> + * In nested translation, the stage-1 page table locates in the address
-> + * space that defined by the corresponding stage-2 page table. Hence the
-> + * stage-1 page table base address value should not be higher than the
-> + * maximum untranslated address of stage-2 page table.
-> + *
-> + * The paging level of the stage-1 page table should be compatible with
-> + * the hardware iommu. Otherwise, the allocation would be failed.
-> + */
-> +struct iommu_hwpt_intel_vtd {
-> +	__u64 flags;
-> +	__u64 pgtbl_addr;
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-__aligned_u64
+Currently it is possible to add e.g. an HTB Qdisc under ffff:fff1
+(TC_H_INGRESS, TC_H_CLSACT):
 
-> +	__u32 pat;
-> +	__u32 emt;
-> +	__u32 addr_width;
-> +	__u32 __reserved;
->  };
->  
->  /**
-> @@ -391,6 +446,8 @@ enum iommu_hwpt_type {
->   * +------------------------------+-------------------------------------+-----------+
->   * | IOMMU_HWPT_TYPE_DEFAULT      |               N/A                   |    IOAS   |
->   * +------------------------------+-------------------------------------+-----------+
-> + * | IOMMU_HWPT_TYPE_VTD_S1       |      struct iommu_hwpt_intel_vtd    |    HWPT   |
-> + * +------------------------------+-------------------------------------+-----------+
+  $ ip link add name ifb0 type ifb
+  $ tc qdisc add dev ifb0 parent ffff:fff1 htb
+  $ tc qdisc add dev ifb0 clsact
+  Error: Exclusivity flag on, cannot modify.
+  $ drgn
+  ...
+  >>> ifb0 = netdev_get_by_name(prog, "ifb0")
+  >>> qdisc = ifb0.ingress_queue.qdisc_sleeping
+  >>> print(qdisc.ops.id.string_().decode())
+  htb
+  >>> qdisc.flags.value_() # TCQ_F_INGRESS
+  2
 
-Please don't make ascii art tables.
+Only allow ingress and clsact Qdiscs under ffff:fff1.  Return -EINVAL
+for everything else.  Make TCQ_F_INGRESS a static flag of ingress and
+clsact Qdiscs.
 
-Note beside the struct what enum it is for
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Fixes: 1f211a1b929c ("net, sched: add clsact qdisc")
+Tested-by: Pedro Tammela <pctammela@mojatatu.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
+ net/sched/sch_api.c     | 7 ++++++-
+ net/sched/sch_ingress.c | 4 ++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-Jason
+diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
+index fdb8f429333d..383195955b7d 100644
+--- a/net/sched/sch_api.c
++++ b/net/sched/sch_api.c
+@@ -1252,7 +1252,12 @@ static struct Qdisc *qdisc_create(struct net_device *dev,
+ 	sch->parent = parent;
+ 
+ 	if (handle == TC_H_INGRESS) {
+-		sch->flags |= TCQ_F_INGRESS;
++		if (!(sch->flags & TCQ_F_INGRESS)) {
++			NL_SET_ERR_MSG(extack,
++				       "Specified parent ID is reserved for ingress and clsact Qdiscs");
++			err = -EINVAL;
++			goto err_out3;
++		}
+ 		handle = TC_H_MAKE(TC_H_INGRESS, 0);
+ 	} else {
+ 		if (handle == 0) {
+diff --git a/net/sched/sch_ingress.c b/net/sched/sch_ingress.c
+index 35963929e117..e43a45499372 100644
+--- a/net/sched/sch_ingress.c
++++ b/net/sched/sch_ingress.c
+@@ -140,7 +140,7 @@ static struct Qdisc_ops ingress_qdisc_ops __read_mostly = {
+ 	.cl_ops			=	&ingress_class_ops,
+ 	.id			=	"ingress",
+ 	.priv_size		=	sizeof(struct ingress_sched_data),
+-	.static_flags		=	TCQ_F_CPUSTATS,
++	.static_flags		=	TCQ_F_INGRESS | TCQ_F_CPUSTATS,
+ 	.init			=	ingress_init,
+ 	.destroy		=	ingress_destroy,
+ 	.dump			=	ingress_dump,
+@@ -281,7 +281,7 @@ static struct Qdisc_ops clsact_qdisc_ops __read_mostly = {
+ 	.cl_ops			=	&clsact_class_ops,
+ 	.id			=	"clsact",
+ 	.priv_size		=	sizeof(struct clsact_sched_data),
+-	.static_flags		=	TCQ_F_CPUSTATS,
++	.static_flags		=	TCQ_F_INGRESS | TCQ_F_CPUSTATS,
+ 	.init			=	clsact_init,
+ 	.destroy		=	clsact_destroy,
+ 	.dump			=	ingress_dump,
+-- 
+2.20.1
+
