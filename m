@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EECE7146DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 975797146E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbjE2JJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 05:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
+        id S231802AbjE2JMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 05:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbjE2JJq (ORCPT
+        with ESMTP id S229512AbjE2JMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 05:09:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469529C;
-        Mon, 29 May 2023 02:09:45 -0700 (PDT)
+        Mon, 29 May 2023 05:12:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55069B;
+        Mon, 29 May 2023 02:12:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D065361239;
-        Mon, 29 May 2023 09:09:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349B0C433D2;
-        Mon, 29 May 2023 09:09:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61DE061297;
+        Mon, 29 May 2023 09:12:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF16EC433EF;
+        Mon, 29 May 2023 09:12:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685351384;
-        bh=dW8HaUANnD0KpZnNdrw8u54SlE9A4EhFPiSPNCIaXkc=;
+        s=k20201202; t=1685351553;
+        bh=oX2UxLQoTskKdFHTYi8PR9lfL9/N4Gh77jpjUdT1d7c=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZBxiEkG3dS0o9jaQ/RLwikydt5DUrFAy0GJb6/BlTzGD+IRYhNHOKpfXMRcuPG7Co
-         8tfqxjbCPUY/c9NR+XcbCgs4iKvE7nxpbEOxPIL0171ugWn8Wz2enFqEvToTVpyPtH
-         lfIonYn4nE7TDzfQ7fOlPJn+nVZUy512ZfRCAaBqajFqj2Bd5BIqD9wi7FG78DzXsV
-         ycMD9ZMQ1U7MVgmv9eX4c+veCYn0Qhxaf9E6+X1fU/Qvhcbfy0onUprtxGO9OY4WgL
-         FJubOLQmodWNddfZpb7zfCMNpBDNjTFzRy1ydc2sZoDGOOanYdQOqUb8w1m8HGmfID
-         76fKRV4hZ/Sgg==
+        b=oX0ITgAqwHvTeGUmQJG5zCn6i6EKOPPAwA9iAktyIlWVcVlGoDu0Kp2199ntKJlGp
+         WQpD/MULNCZucRQMzUddGD+U3a4aMqTiEIlRUGCEm7PvYxGrv9PWn4bVvNo7+ri/1p
+         zSsQqk18Rl/147XRfqqt+7iU+rJnV+Xh3miJaIcG1rtQZaQZuPjJuLkazA9uK+HtVy
+         qMdj3fmNHAr0FcphL5an/wsWKc4iir3sG8hczwzxN/tX9n4PiXAPnnP74HdZ9KNw4E
+         HKicesPKXLa82+P3e4k2dKhKh+A+50SDmFV5t64yismDFMUrRw1mSfQUoYU1s+NxQE
+         tMX50PK0vXB6Q==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1q3Ysn-0012B5-Rv;
-        Mon, 29 May 2023 10:09:41 +0100
-Date:   Mon, 29 May 2023 10:09:41 +0100
-Message-ID: <86bki3cxm2.wl-maz@kernel.org>
+        id 1q3YvX-0012CD-II;
+        Mon, 29 May 2023 10:12:31 +0100
+Date:   Mon, 29 May 2023 10:12:31 +0100
+Message-ID: <86a5xncxhc.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Zheng Wang <zyytlz.wz@163.com>,
@@ -55,21 +55,22 @@ Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         "linux-renesas-soc@vger.kernel.org" 
         <linux-renesas-soc@vger.kernel.org>
 Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M {modprobe,bind} error
-In-Reply-To: <OS0PR01MB592296756992262EC6D382D0864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <20230529085656.GL25984@pendragon.ideasonboard.com>
 References: <20230526143615.372338-1-biju.das.jz@bp.renesas.com>
         <20230529061714.GA25984@pendragon.ideasonboard.com>
         <OS0PR01MB592296756992262EC6D382D0864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+        <20230529085656.GL25984@pendragon.ideasonboard.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: biju.das.jz@bp.renesas.com, laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org, zyytlz.wz@163.com, geert+renesas@glider.be, yoshihiro.shimoda.uh@renesas.com, wsa+renesas@sang-engineering.com, krzysztof.kozlowski@linaro.org, linux-usb@vger.kernel.org, prabhakar.mahadev-lad.rj@bp.renesas.com, linux-renesas-soc@vger.kernel.org
+X-SA-Exim-Rcpt-To: laurent.pinchart@ideasonboard.com, biju.das.jz@bp.renesas.com, linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org, zyytlz.wz@163.com, geert+renesas@glider.be, yoshihiro.shimoda.uh@renesas.com, wsa+renesas@sang-engineering.com, krzysztof.kozlowski@linaro.org, linux-usb@vger.kernel.org, prabhakar.mahadev-lad.rj@bp.renesas.com, linux-renesas-soc@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,60 +79,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 May 2023 09:42:34 +0100,
-Biju Das <biju.das.jz@bp.renesas.com> wrote:
+On Mon, 29 May 2023 09:56:56 +0100,
+Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
 > 
-> Hi Laurent,
-> 
-> Thanks for the feedback.
-> 
-> > Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
-> > {modprobe,bind} error
-> > 
-> > Hi Biju,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Fri, May 26, 2023 at 03:36:15PM +0100, Biju Das wrote:
-> > > Currently {modprobe, bind} after {rmmod, unbind} results in probe
-> > failure.
-> > >
-> > > genirq: Flags mismatch irq 22. 00000004 (85070400.usb3drd) vs.
-> > > 00000004 (85070400.usb3drd)
-> > > renesas_usb3: probe of 85070000.usb3peri failed with error -16
-> > >
-> > > Fix this issue by replacing "parent dev"->"dev" as the irq resource is
-> > > managed by this driver.
-> > 
-> > If the dev pointer passed to devm_request_irq() is not the correct one,
-> > how does it work the first time the driver is loaded ?
-> 
-> + Marc/ Kernel.org to give some feedback on this issue
-> 
-> I believe there may be a bug in the genirq (kernel/irq) driver.
-> first time it works ok. Maybe this driver is caching on unload
-> with null value and comparing with actual one (irq 22) during reload??
-> 
-> Maybe genirq expert can comment what went wrong here??
+> The name is just informative so I suppose it's ok. It makes me wonder,
+> though, if the usb3drd driver shouldn't register the interrupt handler
+> itself.
 
-You get shouted at because you are registering an interrupt handler
-for the same IRQ twice, and the interrupt is not configured with the
-SHARED flag. If, as I understand it, you only have a single device
-using this interrupt, then it means your driver is not freeing its
-interrupt on unload.
-
-And that's probably because the device object used when requesting the
-interrupt isn't the one you load/unload, as indicated by the message.
-On the first load of "usb3peri", you register an interrupt with
-"usb3drd" as the requester device. You then unload "usb3peri", which
-of course has no effect whatsoever on the interrupt.
-
-You could simply have done a "cat /proc/interrupt" and see that
-interrupt was still there after unload.
-
-So the only bug here is in the handling of the interrupt request. And
-that bug firmly lies in your code. My "expert" advise is to debug the
-problem rather than suspecting some random failure modes.
+Well, it registers it itself, but pretending to be another device.
+Which is wrong on many levels.
 
 Thanks,
 
