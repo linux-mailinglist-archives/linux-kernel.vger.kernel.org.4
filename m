@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BA5714B48
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBDA714B58
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjE2N7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        id S230103AbjE2OAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjE2N7F (ORCPT
+        with ESMTP id S229668AbjE2OAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:59:05 -0400
+        Mon, 29 May 2023 10:00:17 -0400
 Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185B81B0;
-        Mon, 29 May 2023 06:58:35 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6d7abe934so21647935e9.2;
-        Mon, 29 May 2023 06:58:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B484E1BD;
+        Mon, 29 May 2023 06:59:46 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f60b3f32b4so21113685e9.1;
+        Mon, 29 May 2023 06:59:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685368682; x=1687960682;
+        d=gmail.com; s=20221208; t=1685368770; x=1687960770;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=d8wXnB4iVuJZTN+eBti6PDoOXenSUwXL/Vym36+LG00=;
-        b=sm2uEKOVz1LR9pGxAkNQfFiXAxvmi4hYDgkR9kD6JdRiHHy4EPhaw9sEP1fYAeoenp
-         M2Cg67O83WRhdN4xlIqim6FNdFvn6VLlN41uZDSotHeVZy8a0B1aaDW6UTKXLqu3ersB
-         i0dOnDDdExp33NKwxjKjpZYcVHODS3xliW13WGUCIUJqhKlYEKxx4cAV6m9n4WLsfFiZ
-         RGjSa2sJp6Q7bfczan8yg+EU6miQRV1wf0+5J1c0+p+A8B4DA2EmmClbD6B6ajaFgoJW
-         f5TMbprefeCG6ip5hcpgNMmsI5mCCzNOY1ZwJ5vDyJVDAka9y7JwRVGszwbKqMPQINhS
-         VwOg==
+        bh=oazLT5BoRo6P0OAkqDnaATq3SHdxnGOsyqxxTgo0/fk=;
+        b=Yr9UREVC5MVPBvfc95ZNhA42fYbaK1DSNtGyVx1whY4H/m5XQ7zYjdwpgrakzzaJLd
+         q0FAVIoycIYEy8ZPPmY2Ckg5WNX/F/ZnyM4dGU97je+EIcK/dnwyZiJMEuu7SHpWWYzk
+         04sd7jnEcZux32/nUGrp/AoED1BfcM/9r0akQsOQQD8AZKqxrHz0QVAQYUzdlHgfCLuv
+         bTeEBWckjLVw4U8jzHhStKmDCn04e+Xlv+ICWjhvvGG72I2X7CJ5/1HASsxWvu9JCefD
+         lcKc5l14g7GD8c4oOPZL1XRBrLsDSwkUz0JGqTJHfape5aU/gzShejRz6HLh/XzQZhzf
+         PclQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685368682; x=1687960682;
+        d=1e100.net; s=20221208; t=1685368770; x=1687960770;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d8wXnB4iVuJZTN+eBti6PDoOXenSUwXL/Vym36+LG00=;
-        b=gt5SWn4pCJqK/yxUllpgYYqwVMNnFhf1IwF10yhm70m3/91xf6qMy5PAqHzK3Sjxus
-         1RHtPYUB4mB+95op4TT+kEmfSVnWszPLI9q9lRDkCCjppL/eUcX74iHBc0ZSNqXBHBjr
-         6Kn24ljOCbVQ/xuj+PZU9cccASbjR0oA+MKQCI3sDZb5v10xo2Ok5DamyTACPqOaBiwD
-         EWnUnXGSTnIPJrIIs3XjXPI7lPGzFqBpXAbuZA+AcF8ggjeZd6u3G3G3Do3KCR+gLRp1
-         iEYa0CVCluGdRJ8Jq1FxggVmiMSlTlc1rBDaKkrLpfgu8aWnJc5WKJx5mvNoMp5y/sz4
-         2Dnw==
-X-Gm-Message-State: AC+VfDzWIbNLFXn6fl49Y2BALXRvbJJFJNoNpaD2tAfkED6rIUBRtheB
-        1+3AfVdlj8r53SC7pbZW9I0=
-X-Google-Smtp-Source: ACHHUZ7H4VO6On4+LQ60ze6eygW9wgdySmljow50Ej5bjnq5xSK7lqfcpgSGf81iI1u261fmbaBI1Q==
-X-Received: by 2002:a05:600c:2110:b0:3f6:f7c:b3fa with SMTP id u16-20020a05600c211000b003f60f7cb3famr8544858wml.31.1685368681822;
-        Mon, 29 May 2023 06:58:01 -0700 (PDT)
+        bh=oazLT5BoRo6P0OAkqDnaATq3SHdxnGOsyqxxTgo0/fk=;
+        b=dNUt3tiAdBb5uC4NbCLAw9C8oLLTLtYy9EIjnWLrE0WmcUgvH2LI50Ncf62kfAyuIh
+         tOmfUd99AANCX2pe4h7IytQ9OeNJcIDwN38DUnD1l0S/cJwnPpLAxXR7+1KDOSVcJ+n2
+         uU0mt0nLZ2iSMxVHV6pFGTDFCGEOuFcIG6jwYA6pKH15fAnXib50lrgcypcyF27lzCFz
+         H8Uug2NtxM48c3+E/Leun0nnRwY6H4xuBwMLIKZmbjCgzlmz6n/7YWRyv7LxHPnXr1Z/
+         QoCi+r1Q7Txicvsxx5e2+3QGOv3rfR4kS/T/mPQrALvfEG1jycpHwBWOFEqLnv9Wug0m
+         TT9w==
+X-Gm-Message-State: AC+VfDwkMY9aWwGe3Fy2/gkuupyAXCoeK/jxEge9K/rZ17Zd+oftQWLL
+        6zPt5WnNbLwXQpmbq1a2XNY=
+X-Google-Smtp-Source: ACHHUZ4RDCeonMwGzDh6NAp931ShLAMt6/ZxYuWux62+rLsp2JN9Aml4izb+ej1Vg383g8EUUJJ+fw==
+X-Received: by 2002:a05:600c:2196:b0:3f6:3da:1603 with SMTP id e22-20020a05600c219600b003f603da1603mr11566428wme.26.1685368769840;
+        Mon, 29 May 2023 06:59:29 -0700 (PDT)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id m23-20020a7bca57000000b003f5ffba9ae1sm14431663wml.24.2023.05.29.06.57.59
+        by smtp.gmail.com with ESMTPSA id n2-20020a5d4c42000000b0030af15d7e41sm86803wrt.4.2023.05.29.06.59.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 06:58:00 -0700 (PDT)
-Message-ID: <78d59502-313e-3b6b-d363-f6e105120abb@gmail.com>
-Date:   Mon, 29 May 2023 15:57:59 +0200
+        Mon, 29 May 2023 06:59:28 -0700 (PDT)
+Message-ID: <740d6471-b71c-3c3b-73e3-60fb5573c88e@gmail.com>
+Date:   Mon, 29 May 2023 15:59:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 21/27] arm64: dts: mediatek: mt6795: Add PMIC Wrapper node
+Subject: Re: [PATCH 23/27] arm64: dts: mediatek: Add MT6331 PMIC devicetree
 Content-Language: en-US, ca-ES, es-ES
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
@@ -73,9 +73,9 @@ Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
         kernel@collabora.com, phone-devel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
 References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
- <20230412112739.160376-22-angelogioacchino.delregno@collabora.com>
+ <20230412112739.160376-24-angelogioacchino.delregno@collabora.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230412112739.160376-22-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230412112739.160376-24-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,35 +91,307 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
-> Add the pwrap node: this is used to communicate with the PMIC(s).
+> MT6331 is the primary PMIC for the MediaTek Helio X10 MT6795 smartphone
+> platforms: add a devicetree describing its regulators, Real Time Clock
+> and PMIC-keys.
 > 
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Applied thanks!
+Applied, thanks
+
 
 > ---
->   arch/arm64/boot/dts/mediatek/mt6795.dtsi | 11 +++++++++++
->   1 file changed, 11 insertions(+)
+>   arch/arm64/boot/dts/mediatek/mt6331.dtsi | 284 +++++++++++++++++++++++
+>   1 file changed, 289 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/mediatek/mt6331.dtsi
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-> index 50d9276d18c6..29ca9a7bf0b3 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-> @@ -391,6 +391,17 @@ timer: timer@10008000 {
->   			clocks = <&system_clk>, <&clk32k>;
->   		};
->   
-> +		pwrap: pwrap@1000d000 {
-> +			compatible = "mediatek,mt6795-pwrap";
-> +			reg = <0 0x1000d000 0 0x1000>;
-> +			reg-names = "pwrap";
-> +			interrupts = <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>;
-> +			resets = <&infracfg MT6795_INFRA_RST0_PMIC_WRAP_RST>;
-> +			reset-names = "pwrap";
-> +			clocks = <&topckgen CLK_TOP_PMICSPI_SEL>, <&clk26m>;
-> +			clock-names = "spi", "wrap";
+> diff --git a/arch/arm64/boot/dts/mediatek/mt6331.dtsi b/arch/arm64/boot/dts/mediatek/mt6331.dtsi
+> new file mode 100644
+> index 000000000000..fcec8c07fe39
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt6331.dtsi
+> @@ -0,0 +1,284 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (c) 2023 Collabora Ltd.
+> + * Author: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> + */
+> +#include <dt-bindings/input/input.h>
+> +
+> +&pwrap {
+> +	pmic: mt6331 {
+> +		compatible = "mediatek,mt6331";
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +
+> +		mt6331regulator: mt6331regulator {
+> +			compatible = "mediatek,mt6331-regulator";
+> +
+> +			mt6331_vdvfs11_reg: buck-vdvfs11 {
+> +				regulator-name = "vdvfs11";
+> +				regulator-min-microvolt = <700000>;
+> +				regulator-max-microvolt = <1493750>;
+> +				regulator-ramp-delay = <12500>;
+> +				regulator-enable-ramp-delay = <0>;
+> +				regulator-allowed-modes = <0 1>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vdvfs12_reg: buck-vdvfs12 {
+> +				regulator-name = "vdvfs12";
+> +				regulator-min-microvolt = <700000>;
+> +				regulator-max-microvolt = <1493750>;
+> +				regulator-ramp-delay = <12500>;
+> +				regulator-enable-ramp-delay = <0>;
+> +				regulator-allowed-modes = <0 1>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vdvfs13_reg: buck-vdvfs13 {
+> +				regulator-name = "vdvfs13";
+> +				regulator-min-microvolt = <700000>;
+> +				regulator-max-microvolt = <1493750>;
+> +				regulator-ramp-delay = <12500>;
+> +				regulator-enable-ramp-delay = <0>;
+> +				regulator-allowed-modes = <0 1>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vdvfs14_reg: buck-vdvfs14 {
+> +				regulator-name = "vdvfs14";
+> +				regulator-min-microvolt = <700000>;
+> +				regulator-max-microvolt = <1493750>;
+> +				regulator-ramp-delay = <12500>;
+> +				regulator-enable-ramp-delay = <0>;
+> +				regulator-allowed-modes = <0 1>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vcore2_reg: buck-vcore2 {
+> +				regulator-name = "vcore2";
+> +				regulator-min-microvolt = <700000>;
+> +				regulator-max-microvolt = <1493750>;
+> +				regulator-ramp-delay = <12500>;
+> +				regulator-enable-ramp-delay = <0>;
+> +				regulator-allowed-modes = <0 1>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vio18_reg: buck-vio18 {
+> +				regulator-name = "vio18";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-ramp-delay = <12500>;
+> +				regulator-enable-ramp-delay = <0>;
+> +				regulator-allowed-modes = <0 1>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vtcxo1_reg: ldo-vtcxo1 {
+> +				regulator-name = "vtcxo1";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <2800000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +				regulator-boot-on;
+> +			};
+> +
+> +			mt6331_vtcxo2_reg: ldo-vtcxo2 {
+> +				regulator-name = "vtcxo2";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <2800000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +				regulator-boot-on;
+> +			};
+> +
+> +			mt6331_avdd32_aud_reg: ldo-avdd32aud {
+> +				regulator-name = "avdd32_aud";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3200000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +				regulator-boot-on;
+> +			};
+> +
+> +			mt6331_vauxa32_reg: ldo-vauxa32 {
+> +				regulator-name = "vauxa32";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3200000>;
+> +				regulator-ramp-delay = <0>;
+> +			};
+> +
+> +			mt6331_vcama_reg: ldo-vcama {
+> +				regulator-name = "vcama";
+> +				regulator-min-microvolt = <1500000>;
+> +				regulator-max-microvolt = <2800000>;
+> +				regulator-ramp-delay = <0>;
+> +			};
+> +
+> +			mt6331_vio28_reg: ldo-vio28 {
+> +				regulator-name = "vio28";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <2800000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +				regulator-boot-on;
+> +			};
+> +
+> +			mt6331_vcamaf_reg: ldo-vcamaf {
+> +				regulator-name = "vcam_af";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-ramp-delay = <0>;
+> +			};
+> +
+> +			mt6331_vmc_reg: ldo-vmc {
+> +				regulator-name = "vmc";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-ramp-delay = <0>;
+> +			};
+> +
+> +			mt6331_vmch_reg: ldo-vmch {
+> +				regulator-name = "vmch";
+> +				regulator-min-microvolt = <3000000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-ramp-delay = <0>;
+> +			};
+> +
+> +			mt6331_vemc33_reg: ldo-vemc33 {
+> +				regulator-name = "vemc33";
+> +				regulator-min-microvolt = <3300000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vgp1_reg: ldo-vgp1 {
+> +				regulator-name = "vgp1";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vsim1_reg: ldo-vsim1 {
+> +				regulator-name = "vsim1";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <3100000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vsim2_reg: ldo-vsim2 {
+> +				regulator-name = "vsim2";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <3100000>;
+> +				regulator-ramp-delay = <0>;
+> +			};
+> +
+> +			mt6331_vmipi_reg: ldo-vmipi {
+> +				regulator-name = "vmipi";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vibr_reg: ldo-vibr {
+> +				regulator-name = "vibr";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-ramp-delay = <0>;
+> +			};
+> +
+> +			mt6331_vgp4_reg: ldo-vgp4 {
+> +				regulator-name = "vgp4";
+> +				regulator-min-microvolt = <1600000>;
+> +				regulator-max-microvolt = <2200000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vcamd_reg: ldo-vcamd {
+> +				regulator-name = "vcamd";
+> +				regulator-min-microvolt = <900000>;
+> +				regulator-max-microvolt = <1500000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vusb10_reg: ldo-vusb10 {
+> +				regulator-name = "vusb";
+> +				regulator-min-microvolt = <1000000>;
+> +				regulator-max-microvolt = <1300000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +				regulator-boot-on;
+> +			};
+> +
+> +			mt6331_vcamio_reg: ldo-vcamio {
+> +				regulator-name = "vcam_io";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-ramp-delay = <0>;
+> +			};
+> +
+> +			mt6331_vsram_reg: ldo-vsram {
+> +				regulator-name = "vsram";
+> +				regulator-min-microvolt = <1012500>;
+> +				regulator-max-microvolt = <1012500>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +				regulator-boot-on;
+> +			};
+> +
+> +			mt6331_vgp2_reg: ldo-vgp2 {
+> +				regulator-name = "vgp2";
+> +				regulator-min-microvolt = <1100000>;
+> +				regulator-max-microvolt = <1500000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +				regulator-boot-on;
+> +			};
+> +
+> +			mt6331_vgp3_reg: ldo-vgp3 {
+> +				regulator-name = "vgp3";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vrtc_reg: ldo-vrtc {
+> +				regulator-name = "vrtc";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <2800000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			mt6331_vdig18_reg: ldo-vdig18 {
+> +				regulator-name = "dvdd18_dig";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
 > +		};
 > +
->   		sysirq: intpol-controller@10200620 {
->   			compatible = "mediatek,mt6795-sysirq",
->   				     "mediatek,mt6577-sysirq";
+> +		mt6331rtc: mt6331rtc {
+> +			compatible = "mediatek,mt6331-rtc";
+> +		};
+> +
+> +		mt6331keys: mt6331keys {
+> +			compatible = "mediatek,mt6331-keys";
+> +			power {
+> +				linux,keycodes = <KEY_POWER>;
+> +				wakeup-source;
+> +			};
+> +			home {
+> +				linux,keycodes = <KEY_HOME>;
+> +			};
+> +		};
+> +	};
+> +};
