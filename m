@@ -2,105 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FDE714D95
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CAB714D70
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjE2P5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46496 "EHLO
+        id S230104AbjE2Pwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjE2P5J (ORCPT
+        with ESMTP id S230095AbjE2Pwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:57:09 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80731A0;
-        Mon, 29 May 2023 08:57:08 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f60e536250so29681865e9.1;
-        Mon, 29 May 2023 08:57:08 -0700 (PDT)
+        Mon, 29 May 2023 11:52:43 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65611A3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:52:42 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-456ece9f868so937815e0c.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685375827; x=1687967827;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=lKUULOSBj7tBTW8FHEwjrgh3AafjtGjNkiIhNVDZYDQ=;
-        b=UHO7po5P5jLxAfPfrh8jh+BHAychOE0T3pKlgqhwScXEnF7Aw92PMVXTBpEjpDUC8c
-         eKCwR8BEKrP4Sa9e1UXFsU+1EkCx3Yw1vCu6B6W60ACHUj8JepKpnGfvmwP4OViNxDfj
-         w37PQ+1k17m5jcQ+/l5nRKQfVZITZcXXtHR8RDDvMw3Op0uFNYE3YrwKuH3eBmpWIxZ4
-         Or9fpoPiori3uM2MU+zWbwP4Ws5wnoFvcX4TzMVcRSyTqv/Q+1MWLUkNqdbnoD42AK13
-         YGq936+0CWWqGbesclYNw7wP6LXbgnVLBesG8y0azOf0gIxAg19TfHJ4PU9exGzbMIb0
-         Jqyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685375827; x=1687967827;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1685375561; x=1687967561;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lKUULOSBj7tBTW8FHEwjrgh3AafjtGjNkiIhNVDZYDQ=;
-        b=eR9/kYbPgXJhymy2PF8VuAxqKWxiXrNpviSq7BWnf9VjqLazxldP4Hixm7uxDFzrws
-         Zl20+6SYl7kTNW+dxBFLJnh0aB1DPqymdfhA3i2LlW96xCq73bYl4GL+v7XetJlApTpB
-         oP0E+j/1+ik2IqrzXbCTUqgHzfrF23uczi+4EmhmM7jOOxBJK3my2caOoNSECCiEoozr
-         eSvYHyuks9+HNNJ6JuKT2VPUZ5wxXmY2tnKF0Sm6i91D58Kre6SNlr6GRozRLpAR/78M
-         kxBb3aFW0yCSp1YO2xYLZzl8MriSwvaGfyZLU86PFrZ4kKaqUfcMbqLVquUfrq6lv59L
-         GJCg==
-X-Gm-Message-State: AC+VfDwN0lpoAikZtIUTTzyz4Le6E9/Mhsj51LNT6WMO6bJWyQDMsIQo
-        gMAoXSAcLi+r5+W4J6AO9+Q=
-X-Google-Smtp-Source: ACHHUZ79cFL3R4cI5Y2qR+q72gm7jPHqUr2wOV+GcT+ImB9u5twMe6StMCS1FCZyk0thQF7rLg6TVQ==
-X-Received: by 2002:a7b:c8d7:0:b0:3f6:3486:1391 with SMTP id f23-20020a7bc8d7000000b003f634861391mr6686520wml.13.1685375826743;
-        Mon, 29 May 2023 08:57:06 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id z10-20020a7bc7ca000000b003f602e2b653sm18313505wmk.28.2023.05.29.08.57.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 08:57:06 -0700 (PDT)
-Message-ID: <6474cb52.7b0a0220.ece09.c49e@mx.google.com>
-X-Google-Original-Message-ID: <ZHTKKK7/Rsjn0HgH@Ansuel-xps.>
-Date:   Mon, 29 May 2023 17:52:08 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-leds@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v3 08/13] leds: trigger: netdev: add support for
- LED hw control
-References: <20230527112854.2366-1-ansuelsmth@gmail.com>
- <20230527112854.2366-9-ansuelsmth@gmail.com>
- <41bbeede-b88a-431f-8bcf-ba3c8a951dc5@lunn.ch>
+        bh=rGaKnkSY6KauhCFSazmEUL/Bq+G0y7m3m3aFs5ZleIs=;
+        b=Dxelwj2lHv1Ym9KWoinFzV/DSsT2+sKqw9RvU0KUv64qrdoHkuLpZ4hY1TtVSepYVM
+         1sHO5361oiSjspGNHm/AOPqxorO6i1V6H2E+QigfuHMjkh8Wfxmc9l/9J+lHloClmSCH
+         Fy68wEC6brJGg7NCZpLfk9zts6aIrNpQXvPA3Y9BsbhKjVwC3ps+FVij7a6jZsDGXvZb
+         bKn/nfz02j0f8RMHqlPGK9gEtQLulk8QtQdYvSJ/b/ygWFeXcJKPXGdmJL8BQ0hU96WI
+         rtuGJWjI44gsKhedH/i/VVoJDLfyr/YKjrf6PplvhjtZz+hxyuaxRMgRrUf7h1sCqe8X
+         xvlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685375561; x=1687967561;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rGaKnkSY6KauhCFSazmEUL/Bq+G0y7m3m3aFs5ZleIs=;
+        b=bHFvWAplMy02ZrB3SRQAj23LDxrk56UgKn/rSV1gaZWLEnwdWNejdQhjAggyC4mjT3
+         /cJYfOYrOynfT7/kOTp1DxV3D79NzYvdF/G1cOozXtGhJ9a1EDiNiKdqsgs3f58zZnas
+         MUGoHCoF9iMcJ421/szt0csf+lgBmP3+GQjCc9CAhyuxCRhCdMW7NvG6dm1PGBHuGsON
+         hVbrvOV5Ox1jHgxbRVWAqfJ6Ym8uhwYHJ/hhUTp0PSrpWexzuEm5rLvCBvvBm5iGvhV/
+         AjjWHZx5i969UFVFdRw+BR5W6EqqAH3HsTOgJXdFt5tZCw9wAjBnszytCoq/hrabkuI7
+         kqGg==
+X-Gm-Message-State: AC+VfDzHKzJYfkFOvOfolUH9RkdIEOsvuSmeztslDN5JsqaeGgyI6dvL
+        ff1T4W22rBbpR9Q5AeLMzFaXeSynDY0m+xpzTwjPhg==
+X-Google-Smtp-Source: ACHHUZ5WTM9BvqPWbVXAGXg1rQ8FgY/ECsnpVegb3v3Wt3m1gWeGXnAFcFVnewNzGrXeKaoSYjRoJKc771LYXcgt6NA=
+X-Received: by 2002:a1f:3d15:0:b0:440:3b4e:9a31 with SMTP id
+ k21-20020a1f3d15000000b004403b4e9a31mr2451504vka.2.1685375560931; Mon, 29 May
+ 2023 08:52:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41bbeede-b88a-431f-8bcf-ba3c8a951dc5@lunn.ch>
+References: <20230528190828.358612414@linuxfoundation.org>
+In-Reply-To: <20230528190828.358612414@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 29 May 2023 21:22:29 +0530
+Message-ID: <CA+G9fYtYT438NoeQegueRqLD_4x+6x9FSBLAcW3jU1+BpwTkpw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 00/69] 5.15.114-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 05:45:45PM +0200, Andrew Lunn wrote:
-> >  static bool can_hw_control(struct led_netdev_data *trigger_data)
-> >  {
-> > +	unsigned int interval = atomic_read(&trigger_data->interval);
-> >  	struct led_classdev *led_cdev = trigger_data->led_cdev;
-> > +	unsigned long default_interval = msecs_to_jiffies(50);
-> 
-> nitpick:
-> 
-> We have 50 in netdev_trig_activate(). Now it is used twice, it would
-> be nice to replace it with a #define. I doubt it will ever get
-> changed, but we do want them to be identical.
-> 
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+On Mon, 29 May 2023 at 01:17, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
+> This is the start of the stable review cycle for the 5.15.114 release.
+> There are 69 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.114-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Good idea. I will move the value to a define in v4, guess it's ok to
-keep the review tag for this simple change?
 
--- 
-	Ansuel
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.15.114-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: cd3aaa9c7395cb221c57a5d6e5ca7d342669d553
+* git describe: v5.15.112-274-gcd3aaa9c7395
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
+.112-274-gcd3aaa9c7395
+
+## Test Regressions (compared to v5.15.112-204-g30213a86a6fe)
+
+## Metric Regressions (compared to v5.15.112-204-g30213a86a6fe)
+
+## Test Fixes (compared to v5.15.112-204-g30213a86a6fe)
+
+## Metric Fixes (compared to v5.15.112-204-g30213a86a6fe)
+
+## Test result summary
+total: 133865, pass: 111296, fail: 4340, skip: 18041, xfail: 188
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 117 total, 116 passed, 1 failed
+* arm64: 45 total, 43 passed, 2 failed
+* i386: 35 total, 32 passed, 3 failed
+* mips: 27 total, 26 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 27 total, 26 passed, 1 failed
+* riscv: 11 total, 11 passed, 0 failed
+* s390: 12 total, 11 passed, 1 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 38 total, 36 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
