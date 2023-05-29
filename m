@@ -2,155 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90987714B21
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9448F714B04
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjE2Nyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S230112AbjE2Nxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjE2NyA (ORCPT
+        with ESMTP id S229966AbjE2Nw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:54:00 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C9810CB
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:53:21 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f4b256a0c9so3522665e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685368371; x=1687960371;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p58CUVqLSR0Tnh+edVFp6/c85yeAdv4ChlUd6Ivl4lE=;
-        b=a1UO99vkagOh/S32zwT51/eizQof70iXiTgLznMSd9CsXwBvvLDZB/WA+Zjzs2yZud
-         d0SYoJ1slw62ov5Xq/oh78Is5q/UPPENMXFIg5jr1lXVQ5NjoB67WwFF/N1fevNMiw0I
-         qqkJaOxV/EVstxkTAK3dr5Uzgr80sycyPWtrMwP2lPn8n1LzDfWD7hhPkeWxE0VOyobI
-         HSZmq1v9vwFoNpbJozETEAFSi9fk7FziFIPaTLE6tnvRB1HLVz4o8hUHo3QqbtCyTooL
-         GS/Gga6SI7S3Y3ZHBGMucZ2dtJhkObBcLi5S93dgl/mzvRScLgjc5UrA83nuNBXiq66P
-         ZHgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685368371; x=1687960371;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p58CUVqLSR0Tnh+edVFp6/c85yeAdv4ChlUd6Ivl4lE=;
-        b=PXRqyRyXzJgJSmQNULgWdMqmSDQ+9UwwBmGGCzOKkhnpvMA+JymwPGfi0XRMwiOsN1
-         tfZMqDT0S00MKk78S/yd4FaNVxAO9X1YYm2xZDLbS3U80PaCdRgV5r3jpeVOKt+ilQRX
-         W7bIrzNfhjUSWbeplGEsmVhIYhzLi6KToop4cNv2qXrcxlQWMoXQT+bAFz1ttQs8wqB3
-         nGKt/tLzMddf8aijnplxDXaegaQ6LPpJ9+DFIQDg3qG4ti5h+n5eYPxcKqaCP5KrYOcR
-         lLNgJmo9RqdjjzBTkMj146YZTvccrMWDc+n4y1N4TujGwxapjpimSqH1xyeS3MNsMuCP
-         Cxuw==
-X-Gm-Message-State: AC+VfDzeItkRZ1GuC7IHeIWwZNABRbKChkXJQCQakpLDwC03T8vQemPr
-        NWZ8e6Ntge9piBIyC2wISDpMfQ==
-X-Google-Smtp-Source: ACHHUZ63Z3eJuDnAvuUI83xqUyXnOhx0Q6NIV16cLmP/m8VuJGE0yGBfdp7h6Ltsv0vqYIBRm2YgEw==
-X-Received: by 2002:ac2:5212:0:b0:4f3:aae3:aedc with SMTP id a18-20020ac25212000000b004f3aae3aedcmr3287507lfl.9.1685368371519;
-        Mon, 29 May 2023 06:52:51 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id c16-20020ac25310000000b004f2532cfbc1sm4700lfh.81.2023.05.29.06.52.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 06:52:51 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 29 May 2023 15:52:37 +0200
-Subject: [PATCH v8 18/18] drm/msm/a6xx: Add A610 speedbin support
+        Mon, 29 May 2023 09:52:58 -0400
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A851B1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:52:43 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 3dIdqr1UCe9XV3dIeq7Nxy; Mon, 29 May 2023 15:52:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685368362;
+        bh=ekUc6/kpoNVqqDDHA37r3P9ofoCJir8xdVgamOnTUws=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=LG8iRBb8j9/7yJeCsjr2RPI/UFdcVBgJkne3mBmtqwaKTuHbSMRzCW/3JNXco4Vl2
+         h+GGvtqNJy6X0RrxtSXUMVFof37JY+onNWTpy11A8RbpTCvwkty1ynEWBPA5dJdJ7M
+         8UmCXsobvUwfxQMNPw0TyRv4A8zWqoEgQgFBX9NtT36X8VQMCoVYRKwS0kfApyCqNL
+         BXg7Us/6Zmav5cMnbYnLoc5m4aQZKnda1evhE0OTz3lrtH6xu39qGnzlkbuLOo+TT2
+         bZPVy2a12TlpkcRXRV6Jm429amrrsZC8mfgcfF/Zq7II976s8Dn9+/TmWwUrDtilay
+         KYrIVbQkYzS2A==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 29 May 2023 15:52:42 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <733f7cc6-a651-2457-3ffc-6ac116c27213@wanadoo.fr>
+Date:   Mon, 29 May 2023 15:52:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230223-topic-gmuwrapper-v8-18-69c68206609e@linaro.org>
-References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
-In-Reply-To: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685368343; l=1852;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=XyERlWDTsfWZFtKFZysYLOHv2ihqt9U+AK25cPIEZ8I=;
- b=2n8OuzD0JlvWdAYJLyaK9eKey1cglmNCSfu2QjRZowbgEZbyhz4HvTwrDp0kby9LRkmISLbjr
- Kcr2krpAbHsBJvpoNGqk/mYX4QT+h2FMVRaFTxDXcCH1aHeS+I5R/H0
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] soc: xilinx: Fix a memory leak in zynqmp_pm_remove()
+Content-Language: fr
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Michal Simek <michal.simek@amd.com>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Tejas Patel <tejas.patel@xilinx.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <93ef923496b6c45a0baa59458099aed3a20b771a.1685346792.git.christophe.jaillet@wanadoo.fr>
+ <8355a10b-e365-485f-810f-0c3001a0406a@kili.mountain>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <8355a10b-e365-485f-810f-0c3001a0406a@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A610 is implemented on at least three SoCs: SM6115 (bengal), SM6125
-(trinket) and SM6225 (khaje). Trinket does not support speed binning
-(only a single SKU exists) and we don't yet support khaje upstream.
-Hence, add a fuse mapping table for bengal to allow for per-chip
-frequency limiting.
+Le 29/05/2023 à 11:59, Dan Carpenter a écrit :
+> On Mon, May 29, 2023 at 09:53:24AM +0200, Christophe JAILLET wrote:
+>> 'rx_chan' is known to be NULL here.
+>> Reverse the logic to free the mbox if it has been allocated.
+>>
+>> Fixes: ffdbae28d9d1 ("drivers: soc: xilinx: Use mailbox IPI callback")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> 'rx_chan' may be NULL, but mbox_free_channel() handles it.
+>> Maybe it is more informative to keep a (useless) "if (rx_chan)" to tell
+>> that it may not be allocated.
+>>
+>>
+>> On my machine, compilation fails with gcc (Ubuntu 12.1.0-2ubuntu1~22.04):
+>>
+>>    CC      drivers/soc/xilinx/zynqmp_power.o
+>> drivers/soc/xilinx/zynqmp_power.c: In function ‘zynqmp_pm_probe’:
+>> drivers/soc/xilinx/zynqmp_power.c:193:12: error: ‘pm_api_version’ is used uninitialized [-Werror=uninitialized]
+>>    193 |         if (pm_api_version < ZYNQMP_PM_VERSION)
+>>        |            ^
+>> drivers/soc/xilinx/zynqmp_power.c:187:13: note: ‘pm_api_version’ was declared here
+>>    187 |         u32 pm_api_version;
+>>        |             ^~~~~~~~~~~~~~
+>> cc1: all warnings being treated as errors
+>>
+>> I think that this warning is bogus and gcc is wrong.
+>>
+>> But I don't know what to do with it :/
+>> Anyway, it is un-realated to this patch.
+> 
+> I bet GCC is correct.
+> 
+> Do you have CONFIG_ZYNQMP_FIRMWARE enabled in your .config?  This driver
+> can only be compiled with that enabled, but I've seen some of your
+> other patches depend on CONFIG_BROKEN so I think you're going outside of
+> the Kconfig rules.
+> 
+> regards,
+> dan carpenter
+> 
+> 
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+Ok, got it. This is for arm64.
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index d046af5f6de2..c304fa118cff 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -2098,6 +2098,30 @@ static bool a6xx_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
- 	return progress;
- }
- 
-+static u32 a610_get_speed_bin(u32 fuse)
-+{
-+	/*
-+	 * There are (at least) three SoCs implementing A610: SM6125 (trinket),
-+	 * SM6115 (bengal) and SM6225 (khaje). Trinket does not have speedbinning,
-+	 * as only a single SKU exists and we don't support khaje upstream yet.
-+	 * Hence, this matching table is only valid for bengal and can be easily
-+	 * expanded if need be.
-+	 */
-+
-+	if (fuse == 0)
-+		return 0;
-+	else if (fuse == 206)
-+		return 1;
-+	else if (fuse == 200)
-+		return 2;
-+	else if (fuse == 157)
-+		return 3;
-+	else if (fuse == 127)
-+		return 4;
-+
-+	return UINT_MAX;
-+}
-+
- static u32 a618_get_speed_bin(u32 fuse)
- {
- 	if (fuse == 0)
-@@ -2195,6 +2219,9 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_gpu *adreno_gpu, u3
- {
- 	u32 val = UINT_MAX;
- 
-+	if (adreno_is_a610(adreno_gpu))
-+		val = a610_get_speed_bin(fuse);
-+
- 	if (adreno_is_a618(adreno_gpu))
- 		val = a618_get_speed_bin(fuse);
- 
+make does not behave the same when you build a file or a directory.
+Sometimes it is convenient, sometimes it is surprising.
 
--- 
-2.40.1
+On x86:
+make -j7 drivers/soc/xilinx/zynqmp_power.o		--> fail
+make -j7 drivers/soc/xilinx/				--> build nothing because I'm not on arm64
 
+
+export ARCH=arm64
+./make.cross -j7 drivers/soc/xilinx/zynqmp_power.o	--> OK
+
+Thanks for the pointer.
+
+CJ
