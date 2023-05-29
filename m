@@ -2,90 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0305F714F78
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 20:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34355714F79
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 20:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjE2Sxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 14:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S229613AbjE2SyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 14:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjE2Sxl (ORCPT
+        with ESMTP id S229535AbjE2SyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 14:53:41 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C639F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 11:53:40 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bad1c8dce48so6116359276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 11:53:40 -0700 (PDT)
+        Mon, 29 May 2023 14:54:13 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7977BC4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 11:54:12 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-7748d634a70so284075239f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 11:54:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685386419; x=1687978419;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fb+xGJEzAuTS5TrIgTU4fcvFK43ao8HwfzBYRc52TTY=;
-        b=S5vwol9vE0JkslbkyRPxKAkNViXqytiqtwh4nsd9eEgwmZ719gWuFJVhrVRcYMhMhH
-         I47+gsK59+oMFCcm/r1itjNdraOXhmYJZhEWSuRWoUYXc7Dp070Pa2Yyvj4dEuYLGKoh
-         AVGVBgumYkPyDju0i+9bhA5sVMRSAbgmt/bo08Ofp93ulaxvSQqkzkIXUIKt60Qxt7aS
-         ckbLK5h8mRGy+3ePq+B0w88MS07aczR+7j5ah1Mo10ytZ913dDcxeiCeTs6HWF478yhB
-         CJ70hGrv1bkk+tSU6BqdFxjeOmCN1out6pHgQpdSrk/bLD1zCrblrtDWLbN3YGdezv4T
-         flqw==
+        d=gmail.com; s=20221208; t=1685386452; x=1687978452;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=A9FWaINC+8yc3RixwuUDL1/QxNvvBSU54/4pwy3a5GY=;
+        b=scTnaOneYSXBUS0fYOF++FZss5VdXaKeIJPre/nf2dnx/eUMVS9xd84WAsnH0GJ62s
+         9yrp9X9ZFMtDtpIC/NXU6ZufETiN8YWiv/Kyii+oE7ZCLnEmrvHoQKOSAaBgr2TIrbq2
+         avF9VR3lsGcGUXk7IY49NE9pvup0fYEzOLcxIkBTqSXb5jWi/sBcQ0mjquZ8z/fGbD5r
+         T8wCDSw/x9Zw6+mZOGQV7rqERacu5jByb1l0pUUKkRA1hp1QCzvMMSt1tl3Wm55FE452
+         zCuOmLziROhaqw47/Gd5G5nTCZc4Bi4oSVMNT/IvyAJ391O26DBaMhvCK0eq6lMOC/Q7
+         9fkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685386419; x=1687978419;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fb+xGJEzAuTS5TrIgTU4fcvFK43ao8HwfzBYRc52TTY=;
-        b=MzhkmF7lkUHtJVCIey1zV0++POH9AyunXW9mL+vGE97sNRKaBaOKnUYnpKu0sivrjs
-         HaFrrQD/kF3iXfY7GTYtNUvdhn92ml1+9m/wDUPehmUixnLyd+tepj4OUJHN49n72AsM
-         Vbb7fuvnIdVK+1mTesZQaDOGXObx+MJ37M4pKg2DuBs4z5jjhVnHHV+Kbz8onLgqrfv5
-         yWtBO1SjgbrpxPY2cNoPKHURPaMTGyLuTc0+Y23PyZc01HakdsTE19b1QWrWncvIqGQa
-         kqMXmuKOcJx7XtcrxREW1milCOw3JZB1YeqGVlvC1QyHtsvROLmKxtkYKN+miGUhRRXZ
-         EMCA==
-X-Gm-Message-State: AC+VfDxrZXzqZQxpWLut8iGzqtcaDbQgyx2LzHIx3UpL/K+Sr6yUuXW6
-        jCh+cjUgDK/moSQ7V+nEZmqcccBdeNeUYw==
-X-Google-Smtp-Source: ACHHUZ7Vn/Q5HrLEkQuw5sBuUMFb7N55w2kESh9lJCpvJqW43vVCYmwyZoVIhiVBp34GVFj710bX4NkVKlJqoQ==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a25:ad1c:0:b0:bac:a7d5:f895 with SMTP id
- y28-20020a25ad1c000000b00baca7d5f895mr31364ybi.10.1685386419461; Mon, 29 May
- 2023 11:53:39 -0700 (PDT)
-Date:   Mon, 29 May 2023 18:53:37 +0000
-In-Reply-To: <ZHOtS67ZtMPsyNVk@casper.infradead.org>
-Mime-Version: 1.0
-References: <20230527103126.398267-1-linmiaohe@huawei.com> <ZHGAcaqOx/e8lqwV@casper.infradead.org>
- <CAJD7tkYSrVkAONXko0eE6LWS__kK_Xeto9MVGwTxuqT5j6N8RQ@mail.gmail.com>
- <ZHIcnOV/mrkcerlG@casper.infradead.org> <CAJD7tkZ2Q1ZCqNchpiiC6FCE08dYH6tzANA=VqujeDgT8YhRUA@mail.gmail.com>
- <D2B59104-B602-45A3-B938-AE5DC67BAC98@linux.dev> <ZHOtS67ZtMPsyNVk@casper.infradead.org>
-Message-ID: <20230529185337.3gk3ww76sdxdgv6o@google.com>
-Subject: Re: [PATCH] memcg: remove unused mem_cgroup_from_obj()
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Muchun Song <muchun.song@linux.dev>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Vasily Averin <vasily.averin@linux.dev>, hannes@cmpxchg.org,
-        mhocko@kernel.org, roman.gushchin@linux.dev,
-        akpm@linux-foundation.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685386452; x=1687978452;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A9FWaINC+8yc3RixwuUDL1/QxNvvBSU54/4pwy3a5GY=;
+        b=cq3exkoIOiUCuUiO0FisispTOtHusaPzwiu68HPES94Zj9C7qYz0Atwd6ZjBd7TtHm
+         CTm1YSDoQWC8lc38Nz2+IYZpXpqqvfKqDzmBAFe+T7VfFLN7GmtrPoWHC4a3AOtPSgn1
+         2MXJYzp59q1FHswavxSFrULoxwm/4Hb0lnS4/vcrm+66ixXSUMsFX/yQ+otbGEg9UlHc
+         wkJqSzGbExQmBootuMtSJDbXsM2G/RaKDgYsOwB0RqPQOlz6PHi0UEO9SDae5Gm2Keyb
+         EgOX4326tDVe6r59WDfbwXjUlcTfDGrWi3vCEdJNnoZY/4kwl9pIKEBE0RgN4CoP22ec
+         7dZA==
+X-Gm-Message-State: AC+VfDxuMTmyDGXsQC+LRgHI8G7Ctib8hUWtqq8jbOjI3V8lETTPomMr
+        h19c5p+kWNYY0s50ZX6hPUay0DNTLIFnORoyTCY=
+X-Google-Smtp-Source: ACHHUZ6hlHm209Y66SO0/rJhZLpiPwCKDbsjdZ9eMl/K7NlCEuxQvblyzaBCnnTH5sYRVlOFAdCpV6/wOB521IsZaJs=
+X-Received: by 2002:a6b:6e02:0:b0:774:85bf:1e9b with SMTP id
+ d2-20020a6b6e02000000b0077485bf1e9bmr8541481ioh.14.1685386451839; Mon, 29 May
+ 2023 11:54:11 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6638:2607:b0:418:3d18:3e94 with HTTP; Mon, 29 May 2023
+ 11:54:11 -0700 (PDT)
+Reply-To: a00728298@yahoo.com
+From:   audu bello <u2195ra@gmail.com>
+Date:   Mon, 29 May 2023 20:54:11 +0200
+Message-ID: <CA+_k-obPWDB=HMS3Q5vG11fPO2xQagjLqU0OHmDUY6zGVJ-GSA@mail.gmail.com>
+Subject: Respuesta urgente necesaria
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 08:36:43PM +0100, Matthew Wilcox wrote:
-> On Sun, May 28, 2023 at 09:01:37PM +0800, Muchun Song wrote:
-> > with *init_net*. If Vasily does not want to bring commit 1d0403d20f6c back,
-> > this patch LGTM. Otherwise, let's wait for Vasily.
-> 
-> If we're not going to bring back 1d0403d20f6c then we should
-> simply revert fc4db90fe71e instead of applying this patch.
+--=20
+=C2=BFTienes una cuenta para recibir fondos de donaciones?
 
-Initially I was thinking of adding virt_addr_valid() check in the
-mem_cgroup_from_obj() but it seems like that check is not cheap on
-arm64. I don't have any quick solutions other than adding a check
-against init_net in __register_pernet_operations(). I will wait for
-couple of days for Vasily otherwise I will retry 1d0403d20f6c with the
-init_net check in __register_pernet_operations().
+Gracias
+Gerente de Auditor=C3=ADa
