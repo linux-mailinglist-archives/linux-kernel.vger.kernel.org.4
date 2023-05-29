@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45AA714AA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6CF714AA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjE2NsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
+        id S229924AbjE2Nsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjE2NsN (ORCPT
+        with ESMTP id S229824AbjE2Nsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:48:13 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094A59C;
-        Mon, 29 May 2023 06:48:11 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-5289cf35eeaso3137003a12.1;
-        Mon, 29 May 2023 06:48:11 -0700 (PDT)
+        Mon, 29 May 2023 09:48:43 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E62A8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:48:42 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30a892c45c4so1946599f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685368090; x=1687960090;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sbFSyfRcHjKjP7DsBh0HDWun6Z5NhHLqrv1Cu0fSBmg=;
-        b=A0zcVJWZ1hYG248bC25y4nx6Z7Olu1rixcosAZpBx5A5x/Z2OOVs/rAYnHqvlKupA2
-         smjqg2/W4h0qr5UVVhuFARK67LvCP8XmridfdYC73JzLGW0AeEF+C+lLBKPKSwu68JXW
-         NWP/+IyuG2ZP4nrFqHhaXW+gKRywXIuW0XpUqZZvU0TjM7oovvLZtFUNkfBsxHTz7SyO
-         jU8keQrs41graqzFA7kK4z1ALDKIOwZVyonHrPUp6zOROAIas9BGC6ZLMzYCTjGRxKJx
-         g/NwnyN7Ops4LgwSMfbiGOPgu81QU52U9Pepf5Yr48agfTNZPf+fRISUC3pUNwB3r4Ab
-         HgKQ==
+        d=linaro.org; s=google; t=1685368120; x=1687960120;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ygh+oO9nvPS/69geqyJq74mEoRjomikOCE/0QvmTjsA=;
+        b=D0VISu+wsAdynfkSb2W4dB8UkYlgKXgWgEPl2APo3VZUDMtI/yXDLY7RT0TmVleKeA
+         LW26C7nbcYgRPgMIncmq3rIBMKgYW/EdgwjDZGKnBHZEpd3NruWDMrhaqCEjVIdRBe8J
+         NrNLuZJjSQJzL6jttoz6hOC+5lOK9L9LbQOyAqy9KC8u9ghw+YpUR6NaTLpxiCfSdBii
+         5Iz3js23lR9HalSHFmhodSEI7ghS6Bd1oyA9sek4vRWh+5JiTUpa5nluSGrsxhiXm7y5
+         i12WnopFVxLpEmGVO0C9Gl87tzzBGf8xul2pjKH8Y0DVWB+3Yb0juRyBRHIe7QLPWIt9
+         FXVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685368090; x=1687960090;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sbFSyfRcHjKjP7DsBh0HDWun6Z5NhHLqrv1Cu0fSBmg=;
-        b=lzi7iNjU/zo7R/LaTg+KfAh8jWHJWTGEkBjyv5wMpvVAZ1ogCubc3jdioFKPEmLLWA
-         QhtFYvleYsPl+I9ozCujIEfpYGfVEPKDw5ub5eg2y41JgSqZfi9Uo4kzDAmZqs5Hx9ZW
-         QH2eWkkUIFq0/0bHpiXgpLgn/Os+2eEfKZdBgj9a530NeJEgIcYqTL22477m9F+cmuqJ
-         IZ8BE6y8bb4L4flFqFInaTnolam9P1EBeLI3STCrocbN47PHeoTk47BdLXJWg14uf/47
-         2I+0teJXjTClKbm0/lWa5w2s4t4hY7vB8nDegWQz3pbb6vQB4Z7/36+ByreUzaUnjA1H
-         Lu0A==
-X-Gm-Message-State: AC+VfDxrcuBM0q4c1dlMVe/WpAH9uP9wDIkblkGP+dOHQaoJcv5HwPyu
-        4OsZErX0OhodEIOPhem30PpmUS/lpFw=
-X-Google-Smtp-Source: ACHHUZ7M2hQvQWZjhae42ciJyF8vZr6ju+Cd6K5d5L7J638XOVQ8Q1Xq+jDC8WWdSuXG5wPzncCoYg==
-X-Received: by 2002:a17:903:230b:b0:1b0:3ab6:5140 with SMTP id d11-20020a170903230b00b001b03ab65140mr4622115plh.4.1685368090378;
-        Mon, 29 May 2023 06:48:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jb18-20020a170903259200b001ac2c3e54adsm981300plb.118.2023.05.29.06.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 06:48:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 May 2023 06:48:08 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 000/132] 4.19.284-rc1 review
-Message-ID: <e98d3b88-980b-4487-baf8-4685cfe62209@roeck-us.net>
-References: <20230528190833.565872088@linuxfoundation.org>
+        d=1e100.net; s=20221208; t=1685368120; x=1687960120;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ygh+oO9nvPS/69geqyJq74mEoRjomikOCE/0QvmTjsA=;
+        b=bkgnY2WoQtQQNTm1GJtTsYY7TR7POLOAZzPJNAbqs2FgNHDjqqm5aEXv0LXzLc+ixt
+         R6ZnDBwCxOplZ0xXks8E1h5OhYgOWLOqtNSWa3ulaKzX5dbgfgI2IkJD832JAklfXyUT
+         CJnuaRgYI32yOutGoqLQkC5wi0O5ihvB1qMgNfuLBd5/0IdrIUG0ud72gV6yVn6/d5FZ
+         Y9vEVOjMZ7NuhC2cwRi9wGf21HIjqsJr9KkaTeACfJDSaIqVIPorTGz99R8YmItt1sga
+         s0NEiSvZ9Euf2D9+fN1ZedYZN7UDOADjX9Z9wRixUxDLIXNlmGSAOYHHYBKYOC4mkdjX
+         2mkQ==
+X-Gm-Message-State: AC+VfDx1j5SofFNVMegfZBzMrdIGcyH6JJf9vBdIcav3wC+DmUCfVTfG
+        xcc6mIbHZ2YZC1vesYg868bhkQ==
+X-Google-Smtp-Source: ACHHUZ7qm1seiYs9z6EiSNYUPrDaF5K9vTYnlVYkOH7qP+ndiO5rmy3QzgvFpVknNyIr22KyKsw6Cw==
+X-Received: by 2002:adf:e4cf:0:b0:306:31fb:1c3e with SMTP id v15-20020adfe4cf000000b0030631fb1c3emr8769862wrm.26.1685368120594;
+        Mon, 29 May 2023 06:48:40 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id x11-20020a5d490b000000b003063a92bbf5sm10820wrq.70.2023.05.29.06.48.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 06:48:40 -0700 (PDT)
+Message-ID: <eca51371-3ff3-a126-bab6-175becf9624c@linaro.org>
+Date:   Mon, 29 May 2023 14:48:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230528190833.565872088@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 6/6] arm64: dts: qcom: msm8916: Move aliases to boards
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230525-msm8916-labels-v1-0-bec0f5fb46fb@gerhold.net>
+ <20230525-msm8916-labels-v1-6-bec0f5fb46fb@gerhold.net>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230525-msm8916-labels-v1-6-bec0f5fb46fb@gerhold.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 08:08:59PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.284 release.
-> There are 132 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 29/05/2023 13:47, Stephan Gerhold wrote:
+> MSM8939 has the aliases defined separately for each board (because
+> there could be (theoretically) a board where the slots are numbered
+> differently. To make MSM8916 and MSM8939 more consistent do the same
+> for all MSM8916 boards and move aliases there.
 > 
-> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
-> Anything received after that time might be too late.
-> 
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> ---
 
-Building s390:defconfig ... failed
-Building s390:allnoconfig ... failed
-Building s390:tinyconfig ... failed
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
---------------
-Error log:
-s390-linux-ld: drivers/base/platform.o: in function `devm_platform_ioremap_resource':
-drivers/base/platform.c:97: undefined reference to `devm_ioremap_resource'
-make[1]: *** [Makefile:1061: vmlinux] Error 1
-make: *** [Makefile:153: sub-make] Error 2
