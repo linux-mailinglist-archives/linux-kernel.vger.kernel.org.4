@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF1F714E1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22852714E16
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjE2QVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
+        id S229782AbjE2QVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjE2QVI (ORCPT
+        with ESMTP id S229499AbjE2QVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:21:08 -0400
+        Mon, 29 May 2023 12:21:05 -0400
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B7FB5;
-        Mon, 29 May 2023 09:21:03 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34TBP5Lp014132;
-        Mon, 29 May 2023 18:20:51 +0200
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F34DA3;
+        Mon, 29 May 2023 09:21:01 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34TBPbtv003563;
+        Mon, 29 May 2023 18:20:42 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=selector1;
- bh=R7roW/pXBm1AzX1ECpv0Ow4olyyWijd6fAx4mT/U654=;
- b=rKKWWShAAaoZfxuiWwq7ehnP0eeGYX4d5a/bAXwhovoCfGeeHG5ryv4N69GhisLuQWWf
- 1+3gnOh3Q9TPK998v+azfamrkdUo92Hcv+5I+qz/Hfr9D+SpMbNVRZ5IgXTp68ENmzIA
- EkA6aYgqufGzp4U7MAy3fZ+Cye5MAqF8HjDvtDeRwbIFok35zS9FoEhdh4GONzOoclwb
- 4i/IIX1TWGttFGSfKUu7sDkZByth+1NTAkPYR5tcXDcJUmzELql57iKo4UBXJURlB9Sj
- J9GMPjQAbuwes8KNx7FY4ZEUXYisy2/e4WRd5Fjr5S/Mi4C8tdiLPWnbCdO6vt8Pf1jD 8Q== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=selector1;
+ bh=EYhps76Dp6JZG5+21hkMd3vYYc6MvyZzlJBpDqE8C5g=;
+ b=kTMclekCZt59jtriqzaqasR679ZVtErgnAPINhp7UZJbdIsF/ruNy4Gtxw6TwKMJCGdf
+ 3I8HczChwP/ny98UEG0XmqgT0aniZxl7WL5beo7IEIbND7Gbn8Zl4cIfORQhZSIORi4v
+ RFgkilugj4iQ0z9sc/3MZh8M6oBqtinrRV8s2fK9oBD37XG7TWzynqMNKw3nwRzjlYx5
+ LrmHIazvB4xFniy+kOhGldXJvfWhtqQIlIo62/XULJtesE7jnExvmH1h9WF1ZDi2bNCl
+ J6ENi1puBN4SmL1plNQvU7S8ZsGCXM9cGjOLWt+fox+rsXKjk3UIcnYvooM27n3KLxzF 2Q== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quahy2mcq-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quag2anwk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 May 2023 18:20:50 +0200
+        Mon, 29 May 2023 18:20:42 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C84EC10002A;
-        Mon, 29 May 2023 18:20:41 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 38A73100034;
+        Mon, 29 May 2023 18:20:42 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9FED1233C87;
-        Mon, 29 May 2023 18:20:41 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 30C81233C87;
+        Mon, 29 May 2023 18:20:42 +0200 (CEST)
 Received: from localhost (10.201.21.93) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 29 May
@@ -52,10 +53,12 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
-Subject: [PATCH 00/11] Add STM32MP25 support
-Date:   Mon, 29 May 2023 18:20:23 +0200
-Message-ID: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+Subject: [PATCH 01/11] dt-bindings: pinctrl: stm32: support for stm32mp257 and additional packages
+Date:   Mon, 29 May 2023 18:20:24 +0200
+Message-ID: <20230529162034.20481-2-alexandre.torgue@foss.st.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.201.21.93]
@@ -73,89 +76,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm pleased to announce extension of the STM32 MPU family with the addition of
-the STM32MP25 Armv8 based SoCs.
+Add support for st,stm32mp257-pinctrl and st,stm32mp257-z-pinctrl.
+Add packages AI, AK and AL (values : 0x100, 0x400 and 0x800)
 
-STM32MP25 family is composed of 4 SoCs defined as following:
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 
-  -STM32MP251: common part composed of 1*Cortex-A35, common peripherals like
-   SDMMC, UART, SPI, I2C, PCIe, USB3, parallel and DSI display, 1*ETH ...
-
-  -STM32MP253: STM32MP251 + 1*Cortex-A35 (dual CPU), a second ETH, CAN-FD and
-   LVDS display.
-
-  -STM32MP255: STM32MP253 + GPU/AI and video encode/decode.
-  -STM32MP257: STM32MP255 + ETH TSN switch (2+1 ports).
-
-  A second diversity layer exists for security features/ A35 frequency:
-  -STM32MP25xY, "Y" gives information:
-    -Y = A means A35@1.2GHz + no cryp IP and no secure boot.
-    -Y = C means A35@1.2GHz + cryp IP and secure boot.
-    -Y = D means A35@1.5GHz + no cryp IP and no secure boot.
-    -Y = F means A35@1.5GHz + cryp IP and secure boot.
-
-This series adds the STM32MP257F EV1 board support. This board embeds a
-STM32MP257FAI SoC, with 4GB of DDR4, TSN switch (2+1 ports), 2*USB typeA,
-1*USB2 typeC, SNOR OctoSPI, mini PCIe, STPMIC2 for power distribution ...
-
-Thanks
-Alex
-
-Alexandre Torgue (10):
-  dt-bindings: pinctrl: stm32: support for stm32mp257 and additional
-    packages
-  pinctrl: stm32: add stm32mp257 pinctrl support
-  dt-bindings: stm32: add st,stm32mp25 compatibles to the stm32 family
-  arm64: introduce STM32 family on Armv8 architecture
-  arm64: dts: st: introduce stm32mp25 SoCs family
-  arm64: dts: st: introduce stm32mp25 pinctrl files
-  dt-bindings: stm32: document stm32mp257f-ev1 board
-  arm64: dts: st: add stm32mp257f-ev1 board support
-  arm64: defconfig: enable ARCH_STM32 and STM32 serial driver
-  MAINTAINERS: add entry for ARM/STM32 ARCHITECTURE
-
-Patrick Delaunay (1):
-  dt-bindings: stm32: add st,stm32mp25-syscfg compatible for syscon
-
- .../bindings/arm/stm32/st,stm32-syscon.yaml   |    1 +
- .../devicetree/bindings/arm/stm32/stm32.yaml  |   12 +
- .../bindings/pinctrl/st,stm32-pinctrl.yaml    |    4 +-
- MAINTAINERS                                   |    1 +
- arch/arm64/Kconfig.platforms                  |   14 +
- arch/arm64/boot/dts/Makefile                  |    1 +
- arch/arm64/boot/dts/st/Makefile               |    2 +
- arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi |   38 +
- arch/arm64/boot/dts/st/stm32mp251.dtsi        |  279 ++
- arch/arm64/boot/dts/st/stm32mp253.dtsi        |   23 +
- arch/arm64/boot/dts/st/stm32mp255.dtsi        |    9 +
- arch/arm64/boot/dts/st/stm32mp257.dtsi        |    9 +
- arch/arm64/boot/dts/st/stm32mp257f-ev1.dts    |   50 +
- arch/arm64/boot/dts/st/stm32mp25xc.dtsi       |    8 +
- arch/arm64/boot/dts/st/stm32mp25xf.dtsi       |    8 +
- .../boot/dts/st/stm32mp25xxai-pinctrl.dtsi    |   83 +
- .../boot/dts/st/stm32mp25xxak-pinctrl.dtsi    |   71 +
- .../boot/dts/st/stm32mp25xxal-pinctrl.dtsi    |   71 +
- arch/arm64/configs/defconfig                  |    3 +
- drivers/pinctrl/stm32/Kconfig                 |    6 +
- drivers/pinctrl/stm32/Makefile                |    1 +
- drivers/pinctrl/stm32/pinctrl-stm32.h         |    3 +
- drivers/pinctrl/stm32/pinctrl-stm32mp257.c    | 2581 +++++++++++++++++
- include/dt-bindings/pinctrl/stm32-pinfunc.h   |    3 +
- 24 files changed, 3280 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/st/Makefile
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp251.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp253.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp255.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp257.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25xf.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxai-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxak-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
- create mode 100644 drivers/pinctrl/stm32/pinctrl-stm32mp257.c
-
+diff --git a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+index 1ab0f8dde477..2120ef71a78d 100644
+--- a/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml
+@@ -27,6 +27,8 @@ properties:
+       - st,stm32mp135-pinctrl
+       - st,stm32mp157-pinctrl
+       - st,stm32mp157-z-pinctrl
++      - st,stm32mp257-pinctrl
++      - st,stm32mp257-z-pinctrl
+ 
+   '#address-cells':
+     const: 1
+@@ -56,7 +58,7 @@ properties:
+       Indicates the SOC package used.
+       More details in include/dt-bindings/pinctrl/stm32-pinfunc.h
+     $ref: /schemas/types.yaml#/definitions/uint32
+-    enum: [1, 2, 4, 8]
++    enum: [0x1, 0x2, 0x4, 0x8, 0x100, 0x400, 0x800]
+ 
+ patternProperties:
+   '^gpio@[0-9a-f]*$':
+diff --git a/include/dt-bindings/pinctrl/stm32-pinfunc.h b/include/dt-bindings/pinctrl/stm32-pinfunc.h
+index e6fb8ada3f4d..28ad0235086a 100644
+--- a/include/dt-bindings/pinctrl/stm32-pinfunc.h
++++ b/include/dt-bindings/pinctrl/stm32-pinfunc.h
+@@ -37,6 +37,9 @@
+ #define STM32MP_PKG_AB	0x2
+ #define STM32MP_PKG_AC	0x4
+ #define STM32MP_PKG_AD	0x8
++#define STM32MP_PKG_AI	0x100
++#define STM32MP_PKG_AK	0x400
++#define STM32MP_PKG_AL	0x800
+ 
+ #endif /* _DT_BINDINGS_STM32_PINFUNC_H */
+ 
 -- 
 2.17.1
 
