@@ -2,179 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF3E71454D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7324714550
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjE2HSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 03:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S230518AbjE2HTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 03:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjE2HSH (ORCPT
+        with ESMTP id S229521AbjE2HTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 03:18:07 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41607A4;
-        Mon, 29 May 2023 00:18:06 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34T6u7J6009420;
-        Mon, 29 May 2023 07:17:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=o32+Zs65tVZRqYisIvSrSLdqpdjM/OYIVeuEGXaxkUY=;
- b=NV6aIBJ8RQk4XcBSZG0GoKVH3FYOmKnwGnBB9H+LFmqAHXGIm7X9ESlcH5Bg+B55mt/3
- xqvUUm7Q0ooz6Y20uBR8+vaL+97qUDH47AuJFJwlmnZpdGogM0fMT96dv2sFZYptRS2E
- YGzLBV6i2RKAe12dU3Lek7Vi15RLHsAsBAVSgwQxcJs06gLQpsKqYWlcfZHInO6waXy3
- ZUQVdq1th9AmjuX7k4cBm93dps4TAch0L/YTj57Rg9li3HMq3Tk21UJCZBnJ5FrApFi3
- z225Ya2u8UBYmHSTShUKkjNzrlXWK1SR8yrWKjnv9MzkG8N/VH08l/hRZSEseeM5Cj9F Qw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3quawgjthc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 May 2023 07:17:42 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34T7HekE011850
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 May 2023 07:17:40 GMT
-Received: from [10.253.79.81] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 29 May
- 2023 00:17:35 -0700
-Message-ID: <5c56a874-dc41-c68c-6f70-efcbc67c29b2@quicinc.com>
-Date:   Mon, 29 May 2023 15:17:32 +0800
+        Mon, 29 May 2023 03:19:04 -0400
+Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99660A4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:19:02 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 3X9eqYgEzMDzt3X9eq4QMn; Mon, 29 May 2023 09:19:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685344740;
+        bh=ToQuNxvWCS00We22b4WvFzbjWsFm90sAaGVlSiXzZ6A=;
+        h=From:To:Cc:Subject:Date;
+        b=N0OGot8XgN/sgaRBBPtv8sAmxBbjCRQT9O8f739VgP6/PefDcz4qn4+sQQ4buhqA8
+         fAc/X2jePdXNNBWmTWvgbUp9Ryp8kHWEDgJmdzV8ZHE8c1YY413djR6ZWGI8tjM7GY
+         fQLYY7JVDeWvBPzsWhh3RHmI0aLvzF0lmu23syr3EuHsiPzq+pwh17fxnJCmfsb7/j
+         iuwSEeqSG/cl3+zCv29bZ+NSC0beKhU3a8viZBb92BUsu6ZKRr/ioSKfkXVgzCf4ft
+         vipwGXayXPCFv1AUaJfDRHr8JmJ2AbFb3IS6GFQko1QKSbRwVykQrP2aT2+cJnfe+V
+         vbfQ3xCVLrLbQ==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 29 May 2023 09:19:00 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH 1/3] drm/amd/display: Fix an erroneous sanity check in get_dmif_switch_time_us()
+Date:   Mon, 29 May 2023 09:18:54 +0200
+Message-Id: <e0a2240f863279b65a1fdc7f8c27ede9f8e37893.1685342739.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 0/3] Add support to configure Coresight Dummy subunit
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        "Yuanfang Zhang" <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        <linux-doc@vger.kernel.org>
-References: <20230526100753.34581-1-quic_hazha@quicinc.com>
-Content-Language: en-US
-From:   Hao Zhang <quic_hazha@quicinc.com>
-In-Reply-To: <20230526100753.34581-1-quic_hazha@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: sFRmv892x0D2A7hEFZSgzFwuaCajquvT
-X-Proofpoint-GUID: sFRmv892x0D2A7hEFZSgzFwuaCajquvT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-29_04,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 phishscore=0 impostorscore=0 mlxlogscore=999
- bulkscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305290062
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+It is likely that there is a typo in the sanity check for 'v_total'.
 
-Add the missing information for this patch series.
+If it is 0, then 'pixels_per_frame' will also be 0, and in this case,
+we also return 'single_frame_time_multiplier * min_single_frame_time_us'.
 
-Thanks,
-Hao
+So test for !v_total which looks much more logical.
 
-On 5/26/2023 6:07 PM, Hao Zhang wrote:
+Fixes: 4562236b3bc0 ("drm/amd/dc: Add dc display driver (v2)")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/gpu/drm/amd/display/dc/dce/dce_mem_input.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Introduction of Coresight Dummy subunit
-The Coresight Dummy subunit is for Coresight Dummy component, there are
-some specific Coresight devices that HLOS don't have permission to access.
-Such as some TPDMs, they would be configured in NON-HLOS side, but it's
-necessary to build Coresight path for it to debug. So there need driver 
-to register dummy devices as Coresight devices.
+diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_mem_input.c b/drivers/gpu/drm/amd/display/dc/dce/dce_mem_input.c
+index 4cdd4dacb761..091f0d68a045 100644
+--- a/drivers/gpu/drm/amd/display/dc/dce/dce_mem_input.c
++++ b/drivers/gpu/drm/amd/display/dc/dce/dce_mem_input.c
+@@ -683,7 +683,7 @@ static uint32_t get_dmif_switch_time_us(
+ 	/*return double of frame time*/
+ 	const uint32_t single_frame_time_multiplier = 2;
+ 
+-	if (!h_total || v_total || !pix_clk_khz)
++	if (!h_total || !v_total || !pix_clk_khz)
+ 		return single_frame_time_multiplier * min_single_frame_time_us;
+ 
+ 	/*TODO: should we use pixel format normalized pixel clock here?*/
+-- 
+2.34.1
 
-Commit link:
-https://git.codelinaro.org/clo/linux-kernel/coresight/-/tree/coresight-dummy-v5
-
-> Changes in V5:
-> 1. Follow the alphabetical order for the header files in
-> coresight-dummy.c. -- Suzuki K Poulose
-> 2. Update the maintainers.
-> 3. Split the Coresight Dummy YAML to 2 schema files.
-> -- Rob Herring & Krzysztof Kozlowski
-> 4. Update the coresight-dummy.rst file. -- Bagas Sanjaya
-> 
-> Changes in V4:
-> 1. Remove traceid allocation in dummy_probe function since it is
-> currently not in use, will upstream it as the part of ATID filtering
-> in the further.  -- Suzuki K Poulose
-> 2. Remove 'oneOf' as there is only one entry. -- Rob Herring
-> 
-> Changes in V3:
-> 1. Use API "dev_dbg" to replace "dev_info". -- Suzuki K Poulose
-> 2. Drop "qcom" property and take it as a dummy framework.
-> -- Suzuki K Poulose
-> 3. Add new sub-type "CORESIGHT_DEV_SUBTYPE_SINK_DUMMY" to support
-> coresight dummy module -- Mike Leach
-> 4. Use compatibles "arm,coresight-dummy-source" and
-> "arm,coresight-dummy-sink" to replace property "qcom,dummy-source" and
-> "qcom,dummy-sink". -- Mike Leach
-> 5. Define source_devs and sink_devs DEVLIST to replace dummy_devs, make
-> it clear at the first level. -- Mike Leach
-> 6. Modify subject of YAML patch, drop "YAML schema". -- Krzysztof Kozlowski
-> 7. Drop some redundant items and correct syntax errors in yaml file.
-> -- Krzysztof Kozlowski & Rob Herring
-> 8. Correct required property of yaml file, constrain out ports to
-> dummy-source and in ports to dummy-sink. -- Mike Leach
-> 9. Drop "Sysfs files and directories" contents of coresight-dummy.rst.
-> -- Suzuki K Poulose/Greg Kroah-Hartman
-> 10.Correct syntax errors of coresight-dummy.rst. -- Bagas Sanjaya
-> 
-> Changes in V2:
-> 1. Declare dummy_init and dummy_exit as static to fix missing-prototypes
-> warnings. -- kernel test robot
-> 2. Fix the errors of coresight-dummy yaml file. -- Rob Herring
-> 
-> Hao Zhang (3):
->    Coresight: Add coresight dummy driver
->    dt-bindings: arm: Add support for Coresight dummy trace
->    Documentation: trace: Add documentation for Coresight Dummy Trace
-> 
->   .../arm/arm,coresight-dummy-sink.yaml         |  73 ++++++++
->   .../arm/arm,coresight-dummy-source.yaml       |  71 ++++++++
->   .../trace/coresight/coresight-dummy.rst       |  32 ++++
->   drivers/hwtracing/coresight/Kconfig           |  11 ++
->   drivers/hwtracing/coresight/Makefile          |   1 +
->   drivers/hwtracing/coresight/coresight-dummy.c | 163 ++++++++++++++++++
->   include/linux/coresight.h                     |   1 +
->   7 files changed, 352 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dummy-sink.yaml
->   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dummy-source.yaml
->   create mode 100644 Documentation/trace/coresight/coresight-dummy.rst
->   create mode 100644 drivers/hwtracing/coresight/coresight-dummy.c
-> 
