@@ -2,85 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA231714D41
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677E8714D43
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjE2PmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
+        id S230025AbjE2Pmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjE2PmC (ORCPT
+        with ESMTP id S229558AbjE2Pmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:42:02 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF20A7;
-        Mon, 29 May 2023 08:42:00 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30ad458f085so2249617f8f.0;
-        Mon, 29 May 2023 08:42:00 -0700 (PDT)
+        Mon, 29 May 2023 11:42:45 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F5FA8;
+        Mon, 29 May 2023 08:42:44 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f6077660c6so22044345e9.0;
+        Mon, 29 May 2023 08:42:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685374919; x=1687966919;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=gmail.com; s=20221208; t=1685374963; x=1687966963;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zj+VDAqPSb25/DEXl04R56d41dEGPCQtyqOgNMpILjY=;
-        b=VsmwXUVg+FoHXj/nL+qq/3/Md3DiD6hWqsH/LJ+FyWokSlgesuJXyr6UkdmVvRjp0z
-         6FmNAZsMS4gTubamr/kPK08H+M7Thdqil9TzAzOO727WyQulsERgEMRUP2mOFCc1f96J
-         59dXBg0NSMeCamgo0kP+F6WLNZwBml1ugAEBSSAZ1JR++9sdGGAQnExwSEDhBWDO1SWg
-         nCZFbo/14kJlKW6UAKAM5FR/GWhqVNPXGaebbLckTiy00xh7Eo7U6x4lu9WputUkvPrZ
-         SwxogrersE/foLyZ/cGYiVF/X62FCpYHdlH/H0RDfBWRhAKYgfKM/3p0bprzQUXNJ4lp
-         4Ixw==
+        bh=Jo5a/JXM5eyW7F1q0/7SeqrmDEnGh/l3ApKPMD9Menw=;
+        b=a9GXuJPJ1WwsWgUNonfxaq2F+J/b1NBIb60iy51Z522x3mLN3q1pu2zTaP5SkAbi85
+         9bmzZF6Y1t0vtmLk4WNkYV8aOG1x3Vcbh6EhvdA7xqPY6gym6Sjho1uepWWseO25KyC0
+         ujYqNu5v6CQ0PaW3wU4Fjw3Y7pAPJNITdWd8OQkFGOSOem3a0cgbm8KS2plJtuP1Elho
+         ZUelxc7ueCj5vfCLuI6GOaVwzB3/bvpb/OGd68KTg/Wo6XHyFc71vJKTacYKZN0Vnsw5
+         FuvJyMNfOl4ZVptsWiCJTdc1XFYGEArY/JSSYlna3ZXaNrDg8vsj2wyV/8Spl25H2HnO
+         xFaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685374919; x=1687966919;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1685374963; x=1687966963;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zj+VDAqPSb25/DEXl04R56d41dEGPCQtyqOgNMpILjY=;
-        b=NF0NcIyiY9BKyZ3VvKzt1iorsDNH32cgMBfMj947m+ihZpp70uFhtATeasGuQyvOEb
-         IhL6ZLZSkth3mWyWrFKA2tAzEUd0VxQqCSdBOMYt7YFBmaaOm306adKBGd6xKLiuVNqQ
-         TnY/qYV9TcD5nDuq20hGXNhDn15DvqQ5167wR7qEBdUub64nWQrv2P/E+4Zy87xLF/Bd
-         Dv7TcA4l+FJ+xfI9TnhTLqFcrRMQ3bakqYlcMHF0pHr8IJRmlRlt2Gg9lotV/gV/N4we
-         iU3f9s2wMWpmnyX4+HCyzhAMCaM17NYjIzMfJNSk9JxCUET8AnIwGJtC1luHvN7/45RS
-         3iww==
-X-Gm-Message-State: AC+VfDzk1PyzDTPdlksyOiUyhjk3R/KpNyC3r9abBQk8Ex+hxnKaKrqI
-        U0yglshjc4vUr+MKNS4WrRs=
-X-Google-Smtp-Source: ACHHUZ6PZ31jEVJxxW/BVWIZxBiKX42sooJ61VxYWeoBtBaDqvQviu9rCxfVlTeS23L+cDrKF8HXkA==
-X-Received: by 2002:adf:f08d:0:b0:30a:efcc:f89a with SMTP id n13-20020adff08d000000b0030aefccf89amr1722530wro.2.1685374919021;
-        Mon, 29 May 2023 08:41:59 -0700 (PDT)
+        bh=Jo5a/JXM5eyW7F1q0/7SeqrmDEnGh/l3ApKPMD9Menw=;
+        b=Us+OapGyYsU/6/w8twVtVHjUOKgSum8v8pTo9o92uIC0EQTFRr2NECcX1rrUSTrDL/
+         25/1NFy3j9B1vV4VVsu0nlZCrGAl0ksM2ypKIzvy00/dbOG2fgUiAgz/MOzC6xfj5RzR
+         JhGBGyYBFTWUqP7Xx75DUCKEzzpuwYz/SWo8f3aOjiPnns2aWQcd5Oii1uxd0kUskYSq
+         01GzQ9vwWckGiXON1OzL0xuaGLDeDBuTfHANH6vx5MjzrFoSC137zvcDVfOup7+uWcxR
+         /3tSMuRtUGMLkH+xPe8N3hHbMIuYzwZkduLJKly68auOHb9Lx0eqWoMadNJSo5ly6DoQ
+         6MiA==
+X-Gm-Message-State: AC+VfDx3SifHLiZ9sOeBZBcQ5PqmKy6JibfsJuXuZLXNMmjWhU+V76sm
+        6h8ZJZfqTHjPmQkfN/ychFg=
+X-Google-Smtp-Source: ACHHUZ44sfIsfx0Za8jPqM0u7GQcawEC5lcy0s9b1DixpfISlRFlYpxslgFy1XaCY3F/xqRBrpjuTg==
+X-Received: by 2002:a7b:c7d0:0:b0:3f6:f152:1183 with SMTP id z16-20020a7bc7d0000000b003f6f1521183mr10002428wmk.37.1685374963211;
+        Mon, 29 May 2023 08:42:43 -0700 (PDT)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id b17-20020adff251000000b002c71b4d476asm288024wrp.106.2023.05.29.08.41.56
+        by smtp.gmail.com with ESMTPSA id t7-20020a7bc3c7000000b003f6132f95e6sm18176715wmj.35.2023.05.29.08.42.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 08:41:57 -0700 (PDT)
-Message-ID: <cf7afb1f-ad1f-b077-6276-222c5ca918cd@gmail.com>
-Date:   Mon, 29 May 2023 17:41:56 +0200
+        Mon, 29 May 2023 08:42:42 -0700 (PDT)
+Message-ID: <89e05581-be6e-409b-c4ba-c35297045af6@gmail.com>
+Date:   Mon, 29 May 2023 17:42:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 0/5] irqchip/gic-v3: Disable pseudo NMIs on Mediatek
- Chromebooks w/ bad FW
+Subject: Re: [PATCH] arm64: dts: mediatek: add missing cache properties
 Content-Language: en-US, ca-ES, es-ES
-To:     Marc Zyngier <maz@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, wenst@chromium.org,
-        yidilin@chromium.org, Tinghan Shen <tinghan.shen@mediatek.com>,
-        jwerner@chromium.org, Weiyi Lu <weiyi.lu@mediatek.com>,
-        Ben Ho <Ben.Ho@mediatek.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Enric Balletbo i Serra <eballetbo@kernel.org>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org
-References: <20230515131353.v2.cover@dianders> <86edngmwcf.wl-maz@kernel.org>
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230421223157.115367-1-krzysztof.kozlowski@linaro.org>
+ <5590f51a-16b6-93ae-d8a0-ab6b4e2e1016@linaro.org>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <86edngmwcf.wl-maz@kernel.org>
+In-Reply-To: <5590f51a-16b6-93ae-d8a0-ab6b4e2e1016@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,62 +83,20 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 16/05/2023 11:58, Marc Zyngier wrote:
-> On Mon, 15 May 2023 21:13:49 +0100,
-> Douglas Anderson <dianders@chromium.org> wrote:
+On 16/05/2023 18:32, Krzysztof Kozlowski wrote:
+> On 22/04/2023 00:31, Krzysztof Kozlowski wrote:
+>> As all level 2 and level 3 caches are unified, add required
+>> cache-unified properties to fix warnings like:
 >>
->> As talked about in the bindings patch included in this series
->> ("dt-bindings: interrupt-controller: arm,gic-v3: Add quirk for
->> Mediatek SoCs w/ broken FW"), many Mediatek-based Chromebooks shipped
->> with firmware that doesn't properly save/restore some GICR
->> registers. This causes the system to crash if "pseudo NMIs" are turned
->> on.
+>>    mt7622-rfb1.dtb: l2-cache: 'cache-unified' is a required property
 >>
->> This series makes sure that we never allow turning on "pseudo NMIs" if
->> we are running with the problematic firmware.
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >>
->> The patches in this series can land in any order and can go through
->> entirely different trees. None of the patches are harmful on their
->> own, but to get things fixed we need all of them.
->>
->> v2 fixes the quirk name and also moves the quirk out of the SoC.dtsi
->> file and into the Chromebook file. This, unfortunately, means that
->> mt8186-based Chromebooks are no longer handled since they don't appear
->> to be upstream yet. :(
->>
->> Changes in v2:
->> - "when CPUs are powered" => "when the GIC redistributors are..."
->> - Changed "Fixes" tag.
->> - Moved from mt8183.dtsi to mt8183-kukui.dtsi
->> - Moved from mt8192.dtsi to mt8192-asurada.dtsi
->> - Moved from mt8195.dtsi to mt8195-cherry.dtsi
->> - mediatek,gicr-save-quirk => mediatek,broken-save-restore-fw
->>
->> Douglas Anderson (5):
->>    dt-bindings: interrupt-controller: arm,gic-v3: Add quirk for Mediatek
->>      SoCs w/ broken FW
->>    irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/ firmware
->>      issues
->>    arm64: dts: mediatek: mt8183: Add mediatek,broken-save-restore-fw to
->>      kukui
->>    arm64: dts: mediatek: mt8192: Add mediatek,broken-save-restore-fw to
->>      asurada
->>    arm64: dts: mediatek: mt8195: Add mediatek,broken-save-restore-fw to
->>      cherry
->>
->>   .../interrupt-controller/arm,gic-v3.yaml      |  6 ++++++
->>   .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  4 ++++
->>   .../boot/dts/mediatek/mt8192-asurada.dtsi     |  4 ++++
->>   .../boot/dts/mediatek/mt8195-cherry.dtsi      |  4 ++++
->>   drivers/irqchip/irq-gic-common.c              |  8 ++++++--
->>   drivers/irqchip/irq-gic-common.h              |  1 +
->>   drivers/irqchip/irq-gic-v3.c                  | 20 +++++++++++++++++++
->>   7 files changed, 45 insertions(+), 2 deletions(-)
+>> ---
 > 
-> I'll take the first two patches as fixes. The rest can be merged via
-> the soc tree as required.
+> Hi Matthias,
 > 
-> 	M.
+> Could you grab this one?
 > 
 
-Patches 3-5 applied now. Thanks!
+Applied now, thanks!
