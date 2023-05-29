@@ -2,103 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81658714C86
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F8F714C93
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjE2Owl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S229825AbjE2O5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjE2Owi (ORCPT
+        with ESMTP id S229814AbjE2O5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:52:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A39FB7;
-        Mon, 29 May 2023 07:52:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E536C625ED;
-        Mon, 29 May 2023 14:52:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D85F0C433EF;
-        Mon, 29 May 2023 14:52:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685371956;
-        bh=ruooO/hib2eTqtlqdlGt216wI4HkJrfG1ILQsX52itE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nJebyKeflDMM5C6oB2CfMassfdovNwMUV+z1ZshUEw77BFvbe9bZvCSW7Xn9Dy8y+
-         aHzdo6eK+u4d1Y3xC0idUGt5RHO192gedw0PG09MTuNPIxJVnCR6so+WtCWJyPL1tN
-         WgelPvDMo/qoPKhhnRCwd7xVd7nVnopNNv6kcKpM=
-Date:   Mon, 29 May 2023 15:52:34 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v6 6/7] usb: cdns3: Add StarFive JH7110 USB driver
-Message-ID: <2023052926-shiny-unelected-5d5f@gregkh>
-References: <20230518112750.57924-1-minda.chen@starfivetech.com>
- <20230518112750.57924-7-minda.chen@starfivetech.com>
- <2023052951-humbly-dentist-cb9c@gregkh>
+        Mon, 29 May 2023 10:57:20 -0400
+Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [IPv6:2001:1600:4:17::8faa])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F800D8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:57:17 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QVJXW2WkFzMpyk5;
+        Mon, 29 May 2023 16:57:15 +0200 (CEST)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QVJXS2kmszMq014;
+        Mon, 29 May 2023 16:57:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1685372235;
+        bh=k2yksphiVr17PfyANZFLI9Exwg8Jhb/+C2VCBIF3McU=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=vnqdvI7B2gcSPoa7xG8gAG2+wFvjlop8mh8W0i0AQQCQpGtFQWtCyZw5X1UmldqHK
+         tyXavk+wtMv7AztQ2Am3KJETPgAycVz0ahjWSwI3uyosYnEBM8/hQROg2eos2b6C+5
+         QIm1JmslgodAazXJaphzDWQX+cq57AuR2F6jmPDc=
+Message-ID: <a0c3e6d4-2827-d9b4-8f4e-aef25997fa8a@digikod.net>
+Date:   Mon, 29 May 2023 16:57:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023052951-humbly-dentist-cb9c@gregkh>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH v1 1/5] hostfs: Fix ephemeral inodes
+Content-Language: en-US
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+To:     Richard Weinberger <richard@nod.at>
+Cc:     anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>,
+        kuba <kuba@kernel.org>, James Morris <jmorris@namei.org>,
+        Jeff Xu <jeffxu@google.com>, Kees Cook <keescook@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Ritesh Raj Sarraf <ritesh@collabora.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sjoerd Simons <sjoerd@collabora.com>,
+        Willem de Bruijn <willemb@google.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+References: <20230309165455.175131-1-mic@digikod.net>
+ <20230309165455.175131-2-mic@digikod.net>
+ <133970354.9328381.1684703636966.JavaMail.zimbra@nod.at>
+ <8249dd59-ce08-2253-1697-301ad082d905@digikod.net>
+In-Reply-To: <8249dd59-ce08-2253-1697-301ad082d905@digikod.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 03:50:04PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, May 18, 2023 at 07:27:49PM +0800, Minda Chen wrote:
-> > Adds Specific Glue layer to support USB peripherals on
-> > StarFive JH7110 SoC.
-> > There is a Cadence USB3 core for JH7110 SoCs, the cdns
-> > core is the child of this USB wrapper module device.
-> > 
-> > Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> > Acked-by: Peter Chen <peter.chen@kernel.org>
-> > Reviewed-by: Roger Quadros <rogerq@kernel.org>
-> > ---
-> >  MAINTAINERS                        |   6 +
-> >  drivers/usb/cdns3/Kconfig          |  11 ++
-> >  drivers/usb/cdns3/Makefile         |   1 +
-> >  drivers/usb/cdns3/cdns3-starfive.c | 246 +++++++++++++++++++++++++++++
-> >  4 files changed, 264 insertions(+)
-> >  create mode 100644 drivers/usb/cdns3/cdns3-starfive.c
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 5519f81c8296..06c63f43bb17 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -20168,6 +20168,12 @@ F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
-> >  F:	drivers/phy/starfive/phy-jh7110-pcie.c
-> >  F:	drivers/phy/starfive/phy-jh7110-usb.c
-> >  
-> > +STARFIVE JH71X0 USB DRIVERS
-> > +M:	Minda Chen <minda.chen@starfivetech.com>
-> > +S:	Maintained
-> > +F:	Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
-> > +F:	drivers/usb/cdns3/cdns3-starfive.c
-> 
-> Does not apply anymore, please rebase and resend.
 
-Nevermind, I fixed it up.
+On 26/05/2023 18:40, Mickaël Salaün wrote:
+> 
+> On 21/05/2023 23:13, Richard Weinberger wrote:
+>> ----- Ursprüngliche Mail -----
+>>> Von: "Mickaël Salaün" <mic@digikod.net>
+>>> hostfs creates a new inode for each opened or created file, which created
+>>> useless inode allocations and forbade identifying a host file with a kernel
+>>> inode.
+>>>
+>>> Fix this uncommon filesystem behavior by tying kernel inodes to host
+>>> file's inode and device IDs.  Even if the host filesystem inodes may be
+>>> recycled, this cannot happen while a file referencing it is open, which
+>>> is the case with hostfs.  It should be noted that hostfs inode IDs may
+>>> not be unique for the same hostfs superblock because multiple host's
+>>> (backed) superblocks may be used.
+>>>
+>>> Delete inodes when dropping them to force backed host's file descriptors
+>>> closing.
+>>>
+>>> This enables to entirely remove ARCH_EPHEMERAL_INODES, and then makes
+>>> Landlock fully supported by UML.  This is very useful for testing
+>>> (ongoing and backported) changes.
+>>
+>> Removing ARCH_EPHEMERAL_INODES should be a patch on its own, IMHO.
+> 
+> OK, I'll do that in the next series.
+
+Well, I added ARCH_EPHEMERAL_INODES for Landlock specifically because of 
+this hostfs inconsistency, and it is not used by anything else in the 
+kernel: https://git.kernel.org/torvalds/c/cb2c7d1a1776
+I then think it makes sense to remove this Kconfig option with the 
+hostfs change. Moreover, this protects against erroneously backporting 
+the ARCH_EPHEMERAL_INODES change, which would silently introduce a bug 
+for Landlock.
+
+
+> 
+>>
+>>> These changes also factor out and simplify some helpers thanks to the
+>>> new hostfs_inode_update() and the hostfs_iget() revamp: read_name(),
+>>> hostfs_create(), hostfs_lookup(), hostfs_mknod(), and
+>>> hostfs_fill_sb_common().
+>>>
+>>> A following commit with new Landlock tests check this new hostfs inode
+>>> consistency.
+>>>
+>>> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+>>> Cc: Johannes Berg <johannes@sipsolutions.net>
+>>> Cc: Richard Weinberger <richard@nod.at>
+>>> Cc: <stable@vger.kernel.org> # 5.15.x: ce72750f04d6: hostfs: Fix writeback of
+>>> dirty pages
+>>> Cc: <stable@vger.kernel.org> # 5.15+
+>>
+>> I'm not sure whether this patch qualifies as stable material.
+>> While I fully agree that the current behavoir is odd, nothing user visible
+>> is really broken so far.
+> I added the ARCH_EPHEMERAL_INODES knob to avoid unexpected behavior.
+> Thanks to that there is no regression for Landlock, but it's unfortunate
+> that we could not use UML to test old kernel versions. According to this
+> odd behavior, I guess some user space may not work with hostfs because
+> of this issue, hence this Cc. I can remove it if you think it is not the
+> case.
+> 
+> 
+>>
+>>> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+>>> Link: https://lore.kernel.org/r/20230309165455.175131-2-mic@digikod.net
+>>
+>> Other than that, patch looks good to me.
+> 
+> Good, I'll send a new series with your suggestions.
+
+Can I add your Signed-off-by to this patch (without touching 
+ARCH_EPHEMERAL_INODES changes, but removing the Cc stable)?
+
+Are you OK for me to push this patch (with the whole series) in the 
+Landlock and next tree?
+
+I'll send a new series splitting the Landlock tests to make a patch 
+dedicated to Landlock with hostfs tests (not backported), and with 
+another patch containing backportable and independent new Landlock FS tests.
