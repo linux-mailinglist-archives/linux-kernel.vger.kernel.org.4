@@ -2,116 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45A27145DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E477145E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjE2ICj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S229561AbjE2ICr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjE2ICf (ORCPT
+        with ESMTP id S231434AbjE2ICj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:02:35 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFFEA7;
-        Mon, 29 May 2023 01:02:33 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 79C1C6605961;
-        Mon, 29 May 2023 09:02:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685347352;
-        bh=A4ZNREQoh5/KC7x7Aai+h2epscmtPk1u6BBSzcPw1yE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dX6SHWyOxgUzPCOpqEMFwfU+oDrE2Q9SSL6ricQ3zd7lGcaD3r9IwZdbfbjLB40Ik
-         Sp4UqpDoKXrblE28lnsvwltd+8w2d1o57AMCrzERi6Zr3wrjVGUhC+zN5y5Tpk1kD6
-         eOpc8OW1TZ+ytBLa4U0aLa/o2vJCU+gXldjU5EoOJB8mUwz08lgUMnRqyw811AxiRX
-         k4EIiiMVX3rQP1iElyi+w4xNvoFcIfxZAzWHGN+5I1x9LAg0ZCUnAp+6f3dN5rJ7BN
-         X6qv/9KC+Oc3PFU/EKQzH+OcXUw0LAmu+4wh/6fRoIt/mkdD5khf6bc9v01SLa+C3B
-         fLDu65wLzWeSg==
-Message-ID: <f4a9e090-3712-200e-bd09-70090c9cccbc@collabora.com>
-Date:   Mon, 29 May 2023 10:02:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8173-elm: remove panel model
- number in DT
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Icenowy Zheng <uwu@icenowy.me>,
-        Pin-yen Lin <treapking@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mon, 29 May 2023 04:02:39 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B85CAF;
+        Mon, 29 May 2023 01:02:35 -0700 (PDT)
+X-GND-Sasl: alexis.lothore@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685347354;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=qQ93j6RUPrDaNV794pTv4bcf5lffw4EDkmv0DGtDjJg=;
+        b=eq8CkUATRwgWk7FOADOn1SaW8m6CvvXfihw/OjPnMLJHXXe1c0jK49EC8WpBggQFJDZcFv
+        L/q4b8KDcdFz4KPMjwHlzgTuqMw8bIye7SRLMXaoDtgQo66Ufa5wN5fyrcY3toXFiGn9O9
+        7/di0HFc1lpEyZ1yg64OTyTLy6N66VuYs/gBN2/KuFZvpmc0deMKm4xnfqI/3QnRbGqEvw
+        kXlD9zooNkqHTxnMbv6ja+7QgHf4i/IDD4fIxXlSGoHg3n4er0agJNlh6KU9/AI9gKs2wl
+        MnXmqIy4U2ZQu4sV/R53z/Nqhht5d0bhC4+fpxfK68QMs1RFcvJg5bWjS/lhew==
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 652076000A;
+        Mon, 29 May 2023 08:02:32 +0000 (UTC)
+From:   =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
-References: <20230526100801.16310-1-uwu@icenowy.me>
- <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Conor Dooley <conor+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        paul.arola@telus.com, scott.roberts@telus.com,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Subject: [PATCH net-next v4 0/7] net: dsa: mv88e6xxx: add 88E6361 support
+Date:   Mon, 29 May 2023 10:02:39 +0200
+Message-Id: <20230529080246.82953-1-alexis.lothore@bootlin.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/05/23 16:24, Doug Anderson ha scritto:
-> Hi,
-> 
-> On Fri, May 26, 2023 at 3:09 AM Icenowy Zheng <uwu@icenowy.me> wrote:
->>
->> Currently a specific panel number is used in the Elm DTSI, which is
->> corresponded to a 12" panel. However, according to the official Chrome
->> OS devices document, Elm refers to Acer Chromebook R13, which, as the
->> name specifies, uses a 13.3" panel, which comes with EDID information.
->>
->> As the kernel currently prioritizes the hardcoded timing parameters
->> matched with the panel number compatible, a wrong timing will be applied
->> to the 13.3" panel on Acer Chromebook R13, which leads to blank display.
->>
->> Because the Elm DTSI is shared with Hana board, and Hana corresponds to
->> multiple devices from 11" to 14", a certain panel model number shouldn't
->> be present, and driving the panel according to its EDID information is
->> necessary.
->>
->> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
->> ---
->>   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> We went through a bunch of back-and-forth here but in the end in the
-> ChromeOS tree we have "edp-panel" as the "compatible" here in the
-> ChromeOS 5.15 tree and this makes sense.
-> 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> 
-> ...in theory one would wish for a "Fixes" tag, but I think in previous
-> discussions it was decided that it was too complicated. Hardcoding the
-> other compatible string has always been technically wrong, but I guess
-> it worked at some point in time. The more correct way (as you're doing
-> here) needs the DP AUX bus support and the generic eDP panels, both of
-> which are significantly newer than the elm dts. So I guess leaving no
-> "Fixes" tag is OK, or perhaps you could do the somewhat weak:
-> 
-> Fixes: c2d94f72140a ("arm64: dts: mediatek: mt8173-elm: Move display
-> to ps8640 auxiliary bus")
+This series brings initial support for Marvell 88E6361 switch.
 
-I remember I didn't change the compatible to panel-edp because it didn't
-work at that time, but it does now... I'm not sure what actually fixed that
-and if the commit(s) was/were backported to that suggested point, so I
-would leave the Fixes tag out, as that may break older kernels.
+MV88E6361 is a 8 ports switch with 5 integrated Gigabit PHYs and 3
+2.5Gigabit SerDes interfaces. It is in fact a new variant in the
+88E639X/88E6193X/88E6191X family with a subset of existing features:
+- port 0: MII, RMII, RGMII, 1000BaseX, 2500BaseX
+- port 3 to 7: triple speed internal phys
+- port 9 and 10: 1000BaseX, 25000BaseX
 
-Anyway, for this commit:
+Since said family is already well supported in mv88e6xxx driver, adding
+initial support for this new switch mostly consists in finding the ID
+exposed in its identification register, adding a proper description
+in switch description tables in mv88e6xxx driver, and enforcing 88E6361
+specificities in mv88e6393x_XXX methods.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+- first 4 commits introduce an internal phy offset field for switches which
+  have internal phys but not starting from port 0
+- 5th commit is a fix on existing switches based on first commits
+- 6th commit is a slight modification to prepare 886361 support
+- last commit introduces 88E6361 support in 88E6393X family
+
+This initial support has been tested with two samples of a custom board
+with the following hardware configuration:
+- a main CPU connected to MV88E6361 using port 0 as CPU port
+- port 9 wired to a SFP cage
+- port 10 wired to a G.Hn transceiver
+
+The following setup was used:
+PC <-ethernet-> (copper SFP) - Board 1 - (G.hn) <-phone line(RJ11)-> (G.hn) Board 2
+
+The unit 1 has been configured to bridge SFP port and G.hn port together,
+which allowed to successfully ping Board 2 from PC.
+
+Changes since v3:
+- fix SoB
+- reorder switch id list
+
+Changes since v2:
+- add Reviewed-By tags for untouched patches
+- remove whitespace
+- reorganized some conditions to avoid weird line split
+
+Changes since v1:
+- rework mv88e6xxx_port_ppu_updates to use internal helper
+- add internal phys offset field to manage switches which do not have
+  internal PHYs right on first ports
+- fix 88E639X/88E6193X/88E6191X internal phy layout
+- enforce 88E6361 features in mv88e6393x_port_set_speed_duplex
+- enforce 88E6361 features in mv88e6393x_port_max_speed_mode
+- enforce 88E6361 features in mv88e6393x_phylink_get_caps
+- add Reviewed-By and Acked-By on untouched patch
+
+Alexis Lothoré (7):
+  dt-bindings: net: dsa: marvell: add MV88E6361 switch to compatibility
+    list
+  net: dsa: mv88e6xxx: pass directly chip structure to
+    mv88e6xxx_phy_is_internal
+  net: dsa: mv88e6xxx: use mv88e6xxx_phy_is_internal in
+    mv88e6xxx_port_ppu_updates
+  net: dsa: mv88e6xxx: add field to specify internal phys layout
+  net: dsa: mv88e6xxx: fix 88E6393X family internal phys layout
+  net: dsa: mv88e6xxx: pass mv88e6xxx_chip structure to
+    port_max_speed_mode
+  net: dsa: mv88e6xxx: enable support for 88E6361 switch
+
+ .../devicetree/bindings/net/dsa/marvell.txt   |  2 +-
+ drivers/net/dsa/mv88e6xxx/chip.c              | 69 ++++++++++++++-----
+ drivers/net/dsa/mv88e6xxx/chip.h              | 11 ++-
+ drivers/net/dsa/mv88e6xxx/global2.c           |  5 +-
+ drivers/net/dsa/mv88e6xxx/port.c              | 26 +++++--
+ drivers/net/dsa/mv88e6xxx/port.h              | 13 ++--
+ 6 files changed, 94 insertions(+), 32 deletions(-)
+
+-- 
+2.40.1
+
