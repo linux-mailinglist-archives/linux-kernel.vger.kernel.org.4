@@ -2,69 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9474A714942
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB7471494B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbjE2MRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
+        id S231448AbjE2MTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjE2MRm (ORCPT
+        with ESMTP id S229965AbjE2MTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:17:42 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE49DC2;
-        Mon, 29 May 2023 05:17:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685362660; x=1716898660;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PHiUGMjxRQ6M/GUGwXf1RDiZRcVrGdxl0s2yVo9wSVQ=;
-  b=qoeuTHSNte5PF76ImmbU8u6Aly64zJuxerVP1A4zblu7Tu/N/VYfEYmB
-   8Ef98wuBcrJ26S18PqxoHrNNo9UxPCPVKCdCtnjUZuLjI5/tZduT0ZF0/
-   GfF/avkqwEB5ab5JDJs/bfoT1NDq/ORL9+bwtrFmxqIcf76sK2JGws7XA
-   /lLU7u8p9t2CGSoqebvh86B2TaqfnjsIUS3E00gsOr1l0Y+6wXp2GsX3s
-   jB2cWwhlS9LuosOqOousUONd2F9ms2qdFzr51zCL5dWvQ2CFDm1isjy7S
-   GNWI0NntGn0sLkAA11PQuJ2LpwTMToOxCQr4BILTWTCmfpMBhl6OFlEN+
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="asc'?scan'208";a="213543328"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 May 2023 05:17:39 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 29 May 2023 05:17:39 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 29 May 2023 05:17:37 -0700
-Date:   Mon, 29 May 2023 13:17:14 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] dt-bindings: timer: atmel,at91sam9260-pit:
- convert to yaml
-Message-ID: <20230529-chuck-turbofan-a8aabbdd9341@wendy>
-References: <20230529062604.1498052-1-claudiu.beznea@microchip.com>
- <20230529062604.1498052-3-claudiu.beznea@microchip.com>
+        Mon, 29 May 2023 08:19:17 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DE1C9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:19:14 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f3b4ed6fdeso3345659e87.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:19:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685362753; x=1687954753;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YECXa3X/DxmraiWq2kY1kuESj9S065EhI3PmyoIgQQU=;
+        b=jVBrGtJnd6soXtOqbUpHJU1830vJv+VTsU77nmdFHHhlV/9Ho04aTrAHvGu8QGikjZ
+         KYayQyXjcBm+YVmxLl+ws1vFxcpQxT6asCZTQdm4DckgOdfKtHuN4jr4LzbREd9DQUhN
+         Hz3rMoPrBTmTl/6Sf/g7gVXVqselWbcTxF4D3TNrizHitQprx+/vexyiPgygga1Dp1me
+         B/LRYoRe4LLeL+7ekja1fv6BunFx4gVPmX8YSeIDBiFeSKRDnelmXOnrgyvLA6oPGTyR
+         y1By6leTvSwqXtWMoomn+XkHTrI0w7RK3CJbiT3tQeyzugGG3kkRhI8/IsHS+nIqklQW
+         A7Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685362753; x=1687954753;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YECXa3X/DxmraiWq2kY1kuESj9S065EhI3PmyoIgQQU=;
+        b=F1MX01RONJ1SMaVKsv+NmoX78JazEmR2iWGNXOO3pGnzZOLZ+7vUD+fhujSBuPazGI
+         DU4A1LzL2rx92DL4LAEREspBKpGsVZphM7idQFz3/2w9cK+cccrv5j5imlQYYMbcAeme
+         jFM/zukpNzvMMdiYnqnR2kDQTfZ24vHDS/tPDJIcA4mxrN2gcWlEQTRjCzmaa+p8Bwa5
+         GEeyme/j8KqJwaAO1ri2umWTRXVE+uWq9oK+mm7Bb+JTpVRuIh+BvPZaq+pqjp1u7xTg
+         2fkdqIlzy4VlyZAZOiVgeOYbyXXTVapKTzpYL1jk/dthnfTQuIX6loLSRB2JMgbI0VcT
+         VQdw==
+X-Gm-Message-State: AC+VfDzKohoCzkmAeH8H1kPn1PfG2x60DyCjlIF6iPn2LNxxQERsfSHb
+        qtJ9kXbbDqVEIruD92jZzfxClQ==
+X-Google-Smtp-Source: ACHHUZ763qQqMP7KPrX70p+UDKi6WNOOXFBaePb7niWyZD7/Ea1KfN14TiBixaTiQxjWYxnhiHXcMw==
+X-Received: by 2002:a19:5201:0:b0:4f4:3418:4726 with SMTP id m1-20020a195201000000b004f434184726mr2931247lfb.56.1685362753224;
+        Mon, 29 May 2023 05:19:13 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id 16-20020ac24830000000b004f13c00dd9bsm1972467lft.135.2023.05.29.05.19.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 05:19:12 -0700 (PDT)
+Message-ID: <58e7e5ff-5e40-7871-efe2-bfe88bd19dad@linaro.org>
+Date:   Mon, 29 May 2023 15:19:11 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MDW8BcZEu6MUYNEl"
-Content-Disposition: inline
-In-Reply-To: <20230529062604.1498052-3-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 7/7] ARM: dts: qcom: msm8226: Add mdss nodes
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230308-msm8226-mdp-v1-0-679f335d3d5b@z3ntu.xyz>
+ <20230308-msm8226-mdp-v1-7-679f335d3d5b@z3ntu.xyz>
+ <6c79b99e-cc69-8cd9-c990-5c0373e1f09c@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <6c79b99e-cc69-8cd9-c990-5c0373e1f09c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,150 +90,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---MDW8BcZEu6MUYNEl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 29/05/2023 15:10, Konrad Dybcio wrote:
+> 
+> 
+> On 29.05.2023 11:44, Luca Weiss wrote:
+>> Add the nodes that describe the mdss so that display can work on
+>> MSM8226.
+>>
+>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+>> ---
+>>   arch/arm/boot/dts/qcom-msm8226.dtsi | 118 ++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 118 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
+>> index 42acb9ddb8cc..182d6405032f 100644
+>> --- a/arch/arm/boot/dts/qcom-msm8226.dtsi
+>> +++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
+>> @@ -636,6 +636,124 @@ smd-edge {
+>>   				label = "lpass";
+>>   			};
+>>   		};
+>> +
+>> +		mdss: display-subsystem@fd900000 {
+>> +			compatible = "qcom,mdss";
+>> +			reg = <0xfd900000 0x100>, <0xfd924000 0x1000>;
+>> +			reg-names = "mdss_phys", "vbif_phys";
+>> +
+>> +			power-domains = <&mmcc MDSS_GDSC>;
+>> +
+>> +			clocks = <&mmcc MDSS_AHB_CLK>,
+>> +				 <&mmcc MDSS_AXI_CLK>,
+>> +				 <&mmcc MDSS_VSYNC_CLK>;
+>> +			clock-names = "iface", "bus", "vsync";
+> One per line, please
+> 
+>> +
+>> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <1>;
+> We're not using the irq cell, is that necessary/should that be 0?
 
-Hey Claudiu,
+No. With 0 it would mean that there is a single interrupt for mdss 
+source, which clearly is not the case.
 
-On Mon, May 29, 2023 at 09:26:02AM +0300, Claudiu Beznea wrote:
-> Convert Microchip AT91 PIT bindings to YAML. Along with it clocks and
-> clock-names bindings were added as the drivers needs it to ensure proper
-> hardware functionality.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  .../devicetree/bindings/arm/atmel-sysregs.txt | 12 ---
->  .../bindings/timer/atmel,at91sam9260-pit.yaml | 96 +++++++++++++++++++
->  2 files changed, 96 insertions(+), 12 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91sam=
-9260-pit.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Do=
-cumentation/devicetree/bindings/arm/atmel-sysregs.txt
-> index 67a66bf74895..54d3f586403e 100644
-> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> @@ -4,18 +4,6 @@ Chipid required properties:
->  - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chi=
-pid"
->  - reg : Should contain registers location and length
-> =20
-> -PIT Timer required properties:
-> -- compatible: Should be "atmel,at91sam9260-pit"
-> -- reg: Should contain registers location and length
-> -- interrupts: Should contain interrupt for the PIT which is the IRQ line
-> -  shared across all System Controller members.
-> -
-> -PIT64B Timer required properties:
-> -- compatible: Should be "microchip,sam9x60-pit64b"
-> -- reg: Should contain registers location and length
-> -- interrupts: Should contain interrupt for PIT64B timer
-> -- clocks: Should contain the available clock sources for PIT64B timer.
-> -
->  System Timer (ST) required properties:
->  - compatible: Should be "atmel,at91rm9200-st", "syscon", "simple-mfd"
->  - reg: Should contain registers location and length
-> diff --git a/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pi=
-t.yaml b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
-> new file mode 100644
-> index 000000000000..1cc7b7494e4b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
-> @@ -0,0 +1,96 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/timer/atmel,at91sam9260-pit.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip AT91 Periodic Interval Timer (PIT)
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +description:
-> +  Microchip AT91 periodic interval timer provides the operating system s=
-cheduler
-> +  interrupt. It is designed to offer maximum accuracy and efficient mana=
-gement,
-> +  even for systems with long response time.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - atmel,at91sam9260-pit
-> +      - microchip,sam9x60-pit64b
+> 
+>> +
+>> +			status = "disabled";
+> status should go last
+> 
+>> +
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges;
+>> +
+>> +			mdp: display-controller@fd900000 {
+>> +				compatible = "qcom,msm8226-mdp5", "qcom,mdp5";
+>> +				reg = <0xfd900100 0x22000>;
+>> +				reg-names = "mdp_phys";
+>> +
+>> +				interrupt-parent = <&mdss>;
+>> +				interrupts = <0>;
+>> +
+>> +				clocks = <&mmcc MDSS_AHB_CLK>,
+>> +					 <&mmcc MDSS_AXI_CLK>,
+>> +					 <&mmcc MDSS_MDP_CLK>,
+>> +					 <&mmcc MDSS_VSYNC_CLK>;
+>> +				clock-names = "iface", "bus", "core", "vsync";
+> One per line, please
+> 
+>> +
+>> +				ports {
+>> +					#address-cells = <1>;
+>> +					#size-cells = <0>;
+> Would port { work here? I remember one mdss component's bindings
+> didn't allow it but don't recall which one
 
-The missing compatible should probably be added here, rather than
-removed from the devicetree.
+Let's use ports /port@0 for uniformity even if there is just a single 
+port always.
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: atmel,at91sam9260-pit
-> +    then:
-> +      properties:
+> 
+>> +
+>> +					port@0 {
+>> +						reg = <0>;
+>> +						mdp5_intf1_out: endpoint {
+>> +							remote-endpoint = <&dsi0_in>;
+>> +						};
+>> +					};
+>> +				};
+>> +			};
+>> +-- 
+With best wishes
+Dmitry
 
-> +        interrupts:
-> +          description:
-> +            Contain interrupt for the PIT which is the IRQ line shared a=
-cross all
-> +            System Controller members.
-
-I think you should drop this & the corresponding section below, since
-both PIT and PIT64 have a single interrupt.
-
-Thanks,
-Conor.
-
-> +        clocks:
-> +          maxItems: 1
-> +
-> +    else:
-> +      properties:
-> +        interrupts:
-> +          description:
-> +            PIT64B peripheral interrupt identifier.
-> +        clocks:
-> +          minItems: 2
-> +        clock-names:
-> +          items:
-> +            - const: pclk
-> +            - const: gclk
-> +      required:
-> +        - clock-names
-
-
---MDW8BcZEu6MUYNEl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHSXygAKCRB4tDGHoIJi
-0lloAP90iVLfmKixUT2X7Jvpsdvgj+TPj5hIYGyTIPBn44lzYgEAyNQOMUvamzjZ
-WsLACZkOX75RoA9nLwB208Nkk8RUww8=
-=W65y
------END PGP SIGNATURE-----
-
---MDW8BcZEu6MUYNEl--
