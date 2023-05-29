@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC812714539
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192CC71453B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjE2HGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 03:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S229802AbjE2HH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 03:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjE2HGg (ORCPT
+        with ESMTP id S229613AbjE2HHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 03:06:36 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272D710C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:06:05 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2af28303127so30875981fa.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:06:05 -0700 (PDT)
+        Mon, 29 May 2023 03:07:54 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1045EA3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:07:53 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af7081c9ebso30949831fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:07:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ferroamp-se.20221208.gappssmtp.com; s=20221208; t=1685343963; x=1687935963;
+        d=ferroamp-se.20221208.gappssmtp.com; s=20221208; t=1685344071; x=1687936071;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=bSGCe5USSQJEGiF5Fy/UcpM812mnZfMtSYhSOl2CPIg=;
-        b=yQ2RPOVq3xwqv0kByvZOr7NUoTwGS3KYUBuoFO2EN1/+riLmQQ+gl9KBdbY2XNa2Jm
-         yf/5UujrzcXwrAGJIROdbayji0Bh217OowCFGgM9AZJGkReWDmzGiJZq/HjBp+dO3Utt
-         AhPlTFhN16867KYDuPmyh3X0WCmxNTzZyye26DI7zoLt7LPAX9pgO92hARHQDTOnW9yn
-         d/i3qIv5HKFpEsX8GkhCuaBS2GTwc1zV006/YEnkF12N/WXX1vjpLufIg7fg1cIT6X2Q
-         AXa/DLQZ7H0Q8ZMt9TSsnYV40gtDv5CwfyBls1Aw7nxLr0MHiFT4Eb2pH0gnxu8F9H+p
-         cOvQ==
+        bh=Zat1KHzLwak5upaRhqnvlEdQ0l9XbwNBWO76a0Xz0Tg=;
+        b=kEHoR0/34wRGf2josYa7LJCkcMHDN54afmtrz+AanwOxVC8r521E0DbmUsUBITSJ/t
+         VmDEL/uvcAxKqtGCqkWRBEOvCptDMAamq8kP1xJ1N3X7Iu0OdfiIGAljFJ83iIexBCTz
+         EsZbB4sreHvD5690UEP6XOq7a5iAJ/RGz6Sh+2l2ufvQ9dg/FhCQiGuxRBE4MdGX+Sk8
+         9aAL1RlkhWKiox3Ofr5cjfwloQesUQGkTHH6r8+tzdXtGyEUeyazSHfR8Sex1iy2X71Z
+         h+HMLKs6KTu2d/YQQGlFDFlljdElJgBQzqNyPRxgkuU3BEf/nRflQglede6Tbb4zGi1I
+         j/Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685343963; x=1687935963;
+        d=1e100.net; s=20221208; t=1685344071; x=1687936071;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bSGCe5USSQJEGiF5Fy/UcpM812mnZfMtSYhSOl2CPIg=;
-        b=Ky6jdDwaQcAKMj/58AUJjyB0gGUG5EwP5blb4ZzkjWwU110aSBsL7gb/cSWnO+jFZU
-         EKOy1i+pdKz/QevM/U96G7SGuSScPe1SG97WQ7as1zbk+6xP6hdhy1VjtReV64gG5q3R
-         c4K3d6QqfB6vRjHaVbMb7Xnf0fnCFBr4SSf8YTIopXNS6wvmhL2yW3+3qaKXvMAoAVe8
-         4XhJ2D5wR0HnH4XD3AwaRrBolkvISteQ908GHpsMbSsvbYHvo4BXV8sJwcbqd9rKNvyt
-         8bT9s/XvZ3AePMb717CaNeRbKCCXCawxzIeyLXBd7n1sKFDg+lQfvmnORY7AMDiOMIqW
-         Zjsg==
-X-Gm-Message-State: AC+VfDyRTfTJULt9XuMaKwAUN4tB+UWFBwjWKyow6AiJAfRSj+Bgk9NT
-        +Zq1tcwRedJEEqSZpirWTRihhg==
-X-Google-Smtp-Source: ACHHUZ7ghxvNiBXIZexmU6mGNqC84T8NesjozSmGJVnzo7tfrKT3UAnltzTThAYM5S8QkaTa1ZnIig==
-X-Received: by 2002:a2e:7d18:0:b0:2ad:990a:212c with SMTP id y24-20020a2e7d18000000b002ad990a212cmr3309182ljc.32.1685343962830;
-        Mon, 29 May 2023 00:06:02 -0700 (PDT)
+        bh=Zat1KHzLwak5upaRhqnvlEdQ0l9XbwNBWO76a0Xz0Tg=;
+        b=fEnJhg0RC2JOxwbCW/0aWQrRHPNphF79f/c9ms/pZ7Aa6XQetmQjVTyCA4Ork/hzFP
+         IRmoBJNceyO7sKPZoEBPLAd18IHX9te3xHLreNwugS4WgP9gIgphqZq6vza4agn83+Ec
+         OfFG+VQ+Yulvg9MC/4xv/2hAPYQ2JPEyoSyLs2W4pwbRc/gA1DZLWzOdCRyLmaVJamfK
+         1mjtsGVDss+Sw2nxY5KsNg0N4MFKX2w7MDP3a4W7nxEnMuEmtJbsTTJt70cOJlEIB5EF
+         u2f1/WjmC63iiIwxmsU5w7t2EUjFEyHacioHsYOUAsxur9fCaymUA7eGeccwL4r50qWm
+         gE4Q==
+X-Gm-Message-State: AC+VfDxFITs5mq6QoRQ9hhJWjleUk8bipM2JXdj9qKRapa/U8Nt1J6K+
+        DSvjfq2wHB79holXpUtK0HAhKQ==
+X-Google-Smtp-Source: ACHHUZ6zRzAcWj6+rNB3nrzDHboqSKGNWTeXA9bRnzXLgDNg+s+k3hk5Sly/yo5bLSos+JNzdX45DQ==
+X-Received: by 2002:a2e:7313:0:b0:2af:e006:b83 with SMTP id o19-20020a2e7313000000b002afe0060b83mr3478748ljc.18.1685344070996;
+        Mon, 29 May 2023 00:07:50 -0700 (PDT)
 Received: from debian (151.236.202.107.c.fiberdirekt.net. [151.236.202.107])
-        by smtp.gmail.com with ESMTPSA id w5-20020a2e3005000000b002ab017899e8sm2298927ljw.39.2023.05.29.00.06.01
+        by smtp.gmail.com with ESMTPSA id z19-20020a2e9b93000000b002a8c32fd2f3sm2312541lji.89.2023.05.29.00.07.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 00:06:02 -0700 (PDT)
-Date:   Mon, 29 May 2023 09:06:00 +0200
+        Mon, 29 May 2023 00:07:50 -0700 (PDT)
+Date:   Mon, 29 May 2023 09:07:48 +0200
 From:   =?iso-8859-1?Q?Ram=F3n?= Nordin Rodriguez 
         <ramon.nordin.rodriguez@ferroamp.se>
 To:     Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
@@ -62,7 +62,7 @@ Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
         Thorsten.Kummermehr@microchip.com
 Subject: Re: [PATCH net-next v4 6/6] net: phy: microchip_t1s: add support for
  Microchip LAN865x Rev.B0 PHYs
-Message-ID: <ZHRO2HZdrTzDoOQm@debian>
+Message-ID: <ZHRPRBwJ5jHs6vLz@debian>
 References: <20230526152348.70781-1-Parthiban.Veerasooran@microchip.com>
  <20230526152348.70781-7-Parthiban.Veerasooran@microchip.com>
 MIME-Version: 1.0
@@ -90,5 +90,5 @@ On Fri, May 26, 2023 at 08:53:48PM +0530, Parthiban Veerasooran wrote:
 > Signed-off-by: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
 > ---
 
-Reviewed-by: Ramón Nordin Rodriguez <ramon.nordin.rodriguez@ferroamp.se>
-Tested-by: Ramón Nordin Rodriguez <ramon.nordin.rodriguez@ferroamp.se>
+I accidentally sent both reviewed-by and tested by, should only have
+been reviewed-by.
