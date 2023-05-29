@@ -2,128 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6157B71502B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 22:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48AD271502D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 22:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjE2UDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 16:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S229765AbjE2UEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 16:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjE2UDa (ORCPT
+        with ESMTP id S229505AbjE2UEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 16:03:30 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1E2B7;
-        Mon, 29 May 2023 13:03:28 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1685390599tn4jgnkv
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 04:03:18 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: k0mQ4ihyJQNl0tPjdjOgNqX0jjoVkxp1GSPuWGQl656yikeNBviNJKBitUkp6
-        lm+aMUjEhrGBVafJe/0RXm005dmvPr0svXZCa00fN2INLXf8FnX81RmDUt2RhzUgAQmcJaY
-        X/4en6armYsi4js8RQbWSj7MXj+1rrUUZu0TBjhA9ohK0H0sNutaoVfQBevgcxiUkv87vvL
-        +//jtz8F0e5Q0CYbDrwZ5uz07UcKaxwX0zS7KvhqZyM0K2PQzxduLNZPan30L2AVmLACHeh
-        eURVC7zC4QyiX2NfPz2+tAWb4UnLZt1DZtzFcv2zFEbXFBGRgAzzEve+INc5O82EGXUTX6q
-        Jn2upXB9ZPMongQJPWwow/0kN1eZf1RBE53Rw0kETzF1NOKT5hNlIbUUAZG6V5q2HzXpa8i
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5246615934604989803
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH v2 13/13] selftests/nolibc: riscv: customize makefile for rv32
-Date:   Tue, 30 May 2023 04:03:13 +0800
-Message-Id: <6f065441a6be9e63238ffb3d43cf09a6e4ac6773.1685387485.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685387484.git.falcon@tinylab.org>
-References: <cover.1685387484.git.falcon@tinylab.org>
+        Mon, 29 May 2023 16:04:32 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FE8CF;
+        Mon, 29 May 2023 13:04:31 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96fe2a1db26so663764566b.0;
+        Mon, 29 May 2023 13:04:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1685390669; x=1687982669;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZoZf/xczibXYDWG/6Mc7Wi2iq3Itvt6yL1vaRCC+K6M=;
+        b=axcRkrFkcmKzt054fs7v1UwB2jVBAxH4IyCUC/7o6SFdnJxyzj/vr0+Kv/JJ3jUhWU
+         0w7Bol+SfZeFjGzVCN5RLNROdzpPH9bxkLEC3lSWwPDHWhGTsDDEdkFh/PbXbzhS3NWq
+         bc+Mo50fliHAsdS1POTT1C0o/ecVuZ9Du47v1vaG1WJbXvKZuhK1x7//E+wTKkW1vqLw
+         tPIjejJ4UwL6h9hhj0c2orH3jl4cLuYJSI0qnNEYfF2WuQXBQLrvdg2htLb7KB6It+8o
+         Sm98KoIp6AGtOIi2rbn3M29x214f4iu/zgX+fgdeCG0ybSLEvBvcBdywGuxHn/kuvrIO
+         whjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685390669; x=1687982669;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZoZf/xczibXYDWG/6Mc7Wi2iq3Itvt6yL1vaRCC+K6M=;
+        b=IxDK2aTKFfJFIO9ads5GySXQGlSug8JOn6+pIOMNQMtgZLDAFBTNk4s1tisGLY4F4T
+         ngF4eUCHiYVvZiRTv13JHnIN76WFsNZe5sQfvgLzLOK+80jLjHUk2d14J0EisNY3/3WI
+         Avf0uUJvnsQGcuQQJ6933F0dJVuOjGPs5E59eNzdqVYJwHTFW6ulXKCNQj3kruw8gYtg
+         pwgquZOOQU89yLtUm4IhIwRT7kNbStZHWEXKUcJ0NAm1cl3KNISFhQZz1Fnz6q6dAONc
+         Pj1/D5JSathgGTETC6mX1kqtupxkZtFdtv6xCUoo06vG8eRjs4A7ECtxhGWpeRU/W2KJ
+         IBJw==
+X-Gm-Message-State: AC+VfDyFNKr5uUSxvXP/T+CbXC9zEhRKrTj+v9c5TQpSuWFPsxDkNkR6
+        GRNcCiL+9uEumFsAJiEiPapF47GfKP83VT48/LE=
+X-Google-Smtp-Source: ACHHUZ6fBnoUW8s7bD4kr2wc2YaDUbTsjPJ7jdxI4pWyyE579kh7lZB5GhSLucvdDMRNz6QURt0vaLwWmjwmMpa1mlI=
+X-Received: by 2002:a17:907:2daa:b0:96a:6723:da48 with SMTP id
+ gt42-20020a1709072daa00b0096a6723da48mr209616ejc.75.1685390669261; Mon, 29
+ May 2023 13:04:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230527214854.126517-1-gnstark@sberdevices.ru>
+ <20230528161117.197f7e61@jic23-huawei> <4d5a7691-68ac-6626-5502-383fad3a9436@sberdevices.ru>
+In-Reply-To: <4d5a7691-68ac-6626-5502-383fad3a9436@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 29 May 2023 22:04:18 +0200
+Message-ID: <CAFBinCA=earf119bN7ohmTQGDzSMeV9qcL8RU9DUYe0195H5=Q@mail.gmail.com>
+Subject: Re: [PATCH v2] meson saradc: add iio device attrib to switch channel
+ 7 mux
+To:     George Stark <GNStark@sberdevices.ru>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        "khilman@baylibre.com" <khilman@baylibre.com>,
+        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "nuno.sa@analog.com" <nuno.sa@analog.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>, kernel <kernel@sberdevices.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both riscv64 and riscv32 have:
+Hi George,
 
-* the same ARCH value, it is riscv
-* the same arch/riscv source code tree
+On Sun, May 28, 2023 at 11:52=E2=80=AFPM George Stark <GNStark@sberdevices.=
+ru> wrote:
+[...]
+> > Based on the limited description we have here, I'm not understanding wh=
+y
+> > you don't just express this as a set of channels. One channel per mux
+> > setting, with the in_voltageX_label providing the information on what t=
+he
+> > channel is connected to.
+> >
+> > This is an interesting facility, so good to enable for high precision c=
+alibration
+> > but we still want to map it to standards signals.  Userspace doesn't
+> > care that these are all being measured via the same input 7 - which
+> > is itself probably an input to a MUX.
+> >
+> > Jonathan
+>
+> Hello Jonathan
+>
+> Thanks for the review.
+>
+> Your idea of exposing the mux setting as iio channels is very
+> interesting and at least worth trying.
+> The sysfs approach was chosen because of the code changes are simple and
+> neat (compare to channels approach).
+> Also calibration by using those mux inputs are already supported in the
+> driver (performed at probe stage) so I expect very special usecases for
+> those mux settings like debug or device production stage tests. In those
+> usescases hardware specific knowledge is required anyway.
+Another downside to the debugfs approach is user support:
+If someone reports odd values on ADC channel 7 then we need to make
+sure to double check if the mux has been altered from userspace (the
+calibration during initialization ensures to leave channel 7 in a
+consistent state, while a user may change the mux, forget about it and
+then complain that values are wrong).
 
-The only differences are:
 
-* riscv64 uses defconfig, riscv32 uses rv32_defconfig
-* riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
-* riscv32 has different compiler options (-march= and -mabi=)
-
-So, riscv32 can share most of the settings with riscv64, there is no
-need to add it as a whole new architecture but just need a flag to
-record and reflect the difference.
-
-The 32bit mips and loongarch may be able to use the same method, so,
-let's use a meaningful flag: CONFIG_32BIT. If required in the future,
-this flag can also be automatically loaded from
-include/config/auto.conf.
-
-With this patch, it is able to run nolibc test for rv32 like this:
-
-    $ make run ARCH=riscv32 CROSS_COMPILE=riscv64-linux-gnu- ...
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/Makefile | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 44088535682e..ea434a0acdc1 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
- ARCH = $(SUBARCH)
- endif
- 
-+# Allow pass ARCH=riscv|riscv32|riscv64, riscv implies riscv64
-+ifneq ($(findstring xriscv,x$(ARCH)),)
-+  CONFIG_32BIT := $(if $(findstring 32x,$(ARCH)x),1)
-+  override ARCH := riscv
-+endif
-+
- # kernel image names by architecture
- IMAGE_i386       = arch/x86/boot/bzImage
- IMAGE_x86_64     = arch/x86/boot/bzImage
-@@ -34,7 +40,7 @@ DEFCONFIG_x86        = defconfig
- DEFCONFIG_arm64      = defconfig
- DEFCONFIG_arm        = multi_v7_defconfig
- DEFCONFIG_mips       = malta_defconfig
--DEFCONFIG_riscv      = defconfig
-+DEFCONFIG_riscv      = $(if $(CONFIG_32BIT),rv32_defconfig,defconfig)
- DEFCONFIG_s390       = defconfig
- DEFCONFIG_loongarch  = defconfig
- DEFCONFIG            = $(DEFCONFIG_$(ARCH))
-@@ -49,7 +55,7 @@ QEMU_ARCH_x86        = x86_64
- QEMU_ARCH_arm64      = aarch64
- QEMU_ARCH_arm        = arm
- QEMU_ARCH_mips       = mipsel  # works with malta_defconfig
--QEMU_ARCH_riscv      = riscv64
-+QEMU_ARCH_riscv      = $(if $(CONFIG_32BIT),riscv32,riscv64)
- QEMU_ARCH_s390       = s390x
- QEMU_ARCH_loongarch  = loongarch64
- QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
-@@ -76,6 +82,7 @@ else
- Q=@
- endif
- 
-+CFLAGS_riscv = $(if $(CONFIG_32BIT),-march=rv32i -mabi=ilp32)
- CFLAGS_s390 = -m64
- CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
- CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
--- 
-2.25.1
-
+Best regards,
+Martin
