@@ -2,196 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84883714EEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C05A4714EF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjE2RZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 13:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54474 "EHLO
+        id S229512AbjE2Rdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 13:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjE2RZB (ORCPT
+        with ESMTP id S229453AbjE2Rdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 13:25:01 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EF64DE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:24:54 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxFvHm33RkR0oCAA--.5355S3;
-        Tue, 30 May 2023 01:24:54 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxMuXk33RkhkV_AA--.9919S8;
-        Tue, 30 May 2023 01:24:53 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v5 6/6] drm/etnaviv: allow usperspace create cached coherent bo
-Date:   Tue, 30 May 2023 01:24:52 +0800
-Message-Id: <20230529172452.2148819-7-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230529172452.2148819-1-suijingfeng@loongson.cn>
-References: <20230529172452.2148819-1-suijingfeng@loongson.cn>
+        Mon, 29 May 2023 13:33:39 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C953BE
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:33:38 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51478f6106cso5720068a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1685381616; x=1687973616;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5SnnxOPGDcq5IgZITbMgF+/5A6j86ONCYACpYZC4l3I=;
+        b=Ba/UoowdP5Dt1gcZhoPhL64PQGgRI/QvrlUi1tHUH2pEeJ06J4goEfGdzKZOMWYPvb
+         suPVSAS459z2FchfuO+dSgaUSm02N/qbzcgi0A0lFib1aHON7VoSA0ArqFzp/qnKtMII
+         Qb6S7BAmVyCar00ns4w0oXFH6tIAsgf3ISU9c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685381616; x=1687973616;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5SnnxOPGDcq5IgZITbMgF+/5A6j86ONCYACpYZC4l3I=;
+        b=bsL17AXOyz2ry12Ynbunsr1qaeqI0UxZVWkZxYwtaJf5MW2YtDxpuAZ9P2wz6uEjGn
+         puXB0xdbrf+HFZvpgkwu2yWMlqzWx1gGx4x6/MuPsLKN1wQzaEuXKe201tWHR47h9OsR
+         m34aA5T0dc6/fmWcjx9nsv3MhhAVx2gHowsEw9HSQhM/cT+OD71Jazuf1gMjkJHwLe6P
+         PagM5P/XXvEa2uZHmBJ6OhdnBHGNZ8vH9v12t2SgISshAhFYQsHXMDePbIA3LbYQzRPP
+         dgiY4O4rzZxasACWH2I4UsFZRn/Q0yxkiKOxaeANXhk3nJ1i2ElYSet9rAagxlB619SA
+         oRWw==
+X-Gm-Message-State: AC+VfDzYXsWBrfgj0Wa/apM42z66icZR/L0Ickh6I2q9dzBDWQzJwwuc
+        /wWvyzRNkIOthdQrsZXPsGlekHqYurmVA2dtE4rHD5Mg
+X-Google-Smtp-Source: ACHHUZ6vipbJY8lDZ+9x1m/kVC+X5IZTtdEtUpcK5s/mkxOH+Hr63IiEEn3Uda7bBwJ9+2caSf0HKA==
+X-Received: by 2002:aa7:da03:0:b0:514:9e61:18ab with SMTP id r3-20020aa7da03000000b005149e6118abmr325816eds.14.1685381616496;
+        Mon, 29 May 2023 10:33:36 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
+        by smtp.gmail.com with ESMTPSA id a10-20020aa7cf0a000000b00506987c5c71sm3259968edy.70.2023.05.29.10.33.35
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 10:33:35 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96f818c48fbso663215266b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:33:35 -0700 (PDT)
+X-Received: by 2002:a17:906:ee83:b0:94f:2a13:4e01 with SMTP id
+ wt3-20020a170906ee8300b0094f2a134e01mr9672114ejb.74.1685381615429; Mon, 29
+ May 2023 10:33:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxMuXk33RkhkV_AA--.9919S8
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF4fGryfAF4UZFyUZFykAFb_yoWrKFWUpF
-        Z3AFyYkrW0v3yDK34xAFn8Za43Gw12gFZ2k3sxtwn09w45tF42qr95KFZ8Crn8Jr1fGry3
-        tw1Dtry5K3WUArJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b68YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JFv_Jw1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
-        M2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
-        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVW3AVW8Xw1lYx0E
-        x4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7
-        CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxV
-        WUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAF
-        wI0_tr0E3s1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2
-        IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1uyxJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CA+icZUVZSBx-=Sm8ZM12dWY4hmpnfDdhmg6UwXsR4OLSgPXY2w@mail.gmail.com>
+In-Reply-To: <CA+icZUVZSBx-=Sm8ZM12dWY4hmpnfDdhmg6UwXsR4OLSgPXY2w@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 29 May 2023 13:33:18 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wjpb_j4xJoKLivHFkrruR2TRcicEUkNVfXkY3xV5ybRSA@mail.gmail.com>
+Message-ID: <CAHk-=wjpb_j4xJoKLivHFkrruR2TRcicEUkNVfXkY3xV5ybRSA@mail.gmail.com>
+Subject: Re: Revert "module: error out early on concurrent load of the same
+ module file"
+To:     sedat.dilek@gmail.com
+Cc:     Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cached system RAM is coherent on loongson CPUs, and the GPU and DC allways
-snoop the CPU's cache. write-combine caching property is not suitiable for
-us.
+On Mon, May 29, 2023 at 12:18=E2=80=AFPM Sedat Dilek <sedat.dilek@gmail.com=
+> wrote:
+>
+> Building from scratch with latest Linus Git including:
+>
+> Revert "module: error out early on concurrent load of the same module fil=
+e"
+> https://git.kernel.org/linus/ac2263b588dffd3a1efd7ed0b156ea6c5aea200d
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- drivers/gpu/drm/etnaviv/etnaviv_drv.c       |  2 +-
- drivers/gpu/drm/etnaviv/etnaviv_gem.c       | 22 +++++++++++++++++++--
- drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |  9 ++++++++-
- include/uapi/drm/etnaviv_drm.h              | 11 ++++++-----
- 4 files changed, 35 insertions(+), 9 deletions(-)
+So just to confirm: both plain 6.4 _and_ with that revert hangs?
 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-index 7ff795c5cc79..3a86d1211ca5 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-@@ -275,7 +275,7 @@ static int etnaviv_ioctl_gem_new(struct drm_device *dev, void *data,
- 	struct drm_etnaviv_gem_new *args = data;
- 
- 	if (args->flags & ~(ETNA_BO_CACHED | ETNA_BO_WC | ETNA_BO_UNCACHED |
--			    ETNA_BO_FORCE_MMU))
-+			    ETNA_BO_CACHED_COHERENT | ETNA_BO_FORCE_MMU))
- 		return -EINVAL;
- 
- 	return etnaviv_gem_new_handle(dev, file, args->size,
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-index b5f73502e3dd..d8b559bd33d3 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-@@ -343,6 +343,7 @@ void *etnaviv_gem_vmap(struct drm_gem_object *obj)
- static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
- {
- 	struct page **pages;
-+	pgprot_t prot;
- 
- 	lockdep_assert_held(&obj->lock);
- 
-@@ -350,8 +351,20 @@ static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
- 	if (IS_ERR(pages))
- 		return NULL;
- 
--	return vmap(pages, obj->base.size >> PAGE_SHIFT,
--			VM_MAP, pgprot_writecombine(PAGE_KERNEL));
-+	switch (obj->flags) {
-+	case ETNA_BO_CACHED_COHERENT:
-+	case ETNA_BO_CACHED:
-+		prot = PAGE_KERNEL;
-+		break;
-+	case ETNA_BO_UNCACHED:
-+		prot = pgprot_noncached(PAGE_KERNEL);
-+		break;
-+	case ETNA_BO_WC:
-+	default:
-+		prot = pgprot_writecombine(PAGE_KERNEL);
-+	}
-+
-+	return vmap(pages, obj->base.size >> PAGE_SHIFT, VM_MAP, prot);
- }
- 
- static inline enum dma_data_direction etnaviv_op_to_dma_dir(u32 op)
-@@ -545,6 +558,7 @@ static const struct drm_gem_object_funcs etnaviv_gem_object_funcs = {
- static int etnaviv_gem_new_impl(struct drm_device *dev, u32 size, u32 flags,
- 	const struct etnaviv_gem_ops *ops, struct drm_gem_object **obj)
- {
-+	struct etnaviv_drm_private *priv = dev->dev_private;
- 	struct etnaviv_gem_object *etnaviv_obj;
- 	unsigned sz = sizeof(*etnaviv_obj);
- 	bool valid = true;
-@@ -555,6 +569,10 @@ static int etnaviv_gem_new_impl(struct drm_device *dev, u32 size, u32 flags,
- 	case ETNA_BO_CACHED:
- 	case ETNA_BO_WC:
- 		break;
-+	case ETNA_BO_CACHED_COHERENT:
-+		if (priv->has_cached_coherent)
-+			break;
-+		fallthrough;
- 	default:
- 		valid = false;
- 	}
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-index 3524b5811682..671d91d8f1c6 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-@@ -112,11 +112,18 @@ static const struct etnaviv_gem_ops etnaviv_gem_prime_ops = {
- struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
- 	struct dma_buf_attachment *attach, struct sg_table *sgt)
- {
-+	struct etnaviv_drm_private *priv = dev->dev_private;
- 	struct etnaviv_gem_object *etnaviv_obj;
- 	size_t size = PAGE_ALIGN(attach->dmabuf->size);
-+	u32 cache_flags;
- 	int ret, npages;
- 
--	ret = etnaviv_gem_new_private(dev, size, ETNA_BO_WC,
-+	if (priv->has_cached_coherent)
-+		cache_flags = ETNA_BO_CACHED_COHERENT;
-+	else
-+		cache_flags = ETNA_BO_WC;
-+
-+	ret = etnaviv_gem_new_private(dev, size, cache_flags,
- 				      &etnaviv_gem_prime_ops, &etnaviv_obj);
- 	if (ret < 0)
- 		return ERR_PTR(ret);
-diff --git a/include/uapi/drm/etnaviv_drm.h b/include/uapi/drm/etnaviv_drm.h
-index af024d90453d..474b0db286de 100644
---- a/include/uapi/drm/etnaviv_drm.h
-+++ b/include/uapi/drm/etnaviv_drm.h
-@@ -90,13 +90,14 @@ struct drm_etnaviv_param {
-  * GEM buffers:
-  */
- 
--#define ETNA_BO_CACHE_MASK   0x000f0000
-+#define ETNA_BO_CACHE_MASK              0x000f0000
- /* cache modes */
--#define ETNA_BO_CACHED       0x00010000
--#define ETNA_BO_WC           0x00020000
--#define ETNA_BO_UNCACHED     0x00040000
-+#define ETNA_BO_CACHED                  0x00010000
-+#define ETNA_BO_WC                      0x00020000
-+#define ETNA_BO_UNCACHED                0x00040000
-+#define ETNA_BO_CACHED_COHERENT         0x00080000
- /* map flags */
--#define ETNA_BO_FORCE_MMU    0x00100000
-+#define ETNA_BO_FORCE_MMU               0x00100000
- 
- struct drm_etnaviv_gem_new {
- 	__u64 size;           /* in */
--- 
-2.25.1
+The revert is pure "go back to old state", so the revert really
+shouldn't cause any problems what-so-ever.
 
+So if rc4 doesn't boot for you, and the revert also didn't fix it for
+you, then there is something else going on.
+
+There have been other module changes during the merge window, and
+obviously it might be entirely unrelated to modules too. Can you try
+to narrow down when it started failing?
+
+          Linus
