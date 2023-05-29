@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2D97149DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 420FC7149DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjE2NGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S229612AbjE2NIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjE2NFs (ORCPT
+        with ESMTP id S229457AbjE2NH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:05:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADCDE5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:05:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EDB46140F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 13:05:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635BFC433EF;
-        Mon, 29 May 2023 13:05:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685365533;
-        bh=gzfcZTY1ZD6t6oXUKO7P9e/T07rqchdUbms2CIDVQtE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DNMvgTEI12WmAoA7aTRX/XJf6PBQX/7SLDvs2eykGAfdsjuzrZAh2tYPM56jJ4INh
-         DhDUHapca/CZw2zGTLl8b0e8x2GCYmALECF5Ls3BzbHsaKzBMijPAQLzYjs1F/9ugL
-         Vu5QIuR9RBzMrC6aMtm0nI2uHm5LWpLHFNY+POPM=
-Date:   Mon, 29 May 2023 14:05:30 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] nvmem: core: Expose cells through sysfs
-Message-ID: <2023052953-average-fade-8b07@gregkh>
-References: <20230523100239.307574-1-miquel.raynal@bootlin.com>
- <20230523100239.307574-3-miquel.raynal@bootlin.com>
- <2023052351-doze-purist-9780@gregkh>
- <20230523191402.0728443a@xps-13>
- <20230529121226.4a74a3bb@xps-13>
+        Mon, 29 May 2023 09:07:57 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693B091;
+        Mon, 29 May 2023 06:07:55 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1685365665tgzca5zc
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 29 May 2023 21:07:44 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: hvKw+PyJ8U6+uRVu/0AXG0i6+eBsNcwRbz2CZsT5niaVOLEjABKXMEbu2AisN
+        uImWTWIWpl/bgpjuSuZqGv9sxOil3B8sj88KJEHleCbTRcmkdCIZoLB6KuLdqDUTW/bfNHC
+        qcNmAe1dPOSnMPzWdJrTK1Ms82OBZOdRa1pz17Cotzmwgaz+8DZqQVeH3+/EUj/1QaNFLGz
+        b2cbQLpbMgX9/StyBR2UmwLCa8hQ3pd50wYkdVem43lLqUAUknVygFLGVgwnoRvuXt9XlD+
+        WyFHJ5lc3V/61Lo3BiaP/0HyPHI9bUnvaaUqXjUNVMv/vv4BLH2GeBCvf6tk9glgdi9gP0O
+        rWlZSsaWPXG4mlGnUKp0F+MP099LijaKfcqzPbPVlQN2SixFKEGVRTrwrpVqUAPa09QjuW9
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 13225124570130202105
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: [PATCH v2 6/7] tools/nolibc: arm: add missing my_syscall6
+Date:   Mon, 29 May 2023 21:07:42 +0800
+Message-Id: <ba91771d72f9a9dc869513155240deab196e4fd7.1685362482.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1685362482.git.falcon@tinylab.org>
+References: <cover.1685362482.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529121226.4a74a3bb@xps-13>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,61 +52,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 12:12:26PM +0200, Miquel Raynal wrote:
-> Hi Greg,
-> 
-> miquel.raynal@bootlin.com wrote on Tue, 23 May 2023 19:14:02 +0200:
-> 
-> > Hi Greg,
-> > 
-> > gregkh@linuxfoundation.org wrote on Tue, 23 May 2023 17:58:51 +0100:
-> > 
-> > > On Tue, May 23, 2023 at 12:02:39PM +0200, Miquel Raynal wrote:  
-> > > > +/* Cell attributes will be dynamically allocated */
-> > > > +static struct attribute_group nvmem_cells_group = {
-> > > > +	.name		= "cells",
-> > > > +};
-> > > > +
-> > > >  static const struct attribute_group *nvmem_dev_groups[] = {
-> > > >  	&nvmem_bin_group,
-> > > > +	NULL, /* Reserved for exposing cells, if any */    
-> > > 
-> > > Please don't do this, but rather use the is_visible callback to
-> > > determine if it should be shown or not.  
-> > 
-> > Ah, excellent point. Don't know why I overlooked that member.
-> 
-> Actually, the .is_visible callback only acts on the files and
-> not the directories (created based on the group name).
+This is required by the coming removal of the oldselect and newselect
+support.
 
-That is true, I have a non-working patch somewhere around here that will
-not create the directory if no files are in that directory, and need to
-get that working someday...
+pselect6/pselect6_time64 will be used unconditionally, they have 6
+arguments.
 
-> This
-> means whether they are visible or not, the attributes must be
-> valid, the nvmem core cannot just toggle a boolean value with
-> .is_visible because the sysfs core makes a number of checks
-> regarding the content of the attributes, without checking if
-> they are visible at all.
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-riscv/20230524182431.268908-1-falcon@tinylab.org/T/#t
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-arm.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-You can't toggle a value, that's not how is_visible works.  It's a
-callback at the creation time, you do know if you should, or should not,
-show the files at creation time, right?
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index 45b89ffe8247..ca4c66987497 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -198,6 +198,29 @@ struct sys_stat_struct {
+ 	_arg1;                                                                \
+ })
+ 
++#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                  \
++({                                                                            \
++	register long _num  __asm__(_NOLIBC_SYSCALL_REG) = (num);             \
++	register long _arg1 __asm__ ("r0") = (long)(arg1);                    \
++	register long _arg2 __asm__ ("r1") = (long)(arg2);                    \
++	register long _arg3 __asm__ ("r2") = (long)(arg3);                    \
++	register long _arg4 __asm__ ("r3") = (long)(arg4);                    \
++	register long _arg5 __asm__ ("r4") = (long)(arg5);                    \
++	register long _arg6 __asm__ ("r5") = (long)(arg6);                    \
++	                                                                      \
++	__asm__  volatile (                                                   \
++		_NOLIBC_THUMB_SET_R7                                          \
++		"svc #0\n"                                                    \
++		_NOLIBC_THUMB_RESTORE_R7                                      \
++		: "=r"(_arg1), "=r" (_num)                                    \
++		: "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
++		  "r"(_arg6), "r"(_num)                                       \
++		: "memory", "cc", "lr"                                        \
++	);                                                                    \
++	_arg1;                                                                \
++})
++
++
+ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
+ 
+-- 
+2.25.1
 
-If so, all should be fine, just ignore the empty directory, it's fine.
-And hopefully one day, it will not be created if there are no files in
-it.  If I can ever get that patch working...
-
-> I can however expose the "cells" bin group by default by having
-> it listed in the static bin_attribute list and discard it by
-> overwriting the list member with NULL (ie. the opposite of the current
-> solution).
-
-Ick, no, please don't do that.  attribute lists should be able to be put
-into read-only memory, and are not set up to be dynamically messed with
-like this at all.
-
-thanks,
-
-greg k-h
