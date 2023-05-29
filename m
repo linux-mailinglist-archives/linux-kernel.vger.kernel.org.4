@@ -2,90 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8EE715011
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED0071500F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjE2TzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 15:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        id S229795AbjE2Ty4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 15:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjE2TzH (ORCPT
+        with ESMTP id S229621AbjE2Tyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 15:55:07 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615CCF4;
-        Mon, 29 May 2023 12:55:03 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1685390094tpc5r986
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 03:54:53 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: uGhnJwy6xZISo/AEbiO2R7D9Bkp1qAC1x25dTn245rn0AypFebeWwalodNjhE
-        EL0Hxl2tTtRKwyjA9hWn6rJEMWZwJ13M7sTzYmfFM1VAENq33hSqeuCTSPxUjmRP8In5z0j
-        jE3PPH0La2QBf3gtfL4qavbfPRbU9RB/PQuJibgW2/x+jjWS9xtIWSHbLtt65NMZEKdLaN8
-        dkZK4Ia/D7JyiFc+a1Kz4je5B5SnuVU37OtBIhZa6tgmgd8wfgtSuev0V/BKN+5P6bH/hRU
-        5o3Ae2l3mwfoTcHHys8UBybwBk03+OCAL3pFbxALn8Bt+8SyD8qmmeKLiKKhfao3WsglZUh
-        Asti4FqiHE3VbrkVNKSBjtA3A/Az2xVvvEmvGiv9bla+QGTOev9aF8pmMHpuQ==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5796279202276383086
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH v2 07/13] tools/nolibc: sys_lseek: add pure 64bit lseek
-Date:   Tue, 30 May 2023 03:54:23 +0800
-Message-Id: <2f5c3338898da65210ad3f62d7b7773a96f6d251.1685387484.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685387484.git.falcon@tinylab.org>
-References: <cover.1685387484.git.falcon@tinylab.org>
+        Mon, 29 May 2023 15:54:54 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D05EE8;
+        Mon, 29 May 2023 12:54:34 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75affb4d0f9so198229485a.2;
+        Mon, 29 May 2023 12:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685390073; x=1687982073;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lxvQw36IJl6rfxc29dkpYIkomgzupnmi9RTlBUu4jpM=;
+        b=nKqoAUuPyVq/aJ9gd0zhUb3Y9lkz9zyKMSJYH89cH0l8Y1uYpphbHorz3yX374Yhpa
+         XufpTqweW4msVG6WxtYLw+3uPNdok9tCRoC4eTI/9MZTVFmomoHAHts2+cQpuTT6oSo/
+         30LUb6sogPqn4BTXo7rtxYSvZIeTSHCsy2qHxQKzbr8bgZwtxTDmdcdcMwX+kwmCTLT9
+         +VWatdrjpNtBF0AK6IZBcnqwZ74NBSdlLHMb3u6FulN/JaNN/I7h2D+EWVvXyApkpo/g
+         Wd8fPgSM/kY4osBaF1L3PCkZWeAF2Qv5vKJRNYhbDnvVmvhPqgmJnbEwk+lfrfzFNa0o
+         St9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685390073; x=1687982073;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lxvQw36IJl6rfxc29dkpYIkomgzupnmi9RTlBUu4jpM=;
+        b=Las01I5NFcyLgTG5ETLh6jUXxbRTYKE2HDKe7Wb3UPhWcxmTg/8LDQC56/fOWZ1DpV
+         e/6teTHf+ddiYiXC7p+LsAlyhHiMUyDr/OSn53j0pfaqZ75BAw+Dr9S/7rdU6ZTXGW5n
+         mRv6J9buVrbGySBZVt1U6SEx30hkEYibco2Vj6M1+QvAwXIwkE3aSb1HII62XwvSndr4
+         B4jghDzQccomh8NtfgHoEseqlaHN5uJuTKXlF2yYoDUo+/tKW21XAR14cMyAlpBPncv5
+         BlL1c9vBk4nNlx0Vz290m+9so3ts9yy+MpkUgG/eMZB1+Qtt4gy14Sdxqpk/Bt4cnuAJ
+         d8rA==
+X-Gm-Message-State: AC+VfDxaosqdQ4JKGTBirMdItjhPoBSYK8giO2zcpqCtkaavhp81quiE
+        gpR8OEpnSJlmju05eua+Aw==
+X-Google-Smtp-Source: ACHHUZ7SjJlMriPBR3mjMu9jZpO7EN8HYr0LZamkEpaENZvmNmcIZNeh7cOiOFG/uGzKAHZi0k5JdQ==
+X-Received: by 2002:a05:6214:1d2e:b0:626:1e95:2feb with SMTP id f14-20020a0562141d2e00b006261e952febmr6460529qvd.19.1685390073317;
+        Mon, 29 May 2023 12:54:33 -0700 (PDT)
+Received: from C02FL77VMD6R.bytedance.net ([2600:1700:d860:12b0:e554:e6:7140:9e6b])
+        by smtp.gmail.com with ESMTPSA id f12-20020ad442cc000000b0061b5ad0290asm3933355qvr.67.2023.05.29.12.54.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 May 2023 12:54:33 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+X-Google-Original-From: Peilin Ye <peilin.ye@bytedance.com>
+To:     Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH v6 net 4/4] net/sched: Prohibit regrafting ingress or clsact Qdiscs
+Date:   Mon, 29 May 2023 12:54:26 -0700
+Message-Id: <182b2a2be81ad5ac0f58effe34e3a320de04d6c7.1685388545.git.peilin.ye@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <cover.1685388545.git.peilin.ye@bytedance.com>
+References: <cover.1685388545.git.peilin.ye@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-use sys_llseek instead of sys_lseek to add 64bit seek even in 32bit
-platforms.
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-This code is based on sysdeps/unix/sysv/linux/lseek.c of glibc and
-src/unistd/lseek.c of musl.
+Currently, after creating an ingress (or clsact) Qdisc and grafting it
+under TC_H_INGRESS (TC_H_CLSACT), it is possible to graft it again under
+e.g. a TBF Qdisc:
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
+  $ ip link add ifb0 type ifb
+  $ tc qdisc add dev ifb0 handle 1: root tbf rate 20kbit buffer 1600 limit 3000
+  $ tc qdisc add dev ifb0 clsact
+  $ tc qdisc link dev ifb0 handle ffff: parent 1:1
+  $ tc qdisc show dev ifb0
+  qdisc tbf 1: root refcnt 2 rate 20Kbit burst 1600b lat 560.0ms
+  qdisc clsact ffff: parent ffff:fff1 refcnt 2
+                                      ^^^^^^^^
+
+clsact's refcount has increased: it is now grafted under both
+TC_H_CLSACT and 1:1.
+
+ingress and clsact Qdiscs should only be used under TC_H_INGRESS
+(TC_H_CLSACT).  Prohibit regrafting them.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Fixes: 1f211a1b929c ("net, sched: add clsact qdisc")
+Tested-by: Pedro Tammela <pctammela@mojatatu.com>
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Reviewed-by: Jamal Hadi Salim <jhs@mojatatu.com>
+Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
 ---
- tools/include/nolibc/sys.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ net/sched/sch_api.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 98cfa2f6d021..d0720af84b6d 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -672,7 +672,17 @@ int link(const char *old, const char *new)
- static __attribute__((unused))
- off_t sys_lseek(int fd, off_t offset, int whence)
- {
-+#if defined(__NR_llseek) || defined(__NR__llseek)
-+#ifndef __NR__llseek
-+#define __NR__llseek __NR_llseek
-+#endif
-+	off_t result;
-+	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result, whence) ?: result;
-+#elif defined(__NR_lseek)
- 	return my_syscall3(__NR_lseek, fd, offset, whence);
-+#else
-+#error None of __NR_lseek, __NR_llseek nor __NR__llseek defined, cannot implement sys_lseek()
-+#endif
- }
- 
- static __attribute__((unused))
+diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
+index 383195955b7d..49b9c1bbfdd9 100644
+--- a/net/sched/sch_api.c
++++ b/net/sched/sch_api.c
+@@ -1596,6 +1596,11 @@ static int tc_modify_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
+ 					NL_SET_ERR_MSG(extack, "Invalid qdisc name");
+ 					return -EINVAL;
+ 				}
++				if (q->flags & TCQ_F_INGRESS) {
++					NL_SET_ERR_MSG(extack,
++						       "Cannot regraft ingress or clsact Qdiscs");
++					return -EINVAL;
++				}
+ 				if (q == p ||
+ 				    (p && check_loop(q, p, 0))) {
+ 					NL_SET_ERR_MSG(extack, "Qdisc parent/child loop detected");
 -- 
-2.25.1
+2.20.1
 
