@@ -2,93 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14F671470B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC55714714
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjE2J1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 05:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S231596AbjE2Jan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 05:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjE2J1e (ORCPT
+        with ESMTP id S229453AbjE2Jal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 05:27:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A3AAC
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:27:33 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685352450;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L9oP66CShv0wsXW7Wvc+5XvMH74LdvQ2kHTVempZbao=;
-        b=0fMICRZaJTgn5JAKL78GogJ/1jaAH+tUacjala8qMFTXYwjhGgcUhArVgS9F7E38KOeTBV
-        RVF+5HoUDDgpFJ/3VmomkAqCAt+vTMC/sNoQ3YggQKnjaypDBeXdsDjs6zr0RqU+hmkHne
-        ApyMCzYEDKfkYCOLFW+Q1rnXLxgR45ESmMjUhEMzx97INL2mom02nBbHRjzHnzcVNgs0rj
-        +J/ZTy7M2ZDWfUtVpv2hZUrDFSqbm7mwQzL60XNuJECwbTnplAwhNtWsdLRiaKVDG5VCyc
-        w0ngIbsHyRFimSn8b0nayjhL7y/PuKBKfYlxOZNvzQ/EhaUSvjB1BuDEI0d4Ew==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685352450;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L9oP66CShv0wsXW7Wvc+5XvMH74LdvQ2kHTVempZbao=;
-        b=nX8V5aF/Xav4vH1QPSThVgfc/HoGNPiEvTWUlRqDnfEQGdOwrpFy+PQc/rgeC45js5pLkm
-        QqPI04hgot9PYaAQ==
-To:     Huacai Chen <chenhuacai@gmail.com>, Marc Zyngier <maz@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 1/2] genirq/msi, platform-msi: Adjust return value of
- msi_domain_prepare_irqs()
-In-Reply-To: <CAAhV-H6KpNhL5VvumvhcAKGOpe-EO0zfzm_xPprP0rTVf18Leg@mail.gmail.com>
-References: <20230527054633.704916-1-chenhuacai@loongson.cn>
- <20230527054633.704916-2-chenhuacai@loongson.cn> <87pm6llvm6.ffs@tglx>
- <86fs7gdhid.wl-maz@kernel.org>
- <CAAhV-H6KpNhL5VvumvhcAKGOpe-EO0zfzm_xPprP0rTVf18Leg@mail.gmail.com>
-Date:   Mon, 29 May 2023 11:27:29 +0200
-Message-ID: <87ilcblc72.ffs@tglx>
+        Mon, 29 May 2023 05:30:41 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94A29E;
+        Mon, 29 May 2023 02:30:39 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QV9DC1bRBzLqB7;
+        Mon, 29 May 2023 17:27:39 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 29 May 2023 17:30:37 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Yunsheng Lin <linyunsheng@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH net-next v2 0/3] support non-frag page for page_pool_alloc_frag()
+Date:   Mon, 29 May 2023 17:28:37 +0800
+Message-ID: <20230529092840.40413-1-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28 2023 at 20:07, Huacai Chen wrote:
-> On Sun, May 28, 2023 at 3:47=E2=80=AFPM Marc Zyngier <maz@kernel.org> wro=
-te:
->>
->> Being able to allocate MSIs is not a guarantee, and is always
->> opportunistic. If some drivers badly fail because the they don't get
->> the number of MSIs they need, then they need fixing.
->
-> Yes, I know allocating MSIs is not a guarantee, and most existing
-> drivers will fallback to use legacy irqs when failed. However, as I
-> replied in an early mail, we want to do some proactive throttling in
-> the loongson-pch-msi irqchip driver, rather than consume msi vectors
-> aggressively. For example, if we have two NICs, we want both of them
-> to get 32 msi vectors; not one exhaust all available vectors, and the
-> other fallback to use legacy irq.
+In [1] & [2], there are usecases for veth and virtio_net to
+use frag support in page pool to reduce memory usage, and it
+may request different frag size depending on the head/tail
+room space for xdp_frame/shinfo and mtu/packet size. When the
+requested frag size is large enough that a single page can not
+be split into more than one frag, using frag support only have
+performance penalty because of the extra frag count handling
+for frag support.
 
-By default you allow up to 256 interrupts to be allocated, right? So to
-prevent vector exhaustion, the admin needs to reboot the machine and set
-a command line parameter to limit this, right? As that parameter is not
-documented the admin is going to dice a number. That's impractical and
-just a horrible bandaid.
+So this patchset provides a way for user to fail back to non
+frag page when a page is not able to hold two frags.
 
-Thanks,
+And PP_FLAG_PAGE_FRAG can be removed now, the extra benefit is
+that driver does not need to handle the case for arch with
+PAGE_POOL_DMA_USE_PP_FRAG_COUNT when using page_pool_alloc_frag()
+API.
 
-        tglx
+1. https://patchwork.kernel.org/project/netdevbpf/patch/d3ae6bd3537fbce379382ac6a42f67e22f27ece2.1683896626.git.lorenzo@kernel.org/
+2. https://patchwork.kernel.org/project/netdevbpf/patch/20230526054621.18371-3-liangchen.linux@gmail.com/
 
+V2: Add patch to remove PP_FLAG_PAGE_FRAG flags and mention
+    virtio_net usecase in the cover letter.
+V1: Drop RFC tag and page_pool_frag patch
+
+Yunsheng Lin (3):
+  page_pool: unify frag page and non-frag page handling
+  page_pool: support non-frag page for page_pool_alloc_frag()
+  page_pool: remove PP_FLAG_PAGE_FRAG flag
+
+ .../net/ethernet/hisilicon/hns3/hns3_enet.c   |  3 +-
+ .../marvell/octeontx2/nic/otx2_common.c       |  2 +-
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |  2 +-
+ drivers/net/wireless/mediatek/mt76/mac80211.c |  2 +-
+ include/net/page_pool.h                       | 42 +++++++++++----
+ net/core/page_pool.c                          | 52 +++++++++++--------
+ net/core/skbuff.c                             |  2 +-
+ 7 files changed, 67 insertions(+), 38 deletions(-)
+
+-- 
+2.33.0
 
