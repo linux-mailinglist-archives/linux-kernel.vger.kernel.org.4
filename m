@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BD5714995
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98D0714997
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbjE2Mny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
+        id S231551AbjE2Mov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjE2Mnx (ORCPT
+        with ESMTP id S231679AbjE2Mor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:43:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3DCB1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:43:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 29 May 2023 08:44:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A11AD;
+        Mon, 29 May 2023 05:44:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 551431F88E;
-        Mon, 29 May 2023 12:43:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685364229; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GzCtx5Td+eoDNVY0dXN9m8+YNDjh3ADQgtk2GxyYC5g=;
-        b=euZA2uppJ9p3Gv6P0DaFZ2l2OvM3BhioXsCROMC8vzMsI1ZRqHoGajYwlkedZb4z3sx6mi
-        N7ntNcJtyVU3e/sPg2SUYxMLiks3ByU2pYd4BihU0sVCPcTbImgFeqSbzDALeMrkV+lo/D
-        9K/5p2rM83QT05xTNVOVSCi+L+TOhv8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685364229;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GzCtx5Td+eoDNVY0dXN9m8+YNDjh3ADQgtk2GxyYC5g=;
-        b=KEt7R7TPRgqrGjgZDCTbEwvGsi3WHoikP/8JKHT67Bm3YqIyUaozS38aWDuKNtYakfwz1y
-        i2I9beTY2u7P3pAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2FB171332D;
-        Mon, 29 May 2023 12:43:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NROFCgWedGRgHAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 29 May 2023 12:43:49 +0000
-Message-ID: <6695b7e5-9fa5-fae8-8a66-cc5985b0baaf@suse.cz>
-Date:   Mon, 29 May 2023 14:43:48 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FEBD61360;
+        Mon, 29 May 2023 12:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3CF1C433EF;
+        Mon, 29 May 2023 12:44:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685364284;
+        bh=ajuRnL6bE9DZhlolJ++MLwqSb9Q2TGkVGPr6Ts71Dg4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VA8Krba+ytnf1eZJdew+FIgQT7Efb78lrxzuPaHxK5/h2pzu9XU5VL0vok+qaAnmC
+         t6zceO9xi6nfEUZN8ED14frQFS1RmRAjs/msN4o1deg3RkyYx/XH3LteQVb4wLzkif
+         xJtoNKDVADj4q9Gng4EHQ5pp/N5L5DAfCPecuLSAehc0JHBmI63YEsLamDsjGA2z85
+         z0s46tJY1RLDW1KFbOMytaiNn7ileTI35ve7LsJCDDvUC3kqGxe+rdQq9Skn+ygzdS
+         J1bsOdKKlRCRCqI4GBqMBe67oDkzrqVM6HlwAlLV+FXBPZsu/8AnhJOZDWwvI3Iwox
+         RVJIMDaq/miMA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q3cEr-0000Uk-VR; Mon, 29 May 2023 14:44:42 +0200
+Date:   Mon, 29 May 2023 14:44:41 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
+        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
+        lennart@poettering.net
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+Message-ID: <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
+References: <20230524213620.3509138-1-mcgrof@kernel.org>
+ <20230524213620.3509138-3-mcgrof@kernel.org>
+ <8fc5b26b-d2f6-0c8f-34a1-af085dbef155@suse.com>
+ <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
+ <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
+ <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
+ <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
+ <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+ <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
+ <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 3/4] mm: compaction: Update pageblock skip when first
- migration candidate is not at the start
-Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chuyi Zhou <zhouchuyi@bytedance.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230515113344.6869-1-mgorman@techsingularity.net>
- <20230515113344.6869-4-mgorman@techsingularity.net>
- <e87a9797-c8ce-1959-884a-7f791adeaafc@suse.cz>
- <20230529103342.esek6r5fvmft2nky@techsingularity.net>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230529103342.esek6r5fvmft2nky@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,80 +78,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/29/23 12:33, Mel Gorman wrote:
-> On Thu, May 25, 2023 at 03:37:43PM +0200, Vlastimil Babka wrote:
->> On 5/15/23 13:33, Mel Gorman wrote:
->> > isolate_migratepages_block should mark a pageblock as skip if scanning
->> > started on an aligned pageblock boundary but it only updates the skip
->> > flag if the first migration candidate is also aligned. Tracing during
->> > a compaction stress load (mmtests: workload-usemem-stress-numa-compact)
->> > that many pageblocks are not marked skip causing excessive scanning of
->> > blocks that had been recently checked. Update pageblock skip based on
->> > "valid_page" which is set if scanning started on a pageblock boundary.
->> > 
->> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
->> 
->> I wonder if this has an unintended side-effect that if we resume
->> isolate_migratepages_block() of a partially compacted pageblock to finish
->> it, test_and_set_skip() will now tell us to abort, because we already set
->> the skip bit in the previous call. This would include the
->> cc->finish_pageblock rescan cases.
->> 
->> So unless I miss something that already prevents that, I agree we should not
->> tie setting the skip bit to pageblock_aligned(pfn), but maybe if we are not
->> pageblock aligned, we should ignore the already-set skip bit, as it was most
->> likely being set by us in the previous iteration and should not prevent us
->> from finishing the pageblock?
->> 
+On Mon, May 29, 2023 at 07:00:05AM -0400, Linus Torvalds wrote:
+
+> However, can I ask you to just verify that it was purely the exclusive
+> open part, and it wasn't that I messed up something else. IOW, can you
+> replace the
 > 
-> Hmm, I think you're right. While it should not hit the original bug,
-> migration candidates are missed until the next compaction scan which
-> could be tricky to detect. Something like this as a separate patch?
-> Build tested only but the intent is for an unaligned start to set the skip
-> bet if already unset but otherwise complete the scan. Like earlier fixes,
-> this might overscan some pageblocks in a given context but we are probably
-> hitting the limits on how compaction can run efficiently in the current
-> scheme without causing other side-effects :(
+>         return exclusive_deny_write_access(file);
+> 
+> in prepare_file_for_module_load() with just a "return 0", and remove the
+> 
+>                 allow_write_access(f.file);
+> 
+> line in finit_module()?
+> 
+> That's obviously _instead_ of the revert that I already pushed out,
+> just to verify that "yup, it's that part, not something silly
+> elsewhere"
 
-Yeah that should work! I think it should be even folded to 3/4 but if you
-want separate, fine too.
+Yes, those two changes are enough to make the problem go away.
 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 91af6a8b7a98..761a2dd7d78a 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -792,6 +792,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  	bool skip_on_failure = false;
->  	unsigned long next_skip_pfn = 0;
->  	bool skip_updated = false;
-> +	bool start_aligned;
->  	int ret = 0;
->  
->  	cc->migrate_pfn = low_pfn;
-> @@ -824,6 +825,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  	}
->  
->  	/* Time to isolate some pages for migration */
-> +	start_aligned = pageblock_aligned(start_pfn);
->  	for (; low_pfn < end_pfn; low_pfn++) {
->  
->  		if (skip_on_failure && low_pfn >= next_skip_pfn) {
-> @@ -1069,10 +1071,15 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  
->  			lruvec_memcg_debug(lruvec, page_folio(page));
->  
-> -			/* Try get exclusive access under lock */
-> +			/* Try get exclusive access under lock. Isolation is
-> +			 * only aborted if the start was pageblock aligned
-> +			 * as this may be a partial resumed scan that set
-> +			 * the bit on a recent scan but the scan must reach
-> +			 * the end of the pageblock.
-> +			 */
->  			if (!skip_updated && valid_page) {
->  				skip_updated = true;
-> -				if (test_and_set_skip(cc, valid_page))
-> +				if (test_and_set_skip(cc, valid_page) && start_aligned)
->  					goto isolate_abort;
->  			}
->  
+> I do wonder what it is that is different in your setup, and maybe you
+> could also enable the
+> 
+>         pr_debug("finit_module: fd=%d, uargs=%p, flags=%i\n", fd, uargs, flags);
 
+Below is the corresponding output with a working kernel: 174 requests
+for the 131 modules that end up being loaded (without the revert there
+is only around 110 modules loaded).
+
+There is some probe deferral and async probing going on during normal
+boot which may be part of the explanation.
+
+Johan
+
+[    0.669112] finit_module: fd=3, uargs=00000000b461506c, flags=0
+[    0.674144] finit_module: fd=4, uargs=00000000b461506c, flags=0
+[    0.676783] finit_module: fd=5, uargs=00000000b461506c, flags=0
+[    0.678920] finit_module: fd=3, uargs=00000000b461506c, flags=0
+[    0.837967] finit_module: fd=5, uargs=0000000000157d9f, flags=0
+[    0.839414] finit_module: fd=3, uargs=00000000b461506c, flags=0
+[    0.844129] finit_module: fd=4, uargs=00000000b461506c, flags=0
+[    0.845016] finit_module: fd=3, uargs=00000000b461506c, flags=0
+[    0.849132] finit_module: fd=3, uargs=00000000b461506c, flags=0
+[    0.849460] finit_module: fd=4, uargs=00000000b461506c, flags=0
+[    3.345004] finit_module: fd=4, uargs=00000000e3e6c6d2, flags=0
+[    3.364302] finit_module: fd=4, uargs=0000000095136ea7, flags=0
+[    3.371928] finit_module: fd=5, uargs=0000000095136ea7, flags=0
+[    4.099183] finit_module: fd=3, uargs=00000000ce2d6f3e, flags=0
+[    4.103156] finit_module: fd=3, uargs=000000004e3e14c2, flags=0
+[    4.713558] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.715608] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.717620] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.717910] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.719517] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.725862] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.726730] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.727018] finit_module: fd=14, uargs=00000000262da138, flags=0
+[    4.730525] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.749602] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.749675] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.749678] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.774117] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.795307] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.797327] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.798405] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.799140] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.800850] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.807306] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.807313] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.807321] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    4.807394] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.807463] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.807525] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.807530] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.807590] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.811469] finit_module: fd=0, uargs=0000000080fab15b, flags=0
+[    4.845851] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.845875] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.846282] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.846363] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.846363] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.846669] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.846994] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.847005] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.847194] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.847356] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.847448] finit_module: fd=17, uargs=00000000262da138, flags=0
+[    4.847556] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.847651] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.848175] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.850005] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.850485] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.866031] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.866032] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    4.866381] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.866711] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.867757] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.868360] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.886043] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    4.886046] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.886046] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.886060] finit_module: fd=17, uargs=00000000262da138, flags=0
+[    4.886114] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.886140] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.886326] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.886716] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.887210] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    4.887451] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.887811] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.887963] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.892066] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.896048] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.896070] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.896092] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.896157] finit_module: fd=18, uargs=00000000262da138, flags=0
+[    4.896193] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.896211] finit_module: fd=18, uargs=00000000262da138, flags=0
+[    4.896737] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.896751] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.897174] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.897343] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.897388] finit_module: fd=19, uargs=00000000262da138, flags=0
+[    4.897555] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.897592] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.899657] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    4.899973] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    4.900316] finit_module: fd=17, uargs=00000000262da138, flags=0
+[    4.901188] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.901668] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.901708] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.902030] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.903964] finit_module: fd=14, uargs=00000000262da138, flags=0
+[    4.905243] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.907083] finit_module: fd=17, uargs=00000000262da138, flags=0
+[    4.907480] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    4.907519] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    4.909481] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    4.911705] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.912056] finit_module: fd=18, uargs=00000000262da138, flags=0
+[    4.912079] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    4.915340] finit_module: fd=19, uargs=00000000262da138, flags=0
+[    4.933199] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    4.933585] finit_module: fd=18, uargs=00000000262da138, flags=0
+[    4.935169] finit_module: fd=20, uargs=00000000262da138, flags=0
+[    4.956021] finit_module: fd=19, uargs=00000000262da138, flags=0
+[    4.956797] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    4.959865] finit_module: fd=17, uargs=00000000262da138, flags=0
+[    4.964171] finit_module: fd=17, uargs=00000000262da138, flags=0
+[    4.977073] finit_module: fd=18, uargs=00000000262da138, flags=0
+[    4.980167] finit_module: fd=18, uargs=00000000262da138, flags=0
+[    5.043379] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    5.053709] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    5.131232] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    5.140785] finit_module: fd=19, uargs=00000000262da138, flags=0
+[    5.186244] finit_module: fd=18, uargs=00000000262da138, flags=0
+[    5.186247] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    5.186252] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    5.186451] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    5.186507] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    5.187345] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    5.190282] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    5.195744] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    5.198242] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    5.198271] finit_module: fd=20, uargs=00000000262da138, flags=0
+[    5.222394] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    5.222395] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    5.222407] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    5.222430] finit_module: fd=21, uargs=00000000262da138, flags=0
+[    5.222432] finit_module: fd=16, uargs=00000000262da138, flags=0
+[    5.222443] finit_module: fd=15, uargs=00000000262da138, flags=0
+[    5.229650] finit_module: fd=22, uargs=00000000262da138, flags=0
+[    5.257981] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    5.313560] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    6.144316] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    6.178956] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    6.178961] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    6.182057] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    6.182067] finit_module: fd=13, uargs=00000000262da138, flags=0
+[    6.243708] finit_module: fd=0, uargs=00000000f9e4f67e, flags=0
+[    6.249397] finit_module: fd=0, uargs=000000001b26db10, flags=0
+[    6.249904] finit_module: fd=1, uargs=000000001b26db10, flags=0
+[    6.250626] finit_module: fd=2, uargs=000000001b26db10, flags=0
+[    6.251515] finit_module: fd=3, uargs=000000001b26db10, flags=0
+[    6.254112] finit_module: fd=4, uargs=000000001b26db10, flags=0
+[    6.255129] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    6.255504] finit_module: fd=6, uargs=00000000262da138, flags=0
+[    6.259256] finit_module: fd=0, uargs=00000000e1b6cfe4, flags=0
+[    6.264136] finit_module: fd=0, uargs=000000004070418f, flags=0
+[    6.265227] finit_module: fd=1, uargs=000000004070418f, flags=0
+[    6.270175] finit_module: fd=0, uargs=0000000092757077, flags=0
+[    6.271230] finit_module: fd=1, uargs=0000000092757077, flags=0
+[    6.322960] finit_module: fd=3, uargs=00000000fb904223, flags=0
+[    6.373125] finit_module: fd=0, uargs=00000000e2cdc73f, flags=0
+[    6.380061] finit_module: fd=0, uargs=000000000591e4e9, flags=0
+[    6.392296] finit_module: fd=0, uargs=0000000088d2796a, flags=0
+[    6.464595] finit_module: fd=0, uargs=000000001aa8b42e, flags=0
+[    6.479839] finit_module: fd=0, uargs=00000000de50a030, flags=0
+[    6.488790] finit_module: fd=0, uargs=00000000cbcb6a65, flags=0
+[    6.492573] finit_module: fd=1, uargs=00000000cbcb6a65, flags=0
+[    6.514903] finit_module: fd=0, uargs=000000006f393376, flags=0
+[    7.989970] finit_module: fd=0, uargs=00000000c4594f52, flags=0
+[   11.492886] finit_module: fd=13, uargs=00000000262da138, flags=0
+[   11.639532] finit_module: fd=6, uargs=00000000262da138, flags=0
+[   11.640048] finit_module: fd=6, uargs=00000000262da138, flags=0
+[   11.640997] finit_module: fd=15, uargs=00000000262da138, flags=0
+[   11.641049] finit_module: fd=6, uargs=00000000262da138, flags=0
+[   11.775051] finit_module: fd=6, uargs=00000000262da138, flags=0
+[   11.776806] finit_module: fd=6, uargs=00000000262da138, flags=0
