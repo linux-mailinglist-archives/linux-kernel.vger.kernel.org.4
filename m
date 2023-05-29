@@ -2,172 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BA1714993
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BD5714995
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjE2MmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S231576AbjE2Mny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjE2MmI (ORCPT
+        with ESMTP id S229606AbjE2Mnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:42:08 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C4EB1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:42:06 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-2566ed9328eso1132531a91.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:42:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685364126; x=1687956126;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JiOdIBLVGKvtg/C9FdawapFJuTlHE4wukHl5zvYnmt0=;
-        b=KoZjYFt8IeTHfSyrqPFZSa2kBfiEgm88FaOSQiqyWvo4Du1M1T/UCKv3f7q3Y3fRH9
-         0hSlqo/xxtsbeeyuXQDZqE8Wwr39mDSe3UWVmA7ETWldwpSmTnVAYGv3eryTSfx4ONG9
-         9rbu/LcPqp8kKiYfb2m/3tYvRQTUtJ1ez2CM/rC+N3BtoLZe1elHiPYEBwMIMVYHZ0e5
-         WDh2OFMmp6xR7HE6XqmvWhp6lG9HyovzhiopwIZWbI+40xuRAqUUKdJ4QVEY/O1tv7LU
-         6j7ioRADhw/XeL+CsgGCY0YESNewpEpv7kqW93HejJ3QGnuozMRLj2fmCu2m1J1TRtiJ
-         uRuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685364126; x=1687956126;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JiOdIBLVGKvtg/C9FdawapFJuTlHE4wukHl5zvYnmt0=;
-        b=aVR8f0Zz4RYSGLt49gXYqJvAvQYVmTM8sc5H39rJZLjxZBOl0Umtmfh1ECgDaaqr05
-         +hyEw+CeWvsKsTMgmN1xsJDJcnyA92o/1uA3+PtlqkRn+/Q7zCKrtRtBaYAl0NDOeHBq
-         XpLrwAAmc1coDRX20TmjI/MDLvLmtPc5dxIp1GzZi/JF9p8UPM2UIWWSHZJP9o6YXFsf
-         rN47JT1+YvEG3AjF5eZOFEceRxu5/x1BruLhO0g8HeguO5BNnIuCjbltEWrk1yg78Biz
-         ntHCe0aqzeoldzTOrZazBQiYX5Vt+aRJbfk1eVVLnUFNmHYoG9J99hxV2PGvbMJlE551
-         tppA==
-X-Gm-Message-State: AC+VfDwPG+t07lYWvLhryRhedSowArHIpe6MySgUzG75cmYQSFuGY0aB
-        uSf4ktblcQ0GLuVLGnValRRZZVI90fxbq5q0
-X-Google-Smtp-Source: ACHHUZ5oKbIWcicO0Um2gUZ+e2poTfUAHet7wZPuLSCWfe9wgyKiSyhvz1qDtwgG5laJtek2WuJYsw==
-X-Received: by 2002:a17:90a:2b0a:b0:255:6c22:5ccb with SMTP id x10-20020a17090a2b0a00b002556c225ccbmr9976113pjc.7.1685364126144;
-        Mon, 29 May 2023 05:42:06 -0700 (PDT)
-Received: from [192.168.50.227] ([116.80.41.155])
-        by smtp.gmail.com with ESMTPSA id f5-20020a17090ace0500b00253305f36c4sm3841935pju.18.2023.05.29.05.42.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 05:42:05 -0700 (PDT)
-Message-ID: <6ad8c3c7-a3e0-1a52-5a10-6b535b1ed7d3@gmail.com>
-Date:   Mon, 29 May 2023 20:41:46 +0800
+        Mon, 29 May 2023 08:43:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3DCB1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:43:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 551431F88E;
+        Mon, 29 May 2023 12:43:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1685364229; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GzCtx5Td+eoDNVY0dXN9m8+YNDjh3ADQgtk2GxyYC5g=;
+        b=euZA2uppJ9p3Gv6P0DaFZ2l2OvM3BhioXsCROMC8vzMsI1ZRqHoGajYwlkedZb4z3sx6mi
+        N7ntNcJtyVU3e/sPg2SUYxMLiks3ByU2pYd4BihU0sVCPcTbImgFeqSbzDALeMrkV+lo/D
+        9K/5p2rM83QT05xTNVOVSCi+L+TOhv8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1685364229;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GzCtx5Td+eoDNVY0dXN9m8+YNDjh3ADQgtk2GxyYC5g=;
+        b=KEt7R7TPRgqrGjgZDCTbEwvGsi3WHoikP/8JKHT67Bm3YqIyUaozS38aWDuKNtYakfwz1y
+        i2I9beTY2u7P3pAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2FB171332D;
+        Mon, 29 May 2023 12:43:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id NROFCgWedGRgHAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 29 May 2023 12:43:49 +0000
+Message-ID: <6695b7e5-9fa5-fae8-8a66-cc5985b0baaf@suse.cz>
+Date:   Mon, 29 May 2023 14:43:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [f2fs-dev] [PATCH 1/1] f2fs: fix args passed to
- trace_f2fs_lookup_end
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 3/4] mm: compaction: Update pageblock skip when first
+ migration candidate is not at the start
 Content-Language: en-US
-To:     Chao Yu <chao@kernel.org>, Wu Bo <bo.wu@vivo.com>
-Cc:     jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <2bb05623-9438-3b68-6ac8-4294f9676ff6@kernel.org>
- <20230529041337.36741-1-bo.wu@vivo.com>
- <0c15c662-903c-3504-d502-72f0a3b70cbf@kernel.org>
-From:   Wu Bo <wubo.oduw@gmail.com>
-In-Reply-To: <0c15c662-903c-3504-d502-72f0a3b70cbf@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chuyi Zhou <zhouchuyi@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230515113344.6869-1-mgorman@techsingularity.net>
+ <20230515113344.6869-4-mgorman@techsingularity.net>
+ <e87a9797-c8ce-1959-884a-7f791adeaafc@suse.cz>
+ <20230529103342.esek6r5fvmft2nky@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230529103342.esek6r5fvmft2nky@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/29/23 12:33, Mel Gorman wrote:
+> On Thu, May 25, 2023 at 03:37:43PM +0200, Vlastimil Babka wrote:
+>> On 5/15/23 13:33, Mel Gorman wrote:
+>> > isolate_migratepages_block should mark a pageblock as skip if scanning
+>> > started on an aligned pageblock boundary but it only updates the skip
+>> > flag if the first migration candidate is also aligned. Tracing during
+>> > a compaction stress load (mmtests: workload-usemem-stress-numa-compact)
+>> > that many pageblocks are not marked skip causing excessive scanning of
+>> > blocks that had been recently checked. Update pageblock skip based on
+>> > "valid_page" which is set if scanning started on a pageblock boundary.
+>> > 
+>> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+>> 
+>> I wonder if this has an unintended side-effect that if we resume
+>> isolate_migratepages_block() of a partially compacted pageblock to finish
+>> it, test_and_set_skip() will now tell us to abort, because we already set
+>> the skip bit in the previous call. This would include the
+>> cc->finish_pageblock rescan cases.
+>> 
+>> So unless I miss something that already prevents that, I agree we should not
+>> tie setting the skip bit to pageblock_aligned(pfn), but maybe if we are not
+>> pageblock aligned, we should ignore the already-set skip bit, as it was most
+>> likely being set by us in the previous iteration and should not prevent us
+>> from finishing the pageblock?
+>> 
+> 
+> Hmm, I think you're right. While it should not hit the original bug,
+> migration candidates are missed until the next compaction scan which
+> could be tricky to detect. Something like this as a separate patch?
+> Build tested only but the intent is for an unaligned start to set the skip
+> bet if already unset but otherwise complete the scan. Like earlier fixes,
+> this might overscan some pageblocks in a given context but we are probably
+> hitting the limits on how compaction can run efficiently in the current
+> scheme without causing other side-effects :(
 
-On 2023/5/29 18:18, Chao Yu wrote:
-> On 2023/5/29 12:13, Wu Bo wrote:
->> On Sat, May 27, 2023 at 09:01:41AM +0800, Chao Yu wrote:
->>> On 2023/5/27 1:21, Jaegeuk Kim wrote:
->>>> On 05/24, Wu Bo wrote:
->>>>> The NULL return of 'd_splice_alias' dosen't mean error.
->>>>>
->>>>> Signed-off-by: Wu Bo <bo.wu@vivo.com>
->>>>> ---
->>>>>    fs/f2fs/namei.c | 2 +-
->>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
->>>>> index 77a71276ecb1..e5a3e39ce90c 100644
->>>>> --- a/fs/f2fs/namei.c
->>>>> +++ b/fs/f2fs/namei.c
->>>>> @@ -577,7 +577,7 @@ static struct dentry *f2fs_lookup(struct inode 
->>>>> *dir, struct dentry *dentry,
->>>>>    #endif
->>>>>        new = c(inode, dentry);
->>>>>        err = PTR_ERR_OR_ZERO(new);
->>>>> -    trace_f2fs_lookup_end(dir, dentry, ino, !new ? -ENOENT : err);
->>>>> +    trace_f2fs_lookup_end(dir, new ? new : dentry, ino, err);
->>>>
->>>> Shouldn't give an error pointer to the dentry field.
->>>>
->>>> How about just giving the err?
->>>>
->>>> -       err = PTR_ERR_OR_ZERO(new);
->>>> -       trace_f2fs_lookup_end(dir, dentry, ino, !new ? -ENOENT : err);
->>>> +       trace_f2fs_lookup_end(dir, dentry, ino, PTR_ERR_OR_ZERO(new));
->>>
->>> static inline int __must_check PTR_ERR_OR_ZERO(__force const void *ptr)
->>> {
->>>     if (IS_ERR(ptr))
->>>         return PTR_ERR(ptr);
->>>     else
->>>         return 0;
->>> }
->>>
->>> For below two cases, PTR_ERR_OR_ZERO(new) will return zero:
->>> a) f2fs_lookup found existed dentry
->>> b) f2fs_lookup didn't find existed dentry (-ENOENT case)
->>>
->>> So in below commit, I passed -ENOENT to tracepoint for case b), so 
->>> we can
->>> distinguish result of f2fs_lookup in tracepoint, actually, -ENOENT 
->>> is expected
->>> value when we create a new file/directory.
->>>
->>> Commit 84597b1f9b05 ("f2fs: fix wrong value of tracepoint parameter")
->> I can see this commit is try to distinguish the dentry not existed case.
->> But a normal case which dentry is exactly found will also go through
->> 'd_splice_alias', and its return is also NULL. This makes the 
->> tracepoint always
->> print 'err:-2' like the following:
->>        ls-11676   [004] .... 329281.943118: f2fs_lookup_end: dev = 
->> (254,39), pino = 4451, name:Alarms, ino:7093, err:-2
->>        ls-11676   [004] .... 329281.943145: f2fs_lookup_end: dev = 
->> (254,39), pino = 4451, name:Notifications, ino:7094, err:-2
->>        ls-11676   [004] .... 329281.943172: f2fs_lookup_end: dev = 
->> (254,39), pino = 4451, name:Pictures, ino:7095, err:-2
->> Even these lookup are acctually successful, this is a bit strange.
->
-> Ah, I misunderstand return value's meaning of .lookup.
->
-> So, how about this? it only update err if d_splice_alias() returns a 
-> negative
-> value?
->
-> if (IS_ERR(new))
->     err = PTR_ERR(new);
-> trace_f2fs_lookup_end(dir, new ? new : dentry, ino, err);
->
-> Thanks,
->
-Yes, this will be better.
+Yeah that should work! I think it should be even folded to 3/4 but if you
+want separate, fine too.
 
->>>
->>>>
->>>>
->>>>>        return new;
->>>>>    out_iput:
->>>>>        iput(inode);
->>>>> -- 
->>>>> 2.35.3
->>>
->>>
->>> _______________________________________________
->>> Linux-f2fs-devel mailing list
->>> Linux-f2fs-devel@lists.sourceforge.net
->>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index 91af6a8b7a98..761a2dd7d78a 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -792,6 +792,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>  	bool skip_on_failure = false;
+>  	unsigned long next_skip_pfn = 0;
+>  	bool skip_updated = false;
+> +	bool start_aligned;
+>  	int ret = 0;
+>  
+>  	cc->migrate_pfn = low_pfn;
+> @@ -824,6 +825,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>  	}
+>  
+>  	/* Time to isolate some pages for migration */
+> +	start_aligned = pageblock_aligned(start_pfn);
+>  	for (; low_pfn < end_pfn; low_pfn++) {
+>  
+>  		if (skip_on_failure && low_pfn >= next_skip_pfn) {
+> @@ -1069,10 +1071,15 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>  
+>  			lruvec_memcg_debug(lruvec, page_folio(page));
+>  
+> -			/* Try get exclusive access under lock */
+> +			/* Try get exclusive access under lock. Isolation is
+> +			 * only aborted if the start was pageblock aligned
+> +			 * as this may be a partial resumed scan that set
+> +			 * the bit on a recent scan but the scan must reach
+> +			 * the end of the pageblock.
+> +			 */
+>  			if (!skip_updated && valid_page) {
+>  				skip_updated = true;
+> -				if (test_and_set_skip(cc, valid_page))
+> +				if (test_and_set_skip(cc, valid_page) && start_aligned)
+>  					goto isolate_abort;
+>  			}
+>  
+
