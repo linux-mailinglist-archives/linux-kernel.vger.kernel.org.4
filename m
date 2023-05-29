@@ -2,105 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD096714670
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B793714675
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjE2Io2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
+        id S231578AbjE2IqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjE2IoW (ORCPT
+        with ESMTP id S229512AbjE2IqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:44:22 -0400
-Received: from out-17.mta0.migadu.com (out-17.mta0.migadu.com [91.218.175.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C3DAC
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:44:20 -0700 (PDT)
-Date:   Mon, 29 May 2023 16:44:15 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685349859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GWWjW272D8dSNO84PIr6uIe+T3G/E2XjK68WyXdYOu8=;
-        b=N3LgF6NjYlhUWOYyfVPqcfV/vbf77eNAW3CS7RAF62mQwFXjX8SrBKd2hxO+pu+7kgdDum
-        jqT2PmoKp0xhmlzuxXnzFQsNc0+YTAlfTE+N8R4aq/oaTB/NSJQ5piN0OZk4z+y085wZpy
-        WGcaKbt0xQZbq6VrxwXMVavg6T0WqqU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     fancer.lancer@gmail.com, gustavo.pimentel@synopsys.com,
-        vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Add Cai Huoqing as dw-edma maintainer
-Message-ID: <ZHRl37L2JPq+UmGp@chq-MS-7D45>
-References: <20230529032423.11650-1-cai.huoqing@linux.dev>
- <20230529052227.GA2856@thinkpad>
+        Mon, 29 May 2023 04:46:16 -0400
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60CFAC;
+        Mon, 29 May 2023 01:46:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685349926; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=UWDchVkEZiy1zgz7GOmGojV4k3GBe6B0J98/o/8VuWZImfM7kKhp+evlWTG/+wbLdsJ48ehE9ywSCra0uNGxZbhwSl3fLDHhXabD1T+CchT4/ig6hwhab1nphrL3/I0E12AZ2RpofM1EBRjZ32Q9nwPOuEvqeMp8sKfs81zSCMI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1685349926; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=rN6UaHs4ggHcS2A5CJI/CPXVvIQe2q2wnZMpU72p46E=; 
+        b=U04yBJ6K+7f3xyXrBevDloZNd20L0TVYYzAqNYVrSiz8sVrOFzu3DZjl2EEZiWPS2lVH4b3ZGnChjhL01ZEiQQCcyAkFDh9Ryo0Rdax72hKpjRcDHPGP+vbTPke5Jv6nVSskWfo2pFFWE7v4uTPIPvchEk0fN831fpgDl5dUdNQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685349926;
+        s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=rN6UaHs4ggHcS2A5CJI/CPXVvIQe2q2wnZMpU72p46E=;
+        b=nvT+YTQtDXzEyPmjNP5ayAWvRISvccnkg/aNGQk5OBtQBsDatWrwkwNIH8NFyyYe
+        CDhzWq1bPZCMZaIOaHP8fdoHlYicWGzCQxWWX2WGSHrS8q8zn0wYWQJD/AdSSwEZMcI
+        eZzcFClARRmsJ8lxp/drRGTeX1hYnaKjzEZ23cCEqJIHx0Kp/poS1sRQMGm+Qsl9yNA
+        D4bvTBgIyB4jyxuDObQs0jbB52KfE7lYdTRRfS5Og/u33ie3XdY1GxnVHz7vP1rQz6K
+        /nGacoEHLUEQr2uviIIn8ALAL50ucCBD8iPWtPazpAfij2ZYeKmLDXA6U8KXpe0DPwy
+        2QvW3gZizw==
+Received: from edelgard.fodlan.icenowy.me (120.85.97.71 [120.85.97.71]) by mx.zohomail.com
+        with SMTPS id 1685349925541243.71967151550905; Mon, 29 May 2023 01:45:25 -0700 (PDT)
+Message-ID: <6996788b112f4795d2930a6664b3152cd9a380a8.camel@icenowy.me>
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8173-elm: remove panel model
+ number in DT
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Pin-yen Lin <treapking@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
+Date:   Mon, 29 May 2023 16:45:20 +0800
+In-Reply-To: <f4a9e090-3712-200e-bd09-70090c9cccbc@collabora.com>
+References: <20230526100801.16310-1-uwu@icenowy.me>
+         <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
+         <f4a9e090-3712-200e-bd09-70090c9cccbc@collabora.com>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230529052227.GA2856@thinkpad>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29 5月 23 10:52:27, Manivannan Sadhasivam wrote:
-> Hi,
-> 
-> On Mon, May 29, 2023 at 11:24:23AM +0800, Cai Huoqing wrote:
-> > Since HDMA mode was merged, including the commits:
-> > commit e74c39573d35 ("dmaengine: dw-edma: Add support for native HDMA"),
-> > commit 353d5c241e83 ("dmaengine: dw-edma: Add HDMA DebugFS support"),
-> > I would like to add myself as maintainer of the dw-edma driver
-> > to recive patch for HDMA part. 
-> > 
-> > I can test HDMA part by our chip and cmodel and do some code review.
-> > I'm active in linux contribution, if possible, I want to
-> > take the dw-edma maintainership.
-> > 
-> 
-> Thanks for your interest in maintaining this driver. However, maintainership
-> involves active reviewing and maintaining the whole driver and not just the HDMA
-> part. If that's what you are intend to do, then I'd encourage you to first spend
-> some time reviewing and testing the patches targeting the dw-edma driver.
+=E5=9C=A8 2023-05-29=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 10:02 +0200=EF=BC=
+=8CAngeloGioacchino Del Regno=E5=86=99=E9=81=93=EF=BC=9A
+> Il 26/05/23 16:24, Doug Anderson ha scritto:
+> > Hi,
+> >=20
+> > On Fri, May 26, 2023 at 3:09=E2=80=AFAM Icenowy Zheng <uwu@icenowy.me>
+> > wrote:
+> > >=20
+> > > Currently a specific panel number is used in the Elm DTSI, which
+> > > is
+> > > corresponded to a 12" panel. However, according to the official
+> > > Chrome
+> > > OS devices document, Elm refers to Acer Chromebook R13, which, as
+> > > the
+> > > name specifies, uses a 13.3" panel, which comes with EDID
+> > > information.
+> > >=20
+> > > As the kernel currently prioritizes the hardcoded timing
+> > > parameters
+> > > matched with the panel number compatible, a wrong timing will be
+> > > applied
+> > > to the 13.3" panel on Acer Chromebook R13, which leads to blank
+> > > display.
+> > >=20
+> > > Because the Elm DTSI is shared with Hana board, and Hana
+> > > corresponds to
+> > > multiple devices from 11" to 14", a certain panel model number
+> > > shouldn't
+> > > be present, and driving the panel according to its EDID
+> > > information is
+> > > necessary.
+> > >=20
+> > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> > > ---
+> > > =C2=A0 arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 2 +-
+> > > =C2=A0 1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > We went through a bunch of back-and-forth here but in the end in
+> > the
+> > ChromeOS tree we have "edp-panel" as the "compatible" here in the
+> > ChromeOS 5.15 tree and this makes sense.
+> >=20
+> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> >=20
+> > ...in theory one would wish for a "Fixes" tag, but I think in
+> > previous
+> > discussions it was decided that it was too complicated. Hardcoding
+> > the
+> > other compatible string has always been technically wrong, but I
+> > guess
+> > it worked at some point in time. The more correct way (as you're
+> > doing
+> > here) needs the DP AUX bus support and the generic eDP panels, both
+> > of
+> > which are significantly newer than the elm dts. So I guess leaving
+> > no
+> > "Fixes" tag is OK, or perhaps you could do the somewhat weak:
+> >=20
+> > Fixes: c2d94f72140a ("arm64: dts: mediatek: mt8173-elm: Move
+> > display
+> > to ps8640 auxiliary bus")
+>=20
+> I remember I didn't change the compatible to panel-edp because it
+> didn't
+> work at that time, but it does now... I'm not sure what actually
+> fixed that
+> and if the commit(s) was/were backported to that suggested point, so
+> I
+> would leave the Fixes tag out, as that may break older kernel.
 
-Ok, will do.
+Well at least I developed this patch on v6.3.
 
-Thanks,
-Cai-
-> 
-> This will help justifying the reviewer/maintainership role in the future.
-> 
-> - Mani
-> 
-> > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> > ---
-> >  MAINTAINERS | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 3a0504731524..541601feabd0 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -5881,6 +5881,7 @@ F:	drivers/mtd/nand/raw/denali*
-> >  
-> >  DESIGNWARE EDMA CORE IP DRIVER
-> >  M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > +M:	Cai Huoqing <cai.huoqing@linux.dev>
-> >  R:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-> >  R:	Serge Semin <fancer.lancer@gmail.com>
-> >  L:	dmaengine@vger.kernel.org
-> > -- 
-> > 2.34.1
-> > 
-> 
-> -- 
-> மணிவண்ணன் சதாசிவம்
+(In fact the same kernel config do not boot to system at all on
+v6.0/v6.1 when I do make olddefconfig then build)
+
+>=20
+> Anyway, for this commit:
+>=20
+> Reviewed-by: AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com>
+
