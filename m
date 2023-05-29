@@ -2,138 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2C1714B5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308B6714B60
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjE2OBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
+        id S230187AbjE2OBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjE2OBM (ORCPT
+        with ESMTP id S229483AbjE2OBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:01:12 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C1E102;
-        Mon, 29 May 2023 07:00:48 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-307d20548adso1959940f8f.0;
-        Mon, 29 May 2023 07:00:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685368825; x=1687960825;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=czUg0GEsA4/pXkVvDlCWQ/xq4KtcNj5P7Uchklz5mQ8=;
-        b=j6QlqVGDsb5MBvK6xpO9PmsCQzkb4YXc9jTOoj10YSyM3wKNZ7U9/DJfUoZZ9y7iF3
-         aVPBszW4LrX4/yBLrPONK9Hya6xe/RJOQfU9SBS7Ygiz1WYILg69U4iYndjLN8aSXQ9H
-         kKTVf8maGXd/Fv/aePNTtlrSxhhPcgTncc/qlCZHwd9tVhJngCXRjGsUg0OukApB0KYC
-         PyjA0zfJhv/CumecS1wyWxunseHmCn0rU5IePGNMLoS7MlEcpe94wp+v8yMzWZW2sCQz
-         o4o6FMk3v+Q0z0gEuPojqAcUBrJvy8Rvndm1eMod030LPgiCRvW0A32+fS/XG6Qbau6Y
-         aELw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685368825; x=1687960825;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=czUg0GEsA4/pXkVvDlCWQ/xq4KtcNj5P7Uchklz5mQ8=;
-        b=LwZM5CTkec2ODyS4VhdtejZ0uXAfTLb2X8p1EM9RO5LpmVM/uTnXL0oSz/oeuShqqk
-         CKVaQyfvFzcR0wg33Xog8VD4nrhWaRnxZffgWTWjLLgEp0EuhNn1q/sViHHEyp1GYNk4
-         74mRKVldh/Bi3hiFIe//hR3I9qgxZoWLVnLY0Yjr0iGWDWAZDZk4K/O072tSrVFQmzCa
-         dpvXlUjT//vJ8XEahNcrOaykWr3urA7CaRiFU5ObDuAxtohiF2o3EAAsIBvc2pNi7DUB
-         wil4LWBkzzN8r4gIz5ULVRZ6pHHSQYdjsEOCSZJDWn8iolG78rTNC01SqM5VrimUn3H/
-         ChEg==
-X-Gm-Message-State: AC+VfDz04/fGl5J+KIhxSXuunk02tN5+MQ2wlfYq6lqz9XygYfVU3tXK
-        kh/6kdsNxSjEoNXMaig8U5M=
-X-Google-Smtp-Source: ACHHUZ5YY0F8kf9d0QDQxU1ifflONL13Hhhhoz7ubJbKMoUbd8atPVWeXbHNhdhapWASVn5XN1KjHQ==
-X-Received: by 2002:adf:f512:0:b0:307:88ba:c999 with SMTP id q18-20020adff512000000b0030788bac999mr7756125wro.62.1685368825106;
-        Mon, 29 May 2023 07:00:25 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id e6-20020adffc46000000b0030631f199f9sm68502wrs.34.2023.05.29.07.00.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 07:00:24 -0700 (PDT)
-Message-ID: <731fa0b6-5576-94fc-7cf5-0ec768db9c7d@gmail.com>
-Date:   Mon, 29 May 2023 16:00:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 24/27] arm64: dts: mediatek: mt6795-xperia-m5: Add MT6331
- Combo PMIC
-Content-Language: en-US, ca-ES, es-ES
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, chunfeng.yun@mediatek.com,
-        vkoul@kernel.org, kishon@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, chunkuang.hu@kernel.org,
-        ck.hu@mediatek.com, jitao.shi@mediatek.com,
-        xinlei.lee@mediatek.com, houlong.wei@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org,
-        kernel@collabora.com, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
- <20230412112739.160376-25-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230412112739.160376-25-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 29 May 2023 10:01:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537E010D;
+        Mon, 29 May 2023 07:00:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9AB860FBB;
+        Mon, 29 May 2023 14:00:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ECFAC4339B;
+        Mon, 29 May 2023 14:00:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685368831;
+        bh=XTBuiKvnDD+l/iubLGvNKu/2fkBSZnZrXeAb5inRLRI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WbYjX4Zwsf0EAitGQnaZHT6xoQMhz2CsSKVLKNYcfvdNl2loHnXayL4CryrhtohjM
+         SpaAVrn7JVYf2ozdw6dE/lwZdpjMWrowHOiuX1w+bF+WwmYjqxdkAvYIj6gkqr+MqG
+         EXfaFHunYOy1xVQlObW/54+2rM2M5CFFZRgKdgVGGtpJcePAw9aai4fITNNOC8/DJd
+         X9AQ8oxQWYxkkj3ESzIjt6snYhfMlq3d5RDq6+3KYTZIce51/nDLmV4JuxP/od+AwL
+         QSMztInsXC3XRah1c0265NbpPdovFjcrXyqiCYsoSavLX+Ld9plUsfzIrLosxu3KuU
+         Itv1sMk/Iek3g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q3dQD-001581-2d;
+        Mon, 29 May 2023 15:00:29 +0100
+Date:   Mon, 29 May 2023 15:00:28 +0100
+Message-ID: <87v8gbjkzn.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 3/6] KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
+In-Reply-To: <20230519005231.3027912-4-rananta@google.com>
+References: <20230519005231.3027912-1-rananta@google.com>
+        <20230519005231.3027912-4-rananta@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rananta@google.com, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, ricarkol@google.com, pbonzini@redhat.com, jingzhangos@google.com, coltonlewis@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
-> This smartphone uses the Helio X10 standard MT6331+MT6332 combo PMICs:
-> include the mt6331 devicetree and add the required interrupt.
+On Fri, 19 May 2023 01:52:28 +0100,
+Raghavendra Rao Ananta <rananta@google.com> wrote:
 > 
-> Note that despite there being two interrupts, one for MT6331 and one
-> for MT6332, in configurations using the companion PMIC, the interrupt
-> of the latter fires for both events on MT6331 and for ones on MT6332,
-> while the interrupt for the main PMIC fires only for events of the
-> main PMIC.
+> Implement kvm_arch_flush_remote_tlbs_range() for arm64
+> to invalidate the given range in the TLB.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Applied, thanks
-
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 > ---
->   arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+>  arch/arm64/include/asm/kvm_host.h |  3 +++
+>  arch/arm64/kvm/hyp/nvhe/tlb.c     |  4 +---
+>  arch/arm64/kvm/mmu.c              | 11 +++++++++++
+>  3 files changed, 15 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-> index a0e01a756f03..debe0f2553d9 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt6795-sony-xperia-m5.dts
-> @@ -7,6 +7,7 @@
->   /dts-v1/;
->   #include <dt-bindings/gpio/gpio.h>
->   #include "mt6795.dtsi"
-> +#include "mt6331.dtsi"
->   
->   / {
->   	model = "Sony Xperia M5";
-> @@ -219,6 +220,15 @@ pins-tx {
->   	};
->   };
->   
-> +&pmic {
-> +	/*
-> +	 * Smartphones, including the Xperia M5, are equipped with a companion
-> +	 * MT6332 PMIC: when this is present, the main MT6331 PMIC will fire
-> +	 * an interrupt on the companion, so we use the MT6332 IRQ GPIO.
-> +	 */
-> +	interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>;
-> +};
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 81ab41b84f436..343fb530eea9c 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -1081,6 +1081,9 @@ struct kvm *kvm_arch_alloc_vm(void);
+>  #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
+>  int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
+>  
+> +#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
+> +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages);
 > +
->   &uart0 {
->   	status = "okay";
->   
+>  static inline bool kvm_vm_is_protected(struct kvm *kvm)
+>  {
+>  	return false;
+> diff --git a/arch/arm64/kvm/hyp/nvhe/tlb.c b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> index d4ea549c4b5c4..d2c7c1bc6d441 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/tlb.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> @@ -150,10 +150,8 @@ void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+>  		return;
+>  	}
+>  
+> -	dsb(ishst);
+> -
+>  	/* Switch to requested VMID */
+> -	__tlb_switch_to_guest(mmu, &cxt);
+> +	__tlb_switch_to_guest(mmu, &cxt, false);
+
+This hunk is in the wrong patch, isn't it?
+
+>  
+>  	__flush_tlb_range_op(ipas2e1is, start, pages, stride, 0, 0, false);
+>  
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index d0a0d3dca9316..e3673b4c10292 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -92,6 +92,17 @@ int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
+>  	return 0;
+>  }
+>  
+> +int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages)
+> +{
+> +	phys_addr_t start, end;
+> +
+> +	start = start_gfn << PAGE_SHIFT;
+> +	end = (start_gfn + pages) << PAGE_SHIFT;
+> +
+> +	kvm_call_hyp(__kvm_tlb_flush_vmid_range, &kvm->arch.mmu, start, end);
+
+So that's the point that I think is not right. It is the MMU code that
+should drive the invalidation method, and not the HYP code. The HYP
+code should be as dumb as possible, and the logic should be kept in
+the MMU code.
+
+So when a range invalidation is forwarded to HYP, it's a *valid* range
+invalidation. not something that can fallback to VMID-wide invalidation.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
