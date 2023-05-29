@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A82F714B39
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF36714B43
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjE2N50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S230137AbjE2N6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjE2N5H (ORCPT
+        with ESMTP id S230024AbjE2N5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:57:07 -0400
+        Mon, 29 May 2023 09:57:37 -0400
 Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF95E61;
-        Mon, 29 May 2023 06:56:40 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30aa1eb95a0so3256557f8f.1;
-        Mon, 29 May 2023 06:56:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF54A7;
+        Mon, 29 May 2023 06:57:09 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30aef0499b6so436692f8f.1;
+        Mon, 29 May 2023 06:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685368533; x=1687960533;
+        d=gmail.com; s=20221208; t=1685368596; x=1687960596;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nTPwRcU9/1owFrxG0zY81x47hBDLk9OGUJzI1r232yU=;
-        b=LWr/g27RUnLmjW3T0TzziGpJ6dU3yFMD0ZkbRXguiTeMWWNxRMcii3JVD3SdkYxLSL
-         Q2zJc/hK+eVilxyWDq9VWLGOiwv2+OtPXq+Btm7uYOf86seEzZF0YIeCX+yjMSboiI2c
-         88KAAH9HIiP8mIksgsZp+PAj4ru1k2qAoBwvknLWWIaxLiYqCPXrfpQdR3t64Yo/smWw
-         mssYTEQkhqQzqJUIQIGqE8ovS1Q8LVE8onl+dSfriT/vuzqlQjQ1KBty0AmTEQCfA9PE
-         kRsrsF9w1ILVCA088Hb4AdoGwDJATkxgpNUDeaRcHGpXzc9qAEwwwGArtJWsIkXf3ISB
-         x31w==
+        bh=9cbwoD1bDN3KeTSFxlU0dNxIG4pUsYvcyn2OEG5dA6Q=;
+        b=P9z5GBmuumqpXC/Gaq66lcgqiAY/Pss4bmTLP+wq60i0MlcKwPs3S4uOVtCPyb28fH
+         OoiHnTE1ViICbKKXgH37QBybD80O6JRJSRRZPjz2ysjynt4Tog74GNfvSrA3FfuvTlw8
+         h/mrNsxY1Nax1/9BbwELXG1HshPnvUX2/j2+0ET2yrk1K+hbK4U1PchSSa/ah9kvaxUR
+         sxujRG+zrr0f0NBHfQv0CDjysLAAp1uWo6yPkX9eZUMgjW25RLi2ODUlCG3UOMx6EQ1I
+         NbLBtETwCRxTAo+zW2Adlyem4pYuG+HRUzLZs0P/x2ST380ED7ujhpvh8SmdMQuUnJGS
+         XIrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685368533; x=1687960533;
+        d=1e100.net; s=20221208; t=1685368596; x=1687960596;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nTPwRcU9/1owFrxG0zY81x47hBDLk9OGUJzI1r232yU=;
-        b=VGvXJ4DBX9usLYPPXQFAtlezevndmzyAw1YP2ydxRF9G7E6+G79bL0nFbRl8jhPBSv
-         37UvmftwdaR4xzxLatVqI2dA4Zf6GkUaibuE4ywlaKGresMjHiYsuYAicdtHtieU6rMI
-         xzg9/Si7cL8cBcVXnBKAjhU/df9Sq08gFCE4cUkbwifYh6u2+GtWtp4jkM9gOCDLubkm
-         u96F4pf1ITF9LZyBg3MnncwOFRJF4jYb8ZqEMWVlE5lGvVOo1jx89bCvfE3DFEAXqT28
-         F1LWAr4x+P+OlZt86+uDwMNOWGsbhuOnH/pVxACvaXihqSjAKIFG6L0BMX88KMDvkZ0t
-         Gb0A==
-X-Gm-Message-State: AC+VfDxjpVlZxoWieTtHBS1hOEk8ohl9a2DZQx1aClRrCxeqBB0dfQ28
-        tezri3Ttr2KwqcRFByA7bKQ=
-X-Google-Smtp-Source: ACHHUZ5eSkNEsDiTtiEBDzlhzfIK9hH43HFqaSiCjMt3hgF///ZXBnNz6oeXz1iWZkcB2H6r75yy/A==
-X-Received: by 2002:a5d:4143:0:b0:30a:ec3b:58d8 with SMTP id c3-20020a5d4143000000b0030aec3b58d8mr1939358wrq.3.1685368533466;
-        Mon, 29 May 2023 06:55:33 -0700 (PDT)
+        bh=9cbwoD1bDN3KeTSFxlU0dNxIG4pUsYvcyn2OEG5dA6Q=;
+        b=Px8NrokMEqUrc1ZdgLJfKQtWwpgCvva45NkoQ31IKVnAOi0uvCugiz7tchr6oSasX9
+         bAGDVhHSjOwF/x6QVUEuYuO95i+xdlYFkVU0Kg2dNmXPv/qTSmVMOvcRguha9t2Jdllw
+         mha9gER86nbRWmXI1DvuH+fwp39KCla9XIR/Xfc54UU+fttE88Ot/m66t03JY8xeLyyX
+         VM4hZCFln26W0ySLVMRZLYRRjRV0ADpsKyobe4FGO2VD7bTKU9TnMlmrQT9n4aLYnTrK
+         VFu9+tmItolYLFxwHWcHY7Bdlduhs31Kvl2g1OITtwmLRggzA5nhj89J7QeGzSSvXBej
+         LKcA==
+X-Gm-Message-State: AC+VfDwZwio/fddsuAWVX1iFhQMvgq9YQID7+wChoTqclAY3oUhHtb1R
+        NJi61uZtaErhdmPy20J9+As=
+X-Google-Smtp-Source: ACHHUZ4wVc5iPVCtxm5Cr6CfPsCUAV2JxQmkDbIFVJyxLuluN7/4L9PtEZwmPvo0Q4/mI85A2+kIFg==
+X-Received: by 2002:a5d:694b:0:b0:309:4ee8:35ce with SMTP id r11-20020a5d694b000000b003094ee835cemr11215209wrw.21.1685368595936;
+        Mon, 29 May 2023 06:56:35 -0700 (PDT)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id t4-20020a5d5344000000b00307acec258esm74633wrv.3.2023.05.29.06.55.30
+        by smtp.gmail.com with ESMTPSA id c16-20020a5d4f10000000b002fda1b12a0bsm80555wru.2.2023.05.29.06.56.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 06:55:32 -0700 (PDT)
-Message-ID: <86a96f9d-196a-8592-41ac-f3b8303d55c6@gmail.com>
-Date:   Mon, 29 May 2023 15:55:30 +0200
+        Mon, 29 May 2023 06:56:34 -0700 (PDT)
+Message-ID: <a24acb75-4503-d987-0ebb-cdbba564768f@gmail.com>
+Date:   Mon, 29 May 2023 15:56:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 17/27] arm64: dts: mediatek: mt6795: Add MMSYS node for
- multimedia clocks
+Subject: Re: [PATCH 18/27] arm64: dts: mediatek: mt6795: Add support for IOMMU
+ and LARBs
 Content-Language: en-US, ca-ES, es-ES
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
@@ -74,9 +74,9 @@ Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
         kernel@collabora.com, phone-devel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
 References: <20230412112739.160376-1-angelogioacchino.delregno@collabora.com>
- <20230412112739.160376-18-angelogioacchino.delregno@collabora.com>
+ <20230412112739.160376-19-angelogioacchino.delregno@collabora.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230412112739.160376-18-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230412112739.160376-19-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,38 +92,109 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 12/04/2023 13:27, AngeloGioacchino Del Regno wrote:
-> Add the MultiMedia System node, providing clocks for the multimedia
-> hardware blocks and their IOMMU/SMIs.
+> Add nodes for the multimedia IOMMU and its LARBs: this includes all but
+> the MJC LARB, which cannot currently be used and will be added later.
 > 
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 Applied, thanks
 
 > ---
->   arch/arm64/boot/dts/mediatek/mt6795.dtsi | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
+>   arch/arm64/boot/dts/mediatek/mt6795.dtsi | 60 ++++++++++++++++++++++++
+>   1 file changed, 60 insertions(+)
 > 
 > diff --git a/arch/arm64/boot/dts/mediatek/mt6795.dtsi b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-> index 99cc4918e6ba..a8b2c4517e79 100644
+> index a8b2c4517e79..9cfa02085f61 100644
 > --- a/arch/arm64/boot/dts/mediatek/mt6795.dtsi
 > +++ b/arch/arm64/boot/dts/mediatek/mt6795.dtsi
-> @@ -635,6 +635,19 @@ mmc3: mmc@11260000 {
->   			status = "disabled";
+> @@ -8,6 +8,7 @@
+>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>   #include <dt-bindings/clock/mediatek,mt6795-clk.h>
+>   #include <dt-bindings/gce/mediatek,mt6795-gce.h>
+> +#include <dt-bindings/memory/mt6795-larb-port.h>
+>   #include <dt-bindings/pinctrl/mt6795-pinfunc.h>
+>   #include <dt-bindings/power/mt6795-power.h>
+>   #include <dt-bindings/reset/mediatek,mt6795-resets.h>
+> @@ -390,6 +391,17 @@ systimer: timer@10200670 {
+>   			clock-names = "clk13m";
 >   		};
 >   
-> +		mmsys: syscon@14000000 {
-> +			compatible = "mediatek,mt6795-mmsys", "syscon";
-> +			reg = <0 0x14000000 0 0x1000>;
+> +		iommu: iommu@10205000 {
+> +			compatible = "mediatek,mt6795-m4u";
+> +			reg = <0 0x10205000 0 0x1000>;
+> +			clocks = <&infracfg CLK_INFRA_M4U>;
+> +			clock-names = "bclk";
+> +			interrupts = <GIC_SPI 146 IRQ_TYPE_LEVEL_LOW>;
+> +			mediatek,larbs = <&larb0 &larb1 &larb2 &larb3>;
 > +			power-domains = <&spm MT6795_POWER_DOMAIN_MM>;
-> +			assigned-clocks = <&topckgen CLK_TOP_MM_SEL>;
-> +			assigned-clock-rates = <400000000>;
-> +			#clock-cells = <1>;
-> +			#reset-cells = <1>;
-> +			mboxes = <&gce 0 CMDQ_THR_PRIO_HIGHEST>,
-> +				 <&gce 1 CMDQ_THR_PRIO_HIGHEST>;
-> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+> +			#iommu-cells = <1>;
+> +		};
+> +
+>   		apmixedsys: syscon@10209000 {
+>   			compatible = "mediatek,mt6795-apmixedsys", "syscon";
+>   			reg = <0 0x10209000 0 0x1000>;
+> @@ -648,16 +660,64 @@ mmsys: syscon@14000000 {
+>   			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+>   		};
+>   
+> +		larb0: larb@14021000 {
+> +			compatible = "mediatek,mt6795-smi-larb";
+> +			reg = <0 0x14021000 0 0x1000>;
+> +			clocks = <&mmsys CLK_MM_SMI_COMMON>, <&mmsys CLK_MM_SMI_LARB0>;
+> +			clock-names = "apb", "smi";
+> +			mediatek,smi = <&smi_common>;
+> +			mediatek,larb-id = <0>;
+> +			power-domains = <&spm MT6795_POWER_DOMAIN_MM>;
+> +		};
+> +
+> +		smi_common: smi@14022000 {
+> +			compatible = "mediatek,mt6795-smi-common";
+> +			reg = <0 0x14022000 0 0x1000>;
+> +			power-domains = <&spm MT6795_POWER_DOMAIN_MM>;
+> +			clocks = <&infracfg CLK_INFRA_SMI>, <&mmsys CLK_MM_SMI_COMMON>;
+> +			clock-names = "apb", "smi";
+> +		};
+> +
+> +		larb2: larb@15001000 {
+> +			compatible = "mediatek,mt6795-smi-larb";
+> +			reg = <0 0x15001000 0 0x1000>;
+> +			clocks = <&mmsys CLK_MM_SMI_COMMON>, <&infracfg CLK_INFRA_SMI>;
+> +			clock-names = "apb", "smi";
+> +			mediatek,smi = <&smi_common>;
+> +			mediatek,larb-id = <2>;
+> +			power-domains = <&spm MT6795_POWER_DOMAIN_ISP>;
 > +		};
 > +
 >   		vdecsys: clock-controller@16000000 {
 >   			compatible = "mediatek,mt6795-vdecsys";
 >   			reg = <0 0x16000000 0 0x1000>;
+>   			#clock-cells = <1>;
+>   		};
+>   
+> +		larb1: larb@16010000 {
+> +			compatible = "mediatek,mt6795-smi-larb";
+> +			reg = <0 0x16010000 0 0x1000>;
+> +			mediatek,smi = <&smi_common>;
+> +			mediatek,larb-id = <1>;
+> +			clocks = <&vdecsys CLK_VDEC_CKEN>, <&vdecsys CLK_VDEC_LARB_CKEN>;
+> +			clock-names = "apb", "smi";
+> +			power-domains = <&spm MT6795_POWER_DOMAIN_VDEC>;
+> +		};
+> +
+>   		vencsys: clock-controller@18000000 {
+>   			compatible = "mediatek,mt6795-vencsys";
+>   			reg = <0 0x18000000 0 0x1000>;
+>   			#clock-cells = <1>;
+>   		};
+> +
+> +		larb3: larb@18001000 {
+> +			compatible = "mediatek,mt6795-smi-larb";
+> +			reg = <0 0x18001000 0 0x1000>;
+> +			clocks = <&vencsys CLK_VENC_VENC>, <&vencsys CLK_VENC_LARB>;
+> +			clock-names = "apb", "smi";
+> +			mediatek,smi = <&smi_common>;
+> +			mediatek,larb-id = <3>;
+> +			power-domains = <&spm MT6795_POWER_DOMAIN_VENC>;
+> +		};
+>   	};
+>   };
