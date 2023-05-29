@@ -2,77 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753F571424C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 05:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BFB714250
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 05:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjE2DYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 23:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
+        id S230117AbjE2D3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 23:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjE2DYb (ORCPT
+        with ESMTP id S229453AbjE2D3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 23:24:31 -0400
-Received: from out-57.mta1.migadu.com (out-57.mta1.migadu.com [IPv6:2001:41d0:203:375::39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317CAAF
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 20:24:30 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685330668;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=HrRea8JyN4C0qVNp9YvhwrTuvrMqec00lyXuOgrJnAg=;
-        b=FLoAOT82LUNh+8YeB20/PYYrGEeG0cUJM7kyi1Qzm6DCphx44+EUwQVhJbBcn5wzrGvkHS
-        jQvoQ6H1xex3wP3VPvCk777n94ZY1VZ6LugvQCiEzhOb0t17tZdaVGvo631AB7Ymag81WR
-        Pn6BAQvvHk1W2eYKO0LQyOe1R6SDfM8=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     mani@kernel.org, fancer.lancer@gmail.com,
-        gustavo.pimentel@synopsys.com, vkoul@kernel.org
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cai Huoqing <cai.huoqing@linux.dev>
-Subject: [PATCH] MAINTAINERS: Add Cai Huoqing as dw-edma maintainer
-Date:   Mon, 29 May 2023 11:24:23 +0800
-Message-Id: <20230529032423.11650-1-cai.huoqing@linux.dev>
+        Sun, 28 May 2023 23:29:21 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3482AF;
+        Sun, 28 May 2023 20:29:17 -0700 (PDT)
+X-UUID: 0a3d9e25f7e642aab2a349ed109e0856-20230529
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:8b011c80-db7e-4bf6-807f-ae12dff5c8a8,IP:15,
+        URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-INFO: VERSION:1.1.22,REQID:8b011c80-db7e-4bf6-807f-ae12dff5c8a8,IP:15,UR
+        L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:0
+X-CID-META: VersionHash:120426c,CLOUDID:d507a33c-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:23052622413414FINTUN,BulkQuantity:2,Recheck:0,SF:24|17|19|44|102,TC:
+        nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI
+        :0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 0a3d9e25f7e642aab2a349ed109e0856-20230529
+Received: from node4.com.cn [(39.156.73.12)] by mailgw
+        (envelope-from <pengfuyuan@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1110830383; Mon, 29 May 2023 11:29:02 +0800
+Received: from node4.com.cn (localhost [127.0.0.1])
+        by node4.com.cn (NSMail) with SMTP id 1885516002C04;
+        Mon, 29 May 2023 11:29:02 +0800 (CST)
+X-ns-mid: postfix-64741BFE-284645
+Received: from [172.20.20.15] (unknown [172.20.20.15])
+        by node4.com.cn (NSMail) with ESMTPA id 0380C16002C04;
+        Mon, 29 May 2023 03:28:59 +0000 (UTC)
+Message-ID: <871f146c-2fd8-4322-2288-4be90c0baf8a@kylinos.cn>
+Date:   Mon, 29 May 2023 11:28:59 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] btrfs: Fix csum_tree_block to avoid tripping on
+ -Werror=array-bounds
+Content-Language: en-US
+To:     dsterba@suse.cz
+Cc:     Qu Wenruo <quwenruo.btrfs@gmx.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230523070956.674019-1-pengfuyuan@kylinos.cn>
+ <a79a7e9d-f6b5-00c8-65c8-f914cf0be0b2@gmx.com>
+ <20230523193212.GA32559@twin.jikos.cz> <20230526143514.GA575@twin.jikos.cz>
+From:   pengfuyuan <pengfuyuan@kylinos.cn>
+In-Reply-To: <20230526143514.GA575@twin.jikos.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since HDMA mode was merged, including the commits:
-commit e74c39573d35 ("dmaengine: dw-edma: Add support for native HDMA"),
-commit 353d5c241e83 ("dmaengine: dw-edma: Add HDMA DebugFS support"),
-I would like to add myself as maintainer of the dw-edma driver
-to recive patch for HDMA part. 
 
-I can test HDMA part by our chip and cmodel and do some code review.
-I'm active in linux contribution, if possible, I want to
-take the dw-edma maintainership.
+On 2023/5/26 22:35, David Sterba wrote:
+> On Tue, May 23, 2023 at 09:32:12PM +0200, David Sterba wrote:
+>> On Tue, May 23, 2023 at 03:33:22PM +0800, Qu Wenruo wrote:
+>>> On 2023/5/23 15:09, pengfuyuan wrote:
+>>> Although even with such change, I'm still not sure if it's any better or
+>>> worse, as most of the calculation can still be bulky.
+>> Yeah I think the calculations would have to be conditional or keeping
+>> some state. I'd like to keep the structure of the first page and the
+>> rest.
+>>
+>> Possible ways is to add extra condition
+>>
+>> 	for (i = 1; i < num_pages && i < INLINE_EXTENT_BUFFER_PAGES; i++)
+> The final version is
+>
+> 	for (i = 1; i < num_pages && INLINE_EXTENT_BUFFER_PAGES > 1; i++)
+>
+> ie. 'INLINE_EXTENT_BUFFER_PAGES > 1' can be evaluated at compile time
+> and result in removing the for loop completely.
+>
+> Pengfuyuan, can you please do a build test that it does not report the
+> warning anymore? The diff is:
+>
+> --- a/fs/btrfs/disk-io.c
+> +++ b/fs/btrfs/disk-io.c
+> @@ -88,7 +88,6 @@ static void csum_tree_block(struct extent_buffer *buf, u8 *result)
+>          const int first_page_part = min_t(u32, PAGE_SIZE, fs_info->nodesize);
+>          SHASH_DESC_ON_STACK(shash, fs_info->csum_shash);
+>          char *kaddr;
+> -       int i;
+>   
+>          shash->tfm = fs_info->csum_shash;
+>          crypto_shash_init(shash);
+> @@ -96,7 +95,7 @@ static void csum_tree_block(struct extent_buffer *buf, u8 *result)
+>          crypto_shash_update(shash, kaddr + BTRFS_CSUM_SIZE,
+>                              first_page_part - BTRFS_CSUM_SIZE);
+>   
+> -       for (i = 1; i < num_pages; i++) {
+> +       for (int i = 1; i < num_pages && INLINE_EXTENT_BUFFER_PAGES > 1; i++) {
+>                  kaddr = page_address(buf->pages[i]);
+>                  crypto_shash_update(shash, kaddr, PAGE_SIZE);
+>          }
+> ---
 
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+I did a build test on the mips64 architecture, the compilation passed, 
+and it no longer reported warnings.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3a0504731524..541601feabd0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5881,6 +5881,7 @@ F:	drivers/mtd/nand/raw/denali*
- 
- DESIGNWARE EDMA CORE IP DRIVER
- M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-+M:	Cai Huoqing <cai.huoqing@linux.dev>
- R:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
- R:	Serge Semin <fancer.lancer@gmail.com>
- L:	dmaengine@vger.kernel.org
--- 
-2.34.1
+Thank you very much and wish you a happy life.
+
+
+Thanks.
 
