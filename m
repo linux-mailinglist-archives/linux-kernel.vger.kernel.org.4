@@ -2,78 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457967148F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 13:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A075A7148FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 13:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbjE2L7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 07:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        id S231608AbjE2L7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 07:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjE2L7S (ORCPT
+        with ESMTP id S229453AbjE2L7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 07:59:18 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F5ECF
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 04:58:52 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-53f8daa1b6fso572282a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 04:58:52 -0700 (PDT)
+        Mon, 29 May 2023 07:59:39 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D350CF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 04:59:37 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af1ae3a21fso33715921fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 04:59:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1685361531; x=1687953531;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DVUU/8MTlqkun0CdJoQ90yYJzG1uqvq8Y3tdJ1vCCh8=;
-        b=dPmWgjQXae6LS5gcZkgt0C7BneH7B4v1QHs/meUjE6fT0mJnYsnwtzoF3AiWM1RrGo
-         +C7UG7Ge3bQNSvm0cVmtj+ST2yFh1alt59mSxPLsPiXIjINokwQLVsFCqQI6c44cWlU1
-         W+ZRW7c8/TTY62cl1VXrq3S/HkShohWCimJy4RWnFR646d3xRiZ5EsP2vHX4pDwtp7po
-         FBJRfnB0WCWlbdBB4Wljc1QSKbiznicPUerUPNSJjChnq6a9s6/OBC8MP5EtMNnY1SUU
-         vtkdTkOxfJM3mHKWSLp+9zdm7Fsevb0hllm1Ey0e6KT3Yr5mOym7MH8T/R9QlcD7ysfz
-         ClsQ==
+        d=linaro.org; s=google; t=1685361575; x=1687953575;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wXVPUyboz0ykS8Ed+FHN0BdXbIB6yMoKQQ93vLHxG5o=;
+        b=ZBuTbEFfvpcpoTU1OUY8m4CyXkMoIdifioeYmwrVauitCM0SNNcSUb7oRFr3UtCL/7
+         10HeWNR42H6Xxxe70igvrCLtWo2a3fkckFceFHI+qxIR08z//wockJoiQoexe6fx51Kc
+         Alw5vjCOgYoQSclZYYHIe512Om8K5u6POSL4fVNhL8F6cG1/HRxZePMaUz1wkHL0dGBJ
+         SsRHfQA26XiyWY1fC6GV6Rs0yc2qOOxrSwQlcL2BXcg+sDwxUX+V00gTxztNPgt1Ahx+
+         lT4Nm388NfGTeb6RYQF/Gfdoa5NI5lIvx4ARtupAMhblH+pLaxYoxj+Js0v4tznZKWgA
+         aTdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685361531; x=1687953531;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1685361575; x=1687953575;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DVUU/8MTlqkun0CdJoQ90yYJzG1uqvq8Y3tdJ1vCCh8=;
-        b=SXfKRt48uMdyT3hR8EIi272r9s30+NQZ706xc5Ch7UIkzZBc48d0oApXxtz3OSfyC9
-         sRw2jsAkcsbcbj6FEDWEyJIOLMybiP5EMZx75ExUSBM7aImIUgcVVDTRK3af9zC58y7N
-         gXGNCURStprerDd2DgCz0ScMvsYIvD4N41vav5kYwnv6xOj5ufRwjNNwcCnuJVDMrs50
-         VqrpSlsD/B7XRtOJlOAO/Es2ejWWEHj15bbuoc3EqBcqHs0tSCZSj3Mk/pAedKYuUCXo
-         yJwpq4iebJhBI4fM5JC7+XXJuloj3ICea8hQYE1ShD2IUCcvdH+w85Ddpc1EQBxCTSl6
-         jpkQ==
-X-Gm-Message-State: AC+VfDyXrH6oZgDGdlwd/RMs/LaYNLAPni3yFuvZj+qL9gFhaKt1Yt0T
-        xNaLg8/afOsZOOgr0JC17DuuxA==
-X-Google-Smtp-Source: ACHHUZ7prsvyzTK5AyaMOYRDPP1hgY/k4VEWuhTNysi3CDUBHAke+4LlMM+IcDr0dp9HHHykOyKZWQ==
-X-Received: by 2002:a17:90a:ea81:b0:256:6e9b:1398 with SMTP id h1-20020a17090aea8100b002566e9b1398mr3873579pjz.2.1685361531311;
-        Mon, 29 May 2023 04:58:51 -0700 (PDT)
-Received: from [10.94.58.170] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id o14-20020a17090ab88e00b00252d960a8dfsm8654085pjr.16.2023.05.29.04.58.47
+        bh=wXVPUyboz0ykS8Ed+FHN0BdXbIB6yMoKQQ93vLHxG5o=;
+        b=lzzXwBIBmW1xm4l6ax0tzqTJzjmYd5PQzxwfc2+578zOz+4KcClxwKRtKsCWBNUZI3
+         0K0tQuQPDSnTHGX24qVzUGuG/GBfFrVt5Dti8GnuFbLakRvPc8LaEjEg0yR6nbxk5PQ9
+         sBN0jTn9WI6co2x4odpUht8XEQQ8xPb5GnkJwJNs/0/NVMNTGZOiLuz3kAuJ8hLYp55w
+         5aQObGiDVxWxoUiU2iljP0N8LOzYNQyKTEi5z7A6QHrFBxJ7h+3kolB5CuwRs9mm7oMp
+         7Z+Ixuqp73DXcsRKNV2KC3DeytfqQmF8paN2hegKWYhID0e7kQecIg/of1olj2aBG7oq
+         PSuA==
+X-Gm-Message-State: AC+VfDwnpqfvDcoonZ8ZuyuDBpNZ+dXKivf6fCo1ezmtWjQb5W5zqHSk
+        11bGzjSmscWFaOyaC6LR5MucaA==
+X-Google-Smtp-Source: ACHHUZ7o0f8xF9lxwcW/IO09XH9XCio/3KVnZQVQDvWkbK1gKBtutVfadeIKLFyPoSro7o3P50BxIw==
+X-Received: by 2002:a2e:9b99:0:b0:2a8:e7f9:c33f with SMTP id z25-20020a2e9b99000000b002a8e7f9c33fmr4330713lji.30.1685361575515;
+        Mon, 29 May 2023 04:59:35 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id j18-20020a2e8012000000b002ad95392147sm2404665ljg.118.2023.05.29.04.59.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 04:58:50 -0700 (PDT)
-Message-ID: <73b1381e-6a59-26fe-c0b6-51ea3ebf60f8@bytedance.com>
-Date:   Mon, 29 May 2023 19:58:45 +0800
+        Mon, 29 May 2023 04:59:35 -0700 (PDT)
+Message-ID: <9858de8d-54ae-aa0c-35d8-fe8c1c8473b7@linaro.org>
+Date:   Mon, 29 May 2023 13:59:33 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-From:   Abel Wu <wuyun.abel@bytedance.com>
-Subject: Re: [PATCH v2 3/4] sock: Consider memcg pressure when raising sockmem
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Glauber Costa <glommer@parallels.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230522070122.6727-1-wuyun.abel@bytedance.com>
- <20230522070122.6727-4-wuyun.abel@bytedance.com>
- <20230525012259.qd6i6rtqvvae3or7@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 4/7] drm/msm/mdp5: Add MDP5 configuration for MSM8226
 Content-Language: en-US
-In-Reply-To: <20230525012259.qd6i6rtqvvae3or7@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230308-msm8226-mdp-v1-0-679f335d3d5b@z3ntu.xyz>
+ <20230308-msm8226-mdp-v1-4-679f335d3d5b@z3ntu.xyz>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230308-msm8226-mdp-v1-4-679f335d3d5b@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,187 +88,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shakeel, thanks for reviewing! And sorry for replying so late,
-I was on a vocation :)
 
-On 5/25/23 9:22 AM, Shakeel Butt wrote:
-> On Mon, May 22, 2023 at 03:01:21PM +0800, Abel Wu wrote:
->> For now __sk_mem_raise_allocated() mainly considers global socket
->> memory pressure and allows to raise if no global pressure observed,
->> including the sockets whose memcgs are in pressure, which might
->> result in longer memcg memstall.
->>
->> So take net-memcg's pressure into consideration when allocating
->> socket memory to alleviate long tail latencies.
->>
->> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+
+On 29.05.2023 11:44, Luca Weiss wrote:
+> Add the required config for the v1.1 MDP5 found on MSM8226.
 > 
-> Hi Abel,
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c | 82 ++++++++++++++++++++++++++++++++
+>  1 file changed, 82 insertions(+)
 > 
-> Have you seen any real world production issue which is fixed by this
-> patch or is it more of a fix after reading code?
+> diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
+> index 2eec2d78f32a..694d54341337 100644
+> --- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
+> +++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
+> @@ -103,6 +103,87 @@ static const struct mdp5_cfg_hw msm8x74v1_config = {
+>  	.max_clk = 200000000,
+>  };
+>  
+> +static const struct mdp5_cfg_hw msm8x26_config = {
+Luca, this patch looks good as-is (without diving into the values).
 
-The latter. But we do observe one common case in the production env
-that p2p service, which mainly downloads container images, running
-inside a container with tight memory limit can easily be throttled and
-keep memstalled for a long period of time and sometimes even be OOM-
-killed. This service shows burst usage of TCP memory and I think it
-indeed needs suppressing sockmem allocation if memcg is already under
-pressure. The memcg pressure is usually caused by too many page caches
-and the dirty ones starting to be wrote back to slow backends. So it
-is insane to continuously receive net data to consume more memory.
+Dmitry, I see some things that we may improve here..
 
+1. Rename msm8xab to msm89ab or something, it's really inconsistent
+   with other drivers
+
+2. Some values seem very common / always constant.. perhaps we could
+   add some #defines like we do in DPU?
+
+3. Can we add some magic defines to make flush_hw_mask non-cryptic?
+
+4. We can probably use pointers in data structs and deduplicate identical
+   blocks!
+
+Konrad
+> +	.name = "msm8x26",
+> +	.mdp = {
+> +		.count = 1,
+> +		.caps = MDP_CAP_SMP |
+> +			0,
+> +	},
+> +	.smp = {
+> +		.mmb_count = 7,
+> +		.mmb_size = 4096,
+> +		.clients = {
+> +			[SSPP_VIG0] =  1,
+> +			[SSPP_DMA0] = 4,
+> +			[SSPP_RGB0] = 7,
+> +		},
+> +	},
+> +	.ctl = {
+> +		.count = 2,
+> +		.base = { 0x00500, 0x00600 },
+> +		.flush_hw_mask = 0x0003ffff,
+> +	},
+> +	.pipe_vig = {
+> +		.count = 1,
+> +		.base = { 0x01100 },
+> +		.caps = MDP_PIPE_CAP_HFLIP |
+> +			MDP_PIPE_CAP_VFLIP |
+> +			MDP_PIPE_CAP_SCALE |
+> +			MDP_PIPE_CAP_CSC   |
+> +			0,
+> +	},
+> +	.pipe_rgb = {
+> +		.count = 1,
+> +		.base = { 0x01d00 },
+> +		.caps = MDP_PIPE_CAP_HFLIP |
+> +			MDP_PIPE_CAP_VFLIP |
+> +			MDP_PIPE_CAP_SCALE |
+> +			0,
+> +	},
+> +	.pipe_dma = {
+> +		.count = 1,
+> +		.base = { 0x02900 },
+> +		.caps = MDP_PIPE_CAP_HFLIP |
+> +			MDP_PIPE_CAP_VFLIP |
+> +			0,
+> +	},
+> +	.lm = {
+> +		.count = 2,
+> +		.base = { 0x03100, 0x03d00 },
+> +		.instances = {
+> +				{ .id = 0, .pp = 0, .dspp = 0,
+> +				  .caps = MDP_LM_CAP_DISPLAY, },
+> +				{ .id = 1, .pp = -1, .dspp = -1,
+> +				  .caps = MDP_LM_CAP_WB },
+> +			     },
+> +		.nb_stages = 2,
+> +		.max_width = 2048,
+> +		.max_height = 0xFFFF,
+> +	},
+> +	.dspp = {
+> +		.count = 1,
+> +		.base = { 0x04500 },
+> +	},
+> +	.pp = {
+> +		.count = 1,
+> +		.base = { 0x21a00 },
+> +	},
+> +	.intf = {
+> +		.base = { 0x00000, 0x21200 },
+> +		.connect = {
+> +			[0] = INTF_DISABLED,
+> +			[1] = INTF_DSI,
+> +		},
+> +	},
+> +	.perf = {
+> +		.ab_inefficiency = 100,
+> +		.ib_inefficiency = 200,
+> +		.clk_inefficiency = 125
+> +	},
+> +	.max_clk = 200000000,
+> +};
+> +
+>  static const struct mdp5_cfg_hw msm8x74v2_config = {
+>  	.name = "msm8x74",
+>  	.mdp = {
+> @@ -1236,6 +1317,7 @@ static const struct mdp5_cfg_hw sdm660_config = {
+>  
+>  static const struct mdp5_cfg_handler cfg_handlers_v1[] = {
+>  	{ .revision = 0, .config = { .hw = &msm8x74v1_config } },
+> +	{ .revision = 1, .config = { .hw = &msm8x26_config } },
+>  	{ .revision = 2, .config = { .hw = &msm8x74v2_config } },
+>  	{ .revision = 3, .config = { .hw = &apq8084_config } },
+>  	{ .revision = 6, .config = { .hw = &msm8x16_config } },
 > 
-> This code is quite subtle and small changes can cause unintended
-> behavior changes. At the moment the tcp memory accounting and memcg
-> accounting is intermingled and I think we should decouple them.
-
-My original intention to post this patchset is to clarify that:
-
-   - proto pressure only considers sysctl_mem[] (patch 2)
-   - memcg pressure only indicates the pressure inside itself
-   - consider both whenever needs allocation or reclaim (patch 1,3)
-
-In this way, the two kinds of pressure maintain purer semantics, and
-socket core can react on both of them properly and consistently.
-
-> 
->> ---
->>   net/core/sock.c | 23 ++++++++++++++++-------
->>   1 file changed, 16 insertions(+), 7 deletions(-)
->>
->> diff --git a/net/core/sock.c b/net/core/sock.c
->> index 801df091e37a..7641d64293af 100644
->> --- a/net/core/sock.c
->> +++ b/net/core/sock.c
->> @@ -2977,21 +2977,30 @@ int __sk_mem_raise_allocated(struct sock *sk, int size, int amt, int kind)
->>   {
->>   	bool memcg_charge = mem_cgroup_sockets_enabled && sk->sk_memcg;
->>   	struct proto *prot = sk->sk_prot;
->> -	bool charged = true;
->> +	bool charged = true, pressured = false;
->>   	long allocated;
->>   
->>   	sk_memory_allocated_add(sk, amt);
->>   	allocated = sk_memory_allocated(sk);
->> -	if (memcg_charge &&
->> -	    !(charged = mem_cgroup_charge_skmem(sk->sk_memcg, amt,
->> -						gfp_memcg_charge())))
->> -		goto suppress_allocation;
->> +
->> +	if (memcg_charge) {
->> +		charged = mem_cgroup_charge_skmem(sk->sk_memcg, amt,
->> +						  gfp_memcg_charge());
->> +		if (!charged)
->> +			goto suppress_allocation;
->> +		if (mem_cgroup_under_socket_pressure(sk->sk_memcg))
-> 
-> The memcg under pressure callback does a upward memcg tree walk, do
-> please make sure you have tested the performance impact of this.
-
-Yes, I have tested several benchmarks on a dual socket machine modeled
-Intel Xeon(R) Platinum 8260 with SNC disabled, that is 2 NUMA nodes each
-of which has 24C/48T. All the benchmarks are done inside a separate
-cgroup in a clean host. Below shows the result of tbench4 and netperf:
-
-tbench4 Throughput (misleading but traditional)
-                             baseline               patchset
-Hmean     1        377.62 (   0.00%)      375.06 *  -0.68%*
-Hmean     2        753.99 (   0.00%)      753.21 *  -0.10%*
-Hmean     4       1503.50 (   0.00%)     1493.07 *  -0.69%*
-Hmean     8       2941.43 (   0.00%)     2925.18 *  -0.55%*
-Hmean     16      5637.59 (   0.00%)     5603.64 *  -0.60%*
-Hmean     32      9042.90 (   0.00%)     9022.53 *  -0.23%*
-Hmean     64     10530.55 (   0.00%)    10554.89 *   0.23%*
-Hmean     128    24230.20 (   0.00%)    24424.74 *   0.80%*
-Hmean     256    23798.21 (   0.00%)    23941.24 *   0.60%*
-Hmean     384    23620.63 (   0.00%)    23569.54 *  -0.22%*
-
-netperf-udp
-                                    baseline               patchset
-Hmean     send-64         281.99 (   0.00%)      274.50 *  -2.65%*
-Hmean     send-128        556.70 (   0.00%)      545.82 *  -1.96%*
-Hmean     send-256       1102.60 (   0.00%)     1091.21 *  -1.03%*
-Hmean     send-1024      4180.48 (   0.00%)     4073.87 *  -2.55%*
-Hmean     send-2048      7837.61 (   0.00%)     7707.12 *  -1.66%*
-Hmean     send-3312     12157.49 (   0.00%)    11845.03 *  -2.57%*
-Hmean     send-4096     14512.64 (   0.00%)    14156.45 *  -2.45%*
-Hmean     send-8192     24015.40 (   0.00%)    23920.94 (  -0.39%)
-Hmean     send-16384    39875.21 (   0.00%)    39696.67 (  -0.45%)
-Hmean     recv-64         281.99 (   0.00%)      274.50 *  -2.65%*
-Hmean     recv-128        556.70 (   0.00%)      545.82 *  -1.96%*
-Hmean     recv-256       1102.60 (   0.00%)     1091.21 *  -1.03%*
-Hmean     recv-1024      4180.48 (   0.00%)     4073.76 *  -2.55%*
-Hmean     recv-2048      7837.61 (   0.00%)     7707.11 *  -1.67%*
-Hmean     recv-3312     12157.49 (   0.00%)    11845.03 *  -2.57%*
-Hmean     recv-4096     14512.62 (   0.00%)    14156.45 *  -2.45%*
-Hmean     recv-8192     24015.29 (   0.00%)    23920.88 (  -0.39%)
-Hmean     recv-16384    39873.93 (   0.00%)    39696.02 (  -0.45%)
-
-netperf-tcp
-                               baseline               patchset
-Hmean     64        1777.05 (   0.00%)     1793.04 (   0.90%)
-Hmean     128       3364.25 (   0.00%)     3451.05 *   2.58%*
-Hmean     256       6309.21 (   0.00%)     6506.84 *   3.13%*
-Hmean     1024     19571.52 (   0.00%)    19606.65 (   0.18%)
-Hmean     2048     26467.00 (   0.00%)    26658.12 (   0.72%)
-Hmean     3312     31312.36 (   0.00%)    31403.54 (   0.29%)
-Hmean     4096     33263.37 (   0.00%)    33278.77 (   0.05%)
-Hmean     8192     39961.82 (   0.00%)    40149.77 (   0.47%)
-Hmean     16384    46065.33 (   0.00%)    46683.67 (   1.34%)
-
-Except slight regression in netperf-udp, no obvious performance win
-or loss. But as you reminded me of the cost of hierarchical behavior,
-I re-tested the cases in a 5-level depth cgroup (originally 2-level),
-and the results are:
-
-tbench4 Throughput (misleading but traditional)
-                             baseline               patchset
-Hmean     1        361.93 (   0.00%)      367.58 *   1.56%*
-Hmean     2        734.39 (   0.00%)      730.33 *  -0.55%*
-Hmean     4       1426.82 (   0.00%)     1440.81 *   0.98%*
-Hmean     8       2848.86 (   0.00%)     2860.87 *   0.42%*
-Hmean     16      5436.72 (   0.00%)     5491.72 *   1.01%*
-Hmean     32      8743.34 (   0.00%)     8913.27 *   1.94%*
-Hmean     64     10345.41 (   0.00%)    10436.92 *   0.88%*
-Hmean     128    23390.36 (   0.00%)    23353.09 *  -0.16%*
-Hmean     256    23823.20 (   0.00%)    23509.79 *  -1.32%*
-Hmean     384    23268.09 (   0.00%)    23178.10 *  -0.39%*
-
-netperf-udp
-                                    baseline               patchset
-Hmean     send-64         278.31 (   0.00%)      275.68 *  -0.94%*
-Hmean     send-128        554.52 (   0.00%)      547.46 (  -1.27%)
-Hmean     send-256       1106.64 (   0.00%)     1103.01 (  -0.33%)
-Hmean     send-1024      4135.84 (   0.00%)     4057.47 *  -1.89%*
-Hmean     send-2048      7816.13 (   0.00%)     7732.71 *  -1.07%*
-Hmean     send-3312     12068.32 (   0.00%)    11895.94 *  -1.43%*
-Hmean     send-4096     14358.02 (   0.00%)    14304.06 (  -0.38%)
-Hmean     send-8192     24041.57 (   0.00%)    24061.70 (   0.08%)
-Hmean     send-16384    39996.09 (   0.00%)    39936.08 (  -0.15%)
-Hmean     recv-64         278.31 (   0.00%)      275.68 *  -0.94%*
-Hmean     recv-128        554.52 (   0.00%)      547.46 (  -1.27%)
-Hmean     recv-256       1106.64 (   0.00%)     1103.01 (  -0.33%)
-Hmean     recv-1024      4135.84 (   0.00%)     4057.47 *  -1.89%*
-Hmean     recv-2048      7816.13 (   0.00%)     7732.71 *  -1.07%*
-Hmean     recv-3312     12068.32 (   0.00%)    11895.94 *  -1.43%*
-Hmean     recv-4096     14357.99 (   0.00%)    14304.04 (  -0.38%)
-Hmean     recv-8192     24041.43 (   0.00%)    24061.58 (   0.08%)
-Hmean     recv-16384    39995.72 (   0.00%)    39935.68 (  -0.15%)
-
-netperf-tcp
-                               baseline               patchset
-Hmean     64        1779.93 (   0.00%)     1784.75 (   0.27%)
-Hmean     128       3380.32 (   0.00%)     3424.14 (   1.30%)
-Hmean     256       6383.37 (   0.00%)     6504.97 *   1.90%*
-Hmean     1024     19345.07 (   0.00%)    19604.06 *   1.34%*
-Hmean     2048     26547.60 (   0.00%)    26743.94 *   0.74%*
-Hmean     3312     30948.40 (   0.00%)    31419.11 *   1.52%*
-Hmean     4096     32888.83 (   0.00%)    33125.01 *   0.72%*
-Hmean     8192     40020.38 (   0.00%)    39949.53 (  -0.18%)
-Hmean     16384    46084.48 (   0.00%)    46300.43 (   0.47%)
-
-Still no obvious difference, and even the udp regression is reduced.
-
-Thanks & Best,
-	Abel
