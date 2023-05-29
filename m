@@ -2,138 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CEA714C0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A43714C0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjE2O1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
+        id S229742AbjE2O2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjE2O11 (ORCPT
+        with ESMTP id S229562AbjE2O2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:27:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD47ED;
-        Mon, 29 May 2023 07:27:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C3776108F;
-        Mon, 29 May 2023 14:27:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74932C433D2;
-        Mon, 29 May 2023 14:27:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685370438;
-        bh=LCmcN44zu2yuo4XqoPyGygsVCbsY+Qs6nCuuIueHTtI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KSXCop9E8wErtX4kx1Fso7pWTN/Y9yeqoEHrUP6NIVK3BNt050vHPbtEC+JHUboOU
-         GNv18nT8m0jQ5tR0KrgbbAYoMhYkpcVrmIi3/4c7lt/nqpOkxiHHTq5mtTNUTwnUOk
-         oxGbk4o95JoJ9+avlSlEYSVwA45cJeDHxPAIXsAY=
-Date:   Mon, 29 May 2023 15:27:16 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Stanley Chang <stanley_chang@realtek.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Ray Chi <raychi@google.com>, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] usb: phy: add usb phy notify port status API
-Message-ID: <2023052905-maimed-studied-3563@gregkh>
-References: <20230525022617.30537-1-stanley_chang@realtek.com>
+        Mon, 29 May 2023 10:28:01 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A10BE;
+        Mon, 29 May 2023 07:27:58 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d5b4c400fso3839084b3a.1;
+        Mon, 29 May 2023 07:27:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685370478; x=1687962478;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jmuun/VWT+neP2DA7RKfwQ89UBcOBnCQ2W3RabGpYlk=;
+        b=sShWWNQl21iKyy6VI0j8on90ULIeyVnlk1w3zQwvz7MOJzRfMW5cp5G4uijrcrxEY0
+         6C8sKU2Qfzpb3GFSngykxKOa8CLHryobEhZ4eZzXiRyC6Mi6eNG+Ax7UhTl/oFRANKgy
+         epWdGu5xe1F27+rkJh6DJVBn/p25g2l+3p2r93rbc1YY4HC3W01v4hxU7WuxvqpT6LG4
+         PUHfudkGsFaeQKBlCUt4NFIzNEyPMCdPcl4l23AZfQDQQxkj9r6jE+NS8HFqE6uxkeMt
+         ZPUXaQTJOTsgiF+Cb4BrdFDtGUGzPcZHQEna70vWf3MG27npVY5Gzq4OaeMWBPR8Es1Y
+         4oQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685370478; x=1687962478;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jmuun/VWT+neP2DA7RKfwQ89UBcOBnCQ2W3RabGpYlk=;
+        b=EAnLDJDdOvk2msZoaW3fyXjyh6zN6yFH99/0yjSJ03QMmcf9HqU55R86Wf8fdkblIy
+         /j2JH+8XhfCT3r+08SF6M01yW0l8VneNQwLLQWe74UoQTJKT7v3cB3a7qWxSe00LJ7M+
+         28ksJ9xzVZNpjQEtoPx4pSZdoEkqe7/tljdCyrG3VuWrW3xS0iQSoCJdcK5kH1sKgh3F
+         DeklydW3bIGrU0GnqxAkO3AaBxKap7IlpZqzNd5uw/XEtN/P6LWBD2Qo1Kyf0/E/p4Em
+         77eALimYg7TqdDUCQa5283i5EAhYs11TVymW+RrZoRomZ3Ic3E1fE663iTpaLCdcb6Pg
+         wksw==
+X-Gm-Message-State: AC+VfDxvdhZ9wPQP5Rf/f59lllHZnW34jwtnv44pPwht6HjmFHHZTmCB
+        SZuL9B84DgyO2Wyulv/dN2gp04Sjymosyg==
+X-Google-Smtp-Source: ACHHUZ4m+1SBfexp2uuaKCxUBhxnxFcc8rr2wUBHwXHwRK+R4InktUg565WydQIQVbv++T185v9wPw==
+X-Received: by 2002:a05:6a00:228f:b0:63d:368b:76b4 with SMTP id f15-20020a056a00228f00b0063d368b76b4mr16718661pfe.17.1685370477720;
+        Mon, 29 May 2023 07:27:57 -0700 (PDT)
+Received: from [172.30.1.35] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id g10-20020aa7818a000000b0064f97ff4506sm36358pfi.68.2023.05.29.07.27.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 07:27:57 -0700 (PDT)
+Message-ID: <eba06c01-e2bb-f715-8b2e-9c489e7c06d3@gmail.com>
+Date:   Mon, 29 May 2023 23:27:51 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230525022617.30537-1-stanley_chang@realtek.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH5b51a54ae2fa1cc8459b68a28b3c8ca7b7203994] PM / devfreq:
+ mtk-cci: Fix variable deferencing before NULL check
+Content-Language: en-US
+To:     Sukrut Bellary <sukrut.bellary@linux.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <20230518084033.508711-1-sukrut.bellary@linux.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230518084033.508711-1-sukrut.bellary@linux.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 10:26:02AM +0800, Stanley Chang wrote:
-> In Realtek SoC, the parameter of usb phy is designed to can dynamic
-> tuning base on port status. Therefore, add a notify callback of phy
-> driver when usb port status change.
+On 23. 5. 18. 17:40, Sukrut Bellary wrote:
+> smatch warning:
+> drivers/devfreq/mtk-cci-devfreq.c:135 mtk_ccifreq_target()
+> warn: variable dereferenced before check 'drv' (see line 130)
 > 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
-> v1 to v2 change:
->     No change
-> ---
->  drivers/usb/core/hub.c  | 13 +++++++++++++
->  include/linux/usb/phy.h | 14 ++++++++++++++
->  2 files changed, 27 insertions(+)
+> This is based on static analysis only. Compilation tested.
 > 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 97a0f8faea6e..b4fbbeae1927 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -614,6 +614,19 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
->  		ret = 0;
->  	}
->  	mutex_unlock(&hub->status_mutex);
-> +
-> +	if (!ret) {
-> +		struct usb_device *hdev = hub->hdev;
-> +
-> +		if (hdev && !hdev->parent) {
-> +			struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
-> +
-> +			if (hcd->usb_phy)
-> +				usb_phy_notify_port_status(hcd->usb_phy,
-> +					    port1 - 1, *status, *change);
-> +		}
-> +	}
-> +
->  	return ret;
->  }
->  
-> diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
-> index e4de6bc1f69b..53bf3540098f 100644
-> --- a/include/linux/usb/phy.h
-> +++ b/include/linux/usb/phy.h
-> @@ -144,6 +144,10 @@ struct usb_phy {
->  	 */
->  	int	(*set_wakeup)(struct usb_phy *x, bool enabled);
->  
-> +	/* notify phy port status change */
-> +	int	(*notify_port_status)(struct usb_phy *x,
-> +		int port, u16 portstatus, u16 portchange);
-> +
->  	/* notify phy connect status change */
->  	int	(*notify_connect)(struct usb_phy *x,
->  			enum usb_device_speed speed);
-
-Why can't this be part of the same notify_connect() callback?
-
-What makes it different somehow?  Please document this much better.
-
-
-> @@ -316,6 +320,16 @@ usb_phy_set_wakeup(struct usb_phy *x, bool enabled)
+> Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
+> ---
+>  drivers/devfreq/mtk-cci-devfreq.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
+> index e5458ada5197..6354622eda65 100644
+> --- a/drivers/devfreq/mtk-cci-devfreq.c
+> +++ b/drivers/devfreq/mtk-cci-devfreq.c
+> @@ -127,7 +127,7 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
+>  			      u32 flags)
+>  {
+>  	struct mtk_ccifreq_drv *drv = dev_get_drvdata(dev);
+> -	struct clk *cci_pll = clk_get_parent(drv->cci_clk);
+> +	struct clk *cci_pll;
+>  	struct dev_pm_opp *opp;
+>  	unsigned long opp_rate;
+>  	int voltage, pre_voltage, inter_voltage, target_voltage, ret;
+> @@ -139,6 +139,7 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
 >  		return 0;
->  }
 >  
-> +static inline int
-> +usb_phy_notify_port_status(struct usb_phy *x, int port, u16 portstatus,
-> +	    u16 portchange)
-> +{
-> +	if (x && x->notify_port_status)
+>  	inter_voltage = drv->inter_voltage;
+> +	cci_pll = clk_get_parent(drv->cci_clk);
+>  
+>  	opp_rate = *freq;
+>  	opp = devfreq_recommended_opp(dev, &opp_rate, 1);
 
-How can x ever be NULL?
+Applied it. Thanks.
 
-thanks,
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
-greg k-h
