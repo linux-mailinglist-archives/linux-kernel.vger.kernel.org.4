@@ -2,113 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF9B714D5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE52714D5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbjE2PtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S230076AbjE2Pud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjE2PtU (ORCPT
+        with ESMTP id S229608AbjE2Pub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:49:20 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6376CC7;
-        Mon, 29 May 2023 08:49:16 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-2566ed9328eso1283177a91.2;
-        Mon, 29 May 2023 08:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685375356; x=1687967356;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Tvy4LC5km0zgmb9Tfu+uBN8Z3LNjnPdumUgMICLrwQ=;
-        b=JnC7FAf0AvDM8j4e+SvZ5JIRqbKo7QY2mR4jSdUXyvsY0mWPCDASHyYk5OfQFl+P5r
-         Qxmbde5rj7t+bqEQJehC2ZZAoau7TyFZfugqUjiiPYDJh4WSC87d/ceqThG3cMI4VFQo
-         JLOpXAvOWBEvEv7JGF4j2ZzAIAwQ3kl4UGAmXoO8BODUTor1br1CdpYBVkf9CPJrMhWW
-         sMSgJmrAZib2GqhVOdHgiVNrKO+MPbSWllhzHqrId2I40k1+msTmoTmVM3zK/VhNmYQa
-         rq9jXcmswS/UlqzgXH93dZQXahZ+pteEkZgHig2hAjDrloELoF+8qjPrCA6YFO+jL7nB
-         Ycig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685375356; x=1687967356;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9Tvy4LC5km0zgmb9Tfu+uBN8Z3LNjnPdumUgMICLrwQ=;
-        b=i/TB6F4xhXg0KfN9ww8xwjG6TbNVN9JkNLM/6AE9dXrPHL8wwCt1Gv+CfIGDbSZNPL
-         VrZEG7Q5i0scpYzj7D/D+1043fyaj/wQJddLbMITNDFrUvmy0QP98hkf/9JdrJkDCG4M
-         +w0KL4gZOWB5WiE7c5wyjJug9eYevc57a+mbO2ffjlaYFqILLZDhgMy4IjamOkW8zVX/
-         Y1fO6LXGg74uJDZ7FamlT9zD4zAnkSn1goJnBjUqGiKtqHTQN+CN6/cFgz8uUp/B5VaG
-         8QVFMCt6nPIqUj1vUQEEWh2kXIAytVXxxftvAyLsSVAitf1ld1mYnJzQS1sByWEb/pGO
-         QQqw==
-X-Gm-Message-State: AC+VfDwjzoKYhKLv68x9ZpBwFrteTksjHIk2VwvxuqbhIrE2j0iwFWoe
-        Z+xLCTETXBJgjdHxENTuU5A=
-X-Google-Smtp-Source: ACHHUZ6hlI/duiNqbAFJIBc+TMmkxccm5bn4NseHDohtfYHgalx3c5p9DPkJbi3hT/9HCnTCeouXVw==
-X-Received: by 2002:a17:903:22c2:b0:1b0:5304:5b4e with SMTP id y2-20020a17090322c200b001b053045b4emr692277plg.43.1685375355748;
-        Mon, 29 May 2023 08:49:15 -0700 (PDT)
-Received: from localhost.localdomain ([106.39.42.38])
-        by smtp.gmail.com with ESMTPSA id w12-20020a170902a70c00b001ac381f1ce9sm8425499plq.185.2023.05.29.08.49.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 08:49:15 -0700 (PDT)
-From:   starmiku1207184332@gmail.com
-To:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Teng Qi <starmiku1207184332@gmail.com>
-Subject: [PATCH] kernel: bpf: syscall: fix a possible sleep-in-atomic bug in __bpf_prog_put()
-Date:   Mon, 29 May 2023 15:48:52 +0000
-Message-Id: <20230529154852.584377-1-starmiku1207184332@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 29 May 2023 11:50:31 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92109C4;
+        Mon, 29 May 2023 08:50:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685375430; x=1716911430;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=mMZh0kAlYL2zmA97tU/xmL590jHHYcGK+jhWW5T1MvI=;
+  b=h3fRTwWYo47xtPQmKwwZC3oj/0S8IFN0x0d/6H3/QFhQ/uvJBFc8C0Jm
+   V9M66H1b5iZ2H4UOXp3B6W7kE5QMDE9N4cNGwi9NB/7xmIbxgtW03qd4v
+   gKQxdNAphm8uEb6GCMS/AEJG3sqmxZlPfkCnmEh1nOamSkV9zIjOEhf2c
+   VSys3SrKbZQcprUuayU8j4i0V7v/wQBPTtjYvZP1Mi2eIGz0W+SKdGqse
+   vzEO98zr0VfsjaOXLNv1Qp6mkJhp6ROZ/HVhO2l8W58HOByUK92GDhdkH
+   gC1NJxxV2SpMMkC1jasVlu1xNvh+Jins7+SmwROoBy/Ltdqn7Zx8lQAWu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="418217876"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="418217876"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 08:50:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="700306400"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="700306400"
+Received: from btaubert-mobl1.ger.corp.intel.com ([10.252.55.237])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 08:50:27 -0700
+Date:   Mon, 29 May 2023 18:50:24 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Mark Pearson <mpearson-lenovo@squebb.ca>
+cc:     Hans de Goede <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/5] platform/x86: think-lmi: Correct System password
+ interface
+In-Reply-To: <e71b1911-5105-4e19-9c86-6146f07a6b00@app.fastmail.com>
+Message-ID: <3b2dfd18-a6f2-46a6-19dd-4ee95d5e9471@linux.intel.com>
+References: <mpearson-lenovo@squebb.ca> <20230526171658.3886-1-mpearson-lenovo@squebb.ca> <20230526171658.3886-2-mpearson-lenovo@squebb.ca> <ff5513d9-ecf-50d3-1bb3-644a1d2c2347@linux.intel.com> <e71b1911-5105-4e19-9c86-6146f07a6b00@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-1304189898-1685375198=:2737"
+Content-ID: <54c48c31-1276-8f71-a0-d2d9119cb7b@linux.intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Teng Qi <starmiku1207184332@gmail.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Although we haven`t found a proper way to identify the rcu read lock region,
-we have noticed that vfree() calls vfree_atomic() with the
-condition 'in_interrupt()' to ensure safety.
+--8323329-1304189898-1685375198=:2737
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <3bfa6cb0-ce43-6b19-c661-90466faeb9c3@linux.intel.com>
 
-To make __bpf_prog_put() safe in practice, we propose calling
-bpf_prog_put_deferred() with the condition 'in_interrupt()' and
-using the work queue for any other context.
+On Mon, 29 May 2023, Mark Pearson wrote:
 
-We also added a comment to indicate that the safety of  __bpf_prog_put()
-relies implicitly on the implementation of vfree().
+> Thanks Ilpo
+> 
+> On Mon, May 29, 2023, at 7:36 AM, Ilpo Järvinen wrote:
+> > On Fri, 26 May 2023, Mark Pearson wrote:
+> >
+> >> The system password identification was incorrect. This means that if
+> >> the password was enabled it wouldn't be detected correctly; and setting
+> >> it would not work.
+> >> Also updated code to use TLMI_SMP_PWD instead of TLMI_SYS_PWD to be in
+> >> sync with Lenovo documentation.
+> >> 
+> >> Correct these mistakes.
+> >> 
+> >> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+> >
+> > Missing Fixes tag?
+> 
+> Yes - will add.
+> 
+> >
+> >> ---
+> >> Changes in v2:
+> >>  - Updated define name to be SMP_PWD instead of SYS_PWD
+> >>  - Clarified in comments what each password type is.
+> >> Changes in v3: None. Version bump with rest of series
+> >> 
+> >>  drivers/platform/x86/think-lmi.c | 14 +++++++-------
+> >>  1 file changed, 7 insertions(+), 7 deletions(-)
+> >> 
+> >> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+> >> index 2745224f62ab..c7e98fbe7c3d 100644
+> >> --- a/drivers/platform/x86/think-lmi.c
+> >> +++ b/drivers/platform/x86/think-lmi.c
+> >> @@ -168,11 +168,11 @@ MODULE_PARM_DESC(debug_support, "Enable debug command support");
+> >>   */
+> >>  #define LENOVO_CERT_THUMBPRINT_GUID "C59119ED-1C0D-4806-A8E9-59AA318176C4"
+> >>  
+> >> -#define TLMI_POP_PWD (1 << 0)
+> >> -#define TLMI_PAP_PWD (1 << 1)
+> >> -#define TLMI_HDD_PWD (1 << 2)
+> >> -#define TLMI_SYS_PWD (1 << 3)
+> >> -#define TLMI_CERT    (1 << 7)
+> >> +#define TLMI_POP_PWD (1 << 0) /* Supervisor */
+> >> +#define TLMI_PAP_PWD (1 << 1) /* Power-on */
+> >> +#define TLMI_HDD_PWD (1 << 2) /* HDD/NVME */
+> >> +#define TLMI_SMP_PWD (1 << 6) /* System Management */
+> >> +#define TLMI_CERT    (1 << 7) /* Certificate Based */
+> >
+> > Whe you're adding Fixes tag, please make this change minimal by just 
+> > adding TLMI_SMP_PWD.
+> >
+> > The rest of these define changes are a good too but it's unrelated to the 
+> > actual fix so they should be in a separate patch. And once you move it 
+> > into own change, convert to BIT() while at it.
+> 
+> I was asked previously to clarify what SMP stood for so added the 
+> comment and it seemed odd to only clarify one and not the others. 
+> Can I push back on this request. Doing two separate patches for just 
+> that doesn't make sense to me.
 
-Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
----
- kernel/bpf/syscall.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+I did not mean removing TLMI_SMP_PWD's comment from this patch just to add 
+it in the another but the comments to the other bits which should go into 
+their own patch. The thing here is that fixes should be made minimal to 
+comply with stable rules.
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 14f39c1e573e..48ff5d2e163a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2099,10 +2099,12 @@ static void __bpf_prog_put(struct bpf_prog *prog)
- 	struct bpf_prog_aux *aux = prog->aux;
- 
- 	if (atomic64_dec_and_test(&aux->refcnt)) {
--		if (in_irq() || irqs_disabled()) {
-+		if (!in_interrupt()) {
-+			// safely calling vfree() under any context
- 			INIT_WORK(&aux->work, bpf_prog_put_deferred);
- 			schedule_work(&aux->work);
- 		} else {
-+			// depending on the vfree_atomic() branch in vfree()
- 			bpf_prog_put_deferred(&aux->work);
- 		}
- 	}
 -- 
-2.25.1
-
+ i.
+--8323329-1304189898-1685375198=:2737--
