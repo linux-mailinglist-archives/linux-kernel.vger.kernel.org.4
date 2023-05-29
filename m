@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84040714662
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B358714664
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbjE2Ii5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S231496AbjE2IkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjE2Iiz (ORCPT
+        with ESMTP id S229965AbjE2IkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:38:55 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56633A4;
-        Mon, 29 May 2023 01:38:54 -0700 (PDT)
-Received: from g550jk.localnet (217-149-172-244.nat.highway.telekom.at [217.149.172.244])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 95F33C6A55;
-        Mon, 29 May 2023 08:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1685349502; bh=uOnCZnZI6C1aOMtX/ZNJQr6sz8PO+7+LG0+1e7bYZjk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=p4ZV1g9EgMR07boeQSo2YgIWBm/O7DoSiUrF6CdueTH+ShW5PvLatDbYUFK9Dt0r1
-         jGjvXg+uwU4Zkbnw8/tH2WizWmWH7lC6EWXjEBe89CNq92qA+1S32w9IhfYGYuFQon
-         eYGr4cC4JsoQD4mATCeg8Ol/NopoMtfVxWbGiY/A=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] soc: qcom: ocmem: Add OCMEM hardware version print
-Date:   Mon, 29 May 2023 10:38:20 +0200
-Message-ID: <2680722.mvXUDI8C0e@z3ntu.xyz>
-In-Reply-To: <cac92fae-310f-79b1-7204-ac9deb2c3319@linaro.org>
-References: <20230509-ocmem-hwver-v2-1-8c8793a07dfc@z3ntu.xyz>
- <cac92fae-310f-79b1-7204-ac9deb2c3319@linaro.org>
+        Mon, 29 May 2023 04:40:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A006BB5;
+        Mon, 29 May 2023 01:40:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ABCC61260;
+        Mon, 29 May 2023 08:40:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39476C433EF;
+        Mon, 29 May 2023 08:40:06 +0000 (UTC)
+Date:   Mon, 29 May 2023 04:40:02 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux trace kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: [PATCH] tracing/rv/rtla: Update MAINTAINERS file to point to proper
+ mailing list
+Message-ID: <20230529044002.0481452b@rorschach.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,98 +45,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Freitag, 26. Mai 2023 21:39:44 CEST Konrad Dybcio wrote:
-> On 23.05.2023 22:32, Luca Weiss wrote:
-> > It might be useful to know what hardware version of the OCMEM block the
-> > SoC contains. Add a debug print for that.
-> > 
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> > This patch is depends on [0] but could also be applied in the other
-> > order, if conflicts are resolved.
-> > 
-> > [0]
-> > https://lore.kernel.org/linux-arm-msm/20230506-msm8226-ocmem-v1-1-3e24e27
-> > 24f01@z3ntu.xyz/ ---
-> > Changes in v2:
-> > - Use FIELD_GET macros for getting correct bits from register (take
-> > 
-> >   wording from mdp5: major, minor, step which hopefully is sort of
-> >   accurate)
-> 
-> Qualcomm uses that (or that-ish) nomenclature for many hw blocks, so
-> it's likely spot on.
-> 
-> > - Link to v1:
-> > https://lore.kernel.org/r/20230509-ocmem-hwver-v1-1-b83ece3f2168@z3ntu.xy
-> > z ---
-> > 
-> >  drivers/soc/qcom/ocmem.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
-> > index c3e78411c637..9f7c3348cbb9 100644
-> > --- a/drivers/soc/qcom/ocmem.c
-> > +++ b/drivers/soc/qcom/ocmem.c
-> > @@ -76,6 +76,10 @@ struct ocmem {
-> > 
-> >  #define OCMEM_REG_GFX_MPU_START			0x00001004
-> >  #define OCMEM_REG_GFX_MPU_END			0x00001008
-> > 
-> > +#define OCMEM_HW_VERSION_MAJOR(val)		FIELD_GET(GENMASK(31, 28), val)
-> > +#define OCMEM_HW_VERSION_MINOR(val)		FIELD_GET(GENMASK(27, 16), val)
-> > +#define OCMEM_HW_VERSION_STEP(val)		FIELD_GET(GENMASK(15, 0), val)
-> > +
-> > 
-> >  #define OCMEM_HW_PROFILE_NUM_PORTS(val)		FIELD_GET(0x0000000f, (val))
-> >  #define OCMEM_HW_PROFILE_NUM_MACROS(val)	FIELD_GET(0x00003f00, (val))
-> > 
-> > @@ -355,6 +359,11 @@ static int ocmem_dev_probe(struct platform_device
-> > *pdev)> 
-> >  		}
-> >  	
-> >  	}
-> > 
-> > +	reg = ocmem_read(ocmem, OCMEM_REG_HW_VERSION);
-> > +	dev_dbg(dev, "OCMEM hardware version: %ld.%ld.%ld\n",
-> 
-> reg is an unsigned long (u32), this should probably be %u
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-I can make it %lu, just %u gives me this warning
+The mailing list that goes to linux-trace-devel is for the tracing
+libraries, and the patchwork associated to the tracing libraries keys
+off of that mailing list.
 
-drivers/soc/qcom/ocmem.c:363:22: warning: format '%u' expects argument of type 'unsigned int', but argument 6 has type 'long unsigned int' [-Wformat=]
-  363 |         dev_dbg(dev, "OCMEM hardware version: %u.%u.%u\n",
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+For anything that lives in the Linux kernel proper (including the tools
+directory) must go through linux-trace-kernel, as the patchwork to that
+list keys off of the Linux kernel proper.
 
+Update the MAINTAINERS file to reflect the proper mailing lists.
 
-Will send a v3 with that.
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ MAINTAINERS | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> > +		OCMEM_HW_VERSION_MAJOR(reg), OCMEM_HW_VERSION_MINOR(reg),
-> > +		OCMEM_HW_VERSION_STEP(reg));
-> 
-> Nit: one per line would make this the tiniest bit easier to read
-
-ack
-
-Regards
-Luca
-
-> 
-> Konrad
-> 
-> > +
-> > 
-> >  	reg = ocmem_read(ocmem, OCMEM_REG_HW_PROFILE);
-> >  	ocmem->num_ports = OCMEM_HW_PROFILE_NUM_PORTS(reg);
-> >  	ocmem->num_macros = OCMEM_HW_PROFILE_NUM_MACROS(reg);
-> > 
-> > ---
-> > base-commit: 8705151771af822ac794b44504cd72eebc423499
-> > change-id: 20230509-ocmem-hwver-99bcb33b028b
-> > 
-> > Best regards,
-
-
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e0ad886d3163..5bb6dccd6ea3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17808,7 +17808,7 @@ F:	tools/testing/selftests/rtc/
+ Real-time Linux Analysis (RTLA) tools
+ M:	Daniel Bristot de Oliveira <bristot@kernel.org>
+ M:	Steven Rostedt <rostedt@goodmis.org>
+-L:	linux-trace-devel@vger.kernel.org
++L:	linux-trace-kernel@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/tools/rtla/
+ F:	tools/tracing/rtla/
+@@ -18370,7 +18370,7 @@ F:	drivers/infiniband/ulp/rtrs/
+ RUNTIME VERIFICATION (RV)
+ M:	Daniel Bristot de Oliveira <bristot@kernel.org>
+ M:	Steven Rostedt <rostedt@goodmis.org>
+-L:	linux-trace-devel@vger.kernel.org
++L:	linux-trace-kernel@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/trace/rv/
+ F:	include/linux/rv.h
+-- 
+2.39.2
 
