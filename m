@@ -2,123 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B7D7146AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8297146BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbjE2Izb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S231752AbjE2I5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjE2Iz2 (ORCPT
+        with ESMTP id S231745AbjE2I5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:55:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6D799;
-        Mon, 29 May 2023 01:55:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11C5C612FB;
-        Mon, 29 May 2023 08:55:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C24AC4339B;
-        Mon, 29 May 2023 08:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685350526;
-        bh=i9OWnfmGmJQVxNLboSBkfNDRCM4AooOMGIVwfZgR5iI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q92vEVrXzUJr0mlI8GSb7Qd940qzEgMw9HA68RlTkPMu9aPFQQSG8QXHk2O6/60gb
-         TLj79uIJvG9CNkKPxtJyouG9FsORzuej0iS6qN85GE6RT0OEZBh/qSxTHLv9NmLMvw
-         wTxgdHoQ9d5Y3hZMf4s97tchiwaaZooPevQ73zo/AYNNYKJs0vg3t/B+yLNL8grrjx
-         LazyDJpX9zui//MZUOjEctHRVq3b7TxUtchfowuU/5HusSHjG3HXR4pNxBdipJGNeJ
-         LG6c6C0lkXxmpv34I1yYKYyZc55lsAlZW8r0goh3b+p6H5d+r97KXwnLD4bpqTb2tO
-         v/K3LifVnImCA==
-Date:   Mon, 29 May 2023 14:25:12 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        kw@linux.com, bhelgaas@google.com, robh@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, steev@kali.org,
-        quic_srichara@quicinc.com, dmitry.baryshkov@linaro.org,
-        Dmitry Baryshkov <dmitry.baryshkov@gmail.com>
-Subject: Re: [PATCH v2 2/8] PCI: qcom: Disable write access to read only
- registers for IP v2.9.0
-Message-ID: <20230529085512.GB5633@thinkpad>
-References: <20230519143117.23875-1-manivannan.sadhasivam@linaro.org>
- <20230519143117.23875-3-manivannan.sadhasivam@linaro.org>
- <ZGsuM8CAv7AtluVx@lpieralisi>
+        Mon, 29 May 2023 04:57:12 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AB0E1;
+        Mon, 29 May 2023 01:57:08 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-30ac4e7f37bso1742308f8f.2;
+        Mon, 29 May 2023 01:57:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685350627; x=1687942627;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dC1z7TxrFRGvIM8czoQTNj2lj+LHfuh6uG4Bml/WNHU=;
+        b=eNnGa1NWtqhV1Gre2Lqvt7nBp96r8ibRC5poe0nnCVb2NIt5VbxYdkJfm2CqM7iNyf
+         vnJ+Lz0Nv16FuNEhny8OSCNcxRO+rOdvq2YNGFvaklyZjfQe9SV1vaD/UUydlNtVXcFz
+         CFUmDNujXt0doyOB/5FiDlcVov+ncroC7wkrsF54ajpAV/2cBDPpW/amvL8bYaUpbJXe
+         +vTBfy93ueB2Ak8ZLIXll8wSpJIsSWPeg9B5X/CffGJHDqB8Hdhu9gGjCMMWCiWZ5101
+         4rTKc8h5nnQlsDUfdZq8cEOl5KO8cCtqfaKVaYS+OmowNQ4E23mL5n5cgPAo4P9EYil9
+         h/MQ==
+X-Gm-Message-State: AC+VfDzdvMoL70eNYaiKZHgGaEAx5Fw6ttcvL6jq/Ljst+800auDol0p
+        bDqkpIY6uYKQr6KTMJ9EsAtD/7JA0QYRJw==
+X-Google-Smtp-Source: ACHHUZ44OOaypqKpQSVa5J7G2mPJg/i80osfFw4GU+e+djItaD+sx4uNdZQoahMJ/F0ub0dCqGtr7w==
+X-Received: by 2002:adf:dbcb:0:b0:30a:f02e:3f46 with SMTP id e11-20020adfdbcb000000b0030af02e3f46mr831013wrj.35.1685350626854;
+        Mon, 29 May 2023 01:57:06 -0700 (PDT)
+Received: from costa-tp.bos2.lab ([2a00:a040:1a3:c11b:3ae6:1732:e587:a81f])
+        by smtp.gmail.com with ESMTPSA id t2-20020a0560001a4200b003062ad45243sm13002835wry.14.2023.05.29.01.57.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 01:57:06 -0700 (PDT)
+From:   Costa Shulyupin <costa.shul@redhat.com>
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     Costa Shulyupin <costa.shul@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] docs: consolidate storage interfaces
+Date:   Mon, 29 May 2023 11:55:20 +0300
+Message-Id: <20230529085521.2574848-1-costa.shul@redhat.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZGsuM8CAv7AtluVx@lpieralisi>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 10:56:19AM +0200, Lorenzo Pieralisi wrote:
-> On Fri, May 19, 2023 at 08:01:11PM +0530, Manivannan Sadhasivam wrote:
-> > In the post init sequence of v2.9.0, write access to read only registers
-> > are not disabled after updating the registers. Fix it by disabling the
-> > access after register update.
-> > 
-> > Fixes: 0cf7c2efe8ac ("PCI: qcom: Add IPQ60xx support")
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@gmail.com>
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-qcom.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > index 01795ee7ce45..391a45d1e70a 100644
-> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > @@ -1136,6 +1136,7 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> >  	writel(0, pcie->parf + PARF_Q2A_FLUSH);
-> >  
-> >  	dw_pcie_dbi_ro_wr_en(pci);
-> > +
-> 
-> Nit: spurious change.
-> 
+to make the page more organized as requested
 
-Well that's intentional. It's good to have a newline between these guard
-functions to differentiate them from the DBI accesses. We do it in other places
-in the driver.
+Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
+---
+ Documentation/subsystem-apis.rst | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-But I thought this change doesn't warrant a mention in commit message or a
-separate patch.
-
-Let me know otherwise.
-
-- Mani
-
-> Lorenzo
-> 
-> >  	writel(PCIE_CAP_SLOT_VAL, pci->dbi_base + offset + PCI_EXP_SLTCAP);
-> >  
-> >  	val = readl(pci->dbi_base + offset + PCI_EXP_LNKCAP);
-> > @@ -1145,6 +1146,8 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
-> >  	writel(PCI_EXP_DEVCTL2_COMP_TMOUT_DIS, pci->dbi_base + offset +
-> >  			PCI_EXP_DEVCTL2);
-> >  
-> > +	dw_pcie_dbi_ro_wr_dis(pci);
-> > +
-> >  	for (i = 0; i < 256; i++)
-> >  		writel(0, pcie->parf + PARF_BDF_TO_SID_TABLE_N + (4 * i));
-> >  
-> > -- 
-> > 2.25.1
-> > 
-
+diff --git a/Documentation/subsystem-apis.rst b/Documentation/subsystem-apis.rst
+index 55c90d5383ef..f7fe772835e5 100644
+--- a/Documentation/subsystem-apis.rst
++++ b/Documentation/subsystem-apis.rst
+@@ -22,6 +22,17 @@ Human interfaces
+    gpu/index
+    fb/index
+ 
++Storage interfaces
++------------------
++
++.. toctree::
++   :maxdepth: 1
++
++   filesystems/index
++   block/index
++   cdrom/index
++   scsi/index
++
+ **Fixme**: much more organizational work is needed here.
+ 
+ .. toctree::
+@@ -31,8 +42,6 @@ Human interfaces
+    core-api/index
+    locking/index
+    accounting/index
+-   block/index
+-   cdrom/index
+    cpu-freq/index
+    fpga/index
+    i2c/index
+@@ -54,12 +63,10 @@ Human interfaces
+    accel/index
+    security/index
+    crypto/index
+-   filesystems/index
+    mm/index
+    bpf/index
+    usb/index
+    PCI/index
+-   scsi/index
+    misc-devices/index
+    scheduler/index
+    mhi/index
 -- 
-மணிவண்ணன் சதாசிவம்
+2.40.1
+
