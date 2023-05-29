@@ -2,190 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68037145F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45A27145DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbjE2IFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
+        id S230229AbjE2ICj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbjE2IE4 (ORCPT
+        with ESMTP id S229556AbjE2ICf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:04:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679BB1BE;
-        Mon, 29 May 2023 01:04:25 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QV7JY19K6zsSMH;
-        Mon, 29 May 2023 16:01:17 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
- (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 29 May
- 2023 16:03:29 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <jun.nie@linaro.org>, <ebiggers@kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
-        <libaokun1@huawei.com>,
-        <syzbot+a158d886ca08a3fecca4@syzkaller.appspotmail.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH] ext4: fix race condition between buffer write and page_mkwrite
-Date:   Mon, 29 May 2023 16:01:48 +0800
-Message-ID: <20230529080148.3810143-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 29 May 2023 04:02:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFFEA7;
+        Mon, 29 May 2023 01:02:33 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 79C1C6605961;
+        Mon, 29 May 2023 09:02:31 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685347352;
+        bh=A4ZNREQoh5/KC7x7Aai+h2epscmtPk1u6BBSzcPw1yE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dX6SHWyOxgUzPCOpqEMFwfU+oDrE2Q9SSL6ricQ3zd7lGcaD3r9IwZdbfbjLB40Ik
+         Sp4UqpDoKXrblE28lnsvwltd+8w2d1o57AMCrzERi6Zr3wrjVGUhC+zN5y5Tpk1kD6
+         eOpc8OW1TZ+ytBLa4U0aLa/o2vJCU+gXldjU5EoOJB8mUwz08lgUMnRqyw811AxiRX
+         k4EIiiMVX3rQP1iElyi+w4xNvoFcIfxZAzWHGN+5I1x9LAg0ZCUnAp+6f3dN5rJ7BN
+         X6qv/9KC+Oc3PFU/EKQzH+OcXUw0LAmu+4wh/6fRoIt/mkdD5khf6bc9v01SLa+C3B
+         fLDu65wLzWeSg==
+Message-ID: <f4a9e090-3712-200e-bd09-70090c9cccbc@collabora.com>
+Date:   Mon, 29 May 2023 10:02:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8173-elm: remove panel model
+ number in DT
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        Pin-yen Lin <treapking@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
+References: <20230526100801.16310-1-uwu@icenowy.me>
+ <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reported a BUG_ON:
-==================================================================
-EXT4-fs (loop0): mounted filesystem without journal. Quota mode: none.
-EXT4-fs error (device loop0): ext4_mb_generate_buddy:1098: group 0, block
-     bitmap and bg descriptor inconsistent: 25 vs 150994969 free clusters
-------------[ cut here ]------------
-kernel BUG at fs/ext4/ext4_jbd2.c:53!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 494 Comm: syz-executor.0 6.1.0-rc7-syzkaller-ga4412fdd49dc #0
-RIP: 0010:__ext4_journal_stop+0x1b3/0x1c0
- [...]
-Call Trace:
- ext4_write_inline_data_end+0xa39/0xdf0
- ext4_da_write_end+0x1e2/0x950
- generic_perform_write+0x401/0x5f0
- ext4_buffered_write_iter+0x35f/0x640
- ext4_file_write_iter+0x198/0x1cd0
- vfs_write+0x8b5/0xef0
- [...]
-==================================================================
+Il 26/05/23 16:24, Doug Anderson ha scritto:
+> Hi,
+> 
+> On Fri, May 26, 2023 at 3:09 AM Icenowy Zheng <uwu@icenowy.me> wrote:
+>>
+>> Currently a specific panel number is used in the Elm DTSI, which is
+>> corresponded to a 12" panel. However, according to the official Chrome
+>> OS devices document, Elm refers to Acer Chromebook R13, which, as the
+>> name specifies, uses a 13.3" panel, which comes with EDID information.
+>>
+>> As the kernel currently prioritizes the hardcoded timing parameters
+>> matched with the panel number compatible, a wrong timing will be applied
+>> to the 13.3" panel on Acer Chromebook R13, which leads to blank display.
+>>
+>> Because the Elm DTSI is shared with Hana board, and Hana corresponds to
+>> multiple devices from 11" to 14", a certain panel model number shouldn't
+>> be present, and driving the panel according to its EDID information is
+>> necessary.
+>>
+>> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+>> ---
+>>   arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> We went through a bunch of back-and-forth here but in the end in the
+> ChromeOS tree we have "edp-panel" as the "compatible" here in the
+> ChromeOS 5.15 tree and this makes sense.
+> 
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> 
+> ...in theory one would wish for a "Fixes" tag, but I think in previous
+> discussions it was decided that it was too complicated. Hardcoding the
+> other compatible string has always been technically wrong, but I guess
+> it worked at some point in time. The more correct way (as you're doing
+> here) needs the DP AUX bus support and the generic eDP panels, both of
+> which are significantly newer than the elm dts. So I guess leaving no
+> "Fixes" tag is OK, or perhaps you could do the somewhat weak:
+> 
+> Fixes: c2d94f72140a ("arm64: dts: mediatek: mt8173-elm: Move display
+> to ps8640 auxiliary bus")
 
-The above BUG_ON is triggered by the following race:
+I remember I didn't change the compatible to panel-edp because it didn't
+work at that time, but it does now... I'm not sure what actually fixed that
+and if the commit(s) was/were backported to that suggested point, so I
+would leave the Fixes tag out, as that may break older kernels.
 
-           cpu1                    cpu2
-________________________|________________________
-ksys_write
- vfs_write
-  new_sync_write
-   ext4_file_write_iter
-    ext4_buffered_write_iter
-     generic_perform_write
-      ext4_da_write_begin
-                          do_fault
-                           do_page_mkwrite
-                            ext4_page_mkwrite
-                             ext4_convert_inline_data
-                              ext4_convert_inline_data_nolock
-                               ext4_destroy_inline_data_nolock
-                                //clear EXT4_STATE_MAY_INLINE_DATA
-                               ext4_map_blocks --> return error
-       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
-       ext4_block_write_begin
-                               ext4_restore_inline_data
-                                // set EXT4_STATE_MAY_INLINE_DATA
-      ext4_da_write_end
-       ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
-       ext4_write_inline_data_end
-        handle=NULL
-        ext4_journal_stop(handle)
-         __ext4_journal_stop
-          ext4_put_nojournal(handle)
-           ref_cnt = (unsigned long)handle
-           BUG_ON(ref_cnt == 0)  ---> BUG_ON
+Anyway, for this commit:
 
-The root cause of this problem is that the ext4_convert_inline_data() in
-ext4_page_mkwrite() does not grab i_rwsem, so it may race with
-ext4_buffered_write_iter() and cause the write_begin() and write_end()
-functions to be inconsistent and trigger BUG_ON.
-
-To solve the above issue, we cannot add inode_lock directly to
-ext4_page_mkwrite(), because this function is a hot path and frequent calls
-to inode_lock will cause performance degradation for multi-threaded reads
-and writes. Hence, we move ext4_convert_inline_data() to ext4_file_mmap(),
-and only when inline_data is enabled and mmap a file in shared write mode,
-we hold the lock to convert, which can reduce the impact on performance.
-
-Reported-by: Jun Nie <jun.nie@linaro.org>
-Closes: https://lore.kernel.org/lkml/63903521.5040307@huawei.com/t/
-Reported-by: syzbot+a158d886ca08a3fecca4@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?id=899b37f20ce4072bcdfecfe1647b39602e956e36
-Fixes: 7b4cc9787fe3 ("ext4: evict inline data when writing to memory map")
-CC: stable@vger.kernel.org # 4.12+
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
- fs/ext4/file.c  | 24 +++++++++++++++++++++++-
- fs/ext4/inode.c |  4 ----
- 2 files changed, 23 insertions(+), 5 deletions(-)
-
-diff --git a/fs/ext4/file.c b/fs/ext4/file.c
-index d101b3b0c7da..7a04376c33f2 100644
---- a/fs/ext4/file.c
-+++ b/fs/ext4/file.c
-@@ -795,7 +795,8 @@ static const struct vm_operations_struct ext4_file_vm_ops = {
- static int ext4_file_mmap(struct file *file, struct vm_area_struct *vma)
- {
- 	struct inode *inode = file->f_mapping->host;
--	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
-+	struct super_block *sb = inode->i_sb;
-+	struct ext4_sb_info *sbi = EXT4_SB(sb);
- 	struct dax_device *dax_dev = sbi->s_daxdev;
- 
- 	if (unlikely(ext4_forced_shutdown(sbi)))
-@@ -808,6 +809,27 @@ static int ext4_file_mmap(struct file *file, struct vm_area_struct *vma)
- 	if (!daxdev_mapping_supported(vma, dax_dev))
- 		return -EOPNOTSUPP;
- 
-+	/*
-+	 * Writing via mmap has no logic to handle inline data, so we
-+	 * need to call ext4_convert_inline_data() to convert the inode
-+	 * to normal format before doing so, otherwise a BUG_ON will be
-+	 * triggered in ext4_writepages() due to the
-+	 * EXT4_STATE_MAY_INLINE_DATA flag. Moreover, we need to grab
-+	 * i_rwsem during conversion, since clearing and setting the
-+	 * inline data flag may race with ext4_buffered_write_iter()
-+	 * to trigger a BUG_ON.
-+	 */
-+	if (ext4_has_feature_inline_data(sb) &&
-+	    vma->vm_flags & VM_SHARED && vma->vm_flags & VM_WRITE) {
-+		int err;
-+
-+		inode_lock(inode);
-+		err = ext4_convert_inline_data(inode);
-+		inode_unlock(inode);
-+		if (err)
-+			return err;
-+	}
-+
- 	file_accessed(file);
- 	if (IS_DAX(file_inode(file))) {
- 		vma->vm_ops = &ext4_dax_vm_ops;
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index ce5f21b6c2b3..31844c4ec9fe 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -6043,10 +6043,6 @@ vm_fault_t ext4_page_mkwrite(struct vm_fault *vmf)
- 
- 	filemap_invalidate_lock_shared(mapping);
- 
--	err = ext4_convert_inline_data(inode);
--	if (err)
--		goto out_ret;
--
- 	/*
- 	 * On data journalling we skip straight to the transaction handle:
- 	 * there's no delalloc; page truncated will be checked later; the
--- 
-2.31.1
-
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
