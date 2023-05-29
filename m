@@ -2,83 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2D3714FD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6646E714FD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjE2TjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 15:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        id S229597AbjE2Tju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 15:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjE2TjJ (ORCPT
+        with ESMTP id S229455AbjE2Tjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 15:39:09 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440DADC;
-        Mon, 29 May 2023 12:39:08 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34TJRIrx008646;
-        Mon, 29 May 2023 19:39:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3ySqhIXMUvVVIRKgUA1QpiSdF3Ns24L3jZl/xjHlh9A=;
- b=hrgAVC7rD7DOB8DRVAPaOP6peKArhfmhTPCyNxMsLF6tQDKzguDdoNMki+8T+SpMzc/l
- AY20P6JlvLQPAkUSy9PWFUpz/76bRASgONcst5bvl51/7kAho0M0bdAdsPuz+WuYsDmp
- BnjtBIOZPnnxjjd+8eiAqwyZ0WlDwM5s/CGvRacBcPnuSrDRhtuBxptYVh4PzEenQ8xE
- DUEkDB9PIZsWXEtk0DW8Ni7KqZfo9/9rRCiLjwxziAChb2YbinoV/nd2sYQQtYDYvNZk
- 4WsxIu8AnvMARy/i9fq02wG8eUtTc1pB2YAIh+8t5Kx+1vutg07g2cf0SP0K0ly6qKk3 kQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qvsr212bk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 May 2023 19:39:04 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34TJd3JM016363
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 May 2023 19:39:03 GMT
-Received: from [10.216.59.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 29 May
- 2023 12:39:01 -0700
-Message-ID: <b14dd204-180d-8035-3eaf-8a53692ef546@quicinc.com>
-Date:   Tue, 30 May 2023 01:08:58 +0530
+        Mon, 29 May 2023 15:39:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED6CB7;
+        Mon, 29 May 2023 12:39:47 -0700 (PDT)
+Date:   Mon, 29 May 2023 19:39:45 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685389186;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2KtZGfYQCjjS2SqnUxX40yZ82weExH9THlmAMKW1Z3k=;
+        b=x3ergisLX/s9jJg/N/JYXP6tp8uM6lGjQX4pjAf4qhylZr17iFqDi/NrZnz+a4zzomkXC6
+        D+UQU19B0X/r2NIyDAiGTc94Hik6QjsWfUqIOOQ+zvW6Ro90Hdj8G6qDgj0oZ5SQg9nMF1
+        2/mT5PoTtASzKedTRHg5v9YAFkyqFiQ3kWHxySOZdyrIqJlMYqWFJh9PJnCvfG3lelyROw
+        04hwJGLtjYGNXV3BSgTVwje173Svn46DTMvua5ThKZ0Gn73TdkkVIG+ErpH4nlgdwIw+BP
+        yCH8tlzNsDn75Lw3k/13PxrvNDyzSga00vshGHjcBfAGskH1WSXGSLkRBjrl7w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685389186;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2KtZGfYQCjjS2SqnUxX40yZ82weExH9THlmAMKW1Z3k=;
+        b=EI2+EB4hGX6vpsU31qjJYaZx251wBvNzCi1bb3BjbsADswxgyhCEtfIA6d4SRod1SrPPvr
+        IcyF5+qdTnu3PNDg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: smp/core] x86/smp: Initialize cpu_primary_thread_mask late
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <87sfbhlwp9.ffs@tglx>
+References: <87sfbhlwp9.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1685004825-30157-1-git-send-email-quic_prashk@quicinc.com>
- <2023052513-gestate-tartar-bf15@gregkh>
- <5f144d80-0439-d014-c845-1cfb1adb840a@quicinc.com>
- <2023052801-immersion-venus-ad0f@gregkh>
- <a86f3bd4-8c87-de67-bdb6-fbe88dc23a56@quicinc.com>
- <2023052943-headfirst-satchel-6d90@gregkh>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <2023052943-headfirst-satchel-6d90@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Message-ID: <168538918580.404.12778821542174933312.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 0qig47KF6g0RsS6fdzMHDwGDRQKQR8f7
-X-Proofpoint-GUID: 0qig47KF6g0RsS6fdzMHDwGDRQKQR8f7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-29_10,2023-05-29_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=788 priorityscore=1501 spamscore=0
- phishscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305290164
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,56 +66,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the smp/core branch of tip:
 
+Commit-ID:     5da80b28bf25c3458c7beb23794ff53622ce7eb4
+Gitweb:        https://git.kernel.org/tip/5da80b28bf25c3458c7beb23794ff53622ce7eb4
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Fri, 26 May 2023 21:38:47 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Mon, 29 May 2023 21:31:23 +02:00
 
-On 30-05-23 12:31 am, Greg Kroah-Hartman wrote:
-> On Tue, May 30, 2023 at 12:00:15AM +0530, Prashanth K wrote:
->>
->>
->> On 28-05-23 05:03 pm, Greg Kroah-Hartman wrote:
->>>>>> diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
->>>>>> index e20874c..30bdb81 100644
->>>>>> --- a/drivers/usb/common/usb-conn-gpio.c
->>>>>> +++ b/drivers/usb/common/usb-conn-gpio.c
->>>>>> @@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
->>>>>>     	platform_set_drvdata(pdev, info);
->>>>>>     	device_set_wakeup_capable(&pdev->dev, true);
->>>>>> +	/* Set last role to unknown before performing the initial detection */
->>>>>> +	info->last_role = USB_ROLE_UNKNOWN;
->>>>>
->>>>> Shouldn't last_role have already been set to 0?  If so, why not just
->>>>> have this enum value be 0?
->>>> Last role would be 0 during first detection, that's the problem here.
->>>> During initial detection, if the the new role is detected as USB_ROLE_NONE
->>>> (0), then we wouldn't call the set_role(). But it should send the current
->>>> role to gadget after the inital detection.
->>>
->>> So you are hoping that the old enum type is still assigned to 0?  That's
->>> brave, please make it explicit otherwise it's very hard to follow or
->>> ensure that this really will happen.  And most of all, document it so
->>> that that value remains 0 in the future, otherwise a list of enum types
->>> without explicit values are seen as if the values do not matter.
->>>
->>> thanks,
->>>
->>> greg k-h
->>
->> So I think it would be better to add USB_ROLE_UNKNOWN towards the end of
->> enum usb_role, so that we can avoid explicit declaration. Is that fine?
->>
->>   enum usb_role {
->>   	USB_ROLE_NONE,
->>   	USB_ROLE_HOST,
->>   	USB_ROLE_DEVICE,
->> +	USB_ROLE_UNKNOWN,
-> 
-> Either is fine, be explicit, or not, just don't mix the two please.
-> 
-> thanks,
-> 
-> greg k-h
+x86/smp: Initialize cpu_primary_thread_mask late
 
-Thanks for the suggestion, will update it in next patch.
+Marking primary threads in the cpumask during early boot is only correct in
+certain configurations, but broken e.g. for the legacy hyperthreading
+detection.
 
-Regards,
-Prashanth K
+This is due to the complete mess in the CPUID evaluation code which
+initializes smp_num_siblings only half during early init and fixes it up
+later when identify_boot_cpu() is invoked.
+
+So using smp_num_siblings before identify_boot_cpu() leads to incorrect
+results.
+
+Fixing the early CPU init code to provide the proper data is a larger scale
+surgery as the code has dependencies on data structures which are not
+initialized during early boot.
+
+Move the initialization of cpu_primary_thread_mask wich depends on
+smp_num_siblings being correct to an early initcall so that it is set up
+correctly before SMP bringup.
+
+Fixes: f54d4434c281 ("x86/apic: Provide cpu_primary_thread mask")
+Reported-by: "Kirill A. Shutemov" <kirill@shutemov.name>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Link: https://lore.kernel.org/r/87sfbhlwp9.ffs@tglx
+
+---
+ arch/x86/kernel/apic/apic.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index 209c505..af49e24 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -2398,6 +2398,21 @@ static void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid)
+ 	if (smp_num_siblings == 1 || !(apicid & mask))
+ 		cpumask_set_cpu(cpu, &__cpu_primary_thread_mask);
+ }
++
++/*
++ * Due to the utter mess of CPUID evaluation smp_num_siblings is not valid
++ * during early boot. Initialize the primary thread mask before SMP
++ * bringup.
++ */
++static int __init smp_init_primary_thread_mask(void)
++{
++	unsigned int cpu;
++
++	for (cpu = 0; cpu < nr_logical_cpuids; cpu++)
++		cpu_mark_primary_thread(cpu, cpuid_to_apicid[cpu]);
++	return 0;
++}
++early_initcall(smp_init_primary_thread_mask);
+ #else
+ static inline void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid) { }
+ #endif
+@@ -2544,7 +2559,8 @@ int generic_processor_info(int apicid, int version)
+ 	set_cpu_present(cpu, true);
+ 	num_processors++;
+ 
+-	cpu_mark_primary_thread(cpu, apicid);
++	if (system_state != SYSTEM_BOOTING)
++		cpu_mark_primary_thread(cpu, apicid);
+ 
+ 	return cpu;
+ }
