@@ -2,173 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745FC7144D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7C57144B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjE2G2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 02:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S231709AbjE2G1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 02:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbjE2G2i (ORCPT
+        with ESMTP id S231682AbjE2G1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 02:28:38 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520911BC;
-        Sun, 28 May 2023 23:28:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685341689; x=1716877689;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dh0EL4hNH/yV6+3G0mpHZLbVKP4ILEfFeFyXC+i3GrQ=;
-  b=2NmnZp6HaVGmrA1AEITvTv7CHjLplUFnxV2vJ07Uz/CNJZt6bKSPZNMc
-   QrBxFPndnvvnwko9++CuagztkyIwGIrcPdg67aozo5Ue2VPxSaTzxEwwb
-   6BJERPcCJsvZZEFW3gu7FoK7DNfb1OOGWoQajTTgpb5glPJaH9iORJ6s0
-   hfohjILa/pyL62kUlML4ENDpuFG/IeUHktcPtY1m59lx4AtXAMij/668H
-   v2lg7H/l6kgvcZTG/1NSOqLsEjA0Y9iYsIdxG9W4BmBT16tRVYg+Rakw5
-   EdHg/sNLwr2O4JM0m+JvUqUGw2siqaOLgu+hjC8iVGAQnEU4PUMf+FZKy
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
-   d="scan'208";a="215861693"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 May 2023 23:26:44 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sun, 28 May 2023 23:26:42 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Sun, 28 May 2023 23:26:37 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>
-Subject: [PATCH v2 4/4] dt-bindings: timer: atmel,at91rm9200-st: convert to yaml
-Date:   Mon, 29 May 2023 09:26:04 +0300
-Message-ID: <20230529062604.1498052-5-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230529062604.1498052-1-claudiu.beznea@microchip.com>
-References: <20230529062604.1498052-1-claudiu.beznea@microchip.com>
+        Mon, 29 May 2023 02:27:23 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277FC19D
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:26:54 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-ba8afcc82c0so5796215276.2
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:26:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685341612; x=1687933612;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OPZMX1+LA/FvHP0/JC5qx50WzIWIXFewxM+MGzYgG4M=;
+        b=Ytf3pJx5ZO2h8JphUMEUM+NgVIXTwIVhtYTQ/lA5Y8cir60w0OXuWtSllgiDhinPaR
+         Iy4j/+CUvFlAp4R/CjSOblw5I+znP0kaNSqJXR4VKYKvTUfPb3oYvzoFoZFf0g3HTRPQ
+         tAY4R1a5sWTcuBd7Oz6cpvBBwVDFmQiqte1C3YTUpMO9AoANcfZAyiW/btELN35Kv490
+         fFp3EQeG93PsokK2axn0N0nvmbnw91onFgB1MigUnnJSNnNJsoUz87zNfUFbsCL7jZ72
+         cyBArEZpOY67dIbt6WH+/9VlUHqVGsY29EI6EqLyGxDNiZ8V+VTllfG1NJsbPWUsuh6Y
+         4UjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685341612; x=1687933612;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OPZMX1+LA/FvHP0/JC5qx50WzIWIXFewxM+MGzYgG4M=;
+        b=dZArGuEZZl+0ysFdi2nbhzpjLv0XjuhXMFscP6iTLbC3XU2t024Y9mVhJA0ypDqTc0
+         dbryjS3bsYVA0IZhb97bQMNTS+Aby1y28s0zf/FhIv9fIjrbdwZe8xVcsG//C8id8ME6
+         ggw9dFkiTRIJqObLH44BvRlXW4K/1wyTWwMqGZv70P2AV1rWeej5cfltZVTRL+iKebdY
+         j/hqs+P3qjJBrJbNuMbG4oYTmoNfNaz2eLvPpidR1yi/KKS4fGcdqBnC5hNpTTK2s4zp
+         B4tnxGWfYDjxudJ9bisfNb+I2nlKWdlC1579D+B8KMuiF+U+rRdOanOw5mIffMk+102u
+         6z+A==
+X-Gm-Message-State: AC+VfDyjqqtqWWcNfcTH40pGMrvZErTqsOPiTXNXtcqw92vLUZXWhFIb
+        6ff3HA3imjT5hHpbcF5njAizAQ==
+X-Google-Smtp-Source: ACHHUZ5aDBGSE8V0e3lWDnHjHjCYn6fQF4N/hxkcmf1ygogwgzLWM5AgQMYGVJCj77dNUpkBtnYW7w==
+X-Received: by 2002:a81:5b55:0:b0:565:ec67:18f4 with SMTP id p82-20020a815b55000000b00565ec6718f4mr4108617ywb.32.1685341612167;
+        Sun, 28 May 2023 23:26:52 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id m6-20020a0de306000000b0055a486140b6sm3427593ywe.36.2023.05.28.23.26.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 23:26:51 -0700 (PDT)
+Date:   Sun, 28 May 2023 23:26:48 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 10/12] mm/khugepaged: collapse_pte_mapped_thp() with
+ mmap_read_lock()
+In-Reply-To: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
+Message-ID: <563340a4-7ac9-7cc8-33d8-f7cc6ef19ea6@google.com>
+References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Microchip AT91 system timer to YAML.
+Bring collapse_and_free_pmd() back into collapse_pte_mapped_thp().
+It does need mmap_read_lock(), but it does not need mmap_write_lock(),
+nor vma_start_write() nor i_mmap lock nor anon_vma lock.  All racing
+paths are relying on pte_offset_map_lock() and pmd_lock(), so use those.
+Follow the pattern in retract_page_tables(); and using pte_free_defer()
+removes the need for tlb_remove_table_sync_one() here.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Confirm the preliminary find_pmd_or_thp_or_none() once page lock has been
+acquired and the page looks suitable: from then on its state is stable.
+
+However, collapse_pte_mapped_thp() was doing something others don't:
+freeing a page table still containing "valid" entries.  i_mmap lock did
+stop a racing truncate from double-freeing those pages, but we prefer
+collapse_pte_mapped_thp() to clear the entries as usual.  Their TLB
+flush can wait until the pmdp_collapse_flush() which follows, but the
+mmu_notifier_invalidate_range_start() has to be done earlier.
+
+Some cleanup while rearranging: rename "count" to "nr_ptes";
+and "step 2" does not need to duplicate the checks in "step 1".
+
+Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- .../devicetree/bindings/arm/atmel-sysregs.txt |  9 ---
- .../bindings/timer/atmel,at91rm9200-st.yaml   | 65 +++++++++++++++++++
- 2 files changed, 65 insertions(+), 9 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
+ mm/khugepaged.c | 131 +++++++++++++++---------------------------------
+ 1 file changed, 41 insertions(+), 90 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-index 54d3f586403e..68c0eacb01ac 100644
---- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-+++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-@@ -4,15 +4,6 @@ Chipid required properties:
- - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chipid"
- - reg : Should contain registers location and length
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 4fd408154692..2999500abdd5 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1485,7 +1485,7 @@ static bool khugepaged_add_pte_mapped_thp(struct mm_struct *mm,
+ 	return ret;
+ }
  
--System Timer (ST) required properties:
--- compatible: Should be "atmel,at91rm9200-st", "syscon", "simple-mfd"
--- reg: Should contain registers location and length
--- interrupts: Should contain interrupt for the ST which is the IRQ line
--  shared across all System Controller members.
--- clocks: phandle to input clock.
--Its subnodes can be:
--- watchdog: compatible should be "atmel,at91rm9200-wdt"
+-/* hpage must be locked, and mmap_lock must be held in write */
++/* hpage must be locked, and mmap_lock must be held */
+ static int set_huge_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 			pmd_t *pmdp, struct page *hpage)
+ {
+@@ -1497,7 +1497,7 @@ static int set_huge_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 	};
+ 
+ 	VM_BUG_ON(!PageTransHuge(hpage));
+-	mmap_assert_write_locked(vma->vm_mm);
++	mmap_assert_locked(vma->vm_mm);
+ 
+ 	if (do_set_pmd(&vmf, hpage))
+ 		return SCAN_FAIL;
+@@ -1506,48 +1506,6 @@ static int set_huge_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 	return SCAN_SUCCEED;
+ }
+ 
+-/*
+- * A note about locking:
+- * Trying to take the page table spinlocks would be useless here because those
+- * are only used to synchronize:
+- *
+- *  - modifying terminal entries (ones that point to a data page, not to another
+- *    page table)
+- *  - installing *new* non-terminal entries
+- *
+- * Instead, we need roughly the same kind of protection as free_pgtables() or
+- * mm_take_all_locks() (but only for a single VMA):
+- * The mmap lock together with this VMA's rmap locks covers all paths towards
+- * the page table entries we're messing with here, except for hardware page
+- * table walks and lockless_pages_from_mm().
+- */
+-static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *vma,
+-				  unsigned long addr, pmd_t *pmdp)
+-{
+-	pmd_t pmd;
+-	struct mmu_notifier_range range;
 -
- RAMC SDRAM/DDR Controller required properties:
- - compatible: Should be "atmel,at91rm9200-sdramc", "syscon"
- 			"atmel,at91sam9260-sdramc",
-diff --git a/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml b/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
-new file mode 100644
-index 000000000000..a75644e1a2fe
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/atmel,at91rm9200-st.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+-	mmap_assert_write_locked(mm);
+-	if (vma->vm_file)
+-		lockdep_assert_held_write(&vma->vm_file->f_mapping->i_mmap_rwsem);
+-	/*
+-	 * All anon_vmas attached to the VMA have the same root and are
+-	 * therefore locked by the same lock.
+-	 */
+-	if (vma->anon_vma)
+-		lockdep_assert_held_write(&vma->anon_vma->root->rwsem);
+-
+-	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm, addr,
+-				addr + HPAGE_PMD_SIZE);
+-	mmu_notifier_invalidate_range_start(&range);
+-	pmd = pmdp_collapse_flush(vma, addr, pmdp);
+-	tlb_remove_table_sync_one();
+-	mmu_notifier_invalidate_range_end(&range);
+-	mm_dec_nr_ptes(mm);
+-	page_table_check_pte_clear_range(mm, addr, pmd);
+-	pte_free(mm, pmd_pgtable(pmd));
+-}
+-
+ /**
+  * collapse_pte_mapped_thp - Try to collapse a pte-mapped THP for mm at
+  * address haddr.
+@@ -1563,16 +1521,17 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 			    bool install_pmd)
+ {
++	struct mmu_notifier_range range;
+ 	unsigned long haddr = addr & HPAGE_PMD_MASK;
+ 	struct vm_area_struct *vma = vma_lookup(mm, haddr);
+ 	struct page *hpage;
+ 	pte_t *start_pte, *pte;
+-	pmd_t *pmd;
+-	spinlock_t *ptl;
+-	int count = 0, result = SCAN_FAIL;
++	pmd_t *pmd, pgt_pmd;
++	spinlock_t *pml, *ptl;
++	int nr_ptes = 0, result = SCAN_FAIL;
+ 	int i;
+ 
+-	mmap_assert_write_locked(mm);
++	mmap_assert_locked(mm);
+ 
+ 	/* Fast check before locking page if already PMD-mapped */
+ 	result = find_pmd_or_thp_or_none(mm, haddr, &pmd);
+@@ -1612,6 +1571,7 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 		goto drop_hpage;
+ 	}
+ 
++	result = find_pmd_or_thp_or_none(mm, haddr, &pmd);
+ 	switch (result) {
+ 	case SCAN_SUCCEED:
+ 		break;
+@@ -1625,27 +1585,14 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 		goto drop_hpage;
+ 	}
+ 
+-	/* Lock the vma before taking i_mmap and page table locks */
+-	vma_start_write(vma);
++	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm,
++				haddr, haddr + HPAGE_PMD_SIZE);
++	mmu_notifier_invalidate_range_start(&range);
+ 
+-	/*
+-	 * We need to lock the mapping so that from here on, only GUP-fast and
+-	 * hardware page walks can access the parts of the page tables that
+-	 * we're operating on.
+-	 * See collapse_and_free_pmd().
+-	 */
+-	i_mmap_lock_write(vma->vm_file->f_mapping);
+-
+-	/*
+-	 * This spinlock should be unnecessary: Nobody else should be accessing
+-	 * the page tables under spinlock protection here, only
+-	 * lockless_pages_from_mm() and the hardware page walker can access page
+-	 * tables while all the high-level locks are held in write mode.
+-	 */
+ 	result = SCAN_FAIL;
+ 	start_pte = pte_offset_map_lock(mm, pmd, haddr, &ptl);
+-	if (!start_pte)
+-		goto drop_immap;
++	if (!start_pte)		/* mmap_lock + page lock should prevent this */
++		goto abort;
+ 
+ 	/* step 1: check all mapped PTEs are to the right huge page */
+ 	for (i = 0, addr = haddr, pte = start_pte;
+@@ -1671,40 +1618,44 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 		 */
+ 		if (hpage + i != page)
+ 			goto abort;
+-		count++;
++		nr_ptes++;
+ 	}
+ 
+-	/* step 2: adjust rmap */
++	/* step 2: clear page table and adjust rmap */
+ 	for (i = 0, addr = haddr, pte = start_pte;
+ 	     i < HPAGE_PMD_NR; i++, addr += PAGE_SIZE, pte++) {
+-		struct page *page;
+-
+ 		if (pte_none(*pte))
+ 			continue;
+-		page = vm_normal_page(vma, addr, *pte);
+-		if (WARN_ON_ONCE(page && is_zone_device_page(page)))
+-			goto abort;
+-		page_remove_rmap(page, vma, false);
 +
-+title: Microchip AT91 System Timer (ST)
++		/* Must clear entry, or a racing truncate may re-remove it */
++		pte_clear(mm, addr, pte);
++		page_remove_rmap(hpage + i, vma, false);
+ 	}
+ 
+ 	pte_unmap_unlock(start_pte, ptl);
+ 
+ 	/* step 3: set proper refcount and mm_counters. */
+-	if (count) {
+-		page_ref_sub(hpage, count);
+-		add_mm_counter(vma->vm_mm, mm_counter_file(hpage), -count);
++	if (nr_ptes) {
++		page_ref_sub(hpage, nr_ptes);
++		add_mm_counter(vma->vm_mm, mm_counter_file(hpage), -nr_ptes);
+ 	}
+ 
+-	/* step 4: remove pte entries */
+-	/* we make no change to anon, but protect concurrent anon page lookup */
+-	if (vma->anon_vma)
+-		anon_vma_lock_write(vma->anon_vma);
++	/* step 4: remove page table */
+ 
+-	collapse_and_free_pmd(mm, vma, haddr, pmd);
++	/* Huge page lock is still held, so page table must remain empty */
++	pml = pmd_lock(mm, pmd);
++	if (ptl != pml)
++		spin_lock_nested(ptl, SINGLE_DEPTH_NESTING);
++	pgt_pmd = pmdp_collapse_flush(vma, haddr, pmd);
++	if (ptl != pml)
++		spin_unlock(ptl);
++	spin_unlock(pml);
+ 
+-	if (vma->anon_vma)
+-		anon_vma_unlock_write(vma->anon_vma);
+-	i_mmap_unlock_write(vma->vm_file->f_mapping);
++	mmu_notifier_invalidate_range_end(&range);
 +
-+maintainers:
-+  - Nicolas Ferre <nicolas.ferre@microchip.com>
-+  - Alexandre Belloni <alexandre.belloni@microchip.com>
-+  - Claudiu Beznea <claudiu.beznea@microchip.com>
-+
-+description:
-+  Microchip AT91 system timer integrates a period interval timer, a watchdog
-+  timer and a real-time timer.
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: atmel,at91rm9200-st
-+      - const: syscon
-+      - const: simple-mfd
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    description:
-+      Contain interrupt for the ST which is the IRQ line shared across all
-+      system controller members.
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  watchdog:
-+    $ref: ../watchdog/atmel,at91rm9200-wdt.yaml
-+    description:
-+      Child node describing watchdog.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    st: timer@fffffd00 {
-+        compatible = "atmel,at91rm9200-st", "syscon", "simple-mfd";
-+        reg = <0xfffffd00 0x100>;
-+        interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
-+        clocks = <&slow_xtal>;
-+
-+        watchdog {
-+            compatible = "atmel,at91rm9200-wdt";
-+        };
-+    };
-+
-+...
++	mm_dec_nr_ptes(mm);
++	page_table_check_pte_clear_range(mm, haddr, pgt_pmd);
++	pte_free_defer(mm, pmd_pgtable(pgt_pmd));
+ 
+ maybe_install_pmd:
+ 	/* step 5: install pmd entry */
+@@ -1718,9 +1669,9 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 	return result;
+ 
+ abort:
+-	pte_unmap_unlock(start_pte, ptl);
+-drop_immap:
+-	i_mmap_unlock_write(vma->vm_file->f_mapping);
++	if (start_pte)
++		pte_unmap_unlock(start_pte, ptl);
++	mmu_notifier_invalidate_range_end(&range);
+ 	goto drop_hpage;
+ }
+ 
+@@ -2842,9 +2793,9 @@ int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
+ 		case SCAN_PTE_MAPPED_HUGEPAGE:
+ 			BUG_ON(mmap_locked);
+ 			BUG_ON(*prev);
+-			mmap_write_lock(mm);
++			mmap_read_lock(mm);
+ 			result = collapse_pte_mapped_thp(mm, addr, true);
+-			mmap_write_unlock(mm);
++			mmap_locked = true;
+ 			goto handle_result;
+ 		/* Whitelisted set of results where continuing OK */
+ 		case SCAN_PMD_NULL:
 -- 
-2.34.1
+2.35.3
 
