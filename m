@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C277D714BED
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A7A714BC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjE2OWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
+        id S229558AbjE2OLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjE2OWm (ORCPT
+        with ESMTP id S229807AbjE2OLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:22:42 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F698E8;
-        Mon, 29 May 2023 07:22:33 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6e72a1464so22082565e9.1;
-        Mon, 29 May 2023 07:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685370151; x=1687962151;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=vl5E9mH7Bi/ClQnlPR1LRMwr8a1e9GOqSgKO5eVDbSU=;
-        b=ggFbeCNormcSCt72bW8IqNCobzV+UiIQWrJ9Ra/a1MX8/CEq8Vuu2VbkPylXs5EuPQ
-         RNt0w9J+lWwJ4Z+A01vIG6BYwn74yVGk8J/cGKNjM7h+REbVxa2JPofUPwESHBHYJU90
-         aT71CuC6NDB1jcXke5SD8VNO8AV1tKjvGTrjFlr1X+hsH/2hQQc+8oKAfJxcN9/HIdcr
-         DTfWxy2yVqhgnMBPWupKvBk3t7qm+ViQ401ZLvgfGL7w+CfzSIIMzxv+87oV8OPrcxWD
-         jsf40vMFg7CHF05UHz7hdf3gEmhRuPab2tFDg0ocOqFRrTs0npl6jyzn57vktB4yOfV0
-         gwNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685370151; x=1687962151;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vl5E9mH7Bi/ClQnlPR1LRMwr8a1e9GOqSgKO5eVDbSU=;
-        b=I7CmJuIoTHKShWxP3IDCU0mga+WAZBXQG6HFDUahfo9D0qlDgGjyvHqVtvXNNwUlVA
-         7XvDm+1bgg/BhtYVBl/IguaOR0J5ErTi6yGz6XSaX14JKZy4Od5rBOlU1UwbwixHNF8I
-         LkBicOva69M4t1mlxeDVf21EP8oS/Z73KvnbjbD4+BYHFJiY3YOHjeUG5/JL+gc93nAZ
-         ad/1+sAwH3a0tCDNbTP+NTFd+BvWkPINhsmOT6/GBhDKbCOXNEUqWRALFZiDaAdwlV8J
-         F8FjkRpc/18VWXahfHGD8UdYfHVIFFh95I0wdfveW3FLA+9hz10LL6qlFa/rb6bupQ/b
-         qrDQ==
-X-Gm-Message-State: AC+VfDy2b9aL9/FP2gtYleqPzPI2SVo7gAgoCrHEnBXNUDSrJSe8fngM
-        bwUn9iDhWo7hR5aXlwaARE0=
-X-Google-Smtp-Source: ACHHUZ7L+Y8YK2pmRY6CMGxDXgKqI9PIYbA5LjI3TodqBKoH52Wli1y549++A2DTU7/h9dwYIpcbFA==
-X-Received: by 2002:a7b:c448:0:b0:3f6:4cfc:79cb with SMTP id l8-20020a7bc448000000b003f64cfc79cbmr8855842wmi.31.1685370151110;
-        Mon, 29 May 2023 07:22:31 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id y6-20020a05600c364600b003f6042d6da0sm14382269wmq.16.2023.05.29.07.22.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 07:22:30 -0700 (PDT)
-Message-ID: <6474b526.050a0220.baa3e.31c1@mx.google.com>
-X-Google-Original-Message-ID: <ZHSyI+ph47zQgpWw@Ansuel-xps.>
-Date:   Mon, 29 May 2023 16:09:39 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-leds@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [net-next PATCH v3 03/13] Documentation: leds: leds-class:
- Document new Hardware driven LEDs APIs
-References: <20230527112854.2366-1-ansuelsmth@gmail.com>
- <20230527112854.2366-4-ansuelsmth@gmail.com>
- <ZHRd5wDnMrWZlwrd@debian.me>
- <871qiz5iqt.fsf@meer.lwn.net>
+        Mon, 29 May 2023 10:11:36 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCA4B1;
+        Mon, 29 May 2023 07:11:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685369467; x=1716905467;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9TesWThXpKxD87Td7aD1y10ImSaXLOK76jjih9rvQ4o=;
+  b=RiSf3vqt9n3RM7rQm982wWrO3ee5Lt8yqxijk+MRdWWGgx8HyV28mtG1
+   5HU37OyKpuJvNO3JjjmFynOTiTxL+cDzLfRKbsnwZWKzsYIheoi7knro+
+   qMLEpjfzr50ln7FU4cpRqm5+o/XOD9+oGj78khYsnYjiCBBgZD4jQw7US
+   DEj+u3GK3aM7bdpN4Q7Gu8cuRdm6jjUZskdUJY7OtlZaQzqOA+c7F/vU1
+   uN/eOMWnYc+iX2CAgd2ARrZtLl2IQAFI8NNniUSAMmW8lZnn76oHK0G/J
+   Imof9iTC1PR7Yu4rTfGDL4JIgFJCwOVj5AcVuQRQY/LK2p2HgU0bujB0s
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="352216825"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="352216825"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 07:10:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="952774560"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="952774560"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.208.110])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 07:10:50 -0700
+Message-ID: <7982aae5-ac38-03df-aa0a-165c3c3f7764@intel.com>
+Date:   Mon, 29 May 2023 17:10:45 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871qiz5iqt.fsf@meer.lwn.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH] mmc: sdhci-msm: Disable broken 64-bit DMA on MSM8916
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230518-msm8916-64bit-v1-1-5694b0f35211@gerhold.net>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230518-msm8916-64bit-v1-1-5694b0f35211@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,31 +70,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 08:12:42AM -0600, Jonathan Corbet wrote:
-> Bagas Sanjaya <bagasdotme@gmail.com> writes:
+On 18/05/23 12:39, Stephan Gerhold wrote:
+> While SDHCI claims to support 64-bit DMA on MSM8916 it does not seem to
+> be properly functional. It is not immediately obvious because SDHCI is
+> usually used with IOMMU bypassed on this SoC, and all physical memory
+> has 32-bit addresses. But when trying to enable the IOMMU it quickly
+> fails with an error such as the following:
 > 
-> >> +    - hw_control_get_device:
-> >> +                return the device associated with the LED driver in
-> >> +                hw control. A trigger might use this to match the
-> >> +                returned device from this function with a configured
-> >> +                device for the trigger as the source for blinking
-> >> +                events and correctly enable hw control.
-> >> +                (example a netdev trigger configured to blink for a
-> >> +                particular dev match the returned dev from get_device
-> >> +                to set hw control)
-> >> +
-> >> +                Return a device or NULL if nothing is currently attached.
-> > Returns a device name?
+>   arm-smmu 1e00000.iommu: Unhandled context fault:
+>     fsr=0x402, iova=0xfffff200, fsynr=0xe0000, cbfrsynra=0x140, cb=3
+>   mmc1: ADMA error: 0x02000000
+>   mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
+>   mmc1: sdhci: Sys addr:  0x00000000 | Version:  0x00002e02
+>   mmc1: sdhci: Blk size:  0x00000008 | Blk cnt:  0x00000000
+>   mmc1: sdhci: Argument:  0x00000000 | Trn mode: 0x00000013
+>   mmc1: sdhci: Present:   0x03f80206 | Host ctl: 0x00000019
+>   mmc1: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
+>   mmc1: sdhci: Wake-up:   0x00000000 | Clock:    0x00000007
+>   mmc1: sdhci: Timeout:   0x0000000a | Int stat: 0x00000001
+>   mmc1: sdhci: Int enab:  0x03ff900b | Sig enab: 0x03ff100b
+>   mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+>   mmc1: sdhci: Caps:      0x322dc8b2 | Caps_1:   0x00008007
+>   mmc1: sdhci: Cmd:       0x0000333a | Max curr: 0x00000000
+>   mmc1: sdhci: Resp[0]:   0x00000920 | Resp[1]:  0x5b590000
+>   mmc1: sdhci: Resp[2]:   0xe6487f80 | Resp[3]:  0x0a404094
+>   mmc1: sdhci: Host ctl2: 0x00000008
+>   mmc1: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x0000000ffffff224
+>   mmc1: sdhci_msm: ----------- VENDOR REGISTER DUMP -----------
+>   mmc1: sdhci_msm: DLL sts: 0x00000000 | DLL cfg:  0x60006400 | DLL cfg2: 0x00000000
+>   mmc1: sdhci_msm: DLL cfg3: 0x00000000 | DLL usr ctl:  0x00000000 | DDR cfg: 0x00000000
+>   mmc1: sdhci_msm: Vndr func: 0x00018a9c | Vndr func2 : 0xf88018a8 Vndr func3: 0x00000000
+>   mmc1: sdhci: ============================================
+>   mmc1: sdhci: fffffffff200: DMA 0x0000ffffffffe100, LEN 0x0008, Attr=0x21
+>   mmc1: sdhci: fffffffff20c: DMA 0x0000000000000000, LEN 0x0000, Attr=0x03
 > 
-> The return type of this function is struct device * - how would you
-> expect it to return a name?
+> Looking closely it's obvious that only the 32-bit part of the address
+> (0xfffff200) arrives at the SMMU, the higher 16-bit (0xffff...) get
+> lost somewhere. This might not be a limitation of the SDHCI itself but
+> perhaps the bus/interconnect it is connected to, or even the connection
+> to the SMMU.
 > 
+> Work around this by setting SDHCI_QUIRK2_BROKEN_64_BIT_DMA to avoid
+> using 64-bit addresses.
+> 
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 
-Just to clarify, a device name can't be returned. Not every device have
-a name and such name can be changed. An example is network device where
-you can change the name of the interface.
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Using the device prevents all of this problem. 
+> ---
+>  drivers/mmc/host/sdhci-msm.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+> index 8ac81d57a3df..1877d583fe8c 100644
+> --- a/drivers/mmc/host/sdhci-msm.c
+> +++ b/drivers/mmc/host/sdhci-msm.c
+> @@ -2479,6 +2479,9 @@ static inline void sdhci_msm_get_of_property(struct platform_device *pdev,
+>  		msm_host->ddr_config = DDR_CONFIG_POR_VAL;
+>  
+>  	of_property_read_u32(node, "qcom,dll-config", &msm_host->dll_config);
+> +
+> +	if (of_device_is_compatible(node, "qcom,msm8916-sdhci"))
+> +		host->quirks2 |= SDHCI_QUIRK2_BROKEN_64_BIT_DMA;
+>  }
+>  
+>  static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
+> 
+> ---
+> base-commit: d4ebc9419afbac330e9ec0d2936108742aa4d97a
+> change-id: 20230518-msm8916-64bit-f5bcf6af7679
+> 
+> Best regards,
 
--- 
-	Ansuel
