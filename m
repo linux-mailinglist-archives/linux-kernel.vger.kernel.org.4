@@ -2,38 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66D3714580
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04CA714582
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjE2H3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 03:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S229629AbjE2H36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 03:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjE2H3n (ORCPT
+        with ESMTP id S229807AbjE2H3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 03:29:43 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC47AB
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:29:35 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VjiZqm2_1685345364;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjiZqm2_1685345364)
-          by smtp.aliyun-inc.com;
-          Mon, 29 May 2023 15:29:32 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH v2 5/6] erofs: use struct lockref to replace handcrafted approach
-Date:   Mon, 29 May 2023 15:29:23 +0800
-Message-Id: <20230529072923.91736-1-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <20230526201459.128169-6-hsiangkao@linux.alibaba.com>
-References: <20230526201459.128169-6-hsiangkao@linux.alibaba.com>
+        Mon, 29 May 2023 03:29:45 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F446B2;
+        Mon, 29 May 2023 00:29:41 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2af20198f20so30311431fa.0;
+        Mon, 29 May 2023 00:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685345379; x=1687937379;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TuyYcu8t+w4tBaiuC6qtUy6PrdNxgiYYt2fH8+OWVDY=;
+        b=QyZQ45wMo1H/zbmv5hl67s6/CQ/iTljYSFFQrpTwhPoSKo3Y8hcx0rtgxQr81Jdzwh
+         XENE8WRNIT/SfwkQb/k7hwarAmqWGmTMniberK9F5KXA8oxRAqqY52+zIrNAUJHEU2rk
+         5Z2UP1FSVWZM5ra4pGDgXOcEy941BjAASlxf71N2LdhyyrYZt5dos6SRHCvONPUivPuo
+         mdY/0+6M4ukzeuf7AAZ0Mi1SOqy/bym8ZkWPENgI0yjNtNa6eloLhaC1JgyrljkexlvH
+         1x4XE33mrfpX2BjGwqEG8S4kiEE2J+Su2S3BAA0fcZqbuBLVPJxD+QntLFy26wexSwBr
+         vJIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685345379; x=1687937379;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TuyYcu8t+w4tBaiuC6qtUy6PrdNxgiYYt2fH8+OWVDY=;
+        b=ZyLSuzOLbJmzKY4Wu17MZZcYM5hS7Y39GrNdXfJ5jB4ax5KkIgPJzoilbBxKDvMbUc
+         5YbHGmh3pGtb2z0yqVAI1nzbri3W0TkegHW0A5dw3Mgt69j2T8C/OlnXe4waaB+OGF1N
+         fBjraW9oWsEmLU/FobTGeDx2C1H0n5bFgFxGP/jRc0qSzACniNsqXRZPB+znOJI4Cac+
+         2IlaTOX5onhfOVliV0eOuIaAHhAqxvMEmITfztg4EyzHaRej411vyCBpD2MxIqAKOq2i
+         2vk5YpEBjB210hJNWvTVpaRkHgcwFyiKaEvkoEJ6JxCDpvPfoUzzoT1LWK/61uCP3lE2
+         uu9g==
+X-Gm-Message-State: AC+VfDyU4+bF86yvvaT20PSc3/SbSBFI/SMenLv4yYLoFsphEE35bE/A
+        DiMgHD5BCsS4cWiKgWiI0BsCrhy4+tpexWfZ6qk=
+X-Google-Smtp-Source: ACHHUZ5vNyF4W+5bG5UxT0wd2OAbCfY+GFjfWFElVoSmaPe5/FUy0nqfBFTkIsivhWe5c+qh/DptkgT6RTS5OOYlWCY=
+X-Received: by 2002:a2e:94c3:0:b0:2ad:9a11:b131 with SMTP id
+ r3-20020a2e94c3000000b002ad9a11b131mr3432418ljh.32.1685345379171; Mon, 29 May
+ 2023 00:29:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+References: <20230526054621.18371-1-liangchen.linux@gmail.com>
+ <20230526054621.18371-3-liangchen.linux@gmail.com> <20230528022057-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230528022057-mutt-send-email-mst@kernel.org>
+From:   Liang Chen <liangchen.linux@gmail.com>
+Date:   Mon, 29 May 2023 15:29:26 +0800
+Message-ID: <CAKhg4tKrG=G6VGUsBK-ykypioWiEydR8z_w_xJiKdPrnKA9xjA@mail.gmail.com>
+Subject: Re: [PATCH net-next 3/5] virtio_net: Add page pool fragmentation support
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, pabeni@redhat.com, alexander.duyck@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,293 +72,260 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's avoid the current handcrafted lockref although `struct lockref`
-inclusion usually increases extra 4 bytes with an explicit spinlock if
-CONFIG_DEBUG_SPINLOCK is off.
+On Sun, May 28, 2023 at 2:25=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
+ wrote:
+>
+> On Fri, May 26, 2023 at 01:46:19PM +0800, Liang Chen wrote:
+> > To further enhance performance, implement page pool fragmentation
+> > support and introduce a module parameter to enable or disable it.
+> >
+> > In single-core vm testing environments, there is an additional performa=
+nce
+> > gain observed in the normal path compared to the one packet per page
+> > approach.
+> >   Upstream codebase: 47.5 Gbits/sec
+> >   Upstream codebase with page pool: 50.2 Gbits/sec
+> >   Upstream codebase with page pool fragmentation support: 52.3 Gbits/se=
+c
+> >
+> > There is also some performance gain for XDP cpumap.
+> >   Upstream codebase: 1.38 Gbits/sec
+> >   Upstream codebase with page pool: 9.74 Gbits/sec
+> >   Upstream codebase with page pool fragmentation: 10.3 Gbits/sec
+> >
+> > Signed-off-by: Liang Chen <liangchen.linux@gmail.com>
+>
+> I think it's called fragmenting not fragmentation.
+>
+>
 
-Apart from the size difference, note that the meaning of refcount is
-also changed to active users. IOWs, it doesn't take an extra refcount
-for XArray tree insertion.
+Sure, thanks!
 
-I don't observe any significant performance difference at least on
-our cloud compute server but the new one indeed simplifies the
-overall codebase a bit.
+> > ---
+> >  drivers/net/virtio_net.c | 72 ++++++++++++++++++++++++++++++----------
+> >  1 file changed, 55 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 99c0ca0c1781..ac40b8c66c59 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -32,7 +32,9 @@ module_param(gso, bool, 0444);
+> >  module_param(napi_tx, bool, 0644);
+> >
+> >  static bool page_pool_enabled;
+> > +static bool page_pool_frag;
+> >  module_param(page_pool_enabled, bool, 0400);
+> > +module_param(page_pool_frag, bool, 0400);
+> >
+> >  /* FIXME: MTU in config. */
+> >  #define GOOD_PACKET_LEN (ETH_HLEN + VLAN_HLEN + ETH_DATA_LEN)
+>
+> So here again same questions.
+>
+> -when is this a net perf gain when does it have no effect?
+> -can be on by default
+> - can we get rid of the extra modes?
+>
+>
 
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
-changes since v1:
- - fix reference leaking due to improper fallback of
-   erofs_workgroup_put().
+Yeah, now I believe it makes sense to enable it by default to avoid
+the extra modes. Thanks.
 
- fs/erofs/internal.h | 38 ++------------------
- fs/erofs/utils.c    | 86 ++++++++++++++++++++++-----------------------
- fs/erofs/zdata.c    | 15 ++++----
- 3 files changed, 52 insertions(+), 87 deletions(-)
 
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 0b8506c39145..e63f6cd424a0 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -208,46 +208,12 @@ enum {
- 	EROFS_ZIP_CACHE_READAROUND
- };
- 
--#define EROFS_LOCKED_MAGIC     (INT_MIN | 0xE0F510CCL)
--
- /* basic unit of the workstation of a super_block */
- struct erofs_workgroup {
--	/* the workgroup index in the workstation */
- 	pgoff_t index;
--
--	/* overall workgroup reference count */
--	atomic_t refcount;
-+	struct lockref lockref;
- };
- 
--static inline bool erofs_workgroup_try_to_freeze(struct erofs_workgroup *grp,
--						 int val)
--{
--	preempt_disable();
--	if (val != atomic_cmpxchg(&grp->refcount, val, EROFS_LOCKED_MAGIC)) {
--		preempt_enable();
--		return false;
--	}
--	return true;
--}
--
--static inline void erofs_workgroup_unfreeze(struct erofs_workgroup *grp,
--					    int orig_val)
--{
--	/*
--	 * other observers should notice all modifications
--	 * in the freezing period.
--	 */
--	smp_mb();
--	atomic_set(&grp->refcount, orig_val);
--	preempt_enable();
--}
--
--static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
--{
--	return atomic_cond_read_relaxed(&grp->refcount,
--					VAL != EROFS_LOCKED_MAGIC);
--}
--
- enum erofs_kmap_type {
- 	EROFS_NO_KMAP,		/* don't map the buffer */
- 	EROFS_KMAP,		/* use kmap_local_page() to map the buffer */
-@@ -492,7 +458,7 @@ static inline void erofs_pagepool_add(struct page **pagepool, struct page *page)
- void erofs_release_pages(struct page **pagepool);
- 
- #ifdef CONFIG_EROFS_FS_ZIP
--int erofs_workgroup_put(struct erofs_workgroup *grp);
-+void erofs_workgroup_put(struct erofs_workgroup *grp);
- struct erofs_workgroup *erofs_find_workgroup(struct super_block *sb,
- 					     pgoff_t index);
- struct erofs_workgroup *erofs_insert_workgroup(struct super_block *sb,
-diff --git a/fs/erofs/utils.c b/fs/erofs/utils.c
-index 46627cb69abe..6ed79f10e2e2 100644
---- a/fs/erofs/utils.c
-+++ b/fs/erofs/utils.c
-@@ -33,22 +33,21 @@ void erofs_release_pages(struct page **pagepool)
- /* global shrink count (for all mounted EROFS instances) */
- static atomic_long_t erofs_global_shrink_cnt;
- 
--static int erofs_workgroup_get(struct erofs_workgroup *grp)
-+static bool erofs_workgroup_get(struct erofs_workgroup *grp)
- {
--	int o;
-+	if (lockref_get_not_zero(&grp->lockref))
-+		return true;
- 
--repeat:
--	o = erofs_wait_on_workgroup_freezed(grp);
--	if (o <= 0)
--		return -1;
--
--	if (atomic_cmpxchg(&grp->refcount, o, o + 1) != o)
--		goto repeat;
-+	spin_lock(&grp->lockref.lock);
-+	if (__lockref_is_dead(&grp->lockref)) {
-+		spin_unlock(&grp->lockref.lock);
-+		return false;
-+	}
- 
--	/* decrease refcount paired by erofs_workgroup_put */
--	if (o == 1)
-+	if (!grp->lockref.count++)
- 		atomic_long_dec(&erofs_global_shrink_cnt);
--	return 0;
-+	spin_unlock(&grp->lockref.lock);
-+	return true;
- }
- 
- struct erofs_workgroup *erofs_find_workgroup(struct super_block *sb,
-@@ -61,7 +60,7 @@ struct erofs_workgroup *erofs_find_workgroup(struct super_block *sb,
- 	rcu_read_lock();
- 	grp = xa_load(&sbi->managed_pslots, index);
- 	if (grp) {
--		if (erofs_workgroup_get(grp)) {
-+		if (!erofs_workgroup_get(grp)) {
- 			/* prefer to relax rcu read side */
- 			rcu_read_unlock();
- 			goto repeat;
-@@ -80,11 +79,10 @@ struct erofs_workgroup *erofs_insert_workgroup(struct super_block *sb,
- 	struct erofs_workgroup *pre;
- 
- 	/*
--	 * Bump up a reference count before making this visible
--	 * to others for the XArray in order to avoid potential
--	 * UAF without serialized by xa_lock.
-+	 * Bump up before making this visible to others for the XArray in order
-+	 * to avoid potential UAF without serialized by xa_lock.
- 	 */
--	atomic_inc(&grp->refcount);
-+	lockref_get(&grp->lockref);
- 
- repeat:
- 	xa_lock(&sbi->managed_pslots);
-@@ -93,13 +91,13 @@ struct erofs_workgroup *erofs_insert_workgroup(struct super_block *sb,
- 	if (pre) {
- 		if (xa_is_err(pre)) {
- 			pre = ERR_PTR(xa_err(pre));
--		} else if (erofs_workgroup_get(pre)) {
-+		} else if (!erofs_workgroup_get(pre)) {
- 			/* try to legitimize the current in-tree one */
- 			xa_unlock(&sbi->managed_pslots);
- 			cond_resched();
- 			goto repeat;
- 		}
--		atomic_dec(&grp->refcount);
-+		lockref_put_return(&grp->lockref);
- 		grp = pre;
- 	}
- 	xa_unlock(&sbi->managed_pslots);
-@@ -112,38 +110,35 @@ static void  __erofs_workgroup_free(struct erofs_workgroup *grp)
- 	erofs_workgroup_free_rcu(grp);
- }
- 
--int erofs_workgroup_put(struct erofs_workgroup *grp)
-+void erofs_workgroup_put(struct erofs_workgroup *grp)
- {
--	int count = atomic_dec_return(&grp->refcount);
-+	if (lockref_put_not_zero(&grp->lockref))
-+		return;
- 
--	if (count == 1)
-+	spin_lock(&grp->lockref.lock);
-+	DBG_BUGON(__lockref_is_dead(&grp->lockref));
-+	if (grp->lockref.count == 1)
- 		atomic_long_inc(&erofs_global_shrink_cnt);
--	else if (!count)
--		__erofs_workgroup_free(grp);
--	return count;
-+	--grp->lockref.count;
-+	spin_unlock(&grp->lockref.lock);
- }
- 
- static bool erofs_try_to_release_workgroup(struct erofs_sb_info *sbi,
- 					   struct erofs_workgroup *grp)
- {
--	/*
--	 * If managed cache is on, refcount of workgroups
--	 * themselves could be < 0 (freezed). In other words,
--	 * there is no guarantee that all refcounts > 0.
--	 */
--	if (!erofs_workgroup_try_to_freeze(grp, 1))
--		return false;
-+	int free = false;
-+
-+	spin_lock(&grp->lockref.lock);
-+	if (grp->lockref.count)
-+		goto out;
- 
- 	/*
--	 * Note that all cached pages should be unattached
--	 * before deleted from the XArray. Otherwise some
--	 * cached pages could be still attached to the orphan
--	 * old workgroup when the new one is available in the tree.
-+	 * Note that all cached pages should be detached before deleted from
-+	 * the XArray. Otherwise some cached pages could be still attached to
-+	 * the orphan old workgroup when the new one is available in the tree.
- 	 */
--	if (erofs_try_to_free_all_cached_pages(sbi, grp)) {
--		erofs_workgroup_unfreeze(grp, 1);
--		return false;
--	}
-+	if (erofs_try_to_free_all_cached_pages(sbi, grp))
-+		goto out;
- 
- 	/*
- 	 * It's impossible to fail after the workgroup is freezed,
-@@ -152,10 +147,13 @@ static bool erofs_try_to_release_workgroup(struct erofs_sb_info *sbi,
- 	 */
- 	DBG_BUGON(__xa_erase(&sbi->managed_pslots, grp->index) != grp);
- 
--	/* last refcount should be connected with its managed pslot.  */
--	erofs_workgroup_unfreeze(grp, 0);
--	__erofs_workgroup_free(grp);
--	return true;
-+	lockref_mark_dead(&grp->lockref);
-+	free = true;
-+out:
-+	spin_unlock(&grp->lockref.lock);
-+	if (free)
-+		__erofs_workgroup_free(grp);
-+	return free;
- }
- 
- static unsigned long erofs_shrink_workstation(struct erofs_sb_info *sbi,
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 15a383899540..2ea8e7f08372 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -643,7 +643,7 @@ int erofs_try_to_free_all_cached_pages(struct erofs_sb_info *sbi,
- 
- 	DBG_BUGON(z_erofs_is_inline_pcluster(pcl));
- 	/*
--	 * refcount of workgroup is now freezed as 1,
-+	 * refcount of workgroup is now freezed as 0,
- 	 * therefore no need to worry about available decompression users.
- 	 */
- 	for (i = 0; i < pcl->pclusterpages; ++i) {
-@@ -676,10 +676,11 @@ static bool z_erofs_cache_release_folio(struct folio *folio, gfp_t gfp)
- 	if (!folio_test_private(folio))
- 		return true;
- 
--	if (!erofs_workgroup_try_to_freeze(&pcl->obj, 1))
--		return false;
--
- 	ret = false;
-+	spin_lock(&pcl->obj.lockref.lock);
-+	if (pcl->obj.lockref.count > 0)
-+		goto out;
-+
- 	DBG_BUGON(z_erofs_is_inline_pcluster(pcl));
- 	for (i = 0; i < pcl->pclusterpages; ++i) {
- 		if (pcl->compressed_bvecs[i].page == &folio->page) {
-@@ -688,10 +689,10 @@ static bool z_erofs_cache_release_folio(struct folio *folio, gfp_t gfp)
- 			break;
- 		}
- 	}
--	erofs_workgroup_unfreeze(&pcl->obj, 1);
--
- 	if (ret)
- 		folio_detach_private(folio);
-+out:
-+	spin_unlock(&pcl->obj.lockref.lock);
- 	return ret;
- }
- 
-@@ -807,7 +808,7 @@ static int z_erofs_register_pcluster(struct z_erofs_decompress_frontend *fe)
- 	if (IS_ERR(pcl))
- 		return PTR_ERR(pcl);
- 
--	atomic_set(&pcl->obj.refcount, 1);
-+	spin_lock_init(&pcl->obj.lockref.lock);
- 	pcl->algorithmformat = map->m_algorithmformat;
- 	pcl->length = 0;
- 	pcl->partial = true;
--- 
-2.24.4
-
+> > @@ -909,23 +911,32 @@ static struct page *xdp_linearize_page(struct rec=
+eive_queue *rq,
+> >                                      struct page *p,
+> >                                      int offset,
+> >                                      int page_off,
+> > -                                    unsigned int *len)
+> > +                                    unsigned int *len,
+> > +                                        unsigned int *pp_frag_offset)
+> >  {
+> >       int tailroom =3D SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+> >       struct page *page;
+> > +     unsigned int pp_frag_offset_val;
+> >
+> >       if (page_off + *len + tailroom > PAGE_SIZE)
+> >               return NULL;
+> >
+> >       if (rq->page_pool)
+> > -             page =3D page_pool_dev_alloc_pages(rq->page_pool);
+> > +             if (rq->page_pool->p.flags & PP_FLAG_PAGE_FRAG)
+> > +                     page =3D page_pool_dev_alloc_frag(rq->page_pool, =
+pp_frag_offset,
+> > +                                                     PAGE_SIZE);
+> > +             else
+> > +                     page =3D page_pool_dev_alloc_pages(rq->page_pool)=
+;
+> >       else
+> >               page =3D alloc_page(GFP_ATOMIC);
+> >
+> >       if (!page)
+> >               return NULL;
+> >
+> > -     memcpy(page_address(page) + page_off, page_address(p) + offset, *=
+len);
+> > +     pp_frag_offset_val =3D pp_frag_offset ? *pp_frag_offset : 0;
+> > +
+> > +     memcpy(page_address(page) + page_off + pp_frag_offset_val,
+> > +            page_address(p) + offset, *len);
+> >       page_off +=3D *len;
+> >
+> >       while (--*num_buf) {
+> > @@ -948,7 +959,7 @@ static struct page *xdp_linearize_page(struct recei=
+ve_queue *rq,
+> >                       goto err_buf;
+> >               }
+> >
+> > -             memcpy(page_address(page) + page_off,
+> > +             memcpy(page_address(page) + page_off + pp_frag_offset_val=
+,
+> >                      page_address(p) + off, buflen);
+> >               page_off +=3D buflen;
+> >               virtnet_put_page(rq, p);
+> > @@ -1029,7 +1040,7 @@ static struct sk_buff *receive_small_xdp(struct n=
+et_device *dev,
+> >                       SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+> >               xdp_page =3D xdp_linearize_page(rq, &num_buf, page,
+> >                                             offset, header_offset,
+> > -                                           &tlen);
+> > +                                           &tlen, NULL);
+> >               if (!xdp_page)
+> >                       goto err_xdp;
+> >
+> > @@ -1323,6 +1334,7 @@ static void *mergeable_xdp_get_buf(struct virtnet=
+_info *vi,
+> >       unsigned int headroom =3D mergeable_ctx_to_headroom(ctx);
+> >       struct page *xdp_page;
+> >       unsigned int xdp_room;
+> > +     unsigned int page_frag_offset =3D 0;
+> >
+> >       /* Transient failure which in theory could occur if
+> >        * in-flight packets from before XDP was enabled reach
+> > @@ -1356,7 +1368,8 @@ static void *mergeable_xdp_get_buf(struct virtnet=
+_info *vi,
+> >               xdp_page =3D xdp_linearize_page(rq, num_buf,
+> >                                             *page, offset,
+> >                                             VIRTIO_XDP_HEADROOM,
+> > -                                           len);
+> > +                                           len,
+> > +                                               &page_frag_offset);
+> >               if (!xdp_page)
+> >                       return NULL;
+> >       } else {
+> > @@ -1366,14 +1379,19 @@ static void *mergeable_xdp_get_buf(struct virtn=
+et_info *vi,
+> >                       return NULL;
+> >
+> >               if (rq->page_pool)
+> > -                     xdp_page =3D page_pool_dev_alloc_pages(rq->page_p=
+ool);
+> > +                     if (rq->page_pool->p.flags & PP_FLAG_PAGE_FRAG)
+> > +                             xdp_page =3D page_pool_dev_alloc_frag(rq-=
+>page_pool,
+> > +                                                                 &page=
+_frag_offset, PAGE_SIZE);
+> > +                     else
+> > +                             xdp_page =3D page_pool_dev_alloc_pages(rq=
+->page_pool);
+> >               else
+> >                       xdp_page =3D alloc_page(GFP_ATOMIC);
+> > +
+> >               if (!xdp_page)
+> >                       return NULL;
+> >
+> > -             memcpy(page_address(xdp_page) + VIRTIO_XDP_HEADROOM,
+> > -                    page_address(*page) + offset, *len);
+> > +             memcpy(page_address(xdp_page) + VIRTIO_XDP_HEADROOM +
+> > +                             page_frag_offset, page_address(*page) + o=
+ffset, *len);
+> >       }
+> >
+> >       *frame_sz =3D PAGE_SIZE;
+> > @@ -1382,7 +1400,7 @@ static void *mergeable_xdp_get_buf(struct virtnet=
+_info *vi,
+> >
+> >       *page =3D xdp_page;
+> >
+> > -     return page_address(*page) + VIRTIO_XDP_HEADROOM;
+> > +     return page_address(*page) + VIRTIO_XDP_HEADROOM + page_frag_offs=
+et;
+> >  }
+> >
+> >  static struct sk_buff *receive_mergeable_xdp(struct net_device *dev,
+> > @@ -1762,6 +1780,7 @@ static int add_recvbuf_mergeable(struct virtnet_i=
+nfo *vi,
+> >       void *ctx;
+> >       int err;
+> >       unsigned int len, hole;
+> > +     unsigned int pp_frag_offset;
+> >
+> >       /* Extra tailroom is needed to satisfy XDP's assumption. This
+> >        * means rx frags coalescing won't work, but consider we've
+> > @@ -1769,13 +1788,29 @@ static int add_recvbuf_mergeable(struct virtnet=
+_info *vi,
+> >        */
+> >       len =3D get_mergeable_buf_len(rq, &rq->mrg_avg_pkt_len, room);
+> >       if (rq->page_pool) {
+> > -             struct page *page;
+> > +             if (rq->page_pool->p.flags & PP_FLAG_PAGE_FRAG) {
+> > +                     if (unlikely(!page_pool_dev_alloc_frag(rq->page_p=
+ool,
+> > +                                                            &pp_frag_o=
+ffset, len + room)))
+> > +                             return -ENOMEM;
+> > +                     buf =3D (char *)page_address(rq->page_pool->frag_=
+page) +
+> > +                             pp_frag_offset;
+> > +                     buf +=3D headroom; /* advance address leaving hol=
+e at front of pkt */
+> > +                     hole =3D (PAGE_SIZE << rq->page_pool->p.order)
+> > +                             - rq->page_pool->frag_offset;
+> > +                     if (hole < len + room) {
+> > +                             if (!headroom)
+> > +                                     len +=3D hole;
+> > +                             rq->page_pool->frag_offset +=3D hole;
+> > +                     }
+> > +             } else {
+> > +                     struct page *page;
+> >
+> > -             page =3D page_pool_dev_alloc_pages(rq->page_pool);
+> > -             if (unlikely(!page))
+> > -                     return -ENOMEM;
+> > -             buf =3D (char *)page_address(page);
+> > -             buf +=3D headroom; /* advance address leaving hole at fro=
+nt of pkt */
+> > +                     page =3D page_pool_dev_alloc_pages(rq->page_pool)=
+;
+> > +                     if (unlikely(!page))
+> > +                             return -ENOMEM;
+> > +                     buf =3D (char *)page_address(page);
+> > +                     buf +=3D headroom; /* advance address leaving hol=
+e at front of pkt */
+> > +             }
+> >       } else {
+> >               if (unlikely(!skb_page_frag_refill(len + room, alloc_frag=
+, gfp)))
+> >                       return -ENOMEM;
+> > @@ -3800,13 +3835,16 @@ static void virtnet_alloc_page_pool(struct rece=
+ive_queue *rq)
+> >       struct virtio_device *vdev =3D rq->vq->vdev;
+> >
+> >       struct page_pool_params pp_params =3D {
+> > -             .order =3D 0,
+> > +             .order =3D page_pool_frag ? SKB_FRAG_PAGE_ORDER : 0,
+> >               .pool_size =3D rq->vq->num_max,
+> >               .nid =3D dev_to_node(vdev->dev.parent),
+> >               .dev =3D vdev->dev.parent,
+> >               .offset =3D 0,
+> >       };
+> >
+> > +     if (page_pool_frag)
+> > +             pp_params.flags |=3D PP_FLAG_PAGE_FRAG;
+> > +
+> >       rq->page_pool =3D page_pool_create(&pp_params);
+> >       if (IS_ERR(rq->page_pool)) {
+> >               dev_warn(&vdev->dev, "page pool creation failed: %ld\n",
+> > --
+> > 2.31.1
+>
