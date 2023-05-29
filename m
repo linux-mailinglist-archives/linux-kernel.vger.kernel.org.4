@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4421D714EA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7016E714EAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjE2Qqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S229620AbjE2QsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjE2QqU (ORCPT
+        with ESMTP id S229536AbjE2QsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:46:20 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD77B5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:46:18 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5147dce372eso4999100a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:46:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685378777; x=1687970777;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o6KztWxfOQw7uIdLc2nfQ4eiSQgNkopQmfDWyk3B1pA=;
-        b=Gyt0f4sPQH8c/Yxoq/p6+y5qkwYSWa26y/xs3+N+ciE8FYOVZ7J6zlIPldqKZ9mZCy
-         P8RQBP/nUCMXQSwSviRg4NilNzK3EFKIOu+HRNl9YROsQxVUO2lfQ5FGVe+wAFqbhKqP
-         9taBOpLFmOR21sbKA6xg+kVTEVlhJd2rUoshaXHyy77vT/u7iAA45hq3AKMZ4RO3fkT8
-         Vje55rUydVT+i9gCqmf+uUzMHhLge9Ezch2RLh3IUat5YaeUCrnZWOBGyBwXj0mlRedF
-         LIlGr/MUwOq5qUS4ZA0BUs4CZsI4g/n0D+O1DxtLYFakPRdtH/8ldO2CRwRd7QD3veKu
-         ZW6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685378777; x=1687970777;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o6KztWxfOQw7uIdLc2nfQ4eiSQgNkopQmfDWyk3B1pA=;
-        b=iBqXAxVE0mzZdReHSC6j32YG48/OY9PsSmQuMofjqIKWZ7AsyYVsAAzQlFZepObtwx
-         7oyWPk62WudshCA0n5oaFlAwz+WcrcRvunXam9lL9px5zmra0VOzt3I+dtU5DGBaXqqV
-         AjL/v81nPo1sgtD6+rpoIfYXOi8HJMestNkb247sxdp42rOP4CfLCtjsDfTTVWTJDdRU
-         OmvND2hldjgiq84epa9qQyVbecigeFITNqI1ocRwcPDxLEtYpBMjZnvlEepiHtxtfwjK
-         rTCWgcbRs86Whhnz7si7lX9f7X2r9ynSfmp073bqOg6IIjpShHL/U2j7nLzq5L1YSkQY
-         Ky1w==
-X-Gm-Message-State: AC+VfDz873GBrR+ZmB43JNJ6lkjm9nMBSpdo7HdELPpwUKA7HWJWIQEE
-        GWq0O0QNiEoQR+bhob0YBjjOiA==
-X-Google-Smtp-Source: ACHHUZ4d9Ioo2R78/WrM/mfDBsIfkzraI/JknJg/l/cBMd2pPd3hVpvP1bJ2Sav3NgeP8b8Zr6E32g==
-X-Received: by 2002:aa7:dccc:0:b0:510:ed22:db43 with SMTP id w12-20020aa7dccc000000b00510ed22db43mr228129edu.24.1685378776855;
-        Mon, 29 May 2023 09:46:16 -0700 (PDT)
-Received: from ph18.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id f4-20020aa7d844000000b0050d89daaa70sm3248578eds.2.2023.05.29.09.46.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 09:46:16 -0700 (PDT)
-From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-Subject: [PATCH v3 5/5] thermal/drivers/mediatek/lvts_thermal: Update calibration data documentation
-Date:   Mon, 29 May 2023 18:46:05 +0200
-Message-ID: <20230529164605.3552619-6-bero@baylibre.com>
-X-Mailer: git-send-email 2.41.0.rc2
-In-Reply-To: <20230529164605.3552619-1-bero@baylibre.com>
-References: <20230529164605.3552619-1-bero@baylibre.com>
+        Mon, 29 May 2023 12:48:12 -0400
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [IPv6:2001:1600:3:17::42ad])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C15AAD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:48:10 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QVM0S0h90zMqS8N;
+        Mon, 29 May 2023 18:48:08 +0200 (CEST)
+Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4QVM0N4qpgzMpvXY;
+        Mon, 29 May 2023 18:48:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1685378887;
+        bh=L+AoM15vKXrvn30NczrqA+aX9dwRdpATxmicKsa0b54=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NIV0lHsv0wTD7BCC4ZXt7w9oowUL9SV7UxKoOT7S1KqEP+2aSUrieQxP9LJP59+mO
+         ZNd3IkCScExVnFAtc3C902qJRT2LHk41z0nJeTFW/IpjysBJPb3bghczvpI3mYK0CS
+         5fhux6+oZzWtW4Q9BILMrxW1qJ1honAjKd3plkns=
+Message-ID: <901ff104-215c-8e81-fbae-5ecd8fa94449@digikod.net>
+Date:   Mon, 29 May 2023 18:48:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: 
+Subject: Re: [PATCH v1 5/9] KVM: x86: Add new hypercall to lock control
+ registers
+Content-Language: en-US
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Alexander Graf <graf@amazon.com>,
+        Forrest Yuan Yu <yuanyu@google.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        John Andersen <john.s.andersen@intel.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Marian Rotariu <marian.c.rotariu@gmail.com>,
+        =?UTF-8?Q?Mihai_Don=c8=9bu?= <mdontu@bitdefender.com>,
+        =?UTF-8?B?TmljdciZb3IgQ8OuyJt1?= <nicu.citu@icloud.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Thara Gopinath <tgopinath@microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        Zahra Tarkhani <ztarkhani@microsoft.com>,
+        =?UTF-8?Q?=c8=98tefan_=c8=98icleru?= <ssicleru@bitdefender.com>,
+        dev@lists.cloudhypervisor.org, kvm@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, qemu-devel@nongnu.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org
+References: <20230505152046.6575-1-mic@digikod.net>
+ <20230505152046.6575-6-mic@digikod.net>
+ <ZFlllHjntehpthma@liuwe-devbox-debian-v2>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <ZFlllHjntehpthma@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,74 +81,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Balsam CHIHI <bchihi@baylibre.com>
 
-Update LVTS calibration data documentation for mt8192 and mt8195.
+On 08/05/2023 23:11, Wei Liu wrote:
+> On Fri, May 05, 2023 at 05:20:42PM +0200, Mickaël Salaün wrote:
+>> This enables guests to lock their CR0 and CR4 registers with a subset of
+>> X86_CR0_WP, X86_CR4_SMEP, X86_CR4_SMAP, X86_CR4_UMIP, X86_CR4_FSGSBASE
+>> and X86_CR4_CET flags.
+>>
+>> The new KVM_HC_LOCK_CR_UPDATE hypercall takes two arguments.  The first
+>> is to identify the control register, and the second is a bit mask to
+>> pin (i.e. mark as read-only).
+>>
+>> These register flags should already be pinned by Linux guests, but once
+>> compromised, this self-protection mechanism could be disabled, which is
+>> not the case with this dedicated hypercall.
+>>
+>> Cc: Borislav Petkov <bp@alien8.de>
+>> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+>> Cc: H. Peter Anvin <hpa@zytor.com>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+>> Cc: Paolo Bonzini <pbonzini@redhat.com>
+>> Cc: Sean Christopherson <seanjc@google.com>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> Cc: Wanpeng Li <wanpengli@tencent.com>
+>> Signed-off-by: Mickaël Salaün <mic@digikod.net>
+>> Link: https://lore.kernel.org/r/20230505152046.6575-6-mic@digikod.net
+> [...]
+>>   	hw_cr4 = (cr4_read_shadow() & X86_CR4_MCE) | (cr4 & ~X86_CR4_MCE);
+>>   	if (is_unrestricted_guest(vcpu))
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index ffab64d08de3..a529455359ac 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -7927,11 +7927,77 @@ static unsigned long emulator_get_cr(struct x86_emulate_ctxt *ctxt, int cr)
+>>   	return value;
+>>   }
+>>   
+>> +#ifdef CONFIG_HEKI
+>> +
+>> +extern unsigned long cr4_pinned_mask;
+>> +
+> 
+> Can this be moved to a header file?
 
-Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-[bero@baylibre.com: Fix issues pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>]
-Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
----
- drivers/thermal/mediatek/lvts_thermal.c | 31 +++++++++++++++++++++++--
- 1 file changed, 29 insertions(+), 2 deletions(-)
+Yep, but I'm not sure which one. Any preference Kees?
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index d5e5214784ece..9185d02003633 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -531,7 +531,8 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * The efuse blob values follows the sensor enumeration per thermal
-  * controller. The decoding of the stream is as follow:
-  *
-- * stream index map for MCU Domain :
-+ * MT8195 :
-+ * Stream index map for MCU Domain mt8195 :
-  *
-  * <-----mcu-tc#0-----> <-----sensor#0-----> <-----sensor#1----->
-  *  0x01 | 0x02 | 0x03 | 0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09
-@@ -542,7 +543,7 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * <-----mcu-tc#2-----> <-----sensor#4-----> <-----sensor#5-----> <-----sensor#6-----> <-----sensor#7----->
-  *  0x13 | 0x14 | 0x15 | 0x16 | 0x17 | 0x18 | 0x19 | 0x1A | 0x1B | 0x1C | 0x1D | 0x1E | 0x1F | 0x20 | 0x21
-  *
-- * stream index map for AP Domain :
-+ * Stream index map for AP Domain mt8195 :
-  *
-  * <-----ap--tc#0-----> <-----sensor#0-----> <-----sensor#1----->
-  *  0x22 | 0x23 | 0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A
-@@ -556,6 +557,32 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * <-----ap--tc#3-----> <-----sensor#7-----> <-----sensor#8----->
-  *  0x40 | 0x41 | 0x42 | 0x43 | 0x44 | 0x45 | 0x46 | 0x47 | 0x48
-  *
-+ * MT8192 :
-+ * Stream index map for MCU Domain mt8192 :
-+ *
-+ * <-----mcu-tc#0-----> <-----sensor#0----->        <-----sensor#1----->
-+ *  0x01 | 0x02 | 0x03 | 0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09 | 0x0A | 0x0B
-+ *
-+ * <-----sensor#2----->        <-----sensor#3----->
-+ *  0x0C | 0x0D | 0x0E | 0x0F | 0x10 | 0x11 | 0x12 | 0x13
-+ *
-+ * <-----sensor#4----->        <-----sensor#5----->        <-----sensor#6----->        <-----sensor#7----->
-+ *  0x14 | 0x15 | 0x16 | 0x17 | 0x18 | 0x19 | 0x1A | 0x1B | 0x1C | 0x1D | 0x1E | 0x1F | 0x20 | 0x21 | 0x22 | 0x23
-+ *
-+ * Stream index map for AP Domain mt8192 :
-+ *
-+ * <-----sensor#0----->        <-----sensor#1----->
-+ *  0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A | 0x2B
-+ *
-+ * <-----sensor#2----->        <-----sensor#3----->
-+ *  0x2C | 0x2D | 0x2E | 0x2F | 0x30 | 0x31 | 0x32 | 0x33
-+ *
-+ * <-----sensor#4----->        <-----sensor#5----->
-+ *  0x34 | 0x35 | 0x36 | 0x37 | 0x38 | 0x39 | 0x3A | 0x3B
-+ *
-+ * <-----sensor#6----->        <-----sensor#7----->        <-----sensor#8----->
-+ *  0x3C | 0x3D | 0x3E | 0x3F | 0x40 | 0x41 | 0x42 | 0x43 | 0x44 | 0x45 | 0x46 | 0x47
-+ *
-  * The data description gives the offset of the calibration data in
-  * this bytes stream for each sensor.
-  */
--- 
-2.41.0.rc2
 
+> 
+>> +static int heki_lock_cr(struct kvm *const kvm, const unsigned long cr,
+>> +			unsigned long pin)
+>> +{
+>> +	if (!pin)
+>> +		return -KVM_EINVAL;
+>> +
+>> +	switch (cr) {
+>> +	case 0:
+>> +		/* Cf. arch/x86/kernel/cpu/common.c */
+>> +		if (!(pin & X86_CR0_WP))
+>> +			return -KVM_EINVAL;
+>> +
+>> +		if ((read_cr0() & pin) != pin)
+>> +			return -KVM_EINVAL;
+>> +
+>> +		atomic_long_or(pin, &kvm->heki_pinned_cr0);
+>> +		return 0;
+>> +	case 4:
+>> +		/* Checks for irrelevant bits. */
+>> +		if ((pin & cr4_pinned_mask) != pin)
+>> +			return -KVM_EINVAL;
+>> +
+> 
+> It is enforcing the host mask on the guest, right? If the guest's set is a
+> super set of the host's then it will get rejected.
+> 
+> 
+>> +		/* Ignores bits not present in host. */
+>> +		pin &= __read_cr4();
+>> +		atomic_long_or(pin, &kvm->heki_pinned_cr4);
+
+We assume that the host's mask is a superset of the guest's mask. I 
+guess we should check the absolute supported bits instead, even if it 
+would be weird for the host to not support these bits.
+
+
+>> +		return 0;
+>> +	}
+>> +	return -KVM_EINVAL;
+>> +}
+>> +
+>> +int heki_check_cr(const struct kvm *const kvm, const unsigned long cr,
+>> +		  const unsigned long val)
+>> +{
+>> +	unsigned long pinned;
+>> +
+>> +	switch (cr) {
+>> +	case 0:
+>> +		pinned = atomic_long_read(&kvm->heki_pinned_cr0);
+>> +		if ((val & pinned) != pinned) {
+>> +			pr_warn_ratelimited(
+>> +				"heki-kvm: Blocked CR0 update: 0x%lx\n", val);
+> 
+> I think if the message contains the VM and VCPU identifier it will
+> become more useful.
+
+Indeed, and this should be the case for all log messages, but I'd left 
+that for future work. ;) I'll update the logs for the next series with a 
+new kvm_warn_ratelimited() helper using VCPU's PID.
