@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36682714828
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 12:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2000771482E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 12:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjE2KqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 06:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
+        id S231631AbjE2KrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 06:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbjE2Kp6 (ORCPT
+        with ESMTP id S230321AbjE2KrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 06:45:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CDEC4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:45:56 -0700 (PDT)
+        Mon, 29 May 2023 06:47:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAAFB2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:47:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AD796123D
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B18C9C433D2;
-        Mon, 29 May 2023 10:45:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 662AA6235A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1AFDC433D2;
+        Mon, 29 May 2023 10:47:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685357155;
-        bh=YyZhd7+u4rnN68BcvCm78mN9H7X5EQow465eMlMwb4A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GAGhpNbneXKu5Fu+MvG/WOrAYFJa/OhdGymyw5GN6sYkdBGsPBX1UbwYq+xtmcXiS
-         GSc+hMQ6MFpNsY/QCqnjbpL3JYYbKuBmhGnnK90BnWJ/iAeKv8t0h0YWHQBJxbGRix
-         D9+ULVYtggHIYgYaJVL+vNY2pQ/zg/RSfKPoc496Obts+VgzMbbu0zTBkxOg5mLiBE
-         ustXpn3uJ8ZNVVgx0FEQrvLk0lK9smLr3YNL84eyEuIYQYVUlrD5Z/0k3p4m8NZ9h8
-         vdCA4pucvoTL+6/eumOu/74mhwYt6AT9O/ZrxY/R9l16QWvX67qjTfueFzHgiQZaxq
-         eCrLxfGUvno7A==
-Date:   Mon, 29 May 2023 13:45:30 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        mcgrof@kernel.org, peterz@infradead.org, tglx@linutronix.de,
-        x86@kernel.org
-Subject: Re: [PATCH 0/3] Type aware module allocator
-Message-ID: <20230529104530.GL4967@kernel.org>
-References: <20230526051529.3387103-1-song@kernel.org>
- <ZHGrjJ8PqAGN9OZK@moria.home.lan>
- <CAPhsuW4DAwx=7Nta5HGiPTJ1LQJCGJGY3FrsdKi62f_zJbsRFQ@mail.gmail.com>
+        s=k20201202; t=1685357233;
+        bh=p/JAPWlDlZsRf7RefrcupA6Ov+l7wpHejJQECxSubZ8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EpV1NHYx3TY0K+KckvIZU6XCIIYbfhNZimuoZzikenGGRC5msuC0C5KBNecdgMf9k
+         v0SpoQJQKDSdR9LHvJGkJxYFegctz0o81HLAdje69jmnwemb1kWxXgoIsuOD7i3+xy
+         wqNULq1TWQL+/bo7jKwHypqYtg3jpPb8ztyQzmTBMPIubVw5EQ08b1Z7UChdK5wYH3
+         wx7D0jOBS1XbldBcqBpkrB93BEm5Vp8vAkXjkCqQZLl7JIp7AoV4v8dHI5OX29hSt7
+         hyaTo2JNiu0jfCRIP7nN2LqMnIaBhFWm+bJYTiL7SYHaY0RzJWgCc4r/9BJOptZ1rB
+         hmB05MlPfKlww==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH v2] f2fs: fix to avoid mmap vs set_compress_option case
+Date:   Mon, 29 May 2023 18:47:09 +0800
+Message-Id: <20230529104709.2560779-1-chao@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW4DAwx=7Nta5HGiPTJ1LQJCGJGY3FrsdKi62f_zJbsRFQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,31 +52,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 27, 2023 at 10:58:37PM -0700, Song Liu wrote:
-> On Sat, May 27, 2023 at 12:04 AM Kent Overstreet
-> <kent.overstreet@linux.dev> wrote:
-> >
-> > I think this needs to back to the drawing board and we need something
-> > simpler just targeted at executable memory; architecture specific
-> > options should definitely _not_ be part of the exposed interface.
-> 
-> I don't think we are exposing architecture specific options to users.
-> Some layer need to handle arch specifics. If the new allocator is
-> built on top of module_alloc, module_alloc is handling that. If the new
-> allocator is to replace module_alloc, it needs to handle arch specifics.
+Compression option in inode should not be changed after they have
+been used, however, it may happen in below race case:
+
+Thread A				Thread B
+- f2fs_ioc_set_compress_option
+ - check f2fs_is_mmap_file()
+ - check get_dirty_pages()
+ - check F2FS_HAS_BLOCKS()
+					- f2fs_file_mmap
+					 - set_inode_flag(FI_MMAP_FILE)
+					- fault
+					 - do_page_mkwrite
+					  - f2fs_vm_page_mkwrite
+					  - f2fs_get_block_locked
+					 - fault_dirty_shared_page
+					  - set_page_dirty
+ - update i_compress_algorithm
+ - update i_log_cluster_size
+ - update i_cluster_size
+
+Avoid such race condition by covering f2fs_file_mmap() w/ inode lock,
+meanwhile add mmap file check condition in f2fs_may_compress() as well.
+
+Fixes: e1e8debec656 ("f2fs: add F2FS_IOC_SET_COMPRESS_OPTION ioctl")
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+v2:
+- add mmap file check condition in f2fs_may_compress()
+ fs/f2fs/f2fs.h |  3 ++-
+ fs/f2fs/file.c | 14 +++++++++++---
+ 2 files changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 9bd83fb28439..0db8b37c7a4d 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4487,7 +4487,8 @@ static inline bool f2fs_low_mem_mode(struct f2fs_sb_info *sbi)
+ static inline bool f2fs_may_compress(struct inode *inode)
+ {
+ 	if (IS_SWAPFILE(inode) || f2fs_is_pinned_file(inode) ||
+-		f2fs_is_atomic_file(inode) || f2fs_has_inline_data(inode))
++		f2fs_is_atomic_file(inode) || f2fs_has_inline_data(inode) ||
++		f2fs_is_mmap_file(inode))
+ 		return false;
+ 	return S_ISREG(inode->i_mode) || S_ISDIR(inode->i_mode);
+ }
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 7b097ab2f5e4..685ded62fc28 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -519,17 +519,25 @@ static loff_t f2fs_llseek(struct file *file, loff_t offset, int whence)
+ static int f2fs_file_mmap(struct file *file, struct vm_area_struct *vma)
+ {
+ 	struct inode *inode = file_inode(file);
++	int ret = 0;
  
-I'm for creating a new allocator that will replace module_alloc(). This
-will give us a clean abstraction that modules and all the rest will use and
-it will make easier to plug binpack or another allocator instead of
-vmalloc.
-Another point is with a new allocator we won't have weird dependencies on
-CONFIG_MODULE in e.g. bpf and kprobes.
-
-I'll have something ready to post as an RFC in a few days.
-
-> Thanks,
-> Song
-
+ 	if (unlikely(f2fs_cp_error(F2FS_I_SB(inode))))
+ 		return -EIO;
+ 
+-	if (!f2fs_is_compress_backend_ready(inode))
+-		return -EOPNOTSUPP;
++	inode_lock(inode);
++
++	if (!f2fs_is_compress_backend_ready(inode)) {
++		ret = -EOPNOTSUPP;
++		goto out_unlock;
++	}
+ 
+ 	file_accessed(file);
+ 	vma->vm_ops = &f2fs_file_vm_ops;
+ 	set_inode_flag(inode, FI_MMAP_FILE);
+-	return 0;
++
++out_unlock:
++	inode_unlock(inode);
++	return ret;
+ }
+ 
+ static int f2fs_file_open(struct inode *inode, struct file *filp)
 -- 
-Sincerely yours,
-Mike.
+2.40.1
+
