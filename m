@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B29714647
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B5B714649
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjE2I2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
+        id S231463AbjE2IbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjE2I2r (ORCPT
+        with ESMTP id S229513AbjE2IbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:28:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAB5A7;
-        Mon, 29 May 2023 01:28:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 29 May 2023 04:31:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B5DA7;
+        Mon, 29 May 2023 01:31:14 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01088611E1;
-        Mon, 29 May 2023 08:28:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 998B8C4339B;
-        Mon, 29 May 2023 08:28:43 +0000 (UTC)
-Date:   Mon, 29 May 2023 04:28:39 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-doc@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        William White <chwhite@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH V2 0/9] rtla improvements
-Message-ID: <20230529042839.5d4af427@rorschach.local.home>
-In-Reply-To: <cover.1684863094.git.bristot@kernel.org>
-References: <cover.1684863094.git.bristot@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 01ABC6605961;
+        Mon, 29 May 2023 09:31:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685349072;
+        bh=SgaXQ43zqDd+lRFXqCMttSv2BWRnEkrhM1NPjt8EZ+0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=K1XiEgSw6AMo6WNIulUT0UFwL37XiC77QE1vQeZaukNLzYgcvyD5h8gGi9xSNlaZo
+         1bdajVGwTs45qLcL11net7MloIXbs82Q759SyfRGigi2u28MzanEfKoc2EQuCThng7
+         kQsvH1ZxCd2DCGBqFwJ8DXXeYRUc9q2y7MMOAAFdxAWxObIicJseZRINCXTFtCM+Z/
+         YJ9FLdc5+w09UA7kh4v7Fd1W4qjIdfM56oAkNOA+DuGwO51f6HRlvA4uoq3w+fu84g
+         XB9Jk62h8iCtVL+Xjt3bxlPS5a7m9G4sokuNYzYTCvOF2k8Q7UWi/80XnQ9dYTo+/r
+         f9HzdiYrv1o2w==
+Message-ID: <2bae7dea-afc5-96b5-c6d1-f4724bae155c@collabora.com>
+Date:   Mon, 29 May 2023 10:31:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v6] media: mtk-vpu: Ensure alignment of 8 for DTCM buffer
+Content-Language: en-US
+To:     Pin-yen Lin <treapking@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-media@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>
+References: <20230526063149.1801196-1-treapking@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230526063149.1801196-1-treapking@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Il 26/05/23 08:31, Pin-yen Lin ha scritto:
+> From: Alexandre Courbot <acourbot@chromium.org>
+> 
+> When running memcpy_toio:
+> memcpy_toio(send_obj->share_buf, buf, len);
+> it was found that errors appear if len is not a multiple of 8:
+> 
+> [58.350841] mtk-mdp 14001000.rdma: processing failed: -22
+> 
+> This is because in ARM64, memcpy_toio does byte-size access
+> when the length is not a multiple of 8 while access to the
+> vpu iomem must be 4 aligned.
+> 
+> This patch ensures the copy of a multiple of 8 size by calling
+> round_up(len, 8) when copying.
+> 
+> Fixes: e6599adfad30 ("media: mtk-vpu: avoid unaligned access to DTCM buffer.")
+> Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> Reviewed-by: Houlong Wei <houlong.wei@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> ---
+> This is a re-send of v5 because it was marked obsolete, but this patch
+> is required for MT8173 platforms.
+> 
 
-Could you make sure to Cc linux-trace-kernel@vger.kernel.org and not
-linux-trace-devel. The former is for any patch that goes into the
-kernel repo, the later is for the tracing libraries (like libtracefs).
-The reason why this matters is that the patchwork that is associated to
-the Linux kernel tree will not get these (and I will not work on them
-when I'm working on kernel patches). But it will go into the 
-patchwork for the libraries (and never be processed by the patchwork
-infrastructure), and I will likely not work on them, because when I
-look at the library patchwork, I ignore anything that goes into the
-kernel.
+Hello,
+I have solved this issue in a different way and the commit was already picked.
 
-Perhaps resend with the proper Cc and it will then be processed. I
-allowed this to happen before, but that's because I did everything
-manually and not with my scripts. And I'm tired of doing that.
+Please check:
+ab14c99c035d ("media: platform: mtk-mdp: Fix mdp_ipi_comm structure alignment")
 
-Thanks,
-
--- Steve
-
-
-On Tue, 23 May 2023 19:44:22 +0200
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
-
-> This is a series of improvements for rtla, mainly as a result of our
-> daily usage of the tool debugging problems at red hat.
-> 
-> The cgroup support and house keeping options are from our usage
-> of the tool debugging containers.
-> 
-> The auto-analysis overhead reduction is needed when we go to
-> large boxes - but it is really hand in practice, as it gives an idea
-> of the problem without having to look at the trace.
-> 
-> Running hwnoise 100 % of CPU time might cause some systems
-> to slow down too much. Reduce its utilization to 75% by default to
-> avoid problems for people using it for the first time.
-> 
-> Finally, it adds support for running timerlat user-space threads,
-> and to collect the additional field via rtla timerlat top.
-> 
-> Changes from V1:
->   - Add the user-space thread support to rtla timerlat top
->     Link: https://lore.kernel.org/lkml/cover.1683827510.git.bristot@kernel.org/
-> 
-> Daniel Bristot de Oliveira (9):
->   rtla: Add -C cgroup support
->   rtla: Add --house-keeping option
->   rtla: Change monitored_cpus from char * to cpu_set_t
->   rtla: Automatically move rtla to a house-keeping cpu
->   rtla/timerlat: Give timerlat auto analysis its own instance
->   rtla/timerlat_hist: Add auto-analysis support
->   rtla: Start the tracers after creating all instances
->   rtla/hwnoise: Reduce runtime to 75%
->   rtla: Add timerlat user-space support for timerlat top
-> 
->  Documentation/tools/rtla/common_options.rst   |   8 +
->  .../tools/rtla/common_timerlat_aa.rst         |   7 -
->  .../tools/rtla/rtla-timerlat-hist.rst         |   7 +-
->  .../tools/rtla/rtla-timerlat-top.rst          |  14 +
->  tools/tracing/rtla/src/osnoise.c              |  65 ++++
->  tools/tracing/rtla/src/osnoise.h              |   5 +
->  tools/tracing/rtla/src/osnoise_hist.c         |  90 ++++-
->  tools/tracing/rtla/src/osnoise_top.c          |  83 ++++-
->  tools/tracing/rtla/src/timerlat_aa.c          |  35 +-
->  tools/tracing/rtla/src/timerlat_aa.h          |   5 +-
->  tools/tracing/rtla/src/timerlat_hist.c        | 139 +++++++-
->  tools/tracing/rtla/src/timerlat_top.c         | 229 +++++++++++--
->  tools/tracing/rtla/src/timerlat_u.c           | 224 ++++++++++++
->  tools/tracing/rtla/src/timerlat_u.h           |  18 +
->  tools/tracing/rtla/src/utils.c                | 324 +++++++++++++++++-
->  tools/tracing/rtla/src/utils.h                |   7 +
->  16 files changed, 1162 insertions(+), 98 deletions(-)
->  create mode 100644 tools/tracing/rtla/src/timerlat_u.c
->  create mode 100644 tools/tracing/rtla/src/timerlat_u.h
-> 
+Regards,
+Angelo
 
