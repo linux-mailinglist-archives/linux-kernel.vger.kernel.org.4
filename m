@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A184C714F74
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 20:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0305F714F78
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 20:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjE2SvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 14:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
+        id S229579AbjE2Sxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 14:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjE2SvS (ORCPT
+        with ESMTP id S229535AbjE2Sxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 14:51:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEDD9F;
-        Mon, 29 May 2023 11:51:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6004614C1;
-        Mon, 29 May 2023 18:51:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8820AC4339B;
-        Mon, 29 May 2023 18:51:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685386276;
-        bh=mawl8qMpP5viRoL6CkrK/gaq13n6bKJ6HvUhLIOtVsA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tOuUuwakLBZIkoTaSMDxZeIXxooaeCi6u6ziQ5J4Y0kdscBs/USyp+KPgbs7IWTrY
-         r4b8WdwGW7GlDLBHSQa94FWIU+K1irRz6MKAPoJhExvwqmRVf5+2R7WW8u9eHuhugH
-         4ihm/oWMk5urUKttwFrsG+r+yNWP4AZicBGZpGKxDqup+mjrdOSGX459xEGRPSgR3z
-         gCQ4X54+QhXoqpYgJ5juo/7M6SJ13B48Hl4IIwgv2DHxYdBceAARfpMXx75CIzWK0x
-         eVsjV+JSIxl63Cyn2W9Yffuf4H3izJfNs7KoKWZzAM9u72mwLBq7ZOK45pPqvkri6c
-         b0h3jnXl2rAaw==
-Date:   Mon, 29 May 2023 12:52:07 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>
-Cc:     linux1394-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] firewire: Replace zero-length array with
- flexible-array member
-Message-ID: <ZHT0V3SpvHyxCv5W@work>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 29 May 2023 14:53:41 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C639F
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 11:53:40 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bad1c8dce48so6116359276.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 11:53:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685386419; x=1687978419;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fb+xGJEzAuTS5TrIgTU4fcvFK43ao8HwfzBYRc52TTY=;
+        b=S5vwol9vE0JkslbkyRPxKAkNViXqytiqtwh4nsd9eEgwmZ719gWuFJVhrVRcYMhMhH
+         I47+gsK59+oMFCcm/r1itjNdraOXhmYJZhEWSuRWoUYXc7Dp070Pa2Yyvj4dEuYLGKoh
+         AVGVBgumYkPyDju0i+9bhA5sVMRSAbgmt/bo08Ofp93ulaxvSQqkzkIXUIKt60Qxt7aS
+         ckbLK5h8mRGy+3ePq+B0w88MS07aczR+7j5ah1Mo10ytZ913dDcxeiCeTs6HWF478yhB
+         CJ70hGrv1bkk+tSU6BqdFxjeOmCN1out6pHgQpdSrk/bLD1zCrblrtDWLbN3YGdezv4T
+         flqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685386419; x=1687978419;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fb+xGJEzAuTS5TrIgTU4fcvFK43ao8HwfzBYRc52TTY=;
+        b=MzhkmF7lkUHtJVCIey1zV0++POH9AyunXW9mL+vGE97sNRKaBaOKnUYnpKu0sivrjs
+         HaFrrQD/kF3iXfY7GTYtNUvdhn92ml1+9m/wDUPehmUixnLyd+tepj4OUJHN49n72AsM
+         Vbb7fuvnIdVK+1mTesZQaDOGXObx+MJ37M4pKg2DuBs4z5jjhVnHHV+Kbz8onLgqrfv5
+         yWtBO1SjgbrpxPY2cNoPKHURPaMTGyLuTc0+Y23PyZc01HakdsTE19b1QWrWncvIqGQa
+         kqMXmuKOcJx7XtcrxREW1milCOw3JZB1YeqGVlvC1QyHtsvROLmKxtkYKN+miGUhRRXZ
+         EMCA==
+X-Gm-Message-State: AC+VfDxrZXzqZQxpWLut8iGzqtcaDbQgyx2LzHIx3UpL/K+Sr6yUuXW6
+        jCh+cjUgDK/moSQ7V+nEZmqcccBdeNeUYw==
+X-Google-Smtp-Source: ACHHUZ7Vn/Q5HrLEkQuw5sBuUMFb7N55w2kESh9lJCpvJqW43vVCYmwyZoVIhiVBp34GVFj710bX4NkVKlJqoQ==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a25:ad1c:0:b0:bac:a7d5:f895 with SMTP id
+ y28-20020a25ad1c000000b00baca7d5f895mr31364ybi.10.1685386419461; Mon, 29 May
+ 2023 11:53:39 -0700 (PDT)
+Date:   Mon, 29 May 2023 18:53:37 +0000
+In-Reply-To: <ZHOtS67ZtMPsyNVk@casper.infradead.org>
+Mime-Version: 1.0
+References: <20230527103126.398267-1-linmiaohe@huawei.com> <ZHGAcaqOx/e8lqwV@casper.infradead.org>
+ <CAJD7tkYSrVkAONXko0eE6LWS__kK_Xeto9MVGwTxuqT5j6N8RQ@mail.gmail.com>
+ <ZHIcnOV/mrkcerlG@casper.infradead.org> <CAJD7tkZ2Q1ZCqNchpiiC6FCE08dYH6tzANA=VqujeDgT8YhRUA@mail.gmail.com>
+ <D2B59104-B602-45A3-B938-AE5DC67BAC98@linux.dev> <ZHOtS67ZtMPsyNVk@casper.infradead.org>
+Message-ID: <20230529185337.3gk3ww76sdxdgv6o@google.com>
+Subject: Re: [PATCH] memcg: remove unused mem_cgroup_from_obj()
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Muchun Song <muchun.song@linux.dev>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Vasily Averin <vasily.averin@linux.dev>, hannes@cmpxchg.org,
+        mhocko@kernel.org, roman.gushchin@linux.dev,
+        akpm@linux-foundation.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length and one-element arrays are deprecated, and we are moving
-towards adopting C99 flexible-array members, instead.
+On Sun, May 28, 2023 at 08:36:43PM +0100, Matthew Wilcox wrote:
+> On Sun, May 28, 2023 at 09:01:37PM +0800, Muchun Song wrote:
+> > with *init_net*. If Vasily does not want to bring commit 1d0403d20f6c back,
+> > this patch LGTM. Otherwise, let's wait for Vasily.
+> 
+> If we're not going to bring back 1d0403d20f6c then we should
+> simply revert fc4db90fe71e instead of applying this patch.
 
-Address the following warnings found with GCC-13 and
--fstrict-flex-arrays=3 enabled:
-sound/firewire/amdtp-stream.c: In function ‘build_it_pkt_header’:
-sound/firewire/amdtp-stream.c:694:17: warning: ‘generate_cip_header’ accessing 8 bytes in a region of size 0 [-Wstringop-overflow=]
-  694 |                 generate_cip_header(s, cip_header, data_block_counter, syt);
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sound/firewire/amdtp-stream.c:694:17: note: referencing argument 2 of type ‘__be32[2]’ {aka ‘unsigned int[2]’}
-sound/firewire/amdtp-stream.c:667:13: note: in a call to function ‘generate_cip_header’
-  667 | static void generate_cip_header(struct amdtp_stream *s, __be32 cip_header[2],
-      |             ^~~~~~~~~~~~~~~~~~~
-
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
-
-Link: https://github.com/KSPP/linux/issues/21
-Link: https://github.com/KSPP/linux/issues/303
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- include/linux/firewire.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/firewire.h b/include/linux/firewire.h
-index 1716c01c4e54..efb6e2cf2034 100644
---- a/include/linux/firewire.h
-+++ b/include/linux/firewire.h
-@@ -391,7 +391,7 @@ struct fw_iso_packet {
- 	u32 tag:2;		/* tx: Tag in packet header		*/
- 	u32 sy:4;		/* tx: Sy in packet header		*/
- 	u32 header_length:8;	/* Length of immediate header		*/
--	u32 header[0];		/* tx: Top of 1394 isoch. data_block	*/
-+	u32 header[];		/* tx: Top of 1394 isoch. data_block	*/
- };
- 
- #define FW_ISO_CONTEXT_TRANSMIT			0
--- 
-2.34.1
-
+Initially I was thinking of adding virt_addr_valid() check in the
+mem_cgroup_from_obj() but it seems like that check is not cheap on
+arm64. I don't have any quick solutions other than adding a check
+against init_net in __register_pernet_operations(). I will wait for
+couple of days for Vasily otherwise I will retry 1d0403d20f6c with the
+init_net check in __register_pernet_operations().
