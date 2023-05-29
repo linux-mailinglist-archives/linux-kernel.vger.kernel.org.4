@@ -2,50 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BDD7149C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEED7149BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbjE2M4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
+        id S229595AbjE2M41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjE2M4f (ORCPT
+        with ESMTP id S229519AbjE2M4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:56:35 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDC4DC;
-        Mon, 29 May 2023 05:56:33 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1685364975tgu8b8nk
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 29 May 2023 20:56:14 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: FVl8EHhfVR783a8W9cyjlbwbl8mKgDbq7E9fTAhEP/OvspzBBX5yVruB4eMmw
-        ghv1uWTKdn3WWnfuPirBiJXTDIoLu4+zRicOyy51cEaBDTfX/44GdqG2l5NZILUSeeU6y/V
-        4nd0bq9QznBIvumYMoPS1IJhTI+h4UZjFJzTkhfnat3GT8dXP6j4ZHLsH7N5xuCxnlR5i+N
-        tViOrP/UytFGRtN5fuWrvTNRAFCFO9vcJkY0hSLR7kWLQqHQlgwIb2njMNj3g9mx/Q3VaKx
-        Wne2knqx3TEbzRHOxPzAikzLPgS8dOE0aAI7qSy+aUfJaB6ijw98ePU52ffTHXNfn+5d2J7
-        imguZhQn65iyk9XF7fsKZRTLg+vA5KqQtHQty4xBuie5vmK5jd7+JzpqmkwnnSYkYZa6DZl
-        HTaaZ9JP8dI=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 561798749906670459
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de, conor@kernel.org
-Subject: [PATCH v2 2/7] selftests/nolibc: allow specify extra arguments for qemu
-Date:   Mon, 29 May 2023 20:56:08 +0800
-Message-Id: <209c75f2c15992e95bca4f6c2f96ef7f23ab3fcc.1685362482.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685362482.git.falcon@tinylab.org>
-References: <cover.1685362482.git.falcon@tinylab.org>
+        Mon, 29 May 2023 08:56:25 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13674C2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:56:23 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4eed764a10cso3400700e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685364981; x=1687956981;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4kMFfJbf4XWQRQofGy/2ExiTeQJT1aHojFUaBWm+VSo=;
+        b=BcDC1g2wM+Hky7zS2L1tkWnaCDYLDXZq2kb6pZOERWNUGx4d4jTjMFTHA07E9ApWSs
+         w+dyPzzFDF3mjciTlbZNFVMzL/VqivyhhPdPLFa3yzhOHRSao2rqJFFI8bD3+OYBthlK
+         cq0H0qxoBbufK5TxSEmJmBpx8zfFHFOi9XoKYMSWvS22GfCJQRLB+Ff4jk+3MSMU5qY4
+         slPIAevDm7tgAQ5UqsacisFeDInVrT4+dS8H3vtMsofj414q5j61MyW00wyoYBurH+bv
+         y7HCbVbew2INxWhgZ3swJESm6zOzcDUMSK3Ixg87sQZFddSnkj1j3UTgIYdzbaMlDnMK
+         aloA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685364981; x=1687956981;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4kMFfJbf4XWQRQofGy/2ExiTeQJT1aHojFUaBWm+VSo=;
+        b=igw/pAdgn3x4B9nssVihBrF5Iaj82eN6ZgpRVHAC6Twluj/bYv0rmmF8gawl0VLll7
+         kcAp57qpaK++RLkT4jKs96yhZ9fqNjBpNzatmZCBrumarQ02zPHI/Iksvcl1BbwjuGSC
+         lJRFMeptxLuVJ0tS5zks7I52IFm+h2qIkyCHkTLbkkETXyEl43mZRYncd1Kd4x2M2BkV
+         8mmEwFxqXGkKv1rSW6mJ+dBhHx2GCZG0XluhvYD2SKqIIrVfn4FSfSj3cd8AQIcFliWI
+         uXlI/iGjOygmKFGczbSUHdtVm7QBThU11E9n06HNkfgebGDeuYUcmyjsEXDpfTdRimRa
+         5psw==
+X-Gm-Message-State: AC+VfDwdHaFv0B/cR7qcDafY3Nvu//KD1CgN/+cQhdvMo0MWz39vgCuP
+        4ddL1ocwcMm1gwWvByL5cFp2rg==
+X-Google-Smtp-Source: ACHHUZ5SDvE89GclIQVxV0l3jEskTCdcupX432GYZIWoRyUD9NsdvqkL1Ne2Cb1FwCZlHaWbxFlAnQ==
+X-Received: by 2002:a19:750c:0:b0:4eb:18d:91de with SMTP id y12-20020a19750c000000b004eb018d91demr3416851lfe.43.1685364981202;
+        Mon, 29 May 2023 05:56:21 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id d12-20020ac241cc000000b004f2529c71c1sm1959695lfi.260.2023.05.29.05.56.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 05:56:20 -0700 (PDT)
+Message-ID: <8bbdc1c3-7caf-c189-9c81-a26efc79c4f0@linaro.org>
+Date:   Mon, 29 May 2023 15:56:20 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Freedreno] [PATCH 4/7] drm/msm/mdp5: Add MDP5 configuration for
+ MSM8226
+Content-Language: en-GB
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+References: <20230308-msm8226-mdp-v1-0-679f335d3d5b@z3ntu.xyz>
+ <20230308-msm8226-mdp-v1-4-679f335d3d5b@z3ntu.xyz>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230308-msm8226-mdp-v1-4-679f335d3d5b@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,48 +89,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The opensbi package from Ubuntu 20.04 only provides rv64 firmwares:
+On 29/05/2023 12:44, Luca Weiss wrote:
+> Add the required config for the v1.1 MDP5 found on MSM8226.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>   drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c | 82 ++++++++++++++++++++++++++++++++
+>   1 file changed, 82 insertions(+)
 
-    $ dpkg -S opensbi | grep -E "fw_.*bin|fw_.*elf" | uniq
-    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_dynamic.bin
-    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_jump.bin
-    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_dynamic.elf
-    opensbi: /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_jump.elf
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-To run this nolibc test for rv32, users must build opensbi or download a
-prebuilt one from qemu repository:
-
-    https://gitlab.com/qemu-project/qemu/-/blob/master/pc-bios/opensbi-riscv32-generic-fw_dynamic.bin
-
-And then use -bios to tell qemu use it to avoid such failure:
-
-    $ qemu-system-riscv32 -display none -no-reboot -kernel /path/to/arch/riscv/boot/Image -serial stdio -M virt -append "console=ttyS0 panic=-1"
-    qemu-system-riscv32: Unable to load the RISC-V firmware "opensbi-riscv32-generic-fw_dynamic.bin"
-
-To run from makefile, QEMU_ARGS_EXTRA is added to allow pass extra
-arguments like -bios:
-
-    $ make run QEMU_ARGS_EXTRA="-bios /path/to/opensbi-riscv32-generic-fw_dynamic.bin" ...
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 47c3c89092e4..44088535682e 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -64,7 +64,7 @@ QEMU_ARGS_mips       = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
--QEMU_ARGS            = $(QEMU_ARGS_$(ARCH))
-+QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_EXTRA)
- 
- # OUTPUT is only set when run from the main makefile, otherwise
- # it defaults to this nolibc directory.
 -- 
-2.25.1
-
+With best wishes
+Dmitry
 
