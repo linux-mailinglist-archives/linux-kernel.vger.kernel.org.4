@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3575714E6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5C2714E73
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjE2QfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S229798AbjE2QfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjE2Qet (ORCPT
+        with ESMTP id S229578AbjE2Qeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:34:49 -0400
+        Mon, 29 May 2023 12:34:50 -0400
 Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6A9AD;
-        Mon, 29 May 2023 09:34:48 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30addbb1b14so1753872f8f.2;
-        Mon, 29 May 2023 09:34:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B60DA3;
+        Mon, 29 May 2023 09:34:49 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30ae967ef74so839283f8f.0;
+        Mon, 29 May 2023 09:34:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685378086; x=1687970086;
+        d=gmail.com; s=20221208; t=1685378088; x=1687970088;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=v7RZChTfO9Ux9viKPzKi7S1xLwMfKhuE6t9va88Kj50=;
-        b=AGsYyhVI5kNmN5PnHbyAXfKvH5U3q97ntL9KrHbuSjhfLQY8cpbNEdjVyTw7hqsTpn
-         lvxaldiA3oamz7vZBmwo+MWN9rLMHR7wILiIC/Hfh2rgw3YIdhAKTkq9ZxS5ml21id8P
-         eDPsvJRMGePqXg2dFvbK4VWRIng/L892IN0Pa9oWyenjnmagENGaz1zYzgcKGDZGNR8B
-         zRWfJSgT74T26+Hwz2v4/hleOyEW3lKQmVY/RwGlcF8PFwp5Ih+IPP8+329xPfO3zrGX
-         KnZxGQF7A6KNLQk1a8JJESnbJsRMvMRBS+b3GFHqwEkjwdYQJyNsb9RABVdqRr0FpWSv
-         RZJg==
+        bh=Gfvrz5G3XlnZ2Vf1vClzhgeEjYoUMrP7las42y0bA9Q=;
+        b=Etqzt3m1D0bdS7EJCaFaYCnfOToBbs2idvHlXP9DUF0SI74sS/sQvkccvcvNwVNp9V
+         QhkpbtiTro0KWvvvTgDn/avcEwI7wi6o4O2U31SsGtyeNsXzj7Aey3HEIdZiQPoh2wt0
+         PZjIJezCeUcKrF++EI9kwmjIKeCdbYyhJsktPfkz91TrS/npaOzImsDK/icmwXhnkRbx
+         vz4oRECuV71wONKIhbwI1X86Xxl/I7nH043o7//5Z87LWaXbUYIkEplaa6WTSGsjr+Bk
+         o+4VVUvyOPYqsVw6HpAQEWkXIFc4vrRB5he1VLoaQh8y4PAKjDnYMGH6Bj1sYcZTQKVM
+         wfUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685378086; x=1687970086;
+        d=1e100.net; s=20221208; t=1685378088; x=1687970088;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=v7RZChTfO9Ux9viKPzKi7S1xLwMfKhuE6t9va88Kj50=;
-        b=GK4sYtpp0esVw83PNJZySPV2G5+TfeJFdoZW8YiWsJfou6hXN0BjpHOn40IutNCw79
-         dKIr3lQYPRWfpokw5qGkaVLjyzep4g5wi9EpFxBWuRqqRBoGCUc8e8mep4jS74D9f1fk
-         oro78TdnAkfq/lXa9pAner1CHGDuHCdeeJTM95mZM9XQ8BPIc2MVlq0wVYRgG6vFJjw8
-         h6S8eturMUCLP1DHK2Bym7zXfzmr5PIEmyCCWE2pXehQ5XitFxGo47JYSSN4Zysl6hqV
-         naEKUdrp8h75Y0mThXN6jOeMq7bELPDEqYhfARBxp94vK01H1dKDNZqnunr1lL5fafJY
-         fdhA==
-X-Gm-Message-State: AC+VfDxhLUOrJDckY90osPm93yqjl3qjW/ma3vMsn5v52aEVKtGAbH4V
-        96wJkHO7vOfCIZ2dMuoelsw=
-X-Google-Smtp-Source: ACHHUZ7EQ27ufb9yRv07KB/RaaMNYy3yoCBZn/kDDSMKdcDvOKtbZzfr6rT4CKjth5yKt5FwoYaVZg==
-X-Received: by 2002:adf:e792:0:b0:306:340c:4737 with SMTP id n18-20020adfe792000000b00306340c4737mr8892359wrm.67.1685378086515;
-        Mon, 29 May 2023 09:34:46 -0700 (PDT)
+        bh=Gfvrz5G3XlnZ2Vf1vClzhgeEjYoUMrP7las42y0bA9Q=;
+        b=TpInGGrfD6QUXuspxtC0yCS5XF5rb5Fwr4ZDZGeu5/vbhbE3KskFHP3EscJpVx1MQs
+         RbmIZgb2Nex3XL2cQa3syPxGy3bpeTY+fJRJnVruBmKfY5k6wGnwddZ7QtO3tkQYHrOE
+         XEjZtZa6pur9FLhBXsslbCrme5Qpjm8k5CRtulLXqyzqUaBGXsvPMzmo/lM32oGnmABS
+         /E8PyH/U8+rtsvUxXR5L7XUZzEua/heIgNIRIofV5Homo+YQIh1+9p1c7LS0SN+A5k6l
+         vPbKrBnQe1KB2pErDj20iL1XXjJR2Su9hcaaEhZf5MwCYH0RtBfbpVLj3pnkAzGxqSTO
+         +G8g==
+X-Gm-Message-State: AC+VfDw6GdbgTtm0abQU/CELwgaJbnVHTFdPAEd3prx9doNRAfkFo01T
+        TlfSx3C4WoZCAJEFVBANeoM=
+X-Google-Smtp-Source: ACHHUZ7+larGJmqw2AZBA7u9cay97RHZujQ31A+rcyfXytbbFvHbHQe/P/4ZHvEqu4ZrI8xBA4ZUPg==
+X-Received: by 2002:adf:fc50:0:b0:30a:bdfd:5c3c with SMTP id e16-20020adffc50000000b0030abdfd5c3cmr10863252wrs.17.1685378087601;
+        Mon, 29 May 2023 09:34:47 -0700 (PDT)
 Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id h14-20020a5d6e0e000000b002ff2c39d072sm417513wrz.104.2023.05.29.09.34.45
+        by smtp.googlemail.com with ESMTPSA id h14-20020a5d6e0e000000b002ff2c39d072sm417513wrz.104.2023.05.29.09.34.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 09:34:46 -0700 (PDT)
+        Mon, 29 May 2023 09:34:47 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew@lunn.ch>,
@@ -62,9 +62,9 @@ To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
         Christian Marangi <ansuelsmth@gmail.com>,
         linux-leds@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [net-next PATCH v4 04/13] leds: trigger: netdev: refactor code setting device name
-Date:   Mon, 29 May 2023 18:32:34 +0200
-Message-Id: <20230529163243.9555-5-ansuelsmth@gmail.com>
+Subject: [net-next PATCH v4 05/13] leds: trigger: netdev: introduce check for possible hw control
+Date:   Mon, 29 May 2023 18:32:35 +0200
+Message-Id: <20230529163243.9555-6-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230529163243.9555-1-ansuelsmth@gmail.com>
 References: <20230529163243.9555-1-ansuelsmth@gmail.com>
@@ -80,72 +80,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Lunn <andrew@lunn.ch>
+Introduce function to check if the requested mode can use hw control in
+preparation for hw control support. Currently everything is handled in
+software so can_hw_control will always return false.
 
-Move the code into a helper, ready for it to be called at
-other times. No intended behaviour change.
+Add knob with the new value hw_control in trigger_data struct to
+set hw control possible. Useful for future implementation to implement
+in set_baseline_state() the required function to set the requested mode
+using LEDs hw control ops and in other function to reject set if hw
+control is currently active.
 
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 ---
- drivers/leds/trigger/ledtrig-netdev.c | 29 ++++++++++++++++++---------
- 1 file changed, 20 insertions(+), 9 deletions(-)
+ drivers/leds/trigger/ledtrig-netdev.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
-index 305eb543ba84..c93ac3bc85a6 100644
+index c93ac3bc85a6..e1f3cedd5d57 100644
 --- a/drivers/leds/trigger/ledtrig-netdev.c
 +++ b/drivers/leds/trigger/ledtrig-netdev.c
-@@ -104,15 +104,9 @@ static ssize_t device_name_show(struct device *dev,
- 	return len;
+@@ -51,6 +51,7 @@ struct led_netdev_data {
+ 
+ 	unsigned long mode;
+ 	bool carrier_link_up;
++	bool hw_control;
+ };
+ 
+ enum led_trigger_netdev_modes {
+@@ -91,6 +92,11 @@ static void set_baseline_state(struct led_netdev_data *trigger_data)
+ 	}
  }
  
--static ssize_t device_name_store(struct device *dev,
--				 struct device_attribute *attr, const char *buf,
--				 size_t size)
-+static int set_device_name(struct led_netdev_data *trigger_data,
-+			   const char *name, size_t size)
- {
--	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
--
--	if (size >= IFNAMSIZ)
--		return -EINVAL;
--
- 	cancel_delayed_work_sync(&trigger_data->work);
- 
- 	mutex_lock(&trigger_data->lock);
-@@ -122,7 +116,7 @@ static ssize_t device_name_store(struct device *dev,
- 		trigger_data->net_dev = NULL;
- 	}
- 
--	memcpy(trigger_data->device_name, buf, size);
-+	memcpy(trigger_data->device_name, name, size);
- 	trigger_data->device_name[size] = 0;
- 	if (size > 0 && trigger_data->device_name[size - 1] == '\n')
- 		trigger_data->device_name[size - 1] = 0;
-@@ -140,6 +134,23 @@ static ssize_t device_name_store(struct device *dev,
- 	set_baseline_state(trigger_data);
- 	mutex_unlock(&trigger_data->lock);
- 
-+	return 0;
++static bool can_hw_control(struct led_netdev_data *trigger_data)
++{
++	return false;
 +}
 +
-+static ssize_t device_name_store(struct device *dev,
-+				 struct device_attribute *attr, const char *buf,
-+				 size_t size)
-+{
-+	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
-+	int ret;
-+
-+	if (size >= IFNAMSIZ)
-+		return -EINVAL;
-+
-+	ret = set_device_name(trigger_data, buf, size);
-+
-+	if (ret < 0)
-+		return ret;
- 	return size;
- }
+ static ssize_t device_name_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
+@@ -204,6 +210,8 @@ static ssize_t netdev_led_attr_store(struct device *dev, const char *buf,
+ 	else
+ 		clear_bit(bit, &trigger_data->mode);
  
++	trigger_data->hw_control = can_hw_control(trigger_data);
++
+ 	set_baseline_state(trigger_data);
+ 
+ 	return size;
 -- 
 2.39.2
 
