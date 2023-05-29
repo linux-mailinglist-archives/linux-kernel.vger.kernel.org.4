@@ -2,43 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B6A714704
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F84A71470A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjE2JZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 05:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
+        id S231654AbjE2J01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 05:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjE2JZN (ORCPT
+        with ESMTP id S229453AbjE2J0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 05:25:13 -0400
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679189E
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:25:11 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VjkSzUZ_1685352307;
-Received: from 30.221.134.122(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VjkSzUZ_1685352307)
-          by smtp.aliyun-inc.com;
-          Mon, 29 May 2023 17:25:08 +0800
-Message-ID: <2fa6114d-9de2-9a0d-ae89-c012914bf682@linux.alibaba.com>
-Date:   Mon, 29 May 2023 17:25:06 +0800
+        Mon, 29 May 2023 05:26:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3C4AC
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685352343;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sj2qXiEWFeMturc9uGJf6ztAEEy4dq2p+Uw4dRrFm4Q=;
+        b=aDfooA5KPYd41knswQfrQMEHXpfWtOevXEJxDpnw/xGCaaEkyvCxRQcukkDXuDYq+rIuqT
+        4Ipjwc8DP79Q0Qo+1WjctQ37zHEWJKENXTeOvnFKdy8dzdQ2CXeue3dGXnDfEhsYcoV4ly
+        7bhxysC/GvG29f8evn2XD0n/iiwyZTM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-73-NXLBL4kSPQG9Le26x_OE3g-1; Mon, 29 May 2023 05:25:42 -0400
+X-MC-Unique: NXLBL4kSPQG9Le26x_OE3g-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f6f58e269eso12196695e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:25:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685352341; x=1687944341;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Sj2qXiEWFeMturc9uGJf6ztAEEy4dq2p+Uw4dRrFm4Q=;
+        b=hVgz2pJ6otlfE9KALeDxTlRFkzFZExkzCY+zXNBGVUrF0SPX1VQl0QYf4gn3TSbwgV
+         4PvWWJKzMmwtWITbJ05aNOb2ItvHhPbVuCLdMNi1rWYYeDtfxo0jWJnNNknIOgo7zHAU
+         kF0TuHqbcMfjPt7RzXgwkpg8oHUUucb0gklsxcjZR0xm4RZV1WHCwOwXToPc+W9utzHt
+         rIcB9QYNXNlSeFLf0RQamOSyfHducnU/z34VD9m3VoV7Oe01AJAeMm59J+LwTpRO1Tri
+         WcAwycxjkkDAuGajO/11HXRuUryYdcG42fLj+yXj3MfXGy8Qk+kGTO6GQgcPyOrcRLaC
+         Ko6A==
+X-Gm-Message-State: AC+VfDw3wUP5b4ZMXLAVHRtxBIZlkvt81De+B3wHiZsrLmSQIso1y0Qk
+        mqgabSGWPHjgUidd7GMKxAsvavYnK35YId/IjfjFGgf41FU1e47GhmIQcb9IlGXRKzdIQAOD6Y3
+        LRxvTIuBin5tDKdkq3VcTKint
+X-Received: by 2002:a1c:7211:0:b0:3f6:cfc7:8bd0 with SMTP id n17-20020a1c7211000000b003f6cfc78bd0mr9676805wmc.36.1685352341030;
+        Mon, 29 May 2023 02:25:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5yPlygRj+fmkALsPX+gGK9yhyCvUZvlYvF7gEiRn8SuazY42oBGYjGdb39uc+kffq2bG3MBw==
+X-Received: by 2002:a1c:7211:0:b0:3f6:cfc7:8bd0 with SMTP id n17-20020a1c7211000000b003f6cfc78bd0mr9676786wmc.36.1685352340652;
+        Mon, 29 May 2023 02:25:40 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
+        by smtp.gmail.com with ESMTPSA id q1-20020a1ce901000000b003f423dfc686sm13416038wmc.45.2023.05.29.02.25.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 02:25:40 -0700 (PDT)
+Message-ID: <4d035744-271d-1ca3-a440-f8b1573eec96@redhat.com>
+Date:   Mon, 29 May 2023 11:25:39 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v2 5/6] erofs: use struct lockref to replace handcrafted
- approach
-To:     Yue Hu <zbestahu@gmail.com>
-Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        huyue2@coolpad.com, zhangwen@coolpad.com
-References: <20230526201459.128169-6-hsiangkao@linux.alibaba.com>
- <20230529072923.91736-1-hsiangkao@linux.alibaba.com>
- <20230529171629.0000292b.zbestahu@gmail.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230529171629.0000292b.zbestahu@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     Matthew Wilcox <willy@infradead.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Cc:     Khalid Aziz <khalid.aziz@oracle.com>,
+        Steven Sistare <steven.sistare@oracle.com>,
+        akpm@linux-foundation.org, ying.huang@intel.com,
+        mgorman@techsingularity.net, baolin.wang@linux.alibaba.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Khalid Aziz <khalid@kernel.org>
+References: <ZG/I7tYY4uV/32hP@casper.infradead.org>
+ <ZG/To8Z3StoVoenU@casper.infradead.org>
+ <60367660-f4a3-06dc-4d17-4dbdc733ef74@oracle.com>
+ <ZHDh4Jeb/vKY+nGU@casper.infradead.org>
+ <f5a37f8d-d888-9085-2f2b-1e350a267396@redhat.com>
+ <ZHD+eOMpZpWXNAig@casper.infradead.org>
+ <e31cd404-56ce-4cad-fcc3-3a6695f750fa@redhat.com>
+ <846b770c-9f63-90a2-0435-ec82484e3f74@nvidia.com>
+ <ZHF2byaRlaX3W6Md@casper.infradead.org>
+ <9821bd9c-7c30-8f0c-68e4-6b1d312bc032@nvidia.com>
+ <ZHPydXSAfRq8sh0u@casper.infradead.org>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v4] mm, compaction: Skip all non-migratable pages during
+ scan
+In-Reply-To: <ZHPydXSAfRq8sh0u@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,201 +99,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/5/29 17:16, Yue Hu wrote:
-> On Mon, 29 May 2023 15:29:23 +0800
-> Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
-> 
->> Let's avoid the current handcrafted lockref although `struct lockref`
->> inclusion usually increases extra 4 bytes with an explicit spinlock if
->> CONFIG_DEBUG_SPINLOCK is off.
+On 29.05.23 02:31, Matthew Wilcox wrote:
+> On Sun, May 28, 2023 at 04:49:52PM -0700, John Hubbard wrote:
+>> On 5/26/23 20:18, Matthew Wilcox wrote:
+>>> On Fri, May 26, 2023 at 07:11:05PM -0700, John Hubbard wrote:
+>>>>> So any user with 1024 processes can fragment physical memory? :/
+>>>>>
+>>>>> Sorry, I'd like to minimize the usage of folio_maybe_dma_pinned().
+>>>>
+>>>> I was actually thinking that we should minimize any more cases of
+>>>> fragile mapcount and refcount comparison, which then leads to
+>>>> Matthew's approach here!
+>>>
+>>> I was wondering if we shouldn't make folio_maybe_dma_pinned() a little
+>>> more accurate.  eg:
+>>>
+>>>           if (folio_test_large(folio))
+>>>                   return atomic_read(&folio->_pincount) > 0;
+>>> 	return (unsigned)(folio_ref_count(folio) - folio_mapcount(folio)) >=
+>>> 			GUP_PIN_COUNTING_BIAS;
 >>
->> Apart from the size difference, note that the meaning of refcount is
->> also changed to active users. IOWs, it doesn't take an extra refcount
->> for XArray tree insertion.
+>> I'm trying to figure out what might be wrong with that, but it seems
+>> OK. We must have talked about this earlier, but I recall vaguely that
+>> there was not a lot of concern about the case of a page being mapped
+>>> 1024 times. Because pinned or not, it's likely to be effectively
+>> locked into memory due to LRU effects. As mentioned here, too.
+> 
+> That was my point of view, but David convinced me that a hostile process
+> can effectively lock its own memory into place.
+> 
+
+1) My opinion on this optimization
+
+Before I start going into detail, let me first phrase my opinion so we 
+are on the same page:
+
+"a tiny fraction of Linux installations makes heavy use of long-term 
+pinning -- the *single* mechanism that completely *destroys* the whole 
+purpose of memory compaction -- and the users complain about memory 
+compaction overhead. So we are talking about optimizing for that by 
+eventually harming *everybody else*."
+
+Ehm ... I'm all for reasonable optimization, but not at any price.
+
+We don't care about a handful of long-term pinned pages in the system, 
+this is really about vfio long-term pinning a significant amount of 
+system RAM, and we only care about shmem here.
+
+
+*maybe* there is an issue with page migration when we have many page 
+mappings, but (a) it's a separate issue and to be dealt with separately, 
+not buried into such checks (b) it's unclear how many page mappings are 
+too many, the magic number 1024 is just a random number (c) it needs 
+much finer control (hostile processes).
+
+
+2) mapcount vs. pagecount
+
+Now, doing these mapcount vs. pagecount checks is perfectly reasonable 
+(see mm/ksm.c) as long as know what we're doing. For example, we have to 
+make sure that a possible compound page cannot get split concurrently 
+(e.g., hold a reference). It's been used forever, I consider it stable.
+
+I completely agree that we should be careful with such mapcount vs. 
+pagecount checks, and if we can use something better, let's use 
+something *better*.
+
+
+3) page_maybe_dma_pinned()
+
+Now, why do I dislike bringing up page_maybe_dma_pinned() [IOW, why is 
+it not better]? Besides it ignoring FOLL_GET for now, that might be 
+fixed at some point.
+
+I think we agree that order-0 pages are the problem, because we get 
+guaranteed false positives with many mappings (not just on speculative 
+page pinnings). For these order-0 pages, it's perfectly reasonable to 
+check page_maybe_dma_pinned() *as long as* we know the number of 
+mappings is very small.
+
+I don't consider anon pages the issue here, we barely get 1024 mappings 
+(not even with KSM), and it's much harder to exploit because you cannot 
+simply get new mappings via mmap(), only via fork().
+
+In fact, we could optimize easily for order-0 anon pages if we'd need 
+to: I have a patch lying around, it just wasn't really worth it for now, 
+because there is only a single relevant page_maybe_dma_pinned() call in 
+vmscan that could benefit:
+
+https://github.com/davidhildenbrand/linux/commit/0575860d064694d4e2f307b2c20a880a6a7b59ab
+
+We cannot do the same for pagecache pages, so we would possibly 
+introduce harm by carelessly checking page_maybe_dma_pinned() on pages
+with many mappings.
+
+
+4) folio_maybe_dma_longterm_pinned() ?
+
+I thought yesterday if we'd want something like 
+folio_maybe_dma_longterm_pinned() here. Essentially using what we 
+learned about long-term pinning of fs pages:
+
+(1) ZONE_MOVABLE, MIGRATE_CMA -> "return false;"
+(2) If !anon, !hugetlb, !shmem -> "return false;"
+(3) "return folio_maybe_dma_pinned()"
+
+Yes, above would easily create false-positives for short-term pinned 
+pages (anon/hugetlb/shmem), but would never create false-positives for 
+any other page (shared library ...).
+
+
+We would use it in the following way:
+
+bool skip_folio_in_isolation()
+{
+	/*
+          * Avoid skipping pages that are short-term pinned, the pin
+	 * might go away any moment and we'll succeed to migrate.
+          *
+          * We get false positives for short-term pinned anon, shmem and
+          * hugetl pages for now, but such short-term pins are transient.
+          */
+	if (!folio_maybe_dma_longterm_pinned())
+		return false;
+         /*
+          * order-0 pages with many mappings can easily be confused
+          * for pinned pages and this could be exploited by
+          * malicious user-space to cause fragmentation. This is only
+          * an optimization, so if a page (especially shmem) is mapped
+          * many times, we'll rather try migrating it instead of
+          * accidentally skipping it all the time.
+          */
+	return folio_order(folio) != 0 || && total_mappings <= 32)
+}
+
+Someone long-term pins an shmem page with many mappings? Too bad, we 
+don't optimize for that and still try migrating it.
+
+
+BUT, I am still confused if we want to check here for "any additional 
+references", which is what mapcount vs. refcount is, or 
+folio_maybe_dma_longterm_pinned().
+
+Of course, we could similarly write a variant of skip_folio_in_isolation:
+
+bool skip_folio_in_isolation()
+{
+	/*
+          * If a page is not pinned, try migrating it. Note that this
+          * does not consider any FOLL_GET used for DMA yet.
+          */
+	if (!folio_maybe_dma_pinned())
+		return false;
+         /*
+          * order-0 pages with many mappings can easily be confused
+          * for pinned pages and this could be exploited by
+          * malicious user-space to cause fragmentation. This is only
+          * an optimization, so if a page is mapped
+          * many times, we'll rather try migrating it instead of
+          * accidentally skipping it all the time.
+          */
+	return folio_order(folio) != 0 || && total_mappings <= 32)
+}
+
+
+As long as FOLL_GET is still used for DMA, the mapcount vs. pagecount 
+checks might be better ... but it depends on if we care about short-term 
+or long-term pinned pages here.
+
+>> Anyway, sure.
 >>
->> I don't observe any significant performance difference at least on
->> our cloud compute server but the new one indeed simplifies the
->> overall codebase a bit.
+>> A detail:
 >>
->> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
->> ---
->> changes since v1:
->>   - fix reference leaking due to improper fallback of
->>     erofs_workgroup_put().
+>> The unsigned cast, I'm not sure that helps or solves anything, right?
+>> That is, other than bugs, is it possible to get refcount < mapcount?
+
+BUG IMHO.
+
 >>
->>   fs/erofs/internal.h | 38 ++------------------
->>   fs/erofs/utils.c    | 86 ++++++++++++++++++++++-----------------------
->>   fs/erofs/zdata.c    | 15 ++++----
->>   3 files changed, 52 insertions(+), 87 deletions(-)
->>
->> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
->> index 0b8506c39145..e63f6cd424a0 100644
->> --- a/fs/erofs/internal.h
->> +++ b/fs/erofs/internal.h
->> @@ -208,46 +208,12 @@ enum {
->>   	EROFS_ZIP_CACHE_READAROUND
->>   };
->>   
->> -#define EROFS_LOCKED_MAGIC     (INT_MIN | 0xE0F510CCL)
->> -
->>   /* basic unit of the workstation of a super_block */
->>   struct erofs_workgroup {
->> -	/* the workgroup index in the workstation */
->>   	pgoff_t index;
->> -
->> -	/* overall workgroup reference count */
->> -	atomic_t refcount;
->> +	struct lockref lockref;
->>   };
->>   
->> -static inline bool erofs_workgroup_try_to_freeze(struct erofs_workgroup *grp,
->> -						 int val)
->> -{
->> -	preempt_disable();
->> -	if (val != atomic_cmpxchg(&grp->refcount, val, EROFS_LOCKED_MAGIC)) {
->> -		preempt_enable();
->> -		return false;
->> -	}
->> -	return true;
->> -}
->> -
->> -static inline void erofs_workgroup_unfreeze(struct erofs_workgroup *grp,
->> -					    int orig_val)
->> -{
->> -	/*
->> -	 * other observers should notice all modifications
->> -	 * in the freezing period.
->> -	 */
->> -	smp_mb();
->> -	atomic_set(&grp->refcount, orig_val);
->> -	preempt_enable();
->> -}
->> -
->> -static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
->> -{
->> -	return atomic_cond_read_relaxed(&grp->refcount,
->> -					VAL != EROFS_LOCKED_MAGIC);
->> -}
->> -
->>   enum erofs_kmap_type {
->>   	EROFS_NO_KMAP,		/* don't map the buffer */
->>   	EROFS_KMAP,		/* use kmap_local_page() to map the buffer */
->> @@ -492,7 +458,7 @@ static inline void erofs_pagepool_add(struct page **pagepool, struct page *page)
->>   void erofs_release_pages(struct page **pagepool);
->>   
->>   #ifdef CONFIG_EROFS_FS_ZIP
->> -int erofs_workgroup_put(struct erofs_workgroup *grp);
->> +void erofs_workgroup_put(struct erofs_workgroup *grp);
->>   struct erofs_workgroup *erofs_find_workgroup(struct super_block *sb,
->>   					     pgoff_t index);
->>   struct erofs_workgroup *erofs_insert_workgroup(struct super_block *sb,
->> diff --git a/fs/erofs/utils.c b/fs/erofs/utils.c
->> index 46627cb69abe..6ed79f10e2e2 100644
->> --- a/fs/erofs/utils.c
->> +++ b/fs/erofs/utils.c
->> @@ -33,22 +33,21 @@ void erofs_release_pages(struct page **pagepool)
->>   /* global shrink count (for all mounted EROFS instances) */
->>   static atomic_long_t erofs_global_shrink_cnt;
->>   
->> -static int erofs_workgroup_get(struct erofs_workgroup *grp)
->> +static bool erofs_workgroup_get(struct erofs_workgroup *grp)
->>   {
->> -	int o;
->> +	if (lockref_get_not_zero(&grp->lockref))
->> +		return true;
->>   
->> -repeat:
->> -	o = erofs_wait_on_workgroup_freezed(grp);
->> -	if (o <= 0)
->> -		return -1;
->> -
->> -	if (atomic_cmpxchg(&grp->refcount, o, o + 1) != o)
->> -		goto repeat;
->> +	spin_lock(&grp->lockref.lock);
->> +	if (__lockref_is_dead(&grp->lockref)) {
->> +		spin_unlock(&grp->lockref.lock);
->> +		return false;
->> +	}
->>   
->> -	/* decrease refcount paired by erofs_workgroup_put */
->> -	if (o == 1)
->> +	if (!grp->lockref.count++)
->>   		atomic_long_dec(&erofs_global_shrink_cnt);
->> -	return 0;
->> +	spin_unlock(&grp->lockref.lock);
->> +	return true;
->>   }
+>> And if it's only due to bugs, then the casting, again, isn't likely to
+>> going to mitigate the fallout from whatever mess the bug caused.
 > 
-> May use lockref_get_not_dead() to simplify it a bit?
-
-we need to get spin_lock() in the slow path and decrease
-erofs_global_shrink_cnt in the lock.
-
+> I wasn't thinking too hard about the cast.  If the caller has the folio
+> lock, I don't think it's possible for refcount < mapcount.  This caller
+> has a refcount, but doesn't hold the lock, so it is possible for them
+> to read mapcount first, then have both mapcount and refcount decremented
+> and see refcount < mapcount.
 > 
->>   
->>   struct erofs_workgroup *erofs_find_workgroup(struct super_block *sb,
->> @@ -61,7 +60,7 @@ struct erofs_workgroup *erofs_find_workgroup(struct super_block *sb,
->>   	rcu_read_lock();
->>   	grp = xa_load(&sbi->managed_pslots, index);
->>   	if (grp) {
->> -		if (erofs_workgroup_get(grp)) {
->> +		if (!erofs_workgroup_get(grp)) {
->>   			/* prefer to relax rcu read side */
->>   			rcu_read_unlock();
->>   			goto repeat;
->> @@ -80,11 +79,10 @@ struct erofs_workgroup *erofs_insert_workgroup(struct super_block *sb,
->>   	struct erofs_workgroup *pre;
->>   
->>   	/*
->> -	 * Bump up a reference count before making this visible
->> -	 * to others for the XArray in order to avoid potential
->> -	 * UAF without serialized by xa_lock.
->> +	 * Bump up before making this visible to others for the XArray in order
->> +	 * to avoid potential UAF without serialized by xa_lock.
->>   	 */
->> -	atomic_inc(&grp->refcount);
->> +	lockref_get(&grp->lockref);
->>   
->>   repeat:
->>   	xa_lock(&sbi->managed_pslots);
->> @@ -93,13 +91,13 @@ struct erofs_workgroup *erofs_insert_workgroup(struct super_block *sb,
->>   	if (pre) {
->>   		if (xa_is_err(pre)) {
->>   			pre = ERR_PTR(xa_err(pre));
->> -		} else if (erofs_workgroup_get(pre)) {
->> +		} else if (!erofs_workgroup_get(pre)) {
->>   			/* try to legitimize the current in-tree one */
->>   			xa_unlock(&sbi->managed_pslots);
->>   			cond_resched();
->>   			goto repeat;
->>   		}
->> -		atomic_dec(&grp->refcount);
->> +		lockref_put_return(&grp->lockref);
+> I don't think it matters too much.  We don't hold the folio lock, so
+> it might transition from pinned to unpinned as much as a refcount might
+> be decremented or a mapcount incremented.  What's important is that a
+> hostile process can't prevent memory from being moved indefinitely.
 > 
-> Should check return error?
+> David, have I missed something else?
 
-nope, just dec one since it always has a refcount to decrease.
 
-> 
->>   		grp = pre;
->>   	}
->>   	xa_unlock(&sbi->managed_pslots);
->> @@ -112,38 +110,35 @@ static void  __erofs_workgroup_free(struct erofs_workgroup *grp)
->>   	erofs_workgroup_free_rcu(grp);
->>   }
->>   
->> -int erofs_workgroup_put(struct erofs_workgroup *grp)
->> +void erofs_workgroup_put(struct erofs_workgroup *grp)
->>   {
->> -	int count = atomic_dec_return(&grp->refcount);
->> +	if (lockref_put_not_zero(&grp->lockref))
->> +		return;
-> 
-> May use lockref_put_or_lock() to avoid following lock?
+What I learned from staring at the code in mm/ksm.c:write_protect_page() 
+for too long a while ago is that:
 
-Thanks! Let me try this.
+(1) Mapping a page first increments the refcount, then the mapcount
+(2) Unmapping a page first decrements the mapcount, then the refcount
 
+So the mapcount is supposed to be always larger than the refcount. 
+Especially, if you take a snapshot of both (read first the mapcount, 
+then the mapcount).
+
+A hostile process wouldn't be able to block compaction here forever, 
+even if we accidentally would make the wrong call once when deciding 
+whether to isolate a page. It would work on the next attempt.
+
+That's the difference to page_maybe_dma_pinned(), which can be made to 
+consistently block compaction.
+
+
+[sorry for the lengthy mail]
+
+-- 
 Thanks,
-Gao Xiang
+
+David / dhildenb
+
