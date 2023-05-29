@@ -2,202 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B7C714C14
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BE6714C25
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjE2O30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        id S229849AbjE2Ogp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjE2O3I (ORCPT
+        with ESMTP id S229816AbjE2Ogl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:29:08 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C30B5;
-        Mon, 29 May 2023 07:29:06 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3063433fa66so2054587f8f.3;
-        Mon, 29 May 2023 07:29:06 -0700 (PDT)
+        Mon, 29 May 2023 10:36:41 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723E6C7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:36:38 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51456392cbbso6507929a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:36:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685370544; x=1687962544;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fTTEEvnfaaPFDLZtelR+S5p0shdfiorMDHxF6386O5A=;
-        b=bM6ehbQSDwSwxlR9EoZFk1dUdftpBXWcd7WNMJZNrCoh0YijQyz9JywwmLuYzlDYg2
-         Tu9hqXUyqkQ3vZjjen8xAJLtMmwOT41YE5M9uPIWu7G3HLqVtu3Z0S75m9G37YBowiSX
-         7uVcoJYvkh/YFyOPTtz6R5i6ywywObtF9kUg1fi7JdXWW/2kHce/vq4ibtLyiLLYBBbS
-         10H25x/5qeZa18CUecinpUrBvfWgWE+SNd1GkXTpkBcwzDosTTmhfb8tWx8ky+6lYyKY
-         pVvjOPmlMdvFZyiiaoqVJVCyf3Oo05ZhlR5ehF2iF0J/wGaS/WA9Quop/LVq3pSW6zv0
-         ihvw==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685370997; x=1687962997;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u469KRx4vCdKAgsfJAWOcmQKH6zjtkSVtIxNGkN2biE=;
+        b=LIZ4udwIb2+6Nfp5qkp9iblRacSJeZvPPcNcudBzj55PlslMHwN9P4aafKJbgKR/fI
+         L2xsMqJu3btNijZwCJzEMJHNiKHVMHTX2ihz2jFKtNm+TyDdM8tb9IB07gwEDTdrYlGJ
+         UqNV9TW751xwkDwv5HpblkjURzWpP060pFuxLpy1K9Qg6i+PPzAlJ1xnXRkj9UPCpg82
+         YrzoLlQ9WuxiDokSGrfaf823RunWlIYNf5IC25S6fo2DMd4EM4uKfLtEjSDKJb8MxeEL
+         2PcZYZl3ziHLluExHZ0qn1BNjMBf+VnhUH0fnSdqwup6fR8HQo5ax2WB5LBTeyF36jtX
+         L9gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685370544; x=1687962544;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fTTEEvnfaaPFDLZtelR+S5p0shdfiorMDHxF6386O5A=;
-        b=HyFmXRLXdYVWyNMP4rQbfo2YL5DHI/sqB6vd3NuPB3j6vqoC6AWe5+ZAnCOipqxNcy
-         Ez/ziT5sjkA//0quIXvfH7uPvzq4rDEX2+kT82aZYALJfbRPC7biLgLATt4H3eU7yVHH
-         FD9PVKR4BPCcaSksz15JH1sAQSJw6Oet6G9ZsLw3EaIdISWv+xI7tJyb2J5H+7cXJ1VI
-         BKapHgt9YhYwOVt/YY74/VdXtdmxn9o8EFdRyE5cPxHUMUDNBbm+Jo1IqblJjDRa+uch
-         xiO79rY4fXBPiQeY+ZmKRfpOYmcvYAau7bs5ynQ1bWCs/aPlJlYNG0ddc5jX0rWZiCIP
-         u4bQ==
-X-Gm-Message-State: AC+VfDwy2ecO636Vp6zSlU76CsZXlj7L6ootRhuRYNEA5DkBByY1gxjh
-        hz+9yNrFOKXPPfRpHjru/wg=
-X-Google-Smtp-Source: ACHHUZ6EsftGeGHUcet6VG2Mv98sUSBFG3Qk0gYDcKo3tTcpdr+/G0DaclFN6AwdSdqFJmkpU95GIw==
-X-Received: by 2002:adf:f412:0:b0:306:2d3d:a108 with SMTP id g18-20020adff412000000b003062d3da108mr7632655wro.11.1685370544323;
-        Mon, 29 May 2023 07:29:04 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id bf3-20020a0560001cc300b00307b5376b2csm100309wrb.90.2023.05.29.07.29.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 07:29:03 -0700 (PDT)
-Message-ID: <9125e52a-614c-5ca2-ca29-654b79ab52c7@gmail.com>
-Date:   Mon, 29 May 2023 16:29:02 +0200
+        d=1e100.net; s=20221208; t=1685370997; x=1687962997;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u469KRx4vCdKAgsfJAWOcmQKH6zjtkSVtIxNGkN2biE=;
+        b=YupRPLd30GMEO3xzP9VHwLJPMkKu8zIsIVIDBiwmXb75oQBmgFeimWI/1L0dN7N9+g
+         0MbMBpjzw4CSpYs2zq7fayRCvCcCgLsMp3C0CFGTbcEzeRalxoOfU3Tq4RlkMEnE7OVP
+         gDssOAUB6pGdfdBeYtCrfevrmy/0qZRVswUIkGJ9S6KN1/VC7Tab2Yo0c4RDTmDcNeD0
+         G4ovCP5yT1fBA1wcCU8lhz3jppMtKKp1VLWbLVDoFKamljydXApPJHa+Y5joUwrnjYrz
+         cKqqgwe5qC/k+rCQ5PBmunA/NUYr1Cehx4SEPpPY99VHh7BuHav73j2/MPKcWTbv+DCX
+         vl+w==
+X-Gm-Message-State: AC+VfDxI/5xP+7nh/OW7D9WpZBKFIZD/UE3OVnviaq1SKo/D4sR97EXG
+        L6xOovQezmAXGdS8GtpUv1O6ig==
+X-Google-Smtp-Source: ACHHUZ7Hr4ZDVqH/Qj4vE00E8I4yNM7z78NM1kCWU9wALVVd+CWGUQTIyvQ5+OTL9WYuwLzBxngfDQ==
+X-Received: by 2002:a17:906:6a29:b0:96f:5511:8803 with SMTP id qw41-20020a1709066a2900b0096f55118803mr7370099ejc.22.1685370996818;
+        Mon, 29 May 2023 07:36:36 -0700 (PDT)
+Received: from [127.0.0.1] (abordeaux-655-1-129-86.w90-5.abo.wanadoo.fr. [90.5.10.86])
+        by smtp.gmail.com with ESMTPSA id le8-20020a170907170800b0096f803afbe3sm5993654ejc.66.2023.05.29.07.36.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 07:36:36 -0700 (PDT)
+From:   Guillaume Ranquet <granquet@baylibre.com>
+Subject: [PATCH v4 0/8] Add MT8195 HDMI support
+Date:   Mon, 29 May 2023 16:30:57 +0200
+Message-Id: <20220919-v4-0-687f09a06dd9@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] arm64: dts: mediatek: mt8192-asurada-hayato: Enable
- Bluetooth
-Content-Language: en-US, ca-ES, es-ES
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACG3dGQC/23MTQrCMBAF4KuUWRtJ0lATV72HiOSvJtimkNRAK
+ b27gxuhuBre432zQfE5+gLXZoPsayxxThjEqQEbdHp6Eh1m4JRzqpgiwU3xMS0vwIXRxROTdbI
+ BN+k9jliGWJY5r9+PleG5/XBlhBIhhZCss0pS2Ru9jtFkf7bzBHfklR8IRyIFU84OYqDK/SHtg
+ bRItKTtwLuOMn45kH3fP9SYURL4AAAA
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20230424100409.2992418-1-wenst@chromium.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230424100409.2992418-1-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
+        Jitao shi <jitao.shi@mediatek.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, mac.shen@mediatek.com,
+        stuart.lee@mediatek.com, Guillaume Ranquet <granquet@baylibre.com>
+X-Mailer: b4 0.13-dev
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for HDMI Tx on MT8195.
 
+This includes a split of the current "legacy" hdmi driver into a common
+library of functions and two dedicated compilation units with specific
+code for mt8167 and another for the "v2" mt8195 SoC.
 
-On 24/04/2023 12:04, Chen-Yu Tsai wrote:
-> Hayato's Realtek WiFi/BT module has it's Bluetooth function wired to
-> UART1.
-> 
-> Add and enable the relevant device nodes for it.
-> 
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Support for the new mt8195 dpi/drm_drv adjustments to support hdmi.
 
-Applied, thanks
+Based on next-20230523
 
-> ---
-> Changes since v1:
-> - Dropped unreferenced labels
-> - Dropped GPIO line name comments
-> - Fixed pinctrl node names
-> - Dropped "output-enable" property
-> - Added spacing between device nodes for consistency
-> 
->   .../dts/mediatek/mt8192-asurada-hayato-r1.dts | 81 +++++++++++++++++++
->   1 file changed, 81 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
-> index 43a823990a92..6e23428a3ed2 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dts
-> @@ -40,9 +40,90 @@ CROS_STD_MAIN_KEYMAP
->   	>;
->   };
->   
-> +&pio {
-> +	bt_pins: bt-pins {
-> +		pins-bt-kill {
-> +			pinmux = <PINMUX_GPIO144__FUNC_GPIO144>;
-> +			output-low;
-> +		};
-> +
-> +		pins-bt-wake {
-> +			pinmux = <PINMUX_GPIO22__FUNC_GPIO22>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		pins-ap-wake-bt {
-> +			pinmux = <PINMUX_GPIO168__FUNC_GPIO168>;
-> +			output-low;
-> +		};
-> +	};
-> +
-> +	uart1_pins: uart1-pins {
-> +		pins-rx {
-> +			pinmux = <PINMUX_GPIO94__FUNC_URXD1>;
-> +			input-enable;
-> +			bias-pull-up;
-> +		};
-> +
-> +		pins-tx {
-> +			pinmux = <PINMUX_GPIO95__FUNC_UTXD1>;
-> +		};
-> +
-> +		pins-cts {
-> +			pinmux = <PINMUX_GPIO166__FUNC_UCTS1>;
-> +			input-enable;
-> +		};
-> +
-> +		pins-rts {
-> +			pinmux = <PINMUX_GPIO167__FUNC_URTS1>;
-> +		};
-> +	};
-> +
-> +	uart1_pins_sleep: uart1-sleep-pins {
-> +		pins-rx {
-> +			pinmux = <PINMUX_GPIO94__FUNC_GPIO94>;
-> +			input-enable;
-> +			bias-pull-up;
-> +		};
-> +
-> +		pins-tx {
-> +			pinmux = <PINMUX_GPIO95__FUNC_UTXD1>;
-> +		};
-> +
-> +		pins-cts {
-> +			pinmux = <PINMUX_GPIO166__FUNC_UCTS1>;
-> +			input-enable;
-> +		};
-> +
-> +		pins-rts {
-> +			pinmux = <PINMUX_GPIO167__FUNC_URTS1>;
-> +		};
-> +	};
-> +};
-> +
->   &touchscreen {
->   	compatible = "hid-over-i2c";
->   	post-power-on-delay-ms = <10>;
->   	hid-descr-addr = <0x0001>;
->   	vdd-supply = <&pp3300_u>;
->   };
-> +
-> +&uart1 {
-> +	status = "okay";
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&uart1_pins>;
-> +	pinctrl-1 = <&uart1_pins_sleep>;
-> +	/delete-property/ interrupts;
-> +	interrupts-extended = <&gic GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH 0>,
-> +			      <&pio 94 IRQ_TYPE_EDGE_FALLING>;
-> +
-> +	bluetooth {
-> +		compatible = "realtek,rtl8822cs-bt";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&bt_pins>;
-> +
-> +		enable-gpios = <&pio 144 GPIO_ACTIVE_HIGH>;
-> +		device-wake-gpios = <&pio 168 GPIO_ACTIVE_HIGH>;
-> +		host-wake-gpios = <&pio 22 GPIO_ACTIVE_LOW>;
-> +	};
-> +};
+Still in my TODO-list for v5:
+
+- Removal of the 'is_internal_hdmi' flag in mtk_dpi. [1]
+    I Couldn't find a way to get rid of it with the way things are done
+    in mtk_drm_drv/mtk_ddp_comp.
+- Do not use a "virtual" device for the ddc v2 hw as it is embedded in
+  the hdmi IP. [2]
+    Seems that a lot of work is done by the framework when using a
+    proper device-tree entry that can be linked as the ddc-i2c-bus of
+    the hdmi-connector.
+    I will keep the virtual device unless I find a way to avoid
+    rewriting the framework code that handles this.
+
+[1] : https://lore.kernel.org/all/988b0a7a-69bb-34e4-e777-1d9516221077@collabora.com/
+[2] : https://lore.kernel.org/all/7da1e73a0cca6867a060d5b69d45e8d4dfc89748.camel@mediatek.com/
+
+Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+---
+
+Changes in v4:
+- Split phy related patches to another series (merged)
+- Removed regmap wrappers in mtk_hdmi
+- Removed colorimetry related changes as this initial version only
+  support one color depth
+- Fixed dt-bindings properties
+- Removed some now useless clocks from mtk_hdmi_v2 and mtk_dpi
+- Link to v3: https://lore.kernel.org/r/20220919-v3-0-a803f2660127@baylibre.com
+
+Changes in v3:
+- phy: Grouped register and bit definition together to add clarity
+- dt-bindings: Addressed comments
+- Link to v2: https://lore.kernel.org/r/20220919-v2-0-8419dcf4f09d@baylibre.com
+
+Changes in v2:
+- Removed syscon requirement from the hdmi node
+- Use as much as possible bit FIELD_PREP/FIELD_GET macros across all the
+  patches
+- Make cec optional dynamically instead of hardcoded with a flag
+- Renamed hdmi variants to v1 (legacy) and v2 (mt8195) while waiting for
+  a better name
+- Rework hdmi v2 code to use a connector (same as v1)
+- Remove "magic" 0x43 addr special handling in hdmi ddc code
+- Link to v1: https://lore.kernel.org/r/20220919-v1-0-4844816c9808@baylibre.com
+
+---
+Guillaume Ranquet (8):
+      dt-bindings: display: mediatek: add MT8195 hdmi bindings
+      drm/mediatek: hdmi: use a regmap instead of iomem
+      drm/mediatek: extract common functions from the mtk hdmi driver
+      drm/mediatek: hdmi: make the cec dev optional
+      drm/mediatek: hdmi: add v2 support
+      drm/mediatek: hdmi: v2: add audio support
+      dt-bindings: display: mediatek: dpi: Add compatible for MediaTek MT8195
+      drm/mediatek: dpi: Add mt8195 hdmi to DPI driver
+
+ .../bindings/display/mediatek/mediatek,dpi.yaml    |    1 +
+ .../bindings/display/mediatek/mediatek,hdmi.yaml   |   59 +-
+ .../display/mediatek/mediatek,mt8195-hdmi-ddc.yaml |   45 +
+ drivers/gpu/drm/mediatek/Kconfig                   |    2 +
+ drivers/gpu/drm/mediatek/Makefile                  |    5 +-
+ drivers/gpu/drm/mediatek/mtk_dpi.c                 |  121 +-
+ drivers/gpu/drm/mediatek/mtk_dpi_regs.h            |    5 +
+ drivers/gpu/drm/mediatek/mtk_hdmi.c                |  773 ++----------
+ drivers/gpu/drm/mediatek/mtk_hdmi.h                |   18 +
+ drivers/gpu/drm/mediatek/mtk_hdmi_common.c         |  437 +++++++
+ drivers/gpu/drm/mediatek/mtk_hdmi_common.h         |  208 ++++
+ drivers/gpu/drm/mediatek/mtk_hdmi_ddc_v2.c         |  362 ++++++
+ drivers/gpu/drm/mediatek/mtk_hdmi_regs_v2.h        |  276 +++++
+ drivers/gpu/drm/mediatek/mtk_hdmi_v2.c             | 1303 ++++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_hdmi_v2.h             |   32 +
+ 15 files changed, 2955 insertions(+), 692 deletions(-)
+---
+base-commit: c8a64c6a78c54887da437098d97dc2accc689e89
+change-id: 20220919-hdmi_mtk
+
+Best regards,
+-- 
+Guillaume Ranquet <granquet@baylibre.com>
+
