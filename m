@@ -2,97 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AF07149DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2D97149DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjE2NFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36750 "EHLO
+        id S229710AbjE2NGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjE2NFR (ORCPT
+        with ESMTP id S229746AbjE2NFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:05:17 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02B4BD8;
-        Mon, 29 May 2023 06:05:13 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 34TD4ndg002822;
-        Mon, 29 May 2023 15:04:49 +0200
-Date:   Mon, 29 May 2023 15:04:49 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v2 3/7] selftests/nolibc: fix up compile warning with
- glibc on x86_64
-Message-ID: <20230529130449.GA2813@1wt.eu>
-References: <cover.1685362482.git.falcon@tinylab.org>
- <aeb48b9cf6fc4674f7560166f22c7dc87d02302d.1685362482.git.falcon@tinylab.org>
+        Mon, 29 May 2023 09:05:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADCDE5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:05:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EDB46140F
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 13:05:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635BFC433EF;
+        Mon, 29 May 2023 13:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685365533;
+        bh=gzfcZTY1ZD6t6oXUKO7P9e/T07rqchdUbms2CIDVQtE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DNMvgTEI12WmAoA7aTRX/XJf6PBQX/7SLDvs2eykGAfdsjuzrZAh2tYPM56jJ4INh
+         DhDUHapca/CZw2zGTLl8b0e8x2GCYmALECF5Ls3BzbHsaKzBMijPAQLzYjs1F/9ugL
+         Vu5QIuR9RBzMrC6aMtm0nI2uHm5LWpLHFNY+POPM=
+Date:   Mon, 29 May 2023 14:05:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] nvmem: core: Expose cells through sysfs
+Message-ID: <2023052953-average-fade-8b07@gregkh>
+References: <20230523100239.307574-1-miquel.raynal@bootlin.com>
+ <20230523100239.307574-3-miquel.raynal@bootlin.com>
+ <2023052351-doze-purist-9780@gregkh>
+ <20230523191402.0728443a@xps-13>
+ <20230529121226.4a74a3bb@xps-13>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aeb48b9cf6fc4674f7560166f22c7dc87d02302d.1685362482.git.falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230529121226.4a74a3bb@xps-13>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 09:00:01PM +0800, Zhangjin Wu wrote:
-> Compiling nolibc-test.c with gcc on x86_64 got such warning:
+On Mon, May 29, 2023 at 12:12:26PM +0200, Miquel Raynal wrote:
+> Hi Greg,
 > 
-> tools/testing/selftests/nolibc/nolibc-test.c: In function 'expect_eq':
-> tools/testing/selftests/nolibc/nolibc-test.c:177:24: warning: format '%lld' expects argument of type 'long long int', but argument 2 has type 'uint64_t' {aka 'long unsigned int'} [-Wformat=]
->   177 |  llen += printf(" = %lld ", expr);
->       |                     ~~~^    ~~~~
->       |                        |    |
->       |                        |    uint64_t {aka long unsigned int}
->       |                        long long int
->       |                     %ld
+> miquel.raynal@bootlin.com wrote on Tue, 23 May 2023 19:14:02 +0200:
 > 
-> It because that glibc defines uint64_t as "unsigned long int" when word
-> size (means sizeof(long)) is 64bit (see include/bits/types.h), but
-> nolibc directly use the 64bit "unsigned long long" (see
-> tools/include/nolibc/stdint.h), which is simpler, seems kernel uses it
-> too (include/uapi/asm-generic/int-ll64.h).
+> > Hi Greg,
+> > 
+> > gregkh@linuxfoundation.org wrote on Tue, 23 May 2023 17:58:51 +0100:
+> > 
+> > > On Tue, May 23, 2023 at 12:02:39PM +0200, Miquel Raynal wrote:  
+> > > > +/* Cell attributes will be dynamically allocated */
+> > > > +static struct attribute_group nvmem_cells_group = {
+> > > > +	.name		= "cells",
+> > > > +};
+> > > > +
+> > > >  static const struct attribute_group *nvmem_dev_groups[] = {
+> > > >  	&nvmem_bin_group,
+> > > > +	NULL, /* Reserved for exposing cells, if any */    
+> > > 
+> > > Please don't do this, but rather use the is_visible callback to
+> > > determine if it should be shown or not.  
+> > 
+> > Ah, excellent point. Don't know why I overlooked that member.
 > 
-> It is able to do like glibc, defining __WORDSIZE for all of platforms
-> and using "unsigned long int" to define uint64_t when __WORDSIZE is
-> 64bits, but here uses a simpler solution: nolibc always requires %lld to
-> match "unsigned long long", for others, only require %lld when word size
-> is 32bit.
-> 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/testing/selftests/nolibc/nolibc-test.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index d417ca5d976f..7f9b716fd9b1 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -174,7 +174,11 @@ static int expect_eq(uint64_t expr, int llen, uint64_t val)
->  {
->  	int ret = !(expr == val);
->  
-> +#if __SIZEOF_LONG__ == 4 || defined(NOLIBC)
->  	llen += printf(" = %lld ", expr);
-> +#else
-> +	llen += printf(" = %ld ", expr);
-> +#endif
->  	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
->  	return ret;
->  }
+> Actually, the .is_visible callback only acts on the files and
+> not the directories (created based on the group name).
 
-Please don't proceed like this. There's much easier to do here for a printf,
-just cast the expression to the type printf expects:
+That is true, I have a non-working patch somewhere around here that will
+not create the directory if no files are in that directory, and need to
+get that working someday...
 
--  	llen += printf(" = %lld ", expr);
-+  	llen += printf(" = %lld ", (long long)expr);
+> This
+> means whether they are visible or not, the attributes must be
+> valid, the nvmem core cannot just toggle a boolean value with
+> .is_visible because the sysfs core makes a number of checks
+> regarding the content of the attributes, without checking if
+> they are visible at all.
 
-Willy
+You can't toggle a value, that's not how is_visible works.  It's a
+callback at the creation time, you do know if you should, or should not,
+show the files at creation time, right?
+
+If so, all should be fine, just ignore the empty directory, it's fine.
+And hopefully one day, it will not be created if there are no files in
+it.  If I can ever get that patch working...
+
+> I can however expose the "cells" bin group by default by having
+> it listed in the static bin_attribute list and discard it by
+> overwriting the list member with NULL (ie. the opposite of the current
+> solution).
+
+Ick, no, please don't do that.  attribute lists should be able to be put
+into read-only memory, and are not set up to be dynamically messed with
+like this at all.
+
+thanks,
+
+greg k-h
