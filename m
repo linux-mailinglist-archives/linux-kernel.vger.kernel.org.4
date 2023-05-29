@@ -2,127 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A43714C0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EBD714C11
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjE2O2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S229674AbjE2O2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjE2O2B (ORCPT
+        with ESMTP id S229562AbjE2O2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:28:01 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A10BE;
-        Mon, 29 May 2023 07:27:58 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d5b4c400fso3839084b3a.1;
-        Mon, 29 May 2023 07:27:58 -0700 (PDT)
+        Mon, 29 May 2023 10:28:47 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C9CA0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:28:46 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id ada2fe7eead31-43ad7bf4db9so421894137.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:28:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685370478; x=1687962478;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jmuun/VWT+neP2DA7RKfwQ89UBcOBnCQ2W3RabGpYlk=;
-        b=sShWWNQl21iKyy6VI0j8on90ULIeyVnlk1w3zQwvz7MOJzRfMW5cp5G4uijrcrxEY0
-         6C8sKU2Qfzpb3GFSngykxKOa8CLHryobEhZ4eZzXiRyC6Mi6eNG+Ax7UhTl/oFRANKgy
-         epWdGu5xe1F27+rkJh6DJVBn/p25g2l+3p2r93rbc1YY4HC3W01v4hxU7WuxvqpT6LG4
-         PUHfudkGsFaeQKBlCUt4NFIzNEyPMCdPcl4l23AZfQDQQxkj9r6jE+NS8HFqE6uxkeMt
-         ZPUXaQTJOTsgiF+Cb4BrdFDtGUGzPcZHQEna70vWf3MG27npVY5Gzq4OaeMWBPR8Es1Y
-         4oQQ==
+        d=linaro.org; s=google; t=1685370526; x=1687962526;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IH0joYFPXL5/9kMgt+velO7TyX2N05LQsunJW9b5ICc=;
+        b=GD5OFb5mFVQZgyO5rmgpZjUamSzPtXtSktW6QtEahL4YYwY3IkLBB46WCxY6BY4/N0
+         ShHko8bvNP7v8TJr8m0G3hMKDRMTEawOgLq/tNYIPEafgQJzDn6d3hD0cm7yZM/JE6VR
+         egMzO1OHVsC5KXGS7IpdvBfteQohhBFdz3lXOsjnz3f7Y9/sEVg4zbnQ3+uLuHdMRfKz
+         jTrnnYYtK29tLiqgZr6ZNuP8s8xC9ds+0bZ06db7NsSmdMz6G4tpCzF/dxbdhsvoTFFD
+         f4goOgMPCZEF7QaUR/NfH3MA8ZqXVBnd1z1Ijt5CnPi7utfXqe3dA+ehxBipS15NaMaF
+         6J0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685370478; x=1687962478;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jmuun/VWT+neP2DA7RKfwQ89UBcOBnCQ2W3RabGpYlk=;
-        b=EAnLDJDdOvk2msZoaW3fyXjyh6zN6yFH99/0yjSJ03QMmcf9HqU55R86Wf8fdkblIy
-         /j2JH+8XhfCT3r+08SF6M01yW0l8VneNQwLLQWe74UoQTJKT7v3cB3a7qWxSe00LJ7M+
-         28ksJ9xzVZNpjQEtoPx4pSZdoEkqe7/tljdCyrG3VuWrW3xS0iQSoCJdcK5kH1sKgh3F
-         DeklydW3bIGrU0GnqxAkO3AaBxKap7IlpZqzNd5uw/XEtN/P6LWBD2Qo1Kyf0/E/p4Em
-         77eALimYg7TqdDUCQa5283i5EAhYs11TVymW+RrZoRomZ3Ic3E1fE663iTpaLCdcb6Pg
-         wksw==
-X-Gm-Message-State: AC+VfDxvdhZ9wPQP5Rf/f59lllHZnW34jwtnv44pPwht6HjmFHHZTmCB
-        SZuL9B84DgyO2Wyulv/dN2gp04Sjymosyg==
-X-Google-Smtp-Source: ACHHUZ4m+1SBfexp2uuaKCxUBhxnxFcc8rr2wUBHwXHwRK+R4InktUg565WydQIQVbv++T185v9wPw==
-X-Received: by 2002:a05:6a00:228f:b0:63d:368b:76b4 with SMTP id f15-20020a056a00228f00b0063d368b76b4mr16718661pfe.17.1685370477720;
-        Mon, 29 May 2023 07:27:57 -0700 (PDT)
-Received: from [172.30.1.35] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id g10-20020aa7818a000000b0064f97ff4506sm36358pfi.68.2023.05.29.07.27.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 07:27:57 -0700 (PDT)
-Message-ID: <eba06c01-e2bb-f715-8b2e-9c489e7c06d3@gmail.com>
-Date:   Mon, 29 May 2023 23:27:51 +0900
+        d=1e100.net; s=20221208; t=1685370526; x=1687962526;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IH0joYFPXL5/9kMgt+velO7TyX2N05LQsunJW9b5ICc=;
+        b=BjUzAJDN0hLIB6vdK8i/LULeJlC5muTB5IbkmhTqmQntg/RabGgqEZ1Lj+fhPChb2l
+         7bOyZ5jwJ5NTv6OnZvO4pf+DfuZzAFURS7I2r06a2MGzeynw7S8fCRw7ibmtsJrPi1h7
+         ixUfqcgbVJS0jUlRe+YIQ1kgYRAIZ2iUa+Uy3oGLzJOSWrUlX/JtHHYFJAVn+fy8oPdD
+         DsyTK6p48X6fczEzLbrL3wkmr8UAjWSoQl2gyBFTfKXQxvgX/2/L962SbvRmtU/o/TqL
+         cZ0qHXnAiHHF5imD90XXtITohUy6E8+wCwcbSnIUpKe7zNigrzi7V6EbG0/LAUrvn5fm
+         dWdQ==
+X-Gm-Message-State: AC+VfDxW67JhCGce4pcgHGGK1mgs9gNsn+7JEwlMXf3PlAetSq6LzHCx
+        3abgraoHZyH4UOmzC0Fnmg8lZuw2jxwUlP+3uHl9Vg==
+X-Google-Smtp-Source: ACHHUZ4/eO1+b8BlT75SiNnKDjV3FV+AUH3nwF/ufRa2ua69CONPA+Bmz3d6zoI1Ddh+pG188A0MHv6oob3vsTkkQzw=
+X-Received: by 2002:a67:fbd9:0:b0:434:50e9:164d with SMTP id
+ o25-20020a67fbd9000000b0043450e9164dmr3008176vsr.17.1685370525735; Mon, 29
+ May 2023 07:28:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH5b51a54ae2fa1cc8459b68a28b3c8ca7b7203994] PM / devfreq:
- mtk-cci: Fix variable deferencing before NULL check
-Content-Language: en-US
-To:     Sukrut Bellary <sukrut.bellary@linux.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <20230518084033.508711-1-sukrut.bellary@linux.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20230518084033.508711-1-sukrut.bellary@linux.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230528190833.565872088@linuxfoundation.org> <e98d3b88-980b-4487-baf8-4685cfe62209@roeck-us.net>
+ <468bc707-0814-4d83-9087-74768d98203a@roeck-us.net>
+In-Reply-To: <468bc707-0814-4d83-9087-74768d98203a@roeck-us.net>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 29 May 2023 19:58:34 +0530
+Message-ID: <CA+G9fYspKgo+qF5Onq_HDz1-w6NscULrFUSw=YKp+1e=4NkBBQ@mail.gmail.com>
+Subject: Re: [PATCH 4.19 000/132] 4.19.284-rc1 review
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23. 5. 18. 17:40, Sukrut Bellary wrote:
-> smatch warning:
-> drivers/devfreq/mtk-cci-devfreq.c:135 mtk_ccifreq_target()
-> warn: variable dereferenced before check 'drv' (see line 130)
-> 
-> This is based on static analysis only. Compilation tested.
-> 
-> Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
-> ---
->  drivers/devfreq/mtk-cci-devfreq.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
-> index e5458ada5197..6354622eda65 100644
-> --- a/drivers/devfreq/mtk-cci-devfreq.c
-> +++ b/drivers/devfreq/mtk-cci-devfreq.c
-> @@ -127,7 +127,7 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
->  			      u32 flags)
->  {
->  	struct mtk_ccifreq_drv *drv = dev_get_drvdata(dev);
-> -	struct clk *cci_pll = clk_get_parent(drv->cci_clk);
-> +	struct clk *cci_pll;
->  	struct dev_pm_opp *opp;
->  	unsigned long opp_rate;
->  	int voltage, pre_voltage, inter_voltage, target_voltage, ret;
-> @@ -139,6 +139,7 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
->  		return 0;
->  
->  	inter_voltage = drv->inter_voltage;
-> +	cci_pll = clk_get_parent(drv->cci_clk);
->  
->  	opp_rate = *freq;
->  	opp = devfreq_recommended_opp(dev, &opp_rate, 1);
+On Mon, 29 May 2023 at 19:19, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Mon, May 29, 2023 at 06:48:10AM -0700, Guenter Roeck wrote:
+> > On Sun, May 28, 2023 at 08:08:59PM +0100, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 4.19.284 release.
+> > > There are 132 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> >
+> > Building s390:defconfig ... failed
+> > Building s390:allnoconfig ... failed
+> > Building s390:tinyconfig ... failed
 
-Applied it. Thanks.
+We do noticed these set of build failures,
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+Seems like the following commit might have caused this
+build break
 
+ drivers: provide devm_platform_ioremap_resource()
+  [ Upstream commit 7945f929f1a77a1c8887a97ca07f87626858ff42 ]
+
+
+> >
+> > --------------
+> > Error log:
+> > s390-linux-ld: drivers/base/platform.o: in function `devm_platform_ioremap_resource':
+> > drivers/base/platform.c:97: undefined reference to `devm_ioremap_resource'
+> > make[1]: *** [Makefile:1061: vmlinux] Error 1
+> > make: *** [Makefile:153: sub-make] Error 2
+>
+> This also affects um:defconfig.
+>
+> Guenter
+
+- Naresh
