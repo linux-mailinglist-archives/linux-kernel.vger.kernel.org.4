@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3965714EB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CEE714EBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjE2QtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S229597AbjE2RFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 13:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjE2QtQ (ORCPT
+        with ESMTP id S229550AbjE2RFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:49:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE4DAD;
-        Mon, 29 May 2023 09:49:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA3D261EF6;
-        Mon, 29 May 2023 16:49:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA260C433D2;
-        Mon, 29 May 2023 16:49:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685378954;
-        bh=wnzcITc/ykHWp69sIWEQPsoi76/Mz+ZrxV5hFCoG58A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r3+68QinoA9FQ9tljy4B70D1mL6G2DCblWTUU0TxwmL827g808lr74VKpDBbCPC9c
-         Hq8cvTyWQwzdiVULZdMdu+61weGDIaWl2GRI2EAca2Tfhg0yQ4cxGVxJahwB+5ljhY
-         2uaqDR0P2QM8Jlvhz3DFetaPg9uC+Ke58lqJh0+Jlsyvd9Q48SpImZKROv1QuOlWnK
-         jRopqMpdhG+CUgioUiXbdNq7GHNZVgEEGLQVo6EollOu3vN2eQycH7UpHUMWPHCZZn
-         FZUlPMWzear7OxZYSOlRZK+gc21ejFJK/1Ek+GE8rfSBlbMst/pZw3c/NSzcI1qs2g
-         hIbwi22mMOoFg==
-Date:   Mon, 29 May 2023 22:18:56 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Owen Yang <ecs.taipeikernel@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moragues <moragues@google.com>,
-        Abner Yen <abner.yen@ecs.com.tw>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@google.com>,
-        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
-        Gavin Lee <gavin.lee@ecs.com.tw>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v1] drivers: pci: quirks: Add suspend fixup for SSD on
- sc7280
-Message-ID: <20230529164856.GE5633@thinkpad>
-References: <20230525163448.v1.1.Id388e4e2aa48fc56f9cd2d413aabd461ff81d615@changeid>
+        Mon, 29 May 2023 13:05:41 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EDAB7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:05:39 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f6a6e9d90dso304371cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685379939; x=1687971939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rwoMfWi97obMRCWCH25odgr0RjnVbHr4fnSsN464Q64=;
+        b=cyKzIaN5n4IEkAWYqYcz7ARQulcXV517rngzKO5u7FJbqGglnmsxa6uu0JpVvC5mv+
+         HrBjREOjysA+0RaOYkpC/IvflK1p+OC4ovSrIoSOFhBwOZpoyLqwdNpwf4WQZvPT+E5K
+         8QhHCvRhSLyw6950wYUzsNiqUiCvrd4zslDt3WbS5T7gbEpJlph9pteggyLDcdZf43I1
+         kk+4QiwU2zyeM3PBrmCrD6bPxgaX//2rFPiSXXt+tLIhRVy3p4WmP4EGs/PqB/P78cFu
+         pI/Hd4rc+JQxI4TDIsJLlpP4PKP2ZW8QzMy/DSXsYD0+dqUjVOM9CyywGwyXIrlFmZdE
+         FAkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685379939; x=1687971939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rwoMfWi97obMRCWCH25odgr0RjnVbHr4fnSsN464Q64=;
+        b=UsXgRJwO/D10CNvIcydk2DJh047rUJUYXzpFTOWHohiJwe8k2hNvjeetxfzYnOxka/
+         XK2ipn2PQhND3/xK3pJeF4itF7VEeCX16Cp4III6il3+0wGsC5NGeh0B2KrUKNyuOmYn
+         XdGAefxn6RBD2ifKzC8TiZ6437BnzIGPgome/ZRTAt/gY4mciYDi5PeRy8oEBiroldjQ
+         d1vyVGMIrvlruK1Hsfrz8l/mTBtMTwihKCYb9dfqTuHP4edWsBcLXsZN/mPQndnW1137
+         65LRVeRfx8fgqDi8w+rrmeErpu5U/BCwXqzoeNQ9oNnIDjJhV22n1xZYvy1TtUgWvWoC
+         LbtA==
+X-Gm-Message-State: AC+VfDxfLP68whzF/WLbzAwOOtyOwXj79frp2HcDTsmT4PedJ8jYydpH
+        F3t1i5uAReyunSXkb/w4t5h+4zydATNrQUG29CioBA==
+X-Google-Smtp-Source: ACHHUZ5KZq1BWV/GcKLg76iWYFUFlREK5iiRQxXX/nyiEq5TjEiRv6E8dspkBJQql+dC4FXCsM0xAVIfH0SxyW+V0rE=
+X-Received: by 2002:ac8:4e8a:0:b0:3f3:9b0b:8750 with SMTP id
+ 10-20020ac84e8a000000b003f39b0b8750mr361294qtp.17.1685379938842; Mon, 29 May
+ 2023 10:05:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230525163448.v1.1.Id388e4e2aa48fc56f9cd2d413aabd461ff81d615@changeid>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1685326994-11987-1-git-send-email-yangtiezhu@loongson.cn> <1685326994-11987-2-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1685326994-11987-2-git-send-email-yangtiezhu@loongson.cn>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 29 May 2023 10:05:26 -0700
+Message-ID: <CAP-5=fXkbBm52v9DC8jZm8Xr0uqKdvL7QfDmGN6j3=ZPRErLcA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] perf arm64: Rename create_table_from_c() to create_sc_table()
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Hans-Peter Nilsson <hp@axis.com>,
+        Alexander Kapshuk <alexander.kapshuk@gmail.com>,
+        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 04:35:12PM +0800, Owen Yang wrote:
-> Implement this workaround until Qualcomm fixed the
->  correct NVMe suspend process.
-> 
-> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
+On Sun, May 28, 2023 at 7:23=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
+> wrote:
+>
+> After commit 9854e7ad35fe ("perf arm64: Simplify mksyscalltbl"),
+> it has been removed the temporary C program and used shell to
+> generate syscall table, so let us rename create_table_from_c()
+> to create_sc_table() to avoid confusion.
+>
+> Suggested-by: Leo Yan <leo.yan@linaro.org>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
-> 
->  drivers/pci/quirks.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index f4e2a88729fd..b57876dc2624 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -5945,6 +5945,16 @@ static void nvidia_ion_ahci_fixup(struct pci_dev *pdev)
->  }
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NVIDIA, 0x0ab8, nvidia_ion_ahci_fixup);
->  
-> +/* In Qualcomm 7c gen 3 sc7280 platform. Some of the SSD won't enter
-> + * the correct ASPM state properly. Therefore. Implement this workaround
-> + * until Qualcomm fixed the correct NVMe suspend process*/
-
-What is there to fix during suspend? Currently, Qcom PCIe driver just votes for
-low interconnect bandwidth and keeps the resources (clocks, regulators) ON
-during suspend. So there is no way the device would move to D3Cold.
-
-Earlier Qcom reported that during suspend, link down event happens when the
-resources are turned OFF without waiting for the link to enter L1ss. But as I
-said above, we are _not_ turning OFF any resources.
-
-I believe this patch is addressing an issue that is caused by an out-of-tree
-patch.
-
-- Mani
-
-> +static void phison_suspend_fixup(struct pci_dev *pdev)
-> +{
-> +	msleep(30);
-> +}
-> +DECLARE_PCI_FIXUP_SUSPEND(0x1987, 0x5013, phison_suspend_fixup);
-> +DECLARE_PCI_FIXUP_SUSPEND(0x1987, 0x5015, phison_suspend_fixup);
-> +
->  static void rom_bar_overlap_defect(struct pci_dev *dev)
+>  tools/perf/arch/arm64/entry/syscalls/mksyscalltbl | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl b/tools/pe=
+rf/arch/arm64/entry/syscalls/mksyscalltbl
+> index 22cdf91..e530587 100755
+> --- a/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
+> +++ b/tools/perf/arch/arm64/entry/syscalls/mksyscalltbl
+> @@ -19,7 +19,7 @@ if ! test -r $input; then
+>         exit 1
+>  fi
+>
+> -create_table_from_c()
+> +create_sc_table()
 >  {
->  	pci_info(dev, "working around ROM BAR overlap defect\n");
-> -- 
-> 2.17.1
-> 
+>         local sc nr last_sc
+>
+> @@ -35,7 +35,7 @@ create_table()
+>  {
+>         echo "#include \"$input\""
+>         echo "static const char *syscalltbl_arm64[] =3D {"
 
--- 
-மணிவண்ணன் சதாசிவம்
+I know this isn't changed here, but this would be better as:
+echo "static const char *const syscalltbl_arm64[] =3D {"
+as the array itself, not just the strings, should never be changing.
+
+Thanks,
+Ian
+
+> -       create_table_from_c
+> +       create_sc_table
+>         echo "};"
+>  }
+>
+> --
+> 2.1.0
+>
