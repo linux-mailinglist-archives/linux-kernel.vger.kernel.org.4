@@ -2,137 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAFC714535
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350DB714537
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjE2HEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 03:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
+        id S229505AbjE2HF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 03:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjE2HEp (ORCPT
+        with ESMTP id S229610AbjE2HFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 03:04:45 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0DEF1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:03:40 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f3b9755961so3163102e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:03:40 -0700 (PDT)
+        Mon, 29 May 2023 03:05:53 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A51107
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:05:05 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2af290cf9b7so29066081fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:05:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1685343818; x=1687935818;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ktk43I3ESCcl+4luTfcpacoXkK0rOIgacSkU1dOgQfA=;
-        b=EzVaURV3PRKZ1IXRJ20SKWyI2R3+cbBKjkEDiWxGuhXDEs4tYnYXxcmcG5TWdUw+q1
-         JlEeNlM+mHBU7+DOoZqm+tBjhkOifHP1AsCo1tDsqPHHr/XlHBr9QoOqORH4P+lZw+5O
-         dmHKET4mthkLuOTwi0yJJ+Mcz4uyXC4TIvQaAlE7AD0k5LaBcXXifSf8/pbPE7aUh26Z
-         ZA3c8gDgyVhDf24nQQyh8Bf99q1L0NtrjfeBqJT+FQHgJO6VGJrqIFrJMCMnnVBA1KjI
-         1HfSoT34FV/E0bjV7QblXJA1taCMNKAHRREduGMGSHwxb7KqkhCubTTC6w6jYdNcnJxf
-         Erzw==
+        d=ferroamp-se.20221208.gappssmtp.com; s=20221208; t=1685343877; x=1687935877;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kkpXRKBp6tLBV/C8Bc2iFoXX2yo7lYgsiqT8T/fdzBA=;
+        b=3+w3QBSMX8zRb5YVZXKdheBnfrEoex1OUJoFkoXtGXbZB1CpDIRkJiDyqNew4vKlnP
+         R533l/DmKe0AHcIGDxXz7GpJ0N6krk2teDjFaYD0+7BRNXCKPOX4trTBhXipDmV2YoMy
+         QeRQYdndYuz7182GCiSENO1riE1eB/H1eBJc828iNpuZjRpF0hdQSbx59xhBjY4zyH5F
+         7yCKf9TtjITxnXmHiTmQjVS1avduUJrWFexqy/HQr7ylLKJq5Li+9lwOjTSKFngtOyB0
+         4GgQOn3MNMuoJhfb/Y3T1Ka2/iYLJSxWJGpyGaHcWt3a1vJLpYHVTbQ2b72c5T+9Mcqt
+         zncA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685343818; x=1687935818;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ktk43I3ESCcl+4luTfcpacoXkK0rOIgacSkU1dOgQfA=;
-        b=HeDKG92tSHkjG9YlJ3+9t5uJmbMQfg6polfLp9o48ZR/NE63yAbnVdDGihEIhQe3xU
-         A57sb8wGO7TTXbZkDDfRSf0VxHq1xUySD4yb61ZR4t+drvNuzSbqPYQP8sllD9aMCJW6
-         tXAxQLpxwqpbR4HtJ4J9CNNAwqTQxO1BTx5Ex96o3AXmenilcHy0GeRT9cBH6l3nOGnm
-         nAeEkj3e7ULZae1TYDvfi7or+l7aexsn/bAWqdqVV8LS2cOjpzSzWylcuQo2/adD/Fy3
-         fgFoHXnxfV4MfyjreGzc//Zf3ijNxPCQAvK4s0ea2Q7uMtOqAhmgZ+br6NHKV92P8vzU
-         oUUg==
-X-Gm-Message-State: AC+VfDxdZzAUSDqgYhIe5BBczrrYUvOvdsP8UoLQb4+8g5CrPrLGgm5P
-        CtKAEBpP6Snr8+1rOuQNR8VoRkShRKzXBrhMRwYBn4IDT/my0Cxrh1M=
-X-Google-Smtp-Source: ACHHUZ4VkOxh0fNxPG1zh86fdppD/WvIcYVQsx7Tso8mCQBz019IqnPTS//0K6ZRb1vNKJxSPmxN81F9XNk7zNJRGYk=
-X-Received: by 2002:ac2:46d2:0:b0:4f1:3d7d:409e with SMTP id
- p18-20020ac246d2000000b004f13d7d409emr3772539lfo.0.1685343818417; Mon, 29 May
- 2023 00:03:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685343877; x=1687935877;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kkpXRKBp6tLBV/C8Bc2iFoXX2yo7lYgsiqT8T/fdzBA=;
+        b=TZIDW6YGfdXPo/fPtr9RD5gFLKD74Ab+DVCkLKAd6++k0BJg9pFXERDcDA1kC1VJXQ
+         4uZiA95Si51iyYewlX5i2nimsgomOdUfP0QttpITEnbrS4EioAyQh0mkxvqI6KsUi1yq
+         IlRnqw8BQxiJYBmPdwxnPoa0ufP4OZzsr/iw+06MeBlKbAleHvYQDOWHelv7bmh+KxmT
+         vQ56EynBKnABAJGby/QbdoAwzJEJqLh18jg+YVVaV5IJEUasyMGOFBoaaX6GpeoPIk9b
+         yINx0sZtyZ256rRqEMCfBw6gaX4UOfX7RK275ley6HrjqBAcJCIMcCYw+BdtNuIJW4LV
+         VR0w==
+X-Gm-Message-State: AC+VfDxD0aPBKmBJE0Tve4pw+wUkedq3Vg584+jX2vKCFp5zMkf1/Pla
+        le0IpP0j+qYu4PwQs5ZlV1+Eog==
+X-Google-Smtp-Source: ACHHUZ759hIY68qhR4aOUhfQVilhiuNqBUa4ZOWg+ZqRZeiUOjhzygCc2OgOlVDEPEbtpDkTntQr/A==
+X-Received: by 2002:a2e:870d:0:b0:2a8:ba49:a811 with SMTP id m13-20020a2e870d000000b002a8ba49a811mr3931277lji.25.1685343876823;
+        Mon, 29 May 2023 00:04:36 -0700 (PDT)
+Received: from debian (151.236.202.107.c.fiberdirekt.net. [151.236.202.107])
+        by smtp.gmail.com with ESMTPSA id o4-20020a2e9b44000000b002adc5ea2791sm2234119ljj.103.2023.05.29.00.04.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 00:04:36 -0700 (PDT)
+Date:   Mon, 29 May 2023 09:04:34 +0200
+From:   =?iso-8859-1?Q?Ram=F3n?= Nordin Rodriguez 
+        <ramon.nordin.rodriguez@ferroamp.se>
+To:     Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, horatiu.vultur@microchip.com,
+        Woojung.Huh@microchip.com, Nicolas.Ferre@microchip.com,
+        Thorsten.Kummermehr@microchip.com
+Subject: Re: [PATCH net-next v4 4/6] net: phy: microchip_t1s: fix reset
+ complete status handling
+Message-ID: <ZHROghMyWEcJ/4J1@debian>
+References: <20230526152348.70781-1-Parthiban.Veerasooran@microchip.com>
+ <20230526152348.70781-5-Parthiban.Veerasooran@microchip.com>
 MIME-Version: 1.0
-References: <20230519200520.10657-1-alex@shruggie.ro> <20230519200520.10657-2-alex@shruggie.ro>
- <9faab8c9-a38b-3f06-c2fb-6c7803b22eb1@foss.st.com>
-In-Reply-To: <9faab8c9-a38b-3f06-c2fb-6c7803b22eb1@foss.st.com>
-From:   Alexandru Ardelean <alex@shruggie.ro>
-Date:   Mon, 29 May 2023 10:03:27 +0300
-Message-ID: <CAH3L5Qpo6j9XdpfY5dPbYM3prLRPbrFPODPubnaNqu_4pQeaow@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: backlight: document new property default-brightness-level
-To:     Philippe CORNU <philippe.cornu@foss.st.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, lee@kernel.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, deller@gmx.de,
-        Yannick Fertre <yannick.fertre@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230526152348.70781-5-Parthiban.Veerasooran@microchip.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 3:05=E2=80=AFPM Philippe CORNU
-<philippe.cornu@foss.st.com> wrote:
->
->
->
-> On 5/19/23 22:05, Alexandru Ardelean wrote:
-> > From: Yannick Fertre <yannick.fertre@foss.st.com>
-> >
-> > Add documentation for new default-brightness-level property.
-> >
-> > Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
->
-> Hi Alexandru,
-> same comments as for the 1/2 patch.
+On Fri, May 26, 2023 at 08:53:46PM +0530, Parthiban Veerasooran wrote:
+> As per the datasheet DS-LAN8670-1-2-60001573C.pdf, the Reset Complete
+> status bit in the STS2 register has to be checked before proceeding to
+> the initial configuration. Reading STS2 register will also clear the
+> Reset Complete interrupt which is non-maskable.
+> 
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> Signed-off-by: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
+> ---
 
-Ack
-
-Will do
-Thanks
-Alexandru
-
-> Many thanks
-> Philippe :-)
->
-> > Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
-> > Signed-off-by: Alexandru Ardelean <alex@shruggie.ro>
-> > ---
-> >
-> > Link to original patch:
-> >    https://github.com/STMicroelectronics/linux/commit/c4067d7bd883c6fa1=
-4ffd49892c4ce663cdafe98
-> >
-> >   .../bindings/leds/backlight/gpio-backlight.yaml          | 9 ++++++++=
-+
-> >   1 file changed, 9 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/leds/backlight/gpio-back=
-light.yaml b/Documentation/devicetree/bindings/leds/backlight/gpio-backligh=
-t.yaml
-> > index 584030b6b0b9..b96c08cff0f0 100644
-> > --- a/Documentation/devicetree/bindings/leds/backlight/gpio-backlight.y=
-aml
-> > +++ b/Documentation/devicetree/bindings/leds/backlight/gpio-backlight.y=
-aml
-> > @@ -23,6 +23,15 @@ properties:
-> >       description: enable the backlight at boot.
-> >       type: boolean
-> >
-> > +  default-brightness-level:
-> > +    description:
-> > +      The default brightness level (index into the array defined by th=
-e
-> > +      "brightness-levels" property).
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +
-> > +dependencies:
-> > +  default-brightness-level: [ "brightness-levels" ]
-> > +
-> >   required:
-> >     - compatible
-> >     - gpios
+Reviewed-by: Ramón Nordin Rodriguez <ramon.nordin.rodriguez@ferroamp.se>
+Tested-by: Ramón Nordin Rodriguez <ramon.nordin.rodriguez@ferroamp.se>
