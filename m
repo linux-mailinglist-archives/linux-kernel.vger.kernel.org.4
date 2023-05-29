@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691DD71506D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 22:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373AF715087
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 22:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjE2UUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 16:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47228 "EHLO
+        id S229519AbjE2UXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 16:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjE2UUN (ORCPT
+        with ESMTP id S229504AbjE2UXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 16:20:13 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EFDB7;
-        Mon, 29 May 2023 13:20:12 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-514924ca903so3625347a12.2;
-        Mon, 29 May 2023 13:20:12 -0700 (PDT)
+        Mon, 29 May 2023 16:23:47 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF42B7;
+        Mon, 29 May 2023 13:23:46 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96f7bf29550so574026266b.3;
+        Mon, 29 May 2023 13:23:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1685391610; x=1687983610;
+        d=googlemail.com; s=20221208; t=1685391825; x=1687983825;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UaBaGYCNxPZhOfoDjvgva3si6aUdokMc6Gw8fHEKHuE=;
-        b=KfiVQLPJLi42XivH0/2I8b8IaA4agFdHz0r3rtjNs1W6EuPkAsmXg7WOKbVeJPCPgT
-         BbK0uX3pJnS3Pv7eVitih7ohKpQyGAZpvzh0Lq5PlbePkTBxQ7ICu32LIfc5yMmVVeHF
-         tc/kOgBTSJ1v8YHX3QYrTPPJ0SuGiCm2OPzXsaHvX8FN05aWy9lyslWGWQeB46GmUq86
-         1MPdU6XyMhjIOyuN264W/iP03wRp9m2gWqR0AiR1NLka9qoFT/MXtB34mXzIka1VcT9i
-         sEAaNpRH+Q3+D8ouWrS0kEQp6mE0jIQ8Wjmum7s1UuODLmWVEMhJaqTugd+qtHHa2Q5v
-         G7WQ==
+        bh=TFRAydikPWX3pKUDK3/GeTj1gN1x9t62tUlv+AAMNb4=;
+        b=N0cvIK20DWhi3/jzCpW+vil3DjAaDTVwae9+znU4tOXniLKEfesgKC0Uw5KwZsJ8A8
+         utsCxSTqkBiAWbCjF0QUcDu8pfbnmuON/H9YuLgDJ3J/CuBB/BAVjwnnQPNG7aOW4rEX
+         E9W1gth1xJfVEshEm4H5R6Bu1SHPbq4iP9MUbLE3lGPmx57VdTQhWAuvW/4+NqD6fuyN
+         Tb07M+Wy8CdCV1YOdD1/WMvJGT4S8t+Rm6jm6+GPgMU/M1fnqC8QpIixR2ARhd/X/vNd
+         6UqHQvJuMKlXPjwW8kVpzXYxY5qLo5v1f5N/1AG4yoMGrVJo/7ED4otf2rOMTywdN5Ck
+         vyuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685391610; x=1687983610;
+        d=1e100.net; s=20221208; t=1685391825; x=1687983825;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UaBaGYCNxPZhOfoDjvgva3si6aUdokMc6Gw8fHEKHuE=;
-        b=W/ToIMKn40XYi2vU8tTIyoJfZNiry9mlsbNlSSXJT1XzZlVxpSF/NRSgO+DNRoMNjQ
-         WDObIeTc8SFUUWnz5uqGrBJ1xTE4F1Phe9Uh67P137RzCzC8FRyzqJRyRk5OqJIeiTxA
-         kSU7QcfGLlfqFgGfESojjiKHZMFREqlpwqSj+F9o+AB2Ti7DaOJy5MPy9vjNNQcXbK6h
-         UG43IPd+U9GrFubvhMQO249jIa4Jd9YDV1uv8V4amWtNBiMikXfsKvvDPsdzKbI1Dnf7
-         Z7eZOP4FjcMAro8mLOFMqio/2teRQxutAqHikBoeuXnMejn/tflgbuKdqk8cty0lo2LE
-         R3sw==
-X-Gm-Message-State: AC+VfDxnMwuHHQV/xI84pjZZLMTjKRoTQn86advsY+taXeIhOt0CumGu
-        WNSQqcx1dBhB0F1BUSk+sVpjSmuyLvyU1DqH6y8=
-X-Google-Smtp-Source: ACHHUZ7rEdsB1abIjXBwnJgb2QaZ3rA+DNo7mrBeOxfo1iuRO9GdPORptUnmUP9H+tnsnEMOzr4noDOfQ+3s5zbIE2Q=
-X-Received: by 2002:a17:907:9813:b0:965:6cb9:b768 with SMTP id
- ji19-20020a170907981300b009656cb9b768mr250326ejc.31.1685391610344; Mon, 29
- May 2023 13:20:10 -0700 (PDT)
+        bh=TFRAydikPWX3pKUDK3/GeTj1gN1x9t62tUlv+AAMNb4=;
+        b=VXe1PiRwo3zVYVelrMeaA25Hk9NBYh69ztOpYttGuiOoHdBIiiojEr+kO6qkVXvGC9
+         W4+lEw6J9x4rpNeuieTFjYeycpfZoDHjtxYH4pNNRp66308ObnsrNBpKGLKjiCGOy4tk
+         hvzM5+DUj+hSNigymzvjyf0qtSzstLYzCBrHJS3MtQARtPT+ybewd3IrRMt8OQ7V6RYK
+         fkwVMEMqIHPUv1apwqoczYqPgaFWPWwFPsXlHQbqtmlajCwUNQDOvCSmfXQua5l2ibJx
+         +gxNbcnbT92XN45rDc9yzVCXkQu4HdOW64yl98UeYPTfAn7pysT0knqsk6j1heGiUPMF
+         +ydA==
+X-Gm-Message-State: AC+VfDymwm8yBLqbkv3jWJaK/eIF7+9QeHZ5JCh9Ra6U4+9nCsB8uqLs
+        3axEE1ftpy23YO6WUtphgf7+2zZxmgK+9Fmsz/k=
+X-Google-Smtp-Source: ACHHUZ4U9hAAYqL77TzPMBvjLDtEWUIjr70SENM4Z8K9RbkxNwGJXVYJGzi1/9xSXn/jCG1x4JnLMwOlIIEvXc4MlAc=
+X-Received: by 2002:a17:906:7945:b0:965:6d21:48bc with SMTP id
+ l5-20020a170906794500b009656d2148bcmr275685ejo.75.1685391824685; Mon, 29 May
+ 2023 13:23:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230523135351.19133-1-ddrokosov@sberdevices.ru> <20230523135351.19133-7-ddrokosov@sberdevices.ru>
-In-Reply-To: <20230523135351.19133-7-ddrokosov@sberdevices.ru>
+References: <20230405195927.13487-1-ddrokosov@sberdevices.ru>
+ <20230405195927.13487-5-ddrokosov@sberdevices.ru> <CAFBinCA3uZXzr3RgnWnKV5Qr-CPaZQX5joDg319i_cgzhLJy2g@mail.gmail.com>
+ <20230425123304.xjmrkraybp2siwdw@CAB-WSD-L081021> <CAFBinCCqx1oHf+PcXBkeRYHnGQChbTTPRyD8SJU+ait+TG+AjQ@mail.gmail.com>
+ <20230511132606.vk52yorf43alwgew@CAB-WSD-L081021> <CAFBinCCmNLQF_qV3k4kgDEAsemEsjL-GQtPex7Pmxrc2sHx30A@mail.gmail.com>
+ <20230529134944.dh7isqg5ontfbtpa@CAB-WSD-L081021>
+In-Reply-To: <20230529134944.dh7isqg5ontfbtpa@CAB-WSD-L081021>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 29 May 2023 22:19:59 +0200
-Message-ID: <CAFBinCA35XC5mo+t-RV+yBA2XzAiVXPR_gX3jO25HA=V5XgnOw@mail.gmail.com>
-Subject: Re: [PATCH v16 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
+Date:   Mon, 29 May 2023 22:23:33 +0200
+Message-ID: <CAFBinCBP_pniDTSwBuFBL8YA-GnCuDHn=nCMn9XHXs=_7DFjkA@mail.gmail.com>
+Subject: Re: [PATCH v13 4/6] clk: meson: a1: add Amlogic A1 PLL clock
  controller driver
 To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
 Cc:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
@@ -75,16 +79,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 3:54=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
+Hello Dmitry,
+
+On Mon, May 29, 2023 at 3:49=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
 es.ru> wrote:
 >
-> Introduce Peripherals clock controller for Amlogic A1 SoC family.
+> Hello Martin,
 >
-> A1 SoC has four clock controllers on the board: PLL, Peripherals, CPU,
-> and Audio.
-> This patchset adds support for Amlogic A1 Peripherals clock driver and
-> allows to generate clocks for all A1 SoC peripheral IPs.
+> As I promised before, I'm now back with the vendor's reply regarding
+> AUDDDS. The information is still incomplete, but I have provided the
+> available details below. Please take a look.
+Great, thank you for following up!
+
+[...]
+> AUDDDS is a direct digital synthesizer used as a clock source.  It is
+> not used as default. You need to modify some clk registers in dts to
+> enable it. Basically, it is used for audio.
 >
-> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> In A1 design, you can use AUD DDS as a clock source and it is not
+> necessary. It is not used in the Amlogic default setting.
+>
+> According to the vendor, it is not necessary and is currently disabled
+> by default. While we don't have much information about AUDDDS, the
+> vendor suggests that it's not a commonly used clock object in A1
+> projects and it may be skipped if not needed.
+My goal is to make the dt-bindings match the hardware implementation...
+
+> Based on all above information, I suppose we can skip it now.
+...but in this case we simply don't have enough information (other
+than some register names and a high level description that it can be
+used as a clock) to do that.
+I still think we did the best we could for now, so I agree with you:
+let's skip it for now (and hope that retrofitting it later - if we
+ever need it - won't be a problem).
+
+
+Best regards,
+Martin
