@@ -2,166 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0F9714431
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B619C714432
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbjE2GUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 02:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S231502AbjE2GUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 02:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjE2GU2 (ORCPT
+        with ESMTP id S231488AbjE2GUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 02:20:28 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E21B2
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:20:27 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bacf9edc87bso4401016276.1
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685341226; x=1687933226;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=osELeF1qrpmk7tMBwVJZ0+Hn0dD614B/zeb//sVH2O8=;
-        b=lDd5t1DNHYrERHggJZt1tFe/2MuojYDB8DYuX4saUcSsWZjN9TJvB4D3jOc40ZJzuw
-         KXTyU64u/loqgfjTny6vyEEHc7I3ap+5KBFfNEbc+et5E0P2BRIz5MO59vg+RyUV5HGF
-         LQIvE8HoWeX7dfHrfHrThINSr2Jkgw1dNwKUT5ElKyxmqFpo9JxBWX275kcmdKdX3BCO
-         TKmGDZP/FC8QUdgVXd4u26ydd2mkiG9rdEZxkd6dJlJez+Ye+8eFZqq1OHv/Cc+ig/ka
-         6L20gyN+7z7wp1ikvxHZmZH1RAvGKKb0++xvnFOn6a1yNDE6E2enDzRJirlL0XfSo/Zh
-         2JMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685341226; x=1687933226;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=osELeF1qrpmk7tMBwVJZ0+Hn0dD614B/zeb//sVH2O8=;
-        b=AJ1Vqg1fIVpMNdMTg1tJnO1oS4PBcK8DvBH33sXDoYMd6ssCNoueKS2k45H4w/j1gC
-         ID4bBlD9cwPJFFdy6j72BTH3ls6YdpQy4dk7ggK7DyMRnYNuHsBJPdkXOZuQCIfl8Nvo
-         C52/LmdwuCEGyT7ILP67NyvjZe2Rrq16Ktp2kKAl4Zs9P5gosyV1l/lgBhdci4E/bIQx
-         7KjZ7cgzNM61hagwa/lOgytAvfPNbV88BiJYy1pH9t0DuTtARGn+5oOugtWJmQ2QA8XR
-         2sBmNH6rU3/DzzOzz15DKd6AyR6VwsbPwJWGwHedN6vr79QOCRtb0hm/Nu6S6Ncs3P65
-         V3fg==
-X-Gm-Message-State: AC+VfDz7+6WRng//oQ53Y5o0hBEA68NNrktWnvp2u/DZTJ96DxB1LtZ9
-        RHxFJ0nJ84AyJbibpR44cRsOYg==
-X-Google-Smtp-Source: ACHHUZ5aMde8BUNH3d96u3IOrLaqOFrYAlrmuVUlWt4ugn0e7ueCBkueldmdmxLB7UIM6n20FuWD7w==
-X-Received: by 2002:a81:8304:0:b0:565:c888:1d09 with SMTP id t4-20020a818304000000b00565c8881d09mr8471629ywf.30.1685341226458;
-        Sun, 28 May 2023 23:20:26 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id y184-20020a0dd6c1000000b00565e57e6662sm1530559ywd.55.2023.05.28.23.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 23:20:25 -0700 (PDT)
-Date:   Sun, 28 May 2023 23:20:21 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 05/12] powerpc: add pte_free_defer() for pgtables sharing
- page
-In-Reply-To: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
-Message-ID: <28eb289f-ea2c-8eb9-63bb-9f7d7b9ccc11@google.com>
-References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
+        Mon, 29 May 2023 02:20:42 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E65B2
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:20:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685341241; x=1716877241;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mY2erTeWwo8KLcT3K3FPJaJOXqKJMG+PRsSCo6Oc9A8=;
+  b=lb4B+B3t0Wam1xF+IdwV1LWH6jRzf4xcmjNlDqfnl5oVUITMhxbDA3lM
+   NcFjAQvX0zwHG0E49h2x8WCL2Z2zJ61/O4hlalkG41OuIscxa7ZYUEw5x
+   xuFEADRX9OF1ocHEjrFydFpv1Em4h2QZtbEok2ThPRIEoqUXTZ2DGnC2j
+   lRj5D2FD2h3SLHRC0s7CbwZqgYWiq/RF6p0M/F5gaHFqWh+nVNZTMKlJA
+   DPzXwVWKkxcPZqCm25OmZHkWBzUGF29xNa/4xc0DFYur8DEOkf6hPzVc0
+   kM8BUfe+tTfiBA8eXQFjN5zjy+P2Xf8w+k417lHll6feW7n6QmaWbvQMU
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="344130748"
+X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
+   d="scan'208";a="344130748"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 23:20:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="952613634"
+X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
+   d="scan'208";a="952613634"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 28 May 2023 23:20:38 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q3WFC-000Kug-0G;
+        Mon, 29 May 2023 06:20:38 +0000
+Date:   Mon, 29 May 2023 14:20:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sheng Yong <shengyong@oppo.com>, jaegeuk@kernel.org,
+        chao@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Sheng Yong <shengyong@oppo.com>
+Subject: Re: [PATCH] f2fs: add f2fs_ioc_[get|set]_extra_attr
+Message-ID: <202305291408.kdy2Itan-lkp@intel.com>
+References: <20230529013502.2230810-1-shengyong@oppo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529013502.2230810-1-shengyong@oppo.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add powerpc-specific pte_free_defer(), to call pte_free() via call_rcu().
-pte_free_defer() will be called inside khugepaged's retract_page_tables()
-loop, where allocating extra memory cannot be relied upon.  This precedes
-the generic version to avoid build breakage from incompatible pgtable_t.
+Hi Sheng,
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- arch/powerpc/include/asm/pgalloc.h |  4 ++++
- arch/powerpc/mm/pgtable-frag.c     | 18 ++++++++++++++++++
- 2 files changed, 22 insertions(+)
+kernel test robot noticed the following build warnings:
 
-diff --git a/arch/powerpc/include/asm/pgalloc.h b/arch/powerpc/include/asm/pgalloc.h
-index 3360cad78ace..3a971e2a8c73 100644
---- a/arch/powerpc/include/asm/pgalloc.h
-+++ b/arch/powerpc/include/asm/pgalloc.h
-@@ -45,6 +45,10 @@ static inline void pte_free(struct mm_struct *mm, pgtable_t ptepage)
- 	pte_fragment_free((unsigned long *)ptepage, 0);
- }
- 
-+/* arch use pte_free_defer() implementation in arch/powerpc/mm/pgtable-frag.c */
-+#define pte_free_defer pte_free_defer
-+void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
-+
- /*
-  * Functions that deal with pagetables that could be at any level of
-  * the table need to be passed an "index_size" so they know how to
-diff --git a/arch/powerpc/mm/pgtable-frag.c b/arch/powerpc/mm/pgtable-frag.c
-index 20652daa1d7e..3a3dac77faf2 100644
---- a/arch/powerpc/mm/pgtable-frag.c
-+++ b/arch/powerpc/mm/pgtable-frag.c
-@@ -120,3 +120,21 @@ void pte_fragment_free(unsigned long *table, int kernel)
- 		__free_page(page);
- 	}
- }
-+
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+static void pte_free_now(struct rcu_head *head)
-+{
-+	struct page *page;
-+
-+	page = container_of(head, struct page, rcu_head);
-+	pte_fragment_free((unsigned long *)page_to_virt(page), 0);
-+}
-+
-+void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
-+{
-+	struct page *page;
-+
-+	page = virt_to_page(pgtable);
-+	call_rcu(&page->rcu_head, pte_free_now);
-+}
-+#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+[auto build test WARNING on jaegeuk-f2fs/dev-test]
+[also build test WARNING on jaegeuk-f2fs/dev next-20230525]
+[cannot apply to linus/master v6.4-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sheng-Yong/f2fs-add-f2fs_ioc_-get-set-_extra_attr/20230529-093611
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+patch link:    https://lore.kernel.org/r/20230529013502.2230810-1-shengyong%40oppo.com
+patch subject: [PATCH] f2fs: add f2fs_ioc_[get|set]_extra_attr
+config: arc-buildonly-randconfig-r004-20230529 (https://download.01.org/0day-ci/archive/20230529/202305291408.kdy2Itan-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/519a8b3bbd4d743ae67c32dfef61e8bfa0951cc5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sheng-Yong/f2fs-add-f2fs_ioc_-get-set-_extra_attr/20230529-093611
+        git checkout 519a8b3bbd4d743ae67c32dfef61e8bfa0951cc5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/f2fs/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305291408.kdy2Itan-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   fs/f2fs/file.c: In function 'f2fs_ioc_get_extra_attr':
+>> fs/f2fs/file.c:4312:44: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    4312 |                                            (void __user *)attr.attr))
+         |                                            ^
+   fs/f2fs/file.c:4316:48: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    4316 |                                                (void __user *)attr.attr))
+         |                                                ^
+
+
+vim +4312 fs/f2fs/file.c
+
+  4262	
+  4263	static int f2fs_ioc_get_extra_attr(struct file *filp, unsigned long arg)
+  4264	{
+  4265		struct inode *inode = file_inode(filp);
+  4266		struct f2fs_inode_info *fi = F2FS_I(inode);
+  4267		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+  4268		struct f2fs_extra_attr attr;
+  4269		u32 chksum;
+  4270		int ret = 0;
+  4271	
+  4272		if (!f2fs_has_extra_attr(inode))
+  4273			return -EOPNOTSUPP;
+  4274	
+  4275		if (copy_from_user(&attr, (void __user *)arg, sizeof(attr)))
+  4276			return -EFAULT;
+  4277	
+  4278		if (attr.field >= F2FS_EXTRA_ATTR_MAX)
+  4279			return -EINVAL;
+  4280	
+  4281		if (!extra_attr_fits_in_inode(inode, attr.field))
+  4282			return -EOPNOTSUPP;
+  4283	
+  4284		switch (attr.field) {
+  4285		case F2FS_EXTRA_ATTR_TOTAL_SIZE:
+  4286			attr.attr = F2FS_TOTAL_EXTRA_ATTR_SIZE;
+  4287			break;
+  4288		case F2FS_EXTRA_ATTR_ISIZE:
+  4289			attr.attr = fi->i_extra_isize;
+  4290			break;
+  4291		case F2FS_EXTRA_ATTR_INLINE_XATTR_SIZE:
+  4292			if (!f2fs_has_inline_xattr(inode))
+  4293				return -EOPNOTSUPP;
+  4294			attr.attr = get_inline_xattr_addrs(inode);
+  4295			break;
+  4296		case F2FS_EXTRA_ATTR_PROJID:
+  4297			if (!f2fs_sb_has_project_quota(F2FS_I_SB(inode)))
+  4298				return -EOPNOTSUPP;
+  4299			attr.attr = from_kprojid(&init_user_ns, fi->i_projid);
+  4300			break;
+  4301		case F2FS_EXTRA_ATTR_INODE_CHKSUM:
+  4302			ret = f2fs_inode_chksum_get(sbi, inode, &chksum);
+  4303			if (ret)
+  4304				return ret;
+  4305			attr.attr = chksum;
+  4306			break;
+  4307		case F2FS_EXTRA_ATTR_CRTIME:
+  4308			if (!f2fs_sb_has_inode_crtime(sbi))
+  4309				return -EOPNOTSUPP;
+  4310			if (attr.attr_size == sizeof(struct timespec64)) {
+  4311				if (put_timespec64(&fi->i_crtime,
+> 4312						   (void __user *)attr.attr))
+  4313					return -EFAULT;
+  4314			} else if (attr.attr_size == sizeof(struct old_timespec32)) {
+  4315				if (put_old_timespec32(&fi->i_crtime,
+  4316						       (void __user *)attr.attr))
+  4317					return -EFAULT;
+  4318			} else {
+  4319				return -EINVAL;
+  4320			}
+  4321			break;
+  4322		case F2FS_EXTRA_ATTR_COMPR_BLOCKS:
+  4323			ret = f2fs_get_compress_blocks(filp, attr.attr_size);
+  4324			attr.attr = ret;
+  4325			break;
+  4326		case F2FS_EXTRA_ATTR_COMPR_OPTION:
+  4327			ret = f2fs_get_compress_option_v2(filp, attr.attr,
+  4328							  &attr.attr_size);
+  4329			break;
+  4330		default:
+  4331			return -EINVAL;
+  4332		}
+  4333	
+  4334		if (ret < 0)
+  4335			return ret;
+  4336	
+  4337		if (copy_to_user((void __user *)arg, &attr, sizeof(attr)))
+  4338			return -EFAULT;
+  4339	
+  4340		return 0;
+  4341	}
+  4342	
+
 -- 
-2.35.3
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
