@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EF1714734
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A904714774
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjE2JmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 05:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
+        id S231839AbjE2JwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 05:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjE2JmA (ORCPT
+        with ESMTP id S231787AbjE2JwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 05:42:00 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F978E
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:41:58 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64d24136663so2090834b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:41:58 -0700 (PDT)
+        Mon, 29 May 2023 05:52:02 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4AEA4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:51:57 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-565c3aa9e82so32133487b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:51:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685353318; x=1687945318;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1685353917; x=1687945917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+ZwleT5IqdSnB0eE2Q5xce5TQ8K2d57jgpMbOyCxpLY=;
-        b=IZtVbX4jJlsx2tmnt54Epk31v5BBQwPiFTdN9jPbJqFgiheK7o7BqixtGfVKh5L8lZ
-         delKKE0URJsJCw/66VjLngG7R8DseCH2uikm69RT4MLiLnvqvufuTn8f5Oil+FAnG9uh
-         cMruROIze+0Dx3IX8nf+VR1gh9BfQtEOgZERBJnONb5yr+IB1X/9KzOQd04zc0o9ZcAm
-         DjeddI+Axw0Hfn+uDJQEONKpPQm8QQrEnntY2i0DLRt3sQMahP1En/rJaxRhRk832cv2
-         hB+KmSTrHMu04C+K39Axd6JeTUo9mqt/Aemsgj+lswOf0vfmanlHsmn3Ya2UuuUqy9ed
-         7lvg==
+        bh=su/Rx3R9SIBQIy8nzLVz8h4unOUxvvoq51HIXg2HVxw=;
+        b=SvgGalIWd4YpI8eO1XbYqYkkltOBsRIAg7aVjdN8kHIzFpwL4etKpQt2zwiS/Na++Y
+         x40/GZ6rKzPbINfTSD746IbsAr8IcQjWFM71bPZxb51lpVQDLlCJIc5DOuKAFkJ357gW
+         EB+RadmpKVbRMCOZI1FiOzWcOpI/YMdo1IogGxCIuUqkGqlmAHJlTN7JrFB7EOejkM0Z
+         TYsH+y4DCN/62wUXm+gJwGVL0sefHaXOvpx5ddoGyR7k+q60FMHU8cGFoudslg1u8BR1
+         vxElZPligfVKNmVHKtzpRR68WYzmcD+ApeT9Lhq9m+8b5p8SPj0zFE7EYREk6IG4Y7+1
+         rqNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685353318; x=1687945318;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685353917; x=1687945917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+ZwleT5IqdSnB0eE2Q5xce5TQ8K2d57jgpMbOyCxpLY=;
-        b=hb/Zr2aqhWoukLTPbuzdaeoIJvTmnITh5eM0Ynkuna4Zc3fItSstitvqbmCul8mQ9S
-         da0Zi2+UKFPcalMkjLEIThp4gTdmKZLa1Z7rDWA1C2Hke+TcB6NsqDee7kCxT0x9N5Ya
-         8tRopJggXK6EulIbbLXYIFkPEngWUpfsbL73TAuR5kqsI9M0KxYc6E8re4S/EJ47Kq6D
-         wY0VPi7kGlQWJhNMebW96lQF0QnznZRomc1aIJi9ekOc4zkkjtO5FQ9zsO1fctnoWWxq
-         sUgHE3CuC451KZV4QXlHoFn/GmUMXqHuysCZeqEeRAvnKibNwDXt+FJWOWoEuQ4zScaJ
-         v6rQ==
-X-Gm-Message-State: AC+VfDxYrlAak4Y+HbdY/IptMU/p9qvypCzRg+xeuFEstjHmmQL3/L7k
-        DfeI6MZCcL1/IjWjqCdNAUg=
-X-Google-Smtp-Source: ACHHUZ6EsnTgielr6QKFKeMl27FoI7NJAsi6CJKjqr8Sk97EEcee4809r0MkYypHO0LnY2+MTaYQvQ==
-X-Received: by 2002:a05:6a20:4306:b0:10b:2ba5:ca66 with SMTP id h6-20020a056a20430600b0010b2ba5ca66mr8726828pzk.20.1685353318327;
-        Mon, 29 May 2023 02:41:58 -0700 (PDT)
-Received: from localhost ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id i14-20020aa787ce000000b0063b8ce0e860sm6430131pfo.21.2023.05.29.02.41.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 May 2023 02:41:58 -0700 (PDT)
-Date:   Mon, 29 May 2023 17:50:07 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        huyue2@coolpad.com, zhangwen@coolpad.com
-Subject: Re: [PATCH 0/6] erofs: random cleanups and fixes
-Message-ID: <20230529175007.000007c6.zbestahu@gmail.com>
-In-Reply-To: <20230526201459.128169-1-hsiangkao@linux.alibaba.com>
-References: <20230526201459.128169-1-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        bh=su/Rx3R9SIBQIy8nzLVz8h4unOUxvvoq51HIXg2HVxw=;
+        b=eb3PDRPdGXeMhDb1Z6bFWw+xG9HB7vYl+LE5RE2KPYDRE8+pxEsTM0Gs6YpvtRGp4f
+         MnGYcu0O8yJPxYDaCp9ilSEIxUQJhYq6oMPr+8PnkBw0oZnStBP3NoT7TjVcSVIZqOls
+         yoW14mkvgOFqaYwgUKGsG+IkEq2EB6i8d738w4O2Kuj2UB/cLALEU1aJ0WMyifYsI6Mq
+         q6kFnUFeESv8Jf0I5rVjCrFIjq2e2zMYE66iBPo0YNSN8CFgS/CHZRbrbK3+YrDmALPS
+         9ESbYYlvKKA6aXhvqC74P0NLokuSsrpIMM3KX0+4ziBNQE8vQj9Xm33VyIC8mnmD482p
+         n/IA==
+X-Gm-Message-State: AC+VfDzYqGN7/eOan92pyOFmSgB92ZPUxlE/532KUlL719zwPMK0uWRn
+        n9SZD58ins4i24K5Tg97noy7MJv2T2XWzlfVS2Wcp3ZyM9hNakdC
+X-Google-Smtp-Source: ACHHUZ7ThBBzG5Zs+36ad76vI5Em4SgJRU6DaA7EJm+LaJAP+r6+CaqDcEkYZqMbcGvrTiWS9Gf9/EIH51/1Z/ln1w8=
+X-Received: by 2002:a81:4a44:0:b0:559:e8c2:6a1a with SMTP id
+ x65-20020a814a44000000b00559e8c26a1amr11677406ywa.18.1685353917052; Mon, 29
+ May 2023 02:51:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <cover.1681580558.git.noodles@earth.li> <cover.1683719613.git.noodles@earth.li>
+ <f9b643ff0d0ed770f5a841111f213f8481dc920f.1683719613.git.noodles@earth.li>
+In-Reply-To: <f9b643ff0d0ed770f5a841111f213f8481dc920f.1683719613.git.noodles@earth.li>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 29 May 2023 11:51:46 +0200
+Message-ID: <CACRpkdb-wp2631KphG+iwnVaYk0Sm9JCLpoz1DuSQd4jXvEdAg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] pinctrl: axp209: Add support for GPIO3 on the AXP209
+To:     Jonathan McDowell <noodles@earth.li>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 May 2023 04:14:53 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+On Wed, May 10, 2023 at 2:01=E2=80=AFPM Jonathan McDowell <noodles@earth.li=
+> wrote:
 
-> Hi folks,
-> 
-> These are some cleanups and fixes for the compressed part I'd like to
-> aim for the next cycle. I will send several versions if there are more
-> patches available.  This ongoing cleanup work are also for later folio
-> adaption.
-> 
-> I've set up a stress test for this patchset at the same time.
-> 
-> Thanks,
-> Gao Xiang
-> 
-> Gao Xiang (6):
->   erofs: allocate extra bvec pages directly instead of retrying
->   erofs: avoid on-stack pagepool directly passed by arguments
->   erofs: kill hooked chains to avoid loops on deduplicated compressed
->     images
->   erofs: adapt managed inode operations into folios
->   erofs: use struct lockref to replace handcrafted approach
->   erofs: use poison pointer to replace the hard-coded address
-> 
->  fs/erofs/internal.h |  41 +-------
->  fs/erofs/super.c    |  62 ------------
->  fs/erofs/utils.c    |  87 ++++++++--------
->  fs/erofs/zdata.c    | 238 ++++++++++++++++++++------------------------
->  4 files changed, 156 insertions(+), 272 deletions(-)
-> 
+> The AXP209 device has a 4th GPIO which has a slightly different register
+> setup, where the control + status bits are held in a single register
+> rather than sharing AXP20X_GPIO20_SS with GPIOs 0-2.
+>
+> Signed-off-by: Jonathan McDowell <noodles@earth.li>
 
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
+This patch 2/5 applied to the pinctrl tree.
+
+I just assume it is fine to apply this one patch, Bartosz already
+applied the binding patch.
+
+Tell me if this works.
+
+Yours,
+Linus Walleij
