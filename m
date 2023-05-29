@@ -2,116 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB39714CA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC21F714CA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjE2PBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S229828AbjE2PCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjE2PBF (ORCPT
+        with ESMTP id S229654AbjE2PCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:01:05 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52244CF;
-        Mon, 29 May 2023 08:01:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685372461; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=TeSUgNsviWgTVrVSnU40bV5R/cHXanV8tma+FMDWJlFy/71IT2GJbWPRagVA4NQwNA
-    U2ar3rZ7ByCtIUJkxe2g8RJg+1NkKwDZb9zlDLzD/rtxWbDcjKl7wBv0GmgRSmTUVj0I
-    /jHTpsVYX8ONHGRP37yAzCHcdyl9ng99+91LOMHZjDiDG9/YfN4foHPPfMhIqF+ypujT
-    x3nbqf6l+Ki8oZ5Vvw7DVnvD5dmV/pB0Y6YvdH0lNOL1wBBSes9rPOgOUALT9/UiJz/5
-    hvAY0A+f11uYKGAL2NyCHm/I+sym7A9r40w1TBSJsdgUAghRMsVpzlTAlHoZAo1PyWei
-    OQcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685372461;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=+wzkjf8akFN6Ea02ez3eZdGqus6ezvmNm9bS8kdiMx8=;
-    b=XTcMGJnBfgpSQgRe+XfoonK10OwsghMyvsYOJehUEpTz1q+Gv1mSvJioo1Bed9TrPK
-    4fQL+mbQZ+NlfAF1vjU1YSq9BVqfbK8xps6fAeghVR0N9cfl5VeZ89qwI1sAR17c+EXX
-    QBVMBfuiQRw0meo2K0+erwamfhVvzcQtt60eVpUZASJzUM/PHER6BOg4btEFX1gaRE6b
-    mRodUGiXgkl7hZLU/WkolSji0cloSdx5b7DLJ0nZSQEssviIP8wnNumvW4nv96/qS9ao
-    TEf132f8ToXwGdht9NEoxGPfZDBVY0Ctq8eNbAm6jvW2MsEtccsxkYGpt7oktyTKtgzi
-    9UHg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685372461;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=+wzkjf8akFN6Ea02ez3eZdGqus6ezvmNm9bS8kdiMx8=;
-    b=gusDTWrkNZ8aDk1NpbmhIdjLnDMM4zvSOq02AZuzseqzID870u/wLJzaUBqT3ZHxYx
-    cmxOdbLEatwg1zCgdpzpKuaxWrQTvsTvGUpxEdD7W5euRhkVfTtaGeQWNmaGS8XMmTf2
-    A17eJGic66xwvwdirNxM8XiErxqah7DGpqyFVvGlAgpwBustTBUtRK6+LwCdpl8rGLNL
-    83VqVjLk32/jDinCtv3wE5kLAbdxA2n+a3WK1nvS2IVQtfJ+u9fNDZl7hWSTu3iR/MDL
-    dNov97kaMNqnUBrySFZQ0W3yuZ2A3A8nFnJI+JY9mAmFUtljs158UUjxoZS/i+uwnnah
-    y1hw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685372461;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=+wzkjf8akFN6Ea02ez3eZdGqus6ezvmNm9bS8kdiMx8=;
-    b=MWRN6KEIuGY+fuwWaRj5s1FHHvee/GDJ55nXozFI/eWsP1n3neRqT0nk/vabIjbQs9
-    IaefzQIO4D/sNjM90oBA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8pqP1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4TF10fFG
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 29 May 2023 17:01:00 +0200 (CEST)
-Date:   Mon, 29 May 2023 17:00:54 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] arm64: dts: qcom: msm8916/39: Clean up MDSS labels
-Message-ID: <ZHS-HSgaBxMXiKy9@gerhold.net>
-References: <20230525-msm8916-labels-v1-0-bec0f5fb46fb@gerhold.net>
- <20230525-msm8916-labels-v1-4-bec0f5fb46fb@gerhold.net>
- <6f1954e6-e98d-6911-8721-c50082bfb1d7@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f1954e6-e98d-6911-8721-c50082bfb1d7@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 29 May 2023 11:02:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF0AAD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:02:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E38F625F5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 15:02:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D00AC433EF;
+        Mon, 29 May 2023 15:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685372536;
+        bh=vagnwYkF/M0s80z8AYqejbdkvgbJQQlnjBPiq81emPY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=npDO2Veeyz+kj399nU8IyHp/kJLssER2ahHR3mH2pLgcUvndMVDkS/8uwXOEL/SOR
+         p3UtckAaps02LL8nC9BdbRYYrQe8ZCNrW39Gs2XGaV8YRTzx6DxJEKrh7/kMGsKHNk
+         2mYKglSDk//Z99IOVFs1UsgwX/h3qhcwfIjDLcDfCv8T3S43wJmGMftVD/G3kFr9PA
+         iB4YsQ1krMlITGlKtoDHIQnzSakpZCDcDTaySxjC1hBnsNj558YcVIdfpO4Pk/CF2g
+         Df//QLLjwfFx9Kaq5WhwRJtDBRt+5tS4FMjd4moQt70BP4laletBs7ecj8nR0kxXGu
+         O2WdBBWzEN0Jw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q3eNy-00162v-6Y;
+        Mon, 29 May 2023 16:02:14 +0100
+Date:   Mon, 29 May 2023 16:02:13 +0100
+Message-ID: <87sfbfji4q.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     zhengyan <zhengyan@asrmicro.com>
+Cc:     linux-kernel@vger.kernel.org, meitaogao@asrmicro.com,
+        qiaozhou@asrmicro.com, tglx@linutronix.de,
+        zhizhouzhang@asrmicro.com
+Subject: Re: [PATCH v2] irqchip/gic-v3: workaround for ASR8601 when reading mpidr
+In-Reply-To: <20230522110643.3063073-1-zhengyan@asrmicro.com>
+References: <20230517075500.43516-1-zhengyan@asrmicro.com>
+        <20230522110643.3063073-1-zhengyan@asrmicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: zhengyan@asrmicro.com, linux-kernel@vger.kernel.org, meitaogao@asrmicro.com, qiaozhou@asrmicro.com, tglx@linutronix.de, zhizhouzhang@asrmicro.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 02:33:43PM +0100, Bryan O'Donoghue wrote:
-> On 29/05/2023 13:47, Stephan Gerhold wrote:
-> > Right now MDSS related definitions cannot be properly grouped together
-> > in board DTs because the labels do not use consistent prefixes. The DSI
-> > PHY label is particularly weird because the DSI number is at the end
-> > (&dsi_phy0) while DSI itself is called &dsi0.
-> > 
-> > Follow the example of more recent SoCs and give all the MDSS related
-> > nodes a consistent label that allows proper grouping.
-> > 
-> > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> > ---
+On Mon, 22 May 2023 12:06:43 +0100,
+zhengyan <zhengyan@asrmicro.com> wrote:
 > 
-> You should probably churn the yaml that goes with this..
+> This patch add workaround for ASR8601, which uses an armv8.2
+> processor with a gic-500. But gic-500 is incompatible with
+> ARMv8.2 implementations from ARM.
 > 
+> ARMv8.2 from ARM implementation uses Multiprocessor Affinity
+> Register to identify the logical address of the core by
+> | cluster | core | thread |.
+> However, gic-500 only supports topologies with
+> affinity levels less than 2 as
+> | cluster | core|.
+> 
+> So we need this patch as workaround to shift the MPIDR values
+> to ensure proper functionality
+> 
+> Signed-off-by: zhengyan <zhengyan@asrmicro.com>
+> ---
+>  Documentation/arm64/silicon-errata.rst |  4 ++++
+>  drivers/irqchip/irq-gic-v3.c           | 30 ++++++++++++++++++++++++++
+>  2 files changed, 34 insertions(+)
+> 
+> diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+> index 9e311bc43e05..d6430ade349d 100644
+> --- a/Documentation/arm64/silicon-errata.rst
+> +++ b/Documentation/arm64/silicon-errata.rst
+> @@ -214,3 +214,7 @@ stable kernels.
+>  +----------------+-----------------+-----------------+-----------------------------+
+>  | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_010001      |
+>  +----------------+-----------------+-----------------+-----------------------------+
+> +
+> ++----------------+-----------------+-----------------+-----------------------------+
+> +| ASR            | ASR8601         | #8601001        | N/A                         |
+> ++----------------+-----------------+-----------------+-----------------------------+
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index 6fcee221f201..cf64783dfe70 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -39,6 +39,9 @@
+>  
+>  #define FLAGS_WORKAROUND_GICR_WAKER_MSM8996	(1ULL << 0)
+>  #define FLAGS_WORKAROUND_CAVIUM_ERRATUM_38539	(1ULL << 1)
+> +#define FLAGS_WORKAROUND_ASR_ERRATUM_8601001	(1ULL << 2)
+> +
+> +#define ASR8601_AFF_QUIRK(aff)			(aff >> 8)
 
-Do you mean update the examples in the yaml bindings or what exactly?
+This is wrong. There are more than just affinity bits in MPIDR, and
+you're making a mess of the result.
 
-Will take a look at those in a separate change (DT bindings don't make
-any definitions about labels so it's not strictly related). From a quick
-look it even seems like the labels are even omitted mostly in the
-bindings.
+>  
+>  #define GIC_IRQ_TYPE_PARTITION	(GIC_IRQ_TYPE_LPI + 1)
+>  
+> @@ -659,6 +662,9 @@ static u64 gic_mpidr_to_affinity(unsigned long mpidr)
+>  {
+>  	u64 aff;
+>  
+> +	if (gic_data.flags & FLAGS_WORKAROUND_ASR_ERRATUM_8601001)
+> +		mpidr = ASR8601_AFF_QUIRK(mpidr);
+> +
+>  	aff = ((u64)MPIDR_AFFINITY_LEVEL(mpidr, 3) << 32 |
+>  	       MPIDR_AFFINITY_LEVEL(mpidr, 2) << 16 |
+>  	       MPIDR_AFFINITY_LEVEL(mpidr, 1) << 8  |
+> @@ -970,6 +976,9 @@ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
+>  	 * Convert affinity to a 32bit value that can be matched to
+>  	 * GICR_TYPER bits [63:32].
+>  	 */
+> +	if (gic_data.flags & FLAGS_WORKAROUND_ASR_ERRATUM_8601001)
+> +		mpidr = ASR8601_AFF_QUIRK(mpidr);
 
-Thanks,
-Stephan
+It really wasn't what I had in mind when I asked you to place this
+inside a helper. The whole thing looks horrible, and I really don't
+want to have to maintain anything like it.
+
+I came up with the following patch, which keeps the workaround *in a
+single spot*.
+
+Let me know if that works for you.
+
+	M.
+
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 6fcee221f201..b7d69ef4da9f 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -39,6 +39,7 @@
+ 
+ #define FLAGS_WORKAROUND_GICR_WAKER_MSM8996	(1ULL << 0)
+ #define FLAGS_WORKAROUND_CAVIUM_ERRATUM_38539	(1ULL << 1)
++#define FLAGS_WORKAROUND_ASR_ERRATUM_8601001	(1ULL << 2)
+ 
+ #define GIC_IRQ_TYPE_PARTITION	(GIC_IRQ_TYPE_LPI + 1)
+ 
+@@ -655,10 +656,16 @@ static int gic_irq_set_vcpu_affinity(struct irq_data *d, void *vcpu)
+ 	return 0;
+ }
+ 
+-static u64 gic_mpidr_to_affinity(unsigned long mpidr)
++static u64 gic_cpu_to_affinity(int cpu)
+ {
++	u64 mpidr = cpu_logical_map(cpu);
+ 	u64 aff;
+ 
++	/* ASR8601 needs to have its affinities shifted down... */
++	if (unlikely(gic_data.flags & FLAGS_WORKAROUND_ASR_ERRATUM_8601001))
++		mpidr = (MPIDR_AFFINITY_LEVEL(mpidr, 1)	|
++			 (MPIDR_AFFINITY_LEVEL(mpidr, 2) << 8));
++
+ 	aff = ((u64)MPIDR_AFFINITY_LEVEL(mpidr, 3) << 32 |
+ 	       MPIDR_AFFINITY_LEVEL(mpidr, 2) << 16 |
+ 	       MPIDR_AFFINITY_LEVEL(mpidr, 1) << 8  |
+@@ -913,7 +920,7 @@ static void __init gic_dist_init(void)
+ 	 * Set all global interrupts to the boot CPU only. ARE must be
+ 	 * enabled.
+ 	 */
+-	affinity = gic_mpidr_to_affinity(cpu_logical_map(smp_processor_id()));
++	affinity = gic_cpu_to_affinity(smp_processor_id());
+ 	for (i = 32; i < GIC_LINE_NR; i++)
+ 		gic_write_irouter(affinity, base + GICD_IROUTER + i * 8);
+ 
+@@ -962,7 +969,7 @@ static int gic_iterate_rdists(int (*fn)(struct redist_region *, void __iomem *))
+ 
+ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
+ {
+-	unsigned long mpidr = cpu_logical_map(smp_processor_id());
++	unsigned long mpidr;
+ 	u64 typer;
+ 	u32 aff;
+ 
+@@ -970,6 +977,8 @@ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
+ 	 * Convert affinity to a 32bit value that can be matched to
+ 	 * GICR_TYPER bits [63:32].
+ 	 */
++	mpidr = gic_cpu_to_affinity(smp_processor_id());
++
+ 	aff = (MPIDR_AFFINITY_LEVEL(mpidr, 3) << 24 |
+ 	       MPIDR_AFFINITY_LEVEL(mpidr, 2) << 16 |
+ 	       MPIDR_AFFINITY_LEVEL(mpidr, 1) << 8 |
+@@ -1262,9 +1271,11 @@ static u16 gic_compute_target_list(int *base_cpu, const struct cpumask *mask,
+ 				   unsigned long cluster_id)
+ {
+ 	int next_cpu, cpu = *base_cpu;
+-	unsigned long mpidr = cpu_logical_map(cpu);
++	unsigned long mpidr;
+ 	u16 tlist = 0;
+ 
++	mpidr = gic_cpu_to_affinity(cpu);
++
+ 	while (cpu < nr_cpu_ids) {
+ 		tlist |= 1 << (mpidr & 0xf);
+ 
+@@ -1273,8 +1284,7 @@ static u16 gic_compute_target_list(int *base_cpu, const struct cpumask *mask,
+ 			goto out;
+ 		cpu = next_cpu;
+ 
+-		mpidr = cpu_logical_map(cpu);
+-
++		mpidr = gic_cpu_to_affinity(cpu);
+ 		if (cluster_id != MPIDR_TO_SGI_CLUSTER_ID(mpidr)) {
+ 			cpu--;
+ 			goto out;
+@@ -1318,7 +1328,7 @@ static void gic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
+ 	dsb(ishst);
+ 
+ 	for_each_cpu(cpu, mask) {
+-		u64 cluster_id = MPIDR_TO_SGI_CLUSTER_ID(cpu_logical_map(cpu));
++		u64 cluster_id = MPIDR_TO_SGI_CLUSTER_ID(gic_cpu_to_affinity(cpu));
+ 		u16 tlist;
+ 
+ 		tlist = gic_compute_target_list(&cpu, mask, cluster_id);
+@@ -1376,7 +1386,7 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *mask_val,
+ 
+ 	offset = convert_offset_index(d, GICD_IROUTER, &index);
+ 	reg = gic_dist_base(d) + offset + (index * 8);
+-	val = gic_mpidr_to_affinity(cpu_logical_map(cpu));
++	val = gic_cpu_to_affinity(cpu);
+ 
+ 	gic_write_irouter(val, reg);
+ 
+@@ -1786,6 +1796,15 @@ static bool gic_enable_quirk_nvidia_t241(void *data)
+ 	return true;
+ }
+ 
++static bool gic_enable_quirk_asr8601(void *data)
++{
++	struct gic_chip_data *d = data;
++
++	d->flags |= FLAGS_WORKAROUND_ASR_ERRATUM_8601001;
++
++	return true;
++}
++
+ static const struct gic_quirk gic_quirks[] = {
+ 	{
+ 		.desc	= "GICv3: Qualcomm MSM8996 broken firmware",
+@@ -1823,6 +1842,11 @@ static const struct gic_quirk gic_quirks[] = {
+ 		.mask	= 0xffffffff,
+ 		.init	= gic_enable_quirk_nvidia_t241,
+ 	},
++	{
++		.desc	= "GICv3: ASR erratum 8601001",
++		.compatible = "asr,asr8601-gic-v3",
++		.init	= gic_enable_quirk_asr8601,
++	},
+ 	{
+ 	}
+ };
+
+
+-- 
+Without deviation from the norm, progress is not possible.
