@@ -2,305 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707F67143C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473DD7143C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjE2Fhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 01:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        id S231228AbjE2Fjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 01:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjE2Fhv (ORCPT
+        with ESMTP id S229650AbjE2Fje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 01:37:51 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3824F9B
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:37:48 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34T5b8A1015197;
-        Mon, 29 May 2023 00:37:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685338628;
-        bh=ybqU11TutcMA6M2ssDZrQDXIrgGcVs+7REiZLCCRFOQ=;
-        h=Date:From:Subject:To:CC:References:In-Reply-To;
-        b=Vky3qwbS+2gTn2GQKPSQK9EKAb/kYsD8vUOoUvOAF+BC7B2P18Zmt97dxv2iD4CS9
-         MOoYzpsu6C0qcF47AqtmSrG/GkGnOrtvvvnBs4fDOXk45hUbAUqeCwsfXbMBZzndn/
-         /jcZytHUPWrFuLCLccEs2zDpgk2nd+ZQzZoj45DY=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34T5b8hl011617
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 29 May 2023 00:37:08 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 29
- May 2023 00:37:08 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 29 May 2023 00:37:08 -0500
-Received: from [172.24.218.160] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34T5b2mf024886;
-        Mon, 29 May 2023 00:37:03 -0500
-Message-ID: <c8712ef7-c0bc-e6e7-7319-68238d011dd9@ti.com>
-Date:   Mon, 29 May 2023 11:07:01 +0530
+        Mon, 29 May 2023 01:39:34 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2639F
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:39:32 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b04949e5baso2132025ad.0
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685338771; x=1687930771;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ZMHeq9p6cGeob4UHg8LtWQXjOznzUEzA319SJMMUZAg=;
+        b=Y2zzcbBr76OAjvnt0aa+mkjg3FDzM7mpkzpFFHTUuFKa4GBcqGgscC+UJ/INqrjYCP
+         MV5dC9xXWehgjYNeTGZP1Oc0OI2fdLvt3MT3b5w5KHFSxKZ4xuGH+hBFDBo2ia6f9HUv
+         J/PABijbLioetfuQD2KHYToFTREUzxdXjwEaCz9QUy0BFU2BjDgMHb2/HkWK4TJoT81G
+         Qh+E8UO5hHmIKrHKQ+Qp75Tx++1zJCAiNdV/W7tQ3ZYpY0G9h/X/nypEyYSA4ePl4CmD
+         Ox2bmR75PcMQJf3urYKef2fgtaykEKm4KeXfYiNE/3w+hvQf/hEhqac15QYNoD1dD2eF
+         rWBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685338771; x=1687930771;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZMHeq9p6cGeob4UHg8LtWQXjOznzUEzA319SJMMUZAg=;
+        b=OddVx/MRK5US7LvoUTZnaF5MJ0uNBuhAFxZ9eVpS29mdsiWm2N02lRbXvQec3Es2aJ
+         fDneZEayy4AOD51Mk8hYrsPYfXQM1asJiD2VPMEYOdjJ+NglkFVW2U46hCmMkxOBO9CP
+         K00yQdoaaR7oKhyl7cGb/U6PG0EoAkf3lRgTs0uaGN+e4/356nDHJRI82fkykHIxa2vm
+         C/KdkCZh8kw9OeWOAyZCTOnusay5jsMm6Dr0YJ0VPWzrU3Ra/6EGOB55hwcN64NsoJK7
+         wW05jVZaBv2LY0ZDuV2dYS5b6XJGytDX98mz7ca658qt6UjNdIC2vVeMJWUU76Aztic8
+         nbNw==
+X-Gm-Message-State: AC+VfDwuxlTI5n2vh0QeG+pkqiunamD+C3VR727Z2dOdQUpHtYdvukSu
+        S5s60e0YXSVMbnR2zIu2Sovv
+X-Google-Smtp-Source: ACHHUZ6Ypi1Of4qg+4vs4ApPfBp6jB82NcYkwzptZq6gsVbdEFNqmfi635wfx7UnXSaNKt3bHt2j7Q==
+X-Received: by 2002:a17:902:e548:b0:1ac:815e:320b with SMTP id n8-20020a170902e54800b001ac815e320bmr10764133plf.17.1685338771283;
+        Sun, 28 May 2023 22:39:31 -0700 (PDT)
+Received: from thinkpad ([117.248.1.157])
+        by smtp.gmail.com with ESMTPSA id jb15-20020a170903258f00b001ae44cd96besm7191664plb.135.2023.05.28.22.39.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 22:39:30 -0700 (PDT)
+Date:   Mon, 29 May 2023 11:09:19 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ahmed S . Darwish" <darwi@linutronix.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>, linux-pci@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        loongson-kernel@lists.loongnix.cn,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pci: irq: Add an early parameter to limit pci irq numbers
+Message-ID: <20230529053919.GB2856@thinkpad>
+References: <20230524093623.3698134-1-chenhuacai@loongson.cn>
+ <ZG4rZYBKaWrsctuH@bhelgaas>
+ <CAAhV-H5u8qtXpr-mY+pKq7UfmyBgr3USRTQpo9-w28w8pHX8QQ@mail.gmail.com>
+ <20230528165738.GF2814@thinkpad>
+ <CAAhV-H5u0ibghgwbfJT1V_oWUWi0rie0NHWTSkpCVat3_ARvKw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: Re: [PATCH v6 3/8] drm/bridge: mhdp8546: Add minimal format
- negotiation
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        <neil.armstrong@linaro.org>, Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Francesco Dolcini <francesco@dolcini.it>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230509093036.3303-1-a-bhatia1@ti.com>
- <20230509093036.3303-4-a-bhatia1@ti.com>
- <db9b4117-b030-49a7-3732-2fc39d089ee2@ideasonboard.com>
- <d2777edc-151d-7f06-30c4-4634fdb6a63d@ti.com>
- <305382fd-2312-59d9-e2d3-25a17e0a2158@linaro.org>
- <363d3089-48d4-5663-68e8-ecf0eb4e3e0e@ti.com>
- <9f98fb99-eaf4-657c-fd2e-b2e81d9cb109@ideasonboard.com>
-Content-Language: en-US
-In-Reply-To: <9f98fb99-eaf4-657c-fd2e-b2e81d9cb109@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAAhV-H5u0ibghgwbfJT1V_oWUWi0rie0NHWTSkpCVat3_ARvKw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
-
-Thank you for taking a look at this.
-
-On 26/05/23 14:59, Tomi Valkeinen wrote:
-> On 16/05/2023 17:25, Aradhya Bhatia wrote:
->> Hi Neil,
->>
->> Thank you for reviewing the patch.
->>
->> On 16-May-23 12:51, Neil Armstrong wrote:
->>> On 15/05/2023 17:59, Aradhya Bhatia wrote:
->>>> Hi Tomi,
->>>>
->>>> On 12-May-23 14:45, Tomi Valkeinen wrote:
->>>>> On 09/05/2023 12:30, Aradhya Bhatia wrote:
->>>>>> From: Nikhil Devshatwar <nikhil.nd@ti.com>
->>>>>>
->>>>>> With new connector model, mhdp bridge will not create the
->>>>>> connector and
->>>>>> SoC driver will rely on format negotiation to setup the encoder
->>>>>> format.
->>>>>>
->>>>>> Support minimal format negotiations hooks in the drm_bridge_funcs.
->>>>>> Complete format negotiation can be added based on EDID data.
->>>>>> This patch adds the minimal required support to avoid failure
->>>>>> after moving to new connector model.
->>>>>>
->>>>>> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
->>>>>> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
->>>>>
->>>>> You need to add your SoB to this and the other patches.
->>>>
->>>> Okay!
->>>>
->>>>>
->>>>>> ---
->>>>>>
->>>>>> Notes:
->>>>>>
->>>>>>        changes from v1:
->>>>>>        * cosmetic fixes, commit message update.
->>>>>>
->>>>>>        changes from v5:
->>>>>>        * dropped the default_bus_format variable and directly
->>>>>> assigned
->>>>>>          MEDIA_BUS_FMT_RGB121212_1X36 to input_fmts.
->>>>>>
->>>>>>     .../drm/bridge/cadence/cdns-mhdp8546-core.c   | 25
->>>>>> +++++++++++++++++++
->>>>>>     1 file changed, 25 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
->>>>>> b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
->>>>>> index f6822dfa3805..623e4235c94f 100644
->>>>>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
->>>>>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
->>>>>> @@ -2146,6 +2146,30 @@ cdns_mhdp_bridge_atomic_reset(struct
->>>>>> drm_bridge
->>>>>> *bridge)
->>>>>>         return &cdns_mhdp_state->base;
->>>>>>     }
->>>>>>     +static u32 *cdns_mhdp_get_input_bus_fmts(struct drm_bridge
->>>>>> *bridge,
->>>>>> +                     struct drm_bridge_state *bridge_state,
->>>>>> +                     struct drm_crtc_state *crtc_state,
->>>>>> +                     struct drm_connector_state *conn_state,
->>>>>> +                     u32 output_fmt,
->>>>>> +                     unsigned int *num_input_fmts)
->>>>>> +{
->>>>>> +    u32 *input_fmts;
->>>>>> +
->>>>>> +    *num_input_fmts = 0;
->>>>>> +
->>>>>> +    if (output_fmt != MEDIA_BUS_FMT_FIXED)
->>>>>> +        return NULL;
->>>>>
->>>>> The tfp410 and sii902x drivers don't have the above check. Why does
->>>>> mhdp
->>>>> need it? Or the other way, why don't tfp410 and sii902x need it?
->>>>
->>>> I had removed this condition in order to follow status quo, from the
->>>> ITE-66121 HDMI bridge driver.
->>>>
->>>> The idea would have been to drop this for MHDP as well, but I guess I
->>>> overlooked this one.
->>>>
->>>> However...
->>>>
->>>>> I guess at the moment we always do get MEDIA_BUS_FMT_FIXED as the out
->>>>> fmt (in all three bridge drivers), don't we?
->>>>
->>>> ... I tested again to ensure that the above is indeed the case. And
->>>> ended up catching some odd behavior.
->>>>
->>>> It turns out that for all the HDMI bridges (TFP410, SII902X,
->>>> ITE-66121),
->>>> the format negotiation doesn't stop at output_fmt =
->>>> MEDIA_BUS_FMT_FIXED.
->>>> The {bridge}_get_input_format API gets called again with the output_fmt
->>>> = MEDIA_BUS_FMT_RGB24_1X24.
->>>>
->>>> This doesn't happen with the MHDP driver. Format negotiation with MHDP
->>>> bridge stops after one round, at output_fmt = MEDIA_BUS_FMT_FIXED.
->>>
->>> This is because the bridge negociation logic will test with all possible
->>> output formats from the chain, and won't stop at first working test.
->>>
->> Okay..
->>
->>> If your bridge only supports a single input format, it should return the
->>> same format whatever output_fmt is tried.
->>>
->>> So indeed remove this test on mhdp aswell, or filter out invalid output
->>> formats.
->> Agreed.
->>
->> I have been looking into the code deeper and trying to understand the
->> logic flow around the format negotiation in the framework. Here are the
->> 2 points that I want to mention. Please let me know if I have missed
->> something with my understanding.
->>
->>
->> Firstly, the mhdp-8546 output connects to the display-connector (with
->> the compatible, "dp-connector") in the devicetree.
->>
->> When the negotiation begins at 'drm_atomic_bridge_chain_select_bus_fmts'
->> the display-connector bridge *should* act as the 'last_bridge', and the
->> atomic_get_output_bus_fmts hook of the display-connector should get
->> called. However, for some reason I am not yet sure of, the condition
->>
->> :: if (last_bridge->funcs->atomic_get_output_bus_fmts)
->>
->> fails and the 'select_bus_fmt_recursive' function gets called instead,
->> (with MEDIA_BUS_FMT_FIXED as output_fmt), which in turn calls the
->> atomic_get_input_bus_fmts hook of the mhdp-8546. This entirely skips the
->> display-connector out of the format negotiation.
->>
->> This doesn't happen when the HDMI bridges are in concern, even though,
->> they too are connected with display-connector (with compatible
->> "hdmi-connector").
->>
->> I looked into the display-connector driver hoping to find if the 2 types
->> of connectors are being treated differently wrt format negotiation, but
->> I did not find any clue.
->>
->> Please let me know if you have any idea about this.
+On Mon, May 29, 2023 at 10:02:20AM +0800, Huacai Chen wrote:
+> Hi, Manivannan,
 > 
-> The display connector is probed, but not attached to the bridge chain,
-> so the last bridge is the mdhp. You need to call drm_bridge_attach in
-> the mhdp driver to attach the next bridge. See e.g. tfp410's
-> tfp410_attach().
-
-Okay, understood. Thank you!
-
+> On Mon, May 29, 2023 at 12:57 AM Manivannan Sadhasivam
+> <manivannan.sadhasivam@linaro.org> wrote:
+> >
+> > On Thu, May 25, 2023 at 05:14:28PM +0800, Huacai Chen wrote:
+> > > Hi, Bjorn,
+> > >
+> > > On Wed, May 24, 2023 at 11:21 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > >
+> > > > [+cc Marc, LKML]
+> > > >
+> > > > On Wed, May 24, 2023 at 05:36:23PM +0800, Huacai Chen wrote:
+> > > > > Some platforms (such as LoongArch) cannot provide enough irq numbers as
+> > > > > many as logical cpu numbers. So we should limit pci irq numbers when
+> > > > > allocate msi/msix vectors, otherwise some device drivers may fail at
+> > > > > initialization. This patch add a cmdline parameter "pci_irq_limit=xxxx"
+> > > > > to control the limit.
+> > > > >
+> > > > > The default pci msi/msix number limit is defined 32 for LoongArch and
+> > > > > NR_IRQS for other platforms.
+> > > >
+> > > > The IRQ experts can chime in on this, but this doesn't feel right to
+> > > > me.  I assume arch code should set things up so only valid IRQ numbers
+> > > > can be allocated.  This doesn't seem necessarily PCI-specific, I'd
+> > > > prefer to avoid an arch #ifdef here, and I'd also prefer to avoid a
+> > > > command-line parameter that users have to discover and supply.
+> > > The problem we meet: LoongArch machines can have as many as 256
+> > > logical cpus, and the maximum of msi vectors is 192. Even on a 64-core
+> > > machine, 192 irqs can be easily exhausted if there are several NICs
+> > > (NIC usually allocates msi irqs depending on the number of online
+> > > cpus). So we want to limit the msi allocation.
+> > >
+> >
+> > If the MSI allocation fails with multiple vectors, then the NIC driver should
+> > revert to a single MSI vector. Is that happening in your case?
+> Thank you for pointing this out. Yes, I know  most existing drivers
+> will fallback to use single msi or legacy irqs when failed. However,
+> as I
+> replied in another thread (the new solution of this problem [1]), we
+> want to do some proactive throttling rather than consume msi vectors
+> aggressively. For example, if we have two NICs, we want both of them
+> to get 32 msi vectors; not one exhaust all available vectors, and the
+> other fallback to use single msi or legacy irq.
 > 
-> Also, I think the support in mhdp for the
-> !DRM_BRIDGE_ATTACH_NO_CONNECTOR case should be dropped.
-
-Agreed. I will send a separate series for this and drm_bridge_attach
-add.
-
+> I hope I have explained clearly, thanks.
 > 
->> Secondly, as mentioned in the display-connector driver, this bridge is
->> essentially a pass-through. And hence to reflect that, both the format
->> negotiation hooks of display-connector driver call their counter-parts
->> from the previous bridge if they are available, and if not, the formats
->> are assigned MEDIA_BUS_FMT_FIXED.
->>
->> While this makes sense for the atomic_get_output_bus_fmts hook, it seems
->> to me that, the same may not hold true for the atomic_get_input_bus_fmts
->> hook.
->> If the bridge is indeed a pass-through, should it not also pass the
->> output_format as its input format (which it actually got from the output
->> of previous bridge)?
->>
->> This way all the following will remain same.
->>
->> 1. output_fmt of prev_bridge,
->> 2. input_fmt of display-connector, and
->> 3. output_fmt of display-connector.
->>
->> Currently, since the atomic_get_input_bus_fmts hook of display-connector
->> calls its counter-part from the prev_bridge, the input_fmt it passes
->> (for HDMI bridges) is MEDIA_BUS_FMT_RGB888_1X24. The
->> atomic_get_ouput_bus_fmts hook of the HDMI bridge has to, then, set an
->> input bus format considering MEDIA_BUS_FMT_RGB888_1X24 as its output
->> instead of MEDIA_BUS_FMT_FIXED.
->>
->> Let me know what you think!
+
+The problem you are facing is not specific to Loongsoon but rather generic. And
+the solution we have currently is what you were also aware of it seems. So if
+you want to propose an alternative solution, it should be generic and also a
+good justification needs to be provided to the maintainers i.e., comparing two
+solutions and why yours is better.
+
+But IMO what you are proposing seems like usecase driven and may not work all
+the time due to architecture limitation. This again proves that the existing
+solution is sufficient enough.
+
+- Mani
+
+> [1] https://lore.kernel.org/lkml/20230527054633.704916-1-chenhuacai@loongson.cn/T/#t
 > 
-> Yes, it does sound odd to me. Returning the same from the
-> display-connector's get-input-fmt and get-output-fmt makes more sense.
+> Huacai
+> >
+> > - Mani
+> >
+> > > This is not a LoongArch-specific problem, because I think other
+> > > platforms can also meet if they have many NICs. But of course,
+> > > LoongArch can meet it more easily because the available msi vectors
+> > > are very few. So, adding a cmdline parameter is somewhat reasonable.
+> > >
+> > > After some investigation, I think it may be possible to modify
+> > > drivers/irqchip/irq-loongson-pch-msi.c and override
+> > > msi_domain_info::domain_alloc_irqs() to limit msi allocation. However,
+> > > doing that need to remove the "static" before
+> > > __msi_domain_alloc_irqs(), which means revert
+> > > 762687ceb31fc296e2e1406559e8bb5 ("genirq/msi: Make
+> > > __msi_domain_alloc_irqs() static"), I don't know whether that is
+> > > acceptable.
+> > >
+> > > If such a revert is not acceptable, it seems that we can only use the
+> > > method in this patch. Maybe rename pci_irq_limits to pci_msi_limits is
+> > > a little better.
+> > >
+> > > Huacai
+> > >
+> > > >
+> > > > > Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+> > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > > > ---
+> > > > >  drivers/pci/msi/msi.c | 26 +++++++++++++++++++++++++-
+> > > > >  1 file changed, 25 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
+> > > > > index ef1d8857a51b..6617381e50e7 100644
+> > > > > --- a/drivers/pci/msi/msi.c
+> > > > > +++ b/drivers/pci/msi/msi.c
+> > > > > @@ -402,12 +402,34 @@ static int msi_capability_init(struct pci_dev *dev, int nvec,
+> > > > >       return ret;
+> > > > >  }
+> > > > >
+> > > > > +#ifdef CONFIG_LOONGARCH
+> > > > > +#define DEFAULT_PCI_IRQ_LIMITS 32
+> > > > > +#else
+> > > > > +#define DEFAULT_PCI_IRQ_LIMITS NR_IRQS
+> > > > > +#endif
+> > > > > +
+> > > > > +static int pci_irq_limits = DEFAULT_PCI_IRQ_LIMITS;
+> > > > > +
+> > > > > +static int __init pci_irq_limit(char *str)
+> > > > > +{
+> > > > > +     get_option(&str, &pci_irq_limits);
+> > > > > +
+> > > > > +     if (pci_irq_limits == 0)
+> > > > > +             pci_irq_limits = DEFAULT_PCI_IRQ_LIMITS;
+> > > > > +
+> > > > > +     return 0;
+> > > > > +}
+> > > > > +
+> > > > > +early_param("pci_irq_limit", pci_irq_limit);
+> > > > > +
+> > > > >  int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int maxvec,
+> > > > >                          struct irq_affinity *affd)
+> > > > >  {
+> > > > >       int nvec;
+> > > > >       int rc;
+> > > > >
+> > > > > +     maxvec = clamp_val(maxvec, 0, pci_irq_limits);
+> > > > > +
+> > > > >       if (!pci_msi_supported(dev, minvec) || dev->current_state != PCI_D0)
+> > > > >               return -EINVAL;
+> > > > >
+> > > > > @@ -776,7 +798,9 @@ static bool pci_msix_validate_entries(struct pci_dev *dev, struct msix_entry *en
+> > > > >  int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries, int minvec,
+> > > > >                           int maxvec, struct irq_affinity *affd, int flags)
+> > > > >  {
+> > > > > -     int hwsize, rc, nvec = maxvec;
+> > > > > +     int hwsize, rc, nvec;
+> > > > > +
+> > > > > +     nvec = clamp_val(maxvec, 0, pci_irq_limits);
+> > > > >
+> > > > >       if (maxvec < minvec)
+> > > > >               return -ERANGE;
+> > > > > --
+> > > > > 2.39.1
+> > > > >
+> >
+> > --
+> > மணிவண்ணன் சதாசிவம்
 
-Yes, it does make more sense! I can send a separate fix for this.
-
-> 
-> Btw, we seem to be missing get-output-fmt from the mdhp driver.
-
-Yes, we are.
-
-With the drm_bridge_attach call added, the display-connector bridge will
-assign MEDIA_BUS_FMT_FIXED as the default output format. And most
-bridges support only their primary output bus format in their
-get-output-fmt hooks. I suppose it would be RGB121212_1X36 in mhdp8546's
-case.
-
-Do we require this when there is no comprehensive way to determine if
-another bus format may be more suitable (depending on the hardware
-configurations)?
-
-
-Regards
-Aradhya
-
+-- 
+மணிவண்ணன் சதாசிவம்
