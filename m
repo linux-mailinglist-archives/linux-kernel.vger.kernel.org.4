@@ -2,57 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0D7714EC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6727D714ECA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjE2RKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 13:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
+        id S229519AbjE2RLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 13:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjE2RKl (ORCPT
+        with ESMTP id S229457AbjE2RLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 13:10:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295B4B5;
-        Mon, 29 May 2023 10:10:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 29 May 2023 13:11:39 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E5ABE
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:11:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0A97627B8;
-        Mon, 29 May 2023 17:10:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F872C433D2;
-        Mon, 29 May 2023 17:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685380238;
-        bh=icOoIcHZHuyObZGLJmbuGYHHOvu2g465XhkK0FjSWjg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eerBi9kzma/XE4N0Iw4e1qUrw0O4JmkMvxNKAdZCCqFzKWf28HH3XCEiTtCvWj/jY
-         zlAsJqicSse/criOMZkHpSzbxSSo0NGHwWRBEGDvnWeFC8EIIRMwQHlQJRcmCv3jUF
-         CF2HZkbVl0Z0VVwCM5ri0TjpDrUL//cg09689PNCvAC0hmHjFodVuQ9Z82hA1VRg5+
-         sL5EaPwRGUCLu/idxlwZhjchFVeaHeb7NVgsjorrqt2EFNVrA2nKMwTC0Mbrws+q6A
-         VaS3yodFTYPoFahIhFOxK6a/0F0aV/kMH4DHL/uE68EmvvkA2k+MNLGRtioiU4r9UN
-         b2+MijrfQZSag==
-Date:   Mon, 29 May 2023 22:40:24 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        kw@linux.com, kishon@kernel.org, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 1/7] PCI: endpoint: Pass EPF device ID to the probe
- function
-Message-ID: <20230529171024.GF5633@thinkpad>
-References: <20230519144215.25167-1-manivannan.sadhasivam@linaro.org>
- <20230519144215.25167-2-manivannan.sadhasivam@linaro.org>
- <ZHRyA1BzK3KaGUEH@lpieralisi>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A68B521A09;
+        Mon, 29 May 2023 17:11:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1685380295; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jO1xGJcRzVWbUcR6oYzFMG+6EcknIhSs9EPGKkrNan8=;
+        b=e+oQly1Ee9i8DBS2bgSe0OS12We3ksWrG41i7+jiLDIe7nkOnOVKB8GXlyIYZZgNJtSb2W
+        RIumEcq1VGZCK/5dflW+mDlUJ3sfDuPPx2A05DwmZVhtIAH7LD/tdZ/GXQkJpPd5EhMVrD
+        fMw7yhDkNfPluqvQaBaRW4+MPZbJL14=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1685380295;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jO1xGJcRzVWbUcR6oYzFMG+6EcknIhSs9EPGKkrNan8=;
+        b=C79tMy4ll71V0DjCxTtggYvXXtP1J/GsgXiXIGef8WeOFZls54Pj364TR8ofn6HJLGQjWm
+        MfwkpqBAUW3LmvDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BA8B1332D;
+        Mon, 29 May 2023 17:11:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Ew5NIcfcdGS9XgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 29 May 2023 17:11:35 +0000
+Message-ID: <5f3ad5f3-780d-1ff7-5f97-0dc8b5611581@suse.cz>
+Date:   Mon, 29 May 2023 19:11:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZHRyA1BzK3KaGUEH@lpieralisi>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 3/5] mm: compaction: refactor __compaction_suitable()
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+References: <20230519123959.77335-1-hannes@cmpxchg.org>
+ <20230519123959.77335-4-hannes@cmpxchg.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230519123959.77335-4-hannes@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,151 +77,250 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 11:36:03AM +0200, Lorenzo Pieralisi wrote:
-> On Fri, May 19, 2023 at 08:12:09PM +0530, Manivannan Sadhasivam wrote:
-> > Currently, the EPF probe function doesn't get the device ID argument needed
-> > to correctly identify the device table ID of the EPF device.
-> > 
-> > When multiple entries are added to the "struct pci_epf_device_id" table,
-> > the probe function needs to identify the correct one. And the only way to
-> > do so is by storing the correct device ID in "struct pci_epf" during
-> > "pci_epf_match_id()" and passing that to probe().
-> > 
-> > Reviewed-by: Kishon Vijay Abraham I <kishon@kernel.org>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/pci/endpoint/functions/pci-epf-ntb.c  | 3 ++-
-> >  drivers/pci/endpoint/functions/pci-epf-test.c | 2 +-
-> >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 2 +-
-> >  drivers/pci/endpoint/pci-epf-core.c           | 8 +++++---
-> >  include/linux/pci-epf.h                       | 4 +++-
-> >  5 files changed, 12 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/pci/endpoint/functions/pci-epf-ntb.c b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > index 9a00448c7e61..980b4ecf19a2 100644
-> > --- a/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > +++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> > @@ -2075,11 +2075,12 @@ static struct config_group *epf_ntb_add_cfs(struct pci_epf *epf,
-> >  /**
-> >   * epf_ntb_probe() - Probe NTB function driver
-> >   * @epf: NTB endpoint function device
-> > + * @id: NTB endpoint function device ID
-> >   *
-> >   * Probe NTB function driver when endpoint function bus detects a NTB
-> >   * endpoint function.
-> >   */
-> > -static int epf_ntb_probe(struct pci_epf *epf)
-> > +static int epf_ntb_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
-> >  {
-> >  	struct epf_ntb *ntb;
-> >  	struct device *dev;
-> > diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > index 0f9d2ec822ac..d5fcc78a5b73 100644
-> > --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> > +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > @@ -980,7 +980,7 @@ static const struct pci_epf_device_id pci_epf_test_ids[] = {
-> >  	{},
-> >  };
-> >  
-> > -static int pci_epf_test_probe(struct pci_epf *epf)
-> > +static int pci_epf_test_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
-> >  {
-> >  	struct pci_epf_test *epf_test;
-> >  	struct device *dev = &epf->dev;
-> > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > index b7c7a8af99f4..122eb7a12028 100644
-> > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > @@ -1401,7 +1401,7 @@ static struct pci_epf_ops epf_ntb_ops = {
-> >   *
-> >   * Returns: Zero for success, or an error code in case of failure
-> >   */
-> > -static int epf_ntb_probe(struct pci_epf *epf)
-> > +static int epf_ntb_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
-> >  {
-> >  	struct epf_ntb *ntb;
-> >  	struct device *dev;
-> > diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
-> > index 2036e38be093..924564288c9a 100644
-> > --- a/drivers/pci/endpoint/pci-epf-core.c
-> > +++ b/drivers/pci/endpoint/pci-epf-core.c
-> > @@ -494,11 +494,13 @@ static const struct device_type pci_epf_type = {
-> >  };
-> >  
-> >  static int
-> > -pci_epf_match_id(const struct pci_epf_device_id *id, const struct pci_epf *epf)
-> > +pci_epf_match_id(const struct pci_epf_device_id *id, struct pci_epf *epf)
-> >  {
-> >  	while (id->name[0]) {
-> > -		if (strcmp(epf->name, id->name) == 0)
-> > +		if (strcmp(epf->name, id->name) == 0) {
-> > +			epf->id = id;
-> >  			return true;
-> > +		}
-> >  		id++;
-> >  	}
+On 5/19/23 14:39, Johannes Weiner wrote:
+> __compaction_suitable() is supposed to check for available migration
+> targets. However, it also checks whether the operation was requested
+> via /proc/sys/vm/compact_memory, and whether the original allocation
+> request can already succeed. These don't apply to all callsites.
 > 
-> I disagree with this patch's intent. The match function should not
-> change the parameters state. We should export this function to drivers
-> so that upon probe they can retrieve the matching id themselves,
-> as other bus interfaces do IMO.
+> Move the checks out to the callers, so that later patches can deal
+> with them one by one. No functional change intended.
 > 
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 
-Ok, if you do not want to change the parameters inside match function, then I
-could move the matching part to a separate function and make it to return the
-correct pci_epf_device_id pointer. Based on this, the match() function can
-return bool if the match is found or not and the pci_epf_device_probe() function
-can pass the returned id to the driver's probe function. This is what being done
-for PCI driver as well [1].
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-- Mani
+Note comment on compaction_suitable() still mentions COMPACT_SUCCESS, that
+is no longer possible, so delete that line?
+Also on closer look, both compaction_suitable() and __compaction_suitable()
+could now simply return bool. The callers use it that way anyway. There
+would just be some extra fiddling internally aroud the tracepoint.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/pci-driver.c#n415
-
-> Thanks,
-> Lorenzo
+> ---
+>  include/linux/compaction.h |  4 +-
+>  mm/compaction.c            | 78 ++++++++++++++++++++++++--------------
+>  mm/vmscan.c                | 35 ++++++++++-------
+>  3 files changed, 73 insertions(+), 44 deletions(-)
 > 
-> > @@ -526,7 +528,7 @@ static int pci_epf_device_probe(struct device *dev)
-> >  
-> >  	epf->driver = driver;
-> >  
-> > -	return driver->probe(epf);
-> > +	return driver->probe(epf, epf->id);
-> >  }
-> >  
-> >  static void pci_epf_device_remove(struct device *dev)
-> > diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
-> > index a215dc8ce693..bc613f0df7e3 100644
-> > --- a/include/linux/pci-epf.h
-> > +++ b/include/linux/pci-epf.h
-> > @@ -89,7 +89,7 @@ struct pci_epc_event_ops {
-> >   * @id_table: identifies EPF devices for probing
-> >   */
-> >  struct pci_epf_driver {
-> > -	int	(*probe)(struct pci_epf *epf);
-> > +	int	(*probe)(struct pci_epf *epf, const struct pci_epf_device_id *id);
-> >  	void	(*remove)(struct pci_epf *epf);
-> >  
-> >  	struct device_driver	driver;
-> > @@ -131,6 +131,7 @@ struct pci_epf_bar {
-> >   * @epc: the EPC device to which this EPF device is bound
-> >   * @epf_pf: the physical EPF device to which this virtual EPF device is bound
-> >   * @driver: the EPF driver to which this EPF device is bound
-> > + * @id: Pointer to the EPF device ID
-> >   * @list: to add pci_epf as a list of PCI endpoint functions to pci_epc
-> >   * @lock: mutex to protect pci_epf_ops
-> >   * @sec_epc: the secondary EPC device to which this EPF device is bound
-> > @@ -158,6 +159,7 @@ struct pci_epf {
-> >  	struct pci_epc		*epc;
-> >  	struct pci_epf		*epf_pf;
-> >  	struct pci_epf_driver	*driver;
-> > +	const struct pci_epf_device_id *id;
-> >  	struct list_head	list;
-> >  	/* mutex to protect against concurrent access of pci_epf_ops */
-> >  	struct mutex		lock;
-> > -- 
-> > 2.25.1
-> > 
+> diff --git a/include/linux/compaction.h b/include/linux/compaction.h
+> index 1f0328a2ba48..9f7cf3e1bf89 100644
+> --- a/include/linux/compaction.h
+> +++ b/include/linux/compaction.h
+> @@ -90,7 +90,7 @@ extern enum compact_result try_to_compact_pages(gfp_t gfp_mask,
+>  		struct page **page);
+>  extern void reset_isolation_suitable(pg_data_t *pgdat);
+>  extern enum compact_result compaction_suitable(struct zone *zone, int order,
+> -		unsigned int alloc_flags, int highest_zoneidx);
+> +					       int highest_zoneidx);
+>  
+>  extern void compaction_defer_reset(struct zone *zone, int order,
+>  				bool alloc_success);
+> @@ -108,7 +108,7 @@ static inline void reset_isolation_suitable(pg_data_t *pgdat)
+>  }
+>  
+>  static inline enum compact_result compaction_suitable(struct zone *zone, int order,
+> -					int alloc_flags, int highest_zoneidx)
+> +						      int highest_zoneidx)
+>  {
+>  	return COMPACT_SKIPPED;
+>  }
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index c9a4b6dffcf2..8f61cfa87c49 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -2206,24 +2206,10 @@ static enum compact_result compact_finished(struct compact_control *cc)
+>  }
+>  
+>  static enum compact_result __compaction_suitable(struct zone *zone, int order,
+> -					unsigned int alloc_flags,
+>  					int highest_zoneidx,
+>  					unsigned long wmark_target)
+>  {
+>  	unsigned long watermark;
+> -
+> -	if (is_via_compact_memory(order))
+> -		return COMPACT_CONTINUE;
+> -
+> -	watermark = wmark_pages(zone, alloc_flags & ALLOC_WMARK_MASK);
+> -	/*
+> -	 * If watermarks for high-order allocation are already met, there
+> -	 * should be no need for compaction at all.
+> -	 */
+> -	if (zone_watermark_ok(zone, order, watermark, highest_zoneidx,
+> -								alloc_flags))
+> -		return COMPACT_SUCCESS;
+> -
+>  	/*
+>  	 * Watermarks for order-0 must be met for compaction to be able to
+>  	 * isolate free pages for migration targets. This means that the
+> @@ -2256,13 +2242,12 @@ static enum compact_result __compaction_suitable(struct zone *zone, int order,
+>   *   COMPACT_CONTINUE - If compaction should run now
+>   */
+>  enum compact_result compaction_suitable(struct zone *zone, int order,
+> -					unsigned int alloc_flags,
+>  					int highest_zoneidx)
+>  {
+>  	enum compact_result ret;
+>  	int fragindex;
+>  
+> -	ret = __compaction_suitable(zone, order, alloc_flags, highest_zoneidx,
+> +	ret = __compaction_suitable(zone, order, highest_zoneidx,
+>  				    zone_page_state(zone, NR_FREE_PAGES));
+>  	/*
+>  	 * fragmentation index determines if allocation failures are due to
+> @@ -2306,7 +2291,16 @@ bool compaction_zonelist_suitable(struct alloc_context *ac, int order,
+>  	for_each_zone_zonelist_nodemask(zone, z, ac->zonelist,
+>  				ac->highest_zoneidx, ac->nodemask) {
+>  		unsigned long available;
+> -		enum compact_result compact_result;
+> +		unsigned long watermark;
+> +
+> +		if (is_via_compact_memory(order))
+> +			return true;
+> +
+> +		/* Allocation can already succeed, nothing to do */
+> +		watermark = wmark_pages(zone, alloc_flags & ALLOC_WMARK_MASK);
+> +		if (zone_watermark_ok(zone, order, watermark,
+> +				      ac->highest_zoneidx, alloc_flags))
+> +			continue;
+>  
+>  		/*
+>  		 * Do not consider all the reclaimable memory because we do not
+> @@ -2316,9 +2310,8 @@ bool compaction_zonelist_suitable(struct alloc_context *ac, int order,
+>  		 */
+>  		available = zone_reclaimable_pages(zone) / order;
+>  		available += zone_page_state_snapshot(zone, NR_FREE_PAGES);
+> -		compact_result = __compaction_suitable(zone, order, alloc_flags,
+> -				ac->highest_zoneidx, available);
+> -		if (compact_result == COMPACT_CONTINUE)
+> +		if (__compaction_suitable(zone, order, ac->highest_zoneidx,
+> +					  available) == COMPACT_CONTINUE)
+>  			return true;
+>  	}
+>  
+> @@ -2348,11 +2341,23 @@ compact_zone(struct compact_control *cc, struct capture_control *capc)
+>  	INIT_LIST_HEAD(&cc->migratepages);
+>  
+>  	cc->migratetype = gfp_migratetype(cc->gfp_mask);
+> -	ret = compaction_suitable(cc->zone, cc->order, cc->alloc_flags,
+> -							cc->highest_zoneidx);
+> -	/* Compaction is likely to fail */
+> -	if (ret == COMPACT_SUCCESS || ret == COMPACT_SKIPPED)
+> -		return ret;
+> +
+> +	if (!is_via_compact_memory(cc->order)) {
+> +		unsigned long watermark;
+> +
+> +		/* Allocation can already succeed, nothing to do */
+> +		watermark = wmark_pages(cc->zone,
+> +					cc->alloc_flags & ALLOC_WMARK_MASK);
+> +		if (zone_watermark_ok(cc->zone, cc->order, watermark,
+> +				      cc->highest_zoneidx, cc->alloc_flags))
+> +			return COMPACT_SUCCESS;
+> +
+> +		ret = compaction_suitable(cc->zone, cc->order,
+> +					  cc->highest_zoneidx);
+> +		/* Compaction is likely to fail */
+> +		if (ret == COMPACT_SKIPPED)
+> +			return ret;
+> +	}
+>  
+>  	/*
+>  	 * Clear pageblock skip if there were failures recently and compaction
+> @@ -2845,7 +2850,16 @@ static bool kcompactd_node_suitable(pg_data_t *pgdat)
+>  		if (!populated_zone(zone))
+>  			continue;
+>  
+> -		if (compaction_suitable(zone, pgdat->kcompactd_max_order, 0,
+> +		if (is_via_compact_memory(pgdat->kcompactd_max_order))
+> +			return true;
+> +
+> +		/* Allocation can already succeed, check other zones */
+> +		if (zone_watermark_ok(zone, pgdat->kcompactd_max_order,
+> +				      min_wmark_pages(zone),
+> +				      highest_zoneidx, 0))
+> +			continue;
+> +
+> +		if (compaction_suitable(zone, pgdat->kcompactd_max_order,
+>  					highest_zoneidx) == COMPACT_CONTINUE)
+>  			return true;
+>  	}
+> @@ -2883,10 +2897,18 @@ static void kcompactd_do_work(pg_data_t *pgdat)
+>  		if (compaction_deferred(zone, cc.order))
+>  			continue;
+>  
+> -		if (compaction_suitable(zone, cc.order, 0, zoneid) !=
+> -							COMPACT_CONTINUE)
+> +		if (is_via_compact_memory(cc.order))
+> +			goto compact;
+> +
+> +		/* Allocation can already succeed, nothing to do */
+> +		if (zone_watermark_ok(zone, cc.order,
+> +				      min_wmark_pages(zone), zoneid, 0))
+>  			continue;
+>  
+> +		if (compaction_suitable(zone, cc.order,
+> +					zoneid) != COMPACT_CONTINUE)
+> +			continue;
+> +compact:
+>  		if (kthread_should_stop())
+>  			return;
+>  
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index d257916f39e5..c9c0f3e081f5 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -6397,14 +6397,17 @@ static inline bool should_continue_reclaim(struct pglist_data *pgdat,
+>  		if (!managed_zone(zone))
+>  			continue;
+>  
+> -		switch (compaction_suitable(zone, sc->order, 0, sc->reclaim_idx)) {
+> -		case COMPACT_SUCCESS:
+> -		case COMPACT_CONTINUE:
+> +		if (sc->order == -1) /* is_via_compact_memory() */
+> +			return false;
+> +
+> +		/* Allocation can already succeed, nothing to do */
+> +		if (zone_watermark_ok(zone, sc->order, min_wmark_pages(zone),
+> +				      sc->reclaim_idx, 0))
+> +			return false;
+> +
+> +		if (compaction_suitable(zone, sc->order,
+> +					sc->reclaim_idx) == COMPACT_CONTINUE)
+>  			return false;
+> -		default:
+> -			/* check next zone */
+> -			;
+> -		}
+>  	}
+>  
+>  	/*
+> @@ -6592,16 +6595,20 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+>  static inline bool compaction_ready(struct zone *zone, struct scan_control *sc)
+>  {
+>  	unsigned long watermark;
+> -	enum compact_result suitable;
+>  
+> -	suitable = compaction_suitable(zone, sc->order, 0, sc->reclaim_idx);
+> -	if (suitable == COMPACT_SUCCESS)
+> -		/* Allocation should succeed already. Don't reclaim. */
+> +	if (sc->order == -1) /* is_via_compact_memory() */
+> +		goto suitable;
+> +
+> +	/* Allocation can already succeed, nothing to do */
+> +	if (zone_watermark_ok(zone, sc->order, min_wmark_pages(zone),
+> +			      sc->reclaim_idx, 0))
+>  		return true;
+> -	if (suitable == COMPACT_SKIPPED)
+> -		/* Compaction cannot yet proceed. Do reclaim. */
+> -		return false;
+>  
+> +	/* Compaction cannot yet proceed. Do reclaim. */
+> +	if (compaction_suitable(zone, sc->order,
+> +				sc->reclaim_idx) == COMPACT_SKIPPED)
+> +		return false;
+> +suitable:
+>  	/*
+>  	 * Compaction is already possible, but it takes time to run and there
+>  	 * are potentially other callers using the pages just freed. So proceed
 
--- 
-மணிவண்ணன் சதாசிவம்
