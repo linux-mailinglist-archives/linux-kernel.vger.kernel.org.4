@@ -2,141 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81C3714F02
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB7A714F05
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjE2RsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 13:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
+        id S229582AbjE2RsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 13:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjE2RsD (ORCPT
+        with ESMTP id S229597AbjE2RsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 13:48:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98DDC7
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:47:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685382434;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jQ6O0cE8673VatXWo3WOH4FGuXlirbmlPmU9z6UkWkA=;
-        b=SH7J86rg2J+JooGeSeA50jLxV+R2xrsMijy9zPGyzIkZcOSjgNzWuhHTwgIecW59QIryl2
-        aIdECBiNffFdnD6EhgogPr/WCiDq+IlhgE+YUtozrENYyQiXv1QRh42K31SCLoO+/lafi9
-        CGOaQ5ZSpmFlm46Rpw4ZMypMkaSUu1g=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-562-4R9wNrFdPXGWKDuWSBBpUA-1; Mon, 29 May 2023 13:47:09 -0400
-X-MC-Unique: 4R9wNrFdPXGWKDuWSBBpUA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5BD912A59575;
-        Mon, 29 May 2023 17:47:09 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.99])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 60EB217103;
-        Mon, 29 May 2023 17:47:06 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 29 May 2023 19:46:50 +0200 (CEST)
-Date:   Mon, 29 May 2023 19:46:46 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     michael.christie@oracle.com
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-Message-ID: <20230529174646.GB15193@redhat.com>
-References: <20230524141022.GA19091@redhat.com>
- <87ttw1zt4i.fsf@email.froward.int.ebiederm.org>
- <20230525115512.GA9229@redhat.com>
- <87y1lcxwcj.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wj4DS=2F5mW+K2P7cVqrsuGd3rKE_2k2BqnnPeeYhUCvg@mail.gmail.com>
- <87cz2mrtnk.fsf@email.froward.int.ebiederm.org>
- <CAHk-=whsi9JFP-okH3jXHrA8rh8bMuuSt6ZgkmPwiDMAn437qA@mail.gmail.com>
- <87mt1pmezu.fsf@email.froward.int.ebiederm.org>
- <20230529111859.GA15193@redhat.com>
- <022f4de6-9eae-0a94-0f55-b84be4982fc3@oracle.com>
+        Mon, 29 May 2023 13:48:10 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E866DE
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:48:08 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-973f78329e3so284365166b.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1685382487; x=1687974487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HMdOshEWsCUccpZDIFZZY9qEaKeS/wKY+PKyVf4UtLw=;
+        b=ebxoUHMAoHjBwRTQQFj5NAVEDHva9Q+73M4/Q/jpzXMPHcw9bjP39wSyvA7bdgirQc
+         hDUdZY8YVnGr12KA2uzMWc133w/odbrTDg9Nbdl8mv3qwoqkKKvfDmu9tG58tYTnLjTP
+         yg1PQODaY05oxTogUAi/p3cS8p+y2FjkdNlYA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685382487; x=1687974487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HMdOshEWsCUccpZDIFZZY9qEaKeS/wKY+PKyVf4UtLw=;
+        b=E+xo7G1X+1XgKBzpFNkAt2aL82KeCCnVA9XGnyT9NDmxwwZnr9iBoU6pG12X6M7lM9
+         82pOQNDDvj3vNq1ONtHv3d5PkEwb8XLZvFO0qM9PrcKH4CapXpVM6GvOeRQS6xvunYj7
+         LN4a+9w/kl184KhrBUtKMzY3f6rJVVfWKF/ikhHQpKKRR1c5RFmif4149IVFFzFTOZMd
+         yflMfAUk8NAPW0yYNF89RuN+Z92SlJUsqiBzmdSCPHILW2nflfDBG9bmk2CDN97EvaTd
+         noR09yhUkKcc0w1kPG1/TM7ItkR+cNF+Be/DsFnpnf67/PKJodIIn/ZkhB++3EQJoAwX
+         DrWw==
+X-Gm-Message-State: AC+VfDyXLzn1o1pHD5SNwJWC8kfrLBP3bMxWGZI/TZA2JZq2kt8PoLo5
+        dVE+OKMkDTVJ1KR63yH0LqNipsl8TaSZ1gf90KShhHfx
+X-Google-Smtp-Source: ACHHUZ7qgZkM29GwHKfVwjfjCwN7FzBukE/4sbS5saaWs8Kh4yt6cpDwy4Jlc1EYZyoK3F8NQ1Sn0Q==
+X-Received: by 2002:a17:907:720b:b0:974:32e:7de9 with SMTP id dr11-20020a170907720b00b00974032e7de9mr3503022ejc.56.1685382486929;
+        Mon, 29 May 2023 10:48:06 -0700 (PDT)
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170906c30700b0094f410225c7sm6130377ejz.169.2023.05.29.10.48.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 10:48:06 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5149b63151aso2745425a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:48:06 -0700 (PDT)
+X-Received: by 2002:a17:907:36cd:b0:96f:7d09:7deb with SMTP id
+ bj13-20020a17090736cd00b0096f7d097debmr13772127ejc.69.1685382465126; Mon, 29
+ May 2023 10:47:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <022f4de6-9eae-0a94-0f55-b84be4982fc3@oracle.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230524213620.3509138-1-mcgrof@kernel.org> <20230524213620.3509138-3-mcgrof@kernel.org>
+ <8fc5b26b-d2f6-0c8f-34a1-af085dbef155@suse.com> <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
+ <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
+ <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
+ <ZG/a+nrt4/AAUi5z@bombadil.infradead.org> <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+ <ZHRpH-JXAxA6DnzR@hovoldconsulting.com> <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+ <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
+In-Reply-To: <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 29 May 2023 13:47:28 -0400
+X-Gmail-Original-Message-ID: <CAHk-=whHRAntqwt_iGAdezj4i33GTmN+Oa8z3CNz4LO0Puo85g@mail.gmail.com>
+Message-ID: <CAHk-=whHRAntqwt_iGAdezj4i33GTmN+Oa8z3CNz4LO0Puo85g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
+        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
+        lennart@poettering.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike, sorry, I don't understand your email.
-
-Just in case, let me remind I know nothing about drivers/vhost/
-
-On 05/29, michael.christie@oracle.com wrote:
+On Mon, May 29, 2023 at 8:44=E2=80=AFAM Johan Hovold <johan@kernel.org> wro=
+te:
 >
-> On 5/29/23 6:19 AM, Oleg Nesterov wrote:
-> > On 05/27, Eric W. Biederman wrote:
-> >>
-> >> Looking forward I don't see not asking the worker threads to stop
-> >> for the coredump right now causing any problems in the future.
-> >> So I think we can use this to resolve the coredump issue I spotted.
+> Yes, those two changes are enough to make the problem go away.
+
+Ok, good. Expected, but just verifying that it wasn't some silly
+incidental thinko.
+
+> > I do wonder what it is that is different in your setup, and maybe you
+> > could also enable the
 > >
-> > But we have almost the same problem with exec.
-> >
-> > Execing thread will wait for vhost_worker() while vhost_worker will wait for
-> > .release -> vhost_task_stop().
+> >         pr_debug("finit_module: fd=3D%d, uargs=3D%p, flags=3D%i\n", fd,=
+ uargs, flags);
 >
-> For this type of case, what is the goal or correct behavior in the end?
->
-> When get_signal returns true we can code things like you mention below
+> Below is the corresponding output with a working kernel: 174 requests
+> for the 131 modules that end up being loaded (without the revert there
+> is only around 110 modules loaded).
 
-and you have mentioned in the next email that you have already coded something
-like this, so perhaps we can delay the further discussions until you send the
-new code?
+Ok, your setup doesn't sound *too* different from mine. I have 176
+kernel modules on my laptop right now, and that exclusive open
+obviously worked fine for me.
 
-> and
-> clean up the task_struct.
+But it could easily be some random small difference just from
+different hardware, so...
 
-Hmm... If we you CLONE_THREAD the exiting vhost_worker() will auto-reap itself,
+And yeah, that dmesg output is useless, I didn't think of the fact
+that it only prints out the file descriptor, not the actual path to
+the file. In fact, without that change in place, the module code never
+actually looks at the file and leaves it all to
+kernel_read_file_from_fd().
 
-> However, we now have a non-functioning vhost device
-> open and just sitting around taking up memory and it can't do any IO.
+With my change, it woul dhave been trivial to use "%pD" and point it
+at the file pointer instead, and get the dentry name that way, but
+never mind.  I think you're entirely right that it's probably due to a
+shared dependency module, and I just didn't happen to trigger that
+case.
 
-can't comment, see above.
+Sadly, the whole idea was to figure out the exclusion so early that we
+don't have the module data structures lookup up yet, so there's no
+really obvious thing to serialize the load on.
 
-> For this type of case, do we expect just not to crash/hang, or was this new
-> exec'd thread suppose to be able to use the vhost device?
+I'll have to think about this more. Serializing on a per-inode lock
+would seem to be the simplest thing, but they are all for IO, and we
+can't just take them over the read.
 
-I just tried to point out that (unless I missed something) there are more corner
-cases, not just coredump.
-
-> > Or suppose that vhost_worker's sub-thread forks a child with CLONE_FILES...
->
-> You mean the vhost_task's task/thread doing a function that does a copy_process
-> right?
-
-I meant that the vhost_task's sub-thread can do sys_clone(CLONE_FILES) from
-userspace. Yes, this implies copy_process() but I still can't understand you.
-
-> That type of thing is not needed.
-
-Do you mean that userspace should never do this? But this doesn't matter, the
-kernel should handle this case anyway.
-
-Or what?
-
-In short let me repeat that I don't understand you and - of course! - quite
-possibly I missed something.
-
-Oleg.
-
+                     Linus
