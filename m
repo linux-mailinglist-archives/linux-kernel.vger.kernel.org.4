@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966DE714A42
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E83714A2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjE2NYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        id S229671AbjE2NWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjE2NYY (ORCPT
+        with ESMTP id S229663AbjE2NWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:24:24 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14678A8;
-        Mon, 29 May 2023 06:24:22 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QVGTF2CKwz4f3wQj;
-        Mon, 29 May 2023 21:24:17 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgAHvbB9p3RkWVPoKQ--.23397S10;
-        Mon, 29 May 2023 21:24:18 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     guoqing.jiang@linux.dev, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, song@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-Subject: [PATCH -next v2 6/6] md: enhance checking in md_check_recovery()
-Date:   Mon, 29 May 2023 21:20:37 +0800
-Message-Id: <20230529132037.2124527-7-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
-References: <20230529132037.2124527-1-yukuai1@huaweicloud.com>
+        Mon, 29 May 2023 09:22:02 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEC4C4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:22:00 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f6da07feb2so33938565e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685366518; x=1687958518;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zQPnGID00Brxksr1LEFVX3pOkofF35RoN55bi7pgARE=;
+        b=gDWZdNkikMtW4jwWJdMwNzOTeQk4XvTMscX5BPzfte6VLW360lle6e8nAPlUk9g/o8
+         xd8wZgiMFPhfztetNazQ8wsnZQFaI88+oW4POxwsz+1GQuVs/DmN/acHJycNy6r+Ps7f
+         fF3/keTavialx5OmeiHTOF6Ui4Uf7eEq9tMAVBM8km/Sd8ZuwJ85Q97IBqXr6/x+sjbE
+         S3pGNhIqb4ct/ZeUSH6toXAJnGCgK5x4qhD7ueiq8QiYUL0B20fbb4yYJ7ERWOT2A0Pn
+         gYxOZK/+sK82Nno81ex8nMHW0dQtNdc+u/9T/T7/QTYrHhCVMclfHrp3J+MHeQdik3RB
+         Sokw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685366518; x=1687958518;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zQPnGID00Brxksr1LEFVX3pOkofF35RoN55bi7pgARE=;
+        b=V6iAfGzIIxFgiKgvZk0nryuS0UvpWtYivJvGmGVx5RMjBKX7WIMC0t7r4lz6j3uzHs
+         /HfGxIYGrtUb3v2tkDUJK4EauBaOLs28mQV9+zBLbAxHdNvlyXZrvmH3UqYCAw0n8BdO
+         bmzMPGAJyVPmqMrqzOhXJMQmS5wojBfyHsuejqgOFJPj4QrpM4kHnMLAUhJLfbhFjtIb
+         igSAuKNUsNfzcYOgL6slXKIWd6W1U4KsTN1mEawe/3m12/qrir89t716/TsfLc7f0itV
+         fld57gcjzfpWFRivvqqP46k64S32jKFuj+ex5xTVpKFrf6CAGzo9/ROyIxKtHyVe1RaU
+         jY1g==
+X-Gm-Message-State: AC+VfDzcmEvpYn0WSK/kbGGIfk468/3sBkP5NdpFbIiX4MFBUIjokk60
+        Vpemk6KIKtbR8ubORS+vVkfifQ==
+X-Google-Smtp-Source: ACHHUZ7I186EtiGbOGB/RbLAQfHQJKOuhNb282Woas7dhrX98jASbnMChjEDiPUjYpdc2Fh5m03Dlw==
+X-Received: by 2002:a7b:c01a:0:b0:3f6:11e9:de8e with SMTP id c26-20020a7bc01a000000b003f611e9de8emr8649611wmb.4.1685366518607;
+        Mon, 29 May 2023 06:21:58 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c214700b003f4f89bc48dsm17990815wml.15.2023.05.29.06.21.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 06:21:58 -0700 (PDT)
+Message-ID: <cf8f746f-93d2-8ddc-7e6d-6324322e46e4@linaro.org>
+Date:   Mon, 29 May 2023 14:21:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHvbB9p3RkWVPoKQ--.23397S10
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF1DXF15WF4fCry5trW3Awb_yoW8CryUpF
-        WfWas8GrW8ZFW3ZrW7Ka4DJayrAw40vayjyFy3Wa4rJF13ta129345uF1UAFWDAa9aq3WY
-        y3W5JFs3Zry8Cw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUP214x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j6r
-        xdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0D
-        M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-        v20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-        F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2
-        IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
-        wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc4
-        0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AK
-        xVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JV
-        WxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7VU17G
-        YJUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/6] arm64: dts: qcom: msm8916/39: Rename &blsp1_uartN ->
+ &blsp_uartN
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230525-msm8916-labels-v1-0-bec0f5fb46fb@gerhold.net>
+ <20230525-msm8916-labels-v1-2-bec0f5fb46fb@gerhold.net>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230525-msm8916-labels-v1-2-bec0f5fb46fb@gerhold.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,63 +79,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+On 29/05/2023 13:46, Stephan Gerhold wrote:
+> For some reason the BLSP UART controllers have a label with a number
+> behind blsp (&blsp1_uartN) while I2C/SPI are named without (&blsp_i2cN).
+> This is confusing, especially for proper node ordering in board DTs.
+> 
+> Right now all board DTs are ordered as if the number behind blsp does
+> not exist (&blsp_i2cN comes before &blsp1_uartN). Strictly speaking
+> correct ordering would be the other way around ('1' comes before '_').
+> 
+> End this confusion by giving the UART controllers consistent labels.
+> There is just one BLSP on MSM8916/39 so the number is redundant.
+> 
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> ---
 
-For md_check_recovery():
-
-1) if 'MD_RECOVERY_RUNING' is not set, register new sync_thread.
-2) if 'MD_RECOVERY_RUNING' is set:
- a) if 'MD_RECOVERY_DONE' is not set, don't do anything, wait for
-   md_do_sync() to be done.
- b) if 'MD_RECOVERY_DONE' is set, unregister sync_thread. Current code
-   expects that sync_thread is not NULL, otherwise new sync_thread will
-   be registered, which will corrupt the array.
-
-Make sure md_check_recovery() won't register new sync_thread if
-'MD_RECOVERY_RUNING' is still set, and a new WARN_ON_ONCE() is added for
-the above corruption,
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- drivers/md/md.c | 22 +++++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index f90226e6ddf8..9da0fc906bbd 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -9397,16 +9397,24 @@ void md_check_recovery(struct mddev *mddev)
- 		if (mddev->sb_flags)
- 			md_update_sb(mddev, 0);
- 
--		if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) &&
--		    !test_bit(MD_RECOVERY_DONE, &mddev->recovery)) {
--			/* resync/recovery still happening */
--			clear_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
--			goto unlock;
--		}
--		if (mddev->sync_thread) {
-+		/*
-+		 * Never start a new sync thread if MD_RECOVERY_RUNNING is
-+		 * still set.
-+		 */
-+		if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery)) {
-+			if (!test_bit(MD_RECOVERY_DONE, &mddev->recovery)) {
-+				/* resync/recovery still happening */
-+				clear_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
-+				goto unlock;
-+			}
-+
-+			if (WARN_ON_ONCE(!mddev->sync_thread))
-+				goto unlock;
-+
- 			md_reap_sync_thread(mddev);
- 			goto unlock;
- 		}
-+
- 		/* Set RUNNING before clearing NEEDED to avoid
- 		 * any transients in the value of "sync_action".
- 		 */
--- 
-2.39.2
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
