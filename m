@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17946714E4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D828D714E57
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbjE2QbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S229574AbjE2Qes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjE2QbD (ORCPT
+        with ESMTP id S229455AbjE2Qeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:31:03 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7219DAB;
-        Mon, 29 May 2023 09:31:02 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6a6b9c079so22869085e9.1;
-        Mon, 29 May 2023 09:31:02 -0700 (PDT)
+        Mon, 29 May 2023 12:34:46 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC92AA3;
+        Mon, 29 May 2023 09:34:43 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30adc51b65cso2949528f8f.0;
+        Mon, 29 May 2023 09:34:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685377861; x=1687969861;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fl5UqcVglx/Zk4w3uBA6m2BcPMsFBjrRyQ7G0qcJSnw=;
-        b=czU8EWyfqVVWum0f9XkGKu0jfiJKyRLWAWQTbnM9PgfeGqVvCD7Xx3pMDXFXcZOkL3
-         fMbb+fve6pNR01Vg00VBv5ZdB5F54WDGgndSixL18EAfFd9wdotJ6Nohc2FhtDsv4T0w
-         /hm8/erKDe/oDQzgeJ9lAEcsZrSvsY81H60DrUsdwH8EfWbep9f/RBjkxxmkifWOhxW/
-         oC5+foF5Aaek7VmjZbihB1HMuSBqgoGlrxCapUDDp5kSyaZt/M0MbU87AP1yp2Bb266E
-         Zd4lmkZWHYUb7/ZXmISXbeYtQBYf+QLJckDj1BcynPKtdDbj2Z9Me3w+k5TanXj2foqn
-         NhJg==
+        d=gmail.com; s=20221208; t=1685378082; x=1687970082;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Am7a+wHpKOk5OFsVXHSbIdYxX/usU5ka2WcWHanWfY=;
+        b=p79/40Kapo6QxF5CduIHkyC0FZ53pa9VC7iQ9G1QkBIMcPLAd584GVjVHgKK8S+5+L
+         YB7VSHpb7dkgrRq+c5W1bUUt6Q7VTmGB5W6BrXQ94I6jAIXYjglHCnmwrIolwk3jFGUM
+         hbyJ6F+kuXdyRDN56cvVcuM9WNnzxKzllRYnDeRcwq2tP+pSy28sgBXvOuh9bbnq5MaI
+         opMPhNvjIyogOdjYmGknlVHqsNeh5aJZFzKSP8z2EKjfVMBBXiNwwMrXqzSv8ddCaxPQ
+         ZnvR7IsydTdTaMOsc+aY94SKP0JOhvxkHRYXQQzRKqIXMuKDUQJ+XBcqY/kbnSVAUQ2u
+         NcgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685377861; x=1687969861;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fl5UqcVglx/Zk4w3uBA6m2BcPMsFBjrRyQ7G0qcJSnw=;
-        b=NqYMSk6KbAkW6BIzU1+7zf112tUqbrY1TthvBE2WwM1hMLPEL+//S7qjXtOZFoJBjg
-         JyIQ0jN7rWFJSYuVcXzm9tIw1vS0oY1vwcOFawJn0I6nf3UbzZu4HYGjcAI/8p3B/oDu
-         lAJUUu+riyKfItxoRPGcrQzpNrjtLZKGRSmUPBqzldsFELlYrDVT+CWJBAFSt3pKD8eK
-         WhBke4fS77d2/Mdt9fnp4EXqaVZJ7JqEg6TOK1xZAIs3y2VTlDoTNAo6IkgOlKi4azT3
-         8KqJnh+Hq4/r+MVFkZrqTkymOMYiJ21DrL0DEyn85oqso/uCuz5EzHKoUbIKmJAmuRIW
-         4KrQ==
-X-Gm-Message-State: AC+VfDxeh4OaUn14HZQkXXYhSkTf62/i65m2FmerTCENUS+5HSuIf53+
-        jQBMxqoVxHbc2IhWY1mopfU=
-X-Google-Smtp-Source: ACHHUZ68EkX8uWUYLnaeTCPg9KW76zCSKxPbjesOhvm3Uf4e0jK8An2oGQJJJQ2gVB6MRWG8RERtRA==
-X-Received: by 2002:a1c:f704:0:b0:3f1:74bd:bc22 with SMTP id v4-20020a1cf704000000b003f174bdbc22mr8535282wmh.6.1685377860857;
-        Mon, 29 May 2023 09:31:00 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id x15-20020a1c7c0f000000b003f4266965fbsm18306579wmc.5.2023.05.29.09.30.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 09:30:59 -0700 (PDT)
-Message-ID: <634c155d-6c04-00a3-2e5b-618c36ec706f@gmail.com>
-Date:   Mon, 29 May 2023 18:30:57 +0200
+        d=1e100.net; s=20221208; t=1685378082; x=1687970082;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Am7a+wHpKOk5OFsVXHSbIdYxX/usU5ka2WcWHanWfY=;
+        b=ffULgZh7ieoucPlEFOxk/D41JIrlITybQ+RuDiouPyu7eteI5s8cpgyzV6uPxdUD3N
+         pnQL0EeKpCQP7BIkbRcG9dVsMijkYhan4nwWcEf/4B03AVr7mwPyh6HtzbwFW1lmjjji
+         k2SOB5XLeW15ClenwFbVOLisala8ZrxD+In3us9p85H+mcsCI/9+LaXL6Dg458dxqcoe
+         y1quQDVp0vv22Pf4UJzDMgDgdI9ylz7C+n2FPtHFw+G07F1BA8d0u7yFf1hPPxuFhJ9v
+         VUiZvSshecl35QtMKpAvdRivGjNyMiQvO93Dpf7fE4U8V9O9YMJ/Zb8asukrLkMzuMzc
+         zRAw==
+X-Gm-Message-State: AC+VfDymkag8bztpOPzocWw3xdoJLgsf1chUoJcyMks0cmX51a4TR12M
+        UKcVdKiCurXt0e4z29Kk8hU=
+X-Google-Smtp-Source: ACHHUZ6/WS/6kZOzkv4UzsJ3M6WllL3tEiAhFwz7zYSfQIa7/P0DEvAlQ9klHZwt0SUVHo22U1ykTQ==
+X-Received: by 2002:a05:6000:1009:b0:30a:f0f0:1277 with SMTP id a9-20020a056000100900b0030af0f01277mr1235670wrx.2.1685378081972;
+        Mon, 29 May 2023 09:34:41 -0700 (PDT)
+Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.googlemail.com with ESMTPSA id h14-20020a5d6e0e000000b002ff2c39d072sm417513wrz.104.2023.05.29.09.34.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 09:34:41 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        linux-leds@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [net-next PATCH v4 00/13] leds: introduce new LED hw control APIs
+Date:   Mon, 29 May 2023 18:32:30 +0200
+Message-Id: <20230529163243.9555-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 0/5]
-Content-Language: en-US, ca-ES, es-ES
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        robh+dt@kernel.org, krzystof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pangutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-References: <20230529153532.3541327-1-bero@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230529153532.3541327-1-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,60 +76,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bernhard,
+Since this series is cross subsystem between LED and netdev,
+a stable branch was created to facilitate merging process.
 
-Please resend with a subject line for the cover letter.
+This is based on top of branch ib-leds-netdev-v6.5 present here [1]
+and rebased on top of net-next since the LED stable branch got merged.
 
-Regards,
-Matthias
+This is a continue of [2]. It was decided to take a more gradual
+approach to implement LEDs support for switch and phy starting with
+basic support and then implementing the hw control part when we have all
+the prereq done.
 
-On 29/05/2023 17:35, Bernhard Rosenkränzer wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
-> 
-> Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTek MT8192 SoC.
-> Also, add Suspend and Resume support to LVTS Driver (all SoCs),
-> and update the documentation that describes the Calibration Data Offsets.
-> 
-> Changelog:
->      v3 :
->          - Rebased :
->              base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
->          - Fix issues in v2 pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>:
->            Use filtered mode to make sure threshold interrupts are triggered,
->            protocol documentation, cosmetics
->          - I (bero@baylibre.com) will be taking care of this patchset
->            from now on, since Balsam has left BayLibre. Thanks for
->            getting it almost ready, Balsam!
-> 
->      v2 :
->          - Based on top of thermal/linux-next :
->              base-commit: 7ac82227ee046f8234471de4c12a40b8c2d3ddcc
->          - Squash "add thermal zones and thermal nodes" and
->              "add temperature mitigation threshold" commits together to form
->              "arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones" commit.
->          - Add Suspend and Resume support to LVTS Driver.
->          - Update Calibration Data documentation.
->          - Fix calibration data offsets for mt8192
->              (Thanks to "Chen-Yu Tsai" and "Nícolas F. R. A. Prado").
->          https://lore.kernel.org/all/20230425133052.199767-1-bchihi@baylibre.com/
->          Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> 
->      v1 :
->          - The initial series "Add LVTS support for mt8192" :
->              "https://lore.kernel.org/all/20230307163413.143334-1-bchihi@baylibre.com/".
-> 
-> Balsam CHIHI (5):
->    dt-bindings: thermal: mediatek: Add LVTS thermal controller definition
->      for mt8192
->    thermal/drivers/mediatek/lvts_thermal: Add suspend and resume
->    thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
->    arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones
->    thermal/drivers/mediatek/lvts_thermal: Update calibration data
->      documentation
-> 
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 454 ++++++++++++++++++
->   drivers/thermal/mediatek/lvts_thermal.c       | 160 +++++-
->   .../thermal/mediatek,lvts-thermal.h           |  19 +
->   3 files changed, 631 insertions(+), 2 deletions(-)
-> 
-> base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
+This is the main part of the series, the one that actually implement the
+hw control API.
+
+Some history about this feature and why
+=======================================
+
+This proposal is highly requested by the entire net community but the API
+is not strictly designed for net usage but for a more generic usage.
+
+Initial version were very flexible and designed to try to support every
+aspect of the LED driver with many complex function that served multiple
+purpose. There was an idea to have sw only and hw only LEDs and sw only
+and hw only LEDs.
+
+With some heads up from Andrew from the net mailing list, it was suggested
+to implement a more basic yet easy to implement system.
+
+These API strictly work with a designated trigger to offload their
+function.
+This may be confused with hw blink offload but LED may have an even more
+advanced configuration where the entire aspect of the trigger is
+offloaded and completely handled by the hardware.
+
+An example of this usage are PHY or switch port LEDs. Almost every of
+these kind of device have multiple LED attached and provide info of the
+current port state.
+
+Currently we lack any support of them but these device always provide a
+way to configure them, from basic feature like turning the LED off or no
+(implemented in previous series related to this feature) or even entirely
+driven by the hw and power on/off/blink based on some events, like tx/rx
+traffic, ethernet cable attached, link speed of 10mbps, 100mbps, 1000mbps
+or more. They can also support multiple logic like blink with traffic only
+if a particular link speed is attached. (an example of this is when a LED
+is designated to be turned on only with 100mbps link speed and configured
+to blink on traffic and a secondary LED of a different color is present to
+serve the same function but only when the link speed is 1000mbps)
+
+These case are very common for a PHY or a switch but they were never
+standardized so OEM support all kind of variant and configuration.
+
+Again with Andrew we compared some feature and we reached a common set
+of modes that are for sure present in every kind of devices.
+
+And this concludes history and why.
+
+What is present in this series
+==============================
+
+This patch contain the required API to support this feature, I decided on
+the name of hw control to quickly describe this feature.
+
+I documented each require API in the related Documentation for leds-class
+so I think it might me redundant to expose them here. Feel free to tell me
+how to improve it if anything is not clear.
+
+On an abstract idea, this feature require this:
+
+    - The trigger needs to make use of it, this is currently implemented
+      for the netdev trigger but other trigger can be expanded if the
+      device expose these function. An idea might be a anything that
+      handle a storage disk and have the LED configurable to blink when
+      there is any activity to the disk.
+
+    - The LED driver needs to expose and implement these new API.
+
+Currently a LED driver supports only a trigger. The trigger should use
+the related helper to check if the LED can be driven hy hardware.
+
+The different modes a trigger support are exposed in the kernel include
+leds.h header and are used by the LED driver to understand what to do.
+
+From a user standpoint, he should enable modes as usual from sysfs and if
+anything is not supported warned.
+
+Final words and missing piece from this series
+==============================================
+
+I honestly hope this feature can finally be implemented.
+
+This series originally had also additional modes and logic to add to the
+netdev trigger, but I decided to strip them and implement only the API
+and support basic tx and rx. After this is merged, I will quickly propose
+these additional modes.
+
+Currently this is limited to tx and rx and this is what the current user
+qca8k use. Marvell PHY support link and a generic blink with any kind of
+traffic (both rx and tx). qca8k switch supports keeping the LED on based on
+link speed.
+
+The next series will add the concept of hw control only modes to the netdev
+trigger and support for these additional modes:
+- link_10
+- link_100
+- link_1000
+- activity
+
+The current implementation is voluntary basic and limited to put the ground
+work and have something easy to implement and usable. 99% part of the logic
+is done on the trigger side, leaving to the LED driver only the validating
+and the apply part.
+
+As shown for the PHY led binding, people are really intrested in this
+feature as quickly after they were merged, people were already working on
+adding support for it.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git/?h=ib-leds-netdev-6.5
+[2] https://lore.kernel.org/lkml/20230216013230.22978-1-ansuelsmth@gmail.com/
+
+Changes in v4:
+- Added review tag from Andrew.
+- Move default interval to a define to keep them synced.
+- Apply suggested reword to improve Documentation rst.
+
+Changes in v3:
+- Rebased on top of net-next
+
+Changes in v2:
+- Drop helper as currently used only by one trigger
+- Improve Documentation and document return error of some functions
+- Squash some patch to reduce series size
+- Drop trigger mode mask as currently not used
+- Rework hw control validating function to a simple implementation
+
+Changes from previous v8 series:
+- Rewrite Documentation from scratch and move to separate commit
+- Strip additional trigger modes (to propose in a different series)
+- Strip from qca8k driver additional modes (to implement in the different
+  series)
+- Split the netdev chages to smaller piece to permit easier review
+
+Changelog in the previous v8 series: (stripped of unrelated changes)
+v8:
+- Improve the documentation of the new feature
+- Rename to a more symbolic name
+- Fix some bug in netdev trigger (not using BIT())
+- Add more define for qca8k-leds driver
+- Drop interval support
+- Fix many bugs in the validate option in the netdev trigger
+v7:
+- Fix qca8k leds documentation warning
+- Remove RFC tag
+v6:
+- Back to RFC.
+- Drop additional trigger
+- Rework netdev trigger to support common modes used by switch and
+  hardware only triggers
+- Refresh qca8k leds logic and driver
+v5:
+- Move out of RFC. (no comments from Andrew this is the right path?)
+- Fix more spelling mistake (thx Randy)
+- Fix error reported by kernel test bot
+- Drop the additional HW_CONTROL flag. It does simplify CONFIG
+  handling and hw control should be available anyway to support
+  triggers as module.
+v4:
+- Rework implementation and drop hw_configure logic.
+  We now expand blink_set.
+- Address even more spelling mistake. (thx a lot Randy)
+- Drop blink option and use blink_set delay.
+v3:
+- Rework start/stop as Andrew asked.
+- Use test_bit API to check flag passed to hw_control_configure.
+- Added a new cmd to hw_control_configure to reset any active blink_mode.
+- Refactor all the patches to follow this new implementation.
+v2:
+- Fix spelling mistake (sorry)
+- Drop patch 02 "permit to declare supported offload triggers".
+  Change the logic, now the LED driver declare support for them
+  using the configure_offload with the cmd TRIGGER_SUPPORTED.
+- Rework code to follow this new implementation.
+- Update Documentation to better describe how this offload
+  implementation work.
+
+Andrew Lunn (4):
+  leds: add API to get attached device for LED hw control
+  leds: trigger: netdev: refactor code setting device name
+  leds: trigger: netdev: validate configured netdev
+  net: dsa: qca8k: add op to get ports netdev
+
+Christian Marangi (9):
+  leds: add APIs for LEDs hw control
+  Documentation: leds: leds-class: Document new Hardware driven LEDs
+    APIs
+  leds: trigger: netdev: introduce check for possible hw control
+  leds: trigger: netdev: add basic check for hw control support
+  leds: trigger: netdev: reject interval store for hw_control
+  leds: trigger: netdev: add support for LED hw control
+  leds: trigger: netdev: init mode if hw control already active
+  leds: trigger: netdev: expose netdev trigger modes in linux include
+  net: dsa: qca8k: implement hw_control ops
+
+ Documentation/leds/leds-class.rst     |  81 ++++++++++++
+ drivers/leds/trigger/ledtrig-netdev.c | 141 +++++++++++++++++---
+ drivers/net/dsa/qca/qca8k-leds.c      | 181 ++++++++++++++++++++++++++
+ include/linux/leds.h                  |  53 ++++++++
+ 4 files changed, 437 insertions(+), 19 deletions(-)
+
+-- 
+2.39.2
+
