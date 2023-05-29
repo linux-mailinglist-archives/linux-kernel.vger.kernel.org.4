@@ -2,143 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFC87146BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E456F7146BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbjE2I47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S231686AbjE2I6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbjE2I45 (ORCPT
+        with ESMTP id S229626AbjE2I6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:56:57 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B443E91;
-        Mon, 29 May 2023 01:56:55 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126255106133.24.openmobile.ne.jp [126.255.106.133])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9ED086D5;
-        Mon, 29 May 2023 10:56:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685350594;
-        bh=rayQWHHa9JlAPYgWdLbLAtmB25Gu7jfFbx7UIlsifWY=;
+        Mon, 29 May 2023 04:58:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FA591;
+        Mon, 29 May 2023 01:58:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 364D16137C;
+        Mon, 29 May 2023 08:58:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A396C433EF;
+        Mon, 29 May 2023 08:58:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685350690;
+        bh=t2lj466261TGVeHMuyfw6d01BSLRoZETH0n0ShM8crM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N4tsmrQbXzVDFOdg6rvkoOiQXwAGtY7NUvlO0LH0E4OgVqRbRbWo87EWVWgkn12dl
-         B1FeKY7mekQXcKApavsWKEkkRAuFc19CXGEIBegHs6YqVc/zXd1FcoHH9TVpoHeEf2
-         8OlP0oAWEbMlc6ixPCr5N72Twecjg8nUfz+rulWA=
-Date:   Mon, 29 May 2023 11:56:56 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Zheng Wang <zyytlz.wz@163.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
- {modprobe,bind} error
-Message-ID: <20230529085656.GL25984@pendragon.ideasonboard.com>
-References: <20230526143615.372338-1-biju.das.jz@bp.renesas.com>
- <20230529061714.GA25984@pendragon.ideasonboard.com>
- <OS0PR01MB592296756992262EC6D382D0864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+        b=R5FDQfcm8SUNyzpKDat8ojVSi4y8fmhImkdGup3zXnGIsJRsK3eJUlNeQZESjT9Gx
+         S2dvoJ/khyHlknve2mX2V1Pd+pMy1J60DyeL4+/TV+s8kQQcAQmKeKNiqrSN7gDQaS
+         hgO++m+zR2PlpJB45PJF+VWuRIIB2b+rn/ywHnY/ihuutRVOVGCkGtqkRP+ipK1xfF
+         u0TczxO2dm1/bUG6dvdW9R8FcabA/r+zU2FNkhfM/6Q+JY4d8Jh7nG3BkTu628dAwS
+         TP0hw3M2sEqF9b1WVPkJTr4rsf4MFs944By1iyFDCuUPB8MBgBE34BDs8sGeoWwIcT
+         wQkhvy2HfChBg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q3Yhb-0004Ym-74; Mon, 29 May 2023 10:58:07 +0200
+Date:   Mon, 29 May 2023 10:58:07 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
+        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
+        lennart@poettering.net
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+Message-ID: <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
+References: <20230524213620.3509138-1-mcgrof@kernel.org>
+ <20230524213620.3509138-3-mcgrof@kernel.org>
+ <8fc5b26b-d2f6-0c8f-34a1-af085dbef155@suse.com>
+ <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
+ <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
+ <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
+ <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
+ <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <OS0PR01MB592296756992262EC6D382D0864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+On Thu, May 25, 2023 at 06:39:52PM -0700, Linus Torvalds wrote:
 
-On Mon, May 29, 2023 at 08:42:34AM +0000, Biju Das wrote:
-> > Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
-> > {modprobe,bind} error
-> > 
-> > Hi Biju,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Fri, May 26, 2023 at 03:36:15PM +0100, Biju Das wrote:
-> > > Currently {modprobe, bind} after {rmmod, unbind} results in probe
-> > failure.
-> > >
-> > > genirq: Flags mismatch irq 22. 00000004 (85070400.usb3drd) vs.
-> > > 00000004 (85070400.usb3drd)
-> > > renesas_usb3: probe of 85070000.usb3peri failed with error -16
-> > >
-> > > Fix this issue by replacing "parent dev"->"dev" as the irq resource is
-> > > managed by this driver.
-> > 
-> > If the dev pointer passed to devm_request_irq() is not the correct one,
-> > how does it work the first time the driver is loaded ?
+> Ok, I decided to just move it from my experimental tree to my main tree.
 > 
-> + Marc/ Kernel.org to give some feedback on this issue
+> I think I used about three times the time and effort (and lines of
+> text) on writing the commit message compared to what I did on the
+> patch itself.
 > 
-> I believe there may be a bug in the genirq (kernel/irq) driver.
-> first time it works ok. Maybe this driver is caching on unload
-> with null value and comparing with actual one (irq 22) during reload??
+> I tried to lay out the background and the implications of the change -
+> it may be pretty darn simple, but it does have some subtle issues.
 > 
-> Maybe genirq expert can comment what went wrong here??
+> Anyway: I've committed it to my tree. This is not necessarily the best
+> time to do that, but let's get this behind us, and in particular,
+> let's get it out and into wider testing asap.
+> 
+> If it causes any problems what-so-ever, I'll just revert it very
+> aggressively (unless the problem is trivially and obviously fixable).
+> It is, after all, not a fix for a _kernel_ bug per se, and whil eI
+> think the patch is very benign, it does change user-visible behavior.
+> Very intentionally so, but still..
 
-I'm curious to understand this (an update to the commit message would
-then be nice), but regardless, I think the code change is fine.
+This change breaks module loading during boot on the Lenovo Thinkpad
+X13s (aarch64).
 
-> > > Fixes: 9cad72dfc556 ("usb: gadget: Add support for RZ/V2M USB3DRD
-> > driver"
-> > 
-> > There's a missing ')' at the end of the line.
-> 
-> Oops missed it.
-> 
-> > > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > > ---
-> > >  drivers/usb/gadget/udc/renesas_usb3.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/usb/gadget/udc/renesas_usb3.c
-> > > b/drivers/usb/gadget/udc/renesas_usb3.c
-> > > index aac8bc185afa..4a37b2e4b9b3 100644
-> > > --- a/drivers/usb/gadget/udc/renesas_usb3.c
-> > > +++ b/drivers/usb/gadget/udc/renesas_usb3.c
-> > > @@ -2877,7 +2877,7 @@ static int renesas_usb3_probe(struct platform_device *pdev)
-> > >  		struct rzv2m_usb3drd *ddata = dev_get_drvdata(pdev->dev.parent);
-> > >
-> > >  		usb3->drd_reg = ddata->reg;
-> > > -		ret = devm_request_irq(ddata->dev, ddata->drd_irq,
-> > > +		ret = devm_request_irq(&pdev->dev, ddata->drd_irq,
-> > >  				       renesas_usb3_otg_irq, 0,
-> > >  				       dev_name(ddata->dev), usb3);
-> > 
-> > Shouldn't you use dev_name(&pdev->dev) too ?
-> 
-> This irq resource belongs to usb3drd driver and is managed by renesas_usb3 driver.
-> It is just representation of irqname and cat /proc/interrupts shows the correct 
-> irq resource name. with dev_name(ddata->dev), it displays correct resource name
-> associated with the handler.
-> 
-> root@rzv2m:~# cat /proc/interrupts | grep usb
->  22:          0     GICv2 274 Level     85070400.usb3drd
->  23:        353     GICv2 277 Level     xhci-hcd:usb1
->  28:          0     GICv2 278 Level     85070000.usb3peri
+Specifically it results in indefinite probe deferral of the display and
+USB (ethernet) which makes it a pain to debug. Typing in the dark to
+acquire some logs reveals that other modules are missing as well.
 
-The name is just informative so I suppose it's ok. It makes me wonder,
-though, if the usb3drd driver shouldn't register the interrupt handler
-itself.
+Fortunately commit 9828ed3f695a ("module: error out early on concurrent
+load of the same module file") stood out when skimming the changes that
+went into -rc4, and reverting it make all the expected modules be loaded
+again.
 
-> > >  		if (ret < 0)
+I have not tried to figure out exactly why things break, but it does
+seem like this one should be reverted.
 
--- 
-Regards,
-
-Laurent Pinchart
+Johan
