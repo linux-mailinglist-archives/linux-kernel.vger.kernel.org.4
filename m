@@ -2,65 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49DF2714C9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7F9714C9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjE2PAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S229897AbjE2PAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjE2PAV (ORCPT
+        with ESMTP id S229845AbjE2PA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:00:21 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1F5AD;
-        Mon, 29 May 2023 08:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=5j7SFtDQH8X7DSfej9/fAOkmgEKXu6OTxSbujrl3kdk=; b=t0baHsaWpZWl967uOTI/ZY11Je
-        l4dVgDg9fL0BQyf4o/bZUTF3VCQCHo8kMsDQwsk+Wfl7md4kAsQC5r7odS79nXI0nJbLVXjCcu24C
-        Vd5XeodM60KmcaPtfK69x8zpyiu4zP/52CMyY0Efndw4Zsl+3tIyD24QIIll5MGIOJjw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q3eM0-00EEjm-HD; Mon, 29 May 2023 17:00:12 +0200
-Date:   Mon, 29 May 2023 17:00:12 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jerry Ray <jerry.ray@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next v1 1/1] dsa: lan9303: Remove stray
- gpiod_unexport() call
-Message-ID: <3eb4f7cf-6401-40ba-b2c0-9a1f26308f98@lunn.ch>
-References: <20230528142531.38602-1-andriy.shevchenko@linux.intel.com>
+        Mon, 29 May 2023 11:00:28 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A597E4;
+        Mon, 29 May 2023 08:00:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685372427; x=1716908427;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AOOSBy8j9IN+drBBdgWRoFkQWz5B0UzI5mBVYtiFNf8=;
+  b=Y2104u2/k2BhaXFEHqB64F4dbKMczWdB3OpQyLdqsagiwmWCxVCmA8a+
+   VMi2MEa7PPhNQZ41Y1IDJyzA4O3czqlDALaSTBqK8xHEUXWMy8eRIC1Mp
+   7VFBTL2CqLFTLt+KgAe0G3H4a7lCFcfixA3jGjrBJGnb/2WBnor1kgAKI
+   qxoL/nViUWw2IQ2BBLmrQWtIVN95i2wwTvBoXo8jZnEy+gU5zQcEt0BSC
+   XckT/pdLiUbRX5Xbe3AbqJWgYRB9cGCg0iqlvXtwJXNxYjpXg0oRfDy2v
+   5sURaUpB9DbGkLGxfpTgVRVmk5p8Q6W8Xz/nSfQDXACkal9uZH/MIDDjZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="344219462"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="344219462"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 08:00:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="830417944"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="830417944"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.208.110])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 08:00:23 -0700
+Message-ID: <985a5616-9f98-9ff1-7007-d0ac77a40014@intel.com>
+Date:   Mon, 29 May 2023 18:00:18 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230528142531.38602-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH V1 1/1] mmc: sdhci: fix DMA configure compatibility issue
+ when 64bit DMA mode is used.
+Content-Language: en-US
+To:     Chevron Li <chevron_li@126.com>, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shirley.her@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
+        shaper.liu@bayhubtech.com, justin.wang@bayhubtech.com,
+        Chevron Li <chevron.li@bayhubtech.com>
+References: <20230523111114.18124-1-chevron_li@126.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230523111114.18124-1-chevron_li@126.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 05:25:31PM +0300, Andy Shevchenko wrote:
-> There is no gpiod_export() and gpiod_unexport() looks pretty much stray.
-> The gpiod_export() and gpiod_unexport() shouldn't be used in the code,
-> GPIO sysfs is deprecated. That said, simply drop the stray call.
+On 23/05/23 14:11, Chevron Li wrote:
+> From: Chevron Li <chevron.li@bayhubtech.com>
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Bayhub SD host has hardware limitation:
+> 1.The upper 32bit address is inhibited to be written at SD Host Register
+>   [03E][13]=0 (32bits addressing) mode, is admitted to be written only at
+>   SD Host Register [03E][13]=1 (64bits addressing) mode.
+> 2.Because of above item#1, need to configure SD Host Register [03E][13] to
+>   1(64bits addressing mode) before set 64bit ADMA system address's higher
+>   32bits SD Host Register [05F~05C] if 64 bits addressing mode is used.
+> 
+> The hardware limitation is reasonable for below reasons:
+> 1.Normal flow should set DMA working mode first, then do
+>   DMA-transfer-related configuration, such as system address.
+> 2.The hardware limitation may avoid the software to configure wrong higher
+>   32bit address at 32bits addressing mode although it is redundant.
+> 
+> The change that set 32bits/64bits addressing mode before set ADMA address,
+>   has no side-effect to other host IPs for below reason:
+> The setting order is reasonable and standard: DMA Mode setting first and
+>   then DMA address setting. It meets all DMA setting sequence.
+> 
+> Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+It should be OK.
 
-    Andrew
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+
+> ---
+> Change in V1:
+> Set dma mode configure before set dma address
+> ---
+>  drivers/mmc/host/sdhci.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+> index 3241916141d7..ff41aa56564e 100644
+> --- a/drivers/mmc/host/sdhci.c
+> +++ b/drivers/mmc/host/sdhci.c
+> @@ -1167,6 +1167,8 @@ static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
+>  		}
+>  	}
+>  
+> +	sdhci_config_dma(host);
+> +
+>  	if (host->flags & SDHCI_REQ_USE_DMA) {
+>  		int sg_cnt = sdhci_pre_dma_transfer(host, data, COOKIE_MAPPED);
+>  
+> @@ -1186,8 +1188,6 @@ static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
+>  		}
+>  	}
+>  
+> -	sdhci_config_dma(host);
+> -
+>  	if (!(host->flags & SDHCI_REQ_USE_DMA)) {
+>  		int flags;
+>  
+> 
+> base-commit: cc3c44c9fda264c6d401be04e95449a57c1231c6
+
