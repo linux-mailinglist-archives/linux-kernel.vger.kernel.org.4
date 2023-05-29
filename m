@@ -2,61 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305B3714602
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B72871460C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbjE2IHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S229584AbjE2IID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbjE2IG5 (ORCPT
+        with ESMTP id S231670AbjE2IHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:06:57 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1420B5;
-        Mon, 29 May 2023 01:06:52 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7C48E6605961;
-        Mon, 29 May 2023 09:06:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685347611;
-        bh=v2GRVQsX6vUBhhSCAfCqx8p4bua6KbUrCIbagxRlt9U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lzqdZiBcZ1UJsdSZ1VMAanlxCw+qUvn0AUsoe7y6ciE3CPoOHH0PXE3boL85ZHDZQ
-         1mEZ4mqGeAnA2Uk1QU2fonFGMihEs9S4ery53LZI76qB1OY5HoPA8dzQsJAI8jO1ju
-         lhyBCjxSvLj0JM9epRQSHuN2e7Xc4fhjaH7Ak61YBXjAYMwA1Zmh4WyQyEs6rhQKmx
-         TcdRruoTQBwTbiqP1ykCOyblpBaA14AMRk6YmXTTHlpXCSXvyhhu6eyMd+SC+mASXq
-         cFXCIhTWcLpLCvTLRrricflxRuUSsC2xLXmHwfm5xpshohEI6yoQ3btfOsy49OW8mZ
-         kGvHq0BM3r1hg==
-Message-ID: <f6617221-33d1-915d-6daf-0bf73b22758e@collabora.com>
-Date:   Mon, 29 May 2023 10:06:48 +0200
+        Mon, 29 May 2023 04:07:54 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE9BB8;
+        Mon, 29 May 2023 01:07:51 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34T1j4r8013586;
+        Mon, 29 May 2023 10:07:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=iJD4xsBkaQxyCxdKBwcnMTO5G+oQGyygLDr4AJFp+Ww=;
+ b=G9yGL8x7zG5rQ5sKydCWpC0rxW/ClE+nCnbpp0Pllf1rqDFv/WFxRx5/QuGqBiW6FGny
+ 05fnCdun4yIb5razFWOaf/unAaVyblSw9VXw+xuxjK2LpDtsdvWcJAP07EzyaNcmU1aX
+ i5Hp2rH0LTslp8v5L/rlq+2BFaIrWPPjB/epsp0k6R69PVN/Zrut0wc4b2T8s7ZB1Ra4
+ 5vParKUfLC9tbDR3qvWp/QtGODTc1dDdNJ8WVoHIQUFVy4rl5jUzZpr2We0vEJVilsRz
+ nxOYFoyI8pnX/D0ZgAgB7rjeOc/4hwpiNrwXzx2AnMvtJC05E2bx0qgSQynOsae+48FX 9Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quakkrcay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 May 2023 10:07:03 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 659A910002A;
+        Mon, 29 May 2023 10:07:02 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4D9E4214D35;
+        Mon, 29 May 2023 10:07:02 +0200 (CEST)
+Received: from [10.252.27.228] (10.252.27.228) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 29 May
+ 2023 10:07:01 +0200
+Message-ID: <cc6a1064-8b53-c63d-9592-92748b67639a@foss.st.com>
+Date:   Mon, 29 May 2023 10:07:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] arm64: dts: mt7986: use size of reserved partition for
- bl2
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 3/3] ARM: dts: stm32: fix several DT warnings on
+ stm32mp15
+To:     Marek Vasut <marex@denx.de>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
-References: <20230528113343.7649-1-linux@fw-web.de>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230528113343.7649-1-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>
+CC:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@dh-electronics.com>
+References: <20230517143542.284029-1-raphael.gallais-pou@foss.st.com>
+ <20230517143542.284029-4-raphael.gallais-pou@foss.st.com>
+ <f64de05b-8854-4345-80c2-f424968defdc@denx.de>
+ <e963370c-7018-243a-712d-62ca8463bfd8@foss.st.com>
+ <5f201903-17cb-5054-763c-f03b1066db1d@denx.de>
+ <32fafa74-8964-c9cf-f95b-f2cd084f46c6@foss.st.com>
+ <b23ddf9e-6bba-68df-cf28-cc0e2c4218ac@denx.de>
+Content-Language: en-US
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+In-Reply-To: <b23ddf9e-6bba-68df-cf28-cc0e2c4218ac@denx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.252.27.228]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-29_05,2023-05-25_03,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,26 +89,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/05/23 13:33, Frank Wunderlich ha scritto:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> To store uncompressed bl2 more space is required than partition is
-> actually defined.
-> 
-> There is currently no known usage of this reserved partition.
-> Openwrt uses same partition layout.
-> 
-> We added same change to u-boot with commit d7bb1099 [1].
-> 
-> [1] https://source.denx.de/u-boot/u-boot/-/commit/d7bb109900c1ca754a0198b9afb50e3161ffc21e
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 8e01fb15b815 ("arm64: dts: mt7986: add Bananapi R3")
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 
-Since you're not changing the start address for the first partition, but
-only extending it, this will not break anything, so
+On 5/26/23 18:55, Marek Vasut wrote:
+> On 5/25/23 10:14, Raphael Gallais-Pou wrote:
+>
+> Hi,
+Hi Marek,
+>
+>>> I think if you retain the stm32mp151.dtsi &ltdc { port { #address-cells = <1>;
+>>> #size-cells = <0>; }; }; part, then you wouldn't be getting any warnings
+>>> regarding LTDC , and you wouldn't have to remove the unit-address from
+>>> endpoint@0 .
+>>>
+>>> btw. I do use both endpoint@0/endpoint@1 in Avenger96 DTOs, but those are not
+>>> submitted yet, I have to clean them up a bit more first.
+>>>
+>>>> One way to do it would be to make the endpoint@0 go down in the device-tree
+>>>> with
+>>>> its dependencies, so that both endpoints are the same level without generating
+>>>> noise.
+>>>
+>>> I'm afraid I really don't quite understand which warning you're referring to.
+>>> Can you please share that warning and ideally how to trigger it (the
+>>> command-line incantation) ?
+>>
+>> Using '$ make dtbs W=1', you can observe several of the followings:
+>>
+>> arch/arm/boot/dts/stm32mp151.dtsi:1533.9-1536.6: Warning
+>> (avoid_unnecessary_addr_size): /soc/display-controller@5a001000/port:
+>> unnecessary #address-cells/#size-cells without "ranges" or child "reg" property
+>> arch/arm/boot/dts/stm32mp151.dtsi:1533.9-1536.6: Warning (graph_child_address):
+>> /soc/display-controller@5a001000/port: graph node has single child node
+>> 'endpoint@0', #address-cells/#size-cells are not necessary
+>>
+>> This &ltdc { port { #address-cells = <1>; #size-cells = <0>; }; }; part is
+>> actually annoying. This is because there is several device-trees that only got
+>> one endpoint, and some other that includes two.
+>>
+>> For instance: stm32mp15xx-dhcor-avenger96.dtsi vs stm32mp157c-dk2.dts.
+>>
+>> I would like to remove to root part of address/size field and let only the lower
+>> device-trees with with multiple endpoints handle their own fields. I hope this
+>> explains a bit better my process.
+>
+> After thinking about this some more, and digging through LTDC driver, and
+> testing on EV1, I think dropping the LTDC node endpoint@N and reg=<N>
+> altogether and just using port/endpoint (singular) is fine.
+>
+> You might want to split the DSI node specific changes and the LTDC node
+> specific changes into separate patches (LTDC specific change like you did in
+> 1/3).
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Yes, I prepared a new serie with that split, to that it is better to read and
+review.
 
+
+Raphaël
 
