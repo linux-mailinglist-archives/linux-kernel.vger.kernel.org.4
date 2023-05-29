@@ -2,141 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2357147D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 12:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AD67147DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 12:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbjE2KTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 06:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
+        id S232024AbjE2KZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 06:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjE2KSz (ORCPT
+        with ESMTP id S231685AbjE2KZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 06:18:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB84F1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:18:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBDBB61362
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 10:18:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12796C433EF;
-        Mon, 29 May 2023 10:18:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685355527;
-        bh=RkkExfeGgE+dhRU4IGRx6ehNzHPNh6PhoYcLpUyFzMI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EBu2mW4E1yMU8iIDd4Lsgo3CNSYIPG4uTB/mjzlxd2YqoaGca4QM+mdVQ/qTNc/vF
-         cWUAaT0p7TiBZkLpAnoXjTeePD16OC1NU32Q2lnnOnrGAU1ZtpGb/vLR4Ic2j/HeBC
-         iIjYaeOzE+mj3C69hZB8e+Q2KscKbLuw+XJQUoEP6NUflbUdLXnCuxL+AbQYeDsy4T
-         /+9j4eS+H4Kio8/TAVCSwgj9g5K5b4fEN3uTJ2E3ATnThp43OByH8ujoYHRIsYmYep
-         10Mle5BiZoD+tFRMmkCqnEnJ2suCWRq01NYGj5NuIfsA/YWMepSyjK5HzGm8rta0GT
-         RIC3Va/1Vlnig==
-Message-ID: <0c15c662-903c-3504-d502-72f0a3b70cbf@kernel.org>
-Date:   Mon, 29 May 2023 18:18:42 +0800
+        Mon, 29 May 2023 06:25:23 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76574C4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:25:19 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2af2b74d258so32536281fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685355918; x=1687947918;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DZdc6i5z2R/+Y9/ZFuY2y7w4jz+QILDjulsUhtAyGX4=;
+        b=QNCnfs6uHjOyrcMnfQ8vqUApOV5PYhd2YixOtZ7ZLvFcGAb6Pb0aoP3puWryA+eRMF
+         OJ+TttCaALibGx5g/3d20G59+wyTb4AcAIYonXNHlIGNNSvcA6etaisqMX/KFPN8LdOi
+         u45uXcF9YqwZpUIKi5nbVvyfNtY7dC1jiUf+KzlOYXTKTvtyrAuzPLjdnouSQ3J+/7PR
+         U9Fx1vCsn9yIS6lHP631N6DB/5W0s+QezhHySMggtRmrAAinkVQ1oeNq6eaBWORj6ntF
+         wGlq3kjjX1JnvGuIJ4CZNUXMTni0jXDlxQbvqRZkkRe6cLMIt+zwWHBlUzKOeT7hYcJk
+         JR+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685355918; x=1687947918;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZdc6i5z2R/+Y9/ZFuY2y7w4jz+QILDjulsUhtAyGX4=;
+        b=ApXUSP8F6LqOwsyq5k0ytHLttYegkJ1YFtKMpzLm1hPIYZMaWWMxwIkRqY6QuZGTse
+         c8wPrkbN3N7IAkyK/uVAv0Ch5cF6VYJ5A2+nvyiUpsKQyZOEGd+HKXlDy6RvpUmkg6Gd
+         Mot7eJWl7fJ2JPzmFvsO/eB23X7svavR2J/KqDhp1Tv0lJN66eejJ/1Irmrvu8emgXRV
+         dkyhpe29juFSRGpT92FndPnWoKd39vfNIHB/C63rblJOKwSg5+Xw4rx43FrZqsCXY2wI
+         Wh4bdEJTjnXF9UtaEVrbjpvRIC+lVp1NnGaWae/bSfzyf+n76eKvzFCYlMVvVvGUBJXg
+         vhdg==
+X-Gm-Message-State: AC+VfDwMqJeYg+tMYqABWO6tmQ521S0xBNGXOQoXfTqoSJa2ZP2/7nRo
+        DJv6kYwDYfnlBmOOVrFJF6mJMg==
+X-Google-Smtp-Source: ACHHUZ4vIs5yH8NjfN0Nkf8gbyCGQ+5UHb7B/5mHAM8XHR9LNDJubjGFpITvbLKj2kdYgWG0sTKPqA==
+X-Received: by 2002:ac2:593b:0:b0:4f4:e26c:644c with SMTP id v27-20020ac2593b000000b004f4e26c644cmr3364039lfi.68.1685355917693;
+        Mon, 29 May 2023 03:25:17 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id i20-20020ac25234000000b004e887fd71acsm1905505lfl.236.2023.05.29.03.25.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 03:25:17 -0700 (PDT)
+Message-ID: <ef8e2090-7e55-14c1-1472-cee7c0ee66ea@linaro.org>
+Date:   Mon, 29 May 2023 12:25:14 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [f2fs-dev] [PATCH 1/1] f2fs: fix args passed to
- trace_f2fs_lookup_end
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 6/7] drm/msm/dsi: Add phy configuration for MSM8226
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230308-msm8226-mdp-v1-0-679f335d3d5b@z3ntu.xyz>
+ <20230308-msm8226-mdp-v1-6-679f335d3d5b@z3ntu.xyz>
 Content-Language: en-US
-To:     Wu Bo <bo.wu@vivo.com>
-Cc:     jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, wubo.oduw@gmail.com
-References: <2bb05623-9438-3b68-6ac8-4294f9676ff6@kernel.org>
- <20230529041337.36741-1-bo.wu@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230529041337.36741-1-bo.wu@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230308-msm8226-mdp-v1-6-679f335d3d5b@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/29 12:13, Wu Bo wrote:
-> On Sat, May 27, 2023 at 09:01:41AM +0800, Chao Yu wrote:
->> On 2023/5/27 1:21, Jaegeuk Kim wrote:
->>> On 05/24, Wu Bo wrote:
->>>> The NULL return of 'd_splice_alias' dosen't mean error.
->>>>
->>>> Signed-off-by: Wu Bo <bo.wu@vivo.com>
->>>> ---
->>>>    fs/f2fs/namei.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
->>>> index 77a71276ecb1..e5a3e39ce90c 100644
->>>> --- a/fs/f2fs/namei.c
->>>> +++ b/fs/f2fs/namei.c
->>>> @@ -577,7 +577,7 @@ static struct dentry *f2fs_lookup(struct inode *dir, struct dentry *dentry,
->>>>    #endif
->>>>    	new = c(inode, dentry);
->>>>    	err = PTR_ERR_OR_ZERO(new);
->>>> -	trace_f2fs_lookup_end(dir, dentry, ino, !new ? -ENOENT : err);
->>>> +	trace_f2fs_lookup_end(dir, new ? new : dentry, ino, err);
->>>
->>> Shouldn't give an error pointer to the dentry field.
->>>
->>> How about just giving the err?
->>>
->>> -       err = PTR_ERR_OR_ZERO(new);
->>> -       trace_f2fs_lookup_end(dir, dentry, ino, !new ? -ENOENT : err);
->>> +       trace_f2fs_lookup_end(dir, dentry, ino, PTR_ERR_OR_ZERO(new));
->>
->> static inline int __must_check PTR_ERR_OR_ZERO(__force const void *ptr)
->> {
->> 	if (IS_ERR(ptr))
->> 		return PTR_ERR(ptr);
->> 	else
->> 		return 0;
->> }
->>
->> For below two cases, PTR_ERR_OR_ZERO(new) will return zero:
->> a) f2fs_lookup found existed dentry
->> b) f2fs_lookup didn't find existed dentry (-ENOENT case)
->>
->> So in below commit, I passed -ENOENT to tracepoint for case b), so we can
->> distinguish result of f2fs_lookup in tracepoint, actually, -ENOENT is expected
->> value when we create a new file/directory.
->>
->> Commit 84597b1f9b05 ("f2fs: fix wrong value of tracepoint parameter")
-> I can see this commit is try to distinguish the dentry not existed case.
-> But a normal case which dentry is exactly found will also go through
-> 'd_splice_alias', and its return is also NULL. This makes the tracepoint always
-> print 'err:-2' like the following:
->        ls-11676   [004] .... 329281.943118: f2fs_lookup_end: dev = (254,39), pino = 4451, name:Alarms, ino:7093, err:-2
->        ls-11676   [004] .... 329281.943145: f2fs_lookup_end: dev = (254,39), pino = 4451, name:Notifications, ino:7094, err:-2
->        ls-11676   [004] .... 329281.943172: f2fs_lookup_end: dev = (254,39), pino = 4451, name:Pictures, ino:7095, err:-2
-> Even these lookup are acctually successful, this is a bit strange.
 
-Ah, I misunderstand return value's meaning of .lookup.
 
-So, how about this? it only update err if d_splice_alias() returns a negative
-value?
+On 29.05.2023 11:44, Luca Weiss wrote:
+> MSM8226 uses a modified PLL lock sequence compared to MSM8974, which is
+> based on the function dsi_pll_enable_seq_m in the msm-3.10 kernel.
+> 
+> Worth noting that the msm-3.10 downstream kernel also will try other
+> sequences in case this one doesn't work, but during testing it has shown
+> that the _m sequence succeeds first time also:
+> 
+>   .pll_enable_seqs[0] = dsi_pll_enable_seq_m,
+>   .pll_enable_seqs[1] = dsi_pll_enable_seq_m,
+>   .pll_enable_seqs[2] = dsi_pll_enable_seq_d,
+>   .pll_enable_seqs[3] = dsi_pll_enable_seq_d,
+>   .pll_enable_seqs[4] = dsi_pll_enable_seq_f1,
+>   .pll_enable_seqs[5] = dsi_pll_enable_seq_c,
+>   .pll_enable_seqs[6] = dsi_pll_enable_seq_e,
+> 
+> We may need to expand this in the future.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  drivers/gpu/drm/msm/dsi/phy/dsi_phy.c      |  2 +
+>  drivers/gpu/drm/msm/dsi/phy/dsi_phy.h      |  3 +-
+>  drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c | 97 ++++++++++++++++++++++++++++++
+>  3 files changed, 101 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> index bb09cbe8ff86..9d5795c58a98 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> @@ -541,6 +541,8 @@ static const struct of_device_id dsi_phy_dt_match[] = {
+>  	  .data = &dsi_phy_28nm_hpm_famb_cfgs },
+>  	{ .compatible = "qcom,dsi-phy-28nm-lp",
+>  	  .data = &dsi_phy_28nm_lp_cfgs },
+> +	{ .compatible = "qcom,dsi-phy-28nm-8226",
+> +	  .data = &dsi_phy_28nm_8226_cfgs },
+>  #endif
+>  #ifdef CONFIG_DRM_MSM_DSI_20NM_PHY
+>  	{ .compatible = "qcom,dsi-phy-20nm",
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> index 7137a17ae523..8b640d174785 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> @@ -46,8 +46,9 @@ struct msm_dsi_phy_cfg {
+>  extern const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_cfgs;
+>  extern const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_famb_cfgs;
+>  extern const struct msm_dsi_phy_cfg dsi_phy_28nm_lp_cfgs;
+> -extern const struct msm_dsi_phy_cfg dsi_phy_20nm_cfgs;
+> +extern const struct msm_dsi_phy_cfg dsi_phy_28nm_8226_cfgs;
+>  extern const struct msm_dsi_phy_cfg dsi_phy_28nm_8960_cfgs;
+> +extern const struct msm_dsi_phy_cfg dsi_phy_20nm_cfgs;
+>  extern const struct msm_dsi_phy_cfg dsi_phy_14nm_cfgs;
+>  extern const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs;
+>  extern const struct msm_dsi_phy_cfg dsi_phy_14nm_2290_cfgs;
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
+> index 4c1bf55c5f38..f71308387566 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
+> @@ -37,6 +37,7 @@
+>  
+>  /* v2.0.0 28nm LP implementation */
+>  #define DSI_PHY_28NM_QUIRK_PHY_LP	BIT(0)
+> +#define DSI_PHY_28NM_QUIRK_PHY_8226	BIT(1)
+>  
+>  #define LPFR_LUT_SIZE			10
+>  struct lpfr_cfg {
+> @@ -377,6 +378,74 @@ static int dsi_pll_28nm_vco_prepare_hpm(struct clk_hw *hw)
+>  	return ret;
+>  }
+>  
+> +static int dsi_pll_28nm_vco_prepare_8226(struct clk_hw *hw)
+> +{
+> +	struct dsi_pll_28nm *pll_28nm = to_pll_28nm(hw);
+> +	struct device *dev = &pll_28nm->phy->pdev->dev;
+> +	void __iomem *base = pll_28nm->phy->pll_base;
+> +	u32 max_reads = 5, timeout_us = 100;
+> +	bool locked;
+> +	u32 val;
+> +	int i;
+> +
+> +	DBG("id=%d", pll_28nm->phy->id);
+> +
+> +	pll_28nm_software_reset(pll_28nm);
+> +
+> +	/*
+> +	 * PLL power up sequence.
+> +	 * Add necessary delays recommended by hardware.
+> +	 */
+> +	dsi_phy_write(base + REG_DSI_28nm_PHY_PLL_CAL_CFG1, 0x34);
+> +
+> +	val = DSI_28nm_PHY_PLL_GLB_CFG_PLL_PWRDN_B; // 1
+Did you send the correct revision?
 
-if (IS_ERR(new))
-	err = PTR_ERR(new);
-trace_f2fs_lookup_end(dir, new ? new : dentry, ino, err);
-
-Thanks,
-
->>
->>>
->>>
->>>>    	return new;
->>>>    out_iput:
->>>>    	iput(inode);
->>>> -- 
->>>> 2.35.3
->>
->>
->> _______________________________________________
->> Linux-f2fs-devel mailing list
->> Linux-f2fs-devel@lists.sourceforge.net
->> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+Konrad
+> +	dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_GLB_CFG, val, 200);
+> +
+> +	val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_PWRGEN_PWRDN_B; // 4
+> +	dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_GLB_CFG, val, 200);
+> +
+> +	val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_LDO_PWRDN_B; // 2
+> +	val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_ENABLE; // 8
+> +	dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_GLB_CFG, val, 600);
+> +
+> +	for (i = 0; i < 7; i++) {
+> +		/* DSI Uniphy lock detect setting */
+> +		dsi_phy_write(base + REG_DSI_28nm_PHY_PLL_LKDET_CFG2, 0x0d);
+> +		dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_LKDET_CFG2,
+> +				0x0c, 100);
+> +		dsi_phy_write(base + REG_DSI_28nm_PHY_PLL_LKDET_CFG2, 0x0d);
+> +
+> +		/* poll for PLL ready status */
+> +		locked = pll_28nm_poll_for_ready(pll_28nm,
+> +						max_reads, timeout_us);
+> +		if (locked)
+> +			break;
+> +
+> +		pll_28nm_software_reset(pll_28nm);
+> +
+> +		/*
+> +		 * PLL power up sequence.
+> +		 * Add necessary delays recommended by hardware.
+> +		 */
+> +		dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_PWRGEN_CFG, 0x00, 50);
+> +
+> +		val = DSI_28nm_PHY_PLL_GLB_CFG_PLL_PWRDN_B; // 1
+> +		val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_PWRGEN_PWRDN_B; // 4
+> +		dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_GLB_CFG, val, 100);
+> +
+> +		val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_LDO_PWRDN_B; // 2
+> +		val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_ENABLE; // 8
+> +		dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_GLB_CFG, val, 600);
+> +	}
+> +
+> +	if (unlikely(!locked))
+> +		DRM_DEV_ERROR(dev, "DSI PLL lock failed\n");
+> +	else
+> +		DBG("DSI PLL Lock success");
+> +
+> +	return locked ? 0 : -EINVAL;
+> +}
+> +
+>  static int dsi_pll_28nm_vco_prepare_lp(struct clk_hw *hw)
+>  {
+>  	struct dsi_pll_28nm *pll_28nm = to_pll_28nm(hw);
+> @@ -471,6 +540,15 @@ static const struct clk_ops clk_ops_dsi_pll_28nm_vco_lp = {
+>  	.is_enabled = dsi_pll_28nm_clk_is_enabled,
+>  };
+>  
+> +static const struct clk_ops clk_ops_dsi_pll_28nm_vco_8226 = {
+> +	.round_rate = dsi_pll_28nm_clk_round_rate,
+> +	.set_rate = dsi_pll_28nm_clk_set_rate,
+> +	.recalc_rate = dsi_pll_28nm_clk_recalc_rate,
+> +	.prepare = dsi_pll_28nm_vco_prepare_8226,
+> +	.unprepare = dsi_pll_28nm_vco_unprepare,
+> +	.is_enabled = dsi_pll_28nm_clk_is_enabled,
+> +};
+> +
+>  /*
+>   * PLL Callbacks
+>   */
+> @@ -536,6 +614,8 @@ static int pll_28nm_register(struct dsi_pll_28nm *pll_28nm, struct clk_hw **prov
+>  
+>  	if (pll_28nm->phy->cfg->quirks & DSI_PHY_28NM_QUIRK_PHY_LP)
+>  		vco_init.ops = &clk_ops_dsi_pll_28nm_vco_lp;
+> +	else if (pll_28nm->phy->cfg->quirks & DSI_PHY_28NM_QUIRK_PHY_8226)
+> +		vco_init.ops = &clk_ops_dsi_pll_28nm_vco_8226;
+>  	else
+>  		vco_init.ops = &clk_ops_dsi_pll_28nm_vco_hpm;
+>  
+> @@ -820,3 +900,20 @@ const struct msm_dsi_phy_cfg dsi_phy_28nm_lp_cfgs = {
+>  	.quirks = DSI_PHY_28NM_QUIRK_PHY_LP,
+>  };
+>  
+> +const struct msm_dsi_phy_cfg dsi_phy_28nm_8226_cfgs = {
+> +	.has_phy_regulator = true,
+> +	.regulator_data = dsi_phy_28nm_regulators,
+> +	.num_regulators = ARRAY_SIZE(dsi_phy_28nm_regulators),
+> +	.ops = {
+> +		.enable = dsi_28nm_phy_enable,
+> +		.disable = dsi_28nm_phy_disable,
+> +		.pll_init = dsi_pll_28nm_init,
+> +		.save_pll_state = dsi_28nm_pll_save_state,
+> +		.restore_pll_state = dsi_28nm_pll_restore_state,
+> +	},
+> +	.min_pll_rate = VCO_MIN_RATE,
+> +	.max_pll_rate = VCO_MAX_RATE,
+> +	.io_start = { 0xfd922b00 },
+> +	.num_dsi_phy = 1,
+> +	.quirks = DSI_PHY_28NM_QUIRK_PHY_8226,
+> +};
+> 
