@@ -2,145 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD64714E09
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF1F714E1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjE2QSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S229835AbjE2QVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjE2QSf (ORCPT
+        with ESMTP id S229787AbjE2QVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:18:35 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7F8A3;
-        Mon, 29 May 2023 09:18:33 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f6042d605dso22695545e9.2;
-        Mon, 29 May 2023 09:18:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685377112; x=1687969112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OS7Cd231F040G33nTg/JdwMNbg9I56weKfa+JuzR9V0=;
-        b=odFSh468vCEXSATMzrGBnyFPDEPBnu3/GVtTQzp2WbXOltmvSGkGEzlC+K8uKcxOUK
-         BYYZO3kOcY8anhzgBOM6eu2JYSW1pbA8imDeBahG2zyaSZEaB0IcQh5Ze1XwlYq4jIDY
-         KelS15P78jje2Xt/QEEsGMzhwwlpa5oUQBJ1dAWnUgDFDo8WAy3DvrQgmAHMZ+JDff+L
-         C+HUaai8+J2dlLY0DigOEZjxf2blWamfHgxRO/kjSklzV24Si3sLDtOa8183sh/g7NiP
-         OMgXLYoeAhgFdMZIEnib1pOtsX2fU4TsK6pA2bkKNPWSkiM2WC4x7RsOvk4Zoblle2YU
-         fETw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685377112; x=1687969112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OS7Cd231F040G33nTg/JdwMNbg9I56weKfa+JuzR9V0=;
-        b=lyltKF5Tp7SP+N0v778Z1rL69SW48XDQlYseZEq0fJDw2DRtbZz6PXZ7a5uuqbIgZv
-         1TQlL4wArHvhJmadlZjTmWsOs1Wp6MnCJV1HJXkzbCP45u+Y00IxSHdW+5eiYdASGkBo
-         DMhN3FUywXBLrZzlK5Y88OsTz3gKA51xEUL2LKj6UW9iUl0nomdmqK+3xV/pFGd3agvA
-         DcfpUrse5xCxn9YevfsUUJPZYe2MlmzfibKvMUK4lak0UmJX35PbpRwKe4xfKa9mGZ0J
-         i++OTsS6NUZ1sxX4J/qCl6WZ0f41GVr/ASg5hFInBGDCih8apGZmNXvVNKrDcwoPhUfH
-         PeWw==
-X-Gm-Message-State: AC+VfDwuJzdEm7FNBlfQuLJrsnqRGM928bjyEvO2Zlw1H++Eg3kh7RqZ
-        fXLkM46BYvQD2hFgfEECHUQ=
-X-Google-Smtp-Source: ACHHUZ5yb7656A5Pt8QU+Hxu5DFAGjmIz71TZJhb5cmkFGg3fCgQ27dRj5NsY4DDPtehbz40yOKrMQ==
-X-Received: by 2002:a7b:c84c:0:b0:3f6:cfc7:8bcf with SMTP id c12-20020a7bc84c000000b003f6cfc78bcfmr9832893wml.34.1685377111877;
-        Mon, 29 May 2023 09:18:31 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id x11-20020a1c7c0b000000b003f50876905dsm14723899wmc.6.2023.05.29.09.18.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 09:18:30 -0700 (PDT)
-Message-ID: <eb9d9814-2dd4-ee87-b1ca-4660b59abec4@gmail.com>
-Date:   Mon, 29 May 2023 18:18:30 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] arm64: dts: mt7986: use size of reserved partition for
- bl2
-Content-Language: en-US, ca-ES, es-ES
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mon, 29 May 2023 12:21:08 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B7FB5;
+        Mon, 29 May 2023 09:21:03 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34TBP5Lp014132;
+        Mon, 29 May 2023 18:20:51 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=R7roW/pXBm1AzX1ECpv0Ow4olyyWijd6fAx4mT/U654=;
+ b=rKKWWShAAaoZfxuiWwq7ehnP0eeGYX4d5a/bAXwhovoCfGeeHG5ryv4N69GhisLuQWWf
+ 1+3gnOh3Q9TPK998v+azfamrkdUo92Hcv+5I+qz/Hfr9D+SpMbNVRZ5IgXTp68ENmzIA
+ EkA6aYgqufGzp4U7MAy3fZ+Cye5MAqF8HjDvtDeRwbIFok35zS9FoEhdh4GONzOoclwb
+ 4i/IIX1TWGttFGSfKUu7sDkZByth+1NTAkPYR5tcXDcJUmzELql57iKo4UBXJURlB9Sj
+ J9GMPjQAbuwes8KNx7FY4ZEUXYisy2/e4WRd5Fjr5S/Mi4C8tdiLPWnbCdO6vt8Pf1jD 8Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quahy2mcq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 May 2023 18:20:50 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C84EC10002A;
+        Mon, 29 May 2023 18:20:41 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9FED1233C87;
+        Mon, 29 May 2023 18:20:41 +0200 (CEST)
+Received: from localhost (10.201.21.93) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 29 May
+ 2023 18:20:41 +0200
+From:   Alexandre Torgue <alexandre.torgue@foss.st.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
-References: <20230528113343.7649-1-linux@fw-web.de>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230528113343.7649-1-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, <soc@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+Subject: [PATCH 00/11] Add STM32MP25 support
+Date:   Mon, 29 May 2023 18:20:23 +0200
+Message-ID: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-29_10,2023-05-29_01,2023-05-22_02
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I'm pleased to announce extension of the STM32 MPU family with the addition of
+the STM32MP25 Armv8 based SoCs.
 
+STM32MP25 family is composed of 4 SoCs defined as following:
 
-On 28/05/2023 13:33, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> To store uncompressed bl2 more space is required than partition is
-> actually defined.
-> 
-> There is currently no known usage of this reserved partition.
-> Openwrt uses same partition layout.
-> 
-> We added same change to u-boot with commit d7bb1099 [1].
-> 
-> [1] https://source.denx.de/u-boot/u-boot/-/commit/d7bb109900c1ca754a0198b9afb50e3161ffc21e
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 8e01fb15b815 ("arm64: dts: mt7986: add Bananapi R3")
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+  -STM32MP251: common part composed of 1*Cortex-A35, common peripherals like
+   SDMMC, UART, SPI, I2C, PCIe, USB3, parallel and DSI display, 1*ETH ...
 
-Applied, thanks!
+  -STM32MP253: STM32MP251 + 1*Cortex-A35 (dual CPU), a second ETH, CAN-FD and
+   LVDS display.
 
-> ---
-> If the bl2 does not fit into the bl2-partition (cut off), board does
-> not boot, thats why i want to increase it now. My current bl2 is 197K
-> for nor and i ran into this problem.
-> 
-> Openwrt uses also the first reserved partition to give bl2 more
-> space:
-> 
-> https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/mediatek/dts/mt7986a-bananapi-bpi-r3-nor.dts;h=f597b869abc80d1a73f44ebb85ad4da17376bb52;hb=HEAD#l22
-> 
-> so imho it should be same in mainline to not require complex bl2
-> compression.
-> 
-> have now sent the board-specific dts to uboot too:
-> https://source.denx.de/u-boot/u-boot/-/commit/d7bb109900c1ca754a0198b9afb50e3161ffc21e
-> ---
->   .../boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso     | 7 +------
->   1 file changed, 1 insertion(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
-> index 84aa229e80f3..e48881be4ed6 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
-> @@ -27,15 +27,10 @@ partitions {
->   
->   					partition@0 {
->   						label = "bl2";
-> -						reg = <0x0 0x20000>;
-> +						reg = <0x0 0x40000>;
->   						read-only;
->   					};
->   
-> -					partition@20000 {
-> -						label = "reserved";
-> -						reg = <0x20000 0x20000>;
-> -					};
-> -
->   					partition@40000 {
->   						label = "u-boot-env";
->   						reg = <0x40000 0x40000>;
+  -STM32MP255: STM32MP253 + GPU/AI and video encode/decode.
+  -STM32MP257: STM32MP255 + ETH TSN switch (2+1 ports).
+
+  A second diversity layer exists for security features/ A35 frequency:
+  -STM32MP25xY, "Y" gives information:
+    -Y = A means A35@1.2GHz + no cryp IP and no secure boot.
+    -Y = C means A35@1.2GHz + cryp IP and secure boot.
+    -Y = D means A35@1.5GHz + no cryp IP and no secure boot.
+    -Y = F means A35@1.5GHz + cryp IP and secure boot.
+
+This series adds the STM32MP257F EV1 board support. This board embeds a
+STM32MP257FAI SoC, with 4GB of DDR4, TSN switch (2+1 ports), 2*USB typeA,
+1*USB2 typeC, SNOR OctoSPI, mini PCIe, STPMIC2 for power distribution ...
+
+Thanks
+Alex
+
+Alexandre Torgue (10):
+  dt-bindings: pinctrl: stm32: support for stm32mp257 and additional
+    packages
+  pinctrl: stm32: add stm32mp257 pinctrl support
+  dt-bindings: stm32: add st,stm32mp25 compatibles to the stm32 family
+  arm64: introduce STM32 family on Armv8 architecture
+  arm64: dts: st: introduce stm32mp25 SoCs family
+  arm64: dts: st: introduce stm32mp25 pinctrl files
+  dt-bindings: stm32: document stm32mp257f-ev1 board
+  arm64: dts: st: add stm32mp257f-ev1 board support
+  arm64: defconfig: enable ARCH_STM32 and STM32 serial driver
+  MAINTAINERS: add entry for ARM/STM32 ARCHITECTURE
+
+Patrick Delaunay (1):
+  dt-bindings: stm32: add st,stm32mp25-syscfg compatible for syscon
+
+ .../bindings/arm/stm32/st,stm32-syscon.yaml   |    1 +
+ .../devicetree/bindings/arm/stm32/stm32.yaml  |   12 +
+ .../bindings/pinctrl/st,stm32-pinctrl.yaml    |    4 +-
+ MAINTAINERS                                   |    1 +
+ arch/arm64/Kconfig.platforms                  |   14 +
+ arch/arm64/boot/dts/Makefile                  |    1 +
+ arch/arm64/boot/dts/st/Makefile               |    2 +
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi |   38 +
+ arch/arm64/boot/dts/st/stm32mp251.dtsi        |  279 ++
+ arch/arm64/boot/dts/st/stm32mp253.dtsi        |   23 +
+ arch/arm64/boot/dts/st/stm32mp255.dtsi        |    9 +
+ arch/arm64/boot/dts/st/stm32mp257.dtsi        |    9 +
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts    |   50 +
+ arch/arm64/boot/dts/st/stm32mp25xc.dtsi       |    8 +
+ arch/arm64/boot/dts/st/stm32mp25xf.dtsi       |    8 +
+ .../boot/dts/st/stm32mp25xxai-pinctrl.dtsi    |   83 +
+ .../boot/dts/st/stm32mp25xxak-pinctrl.dtsi    |   71 +
+ .../boot/dts/st/stm32mp25xxal-pinctrl.dtsi    |   71 +
+ arch/arm64/configs/defconfig                  |    3 +
+ drivers/pinctrl/stm32/Kconfig                 |    6 +
+ drivers/pinctrl/stm32/Makefile                |    1 +
+ drivers/pinctrl/stm32/pinctrl-stm32.h         |    3 +
+ drivers/pinctrl/stm32/pinctrl-stm32mp257.c    | 2581 +++++++++++++++++
+ include/dt-bindings/pinctrl/stm32-pinfunc.h   |    3 +
+ 24 files changed, 3280 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/boot/dts/st/Makefile
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp251.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp253.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp255.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp257.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp257f-ev1.dts
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25xc.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25xf.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxai-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxak-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/st/stm32mp25xxal-pinctrl.dtsi
+ create mode 100644 drivers/pinctrl/stm32/pinctrl-stm32mp257.c
+
+-- 
+2.17.1
+
