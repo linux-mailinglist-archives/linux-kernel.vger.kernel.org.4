@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58DC71438B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C3271438E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbjE2FCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 01:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
+        id S231768AbjE2FE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 01:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjE2FB7 (ORCPT
+        with ESMTP id S231482AbjE2FEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 01:01:59 -0400
+        Mon, 29 May 2023 01:04:12 -0400
 Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21EF1A7
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 21:59:52 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d1e96c082so2131290b3a.1
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 21:59:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E232710D1;
+        Sun, 28 May 2023 22:03:27 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d44b198baso1983447b3a.0;
+        Sun, 28 May 2023 22:03:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685336337; x=1687928337;
+        d=gmail.com; s=20221208; t=1685336606; x=1687928606;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nqooid6rmRrosD+pJG/icvSkXG6P8Aj4zGJCWNMCDzI=;
-        b=lWCjy6/gom3CjuWsJMdNX+Q/mnZzn7uPuhFWQN/C55p7IwlzfICaUB4c7RUgkGmCxo
-         5+dSFXu5kIYepnItblVNLhSqxuQDv/otMABgR3atbAwtqcSU9nmV7ZD+Rxzow+Jd7dsC
-         6H1pjhvsi42XYSFfAFTX+pn/I1I0Qmwuu5P9TRsT3Mo12TWAEifFMyk8whcx70CSB2Zo
-         Tj5hhlqf0FH7POGkl7xiKgMr0b4V1O65fi+h6hHsxvMnBUQIX75+8dTqytmzZq0d9lDo
-         MT0b9TE4Gp44xdWDwFf+LxlVY74Ubji7Pv3yulkCDnDSg1QTF15ILlQMzEs4z1k4+gih
-         LKzA==
+        bh=ZS7IsfdpubWMWbMIpSsxRx+ub93QQK4IFCY1BnBE+eM=;
+        b=r/iPY92YyEc5+MDaILsPQQqvI9WFXX+4hU774+EUv6Sqsc2YqL7KPtQ5bQGcEXW8mX
+         +wfnF1Wd1JC725MQ65yleNXQGCN5sNqZBGFLeXe9c9JYT1hcJmaF+DLqea1zxM1hOocZ
+         GsQ0yos8BRDmLZIbrRjMAwwrxcxpO+V6CvmOUxPVly6aG3IJk1G7ItqJneFF26nhb3ng
+         pbh3Zl8V9Gwryk+KAoM2xU7k/h0/igVs6Bgj5ZHU2d67rVjVZgxytvSr18thOCEU/Cut
+         o73z8IxRLP6NQJooHynGhT5Q30/6sOrRyridqlWe3bkI9ooWNiUL0yEqZ+YhPAt/OfIA
+         mOgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685336337; x=1687928337;
+        d=1e100.net; s=20221208; t=1685336606; x=1687928606;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Nqooid6rmRrosD+pJG/icvSkXG6P8Aj4zGJCWNMCDzI=;
-        b=Lm5+5aobDbCgl0NAFscg2yLdEolGtvpbit/eBPPg1krzDHI08/1Qp2kA4D02nnpQ7I
-         7bVyw337xteXRTGEvUw8CpBhnm+BZi1MxbXFU9Bkf3sMCQgY+c8+hWHLFiBB754ohkON
-         fxxp4vwh4ecAZ5THQxQlTNSnr6zMdivpcBoVMrU17IOW+7kuHUrdDSru+piHuBABZnoX
-         RYR3JpJopQc1EriNtnS0Qcu4B0gd/3xmlhzbhWx+O0f1kJp54Q7Ng1PDErqkJCl9yNRw
-         0asNRmnTlMrBIgOLjMBy1MlQN8nHfDTD4MoWBSOTUrZGKQZ++TNv/2IyaViC9eunaY2w
-         aNTA==
-X-Gm-Message-State: AC+VfDwZ7R779BggTRelWYzXDwaZiOTPJUegXWy+6xxF4i+eCUYW7y+1
-        Wj4Cdv1cShY7G6CfWFoX/55M5g==
-X-Google-Smtp-Source: ACHHUZ50HVXC4y+n6kFH/mPdG1qlWl38vipty4Vnphdu+aiEObvFBGlAbGdZ8ndZKCiH9HjlrQwR2g==
-X-Received: by 2002:a05:6a00:985:b0:640:ddf8:607a with SMTP id u5-20020a056a00098500b00640ddf8607amr12394367pfg.14.1685336337325;
-        Sun, 28 May 2023 21:58:57 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id d22-20020aa78156000000b0063d375ca0cbsm5906687pfn.151.2023.05.28.21.58.56
+        bh=ZS7IsfdpubWMWbMIpSsxRx+ub93QQK4IFCY1BnBE+eM=;
+        b=ITWR6B5WO7HDvPSRxPmwPfLy9Oi5MH5AdWqTxJ7xjAhyxR9edOCdfn3ENpMO1ClTGl
+         s4me+uATdNV1ApJQovxDRa5fHxkxTDKksP+FBC/+x8u7ILwe80CMHbSF7tvF3pXSrNGF
+         x3u5PpunSmudp0mcfgtfkI5IobpCOvFdowbwZEhWE7wsAsH4Co9ejCdwCxrVuLFmOYg/
+         050DuACH+HPKnAfL4miJtkCR3pA1C+BH11nml8zpbFp9fZqavXv/4dXEmk44xm59gtKm
+         y1S7L/HUjmhUlBWR0lMwU94Dalh3TpffnvySy7azhTuXPxrua/reTeZd1B6jlx6z+Km1
+         NhJw==
+X-Gm-Message-State: AC+VfDznP+hglc3kWGOi3Oyfvd0iP+h+Qrx9BfkaUsB1NiO0Mk39UXbO
+        z/TZRImbdhuAMFXxd8GsxDI=
+X-Google-Smtp-Source: ACHHUZ6mtt6tvQ+KHq1AAuJM6+9hmFCBIzLzhkXZXBEj9JRLqflfZsYHasXuQ+bzxBYhWfG4TKy1nA==
+X-Received: by 2002:a05:6a00:2315:b0:646:c56c:f0e0 with SMTP id h21-20020a056a00231500b00646c56cf0e0mr7293552pfh.15.1685336605533;
+        Sun, 28 May 2023 22:03:25 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-18.three.co.id. [180.214.232.18])
+        by smtp.gmail.com with ESMTPSA id u5-20020aa78385000000b0064305676b61sm5921609pfm.203.2023.05.28.22.03.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 21:58:56 -0700 (PDT)
-Date:   Mon, 29 May 2023 10:28:54 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] opp: Provide a function for just setting bandwidth
-Message-ID: <20230529045854.gh36k5my4i35jspc@vireshk-i7>
-References: <20230526-topic-opp_bw-v1-1-e881091363af@linaro.org>
- <20230526105320.pfnu3oxl2cm37ot7@vireshk-i7>
- <f8731d93-b335-6d9a-183c-34a652f45455@linaro.org>
+        Sun, 28 May 2023 22:03:24 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 4AB191069EE; Mon, 29 May 2023 12:03:21 +0700 (WIB)
+Date:   Mon, 29 May 2023 12:03:20 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/69] 5.15.114-rc1 review
+Message-ID: <ZHQyGGR2TBzuW_3I@debian.me>
+References: <20230528190828.358612414@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WJgiagu4JoyStVG+"
 Content-Disposition: inline
-In-Reply-To: <f8731d93-b335-6d9a-183c-34a652f45455@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230528190828.358612414@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-05-23, 12:59, Konrad Dybcio wrote:
-> There are some users which have tight power sequencing requirements,
-> like the Qualcomm Adreno GPU.
-> 
-> Dropping the entire OPP kills clocks, bw and required-opps at once,
-> but on certain Adrenos we need something like:
-> 
-> 
-> disable memory clock (clk)
-> disable all other clocks, including the opp-managed core clock (clk_bulk)
-> kill one, fully manually controlled genpd (manual runtime pm)
-> remove bus vote (func proposed in this patch)
-> kill another genpd (manual runtime pm)
-> kill the opp-managed genpd (automatic pm calls)
-> 
-> Changing the order kills the chip until you reboot the whole board and
-> setting freq=0 using dev_pm_opp_set_rate doesn't drop the bw vote.
 
-I am a bit confused now.
+--WJgiagu4JoyStVG+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What's the exact problem with dev_pm_opp_set_rate(dev, 0) ? It does set the
-bandwidth too, from what I can see.
+On Sun, May 28, 2023 at 08:11:20PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.114 release.
+> There are 69 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
--- 
-viresh
+Successfully compiled and installed bindeb-pkgs on my computer (Acer
+Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--WJgiagu4JoyStVG+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHQyFAAKCRD2uYlJVVFO
+o29dAQCZe88o+K8RGhFVMiRABqfAHr4p6ODLJ6bGua9Ecn6mlAEA8GVDkv0+b4W1
+AIujQRnwo0ml5L4phj70108U21h5mw8=
+=Y/iw
+-----END PGP SIGNATURE-----
+
+--WJgiagu4JoyStVG+--
