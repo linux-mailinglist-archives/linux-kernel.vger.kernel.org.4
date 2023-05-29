@@ -2,219 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E957143EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0EC7143F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjE2GN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 02:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
+        id S229626AbjE2GOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 02:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjE2GNY (ORCPT
+        with ESMTP id S229556AbjE2GOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 02:13:24 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574F5AF;
-        Sun, 28 May 2023 23:13:21 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vjgsk4h_1685340796;
-Received: from 30.97.48.60(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vjgsk4h_1685340796)
-          by smtp.aliyun-inc.com;
-          Mon, 29 May 2023 14:13:17 +0800
-Message-ID: <505a5d3a-c970-8d15-ea60-444a3630c199@linux.alibaba.com>
-Date:   Mon, 29 May 2023 14:13:34 +0800
+        Mon, 29 May 2023 02:14:16 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BD7B1
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685340855; x=1716876855;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lZvg1L57BcoSEw3CqHyDTtH9MeFq1P/MjhjyoIG9cOk=;
+  b=a2TAUepaXSB/fUm74HgmOqxRji0GG/eqXp4N7Z05TEgTg/r4NWk+UQnN
+   sxZ5JMrjPYndaU2lLBwgr4K+wOtY1i8+URqfzj91LMOc+0DFprwRqvwZL
+   worAsq9F85nrieVk4MrOiXmhVXLwt/ww5OHRg/bf1Gdjuoivm0SzHaK3P
+   KJ1tmoORBuL5sg97/qpml70D8llJBicVbhz9yFiXbPzke8DbxRAng3/r3
+   4CB80VVOvSUzWLjHzr4pJe+ds7x1jITW8RQMIdqW68/MWpCTRYBNADTn3
+   YAeoYQYxjstIyz8DdjScxSD6nNegmF+Cu65M2wGe2TsRFC+U0jugMzbCC
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="357881762"
+X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
+   d="scan'208";a="357881762"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 23:14:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="1036079969"
+X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
+   d="scan'208";a="1036079969"
+Received: from azhao3-mobl1.ccr.corp.intel.com (HELO yhuang6-mobl2.ccr.corp.intel.com) ([10.255.28.126])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 23:14:11 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Huang Ying <ying.huang@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        Chris Li <chrisl@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: [PATCH -V3 0/5] swap: cleanup get/put_swap_device() usage
+Date:   Mon, 29 May 2023 14:13:50 +0800
+Message-Id: <20230529061355.125791-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v5 3/4] drivers/perf: add DesignWare PCIe PMU driver
-To:     Shuai Xue <xueshuai@linux.alibaba.com>, chengyou@linux.alibaba.com,
-        kaishen@linux.alibaba.com, helgaas@kernel.org,
-        yangyicong@huawei.com, will@kernel.org,
-        Jonathan.Cameron@huawei.com, robin.murphy@arm.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org, rdunlap@infradead.org,
-        mark.rutland@arm.com, zhuo.song@linux.alibaba.com
-References: <20220917121036.14864-1-xueshuai@linux.alibaba.com>
- <20230522035428.69441-4-xueshuai@linux.alibaba.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20230522035428.69441-4-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The general rule to use a swap entry is as follows.
 
+When we get a swap entry, if there aren't some other ways to prevent
+swapoff, such as the folio in swap cache is locked, page table lock is
+held, etc., the swap entry may become invalid because of swapoff.
+Then, we need to enclose all swap related functions with
+get_swap_device() and put_swap_device(), unless the swap functions
+call get/put_swap_device() by themselves.
 
-On 5/22/2023 11:54 AM, Shuai Xue wrote:
-> This commit adds the PCIe Performance Monitoring Unit (PMU) driver support
-> for T-Head Yitian SoC chip. Yitian is based on the Synopsys PCI Express
-> Core controller IP which provides statistics feature. The PMU is not a PCIe
-> Root Complex integrated End Point(RCiEP) device but only register counters
-> provided by each PCIe Root Port.
-> 
-> To facilitate collection of statistics the controller provides the
-> following two features for each Root Port:
-> 
-> - Time Based Analysis (RX/TX data throughput and time spent in each
->    low-power LTSSM state)
-> - Event counters (Error and Non-Error for lanes)
-> 
-> Note, only one counter for each type and does not overflow interrupt.
-> 
-> This driver adds PMU devices for each PCIe Root Port. And the PMU device is
-> named based the BDF of Root Port. For example,
-> 
->      30:03.0 PCI bridge: Device 1ded:8000 (rev 01)
-> 
-> the PMU device name for this Root Port is dwc_rootport_3018.
-> 
-> Example usage of counting PCIe RX TLP data payload (Units of 16 bytes)::
-> 
->      $# perf stat -a -e dwc_rootport_3018/Rx_PCIe_TLP_Data_Payload/
-> 
-> average RX bandwidth can be calculated like this:
-> 
->      PCIe TX Bandwidth = PCIE_TX_DATA * 16B / Measure_Time_Window
-> 
-> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202305170639.XU3djFZX-lkp@intel.com/
-> ---
+Based on the above rule, all get/put_swap_device() usage are checked
+and cleaned up if necessary.
 
-[snip]
+Changelogs:
 
-> +static int dwc_pcie_pmu_remove(struct platform_device *pdev)
-> +{
-> +	struct dwc_pcie_pmu_priv *priv = platform_get_drvdata(pdev);
-> +	struct dwc_pcie_pmu *pcie_pmu;
-> +
-> +	list_for_each_entry(pcie_pmu, &priv->pmu_nodes, pmu_node) {
-> +		cpuhp_state_remove_instance(dwc_pcie_pmu_hp_state,
-> +					    &pcie_pmu->cpuhp_node);
-> +		perf_pmu_unregister(&pcie_pmu->pmu);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int dwc_pcie_pmu_probe(struct platform_device *pdev)
-> +{
-> +	struct dwc_pcie_pmu_priv *priv;
-> +
-> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->dev = &pdev->dev;
-> +	platform_set_drvdata(pdev, priv);
-> +
-> +	/* If one PMU registration fails, remove all. */
-> +	if (__dwc_pcie_pmu_probe(priv))
-> +		dwc_pcie_pmu_remove(pdev);
+V3:
 
-In this case, you should return error from __dwc_pcie_pmu_probe() 
-instead of returning 0, to release the requested resources of the PMU 
-deivce.
+- Fix build error in [2/5], Thanks David!
 
-> +
-> +	return 0;
-> +}
-> +
-> +static void dwc_pcie_pmu_migrate(struct dwc_pcie_pmu *pcie_pmu, unsigned int cpu)
-> +{
-> +	/* This PMU does NOT support interrupt, just migrate context. */
-> +	perf_pmu_migrate_context(&pcie_pmu->pmu, pcie_pmu->oncpu, cpu);
-> +	pcie_pmu->oncpu = cpu;
-> +}
-> +
-> +static int dwc_pcie_pmu_online_cpu(unsigned int cpu, struct hlist_node *cpuhp_node)
-> +{
-> +	struct dwc_pcie_pmu *pcie_pmu;
-> +	struct pci_dev *pdev;
-> +	int node;
-> +
-> +	pcie_pmu = hlist_entry_safe(cpuhp_node, struct dwc_pcie_pmu, cpuhp_node);
-> +	pdev = pcie_pmu->pdev;
-> +	node = dev_to_node(&pdev->dev);
-> +
-> +	if (node != NUMA_NO_NODE && cpu_to_node(pcie_pmu->oncpu) != node &&
-> +	    cpu_to_node(cpu) == node)
-> +		dwc_pcie_pmu_migrate(pcie_pmu, cpu);
-> +
-> +	return 0;
-> +}
-> +
-> +static int dwc_pcie_pmu_offline_cpu(unsigned int cpu, struct hlist_node *cpuhp_node)
-> +{
-> +	struct dwc_pcie_pmu *pcie_pmu;
-> +	struct pci_dev *pdev;
-> +	int node;
-> +	cpumask_t mask;
-> +	unsigned int target;
-> +
-> +	pcie_pmu = hlist_entry_safe(cpuhp_node, struct dwc_pcie_pmu, cpuhp_node);
-> +	if (cpu != pcie_pmu->oncpu)
-> +		return 0;
-> +
-> +	pdev = pcie_pmu->pdev;
-> +	node = dev_to_node(&pdev->dev);
-> +	if (cpumask_and(&mask, cpumask_of_node(node), cpu_online_mask) &&
-> +	    cpumask_andnot(&mask, &mask, cpumask_of(cpu)))
-> +		target = cpumask_any(&mask);
-> +	else
-> +		target = cpumask_any_but(cpu_online_mask, cpu);
-> +	if (target < nr_cpu_ids)
-> +		dwc_pcie_pmu_migrate(pcie_pmu, target);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver dwc_pcie_pmu_driver = {
-> +	.probe = dwc_pcie_pmu_probe,
-> +	.remove = dwc_pcie_pmu_remove,
-> +	.driver = {.name = "dwc_pcie_pmu",},
-> +};
-> +
-> +static int __init dwc_pcie_pmu_init(void)
-> +{
-> +	int ret;
-> +
-> +	ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
-> +				      "perf/dwc_pcie_pmu:online",
-> +				      dwc_pcie_pmu_online_cpu,
-> +				      dwc_pcie_pmu_offline_cpu);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	dwc_pcie_pmu_hp_state = ret;
-> +
-> +	ret = platform_driver_register(&dwc_pcie_pmu_driver);
-> +	if (ret) {
-> +		cpuhp_remove_multi_state(dwc_pcie_pmu_hp_state);
-> +		return ret;
-> +	}
-> +
-> +	dwc_pcie_pmu_dev = platform_device_register_simple(
-> +				"dwc_pcie_pmu", PLATFORM_DEVID_NONE, NULL, 0);
-> +	if (IS_ERR(dwc_pcie_pmu_dev)) {
-> +		platform_driver_unregister(&dwc_pcie_pmu_driver);
-> +		return PTR_ERR(dwc_pcie_pmu_dev);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void __exit dwc_pcie_pmu_exit(void)
-> +{
-> +	platform_device_unregister(dwc_pcie_pmu_dev);
-> +	platform_driver_unregister(&dwc_pcie_pmu_driver);
+- Fix comments and patch description about the folio in swap cache, Thanks David!
 
-You should also call 'cpuhp_remove_multi_state()' when exiting the driver.
+- Collected reviewed-by.
 
-With above issues fixed, you can add:
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+V2:
+
+- Split patch per David's comments.  Thanks!
+
+Best Regards,
+Huang, Ying
