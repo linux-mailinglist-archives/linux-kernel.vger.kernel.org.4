@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD19071511E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 23:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A8071511F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 23:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjE2Vty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 17:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S229705AbjE2VvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 17:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjE2Vtw (ORCPT
+        with ESMTP id S229485AbjE2VvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 17:49:52 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56F6C1;
-        Mon, 29 May 2023 14:49:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVThT65bcz4whk;
-        Tue, 30 May 2023 07:49:45 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1685396986;
-        bh=M+yVj+vLQfNG4ud8zB4xhuy4EkeoZBz0Mfxes0Tz530=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PPgH3cfvnLHtyjNYkeM9ChDF8cZTzOnzE3sgb3S/fLifC74pKujI1Y32DdrIO9i/g
-         64jj9n68JWDLBKFrYTyO9huVtiKDicLBdr+pu8RGJ4svWXu0h+H2a/KNj0k4W4ECWC
-         aSMXLjP+XxKxi28kqgc0Bg7LE+FI/Kl189n6P3ieQxEOa/eWraKgqZtLOKH+KwXba1
-         4DrqUGH4rpms1RMcYwUqBTNfdwrckyu5Fhdx1mqEmP9PeOvUDxsyffhjf7NOQyTSkj
-         JcuNJIvygrgIAjfR5xkPjZxfF0bpIJ90P78/UYakX2flQeXh4MmmYfXUao4U7Uqr0W
-         HEGi0IQyh280Q==
-Date:   Tue, 30 May 2023 07:49:43 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andy Gross <agross@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the qcom tree
-Message-ID: <20230530074943.5b196424@canb.auug.org.au>
+        Mon, 29 May 2023 17:51:07 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1538CF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 14:51:04 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685397062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IbB5GEW6N6XR6fDTgOAi2+yyovZbSHzUMyqfv0TZelw=;
+        b=QLZyIa4hi4aYScN+5gbkkMeWXHulYrevLiSZIgZ1d0Or3rkqCX0JZGVkgxEXIP4XIFcp4n
+        mtsolMkxLg4hAEIEjQSKlYOwgNo6rlJK6CerC7oYUWyvUPyrbQ1pvfM/4bAKa11/GOApA9
+        dy6TivB7HHdcAkrJkPIgd0GG3jol7GivzAKCNBRXKmX7TJwG08xc8qL3tcWCa6MaB7U6yo
+        SFUe2QC341pYnLxSdJPdq3Gb2Jul8Y0yxcR74jFcLuIp2CBvjk26SD1yy1kPC4pl8ORCmt
+        44FN3KKZAoGfVhT2ZL3qJRKxpctyvXS73Wl9VX5ItPJxUhKAOWaTrKWrS2Mz0w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685397062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IbB5GEW6N6XR6fDTgOAi2+yyovZbSHzUMyqfv0TZelw=;
+        b=J4XcwjFOs6lSrL8jHe19t6U8p/T2Lg4j6XLMa2UTTUUvMB+V4qfiB7gc6dkErdKt0xsDJj
+        4UwvOKWgCx7tpVAA==
+To:     "Liao, Chang" <liaochang1@huawei.com>,
+        Shanker Donthineni <sdonthineni@nvidia.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Vikram Sethi <vsethi@nvidia.com>,
+        Jason Sequeira <jsequeira@nvidia.com>
+Subject: Re: [PATCH v5 1/3] genirq: Use hlist for managing resend handlers
+In-Reply-To: <6dc6642a-1e7c-f111-1fa2-be54826ecef6@huawei.com>
+References: <20230519134902.1495562-1-sdonthineni@nvidia.com>
+ <20230519134902.1495562-2-sdonthineni@nvidia.com>
+ <6dc6642a-1e7c-f111-1fa2-be54826ecef6@huawei.com>
+Date:   Mon, 29 May 2023 23:51:02 +0200
+Message-ID: <871qiylsc9.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MVHY6JUTwfHcGA/a91X/tyy";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/MVHY6JUTwfHcGA/a91X/tyy
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 29 2023 at 15:57, Chang Liao wrote:
+> =E5=9C=A8 2023/5/19 21:49, Shanker Donthineni =E5=86=99=E9=81=93:
+>> diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+>> index 844a8e30e6de..d9451d456a73 100644
+>> --- a/include/linux/irqdesc.h
+>> +++ b/include/linux/irqdesc.h
+>> @@ -102,6 +102,9 @@ struct irq_desc {
+>>  	int			parent_irq;
+>>  	struct module		*owner;
+>>  	const char		*name;
+>> +#ifdef CONFIG_HARDIRQS_SW_RESEND
+>> +	struct hlist_node	resend_node;
+>> +#endif
+>>  } ____cacheline_internodealigned_in_smp;
+>
+> Although there is no documented rule that limits the change of the KABI
+> struct irq_desc, it is still better to keep the irq_desc definition
+> stable.
 
-Hi all,
+Please read and understand:
 
-In commit
+       Documentation/process/stable-api-nonsense.rst
 
-  8b9ca2f3ea45 ("ARM: dts: qcom-apq8060: Fix regulator node names")
+If you want KABI, then that's  _YOUR_ problem, period.
 
-Fixes tag
+>> -/* Bitmap to handle software resend of interrupts: */
+>> -static DECLARE_BITMAP(irqs_resend, IRQ_BITMAP_BITS);
+>> +/* hlist_head to handle software resend of interrupts: */
+>> +static HLIST_HEAD(irq_resend_list);
+>> +static DEFINE_RAW_SPINLOCK(irq_resend_lock);
+>
+> What is the benefit of using hlist here? If you want to enjoy the
+> low latency of querying elements by key, you must define a hlist table
+> with a reasonable number of buckets. Otherwise, I don't think the time
+> complexity of hlist is better than a regular double-linked list,
+> right?
 
-  Fixes: 04715461abf7 ("ARM: dts: qcom-msm8660: align RPM regulators node n=
-ame with bindings")
+What's complex about hlist in this case? Please explain.
 
-has these problem(s):
+Thanks,
 
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 85055a1eecc1 ("ARM: dts: qcom-msm8660: align RPM regulators node nam=
-e with bindings")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MVHY6JUTwfHcGA/a91X/tyy
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1HfgACgkQAVBC80lX
-0GwphggAljxaWaVve4L0ZNePxtepnw/nvwKK/zg3uFZn+cekNuc8CcWtH2KYgNEx
-JmY3lOxM2McPlJ67pK7pWlsizKt1RV/T8Cva4qcCcy/23luqVzHG5Dy1/XcdKevh
-yuxtbsgv+8yRHGJuLf0klUepXxL4xjd176oAhoxtVVptRiAbDbjSazVeLH/g2RZY
-CNccbU0At/LpfqgbhSrFs/zvEE4ysRvLA6faZv30/E5PQWrPUQveC4NltJXE+NPE
-ztZFPVcoMCKV9Jua+Bd7N1nzPDGORMCD20fFB8Re77Kzl0rj6MoW5iAyEx8QyhVi
-zXvQmg7mm68kZT7aNDGnS+k2UNeAiw==
-=ji6r
------END PGP SIGNATURE-----
-
---Sig_/MVHY6JUTwfHcGA/a91X/tyy--
+        tglx
