@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8D27145B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E72B7145BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjE2Hov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 03:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
+        id S231490AbjE2Ht2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 03:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbjE2Hot (ORCPT
+        with ESMTP id S229604AbjE2Ht1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 03:44:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEB1A7
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:44:48 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685346280;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5paxpN3xYOAEQ+EuARrTGAj++AZNd41FPhgcLsr3N10=;
-        b=jCoWNfmxhOaBpWVY4SbBaEvb26HsRjcfXtDdEy6YYypOznC5aekQoxlho8hszhNUE+D6Uk
-        p7IwnBSxmWTM7AK3vxUXC/pvPbP3dynUOpTp5+mhf2POgMZOVs9+KHr3ozYvVzX5t9ORHz
-        DE4/covFNBnOXITEgpNsQ4Oz/G+941sM29bPBqEhBIgV8BaH3zVGAxhsD1OvT3Y1GRoefw
-        C0G9PxzHyS6UJw1KFWArvku6W30Mn7KZJEahecyUapxVNdKgLf+izGLMotHF3a7u2zZsRZ
-        yyfoBsqwjiPwUsTzJmD3711L9/xWDA0Cfji0+8vC00puHArMuIYnKDCQla80/A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685346280;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5paxpN3xYOAEQ+EuARrTGAj++AZNd41FPhgcLsr3N10=;
-        b=R6padX2qZC11tsfG6GMKaM/LZ95ka/fsf8MtryA0H94XwnDjxFP8SuQsz7F+Hlpi6yWDWy
-        tDmNdRKyB5WTjFAg==
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH 1/2] genirq/msi, platform-msi: Adjust return value of
- msi_domain_prepare_irqs()
-In-Reply-To: <CAAhV-H5ack9r4WwuC3gixx0tbwW=4h84X5yrod-1DZouWr67BA@mail.gmail.com>
-References: <20230527054633.704916-1-chenhuacai@loongson.cn>
- <20230527054633.704916-2-chenhuacai@loongson.cn> <87pm6llvm6.ffs@tglx>
- <CAAhV-H5ack9r4WwuC3gixx0tbwW=4h84X5yrod-1DZouWr67BA@mail.gmail.com>
-Date:   Mon, 29 May 2023 09:44:39 +0200
-Message-ID: <87leh7lgyg.ffs@tglx>
+        Mon, 29 May 2023 03:49:27 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E9CFA7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:49:24 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Dxy+r5WHRkgikCAA--.699S3;
+        Mon, 29 May 2023 15:49:13 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxX+T4WHRkM5l+AA--.10477S2;
+        Mon, 29 May 2023 15:49:12 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/i915_drm.h: fix a typo
+Date:   Mon, 29 May 2023 15:49:12 +0800
+Message-Id: <20230529074912.2070902-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxX+T4WHRkM5l+AA--.10477S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZw1Utw1DCrWfJw4UJrWfuFg_yoW3ArXEya
+        4xArWru348CrZ29r43A3Z8GFWfKa4rtw4xCFn3J3ZrWFy2yrn0kws5WrWaqFy3Crs3AFsx
+        X3ZagFs8JanxKjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        X7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS
+        14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
+        AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_
+        JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+        daVFxhVjvjDU0xZFpf9x07jOa93UUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,24 +64,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28 2023 at 11:42, Huacai Chen wrote:
-> On Sat, May 27, 2023 at 10:03=E2=80=AFPM Thomas Gleixner <tglx@linutronix=
-.de> wrote:
->> On Sat, May 27 2023 at 13:46, Huacai Chen wrote:
->> > After:
->> > =3D 0: Success;
->> >> 0: The modified nvec;
->> > < 0: Error code.
->>
->> This explains what the patch does, but provides zero justification for
->> this nor any analysis why this is correct for the existing use cases.
-> I checked all msi_prepare() callbacks and none of them return positive
-> values now, so I think it is correct.
+ 'rbiter' -> 'arbite'
 
-Still you failed to tell so in the changelog. It's not helpful if you
-think it is correct. The point is that you have to make clear why it
-_IS_ correct.
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ include/drm/i915_drm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
+diff --git a/include/drm/i915_drm.h b/include/drm/i915_drm.h
+index 7adce327c1c2..3dcb1db519ae 100644
+--- a/include/drm/i915_drm.h
++++ b/include/drm/i915_drm.h
+@@ -42,7 +42,7 @@ extern struct resource intel_graphics_stolen_res;
+  * The Bridge device's PCI config space has information about the
+  * fb aperture size and the amount of pre-reserved memory.
+  * This is all handled in the intel-gtt.ko module. i915.ko only
+- * cares about the vga bit for the vga rbiter.
++ * cares about the vga bit for the vga arbite.
+  */
+ #define INTEL_GMCH_CTRL		0x52
+ #define INTEL_GMCH_VGA_DISABLE  (1 << 1)
+-- 
+2.25.1
 
-        tglx
