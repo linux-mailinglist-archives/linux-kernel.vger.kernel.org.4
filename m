@@ -2,381 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31318714C41
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010E6714C15
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjE2OhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
+        id S229718AbjE2Obf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjE2OhL (ORCPT
+        with ESMTP id S229478AbjE2ObO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:37:11 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85032100
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:36:52 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-97392066d04so502477066b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685371010; x=1687963010;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DtIowCWArhNAKDJ21t/Gz3FuvkA8KEPefFaFjHCeQr4=;
-        b=pCTcRPHfX3X1QhvHwCBNVTgzfn/Qm28cgRWSmlzGAohNnkVN4gHRNa/q16pJEcvXt1
-         /APenx4ADuC8k13hFw2PBKaCGpcgNcI/Wm2A3tnb2ElOQIN30A2r3Pc53PRSkb1jZDJR
-         x5S2w6uSizNScE+h8CbPJxfbCLKHyrVTlHoUwiuwEqna9V4iwK9zxQcqOwdh6ACNuuxb
-         YEwOiYh/EosOeCa1PIdL+Fo/4FOAe8VYrg7mGRK9/G3PC/25h7GnTFW0xrECMTtn3Wzv
-         HumEx6HtlqHcbYLNMVSdzc/wWFd/y5upyJFYNQvrpekQp8iQbhSQvEEtv8HChwIWgkOJ
-         nvew==
+        Mon, 29 May 2023 10:31:14 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2A4A0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:31:12 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-33832662ba5so44152325ab.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:31:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685371010; x=1687963010;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DtIowCWArhNAKDJ21t/Gz3FuvkA8KEPefFaFjHCeQr4=;
-        b=H8NfWgCCiLMyCZ3Kh5l4eg8yMsTNrNT5mmVhFu5bsHsFFZEyzWx20kYYnpVumA1PCO
-         GEln95Yykt1dmH/jSPu85U7c1NF8azx4LEELc0hWd8MY7hAB1B34SqHaJTCRM4fguc2b
-         fE3L6/QLrZMp2qF5bzlfAoNOW6wYY8MQOPyB7hqqMwGPAHTHlQ6yCQOS4XZtUUX0wSC7
-         JTVZm3mph0PAp0EfU6m48zACQInYpU5j9kYOn5i4sT/dpd+8X/BhuWnHYZNK0JfR2X4A
-         wjkxmOQMLPYbud8Kwy97571G++WFazc5BnyrCzms7AjxrkhO46Edr+Zc4G2NKBcb8uq2
-         J6vw==
-X-Gm-Message-State: AC+VfDwVIiKrlRqHXWYSHgLC4dkvOkvtW2vAF2SiPYE9MXdHpjYto8Bl
-        QiOMBfrP52uOEQiF5xaqffMdTQ==
-X-Google-Smtp-Source: ACHHUZ6ZdgKp3qcctbdXffjSB1OljMNkHMX5k/OVK97KqbCMJGQbzQJgmnum9XhXzvedFA0un68qVg==
-X-Received: by 2002:a17:907:c09:b0:971:eb29:a086 with SMTP id ga9-20020a1709070c0900b00971eb29a086mr13291571ejc.75.1685371010136;
-        Mon, 29 May 2023 07:36:50 -0700 (PDT)
-Received: from [127.0.0.1] (abordeaux-655-1-129-86.w90-5.abo.wanadoo.fr. [90.5.10.86])
-        by smtp.gmail.com with ESMTPSA id le8-20020a170907170800b0096f803afbe3sm5993654ejc.66.2023.05.29.07.36.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 07:36:49 -0700 (PDT)
-From:   Guillaume Ranquet <granquet@baylibre.com>
-Date:   Mon, 29 May 2023 16:31:05 +0200
-Subject: [PATCH v4 8/8] drm/mediatek: dpi: Add mt8195 hdmi to DPI driver
+        d=1e100.net; s=20221208; t=1685370672; x=1687962672;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kcy6OuZtdRNwc/jzZDtZWOVoC4LwS2/1EIUPcPzZysk=;
+        b=SqQzXpO1+1tdOlc1ux1rDNg+Rs7lFQyr8tS02Zo4qEtpor2F31q/+vMRQCpVwPSYMF
+         OpZ2hreh0ZDAxmxqX8SrKLPt3kgYHWIPFgCcKUIKq3Qia67Zww25weeMsGryPc45fZMT
+         +TatEAFDgowtLCjpraa1omgRXzQvRSNeF3rSSpEsFamxD6Itaa6NSktInbeY5QX3N60h
+         T5w2LELf1Dj9XxWwZVchgubBnzM7l6s7SUL9E3Ud0Ed7ekU9QedKWuiPIOInXbpvX58A
+         ez0K8Yu9s6OznsgK7zI8KbUrbR/B0D0WMxcHZS3gtj4rS+IpDOJ3TDsBb8aKHWXd2ZFH
+         jYMA==
+X-Gm-Message-State: AC+VfDweHPQj8nwQ6bz3VHZdXJaK2k0YqQmJAvFyJNaTx1PfeflX19Hc
+        CwJ8Vm3JmPTuNbIgTpXmjhIjLBdkvTDYcp8kPUGuBj8pNNa70BH/pw==
+X-Google-Smtp-Source: ACHHUZ7lqWN311dhhLfep6MLf69vWKCEyseYLBgHu90x/JmTpUCVg23pab3eJziJ+Bbe0EcCDycv6evADt9GUBH7HP4FQQd7dxQv
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20220919-v4-8-687f09a06dd9@baylibre.com>
-References: <20220919-v4-0-687f09a06dd9@baylibre.com>
-In-Reply-To: <20220919-v4-0-687f09a06dd9@baylibre.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
-        Jitao shi <jitao.shi@mediatek.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, mac.shen@mediatek.com,
-        stuart.lee@mediatek.com, Guillaume Ranquet <granquet@baylibre.com>
-X-Mailer: b4 0.13-dev
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d392:0:b0:331:2a69:96f9 with SMTP id
+ o18-20020a92d392000000b003312a6996f9mr3156984ilo.2.1685370672129; Mon, 29 May
+ 2023 07:31:12 -0700 (PDT)
+Date:   Mon, 29 May 2023 07:31:12 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003a2f8505fcd5f06b@google.com>
+Subject: [syzbot] [kernel?] WARNING: ODEBUG bug in __mod_timer
+From:   syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the DPI1 hdmi path support in mtk dpi driver
+Hello,
 
-Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+syzbot found the following issue on:
+
+HEAD commit:    44bf136283e5 Add linux-next specific files for 20230420
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1026a757c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ba413c0527139246
+dashboard link: https://syzkaller.appspot.com/bug?extid=7937ba6a50bdd00fffdf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/db069eb0e403/disk-44bf1362.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9f9f4ca6cfb8/vmlinux-44bf1362.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e53d01b894f7/bzImage-44bf1362.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com
+
+WARNING: CPU: 1 PID: 5171 at lib/debugobjects.c:505 debug_print_object+0x194/0x2c0 lib/debugobjects.c:505
+Modules linked in:
+CPU: 1 PID: 5171 Comm: kworker/1:5 Not tainted 6.3.0-rc7-next-20230420-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Workqueue: rcu_gp wait_rcu_exp_gp
+RIP: 0010:debug_print_object+0x194/0x2c0 lib/debugobjects.c:505
+Code: df 48 89 fe 48 c1 ee 03 80 3c 16 00 0f 85 c7 00 00 00 48 8b 14 dd c0 0f a7 8a 50 4c 89 ee 48 c7 c7 80 03 a7 8a e8 7c ec 35 fd <0f> 0b 58 83 05 86 75 63 0a 01 48 83 c4 20 5b 5d 41 5c 41 5d 41 5e
+RSP: 0018:ffffc900056af890 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 0000000000000000
+RDX: ffff88801e71d7c0 RSI: ffffffff814be0c7 RDI: 0000000000000001
+RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff8a4ecb40
+R13: ffffffff8aa70a60 R14: ffffc900056af950 R15: ffffffff817267d0
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020404030 CR3: 000000002bc8b000 CR4: 00000000003526e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ debug_object_assert_init+0x20f/0x310 lib/debugobjects.c:912
+ debug_timer_assert_init kernel/time/timer.c:792 [inline]
+ debug_assert_init kernel/time/timer.c:837 [inline]
+ __mod_timer+0x9b/0xe80 kernel/time/timer.c:1020
+ schedule_timeout+0x149/0x2b0 kernel/time/timer.c:2166
+ synchronize_rcu_expedited_wait_once kernel/rcu/tree_exp.h:572 [inline]
+ synchronize_rcu_expedited_wait kernel/rcu/tree_exp.h:624 [inline]
+ rcu_exp_wait_wake+0x2ae/0x1550 kernel/rcu/tree_exp.h:693
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x33e/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+
+
 ---
- drivers/gpu/drm/mediatek/mtk_dpi.c      | 121 ++++++++++++++++++++++++++++++--
- drivers/gpu/drm/mediatek/mtk_dpi_regs.h |   5 ++
- 2 files changed, 119 insertions(+), 7 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 948a53f1f4b3..b83a38e8bd60 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -9,12 +9,15 @@
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
- #include <linux/media-bus-format.h>
-+#include <linux/mfd/syscon.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/of_graph.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/soc/mediatek/mtk-mmsys.h>
-+#include <linux/regmap.h>
-+#include <linux/reset.h>
- #include <linux/types.h>
- 
- #include <video/videomode.h>
-@@ -67,11 +70,14 @@ struct mtk_dpi {
- 	struct drm_bridge *next_bridge;
- 	struct drm_connector *connector;
- 	void __iomem *regs;
-+	struct reset_control *reset_ctl;
- 	struct device *dev;
- 	struct device *mmsys_dev;
- 	struct clk *engine_clk;
-+	struct clk *dpi_ck_cg;
- 	struct clk *pixel_clk;
- 	struct clk *tvd_clk;
-+	struct clk *hdmi_cg;
- 	int irq;
- 	struct drm_display_mode mode;
- 	const struct mtk_dpi_conf *conf;
-@@ -138,6 +144,7 @@ struct mtk_dpi_yc_limit {
-  * @csc_enable_bit: Enable bit of CSC.
-  * @pixels_per_iter: Quantity of transferred pixels per iteration.
-  * @edge_cfg_in_mmsys: If the edge configuration for DPI's output needs to be set in MMSYS.
-+ * @is_internal_hdmi: True if this DPI block is directly connected to SoC internal HDMI block.
-  */
- struct mtk_dpi_conf {
- 	unsigned int (*cal_factor)(int clock);
-@@ -157,6 +164,7 @@ struct mtk_dpi_conf {
- 	u32 csc_enable_bit;
- 	u32 pixels_per_iter;
- 	bool edge_cfg_in_mmsys;
-+	bool is_internal_hdmi;
- };
- 
- static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val, u32 mask)
-@@ -471,8 +479,14 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
- 		return;
- 
- 	mtk_dpi_disable(dpi);
-+
-+	reset_control_rearm(dpi->reset_ctl);
-+
- 	clk_disable_unprepare(dpi->pixel_clk);
- 	clk_disable_unprepare(dpi->engine_clk);
-+	clk_disable_unprepare(dpi->dpi_ck_cg);
-+	clk_disable_unprepare(dpi->hdmi_cg);
-+	clk_disable_unprepare(dpi->tvd_clk);
- }
- 
- static int mtk_dpi_power_on(struct mtk_dpi *dpi)
-@@ -488,15 +502,44 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
- 		goto err_refcount;
- 	}
- 
-+	ret = clk_prepare_enable(dpi->tvd_clk);
-+	if (ret) {
-+		dev_err(dpi->dev, "Failed to enable tvd pll: %d\n", ret);
-+		goto err_engine;
-+	}
-+
-+	ret = clk_prepare_enable(dpi->hdmi_cg);
-+	if (ret) {
-+		dev_err(dpi->dev, "Failed to enable hdmi_cg clock: %d\n", ret);
-+		goto err_tvd;
-+	}
-+
-+	ret = clk_prepare_enable(dpi->dpi_ck_cg);
-+	if (ret) {
-+		dev_err(dpi->dev, "Failed to enable dpi_ck_cg clock: %d\n", ret);
-+		goto err_hdmi_cg;
-+	}
-+
- 	ret = clk_prepare_enable(dpi->pixel_clk);
- 	if (ret) {
- 		dev_err(dpi->dev, "Failed to enable pixel clock: %d\n", ret);
- 		goto err_pixel;
- 	}
- 
-+	reset_control_reset(dpi->reset_ctl);
-+
-+	if (dpi->pinctrl && dpi->pins_dpi)
-+		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
-+
- 	return 0;
- 
- err_pixel:
-+	clk_disable_unprepare(dpi->dpi_ck_cg);
-+err_hdmi_cg:
-+	clk_disable_unprepare(dpi->hdmi_cg);
-+err_tvd:
-+	clk_disable_unprepare(dpi->tvd_clk);
-+err_engine:
- 	clk_disable_unprepare(dpi->engine_clk);
- err_refcount:
- 	dpi->refcount--;
-@@ -541,7 +584,6 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
- 	else
- 		clk_set_rate(dpi->pixel_clk, vm.pixelclock);
- 
--
- 	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
- 
- 	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
-@@ -608,7 +650,16 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
- 	if (dpi->conf->support_direct_pin) {
- 		mtk_dpi_config_yc_map(dpi, dpi->yc_map);
- 		mtk_dpi_config_2n_h_fre(dpi);
--		mtk_dpi_dual_edge(dpi);
-+		/* DPI could be connecting to external bridge
-+		 * or internal HDMI encoder. */
-+		if (dpi->conf->is_internal_hdmi) {
-+			mtk_dpi_mask(dpi, DPI_CON, DPI_OUTPUT_1T1P_EN,
-+				     DPI_OUTPUT_1T1P_EN);
-+			mtk_dpi_mask(dpi, DPI_CON, DPI_INPUT_2P_EN,
-+				     DPI_INPUT_2P_EN);
-+		} else {
-+			mtk_dpi_dual_edge(dpi);
-+		}
- 		mtk_dpi_config_disable_edge(dpi);
- 	}
- 	if (dpi->conf->input_2pixel) {
-@@ -723,7 +774,10 @@ static void mtk_dpi_bridge_disable(struct drm_bridge *bridge)
- {
- 	struct mtk_dpi *dpi = bridge_to_dpi(bridge);
- 
--	mtk_dpi_power_off(dpi);
-+	if (dpi->conf->is_internal_hdmi)
-+		mtk_dpi_power_off(dpi);
-+	else
-+		mtk_dpi_disable(dpi);
- 
- 	if (dpi->pinctrl && dpi->pins_gpio)
- 		pinctrl_select_state(dpi->pinctrl, dpi->pins_gpio);
-@@ -772,14 +826,16 @@ void mtk_dpi_start(struct device *dev)
- {
- 	struct mtk_dpi *dpi = dev_get_drvdata(dev);
- 
--	mtk_dpi_power_on(dpi);
-+	if (!dpi->conf->is_internal_hdmi)
-+		mtk_dpi_power_on(dpi);
- }
- 
- void mtk_dpi_stop(struct device *dev)
- {
- 	struct mtk_dpi *dpi = dev_get_drvdata(dev);
- 
--	mtk_dpi_power_off(dpi);
-+	if (!dpi->conf->is_internal_hdmi)
-+		mtk_dpi_power_off(dpi);
- }
- 
- static int mtk_dpi_bind(struct device *dev, struct device *master, void *data)
-@@ -864,6 +920,11 @@ static unsigned int mt8183_calculate_factor(int clock)
- 		return 2;
- }
- 
-+static unsigned int mt8195_calculate_factor(int clock)
-+{
-+	return 1;
-+}
-+
- static unsigned int mt8195_dpintf_calculate_factor(int clock)
- {
- 	if (clock < 70000)
-@@ -989,6 +1050,24 @@ static const struct mtk_dpi_conf mt8192_conf = {
- 	.csc_enable_bit = CSC_ENABLE,
- };
- 
-+static const struct mtk_dpi_conf mt8195_conf = {
-+	.cal_factor = mt8195_calculate_factor,
-+	.max_clock_khz = 594000,
-+	.reg_h_fre_con = 0xe0,
-+	.output_fmts = mt8183_output_fmts,
-+	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
-+	.pixels_per_iter = 1,
-+	.is_ck_de_pol = true,
-+	.swap_input_support = true,
-+	.dimension_mask = HPW_MASK,
-+	.hvsize_mask = HSIZE_MASK,
-+	.channel_swap_shift = CH_SWAP,
-+	.yuv422_en_bit = YUV422_EN,
-+	.csc_enable_bit = CSC_ENABLE,
-+	.is_internal_hdmi = true,
-+	.support_direct_pin = true,
-+};
-+
- static const struct mtk_dpi_conf mt8195_dpintf_conf = {
- 	.cal_factor = mt8195_dpintf_calculate_factor,
- 	.max_clock_khz = 600000,
-@@ -1046,6 +1125,12 @@ static int mtk_dpi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	dpi->reset_ctl = devm_reset_control_get_optional_exclusive(dev, "dpi_on");
-+	if (IS_ERR(dpi->reset_ctl)) {
-+		dev_err(dev, "Failed to get reset_ctl: %ld\n", PTR_ERR(dpi->reset_ctl));
-+		return PTR_ERR(dpi->reset_ctl);
-+	}
-+
- 	dpi->engine_clk = devm_clk_get(dev, "engine");
- 	if (IS_ERR(dpi->engine_clk)) {
- 		ret = PTR_ERR(dpi->engine_clk);
-@@ -1055,7 +1140,26 @@ static int mtk_dpi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	dpi->pixel_clk = devm_clk_get(dev, "pixel");
-+	dpi->hdmi_cg = devm_clk_get_optional(dev, "hdmi_cg");
-+	if (IS_ERR(dpi->hdmi_cg)) {
-+		ret = PTR_ERR(dpi->hdmi_cg);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "Failed to get hdmi_cg clock: %d\n", ret);
-+
-+		return ret;
-+	}
-+
-+	dpi->dpi_ck_cg = devm_clk_get_optional(dev, "ck_cg");
-+	if (IS_ERR(dpi->dpi_ck_cg)) {
-+		ret = PTR_ERR(dpi->dpi_ck_cg);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "Failed to get dpi ck cg clock: %d\n",
-+				ret);
-+
-+		return ret;
-+	}
-+
-+	dpi->pixel_clk = devm_clk_get_optional(dev, "pixel");
- 	if (IS_ERR(dpi->pixel_clk)) {
- 		ret = PTR_ERR(dpi->pixel_clk);
- 		if (ret != -EPROBE_DEFER)
-@@ -1064,7 +1168,7 @@ static int mtk_dpi_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	dpi->tvd_clk = devm_clk_get(dev, "pll");
-+	dpi->tvd_clk = devm_clk_get_optional(dev, "pll");
- 	if (IS_ERR(dpi->tvd_clk)) {
- 		ret = PTR_ERR(dpi->tvd_clk);
- 		if (ret != -EPROBE_DEFER)
-@@ -1134,6 +1238,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
- 	{ .compatible = "mediatek,mt8195-dp-intf",
- 	  .data = &mt8195_dpintf_conf,
- 	},
-+	{ .compatible = "mediatek,mt8195-dpi",
-+	  .data = &mt8195_conf,
-+	},
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, mtk_dpi_of_ids);
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-index 62bd4931b344..653ef4b93a97 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi_regs.h
-@@ -43,6 +43,11 @@
- #define DPINTF_YUV422_EN		BIT(24)
- #define DPINTF_CSC_ENABLE		BIT(26)
- #define DPINTF_INPUT_2P_EN		BIT(29)
-+#define DPI_OUTPUT_1T1P_EN		BIT(24)
-+#define DPI_INPUT_2P_EN			BIT(25)
-+#define DPI_EXT_VSYNC_EN		BIT(26)
-+#define DPI_RGB565_EN			BIT(27)
-+#define DPI_RGB880_EN			BIT(28)
- 
- #define DPI_OUTPUT_SETTING	0x14
- #define CH_SWAP				0
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
--- 
-2.40.0
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
