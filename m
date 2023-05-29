@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACF0714F0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDC2714F0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjE2Rtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 13:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S229595AbjE2Rtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 13:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjE2Rtk (ORCPT
+        with ESMTP id S229473AbjE2Rtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 13:49:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC226C7;
-        Mon, 29 May 2023 10:49:39 -0700 (PDT)
+        Mon, 29 May 2023 13:49:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEE7CD;
+        Mon, 29 May 2023 10:49:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57E2A6157D;
-        Mon, 29 May 2023 17:49:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5210C433D2;
-        Mon, 29 May 2023 17:49:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 451CC61D7E;
+        Mon, 29 May 2023 17:49:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F31E9C433EF;
+        Mon, 29 May 2023 17:49:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685382578;
-        bh=w6IvOvi08pEaUqTJh5LkFUiOSX8C9pAinrnPh+Qkx/Y=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M35iP0f1ZNqSw9RuP/Qwdpofhhr4ANuwhjhUGCsPjDVavvPGY9TcevIa01mX3Fb0Q
-         xRvsBSGd96SbsEdBeVcO0v0mxC2NmuNPwkGyZD6b7ggZW29T99f8ug2Vj6gs2zbs1u
-         Ll/D7mGtpgthzi8Kgh2mz0H9Sj4ofamaeNB9w9Td9IbTn87S2eyWSL1s4shEynUpWK
-         SO+CrEPcZ8BcfMB+LOwJq2B2s9HEBAjRlNX9ozKs+cdhQTMsf5/cKoBNCtfqY49JeN
-         yF9NW3gZt7sTlCz12aaVnvPhfvd9MxP2UeW2feYrneEygPrNf2CCFbSNmwOSUHGWYx
-         umiEbMCmWhHtA==
+        s=k20201202; t=1685382579;
+        bh=gas9HV6Oybcrt04Wh/oZpwwH73vnTB+e3dDemnX8cwQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Be9UoCluJijqHwQffuDToehZLps59N6Uf8cZkLsPUBs9XSnyp5E55B2glJ/m5qbND
+         sJn5SXkkDkqSyPWHZK4AVdWXcs7r5QU+/hrEeVOX7NbnX5i9xFUpOyCjNaCz12Ww+B
+         66+rjAl/dW93Won078uEEP6dVflRW6kDgYZhNx5OKzbItYbu5Wrm7cabf143u6aolY
+         2tZaRiJqBgNM57wfr1PMwvSAywDQ3GqUIFFY0QTzZ1XEfXNOVrUA6jg/mbOhrhlJN8
+         5/pGQ89eX2NeQ9JLQ5qF0oZxW616v9lNHcASu0J3i/Sy8E2YflCPFBKE8rdIlGKGo9
+         LKyHOw1AiyY3Q==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     linux-phy@lists.infradead.org,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, dmitry.baryshkov@linaro.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bhupesh.linux@gmail.com,
-        konrad.dybcio@linaro.org
-Subject: Re: (subset) [PATCH v11 0/4] Enable USB SS qmp phy for Qualcomm SM6115 SoC
-Date:   Mon, 29 May 2023 10:53:22 -0700
-Message-Id: <168538280003.437034.14219843180641577263.b4-ty@kernel.org>
+To:     Kathiravan T <quic_kathirav@quicinc.com>, robh+dt@kernel.org,
+        conor+dt@kernel.org, devicetree@vger.kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org
+Subject: Re: [PATCH 0/2] Add initial support for RDP442 of IPQ5332 family
+Date:   Mon, 29 May 2023 10:53:23 -0700
+Message-Id: <168538280003.437034.4117872163550463058.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516150511.2346357-1-bhupesh.sharma@linaro.org>
-References: <20230516150511.2346357-1-bhupesh.sharma@linaro.org>
+In-Reply-To: <20230509160133.3794-1-quic_kathirav@quicinc.com>
+References: <20230509160133.3794-1-quic_kathirav@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,27 +56,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 20:35:07 +0530, Bhupesh Sharma wrote:
-> Changes since v10:
-> -----------------
-> - v10 can be seen here: https://lore.kernel.org/lkml/20230502053534.1240553-4-bhupesh.sharma@linaro.org/
-> - Rebased on phy/next, as Vinod was seeing rebasing issues with v9 while
->   applying.
+On Tue, 9 May 2023 21:31:31 +0530, Kathiravan T wrote:
+> Add the initial device tree support for the Reference Design
+> Platform(RDP) 442 based on IPQ5332 family of SoC. This patch carries
+> the support for Console UART, SPI NOR, eMMC and I2C.
 > 
-> Changes since v9:
-> -----------------
-> - v9 can be seen here: https://lore.kernel.org/linux-arm-msm/20230501192432.1220727-1-bhupesh.sharma@linaro.org/
-> - Addressed review comments from Dmitry on v9, regarding register size
->   and pcs_misc offset handling. Also collected his R-Bs.
+> Kathiravan T (2):
+>   dt-bindings: arm: qcom: document MI01.3 board based on IPQ5332 family
+>   arm64: dts: qcom: ipq5332: add support for the RDP442 variant
 > 
 > [...]
 
 Applied, thanks!
 
-[3/4] arm64: dts: qcom: sm6115: Add USB SS qmp phy node
-      commit: 9dd5f6dba72928e1f16b259fb1c984f80bfa4120
-[4/4] arm64: dts: qcom: qrb4210-rb2: Enable USB node
-      commit: eaa53a85748d58c4398c5c9acaa8d01d92adbb67
+[1/2] dt-bindings: arm: qcom: document MI01.3 board based on IPQ5332 family
+      commit: 68c4c67156ec0e0e1abe11a90e4bb9bfe34ca722
+[2/2] arm64: dts: qcom: ipq5332: add support for the RDP442 variant
+      commit: a782318023f339213f29372e2ecae696c0ca4a69
 
 Best regards,
 -- 
