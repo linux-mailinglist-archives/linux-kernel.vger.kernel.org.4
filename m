@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DD17149B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83ED07149B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjE2MuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S229734AbjE2Mu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjE2MuP (ORCPT
+        with ESMTP id S229714AbjE2MuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:50:15 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A115188;
-        Mon, 29 May 2023 05:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685364573; x=1716900573;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sihrqxGXOegLfJu5K0vAKoVsedsMzHotWvqPkMnnUEw=;
-  b=uDO2Z0sMLsXYOmn1XkSLjoYsvw17laPvRLlTof4rL2JjtyTbblKp9Mze
-   wOWWYqnjJeO+q00HWDAUTBzog5p/71Epn9o85LVr8Hg14kF2mpT4IkqxR
-   1k7GUNmH1qRvGRw0TFTLSY5PiYS6iTKkLItJUHWk1otmY219kEIrQp/6n
-   JkO/WBIug1mUmzs9GkL4L5TUvdU7uintceEFY0rQDNca3vPBvKJTUIO2L
-   feiRoE9r+yH//H8YPF+hyET20SOC2ltDNXNKv39sCxfSc0DzOUq/59//w
-   s9p+k5KDkIQfu/B4hZiy6JcGHzN1VV915IiWLrSUIHMG/TuakwYAT15o4
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="asc'?scan'208";a="154432424"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 May 2023 05:49:01 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 29 May 2023 05:49:01 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 29 May 2023 05:48:58 -0700
-Date:   Mon, 29 May 2023 13:48:36 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <Claudiu.Beznea@microchip.com>
-CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <Nicolas.Ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] dt-bindings: timer: atmel,at91sam9260-pit:
- convert to yaml
-Message-ID: <20230529-schematic-abrasion-a06a29481ace@wendy>
-References: <20230529062604.1498052-1-claudiu.beznea@microchip.com>
- <20230529062604.1498052-3-claudiu.beznea@microchip.com>
- <20230529-chuck-turbofan-a8aabbdd9341@wendy>
- <f4c04190-c90e-bf5f-f666-c979a7aee8ce@microchip.com>
+        Mon, 29 May 2023 08:50:23 -0400
+Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4397F3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:49:51 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 3cJHqJjQi7PLm3cJHqd6v7; Mon, 29 May 2023 14:49:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685364558;
+        bh=XoQbgvxypteKRvYSbooN/t9qEyY5FoztBSboiKjXBiQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ZUl3C+/pW2OBrpSbLR2US9qae0y7TDuebI1UT8hnIJpqqhgkWIZKKMxycl1S8Kwj1
+         u7CwGXoGvGndNcXntCrEbHCNbtICeSMWiAhl94fqu0xIQmU4vzzZbz5B3tZp9B1odC
+         N33eNi0RIl1bELXMryoxSxUOQWWrD4JF5Pyw0doiwOue5cFwgSIYdV9SWqALvx37cS
+         uTHWr0rPggRCPpel2Cn17l4eW10bcw0bG9Sr4FWMukmUgn0bTwDhxyRXygCVMGqud4
+         oieR2iQn3PtBjCz5Ol2vAen+9MKF9bNhbj/eKcGyk7vOdrYoUT7m5nc/IYIidZIij+
+         bvnClHqeKsq4g==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 29 May 2023 14:49:18 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <92bc6f3e-4463-e0fe-5cab-54c6c5eecd3f@wanadoo.fr>
+Date:   Mon, 29 May 2023 14:49:15 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="QnBF0FcDx3VBpqKu"
-Content-Disposition: inline
-In-Reply-To: <f4c04190-c90e-bf5f-f666-c979a7aee8ce@microchip.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3] hv_netvsc: Allocate rx indirection table size
+ dynamically
+Content-Language: fr
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Simon Horman <simon.horman@corigine.com>
+References: <1685080949-18316-1-git-send-email-shradhagupta@linux.microsoft.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <1685080949-18316-1-git-send-email-shradhagupta@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,66 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---QnBF0FcDx3VBpqKu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Le 26/05/2023 à 08:02, Shradha Gupta a écrit :
+> Allocate the size of rx indirection table dynamically in netvsc
+> from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
+> query instead of using a constant value of ITAB_NUM.
+> 
+> Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+> Tested-on: Ubuntu22 (azure VM, SKU size: Standard_F72s_v2)
+> Testcases:
+> 1. ethtool -x eth0 output
+> 2. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-Synthetic
+> 3. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-SRIOV
+> 
+> ---
 
-On Mon, May 29, 2023 at 12:32:49PM +0000, Claudiu.Beznea@microchip.com wrot=
-e:
-> On 29.05.2023 15:17, Conor Dooley wrote:
-> > On Mon, May 29, 2023 at 09:26:02AM +0300, Claudiu Beznea wrote:
-> >> +        interrupts:
-> >> +          description:
-> >> +            Contain interrupt for the PIT which is the IRQ line share=
-d across all
-> >> +            System Controller members.
-> >=20
-> > I think you should drop this & the corresponding section below, since
-> > both PIT and PIT64 have a single interrupt.
->=20
-> OK. Just wanted to emphasize with this that in case of PIT the interrupt
-> may be shared with other IPs.
+[...]
 
-Hmm. Perhaps for the other patch, keep the description then, and for this
-one remove the description from the else branch & add explain what "all
-system controller members" actually means here? It probably made sense in
-the txt binding, but "system controller" has lost its context here.
-Maybe something like:
-"Shared interrupt between the PIT and other functions of the system
-controller, for example, the watchdog, trumpet and airhorn"?
+> @@ -1596,11 +1608,18 @@ void rndis_filter_device_remove(struct hv_device *dev,
+>   				struct netvsc_device *net_dev)
+>   {
+>   	struct rndis_device *rndis_dev = net_dev->extension;
+> +	struct net_device *net = hv_get_drvdata(dev);
+> +	struct net_device_context *ndc = netdev_priv(net);
+>   
+>   	/* Halt and release the rndis device */
+>   	rndis_filter_halt_device(net_dev, rndis_dev);
+>   
+>   	netvsc_device_remove(dev);
+> +
+> +	ndc->rx_table_sz = 0;
+> +	kfree(ndc->rx_table);
+> +	ndc->rx_table = NULL;
+> +
 
-Cheers,
-Conor.
+Nit: useless empty NL
 
-> >> +        clocks:
-> >> +          maxItems: 1
-> >> +
-> >> +    else:
-> >> +      properties:
-> >> +        interrupts:
-> >> +          description:
-> >> +            PIT64B peripheral interrupt identifier.
-> >> +        clocks:
-> >> +          minItems: 2
-> >> +        clock-names:
-> >> +          items:
-> >> +            - const: pclk
-> >> +            - const: gclk
-> >> +      required:
-> >> +        - clock-names
-> >=20
->=20
+>   }
+>   
+>   int rndis_filter_open(struct netvsc_device *nvdev)
 
---QnBF0FcDx3VBpqKu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHSfIwAKCRB4tDGHoIJi
-0jihAP9RPI9uRTfWz1IZRSiam+UQ+nEDIQA6miPvid++71X53gD/WqPNahZzotuJ
-FT+ZEVVKizduAnFCebdolxza7JIw6Ac=
-=16Ml
------END PGP SIGNATURE-----
-
---QnBF0FcDx3VBpqKu--
