@@ -2,484 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA89A71423D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 05:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D09D714243
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 05:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjE2DQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 23:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        id S229815AbjE2DSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 23:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjE2DQo (ORCPT
+        with ESMTP id S229570AbjE2DSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 23:16:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD3DAF;
-        Sun, 28 May 2023 20:16:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EB7461009;
-        Mon, 29 May 2023 03:16:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37735C433EF;
-        Mon, 29 May 2023 03:16:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685330202;
-        bh=SuwHK+3uvnhmr7CGQ1Uh5iGkHRJq+JULE8llPZ/Laq8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PKz0TDcEzwaZcSqsXJsYOIBjL8QpVfPVFouOafv2xxKU6fm76PRcsY6l2kiP8DBCd
-         48htF2muGltMOdpYpANp+Y+EyPNOJtrs8bCNEcNQ+gGdeEwk86aAjnhnDdHN/HEZzn
-         2RePuI7cPBCjuUTz9qrhIy+ACPkMlrpskbJAdJSe3xwGHJG98rZGMscP4n1bjH2aB6
-         3XGyuEkk3LFFt3xZ/mFo8AB/Mff6tZUhCaeLWymU3Tbl092VUUFncycFpMFBkGn3TX
-         StcMa0/9paxbpDcI2APSaX8jgVvQqtPDFHOtj5+KwK2h5b1OPJtdrOUbPgeQ+ndysB
-         HlwsUL+K4W2Xg==
-Date:   Mon, 29 May 2023 12:16:38 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Florent Revest <revest@chromium.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Re: [PATCH v13 03/12] tracing/probes: Add fprobe events for tracing
- function entry and exit.
-Message-Id: <20230529121638.74b94a2d85eb384d9b02c719@kernel.org>
-In-Reply-To: <CABRcYm+esb8J2O1v6=C+h+HSa5NxraPUgo63w7-iZj0CXbpusg@mail.gmail.com>
-References: <168507466597.913472.10572827237387849017.stgit@mhiramat.roam.corp.google.com>
-        <168507469754.913472.6112857614708350210.stgit@mhiramat.roam.corp.google.com>
-        <CABRcYm+esb8J2O1v6=C+h+HSa5NxraPUgo63w7-iZj0CXbpusg@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Sun, 28 May 2023 23:18:48 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9A7B1;
+        Sun, 28 May 2023 20:18:46 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QV12V5Qn2z4f3mJM;
+        Mon, 29 May 2023 11:18:42 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCnD7ORGXRkW4rJKQ--.54725S3;
+        Mon, 29 May 2023 11:18:43 +0800 (CST)
+Subject: Re: [PATCH -next v2 7/7] md/raid1-10: limit the number of plugged bio
+To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, akpm@osdl.org, neilb@suse.de,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230426082031.1299149-1-yukuai1@huaweicloud.com>
+ <20230426082031.1299149-8-yukuai1@huaweicloud.com>
+ <CALTww2-yTsHXNFgkAVu0v++HHahZCnvXEUv2qJqbvcGUhKanDw@mail.gmail.com>
+ <5e9852fe-0d47-92fc-f6a9-16d028d09ad4@huaweicloud.com>
+ <CALTww28ur_S0UpGQqq0TubSgkxGG7dicc1ZKrJ3Pno4CpSOWUw@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <25279079-2600-b0d3-5279-caaf6f664d71@huaweicloud.com>
+Date:   Mon, 29 May 2023 11:18:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <CALTww28ur_S0UpGQqq0TubSgkxGG7dicc1ZKrJ3Pno4CpSOWUw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgCnD7ORGXRkW4rJKQ--.54725S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF4UXF4DuF48Xry5Ar4UXFb_yoW7Aw45pw
+        4Uta4YkFWUJrW7Xw1jq3WjvF1ftw4DWrWUZr95G343XF9FqFy7Wa15JFWrur1kZrnxGFy7
+        ZFn8KrZxWF15tFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWU
+        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 May 2023 21:38:44 +0200
-Florent Revest <revest@chromium.org> wrote:
+Hi,
 
-> On Fri, May 26, 2023 at 6:18 AM Masami Hiramatsu (Google)
-> <mhiramat@kernel.org> wrote:
-> >
-> > [...] Since
-> > CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
-> > it is not available if the architecture only supports
-> > CONFIG_DYNAMIC_FTRACE_WITH_ARGS. And that means kprobe events can not
-> > probe function entry/exit effectively on such architecture.
-> > But this can be solved if the dynamic events supports fprobe events.
+在 2023/05/29 11:10, Xiao Ni 写道:
+> On Mon, May 29, 2023 at 10:20 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> Hi,
+>>
+>> 在 2023/05/29 10:08, Xiao Ni 写道:
+>>> Hi Kuai
+>>>
+>>> There is a limitation of the memory in your test. But for most
+>>> situations, customers should not set this. Can this change introduce a
+>>> performance regression against other situations?
+>>
+>> Noted that this limitation is just to triggered writeback as soon as
+>> possible in the test, and it's 100% sure real situations can trigger
+>> dirty pages write back asynchronously and continue to produce new dirty
+>> pages.
 > 
-> Currently CONFIG_FPROBE also requires CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> so iiuc this will only be true when we'll have migrated fprobe to use
-> ftrace_regs instead of pt_regs right ?
+> Hi
+> 
+> I'm confused here. If we want to trigger write back quickly, it needs
+> to set these two values with a smaller number, rather than 0 and 60.
+> Right?
 
-Sorry for confusion, yes, that's right. Currently does, but I will remove
-that.
+60 is not required, I'll remove this setting.
 
+0 just means write back if there are any dirty pages.
+>>
+>> If a lot of bio is not plugged, then it's the same as before; if a lot
+>> of bio is plugged, noted that before this patchset, these bio will spent
+>> quite a long time in plug, and hence I think performance should be
+>> better.
 > 
-> We discussed having fprobe use ftrace_regs instead of pt_regs in the
-> past and I even had a proof of concept branch at one point but this
-> patch seems to make this transition quite a bit harder. Have you tried
-> to make fprobe work on ftrace_regs on top of this patch ?
+> Hmm, it depends on if it's sequential or not? If it's a big io
+> request, can it miss the merge opportunity?
 
-No, not yet, but taht should not be so hard. Let me try.
+The bio will still be merged to underlying disks' rq(if it's rq based),
+underlying disk won't flush plug untill the number of request exceed
+threshold.
 
-Thank you!
+Thanks,
+Kuai
+> 
+> Regards
+> Xiao
+> 
+>>
+>> Thanks,
+>> Kuai
+>>>
+>>> Best Regards
+>>> Xiao
+>>>
+>>> On Wed, Apr 26, 2023 at 4:24 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>>>
+>>>> From: Yu Kuai <yukuai3@huawei.com>
+>>>>
+>>>> bio can be added to plug infinitely, and following writeback test can
+>>>> trigger huge amount of plugged bio:
+>>>>
+>>>> Test script:
+>>>> modprobe brd rd_nr=4 rd_size=10485760
+>>>> mdadm -CR /dev/md0 -l10 -n4 /dev/ram[0123] --assume-clean
+>>>> echo 0 > /proc/sys/vm/dirty_background_ratio
+>>>> echo 60 > /proc/sys/vm/dirty_ratio
+>>>> fio -filename=/dev/md0 -ioengine=libaio -rw=write -bs=4k -numjobs=1 -iodepth=128 -name=test
+>>>>
+>>>> Test result:
+>>>> Monitor /sys/block/md0/inflight will found that inflight keep increasing
+>>>> until fio finish writing, after running for about 2 minutes:
+>>>>
+>>>> [root@fedora ~]# cat /sys/block/md0/inflight
+>>>>          0  4474191
+>>>>
+>>>> Fix the problem by limiting the number of plugged bio based on the number
+>>>> of copies for original bio.
+>>>>
+>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>>> ---
+>>>>    drivers/md/raid1-10.c | 9 ++++++++-
+>>>>    drivers/md/raid1.c    | 2 +-
+>>>>    drivers/md/raid10.c   | 2 +-
+>>>>    3 files changed, 10 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.c
+>>>> index 98d678b7df3f..35fb80aa37aa 100644
+>>>> --- a/drivers/md/raid1-10.c
+>>>> +++ b/drivers/md/raid1-10.c
+>>>> @@ -21,6 +21,7 @@
+>>>>    #define IO_MADE_GOOD ((struct bio *)2)
+>>>>
+>>>>    #define BIO_SPECIAL(bio) ((unsigned long)bio <= 2)
+>>>> +#define MAX_PLUG_BIO 32
+>>>>
+>>>>    /* for managing resync I/O pages */
+>>>>    struct resync_pages {
+>>>> @@ -31,6 +32,7 @@ struct resync_pages {
+>>>>    struct raid1_plug_cb {
+>>>>           struct blk_plug_cb      cb;
+>>>>           struct bio_list         pending;
+>>>> +       unsigned int            count;
+>>>>    };
+>>>>
+>>>>    static void rbio_pool_free(void *rbio, void *data)
+>>>> @@ -127,7 +129,7 @@ static inline void md_submit_write(struct bio *bio)
+>>>>    }
+>>>>
+>>>>    static inline bool md_add_bio_to_plug(struct mddev *mddev, struct bio *bio,
+>>>> -                                     blk_plug_cb_fn unplug)
+>>>> +                                     blk_plug_cb_fn unplug, int copies)
+>>>>    {
+>>>>           struct raid1_plug_cb *plug = NULL;
+>>>>           struct blk_plug_cb *cb;
+>>>> @@ -147,6 +149,11 @@ static inline bool md_add_bio_to_plug(struct mddev *mddev, struct bio *bio,
+>>>>
+>>>>           plug = container_of(cb, struct raid1_plug_cb, cb);
+>>>>           bio_list_add(&plug->pending, bio);
+>>>> +       if (++plug->count / MAX_PLUG_BIO >= copies) {
+>>>> +               list_del(&cb->list);
+>>>> +               cb->callback(cb, false);
+>>>> +       }
+>>>> +
+>>>>
+>>>>           return true;
+>>>>    }
+>>>> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+>>>> index 639e09cecf01..c6066408a913 100644
+>>>> --- a/drivers/md/raid1.c
+>>>> +++ b/drivers/md/raid1.c
+>>>> @@ -1562,7 +1562,7 @@ static void raid1_write_request(struct mddev *mddev, struct bio *bio,
+>>>>                                                 r1_bio->sector);
+>>>>                   /* flush_pending_writes() needs access to the rdev so...*/
+>>>>                   mbio->bi_bdev = (void *)rdev;
+>>>> -               if (!md_add_bio_to_plug(mddev, mbio, raid1_unplug)) {
+>>>> +               if (!md_add_bio_to_plug(mddev, mbio, raid1_unplug, disks)) {
+>>>>                           spin_lock_irqsave(&conf->device_lock, flags);
+>>>>                           bio_list_add(&conf->pending_bio_list, mbio);
+>>>>                           spin_unlock_irqrestore(&conf->device_lock, flags);
+>>>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+>>>> index bd9e655ca408..7135cfaf75db 100644
+>>>> --- a/drivers/md/raid10.c
+>>>> +++ b/drivers/md/raid10.c
+>>>> @@ -1306,7 +1306,7 @@ static void raid10_write_one_disk(struct mddev *mddev, struct r10bio *r10_bio,
+>>>>
+>>>>           atomic_inc(&r10_bio->remaining);
+>>>>
+>>>> -       if (!md_add_bio_to_plug(mddev, mbio, raid10_unplug)) {
+>>>> +       if (!md_add_bio_to_plug(mddev, mbio, raid10_unplug, conf->copies)) {
+>>>>                   spin_lock_irqsave(&conf->device_lock, flags);
+>>>>                   bio_list_add(&conf->pending_bio_list, mbio);
+>>>>                   spin_unlock_irqrestore(&conf->device_lock, flags);
+>>>> --
+>>>> 2.39.2
+>>>>
+>>>
+>>> .
+>>>
+>>
+> 
+> .
+> 
 
-> 
-> > diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-> > new file mode 100644
-> > index 000000000000..48dbbc72b7dd
-> > --- /dev/null
-> > +++ b/kernel/trace/trace_fprobe.c
-> > @@ -0,0 +1,1053 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Fprobe-based tracing events
-> > + * Copyright (C) 2022 Google LLC.
-> > + */
-> > +#define pr_fmt(fmt)    "trace_fprobe: " fmt
-> > +
-> > +#include <linux/fprobe.h>
-> > +#include <linux/module.h>
-> > +#include <linux/rculist.h>
-> > +#include <linux/security.h>
-> > +#include <linux/uaccess.h>
-> > +
-> > +#include "trace_dynevent.h"
-> > +#include "trace_probe.h"
-> > +#include "trace_probe_kernel.h"
-> > +#include "trace_probe_tmpl.h"
-> > +
-> > +#define FPROBE_EVENT_SYSTEM "fprobes"
-> > +#define RETHOOK_MAXACTIVE_MAX 4096
-> > +
-> > +static int trace_fprobe_create(const char *raw_command);
-> > +static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev);
-> > +static int trace_fprobe_release(struct dyn_event *ev);
-> > +static bool trace_fprobe_is_busy(struct dyn_event *ev);
-> > +static bool trace_fprobe_match(const char *system, const char *event,
-> > +                       int argc, const char **argv, struct dyn_event *ev);
-> > +
-> > +static struct dyn_event_operations trace_fprobe_ops = {
-> > +       .create = trace_fprobe_create,
-> > +       .show = trace_fprobe_show,
-> > +       .is_busy = trace_fprobe_is_busy,
-> > +       .free = trace_fprobe_release,
-> > +       .match = trace_fprobe_match,
-> > +};
-> > +
-> > +/*
-> > + * Fprobe event core functions
-> > + */
-> > +struct trace_fprobe {
-> > +       struct dyn_event        devent;
-> > +       struct fprobe           fp;
-> > +       const char              *symbol;
-> > +       struct trace_probe      tp;
-> > +};
-> > +
-> > +static bool is_trace_fprobe(struct dyn_event *ev)
-> > +{
-> > +       return ev->ops == &trace_fprobe_ops;
-> > +}
-> > +
-> > +static struct trace_fprobe *to_trace_fprobe(struct dyn_event *ev)
-> > +{
-> > +       return container_of(ev, struct trace_fprobe, devent);
-> > +}
-> > +
-> > +/**
-> > + * for_each_trace_fprobe - iterate over the trace_fprobe list
-> > + * @pos:       the struct trace_fprobe * for each entry
-> > + * @dpos:      the struct dyn_event * to use as a loop cursor
-> > + */
-> > +#define for_each_trace_fprobe(pos, dpos)       \
-> > +       for_each_dyn_event(dpos)                \
-> > +               if (is_trace_fprobe(dpos) && (pos = to_trace_fprobe(dpos)))
-> > +
-> > +static bool trace_fprobe_is_return(struct trace_fprobe *tf)
-> > +{
-> > +       return tf->fp.exit_handler != NULL;
-> > +}
-> > +
-> > +static const char *trace_fprobe_symbol(struct trace_fprobe *tf)
-> > +{
-> > +       return tf->symbol ? tf->symbol : "unknown";
-> > +}
-> > +
-> > +static bool trace_fprobe_is_busy(struct dyn_event *ev)
-> > +{
-> > +       struct trace_fprobe *tf = to_trace_fprobe(ev);
-> > +
-> > +       return trace_probe_is_enabled(&tf->tp);
-> > +}
-> > +
-> > +static bool trace_fprobe_match_command_head(struct trace_fprobe *tf,
-> > +                                           int argc, const char **argv)
-> > +{
-> > +       char buf[MAX_ARGSTR_LEN + 1];
-> > +
-> > +       if (!argc)
-> > +               return true;
-> > +
-> > +       snprintf(buf, sizeof(buf), "%s", trace_fprobe_symbol(tf));
-> > +       if (strcmp(buf, argv[0]))
-> > +               return false;
-> > +       argc--; argv++;
-> > +
-> > +       return trace_probe_match_command_args(&tf->tp, argc, argv);
-> > +}
-> > +
-> > +static bool trace_fprobe_match(const char *system, const char *event,
-> > +                       int argc, const char **argv, struct dyn_event *ev)
-> > +{
-> > +       struct trace_fprobe *tf = to_trace_fprobe(ev);
-> > +
-> > +       if (event[0] != '\0' && strcmp(trace_probe_name(&tf->tp), event))
-> > +               return false;
-> > +
-> > +       if (system && strcmp(trace_probe_group_name(&tf->tp), system))
-> > +               return false;
-> > +
-> > +       return trace_fprobe_match_command_head(tf, argc, argv);
-> > +}
-> > +
-> > +static bool trace_fprobe_is_registered(struct trace_fprobe *tf)
-> > +{
-> > +       return fprobe_is_registered(&tf->fp);
-> > +}
-> > +
-> > +/*
-> > + * Note that we don't verify the fetch_insn code, since it does not come
-> > + * from user space.
-> > + */
-> > +static int
-> > +process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
-> > +                  void *base)
-> > +{
-> > +       struct pt_regs *regs = rec;
-> 
-> I gave it a try this week and it was mostly a matter of replacing
-> pt_regs with ftrace_regs in this file. Like here for example. Not too
-> bad so far.
-> 
-> > +       unsigned long val;
-> > +       int ret;
-> > +
-> > +retry:
-> > +       /* 1st stage: get value from context */
-> > +       switch (code->op) {
-> > +       case FETCH_OP_STACK:
-> > +               val = regs_get_kernel_stack_nth(regs, code->param);
-> 
-> This does not have a ftrace_regs equivalent at the moment. I suppose
-> we could introduce one without too much effort so that's probably ok.
-> 
-> > +               break;
-> > +       case FETCH_OP_STACKP:
-> > +               val = kernel_stack_pointer(regs);
-> > +               break;
-> > +       case FETCH_OP_RETVAL:
-> > +               val = regs_return_value(regs);
-> > +               break;
-> > +#ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-> > +       case FETCH_OP_ARG:
-> > +               val = regs_get_kernel_argument(regs, code->param);
-> > +               break;
-> > +#endif
-> > +       case FETCH_NOP_SYMBOL:  /* Ignore a place holder */
-> > +               code++;
-> > +               goto retry;
-> > +       default:
-> > +               ret = process_common_fetch_insn(code, &val);
-> > +               if (ret < 0)
-> > +                       return ret;
-> > +       }
-> > +       code++;
-> > +
-> > +       return process_fetch_insn_bottom(code, val, dest, base);
-> > +}
-> > +NOKPROBE_SYMBOL(process_fetch_insn)
-> > +
-> > +/* function entry handler */
-> > +static nokprobe_inline void
-> > +__fentry_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> > +                   struct pt_regs *regs,
-> > +                   struct trace_event_file *trace_file)
-> > +{
-> > +       struct fentry_trace_entry_head *entry;
-> > +       struct trace_event_call *call = trace_probe_event_call(&tf->tp);
-> > +       struct trace_event_buffer fbuffer;
-> > +       int dsize;
-> > +
-> > +       if (WARN_ON_ONCE(call != trace_file->event_call))
-> > +               return;
-> > +
-> > +       if (trace_trigger_soft_disabled(trace_file))
-> > +               return;
-> > +
-> > +       dsize = __get_data_size(&tf->tp, regs);
-> > +
-> > +       entry = trace_event_buffer_reserve(&fbuffer, trace_file,
-> > +                                          sizeof(*entry) + tf->tp.size + dsize);
-> > +       if (!entry)
-> > +               return;
-> > +
-> > +       fbuffer.regs = regs;
-> > +       entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
-> > +       entry->ip = entry_ip;
-> > +       store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
-> > +
-> > +       trace_event_buffer_commit(&fbuffer);
-> > +}
-> > +
-> > +static void
-> > +fentry_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> > +                 struct pt_regs *regs)
-> > +{
-> > +       struct event_file_link *link;
-> > +
-> > +       trace_probe_for_each_link_rcu(link, &tf->tp)
-> > +               __fentry_trace_func(tf, entry_ip, regs, link->file);
-> > +}
-> > +NOKPROBE_SYMBOL(fentry_trace_func);
-> > +
-> > +/* Kretprobe handler */
-> > +static nokprobe_inline void
-> > +__fexit_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> > +                  unsigned long ret_ip, struct pt_regs *regs,
-> > +                  struct trace_event_file *trace_file)
-> > +{
-> > +       struct fexit_trace_entry_head *entry;
-> > +       struct trace_event_buffer fbuffer;
-> > +       struct trace_event_call *call = trace_probe_event_call(&tf->tp);
-> > +       int dsize;
-> > +
-> > +       if (WARN_ON_ONCE(call != trace_file->event_call))
-> > +               return;
-> > +
-> > +       if (trace_trigger_soft_disabled(trace_file))
-> > +               return;
-> > +
-> > +       dsize = __get_data_size(&tf->tp, regs);
-> > +
-> > +       entry = trace_event_buffer_reserve(&fbuffer, trace_file,
-> > +                                          sizeof(*entry) + tf->tp.size + dsize);
-> > +       if (!entry)
-> > +               return;
-> > +
-> > +       fbuffer.regs = regs;
-> > +       entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
-> > +       entry->func = entry_ip;
-> > +       entry->ret_ip = ret_ip;
-> > +       store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
-> > +
-> > +       trace_event_buffer_commit(&fbuffer);
-> > +}
-> > +
-> > +static void
-> > +fexit_trace_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> > +                unsigned long ret_ip, struct pt_regs *regs)
-> > +{
-> > +       struct event_file_link *link;
-> > +
-> > +       trace_probe_for_each_link_rcu(link, &tf->tp)
-> > +               __fexit_trace_func(tf, entry_ip, ret_ip, regs, link->file);
-> > +}
-> > +NOKPROBE_SYMBOL(fexit_trace_func);
-> > +
-> > +#ifdef CONFIG_PERF_EVENTS
-> > +
-> > +static int fentry_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> > +                           struct pt_regs *regs)
-> > +{
-> > +       struct trace_event_call *call = trace_probe_event_call(&tf->tp);
-> > +       struct fentry_trace_entry_head *entry;
-> > +       struct hlist_head *head;
-> > +       int size, __size, dsize;
-> > +       int rctx;
-> > +
-> > +       head = this_cpu_ptr(call->perf_events);
-> > +       if (hlist_empty(head))
-> > +               return 0;
-> > +
-> > +       dsize = __get_data_size(&tf->tp, regs);
-> > +       __size = sizeof(*entry) + tf->tp.size + dsize;
-> > +       size = ALIGN(__size + sizeof(u32), sizeof(u64));
-> > +       size -= sizeof(u32);
-> > +
-> > +       entry = perf_trace_buf_alloc(size, NULL, &rctx);
-> > +       if (!entry)
-> > +               return 0;
-> > +
-> > +       entry->ip = entry_ip;
-> > +       memset(&entry[1], 0, dsize);
-> > +       store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
-> > +       perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
-> 
-> However, that call concerns me. Perf requires a pt_regs pointer here
-> and it expects certain specific fields of that pt_regs to be set (the
-> exact requirements don't seem to be explicitly stated anywhere).
-> 
-> For example, on arm64 (the architecture without
-> CONFIG_DYNAMIC_FTRACE_WITH_REGS on which I'd like to have fprobe...
-> :)) perf calls the user_mode(regs) macro which expects the pstate
-> register to be set in pt_regs. However, pstate is invalid outside of
-> an exception entry so ftrace_regs on arm64 does not have a pstate
-> field at all.
-> 
-> If we migrate fprobe to ftrace_regs and try to construct a sparse
-> pt_regs out of a ftrace_regs here, it wouldn't be enough to just copy
-> all the registers we know from ftrace_regs into the pt_regs: we would
-> also need to make up the pstate register with the knowledge that it
-> has to be set in certain way specifically to please perf... Arch code
-> wouldn't only have to provide a
-> "expand_ftrace_regs_into_sparse_pt_regs" macro but also a
-> "invent_registers_for_perf" similar to the current
-> perf_arch_fetch_caller_regs macro. This seems rough...
-> 
-> It sounds to me like we should have avoided the use of sparse and
-> "made up" pt_regs a long time back and the more users of fprobe that
-> expect pt_regs we add, the more difficult we make it to make fprobe
-> work on CONFIG_DYNAMIC_FTRACE_WITH_ARGS.
-> 
-> > +                             head, NULL);
-> > +       return 0;
-> > +}
-> > +NOKPROBE_SYMBOL(fentry_perf_func);
-> > +
-> > +static void
-> > +fexit_perf_func(struct trace_fprobe *tf, unsigned long entry_ip,
-> > +               unsigned long ret_ip, struct pt_regs *regs)
-> > +{
-> > +       struct trace_event_call *call = trace_probe_event_call(&tf->tp);
-> > +       struct fexit_trace_entry_head *entry;
-> > +       struct hlist_head *head;
-> > +       int size, __size, dsize;
-> > +       int rctx;
-> > +
-> > +       head = this_cpu_ptr(call->perf_events);
-> > +       if (hlist_empty(head))
-> > +               return;
-> > +
-> > +       dsize = __get_data_size(&tf->tp, regs);
-> > +       __size = sizeof(*entry) + tf->tp.size + dsize;
-> > +       size = ALIGN(__size + sizeof(u32), sizeof(u64));
-> > +       size -= sizeof(u32);
-> > +
-> > +       entry = perf_trace_buf_alloc(size, NULL, &rctx);
-> > +       if (!entry)
-> > +               return;
-> > +
-> > +       entry->func = entry_ip;
-> > +       entry->ret_ip = ret_ip;
-> > +       store_trace_args(&entry[1], &tf->tp, regs, sizeof(*entry), dsize);
-> > +       perf_trace_buf_submit(entry, size, rctx, call->event.type, 1, regs,
-> > +                             head, NULL);
-> > +}
-> > +NOKPROBE_SYMBOL(fexit_perf_func);
-> > +#endif /* CONFIG_PERF_EVENTS */
-> > +
-> > +static int fentry_dispatcher(struct fprobe *fp, unsigned long entry_ip,
-> > +                            unsigned long ret_ip, struct pt_regs *regs,
-> > +                            void *entry_data)
-> > +{
-> > +       struct trace_fprobe *tf = container_of(fp, struct trace_fprobe, fp);
-> > +       int ret = 0;
-> > +
-> > +       if (trace_probe_test_flag(&tf->tp, TP_FLAG_TRACE))
-> > +               fentry_trace_func(tf, entry_ip, regs);
-> > +#ifdef CONFIG_PERF_EVENTS
-> > +       if (trace_probe_test_flag(&tf->tp, TP_FLAG_PROFILE))
-> > +               ret = fentry_perf_func(tf, entry_ip, regs);
-> > +#endif
-> > +       return ret;
-> > +}
-> > +NOKPROBE_SYMBOL(fentry_dispatcher);
-> > +
-> > +static void fexit_dispatcher(struct fprobe *fp, unsigned long entry_ip,
-> > +                            unsigned long ret_ip, struct pt_regs *regs,
-> > +                            void *entry_data)
-> > +{
-> > +       struct trace_fprobe *tf = container_of(fp, struct trace_fprobe, fp);
-> > +
-> > +       if (trace_probe_test_flag(&tf->tp, TP_FLAG_TRACE))
-> > +               fexit_trace_func(tf, entry_ip, ret_ip, regs);
-> > +#ifdef CONFIG_PERF_EVENTS
-> > +       if (trace_probe_test_flag(&tf->tp, TP_FLAG_PROFILE))
-> > +               fexit_perf_func(tf, entry_ip, ret_ip, regs);
-> > +#endif
-> > +}
-> > +NOKPROBE_SYMBOL(fexit_dispatcher);
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
