@@ -2,105 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8C4714FA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDE9714FB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjE2TWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 15:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S229524AbjE2T1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 15:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjE2TWt (ORCPT
+        with ESMTP id S229489AbjE2T1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 15:22:49 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A9BCD
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 12:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685388168; x=1716924168;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7xOvPB71Pz15TnZf97YsAhKKe2nSXBqN1iImorpN5tI=;
-  b=XUOT9ZNqefrpP1a40003C+KSqClhqWeTyg0w4OI3TmZYqD8r/jV8k3uG
-   9p3PURRkjSwK+xtIqgoosnyxa0MTOTVTYr1VXWdZk81TMSmmBE1tfhyLO
-   h26GYF072WjetpjinuYXurcOG886Y093BPnR0uO1X+Pc5rvxaL29N4+5U
-   +FKdyWDuqVRPMvCyK6BcpjB7RxRFb2mfv32Ci6pu2l1yfeUNNAXDbUo7g
-   TII4iZXzjLply806R3toN0OjZyuZKsK5pdYs1SUo0jqc9Mnb89HdRp5a0
-   +jR9PuCk9GzPdS3WFWUm0dMNpr8iQbgqt/UDqc15SF3ACU1+m6BeFMHHY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="357135984"
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="357135984"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 12:22:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="830469581"
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="830469581"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 29 May 2023 12:22:39 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q3iRy-000L6U-3A;
-        Mon, 29 May 2023 19:22:38 +0000
-Date:   Tue, 30 May 2023 03:22:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: undefined reference to `ftrace_likely_update'
-Message-ID: <202305300324.O7irARsx-lkp@intel.com>
+        Mon, 29 May 2023 15:27:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD98B0;
+        Mon, 29 May 2023 12:27:15 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685388433;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kl0ODdCeKiDH/b09sXJZwrPwGLdocmdMEThYYertZKo=;
+        b=Vxb6resa0Cee8qKiX40iLmpLbizKny04GkH5PE3gewsxqPqAzhTPcwc8GkVpD7IYkBdOob
+        kldM9lYeqBeHeuVdf1n1uSRqpZ8thZOUUpxSgDMIWLmXNRAjjAYL9XB4nCkRJyP2BNBrgs
+        +LjDC7xzihRAukwVXXSnFrbgcjETfKlxcQ0f7eAmLBfEur7iq3CkzZd7Fv+C3xIIfX9Oqn
+        UDvSgGVwTUuYApQRu8CALqoBA3mLboEZWctl8SJ4zwTlaLr0WQyCLTztU3yg0BGhcD0i4q
+        r0GC5zQfvpRfIKFDunUCoMLmRn5jMSReNtV5bplMpx4cZ9Wq3FpYR24PpP9nqg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685388433;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Kl0ODdCeKiDH/b09sXJZwrPwGLdocmdMEThYYertZKo=;
+        b=2dl6kWdCmqa//U1xNID+wwwyKgUQy1Ux9vDUW+tt7QyZfM5CWCbMX54JcFWLtsOWsuy9ZI
+        CACTmSWLwHX7odAw==
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
+In-Reply-To: <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185218.962208640@linutronix.de>
+ <20230524204818.3tjlwah2euncxzmh@box.shutemov.name> <87y1lbl7r6.ffs@tglx>
+ <87sfbhlwp9.ffs@tglx> <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+Date:   Mon, 29 May 2023 21:27:13 +0200
+Message-ID: <87bki3kkfi.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+On Mon, May 29 2023 at 05:39, Kirill A. Shutemov wrote:
+> On Sat, May 27, 2023 at 03:40:02PM +0200, Thomas Gleixner wrote:
+> But it gets broken again on "x86/smpboot: Implement a bit spinlock to
+> protect the realmode stack" with
+>
+> [    0.554079] .... node  #0, CPUs:        #1  #2
+> [    0.738071] Callback from call_rcu_tasks() invoked.
+> [   10.562065] CPU2 failed to report alive state
+> [   10.566337]   #3
+> [   20.570066] CPU3 failed to report alive state
+> [   20.574268]   #4
+> ...
+>
+> Notably CPU1 is missing from "failed to report" list. So CPU1 takes the
+> lock fine, but seems never unlocks it.
+>
+> Maybe trampoline_lock(%rip) in head_64.S somehow is not the same as
+> &tr_lock in trampoline_64.S. I donno.
 
-FYI, the error/warning still remains.
+It's definitely the same in the regular startup (16bit mode), but TDX
+starts up via:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8b817fded42d8fe3a0eb47b1149d907851a3c942
-commit: 54d9469bc515dc5fcbc20eecbe19cea868b70d68 fortify: Add run-time WARN for cross-field memcpy()
-date:   9 months ago
-config: s390-randconfig-r033-20230529 (https://download.01.org/0day-ci/archive/20230530/202305300324.O7irARsx-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 4faf3aaf28226a4e950c103a14f6fc1d1fdabb1b)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54d9469bc515dc5fcbc20eecbe19cea868b70d68
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 54d9469bc515dc5fcbc20eecbe19cea868b70d68
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+trampoline_start64
+  trampoline_compat
+    LOAD_REALMODE_ESP <- lock
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305300324.O7irARsx-lkp@intel.com/
+That place cannot work with that LOAD_REALMODE_ESP macro. The untested
+below should cure it.
 
-All errors (new ones prefixed by >>):
+Thanks,
 
-   s390x-linux-ld: arch/s390/purgatory/purgatory: in function `sha256_update':
->> (.text+0x23f2): undefined reference to `ftrace_likely_update'
->> s390x-linux-ld: (.text+0x240a): undefined reference to `ftrace_likely_update'
-   s390x-linux-ld: (.text+0x2422): undefined reference to `ftrace_likely_update'
-   s390x-linux-ld: (.text+0x2ad8): undefined reference to `ftrace_likely_update'
-   s390x-linux-ld: (.text+0x2af0): undefined reference to `ftrace_likely_update'
-   s390x-linux-ld: arch/s390/purgatory/purgatory:(.text+0x2b08): more undefined references to `ftrace_likely_update' follow
+        tglx
+---
+--- a/arch/x86/realmode/rm/trampoline_64.S
++++ b/arch/x86/realmode/rm/trampoline_64.S
+@@ -37,12 +37,12 @@
+ 	.text
+ 	.code16
+ 
+-.macro LOAD_REALMODE_ESP
++.macro LOAD_REALMODE_ESP lock:req
+ 	/*
+ 	 * Make sure only one CPU fiddles with the realmode stack
+ 	 */
+ .Llock_rm\@:
+-        lock btsl       $0, tr_lock
++        lock btsl       $0, \lock
+         jnc             2f
+         pause
+         jmp             .Llock_rm\@
+@@ -63,7 +63,7 @@ SYM_CODE_START(trampoline_start)
+ 	mov	%ax, %es
+ 	mov	%ax, %ss
+ 
+-	LOAD_REALMODE_ESP
++	LOAD_REALMODE_ESP tr_lock
+ 
+ 	call	verify_cpu		# Verify the cpu supports long mode
+ 	testl   %eax, %eax		# Check for return code
+@@ -106,7 +106,7 @@ SYM_CODE_START(sev_es_trampoline_start)
+ 	mov	%ax, %es
+ 	mov	%ax, %ss
+ 
+-	LOAD_REALMODE_ESP
++	LOAD_REALMODE_ESP tr_lock
+ 
+ 	jmp	.Lswitch_to_protected
+ SYM_CODE_END(sev_es_trampoline_start)
+@@ -189,7 +189,7 @@ SYM_CODE_START(pa_trampoline_compat)
+ 	 * In compatibility mode.  Prep ESP and DX for startup_32, then disable
+ 	 * paging and complete the switch to legacy 32-bit mode.
+ 	 */
+-	LOAD_REALMODE_ESP
++	LOAD_REALMODE_ESP pa_tr_lock
+ 	movw	$__KERNEL_DS, %dx
+ 
+ 	movl	$(CR0_STATE & ~X86_CR0_PG), %eax
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
