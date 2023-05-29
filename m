@@ -2,47 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D18714B2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A577E714B32
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjE2N4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
+        id S229948AbjE2N5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjE2N4g (ORCPT
+        with ESMTP id S230174AbjE2N4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:56:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1BB1BB
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:56:08 -0700 (PDT)
+        Mon, 29 May 2023 09:56:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6E61A7;
+        Mon, 29 May 2023 06:56:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A969F61488
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 13:53:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD00FC4339B;
-        Mon, 29 May 2023 13:53:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685368432;
-        bh=jVDsGL+dLqD9K1LG+CET/uN8pHwWk1DdYzI4yZ1/8nQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s0cCKHCXDli2lqMwKffWE3VnfTnCd8vyQyB43t4UIU2JZZjBVz8TkemVrLv8fyBN4
-         N6IBS8GsO9+lvMNRONbiG+Q4DYg6xFs4LMtXr6nhD5KLvSaU0hhJGJUpX2/x6eIWpR
-         nOpTkXCtYh9ZtgLD1tjwVCKhcjCDzvJkEPxTQrdg=
-Date:   Mon, 29 May 2023 14:53:49 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>
-Cc:     "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] PECI fixes for v6.4
-Message-ID: <2023052904-platypus-mower-0e01@gregkh>
-References: <f8506bf66b8bdaa85b5a2bec48bcdcc6a2853da7.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f8506bf66b8bdaa85b5a2bec48bcdcc6a2853da7.camel@intel.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B3CF61662;
+        Mon, 29 May 2023 13:54:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3791C433EF;
+        Mon, 29 May 2023 13:54:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685368455;
+        bh=Cg5hiRPG0S2RXe+2ZuA41pCEb3KIBadXoQONSDthYSs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iWRqAAd6Ke8BonlZa0ifJdbzDILGaYLBYri1qMfWuJ0PZeeJRF726lTYwqZiOHeAr
+         f8AcdZWCP2Aqgay55nkpuTKbUnRvizhD4vqgp6JGvuvsI+RVWyCQ6XD25zcyzGD1Xz
+         Rhp1bbN6V5onj/boWsFspbb8MzegAklK9yDN7iACywb1QOEPRDm92GJZhwgOBrFwRS
+         VXG+AxVDGm9hY+36uLb6P+Z/lvnZgy1X9D8xRRq+WtZryOoSA8SBEd+KPVFR+acVHI
+         ys4dCPzlDDNO9fLfUxoftiINM4gNbYZ8Cu+WMoLXh55CL13JxCCjyMogy4ia9Yn2pI
+         mfb0jt6LufSaA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q3dK9-0014za-PO;
+        Mon, 29 May 2023 14:54:13 +0100
+Date:   Mon, 29 May 2023 14:54:13 +0100
+Message-ID: <87wn0rjla2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 2/6] KVM: arm64: Implement  __kvm_tlb_flush_vmid_range()
+In-Reply-To: <20230519005231.3027912-3-rananta@google.com>
+References: <20230519005231.3027912-1-rananta@google.com>
+        <20230519005231.3027912-3-rananta@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rananta@google.com, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, ricarkol@google.com, pbonzini@redhat.com, jingzhangos@google.com, coltonlewis@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,33 +74,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 09:24:26PM +0000, Winiarska, Iwona wrote:
-> Hi Greg,
+On Fri, 19 May 2023 01:52:27 +0100,
+Raghavendra Rao Ananta <rananta@google.com> wrote:
 > 
-> please pull PECI update for Linux v6.4.
+> Define  __kvm_tlb_flush_vmid_range() (for VHE and nVHE)
+> to flush a range of stage-2 page-tables using IPA in one go.
+> If the system supports FEAT_TLBIRANGE, the following patches
+> would conviniently replace global TLBI such as vmalls12e1is
+> in the map, unmap, and dirty-logging paths with ripas2e1is
+> instead.
 > 
-> Thanks
-> -Iwona
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  arch/arm64/include/asm/kvm_asm.h   |  3 +++
+>  arch/arm64/kvm/hyp/nvhe/hyp-main.c | 11 +++++++++
+>  arch/arm64/kvm/hyp/nvhe/tlb.c      | 39 ++++++++++++++++++++++++++++++
+>  arch/arm64/kvm/hyp/vhe/tlb.c       | 35 +++++++++++++++++++++++++++
+>  4 files changed, 88 insertions(+)
 > 
-> The following changes since commit c21c0f9a20a963f5a1874657a4e3d657503f7815:
-> 
->   Binder: Add async from to transaction record (2023-05-13 20:38:12 +0900)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/iwi/linux.git tags/peci-fixes-6.4
+> diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
+> index 43c3bc0f9544d..33352d9399e32 100644
+> --- a/arch/arm64/include/asm/kvm_asm.h
+> +++ b/arch/arm64/include/asm/kvm_asm.h
+> @@ -79,6 +79,7 @@ enum __kvm_host_smccc_func {
+>  	__KVM_HOST_SMCCC_FUNC___pkvm_init_vm,
+>  	__KVM_HOST_SMCCC_FUNC___pkvm_init_vcpu,
+>  	__KVM_HOST_SMCCC_FUNC___pkvm_teardown_vm,
+> +	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_range,
 
-This includes some random Binder changes that do not belong in my
-char-misc-linus branch right now for 6.4-final
+nit: please keep this close to the other TLB operations.
 
-> 
-> for you to fetch changes up to 849b391254bf64796655868dbb6dee23551ff7d3:
-> 
->   peci: Constify struct peci_controller_ops (2023-05-22 22:16:16 +0200)
+>  };
+>  
+>  #define DECLARE_KVM_VHE_SYM(sym)	extern char sym[]
+> @@ -225,6 +226,8 @@ extern void __kvm_flush_vm_context(void);
+>  extern void __kvm_flush_cpu_context(struct kvm_s2_mmu *mmu);
+>  extern void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr_t ipa,
+>  				     int level);
+> +extern void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> +					phys_addr_t start, phys_addr_t end);
+>  extern void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu);
+>  
+>  extern void __kvm_timer_set_cntvoff(u64 cntvoff);
+> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> index 728e01d4536b0..81d30737dc7c9 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> @@ -125,6 +125,16 @@ static void handle___kvm_tlb_flush_vmid_ipa(struct kvm_cpu_context *host_ctxt)
+>  	__kvm_tlb_flush_vmid_ipa(kern_hyp_va(mmu), ipa, level);
+>  }
+>  
+> +static void
+> +handle___kvm_tlb_flush_vmid_range(struct kvm_cpu_context *host_ctxt)
+> +{
+> +	DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
+> +	DECLARE_REG(phys_addr_t, start, host_ctxt, 2);
+> +	DECLARE_REG(phys_addr_t, end, host_ctxt, 3);
+> +
+> +	__kvm_tlb_flush_vmid_range(kern_hyp_va(mmu), start, end);
+> +}
+> +
+>  static void handle___kvm_tlb_flush_vmid(struct kvm_cpu_context *host_ctxt)
+>  {
+>  	DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
+> @@ -315,6 +325,7 @@ static const hcall_t host_hcall[] = {
+>  	HANDLE_FUNC(__kvm_vcpu_run),
+>  	HANDLE_FUNC(__kvm_flush_vm_context),
+>  	HANDLE_FUNC(__kvm_tlb_flush_vmid_ipa),
+> +	HANDLE_FUNC(__kvm_tlb_flush_vmid_range),
+>  	HANDLE_FUNC(__kvm_tlb_flush_vmid),
+>  	HANDLE_FUNC(__kvm_flush_cpu_context),
+>  	HANDLE_FUNC(__kvm_timer_set_cntvoff),
+> diff --git a/arch/arm64/kvm/hyp/nvhe/tlb.c b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> index 978179133f4b9..d4ea549c4b5c4 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/tlb.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> @@ -130,6 +130,45 @@ void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu,
+>  	__tlb_switch_to_host(&cxt);
+>  }
+>  
+> +void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> +				phys_addr_t start, phys_addr_t end)
+> +{
+> +	struct tlb_inv_context cxt;
+> +	unsigned long pages, stride;
+> +
+> +	/*
+> +	 * Since the range of addresses may not be mapped at
+> +	 * the same level, assume the worst case as PAGE_SIZE
+> +	 */
+> +	stride = PAGE_SIZE;
+> +	start = round_down(start, stride);
+> +	end = round_up(end, stride);
+> +	pages = (end - start) >> PAGE_SHIFT;
+> +
+> +	if (!system_supports_tlb_range() || pages >= MAX_TLBI_RANGE_PAGES) {
+> +		__kvm_tlb_flush_vmid(mmu);
+> +		return;
 
-Why is this a bugfix that needs to get merged now?  Shouldn't this be
-for 6.5-rc1?
+Why do we give up on "pages >= MAX_TLBI_RANGE_PAGES"? I see no
+rationale for it in the patch. My understanding is that this is the
+maximum representable as a range, in which case this is a programming
+error.
 
-thanks,
+Or are you *on purpose* making the two equivalent?
 
-greg k-h
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
