@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1839771491F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2363E714923
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjE2MKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
+        id S231679AbjE2MMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbjE2MKU (ORCPT
+        with ESMTP id S231653AbjE2MM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:10:20 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2D0A3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:10:17 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f3a611b3ddso5438585e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:10:17 -0700 (PDT)
+        Mon, 29 May 2023 08:12:29 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AF9C9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:12:26 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2af2c7f2883so33492741fa.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:12:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685362215; x=1687954215;
+        d=linaro.org; s=google; t=1685362345; x=1687954345;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=l69CNvwsvVxOdGGpTP24kCQnLR92Q+STYaVRxceSaVE=;
-        b=YbyxlReB4gUoqN2+Uux/itPBp3PjRZlrffduJWaRXZxM9KKG30DePhV0sz6Mjv/ib6
-         ybVp6lyLlt1ETOMC3+gZ4+1unKtQ0vkATYVPWriHtOaQ3AZUdVdPnlPVbCAuuD/oeemB
-         i4CE4aHYXZRpCEtKYJMg/y+7ZYrqwHPoK5YByqF3dtti8DS5PdDfVOkzPGM+0SCgk3UY
-         FP11aj+eC7T0d1DqCc1yuJHvlRNIuAm0CU/FZ6SQ6HwRPyjmcrGsSSWURPa6XU+ibxUE
-         2O8pDijXUBCexo4C0Odpsb87iscgLW7ggGcFHbGF9JpuSJ9veh9yFcORMIaTV4cyjPkE
-         VBzA==
+        bh=J3ABGit/TAcsKmvTN4UN3Tm0XCYfzg7S6lZfJii5Jc8=;
+        b=iDCNWDAAPFR3sv+Wq7fS+gD5r5IBEPuVOnLNoCD8PIF5/Vi3zsZAwck9+OOI1fxqLJ
+         H7mtn5fH2zgJt1bl3iWw4KEC49pegNqX2TZZ0U9kTVJFj5oYf8zoKjo1ra/+Ak5dJTdh
+         rwFWqXacCi2pdV9HqB7v1Bijg8jsgb9p3ulP421FjIYtiu+HM3sDqJGS1rgmnIeS3DEo
+         46cka1D5vuEu8Qi+VKjIeEjUgmi//lC4j4dcQf7TGRzhkMhkeP3VBXi1pMBOVgOnzqGn
+         tuZLnFsGOUpch9UipgtpptorJ0p6LctUwGjz+iwu2ew0Nx225Syvd0qaNzWDIRCoUnjO
+         qvSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685362215; x=1687954215;
+        d=1e100.net; s=20221208; t=1685362345; x=1687954345;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l69CNvwsvVxOdGGpTP24kCQnLR92Q+STYaVRxceSaVE=;
-        b=Ne2wJEnXcoXaZDqyGxKPtpukuEIbLbZpor4+y1LmD5H1QC4mAAVdbbsCdx30PQJLfU
-         YtV+kVBor8MhrrXO1UiJ92kviYG/sjP8A/TiUxxfwzGseLfLMQFszmTDiN5ytCtCBhKI
-         MT6I/mxOG+YhNJGmxcdj681IMLKVTGOPuZIvPdIr7y01mcqwofZGgMYFz6p/PFnppoN6
-         iI7Kxg5HBmzY8zk2slB/Y4dKSg/W1hLcgTt279fbm4XBifv67zQoEo6u0HW9XqZ5gzZL
-         KpSrGjYmXwR/QIXqBd+M6dfmIPJkbFvTtEW2iM2RfcJHflyOGifpUcwS1KwCTbLPHwYT
-         CpvA==
-X-Gm-Message-State: AC+VfDxSf2Ogv5qQAMVWKDJ/lynkLvD7f2z6w6nytMP8MzMB5w64Aj9e
-        wCTaEG4eS8wWhJkqKeIpIQMqYA==
-X-Google-Smtp-Source: ACHHUZ4SLO0EXLJHmvPcuzw7Gf9skUZZu5F7ieOm7t2Pa05aSNTcrQE7t9swQbgYoE0bglE3+lgHSw==
-X-Received: by 2002:ac2:5581:0:b0:4e8:487a:7c2e with SMTP id v1-20020ac25581000000b004e8487a7c2emr2935379lfg.14.1685362215610;
-        Mon, 29 May 2023 05:10:15 -0700 (PDT)
+        bh=J3ABGit/TAcsKmvTN4UN3Tm0XCYfzg7S6lZfJii5Jc8=;
+        b=MI87+V6OYmnm71WXMRa2AUwkds2yw1x1D+81PrM25K/yEoJfosIfAyx/1fZ0IukSj2
+         /tq0VYTDV7bjB3sW5yVkPUP0hChOJ9GE7Cx9sj2sfvcJU5DZkU45ZXfJCwH4nw2yV4PZ
+         43WUf3vtVc9WsFLCk9XeNjizSnB7N4PZk7N1gHl1sPAh1Ox+HXBrVgRaDK26cN6JM9Cg
+         3Z0RChqhL08S91739oMrYiJ6Z2xDLkcEBELT8zgE2D+J6rzfHGJgKlHyAEFKdJRWJIab
+         tCETvoi6lWjJ3JtjC7XMXCiC0S4GLaLRNdWaEeEFJWPEKyn24RTHy4ccF00ZrnM++GoY
+         veKQ==
+X-Gm-Message-State: AC+VfDyBnKF2hjeNRmDRTFxl2bx2tG76TY2tv9Vr1SSIs6oIL1kAiwXQ
+        vkCLbXgqs7JPU8cnDXKgy9fs5Q==
+X-Google-Smtp-Source: ACHHUZ4kCnD4vAXW9BnOp6OGw0h8Enwzq8eA8ZxzcUP+eEZQL/r/53Opp+YGpZFQcsv39OC09fdj3Q==
+X-Received: by 2002:a2e:9e8e:0:b0:29f:58c6:986e with SMTP id f14-20020a2e9e8e000000b0029f58c6986emr3427027ljk.52.1685362344708;
+        Mon, 29 May 2023 05:12:24 -0700 (PDT)
 Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id e18-20020ac25472000000b004f4589808cfsm1963021lfn.300.2023.05.29.05.10.13
+        by smtp.gmail.com with ESMTPSA id o11-20020a2e730b000000b002a8c409f1f5sm2412067ljc.110.2023.05.29.05.12.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 05:10:15 -0700 (PDT)
-Message-ID: <6c79b99e-cc69-8cd9-c990-5c0373e1f09c@linaro.org>
-Date:   Mon, 29 May 2023 14:10:13 +0200
+        Mon, 29 May 2023 05:12:24 -0700 (PDT)
+Message-ID: <4afbcdd0-a11c-4826-d669-2ffc9488a8b6@linaro.org>
+Date:   Mon, 29 May 2023 14:12:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH 7/7] ARM: dts: qcom: msm8226: Add mdss nodes
+Subject: Re: [PATCH v4 2/3] clk: qcom: clk-rcg2: add support for rcg2 freq
+ multi ops
 Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230308-msm8226-mdp-v1-0-679f335d3d5b@z3ntu.xyz>
- <20230308-msm8226-mdp-v1-7-679f335d3d5b@z3ntu.xyz>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230427150717.20860-1-ansuelsmth@gmail.com>
+ <20230427150717.20860-3-ansuelsmth@gmail.com>
+ <82072c2b-8483-6fb6-a9d1-c9882825c9cb@linaro.org>
+ <6473e34c.df0a0220.33a79.6c95@mx.google.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230308-msm8226-mdp-v1-7-679f335d3d5b@z3ntu.xyz>
+In-Reply-To: <6473e34c.df0a0220.33a79.6c95@mx.google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,158 +84,155 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 29.05.2023 11:44, Luca Weiss wrote:
-> Add the nodes that describe the mdss so that display can work on
-> MSM8226.
+On 28.05.2023 14:37, Christian Marangi wrote:
+> On Sat, May 27, 2023 at 06:11:16PM +0200, Konrad Dybcio wrote:
+>>
+>>
+>> On 27.04.2023 17:07, Christian Marangi wrote:
+>>> Some RCG frequency can be reached by multiple configuration.
+>>>
+>>> Add clk_rcg2_fm_ops ops to support these special RCG configurations.
+>>>
+>>> These alternative ops will select the frequency using a CEIL policy.
+>>>
+>>> When the correct frequency is found, the correct config is selected by
+>>> calculating the final rate (by checking the defined parent and values
+>>> in the config that is being checked) and deciding based on the one that
+>>> is less different than the requested one.
+>>>
+>>> These check are skipped if there is just on config for the requested
+>>> freq.
+>>>
+>>> qcom_find_freq_multi is added to search the freq with the new struct
+>>> freq_multi_tbl.
+>>> __clk_rcg2_select_conf is used to select the correct conf by simulating
+>>> the final clock.
+>>>
+>>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+>>> ---
+>>>  drivers/clk/qcom/clk-rcg.h  |   1 +
+>>>  drivers/clk/qcom/clk-rcg2.c | 152 ++++++++++++++++++++++++++++++++++++
+>>>  drivers/clk/qcom/common.c   |  18 +++++
+>>>  drivers/clk/qcom/common.h   |   2 +
+>>>  4 files changed, 173 insertions(+)
+>>>
+>>> diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
+>>> index dc85b46b0d79..f8ec989ed3d9 100644
+>>> --- a/drivers/clk/qcom/clk-rcg.h
+>>> +++ b/drivers/clk/qcom/clk-rcg.h
+>>> @@ -188,6 +188,7 @@ struct clk_rcg2_gfx3d {
+>>>  
+>>>  extern const struct clk_ops clk_rcg2_ops;
+>>>  extern const struct clk_ops clk_rcg2_floor_ops;
+>>> +extern const struct clk_ops clk_rcg2_fm_ops;
+>>>  extern const struct clk_ops clk_rcg2_mux_closest_ops;
+>>>  extern const struct clk_ops clk_edp_pixel_ops;
+>>>  extern const struct clk_ops clk_byte_ops;
+>>> diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+>>> index 76551534f10d..4f2fe012ef5f 100644
+>>> --- a/drivers/clk/qcom/clk-rcg2.c
+>>> +++ b/drivers/clk/qcom/clk-rcg2.c
+>>> @@ -266,6 +266,104 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
+>>>  	return 0;
+>>>  }
+>>>  
+>>> +static const struct freq_conf *
+>>> +__clk_rcg2_select_conf(struct clk_hw *hw, const struct freq_multi_tbl *f,
+>>> +		       unsigned long req_rate)
+>>> +{
+>>> +	unsigned long best_rate = 0, parent_rate, rate;
+>>> +	const struct freq_conf *conf, *best_conf;
+>>> +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+>>> +	struct clk_hw *p;
+>>> +	int index, i;
+>>> +
+>>> +	/* Exit early if only one config is defined */
+>>> +	if (f->num_confs == 1)
+>>> +		return f->confs;
+>>> +
+>>> +	/* Search in each provided config the one that is near the wanted rate */
+>>> +	for (i = 0, conf = f->confs; i < f->num_confs; i++, conf++) {
+>>> +		index = qcom_find_src_index(hw, rcg->parent_map, conf->src);
+>>> +		if (index < 0)
+>>> +			continue;
+>>> +
+>>> +		p = clk_hw_get_parent_by_index(hw, index);
+>>> +		if (!p)
+>>> +			continue;
+>>> +
+>>> +		parent_rate =  clk_hw_get_rate(p);
+>>> +		rate = calc_rate(parent_rate, conf->n, conf->m, conf->n, conf->pre_div);
+>>> +
+>>> +		if (rate == req_rate) {
+>>> +			best_conf = conf;
+>>> +			break;
+>>> +		}
+>>> +
+>>> +		if (abs(req_rate - rate) < abs(best_rate - rate)) {
+>> Shouldn't this be:
+>>
+>> if (abs(req_rate - rate) < abs(best_rate - req_rate)
+>>
+>> ?
+>>
+>> this way it'd say
+>>
+>> "if this iteration's rate is closer to the requested one than the
+>> best one we've found yet, it's better"
+>>
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->  arch/arm/boot/dts/qcom-msm8226.dtsi | 118 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 118 insertions(+)
+> Hi, thanks for the review!
 > 
-> diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-> index 42acb9ddb8cc..182d6405032f 100644
-> --- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-> @@ -636,6 +636,124 @@ smd-edge {
->  				label = "lpass";
->  			};
->  		};
-> +
-> +		mdss: display-subsystem@fd900000 {
-> +			compatible = "qcom,mdss";
-> +			reg = <0xfd900000 0x100>, <0xfd924000 0x1000>;
-> +			reg-names = "mdss_phys", "vbif_phys";
-> +
-> +			power-domains = <&mmcc MDSS_GDSC>;
-> +
-> +			clocks = <&mmcc MDSS_AHB_CLK>,
-> +				 <&mmcc MDSS_AXI_CLK>,
-> +				 <&mmcc MDSS_VSYNC_CLK>;
-> +			clock-names = "iface", "bus", "vsync";
-One per line, please
+> I wonder if even better would be something where we save the best rate
+> diff and just compare that.
+> 
+> rate_diff = abs(req_rate - rate)
+> if (rate_diff < best_rate_diff) {
+> 	best_rate_diff = rate_diff;
+> 	best_conf = conf;
+> }
+> 
+> And best_rate_diff init to ULONG_MAX?
+Yeah that would be more readable!
 
-> +
-> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
-We're not using the irq cell, is that necessary/should that be 0?
-
-> +
-> +			status = "disabled";
-status should go last
-
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +
-> +			mdp: display-controller@fd900000 {
-> +				compatible = "qcom,msm8226-mdp5", "qcom,mdp5";
-> +				reg = <0xfd900100 0x22000>;
-> +				reg-names = "mdp_phys";
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <0>;
-> +
-> +				clocks = <&mmcc MDSS_AHB_CLK>,
-> +					 <&mmcc MDSS_AXI_CLK>,
-> +					 <&mmcc MDSS_MDP_CLK>,
-> +					 <&mmcc MDSS_VSYNC_CLK>;
-> +				clock-names = "iface", "bus", "core", "vsync";
-One per line, please
-
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-Would port { work here? I remember one mdss component's bindings
-didn't allow it but don't recall which one
-
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						mdp5_intf1_out: endpoint {
-> +							remote-endpoint = <&dsi0_in>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +
-> +			dsi0: dsi@fd922800 {
-> +				compatible = "qcom,msm8226-dsi-ctrl",
-> +					     "qcom,mdss-dsi-ctrl";
-> +				reg = <0xfd922800 0x1f8>;
-> +				reg-names = "dsi_ctrl";
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <4>;
-> +
-> +				assigned-clocks = <&mmcc BYTE0_CLK_SRC>, <&mmcc PCLK0_CLK_SRC>;
-> +				assigned-clock-parents = <&dsi_phy0 0>, <&dsi_phy0 1>;
-One per line, please
-
-> +
-> +				clocks = <&mmcc MDSS_MDP_CLK>,
-> +					 <&mmcc MDSS_AHB_CLK>,
-> +					 <&mmcc MDSS_AXI_CLK>,
-> +					 <&mmcc MDSS_BYTE0_CLK>,
-> +					 <&mmcc MDSS_PCLK0_CLK>,
-> +					 <&mmcc MDSS_ESC0_CLK>,
-> +					 <&mmcc MMSS_MISC_AHB_CLK>;
-> +				clock-names = "mdp_core",
-> +					      "iface",
-> +					      "bus",
-> +					      "byte",
-> +					      "pixel",
-> +					      "core",
-> +					      "core_mmss";
-> +
-> +				phys = <&dsi_phy0>;
-> +
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						dsi0_in: endpoint {
-> +							remote-endpoint = <&mdp5_intf1_out>;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						dsi0_out: endpoint {
-> +						};
-> +					};
-> +				};
-> +			};
-> +
-> +			dsi_phy0: phy@fd922a00 {
-> +				compatible = "qcom,dsi-phy-28nm-8226";
-> +				reg = <0xfd922a00 0xd4>,
-> +				      <0xfd922b00 0x280>,
-> +				      <0xfd922d80 0x30>;
-> +				reg-names = "dsi_pll",
-> +					    "dsi_phy",
-> +					    "dsi_phy_regulator";
-> +
-> +				#clock-cells = <1>;
-> +				#phy-cells = <0>;
-> +
-> +				clocks = <&mmcc MDSS_AHB_CLK>, <&rpmcc RPM_SMD_XO_CLK_SRC>;
-One per line, please
+> 
+>>> +			best_rate = rate;
+>>> +			best_conf = conf;
+>>> +		}
+>>> +	}
+>>> +
+>>> +	/*
+>>> +	 * Very unlikely.
+>>> +	 * Force the first conf if we can't find a correct config.
+>>> +	 */
+>>> +	if (unlikely(i == f->num_confs))
+>>> +		best_conf = f->confs;
+>> Is that a supported scenario or would it be a device driver / clock
+>> driver error?
+>>
+> 
+> It's to handle case for the 2 continue in the loop and arriving in a
+> situation where best_conf was never set?
+> 
+> Should we return a warning and an ERR_PTR? Idea was to provide a best
+> effort selection.
+Hm.. I'm not sure what's the expected behavior here.. Stephen?
 
 Konrad
-> +				clock-names = "iface", "ref";
-> +			};
-> +		};
->  	};
->  
->  	timer {
+> 
+>>> +
+>>> +	return best_conf;
+>>> +}
+>>> +
+>>> +static int _freq_tbl_fm_determine_rate(struct clk_hw *hw, const struct freq_multi_tbl *f,
+>>> +				       struct clk_rate_request *req)
+>>> +{
+>>> +	unsigned long clk_flags, rate = req->rate;
+>>> +	const struct freq_conf *conf;
+>>> +	struct clk_hw *p;
+>>> +	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+>> swap lines 2, 3, 4 to 4, 2, 3 and you'll get a revers-Christmas-tree!
+>>
+> 
+> Thanks, didn't notice this. Will do in v5.
 > 
