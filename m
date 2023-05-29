@@ -2,118 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F34F714561
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BDE714565
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbjE2HXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 03:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S230340AbjE2HZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 03:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjE2HX2 (ORCPT
+        with ESMTP id S229561AbjE2HZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 03:23:28 -0400
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A971AA6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:23:26 -0700 (PDT)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 411F6100410D3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:23:26 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 3XDyq1HVIEs8A3XDyqvdYK; Mon, 29 May 2023 07:23:26 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=B7l8bMhM c=1 sm=1 tr=0 ts=647452ee
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=P0xRbXHiH_UA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6LOf6/O485ZKjiwMNNJFVV/JEzoDz/h+7BIORfbfe8g=; b=tkOUDxoIqqzQrXkBx1uaqPhcb4
-        c6ts7AJNG8GblKEmHaY5RBveG9j1r0nIhm15RdQ0t9OyJJ3JBRThnIp6dDLf54PiCf6NEf4R2wlut
-        eMxYepumOoig3pPemnLF/Y2WldqWuRbOYKGSXzZL1Mtlfa0CyIOSlUekpvc8wevVgZRhtD/6dbxLr
-        BWFuEdHAm4hW++oq0HbMM0L5HjuDhOZwQJgTxWiyP2FJUYpS6haTCfEQ3qCFmWr675cbpyk8T6u+1
-        tklhaWq+gGHaTW+PKOQ5QaSTqKfChArfzpH98NPOQ+lm8WZySINA8JYKYXuy72OEvoku5GL4JVIM7
-        cvOUklEg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:41956 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1q3XDx-001Ng2-CO;
-        Mon, 29 May 2023 01:23:25 -0600
-Subject: Re: [PATCH 6.3 000/127] 6.3.5-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230528190836.161231414@linuxfoundation.org>
-In-Reply-To: <20230528190836.161231414@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <8c062b1e-48f6-9e7c-444d-1e6b6bb9986c@w6rz.net>
-Date:   Mon, 29 May 2023 00:23:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 29 May 2023 03:25:20 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E92CA7;
+        Mon, 29 May 2023 00:25:19 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2af2602848aso29915771fa.2;
+        Mon, 29 May 2023 00:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685345117; x=1687937117;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7dbJswxuikSdGXOWoUBNPK1HqbQyPIndcOVtASk695c=;
+        b=d3e3ndgdfD6fKBWEdpcCFSfICCQiSidpzlKnI/vYKnkIi4znfmdBzgcBTXv776E0tS
+         uMXUFP+7uojCP3A0cxMlt9p71bELw+AoqDWf/O+Fnecp+6y5MXbMSTpW+bm9CJAIvQPl
+         8IEpA7OZtWb0VoCgiMJdR49quBJaJXnvRE+mLuX1pMTyTgmdNOLF5v1hnlZvoq0cKriC
+         XOBsBQ1pHVVzGwhXSHkKOoENz03VO3WfMdhOuLuLAOvDPgkb8Lk8DUEiPMbykLDENjMu
+         q6l1vCOJe7Cl4LVJEVP2N36t5abtJPiZ2ShxtrCgVQYK7+1PF2o+som5hBD+ZGFzPFNf
+         wLzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685345117; x=1687937117;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7dbJswxuikSdGXOWoUBNPK1HqbQyPIndcOVtASk695c=;
+        b=fS9CAZQ/gCW9vXgAEly80zyX35QJsNFsirVBKc25ippklxVetNN6gNPRcM/0C3uOmd
+         sTBbCVM5kjEE7hfOzldOqieXfcIsmQtVq2INLouexYc+myj+i0ghV3ERmQlzLk9U+VIi
+         xZqT4BcngKhuMWOfCGOQO5TVyDD0FL0YmrjikDkf4zOzhERkyuOY8ChvnjpJveYH84ow
+         +wezfFj7NGWOl3mwDqmezSp/rJA6JSBkx42xjXI7mcldAOZPd3+FYPiKUNkU/YT8eEqv
+         5UOgxmLCk9sDDxe9zIRC3C7dC5EQb90p8+nfsVxtO++nyP4IF8+HvVKRtKryqBW03bV8
+         nVbw==
+X-Gm-Message-State: AC+VfDxjfG7LU1UBoFcDiJaIdmJLxcAPF5mNbWGGxj7Kl0BbM/B0nEkV
+        FeOuOsM5uYX3a1gGWAdmmsFOr4aTIp8W72WegTE=
+X-Google-Smtp-Source: ACHHUZ52xFgAKpl/EmO2rDkI6Nn8eyjYwvFWa7SRSG7SY1gEZCSW9S5AmsC8FWr+kNxgngXqcOo0ahzZ8W9QKCbZXZM=
+X-Received: by 2002:a05:651c:d0:b0:2a8:b7e9:82ee with SMTP id
+ 16-20020a05651c00d000b002a8b7e982eemr3451083ljr.1.1685345117194; Mon, 29 May
+ 2023 00:25:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1q3XDx-001Ng2-CO
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:41956
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230526054621.18371-1-liangchen.linux@gmail.com> <20230528021008-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230528021008-mutt-send-email-mst@kernel.org>
+From:   Liang Chen <liangchen.linux@gmail.com>
+Date:   Mon, 29 May 2023 15:25:04 +0800
+Message-ID: <CAKhg4tLA9z0rMEzRJ8tRt+1jQtS9z74Se2Wvwc5SKEk=WgSd2Q@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/5] virtio_net: Fix an unsafe reference to the
+ page chain
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, pabeni@redhat.com, alexander.duyck@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/28/23 12:09 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.5 release.
-> There are 127 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sun, May 28, 2023 at 2:16=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
+ wrote:
 >
-> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
-> Anything received after that time might be too late.
+> On Fri, May 26, 2023 at 01:46:17PM +0800, Liang Chen wrote:
+> > "private" of buffer page is currently used for big mode to chain pages.
+> > But in mergeable mode, that offset of page could mean something else,
+> > e.g. when page_pool page is used instead. So excluding mergeable mode t=
+o
+> > avoid such a problem.
+> >
+> > Signed-off-by: Liang Chen <liangchen.linux@gmail.com>
 >
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.5-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
+> Ugh the subject makes it looks like current code has a problem
+> but I don't think so because I don't think anything besides
+> big packets uses page->private.
 >
-> thanks,
+> The reason patch is needed is because follow up patches
+> use page_pool.
+> pls adjust commit log and subject to make all this clear.
 >
-> greg k-h
+>
+> > ---
+> >  drivers/net/virtio_net.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > index 5a7f7a76b920..c5dca0d92e64 100644
+> > --- a/drivers/net/virtio_net.c
+> > +++ b/drivers/net/virtio_net.c
+> > @@ -497,7 +497,7 @@ static struct sk_buff *page_to_skb(struct virtnet_i=
+nfo *vi,
+> >                       return NULL;
+> >
+> >               page =3D (struct page *)page->private;
+> > -             if (page)
+> > +             if (!vi->mergeable_rx_bufs && page)
+>
+> To be safe let's limit to big packets too:
+>
+>         if (!vi->mergeable_rx_bufs && vi->big_packets && page)
+>
+>
+>
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Sure, thanks!
 
-Tested-by: Ron Economos <re@w6rz.net>
-
+> >                       give_pages(rq, page);
+> >               goto ok;
+> >       }
+> > --
+> > 2.31.1
+>
