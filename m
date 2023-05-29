@@ -2,190 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0702D714724
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFD6714725
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjE2JgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 05:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
+        id S231572AbjE2Jg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 05:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjE2JgL (ORCPT
+        with ESMTP id S231586AbjE2JgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 05:36:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87475AF;
-        Mon, 29 May 2023 02:36:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2228262304;
-        Mon, 29 May 2023 09:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EEAFC4339B;
-        Mon, 29 May 2023 09:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685352968;
-        bh=WjawDvm6oPVly4kc/gMcQLO6JNcFJPHYvkIDhnDoG+c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YgL4qrQ9f2ai2b1qgowWAF/VBckdP80pf0+i2CbiMsS30Gtkiq1k3Ou5en5BN7gZC
-         BXzDK0J+YfU4+ijn/WbolCojwJ4RVOKcnuiI/scxG7EwUMlO6ErH2fwNozldQQ1ZpQ
-         WJuQvvD5S3mdhR9CfmHkdle9Cx8FdNSCg8UG8Q/Lr2/C1kSzHhe+J+CIGbaOxv+qVL
-         rxlQAcieBghueIMsENaCoYdbbhh4Ts4xe/7oEk6Wxmp667+dBSf7fbTrVZkeTRXiY1
-         HYzoyZTZAEosTBrRnIcbB1iOtRktA+1XPUU4DNMLXnsjlGDcaI/xS3Ve5I9MZ6Del3
-         NKJKn+EPsS+bQ==
-Date:   Mon, 29 May 2023 11:36:03 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     kw@linux.com, kishon@kernel.org, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 1/7] PCI: endpoint: Pass EPF device ID to the probe
- function
-Message-ID: <ZHRyA1BzK3KaGUEH@lpieralisi>
-References: <20230519144215.25167-1-manivannan.sadhasivam@linaro.org>
- <20230519144215.25167-2-manivannan.sadhasivam@linaro.org>
+        Mon, 29 May 2023 05:36:24 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD00ED
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:36:21 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-514859f3ffbso3577579a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685352980; x=1687944980;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g6HhsVWhTLIX/zKXEmQIlcJy3oQM7uNYV5sO+LVhw4A=;
+        b=hagvf3S+qJ/o9cf3nFUMZseHrJV8fdDjbuotGVYUG7990EYSJx9ng/qDpiCRJ+k2WI
+         MSkX9A2gJ8ksrlMZ4ypj7T/5rMx8i9XWM6kTsqwnUimZBgyWz8ps8ixOyrjc8+Z3YgQg
+         BqhGFKsrNriCOxYmVk5L5y3w6Ftkm8xRaAq0AoJeCj2/oqdpW0s07SyHcWZLkcTys32n
+         OE2jtblXHmnK0yThMxklhysHFjI4blfNuMMwtTiAWwWgbLcWBr8R9WZskLn+s2dVoqmt
+         S35CCE1QeKgmklAyWdYYgxNhaPHDCgbjb+xSEFLSl2z+prUVwUiMY17E2oRnkn88xAMH
+         iHdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685352980; x=1687944980;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g6HhsVWhTLIX/zKXEmQIlcJy3oQM7uNYV5sO+LVhw4A=;
+        b=XEFfT/UmO5j8VqGFxXullTW0vZSyTjintIm8ndgRr2X/V9VcvdYlNOoNKUDeDZERND
+         mGhM94PXEOhysfSN7ukH2IgzJC/DIj0g8zk6J9xaT/WNPGFr+U2N0cnNvaDFViDdXMco
+         pDqU1r2HfrfV+yZ/+6tI3xEEHFwDm5wOcgfyx5GD9Nm8xqBPm9h47m9Dj5goqNOpZ2VB
+         yuqaHca7MaAddxDOkE8aDOIRt3MELdEv1ev5EAiyYZ78xzVuQ7IvWz5R9CaJ2Ui7SwUH
+         5V7GbTSa/uYXgC3vbRU3+Tj9X8KHoKzBZt4VCLbIOaPn+7z3kDE0z6vDHJp7K+LUJ9k4
+         mU4w==
+X-Gm-Message-State: AC+VfDwk6LCNNxazXrefCuEhFN8QVSFuNSDN8glXNQB5e2QYTRWa7/xe
+        I9tTccVUGyMIfRtBivGb9la1UbxG7gsINuUCWPM=
+X-Google-Smtp-Source: ACHHUZ6GptyW0y6QW+1Vr7zecgW3c3cm4SlUtSK6ieRTeE06G8VBvQ2BK7rKChjBo34LTrClSi6V+yWw5kF2loQFKQ4=
+X-Received: by 2002:a17:906:6a14:b0:962:582d:89d7 with SMTP id
+ qw20-20020a1709066a1400b00962582d89d7mr10555695ejc.38.1685352979626; Mon, 29
+ May 2023 02:36:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519144215.25167-2-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230527054633.704916-1-chenhuacai@loongson.cn>
+ <20230527054633.704916-2-chenhuacai@loongson.cn> <87pm6llvm6.ffs@tglx>
+ <86fs7gdhid.wl-maz@kernel.org> <CAAhV-H6KpNhL5VvumvhcAKGOpe-EO0zfzm_xPprP0rTVf18Leg@mail.gmail.com>
+ <87ilcblc72.ffs@tglx>
+In-Reply-To: <87ilcblc72.ffs@tglx>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Mon, 29 May 2023 17:36:07 +0800
+Message-ID: <CAAhV-H41vDyBktE25Fdb34QtZ_yWSgTq4yMOyfD9H7YytKS3RA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] genirq/msi, platform-msi: Adjust return value of msi_domain_prepare_irqs()
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 08:12:09PM +0530, Manivannan Sadhasivam wrote:
-> Currently, the EPF probe function doesn't get the device ID argument needed
-> to correctly identify the device table ID of the EPF device.
-> 
-> When multiple entries are added to the "struct pci_epf_device_id" table,
-> the probe function needs to identify the correct one. And the only way to
-> do so is by storing the correct device ID in "struct pci_epf" during
-> "pci_epf_match_id()" and passing that to probe().
-> 
-> Reviewed-by: Kishon Vijay Abraham I <kishon@kernel.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/pci/endpoint/functions/pci-epf-ntb.c  | 3 ++-
->  drivers/pci/endpoint/functions/pci-epf-test.c | 2 +-
->  drivers/pci/endpoint/functions/pci-epf-vntb.c | 2 +-
->  drivers/pci/endpoint/pci-epf-core.c           | 8 +++++---
->  include/linux/pci-epf.h                       | 4 +++-
->  5 files changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-ntb.c b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> index 9a00448c7e61..980b4ecf19a2 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-ntb.c
-> @@ -2075,11 +2075,12 @@ static struct config_group *epf_ntb_add_cfs(struct pci_epf *epf,
->  /**
->   * epf_ntb_probe() - Probe NTB function driver
->   * @epf: NTB endpoint function device
-> + * @id: NTB endpoint function device ID
->   *
->   * Probe NTB function driver when endpoint function bus detects a NTB
->   * endpoint function.
->   */
-> -static int epf_ntb_probe(struct pci_epf *epf)
-> +static int epf_ntb_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
->  {
->  	struct epf_ntb *ntb;
->  	struct device *dev;
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-> index 0f9d2ec822ac..d5fcc78a5b73 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> @@ -980,7 +980,7 @@ static const struct pci_epf_device_id pci_epf_test_ids[] = {
->  	{},
->  };
->  
-> -static int pci_epf_test_probe(struct pci_epf *epf)
-> +static int pci_epf_test_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
->  {
->  	struct pci_epf_test *epf_test;
->  	struct device *dev = &epf->dev;
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> index b7c7a8af99f4..122eb7a12028 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> @@ -1401,7 +1401,7 @@ static struct pci_epf_ops epf_ntb_ops = {
->   *
->   * Returns: Zero for success, or an error code in case of failure
->   */
-> -static int epf_ntb_probe(struct pci_epf *epf)
-> +static int epf_ntb_probe(struct pci_epf *epf, const struct pci_epf_device_id *id)
->  {
->  	struct epf_ntb *ntb;
->  	struct device *dev;
-> diff --git a/drivers/pci/endpoint/pci-epf-core.c b/drivers/pci/endpoint/pci-epf-core.c
-> index 2036e38be093..924564288c9a 100644
-> --- a/drivers/pci/endpoint/pci-epf-core.c
-> +++ b/drivers/pci/endpoint/pci-epf-core.c
-> @@ -494,11 +494,13 @@ static const struct device_type pci_epf_type = {
->  };
->  
->  static int
-> -pci_epf_match_id(const struct pci_epf_device_id *id, const struct pci_epf *epf)
-> +pci_epf_match_id(const struct pci_epf_device_id *id, struct pci_epf *epf)
->  {
->  	while (id->name[0]) {
-> -		if (strcmp(epf->name, id->name) == 0)
-> +		if (strcmp(epf->name, id->name) == 0) {
-> +			epf->id = id;
->  			return true;
-> +		}
->  		id++;
->  	}
+Hi, Thomas,
 
-I disagree with this patch's intent. The match function should not
-change the parameters state. We should export this function to drivers
-so that upon probe they can retrieve the matching id themselves,
-as other bus interfaces do IMO.
+On Mon, May 29, 2023 at 5:27=E2=80=AFPM Thomas Gleixner <tglx@linutronix.de=
+> wrote:
+>
+> On Sun, May 28 2023 at 20:07, Huacai Chen wrote:
+> > On Sun, May 28, 2023 at 3:47=E2=80=AFPM Marc Zyngier <maz@kernel.org> w=
+rote:
+> >>
+> >> Being able to allocate MSIs is not a guarantee, and is always
+> >> opportunistic. If some drivers badly fail because the they don't get
+> >> the number of MSIs they need, then they need fixing.
+> >
+> > Yes, I know allocating MSIs is not a guarantee, and most existing
+> > drivers will fallback to use legacy irqs when failed. However, as I
+> > replied in an early mail, we want to do some proactive throttling in
+> > the loongson-pch-msi irqchip driver, rather than consume msi vectors
+> > aggressively. For example, if we have two NICs, we want both of them
+> > to get 32 msi vectors; not one exhaust all available vectors, and the
+> > other fallback to use legacy irq.
+>
+> By default you allow up to 256 interrupts to be allocated, right? So to
+> prevent vector exhaustion, the admin needs to reboot the machine and set
+> a command line parameter to limit this, right? As that parameter is not
+> documented the admin is going to dice a number. That's impractical and
+> just a horrible bandaid.
+OK, I think I should update the documents in the new version.
 
-Thanks,
-Lorenzo
-
-> @@ -526,7 +528,7 @@ static int pci_epf_device_probe(struct device *dev)
->  
->  	epf->driver = driver;
->  
-> -	return driver->probe(epf);
-> +	return driver->probe(epf, epf->id);
->  }
->  
->  static void pci_epf_device_remove(struct device *dev)
-> diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
-> index a215dc8ce693..bc613f0df7e3 100644
-> --- a/include/linux/pci-epf.h
-> +++ b/include/linux/pci-epf.h
-> @@ -89,7 +89,7 @@ struct pci_epc_event_ops {
->   * @id_table: identifies EPF devices for probing
->   */
->  struct pci_epf_driver {
-> -	int	(*probe)(struct pci_epf *epf);
-> +	int	(*probe)(struct pci_epf *epf, const struct pci_epf_device_id *id);
->  	void	(*remove)(struct pci_epf *epf);
->  
->  	struct device_driver	driver;
-> @@ -131,6 +131,7 @@ struct pci_epf_bar {
->   * @epc: the EPC device to which this EPF device is bound
->   * @epf_pf: the physical EPF device to which this virtual EPF device is bound
->   * @driver: the EPF driver to which this EPF device is bound
-> + * @id: Pointer to the EPF device ID
->   * @list: to add pci_epf as a list of PCI endpoint functions to pci_epc
->   * @lock: mutex to protect pci_epf_ops
->   * @sec_epc: the secondary EPC device to which this EPF device is bound
-> @@ -158,6 +159,7 @@ struct pci_epf {
->  	struct pci_epc		*epc;
->  	struct pci_epf		*epf_pf;
->  	struct pci_epf_driver	*driver;
-> +	const struct pci_epf_device_id *id;
->  	struct list_head	list;
->  	/* mutex to protect against concurrent access of pci_epf_ops */
->  	struct mutex		lock;
-> -- 
-> 2.25.1
-> 
+Huacai
+>
+> Thanks,
+>
+>         tglx
+>
+>
