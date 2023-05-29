@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CCA7143B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 690B97143B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjE2FXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 01:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S231468AbjE2FWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 01:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbjE2FW7 (ORCPT
+        with ESMTP id S231479AbjE2FWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 01:22:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167D5B1;
-        Sun, 28 May 2023 22:22:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83DF1611F0;
-        Mon, 29 May 2023 05:22:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7103C433D2;
-        Mon, 29 May 2023 05:22:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685337769;
-        bh=ggrBfM5Pkx6rzaVYqbUXNj5/omnkZEAUkcCnHkhmQ38=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=moNGhNs0pZI4d94Czmaj5IpoVe9wK0bA6CFjla1rjPgX4TJPMNrytbQjcZ2KdoB1D
-         /0YRPJ93oJI1lfJ+3vrc5B06TxpZj7h6mscg9STG8mrBDoZhXDPc2XhTz32saZOYNB
-         OFf7RulZVLDuRdwBJh8vGLib3/MVTAcMsFfkaLXZfRe/nEWYRDiK88KJVSPhhZ6WSm
-         +fMNmubD0mKSkuVF7mwRVdupC2IMmKTny8bNzjWO6xMOUkaMsBvBXj2U+CzAciN5U4
-         lF/qVmlp02zX6GXJyTlM3VpzF0rEqTxA3/JxTNbE4CiCfsudiCkN9PM6caUqVQ3w3H
-         dHL2jiTuwyK8g==
-Date:   Mon, 29 May 2023 10:52:27 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     fancer.lancer@gmail.com, gustavo.pimentel@synopsys.com,
-        vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Add Cai Huoqing as dw-edma maintainer
-Message-ID: <20230529052227.GA2856@thinkpad>
-References: <20230529032423.11650-1-cai.huoqing@linux.dev>
+        Mon, 29 May 2023 01:22:48 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FEA9B
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:22:45 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id d5de9746-fde0-11ed-abf4-005056bdd08f;
+        Mon, 29 May 2023 08:22:42 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Mon, 29 May 2023 08:22:41 +0300
+To:     Astrid Rost <astrid.rost@axis.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mathieu Othacehe <m.othacehe@gmail.com>
+Subject: Re: [PATCH v4 6/7] iio: light: vcnl4000: Add oversampling_ratio for
+ 4040/4200
+Message-ID: <ZHQ2obeWHEHZsVOG@surfacebook>
+References: <20230522142621.1680563-1-astrid.rost@axis.com>
+ <20230522142621.1680563-7-astrid.rost@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230529032423.11650-1-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230522142621.1680563-7-astrid.rost@axis.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Mon, May 29, 2023 at 11:24:23AM +0800, Cai Huoqing wrote:
-> Since HDMA mode was merged, including the commits:
-> commit e74c39573d35 ("dmaengine: dw-edma: Add support for native HDMA"),
-> commit 353d5c241e83 ("dmaengine: dw-edma: Add HDMA DebugFS support"),
-> I would like to add myself as maintainer of the dw-edma driver
-> to recive patch for HDMA part. 
+Mon, May 22, 2023 at 04:26:20PM +0200, Astrid Rost kirjoitti:
+> Add the proximity multi pulse (PS_MPS) as oversampling_ratio.
+> Instead of one single pulse per every defined time frame,
+> one can program 2, 4, or even 8 pulses. This leads to a
+> longer IRED on-time for each proximity measurement value, which
+> also results in a higher detection range.
 > 
-> I can test HDMA part by our chip and cmodel and do some code review.
-> I'm active in linux contribution, if possible, I want to
-> take the dw-edma maintainership.
-> 
+> Add read/write attribute for proximity oversampling-ratio and read
+> attribute for available oversampling-ratio.
+> This is supported for vcnl4040 and vcnl4200.
 
-Thanks for your interest in maintaining this driver. However, maintainership
-involves active reviewing and maintaining the whole driver and not just the HDMA
-part. If that's what you are intend to do, then I'd encourage you to first spend
-some time reviewing and testing the patches targeting the dw-edma driver.
+...
 
-This will help justifying the reviewer/maintainership role in the future.
+> +static ssize_t vcnl4040_write_ps_oversampling_ratio(struct vcnl4000_data *data, int val)
+> +{
+> +	unsigned int i;
+> +	int ret, index = -1;
 
-- Mani
+Either i or index is redundant.
 
-> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3a0504731524..541601feabd0 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5881,6 +5881,7 @@ F:	drivers/mtd/nand/raw/denali*
->  
->  DESIGNWARE EDMA CORE IP DRIVER
->  M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> +M:	Cai Huoqing <cai.huoqing@linux.dev>
->  R:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
->  R:	Serge Semin <fancer.lancer@gmail.com>
->  L:	dmaengine@vger.kernel.org
-> -- 
-> 2.34.1
-> 
+> +	u16 regval;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(vcnl4040_ps_oversampling_ratio); i++) {
+> +		if (val == vcnl4040_ps_oversampling_ratio[i]) {
+> +			index = i;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (index < 0)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&data->vcnl4000_lock);
+> +
+> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF3);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	regval = (ret & ~VCNL4040_PS_CONF3_MPS) |
+> +	    FIELD_PREP(VCNL4040_PS_CONF3_MPS, index);
+> +	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF3,
+> +					regval);
+> +
+> +out:
+
+out_unlock:
+
+> +	mutex_unlock(&data->vcnl4000_lock);
+> +	return ret;
+> +}
+
+...
+
+>  		if (ret < 0)
+>  			return ret;
+>  		return IIO_VAL_INT_PLUS_MICRO;
+> +	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+> +		switch (chan->type) {
+> +		case IIO_PROXIMITY:
+> +			ret = vcnl4040_read_ps_oversampling_ratio(data, val);
+> +			if (ret < 0)
+> +				return ret;
+> +			return IIO_VAL_INT;
+> +		default:
+> +			return -EINVAL;
+> +		}
+
+> +
+
+This is inconsistent blank line.
+
+>  	default:
+>  		return -EINVAL;
+>  	}
 
 -- 
-மணிவண்ணன் சதாசிவம்
+With Best Regards,
+Andy Shevchenko
+
+
