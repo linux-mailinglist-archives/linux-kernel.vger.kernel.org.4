@@ -2,147 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC57714990
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DFA714991
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjE2MhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
+        id S230318AbjE2Mhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjE2MhR (ORCPT
+        with ESMTP id S230174AbjE2Mhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:37:17 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970EAAD
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:37:14 -0700 (PDT)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QVFP50DRgzLmPC;
-        Mon, 29 May 2023 20:35:37 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 29 May 2023 20:37:10 +0800
-From:   Wupeng Ma <mawupeng1@huawei.com>
-To:     <akpm@linux-foundation.org>, <kirill.shutemov@linux.intel.com>,
-        <hughd@google.com>
-CC:     <n-horiguchi@ah.jp.nec.com>, <jmarchan@redhat.com>,
-        <willy@infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <mawupeng1@huawei.com>
-Subject: [RFC PATCH stable 5.10/5.15] mm: Pass head page to clear_page_mlock for page_remove_rmap
-Date:   Mon, 29 May 2023 20:37:05 +0800
-Message-ID: <20230529123705.955378-1-mawupeng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 29 May 2023 08:37:40 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9FCD8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:37:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0Vjnn2Bk_1685363849;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vjnn2Bk_1685363849)
+          by smtp.aliyun-inc.com;
+          Mon, 29 May 2023 20:37:33 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH v3 5/6] erofs: use struct lockref to replace handcrafted approach
+Date:   Mon, 29 May 2023 20:37:27 +0800
+Message-Id: <20230529123727.79943-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
+In-Reply-To: <2fa6114d-9de2-9a0d-ae89-c012914bf682@linux.alibaba.com>
+References: <2fa6114d-9de2-9a0d-ae89-c012914bf682@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ma Wupeng <mawupeng1@huawei.com>
+Let's avoid the current handcrafted lockref although `struct lockref`
+inclusion usually increases extra 4 bytes with an explicit spinlock if
+CONFIG_DEBUG_SPINLOCK is off.
 
-Our syzbot report a mlock related problem. During exit_mm, tail page is
-passed to clear_page_mlock which final lead to kernel panic.
+Apart from the size difference, note that the meaning of refcount is
+also changed to active users. IOWs, it doesn't take an extra refcount
+for XArray tree insertion.
 
-During unmap_page_range, if compound is false, it means this page is
-seen as a small page. This page is passed to isolate_lru_page if this
-page is PageMlocked and finally lead to "trying to isolate tail page"
-warning.
+I don't observe any significant performance difference at least on
+our cloud compute server but the new one indeed simplifies the
+overall codebase a bit.
 
-Here is the simplified calltrace:
-
-unmap_page_range
-  zap_pte_range
-    page_remove_rmap(page, false);	// compound is false means to handle
-					   to small page not compound page
-	  nr_pages = thp_nr_pages(page);
-	  clear_page_mlock(page)	// maybe tail page here
-		isolate_lru_page
-		  WARN_RATELIMIT(PageTail(page), "trying to isolate tail page");
-
-Since mlock is not supposed to handle tail, we pass head page to
-clear_page_mlock() to slove this problem.
-
-This bug can lead to multiple reports. Here ares the simplified reports:
-
-------------[ cut here ]------------
-trying to isolate tail page
-WARNING: CPU: 1 PID: 24489 at mm/vmscan.c:2031 isolate_lru_page+0x574/0x660
-
-page:fffffc000eb7a300 refcount:512 mapcount:0 mapping:0000000000000000 index:0x2008c pfn:0x3ede8c
-head:fffffc000eb78000 order:9 compound_mapcount:0 compound_pincount:0
-memcg:ffff0000d24bc000
-anon flags: 0x37ffff80009080c(uptodate|dirty|arch_1|head|swapbacked|node=1|zone=2|lastcpupid=0xfffff)
-raw: 037ffff800000800 fffffc000eb78001 fffffc000eb7a308 dead000000000400
-raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
-head: 037ffff80009080c fffffc000eb70008 fffffc000e350708 ffff0003829eb839
-head: 0000000000020000 0000000000000000 00000200ffffffff ffff0000d24bc000
-page dumped because: VM_WARN_ON_ONCE_PAGE(!memcg && !mem_cgroup_disabled())
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 24489 at include/linux/memcontrol.h:767 lock_page_lruvec_irq+0x148/0x190
-
-page:fffffc000eb7a300 refcount:0 mapcount:0 mapping:dead000000000400 index:0x0 pfn:0x3ede8c
-failed to read mapping contents, not a valid kernel address?
-flags: 0x37ffff800000800(arch_1|node=1|zone=2|lastcpupid=0xfffff)
-raw: 037ffff800000800 dead000000000100 dead000000000122 dead000000000400
-raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: VM_BUG_ON_PAGE(((unsigned int) page_ref_count(page) + 127u <= 127u))
-------------[ cut here ]------------
-kernel BUG at include/linux/mm.h:1213!
-Call trace:
- lru_cache_add+0x2d4/0x2e8
- putback_lru_page+0x2c/0x168
- clear_page_mlock+0x254/0x318
- page_remove_rmap+0x900/0x9c0
- unmap_page_range+0xa78/0x16a0
- unmap_single_vma+0x114/0x1a0
- unmap_vmas+0x100/0x220
- exit_mmap+0x120/0x410
- mmput+0x174/0x498
- exit_mm+0x33c/0x460
- do_exit+0x3c0/0x1310
- do_group_exit+0x98/0x170
- get_signal+0x370/0x13d0
- do_notify_resume+0x5a0/0x968
- el0_da+0x154/0x188
- el0t_64_sync_handler+0x88/0xb8
- el0t_64_sync+0x1a0/0x1a4
-Code: 912b0021 aa1503e0 910c0021 9401a49c (d4210000)
-
-This bug can be reproduced in both linux-5.10.y & linux-5.15.y and maybe
-fixed after commit 889a3747b3b7 ("mm/lru: Add folio LRU functions").
-This patch turn page into folio for LRU related operations, all
-operations to page is turn to folio which means head page after this
-patch.
-
-Fixes: d281ee614518 ("rmap: add argument to charge compound page")
-Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 ---
- mm/rmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+changes since v2:
+ - use lockref_put_or_lock() as Yue's suggested;
 
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 330b361a460e..8838f6a9d65d 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -1372,7 +1372,7 @@ void page_remove_rmap(struct page *page, bool compound)
- 	__dec_lruvec_page_state(page, NR_ANON_MAPPED);
+ fs/erofs/internal.h | 38 ++------------------
+ fs/erofs/utils.c    | 85 ++++++++++++++++++++++-----------------------
+ fs/erofs/zdata.c    | 15 ++++----
+ 3 files changed, 51 insertions(+), 87 deletions(-)
+
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 005f3391bcd3..36e32fa542f0 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -208,46 +208,12 @@ enum {
+ 	EROFS_ZIP_CACHE_READAROUND
+ };
  
- 	if (unlikely(PageMlocked(page)))
--		clear_page_mlock(page);
-+		clear_page_mlock(compound_head(page));
+-#define EROFS_LOCKED_MAGIC     (INT_MIN | 0xE0F510CCL)
+-
+ /* basic unit of the workstation of a super_block */
+ struct erofs_workgroup {
+-	/* the workgroup index in the workstation */
+ 	pgoff_t index;
+-
+-	/* overall workgroup reference count */
+-	atomic_t refcount;
++	struct lockref lockref;
+ };
  
- 	if (PageTransCompound(page))
- 		deferred_split_huge_page(compound_head(page));
+-static inline bool erofs_workgroup_try_to_freeze(struct erofs_workgroup *grp,
+-						 int val)
+-{
+-	preempt_disable();
+-	if (val != atomic_cmpxchg(&grp->refcount, val, EROFS_LOCKED_MAGIC)) {
+-		preempt_enable();
+-		return false;
+-	}
+-	return true;
+-}
+-
+-static inline void erofs_workgroup_unfreeze(struct erofs_workgroup *grp,
+-					    int orig_val)
+-{
+-	/*
+-	 * other observers should notice all modifications
+-	 * in the freezing period.
+-	 */
+-	smp_mb();
+-	atomic_set(&grp->refcount, orig_val);
+-	preempt_enable();
+-}
+-
+-static inline int erofs_wait_on_workgroup_freezed(struct erofs_workgroup *grp)
+-{
+-	return atomic_cond_read_relaxed(&grp->refcount,
+-					VAL != EROFS_LOCKED_MAGIC);
+-}
+-
+ enum erofs_kmap_type {
+ 	EROFS_NO_KMAP,		/* don't map the buffer */
+ 	EROFS_KMAP,		/* use kmap_local_page() to map the buffer */
+@@ -486,7 +452,7 @@ static inline void erofs_pagepool_add(struct page **pagepool, struct page *page)
+ void erofs_release_pages(struct page **pagepool);
+ 
+ #ifdef CONFIG_EROFS_FS_ZIP
+-int erofs_workgroup_put(struct erofs_workgroup *grp);
++void erofs_workgroup_put(struct erofs_workgroup *grp);
+ struct erofs_workgroup *erofs_find_workgroup(struct super_block *sb,
+ 					     pgoff_t index);
+ struct erofs_workgroup *erofs_insert_workgroup(struct super_block *sb,
+diff --git a/fs/erofs/utils.c b/fs/erofs/utils.c
+index 46627cb69abe..4590954cf147 100644
+--- a/fs/erofs/utils.c
++++ b/fs/erofs/utils.c
+@@ -33,22 +33,21 @@ void erofs_release_pages(struct page **pagepool)
+ /* global shrink count (for all mounted EROFS instances) */
+ static atomic_long_t erofs_global_shrink_cnt;
+ 
+-static int erofs_workgroup_get(struct erofs_workgroup *grp)
++static bool erofs_workgroup_get(struct erofs_workgroup *grp)
+ {
+-	int o;
++	if (lockref_get_not_zero(&grp->lockref))
++		return true;
+ 
+-repeat:
+-	o = erofs_wait_on_workgroup_freezed(grp);
+-	if (o <= 0)
+-		return -1;
+-
+-	if (atomic_cmpxchg(&grp->refcount, o, o + 1) != o)
+-		goto repeat;
++	spin_lock(&grp->lockref.lock);
++	if (__lockref_is_dead(&grp->lockref)) {
++		spin_unlock(&grp->lockref.lock);
++		return false;
++	}
+ 
+-	/* decrease refcount paired by erofs_workgroup_put */
+-	if (o == 1)
++	if (!grp->lockref.count++)
+ 		atomic_long_dec(&erofs_global_shrink_cnt);
+-	return 0;
++	spin_unlock(&grp->lockref.lock);
++	return true;
+ }
+ 
+ struct erofs_workgroup *erofs_find_workgroup(struct super_block *sb,
+@@ -61,7 +60,7 @@ struct erofs_workgroup *erofs_find_workgroup(struct super_block *sb,
+ 	rcu_read_lock();
+ 	grp = xa_load(&sbi->managed_pslots, index);
+ 	if (grp) {
+-		if (erofs_workgroup_get(grp)) {
++		if (!erofs_workgroup_get(grp)) {
+ 			/* prefer to relax rcu read side */
+ 			rcu_read_unlock();
+ 			goto repeat;
+@@ -80,11 +79,10 @@ struct erofs_workgroup *erofs_insert_workgroup(struct super_block *sb,
+ 	struct erofs_workgroup *pre;
+ 
+ 	/*
+-	 * Bump up a reference count before making this visible
+-	 * to others for the XArray in order to avoid potential
+-	 * UAF without serialized by xa_lock.
++	 * Bump up before making this visible to others for the XArray in order
++	 * to avoid potential UAF without serialized by xa_lock.
+ 	 */
+-	atomic_inc(&grp->refcount);
++	lockref_get(&grp->lockref);
+ 
+ repeat:
+ 	xa_lock(&sbi->managed_pslots);
+@@ -93,13 +91,13 @@ struct erofs_workgroup *erofs_insert_workgroup(struct super_block *sb,
+ 	if (pre) {
+ 		if (xa_is_err(pre)) {
+ 			pre = ERR_PTR(xa_err(pre));
+-		} else if (erofs_workgroup_get(pre)) {
++		} else if (!erofs_workgroup_get(pre)) {
+ 			/* try to legitimize the current in-tree one */
+ 			xa_unlock(&sbi->managed_pslots);
+ 			cond_resched();
+ 			goto repeat;
+ 		}
+-		atomic_dec(&grp->refcount);
++		lockref_put_return(&grp->lockref);
+ 		grp = pre;
+ 	}
+ 	xa_unlock(&sbi->managed_pslots);
+@@ -112,38 +110,34 @@ static void  __erofs_workgroup_free(struct erofs_workgroup *grp)
+ 	erofs_workgroup_free_rcu(grp);
+ }
+ 
+-int erofs_workgroup_put(struct erofs_workgroup *grp)
++void erofs_workgroup_put(struct erofs_workgroup *grp)
+ {
+-	int count = atomic_dec_return(&grp->refcount);
++	if (lockref_put_or_lock(&grp->lockref))
++		return;
+ 
+-	if (count == 1)
++	DBG_BUGON(__lockref_is_dead(&grp->lockref));
++	if (grp->lockref.count == 1)
+ 		atomic_long_inc(&erofs_global_shrink_cnt);
+-	else if (!count)
+-		__erofs_workgroup_free(grp);
+-	return count;
++	--grp->lockref.count;
++	spin_unlock(&grp->lockref.lock);
+ }
+ 
+ static bool erofs_try_to_release_workgroup(struct erofs_sb_info *sbi,
+ 					   struct erofs_workgroup *grp)
+ {
+-	/*
+-	 * If managed cache is on, refcount of workgroups
+-	 * themselves could be < 0 (freezed). In other words,
+-	 * there is no guarantee that all refcounts > 0.
+-	 */
+-	if (!erofs_workgroup_try_to_freeze(grp, 1))
+-		return false;
++	int free = false;
++
++	spin_lock(&grp->lockref.lock);
++	if (grp->lockref.count)
++		goto out;
+ 
+ 	/*
+-	 * Note that all cached pages should be unattached
+-	 * before deleted from the XArray. Otherwise some
+-	 * cached pages could be still attached to the orphan
+-	 * old workgroup when the new one is available in the tree.
++	 * Note that all cached pages should be detached before deleted from
++	 * the XArray. Otherwise some cached pages could be still attached to
++	 * the orphan old workgroup when the new one is available in the tree.
+ 	 */
+-	if (erofs_try_to_free_all_cached_pages(sbi, grp)) {
+-		erofs_workgroup_unfreeze(grp, 1);
+-		return false;
+-	}
++	if (erofs_try_to_free_all_cached_pages(sbi, grp))
++		goto out;
+ 
+ 	/*
+ 	 * It's impossible to fail after the workgroup is freezed,
+@@ -152,10 +146,13 @@ static bool erofs_try_to_release_workgroup(struct erofs_sb_info *sbi,
+ 	 */
+ 	DBG_BUGON(__xa_erase(&sbi->managed_pslots, grp->index) != grp);
+ 
+-	/* last refcount should be connected with its managed pslot.  */
+-	erofs_workgroup_unfreeze(grp, 0);
+-	__erofs_workgroup_free(grp);
+-	return true;
++	lockref_mark_dead(&grp->lockref);
++	free = true;
++out:
++	spin_unlock(&grp->lockref.lock);
++	if (free)
++		__erofs_workgroup_free(grp);
++	return free;
+ }
+ 
+ static unsigned long erofs_shrink_workstation(struct erofs_sb_info *sbi,
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index c556906354e5..637a964ff110 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -641,7 +641,7 @@ int erofs_try_to_free_all_cached_pages(struct erofs_sb_info *sbi,
+ 
+ 	DBG_BUGON(z_erofs_is_inline_pcluster(pcl));
+ 	/*
+-	 * refcount of workgroup is now freezed as 1,
++	 * refcount of workgroup is now freezed as 0,
+ 	 * therefore no need to worry about available decompression users.
+ 	 */
+ 	for (i = 0; i < pcl->pclusterpages; ++i) {
+@@ -674,10 +674,11 @@ static bool z_erofs_cache_release_folio(struct folio *folio, gfp_t gfp)
+ 	if (!folio_test_private(folio))
+ 		return true;
+ 
+-	if (!erofs_workgroup_try_to_freeze(&pcl->obj, 1))
+-		return false;
+-
+ 	ret = false;
++	spin_lock(&pcl->obj.lockref.lock);
++	if (pcl->obj.lockref.count > 0)
++		goto out;
++
+ 	DBG_BUGON(z_erofs_is_inline_pcluster(pcl));
+ 	for (i = 0; i < pcl->pclusterpages; ++i) {
+ 		if (pcl->compressed_bvecs[i].page == &folio->page) {
+@@ -686,10 +687,10 @@ static bool z_erofs_cache_release_folio(struct folio *folio, gfp_t gfp)
+ 			break;
+ 		}
+ 	}
+-	erofs_workgroup_unfreeze(&pcl->obj, 1);
+-
+ 	if (ret)
+ 		folio_detach_private(folio);
++out:
++	spin_unlock(&pcl->obj.lockref.lock);
+ 	return ret;
+ }
+ 
+@@ -805,7 +806,7 @@ static int z_erofs_register_pcluster(struct z_erofs_decompress_frontend *fe)
+ 	if (IS_ERR(pcl))
+ 		return PTR_ERR(pcl);
+ 
+-	atomic_set(&pcl->obj.refcount, 1);
++	spin_lock_init(&pcl->obj.lockref.lock);
+ 	pcl->algorithmformat = map->m_algorithmformat;
+ 	pcl->length = 0;
+ 	pcl->partial = true;
 -- 
-2.25.1
+2.24.4
 
