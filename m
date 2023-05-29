@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED8B714874
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 13:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6219714871
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 13:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjE2LUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 07:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
+        id S231350AbjE2LU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 07:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjE2LUw (ORCPT
+        with ESMTP id S229920AbjE2LUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 07:20:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B784DD8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 04:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685359205;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lKtwwKgdOHzbmoD1T/tHoH3aQvqf/6iMtVklqd9So0E=;
-        b=hU9T1WEY4Og5ZjjkmmJQ6nv+DDmeSjIxB4e3Skb/HxrmN4BU/OvK84GMlMA2rw8GrP1ejy
-        /F+drlBRm+mx3eGOMU3veWhm0OqsvMMMlaauxVrmY9DCst2zH6Nt6BC/eb5kjYV+BI7hJb
-        wYyxtZu3ynR80CD2qRHNqpkr33VvtD4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-RwJkRKDPN2qUEFaFuOyK3Q-1; Mon, 29 May 2023 07:20:02 -0400
-X-MC-Unique: RwJkRKDPN2qUEFaFuOyK3Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 05FFA185A78F;
-        Mon, 29 May 2023 11:20:02 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.99])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 64375492B00;
-        Mon, 29 May 2023 11:19:59 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 29 May 2023 13:19:43 +0200 (CEST)
-Date:   Mon, 29 May 2023 13:19:39 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mike Christie <michael.christie@oracle.com>,
-        linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-Message-ID: <20230529111859.GA15193@redhat.com>
-References: <20230523121506.GA6562@redhat.com>
- <87bkib6nxr.fsf@email.froward.int.ebiederm.org>
- <20230524141022.GA19091@redhat.com>
- <87ttw1zt4i.fsf@email.froward.int.ebiederm.org>
- <20230525115512.GA9229@redhat.com>
- <87y1lcxwcj.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wj4DS=2F5mW+K2P7cVqrsuGd3rKE_2k2BqnnPeeYhUCvg@mail.gmail.com>
- <87cz2mrtnk.fsf@email.froward.int.ebiederm.org>
- <CAHk-=whsi9JFP-okH3jXHrA8rh8bMuuSt6ZgkmPwiDMAn437qA@mail.gmail.com>
- <87mt1pmezu.fsf@email.froward.int.ebiederm.org>
+        Mon, 29 May 2023 07:20:24 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54FEBCD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 04:20:23 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:38010.867005441
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 313FA1028BB;
+        Mon, 29 May 2023 19:20:20 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-xp9j7 with ESMTP id 40b0b2cc20eb420b8f017a90b76d4b16 for jani.nikula@linux.intel.com;
+        Mon, 29 May 2023 19:20:22 CST
+X-Transaction-ID: 40b0b2cc20eb420b8f017a90b76d4b16
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <edcc8838-f097-4c29-a26f-8cc5e325acb7@189.cn>
+Date:   Mon, 29 May 2023 19:20:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mt1pmezu.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/i915_drm.h: fix a typo
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230529074912.2070902-1-suijingfeng@loongson.cn>
+ <874jnvimtf.fsf@intel.com> <970d2cff-f181-d933-8ce3-b1dbe7f90fd8@189.cn>
+ <87wn0rh2oa.fsf@intel.com>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <87wn0rh2oa.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/27, Eric W. Biederman wrote:
+Hi,
+
+
+I'm just hesitating to so, thank you.
+
+
+On 2023/5/29 18:06, Jani Nikula wrote:
+> On Mon, 29 May 2023, Sui Jingfeng <15330273260@189.cn> wrote:
+>> Hi,
+>>
+>>
+>> On 2023/5/29 16:06, Jani Nikula wrote:
+>>> On Mon, 29 May 2023, Sui Jingfeng <suijingfeng@loongson.cn> wrote:
+>>>>    'rbiter' -> 'arbite'
+>>> Should be arbiter.
+>> Yeah, should be arbiter.
+>>
+>> arbiter is a noun. Here, this arbiter may referrer to the
+>> drivers/pci/vgaarb.c.
+>>
+>> Can you help correct then apply it ? thanks.
+> Please send a fixed version and I'll apply it. I'm not fixing trivial
+> patches for you.
 >
-> Looking forward I don't see not asking the worker threads to stop
-> for the coredump right now causing any problems in the future.
-> So I think we can use this to resolve the coredump issue I spotted.
-
-But we have almost the same problem with exec.
-
-Execing thread will wait for vhost_worker() while vhost_worker will wait for
-.release -> vhost_task_stop().
-
-And even O_CLOEXEC won't help, do_close_on_exec() is called after de_thread().
-
-Or suppose that vhost_worker's sub-thread forks a child with CLONE_FILES...
-
-If we want CLONE_THREAD, I think vhost_worker() should exit after get_signal()
-returns SIGKILL. Perhaps it should "disable" vhost_work_queue() somehow and
-flush the pending works on ->work_list before exit, I dunno. But imo it should
-not wait for the final fput().
-
-Oleg.
-
+> BR,
+> Jani.
+>
+>
+>>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>> ---
+>>>>    include/drm/i915_drm.h | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/include/drm/i915_drm.h b/include/drm/i915_drm.h
+>>>> index 7adce327c1c2..3dcb1db519ae 100644
+>>>> --- a/include/drm/i915_drm.h
+>>>> +++ b/include/drm/i915_drm.h
+>>>> @@ -42,7 +42,7 @@ extern struct resource intel_graphics_stolen_res;
+>>>>     * The Bridge device's PCI config space has information about the
+>>>>     * fb aperture size and the amount of pre-reserved memory.
+>>>>     * This is all handled in the intel-gtt.ko module. i915.ko only
+>>>> - * cares about the vga bit for the vga rbiter.
+>>>> + * cares about the vga bit for the vga arbite.
+>>>>     */
+>>>>    #define INTEL_GMCH_CTRL		0x52
+>>>>    #define INTEL_GMCH_VGA_DISABLE  (1 << 1)
