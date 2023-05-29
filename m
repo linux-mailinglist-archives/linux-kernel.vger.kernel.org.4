@@ -2,88 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AC971466D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD096714670
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbjE2InW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
+        id S231532AbjE2Io2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbjE2InP (ORCPT
+        with ESMTP id S231650AbjE2IoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:43:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10738B1;
-        Mon, 29 May 2023 01:43:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 932066127C;
-        Mon, 29 May 2023 08:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5773EC433EF;
-        Mon, 29 May 2023 08:43:11 +0000 (UTC)
-Date:   Mon, 29 May 2023 04:43:07 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-doc@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        William White <chwhite@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH V2 0/9] rtla improvements
-Message-ID: <20230529044307.2dcfca3d@rorschach.local.home>
-In-Reply-To: <838075fb-8b82-1aee-97a1-95102c03c16d@kernel.org>
-References: <cover.1684863094.git.bristot@kernel.org>
-        <20230529042839.5d4af427@rorschach.local.home>
-        <838075fb-8b82-1aee-97a1-95102c03c16d@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 29 May 2023 04:44:22 -0400
+Received: from out-17.mta0.migadu.com (out-17.mta0.migadu.com [91.218.175.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C3DAC
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:44:20 -0700 (PDT)
+Date:   Mon, 29 May 2023 16:44:15 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685349859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GWWjW272D8dSNO84PIr6uIe+T3G/E2XjK68WyXdYOu8=;
+        b=N3LgF6NjYlhUWOYyfVPqcfV/vbf77eNAW3CS7RAF62mQwFXjX8SrBKd2hxO+pu+7kgdDum
+        jqT2PmoKp0xhmlzuxXnzFQsNc0+YTAlfTE+N8R4aq/oaTB/NSJQ5piN0OZk4z+y085wZpy
+        WGcaKbt0xQZbq6VrxwXMVavg6T0WqqU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     fancer.lancer@gmail.com, gustavo.pimentel@synopsys.com,
+        vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add Cai Huoqing as dw-edma maintainer
+Message-ID: <ZHRl37L2JPq+UmGp@chq-MS-7D45>
+References: <20230529032423.11650-1-cai.huoqing@linux.dev>
+ <20230529052227.GA2856@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230529052227.GA2856@thinkpad>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 May 2023 10:38:16 +0200
-Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
-
-> On 5/29/23 10:28, Steven Rostedt wrote:
-> > Hi Daniel,
+On 29 5月 23 10:52:27, Manivannan Sadhasivam wrote:
+> Hi,
+> 
+> On Mon, May 29, 2023 at 11:24:23AM +0800, Cai Huoqing wrote:
+> > Since HDMA mode was merged, including the commits:
+> > commit e74c39573d35 ("dmaengine: dw-edma: Add support for native HDMA"),
+> > commit 353d5c241e83 ("dmaengine: dw-edma: Add HDMA DebugFS support"),
+> > I would like to add myself as maintainer of the dw-edma driver
+> > to recive patch for HDMA part. 
 > > 
-> > Could you make sure to Cc linux-trace-kernel@vger.kernel.org and not
-> > linux-trace-devel. The former is for any patch that goes into the
-> > kernel repo, the later is for the tracing libraries (like libtracefs).
-> > The reason why this matters is that the patchwork that is associated to
-> > the Linux kernel tree will not get these (and I will not work on them
-> > when I'm working on kernel patches). But it will go into the 
-> > patchwork for the libraries (and never be processed by the patchwork
-> > infrastructure), and I will likely not work on them, because when I
-> > look at the library patchwork, I ignore anything that goes into the
-> > kernel.  
-> 
-> Sure, I will do that. IIRC, we agreed that we would use linux-trace-devel for
-> rtla because it is a user-space tool. But I agree with you, as they are patches
-> going to the kernel repo, linux-trace-kernel is a better place. It is easier to
-> myself too... :-).
-
-I think we agreed on that because linux-trace-kernel didn't exist yet ;-)
-
-> 
+> > I can test HDMA part by our chip and cmodel and do some code review.
+> > I'm active in linux contribution, if possible, I want to
+> > take the dw-edma maintainership.
 > > 
-> > Perhaps resend with the proper Cc and it will then be processed. I
-> > allowed this to happen before, but that's because I did everything
-> > manually and not with my scripts. And I'm tired of doing that.  
 > 
-> I will do that in the v3.
+> Thanks for your interest in maintaining this driver. However, maintainership
+> involves active reviewing and maintaining the whole driver and not just the HDMA
+> part. If that's what you are intend to do, then I'd encourage you to first spend
+> some time reviewing and testing the patches targeting the dw-edma driver.
+
+Ok, will do.
+
+Thanks,
+Cai-
 > 
-> I will also update the maintainers entry for RTLA and RV, as both are pointing to
-> linux-trace-devel.
-
-I already sent the patch!
-
--- Steve
+> This will help justifying the reviewer/maintainership role in the future.
+> 
+> - Mani
+> 
+> > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> > ---
+> >  MAINTAINERS | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 3a0504731524..541601feabd0 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -5881,6 +5881,7 @@ F:	drivers/mtd/nand/raw/denali*
+> >  
+> >  DESIGNWARE EDMA CORE IP DRIVER
+> >  M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > +M:	Cai Huoqing <cai.huoqing@linux.dev>
+> >  R:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+> >  R:	Serge Semin <fancer.lancer@gmail.com>
+> >  L:	dmaengine@vger.kernel.org
+> > -- 
+> > 2.34.1
+> > 
+> 
+> -- 
+> மணிவண்ணன் சதாசிவம்
