@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FE7714F93
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC5F714F97
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjE2TOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 15:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
+        id S229736AbjE2TOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 15:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjE2TO1 (ORCPT
+        with ESMTP id S229676AbjE2TO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 May 2023 15:14:27 -0400
 Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD471D2;
-        Mon, 29 May 2023 12:14:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B90DD9;
+        Mon, 29 May 2023 12:14:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
         s=smtpout1; t=1685387663;
-        bh=E7Q4JmbMKWpqkjo72GLBkCxs4FPIIvyJtEspj5idB/U=;
+        bh=1NSDvuKZlkj1LDG55Opnc9arEf2CDBA5sWooOa0Auxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iA6sYhg7uvaIe/pCwyzk1Z6fglq2EMj8blDu8+QNsIltbH5xaQX/PGLCvJztR9ZbW
-         3HOWzbbek+f7mpT0kHnTz1jpLJSxd6TY3uMCaFNhJ1pLOPahcBAuk+nOo/+JrcdRhW
-         Ic9FqDxpWxoZrdnpTmeJq+Sgkf1w8kwF+4hgKg/jyizLs34BqBCvDt9/3hapA/GmhU
-         L6FspGdPOmUDPEauUIV5OK/A+5H5r3vT3xGfLLeop603Y2o0gPIWR+rtKR7TJC65r8
-         FIu6g/GOEpmf5c15Nz56T3ebqj1llXL6QdOsCG32aMGEHZK0yyR4rT5bK9sVr9fxvE
-         YxEC05Z+gihjQ==
+        b=E+nmIA9jjhGxSVcQWQ1eh0PMnpHNNfD6o9CBD+CE/oKRJutzuFGKqFXTzkuQ3vlHR
+         +srFPLRlhguoA+SYIAbp2Y80lBYBP8/sVMMuFZjOO8TomJeAkBd/oHgtqHKET1L/jE
+         Oq+sdX9bwUXsbfwjQ1TUad7wjJoJvyq4l5NiCSUFlorVyqzmqn8KCQdYd0PDkQDKke
+         rMm2TI/P4A++PEXnsUgm17wwUCo1q7HtISOODP7xtmJOwVXzNjY5xP9XCLnkP13faU
+         dvZd1sCtXlMDSGDDskruo6k2GnQ2obToX5tEaMZD6S6g95kTQbdLD9TnsB3M2w4yjk
+         7ljd78EzhMOCg==
 Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QVQFB4ZFyz165P;
-        Mon, 29 May 2023 15:14:22 -0400 (EDT)
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QVQFC0n9Jz165Q;
+        Mon, 29 May 2023 15:14:23 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
@@ -48,9 +48,9 @@ Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Noah Goldstein <goldstein.w.n@gmail.com>,
         Daniel Colascione <dancol@google.com>, longman@redhat.com,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RFC PATCH v2 2/4] selftests/rseq: Add sched_state rseq field and getter
-Date:   Mon, 29 May 2023 15:14:14 -0400
-Message-Id: <20230529191416.53955-3-mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH v2 3/4] selftests/rseq: Implement sched state test program
+Date:   Mon, 29 May 2023 15:14:15 -0400
+Message-Id: <20230529191416.53955-4-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230529191416.53955-1-mathieu.desnoyers@efficios.com>
 References: <20230529191416.53955-1-mathieu.desnoyers@efficios.com>
@@ -66,141 +66,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend struct rseq in the rseq selftests to include the sched_state
-field. Implement a getter function for this field.
+This is a small test program with can be altered to show whether the
+target thread is on-cpu or not, dependending on whether it loops on
+poll() or does a busy-loop.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- tools/testing/selftests/rseq/rseq-abi.h | 42 +++++++++++++++++++++++++
- tools/testing/selftests/rseq/rseq.c     | 13 ++++++++
- tools/testing/selftests/rseq/rseq.h     |  5 +++
- 3 files changed, 60 insertions(+)
+ tools/testing/selftests/rseq/.gitignore       |  1 +
+ tools/testing/selftests/rseq/Makefile         |  2 +-
+ .../testing/selftests/rseq/sched_state_test.c | 72 +++++++++++++++++++
+ 3 files changed, 74 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/rseq/sched_state_test.c
 
-diff --git a/tools/testing/selftests/rseq/rseq-abi.h b/tools/testing/selftests/rseq/rseq-abi.h
-index fb4ec8a75dd4..1092d6750386 100644
---- a/tools/testing/selftests/rseq/rseq-abi.h
-+++ b/tools/testing/selftests/rseq/rseq-abi.h
-@@ -37,6 +37,13 @@ enum rseq_abi_cs_flags {
- 		(1U << RSEQ_ABI_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT),
- };
+diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
+index 16496de5f6ce..a8db9f7a7cec 100644
+--- a/tools/testing/selftests/rseq/.gitignore
++++ b/tools/testing/selftests/rseq/.gitignore
+@@ -9,3 +9,4 @@ param_test_compare_twice
+ param_test_mm_cid
+ param_test_mm_cid_benchmark
+ param_test_mm_cid_compare_twice
++sched_state_test
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index b357ba24af06..7c8f4f2be74c 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -14,7 +14,7 @@ OVERRIDE_TARGETS = 1
  
-+enum rseq_abi_sched_state_flags {
-+	/*
-+	 * Task is currently running on a CPU if bit is set.
-+	 */
-+	RSEQ_ABI_SCHED_STATE_FLAG_ON_CPU		= (1U << 0),
-+};
+ TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
+ 		param_test_benchmark param_test_compare_twice param_test_mm_cid \
+-		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice
++		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice sched_state_test
+ 
+ TEST_GEN_PROGS_EXTENDED = librseq.so
+ 
+diff --git a/tools/testing/selftests/rseq/sched_state_test.c b/tools/testing/selftests/rseq/sched_state_test.c
+new file mode 100644
+index 000000000000..5196b0dd897a
+--- /dev/null
++++ b/tools/testing/selftests/rseq/sched_state_test.c
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: LGPL-2.1
 +
- /*
-  * struct rseq_abi_cs is aligned on 4 * 8 bytes to ensure it is always
-  * contained within a single cache-line. It is usually declared as
-@@ -53,6 +60,32 @@ struct rseq_abi_cs {
- 	__u64 abort_ip;
- } __attribute__((aligned(4 * sizeof(__u64))));
- 
-+/*
-+ * rseq_abi_sched_state should be aligned on the cache line size.
-+ */
-+struct rseq_abi_sched_state {
-+	/*
-+	 * Version of this structure. Populated by the kernel, read by
-+	 * user-space.
-+	 */
-+	__u32 version;
-+	/*
-+	 * The state is updated by the kernel. Read by user-space with
-+	 * single-copy atomicity semantics. This field can be read by any
-+	 * userspace thread. Aligned on 32-bit, and ideally on cache line size.
-+	 * Contains a bitmask of enum rseq_abi_sched_state_flags. This field is
-+	 * provided as a hint by the scheduler, and requires that the page
-+	 * holding this state is faulted-in for the state update to be
-+	 * performed by the scheduler.
-+	 */
-+	__u32 state;
-+	/*
-+	 * Thread ID associated with the thread registering this structure.
-+	 * Initialized by user-space before registration.
-+	 */
-+	__u32 tid;
-+};
++#define _GNU_SOURCE
++#include <assert.h>
++#include <sched.h>
++#include <signal.h>
++#include <stdio.h>
++#include <string.h>
++#include <sys/time.h>
++#include <poll.h>
 +
- /*
-  * struct rseq_abi is aligned on 4 * 8 bytes to ensure it is always
-  * contained within a single cache-line.
-@@ -164,6 +197,15 @@ struct rseq_abi {
- 	 */
- 	__u32 mm_cid;
- 
-+	__u32 padding1;
++#include "rseq.h"
 +
-+	/*
-+	 * Restartable sequences sched_state_ptr field. Initialized by
-+	 * userspace to the address at which the struct rseq_abi_sched_state is
-+	 * located. Read by the kernel on rseq registration.
-+	 */
-+	__u64 sched_state_ptr;
++static struct rseq_abi_sched_state *target_thread_state;
 +
- 	/*
- 	 * Flexible array member at end of structure, after last feature field.
- 	 */
-diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
-index 4e4aa006004c..76925b116054 100644
---- a/tools/testing/selftests/rseq/rseq.c
-+++ b/tools/testing/selftests/rseq/rseq.c
-@@ -62,17 +62,28 @@ static int rseq_reg_success;	/* At least one rseq registration has succeded. */
- /* Allocate a large area for the TLS. */
- #define RSEQ_THREAD_AREA_ALLOC_SIZE	1024
- 
-+/* Approximation of cacheline size. */
-+#define CACHELINE_SIZE			128
++//TODO:
++//Use rseq c.s. and rseq fence to protect access to remote thread's rseq_abi.
 +
- /* Original struct rseq feature size is 20 bytes. */
- #define ORIG_RSEQ_FEATURE_SIZE		20
- 
- /* Original struct rseq allocation size is 32 bytes. */
- #define ORIG_RSEQ_ALLOC_SIZE		32
- 
 +static
-+__thread struct rseq_abi_sched_state __rseq_abi_sched_state __attribute__((tls_model("initial-exec"), aligned(CACHELINE_SIZE)));
-+
- static
- __thread struct rseq_abi __rseq_abi __attribute__((tls_model("initial-exec"), aligned(RSEQ_THREAD_AREA_ALLOC_SIZE))) = {
- 	.cpu_id = RSEQ_ABI_CPU_ID_UNINITIALIZED,
- };
- 
-+static pid_t rseq_gettid(void)
++void show_sched_state(struct rseq_abi_sched_state *rseq_thread_state)
 +{
-+	return syscall(__NR_gettid);
++	uint32_t state;
++
++	state = rseq_thread_state->state;
++	printf("Target thread: %u, ON_CPU=%d\n",
++	       rseq_thread_state->tid,
++	       !!(state & RSEQ_ABI_SCHED_STATE_FLAG_ON_CPU));
 +}
 +
- static int sys_rseq(struct rseq_abi *rseq_abi, uint32_t rseq_len,
- 		    int flags, uint32_t sig)
- {
-@@ -109,6 +120,8 @@ int rseq_register_current_thread(void)
- 		/* Treat libc's ownership as a successful registration. */
- 		return 0;
- 	}
-+	__rseq_abi_sched_state.tid = rseq_gettid();
-+	__rseq_abi.sched_state_ptr = (uint64_t)(unsigned long)&__rseq_abi_sched_state;
- 	rc = sys_rseq(&__rseq_abi, rseq_size, 0, RSEQ_SIG);
- 	if (rc) {
- 		if (RSEQ_READ_ONCE(rseq_reg_success)) {
-diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
-index d7364ea4d201..4c14ef3f581f 100644
---- a/tools/testing/selftests/rseq/rseq.h
-+++ b/tools/testing/selftests/rseq/rseq.h
-@@ -236,6 +236,11 @@ static inline void rseq_prepare_unload(void)
- 	rseq_clear_rseq_cs();
- }
- 
-+static inline struct rseq_abi_sched_state *rseq_get_sched_state(struct rseq_abi *rseq)
++static
++void *test_thread(void *arg)
 +{
-+	return (struct rseq_abi_sched_state *)(unsigned long)rseq->sched_state_ptr;
++	int i;
++
++	for (i = 0; i < 1000; i++) {
++		show_sched_state(target_thread_state);
++		(void) poll(NULL, 0, 100);
++	}
++	return NULL;
 +}
 +
- static inline __attribute__((always_inline))
- int rseq_cmpeqv_storev(enum rseq_mo rseq_mo, enum rseq_percpu_mode percpu_mode,
- 		       intptr_t *v, intptr_t expect,
++int main(int argc, char **argv)
++{
++	pthread_t test_thread_id;
++	int i;
++
++	if (rseq_register_current_thread()) {
++		fprintf(stderr, "Error: rseq_register_current_thread(...) failed(%d): %s\n",
++			errno, strerror(errno));
++		goto init_thread_error;
++	}
++	target_thread_state = rseq_get_sched_state(rseq_get_abi());
++
++	pthread_create(&test_thread_id, NULL, test_thread, NULL);
++
++	for (i = 0; i < 1000000000; i++)
++		rseq_barrier();
++	//for (i = 0; i < 10000; i++)
++	//	(void) poll(NULL, 0, 75);
++
++	pthread_join(test_thread_id, NULL);
++
++	if (rseq_unregister_current_thread()) {
++		fprintf(stderr, "Error: rseq_unregister_current_thread(...) failed(%d): %s\n",
++			errno, strerror(errno));
++		goto init_thread_error;
++	}
++	return 0;
++
++init_thread_error:
++	return -1;
++}
 -- 
 2.25.1
 
