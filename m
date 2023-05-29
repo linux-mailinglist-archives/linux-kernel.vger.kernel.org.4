@@ -2,62 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4223714849
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 13:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FE371485B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 13:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjE2LD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 07:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S230211AbjE2LMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 07:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjE2LDZ (ORCPT
+        with ESMTP id S229570AbjE2LMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 07:03:25 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F874DF;
-        Mon, 29 May 2023 04:03:23 -0700 (PDT)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 1775284775;
-        Mon, 29 May 2023 13:03:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1685358201;
-        bh=GqokHjKP/g/o3iocPWhiRG0b1OMpUzny8buyeSDIlNw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=yenk1p/F6BHYZeX892TJYfgx7a4wRneSJz8igBXw6l5Ot+ivz85zkiplG+5FXf3H7
-         UXw1oyRtiQJuR1ORNHcHfNTg6eUxcruo+W3zoaebHjOJU+bqh8KAifji7H3FI5C175
-         s2AZ1hzNvd+hlps9D41yPwcRnHpKky6/9DVEIs4GZmfe84Ix6msqcouQeh+UXsHE8W
-         CbJ4MY0haMyCPcF1iG2yLDl64drDnHf5attqwew26tC8h91dR7uS7LaxGp8ekE0lxc
-         ZOiqBPZED7VWghPwb77YdOwUyjhDQnMFAQMyeJwSggSOOqElwgs+SkNco6fDov6TNQ
-         hRDmsvfh31wvQ==
-Date:   Mon, 29 May 2023 13:03:14 +0200
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/3] dsa: marvell: Add support for mv88e6071 and 6020
- switches
-Message-ID: <20230529130314.0d4c474e@wsk>
-In-Reply-To: <20230529105132.h673mnjddubl7und@skbuf>
-References: <20230523142912.2086985-1-lukma@denx.de>
-        <20230529110222.68887a31@wsk>
-        <20230529105132.h673mnjddubl7und@skbuf>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 29 May 2023 07:12:33 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2503CCF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 04:12:32 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B211B836;
+        Mon, 29 May 2023 13:12:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685358729;
+        bh=ADkBV2LVS+YgVqFYYD4O2XlRfoS6+tQg/VZ+VEf6b1Y=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hohLMmFWvioA5RJ9d0FwjFsyEu/C+X32za6b6Q8VbtETTJPfBcpsbBO2UTP6fWEpX
+         0Tu4bHMD5+YLxhDhQdTyuFl8hBfvh1VzjQxLBAlp4pPUNhp1FPdtJridqyTs+sp0G1
+         NarhUBv1yVAKKVnq4jzH1bgbKVVHsyCiXAz0itis=
+Message-ID: <5d207be0-c8f0-7c68-91b2-d5ef873ca6cc@ideasonboard.com>
+Date:   Mon, 29 May 2023 14:12:23 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wjR+okbr5dZj2MG3U4lC9KN";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 3/8] drm/bridge: mhdp8546: Add minimal format
+ negotiation
+Content-Language: en-US
+To:     Aradhya Bhatia <a-bhatia1@ti.com>, neil.armstrong@linaro.org,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230509093036.3303-1-a-bhatia1@ti.com>
+ <20230509093036.3303-4-a-bhatia1@ti.com>
+ <db9b4117-b030-49a7-3732-2fc39d089ee2@ideasonboard.com>
+ <d2777edc-151d-7f06-30c4-4634fdb6a63d@ti.com>
+ <305382fd-2312-59d9-e2d3-25a17e0a2158@linaro.org>
+ <363d3089-48d4-5663-68e8-ecf0eb4e3e0e@ti.com>
+ <9f98fb99-eaf4-657c-fd2e-b2e81d9cb109@ideasonboard.com>
+ <c8712ef7-c0bc-e6e7-7319-68238d011dd9@ti.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <c8712ef7-c0bc-e6e7-7319-68238d011dd9@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,101 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/wjR+okbr5dZj2MG3U4lC9KN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 29/05/2023 08:37, Aradhya Bhatia wrote:
+>> Btw, we seem to be missing get-output-fmt from the mdhp driver.
+> Yes, we are.
+> 
+> With the drm_bridge_attach call added, the display-connector bridge will
+> assign MEDIA_BUS_FMT_FIXED as the default output format. And most
+> bridges support only their primary output bus format in their
+> get-output-fmt hooks. I suppose it would be RGB121212_1X36 in mhdp8546's
+> case.
+> 
+> Do we require this when there is no comprehensive way to determine if
+> another bus format may be more suitable (depending on the hardware
+> configurations)?
 
-Hi Vladimir,
+If I recall right, mhdp supports other formats than RGB121212_1X36 on 
+the input side (different bit depths and also yuv). On the output side, 
+even if the input is 12 bits per component, when connected to a normal 
+monitor, the output bpc would be 8.
 
-> Hello Lukasz,
->=20
-> On Mon, May 29, 2023 at 11:02:22AM +0200, Lukasz Majewski wrote:
-> > Dear All,
-> >  =20
-> > > After the commit (SHA1: 7e9517375a14f44ee830ca1c3278076dd65fcc8f);
-> > > "net: dsa: mv88e6xxx: fix max_mtu of 1492 on 6165, 6191, 6220,
-> > > 6250, 6290" the error when mv88e6020 or mv88e6071 is used is not
-> > > present anymore.
-> > >  =20
-> >=20
-> > Are there any more comments for this patch set? =20
->=20
-> Has your email client eaten these comments too?
->=20
-> https://lore.kernel.org/netdev/c39f4127-e1fe-4d38-83eb-f372ca2ebcd3@lunn.=
-ch/
-> | On Wed, May 24, 2023 at 03:48:02PM +0200, Andrew Lunn wrote:
-> | > > > Vladimir indicates here that it is not known how to change
-> the max MTU | > > > for the MV88E6250. Where did you get the
-> information from to implement | > > > it?
-> | > >=20
-> | > > Please refer to [1].
-> | > >=20
-> | > > The mv88e6185_g1_set_max_frame_size() function can be reused (as
-> | > > registers' offsets and bits are the same for mv88e60{71|20}).
-> | >=20
-> | > So you have the datasheet? You get the information to implement
-> this | > from the data sheet?
-> | >=20
+I'm not sure if any of that matters, as nobody (?) will use the output 
+format of mhdp, as it just goes "outside" to the monitor, and it is the 
+mhdp driver that negotiates a suitable output format with the monitor.
 
-This I've replied to Andrew in a private mail.
+  Tomi
 
-> | >      Andrew
->=20
-> https://lore.kernel.org/netdev/ZG4E+wd03cKipsib@shell.armlinux.org.uk/
-> | On Wed, May 24, 2023 at 01:37:15PM +0100, Russell King (Oracle)
-> wrote: | > On Wed, May 24, 2023 at 02:17:43PM +0200, Lukasz Majewski
-> wrote: | > > Please refer to [1].
-> | > >=20
-> | > > The mv88e6185_g1_set_max_frame_size() function can be reused (as
-> | > > registers' offsets and bits are the same for mv88e60{71|20}).
-> | > >=20
-> | > > After using Vladimir's patch there is no need to add max_frame
-> size | > > field and related patches from v6 can be dropped.
-> | >=20
-> | > However, you haven't responded to:
-> | >=20
-> | >
-> https://lore.kernel.org/all/ZGzP0qEjQkCFnXnr@shell.armlinux.org.uk/ |
-> > | > to explain why what you're doing (adding this function) is safe.
-> | >=20
-> | > Thanks.
-> | >=20
-
-The above question has been replied:
-https://lore.kernel.org/all/20230524145357.3928f261@wsk/
-
-> | > --=20
-> | > RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> | > FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
-
-Do you have any more comments?
-
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/wjR+okbr5dZj2MG3U4lC9KN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmR0hnIACgkQAR8vZIA0
-zr3phggAnR4vPpm7QoDvoYhqmbZqP8NmH+Xwb+XojKe9MRSSCQr0CcH/uF0+9dqm
-H+b88EW66uMrlN9PmQDrK6gelrzMO2qqILFCE4IYTLlJtlBbMxcn5fxyNqHx6HWe
-tSy8aiVywTW+++Rtrkp4lPDhNjV9aBiqudyPWPTYVsvCkWQPxVtsUdHXEvIOJQRZ
-cWzfyKrjOrR6RAIDvdQPsRrS0GSrPnQQRv1SsPYwRMzK5QOUpc8QHw9WU0M2XIUg
-rLV22gdtVstZIg+6HC8eM6mHtquJHJ7kfH008JTj5AIqkLgwe7Fs2CiaYLGnNOaW
-u2dHQC/uo9/7bRdir3xfOlZAelZ5FA==
-=ffyA
------END PGP SIGNATURE-----
-
---Sig_/wjR+okbr5dZj2MG3U4lC9KN--
