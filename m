@@ -2,145 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2411B7146CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0037146CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjE2JCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 05:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        id S231792AbjE2JDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 05:03:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjE2JCI (ORCPT
+        with ESMTP id S231806AbjE2JCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 05:02:08 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DD79C;
-        Mon, 29 May 2023 02:02:05 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7AD3921A1E;
-        Mon, 29 May 2023 09:02:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685350924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kFWz25ijAwtezsEsJfvwhWUN0ek5GmhRBcW2BirG67s=;
-        b=ZN9ZFQLchBtUfvhRF6uJVCSPdqOdDMnq6D0bYEMlB3KVOifIJMpTqeRit28RmFuB1JOdNS
-        a6OdjvKL/hU4tFlRyU+Plm1sA9CqI/54DiEz8Du0s3J4zlHeN8c1XLLbVjSwKRUlaZ2Lu1
-        fzl6goxkg0Pa0yOH5RPLeFVJ+KRCsSQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685350924;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kFWz25ijAwtezsEsJfvwhWUN0ek5GmhRBcW2BirG67s=;
-        b=HyCV5MkHcUPb0kFy0qNvwwus+4zH6Zgf5PAAuzQgvjAgqY1O+g2X1gcOkar74GwIfcUizj
-        asUFBf3enD5OkHAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6D02C13466;
-        Mon, 29 May 2023 09:02:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4EuTGgxqdGRmYwAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 29 May 2023 09:02:04 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 05276A0719; Mon, 29 May 2023 11:02:04 +0200 (CEST)
-Date:   Mon, 29 May 2023 11:02:03 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [git pull] vfs.git sysv pile
-Message-ID: <20230529090203.cbqst3rlkv2ejtnd@quack3.mediaserver.passengera.com>
-References: <Y/gugbqq858QXJBY@ZenIV>
- <20230525201046.cth6qizdh7lwobxj@quack3>
- <5939173.lOV4Wx5bFT@suse>
- <2886258.e9J7NaK4W3@suse>
+        Mon, 29 May 2023 05:02:55 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82225E8;
+        Mon, 29 May 2023 02:02:53 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-75cbd6f9577so144149985a.2;
+        Mon, 29 May 2023 02:02:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685350972; x=1687942972;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KlbILOfGwHHcm72NT7ycsjpiiLYUdGgHDOJzvZ5rU00=;
+        b=kQ81YS55kmtiXc3ilGdE12xEke0hqdJ+vjl4WQsyB9kGFpuVPgk2/s+NiLOgH4p3Rg
+         v9115wpuN5uL5QLLTPTu8T5S7x/kCp0ZNg4oXHH9xHLzWDhJklw9RWYe/sDw33JA9ARo
+         40xwQWc9HD3G8kkBffg3ktKQqbmxmZwaaDnxAYjlKrI4Qb5AIoadWB0GYex9dMvn4l4m
+         CHNatENoSKI4PfDGfd4JEXYH8sh5VvexOePOSYQuaDvgJ5RTScymOrzXR9XNq05OFRc1
+         /gvFOv3p31Hrk/v2xSjCaFDBlvoHQt1ItAbdHv4R/jL8HE4ReIjfhhIN9oS6YwjqY6v1
+         QG5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685350972; x=1687942972;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KlbILOfGwHHcm72NT7ycsjpiiLYUdGgHDOJzvZ5rU00=;
+        b=YI0LMvz6bzrfCs+odblmOgSSwK79aaR39MswSXiWPhbBeNd4HJr2eVxyGeOGbumqAm
+         /q22jqWAB1C526vLSF93NdMMeZfCA3IBFdfTYa/Twn0tpjlZEE6anOs4sdl7b8Kmh/LS
+         754Q+TWXCUPr7HLofUzQCJMLBhe1U+0dh8dTKcV+dGVIxS2RmTAZ0K2AF7XPL6xYS6g/
+         vEjmHr0zgy/S4hNFlPW9ozETkPomVG66zSn3f3zzvVI6T/94HrFkFtRKpFPFtmoKwKvE
+         UqsOYkgqhZKjWKrLH5b4g1AB2p2+QYQgC7Dor818ur+zynqZgq+Ow3kFxWGkxWYA7hTS
+         RJYg==
+X-Gm-Message-State: AC+VfDxbdjcq/nBSr/HQuPyHcgkuADoWR/K6/H1SLRVMZWFz+HG5SFXr
+        NRC8i2Vg5VysNVjszmB+t15K1mzcgyPeQi1cA74=
+X-Google-Smtp-Source: ACHHUZ4ay/oKD4J+lYY0OdaVXdsz7oc126FLvXOCQWwRoF5VO207cVZepKbQ82I9EZUsEaMQpvDL9yFjHIB2hLTaD70=
+X-Received: by 2002:a05:6214:ac7:b0:621:4669:c806 with SMTP id
+ g7-20020a0562140ac700b006214669c806mr13088784qvi.37.1685350972503; Mon, 29
+ May 2023 02:02:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2886258.e9J7NaK4W3@suse>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230522142621.1680563-1-astrid.rost@axis.com>
+ <20230522142621.1680563-5-astrid.rost@axis.com> <ZHPZlA5LM5h4xmp3@surfacebook>
+ <ca146ce1-d3d3-e5eb-ac44-3afaec8ca6cc@axis.com>
+In-Reply-To: <ca146ce1-d3d3-e5eb-ac44-3afaec8ca6cc@axis.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 29 May 2023 12:02:16 +0300
+Message-ID: <CAHp75VdZAGhrXgYf5EOE6MQ4DiseaxOqkjUs+X9jROB1aonD_g@mail.gmail.com>
+Subject: Re: [PATCH v4 4/7] iio: light: vcnl4000: add illuminance irq vcnl4040/4200
+To:     Astrid Rost <astridr@axis.com>
+Cc:     Astrid Rost <astrid.rost@axis.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mathieu Othacehe <m.othacehe@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 26-05-23 15:25:18, Fabio M. De Francesco wrote:
-> On venerdì 26 maggio 2023 12:32:59 CEST Fabio M. De Francesco wrote:
-> > On giovedì 25 maggio 2023 22:10:46 CEST Jan Kara wrote:
-> > > On Mon 27-03-23 12:29:56, Fabio M. De Francesco wrote:
-> > > > On lunedì 20 marzo 2023 13:47:25 CEST Jan Kara wrote:
-> > > > > On Mon 20-03-23 12:18:38, Fabio M. De Francesco wrote:
-> > > > > > On giovedì 16 marzo 2023 11:30:21 CET Fabio M. De Francesco wrote:
-> > > > > > > On giovedì 16 marzo 2023 10:00:35 CET Jan Kara wrote:
-> > > > > > > > On Wed 15-03-23 19:08:57, Fabio M. De Francesco wrote:
-> > > > > > > > > On mercoledì 1 marzo 2023 15:14:16 CET Al Viro wrote:
-> > > > [snip]
-> > > > 
-> > > > > > > > > > I think I've pushed a demo patchset to vfs.git at some point
-> > > > > > > > > > back
-> > > > 
-> > > > in
-> > > > 
-> > > > > > > > > > January... Yep - see #work.ext2 in there; completely 
-> untested,
-> > > > > > > > > > though.
-> > > > 
-> > > > Al,
-> > > > 
-> > > > I reviewed and tested your patchset (please see below).
-> > > > 
-> > > > I think that you probably also missed Jan's last message about how you
-> > > > prefer
-> > > > they to be treated.
-> > > > 
-> > > > Jan asked you whether you will submit these patches or he should just 
-> pull
-> > > > your branch into his tree.
-> > > > 
-> > > > Please look below for my tags and Jan's question.
-> > > 
-> > > Ok, Al didn't reply
-> > 
-> > I noticed it...
-> > 
-> > > so I've just pulled the patches from Al's tree,
-> > 
-> > Thank you very much for doing this :-)
-> > 
-> > > added
-> > > your Tested-by tag
-> > 
-> > Did you also notice the Reviewed-by tags?
-> > 
-> 
-> Well, it looks like you missed my Reviewed-by tags at https://lore.kernel.org/
-> lkml/3019063.4lk9UinFSI@suse/
-> 
-> FWIW, I'd just like to say that I did the review of Al's patchset because I 
-> know the code that is modeled after a similar series to fs/sysv, which in turn 
-> I made following Al's suggestions.
-> 
-> However, I suppose it's up to you to decide whether or not is worth
-> mentioning my reviews :-)
+On Mon, May 29, 2023 at 10:41=E2=80=AFAM Astrid Rost <astridr@axis.com> wro=
+te:
+> Thanks for reviewing.
+> I can change this. But this is how it gets formatted by .clang-format.
 
-Yes, I've missed that you also gave your Reviewed-by tags. I will add
-these. Thanks for the reminder :).
+I would suggest to report the bug (in case it's not configurable) or
+configure to avoid such a misindentation.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> On 5/29/23 00:45, andy.shevchenko@gmail.com wrote:
+> > Mon, May 22, 2023 at 04:26:18PM +0200, Astrid Rost kirjoitti:
+> >> Add support to configure ambient light sensor interrupts and threshold
+> >> limits for vcnl4040 and vcnl4200. If an interrupt is detected an event
+> >> will be pushed to the event interface.
+> >
+> > ...
+> >
+> >> +            case IIO_EV_DIR_RISING:
+> >> +                    ret =3D i2c_smbus_write_word_data(
+> >> +                            data->client, VCNL4040_ALS_THDH_LM, val);
+> >
+> > Strange indentation.
+> >
+> >> +                    break;
+> >> +            case IIO_EV_DIR_FALLING:
+> >> +                    ret =3D i2c_smbus_write_word_data(
+> >> +                            data->client, VCNL4040_ALS_THDL_LM, val);
+> >
+> > Same.
+> >
+> >> +                    break;
+> >
+> > ...
+> >
+> >> +    case IIO_PROXIMITY:
+> >> +            switch (dir) {
+> >> +            case IIO_EV_DIR_RISING:
+> >> +                    ret =3D i2c_smbus_write_word_data(
+> >> +                            data->client, VCNL4040_PS_THDH_LM, val);
+> >
+> > Same.
+> >
+> >> +                    break;
+> >> +            case IIO_EV_DIR_FALLING:
+> >> +                    ret =3D i2c_smbus_write_word_data(
+> >> +                            data->client, VCNL4040_PS_THDL_LM, val);
+> >
+> > Same.
+
+--=20
+With Best Regards,
+Andy Shevchenko
