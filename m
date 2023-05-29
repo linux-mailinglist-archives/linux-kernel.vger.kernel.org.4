@@ -2,234 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B24E7144EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FDC7144FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbjE2Gdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 02:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S231599AbjE2GjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 02:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbjE2Gdn (ORCPT
+        with ESMTP id S230338AbjE2GjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 02:33:43 -0400
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150B4E8;
-        Sun, 28 May 2023 23:33:26 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vjgj2wz_1685342001;
-Received: from 30.240.113.228(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vjgj2wz_1685342001)
-          by smtp.aliyun-inc.com;
-          Mon, 29 May 2023 14:33:22 +0800
-Message-ID: <1a1af428-0794-514d-1d79-52e3796a0707@linux.alibaba.com>
-Date:   Mon, 29 May 2023 14:33:20 +0800
+        Mon, 29 May 2023 02:39:10 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A207E90;
+        Sun, 28 May 2023 23:39:08 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126255106133.24.openmobile.ne.jp [126.255.106.133])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 53C68327;
+        Mon, 29 May 2023 08:38:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685342326;
+        bh=fa5DcWfYFxXh6ZRXgXD2CyLPJ7lIV1gqoDog7SPFUhw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eseyMY8n7ezkkrSxDUwgZtsI+dY8YZqdJs8XO+wdOTOnU6KYkDPw3yTL0nsxLsbry
+         iLbQoITT/OUGm17tADvbCeBdHbkKzv3+CQ+SW5v4wmKeJfVNYZyxcJgev7VTGO1Icm
+         OwY72AG1NfWdawt281/FnH+PdWk+t5O/FIMRsa9Q=
+Date:   Mon, 29 May 2023 09:39:07 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Tommaso Merciai <tomm.merciai@gmail.com>,
+        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <20230529063907.GB25984@pendragon.ideasonboard.com>
+References: <20230526173955.797226-1-tomm.merciai@gmail.com>
+ <20230526173955.797226-2-tomm.merciai@gmail.com>
+ <ZHPElYOeD2C1qo4R@kekkonen.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH v5 3/4] drivers/perf: add DesignWare PCIe PMU driver
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        chengyou@linux.alibaba.com, kaishen@linux.alibaba.com,
-        helgaas@kernel.org, yangyicong@huawei.com, will@kernel.org,
-        Jonathan.Cameron@huawei.com, robin.murphy@arm.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org, rdunlap@infradead.org,
-        mark.rutland@arm.com, zhuo.song@linux.alibaba.com
-References: <20220917121036.14864-1-xueshuai@linux.alibaba.com>
- <20230522035428.69441-4-xueshuai@linux.alibaba.com>
- <505a5d3a-c970-8d15-ea60-444a3630c199@linux.alibaba.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <505a5d3a-c970-8d15-ea60-444a3630c199@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZHPElYOeD2C1qo4R@kekkonen.localdomain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, May 28, 2023 at 09:16:05PM +0000, Sakari Ailus wrote:
+> On Fri, May 26, 2023 at 07:39:43PM +0200, Tommaso Merciai wrote:
+> > Add documentation of device tree in YAML schema for the ALVIUM
+> > Camera from Allied Vision Inc.
+> > 
+> > References:
+> >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
+> > 
+> > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> > ---
+> > Changes since v1:
+> >  - Fixed build error as suggested by RHerring bot
+> > 
+> >  .../media/i2c/alliedvision,alvium.yaml        | 115 ++++++++++++++++++
+> >  1 file changed, 115 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > new file mode 100644
+> > index 000000000000..81e9e560c99d
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > @@ -0,0 +1,115 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Alliedvision Alvium Camera
 
+s/Alliedvision/Allied Vision/
 
-On 2023/5/29 14:13, Baolin Wang wrote:
+> > +
+> > +maintainers:
+> > +  - Tommaso Merciai <tomm.merciai@gmail.com>
+> > +  - Martin Hecht <martin.hecht@avnet.eu>
+> > +
+> > +allOf:
+> > +  - $ref: /schemas/media/video-interface-devices.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: alliedvision,alvium
+
+The name is very generic. There are Alvium camera modules that have a
+GMSL or FPD-Link interface, and I'm pretty sure those will require a
+different driver. I would add module-specific compatible strings (e.g.
+"alliedvision,alvium-1500c", ...) here, with a generic fallback.
+"alliedvision,alvium" isn't good as it won't cover GMSL or FPD-Link,
+maybe "alliedvision,alvium-csi2" would be an option.
+
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    description: XCLK Input Clock
+> > +
+> > +  clock-names:
+> > +    const: xclk
 > 
+> I'd also drop this as you have a single clock only: it's redundant.
 > 
-> On 5/22/2023 11:54 AM, Shuai Xue wrote:
->> This commit adds the PCIe Performance Monitoring Unit (PMU) driver support
->> for T-Head Yitian SoC chip. Yitian is based on the Synopsys PCI Express
->> Core controller IP which provides statistics feature. The PMU is not a PCIe
->> Root Complex integrated End Point(RCiEP) device but only register counters
->> provided by each PCIe Root Port.
->>
->> To facilitate collection of statistics the controller provides the
->> following two features for each Root Port:
->>
->> - Time Based Analysis (RX/TX data throughput and time spent in each
->>    low-power LTSSM state)
->> - Event counters (Error and Non-Error for lanes)
->>
->> Note, only one counter for each type and does not overflow interrupt.
->>
->> This driver adds PMU devices for each PCIe Root Port. And the PMU device is
->> named based the BDF of Root Port. For example,
->>
->>      30:03.0 PCI bridge: Device 1ded:8000 (rev 01)
->>
->> the PMU device name for this Root Port is dwc_rootport_3018.
->>
->> Example usage of counting PCIe RX TLP data payload (Units of 16 bytes)::
->>
->>      $# perf stat -a -e dwc_rootport_3018/Rx_PCIe_TLP_Data_Payload/
->>
->> average RX bandwidth can be calculated like this:
->>
->>      PCIe TX Bandwidth = PCIE_TX_DATA * 16B / Measure_Time_Window
->>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Link: https://lore.kernel.org/oe-kbuild-all/202305170639.XU3djFZX-lkp@intel.com/
->> ---
+> > +
+> > +  powerdown-gpios:
+> > +    maxItems: 1
+> > +    description: >
+> > +      Reference to the GPIO connected to the powerdown pin, if any.
+> > +
+> > +  reset-gpios:
+> > +    maxItems: 1
+> > +    description: >
+> > +      Reference to the GPIO connected to the reset pin, if any.
+
+Reading the Alvium CSI-2 Cameras User Guide, I don't see any powerdown
+or reset pin on the 22-pin connector. Am I missing something ? There are
+however two GPIOs (in addition to the I2C signals that are also
+documented as GPIOs), do you plan to support those ?
+
+> > +
+> > +  streamon-delay:
+> > +    maxItems: 1
+> > +    description: >
+> > +      Delay before camera start capturing frames in us.
+
+Add "-us" to the property name to indicate the unit.
+
+This is a vendor-specific property, and should thus have a vendor
+prefix.
+
+A longer description is needed, from that single line I have no idea
+what the property does exactly.
+
+> > +
+> > +  rotation:
+> > +    enum:
+> > +      - 0
+> > +      - 180
+
+Why is the rotation restricted to 0 or 180 ? Someone could mount the
+module with  90 degrees rotation, shouldn't the DT bindings allow
+describing that ?
+
+You need a property for the vcc-ext-in supply.
+
+> > +
+> > +  port:
+> > +    description: Digital Output Port
+> > +    $ref: /schemas/graph.yaml#/$defs/port-base
+> > +    additionalProperties: false
+> > +
+> > +    properties:
+> > +      endpoint:
+> > +        $ref: /schemas/media/video-interfaces.yaml#
+> > +        unevaluatedProperties: false
+> > +
+> > +        properties:
+> > +          clock-lanes:
+> > +            const: 0
 > 
-> [snip]
+> The driver can know this, no need to have it in DT, i.e. please drop it.
 > 
->> +static int dwc_pcie_pmu_remove(struct platform_device *pdev)
->> +{
->> +    struct dwc_pcie_pmu_priv *priv = platform_get_drvdata(pdev);
->> +    struct dwc_pcie_pmu *pcie_pmu;
->> +
->> +    list_for_each_entry(pcie_pmu, &priv->pmu_nodes, pmu_node) {
->> +        cpuhp_state_remove_instance(dwc_pcie_pmu_hp_state,
->> +                        &pcie_pmu->cpuhp_node);
->> +        perf_pmu_unregister(&pcie_pmu->pmu);
->> +    }
->> +
->> +    return 0;
->> +}
->> +
->> +static int dwc_pcie_pmu_probe(struct platform_device *pdev)
->> +{
->> +    struct dwc_pcie_pmu_priv *priv;
->> +
->> +    priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
->> +    if (!priv)
->> +        return -ENOMEM;
->> +
->> +    priv->dev = &pdev->dev;
->> +    platform_set_drvdata(pdev, priv);
->> +
->> +    /* If one PMU registration fails, remove all. */
->> +    if (__dwc_pcie_pmu_probe(priv))
->> +        dwc_pcie_pmu_remove(pdev);
-> 
-> In this case, you should return error from __dwc_pcie_pmu_probe() instead of returning 0, to release the requested resources of the PMU deivce.
+> > +          data-lanes:
+> > +            minItems: 1
+> > +            maxItems: 4
+> > +          link-frequencies: true
+> > +
+> > +        required:
+> > +          - data-lanes
+> > +          - link-frequencies
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +  - clock-names
+> > +  - port
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +      #include <dt-bindings/gpio/gpio.h>
+> > +      #include <dt-bindings/clock/imx8mp-clock.h>
+> > +
+> > +      i2c {
+> > +          #address-cells = <1>;
+> > +          #size-cells = <0>;
+> > +
+> > +          camera: alvium@3c {
+> > +              compatible = "alliedvision,alvium";
 
-You are right, will fix it in next version.
+The "alliedvision" prefix is missing from
+Documentation/devicetree/bindings/vendor-prefixes.yaml.
 
-> 
->> +
->> +    return 0;
->> +}
->> +
->> +static void dwc_pcie_pmu_migrate(struct dwc_pcie_pmu *pcie_pmu, unsigned int cpu)
->> +{
->> +    /* This PMU does NOT support interrupt, just migrate context. */
->> +    perf_pmu_migrate_context(&pcie_pmu->pmu, pcie_pmu->oncpu, cpu);
->> +    pcie_pmu->oncpu = cpu;
->> +}
->> +
->> +static int dwc_pcie_pmu_online_cpu(unsigned int cpu, struct hlist_node *cpuhp_node)
->> +{
->> +    struct dwc_pcie_pmu *pcie_pmu;
->> +    struct pci_dev *pdev;
->> +    int node;
->> +
->> +    pcie_pmu = hlist_entry_safe(cpuhp_node, struct dwc_pcie_pmu, cpuhp_node);
->> +    pdev = pcie_pmu->pdev;
->> +    node = dev_to_node(&pdev->dev);
->> +
->> +    if (node != NUMA_NO_NODE && cpu_to_node(pcie_pmu->oncpu) != node &&
->> +        cpu_to_node(cpu) == node)
->> +        dwc_pcie_pmu_migrate(pcie_pmu, cpu);
->> +
->> +    return 0;
->> +}
->> +
->> +static int dwc_pcie_pmu_offline_cpu(unsigned int cpu, struct hlist_node *cpuhp_node)
->> +{
->> +    struct dwc_pcie_pmu *pcie_pmu;
->> +    struct pci_dev *pdev;
->> +    int node;
->> +    cpumask_t mask;
->> +    unsigned int target;
->> +
->> +    pcie_pmu = hlist_entry_safe(cpuhp_node, struct dwc_pcie_pmu, cpuhp_node);
->> +    if (cpu != pcie_pmu->oncpu)
->> +        return 0;
->> +
->> +    pdev = pcie_pmu->pdev;
->> +    node = dev_to_node(&pdev->dev);
->> +    if (cpumask_and(&mask, cpumask_of_node(node), cpu_online_mask) &&
->> +        cpumask_andnot(&mask, &mask, cpumask_of(cpu)))
->> +        target = cpumask_any(&mask);
->> +    else
->> +        target = cpumask_any_but(cpu_online_mask, cpu);
->> +    if (target < nr_cpu_ids)
->> +        dwc_pcie_pmu_migrate(pcie_pmu, target);
->> +
->> +    return 0;
->> +}
->> +
->> +static struct platform_driver dwc_pcie_pmu_driver = {
->> +    .probe = dwc_pcie_pmu_probe,
->> +    .remove = dwc_pcie_pmu_remove,
->> +    .driver = {.name = "dwc_pcie_pmu",},
->> +};
->> +
->> +static int __init dwc_pcie_pmu_init(void)
->> +{
->> +    int ret;
->> +
->> +    ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
->> +                      "perf/dwc_pcie_pmu:online",
->> +                      dwc_pcie_pmu_online_cpu,
->> +                      dwc_pcie_pmu_offline_cpu);
->> +    if (ret < 0)
->> +        return ret;
->> +
->> +    dwc_pcie_pmu_hp_state = ret;
->> +
->> +    ret = platform_driver_register(&dwc_pcie_pmu_driver);
->> +    if (ret) {
->> +        cpuhp_remove_multi_state(dwc_pcie_pmu_hp_state);
->> +        return ret;
->> +    }
->> +
->> +    dwc_pcie_pmu_dev = platform_device_register_simple(
->> +                "dwc_pcie_pmu", PLATFORM_DEVID_NONE, NULL, 0);
->> +    if (IS_ERR(dwc_pcie_pmu_dev)) {
->> +        platform_driver_unregister(&dwc_pcie_pmu_driver);
->> +        return PTR_ERR(dwc_pcie_pmu_dev);
->> +    }
->> +
->> +    return 0;
->> +}
->> +
->> +static void __exit dwc_pcie_pmu_exit(void)
->> +{
->> +    platform_device_unregister(dwc_pcie_pmu_dev);
->> +    platform_driver_unregister(&dwc_pcie_pmu_driver);
-> 
-> You should also call 'cpuhp_remove_multi_state()' when exiting the driver.
+> > +              pinctrl-names = "default";
+> > +              pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
 
-Good catch, will add it in next version.
+I'd drop pinctrl, it makes the example longer without adding much value.
 
+> > +              reg = <0x3c>;
+> > +              clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+> > +              clock-names = "xclk";
+> > +              assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+> > +              assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
+> > +              assigned-clock-rates = <24000000>;
+> > +              streamon-delay = <20>;
+> > +              powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+> > +              reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
+> > +              status = "okay";
+> > +
+> > +              port {
+> > +                  alvium_out: endpoint {
+> > +                      remote-endpoint = <&mipi_csi_0_in>;
+> > +                      data-lanes = <1 2 3 4>;
+> > +                      link-frequencies = /bits/ 64 <681250000>;
+> > +                      clock-lanes = <0>;
+> > +                  };
+> > +              };
+> > +          };
+> > +      };
+> > +
+> > +...
 
-> 
-> With above issues fixed, you can add:
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+-- 
+Regards,
 
-Thank you :)
-
-Best Regards,
-Shuai
+Laurent Pinchart
