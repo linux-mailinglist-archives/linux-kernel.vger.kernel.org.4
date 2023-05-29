@@ -2,157 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23ABC714970
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9A071497A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbjE2MYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
+        id S231735AbjE2MZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjE2MYC (ORCPT
+        with ESMTP id S230210AbjE2MZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:24:02 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75393C2;
-        Mon, 29 May 2023 05:23:47 -0700 (PDT)
+        Mon, 29 May 2023 08:25:04 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CD2AB;
+        Mon, 29 May 2023 05:25:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685363027; x=1716899027;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=zsfRnRMXIV5r/X5furPt6ghu8XOqWi203n2Q9dk2B28=;
-  b=GUY4uDRsumjymEK1BNnByh9fG6eFMx9vHkN698/wu4vJmeiGSNuax5r1
-   55XanUm7NAXdLkx4K9tT1cGNkIuitTKVJzK+LmVpa8FdoSVO8tOJodSE8
-   QuH+iqtS2zKIZge4+CeexTL7VA00Tq3nG/QVv/v5ZLT6EsvIz+gzbYurC
-   p/JYfuNKEaA1KWw/BURLUfgl1N2bojRM1yiawcE+xk2ITq0N3e7umjx8U
-   SctYrMusy5ptMbqooPl5Irfb0swveOuIIl+T7lKa7XBdeVuHf6DAy/TQt
-   fuNN7amAtOFZDWEGQACaLmo4hu8zqLlL74UA/v6pMLQq6eob06iyhrPyr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="441049767"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685363103; x=1716899103;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=g1XI8dwInjLQREirvGIHQu2rAR63mNwJCB4uTNd8Jxw=;
+  b=WMR3UYJPNQRMy1cwWZzrBsfHmjiDSIIVijWD7OusiKkhR6DcGr3orSBo
+   2xMtof53Hb9cbF8FA53caEfF0beriITSAEyZ/0HACY1eTmIzgDlc9NRwr
+   3eUVaDz18Dwf25+tQQSieuw0BLFqHS28fe4eR889woe7N+GOSqwTticWW
+   4Vag8OO0/ryMITbVy40H8WT0vBvB26g7/V1VYYTlEysAzWIjLgrKjd3Oe
+   KgJBWP0B8b5l5ep6WB9tmBLJnFC/XwGvL/Gf6d/kvbcKV62sLdAoaP1B1
+   nD4fl1nr7SnIQGatbidt9dP3b1LAYUnIhLV1SQwLeS1bwEbsf6S0Y6cHO
+   g==;
 X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="441049767"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 05:23:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="818417659"
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="scan'208";a="818417659"
-Received: from btaubert-mobl1.ger.corp.intel.com ([10.252.55.237])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 05:23:45 -0700
-Date:   Mon, 29 May 2023 15:23:42 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Mark Pearson <mpearson-lenovo@squebb.ca>
-cc:     hdegoede@redhat.com, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 5/5] platform/x86: think-lmi: mutex protection around
- multiple WMI calls
-In-Reply-To: <20230526171658.3886-5-mpearson-lenovo@squebb.ca>
-Message-ID: <27c7824e-ec90-c68f-3e76-92525ed7e393@linux.intel.com>
-References: <mpearson-lenovo@squebb.ca> <20230526171658.3886-1-mpearson-lenovo@squebb.ca> <20230526171658.3886-5-mpearson-lenovo@squebb.ca>
+   d="asc'?scan'208";a="215301156"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 May 2023 05:25:02 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 29 May 2023 05:25:02 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 29 May 2023 05:25:00 -0700
+Date:   Mon, 29 May 2023 13:24:37 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH v2 4/4] dt-bindings: timer: atmel,at91rm9200-st: convert
+ to yaml
+Message-ID: <20230529-frivolous-refinery-43d91975fff9@wendy>
+References: <20230529062604.1498052-1-claudiu.beznea@microchip.com>
+ <20230529062604.1498052-5-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="57Jgg4Kb+/tidqBv"
+Content-Disposition: inline
+In-Reply-To: <20230529062604.1498052-5-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 May 2023, Mark Pearson wrote:
+--57Jgg4Kb+/tidqBv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Add mutex protection around cases where an operation needs multiple
-> WMI calls - e.g. setting password.
+Hey Claudiu,
 
-So you need this feature already for Patch 1/5? If that's the case, you 
-should reorder the patches and put it before 1/5.
-
-That "e.g. setting password" sounds vague enough that I'm left to wonder 
-if there are other cases in the driver which need locking too. It would be 
-useful to be precise with wording here. It will help immensely when 
-somebody looks this changelog 5 years from now if you explain all cases 
-that need locking up front.
-
-So, is this needed also for some existing code, then Fixes tag might be in 
-order? (I'm looking e.g. that cert auth block in current_value_store() 
-which also does more than one call).
-
--- 
- i.
-
-> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+On Mon, May 29, 2023 at 09:26:04AM +0300, Claudiu Beznea wrote:
+> Convert Microchip AT91 system timer to YAML.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
-> Changes in v2: New commit added after review of other patches in series.
-> Changes in v3: Simplified mutex handling as recommended.
-> 
->  drivers/platform/x86/think-lmi.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-> index 64cd453d6e7d..86185358dba2 100644
-> --- a/drivers/platform/x86/think-lmi.c
-> +++ b/drivers/platform/x86/think-lmi.c
-> @@ -14,6 +14,7 @@
->  #include <linux/acpi.h>
->  #include <linux/errno.h>
->  #include <linux/fs.h>
-> +#include <linux/mutex.h>
->  #include <linux/string.h>
->  #include <linux/types.h>
->  #include <linux/dmi.h>
-> @@ -195,6 +196,7 @@ static const char * const level_options[] = {
->  };
->  static struct think_lmi tlmi_priv;
->  static struct class *fw_attr_class;
-> +static DEFINE_MUTEX(tlmi_mutex);
->  
->  /* ------ Utility functions ------------*/
->  /* Strip out CR if one is present */
-> @@ -437,6 +439,9 @@ static ssize_t new_password_store(struct kobject *kobj,
->  	/* Strip out CR if one is present, setting password won't work if it is present */
->  	strip_cr(new_pwd);
->  
-> +	/* Use lock in case multiple WMI operations needed */
-> +	mutex_lock(&tlmi_mutex);
-> +
->  	pwdlen = strlen(new_pwd);
->  	/* pwdlen == 0 is allowed to clear the password */
->  	if (pwdlen && ((pwdlen < setting->minlen) || (pwdlen > setting->maxlen))) {
-> @@ -493,6 +498,7 @@ static ssize_t new_password_store(struct kobject *kobj,
->  		kfree(auth_str);
->  	}
->  out:
-> +	mutex_unlock(&tlmi_mutex);
->  	kfree(new_pwd);
->  	return ret ?: count;
->  }
-> @@ -987,6 +993,9 @@ static ssize_t current_value_store(struct kobject *kobj,
->  	/* Strip out CR if one is present */
->  	strip_cr(new_setting);
->  
-> +	/* Use lock in case multiple WMI operations needed */
-> +	mutex_lock(&tlmi_mutex);
-> +
->  	/* Check if certificate authentication is enabled and active */
->  	if (tlmi_priv.certificate_support && tlmi_priv.pwd_admin->cert_installed) {
->  		if (!tlmi_priv.pwd_admin->signature || !tlmi_priv.pwd_admin->save_signature) {
-> @@ -1031,7 +1040,6 @@ static ssize_t current_value_store(struct kobject *kobj,
->  			if (ret)
->  				goto out;
->  		}
+>  .../devicetree/bindings/arm/atmel-sysregs.txt |  9 ---
+>  .../bindings/timer/atmel,at91rm9200-st.yaml   | 65 +++++++++++++++++++
+>  2 files changed, 65 insertions(+), 9 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91rm9=
+200-st.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Do=
+cumentation/devicetree/bindings/arm/atmel-sysregs.txt
+> index 54d3f586403e..68c0eacb01ac 100644
+> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> @@ -4,15 +4,6 @@ Chipid required properties:
+>  - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chi=
+pid"
+>  - reg : Should contain registers location and length
+> =20
+> -System Timer (ST) required properties:
+> -- compatible: Should be "atmel,at91rm9200-st", "syscon", "simple-mfd"
+> -- reg: Should contain registers location and length
+> -- interrupts: Should contain interrupt for the ST which is the IRQ line
+> -  shared across all System Controller members.
+> -- clocks: phandle to input clock.
+> -Its subnodes can be:
+> -- watchdog: compatible should be "atmel,at91rm9200-wdt"
 > -
->  		ret = tlmi_save_bios_settings("");
->  	} else { /* old non opcode based authentication method (deprecated)*/
->  		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
-> @@ -1071,6 +1079,7 @@ static ssize_t current_value_store(struct kobject *kobj,
->  		kobject_uevent(&tlmi_priv.class_dev->kobj, KOBJ_CHANGE);
->  	}
->  out:
-> +	mutex_unlock(&tlmi_mutex);
->  	kfree(auth_str);
->  	kfree(set_str);
->  	kfree(new_setting);
-> 
+>  RAMC SDRAM/DDR Controller required properties:
+>  - compatible: Should be "atmel,at91rm9200-sdramc", "syscon"
+>  			"atmel,at91sam9260-sdramc",
+> diff --git a/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.=
+yaml b/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
+> new file mode 100644
+> index 000000000000..a75644e1a2fe
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/atmel,at91rm9200-st.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip AT91 System Timer (ST)
+> +
+> +maintainers:
+> +  - Nicolas Ferre <nicolas.ferre@microchip.com>
+> +  - Alexandre Belloni <alexandre.belloni@microchip.com>
+
+Is that a valid email address?
+
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description:
+> +  Microchip AT91 system timer integrates a period interval timer, a watc=
+hdog
+> +  timer and a real-time timer.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: atmel,at91rm9200-st
+> +      - const: syscon
+> +      - const: simple-mfd
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description:
+> +      Contain interrupt for the ST which is the IRQ line shared across a=
+ll
+> +      system controller members.
+
+I don't think there's really much point having a description when there
+is only one interrupt, but it cannot do any harm I suppose!
+
+Other than the email address question,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  watchdog:
+> +    $ref: ../watchdog/atmel,at91rm9200-wdt.yaml
+> +    description:
+> +      Child node describing watchdog.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    st: timer@fffffd00 {
+> +        compatible =3D "atmel,at91rm9200-st", "syscon", "simple-mfd";
+> +        reg =3D <0xfffffd00 0x100>;
+> +        interrupts =3D <1 IRQ_TYPE_LEVEL_HIGH 7>;
+> +        clocks =3D <&slow_xtal>;
+> +
+> +        watchdog {
+> +            compatible =3D "atmel,at91rm9200-wdt";
+> +        };
+> +    };
+> +
+> +...
+> --=20
+> 2.34.1
+>=20
+
+--57Jgg4Kb+/tidqBv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHSZhQAKCRB4tDGHoIJi
+0u0uAQCqYD8k+lUIAvY39DHyYkYA6s0n1YpJnOBI1ROSuTdjAAD/a16itLO6NWbT
+xje716xh348zl36jUNdGjv+oi4sxiww=
+=3Rmu
+-----END PGP SIGNATURE-----
+
+--57Jgg4Kb+/tidqBv--
