@@ -2,107 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DC07151C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 00:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 027FB7151CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 00:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjE2WVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 18:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S229910AbjE2WVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 18:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjE2WVH (ORCPT
+        with ESMTP id S229712AbjE2WVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 18:21:07 -0400
+        Mon, 29 May 2023 18:21:08 -0400
 Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2075.outbound.protection.outlook.com [40.107.223.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D472EA0;
-        Mon, 29 May 2023 15:21:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42897D9;
+        Mon, 29 May 2023 15:21:07 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Na6hSHHAipT4dU7X3XmFMu+HhdIIRK+rUWlLOU6HZPiAo9xY9x0TG43UbVjVXqFLP9iwhzok09zCqFYiJyRyvEEc3929poyEFCztvy9KTG9PZK+AQWARv8dc7DHtEBiKVaIZYvf0H7v08a1p25P6mP73YSF2JDCkOP0yCMeNQvh7w+mbAdowSUhdS8j7mu55HYfezaYK4ERnfhr5siZD8DR1R4msvmAaUuxni2z4yRIPbayDxTpfLo6K5itpM9459aDgKG+PQWRSfkkw2QAzzyOxtXqGTxAFuH/jIpoTqsFMAr9cSTxJlu0+gZJLv1Q+s0a7RWG4PgNmYohL7ZKzgw==
+ b=eMzfX0XvPoFwNsXJngJaSecoGvjI0J84HZylrDzxrad+sl89wcD5aJiYCqsn1ENhZlTfcZYw05em/a0ECdus+NzIAm6xBlqn+xKh9+4SMccdDzn31U/6ZVEFb2e9kSKC8fvamqBC4YRQB/yZZPt3du63IN4GHFFj7Zmbh58dQtku+rAgSbQTG18i8jSAFgn8UhGIt5aHMdyveFBAEaPxLeZnmULOPfpnwmtkSWXIhHe9YFvA3oJko9k4WcdvpJZD99SA5cOoVPai8qUHJmIm+YaJNWiQglNynYYh2DKc+4tV6FjhzLbk2WEsvXNDXF0+y20ijup1WKZu+vobPGxV8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hr6Hu+XIhMXZhfpvUZ3dlh1Rrs3bYziUTbV9Nv7mIAI=;
- b=FeSRAmpsjvWPIIYEfhdcwXmrDL1zFJ0QSRtpxbNGNvi9nIsjMLrGocoqDGJj6mt7WjQrzAlcBRHVGGtnxvv+OTGVLXtUpRWGD3e5dnxXkDC9uJR7MIFNmdpEbSz+/odu9anShRGNbLgCtNQEyWxVin968McYHxO2YCzVLgoxEE7vKxs9rT4lFWbygL5+b/25dCaVO8XO2N1EvHT6IjabSFD4Rz5ht6DYgw+uxtWZn53gCjjb6h9iHwM+91gItYz85Jwi9/vsRQxVMrTms6CWyPcUJJWIwhWwwJXY7YWU6ScJs9jORif0d2NQBHGGf6ynpNMxO8/gMgwfiO+8zSch9A==
+ bh=vUe8hSLSkY6kC/+7P2GtOEmkhIVmW9KSZfXa6hRn4Ck=;
+ b=Lf7jDt5WKG0acHlxdJG/GBhLqMsWsJByDQPx5J2dfgVzbBbeLiGUL/09Za2rFWvjx4/0z1Znc0bjmm8zT4erWW+h90WkxAEQlKWKWIpYMt/AYS50Uo6saq25N8K+/kN4iLDWmc5PiXUEBLd7qqTtFUVjQ4Z6FvhG/HXaE+ycg0/r4XolU6RCSWq/c8OqQHZyIBZPSr+E4VnIFDhAaJ2vkKULcmgLaYea4E2KV5NWexqqqy4clGzq5TxDrDu9QRL6p4xGBd1pNlUClrerO2h+SppTD6pssAvtsSDaSoqFNBSFhmjyOy0Z22O9y4+53ma3ILrgEbz+Vh3yN8vWmYZuzQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hr6Hu+XIhMXZhfpvUZ3dlh1Rrs3bYziUTbV9Nv7mIAI=;
- b=VZ20FPU2tv3JZCJdRilwn/jabA6+wMUGd0C2BiHMiXFQQTprZ1fcOS2aMZBzJx74EZiQBLL5mc2trd/Ygx7I7Ni6BFTQ4TlnEJYiHtE7ys3ZPy5nUQfSRt4UsDLcrcckLeYy+hSiT88RZsdrLR9w+iouiqBlEYhHGIZ7vYqx+cnlzBaLtxo0OcuZeR5sTGRc8HoE7hZ41XBETCXeMuXwTB+ZpVileHNknu5rYbIy/Shr78/W45WrOTWKWbrsAegkUXyHjJ3xxW7N2R7Fd6ZPjdBZcSzo7SknfWNwyPhRccMO8RgvY2a8YtztZ1vKkkjXJthni7SDus2mgxk4CT1xlg==
+ bh=vUe8hSLSkY6kC/+7P2GtOEmkhIVmW9KSZfXa6hRn4Ck=;
+ b=qKgDYRASL9hWUjcH+xuwchrI35zTUUAuw3hVCRc+p8sZ65V7H6RLNKxtHzXgxduCMuUcShkAY+JdV+P9u8S2RFkShLBvzQqbNFwG1eyfacpOvPDUgfk9vDpoSic477IrmxZcNyADG25Yj2D/eg3q//FZWZcWsAEWaOQrA0gbOPkQIrZ3NzVWi7NzrkGepRy/qTtWuA7q+eNAGrJDOOS7RP3t27fr3Tgb4FbpOsPq91IkkvEZEEhdUG/mRcaQHtvhnfgytPbNVY7ytHZ55rsU1ZS2n1st3XaOMBdpQI4cYVdXppDMiuFBRVl34qwdAZR8lxMf5BPLNJfaFM8vFAiAgA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BYAPR12MB2743.namprd12.prod.outlook.com (2603:10b6:a03:61::28)
  by BN9PR12MB5355.namprd12.prod.outlook.com (2603:10b6:408:104::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Mon, 29 May
- 2023 22:21:02 +0000
+ 2023 22:21:04 +0000
 Received: from BYAPR12MB2743.namprd12.prod.outlook.com
  ([fe80::f3d4:f48a:1bfc:dbf1]) by BYAPR12MB2743.namprd12.prod.outlook.com
  ([fe80::f3d4:f48a:1bfc:dbf1%5]) with mapi id 15.20.6433.018; Mon, 29 May 2023
- 22:21:02 +0000
+ 22:21:04 +0000
 From:   Rahul Rameshbabu <rrameshbabu@nvidia.com>
 To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Jiri Kosina <jikos@kernel.org>
 Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
         Rahul Rameshbabu <rrameshbabu@nvidia.com>
-Subject: [PATCH RFC v1 0/3] HID: nvidia-shield: More functionality on top of initial driver
-Date:   Mon, 29 May 2023 15:20:49 -0700
-Message-Id: <20230529222052.68913-1-rrameshbabu@nvidia.com>
+Subject: [PATCH RFC v1 1/3] HID: nvidia-shield: Add mappings for consumer HID USAGE buttons
+Date:   Mon, 29 May 2023 15:20:50 -0700
+Message-Id: <20230529222052.68913-2-rrameshbabu@nvidia.com>
 X-Mailer: git-send-email 2.38.4
+In-Reply-To: <20230529222052.68913-1-rrameshbabu@nvidia.com>
+References: <20230529222052.68913-1-rrameshbabu@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BYAPR21CA0004.namprd21.prod.outlook.com
- (2603:10b6:a03:114::14) To BYAPR12MB2743.namprd12.prod.outlook.com
+X-ClientProxiedBy: SJ0PR03CA0373.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a1::18) To BYAPR12MB2743.namprd12.prod.outlook.com
  (2603:10b6:a03:61::28)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BYAPR12MB2743:EE_|BN9PR12MB5355:EE_
-X-MS-Office365-Filtering-Correlation-Id: d49755b5-acb4-4b61-d377-08db6092fcac
+X-MS-Office365-Filtering-Correlation-Id: 423125f8-d8a8-4efd-882c-08db6092fda9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PqLg/fcXigGzT+dUWOult6KjgVFe2tFHqk//AHJQUQ5ylutN/NCdU1B5PNslmTOlAMkGp2gRL5w2K9TtUZAXzF3kf6/H47HZjJXZHFYlk4vPHsKmi6PXoAEr3kjhVWzH/515uwop180nfHCpf0WA87HWsVqdj+xP7JSyOwCcsYHZ7AMChXn0L/n0Xo9MKTZs9mp/cJD++LeVuHeKp6StCTWtCxld8MNk76uwWJFTJAicMCggABa9mWH5fXf0IcJCpHU5uXV6pHQcJEfQEjaJ9niZ95Dll/Vi7a0GZJtzHD7y9H9fteJjIL9iY+pfnqKF0O3fqjljH1CNtmOxrkxagojWNU107zr6vTTtk5puc0bBbPle80B2FI14cNTRAP8GmqBsEaZm10o0JClLqPcQummuevYx1Nt64CAZnRmtIJgdfqDO8Fgbf6T2G4AcaWFe5T2ejLoddDvUoeEUhGVPW8CGk0C0Ie3Z/Rb9b943Zy+OF8gQLkYS/hAHYvpOppnQaR6urnk20UIYuhxhxIJ+1XlKFfPKPJeHEgnad5PuwLsnLWv6jrT9wbZIKUiCdX3H84mOAEHqP1ASJEDd936cJeQiMMA7c5rHh2ejza+AJwM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2743.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(346002)(376002)(136003)(451199021)(6506007)(6512007)(4744005)(186003)(2906002)(2616005)(110136005)(478600001)(26005)(1076003)(83380400001)(8676002)(41300700001)(38100700002)(8936002)(6486002)(966005)(86362001)(6666004)(316002)(66946007)(5660300002)(66476007)(66556008)(36756003)(107886003)(4326008);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: rTBbCaONemfe9ZJH8f/4mfoc29VDjpI7qhUBCLIywA723t0H6Ik/QXvxBcL+fKDSxLD3rpas0J11Hh905v9eYOrSZ1G3CPzp6thB3SsRO3urd5IHmP0D8oXS0pY3s4XGxWJ9C5Lm2P+NRuXoVmjdTPaVpKgmwA0kBRKV5EMH1JYLBSuuqnl3qw8spzpPVMF32wU8+o2Dt5j01a+JOL++hRkFUoiIx9qRCF1UrtwTS5wPGgMKqYdm8ik5rWag4qTBcdvlh6qvOx2DQoC10svZvfwLye5Lpl7sVVSPu5JdxL2RN3dM25DUnfgkAZCDNHH/1SXFSI3f5a0U15OrGdtttj0YXYjkrlAWTx5qg0b6DcjbO9BFuzz6ltjEDMYAbzb7Uk3jKa3qy8gh5leN08XLlAH/dq3DllyQ2QtWw6Vxqa0cX3mLwTxFFq3u9yDd2l8/Re+NczAXPz+ISPffgORl+L62V7VljledTZOpibgxJ/vkHJ3XLavsX1GqyfwARwp8cKDi+V7UNxj/55D2Pn92FbWgJY3EZwG5Hvcf3EOPHfisJ5p0EUf1sVbt2ijtvLMt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2743.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(346002)(376002)(136003)(451199021)(6506007)(6512007)(186003)(2906002)(2616005)(110136005)(478600001)(26005)(1076003)(83380400001)(8676002)(41300700001)(38100700002)(8936002)(6486002)(86362001)(6666004)(316002)(66946007)(5660300002)(66476007)(66556008)(36756003)(107886003)(4326008);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Gez0mq2wH3HbHPdn7BRN6QOZIYVYuOa6MbVkpmxUeyfxCrrb5ifYtHs0DQwl?=
- =?us-ascii?Q?XMh0piiF+JddhaCCP/U7pba5B5wVUCqGfG7EBJ264xdmY6GKmoGT6Ig8Rv5e?=
- =?us-ascii?Q?za5O31IW2LzE/mcJXKAhMTK+dItCBYoY1jqNP3bZs1TsRS/mMcJW9mocFbaO?=
- =?us-ascii?Q?bYyjhYCEyMCizNEzPpQmKMi5mMpb2s9cwcuBGicj+YYaHf/8QHHyfQqIlqh1?=
- =?us-ascii?Q?N9ebn0m2+GHqHWHHiVFJH8+QcxAzzt5ocgsbXR9ZABff0TnTiAnLeqZfKNNx?=
- =?us-ascii?Q?0RK/yR3aEI12B84bTlks2s/P9iak5uxhlU7HV48OVrjEM4h+UofMQ/pdTk4g?=
- =?us-ascii?Q?+eTG6HPEdWvQnYsOPAjJrKHASoNYtKmeBTT3JTZBW9xqoyS3uRHq3/toRthe?=
- =?us-ascii?Q?QGZB/mDZE2nwNqvbQWku++j3VxY3SaRJlUjbwW9upFzysRMl/u57+n2ayHqg?=
- =?us-ascii?Q?2eUzSCpS9vPQWhi0lCaqcnPxo5DtH9uXJ8yIPWpNbtZw4mnZ7qnFnrH86XCc?=
- =?us-ascii?Q?vYazZsg75G4I9EQy+d45V0jg8TDgS4Ht7dhQ/WU3eN6dQCa3QblY1acBPgvY?=
- =?us-ascii?Q?oqfw1T2vV0+0S44NYqJXhOkeGLqCx0LC0fiKXd5096UDFNjZVrgTgvTgYRW6?=
- =?us-ascii?Q?34hvEoxvlOYn+iRAQhyUsRV98vNwfitEPukhEPobh/5rJmLTWwq4mGSvsP+d?=
- =?us-ascii?Q?QCuWb/A6HeZMCuhtZ2j2aSc9HTM734M+rZIQ4bMKL2HJb61X+KQMYaTOIvxj?=
- =?us-ascii?Q?2DRUlrzAJ1wmZPPJpmhRvD+INOlAMIfBhRk4xr80b7cEcOlUm/biNmZPeNC2?=
- =?us-ascii?Q?oLsCvRT9EFiQ3JPiYu3XokzuFgBiiQM7Msv+IyRjKRyRCHJ5p42YFwGtjpin?=
- =?us-ascii?Q?fIvieZJlDKWIAL+KrB9lx/1XLfsmZc80JQS1Rnt/KXQ22HhomSh8OnTpw9qF?=
- =?us-ascii?Q?EfdlrblWaH8RoLZAuaNo073bHuhNlskWbiyx1FbM8G7ekQgkgoXuUWrLWRup?=
- =?us-ascii?Q?fT7DNKU8ZKbU5lqtGdte0Dyvib+uaGMjflPYYkot0Pw3Fd9VFbS/wlL0hGhp?=
- =?us-ascii?Q?vo5jO2o0jK6/zCu0OaSYgODZ0FaWy3DqCiBEDWaZB1s+j84Yl4yVE/Bz4wt5?=
- =?us-ascii?Q?a1ymx6bbePxyjpf19t0f7p+Yn15PaNqJ/TmatTJyprdvyQR54Rtn35Z60ptF?=
- =?us-ascii?Q?0Fcv5KV7mnO1v8hrMzRtq2wtMEfzyEMXGoS3ABXtI+wYAI+D9BtpUKrUrPKv?=
- =?us-ascii?Q?iCUk/t93nQNVjLJTzp9Md15Ta4kDncecFg2wNrfGxz89e8ng002P+Trpempv?=
- =?us-ascii?Q?ofjBs+UF49jt2KAWN/XWV9/ym2pKgl8SCq7kfaPbxKqlMEOv5MRrevtSmCbY?=
- =?us-ascii?Q?dGVSH1f+tPbKH7zJHPhIa5dSt0MzOlBrHq2Nrh0b95bD07ysEFDdVLn2CoyY?=
- =?us-ascii?Q?qYGNT03jHSOOZueS2Prh7ootc8uAITI4d/azKIpAxcdpb5J2cy3x+rW/S+4x?=
- =?us-ascii?Q?tmJgUTEAgqq+142b/WeG68ieRyhhoKoeI52dC8kcZA5fnWV1vNpwa2vfDPr5?=
- =?us-ascii?Q?HjFODXttXrGpGjAuu/xsYFepG08JtVNNygNpk6rHhfP3sdDu5uyy+c8RCVvk?=
- =?us-ascii?Q?cg=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?34JsuWz3l1zXILzMP7H5ynEiU7ELQzTaJwmIFpdx+R0rQ09DgaVLpDh2HHkw?=
+ =?us-ascii?Q?XwsQcxN461IEbOHNOuy0bGOjMurFxN3/1wXXpoRVsXo8PQ/8WrjRhKt6x0pV?=
+ =?us-ascii?Q?5zO/n00Zqo2Z0ppHgvzAyS7P0i9VFbDAgGLstOSnH6OLYhdL3Xlz5b2a4OR7?=
+ =?us-ascii?Q?d2+3XA8ZPxqWyxXafVfe6RG6NOUQ/d8XdnnT6oL9LjD7H72XEdBbJr1VgRpW?=
+ =?us-ascii?Q?fIRgqzSwebglZPrq1zz0aWHZ9ksuBb9j5jN1iG+W8A2h9vpocUTTXIQs4ooN?=
+ =?us-ascii?Q?NHiS230/8kXZqAWCk0rpT2pBkpn+af3tahk2/WHpyu9uEtE8laQV/4+1/dO3?=
+ =?us-ascii?Q?6mHlXSccwF5mo7cBfyBvSIfvJhjCre278cCgU5+EbUTG6G8sADmNW8K7dlSJ?=
+ =?us-ascii?Q?2dEUu6NQpM3FCGDKltX9XjuPeGdNlVtuSd30ceU7S9fiChB5VWxEqHoT8snz?=
+ =?us-ascii?Q?Sm5Zi0qkdHzXSq7eCwyKFuCXEPmqNq5zc3T+/6esuX8X+prQbi/iYcZ3gmcN?=
+ =?us-ascii?Q?Kh9BRqudPFvfC8AK59J+g+JW3mz+qNEZWbRRsuLzzGmWHM/PUGPL90QfBAWQ?=
+ =?us-ascii?Q?CIaAT12AYSNodT/6F+3v+ZynaPP2Z2YOObiCiEy1dX9G7TjxlWVYy4lKQFwJ?=
+ =?us-ascii?Q?GTlds65os80nNTylKWvCZu4/hsCzypB0SSKVMp+SsDfdoi2ewVUuDxIRYnkZ?=
+ =?us-ascii?Q?IMa7YIMolE816i2tk1P1K/2H96u+fHzz51zw1hnhDRD5hFKqugASkFexgcE1?=
+ =?us-ascii?Q?Lzs10iRtuF586iwTqSMVS6lQNPyza+9IZ/QlB5LLLalX1Q7bRUpoPG8dEs+s?=
+ =?us-ascii?Q?4fcDj+zdBNh18DSo9w3kubIojQmxrMqOgp6yFkGusb4/sbvX4su7lUq+5EtA?=
+ =?us-ascii?Q?HATZ3S3Gamn4E8Z1SQrmec7NtjT2XKMcKEdPeq47e33iJMW1xGO3aFF18jLe?=
+ =?us-ascii?Q?gJY/VmczTJxt7PCxlDrhmMFeIx4OEjvVp0mY3FWZIlK6DNy8HIr4jpyahytV?=
+ =?us-ascii?Q?mVY2uKZoTXzC/UlqrdZeC/BSjEAd10G8RfqDWy4kKax14aCHgfGQocIhx83/?=
+ =?us-ascii?Q?h/3zswuQUS/jkHF2KPoAWTdOOaqOqaDwXfP7H430ZVJAKh4Ast2hoXlfn7g3?=
+ =?us-ascii?Q?/2Fn9RgCLcmhDBCk9iYhSRYDrrJfnYHO5MuxuggYN2eVCgR10Rd10Ha1+nVW?=
+ =?us-ascii?Q?j4M4qUk8W+m9gQMznVWdOENkWUX8yeEGlgwNRVn3yiA/rJzrfOAKlAEOu75v?=
+ =?us-ascii?Q?7i9HrZKS/ssbqlKiTYSBaP1zxoapBGBB99R8kTMWowcTFHEB+4Da6Dp0ifcH?=
+ =?us-ascii?Q?qPZwu1JRnkHfIxsWODsfNm/74H9yInp5qeSJP4AhNGI14K3W5SP3jQIENTrf?=
+ =?us-ascii?Q?mKDj9ggO7cVx3rk+APnOawL3lzFonVQ+CjVuw8fZHJMuW+CDfn1YorpCEH8q?=
+ =?us-ascii?Q?x6YVWkojF2th+D8jOSgz48GAHd7EVXGb3uYlpz7VSd+gYU//uDYgQeTpx/Sc?=
+ =?us-ascii?Q?QTENZrxGEFA1UPVNmzT8iH4jPM4SAzEik8Aq8VYvX5+LINi81w+gSUweNzvF?=
+ =?us-ascii?Q?wTJIoIDgxe6XspMb5xbKprddwlmn9hRLO45tKhQFAjqVpqgrYqy3liQ9QVEH?=
+ =?us-ascii?Q?FA=3D=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d49755b5-acb4-4b61-d377-08db6092fcac
+X-MS-Exchange-CrossTenant-Network-Message-Id: 423125f8-d8a8-4efd-882c-08db6092fda9
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2743.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2023 22:21:02.4768
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2023 22:21:04.1392
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SJM7lPZzn5mFw67SIWRx1h380rc9f7xTfuh0s4u9iHQrLpXBtCA0Pysra5QvAhi8zCpEBLLdXbUDM8wPs96Sng==
+X-MS-Exchange-CrossTenant-UserPrincipalName: mdfj+Xmbq9sbfbWGoUB/ACpI3JZ3EZM15tiuQgzGIlxx9aAQg/m1q/YnPkZJ9bqM/qnkkH6pMsHYBJxpT4kNRA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5355
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
@@ -114,23 +116,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series introduces more functionality on top of the initial
-nvidia-shield HID driver sent to the linux-input mailing list. The android
-media buttons, capacitive slider, and led on the Thunderstrike controller
-are now supported. If possible, would appreciate an acknowledgment of the
-initial driver patch or more feedback if needed.
+Map Android Home, Back, Search, VolumeUp, VolumeDown, and PlayPause buttons
+to the appropriate input event codes.
 
-Link: https://lore.kernel.org/linux-input/20230418203747.24000-1-rrameshbabu@nvidia.com/
+Signed-off-by: Rahul Rameshbabu <rrameshbabu@nvidia.com>
+---
+ drivers/hid/hid-nvidia-shield.c | 55 ++++++++++++++++++++++++++++++---
+ 1 file changed, 50 insertions(+), 5 deletions(-)
 
-Rahul Rameshbabu (3):
-  HID: nvidia-shield: Add mappings for consumer HID USAGE buttons
-  HID: nvidia-shield: Support LED functionality for Thunderstrike
-  HID: nvidia-shield: Remove space prefix from label in
-    shield_haptics_create
-
- drivers/hid/hid-nvidia-shield.c | 173 ++++++++++++++++++++++++++++++--
- 1 file changed, 162 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/hid/hid-nvidia-shield.c b/drivers/hid/hid-nvidia-shield.c
+index bcf345e365c0..1a9d32b2c80c 100644
+--- a/drivers/hid/hid-nvidia-shield.c
++++ b/drivers/hid/hid-nvidia-shield.c
+@@ -15,6 +15,16 @@
+ #include "hid-ids.h"
+ 
+ #define NOT_INIT_STR "NOT INITIALIZED"
++#define android_map_key(c) hid_map_usage(hi, usage, bit, max, EV_KEY, (c))
++
++enum {
++	HID_USAGE_ANDROID_PLAYPAUSE_BTN = 0xcd, /* Double-tap volume slider */
++	HID_USAGE_ANDROID_VOLUMEUP_BTN = 0xe9,
++	HID_USAGE_ANDROID_VOLUMEDOWN_BTN = 0xea,
++	HID_USAGE_ANDROID_SEARCH_BTN = 0x221, /* NVIDIA btn on Thunderstrike */
++	HID_USAGE_ANDROID_HOME_BTN = 0x223,
++	HID_USAGE_ANDROID_BACK_BTN = 0x224,
++};
+ 
+ enum {
+ 	SHIELD_FW_VERSION_INITIALIZED = 0,
+@@ -416,6 +426,40 @@ static struct shield_device *thunderstrike_create(struct hid_device *hdev)
+ 	return shield_dev;
+ }
+ 
++static int android_input_mapping(struct hid_device *hdev, struct hid_input *hi,
++				 struct hid_field *field,
++				 struct hid_usage *usage, unsigned long **bit,
++				 int *max)
++{
++	if ((usage->hid & HID_USAGE_PAGE) != HID_UP_CONSUMER)
++		return 0;
++
++	switch (usage->hid & HID_USAGE) {
++	case HID_USAGE_ANDROID_PLAYPAUSE_BTN:
++		android_map_key(KEY_PLAYPAUSE);
++		break;
++	case HID_USAGE_ANDROID_VOLUMEUP_BTN:
++		android_map_key(KEY_VOLUMEUP);
++		break;
++	case HID_USAGE_ANDROID_VOLUMEDOWN_BTN:
++		android_map_key(KEY_VOLUMEDOWN);
++		break;
++	case HID_USAGE_ANDROID_SEARCH_BTN:
++		android_map_key(BTN_Z);
++		break;
++	case HID_USAGE_ANDROID_HOME_BTN:
++		android_map_key(BTN_MODE);
++		break;
++	case HID_USAGE_ANDROID_BACK_BTN:
++		android_map_key(BTN_SELECT);
++		break;
++	default:
++		return 0;
++	}
++
++	return 1;
++}
++
+ static ssize_t firmware_version_show(struct device *dev,
+ 				     struct device_attribute *attr, char *buf)
+ {
+@@ -571,11 +615,12 @@ static const struct hid_device_id shield_devices[] = {
+ MODULE_DEVICE_TABLE(hid, shield_devices);
+ 
+ static struct hid_driver shield_driver = {
+-	.name         = "shield",
+-	.id_table     = shield_devices,
+-	.probe        = shield_probe,
+-	.remove       = shield_remove,
+-	.raw_event    = shield_raw_event,
++	.name          = "shield",
++	.id_table      = shield_devices,
++	.input_mapping = android_input_mapping,
++	.probe         = shield_probe,
++	.remove        = shield_remove,
++	.raw_event     = shield_raw_event,
+ 	.driver = {
+ 		.dev_groups = shield_device_groups,
+ 	},
 -- 
 2.38.4
 
