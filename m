@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67312714569
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EECB71456A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjE2HZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 03:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        id S231468AbjE2HZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 03:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbjE2HZf (ORCPT
+        with ESMTP id S231453AbjE2HZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 03:25:35 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75482AF;
-        Mon, 29 May 2023 00:25:31 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2af1e290921so30115681fa.3;
-        Mon, 29 May 2023 00:25:31 -0700 (PDT)
+        Mon, 29 May 2023 03:25:42 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD247AF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:25:40 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96fd3a658eeso426078166b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:25:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685345129; x=1687937129;
+        d=gmail.com; s=20221208; t=1685345139; x=1687937139;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fuA6Mx7qZk6GEXujcE9++nuvrgV08ZyqT/8PAv9VpyQ=;
-        b=E+CGf+hSlas2ziMgKKa6jlYK0xVOwshz/Sz6tFHIvkH+2c2Sf06OVcWnyv3eFsh5LO
-         xv7MLLUghSxQ3ASwLN2a853fG3gq89bwejLL/Q2oomoxGxFfGNuJirlLsb42Pr2J+WB+
-         7hHsxD5ckzCRvIyqWo2VDSRuQFe/rAE/d+PHamsWvIFyn2mtQpFbjhSFW3OI/IBmqOZJ
-         ng4Th1aQI1IUHLr1ob4xiD+a1l0PKm0DSm12Iu8uekGM76S9J7Jko0G8Y7rq0iWJJrB5
-         wZUhcKyHdJCUnFZkmqFOOF9G3ELP8+LiT+EXDwXntA/b+HcoqMXlQKvdU8ezF/4dOQk+
-         9hIQ==
+        bh=VKRg7l5upkPsHIbZGSw6Q8T2a/KMJm+ptNrO6T1korM=;
+        b=P/iSYFpQmgEljYGK2XHIQlE5MqGp/QLon7aRZTfpzPWXUEusqmS6BApSim4mj9x/D5
+         /93UGSQD5xtqefIXombswSsHyQ0W8CSIXotboM6ZBjl4+yzw+1os8u05fsG5cfZCi3li
+         1ygO3ysknEbwRLDUQLwIcar7XMX9nV3bWyD6TDPpwDyFtPy+lvJzPvhF8HNp/UBILU/o
+         8keIrXXXOxNsb0/18B87quiSqb2Phqy5MHvfj9jY30rHP2e4v+cEVgApXOeBsQWxqJYs
+         l+sQwrzPPssAkdh/xWmlPAppqVW9yQFOUo4zM2HtFD3mZvfux1+i1qi22kQjhVkguHaE
+         Bl2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685345129; x=1687937129;
+        d=1e100.net; s=20221208; t=1685345139; x=1687937139;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fuA6Mx7qZk6GEXujcE9++nuvrgV08ZyqT/8PAv9VpyQ=;
-        b=Y/gOpDyX1eT/PFjf59hFX/RS0nscuaCjodZyc0amoTbMS4FH5NBzzv9771pXtB4cjN
-         vZYQkEtsO+D5mFdDRRjJs7Nh7yUYPebQa9mMf4F4LBh2EORq8OC1io4PZKl+nC/G0fwU
-         +QZ+LpdgYTkhgGEaFkXHV6actAk9sWTWvutvszy/sQUbPPKzkG1koGjXQnOCwIppZcem
-         HPk+sZK5sxQ2IHFV+5aPwwhnOgAbdasGwul9CxTwkJ7ms9+0kgS2WLw5WKY49Ovr7JBp
-         6bWzrrfXwH4BFm5GhaW1jwNQp+UkDctqUyzD2crYhg1E4SB7dW8qDI7en9b6TFGuuCds
-         FewQ==
-X-Gm-Message-State: AC+VfDwBZEJ55at8/WsfzkbLMDkNBXdFv5cfzmUtDAwPdj5u/kYYOgZX
-        RtArX41X3W7H1S3G9m7nNE6tIxNzufS+qJWkALI=
-X-Google-Smtp-Source: ACHHUZ6WwUCBaQyc2mmNPx0qmJK6CBQV/NW72H05zZW5Tej2BIzwSvwr6Vpj0zCrsm5svhM9IR7t/+qbyA0PaQiPooU=
-X-Received: by 2002:a2e:6a18:0:b0:2ab:e50:315a with SMTP id
- f24-20020a2e6a18000000b002ab0e50315amr3293876ljc.51.1685345129439; Mon, 29
- May 2023 00:25:29 -0700 (PDT)
+        bh=VKRg7l5upkPsHIbZGSw6Q8T2a/KMJm+ptNrO6T1korM=;
+        b=hRUbq6C21hT5Cl8dTNGHCVNhlcL/mMh6KpKISIno5PzndkDb7maLh1NUrqJkIacLSx
+         b9qLN+iVMtIB9eIVedpNr/ETk428Blw1kmzNVZo4WJCYc0RLH4oAzUuggcehakF9wyna
+         kBimFaaa9qihO8L5mulXgaWehvrzg368HQDtQR9ht2JHmH7WG4ZNU1D8+qg38K0RBGo4
+         EofVhZIJsvHgQF8PYN0ImR0S0uFtVgpPiFNxpPrT9pw9vRjUsa6BJq3MrHRg5NR9+Qkx
+         8cSTR0jxWoUyKXl8tkY00f65rmF82igTWFZZFzTke0AhDLG4VHAKoitB6KUnoaoYitSk
+         hSFA==
+X-Gm-Message-State: AC+VfDz/TKE+NnVPu/A3YO4sgGek4cTqNgd8eKQQCqux0h0KBvYomJh8
+        naSINyLJdVAeTXkORfKUjDp3vHCmK6JamFKERMg=
+X-Google-Smtp-Source: ACHHUZ5o0wacQ702LrQubMWpOhTJauZeqW+GMEsMsxGDKb9Shv3EqNUyOU1XwX5LqkT2fpMFJ+G7vKhrUy0+dhXHY3I=
+X-Received: by 2002:a17:907:7243:b0:94c:ea3b:27a with SMTP id
+ ds3-20020a170907724300b0094cea3b027amr9760839ejc.16.1685345138979; Mon, 29
+ May 2023 00:25:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230526054621.18371-1-liangchen.linux@gmail.com>
- <CACGkMEuUTNfHXQPg29eUZFnVBRJEmjjKN4Jmr3=Qnkgjj0B9PQ@mail.gmail.com> <20230528022737-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230528022737-mutt-send-email-mst@kernel.org>
-From:   Liang Chen <liangchen.linux@gmail.com>
-Date:   Mon, 29 May 2023 15:25:16 +0800
-Message-ID: <CAKhg4tL1fkb8JR5+XH_toVDx_c79uH4-fXv8XTDe4gpOFc92VA@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/5] virtio_net: Fix an unsafe reference to the
- page chain
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuanzhuo@linux.alibaba.com,
-        kuba@kernel.org, edumazet@google.com, davem@davemloft.net,
-        pabeni@redhat.com, alexander.duyck@gmail.com
+References: <20230525122837.649627-1-daniel.baluta@oss.nxp.com>
+ <69c2b7cd-f211-47ef-b42a-609ee792de11@sirena.org.uk> <CAEnQRZAseAmOHLBsBQuW+SqEFbT-pbrjpUiPhSuv8Ww2VoJf_w@mail.gmail.com>
+ <9484d916-2983-40a3-bad9-b2125e48e2b6@sirena.org.uk>
+In-Reply-To: <9484d916-2983-40a3-bad9-b2125e48e2b6@sirena.org.uk>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Mon, 29 May 2023 10:25:26 +0300
+Message-ID: <CAEnQRZA+dXPN6xeV1SZk6YbaZSqTxoP7AJ9mqko98Jj25cs0Kg@mail.gmail.com>
+Subject: Re: [PATCH v2] ASoC: SOF: imx: Add OF machine descriptors for i.MX platforms
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Daniel Baluta <daniel.baluta@oss.nxp.com>,
+        alsa-devel@alsa-project.org, pierre-louis.bossart@linux.intel.com,
+        lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,55 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 2:29=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
+On Fri, May 26, 2023 at 6:32=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> On Thu, May 25, 2023 at 09:35:40PM +0300, Daniel Baluta wrote:
+> > On Thu, May 25, 2023 at 8:07=E2=80=AFPM Mark Brown <broonie@kernel.org>=
  wrote:
 >
-> On Fri, May 26, 2023 at 02:38:54PM +0800, Jason Wang wrote:
-> > On Fri, May 26, 2023 at 1:46=E2=80=AFPM Liang Chen <liangchen.linux@gma=
-il.com> wrote:
-> > >
-> > > "private" of buffer page is currently used for big mode to chain page=
-s.
-> > > But in mergeable mode, that offset of page could mean something else,
-> > > e.g. when page_pool page is used instead. So excluding mergeable mode=
- to
-> > > avoid such a problem.
-> >
-> > If this issue happens only in the case of page_pool, it would be
-> > better to squash it there.
-> >
-> > Thanks
+> > > > +     {
+> > > > +             .compatible =3D "fsl,imx8qm",
+> > > > +             .drv_name =3D "asoc-simple-card",
+> > > > +             .sof_tplg_filename =3D "sof-imx8.tplg",
+> > > > +     },
 >
+> > > It seems a bit sad to be adding simple-card rather than audio-graph-c=
+ard
+> > > at this point - is there some great reason for this?
 >
-> This is a tiny patch so I don't care. Generally it's ok
-> to first rework code then change functionality.
-> in this case what Jason says os right especially because
-> you then do not need to explain that current code is ok.
+> > This is what we used so far and it works pretty well for us.
 >
+> > Is there a plan to deprecate simple-card? And switch to audio-graph-car=
+d?
+>
+> > We could have a look at this if this is the correct direction.
+>
+> It's already deprecated, and audio-graph-card (really you want to use
+> the audio-graph-card2 binding) is much more featureful so will cover
+> more machines.  If you're doing something new then it's best to use
+> audio-graph-card for future proofing, simple-card is a bit too simple
+> and inflexible.
 
-Sure. it will be squashed into the page pool enablement patch. Thanks!
-
-> > >
-> > > Signed-off-by: Liang Chen <liangchen.linux@gmail.com>
-> > > ---
-> > >  drivers/net/virtio_net.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > index 5a7f7a76b920..c5dca0d92e64 100644
-> > > --- a/drivers/net/virtio_net.c
-> > > +++ b/drivers/net/virtio_net.c
-> > > @@ -497,7 +497,7 @@ static struct sk_buff *page_to_skb(struct virtnet=
-_info *vi,
-> > >                         return NULL;
-> > >
-> > >                 page =3D (struct page *)page->private;
-> > > -               if (page)
-> > > +               if (!vi->mergeable_rx_bufs && page)
-> > >                         give_pages(rq, page);
-> > >                 goto ok;
-> > >         }
-> > > --
-> > > 2.31.1
-> > >
->
+Ok! Thanks for clarifications! Will use audio-graph-card!
