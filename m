@@ -2,82 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479177146A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B7D7146AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbjE2IvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S231709AbjE2Izb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbjE2IvI (ORCPT
+        with ESMTP id S229513AbjE2Iz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:51:08 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B5010C;
-        Mon, 29 May 2023 01:50:56 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 29 May 2023 04:55:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6D799;
+        Mon, 29 May 2023 01:55:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5F52B6606E70;
-        Mon, 29 May 2023 09:50:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685350254;
-        bh=vONTs6WMJV8KARE9JFHUrd9Ipnd933O8COixgUoyCrA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PGFjSRa2U0lt4ZTtEAvOlhPCcKsseSMpeyLa28juvIhF2ElLWPq31iHpIbqz/qNg3
-         9hDOForVW20w3BkErYjIqsl4AveUVgBJNBJLVgTTpz91cpgfG07djMyaLBRl4zpcMG
-         dJesnUN691UkBCBTpH9iFNWOzUE6qapqfRlh8ENhrDqvRWxb0OlqPI/FZTAzDS0uX4
-         1q8mLMwKyLXfMus6EXL0cF+2n+JZqDXCHijPuMtCoEouA+odUrGJ9m+SxTFgKwlKSE
-         IRv9+qWnqJDSCYheWB6aY/SvXiwd3NTXQxxeTmw3ZYvIRdCCaIPf2sZSN5dx5tVb4K
-         Bp4f4D/hd/yMA==
-Message-ID: <66d9eaa2-4eb5-e9d1-cc76-0e0b68be44ca@collabora.com>
-Date:   Mon, 29 May 2023 10:50:51 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11C5C612FB;
+        Mon, 29 May 2023 08:55:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C24AC4339B;
+        Mon, 29 May 2023 08:55:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685350526;
+        bh=i9OWnfmGmJQVxNLboSBkfNDRCM4AooOMGIVwfZgR5iI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q92vEVrXzUJr0mlI8GSb7Qd940qzEgMw9HA68RlTkPMu9aPFQQSG8QXHk2O6/60gb
+         TLj79uIJvG9CNkKPxtJyouG9FsORzuej0iS6qN85GE6RT0OEZBh/qSxTHLv9NmLMvw
+         wTxgdHoQ9d5Y3hZMf4s97tchiwaaZooPevQ73zo/AYNNYKJs0vg3t/B+yLNL8grrjx
+         LazyDJpX9zui//MZUOjEctHRVq3b7TxUtchfowuU/5HusSHjG3HXR4pNxBdipJGNeJ
+         LG6c6C0lkXxmpv34I1yYKYyZc55lsAlZW8r0goh3b+p6H5d+r97KXwnLD4bpqTb2tO
+         v/K3LifVnImCA==
+Date:   Mon, 29 May 2023 14:25:12 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        kw@linux.com, bhelgaas@google.com, robh@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, steev@kali.org,
+        quic_srichara@quicinc.com, dmitry.baryshkov@linaro.org,
+        Dmitry Baryshkov <dmitry.baryshkov@gmail.com>
+Subject: Re: [PATCH v2 2/8] PCI: qcom: Disable write access to read only
+ registers for IP v2.9.0
+Message-ID: <20230529085512.GB5633@thinkpad>
+References: <20230519143117.23875-1-manivannan.sadhasivam@linaro.org>
+ <20230519143117.23875-3-manivannan.sadhasivam@linaro.org>
+ <ZGsuM8CAv7AtluVx@lpieralisi>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 2/2] clk: divider: Fix divisions
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Christopher Obbard <chris.obbard@collabora.com>,
-        David Laight <David.Laight@ACULAB.COM>, kernel@collabora.com
-References: <20230526171057.66876-1-sebastian.reichel@collabora.com>
- <20230526171057.66876-3-sebastian.reichel@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230526171057.66876-3-sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZGsuM8CAv7AtluVx@lpieralisi>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 26/05/23 19:10, Sebastian Reichel ha scritto:
-> The clock framework handles clock rates as "unsigned long", so u32 on
-> 32-bit architectures and u64 on 64-bit architectures.
+On Mon, May 22, 2023 at 10:56:19AM +0200, Lorenzo Pieralisi wrote:
+> On Fri, May 19, 2023 at 08:01:11PM +0530, Manivannan Sadhasivam wrote:
+> > In the post init sequence of v2.9.0, write access to read only registers
+> > are not disabled after updating the registers. Fix it by disabling the
+> > access after register update.
+> > 
+> > Fixes: 0cf7c2efe8ac ("PCI: qcom: Add IPQ60xx support")
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@gmail.com>
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index 01795ee7ce45..391a45d1e70a 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -1136,6 +1136,7 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+> >  	writel(0, pcie->parf + PARF_Q2A_FLUSH);
+> >  
+> >  	dw_pcie_dbi_ro_wr_en(pci);
+> > +
 > 
-> The current code pointlessly casts the dividend to u64 on 32-bit
-> architectures and thus pointlessly reducing the performance.
+> Nit: spurious change.
 > 
-> On the other hand on 64-bit architectures the divisor is masked and only
-> the lower 32-bit are used. Thus requesting a frequency >= 4.3GHz results
-> in incorrect values. For example requesting 4300000000 (4.3 GHz) will
-> effectively request ca. 5 MHz. Requesting clk_round_rate(clk, ULONG_MAX)
-> is a bit of a special case, since that still returns correct values as
-> long as the parent clock is below 8.5 GHz.
+
+Well that's intentional. It's good to have a newline between these guard
+functions to differentiate them from the DBI accesses. We do it in other places
+in the driver.
+
+But I thought this change doesn't warrant a mention in commit message or a
+separate patch.
+
+Let me know otherwise.
+
+- Mani
+
+> Lorenzo
 > 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> >  	writel(PCIE_CAP_SLOT_VAL, pci->dbi_base + offset + PCI_EXP_SLTCAP);
+> >  
+> >  	val = readl(pci->dbi_base + offset + PCI_EXP_LNKCAP);
+> > @@ -1145,6 +1146,8 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+> >  	writel(PCI_EXP_DEVCTL2_COMP_TMOUT_DIS, pci->dbi_base + offset +
+> >  			PCI_EXP_DEVCTL2);
+> >  
+> > +	dw_pcie_dbi_ro_wr_dis(pci);
+> > +
+> >  	for (i = 0; i < 256; i++)
+> >  		writel(0, pcie->parf + PARF_BDF_TO_SID_TABLE_N + (4 * i));
+> >  
+> > -- 
+> > 2.25.1
+> > 
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-
+-- 
+மணிவண்ணன் சதாசிவம்
