@@ -2,131 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF9F7150A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 22:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251537150A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 22:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjE2Uka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 16:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
+        id S229582AbjE2Ulq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 16:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjE2Uk2 (ORCPT
+        with ESMTP id S229484AbjE2Ulo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 16:40:28 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D427CF;
-        Mon, 29 May 2023 13:40:23 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QVS8F0NKSz49Psb;
-        Mon, 29 May 2023 23:40:12 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1685392814;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aKrMmJS6UFOXWpnJtPQFVZKoxYuel7ujkpy1v5Vq8JY=;
-        b=TfBz/lgOpq6E9nccbfdJWVwBfkD2kgapf2d/WOqzWHo9xbsp/gLTdL3G2sukmSw72BDzMr
-        4HJjrnODO/HP3+EOZTo+uyGAaI9NWzU7KzzZRcQ3eIQ26zNVW5xMiMal3ri/9O10bKvz2q
-        7IHOaRcyCqNGZbvPGiHE7qeyVlEYsQvVhel4emet+nvu9IT0kDJZWzLABdC/vq2VxcKOVm
-        Buv2WBZIO/2f0MBkQm89rIDKleQnxdIzRItuba4M23ZzCKw5N2d/TyVV0o+IJZADQacUjD
-        WH2tKXL/xr7BnTL9jX0MqtR9aEqSWcydvr/rWgK4j6f67dXfwRLvSMuryDSsxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1685392814;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aKrMmJS6UFOXWpnJtPQFVZKoxYuel7ujkpy1v5Vq8JY=;
-        b=sN4R+xtS7GAfoIDci2Snn9cc27sf2G6dm050Exb1/wEh0YaJOmX3OSbH8ptYA2aIU6b+8o
-        DIw9casC8lK8LFFl0YEws5+rna+piQyTghXT20AWVuSK+QqzmeR04XvUg2CfgozHxyg71a
-        RxvSH0qQ6lUnSbBPd7BAOVcQv/E4FNurphmRDLtuyjoRLqnbXuouDOeYi85V7K9wLrAH7g
-        suFe68XhMVAZM3SB239kW2vvelfGkkoWx3GXKjQq6OB7B0/FE4LA3whoTLIfbTVM0Lof1U
-        tRm+YjZLb2I0AmhR1a2m568C33jaC0LmMOfSlrrwzw2t1zCukKkjheec9koxMg==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1685392814; a=rsa-sha256;
-        cv=none;
-        b=olTBHGB30pHxL93soLi1eo1qm+qT0xws3OLlvGXQ/efEHIuFkg+CMUVDI+QoHhjRbbHw5q
-        4vaFKyJ4ySzkYZh/ShO2IsUf0LknViVefbrlFy5vvnEAIZ8eOlElV+qCxv2k6EwH+3TlG3
-        p1B7YyrIdtxLUfhAFpT37Xco0G6gDj1539J6w+w0v3OsU8Dw6KND3Per7mOnqjE41grAIc
-        rn7ewpJwXdX3uFZhv2INNwo/fFvpyYkGU6b5KXO6z+V9KRCWnzY4hWi3+c8sNL3QApwkzO
-        IFhirlDJbTDZkg2qHE4ESFURXhFOBV3XEhJaY8rnTQOHSpeyCBd8mJ2BV3HNMg==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 6A275634C91;
-        Mon, 29 May 2023 23:40:12 +0300 (EEST)
-Date:   Mon, 29 May 2023 23:40:12 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     laurent.pinchart@ideasonboard.com, kernel@puri.sm,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        mchehab@kernel.org
-Subject: Re: [PATCH v2] media: hi846: fix usage of pm_runtime_get_if_in_use()
-Message-ID: <ZHUNrHGJv63mKGH0@valkosipuli.retiisi.eu>
-References: <20230425094747.2769693-1-martin.kepplinger@puri.sm>
- <ZGODstToZrypFaAV@valkosipuli.retiisi.eu>
- <73bfe0c438e194fa462bec521debacfcd722dc9e.camel@puri.sm>
+        Mon, 29 May 2023 16:41:44 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEACC7;
+        Mon, 29 May 2023 13:41:43 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96f5d651170so944664466b.1;
+        Mon, 29 May 2023 13:41:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1685392902; x=1687984902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8oVcB/3PU414dGGRa5XjMeY+ZP+wNwSmSLVI+C8Yxe4=;
+        b=PsknnEmvP6wS6LwIMVDy541+2wS44WvjbYe8sUGBsjtPB9+YTtBJz367oliJzlKecq
+         qq6231HCLJTLj5nXN7fGd4BWOsHorvyobp7shFhPwPsO/X1v6WX+jhZ1Zx3b5XSeWlKz
+         FtjUUGlRv8XvuCVIBp62tiplKIsWU8zw/sjzgwccg8RbwYXchQqbZGutTshzbkXFzBrO
+         UaXGTDhcQaNqtDwwipJW16ynLAc+dC11VAadqHBTasMdwF0fu8ZK9JWgatpex387mveG
+         p9HMIWBB+Sj9NTztwj4F/DX/JGAwW90aChATDjGIY6lziSA71oD4hID+EFJFCvEVbS7t
+         6fPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685392902; x=1687984902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8oVcB/3PU414dGGRa5XjMeY+ZP+wNwSmSLVI+C8Yxe4=;
+        b=PiH7aS7/1PbLgp6dQfSq3MQFsscO07dSp4vmOFnvIa7UBNEIiymkj4Oe2ZbZWrAQJq
+         byTb0AIHnzaYwueLemlt+FjVjRKKITtT03TJG7Vrh5CX0cXdFT6og+4IgzQD2ajUTrHB
+         hTKGB6glaV/MgrwCkS3VXLPaaSm80HVZShQH2Y3uxXg0uF0xNpiW7GpCiBwRadRdqSlK
+         XhwCFrX/K/m8u56U8rkKQ8xGb0+c09m7SAUEYkru81jWvRZjbAJBNon9YH00OIEZCKQj
+         T/f1Rnxz39JOaXd1K7H4pcmbkn7YvziAxksIpm1RimY0vzvgXMbTzNcYWSNuksBkWDkj
+         ihYQ==
+X-Gm-Message-State: AC+VfDxSLKHDygGOO3B7+cOjeCwaCH6LIrZ2IkhCc5/ERHLYeApBCKE9
+        CuT6eUCPaEMgbgojMKqtGcSp0IEfuCCUVWaoZ88=
+X-Google-Smtp-Source: ACHHUZ6207AD0hmd3Pf2Y01WBOzBdWrg6plD6e1TcvbdQOjjEPdECzGbZUSsxNqCyt2hVYSrZgH15bzo3/Efr3x0vzo=
+X-Received: by 2002:a17:907:868e:b0:96f:8afc:b310 with SMTP id
+ qa14-20020a170907868e00b0096f8afcb310mr238082ejc.3.1685392901963; Mon, 29 May
+ 2023 13:41:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <73bfe0c438e194fa462bec521debacfcd722dc9e.camel@puri.sm>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230515210545.2100161-1-gnstark@sberdevices.ru>
+ <CAFBinCCc+t7Ks6fqz38cVrufPRFdxFgC9Qp+JhcM1KfD6pupTg@mail.gmail.com>
+ <a52335ea-6545-8ca6-d318-38b7ffc64368@lexina.in> <CAFBinCDmkGnD5o_rV6K73De2XmHDxRYveDwNAy3iA+Kwr5sdqg@mail.gmail.com>
+ <6910550a-b025-0d97-0b39-bc89b235541e@sberdevices.ru>
+In-Reply-To: <6910550a-b025-0d97-0b39-bc89b235541e@sberdevices.ru>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 29 May 2023 22:41:31 +0200
+Message-ID: <CAFBinCCk6OziOxt2AY1A25C=9_pibhHsDK0wJNZ_AyHMd=z6SQ@mail.gmail.com>
+Subject: Re: [PATCH v1] meson saradc: fix clock divider mask length
+To:     =?UTF-8?B?0KHRgtCw0YDQuiDQk9C10L7RgNCz0LjQuSDQndC40LrQvtC70LDQtdCy0LjRhw==?= 
+        <GNStark@sberdevices.ru>
+Cc:     "jic23@kernel.org" <jic23@kernel.org>,
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        "khilman@baylibre.com" <khilman@baylibre.com>,
+        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "nuno.sa@analog.com" <nuno.sa@analog.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>, Vyacheslav <adeep@lexina.in>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 12:07:54PM +0200, Martin Kepplinger wrote:
-> Am Dienstag, dem 16.05.2023 um 16:22 +0300 schrieb Sakari Ailus:
-> > Hi Martin,
-> > 
-> > On Tue, Apr 25, 2023 at 11:47:47AM +0200, Martin Kepplinger wrote:
-> > > pm_runtime_get_if_in_use() does not only return nonzero values when
-> > > the device is in use, it can return a negative errno too.
-> > > 
-> > > And especially during resuming from system suspend, when runtime pm
-> > > is not yet up again, -EAGAIN is being returned, so the subsequent
-> > > pm_runtime_put() call results in a refcount underflow.
-> > > 
-> > > Fix system-resume by handling -EAGAIN of
-> > > pm_runtime_get_if_in_use().
-> > > 
-> > > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > ---
-> > > 
-> > > revision history
-> > > ----------------
-> > > v2 (thank you Sakari and Laurent):
-> > > * drop the other patch (the streaming-state in suspend/resume needs
-> > > to
-> > >   be solved differently).
-> > > * Sakari pointed out that many drivers are affected by this and
-> > > that
-> > >   runtime-pm might need changes instead. I think this patch doesn't
-> > > hurt
-> > >   and could serve as a reminder to do so.
-> > 
-> > I guess it's appropriate to add:
-> > 
-> > Fixes: e8c0882685f9 ("media: i2c: add driver for the SK Hynix Hi-846
-> > 8M pixel camera")
-> > 
-> 
-> I agree. Feel free to do so when applying.
+Hi George,
 
-Done!
+On Mon, May 22, 2023 at 5:47=E2=80=AFPM =D0=A1=D1=82=D0=B0=D1=80=D0=BA =D0=
+=93=D0=B5=D0=BE=D1=80=D0=B3=D0=B8=D0=B9 =D0=9D=D0=B8=D0=BA=D0=BE=D0=BB=D0=
+=B0=D0=B5=D0=B2=D0=B8=D1=87
+<GNStark@sberdevices.ru> wrote:
+>
+> Hello Martin
+>
+> Actually you were right that my patch affects only meson8 family not the =
+all new ones, my bad.
+> It's clear from the driver code meson_saradc.c and dts files.
+> I've made an experiment on a113l soc - changingclock_rate inmeson_sar_adc=
+_param and measuring adc channel many times
+> and with low clockfrequency (priv->adc_clk) time of measurementis high
+> and vice versa. ADC_CLK_DIV field in SAR_ADC_REG3 is always zero.
+Thanks for sharing your findings!
 
--- 
-Sakari Ailus
+> I need to get s805 (meson8) board for example and made experiment on it.
+If you don't find any Meson8 (S802)/Meson8b (S805) or Meson8m2 (S812)
+board then please provide the code that you used for your experiment
+as a patch so I can give it a try on my Odroid-C1 (Meson8b).
+
+
+Best regards,
+Martin
