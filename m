@@ -2,129 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0037146CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B907146CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbjE2JDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 05:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
+        id S231783AbjE2JCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 05:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbjE2JCz (ORCPT
+        with ESMTP id S231781AbjE2JCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 05:02:55 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82225E8;
-        Mon, 29 May 2023 02:02:53 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-75cbd6f9577so144149985a.2;
-        Mon, 29 May 2023 02:02:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685350972; x=1687942972;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KlbILOfGwHHcm72NT7ycsjpiiLYUdGgHDOJzvZ5rU00=;
-        b=kQ81YS55kmtiXc3ilGdE12xEke0hqdJ+vjl4WQsyB9kGFpuVPgk2/s+NiLOgH4p3Rg
-         v9115wpuN5uL5QLLTPTu8T5S7x/kCp0ZNg4oXHH9xHLzWDhJklw9RWYe/sDw33JA9ARo
-         40xwQWc9HD3G8kkBffg3ktKQqbmxmZwaaDnxAYjlKrI4Qb5AIoadWB0GYex9dMvn4l4m
-         CHNatENoSKI4PfDGfd4JEXYH8sh5VvexOePOSYQuaDvgJ5RTScymOrzXR9XNq05OFRc1
-         /gvFOv3p31Hrk/v2xSjCaFDBlvoHQt1ItAbdHv4R/jL8HE4ReIjfhhIN9oS6YwjqY6v1
-         QG5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685350972; x=1687942972;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KlbILOfGwHHcm72NT7ycsjpiiLYUdGgHDOJzvZ5rU00=;
-        b=YI0LMvz6bzrfCs+odblmOgSSwK79aaR39MswSXiWPhbBeNd4HJr2eVxyGeOGbumqAm
-         /q22jqWAB1C526vLSF93NdMMeZfCA3IBFdfTYa/Twn0tpjlZEE6anOs4sdl7b8Kmh/LS
-         754Q+TWXCUPr7HLofUzQCJMLBhe1U+0dh8dTKcV+dGVIxS2RmTAZ0K2AF7XPL6xYS6g/
-         vEjmHr0zgy/S4hNFlPW9ozETkPomVG66zSn3f3zzvVI6T/94HrFkFtRKpFPFtmoKwKvE
-         UqsOYkgqhZKjWKrLH5b4g1AB2p2+QYQgC7Dor818ur+zynqZgq+Ow3kFxWGkxWYA7hTS
-         RJYg==
-X-Gm-Message-State: AC+VfDxbdjcq/nBSr/HQuPyHcgkuADoWR/K6/H1SLRVMZWFz+HG5SFXr
-        NRC8i2Vg5VysNVjszmB+t15K1mzcgyPeQi1cA74=
-X-Google-Smtp-Source: ACHHUZ4ay/oKD4J+lYY0OdaVXdsz7oc126FLvXOCQWwRoF5VO207cVZepKbQ82I9EZUsEaMQpvDL9yFjHIB2hLTaD70=
-X-Received: by 2002:a05:6214:ac7:b0:621:4669:c806 with SMTP id
- g7-20020a0562140ac700b006214669c806mr13088784qvi.37.1685350972503; Mon, 29
- May 2023 02:02:52 -0700 (PDT)
+        Mon, 29 May 2023 05:02:34 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8A19C;
+        Mon, 29 May 2023 02:02:32 -0700 (PDT)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 8D4DE8215F;
+        Mon, 29 May 2023 11:02:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1685350950;
+        bh=mxJF2rG5NfRMzs/sH8AlTVnhuq4+7EmqGbtNevuhHVo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Dgur7oJ2vNQoyn035H2miR5nccnQyt6Q5cykwTca2kxWsdJ40NrWi+tMXs6/kPdJ8
+         sXgaI6ddVy2fXuJx66X3aqOaDL3l9EFkoGm5UVb+yK2VgSErGjv5pHaK0hVYbnAdnr
+         VWi2dX1EUHxXMhE3HgjorWMeMkhvC6UMuOdgYVpI1LdoIf3uhl7nsqWrEuW4VLr3j/
+         aE8o7fWTXR2oTmJsK/KWoJjEoM9xB6AX4IZq3tG1xA4k7x04vcoQ6d9NV4jWnFgJ+g
+         /cETUgvGNa+QscPzpDZwjXTe2dQE+fmTRpG/vh4jIsnu9Ycs6TIE+vDbUNUB5ZXx+X
+         n5WHrHjvJtUaw==
+Date:   Mon, 29 May 2023 11:02:22 +0200
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/3] dsa: marvell: Add support for mv88e6071 and 6020
+  switches
+Message-ID: <20230529110222.68887a31@wsk>
+In-Reply-To: <20230523142912.2086985-1-lukma@denx.de>
+References: <20230523142912.2086985-1-lukma@denx.de>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230522142621.1680563-1-astrid.rost@axis.com>
- <20230522142621.1680563-5-astrid.rost@axis.com> <ZHPZlA5LM5h4xmp3@surfacebook>
- <ca146ce1-d3d3-e5eb-ac44-3afaec8ca6cc@axis.com>
-In-Reply-To: <ca146ce1-d3d3-e5eb-ac44-3afaec8ca6cc@axis.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 29 May 2023 12:02:16 +0300
-Message-ID: <CAHp75VdZAGhrXgYf5EOE6MQ4DiseaxOqkjUs+X9jROB1aonD_g@mail.gmail.com>
-Subject: Re: [PATCH v4 4/7] iio: light: vcnl4000: add illuminance irq vcnl4040/4200
-To:     Astrid Rost <astridr@axis.com>
-Cc:     Astrid Rost <astrid.rost@axis.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@axis.com,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mathieu Othacehe <m.othacehe@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/6859To1L./u.yFDOGr/r6d/";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 10:41=E2=80=AFAM Astrid Rost <astridr@axis.com> wro=
-te:
-> Thanks for reviewing.
-> I can change this. But this is how it gets formatted by .clang-format.
+--Sig_/6859To1L./u.yFDOGr/r6d/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I would suggest to report the bug (in case it's not configurable) or
-configure to avoid such a misindentation.
+Dear All,
 
-> On 5/29/23 00:45, andy.shevchenko@gmail.com wrote:
-> > Mon, May 22, 2023 at 04:26:18PM +0200, Astrid Rost kirjoitti:
-> >> Add support to configure ambient light sensor interrupts and threshold
-> >> limits for vcnl4040 and vcnl4200. If an interrupt is detected an event
-> >> will be pushed to the event interface.
-> >
-> > ...
-> >
-> >> +            case IIO_EV_DIR_RISING:
-> >> +                    ret =3D i2c_smbus_write_word_data(
-> >> +                            data->client, VCNL4040_ALS_THDH_LM, val);
-> >
-> > Strange indentation.
-> >
-> >> +                    break;
-> >> +            case IIO_EV_DIR_FALLING:
-> >> +                    ret =3D i2c_smbus_write_word_data(
-> >> +                            data->client, VCNL4040_ALS_THDL_LM, val);
-> >
-> > Same.
-> >
-> >> +                    break;
-> >
-> > ...
-> >
-> >> +    case IIO_PROXIMITY:
-> >> +            switch (dir) {
-> >> +            case IIO_EV_DIR_RISING:
-> >> +                    ret =3D i2c_smbus_write_word_data(
-> >> +                            data->client, VCNL4040_PS_THDH_LM, val);
-> >
-> > Same.
-> >
-> >> +                    break;
-> >> +            case IIO_EV_DIR_FALLING:
-> >> +                    ret =3D i2c_smbus_write_word_data(
-> >> +                            data->client, VCNL4040_PS_THDL_LM, val);
-> >
-> > Same.
+> After the commit (SHA1: 7e9517375a14f44ee830ca1c3278076dd65fcc8f);
+> "net: dsa: mv88e6xxx: fix max_mtu of 1492 on 6165, 6191, 6220, 6250,
+> 6290" the error when mv88e6020 or mv88e6071 is used is not present
+> anymore.
+>=20
 
---=20
-With Best Regards,
-Andy Shevchenko
+Are there any more comments for this patch set?
+
+> As a result patches for adding max frame size are not required to
+> provide working setup with aforementioned switches.
+>=20
+> Lukasz Majewski (2):
+>   dsa: marvell: Define .set_max_frame_size() function for mv88e6250
+> SoC family
+>   net: dsa: mv88e6xxx: add support for MV88E6071 switch
+>=20
+> Matthias Schiffer (1):
+>   net: dsa: mv88e6xxx: add support for MV88E6020 switch
+>=20
+>  drivers/net/dsa/mv88e6xxx/chip.c | 41
+> ++++++++++++++++++++++++++++++++ drivers/net/dsa/mv88e6xxx/chip.h |
+> 2 ++ drivers/net/dsa/mv88e6xxx/port.h |  2 ++
+>  3 files changed, 45 insertions(+)
+>=20
+
+
+
+
+Best regards,
+
+Lukasz Majewski
+
+--
+
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/6859To1L./u.yFDOGr/r6d/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmR0ah4ACgkQAR8vZIA0
+zr2cvwgAh8ek05WoONQVlzY2ZyyfV1amhPpaiFIZkyARjxOyX00Yi9YnATsaTgim
+lZNnQ8+zGAQf8+f2HPml3GtqV0kvzp99ttOrQrgMRQXRrv/wBqAhJbG7mBnKBu9n
+WIW3vyvhqKwHZ9yVMWQqe2DwcmmiOh2GUSY9VQ6T6A9hhdLQw3nv0BjMWBaF5hjU
+RoVK4quZ/yBFvEDjvCfGkB/YUxlkSdb0eP74MTuAhb9aoo7mx5iPyP/KusWGFChO
+teiXEvuVr6EuNP600veWPnj5nlJu3ScNjZaHjnY3w/xOoTLG/33t41AVSIq0tGCE
+25iIsF2I6mrs1RlpQ5cXrTr5wvCWDQ==
+=LQIc
+-----END PGP SIGNATURE-----
+
+--Sig_/6859To1L./u.yFDOGr/r6d/--
