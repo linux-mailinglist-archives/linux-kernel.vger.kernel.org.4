@@ -2,133 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C95714F13
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822BF714F1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 19:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjE2Ry7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 13:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S229591AbjE2Rzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 13:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjE2Ry5 (ORCPT
+        with ESMTP id S229473AbjE2Rzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 13:54:57 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA202CD;
-        Mon, 29 May 2023 10:54:56 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-53f8daa1b6fso786786a12.0;
-        Mon, 29 May 2023 10:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685382896; x=1687974896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FXQhl/1DReICEmpN3fsZjB8PYW6gvWRFYFP7IKx3m+s=;
-        b=D7L+qlW4ZbhvuXCv6VYVRnroKmEVoht78yHzYiZJ6m2QAHhlimsZSrQaWw+jwGWiYy
-         yrgNogKZjClDf/hTyufLfkc4BkN6hWLZC4e7mziU/RusrAVcajN5UV1S8ROw6HEkNuQi
-         KDqPVBsZC1I/ybwCuPqHu0I1GWglNJZNhSNFAc+35hO5HoXj7zFXFLuw6iMOscuk1TN8
-         VvcRAnUH3FE03V/G9aY5Rn6zcchIscrGceX68YEYdyAncPqiiS16ymr/U2ov30XcML70
-         GZJSSm27KxLwmcu6G8x/5RaU8UQbuHm7SzrI/pCVuGRaqd/MvJZA0SIlXqBoybwZzfVl
-         X+lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685382896; x=1687974896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FXQhl/1DReICEmpN3fsZjB8PYW6gvWRFYFP7IKx3m+s=;
-        b=VfUI22r/P/qFGz8i2AmdgSdQDpVB49L7BfH7Zh1TFMionmcWwqUFF54a05u/OwRTiK
-         u1vBROCWsv9e5+AZ4K4m1XFBQVyNLEE5Ulj3WCrorsU2cwGvMLtvpL+VCaCAmP831TZE
-         UwioL2Gnq1IZFk77Kf4PcWa//PaGKI+EfoTEeSV7enEyJt69lqo7PUmEUtxQMKRbQV/8
-         q3yzkmZmIrFI8js2dBXlNg17oFu0x3qI5ZoVIFMvGMZJlMGnaMicVLa1OSrZOpppRObP
-         fncvIWdCsLE6If2ktBHgQNPDKUvdqWhJfLF5e6Y31MO5i/tWSajKDRGlnwIzHD1lLgNy
-         1e4g==
-X-Gm-Message-State: AC+VfDzuAR0gdfoMrUJDm6mz5uN0dsw3txqa/CVs3IVdD3lZe4ozBCLi
-        A768HZK3wFDpE1GDC2fLPpVhMd5gAZVIYPpSSwM=
-X-Google-Smtp-Source: ACHHUZ7qmypDRrl70hrlW+MkwEOcNT8uZXr+Gyh3y3jdUdsZ80CkNjcW6b1CxZTvjCLMDdahrlG+3gxsqJDbqbUydhc=
-X-Received: by 2002:a17:902:ab58:b0:1ac:7ae7:3fdf with SMTP id
- ij24-20020a170902ab5800b001ac7ae73fdfmr11925390plb.41.1685382896047; Mon, 29
- May 2023 10:54:56 -0700 (PDT)
+        Mon, 29 May 2023 13:55:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC136CD;
+        Mon, 29 May 2023 10:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=P/0tITYpTpGavafJMOkhwQed8uJTPSwLhyk8FXAUCS8=; b=eKO8XMAZv/UuArc8zlhV6qI5Z6
+        wwoXuHeWvPqvnNzPY/wAymufwuUnWz6wKtpLuVcY2fUy6dTJzBfU0e48o8MOFMgYVur0phcqyOtjQ
+        B8uuZ0z3MfECNtVeWZtb7jk1d3JWxI06vtr++Xye1e3s0OWgYfbvkkVEAQdwtpPnb42rxUe36boqU
+        QAJs/GKgHmXFxleNHO/XY8yy/fJdUY60TlvLHghmlDoRv2OnYwBHpLjRKgLoErWJY4qzKidFxkgX9
+        jIYWaGUnt1MoaJK9eTUHxwg+ta8SPNFmjHJ4elcGTHg/ztPEuFCYUoJMbDx1VrG5kHxGlbYz57PH2
+        ZhauUOmw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q3h5K-005bSP-AT; Mon, 29 May 2023 17:55:10 +0000
+Date:   Mon, 29 May 2023 18:55:10 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, bvanassche@acm.org,
+        hare@suse.de, ming.lei@redhat.com, dlemoal@kernel.org,
+        anuj20.g@samsung.com, joshi.k@samsung.com, nitheshshetty@gmail.com,
+        gost.dev@samsung.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v11 2/9] block: Add copy offload support infrastructure
+Message-ID: <ZHTm/v1jTZhcpDei@casper.infradead.org>
+References: <20230522104146.2856-1-nj.shetty@samsung.com>
+ <CGME20230522104536epcas5p23dd8108dd267ec588e5c36e8f9eb9fe8@epcas5p2.samsung.com>
+ <20230522104146.2856-3-nj.shetty@samsung.com>
 MIME-Version: 1.0
-References: <20230418113451.151312-1-kaima@hust.edu.cn> <ZGX/PjYBVGuECcPg@linaro.org>
- <22043583.EfDdHjke4D@sophie-lab>
-In-Reply-To: <22043583.EfDdHjke4D@sophie-lab>
-From:   Jesse T <mr.bossman075@gmail.com>
-Date:   Mon, 29 May 2023 13:54:45 -0400
-Message-ID: <CAJFTR8R=QkWSoMstqer_eEwA5YmvEZetENT8hkxx62QCt2ztjg@mail.gmail.com>
-Subject: Re: [PATCH] clk: imx: clk-imxrt1050: fix memory leak in imxrt1050_clocks_probe
-To:     Kai Ma <kaima@hust.edu.cn>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        hust-os-kernel-patches@googlegroups.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Zhanhao Hu <zero12113@hust.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522104146.2856-3-nj.shetty@samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 12:55=E2=80=AFAM Kai Ma <kaima@hust.edu.cn> wrote:
->
-> On Thursday, May 18, 2023 6:34:38 PM CST Abel Vesa wrote:
-> > On 23-04-18 11:34:51, Kai Ma wrote:
-> > > Use devm_of_iomap() instead of of_iomap() to automatically
-> > > handle the unused ioremap region. If any error occurs, regions alloca=
-ted by
-> > > kzalloc() will leak, but using devm_kzalloc() instead will automatica=
-lly
-> > > free the memory using devm_kfree().
-> > >
-> > > Also, fix error handling of hws by adding unregister_hws label, which
-> > > unregisters remaining hws when iomap failed.
-> > >
-> > > Fixes: 7154b046d8f3 ("clk: imx: Add initial support for i.MXRT1050 cl=
-ock driver")
-> > > Signed-off-by: Kai Ma <kaima@hust.edu.cn>
-> >
-> > Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
-> >
-> > Stephen, can you apply this through clk-fixes?
-> >
->
-> Thanks for your review, I am glad to let you know that I am a student at =
-a
-> university and we collaborate to contribute to the Linux kernel.
+On Mon, May 22, 2023 at 04:11:33PM +0530, Nitesh Shetty wrote:
+> +		token = alloc_page(gfp_mask);
 
-That's cool, I am too!
-Is there going to be a V2 of
-https://lore.kernel.org/linux-arm-kernel/20230426142552.217435-1-zero12113@=
-hust.edu.cn/T/
-
-Thanks,
-Jesse Taube
-
-> Here we
-> have some similar patches for clk. Could you please take care of them?
->
-> [1] https://lore.kernel.org/linux-arm-kernel/DU0PR04MB9417B63DE97D4A2A77B=
-4176C88969@DU0PR04MB9417.eurprd04.prod.outlook.com/T/
-> [2] https://lore.kernel.org/linux-arm-kernel/20230503070607.2462-1-lyx202=
-2@hust.edu.cn/T/
-> [3] https://lore.kernel.org/linux-arm-kernel/dc0f2863-d5d5-5102-eb8e-ceea=
-92c03fda@oss.nxp.com/
-> [4] https://lore.kernel.org/linux-arm-kernel/9a2ab7ec-07ee-255f-a143-9b6c=
-8df7c1e2@gmail.com/
->
-> Thank you very much!
->
-> Regards,
-> Kai Ma
+Why is PAGE_SIZE the right size for 'token'?  That seems quite unlikely.
+I could understand it being SECTOR_SIZE or something that's dependent on
+the device, but I cannot fathom it being dependent on the host' page size.
