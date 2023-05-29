@@ -2,102 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908F971437A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 06:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36445714397
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjE2EpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 00:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
+        id S230165AbjE2FIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 01:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjE2Eo3 (ORCPT
+        with ESMTP id S229691AbjE2FIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 00:44:29 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7194C26AD;
-        Sun, 28 May 2023 21:38:03 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id 41be03b00d2f7-52c84543902so284502a12.0;
-        Sun, 28 May 2023 21:38:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685334999; x=1687926999;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ljDXSZhLI5ptYG5XAswsWjP1Fj7Tcbc8VedPFNYBYoQ=;
-        b=m40D0lUwbnh9qpzZq3YJVGsio+MYTwloUDfNmu8pg9f2x53WC6W8FVyfJWwiBMbEEt
-         C3qF3N8Je6GWNLGU750Ia3qbTDJzvIlxFh1mGK4KCCxyxFZ0nKP1MHWzaDDSrZ10ubZS
-         sAFfo5cSSfIqHV2Maynd1DSDdOZuSGhrAtB3+ChTAFuSjLS8U5wCr2PNbmdLP8CQu6z+
-         tA1gBcyGMLo8RGPwKl9slQOREzwKgDWyEgk7yyKXLoRgSHHOKkN3rBYS8yI+zfdKt8iO
-         4FGossrGqXq5UFOY1XupyAg+QcheZUHmT2Ia5PvqiILDl2nZlwXJSfTOPjwTN4TqNC2s
-         Wgfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685334999; x=1687926999;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ljDXSZhLI5ptYG5XAswsWjP1Fj7Tcbc8VedPFNYBYoQ=;
-        b=QqlNhH8Pe9OKBKTSVuD8wz8D/ZmUjIJJaQ5+5hZcSPEMCnrtN9aP6ZJl4etK8booOI
-         lru3Hu9cPDGk3Vz6jcJscX9KR8r8b1lY8eTiwOKEclWQUWHqe8BjbGZRY2E/F32HEdRN
-         mBcxbb8UlEdHu9bSzWGIUWnUCEpMK1TQuCYXrxoQHf2uFqYDMN0PhNi4CQbLQTaS5sjh
-         oyPdh1Ymx9Ek3wrf4wmdXE3bieMBNE9Gb/ishxb2uxTHeKLOj+jxHIxOpog/zJgMmQ/M
-         DnlgsZivn/4DgTSWhznJBg34b9rO1efprPU+qTBvxfyL4I9AHqYxLSf53cZbmYZQgeYK
-         YaMA==
-X-Gm-Message-State: AC+VfDzG+kQQE50YBts12XcayiBm/8nKV4InZQQDSpFALBOkAl45aTUG
-        I7NyMfZQxcqVRRhTZ3+X3cU=
-X-Google-Smtp-Source: ACHHUZ4lTguLq8y8jj9KX9ucZq9zIctmBGh7gxd9yKo8+2IUU5w7rbqQFarEa3Iv4T5h9YkfClS6NQ==
-X-Received: by 2002:a05:6a00:1f0e:b0:64a:ed6d:53ac with SMTP id be14-20020a056a001f0e00b0064aed6d53acmr10772452pfb.2.1685334998968;
-        Sun, 28 May 2023 21:36:38 -0700 (PDT)
-Received: from hbh25y.. ([114.254.32.145])
-        by smtp.gmail.com with ESMTPSA id i3-20020aa78b43000000b0064f95bb8255sm5096984pfd.53.2023.05.28.21.36.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 21:36:38 -0700 (PDT)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, simon.horman@netronome.com,
-        pieter.jansenvanvuuren@netronome.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH] net: sched: fix possible OOB write in fl_set_geneve_opt()
-Date:   Mon, 29 May 2023 12:36:15 +0800
-Message-Id: <20230529043615.4761-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 29 May 2023 01:08:17 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E59B83;
+        Sun, 28 May 2023 22:08:13 -0700 (PDT)
+Received: from sophie-lab.localnet ([172.16.0.254])
+        (user=kaima@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 34T4t7pt020146-34T4t7pu020146
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 29 May 2023 12:55:07 +0800
+From:   Kai Ma <kaima@hust.edu.cn>
+To:     Stephen Boyd <sboyd@kernel.org>, NXP Linux Team <linux-imx@nxp.com>
+Cc:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Jesse Taube <mr.bossman075@gmail.com>,
+        hust-os-kernel-patches@googlegroups.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Abel Vesa <abel.vesa@linaro.org>
+Subject: Re: [PATCH] clk: imx: clk-imxrt1050: fix memory leak in
+ imxrt1050_clocks_probe
+Date:   Mon, 29 May 2023 12:55:07 +0800
+Message-ID: <22043583.EfDdHjke4D@sophie-lab>
+In-Reply-To: <ZGX/PjYBVGuECcPg@linaro.org>
+References: <20230418113451.151312-1-kaima@hust.edu.cn> <ZGX/PjYBVGuECcPg@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart7679923.EvYhyI6sBW";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-FEAS-AUTH-USER: kaima@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we send two TCA_FLOWER_KEY_ENC_OPTS_GENEVE packets and their total
-size is 252 bytes(key->enc_opts.len = 252) then
-key->enc_opts.len = opt->length = data_len / 4 = 0 when the third
-TCA_FLOWER_KEY_ENC_OPTS_GENEVE packet enters fl_set_geneve_opt. This
-bypasses the next bounds check and results in an out-of-bounds.
+--nextPart7679923.EvYhyI6sBW
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Kai Ma <kaima@hust.edu.cn>
+Date: Mon, 29 May 2023 12:55:07 +0800
+Message-ID: <22043583.EfDdHjke4D@sophie-lab>
+In-Reply-To: <ZGX/PjYBVGuECcPg@linaro.org>
+MIME-Version: 1.0
 
-Fixes: 0a6e77784f49 ("net/sched: allow flower to match tunnel options")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
- net/sched/cls_flower.c | 3 +++
- 1 file changed, 3 insertions(+)
+On Thursday, May 18, 2023 6:34:38 PM CST Abel Vesa wrote:
+> On 23-04-18 11:34:51, Kai Ma wrote:
+> > Use devm_of_iomap() instead of of_iomap() to automatically
+> > handle the unused ioremap region. If any error occurs, regions allocated by
+> > kzalloc() will leak, but using devm_kzalloc() instead will automatically
+> > free the memory using devm_kfree().
+> > 
+> > Also, fix error handling of hws by adding unregister_hws label, which
+> > unregisters remaining hws when iomap failed.
+> > 
+> > Fixes: 7154b046d8f3 ("clk: imx: Add initial support for i.MXRT1050 clock driver")
+> > Signed-off-by: Kai Ma <kaima@hust.edu.cn>
+> 
+> Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+> 
+> Stephen, can you apply this through clk-fixes?
+> 
 
-diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
-index e960a46b0520..a326fbfe4339 100644
---- a/net/sched/cls_flower.c
-+++ b/net/sched/cls_flower.c
-@@ -1153,6 +1153,9 @@ static int fl_set_geneve_opt(const struct nlattr *nla, struct fl_flow_key *key,
- 	if (option_len > sizeof(struct geneve_opt))
- 		data_len = option_len - sizeof(struct geneve_opt);
- 
-+	if (key->enc_opts.len > FLOW_DIS_TUN_OPTS_MAX - 4)
-+		return -ERANGE;
-+
- 	opt = (struct geneve_opt *)&key->enc_opts.data[key->enc_opts.len];
- 	memset(opt, 0xff, option_len);
- 	opt->length = data_len / 4;
--- 
-2.34.1
+Thanks for your review, I am glad to let you know that I am a student at a
+university and we collaborate to contribute to the Linux kernel. Here we
+have some similar patches for clk. Could you please take care of them?
+
+[1] https://lore.kernel.org/linux-arm-kernel/DU0PR04MB9417B63DE97D4A2A77B4176C88969@DU0PR04MB9417.eurprd04.prod.outlook.com/T/
+[2] https://lore.kernel.org/linux-arm-kernel/20230503070607.2462-1-lyx2022@hust.edu.cn/T/
+[3] https://lore.kernel.org/linux-arm-kernel/dc0f2863-d5d5-5102-eb8e-ceea92c03fda@oss.nxp.com/
+[4] https://lore.kernel.org/linux-arm-kernel/9a2ab7ec-07ee-255f-a143-9b6c8df7c1e2@gmail.com/
+
+Thank you very much!
+
+Regards,
+Kai Ma
+
+--nextPart7679923.EvYhyI6sBW
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEOL4x3UcITzqVpkF5dHxtpLztq4UFAmR0MCsACgkQdHxtpLzt
+q4UphAgAnrurl7BzADxMZ3h8kBcriFp9uk4EAUxcpokix8jD7dp9y6SBJsckqVTG
+KWGX5guMpVJ44+vClDOJVcT+odTlO5/I2f+ckamSCp2xdTFPZ/TEjpZTfbHI2csL
+rXD/h/5dbZ4MjGbngWrkq+teS6LqMYuofyosEV9wBpe85bMpfqy1ti5wGQJH2Kzg
+0BSyGYi6obWDsPu05HLaBiwVQY5EJJX3ss7QW0ErtQOajGbRTqW3A+SUluUrvFUg
+7uRNmox67KDcgkA07BFWZ/IkrFsv/4E3DLR98B9oOq/DTqHEGz+g9pB7T14PhR2u
+PTyXpcPtzqGoTaTzjcs22grJt2TsGw==
+=CDQ6
+-----END PGP SIGNATURE-----
+
+--nextPart7679923.EvYhyI6sBW--
+
+
 
