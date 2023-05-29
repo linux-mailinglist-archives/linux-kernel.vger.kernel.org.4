@@ -2,95 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B2D715000
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 038A2715002
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjE2TwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 15:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
+        id S229734AbjE2Twp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 15:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjE2TwF (ORCPT
+        with ESMTP id S229716AbjE2Two (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 15:52:05 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FC5E3;
-        Mon, 29 May 2023 12:52:02 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1685389912tusgo9mr
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 03:51:51 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: LE7C6P2vL8R5XJtM7F/ylhDdnSf4EUI8w+v082wCayEwS8rdu+e8MzUqlG3Sb
-        QuE4mqAnTVj6AADlLJu/mYN813+YPw+wXBoUtUM/fgbT6eqZhO8mdM4qSyoVp4k8dOh/beL
-        /l7yxz9x8w9r+TSZWZLLMsMD9u3qECqZpmPkRw0+tQOYBeXpiaRhRFDEEoxVspoDs9zmbAg
-        977LlI4WFKBMXCoTk3CBGjDpFdvDeGrbH0Fsj2GfLw+U4NeVeHbXa3Ycefev6zt9mzP01Qo
-        LJnk0Twv4xlHA/20ARRy2Qt8n9dEKicVztokHy1O+8hrgKAQQHYbo5SNcKjO3ajFS8Vnkwl
-        KO6HYcWeOwM/XfiLougrpGNauB5hUSmFxblr/kzjnLpPEhiZhWuZnbWOyY86IFQeBWRJY38
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14959843268558275111
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH v2 05/13] tools/nolibc: add more wait status related types
-Date:   Tue, 30 May 2023 03:51:48 +0800
-Message-Id: <e578baa7116bb09f406a2beaea8298f7bbb22d6c.1685387484.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685387484.git.falcon@tinylab.org>
-References: <cover.1685387484.git.falcon@tinylab.org>
+        Mon, 29 May 2023 15:52:44 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A5A92;
+        Mon, 29 May 2023 12:52:43 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75b14216386so199715885a.0;
+        Mon, 29 May 2023 12:52:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685389962; x=1687981962;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z1dUZSHVQhEtOuDH3VaKyipYbrN9drARN4zUz4dByZM=;
+        b=kX0jX/JgLb4DILaeytE2ajbjulyxARy8zRicxzulgBVhSAqwQ7RhYL5Xw+55c0lHn6
+         teTzWV00eLvwOcfdIFQhYe5IVJLbNOhFUFlMoG6TfyxdNVfMuWaXCBJcpWLlR25f4wOx
+         5CebWRolvb6bXsmDRAwiYbdxcpmMJoeO9BK3Zzne4V6Q0D7f2vWYMGtIzdFDwxxtPkBW
+         JlRuWfZt8/J5a/kG+DhQRDom6EZ8JY7ST0hy0Kqn/9trgE8T685QBZi3zbS/YiYpHl1r
+         HpZo0Yh0oXUeS+TmnI6MQh32JjEnJK0zfElFv7/wQWZtVr+OWOQMnhm/NwGnaRcLBqXP
+         P+Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685389962; x=1687981962;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z1dUZSHVQhEtOuDH3VaKyipYbrN9drARN4zUz4dByZM=;
+        b=IwrRHKqG3KGspc7mcssRd53ty2rVza0NQX0V59FZHCA2+3jeS2L4mIw2MG1PxKxZWQ
+         eYtpZF6tW6Yhj9U1MCrufYwSJQG+b8Bax3Yd2son+CLZwvYZ76FK3CGLvap2ZDXDh/bz
+         ztuxAV5aRZ8W1CyWlu/5i6ySJ3ODh+BTqIkxqn/MDtdQdT+Hyq8zxuKz8a3PPVeWQ8KQ
+         cmm44yN9kwlm2j67RerSvGK7pQJ5sJGLwaGkGAcQBDF4sSeX89p9Hj64noH0o1MvHt45
+         O+ID+4D41UQVQ1ttKxNQ8QyyIxAl1bphadiqzuoPOy0L6fbaoBh95Lj4zOb+9+vwZTXE
+         dQNA==
+X-Gm-Message-State: AC+VfDy68am/ceQkpUMbmxAa8V3BCSX5QllmaItCkHQSrQHOSoUJRz1y
+        LrguDoEAYfr4nrNw4jnyLA==
+X-Google-Smtp-Source: ACHHUZ7cNQUq6xOFSGH5grc7BgTC9ihncUnfb1Blh4w3rDVuIAFFI1fMX9A44ttqf5bXg+3Jp6l6pw==
+X-Received: by 2002:a05:620a:4c97:b0:75b:23a0:e7be with SMTP id to23-20020a05620a4c9700b0075b23a0e7bemr8305996qkn.31.1685389962102;
+        Mon, 29 May 2023 12:52:42 -0700 (PDT)
+Received: from C02FL77VMD6R.bytedance.net ([2600:1700:d860:12b0:e554:e6:7140:9e6b])
+        by smtp.gmail.com with ESMTPSA id a4-20020a05620a124400b0075b1c6f9628sm3583334qkl.71.2023.05.29.12.52.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 May 2023 12:52:41 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+X-Google-Original-From: Peilin Ye <peilin.ye@bytedance.com>
+To:     Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH v6 net 0/4] net/sched: Fixes for sch_ingress and sch_clsact
+Date:   Mon, 29 May 2023 12:52:31 -0700
+Message-Id: <cover.1685388545.git.peilin.ye@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-More wait status related types are added for the coming waitid syscall
-based wait4() support.
+Link to v5: https://lore.kernel.org/r/cover.1684887977.git.peilin.ye@bytedance.com/
+Link to v4: https://lore.kernel.org/r/cover.1684825171.git.peilin.ye@bytedance.com/
+Link to v3 (incomplete): https://lore.kernel.org/r/cover.1684821877.git.peilin.ye@bytedance.com/
+Link to v2: https://lore.kernel.org/r/cover.1684796705.git.peilin.ye@bytedance.com/
+Link to v1: https://lore.kernel.org/r/cover.1683326865.git.peilin.ye@bytedance.com/
 
-Resue the ones from <linux/wait.h>, add the missing ones from sys/wait.h
-and bits/waitstatus.h of glibc.
+Hi all,
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/types.h | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+These are v6 fixes for ingress and clsact Qdiscs, including only first 4
+patches (already tested and reviewed) from v5.  Patch 5 and 6 from
+previous versions are still under discussion and will be sent separately.
+Per-patch changelog omitted.
 
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index f96e28bff4ba..698d859fc6e2 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -10,6 +10,7 @@
- #include "std.h"
- #include <linux/time.h>
- #include <linux/stat.h>
-+#include <linux/wait.h>
- 
- 
- /* Only the generic macros and types may be defined here. The arch-specific
-@@ -91,9 +92,13 @@
- #define WIFEXITED(status)   (((status) & 0x7f) == 0)
- #define WTERMSIG(status)    ((status) & 0x7f)
- #define WIFSIGNALED(status) ((status) - 1 < 0xff)
-+#define WIFSTOPPED(status)  (((status) & 0xff) == 0x7f)
- 
--/* waitpid() flags */
--#define WNOHANG      1
-+/* Macros for constructing status values.  */
-+#define W_EXITCODE(ret, sig) ((ret) << 8 | (sig))
-+#define W_STOPCODE(sig)      ((sig) << 8 | 0x7f)
-+#define W_CONTINUED          0xffff
-+#define WCOREFLAG            0x80
- 
- /* standard exit() codes */
- #define EXIT_SUCCESS 0
+Change in v6:
+  - only include first 4 patches from previous versions
+
+Changes in v5:
+  - for [6/6], reinitialize @q, @p (suggested by Vlad) and @tcm after the
+    "replay:" tag
+  - for [1,2/6], do nothing in ->destroy() if ->parent isn't ffff:fff1, as
+    reported by Pedro
+
+Change in v3, v4:
+  - add in-body From: tags
+
+Changes in v2:
+  - for [1-5/6], include tags from Jamal and Pedro
+  - for [6/6], as suggested by Vlad, replay the request if the current
+    Qdisc has any ongoing (RTNL-unlocked) filter requests, instead of
+    returning -EBUSY to the user
+  - use Closes: tag as warned by checkpatch
+
+[1,2/6]: ingress and clsact Qdiscs should only be created under ffff:fff1
+  [3/6]: Under ffff:fff1, only create ingress and clsact Qdiscs (for now,
+         at least)
+  [4/6]: After creating ingress and clsact Qdiscs under ffff:fff1, do not
+         graft them again to anywhere else (e.g. as the inner Qdisc of a
+         TBF Qdisc)
+  [5/6]: Prepare for [6/6], do not reuse that for-loop in qdisc_graft()
+         for ingress and clsact Qdiscs
+  [6/6]: Fix use-after-free [a] in mini_qdisc_pair_swap()
+
+[a] https://syzkaller.appspot.com/bug?extid=b53a9c0d1ea4ad62da8b
+
+Thanks,
+Peilin Ye (4):
+  net/sched: sch_ingress: Only create under TC_H_INGRESS
+  net/sched: sch_clsact: Only create under TC_H_CLSACT
+  net/sched: Reserve TC_H_INGRESS (TC_H_CLSACT) for ingress (clsact)
+    Qdiscs
+  net/sched: Prohibit regrafting ingress or clsact Qdiscs
+
+ net/sched/sch_api.c     | 12 +++++++++++-
+ net/sched/sch_ingress.c | 16 ++++++++++++++--
+ 2 files changed, 25 insertions(+), 3 deletions(-)
+
 -- 
-2.25.1
+2.20.1
 
