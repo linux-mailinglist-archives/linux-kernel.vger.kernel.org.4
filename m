@@ -2,238 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325A171486C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 13:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E206271486F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 13:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjE2LRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 07:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
+        id S231449AbjE2LSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 07:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjE2LRf (ORCPT
+        with ESMTP id S230388AbjE2LSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 07:17:35 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A384CD;
-        Mon, 29 May 2023 04:17:34 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1134)
-        id BE6F720FC3C2; Mon, 29 May 2023 04:17:33 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BE6F720FC3C2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1685359053;
-        bh=zbJHCfpQge+fU0YA6gOtWPse9WhEuNPrb8yZEQ3BNWU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D+m7uZFFOpMY0pky9R7YBEh9SDk71aDBLorxNrk/l9L+0gQTYlCPo7bI5tE+RHS0h
-         wJOGPGMcYP4GC7B5EH+s2lgI7ekJSdFYGBy0o1qS9B3/bJk9F7T51pdQ5ETdjNbFe8
-         4dnvg4sfyz7t0WQbi/hokNIfVlws5eWkt4EJ+UVg=
-Date:   Mon, 29 May 2023 04:17:33 -0700
-From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
-To:     Praveen Kumar <kumarpraveen@linux.microsoft.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH v3] hv_netvsc: Allocate rx indirection table size
- dynamically
-Message-ID: <20230529111733.GA21447@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1685080949-18316-1-git-send-email-shradhagupta@linux.microsoft.com>
- <5fc413e5-77d2-814d-250a-7ddf8eb6d6ad@linux.microsoft.com>
+        Mon, 29 May 2023 07:18:15 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C7AD8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 04:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685359092; x=1716895092;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6rCT+yEXPgj5wlTxoVI6fA/KdGASjZLeTtStUr+8ANo=;
+  b=zW0Z0NvonY32iz46DDFmv+HuaZiACftm/Ex+Znq14szgqYK5UVzzTkd5
+   LFZ7RRwJr+wgo/tkRhGTTr9Nm0pBFG2WoLpeqrg0H5ufy+x5Fa4Kub5+U
+   31lyxjdIwaVRNn5b4tkAYnzX379KrT2IW962t6wTcqfCFAYnXz8bOJHF7
+   arS8fdFp9SL00mT0gJ7c6rgcgg2vQ3PWszRXuXfzqbFDb/OC4Hyw2uOmE
+   n6v8ieed4zzwSHL0jAFyDxDZYAz4WWwXWS23DxbIttMJ5lGCQqgFY1xP6
+   dBsAwmUHefqumj1OSt10pS7HJe5aakHQDvruXKS/+vBVGtbOrX7w4CRTp
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="asc'?scan'208";a="154418415"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 May 2023 04:18:11 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 29 May 2023 04:18:10 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 29 May 2023 04:18:09 -0700
+Date:   Mon, 29 May 2023 12:17:46 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH 5/6] riscv: allow kmalloc() caches aligned to the
+ smallest value
+Message-ID: <20230529-fidelity-booted-0d4055d1f559@wendy>
+References: <20230526165958.908-1-jszhang@kernel.org>
+ <20230526165958.908-6-jszhang@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Z9WH5QdwX/12aqRc"
 Content-Disposition: inline
-In-Reply-To: <5fc413e5-77d2-814d-250a-7ddf8eb6d6ad@linux.microsoft.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230526165958.908-6-jszhang@kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 03:09:49PM +0530, Praveen Kumar wrote:
-> On 5/26/2023 11:32 AM, Shradha Gupta wrote:
-> > Allocate the size of rx indirection table dynamically in netvsc
-> > from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
-> > query instead of using a constant value of ITAB_NUM.
-> > 
-> > Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
-> > Tested-on: Ubuntu22 (azure VM, SKU size: Standard_F72s_v2)
-> > Testcases:
-> > 1. ethtool -x eth0 output
-> > 2. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-Synthetic
-> > 3. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-SRIOV
-> > 
-> > ---
-> > Changes in v3:
-> >  * Changed the data type of rx_table_sz to u32
-> >  * Moved the rx indirection table free to rndis_filter_device_remove()
-> >  * Device add will fail with error if not enough memory is available
-> >  * Changed kzmalloc to kcalloc as suggested in checkpatch script
-> >  * Removed redundant log if memory allocation failed.
-> > ---
-> >  drivers/net/hyperv/hyperv_net.h   |  5 ++++-
-> >  drivers/net/hyperv/netvsc_drv.c   | 10 ++++++----
-> >  drivers/net/hyperv/rndis_filter.c | 27 +++++++++++++++++++++++----
-> >  3 files changed, 33 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/net/hyperv/hyperv_net.h b/drivers/net/hyperv/hyperv_net.h
-> > index dd5919ec408b..c40868f287a9 100644
-> > --- a/drivers/net/hyperv/hyperv_net.h
-> > +++ b/drivers/net/hyperv/hyperv_net.h
-> > @@ -74,6 +74,7 @@ struct ndis_recv_scale_cap { /* NDIS_RECEIVE_SCALE_CAPABILITIES */
-> >  #define NDIS_RSS_HASH_SECRET_KEY_MAX_SIZE_REVISION_2   40
-> >  
-> >  #define ITAB_NUM 128
-> > +#define ITAB_NUM_MAX 256
-> >  
-> >  struct ndis_recv_scale_param { /* NDIS_RECEIVE_SCALE_PARAMETERS */
-> >  	struct ndis_obj_header hdr;
-> > @@ -1034,7 +1035,9 @@ struct net_device_context {
-> >  
-> >  	u32 tx_table[VRSS_SEND_TAB_SIZE];
-> >  
-> > -	u16 rx_table[ITAB_NUM];
-> > +	u16 *rx_table;
-> > +
-> > +	u32 rx_table_sz;
-> >  
-> >  	/* Ethtool settings */
-> >  	u8 duplex;
-> > diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
-> > index 0103ff914024..3ba3c8fb28a5 100644
-> > --- a/drivers/net/hyperv/netvsc_drv.c
-> > +++ b/drivers/net/hyperv/netvsc_drv.c
-> > @@ -1747,7 +1747,9 @@ static u32 netvsc_get_rxfh_key_size(struct net_device *dev)
-> >  
-> >  static u32 netvsc_rss_indir_size(struct net_device *dev)
-> >  {
-> > -	return ITAB_NUM;
-> > +	struct net_device_context *ndc = netdev_priv(dev);
-> > +
-> > +	return ndc->rx_table_sz;
-> >  }
-> >  
-> >  static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
-> > @@ -1766,7 +1768,7 @@ static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
-> >  
-> >  	rndis_dev = ndev->extension;
-> >  	if (indir) {
-> > -		for (i = 0; i < ITAB_NUM; i++)
-> > +		for (i = 0; i < ndc->rx_table_sz; i++)
-> >  			indir[i] = ndc->rx_table[i];
-> >  	}
-> >  
-> > @@ -1792,11 +1794,11 @@ static int netvsc_set_rxfh(struct net_device *dev, const u32 *indir,
-> >  
-> >  	rndis_dev = ndev->extension;
-> >  	if (indir) {
-> > -		for (i = 0; i < ITAB_NUM; i++)
-> > +		for (i = 0; i < ndc->rx_table_sz; i++)
-> >  			if (indir[i] >= ndev->num_chn)
-> >  				return -EINVAL;
-> >  
-> > -		for (i = 0; i < ITAB_NUM; i++)
-> > +		for (i = 0; i < ndc->rx_table_sz; i++)
-> >  			ndc->rx_table[i] = indir[i];
-> >  	}
-> >  
-> > diff --git a/drivers/net/hyperv/rndis_filter.c b/drivers/net/hyperv/rndis_filter.c
-> > index eea777ec2541..dc7b9b326690 100644
-> > --- a/drivers/net/hyperv/rndis_filter.c
-> > +++ b/drivers/net/hyperv/rndis_filter.c
-> > @@ -21,6 +21,7 @@
-> >  #include <linux/rtnetlink.h>
-> >  #include <linux/ucs2_string.h>
-> >  #include <linux/string.h>
-> > +#include <linux/slab.h>
-> >  
-> >  #include "hyperv_net.h"
-> >  #include "netvsc_trace.h"
-> > @@ -927,7 +928,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
-> >  	struct rndis_set_request *set;
-> >  	struct rndis_set_complete *set_complete;
-> >  	u32 extlen = sizeof(struct ndis_recv_scale_param) +
-> > -		     4 * ITAB_NUM + NETVSC_HASH_KEYLEN;
-> > +		     4 * ndc->rx_table_sz + NETVSC_HASH_KEYLEN;
-> >  	struct ndis_recv_scale_param *rssp;
-> >  	u32 *itab;
-> >  	u8 *keyp;
-> > @@ -953,7 +954,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
-> >  	rssp->hashinfo = NDIS_HASH_FUNC_TOEPLITZ | NDIS_HASH_IPV4 |
-> >  			 NDIS_HASH_TCP_IPV4 | NDIS_HASH_IPV6 |
-> >  			 NDIS_HASH_TCP_IPV6;
-> > -	rssp->indirect_tabsize = 4*ITAB_NUM;
-> > +	rssp->indirect_tabsize = 4 * ndc->rx_table_sz;
-> >  	rssp->indirect_taboffset = sizeof(struct ndis_recv_scale_param);
-> >  	rssp->hashkey_size = NETVSC_HASH_KEYLEN;
-> >  	rssp->hashkey_offset = rssp->indirect_taboffset +
-> > @@ -961,7 +962,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
-> >  
-> >  	/* Set indirection table entries */
-> >  	itab = (u32 *)(rssp + 1);
-> > -	for (i = 0; i < ITAB_NUM; i++)
-> > +	for (i = 0; i < ndc->rx_table_sz; i++)
-> >  		itab[i] = ndc->rx_table[i];
-> >  
-> >  	/* Set hask key values */
-> > @@ -1548,6 +1549,17 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
-> >  	if (ret || rsscap.num_recv_que < 2)
-> >  		goto out;
-> >  
-> > +	if (rsscap.num_indirect_tabent &&
-> > +	    rsscap.num_indirect_tabent <= ITAB_NUM_MAX)
-> > +		ndc->rx_table_sz = rsscap.num_indirect_tabent;
-> > +	else
-> > +		ndc->rx_table_sz = ITAB_NUM;
-> > +
-> > +	ndc->rx_table = kcalloc(ndc->rx_table_sz, sizeof(u16),
-> > +				GFP_KERNEL);
-> > +	if (!ndc->rx_table)
-> > +		goto err_dev_remv;
-> > +
-> >  	/* This guarantees that num_possible_rss_qs <= num_online_cpus */
-> >  	num_possible_rss_qs = min_t(u32, num_online_cpus(),
-> >  				    rsscap.num_recv_que);
-> > @@ -1558,7 +1570,7 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
-> >  	net_device->num_chn = min(net_device->max_chn, device_info->num_chn);
-> >  
-> >  	if (!netif_is_rxfh_configured(net)) {
-> > -		for (i = 0; i < ITAB_NUM; i++)
-> > +		for (i = 0; i < ndc->rx_table_sz; i++)
-> >  			ndc->rx_table[i] = ethtool_rxfh_indir_default(
-> >  						i, net_device->num_chn);
-> >  	}
-> > @@ -1596,11 +1608,18 @@ void rndis_filter_device_remove(struct hv_device *dev,
-> >  				struct netvsc_device *net_dev)
-> >  {
-> >  	struct rndis_device *rndis_dev = net_dev->extension;
-> > +	struct net_device *net = hv_get_drvdata(dev);
-> > +	struct net_device_context *ndc = netdev_priv(net);
-> >  
-> >  	/* Halt and release the rndis device */
-> >  	rndis_filter_halt_device(net_dev, rndis_dev);
-> >  
-> >  	netvsc_device_remove(dev);
-> 
-> Shouldn't the netvsc_device_remove be called post table cleanup ? or better, the cleanup should happen as part of netvsc_device_remove operation ? This looks a bug to me as with remove operation, we already cleaned up the device and the association between context and device is removed.
+--Z9WH5QdwX/12aqRc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The netvsc_device_remove() function is responsible for cleaning up/removing the netvsc_device structures upon events like remove/suspend. The net_device and net_device_context structures(where the rx indirection table exists) remain untouched in netvsc_device_remove(). They(net_device, net_device_context) only get cleaned up in netvsc_remove(). So, the netvsc_device_remove() should not affect the cleanup for the rx indirection table, that we did.
+On Sat, May 27, 2023 at 12:59:57AM +0800, Jisheng Zhang wrote:
+> Currently, riscv defines ARCH_DMA_MINALIGN as L1_CACHE_BYTES, I.E
+> 64Bytes, if CONFIG_RISCV_DMA_NONCOHERENT=3Dy. To support unified kernel
+> Image, usually we have to enable CONFIG_RISCV_DMA_NONCOHERENT, thus
+> it brings some bad effects to for coherent platforms:
+>=20
+> Firstly, it wastes memory, kmalloc-96, kmalloc-32, kmalloc-16 and
+> kmalloc-8 slab caches don't exist any more, they are replaced with
+> either kmalloc-128 or kmalloc-64.
+>=20
+> Secondly, larger than necessary kmalloc aligned allocations results
+> in unnecessary cache/TLB pressure.
+>=20
+> This issue also exists on arm64 platforms. From last year, Catalin
+> tried to solve this issue by decoupling ARCH_KMALLOC_MINALIGN from
+> ARCH_DMA_MINALIGN, limiting kmalloc() minimum alignment to
+> dma_get_cache_alignment() and replacing ARCH_KMALLOC_MINALIGN usage
+> in various drivers with ARCH_DMA_MINALIGN etc.
+>=20
+> One fact we can make use of for riscv: if the CPU doesn't support
+> ZICBOM or T-HEAD CMO, we know the platform is coherent. Based on
+> Catalin's work and above fact, we can easily solve the kmalloc align
+> issue for riscv: we can override dma_get_cache_alignment(), then let
+> it return ARCH_DMA_MINALIGN at the beginning and return 1 once we know
+> the underlying HW neither supports ZICBOM nor supports T-HEAD CMO.
+>=20
+> So what about if the CPU supports ZICBOM and T-HEAD CMO, but all the
+> devices are dma coherent? Well, we use ARCH_DMA_MINALIGN as the
+> kmalloc minimum alignment, nothing changed in this case. This case
+> can be improved in the future.
+>=20
+> After this patch, a simple test of booting to a small buildroot rootfs
+> on qemu shows:
+>=20
+> kmalloc-96           5041    5041     96  ...
+> kmalloc-64           9606    9606     64  ...
+> kmalloc-32           5128    5128     32  ...
+> kmalloc-16           7682    7682     16  ...
+> kmalloc-8           10246   10246      8  ...
+>=20
+> So we save about 1268KB memory. The saving will be much larger in normal
+> OS env on real HW platforms.
+>=20
+> [1] Link: https://lore.kernel.org/linux-arm-kernel/20230524171904.3967031=
+-1-catalin.marinas@arm.com/
+>=20
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 
-> > +
-> > +	ndc->rx_table_sz = 0;
-> > +	kfree(ndc->rx_table);
-> > +	ndc->rx_table = NULL;
-> > +
-> >  }
-> >  
-> >  int rndis_filter_open(struct netvsc_device *nvdev)
+Fails to build chief, with loads of:
+linux/dma-mapping.h:546:19: error: redefinition of 'dma_get_cache_alignment'
+
+And for 32-bit there's also a rake of:
+include/linux/slab.h:239:9: warning: 'ARCH_KMALLOC_MINALIGN' macro redefine=
+d [-Wmacro-redefined]
+
+At the very least, reproducable with rv32_defconfig.
+
+Cheers,
+Conor.
+
+--Z9WH5QdwX/12aqRc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHSJ2gAKCRB4tDGHoIJi
+0m+tAP4sdXn+LMprJWt23HtPFptshMgmxdi+fGISwb+YKP/lCQD/YCAMsLFLpXhi
+KriTBKzT1kNmEhFIGrNB/PP1G1gCjw0=
+=mn6y
+-----END PGP SIGNATURE-----
+
+--Z9WH5QdwX/12aqRc--
