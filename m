@@ -2,140 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA77714CAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C555714CB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjE2PH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
+        id S229852AbjE2PI3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 May 2023 11:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjE2PHx (ORCPT
+        with ESMTP id S229637AbjE2PI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:07:53 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9921C4;
-        Mon, 29 May 2023 08:07:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685372870; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=e1WW4XsTpdAQP1Hfrtfz1Z4NDYLxzleVB5bBz122yxf/qIAiFYEbCLGmzgiIneCerx
-    PWMZkLLTizyuhsSx9IZezT1Dm3aRfK8bCAABUNLvtkzdHqVMDFxGW0/sqK5afs0bU8iC
-    onnTb3rZg09EAoOgaZtAfl0JjrWNXMnKu5VsM/meX3nd1HQhhVYvLCiGEwgUc44IClR4
-    UA6FFV6MAMcnmeF8dnw+En4e/RwdCqZ54U5mUYgbrBWalLz91hoqi27lpR1SeWWnFShB
-    u2XsusvqCp1bmYklDCsUHRbeYipDqucJURAO6akSdI/CdaYG6IX917ZEldyYoaQGdjV9
-    YvXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685372870;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=tud/erIICHaLnTpVAwdYN5wz1o/STh6geYXi8mR0I9w=;
-    b=X4OTIKlvesWcmLh0R5zLI4rk7tt3Q/j04RiSEd/2Ma0CkDzUaEzoZRD23+v4yLI21k
-    OhjAdLpBaGmYF4bw5UaMh9xEOwYR1Oo2xy6Se5FeBstotjPIH431BWPpDpB7hrE8Ul4G
-    QKHXUAxc/rSjYKsFbJtOAQGd3kMWuUU72RxMK6QrGozeQ8a6rmcQ5WCQm3LZaHYQiLBW
-    dq9c1/PWl0kkHUGbOlUfGj+Hwe2AkSoYcckWdbY1o558JFG4AtC0rWf8Wu+jIrCWhHuI
-    Z89tFTNVxC9woUOK5jz9VRhQunNkbFZ7goJORjMR+tXQKMOdzE5thNdKUABE0UN5lC/u
-    L87g==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685372870;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=tud/erIICHaLnTpVAwdYN5wz1o/STh6geYXi8mR0I9w=;
-    b=bPD7CpX+5oZQrWV1HPevPZZvITF4o64dTJRPmNbdzAlfLfud4pF/JqnNllqj10X3KE
-    z+No2igJHl5gOEnzIZuZ62YZVo/4Aj1LlopjDCu/Qa5dzoP/9Qm9O92b53rPtvBg7Z5r
-    IAeros26v7EHfXMI+QLXhbE+YOTY929D2LbyjDqo04k1hw2RibEiJ5cbnelhamDNeadZ
-    Kixpx7kdIZ87KCBNu0OiOQZHmHjvr+iOV7ml5Q7CkdMCXmTS3Hlb3pPW75p4cwqDZNcp
-    7Ou27qPbNYHgweNQm4pgYf5/bdKRZvUcyGT6A73YivZB2lIFSXmzoaEIUZ1fr7Yp3OoN
-    BpNA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685372870;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=tud/erIICHaLnTpVAwdYN5wz1o/STh6geYXi8mR0I9w=;
-    b=3tZJRLqfg9JpN7/pzY6QtgcNiaoZ6foFeb1Y4DOaMShKjCbNXW283cjkTjyUPWHYWu
-    cZbqiDgiDBzBf+YDG4Dg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8pqP1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4TF7ofFm
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 29 May 2023 17:07:50 +0200 (CEST)
-Date:   Mon, 29 May 2023 17:07:49 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] arm64: dts: qcom: pm8916: Rename &wcd_codec ->
- &pm8916_codec
-Message-ID: <ZHS_xTvBEzngiyrB@gerhold.net>
-References: <20230525-msm8916-labels-v1-0-bec0f5fb46fb@gerhold.net>
- <20230525-msm8916-labels-v1-5-bec0f5fb46fb@gerhold.net>
- <e1f5e719-5b38-a258-2778-5dfe9a7dcf5e@linaro.org>
+        Mon, 29 May 2023 11:08:27 -0400
+Received: from sender4-of-o54.zoho.com (sender4-of-o54.zoho.com [136.143.188.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3B79F;
+        Mon, 29 May 2023 08:08:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685372879; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=PsHWBH37boivgn6l9SUGcHMBUDCneiCPydEetLZAgB4ZzXa4W2ayvWo9L++tKZL6wtMWvV3VR1oa4eGELpQisEQhFlrKfx+t3xuxe/LAZzg5l3J9qmwcxCh+L+83LeeyWJue9GfZr5HQPEi3jahuDlqqFX8C2spw+Gwz+MgG/N4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1685372879; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=DYXckkWz6vk81Z+sSLyNx7SrZW5XbG3DNStLiANmp9g=; 
+        b=dqnjpdiwSy5UAWRTWYDfZJhKunusJQ+jZ/+Wembg8tmivCytRSidFD2Vk42teEGomUbsAiDa5XsQdbt2d0vJzqblH9RPne4xyAtIRpX6LUvacbn4GlkrOT8m2Fwcg/hy91l/sDzmtHe5jpwq/r6Ksy0+4gzJfFdUYQMI6I84TyU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (31.187.91.190 [31.187.91.190]) by mx.zohomail.com
+        with SMTPS id 1685372878497518.3575553410253; Mon, 29 May 2023 08:07:58 -0700 (PDT)
+Message-ID: <fcdc5a27817b17d91df84bb06ad5d382829d5467.camel@mniewoehner.de>
+Subject: Re: [linus:master] [tpm, tpm_tis] e644b2f498: RIP:acpi_safe_halt
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc:     Lukas Wunner <lukas@wunner.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        peterz@infradead.org
+In-Reply-To: <6nf5n6fdnkhx6taa2mecnsmyw7sdgaz6fbvkqy7jqkyd7jq2u7@ogsi6ije32in>
+References: <202305041325.ae8b0c43-yujie.liu@intel.com>
+         <d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org>
+         <42ea93a1-3186-b8ff-c317-d51f3e13856e@kunbus.com>
+         <20230511141607.GA32208@wunner.de>
+         <1a8ecf90-80a4-9aac-95e1-9ce0c4e09ba5@kunbus.com>
+         <6nf5n6fdnkhx6taa2mecnsmyw7sdgaz6fbvkqy7jqkyd7jq2u7@ogsi6ije32in>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+Date:   Mon, 29 May 2023 17:07:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e1f5e719-5b38-a258-2778-5dfe9a7dcf5e@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.44.4 
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 02:47:30PM +0100, Bryan O'Donoghue wrote:
-> On 29/05/2023 13:47, Stephan Gerhold wrote:
-> > All definitions in pm8916.dtsi use the &pm8916_ label suffix, only the
-> 
-> That's a prefix_ not a _suffix
-> 
+Hi Jerry,
 
-Right, my bad :)
-
-> > codec uses the &wcd_codec label. &wcd_codec is confusing because the
-> > codec on MSM8916 is split into a "wcd-digital" and "wcd-analog" part
-> > and both could be described with &wcd_codec.
-> > 
-> > Let's just name it &pm8916_codec so it's consistent with all other PMIC
-> > device nodes.
+On Thu, 2023-05-11 at 07:59 -0700, Jerry Snitselaar wrote:
 > 
-> I'm not sure that's really consistent throught the dts/yaml TBH but, I do
-> think the pm8196 name is more meaningful and clear.
+> IIRC trying to catch the irq storm didn't work in the L490 case for
+> some reason, so we might still need the dmi entry for that one.
 > 
-> What is wcd supposed to stand for anyway ? Its probably obvious but I prefer
-> pm8916_code since that *is* obvious.
+> The info that the T490s had a pin wired up wrong came from Lenovo, but
+> this one even looks to be a different vendor so I wonder how often
+> this happens or if there is something else going on. Is it possible to
+> get info about the tpm used in the Inspur system? The datasheet online
+> doesn't mention it.
+
+Are you sure about T490s? To me the wiring looks right on both s and non-s: Pin
+18 / PIRQ# goes to PIRQA# of the PCH/SoC.
+
+However on L490 Pin 18 / PIRQ# is wired wrongly to SERIRQ, which probably is the
+reason that catching the interrupt storm didn't work: I guess this completely
+messes up LPC communication and causes way more problems. In this case only a
+DMI quirk can help.
+
+BR
+Michael
+
 > 
-
-I think WCD is the typical prefix Qualcomm uses for its dedicated audio
-codec chips. There is no WCD* chip on MSM8916/PM8916 because the codec
-was split and integrated partly into the SoC and partly into the PMIC.
-I guess the "wcd" name just survived for historical reasons.
-
-Looking at "WCD9335 Audio Codec - Device Specification - LM80-P2751-29
-Rev. A - Table 1-2 Terms and acronyms" apparently
-
-  WCD = WSP codec device
-  WSP = Wafer-scale package
-  WSA = WSP smart amplifier
-
-> > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> Regards,
+> Jerry
 > 
-> Seems like a valid change but, consider amending your commit log.
-> 
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> > > Thanks,
+> > > 
+> > > Lukas
 > 
 
-Perhaps Bjorn can fix "prefix" -> "suffix" in the commit message when
-applying, doesn't seem worth resending for that alone. (Will fix it of
-course in case I send a v2 for other reasons!)
-
-Thanks,
-Stephan
