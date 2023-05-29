@@ -2,85 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF1771493D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9474A714942
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjE2MQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S231434AbjE2MRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjE2MQ3 (ORCPT
+        with ESMTP id S230042AbjE2MRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:16:29 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A0BFD
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:15:56 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2af2c7f2883so33528341fa.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:15:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685362554; x=1687954554;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4R+IfYo+E0SCCMD1zQpk0fCdlACgecdJiT+kGuqtiLg=;
-        b=StPnAtUCsV6F1TvbGaGOO5K8T4D+osbaUPE84n7vpIgQLPOhWXmf2VSZHgGNsNizeP
-         2b//hXbvsBdFFopE3FaEoZmmlb8QaYwAAB3lveJLIfFDuxdPAxICRVzi4zNiAJAJ+4S2
-         ntcAgJWM07if4qmkSAuwZq9p8oZevZiorWXn+5R3W/stB3qWFsZ3XGchwnXBHZLoZ6qb
-         DPXsVukBjItob1hHw0Gbl7M46z/FJeEFdHMWAsoorGjRbkS6Al3sajuxbFIoqIodI7+4
-         qthetIQvflWchqqtCpp2gL0iAZTympVPgELG9DDU8qXqZdhqgsCgig/dPjeu3XSzPtF1
-         UtXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685362554; x=1687954554;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4R+IfYo+E0SCCMD1zQpk0fCdlACgecdJiT+kGuqtiLg=;
-        b=BZ2VcBe6DZY5/TI2wFifHji+4tVM486sD/82+XDRqCSv3NihPiybtKz3OBr8CRrEw1
-         +5Uctc1J9abE5nQH5DrxFrSMCVajz1bAtIjOaEmOSF1ddX28I31wVOfD/DXxE0MzU3LQ
-         ZZkvD3GO1ZNWMFXnPrUT8fQ2ZCjukLU34DjToSWSdcyl43KtwQxkhu1rSeozJHa+Wi4W
-         LtCSV+oB+FixNU8/aLGGdKeC2mjWzJVaduf6gkv3SmyMaj+7OXUBY5NFrj4H+7HQy37T
-         JuPIWovGvEd3zoKGWgQtQbNJEqZQ6oQKBeG8uX6Er9pgEp6K01QjZxxdaNxCzyUNOdQD
-         /WCg==
-X-Gm-Message-State: AC+VfDyNtsQMVLhdM5spzRq1lYeB9hLZKQhwr929NIlUHO49Y3/MKlOu
-        NeJjMpkRltV28m0C1Q5ObOw8DQ==
-X-Google-Smtp-Source: ACHHUZ6aG6I3AHLtXeZR7Ibl3hYkDkhoUmq/6kFzkMFcm1XAR4QkvNx7jyhrqwijGbSD0P1l5QeOCw==
-X-Received: by 2002:ac2:5204:0:b0:4f3:bb84:a780 with SMTP id a4-20020ac25204000000b004f3bb84a780mr3686586lfl.23.1685362554501;
-        Mon, 29 May 2023 05:15:54 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id s9-20020a19ad49000000b004edc55d3900sm1974509lfd.0.2023.05.29.05.15.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 05:15:53 -0700 (PDT)
-Message-ID: <35662a02-a06d-017a-56bd-9e328fc0ae39@linaro.org>
-Date:   Mon, 29 May 2023 15:15:53 +0300
+        Mon, 29 May 2023 08:17:42 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE49DC2;
+        Mon, 29 May 2023 05:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685362660; x=1716898660;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PHiUGMjxRQ6M/GUGwXf1RDiZRcVrGdxl0s2yVo9wSVQ=;
+  b=qoeuTHSNte5PF76ImmbU8u6Aly64zJuxerVP1A4zblu7Tu/N/VYfEYmB
+   8Ef98wuBcrJ26S18PqxoHrNNo9UxPCPVKCdCtnjUZuLjI5/tZduT0ZF0/
+   GfF/avkqwEB5ab5JDJs/bfoT1NDq/ORL9+bwtrFmxqIcf76sK2JGws7XA
+   /lLU7u8p9t2CGSoqebvh86B2TaqfnjsIUS3E00gsOr1l0Y+6wXp2GsX3s
+   jB2cWwhlS9LuosOqOousUONd2F9ms2qdFzr51zCL5dWvQ2CFDm1isjy7S
+   GNWI0NntGn0sLkAA11PQuJ2LpwTMToOxCQr4BILTWTCmfpMBhl6OFlEN+
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="asc'?scan'208";a="213543328"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 May 2023 05:17:39 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 29 May 2023 05:17:39 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 29 May 2023 05:17:37 -0700
+Date:   Mon, 29 May 2023 13:17:14 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH v2 2/4] dt-bindings: timer: atmel,at91sam9260-pit:
+ convert to yaml
+Message-ID: <20230529-chuck-turbofan-a8aabbdd9341@wendy>
+References: <20230529062604.1498052-1-claudiu.beznea@microchip.com>
+ <20230529062604.1498052-3-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5/7] drm/msm/dsi: Add configuration for MSM8226
-Content-Language: en-GB
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230308-msm8226-mdp-v1-0-679f335d3d5b@z3ntu.xyz>
- <20230308-msm8226-mdp-v1-5-679f335d3d5b@z3ntu.xyz>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230308-msm8226-mdp-v1-5-679f335d3d5b@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="MDW8BcZEu6MUYNEl"
+Content-Disposition: inline
+In-Reply-To: <20230529062604.1498052-3-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,19 +72,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/05/2023 12:44, Luca Weiss wrote:
-> Add the config for the v1.0.2 DSI found on MSM8226. We can reuse
-> existing bits from other revisions that are identical for v1.0.2.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+--MDW8BcZEu6MUYNEl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hey Claudiu,
+
+On Mon, May 29, 2023 at 09:26:02AM +0300, Claudiu Beznea wrote:
+> Convert Microchip AT91 PIT bindings to YAML. Along with it clocks and
+> clock-names bindings were added as the drivers needs it to ensure proper
+> hardware functionality.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
->   drivers/gpu/drm/msm/dsi/dsi_cfg.c | 2 ++
->   drivers/gpu/drm/msm/dsi/dsi_cfg.h | 1 +
->   2 files changed, 3 insertions(+)
+>  .../devicetree/bindings/arm/atmel-sysregs.txt | 12 ---
+>  .../bindings/timer/atmel,at91sam9260-pit.yaml | 96 +++++++++++++++++++
+>  2 files changed, 96 insertions(+), 12 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91sam=
+9260-pit.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Do=
+cumentation/devicetree/bindings/arm/atmel-sysregs.txt
+> index 67a66bf74895..54d3f586403e 100644
+> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> @@ -4,18 +4,6 @@ Chipid required properties:
+>  - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chi=
+pid"
+>  - reg : Should contain registers location and length
+> =20
+> -PIT Timer required properties:
+> -- compatible: Should be "atmel,at91sam9260-pit"
+> -- reg: Should contain registers location and length
+> -- interrupts: Should contain interrupt for the PIT which is the IRQ line
+> -  shared across all System Controller members.
+> -
+> -PIT64B Timer required properties:
+> -- compatible: Should be "microchip,sam9x60-pit64b"
+> -- reg: Should contain registers location and length
+> -- interrupts: Should contain interrupt for PIT64B timer
+> -- clocks: Should contain the available clock sources for PIT64B timer.
+> -
+>  System Timer (ST) required properties:
+>  - compatible: Should be "atmel,at91rm9200-st", "syscon", "simple-mfd"
+>  - reg: Should contain registers location and length
+> diff --git a/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pi=
+t.yaml b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+> new file mode 100644
+> index 000000000000..1cc7b7494e4b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+> @@ -0,0 +1,96 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/atmel,at91sam9260-pit.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip AT91 Periodic Interval Timer (PIT)
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description:
+> +  Microchip AT91 periodic interval timer provides the operating system s=
+cheduler
+> +  interrupt. It is designed to offer maximum accuracy and efficient mana=
+gement,
+> +  even for systems with long response time.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - atmel,at91sam9260-pit
+> +      - microchip,sam9x60-pit64b
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The missing compatible should probably be added here, rather than
+removed from the devicetree.
 
--- 
-With best wishes
-Dmitry
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: atmel,at91sam9260-pit
+> +    then:
+> +      properties:
 
+> +        interrupts:
+> +          description:
+> +            Contain interrupt for the PIT which is the IRQ line shared a=
+cross all
+> +            System Controller members.
+
+I think you should drop this & the corresponding section below, since
+both PIT and PIT64 have a single interrupt.
+
+Thanks,
+Conor.
+
+> +        clocks:
+> +          maxItems: 1
+> +
+> +    else:
+> +      properties:
+> +        interrupts:
+> +          description:
+> +            PIT64B peripheral interrupt identifier.
+> +        clocks:
+> +          minItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: pclk
+> +            - const: gclk
+> +      required:
+> +        - clock-names
+
+
+--MDW8BcZEu6MUYNEl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHSXygAKCRB4tDGHoIJi
+0lloAP90iVLfmKixUT2X7Jvpsdvgj+TPj5hIYGyTIPBn44lzYgEAyNQOMUvamzjZ
+WsLACZkOX75RoA9nLwB208Nkk8RUww8=
+=W65y
+-----END PGP SIGNATURE-----
+
+--MDW8BcZEu6MUYNEl--
