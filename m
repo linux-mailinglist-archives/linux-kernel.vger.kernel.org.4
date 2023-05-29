@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40292714EA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F16714EA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 18:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjE2QqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 12:46:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
+        id S229672AbjE2Qq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 12:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjE2QqR (ORCPT
+        with ESMTP id S229615AbjE2QqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 12:46:17 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A620CD
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:46:14 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96fbc74fbf1so649481066b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:46:14 -0700 (PDT)
+        Mon, 29 May 2023 12:46:18 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BF5D2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:46:15 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5147f7d045bso4700355a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 09:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685378773; x=1687970773;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685378774; x=1687970774;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GZ1Pw000YHwunl4UOYUIH6XIIpBvLCqm0y/k6ZseuYk=;
-        b=deTEIU+pyD3V5mnx/rrEaGu+++V8NuthSZVyNy3qg7qAW7v1bdiAuHp1Ykv4wUMdak
-         sEITqWIa0GT/2rqYOvugqqALSSRd0RVUjiefeGQVIw0wLoa8e+hwbyx+2w1oNF//W7Un
-         BXuQN9qcPNRjHieND/XpY8yaVCXqjH/bMXGpEm8E/v6SQuK2JCOB0KFrRcLdU/v7pTEj
-         EI/mw2e4EWrFO1ixiI2qRQFfaNcig/KQNRdwTN6CbqtiM5EDCUzq8/hCPOICPWOAq9tw
-         8Q6Ityc22xe4ekw1DhjSIKE7tu0Jvyv+2v80prncLc1QuPfo6T8PloejnKRJqziKOLJj
-         KE8g==
+        bh=okJUfe+J2lktOzbTBoR7fCmJ4uPpfts4ISVsUrRsL8s=;
+        b=1Ct2HKvKxppmAt3WslN5ekIsk3Ti5wkXJOaYEQq4Aqt1ERIO+MObGuoSun48zPGh/6
+         1+m/UleVx1iF3cYfEcRmNIgR066/IowWPZtaQS73P2R8nzqD3wLZ1a7zsWmMR1nwOEsb
+         NAjC+KmybjL1aIg1F7Z71bk9K/dYnaMKn7/anAKmtrlzLDCLvtRoXhcG0c40sUHLsxao
+         dniqD+yL17nHxVLMVG2nFyEA1NRsIn1pTVDDZ1cKhlJ4T4f1MiYP2M6qkD9g3YSU/mn9
+         kvPm/6f/iZj18nLqnLV3C0sHVfTg5xj1kuK21BxiRmSqblaqObGIXqYEoiw/iatpwrDE
+         59Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685378773; x=1687970773;
+        d=1e100.net; s=20221208; t=1685378774; x=1687970774;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GZ1Pw000YHwunl4UOYUIH6XIIpBvLCqm0y/k6ZseuYk=;
-        b=TX0f2jAoxldgRm6+ROGu+4vOA/sbuCJonJZRDmDK82fphoPsFLO+L8AHlKo16IuVSV
-         LoMVUGurNJ6XOqe/a3PpwFHpqZctGmp6IIEtIyqdYTliG1aBSDeXG9MOgiJKZWL36RUm
-         LXM/3QESqTEq1XdU2KInz5S62gnqVi3T7df4iq0VDP8vdQzWjYzSuukSVVKDLBtfKQME
-         0VqI/Vlcis7M6DuvWqATrCn+qcnxFjvGFusNa1q0ToenfH8zAazcAi2Yox7xUAxwhEjx
-         4gasDxG9jo3TUzxq/+jZmhK3AL+Il9laHY8romdRmPbzliqylecr0/jPB4mKdpoqBNb8
-         BpwA==
-X-Gm-Message-State: AC+VfDzLFM5G2FfJzxiXbDJDoHfm5mTJHeq3dSDzkiqbI5Fqml+to1wE
-        sFKDdzh6yTA8osZ0ylTL+EzDhw==
-X-Google-Smtp-Source: ACHHUZ57TCu1nzyJyjSvhGgSy6JPiAeD/WueOUQpFY775HM6nWCxEeV9TIa9C/uSHQQiugl0GYTgpw==
-X-Received: by 2002:a17:907:6093:b0:965:6075:d100 with SMTP id ht19-20020a170907609300b009656075d100mr14795453ejc.39.1685378772810;
-        Mon, 29 May 2023 09:46:12 -0700 (PDT)
+        bh=okJUfe+J2lktOzbTBoR7fCmJ4uPpfts4ISVsUrRsL8s=;
+        b=ZJHYYq/l7288qDNMPSxhRmzUuq1bFeNwtk+d5g2fV/RQql6SseEJ58RVk3GKJ8vxgp
+         pRtc+ftop7qm0gZcaDYZ/4kqi3Qlq94zNSoPIqL1a4c5p/544CCXPYCLZXL6wC4vL0vA
+         c7EejsPEzR9KMKtWna5RAZu9kYWirUp3uPD7fyCmRMlKUTEZ7ONm04iMZwBAcI5oYOXT
+         hNPOtzwsYFIGX3TulflsYeT3B/0n+gwQPb+vt4PgJKxyaXhsD35n2ZJTCZKCxmLwWLW4
+         CbDGsUBnItkRghLnYPJos3s/D62WZsaxTmqS8El3zjRWyu1hKVOxLNqauKFffCtrb9kP
+         Sidw==
+X-Gm-Message-State: AC+VfDzuufdrQ5VqgcoRkysu4ql/CETaXRD3Nj4TJQMI0vroFguTXSGo
+        egAi/5yLFDB0QVcRIE/iTNL6zw==
+X-Google-Smtp-Source: ACHHUZ4MOIYTHTGclDNGhT7EA/gcBVTkBZq3YDK2pAqHCZjwGgo+m2IybXiQCUxUe0jTf8EK3KJtfQ==
+X-Received: by 2002:a50:fc0a:0:b0:510:f3a6:d50 with SMTP id i10-20020a50fc0a000000b00510f3a60d50mr195454edr.36.1685378774115;
+        Mon, 29 May 2023 09:46:14 -0700 (PDT)
 Received: from ph18.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id f4-20020aa7d844000000b0050d89daaa70sm3248578eds.2.2023.05.29.09.46.11
+        by smtp.gmail.com with ESMTPSA id f4-20020aa7d844000000b0050d89daaa70sm3248578eds.2.2023.05.29.09.46.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 09:46:12 -0700 (PDT)
+        Mon, 29 May 2023 09:46:13 -0700 (PDT)
 From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
 To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
         rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
@@ -62,9 +62,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         wenst@chromium.org, james.lo@mediatek.com,
         rex-bc.chen@mediatek.com, nfraprado@collabora.com,
         abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-Subject: [PATCH v3 2/5] thermal/drivers/mediatek/lvts_thermal: Add suspend and resume
-Date:   Mon, 29 May 2023 18:46:02 +0200
-Message-ID: <20230529164605.3552619-3-bero@baylibre.com>
+Subject: [PATCH v3 3/5] thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
+Date:   Mon, 29 May 2023 18:46:03 +0200
+Message-ID: <20230529164605.3552619-4-bero@baylibre.com>
 X-Mailer: git-send-email 2.41.0.rc2
 In-Reply-To: <20230529164605.3552619-1-bero@baylibre.com>
 References: <20230529164605.3552619-1-bero@baylibre.com>
@@ -83,66 +83,140 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Balsam CHIHI <bchihi@baylibre.com>
 
-Add suspend and resume support to LVTS driver.
+Add LVTS Driver support for MT8192.
 
+Co-developed-by : Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
 ---
- drivers/thermal/mediatek/lvts_thermal.c | 34 +++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ drivers/thermal/mediatek/lvts_thermal.c | 95 +++++++++++++++++++++++++
+ 1 file changed, 95 insertions(+)
 
 diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index d0a3f95b7884b..5ea8a9d569ea6 100644
+index 5ea8a9d569ea6..d5e5214784ece 100644
 --- a/drivers/thermal/mediatek/lvts_thermal.c
 +++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -1169,6 +1169,38 @@ static int lvts_remove(struct platform_device *pdev)
- 	return 0;
- }
+@@ -80,6 +80,7 @@
+ #define LVTS_MSR_FILTERED_MODE		1
  
-+static int lvts_suspend(struct platform_device *pdev, pm_message_t state)
-+{
-+	struct lvts_domain *lvts_td;
-+	int i;
+ #define LVTS_HW_SHUTDOWN_MT8195		105000
++#define LVTS_HW_SHUTDOWN_MT8192		105000
+ 
+ static int golden_temp = LVTS_GOLDEN_TEMP_DEFAULT;
+ static int coeff_b = LVTS_COEFF_B;
+@@ -1280,6 +1281,88 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
+ 	}
+ };
+ 
++static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] = {
++	{
++		.cal_offset = { 0x04, 0x08 },
++		.lvts_sensor = {
++			{ .dt_id = MT8192_MCU_BIG_CPU0 },
++			{ .dt_id = MT8192_MCU_BIG_CPU1 }
++		},
++		.num_lvts_sensor = 2,
++		.offset = 0x0,
++		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
++		.mode = LVTS_MSR_FILTERED_MODE,
++	},
++	{
++		.cal_offset = { 0x0c, 0x10 },
++		.lvts_sensor = {
++			{ .dt_id = MT8192_MCU_BIG_CPU2 },
++			{ .dt_id = MT8192_MCU_BIG_CPU3 }
++		},
++		.num_lvts_sensor = 2,
++		.offset = 0x100,
++		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
++		.mode = LVTS_MSR_FILTERED_MODE,
++	},
++	{
++		.cal_offset = { 0x14, 0x18, 0x1c, 0x20 },
++		.lvts_sensor = {
++			{ .dt_id = MT8192_MCU_LITTLE_CPU0 },
++			{ .dt_id = MT8192_MCU_LITTLE_CPU1 },
++			{ .dt_id = MT8192_MCU_LITTLE_CPU2 },
++			{ .dt_id = MT8192_MCU_LITTLE_CPU3 }
++		},
++		.num_lvts_sensor = 4,
++		.offset = 0x200,
++		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
++		.mode = LVTS_MSR_FILTERED_MODE,
++	}
++};
 +
-+	lvts_td = platform_get_drvdata(pdev);
++static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] = {
++		{
++		.cal_offset = { 0x24, 0x28 },
++		.lvts_sensor = {
++			{ .dt_id = MT8192_AP_VPU0 },
++			{ .dt_id = MT8192_AP_VPU1 }
++		},
++		.num_lvts_sensor = 2,
++		.offset = 0x0,
++		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
++	},
++	{
++		.cal_offset = { 0x2c, 0x30 },
++		.lvts_sensor = {
++			{ .dt_id = MT8192_AP_GPU0 },
++			{ .dt_id = MT8192_AP_GPU1 }
++		},
++		.num_lvts_sensor = 2,
++		.offset = 0x100,
++		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
++	},
++	{
++		.cal_offset = { 0x34, 0x38 },
++		.lvts_sensor = {
++			{ .dt_id = MT8192_AP_INFRA },
++			{ .dt_id = MT8192_AP_CAM },
++		},
++		.num_lvts_sensor = 2,
++		.offset = 0x200,
++		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
++	},
++	{
++		.cal_offset = { 0x3c, 0x40, 0x44 },
++		.lvts_sensor = {
++			{ .dt_id = MT8192_AP_MD0 },
++			{ .dt_id = MT8192_AP_MD1 },
++			{ .dt_id = MT8192_AP_MD2 }
++		},
++		.num_lvts_sensor = 3,
++		.offset = 0x300,
++		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
++	}
++};
 +
-+	for (i = 0; i < lvts_td->num_lvts_ctrl; i++)
-+		lvts_ctrl_set_enable(&lvts_td->lvts_ctrl[i], false);
+ static const struct lvts_data mt8195_lvts_mcu_data = {
+ 	.lvts_ctrl	= mt8195_lvts_mcu_data_ctrl,
+ 	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_mcu_data_ctrl),
+@@ -1290,9 +1373,21 @@ static const struct lvts_data mt8195_lvts_ap_data = {
+ 	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_ap_data_ctrl),
+ };
+ 
++static const struct lvts_data mt8192_lvts_mcu_data = {
++	.lvts_ctrl	= mt8192_lvts_mcu_data_ctrl,
++	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_mcu_data_ctrl),
++};
 +
-+	clk_disable_unprepare(lvts_td->clk);
++static const struct lvts_data mt8192_lvts_ap_data = {
++	.lvts_ctrl	= mt8192_lvts_ap_data_ctrl,
++	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_ap_data_ctrl),
++};
 +
-+	return 0;
-+}
-+
-+static int lvts_resume(struct platform_device *pdev)
-+{
-+	struct lvts_domain *lvts_td;
-+	int i, ret;
-+
-+	lvts_td = platform_get_drvdata(pdev);
-+
-+	ret = clk_prepare_enable(lvts_td->clk);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < lvts_td->num_lvts_ctrl; i++)
-+		lvts_ctrl_set_enable(&lvts_td->lvts_ctrl[i], true);
-+
-+	return 0;
-+}
-+
- static const struct lvts_ctrl_data mt8195_lvts_mcu_data_ctrl[] = {
- 	{
- 		.cal_offset = { 0x04, 0x07 },
-@@ -1268,6 +1300,8 @@ MODULE_DEVICE_TABLE(of, lvts_of_match);
- static struct platform_driver lvts_driver = {
- 	.probe = lvts_probe,
- 	.remove = lvts_remove,
-+	.suspend = lvts_suspend,
-+	.resume = lvts_resume,
- 	.driver = {
- 		.name = "mtk-lvts-thermal",
- 		.of_match_table = lvts_of_match,
+ static const struct of_device_id lvts_of_match[] = {
+ 	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data },
+ 	{ .compatible = "mediatek,mt8195-lvts-ap", .data = &mt8195_lvts_ap_data },
++	{ .compatible = "mediatek,mt8192-lvts-mcu", .data = &mt8192_lvts_mcu_data },
++	{ .compatible = "mediatek,mt8192-lvts-ap", .data = &mt8192_lvts_ap_data },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, lvts_of_match);
 -- 
 2.41.0.rc2
 
