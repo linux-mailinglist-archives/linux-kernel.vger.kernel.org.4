@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A4E47151BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 00:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB9F7151C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 00:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjE2WTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 18:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
+        id S229836AbjE2WU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 18:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjE2WTL (ORCPT
+        with ESMTP id S229588AbjE2WUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 18:19:11 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28173120
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 15:18:43 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f5021faa16so1532722e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 15:18:43 -0700 (PDT)
+        Mon, 29 May 2023 18:20:25 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76002A0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 15:20:20 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2af2ef0d0daso37971751fa.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 15:20:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685398721; x=1687990721;
+        d=linaro.org; s=google; t=1685398819; x=1687990819;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EZVm7UiouESyKo6k2LBzlK9njKm8DA0ECdqTFD1OkjA=;
-        b=Fd3ljygoclvCV+t+t68E7faPRuA7OY+1N0EbqrDmrRCnHTCOHcGHWFlR8X86bXZpsw
-         oylPFV2bUlgPsegg7vGvHGw4htpTaMWEVcqgvatSzfNZfYmGDnqjFmS5Vws6Xj8YI6a5
-         MQk25AeL2uZSAdjSeBow9k9cqPa5daUoG8b/LoowqTxa7aSQp62GmP1Y1Z0aEp5m2j9O
-         Y3wOUeTldt9uO1Uoo6mxFLu7pTiPXT/XmUayYngFW5eve8Qxs4hAkzDd9JHy+UB8wKo6
-         BAKx7bmexea+55rI2fAAQtJ5MtBret9f8Y74Kl9JRro/gB7tXAfJbR0z03MWzDNenF9N
-         182g==
+        bh=USqTtpZDzyEPrsHSC9jFOSH+OQLok+CQPPy4QrEEqFA=;
+        b=jEpgLgtV7r99HbSXnV1kD5IeD32rh8mN8wROSgew7n4EJf9kNaykVP5/nS17RfXUqa
+         PkPdw2vEqJJdNi3M1xdh4pDcKfwSQgLJxmIVwIWhmCqwjxV5Fzoe6K/uJIF6X/kG/+1T
+         Xfyp9HmnfA/yxham5hSpvZiqALfsdUV9XZz13n5bK4bKn5TXwEaJna6nQ1VSosKQpwRi
+         vfN86iCYXae4u5aP/Zj38WnJGfcVVP8165/k56eIkfRpAGtaF0U3GIOMHi6eUgCOGfFP
+         5pDiiRJkDUwvkUs3nfZMDqu/g59zTYU5fdSkMyzjw4k0dJISXL00801nCm5rdMAhz5aC
+         wdVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685398721; x=1687990721;
+        d=1e100.net; s=20221208; t=1685398819; x=1687990819;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EZVm7UiouESyKo6k2LBzlK9njKm8DA0ECdqTFD1OkjA=;
-        b=BpoWLe2Mrc85ikPDYp9f0vOaL2HIlXd5COgNcbT/PAzKDP/V5E+sS9P6L3IUnMWA4Y
-         cYlW0g2Ctmi/ljreuKnoSMJekSfbrplakT9VzGLDatXjdzWBAt15wl6nNlcZm5xD9208
-         Pzb8GURZIxiGaTP/u5F1wT5cK2iKc8ODApqCYggeFt9UHNq1F2W3pmD5zr1pnBKHOXt3
-         Cz07zx71l6t9B5LWyn5dVBjS+9MtlVlSE7Ga0Bj0w8JunjkjBsa5MH6NsdevxdRgdAB8
-         GCbA44kWC4CdaI6QLeVduR31oetvv8SDgtuRImdBo/dhZkCisqbtj3kTbCknA6KCABFj
-         dalA==
-X-Gm-Message-State: AC+VfDy2fBHPoBqerpKeGYt7E68dNkC0vbhwFGhpP/Wo4IfcRbBGS3GY
-        rVjSpYVh/SV+ELZRNJ2YbehlhA==
-X-Google-Smtp-Source: ACHHUZ4e4DeF7peEMmQbB+Q/seVcfomkLOXTZL9x2Y7AVdJlug2gaPKj0fov20Ge3ModNV3lWC7SPA==
-X-Received: by 2002:ac2:4859:0:b0:4ec:7b87:931a with SMTP id 25-20020ac24859000000b004ec7b87931amr32739lfy.13.1685398721236;
-        Mon, 29 May 2023 15:18:41 -0700 (PDT)
+        bh=USqTtpZDzyEPrsHSC9jFOSH+OQLok+CQPPy4QrEEqFA=;
+        b=I7B60uB8Hy0e2cp+6rYxsCSLzq0yVgnlr8YJsADRCShdi+UtskBG0zorBZQWv5FFgQ
+         SHC1d/ZwYQs0YKQWhbIcwL+lQev6CXJ1la4LzqLS2hwxm5c+eEbCAxU769Zn27akzVNO
+         7DKUXPHQxNRuIH/a4g+AiB9CQ8eKHMbgPt/fjU8goMJI8zAMlLqVzvZ0kDQbSWHhYtrV
+         FbYhrEGmZkgYldFikszN59qbLjsRdCpRtD/7t+/HULNF6GokVXEtS5OTvuF7BQFl0lYm
+         +cs/IHLrujJhV+j2+lRc3/gLEtWztZdgiSu0AW+56JGUdqAS3OdCYomZ93kzIKOSyuLB
+         wMIQ==
+X-Gm-Message-State: AC+VfDzMwC3gqhLsUuZwz6WiJLOZ5VVoj9wW5kzhrkEisdY8tHibZW/p
+        ppQpDS4pepwemlkEMufpuOxQkw==
+X-Google-Smtp-Source: ACHHUZ6QPLFeKcQ4ZS9i2gxp9ZfFi+7aj7bRNJOGHEhaqjPDrylDtjNPIO8RJ2v8iV9DqrvR298gCg==
+X-Received: by 2002:a2e:b0fc:0:b0:2a8:b37c:17f0 with SMTP id h28-20020a2eb0fc000000b002a8b37c17f0mr4931553ljl.4.1685398818715;
+        Mon, 29 May 2023 15:20:18 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id g22-20020ac25396000000b004edb8fac1cesm127455lfh.215.2023.05.29.15.18.40
+        by smtp.gmail.com with ESMTPSA id e18-20020a2e9852000000b002af15f2a735sm2609555ljj.111.2023.05.29.15.20.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 15:18:40 -0700 (PDT)
-Message-ID: <ebc3ff33-6e4f-b107-33c6-f35b03307058@linaro.org>
-Date:   Tue, 30 May 2023 01:18:40 +0300
+        Mon, 29 May 2023 15:20:18 -0700 (PDT)
+Message-ID: <66d0c903-5b79-68d4-8303-76c4846770d8@linaro.org>
+Date:   Tue, 30 May 2023 01:20:17 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH RFC 03/10] drm/panel: Add LGD panel driver for Sony Xperia
- XZ3
+Subject: Re: [PATCH RFC 06/10] drm/panel/samsung-sofef01: Add panel driver for
+ Sony Xperia 5 / 10 II
 Content-Language: en-GB
 To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     neil.armstrong@linaro.org, Sam Ravnborg <sam@ravnborg.org>,
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Caleb Connolly <caleb@connolly.tech>,
@@ -80,13 +81,13 @@ Cc:     neil.armstrong@linaro.org, Sam Ravnborg <sam@ravnborg.org>,
         Kuogee Hsieh <quic_khsieh@quicinc.com>,
         Jessica Zhang <quic_jesszhan@quicinc.com>
 References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
- <20230521-drm-panels-sony-v1-3-541c341d6bee@somainline.org>
- <ccc97880-8e74-b85b-9679-9c12c44c4b99@linaro.org>
- <71675a02-0801-62dc-2673-4a0907636b21@linaro.org>
- <CAA8EJpq=HZqiBZ6bpUNH47VmASuH+Mi5OD5BHmg0TPwtsKHf8w@mail.gmail.com>
- <oxgtbj7qmsdvz5gl4bud64jedmhdmvphjfge7uy6uwulefqfsa@pleslv2zgwbp>
+ <20230521-drm-panels-sony-v1-6-541c341d6bee@somainline.org>
+ <f34cd6a8-6d6d-9dcf-b681-56439416c4b4@linaro.org>
+ <gzhxxdh235nsbjbns37thi33rpk546ynkihihjiam46pkngkud@opwtr2swvdau>
+ <CAA8EJppniEh3cFpi=AdK-i=KZcd=tzpPru0W4Vq9LJjJL8q=qQ@mail.gmail.com>
+ <bz7kqcdxnrbt2lzaykgxnviusrksu5txng3ngietj6rb3mhmsx@qwbann5px44w>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <oxgtbj7qmsdvz5gl4bud64jedmhdmvphjfge7uy6uwulefqfsa@pleslv2zgwbp>
+In-Reply-To: <bz7kqcdxnrbt2lzaykgxnviusrksu5txng3ngietj6rb3mhmsx@qwbann5px44w>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -99,188 +100,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 00:07, Marijn Suijten wrote:
-> On 2023-05-22 15:58:56, Dmitry Baryshkov wrote:
->> On Mon, 22 May 2023 at 12:04, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+On 29/05/2023 23:58, Marijn Suijten wrote:
+> On 2023-05-23 01:56:46, Dmitry Baryshkov wrote:
+>> On Tue, 23 May 2023 at 01:32, Marijn Suijten
+>> <marijn.suijten@somainline.org> wrote:
 >>>
->>> On 22/05/2023 03:16, Dmitry Baryshkov wrote:
+>>> On 2023-05-22 04:19:45, Dmitry Baryshkov wrote:
 >>>> On 22/05/2023 00:23, Marijn Suijten wrote:
->>>>> Sony provides an unlabeled LGD + Atmel maXTouch assembly in its Xperia
->>>>> XZ3 (tama akatsuki) phone, with custom DCS commands to match.
+>>>>> This SOFEF01-M Display-IC driver supports two modes with different
+>>>>> compatibles to differentiate between slightly different physical sizes
+>>>>> (panels) found on the Xperia 5 (6.1") and 10 II (6.0").
 >>>>>
->>>>> This panel features Display Stream Compression 1.1.
->>>>>
->>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->>>>> ---
->>>>>    drivers/gpu/drm/panel/Kconfig                   |  11 +
->>>>>    drivers/gpu/drm/panel/Makefile                  |   1 +
->>>>>    drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c | 362 ++++++++++++++++++++++++
->>>>>    3 files changed, 374 insertions(+)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
->>>>> index 67ef898d133f2..18bd116e78a71 100644
->>>>> --- a/drivers/gpu/drm/panel/Kconfig
->>>>> +++ b/drivers/gpu/drm/panel/Kconfig
->>>>> @@ -706,6 +706,17 @@ config DRM_PANEL_SONY_ACX565AKM
->>>>>          Say Y here if you want to enable support for the Sony ACX565AKM
->>>>>          800x600 3.5" panel (found on the Nokia N900).
->>>>> +config DRM_PANEL_SONY_AKATSUKI_LGD
->>>>> +    tristate "Sony Xperia XZ3 LGD panel"
->>>>> +    depends on GPIOLIB && OF
->>>>> +    depends on DRM_MIPI_DSI
->>>>> +    depends on BACKLIGHT_CLASS_DEVICE
->>>>> +    help
->>>>> +      Say Y here if you want to enable support for the Sony Xperia XZ3
->>>>> +      1440x2880@60 6.0" OLED DSI cmd mode panel produced by LG Display.
->>>>> +
->>>>> +      This panel uses Display Stream Compression 1.1.
->>>>> +
->>>>>    config DRM_PANEL_SONY_TD4353_JDI
->>>>>        tristate "Sony TD4353 JDI panel"
->>>>>        depends on GPIOLIB && OF
->>>>> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
->>>>> index ff169781e82d7..85133f73558f3 100644
->>>>> --- a/drivers/gpu/drm/panel/Makefile
->>>>> +++ b/drivers/gpu/drm/panel/Makefile
->>>>> @@ -71,6 +71,7 @@ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701) += panel-sitronix-st7701.o
->>>>>    obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
->>>>>    obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
->>>>>    obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
->>>>> +obj-$(CONFIG_DRM_PANEL_SONY_AKATSUKI_LGD) += panel-sony-akatsuki-lgd.o
->>>>>    obj-$(CONFIG_DRM_PANEL_SONY_TD4353_JDI) += panel-sony-td4353-jdi.o
->>>>>    obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) += panel-sony-tulip-truly-nt35521.o
->>>>>    obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
->>>>> diff --git a/drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c b/drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c
->>>>> new file mode 100644
->>>>> index 0000000000000..f55788f963dab
->>>>> --- /dev/null
->>>>> +++ b/drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c
->>>>> @@ -0,0 +1,362 @@
->>>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>>> +/*
->>>>> + * Copyright (c) 2023 Marijn Suijten <marijn.suijten@somainline.org>
->>>>> + *
->>>>> + * Based on Sony Downstream's "Atmel LGD ID5" Akatsuki panel dtsi.
->>>>> + */
->>>>> +
->>>>> +#include <linux/backlight.h>
->>>>> +#include <linux/delay.h>
->>>>> +#include <linux/gpio/consumer.h>
->>>>> +#include <linux/module.h>
->>>>> +#include <linux/of.h>
->>>>> +#include <linux/of_device.h>
->>>>> +#include <linux/regulator/consumer.h>
->>>>> +
->>>>> +#include <video/mipi_display.h>
->>>>> +
->>>>> +#include <drm/drm_mipi_dsi.h>
->>>>> +#include <drm/drm_modes.h>
->>>>> +#include <drm/drm_panel.h>
->>>>> +#include <drm/drm_probe_helper.h>
->>>>> +#include <drm/display/drm_dsc.h>
->>>>> +#include <drm/display/drm_dsc_helper.h>
->>>>> +
->>>>> +struct sony_akatsuki_lgd {
->>>>> +    struct drm_panel panel;
->>>>> +    struct mipi_dsi_device *dsi;
->>>>> +    struct regulator *vddio;
->>>>> +    struct gpio_desc *reset_gpio;
->>>>> +    bool prepared;
+>>>>> It is currently also used to hardcode significantly higher fake porches
+>>>>> for the Xperia 5, which are unused in transfers due to this being a
+>>>>> command-mode panel but do have an effect on the clock rates set by
+>>>>> dsi_host.c.  Without higher clock rates this panel fails to achieve
+>>>>> 60fps and has significant tearing artifacts, while the same calculated
+>>>>> clock rate works perfectly fine on the Xperia 10 II.
+>>>
+>>> <snip>
+>>>
+>>>>> +/* Sony Xperia 5 (kumano bahamut) */
+>>>>> +static const struct drm_display_mode samsung_sofef01_m_bahamut_mode = {
+>>>>> +   /*
+>>>>> +    * WARNING: These massive porches are wrong/useless for CMDmode
+>>>>> +    * (and not defined in downstream DTS) but necessary to bump dsi
+>>>>> +    * clocks higher, so that we can achieve proper 60fps without tearing.
+>>>>> +    */
+>>>>> +   .clock = (1080 + 156 + 8 + 8) * (2520 + 2393 + 8 + 8) * 60 / 1000,
+>>>>> +   .hdisplay = 1080,
+>>>>> +   .hsync_start = 1080 + 156,
+>>>>> +   .hsync_end = 1080 + 156 + 8,
+>>>>> +   .htotal = 1080 + 156 + 8 + 8,
+>>>>> +   .vdisplay = 2520,
+>>>>> +   .vsync_start = 2520 + 2393,
+>>>>> +   .vsync_end = 2520 + 2393 + 8,
+>>>>> +   .vtotal = 2520 + 2393 + 8 + 8,
+>>>>> +   .width_mm = 61,
+>>>>> +   .height_mm = 142,
 >>>>> +};
 >>>>> +
->>>>> +static inline struct sony_akatsuki_lgd *to_sony_akatsuki_lgd(struct drm_panel *panel)
->>>>> +{
->>>>> +    return container_of(panel, struct sony_akatsuki_lgd, panel);
->>>>> +}
+>>>>> +/* Sony Xperia 10 II (seine pdx201) */
+>>>>> +static const struct drm_display_mode samsung_sofef01_m_pdx201_mode = {
+>>>>> +   .clock = (1080 + 8 + 8 + 8) * (2520 + 8 + 8 + 8) * 60 / 1000,
+>>>>> +   .hdisplay = 1080,
+>>>>> +   .hsync_start = 1080 + 8,
+>>>>> +   .hsync_end = 1080 + 8 + 8,
+>>>>> +   .htotal = 1080 + 8 + 8 + 8,
+>>>>> +   .vdisplay = 2520,
+>>>>> +   .vsync_start = 2520 + 8,
+>>>>> +   .vsync_end = 2520 + 8 + 8,
+>>>>> +   .vtotal = 2520 + 8 + 8 + 8,
+>>>>> +   .width_mm = 60,
+>>>>> +   .height_mm = 139,
+>>>>> +};
 >>>>> +
->>>>> +static int sony_akatsuki_lgd_on(struct sony_akatsuki_lgd *ctx)
->>>>> +{
->>>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>>>> +    struct device *dev = &dsi->dev;
->>>>> +    int ret;
->>>>> +
->>>>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
->>>>> +
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0x7f, 0x5a, 0x5a);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf1, 0x5a, 0x5a);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x5a, 0x5a);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0x02, 0x01);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0x59, 0x01);
->>>>> +    /* Enable backlight control */
->>>>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY, BIT(5));
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0x57, 0x20, 0x80, 0xde, 0x60, 0x00);
->>>>> +
->>>>> +    ret = mipi_dsi_dcs_set_column_address(dsi, 0, 1440 - 1);
->>>>> +    if (ret < 0) {
->>>>> +        dev_err(dev, "Failed to set column address: %d\n", ret);
->>>>> +        return ret;
->>>>> +    }
->>>>> +
->>>>> +    ret = mipi_dsi_dcs_set_page_address(dsi, 0, 2880 - 1);
->>>>> +    if (ret < 0) {
->>>>> +        dev_err(dev, "Failed to set page address: %d\n", ret);
->>>>> +        return ret;
->>>>> +    }
->>>>> +
->>>>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_POWER_SAVE, 0x00);
->>>>> +
->>>>> +    ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
->>>>> +    if (ret < 0) {
->>>>> +        dev_err(dev, "Failed to set tear on: %d\n", ret);
->>>>> +        return ret;
->>>>> +    }
->>>>> +
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0x7f, 0x5a, 0x5a);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf1, 0x5a, 0x5a);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x5a, 0x5a);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x03);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf6, 0x04);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x05);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf6, 0x01, 0x7f, 0x00);
->>>>> +
->>>>> +    ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
->>>>> +    if (ret < 0) {
->>>>> +        dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
->>>>> +        return ret;
->>>>> +    }
->>>>> +    msleep(120);
->>>>> +
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe3, 0xac, 0x19, 0x34, 0x14, 0x7d);
->>>>> +
->>>>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
->>>>> +    if (ret < 0) {
->>>>> +        dev_err(dev, "Failed to turn display on: %d\n", ret);
->>>>> +        return ret;
->>>>> +    }
+>>>>> +static const struct of_device_id samsung_sofef01_m_of_match[] = {
+>>>>> +   { .compatible = "samsung,sofef01-m-bahamut", .data = &samsung_sofef01_m_bahamut_mode },
+>>>>> +   { .compatible = "samsung,sofef01-m-pdx201", .data = &samsung_sofef01_m_pdx201_mode },
 >>>>
->>>> My usual question: should the mipi_dsi_dcs_exit_sleep_mode() / mipi_dsi_dcs_set_display_on() be moved from prepare() to enable() part?
+>>>> Are there really two panels? Can we use one mode for both usecases?
 >>>
+>>> See the commit description where I explained exactly this: the panels
+>>> have different dimensions (6.1" vs 6.0", hence different DPI) and I also
+>>> abuse this to hack in higher clock rates via fake porches.
 >>>
->>> No, prepare is called before the video stream is started and when display is still in LPM mode and the mode hasn't been set.
+>>> I just ended up on a scary website that supposedly contains the panel
+>>> names:
 >>>
+>>> - Xperia 5 (bahamut, 6.1"): AMB609TC01
+>>> - Xperia 10 II (pdx201, 6.0"): AMS597UT01
 >>
->> Yes, that's my point. Shouldn't we enable the panel _after_ starting the stream?
+>> Great! From the patch description it was not obvious if those are two
+>> different panels or a single panel with slight difference in the glass
+>> cover. With these names in place (well, with two distinct names in
+>> place) it makes sense.
 > 
-> I have never investigated what it takes to split these functions, but
-> some of these panels do show some corruption at startup which may be
-> circumvented by powering the panel on after starting the video stream?
-> 
-> I'm just not sure where to make the split: downstream does describe a
-> qcom,mdss-dsi-on-command and qcom,mdss-dsi-post-panel-on-command, where
-> the latter only contains set_display_on() (not exit_sleep_mode()).
-> It is documented like:
-> 
->      same as "qcom,mdss-dsi-on-command" except commands are sent after
->      displaying an image."
-> 
-> So this seems like the right way to split them up, I'll test this out on
-> all submitted panel drivers.
+> For completeness: keep the current single file but embed these panel
+> names as suffix (eg. `samsung,sofef-01-m-am[bs]...`) to the compatible
+> (and document these more explicitly elsewhere)?
 
-Interesting enough, Neil suggested that sending all the commands during 
-pre_enable() is the correct sequence (especially for VIDEO mode panels), 
-since not all DSI hosts can send commands after switching to the VIDEO mode.
+Where do the sofef parts of the name come from? Glancing at other 
+panels, I'd expect something simpler. Maybe:
+
+samsung,sofef01m-amb60...
+
+> 
+> - Marijn
+> 
+>>
+>> -- 
+>> With best wishes
+>> Dmitry
 
 -- 
 With best wishes
