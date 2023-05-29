@@ -2,123 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32A17146FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8547146FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjE2JTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 05:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
+        id S231484AbjE2JXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 05:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjE2JTP (ORCPT
+        with ESMTP id S229572AbjE2JXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 05:19:15 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675759F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:19:14 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bacfa9fa329so2441351276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:19:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685351953; x=1687943953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NRtrZJDNE1gH0d57uQ8iJiIEvEp4ayD19IjPOjYxZRw=;
-        b=SF7NW2Z0cno3RIZjdFf2Ac8pfzes0UvvZxqJhMaEL+JJh38A7/mChBhveTBPU1Bl3I
-         KMqpYp1TIF+rfUq1OfVeFvGMtwfDIac9bFLWrit+eiaJyH2gf7qbvxXIoPDk1hjTkw6z
-         djRbLAjIk0usuWGtsEC4+r38mMss9Pm4hKFwW/6VEgaDC6jLr0WLAa1v4p4XBCpBpIod
-         8D9NKozUCKtACJxLfOvzkiG3zCagS8I28oRRG9/y93qVyN2sk0OkG3UGBWwlobf4ODkW
-         CPxnozxDxEEqefzHdimSTvUzNwPVDheb5CzVU/2sN+VNGv0nT766SJAOZVCpkqeD+Eih
-         RUEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685351953; x=1687943953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NRtrZJDNE1gH0d57uQ8iJiIEvEp4ayD19IjPOjYxZRw=;
-        b=P4IpMCTRYihfKRe5RCrd+pdrLM1kpCFcV5LX3l+EXmxXBeb5zxI66xFdui2w2p706d
-         eff9sJv17nKnpwU8uRG0kyKHK1AMR9i2iAYhOPNLLaOpPxaQn67OhVK27ivmq5GPyWUr
-         p+XSUL2Sl1gJ7pc2stE5UINIKJBx6lNXMOCXCeMQWFflLCIQEl5nq0aIfFEw1kN5hbya
-         BsvAt0eppTiWKD2m7RrJSGOBiRe6koBVLCnSIDOT0aDJWt9domUeSMcbIK3G4kCIpLGs
-         eJAUgvvMSEy9PDCmOA3PsT/qGVVKZYHXhvhxKhjHGiZSlT5z/gohAciUiECBSmAycfQy
-         C4AQ==
-X-Gm-Message-State: AC+VfDxDRcb5mYvIhzG7U1p6DxKXlxv0MdyDSnRAhZy+gNE6YrEm7cjP
-        llts8ADRulh8yTXZU4jXhw5aMCmOvaRyN2J8AYHAPg==
-X-Google-Smtp-Source: ACHHUZ4BPMWIY4E7PN/0ftBnUVGfGDIGHcwYgkd3ig6+yKYqCa7V1DhuDWG00hGBzKT++q+XzAnl29SSKkt7UnGUY9g=
-X-Received: by 2002:a0d:d8cc:0:b0:549:2623:6f65 with SMTP id
- a195-20020a0dd8cc000000b0054926236f65mr10946133ywe.33.1685351953650; Mon, 29
- May 2023 02:19:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230512042806.3438373-1-chris.packham@alliedtelesis.co.nz>
- <CACRpkdYz9ipNTo2ORXKWy5Q4uCpKL=9Gd+kK76pestX7Onuz-Q@mail.gmail.com>
- <b36fcdf1-45ab-0c06-efe4-237df0612466@alliedtelesis.co.nz>
- <CACRpkdbiSAFoJP_JB1d_6gQ+Xx7Y+mLAh=C6Za+fpyWuRe6Gbw@mail.gmail.com>
- <31a23398-9b0e-4a19-3576-84fcfd3ce4b5@alliedtelesis.co.nz>
- <ZGQH8/hH0Llx3rzZ@sol> <a61415db-fa3f-2fce-9c21-08d8dd026960@alliedtelesis.co.nz>
- <CAHp75VfSnb2DWX8iMZ7BiSnrEquZdbzvTD+bcHk_Oc_rh7ectw@mail.gmail.com> <604467c7-c5d6-38b1-be98-42c7da031416@alliedtelesis.co.nz>
-In-Reply-To: <604467c7-c5d6-38b1-be98-42c7da031416@alliedtelesis.co.nz>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 29 May 2023 11:19:02 +0200
-Message-ID: <CACRpkdYGD5z4rrFsBGm8ihHEvWBep6sgqXPXSn2Q38jGod58GA@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: Avoid side effects in gpio_is_visible()
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Kent Gibson <warthog618@gmail.com>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "johan@kernel.org" <johan@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        Ben Brown <Ben.Brown@alliedtelesis.co.nz>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 29 May 2023 05:23:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DFEAC;
+        Mon, 29 May 2023 02:23:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7402162247;
+        Mon, 29 May 2023 09:23:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F23C4339B;
+        Mon, 29 May 2023 09:23:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685352201;
+        bh=GWbhfro7mScT3pUdsUQtz4ZAPeagy5Rb6k2c8ZAI6OQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dIOU/xaGwkDyKcwyDocIkiVQbENBQUi7g8WqE5qVwhsQEKDXoKJAnOaqRk5026r0M
+         6oyFDRIKaqfaBYUw5znjcIqLKg5YqJ7kQG15fkIxk29lHxmPMgWriZOU1HpjRvc1xP
+         K1Ieza6rVH1Q9zHLYYzJeQ+pcW5U1cpYDq6KtrH45561axeaGeA7l6d1Jn4P4flXoh
+         g8PvuHzoF6Agw4qkKi1ijOvsDhq57VDhV6atWntw/7r6SU2zWDcX28ARQWofVWdB0p
+         3LahSss88sxsVsd2diXJijydgrAi6UZFgzu3pzXw30uPOKtqzRlIDjUgoyTUlH3HSA
+         w78SZsz40txaA==
+Date:   Mon, 29 May 2023 18:23:19 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     rostedt@goodmis.org, beaub@linux.microsoft.com,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3] tracing/user_events: Prevent same name but different
+ args event
+Message-Id: <20230529182319.5b3dff8afcf50922eb46099f@kernel.org>
+In-Reply-To: <20230529032100.286534-1-sunliming@kylinos.cn>
+References: <20230529032100.286534-1-sunliming@kylinos.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 11:30=E2=80=AFPM Chris Packham
-<Chris.Packham@alliedtelesis.co.nz> wrote:
+On Mon, 29 May 2023 11:21:00 +0800
+sunliming <sunliming@kylinos.cn> wrote:
 
-> > Why does the MCU have no in-kernel driver?
->
-> There isn't any PoE PSE infrastructure in the kernel. I'm not really
-> sure what it'd look like either as the hardware designs are all highly
-> customized and often have very specialized requirements. Even the vendor
-> reference boards tend to use the i2c userspace interface and punt
-> everything to a specialist application.
->
-> Of course if anyone is thinking about adding PoE PSE support in-kernel
-> I'd be very keen to be involved.
-(...)
-> > I'm a bit lost. What your app is doing and how that is related to the
-> > (userspace) drivers?
->
-> Probably one of the primary things it's doing is bringing the chip out
-> of reset by driving the GPIO (we don't want the PoE PSE supplying power
-> if nothing is monitoring the temperature of the system). There's also
-> some corner cases involving not resetting the PoE chipset on a hot restar=
-t.
+> User processes register name_args for events. If the same name but different
+> args event are registered. The trace outputs of second event are printed
+> as the first event. This is incorrect.
+> 
+> Return EADDRINUSE back to the user process if the same name but different args
+> event has being registered.
+> 
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
 
-This sounds like solid 100% kernelspace territory, and while I do see
-that it can be a bit intimidating to extend the existing frameworks, there
-are some really helpful people in the netdev community.
+Looks good to me.
 
-For example Andrew Lunn and Sebastian Reichel working on netdev and
-the power supply subsystems can most certainly figure out where this
-thing goes and what is already available.
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-There is: drivers/pwm/pwm-raspberrypi-poe.c
-referring to this hardware:
-https://www.raspberrypi.com/products/poe-hat/
-which is a bit odd: I think this PWM controls the fan on the PoE
-board only, so it is probably not a good example.
+Thank you,
 
-Yours,
-Linus Walleij
+> ---
+>  kernel/trace/trace_events_user.c              | 36 +++++++++++++++----
+>  .../selftests/user_events/ftrace_test.c       |  6 ++++
+>  2 files changed, 36 insertions(+), 6 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index b1ecd7677642..e90161294698 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -1753,6 +1753,8 @@ static int user_event_parse(struct user_event_group *group, char *name,
+>  	int ret;
+>  	u32 key;
+>  	struct user_event *user;
+> +	int argc = 0;
+> +	char **argv;
+>  
+>  	/* Prevent dyn_event from racing */
+>  	mutex_lock(&event_mutex);
+> @@ -1760,13 +1762,35 @@ static int user_event_parse(struct user_event_group *group, char *name,
+>  	mutex_unlock(&event_mutex);
+>  
+>  	if (user) {
+> -		*newuser = user;
+> -		/*
+> -		 * Name is allocated by caller, free it since it already exists.
+> -		 * Caller only worries about failure cases for freeing.
+> -		 */
+> -		kfree(name);
+> +		if (args) {
+> +			argv = argv_split(GFP_KERNEL, args, &argc);
+> +			if (!argv) {
+> +				ret = -ENOMEM;
+> +				goto error;
+> +			}
+> +
+> +			ret = user_fields_match(user, argc, (const char **)argv);
+> +			argv_free(argv);
+> +
+> +		} else
+> +			ret = list_empty(&user->fields);
+> +
+> +		if (ret) {
+> +			*newuser = user;
+> +			/*
+> +			 * Name is allocated by caller, free it since it already exists.
+> +			 * Caller only worries about failure cases for freeing.
+> +			 */
+> +			kfree(name);
+> +		} else {
+> +			ret = -EADDRINUSE;
+> +			goto error;
+> +		}
+> +
+>  		return 0;
+> +error:
+> +		refcount_dec(&user->refcnt);
+> +		return ret;
+>  	}
+>  
+>  	user = kzalloc(sizeof(*user), GFP_KERNEL_ACCOUNT);
+> diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+> index 7c99cef94a65..6e8c4b47281c 100644
+> --- a/tools/testing/selftests/user_events/ftrace_test.c
+> +++ b/tools/testing/selftests/user_events/ftrace_test.c
+> @@ -228,6 +228,12 @@ TEST_F(user, register_events) {
+>  	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+>  	ASSERT_EQ(0, reg.write_index);
+>  
+> +	/* Multiple registers to same name but different args should fail */
+> +	reg.enable_bit = 29;
+> +	reg.name_args = (__u64)"__test_event u32 field1;";
+> +	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+> +	ASSERT_EQ(EADDRINUSE, errno);
+> +
+>  	/* Ensure disabled */
+>  	self->enable_fd = open(enable_file, O_RDWR);
+>  	ASSERT_NE(-1, self->enable_fd);
+> -- 
+> 2.25.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
