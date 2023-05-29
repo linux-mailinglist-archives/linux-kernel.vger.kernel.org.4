@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B352F714842
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 12:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FCC714843
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 12:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjE2K7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 06:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
+        id S231548AbjE2K7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 06:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbjE2K7e (ORCPT
+        with ESMTP id S229597AbjE2K7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 06:59:34 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45B3B2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:59:32 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d341bdedcso2298985b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:59:32 -0700 (PDT)
+        Mon, 29 May 2023 06:59:35 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E9BB2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:59:34 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64f47448aeaso2317121b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 03:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685357972; x=1687949972;
+        d=gmail.com; s=20221208; t=1685357974; x=1687949974;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8tYonR6LNuZCooEmlmgTKMf28bl9/ZTlTCygYn5q1Cw=;
-        b=PSmEwZz643pnW8Xse8tY1hqnFmGInOC5b4zZrlmoZFPpZqkupjDpaW0LrQGo32BJdz
-         D3swe/ZRiykdDI52GI9N2wuHsVJRr8A8/3hLLzaYua7xRDSzc7zHYUfFUxqSEQRDX6UP
-         5lbDKZJXhwnj0sy6UezOo11WA4GLf/hZ/uCT+XTXMu3F24J2h5L+zc3Sq2BrXBsYldVs
-         8uaIGxKQ9zgSj5Dld/rykhraq95m+PLW8Ucxs0Gu5MZ4JDcm9JAisnQxQmyc49Gszvio
-         340nBpOxwIVEYY2nEEhhrjoM25k++YkFbTDzTWZXzbLjFRGRLb8P5f2EsRs+c+DivbMe
-         4eGw==
+        bh=63KAqVVdXGOoTrSylFFLhnHQleDcSgfdSMcTbn9SMvM=;
+        b=oiRjRhuNdihyDtRj+itgk5qVaD+34X0RfxNTyBxmlm4vY8ELsjSxUz0O1elP8t9f0S
+         yl3FEaNNR3nohNXCGbFai7uzra7YrPJWEy8wft+1ozLwGRaK8tgIGyq7mBG7Dxm/qi1P
+         P+gTHnb9AaarJWzOpYCrYC7Az8hBU8y14pKdc/YuH/3DL9AUNmqaJZYNUOa6W0EQ69n3
+         u67bXvHhHso46v+9DH55bCwp3UA7FDUsOyAe3Vs66Mt4VqH6e6aO7ZHsLZaCSN+UnLqp
+         ruOyNwYAcwzLPgF49it5/8CDzSqj3yt77nHPZxLaH4ZSOGG2i4lGlgW0vPNt/AKPgwBk
+         /4gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685357972; x=1687949972;
+        d=1e100.net; s=20221208; t=1685357974; x=1687949974;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8tYonR6LNuZCooEmlmgTKMf28bl9/ZTlTCygYn5q1Cw=;
-        b=iQFwn1HySEx0oZkbG516Qr9vtVfKAhX6IAM2kgUZIYhmDhf3y2RWhhf4Np+Buf1ypd
-         X1cXKItswHH27657fyb3Da57UkVmNZ+B2+TPGCfo2T/2YinkRBAAhvhS7CDx7HuNbsOF
-         GjYx0ptRBGEMscu2M366TM94/GSOZ12zlKEwbwDfYpn5yoXhYGqUfKuGHXGexMNDpidM
-         27eHZX7Mt9CdU7qgpBTI9o8/RXV6n6+vOwLhSX2IveoWfyOQYnptiRLPkvO0WsCjOzVH
-         Cnf/cAVNtUwFkMQwp5BZvZoxJ8ZjaghBzmC1Iqb6FxvcPvhPuqYuPhv2s8VpNJFVAAuB
-         G7CA==
-X-Gm-Message-State: AC+VfDx3MPZS7aOh0vssVZa2QLQLKfFxeHNP6Vtu0Ynb/M2rHDP+E+8A
-        fz/YwB8ipSE+RJPLm70qGxs=
-X-Google-Smtp-Source: ACHHUZ4ygugDxsqcfbKWLBrVviCK5pvhu9JvUr44CQ8V7ogK9Db/5jSaRcvpGuwthUjh+dHPoY1zgg==
-X-Received: by 2002:a05:6a20:12d6:b0:110:7edc:fb50 with SMTP id v22-20020a056a2012d600b001107edcfb50mr7535813pzg.9.1685357972097;
-        Mon, 29 May 2023 03:59:32 -0700 (PDT)
+        bh=63KAqVVdXGOoTrSylFFLhnHQleDcSgfdSMcTbn9SMvM=;
+        b=d5WX4pernuCjBOpTcUVyb7LahRBgZeP1dyJCRpHllyEM0Qsh43SgPxh1uY+SNGIrjE
+         2zVIwTXrjR2rttD7ncbj0zRksVz3a9dZHfn7ySCGA1AoeK5VcJQ9pCXzxS8mClJK7IER
+         w447XyWwxEfKjMOZyomyC+/ycmDF56PnKPIaWDIUddZ6B6xG0CuXDm+jlTYygWQUPKxz
+         zRCkXPx78+f/0reGn44z5wPzWRxs3PHU7s7qwG2GnzG04FI4NsqHpnjhaZmgYdv11Qni
+         syzR/PFxWupqyNIx3bD1Fe5QJc7WaoGdS6ep+CLfJihr1mwMi5d5SRqNURx11H2p/l6I
+         x0Og==
+X-Gm-Message-State: AC+VfDy0050h4jo87Lqlc7J6rg2o9h7GdSK4EWW9kNKst4R0awb5tFJR
+        kPGSP7YaG5Yi+26md/Mo41k=
+X-Google-Smtp-Source: ACHHUZ4h0oIv5BoInIChTF6doTA25m5LmNP6412qwvIAH1L0J0bj9+NiqrJQcu5Qd3qNfQLeOGhhQg==
+X-Received: by 2002:a05:6a21:32a2:b0:10f:96aa:9e4a with SMTP id yt34-20020a056a2132a200b0010f96aa9e4amr9774800pzb.2.1685357974245;
+        Mon, 29 May 2023 03:59:34 -0700 (PDT)
 Received: from localhost.localdomain ([143.92.64.20])
-        by smtp.gmail.com with ESMTPSA id v7-20020a63d547000000b0053f22b76cdcsm6863110pgi.82.2023.05.29.03.59.30
+        by smtp.gmail.com with ESMTPSA id v7-20020a63d547000000b0053f22b76cdcsm6863110pgi.82.2023.05.29.03.59.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 03:59:31 -0700 (PDT)
+        Mon, 29 May 2023 03:59:33 -0700 (PDT)
 From:   "brookxu.cn" <brookxu.cn@gmail.com>
 To:     kbusch@kernel.org, axboe@kernel.dk, hch@lst.de, sagi@grimberg.me
 Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/4] nvme: unfreeze while exit from recovery or resetting
-Date:   Mon, 29 May 2023 18:59:23 +0800
-Message-Id: <fd205548c8102ebbea3d09a7020b9b1fbc4beefb.1685350577.git.chunguang.xu@shopee.com>
+Subject: [RFC PATCH 2/4] nvme: donot retry request for NVME_CTRL_DELETING_NOIO
+Date:   Mon, 29 May 2023 18:59:24 +0800
+Message-Id: <41041f049985675f95a38bdd8bb998c5a4ab140c.1685350577.git.chunguang.xu@shopee.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1685350577.git.chunguang.xu@shopee.com>
 References: <cover.1685350577.git.chunguang.xu@shopee.com>
@@ -73,87 +73,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chunguang Xu <chunguang.xu@shopee.com>
 
-Remove controller will interrupt err_work/connect_work, leave
-controller at freezed and IO queues at quiescing. Then IOs
-issued by scan_work will be blocked,  nvme_remove_namespaces()
-will hang on fush scan_work. Try to fix that we should unfreeze
-contrller and unquiescing IO queues while exit from
-error_recovery or resetting.
+According to NVME_CTRL_DELETING_NOIO definition, we should
+not requeue any request while controller at this state.
 
 Signed-off-by: Chunguang Xu <chunguang.xu@shopee.com>
 ---
- drivers/nvme/host/tcp.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ drivers/nvme/host/core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
-index bf0230442d57..cfebcae7fc9b 100644
---- a/drivers/nvme/host/tcp.c
-+++ b/drivers/nvme/host/tcp.c
-@@ -2031,12 +2031,24 @@ static void nvme_tcp_teardown_io_queues(struct nvme_ctrl *ctrl,
- 	nvme_tcp_destroy_io_queues(ctrl, remove);
- }
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 1f0cbb77b249..304eb4eda6c4 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -346,6 +346,8 @@ enum nvme_disposition {
  
-+static inline void nvme_ctrl_reconnect_exit(struct nvme_ctrl *ctrl)
-+{
-+	/* fast fail all pending requests */
-+	blk_mq_unquiesce_queue(ctrl->admin_q);
-+
-+	if (ctrl->queue_count > 1) {
-+		nvme_unquiesce_io_queues(ctrl);
-+		nvme_unfreeze(ctrl);
-+	}
-+}
-+
- static void nvme_tcp_reconnect_or_remove(struct nvme_ctrl *ctrl)
+ static inline enum nvme_disposition nvme_decide_disposition(struct request *req)
  {
- 	/* If we are resetting/deleting then do nothing */
- 	if (ctrl->state != NVME_CTRL_CONNECTING) {
- 		WARN_ON_ONCE(ctrl->state == NVME_CTRL_NEW ||
- 			ctrl->state == NVME_CTRL_LIVE);
-+		nvme_ctrl_reconnect_exit(ctrl);
- 		return;
++	struct nvme_ctrl *ctrl = nvme_req(req)->ctrl;
++
+ 	if (likely(nvme_req(req)->status == 0))
+ 		return COMPLETE;
+ 
+@@ -362,7 +364,8 @@ static inline enum nvme_disposition nvme_decide_disposition(struct request *req)
+ 		    blk_queue_dying(req->q))
+ 			return FAILOVER;
+ 	} else {
+-		if (blk_queue_dying(req->q))
++		if (ctrl->state == NVME_CTRL_DELETING_NOIO ||
++		    blk_queue_dying(req->q))
+ 			return COMPLETE;
  	}
  
-@@ -2107,13 +2119,7 @@ static int nvme_tcp_setup_ctrl(struct nvme_ctrl *ctrl, bool new)
- 	return 0;
- 
- destroy_io:
--	if (ctrl->queue_count > 1) {
--		nvme_quiesce_io_queues(ctrl);
--		nvme_sync_io_queues(ctrl);
--		nvme_tcp_stop_io_queues(ctrl);
--		nvme_cancel_tagset(ctrl);
--		nvme_tcp_destroy_io_queues(ctrl, new);
--	}
-+	nvme_tcp_teardown_io_queues(ctrl, new);
- destroy_admin:
- 	nvme_quiesce_admin_queue(ctrl);
- 	blk_sync_queue(ctrl->admin_q);
-@@ -2166,6 +2172,7 @@ static void nvme_tcp_error_recovery_work(struct work_struct *work)
- 		/* state change failure is ok if we started ctrl delete */
- 		WARN_ON_ONCE(ctrl->state != NVME_CTRL_DELETING &&
- 			     ctrl->state != NVME_CTRL_DELETING_NOIO);
-+		nvme_ctrl_reconnect_exit(ctrl);
- 		return;
- 	}
- 
-@@ -2197,6 +2204,7 @@ static void nvme_reset_ctrl_work(struct work_struct *work)
- 		/* state change failure is ok if we started ctrl delete */
- 		WARN_ON_ONCE(ctrl->state != NVME_CTRL_DELETING &&
- 			     ctrl->state != NVME_CTRL_DELETING_NOIO);
-+		nvme_ctrl_reconnect_exit(ctrl);
- 		return;
- 	}
- 
-@@ -2213,7 +2221,7 @@ static void nvme_reset_ctrl_work(struct work_struct *work)
- static void nvme_tcp_stop_ctrl(struct nvme_ctrl *ctrl)
- {
- 	flush_work(&to_tcp_ctrl(ctrl)->err_work);
--	cancel_delayed_work_sync(&to_tcp_ctrl(ctrl)->connect_work);
-+	flush_delayed_work(&to_tcp_ctrl(ctrl)->connect_work);
- }
- 
- static void nvme_tcp_free_ctrl(struct nvme_ctrl *nctrl)
 -- 
 2.25.1
 
