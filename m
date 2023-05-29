@@ -2,132 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C84B714F64
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 20:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03FF714F6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 20:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjE2Sd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 14:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
+        id S229658AbjE2Sgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 14:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjE2Sd0 (ORCPT
+        with ESMTP id S229518AbjE2Sgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 14:33:26 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199FAC4;
-        Mon, 29 May 2023 11:33:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=D77Hp7t1go5Z1+uiXCnF4+amc9MTSKwzfWot6WkdpQ4=; b=AQ7wO3nT0rdk7HhZCzs9yl3o95
-        7PX7MqBvhhWzf60ICDGY6gtko2gjHK1n4s2mpwqrdQenX8U12HLvBlaM+nw1EfQ354lSuWdscyvt2
-        fVDbTbH1BLTgixXiTce6v8btFuKpMUdq2Ugkb2yWXPJrihltP0b6zZCw+/l0KBOM7p04=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:35702 helo=debian-acer)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q3hgB-0005hM-DM; Mon, 29 May 2023 14:33:16 -0400
-Date:   Mon, 29 May 2023 14:33:14 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230529143314.ac8e6bc1dbf79671cf38e9a1@hugovil.com>
-In-Reply-To: <20230529-verify-sympathy-4a486a6cb2c9@spud>
-References: <20230529140711.896830-1-hugo@hugovil.com>
-        <20230529140711.896830-7-hugo@hugovil.com>
-        <20230529-verify-sympathy-4a486a6cb2c9@spud>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Mon, 29 May 2023 14:36:32 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3714ED2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 11:36:31 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f4d6aee530so3742686e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 11:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685385389; x=1687977389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t3ozesbe+mSNz95y12LI1uVitfrg5g7D4Ki7IAE/tYk=;
+        b=kyKAFSjY987yHXaGsuiqDYW8Jkn6gLhGEDhvO4jpA/k2/Y30WwMN/32qddtqYgAKcb
+         A92EGA58yEHfh2UpxikHWTnIjzwO6mp+snFNq1ay6517+gaH7auhTxvvK626eowRhP8+
+         QVmyyfVo+cHFdKQXTFMuiQxwS0Gy0xQ2NjvMC1wf+FEHCCi6EOQXdD5q3T4w6EGfuryX
+         Rr55Bs+qS5JqISCn2x6XFok08rTnrU7NIIZdwN3Gl8IJ6EkzSXQ1km8yhMP6p6/Hwg+U
+         7mN+kUQXbRW5QwS9xJ1wiuqKlrvRQtjtFad6KiExsOpmkhigLIRIp8r7+ljEsJLpDg0B
+         o8uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685385389; x=1687977389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t3ozesbe+mSNz95y12LI1uVitfrg5g7D4Ki7IAE/tYk=;
+        b=Uc02iE2aNNl/lKRd4CwMMWUsyR/MmsnJSEujgrJYgAmpgvgeX3T/u+Uj4KZ2so5aLE
+         E/nFIhksWbZFwbSWwoPtUGYH+z3OlZGoKh6woDqtAT5DIgRQaQSRKFxdhwgHgujYsH9R
+         EMxq/+nb64bbiR/ucOdjkgl1lAC1WbcGQ8/J0VqDfM0m7ww/oe1pAr16im9QTiefhXZe
+         GdBOgyWMvzzDFPk4o0EmnMbj9w7cDCrZIHgTBIsU6Y0m4trkjPPfaZtEvpUi9p8o6VQ5
+         EuqdpMgRgrC7ziOHoIrpevIejNvutLZ7z6lmxC36tjDPTHd3zSXAHlIjzaWzsLMKTWIQ
+         kRMA==
+X-Gm-Message-State: AC+VfDyLvWVV925tk6h9wiYK/mlR8ntEgF3bGz78pDjDBfI2GHkSN/bF
+        Auqi42ddsNZltLPCx1j77bJhSg==
+X-Google-Smtp-Source: ACHHUZ6dn47QBusaXpkxE0E5EKJjRxwpIGLwNnUgxmrCRciC1SFZdzeIITChD9ljPFiOeMyeOiEqhw==
+X-Received: by 2002:ac2:514c:0:b0:4f3:a69e:1d80 with SMTP id q12-20020ac2514c000000b004f3a69e1d80mr3114138lfd.0.1685385389404;
+        Mon, 29 May 2023 11:36:29 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id l19-20020a19c213000000b004f37a541f0csm74832lfc.270.2023.05.29.11.36.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 11:36:28 -0700 (PDT)
+Message-ID: <ec745998-8b07-c5a5-5220-b2e21528eac1@linaro.org>
+Date:   Mon, 29 May 2023 20:36:27 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] media: venus: firmware: Use of_reserved_mem_lookup()
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
+Cc:     Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230529-venus-of-rmem-v1-1-dfcdc5047ffb@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230529-venus-of-rmem-v1-1-dfcdc5047ffb@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH v4 6/9] dt-bindings: sc16is7xx: Add property to change
- GPIO function
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 May 2023 19:19:27 +0100
-Conor Dooley <conor@kernel.org> wrote:
 
-> On Mon, May 29, 2023 at 10:07:08AM -0400, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Some variants in this series of UART controllers have GPIO pins that
-> > are shared between GPIO and modem control lines.
-> > 
-> > The pin mux mode (GPIO or modem control lines) can be set for each
-> > ports (channels) supported by the variant.
-> > 
-> > This adds a property to the device tree to set the GPIO pin mux to
-> > modem control lines on selected ports if needed.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  .../bindings/serial/nxp,sc16is7xx.txt         | 46 +++++++++++++++++++
-> >  1 file changed, 46 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> > index 0fa8e3e43bf8..74dfbbf7b2cb 100644
-> > --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> > +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> > @@ -23,6 +23,9 @@ Optional properties:
-> >      1 = active low.
-> >  - irda-mode-ports: An array that lists the indices of the port that
-> >  		   should operate in IrDA mode.
-> > +- nxp,modem-control-line-ports: An array that lists the indices of the port that
-> > +				should have shared GPIO lines configured as
-> > +				modem control lines.
-> >  
-> >  Example:
-> >          sc16is750: sc16is750@51 {
-> > @@ -35,6 +38,26 @@ Example:
-> >                  #gpio-cells = <2>;
-> >          };
-> >  
-> > +	sc16is752: sc16is752@54 {
-> > +		compatible = "nxp,sc16is752";
-> > +		reg = <0x54>;
-> > +		clocks = <&clk20m>;
-> > +		interrupt-parent = <&gpio3>;
-> > +		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
-> > +		nxp,modem-control-line-ports = <1>; /* Port 1 as modem control lines */
-> > +		gpio-controller; /* Port 0 as GPIOs */
-> > +		#gpio-cells = <2>;
-> > +	};
-> > +
-> > +	sc16is752: sc16is752@54 {
-> > +		compatible = "nxp,sc16is752";
-> > +		reg = <0x54>;
+
+On 29.05.2023 20:16, Stephan Gerhold wrote:
+> Reserved memory can be either looked up using the generic function
+> of_address_to_resource() or using the special of_reserved_mem_lookup().
+> The latter has the advantage that it ensures that the referenced memory
+> region was really reserved and is not e.g. status = "disabled".
 > 
-> If this were not a txt binding, dt_binding_check would likely complain
-> that you have two nodes with the same node address & 3 below.
-> If you end up re-submitting, could you change that please?
-> Otherwise,
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> of_reserved_mem also supports allocating reserved memory dynamically at
+> boot time. This works only when using of_reserved_mem_lookup() since
+> there won't be a fixed address in the device tree.
+> 
+> Switch the code to use of_reserved_mem_lookup(). There is no functional
+> difference for static reserved memory allocations.
+> 
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> ---
+> See e.g. [1] for an example of dynamically allocated reserved memory.
+> (This patch does *not* depend on [1] and is useful without as well...)
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/20230510-dt-resv-bottom-up-v1-5-3bf68873dbed@gerhold.net/
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Hi Conor,
-for the I2C section, I will use addresse 51, 52 and 54.
+>  drivers/media/platform/qcom/venus/firmware.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
+> 
+[...]
 
-For the SPI section, I will use addresse 0, 1 and 2.
+> -	mem_va = memremap(r.start, *mem_size, MEMREMAP_WC);
+> +	mem_va = memremap(*mem_phys, *mem_size, MEMREMAP_WC);
+>  	if (!mem_va) {
+> -		dev_err(dev, "unable to map memory region: %pR\n", &r);
+> +		dev_err(dev, "unable to map memory region %pa size %#zx\n", mem_phys, *mem_size);
+Nit : I'm not sure which is more useful, but many mapping functions
+seem to prefer printing
 
-I will resubmit if there is a v5.
+start, start+size-1
 
-Thank you, Hugo.
+instead of 
+
+start, size
+
+on failure.
+
+Konrad
+>  		ret = -ENOMEM;
+>  		goto err_release_fw;
+>  	}
+> @@ -138,8 +142,6 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
+>  	memunmap(mem_va);
+>  err_release_fw:
+>  	release_firmware(mdt);
+> -err_put_node:
+> -	of_node_put(node);
+>  	return ret;
+>  }
+>  
+> 
+> ---
+> base-commit: 9f9f8ca6f012d25428f8605cb36369a449db8508
+> change-id: 20230529-venus-of-rmem-f649885114fd
+> 
+> Best regards,
