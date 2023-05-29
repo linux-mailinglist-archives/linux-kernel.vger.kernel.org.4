@@ -2,60 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A8071511F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 23:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A21715122
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 23:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjE2VvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 17:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S229635AbjE2VyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 17:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjE2VvH (ORCPT
+        with ESMTP id S229478AbjE2VyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 17:51:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1538CF
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 14:51:04 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685397062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IbB5GEW6N6XR6fDTgOAi2+yyovZbSHzUMyqfv0TZelw=;
-        b=QLZyIa4hi4aYScN+5gbkkMeWXHulYrevLiSZIgZ1d0Or3rkqCX0JZGVkgxEXIP4XIFcp4n
-        mtsolMkxLg4hAEIEjQSKlYOwgNo6rlJK6CerC7oYUWyvUPyrbQ1pvfM/4bAKa11/GOApA9
-        dy6TivB7HHdcAkrJkPIgd0GG3jol7GivzAKCNBRXKmX7TJwG08xc8qL3tcWCa6MaB7U6yo
-        SFUe2QC341pYnLxSdJPdq3Gb2Jul8Y0yxcR74jFcLuIp2CBvjk26SD1yy1kPC4pl8ORCmt
-        44FN3KKZAoGfVhT2ZL3qJRKxpctyvXS73Wl9VX5ItPJxUhKAOWaTrKWrS2Mz0w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685397062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IbB5GEW6N6XR6fDTgOAi2+yyovZbSHzUMyqfv0TZelw=;
-        b=J4XcwjFOs6lSrL8jHe19t6U8p/T2Lg4j6XLMa2UTTUUvMB+V4qfiB7gc6dkErdKt0xsDJj
-        4UwvOKWgCx7tpVAA==
-To:     "Liao, Chang" <liaochang1@huawei.com>,
-        Shanker Donthineni <sdonthineni@nvidia.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
-        Vikram Sethi <vsethi@nvidia.com>,
-        Jason Sequeira <jsequeira@nvidia.com>
-Subject: Re: [PATCH v5 1/3] genirq: Use hlist for managing resend handlers
-In-Reply-To: <6dc6642a-1e7c-f111-1fa2-be54826ecef6@huawei.com>
-References: <20230519134902.1495562-1-sdonthineni@nvidia.com>
- <20230519134902.1495562-2-sdonthineni@nvidia.com>
- <6dc6642a-1e7c-f111-1fa2-be54826ecef6@huawei.com>
-Date:   Mon, 29 May 2023 23:51:02 +0200
-Message-ID: <871qiylsc9.ffs@tglx>
+        Mon, 29 May 2023 17:54:02 -0400
+Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA179C1;
+        Mon, 29 May 2023 14:53:59 -0700 (PDT)
+Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
+        by smtp.dudau.co.uk (Postfix) with SMTP id F023641D13A6;
+        Mon, 29 May 2023 22:53:57 +0100 (BST)
+Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Mon, 29 May 2023 22:53:57 +0100
+Date:   Mon, 29 May 2023 22:53:57 +0100
+From:   Liviu Dudau <liviu@dudau.co.uk>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: mips: Add bindings for TP-Link HC220
+ G5 v1 board
+Message-ID: <ZHUe9RJfweNBAU0K@bart.dudau.co.uk>
+References: <84b31c59-81d3-c83d-ece9-a120b1cdcdd7@arinc9.com>
+ <20230529150833.526084-1-liviu@dudau.co.uk>
+ <20230529150833.526084-3-liviu@dudau.co.uk>
+ <20230529-unhook-alone-1b1bd6e6a226@spud>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Disposition: inline
+In-Reply-To: <20230529-unhook-alone-1b1bd6e6a226@spud>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,45 +49,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29 2023 at 15:57, Chang Liao wrote:
-> =E5=9C=A8 2023/5/19 21:49, Shanker Donthineni =E5=86=99=E9=81=93:
->> diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
->> index 844a8e30e6de..d9451d456a73 100644
->> --- a/include/linux/irqdesc.h
->> +++ b/include/linux/irqdesc.h
->> @@ -102,6 +102,9 @@ struct irq_desc {
->>  	int			parent_irq;
->>  	struct module		*owner;
->>  	const char		*name;
->> +#ifdef CONFIG_HARDIRQS_SW_RESEND
->> +	struct hlist_node	resend_node;
->> +#endif
->>  } ____cacheline_internodealigned_in_smp;
->
-> Although there is no documented rule that limits the change of the KABI
-> struct irq_desc, it is still better to keep the irq_desc definition
-> stable.
+On Mon, May 29, 2023 at 10:00:20PM +0100, Conor Dooley wrote:
+> Hey,
 
-Please read and understand:
+Hi Conor,
 
-       Documentation/process/stable-api-nonsense.rst
+> 
+> On Mon, May 29, 2023 at 04:08:33PM +0100, Liviu Dudau wrote:
+> > Add bindings for the compatible string used for the TP-Link's
+> > HC220 G5 V1 board, a wireless AP based on MT7621.
+> > 
+> > Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
+> 
+> Two process things:
+> - Please run get_maintainer.pl against the current git tree - you seem
+>   to have missed 2 of the 3 dt-bindings maintainers. I don't mind my
+>   omission, but omitting Krzysztof means you're submitting patches based
+>   on a tree that is over a year old.
 
-If you want KABI, then that's  _YOUR_ problem, period.
+Appologies for that, I should have check get_maintainer.pl rather than looking
+at the output of git log for the file.
 
->> -/* Bitmap to handle software resend of interrupts: */
->> -static DECLARE_BITMAP(irqs_resend, IRQ_BITMAP_BITS);
->> +/* hlist_head to handle software resend of interrupts: */
->> +static HLIST_HEAD(irq_resend_list);
->> +static DEFINE_RAW_SPINLOCK(irq_resend_lock);
->
-> What is the benefit of using hlist here? If you want to enjoy the
-> low latency of querying elements by key, you must define a hlist table
-> with a reasonable number of buckets. Otherwise, I don't think the time
-> complexity of hlist is better than a regular double-linked list,
-> right?
+> - Please don't send a v2 in reply to the v1.
 
-What's complex about hlist in this case? Please explain.
+Sorry, I'm not sure why that makes any difference. Reason for sending it as a
+reply was the fact that last conversation was more than two weeks ago, people
+might have forgot the context. This way it's all in one thread.
 
-Thanks,
+> 
+> > ---
+> >  Documentation/devicetree/bindings/mips/ralink.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mips/ralink.yaml b/Documentation/devicetree/bindings/mips/ralink.yaml
+> > index 704b5b5951271..53c1f66353770 100644
+> > --- a/Documentation/devicetree/bindings/mips/ralink.yaml
+> > +++ b/Documentation/devicetree/bindings/mips/ralink.yaml
+> > @@ -80,6 +80,7 @@ properties:
+> >            - enum:
+> >                - gnubee,gb-pc1
+> >                - gnubee,gb-pc2
+> > +              - tplink,hc220-g5-v1
+> 
+> For the actual change though,
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-        tglx
+Many thanks!
+
+Best regards,
+Liviu
+
+> 
+> Thanks,
+> Conor.
+> 
+> >            - const: mediatek,mt7621-soc
+> >  
+> >  additionalProperties: true
+> > -- 
+> > 2.40.1
+> > 
+
+
+
+-- 
+Everyone who uses computers frequently has had, from time to time,
+a mad desire to attack the precocious abacus with an axe.
+       	   	      	     	  -- John D. Clark, Ignition!
