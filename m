@@ -2,297 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93885714696
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFB371469B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbjE2Iun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S231660AbjE2Iu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjE2Iuk (ORCPT
+        with ESMTP id S231680AbjE2Iuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:50:40 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BDFAC;
-        Mon, 29 May 2023 01:50:38 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QV8PQ2pf5z4f3v4h;
-        Mon, 29 May 2023 16:50:34 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHcLNYZ3Rk+JjaKQ--.12674S3;
-        Mon, 29 May 2023 16:50:34 +0800 (CST)
-Subject: Re: [PATCH -next v2 7/7] md/raid1-10: limit the number of plugged bio
-To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     song@kernel.org, akpm@osdl.org, neilb@suse.de,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230426082031.1299149-1-yukuai1@huaweicloud.com>
- <20230426082031.1299149-8-yukuai1@huaweicloud.com>
- <CALTww2-yTsHXNFgkAVu0v++HHahZCnvXEUv2qJqbvcGUhKanDw@mail.gmail.com>
- <5e9852fe-0d47-92fc-f6a9-16d028d09ad4@huaweicloud.com>
- <CALTww28ur_S0UpGQqq0TubSgkxGG7dicc1ZKrJ3Pno4CpSOWUw@mail.gmail.com>
- <25279079-2600-b0d3-5279-caaf6f664d71@huaweicloud.com>
- <CALTww2-PjJ74J61jYz032t8K5tszN1tnhEbcv5h+MJjkKuVq2A@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <c56e7e9c-90ca-29ca-2003-1a9a88d75fa6@huaweicloud.com>
-Date:   Mon, 29 May 2023 16:50:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 29 May 2023 04:50:50 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19339B5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:50:47 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-77729fb6c62so159273739f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:50:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685350246; x=1687942246;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+Pzz//WLGisQRMA9EGKGwqNxwnucK0kg6ldl5wEv+QQ=;
+        b=BBpptuZlhJYmFxIh4ugMVVOO5GzwYJI6hV+iWFNTxo5swTC1eZBqTK5SUGgwhH9K5V
+         LbBbzjBa2WL9ZNr6tf9wmua2wyN7EItIZVyDfZAYlhAsfWrgzqFamxLsRAKyC5iFvaXn
+         rgstdwFwOJyKpiYpx4tbjEfyCo97AFG0iboBykPSaTeav3R0M8pUnFN72n1G373YZC5X
+         LHrXsSjTqE8ncqge0KWnTamA5RyaaVxnIP4boDMeYjDZiYSns01bUUbBQHziY5LLkLTH
+         GM9znyf4Ce1CoZJ09hrEcCaFx868uOqaq7H30LdLY8vHGZp3caV/i94YeMdHxdnsZ0Ne
+         A17w==
+X-Gm-Message-State: AC+VfDygiR56vhtnWgCKREUX+3ca0HBAU/RciCVp1I+7cezdE75rjh+g
+        zRkliBKqD2M+a4L6nRaofSwjiBgpFbClXOpqN00mAoMR7LAr
+X-Google-Smtp-Source: ACHHUZ7R5D27DvtOZs60rj3g1XmpdKg+EQ2CMLp/eBrrsJw7DjzN7Fl57zdlWtSWfEmPXaHomr6+OpG9TeWidPoXMdrpuQsEnZ7f
 MIME-Version: 1.0
-In-Reply-To: <CALTww2-PjJ74J61jYz032t8K5tszN1tnhEbcv5h+MJjkKuVq2A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHcLNYZ3Rk+JjaKQ--.12674S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxuFW8uF1rAFWfAFyDAr4rAFb_yoW3Ww4xpa
-        17J3WYkFWUJry7XwnFq3WUZFyftw47XrWUWry8Jw17AryqqFyDWFW8JrWrCr1kZr13GryU
-        Xrs0grZrWr15tF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:f20d:0:b0:759:25eb:210d with SMTP id
+ q13-20020a6bf20d000000b0075925eb210dmr3456023ioh.0.1685350246468; Mon, 29 May
+ 2023 01:50:46 -0700 (PDT)
+Date:   Mon, 29 May 2023 01:50:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c358c205fcd12e02@google.com>
+Subject: [syzbot] Monthly nilfs report (May 2023)
+From:   syzbot <syzbot+list49de8182d696bb4d450d@syzkaller.appspotmail.com>
+To:     konishi.ryusuke@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello nilfs maintainers/developers,
 
-在 2023/05/29 15:57, Xiao Ni 写道:
-> On Mon, May 29, 2023 at 11:18 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> Hi,
->>
->> 在 2023/05/29 11:10, Xiao Ni 写道:
->>> On Mon, May 29, 2023 at 10:20 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>>>
->>>> Hi,
->>>>
->>>> 在 2023/05/29 10:08, Xiao Ni 写道:
->>>>> Hi Kuai
->>>>>
->>>>> There is a limitation of the memory in your test. But for most
->>>>> situations, customers should not set this. Can this change introduce a
->>>>> performance regression against other situations?
->>>>
->>>> Noted that this limitation is just to triggered writeback as soon as
->>>> possible in the test, and it's 100% sure real situations can trigger
->>>> dirty pages write back asynchronously and continue to produce new dirty
->>>> pages.
->>>
->>> Hi
->>>
->>> I'm confused here. If we want to trigger write back quickly, it needs
->>> to set these two values with a smaller number, rather than 0 and 60.
->>> Right?
->>
->> 60 is not required, I'll remove this setting.
->>
->> 0 just means write back if there are any dirty pages.
-> 
-> Hi Kuai
-> 
-> Does 0 mean disabling write back? I tried to find the doc that
-> describes the meaning when setting dirty_background_ratio to 0, but I
-> didn't find it.
-> In https://www.kernel.org/doc/html/next/admin-guide/sysctl/vm.html it
-> doesn't describe this. But it says something like this
-> 
-> Note:
->    dirty_background_bytes is the counterpart of dirty_background_ratio. Only
->    one of them may be specified at a time. When one sysctl is written it is
->    immediately taken into account to evaluate the dirty memory limits and the
->    other appears as 0 when read.
-> 
-> Maybe you can specify dirty_background_ratio to 1 if you want to
-> trigger write back ASAP.
+This is a 31-day syzbot report for the nilfs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/nilfs
 
-The purpose here is to trigger write back ASAP, I'm not an expert here,
-but based on test result, 0 obviously doesn't mean disable write back.
+During the period, 1 new issues were detected and 3 were fixed.
+In total, 14 issues are still open and 29 have been fixed so far.
 
-Set dirty_background_bytes to a value, dirty_background_ratio will be
-set to 0 together, which means dirty_background_ratio is disabled.
-However, change dirty_background_ratio from default value to 0, will end
-up both dirty_background_ratio and dirty_background_bytes to be 0, and
-based on following related code, I think 0 just means write back if
-there are any dirty pages.
+Some of the still happening issues:
 
-domain_dirty_limits:
-  bg_bytes = dirty_background_bytes -> 0
-  bg_ratio = (dirty_background_ratio * PAGE_SIZE) / 100 -> 0
+Ref Crashes Repro Title
+<1> 718     Yes   WARNING in nilfs_btree_assign
+                  https://syzkaller.appspot.com/bug?extid=31837fe952932efc8fb9
+<2> 324     Yes   WARNING in nilfs_sufile_set_segment_usage
+                  https://syzkaller.appspot.com/bug?extid=14e9f834f6ddecece094
+<3> 203     No    INFO: task hung in path_openat (7)
+                  https://syzkaller.appspot.com/bug?extid=950a0cdaa2fdd14f5bdc
+<4> 60      Yes   INFO: task hung in nilfs_detach_log_writer
+                  https://syzkaller.appspot.com/bug?extid=e3973c409251e136fdd0
+<5> 31      Yes   kernel BUG in folio_end_writeback
+                  https://syzkaller.appspot.com/bug?extid=7e5cf1d80677ec185e63
+<6> 3       Yes   general protection fault in folio_create_empty_buffers
+                  https://syzkaller.appspot.com/bug?extid=0ad741797f4565e7e2d2
 
-  if (bg_bytes)
-	 bg_thresh = DIV_ROUND_UP(bg_bytes, PAGE_SIZE);
-  else
-	 bg_thresh = (bg_ratio * available_memory) / PAGE_SIZE; -> 0
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-  dtc->bg_thresh = bg_thresh; -> 0
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-balance_dirty_pages
-  nr_reclaimable = global_node_page_state(NR_FILE_DIRTY);
-  if (!laptop_mode && nr_reclaimable > gdtc->bg_thresh &&
-       !writeback_in_progress(wb))
-    wb_start_background_writeback(wb); -> writeback ASAP
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
-Thanks,
-Kuai
-> 
->>>>
->>>> If a lot of bio is not plugged, then it's the same as before; if a lot
->>>> of bio is plugged, noted that before this patchset, these bio will spent
->>>> quite a long time in plug, and hence I think performance should be
->>>> better.
->>>
->>> Hmm, it depends on if it's sequential or not? If it's a big io
->>> request, can it miss the merge opportunity?
->>
->> The bio will still be merged to underlying disks' rq(if it's rq based),
->> underlying disk won't flush plug untill the number of request exceed
->> threshold.
-> 
-> Thanks for this.
-> 
-> Regards
-> Xiao
->>
->> Thanks,
->> Kuai
->>>
->>> Regards
->>> Xiao
->>>
->>>>
->>>> Thanks,
->>>> Kuai
->>>>>
->>>>> Best Regards
->>>>> Xiao
->>>>>
->>>>> On Wed, Apr 26, 2023 at 4:24 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>>>>>
->>>>>> From: Yu Kuai <yukuai3@huawei.com>
->>>>>>
->>>>>> bio can be added to plug infinitely, and following writeback test can
->>>>>> trigger huge amount of plugged bio:
->>>>>>
->>>>>> Test script:
->>>>>> modprobe brd rd_nr=4 rd_size=10485760
->>>>>> mdadm -CR /dev/md0 -l10 -n4 /dev/ram[0123] --assume-clean
->>>>>> echo 0 > /proc/sys/vm/dirty_background_ratio
->>>>>> echo 60 > /proc/sys/vm/dirty_ratio
->>>>>> fio -filename=/dev/md0 -ioengine=libaio -rw=write -bs=4k -numjobs=1 -iodepth=128 -name=test
->>>>>>
->>>>>> Test result:
->>>>>> Monitor /sys/block/md0/inflight will found that inflight keep increasing
->>>>>> until fio finish writing, after running for about 2 minutes:
->>>>>>
->>>>>> [root@fedora ~]# cat /sys/block/md0/inflight
->>>>>>           0  4474191
->>>>>>
->>>>>> Fix the problem by limiting the number of plugged bio based on the number
->>>>>> of copies for original bio.
->>>>>>
->>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>>>>> ---
->>>>>>     drivers/md/raid1-10.c | 9 ++++++++-
->>>>>>     drivers/md/raid1.c    | 2 +-
->>>>>>     drivers/md/raid10.c   | 2 +-
->>>>>>     3 files changed, 10 insertions(+), 3 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.c
->>>>>> index 98d678b7df3f..35fb80aa37aa 100644
->>>>>> --- a/drivers/md/raid1-10.c
->>>>>> +++ b/drivers/md/raid1-10.c
->>>>>> @@ -21,6 +21,7 @@
->>>>>>     #define IO_MADE_GOOD ((struct bio *)2)
->>>>>>
->>>>>>     #define BIO_SPECIAL(bio) ((unsigned long)bio <= 2)
->>>>>> +#define MAX_PLUG_BIO 32
->>>>>>
->>>>>>     /* for managing resync I/O pages */
->>>>>>     struct resync_pages {
->>>>>> @@ -31,6 +32,7 @@ struct resync_pages {
->>>>>>     struct raid1_plug_cb {
->>>>>>            struct blk_plug_cb      cb;
->>>>>>            struct bio_list         pending;
->>>>>> +       unsigned int            count;
->>>>>>     };
->>>>>>
->>>>>>     static void rbio_pool_free(void *rbio, void *data)
->>>>>> @@ -127,7 +129,7 @@ static inline void md_submit_write(struct bio *bio)
->>>>>>     }
->>>>>>
->>>>>>     static inline bool md_add_bio_to_plug(struct mddev *mddev, struct bio *bio,
->>>>>> -                                     blk_plug_cb_fn unplug)
->>>>>> +                                     blk_plug_cb_fn unplug, int copies)
->>>>>>     {
->>>>>>            struct raid1_plug_cb *plug = NULL;
->>>>>>            struct blk_plug_cb *cb;
->>>>>> @@ -147,6 +149,11 @@ static inline bool md_add_bio_to_plug(struct mddev *mddev, struct bio *bio,
->>>>>>
->>>>>>            plug = container_of(cb, struct raid1_plug_cb, cb);
->>>>>>            bio_list_add(&plug->pending, bio);
->>>>>> +       if (++plug->count / MAX_PLUG_BIO >= copies) {
->>>>>> +               list_del(&cb->list);
->>>>>> +               cb->callback(cb, false);
->>>>>> +       }
->>>>>> +
->>>>>>
->>>>>>            return true;
->>>>>>     }
->>>>>> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
->>>>>> index 639e09cecf01..c6066408a913 100644
->>>>>> --- a/drivers/md/raid1.c
->>>>>> +++ b/drivers/md/raid1.c
->>>>>> @@ -1562,7 +1562,7 @@ static void raid1_write_request(struct mddev *mddev, struct bio *bio,
->>>>>>                                                  r1_bio->sector);
->>>>>>                    /* flush_pending_writes() needs access to the rdev so...*/
->>>>>>                    mbio->bi_bdev = (void *)rdev;
->>>>>> -               if (!md_add_bio_to_plug(mddev, mbio, raid1_unplug)) {
->>>>>> +               if (!md_add_bio_to_plug(mddev, mbio, raid1_unplug, disks)) {
->>>>>>                            spin_lock_irqsave(&conf->device_lock, flags);
->>>>>>                            bio_list_add(&conf->pending_bio_list, mbio);
->>>>>>                            spin_unlock_irqrestore(&conf->device_lock, flags);
->>>>>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
->>>>>> index bd9e655ca408..7135cfaf75db 100644
->>>>>> --- a/drivers/md/raid10.c
->>>>>> +++ b/drivers/md/raid10.c
->>>>>> @@ -1306,7 +1306,7 @@ static void raid10_write_one_disk(struct mddev *mddev, struct r10bio *r10_bio,
->>>>>>
->>>>>>            atomic_inc(&r10_bio->remaining);
->>>>>>
->>>>>> -       if (!md_add_bio_to_plug(mddev, mbio, raid10_unplug)) {
->>>>>> +       if (!md_add_bio_to_plug(mddev, mbio, raid10_unplug, conf->copies)) {
->>>>>>                    spin_lock_irqsave(&conf->device_lock, flags);
->>>>>>                    bio_list_add(&conf->pending_bio_list, mbio);
->>>>>>                    spin_unlock_irqrestore(&conf->device_lock, flags);
->>>>>> --
->>>>>> 2.39.2
->>>>>>
->>>>>
->>>>> .
->>>>>
->>>>
->>>
->>> .
->>>
->>
-> 
-> .
-> 
-
+You may send multiple commands in a single email message.
