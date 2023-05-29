@@ -2,99 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C19071463C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B73A71463E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbjE2IV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S229695AbjE2IYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjE2IVy (ORCPT
+        with ESMTP id S229570AbjE2IYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:21:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB9EA7;
-        Mon, 29 May 2023 01:21:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C3866151B;
-        Mon, 29 May 2023 08:21:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B15FC433D2;
-        Mon, 29 May 2023 08:21:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685348512;
-        bh=hlRfSmclHorz/xxdGaOQVbJyEMbb50M9sLXS/0qDFBc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=F7aNNZ3mc+PZkqJA45ygSx+UJ6f/HCGNpzvlBHq9jxyRQqJRaZneWktBBFpKcbnDU
-         f4QKeXE4h/uITvXCEvSO10zjJ0Rc3DXxFblByeaPru1F3LSss44C/00fPnTWmCbm0O
-         h3il6LEKKXdQCfR8z+uRnfXKUYLDDtlDocAPWPr02GTbRks85+I66+/B29xgaAsqWb
-         zKywh495Z4voqVZe6OVzcrmrJTa7E7rwSt7YI21qbiGuEg2RD/pyCn68UfMRhEuXRU
-         YDCWxCUHQbIj3PxtycbFU8ylUXwC3CKsENdrqU1yVetzfy0bJiRu++oCACuhIkBa4Y
-         UZ2RZhQSNwIiA==
-Date:   Mon, 29 May 2023 17:21:49 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     rostedt@goodmis.org, beaub@linux.microsoft.com,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] tracing/user_events: Handle matching arguments that is
- null from dyn_events
-Message-Id: <20230529172149.fec12da876356c1a679d8bcb@kernel.org>
-In-Reply-To: <20230529065110.303440-1-sunliming@kylinos.cn>
-References: <20230529065110.303440-1-sunliming@kylinos.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 29 May 2023 04:24:40 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B0BA8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:24:39 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b0424c5137so6515255ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 01:24:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685348679; x=1687940679;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nvt0GJ2QNY+rFYHNBGjXKBYm5GhXHIFHMKlgbX9PLZk=;
+        b=R1NVU0pqq0Dlw2lqS4BrSYDie0cRmWwcq722khiiwhlJ1YNKNQ0F6ayuf6Jc25fxEV
+         REWSG+z/8WPD1DjCSlsculfyM8tkigqWD5Xj/GJgTPI/phXg37BIF2Hi+yX75SRZLHfH
+         iwMokATwsMXSgyps3tN4o2dssa+qY6qCZGwo8wmc+XSLWsrGV0IQmlfiDHLOZiP5RZ5v
+         lumbspD7eBzCD6D9G/IHfgfBHPwHtZyw4gl8zf/PJJ+X1RDJd5jkrS6S2s4/C7YW0QX3
+         gfLh/85bQ4+4Mj/MxQyGhAI3ac667ZIJMUpq4XfMCUES7qk5Ra1ZRe3TWU3wGHqBzDik
+         qKZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685348679; x=1687940679;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nvt0GJ2QNY+rFYHNBGjXKBYm5GhXHIFHMKlgbX9PLZk=;
+        b=KUWZQ3SFYJfo6rbLpY7E+9n6Rfdu2hKdiA2IQBeijK2WPYA4Re7waqOfYd3jG3qEpX
+         wmMyt1ZNnP157ACINkr/xRqglwh197155Ictqe7RbMUrhLMReboyNe+i45YEoCO/VlK+
+         VH1IRjVoneIK6pgV+pb21W7JBaMqwKVoihKe48h//sJqUhWlEUfjDDRxhbJpVjbVx2W1
+         m1POrsGh172axtBtV6FRZaLlTuWgo08kS+gksMa3shQPVCjbVEr3pcz4+G8f998hs8Sy
+         p70Yj8dbaPxGvLGlntG0NKCOhYvSMky/s3EhM6y03IaCM4XBESak+OMBs3kvpc/t1Swy
+         stEA==
+X-Gm-Message-State: AC+VfDwqdc4/t6QJ/nqVVO0DQw+2diUh7M3vMaIHkjTWe67LmCK93fgw
+        WwahffeVXSgXoLh7kDoTwj8xjGtnzTg=
+X-Google-Smtp-Source: ACHHUZ70mYW4u96RSo3Ry/YJBBDWbyHuvhnrjdHhLlQ0uGBtm0rqCM5LLQsGo//UKx+Iq7pYhSiRZg==
+X-Received: by 2002:a17:902:a610:b0:1b0:4b65:79db with SMTP id u16-20020a170902a61000b001b04b6579dbmr475567plq.63.1685348678850;
+        Mon, 29 May 2023 01:24:38 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-78.three.co.id. [180.214.232.78])
+        by smtp.gmail.com with ESMTPSA id jh19-20020a170903329300b001b012589c49sm5637750plb.78.2023.05.29.01.24.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 01:24:38 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id BD8B6106A11; Mon, 29 May 2023 15:24:35 +0700 (WIB)
+Date:   Mon, 29 May 2023 15:24:35 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Doru Iorgulescu <doru.iorgulescu1@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Zi Yan <ziy@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Disha Goel <disgoel@linux.vnet.ibm.com>
+Subject: Re: Fwd: ./include/linux/mmzone.h:1735:2: error: #error Allocator
+ MAX_ORDER exceeds SECTION_SIZE (v6.4-rc3 build regression)
+Message-ID: <ZHRhQ92aXQCQa_yK@debian.me>
+References: <2a1cd5e6-01f7-66f9-1f9d-c655cc3f919b@gmail.com>
+ <5d22e1e9-0307-3664-8b4a-99caaaaa4315@gmail.com>
+ <87bki9ai11.fsf@mail.lhotse>
+ <CA+39qUjP48n=EwqHzwdGkBE8SC-nTNZHZxEfG4r4hWC-5Bg4HA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="n0n99li26aKBWElc"
+Content-Disposition: inline
+In-Reply-To: <CA+39qUjP48n=EwqHzwdGkBE8SC-nTNZHZxEfG4r4hWC-5Bg4HA@mail.gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 May 2023 14:51:10 +0800
-sunliming <sunliming@kylinos.cn> wrote:
 
-> When A registering user event from dyn_events has no argments, it will pass the
-> matching check, regardless of whether there is a user event with the same name
-> and arguments. Add the matching check when the arguments of registering user
-> event is null.
+--n0n99li26aKBWElc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-OK, since the user_events doesn't support multi-definitions on the same name
-event, this should be checked.
+On Wed, May 24, 2023 at 06:13:52PM +0300, Doru Iorgulescu wrote:
+> Awesome, thanks!
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+tl;dr: see [1].
 
-Thank you!
+(Hey, looks like complimenting noise here.)
 
-> 
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
-> ---
->  kernel/trace/trace_events_user.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index e90161294698..0d91dac206ff 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -1712,6 +1712,8 @@ static bool user_event_match(const char *system, const char *event,
->  
->  	if (match && argc > 0)
->  		match = user_fields_match(user, argc, argv);
-> +	else if (match && argc == 0)
-> +		match = list_empty(&user->fields);
->  
->  	return match;
->  }
-> -- 
-> 2.25.1
-> 
+[1]: https://lore.kernel.org/regressions/5df92692-296e-3956-24fa-2bd4393379=
+53@gmail.com/
 
+--=20
+An old man doll... just what I always wanted! - Clara
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--n0n99li26aKBWElc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHRhQwAKCRD2uYlJVVFO
+o+jyAQDEMW9U8RtyW3eLmz1vfYY5zX7zMISeoeMx9Ep+ODtNAgD/XvY+dmTzM2sW
+OCQZJxqHfzgzTV/+CFXMZ4UMTRIWagI=
+=vA0l
+-----END PGP SIGNATURE-----
+
+--n0n99li26aKBWElc--
