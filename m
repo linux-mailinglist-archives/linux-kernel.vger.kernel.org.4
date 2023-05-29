@@ -2,233 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D09D714243
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 05:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F40B714246
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 05:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjE2DSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 23:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        id S229627AbjE2DVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 23:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjE2DSs (ORCPT
+        with ESMTP id S229534AbjE2DVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 23:18:48 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9A7B1;
-        Sun, 28 May 2023 20:18:46 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QV12V5Qn2z4f3mJM;
-        Mon, 29 May 2023 11:18:42 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgCnD7ORGXRkW4rJKQ--.54725S3;
-        Mon, 29 May 2023 11:18:43 +0800 (CST)
-Subject: Re: [PATCH -next v2 7/7] md/raid1-10: limit the number of plugged bio
-To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     song@kernel.org, akpm@osdl.org, neilb@suse.de,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230426082031.1299149-1-yukuai1@huaweicloud.com>
- <20230426082031.1299149-8-yukuai1@huaweicloud.com>
- <CALTww2-yTsHXNFgkAVu0v++HHahZCnvXEUv2qJqbvcGUhKanDw@mail.gmail.com>
- <5e9852fe-0d47-92fc-f6a9-16d028d09ad4@huaweicloud.com>
- <CALTww28ur_S0UpGQqq0TubSgkxGG7dicc1ZKrJ3Pno4CpSOWUw@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <25279079-2600-b0d3-5279-caaf6f664d71@huaweicloud.com>
-Date:   Mon, 29 May 2023 11:18:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 28 May 2023 23:21:09 -0400
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22B0B1;
+        Sun, 28 May 2023 20:21:07 -0700 (PDT)
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-1b0236ee816so12012445ad.1;
+        Sun, 28 May 2023 20:21:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685330467; x=1687922467;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4P7WeN5KQdMR5j63wqiGQQE4xifYy2/Pv0geGlldDZQ=;
+        b=QzkolDpQ5uDt7iU73UZg/FlNZquAtm2r+udHpCNRbvR7zb7KAKlzx0//H/j8hgVg5g
+         GSryfiPSKcjdOUDhvVLw+Q/I1cbVA03VqxA7lfGh3L0HLsI8UiuHNVjhTcHQMA4zPDwV
+         hCHjSMbN82NjZLOzhfgL+Ll/CoiNMtCWmrQlKx/7H8707z4wHkdKQr9XUCry45+Y4CFq
+         od6dpGxzPfe2rIA1j4vSCSO8d6V4dzNhO0ANCWfvqNOYiWM3gkmYRuW7rOR/89JU0Iwn
+         pi0diVZHrJapY6EWKDRsP9KV/ufiGs+4jtQqjz29eo4mmz1GRDGgouJZq51p6a8fm21x
+         XcrA==
+X-Gm-Message-State: AC+VfDzMtu0pzNLn6iTNbicTZ1L4m4wXyMCN9fFm9+qq/wO399BLFNzY
+        4rwAVYZwg07tYts5iwM4ew==
+X-Google-Smtp-Source: ACHHUZ7KbZ5y2GcO7mQJo8WOqG4gdj1JXDA44XcB/CfyTeatvk0aZo1hZ0W4/oo0C/DvMHQavQ4OJQ==
+X-Received: by 2002:a17:903:18a:b0:1ad:e2b6:d2a0 with SMTP id z10-20020a170903018a00b001ade2b6d2a0mr7625869plg.11.1685330467048;
+        Sun, 28 May 2023 20:21:07 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id ik7-20020a170902ab0700b001b04772d33esm417634plb.165.2023.05.28.20.21.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 20:21:06 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     rostedt@goodmis.org, mhiramat@kernel.org, beaub@linux.microsoft.com
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, sunliming <sunliming@kylinos.cn>
+Subject: [PATCH V3] tracing/user_events: Prevent same name but different args event
+Date:   Mon, 29 May 2023 11:21:00 +0800
+Message-Id: <20230529032100.286534-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CALTww28ur_S0UpGQqq0TubSgkxGG7dicc1ZKrJ3Pno4CpSOWUw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCnD7ORGXRkW4rJKQ--.54725S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3GF4UXF4DuF48Xry5Ar4UXFb_yoW7Aw45pw
-        4Uta4YkFWUJrW7Xw1jq3WjvF1ftw4DWrWUZr95G343XF9FqFy7Wa15JFWrur1kZrnxGFy7
-        ZFn8KrZxWF15tFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWU
-        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+User processes register name_args for events. If the same name but different
+args event are registered. The trace outputs of second event are printed
+as the first event. This is incorrect.
 
-在 2023/05/29 11:10, Xiao Ni 写道:
-> On Mon, May 29, 2023 at 10:20 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> Hi,
->>
->> 在 2023/05/29 10:08, Xiao Ni 写道:
->>> Hi Kuai
->>>
->>> There is a limitation of the memory in your test. But for most
->>> situations, customers should not set this. Can this change introduce a
->>> performance regression against other situations?
->>
->> Noted that this limitation is just to triggered writeback as soon as
->> possible in the test, and it's 100% sure real situations can trigger
->> dirty pages write back asynchronously and continue to produce new dirty
->> pages.
-> 
-> Hi
-> 
-> I'm confused here. If we want to trigger write back quickly, it needs
-> to set these two values with a smaller number, rather than 0 and 60.
-> Right?
+Return EADDRINUSE back to the user process if the same name but different args
+event has being registered.
 
-60 is not required, I'll remove this setting.
+Signed-off-by: sunliming <sunliming@kylinos.cn>
+---
+ kernel/trace/trace_events_user.c              | 36 +++++++++++++++----
+ .../selftests/user_events/ftrace_test.c       |  6 ++++
+ 2 files changed, 36 insertions(+), 6 deletions(-)
 
-0 just means write back if there are any dirty pages.
->>
->> If a lot of bio is not plugged, then it's the same as before; if a lot
->> of bio is plugged, noted that before this patchset, these bio will spent
->> quite a long time in plug, and hence I think performance should be
->> better.
-> 
-> Hmm, it depends on if it's sequential or not? If it's a big io
-> request, can it miss the merge opportunity?
-
-The bio will still be merged to underlying disks' rq(if it's rq based),
-underlying disk won't flush plug untill the number of request exceed
-threshold.
-
-Thanks,
-Kuai
-> 
-> Regards
-> Xiao
-> 
->>
->> Thanks,
->> Kuai
->>>
->>> Best Regards
->>> Xiao
->>>
->>> On Wed, Apr 26, 2023 at 4:24 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>>>
->>>> From: Yu Kuai <yukuai3@huawei.com>
->>>>
->>>> bio can be added to plug infinitely, and following writeback test can
->>>> trigger huge amount of plugged bio:
->>>>
->>>> Test script:
->>>> modprobe brd rd_nr=4 rd_size=10485760
->>>> mdadm -CR /dev/md0 -l10 -n4 /dev/ram[0123] --assume-clean
->>>> echo 0 > /proc/sys/vm/dirty_background_ratio
->>>> echo 60 > /proc/sys/vm/dirty_ratio
->>>> fio -filename=/dev/md0 -ioengine=libaio -rw=write -bs=4k -numjobs=1 -iodepth=128 -name=test
->>>>
->>>> Test result:
->>>> Monitor /sys/block/md0/inflight will found that inflight keep increasing
->>>> until fio finish writing, after running for about 2 minutes:
->>>>
->>>> [root@fedora ~]# cat /sys/block/md0/inflight
->>>>          0  4474191
->>>>
->>>> Fix the problem by limiting the number of plugged bio based on the number
->>>> of copies for original bio.
->>>>
->>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>>> ---
->>>>    drivers/md/raid1-10.c | 9 ++++++++-
->>>>    drivers/md/raid1.c    | 2 +-
->>>>    drivers/md/raid10.c   | 2 +-
->>>>    3 files changed, 10 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.c
->>>> index 98d678b7df3f..35fb80aa37aa 100644
->>>> --- a/drivers/md/raid1-10.c
->>>> +++ b/drivers/md/raid1-10.c
->>>> @@ -21,6 +21,7 @@
->>>>    #define IO_MADE_GOOD ((struct bio *)2)
->>>>
->>>>    #define BIO_SPECIAL(bio) ((unsigned long)bio <= 2)
->>>> +#define MAX_PLUG_BIO 32
->>>>
->>>>    /* for managing resync I/O pages */
->>>>    struct resync_pages {
->>>> @@ -31,6 +32,7 @@ struct resync_pages {
->>>>    struct raid1_plug_cb {
->>>>           struct blk_plug_cb      cb;
->>>>           struct bio_list         pending;
->>>> +       unsigned int            count;
->>>>    };
->>>>
->>>>    static void rbio_pool_free(void *rbio, void *data)
->>>> @@ -127,7 +129,7 @@ static inline void md_submit_write(struct bio *bio)
->>>>    }
->>>>
->>>>    static inline bool md_add_bio_to_plug(struct mddev *mddev, struct bio *bio,
->>>> -                                     blk_plug_cb_fn unplug)
->>>> +                                     blk_plug_cb_fn unplug, int copies)
->>>>    {
->>>>           struct raid1_plug_cb *plug = NULL;
->>>>           struct blk_plug_cb *cb;
->>>> @@ -147,6 +149,11 @@ static inline bool md_add_bio_to_plug(struct mddev *mddev, struct bio *bio,
->>>>
->>>>           plug = container_of(cb, struct raid1_plug_cb, cb);
->>>>           bio_list_add(&plug->pending, bio);
->>>> +       if (++plug->count / MAX_PLUG_BIO >= copies) {
->>>> +               list_del(&cb->list);
->>>> +               cb->callback(cb, false);
->>>> +       }
->>>> +
->>>>
->>>>           return true;
->>>>    }
->>>> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
->>>> index 639e09cecf01..c6066408a913 100644
->>>> --- a/drivers/md/raid1.c
->>>> +++ b/drivers/md/raid1.c
->>>> @@ -1562,7 +1562,7 @@ static void raid1_write_request(struct mddev *mddev, struct bio *bio,
->>>>                                                 r1_bio->sector);
->>>>                   /* flush_pending_writes() needs access to the rdev so...*/
->>>>                   mbio->bi_bdev = (void *)rdev;
->>>> -               if (!md_add_bio_to_plug(mddev, mbio, raid1_unplug)) {
->>>> +               if (!md_add_bio_to_plug(mddev, mbio, raid1_unplug, disks)) {
->>>>                           spin_lock_irqsave(&conf->device_lock, flags);
->>>>                           bio_list_add(&conf->pending_bio_list, mbio);
->>>>                           spin_unlock_irqrestore(&conf->device_lock, flags);
->>>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
->>>> index bd9e655ca408..7135cfaf75db 100644
->>>> --- a/drivers/md/raid10.c
->>>> +++ b/drivers/md/raid10.c
->>>> @@ -1306,7 +1306,7 @@ static void raid10_write_one_disk(struct mddev *mddev, struct r10bio *r10_bio,
->>>>
->>>>           atomic_inc(&r10_bio->remaining);
->>>>
->>>> -       if (!md_add_bio_to_plug(mddev, mbio, raid10_unplug)) {
->>>> +       if (!md_add_bio_to_plug(mddev, mbio, raid10_unplug, conf->copies)) {
->>>>                   spin_lock_irqsave(&conf->device_lock, flags);
->>>>                   bio_list_add(&conf->pending_bio_list, mbio);
->>>>                   spin_unlock_irqrestore(&conf->device_lock, flags);
->>>> --
->>>> 2.39.2
->>>>
->>>
->>> .
->>>
->>
-> 
-> .
-> 
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index b1ecd7677642..e90161294698 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -1753,6 +1753,8 @@ static int user_event_parse(struct user_event_group *group, char *name,
+ 	int ret;
+ 	u32 key;
+ 	struct user_event *user;
++	int argc = 0;
++	char **argv;
+ 
+ 	/* Prevent dyn_event from racing */
+ 	mutex_lock(&event_mutex);
+@@ -1760,13 +1762,35 @@ static int user_event_parse(struct user_event_group *group, char *name,
+ 	mutex_unlock(&event_mutex);
+ 
+ 	if (user) {
+-		*newuser = user;
+-		/*
+-		 * Name is allocated by caller, free it since it already exists.
+-		 * Caller only worries about failure cases for freeing.
+-		 */
+-		kfree(name);
++		if (args) {
++			argv = argv_split(GFP_KERNEL, args, &argc);
++			if (!argv) {
++				ret = -ENOMEM;
++				goto error;
++			}
++
++			ret = user_fields_match(user, argc, (const char **)argv);
++			argv_free(argv);
++
++		} else
++			ret = list_empty(&user->fields);
++
++		if (ret) {
++			*newuser = user;
++			/*
++			 * Name is allocated by caller, free it since it already exists.
++			 * Caller only worries about failure cases for freeing.
++			 */
++			kfree(name);
++		} else {
++			ret = -EADDRINUSE;
++			goto error;
++		}
++
+ 		return 0;
++error:
++		refcount_dec(&user->refcnt);
++		return ret;
+ 	}
+ 
+ 	user = kzalloc(sizeof(*user), GFP_KERNEL_ACCOUNT);
+diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+index 7c99cef94a65..6e8c4b47281c 100644
+--- a/tools/testing/selftests/user_events/ftrace_test.c
++++ b/tools/testing/selftests/user_events/ftrace_test.c
+@@ -228,6 +228,12 @@ TEST_F(user, register_events) {
+ 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+ 	ASSERT_EQ(0, reg.write_index);
+ 
++	/* Multiple registers to same name but different args should fail */
++	reg.enable_bit = 29;
++	reg.name_args = (__u64)"__test_event u32 field1;";
++	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
++	ASSERT_EQ(EADDRINUSE, errno);
++
+ 	/* Ensure disabled */
+ 	self->enable_fd = open(enable_file, O_RDWR);
+ 	ASSERT_NE(-1, self->enable_fd);
+-- 
+2.25.1
 
