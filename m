@@ -2,232 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DC1714D8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42979714D9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjE2Pzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
+        id S229896AbjE2P5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjE2Pzl (ORCPT
+        with ESMTP id S229633AbjE2P5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:55:41 -0400
-Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D48CBD9;
-        Mon, 29 May 2023 08:55:39 -0700 (PDT)
-Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
-        by smtp.dudau.co.uk (Postfix) with SMTP id 1161241D13A7;
-        Mon, 29 May 2023 16:55:38 +0100 (BST)
-Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Mon, 29 May 2023 16:55:38 +0100
-Date:   Mon, 29 May 2023 16:55:38 +0100
-From:   Liviu Dudau <liviu@dudau.co.uk>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mips: dts: ralink: Add support for TP-Link HC220
- G5 v1 board
-Message-ID: <ZHTK+qG0xBWfn9gt@bart.dudau.co.uk>
-References: <84b31c59-81d3-c83d-ece9-a120b1cdcdd7@arinc9.com>
- <20230529150833.526084-1-liviu@dudau.co.uk>
- <20230529150833.526084-2-liviu@dudau.co.uk>
+        Mon, 29 May 2023 11:57:47 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11750A3;
+        Mon, 29 May 2023 08:57:46 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f6dfc4e01fso35651055e9.0;
+        Mon, 29 May 2023 08:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685375864; x=1687967864;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kk5w1ZF9WZxiTvHaoko6XuzTV0f3ptf0Wt5suaeuZhw=;
+        b=D3FMDcuu8vM0YPWs4oaKpsco1HoEOxJnviREkZfLdB7g3AQ8cEKJIhGkXQxnTOVYpn
+         a0O3mC4EQUCaPnwVfViJRw7RtcS8Nu3dN3w/xqFLkJ6QRaHTPOFO8LuJO+fCmZz1929/
+         V1tFSBn3MmjmXWd/tYJgx0rcm/nJikwQRCW5k1j8Rffss4ZQ/DagBcJuoHfVlvXBu2xE
+         Bqmkpwb5Kz3iOqHkdondwhscBmw3KK1auAvvtoWixscLpOlmbFsm739169ERChFZpY2Y
+         F/vYH/UjmLbCI0hhbFCJs7PT80tt0+IT95vsDy6mGfhjUzdNgqGkj0tXocu+I5/IjTX2
+         XsJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685375864; x=1687967864;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kk5w1ZF9WZxiTvHaoko6XuzTV0f3ptf0Wt5suaeuZhw=;
+        b=Mn5QGMzSr6jXQkuhLZFWZ0tI2i362bKn5QMR6xA0ETbPe4rG2PcASuAqX0Q1Bb5sMN
+         0Z7CkgzkuTcDeDQwOVPqnWudqmM3uGWnL0+J7iNzMBHais6MAX7uSOLKhIV+sm8wLLA6
+         YtQhY23Qotfg4+zYaSfmXfOedp2LTyKKogrqL54wzgfSrC1VTswO7oLPBpKvrN9Rq3Pf
+         nzp3CrYcr0UjXQ1nXkwSvb8RSgg0H3uRC3Lk+9QRF+EVz2yMgP72HsHeXSqN1pGFXabv
+         d24mqz8Ts22HWardWR2a/DQ0WZKnCkbjL05N1L9yo6S8S3U0j+aT8vWLx0gn9L9LoHEP
+         iqRw==
+X-Gm-Message-State: AC+VfDz/dxRtV484w7gtVtb+OoXAg39Qs77ZunrEr//1dqx46ZxT8NRw
+        K72PYq/w6IpZY81mVY5Gu7k=
+X-Google-Smtp-Source: ACHHUZ4ktgXjLFeIrVQoIdPmozklvLl4NMdrl8nqpHdXz2q5dwcyJpHYEba+bseNdZZtQ0DQAIatzw==
+X-Received: by 2002:a1c:7206:0:b0:3f6:e6e3:3da7 with SMTP id n6-20020a1c7206000000b003f6e6e33da7mr10618901wmc.24.1685375864464;
+        Mon, 29 May 2023 08:57:44 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id p19-20020a1c7413000000b003f60e143d38sm14673008wmc.11.2023.05.29.08.57.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 08:57:43 -0700 (PDT)
+Message-ID: <c2cfaae3-5f5e-60e1-b8e4-9584dd20550b@gmail.com>
+Date:   Mon, 29 May 2023 17:57:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230529150833.526084-2-liviu@dudau.co.uk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 1/7] dt-bindings: nvmem: mediatek: efuse: add support
+ for mt7986
+Content-Language: en-US, ca-ES, es-ES
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        "Hui.Liu" <hui.liu@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Lala Lin <lala.lin@mediatek.com>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>
+References: <20230421132047.42166-1-linux@fw-web.de>
+ <20230421132047.42166-2-linux@fw-web.de>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230421132047.42166-2-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 04:08:32PM +0100, Liviu Dudau wrote:
-> This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
-> a MT7603 2.4GHz WiFi and a MT7663 5GHz WiFi chips integrated on the board,
-> connected to the main SoC over PCIe.
-> 
-> The GMAC1 on the SoC is connected to PHY0 on the GSW and can be used to
-> improve routing bandwidth.
-> 
-> The device uses NMBM over NAND, which is not currently supported in the
-> mainline, so NAND node is skipped in this revision.
-> 
-> Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
-> ---
->  arch/mips/boot/dts/ralink/Makefile            |   3 +-
->  .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 129 ++++++++++++++++++
->  2 files changed, 131 insertions(+), 1 deletion(-)
->  create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> 
-> diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
-> index 11732b8c8163a..d27d7e8c700fe 100644
-> --- a/arch/mips/boot/dts/ralink/Makefile
-> +++ b/arch/mips/boot/dts/ralink/Makefile
-> @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
->  
->  dtb-$(CONFIG_SOC_MT7621) += \
->  	mt7621-gnubee-gb-pc1.dtb \
-> -	mt7621-gnubee-gb-pc2.dtb
-> +	mt7621-gnubee-gb-pc2.dtb \
-> +	mt7621-tplink-hc220-g5-v1.dtb
->  
->  obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
-> diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> new file mode 100644
-> index 0000000000000..f003ae615a58e
-> --- /dev/null
-> +++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> @@ -0,0 +1,129 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/dts-v1/;
-> +
-> +#include "mt7621.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +	compatible = "tplink,hc220-g5-v1", "mediatek,mt7621-soc";
-> +	model = "TP-Link HC220 G5 v1";
-> +
-> +	memory@0 {
-> +		device_type = "memory";
-> +		reg = <0x0 0x0 0x0 0x8000000>;
-> +	};
-> +
-> +	chosen {
-> +		/* add 'earlycon=uart8260,mmio32,0x1e000c00' to
-> +		 * bootargs for early boot messages
-> +		 */
-> +		bootargs = "console=ttyS0,115200";
-> +	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +
-> +		key-reset {
-> +			label = "reset";
-> +			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_RESTART>;
-> +		};
-> +
-> +		key-wps {
-> +			label = "wps";
-> +			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
-> +			linux,code = <KEY_WPS_BUTTON>;
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		red {
-> +			color = <LED_COLOR_ID_RED>;
-> +			function = LED_FUNCTION_FAULT;
-> +			gpios = <&gpio 13 GPIO_ACTIVE_HIGH>;
-> +		};
-> +
-> +		green {
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			function = LED_FUNCTION_POWER;
-> +			gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "default-on";
-> +		};
-> +
-> +		blue {
-> +			color = <LED_COLOR_ID_BLUE>;
-> +			function = LED_FUNCTION_WPS;
-> +			gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
-> +		};
-> +	};
-> +
-> +	resetc: reset-controller {
-> +		compatible = "ralink,rt2880-reset";
-> +		#reset-cells = <1>;
-> +	};
-> +
-> +	mtd {
-> +		compatible = "mediatek,mt7622-nfc";
-> +	};
-> +};
-> +
-> +&i2c {
-> +	status = "okay";
-> +};
-> +
-> +&pcie {
-> +	status = "okay";
-> +};
-> +
-> +&spi0 {
-> +	status = "okay";
-> +
-> +	flash@0 {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		compatible = "jedec,spi-nor";
-> +		reg = <0>;
-> +		spi-max-frequency = <50000000>;
-> +	};
-> +};
-> +
-> +/* gmac1 connected to MT7530's phy0 */
-> +&gmac1 {
-> +	phy-handle = <&ethphy0>;
-> +
-> +	fixed-link {
-> +		status = "disabled";
-> +	};
-> +};
-> +
-> +&mdio {
-> +	/* MT7530's phy0 */
-> +	ethphy0: ethernet-phy@0 {
-> +		reg = <0>;
-> +	};
-> +};
-> +
-> +&switch0 {
-> +	ports {
-> +		/* phy0 is muxed to gmac1 */
-> +		port@0 {
-> +			status = "okay";
-> +			label = "lan2";
-> +		};
++Srinivas as he is the maintainer
 
-I've made the changes to look similar to the gnubee-gb-pc2, and things mostly
-work, with the exception that I can mount an NFS root filesystem only on "lan2"
-interface at boot time. All other interfaces (ports) hang forever waiting for
-an DHCP response from my server. The only difference is where I plug in the
-ethernet cable, no other change (not even a restart) on the server.
+On 21/04/2023 15:20, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> Add compatible string for mt7986 SoC.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>   Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+> index 75e0a516e59a..e3894f9d566e 100644
+> --- a/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml
+> @@ -27,6 +27,7 @@ properties:
+>             - enum:
+>                 - mediatek,mt7622-efuse
+>                 - mediatek,mt7623-efuse
+> +              - mediatek,mt7986-efuse
+
+Srinivas, will you take this patch through your tree or would you prefer that I 
+take it through the my MediaTek arm-soc tree? It's a trivial patch.
 
 Best regards,
-Liviu
+Matthias
 
-> +
-> +		port@1 {
-> +			status = "okay";
-> +			label = "lan1";
-> +		};
-> +
-> +		port@2 {
-> +			status = "okay";
-> +			label = "wan";
-> +		};
-> +	};
-> +};
-> -- 
-> 2.40.1
-> 
-
--- 
-Everyone who uses computers frequently has had, from time to time,
-a mad desire to attack the precocious abacus with an axe.
-       	   	      	     	  -- John D. Clark, Ignition!
+>                 - mediatek,mt8173-efuse
+>                 - mediatek,mt8183-efuse
+>                 - mediatek,mt8186-efuse
