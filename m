@@ -2,163 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F7E7143CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D8F7143C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjE2Foz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 01:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S231480AbjE2Fb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 01:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjE2Fox (ORCPT
+        with ESMTP id S231453AbjE2Fbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 01:44:53 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF32FA6
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:44:46 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230529054442epoutp01309f0b47d6c6ff404f84b41e42d6dfb2~jhvdmcTJ52123421234epoutp01b
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:44:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230529054442epoutp01309f0b47d6c6ff404f84b41e42d6dfb2~jhvdmcTJ52123421234epoutp01b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1685339082;
-        bh=VKGA7JRShMZpv9qQksUeVQx6cayrYtRJ5ilKYNP0jmE=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=NTyT/sjdXwOKF36GE+jkfCeAiwH+K4Kuu30gYW2CjFH9kJUBMCWhPCIGtMREsV+VA
-         mii2WKxOc2VcXwW9IdMeqzthQ5ZZkb4f12JwphMQpquVRKfXqXlqIQzKP6+EluPXMW
-         tKY99UVdtTIY4FsXy10t/zSoIQ3ZURNiUmI3OuFA=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20230529054442epcas5p174f7f1efb7ecaa25dcb51543f75c5f46~jhvc-Ls2d0107001070epcas5p1E;
-        Mon, 29 May 2023 05:44:42 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EA.1D.16380.9CB34746; Mon, 29 May 2023 14:44:41 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20230529052832epcas5p4fa1b8cf25d9810d32bd2ccf012086fb3~jhhVsx2dC0673106731epcas5p4b;
-        Mon, 29 May 2023 05:28:32 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230529052832epsmtrp1af9353d7aba59de1154e69418a46b28f~jhhVrzAe12525125251epsmtrp1M;
-        Mon, 29 May 2023 05:28:32 +0000 (GMT)
-X-AuditID: b6c32a4b-7dffd70000013ffc-a3-64743bc96d39
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9B.40.28392.FF734746; Mon, 29 May 2023 14:28:31 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.109.224.44]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230529052828epsmtip2ec3d5bb5aec6f5fcd83577c21270d0c9~jhhSnoNsd1095910959epsmtip2J;
-        Mon, 29 May 2023 05:28:28 +0000 (GMT)
-From:   Maninder Singh <maninder1.s@samsung.com>
-To:     bcain@quicinc.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, keescook@chromium.org,
-        nathanl@linux.ibm.com, ustavoars@kernel.org, alex.gaynor@gmail.com,
-        gary@garyguo.net, ojeda@kernel.org, pmladek@suse.com,
-        wedsonaf@google.com
-Cc:     linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Maninder Singh <maninder1.s@samsung.com>,
-        Onkarnath <onkarnath.1@samsung.com>
-Subject: [PATCH 1/1] arch:hexagon/powerpc: use KSYM_NAME_LEN in array size
-Date:   Mon, 29 May 2023 10:58:21 +0530
-Message-Id: <20230529052821.58175-1-maninder1.s@samsung.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 29 May 2023 01:31:53 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71E79F
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:31:51 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2566f66190dso833898a91.1
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:31:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685338311; x=1687930311;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4PPFonEhDSP8gLC8BJ9+HvAE9BMM5+O6SrwzMbFYDbw=;
+        b=BG77cKFMbbtQaVW0nAg4Je7YFmXgzvHOgK0j+KCXw29PFYAmJJCClKwElyG2QDtgW0
+         IqWnO8Qd1fWmnmai4QNC9kdM8u8hyiDgc8LpViVOdJNJ7fqkQr4nihvCg2bXMJhjxXj3
+         GkmEhrAeGEk4NKiPoGU/u1v5yQwYSvTKyXu+bWZMsUhZGF0lenQNQOXd0miF/tZ1ARFT
+         /hjWJ3DS/GInl5x0J45EWJKkUas3C/LusjyxjbKJoAbaKh3tXNWNlOqxUM+WGFqCUl6Y
+         vQD+KVKgNFoqeohnFPoR9K/899TK9Oy4ba7pfHa8fMVD8ThJAbc3RKpbSJjpSpImgAxS
+         y6Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685338311; x=1687930311;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4PPFonEhDSP8gLC8BJ9+HvAE9BMM5+O6SrwzMbFYDbw=;
+        b=O9uqTCZBzpS8bqheMPNj1Cq7WXx7D8+lyT2rVBY+H9OtdnCLZNPT6taPcOAg2Xbpd/
+         UvtxmKB+gE+pmmdK/wvaPvtsDj27iIujluq7QWC/Wg95zVF4y0rjMmc7K7xPxNnshcog
+         Dgl9ShrwTxlOKGmlrW73nyAiU+CLAoAtaG6NF9wJios77YZ7SV9o2MLD1WhrbVGJSIRx
+         sS9flDDdC5TTT7G/xwr7bjFtW0NshZRwX1o/wraMA4tLLny4Fmgu02Yfx7pCQwOnt9Yv
+         stBoodu+Rbh42ZlZc7Pp/mMAeIddV3ZEx7LGYxuXV4SOneER4/3zfnqm/NYxaSJRe9m0
+         hlxA==
+X-Gm-Message-State: AC+VfDwVb3ne0ChDN9jPu7Njc7qXQXmkDxRnP9sL7bu7MQ9AVdqWrF1U
+        5gTbZzlIKTq4iJPpsZeEwFSHTg==
+X-Google-Smtp-Source: ACHHUZ492JkVbVMwadub6cNpLxDqf+cAwCg3OJlG0pA62Sl8NKCneXD5hDVRh6c/f0Wz+bvK9B+7DQ==
+X-Received: by 2002:a17:903:2093:b0:1b0:4c32:5d6d with SMTP id d19-20020a170903209300b001b04c325d6dmr56502plc.31.1685338311173;
+        Sun, 28 May 2023 22:31:51 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id im15-20020a170902bb0f00b001b0395c4002sm1941527plb.210.2023.05.28.22.31.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 22:31:50 -0700 (PDT)
+Date:   Mon, 29 May 2023 11:01:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] opp: Fix use-after-free in lazy_opp_tables after probe
+ deferral
+Message-ID: <20230529053148.xuhuv6skg2xqworr@vireshk-i7>
+References: <20230524-opp-lazy-uaf-v1-1-f5f95cb4b6de@kernkonzept.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPKsWRmVeSWpSXmKPExsWy7bCmlu5J65IUg77/lhZ/Z29nt3i4u4XF
-        4s6k5+wWF8+8ZrQ4051r8b5lB5vF5V1z2Cx+f//HanF4fhuLxZaGQ2wWG44GW/x8cYPFYuX8
-        5YwWK3o+sFr8f/wVSLw7wmTRsXglo4Ogx+yGiyweX2+eY/JY9LKBxWNJ5y8mj52z7rJ7LNhU
-        6rFpVSebx4RFBxg9zs9YyOgxcU+dR9+WVYwe67dcZfH4vEkugDeKyyYlNSezLLVI3y6BK+P3
-        om+sBe08FdPP3WBpYOzh6mLk5JAQMJFYdHMhWxcjF4eQwG5GiVlzdjJBOJ8YJVq2XoNyPjNK
-        vNozkxmm5fDvn2C2kMAuRonOvhqIoi+MEtfvnwdLsAnoSazatYcFJCEi0MokcePwabAlzAIb
-        GSX+7lnFCFIlLOAl8eHrfFYQm0VAVeLi0w52EJtXwEbiyaxGVoh18hIzL32HigtKnJz5hAXE
-        ZgaKN2+dzQwyVELgDIdE087pQEM5gBwXiUVzCiB6hSVeHd/CDmFLSbzsb2OHKCmX2DqhHqK1
-        hVFi/5wpbBA19hJPLi5kBalhFtCUWL9LHyIsKzH11DomiLV8Er2/nzBBxHkldsyDsVUlWm5u
-        gDpZWuLzx48sELaHxKnvq1ghoRUrse/MIuYJjPKzkHwzC8k3sxA2L2BkXsUomVpQnJueWmxa
-        YJyXWq5XnJhbXJqXrpecn7uJEZwGtbx3MD568EHvECMTB+MhRgkOZiURXtvE4hQh3pTEyqrU
-        ovz4otKc1OJDjNIcLErivOq2J5OFBNITS1KzU1MLUotgskwcnFINTIuFN0aYrT3lPXV7/LeO
-        oPZSlULpPvWvjnW9sz/OWTyN99+3M3PObYwLOeLC9jCbuyCPY/lVbv6ZzYZakxcUcPwKcuhL
-        NzIy2mqbsuPk1dAjQZ6HujKZ9bb0hTUdmZ2+M75cwuHn/LceSx55iGUofcn0vLOgc/HBx5zq
-        EknnZb6uVz9r+eFYzm2xwhelyWXrA2yW5SXvnfPzwLRDYVF6z7TmH89Vec5vxu9o8Olvu4xU
-        GsdMrpksTnN2dEzvcp2z6eos6W/64R/vv2ebs/dV1l+15w9zlERnt+5drBMSduPGbW/b3gxL
-        Lp8j7//UqPEuvPp37jXhgxwB7qkNUU5ubNuf/XG4cb0oT/GyqbNqqxJLcUaioRZzUXEiAJrs
-        hsPyAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjkeLIzCtJLcpLzFFi42LZdlhJXve/eUmKwZPrNhZ/Z29nt3i4u4XF
-        4s6k5+wWF8+8ZrQ4051r8b5lB5vF5V1z2Cx+f//HanF4fhuLxZaGQ2wWG44GW/x8cYPFYuX8
-        5YwWK3o+sFr8f/wVSLw7wmTRsXglo4Ogx+yGiyweX2+eY/JY9LKBxWNJ5y8mj52z7rJ7LNhU
-        6rFpVSebx4RFBxg9zs9YyOgxcU+dR9+WVYwe67dcZfH4vEkugDeKyyYlNSezLLVI3y6BK+P3
-        om+sBe08FdPP3WBpYOzh6mLk5JAQMJE4/PsncxcjF4eQwA5GiYW7X7FCJKQlfv57zwJhC0us
-        /PecHaLoE6PE7tdnwRJsAnoSq3btYQFJiAhMZZKY8vo+G0iCWWAro8SSK/UgtrCAl8SHr/PB
-        prIIqEpcfNrBDmLzCthIPJnVCLVNXmLmpe9QcUGJkzOfsEDMkZdo3jqbeQIj3ywkqVlIUgsY
-        mVYxSqYWFOem5xYbFhjlpZbrFSfmFpfmpesl5+duYgRHlZbWDsY9qz7oHWJk4mA8xCjBwawk
-        wmubWJwixJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUA9Ne
-        E2HTExmS6ce+nW786zprzUHdGNPWp0pnYkqu3/6Zf1DZmU/50PHz23T2+Kz0auuaGFRwpHej
-        5NyebVI5OlMEpq8UE663XFu8/Pe/WVVLtwhemmzgpeypsLp+Uva8CazrWDuOf5m+9ambMd8h
-        zR2F649/FTNjfzJv4Q0hbpn+0g+JonyikVFyNxcUveKNuF8m69lxR3Txl8ArlaUchm/cZyw6
-        6FLAaXLMmaWCrVrWJaf3fOyCZRfuCHU+SZMzTNn6Ym5L+oWwC5N5P/qH9lyyr+j0Nym+civu
-        FKf9nrjyOcv/fZyTuHuqzsTfadIS7hsslp/buUk5PcVCZMuHX5Osv26zFpTrdk/60fNehV2J
-        pTgj0VCLuag4EQDXWk9QGQMAAA==
-X-CMS-MailID: 20230529052832epcas5p4fa1b8cf25d9810d32bd2ccf012086fb3
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20230529052832epcas5p4fa1b8cf25d9810d32bd2ccf012086fb3
-References: <CGME20230529052832epcas5p4fa1b8cf25d9810d32bd2ccf012086fb3@epcas5p4.samsung.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524-opp-lazy-uaf-v1-1-f5f95cb4b6de@kernkonzept.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kallsyms_lookup which in turn calls for kallsyms_lookup_buildid()
-writes on index "KSYM_NAME_LEN - 1".
+On 24-05-23, 19:56, Stephan Gerhold wrote:
+> When dev_pm_opp_of_find_icc_paths() in _allocate_opp_table() returns
+> -EPROBE_DEFER, the opp_table is freed again, to wait until all the
+> interconnect paths are available.
+> 
+> However, if the OPP table is using required-opps then it may already
+> have been added to the global lazy_opp_tables list. The error path
+> does not remove the opp_table from the list again.
+> 
+> This can cause crashes later when the provider of the required-opps
+> is added, since we will iterate over OPP tables that have already been
+> freed. E.g.:
+> 
+>   Unable to handle kernel NULL pointer dereference when read
+>   CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.4.0-rc3
+>   PC is at _of_add_opp_table_v2 (include/linux/of.h:949
+>   drivers/opp/of.c:98 drivers/opp/of.c:344 drivers/opp/of.c:404
+>   drivers/opp/of.c:1032) -> lazy_link_required_opp_table()
+> 
+> Fix this by removing the opp_table from the list before freeing it.
 
-Thus array size should be KSYM_NAME_LEN.
+I think you need this instead:
 
-for powerpc and hexagon it was defined as "128" directly.
-and commit '61968dbc2d5d' changed define value to 512,
-So both were missed to update with new size.
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 954c94865cf5..b5973fefdfd8 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1358,7 +1358,10 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+        return opp_table;
 
-Fixes: 61968dbc2d5d ("kallsyms: increase maximum kernel symbol length to 512")
-Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
-Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
----
- arch/hexagon/kernel/traps.c | 2 +-
- arch/powerpc/xmon/xmon.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ remove_opp_dev:
++       _of_clear_opp_table(opp_table);
+        _remove_opp_dev(opp_dev, opp_table);
++       mutex_destroy(&opp_table->genpd_virt_dev_lock);
++       mutex_destroy(&opp_table->lock);
+ err:
+        kfree(opp_table);
+        return ERR_PTR(ret);
 
-diff --git a/arch/hexagon/kernel/traps.c b/arch/hexagon/kernel/traps.c
-index 6447763ce5a9..65b30b6ea226 100644
---- a/arch/hexagon/kernel/traps.c
-+++ b/arch/hexagon/kernel/traps.c
-@@ -82,7 +82,7 @@ static void do_show_stack(struct task_struct *task, unsigned long *fp,
- 	const char *name = NULL;
- 	unsigned long *newfp;
- 	unsigned long low, high;
--	char tmpstr[128];
-+	char tmpstr[KSYM_NAME_LEN];
- 	char *modname;
- 	int i;
- 
-diff --git a/arch/powerpc/xmon/xmon.c b/arch/powerpc/xmon/xmon.c
-index 728d3c257e4a..70c4c59a1a8f 100644
---- a/arch/powerpc/xmon/xmon.c
-+++ b/arch/powerpc/xmon/xmon.c
-@@ -88,7 +88,7 @@ static unsigned long ndump = 64;
- static unsigned long nidump = 16;
- static unsigned long ncsum = 4096;
- static int termch;
--static char tmpstr[128];
-+static char tmpstr[KSYM_NAME_LEN];
- static int tracing_enabled;
- 
- static long bus_error_jmp[JMP_BUF_LEN];
+> Cc: stable@vger.kernel.org
+> Fixes: 7eba0c7641b0 ("opp: Allow lazy-linking of required-opps")
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> ---
+> This fixes the crash I ran into after adding an OPP table with
+> both "required-opps" and interconnect paths (opp-peak-kBps).
+> 
+> By the way, the "lazy_opp_tables" does not seem to be protected by any
+> locks(?)
+
+It is always accessed with opp_table_lock held I believe.
+
 -- 
-2.17.1
-
+viresh
