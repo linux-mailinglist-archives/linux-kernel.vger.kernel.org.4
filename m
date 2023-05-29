@@ -2,98 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583D8714FEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADA1714FF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 21:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjE2TsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 15:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
+        id S229669AbjE2Ts4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 15:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjE2TsR (ORCPT
+        with ESMTP id S229547AbjE2Tsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 15:48:17 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4685DC;
-        Mon, 29 May 2023 12:48:15 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1685389686tvz8s19j
-Received: from linux-lab-host.localdomain ( [119.123.130.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 03:48:05 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: dKvkn8qoLrH/qrejci3fihvIQXoBf5YJrhmGUUzcf6qh+6IazDSOYdwIhP/YW
-        ORgu5EPCd6gOyYSDLJ50tIYOWHXJxLAHR+9ATsEoUhwa54b9uqgZV8rWyvxv5W1sGh3Dw0f
-        yzw3WsCbvyXct5MtQJqJt/JFGFvi3IWadG8J3YkTbMp0ForpQJ/4qiirjssVz+7nPuHC5wH
-        zOP+3TtFbEJQahQpwJpxiK5lh9V5fPTxAGAibu31tRi7EEfUpX+/b6G5EdjvKBHfJUrz/40
-        IcdygC3t7OZS2n+o3MeIYbt6xp+apeSPMnuQC/Qj2LQQeDS/zt6WhRt3e8Ns8QuBKgJ8LoD
-        RID1pt1s13NEExuGLJSuUmrq+riUGsiUJO5h+JsZIs+Q6yPZdUdER2Yi1BNlQ==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17992497824335630657
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH v2 02/13] selftests/nolibc: support two errnos with EXPECT_SYSER2()
-Date:   Tue, 30 May 2023 03:47:55 +0800
-Message-Id: <63510e8d586d2d20337f3bb2ff753db4e09bfe11.1685387484.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685387484.git.falcon@tinylab.org>
-References: <cover.1685387484.git.falcon@tinylab.org>
+        Mon, 29 May 2023 15:48:53 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2B7E3;
+        Mon, 29 May 2023 12:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1685389720;
+        bh=5Mv2iDY3/+/X26c7+oJN7S46E47FDbIxA4JnvM9t6LA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qKqixCkAmWIZJ9ueg9iXOFyyyfKXkToaxYQMR+WimJXBFlbMcwJuEg+tmoKI945V/
+         mhJsQKx2+spbbY875mXg3wdgD8FXxk1bu6lUNEB+e3J9yvuolZLaiNwBNmdf3RBkeJ
+         BzD9jSp3prSUR0xoR30cSVbOwVKr73F9l7+ElQcx+rtwbHfPZCul1aFmnZf3FSH8FE
+         6U2UsMFuDNKS56jUbBmF4RAQ20wsqomYBc+HXP4pYFmDhY2fNs2zAVYZzA6obWsff5
+         NG8fCnmKYzx9K+yyIl/U+E373NqF63Z5zoiUl1SLV6xLIwjgvr88WG21kDJOpsqxEk
+         e8txGroYFlKyQ==
+Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QVR0m1cVFz15tr;
+        Mon, 29 May 2023 15:48:40 -0400 (EDT)
+Message-ID: <2c421e36-a749-7dc3-3562-7a8cf256df3c@efficios.com>
+Date:   Mon, 29 May 2023 15:48:44 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH v2 1/4] rseq: Add sched_state field to struct rseq
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        David.Laight@ACULAB.COM, carlos@redhat.com,
+        Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        libc-alpha@sourceware.org, Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Noah Goldstein <goldstein.w.n@gmail.com>,
+        Daniel Colascione <dancol@google.com>, longman@redhat.com
+References: <20230529191416.53955-1-mathieu.desnoyers@efficios.com>
+ <20230529191416.53955-2-mathieu.desnoyers@efficios.com>
+ <87wn0r6id9.fsf@oldenburg.str.redhat.com>
+Content-Language: en-US
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <87wn0r6id9.fsf@oldenburg.str.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some functions may be implemented with different syscalls in different
-platforms, these syscalls may set different errnos for the same
-arguments, let's support such cases.
+On 5/29/23 15:35, Florian Weimer wrote:
+> * Mathieu Desnoyers:
+> 
+>> +/*
+>> + * rseq_sched_state should be aligned on the cache line size.
+>> + */
+>> +struct rseq_sched_state {
+>> +	/*
+>> +	 * Version of this structure. Populated by the kernel, read by
+>> +	 * user-space.
+>> +	 */
+>> +	__u32 version;
+>> +	/*
+>> +	 * The state is updated by the kernel. Read by user-space with
+>> +	 * single-copy atomicity semantics. This field can be read by any
+>> +	 * userspace thread. Aligned on 32-bit. Contains a bitmask of enum
+>> +	 * rseq_sched_state_flags. This field is provided as a hint by the
+>> +	 * scheduler, and requires that the page holding this state is
+>> +	 * faulted-in for the state update to be performed by the scheduler.
+>> +	 */
+>> +	__u32 state;
+>> +	/*
+>> +	 * Thread ID associated with the thread registering this structure.
+>> +	 * Initialized by user-space before registration.
+>> +	 */
+>> +	__u32 tid;
+>> +};
+> 
+> How does the version handshake protocol in practice?  Given that this
+> user-allocated?
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+Good point, I must admit that I have not thought this specific version 
+protocol through. :) As you say, userspace is responsible for 
+allocation, and the kernel is responsible for implementing features.
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 7be2625f952d..bf63fc66e486 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -300,18 +300,24 @@ static int expect_sysne(int expr, int llen, int val)
- }
- 
- 
-+#define EXPECT_SYSER2(cond, expr, expret, experr1, experr2)		\
-+	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_syserr2(expr, expret, experr1, experr2, llen); } while (0)
-+
- #define EXPECT_SYSER(cond, expr, expret, experr)			\
--	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_syserr(expr, expret, experr, llen); } while (0)
-+	EXPECT_SYSER2(cond, expr, expret, experr, 0)
- 
--static int expect_syserr(int expr, int expret, int experr, int llen)
-+static int expect_syserr2(int expr, int expret, int experr1, int experr2, int llen)
- {
- 	int ret = 0;
- 	int _errno = errno;
- 
- 	llen += printf(" = %d %s ", expr, errorname(_errno));
--	if (expr != expret || _errno != experr) {
-+	if (expr != expret || (_errno != experr1 && _errno != experr2)) {
- 		ret = 1;
--		llen += printf(" != (%d %s) ", expret, errorname(experr));
-+		if (experr2 == 0)
-+			llen += printf(" != (%d %s) ", expret, errorname(experr1));
-+		else
-+			llen += printf(" != (%d %s %s) ", expret, errorname(experr1), errorname(experr2));
- 		llen += pad_spc(llen, 64, "[FAIL]\n");
- 	} else {
- 		llen += pad_spc(llen, 64, " [OK]\n");
+Let's first see if we can get away with embedding these fields in struct 
+rseq.
+
+> 
+> I don't see why we can't stick this directly into struct rseq because
+> it's all public anyway.
+
+The motivation for moving this to a different cache line is to handle 
+the prior comment from Boqun, who is concerned that busy-waiting 
+repeatedly loading a field from struct rseq will cause false-sharing and 
+make other stores to that cache line slower, especially stores to 
+rseq_cs to begin rseq critical sections, thus slightly increasing the 
+overhead of rseq critical sections taken while mutexes are held.
+
+If we want to embed this field into struct rseq with its own cache line, 
+then we need to add a lot of padding, which is inconvenient.
+
+That being said, perhaps this is premature optimization, what do you think ?
+
+> 
+> The TID field would be useful in its own right.
+
+Indeed, good point.
+
+While we are there, I wonder if we should use the thread_pointer() as 
+lock identifier, or if the address of struct rseq is fine ?
+
+Thanks,
+
+Mathieu
+
+> 
+> Thanks,
+> Florian
+> 
+
 -- 
-2.25.1
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
