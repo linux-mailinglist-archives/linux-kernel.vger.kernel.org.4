@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA554715239
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 01:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3838771523F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 01:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjE2XG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 19:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
+        id S229603AbjE2XNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 19:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjE2XG0 (ORCPT
+        with ESMTP id S229539AbjE2XNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 19:06:26 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECCBAD
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 16:06:24 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-565eaf83853so25206847b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 16:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google; t=1685401584; x=1687993584;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Gwe8KUB75vJ8ATbX2tI7fPPOMkZ9teDmitLExCKhe8=;
-        b=tNwT6LO+aBIZxezXyHnRASPCD62GLFGnjPfwJ8g2r8g/TRw8Eed3jW8Mr3RIogZ1GK
-         LV3yahssKSBRFtIammbHYEk9DFeY3VJnnndQdcpBCv8BNoRorXWoTdPo0jdym7Ibkb5N
-         7wfT/gUBYpf6rNHAuqW02KsNhsDABS9ODvRTY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685401584; x=1687993584;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8Gwe8KUB75vJ8ATbX2tI7fPPOMkZ9teDmitLExCKhe8=;
-        b=h2IwZa17DA6XvOaCrNekRiO+vW2vUvqC22I0XFYLdOITZP2oYasL44vDfLltvWQhOE
-         zekFux4reKVi8ikSMi/0h/DC5fwE5OXVilwyGWg8zSCIEj1tkuzBoEE1ZQuDwMJe2ZQH
-         GEzpQn37a3xwm1fUzFYfOHmbJOK1pWSD3mADG/56Qh8tiNqsF/b7GLlssaQwIQLPrG7w
-         wWxGtPKhn/+AmAT2fHH+nkbttDmY1eB1KKWCaiEA+Yc6hryRHQ70KJ2TVbwTUvG/ClS6
-         p1yceA208N2gY/FDPUFVr8J18660LE4c+thbPKmr5caBxrNvt1VN5kSDFZbX5/6Ng0lS
-         eSsA==
-X-Gm-Message-State: AC+VfDxFFyFqXlXC8JvELew5dFHk+8uoDJ01GmDzohyS1p6Pj2WPIn2x
-        ejRzlQzj6NTaBPz0w6t8psbSyky+zA8xUyuIJTSFKID7w8gp9uiZ
-X-Google-Smtp-Source: ACHHUZ623hQPNTMKC8Mr+SxOf2Iq+N2p2KsAbHuoVF1m+4I3MNXJmYskMwlOFEzNpnrSomnbqrVXBWmKsXaAX/RpJ5I=
-X-Received: by 2002:a0d:d688:0:b0:559:d39e:e1e8 with SMTP id
- y130-20020a0dd688000000b00559d39ee1e8mr351868ywd.44.1685401583855; Mon, 29
- May 2023 16:06:23 -0700 (PDT)
+        Mon, 29 May 2023 19:13:12 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29429AD;
+        Mon, 29 May 2023 16:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=2GSBnGGF/cWciTe090S7qBqvsPOJa4MBkLkJEyta5hk=; b=JVJvd0HZPkeM1i/qHdw8SNFkZm
+        ofwPGKDaFbdxyWAqsXjT+IeCdSOdrhMr2amWD/SVGRRarIqMPqRi7JMhfIalNaMoCsU8XFY/Pim1W
+        ac5KSoDelKbQHKXAE2fA9lUiVPc1Y6A5heX9TVpXbL/m2tfCS3lm9FowHJmiFAzYo3UXIVdBgmpWa
+        SXftjTYfcMw4HRESb0VQuu3bXE9fKTplOvNff2WibOqrOtMwKH8wWwveigf/Q4MVfZ4xlDWaYtfbF
+        TTF8kK2Y2CeUesvsPM6ICOCu4AqUPgCPd5Y0LXdNA3vCS4sfiZmcggoaX5u0ow3ONWO21BqBEXftQ
+        S+Lrsa3Q==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q3m31-00BtbH-1I;
+        Mon, 29 May 2023 23:13:07 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-crypto@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH] virt: sev-guest: fix kconfig warnings
+Date:   Mon, 29 May 2023 16:13:05 -0700
+Message-Id: <20230529231305.16995-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230517144144.365631-1-romain.perier@gmail.com>
- <20230517144144.365631-2-romain.perier@gmail.com> <20230529224039a7f270b9@mail.local>
-In-Reply-To: <20230529224039a7f270b9@mail.local>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Tue, 30 May 2023 08:06:13 +0900
-Message-ID: <CAFr9PX=NmgX5Ww55bz+oM15fhqofFQH=PGs_T6Gkfs4g8ZrFXw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] rtc: Add support for the SSD20xD RTC
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Romain Perier <romain.perier@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexandre,
+kconfig complains about unmet dependencies for SEV_GUEST
+whenever CRYPTO is not set/enabled, so also select CRYPTO
+when selecting other crypto kconfig options to silence the
+warnings.
 
-On Tue, 30 May 2023 at 07:40, Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
->
-> Hello,
->
-> On 17/05/2023 16:41:42+0200, Romain Perier wrote:
-> > Newer SigmaStar SSD20xD SoCs contain a really low power RTC (300uA claimed),
->
-> The low power RTCs are more on the side of a few tenth of nA. RV3028
-> consumes 40nA, including the crystal. AB1805 consumes 14nA with an RC
-> oscillator. It is funny how SoC vendors think they are low power ;)
+Quietens these warnings:
 
-To be fair to them I think the 300uA claim is for the whole SoC in
-RTC-only deep sleep.
-Whatever logic is powered on alongside the RTC to trigger wake up will
-be part of that number I guess.
+WARNING: unmet direct dependencies detected for CRYPTO_GCM
+  Depends on [n]: CRYPTO [=n]
+  Selected by [y]:
+  - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
 
-Cheers,
+WARNING: unmet direct dependencies detected for CRYPTO_AEAD2
+  Depends on [n]: CRYPTO [=n]
+  Selected by [y]:
+  - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
 
-Daniel
+Fixes: fce96cf04430 ("virt: Add SEV-SNP guest driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: lore.kernel.org/r/202305300557.PJ5ao694-lkp@intel.com
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Cc: Paul Gazzillo <paul@pgazz.com>
+Cc: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: linux-crypto@vger.kernel.org
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>
+---
+ drivers/virt/coco/sev-guest/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff -- a/drivers/virt/coco/sev-guest/Kconfig b/drivers/virt/coco/sev-guest/Kconfig
+--- a/drivers/virt/coco/sev-guest/Kconfig
++++ b/drivers/virt/coco/sev-guest/Kconfig
+@@ -2,6 +2,7 @@ config SEV_GUEST
+ 	tristate "AMD SEV Guest driver"
+ 	default m
+ 	depends on AMD_MEM_ENCRYPT
++	select CRYPTO
+ 	select CRYPTO_AEAD2
+ 	select CRYPTO_GCM
+ 	help
