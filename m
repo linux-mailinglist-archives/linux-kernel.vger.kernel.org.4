@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD09F7143F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17657143F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjE2GOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 02:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S230430AbjE2GOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 02:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjE2GOX (ORCPT
+        with ESMTP id S229624AbjE2GO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 02:14:23 -0400
+        Mon, 29 May 2023 02:14:27 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF1DB1
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:14:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0B3BB
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:14:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685340862; x=1716876862;
+  t=1685340865; x=1716876865;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=9Oxpi0PPziaQhMGSH3TrNy4IFICDc28ZfyvpBf2ejj4=;
-  b=DlehFadix+4U+iWpL/fGaz7SLQ8p/smv5qoK/XfFKa6WPKzUKo4ZYRlF
-   go98QSjc5Gt5s7PmqGZpaLv2+EiSntjVbIXIlrB7UYchNbq2tgZetQ2VJ
-   St6zHzrnU8JyBItisGmohcSwjDj2Oi89j2iRzdaPN2gE0ItATH3LYP9p+
-   s5ul0U7OVGd9ffArcwvwCyI8hzl8xE72sqvXYsf+NCTFLBxXXmVkzj9+J
-   IokpS/30mPMXuSUS1tghh/MUuXRT/Nritu1yiZvdSUlbYh4B/6ZI0SHgp
-   KHJF9UlDihAEIBLX98vENdrLrix9KR7G9yqHHiJ7YPMKH+3IwLMbEQqsL
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="357881814"
+  bh=tTttI7ks79EVJT0Lkkg7CgRwuqqX+cQLYrih/1r1FtU=;
+  b=ZS60TbM6qYbN/Q3CVL42COpkGiFTtmto2DACxT0SSW21D9JEoDmHh7Cx
+   ZHNrykD1KPtmB0FZc+9nL+MNg3sr9yZ3ZCxkFizkchdiDHy6wAg568PPg
+   XdwLE+2T3omXzYVzcqxW3BWshiZe4UK+gVgGmqGt/iAyiJYf6BLlNOUiM
+   IudLGi0St3ihKDDHY2Qmrumqs3J+AQT3tYjF3uFCdDy/hXYXvHoHBWylP
+   qh5kQGpLN7oEMgdY6c+beM648+nu+q5ZgfwYH0V5chQtSr0Qgk4HYEQYb
+   Pz12B7hf4p20YEDh+YPy0bgQsTSDsPEAqMUvCequ6LAOSsA+m8Q5rlCKx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="357881834"
 X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
-   d="scan'208";a="357881814"
+   d="scan'208";a="357881834"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 23:14:21 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 23:14:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="1036079991"
+X-IronPort-AV: E=McAfee;i="6600,9927,10724"; a="1036079999"
 X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
-   d="scan'208";a="1036079991"
+   d="scan'208";a="1036079999"
 Received: from azhao3-mobl1.ccr.corp.intel.com (HELO yhuang6-mobl2.ccr.corp.intel.com) ([10.255.28.126])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 23:14:18 -0700
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2023 23:14:22 -0700
 From:   Huang Ying <ying.huang@intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
         Chris Li <chrisl@kernel.org>,
         Yosry Ahmed <yosryahmed@google.com>
-Subject: [PATCH -V3 2/5] swap, __read_swap_cache_async(): enlarge get/put_swap_device protection range
-Date:   Mon, 29 May 2023 14:13:52 +0800
-Message-Id: <20230529061355.125791-3-ying.huang@intel.com>
+Subject: [PATCH -V3 3/5] swap: remove __swp_swapcount()
+Date:   Mon, 29 May 2023 14:13:53 +0800
+Message-Id: <20230529061355.125791-4-ying.huang@intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230529061355.125791-1-ying.huang@intel.com>
 References: <20230529061355.125791-1-ying.huang@intel.com>
@@ -71,10 +71,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This makes the function a little easier to be understood because we
-don't need to consider swapoff.  And this makes it possible to remove
-get/put_swap_device() calling in some functions called by
-__read_swap_cache_async().
+__swp_swapcount() just encloses the calling to swap_swapcount() with
+get/put_swap_device().  It is called in __read_swap_cache_async()
+only, which encloses the calling with get/put_swap_device() already.
+So, __read_swap_cache_async() can call swap_swapcount() directly.
 
 Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
 Cc: David Hildenbrand <david@redhat.com>
@@ -89,103 +89,84 @@ Cc: Yu Zhao <yuzhao@google.com>
 Cc: Chris Li <chrisl@kernel.org>
 Cc: Yosry Ahmed <yosryahmed@google.com>
 ---
- mm/swap_state.c | 31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
+ include/linux/swap.h |  4 ++--
+ mm/swap_state.c      |  2 +-
+ mm/swapfile.c        | 20 +-------------------
+ 3 files changed, 4 insertions(+), 22 deletions(-)
 
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index b76a65ac28b3..a8450b4a110c 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -417,9 +417,13 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
- {
- 	struct swap_info_struct *si;
- 	struct folio *folio;
-+	struct page *page;
- 	void *shadow = NULL;
- 
- 	*new_page_allocated = false;
-+	si = get_swap_device(entry);
-+	if (!si)
-+		return NULL;
- 
- 	for (;;) {
- 		int err;
-@@ -428,14 +432,12 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
- 		 * called after swap_cache_get_folio() failed, re-calling
- 		 * that would confuse statistics.
- 		 */
--		si = get_swap_device(entry);
--		if (!si)
--			return NULL;
- 		folio = filemap_get_folio(swap_address_space(entry),
- 						swp_offset(entry));
--		put_swap_device(si);
--		if (!IS_ERR(folio))
--			return folio_file_page(folio, swp_offset(entry));
-+		if (!IS_ERR(folio)) {
-+			page = folio_file_page(folio, swp_offset(entry));
-+			goto got_page;
-+		}
- 
- 		/*
- 		 * Just skip read ahead for unused swap slot.
-@@ -446,7 +448,7 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
- 		 * else swap_off will be aborted if we return NULL.
- 		 */
- 		if (!__swp_swapcount(entry) && swap_slot_cache_enabled)
--			return NULL;
-+			goto fail_put_swap;
- 
- 		/*
- 		 * Get a new page to read into from swap.  Allocate it now,
-@@ -455,7 +457,7 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
- 		 */
- 		folio = vma_alloc_folio(gfp_mask, 0, vma, addr, false);
- 		if (!folio)
--			return NULL;
-+                        goto fail_put_swap;
- 
- 		/*
- 		 * Swap entry may have been freed since our caller observed it.
-@@ -466,7 +468,7 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
- 
- 		folio_put(folio);
- 		if (err != -EEXIST)
--			return NULL;
-+			goto fail_put_swap;
- 
- 		/*
- 		 * We might race against __delete_from_swap_cache(), and
-@@ -500,12 +502,17 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
- 	/* Caller will initiate read into locked folio */
- 	folio_add_lru(folio);
- 	*new_page_allocated = true;
--	return &folio->page;
-+	page = &folio->page;
-+got_page:
-+	put_swap_device(si);
-+	return page;
- 
- fail_unlock:
- 	put_swap_folio(folio, entry);
- 	folio_unlock(folio);
- 	folio_put(folio);
-+fail_put_swap:
-+	put_swap_device(si);
- 	return NULL;
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 3c69cb653cb9..f6bd51aa05ea 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -512,7 +512,7 @@ int find_first_swap(dev_t *device);
+ extern unsigned int count_swap_pages(int, int);
+ extern sector_t swapdev_block(int, pgoff_t);
+ extern int __swap_count(swp_entry_t entry);
+-extern int __swp_swapcount(swp_entry_t entry);
++extern int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry);
+ extern int swp_swapcount(swp_entry_t entry);
+ extern struct swap_info_struct *page_swap_info(struct page *);
+ extern struct swap_info_struct *swp_swap_info(swp_entry_t entry);
+@@ -590,7 +590,7 @@ static inline int __swap_count(swp_entry_t entry)
+ 	return 0;
  }
  
-@@ -514,6 +521,10 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
-  * and reading the disk if it is not already cached.
-  * A failure return means that either the page allocation failed or that
-  * the swap entry is no longer in use.
-+ *
-+ * get/put_swap_device() aren't needed to call this function, because
-+ * __read_swap_cache_async() call them and swap_readpage() holds the
-+ * swap cache folio lock.
+-static inline int __swp_swapcount(swp_entry_t entry)
++static inline int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+ {
+ 	return 0;
+ }
+diff --git a/mm/swap_state.c b/mm/swap_state.c
+index a8450b4a110c..ef32353c18a6 100644
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -447,7 +447,7 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+ 		 * as SWAP_HAS_CACHE.  That's done in later part of code or
+ 		 * else swap_off will be aborted if we return NULL.
+ 		 */
+-		if (!__swp_swapcount(entry) && swap_slot_cache_enabled)
++		if (!swap_swapcount(si, entry) && swap_slot_cache_enabled)
+ 			goto fail_put_swap;
+ 
+ 		/*
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 8419cba9c192..e9cce775fb25 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1443,7 +1443,7 @@ int __swap_count(swp_entry_t entry)
+  * This does not give an exact answer when swap count is continued,
+  * but does include the high COUNT_CONTINUED flag to allow for that.
   */
- struct page *read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
- 				   struct vm_area_struct *vma,
+-static int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
++int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+ {
+ 	pgoff_t offset = swp_offset(entry);
+ 	struct swap_cluster_info *ci;
+@@ -1455,24 +1455,6 @@ static int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
+ 	return count;
+ }
+ 
+-/*
+- * How many references to @entry are currently swapped out?
+- * This does not give an exact answer when swap count is continued,
+- * but does include the high COUNT_CONTINUED flag to allow for that.
+- */
+-int __swp_swapcount(swp_entry_t entry)
+-{
+-	int count = 0;
+-	struct swap_info_struct *si;
+-
+-	si = get_swap_device(entry);
+-	if (si) {
+-		count = swap_swapcount(si, entry);
+-		put_swap_device(si);
+-	}
+-	return count;
+-}
+-
+ /*
+  * How many references to @entry are currently swapped out?
+  * This considers COUNT_CONTINUED so it returns exact answer.
 -- 
 2.39.2
 
