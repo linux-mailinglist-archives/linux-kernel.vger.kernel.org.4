@@ -2,118 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EB071511B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 23:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD19071511E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 23:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjE2VtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 17:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
+        id S229724AbjE2Vty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 17:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjE2VtM (ORCPT
+        with ESMTP id S229485AbjE2Vtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 17:49:12 -0400
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B54CCF
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 14:49:11 -0700 (PDT)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id E48B41004062C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 21:49:10 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 3kjmqX9RfpMQl3kjmqgJxX; Mon, 29 May 2023 21:49:10 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=XKv19StE c=1 sm=1 tr=0 ts=64751dd6
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=P0xRbXHiH_UA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Mtz8ncBQGc66NOqAbAq0X0do/oA1vIqXijZszyCtM+I=; b=oWMHLDLFP0QknohAJo9k1pTdRz
-        DlXh9bOYamzbYN+c2tq0588Xdb79OmHf4Dlfx6OjWAGqymjt3T08IoZJBC99nAzjS69a3a/pyV/al
-        UjaV7hZoMZJuQZy0HBPELwwsHHLa6d29E+izNQeyJSlYOVL7uTaHbKmrxU/x6oZUnT2rRys7GC5p0
-        ku2O9foIuCmuvIrVCj0zd37mZMWYwaTKgMqnyakFqt5XtS7kOSwgDyC4/0BGsxyl2Vi5eYF54T740
-        A1Wxh4C8K61QwS7Eq2x9Ocxczx5YJOP24LZNuuNRKhLVcVLLYmgW0Hj4quW0RnjoeQHu9UHCvBr/2
-        tlFQV6Tg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:42034 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1q3kjl-0024Oe-CQ;
-        Mon, 29 May 2023 15:49:09 -0600
-Subject: Re: [PATCH 6.1 000/119] 6.1.31-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230528190835.386670951@linuxfoundation.org>
-In-Reply-To: <20230528190835.386670951@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <2ea97484-7ad0-a844-27e5-19085cb36ae7@w6rz.net>
-Date:   Mon, 29 May 2023 14:49:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 29 May 2023 17:49:52 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56F6C1;
+        Mon, 29 May 2023 14:49:50 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVThT65bcz4whk;
+        Tue, 30 May 2023 07:49:45 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685396986;
+        bh=M+yVj+vLQfNG4ud8zB4xhuy4EkeoZBz0Mfxes0Tz530=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PPgH3cfvnLHtyjNYkeM9ChDF8cZTzOnzE3sgb3S/fLifC74pKujI1Y32DdrIO9i/g
+         64jj9n68JWDLBKFrYTyO9huVtiKDicLBdr+pu8RGJ4svWXu0h+H2a/KNj0k4W4ECWC
+         aSMXLjP+XxKxi28kqgc0Bg7LE+FI/Kl189n6P3ieQxEOa/eWraKgqZtLOKH+KwXba1
+         4DrqUGH4rpms1RMcYwUqBTNfdwrckyu5Fhdx1mqEmP9PeOvUDxsyffhjf7NOQyTSkj
+         JcuNJIvygrgIAjfR5xkPjZxfF0bpIJ90P78/UYakX2flQeXh4MmmYfXUao4U7Uqr0W
+         HEGi0IQyh280Q==
+Date:   Tue, 30 May 2023 07:49:43 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the qcom tree
+Message-ID: <20230530074943.5b196424@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1q3kjl-0024Oe-CQ
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:42034
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/MVHY6JUTwfHcGA/a91X/tyy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/28/23 12:10 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.31 release.
-> There are 119 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.31-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+--Sig_/MVHY6JUTwfHcGA/a91X/tyy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Hi all,
 
-Tested-by: Ron Economos <re@w6rz.net>
+In commit
 
+  8b9ca2f3ea45 ("ARM: dts: qcom-apq8060: Fix regulator node names")
+
+Fixes tag
+
+  Fixes: 04715461abf7 ("ARM: dts: qcom-msm8660: align RPM regulators node n=
+ame with bindings")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 85055a1eecc1 ("ARM: dts: qcom-msm8660: align RPM regulators node nam=
+e with bindings")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/MVHY6JUTwfHcGA/a91X/tyy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1HfgACgkQAVBC80lX
+0GwphggAljxaWaVve4L0ZNePxtepnw/nvwKK/zg3uFZn+cekNuc8CcWtH2KYgNEx
+JmY3lOxM2McPlJ67pK7pWlsizKt1RV/T8Cva4qcCcy/23luqVzHG5Dy1/XcdKevh
+yuxtbsgv+8yRHGJuLf0klUepXxL4xjd176oAhoxtVVptRiAbDbjSazVeLH/g2RZY
+CNccbU0At/LpfqgbhSrFs/zvEE4ysRvLA6faZv30/E5PQWrPUQveC4NltJXE+NPE
+ztZFPVcoMCKV9Jua+Bd7N1nzPDGORMCD20fFB8Re77Kzl0rj6MoW5iAyEx8QyhVi
+zXvQmg7mm68kZT7aNDGnS+k2UNeAiw==
+=ji6r
+-----END PGP SIGNATURE-----
+
+--Sig_/MVHY6JUTwfHcGA/a91X/tyy--
