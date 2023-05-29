@@ -2,136 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE63714967
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23ABC714970
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 14:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbjE2MXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 08:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
+        id S231600AbjE2MYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 08:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjE2MXY (ORCPT
+        with ESMTP id S230332AbjE2MYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 08:23:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CB1B1;
-        Mon, 29 May 2023 05:23:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1674461478;
-        Mon, 29 May 2023 12:23:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4431BC4339B;
-        Mon, 29 May 2023 12:23:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685363002;
-        bh=DIom684KiSxk01dPxTEKYPYlKZpznxqWChGWbgchUas=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=m4huvw5FG87KkGp5G3c8mVaPbM/gEiXG+/qixHAbgpeFl0VLnEkTvQBqodFGEHH8z
-         Kub46+L6NPl7bhqzEl563kbd8CCrHPTsh+waN3A7pHqapeFNaA9nlQETtbkiuGh+Dn
-         kmy+h8vfXfQbArn0f63TOuetidEW/dy87CBXcO/P3rFKA6Tw2nurzspDUAjGuO1hEl
-         liuE0b3YCe3k56krJ9D7G9TCdrR8fGKQJZhMGJ5MAo9L2mXtklS63FWtdj9xPcwKuX
-         yWpXNYr2bYemW3TwKZW3Ru13mT79WvyUHLDX5CZvUqZuobq9YK65hY9RvxI/4Zn0lp
-         Zj0iup5lWOMJA==
-Date:   Mon, 29 May 2023 07:23:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     =?utf-8?B?5qWK5a6X57+w?= <ecs.taipeikernel@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moragues <moragues@google.com>,
-        Abner Yen <abner.yen@ecs.com.tw>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@google.com>,
-        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
-        Gavin Lee <gavin.lee@ecs.com.tw>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v1] drivers: pci: quirks: Add suspend fixup for SSD on
- sc7280
-Message-ID: <ZHSZOKEMNbARQyiG@bhelgaas>
+        Mon, 29 May 2023 08:24:02 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75393C2;
+        Mon, 29 May 2023 05:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685363027; x=1716899027;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=zsfRnRMXIV5r/X5furPt6ghu8XOqWi203n2Q9dk2B28=;
+  b=GUY4uDRsumjymEK1BNnByh9fG6eFMx9vHkN698/wu4vJmeiGSNuax5r1
+   55XanUm7NAXdLkx4K9tT1cGNkIuitTKVJzK+LmVpa8FdoSVO8tOJodSE8
+   QuH+iqtS2zKIZge4+CeexTL7VA00Tq3nG/QVv/v5ZLT6EsvIz+gzbYurC
+   p/JYfuNKEaA1KWw/BURLUfgl1N2bojRM1yiawcE+xk2ITq0N3e7umjx8U
+   SctYrMusy5ptMbqooPl5Irfb0swveOuIIl+T7lKa7XBdeVuHf6DAy/TQt
+   fuNN7amAtOFZDWEGQACaLmo4hu8zqLlL74UA/v6pMLQq6eob06iyhrPyr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="441049767"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="441049767"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 05:23:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="818417659"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="818417659"
+Received: from btaubert-mobl1.ger.corp.intel.com ([10.252.55.237])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 05:23:45 -0700
+Date:   Mon, 29 May 2023 15:23:42 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Mark Pearson <mpearson-lenovo@squebb.ca>
+cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 5/5] platform/x86: think-lmi: mutex protection around
+ multiple WMI calls
+In-Reply-To: <20230526171658.3886-5-mpearson-lenovo@squebb.ca>
+Message-ID: <27c7824e-ec90-c68f-3e76-92525ed7e393@linux.intel.com>
+References: <mpearson-lenovo@squebb.ca> <20230526171658.3886-1-mpearson-lenovo@squebb.ca> <20230526171658.3886-5-mpearson-lenovo@squebb.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPao8GJNbXnh1R2-9rueMygyYyy-r3kqvQ55xdN61E7m6_dkdw@mail.gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 02:24:53PM +0800, 楊宗翰 wrote:
-> Hi Bjorn,
+On Fri, 26 May 2023, Mark Pearson wrote:
+
+> Add mutex protection around cases where an operation needs multiple
+> WMI calls - e.g. setting password.
+
+So you need this feature already for Patch 1/5? If that's the case, you 
+should reorder the patches and put it before 1/5.
+
+That "e.g. setting password" sounds vague enough that I'm left to wonder 
+if there are other cases in the driver which need locking too. It would be 
+useful to be precise with wording here. It will help immensely when 
+somebody looks this changelog 5 years from now if you explain all cases 
+that need locking up front.
+
+So, is this needed also for some existing code, then Fixes tag might be in 
+order? (I'm looking e.g. that cert auth block in current_value_store() 
+which also does more than one call).
+
+-- 
+ i.
+
+> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+> ---
+> Changes in v2: New commit added after review of other patches in series.
+> Changes in v3: Simplified mutex handling as recommended.
 > 
-> Thanks for your kind directions.
-
-Your response was a multi-part message, which doesn't work on the
-Linux mailing lists.  See http://vger.kernel.org/majordomo-info.html
-
->   - Subject line in style of the file (use "git log --oneline
->     drivers/pci/quirks.c").
-> Done, and I resend in topic "[PATCH v1] PCI: Add suspend fixup for SSD
->  on sc7280", please review it.
-
-This would actually have been "v2", since you sent v1 previously.
-
->   - Description of incorrect behavior.  What does the user see?  If
->     there's a bug report, include a link to it.
+>  drivers/platform/x86/think-lmi.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> This issue seems to be discovered in ChromeOS only. SSD will randomly
+> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+> index 64cd453d6e7d..86185358dba2 100644
+> --- a/drivers/platform/x86/think-lmi.c
+> +++ b/drivers/platform/x86/think-lmi.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/acpi.h>
+>  #include <linux/errno.h>
+>  #include <linux/fs.h>
+> +#include <linux/mutex.h>
+>  #include <linux/string.h>
+>  #include <linux/types.h>
+>  #include <linux/dmi.h>
+> @@ -195,6 +196,7 @@ static const char * const level_options[] = {
+>  };
+>  static struct think_lmi tlmi_priv;
+>  static struct class *fw_attr_class;
+> +static DEFINE_MUTEX(tlmi_mutex);
+>  
+>  /* ------ Utility functions ------------*/
+>  /* Strip out CR if one is present */
+> @@ -437,6 +439,9 @@ static ssize_t new_password_store(struct kobject *kobj,
+>  	/* Strip out CR if one is present, setting password won't work if it is present */
+>  	strip_cr(new_pwd);
+>  
+> +	/* Use lock in case multiple WMI operations needed */
+> +	mutex_lock(&tlmi_mutex);
+> +
+>  	pwdlen = strlen(new_pwd);
+>  	/* pwdlen == 0 is allowed to clear the password */
+>  	if (pwdlen && ((pwdlen < setting->minlen) || (pwdlen > setting->maxlen))) {
+> @@ -493,6 +498,7 @@ static ssize_t new_password_store(struct kobject *kobj,
+>  		kfree(auth_str);
+>  	}
+>  out:
+> +	mutex_unlock(&tlmi_mutex);
+>  	kfree(new_pwd);
+>  	return ret ?: count;
+>  }
+> @@ -987,6 +993,9 @@ static ssize_t current_value_store(struct kobject *kobj,
+>  	/* Strip out CR if one is present */
+>  	strip_cr(new_setting);
+>  
+> +	/* Use lock in case multiple WMI operations needed */
+> +	mutex_lock(&tlmi_mutex);
+> +
+>  	/* Check if certificate authentication is enabled and active */
+>  	if (tlmi_priv.certificate_support && tlmi_priv.pwd_admin->cert_installed) {
+>  		if (!tlmi_priv.pwd_admin->signature || !tlmi_priv.pwd_admin->save_signature) {
+> @@ -1031,7 +1040,6 @@ static ssize_t current_value_store(struct kobject *kobj,
+>  			if (ret)
+>  				goto out;
+>  		}
+> -
+>  		ret = tlmi_save_bios_settings("");
+>  	} else { /* old non opcode based authentication method (deprecated)*/
+>  		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
+> @@ -1071,6 +1079,7 @@ static ssize_t current_value_store(struct kobject *kobj,
+>  		kobject_uevent(&tlmi_priv.class_dev->kobj, KOBJ_CHANGE);
+>  	}
+>  out:
+> +	mutex_unlock(&tlmi_mutex);
+>  	kfree(auth_str);
+>  	kfree(set_str);
+>  	kfree(new_setting);
 > 
-> crashed at 100~250+ suspend/resume cycle. Phison and Qualcomm
-> 
-> found that its due to NVMe entering D3cold instead of L1ss.
-> https://partnerissuetracker.corp.google.com/issues/275663637
-
-This kind of information needs to be in the commit log, not just in
-the email thread.
-
-It's best if there is a published errata document from Qualcomm that
-describes the issue and how software should work around it.  Obviously
-a URL to that document would be in the commit log.
-
->   - Multi-line code comments in style of the file (look at existing
->     comments in the file).
-> Done.
-
-Not quite done.  Needs to be like this:
-
-  /*
-   * Text ...
-   */
-
-Not like this:
-
-  /* Text ...
-   */
-
->   - Details of "the correct ASPM state".  ASPM may be enabled or
->     disabled by the user, so you can't assume any particular ASPM
->     configuration.
-> According to Qualcomm. This issue has been found last year and they have
-> attempt to submit some patches to fix the pci suspend behavior.
-> (ref:https://patchwork.kernel.org/project/linux-arm-msm/list/?
-> series=665060&state=%2A&archive=both).
-> But somehow these patches were rejected because of its complexity. And
-> we've got advise from Google that it will be more efficient that we
-> implement
-> a quirks to fix this issue.
-
-Some of this history or at least a pointer to it should be in the
-commit log.
-
->   - Details on the Qualcomm sc7280 connection.  This quirk would
->     affect Phison SSDs on *all* platforms, not just sc7280.  I don't
->     want to slow down suspend on all platforms just for a sc7280
->     issue.
-> The DECLARE_PCI_FIXUP_SUSPEND function has already specify the PCI device
-> ID. And this SSD will only be used at our Chromebook device only.
-
-It's hard to guarantee that this will only be used in Chromebook, so
-this is a little weak.  But if it's the best we have, it needs to be
-mentioned in the code comment.
-
-Bjorn
