@@ -2,207 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25740714544
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B74B71455B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjE2HLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 03:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
+        id S229652AbjE2HVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 03:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjE2HLa (ORCPT
+        with ESMTP id S229584AbjE2HVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 03:11:30 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F6CA3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:11:28 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-786efb5ffa8so514155241.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:11:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685344288; x=1687936288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/VIPgBItugg4n8+/DVI4i5wWvIxKuIY8gx2aSmo5OI8=;
-        b=NhuDMIV4CzkB5TZoj+zpREJy0Jjp228iNsIC5t71Pobq9pYknAqGcLpT+RkjzCVHCS
-         GG5e71NgiZ3M4hIzVL9eobgCFFQDG5q0w9CezCCo8oalRtvECpyfw5jo7yvlNbwZGcgL
-         piox/dUCtcrqXrWdZ3PVFkwP/hBe/lJUbwdN592qQ60GAwakB1SVbn70VEx1/E5rC9sM
-         iRACk1NqvErcnlHZA8E7ycF6W2mr9U+0WWARqhdmOXTGQ96+8f8ehQXqxkUFHNF0kOIY
-         HCYnq5GR4T8xrAtNEWmgVQKfL72EkUQXaR2/D/H1YnanCyfz5tNLuaK09WESOglluZh7
-         Uy2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685344288; x=1687936288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/VIPgBItugg4n8+/DVI4i5wWvIxKuIY8gx2aSmo5OI8=;
-        b=Q06CAyayPwCGD73TAt6ActkIbJJzjIs9wPytNIpSJJbqVjDQ9J7grTL01vJxfSxA6x
-         HwvDqyirsI2vx0H/sQ6XVUXKpdHjagIWGBpo15VMXyOQQQLUhCpAQQiKaxL1lhCEXK7J
-         E37s44g4deOmNuAahpFc+tlDON9cD5XH2UP50FanpQs2uGKMO7cUW4+OtPCuMs19CJKL
-         5jTA5E4RoYLkg9rnB40F1Skgf5YRRMEp1jN1BS0GmNtrfAVcFGEznVHJWC0Ru7vuO1TC
-         N9fllX09QqSx80IuDj+4KgRpivtfT56/9z9XFBJymDsxLzIQ7mT2fJXR6hqw9W/Pb9XK
-         SYYA==
-X-Gm-Message-State: AC+VfDzYakisYfo5TO2DlHc1QhO7h0XL9rp32IcYuzgqDJBTaucr0uzu
-        pJvwLmmBhbuhPvLLAdhIK8I0tUezPteSDvPIF8o5zw==
-X-Google-Smtp-Source: ACHHUZ6UVA0h7xXFQG5gOcgMwDOEFrKiHeXNI98sDyTpHEyrpriq468L8JGu702BpaRvVreB3ffW11mcxFXFm6weGRQ=
-X-Received: by 2002:a67:eb88:0:b0:439:e3f:9d6 with SMTP id e8-20020a67eb88000000b004390e3f09d6mr2481461vso.17.1685344288029;
- Mon, 29 May 2023 00:11:28 -0700 (PDT)
+        Mon, 29 May 2023 03:21:34 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE82A6;
+        Mon, 29 May 2023 00:21:32 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34T6TFJd022657;
+        Mon, 29 May 2023 09:21:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=R7U12OfPWbuKgyybSdqlH6r+NAGEknQL5yOH75+Ki/o=;
+ b=mWTzap13IJD3sGmFPOA13Bs0t5d4pbafMu/Co6c4yHZ6oMTKxRLdVzGEToWs0IGUroNE
+ QP8XfIRu9woFIYgnX97OZuo95eM/AFE1JWze1wNiqzOKITvsJ1CLLDxfMBUTIlm+ZFZ/
+ FBrZ6qj9twziD55xCwawiWR/CNMciHj8YUaZa+z1Br7LL4tV528fSTPjtWU59aU92Db2
+ eOpkZZ6wwruqY0h27P58IQd+Br0quuuOXF5mYuYH6E/WG1ObvkGfGUCKr115WlqWnG/g
+ QfRuciXKo3pg0Dsakv3Ll9/s+AK8ty6lMl0IzMFg6wbiuu/JxiG6F3KJJduixrcFexxJ SQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quag27vxa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 May 2023 09:21:05 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 03EAB100039;
+        Mon, 29 May 2023 09:21:04 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EEF0B2132FC;
+        Mon, 29 May 2023 09:21:03 +0200 (CEST)
+Received: from [10.201.21.9] (10.201.21.9) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 29 May
+ 2023 09:21:02 +0200
+Message-ID: <312a7c7a-165c-eb17-b6af-4c708d33afb4@foss.st.com>
+Date:   Mon, 29 May 2023 09:17:00 +0200
 MIME-Version: 1.0
-References: <20230517143311.585080-1-sumit.garg@linaro.org>
- <CAN5uoS9h6OmO-SZWmBdRUkT+ih9QK+mTo8Kvmn3ePQ4NrKriBw@mail.gmail.com>
- <CAFA6WYPCOqsyedjP-ffAQiyX3manDV+oE3akFpeuRZukro_dRg@mail.gmail.com>
- <PAXPR10MB468715EB2B1DFE080F380266FD469@PAXPR10MB4687.EURPRD10.PROD.OUTLOOK.COM>
- <CAHUa44FDs-cukERVwev88i855Y-ZaAkLUt=bVxah=GdW+JKVLQ@mail.gmail.com> <PAXPR10MB46872AD9A798A1B7DAF4721DFD469@PAXPR10MB4687.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <PAXPR10MB46872AD9A798A1B7DAF4721DFD469@PAXPR10MB4687.EURPRD10.PROD.OUTLOOK.COM>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Mon, 29 May 2023 12:41:17 +0530
-Message-ID: <CAFA6WYOFaSHHRhNbeuwjLMtCRhGt4edMyeSD1841E3xzS-ETag@mail.gmail.com>
-Subject: Re: [PATCH v9 3/4] tee: optee: support tracking system threads
-To:     Etienne CARRIERE <etienne.carriere@st.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 1/4] tee: Re-enable vmalloc page support for shared
+ memory
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        Etienne CARRIERE - foss <etienne.carriere@foss.st.com>
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <op-tee@lists.trustedfirmware.org>
+References: <20230523091350.292221-1-arnaud.pouliquen@foss.st.com>
+ <20230523091350.292221-2-arnaud.pouliquen@foss.st.com>
+ <ZG2yw0xZ6XGGp9E5@infradead.org>
+ <18a8528d-7d9d-6ed0-0045-5ee47dd39fb2@foss.st.com>
+ <ZHCoJEkVinvsB2lZ@infradead.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <ZHCoJEkVinvsB2lZ@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.9]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-29_04,2023-05-25_03,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 May 2023 at 01:05, Etienne CARRIERE <etienne.carriere@st.com> wr=
-ote:
->
->
-> > De: Jens Wiklander <jens.wiklander@linaro.org>
-> > Envoy=C3=A9 : jeudi 25 mai 2023 17:20
-> >
-> > Hi,
-> >
-> > On Thu, May 25, 2023 at 1:48=E2=80=AFPM Etienne CARRIERE
-> > <etienne.carriere@st.com> wrote:>
-> > >
-> > > >
-> > > > De : Sumit Garg <sumit.garg@linaro.org>
-> > > > Envoy=C3=A9 : mercredi 24 mai 2023 09:31
-> > > > > On Tue, 23 May 2023 at 12:41, Etienne Carriere
-> > > > <etienne.carriere@linaro.org> wrote:
-> > > > > Hello Sumit,
-> > > > >
-> > > > >
-> > > > > On Wed, 17 May 2023 at 16:33, Sumit Garg <sumit.garg@linaro.org> =
-wrote:
-> > > > > >
-> > > > > > From: Etienne Carriere <etienne.carriere@linaro.org>
-> > > > > >
-> > > > > > Adds support in the OP-TEE driver to keep track of reserved sys=
-tem
-> > > > > > threads. The optee_cq_*() functions are updated to handle this =
-if
-> > > > > > enabled. The SMC ABI part of the driver enables this tracking, =
-but the
-> > > > > > FF-A ABI part does not.
-> > > > > >
-> > > > > > The logic allows atleast 1 OP-TEE thread can be reserved to TEE=
- system
-> > > > > > sessions. For sake of simplicity, initialization of call queue
-> > > > > > management is factorized into new helper function optee_cq_init=
-().
-> > > > > >
-> > > > > > Co-developed-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > > > > > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> > > > > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > > > > > Co-developed-by: Sumit Garg <sumit.garg@linaro.org>
-> > > > > > Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> > > > > > ---
-> > > > > >
-> > > > > > Disclaimer: Compile tested only
-> > > > > >
-> > > > > > Hi Etienne,
-> > > > > >
-> > > > > > Overall the idea we agreed upon was okay but the implementation=
- looked
-> > > > > > complex to me. So I thought it would be harder to explain that =
-via
-> > > > > > review and I decided myself to give a try at simplification. I =
-would
-> > > > > > like you to test it if this still addresses the SCMI deadlock p=
-roblem or
-> > > > > > not. Also, feel free to include this in your patchset if all go=
-es fine
-> > > > > > wrt testing.
-> > > > >
-> > > > > With these changes, there is no more a specific waiting list for =
-TEE
-> > > > > system threads hence when a waiting queue can complete, we'll pic=
-k any
-> > > > > TEE thread, not a TEE system thread first..
-> > > >
-> > > > I had thought about this but I can't see any value in having a
-> > > > separate wait queue for system threads. Here we only need to provid=
-e
-> > > > an extra privileged thread for system sessions (kernel clients) suc=
-h
-> > > > that user-space doesn't contend for that thread. This prevents kern=
-el
-> > > > client's starvation or deadlock like in the SCMI case.
-> > > >
-> > > > > Also, as stated in a below answer, these change unconditionally
-> > > > > reserve a TEE thread for TEE system calls even if no TEE client
-> > > > > reserved such.
-> > > >
-> > > > I don't think we should make thread reservations based on the prese=
-nce
-> > > > of TEE clients. You never know how much user-space or kernel TEE
-> > > > clients you are dealing with. And reserving a single privileged thr=
-ead
-> > > > unconditionally for system sessions shouldn't be much of a burden f=
-or
-> > > > memory constrained devices too.
-> > > >
-> > > > Also, this way we would enable every kernel TEE client to leverage
-> > > > system sessions as it's very likely they wouldn't like to compete w=
-ith
-> > > > user-space for thread availability. Two other kernel TEE clients th=
-at
-> > > > are on top of my head are HWRNG and Trusted Keys which can benefit
-> > > > from this feature.
-> > >
-> > > Trusted Keys is an interesting use case. When OP-TEE accesses Trusted=
- Keys,
-> > > it may need to access the eMMC/RPMB using the Linux OS tee-supplicant
-> > >  whichj may repuire an eMMC clock or voltage regulator to be enabled.
-> > > If that clock or regulator is under an SCMI control, then we need 2
-> > > reserved TEE thread: one for invoking the Trusted Key TA and
-> > > another for the SCMI request to reach the TEE will the Trusted Key
-> > > TA invocation still consumes a thread.
 
-Trusked keys TA doesn't need access to secure storage (eMMC/RPMB). It
-only requires a RNG and access to a key derived from HUK.
 
-> > >
-> > Why would the Trusted Keys session need a system thread? To me, it
-> > seems that the session could use the normal client priority.
+On 5/26/23 14:37, Christoph Hellwig wrote:
+> On Wed, May 24, 2023 at 04:01:14PM +0200, Arnaud POULIQUEN wrote:
+>>> As per the discussion back then: don't just blindly do the same dumb
+>>> thing again and fix the interfae to actually pass in a page array,
+>>> or iov_iter or an actually useful container that fits.
+>>>
+>>
+>> I suppose your are speaking about this discussion:
+>> https://lore.kernel.org/all/20221002002326.946620-3-ira.weiny@intel.com/
+> 
+> Yes.
+> 
+>>
+>> If I'm not mistaken, I should modify at tee_shm_register_kernel_buf API and
+>> register_shm_helper inernal function, right?
+>>
+> 
+>> What about having equivalent of shm_get_kernel_pages in an external helper (to
+>> defined where to put it), could it be an alternative of the upadate of the
+>> tee_shm API?
+> 
+> I think the fundamentally right thing is to pass an iov_iter to
+> register_shm_helper, and then use the new as of 6.3
+> iov_iter_extract_pages helper to extract the pages from that.  For
+> the kernel users you can then simply pass down an ITER_BVEC iter
+> that you can fill with vmalloc pages if you want.
+> 
 
-The system thread priority as per my patch is nothing but an extra
-thread available in the thread pool for kernel clients as compared to
-user-space clients.
+Thanks for the advice!
 
-Trusted keys use-case was really motivated by: "every kernel TEE
-client would like to avoid competing with user-space for thread
-availability". However, HWRNG has a real case that user-space
-shouldn't starve kernel RNG thread for OP-TEE thread availability.
-
-System thread can be useful for trusted keys in case the disk
-encryption key is backed by a trusted key.
-
--Sumit
+Regards,
+Arnaud
