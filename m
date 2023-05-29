@@ -2,145 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D707F714509
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D538C71450C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjE2Gml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 02:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        id S231688AbjE2Gna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 02:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjE2Gmj (ORCPT
+        with ESMTP id S229669AbjE2Gn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 02:42:39 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711F590
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:42:38 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34T5DgA8015207;
-        Mon, 29 May 2023 06:42:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Lt0aERUVfRMqik1xWn/SqHWOUfW+VPGCzzaeb6+9Lys=;
- b=kvLROsntxs2633pPXLnE8rFAna0Yo8B6FD/qcGIdAH1I0DIog4tNLeA9araI7myEorW3
- Pj8V9MbuqqMG9rAkvo+LTbfiiGFEks8lePT+ZXZOORSPg9uGZi+/fLA0QRsMhiWfwzdT
- xxFUfF8pqs3UwYN/obW6GXdpdiQuSo3CTnp5CEuJR8M/6T3DKlvjdDkREOMLs4M1RNCQ
- dSMoGUN3sbhQz6o05Z+a1BcNywUDeU7JiaBIO/fM6PowKz/dx4vGz0ImZ8oESG8UT4UM
- IYWZ2oKmczoK993/ze5fNZ7fL9YnLkGrP68HlcxT78aNMaO6WprM+ur32iAvMT3l0ss2 EQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3quatsjqyv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 May 2023 06:42:20 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34T6gJo5000358
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 May 2023 06:42:19 GMT
-Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 28 May
- 2023 23:42:16 -0700
-Message-ID: <010e31f6-113c-82f5-35fd-be6045610ab4@quicinc.com>
-Date:   Mon, 29 May 2023 12:12:13 +0530
+        Mon, 29 May 2023 02:43:27 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95B590;
+        Sun, 28 May 2023 23:43:25 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126255106133.24.openmobile.ne.jp [126.255.106.133])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 706B0A3A;
+        Mon, 29 May 2023 08:43:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685342584;
+        bh=Gv1wI1HXl/xftSGvC9ynLWDPtrckqiB0NV3CbxCDPik=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lqDRPQnXMSEWTP28yDtwpUXXze/a4+S9M9pcDx8K9h3JkIcHiJiPU/Bl2rlO2gcPy
+         0yQQ8+kYRGcjzxX5tGzMnqP+MIKzw78rJhCc/smBUeG5s/mJU2CKLRL3h72c8rNkB7
+         Uauy9drU49LUmGdZhA8orjL2MZy8htXLLq1JU+ek=
+Date:   Mon, 29 May 2023 09:43:26 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Tommaso Merciai <tomm.merciai@gmail.com>,
+        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <20230529064326.GC25984@pendragon.ideasonboard.com>
+References: <20230526173955.797226-1-tomm.merciai@gmail.com>
+ <20230526173955.797226-2-tomm.merciai@gmail.com>
+ <ZHPElYOeD2C1qo4R@kekkonen.localdomain>
+ <20230529063907.GB25984@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] sched/headers: remove duplicate included header files
-Content-Language: en-US
-To:     "Yan Yan(cailing)" <yanyan.yan@antgroup.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     =?UTF-8?B?6LCI6Ym06ZSL?= <henry.tjf@antgroup.com>,
-        <christophe.jaillet@wanadoo.fr>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-References: <20230522155341.9420-1-yanyan.yan@antgroup.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230522155341.9420-1-yanyan.yan@antgroup.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 9Xywe0xppya-SmWfWl-DXMZMWAGbsyP9
-X-Proofpoint-GUID: 9Xywe0xppya-SmWfWl-DXMZMWAGbsyP9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-29_04,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
- impostorscore=0 mlxscore=0 clxscore=1011 adultscore=0 lowpriorityscore=0
- mlxlogscore=999 priorityscore=1501 bulkscore=0 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305290057
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230529063907.GB25984@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/22/2023 9:23 PM, Yan Yan(cailing) wrote:
-> These headers are included more than once, some also appear in
-> kernel/sched/sched.h, so remove them.
+On Mon, May 29, 2023 at 09:39:13AM +0300, Laurent Pinchart wrote:
+> On Sun, May 28, 2023 at 09:16:05PM +0000, Sakari Ailus wrote:
+> > On Fri, May 26, 2023 at 07:39:43PM +0200, Tommaso Merciai wrote:
+> > > Add documentation of device tree in YAML schema for the ALVIUM
+> > > Camera from Allied Vision Inc.
+> > > 
+> > > References:
+> > >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
+> > > 
+> > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> > > ---
+> > > Changes since v1:
+> > >  - Fixed build error as suggested by RHerring bot
+> > > 
+> > >  .../media/i2c/alliedvision,alvium.yaml        | 115 ++++++++++++++++++
+> > >  1 file changed, 115 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > > new file mode 100644
+> > > index 000000000000..81e9e560c99d
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > > @@ -0,0 +1,115 @@
+> > > +# SPDX-License-Identifier: GPL-2.0
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Alliedvision Alvium Camera
 > 
-> Signed-off-by: Yan Yan <yanyan.yan@antgroup.com>
-
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
-
--- Mukesh
-
-> ---
->   kernel/sched/build_utility.c | 12 ------------
->   1 file changed, 12 deletions(-)
+> s/Alliedvision/Allied Vision/
 > 
-> diff --git a/kernel/sched/build_utility.c b/kernel/sched/build_utility.c
-> index 99bdd96f454f..b9ae5fe42f7b 100644
-> --- a/kernel/sched/build_utility.c
-> +++ b/kernel/sched/build_utility.c
-> @@ -13,16 +13,10 @@
->   #include <linux/sched/cputime.h>
->   #include <linux/sched/debug.h>
->   #include <linux/sched/isolation.h>
-> -#include <linux/sched/loadavg.h>
->   #include <linux/sched/nohz.h>
-> -#include <linux/sched/mm.h>
-> -#include <linux/sched/rseq_api.h>
->   #include <linux/sched/task_stack.h>
->   
-> -#include <linux/cpufreq.h>
-> -#include <linux/cpumask_api.h>
->   #include <linux/cpuset.h>
-> -#include <linux/ctype.h>
->   #include <linux/debugfs.h>
->   #include <linux/energy_model.h>
->   #include <linux/hashtable_api.h>
-> @@ -32,18 +26,12 @@
->   #include <linux/mempolicy.h>
->   #include <linux/nmi.h>
->   #include <linux/nospec.h>
-> -#include <linux/proc_fs.h>
-> -#include <linux/psi.h>
-> -#include <linux/psi.h>
->   #include <linux/ptrace_api.h>
->   #include <linux/sched_clock.h>
->   #include <linux/security.h>
-> -#include <linux/spinlock_api.h>
->   #include <linux/swait_api.h>
->   #include <linux/timex.h>
->   #include <linux/utsname.h>
-> -#include <linux/wait_api.h>
-> -#include <linux/workqueue_api.h>
->   
->   #include <uapi/linux/prctl.h>
->   #include <uapi/linux/sched/types.h>
+> > > +
+> > > +maintainers:
+> > > +  - Tommaso Merciai <tomm.merciai@gmail.com>
+> > > +  - Martin Hecht <martin.hecht@avnet.eu>
+> > > +
+> > > +allOf:
+> > > +  - $ref: /schemas/media/video-interface-devices.yaml#
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: alliedvision,alvium
+> 
+> The name is very generic. There are Alvium camera modules that have a
+> GMSL or FPD-Link interface, and I'm pretty sure those will require a
+> different driver. I would add module-specific compatible strings (e.g.
+> "alliedvision,alvium-1500c", ...) here, with a generic fallback.
+> "alliedvision,alvium" isn't good as it won't cover GMSL or FPD-Link,
+> maybe "alliedvision,alvium-csi2" would be an option.
+
+Actually, "alvium-1500c" as a specific compatible string won't do. You
+need the exact model in the compatible string, otherwise it won't be
+possible for the driver to handle device-specific configuration (for
+instance accessing registers of the camera sensor for fine-grained
+configuration). I would thus recommend using "alliedvision,alvium-1500c"
+and "alliedvision,alvium-1800c" as generic fallbacks, along compatible
+strings that include the exact device model.
+
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    description: XCLK Input Clock
+> > > +
+> > > +  clock-names:
+> > > +    const: xclk
+> > 
+> > I'd also drop this as you have a single clock only: it's redundant.
+> > 
+> > > +
+> > > +  powerdown-gpios:
+> > > +    maxItems: 1
+> > > +    description: >
+> > > +      Reference to the GPIO connected to the powerdown pin, if any.
+> > > +
+> > > +  reset-gpios:
+> > > +    maxItems: 1
+> > > +    description: >
+> > > +      Reference to the GPIO connected to the reset pin, if any.
+> 
+> Reading the Alvium CSI-2 Cameras User Guide, I don't see any powerdown
+> or reset pin on the 22-pin connector. Am I missing something ? There are
+> however two GPIOs (in addition to the I2C signals that are also
+> documented as GPIOs), do you plan to support those ?
+> 
+> > > +
+> > > +  streamon-delay:
+> > > +    maxItems: 1
+> > > +    description: >
+> > > +      Delay before camera start capturing frames in us.
+> 
+> Add "-us" to the property name to indicate the unit.
+> 
+> This is a vendor-specific property, and should thus have a vendor
+> prefix.
+> 
+> A longer description is needed, from that single line I have no idea
+> what the property does exactly.
+> 
+> > > +
+> > > +  rotation:
+> > > +    enum:
+> > > +      - 0
+> > > +      - 180
+> 
+> Why is the rotation restricted to 0 or 180 ? Someone could mount the
+> module with  90 degrees rotation, shouldn't the DT bindings allow
+> describing that ?
+> 
+> You need a property for the vcc-ext-in supply.
+> 
+> > > +
+> > > +  port:
+> > > +    description: Digital Output Port
+> > > +    $ref: /schemas/graph.yaml#/$defs/port-base
+> > > +    additionalProperties: false
+> > > +
+> > > +    properties:
+> > > +      endpoint:
+> > > +        $ref: /schemas/media/video-interfaces.yaml#
+> > > +        unevaluatedProperties: false
+> > > +
+> > > +        properties:
+> > > +          clock-lanes:
+> > > +            const: 0
+> > 
+> > The driver can know this, no need to have it in DT, i.e. please drop it.
+> > 
+> > > +          data-lanes:
+> > > +            minItems: 1
+> > > +            maxItems: 4
+> > > +          link-frequencies: true
+> > > +
+> > > +        required:
+> > > +          - data-lanes
+> > > +          - link-frequencies
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - clocks
+> > > +  - clock-names
+> > > +  - port
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +      #include <dt-bindings/gpio/gpio.h>
+> > > +      #include <dt-bindings/clock/imx8mp-clock.h>
+> > > +
+> > > +      i2c {
+> > > +          #address-cells = <1>;
+> > > +          #size-cells = <0>;
+> > > +
+> > > +          camera: alvium@3c {
+> > > +              compatible = "alliedvision,alvium";
+> 
+> The "alliedvision" prefix is missing from
+> Documentation/devicetree/bindings/vendor-prefixes.yaml.
+> 
+> > > +              pinctrl-names = "default";
+> > > +              pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
+> 
+> I'd drop pinctrl, it makes the example longer without adding much value.
+> 
+> > > +              reg = <0x3c>;
+> > > +              clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+> > > +              clock-names = "xclk";
+> > > +              assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+> > > +              assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
+> > > +              assigned-clock-rates = <24000000>;
+> > > +              streamon-delay = <20>;
+> > > +              powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+> > > +              reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
+> > > +              status = "okay";
+> > > +
+> > > +              port {
+> > > +                  alvium_out: endpoint {
+> > > +                      remote-endpoint = <&mipi_csi_0_in>;
+> > > +                      data-lanes = <1 2 3 4>;
+> > > +                      link-frequencies = /bits/ 64 <681250000>;
+> > > +                      clock-lanes = <0>;
+> > > +                  };
+> > > +              };
+> > > +          };
+> > > +      };
+> > > +
+> > > +...
+
+-- 
+Regards,
+
+Laurent Pinchart
