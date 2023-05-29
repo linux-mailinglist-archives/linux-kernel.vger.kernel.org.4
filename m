@@ -2,62 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89877143A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B87F7143AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjE2FRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 01:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S231347AbjE2FUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 01:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjE2FRt (ORCPT
+        with ESMTP id S230427AbjE2FUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 01:17:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F19A6
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:17:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C61661028
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 05:17:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7509FC433EF;
-        Mon, 29 May 2023 05:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685337467;
-        bh=sh4pubmyXVQLpGpgSZtDf5EnBuwgelN/Cctaod7zKn8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eDX6G8p5IMAxh9JNKJUTvjXXlZdDtt9rXD8EDRgXuys/cs4Ps6eSzdiqeWbzIDw8h
-         J2wwDJiZmHoMohiLRGsX9OuSSDLgQYZbLjs1rTWlRb8InhXoKoA7aFyrniVCssJ3IN
-         2d10V1UIL4FH+9iza8dG6brjwUR2uSeG6zJVYV04/0oZkj4p80tCl8VbqeVSPDWSrU
-         fvncktEUxQe22ek/0bS13uaxLs920Z8S5IQSdmPRGSPaNm4YqvLdDM4umg4B6Zvr6/
-         O/31nfQ4ii0wUx8WkmyeLrUa95vUn6osd+PacSLXXBSl8B0rqDjaWvQHXUZTWFar/W
-         KVGR0aSpB9Xmg==
-Date:   Mon, 29 May 2023 10:47:42 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: Re: [PATCH 0/3] soundwire: improve bus reset
-Message-ID: <ZHQ1dmvFgifSU6X5@matsya>
-References: <20230518024119.164160-1-yung-chuan.liao@linux.intel.com>
+        Mon, 29 May 2023 01:20:15 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50F89E
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:20:13 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id 7a5c1941-fde0-11ed-abf4-005056bdd08f;
+        Mon, 29 May 2023 08:20:09 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Mon, 29 May 2023 08:20:08 +0300
+To:     Astrid Rost <astrid.rost@axis.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@axis.com,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mathieu Othacehe <m.othacehe@gmail.com>
+Subject: Re: [PATCH v4 5/7] iio: light: vcnl4000: Add period for vcnl4040/4200
+Message-ID: <ZHQ2CGSnB-CaYqSy@surfacebook>
+References: <20230522142621.1680563-1-astrid.rost@axis.com>
+ <20230522142621.1680563-6-astrid.rost@axis.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230518024119.164160-1-yung-chuan.liao@linux.intel.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230522142621.1680563-6-astrid.rost@axis.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18-05-23, 10:41, Bard Liao wrote:
-> Improve bus reset sequence by updating programing sequence.
+Mon, May 22, 2023 at 04:26:19PM +0200, Astrid Rost kirjoitti:
+> Add read/write attribute for proximity and illuminance period.
+> The period is set in the interrupt persistence flags
+> (PS_PERS and ALS_PERS). An interrupt will not be asserted if the raw
+> value is not over (or lower) than the threshold for the set
+> continued amount of measurements.
+> The time in seconds is calculated by the number of continued refreshes
+> multiplied with the integration time.
+> It will always pick the next lower possible value. The period changes,
+> if the integration time is changed.
 
-Applied, thanks
+Something interesting happened to the indentation in the above text.
+
+...
+
+> +out:
+
+out_unlock:
+
+> +	mutex_unlock(&data->vcnl4000_lock);
+> +	return ret;
+
+...
+
+> +	*val2 = (*data->chip_spec->ps_it_times)[ret_it][1]
+> +		* vcnl4040_ps_persistence[ret_pers];
+
+' *' can be placed on the previous line.
+
+...
+
+> +			if (val2 <= vcnl4040_ps_persistence[index]
+> +					* (*data->chip_spec->ps_it_times)[ret_it][1])
+
+Ditto.
+
+> +				break;
+
+...
+
+> +out:
+
+out_unlock:
+
+> +	mutex_unlock(&data->vcnl4000_lock);
+> +	return ret;
+
+...
+
+> +			case IIO_EV_DIR_RISING:
+> +				ret = i2c_smbus_write_word_data(
+> +					data->client, VCNL4040_ALS_THDH_LM, val);
+
+Indentation.
+
+> +				break;
+> +			case IIO_EV_DIR_FALLING:
+> +				ret = i2c_smbus_write_word_data(
+> +					data->client, VCNL4040_ALS_THDL_LM, val);
+
+Ditto.
+
+> +				break;
+
+...
+
+> +			case IIO_EV_DIR_RISING:
+> +				ret = i2c_smbus_write_word_data(
+> +					data->client, VCNL4040_PS_THDH_LM, val);
+> +				break;
+> +			case IIO_EV_DIR_FALLING:
+> +				ret = i2c_smbus_write_word_data(
+> +					data->client, VCNL4040_PS_THDL_LM, val);
+> +				break;
+
+Ditto.
+
+...
+
+> +	{
+> +		.type = IIO_EV_TYPE_THRESH,
+> +		.dir = IIO_EV_DIR_RISING,
+> +		.mask_separate = BIT(IIO_EV_INFO_VALUE),
+> +	}, {
+> +		.type = IIO_EV_TYPE_THRESH,
+> +		.dir = IIO_EV_DIR_FALLING,
+> +		.mask_separate = BIT(IIO_EV_INFO_VALUE),
+> +	}, {
+> +		.type = IIO_EV_TYPE_THRESH,
+> +		.dir = IIO_EV_DIR_EITHER,
+> +		.mask_separate = BIT(IIO_EV_INFO_ENABLE) |  BIT(IIO_EV_INFO_PERIOD),
+> +	}
+
+Can we keep trailing comma here?
+
+...
+
+> -	},
+
+Stray change (and see just above).
+
+> +	}, {
+> +		.type = IIO_EV_TYPE_THRESH,
+> +		.dir = IIO_EV_DIR_EITHER,
+> +		.mask_separate = BIT(IIO_EV_INFO_PERIOD),
+> +	}
 
 -- 
-~Vinod
+With Best Regards,
+Andy Shevchenko
+
+
