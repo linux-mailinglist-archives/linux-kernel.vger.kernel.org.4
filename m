@@ -2,138 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE4F714CE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA74C714CE8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjE2PUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S229828AbjE2PVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjE2PU2 (ORCPT
+        with ESMTP id S229813AbjE2PVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:20:28 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA163C9;
-        Mon, 29 May 2023 08:20:27 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b011cffe7fso21592145ad.1;
-        Mon, 29 May 2023 08:20:27 -0700 (PDT)
+        Mon, 29 May 2023 11:21:06 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD011CF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:21:03 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30aa76048fbso2088535f8f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:21:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685373627; x=1687965627;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685373662; x=1687965662;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gvc0Sypc7fVXcvgTsHV4j3N88EBzVEma04rOGpLqnUU=;
-        b=MENfSFGTaCBdxZAFqE4sG0TtxWV15Fno/PeOwVzCXbN8GeB47TYDzyOfRUj/U5z2Ux
-         1H08GDzKA5tTGK+zXkZyUQvknW1HYerlxtcZScLUorKhgzXl5J7xHQhb55WswLega4dx
-         pF5irxc1i97I8vZqcvYN5PJL8bQdNEGlM8LsE5Re8ew1IlfqYCMPi8Bwp1cFMXWLT8FX
-         UrlTD5ifd4HZ6SmeRTE2vwYo8ENcwUzqND33PRxSbroBqzyxlnSI29kwm5Rc2G2ZRZBb
-         lI0TEPeZfCA8gYMdUF6pKctS9CYM5PyhYyG/RDzSs7mMpGdsFY/K7Sjof2xfSbPC6S/Y
-         rybA==
+        bh=TBUyi7GtvvTumLP5OPVjGqROpV802wvk7yxqnFgwTHY=;
+        b=Msn7AW1khWORLn/oD/9VF15pkuplmldeqTa1sZH7PRTWzL9284dima5XY3ropCTDrd
+         WkoMXDtdqR2n738N6PCPiPJ7E+Q8wE750FrMkHSK3SzZACRvtCw5iA2sX1itxo2rxocV
+         Fryn5uTbDazceFQSQs0WI+0snyV8iQ1u0Lvd1K0VD4vQE+Gpxg5byq/SO/4P3c9QRBMR
+         Tmv9l3R0W2rhDamU+x4TbngiA/DTWk3G47cgTVkWibvno3Ok+m2yBUFrPuNpCjRUbMbq
+         lWtstpgFgaVncvS0Yj0/IPViUMLvBEpXEGMMunEziBT4rQZZ4A4MOaa+Lfxd8h2+fOYq
+         sB3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685373627; x=1687965627;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
+        d=1e100.net; s=20221208; t=1685373662; x=1687965662;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gvc0Sypc7fVXcvgTsHV4j3N88EBzVEma04rOGpLqnUU=;
-        b=QPaiscoZTZelvI20nOlAeqob1l09L02R4707ImFPJLpXnIQnNmAvhw3JroM3feC7o2
-         X3cnSFatPVJ+xnbFoJYn7txlq3VAfhSVLoHIxJwBAqzDGSfuyWvyAuirwYW4NVW0+bhc
-         byKdSu8gxSfpIYHXbTe2KRmP8dySnmfi5NTQy2PfzRcNzMPeASZzzTDAtHBcZwnyUKjD
-         JDd3GLaQgNMejy1+zJ9J0ssPWqpfLYwI0MUJMXgphFCJB8uHdW2Y6uFvXWpMzQxlUkUh
-         Q4GnNl5oa3/4bpoOESvS7G7obPjTbTufabGHeQaNqzNAMr+froUkSaxoeyK0LJ6qAZ88
-         3zhA==
-X-Gm-Message-State: AC+VfDwMUV3a+XZx7l+uLUKjK0xGtp4O+Knf47/M0dttlz9pOPsYtCFV
-        iatvBonTT6DcdDnqCjEqWaE=
-X-Google-Smtp-Source: ACHHUZ59ESDKQoF2T4ui0T0ADbVS1ZkuYfAEn3lC7NGBQz1TnVvi1bwsZY9nbiys8LXpzliPh0jcWw==
-X-Received: by 2002:a17:902:cecd:b0:1af:a2a4:837f with SMTP id d13-20020a170902cecd00b001afa2a4837fmr12174462plg.26.1685373627117;
-        Mon, 29 May 2023 08:20:27 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jo8-20020a170903054800b001ac937171e4sm3510861plb.254.2023.05.29.08.20.24
+        bh=TBUyi7GtvvTumLP5OPVjGqROpV802wvk7yxqnFgwTHY=;
+        b=JzGeW4n4G6Kbyofd/hHhMgt3/oGmVJ9BqO5tpjw7Tf6DD64hnxTga6DC1mfCOdvHQJ
+         Y4vWfmxi6QcFN4guHwryO5j7OlWuXs8ElszO/FH9SGv2angbEIb7xmQmD3aXsZ0pW4wU
+         hKg3r0iE5wEupMgeB6/EGW0jhl2h2vUSRyU9tqCMyHdc6pBDgbEI9wwDc+XB63/4lBtn
+         DPQjVDXmduqVnVs6ZLrdqpr/UUVvz4WBHnsICsFG5sdp+nkBw+X/2S3OS6DGkagNDG3N
+         mSEaV6irTvk84KcWhvvgaAVen5lDEGHefk143Rg3yvkxOfIvAurXE70cwGXyVarTcio6
+         lfYA==
+X-Gm-Message-State: AC+VfDz+JahUDQdTfWdNauh8Kym4ikjufP+AxqVBftVIuHfp/+f/COZV
+        kWlOroNYDc1EEXAarIafgYjrmQ==
+X-Google-Smtp-Source: ACHHUZ5QsPruAv4u4ZJBUO5E7KlnTJFL6JDOEHss86t1fBqmlCJvSruzkrQftYsvmoGskysj74HOAA==
+X-Received: by 2002:a5d:4e82:0:b0:30a:eadb:791b with SMTP id e2-20020a5d4e82000000b0030aeadb791bmr2551244wru.29.1685373662138;
+        Mon, 29 May 2023 08:21:02 -0700 (PDT)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id y4-20020a056000108400b0030abe7c36b1sm241306wrw.93.2023.05.29.08.21.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 08:20:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <bb173e8e-c275-e153-83cd-019861b30e09@roeck-us.net>
-Date:   Mon, 29 May 2023 08:20:23 -0700
+        Mon, 29 May 2023 08:21:01 -0700 (PDT)
+Message-ID: <2c970ea3-e927-4ea1-f378-a600e834cc9d@baylibre.com>
+Date:   Mon, 29 May 2023 17:21:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
 Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20230528190833.565872088@linuxfoundation.org>
- <e98d3b88-980b-4487-baf8-4685cfe62209@roeck-us.net>
- <468bc707-0814-4d83-9087-74768d98203a@roeck-us.net>
- <CA+G9fYspKgo+qF5Onq_HDz1-w6NscULrFUSw=YKp+1e=4NkBBQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 4.19 000/132] 4.19.284-rc1 review
-In-Reply-To: <CA+G9fYspKgo+qF5Onq_HDz1-w6NscULrFUSw=YKp+1e=4NkBBQ@mail.gmail.com>
+To:     andy.shevchenko@gmail.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        Jonathan Cormier <jcormier@criticallink.com>
+References: <20230511-tps65219-add-gpio-support-v3-0-19837a34d820@baylibre.com>
+ <20230511-tps65219-add-gpio-support-v3-1-19837a34d820@baylibre.com>
+ <ZHD3VtFDYUyy_Std@surfacebook>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <ZHD3VtFDYUyy_Std@surfacebook>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/29/23 07:28, Naresh Kamboju wrote:
-> On Mon, 29 May 2023 at 19:19, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On Mon, May 29, 2023 at 06:48:10AM -0700, Guenter Roeck wrote:
->>> On Sun, May 28, 2023 at 08:08:59PM +0100, Greg Kroah-Hartman wrote:
->>>> This is the start of the stable review cycle for the 4.19.284 release.
->>>> There are 132 patches in this series, all will be posted as a response
->>>> to this one.  If anyone has any issues with these being applied, please
->>>> let me know.
->>>>
->>>> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
->>>> Anything received after that time might be too late.
->>>>
->>>
->>> Building s390:defconfig ... failed
->>> Building s390:allnoconfig ... failed
->>> Building s390:tinyconfig ... failed
-> 
-> We do noticed these set of build failures,
-> 
-> Seems like the following commit might have caused this
-> build break
-> 
->   drivers: provide devm_platform_ioremap_resource()
->    [ Upstream commit 7945f929f1a77a1c8887a97ca07f87626858ff42 ]
-> 
-> 
 
-Yes. devm_ioremap_resource() is only defined with CONFIG_HAS_IOMEM,
-That dependency was added to platform.c with commit 837ccda3480d
-("drivers: depend on HAS_IOMEM for devm_platform_ioremap_resource()")
-which wasn't backported.
 
-Guenter
-
->>>
->>> --------------
->>> Error log:
->>> s390-linux-ld: drivers/base/platform.o: in function `devm_platform_ioremap_resource':
->>> drivers/base/platform.c:97: undefined reference to `devm_ioremap_resource'
->>> madrivers/base/platform.cke[1]: *** [Makefile:1061: vmlinux] Error 1
->>> make: *** [Makefile:153: sub-make] Error 2
->>
->> This also affects um:defconfig.
->>
->> Guenter
+On 26/05/2023 20:15, andy.shevchenko@gmail.com wrote:
+> ...
 > 
-> - Naresh
+> Missing bits.h
+> 
+>> +#include <linux/gpio/driver.h>
+>> +#include <linux/mfd/tps65219.h>
+>> +#include <linux/module.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>
 
+Thanks for your review.Just to be sure on this particular point:
+Your recommendation here it to include explicitly bits.h.
+
+I can see BIT_MASK(n) defined in linux/bits.h
+BIT(n) is defined in vdso/bits.h
+ From what I can see, BIT(n) is broadly used across kernel but 
+BIT_MASK(n) sounds to be the Linux strict way...
+
+In current version I'm using BIT(n) macro not BIT_MASK(n).
+Do you recommend to replace every BIT(n) currently used with BIT_MASK(n)?
+Sorry for asking dumb questions. Just trying to make sure I 
+correctly/fully understand your feedback... And do it all right for the 
+next iteration.
+
+Regards,
+Jerome.
