@@ -2,154 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2997151F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 00:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F2471520B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 00:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjE2WjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 18:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
+        id S230027AbjE2WqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 18:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjE2WjO (ORCPT
+        with ESMTP id S229772AbjE2WqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 18:39:14 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39074AB
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 15:39:13 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2af2696fd1cso39397121fa.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 15:39:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685399951; x=1687991951;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Xub4E75y8Nyr5XajoijONWb7PnUiTj5szgyWiuoPJQ=;
-        b=MneeusNPF5NlydCsdbfh/dap+ohfCB4fgHdqa2BiNfYpPkKSUL6R7YM/Y4tXnpktFG
-         e9Dwm0RCk1+uJPcmzdXjzFsAa6CK4T2GYqX35VNV5Xs2qMkOyOIPQUoHY7Umj9oSIkda
-         LpcsZQEAcC0OQBp3IoT0ssriIOY9SiQu7X2dFxsNWFMpf68LONBDstH9WlY7rnGHWPiM
-         IQJ4vUgwdOqc+VPpm9CY4yol+rr4G1PmDpG6sXCCdvyCNG0O0U/qo3qIUsM7BsTqExdl
-         lCDBUDOFvlOZKHfkoupjfALiOTsHqOxHMU2m5g3jsKaPxmL50s7B8MRrFT7gJ57n3cKf
-         w2+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685399951; x=1687991951;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Xub4E75y8Nyr5XajoijONWb7PnUiTj5szgyWiuoPJQ=;
-        b=Voa4gygQlsYkSxaCzg1AbpTlHMjXEScmvp9xqu4hjQgx1TSB+vA8vgLtMR82BCJefM
-         8+ViYp+pGzq5SIaICZVnmfJcXGIPv84VncevU2iID5SbuAHzZmAD6iaTuiLIODrEQGhG
-         vKgg9A+GfZBvEleZHVt3hEmurEQGHgk1i2uzp1B3/pGspFHML3H7g6yA0CsJffofdfrq
-         1+NjK6TuW2RmIlJaUGM21RwudSliEVrfTmz4umzlImHuWSJR6rQSHUq5CknPmeiR3rNp
-         yCeP+wakS/la5hZ3PqiQz+ER2MTF+7bUQMHvPp+Sh2zHAbAroWR0wpo9sfjbs6PUI4wM
-         Odmg==
-X-Gm-Message-State: AC+VfDxjfZdHWa/yw5fQLmRfTbbD0a7gyC/xTfm3zpIgcb66fi0OutyC
-        PL5c9TLJfLTAklOUHTLzQ5KS9Q==
-X-Google-Smtp-Source: ACHHUZ4An8N93KNttIkDEg95kOa0os1fM8bISo57wWgd27lbpv8dT/gg0gviUKDQnepBfNN1PxN0cQ==
-X-Received: by 2002:a05:6512:247:b0:4e9:9e45:3470 with SMTP id b7-20020a056512024700b004e99e453470mr36318lfo.3.1685399951314;
-        Mon, 29 May 2023 15:39:11 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id j28-20020ac2551c000000b004f27cf63a03sm128312lfk.299.2023.05.29.15.39.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 15:39:10 -0700 (PDT)
-Message-ID: <d52b384f-9853-3921-d4f2-5aedb7ef4c61@linaro.org>
-Date:   Tue, 30 May 2023 01:39:10 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RFC 03/10] drm/panel: Add LGD panel driver for Sony Xperia
- XZ3
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     neil.armstrong@linaro.org, Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
+        Mon, 29 May 2023 18:46:16 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD9EEC;
+        Mon, 29 May 2023 15:46:09 -0700 (PDT)
+Received: from workpc.. (109-252-150-34.dynamic.spd-mgts.ru [109.252.150.34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8BD46660217A;
+        Mon, 29 May 2023 23:46:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685400368;
+        bh=N/iL1JRZHbQ9J5wEpHGjUIuREtcko5e+/wiJaOIi8L4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=faMfm4XpdfToTxpu3jT424GwfpAwTcRALVJbPia7nobOTK4KdKtdeUe+SlfmvgfUZ
+         QRk9lDQA1yvalx230xcPasAAqkZKbr5DtHewOxourFeUyLQ5bXDGF37PgKJ9kvDI3U
+         EO7hBjoXzDiDOnEumIfe4pQazIy/Q/O06CP+k7EZT0Q6bEMjTLgQNZmIUxKRLTGQRW
+         +7h25FSiVbycEBPTJGM2iKahpEpbwCIhIr072NGyAppUyrs7UK0Ju+3QR67LgYQdON
+         bha23Hn57uvoGHGEUxiH/xyjLTcELOdOQAoaZA0OYjQXxxnC84UNh/pZX4NqBtlF9a
+         CETKWVEJ9TUuQ==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Caleb Connolly <caleb@connolly.tech>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
- <20230521-drm-panels-sony-v1-3-541c341d6bee@somainline.org>
- <ccc97880-8e74-b85b-9679-9c12c44c4b99@linaro.org>
- <71675a02-0801-62dc-2673-4a0907636b21@linaro.org>
- <CAA8EJpq=HZqiBZ6bpUNH47VmASuH+Mi5OD5BHmg0TPwtsKHf8w@mail.gmail.com>
- <oxgtbj7qmsdvz5gl4bud64jedmhdmvphjfge7uy6uwulefqfsa@pleslv2zgwbp>
- <ebc3ff33-6e4f-b107-33c6-f35b03307058@linaro.org>
- <v3ac2ihqjce7vxcsjnm7ett2vc6wb4hb3bb6x4widd55eintw7@fgkyipbbl2ei>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <v3ac2ihqjce7vxcsjnm7ett2vc6wb4hb3bb6x4widd55eintw7@fgkyipbbl2ei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, kernel@collabora.com
+Subject: [PATCH v4 0/6] Move dma-buf mmap() reservation locking down to exporters
+Date:   Tue, 30 May 2023 01:39:29 +0300
+Message-Id: <20230529223935.2672495-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 01:37, Marijn Suijten wrote:
-> On 2023-05-30 01:18:40, Dmitry Baryshkov wrote:
-> <snip>
->>>>>>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
->>>>>>> +    if (ret < 0) {
->>>>>>> +        dev_err(dev, "Failed to turn display on: %d\n", ret);
->>>>>>> +        return ret;
->>>>>>> +    }
->>>>>>
->>>>>> My usual question: should the mipi_dsi_dcs_exit_sleep_mode() / mipi_dsi_dcs_set_display_on() be moved from prepare() to enable() part?
->>>>>
->>>>>
->>>>> No, prepare is called before the video stream is started and when display is still in LPM mode and the mode hasn't been set.
->>>>>
->>>>
->>>> Yes, that's my point. Shouldn't we enable the panel _after_ starting the stream?
->>>
->>> I have never investigated what it takes to split these functions, but
->>> some of these panels do show some corruption at startup which may be
->>> circumvented by powering the panel on after starting the video stream?
->>>
->>> I'm just not sure where to make the split: downstream does describe a
->>> qcom,mdss-dsi-on-command and qcom,mdss-dsi-post-panel-on-command, where
->>> the latter only contains set_display_on() (not exit_sleep_mode()).
->>> It is documented like:
->>>
->>>       same as "qcom,mdss-dsi-on-command" except commands are sent after
->>>       displaying an image."
->>>
->>> So this seems like the right way to split them up, I'll test this out on
->>> all submitted panel drivers.
->>
->> Interesting enough, Neil suggested that sending all the commands during
->> pre_enable() is the correct sequence (especially for VIDEO mode panels),
->> since not all DSI hosts can send commands after switching to the VIDEO mode.
-> 
-> Note that all these panels and Driver-ICs are command-mode, and/or
-> programmed to run in command-mode, so there shouldn't be any notion of a
-> VIDEO stream (any command-mode frame is just an "arbitrary command" as
-> far as I understood).
+This patchset makes dma-buf exporters responisble for taking care of
+the reservation lock. I also included patch that moves drm-shmem to use
+reservation lock, to let CI test the whole set. I'm going to take all
+the patches via the drm-misc tree, please give an ack.
 
-Yes, from the data stream point of view. I was talking about the DSI 
-host being able to send arbitrary commands or not after enabling the 
-video/cmd stream.
+Previous policy stated that dma-buf core takes the lock around mmap()
+callback. Which meant that both importers and exporters shouldn't touch
+the reservation lock in the mmap() code path. This worked well until
+Intel-CI found a deadlock problem in a case of self-imported dma-buf [1].
 
-> 
-> - Marijn
+The problem happens when userpace mmaps a self-imported dma-buf, i.e.
+mmaps the dma-buf FD. DRM core treats self-imported dma-bufs as own GEMs
+[2]. There is no way to differentiate a prime GEM from a normal GEM for
+drm-shmem in drm_gem_shmem_mmap(), which resulted in a deadlock problem
+for drm-shmem mmap() code path once it's switched to use reservation lock.
+
+It was difficult to fix the drm-shmem problem without adjusting dma-buf
+locking policy. In parctice not much changed from importers perspective
+because previosly dma-buf was taking the lock in between of importers
+and exporters. Now this lock is shifted down to exporters.
+
+[1] https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_114671v2/shard-snb5/igt@prime_vgem@sync@rcs0.html
+[2] https://elixir.bootlin.com/linux/v6.3-rc4/source/drivers/gpu/drm/drm_prime.c#L924
+
+Changelog:
+
+v4: - Added dma_resv_assert_held() to drm_gem_shmem_get_pages(), making
+      assert consistent with the put() variant. Suggested by Emil Velikov.
+
+v3: - Added r-b from Hans Verkuil to the videobuf2 patch.
+
+    - The v2 fastrpc patch was already applied, not including it anymore.
+      Though, the cover-letter says that I'd want to apply all the patches
+      via the drm-misc tree to keep the proper ordering of the changes.
+
+    - Previously Intel's CI gave a flake failure to v2, want to re-test
+      it again.
+
+v2: - Added ack from Christian König to the DRM patch.
+
+    - Dropped "fixes" tag from the patches, like was requested by
+      Christian König. The patches don't actually need a backport
+      and merely improve the locking policy.
+
+    - Dropped "reverts" from the patch titles to prevent them from
+      auto-backporting by the stable bot based on the title.
+
+    - Added r-b from Emil Velikov and placed the drm_WARN in the
+      drm-shmem patch like he suggested in a comment to v1.
+
+    - Corrected drm-shmem patch dma_resv_lock(obj->resv) inconsistently
+      used with dma_resv_unlock(shmem->base.resv). Now shmem->base.resv
+      variant is used for all locks/unlocks.
+
+Dmitry Osipenko (6):
+  media: videobuf2: Don't assert held reservation lock for dma-buf
+    mmapping
+  dma-buf/heaps: Don't assert held reservation lock for dma-buf mmapping
+  udmabuf: Don't assert held reservation lock for dma-buf mmapping
+  drm: Don't assert held reservation lock for dma-buf mmapping
+  dma-buf: Change locking policy for mmap()
+  drm/shmem-helper: Switch to reservation lock
+
+ drivers/dma-buf/dma-buf.c                     |  17 +-
+ drivers/dma-buf/heaps/cma_heap.c              |   3 -
+ drivers/dma-buf/heaps/system_heap.c           |   3 -
+ drivers/dma-buf/udmabuf.c                     |   2 -
+ drivers/gpu/drm/drm_gem_shmem_helper.c        | 210 ++++++++----------
+ drivers/gpu/drm/drm_prime.c                   |   2 -
+ drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   2 -
+ drivers/gpu/drm/lima/lima_gem.c               |   8 +-
+ drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c     |   2 -
+ drivers/gpu/drm/panfrost/panfrost_drv.c       |   7 +-
+ .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |   6 +-
+ drivers/gpu/drm/panfrost/panfrost_mmu.c       |  19 +-
+ drivers/gpu/drm/tegra/gem.c                   |   2 -
+ .../common/videobuf2/videobuf2-dma-contig.c   |   3 -
+ .../media/common/videobuf2/videobuf2-dma-sg.c |   3 -
+ .../common/videobuf2/videobuf2-vmalloc.c      |   3 -
+ include/drm/drm_gem_shmem_helper.h            |  14 +-
+ 17 files changed, 119 insertions(+), 187 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.40.1
 
