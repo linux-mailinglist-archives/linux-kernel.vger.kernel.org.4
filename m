@@ -2,109 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5635714407
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84339714411
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjE2GQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 02:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
+        id S231486AbjE2GQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 02:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbjE2GQX (ORCPT
+        with ESMTP id S231462AbjE2GQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 02:16:23 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8689E1;
-        Sun, 28 May 2023 23:15:53 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b02d0942caso8268945ad.1;
-        Sun, 28 May 2023 23:15:53 -0700 (PDT)
+        Mon, 29 May 2023 02:16:36 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448BBD2
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:16:11 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f6d3f83d0cso30590095e9.2
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 23:16:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685340952; x=1687932952;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EcQN8VgoDYPYnc3V4elXqbCt7D4H65Z/7XNtLl1+E5g=;
-        b=pW5b94mZADa2C+g+WEXSfS2ewafvu3n4QW2Iq+3NdaSLsQ1FHZjHDLyMAxuTB3lvdj
-         oXs6hnTYF2YOyCn2wMTrZIbMSVBD+WooJeik5bIFhA96vrrIBuVxfppRBoTKarwEsRSA
-         oATEm20DWqFwD3oD4CLrGPFd4C9+mZ3+4TsF74un/s2M7leM8lCZ44UOIj5Q8C96botd
-         SPB3TVN1E6XMljWMzS0WYxETPBKr2Ovc1tgiG9QTl1aeNywv6Y4CCxc4wrSzHycByEpj
-         a+XKIEcYONdy+XshmkNkbbDv8zn7mnwmaokx3aFCktUJmh/afDSY/LScu1MUb/9WYUlu
-         qcNg==
+        d=linaro.org; s=google; t=1685340967; x=1687932967;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LA0lZXIZyfreSy6UzrDrMm0pLQo6QMWpJJ8ip5ZSwRM=;
+        b=fwnJI2MHpqMgPEusIsDf6dCdGxxELVhkY6rqbFk3lB4f3VkRWgTwc3I9XPPoRSqIA/
+         +i0QzKhrmmpRP8fjyyir1WVPKrQ98bNCt5TfkxeZuaHjnQ4Q0UH1E2fk0maaS1G/Af/T
+         5kmHjNCc6v3dS2RssRi1X2x+yLqBwXQipQpzvOqkkXosU47sMFUEQX4hNMTSWSHQizBI
+         lRAQ6Vl+b9fJlYCWbfZIlbeowumqYxk5TKyEtLN33xTzT5vvfPp2inLsnoLcGkUHlitZ
+         Wk4QVRfCuOPybeD3s3Q5IWrbRSYkQk+XISzzyii2gYRMKrB5MqeQPS/kBEGsK6qmcS0z
+         0AQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685340952; x=1687932952;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EcQN8VgoDYPYnc3V4elXqbCt7D4H65Z/7XNtLl1+E5g=;
-        b=NkGql1Lgy3iA7C78mrR6NIGAL33c3rYG64CRyg18/vEW6u7vzkk3Wo0MrMdiLzuKfA
-         L+p87N1+g8GRIAu6MfXoGOJAqs1RBR3gt+pyk0vbSgWZFbtpq2ge6M89G+tWHlx5CnRM
-         owwmpvBd2b3SFCIRFCawOlkKUbcu9YjavnFzv0J3nBUkeD7gEZ1bMFnSoGfr8NSwLsDD
-         mVIw3wd0sKoqlAtHKc80riD248N3V98AEJFPY7nKRr2Gwi6cPbH5hr4rNkMfR63xCTWf
-         vGcwuBXjhE2Vr8SKyp+HY+Qb0a191ufrN6Z2dRpTFKCjUg1VEUzZQexdJhOqPAwf3UjX
-         qSrA==
-X-Gm-Message-State: AC+VfDzt81wrM79nzQ8EjJREZNdZhHKsA995AAGTkkPET787iy3QQf+O
-        hkRZGIfGB/JJ7DDOxMNtkJ81p4b8cqw=
-X-Google-Smtp-Source: ACHHUZ7asIUDUnelNdN6ELbB/y06Mv3zvsXl7aRIuHsGdgHEFGyNRVPWCl2peKuHKUUV0c9z6JEhqw==
-X-Received: by 2002:a17:902:d2d0:b0:1ac:61ad:d6bd with SMTP id n16-20020a170902d2d000b001ac61add6bdmr13289840plc.65.1685340952171;
-        Sun, 28 May 2023 23:15:52 -0700 (PDT)
-Received: from localhost.localdomain (2001-b400-e28a-e298-44b2-039a-c888-7c56.emome-ip6.hinet.net. [2001:b400:e28a:e298:44b2:39a:c888:7c56])
-        by smtp.gmail.com with ESMTPSA id p23-20020a170902a41700b001aaecc0b6ffsm7270393plq.160.2023.05.28.23.15.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 23:15:51 -0700 (PDT)
-From:   Owen Yang <ecs.taipeikernel@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@google.com>, Harvey <hunge@google.com>,
-        Bob Moragues <moragues@google.com>,
-        Gavin Lee <gavin.lee@ecs.com.tw>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Abner Yen <abner.yen@ecs.com.tw>,
-        Owen Yang <ecs.taipeikernel@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: [PATCH v1] PCI: Add suspend fixup for SSD on sc7280
-Date:   Mon, 29 May 2023 14:15:41 +0800
-Message-Id: <20230529141527.v1.1.Id388e4e2aa48fc56f9cd2d413aabd461ff81d615@changeid>
-X-Mailer: git-send-email 2.17.1
+        d=1e100.net; s=20221208; t=1685340967; x=1687932967;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LA0lZXIZyfreSy6UzrDrMm0pLQo6QMWpJJ8ip5ZSwRM=;
+        b=QrE+YyvYM+Ol8pHC0RCeED5szBiiuXh2ixPeftuONOmjDb/s/nwLHDmtro0g0KE9ZI
+         ORi5MZvNq3nc11UK0jgVIzyPvjFSSNTNIhnPmpPpaSzRtagFb9dGiMOAkwr08Y6vTo2A
+         n/39EYgOIYrihCEeS394in0eJKfkuR32DOUvdiHkGE7BGGRKmI3Ylzq8i4PzrDNVS+7z
+         VZ5zMoipDN8V+kNqkJSuSLp9fwVNTg+9ePNplF/J36pFNi/tlrrb8789PA8Q9xlsA4tw
+         XQfnLi8TYUKNNwMhX/d1gSij0bNhPVpph+fgisboQz+yUkW3/wFEV/ipOf1OFw+6ypdu
+         GTCQ==
+X-Gm-Message-State: AC+VfDwd8owuKG4AKDisf7E4B5+WV2zu1lcnNP5D3+OCiqms7qxYJGkz
+        Hzn0qxFVLyCVHhJAXWAYTiOdKWbtFRg+Sm+r81sRLg==
+X-Google-Smtp-Source: ACHHUZ4ueNV2gTUYIfOuOR4I8nBjLUyiMggWa2AaJkdjCQz68pX+xZH4y3Da4ZNKMrsDlhdFfcW6KtA7o9jw9fnmtHc=
+X-Received: by 2002:a7b:cd99:0:b0:3f6:41f:8e66 with SMTP id
+ y25-20020a7bcd99000000b003f6041f8e66mr8079474wmj.5.1685340967640; Sun, 28 May
+ 2023 23:16:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230526192210.3146896-1-bhupesh.sharma@linaro.org> <20230526192210.3146896-6-bhupesh.sharma@linaro.org>
+In-Reply-To: <20230526192210.3146896-6-bhupesh.sharma@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Mon, 29 May 2023 11:45:54 +0530
+Message-ID: <CAH=2NtwPhspRXD1g390c79+w1CFc19m+RcrzcCEtnGxomumhMQ@mail.gmail.com>
+Subject: Re: [PATCH v8 05/11] dt-bindings: qcom-qce: Fix compatible
+ combinations for SM8150 and IPQ4019 SoCs
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, konrad.dybcio@linaro.org,
+        vladimir.zapolskiy@linaro.org, rfoss@kernel.org,
+        neil.armstrong@linaro.org, djakov@kernel.org, stephan@gerhold.net,
+        Rob Herring <robh@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        dmaengine@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement this workaround to correct NVMe suspend process.
+Hi Herbert,
 
-Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
----
+On Sat, 27 May 2023 at 00:53, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+>
+> Currently the compatible list available in 'qce' dt-bindings does not
+> support SM8150 and IPQ4019 SoCs directly which may lead to potential
+> 'dtbs_check' error(s).
+>
+> Fix the same.
+>
+> Fixes: 00f3bc2db351 ("dt-bindings: qcom-qce: Add new SoC compatible strings for Qualcomm QCE IP")
+> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Tested-by: Anders Roxell <anders.roxell@linaro.org>
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+> index e375bd981300..90ddf98a6df9 100644
+> --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+> +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+> @@ -24,6 +24,12 @@ properties:
+>          deprecated: true
+>          description: Kept only for ABI backward compatibility
+>
+> +      - items:
+> +          - enum:
+> +              - qcom,ipq4019-qce
+> +              - qcom,sm8150-qce
+> +          - const: qcom,qce
+> +
+>        - items:
+>            - enum:
+>                - qcom,ipq6018-qce
+> --
+> 2.38.1
 
- drivers/pci/quirks.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Bjorn has applied the dts patches from this series to his tree.
+As suggested by him, can you please pick patches [PATCH 5/11] and
+[PATCH 6/11] from this series via the 'crypto' tree.
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index f4e2a88729fd..3e7da7174f0c 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5945,6 +5945,20 @@ static void nvidia_ion_ahci_fixup(struct pci_dev *pdev)
- }
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NVIDIA, 0x0ab8, nvidia_ion_ahci_fixup);
- 
-+/* In Qualcomm 7c gen 3 sc7280 platform. Some of the SSD will enter
-+ * D3cold instead of L1ss.It cause the device will randomly crash after
-+ * suspend within 100~250+ cycles of suspend/resume test.
-+ *
-+ * After adding this fixup.We've verified that 10 devices passed
-+ * the suspend/resume 2500 cycles test.
-+ */
-+static void phison_suspend_fixup(struct pci_dev *pdev)
-+{
-+	msleep(30);
-+}
-+DECLARE_PCI_FIXUP_SUSPEND(0x1987, 0x5013, phison_suspend_fixup);
-+DECLARE_PCI_FIXUP_SUSPEND(0x1987, 0x5015, phison_suspend_fixup);
-+
- static void rom_bar_overlap_defect(struct pci_dev *dev)
- {
- 	pci_info(dev, "working around ROM BAR overlap defect\n");
--- 
-2.17.1
+Seems some Cc fields got messed up while sending the patchset, so
+Cc'ing the list(s) again.
 
+Thanks,
+Bhupesh
