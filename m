@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CA3714A0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C95A714A07
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjE2NPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        id S229754AbjE2NPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjE2NPK (ORCPT
+        with ESMTP id S229564AbjE2NPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:15:10 -0400
+        Mon, 29 May 2023 09:15:07 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB3D107;
-        Mon, 29 May 2023 06:14:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400D5F9;
+        Mon, 29 May 2023 06:14:49 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QVGGD2PSBz4f41Vd;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QVGGD5WPQz4f454K;
         Mon, 29 May 2023 21:14:44 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgAHcLNDpXRknNjnKQ--.28139S5;
+        by APP4 (Coremail) with SMTP id gCh0CgAHcLNDpXRknNjnKQ--.28139S6;
         Mon, 29 May 2023 21:14:45 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     song@kernel.org, neilb@suse.de, akpm@osdl.org
 Cc:     xni@redhat.com, linux-raid@vger.kernel.org,
         linux-kernel@vger.kernel.org, yukuai3@huawei.com,
         yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: [PATCH -next v3 1/7] md/raid10: prevent soft lockup while flush writes
-Date:   Mon, 29 May 2023 21:11:00 +0800
-Message-Id: <20230529131106.2123367-2-yukuai1@huaweicloud.com>
+Subject: [PATCH -next v3 2/7] md/raid1-10: factor out a helper to add bio to plug
+Date:   Mon, 29 May 2023 21:11:01 +0800
+Message-Id: <20230529131106.2123367-3-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230529131106.2123367-1-yukuai1@huaweicloud.com>
 References: <20230529131106.2123367-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHcLNDpXRknNjnKQ--.28139S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFyxGw43ZryUArW3Jw1rXrb_yoW8ZFyUpa
-        90gFWYyw4UCw13AwsIyF4IgFyrZa90q3y7CFWvyw13XF13XFyUGa1DJrWjgrWDuryfGrW3
-        CF4vkrZ7Xw15tFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBK14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+X-CM-TRANSID: gCh0CgAHcLNDpXRknNjnKQ--.28139S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrWUXFWkCr1xtw43ury7Awb_yoW5uw4fpa
+        15KFyavrWDXrW5Xw1kJF4DuF45K3ZIgFZFkr93C3s3Jr17XFWUWa15JFWrCr98ZFZxury7
+        Jrn0krsrCF43KFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
         Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j6rxdM2
         8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
         xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
@@ -48,9 +48,9 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7ZFyxGw43ZryUArW3Jw1rXrb_yoW8ZFyUpa
         r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04
         v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
         Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x
-        0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
-        JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
-        AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbec_DUUUUU=
+        0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWx
+        JVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
+        IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUc6pPUUUUU
         =
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
@@ -65,70 +65,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-Currently, there is no limit for raid1/raid10 plugged bio. While flushing
-writes, raid1 has cond_resched() while raid10 doesn't, and too many
-writes can cause soft lockup.
-
-Follow up soft lockup can be triggered easily with writeback test for
-raid10 with ramdisks:
-
-watchdog: BUG: soft lockup - CPU#10 stuck for 27s! [md0_raid10:1293]
-Call Trace:
- <TASK>
- call_rcu+0x16/0x20
- put_object+0x41/0x80
- __delete_object+0x50/0x90
- delete_object_full+0x2b/0x40
- kmemleak_free+0x46/0xa0
- slab_free_freelist_hook.constprop.0+0xed/0x1a0
- kmem_cache_free+0xfd/0x300
- mempool_free_slab+0x1f/0x30
- mempool_free+0x3a/0x100
- bio_free+0x59/0x80
- bio_put+0xcf/0x2c0
- free_r10bio+0xbf/0xf0
- raid_end_bio_io+0x78/0xb0
- one_write_done+0x8a/0xa0
- raid10_end_write_request+0x1b4/0x430
- bio_endio+0x175/0x320
- brd_submit_bio+0x3b9/0x9b7 [brd]
- __submit_bio+0x69/0xe0
- submit_bio_noacct_nocheck+0x1e6/0x5a0
- submit_bio_noacct+0x38c/0x7e0
- flush_pending_writes+0xf0/0x240
- raid10d+0xac/0x1ed0
-
-Fix the problem by adding cond_resched() to raid10 like what raid1 did.
-
-Note that unlimited plugged bio still need to be optimized, for example,
-in the case of lots of dirty pages writeback, this will take lots of
-memory and io will spend a long time in plug, hence io latency is bad.
+The code in raid1 and raid10 is identical, prepare to limit the number
+of plugged bios.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/raid10.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/md/raid1-10.c | 16 ++++++++++++++++
+ drivers/md/raid1.c    | 12 +-----------
+ drivers/md/raid10.c   | 11 +----------
+ 3 files changed, 18 insertions(+), 21 deletions(-)
 
+diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.c
+index e61f6cad4e08..9bf19a3409ce 100644
+--- a/drivers/md/raid1-10.c
++++ b/drivers/md/raid1-10.c
+@@ -109,3 +109,19 @@ static void md_bio_reset_resync_pages(struct bio *bio, struct resync_pages *rp,
+ 		size -= len;
+ 	} while (idx++ < RESYNC_PAGES && size > 0);
+ }
++
++static inline bool raid1_add_bio_to_plug(struct mddev *mddev, struct bio *bio,
++				      blk_plug_cb_fn unplug)
++{
++	struct raid1_plug_cb *plug = NULL;
++	struct blk_plug_cb *cb = blk_check_plugged(unplug, mddev,
++						   sizeof(*plug));
++
++	if (!cb)
++		return false;
++
++	plug = container_of(cb, struct raid1_plug_cb, cb);
++	bio_list_add(&plug->pending, bio);
++
++	return true;
++}
+diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+index 2f1011ffdf09..e86c5e71c604 100644
+--- a/drivers/md/raid1.c
++++ b/drivers/md/raid1.c
+@@ -1343,8 +1343,6 @@ static void raid1_write_request(struct mddev *mddev, struct bio *bio,
+ 	struct bitmap *bitmap = mddev->bitmap;
+ 	unsigned long flags;
+ 	struct md_rdev *blocked_rdev;
+-	struct blk_plug_cb *cb;
+-	struct raid1_plug_cb *plug = NULL;
+ 	int first_clone;
+ 	int max_sectors;
+ 	bool write_behind = false;
+@@ -1573,15 +1571,7 @@ static void raid1_write_request(struct mddev *mddev, struct bio *bio,
+ 					      r1_bio->sector);
+ 		/* flush_pending_writes() needs access to the rdev so...*/
+ 		mbio->bi_bdev = (void *)rdev;
+-
+-		cb = blk_check_plugged(raid1_unplug, mddev, sizeof(*plug));
+-		if (cb)
+-			plug = container_of(cb, struct raid1_plug_cb, cb);
+-		else
+-			plug = NULL;
+-		if (plug) {
+-			bio_list_add(&plug->pending, mbio);
+-		} else {
++		if (!raid1_add_bio_to_plug(mddev, mbio, raid1_unplug)) {
+ 			spin_lock_irqsave(&conf->device_lock, flags);
+ 			bio_list_add(&conf->pending_bio_list, mbio);
+ 			spin_unlock_irqrestore(&conf->device_lock, flags);
 diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-index 32fb4ff0acdb..6b31f848a6d9 100644
+index 6b31f848a6d9..18702051ebd1 100644
 --- a/drivers/md/raid10.c
 +++ b/drivers/md/raid10.c
-@@ -921,6 +921,7 @@ static void flush_pending_writes(struct r10conf *conf)
- 			else
- 				submit_bio_noacct(bio);
- 			bio = next;
-+			cond_resched();
- 		}
- 		blk_finish_plug(&plug);
- 	} else
-@@ -1145,6 +1146,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
- 		else
- 			submit_bio_noacct(bio);
- 		bio = next;
-+		cond_resched();
- 	}
- 	kfree(plug);
- }
+@@ -1287,8 +1287,6 @@ static void raid10_write_one_disk(struct mddev *mddev, struct r10bio *r10_bio,
+ 	const blk_opf_t do_sync = bio->bi_opf & REQ_SYNC;
+ 	const blk_opf_t do_fua = bio->bi_opf & REQ_FUA;
+ 	unsigned long flags;
+-	struct blk_plug_cb *cb;
+-	struct raid1_plug_cb *plug = NULL;
+ 	struct r10conf *conf = mddev->private;
+ 	struct md_rdev *rdev;
+ 	int devnum = r10_bio->devs[n_copy].devnum;
+@@ -1328,14 +1326,7 @@ static void raid10_write_one_disk(struct mddev *mddev, struct r10bio *r10_bio,
+ 
+ 	atomic_inc(&r10_bio->remaining);
+ 
+-	cb = blk_check_plugged(raid10_unplug, mddev, sizeof(*plug));
+-	if (cb)
+-		plug = container_of(cb, struct raid1_plug_cb, cb);
+-	else
+-		plug = NULL;
+-	if (plug) {
+-		bio_list_add(&plug->pending, mbio);
+-	} else {
++	if (!raid1_add_bio_to_plug(mddev, mbio, raid10_unplug)) {
+ 		spin_lock_irqsave(&conf->device_lock, flags);
+ 		bio_list_add(&conf->pending_bio_list, mbio);
+ 		spin_unlock_irqrestore(&conf->device_lock, flags);
 -- 
 2.39.2
 
