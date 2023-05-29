@@ -2,115 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D2D714B7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5E2714B6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjE2OEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S230212AbjE2ODZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjE2OEf (ORCPT
+        with ESMTP id S229711AbjE2ODX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:04:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963AC1A7
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685368949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 29 May 2023 10:03:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799C6E6C;
+        Mon, 29 May 2023 07:02:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4F3BE21AA2;
+        Mon, 29 May 2023 14:02:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1685368968; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zJ8lVkJGMAf7X6sgK7+SzlistNxfN3tza5OmhJom+fY=;
-        b=Y1d51SjuWUwuzEjZ5mG/0xDJfZbbB6AN4cds61E9HDAYALyZ/mt+NEQEWHj7Cuxcoau345
-        1fHnH+FbANsrN9stLgCXPNftY2be5uIuD/lq3/rJTiOBI/sNv+YzqpUpOQlxtTc0t9/vWa
-        6cXTSP9FfHjG9nSQer0mXTjIYYKQ1uI=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-404-gwmcFD5LNOaSamoH_9fgnw-1; Mon, 29 May 2023 10:02:28 -0400
-X-MC-Unique: gwmcFD5LNOaSamoH_9fgnw-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-514777266a3so2568740a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 07:02:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685368947; x=1687960947;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zJ8lVkJGMAf7X6sgK7+SzlistNxfN3tza5OmhJom+fY=;
-        b=FQGS8n8LVNwQBOkmaibBl2MbyV3stTrKrj97dzHl7D85BxXwtHC9LaTUetjBZ5j3T/
-         eSZeHU3//Q3gkHI3nrESMNkjhaLdHsW1KTMboVCMz3w1Wa0g/HAYiH9b7M1R/e+hBR3U
-         WmTIfiYC9+f/MVAn0CCR4lAJtxYKEeV4r4JndqSYOwJ/eTk9FOtXBPDu26tVNhv0swCl
-         KHh9FIhO6JVAMyaigasTAcDe7MdRuryNJhA3qgsiPHaq6RbfbatZ7L2CGORaBjCTLDka
-         g7sDI01fEtRqXIQaNaTueBSjKJqK6b245Ddquux4yam0LF2AnDUDM9xZxbYjHtmEzxF0
-         4zZw==
-X-Gm-Message-State: AC+VfDyAB13Bn3CoVj745XdkjulFSS7oG1ZOb1IPCqU54MMobvt0PgYW
-        11oIaPGvPiETvg9TqLvLv/49L09tpKVS10PD7X+6fnyEDn9A/a+S3UhbPbKDdu8i8nAKoCYAnLC
-        iGxfEpSlxMGjaY5g0P5qdc+Rx
-X-Received: by 2002:aa7:ccd8:0:b0:514:a179:b151 with SMTP id y24-20020aa7ccd8000000b00514a179b151mr1610788edt.41.1685368947363;
-        Mon, 29 May 2023 07:02:27 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ510QWjG+RFlHmeCrPdvlqvEtFovcewTXQ5zlrjDXHvEmH5MVjEwz12mTI4MyNmn0RyD1YbTg==
-X-Received: by 2002:aa7:ccd8:0:b0:514:a179:b151 with SMTP id y24-20020aa7ccd8000000b00514a179b151mr1610778edt.41.1685368947089;
-        Mon, 29 May 2023 07:02:27 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id ay1-20020a056402202100b005066cadcc54sm3115204edb.43.2023.05.29.07.02.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 07:02:26 -0700 (PDT)
-Message-ID: <d03d78be-76e6-dff7-b11b-cac82e6eeedd@redhat.com>
-Date:   Mon, 29 May 2023 16:02:25 +0200
+        bh=7GJRpbbOWjmOtMjAXUNy6RFw5qpoxHIxlBqF4FAib7E=;
+        b=PzWJFOZl5hglKjHwGxSFNG6csgGjPjfcCOSu6qaea4hDEpHamSzdd5mblQCvMY6xFMO5YP
+        Wy8pgjSViC6VqTZwueSmOMNPcclCa/lwqdmXyknyZBQD/vK1JfVjZet7E04ToMWekJxtm/
+        FkCKDmMYPAi9od8uFZKh0JI+m1s4/Wo=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 259B113466;
+        Mon, 29 May 2023 14:02:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cNulCIiwdGTAMAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 29 May 2023 14:02:48 +0000
+Date:   Mon, 29 May 2023 16:02:47 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
+        <chengkaitao@didiglobal.com>
+Cc:     "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "muchun.song@linux.dev" <muchun.song@linux.dev>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH v3 0/2] memcontrol: support cgroup level OOM protection
+Message-ID: <ZHSwhyGnPteiLKs/@dhcp22.suse.cz>
+References: <ZGtoNu7zIRRy7qK0@dhcp22.suse.cz>
+ <96BFCF52-A5F6-4B73-ACAE-ACF11798E374@didiglobal.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] scsi: virtio_scsi: Remove a useless function call
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org
-References: <08740635cdb0f8293e57c557b22e048daae50961.1685345683.git.christophe.jaillet@wanadoo.fr>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <08740635cdb0f8293e57c557b22e048daae50961.1685345683.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <96BFCF52-A5F6-4B73-ACAE-ACF11798E374@didiglobal.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/29/23 09:35, Christophe JAILLET wrote:
-> 'inq_result' is known to be NULL. There is no point calling kfree().
+On Thu 25-05-23 07:35:41, 程垲涛 Chengkaitao Cheng wrote:
+> At 2023-05-22 21:03:50, "Michal Hocko" <mhocko@suse.com> wrote:
+[...]
+> >> I have created a new indicator oom_kill_inherit that maintains a negative correlation 
+> >> with memory.oom.protect, so we have a ruler to measure the optimal value of 
+> >> memory.oom.protect.
+> >
+> >An example might help here.
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->   drivers/scsi/virtio_scsi.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
+> In my testing case, by adjusting memory.oom.protect, I was able to significantly 
+> reduce the oom_kill_inherit of the corresponding cgroup. In a physical machine 
+> with severely oversold memory, I divided all cgroups into three categories and 
+> controlled their probability of being selected by the oom-killer to 0%,% 20, 
+> and 80%, respectively.
+
+I might be just dense but I am lost. Can we focus on the barebone
+semantic of the group oom selection and killing first. No magic
+auto-tuning at this stage please.
+
+> >> >> about the semantics of non-leaf memcgs protection,
+> >> >> If a non-leaf memcg's oom_protect quota is set, its leaf memcg will proportionally 
+> >> >> calculate the new effective oom_protect quota based on non-leaf memcg's quota.
+> >> >
+> >> >So the non-leaf memcg is never used as a target? What if the workload is
+> >> >distributed over several sub-groups? Our current oom.group
+> >> >implementation traverses the tree to find a common ancestor in the oom
+> >> >domain with the oom.group.
+> >> 
+> >> If the oom_protect quota of the parent non-leaf memcg is less than the sum of 
+> >> sub-groups oom_protect quota, the oom_protect quota of each sub-group will 
+> >> be proportionally reduced
+> >> If the oom_protect quota of the parent non-leaf memcg is greater than the sum 
+> >> of sub-groups oom_protect quota, the oom_protect quota of each sub-group 
+> >> will be proportionally increased
+> >> The purpose of doing so is that users can set oom_protect quota according to 
+> >> their own needs, and the system management process can set appropriate 
+> >> oom_protect quota on the parent non-leaf memcg as the final cover, so that 
+> >> the system management process can indirectly manage all user processes.
+> >
+> >I guess that you are trying to say that the oom protection has a
+> >standard hierarchical behavior. And that is fine, well, in fact it is
+> >mandatory for any control knob to have a sane hierarchical properties.
+> >But that doesn't address my above question. Let me try again. When is a
+> >non-leaf memcg potentially selected as the oom victim? It doesn't have
+> >any tasks directly but it might be a suitable target to kill a multi
+> >memcg based workload (e.g. a full container).
 > 
-> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-> index 58498da9869a..bd5633667d01 100644
-> --- a/drivers/scsi/virtio_scsi.c
-> +++ b/drivers/scsi/virtio_scsi.c
-> @@ -338,10 +338,8 @@ static int virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
->   	int result, inquiry_len, inq_result_len = 256;
->   	char *inq_result = kmalloc(inq_result_len, GFP_KERNEL);
->   
-> -	if (!inq_result) {
-> -		kfree(inq_result);
-> +	if (!inq_result)
->   		return -ENOMEM;
-> -	}
->   
->   	shost_for_each_device(sdev, shost) {
->   		inquiry_len = sdev->inquiry_len ? sdev->inquiry_len : 36;
+> If nonleaf memcg have the higher memory usage and the smaller 
+> memory.oom.protect, it will have the higher the probability being 
+> selected by the killer. If the non-leaf memcg is selected as the oom 
+> victim, OOM-killer will continue to select the appropriate child 
+> memcg downwards until the leaf memcg is selected.
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+Parent memcg has more or equal memory charged than its child(ren) by
+definition. Let me try to ask differently. Say you have the following
+hierarchy
 
+		  root
+		/     \
+       container_A     container_B
+     (oom.prot=100M)   (oom.prot=200M)
+     (usage=120M)      (usage=180M)
+     /     |     \
+    A      B      C
+                 / \
+		C1  C2
+
+
+container_B is protected so it should be excluded. Correct? So we are at
+container_A to chose from. There are multiple ways the system and
+continer admin might want to achieve.
+1) system admin might want to shut down the whole container.
+2) continer admin might want to shut the whole container down
+3) cont. admin might want to shut down a whole sub group (e.g. C as it
+   is a self contained workload and killing portion of it will put it into
+   inconsistent state).
+4) cont. admin might want to kill the most excess cgroup with tasks (i.e. a
+   leaf memcg).
+5) admin might want to kill a process in the most excess memcg.
+
+Now we already have oom.group thingy that can drive the group killing
+policy but it is not really clear how you want to incorporate that to
+the protection.
+
+Again, I think that an oom.protection makes sense but the semantic has
+to be very carefully thought through because it is quite easy to create
+corner cases and weird behavior. I also think that oom.group has to be
+consistent with the protection.
+
+> >> >All that being said and with the usecase described more specifically. I
+> >> >can see that memcg based oom victim selection makes some sense. That
+> >> >menas that it is always a memcg selected and all tasks withing killed.
+> >> >Memcg based protection can be used to evaluate which memcg to choose and
+> >> >the overall scheme should be still manageable. It would indeed resemble
+> >> >memory protection for the regular reclaim.
+> >> >
+> >> >One thing that is still not really clear to me is to how group vs.
+> >> >non-group ooms could be handled gracefully. Right now we can handle that
+> >> >because the oom selection is still process based but with the protection
+> >> >this will become more problematic as explained previously. Essentially
+> >> >we would need to enforce the oom selection to be memcg based for all
+> >> >memcgs. Maybe a mount knob? What do you think?
+> >> 
+> >> There is a function in the patch to determine whether the oom_protect 
+> >> mechanism is enabled. All memory.oom.protect nodes default to 0, so the function 
+> >> <is_root_oom_protect> returns 0 by default.
+> >
+> >How can an admin determine what is the current oom detection logic?
+> 
+> The memory.oom.protect are set by the administrator themselves, and they 
+> must know what the current OOM policy is. Reading the memory.oom.protect 
+> of the first level cgroup directory and observing whether it is 0 can also 
+> determine whether the oom.protect policy is enabled.
+
+How do you achieve that from withing a container which doesn't have a
+full visibility to the cgroup tree?
+-- 
+Michal Hocko
+SUSE Labs
