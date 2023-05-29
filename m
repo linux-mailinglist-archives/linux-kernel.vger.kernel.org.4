@@ -2,64 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8124A7151EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 00:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6494D7151F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 00:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjE2Wht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 18:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        id S229992AbjE2WiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 18:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjE2Whm (ORCPT
+        with ESMTP id S229489AbjE2WiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 18:37:42 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8280F9F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 15:37:41 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 77E68202E5;
-        Tue, 30 May 2023 00:37:39 +0200 (CEST)
-Date:   Tue, 30 May 2023 00:37:38 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     neil.armstrong@linaro.org, Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Caleb Connolly <caleb@connolly.tech>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-Subject: Re: [PATCH RFC 03/10] drm/panel: Add LGD panel driver for Sony
- Xperia XZ3
-Message-ID: <v3ac2ihqjce7vxcsjnm7ett2vc6wb4hb3bb6x4widd55eintw7@fgkyipbbl2ei>
-References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
- <20230521-drm-panels-sony-v1-3-541c341d6bee@somainline.org>
- <ccc97880-8e74-b85b-9679-9c12c44c4b99@linaro.org>
- <71675a02-0801-62dc-2673-4a0907636b21@linaro.org>
- <CAA8EJpq=HZqiBZ6bpUNH47VmASuH+Mi5OD5BHmg0TPwtsKHf8w@mail.gmail.com>
- <oxgtbj7qmsdvz5gl4bud64jedmhdmvphjfge7uy6uwulefqfsa@pleslv2zgwbp>
- <ebc3ff33-6e4f-b107-33c6-f35b03307058@linaro.org>
+        Mon, 29 May 2023 18:38:22 -0400
+Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B746CD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 15:38:20 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
+        id 81458e19-fe71-11ed-b972-005056bdfda7;
+        Tue, 30 May 2023 01:38:17 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Tue, 30 May 2023 01:38:17 +0300
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v4 7/9] serial: sc16is7xx: fix regression with GPIO
+ configuration
+Message-ID: <ZHUpWQafRPHW1RJQ@surfacebook>
+References: <20230529140711.896830-1-hugo@hugovil.com>
+ <20230529140711.896830-8-hugo@hugovil.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ebc3ff33-6e4f-b107-33c6-f35b03307058@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20230529140711.896830-8-hugo@hugovil.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,44 +48,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-30 01:18:40, Dmitry Baryshkov wrote:
-<snip>
-> >>>>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
-> >>>>> +    if (ret < 0) {
-> >>>>> +        dev_err(dev, "Failed to turn display on: %d\n", ret);
-> >>>>> +        return ret;
-> >>>>> +    }
-> >>>>
-> >>>> My usual question: should the mipi_dsi_dcs_exit_sleep_mode() / mipi_dsi_dcs_set_display_on() be moved from prepare() to enable() part?
-> >>>
-> >>>
-> >>> No, prepare is called before the video stream is started and when display is still in LPM mode and the mode hasn't been set.
-> >>>
-> >>
-> >> Yes, that's my point. Shouldn't we enable the panel _after_ starting the stream?
-> > 
-> > I have never investigated what it takes to split these functions, but
-> > some of these panels do show some corruption at startup which may be
-> > circumvented by powering the panel on after starting the video stream?
-> > 
-> > I'm just not sure where to make the split: downstream does describe a
-> > qcom,mdss-dsi-on-command and qcom,mdss-dsi-post-panel-on-command, where
-> > the latter only contains set_display_on() (not exit_sleep_mode()).
-> > It is documented like:
-> > 
-> >      same as "qcom,mdss-dsi-on-command" except commands are sent after
-> >      displaying an image."
-> > 
-> > So this seems like the right way to split them up, I'll test this out on
-> > all submitted panel drivers.
+Mon, May 29, 2023 at 10:07:09AM -0400, Hugo Villeneuve kirjoitti:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> Interesting enough, Neil suggested that sending all the commands during 
-> pre_enable() is the correct sequence (especially for VIDEO mode panels), 
-> since not all DSI hosts can send commands after switching to the VIDEO mode.
+> Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
+> and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+> changed the function of the GPIOs pins to act as modem control
+> lines without any possibility of selecting GPIO function.
+> 
+> As a consequence, applications that depends on GPIO lines configured
+> by default as GPIO pins no longer work as expected.
+> 
+> Also, the change to select modem control lines function was done only
+> for channel A of dual UART variants (752/762). This was not documented
+> in the log message.
+> 
+> Allow to specify GPIO or modem control line function in the device
+> tree, and for each of the ports (A or B).
+> 
+> Do so by using the new device-tree property named
+> "modem-control-line-ports" (property added in separate patch).
+> 
+> When registering GPIO chip controller, mask-out GPIO pins declared as
+> modem control lines according to this new "modem-control-line-ports"
+> DT property.
+> 
+> Boards that need to have GPIOS configured as modem control lines
+> should add that property to their device tree. Here is a list of
+> boards using the sc16is7xx driver in their device tree and that may
+> need to be modified:
+>     arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
+>     mips/boot/dts/ingenic/cu1830-neo.dts
+>     mips/boot/dts/ingenic/cu1000-neo.dts
 
-Note that all these panels and Driver-ICs are command-mode, and/or
-programmed to run in command-mode, so there shouldn't be any notion of a
-VIDEO stream (any command-mode frame is just an "arbitrary command" as
-far as I understood).
+...
 
-- Marijn
+> Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
+> Fixes: 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+
+Don't forget to refer to the dependency patches form this series.
+(I forgot how it should be done, IIRC the documentation about stable kernel
+patches can shed a light on this.)
+
+
+...
+
+> +	switch (mctrl_mask) {
+> +	case 0:
+> +		s->gpio_valid_mask = 0xFF;
+
+GENMASK()
+
+> +		break;
+> +	case SC16IS7XX_IOCONTROL_MODEM_A_BIT:
+> +		s->gpio_valid_mask = 0x0F;
+
+GENMASK()
+
+> +		break;
+> +	case SC16IS7XX_IOCONTROL_MODEM_B_BIT:
+> +		s->gpio_valid_mask = 0xF0;
+
+GENMASK()
+
+> +		break;
+> +	default:
+> +		break;
+> +	}
+
+...
+
+> +		of_property_for_each_u32(dev->of_node, "nxp,modem-control-line-ports",
+> +					 prop, p, u) {
+> +			if (u >= devtype->nr_uart)
+> +				continue;
+> +
+> +			/* Use GPIO lines as modem control lines */
+> +			if (u == 0)
+> +				mctrl_mask |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
+> +			else if (u == 1)
+> +				mctrl_mask |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
+> +		}
+
+Can we use device properties, please?
+
+If you think about backporting to the earlier kernels (w/o properties in use in
+this driver), perhaps an additional followup for that?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
