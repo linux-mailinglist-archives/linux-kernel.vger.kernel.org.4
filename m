@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984527145EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ABE37145E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 10:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbjE2IDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 04:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
+        id S231639AbjE2IDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 04:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbjE2ICt (ORCPT
+        with ESMTP id S231649AbjE2ICu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 04:02:49 -0400
+        Mon, 29 May 2023 04:02:50 -0400
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82B9CA;
-        Mon, 29 May 2023 01:02:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B940E0;
+        Mon, 29 May 2023 01:02:45 -0700 (PDT)
 X-GND-Sasl: alexis.lothore@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685347362;
+        t=1685347364;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZqUKIWMaVniJ4Gjl5hNG4cyAnuaYWu6qgOZ97jOF9QM=;
-        b=TlX157l9s11kbP1sDyHwtFGWPNrTYUZmZw+GTu9Cq729/lKYHEVQQUUBiy36b3JfIluibf
-        Wd/DwxBTUdRdxvQJ0zAbhAvc8QpUQVQHzvW7TadUR4Umo6S06oohNq7DJEzPH4vfb4xYs+
-        boJ2UP7Xg4nZUfzmQ8IDA52CPMgpW0LnfdMAI7Z4nca51qTM3gT+rkKn0qJuj/kZ2iA+0n
-        TOV3SWQ6E+Ym5d6vI85Kyf1f8gINgnZZBaBvlMTvcBjpM/bq0pyQ1Yyht5rE856pj0so3d
-        zHN5+C9vvm0mxaSubr7xJVFh5C/46zQsH7RC97o+uQr7f7lJ6gxZKnR/lcyiaw==
+        bh=wPLy8gbYNUrZjATOCdFHCsb4lMos6/9mDXRS3C5jaRY=;
+        b=hDPOvMJOEL+P7wtRxV4tL+n6Slr1dNc37owCWvy2bzk7bG8UrcuTPmnPU2mpR927Brn7il
+        /2ADph3OrDmom/JDu3gwuETvqiYmoSsfSMlnK8Z3zao1dpFEFIm2EarZHJrI7cq6ZWD15n
+        yECNMhRmYbJf2S8dLRxyqXEwUjESgZl659F1xoKO1TM5/OQxqs3x+vX5eldWD7NqcDpB4e
+        mKxbfWa5VBAlzOQcImJes0xeA+BXwt1QcZF8qM6B2erGQ8NSzD4YxYPboLfxPsIOKPee39
+        dVTL4LGTgTz1AZS/yZgRr9WPjNZxxf3FdNstBm1EGzCCJu94/CMI/X9UDu5lwA==
 X-GND-Sasl: alexis.lothore@bootlin.com
 X-GND-Sasl: alexis.lothore@bootlin.com
 X-GND-Sasl: alexis.lothore@bootlin.com
@@ -47,8 +47,8 @@ X-GND-Sasl: alexis.lothore@bootlin.com
 X-GND-Sasl: alexis.lothore@bootlin.com
 X-GND-Sasl: alexis.lothore@bootlin.com
 X-GND-Sasl: alexis.lothore@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CD3D860010;
-        Mon, 29 May 2023 08:02:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 808696000D;
+        Mon, 29 May 2023 08:02:42 +0000 (UTC)
 From:   =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
 To:     Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -68,9 +68,9 @@ Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         paul.arola@telus.com, scott.roberts@telus.com,
         =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
         =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Subject: [PATCH net-next v4 5/7] net: dsa: mv88e6xxx: fix 88E6393X family internal phys layout
-Date:   Mon, 29 May 2023 10:02:44 +0200
-Message-Id: <20230529080246.82953-6-alexis.lothore@bootlin.com>
+Subject: [PATCH net-next v4 6/7] net: dsa: mv88e6xxx: pass mv88e6xxx_chip structure to port_max_speed_mode
+Date:   Mon, 29 May 2023 10:02:45 +0200
+Message-Id: <20230529080246.82953-7-alexis.lothore@bootlin.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230529080246.82953-1-alexis.lothore@bootlin.com>
 References: <20230529080246.82953-1-alexis.lothore@bootlin.com>
@@ -87,57 +87,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-88E6393X/88E6193X/88E6191X switches have in fact 8 internal PHYs, but those
-are not present starting at port 0: supported ports go from 1 to 8
+Some switches families have minor differences on supported link speed for
+ports. Instead of redefining a new port_max_speed_mode for each different
+configuration, allow to pass mv88e6xxx_chip structure to allow
+differentiating those chips by known chip id
 
 Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
 Changes since v3:
 - fix SoB
-- fix typo in commit message
 
 Changes since v2:
-- add reviewed-by tags
+- add reviewed-by tag
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/net/dsa/mv88e6xxx/chip.c |  2 +-
+ drivers/net/dsa/mv88e6xxx/chip.h |  3 ++-
+ drivers/net/dsa/mv88e6xxx/port.c | 12 ++++++++----
+ drivers/net/dsa/mv88e6xxx/port.h | 12 ++++++++----
+ 4 files changed, 19 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index c967259fcadd..d3d861e55fe0 100644
+index d3d861e55fe0..a2b5cac39507 100644
 --- a/drivers/net/dsa/mv88e6xxx/chip.c
 +++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -6047,7 +6047,8 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
- 		.name = "Marvell 88E6191X",
- 		.num_databases = 4096,
- 		.num_ports = 11,	/* 10 + Z80 */
--		.num_internal_phys = 9,
-+		.num_internal_phys = 8,
-+		.internal_phys_offset = 1,
- 		.max_vid = 8191,
- 		.max_sid = 63,
- 		.port_base_addr = 0x0,
-@@ -6070,7 +6071,8 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
- 		.name = "Marvell 88E6193X",
- 		.num_databases = 4096,
- 		.num_ports = 11,	/* 10 + Z80 */
--		.num_internal_phys = 9,
-+		.num_internal_phys = 8,
-+		.internal_phys_offset = 1,
- 		.max_vid = 8191,
- 		.max_sid = 63,
- 		.port_base_addr = 0x0,
-@@ -6389,7 +6391,8 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
- 		.name = "Marvell 88E6393X",
- 		.num_databases = 4096,
- 		.num_ports = 11,	/* 10 + Z80 */
--		.num_internal_phys = 9,
-+		.num_internal_phys = 8,
-+		.internal_phys_offset = 1,
- 		.max_vid = 8191,
- 		.max_sid = 63,
- 		.port_base_addr = 0x0,
+@@ -3334,7 +3334,7 @@ static int mv88e6xxx_setup_port(struct mv88e6xxx_chip *chip, int port)
+ 		caps = pl_config.mac_capabilities;
+ 
+ 		if (chip->info->ops->port_max_speed_mode)
+-			mode = chip->info->ops->port_max_speed_mode(port);
++			mode = chip->info->ops->port_max_speed_mode(chip, port);
+ 		else
+ 			mode = PHY_INTERFACE_MODE_NA;
+ 
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
+index eca51946c100..dd7c8880e987 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.h
++++ b/drivers/net/dsa/mv88e6xxx/chip.h
+@@ -518,7 +518,8 @@ struct mv88e6xxx_ops {
+ 				     int speed, int duplex);
+ 
+ 	/* What interface mode should be used for maximum speed? */
+-	phy_interface_t (*port_max_speed_mode)(int port);
++	phy_interface_t (*port_max_speed_mode)(struct mv88e6xxx_chip *chip,
++					       int port);
+ 
+ 	int (*port_tag_remap)(struct mv88e6xxx_chip *chip, int port);
+ 
+diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
+index f79cf716c541..66f1b40b4e96 100644
+--- a/drivers/net/dsa/mv88e6xxx/port.c
++++ b/drivers/net/dsa/mv88e6xxx/port.c
+@@ -342,7 +342,8 @@ int mv88e6341_port_set_speed_duplex(struct mv88e6xxx_chip *chip, int port,
+ 					       duplex);
+ }
+ 
+-phy_interface_t mv88e6341_port_max_speed_mode(int port)
++phy_interface_t mv88e6341_port_max_speed_mode(struct mv88e6xxx_chip *chip,
++					      int port)
+ {
+ 	if (port == 5)
+ 		return PHY_INTERFACE_MODE_2500BASEX;
+@@ -381,7 +382,8 @@ int mv88e6390_port_set_speed_duplex(struct mv88e6xxx_chip *chip, int port,
+ 					       duplex);
+ }
+ 
+-phy_interface_t mv88e6390_port_max_speed_mode(int port)
++phy_interface_t mv88e6390_port_max_speed_mode(struct mv88e6xxx_chip *chip,
++					      int port)
+ {
+ 	if (port == 9 || port == 10)
+ 		return PHY_INTERFACE_MODE_2500BASEX;
+@@ -403,7 +405,8 @@ int mv88e6390x_port_set_speed_duplex(struct mv88e6xxx_chip *chip, int port,
+ 					       duplex);
+ }
+ 
+-phy_interface_t mv88e6390x_port_max_speed_mode(int port)
++phy_interface_t mv88e6390x_port_max_speed_mode(struct mv88e6xxx_chip *chip,
++					       int port)
+ {
+ 	if (port == 9 || port == 10)
+ 		return PHY_INTERFACE_MODE_XAUI;
+@@ -500,7 +503,8 @@ int mv88e6393x_port_set_speed_duplex(struct mv88e6xxx_chip *chip, int port,
+ 	return 0;
+ }
+ 
+-phy_interface_t mv88e6393x_port_max_speed_mode(int port)
++phy_interface_t mv88e6393x_port_max_speed_mode(struct mv88e6xxx_chip *chip,
++					       int port)
+ {
+ 	if (port == 0 || port == 9 || port == 10)
+ 		return PHY_INTERFACE_MODE_10GBASER;
+diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
+index d19b6303b91f..8331b9a89a15 100644
+--- a/drivers/net/dsa/mv88e6xxx/port.h
++++ b/drivers/net/dsa/mv88e6xxx/port.h
+@@ -359,10 +359,14 @@ int mv88e6390x_port_set_speed_duplex(struct mv88e6xxx_chip *chip, int port,
+ int mv88e6393x_port_set_speed_duplex(struct mv88e6xxx_chip *chip, int port,
+ 				     int speed, int duplex);
+ 
+-phy_interface_t mv88e6341_port_max_speed_mode(int port);
+-phy_interface_t mv88e6390_port_max_speed_mode(int port);
+-phy_interface_t mv88e6390x_port_max_speed_mode(int port);
+-phy_interface_t mv88e6393x_port_max_speed_mode(int port);
++phy_interface_t mv88e6341_port_max_speed_mode(struct mv88e6xxx_chip *chip,
++					      int port);
++phy_interface_t mv88e6390_port_max_speed_mode(struct mv88e6xxx_chip *chip,
++					      int port);
++phy_interface_t mv88e6390x_port_max_speed_mode(struct mv88e6xxx_chip *chip,
++					       int port);
++phy_interface_t mv88e6393x_port_max_speed_mode(struct mv88e6xxx_chip *chip,
++					       int port);
+ 
+ int mv88e6xxx_port_set_state(struct mv88e6xxx_chip *chip, int port, u8 state);
+ 
 -- 
 2.40.1
 
