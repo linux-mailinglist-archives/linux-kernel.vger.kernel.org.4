@@ -2,69 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29A3714BDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7358A714BE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 16:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjE2ORb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 10:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S230039AbjE2OSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 10:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjE2OR1 (ORCPT
+        with ESMTP id S229673AbjE2OSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 10:17:27 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47958BE;
-        Mon, 29 May 2023 07:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685369844; x=1716905844;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QJcnTBFqLSso7I149K/7bYRpFd+idvVMmtjIYAQ5p2E=;
-  b=SUY3T0VwF0DBzMAwBpd0XYx+rldvJqzTIwuwZBC+CmUATMPj62ZE0npn
-   +pBCMzoO9gDqe7k2XHpQ4sC+Qkt1bexJ1Qj1Q08at/TeTMbCA9oQOPjC9
-   wkUvI+7PoL/ZSoq31xMS39u0x3HnUG459Js/s6HvMGE0p1qgh4cGGaTvB
-   N6m5W0Wg76XTr23Wmn7K+bfKyNwXFmEtoTz/poZNgsyqoYmM5dD3Fiwse
-   S1ZsEV5LzGVNOJGv8XXC0tvsoTbdLj/l5iMyweOOqwpcCLouokdCJQYeh
-   knmIJxmlKQeQ7bTRl+B0Of/DvxsbAKUt6qZX3Hzlks4fhpoBclYpaRSlR
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
-   d="asc'?scan'208";a="154446873"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 May 2023 07:17:21 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 29 May 2023 07:17:12 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 29 May 2023 07:17:10 -0700
-Date:   Mon, 29 May 2023 15:16:47 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <jirislaby@kernel.org>, <jringle@gridpoint.com>,
-        <l.perczak@camlintechnologies.com>, <tomasz.mon@camlingroup.com>,
-        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v4 6/9] dt-bindings: sc16is7xx: Add property to change
- GPIO function
-Message-ID: <20230529-seventy-stash-0446d9ae02e8@wendy>
-References: <20230529140711.896830-1-hugo@hugovil.com>
- <20230529140711.896830-7-hugo@hugovil.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+085Gn19puYh7ZJS"
-Content-Disposition: inline
-In-Reply-To: <20230529140711.896830-7-hugo@hugovil.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 29 May 2023 10:18:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87610A8;
+        Mon, 29 May 2023 07:18:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23C5B614CA;
+        Mon, 29 May 2023 14:18:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85056C433EF;
+        Mon, 29 May 2023 14:18:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685369908;
+        bh=XanX7byBEmuBhTMsmTfYRDi9srDmLXFA6kg1lQHYCyQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t8PslmTOfb8SYtHGK/zwuAcf+Vr5g/K1h/CwfUP42LMMyeIt1HgPjND/chW2vUPsB
+         tovOtb/q/IQPMivy/hDcxPEYuVcTAMyoS+4vov4+sZbWzehrc7rvdMxKcdV6jpkvW7
+         ahIzHhGDGAx0oXtA4C5CRYBONySa6gtEVWsvkovdmIHsDC/Bi51FfDS1QERO9v6LPS
+         27o7qwcJclJr8L/OULqLNVRzv11idFUqSHGdvn5BbVOTW/GWZa9n2KZoeBxaRVeOZA
+         7fdhf47MlIpQgaZyq2K2GEjxGwPUZZ7LY2Exofrfep9s4ddB8jlskpVBHHNHiY7ElO
+         AK1wdURP+aVEg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q3dha-0015Qd-9I;
+        Mon, 29 May 2023 15:18:26 +0100
+Date:   Mon, 29 May 2023 15:18:25 +0100
+Message-ID: <87ttvvjk5q.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 6/6] KVM: arm64: Use TLBI range-based intructions for unmap
+In-Reply-To: <20230519005231.3027912-7-rananta@google.com>
+References: <20230519005231.3027912-1-rananta@google.com>
+        <20230519005231.3027912-7-rananta@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rananta@google.com, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, ricarkol@google.com, pbonzini@redhat.com, jingzhangos@google.com, coltonlewis@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,42 +74,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---+085Gn19puYh7ZJS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, 19 May 2023 01:52:31 +0100,
+Raghavendra Rao Ananta <rananta@google.com> wrote:
+> 
+> The current implementation of the stage-2 unmap walker traverses
+> the given range and, as a part of break-before-make, performs
+> TLB invalidations with a DSB for every PTE. A multitude of this
+> combination could cause a performance bottleneck.
+> 
+> Hence, if the system supports FEAT_TLBIRANGE, defer the TLB
+> invalidations until the entire walk is finished, and then
+> use range-based instructions to invalidate the TLBs in one go.
+> Condition this upon S2FWB in order to avoid walking the page-table
+> again to perform the CMOs after issuing the TLBI.
 
-Hey Hugo,
+But that's the real bottleneck. TLBIs are cheap compared to CMOs, even
+on remarkably bad implementations. What is your plan to fix this?
 
-On Mon, May 29, 2023 at 10:07:08AM -0400, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
->=20
-> Some variants in this series of UART controllers have GPIO pins that
-> are shared between GPIO and modem control lines.
->=20
-> The pin mux mode (GPIO or modem control lines) can be set for each
-> ports (channels) supported by the variant.
->=20
-> This adds a property to the device tree to set the GPIO pin mux to
-> modem control lines on selected ports if needed.
->=20
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> 
+> Rename stage2_put_pte() to stage2_unmap_put_pte() as the function
+> now serves the stage-2 unmap walker specifically, rather than
+> acting generic.
+> 
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  arch/arm64/kvm/hyp/pgtable.c | 35 ++++++++++++++++++++++++++++++-----
+>  1 file changed, 30 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index b8f0dbd12f773..5832ee3418fb0 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -771,16 +771,34 @@ static void stage2_make_pte(const struct kvm_pgtable_visit_ctx *ctx, kvm_pte_t n
+>  	smp_store_release(ctx->ptep, new);
+>  }
+>  
+> -static void stage2_put_pte(const struct kvm_pgtable_visit_ctx *ctx, struct kvm_s2_mmu *mmu,
+> -			   struct kvm_pgtable_mm_ops *mm_ops)
+> +static bool stage2_unmap_defer_tlb_flush(struct kvm_pgtable *pgt)
+>  {
+> +	/*
+> +	 * If FEAT_TLBIRANGE is implemented, defer the individial PTE
+> +	 * TLB invalidations until the entire walk is finished, and
+> +	 * then use the range-based TLBI instructions to do the
+> +	 * invalidations. Condition this upon S2FWB in order to avoid
+> +	 * a page-table walk again to perform the CMOs after TLBI.
+> +	 */
+> +	return system_supports_tlb_range() && stage2_has_fwb(pgt);
+> +}
+> +
+> +static void stage2_unmap_put_pte(const struct kvm_pgtable_visit_ctx *ctx,
+> +				struct kvm_s2_mmu *mmu,
+> +				struct kvm_pgtable_mm_ops *mm_ops)
+> +{
+> +	struct kvm_pgtable *pgt = ctx->arg;
+> +
+>  	/*
+>  	 * Clear the existing PTE, and perform break-before-make with
+>  	 * TLB maintenance if it was valid.
+>  	 */
+>  	if (kvm_pte_valid(ctx->old)) {
+>  		kvm_clear_pte(ctx->ptep);
+> -		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu, ctx->addr, ctx->level);
+> +
+> +		if (!stage2_unmap_defer_tlb_flush(pgt))
+> +			kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu,
+> +					ctx->addr, ctx->level);
 
-Did I not ack this in v2? I didn't notice a reason for dropping it
-in the cover etc. Was it intentionally dropped, or missed?
+This really doesn't match the comment anymore.
 
-Cheers,
-Conor.
+Overall, I'm very concerned that we lose the consistency property that
+the current code has: once called, the TLBs and the page tables are
+synchronised.
 
---+085Gn19puYh7ZJS
-Content-Type: application/pgp-signature; name="signature.asc"
+Yes, this patch looks correct. But it is also really fragile.
 
------BEGIN PGP SIGNATURE-----
+>  	}
+>  
+>  	mm_ops->put_page(ctx->ptep);
+> @@ -1015,7 +1033,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
+>  	 * block entry and rely on the remaining portions being faulted
+>  	 * back lazily.
+>  	 */
+> -	stage2_put_pte(ctx, mmu, mm_ops);
+> +	stage2_unmap_put_pte(ctx, mmu, mm_ops);
+>  
+>  	if (need_flush && mm_ops->dcache_clean_inval_poc)
+>  		mm_ops->dcache_clean_inval_poc(kvm_pte_follow(ctx->old, mm_ops),
+> @@ -1029,13 +1047,20 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
+>  
+>  int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
+>  {
+> +	int ret;
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= stage2_unmap_walker,
+>  		.arg	= pgt,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
+>  	};
+>  
+> -	return kvm_pgtable_walk(pgt, addr, size, &walker);
+> +	ret = kvm_pgtable_walk(pgt, addr, size, &walker);
+> +	if (stage2_unmap_defer_tlb_flush(pgt))
+> +		/* Perform the deferred TLB invalidations */
+> +		kvm_call_hyp(__kvm_tlb_flush_vmid_range, pgt->mmu,
+> +				addr, addr + size);
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHSzzwAKCRB4tDGHoIJi
-0npZAQCPFQ52PwxbkPmD/kvN+12IBZ4QQ9I02aZB1j7w6DaqDgD/SNbcnScnBM8m
-pp0jJoZcKtbiuZljo4tvKhya4e5kawc=
-=YYyF
------END PGP SIGNATURE-----
+This "kvm_call_hyp(__kvm_tlb_flush_vmid_range,...)" could do with a
+wrapper from the point where you introduce it.
 
---+085Gn19puYh7ZJS--
+> +
+> +	return ret;
+>  }
+>  
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
