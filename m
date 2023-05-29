@@ -2,320 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F84A71470A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11951714709
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjE2J01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 05:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S231615AbjE2JZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 05:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjE2J0Z (ORCPT
+        with ESMTP id S229572AbjE2JZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 05:26:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3C4AC
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:25:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685352343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sj2qXiEWFeMturc9uGJf6ztAEEy4dq2p+Uw4dRrFm4Q=;
-        b=aDfooA5KPYd41knswQfrQMEHXpfWtOevXEJxDpnw/xGCaaEkyvCxRQcukkDXuDYq+rIuqT
-        4Ipjwc8DP79Q0Qo+1WjctQ37zHEWJKENXTeOvnFKdy8dzdQ2CXeue3dGXnDfEhsYcoV4ly
-        7bhxysC/GvG29f8evn2XD0n/iiwyZTM=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-73-NXLBL4kSPQG9Le26x_OE3g-1; Mon, 29 May 2023 05:25:42 -0400
-X-MC-Unique: NXLBL4kSPQG9Le26x_OE3g-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f6f58e269eso12196695e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:25:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685352341; x=1687944341;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sj2qXiEWFeMturc9uGJf6ztAEEy4dq2p+Uw4dRrFm4Q=;
-        b=hVgz2pJ6otlfE9KALeDxTlRFkzFZExkzCY+zXNBGVUrF0SPX1VQl0QYf4gn3TSbwgV
-         4PvWWJKzMmwtWITbJ05aNOb2ItvHhPbVuCLdMNi1rWYYeDtfxo0jWJnNNknIOgo7zHAU
-         kF0TuHqbcMfjPt7RzXgwkpg8oHUUucb0gklsxcjZR0xm4RZV1WHCwOwXToPc+W9utzHt
-         rIcB9QYNXNlSeFLf0RQamOSyfHducnU/z34VD9m3VoV7Oe01AJAeMm59J+LwTpRO1Tri
-         WcAwycxjkkDAuGajO/11HXRuUryYdcG42fLj+yXj3MfXGy8Qk+kGTO6GQgcPyOrcRLaC
-         Ko6A==
-X-Gm-Message-State: AC+VfDw3wUP5b4ZMXLAVHRtxBIZlkvt81De+B3wHiZsrLmSQIso1y0Qk
-        mqgabSGWPHjgUidd7GMKxAsvavYnK35YId/IjfjFGgf41FU1e47GhmIQcb9IlGXRKzdIQAOD6Y3
-        LRxvTIuBin5tDKdkq3VcTKint
-X-Received: by 2002:a1c:7211:0:b0:3f6:cfc7:8bd0 with SMTP id n17-20020a1c7211000000b003f6cfc78bd0mr9676805wmc.36.1685352341030;
-        Mon, 29 May 2023 02:25:41 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5yPlygRj+fmkALsPX+gGK9yhyCvUZvlYvF7gEiRn8SuazY42oBGYjGdb39uc+kffq2bG3MBw==
-X-Received: by 2002:a1c:7211:0:b0:3f6:cfc7:8bd0 with SMTP id n17-20020a1c7211000000b003f6cfc78bd0mr9676786wmc.36.1685352340652;
-        Mon, 29 May 2023 02:25:40 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f2e:ae00:f2e3:50e0:73f7:451? (p200300d82f2eae00f2e350e073f70451.dip0.t-ipconnect.de. [2003:d8:2f2e:ae00:f2e3:50e0:73f7:451])
-        by smtp.gmail.com with ESMTPSA id q1-20020a1ce901000000b003f423dfc686sm13416038wmc.45.2023.05.29.02.25.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 02:25:40 -0700 (PDT)
-Message-ID: <4d035744-271d-1ca3-a440-f8b1573eec96@redhat.com>
-Date:   Mon, 29 May 2023 11:25:39 +0200
-MIME-Version: 1.0
+        Mon, 29 May 2023 05:25:58 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705B09E;
+        Mon, 29 May 2023 02:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1685352356;
+  x=1716888356;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=JwKb3x4SOyuQx3MrzdQi05ot7ITRYC7+rn1BTIfxCnw=;
+  b=mnrLoyahSJjDXYSN4ib9D2dB6hRfeksrYO2uzZpZOmDanKjkPs5vDZlj
+   UG5u4f090hjNnSjto6LI62H0yrwHxlKGSeUFLMptyEZCzieCdBFxkwvE+
+   gyL5nSQDSO4GEFgb/kQSeQLKlDO/tmGbIgMAAgCiXle025DVl461FQhS7
+   ENp5oVnfU+1M9pJmjATrAJwXBOOokszbTxpBjP7pMFyUOd80Tu9ol5Bdv
+   mHw1HzlX4Dc4To0l/WXAeiYjX7Do51d+yeRrw4ZX0Sm4KxTXh9s3Mj9uS
+   qpIA97IcvvC7QmsvynFJm1cMzO+m5Q+wJNIXNGFuCFgkOMVxipSdwUjof
+   A==;
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SoifpH5x9sC+qLReRHWm+zIfw66gpLsLAoxHflTs1/Gl20RnMawo+ew2ls3uYA4s8DMo5MqZs3JwQLsJU0Z3BTlhbg3intL9aSFXMmgMEdbW2sPplJM8ERN9GVf3CzrhJdbChhj4Lkl8+k8r46iEDlbDCsOKY6V1kldAEqCMo+Q09FJP5Exc5lsQxsuQAeckaNHbXXtyv01qMYYkBUvJ1+Ev8g06zLRLkub64lRjze5Lfx9skHabU9M7aBoDjt52RKPUvh0YZDQNQD7Y9NYziXDSCTHi6qjmRTpO3UZZcRnXoXivM6/FjUaD6MunpO0pOeySGb347THUbRKmifaYkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JwKb3x4SOyuQx3MrzdQi05ot7ITRYC7+rn1BTIfxCnw=;
+ b=DItNTFAyOJX6zLtBNbHy+385UbvylMV96iu8s/OeC6rh0BBw+V7CNcpQ4otYKFlyOVNkf1BvHjDKBLehLS6HuzuYhHjfRPSsg5Nglyp7Dl4qND35IvRNI+/kvqC/Ad0Aeuic8XDxA2l9v/oO6P5mMrfGpe6n64QHgZjLBfO/tbCKle5Q8l72d4uFQ1rSZk6pBZwfULQlhanUxUBjv0SN2tWxhxpW7NKZ30PX4EeV0PsXwJjpDDNYnsNyeNG49I5DSyMgwsTFdEWXbQFp8qkQc/QoU1IBrcxH6CgaTRHPV2tL6aRsQym3jrlvMGAF4kw9KEqFcxqHwAp3Fy/UWBCKZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axis.com; dmarc=pass action=none header.from=axis.com;
+ dkim=pass header.d=axis.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=axis365.onmicrosoft.com; s=selector2-axis365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JwKb3x4SOyuQx3MrzdQi05ot7ITRYC7+rn1BTIfxCnw=;
+ b=pu0BmO321S+LK4rwjbWE/oqMaDTQ62MdrSaVm+vV/Cx9jFhPIwLBQxX4wBoyBxB0ii1RgelqNBh4tbdbA09DEDqsu/YU/yh6L1qdO3E7feKBhuHk1HAdLcnmKNkorMXFEyZQsoRxmvrvZxmWI9ZP5QpMu+bplV4vpZFQZt3edIo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axis.com;
+Message-ID: <46da8636-0c4f-9602-dcad-6e6dec10a94a@axis.com>
+Date:   Mon, 29 May 2023 11:25:47 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-To:     Matthew Wilcox <willy@infradead.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>,
-        Steven Sistare <steven.sistare@oracle.com>,
-        akpm@linux-foundation.org, ying.huang@intel.com,
-        mgorman@techsingularity.net, baolin.wang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Khalid Aziz <khalid@kernel.org>
-References: <ZG/I7tYY4uV/32hP@casper.infradead.org>
- <ZG/To8Z3StoVoenU@casper.infradead.org>
- <60367660-f4a3-06dc-4d17-4dbdc733ef74@oracle.com>
- <ZHDh4Jeb/vKY+nGU@casper.infradead.org>
- <f5a37f8d-d888-9085-2f2b-1e350a267396@redhat.com>
- <ZHD+eOMpZpWXNAig@casper.infradead.org>
- <e31cd404-56ce-4cad-fcc3-3a6695f750fa@redhat.com>
- <846b770c-9f63-90a2-0435-ec82484e3f74@nvidia.com>
- <ZHF2byaRlaX3W6Md@casper.infradead.org>
- <9821bd9c-7c30-8f0c-68e4-6b1d312bc032@nvidia.com>
- <ZHPydXSAfRq8sh0u@casper.infradead.org>
+Subject: Re: [PATCH v4 3/7] iio: light: vcnl4000: Add als_it for vcnl4040/4200
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v4] mm, compaction: Skip all non-migratable pages during
- scan
-In-Reply-To: <ZHPydXSAfRq8sh0u@casper.infradead.org>
+To:     <andy.shevchenko@gmail.com>, Astrid Rost <astrid.rost@axis.com>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@axis.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mathieu Othacehe <m.othacehe@gmail.com>
+References: <20230522142621.1680563-1-astrid.rost@axis.com>
+ <20230522142621.1680563-4-astrid.rost@axis.com>
+ <ZHPY32XPGyc96jJS@surfacebook>
+From:   Astrid Rost <astridr@axis.com>
+In-Reply-To: <ZHPY32XPGyc96jJS@surfacebook>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MM0P280CA0060.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:b::21) To DU0PR02MB9467.eurprd02.prod.outlook.com
+ (2603:10a6:10:41b::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR02MB9467:EE_|GVXPR02MB8327:EE_
+X-MS-Office365-Filtering-Correlation-Id: 47fd9ce9-f0bf-4976-2c9c-08db6026b14c
+X-LD-Processed: 78703d3c-b907-432f-b066-88f7af9ca3af,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d5c/SuOZm6SNaay7WGszMn8nEqoBVYjB8PZ7nRrDUlUUwBzi0K7h0sAbK7gCqxUnV4DaqSy0ppgDpt+e7Byu8pAkSDxRSbus0HcZST7QrRdpuK9+rwKTvOqD6akxv3gEjiofg9eeT6pqQB4lATSbD+XJTuo9voT139LCoLp/CJqQmF+cRtkhH7JHonGwBuzVFvpTDE+6EB2VibUvIVcBv+As27jJxVtLnTDmr6IirY9x751ugbTljynqm+EHBglf1/+IGT40A1Na26HogIMb3IdhqLBH+IeB2KBPV9/cMvfW/QT+W6ouPHYrJ2eSmZmUSAbgYg5NcIQ5B1+h5fxdwRmHp79DlCfA3/9m85T3x6dmaC6EXEHDk18Vm0qJzEiWjUHxBVhWNvMNgDQhjQ5J82l5vFNOvnhu/0IgNJlk1K06y2KqKtg0ba1OvVftCdvHxTFFFhMJStAPsrFwNZfYxyWaqQQADrkSRZN3vdflmLSS1YxPqVVTlAvswTnSpNBEV/4kermOzjYmRUuNTnGx9mAkcKs9fva3a22Bi7ozCvW2a3khzsVj42sytfClLPEH4ozhV5u2IjZJYWCWXqcUVsqvuHhNBIQn+12waibZ9yfxYdO4OoASLdxqnRpnAP/Rd3LTSGjalKmOhdAO8kYCug==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR02MB9467.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(136003)(39860400002)(346002)(451199021)(478600001)(2906002)(186003)(6512007)(26005)(31686004)(53546011)(6506007)(5660300002)(8676002)(8936002)(37006003)(54906003)(38100700002)(6862004)(83380400001)(2616005)(6486002)(31696002)(41300700001)(316002)(4326008)(6666004)(66946007)(36756003)(66556008)(66476007)(6636002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ak84TUkxY1VKa0Q4d09VTGpGVUlLMFBSbGdoS05nU0pWdU44OFZZM096NlBT?=
+ =?utf-8?B?UGQ5YlljYjBkV3BKOW5PUVc2K2NubDk1U1V6TVREWnROc1NBaENpakNOWWcv?=
+ =?utf-8?B?ay9YYkhsakNhcXlBVGtmMklOUjU5cHlQVjcwemJUQjVsSW96M1JkV21NRzNn?=
+ =?utf-8?B?R3gxeDh2b0c1KzZXbzFXTnJUa2tEajdPZ2w0eWwzWmYxVnE3TkQ4VjFPSTMw?=
+ =?utf-8?B?ZXdZVTNUNmhxYWp4c2owRk1MeC9oaVNNWjZ1emNaVHV2RHMvMjBUVlBpYVM4?=
+ =?utf-8?B?U2w4QmRqSVl0YnVjcE9vdmV3eEdKbjRUREM4YWVTRE0wU3AydzVUcjJSWXhQ?=
+ =?utf-8?B?ai9WNThlc2drU3k0TkN3MXI2QVFkVm93SVk2a0lIbE56OFJlbTB1aWlpVFZt?=
+ =?utf-8?B?M0J1Zmsva292NmlCUVB3OGJDb1lvRXFRcmw1WXZnMTFTZTBlV1FmRGJuMVZ1?=
+ =?utf-8?B?WFI3NHFKZFFnUUV6MG94WHAxcklxR2FRL0VaSFg3aGFMLzVBMHZoTDluUnB3?=
+ =?utf-8?B?bUlhc2R5Y2w2ZWFoMldxQWZZRjFQSVRNMGY0U0IrN3ZQNDVQKzJQSllkOStK?=
+ =?utf-8?B?dkxXM2RRSmlHQ01WampzdEcvOGpVZnZaa0V6RFpUZ0pxRXp0Z1R4Nzdmb0ox?=
+ =?utf-8?B?dFoxVExPR1BlUVlYMlIvaUZ4MzladjN5VERxdnk2ZHRHdHd0bDYxcXpFSmJF?=
+ =?utf-8?B?MExZeXdmUHBxUzBPNzVyK1ZITEdoU3ZkUEdOS2hja09uR1pjeS94Qk12TC9r?=
+ =?utf-8?B?UHFreldYMmtXbkZBS3QxKzMrKzdLUThxcEdTbytOQk1IaUU0MU5CbVhmUWZV?=
+ =?utf-8?B?NWpzRzJSSDBObXJFTlVPQk9FQzRPNGFQVTZVVGlGQ2sxNXpKZi9PcFJMcGQv?=
+ =?utf-8?B?cTExKzBqdWxxbUlxdFdxNVZ4MW9sdWREd09uemZQYmdWUUNiWEhQZDlCQkd0?=
+ =?utf-8?B?b1FKQlVxd2RJSXBlVGZsSnBFZHlIV3pxMEVOVUNERTNEamxlOEs5V2lyaU1Y?=
+ =?utf-8?B?dDJ5OUt2ZnZzNHczaVBnM1Zoci9PVStKdjhyMGhjOUptNUpkTllzUzRMVXF5?=
+ =?utf-8?B?SjlhbkNpeStmRUxxbVBjTlViU09SLy9wWnMrZUdMaDFaS1NLYVVDbUd2RnU2?=
+ =?utf-8?B?NmxBd2c3dG5sNWJ2cVJNYmhXbHRQNmZZZmpmSGdqd2c3d1gybDVWQWh0WmtM?=
+ =?utf-8?B?TGpkOUFaL3dabXM2RXFnSEZYOGwzaWVBMFppQUJZeGYzUllzVEhVVjFEcUNx?=
+ =?utf-8?B?dmdaRUhtcUltQzk3NUg0eWlSdGdHUTdYU0ZCV3d1RE1hYUpiR3p3TG05ckM5?=
+ =?utf-8?B?NkNtYkFUbGUvUFU1Ni9KVnphMCtCUTdub3Ivd2svM3JWUnVpVUhxS1gwWEUr?=
+ =?utf-8?B?cVp1THlqbDlxNUxyMUJreW1WTitBL1kwNGloUy9NckFZRFlVRGE4ejBUa3dv?=
+ =?utf-8?B?SlhDcWorUXpDQTFwall6Y05SS3J4Wklac21WSUZiN1ZBQ05STm9iSXdaanBX?=
+ =?utf-8?B?cGtOT0xHYWthZWRlcDc0RFIyeGhDVVM4UzB0OWZJZ3ZWU2RtbHlEK29CSHh4?=
+ =?utf-8?B?eC9qS3FzSWk5eUQ1SFprdlJoa0w5TVd6OTJiZTdIMXhKVlVJeHFKdlljdlN0?=
+ =?utf-8?B?dDE5cWFDdjFpSWNKWXFwYlhlOWMzb21sVGxmcEc0a1hORG1GQVZZekR0akwv?=
+ =?utf-8?B?NDRJWmpxa1ZmSHlJakdWdnQyMC9GQlNqZFVBaHNVc0VhcldkakFKaTlIVW55?=
+ =?utf-8?B?NFlLa2haWnFPOTlCcE5xTEFXWlE3OU1JQkdRV0JFN1Z5T2dSQzlMcE5Kc3JN?=
+ =?utf-8?B?S3BINVZGdVErSVJjbkZnbGNzK0dXa0h3c3hVYm1hc3l6U3AycG5qS20rK1Qr?=
+ =?utf-8?B?UEhJeTltTDgwL1dqTEFEYjFvcm1RY0dER1I4d1M5dElHemU3OUdyWWh6MnRJ?=
+ =?utf-8?B?NVBHV3hSS2QrOGt4bWk1T2c0eG1VUDV3WnlxYjFPV3ZkdEtpQVlJdy92MExw?=
+ =?utf-8?B?S2lCaEJxQXU3NXNKTWJURnVQU0hhOTJsNmc0UkRUYVR3NGllSUxkdERPY1p2?=
+ =?utf-8?B?T3JldjBHUDRjNExaSkNOdTRGbE16RkJoTjllWXJoempZWGg3ZnUrOFlacW1H?=
+ =?utf-8?Q?7fvw=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 47fd9ce9-f0bf-4976-2c9c-08db6026b14c
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR02MB9467.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2023 09:25:50.4610
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uwgl6H8xchB2k002u3Dpw+q1srIIixB58oLsPDSPFtxCBjfRLIZi0qQqzhCAQMfIl07VZENv9Zfytc5RHE9RFg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR02MB8327
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.05.23 02:31, Matthew Wilcox wrote:
-> On Sun, May 28, 2023 at 04:49:52PM -0700, John Hubbard wrote:
->> On 5/26/23 20:18, Matthew Wilcox wrote:
->>> On Fri, May 26, 2023 at 07:11:05PM -0700, John Hubbard wrote:
->>>>> So any user with 1024 processes can fragment physical memory? :/
->>>>>
->>>>> Sorry, I'd like to minimize the usage of folio_maybe_dma_pinned().
->>>>
->>>> I was actually thinking that we should minimize any more cases of
->>>> fragile mapcount and refcount comparison, which then leads to
->>>> Matthew's approach here!
->>>
->>> I was wondering if we shouldn't make folio_maybe_dma_pinned() a little
->>> more accurate.  eg:
->>>
->>>           if (folio_test_large(folio))
->>>                   return atomic_read(&folio->_pincount) > 0;
->>> 	return (unsigned)(folio_ref_count(folio) - folio_mapcount(folio)) >=
->>> 			GUP_PIN_COUNTING_BIAS;
->>
->> I'm trying to figure out what might be wrong with that, but it seems
->> OK. We must have talked about this earlier, but I recall vaguely that
->> there was not a lot of concern about the case of a page being mapped
->>> 1024 times. Because pinned or not, it's likely to be effectively
->> locked into memory due to LRU effects. As mentioned here, too.
+Hello Andy,
+
+Thanks for your comment.
+
+
+On 5/29/23 00:42, andy.shevchenko@gmail.com wrote:
+> Mon, May 22, 2023 at 04:26:17PM +0200, Astrid Rost kirjoitti:
+>> Add illuminance integration time for vcnl4040 and vcnl4200.
+>> Add read/write attribute for illuminance integration time and read
+>> attribute for available integration times.
+>> Set scale and sampling rate according to the integration time.
 > 
-> That was my point of view, but David convinced me that a hostile process
-> can effectively lock its own memory into place.
+> ...
 > 
-
-1) My opinion on this optimization
-
-Before I start going into detail, let me first phrase my opinion so we 
-are on the same page:
-
-"a tiny fraction of Linux installations makes heavy use of long-term 
-pinning -- the *single* mechanism that completely *destroys* the whole 
-purpose of memory compaction -- and the users complain about memory 
-compaction overhead. So we are talking about optimizing for that by 
-eventually harming *everybody else*."
-
-Ehm ... I'm all for reasonable optimization, but not at any price.
-
-We don't care about a handful of long-term pinned pages in the system, 
-this is really about vfio long-term pinning a significant amount of 
-system RAM, and we only care about shmem here.
-
-
-*maybe* there is an issue with page migration when we have many page 
-mappings, but (a) it's a separate issue and to be dealt with separately, 
-not buried into such checks (b) it's unclear how many page mappings are 
-too many, the magic number 1024 is just a random number (c) it needs 
-much finer control (hostile processes).
-
-
-2) mapcount vs. pagecount
-
-Now, doing these mapcount vs. pagecount checks is perfectly reasonable 
-(see mm/ksm.c) as long as know what we're doing. For example, we have to 
-make sure that a possible compound page cannot get split concurrently 
-(e.g., hold a reference). It's been used forever, I consider it stable.
-
-I completely agree that we should be careful with such mapcount vs. 
-pagecount checks, and if we can use something better, let's use 
-something *better*.
-
-
-3) page_maybe_dma_pinned()
-
-Now, why do I dislike bringing up page_maybe_dma_pinned() [IOW, why is 
-it not better]? Besides it ignoring FOLL_GET for now, that might be 
-fixed at some point.
-
-I think we agree that order-0 pages are the problem, because we get 
-guaranteed false positives with many mappings (not just on speculative 
-page pinnings). For these order-0 pages, it's perfectly reasonable to 
-check page_maybe_dma_pinned() *as long as* we know the number of 
-mappings is very small.
-
-I don't consider anon pages the issue here, we barely get 1024 mappings 
-(not even with KSM), and it's much harder to exploit because you cannot 
-simply get new mappings via mmap(), only via fork().
-
-In fact, we could optimize easily for order-0 anon pages if we'd need 
-to: I have a patch lying around, it just wasn't really worth it for now, 
-because there is only a single relevant page_maybe_dma_pinned() call in 
-vmscan that could benefit:
-
-https://github.com/davidhildenbrand/linux/commit/0575860d064694d4e2f307b2c20a880a6a7b59ab
-
-We cannot do the same for pagecache pages, so we would possibly 
-introduce harm by carelessly checking page_maybe_dma_pinned() on pages
-with many mappings.
-
-
-4) folio_maybe_dma_longterm_pinned() ?
-
-I thought yesterday if we'd want something like 
-folio_maybe_dma_longterm_pinned() here. Essentially using what we 
-learned about long-term pinning of fs pages:
-
-(1) ZONE_MOVABLE, MIGRATE_CMA -> "return false;"
-(2) If !anon, !hugetlb, !shmem -> "return false;"
-(3) "return folio_maybe_dma_pinned()"
-
-Yes, above would easily create false-positives for short-term pinned 
-pages (anon/hugetlb/shmem), but would never create false-positives for 
-any other page (shared library ...).
-
-
-We would use it in the following way:
-
-bool skip_folio_in_isolation()
-{
-	/*
-          * Avoid skipping pages that are short-term pinned, the pin
-	 * might go away any moment and we'll succeed to migrate.
-          *
-          * We get false positives for short-term pinned anon, shmem and
-          * hugetl pages for now, but such short-term pins are transient.
-          */
-	if (!folio_maybe_dma_longterm_pinned())
-		return false;
-         /*
-          * order-0 pages with many mappings can easily be confused
-          * for pinned pages and this could be exploited by
-          * malicious user-space to cause fragmentation. This is only
-          * an optimization, so if a page (especially shmem) is mapped
-          * many times, we'll rather try migrating it instead of
-          * accidentally skipping it all the time.
-          */
-	return folio_order(folio) != 0 || && total_mappings <= 32)
-}
-
-Someone long-term pins an shmem page with many mappings? Too bad, we 
-don't optimize for that and still try migrating it.
-
-
-BUT, I am still confused if we want to check here for "any additional 
-references", which is what mapcount vs. refcount is, or 
-folio_maybe_dma_longterm_pinned().
-
-Of course, we could similarly write a variant of skip_folio_in_isolation:
-
-bool skip_folio_in_isolation()
-{
-	/*
-          * If a page is not pinned, try migrating it. Note that this
-          * does not consider any FOLL_GET used for DMA yet.
-          */
-	if (!folio_maybe_dma_pinned())
-		return false;
-         /*
-          * order-0 pages with many mappings can easily be confused
-          * for pinned pages and this could be exploited by
-          * malicious user-space to cause fragmentation. This is only
-          * an optimization, so if a page is mapped
-          * many times, we'll rather try migrating it instead of
-          * accidentally skipping it all the time.
-          */
-	return folio_order(folio) != 0 || && total_mappings <= 32)
-}
-
-
-As long as FOLL_GET is still used for DMA, the mapcount vs. pagecount 
-checks might be better ... but it depends on if we care about short-term 
-or long-term pinned pages here.
-
->> Anyway, sure.
->>
->> A detail:
->>
->> The unsigned cast, I'm not sure that helps or solves anything, right?
->> That is, other than bugs, is it possible to get refcount < mapcount?
-
-BUG IMHO.
-
->>
->> And if it's only due to bugs, then the casting, again, isn't likely to
->> going to mitigate the fallout from whatever mess the bug caused.
+>> +	data->vcnl4200_al.sampling_rate = ktime_set(0, val * 1200000);
+>> +	if (data->id == VCNL4200)
+>> +		/* 24000 µlux/step * 50000 µs / val  */
+>> +		data->al_scale = div_u64(1200000000, val);
 > 
-> I wasn't thinking too hard about the cast.  If the caller has the folio
-> lock, I don't think it's possible for refcount < mapcount.  This caller
-> has a refcount, but doesn't hold the lock, so it is possible for them
-> to read mapcount first, then have both mapcount and refcount decremented
-> and see refcount < mapcount.
+> Without type these constant are integers. Is this okay with 32-bit builds?
+
+No, I got an error on x86 on my first patch. But i did not really 
+understand. All variables are within int and not defined as something 
+bigger.
+
 > 
-> I don't think it matters too much.  We don't hold the folio lock, so
-> it might transition from pinned to unpinned as much as a refcount might
-> be decremented or a mapcount incremented.  What's important is that a
-> hostile process can't prevent memory from being moved indefinitely.
+>> +	else
+>> +		/* 100000 µlux/step * 80000 µs / val */
+>> +		data->al_scale = div_u64(8000000000, val);
 > 
-> David, have I missed something else?
+> Ditto.
 
-
-What I learned from staring at the code in mm/ksm.c:write_protect_page() 
-for too long a while ago is that:
-
-(1) Mapping a page first increments the refcount, then the mapcount
-(2) Unmapping a page first decrements the mapcount, then the refcount
-
-So the mapcount is supposed to be always larger than the refcount. 
-Especially, if you take a snapshot of both (read first the mapcount, 
-then the mapcount).
-
-A hostile process wouldn't be able to block compaction here forever, 
-even if we accidentally would make the wrong call once when deciding 
-whether to isolate a page. It would work on the next attempt.
-
-That's the difference to page_maybe_dma_pinned(), which can be made to 
-consistently block compaction.
-
-
-[sorry for the lengthy mail]
-
--- 
-Thanks,
-
-David / dhildenb
-
+8000000000 exceeds at least 32 bit.
+> 
+> Also, can you use constants from units.h (KILO) and time.h (USEC_PER_MSEC)?
+> 
+> ...
+> 
+>> +out:
+> 
+> out_unlock:
+> 
+>> +	mutex_unlock(&data->vcnl4000_lock);
+>> +	return ret;
+> 
