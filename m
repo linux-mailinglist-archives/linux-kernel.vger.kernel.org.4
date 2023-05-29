@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA1D7141D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 04:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10E97141D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 04:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjE2CCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 22:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
+        id S229519AbjE2CEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 22:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjE2CCg (ORCPT
+        with ESMTP id S229505AbjE2CEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 22:02:36 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B536AB8;
-        Sun, 28 May 2023 19:02:34 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51475e981f0so4607807a12.1;
-        Sun, 28 May 2023 19:02:34 -0700 (PDT)
+        Sun, 28 May 2023 22:04:10 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B518DC6;
+        Sun, 28 May 2023 19:04:08 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d426e63baso3260899b3a.0;
+        Sun, 28 May 2023 19:04:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685325753; x=1687917753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9Wg139ZawHzc+EqrNyAUd4G4t6i7iB3NYXCpzkJY0bk=;
-        b=Phtq21cb2/AQSZKaHipKQ83ww49PPXAmWpbP9Ynm+U4pEr3LCmBdcgDbGRMNqluXhd
-         BJfVtAEq3/jo9lFqooWHoqIYPlAT+pMNm0zWUE6DBCOWBEAFeZsDWv/nQ0EJzCxtmXtp
-         YiZHjU9usWKV2vWDhw0W8H2pmnnLjuG4dSoglkGTbnIHdhpylYXvHEJX682EhDDv7WoJ
-         qxgG5QKdtxPOLZFV1t8HO2pOPDdB8S2r2ieqSI1+Z4g3JrjKq9fMw/fcoogR6K/FaC7l
-         BWM+aaVjYwvflg6JyQtOnFKErhC5ItaVUMP5xhL3nSM0jy8tAYDhVBIX6Ec8BDMnuZoS
-         KbXg==
+        d=gmail.com; s=20221208; t=1685325848; x=1687917848;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iLBoA+23K3jc86HPrf+FyXyak1JXjRm8IVB/JjKg/LY=;
+        b=K+fT8nvfFj5f10qcR4UuYyW15c7V0i0AqIcH4ZjI1+El2ri5JzgbZwlXgLbW/Ll787
+         +DosbUEprmLxm9+f39q4jRR1D8xkl3/aNR6K3M9qJgpn8t2RnjOTDX++JqiRIbHyDsDB
+         ukGg0SiqbDmsQmD59ZkkO59QZANiYC9HNt/EaDlLtlMUyqy1GsbuYjk+10WTm5U5lTh5
+         kY/9HmU3WZIFGPt4XyBOVk4ISJB5hqHYZFFLPvL/sGZ3AAT5/hMgODljcTBMBCc3HL39
+         HnvQ+oGaIUEimziiN+POB3xlAFrm05+3YE+cmjPtolRMdGFOXANzb4d12LSqNqjXZfkY
+         PPAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685325753; x=1687917753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9Wg139ZawHzc+EqrNyAUd4G4t6i7iB3NYXCpzkJY0bk=;
-        b=MThS7wQZj6W+DJHv9tLZM+xWFaWXEbW1Lh3zU7tmkFXQqIJfv+viSt778PkEXDr+ei
-         +JGM2FtpgRmdWIu3kzT3hHJoloXQC9et6/N9TXKJY0qAGpJqlLX3PT+e49J0KFsDFlU7
-         Vye65G3F8IVAnyAaU8/Ef8DzcIdlCkx1vXBC9HEYJg7bGs8QoMur2GG2xuiY8vtXn0KL
-         Ahou9u37P2iMxSmfJGczjwx5xVbrCFjHQLd5v034GenNAMg6zXDfqOXaGF/CauDlDGNc
-         TviexidX5sLhenkpjRnsEFmyAQKR73xaJ3rPg2lpPKyeAdeJm0u0I7irZkFxkvpvWKaI
-         3N1w==
-X-Gm-Message-State: AC+VfDz3qySzRXbsT5zFct4+QjagF9DnT0FjrntOFfDs3W0NrlHlpvnC
-        mgJmBJ29ySgd469tZQWPaY9RgkJjciKYX8FCspo=
-X-Google-Smtp-Source: ACHHUZ71CUcbb0DiVR0aw6CpTjhsRK2rb6rDnCNIIPrgEp2YNinAPxlVWE3wcodb24NGskeKUrV7VPV5+duLKIPvaWU=
-X-Received: by 2002:a17:907:26ce:b0:96a:1ee9:4a5 with SMTP id
- bp14-20020a17090726ce00b0096a1ee904a5mr9786555ejc.8.1685325752964; Sun, 28
- May 2023 19:02:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685325848; x=1687917848;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iLBoA+23K3jc86HPrf+FyXyak1JXjRm8IVB/JjKg/LY=;
+        b=TTnRx+ozJ/F1h3rqM3/mzTdyap/ZazdagEft5fO4emTBoNajmsTM3ntIeIFd12Tjzr
+         IhnBlleuB63/wcs/t02GuQVmHP7iycoBFE89pv/xHSH0hCuZZ5YR2FPowp7OhawTFC4K
+         C1k0n715GAMlHaXeWt/aMCyM2C3lzPDldjeX6oh+EKhinGdvH7ZxXfj1HDGX0+G+oHqE
+         nc2Co6JGgqsEv69qszUUfVu8hrR0dAZP2IrPLj2OzAMzlNqzc/TqN0JfgwzzGxWpT4BO
+         W1VzY7/6sWWBHhJNae/v57XONlUGqf9NVRsh0qb646OI+qaF/NOixOTM8tku8eGaSjM2
+         b5tw==
+X-Gm-Message-State: AC+VfDwuu51BPeURge9s116G/29b6DksQW3kLH76y1EaytXdb/YxHkzH
+        mVN1/4M6LtQl3LTCfmSk+nA=
+X-Google-Smtp-Source: ACHHUZ7Uci2HCTNGFogEjdlH+G91Mpz9Qa/IPP21M2dVIqZJNCp8Y5WUCg5fVfszsD8uil/5WLGm8g==
+X-Received: by 2002:a05:6a00:1744:b0:636:f5f4:5308 with SMTP id j4-20020a056a00174400b00636f5f45308mr14700095pfc.7.1685325848004;
+        Sun, 28 May 2023 19:04:08 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-34.three.co.id. [116.206.12.34])
+        by smtp.gmail.com with ESMTPSA id s12-20020a62e70c000000b0063ba9108c5csm5934409pfh.149.2023.05.28.19.04.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 May 2023 19:04:07 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 8182F106A0B; Mon, 29 May 2023 09:04:04 +0700 (WIB)
+Date:   Mon, 29 May 2023 09:04:04 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Linux Kernel Integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
+ (and 5.15.113)
+Message-ID: <ZHQIFLWvrWUNMVxb@debian.me>
+References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
 MIME-Version: 1.0
-References: <20230524093623.3698134-1-chenhuacai@loongson.cn>
- <ZG4rZYBKaWrsctuH@bhelgaas> <CAAhV-H5u8qtXpr-mY+pKq7UfmyBgr3USRTQpo9-w28w8pHX8QQ@mail.gmail.com>
- <20230528165738.GF2814@thinkpad>
-In-Reply-To: <20230528165738.GF2814@thinkpad>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Mon, 29 May 2023 10:02:20 +0800
-Message-ID: <CAAhV-H5u0ibghgwbfJT1V_oWUWi0rie0NHWTSkpCVat3_ARvKw@mail.gmail.com>
-Subject: Re: [PATCH] pci: irq: Add an early parameter to limit pci irq numbers
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ahmed S . Darwish" <darwi@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>, linux-pci@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongson-kernel@lists.loongnix.cn,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ybxFYc807lJQs/+9"
+Content-Disposition: inline
+In-Reply-To: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,156 +80,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Manivannan,
 
-On Mon, May 29, 2023 at 12:57=E2=80=AFAM Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> On Thu, May 25, 2023 at 05:14:28PM +0800, Huacai Chen wrote:
-> > Hi, Bjorn,
-> >
-> > On Wed, May 24, 2023 at 11:21=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.=
-org> wrote:
-> > >
-> > > [+cc Marc, LKML]
-> > >
-> > > On Wed, May 24, 2023 at 05:36:23PM +0800, Huacai Chen wrote:
-> > > > Some platforms (such as LoongArch) cannot provide enough irq number=
-s as
-> > > > many as logical cpu numbers. So we should limit pci irq numbers whe=
-n
-> > > > allocate msi/msix vectors, otherwise some device drivers may fail a=
-t
-> > > > initialization. This patch add a cmdline parameter "pci_irq_limit=
-=3Dxxxx"
-> > > > to control the limit.
-> > > >
-> > > > The default pci msi/msix number limit is defined 32 for LoongArch a=
-nd
-> > > > NR_IRQS for other platforms.
-> > >
-> > > The IRQ experts can chime in on this, but this doesn't feel right to
-> > > me.  I assume arch code should set things up so only valid IRQ number=
-s
-> > > can be allocated.  This doesn't seem necessarily PCI-specific, I'd
-> > > prefer to avoid an arch #ifdef here, and I'd also prefer to avoid a
-> > > command-line parameter that users have to discover and supply.
-> > The problem we meet: LoongArch machines can have as many as 256
-> > logical cpus, and the maximum of msi vectors is 192. Even on a 64-core
-> > machine, 192 irqs can be easily exhausted if there are several NICs
-> > (NIC usually allocates msi irqs depending on the number of online
-> > cpus). So we want to limit the msi allocation.
-> >
->
-> If the MSI allocation fails with multiple vectors, then the NIC driver sh=
-ould
-> revert to a single MSI vector. Is that happening in your case?
-Thank you for pointing this out. Yes, I know  most existing drivers
-will fallback to use single msi or legacy irqs when failed. However,
-as I
-replied in another thread (the new solution of this problem [1]), we
-want to do some proactive throttling rather than consume msi vectors
-aggressively. For example, if we have two NICs, we want both of them
-to get 32 msi vectors; not one exhaust all available vectors, and the
-other fallback to use single msi or legacy irq.
+--ybxFYc807lJQs/+9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I hope I have explained clearly, thanks.
+On Sun, May 28, 2023 at 11:42:50PM +0000, Chris Packham wrote:
+> Hi,
+>=20
+> We have an embedded product with an Infineon SLM9670 TPM. After updating=
+=20
+> to a newer LTS kernel version we started seeing the following warning at=
+=20
+> boot.
+>=20
+> [=C2=A0=C2=A0=C2=A0 4.741025] ------------[ cut here ]------------
+> [=C2=A0=C2=A0=C2=A0 4.749894] irq 38 handler tis_int_handler+0x0/0x154 en=
+abled interrupts
+> [=C2=A0=C2=A0=C2=A0 4.756555] WARNING: CPU: 0 PID: 0 at kernel/irq/handle=
+=2Ec:159=20
+> __handle_irq_event_percpu+0xf4/0x180
+> [=C2=A0=C2=A0=C2=A0 4.765557] Modules linked in:
+> [=C2=A0=C2=A0=C2=A0 4.768626] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5=
+=2E15.113 #1
+> [=C2=A0=C2=A0=C2=A0 4.774747] Hardware name: Allied Telesis x250-18XS (DT)
+> [=C2=A0=C2=A0=C2=A0 4.780080] pstate: 60000005 (nZCv daif -PAN -UAO -TCO =
+-DIT -SSBS=20
+> BTYPE=3D--)
+> [=C2=A0=C2=A0=C2=A0 4.787072] pc : __handle_irq_event_percpu+0xf4/0x180
+> [=C2=A0=C2=A0=C2=A0 4.792146] lr : __handle_irq_event_percpu+0xf4/0x180
+> [=C2=A0=C2=A0=C2=A0 4.797220] sp : ffff800008003e40
+> [=C2=A0=C2=A0=C2=A0 4.800547] x29: ffff800008003e40 x28: ffff8000093951c0=
+ x27:=20
+> ffff80000902a9b8
+> [=C2=A0=C2=A0=C2=A0 4.807716] x26: ffff800008fe8d28 x25: ffff8000094a62bd=
+ x24:=20
+> ffff000001b92400
+> [=C2=A0=C2=A0=C2=A0 4.814885] x23: 0000000000000026 x22: ffff800008003ec4=
+ x21:=20
+> 0000000000000000
+> [=C2=A0=C2=A0=C2=A0 4.822053] x20: 0000000000000001 x19: ffff000002381200=
+ x18:=20
+> ffffffffffffffff
+> [=C2=A0=C2=A0=C2=A0 4.829222] x17: ffff800076962000 x16: ffff800008000000=
+ x15:=20
+> ffff800088003b57
+> [=C2=A0=C2=A0=C2=A0 4.836390] x14: 0000000000000000 x13: ffff8000093a5078=
+ x12:=20
+> 000000000000035d
+> [=C2=A0=C2=A0=C2=A0 4.843558] x11: 000000000000011f x10: ffff8000093a5078=
+ x9 :=20
+> ffff8000093a5078
+> [=C2=A0=C2=A0=C2=A0 4.850727] x8 : 00000000ffffefff x7 : ffff8000093fd078=
+ x6 :=20
+> ffff8000093fd078
+> [=C2=A0=C2=A0=C2=A0 4.857895] x5 : 000000000000bff4 x4 : 0000000000000000=
+ x3 :=20
+> 0000000000000000
+> [=C2=A0=C2=A0=C2=A0 4.865062] x2 : 0000000000000000 x1 : 0000000000000000=
+ x0 :=20
+> ffff8000093951c0
+> [=C2=A0=C2=A0=C2=A0 4.872230] Call trace:
+> [=C2=A0=C2=A0=C2=A0 4.874686]=C2=A0 __handle_irq_event_percpu+0xf4/0x180
+> [=C2=A0=C2=A0=C2=A0 4.879411]=C2=A0 handle_irq_event+0x64/0xec
+> [=C2=A0=C2=A0=C2=A0 4.883264]=C2=A0 handle_level_irq+0xc0/0x1b0
+> [=C2=A0=C2=A0=C2=A0 4.887202]=C2=A0 generic_handle_irq+0x30/0x50
+> [=C2=A0=C2=A0=C2=A0 4.891229]=C2=A0 mvebu_gpio_irq_handler+0x11c/0x2a0
+> [=C2=A0=C2=A0=C2=A0 4.895780]=C2=A0 handle_domain_irq+0x60/0x90
+> [=C2=A0=C2=A0=C2=A0 4.899720]=C2=A0 gic_handle_irq+0x4c/0xd0
+> [=C2=A0=C2=A0=C2=A0 4.903398]=C2=A0 call_on_irq_stack+0x20/0x4c
+> [=C2=A0=C2=A0=C2=A0 4.907338]=C2=A0 do_interrupt_handler+0x54/0x60
+> [=C2=A0=C2=A0=C2=A0 4.911538]=C2=A0 el1_interrupt+0x30/0x80
+> [=C2=A0=C2=A0=C2=A0 4.915130]=C2=A0 el1h_64_irq_handler+0x18/0x24
+> [=C2=A0=C2=A0=C2=A0 4.919244]=C2=A0 el1h_64_irq+0x78/0x7c
+> [=C2=A0=C2=A0=C2=A0 4.922659]=C2=A0 arch_cpu_idle+0x18/0x2c
+> [=C2=A0=C2=A0=C2=A0 4.926249]=C2=A0 do_idle+0xc4/0x150
+> [=C2=A0=C2=A0=C2=A0 4.929404]=C2=A0 cpu_startup_entry+0x28/0x60
+> [=C2=A0=C2=A0=C2=A0 4.933343]=C2=A0 rest_init+0xe4/0xf4
+> [=C2=A0=C2=A0=C2=A0 4.936584]=C2=A0 arch_call_rest_init+0x10/0x1c
+> [=C2=A0=C2=A0=C2=A0 4.940699]=C2=A0 start_kernel+0x600/0x640
+> [=C2=A0=C2=A0=C2=A0 4.944375]=C2=A0 __primary_switched+0xbc/0xc4
+> [=C2=A0=C2=A0=C2=A0 4.948402] ---[ end trace 940193047b35b311 ]---
+>=20
+> Initially I dismissed this as a warning that would probably be cleaned=20
+> up when we did more work on the TPM support for our product but we also=
+=20
+> seem to be getting some new i2c issues and possibly a kernel stack=20
+> corruption that we've conflated with this TPM warning.
 
-[1] https://lore.kernel.org/lkml/20230527054633.704916-1-chenhuacai@loongso=
-n.cn/T/#t
+Can you reproduce this issue on mainline? Can you also bisect to find
+the culprit?
 
-Huacai
->
-> - Mani
->
-> > This is not a LoongArch-specific problem, because I think other
-> > platforms can also meet if they have many NICs. But of course,
-> > LoongArch can meet it more easily because the available msi vectors
-> > are very few. So, adding a cmdline parameter is somewhat reasonable.
-> >
-> > After some investigation, I think it may be possible to modify
-> > drivers/irqchip/irq-loongson-pch-msi.c and override
-> > msi_domain_info::domain_alloc_irqs() to limit msi allocation. However,
-> > doing that need to remove the "static" before
-> > __msi_domain_alloc_irqs(), which means revert
-> > 762687ceb31fc296e2e1406559e8bb5 ("genirq/msi: Make
-> > __msi_domain_alloc_irqs() static"), I don't know whether that is
-> > acceptable.
-> >
-> > If such a revert is not acceptable, it seems that we can only use the
-> > method in this patch. Maybe rename pci_irq_limits to pci_msi_limits is
-> > a little better.
-> >
-> > Huacai
-> >
-> > >
-> > > > Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
-> > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > ---
-> > > >  drivers/pci/msi/msi.c | 26 +++++++++++++++++++++++++-
-> > > >  1 file changed, 25 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
-> > > > index ef1d8857a51b..6617381e50e7 100644
-> > > > --- a/drivers/pci/msi/msi.c
-> > > > +++ b/drivers/pci/msi/msi.c
-> > > > @@ -402,12 +402,34 @@ static int msi_capability_init(struct pci_dev=
- *dev, int nvec,
-> > > >       return ret;
-> > > >  }
-> > > >
-> > > > +#ifdef CONFIG_LOONGARCH
-> > > > +#define DEFAULT_PCI_IRQ_LIMITS 32
-> > > > +#else
-> > > > +#define DEFAULT_PCI_IRQ_LIMITS NR_IRQS
-> > > > +#endif
-> > > > +
-> > > > +static int pci_irq_limits =3D DEFAULT_PCI_IRQ_LIMITS;
-> > > > +
-> > > > +static int __init pci_irq_limit(char *str)
-> > > > +{
-> > > > +     get_option(&str, &pci_irq_limits);
-> > > > +
-> > > > +     if (pci_irq_limits =3D=3D 0)
-> > > > +             pci_irq_limits =3D DEFAULT_PCI_IRQ_LIMITS;
-> > > > +
-> > > > +     return 0;
-> > > > +}
-> > > > +
-> > > > +early_param("pci_irq_limit", pci_irq_limit);
-> > > > +
-> > > >  int __pci_enable_msi_range(struct pci_dev *dev, int minvec, int ma=
-xvec,
-> > > >                          struct irq_affinity *affd)
-> > > >  {
-> > > >       int nvec;
-> > > >       int rc;
-> > > >
-> > > > +     maxvec =3D clamp_val(maxvec, 0, pci_irq_limits);
-> > > > +
-> > > >       if (!pci_msi_supported(dev, minvec) || dev->current_state !=
-=3D PCI_D0)
-> > > >               return -EINVAL;
-> > > >
-> > > > @@ -776,7 +798,9 @@ static bool pci_msix_validate_entries(struct pc=
-i_dev *dev, struct msix_entry *en
-> > > >  int __pci_enable_msix_range(struct pci_dev *dev, struct msix_entry=
- *entries, int minvec,
-> > > >                           int maxvec, struct irq_affinity *affd, in=
-t flags)
-> > > >  {
-> > > > -     int hwsize, rc, nvec =3D maxvec;
-> > > > +     int hwsize, rc, nvec;
-> > > > +
-> > > > +     nvec =3D clamp_val(maxvec, 0, pci_irq_limits);
-> > > >
-> > > >       if (maxvec < minvec)
-> > > >               return -ERANGE;
-> > > > --
-> > > > 2.39.1
-> > > >
->
-> --
-> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
-=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
-=E0=AF=8D
+Anyway, I'm adding it to regzbot:
+
+#regzbot ^introduced: v5.15.110..v5.15.112
+#regzbot title: Possible stack corruption and i2c issues due to irq warning=
+ on Inifineon SLM9670 TPM
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--ybxFYc807lJQs/+9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHQIDQAKCRD2uYlJVVFO
+o28IAP9l7fkmBaEnd7uOzDrnx7R2T/xBLWnlazaZb2bK81BjkwD9EvBXYgNA8Ikl
+z9GdErluz1LCaBlZBBqRshbT/6hKTQY=
+=eZ2H
+-----END PGP SIGNATURE-----
+
+--ybxFYc807lJQs/+9--
