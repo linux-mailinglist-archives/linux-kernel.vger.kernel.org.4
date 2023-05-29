@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EDC714D28
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7795714D24
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 17:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjE2Pfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 11:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
+        id S230005AbjE2Pfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 11:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjE2Pfj (ORCPT
+        with ESMTP id S229494AbjE2Pfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 11:35:39 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E02D8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:35:37 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f60e536250so29532805e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:35:37 -0700 (PDT)
+        Mon, 29 May 2023 11:35:40 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187A7CD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:35:39 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-307d58b3efbso2103449f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 08:35:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685374536; x=1687966536;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685374537; x=1687966537;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NxiLnH0M50rO/qW7JX7iQtyXgKtx4AkJoJmCH1LebW4=;
-        b=L//I9S2COgnPuAqwzY7rwCqIEzLr5UHMuung9l2NZeScGr95y8DGnRo7M71Q/tqPWw
-         SvJr/sEATWPr2CHBmeJBhJ2BfcjsfLxyGY1+uL+7Y4SFFBzM24GJx6VYHGhFaZD2b5jk
-         hIFSHlRrdkkIW6UHyhfFd8N9PmLksxfsIuivGrqCSBPNWFjFh6CBsfzxITI36oKqBSxH
-         lnn1P+cV8vu1e+h6hIGzrDnloX0bA3dQ18MBFpbS9Do/eDP79363UCIVnqeXfY1dojuh
-         b4MOVW0XdNbQ56C1lX2iO3fT4QkkgcxZ7dHtoGzNiOcVdyK64i06Li+WYzO8nRAPAB3h
-         RvUQ==
+        bh=GZ1Pw000YHwunl4UOYUIH6XIIpBvLCqm0y/k6ZseuYk=;
+        b=4mZai65JwnIG31lGL2FdgRbna5ZX+1vQfraelVx+zO93D0FR0QuDbiNo8FaYCM2xYJ
+         SOnD9umdATXRVthXkkARqZIMPkDTQy23NIHNmbGkqswDme5R2INWw/exCro7K8Q3odVt
+         O/qbxxy3w9JYMmbv7BJUfS1o1B4GzJZjRi4Eh7pRT+xpItAMYaqURjelrCQvlpwDs2c+
+         l9Yg2bfb0aOxWERFNunADa2qvLxt/4fPWMpqf2K4i5L+tWFhVM++jki+iXq55Z37IRZA
+         KAv6NStIoaqaxTMRch67UfZBCoxRLLhUpwGY3w3PUBSENfUMiHfasMUFzFs9PRGbjeZU
+         CjMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685374536; x=1687966536;
+        d=1e100.net; s=20221208; t=1685374537; x=1687966537;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NxiLnH0M50rO/qW7JX7iQtyXgKtx4AkJoJmCH1LebW4=;
-        b=Fw6axkmqVYX/MPbwJFsgnQrAXmtteZog9XQL26BqCMb4ilUhBZ0RR7hlFZHpSLKd+Z
-         zcWEM2aHpjtoIOjWx+VggCqxiKCgwj0XzOaXKpKk+1SFn4mYFDIhy4Z+o9/1XhZVAMGh
-         DcZy4EspmoXvotuZ+iXXG5gmHOpKoSOrqNQa7OpbJAPUu0ZBN9XL43GiVk8vBxFkuVPj
-         aWCUdAsgFWoOYuSVkE6kWSM/upOxWSenSL/eo+Lg8/5Q7nd/HJyYShOaX5139wGej+6j
-         L/Xz+/bOD1x04aqlwA/MdxlcxaXuVuvBzJFPkVRBNFA4hKMQtbD7bX4610s+tr9BBiEX
-         GzJg==
-X-Gm-Message-State: AC+VfDxBJ3q5OLkHE7jTtR5jZthXTs3VEDI7pm5GFeIkfSnwkMviyAI0
-        7RWjT0idEWvdYgVPr06fcOzjEg==
-X-Google-Smtp-Source: ACHHUZ7qZHxmF3+e+rNlw5j8VzdMDxKnKmfpbQTz65hzsyWKZLCH+2IuKfhVLZ3R2YbGPj0C8SGvvw==
-X-Received: by 2002:adf:e544:0:b0:30a:8e6a:3d77 with SMTP id z4-20020adfe544000000b0030a8e6a3d77mr7670288wrm.1.1685374535793;
-        Mon, 29 May 2023 08:35:35 -0700 (PDT)
+        bh=GZ1Pw000YHwunl4UOYUIH6XIIpBvLCqm0y/k6ZseuYk=;
+        b=NxgPOs2tAKj8vwx0yTI7g3/aWCk6pR+MAQyKt7EBHZngN1lOx4jOUr3/8QLXx0OHtn
+         SQVkpMLblTNMjwDU/GayVRpoMFSAuT2ux67KYGkjnVOTnbaMb8t+URMdPN5KGnnzavTW
+         0xv14z+Ax/d/PG2iPE7pwqMfFKuZzLC52WyFeaXcUuRJNHNo22QEYuv/XXGuq1W5IgOX
+         3mCb46SHsDBQLelcY7BoH0pRjC3mryWMoMuITUdgTbWw+HxFTD+JWx5YqcPtt4HJgWPe
+         Xrn+Bk968QGsUkNgaXK7QqSSkhLkFtw4FHaI4dyx3iTuV6SEaWXYgydUOa6n5KIC1+UJ
+         8IBQ==
+X-Gm-Message-State: AC+VfDwfw1VHY+1oq2OdrGOOKqfj7t9Wwu7zVdABXSMpaRFgvG/8vLyO
+        yDIOAO5HQVB2vWl2TrakBf3EVw==
+X-Google-Smtp-Source: ACHHUZ6G0aBAtC/cPLbBBLlra6lcIfNV54GneoMynv4vOLmsZoj4L7CcHXrSU5ONQmISmgw+w6krYQ==
+X-Received: by 2002:a5d:67c5:0:b0:30a:e3da:efe5 with SMTP id n5-20020a5d67c5000000b0030ae3daefe5mr8296777wrw.32.1685374537501;
+        Mon, 29 May 2023 08:35:37 -0700 (PDT)
 Received: from ph18.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id j27-20020a5d453b000000b003095a329e90sm269781wra.97.2023.05.29.08.35.34
+        by smtp.gmail.com with ESMTPSA id j27-20020a5d453b000000b003095a329e90sm269781wra.97.2023.05.29.08.35.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 08:35:35 -0700 (PDT)
+        Mon, 29 May 2023 08:35:36 -0700 (PDT)
 From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
 To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
         rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
@@ -62,9 +62,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         wenst@chromium.org, james.lo@mediatek.com,
         rex-bc.chen@mediatek.com, nfraprado@collabora.com,
         abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-Subject: [PATCH v3 1/5] dt-bindings: thermal: mediatek: Add LVTS thermal controller definition for mt8192
-Date:   Mon, 29 May 2023 17:35:28 +0200
-Message-ID: <20230529153532.3541327-2-bero@baylibre.com>
+Subject: [PATCH v3 2/5] thermal/drivers/mediatek/lvts_thermal: Add suspend and resume
+Date:   Mon, 29 May 2023 17:35:29 +0200
+Message-ID: <20230529153532.3541327-3-bero@baylibre.com>
 X-Mailer: git-send-email 2.41.0.rc2
 In-Reply-To: <20230529153532.3541327-1-bero@baylibre.com>
 References: <20230529153532.3541327-1-bero@baylibre.com>
@@ -83,44 +83,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Balsam CHIHI <bchihi@baylibre.com>
 
-Add LVTS thermal controller definition for MT8192.
+Add suspend and resume support to LVTS driver.
 
 Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
 ---
- .../thermal/mediatek,lvts-thermal.h           | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/thermal/mediatek/lvts_thermal.c | 34 +++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-index 8fa5a46675c46..5e9eb62174268 100644
---- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-+++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-@@ -26,4 +26,23 @@
- #define MT8195_AP_CAM0  15
- #define MT8195_AP_CAM1  16
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index d0a3f95b7884b..5ea8a9d569ea6 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -1169,6 +1169,38 @@ static int lvts_remove(struct platform_device *pdev)
+ 	return 0;
+ }
  
-+#define MT8192_MCU_BIG_CPU0     0
-+#define MT8192_MCU_BIG_CPU1     1
-+#define MT8192_MCU_BIG_CPU2     2
-+#define MT8192_MCU_BIG_CPU3     3
-+#define MT8192_MCU_LITTLE_CPU0  4
-+#define MT8192_MCU_LITTLE_CPU1  5
-+#define MT8192_MCU_LITTLE_CPU2  6
-+#define MT8192_MCU_LITTLE_CPU3  7
++static int lvts_suspend(struct platform_device *pdev, pm_message_t state)
++{
++	struct lvts_domain *lvts_td;
++	int i;
 +
-+#define MT8192_AP_VPU0  8
-+#define MT8192_AP_VPU1  9
-+#define MT8192_AP_GPU0  10
-+#define MT8192_AP_GPU1  11
-+#define MT8192_AP_INFRA 12
-+#define MT8192_AP_CAM   13
-+#define MT8192_AP_MD0   14
-+#define MT8192_AP_MD1   15
-+#define MT8192_AP_MD2   16
++	lvts_td = platform_get_drvdata(pdev);
 +
- #endif /* __MEDIATEK_LVTS_DT_H */
++	for (i = 0; i < lvts_td->num_lvts_ctrl; i++)
++		lvts_ctrl_set_enable(&lvts_td->lvts_ctrl[i], false);
++
++	clk_disable_unprepare(lvts_td->clk);
++
++	return 0;
++}
++
++static int lvts_resume(struct platform_device *pdev)
++{
++	struct lvts_domain *lvts_td;
++	int i, ret;
++
++	lvts_td = platform_get_drvdata(pdev);
++
++	ret = clk_prepare_enable(lvts_td->clk);
++	if (ret)
++		return ret;
++
++	for (i = 0; i < lvts_td->num_lvts_ctrl; i++)
++		lvts_ctrl_set_enable(&lvts_td->lvts_ctrl[i], true);
++
++	return 0;
++}
++
+ static const struct lvts_ctrl_data mt8195_lvts_mcu_data_ctrl[] = {
+ 	{
+ 		.cal_offset = { 0x04, 0x07 },
+@@ -1268,6 +1300,8 @@ MODULE_DEVICE_TABLE(of, lvts_of_match);
+ static struct platform_driver lvts_driver = {
+ 	.probe = lvts_probe,
+ 	.remove = lvts_remove,
++	.suspend = lvts_suspend,
++	.resume = lvts_resume,
+ 	.driver = {
+ 		.name = "mtk-lvts-thermal",
+ 		.of_match_table = lvts_of_match,
 -- 
 2.41.0.rc2
 
