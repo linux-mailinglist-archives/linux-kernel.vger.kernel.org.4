@@ -2,196 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0B0714837
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 12:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5156E714839
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 12:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbjE2Ktl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 06:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
+        id S229965AbjE2Kvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 06:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjE2Ktf (ORCPT
+        with ESMTP id S229615AbjE2Kvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 06:49:35 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C97C2;
-        Mon, 29 May 2023 03:49:33 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34TAnO1Z089145;
-        Mon, 29 May 2023 05:49:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685357364;
-        bh=0MHzJQiVfolu0HjY0ae28OKooLMIQmAJEbGRg4/hQGU=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=KhLrIxHm7OxKoae64uvhQrPeFH4WtqQZCZU7Mwjd5JmEVRAzp7s9TmAdX0Y7GMU81
-         nla5uKXMTrRWtAABex8DVGa5AlVHPktj6+sp55++GQj4vGZRM0LDAmpCDRm4s7rgEX
-         E04VN6iqH33RGXUO1dNVTIm/7ZnIY+T3e/SLZDN8=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34TAnO8B119652
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 29 May 2023 05:49:24 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 29
- May 2023 05:49:24 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 29 May 2023 05:49:24 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34TAnDno028618;
-        Mon, 29 May 2023 05:49:21 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <afd@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH 2/2] arm64: dts: ti: k3-j721s2: Add overlay to enable main CPSW2G with GESI
-Date:   Mon, 29 May 2023 16:19:13 +0530
-Message-ID: <20230529104913.560045-3-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230529104913.560045-1-s-vadapalli@ti.com>
-References: <20230529104913.560045-1-s-vadapalli@ti.com>
+        Mon, 29 May 2023 06:51:38 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B98DC2;
+        Mon, 29 May 2023 03:51:37 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5149c76f4dbso1852933a12.1;
+        Mon, 29 May 2023 03:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685357496; x=1687949496;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8LCe2EKUc/HUKv8Vdwd3IAxJsI6uVh4H8TlALy41nxg=;
+        b=dnlxLcu8oG8H068277xPQWzNdEDRqJmbMvM5ZfwSxRkTiDCEeCtEtl3mj3KSwsfm9w
+         NMIf/QkQGXI0cCFKAsMxpCRPixUQZMu/6w03AU0aVIFXwPRpLWl/9qP14Mc0hEdcWclf
+         hOhNyUzNoKw/GKBJ4B7S+HUrfpdYeUGWxeGT+CABsYNsmOrOEV7FUKElHjLiVAHgudrM
+         oW24eRCXgCqo7L0smmrqhqyo1yNdnoylRyMKcfqTB12SHOO3WLfuIUbjSqYLnyblBruy
+         SIyKCV6x8ON5iqBR3G2popkaxixdIXoPLFRf9VUF7wOAA+jZIL3tInUy8YIyZ2mkg0S2
+         iZPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685357496; x=1687949496;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8LCe2EKUc/HUKv8Vdwd3IAxJsI6uVh4H8TlALy41nxg=;
+        b=Nxj6uxJO0OD/5M4lD+yODYLl0VHM5GJ1kXzIWTNoJi7hKkxyjrOqRN4yxf7jslt+1D
+         PQfDLvALBJsvdRhRkQ7BV6UMgWO3aTDVZfhOF1t5BQanSbE+oBPqF19IY8j8jjkLn5u+
+         vD7PSRSshxKFh4obmDt39n2ENrkLb6tc4n4XPPwxwStqgRkfDfnh1cuyk8yI58Dvg1BA
+         /sIDScti+/d4mpkxr+cLvAPSsy+EdiIJGLlSBXj3a4NPHVPoFvLgLMIIGKMyMgOIrUFm
+         ajB04mYoGatlOeX7lg8IeDTMNwALy2YHYEYTxB0tZbQZ0yzYo9Z+JlSDe7gYGiOF3/Rx
+         AkPA==
+X-Gm-Message-State: AC+VfDwMP5y85QaTNDaJv6V5JiVYS4UYMdoUnu/jTeV/9iLzV2jMwbdS
+        euYrXvC8RZS+Uc7X6Fjhupk=
+X-Google-Smtp-Source: ACHHUZ61VpXTU+I9Rd/KQgtSJUXweX6b1D99k1qn7ca3qHpBQXMp5VZ7g/3eSnOI6TRPtei4NaJk9Q==
+X-Received: by 2002:a17:907:987:b0:96a:6723:da47 with SMTP id bf7-20020a170907098700b0096a6723da47mr9974841ejc.43.1685357495394;
+        Mon, 29 May 2023 03:51:35 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id m13-20020a170906160d00b0095342bfb701sm5887645ejd.16.2023.05.29.03.51.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 03:51:35 -0700 (PDT)
+Date:   Mon, 29 May 2023 13:51:32 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/3] dsa: marvell: Add support for mv88e6071 and 6020
+ switches
+Message-ID: <20230529105132.h673mnjddubl7und@skbuf>
+References: <20230523142912.2086985-1-lukma@denx.de>
+ <20230529110222.68887a31@wsk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529110222.68887a31@wsk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kishon Vijay Abraham I <kishon@ti.com>
+Hello Lukasz,
 
-The MAIN CPSW2G instance of CPSW on J721S2 SoC can be enabled with the GESI
-Expansion Board connected to the J7 Common-Proc-Board. Use the overlay
-to enable this.
+On Mon, May 29, 2023 at 11:02:22AM +0200, Lukasz Majewski wrote:
+> Dear All,
+> 
+> > After the commit (SHA1: 7e9517375a14f44ee830ca1c3278076dd65fcc8f);
+> > "net: dsa: mv88e6xxx: fix max_mtu of 1492 on 6165, 6191, 6220, 6250,
+> > 6290" the error when mv88e6020 or mv88e6071 is used is not present
+> > anymore.
+> > 
+> 
+> Are there any more comments for this patch set?
 
-Add alias for the MAIN CPSW2G port to enable kernel to fetch MAC address
-directly from U-Boot.
+Has your email client eaten these comments too?
 
-Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- arch/arm64/boot/dts/ti/Makefile               |  2 +
- .../dts/ti/k3-j721s2-evm-gesi-exp-board.dtso  | 85 +++++++++++++++++++
- 2 files changed, 87 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-evm-gesi-exp-board.dtso
+https://lore.kernel.org/netdev/c39f4127-e1fe-4d38-83eb-f372ca2ebcd3@lunn.ch/
+| On Wed, May 24, 2023 at 03:48:02PM +0200, Andrew Lunn wrote:
+| > > > Vladimir indicates here that it is not known how to change the max MTU
+| > > > for the MV88E6250. Where did you get the information from to implement
+| > > > it?
+| > > 
+| > > Please refer to [1].
+| > > 
+| > > The mv88e6185_g1_set_max_frame_size() function can be reused (as
+| > > registers' offsets and bits are the same for mv88e60{71|20}).
+| > 
+| > So you have the datasheet? You get the information to implement this
+| > from the data sheet?
+| > 
+| >      Andrew
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index c83c9d772b81..13db9b8dbe1d 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -42,6 +42,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-j721e-sk.dtb
- # Boards with J721s2 SoC
- dtb-$(CONFIG_ARCH_K3) += k3-am68-sk-base-board.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
-+dtb-$(CONFIG_ARCH_K3) += k3-j721s2-evm-gesi-exp-board.dtbo
- 
- # Boards with J784s4 SoC
- dtb-$(CONFIG_ARCH_K3) += k3-am69-sk.dtb
-@@ -49,3 +50,4 @@ dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
- 
- # Enable support for device-tree overlays
- DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
-+DTC_FLAGS_k3-j721s2-common-proc-board += -@
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-evm-gesi-exp-board.dtso b/arch/arm64/boot/dts/ti/k3-j721s2-evm-gesi-exp-board.dtso
-new file mode 100644
-index 000000000000..9ababfeef904
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-evm-gesi-exp-board.dtso
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * DT Overlay for MAIN CPSW2G using GESI Expansion Board with J7 common processor board.
-+ *
-+ * GESI Board Product Link: https://www.ti.com/tool/J7EXPCXEVM
-+ *
-+ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/net/ti-dp83867.h>
-+
-+#include "k3-pinctrl.h"
-+
-+&{/} {
-+	aliases {
-+		ethernet1 = "/bus@100000/ethernet@c200000/ethernet-ports/port@1";
-+	};
-+};
-+
-+&main_pmx0 {
-+	main_cpsw_mdio_pins_default: main-cpsw-mdio-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_IOPAD(0x0c0, PIN_OUTPUT, 6) /* (T28) MCASP1_AXR0.MDIO0_MDC */
-+			J721S2_IOPAD(0x0bc, PIN_INPUT, 6) /* (V28) MCASP1_AFSX.MDIO0_MDIO */
-+		>;
-+	};
-+
-+	rgmii1_pins_default: rgmii1-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_IOPAD(0x0b8, PIN_INPUT, 6) /* (AA24) MCASP1_ACLKX.RGMII1_RD0 */
-+			J721S2_IOPAD(0x0a0, PIN_INPUT, 6) /* (AB25) MCASP0_AXR12.RGMII1_RD1 */
-+			J721S2_IOPAD(0x0a4, PIN_INPUT, 6) /* (T23) MCASP0_AXR13.RGMII1_RD2 */
-+			J721S2_IOPAD(0x0a8, PIN_INPUT, 6) /* (U24) MCASP0_AXR14.RGMII1_RD3 */
-+			J721S2_IOPAD(0x0b0, PIN_INPUT, 6) /* (AD26) MCASP1_AXR3.RGMII1_RXC */
-+			J721S2_IOPAD(0x0ac, PIN_INPUT, 6) /* (AC25) MCASP0_AXR15.RGMII1_RX_CTL */
-+			J721S2_IOPAD(0x08c, PIN_OUTPUT, 6) /* (T25) MCASP0_AXR7.RGMII1_TD0 */
-+			J721S2_IOPAD(0x090, PIN_OUTPUT, 6) /* (W24) MCASP0_AXR8.RGMII1_TD1 */
-+			J721S2_IOPAD(0x094, PIN_OUTPUT, 6) /* (AA25) MCASP0_AXR9.RGMII1_TD2 */
-+			J721S2_IOPAD(0x098, PIN_OUTPUT, 6) /* (V25) MCASP0_AXR10.RGMII1_TD3 */
-+			J721S2_IOPAD(0x0b4, PIN_OUTPUT, 6) /* (U25) MCASP1_AXR4.RGMII1_TXC */
-+			J721S2_IOPAD(0x09c, PIN_OUTPUT, 6) /* (T24) MCASP0_AXR11.RGMII1_TX_CTL */
-+		>;
-+	};
-+};
-+
-+&exp1 {
-+	p15 {
-+		/* P15 - EXP_MUX2 */
-+		gpio-hog;
-+		gpios = <13 GPIO_ACTIVE_HIGH>;
-+		output-high;
-+		line-name = "EXP_MUX2";
-+	};
-+};
-+
-+&main_cpsw {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rgmii1_pins_default>;
-+};
-+
-+&main_cpsw_mdio {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_cpsw_mdio_pins_default>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	main_cpsw_phy0: ethernet-phy@0 {
-+		reg = <0>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+};
-+
-+&main_cpsw_port1 {
-+	status = "okay";
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&main_cpsw_phy0>;
-+};
--- 
-2.25.1
-
+https://lore.kernel.org/netdev/ZG4E+wd03cKipsib@shell.armlinux.org.uk/
+| On Wed, May 24, 2023 at 01:37:15PM +0100, Russell King (Oracle) wrote:
+| > On Wed, May 24, 2023 at 02:17:43PM +0200, Lukasz Majewski wrote:
+| > > Please refer to [1].
+| > > 
+| > > The mv88e6185_g1_set_max_frame_size() function can be reused (as
+| > > registers' offsets and bits are the same for mv88e60{71|20}).
+| > > 
+| > > After using Vladimir's patch there is no need to add max_frame size
+| > > field and related patches from v6 can be dropped.
+| > 
+| > However, you haven't responded to:
+| > 
+| > https://lore.kernel.org/all/ZGzP0qEjQkCFnXnr@shell.armlinux.org.uk/
+| > 
+| > to explain why what you're doing (adding this function) is safe.
+| > 
+| > Thanks.
+| > 
+| > -- 
+| > RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+| > FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
