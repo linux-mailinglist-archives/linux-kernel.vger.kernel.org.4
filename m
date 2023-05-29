@@ -2,127 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D8F7143C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707F67143C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 07:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjE2Fb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 01:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S230342AbjE2Fhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 01:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbjE2Fbx (ORCPT
+        with ESMTP id S229606AbjE2Fhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 01:31:53 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71E79F
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:31:51 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2566f66190dso833898a91.1
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:31:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685338311; x=1687930311;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4PPFonEhDSP8gLC8BJ9+HvAE9BMM5+O6SrwzMbFYDbw=;
-        b=BG77cKFMbbtQaVW0nAg4Je7YFmXgzvHOgK0j+KCXw29PFYAmJJCClKwElyG2QDtgW0
-         IqWnO8Qd1fWmnmai4QNC9kdM8u8hyiDgc8LpViVOdJNJ7fqkQr4nihvCg2bXMJhjxXj3
-         GkmEhrAeGEk4NKiPoGU/u1v5yQwYSvTKyXu+bWZMsUhZGF0lenQNQOXd0miF/tZ1ARFT
-         /hjWJ3DS/GInl5x0J45EWJKkUas3C/LusjyxjbKJoAbaKh3tXNWNlOqxUM+WGFqCUl6Y
-         vQD+KVKgNFoqeohnFPoR9K/899TK9Oy4ba7pfHa8fMVD8ThJAbc3RKpbSJjpSpImgAxS
-         y6Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685338311; x=1687930311;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4PPFonEhDSP8gLC8BJ9+HvAE9BMM5+O6SrwzMbFYDbw=;
-        b=O9uqTCZBzpS8bqheMPNj1Cq7WXx7D8+lyT2rVBY+H9OtdnCLZNPT6taPcOAg2Xbpd/
-         UvtxmKB+gE+pmmdK/wvaPvtsDj27iIujluq7QWC/Wg95zVF4y0rjMmc7K7xPxNnshcog
-         Dgl9ShrwTxlOKGmlrW73nyAiU+CLAoAtaG6NF9wJios77YZ7SV9o2MLD1WhrbVGJSIRx
-         sS9flDDdC5TTT7G/xwr7bjFtW0NshZRwX1o/wraMA4tLLny4Fmgu02Yfx7pCQwOnt9Yv
-         stBoodu+Rbh42ZlZc7Pp/mMAeIddV3ZEx7LGYxuXV4SOneER4/3zfnqm/NYxaSJRe9m0
-         hlxA==
-X-Gm-Message-State: AC+VfDwVb3ne0ChDN9jPu7Njc7qXQXmkDxRnP9sL7bu7MQ9AVdqWrF1U
-        5gTbZzlIKTq4iJPpsZeEwFSHTg==
-X-Google-Smtp-Source: ACHHUZ492JkVbVMwadub6cNpLxDqf+cAwCg3OJlG0pA62Sl8NKCneXD5hDVRh6c/f0Wz+bvK9B+7DQ==
-X-Received: by 2002:a17:903:2093:b0:1b0:4c32:5d6d with SMTP id d19-20020a170903209300b001b04c325d6dmr56502plc.31.1685338311173;
-        Sun, 28 May 2023 22:31:51 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id im15-20020a170902bb0f00b001b0395c4002sm1941527plb.210.2023.05.28.22.31.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 May 2023 22:31:50 -0700 (PDT)
-Date:   Mon, 29 May 2023 11:01:48 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] opp: Fix use-after-free in lazy_opp_tables after probe
- deferral
-Message-ID: <20230529053148.xuhuv6skg2xqworr@vireshk-i7>
-References: <20230524-opp-lazy-uaf-v1-1-f5f95cb4b6de@kernkonzept.com>
+        Mon, 29 May 2023 01:37:51 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3824F9B
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 22:37:48 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34T5b8A1015197;
+        Mon, 29 May 2023 00:37:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685338628;
+        bh=ybqU11TutcMA6M2ssDZrQDXIrgGcVs+7REiZLCCRFOQ=;
+        h=Date:From:Subject:To:CC:References:In-Reply-To;
+        b=Vky3qwbS+2gTn2GQKPSQK9EKAb/kYsD8vUOoUvOAF+BC7B2P18Zmt97dxv2iD4CS9
+         MOoYzpsu6C0qcF47AqtmSrG/GkGnOrtvvvnBs4fDOXk45hUbAUqeCwsfXbMBZzndn/
+         /jcZytHUPWrFuLCLccEs2zDpgk2nd+ZQzZoj45DY=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34T5b8hl011617
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 29 May 2023 00:37:08 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 29
+ May 2023 00:37:08 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 29 May 2023 00:37:08 -0500
+Received: from [172.24.218.160] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34T5b2mf024886;
+        Mon, 29 May 2023 00:37:03 -0500
+Message-ID: <c8712ef7-c0bc-e6e7-7319-68238d011dd9@ti.com>
+Date:   Mon, 29 May 2023 11:07:01 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524-opp-lazy-uaf-v1-1-f5f95cb4b6de@kernkonzept.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+Subject: Re: [PATCH v6 3/8] drm/bridge: mhdp8546: Add minimal format
+ negotiation
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        <neil.armstrong@linaro.org>, Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230509093036.3303-1-a-bhatia1@ti.com>
+ <20230509093036.3303-4-a-bhatia1@ti.com>
+ <db9b4117-b030-49a7-3732-2fc39d089ee2@ideasonboard.com>
+ <d2777edc-151d-7f06-30c4-4634fdb6a63d@ti.com>
+ <305382fd-2312-59d9-e2d3-25a17e0a2158@linaro.org>
+ <363d3089-48d4-5663-68e8-ecf0eb4e3e0e@ti.com>
+ <9f98fb99-eaf4-657c-fd2e-b2e81d9cb109@ideasonboard.com>
+Content-Language: en-US
+In-Reply-To: <9f98fb99-eaf4-657c-fd2e-b2e81d9cb109@ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24-05-23, 19:56, Stephan Gerhold wrote:
-> When dev_pm_opp_of_find_icc_paths() in _allocate_opp_table() returns
-> -EPROBE_DEFER, the opp_table is freed again, to wait until all the
-> interconnect paths are available.
+Hi Tomi,
+
+Thank you for taking a look at this.
+
+On 26/05/23 14:59, Tomi Valkeinen wrote:
+> On 16/05/2023 17:25, Aradhya Bhatia wrote:
+>> Hi Neil,
+>>
+>> Thank you for reviewing the patch.
+>>
+>> On 16-May-23 12:51, Neil Armstrong wrote:
+>>> On 15/05/2023 17:59, Aradhya Bhatia wrote:
+>>>> Hi Tomi,
+>>>>
+>>>> On 12-May-23 14:45, Tomi Valkeinen wrote:
+>>>>> On 09/05/2023 12:30, Aradhya Bhatia wrote:
+>>>>>> From: Nikhil Devshatwar <nikhil.nd@ti.com>
+>>>>>>
+>>>>>> With new connector model, mhdp bridge will not create the
+>>>>>> connector and
+>>>>>> SoC driver will rely on format negotiation to setup the encoder
+>>>>>> format.
+>>>>>>
+>>>>>> Support minimal format negotiations hooks in the drm_bridge_funcs.
+>>>>>> Complete format negotiation can be added based on EDID data.
+>>>>>> This patch adds the minimal required support to avoid failure
+>>>>>> after moving to new connector model.
+>>>>>>
+>>>>>> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+>>>>>> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+>>>>>
+>>>>> You need to add your SoB to this and the other patches.
+>>>>
+>>>> Okay!
+>>>>
+>>>>>
+>>>>>> ---
+>>>>>>
+>>>>>> Notes:
+>>>>>>
+>>>>>>        changes from v1:
+>>>>>>        * cosmetic fixes, commit message update.
+>>>>>>
+>>>>>>        changes from v5:
+>>>>>>        * dropped the default_bus_format variable and directly
+>>>>>> assigned
+>>>>>>          MEDIA_BUS_FMT_RGB121212_1X36 to input_fmts.
+>>>>>>
+>>>>>>     .../drm/bridge/cadence/cdns-mhdp8546-core.c   | 25
+>>>>>> +++++++++++++++++++
+>>>>>>     1 file changed, 25 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>>>>>> b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>>>>>> index f6822dfa3805..623e4235c94f 100644
+>>>>>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>>>>>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>>>>>> @@ -2146,6 +2146,30 @@ cdns_mhdp_bridge_atomic_reset(struct
+>>>>>> drm_bridge
+>>>>>> *bridge)
+>>>>>>         return &cdns_mhdp_state->base;
+>>>>>>     }
+>>>>>>     +static u32 *cdns_mhdp_get_input_bus_fmts(struct drm_bridge
+>>>>>> *bridge,
+>>>>>> +                     struct drm_bridge_state *bridge_state,
+>>>>>> +                     struct drm_crtc_state *crtc_state,
+>>>>>> +                     struct drm_connector_state *conn_state,
+>>>>>> +                     u32 output_fmt,
+>>>>>> +                     unsigned int *num_input_fmts)
+>>>>>> +{
+>>>>>> +    u32 *input_fmts;
+>>>>>> +
+>>>>>> +    *num_input_fmts = 0;
+>>>>>> +
+>>>>>> +    if (output_fmt != MEDIA_BUS_FMT_FIXED)
+>>>>>> +        return NULL;
+>>>>>
+>>>>> The tfp410 and sii902x drivers don't have the above check. Why does
+>>>>> mhdp
+>>>>> need it? Or the other way, why don't tfp410 and sii902x need it?
+>>>>
+>>>> I had removed this condition in order to follow status quo, from the
+>>>> ITE-66121 HDMI bridge driver.
+>>>>
+>>>> The idea would have been to drop this for MHDP as well, but I guess I
+>>>> overlooked this one.
+>>>>
+>>>> However...
+>>>>
+>>>>> I guess at the moment we always do get MEDIA_BUS_FMT_FIXED as the out
+>>>>> fmt (in all three bridge drivers), don't we?
+>>>>
+>>>> ... I tested again to ensure that the above is indeed the case. And
+>>>> ended up catching some odd behavior.
+>>>>
+>>>> It turns out that for all the HDMI bridges (TFP410, SII902X,
+>>>> ITE-66121),
+>>>> the format negotiation doesn't stop at output_fmt =
+>>>> MEDIA_BUS_FMT_FIXED.
+>>>> The {bridge}_get_input_format API gets called again with the output_fmt
+>>>> = MEDIA_BUS_FMT_RGB24_1X24.
+>>>>
+>>>> This doesn't happen with the MHDP driver. Format negotiation with MHDP
+>>>> bridge stops after one round, at output_fmt = MEDIA_BUS_FMT_FIXED.
+>>>
+>>> This is because the bridge negociation logic will test with all possible
+>>> output formats from the chain, and won't stop at first working test.
+>>>
+>> Okay..
+>>
+>>> If your bridge only supports a single input format, it should return the
+>>> same format whatever output_fmt is tried.
+>>>
+>>> So indeed remove this test on mhdp aswell, or filter out invalid output
+>>> formats.
+>> Agreed.
+>>
+>> I have been looking into the code deeper and trying to understand the
+>> logic flow around the format negotiation in the framework. Here are the
+>> 2 points that I want to mention. Please let me know if I have missed
+>> something with my understanding.
+>>
+>>
+>> Firstly, the mhdp-8546 output connects to the display-connector (with
+>> the compatible, "dp-connector") in the devicetree.
+>>
+>> When the negotiation begins at 'drm_atomic_bridge_chain_select_bus_fmts'
+>> the display-connector bridge *should* act as the 'last_bridge', and the
+>> atomic_get_output_bus_fmts hook of the display-connector should get
+>> called. However, for some reason I am not yet sure of, the condition
+>>
+>> :: if (last_bridge->funcs->atomic_get_output_bus_fmts)
+>>
+>> fails and the 'select_bus_fmt_recursive' function gets called instead,
+>> (with MEDIA_BUS_FMT_FIXED as output_fmt), which in turn calls the
+>> atomic_get_input_bus_fmts hook of the mhdp-8546. This entirely skips the
+>> display-connector out of the format negotiation.
+>>
+>> This doesn't happen when the HDMI bridges are in concern, even though,
+>> they too are connected with display-connector (with compatible
+>> "hdmi-connector").
+>>
+>> I looked into the display-connector driver hoping to find if the 2 types
+>> of connectors are being treated differently wrt format negotiation, but
+>> I did not find any clue.
+>>
+>> Please let me know if you have any idea about this.
 > 
-> However, if the OPP table is using required-opps then it may already
-> have been added to the global lazy_opp_tables list. The error path
-> does not remove the opp_table from the list again.
+> The display connector is probed, but not attached to the bridge chain,
+> so the last bridge is the mdhp. You need to call drm_bridge_attach in
+> the mhdp driver to attach the next bridge. See e.g. tfp410's
+> tfp410_attach().
+
+Okay, understood. Thank you!
+
 > 
-> This can cause crashes later when the provider of the required-opps
-> is added, since we will iterate over OPP tables that have already been
-> freed. E.g.:
+> Also, I think the support in mhdp for the
+> !DRM_BRIDGE_ATTACH_NO_CONNECTOR case should be dropped.
+
+Agreed. I will send a separate series for this and drm_bridge_attach
+add.
+
 > 
->   Unable to handle kernel NULL pointer dereference when read
->   CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.4.0-rc3
->   PC is at _of_add_opp_table_v2 (include/linux/of.h:949
->   drivers/opp/of.c:98 drivers/opp/of.c:344 drivers/opp/of.c:404
->   drivers/opp/of.c:1032) -> lazy_link_required_opp_table()
+>> Secondly, as mentioned in the display-connector driver, this bridge is
+>> essentially a pass-through. And hence to reflect that, both the format
+>> negotiation hooks of display-connector driver call their counter-parts
+>> from the previous bridge if they are available, and if not, the formats
+>> are assigned MEDIA_BUS_FMT_FIXED.
+>>
+>> While this makes sense for the atomic_get_output_bus_fmts hook, it seems
+>> to me that, the same may not hold true for the atomic_get_input_bus_fmts
+>> hook.
+>> If the bridge is indeed a pass-through, should it not also pass the
+>> output_format as its input format (which it actually got from the output
+>> of previous bridge)?
+>>
+>> This way all the following will remain same.
+>>
+>> 1. output_fmt of prev_bridge,
+>> 2. input_fmt of display-connector, and
+>> 3. output_fmt of display-connector.
+>>
+>> Currently, since the atomic_get_input_bus_fmts hook of display-connector
+>> calls its counter-part from the prev_bridge, the input_fmt it passes
+>> (for HDMI bridges) is MEDIA_BUS_FMT_RGB888_1X24. The
+>> atomic_get_ouput_bus_fmts hook of the HDMI bridge has to, then, set an
+>> input bus format considering MEDIA_BUS_FMT_RGB888_1X24 as its output
+>> instead of MEDIA_BUS_FMT_FIXED.
+>>
+>> Let me know what you think!
 > 
-> Fix this by removing the opp_table from the list before freeing it.
+> Yes, it does sound odd to me. Returning the same from the
+> display-connector's get-input-fmt and get-output-fmt makes more sense.
 
-I think you need this instead:
+Yes, it does make more sense! I can send a separate fix for this.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 954c94865cf5..b5973fefdfd8 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1358,7 +1358,10 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
-        return opp_table;
-
- remove_opp_dev:
-+       _of_clear_opp_table(opp_table);
-        _remove_opp_dev(opp_dev, opp_table);
-+       mutex_destroy(&opp_table->genpd_virt_dev_lock);
-+       mutex_destroy(&opp_table->lock);
- err:
-        kfree(opp_table);
-        return ERR_PTR(ret);
-
-> Cc: stable@vger.kernel.org
-> Fixes: 7eba0c7641b0 ("opp: Allow lazy-linking of required-opps")
-> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-> ---
-> This fixes the crash I ran into after adding an OPP table with
-> both "required-opps" and interconnect paths (opp-peak-kBps).
 > 
-> By the way, the "lazy_opp_tables" does not seem to be protected by any
-> locks(?)
+> Btw, we seem to be missing get-output-fmt from the mdhp driver.
 
-It is always accessed with opp_table_lock held I believe.
+Yes, we are.
 
--- 
-viresh
+With the drm_bridge_attach call added, the display-connector bridge will
+assign MEDIA_BUS_FMT_FIXED as the default output format. And most
+bridges support only their primary output bus format in their
+get-output-fmt hooks. I suppose it would be RGB121212_1X36 in mhdp8546's
+case.
+
+Do we require this when there is no comprehensive way to determine if
+another bus format may be more suitable (depending on the hardware
+configurations)?
+
+
+Regards
+Aradhya
+
