@@ -2,92 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BCC7145AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EE77145B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 09:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbjE2HmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 03:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S231556AbjE2HpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 03:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjE2Hlr (ORCPT
+        with ESMTP id S231550AbjE2HpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 03:41:47 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B43BE1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 00:41:43 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vjis6Cv_1685346099;
-Received: from 30.221.134.122(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vjis6Cv_1685346099)
-          by smtp.aliyun-inc.com;
-          Mon, 29 May 2023 15:41:40 +0800
-Message-ID: <9d928aa7-31cf-e4c1-8694-0aa63e55b382@linux.alibaba.com>
-Date:   Mon, 29 May 2023 15:41:38 +0800
+        Mon, 29 May 2023 03:45:01 -0400
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F62AC;
+        Mon, 29 May 2023 00:44:54 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1685346271t2dsh6fi
+Received: from wxdbg.localdomain.com ( [183.159.96.128])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 29 May 2023 15:44:22 +0800 (CST)
+X-QQ-SSF: 01400000000000J0Z000000A0000000
+X-QQ-FEAT: eSZ1CZgv+JDnClWgMPbLdL6Yn+9Meybq4WT4eTj7rXbJ1L6TQWpUnAm2mROMV
+        ofkFElQi08BdjMr3eXJJvzEyZrfjFKXQKDeDc+xIjLLOe+89hbMXvZLj85XvjjHkQCwHVeI
+        QOsqlNZg3wFTsPTgJaSN1+tNg9K6HIWXe9ZhPcSvCvDJCLbXMv3b6upAPUc0c4Zc9PdjDl3
+        M0C57woFwk39p2d3WLFdVHSYL1TwEsCegCK1Ojglw2g8QGG+/XhaydOaBuxFANp/hLp3b6W
+        cOTuiLInlp3THu6N0GA2tFCej5jx72TcKz7pPtp+X7carWLjqzSi+n8d6CjnYQ9KbSw/2VN
+        mXhXQcPJMn96a2YqLBPugtpj9d9fuF/z3Mf4FAyGYmI3AwezwUD9M84vd1i4w==
+X-QQ-GoodBg: 2
+X-BIZMAIL-ID: 9551324987145372188
+From:   Jiawen Wu <jiawenwu@trustnetic.com>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl, andy.shevchenko@gmail.com,
+        shreeya.patel@collabora.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jiawen Wu <jiawenwu@trustnetic.com>
+Subject: [PATCH] gpiolib: Fix GPIO chip IRQ initialization restriction
+Date:   Mon, 29 May 2023 15:42:27 +0800
+Message-Id: <20230529074227.636933-1-jiawenwu@trustnetic.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/5] erofs: introduce erofs_xattr_iter_fixup_aligned()
- helper
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
-        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20230518024551.123990-1-jefflexu@linux.alibaba.com>
- <20230518024551.123990-2-jefflexu@linux.alibaba.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230518024551.123990-2-jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+In case of gpio-regmap, IRQ chip is added by regmap-irq and associated with
+GPIO chip by gpiochip_irqchip_add_domain(). The initialization flag was not
+added in gpiochip_irqchip_add_domain(), causing gpiochip_to_irq() to return
+-EPROBE_DEFER.
 
-On 2023/5/18 10:45, Jingbo Xu wrote:
-> Introduce erofs_xattr_iter_fixup_aligned() helper where
-> it.ofs <= EROFS_BLKSIZ is mandatory.
-> 
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-> ---
->   fs/erofs/xattr.c | 79 +++++++++++++++++++++---------------------------
->   1 file changed, 35 insertions(+), 44 deletions(-)
-> 
-> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-> index bbfe7ce170d2..b79be2a556ba 100644
-> --- a/fs/erofs/xattr.c
-> +++ b/fs/erofs/xattr.c
-> @@ -29,6 +29,28 @@ struct xattr_iter {
->   	unsigned int ofs;
->   };
->   
-> +static inline int erofs_xattr_iter_fixup(struct xattr_iter *it)
-> +{
-> +	if (it->ofs < it->sb->s_blocksize)
-> +		return 0;
-> +
-> +	it->blkaddr += erofs_blknr(it->sb, it->ofs);
-> +	it->kaddr = erofs_read_metabuf(&it->buf, it->sb, it->blkaddr, EROFS_KMAP);
+Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before initialization")
+Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
+Cc: shreeya.patel@collabora.com
+---
+ drivers/gpio/gpiolib.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-could we use a new buf interface to init_metabuf at once?
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 04fb05df805b..1b6cd4ffb761 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1789,6 +1789,7 @@ int gpiochip_irqchip_add_domain(struct gpio_chip *gc,
+ 
+ 	gc->to_irq = gpiochip_to_irq;
+ 	gc->irq.domain = domain;
++	gc->irq.initialized = true;
+ 
+ 	return 0;
+ }
+-- 
+2.27.0
 
-> +	if (IS_ERR(it->kaddr))
-> +		return PTR_ERR(it->kaddr);
-> +	it->ofs = erofs_blkoff(it->sb, it->ofs);
-> +	return 0;
-> +}
-> +
-> +static inline int erofs_xattr_iter_fixup_aligned(struct xattr_iter *it)
-
-Since we're doing cleanup, this name sounds confusing to me
-since here the meaning is actually "we don't allow pos >
-blksize", IOWs, any pos <= blksize is allowed here, so
-'aligned' is not accurate.
-
-Could we think out a better one?
-
-Thanks,
-Gao Xiang
