@@ -2,286 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4682771451F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2667C714521
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 08:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjE2Gws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 02:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
+        id S229958AbjE2G6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 02:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjE2Gwq (ORCPT
+        with ESMTP id S229453AbjE2G57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 02:52:46 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219AFA3;
-        Sun, 28 May 2023 23:52:44 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso4035881a12.3;
-        Sun, 28 May 2023 23:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685343162; x=1687935162;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8xLU0TDl8S2h/LajmRlkUSNAeMKsxbvqXKst8upBRuE=;
-        b=LnzifqjYS+B2tULydawHuxxg+0jiTM3TjUV3DioFI26sY+LZ+SSFwChZsZaWitKw2n
-         nFxVa2wSbWlFKw+3KOPipVLhGjWlL+gBGfCqrT6Mr1nqLI93jl2gMq/oKePEhfhpPJGH
-         cu2o0bcAM/JUEetuNOS4Ezzn2+gthSxNwXvlC8iVqZGe5eJ5p7DPyOJ0Rky1T1UUi//X
-         gvONRZaYwG4P0kmiyU/Nkz1CHCrmtibyi+CNcrVGCBZgZ3vQipuK/KwZ7heoEbz6MmZX
-         f5waS5EHckuomnV0fzg9qsAGawIchNaorV6IpTYkPn7elH6Mbj3VxwxX2t14pFic2OxA
-         M7OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685343162; x=1687935162;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8xLU0TDl8S2h/LajmRlkUSNAeMKsxbvqXKst8upBRuE=;
-        b=hQeYQ7LBa1AsSZJiaTxqauvmOEQBZ3faP1o606rzie8oUh7oOLT8Xgntxt5y3qBcS8
-         mYz0afaL/lMxFookQ9u3zvQ0CGTraV6/1/vRJUFNKz1l+f/6HL5fU2r7OHh6SCkE9Asl
-         VylZNoLt6IP2qKQCNxS24CMMPfKepc/2McnVGHeq9gzod1B99mbwRDRuI3+2haW7893Z
-         SYBKVLsM5qz2F5nNZvdRuXZ9U1GY/jLd+StQ02EnpJ+1qc8vEhmu/DWbrP1cSjy3VSLF
-         MwRxadXMXAYdmSsyKIDVdEVP9FVBlilrSbngHOT2IThD08UK9ndmsqbaE7CnYcRSBC72
-         joZw==
-X-Gm-Message-State: AC+VfDy1VdiohNreb4s8bYNWW6yU+Wq35elan2RNfsWxvjotPDAZmNh+
-        E6No7IdrTKM8l+rXp8jllNpf9wEcdy1vMVZomv4=
-X-Google-Smtp-Source: ACHHUZ4jYsiG4h1SNeAONK8ZW0V2k2rMFPZdC6crFet24ZOpKZSwB2Cj/fm2N2wxMjBZDTtJUb9Fsyl9ji9DMdcoQ0M=
-X-Received: by 2002:a17:906:d555:b0:960:c5fe:a36a with SMTP id
- cr21-20020a170906d55500b00960c5fea36amr9914575ejc.61.1685343162370; Sun, 28
- May 2023 23:52:42 -0700 (PDT)
+        Mon, 29 May 2023 02:57:59 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2063.outbound.protection.outlook.com [40.107.93.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8951A3;
+        Sun, 28 May 2023 23:57:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D1ANA9ZCFzpnZEkvgPhik7XBojQ2sHub/EjXvyAxZ2ouYOr2s2V+r5Cj60QVtzlGcfTB9YSxvE50LTzXDhXrP7wUgwXvHr1KOJAz/VIaCQIqyR7oaneX4GvVasmgUB5HxlP+TQNhdEcPf+cR2nbq5QoVZFKrGOP8Vet/NUj6kwccxCzr17nlllamYBuk4Ft6jOw96kjr9I77Uv0FeIIDpVysyallh52IeQJdL48mCGPvvMl720nEZek3E7ZZXlK+vmsIEUuOor6DesA6DyF2Yu9FQEAFYLTnKI+4lJ+arZn2+TZxMynz/mpZjcbNDGu1PkFtUElpb11NCgX3QT7g3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BSV20EvtYhzIWE9mDr57eH8iKQea7t0Oeo+lAPxo/1k=;
+ b=dDPlfaceg48p457scRLPDC+ltn/Axh+APHer6fwz3abSYT2pkiBID2SK5c1pKjROcw1trD0TzaiIsMBFv6tQvIGU9nf5W2dW6Ibt8mebQwLLX8iwJIi4luSm5PCQtkWaFPVEg5iLm8nbKrlwlDm8wuh+lVe97mVtN3xQaDCev2fI9PighaokxjWUU1ScknMPbHyxWQaaz6Tz1eTEuwq0yH/qysFAskw9LkUAOMSGY/mUZDTaUb6g2/cVQg+GIblqAaxWBJ+8j4wsYusO7JeBV5fImls8ydKEClKW/nvWKG7KU2BExNBd6nijFeqJlrLhOSFEK2jkEClXFmKEdnue0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BSV20EvtYhzIWE9mDr57eH8iKQea7t0Oeo+lAPxo/1k=;
+ b=ArKAOInOvl7/1eytt4uQwxj55pYYU5MfYzMCV8fR8+iUCySgk+VjlzatztD4Pmn4ROw/bZ5DMIbiUgQC/jxPkoaeIN+UPx1G/ErINcPQtb6iqsWotCuMKMQruOS2SZMa/8tZjcS/ascR/wQUZMIT6qqft872uquDi59vY2VGo2c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by MN0PR12MB5881.namprd12.prod.outlook.com (2603:10b6:208:379::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Mon, 29 May
+ 2023 06:57:54 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::aeb:7ad3:2f4a:f218]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::aeb:7ad3:2f4a:f218%4]) with mapi id 15.20.6433.022; Mon, 29 May 2023
+ 06:57:54 +0000
+Date:   Mon, 29 May 2023 12:27:35 +0530
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     ray.huang@amd.com, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gautham.shenoy@amd.com
+Subject: Re: [PATCH v4 1/3] amd_pstate: Add ->fast_switch() callback
+Message-ID: <ZHRM3x1/Cle1iR2o@BLR-5CG13462PL.amd.com>
+References: <20230517162817.8538-1-wyes.karny@amd.com>
+ <20230517162817.8538-2-wyes.karny@amd.com>
+ <CAJZ5v0h+frxNpTz4GsjQ=OdbXXnTgLB=ufA5P2pNjbDF_FhNUQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0h+frxNpTz4GsjQ=OdbXXnTgLB=ufA5P2pNjbDF_FhNUQ@mail.gmail.com>
+X-ClientProxiedBy: MA0PR01CA0111.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:11d::17) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
-References: <20230524093623.3698134-1-chenhuacai@loongson.cn>
- <ZG4rZYBKaWrsctuH@bhelgaas> <CAAhV-H5u8qtXpr-mY+pKq7UfmyBgr3USRTQpo9-w28w8pHX8QQ@mail.gmail.com>
- <20230528165738.GF2814@thinkpad> <CAAhV-H5u0ibghgwbfJT1V_oWUWi0rie0NHWTSkpCVat3_ARvKw@mail.gmail.com>
- <20230529053919.GB2856@thinkpad>
-In-Reply-To: <20230529053919.GB2856@thinkpad>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Mon, 29 May 2023 14:52:29 +0800
-Message-ID: <CAAhV-H6EPkGJchA4pg=zctmmt=9LboaFqKhFgQxZKNxJxQVT7g@mail.gmail.com>
-Subject: Re: [PATCH] pci: irq: Add an early parameter to limit pci irq numbers
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ahmed S . Darwish" <darwi@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>, linux-pci@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongson-kernel@lists.loongnix.cn,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|MN0PR12MB5881:EE_
+X-MS-Office365-Filtering-Correlation-Id: c5f38a33-87f3-493e-3c49-08db60120654
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wuYnrJnuUfSr33yLGOwMNMASsuWPy1vDsX0GLcBTY3iu/JFIicJqUuR+gAvL149JCkL978nj7812fwh4X0/nKU3iPUPFlBMbp3pPaJWjSag6tqs94yu01ppHL0kLnIuS+EkVIRwsgTrZqS3fcna6+JSF6SueAmlpNdWZBZRnb1KpZ0eQ8LL86ZCWl8/syKeFyxW3W0IgQIK1j4d2bYDw98Ouo4iPsU/LeYA0Vj1dreeyxojhzSgtPPkme2twsp3QOeQ3JAj4F+X8bjoH/JFaJfhcxqr3+wLq5yr5Zn++IpktNA9g/C0afodnu5/SoeCdrP6UU6aopFmFZ3XFoWdsJr5dW/3jfERH5/dm36V0/KNiyWpucsabx7au4xZkNR0/cGdpNZoBFFx5+5VR+Aug4++37mnjbQlhlP6kUCa2lmBaOnEENStNT2XJGe5xoa+2w+GMa+n6UwJOYyNGbz+Z2mAF1SknrDMwRHWF61cofqRSKhjEBA/vMncgGw81QRUvAT1T6hEBpXaJ0i1OlilxnKj2lVcEJHOHaNN7hksTjydsvfaUn7P3ymUP0v3/SXRN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(39860400002)(376002)(136003)(451199021)(6506007)(6512007)(186003)(44832011)(2906002)(53546011)(478600001)(26005)(83380400001)(86362001)(6486002)(8676002)(41300700001)(38100700002)(8936002)(5660300002)(66946007)(66476007)(66556008)(6666004)(316002)(6916009)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U2FpeU56bi9ZblcySEkrMVQ4UFp4Qll5TUJUYVIzUHNQOTFUZFphMDY0dU11?=
+ =?utf-8?B?bWVYRnNFRlNtdWx4TnF5THUydGpLWU9WSUtjR1NDaFJpUVhLOUxNTVZrT2Nm?=
+ =?utf-8?B?RXArZmFtS1NtaXUrQnlibmRacU9icm5SZUJrUklvcXN1Y3N1ejVSd1dldUlN?=
+ =?utf-8?B?ZXZFVlc1L3NsRHd5RE5TM0FDNFNaWGJIZFg1K1Y5R0l1QzBYdHM4d2tQSC8w?=
+ =?utf-8?B?QWc5TFBYWTV3TTNGYW4wQTJXRG1yTjBmYkRrZWx6ZWxIMWJONHo4YTVnaWpy?=
+ =?utf-8?B?d2FvNmRkMEoyMGlNYktFRzdXN1FuRDFLRGd4MnhHdk43UTZMWEtPRXAwRTFU?=
+ =?utf-8?B?R3lLVWprUmRDbHdnN3I5b0VoeVdFd0laTHdMblY5Q04vR0Q1WmRYQnpPN3Fw?=
+ =?utf-8?B?UEhCK1Y4R25JK2xaSEJYOGhQNXl5VTkxK3VNVDJwN2sxVDQwZS9CdGM5STF5?=
+ =?utf-8?B?bjgxM3J3eHZ6Z05mVU1GaGpKOXNCOWRFMGV3ajk1bHR3TDg4SHovR3J2R2tr?=
+ =?utf-8?B?RWJETlVzOVFsZjRIdnNNcnVWT2tYYVNIQTFsOEhOaDVJaXIvZ1VDQXk1a0pD?=
+ =?utf-8?B?Yks2S1RQeDNidHQ3bm1aalQ4WXNaZitsbmNGQ2I0d1UwRWFZemRUUDBUK0w2?=
+ =?utf-8?B?NXFyNk5jampEQmpyajhiVlNFNmNJTkpncExOdUQyMHlOMHZpRFNOd2VEMDNk?=
+ =?utf-8?B?SitwSkdvMXNaMGFJeksrNndYcnFvRGhaN2UwenFaYURGUDN1eEpVeFFJcEo0?=
+ =?utf-8?B?UWtTNjBxb1dkZkxsbU1nZ0tWVC9MY3QyL2VYa2JIU1JhWXQwenMvWVBYTk1G?=
+ =?utf-8?B?aWlFUy9pZSt5VnFkc2FDT0tjSkdvallDWXRjNFg2QmdBS0JyWmkxRHN1MFhz?=
+ =?utf-8?B?cm9HS3kvQVZUckdVbWJlZm9VSkR1Qkk0MmZiRFFZMTBPay8vajJqV3U4ZGlB?=
+ =?utf-8?B?NmdDeFVBNHBrOWZidjNZTXNpcWZKZ09mUU5COU5oZCtYWXU1SXBuZnJXdUVD?=
+ =?utf-8?B?MlhTZTVRandla2VNc2dXMllia1ZmelNWb1dhZm53Z21CYnVNdDFaSkVGZHBw?=
+ =?utf-8?B?aXhrZXpZcFYyNHlJQmhEakFzY3NXdzNDVjA4b2NvV0V5dDZaclNjcXFUcjRv?=
+ =?utf-8?B?eFNtQ2NxTnE2SnlZV0FxczdUbTNBWllvQ2pYdk9xaHYrRklsaWlZSzZSV2Mw?=
+ =?utf-8?B?NVM2U1dPUjd5dkFWaXNFK2JHRFVXbFBuMFNyUW1MOHFrRjk5N0lPZTZnQUZF?=
+ =?utf-8?B?aXhBeU5rbmRJRHlmOVQ4RVZOVVh4d0JMUHBZbmgxbDhMejk3aHYvQVUxV2tE?=
+ =?utf-8?B?V29LdThRQWx6cHpBVEx5OUhxSC9kZHFyRzREeFgwWGw4Y2o3bE80WSs3bjNG?=
+ =?utf-8?B?MWt3QVluUG1RanNWK2tMaEkwaDZZRlFpeU1pOXAxTVRiWktRNll4R1VrL1RM?=
+ =?utf-8?B?NkVEM2oyb2h0QlhIVWdZY0JEWng4Z3VLTUhwT1JZQ0MwTzVEOXkzbnRsditm?=
+ =?utf-8?B?enVqL21pL3F1dmJ1TWRhNkVRLzFYQnFSVlBRdHZDc0lHUDY3bHdFRDE0Y3Jm?=
+ =?utf-8?B?ajQ1TlloOVF3Q1ZEVGRaNGFVMTBySVhDWDl6ZmVrUHp0OTBOTkpjOG5OczZU?=
+ =?utf-8?B?MU9tRXlZSW5rakFGckZTdWxHMEJESHA0Vm1wb1Y5ZDJYalY3Nm1SM0lkemxw?=
+ =?utf-8?B?bGlNQUJialZXYjlBNCtiU096MGh3YW5OeEJ1Q2gvZERyejJoam81NDUrKy83?=
+ =?utf-8?B?M29majBRZVEzcFdOWTU2S3VtYVhRY1NLYm5CZlJnb3dqclFjWm1wdEhxTUIx?=
+ =?utf-8?B?aWhUZ0xZUSs4V01mZHRtU3NTU21URWkrcytldWgvcXZUZy84d3pUU05peXBQ?=
+ =?utf-8?B?aGZub3pLRHF2ZUZKQ3VHSTlNUEhQV05xa0V3anRjZkpTanRiMTF1LzhRcDBw?=
+ =?utf-8?B?RmM1aUZLaUdwb1hXMitkaW15UkIxWXlXSm5pRm1YbG9MTm9sUU9pRDJCMEFB?=
+ =?utf-8?B?dW15VmVRZ1RMTU5OL3o2NXNzY0xmRDl1cGtFcXRYSkFMZno5bEVZaTBVdkJs?=
+ =?utf-8?B?MDBCS0V5cGVXU1VtSXBhRFdhOWdES0V1UHJ0dlN5NjdOcVI3RGxTVFRKcGE0?=
+ =?utf-8?Q?+Z4cBXplXWrOfp+8JnveP+RSN?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5f38a33-87f3-493e-3c49-08db60120654
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2023 06:57:53.7151
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Wbni1X62H+DWJ0mBQtkvXQ4+PssfGHXWDUr7MM2WQppp1vDXQwjzCfnZgqgrUHSTNtXqaVhovgG6vF51454u2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5881
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Manivannan,
+Hi Rafael,
 
-On Mon, May 29, 2023 at 1:39=E2=80=AFPM Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> On Mon, May 29, 2023 at 10:02:20AM +0800, Huacai Chen wrote:
-> > Hi, Manivannan,
+On 24 May 19:47, Rafael J. Wysocki wrote:
+> On Wed, May 17, 2023 at 6:29 PM Wyes Karny <wyes.karny@amd.com> wrote:
 > >
-> > On Mon, May 29, 2023 at 12:57=E2=80=AFAM Manivannan Sadhasivam
-> > <manivannan.sadhasivam@linaro.org> wrote:
-> > >
-> > > On Thu, May 25, 2023 at 05:14:28PM +0800, Huacai Chen wrote:
-> > > > Hi, Bjorn,
-> > > >
-> > > > On Wed, May 24, 2023 at 11:21=E2=80=AFPM Bjorn Helgaas <helgaas@ker=
-nel.org> wrote:
-> > > > >
-> > > > > [+cc Marc, LKML]
-> > > > >
-> > > > > On Wed, May 24, 2023 at 05:36:23PM +0800, Huacai Chen wrote:
-> > > > > > Some platforms (such as LoongArch) cannot provide enough irq nu=
-mbers as
-> > > > > > many as logical cpu numbers. So we should limit pci irq numbers=
- when
-> > > > > > allocate msi/msix vectors, otherwise some device drivers may fa=
-il at
-> > > > > > initialization. This patch add a cmdline parameter "pci_irq_lim=
-it=3Dxxxx"
-> > > > > > to control the limit.
-> > > > > >
-> > > > > > The default pci msi/msix number limit is defined 32 for LoongAr=
-ch and
-> > > > > > NR_IRQS for other platforms.
-> > > > >
-> > > > > The IRQ experts can chime in on this, but this doesn't feel right=
- to
-> > > > > me.  I assume arch code should set things up so only valid IRQ nu=
-mbers
-> > > > > can be allocated.  This doesn't seem necessarily PCI-specific, I'=
-d
-> > > > > prefer to avoid an arch #ifdef here, and I'd also prefer to avoid=
- a
-> > > > > command-line parameter that users have to discover and supply.
-> > > > The problem we meet: LoongArch machines can have as many as 256
-> > > > logical cpus, and the maximum of msi vectors is 192. Even on a 64-c=
-ore
-> > > > machine, 192 irqs can be easily exhausted if there are several NICs
-> > > > (NIC usually allocates msi irqs depending on the number of online
-> > > > cpus). So we want to limit the msi allocation.
-> > > >
-> > >
-> > > If the MSI allocation fails with multiple vectors, then the NIC drive=
-r should
-> > > revert to a single MSI vector. Is that happening in your case?
-> > Thank you for pointing this out. Yes, I know  most existing drivers
-> > will fallback to use single msi or legacy irqs when failed. However,
-> > as I
-> > replied in another thread (the new solution of this problem [1]), we
-> > want to do some proactive throttling rather than consume msi vectors
-> > aggressively. For example, if we have two NICs, we want both of them
-> > to get 32 msi vectors; not one exhaust all available vectors, and the
-> > other fallback to use single msi or legacy irq.
+> > From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
 > >
-> > I hope I have explained clearly, thanks.
+> > Schedutil normally calls the adjust_perf callback for drivers with
+> > adjust_perf callback available and fast_switch_possible flag set.
+> > However, when frequency invariance is disabled and schedutil tries to
+> > invoke fast_switch. So, there is a chance of kernel crash if this
+> > function pointer is not set. To protect against this scenario add
+> > fast_switch callback to amd_pstate driver.
 > >
->
-> The problem you are facing is not specific to Loongsoon but rather generi=
-c. And
-> the solution we have currently is what you were also aware of it seems. S=
-o if
-> you want to propose an alternative solution, it should be generic and als=
-o a
-> good justification needs to be provided to the maintainers i.e., comparin=
-g two
-> solutions and why yours is better.
-Yes, I think we are facing a generic problem, but it is more obvious
-on platforms which provide less MSI vectors. And my solution seems
-generic enough. :)
+> > Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
+> >
+> > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> > Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> > ---
+> >  drivers/cpufreq/amd-pstate.c | 36 ++++++++++++++++++++++++++++++------
+> >  1 file changed, 30 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> > index 5a3d4aa0f45a..45711fc0a856 100644
+> > --- a/drivers/cpufreq/amd-pstate.c
+> > +++ b/drivers/cpufreq/amd-pstate.c
+> > @@ -444,9 +444,8 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
+> >         return 0;
+> >  }
+> >
+> > -static int amd_pstate_target(struct cpufreq_policy *policy,
+> > -                            unsigned int target_freq,
+> > -                            unsigned int relation)
+> > +static int amd_pstate_update_freq(struct cpufreq_policy *policy,
+> > +                                 unsigned int target_freq, bool fast_switch)
+> >  {
+> >         struct cpufreq_freqs freqs;
+> >         struct amd_cpudata *cpudata = policy->driver_data;
+> > @@ -465,14 +464,37 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
+> >         des_perf = DIV_ROUND_CLOSEST(target_freq * cap_perf,
+> >                                      cpudata->max_freq);
+> >
+> > -       cpufreq_freq_transition_begin(policy, &freqs);
+> > +       WARN_ON(fast_switch && !policy->fast_switch_enabled);
+> > +       /*
+> > +        * If fast_switch is desired, then there aren't any registered
+> > +        * transition notifiers. See comment for
+> > +        * cpufreq_enable_fast_switch().
+> > +        */
+> > +       if (!fast_switch)
+> > +               cpufreq_freq_transition_begin(policy, &freqs);
+> > +
+> >         amd_pstate_update(cpudata, min_perf, des_perf,
+> > -                         max_perf, false, policy->governor->flags);
+> > -       cpufreq_freq_transition_end(policy, &freqs, false);
+> > +                       max_perf, fast_switch, policy->governor->flags);
+> > +
+> > +       if (!fast_switch)
+> > +               cpufreq_freq_transition_end(policy, &freqs, false);
+> >
+> >         return 0;
+> >  }
+> >
+> > +static int amd_pstate_target(struct cpufreq_policy *policy,
+> > +                            unsigned int target_freq,
+> > +                            unsigned int relation)
+> > +{
+> > +       return amd_pstate_update_freq(policy, target_freq, false);
+> > +}
+> > +
+> > +static unsigned int amd_pstate_fast_switch(struct cpufreq_policy *policy,
+> > +                                 unsigned int target_freq)
+> > +{
+> > +       return amd_pstate_update_freq(policy, target_freq, true);
+> > +}
+> > +
+> >  static void amd_pstate_adjust_perf(unsigned int cpu,
+> >                                    unsigned long _min_perf,
+> >                                    unsigned long target_perf,
+> > @@ -715,6 +737,7 @@ static int amd_pstate_cpu_exit(struct cpufreq_policy *policy)
+> >
+> >         freq_qos_remove_request(&cpudata->req[1]);
+> >         freq_qos_remove_request(&cpudata->req[0]);
+> > +       policy->fast_switch_possible = false;
+> >         kfree(cpudata);
+> >
+> >         return 0;
+> > @@ -1309,6 +1332,7 @@ static struct cpufreq_driver amd_pstate_driver = {
+> >         .flags          = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
+> >         .verify         = amd_pstate_verify,
+> >         .target         = amd_pstate_target,
+> > +       .fast_switch    = amd_pstate_fast_switch,
+> >         .init           = amd_pstate_cpu_init,
+> >         .exit           = amd_pstate_cpu_exit,
+> >         .suspend        = amd_pstate_cpu_suspend,
+> > --
+> 
+> Applied along with the [2/3], thanks!
+> 
+> Do you need them in 6.4 or would 6.5 be sufficient?  Also do you need
+> them to go into "stable"?
 
-At least in my example, "proactive throttling" is better than
-"aggressive consuming", because two (or more) NICs have more balanced
-throughput.
+Sorry for late reply.
+Thanks for picking this for 6.4 and stable.
+I see the patch is not applying to the 6.3-stable tree.
+I'll check that.
 
->
-> But IMO what you are proposing seems like usecase driven and may not work=
- all
-> the time due to architecture limitation. This again proves that the exist=
-ing
-> solution is sufficient enough.
-Yes, it's a usecase driven solution, so I provide a cmdline parameter
-to let the user decide.
+Thanks & Regards,
+Wyes
 
-Huacai
->
-> - Mani
->
-> > [1] https://lore.kernel.org/lkml/20230527054633.704916-1-chenhuacai@loo=
-ngson.cn/T/#t
-> >
-> > Huacai
-> > >
-> > > - Mani
-> > >
-> > > > This is not a LoongArch-specific problem, because I think other
-> > > > platforms can also meet if they have many NICs. But of course,
-> > > > LoongArch can meet it more easily because the available msi vectors
-> > > > are very few. So, adding a cmdline parameter is somewhat reasonable=
-.
-> > > >
-> > > > After some investigation, I think it may be possible to modify
-> > > > drivers/irqchip/irq-loongson-pch-msi.c and override
-> > > > msi_domain_info::domain_alloc_irqs() to limit msi allocation. Howev=
-er,
-> > > > doing that need to remove the "static" before
-> > > > __msi_domain_alloc_irqs(), which means revert
-> > > > 762687ceb31fc296e2e1406559e8bb5 ("genirq/msi: Make
-> > > > __msi_domain_alloc_irqs() static"), I don't know whether that is
-> > > > acceptable.
-> > > >
-> > > > If such a revert is not acceptable, it seems that we can only use t=
-he
-> > > > method in this patch. Maybe rename pci_irq_limits to pci_msi_limits=
- is
-> > > > a little better.
-> > > >
-> > > > Huacai
-> > > >
-> > > > >
-> > > > > > Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
-> > > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > > > ---
-> > > > > >  drivers/pci/msi/msi.c | 26 +++++++++++++++++++++++++-
-> > > > > >  1 file changed, 25 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/pci/msi/msi.c b/drivers/pci/msi/msi.c
-> > > > > > index ef1d8857a51b..6617381e50e7 100644
-> > > > > > --- a/drivers/pci/msi/msi.c
-> > > > > > +++ b/drivers/pci/msi/msi.c
-> > > > > > @@ -402,12 +402,34 @@ static int msi_capability_init(struct pci=
-_dev *dev, int nvec,
-> > > > > >       return ret;
-> > > > > >  }
-> > > > > >
-> > > > > > +#ifdef CONFIG_LOONGARCH
-> > > > > > +#define DEFAULT_PCI_IRQ_LIMITS 32
-> > > > > > +#else
-> > > > > > +#define DEFAULT_PCI_IRQ_LIMITS NR_IRQS
-> > > > > > +#endif
-> > > > > > +
-> > > > > > +static int pci_irq_limits =3D DEFAULT_PCI_IRQ_LIMITS;
-> > > > > > +
-> > > > > > +static int __init pci_irq_limit(char *str)
-> > > > > > +{
-> > > > > > +     get_option(&str, &pci_irq_limits);
-> > > > > > +
-> > > > > > +     if (pci_irq_limits =3D=3D 0)
-> > > > > > +             pci_irq_limits =3D DEFAULT_PCI_IRQ_LIMITS;
-> > > > > > +
-> > > > > > +     return 0;
-> > > > > > +}
-> > > > > > +
-> > > > > > +early_param("pci_irq_limit", pci_irq_limit);
-> > > > > > +
-> > > > > >  int __pci_enable_msi_range(struct pci_dev *dev, int minvec, in=
-t maxvec,
-> > > > > >                          struct irq_affinity *affd)
-> > > > > >  {
-> > > > > >       int nvec;
-> > > > > >       int rc;
-> > > > > >
-> > > > > > +     maxvec =3D clamp_val(maxvec, 0, pci_irq_limits);
-> > > > > > +
-> > > > > >       if (!pci_msi_supported(dev, minvec) || dev->current_state=
- !=3D PCI_D0)
-> > > > > >               return -EINVAL;
-> > > > > >
-> > > > > > @@ -776,7 +798,9 @@ static bool pci_msix_validate_entries(struc=
-t pci_dev *dev, struct msix_entry *en
-> > > > > >  int __pci_enable_msix_range(struct pci_dev *dev, struct msix_e=
-ntry *entries, int minvec,
-> > > > > >                           int maxvec, struct irq_affinity *affd=
-, int flags)
-> > > > > >  {
-> > > > > > -     int hwsize, rc, nvec =3D maxvec;
-> > > > > > +     int hwsize, rc, nvec;
-> > > > > > +
-> > > > > > +     nvec =3D clamp_val(maxvec, 0, pci_irq_limits);
-> > > > > >
-> > > > > >       if (maxvec < minvec)
-> > > > > >               return -ERANGE;
-> > > > > > --
-> > > > > > 2.39.1
-> > > > > >
-> > >
-> > > --
-> > > =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=
-=A9=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=
-=AE=E0=AF=8D
->
-> --
-> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
-=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
-=E0=AF=8D
