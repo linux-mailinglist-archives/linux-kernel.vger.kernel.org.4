@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48ED7149D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A22A7149C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 15:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjE2NFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 09:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36622 "EHLO
+        id S229524AbjE2NAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 09:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjE2NFL (ORCPT
+        with ESMTP id S229455AbjE2NAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 09:05:11 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 29 May 2023 06:05:07 PDT
-Received: from hogfather.0x04.net (84-10-63-242.static.chello.pl [84.10.63.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36DCD9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 06:05:07 -0700 (PDT)
-Received: by hogfather.0x04.net (Postfix, from userid 1000)
-        id 746B04A05DE; Mon, 29 May 2023 14:57:58 +0200 (CEST)
-From:   =?UTF-8?q?Marcelina=20Ko=C5=9Bcielnicka?= <mwk@0x04.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        =?UTF-8?q?Marcelina=20Ko=C5=9Bcielnicka?= <mwk@0x04.net>
-Subject: [PATCH] x86/vdso: Limit vdso allocation to 47-bit address space
-Date:   Mon, 29 May 2023 14:57:09 +0200
-Message-Id: <20230529125709.1882042-1-mwk@0x04.net>
-X-Mailer: git-send-email 2.37.1
+        Mon, 29 May 2023 09:00:20 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D24391;
+        Mon, 29 May 2023 06:00:18 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1685365209tn304cds
+Received: from linux-lab-host.localdomain ( [119.123.130.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 29 May 2023 21:00:07 +0800 (CST)
+X-QQ-SSF: 00200000000000D0V000000A0000000
+X-QQ-FEAT: rZJGTgY0+YPLNKIjmriA1LyRD/9GVh50DK49bFM+u4kQwihN+a4qP4/e9Lr+I
+        tlmnaNZ+nIUm6A2omPGy/+sSzZrOubvL+5ZvqVr3IsHscrGxbzvQRuwqG7viOZO6b+sh992
+        HUiH7R5VAiWB6QaViufuoxqSKbNbwowdK7F797RyTOJhl1+JgSrGd+24WyK7eVDXzu83zSv
+        eDNpUtxLJstDd39F4/RIIHuzZzCNldhAlJF4/t0rfGfd1dgRmCa3+IYz/wD7XfyhPtK57Ao
+        Rmvu4usRDG5AyT2Kj66AC6iBUeSMjXIqPJypayw8mcuGFHrB0/PmUIReymTHZVQCZWy2w7j
+        hLj7rV3KyYOR8VuFnHZ7q1HAwSUI7VPcjcPc9a8f6dEHBjOv8+WhJvLFKrnmy9ZVB6+7sNR
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 879951463538973120
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: [PATCH v2 3/7] selftests/nolibc: fix up compile warning with glibc on x86_64
+Date:   Mon, 29 May 2023 21:00:01 +0800
+Message-Id: <aeb48b9cf6fc4674f7560166f22c7dc87d02302d.1685362482.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1685362482.git.falcon@tinylab.org>
+References: <cover.1685362482.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vdso is normally allocated after the stack, with a random offset.
-With ADDR_NO_RANDOMIZE and without 57-bit virtual addressing, the stack is
-too close to the canonical address hole to fit the vdso after it, so it
-reverts to normal mmap handling, resulting in something like the
-following (deterministic) address map:
+Compiling nolibc-test.c with gcc on x86_64 got such warning:
 
-[...]
-7ffff7fc4000-7ffff7fc8000 r--p 00000000 00:00 0                          [vvar]
-7ffff7fc8000-7ffff7fca000 r-xp 00000000 00:00 0                          [vdso]
-7ffff7fca000-7ffff7fcb000 r--p 00000000 fe:01 1183001                    /usr/lib/ld-linux-x86-64.so.2
-7ffff7fcb000-7ffff7ff1000 r-xp 00001000 fe:01 1183001                    /usr/lib/ld-linux-x86-64.so.2
-7ffff7ff1000-7ffff7ffb000 r--p 00027000 fe:01 1183001                    /usr/lib/ld-linux-x86-64.so.2
-7ffff7ffb000-7ffff7ffd000 r--p 00031000 fe:01 1183001                    /usr/lib/ld-linux-x86-64.so.2
-7ffff7ffd000-7ffff7fff000 rw-p 00033000 fe:01 1183001                    /usr/lib/ld-linux-x86-64.so.2
-7ffffffde000-7ffffffff000 rw-p 00000000 00:00 0                          [stack]
-ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]
+tools/testing/selftests/nolibc/nolibc-test.c: In function ‘expect_eq’:
+tools/testing/selftests/nolibc/nolibc-test.c:177:24: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+  177 |  llen += printf(" = %lld ", expr);
+      |                     ~~~^    ~~~~
+      |                        |    |
+      |                        |    uint64_t {aka long unsigned int}
+      |                        long long int
+      |                     %ld
 
-However, on a CPU with LA57 support, allocating the vdso after the stack
-actually succeeds and results in something like the following:
+It because that glibc defines uint64_t as "unsigned long int" when word
+size (means sizeof(long)) is 64bit (see include/bits/types.h), but
+nolibc directly use the 64bit "unsigned long long" (see
+tools/include/nolibc/stdint.h), which is simpler, seems kernel uses it
+too (include/uapi/asm-generic/int-ll64.h).
 
-[...]
-7ffff7fca000-7ffff7fcb000 r--p 00000000 fe:01 1183001                    /usr/lib/ld-linux-x86-64.so.2
-7ffff7fcb000-7ffff7ff1000 r-xp 00001000 fe:01 1183001                    /usr/lib/ld-linux-x86-64.so.2
-7ffff7ff1000-7ffff7ffb000 r--p 00027000 fe:01 1183001                    /usr/lib/ld-linux-x86-64.so.2
-7ffff7ffb000-7ffff7ffd000 r--p 00031000 fe:01 1183001                    /usr/lib/ld-linux-x86-64.so.2
-7ffff7ffd000-7ffff7fff000 rw-p 00033000 fe:01 1183001                    /usr/lib/ld-linux-x86-64.so.2
-7ffffffde000-7ffffffff000 rw-p 00000000 00:00 0                          [stack]
-8000001be000-8000001c2000 r--p 00000000 00:00 0                          [vvar]
-8000001c2000-8000001c4000 r-xp 00000000 00:00 0                          [vdso]
+It is able to do like glibc, defining __WORDSIZE for all of platforms
+and using "unsigned long int" to define uint64_t when __WORDSIZE is
+64bits, but here uses a simpler solution: nolibc always requires %lld to
+match "unsigned long long", for others, only require %lld when word size
+is 32bit.
 
-The resulting map has two problems:
-
-1. The vdso mapping address is non-deterministic, since the
-   get_random_u32_below call in vdso_addr is called unconditionally,
-   without taking PF_RANDOMIZE into account.
-2. The vdso is mapped outside of the legacy 47-bit address space,
-   needlessly allocating 4 page tables and violating the principles
-   outlined in Documentation/x86/x86_64/5level-paging.rst
-
-This patch forces vdso allocation range to always be within the 47-bit
-space, ensuring consistent results between LA57 and non-LA57 systems.
-
-Signed-off-by: Marcelina Kościelnicka <mwk@0x04.net>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- arch/x86/entry/vdso/vma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
-index 2738eb28cb2e..1f4bdbadae1e 100644
---- a/arch/x86/entry/vdso/vma.c
-+++ b/arch/x86/entry/vdso/vma.c
-@@ -301,8 +301,8 @@ static unsigned long vdso_addr(unsigned long start, unsigned len)
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index d417ca5d976f..7f9b716fd9b1 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -174,7 +174,11 @@ static int expect_eq(uint64_t expr, int llen, uint64_t val)
+ {
+ 	int ret = !(expr == val);
  
- 	/* Round the lowest possible end address up to a PMD boundary. */
- 	end = (start + len + PMD_SIZE - 1) & PMD_MASK;
--	if (end >= TASK_SIZE_MAX)
--		end = TASK_SIZE_MAX;
-+	if (end >= DEFAULT_MAP_WINDOW)
-+		end = DEFAULT_MAP_WINDOW;
- 	end -= len;
- 
- 	if (end > start) {
++#if __SIZEOF_LONG__ == 4 || defined(NOLIBC)
+ 	llen += printf(" = %lld ", expr);
++#else
++	llen += printf(" = %ld ", expr);
++#endif
+ 	pad_spc(llen, 64, ret ? "[FAIL]\n" : " [OK]\n");
+ 	return ret;
+ }
 -- 
-2.40.1
+2.25.1
 
