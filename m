@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A217146DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EECE7146DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 11:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbjE2JJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 05:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S231648AbjE2JJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 05:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbjE2JIz (ORCPT
+        with ESMTP id S231830AbjE2JJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 05:08:55 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1582114
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:08:49 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f122ff663eso3269681e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 02:08:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685351328; x=1687943328;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tSa8aYLGe0eh6zJBgEC1ehDOBlDuDqV/nsz+yCLZGS8=;
-        b=JoqnkqFFs6uFRbpaAbkym4gYnhJQCsnnGsqSwDYL/jL5nlLBM1xz+gJ5X0dxp1zrXI
-         O/tJTtctTjTyqNVgs5ydIokhsCUjUZ6MLaZnabW5HL89gZDo+3NBUFwCT8kUFd3H6zWl
-         kPOun5HSiSYWhM/m/AlGwBhXK7FNMMcr+F0J8kQidRUP9Bh4lLQ07imKQsvlBPcgBpgO
-         NEUKGi5kqZ73V91LHAr4ihEjWO79uT96tJRe9v+PuXqYbTCt1PDg+AcQbyVXRTTFVC8J
-         FfU5KFOmNBObhRkJldNnsxwrZTdw/T3goyEYKuDbs3lrMOdHwfHGvFO9ulU3uj9g9o3K
-         jiLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685351328; x=1687943328;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tSa8aYLGe0eh6zJBgEC1ehDOBlDuDqV/nsz+yCLZGS8=;
-        b=iwSfOKzw4FKGScGfQX+o6VUvkCDIK6wfX2IZct2yow3bHWK3Yo2ZexeQFoac9DMm7c
-         EIsVZ+sxAOdCqxFYpDrmTsljolE0xbJAx4NppenlWV2I3WXz+2+OTLNiFyHFe4eAwNZA
-         ELncE2wRbkDP36ctFalFALmaQDUKdanvdDQhlIa4vi08W4djCxhMjQVVx1oOL2+SqxXl
-         RyP6ZbX9m0VmHLxQg7YNCaIf8lli7FXnsOhUpt4F6J9hTk2vL1ZCR+7qg3y9PanE9P6P
-         qbQgPBIttCZNth8irFsmgI511+dnAaWX7nP4DQrn/QKojfLc6YXbU+fHorpMmRD5MAYk
-         fF5w==
-X-Gm-Message-State: AC+VfDweSG1I5cqksz9//xu8UU9bRYPxL3lPqtfNHIaR3QBdfc1aW61M
-        Lnk2/LUemmLdO0yt/sPfC/E4/Q==
-X-Google-Smtp-Source: ACHHUZ5qiEyUTO6pdyeSWqWw0+WfQT0iGbQqMBiKvhlXlAcXdRgSEX7FCWEmso42ecsPEc8eSvdmTw==
-X-Received: by 2002:ac2:59cf:0:b0:4ed:d2cf:857b with SMTP id x15-20020ac259cf000000b004edd2cf857bmr3019232lfn.5.1685351328124;
-        Mon, 29 May 2023 02:08:48 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id d11-20020ac2544b000000b004f4e637db2fsm1484450lfn.167.2023.05.29.02.08.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 02:08:47 -0700 (PDT)
-Message-ID: <e99a9fe9-21e4-fc56-d400-4f6e9df2eaed@linaro.org>
-Date:   Mon, 29 May 2023 11:08:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 0/5] MDSS reg bus interconnect
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230417-topic-dpu_regbus-v1-0-06fbdc1643c0@linaro.org>
- <CAA8EJpo8X7KrrXoButyW0d1Lz=a5Stw2inFGt2R7KJ+2NTX6wA@mail.gmail.com>
- <74a817ff-5850-330d-8cac-f551be6fa35c@linaro.org>
- <254cd131-4ad1-44c9-2653-862580503c15@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <254cd131-4ad1-44c9-2653-862580503c15@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Mon, 29 May 2023 05:09:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469529C;
+        Mon, 29 May 2023 02:09:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D065361239;
+        Mon, 29 May 2023 09:09:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349B0C433D2;
+        Mon, 29 May 2023 09:09:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685351384;
+        bh=dW8HaUANnD0KpZnNdrw8u54SlE9A4EhFPiSPNCIaXkc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZBxiEkG3dS0o9jaQ/RLwikydt5DUrFAy0GJb6/BlTzGD+IRYhNHOKpfXMRcuPG7Co
+         8tfqxjbCPUY/c9NR+XcbCgs4iKvE7nxpbEOxPIL0171ugWn8Wz2enFqEvToTVpyPtH
+         lfIonYn4nE7TDzfQ7fOlPJn+nVZUy512ZfRCAaBqajFqj2Bd5BIqD9wi7FG78DzXsV
+         ycMD9ZMQ1U7MVgmv9eX4c+veCYn0Qhxaf9E6+X1fU/Qvhcbfy0onUprtxGO9OY4WgL
+         FJubOLQmodWNddfZpb7zfCMNpBDNjTFzRy1ydc2sZoDGOOanYdQOqUb8w1m8HGmfID
+         76fKRV4hZ/Sgg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q3Ysn-0012B5-Rv;
+        Mon, 29 May 2023 10:09:41 +0100
+Date:   Mon, 29 May 2023 10:09:41 +0100
+Message-ID: <86bki3cxm2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Zheng Wang <zyytlz.wz@163.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M {modprobe,bind} error
+In-Reply-To: <OS0PR01MB592296756992262EC6D382D0864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230526143615.372338-1-biju.das.jz@bp.renesas.com>
+        <20230529061714.GA25984@pendragon.ideasonboard.com>
+        <OS0PR01MB592296756992262EC6D382D0864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: biju.das.jz@bp.renesas.com, laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org, zyytlz.wz@163.com, geert+renesas@glider.be, yoshihiro.shimoda.uh@renesas.com, wsa+renesas@sang-engineering.com, krzysztof.kozlowski@linaro.org, linux-usb@vger.kernel.org, prabhakar.mahadev-lad.rj@bp.renesas.com, linux-renesas-soc@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,48 +78,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 29.05.2023 10:47, Dmitry Baryshkov wrote:
-> On 29/05/2023 10:42, Konrad Dybcio wrote:
->>
->>
->> On 29.05.2023 04:42, Dmitry Baryshkov wrote:
->>> On Mon, 17 Apr 2023 at 18:30, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>>>
->>>> Apart from the already handled data bus (MAS_MDP_Pn<->DDR), there's
->>>> another path that needs to be handled to ensure MDSS functions properly,
->>>> namely the "reg bus", a.k.a the CPU-MDSS interconnect.
->>>>
->>>> Gating that path may have a variety of effects.. from none to otherwise
->>>> inexplicable DSI timeouts..
->>>>
->>>> This series tries to address the lack of that.
->>>>
->>>> Example path:
->>>>
->>>> interconnects = <&bimc MASTER_AMPSS_M0 0 &config_noc SLAVE_DISPLAY_CFG 0>;
->>>
->>> If we are going to touch the MDSS interconnects, could you please also
->>> add the rotator interconnect to the bindings?
->>> We do not need to touch it at this time, but let's not have to change
->>> bindings later again.
->>>
->> Ack
+On Mon, 29 May 2023 09:42:34 +0100,
+Biju Das <biju.das.jz@bp.renesas.com> wrote:
 > 
-> Also, several points noted from the mdss fbdev driver:
+> Hi Laurent,
 > 
-> - All possible clents vote for the low bw setting. This includes DSI, HDMI, MDSS itself and INTF
-As in, "you need NUM_CLIENTS * MIN_VOTE" or as in "any client necessitates
-a vote"?
-
-> - SMMU also casts such vote, which I do not think should be necessary, unless there is a separate MDSS SMMU?
-There's one on 8996, pre-845 SoCs often have a MMSS MMU, 845 and
-later have a MMSS-specific TBU which (theoretically) requires a
-vote for access to 0x400-0x7ff SIDs
-
-> - PINGPONG cacsts high bw setting for the sake of speeding up the LUT tables if required.
-Hm, I think is would be a separate topic.
-
-Konrad
+> Thanks for the feedback.
 > 
+> > Subject: Re: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
+> > {modprobe,bind} error
+> > 
+> > Hi Biju,
+> > 
+> > Thank you for the patch.
+> > 
+> > On Fri, May 26, 2023 at 03:36:15PM +0100, Biju Das wrote:
+> > > Currently {modprobe, bind} after {rmmod, unbind} results in probe
+> > failure.
+> > >
+> > > genirq: Flags mismatch irq 22. 00000004 (85070400.usb3drd) vs.
+> > > 00000004 (85070400.usb3drd)
+> > > renesas_usb3: probe of 85070000.usb3peri failed with error -16
+> > >
+> > > Fix this issue by replacing "parent dev"->"dev" as the irq resource is
+> > > managed by this driver.
+> > 
+> > If the dev pointer passed to devm_request_irq() is not the correct one,
+> > how does it work the first time the driver is loaded ?
+> 
+> + Marc/ Kernel.org to give some feedback on this issue
+> 
+> I believe there may be a bug in the genirq (kernel/irq) driver.
+> first time it works ok. Maybe this driver is caching on unload
+> with null value and comparing with actual one (irq 22) during reload??
+> 
+> Maybe genirq expert can comment what went wrong here??
+
+You get shouted at because you are registering an interrupt handler
+for the same IRQ twice, and the interrupt is not configured with the
+SHARED flag. If, as I understand it, you only have a single device
+using this interrupt, then it means your driver is not freeing its
+interrupt on unload.
+
+And that's probably because the device object used when requesting the
+interrupt isn't the one you load/unload, as indicated by the message.
+On the first load of "usb3peri", you register an interrupt with
+"usb3drd" as the requester device. You then unload "usb3peri", which
+of course has no effect whatsoever on the interrupt.
+
+You could simply have done a "cat /proc/interrupt" and see that
+interrupt was still there after unload.
+
+So the only bug here is in the handling of the interrupt request. And
+that bug firmly lies in your code. My "expert" advise is to debug the
+problem rather than suspecting some random failure modes.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
