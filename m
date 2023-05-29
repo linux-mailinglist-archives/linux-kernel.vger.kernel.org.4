@@ -2,149 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3C8714214
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 04:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB96714216
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 May 2023 04:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjE2CiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 28 May 2023 22:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S229965AbjE2Cjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 28 May 2023 22:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjE2CiD (ORCPT
+        with ESMTP id S229512AbjE2Cjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 28 May 2023 22:38:03 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773EAA7
-        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 19:38:00 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7415D2C0596;
-        Mon, 29 May 2023 14:37:57 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1685327877;
-        bh=CvoTk+Xu1b14AHNypYvOaXT+5OcQdBAujFjRkMNhZ0M=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=D4H+AEl/X7ZSx3/xYxeHH3LU8Wm5bzEihGjKqWxBlgFLCAVqy64LYL0/bzPGlVwHP
-         g2Abxirojcr2maFv4PJdgOaCaoiCyhGEuS936CyIdurOJ3v+L5OttL45fBChz3+v1H
-         07v5vwEzp0Rf5Li/moe5Cym5oUzx0hEnbc4qbAURRBRNUkcSkTswRpLhJeMc1eEuBV
-         ep5kyk8Pxirtz41/jPNi6ygfkZkTwITAP0z54oROjmsb7EsoimuZTo/fU/UCKZIj8w
-         HKMHBmJ/HQuGsHrfBqWTzn4laNQB2CgoG8nSBvAwoZHlM+KeAKo7JOsuPf48eFrciD
-         OSiHo2GTh8FMQ==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B647410050001>; Mon, 29 May 2023 14:37:57 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 29 May 2023 14:37:57 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Mon, 29 May 2023 14:37:57 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-CC:     Linux Kernel Integrity <linux-integrity@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>
-Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
- (and 5.15.113)
-Thread-Topic: New kernel warning after updating from LTS 5.15.110 to 5.15.112
- (and 5.15.113)
-Thread-Index: AQHZkb4dgnEVWoKsX0S/ux9OJoU4IK9vtwkAgAAJdgA=
-Date:   Mon, 29 May 2023 02:37:56 +0000
-Message-ID: <6e470461-1a9b-ec51-bac5-f2beb1dc11c9@alliedtelesis.co.nz>
-References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
- <ZHQIFLWvrWUNMVxb@debian.me>
-In-Reply-To: <ZHQIFLWvrWUNMVxb@debian.me>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A0F65EDD43D12A449AF8828D55AAEF22@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Sun, 28 May 2023 22:39:35 -0400
+Received: from out-25.mta0.migadu.com (out-25.mta0.migadu.com [IPv6:2001:41d0:1004:224b::19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAA9A9
+        for <linux-kernel@vger.kernel.org>; Sun, 28 May 2023 19:39:33 -0700 (PDT)
+Message-ID: <d4b1599d-14c1-071c-6205-09fe60f2ed8b@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685327971;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qPg6ZDtxNrVeEaFU+D4Wu5Yq1tkWvN5fR6aSGPARBZA=;
+        b=Z8XIoICremlWHRFpMcWCOQAANOafwHhpcFj6yo+H86RlcpqprVyJ7IZ1w9eblm/lqZG+VB
+        /lKgMQR/5qeYI0UUFPj0ZoRYAIS3cqLFLIAu0/pMs9s5v79n6vavfYbJgZYR2CkffPlstJ
+        acLcdsTWSl0MD+s4mY6Zn9Xbi5cQ4yQ=
+Date:   Mon, 29 May 2023 10:39:21 +0800
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=CSfSghpekuitt3WpJpAA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Subject: Re: [linus:master] [mm] f95bdb700b: stress-ng.ramfs.ops_per_sec
+ -88.8% regression
+Content-Language: en-US
+To:     paulmck@kernel.org, Kirill Tkhai <tkhai@ya.ru>
+Cc:     RCU <rcu@vger.kernel.org>, Yujie Liu <yujie.liu@intel.com>,
+        oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David Hildenbrand <david@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org,
+        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com
+References: <202305230837.db2c233f-yujie.liu@intel.com>
+ <eba38fce-2454-d7a4-10ef-240b4686f23d@linux.dev>
+ <ZG29ULGNJdErnatI@yujie-X299>
+ <896bbb09-d400-ec73-ba3a-b64c6e9bbe46@linux.dev>
+ <e5fb8b34-c1ad-92e0-e7e5-f7ed1605dbc6@linux.dev>
+ <bfb36563-fac9-4c84-96db-87dd28892088@linux.dev>
+ <be04dc3e-a671-ec70-6cf6-70dc702f4184@linux.dev>
+ <44407892-b7bc-4d6c-8e4a-6452f0ee88b9@paulmck-laptop>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <44407892-b7bc-4d6c-8e4a-6452f0ee88b9@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAyOS8wNS8yMyAxNDowNCwgQmFnYXMgU2FuamF5YSB3cm90ZToNCj4gT24gU3VuLCBNYXkg
-MjgsIDIwMjMgYXQgMTE6NDI6NTBQTSArMDAwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IEhp
-LA0KPj4NCj4+IFdlIGhhdmUgYW4gZW1iZWRkZWQgcHJvZHVjdCB3aXRoIGFuIEluZmluZW9uIFNM
-TTk2NzAgVFBNLiBBZnRlciB1cGRhdGluZw0KPj4gdG8gYSBuZXdlciBMVFMga2VybmVsIHZlcnNp
-b24gd2Ugc3RhcnRlZCBzZWVpbmcgdGhlIGZvbGxvd2luZyB3YXJuaW5nIGF0DQo+PiBib290Lg0K
-Pj4NCj4+IFvCoMKgwqAgNC43NDEwMjVdIC0tLS0tLS0tLS0tLVsgY3V0IGhlcmUgXS0tLS0tLS0t
-LS0tLQ0KPj4gW8KgwqDCoCA0Ljc0OTg5NF0gaXJxIDM4IGhhbmRsZXIgdGlzX2ludF9oYW5kbGVy
-KzB4MC8weDE1NCBlbmFibGVkIGludGVycnVwdHMNCj4+IFvCoMKgwqAgNC43NTY1NTVdIFdBUk5J
-Tkc6IENQVTogMCBQSUQ6IDAgYXQga2VybmVsL2lycS9oYW5kbGUuYzoxNTkNCj4+IF9faGFuZGxl
-X2lycV9ldmVudF9wZXJjcHUrMHhmNC8weDE4MA0KPj4gW8KgwqDCoCA0Ljc2NTU1N10gTW9kdWxl
-cyBsaW5rZWQgaW46DQo+PiBbwqDCoMKgIDQuNzY4NjI2XSBDUFU6IDAgUElEOiAwIENvbW06IHN3
-YXBwZXIvMCBOb3QgdGFpbnRlZCA1LjE1LjExMyAjMQ0KPj4gW8KgwqDCoCA0Ljc3NDc0N10gSGFy
-ZHdhcmUgbmFtZTogQWxsaWVkIFRlbGVzaXMgeDI1MC0xOFhTIChEVCkNCj4+IFvCoMKgwqAgNC43
-ODAwODBdIHBzdGF0ZTogNjAwMDAwMDUgKG5aQ3YgZGFpZiAtUEFOIC1VQU8gLVRDTyAtRElUIC1T
-U0JTDQo+PiBCVFlQRT0tLSkNCj4+IFvCoMKgwqAgNC43ODcwNzJdIHBjIDogX19oYW5kbGVfaXJx
-X2V2ZW50X3BlcmNwdSsweGY0LzB4MTgwDQo+PiBbwqDCoMKgIDQuNzkyMTQ2XSBsciA6IF9faGFu
-ZGxlX2lycV9ldmVudF9wZXJjcHUrMHhmNC8weDE4MA0KPj4gW8KgwqDCoCA0Ljc5NzIyMF0gc3Ag
-OiBmZmZmODAwMDA4MDAzZTQwDQo+PiBbwqDCoMKgIDQuODAwNTQ3XSB4Mjk6IGZmZmY4MDAwMDgw
-MDNlNDAgeDI4OiBmZmZmODAwMDA5Mzk1MWMwIHgyNzoNCj4+IGZmZmY4MDAwMDkwMmE5YjgNCj4+
-IFvCoMKgwqAgNC44MDc3MTZdIHgyNjogZmZmZjgwMDAwOGZlOGQyOCB4MjU6IGZmZmY4MDAwMDk0
-YTYyYmQgeDI0Og0KPj4gZmZmZjAwMDAwMWI5MjQwMA0KPj4gW8KgwqDCoCA0LjgxNDg4NV0geDIz
-OiAwMDAwMDAwMDAwMDAwMDI2IHgyMjogZmZmZjgwMDAwODAwM2VjNCB4MjE6DQo+PiAwMDAwMDAw
-MDAwMDAwMDAwDQo+PiBbwqDCoMKgIDQuODIyMDUzXSB4MjA6IDAwMDAwMDAwMDAwMDAwMDEgeDE5
-OiBmZmZmMDAwMDAyMzgxMjAwIHgxODoNCj4+IGZmZmZmZmZmZmZmZmZmZmYNCj4+IFvCoMKgwqAg
-NC44MjkyMjJdIHgxNzogZmZmZjgwMDA3Njk2MjAwMCB4MTY6IGZmZmY4MDAwMDgwMDAwMDAgeDE1
-Og0KPj4gZmZmZjgwMDA4ODAwM2I1Nw0KPj4gW8KgwqDCoCA0LjgzNjM5MF0geDE0OiAwMDAwMDAw
-MDAwMDAwMDAwIHgxMzogZmZmZjgwMDAwOTNhNTA3OCB4MTI6DQo+PiAwMDAwMDAwMDAwMDAwMzVk
-DQo+PiBbwqDCoMKgIDQuODQzNTU4XSB4MTE6IDAwMDAwMDAwMDAwMDAxMWYgeDEwOiBmZmZmODAw
-MDA5M2E1MDc4IHg5IDoNCj4+IGZmZmY4MDAwMDkzYTUwNzgNCj4+IFvCoMKgwqAgNC44NTA3Mjdd
-IHg4IDogMDAwMDAwMDBmZmZmZWZmZiB4NyA6IGZmZmY4MDAwMDkzZmQwNzggeDYgOg0KPj4gZmZm
-ZjgwMDAwOTNmZDA3OA0KPj4gW8KgwqDCoCA0Ljg1Nzg5NV0geDUgOiAwMDAwMDAwMDAwMDBiZmY0
-IHg0IDogMDAwMDAwMDAwMDAwMDAwMCB4MyA6DQo+PiAwMDAwMDAwMDAwMDAwMDAwDQo+PiBbwqDC
-oMKgIDQuODY1MDYyXSB4MiA6IDAwMDAwMDAwMDAwMDAwMDAgeDEgOiAwMDAwMDAwMDAwMDAwMDAw
-IHgwIDoNCj4+IGZmZmY4MDAwMDkzOTUxYzANCj4+IFvCoMKgwqAgNC44NzIyMzBdIENhbGwgdHJh
-Y2U6DQo+PiBbwqDCoMKgIDQuODc0Njg2XcKgIF9faGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHhm
-NC8weDE4MA0KPj4gW8KgwqDCoCA0Ljg3OTQxMV3CoCBoYW5kbGVfaXJxX2V2ZW50KzB4NjQvMHhl
-Yw0KPj4gW8KgwqDCoCA0Ljg4MzI2NF3CoCBoYW5kbGVfbGV2ZWxfaXJxKzB4YzAvMHgxYjANCj4+
-IFvCoMKgwqAgNC44ODcyMDJdwqAgZ2VuZXJpY19oYW5kbGVfaXJxKzB4MzAvMHg1MA0KPj4gW8Kg
-wqDCoCA0Ljg5MTIyOV3CoCBtdmVidV9ncGlvX2lycV9oYW5kbGVyKzB4MTFjLzB4MmEwDQo+PiBb
-wqDCoMKgIDQuODk1NzgwXcKgIGhhbmRsZV9kb21haW5faXJxKzB4NjAvMHg5MA0KPj4gW8KgwqDC
-oCA0Ljg5OTcyMF3CoCBnaWNfaGFuZGxlX2lycSsweDRjLzB4ZDANCj4+IFvCoMKgwqAgNC45MDMz
-OThdwqAgY2FsbF9vbl9pcnFfc3RhY2srMHgyMC8weDRjDQo+PiBbwqDCoMKgIDQuOTA3MzM4XcKg
-IGRvX2ludGVycnVwdF9oYW5kbGVyKzB4NTQvMHg2MA0KPj4gW8KgwqDCoCA0LjkxMTUzOF3CoCBl
-bDFfaW50ZXJydXB0KzB4MzAvMHg4MA0KPj4gW8KgwqDCoCA0LjkxNTEzMF3CoCBlbDFoXzY0X2ly
-cV9oYW5kbGVyKzB4MTgvMHgyNA0KPj4gW8KgwqDCoCA0LjkxOTI0NF3CoCBlbDFoXzY0X2lycSsw
-eDc4LzB4N2MNCj4+IFvCoMKgwqAgNC45MjI2NTldwqAgYXJjaF9jcHVfaWRsZSsweDE4LzB4MmMN
-Cj4+IFvCoMKgwqAgNC45MjYyNDldwqAgZG9faWRsZSsweGM0LzB4MTUwDQo+PiBbwqDCoMKgIDQu
-OTI5NDA0XcKgIGNwdV9zdGFydHVwX2VudHJ5KzB4MjgvMHg2MA0KPj4gW8KgwqDCoCA0LjkzMzM0
-M13CoCByZXN0X2luaXQrMHhlNC8weGY0DQo+PiBbwqDCoMKgIDQuOTM2NTg0XcKgIGFyY2hfY2Fs
-bF9yZXN0X2luaXQrMHgxMC8weDFjDQo+PiBbwqDCoMKgIDQuOTQwNjk5XcKgIHN0YXJ0X2tlcm5l
-bCsweDYwMC8weDY0MA0KPj4gW8KgwqDCoCA0Ljk0NDM3NV3CoCBfX3ByaW1hcnlfc3dpdGNoZWQr
-MHhiYy8weGM0DQo+PiBbwqDCoMKgIDQuOTQ4NDAyXSAtLS1bIGVuZCB0cmFjZSA5NDAxOTMwNDdi
-MzViMzExIF0tLS0NCj4+DQo+PiBJbml0aWFsbHkgSSBkaXNtaXNzZWQgdGhpcyBhcyBhIHdhcm5p
-bmcgdGhhdCB3b3VsZCBwcm9iYWJseSBiZSBjbGVhbmVkDQo+PiB1cCB3aGVuIHdlIGRpZCBtb3Jl
-IHdvcmsgb24gdGhlIFRQTSBzdXBwb3J0IGZvciBvdXIgcHJvZHVjdCBidXQgd2UgYWxzbw0KPj4g
-c2VlbSB0byBiZSBnZXR0aW5nIHNvbWUgbmV3IGkyYyBpc3N1ZXMgYW5kIHBvc3NpYmx5IGEga2Vy
-bmVsIHN0YWNrDQo+PiBjb3JydXB0aW9uIHRoYXQgd2UndmUgY29uZmxhdGVkIHdpdGggdGhpcyBU
-UE0gd2FybmluZy4NCj4gQ2FuIHlvdSByZXByb2R1Y2UgdGhpcyBpc3N1ZSBvbiBtYWlubGluZT8g
-Q2FuIHlvdSBhbHNvIGJpc2VjdCB0byBmaW5kDQo+IHRoZSBjdWxwcml0Pw0KDQpObyB0aGUgZXJy
-b3IgZG9lc24ndCBhcHBlYXIgb24gYSByZWNlbnQgbWFpbmxpbmUga2VybmVsLiBJIGRvIHN0aWxs
-IGdldA0KDQp0cG1fdGlzX3NwaSBzcGkxLjE6IDIuMCBUUE0gKGRldmljZS1pZCAweDFCLCByZXYt
-aWQgMjIpDQp0cG0gdHBtMDogW0Zpcm13YXJlIEJ1Z106IFRQTSBpbnRlcnJ1cHQgbm90IHdvcmtp
-bmcsIHBvbGxpbmcgaW5zdGVhZA0KdHBtIHRwbTA6IEEgVFBNIGVycm9yICgyNTYpIG9jY3VycmVk
-IGF0dGVtcHRpbmcgdGhlIHNlbGYgdGVzdA0KDQpidXQgSSB0aGluayBJIHdhcyBnZXR0aW5nIHRo
-YXQgb24gdjUuMTUuMTEwDQoNCj4NCj4gQW55d2F5LCBJJ20gYWRkaW5nIGl0IHRvIHJlZ3pib3Q6
-DQo+DQo+ICNyZWd6Ym90IF5pbnRyb2R1Y2VkOiB2NS4xNS4xMTAuLnY1LjE1LjExMg0KPiAjcmVn
-emJvdCB0aXRsZTogUG9zc2libGUgc3RhY2sgY29ycnVwdGlvbiBhbmQgaTJjIGlzc3VlcyBkdWUg
-dG8gaXJxIHdhcm5pbmcgb24gSW5pZmluZW9uIFNMTTk2NzAgVFBNDQo+DQo+IFRoYW5rcy4NCj4=
+Hi Paul,
+
+On 2023/5/27 19:14, Paul E. McKenney wrote:
+> On Thu, May 25, 2023 at 12:03:16PM +0800, Qi Zheng wrote:
+>> On 2023/5/24 19:56, Qi Zheng wrote:
+>>> On 2023/5/24 19:08, Qi Zheng wrote:
+>>>
+>>> [...]
+>>>
+>>>>
+>>>> Well, I just ran the following command and reproduced the result:
+>>>>
+>>>> stress-ng --timeout 60 --times --verify --metrics-brief --ramfs 9 &
+>>>>
+>>>> 1) with commit 42c9db3970483:
+>>>>
+>>>> stress-ng: info:  [11023] setting to a 60 second run per stressor
+>>>> stress-ng: info:  [11023] dispatching hogs: 9 ramfs
+>>>> stress-ng: info:  [11023] stressor       bogo ops real time  usr
+>>>> time sys time   bogo ops/s     bogo ops/s
+>>>> stress-ng: info:  [11023]                           (secs)    (secs)
+>>>> (secs)   (real time) (usr+sys time)
+>>>> stress-ng: info:  [11023] ramfs            774966     60.00
+>>>> 10.18 169.45     12915.89        4314.26
+>>>> stress-ng: info:  [11023] for a 60.00s run time:
+>>>> stress-ng: info:  [11023]    1920.11s available CPU time
+>>>> stress-ng: info:  [11023]      10.18s user time   (  0.53%)
+>>>> stress-ng: info:  [11023]     169.44s system time (  8.82%)
+>>>> stress-ng: info:  [11023]     179.62s total time  (  9.35%)
+>>>> stress-ng: info:  [11023] load average: 8.99 2.69 0.93
+>>>> stress-ng: info:  [11023] successful run completed in 60.00s (1 min,
+>>>> 0.00 secs)
+>>>>
+>>>> 2) with commit f95bdb700bc6b:
+>>>>
+>>>> stress-ng: info:  [37676] dispatching hogs: 9 ramfs
+>>>> stress-ng: info:  [37676] stressor       bogo ops real time  usr
+>>>> time sys time   bogo ops/s     bogo ops/s
+>>>> stress-ng: info:  [37676]                           (secs)    (secs)
+>>>> (secs)   (real time) (usr+sys time)
+>>>> stress-ng: info:  [37676] ramfs            168673     60.00
+>>>> 1.61   39.66      2811.08        4087.47
+>>>> stress-ng: info:  [37676] for a 60.10s run time:
+>>>> stress-ng: info:  [37676]    1923.36s available CPU time
+>>>> stress-ng: info:  [37676]       1.60s user time   (  0.08%)
+>>>> stress-ng: info:  [37676]      39.66s system time (  2.06%)
+>>>> stress-ng: info:  [37676]      41.26s total time  (  2.15%)
+>>>> stress-ng: info:  [37676] load average: 7.69 3.63 2.36
+>>>> stress-ng: info:  [37676] successful run completed in 60.10s (1 min,
+>>>> 0.10 secs)
+>>>>
+>>>> The bogo ops/s (real time) did drop significantly.
+>>>>
+>>>> And the memory reclaimation was not triggered in the whole process. so
+>>>> theoretically no one is in the read critical section of shrinker_srcu.
+>>>>
+>>>> Then I found that some stress-ng-ramfs processes were in
+>>>> TASK_UNINTERRUPTIBLE state for a long time:
+>>>>
+>>>> root       42313  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+>>>> stress-ng-ramfs [run]
+>>>> root       42314  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+>>>> stress-ng-ramfs [run]
+>>>> root       42315  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+>>>> stress-ng-ramfs [run]
+>>>> root       42316  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+>>>> stress-ng-ramfs [run]
+>>>> root       42317  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
+>>>> stress-ng-ramfs [run]
+>>>> root       42318  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+>>>> stress-ng-ramfs [run]
+>>>> root       42319  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
+>>>> stress-ng-ramfs [run]
+>>>> root       42320  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+>>>> stress-ng-ramfs [run]
+>>>> root       42321  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
+>>>> stress-ng-ramfs [run]
+>>>> root       42322  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+>>>> stress-ng-ramfs [run]
+>>>> root       42323  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
+>>>> stress-ng-ramfs [run]
+>>>> root       42324  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+>>>> stress-ng-ramfs [run]
+>>>> root       42325  7.8  0.0  69592  1812 pts/0    D    19:00   0:02
+>>>> stress-ng-ramfs [run]
+>>>> root       42326  0.0  0.0  69592  2068 pts/0    S    19:00   0:00
+>>>> stress-ng-ramfs [run]
+>>>> root       42327  7.9  0.0  69592  1812 pts/0    D    19:00   0:02
+>>>> stress-ng-ramfs [run]
+>>>> root       42328  7.9  0.0  69592  1812 pts/0    D    19:00   0:02
+>>>> stress-ng-ramfs [run]
+>>>> root       42329  7.9  0.0  69592  1812 pts/0    D    19:00   0:02
+>>>> stress-ng-ramfs [run]
+>>>> root       42330  7.9  0.0  69592  1556 pts/0    D    19:00   0:02
+>>>> stress-ng-ramfs [run]
+>>>>
+>>>> Their call stack is as follows:
+>>>>
+>>>> cat /proc/42330/stack
+>>>>
+>>>> [<0>] __synchronize_srcu.part.21+0x83/0xb0
+>>>> [<0>] unregister_shrinker+0x85/0xb0
+>>>> [<0>] deactivate_locked_super+0x27/0x70
+>>>> [<0>] cleanup_mnt+0xb8/0x140
+>>>> [<0>] task_work_run+0x65/0x90
+>>>> [<0>] exit_to_user_mode_prepare+0x1ba/0x1c0
+>>>> [<0>] syscall_exit_to_user_mode+0x1b/0x40
+>>>> [<0>] do_syscall_64+0x44/0x80
+>>>> [<0>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>>
+>>>> + RCU folks, Is this result as expected? I would have thought that
+>>>> synchronize_srcu() should return quickly if no one is in the read
+>>>> critical section. :(
+> 
+> In theory, it would indeed be nice if synchronize_srcu() would do that.
+> In practice, the act of checking to see if there is anyone in an SRCU
+> read-side critical section is a heavy-weight operation, involving at
+> least one cache miss per CPU along with a number of full memory barriers.
+> 
+> So SRCU has to be careful to not check too frequently.
+
+Got it.
+
+> 
+> However, if SRCU has been idle for some time, normal synchronize_srcu()
+> will do an immediate check.  And this will of course mark SRCU as
+> non-idle.
+> 
+>>> With the following changes, ops/s can return to previous levels:
+>>
+>> Or just set rcu_expedited to 1:
+>> 	echo 1 > /sys/kernel/rcu_expedited
+> 
+> This does cause SRCU to be much more aggressive.  This can be a good
+> choice for small systems, but please keep in mind that this affects normal
+> RCU as well as SRCU.  It will cause RCU to also be much more aggressive,
+> sending IPIs to CPUs that are (or might be) in RCU read-side critical
+> sections.  Depending on your workload, this might or might not be what
+> you want RCU to be doing.  For example, if you are running aggressive
+> real-time workloads, it most definitely is not what you want.
+
+Yeah, that's not what I want, a shrinker might run for a long time.
+
+> 
+>>> diff --git a/mm/vmscan.c b/mm/vmscan.c
+>>> index db2ed6e08f67..90f541b07cd1 100644
+>>> --- a/mm/vmscan.c
+>>> +++ b/mm/vmscan.c
+>>> @@ -763,7 +763,7 @@ void unregister_shrinker(struct shrinker *shrinker)
+>>>           debugfs_entry = shrinker_debugfs_remove(shrinker);
+>>>           up_write(&shrinker_rwsem);
+>>>
+>>> -       synchronize_srcu(&shrinker_srcu);
+>>> +       synchronize_srcu_expedited(&shrinker_srcu);
+> 
+> If shrinkers are unregistered only occasionally, this is an entirely
+> reasonable change.
+> 
+>>>           debugfs_remove_recursive(debugfs_entry);
+>>>
+>>> stress-ng: info:  [13159] dispatching hogs: 9 ramfs
+>>> stress-ng: info:  [13159] stressor       bogo ops real time  usr time
+>>> sys time   bogo ops/s     bogo ops/s
+>>> stress-ng: info:  [13159]                           (secs)    (secs)
+>>> (secs)   (real time) (usr+sys time)
+>>> stress-ng: info:  [13159] ramfs            710062     60.00      9.63
+>>> 157.26     11834.18        4254.75
+>>> stress-ng: info:  [13159] for a 60.00s run time:
+>>> stress-ng: info:  [13159]    1920.14s available CPU time
+>>> stress-ng: info:  [13159]       9.62s user time   (  0.50%)
+>>> stress-ng: info:  [13159]     157.26s system time (  8.19%)
+>>> stress-ng: info:  [13159]     166.88s total time  (  8.69%)
+>>> stress-ng: info:  [13159] load average: 9.49 4.02 1.65
+>>> stress-ng: info:  [13159] successful run completed in 60.00s (1 min,
+>>> 0.00 secs)
+>>>
+>>> Can we make synchronize_srcu() call synchronize_srcu_expedited() when no
+>>> one is in the read critical section?
+> 
+> Yes, in theory we could, but this would be a bad thing in practice.
+> After all, the point of having synchronize_srcu() be separate from
+> synchronize_srcu_expedited() is to allow uses that are OK with longer
+> latency avoid consuming too much CPU.  In addition, that longer
+> SRCU grace-period latency allows the next grace period to handle more
+> synchronize_srcu() and call_srcu() requests.  This amortizes the
+> overhead of that next grace period over a larger number of updates.
+> 
+> However, your use of synchronize_srcu_expedited() does have that effect,
+> but only for this call point.  Which has the advantage of avoiding
+> burning excessive quantities of CPU for the other 50+ call points.
+
+Thanks for such a detailed explanation.
+
+Now I think we can continue to try to complete the idea[1] from
+Kirill Tkhai. The patch moves heavy synchronize_srcu() to delayed
+work, so it doesn't affect on user-visible unregistration speed.
+
+[1]. 
+https://lore.kernel.org/lkml/153365636747.19074.12610817307548583381.stgit@localhost.localdomain/
+
+Thanks,
+Qi
+
+> 
+> 							Thanx, Paul
+
