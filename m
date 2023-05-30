@@ -2,154 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D2F716AF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94F8716CF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233391AbjE3RaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
+        id S233228AbjE3TAR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 May 2023 15:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbjE3RaP (ORCPT
+        with ESMTP id S233036AbjE3TAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:30:15 -0400
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BD89C;
-        Tue, 30 May 2023 10:29:55 -0700 (PDT)
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so34254a12.0;
-        Tue, 30 May 2023 10:29:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685467795; x=1688059795;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QVRaZG2eM/gohyhY2fboQdC7q4wdMVSPr7qxCPkqPm8=;
-        b=Ibqwv9ArAqbL9+kZoGxmE8qDprx+l8vtVBDwhCAQ7kvJsL6VZKNzhKDzUIgytYbHhg
-         C8L61hLHsmzsZ0BgrflxV8MXYu9g9ZijXNP5zbS1+TC+yYar0C6vlGNu3ZUhdPlBFIr9
-         nfsFru0HKaeRsIeyGleeFhxS9XTg6cvHVFO94dUVm1+ZA6fNcBLUIGkAberioJwMSikA
-         PzuCGx12K/c/MzckJJnAYwNz0bxv5qonjvijlvWEqcPmWk3JLNbP9lHgtlqF3z7kQ5WA
-         lRDprzc/d6nY/RopgO2B1m+Tlz6kqy8SdT4zOboUKcJOWW2ulGluOVFXIAVk5mljNHPm
-         bpow==
-X-Gm-Message-State: AC+VfDwT4SF5IbX3/MzkqORDMz1z8H6zZejd1e/vvTqQ+bB/zdozggXt
-        HkRN/TL3smWXDKxgkIzGJjJYNiTxZK6YGL2G7Cs=
-X-Google-Smtp-Source: ACHHUZ5A4A3O+7txlbeFTK3FPQBbhzfelt3pPcztJKmBPhBSbQJ/44iVbEwp9i8wHQpP8t5FZ/ddJ0htHD9ZXwIBdiQ=
-X-Received: by 2002:a17:90b:1190:b0:256:6462:e399 with SMTP id
- gk16-20020a17090b119000b002566462e399mr9840472pjb.5.1685467794923; Tue, 30
- May 2023 10:29:54 -0700 (PDT)
+        Tue, 30 May 2023 15:00:11 -0400
+Received: from mail-b.sr.ht (mail-b.sr.ht [173.195.146.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FB2107
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:00:02 -0700 (PDT)
+Authentication-Results: mail-b.sr.ht; dkim=none 
+Received: from git.sr.ht (unknown [173.195.146.142])
+        by mail-b.sr.ht (Postfix) with ESMTPSA id 8CE6311F060;
+        Tue, 30 May 2023 18:50:50 +0000 (UTC)
+From:   ~akihirosuda <akihirosuda@git.sr.ht>
+Date:   Wed, 31 May 2023 02:31:11 +0900
+Subject: [PATCH linux 2/3] group_range: allow GID from 2147483648 to 4294967294
+Message-ID: <168547265011.24337.4306067683997517082-2@git.sr.ht>
+X-Mailer: git.sr.ht
+Reply-to: ~akihirosuda <suda.kyoto@gmail.com>
+In-Reply-To: <168547265011.24337.4306067683997517082-0@git.sr.ht>
+To:     linux-kernel@vger.kernel.org, containers@lists.linux.dev,
+        serge@hallyn.com, brauner@kernel.org, paul@paul-moore.com,
+        ebiederm@xmission.com
+Cc:     suda.kyoto@gmail.com, akihiro.suda.cz@hco.ntt.co.jp
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
- <20230530144637.4746-1-mailhol.vincent@wanadoo.fr> <20230530144637.4746-4-mailhol.vincent@wanadoo.fr>
- <ZHYbaYWeIaDcUhhw@corigine.com>
-In-Reply-To: <ZHYbaYWeIaDcUhhw@corigine.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 31 May 2023 02:29:43 +0900
-Message-ID: <CAMZ6RqK2vr0KRq76UNOSKzHMEfhz1YPFdg7CdQJqq4pBH3hj5w@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] can: length: refactor frame lengths definition to
- add size in bits
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Thomas.Kopp@microchip.com,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        netdev@vger.kernel.org, marex@denx.de, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_REPLYTO,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed. 31 May 2023 at 00:56, Simon Horman <simon.horman@corigine.com> wrote:
-> On Tue, May 30, 2023 at 11:46:37PM +0900, Vincent Mailhol wrote:
-> > Introduce a method to calculate the exact size in bits of a CAN(-FD)
-> > frame with or without dynamic bitsuffing.
-> >
-> > These are all the possible combinations taken into account:
-> >
-> >   - Classical CAN or CAN-FD
-> >   - Standard or Extended frame format
-> >   - CAN-FD CRC17 or CRC21
-> >   - Include or not intermission
-> >
-> > Instead of doing several individual macro definitions, declare the
-> > can_frame_bits() function-like macro. To this extent, do a full
-> > refactoring of the length definitions.
-> >
-> > In addition add the can_frame_bytes(). This function-like macro
-> > replaces the existing macro:
-> >
-> >   - CAN_FRAME_OVERHEAD_SFF: can_frame_bytes(false, false, 0)
-> >   - CAN_FRAME_OVERHEAD_EFF: can_frame_bytes(false, true, 0)
-> >   - CANFD_FRAME_OVERHEAD_SFF: can_frame_bytes(true, false, 0)
-> >   - CANFD_FRAME_OVERHEAD_EFF: can_frame_bytes(true, true, 0)
-> >
-> > The different maximum frame lengths (maximum data length, including
-> > intermission) are as follow:
-> >
-> >    Frame type                         bits    bytes
-> >   -------------------------------------------------------
-> >    Classic CAN SFF no-bitstuffing     111     14
-> >    Classic CAN EFF no-bitstuffing     131     17
-> >    Classic CAN SFF bitstuffing                135     17
-> >    Classic CAN EFF bitstuffing                160     20
-> >    CAN-FD SFF no-bitstuffing          579     73
-> >    CAN-FD EFF no-bitstuffing          598     75
-> >    CAN-FD SFF bitstuffing             712     89
-> >    CAN-FD EFF bitstuffing             736     92
-> >
-> > The macro CAN_FRAME_LEN_MAX and CANFD_FRAME_LEN_MAX are kept as an
-> > alias to, respectively, can_frame_bytes(false, true, CAN_MAX_DLEN) and
-> > can_frame_bytes(true, true, CANFD_MAX_DLEN).
-> >
-> > In addition to the above:
-> >
-> >  - Use ISO 11898-1:2015 definitions for the name of the CAN frame
-> >    fields.
-> >  - Include linux/bits.h for use of BITS_PER_BYTE.
-> >  - Include linux/math.h for use of mult_frac() and
-> >    DIV_ROUND_UP(). N.B: the use of DIV_ROUND_UP() is not new to this
-> >    patch, but the include was previously omitted.
-> >  - Add copyright 2023 for myself.
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->
-> ...
->
-> > +/**
-> > + * can_bitstuffing_len() - Calculate the maximum length with bitsuffing
-> > + * @bitstream_len: length of a destuffed bit stream
->
-> Hi Vincent,
->
-> it looks like an editing error has crept in here:
->
->         s/bitstream_len/destuffed_len/
+From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
 
-Doh! Thanks for picking this up.
+proc_dointvec_minmax is no longer used because it does not support GID
+from 2147483648 to 4294967294.
 
-I already prepared a v4 locally. Before sending it, I will wait one
-day to see if there are other comments.
+proc_douintvec is not used either, because it does not support vectors,
+despite its function name.
 
-> > + *
-> > + * The worst bit stuffing case is a sequence in which dominant and
-> > + * recessive bits alternate every four bits:
-> > + *
-> > + *   Destuffed: 1 1111  0000  1111  0000  1111
-> > + *   Stuffed:   1 1111o 0000i 1111o 0000i 1111o
-> > + *
-> > + * Nomenclature
-> > + *
-> > + *  - "0": dominant bit
-> > + *  - "o": dominant stuff bit
-> > + *  - "1": recessive bit
-> > + *  - "i": recessive stuff bit
-> > + *
-> > + * Aside of the first bit, one stuff bit is added every four bits.
-> > + *
-> > + * Return: length of the stuffed bit stream in the worst case scenario.
-> > + */
-> > +#define can_bitstuffing_len(destuffed_len)                   \
-> > +     (destuffed_len + (destuffed_len - 1) / 4)
+Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+---
+ include/linux/group_range.h |  6 -----
+ kernel/group_range.c        | 52 ++++++++++++++++++++++++++++++-------
+ 2 files changed, 42 insertions(+), 16 deletions(-)
+
+diff --git a/include/linux/group_range.h b/include/linux/group_range.h
+index 5bd837eced95..8f71dc956693 100644
+--- a/include/linux/group_range.h
++++ b/include/linux/group_range.h
+@@ -5,12 +5,6 @@
+ #include <linux/seqlock.h>
+ #include <linux/uidgid.h>
+ 
+-/*
+- * gid_t is either uint or ushort.  We want to pass it to
+- * proc_dointvec_minmax(), so it must not be larger than MAX_INT
+- */
+-#define GROUP_RANGE_MAX (((gid_t)~0U) >> 1)
+-
+ struct group_range {
+ 	seqlock_t       lock;
+ 	kgid_t          range[2];
+diff --git a/kernel/group_range.c b/kernel/group_range.c
+index b5c7d35d680b..13db83b77832 100644
+--- a/kernel/group_range.c
++++ b/kernel/group_range.c
+@@ -4,6 +4,7 @@
+ #include <linux/group_range.h>
+ #include <linux/uidgid.h>
+ #include <linux/seqlock.h>
++#include <linux/slab.h>
+ #include <linux/sysctl.h>
+ 
+ static void get_group_range(struct group_range *gr, kgid_t *low, kgid_t *high)
+@@ -26,9 +27,6 @@ static void set_group_range(struct group_range *gr, kgid_t low, kgid_t high)
+ 	write_sequnlock(&gr->lock);
+ }
+ 
+-static int group_range_min[] = { 0, 0 };
+-static int group_range_max[] = { GROUP_RANGE_MAX, GROUP_RANGE_MAX };
+-
+ int sysctl_group_range(sysctl_group_range_func_t fn, struct ctl_table *table,
+ 				 int write, void *buffer, size_t *lenp, loff_t *ppos)
+ {
+@@ -37,24 +35,56 @@ int sysctl_group_range(sysctl_group_range_func_t fn, struct ctl_table *table,
+ 	int ret;
+ 	gid_t urange[2];
+ 	kgid_t low, high;
++	size_t slen = 256; /* total bytes including '\0' */
++	char *s = kmalloc(slen, GFP_KERNEL); /* clobbered by strsep */
+ 	struct ctl_table tmp = {
+-		.data = &urange,
+-		.maxlen = sizeof(urange),
++		.data = s,
++		.maxlen = slen,
+ 		.mode = table->mode,
+-		.extra1 = &group_range_min,
+-		.extra2 = &group_range_max,
+ 	};
+ 
++	if (unlikely(!s))
++		return -ENOMEM;
++
++	/*
++	 * proc_dointvec_minmax is no longer used because it does not support
++	 * GID from 2147483648 to 4294967294.
++	 *
++	 * proc_douintvec is not used either, because it does not support
++	 * vectors, despite its function name.
++	 */
+ 	get_group_range(gr, &low, &high);
+ 	urange[0] = from_kgid_munged(user_ns, low);
+ 	urange[1] = from_kgid_munged(user_ns, high);
+-	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	ret = snprintf(tmp.data, slen, "%u\t%u", urange[0], urange[1]);
++	if (ret < 0)
++		goto done;
++	ret = proc_dostring(&tmp, write, buffer, lenp, ppos);
++	if (*lenp >= slen - 1) /* truncated */
++		ret = -EINVAL;
+ 
+ 	if (write && ret == 0) {
++		char *tok[2];
++		int i;
++
++		s = strim(s);
++		tok[0] = strsep(&s, " \t");
++		tok[1] = s;
++		for (i = 0; i < 2; i++) {
++			if (!tok[i]) {
++				ret = -EINVAL;
++				goto done;
++			}
++			ret = kstrtouint(tok[i], 0, &urange[i]);
++			if (ret < 0)
++				goto done;
++		}
+ 		low = make_kgid(user_ns, urange[0]);
+ 		high = make_kgid(user_ns, urange[1]);
+-		if (!gid_valid(low) || !gid_valid(high))
+-			return -EINVAL;
++		if (!gid_valid(low) || !gid_valid(high)) {
++			ret = -EINVAL;
++			goto done;
++		}
+ 		if (urange[1] < urange[0] || gid_lt(high, low)) {
+ 			low = make_kgid(&init_user_ns, 1);
+ 			high = make_kgid(&init_user_ns, 0);
+@@ -62,6 +92,8 @@ int sysctl_group_range(sysctl_group_range_func_t fn, struct ctl_table *table,
+ 		set_group_range(gr, low, high);
+ 	}
+ 
++done:
++	kfree(tmp.data);
+ 	return ret;
+ }
+ 
+-- 
+2.38.4
+
