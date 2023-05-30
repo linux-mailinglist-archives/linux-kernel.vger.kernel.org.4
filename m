@@ -2,144 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A293716BEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80654716BEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbjE3SIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
+        id S233153AbjE3SKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbjE3SIi (ORCPT
+        with ESMTP id S230234AbjE3SKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:08:38 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F0CB2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685470116; x=1717006116;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+QEGqPfFVuk+E/tI4xSylaB0JnSmbuyjuMwlxacAFwY=;
-  b=RdYa8MBHQzWbmq2PLlmMn+8xfDniu52X0K1iIALdK/UYzmEUFu6SGrJr
-   ENzNnWGdaw1DTUs2fs1jjANRybc5YzEm81nRArIaDxsTTx2+mnMICDJV6
-   ZJBOdAkhW5TW5sa/AzcXS8vsALVS0ApcjzoF6DgffKB1rNmiAUWRJbKDI
-   wzikHB0Vgutd7hpguYWe1E5leK+hxp1KJv0YpW8Otf7wrHrbbvwkrZ0CC
-   LQgDdBQ+a2cDyYJbzj1LzYtgagp8hQZJoIyzsoKYmPFWX69HMQ5GgL/JB
-   CAQ07yveQJRC0Wj8cFj13kc39lWGykIsIHjYe3PM05xaTe61eB0fzCBA7
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="383264085"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="383264085"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 11:08:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="1036697414"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="1036697414"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 30 May 2023 11:08:35 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q43lr-0000jP-0n;
-        Tue, 30 May 2023 18:08:35 +0000
-Date:   Wed, 31 May 2023 02:08:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: include/linux/compiler_types.h:338:45: error: call to
- '__compiletime_assert_304' declared with attribute error: BUILD_BUG_ON
- failed: SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH +
- ilog2(roundup_pow_of_two(NR_CPUS)) > 32
-Message-ID: <202305310229.cc0htUa0-lkp@intel.com>
+        Tue, 30 May 2023 14:10:20 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10F26A1;
+        Tue, 30 May 2023 11:10:17 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5104620FC3D5;
+        Tue, 30 May 2023 11:10:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5104620FC3D5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1685470216;
+        bh=BAU3e+yvd1iAQiR6QyNHK9pkl071iekAm5ZOtk3PffY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QOC2gH2MYjzTCleG+SWvBrdiBFRYBw9fdbIEfXxzhV9tySwPMOdSAXpYy04r5ytlD
+         nfLhBwgf/8spsDleloffYuV8Xg2H10cZYYGJX3xNyzrNkvyUQ1KP28cOY2e/K7Igp+
+         w9GTh5A+/cF67UFNogFGDlxV1FPdVQCxBPYzAXlM=
+Date:   Tue, 30 May 2023 11:10:11 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     sunliming <sunliming@kylinos.cn>, rostedt@goodmis.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH V3] tracing/user_events: Prevent same name but different
+ args event
+Message-ID: <20230530181011.GA225@W11-BEAU-MD.localdomain>
+References: <20230529032100.286534-1-sunliming@kylinos.cn>
+ <20230529182319.5b3dff8afcf50922eb46099f@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230529182319.5b3dff8afcf50922eb46099f@kernel.org>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+On Mon, May 29, 2023 at 06:23:19PM +0900, Masami Hiramatsu wrote:
+> On Mon, 29 May 2023 11:21:00 +0800
+> sunliming <sunliming@kylinos.cn> wrote:
+> 
+> > User processes register name_args for events. If the same name but different
+> > args event are registered. The trace outputs of second event are printed
+> > as the first event. This is incorrect.
+> > 
+> > Return EADDRINUSE back to the user process if the same name but different args
+> > event has being registered.
+> > 
+> > Signed-off-by: sunliming <sunliming@kylinos.cn>
+> 
+> Looks good to me.
+> 
+> Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Thank you,
+> 
 
-FYI, the error/warning still remains.
+This also looks good to me, thank you for your patch!
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8b817fded42d8fe3a0eb47b1149d907851a3c942
-commit: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-date:   2 years, 10 months ago
-config: sparc-randconfig-r016-20230530 (https://download.01.org/0day-ci/archive/20230531/202305310229.cc0htUa0-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash arch/sparc/mm/
+Acked-by: Beau Belgrave <beaub@linux.microsoft.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305310229.cc0htUa0-lkp@intel.com/
+Thanks,
+-Beau
 
-All errors (new ones prefixed by >>):
-
-   arch/sparc/mm/init_64.c: In function 'arch_hugetlb_valid_size':
-   arch/sparc/mm/init_64.c:354:24: error: variable 'hv_pgsz_idx' set but not used [-Werror=unused-but-set-variable]
-     354 |         unsigned short hv_pgsz_idx;
-         |                        ^~~~~~~~~~~
-   In file included from <command-line>:
-   arch/sparc/mm/init_64.c: In function 'paging_init':
->> include/linux/compiler_types.h:338:45: error: call to '__compiletime_assert_304' declared with attribute error: BUILD_BUG_ON failed: SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH + ilog2(roundup_pow_of_two(NR_CPUS)) > 32
-     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:319:25: note: in definition of macro '__compiletime_assert'
-     319 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:338:9: note: in expansion of macro '_compiletime_assert'
-     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   arch/sparc/mm/init_64.c:2306:9: note: in expansion of macro 'BUILD_BUG_ON'
-    2306 |         BUILD_BUG_ON(SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH +
-         |         ^~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +/__compiletime_assert_304 +338 include/linux/compiler_types.h
-
-   324	
-   325	#define _compiletime_assert(condition, msg, prefix, suffix) \
-   326		__compiletime_assert(condition, msg, prefix, suffix)
-   327	
-   328	/**
-   329	 * compiletime_assert - break build and emit msg if condition is false
-   330	 * @condition: a compile-time constant condition to check
-   331	 * @msg:       a message to emit if condition is false
-   332	 *
-   333	 * In tradition of POSIX assert, this macro will break the build if the
-   334	 * supplied condition is *false*, emitting the supplied error message if the
-   335	 * compiler has support to do so.
-   336	 */
-   337	#define compiletime_assert(condition, msg) \
- > 338		_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-   339	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > ---
+> >  kernel/trace/trace_events_user.c              | 36 +++++++++++++++----
+> >  .../selftests/user_events/ftrace_test.c       |  6 ++++
+> >  2 files changed, 36 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> > index b1ecd7677642..e90161294698 100644
+> > --- a/kernel/trace/trace_events_user.c
+> > +++ b/kernel/trace/trace_events_user.c
+> > @@ -1753,6 +1753,8 @@ static int user_event_parse(struct user_event_group *group, char *name,
+> >  	int ret;
+> >  	u32 key;
+> >  	struct user_event *user;
+> > +	int argc = 0;
+> > +	char **argv;
+> >  
+> >  	/* Prevent dyn_event from racing */
+> >  	mutex_lock(&event_mutex);
+> > @@ -1760,13 +1762,35 @@ static int user_event_parse(struct user_event_group *group, char *name,
+> >  	mutex_unlock(&event_mutex);
+> >  
+> >  	if (user) {
+> > -		*newuser = user;
+> > -		/*
+> > -		 * Name is allocated by caller, free it since it already exists.
+> > -		 * Caller only worries about failure cases for freeing.
+> > -		 */
+> > -		kfree(name);
+> > +		if (args) {
+> > +			argv = argv_split(GFP_KERNEL, args, &argc);
+> > +			if (!argv) {
+> > +				ret = -ENOMEM;
+> > +				goto error;
+> > +			}
+> > +
+> > +			ret = user_fields_match(user, argc, (const char **)argv);
+> > +			argv_free(argv);
+> > +
+> > +		} else
+> > +			ret = list_empty(&user->fields);
+> > +
+> > +		if (ret) {
+> > +			*newuser = user;
+> > +			/*
+> > +			 * Name is allocated by caller, free it since it already exists.
+> > +			 * Caller only worries about failure cases for freeing.
+> > +			 */
+> > +			kfree(name);
+> > +		} else {
+> > +			ret = -EADDRINUSE;
+> > +			goto error;
+> > +		}
+> > +
+> >  		return 0;
+> > +error:
+> > +		refcount_dec(&user->refcnt);
+> > +		return ret;
+> >  	}
+> >  
+> >  	user = kzalloc(sizeof(*user), GFP_KERNEL_ACCOUNT);
+> > diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+> > index 7c99cef94a65..6e8c4b47281c 100644
+> > --- a/tools/testing/selftests/user_events/ftrace_test.c
+> > +++ b/tools/testing/selftests/user_events/ftrace_test.c
+> > @@ -228,6 +228,12 @@ TEST_F(user, register_events) {
+> >  	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+> >  	ASSERT_EQ(0, reg.write_index);
+> >  
+> > +	/* Multiple registers to same name but different args should fail */
+> > +	reg.enable_bit = 29;
+> > +	reg.name_args = (__u64)"__test_event u32 field1;";
+> > +	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+> > +	ASSERT_EQ(EADDRINUSE, errno);
+> > +
+> >  	/* Ensure disabled */
+> >  	self->enable_fd = open(enable_file, O_RDWR);
+> >  	ASSERT_NE(-1, self->enable_fd);
+> > -- 
+> > 2.25.1
+> > 
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
