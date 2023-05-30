@@ -2,121 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC8D716818
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B27F71681F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjE3Pxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
+        id S229967AbjE3PyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbjE3Pxi (ORCPT
+        with ESMTP id S230515AbjE3Px6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:53:38 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652EBE69
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:53:15 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f4f3ac389eso3814774e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:53:15 -0700 (PDT)
+        Tue, 30 May 2023 11:53:58 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDB5103
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:53:42 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so3015895a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:53:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685461993; x=1688053993;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VqNpW0OZtd7V3RZHQpujchgrqkyo2Xa35qmnixTOZkI=;
-        b=R84/R7uSTjQVDR7nu30+XtKG6irZjIyGXIoVBe5sNFdFqOWXVxEDB5x5CYajSIBnw/
-         YFGrO0A2plIQ2dAIdLvEeIP6LogNVsRHaZOBEKfY91Aj7v/zuRatxfboOM8xvJtnY1X8
-         fQyZGKrtZTTR0VJhmNlX7JOPvB4IsEBUPplbx79Sgq+ycuBEh87wt9kz+jx8EC9ICYOz
-         pGZAEzRjmI7cYF8NcklzThgHc6ru+jb9RgrvFYU7WO8yvktBCfCokwB2CMqx6mgRBocq
-         4HvopUrIHc+NIiavF2K6mVG2kHPL0fE7eTynRnI+XtB6rbGlMB/bNhGRnBEIcwscI/fE
-         HMAg==
+        d=gmail.com; s=20221208; t=1685462022; x=1688054022;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WNArju2Q8+Sr5dwcNQgGMkuM+vdAY/tBFjavnfU7aAs=;
+        b=m6P4SpRmIhLWilK2bwoWEMQsEWk/K6yhndm14R57q2fmXCIxmQD0hmLtubyT0ltNsD
+         5mzb/C0TgKgAvGKJRMLkGevN9ywiUjPUBVA17GMkjuXksQd7uKuMPAsayxRi957MlXgz
+         VF+5Lk9yteg1zp99/PHovVO1luQYBqZR1begl5GE6xnlUaOH7P8fp/y6TJyqCQrhfJOz
+         GmSLlBKjWMEbPAFAhBZaduYCAy/a7mb7dItIGo7O38cxcSSHJ3fi4GVHm5aPyFiNx0y7
+         0Ylcwe2+d6CvCscSCSmWp1hLDgSsGszHIHhs0OZ+Ti2EwuimZiT8yf6j1niWNwR5h9Dm
+         4p7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685461993; x=1688053993;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VqNpW0OZtd7V3RZHQpujchgrqkyo2Xa35qmnixTOZkI=;
-        b=Qdu9zwNwuvKPtkNJUn/BUqVvatAzNBEh4riX9Ksm28lgpFMweLZ0qW0Ee4Z9Xs7DBc
-         2HzqrHJ5Vv9WIRjz2mw7hruwmAVTxqUsf8NfrvnvAQOkgD9OC0hTmtv9Um2jkL+xIH5W
-         dAH3MxBkt93//6POhPBraoNOmenUY6isI22oA6GR0eGcpLwcSY5Ebz9LglbqCfXp7Ove
-         kihpqbRfGvcvHOVjAv1hxqWBJALYSwhOsZLrwEMDiDdZ9N8CjK2ZwkVKoqF5mWI93Q/p
-         0Ia22zwnJpjW98C9Uwn0ooWUvVzQ4xqGRGojx24MYx2/tvDo95TX+lOh+nmPF8O7O+XQ
-         gA3A==
-X-Gm-Message-State: AC+VfDyjjiH7Az+c2Yd+/ze6M/rvssdBeQmhjkYSBs0GLo83HCwL1Xs6
-        GW48Crp9vL48HILikdyosCWlMw==
-X-Google-Smtp-Source: ACHHUZ4AhHkowvpWGnw7baxepQF5swQezoDFLOmN7uQQpMK3/MtpwUYzh3bZPyWDDVvirfxLTDxC5A==
-X-Received: by 2002:ac2:511c:0:b0:4ed:d584:d1f4 with SMTP id q28-20020ac2511c000000b004edd584d1f4mr975949lfb.10.1685461993559;
-        Tue, 30 May 2023 08:53:13 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id f14-20020a056402004e00b0050c0b9d31a7sm4561155edu.22.2023.05.30.08.53.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 08:53:13 -0700 (PDT)
-Message-ID: <57e159ef-fce7-88b8-6107-9985559c4578@linaro.org>
-Date:   Tue, 30 May 2023 17:53:10 +0200
+        d=1e100.net; s=20221208; t=1685462022; x=1688054022;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WNArju2Q8+Sr5dwcNQgGMkuM+vdAY/tBFjavnfU7aAs=;
+        b=Qr7QjKG9MlpDaukorfkB7jkDIiNbFccqk3qffCs2SRU+KmHDtcaqX5q3kL75v7P2qa
+         EZztDs/vp0bDm8zJidXQJfsHjYonZFB+VXJaFjvt3d5xmDj5oAaWfBCFjSYUTHzh8Z5e
+         ku8bhp86NOuzC2B3MU+LaVko59UNovNvg1WXDgb2p/e0KT9YvKuQrjoOqy+KNx+B5HAI
+         k0wFG2t5BBTN4o+i6lmbTCN1R5KBp9Tui4B+dDT6WD7lP1vT0hMGB4smzfoHlYVjjN+f
+         usT1pqwZzqsOSMrOXUWjjro3swF3Quj349ZGZYKXR/s/+A4oMXy8clqWKWIFEFBEVyyn
+         F54g==
+X-Gm-Message-State: AC+VfDzkykwtRQBbQBlgpwBJ1AYmLllOw0WGnhBusJYvfkQeJO5yV9KS
+        /GQqe+aJGJcTTVcJPuqqM7ZzldG3hT4t7kHTy1E=
+X-Google-Smtp-Source: ACHHUZ7sn3ztVKnJjhBggbCbONyO+AsW8XNE2yHvSV08ahzB8uFM1wykgNjVYghRFNCNNXUNIoLTKjLnsrfc/pmUUYs=
+X-Received: by 2002:a17:90a:bf8c:b0:253:25c3:7a95 with SMTP id
+ d12-20020a17090abf8c00b0025325c37a95mr11888507pjs.14.1685462021937; Tue, 30
+ May 2023 08:53:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] media: dt-bindings: alvium: add document YAML
- binding
-Content-Language: en-US
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-        martin.hecht@avnet.eu, linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230526173955.797226-1-tomm.merciai@gmail.com>
- <20230526173955.797226-2-tomm.merciai@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230526173955.797226-2-tomm.merciai@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:ba3:b0:65:5d1b:9a16 with HTTP; Tue, 30 May 2023
+ 08:53:41 -0700 (PDT)
+Reply-To: jkirinec101@gmail.com
+From:   marine <jessicakirinec1@gmail.com>
+Date:   Tue, 30 May 2023 16:53:41 +0100
+Message-ID: <CACrLz9RUfqd1XDcU1qQ-MXYbKcZCtOrXa35uzso1LTdRbsO_FQ@mail.gmail.com>
+Subject: Hallo
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:52a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4999]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [jkirinec101[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [jessicakirinec1[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [jessicakirinec1[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/05/2023 19:39, Tommaso Merciai wrote:
-> Add documentation of device tree in YAML schema for the ALVIUM
-> Camera from Allied Vision Inc.
-> 
-
-
-> +
-> +          camera: alvium@3c {
-> +              compatible = "alliedvision,alvium";
-> +              pinctrl-names = "default";
-> +              pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
-> +              reg = <0x3c>;
-> +              clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
-> +              clock-names = "xclk";
-> +              assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
-> +              assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-> +              assigned-clock-rates = <24000000>;
-> +              streamon-delay = <20>;
-> +              powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
-> +              reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-> +              status = "okay";
-
-Please apply all my comments from v1. I don't see improvements.
-
-Best regards,
-Krzysztof
-
+Hallo, es tut mir so leid, Ihre Privatsph=C3=A4re zu verletzen. Es hei=C3=
+=9Ft:
+=E2=80=9EEin Bild sagt mehr als tausend Worte, aber als ich Ihres sah, war =
+es
+mehr, als Worte erkl=C3=A4ren k=C3=B6nnten.=E2=80=9C Das charmante Profil i=
+st
+unwiderstehlich, obwohl es eine kleine pers=C3=B6nliche Nachricht ist, aber
+Ihr Aussehen verr=C3=A4t viel =C3=BCber eine nette Person ... Also musste i=
+ch
+der charmanten Person mit diesem tollen Profil eine Nachricht
+hinterlassen. Ich glaube, es ist die Neugier, die mich in einer
+solchen Zeit zu Ihnen f=C3=BChrt. Ich muss noch einmal sagen, dass es mir
+leid tut, wenn das Schreiben an Sie Ihrer moralischen Ethik
+widerspricht. Ich m=C3=B6chte dich einfach besser kennenlernen und ein
+Freund sein oder mehr. Ich hoffe, irgendwann von Ihnen zu h=C3=B6ren.
