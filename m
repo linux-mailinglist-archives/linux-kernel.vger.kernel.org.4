@@ -2,110 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869D3716AF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D2F716AF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbjE3R3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
+        id S233391AbjE3RaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbjE3R3f (ORCPT
+        with ESMTP id S233653AbjE3RaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:29:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F332BE8;
-        Tue, 30 May 2023 10:29:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33CA361403;
-        Tue, 30 May 2023 17:29:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDFCC4339B;
-        Tue, 30 May 2023 17:28:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685467742;
-        bh=2bODZqzDsUoTQkh2zMk1nEE+wHElsvjQpmoMsf7f/Qk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hHOGYhzLNSVRW2KA0PSbdr+3tO52BK5i2Wf+B9H6AQC08PA1PFm0Bkwly4Xk+Zy6s
-         fpjQGhv3AcA21h6GnNPWiSEPN3pI7J/t9TpNrcOlySMQHRr5sjkbiDF2yt71sn1ClN
-         6FBrIyVa0KMjPrG6KZ6KmrmVvn+o9Il5gH1wEptuV+dQ6LmxKVh80QOdChihjaG2jt
-         2j3mtGq60eXLP8Ralhy/kmZTikzXW7Vt7XQBRLdCD/ol94LsWHuNNhjZf+KyZMBetT
-         cw6lGHcV7QJ9iBnCmUwTCh4/AatytoU1t2wjMpW7vK3IKmvAd2dVDvDTQNXAg0NkfD
-         mWfjQxCFTIQUw==
-Date:   Tue, 30 May 2023 18:28:55 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "Lukas F. Hartmann" <lukas@mntre.com>,
-        Nicolas Belin <nbelin@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH v5 06/17] dt-bindings: display: add Amlogic MIPI DSI Host
- Controller bindings
-Message-ID: <20230530-hankering-trident-9cab74e59591@spud>
-References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
- <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-6-56eb7a4d5b8e@linaro.org>
+        Tue, 30 May 2023 13:30:15 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BD89C;
+        Tue, 30 May 2023 10:29:55 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so34254a12.0;
+        Tue, 30 May 2023 10:29:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685467795; x=1688059795;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QVRaZG2eM/gohyhY2fboQdC7q4wdMVSPr7qxCPkqPm8=;
+        b=Ibqwv9ArAqbL9+kZoGxmE8qDprx+l8vtVBDwhCAQ7kvJsL6VZKNzhKDzUIgytYbHhg
+         C8L61hLHsmzsZ0BgrflxV8MXYu9g9ZijXNP5zbS1+TC+yYar0C6vlGNu3ZUhdPlBFIr9
+         nfsFru0HKaeRsIeyGleeFhxS9XTg6cvHVFO94dUVm1+ZA6fNcBLUIGkAberioJwMSikA
+         PzuCGx12K/c/MzckJJnAYwNz0bxv5qonjvijlvWEqcPmWk3JLNbP9lHgtlqF3z7kQ5WA
+         lRDprzc/d6nY/RopgO2B1m+Tlz6kqy8SdT4zOboUKcJOWW2ulGluOVFXIAVk5mljNHPm
+         bpow==
+X-Gm-Message-State: AC+VfDwT4SF5IbX3/MzkqORDMz1z8H6zZejd1e/vvTqQ+bB/zdozggXt
+        HkRN/TL3smWXDKxgkIzGJjJYNiTxZK6YGL2G7Cs=
+X-Google-Smtp-Source: ACHHUZ5A4A3O+7txlbeFTK3FPQBbhzfelt3pPcztJKmBPhBSbQJ/44iVbEwp9i8wHQpP8t5FZ/ddJ0htHD9ZXwIBdiQ=
+X-Received: by 2002:a17:90b:1190:b0:256:6462:e399 with SMTP id
+ gk16-20020a17090b119000b002566462e399mr9840472pjb.5.1685467794923; Tue, 30
+ May 2023 10:29:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yUiZQebBLS7labwP"
-Content-Disposition: inline
-In-Reply-To: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-6-56eb7a4d5b8e@linaro.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+ <20230530144637.4746-1-mailhol.vincent@wanadoo.fr> <20230530144637.4746-4-mailhol.vincent@wanadoo.fr>
+ <ZHYbaYWeIaDcUhhw@corigine.com>
+In-Reply-To: <ZHYbaYWeIaDcUhhw@corigine.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 31 May 2023 02:29:43 +0900
+Message-ID: <CAMZ6RqK2vr0KRq76UNOSKzHMEfhz1YPFdg7CdQJqq4pBH3hj5w@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] can: length: refactor frame lengths definition to
+ add size in bits
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Thomas.Kopp@microchip.com,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org, marex@denx.de, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed. 31 May 2023 at 00:56, Simon Horman <simon.horman@corigine.com> wrote:
+> On Tue, May 30, 2023 at 11:46:37PM +0900, Vincent Mailhol wrote:
+> > Introduce a method to calculate the exact size in bits of a CAN(-FD)
+> > frame with or without dynamic bitsuffing.
+> >
+> > These are all the possible combinations taken into account:
+> >
+> >   - Classical CAN or CAN-FD
+> >   - Standard or Extended frame format
+> >   - CAN-FD CRC17 or CRC21
+> >   - Include or not intermission
+> >
+> > Instead of doing several individual macro definitions, declare the
+> > can_frame_bits() function-like macro. To this extent, do a full
+> > refactoring of the length definitions.
+> >
+> > In addition add the can_frame_bytes(). This function-like macro
+> > replaces the existing macro:
+> >
+> >   - CAN_FRAME_OVERHEAD_SFF: can_frame_bytes(false, false, 0)
+> >   - CAN_FRAME_OVERHEAD_EFF: can_frame_bytes(false, true, 0)
+> >   - CANFD_FRAME_OVERHEAD_SFF: can_frame_bytes(true, false, 0)
+> >   - CANFD_FRAME_OVERHEAD_EFF: can_frame_bytes(true, true, 0)
+> >
+> > The different maximum frame lengths (maximum data length, including
+> > intermission) are as follow:
+> >
+> >    Frame type                         bits    bytes
+> >   -------------------------------------------------------
+> >    Classic CAN SFF no-bitstuffing     111     14
+> >    Classic CAN EFF no-bitstuffing     131     17
+> >    Classic CAN SFF bitstuffing                135     17
+> >    Classic CAN EFF bitstuffing                160     20
+> >    CAN-FD SFF no-bitstuffing          579     73
+> >    CAN-FD EFF no-bitstuffing          598     75
+> >    CAN-FD SFF bitstuffing             712     89
+> >    CAN-FD EFF bitstuffing             736     92
+> >
+> > The macro CAN_FRAME_LEN_MAX and CANFD_FRAME_LEN_MAX are kept as an
+> > alias to, respectively, can_frame_bytes(false, true, CAN_MAX_DLEN) and
+> > can_frame_bytes(true, true, CANFD_MAX_DLEN).
+> >
+> > In addition to the above:
+> >
+> >  - Use ISO 11898-1:2015 definitions for the name of the CAN frame
+> >    fields.
+> >  - Include linux/bits.h for use of BITS_PER_BYTE.
+> >  - Include linux/math.h for use of mult_frac() and
+> >    DIV_ROUND_UP(). N.B: the use of DIV_ROUND_UP() is not new to this
+> >    patch, but the include was previously omitted.
+> >  - Add copyright 2023 for myself.
+> >
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>
+> ...
+>
+> > +/**
+> > + * can_bitstuffing_len() - Calculate the maximum length with bitsuffing
+> > + * @bitstream_len: length of a destuffed bit stream
+>
+> Hi Vincent,
+>
+> it looks like an editing error has crept in here:
+>
+>         s/bitstream_len/destuffed_len/
 
---yUiZQebBLS7labwP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Doh! Thanks for picking this up.
 
-On Tue, May 30, 2023 at 09:38:07AM +0200, Neil Armstrong wrote:
-> The Amlogic G12A, G12B & SM1 SoCs embeds a Synopsys DW-MIPI-DSI
-> transceiver (ver 1.21a) with a custom glue managing the IP resets,
-> clock and data inputs similar to the DW-HDMI Glue on the same
-> Amlogic SoC families.
->=20
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+I already prepared a v4 locally. Before sending it, I will wait one
+day to see if there are other comments.
 
-Welp, I was happy with it last time around before Krzysztof took a look,
-and the things he pointed out seem to be fixed, so you can have my R-b
-back.
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
---yUiZQebBLS7labwP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHYyVwAKCRB4tDGHoIJi
-0mZYAQDW0DCO9lI9BrijwwOdNaACzk5HrgyW4ZHkJfjAmf3d6AD/cQb89WQt5+7E
-yfiA12g1wqL5SmEpqaTBIFYHn1cucAo=
-=v6gU
------END PGP SIGNATURE-----
-
---yUiZQebBLS7labwP--
+> > + *
+> > + * The worst bit stuffing case is a sequence in which dominant and
+> > + * recessive bits alternate every four bits:
+> > + *
+> > + *   Destuffed: 1 1111  0000  1111  0000  1111
+> > + *   Stuffed:   1 1111o 0000i 1111o 0000i 1111o
+> > + *
+> > + * Nomenclature
+> > + *
+> > + *  - "0": dominant bit
+> > + *  - "o": dominant stuff bit
+> > + *  - "1": recessive bit
+> > + *  - "i": recessive stuff bit
+> > + *
+> > + * Aside of the first bit, one stuff bit is added every four bits.
+> > + *
+> > + * Return: length of the stuffed bit stream in the worst case scenario.
+> > + */
+> > +#define can_bitstuffing_len(destuffed_len)                   \
+> > +     (destuffed_len + (destuffed_len - 1) / 4)
