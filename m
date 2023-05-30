@@ -2,125 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BFD7155BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6277155CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjE3Gy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 02:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S230262AbjE3G53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 02:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjE3Gyv (ORCPT
+        with ESMTP id S229992AbjE3G50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 02:54:51 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E847AF0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:54:49 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f6a6e9d90dso374741cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685429689; x=1688021689;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MoU/9v3bmYe5em3pZ8Qm6c8p1nDaciuv1tADFddxFDM=;
-        b=VgSGtYt8W1Zn1mWK6alB2rA8GfNplLqkPko2JeDNGlDw/kQ2EhQxziA+Ed4UJVS2Sm
-         BySebuU8gxZ1aZO2XJgXoasR/NUf47cz5ibFtJNJ//72Z4wyV2RxK0afTSThMlrIckES
-         oc7jyOrY6+PJDD19LXHUpun3h8pIfVYAEljSmnDwOiYgcANxFQbyLaN2OrLeju9NHc1r
-         +oS07EwqQJHAhoLZXzl47XbM3A4YzdyOL3hX4n0FlzdNOj5ztbiBSsdI0hzTCQABJnO6
-         TzEF5Hic7mVbB+Or8HAHwCrglukaFk22x0CQdX4sXQpRsQzkJnwXjE2i1rLfue05N0Bq
-         1wfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685429689; x=1688021689;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MoU/9v3bmYe5em3pZ8Qm6c8p1nDaciuv1tADFddxFDM=;
-        b=Bf21Z86pmwmpHLBFWIOTvBQWchrh1kPgONK1AE2lOgDMOXkz86v27Cxb45sXlIGfJU
-         cmkYJK1pBVCpQPem5bm2sjDFKQITMGqVtSUlmtCJHJQTNSeqYQSHQq/gwWbqEH5PAXM1
-         ZwiHgHpIvHyEXljpkCr0NkIQvylwKMY5P8IUQEwKJM3W8AqPu4qjFn/y0Lnj5aN0zh4+
-         lZSzdgBT24tiMKuzTzPcDcAuj8IZn9ulACuDQ4mU/5K6NJkan3asJLeR24Y1V38MNBLC
-         ifP9VjRVOS6MERYLmLCJdQy+P1JFcUaH0zpaMcm+lz0N88swIDT0RyPTHZs3fvH5v8Io
-         wQpg==
-X-Gm-Message-State: AC+VfDxXa90ekum4Cql+3LPNH5deZFLG867JgceiYYH03gxu4K6nMWG9
-        5z7QBbb8x2OsOrr/OCuwFqAfG6aT3LHLXhUVr6kQjw==
-X-Google-Smtp-Source: ACHHUZ7Bqqw3I8bqs/tZq64LmP9ot1bwhIvJaNEHAr866PaE/BvwE6qtfdTos3qHAMNbXlWJUuTI5Ld4xvYI99Zs4Rs=
-X-Received: by 2002:a05:622a:1aa3:b0:3f6:97b4:1a4b with SMTP id
- s35-20020a05622a1aa300b003f697b41a4bmr61520qtc.21.1685429688703; Mon, 29 May
- 2023 23:54:48 -0700 (PDT)
+        Tue, 30 May 2023 02:57:26 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3F3E5;
+        Mon, 29 May 2023 23:57:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685429844; x=1716965844;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VOir9wRdXMhSVA1RPy8DGCcS8yW7/ACO/H4hKKTX2dY=;
+  b=RU3yy3tysmQuUobD9s5vTVgUZ+91NJmMRE8myCJna7oYaIpIhisxajoq
+   z5o5MgKLKmlWOtaQUUkjVJZshT5lgduVXZi8gdHjASCiaI7j/eIgfwl8+
+   TE7FkxQhR8EyBKBgQMjw/aSJvMS4B3PErw20R9yxdapx/yK9DMTbM6ao+
+   lToeLRQOci7jtp8kBZIsbhUwQDgmI9/tZc7anD3+21K0JBy+qbRG1Myxh
+   aSv5SK8masWfMTDmXoGUWJMHaa70cGKXAqFTksn+Jd2UQunl1BBy+z0GA
+   wLGquvL2CAPUoTxfU2HCRIZ7uj8jfNDS1PBkoAT9t8i+2Ya7ICLXsoytI
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="asc'?scan'208";a="215392567"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 May 2023 23:57:23 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 29 May 2023 23:57:23 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 29 May 2023 23:57:20 -0700
+Date:   Tue, 30 May 2023 07:56:57 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Stanley =?utf-8?B?Q2hhbmdb5piM6IKy5b63XQ==?= 
+        <stanley_chang@realtek.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0/3.0 PHY
+Message-ID: <20230530-monsieur-dumpling-32c102f78c56@wendy>
+References: <20230525022617.30537-1-stanley_chang@realtek.com>
+ <20230525022617.30537-3-stanley_chang@realtek.com>
+ <20230529-impurity-dismount-bca5c9100c9b@spud>
+ <44015844858c42a79e0e7f9207d01496@realtek.com>
 MIME-Version: 1.0
-References: <20230526183401.2326121-1-irogers@google.com> <ZHWCPXKo2fFJmtlT@tassilo>
-In-Reply-To: <ZHWCPXKo2fFJmtlT@tassilo>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 29 May 2023 23:54:37 -0700
-Message-ID: <CAP-5=fXXykcwjXjd+W=8Eez79JhmuKhf1Z-1R_8+AD4XdY4a8A@mail.gmail.com>
-Subject: Re: [PATCH v2 00/16] Address some perf memory/data size issues
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Ross Zwisler <zwisler@chromium.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="W3NXbn335O8/41NE"
+Content-Disposition: inline
+In-Reply-To: <44015844858c42a79e0e7f9207d01496@realtek.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 9:57=E2=80=AFPM Andi Kleen <ak@linux.intel.com> wro=
-te:
->
->
-> FWIW I think the whole patchkit could be replaced with a one liner
-> that disables THP for the BSS segment. I suspect that would be roughly
-> equivalent for memory consumption because 4K pages that are never
-> touched would never be allocated.
->
-> -Andi
+--W3NXbn335O8/41NE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So, it is worth reading some of the comments on the code to see why a
-wider clean up is worth it:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/p=
-erf/util/path.c?h=3Dperf-tools#n7
-"It's obviously not thread-safe. Sue me."
-(a comment stemming back to the git origins of the code base)
+On Tue, May 30, 2023 at 03:08:29AM +0000, Stanley Chang[=E6=98=8C=E8=82=B2=
+=E5=BE=B7] wrote:
+> Hi Conor,
+>=20
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - realtek,usb2phy
+> > > +      - realtek,rtd-usb2phy
+> > > +      - realtek,rtd1295-usb2phy
+> > > +      - realtek,rtd1395-usb2phy
+> > > +      - realtek,rtd1619-usb2phy
+> > > +      - realtek,rtd1319-usb2phy
+> > > +      - realtek,rtd1619b-usb2phy
+> > > +      - realtek,rtd1312c-usb2phy
+> > > +      - realtek,rtd1319d-usb2phy
+> > > +      - realtek,rtd1315e-usb2phy
+>=20
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - realtek,usb3phy
+> > > +      - realtek,rtd-usb3phy
+> > > +      - realtek,rtd1295-usb3phy
+> > > +      - realtek,rtd1619-usb3phy
+> > > +      - realtek,rtd1319-usb3phy
+> > > +      - realtek,rtd1619b-usb3phy
+> > > +      - realtek,rtd1319d-usb3phy
+>=20
+> > Ignoring everything else, because I really want Krzysztof or Rob to
+> > review this rather than me, but what's going on here with the
+> > compatibles?
+> > What hardware do "usbNphy" and "rtd-usbNphy" represent?
+> >=20
+> > You have device-specific compatibles, which is great, but you also allow
+> > only those two generic ones. I had a _brief_ look at the driver, and it
+> > seems like there is no decision making done based on the compatibles,
+> > only on the properties. Is that correct?
+> > If it is, I would understand having "realtek,usb3phy" as a fallback
+> > compatible for "realtek,rtd1619-usb3phy", but I do not get the current
+> > setup.
+>=20
+> This driver is compatible with all Realtek RTD SoCs without specifying di=
+fferent settings.
+> So use "realtek,usb3phy" as fallback compatible for all SoCs.
+> This is the compatible name we use.
+> Other compatible names simply indicate that the driver supports the SoCs.
 
-BSS won't count toward file size, which the patches were primarily
-going after - but checking the size numbers I have miscalculated from
-reading size's output that I'm not familiar with. The numbers are
-still improved, but I just see a 37kb saving, with 5kb more in
-.rodata. Something but not much. .data.rel.ro is larger, which imo is
-good, but those pages will still be dirtied so a mute point wrt file
-size and memory overhead.
+Then you should write the binding such that having fallback compatibles
+is permitted. Try plugging
+compatible =3D "realtek,rtd1295-usb2phy", "realtek,rtd-usb2phy", "realtek,u=
+sb2phy";
+into your example below and see what happens.
 
-For huge pages I thought it was correct that things are aligned by max
-page size which I thought on x86-64 was 2MB, so I tried:
-EXTRA_LDFLAGS=3D"-z max-page-size=3D4096"
-but it made no difference to anything, and with:
-EXTRA_CFLAGS=3D"-Wl,-z,max-page-size=3D4096"
-EXTRA_CXXFLAGS=3D"-Wl,-z,max-page-size=3D4096"
-file size just got worse.
+> The name "usbNphy" and "rtd-usbNphy" seem to be more generic for all RTD =
+SoCs,
+> but they are not device-specific compatible.
+> Do you have a better suggestion?
 
-Thanks,
-Ian
+Write the binding so that having fallback compatibles in the DT actually
+works, don't add the SoC-specific ones merely as indicators that those
+SoCs are supported and don't permit "realtek,usbNphy" or
+"realtek,rtd-usbNphy" in isolation ;)
+
+Cheers,
+Conor.
+
+--W3NXbn335O8/41NE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHWeKgAKCRB4tDGHoIJi
+0gUMAQDaAWRa95AFdcTrun9KJrWgJmpk4c2Jh03zukk+uTrWkQEAp5S58xu4+voq
+u38k5+Xn+V6Fiovzr8Qywo1BJggf1Q0=
+=a78/
+-----END PGP SIGNATURE-----
+
+--W3NXbn335O8/41NE--
