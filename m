@@ -2,111 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05139716E7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A712716E7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbjE3UPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 16:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S233266AbjE3UPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233293AbjE3UPK (ORCPT
+        with ESMTP id S231615AbjE3UP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 16:15:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A820138
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:14:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1612562EF3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:14:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E29AC433D2;
-        Tue, 30 May 2023 20:14:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685477695;
-        bh=44WCNV7nugST0nNtKo1Ce1/xmKinsbP8BNQC8KvX40A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YEJBWByVW2deQuA7F+8Hver0h5JX9MXCf2m2Bhf75KSl9usSlxtMYF0IMSDVvp9Js
-         use80RNkOYgRfCUAr1x8VX8DOe9kfsNSXOmRv4AuFhS8O2qlSBdRvLc/PBhpSSAsNk
-         JBKej+WlUyG7AczIGwvh9btc1tZW8f6453If8T4U=
-Date:   Tue, 30 May 2023 21:14:53 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     chris hyser <chris.hyser@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 1/4] debugfs: return EINVAL if write to unsigned simple
- files exceed storage.
-Message-ID: <2023053058-favorably-snowbound-39eb@gregkh>
-References: <20230530194012.44411-1-chris.hyser@oracle.com>
- <20230530194012.44411-2-chris.hyser@oracle.com>
+        Tue, 30 May 2023 16:15:28 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415E19D;
+        Tue, 30 May 2023 13:15:23 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-399e9455e9fso1529501b6e.0;
+        Tue, 30 May 2023 13:15:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685477722; x=1688069722;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QXAybs3M1jd6+Bigy7bnSFaPmpOAVXQJa7fJ334Uuxo=;
+        b=EODtw8QI5x4Aan2NA2lhWfLoxgLgENaYuF4eUcRkrL3coQ0qZ9YdCt16+N9xeieRxA
+         1FL1+9TcRSjiynoR1GpxFoPpagSTk6DZX69WtWVb+u9Fjr0e6udLJNdWqKNVCKYGTRuX
+         c3eQIYyCgvQ5omPnIlcMOo+JvoCNGQJ+d4mALHp3LbktwgrfvCdMQQ8/fqfbUtTzZ30V
+         7zrNjzJc+McCYzmGbyEHcOeHou8QRtnz6gcIeYcguTRAMrNjsottxIbbDNGDOlt27AHP
+         VZ+TjFKGbwhZJ4Fhrtmut6y0TZTtc6Cv0JlEmsVSeKFgY3noc1NBNFdg7MZ2NM/y1vX5
+         BkQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685477722; x=1688069722;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QXAybs3M1jd6+Bigy7bnSFaPmpOAVXQJa7fJ334Uuxo=;
+        b=DS25iH9RZPlWMNoUgTsTTUXoKwqfP+y18RM9WS1lSKLD4aFFBdn2wVXA741h4OuZTt
+         FEq4zlgihs3w7IxgedJWU1CkpgoMwqQ+FtNZ45ofemgGgV0ZUauAxE4oKRCPWBHelbxj
+         PsiYZ1v4a8yae2ndi8jkXmGmZoj6JthKbCbkPPO7sdXPPWCoAwiMbMYRg9DosReMXdfX
+         NiDVqKK0SOnr+m3WgUISJK1AWKA32/kPkm2qi8fv0vTqzJBWb2UgO+fdcDbSlu62Bwww
+         ta5Z177xDrwtBbDqdVYeIEcCk464WN0NB7mgikzxhyw/ja5LpeezyRFtaTO9rcko3Ghp
+         MuIw==
+X-Gm-Message-State: AC+VfDxX2B7Dn+UTJhPJk65cgrT4EljUYBtbIct+mOqzGQ9PBF34Bt+k
+        9ajj8xB3WhkKAsx5t5zSXjU=
+X-Google-Smtp-Source: ACHHUZ6ycO8RJMK28QDVMakl+n6fgRe2gt29wwYKvo6Zz01XTDAE7OzKoB+U+hEHr2DD3o4KyY77UQ==
+X-Received: by 2002:a05:6808:3942:b0:398:57fa:9b23 with SMTP id en2-20020a056808394200b0039857fa9b23mr1833675oib.0.1685477722063;
+        Tue, 30 May 2023 13:15:22 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id l1-20020a056870e90100b0019f44a07b35sm3453765oan.51.2023.05.30.13.15.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 13:15:21 -0700 (PDT)
+Message-ID: <33ef6ea0-712b-25b6-6be9-c407ecbdb68f@gmail.com>
+Date:   Tue, 30 May 2023 17:15:17 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530194012.44411-2-chris.hyser@oracle.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] rust: kernel: add scatterlist wrapper
+Content-Language: en-US
+To:     Qingsong Chen <changxian.cqs@antgroup.com>,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?B?55Sw5rSq5Lqu?= <tate.thl@antgroup.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Asahi Lina <lina@asahilina.net>,
+        Niklas Mohrin <dev@niklasmohrin.de>,
+        rust-for-linux@vger.kernel.org
+References: <20230530064821.1222290-1-changxian.cqs@antgroup.com>
+ <20230530064821.1222290-2-changxian.cqs@antgroup.com>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230530064821.1222290-2-changxian.cqs@antgroup.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 03:40:09PM -0400, chris hyser wrote:
-> Writes to the debug files created by "debugfs_create_*" (u8/u16/u32/u64),
-> (x8/x16/x32/x64) should not silently succeed if the value exceeds the
-> storage space for the type and upper written bits are lost. Absent an
-> error, a read should return the last written value.  Current behaviour is
-> to down cast the storage type thus losing upper bits (thus u64/x64
-> files are unaffected).
+On 5/30/23 03:48, Qingsong Chen wrote:
+> Add abstractions for single `struct scatterlist` and chainable
+> `struct sg_table`.
 > 
-> This patch ensures the written value fits into the specified storage space
-> returning EINVAL on error.
-> 
-> Signed-off-by: Chris Hyser <chris.hyser@oracle.com>
+> Signed-off-by: Qingsong Chen <changxian.cqs@antgroup.com>
 > ---
->  Documentation/filesystems/debugfs.rst | 7 ++++---
->  fs/debugfs/file.c                     | 6 ++++++
->  2 files changed, 10 insertions(+), 3 deletions(-)
+>   rust/bindings/bindings_helper.h |   1 +
+>   rust/helpers.c                  |  14 +
+>   rust/kernel/lib.rs              |   1 +
+>   rust/kernel/scatterlist.rs      | 478 ++++++++++++++++++++++++++++++++
+
+I think that 478 line changes are a bit too much for a commit, I'd
+suggest to split this patch into smaller parts for easier reviews,
+like one for ScatterList, another for SgTable, one for iterator
+implementations, etc.
+
+>   4 files changed, 494 insertions(+)
+>   create mode 100644 rust/kernel/scatterlist.rs
 > 
-> diff --git a/Documentation/filesystems/debugfs.rst b/Documentation/filesystems/debugfs.rst
-> index dc35da8b8792..6f1ac8d7f108 100644
-> --- a/Documentation/filesystems/debugfs.rst
-> +++ b/Documentation/filesystems/debugfs.rst
-> @@ -85,9 +85,10 @@ created with any of::
->  			    struct dentry *parent, u64 *value);
->  
->  These files support both reading and writing the given value; if a specific
-> -file should not be written to, simply set the mode bits accordingly.  The
-> -values in these files are in decimal; if hexadecimal is more appropriate,
-> -the following functions can be used instead::
-> +file should not be written to, simply set the mode bits accordingly.  Written
-> +values that exceed the storage for the type return EINVAL. The values in these
-> +files are in decimal; if hexadecimal is more appropriate, the following
-> +functions can be used instead::
->  
->      void debugfs_create_x8(const char *name, umode_t mode,
->  			   struct dentry *parent, u8 *value);
-> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-> index 1f971c880dde..743ddd04f8d8 100644
-> --- a/fs/debugfs/file.c
-> +++ b/fs/debugfs/file.c
-> @@ -429,6 +429,8 @@ static struct dentry *debugfs_create_mode_unsafe(const char *name, umode_t mode,
->  
->  static int debugfs_u8_set(void *data, u64 val)
->  {
-> +	if (val > (1 << sizeof(u8) * 8) - 1)
-> +		return -EINVAL;
+> [...]
+> +
+> +/// A [`ScatterList`] table of fixed `N` entries.
+> +///
+> +/// According to the SG table design (form kernel ), the `page_link` field may contain
+> +/// a pointer to the next sg table list, so this struct should be pinned. If the table
+> +/// is chainable, the last entry will be reserved for chainning. The recommended way to
 
-We do have U8_MAX and friends, please don't reinvent the wheel.
+This comment has some orthographic, coherence (like "SG table",
+"sg table") and grammatical, though, it's correct on its meaning.
 
-But really, why?  This is debugfs, if userspace messes something up like
-this, why not just cast and be done with it?
+> +/// create such instances is with the [`pin_init`].
+This ([`pin_init`]) might point to nothing in `rustdoc`, though I'd
+recommend to test it with `make rustdoc` and opening it in a browser
+nonetheless.
 
-In other words, what existing workflow is now going to break with this
-patchset?  :)
+> +///
+> +/// # Examples
+> +///
+> +/// The following is examples of creating [`SgTable<N>`] instances> +///
+> [...]> +
+> +impl<'a, const N: usize> SgTable<'a, N> {
+> [...]
 
-thanks,
+This `impl` block has the same definition as the one above it. And
+thus, wouldn't be worth to have the iter functions inside the same
+block?
 
-greg k-h
+> +}
+> +
+> +/// Wrap the kernel's `struct scatterlist`.
+> +///
+> +/// According to the SG table design (from kernel), the `page_link` field may contain
+> +/// a pointer to the next sg table list, so this struct should be pinned.
+> +///
+> +/// # Invirants
+> +///
+> +/// All instances are valid, either created by the `new` constructor (see [`pin_init`]),
+> +/// or transmuted from raw pointers by the `as_ref` or `as_mut` function (usually used
+> +/// to get an entry of [`SgTable`]).
+> +///
+> +/// # Examples
+> +///
+> +/// The following is examples of creating [`ScatterList`] instances.
+
+Same as `SgTable` above.
+
+> +///
+> +/// ```rust
+> +/// use core::pin::pin;
+> +/// # use kernel::error::Result;
+> +/// # use kernel::scatterlist::ScatterList;
+> +///
+> +/// // Prepare memory buffer.
+> +/// let buf: Pin<&mut [u8]> = pin!([0u8; 512]);
+> +///
+> +/// // Allocates an instance on stack.
+> +/// kernel::stack_pin_init!(let foo = ScatterList::new(&buf));
+> +/// let foo: Pin<&mut ScatterList<'_>> = foo;
+> +/// assert_eq!(foo.length(), 512);
+> +/// assert_eq!(foo.count(), 1);
+> +///
+> +/// // Alloccate an instance by Box::pin_init.
+> +/// let bar: Result<Pin<Box<ScatterList<'_>>>> = Box::pin_init(ScatterList::new(&buf));
+> +/// assert_eq!(bar.as_ref().unwrap().length(), 512);
+> +/// assert_eq!(bar.as_ref().unwrap().count(), 1);
+> +/// ```
+> +#[pin_data]
+> +pub struct ScatterList<'a> {
+> +    #[pin]
+> +    opaque: Opaque<bindings::scatterlist>,
+> +    _p: PhantomData<&'a mut bindings::scatterlist>,
+> +}
+> +
+> +impl<'a> ScatterList<'a> {
+> +    /// Construct a new initializer.
+> +    pub fn new(buf: &'a Pin<&mut [u8]>) -> impl PinInit<ScatterList<'a>> {
+> +        // SAFETY: `slot` is valid while the closure is called, the memory buffer is
+> +        // pinned and valid.
+> +        unsafe {
+> +            init::pin_init_from_closure(move |slot: *mut Self| {
+> +                (*slot).set_buf(buf);
+> +                (*slot).mark_end();
+> +                Ok(())
+> +            })
+> +        }
+> +    }
+> +
+> +    /// Obtain [`Pin<&ScatterList>`] from raw pointer.
+
+I'd rather say "Obtain a pinned reference to a scatter list from a raw
+pointer.
+
+> +    pub fn as_ref(entry: *mut bindings::scatterlist) -> Option<Pin<&'a Self>> {
+> +        match entry.is_null() {
+> +            true => None,
+> +            // SAFETY: `entry` is non-null and valid.
+> +            false => Some(Pin::new(unsafe { &*(entry as *const ScatterList<'_>) })),
+> +        }
+
+Another approach could be `NonNull::new` with `Option::map`, though if
+you don't use it, no problem.
+
+> +    }
+> +
+> +    /// Obtain [`Pin<&mut ScatterList>`] from raw pointer.
+
+Same as `ScatterList::as_mut`.
+
+> +    pub fn as_mut(entry: *mut bindings::scatterlist) -> Option<Pin<&'a mut Self>> {
+> +        match entry.is_null() {
+> +            true => None,
+> +            // SAFETY: `entry` is non-null and valid.
+> +            false => Some(Pin::new(unsafe { &mut *(entry as *mut ScatterList<'_>) })),
+> +        }
+> +    }
+> +}
+> +
+> +impl ScatterList<'_> {
+> [...]
+> +
+> +    /// Return the mapped DMA length.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// It is only valid after this scatterlist has been mapped to some bus address
+> +    /// and then called `set_dma` method to setup it.
+> +    #[cfg(CONFIG_NEED_SG_DMA_LENGTH)]
+> +    pub fn dma_length(&self) -> usize {
+> +        // SAFETY: By the type invariant, we know that `self.opaque` is valid.
+> +        unsafe { (*self.opaque.get()).dma_length as _ }
+> +    }
+> +
+> +    /// Return the mapped DMA length.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// It is only valid after this scatterlist has been mapped to some bus address
+> +    /// and then called `set_dma` method to setup it.
+> +    #[cfg(not(CONFIG_NEED_SG_DMA_LENGTH))]
+> +    pub fn dma_length(&self) -> usize {
+> +        // SAFETY: By the type invariant, we know that `self.opaque` is valid.
+> +        unsafe { (*self.opaque.get()).length as _ }
+> +    }
+> +
+> +    /// Setup the DMA address and length.
+> +    #[cfg(CONFIG_NEED_SG_DMA_LENGTH)]
+> +    pub fn set_dma(&mut self, addr: usize, len: usize) {
+> +        // SAFETY: By the type invariant, we know that `self.opaque` is valid.
+> +        unsafe {
+> +            (*self.opaque.get()).dma_address = addr as _;
+> +            (*self.opaque.get()).dma_length = len as _;
+> +        }
+> +        self.dma_mark_bus_address();
+> +    }
+> +
+> +    /// Setup the DMA address and length.
+> +    #[cfg(not(CONFIG_NEED_SG_DMA_LENGTH))]
+> +    pub fn set_dma(&mut self, addr: usize, len: usize) {
+> +        // SAFETY: By the type invariant, we know that `self.opaque` is valid.
+> +        unsafe {
+> +            (*self.opaque.get()).dma_address = addr as _;
+> +            (*self.opaque.get()).length = len as _;
+> +        }
+> +        self.dma_mark_bus_address();
+> +    }
+
+Please avoid boilerplate by putting those `cfgs` inside the function.
+For example you can turn this...
+
+     /// Setup the DMA address and length.
+     #[cfg(CONFIG_NEED_SG_DMA_LENGTH)]
+     pub fn set_dma(&mut self, addr: usize, len: usize) {
+         // SAFETY: By the type invariant, we know that `self.opaque` is valid.
+         unsafe {
+             (*self.opaque.get()).dma_address = addr as _;
+             (*self.opaque.get()).dma_length = len as _;
+         }
+         self.dma_mark_bus_address();
+     }
+
+     /// Setup the DMA address and length.
+     #[cfg(CONFIG_NEED_SG_DMA_LENGTH)]
+     pub fn set_dma(&mut self, addr: usize, len: usize) {
+         // SAFETY: By the type invariant, we know that `self.opaque` is valid.
+         unsafe {
+             (*self.opaque.get()).dma_address = addr as _;
+             (*self.opaque.get()).length = len as _;
+         }
+         self.dma_mark_bus_address();
+     }
+
+...into this...
+
+     /// Setup the DMA address and length.
+     pub fn set_dma(&mut self, addr: usize, len: usize) {
+         // SAFETY: By the type invariant, we know that `self.opaque` is valid.
+         #[cfg(CONFIG_NEED_SG_DMA_LENGTH)]
+         unsafe {
+             (*self.opaque.get()).dma_address = addr as _;
+             (*self.opaque.get()).dma_length = len as _;
+         }
+         #[cfg(not(CONFIG_NEED_SG_DMA_LENGTH))]
+         unsafe {
+             (*self.opaque.get()).dma_address = addr as _;
+             (*self.opaque.get()).length = len as _;
+         }
+         self.dma_mark_bus_address();
+     }
+
+> [...]
+> +}
+> [...]
