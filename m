@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B605717124
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1950B717129
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbjE3XAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S233550AbjE3XAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjE3XAN (ORCPT
+        with ESMTP id S229794AbjE3XAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:00:13 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89788EC;
-        Tue, 30 May 2023 16:00:10 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d41d8bc63so4019806b3a.0;
-        Tue, 30 May 2023 16:00:10 -0700 (PDT)
+        Tue, 30 May 2023 19:00:53 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C474EC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:00:52 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-52cb78647ecso3247338a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:00:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685487610; x=1688079610;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MhkmwhzVFv1bWKBw06RWKQ85zcFA8OuFNsMQdUaAwlA=;
-        b=SpDnqS/gyx977+0QYAk/5vk8jfE9dMGQ/M551BHZsK8DyLDbQTZRbPNaqHbUTosgD6
-         08mbQ8xhC4Fy7Xw6nbGvifDdJKh7CngQLD9t/qNgpIP/JrBJA+be7GG2JNhe/X78KC/+
-         IAmI2BctwsmQcvJ3IZHLoqgL4ezJyvzZZ3eRN0AEMA1VgNAq3gF+FlSu7Ej7/Oi2VKsg
-         TQ6K1prEtMK9KZnPn04boP7vhVdcrAYeKt55BCJvU1++ntA/fsjRi/NVyX7IUyY+E/G/
-         VjNYKh/QC1B6Fd9cBDkFfqTZHECT95nqNjikec+Dup1/yrhyNmEGQlnWn2lCWG7wwCyB
-         RT8g==
+        d=chromium.org; s=google; t=1685487651; x=1688079651;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rJiLW7AmmQnpv9DEnjN9p5/4mIGo+5HG0C4i82Hita4=;
+        b=dxiJXImoRvtMCanp9c/ceTZ8qTmSPzD9b1rkVpo2uNvegmRaKNTVAVmuuWbCmnqbZk
+         LO6bFjayl63AyoqRb11VMuyfiv45TChQjVsuP5zqr3dkHUYMwJRPzRkIqo4njsP3bcSV
+         LjrzWPAs6kMkf5eHTc1VLqHWDu3hatO7OD3Jo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685487610; x=1688079610;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MhkmwhzVFv1bWKBw06RWKQ85zcFA8OuFNsMQdUaAwlA=;
-        b=Ox2sLzwMTzelxYY/S33nPs9gUwyEywa0oij69SBV1HqbWesZHK2CzbMfd9pjsRqJQi
-         u6P1hiu6tUhOBhvdwVyREdVxlvRccqNfhKEZdfw6Dl1IKnZARGE4eKN5pBSmr8JN913+
-         Isp161CjefT402JaXYeje8amc8hpYJwhX7rioYlVkRs8bMAKw+mDnctfe9c3n9z+8Odo
-         +osuIh711a2RaDIqIMpMpLB9ugtmRbpva1yNF1BZ1mVmFPNw5q8yWO18LAVAwEPfCLvS
-         +4YfkR5CpWg6C90nB8ob4o5DmpRJdVGKJ+sEXyjifFwb5b4bJjvdBcbyLY5h1tf52pNm
-         zE0Q==
-X-Gm-Message-State: AC+VfDxG4Q0IkWnHxbLprtoorepqe7bi1uE2CKkI8cEx8H0WVt4sJECN
-        NpOmbxPZopVxAPYFLh6Zj4Q=
-X-Google-Smtp-Source: ACHHUZ4Cx4GU4obSH7OFW8nhQ1JqeI8yoGHRoZr5v+gFueWC79mKY1HhqEJk3ylQNB7PNEm6qlUQ5g==
-X-Received: by 2002:a05:6a21:6704:b0:10a:9f45:e3f with SMTP id wh4-20020a056a21670400b0010a9f450e3fmr3879785pzb.12.1685487609828;
-        Tue, 30 May 2023 16:00:09 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id e2-20020a63ee02000000b00514256c05c2sm9445520pgi.7.2023.05.30.16.00.08
+        d=1e100.net; s=20221208; t=1685487651; x=1688079651;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rJiLW7AmmQnpv9DEnjN9p5/4mIGo+5HG0C4i82Hita4=;
+        b=XOFsV8GrN4RNZXQtXnErgGw+5OVAyLhmHGe6zMTum8Ckktq40oBUhnsexfxk+waTpz
+         KZXekfl4rSkqmhQheZ4eKLU6qGxqF9F1Dn/0oIJ18dSFZIyuKgACKk9AknP4YZLcVEMK
+         0jnv+xyiQ6WgHIbm2/XBBUwT2n6Yw5b3ScZBOPWoVzLKtBIcj2+SMP6YGlqliU5Bc3Cx
+         QlE9BR8/RnsyB7ONO0UYZ2H7qDcev24WEYO0zaeZ8nU84YgjFx8vTiE/tO+2FXNrwPZR
+         SH/I6mbFWvDv+ay+Xb8q7+gfEuHVA20wWwozLOPF/F4+TKwUj7JPl4nKopVlMToIcoJX
+         vXFg==
+X-Gm-Message-State: AC+VfDzCwbVpTmUiq1cw2FF9c4PvNHrSASPyfbUrnYWG9PkHke1jfBZR
+        gV3AN1SPfvDkK3xsX0hUQT8IMQ==
+X-Google-Smtp-Source: ACHHUZ67LwwGjf/CO2NXgUokK7LdElpmLqHmamM5N0opD0v/5UjtIAhbIW+nDOEd3A//mwLET8bStQ==
+X-Received: by 2002:a17:902:e809:b0:1a5:22a:165c with SMTP id u9-20020a170902e80900b001a5022a165cmr3877787plg.0.1685487651583;
+        Tue, 30 May 2023 16:00:51 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id ik24-20020a170902ab1800b001b0142908f7sm8886130plb.291.2023.05.30.16.00.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 16:00:09 -0700 (PDT)
-Date:   Tue, 30 May 2023 16:00:07 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>
-Subject: Re: [PATCH v13 021/113] KVM: TDX: Make pmu_intel.c ignore guest TD
- case
-Message-ID: <20230530230007.GF1234772@ls.amr.corp.intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <017a06174fa054ae264a2caba6f7f55e00f258e8.1678643052.git.isaku.yamahata@intel.com>
- <20230402115019.000046fd@gmail.com>
- <36fb638a-c9ff-0139-3e8e-7e8ff0bbff1f@gmail.com>
- <20230528082602.GC1234772@ls.amr.corp.intel.com>
- <cd8b6ea4-1293-c57c-1bed-4f6dbdbc2722@gmail.com>
+        Tue, 30 May 2023 16:00:50 -0700 (PDT)
+Date:   Tue, 30 May 2023 16:00:50 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Song Liu <song@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] md/raid5: Convert stripe_head's "dev" to flexible
+ array member
+Message-ID: <202305301600.EEF0BAAD@keescook>
+References: <20230522212114.gonna.589-kees@kernel.org>
+ <CAPhsuW5ibONdyyJq0zVCEHuM38GUocn8A1abi4mTa9gUHH1hHQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cd8b6ea4-1293-c57c-1bed-4f6dbdbc2722@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW5ibONdyyJq0zVCEHuM38GUocn8A1abi4mTa9gUHH1hHQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,79 +72,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 10:19:16PM +0800,
-Like Xu <like.xu.linux@gmail.com> wrote:
-
-> On 28/5/2023 4:26 pm, Isaku Yamahata wrote:
-> > On Wed, Apr 19, 2023 at 04:21:21PM +0800,
-> > Like Xu <like.xu.linux@gmail.com> wrote:
-> > 
-> > > On 2/4/2023 4:50 pm, Zhi Wang wrote:
-> > > > Hi Like:
-> > > > 
-> > > > Would you mind to take a look on this patch? It would be nice to have
-> > > > a r-b also from you. :)
-> > > > 
-> > > > On Sun, 12 Mar 2023 10:55:45 -0700
-> > > > isaku.yamahata@intel.com wrote:
-> > > > 
-> > > > > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > > > > 
-> > > > > Because TDX KVM doesn't support PMU yet (it's future work of TDX KVM
-> > > > > support as another patch series) and pmu_intel.c touches vmx specific
-> > > 
-> > > It would be nice to have pmu support for tdx-guest from the very beginning.
-> > 
-> > It's supported in the public github repo.
-> > https://github.com/intel/tdx/tree/kvm-upstream-workaround
-> > As this patch series has 100+ patches, I don't want to bloat this patch more.
+On Tue, May 23, 2023 at 10:43:52AM -0700, Song Liu wrote:
+> On Mon, May 22, 2023 at 2:21 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Replace old-style 1-element array of "dev" in struct stripe_head with
+> > modern C99 flexible array. In the future, we can additionally annotate
+> > it with the run-time size, found in the "disks" member.
+> >
+> > Cc: Christoph Hellwig <hch@infradead.org>
+> > Cc: linux-raid@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > It looks like this memory calculation:
+> >
+> >         memory = conf->min_nr_stripes * (sizeof(struct stripe_head) +
+> >                  max_disks * ((sizeof(struct bio) + PAGE_SIZE))) / 1024;
+> >
+> > ... was already buggy (i.e. it included the single "dev" bytes in the
+> > result). However, I'm not entirely sure if that is the right analysis,
+> > since "dev" is not related to struct bio nor PAGE_SIZE?
+> >
+> > v1: https://lore.kernel.org/all/20230517233313.never.130-kees@kernel.org/
+> > v2: use new struct_size_t() helper from
+> >     https://lore.kernel.org/lkml/20230522211810.never.421-kees@kernel.org/
 > 
-> I presume we are talking about 873e2391e729...63761adbf5aa for TD pmu:
-> 
-> A quick glance brought me at least these comments:
-> 
-> (1) how does intel_pmu_save/restore() handle the enabled host LBR/PEBS ?
+> LTGM. Thanks!
 
-It's not handled yet. We need to save/restore those MSRs.
+Thanks!
 
+> I will hold this for a while until struct_size_t() merged.
 
-> (2) guest PMI injection may be malicious and could the current guest pmu
-> driver handle it ?
-
-This isn't specific to PMI.  Malicious VMM can inject any interrupt to the
-guest at any time.  Guest should be prepared for it.
-
-
-> (3) how do we handle the case when host counters can be enabled before TDENTER
-> for debuggable TD and support the case like "perf-kvm for both guest and host" ?
-
-On TDEXIT, those are disabled. VMM has to restore MSRs and enable it again.
-There is a window where events can be missed.
-
-
-> My point is actually, changes to perf/core should be CC to the perf reviewers
-> as early as possible to prevent key player from killing the direction.
-
-Sure, agreed.
-
-
-> > > > > structure in vcpu initialization, as workaround add dummy structure to
-> > > > > struct vcpu_tdx and pmu_intel.c can ignore TDX case.
-> > > 
-> > > If the target is not to provide a workaround, how about other variants:
-> > > 	- struct lbr_desc lbr_desc;
-> > > 	- pebs ds_buffer;
-> > > ?
-> > > 
-> > > We also need tdx selftest to verify the unavailability of these features.
-> > > Also, it would be great to have TDX's "System Profiling Mode" featue back in
-> > > the specification.
-> 
-> Detailed TD (plus debuggable) PMU selftest would clearly speed up the review
-> process.
-
-The existing KVM PMU selftest can be utilized. Or do you have something else in
-mind?
+Since my tree will introduce struct_size_t(), I will just carry it
+there.
 
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Kees Cook
