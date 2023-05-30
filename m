@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD1A716B55
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EAE716B60
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233248AbjE3RlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
+        id S230184AbjE3Rma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232289AbjE3Rk5 (ORCPT
+        with ESMTP id S229866AbjE3Rm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:40:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D099C5;
-        Tue, 30 May 2023 10:40:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 071F66315B;
-        Tue, 30 May 2023 17:40:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B86C433D2;
-        Tue, 30 May 2023 17:40:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685468455;
-        bh=w1NSZYYEBgNyVUqt+H+MeKBqo+IDthEwPi4Kkb5qD/M=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=D+8X1h2HONo52l0m9O4m3gQrGOFvIBRYgKU0nP8Vq/QP+CxqlmxVcE8C0EfyHKmI4
-         rQEen38kgnd1EWVDQGSVyFpom4Pl/MmWGfYP4if5IG07jejorzb0IZRM2/s6UvfcYI
-         vVdwp95qyNdk1nCpgI2NWo8GFMDcVApjMjWOicfvqLRNBEXFGm/rqxRNy9egSizf3K
-         DopwCi61LJugeC3nQ9Bh1zKZ5gtL4NoUkZvN1pgk5lIdFW6gUsSM+9XZtxwJbS7AUc
-         iZTvIc7lUvC+jgbAlR/drR+9dXWXxEkzrrl+JsD3LOZAn5XF2KzlqHOme7aaoonS2z
-         xfZSr3G7Rcr4g==
-From:   Mark Brown <broonie@kernel.org>
-To:     Boerge Struempfel <boerge.struempfel@gmail.com>
-Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
-        festevam@gmail.com, amit.kumar-mahapatra@amd.com,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tue, 30 May 2023 13:42:28 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07A4B2;
+        Tue, 30 May 2023 10:42:26 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126205198071.34.openmobile.ne.jp [126.205.198.71])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CD80A7EC;
+        Tue, 30 May 2023 19:42:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685468524;
+        bh=CaKTnHZCM+2tWEEUW3VhPnjGo68JAAX4FhkKXSxl8lE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uuNskoDUgqj2a39oi2O7SRQQvVV1TDbHqI0gq4PnV9NnU8jOPTLtC1rdj5OK3BZT8
+         GcN9Kk1wOFGv9DvsWrOAjL0uSksJp0VP3qIl9WtoEf0BeLr9qLQBlOlnLfYjl60VUt
+         XWL4X3gVaIZEpRAl/eSBnBHCtzAfojry1i7uO5Rs=
+Date:   Tue, 30 May 2023 20:42:25 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Lad Prabhakar <prabhakar.csengg@gmail.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230530141641.1155691-1-boerge.struempfel@gmail.com>
-References: <20230530141641.1155691-1-boerge.struempfel@gmail.com>
-Subject: Re: [PATCH v7 0/5] spi: add SPI_MOSI_IDLE_LOW mode bit
-Message-Id: <168546845282.691057.8142290135375086082.b4-ty@kernel.org>
-Date:   Tue, 30 May 2023 18:40:52 +0100
+Subject: Re: [PATCH] media: camss: camss-video: Don't zero subdev format
+ again after initialization
+Message-ID: <20230530174225.GI22516@pendragon.ideasonboard.com>
+References: <20230503075340.45755-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230503075340.45755-1-y.oudjana@protonmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 16:16:36 +0200, Boerge Struempfel wrote:
-> Some spi controller switch the mosi line to high, whenever they are
-> idle. This may not be desired in all use cases. For example neopixel
-> leds can get confused and flicker due to misinterpreting the idle state.
-> Therefore, we introduce a new spi-mode bit, with which the idle behaviour
-> can be overwritten on a per device basis.
+Hi Yassine,
+
+Thank you for the patch.
+
+On Wed, May 03, 2023 at 10:53:40AM +0300, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
 > 
+> In an earlier commit, setting the which field of the subdev format struct
+> in video_get_subdev_format was moved to a designated initializer that also
+> zeroes all other fields. However, the memset call that was zeroing the
+> fields earlier was left in place, causing the which field to be cleared
+> after being set in the initializer.
+> 
+> Remove the memset call from video_get_subdev_format to avoid clearing the
+> initialized which field.
+> 
+> Fixes: ecefa105cc44 ("media: Zero-initialize all structures passed to subdev pad operations")
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Applied to
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+This is a regression fix, I'll send a pull request right away.
 
-Thanks!
+> ---
+>  drivers/media/platform/qcom/camss/camss-video.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
+> index 898f32177b12..8640db306026 100644
+> --- a/drivers/media/platform/qcom/camss/camss-video.c
+> +++ b/drivers/media/platform/qcom/camss/camss-video.c
+> @@ -353,7 +353,6 @@ static int video_get_subdev_format(struct camss_video *video,
+>  	if (subdev == NULL)
+>  		return -EPIPE;
+>  
+> -	memset(&fmt, 0, sizeof(fmt));
+>  	fmt.pad = pad;
+>  
+>  	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &fmt);
 
-[1/5] spi: add SPI_MOSI_IDLE_LOW mode bit
-      commit: fe73245592fef75a7c41180a3fbb07c9a75f622e
-[2/5] spi: spi-imx: add support for SPI_MOSI_IDLE_LOW mode bit
-      commit: 6a983ff5102ff0d859df05ca3f5cf2f6a17c0fad
-[3/5] spi: spidev: add two new spi mode bits
-      commit: 5cc223ca4858ec40bd2b8522ebc51c0d4963e51f
-[4/5] spi: spidev_test: Sorted the options into logical groups
-      commit: 113f36f2dce3a5a1aacbfa700c44080ec37ee3a0
-[5/5] spi: spidev_test Add three missing spi mode bits
-      commit: b229a7f530ebea90c8e21b56872f3102e3d54461
+-- 
+Regards,
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Laurent Pinchart
