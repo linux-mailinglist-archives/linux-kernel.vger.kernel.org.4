@@ -2,68 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C89716937
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053F2716944
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjE3QZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S232772AbjE3QZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbjE3QYy (ORCPT
+        with ESMTP id S232036AbjE3QZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:24:54 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FA5124
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:24:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pWWdPmiGz+I1qZLHvpqK5zN+jIL1btM5goMCaUaSM3Y=; b=vgG9td/BWQJK4sQpQpyRFGpLzm
-        FV/mUQzdJTxiY9qHZ8PEXkGz8ezRUXP3cXBGGjFaDkRV+QYc257kTmEff8P5pAPex6GUiYNnU7tvG
-        sMLGARgjjd2lcsduL5n5qnr3TEmIvfRPLBGbr4VYqhPaw/vqddpvRdsh98z5ZqFUIy7vhLIncZ4ZT
-        f5gazCUG5quqnxanUNN8ZSj1cEaY8zLfg/fq6LXmJX0sJxSMqfuQNNpiYh5QQJPiUjZEP16G6YxKU
-        YPXQGElIXOnjPhhdrLSe+JFtZLNFdpylQmxzHcrU/Dks61bbWzz+yUNKFNBDhb7KjXvrcpRq0xGDv
-        O9Gop7sg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4292-00EYmV-1p;
-        Tue, 30 May 2023 16:24:24 +0000
-Date:   Tue, 30 May 2023 09:24:24 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Daniel Gomez <da.gomez@samsung.com>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] nvme: Increase block size variable size to 32-bit
-Message-ID: <ZHYjOFNo0eV+VeCL@bombadil.infradead.org>
-References: <CGME20230530154254eucas1p241e57af99e4d4ee0e1a677904c3db68c@eucas1p2.samsung.com>
- <20230530154231.8313-1-da.gomez@samsung.com>
+        Tue, 30 May 2023 12:25:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAD3E8;
+        Tue, 30 May 2023 09:25:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F53562CD7;
+        Tue, 30 May 2023 16:25:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E037C433D2;
+        Tue, 30 May 2023 16:24:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685463903;
+        bh=ACMyBw8aBnxiwOn2sGNCuMmXFrRs+KzaneQ9BAek270=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XvWvDIE1Ft9keSbeXqQfOI1P3L00zUknWIQdylE1nrnb9OynfjQ1ln8qoIgm3NPq0
+         SZ73e2WlSLBQxQepWFJEQXhJcKghKsmYT+up9nc1PUj+i/vCthruVK1OAeqGQMn59e
+         DCqaAQOp06jGCvqZpEUTM+TJ3suSTx1eCt+OEyB51GT9rfn8Fac54EFwMtN7SgugPW
+         HGZFi9/ESXdojChhxxgPtL0fU/3o9t7x7QzZnhBbkx9/l/ekSeTzoHEl4/3g0AsQdD
+         PRFE62cp5QePE2869nUSxvHX4PABXveEGgmdWNRDYKc5jsDqi0+lyxFGDW///XMW2C
+         jNI4QCt2zJgzg==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Georgi Djakov <djakov@kernel.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH v3 00/15] Introduce the SC8180x devices
+Date:   Tue, 30 May 2023 21:54:39 +0530
+Message-Id: <20230530162454.51708-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530154231.8313-1-da.gomez@samsung.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 03:42:53PM +0000, Daniel Gomez wrote:
-> Increase block size variable size to 32-bit unsigned to be able to
-> support block devices larger than 32k (starting from 64 KiB).
-> 
-> Physical and logical block size already support unsigned 32-bit.
-> 
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+This introduces Qualcomm SC8180x SoC which features in Lenovo Flex 5G
+laptop. This also adds support for Primus platform as well as Lenovo Flex 5G
+laptop.
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Changes in v3:
+ - Split DTS patch into smaller check
+ - checkpatch and dtbs check error fixes
+ - fix comments from Konrad/Krzysztof
 
-  Luis
+Changes in v2:
+ - Fix the ufs pcie and phy bindings
+ - Lots of error fixes for dtbs_check
+ - Add few more missing compatiables
+
+Bjorn Andersson (3):
+  arm64: dts: qcom: Introduce the SC8180x platform
+  arm64: dts: qcom: sc8180x: Introduce Primus
+  arm64: dts: qcom: sc8180x: Introduce Lenovo Flex 5G
+
+Vinod Koul (12):
+  dt-bindings: PCI: qcom: Fix sc8180x clocks and interrupts
+  dt-bindings: usb: qcom,dwc3: Add SC8180x binding
+  dt-bindings: interconnect: split SC8180x to own schema
+  scsi: ufs: dt-bindings: Add SC8180x binding
+  dt-bindings: qcom,pdc: Add SC8180x compatible
+  arm64: dts: qcom: sc8180x: Add interconnects and lmh
+  arm64: dts: qcom: sc8180x: Add thermal zones
+  arm64: dts: qcom: sc8180x: Add QUPs
+  arm64: dts: qcom: sc8180x: Add PCIe instances
+  arm64: dts: qcom: sc8180x: Add remoteprocs, wifi and usb nodes
+  arm64: dts: qcom: sc8180x: Add display and gpu nodes
+  arm64: dts: qcom: sc8180x: Add pmics
+
+ .../bindings/interconnect/qcom,rpmh.yaml      |   11 -
+ .../interconnect/qcom,sc8180x-rpmh.yaml       |   49 +
+ .../interrupt-controller/qcom,pdc.yaml        |    1 +
+ .../devicetree/bindings/pci/qcom,pcie.yaml    |   29 +-
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     |    2 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |    3 +
+ arch/arm64/boot/dts/qcom/Makefile             |    2 +
+ .../boot/dts/qcom/sc8180x-lenovo-flex-5g.dts  |  583 +++
+ arch/arm64/boot/dts/qcom/sc8180x-pmics.dtsi   |  326 ++
+ arch/arm64/boot/dts/qcom/sc8180x-primus.dts   |  706 +++
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi         | 4030 +++++++++++++++++
+ 11 files changed, 5730 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc8180x-pmics.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc8180x-primus.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc8180x.dtsi
+
+-- 
+2.40.1
+
