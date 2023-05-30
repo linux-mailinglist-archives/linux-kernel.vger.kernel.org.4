@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17AB2716CC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E09A716CCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbjE3Sqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
+        id S231702AbjE3Sun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbjE3Sqg (ORCPT
+        with ESMTP id S229630AbjE3Sul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:46:36 -0400
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6DAFC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:46:31 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 44MPqYngtbOsk44MPqezJs; Tue, 30 May 2023 20:46:24 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1685472384;
-        bh=wAisxzg8dfWOsHsZpM0v+nS0EU1aAoqe1cA6dlcGUok=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=cxt0b70ongh8rsgRilK/5wy7YAeEmoJ6BLvRFuDAttIFdCTyIEADSZEsZ9Pt/f9gp
-         /8DhWc68KV2UcjVYvivWz3kq7O1O5X9Fvi+CTn0I+rEO+d1jf933J2/xdcymkleJIs
-         RGan+1ir9Dzt6Z2N2nRYOgW+dALxxgKqJyoZ08xKxpyGFNSYD55OYnqZuVmjkitpp3
-         OkzZbMEnIRnMELQqRlpZvf5Rq/ylVz+Wt/if9U9hWAXQpfz3S6DnWFAg16Y0fgONQI
-         riQDrtvrRSoEXkaj3RRjcnrJI0HLg8cxj48aDPbFtEAeUBTYdtjAf4VinNLHypXG1o
-         KGXxJF0XHpo/Q==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 30 May 2023 20:46:24 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <1335982c-70ea-6af2-19cf-73a4332ae510@wanadoo.fr>
-Date:   Tue, 30 May 2023 20:46:21 +0200
+        Tue, 30 May 2023 14:50:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615B0C9;
+        Tue, 30 May 2023 11:50:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0729628AE;
+        Tue, 30 May 2023 18:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6ABBC4339B;
+        Tue, 30 May 2023 18:50:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685472639;
+        bh=IZndPRsXdrvOnJb0ewXcTHzPGDycIf5ne3eEnx8Ld9E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SobdW6evDpNp5XKzU2RTYcxgG6l3SzTGzHCt5xrkeFknfGnlWzrVbG7cP1lPwqiaP
+         0FfyQurrDzUSnsieubT4XEnyDT97hyJQtHJCkBqJnG0CujgiOkILFbSLR7zDNG2zfY
+         T0hRclOsh62yzX4bY8+RHhL+htMASIgNqijM8KK+6H5Ht8sJdg5Dv6cDj1Ps1Pey0s
+         oVJeNXw6Y551qe82DQGWsaSS1fwR6MjgToppxj6pwlWvbH7FwDh/O6iZVWx7bZhddo
+         NXJlP8NoZygP29UsklAodVhproIJN3PrDjO2Fv1p9/2bdMZGxOAU7sWK64Gi/PyPsy
+         8Ln+mS7SaCOWw==
+Date:   Tue, 30 May 2023 20:50:36 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     carlos.song@nxp.com
+Cc:     aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, xiaoning.wang@nxp.com,
+        haibo.chen@nxp.com, linux-imx@nxp.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: imx-lpi2c: fix type char overflow issue when
+ calculating the clock cycle
+Message-ID: <20230530185036.ggep3pv7booqtb6b@intel.intel>
+References: <20230529080251.3614380-1-carlos.song@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] dmaengine: idxd: No need to clear memory after a
- dma_alloc_coherent() call
-To:     Bernd Petrovitsch <bernd@petrovitsch.priv.at>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        dmaengine@vger.kernel.org
-References: <f44be04317387f8936d31d5470963541615f30ef.1685283065.git.christophe.jaillet@wanadoo.fr>
- <1e87f3fa-58c5-d47f-3335-cd0a554b3144@petrovitsch.priv.at>
-Content-Language: fr, en-US
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <1e87f3fa-58c5-d47f-3335-cd0a554b3144@petrovitsch.priv.at>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529080251.3614380-1-carlos.song@nxp.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,26 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 30/05/2023 à 17:54, Bernd Petrovitsch a écrit :
-> On 28/05/2023 16:11, Christophe JAILLET wrote:
->> dma_alloc_coherent() already clear the allocated memory, there is no need
->> to explicitly call memset().
+On Mon, May 29, 2023 at 04:02:51PM +0800, carlos.song@nxp.com wrote:
+> From: Clark Wang <xiaoning.wang@nxp.com>
 > 
-> Hmm, so wouldn't be dma_zalloc_coherent() a better name for the function?
+> Claim clkhi and clklo as integer type to avoid possible calculation
+> errors caused by data overflow.
 > 
-> Kind regards,
->      Bernd
+> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+> Signed-off-by: Carlos Song <carlos.song@nxp.com>
+> ---
+>  drivers/i2c/busses/i2c-imx-lpi2c.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> index 40a4420d4c12..7dd33564cbe1 100644
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -211,8 +211,8 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
+>  /* CLKLO = I2C_CLK_RATIO * CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2 */
+>  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+>  {
+> -	u8 prescale, filt, sethold, clkhi, clklo, datavd;
+> -	unsigned int clk_rate, clk_cycle;
+> +	u8 prescale, filt, sethold, datavd;
+> +	unsigned int clk_rate, clk_cycle, clkhi, clklo;
 
-Hi,
+looks OK.
 
-No strong opinion about it.
-It is not malloc either !)
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
-When dma_zalloc_coherent() has been deprecated (see [1]), for some 
-reason, it was decided to keep the "alloc" version.
+there is, though, another part I would take care of, this bit:
 
-CJ
+	clklo = clk_cycle - clkhi;
+	if (clklo < 64)
+		break;
 
+It might be unlikely, but if "clk_cycle > clkhi" then all the
+calculation. Do you mind adding a check:
 
-[1]: 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/include/linux/dma-mapping.h?id=06d4dd2f2ce1cdb625f77c0676d5af6ba310c01d
+	if (unlikely(clk_cycle > clkhi))
+		break;
+
+Andi
+
+>  	enum lpi2c_imx_pincfg pincfg;
+>  	unsigned int temp;
+>  
+> -- 
+> 2.34.1
+> 
