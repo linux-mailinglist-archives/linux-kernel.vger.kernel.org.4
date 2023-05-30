@@ -2,135 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4845715C56
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6EE715C52
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:56:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjE3K5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S231398AbjE3K4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbjE3K4s (ORCPT
+        with ESMTP id S231361AbjE3K4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:56:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E13D9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685444164;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7r4Mnem7kmzwqmYPUjeTXwU41wAFR83DgbxuqCZJ8nM=;
-        b=V3NylsnVcUKXlon4E5PNzDUEKnboVteO/E19K8veTt7ekBBz4YJFbyKiWjm4+5T/9CjAM7
-        M3aAwYnkai5xVjGrVmNexSJlnkFsTE3AYTWh5l0zXW1X6SYxUXpxuozccE+wXj7vGI0wiS
-        k66I564gofYrwdFeklhIABCHl85AXfA=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-620-5c_DZ-WlOzGJYjjkTy2o6w-1; Tue, 30 May 2023 06:55:55 -0400
-X-MC-Unique: 5c_DZ-WlOzGJYjjkTy2o6w-1
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-64f383f88dfso1020023b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:55:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685444154; x=1688036154;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7r4Mnem7kmzwqmYPUjeTXwU41wAFR83DgbxuqCZJ8nM=;
-        b=QBAZjleUpjpTXisxmVnM1tAQunVKG4bCA3dznEIO1S9ZNo1sUbNi3o6/Ke46UDG9JS
-         burm3Gp0iXzM9kvyjJa+4WEO8vQZrIiC8mZZ/skDGXvY3P3JIPm6cl4fLvwvhMcVdO79
-         wSLhmR8N9UZOgo3iktOYvXf3Vtz6DZ7TgQyLv5vX/0KfjZlHbmo6DEy72ke7wi42T+gl
-         pf85pmUDMO/WB0vAJKVZpS87IrtANftNdLvTprLdEZBr64DalSA1N2LwDpl3t/8ut4ox
-         uHVa1bgi+j8x9f/bMtUf64yxk4pxE3adEvFNQf6PB7l6y89Mb5ndqQc2n9eqVFpvjPgP
-         zwpA==
-X-Gm-Message-State: AC+VfDwYEWlBy3zjVOZ8IDcl5ihcb/tFT3YWXUN8DHehwc8dcqhTlzT2
-        hurrETljXmsmYo5oLqxX5rzsRiUx+FBBMjjcKPavAm0tDykxVMAPMjth5+jhROtNWHsbFYiEDkv
-        YN5IK3KNGJuttRatYwV8QA0DL
-X-Received: by 2002:a17:902:d2cf:b0:1ad:eada:598b with SMTP id n15-20020a170902d2cf00b001adeada598bmr2094734plc.3.1685444154261;
-        Tue, 30 May 2023 03:55:54 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7CUOUu5tniDT9Anx1jndbJZo9eoV8LSBuK+IXZEX8MBQk8TjG7H9ErpJBB2Mbo63Rdlv0pCg==
-X-Received: by 2002:a17:902:d2cf:b0:1ad:eada:598b with SMTP id n15-20020a170902d2cf00b001adeada598bmr2094720plc.3.1685444153998;
-        Tue, 30 May 2023 03:55:53 -0700 (PDT)
-Received: from [10.66.61.39] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id h20-20020a170902f7d400b001aaed55aff3sm5579270plw.137.2023.05.30.03.55.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 03:55:53 -0700 (PDT)
-Message-ID: <3772ec3f-cafa-6d90-77e4-d1594e4046dd@redhat.com>
-Date:   Tue, 30 May 2023 18:55:49 +0800
+        Tue, 30 May 2023 06:56:21 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E598AF7;
+        Tue, 30 May 2023 03:56:17 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1685444172tvjqxqzn
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 May 2023 18:56:11 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: IV30oiqrgAYLeAVOtqPY/w4sV51ufOZgvH9veDK9Ln5rvQZwJVqfvQebBNkb0
+        rWdg0XWxELEr+D+JJDpmJRKXEGbTrqUmljotAwMSeKgbivwAh8Yc83kjym3D0j3G2Y/rfbT
+        rmDMziIaF1RHSZ0VHwappE4cH+2ibJvPOUXuZeZixvII0+kcxU/CNsIAfWDAPnGiPA/X4Ry
+        uhcwpAPuHw//KlJZuq0nj2KBV/mhrO1z6IjLwWZl6tEPenU5NHMlwsxmdxFUZgT39wwGWzW
+        zUWW0R3DR8s36VqJKPbbMYeeSntiCd0UAIcDVkGpuo+W1S9x5EyFdJl4W5eKH6bam/lftYQ
+        9/imcDdRSqPSe6FQ4g46x2VQalG7yfX6OA+ka7s9XC8huDYjbWd2rJlVOqjkRRquGnxwI1c
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 16230640011585094560
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: [PATCH 1/4] selftests/nolibc: allow rerun with the same settings
+Date:   Tue, 30 May 2023 18:56:10 +0800
+Message-Id: <32d4ec1c3cabae5c1baabf85627b81d6ede01518.1685443199.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1685443199.git.falcon@tinylab.org>
+References: <cover.1685443199.git.falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 7/7] arm64/sysreg: Convert OSECCR_EL1 to automatic
- generation
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev
-References: <20230419-arm64-syreg-gen-v2-0-4c6add1f6257@kernel.org>
- <20230419-arm64-syreg-gen-v2-7-4c6add1f6257@kernel.org>
-From:   Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <20230419-arm64-syreg-gen-v2-7-4c6add1f6257@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Record the user settings from NOLIBC_TEST and allow reuse them in
+another run iteration.
 
+This allows to rerun the test cases with the same setting.
 
-On 5/24/23 02:37, Mark Brown wrote:
-> Convert OSECCR_EL1 to automatic generation as per DDI0601 2023-03, no
-> functional changes.
-> 
-Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->   arch/arm64/include/asm/sysreg.h | 1 -
->   arch/arm64/tools/sysreg         | 5 +++++
->   2 files changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
-> index d9711f1e47b2..23a17da500a4 100644
-> --- a/arch/arm64/include/asm/sysreg.h
-> +++ b/arch/arm64/include/asm/sysreg.h
-> @@ -134,7 +134,6 @@
->   #define SYS_SVCR_SMSTART_SM_EL0		sys_reg(0, 3, 4, 3, 3)
->   #define SYS_SVCR_SMSTOP_SMZA_EL0	sys_reg(0, 3, 4, 6, 3)
->   
-> -#define SYS_OSECCR_EL1			sys_reg(2, 0, 0, 6, 2)
->   #define SYS_DBGBVRn_EL1(n)		sys_reg(2, 0, 0, n, 4)
->   #define SYS_DBGBCRn_EL1(n)		sys_reg(2, 0, 0, n, 5)
->   #define SYS_DBGWVRn_EL1(n)		sys_reg(2, 0, 0, n, 6)
-> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-> index e18ae1df41f4..41462785020b 100644
-> --- a/arch/arm64/tools/sysreg
-> +++ b/arch/arm64/tools/sysreg
-> @@ -93,6 +93,11 @@ Res0	63:32
->   Field	31:0	DTRTX
->   EndSysreg
->   
-> +Sysreg	OSECCR_EL1	2	0	0	6	2
-> +Res0	63:32
-> +Field	31:0	EDECCR
-> +EndSysreg
-> +
->   Sysreg	OSLAR_EL1	2	0	1	0	4
->   Res0	63:1
->   Field	0	OSLK
-> 
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 46 ++++++++++++--------
+ 1 file changed, 29 insertions(+), 17 deletions(-)
 
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index fd7515f6b1d2..be718fa5dc86 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -46,6 +46,9 @@ char **environ;
+ /* definition of a series of tests */
+ struct test {
+ 	const char *name;              /* test name */
++	int min;
++	int max;
++	int run;
+ 	int (*func)(int min, int max); /* handler */
+ };
+ 
+@@ -940,12 +943,12 @@ int prepare(void)
+ }
+ 
+ /* This is the definition of known test names, with their functions */
+-static const struct test test_names[] = {
++static struct test test_names[] = {
+ 	/* add new tests here */
+-	{ .name = "syscall",    .func = run_syscall    },
+-	{ .name = "stdlib",     .func = run_stdlib     },
+-	{ .name = "vfprintf",   .func = run_vfprintf   },
+-	{ .name = "protection", .func = run_protection },
++	{ .name = "syscall",    .min = 0, .max = INT_MAX, .run = -1, .func = run_syscall    },
++	{ .name = "stdlib",     .min = 0, .max = INT_MAX, .run = -1, .func = run_stdlib     },
++	{ .name = "vfprintf",   .min = 0, .max = INT_MAX, .run = -1, .func = run_vfprintf   },
++	{ .name = "protection", .min = 0, .max = INT_MAX, .run = -1, .func = run_protection },
+ 	{ 0 }
+ };
+ 
+@@ -994,7 +997,11 @@ int main(int argc, char **argv, char **envp)
+ 					break;
+ 			}
+ 
+-			if (test_names[idx].name) {
++			if (!test_names[idx].name) {
++				printf("Ignoring unknown test name '%s'\n", test);
++			} else {
++				test_names[idx].run = 1;
++
+ 				/* The test was named, it will be called at least
+ 				 * once. We may have an optional range at <colon>
+ 				 * here, which defaults to the full range.
+@@ -1022,27 +1029,32 @@ int main(int argc, char **argv, char **envp)
+ 						value = colon;
+ 					}
+ 
+-					/* now's time to call the test */
+-					printf("Running test '%s'\n", test_names[idx].name);
+-					err = test_names[idx].func(min, max);
+-					ret += err;
+-					printf("Errors during this test: %d\n\n", err);
++					test_names[idx].min = min;
++					test_names[idx].max = max;
+ 				} while (colon && *colon);
+-			} else
+-				printf("Ignoring unknown test name '%s'\n", test);
++			}
+ 
+ 			test = comma;
+ 		} while (test && *test);
+-	} else {
+-		/* no test mentioned, run everything */
++
++		/* disable the left tests */
+ 		for (idx = 0; test_names[idx].name; idx++) {
+-			printf("Running test '%s'\n", test_names[idx].name);
+-			err = test_names[idx].func(min, max);
++			if (test_names[idx].run != 1)
++				test_names[idx].run = 0;
++		}
++	}
++
++	/* run everything or the test mentioned */
++	for (idx = 0; test_names[idx].name; idx++) {
++		if (test_names[idx].run != 0) {
++			printf("Running test '%s', from %d to %d\n", test_names[idx].name, test_names[idx].min, test_names[idx].max);
++			err = test_names[idx].func(test_names[idx].min, test_names[idx].max);
+ 			ret += err;
+ 			printf("Errors during this test: %d\n\n", err);
+ 		}
+ 	}
+ 
++
+ 	printf("Total number of errors: %d\n", ret);
+ 
+ 	if (getpid() == 1) {
 -- 
-Shaoqin
+2.25.1
 
