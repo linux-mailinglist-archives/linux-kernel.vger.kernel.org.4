@@ -2,107 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177D17156B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9057156BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbjE3H2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S229952AbjE3H3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjE3H2N (ORCPT
+        with ESMTP id S230360AbjE3H2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:28:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F5F10E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:28:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 67AB71F8B9;
-        Tue, 30 May 2023 07:27:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685431679; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0iuaXZNwiLN+ZHN3JBMLHew3TV1lht46Dhhj/rIIHak=;
-        b=KwROOZXUqtwOxh+02Q9km5zdl57HiclQ2Xf1++iSWTNzgwzJBs0D9kNktitRFxRtvpwbiH
-        pfy5d/CXuN4XxYZH0rhEiVKEH0xpIZaZgQeHdVXqjHcKMcTcSZApoYytLxAUk4uf/Sem+J
-        KHd46xdWk5DbrDlhCOyRx0np9wJLyxE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685431679;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0iuaXZNwiLN+ZHN3JBMLHew3TV1lht46Dhhj/rIIHak=;
-        b=hpbCRhUjBkvJIrGPaWFWcZrwLDEcl0YY8hvzBeUL+AScG1Hh5JBp9PiS1enRC9GK4cCWUP
-        YnLITC3PM/sfyQDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 48E3213478;
-        Tue, 30 May 2023 07:27:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id M8ubEH+ldWSdGwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 30 May 2023 07:27:59 +0000
-Message-ID: <6feab6b0-ec49-8651-bc8e-14ec40249017@suse.cz>
-Date:   Tue, 30 May 2023 09:27:59 +0200
+        Tue, 30 May 2023 03:28:34 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7FC19C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:28:15 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id a1e0cc1a2514c-783f88ce557so3159355241.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685431694; x=1688023694;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OCgynGq67ALKegDWHOnwBw+W3AAJiRXYWJGBUDwaz7k=;
+        b=Scz+y1v49XF8CbK1f5L6+O5+BLeaDdOqS7gfMFDV9xOAeweo1APxY9t+6TL2fqiDZ1
+         mu3D7zp8dRU2KBgliZVXcrYJC1Zlu3igaZqbKSn/2Zyl+SDgwlJGpcH2eiLpSBCVeB3t
+         ISSeQl/vhsKbxBgS4SOghVBiNPTQa6DXKfu94=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685431694; x=1688023694;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OCgynGq67ALKegDWHOnwBw+W3AAJiRXYWJGBUDwaz7k=;
+        b=V6fmXs6xznttJV7D6+nF5Hav4i57u9ZGMxFIljzZfLHte8MVvvXloOw3C4cNg4PqCg
+         y1nOP7j/B0eP5sL4IbakrqGB07lgrUNjsrl7KeP/PQ5R7U5lkqizYxrU+9sADl6ByquW
+         hREP2hvX9HqsLonVz3QFlfyMkzW2acI/Qj4HmKWSXIkTRET2FX48HRtfW6I8q0yA9OEb
+         TS1cLGDWm96f6mhp/ReFFiakgNNbMQtTZUyfOTPJQmcjbd8scPR8DDhJHs3rUhdj1Dk2
+         Bf4oNE9Gtd3sSaAJTq7s93iG1Y8ONl+z4cq7r73yC66rnwGtFzrAsrwbmcW2dLhBduwd
+         j1Qw==
+X-Gm-Message-State: AC+VfDzSghZdHxyVWHbPKC2Bc4SAYLQRspkocRpugxzSFn0GVEdZl0DQ
+        Wx6qbSqkQbEdZtXgYclVgr01WJsMg/4b/3nVca+UNg==
+X-Google-Smtp-Source: ACHHUZ6fL/grV0awl9WykFSsFWLwHVGeiIhqkSVSfAVpNCJK6q5E8S64jpA0MWKklZJMO1VR0bmMP3sKJzadwSXq2Ak=
+X-Received: by 2002:a1f:5e8f:0:b0:44f:e6ff:f30e with SMTP id
+ s137-20020a1f5e8f000000b0044fe6fff30emr368533vkb.10.1685431694694; Tue, 30
+ May 2023 00:28:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/6] mm: compaction: drop the redundant page validation in
- update_pageblock_skip()
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1685018752.git.baolin.wang@linux.alibaba.com>
- <5142e15b9295fe8c447dbb39b7907a20177a1413.1685018752.git.baolin.wang@linux.alibaba.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <5142e15b9295fe8c447dbb39b7907a20177a1413.1685018752.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20230303013842.23259-1-allen-kh.cheng@mediatek.com> <4ebd1c9f-0460-4436-8e17-0e46e88f4828@notapiano>
+In-Reply-To: <4ebd1c9f-0460-4436-8e17-0e46e88f4828@notapiano>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 30 May 2023 15:28:03 +0800
+Message-ID: <CAGXv+5Hd-8e9QWGQ2MB++xjNH0sRemmQnVnAk=CfE8DBhkYZQw@mail.gmail.com>
+Subject: Re: [RESEND 0/6] media: mediatek: Update video decoder nodes for
+ MT8195 and MT8192
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/23 14:53, Baolin Wang wrote:
-> The caller has validated the page before calling pdate_pageblock_skip(),
-                                                   ^ u
+On Tue, Apr 4, 2023 at 6:19=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> On Fri, Mar 03, 2023 at 09:38:36AM +0800, Allen-KH Cheng wrote:
+> > This series is based on matthias github v6.3-tmp. Since there is a
+> > dependence in the following series, I resend a series for them.
+> >
+> > patchwork.kernel.org/project/linux-mediatek/list/?series=3D702423
+> > patchwork.kernel.org/project/linux-mediatek/list/?series=3D702078
+>
+> Hi Matthias,
+>
+> this series has been completely reviewed and tested for a while, and the
+> bindings patches were already picked up by Hans and are on their way to 6=
+.4 [1].
+> So could you please pick the devicetree patches?
 
-> thus drop the redundant page validation in update_pageblock_skip().
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Ping again on this series.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+The device tree patches can be picked up.
 
-> ---
->  mm/compaction.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 163e2ec70aff..426bb6ce070b 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -436,9 +436,6 @@ static void update_pageblock_skip(struct compact_control *cc,
->  	if (cc->no_set_skip_hint)
->  		return;
->  
-> -	if (!page)
-> -		return;
-> -
->  	set_pageblock_skip(page);
->  
->  	/* Update where async and sync compaction should restart */
-
+> Thanks,
+> N=C3=ADcolas
+>
+> [1] https://lore.kernel.org/all/98c48690-631d-1086-9b7c-004c61cc8dbb@xs4a=
+ll.nl/
+>
+> >
+> > Allen-KH Cheng (3):
+> >   media: dt-bindings: media: mediatek: Rename child node names for
+> >     decoder
+> >   media: dt-bindings: media: mediatek: Remove "dma-ranges" property for
+> >     decoder
+> >   arm64: dts: mt8192: Add video-codec nodes
+> >
+> > Yunfei Dong (3):
+> >   media: dt-bindings: media: mediatek: vcodec: adapt to the
+> >     'clock-names' of different platforms
+> >   media: dt-bindings: media: mediatek: vcodec: Change the max reg value
+> >     to 2
+> >   arm64: dts: mt8195: Add video decoder node
+> >
+> >  .../media/mediatek,vcodec-subdev-decoder.yaml | 113 +++++++-----------
+> >  arch/arm64/boot/dts/mediatek/mt8192.dtsi      |  59 +++++++++
+> >  arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  70 +++++++++++
+> >  3 files changed, 173 insertions(+), 69 deletions(-)
+> >
+> > --
+> > 2.18.0
+> >
