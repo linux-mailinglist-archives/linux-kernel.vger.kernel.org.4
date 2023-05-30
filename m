@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65ABB716778
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB49716770
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbjE3PqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
+        id S232317AbjE3PqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbjE3PqF (ORCPT
+        with ESMTP id S231134AbjE3PqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 May 2023 11:46:05 -0400
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93918F1;
-        Tue, 30 May 2023 08:46:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FFEC7;
+        Tue, 30 May 2023 08:46:00 -0700 (PDT)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 62e679b2b44cfc7e; Tue, 30 May 2023 17:46:00 +0200
+ id b5dd397e3628a3f2; Tue, 30 May 2023 17:45:59 +0200
 Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 8FE318BB094;
-        Tue, 30 May 2023 17:45:59 +0200 (CEST)
+        by v370.home.net.pl (Postfix) with ESMTPSA id D8F848BB094;
+        Tue, 30 May 2023 17:45:58 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux ACPI <linux-acpi@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Michal Wilczynski <michal.wilczynski@intel.com>
-Subject: [PATCH v1 3/5] ACPI: thermal: Move symbol definitions to one place
-Date:   Tue, 30 May 2023 17:44:32 +0200
-Message-ID: <2224091.iZASKD2KPV@kreacher>
+Subject: [PATCH v1 4/5] ACPI: thermal: Move acpi_thermal_driver definition
+Date:   Tue, 30 May 2023 17:44:40 +0200
+Message-ID: <21889638.EfDdHjke4D@kreacher>
 In-Reply-To: <5675481.DvuYhMxLoT@kreacher>
 References: <5675481.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
@@ -41,7 +41,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehm
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgleduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehm
  ihgthhgrlhdrfihilhgtiiihnhhskhhisehinhhtvghlrdgtohhm
 X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -55,94 +55,115 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Move all of the symbol definitions to the initial part of the code so
-they all can be found in one place.
+Move the definition of the acpi_thermal_driver structure closer to the
+initialization code that registes the driver, so some function forward
+declarations can be dropped.
 
-While at it, consolidate white space used in there.
+Also move the module information to the end of the file where it is
+usually located.
 
 No functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/acpi/thermal.c |   58 ++++++++++++++++++++++++-------------------------
- 1 file changed, 29 insertions(+), 29 deletions(-)
+ drivers/acpi/thermal.c |   66 +++++++++++++++++++++++--------------------------
+ 1 file changed, 31 insertions(+), 35 deletions(-)
 
 Index: linux-pm/drivers/acpi/thermal.c
 ===================================================================
 --- linux-pm.orig/drivers/acpi/thermal.c
 +++ linux-pm/drivers/acpi/thermal.c
-@@ -40,8 +40,35 @@
- #define ACPI_THERMAL_NOTIFY_HOT		0xF1
- #define ACPI_THERMAL_MODE_ACTIVE	0x00
+@@ -70,10 +70,6 @@ do { \
+ 			"Please report to linux-acpi@vger.kernel.org\n", str); \
+ } while (0)
  
--#define ACPI_THERMAL_MAX_ACTIVE	10
--#define ACPI_THERMAL_MAX_LIMIT_STR_LEN 65
-+#define ACPI_THERMAL_MAX_ACTIVE		10
-+#define ACPI_THERMAL_MAX_LIMIT_STR_LEN	65
-+
-+#define ACPI_TRIPS_CRITICAL	BIT(0)
-+#define ACPI_TRIPS_HOT		BIT(1)
-+#define ACPI_TRIPS_PASSIVE	BIT(2)
-+#define ACPI_TRIPS_ACTIVE	BIT(3)
-+#define ACPI_TRIPS_DEVICES	BIT(4)
-+
-+#define ACPI_TRIPS_THRESHOLDS	(ACPI_TRIPS_PASSIVE | ACPI_TRIPS_ACTIVE)
-+
-+#define ACPI_TRIPS_INIT		(ACPI_TRIPS_CRITICAL | ACPI_TRIPS_HOT | \
-+				 ACPI_TRIPS_PASSIVE | ACPI_TRIPS_ACTIVE | \
-+				 ACPI_TRIPS_DEVICES)
-+
-+/*
-+ * This exception is thrown out in two cases:
-+ * 1.An invalid trip point becomes invalid or a valid trip point becomes invalid
-+ *   when re-evaluating the AML code.
-+ * 2.TODO: Devices listed in _PSL, _ALx, _TZD may change.
-+ *   We need to re-bind the cooling devices of a thermal zone when this occurs.
-+ */
-+#define ACPI_THERMAL_TRIPS_EXCEPTION(flags, tz, str) \
-+do { \
-+	if (flags != ACPI_TRIPS_INIT) \
-+		acpi_handle_info(tz->device->handle, \
-+			"ACPI thermal trip point %s changed\n" \
-+			"Please report to linux-acpi@vger.kernel.org\n", str); \
-+} while (0)
+-MODULE_AUTHOR("Paul Diefenbaugh");
+-MODULE_DESCRIPTION("ACPI Thermal Zone Driver");
+-MODULE_LICENSE("GPL");
+-
+ static int act;
+ module_param(act, int, 0644);
+ MODULE_PARM_DESC(act, "Disable or override all lowest active trip points.");
+@@ -100,37 +96,6 @@ MODULE_PARM_DESC(psv, "Disable or overri
  
- MODULE_AUTHOR("Paul Diefenbaugh");
- MODULE_DESCRIPTION("ACPI Thermal Zone Driver");
-@@ -232,33 +259,6 @@ static int acpi_thermal_set_cooling_mode
- 	return 0;
+ static struct workqueue_struct *acpi_thermal_pm_queue;
+ 
+-static int acpi_thermal_add(struct acpi_device *device);
+-static void acpi_thermal_remove(struct acpi_device *device);
+-static void acpi_thermal_notify(struct acpi_device *device, u32 event);
+-
+-static const struct acpi_device_id  thermal_device_ids[] = {
+-	{ACPI_THERMAL_HID, 0},
+-	{"", 0},
+-};
+-MODULE_DEVICE_TABLE(acpi, thermal_device_ids);
+-
+-#ifdef CONFIG_PM_SLEEP
+-static int acpi_thermal_suspend(struct device *dev);
+-static int acpi_thermal_resume(struct device *dev);
+-#else
+-#define acpi_thermal_suspend NULL
+-#define acpi_thermal_resume NULL
+-#endif
+-static SIMPLE_DEV_PM_OPS(acpi_thermal_pm, acpi_thermal_suspend, acpi_thermal_resume);
+-
+-static struct acpi_driver acpi_thermal_driver = {
+-	.name = "thermal",
+-	.class = ACPI_THERMAL_CLASS,
+-	.ids = thermal_device_ids,
+-	.ops = {
+-		.add = acpi_thermal_add,
+-		.remove = acpi_thermal_remove,
+-		.notify = acpi_thermal_notify,
+-		},
+-	.drv.pm = &acpi_thermal_pm,
+-};
+-
+ struct acpi_thermal_state {
+ 	u8 critical:1;
+ 	u8 hot:1;
+@@ -1131,6 +1096,33 @@ static int acpi_thermal_resume(struct de
  }
+ #endif
  
--#define ACPI_TRIPS_CRITICAL	BIT(0)
--#define ACPI_TRIPS_HOT		BIT(1)
--#define ACPI_TRIPS_PASSIVE	BIT(2)
--#define ACPI_TRIPS_ACTIVE	BIT(3)
--#define ACPI_TRIPS_DEVICES	BIT(4)
--
--#define ACPI_TRIPS_THRESHOLDS	(ACPI_TRIPS_PASSIVE | ACPI_TRIPS_ACTIVE)
--
--#define ACPI_TRIPS_INIT		(ACPI_TRIPS_CRITICAL | ACPI_TRIPS_HOT | \
--				 ACPI_TRIPS_PASSIVE | ACPI_TRIPS_ACTIVE | \
--				 ACPI_TRIPS_DEVICES)
--
--/*
-- * This exception is thrown out in two cases:
-- * 1.An invalid trip point becomes invalid or a valid trip point becomes invalid
-- *   when re-evaluating the AML code.
-- * 2.TODO: Devices listed in _PSL, _ALx, _TZD may change.
-- *   We need to re-bind the cooling devices of a thermal zone when this occurs.
-- */
--#define ACPI_THERMAL_TRIPS_EXCEPTION(flags, tz, str)	\
--do {	\
--	if (flags != ACPI_TRIPS_INIT)	\
--		acpi_handle_info(tz->device->handle,	\
--		"ACPI thermal trip point %s changed\n"	\
--		"Please report to linux-acpi@vger.kernel.org\n", str); \
--} while (0)
--
- static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
- {
- 	acpi_status status;
++static const struct acpi_device_id  thermal_device_ids[] = {
++	{ACPI_THERMAL_HID, 0},
++	{"", 0},
++};
++MODULE_DEVICE_TABLE(acpi, thermal_device_ids);
++
++#ifdef CONFIG_PM_SLEEP
++static int acpi_thermal_suspend(struct device *dev);
++static int acpi_thermal_resume(struct device *dev);
++#else
++#define acpi_thermal_suspend	NULL
++#define acpi_thermal_resume	NULL
++#endif
++static SIMPLE_DEV_PM_OPS(acpi_thermal_pm, acpi_thermal_suspend, acpi_thermal_resume);
++
++static struct acpi_driver acpi_thermal_driver = {
++	.name = "thermal",
++	.class = ACPI_THERMAL_CLASS,
++	.ids = thermal_device_ids,
++	.ops = {
++		.add = acpi_thermal_add,
++		.remove = acpi_thermal_remove,
++		.notify = acpi_thermal_notify,
++		},
++	.drv.pm = &acpi_thermal_pm,
++};
++
+ static int thermal_act(const struct dmi_system_id *d) {
+ 	if (act == 0) {
+ 		pr_notice("%s detected: disabling all active thermal trip points\n",
+@@ -1235,3 +1227,7 @@ static void __exit acpi_thermal_exit(voi
+ 
+ module_init(acpi_thermal_init);
+ module_exit(acpi_thermal_exit);
++
++MODULE_AUTHOR("Paul Diefenbaugh");
++MODULE_DESCRIPTION("ACPI Thermal Zone Driver");
++MODULE_LICENSE("GPL");
 
 
 
