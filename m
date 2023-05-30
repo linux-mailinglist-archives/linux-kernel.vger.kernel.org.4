@@ -2,189 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489E1716739
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCB271673D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjE3Ph5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S231809AbjE3Piv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjE3Phy (ORCPT
+        with ESMTP id S229524AbjE3Pis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:37:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5BBC7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:37:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B2D1629D4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:37:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD27FC433D2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:37:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685461071;
-        bh=I+bDplFB4ybfoxeuTjDQOJi8CNtCKz/6pE+frellwdw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CL+UBr8+xQiuU2Uzm5rgc/6Ijr+ybjXyWsdX/hFcmslL0w6tfI+kNHoOk1qiEhons
-         sa3TUeA6xcnI/vDGf+/toNsoLVo6tecz2wx1bi2Q53md3LAPhOZwKnqpfXsVZG2ere
-         aDxYQ0m0SMBupi6W9ERgv+RtUVTIkuFwUFZ6zB/7/5trk8Ji/LC7ZY8ygsQdMXZxKM
-         8kAwimKnI7tCnDj2mGaGSNukohfq1dVn+qhBhnKAHNWLWtW5cC0P0LUdmjZvuwVTBo
-         lrfFKnJMrUiDffkHg4togiBuNHbAMD50FK2TdotvqJZfI+DBq7Wl+4fkGlF122EOwx
-         zCDKEWRNleOPA==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f4b80bf93aso5155664e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:37:51 -0700 (PDT)
-X-Gm-Message-State: AC+VfDz4h9kXasnDmJKwmYtvZR448fcA7y4vMYwQUDpsAXMGM2C7nWRR
-        9S+yCXQcH0iTmKtFi1sbvTzUeuk4m7rjmRbe7+Y=
-X-Google-Smtp-Source: ACHHUZ4eIE/heo/0Kn6F9UfSo+8dlTQAjTrg/t6eQUk7SkKkLaE4qya56Lz8F7g5SRJ48fAbdBGvPQp6DD16rlkOl+U=
-X-Received: by 2002:ac2:44cf:0:b0:4f3:7a59:d19 with SMTP id
- d15-20020ac244cf000000b004f37a590d19mr1075745lfm.59.1685461069828; Tue, 30
- May 2023 08:37:49 -0700 (PDT)
+        Tue, 30 May 2023 11:38:48 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEF0C7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:38:46 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-514953b3aa6so4281916a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:38:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685461125; x=1688053125;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IaHu9TtkLLNOstMNSPpKZct2v0hP2E2NmFd4zYNUP+k=;
+        b=EX00xAh9t4XvFcWZc3FWQE5sqik+kGjm9qDbvY0NT14alFvhwB5nWacvT9u0CkeRY0
+         tUwtFCrMAE4XUbqi3oiibp2Ko6+p/vJOwuM+n0D4PImbPiPzG8nQOcy/bdOsICr20W9a
+         7CW9XcE6Y9dBT9kX2rsu+Gj04cHoxgbvOX2YtgfOpxwxOxKUGukZHknX8NGXLSVdHxlL
+         W5IG1NZ9rzoE3YdUqZwCJ2AKU8l+BmIvzVYih+d9R9qbiowemlATsTRfHUf4zsoabqqy
+         JlDZSTNLHnyodPieIHqgsmWq0LD7wCjZlAOmZkHecK4tHr04G8aOkA1JVDwTpgJ55lIl
+         WiMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685461125; x=1688053125;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IaHu9TtkLLNOstMNSPpKZct2v0hP2E2NmFd4zYNUP+k=;
+        b=HGsOcqsjBYPSwR+4Jr7Eqw0N6LZxXk1QNhF3GoV48YduWOQUpnMiqAY/EkLYb2depf
+         7gTDQ6KNDdnkiUuxikl7JEBTpMFBccLbhLF+h+O9VYLbvaNcSoHcETi7HOwqdkSdN0Xx
+         nes4Aloy2oVHABk35Po0ZDUHscWwU3iitt4VmIHMjvoV04cTM40i4DlBg73mVocoKNbG
+         0orUocPKxyrDyTxnxzYq0SfGVUoz1Gxj/reJgnmOtQgJX7acWj3uBb2SBdhT0rKiN7BF
+         wCSDBCeR4iiviWCtGd7lXyOEdgcF7uCNDpJP5jc1vsn7zcLcNM+wdEHxbcuEqxzCgugL
+         yG7w==
+X-Gm-Message-State: AC+VfDzv2TsQnajNkVGKfN/SlkxYcsVNMr5qyTNR5qD31jkEzxyMW5cN
+        5LZpu9hu9VRISFjSnyOOss1u1Q==
+X-Google-Smtp-Source: ACHHUZ5mgEz2+fqyMWH4zaqwvf603rvdfg9ARinMvvN/pAOkAoTqh0y3Kum6bFZI5/DHOaPc0F3iAA==
+X-Received: by 2002:a17:907:3e1e:b0:94e:ed5d:c864 with SMTP id hp30-20020a1709073e1e00b0094eed5dc864mr3324947ejc.19.1685461125225;
+        Tue, 30 May 2023 08:38:45 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id kq12-20020a170906abcc00b009596e7e0dbasm7479658ejb.162.2023.05.30.08.38.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 08:38:44 -0700 (PDT)
+Message-ID: <80ec15f5-0c68-9076-020a-854720d84c8a@linaro.org>
+Date:   Tue, 30 May 2023 17:38:42 +0200
 MIME-Version: 1.0
-References: <20230529073845.2859178-1-guoren@kernel.org> <20230529-jasmine-amigo-6d01f6852b35@wendy>
- <CAJF2gTRSoZbexqka=_7nf4+dHZW2FGf++BiTMypfTbeoGAbUiA@mail.gmail.com>
- <CAJF2gTTzUfp7xDr8myA+xMcxGNEQ+XLEYMfoR91NShdBAQMu7Q@mail.gmail.com> <CABgGipXu7iq-J5v6GVMPrnHiGVLuMxabB0_hPb+o+04T2MAwpw@mail.gmail.com>
-In-Reply-To: <CABgGipXu7iq-J5v6GVMPrnHiGVLuMxabB0_hPb+o+04T2MAwpw@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 30 May 2023 23:37:38 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR2fAkk1532VWmsWP5DSYN17ib80wa5QwwT=DC0LY9gGw@mail.gmail.com>
-Message-ID: <CAJF2gTR2fAkk1532VWmsWP5DSYN17ib80wa5QwwT=DC0LY9gGw@mail.gmail.com>
-Subject: Re: [PATCH] riscv: vector: Fixup modules compile error
-To:     Andy Chiu <andy.chiu@sifive.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>, greentime.hu@sifive.com,
-        vincent.chen@sifive.com, paul.walmsley@sifive.com,
-        palmer@rivosinc.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1 3/3] dt-bindings: arm: Adds CoreSight CSR hardware
+ definitions
+Content-Language: en-US
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+References: <20230526153508.6208-1-quic_jinlmao@quicinc.com>
+ <20230526153508.6208-4-quic_jinlmao@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230526153508.6208-4-quic_jinlmao@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 5:49=E2=80=AFPM Andy Chiu <andy.chiu@sifive.com> wr=
-ote:
->
-> On Tue, May 30, 2023 at 2:52=E2=80=AFPM Guo Ren <guoren@kernel.org> wrote=
-:
-> >
-> > On Tue, May 30, 2023 at 10:59=E2=80=AFAM Guo Ren <guoren@kernel.org> wr=
-ote:
-> > >
-> > > On Mon, May 29, 2023 at 9:43=E2=80=AFPM Conor Dooley <conor.dooley@mi=
-crochip.com> wrote:
-> > > >
-> > > > On Mon, May 29, 2023 at 03:38:45AM -0400, guoren@kernel.org wrote:
-> > > > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > > >
-> > > > > Some .ko also need the riscv_v_user_allowed symbol.
-> > > > >
-> > > > > ERROR: modpost: "riscv_v_user_allowed" [arch/riscv/kvm/kvm.ko]
-> > > > > undefined!
-> > > > > make[3]: ***
-> > > > > [/home/guoren/source/kernel/linux/scripts/Makefile.modpost:136:
-> > > > > Module.symvers] Error 1
-> > > > >
-> > > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > > > ---
-> > > > >  arch/riscv/kernel/vector.c | 1 +
-> > > > >  1 file changed, 1 insertion(+)
-> > > > >
-> > > > > diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vecto=
-r.c
-> > > > > index 1c4ac821e008..3ae08816d608 100644
-> > > > > --- a/arch/riscv/kernel/vector.c
-> > > > > +++ b/arch/riscv/kernel/vector.c
-> > > > > @@ -129,6 +129,7 @@ bool riscv_v_user_allowed(void)
-> > > > >  {
-> > > > >       return riscv_v_get_cur_ctrl(current) =3D=3D PR_RISCV_V_VSTA=
-TE_CTRL_ON;
-> > > > >  }
-> > > > > +EXPORT_SYMBOL(riscv_v_user_allowed);
-> > > >
-> > > > Is there a reason that this should not be EXPORT_SYMBOL_GPL()?
-> > > Good question, but I just follow our arch/riscv habbit, maybe we
-> > > should change all of that in another patch.
-> > >
-> > > =E2=9E=9C  linux-s64ilp32 git:(s64ilp32) =E2=9C=97 grep EXPORT_SYMBOL=
-  arch/riscv -r | wc -l
-> > > 66
-> > > =E2=9E=9C  linux-s64ilp32 git:(s64ilp32) =E2=9C=97 grep EXPORT_SYMBOL=
-_GPL  arch/riscv -r | wc -l
-> > > 15
-> >
-> > Why !MODULE_LICENSE(GPL) modules couldn't use riscv_v_user_allowed?
-> > Seems EXPORT_SYMBOL_GPL has more limitations.
-> >
-> > :c:func:`EXPORT_SYMBOL_GPL()`
-> > -----------------------------
-> >
-> > Defined in ``include/linux/export.h``
-> >
-> > Similar to :c:func:`EXPORT_SYMBOL()` except that the symbols
-> > exported by :c:func:`EXPORT_SYMBOL_GPL()` can only be seen by
-> > modules with a :c:func:`MODULE_LICENSE()` that specifies a GPL
-> > compatible license. It implies that the function is considered an
-> > internal implementation issue, and not really an interface. Some
-> > maintainers and developers may however require EXPORT_SYMBOL_GPL()
-> > when adding any new APIs or functionality.
-> >
-> > For kvm is okay:
-> >
-> > MODULE_AUTHOR("Qumranet");
-> > MODULE_LICENSE("GPL");
-> >
-> > So, I would leave the decition to Andy. If he didn't want it used with
-> > other non-gpl modules, choose the EXPORT_SYMBOL_GPL.
->
-> Do you have any use case for exporting this function to non-GPL
-> licensed modules? I exported the function with EXPORT_SYMBOL_GPL() in
-> v20[1] because I thought most maintainers would accept GPL rather than
-> non-GPL one. And it seems most drivers would never call this function
-> anyway.
-I just found Linux-next build is broken, so I sent the patch. It seems
-you've solved that. That's okay.
+On 26/05/2023 17:35, Mao Jinlong wrote:
+> Adds new coresight-csr.yaml file describing the bindings required
+> to define csr in the device trees.
+> 
+> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> ---
+>  .../bindings/arm/qcom,coresight-csr.yaml      | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-csr.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-csr.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-csr.yaml
+> new file mode 100644
+> index 000000000000..a79b4f6a8bdf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-csr.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +# Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/qcom,coresight-csr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: CoreSight Slave Register - TPDA
+> +
+> +description: |
+> +  CoreSight Slave Register block hosts miscellaneous configuration registers.
+> +  Those configuration registers can be used to control, various coresight
+> +  configurations.
+> +
+> +maintainers:
+> +  - Mao Jinlong <quic_jinlmao@quicinc.com>
+> +  - Hao Zhang <quic_hazha@quicinc.com>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^csr(@[0-9a-f]+)$"
 
->
-> >
-> > >
-> > > >
-> > > > I figure Andy will roll this into this next revision.
->
-> The fix for this has been included in v20[1]. However, I also changed
-> the function name
-> s/riscv_v_user_allowed/riscv_v_vstate_ctrl_user_allowed/.
->
-> > > >
-> > > > Cheers,
-> > > > Conor.
-> > >
-> > >
-> > >
-> > > --
-> > > Best Regards
-> > >  Guo Ren
-> >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
->
-> [1]: https://lore.kernel.org/all/20230518161949.11203-21-andy.chiu@sifive=
-.com/
->
-> Cheers,
-> Andy
+Drop nodename, we do not enforce it for device schemas.
+
+> +  compatible:
+> +    items:
+> +      - const: qcom,coresight-csr
+
+Why qcom, not arm? Description and title suggests it is generic.
+
+If it is SoC specific, then what is it exactly? IP block of SoC? Then it
+would miss SoC specific compatibles.
 
 
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 2
 
---=20
-Best Regards
- Guo Ren
+You need to describe the items
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: apb_pclk
+> +
+> +  qcom,set-byte-cntr-support:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      If set, indicates that CSR supports to set ETR_IRQ_CTRL register.
+
+Why this cannot be deducted from SoC-specific compatible?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # minimum CSR definition.
+
+Drop comment
+
+> +  - |
+> +    csr@10001000 {
+
+
+Best regards,
+Krzysztof
+
