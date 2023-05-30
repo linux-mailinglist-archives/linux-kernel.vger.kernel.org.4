@@ -2,109 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47598716B6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC0E716B71
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbjE3RpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
+        id S233056AbjE3RqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbjE3RpQ (ORCPT
+        with ESMTP id S230117AbjE3RqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:45:16 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1D7D9;
-        Tue, 30 May 2023 10:45:14 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126205198071.34.openmobile.ne.jp [126.205.198.71])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 899207EC;
-        Tue, 30 May 2023 19:44:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685468692;
-        bh=jm2ldsqaGU1NMz+qnYWObPHh1yWtfkHkbJiCm2Lrw3o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QQIuJnNignz0Gld4KLd6aQR5alFgqgMSvp3snFqjSd2o/rV87ixUHHsuHyk9Rs3K9
-         UGUjUSZ1Tlbi45i5x8rMjxFCqghzD/DP6mtvBEw2+yD7yzHmmJm/WvxZ1sbWhBJc2E
-         ZxjVWCBeOLNu6Nlg3zyDKJupvmnR43nVFEJGAovc=
-Date:   Tue, 30 May 2023 20:45:13 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Robert Foss <rfoss@kernel.org>, Todor Tomov <todor.too@gmail.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Tue, 30 May 2023 13:46:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3896FD9;
+        Tue, 30 May 2023 10:45:59 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UHhDn9025404;
+        Tue, 30 May 2023 17:45:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=D70WWLtoNscqH6i7mk78YhwrreiuX9n+hLmEciva19U=;
+ b=D8yOCt+dAW9L2av8EqkM95WRDaoeRCJwRRg+5zRm589vAPFpIYqaUppaL3jaLklCVO90
+ mgzT3cHLLJqaOMYtB9XrsnKN90kyZZXmRHdIMxqCeLhIczPOLkcBrrqY9vjoEJWmj6Ew
+ 6ye+KAW4jxJKuBdHH0XwKm+vq9igqeczv2Ks+Syci41q7Letdc8rxltUufjGwlrZQEp8
+ 5vSOtqf9N9G5eEb6dcn+EJOFkPChh39kosjjLucaJP6l5cuy25eaYH9qDhPAiRuGtmFF
+ BrCj1nt6ZUR+/02Xw0wdBwDx9mw2kyDlsSkfrzkulw7eOfmHMl3gmS9HfMl/Gus+0zJU Bg== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwjej5vu2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 17:45:51 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34UDdMuA009536;
+        Tue, 30 May 2023 17:45:50 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g5qwby-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 17:45:50 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34UHjn5X6947354
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 May 2023 17:45:49 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 85FDC5805E;
+        Tue, 30 May 2023 17:45:49 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A2D7E58045;
+        Tue, 30 May 2023 17:45:48 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 30 May 2023 17:45:48 +0000 (GMT)
+Message-ID: <b2657b55-355d-80cb-23cc-d11825f64ad1@linux.ibm.com>
+Date:   Tue, 30 May 2023 13:45:48 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RFC v2] tpm: tpm_vtpm_proxy: do not reference kernel
+ memory as user memory
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Alejandro Cabrera <alejandro.cabreraaldaya@tuni.fi>,
+        Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>,
+        stable@vger.kernel.org, Stefan Berger <stefanb@linux.vnet.ibm.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: camss: camss-video: Don't zero subdev format
- again after initialization
-Message-ID: <20230530174513.GJ22516@pendragon.ideasonboard.com>
-References: <20230503075340.45755-1-y.oudjana@protonmail.com>
- <20230530174225.GI22516@pendragon.ideasonboard.com>
+References: <20230530020133.235765-1-jarkko@kernel.org>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230530020133.235765-1-jarkko@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: XenJoXPzC-n5mu-ndWws4ddie8fZNLS1
+X-Proofpoint-GUID: XenJoXPzC-n5mu-ndWws4ddie8fZNLS1
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230530174225.GI22516@pendragon.ideasonboard.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_13,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ adultscore=0 lowpriorityscore=0 clxscore=1015 spamscore=0 phishscore=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=632
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305300140
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 08:42:30PM +0300, Laurent Pinchart wrote:
-> Hi Yassine,
-> 
-> Thank you for the patch.
-> 
-> On Wed, May 03, 2023 at 10:53:40AM +0300, Yassine Oudjana wrote:
-> > From: Yassine Oudjana <y.oudjana@protonmail.com>
-> > 
-> > In an earlier commit, setting the which field of the subdev format struct
-> > in video_get_subdev_format was moved to a designated initializer that also
-> > zeroes all other fields. However, the memset call that was zeroing the
-> > fields earlier was left in place, causing the which field to be cleared
-> > after being set in the initializer.
-> > 
-> > Remove the memset call from video_get_subdev_format to avoid clearing the
-> > initialized which field.
-> > 
-> > Fixes: ecefa105cc44 ("media: Zero-initialize all structures passed to subdev pad operations")
-> > Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
-> This is a regression fix, I'll send a pull request right away.
 
-The patch has actually been applied to the media fixes branch already
-:-)
 
-> > ---
-> >  drivers/media/platform/qcom/camss/camss-video.c | 1 -
-> >  1 file changed, 1 deletion(-)
-> > 
-> > diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
-> > index 898f32177b12..8640db306026 100644
-> > --- a/drivers/media/platform/qcom/camss/camss-video.c
-> > +++ b/drivers/media/platform/qcom/camss/camss-video.c
-> > @@ -353,7 +353,6 @@ static int video_get_subdev_format(struct camss_video *video,
-> >  	if (subdev == NULL)
-> >  		return -EPIPE;
-> >  
-> > -	memset(&fmt, 0, sizeof(fmt));
-> >  	fmt.pad = pad;
-> >  
-> >  	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &fmt);
+On 5/29/23 22:01, Jarkko Sakkinen wrote:
+> From: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
+> 
 
--- 
-Regards,
+> -	rc = copy_to_user(buf, proxy_dev->buffer, len);
+> +	if (buf)
+> +		rc = copy_to_user(buf, proxy_dev->buffer, len);
+> +
 
-Laurent Pinchart
+Looking through other drivers it seems buf is always expected to be a valid non-NULL pointer on file_operations.read().
+
+
+https://elixir.bootlin.com/linux/latest/source/arch/x86/mm/tlb.c#L1279   simple_read_from_buffer will pass the pointer to the user buffer along and it ('to') ends up in copy_to_user(to, ...);
+
+
+Same here: https://elixir.bootlin.com/linux/latest/source/security/integrity/ima/ima_fs.c#L41
