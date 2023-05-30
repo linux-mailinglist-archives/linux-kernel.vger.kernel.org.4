@@ -2,104 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18629716ADA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C00716ADE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbjE3R0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S233302AbjE3R0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbjE3RZs (ORCPT
+        with ESMTP id S231935AbjE3R0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:25:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79AF10E3;
-        Tue, 30 May 2023 10:25:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90DE56311F;
-        Tue, 30 May 2023 17:23:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A21C433D2;
-        Tue, 30 May 2023 17:23:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685467431;
-        bh=UzR1fj++02HkyWwFEbtMSGXQjQFGcPmg+nk6CBoorTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XRVqqSg7l3gtvrJQiZxWUs3sW3dpPsMZeLs0xK9uSL6mJjYdIfftdEHjGyAasA93F
-         vp0gLpUnS8qcpk9a3/voHcP+fe0HcgZAQiKxsgSvam2RRuNhrt3VDiHL2skxmXmfz0
-         UHgEUyQ6JGLAJM989kYc/NlVsmrAxHCIIr/mJrjU+z/jyfCIDmpYobEEaG7Jdff0aL
-         ptUgFtjkatqQWlWJzTIrFj/ck17aguEcEqHWg/QiVbq37aW3cLY4mOtG4O/KNC2yLK
-         zZBBLpYcKu8Wous2xnJ4zlBIq3hDm3aDhdBZB4h0Yjhi4MLkcdhGk2cSj+YnhXzP9N
-         A6/p2tUZSaTqw==
-Date:   Tue, 30 May 2023 18:23:44 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "Lukas F. Hartmann" <lukas@mntre.com>,
-        Nicolas Belin <nbelin@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH v5 16/17] dt-bindings: arm: amlogic: Document the MNT
- Reform 2 CM4 adapter with a BPI-CM4 Module
-Message-ID: <20230530-switch-riverbank-8a2ae8e5ea4a@spud>
-References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
- <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-16-56eb7a4d5b8e@linaro.org>
+        Tue, 30 May 2023 13:26:25 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC12FE7A;
+        Tue, 30 May 2023 10:25:56 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f4f8b94c06so3495226e87.1;
+        Tue, 30 May 2023 10:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685467498; x=1688059498;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9mcfBA7C2XEbgXjVDjCpK0Hf299E00EVQylWvc9g1Yw=;
+        b=Vzk1E4CsQnADdI4J7KpPHeOmHnbn9ALXbGt+Ef0Q1qZsnyNw7dJFNJEVoVMj4Opw6B
+         OsfGaZpw6UpFrGdnHGTSmS9vcFL+yqAAKCOMCNFd8tcs3IzlTE92tZ65dXUgMlugAfIS
+         3fP5/4bh8dNA2oO8H1DC6+mjZThe7fZctLwlUCdnKoHYRRjBcP6JaYhMf5LEBWmhXHvN
+         UovSDXFeYlc89BqZ352e30cK2xof3ikPOzf/1+yNADDXeV6tqXN6f9G+KawlmEHpni2o
+         LeTpLi+HKK28lZZMfvPhqJ1tWQBCDCY1e34Zs0rkIrrENSvGBfwd8g9yUllCfv1Yx/zj
+         To1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685467498; x=1688059498;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9mcfBA7C2XEbgXjVDjCpK0Hf299E00EVQylWvc9g1Yw=;
+        b=Q7pCtWu72APCwwCF579RjscFoPXWUpAhNhFlDRcOAVkroEA9KBr1yaqmIPYm8wywW7
+         GJDiXT0UJwzCZizqRa0mFQofPM/nIY8jeToK383d5Dc+rv6pHn8iS3tfSAc+WDNSK2L5
+         HU/uk7Iz8MXvCKYS7THFpiJSJrTiss1Ct4B635s2Zoos8PMEVGcUoYG0Hx6rTSJjf29f
+         fkjrJhuRksIrFEMyXTys/BtAHUHpxRivY4cpt1bByt/il81Cvn5TYPYC7M9pu5MHqaLw
+         Wk8/DK/zOhLG/xLbXsZsoWY/RuJmCixfRiLE0+1EC/BZ3+QE3Fq8EsUt3MJ+COYGklYs
+         q7Jg==
+X-Gm-Message-State: AC+VfDxbKUO7CIYRklzzBr6XGy4Klm3+xImzrbkTmu/iS+O0/nZcis9T
+        O76JxBda4upTW+xosGfcuaY=
+X-Google-Smtp-Source: ACHHUZ71EpQjOWoE0C2+ipu+Fj5FwrvOoRwzkItvSUH9dOdK/uSK0NCL5q2Qokp9iUPeSRZ/wTIjxA==
+X-Received: by 2002:a19:ae09:0:b0:4f2:40dd:e2cf with SMTP id f9-20020a19ae09000000b004f240dde2cfmr1121845lfc.55.1685467497822;
+        Tue, 30 May 2023 10:24:57 -0700 (PDT)
+Received: from Osmten.. ([223.123.107.215])
+        by smtp.gmail.com with ESMTPSA id k16-20020a5d66d0000000b0030ae6432504sm3932841wrw.38.2023.05.30.10.24.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 10:24:57 -0700 (PDT)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        angelogioacchino.delregno@collabora.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com, amitk@kernel.org,
+        wenst@chromium.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Osama Muhammad <osmtendev@gmail.com>
+Subject: [PATCH] lvts_thermal.c: Drop error checking for debugfs_create_dir
+Date:   Tue, 30 May 2023 22:24:39 +0500
+Message-Id: <20230530172439.13683-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="U7YSC210J2lnKh/+"
-Content-Disposition: inline
-In-Reply-To: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-16-56eb7a4d5b8e@linaro.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch removes the error checking for debugfs_create_dir
+in lvts_thermal.c. This is because the debugfs_create_dir()
+does not return NULL but an ERR_PTR after an error.
+The DebugFS kernel API is developed in a way that the
+caller can safely ignore the errors that occur during
+the creation of DebugFS nodes.The debugfs Api handles
+it gracefully. The check is unnecessary.
 
---U7YSC210J2lnKh/+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Link to the comment above debugfs_create_dir:
+https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L451
 
-On Tue, May 30, 2023 at 09:38:17AM +0200, Neil Armstrong wrote:
-> The MNT Reform 2 CM4 adapter can be populated with any Raspberry Pi CM4
-> compatible module such as a BPI-CM4 Module, document that.
->=20
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+---
+ drivers/thermal/mediatek/lvts_thermal.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index d0a3f95b7884..da5e3652ff3b 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -179,7 +179,7 @@ static const struct debugfs_reg32 lvts_regs[] = {
+ 	LVTS_DEBUG_FS_REGS(LVTS_CLKEN),
+ };
+ 
+-static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
++static void lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+ {
+ 	struct debugfs_regset32 *regset;
+ 	struct lvts_ctrl *lvts_ctrl;
+@@ -188,8 +188,6 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+ 	int i;
+ 
+ 	lvts_td->dom_dentry = debugfs_create_dir(dev_name(dev), NULL);
+-	if (!lvts_td->dom_dentry)
+-		return 0;
+ 
+ 	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
+ 
+@@ -197,8 +195,6 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+ 
+ 		sprintf(name, "controller%d", i);
+ 		dentry = debugfs_create_dir(name, lvts_td->dom_dentry);
+-		if (!dentry)
+-			continue;
+ 
+ 		regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
+ 		if (!regset)
+@@ -211,7 +207,6 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+ 		debugfs_create_regset32("registers", 0400, dentry, regset);
+ 	}
+ 
+-	return 0;
+ }
+ 
+ static void lvts_debugfs_exit(struct lvts_domain *lvts_td)
+@@ -221,10 +216,9 @@ static void lvts_debugfs_exit(struct lvts_domain *lvts_td)
+ 
+ #else
+ 
+-static inline int lvts_debugfs_init(struct device *dev,
++static inline void lvts_debugfs_init(struct device *dev,
+ 				    struct lvts_domain *lvts_td)
+ {
+-	return 0;
+ }
+ 
+ static void lvts_debugfs_exit(struct lvts_domain *lvts_td) { }
+@@ -1099,7 +1093,8 @@ static int lvts_domain_init(struct device *dev, struct lvts_domain *lvts_td,
+ 		}
+ 	}
+ 
+-	return lvts_debugfs_init(dev, lvts_td);
++	lvts_debugfs_init(dev, lvts_td);
++	return 0;
+ }
+ 
+ static int lvts_probe(struct platform_device *pdev)
+-- 
+2.34.1
 
-Thanks,
-Conor.
-
---U7YSC210J2lnKh/+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHYxIAAKCRB4tDGHoIJi
-0jYwAQCUXtrTR7MIODftWUrB77h5/mo+g9I8GUIGCkjmSOVnAwD/fepTgXRQjx2p
-dKfe5rmv2Fw9D0GFz7KPFbFjaNP3Wgc=
-=vEeV
------END PGP SIGNATURE-----
-
---U7YSC210J2lnKh/+--
