@@ -2,168 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFFF715C83
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1634715C88
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbjE3LDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        id S231777AbjE3LEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbjE3LDj (ORCPT
+        with ESMTP id S231201AbjE3LEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:03:39 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B05D9;
-        Tue, 30 May 2023 04:03:37 -0700 (PDT)
-X-QQ-mid: bizesmtp67t1685444612t08p4xww
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 19:03:31 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: C46Rb8GPIEc160nmUqFUHiFICVb8yJ5e11pqzLjXmS2/y5C6aYAhQb0+Cg9Tj
-        G3ora3iXuOFD2kdO18FYoRZpzosUJ632Ckb/qSW3VPNCJimOOJtBcHY61W3wIe1KHd8Ku/m
-        SNaBXZkq2EDAvjm3Z2XXHd9yz9p9K+IWKqic4/ShSxQLPa+MhRk+KsuDEZwgII7hmu9g0Hj
-        OD4MUc56yMOVYx8jF1UmiV4xnslxBAOf8TydDIQUBAo1c/pZb2cTMLZhdKOyDiqzb5R5A3t
-        sM7sjtpkHDsR1PkkNnf2L64rsCpz9zPGGU8rWiCfNGmSBMcaIdRNSmIkwsJ1IDxPvn6f6Lv
-        /tN5H40PTJIIHyFAN1kYgY95zls1dyh5pu+erFw4eSHkrjvLHL//EpzyhXCHPv1LNHhyht+
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17642228944967858726
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH 2/4] selftests/nolibc: add rerun support
-Date:   Tue, 30 May 2023 19:03:30 +0800
-Message-Id: <247d4d69a5e229446fc43efa49cc4fa36ccd600a.1685443199.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685443199.git.falcon@tinylab.org>
-References: <cover.1685443199.git.falcon@tinylab.org>
+        Tue, 30 May 2023 07:04:04 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF352E5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:04:02 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96f5d651170so1066771666b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:04:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685444641; x=1688036641;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sJpPcvlhDr55XVdV13FrZJDCixqh9Kz7L+e3bwYKNW0=;
+        b=eYmzjC9fjdboCt4Xpc1iRgGhbX0DwkZwyCCYJEoSymGBuYMlTQ902mIbm3+WH3VYLA
+         RTFkAhI1YXZvlZlryC5dxg0/KK/Qe3Czy5QvtLngJAFjxA5fgKVZfJGDLkV8kIhyAl/G
+         hujYth1n/g/GjHkdWwotfFFTWShqfywSzRZPiMYgjdqEb+5Cude8j+tTtj/V+H2bMsdc
+         ASD7wE5L+EdaA6yTgh+G+sIc8aDo5XvE75uuh6LNepuJAIcx+WchpxT5Go0Fzd31eziI
+         W0/QWSyKlmEk8g2vJs1Ro/DGzpXY7ObUS0Hc4IrljLe43/5GTWi3roiT+8ha/jLU8IqN
+         rF5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685444641; x=1688036641;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sJpPcvlhDr55XVdV13FrZJDCixqh9Kz7L+e3bwYKNW0=;
+        b=SEuB4vYzVeSVGW9kiQyeTwbUU8zkMj1Tg/DGEuBTpIVI9nWnvMM3wca+uB8fhD4UEV
+         nTMNt01J3FFnad1TDaJSxODG1LTVaw6w0eOccsyP10xVvEWvzk2KsVGi/U9QtzIn+6JU
+         QnCm9klWW9j8UIe87lR9fWX8pyVQAPa7Vc3G0+Q6tQ6nvslZobLogohLGKgW9cbgDIAb
+         R5MzkJdQv/GnE3WtE1l9/InkbPxxHlHJhHPRAIZKFzG0eqgDwh7duOqWKoa6P/O0UMML
+         aVN4+geNSq7NHpt3zZYzUtvuRc23+9OmcPzELqU6CF3k9P0KWUwEmHlyTQ2uOriFrgPf
+         ew/w==
+X-Gm-Message-State: AC+VfDx9OT5GV7b15C9DoW0TgxxA6AtKkyLPjNY16bP1hDb9QI41N2Ar
+        3bvC7ABmPc5mX0FNyqv8aVSJHw==
+X-Google-Smtp-Source: ACHHUZ47aLpUcTUH2+3Tb4gKZeBxw7El92S1s3TQBI7H0P8ZOWBOqOvi1F1laf1lx80mffdjpGOLOg==
+X-Received: by 2002:a17:906:6a04:b0:973:93c3:16a1 with SMTP id qw4-20020a1709066a0400b0097393c316a1mr9228224ejc.19.1685444641154;
+        Tue, 30 May 2023 04:04:01 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id h26-20020a1709062dda00b00969f2d5267asm7225424eji.114.2023.05.30.04.03.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 04:04:00 -0700 (PDT)
+Message-ID: <46944bf1-3a07-0db7-2702-f6b7d54b611a@linaro.org>
+Date:   Tue, 30 May 2023 13:03:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V2 06/13] clk: qcom: ipq5018: remove q6 bring up clocks
+Content-Language: en-US
+To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jassisinghbrar@gmail.com,
+        mathieu.poirier@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, quic_eberman@quicinc.com, quic_mojha@quicinc.com,
+        kvalo@kernel.org, loic.poulain@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com, quic_varada@quicinc.com,
+        quic_devipriy@quicinc.com
+References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
+ <20230521222852.5740-7-quic_mmanikan@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230521222852.5740-7-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The global 'run' setting is added to allow specify the running
-iterations, for example:
+On 22/05/2023 00:28, Manikanta Mylavarapu wrote:
+> Since Q6 firmware takes care of it's bring up clocks
+> in multipd model, remove from gcc driver.
+> 
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+> ---
+>  drivers/clk/qcom/gcc-ipq5018.c | 414 ---------------------------------
+>  1 file changed, 414 deletions(-)
+> 
 
-    NOLIBC_TEST=run:5,syscall:1
+So here is explanation - your patchset is not bisectable.
 
-This setting allows to run the first syscall for 5 times.
+What's more, I really wonder now why these clocks were added if firmware
+handles them?
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 53 ++++++++++++++------
- 1 file changed, 38 insertions(+), 15 deletions(-)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index be718fa5dc86..b8fd7fcf56a6 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -956,9 +956,12 @@ int main(int argc, char **argv, char **envp)
- {
- 	int min = 0;
- 	int max = INT_MAX;
-+	int run = 1;
-+	int selected = 0;
- 	int ret = 0;
- 	int err;
- 	int idx;
-+	int i;
- 	char *test;
- 
- 	environ = envp;
-@@ -974,7 +977,7 @@ int main(int argc, char **argv, char **envp)
- 	/* the definition of a series of tests comes from either argv[1] or the
- 	 * "NOLIBC_TEST" environment variable. It's made of a comma-delimited
- 	 * series of test names and optional ranges:
--	 *    syscall:5-15[:.*],stdlib:8-10
-+	 *    run:3,syscall:5-15[:.*],stdlib:8-10
- 	 */
- 	test = argv[1];
- 	if (!test)
-@@ -992,14 +995,27 @@ int main(int argc, char **argv, char **envp)
- 			if (colon)
- 				*(colon++) = '\0';
- 
--			for (idx = 0; test_names[idx].name; idx++) {
--				if (strcmp(test, test_names[idx].name) == 0)
-+			if (strcmp(test, "run") != 0) {
-+				for (idx = 0; test_names[idx].name; idx++) {
-+					if (strcmp(test, test_names[idx].name) == 0)
-+						break;
-+				}
-+			} else {
-+				value = colon;
-+				if (value && *value)
-+					run = atoi(value);
-+
-+				test = comma;
-+				if (test && *test)
-+					continue;
-+				else
- 					break;
- 			}
- 
- 			if (!test_names[idx].name) {
- 				printf("Ignoring unknown test name '%s'\n", test);
- 			} else {
-+				selected++;
- 				test_names[idx].run = 1;
- 
- 				/* The test was named, it will be called at least
-@@ -1038,24 +1054,31 @@ int main(int argc, char **argv, char **envp)
- 		} while (test && *test);
- 
- 		/* disable the left tests */
--		for (idx = 0; test_names[idx].name; idx++) {
--			if (test_names[idx].run != 1)
--				test_names[idx].run = 0;
-+		if (selected != 0) {
-+			for (idx = 0; test_names[idx].name; idx++) {
-+				if (test_names[idx].run != 1)
-+					test_names[idx].run = 0;
-+			}
- 		}
- 	}
- 
- 	/* run everything or the test mentioned */
--	for (idx = 0; test_names[idx].name; idx++) {
--		if (test_names[idx].run != 0) {
--			printf("Running test '%s', from %d to %d\n", test_names[idx].name, test_names[idx].min, test_names[idx].max);
--			err = test_names[idx].func(test_names[idx].min, test_names[idx].max);
--			ret += err;
--			printf("Errors during this test: %d\n\n", err);
--		}
--	}
-+	printf("Running iteration(s): %d\n\n", run);
-+	for (i = 0; i < run; i++) {
-+		printf("Current iteration: %d\n\n", i + 1);
- 
-+		ret = 0;
-+		for (idx = 0; test_names[idx].name; idx++) {
-+			if (test_names[idx].run != 0) {
-+				printf("Running test '%s', from %d to %d\n", test_names[idx].name, test_names[idx].min, test_names[idx].max);
-+				err = test_names[idx].func(test_names[idx].min, test_names[idx].max);
-+				ret += err;
-+				printf("Errors during this test: %d\n\n", err);
-+			}
-+		}
- 
--	printf("Total number of errors: %d\n", ret);
-+		printf("Total number of errors in the %d iteration(s): %d\n\n", i + 1, ret);
-+	}
- 
- 	if (getpid() == 1) {
- 		/* we're running as init, there's no other process on the
--- 
-2.25.1
+Best regards,
+Krzysztof
 
