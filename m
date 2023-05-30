@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AF5716AC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03041716AD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbjE3RWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
+        id S233462AbjE3RYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233258AbjE3RVo (ORCPT
+        with ESMTP id S232951AbjE3RYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:21:44 -0400
+        Tue, 30 May 2023 13:24:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3404106
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:21:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723D91A2;
+        Tue, 30 May 2023 10:23:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BABE8616AF
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:21:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60BA8C43321;
-        Tue, 30 May 2023 17:21:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFF9863127;
+        Tue, 30 May 2023 17:22:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD3DCC433D2;
+        Tue, 30 May 2023 17:22:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685467299;
-        bh=KD8Lf36i8S8fkl9e26OJy++ossCBPSeuvsfaXWI90DE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tmRnWW51kF+qVvCNHgNioj2opxfXrWksnpanZ9AMj5ePvZzpzLlj6ClrgoIwJTh21
-         T1cong5ST2Vg2+GZOlz51ko9EoC3dcuhJTdH9w9ZDdFgEqRUA0A/vPt69/8HtrmWqc
-         uihOUcYaaHj6pgnhWPpHUn3yyYVt/rzddmfsdy9o0/QATGQ/2sh+qpE/RYszwCNWg0
-         TmTYiWG82Ew/7mw63L+7sLqjuDN+TMMQDK/20/GvyFImWRb3fYgBFws8cJNIZtcidg
-         DU3k13QPvoxpCdMwH0cXLaBnwxijXLb9PEnZt53gSLFPeGQ+wkbdQaEQbYIKoxr92+
-         ve+u+jFFg65TA==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH 22/22] objtool: Skip reading DWARF section data
-Date:   Tue, 30 May 2023 10:21:14 -0700
-Message-Id: <52a9698835861dd35f2ec35c49f96d0bb39fb177.1685464332.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1685464332.git.jpoimboe@kernel.org>
-References: <cover.1685464332.git.jpoimboe@kernel.org>
+        s=k20201202; t=1685467331;
+        bh=QewfULGDzQw9U8Sjf5XkcO2JdMdAuFaRZdNueC5s0yU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fn1PZNRTwL8dtH+YSdMWiNxKTQgLI4jjWZPrXGNCw2bmxXzetvhdi9uvapssaeNjy
+         PUrqQse5a27RfWC7mwGnoRmLnCWHKKUZvu/SFHvbUG37WakyZdMohzKouEQyHHfHhJ
+         ZSbBbqLMmyrTkkZ8TXpZNzLEtl73JaPbMr1QJ5Pnu6z1Ch3bOVgJtlFNx5N+RXEo6g
+         RkxZ935caiXca5SPQMLraZ2jZeGfO7fLcobwhwkvIVeY7Khm2/Ab2kb4rlbU8nR5Wv
+         UfCqBJ3I/pH4qW34pbsYZkdcyequfJKYDDvqj7d7uHGZ4YSYJAC4B3rl+/5DZdqajx
+         M84uaqqx+gPYw==
+Date:   Tue, 30 May 2023 18:22:06 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     fl.scratchpad@gmail.com
+Cc:     jic23@kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 5/5] dt-bindings: iio: ad7192: Allow selection of
+ clock modes
+Message-ID: <20230530-cannabis-headstone-883c5b891dd3@spud>
+References: <20230530075311.400686-1-fl.scratchpad@gmail.com>
+ <20230530075311.400686-6-fl.scratchpad@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="GOC40fJ/cBBzzJa4"
+Content-Disposition: inline
+In-Reply-To: <20230530075311.400686-6-fl.scratchpad@gmail.com>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,54 +62,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Objtool doesn't use DWARF at all, and the DWARF sections' data take up a
-lot of memory.  Skip reading them.
 
-Note this only skips the DWARF base sections, not the rela sections.
-The relas are needed because their symbol references may need to be
-reindexed if any local symbols get added by elf_create_symbol().
+--GOC40fJ/cBBzzJa4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Also note the DWARF data will eventually be read by libelf anyway, when
-writing the object file.  But that's fine, the goal here is to reduce
-*peak* memory usage, and the previous patch (which freed insn memory)
-gave some breathing room.  So the allocation gets shifted to a later
-time, resulting in lower peak memory usage.
+On Tue, May 30, 2023 at 09:53:11AM +0200, fl.scratchpad@gmail.com wrote:
+> From: Fabrizio Lamarque <fl.scratchpad@gmail.com>
+>=20
+> AD7192 supports external clock sources, generated by a digital clock
+> source or a crystal oscillator, or internally generated clock option
+> without external components.
+>=20
+> Describe choice between internal and external clock, crystal or external
+> oscillator, and internal clock output enable.
+>=20
+> Signed-off-by: Fabrizio Lamarque <fl.scratchpad@gmail.com>
+> ---
+>  .../bindings/iio/adc/adi,ad7192.yaml          | 27 ++++++++++++++++---
+>  1 file changed, 24 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml b/=
+Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
+> index 16def2985ab4..f7ecfd65ad80 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
+> @@ -32,7 +32,8 @@ properties:
+> =20
+>    clocks:
+>      maxItems: 1
+> -    description: phandle to the master clock (mclk)
+> +    description: |
+> +      Master clock (mclk). If not set, internal clock is used.
+> =20
+>    clock-names:
+>      items:
+> @@ -50,6 +51,17 @@ properties:
+>    vref-supply:
+>      description: VRef voltage supply
+> =20
+> +  adi,clock-xtal:
+> +    description: |
+> +      Select whether an external crystal oscillator or an external
+> +      clock is applied as master (mclk) clock.
+> +    type: boolean
 
-With allyesconfig + CONFIG_DEBUG_INFO:
+Am I being daft, or are these the same thing? If they are not, and use
+different input pins, I think it should be explained as it not clear.
+Could you explain why we actually care that the source is a xtal versus
+it being mclk, and why just having master clock is not sufficient?
 
-- Before: peak heap memory consumption: 29.93G
-- After:  peak heap memory consumption: 25.47G
+> +  adi,int-clock-output-enable:
+> +    description: |
+> +      When internal clock is selected, this bit enables clock out pin.
+> +    type: boolean
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- tools/objtool/elf.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+And this one makes you a clock provider, so the devices advocate
+position would be that you know that this bit should be set if
+"clocks" is not present and a consumer requests a clock.
+I don't seem to have got the driver patches (at least not in this
+mailbox), so I have got no information on how you've actually implemented
+this.
 
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 54d182ddc4bb..d420b5d2e2b6 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -300,6 +300,11 @@ struct reloc *find_reloc_by_dest(const struct elf *elf, struct section *sec, uns
- 	return find_reloc_by_dest_range(elf, sec, offset, 1);
- }
- 
-+static bool is_dwarf_section(struct section *sec)
-+{
-+	return !strncmp(sec->name, ".debug_", 7);
-+}
-+
- static int read_sections(struct elf *elf)
- {
- 	Elf_Scn *s = NULL;
-@@ -350,7 +355,7 @@ static int read_sections(struct elf *elf)
- 			return -1;
- 		}
- 
--		if (sec->sh.sh_size != 0) {
-+		if (sec->sh.sh_size != 0 && !is_dwarf_section(sec)) {
- 			sec->data = elf_getdata(s, NULL);
- 			if (!sec->data) {
- 				WARN_ELF("elf_getdata");
--- 
-2.40.1
+Cheers,
+Conor.
 
+> +
+>    adi,rejection-60-Hz-enable:
+>      description: |
+>        This bit enables a notch at 60 Hz when the first notch of the sinc
+> @@ -84,11 +96,12 @@ properties:
+>      description: see Documentation/devicetree/bindings/iio/adc/adc.yaml
+>      type: boolean
+> =20
+> +dependencies:
+> +  adi,clock-xtal: ['clocks', 'clock-names']
+> +
+>  required:
+>    - compatible
+>    - reg
+> -  - clocks
+> -  - clock-names
+>    - interrupts
+>    - dvdd-supply
+>    - avdd-supply
+> @@ -98,6 +111,13 @@ required:
+> =20
+>  allOf:
+>    - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +  - if:
+> +      required:
+> +        - clocks
+> +        - clock-names
+> +    then:
+> +      properties:
+> +        adi,int-clock-output-enable: false
+> =20
+>  unevaluatedProperties: false
+> =20
+> @@ -115,6 +135,7 @@ examples:
+>              spi-cpha;
+>              clocks =3D <&ad7192_mclk>;
+>              clock-names =3D "mclk";
+> +            adi,clock-xtal;
+>              interrupts =3D <25 0x2>;
+>              interrupt-parent =3D <&gpio>;
+>              dvdd-supply =3D <&dvdd>;
+> --=20
+> 2.34.1
+>=20
+
+--GOC40fJ/cBBzzJa4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHYwvgAKCRB4tDGHoIJi
+0qkFAP9uZ1N8bFxZsXbgW8kQo1+vlYKpinjPWQHQw4vNab1QdAEAiMZn03LxwMx2
+/4Q9ctSo9xBk9Le4GVYdC0z4WQRcWgs=
+=KNs6
+-----END PGP SIGNATURE-----
+
+--GOC40fJ/cBBzzJa4--
