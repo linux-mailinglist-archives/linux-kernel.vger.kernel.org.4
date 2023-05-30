@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E8D7170A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2586F7170A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233609AbjE3WWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
+        id S233715AbjE3WYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjE3WWR (ORCPT
+        with ESMTP id S229945AbjE3WYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:22:17 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78019102;
-        Tue, 30 May 2023 15:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685485331; x=1717021331;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1yclU0/PNC1x/+Z0XR9VHAZKmtWtaT5GSX759uuyefU=;
-  b=iy+YT3DU3F3cO+Jr4TA5g6yGimxpFsh2v/mQ1SD46clyAbdd31T8+wIC
-   LPHp1lIwZ2PDrF9ZAMlt9FFf2P4q7FVbIr3vGMRtoKrgj3HKXyhi9MT5/
-   IWSnI5XPgey8/hAayeIWAT1GWdtclLV0546oDOna0ttdNYqai9ql25+c1
-   Pl32HehHvTfeHawCDxP11w6ut0eUIjZFUZ+R+NlSLeH4ZRFDUIRTDxkzL
-   Y4E/JxmycqQT9LwA3srK/ZtUpcwJ0d30qTjknXsuTO3nvpOHcI6pbgiTl
-   STAjqf0lcecAulBbwy/HGOAi7pz8IMEPRHkgCxNr5K/c6MzlKcCHxx7Ew
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="335411349"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="335411349"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 15:22:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="796440615"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="796440615"
-Received: from jswalken-mobl.amr.corp.intel.com (HELO [10.212.134.46]) ([10.212.134.46])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 15:22:10 -0700
-Message-ID: <2a6502e3-ba87-0355-af09-825e8467b81f@intel.com>
-Date:   Tue, 30 May 2023 15:22:09 -0700
+        Tue, 30 May 2023 18:24:43 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A04BE5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:24:42 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d341bdedcso3693229b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:24:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685485481; x=1688077481;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G/1SowEewql6UJanqoqPfCeIbhtfTWUbi0a35Y9vIrs=;
+        b=WnGpKbOV8lvKv65POyTi6fFpPciJnn2J218zZF6h2JBge30QnWdNUvnzUrtIt8UgnZ
+         2eW1iZOQ2Tt2wXfrF2sy9wyLOHpdabbOEbVJDs3E75P65V7vvOuV1Ux5MwkFcjkLY7Xz
+         Bu7uKz5n+vefnTqjV1nadY4GfOrsQ0Uw+HjVXvDl4I0StS513zWcuXQq5eVL+/MlwMXu
+         8F2l0wObfSk2UsB5Dk9tPoBRFXwVKzqv8ZWdz8aH6tf7AsfQAloacKm3lmKE+Xj2uWJv
+         Govc/74/GHTR45rriTat2bDrmCYoFbabV+xQ/5N+eZDgjJPHDFFE+TLtd0w9u57QaQJX
+         anMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685485481; x=1688077481;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G/1SowEewql6UJanqoqPfCeIbhtfTWUbi0a35Y9vIrs=;
+        b=Wi4vTEZqfoUospKaG69FJmR3EjGWeXsdkmZxIyQrmMpJH478qxc4/mo7ZZHhXclpEJ
+         izadwWMA6T9lE4peiJLS/2hZMVTO3yZ2Eg8qAgBGqxJ7Lma70g3F2Bimd7wQ04jgCoXN
+         BQJGxc56MWCTok3Rhl5RVo7nyJs8Likg99niCTFRwL32+2vheCVDMYH81aD1y1nJ5/ES
+         OwCllHzYwnpwFE8+TwriiJlEDaUfXA6qZjNbKowh04ENONpZGqnB14yeiP+QubQa7Faw
+         xjTcDooOs45Tr1HIKpDX1YmegThv29PfuP3K4HzG1DRS5jNOAt32Ph115ANxA4rcD4V1
+         20jA==
+X-Gm-Message-State: AC+VfDzx+vXr5A+Qa9m/vnyTdOoPIQfJYBEFxIrJWMKLhK+Ucjp2AX/r
+        13xEEis4Em29RxaHNT7uPik=
+X-Google-Smtp-Source: ACHHUZ7o0vAxUBMoiek8AqoGTNtUZ009NsT2LcERUfQxIOYsAOkRZBMLNu4fP80xpI5LAqDbmuIFpQ==
+X-Received: by 2002:a17:902:e74f:b0:1b0:2658:db00 with SMTP id p15-20020a170902e74f00b001b02658db00mr4629006plf.31.1685485481413;
+        Tue, 30 May 2023 15:24:41 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-005.fbsv.net. [2a03:2880:ff:5::face:b00c])
+        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b001a212a93295sm1719203plg.189.2023.05.30.15.24.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 15:24:41 -0700 (PDT)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, cerasuolodomenico@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        yosryahmed@google.com, kernel-team@meta.com
+Subject: [PATCH] zswap: do not shrink if cgroup may not zswap
+Date:   Tue, 30 May 2023 15:24:40 -0700
+Message-Id: <20230530222440.2777700-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAKEwX=PrqV+cCGmdTcFPMqP-48Y=abQTkSOUzJnOWWpc4rR4cA@mail.gmail.com>
+References: <CAKEwX=PrqV+cCGmdTcFPMqP-48Y=abQTkSOUzJnOWWpc4rR4cA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] x86/fpu/xstate: clear XSAVE features if DISABLED_MASK set
-Content-Language: en-US
-To:     Jon Kohler <jon@nutanix.com>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Kyle Huey <me@kylehuey.com>, neelnatu@google.com,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20230530200152.18961-1-jon@nutanix.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230530200152.18961-1-jon@nutanix.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/23 13:01, Jon Kohler wrote:
-> Respect DISABLED_MASK when clearing XSAVE features, such that features
-> that are disabled do not appear in the xfeatures mask.
+Before storing a page, zswap first checks if the number of stored pages
+exceeds the limit specified by memory.zswap.max, for each cgroup in the
+hierarchy. If this limit is reached or exceeded, then zswap shrinking is
+triggered and short-circuits the store attempt.
 
-One sanity check that I'd suggest adopting is "How many other users in
-the code do this?"  How many DISABLED_MASK_BIT_SET() users are there?
+However, since the zswap's LRU is not memcg-aware, this can create the
+following pathological behavior: the cgroup whose zswap limit is
+reached will evict pages from other cgroups continually, without
+lowering its own zswap usage. This means the shrinking will continue
+until the need for swap ceases or the pool becomes empty.
 
-> This is important for kvm_load_{guest|host}_xsave_state, which look
-> at host_xcr0 and will do an expensive xsetbv when the guest and host
-> do not match.
+As a result of this, we observe a disproportionate amount of zswap
+writeback and a perpetually small zswap pool in our experiments, even
+though the pool limit is never hit.
 
-Is that the only problem?  kvm_load_guest_xsave_state() seems to have
-some #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS code and I can't
-imagine that KVM guests can even use PKRU if this code is compiled out.
+This patch fixes the issue by rejecting zswap store attempt without
+shrinking the pool when obj_cgroup_may_zswap() returns false.
 
-Also, this will set XFEATURE_PKRU in xcr0 and go to the trouble of
-XSAVE/XRSTOR'ing it all over the place even for regular tasks.
+Fixes: f4840ccfca25 ("zswap: memcg accounting")
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+---
+ mm/zswap.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> A prime example if CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS is disabled,
-> the guest OS will not see PKU masked; however, the guest will incur
-> xsetbv since the host mask will never match the guest, even though
-> DISABLED_MASK16 has DISABLE_PKU set.
-
-OK, so you care because you're seeing KVM go slow.  You tracked it down
-to lots of XSETBV's?  You said, "what the heck, why is it doing XSETBV
-so much?" and tracked it down to 'max_features' which we use to populate
-XCR0?
-
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index 0bab497c9436..211ef82b53e3 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -798,7 +798,8 @@ void __init fpu__init_system_xstate(unsigned int legacy_size)
->  		unsigned short cid = xsave_cpuid_features[i];
-> 
->  		/* Careful: X86_FEATURE_FPU is 0! */
-> -		if ((i != XFEATURE_FP && !cid) || !boot_cpu_has(cid))
-> +		if ((i != XFEATURE_FP && !cid) || !boot_cpu_has(cid) ||
-> +		    DISABLED_MASK_BIT_SET(cid))
->  			fpu_kernel_cfg.max_features &= ~BIT_ULL(i);
->  	}
-
-I _think_ I'd rather this just be cpu_feature_enabled(cid) rather than
-using DISABLED_MASK_BIT_SET() directly.
-
-But, I guess this probably also isn't a big deal for _most_ people.  Any
-sane distro kernel will just set CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
-since it's pretty widespread on modern CPUs and works across Intel and
-AMD now.
+diff --git a/mm/zswap.c b/mm/zswap.c
+index 59da2a415fbb..cff93643a6ab 100644
+--- a/mm/zswap.c
++++ b/mm/zswap.c
+@@ -1174,9 +1174,14 @@ static int zswap_frontswap_store(unsigned type, pgoff_t offset,
+ 		goto reject;
+ 	}
+ 
++	/*
++	 * XXX: zswap reclaim does not work with cgroups yet. Without a
++	 * cgroup-aware entry LRU, we will push out entries system-wide based on
++	 * local cgroup limits.
++	 */
+ 	objcg = get_obj_cgroup_from_page(page);
+ 	if (objcg && !obj_cgroup_may_zswap(objcg))
+-		goto shrink;
++		goto reject;
+ 
+ 	/* reclaim space if needed */
+ 	if (zswap_is_full()) {
+-- 
+2.34.1
 
