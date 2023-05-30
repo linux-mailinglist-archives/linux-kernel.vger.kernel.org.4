@@ -2,113 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB79D716C16
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1AF1716C1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbjE3SQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
+        id S232909AbjE3SRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbjE3SQn (ORCPT
+        with ESMTP id S231231AbjE3SRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:16:43 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DD4B2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:16:41 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3f6c6320d4eso25611cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685470601; x=1688062601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2kVEj843CHgMv+dCunk1UqfhchtPivldBaBOHjhNqio=;
-        b=rnWe8N6fmz34Nmj+miuUcbtMxa9WO2Cj/nDwQB2qMId4XmWz3ogI6p3hfvx/IQrQmS
-         Q8i1Epz4HuCdfp36ZX8Jin0/6IqdnA4tfslHqab/T9b+yOOjm0giF1hQTvj7/lapmveN
-         /VcdoKqz7w64cvtCPxCxgv3Kr7Q9poRd93/DnBbD4WYi5mNi3lPW0SjofhVSMy1QIx+G
-         8AsfJhVB9WP3Njgjw18Y1UD6c07Jd7OrLzTFYs/ZCUxbrrKOoEhMLSZp0ec+Zfa8zUub
-         sX/pFd/9liMPgrHIqwByJZm3CqX6nJaGNTXhlonC8E8rK7SVR1HTlMUMfZCZ/8HVoYlN
-         oa7Q==
+        Tue, 30 May 2023 14:17:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E508B2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685470607;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LboiJrYnAi/py5cGBQDQMSaCfDnf6CASAq+urrSZpQ0=;
+        b=JIp6OkyU4j51uq6HKLfj4Yg2Ubpkour7PHp8VvZHDnHe84IqZsgC2gHy9CPhIvP69+vFmt
+        ZzQ/PW0yv1KDmSC9XuQr0vty1qP0vUqwnZn1Y5lk6P5tnoMPBCEehz87L6SlSask7dosBJ
+        Mqo+IGazwGO5nk4Uk9lWvfiUJ73oFbA=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-489-rdbkMR3-M0KnPW8xrj1w-A-1; Tue, 30 May 2023 14:16:45 -0400
+X-MC-Unique: rdbkMR3-M0KnPW8xrj1w-A-1
+Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2af2ffb4e5aso21521821fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:16:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685470601; x=1688062601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2kVEj843CHgMv+dCunk1UqfhchtPivldBaBOHjhNqio=;
-        b=KkXKWrcXiIYyVICIOerJ/DSggKgdntbcpFsqp9VWmgWXZMzFSYCAJ4a6SZ2c+y5tB1
-         49iUry4gCBloGjB6bxcT9oHyoqEj24K/OHM5BEcjkB+YqJkpH53nJAuncVC+CELwKzB4
-         14Qa7PtBjAtxb/z874kk8H8CbTo29PdAcBEwf84ppIEWV7GdExeiuh1kDZAixjF3KokZ
-         O6fBpFlnfHeEgoJh6H5554ZLvR3vcu1//1/LnEGwDTxK7XjEM7NsgbkcbCgR0KYcL7xt
-         1fQDOoQY+9V2LQE5TFQq2l2PfOnE6C5v8+Y9aFhUOEy6gabYGBOdhZL+Wzt7W5lq7nF1
-         DAqg==
-X-Gm-Message-State: AC+VfDxpExzt93Dc+PXwpJS595N+SZ8lu1BDPY7uhIMxt7M1GQhynsOM
-        hs9D2U4+OcI9ZFF9XTMSRe0IBDGMbeQ3QR/NhIfenqa4TBgfiTIDmYrf
-X-Google-Smtp-Source: ACHHUZ56knjqd5JWW4SGlcgVP5Uoa+bIdal55cK7Ul2sjDA32jT0AibnM5236LiIyGfl5XDekw9XKUPTitMwt5Wwm0w=
-X-Received: by 2002:a05:622a:49:b0:3ef:3361:75d5 with SMTP id
- y9-20020a05622a004900b003ef336175d5mr190529qtw.11.1685470600656; Tue, 30 May
- 2023 11:16:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685470604; x=1688062604;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LboiJrYnAi/py5cGBQDQMSaCfDnf6CASAq+urrSZpQ0=;
+        b=lPYRMPMuOcbv2l9G6m6Ayq+2tInfNJJ8TGAtBE6TCHjKNO+i7H4jXVhEJeJUe7PWfk
+         Yufa7pGlLiDhJEjCvaHirgcdRrdru00b8W7GdOIAfMqmnT/MV9hLExN+3Kz0sns40Psp
+         Td5yfNS+6nkRpg2nUG0+vOL3YiqvVI8z35500MG+akE6C+OuKRe6UGbQEX1MWuoWYc0Q
+         mMqCNVs7JTKqOkilRvvQ4/3uUAmFAIVIMPChtG0e/FwMQ7PMsogoQCxnDlTFPQWYIxTv
+         r6pzjzg7NOdr66fzDe60UhY1cA+xfJdmhDk8f9kb8jlrb2jETlh+u+GH04qnEC/Jd8u/
+         e5nA==
+X-Gm-Message-State: AC+VfDzSxDO30kRkeyKDTJMxmotDtLiw1e3fNHc1RM/i0BwQh5WHTeOM
+        +lE9YQHGcIvxzQW2xOteeh0TOrq7yn/fCKDLKZwJTewUImuVUHpHfOaJQ0+Zxp4nE0iVuIvLaCv
+        EMoAYjROD88ZkOLY742hiu6li
+X-Received: by 2002:a2e:c52:0:b0:2a2:47a8:728b with SMTP id o18-20020a2e0c52000000b002a247a8728bmr1425276ljd.13.1685470603872;
+        Tue, 30 May 2023 11:16:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6L+/RfkbhNFet6mCP3WipllloDSKB6gbN/OJcXr/yJVtnkSj+T0yms3k/Tma6Qn+mxAQxBOg==
+X-Received: by 2002:a2e:c52:0:b0:2a2:47a8:728b with SMTP id o18-20020a2e0c52000000b002a247a8728bmr1425268ljd.13.1685470603541;
+        Tue, 30 May 2023 11:16:43 -0700 (PDT)
+Received: from redhat.com ([176.12.143.106])
+        by smtp.gmail.com with ESMTPSA id c10-20020a2e9d8a000000b002af03f75edasm2932561ljj.80.2023.05.30.11.16.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 11:16:43 -0700 (PDT)
+Date:   Tue, 30 May 2023 14:16:36 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Igor Mammedov <imammedo@redhat.com>, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, lenb@kernel.org, bhelgaas@google.com,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        mika.westerberg@linux.intel.com
+Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if
+ necessary
+Message-ID: <20230530141321-mutt-send-email-mst@kernel.org>
+References: <20230424191557.2464760-1-imammedo@redhat.com>
+ <ZHYujEM3o6iWIB1B@bhelgaas>
 MIME-Version: 1.0
-References: <20230530163546.986188-1-azeemshaikh38@gmail.com>
-In-Reply-To: <20230530163546.986188-1-azeemshaikh38@gmail.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Tue, 30 May 2023 11:16:30 -0700
-Message-ID: <CANDhNCrZBWFGtt49_Eu=yvKLCxeydXXowbS_9VnTH2E6-wtvzg@mail.gmail.com>
-Subject: Re: [PATCH] clocksource: Replace all non-returning strlcpy with strscpy
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        linux-hardening@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHYujEM3o6iWIB1B@bhelgaas>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 9:35=E2=80=AFAM Azeem Shaikh <azeemshaikh38@gmail.c=
-om> wrote:
->
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> No return values were used, so direct replacement is safe.
->
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcp=
-y
-> [2] https://github.com/KSPP/linux/issues/89
->
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> ---
->  kernel/time/clocksource.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-> index 91836b727cef..88cbc1181b23 100644
-> --- a/kernel/time/clocksource.c
-> +++ b/kernel/time/clocksource.c
-> @@ -1480,7 +1480,7 @@ static int __init boot_override_clocksource(char* s=
-tr)
->  {
->         mutex_lock(&clocksource_mutex);
->         if (str)
-> -               strlcpy(override_name, str, sizeof(override_name));
-> +               strscpy(override_name, str, sizeof(override_name));
->         mutex_unlock(&clocksource_mutex);
->         return 1;
->  }
+On Tue, May 30, 2023 at 12:12:44PM -0500, Bjorn Helgaas wrote:
+> On Mon, Apr 24, 2023 at 09:15:57PM +0200, Igor Mammedov wrote:
+> > When using ACPI PCI hotplug, hotplugging a device with
+> > large BARs may fail if bridge windows programmed by
+> > firmware are not large enough.
+> > 
+> > Reproducer:
+> >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
+> >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
+> >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
+> >       disk_image
+> > 
+> >  wait till linux guest boots, then hotplug device
+> >    (qemu) device_add qxl,bus=rp1
+> > 
+> >  hotplug on guest side fails with:
+> >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
+> >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
+> >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+> >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
+> >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
+> >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
+> >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
+> >    qxl 0000:01:00.0: enabling device (0000 -> 0003)
+> 
+> Ugh, I just noticed that we turned on PCI_COMMAND_MEMORY even though
+> BARs 0 and 1 haven't been assigned.  How did that happen?  It looks
+> like pci_enable_resources() checks for that, but there must be a hole
+> somewhere.
 
-Sounds reasonable to me.
+Maybe because BAR2 was assigned? I think pci_enable_resources just
+does
+                if (r->flags & IORESOURCE_MEM)
+                        cmd |= PCI_COMMAND_MEMORY;
+in a loop so if any memory BARs are assigned then PCI_COMMAND_MEMORY
+is set.
 
-Acked-by: John Stultz <jstultz@google.com>
+> >    Unable to create vram_mapping
+> >    qxl: probe of 0000:01:00.0 failed with error -12
 
-Thanks for submitting this!
--john
