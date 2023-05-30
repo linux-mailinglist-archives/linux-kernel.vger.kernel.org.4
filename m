@@ -2,80 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6957715A45
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F7A715A47
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjE3JfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S229956AbjE3JfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjE3Jev (ORCPT
+        with ESMTP id S229907AbjE3JfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:34:51 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FC010A;
-        Tue, 30 May 2023 02:34:49 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vjt9QYb_1685439286;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vjt9QYb_1685439286)
-          by smtp.aliyun-inc.com;
-          Tue, 30 May 2023 17:34:47 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     clm@fb.com
-Cc:     josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] btrfs: remove unused definition
-Date:   Tue, 30 May 2023 17:34:45 +0800
-Message-Id: <20230530093445.61526-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 30 May 2023 05:35:13 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA849C;
+        Tue, 30 May 2023 02:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=g7fUJD6rbDzuWW1q3C6cTYg4WrNyI/NCOvGUuWRnOEM=; b=RdnRnTEIcNgRZ0UFVkJouvlJEt
+        KxXF6WttRbwn23A5ARXE7cbYAIPJYfm2RG2Nu2NfZRq5gmGrqq2PLX51oxmDrbA2lIj6g2kw+1F9K
+        Qz6HHdqpve2uLWPt9HQsD+ChlisikQqKsh6a+BEIq+j7zyfftEzdiyiAC6Usy3TNmp2RqhlublK7A
+        /i8kMDRq0jZhu+kYfADEBplGXAP9rOngZiStKHsRgcS9Zj67KfGxmOCsPgN5O8jy3DN1RBpKA/mLD
+        ZShrfYrWgFrQP+6NbEATV/dLSZ8yV6FY1dqPcD3RXzNk+wDQ1Nv5/JhJIL0otmiwrL9cozcEFQ4Sc
+        /EKGa0lA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q3vkj-006AfG-7j; Tue, 30 May 2023 09:34:53 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A78783001C3;
+        Tue, 30 May 2023 11:34:52 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5D2A4214873C1; Tue, 30 May 2023 11:34:52 +0200 (CEST)
+Date:   Tue, 30 May 2023 11:34:52 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de
+Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
+Message-ID: <20230530093452.GA153810@hirez.programming.kicks-ass.net>
+References: <20230526205204.861311518@infradead.org>
+ <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
+ <20230530092342.GA149947@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530092342.GA149947@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code using variable pages_processed has been removed,
-and function folio_nr_pages has not changed the memory of pointer folio,
-so both should be removed.
+On Tue, May 30, 2023 at 11:23:42AM +0200, Peter Zijlstra wrote:
 
-silence the warning:
-fs/btrfs/extent_io.c:230:16: warning: variable 'pages_processed' set but not used
+> Yes, it's a wee bit more involved, but I'm thinking it gives a fair
+> amount of flexibility and we don't need to ret rid of
+> -Wdeclaration-after-statement.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5340
-Fixes: 8294b1869688 ("btrfs: split page locking out of __process_pages_contig")
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- fs/btrfs/extent_io.c | 2 --
- 1 file changed, 2 deletions(-)
+One other thing I forgot to point put; it allows things like:
 
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index 89e093ae1c33..6919409c1183 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -227,7 +227,6 @@ static void __process_pages_contig(struct address_space *mapping,
- 	pgoff_t start_index = start >> PAGE_SHIFT;
- 	pgoff_t end_index = end >> PAGE_SHIFT;
- 	pgoff_t index = start_index;
--	unsigned long pages_processed = 0;
- 	struct folio_batch fbatch;
- 	int i;
- 
-@@ -242,7 +241,6 @@ static void __process_pages_contig(struct address_space *mapping,
- 
- 			process_one_page(fs_info, &folio->page, locked_page,
- 					 page_ops, start, end);
--			pages_processed += folio_nr_pages(folio);
- 		}
- 		folio_batch_release(&fbatch);
- 		cond_resched();
--- 
-2.20.1.7.g153144c
+	int store_fd(int fd)
+	{
+		ptr_guard(fdput, f) = fdget(fd);
+		void *ret;
+		if (!f.file)
+			return -EBADF;
+		ret = xa_store(&xarray, f.file->private, f);
+		if (xa_is_err(ret))
+			return xa_err(ret);
+		f = null_ptr(fdput); // xarray now owns f
+		return 0;
+	}
 
+Where we can assign null_ptr() to clear the guard and inhibit the
+cleanup function to pass ownership around.
