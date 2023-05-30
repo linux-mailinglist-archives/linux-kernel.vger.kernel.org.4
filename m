@@ -2,243 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F3E715D04
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E8B715D0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjE3LWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
+        id S231868AbjE3LXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbjE3LWF (ORCPT
+        with ESMTP id S231520AbjE3LW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:22:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172FB10D;
-        Tue, 30 May 2023 04:21:48 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B07471F8B9;
-        Tue, 30 May 2023 11:21:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685445707; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1xqVALaFk7J72db8rlBEb4x/7TKicjRv29Wsom/dI7g=;
-        b=mZqWfB31guTjIKJ23uuU4VWi7KuL6RCIRXwXxfb7ceRja8Lz8dZ4sAxLIUboob0CkNUvaR
-        KXStA5O2wH7Eq15TcrH99NE89GcUHmtHHsNfXqbAeCXfqp0X3iv1/eXiD+EYYIrmDTgi8r
-        5yDoSCwf/HyKOzMYkbAcZ/N1qOko5uU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685445707;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1xqVALaFk7J72db8rlBEb4x/7TKicjRv29Wsom/dI7g=;
-        b=JC03HezlcO95pQD3wb4zuZh7SlZE+qGcPKbexpCPcvoFkBdjvhzcO1mLYeImbFCRMT6cIn
-        wIIj0eLumXBMkXDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A0E4013597;
-        Tue, 30 May 2023 11:21:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hRI/J0vcdWQFdwAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 30 May 2023 11:21:47 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 38105A0754; Tue, 30 May 2023 13:21:47 +0200 (CEST)
-Date:   Tue, 30 May 2023 13:21:47 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com>,
-        Jan Kara <jack@suse.cz>, Jeff Mahoney <jeffm@suse.com>
-Subject: Re: [syzbot] [reiserfs?] INFO: task hung in flush_old_commits
-Message-ID: <20230530112147.spvyjl7b4ss7re47@quack3>
-References: <000000000000be039005fc540ed7@google.com>
- <00000000000018faf905fc6d9056@google.com>
- <CAHC9VhTM0a7jnhxpCyonepcfWbnG-OJbbLpjQi68gL2GVnKSRg@mail.gmail.com>
- <813148798c14a49cbdf0f500fbbbab154929e6ed.camel@huaweicloud.com>
- <CAHC9VhRoj3muyD0+pTwpJvCdmzz25C8k8eufWcjc8ZE4e2AOew@mail.gmail.com>
- <58cebdd9318bd4435df6c0cf45318abd3db0fff8.camel@huaweicloud.com>
+        Tue, 30 May 2023 07:22:59 -0400
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493AFD9;
+        Tue, 30 May 2023 04:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EIqbr3ImWSf/0upwjLftoyo2ik4nrN7ZVxzp8AE4Lws=; b=S5hrlOkuY9bcl8i37p7KIhzcvy
+        RgbGCGFuq1fhNMWlzgWeAV1OlGAdLcOf5V5kdtGWvFXxpRsf3s2bjuGiJbuOiEYQS5jW5rOj+fVRZ
+        4TMnsXkxapqoc1zHd3/hbptFJ0uBz0A2kygPZT6sWimts93IBRBmD3nSKLfroXRRMvwGfvNb6GYp5
+        D/ojL14qar2bXOkrjrqpadgZAXQUj99rLoyH6Cr3D3dnFNTpALfkPELfc9/lokjm+Vz+63PcjAyyR
+        yIUSe+8+O3ad+AXTuXkDDE9RYQQx+Sbx0S13eSVIznlihEHAu5WG3BoEsYam+OJfmO6shNC93vu3v
+        Xqq6PO7A==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <carnil@debian.org>)
+        id 1q3xR3-00Eoj8-Rh; Tue, 30 May 2023 11:22:42 +0000
+Received: by eldamar.lan (Postfix, from userid 1000)
+        id 90673BE2DE0; Tue, 30 May 2023 13:22:40 +0200 (CEST)
+Date:   Tue, 30 May 2023 13:22:40 +0200
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Nick Hastings <nicholaschastings@gmail.com>,
+        1036530@bugs.debian.org
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
+Subject: Re: Bug#1036530: Regression from "ACPI: OSI: Remove Linux-Dell-Video
+ _OSI string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of
+ system)
+Message-ID: <ZHXcgPC+7u04RuGD@eldamar.lan>
+References: <ZHKrC4/G6ZyvRReI@xps>
+ <ZHL5cCNUzVdleiag@eldamar.lan>
+ <ab12984e-be17-903d-ba0a-f9c85b8c544f@amd.com>
+ <ZHP4IqxBUPuVRvRV@xps>
+ <09e24386-de63-e9e9-9e7f-5d04bad62d83@amd.com>
+ <ZHQhPcKUF76Kplwm@xps>
+ <ZHUt9xQKCwCflvVC@xps>
+ <8537d965-ddf4-7f45-6459-d5acf520376e@amd.com>
+ <168471337231.1913606.15905047692536779158.reportbug@xps>
+ <ZHWfMBeAONerAJmd@xps>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <58cebdd9318bd4435df6c0cf45318abd3db0fff8.camel@huaweicloud.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZHWfMBeAONerAJmd@xps>
+X-Debian-User: carnil
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 26-05-23 11:45:57, Roberto Sassu wrote:
-> On Wed, 2023-05-24 at 17:57 -0400, Paul Moore wrote:
-> > On Wed, May 24, 2023 at 11:50 AM Roberto Sassu
-> > <roberto.sassu@huaweicloud.com> wrote:
-> > > On Wed, 2023-05-24 at 11:11 -0400, Paul Moore wrote:
-> > > > On Wed, May 24, 2023 at 5:59 AM syzbot
-> > > > <syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com> wrote:
-> > > > > syzbot has bisected this issue to:
-> > > > > 
-> > > > > commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
-> > > > > Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > Date:   Fri Mar 31 12:32:18 2023 +0000
-> > > > > 
-> > > > >     reiserfs: Add security prefix to xattr name in reiserfs_security_write()
-> > > > > 
-> > > > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11c39639280000
-> > > > > start commit:   421ca22e3138 Merge tag 'nfs-for-6.4-2' of git://git.linux-..
-> > > > > git tree:       upstream
-> > > > > final oops:     https://syzkaller.appspot.com/x/report.txt?x=13c39639280000
-> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=15c39639280000
-> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
-> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=0a684c061589dcc30e51
-> > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14312791280000
-> > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12da8605280000
-> > > > > 
-> > > > > Reported-by: syzbot+0a684c061589dcc30e51@syzkaller.appspotmail.com
-> > > > > Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reiserfs_security_write()")
-> > > > > 
-> > > > > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Hi Nick,
+
+Thanks to you both for triaging the issue!
+
+On Tue, May 30, 2023 at 04:01:04PM +0900, Nick Hastings wrote:
+> Hi,
+> 
+> * Mario Limonciello <mario.limonciello@amd.com> [230530 13:00]:
+> > On 5/29/23 18:01, Nick Hastings wrote:
+> > > Hi,
+> > > 
+> > > * Nick Hastings <nicholaschastings@gmail.com> [230529 12:51]:
+> > > > * Mario Limonciello <mario.limonciello@amd.com> [230529 10:14]:
+> > > > > On 5/28/23 19:56, Nick Hastings wrote:
+> > > > > > Hi,
+> > > > > > 
+> > > > > > * Mario Limonciello <mario.limonciello@amd.com> [230528 21:44]:
+> > > > > > > On 5/28/23 01:49, Salvatore Bonaccorso wrote:
+> > > > > > > > Hi Mario
+> > > > > > > > 
+> > > > > > > > Nick Hastings reported in Debian in https://bugs.debian.org/1036530
+> > > > > > > > lockups from his system after updating from a 6.0 based version to
+> > > > > > > > 6.1.y. >
+> > > > > > > > #regzbot ^introduced 24867516f06d
+> > > > > > > > 
+> > > > > > > > he bisected the issue and tracked it down to:
+> > > > > > > > 
+> > > > > > > > On Sun, May 28, 2023 at 10:14:51AM +0900, Nick Hastings wrote:
+> > > > > > > > > Control: tags -1 - moreinfo
+> > > > > > > > > 
+> > > > > > > > > Hi,
+> > > > > > > > > 
+> > > > > > > > > I repeated the git bisect, and the bad commit seems to be:
+> > > > > > > > > 
+> > > > > > > > > (git)-[v6.1-rc1~206^2~4^5~3|bisect] % git bisect bad
+> > > > > > > > > 24867516f06dabedef3be7eea0ef0846b91538bc is the first bad commit
+> > > > > > > > > commit 24867516f06dabedef3be7eea0ef0846b91538bc
+> > > > > > > > > Author: Mario Limonciello <mario.limonciello@amd.com>
+> > > > > > > > > Date:   Tue Aug 23 13:51:31 2022 -0500
+> > > > > > > > > 
+> > > > > > > > >        ACPI: OSI: Remove Linux-Dell-Video _OSI string
+> > > > > > > > >        This string was introduced because drivers for NVIDIA hardware
+> > > > > > > > >        had bugs supporting RTD3 in the past.
+> > > > > > > > >        Before proprietary NVIDIA driver started to support RTD3, Ubuntu had
+> > > > > > > > >        had a mechanism for switching PRIME on and off, though it had required
+> > > > > > > > >        to logout/login to make the library switch happen.
+> > > > > > > > >        When the PRIME had been off, the mechanism had unloaded the NVIDIA
+> > > > > > > > >        driver and put the device into D3cold, but the GPU had never come back
+> > > > > > > > >        to D0 again which is why ODMs used the _OSI to expose an old _DSM
+> > > > > > > > >        method to switch the power on/off.
+> > > > > > > > >        That has been fixed by commit 5775b843a619 ("PCI: Restore config space
+> > > > > > > > >        on runtime resume despite being unbound"). so vendors shouldn't be
+> > > > > > > > >        using this string to modify ASL any more.
+> > > > > > > > >        Reviewed-by: Lyude Paul <lyude@redhat.com>
+> > > > > > > > >        Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > > > > > > >        Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > > > > > 
+> > > > > > > > >     drivers/acpi/osi.c | 9 ---------
+> > > > > > > > >     1 file changed, 9 deletions(-)
+> > > > > > > > > 
+> > > > > > > > > This machine is a Dell with an nvidia chip so it looks like this really
+> > > > > > > > > could be the commit that that is causing the problems. The description
+> > > > > > > > > of the commit also seems (to my untrained eye) to be consistent with the
+> > > > > > > > > error reported on the console when the lockup occurs:
+> > > > > > > > > 
+> > > > > > > > > [   58.729863] ACPI Error: Aborting method \_SB.PCI0.PGON due to previous error (AE_AML_LOOP_TIMEOUT) (20220331/psparse-529)
+> > > > > > > > > [   58.729904] ACPI Error: Aborting method \_SB.PCI0.PEG0.PG00._ON due to previous error (AE_AML_LOOP_TIMEOUT) (20220331/psparse-529)
+> > > > > > > > > [   60.083261] vfio-pci 0000:01:00.0 Unable to change power state from D3cold to D0, device inaccessible
+> > > > > > > > > 
+> > > > > > > > > Hopefully this is enough information for experts to resolve this.
+> > > > > > > > 
+> > > > > > > > Does this ring some bell for you? Do you need any further information
+> > > > > > > > from Nick?
+> > > > > > > > 
+> > > > > > > > Regards,
+> > > > > > > > Salvatore
+> > > > > > > 
+> > > > > > 
+> > > > > > > Have Nick try using "pcie_port_pm=off" and see if it helps the issue.
+> > > > > > 
+> > > > > > I booted into a 6.1 kernel with this option. It has been running without
+> > > > > > problems for 1.5 hours. Usually I would expect the lockup to have
+> > > > > > occurred by now.
 > > > > 
-> > > > Roberto, I think we need to resolve this somehow.  As I mentioned
-> > > > earlier, I don't believe this to be a fault in your patch, rather that
-> > > > patch simply triggered a situation that had not been present before,
-> > > > likely because the reiserfs code always failed when writing LSM
-> > > > xattrs.  Regardless, we still need to fix the deadlocks that sysbot
-> > > > has been reporting.
+> > > > I let this run for 3 hours without issue.
+> > > > 
+> > > > > > > Does this happen in the latest 6.4 RC as well?
+> > > > > > 
+> > > > > > I have compiled that kernel and will boot into it after running this one
+> > > > > > with the pcie_port_pm=off for another hour or so.
+> > > > 
+> > > > I'm now running 6.4.0-rc4 without seeing the problem after 1 hour.
 > > > 
-> > > Hi Paul
+> > > I did eventually see a lockup of this kernel. On the console I saw:
 > > > 
-> > > ok, I will try.
+> > > [  151.035036] vfio-pci 0000:01:00.0 Unable to change power state from D3cold to D0, device inaccessible
+> > > 
+> > > I did not see the other two lines that were present in earlier lock ups >
+> > > > I did however see two unrelated problems that I include here for
+> > > > completeness:
+> > > > 1. iwlwifi module did not automatically load
+> > > > 2. Xwayland used huge amount of CPU even though was not running any X
+> > > > programs. Recompiling my wayland compositor without XWayland support
+> > > > "fixed" this.
+> > > > 
+> > > > > > > I think we need to see a full dmesg and acpidump to better
+> > > > > > > characterize it.
+> > > > > > 
+> > > > > > Please find attached. Let me know if there is anything else I can provide.
+> > > > > > 
+> > > > > > Regards,
+> > > > > > 
+> > > > > > Nick.
+> > > > > 
+> > > > > I don't see nouveau loading, are you explicitly preventing it from
+> > > > > loading?
+> > > > 
+> > > > Yes nouveau is blacklisted.
+> > > > 
+> > > > > Can I see the journal from a boot when it reproduced?
+> > > > 
+> > > > Hmm not sure which n for "journalctl -b n" maps to which kernel (is that
+> > > > what you are requesting?). The commit hash doesn't not seem to be
+> > > > listed. I may have to boot into a bad kernel again.
+> > > 
+> > > Please find attached the output from a "journalctl --system -bN" for a
+> > > kernel that has this issue.
+> > > 
+> > > Regards,
+> > > 
+> > > Nick.
 > > 
-> > Thanks Roberto.  If it gets to be too challenging, let us know and we
-> > can look into safely disabling the LSM xattrs for reiserfs, I'll be
-> > shocked if anyone is successfully using LSM xattrs on reiserfs.
+> > In this log I see nouveau loaded, but I also don't see the failure
+> > occurring.
 > 
-> Ok, at least I know what happens...
-> 
-> + Jan, Jeff
-> 
-> I'm focusing on this reproducer, which works 100% of the times:
-> 
-> https://syzkaller.appspot.com/text?tag=ReproSyz&x=163079f9280000
+> I never saw anything in the logs from a lockup either. I had assumed it
+> was no longer able to write to disk. The failure did occur on that
+> occasion.
 
-Well, the commit d82dcd9e21b ("reiserfs: Add security prefix to xattr name
-in reiserfs_security_write()") looks obviously broken to me. It does:
+Can you try if you would get more out of it using netconsole?
 
-char xattr_name[XATTR_NAME_MAX + 1] = XATTR_SECURITY_PREFIX;
+https://www.kernel.org/doc/html/latest/networking/netconsole.html
 
-Which is not how we can initialize strings in C... ;)
-
-								Honza
-
-> 
-> This is the last lock, before things go wrong:
-> 
-> Thread 5 hit Breakpoint 2, reiserfs_write_lock (s=s@entry=0xffff888066e28000) at fs/reiserfs/lock.c:24
-> 24	{
-> (gdb) bt
-> #0  reiserfs_write_lock (s=s@entry=0xffff888066e28000) at fs/reiserfs/lock.c:24
-> #1  0xffffffff821a559a in reiserfs_get_block (inode=inode@entry=0xffff888069fd0190, block=block@entry=15, bh_result=bh_result@entry=0xffff888075940000, create=create@entry=1) at fs/reiserfs/inode.c:680
-> #2  0xffffffff81f50254 in __block_write_begin_int (folio=0xffffea00019a9180, pos=pos@entry=61440, len=len@entry=1, get_block=get_block@entry=0xffffffff821a5390 <reiserfs_get_block>, iomap=iomap@entry=0x0 <fixed_percpu_data>) at fs/buffer.c:2064
-> #3  0xffffffff81f5165a in __block_write_begin (page=page@entry=0xffffea00019a9180, pos=pos@entry=61440, len=len@entry=1, get_block=get_block@entry=0xffffffff821a5390 <reiserfs_get_block>) at ./arch/x86/include/asm/jump_label.h:27
-> #4  0xffffffff821a3e3d in reiserfs_write_begin (file=<optimized out>, mapping=<optimized out>, pos=61440, len=1, pagep=<optimized out>, fsdata=<optimized out>) at fs/reiserfs/inode.c:2779
-> #5  0xffffffff81aec252 in generic_perform_write (iocb=iocb@entry=0xffffc9002130fb60, i=i@entry=0xffffc9002130fd00) at mm/filemap.c:3923
-> #6  0xffffffff81b0604e in __generic_file_write_iter (iocb=iocb@entry=0xffffc9002130fb60, from=from@entry=0xffffc9002130fd00) at mm/filemap.c:4051
-> #7  0xffffffff81b06383 in generic_file_write_iter (iocb=0xffffc9002130fb60, from=0xffffc9002130fd00) at mm/filemap.c:4083
-> #8  0xffffffff81e3240b in call_write_iter (file=0xffff888012692d00, iter=0xffffc9002130fd00, kio=0xffffc9002130fb60) at ./include/linux/fs.h:1868
-> #9  do_iter_readv_writev (filp=filp@entry=0xffff888012692d00, iter=iter@entry=0xffffc9002130fd00, ppos=ppos@entry=0xffffc9002130fe90, type=type@entry=1, flags=flags@entry=0) at fs/read_write.c:735
-> #10 0xffffffff81e33da4 in do_iter_write (flags=0, pos=0xffffc9002130fe90, iter=0xffffc9002130fd00, file=0xffff888012692d00) at fs/read_write.c:860
-> #11 do_iter_write (file=0xffff888012692d00, iter=0xffffc9002130fd00, pos=0xffffc9002130fe90, flags=0) at fs/read_write.c:841
-> #12 0xffffffff81e34611 in vfs_writev (file=file@entry=0xffff888012692d00, vec=vec@entry=0x20000480, vlen=vlen@entry=1, pos=pos@entry=0xffffc9002130fe90, flags=flags@entry=0) at fs/read_write.c:933
-> #13 0xffffffff81e34fd6 in do_pwritev (fd=fd@entry=5, vec=vec@entry=0x20000480, vlen=vlen@entry=1, pos=pos@entry=61440, flags=flags@entry=0) at fs/read_write.c:1030
-> #14 0xffffffff81e3b61f in __do_sys_pwritev2 (pos_h=<optimized out>, flags=0, pos_l=61440, vlen=1, vec=0x20000480, fd=5) at fs/read_write.c:1089
-> #15 __se_sys_pwritev2 (pos_h=<optimized out>, flags=0, pos_l=61440, vlen=1, vec=536872064, fd=5) at fs/read_write.c:1080
-> #16 __x64_sys_pwritev2 (regs=0xffffc9002130ff58) at fs/read_write.c:1080
-> #17 0xffffffff880dd279 in do_syscall_x64 (nr=<optimized out>, regs=0xffffc9002130ff58) at arch/x86/entry/common.c:50
-> #18 do_syscall_64 (regs=0xffffc9002130ff58, nr=<optimized out>) at arch/x86/entry/common.c:80
-> #19 0xffffffff8820008b in entry_SYSCALL_64 () at arch/x86/entry/entry_64.S:120
-> #20 0x0000000000406e00 in ?? ()
-> #21 0x00007f99e21b5000 in ?? ()
-> #22 0x0000000000000000 in ?? ()
-> 
-> After that, there is a very long loop doing:
-> 
-> Thread 5 hit Breakpoint 3, reiserfs_read_bitmap_block (sb=sb@entry=0xffff888066e28000, bitmap=bitmap@entry=1) at fs/reiserfs/bitmap.c:1417
-> 1417	{
-> (gdb) c
-> Continuing.
-> 
-> Thread 5 hit Breakpoint 3, reiserfs_read_bitmap_block (sb=sb@entry=0xffff888066e28000, bitmap=bitmap@entry=2) at fs/reiserfs/bitmap.c:1417
-> 1417	{
-> (gdb) 
-> Continuing.
-> 
-> and so on...
-> 
-> [  628.589974][ T6003] REISERFS warning (device loop0): sh-2029: %s: bitmap block (#%u) reading failed reiserfs_read_bitmap_block: reiserfs_read_bitmap_block
-> 
-> This message appears because we are here:
-> 
-> struct buffer_head *reiserfs_read_bitmap_block(struct super_block *sb,
->                                                unsigned int bitmap)
-> {
-> 
-> [...]
-> 
-> 	bh = sb_bread(sb, block);
-> 	if (bh == NULL)
-> 		reiserfs_warning(sb, "sh-2029: %s: bitmap block (#%u) "
-> 		                 "reading failed", __func__, block);
-> 
-> The hanging task (kthread) is trying to hold the same lock, which
-> unfortunately is not going to be released soon:
-> 
-> static int reiserfs_sync_fs(struct super_block *s, int wait)
-> {
-> 
-> [...]
-> 
-> 	reiserfs_write_lock(s);
-> 
-> I didn't get yet if the reason of this long loop is because we cannot
-> flush at this point, or just because of the test. I tried to
-> synchronously flush, but didn't make any difference.
-> 
-> I did a very simple change, which can be totally wrong:
-> 
-> @@ -94,7 +96,7 @@ static void flush_old_commits(struct work_struct *work)
->          * trylock as reiserfs_cancel_old_flush() may be waiting for this work
->          * to complete with s_umount held.
->          */
-> -       if (!down_read_trylock(&s->s_umount)) {
-> +       if (sbi->lock_owner || !down_read_trylock(&s->s_umount)) {
->                 /* Requeue work if we are not cancelling it */
->                 spin_lock(&sbi->old_work_lock);
->                 if (sbi->work_queued == 1)
-> 
-> 
-> If the lock is held, instead of waiting, reschedule the flush.
-> 
-> Anyway, at least this report does not seem to be related to fixing
-> security xattrs.
-> 
-> Roberto
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Regards,
+Salvatore
