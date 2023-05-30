@@ -2,257 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BC7716F18
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13749716F21
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbjE3UvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 16:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        id S233001AbjE3Uwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjE3UvS (ORCPT
+        with ESMTP id S232613AbjE3Uv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 16:51:18 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCFC10A;
-        Tue, 30 May 2023 13:50:52 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2afb2875491so53109891fa.1;
-        Tue, 30 May 2023 13:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685479850; x=1688071850;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Ylkw/NLGjRglYYdjZVPg6YRfMOUcFgiFJEPQkmObYw=;
-        b=cFeZHxd72eQLJPqj0Y71fYxUtkh8Dk/Phgzhw0QsSbGrd/Pe/FpZ6uQDp/By20Jlg/
-         UsHX5VUl0Ssyt1hDQGvCmJiEA+8R0OR5XzNus2Dt/Z0QcYp20N7Db8k0PTvpJLNepQuI
-         zVUL1c+NAmac87l+XYMO3m4Z9YiXDWIk3tdXD0JIEypNeR+0pcWgN7Z8jCbR5MYkiJh9
-         Wgbf6DtiAyjD3/GhoYVjeHEkBY+UiE0T8tvQ2eQfMIPf9egwoMD8NperlKCzvfK9h1xm
-         9rumJuOXHplb7WZWgoicto6WQGBizH1BS0v6asUz/35CMpvIJdWo9B+4W+QT2j3qXgFo
-         52KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685479850; x=1688071850;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Ylkw/NLGjRglYYdjZVPg6YRfMOUcFgiFJEPQkmObYw=;
-        b=EFOqolcQgbZKEBT8tffs7iGZR43jJl2oUaEtipLaqDIwX7TCztX+Cp9EUvSi97L42L
-         2cVjWYC6sPZEgNQm8KEOW6LlxQeeTwzHjOzX28tVEFzyheEi3b14UL5RSI0KeVpub/D+
-         vWfDlRJr/c/qwcx1LsfEMKKjU/PkUTwuoO/X2zoLIGPDxoWyjNHTurMFt+Yqxo9vrpXP
-         ynhtx9LbkBl6r46G4eJKdKoIx45Tvx9qdnM7sLMzrrEIdHeZgItbgzZG9BP1pjHwOjuV
-         dn4JGkztKMwKfm9gXg5dxdBhnVCBzrYJG8jFQeE55kOKovvlBjekJ8kMlnifUfc4R1ud
-         FSfQ==
-X-Gm-Message-State: AC+VfDwx2hwjWFnAKfcpqPa09S7XWBZDWSx+yIYfmJ6hgxv7P/uBDxvs
-        veWAXaNQsiqkJ4l2AKuasPuYZzzAEomFge1X2Yo12sHM
-X-Google-Smtp-Source: ACHHUZ5n5Jmrhmc1kh/SJJ708j1DWzaUZSdp/68VKKs1M1037UKPw0vinzDJmL971eSMr/3StPc9MMa2hJHfJxJBo7U=
-X-Received: by 2002:a2e:9f09:0:b0:2aa:481b:b439 with SMTP id
- u9-20020a2e9f09000000b002aa481bb439mr1525949ljk.21.1685479850206; Tue, 30 May
- 2023 13:50:50 -0700 (PDT)
+        Tue, 30 May 2023 16:51:56 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE9CBE;
+        Tue, 30 May 2023 13:51:50 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.75.218) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Tue, 30 May
+ 2023 23:51:39 +0300
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: Re: [PATCH v4 02/41] ata: add HAS_IOPORT dependencies
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Damien Le Moal <dlemoal@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, Arnd Bergmann <arnd@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <linux-ide@vger.kernel.org>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+ <20230516110038.2413224-3-schnelle@linux.ibm.com>
+Organization: Open Mobile Platform
+Message-ID: <3af407e3-76a4-23df-8742-8f7b9a98f088@omp.ru>
+Date:   Tue, 30 May 2023 23:51:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20230522234154.2924052-1-yinghsu@chromium.org>
- <ZGyPt1GYGV2C2RQZ@corigine.com> <CABBYNZ+by-OQH2aPEMHpQ5cOLoKNpR7k111rJj6iOd2PGLx3gg@mail.gmail.com>
- <CAAa9mD3A+3uJzFK0EbTrn5hX42EOgeixehmxgkwdhp1KetxjVQ@mail.gmail.com>
- <CABBYNZKPv_0AaJJm2_c0F+4qX_vKXQ9BnVgR-kPy40YsDDqSRQ@mail.gmail.com>
- <CAAa9mD2e-WkuHshXf7ifOHcGEsgHb68xkRdaq5MRMeY7_jzkMg@mail.gmail.com> <CAAa9mD00VriG3utyedjwykuUUXaRU0SvXkr5+VPgmZFpiFokrA@mail.gmail.com>
-In-Reply-To: <CAAa9mD00VriG3utyedjwykuUUXaRU0SvXkr5+VPgmZFpiFokrA@mail.gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Tue, 30 May 2023 13:50:37 -0700
-Message-ID: <CABBYNZLpNbYDrP9aZqx9dm=XMh2KdRDAy+2gXX0wexMBHiQQUA@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: Fix l2cap_disconnect_req deadlock
-To:     Ying Hsu <yinghsu@chromium.org>
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        linux-bluetooth@vger.kernel.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230516110038.2413224-3-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.75.218]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 05/30/2023 20:36:28
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 177729 [May 30 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 514 514 afae95493a83d1ad2cafbfa8c38dfd9c90c52a7a
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_phishing_log_reg_50_60}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.75.218 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;178.176.75.218:7.1.2;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.75.218
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/30/2023 20:41:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 5/30/2023 6:29:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ying,
 
-On Mon, May 29, 2023 at 10:08=E2=80=AFPM Ying Hsu <yinghsu@chromium.org> wr=
-ote:
->
-> Gentle ping, Luiz.
->
->
-> On Thu, May 25, 2023 at 12:16=E2=80=AFPM Ying Hsu <yinghsu@chromium.org> =
-wrote:
-> >
-> > Hi Luiz,
-> >
-> > The proposal solves the deadlock but might introduce other problems as
-> > it breaks the order of l2cap_chan_del.
-> > There are another way to resolve the deadlock:
-> > ```
-> > @@ -4663,7 +4663,9 @@ static inline int l2cap_disconnect_req(struct
-> > l2cap_conn *conn,
-> >
-> >         chan->ops->set_shutdown(chan);
-> >
-> > +       l2cap_chan_unlock(chan);
-> >         mutex_lock(&conn->chan_lock);
-> > +       l2cap_chan_lock(chan);
-> >         l2cap_chan_del(chan, ECONNRESET);
-> >         mutex_unlock(&conn->chan_lock);
-> >  ```
+Hello!
 
-Yeah, I kind of like this better, that said I don't think changing the
-order of l2cap_chan_del matters that much but it does change the
-callback teardown sequence so perhaps we should stick to a simpler
-solution for now.
+On 5/16/23 1:59 PM, Niklas Schnelle wrote:
 
-Please submit an updated version so we can move forward with it.
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
+>       per-subsystem patches may be applied independently
+> 
+>  drivers/ata/Kconfig       | 28 ++++++++++++++--------------
+>  drivers/ata/ata_generic.c |  2 ++
+>  drivers/ata/libata-sff.c  |  2 ++
+>  include/linux/libata.h    |  2 ++
+>  4 files changed, 20 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> index 42b51c9812a0..c521cdc51f8c 100644
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+[...]
 
-> > If you're okay with it, I'll do some verification and post a full patch=
-.
-> >
-> > Best regards,
-> > Ying
-> >
-> > On Thu, May 25, 2023 at 2:56=E2=80=AFAM Luiz Augusto von Dentz
-> > <luiz.dentz@gmail.com> wrote:
-> > >
-> > > Hi Ying,
-> > >
-> > > On Wed, May 24, 2023 at 3:54=E2=80=AFAM Ying Hsu <yinghsu@chromium.or=
-g> wrote:
-> > > >
-> > > > Hi Simon,
-> > > >
-> > > > I understand your concern about the repeated code.
-> > > > However, simply hiding the locking logic in another function
-> > > > introduces hidden assumptions.
-> > > > For this patch, I would like to fix the deadlock in a simple and ea=
-sy
-> > > > to understand way.
-> > > > We can always refactor the l2cap_chan utility functions later.
-> > > >
-> > > > Hi Luis,
-> > > >
-> > > > I'll add a fixes tag in the next version.
-> > >
-> > > And how about doing this:
-> > >
-> > > https://gist.github.com/Vudentz/e513859ecb31e79c947dfcb4b5c60453
-> > >
-> > > > Best regards,
-> > > > Ying
-> > > >
-> > > >
-> > > > On Wed, May 24, 2023 at 3:06=E2=80=AFAM Luiz Augusto von Dentz
-> > > > <luiz.dentz@gmail.com> wrote:
-> > > > >
-> > > > > Hi Simon, Ying,
-> > > > >
-> > > > > On Tue, May 23, 2023 at 3:04=E2=80=AFAM Simon Horman <simon.horma=
-n@corigine.com> wrote:
-> > > > > >
-> > > > > > On Mon, May 22, 2023 at 11:41:51PM +0000, Ying Hsu wrote:
-> > > > > > > L2CAP assumes that the locks conn->chan_lock and chan->lock a=
-re
-> > > > > > > acquired in the order conn->chan_lock, chan->lock to avoid
-> > > > > > > potential deadlock.
-> > > > > > > For example, l2sock_shutdown acquires these locks in the orde=
-r:
-> > > > > > >   mutex_lock(&conn->chan_lock)
-> > > > > > >   l2cap_chan_lock(chan)
-> > > > > > >
-> > > > > > > However, l2cap_disconnect_req acquires chan->lock in
-> > > > > > > l2cap_get_chan_by_scid first and then acquires conn->chan_loc=
-k
-> > > > > > > before calling l2cap_chan_del. This means that these locks ar=
-e
-> > > > > > > acquired in unexpected order, which leads to potential deadlo=
-ck:
-> > > > > > >   l2cap_chan_lock(c)
-> > > > > > >   mutex_lock(&conn->chan_lock)
-> > > > > > >
-> > > > > > > This patch uses __l2cap_get_chan_by_scid to replace
-> > > > > > > l2cap_get_chan_by_scid and adjusts the locking order to avoid=
- the
-> > > > > > > potential deadlock.
-> > > > >
-> > > > > This needs the fixes tag so we can backport it properly.
-> > > > >
-> > > > > > > Signed-off-by: Ying Hsu <yinghsu@chromium.org>
-> > > > > > > ---
-> > > > > > > This commit has been tested on a Chromebook device.
-> > > > > > >
-> > > > > > > Changes in v2:
-> > > > > > > - Adding the prefix "Bluetooth:" to subject line.
-> > > > > > >
-> > > > > > >  net/bluetooth/l2cap_core.c | 26 ++++++++++++++++++++------
-> > > > > > >  1 file changed, 20 insertions(+), 6 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap=
-_core.c
-> > > > > > > index 376b523c7b26..8f08192b8fb1 100644
-> > > > > > > --- a/net/bluetooth/l2cap_core.c
-> > > > > > > +++ b/net/bluetooth/l2cap_core.c
-> > > > > > > @@ -4651,8 +4651,16 @@ static inline int l2cap_disconnect_req=
-(struct l2cap_conn *conn,
-> > > > > > >
-> > > > > > >       BT_DBG("scid 0x%4.4x dcid 0x%4.4x", scid, dcid);
-> > > > > > >
-> > > > > > > -     chan =3D l2cap_get_chan_by_scid(conn, dcid);
-> > > > > > > +     mutex_lock(&conn->chan_lock);
-> > > > > > > +     chan =3D __l2cap_get_chan_by_scid(conn, dcid);
-> > > > > > > +     if (chan) {
-> > > > > > > +             chan =3D l2cap_chan_hold_unless_zero(chan);
-> > > > > > > +             if (chan)
-> > > > > > > +                     l2cap_chan_lock(chan);
-> > > > > > > +     }
-> > > > > > > +
-> > > > > > >       if (!chan) {
-> > > > > > > +             mutex_unlock(&conn->chan_lock);
-> > > > > > >               cmd_reject_invalid_cid(conn, cmd->ident, dcid, =
-scid);
-> > > > > > >               return 0;
-> > > > > > >       }
-> > > > > >
-> > > > > > Hi Ying,
-> > > > > >
-> > > > > > The conditional setting of chan and calling l2cap_chan_lock()
-> > > > > > is both non-trivial and repeated. It seems that it ought to be
-> > > > > > in a helper.
-> > > > > >
-> > > > > > Something like this (I'm sure a better function name can be cho=
-sen):
-> > > > > >
-> > > > > >         chan =3D __l2cap_get_and_lock_chan_by_scid(conn, dcid);
-> > > > > >         if (!chan) {
-> > > > > >                 ...
-> > > > > >         }
-> > > > > >
-> > > > > >         ...
-> > > > >
-> > > > > Or perhaps we could do something like l2cap_del_chan_by_scid:
-> > > > >
-> > > > > https://gist.github.com/Vudentz/e513859ecb31e79c947dfcb4b5c60453
-> > > > >
-> > > > > --
-> > > > > Luiz Augusto von Dentz
-> > >
-> > >
-> > >
-> > > --
-> > > Luiz Augusto von Dentz
+   Shouldn't there be an entry for the ATIIXP driver here? It doesn't
+call in*/out*() but it does call ata_bmdma_{start|stop}() that call
+ioread*/iowrite*()...
+   And shouldn't there be an entry for APT867x driver too? It does call
+ioread*/iowrite*()...
+ 
+[...]
 
+   Shouldn't there be an entry for the HPT3x3 driver too? It does call
+ioread*/iowrite*()... and also for the IT821x driver? And the Marvall
+driver?
 
+> @@ -819,7 +819,7 @@ config PATA_MPC52xx
+>  
+>  config PATA_NETCELL
+>  	tristate "NETCELL Revolution RAID support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
 
---=20
-Luiz Augusto von Dentz
+   Not clear why -- because it calls ata_pci_bmdma_clear_simplex()?
+
+[...]
+
+   Shouldn't there be an entry for the NS87415 driver too? It does
+call ioread*/iowrite*()...
+
+[...]
+> @@ -919,7 +919,7 @@ config PATA_SCH
+>  
+>  config PATA_SERVERWORKS
+>  	tristate "SERVERWORKS OSB4/CSB5/CSB6/HT1000 PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+
+   Not clear why -- because it calls ata_pci_bmdma_clear_simplex()?
+
+[...]
+
+   Shouldn't there be an entry for the VIA driver too? It does call
+ioread*/iowrite*()... and SiL680 driver too... and Winbond SL82C105
+driver too... and OPTi PIO driver too... and PCMCIA driver too...
+
+[...]
+> @@ -1183,7 +1183,7 @@ config ATA_GENERIC
+>  
+>  config PATA_LEGACY
+>  	tristate "Legacy ISA PATA support (Experimental)"
+> -	depends on (ISA || PCI)
+> +	depends on (ISA || PCI) && HAS_IOPORT
+>  	select PATA_TIMINGS
+
+   Hm, won't it override the HAS_IOPORT dependency, if you enable
+PATA_QDI or PATA_WINBOD_VLB?
+
+>  	help
+>  	  This option enables support for ISA/VLB/PCI bus legacy PATA
+> diff --git a/drivers/ata/ata_generic.c b/drivers/ata/ata_generic.c
+> index 2f57ec00ab82..2d391d117f74 100644
+> --- a/drivers/ata/ata_generic.c
+> +++ b/drivers/ata/ata_generic.c
+
+   This driver calls ioread8() as well...
+
+> @@ -197,8 +197,10 @@ static int ata_generic_init_one(struct pci_dev *dev, const struct pci_device_id
+>  	if (!(command & PCI_COMMAND_IO))
+>  		return -ENODEV;
+>  
+> +#ifdef CONFIG_PATA_ALI
+
+   This #ifdef doesn't make sense to me -- pata_ali.c will call
+the below function anyway, no?
+>  	if (dev->vendor == PCI_VENDOR_ID_AL)
+>  		ata_pci_bmdma_clear_simplex(dev);
+> +#endif /* CONFIG_PATA_ALI */
+>  	if (dev->vendor == PCI_VENDOR_ID_ATI) {
+>  		int rc = pcim_enable_device(dev);
+> diff --git a/drivers/ata/libata-sff.c b/drivers/ata/libata-sff.c
+> index 9d28badfe41d..80137edb7ebf 100644
+> --- a/drivers/ata/libata-sff.c
+> +++ b/drivers/ata/libata-sff.c
+> @@ -3031,6 +3031,7 @@ EXPORT_SYMBOL_GPL(ata_bmdma_port_start32);
+>  
+>  #ifdef CONFIG_PCI
+>  
+> +#ifdef CONFIG_HAS_IOPORT
+>  /**
+>   *	ata_pci_bmdma_clear_simplex -	attempt to kick device out of simplex
+>   *	@pdev: PCI device
+> @@ -3056,6 +3057,7 @@ int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev)
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(ata_pci_bmdma_clear_simplex);
+> +#endif /* CONFIG_HAS_IOPORT */
+>  
+>  static void ata_bmdma_nodma(struct ata_host *host, const char *reason)
+>  {
+> diff --git a/include/linux/libata.h b/include/linux/libata.h
+> index 311cd93377c7..90002d4a785b 100644
+> --- a/include/linux/libata.h
+> +++ b/include/linux/libata.h
+> @@ -2012,7 +2012,9 @@ extern int ata_bmdma_port_start(struct ata_port *ap);
+>  extern int ata_bmdma_port_start32(struct ata_port *ap);
+>  
+>  #ifdef CONFIG_PCI
+> +#ifdef CONFIG_HAS_IOPORT
+>  extern int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev);
+> +#endif /* CONFIG_HAS_IOPORT */
+
+   Hm, wouldn't it be better if you used #else and declare an inline
+variant of this function simply retirning an error?
+
+[...]
+
+MBR, Sergey
