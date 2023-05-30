@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD597165D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4237165FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232623AbjE3PD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S231750AbjE3PED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232839AbjE3PDV (ORCPT
+        with ESMTP id S232698AbjE3PEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:03:21 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06710123
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:03:13 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96fe88cd2fcso810112266b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685458991; x=1688050991;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aEQIS/yFx71ksD8fqCte2hKOWxpFvygsifDUrj8phvs=;
-        b=aN/gac4kaiXeacQLi7VjMayPi1MFte4yfPUgsI1CsRSGdTsepky2Hj41IkxLP3s+AX
-         7y+s02gUNv1muYqXr7R2YxL/i1ZWjwXxK1AEuS4n4iGbt3FGT63R9R/B5FoczB7MRko1
-         PQX4u0u+jado2AmqHECpiaDyiMonRZdZqFDFZ+qt0vNTRTaWRbUAMxkfRKJR5FeoZAJ8
-         yn0AAtyWy01+4/ImyA8E/X2t1SLu1SfijO83m58Y1rVpaswsYAFmdZmjwFADhwqL/x4l
-         xiXfcf6fXpW/ZE/6VDG+GgMytXPxRxtPAOrIJOy10OGG3LNg4DkJlLcD0ClZtQL/IqMm
-         1nbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685458991; x=1688050991;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aEQIS/yFx71ksD8fqCte2hKOWxpFvygsifDUrj8phvs=;
-        b=fHQcO9ZYGlBXANOcBsdkv0maDhX6URLWYRDdysnsYsmUUyhG0s1O7bZYnuoj4UJgXv
-         nhy+F9K3pEKeF6YOM1lNz9dOn6ft8LbzOkp2Mv4EctgSF7xIwe5CPduy2yhONjnT8cYV
-         bXLyCpzUGUK/3c6KQVWJld8dYsBrBdWiTVfFG6Slr1U+O0hjVGl7j174Rkh2KFuvleW5
-         5BchzmW5tGuuJ8hKCU46t/JaHsJrFufXYcwcnz9QcUO9K2Y63hMmA70zahMnmlO2rMOs
-         HJ0AaCS0lRkVBi32ba4hqZfYz8/xQG1HygKnfoljOon7wng/hVBLpzw2bC7dbmQRW3rJ
-         grYg==
-X-Gm-Message-State: AC+VfDyxepERPgNruDjrS4JILDfJV8EHidjHjCI30XMEpVboQ9LVyxSG
-        PgB027NoezVlKLe2TooypTX6Zg==
-X-Google-Smtp-Source: ACHHUZ6XvwXoHtKC8YDdDZKazBHpDWhj1BoSeeIbpL9HLB6seooGiaMn7Rbk26lp9ksoPRaeY/+3hQ==
-X-Received: by 2002:a17:907:d16:b0:960:ddba:e5c3 with SMTP id gn22-20020a1709070d1600b00960ddbae5c3mr2787944ejc.32.1685458991445;
-        Tue, 30 May 2023 08:03:11 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id f11-20020a1709062c4b00b0096a6bf89259sm7374073ejh.167.2023.05.30.08.03.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 08:03:10 -0700 (PDT)
-Message-ID: <9218c23d-91f2-9eda-47b1-f2f38bf13535@linaro.org>
-Date:   Tue, 30 May 2023 17:03:07 +0200
+        Tue, 30 May 2023 11:04:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E34D9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:03:59 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685459037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
+        bh=ffd7BIo0RG9iYEAP05EAXIJsUhP7tH/wkxnbALKQ+m0=;
+        b=IwUV7KM6ZNj17NS9CAfRur1vJUmtx4Cph/1uu3Ba+DFU3BdN+wLK18YG0o/BoXDKePZtfG
+        1vHKW6dKZQRHq2NbthONWrkXWiCtWbYfkbbbXpDQng6jFIUCOankqi7lv0bUiYQpbtKiaP
+        7jI3cN9/rZsOO6Ba23xxJg2QZ+FVJGxrreKQ4yGdDtc+3aFy+JB+91OqAYN4m/rfH2ZkU1
+        8zXCwEaWDrE0W23dsvhAnWdr7DLT2nQkm8/YR6RZ7YCX9gpxGnqWpH4HJW4OHqQ2sp6d6B
+        eWYT5ctp+fd0W/F7tYOSDEHBWzezIn9YZ455pSkIYq20d5olna6y/8wMgBTmvg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685459037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
+        bh=ffd7BIo0RG9iYEAP05EAXIJsUhP7tH/wkxnbALKQ+m0=;
+        b=C8gi1+a+TmWm7vQmepAGS3aDZh41zdSM3zl8BECxun2kiqDr4gDHo6vQWMQ+2IRyNYCnER
+        UBhyKg6+t+sXxaAA==
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH 1/2] genirq/msi, platform-msi: Adjust return value of
+ msi_domain_prepare_irqs()
+In-Reply-To: <CAAhV-H6uZWgZQsVh=1-U2B4ZZZz6EPJ3gkv0mxHSNGOMPB=VwQ@mail.gmail.com>
+Date:   Tue, 30 May 2023 17:03:56 +0200
+Message-ID: <87zg5lj1yb.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] dt-bindings: power: reset: bcm21664-resetmgr: convert to
- YAML
-Content-Language: en-US
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230527141222.GA5048@standask-GA-A55M-S2HP>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230527141222.GA5048@standask-GA-A55M-S2HP>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/05/2023 16:12, Stanislav Jakubek wrote:
-> Convert Broadcom Kona family reset manager bindings to DT schema.
-> 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> ---
->  .../power/reset/brcm,bcm21664-resetmgr.txt    | 14 ---------
+On Tue, May 30 2023 at 16:34, Huacai Chen wrote:
+> On Tue, May 30, 2023 at 4:19=E2=80=AFAM Thomas Gleixner <tglx@linutronix.=
+de> wrote:
+>> Let's take a step back and look at the larger picture:
+>>
+>>  1) A PCI/MSI irqdomain is attached to a PCI bus
+>>
+>>  2) The number of PCI devices on that PCI bus is usually known at boot
+>>     time _before_ the first device driver is probed.
+>>
+>>     That's not entirely true for PCI hotplug devices, but that's hardly
+>>     relevant for an architecture which got designed less than 10 years
+>>     ago and the architects decided that 256 MSI vectors are good enough
+>>     for up to 256 CPUs. The concept of per CPU queues was already known
+>>     at that time, no?
+> Does this solution depend on the per-device msi domain? Can we do that
+> if we use the global msi domain?
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In principle it should not depend on per-device MSI domains, but I
+really don't want to add new functionality to the old operating models
+as that does not create an incentive for people to convert their stuff
+over.
 
-Best regards,
-Krzysztof
+>> So the irqdomain can tell the PCI/MSI core the maximum number of vectors
+>> available for a particular bus, right?
+>>
+>> The default, i.e if the irqdomain does not expose that information,
+>> would be "unlimited", i.e. ULONG_MAX.
+> OK, thanks, but how to expose? By msi_domain_info::hwsize?
 
+Probably. Needs a proper helper around it.
+
+Thanks,
+
+        tglx
