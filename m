@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40604716A50
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70A9716A4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbjE3Q7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S233060AbjE3Q7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbjE3Q70 (ORCPT
+        with ESMTP id S233190AbjE3Q7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:59:26 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E32188;
-        Tue, 30 May 2023 09:59:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685465957; x=1717001957;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nGdccLwIUp9WzO5WvRcldvrod6QymUjgGMPvNsyJeHc=;
-  b=H780xPQUEzdP4MKu1bdiXzG/W2zAty6FkLpXhu4tG3tJpXLkDVbkswtY
-   zTx4OSGX/qjTxv4jTGZj7gwZxwINY1PaIWTsswS0EF2NDGEXuv7eIJg4e
-   kqhlBCDuDf7yWDQBBK1AraH9D9SITdPl/RYxN4NFRyECujX6ihjjN6v7j
-   fRZgY8VKi6oKzZ19jW0S9qpxhUB7jX/Fa286OyxJN0XawohcvJZXLtSnj
-   sDEy+c4voBWPSzc/FoXOSXh3F2T4LZXvA3iB//bkh+rFx0pF/hodJBJ2f
-   6MYt3yVwSa2ZIdKN40WOMdvBIDrCq5uesqVVtx3yp9336vhujI1NAgqiw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="357360902"
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="scan'208";a="357360902"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 09:59:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="776408045"
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="scan'208";a="776408045"
-Received: from rajeshag-mobl.gar.corp.intel.com (HELO [10.213.99.59]) ([10.213.99.59])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 09:58:58 -0700
-Message-ID: <5470de6d-1b2d-688b-5a6f-301ba888c054@linux.intel.com>
-Date:   Tue, 30 May 2023 22:28:53 +0530
+        Tue, 30 May 2023 12:59:25 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147AF184;
+        Tue, 30 May 2023 09:59:10 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34UGx19e078892;
+        Tue, 30 May 2023 11:59:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685465941;
+        bh=6M2aKEuRzEO5x6yCRaOU9u1elCkXurH6+7kxcN/ICaw=;
+        h=From:To:CC:Subject:Date;
+        b=qpHuNJ/q7e74dDkHn6lpvH5+UN2PyK8gdpotdItNsG+7NOSsSTQgJSl597mQrRf9Q
+         KTARAiAk/2g1aP/j1v6kwy1M7G/621jjakkfzABYmrfhsReI8baINiySfxejCIykSl
+         w9qdutWedxH0hzfeF0fiuyWO6ZAy1JbJP1lPyhOI=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34UGx16k087477
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 30 May 2023 11:59:01 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 30
+ May 2023 11:59:01 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 30 May 2023 11:59:01 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34UGx1Dd038965;
+        Tue, 30 May 2023 11:59:01 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>, Udit Kumar <u-kumar1@ti.com>,
+        Nitin Yadav <n-yadav@ti.com>, Andrew Davis <afd@ti.com>
+Subject: [PATCH 0/7] arm64: dts: ti: Add additional secproxy instances
+Date:   Tue, 30 May 2023 11:58:53 -0500
+Message-ID: <20230530165900.47502-1-nm@ti.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v5] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230524104754.4154013-1-rajat.khandelwal@linux.intel.com>
- <2023052917-juicy-calamity-4b35@gregkh>
- <0367a134-cb04-8a1c-bb46-bb5553df6f8a@linux.intel.com>
- <2023053049-dexterous-flatware-df04@gregkh>
- <2da06c06-6617-bd02-f20a-a5ea7f9ae0b4@linux.intel.com>
- <2023053013-playhouse-dad-1444@gregkh>
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-In-Reply-To: <2023053013-playhouse-dad-1444@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,57 +70,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 5/30/2023 3:14 PM, Greg KH wrote:
-> On Tue, May 30, 2023 at 03:06:15PM +0530, Rajat Khandelwal wrote:
->> Hi,
->>
->> On 5/30/2023 2:57 PM, Greg KH wrote:
->>> On Tue, May 30, 2023 at 02:45:03PM +0530, Rajat Khandelwal wrote:
->>>> Hi,
->>>>
->>>> On 5/29/2023 7:48 PM, Greg KH wrote:
->>>>> On Wed, May 24, 2023 at 04:17:54PM +0530, Rajat Khandelwal wrote:
->>>>>> IOM status has a crucial role during debugging to check the
->>>>>> current state of the type-C port.
->>>>>> There are ways to fetch the status, but all those require the
->>>>>> IOM port status offset, which could change with platform.
->>>>>>
->>>>>> Make a debugfs directory for intel_pmc_mux and expose the status
->>>>>> under it per port basis.
->>>>>>
->>>>>> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
->>>>>> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->>>>> Does not apply to my tree :(
->>>> I have pushed the patch on top of the Linus's tree.
->>>> Had a quick check with the USB Linux tree and seems like its a lot
->>>> behind?
->>> What branch did you use?
->>>
->>> Please use the usb-next branch of
->>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git, which as
->>> of right now, is at 6.4-rc4 + a bunch of USB-specific patches.
->> I see. There is one commit additional in the usb-next tree:
->> ef0a3642b320 usb: typec: intel_pmc_mux: Convert to platform remove callback returning void
-> One?  I count a lot more:
->
-> $ git log --oneline main..usb-next | wc -l
-> 143
+This series introduces secure proxies meant for usage with bootloaders
+and firmware components in the SoC for all K3 SoCs. AM64x SoC is an odd
+case here as the single instance of secure proxy is dual use for both
+ROM and general purpose. All other SoCs have independent instances that
+is used for firmware and bootloader communication.
 
-I was referring to Linus's master branch. :)
+Nitin had posted [1] to address one of the SoCs (AM62), I am cleaning
+that patch a bit in this series.
 
->
->> Anyways, do you want me to re-work the patch for the usb-next branch?
-> Given that I can not take the patch as-is, it's up to you to rebase it
-> if you wish to have it accepted.
+Nishanth Menon (6):
+  arm64: dts: ti: k3-am62a-main: Add sa3_secproxy
+  arm64: dts: ti: k3-am65-mcu: Add mcu_secproxy
+  arm64: dts: ti: k3-j7200-mcu: Add mcu_secproxy
+  arm64: dts: ti: k3-j721e-mcu: Add mcu_secproxy
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: Add sa3_secproxy and
+    mcu_sec_proxy
+  arm64: dts: ti: k3-j784s4-mcu-wakeup: Add sa3_secproxy and
+    mcu_sec_proxy
 
-Ok. I will make a v6 on top of usb-next.
+Nitin Yadav (1):
+  arm64: dts: ti: k3-am62-main: Add sa3_secproxy
 
-Thanks
-Rajat
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi      | 15 ++++++++++
+ arch/arm64/boot/dts/ti/k3-am62a-main.dtsi     | 15 ++++++++++
+ arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi       | 15 ++++++++++
+ .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      | 15 ++++++++++
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      | 15 ++++++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 30 +++++++++++++++++++
+ .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 30 +++++++++++++++++++
+ 7 files changed, 135 insertions(+)
 
->
-> Isn't this all covered in the Intel kernel developer training class?
->
-> thanks,
->
-> greg k-h
+[1] https://lore.kernel.org/all/20230519113434.1024206-3-n-yadav@ti.com/
+-- 
+2.40.0
+
