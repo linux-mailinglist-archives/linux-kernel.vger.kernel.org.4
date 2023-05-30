@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81203715394
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC26B71539A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjE3CU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 22:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S230082AbjE3CXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 22:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjE3CUy (ORCPT
+        with ESMTP id S229640AbjE3CXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 22:20:54 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E3DB5;
-        Mon, 29 May 2023 19:20:44 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34U2JXGT0028436, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34U2JXGT0028436
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Tue, 30 May 2023 10:19:33 +0800
-Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 30 May 2023 10:19:46 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 30 May 2023 10:19:45 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Tue, 30 May 2023 10:19:45 +0800
-From:   =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Flavio Suligoi" <f.suligoi@asem.it>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Mathias Nyman" <mathias.nyman@linux.intel.com>,
-        Ray Chi <raychi@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v2 1/3] usb: phy: add usb phy notify port status API
-Thread-Topic: [PATCH v2 1/3] usb: phy: add usb phy notify port status API
-Thread-Index: AQHZjrBJqs57LUq3CEa1m1O4SeqC6K9wz9gAgAFFkIA=
-Date:   Tue, 30 May 2023 02:19:45 +0000
-Message-ID: <647ded70ff024a3081cbf5c45f5da12c@realtek.com>
-References: <20230525022617.30537-1-stanley_chang@realtek.com>
- <2023052905-maimed-studied-3563@gregkh>
-In-Reply-To: <2023052905-maimed-studied-3563@gregkh>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        Mon, 29 May 2023 22:23:43 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71E09D
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:23:41 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-2568fc3d8a9so820888a91.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:23:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685413421; x=1688005421;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F7yxoBalJu1ZCTXrRuET/e/J8+mI0agu1V6HCaCfZ5Y=;
+        b=JInACbaRG6zCY54oNSpmPgvZZumFjCPunkuf/OzCrnpLD69mSnpE4jRqYh1leO/FvZ
+         j+0KrSwqplZ2flR8iwKpTRSeYdkMHKFqEOY8eF/xG+NqllhjxsecM7R/jxLGWLrQeTYy
+         uQRjPMMDA5PyDPTlgHT+08D8KFINy9sEz7vOSojUnNlScDO8HD/lAmMgLA2vrlBgoZi4
+         OuQ9oPUx47kDoIO7ZRoGDoTr4NFi862+JQSooIP7fppA57LipQ5PdV/jLs4ydSs9MK8C
+         ywpuTKcqaK2Ucw8g0nC7aEEKAIIi1uOFqzVNv5O3hoDlJdB/39D5vX/Ys3XtxKF12Akg
+         6pZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685413421; x=1688005421;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F7yxoBalJu1ZCTXrRuET/e/J8+mI0agu1V6HCaCfZ5Y=;
+        b=M5565DUxMrighgsV7TElOskyzUTx6IiziOvebndN7SWq29+t5Nk7DaDTWF1pRZFjNx
+         jnRP31ybe+yltUJqjvbNWih8gNMO4K3P8BU5hjrYRQmyVuFieZdtM1YZcWGTqldfkNaE
+         v4JOS1tLd4zexlLE9+jUT7z6g5aMgN8KLdQvTY6YE4QGprWj6qQ+dlyzdcGPnfJRDQes
+         toWpusXStzEHv5HkGjO8Fso8hZpN2xtBH/fFDJ3TafmsQ9uVQCqougc3njbD2XKPtdv8
+         S5qNUNYKo3Im0OQpqG57Rcd3c+Y9gZ1LAEA+75okRDjs+iKt0kEu1TlMh3/Gjn2dFeg+
+         TdkQ==
+X-Gm-Message-State: AC+VfDxs21kTOfV7dTVMLlg3FswjLcnO8uQDfJoyusOl/rHbbVDZgmT6
+        rxNLRWE7HSI+4JX7SzHzklFBdm7fJdM=
+X-Google-Smtp-Source: ACHHUZ4vB8xYir+2LzLQmGt/Drl5uVOTpk3tEFPqW+VM/JpJ/UJY9c9iUM6YYMknkbkVQS0OBTEOYA==
+X-Received: by 2002:a17:903:124a:b0:1af:daf7:7240 with SMTP id u10-20020a170903124a00b001afdaf77240mr946768plh.58.1685413420941;
+        Mon, 29 May 2023 19:23:40 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:682f:3801:cfd9:6060:fe9:235b])
+        by smtp.gmail.com with ESMTPSA id u6-20020a17090282c600b001ae6b4b28adsm6236998plz.130.2023.05.29.19.23.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 19:23:40 -0700 (PDT)
+From:   Deepanshu Kartikey <kartikey406@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Deepanshu Kartikey <kartikey406@gmail.com>
+Subject: [PATCH v4] Staging: rts5208: rtsx: Moved else statement to same line with else if
+Date:   Tue, 30 May 2023 07:52:59 +0530
+Message-Id: <20230530022259.24094-1-kartikey406@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,38 +70,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgR3JlZywNCg0KPiA+IC0tLSBhL2luY2x1ZGUvbGludXgvdXNiL3BoeS5oDQo+ID4gKysrIGIv
-aW5jbHVkZS9saW51eC91c2IvcGh5LmgNCj4gPiBAQCAtMTQ0LDYgKzE0NCwxMCBAQCBzdHJ1Y3Qg
-dXNiX3BoeSB7DQo+ID4gICAgICAgICovDQo+ID4gICAgICAgaW50ICAgICAoKnNldF93YWtldXAp
-KHN0cnVjdCB1c2JfcGh5ICp4LCBib29sIGVuYWJsZWQpOw0KPiA+DQo+ID4gKyAgICAgLyogbm90
-aWZ5IHBoeSBwb3J0IHN0YXR1cyBjaGFuZ2UgKi8NCj4gPiArICAgICBpbnQgICAgICgqbm90aWZ5
-X3BvcnRfc3RhdHVzKShzdHJ1Y3QgdXNiX3BoeSAqeCwNCj4gPiArICAgICAgICAgICAgIGludCBw
-b3J0LCB1MTYgcG9ydHN0YXR1cywgdTE2IHBvcnRjaGFuZ2UpOw0KPiA+ICsNCj4gPiAgICAgICAv
-KiBub3RpZnkgcGh5IGNvbm5lY3Qgc3RhdHVzIGNoYW5nZSAqLw0KPiA+ICAgICAgIGludCAgICAg
-KCpub3RpZnlfY29ubmVjdCkoc3RydWN0IHVzYl9waHkgKngsDQo+ID4gICAgICAgICAgICAgICAg
-ICAgICAgIGVudW0gdXNiX2RldmljZV9zcGVlZCBzcGVlZCk7DQo+IA0KPiBXaHkgY2FuJ3QgdGhp
-cyBiZSBwYXJ0IG9mIHRoZSBzYW1lIG5vdGlmeV9jb25uZWN0KCkgY2FsbGJhY2s/DQoNClRoZSBu
-b3RpZnkgY29ubmVjdCBpcyBhdCBkZXZpY2UgcmVhZHkuIEJ1dCBJIHdhbnQgbm90aWZ5IHBvcnQg
-c3RhdHVzIGNoYW5nZSBiZWZvcmUgcG9ydCByZXNldC4NCg0KPiBXaGF0IG1ha2VzIGl0IGRpZmZl
-cmVudCBzb21laG93PyAgUGxlYXNlIGRvY3VtZW50IHRoaXMgbXVjaCBiZXR0ZXIuDQoNCkluIFJl
-YWx0ZWsgcGh5IGRyaXZlciwgd2UgaGF2ZSBkZXNpZ25lZCB0byBkeW5hbWljYWxseSBhZGp1c3Qg
-ZGlzY29ubmVjdGlvbiBsZXZlbCBhbmQgY2FsaWJyYXRlIHBoeSBwYXJhbWV0ZXJzLg0KU28gd2Ug
-ZG8gdGhpcyB3aGVuIHRoZSBkZXZpY2UgY29ubmVjdGVkIGJpdCBjaGFuZ2VzIGFuZCB3aGVuIHRo
-ZSBkaXNjb25uZWN0ZWQgYml0IGNoYW5nZXMuDQpQb3J0IHN0YXR1cyBjaGFuZ2Ugbm90aWZpY2F0
-aW9uOg0KMS4gQ2hlY2sgaWYgcG9ydHN0YXR1cyBpcyBVU0JfUE9SVF9TVEFUX0NPTk5FQ1RJT04g
-YW5kIHBvcnRjaGFuZ2UgaXMgVVNCX1BPUlRfU1RBVF9DX0NPTk5FQ1RJT04uDQogIFRoZSBkZXZp
-Y2UgaXMgY29ubmVjdGVkLCB0aGUgZHJpdmVyIGxvd2VycyB0aGUgZGlzY29ubmVjdGlvbiBsZXZl
-bCBhbmQgY2FsaWJyYXRlcyB0aGUgcGh5IHBhcmFtZXRlcnMuDQoyLiBUaGUgZGV2aWNlIGRpc2Nv
-bm5lY3RzLCB0aGUgZHJpdmVyIGluY3JlYXNlcyB0aGUgZGlzY29ubmVjdCBsZXZlbCBhbmQgY2Fs
-aWJyYXRlcyB0aGUgcGh5IHBhcmFtZXRlcnMuDQoNCklmIHdlIGFkanVzdCB0aGUgZGlzY29ubmVj
-dGlvbiBsZXZlbCBpbiBub3RpZnlfY29ubmVjdCAsIHRoZSBkaXNjb25uZWN0IG1heSBoYXZlIGJl
-ZW4gdHJpZ2dlcmVkIGF0IHRoaXMgc3RhZ2UuIA0KU28gd2UgbmVlZCB0byBjaGFuZ2UgdGhhdCBh
-cyBlYXJseSBhcyBwb3NzaWJsZS4NCg0KDQo+IA0KPiA+IEBAIC0zMTYsNiArMzIwLDE2IEBAIHVz
-Yl9waHlfc2V0X3dha2V1cChzdHJ1Y3QgdXNiX3BoeSAqeCwgYm9vbA0KPiBlbmFibGVkKQ0KPiA+
-ICAgICAgICAgICAgICAgcmV0dXJuIDA7DQo+ID4gIH0NCj4gPg0KPiA+ICtzdGF0aWMgaW5saW5l
-IGludA0KPiA+ICt1c2JfcGh5X25vdGlmeV9wb3J0X3N0YXR1cyhzdHJ1Y3QgdXNiX3BoeSAqeCwg
-aW50IHBvcnQsIHUxNiBwb3J0c3RhdHVzLA0KPiA+ICsgICAgICAgICB1MTYgcG9ydGNoYW5nZSkN
-Cj4gPiArew0KPiA+ICsgICAgIGlmICh4ICYmIHgtPm5vdGlmeV9wb3J0X3N0YXR1cykNCj4gDQo+
-IEhvdyBjYW4geCBldmVyIGJlIE5VTEw/DQoNCkl0IGlzIHBvc3NpYmxlLg0KSWYgdGhlIGNvbnRy
-b2xsZXIgbm90IHVzZSB1c2ItcGh5IGRyaXZlci4gSXQgIGlzIE5VTEwuDQoNClRoYW5rcywNClN0
-YW5sZXkNCg==
+Moved else statement to same line with else if,
+this warning was given by checkpatch.pl
+
+Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
+
+---
+Changes in V4:
+	- Moved else to the same line with else if
+	- Moved comment on else statement to inside of it
+---
+---
+ drivers/staging/rts5208/rtsx.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/staging/rts5208/rtsx.c b/drivers/staging/rts5208/rtsx.c
+index 2284a96abcff..47dacef0aaf8 100644
+--- a/drivers/staging/rts5208/rtsx.c
++++ b/drivers/staging/rts5208/rtsx.c
+@@ -399,10 +399,8 @@ static int rtsx_control_thread(void *__dev)
+ 				chip->srb->device->id,
+ 				(u8)chip->srb->device->lun);
+ 			chip->srb->result = DID_BAD_TARGET << 16;
+-		}
+-
+-		/* we've got a command, let's do it! */
+-		else {
++		} else {
++			/* we've got a command, let's do it! */
+ 			scsi_show_command(chip);
+ 			rtsx_invoke_transport(chip->srb, chip);
+ 		}
+-- 
+2.25.1
+
