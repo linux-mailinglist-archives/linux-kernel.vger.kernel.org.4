@@ -2,96 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60D6E717225
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E714F717227
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbjE3XzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        id S233704AbjE3X5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233806AbjE3XzQ (ORCPT
+        with ESMTP id S233675AbjE3X53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:55:16 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC70613E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:55:06 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 3147F2C0615;
-        Wed, 31 May 2023 11:55:05 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1685490905;
-        bh=CR/D4HszLFw7g5PkmVVQf15ez0ihtAw6SzCP2pi70Bw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VWOIvWVJ1cMewbloLAT4l3zII898ttc0dOOfEeoiVTv0L/Q1mAMH6E4L5PUgdAEua
-         bQ2dxk3dy0HjBRNzDB3M5sIS66uXWpSegq1k7R5BVPDkLFoCGlXkuorvYrfd83ErxN
-         ZodcnJkq3jQ4AOJFHni8YsWO8pasQE9REXI9l/rkcIL9eJlgRsICnfZ6HqrFU883cW
-         kZ1JFLCnIpaONfwTtvUCs94dH5kw3FDLVYL6zi33jconAV587dxFK+N6iuRbnQWS23
-         na6I33S0I3gRmuVOPYnetHEPvvhO0E23kNC2az3g1q25q+sDERwz5xfGrEIwnPw05h
-         mh+JI2C238gUg==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B64768cd90000>; Wed, 31 May 2023 11:55:05 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id F2AB913EDD5;
-        Wed, 31 May 2023 11:55:04 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id F1B93280AFE; Wed, 31 May 2023 11:55:04 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        enachman@marvell.com,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v7 4/4] dt-bindings: mtd: marvell-nand: Remove deprecated compatibles
-Date:   Wed, 31 May 2023 11:54:56 +1200
-Message-Id: <20230530235456.1009082-5-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230530235456.1009082-1-chris.packham@alliedtelesis.co.nz>
-References: <20230530235456.1009082-1-chris.packham@alliedtelesis.co.nz>
+        Tue, 30 May 2023 19:57:29 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E167FB2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:57:27 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96f5685f902so771885366b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685491046; x=1688083046;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=irawpEcShcOFbqSfMe4v0NPnVegXzVzVnWF9D2giD9s=;
+        b=ZvOASTbhIvwRaFys7hANyH9bpyOx4YlDxiR8GHKD9SYbZTnff95bSM5c/KQXM2H1pB
+         pdiI1/rqdWnEcFR/zez/MU+STTlT2voj4r3xaA/2uf94J++3dpoeBOT8ohLoxHNOGpSR
+         otxvghneVjyn7Z2raNtS0ED12iioF8OOiGRiBvP00Q9PiwRizM88FBSmgJKXQGKHQQk7
+         5reQmZ2oSmkYPCdI6on2I8Q1xpl0JB85hFySWjdhm+cooc1a2LLBWQ6ZkLSqaCyZT/Rg
+         lgstxpduGP8MkEuqC+k9ezpN1jNnTUkfutoGUcQosE5KBo/xYRaOIOVpm79mYKlCi17v
+         pryA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685491046; x=1688083046;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=irawpEcShcOFbqSfMe4v0NPnVegXzVzVnWF9D2giD9s=;
+        b=JJ4TIkJBRdYCIcOoL/xeUpW9RqrMzMrSDFOPBuitFEymOb41yygJsxohxwjbu/4v89
+         DOr+2RAPJmiCTaiD3a1ZVuMIfmACBOP2OkoheW18toanoboY018NjRte0WBtPhghp8WU
+         kuo3LYlejSJ5CSRJJas2F+n5cBef+Szlri1f+R8xqpklfUAGGfqK5fargSp3WSEJNvB7
+         leIZ3UgXFUwJFIOWl0cNxvx450faHOROfxGcsHmDxGNKbcQQK76nwmqXkewTPnmRHUW1
+         NqpfsYY+7iYQRLxgMvt1gCj+ttKSHhQEW0ul8tgPw+g3vSlboyBaCEOt5BrIJ0liLMhE
+         wiMw==
+X-Gm-Message-State: AC+VfDwOFu0ZNSjBLZnRaae7r45akJNCfye0rMxd5EwiO6WCp2ysUtB3
+        0sqT9xNdUuiOm3d06fhRMJouPSTpHPLlJSqX+7+EAA==
+X-Google-Smtp-Source: ACHHUZ5wnBhENC6jyjk3XZkH/KXC4TGcgeaoMvOQcTB4XFx9dIsl7trBs2gAsHt5pOI61mA0Cdl9EGAL2kelSq7e0BQ=
+X-Received: by 2002:a17:907:16a3:b0:96a:f688:db6e with SMTP id
+ hc35-20020a17090716a300b0096af688db6emr4385611ejc.74.1685491046241; Tue, 30
+ May 2023 16:57:26 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230530210251.493194-1-yosryahmed@google.com> <20230530235447.GB102494@cmpxchg.org>
+In-Reply-To: <20230530235447.GB102494@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 30 May 2023 16:56:49 -0700
+Message-ID: <CAJD7tkb3GO7yiYp4NHApyRHyg_kzaPuMQPvkvS0aUzUHkPkNzg@mail.gmail.com>
+Subject: Re: [PATCH] mm: zswap: support exclusive loads
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=P0xRbXHiH_UA:10 a=v2geHv6J5O549XUBZ50A:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove compatible values that were marked as deprecated in the old text
-binding.
+On Tue, May 30, 2023 at 4:54=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.org=
+> wrote:
+>
+> On Tue, May 30, 2023 at 09:02:51PM +0000, Yosry Ahmed wrote:
+> > @@ -216,8 +216,13 @@ int __frontswap_load(struct page *page)
+> >
+> >       /* Try loading from each implementation, until one succeeds. */
+> >       ret =3D frontswap_ops->load(type, offset, page);
+> > -     if (ret =3D=3D 0)
+> > +     if (ret =3D=3D 0) {
+> >               inc_frontswap_loads();
+> > +             if (frontswap_ops->exclusive_loads) {
+> > +                     SetPageDirty(page);
+> > +                     __frontswap_clear(sis, offset);
+> > +             }
+>
+> Somewhat tangential, but is there still a point to the frontswap
+> layer? It seems usecases other than zswap have never materialized, at
+> least not in tree. Life would be a lot easier if we were to just
+> hardcode the zswap callbacks in the swap functions.
+>
+> It's not the patch's fault, but it highlights the boiler plate the
+> indirection causes. ->load() already has the page and could just dirty
+> it directly. Instead now both layers have to handle invalidation,
+> which is a vector for bugs.
+>
+> Can somebody think of reasons to keep it? If not, I'd take a stab at
+> removing it.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- .../devicetree/bindings/mtd/marvell,nand-controller.yaml       | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-controlle=
-r.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.ya=
-ml
-index 7cd4a2e99343..80ce854291cb 100644
---- a/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-+++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-@@ -18,9 +18,6 @@ properties:
-       - enum:
-           - marvell,armada370-nand-controller
-           - marvell,pxa3xx-nand-controller
--          - marvell,armada-8k-nand
--          - marvell,armada370-nand
--          - marvell,pxa3xx-nand
-=20
-   reg:
-     maxItems: 1
---=20
-2.40.1
-
+I was intending to eventually remove it as part of the swap
+abstraction proposal I am working on, but this will take some time. If
+you want to remove it now, even better :)
