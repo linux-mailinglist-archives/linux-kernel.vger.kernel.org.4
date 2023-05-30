@@ -2,177 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D765E716EE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC207716EE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbjE3UeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 16:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S233540AbjE3UhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjE3UeJ (ORCPT
+        with ESMTP id S229991AbjE3UhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 16:34:09 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BDDE42;
-        Tue, 30 May 2023 13:33:32 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 0D022320096E;
-        Tue, 30 May 2023 16:32:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 30 May 2023 16:32:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1685478740; x=1685565140; bh=gJtXKfjMb5
-        k3PryJlBFsKsS3ZINd0EksqBFZ4ekKEDw=; b=iSW8ttt26dngYvxurKxiOI2vd1
-        WHoQ92v7hwye8qiWm/sMzD3pqp5ya8c2OA22dKJKDKSCyzxijZP+Dp144KoNmvpt
-        K8OI+kD4ismX23LXNvkYBIS8haogcvQd7EEZ19u32N/1GOR8sh6VaGOBsVQxw9Bq
-        zrT17xw8paAPsuaett1MoyqWDe6uGCPznnCFymKvWzjN2rUubwy9Ob0uFq6jMg76
-        gqlN1m7Mc8Mkxu+yjAxvH0vX7/PlJqdVVec52wcaqJpFToYt9AxPY3yOgBt+RjEI
-        aG4fzuzWpC22NKMBxr6O/RMjHdv28qKWfTHlwgkpaOz+BcWrwFwxRmGMeaMg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685478740; x=
-        1685565140; bh=gJtXKfjMb5k3PryJlBFsKsS3ZINd0EksqBFZ4ekKEDw=; b=o
-        QbHhAjdGI/824Nl01Pip/x1ESJBxXGnNCUCk4Arc6BskEm0MTh9UC6MZYaR2q79S
-        k1Uqb9Vj1z9f6r5u3H1HVCqm/h4f+Vs2C2I55ZxnoCF18+ZrNegBzgUSduwuENN3
-        ZelAmC1BB6EziOQZ1m0S4cDcLpBIGrjkaMEsTbam0kd7jHN3XymXk0VF7iAEn4+L
-        g585WZp+QBIJWRDnqGJWJT85ZYmZick+DsS7QTOGtDLjDvulDczBAEFMf2pxjFDZ
-        z70/jIsQbBWGVBj2a0QhQ3776f+UlGOsyvyOBXKD9nxTQaFTHfPjpO3nn2UqnNoO
-        C4Idzu7QZyx3OsqotLhew==
-X-ME-Sender: <xms:VF12ZCx6LBtGDgihYZ-NBi1TQbMnT10K4M83ELm3G3ATfM8R279sSA>
-    <xme:VF12ZOSoOZisX8Dh7PgaI1Br2VXmS17_-QQHdNrd8ODedLEjRJsiupF-ePxfF5-CL
-    VIu0ou0rSk2fvk>
-X-ME-Received: <xmr:VF12ZEUZ2v-22K9HABN8joZIwupVm2l2OuN_SbATb71V0ubBkGLMjmuY97GOgzqwv3poc01Y0NU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgudeglecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffvghm
-    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
-    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpeejffejgffgueegudevvdejkefg
-    hefghffhffejteekleeufeffteffhfdtudehteenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
-    shhlrggsrdgtohhm
-X-ME-Proxy: <xmx:VF12ZIgsEEnwHKmC43Kv9GxV7bH-i7tiH_PkAz1p_2nBYwSEAf6YrA>
-    <xmx:VF12ZEDqiN37KhUgZoqxnScnVqOaHAYoy7GmY53oxQjsejR59koZOQ>
-    <xmx:VF12ZJLZp0lEBhXhDlI94ziBRaLfrp4UJrXDlteRIEm9FlDD8PS34w>
-    <xmx:VF12ZCA0rxPCrK0M9295LprgFjyNUobhbd0Xa629Rogk5JO32xfXOA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 May 2023 16:32:19 -0400 (EDT)
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
-Subject: [PATCH v2 16/16] xen-blkback: Inform userspace that device has been opened
-Date:   Tue, 30 May 2023 16:31:16 -0400
-Message-Id: <20230530203116.2008-17-demi@invisiblethingslab.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230530203116.2008-1-demi@invisiblethingslab.com>
-References: <20230530203116.2008-1-demi@invisiblethingslab.com>
+        Tue, 30 May 2023 16:37:03 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4525319B;
+        Tue, 30 May 2023 13:36:33 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UJQmRe017820;
+        Tue, 30 May 2023 20:34:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=X7HRVosRgmJs5+RFEXM6XSFA8cNWjEsb1oakecBUyJE=;
+ b=oxIcMiPcE5bSc4zXf6h3IroIipLvp3dCDjHBuv96sI7QbySt912o6oj9RtQ52M0S/Lfm
+ ZN6Tw3e/ldJWkta8PQHGLPMNuCqcTLediIigC0JMCz5tgd+wCZiufXXCWlHjw0SkWzBb
+ vI9Ygaou0tABCsqAPTD5MtmHsLhf//cLIP6+1ScdfScsjjz+BkYqF2uNdIVXJCmjM1oE
+ 0lHQ+QegL21JT97klPanz5wy9JX0q/wQIz5fxjMKuIIwf+KLO+EVV1PhjN4npqBfqSYm
+ VDwvq0+n+Zao5jimV2Z0IddbH5elcgsZxcdAPAAbqaJjmQNpFiYNvLtHPEyFxys70YGr lQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwmx25qnk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 20:34:35 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34UKSaM4004765;
+        Tue, 30 May 2023 20:34:35 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwmx25qn3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 20:34:35 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34UHoGjq016721;
+        Tue, 30 May 2023 20:34:34 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3qu9g61jb5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 20:34:34 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34UKYWq025166464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 May 2023 20:34:33 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BD21758052;
+        Tue, 30 May 2023 20:34:32 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B59C358050;
+        Tue, 30 May 2023 20:34:30 +0000 (GMT)
+Received: from [9.61.92.222] (unknown [9.61.92.222])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 30 May 2023 20:34:30 +0000 (GMT)
+Message-ID: <f309d525-7e12-ee81-8d59-ad07f94f9e9d@linux.ibm.com>
+Date:   Tue, 30 May 2023 22:34:29 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH net 2/2] net/smc: Don't use RMBs not mapped to new link in
+ SMCRv2 ADD LINK
+To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
+        jaka@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1685101741-74826-1-git-send-email-guwen@linux.alibaba.com>
+ <1685101741-74826-3-git-send-email-guwen@linux.alibaba.com>
+ <f134294c-2919-6069-d362-87a84c846690@linux.ibm.com>
+ <34e6b564-a658-4461-ebec-f53dd80a9125@linux.alibaba.com>
+From:   Wenjia Zhang <wenjia@linux.ibm.com>
+In-Reply-To: <34e6b564-a658-4461-ebec-f53dd80a9125@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 6Gnmr9EKebcZZGXDVLBeslmA6qIBq4SM
+X-Proofpoint-ORIG-GUID: c8ux_XYcnOC3Y0ECBTlF8oOPxa_mbxRh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_16,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ adultscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015 mlxscore=0
+ priorityscore=1501 bulkscore=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305300163
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set "opened" to "0" before the hotplug script is called.  Once the
-device node has been opened, set "opened" to "1".
 
-"opened" is used exclusively by userspace.  It serves two purposes:
 
-1. It tells userspace that the diskseq Xenstore entry is supported.
+On 27.05.23 17:20, Wen Gu wrote:
+> 
+> 
+> On 2023/5/27 18:22, Wenjia Zhang wrote:
+>>
+>> I'm wondering if this crash is introduced by the first fix patch you 
+>> wrote.
+>>
+>> Thanks,
+>> Wenjia
+> 
+> Hi Wenjia,
+> 
+> No, the crash can be reproduced without my two patches by the following 
+> steps:
+> 
+> 1. Each side activates only one RNIC firstly and set the default 
+> sndbuf/RMB sizes to more
+>     than 16KB, such as 64KB, through sysctl net.smc.{wmem | rmem}.
+>     (The reason why initial sndbufs/RMBs size needs to be larger than 
+> 16KB will be explained later)
+> 
+> 2. Use SMCRv2 in any test, just to create a link group that has some 
+> alloced RMBs.
+> 
+>     Example of step #1 #2:
+> 
+>     [server]
+>     smcr ueid add 1234
+>     sysctl net.smc.rmem=65536
+>     sysctl net.smc.wmem=65536
+>     smc_run sockperf sr --tcp
+> 
+>     [client]
+>     smcr ueid add 1234
+>     sysctl net.smc.rmem=65536
+>     sysctl net.smc.wmem=65536
+>     smc_run sockperf pp --tcp -i <server ip> -t <time>
+> 
+> 
+> 3. Change the default sndbuf/RMB sizes, make sure they are larger than 
+> initial size above,
+>     such as 256KB.
+> 
+> 4. Then rerun the test, and there will be some bigger RMBs alloced. And 
+> when the test is
+>     running, activate the second alternate RNIC of each side. It will 
+> trigger to add a new
+>     link and do what I described in the second patch's commit log, that 
+> only map the in-use
+>     256KB RMBs to new link but try to access the unused 64KB RMBs' 
+> invalid mr[new_link->lnk_idx].
+> 
+>     Example of step #3 #4:
+> 
+>     [server]
+>     sysctl net.smc.rmem=262144
+>     sysctl net.smc.wmem=262144
+>     smc_run sockperf sr --tcp
+> 
+>     [client]
+>     sysctl net.smc.rmem=262144
+>     sysctl net.smc.wmem=262144
+>     smc_run sockperf pp --tcp -i <server ip> -t <time>
+> 
+>     When the sockperf is running:
+> 
+>     [server/client]
+>     ip link set dev <2nd RNIC> up    # activate the second alternate 
+> RNIC, then crash occurs.
+> 
+> 
+> At the beginning, I only found the crash in the second patch. But when I 
+> try to fix it,
+> I found the issue descibed in the first patch.
+> 
+> In first patch, if I understand correctly, smc_llc_get_first_rmb() is 
+> aimed to get the first
+> RMB in lgr->rmb[*]. If so, It should start from lgr->rmbs[0] instead of 
+> lgr->rmbs[1], right?
+> 
+> Then back to the reason needs to be explained in step #1. Because of the 
+> issue mentioned
+> above in smc_llc_get_first_rmb(), if we set the initial sndbuf/RMB sizes 
+> to 16KB, these 16KB
+> RMBs (in lgr->rmbs[0]) alloced in step #2 will happen not to be accessed 
+> in step #4, so the
+> potential crash is hided.
+> 
+> So, the crash is not introduced by the first fix. Instead, it is the 
+> first issue that may hide
+> the second issue(crash) in special cases.
+> 
+> I am a little curious why you think the first fix patch caused the 
+> second crash? Is
+> something wrong in the first fix patch?
+> 
+> Thanks for your review!
+> 
+> Regards,
+> Wen Gu
 
-2. It tells userspace that it can wait for "opened" to be set to 1.
-   Once "opened" is 1, blkback has a reference to the device, so
-   userspace doesn't need to keep one.
+Hi Wen,
 
-Together, these changes allow userspace to use block devices with
-delete-on-close behavior, such as loop devices with the autoclear flag
-set or device-mapper devices with the deferred-remove flag set.
+Sorry for the late answer because of the public holiday here!
 
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
----
- drivers/block/xen-blkback/xenbus.c | 35 ++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+I really like the test scenario, thank you for the elaboration and the 
+fixes!
+They look good to me.
 
-diff --git a/drivers/block/xen-blkback/xenbus.c b/drivers/block/xen-blkback/xenbus.c
-index 9c3eb148fbd802c74e626c3d7bcd69dcb09bd921..519a78aa9073d1faa1dce5c1b36e95ae58da534b 100644
---- a/drivers/block/xen-blkback/xenbus.c
-+++ b/drivers/block/xen-blkback/xenbus.c
-@@ -3,6 +3,20 @@
-     Copyright (C) 2005 Rusty Russell <rusty@rustcorp.com.au>
-     Copyright (C) 2005 XenSource Ltd
- 
-+In addition to the Xenstore nodes required by the Xen block device
-+specification, this implementation of blkback uses a new Xenstore
-+node: "opened".  blkback sets "opened" to "0" before the hotplug script
-+is called.  Once the device node has been opened, blkback sets "opened"
-+to "1".
-+
-+"opened" is read exclusively by userspace.  It serves two purposes:
-+
-+1. It tells userspace that diskseq@major:minor syntax for "physical-device" is
-+   supported.
-+
-+2. It tells userspace that it can wait for "opened" to be set to 1 after writing
-+   "physical-device".  Once "opened" is 1, blkback has a reference to the
-+   device, so userspace doesn't need to keep one.
- 
- */
- 
-@@ -699,6 +713,14 @@ static int xen_blkbk_probe(struct xenbus_device *dev,
- 	if (err)
- 		pr_warn("%s write out 'max-ring-page-order' failed\n", __func__);
- 
-+	/*
-+	 * This informs userspace that the "opened" node will be set to "1" when
-+	 * the device has been opened successfully.
-+	 */
-+	err = xenbus_write(XBT_NIL, dev->nodename, "opened", "0");
-+	if (err)
-+		goto fail;
-+
- 	err = xenbus_switch_state(dev, XenbusStateInitWait);
- 	if (err)
- 		goto fail;
-@@ -826,6 +848,19 @@ static void backend_changed(struct xenbus_watch *watch,
- 		goto fail;
- 	}
- 
-+	/*
-+	 * Tell userspace that the device has been opened and that blkback has a
-+	 * reference to it.  Userspace can then close the device or mark it as
-+	 * delete-on-close, knowing that blkback will keep the device open as
-+	 * long as necessary.
-+	 */
-+	err = xenbus_write(XBT_NIL, dev->nodename, "opened", "1");
-+	if (err) {
-+		xenbus_dev_fatal(dev, err, "%s: notifying userspace device has been opened",
-+				 dev->nodename);
-+		goto free_vbd;
-+	}
-+
- 	err = xenvbd_sysfs_addif(dev);
- 	if (err) {
- 		xenbus_dev_fatal(dev, err, "creating sysfs entries");
--- 
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+Why I asked that was that the first patch looked very reasonable, but I 
+was wondering why I didn't meet any problem with that before ;-) and if 
+it would trigger some problem during processing the SMCRv1 ADD Link 
+Continuation Messages. After checking the code again, I don't think 
+there would be any problem with the patch, because in the case of 
+processing the SMCRv1 ADD Link Continuation Messages, it's about the 
+same RMB.
+
+Hi @Paolo, I would appreciate it if you could give us more time to 
+review and test the patches. Because we have to make sure that they can 
+work on our platform (s390) without problem, not only on x86.
+
+Thanks
+Wenjia
+
+
 
