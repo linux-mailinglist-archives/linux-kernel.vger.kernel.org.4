@@ -2,122 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC511715917
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7465715926
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbjE3Iyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S230162AbjE3I4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjE3IyY (ORCPT
+        with ESMTP id S229889AbjE3I4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:54:24 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEECAB;
-        Tue, 30 May 2023 01:54:23 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-5343c3daff0so2619085a12.0;
-        Tue, 30 May 2023 01:54:23 -0700 (PDT)
+        Tue, 30 May 2023 04:56:14 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 May 2023 01:56:11 PDT
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C964BE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:56:11 -0700 (PDT)
+X-KPN-MessageId: 9150d9a8-fec7-11ed-8f97-00505699b430
+Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 9150d9a8-fec7-11ed-8f97-00505699b430;
+        Tue, 30 May 2023 10:54:20 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685436863; x=1688028863;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RHOfDHWRu2lnNQ2rwsI4E9GPenGbIFAJzlfsF9ORlaA=;
-        b=Ylgn9iAdMtxxc8FJxKAGE2o1WOnW3T3Lw18t6dKRqKWozr5Iq/nRIpwG+R5TUxHvKz
-         zvpErSFlsOh4Aq/S3x04R937m9P7/iknOualjqnPLqNUiRVfit69aQq6j4qvAm0H+UU9
-         aJI4x23lnXFUUA/lszjmULkwt/hHk9F7HnSqhp7+bO/t3Vkb3MdOTa/z8iAwiIdvJXdu
-         c3WRcTNU9FsVdf0aizB/g37zKSR55Sgcem+WWXP4uuegYEiYdVRAJ7Ln7w3Jp1tU5/J1
-         rEBcIz1Nn76EOxUGObFYr135bZ/v8kPiN87yAw0q1f4KM/SJQInWPU4T6xyAUd/QJ53p
-         p27Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685436863; x=1688028863;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RHOfDHWRu2lnNQ2rwsI4E9GPenGbIFAJzlfsF9ORlaA=;
-        b=FEKxOV3sQhSHgd7MXxKCp3cc7f/yD54OAICBTTE4RGLcx7MwgsS2igJPlPP6EvBhyH
-         X3j5QE637jxzoMjLeKJl1z2n3gx6rbTX267P38qbbnXZU4s9YYHVJJPsr1huHwZIQ7xf
-         K1mGFkx4x4GRCTqMkhnZJJXnV6DMINzLiHuPEarcEVXnm+hKwUvzb0Oj1kFVAN02W43P
-         vG8pNyN/9ZtxMoEyagfHsvs6Z4U5O4T+8aFQ336bzsxbG9F6m9++5Nn/4fMqLY9tFFT2
-         lDQLHmvtkEV3S1vRUvByxwj1p8WvgKQCFV8nkvYvHjK0avZ1dgBbCwrv0U0pbHI+4phb
-         82Pg==
-X-Gm-Message-State: AC+VfDzirtQcDarXRwwVPRH5+BpsfdNeI5Bz1MFJEEINFTmkQ0AsR18n
-        GZayIj9ON6IM+AqWJsUO8kymuLEGtU0=
-X-Google-Smtp-Source: ACHHUZ7Rk93SVq30nkXleqZYW12ye8Tl15Neszkr2aVbJkc30Bw3jgnoVHpBz9GQvl/GkjlAZ9219A==
-X-Received: by 2002:a17:903:41cb:b0:1ad:edbd:8547 with SMTP id u11-20020a17090341cb00b001adedbd8547mr1936489ple.15.1685436862988;
-        Tue, 30 May 2023 01:54:22 -0700 (PDT)
-Received: from [192.168.43.80] (subs09a-223-255-225-74.three.co.id. [223.255.225.74])
-        by smtp.gmail.com with ESMTPSA id x7-20020a170902ec8700b001ab1cdb41d6sm9692178plg.235.2023.05.30.01.54.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 01:54:22 -0700 (PDT)
-Message-ID: <d1e4436e-b428-0f49-ecf1-079955aaecb2@gmail.com>
-Date:   Tue, 30 May 2023 15:54:20 +0700
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:from:to:subject:mime-version:date:message-id;
+        bh=KeYfZ06rkafUiVhvXtxz1pIwLEUIQSPMvMXjwuaAdO4=;
+        b=OTDSVptP7bURCu/c9/MO7WlVKtsozou2PYwG/xqDxaD9mHR/MCMOY3dI2E8UEWiAByhAp7lqNa4Hz
+         GpgfJwKxDnylluy7KvkZKeeIl+M1gfX2qCBdnqES/yI2rscYZTbOMBoNPnZftc1CCMPXeCgOIZQ+DX
+         i+NdKZ8I3lpYRx18nLPKUEMqg1MMQ6VPTqq/x9/GRiPXaaPASejjtguzxCh9xLL5mhHo8tsdIIUVn7
+         uZTFOCcnvSe9hsV6Lb83yM30yGNcb/uWsG3yflyd1lkk986VM6MusZPfUVh2cCaBUXX6a+8E+hSKl+
+         rA9mVeHf15vX+IAlzfk6zwledYDWuWQ==
+X-KPN-MID: 33|K8osm6JgAOUfS6Vhr6RM0H7GmHZ3TLYp4rWWtMKd0rZJoG0wyjDFfrq9TQfMQ9w
+ Jv59UUX5O9QLMt/8q0ww9obiPjAAM8VWyNg8uc0xs+LA=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|p2PpW6AUl/WMPvVuOaO18EeHiiFN/Y7IFIwjJs98B1OIx+NllflOnemJVXB/lev
+ 4jwaHQ2XV52tJC94Kdckuwg==
+X-Originating-IP: 173.38.220.44
+Received: from [10.47.77.214] (unknown [173.38.220.44])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id a98dfdd8-fec7-11ed-b306-00505699d6e5;
+        Tue, 30 May 2023 10:55:03 +0200 (CEST)
+Message-ID: <849d601d-9504-7118-0c99-a9bc3bb040eb@xs4all.nl>
+Date:   Tue, 30 May 2023 10:55:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] docs: consolidate storage interfaces
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5,0/8] media: mediatek: vcodec: Add debugfs file for
+ decode and encode
 Content-Language: en-US
-To:     Costa Shulyupin <costa.shul@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     open list <linux-kernel@vger.kernel.org>
-References: <20230529085521.2574848-1-costa.shul@redhat.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230529085521.2574848-1-costa.shul@redhat.com>
+To:     =?UTF-8?B?WXVuZmVpIERvbmcgKOiRo+S6kemjnik=?= 
+        <Yunfei.Dong@mediatek.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "frkoenig@chromium.org" <frkoenig@chromium.org>,
+        "stevecho@chromium.org" <stevecho@chromium.org>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "nhebert@chromium.org" <nhebert@chromium.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "nicolas.dufresne@collabora.com" <nicolas.dufresne@collabora.com>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>,
+        "hsinyi@chromium.org" <hsinyi@chromium.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "nfraprado@collabora.com" <nfraprado@collabora.com>
+References: <20230525021219.23638-1-yunfei.dong@mediatek.com>
+ <ec8c0113aff833aa7de746843e8e4b4294b7ea8e.camel@mediatek.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <ec8c0113aff833aa7de746843e8e4b4294b7ea8e.camel@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/29/23 15:55, Costa Shulyupin wrote:
-> +Storage interfaces
-> +------------------
-> +
-> +.. toctree::
-> +   :maxdepth: 1
-> +
-> +   filesystems/index
-> +   block/index
-> +   cdrom/index
-> +   scsi/index
-> +
->  **Fixme**: much more organizational work is needed here.
->  
+On 5/30/23 10:27, Yunfei Dong (董云飞) wrote:
+> Hi Hans,
+> 
+> Sorry to disturb you.
+> 
+> Could you please help to review and apply this patch series if it is ok
+> for you? Or whose review is expected before you can apply?
 
-Can you also categorize below indexes (table of contents) like above?
+AngeloGioacchino Del Regno reviewed this series before, so I'd like to
+have his OK for this series.
 
->  .. toctree::
-> @@ -31,8 +42,6 @@ Human interfaces
->     core-api/index
->     locking/index
->     accounting/index
-> -   block/index
-> -   cdrom/index
->     cpu-freq/index
->     fpga/index
->     i2c/index
-> @@ -54,12 +63,10 @@ Human interfaces
->     accel/index
->     security/index
->     crypto/index
-> -   filesystems/index
->     mm/index
->     bpf/index
->     usb/index
->     PCI/index
-> -   scsi/index
->     misc-devices/index
->     scheduler/index
->     mhi/index
+Regards,
 
-Thanks.
+	Hans
 
--- 
-An old man doll... just what I always wanted! - Clara
+> 
+> Best Regards,
+> Yunfei Dong
+> 
+> On Thu, 2023-05-25 at 10:12 +0800, Yunfei Dong wrote:
+>> Need to change kernel driver to open decode and encode debug log at
+>> current period,
+>> it's very unreasonable. Adding debugfs common interface to support
+>> decode and encode,
+>> using echo command to control debug log level and getting useful
+>> information for each
+>> instance.
+>>
+>> patch 1 add dbgfs common interface.
+>> patch 2~5 support decode.
+>> patch 6~7 support encode
+>> patch 8 add help function
+>> ---
+>> changed with v4:
+>> - rebase to the top of media stage header.
+>>
+>> changed with v3:
+>> - add help function for patch 8
+>> - remove append '\0' and enlarge buffer size for patch 4
+>>
+>> changed with v2:
+>> - using pr_debug and dev_dbg instead of pr_info for patch 2.
+>> - fix word fail: informatiaoin -> information for patch 3.
+>> - used to print each instance format information for patch 5.
+>>
+>> changed with v1:
+>> - add new patch 4 and 5.
+>> - using cmd 'cat vdec' to show debug information instead of pr_info
+>> directly.
+>> ---
+>> Yunfei Dong (8):
+>>   media: mediatek: vcodec: Add debugfs interface to get debug
+>>     information
+>>   media: mediatek: vcodec: Add debug params to control different log
+>>     level
+>>   media: mediatek: vcodec: Add a debugfs file to get different useful
+>>     information
+>>   media: mediatek: vcodec: Get each context resolution information
+>>   media: mediatek: vcodec: Get each instance format type
+>>   media: mediatek: vcodec: Change dbgfs interface to support encode
+>>   media: mediatek: vcodec: Add encode to support dbgfs
+>>   media: mediatek: vcodec: Add dbgfs help function
+>>
+>>  .../media/platform/mediatek/vcodec/Makefile   |   6 +
+>>  .../mediatek/vcodec/mtk_vcodec_dbgfs.c        | 216
+>> ++++++++++++++++++
+>>  .../mediatek/vcodec/mtk_vcodec_dbgfs.h        |  72 ++++++
+>>  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
+>>  .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   4 +
+>>  .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |   2 +
+>>  .../mediatek/vcodec/mtk_vcodec_util.c         |   8 +
+>>  .../mediatek/vcodec/mtk_vcodec_util.h         |  26 ++-
+>>  8 files changed, 335 insertions(+), 3 deletions(-)
+>>  create mode 100644
+>> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
+>>  create mode 100644
+>> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
+>>
 
