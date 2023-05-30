@@ -2,74 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3ACF715BCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6CB715BCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbjE3Kam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
+        id S230468AbjE3Ka6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbjE3KaT (ORCPT
+        with ESMTP id S230513AbjE3Kak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:30:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFE1198;
-        Tue, 30 May 2023 03:29:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA5B26232F;
-        Tue, 30 May 2023 10:29:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55CA3C433EF;
-        Tue, 30 May 2023 10:29:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685442582;
-        bh=yaQ1s4zqJX+CR6dLRA+UZTtmUpMxJSpY3TwJ7NIb7pw=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=MtphMf9fx4Ckf8MUWsnOC2+KfKZgeU0ZtAT6Nhi/dHL1UBFE+4IIHm3yj1wmROfkS
-         gRMBm/TWmoBooKy7de9GhOr1U5is9vKttU35U12v+0JWKDL9Zi6qQt0Uvf2GyxF3PZ
-         41o1dB1Ge0DR/YSgun68lWzlnKm4fR8fJXCDGPCW+y8D0D2pVJ8TaPDqZghvc3Zc/c
-         tBOe/l/s/uwLrQ11oJlUhIhILhvTbFAYfuY8PYn8n2AfVRNkCXdDboUOSNvkokQQfL
-         KZ+WAZ6KN8V7iYyfwgyrEPaNUXpeAdm0OlXQwBZ53o9Pxva9DZ7gmdbS1Oh52kYMz4
-         WLyLk7FAXqC5g==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Osama Muhammad <osmtendev@gmail.com>
-Cc:     nbd@nbd.name, ryder.lee@mediatek.com, lorenzo@kernel.org,
-        shayne.chen@mediatek.com, davem@davemloft.net,
-        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] debugfs.c: Fix error checking for debugfs_create_dir
-References: <20230524160352.19704-1-osmtendev@gmail.com>
-Date:   Tue, 30 May 2023 13:29:37 +0300
-In-Reply-To: <20230524160352.19704-1-osmtendev@gmail.com> (Osama Muhammad's
-        message of "Wed, 24 May 2023 21:03:52 +0500")
-Message-ID: <87v8gajeni.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
-MIME-Version: 1.0
+        Tue, 30 May 2023 06:30:40 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2083.outbound.protection.outlook.com [40.107.20.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE8DEC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:30:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AXGPBaXubFDmxCZy8hAbdHYBfxQJ6bm958tAsh4kEXQzTDI/1+6pzRsIGVxzXXGdYcmZAsy0F2IfelQGF71LW3YJcFfweaWJBxsIHH7EYn2TCzZuIVqNaSglXLPGou74H/KGlbMY6MiD+p95mXsOpNkDO5EhPv74dGyafM/ZbMLOkomusTsay4FdVbYTIVIfnS77wUD7lz22hN3LS7oXBjICYVBS13Mq4GY8W4KUW0iIyOgF3Xo8VKER/K8n52539WwwnVqhZS8yPmeX8tc70sjS9nGbldGj+J1/i08KH7kWBdL2hpzDnFjSd6fpnA0yhVVBzeeDjIlsV7VoQJugtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=f7AMVWF9xVZUTxz9DTSUBCzeMv6541p4nFNehZgUFrc=;
+ b=he/1mVkeB3i/IS0OlJDUsX3HZx7qljSn0wEppWyxSbPQ900tX/BlhvjnYr+QYtSLuPqHLNuRwvRyCC5s8XG1w/6OLptmao1XZMF3b+j0dr0sHYtouVwseRXt2jMfBkbCX8TvhGDfPsAA28p353npkjzCCkXslzoUoTVitUJk4qkh6VEmtKGez5X9SOPZ5ac+06tulRE1eLjhCVX/fN1Om93Fm0l+ItI0TcBxLgDJYsOS7w4sXZhemLrrNtZ0etoZg5XVTmslDdOfwGIE9vEaqMHt301gAb2Ac4vtE+IpUogfM+y5dg//KOhJzTDHm220zkCJAb3ESuyfQ8ZYIZcseg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f7AMVWF9xVZUTxz9DTSUBCzeMv6541p4nFNehZgUFrc=;
+ b=E8pygQAh2k/0oMxyPVN/b0Ee1935WI8fKJNQNNqyPkE0QjA3yORGY5i5OgWicNfv/5kOMyw4bz3s/YCpC6SKUAOG+9qoKbC5E1gTDt024xtSGitAMN4XfaMGw4FyrVUCovnvod0fNPNs/x8cXGPHjq9dYH9W4h+SJn1bsn6YSpo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB9PR04MB9498.eurprd04.prod.outlook.com (2603:10a6:10:360::21)
+ by DB9PR04MB8154.eurprd04.prod.outlook.com (2603:10a6:10:243::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
+ 2023 10:30:34 +0000
+Received: from DB9PR04MB9498.eurprd04.prod.outlook.com
+ ([fe80::a853:185d:bef3:e335]) by DB9PR04MB9498.eurprd04.prod.outlook.com
+ ([fe80::a853:185d:bef3:e335%7]) with mapi id 15.20.6433.022; Tue, 30 May 2023
+ 10:30:34 +0000
+From:   Chancel Liu <chancel.liu@nxp.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        nicoleotsuka@gmail.com
+Cc:     Chancel Liu <chancel.liu@nxp.com>
+Subject: [PATCH] ASoC: fsl_sai: Enable BCI bit if SAI works on synchronous mode with BYP asserted
+Date:   Tue, 30 May 2023 18:30:12 +0800
+Message-Id: <20230530103012.3448838-1-chancel.liu@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SI2PR02CA0047.apcprd02.prod.outlook.com
+ (2603:1096:4:196::14) To DB9PR04MB9498.eurprd04.prod.outlook.com
+ (2603:10a6:10:360::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9498:EE_|DB9PR04MB8154:EE_
+X-MS-Office365-Filtering-Correlation-Id: f2783b6e-80ff-46dd-459a-08db60f8e6fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ykOjkwBsf99AETd9DPGSaET+lDuFBNluxzKBFpRf6SGR2CgEI5S7njDInVmBzfiBrd0NMsKfO1Dk6zHSes7bjIXw6wjfcRBc28K9bt+TIrLHZNPTwgL3xO1mpT9B6cNdSmQBkSuDv/4E1FjzQh61FQEdnTdr+qE2mNz9pSWzk2X17Vbgf4eKaYtozmFXGk8i0GKekheFO1UrBC7Do5cgEx9dohxrLrbYHMSvReX0Wb1+0+9QmYrLb7UQcTk/LT4rxYt+2GFa9V9KQrzlcK96E07nIx+BXdGOnXJsknkL4wOq+YNsZaDP8UTgoUpbbgaZOyu/YhpnxE3ZOL/ZejYfm2YhW52UEZx/lsNd7t/DOhdfAPZPey1E7gDrzlEF6/SDxcR3GmGZfABBlHwLob6F+7neZprncW5g7hWCy6W8eVPgki/enZpkgpFQjYWxyLzvClleVf93WKAtF8vMuFwBwgPvzaeClAY4wcY4hs073esuVhkfzFhYObjMI6d6+v/OjN3y10OkrNs2msdbz3x0qqrDTXXgp7yhA5mJNfGoOlbK4c6SqOaoUlZ9Q+XAyUK/GQQdySGpr+pxIYp0DE+YhdRuPEpzy86XVma5CZg6dsAkUvs1WMNHUYBVBKUEGCTQMZanlRj/K42LlnyX/WRs0g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9498.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(396003)(376002)(136003)(451199021)(478600001)(8676002)(8936002)(7416002)(44832011)(5660300002)(36756003)(2906002)(86362001)(921005)(4326008)(66476007)(66556008)(66946007)(316002)(38350700002)(38100700002)(41300700001)(2616005)(186003)(1076003)(6506007)(6512007)(26005)(52116002)(6486002)(6666004)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vwnbwn9nptZY6f7/uhaM7y/qgzvCL+tRZ+X2gwd7IK2NFinRCWUxwHOkCYCi?=
+ =?us-ascii?Q?z5FAycBgBk2xKA6CAHrNfBBwcjBSYho3t6uhJ7dsyAKJpfHcC1TYlofxf8x3?=
+ =?us-ascii?Q?+k9k5q6v0q+gXd0vjYg7AMbYf8BUVhgAzGYU7YJD9aP5Q6VdRFG/EFx+Zpzl?=
+ =?us-ascii?Q?QK3YyLdBHmPZgSuSPzuE6ZGAKjwHuuxZLx9xFVisztRcg/jTbdfnff/kmS5T?=
+ =?us-ascii?Q?l/fETYrU6QFqJm9MMSHu/w87VRi8UVaI9d2YrKwVnVVaIS1CZ/waYLw0krA9?=
+ =?us-ascii?Q?C0WvzuQ5HfUURKDURKH5MuRghFqrwf4viuWkr2WCReKwvhSyRxfXPLPxoI/0?=
+ =?us-ascii?Q?Q5Pkz2Y4tBfZc7/2bhz6VJ9fbYyRfv0WzqLcLJPd/Dh+hkYQto/tbUVJS3h4?=
+ =?us-ascii?Q?96k8AEi1Z/77Pd8Qbtto55zgD5rdASUJTzuyBvqmDehTS7LTAGb6qhIEUlD7?=
+ =?us-ascii?Q?Uj44ht7LPobwI5wKKGv28+JW30GojAcyonfI3bGg2KDDowwnOBPbAPHgEKCo?=
+ =?us-ascii?Q?yuOEYK0ert3sKW6CWME/L3QVcaKQTEF+jj0ugVU7xupJKsGkR+bjaulkIQEP?=
+ =?us-ascii?Q?6UqxrmPkTZD/mIRq34+iB1vn440NUovv2MTAc1CrKX0TuEAm4besUja0aGq4?=
+ =?us-ascii?Q?T30ihw1lL9TZAOuRuLvWuzlLfTnq2deGSXOlGeR8zEelfibcAve/oy+PyTsm?=
+ =?us-ascii?Q?ATssShmto4nKmOVhl0OtYUnpZoszKqiuX5moVajtlfbhImB2uJq57XFo3aAF?=
+ =?us-ascii?Q?hhVZ/rNVTkZ69bRE1I5l+KvW7qkqNDrLnczvGxn2qGIo3YGPFr0FEwspbDKo?=
+ =?us-ascii?Q?kAxphPLTKKR1gJ0HcSsRJuxRqAuvkHxUcr/nXL/sQ6PYEI3emSB+e3cIhQPd?=
+ =?us-ascii?Q?HW+0zyRlomCV4KPPAIcz3Vw3GD3gBz8BHk62llsX85B0RAYOzx3Ia8OgNvXv?=
+ =?us-ascii?Q?w90YsF9S3Vp7xm0lnkxiSt3vXlNrIyg7Zs8ss30x0cdLY4hYtauna99piwMB?=
+ =?us-ascii?Q?IF8hEHRyvH5AACd/fZv4cWFG2sL1Bp/nIG7ZTijecpzcfYccPxavLO4mI6VO?=
+ =?us-ascii?Q?ls/mU4MHK8fzJsFZM0TPq1k7LVrbvkmuXUn/ikNFgjbvSImfhkMhlhhOgtcB?=
+ =?us-ascii?Q?+wKrwrI/hYm8yGqQ9zgKy/BGKW7QU4GaYQuG38RDTp7cbJZszlQ7yEICqnWf?=
+ =?us-ascii?Q?StGyenFXSTOWQulHmbYMME3WrgLnsn1CG0xkX44eVw2jmSPENu8owXJfm0/H?=
+ =?us-ascii?Q?5PpxtWpfBqTFnU8NOEIOZ7ebSMe9o67l5q4mu6lrf7BavI0IUg9E4fpsXMel?=
+ =?us-ascii?Q?g3EjmNJIm8zSwVgwr5BzsO51kXQE9nUXEoPDm1J1ebVUyRLd7VRFG0SYXKND?=
+ =?us-ascii?Q?YXN1XkoZpkXR9vwSHZTj5dtig78J9G8h/HNX0T+XlTToF2NHv/NMXrjwQQEI?=
+ =?us-ascii?Q?ApRbA9eqoPV1cv71IQPwJEJpksa8nI05zSSzW5q/ee8hSSaqR92jJ9jF6ubx?=
+ =?us-ascii?Q?2dQWn9GtzdMrgW8I/mdLO4Gh2EE473B1vc3EuTgk1syrOB3xbGoz7m3OM2js?=
+ =?us-ascii?Q?nonTRm9pnCNKJkpe+gE+q/tckr963pBkqZdpyYtZ?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f2783b6e-80ff-46dd-459a-08db60f8e6fc
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9498.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 10:30:34.8329
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CdH8IP4b2TEZEpm7aoQNh24qfsfZCbkyT6QngvZQNh10KMKeAwyeWb3GTdp/4hsP4mq1wHXzPElkv1GK28a/7A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8154
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Osama Muhammad <osmtendev@gmail.com> writes:
+There's an issue on SAI synchronous mode that TX/RX side can't get BCLK
+from RX/TX it sync with if BYP bit is asserted. It's a workaround to
+fix it that enable SION of IOMUX pad control and assert BCI.
 
-> This patch fixes the error checking in debugfs.c in
-> debugfs_create_dir. The correct way to check if an error occurred
-> is using 'IS_ERR' inline function.
->
-> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+For example if TX sync with RX which means both TX and RX are using clk
+form RX and BYP=1. TX can get BCLK only if the following two conditions
+are valid:
+1. SION of RX BCLK IOMUX pad is set to 1
+2. BCI of TX is set to 1
 
-The title is wrong, please see the wiki page below how to create titles.
+Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
+---
+ sound/soc/fsl/fsl_sai.c | 11 +++++++++--
+ sound/soc/fsl/fsl_sai.h |  1 +
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-Also no need to say "This patch fixes..", saying "Fix..." is enough.
-
+diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
+index d9344025dc16..5e09f634c61b 100644
+--- a/sound/soc/fsl/fsl_sai.c
++++ b/sound/soc/fsl/fsl_sai.c
+@@ -491,14 +491,21 @@ static int fsl_sai_set_bclk(struct snd_soc_dai *dai, bool tx, u32 freq)
+ 	regmap_update_bits(sai->regmap, reg, FSL_SAI_CR2_MSEL_MASK,
+ 			   FSL_SAI_CR2_MSEL(sai->mclk_id[tx]));
+ 
+-	if (savediv == 1)
++	if (savediv == 1) {
+ 		regmap_update_bits(sai->regmap, reg,
+ 				   FSL_SAI_CR2_DIV_MASK | FSL_SAI_CR2_BYP,
+ 				   FSL_SAI_CR2_BYP);
+-	else
++		if (fsl_sai_dir_is_synced(sai, adir))
++			regmap_update_bits(sai->regmap, FSL_SAI_xCR2(tx, ofs),
++					   FSL_SAI_CR2_BCI, FSL_SAI_CR2_BCI);
++		else
++			regmap_update_bits(sai->regmap, FSL_SAI_xCR2(tx, ofs),
++					   FSL_SAI_CR2_BCI, 0);
++	} else {
+ 		regmap_update_bits(sai->regmap, reg,
+ 				   FSL_SAI_CR2_DIV_MASK | FSL_SAI_CR2_BYP,
+ 				   savediv / 2 - 1);
++	}
+ 
+ 	if (sai->soc_data->max_register >= FSL_SAI_MCTL) {
+ 		/* SAI is in master mode at this point, so enable MCLK */
+diff --git a/sound/soc/fsl/fsl_sai.h b/sound/soc/fsl/fsl_sai.h
+index 3eb994aef36a..8254c3547b87 100644
+--- a/sound/soc/fsl/fsl_sai.h
++++ b/sound/soc/fsl/fsl_sai.h
+@@ -116,6 +116,7 @@
+ 
+ /* SAI Transmit and Receive Configuration 2 Register */
+ #define FSL_SAI_CR2_SYNC	BIT(30)
++#define FSL_SAI_CR2_BCI		BIT(28)
+ #define FSL_SAI_CR2_MSEL_MASK	(0x3 << 26)
+ #define FSL_SAI_CR2_MSEL_BUS	0
+ #define FSL_SAI_CR2_MSEL_MCLK1	BIT(26)
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.25.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
