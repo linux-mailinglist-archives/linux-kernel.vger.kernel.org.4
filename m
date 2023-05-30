@@ -2,116 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D687170BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 955537170C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233564AbjE3WdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        id S233736AbjE3Wfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjE3WdG (ORCPT
+        with ESMTP id S229499AbjE3Wfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:33:06 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D91093;
-        Tue, 30 May 2023 15:33:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685485985; x=1717021985;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=VABDFdCJy0Ud+Ks8o/SFbThuZCncKrRivw4ObAAYIR8=;
-  b=P+kkw8dYQD+M0bIFBD1IBW+RdX870JA2uZdwRybdWDIMrH9HK+Ct3hPV
-   6bN3e9PR06zpcBztXTt8X5llR7CR5uJ/D3bDapn9dLMkjQq6hC/gBvIsH
-   1kalHg4bCQW6xbbvpGZaeZLuydg7NDweUxAvMIKZkb6h0xqpAuVfnkpkZ
-   Uu8+gZJMwrkR1yOkXfbURBFMBszeihhHx0xrUaioXwEzwko4179P846Dx
-   EYdQTjtx5YOZVLEktoyllgFVyHKKQ0cnrQnsmE4IrOtXTv/IZZdBJUZeM
-   w0aCavBOI5t6JOyj69uN4WCpNHbgCx9CgkqdOB5DvWKW573gRvYgkMLSx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="358322047"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="358322047"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 15:33:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="880914492"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="880914492"
-Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.17])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 15:33:02 -0700
-From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>
-Subject: Re: [PATCH net-next 1/5] net/sched: taprio: don't overwrite "sch"
- variable in taprio_dump_class_stats()
-In-Reply-To: <20230530213252.pddrmwgppneawmht@skbuf>
-References: <20230530091948.1408477-1-vladimir.oltean@nxp.com>
- <20230530091948.1408477-2-vladimir.oltean@nxp.com>
- <87edmxv7x2.fsf@intel.com> <20230530213252.pddrmwgppneawmht@skbuf>
-Date:   Tue, 30 May 2023 15:33:02 -0700
-Message-ID: <878rd5v49t.fsf@intel.com>
+        Tue, 30 May 2023 18:35:46 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5C7C9;
+        Tue, 30 May 2023 15:35:44 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UM8sf9032181;
+        Tue, 30 May 2023 22:35:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=tPYaKnQ7SMeZMYNrdYpQjkUth4bn7YaBwUTTakG0I28=;
+ b=TBIwU7MrsLFOu71rmwwnJ3U+7Z04zvqSN20Mc0Q1RNyVdIVlG7YmRJggQulPG4QyiKkU
+ E1++GnAv8Pk4n7UBciKHLp453poQ4FkuqIMiFLKMc341VMpy2/eO+7rWQuZ1WvMdW1u8
+ miItCqE21bF2B6YzDdA/v2hBVfqY9IzImWeJsF4ZLmNMYkQoBHRLgmUmj/8jfGrPummY
+ A1JbgnDASTuiIrKlHkLTuK3/MW5vlTij7TmcrB7vPaTbYNrACvMhbJ6eSatEbjLmc+bZ
+ rZrEBnESW1JhiBvVF2ZPcCrL4Um7mjas3livjOXN5l09BkWb3nI8q6Df0Xh9bpBuAgDo Gw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwj0enmgu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 22:35:43 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34UMZher008241;
+        Tue, 30 May 2023 22:35:43 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwj0enmgc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 22:35:43 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34UKQoHc019395;
+        Tue, 30 May 2023 22:35:42 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3qu9g6j2sq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 22:35:42 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34UMZeow30212410
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 May 2023 22:35:40 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C3C3158101;
+        Tue, 30 May 2023 22:35:40 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 155DC580FE;
+        Tue, 30 May 2023 22:35:40 +0000 (GMT)
+Received: from li-2c1e724c-2c76-11b2-a85c-ae42eaf3cb3d.ibm.com.com (unknown [9.61.88.233])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 30 May 2023 22:35:39 +0000 (GMT)
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     jjherne@linux.ibm.com, pasic@linux.ibm.com, farman@linux.ibm.com,
+        mjrosato@linux.ibm.com, alex.williamson@redhat.com,
+        borntraeger@linux.ibm.com
+Subject: [PATCH 0/3] s390/vfio-ap: fix hang when mdev attached to guest is removed
+Date:   Tue, 30 May 2023 18:35:35 -0400
+Message-Id: <20230530223538.279198-1-akrowiak@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vtBORcWIpYCeH2bpLuDBXRoXujzL3okF
+X-Proofpoint-ORIG-GUID: nBEDf3-TsGvbdbg9OoU24RJMHIgrjvad
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_16,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 phishscore=0 spamscore=0
+ adultscore=0 clxscore=1011 mlxlogscore=932 malwarescore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305300184
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vladimir Oltean <vladimir.oltean@nxp.com> writes:
+When a user attempts to remove a vfio-ap mediated device attached to a
+guest, the operation hangs until the mdev's fd is closed by the guest
+(i.e., the hostdev is detached or the guest is shut down). This patch 
+series provides kernel-side code that allows userspace to set up a 
+communication channel that will allow the vfio_ap device driver to notify 
+userspace when a request to release the mdev is received, so that userspace
+can close the mdev fd and avoid the hang. The patch series provides the 
+following:  
 
-> On Tue, May 30, 2023 at 02:14:17PM -0700, Vinicius Costa Gomes wrote:
->> But I have a suggestion, this "taprio_queue_get() ->
->> dev_queue->qdisc_sleeping()" dance should have the same result as
->> calling 'taprio_leaf()'.
->> 
->> I am thinking of using taprio_leaf() here and in taprio_dump_class().
->> Could be a separate commit.
->
-> Got it, you want to consolidate the dev_queue->qdisc_sleeping pattern.
-> Since taprio_dump_class() could benefit from the consolidation too, they
-> could really be both converted separately. Or I could also handle that
-> in this patch set, if I need to resend it.
+1. Introduces code to handle the VFIO_DEVICE_GET_IRQ_INFO and 
+   VFIO_DEVICE_SET_IRQS ioctl calls to set the eventfd_ctx for signaling a
+   device request to userspace. 
 
-Exactly. Both options sound great.
+2. Wires up the VFIO bus driver callback to request a release of the mdev.
+   When invoked, the vfio_ap device driver will use the eventfd_ctx set up
+   in #1 to signal a request to userspace to release the mdev.
 
 
-Cheers,
+Note:
+----
+If a user subsequently attempts to restart the guest or re-attach the mdev,
+the operation will fail with a message indicating the domain is already
+active. This is a libvirt problem resolved with the following commit:
+
+commit ebd004a03dbd ("security: do not remember/recall labels for VFIO 
+MDEVs") 
+
+Tony Krowiak (3):
+  vfio: ap: realize the VFIO_DEVICE_GET_IRQ_INFO ioctl
+  vfio: ap: realize the VFIO_DEVICE_SET_IRQS ioctl
+  s390/vfio-ap: Wire in the vfio_device_ops request callback
+
+ drivers/s390/crypto/vfio_ap_ops.c     | 134 +++++++++++++++++++++++++-
+ drivers/s390/crypto/vfio_ap_private.h |   3 +
+ include/uapi/linux/vfio.h             |   9 ++
+ 3 files changed, 145 insertions(+), 1 deletion(-)
+
 -- 
-Vinicius
+2.31.1
+
