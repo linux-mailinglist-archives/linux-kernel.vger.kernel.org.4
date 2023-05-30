@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF690715482
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 06:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B95715484
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 06:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjE3EcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 00:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
+        id S230049AbjE3EhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 00:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjE3EcV (ORCPT
+        with ESMTP id S229656AbjE3EhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 00:32:21 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0162BE4;
-        Mon, 29 May 2023 21:32:19 -0700 (PDT)
+        Tue, 30 May 2023 00:37:17 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D03B0;
+        Mon, 29 May 2023 21:37:16 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVfcy0Q97z4x46;
-        Tue, 30 May 2023 14:32:18 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVfkf3HTTz4x3g;
+        Tue, 30 May 2023 14:37:14 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1685421138;
-        bh=U8n9Hde3DsbVeXiazBuQ1xk7QSZyvg9RTkdEpTMUxzc=;
+        s=201702; t=1685421434;
+        bh=kNWtLo8ghy5vwb5JyMlcVxxAML2QhxKyddKUE0BxM8Y=;
         h=Date:From:To:Cc:Subject:From;
-        b=KhxG2/lu2ZYmaTaJApux+GzhYtZ4KdSpq/UwExYHeG43xweeYGftLEhUfKJjMKkJp
-         T+gC8iydc+wqBmxtlb/ikNIAtD7FWtlR5zVXwkUmRbCLWbb+Hvk4GO2GujXPzqfn7i
-         RL8gZaO/VrcJ6eeGj1mkHPaW2beTuU9xXfJq+uVsRuvT7kGWNSVqGWbfU2DfHbFKGl
-         0/LQDsGWXBT5ks75B5tbRPG67YKzDaWxHxWphSlbbsQOFfDW6cjAH3uoimts6+YStB
-         b4a7wKbuoqzVUYMWve9JXyv0ILM3wfeCLJajqFTaMO3oRebXYKE3Jq1SIWfQKRJLt/
-         fSzLnLskVs+gQ==
-Date:   Tue, 30 May 2023 14:32:17 +1000
+        b=EGkHJBwDsJ8hf7ZIpTkxwu7iIER8xcaIjFA8gmyc23/LrNJsaBVQ193pqePt/TQaj
+         atfk/V3WfqqoRty8OfPVuvblOY12paFIu6VOCNInlRfvrySfAB/AjMOsGMlKsNztMY
+         O+dfBePQDbsa6rgIStk6S5WIVraZI6qvqbCw0wTzmiLP7LZWq0s5Yi1DgBWfepcTQz
+         Y/Bq3/azCCEoYEY4xwSIGfZDedq4gTgT7pGAh2EMlUfhz5xnEm5XbM4jsNTlNMTKSx
+         9O+57tEvAIL6WLcQKcrrLtZ8RaWMdn/wDvJVER7gYsSbHdyaHMh/lXBQtBshcsYzUn
+         VGpWkodvuJlnw==
+Date:   Tue, 30 May 2023 14:37:13 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>
-Subject: linux-next: manual merge of the efi tree with the efi-fixes tree
-Message-ID: <20230530143217.49ae8cbf@canb.auug.org.au>
+To:     Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the fastrpc tree
+Message-ID: <20230530143713.4cd58e31@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Zta=SjlqHVMyuVoNmM/m3i1";
+Content-Type: multipart/signed; boundary="Sig_/ORyttW0h06tCQQJtDy.wAKK";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Zta=SjlqHVMyuVoNmM/m3i1
+--Sig_/ORyttW0h06tCQQJtDy.wAKK
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the efi tree got a conflict in:
+The following commits are also in the char-misc.current tree as different
+commits (but the same patches):
 
-  include/linux/efi.h
+  3a1f192ad1b4 ("misc: fastrpc: reject new invocations during device remova=
+l")
+  578b3c7d15e6 ("misc: fastrpc: return -EPIPE to invocations on device remo=
+val")
+  5fad4a6b2d8f ("misc: fastrpc: Reassign memory ownership only for remote h=
+eap")
+  dc37d43b894e ("misc: fastrpc: Pass proper scm arguments for secure map re=
+quest")
 
-between commit:
+These are commits
 
-  fd936fd8ac10 ("efi: fix missing prototype warnings")
+  46248400d81e ("misc: fastrpc: reject new invocations during device remova=
+l")
+  b6a062853ddf ("misc: fastrpc: return -EPIPE to invocations on device remo=
+val")
+  3c7d0079a183 ("misc: fastrpc: Reassign memory ownership only for remote h=
+eap")
+  a6e766dea0a2 ("misc: fastrpc: Pass proper scm arguments for secure map re=
+quest")
 
-from the efi-fixes tree and commit:
-
-  5b6e3aa08c62 ("efi: expose efivar generic ops register function")
-
-from the efi tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+in the char-misc.current tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/efi.h
-index 571d1a6e1b74,657f7e203374..000000000000
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@@ -1338,6 -1350,7 +1350,9 @@@ bool efi_config_table_is_usable(const e
-  	return xen_efi_config_table_is_usable(guid, table);
-  }
- =20
- +umode_t efi_attr_is_visible(struct kobject *kobj, struct attribute *attr,=
- int n);
- +
-+ void efivars_generic_ops_register(void);
-+ void efivars_generic_ops_unregister(void);
-+=20
-  #endif /* _LINUX_EFI_H */
-
---Sig_/Zta=SjlqHVMyuVoNmM/m3i1
+--Sig_/ORyttW0h06tCQQJtDy.wAKK
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1fFEACgkQAVBC80lX
-0GxI0Af9FM1vbjoQ0dm4uairsYi5SbcHlOV8+L0sybP1V9Iq6tlyGnrm/xdBpQtq
-g4CDShQZo/+TOr+VKRSwkQiq8LeoBbctUiciE/tYHSjKCQVFz2iTIYYCQrnPo5XX
-zOHuyLDWOUEISua+DXI/xqHV6TdiMni0yuTZdpBdgyc+4cDo8ineKssRhEeYs7zY
-pl8hHZgYI9MtROhTHls7u+zhDTkJtfyq+PR6eXqgUf6wAvq+BgcrkY+PJyNT2xKl
-4YlaGGEHKVT4uLcDza9aISVicaL4hcICKzCaavKAGZujMYDTfp9KAIxRtm+0ydrG
-lX9jiNaAsKMV37LAjop/icoRar7I3w==
-=65db
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1fXkACgkQAVBC80lX
+0Gyc5Af8DvzCv+f0k9SaZuE1m1si2A5Mq2ek+iU63yv6IuEChjsCpxlxEpFZkyLH
+RpUg454h9u/YgGGa2IXE+d3amlf4oicwZB1JE955vRtoDQV9U7qy0pXyQWs0XJYY
+u7I1AvZ+rlXj/VaXyWh/MzcR43sPy3IKzFzWxcIpIoXP1PCAt9dIPc8QcJjx8Rdg
+rTgV6slcOa+0r08agUblNbDNzG0xeynhq/9WCKfboEMkXuyEZLe+fk87uPGO2PDX
+oRi0I1XmR2f0uhSfv22/6xm4ZUnicJYdx9g8Ykn5cky7oBGdeikYVb5oD2LuWqcZ
+OVQsmuXpvkre9LkPdYPycdMANMCHHQ==
+=pwNF
 -----END PGP SIGNATURE-----
 
---Sig_/Zta=SjlqHVMyuVoNmM/m3i1--
+--Sig_/ORyttW0h06tCQQJtDy.wAKK--
