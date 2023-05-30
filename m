@@ -2,82 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBE3717164
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920EB717167
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbjE3XMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S233772AbjE3XM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbjE3XMn (ORCPT
+        with ESMTP id S233768AbjE3XMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:12:43 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679F2E8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:12:40 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f3b39cea1eso5701094e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:12:40 -0700 (PDT)
+        Tue, 30 May 2023 19:12:54 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF23116
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:12:51 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-565ba2c7554so38937227b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685488358; x=1688080358;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VlrmURisZS7q/QAHr0J+CvY3JO6uf1hNrIrIO78pa18=;
-        b=Fo0dkMfhk0Vi7P8wz+WXkw8ZPZV1Vl46ZM2YvqHNrCx9UMIvhl/jfg9hq8sV/acL40
-         zoP7YnVKsrw6L2VW68/nOnjEeKMGGdJjyS/NCqXRB2XMT6OiG7nLn+EMCmfJVRQHwK7b
-         5eL3Tni5dC1qzaRa8FFbwih7k291xNEPD8o6am09pdq7qVvmFOjqx0ihux/gWtYdzop2
-         ZiWhO36st07XHN8nCQTai6hanK+/c1MQZAmaEG18LfyLad0dqLlobuJsGs//05uPJl2V
-         PS9e0Nweu4I64ocP32S0iqk9vgCzfE/GqRkjv07elKjyGsVxvY/OatYzm/bisf8dupJQ
-         YzCA==
+        d=0x0f.com; s=google; t=1685488370; x=1688080370;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Sk+qWXcGW0GUpvgiyhHnfROShVA7dmyiswjVrrXG8U=;
+        b=B05Pid/LKtGjtIJfO8foDbZeVsvkHTrT2f2SBzRS4zWcf1S+2cZB96uHjjgtpX3PDH
+         qho7GHfBesnm2u7U0N+Pk1Gk76IAp3zZyfnLIySrQwwN0cROIbNHN9mXCzcAdi2pnnPp
+         FcuHHT0sojhyqk+b8IONXCFLSyZd2H5gxGVb0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685488358; x=1688080358;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VlrmURisZS7q/QAHr0J+CvY3JO6uf1hNrIrIO78pa18=;
-        b=AVltwZ+MPSpcQGAbmy2dKupBxJjaJ3KhnedlRcqMiZgRy2kznq9vDRVy9y68sJuOg8
-         PYntfyoZX47qJ9OPm/jx50Nbg6z27nd7Sl6ZUNhO/SFYS1qUjkPKrbU+/j/tqogANVcg
-         lrSMOhfIVkl57wWSkWoaq2HEcdoPdoLZIdoZFwZBU8SzkZAGOqB+YVgFy4S2iIrR8aPM
-         DkGzJKAF+5SysZyF3rvfnNw0qkGTUsMeFNehLG/T9dCVqHqJJdbWcEbAh8JyUTz1wH+y
-         k5HHltjwfVA8+hU4L97NMzq4wvm2N8pMl4GHJZCZnWpWg/AUb7i4N3UTjPMfQxGx1G5m
-         23pg==
-X-Gm-Message-State: AC+VfDwWhQbL1ONczUPFvaN5C4Huw2694wTTGEnizn36S9J0LODlngi4
-        7+V46OWEsWQDSGLQ3Rmi6wfkiA==
-X-Google-Smtp-Source: ACHHUZ4hbr+QnHxMndXp+K41DpevzQh5vk3K1wv9jGL+7zjGaSwdfj1uOgSrwYbmIAtG/nr/fHUTcw==
-X-Received: by 2002:ac2:4c13:0:b0:4ef:f11c:f5b0 with SMTP id t19-20020ac24c13000000b004eff11cf5b0mr1760472lfq.54.1685488358638;
-        Tue, 30 May 2023 16:12:38 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id i22-20020a056512007600b004f3940c2b07sm472758lfo.274.2023.05.30.16.12.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 16:12:38 -0700 (PDT)
-Message-ID: <f3908927-e9b7-c61e-d5e6-8223dfe45bf8@linaro.org>
-Date:   Wed, 31 May 2023 02:12:37 +0300
+        d=1e100.net; s=20221208; t=1685488370; x=1688080370;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Sk+qWXcGW0GUpvgiyhHnfROShVA7dmyiswjVrrXG8U=;
+        b=E6+Tp57VAl4yhebedIBOVrVFl0zuDuYp9PkD6RGz1S4Hh5sU23yTZzYOglo2e4BHOv
+         hHjFiEJsyf9FZrOMaAgTOXdaqcXgP3/AGUWNni1ZSYzfBxIs1HJUCDaFLgvjVzRHa2v0
+         CNe4CYY6WxAOe8S8aEN+TbKCZ6CPGKHDxKMLT+wxMNK/BxJ5Z/UAZyY8HioJ0nbpRurF
+         wGFlpPh50jAmikjBQ4LA3xE7UjVRIV0bD/fG4QY8D5IEVkRn+9h4nsVS7VjHkyJfBd9h
+         xbUW7jhC1pq8HOhGEvWrafOCBAr1+L8EjZbqsq5MNKX4+cquZgOXQwRRn2l8edvRTdtM
+         uRIw==
+X-Gm-Message-State: AC+VfDyT5B2cftZxMr26s+cwtv0JBHlzbh1H3IKpn6bGaYyrax4gXrQ5
+        PM6vv70VInzA5NT5FExH4tD1LDbJ/YAGA00n0IDbMQ==
+X-Google-Smtp-Source: ACHHUZ7IWuuIkbJHtCvA06a4W4OlLV+CuNxuRKBq081h6V6711sEGkR9kqXrFauvtb28sape68GwRuOip1snlQlaww8=
+X-Received: by 2002:a0d:d752:0:b0:565:6634:d106 with SMTP id
+ z79-20020a0dd752000000b005656634d106mr4492319ywd.2.1685488370082; Tue, 30 May
+ 2023 16:12:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] drm/panel: Add driver for Visionox r66451 panel
-Content-Language: en-GB
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230516-b4-r66451-panel-driver-v1-0-4210bcbb1649@quicinc.com>
- <20230516-b4-r66451-panel-driver-v1-2-4210bcbb1649@quicinc.com>
- <3cca2809-fa26-f0cf-2ccc-6737d150b43d@linaro.org>
- <aeef04c4-7952-2b7c-d673-5c75dda19154@quicinc.com>
- <196a43da-1f59-6213-7c4f-2cfcb8d39b32@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <196a43da-1f59-6213-7c4f-2cfcb8d39b32@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230517144144.365631-1-romain.perier@gmail.com>
+ <20230517144144.365631-3-romain.perier@gmail.com> <669d7b79-71a6-e1f9-8d7a-71c4b64de28d@kernel.org>
+ <CABgxDoKaVip=T5=s2Gd8qpX15cLD=_0TZtQoNodK1CCf+GTYZw@mail.gmail.com> <ad788d84-48ea-2fdb-607a-a8d49c8fe52c@kernel.org>
+In-Reply-To: <ad788d84-48ea-2fdb-607a-a8d49c8fe52c@kernel.org>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Wed, 31 May 2023 08:12:39 +0900
+Message-ID: <CAFr9PXmkvunO8mu+n7_YFSixe3k0vzowJzrmEWKcs9W677=WNQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] dt-bindings: rtc: Add Mstar SSD20xD RTC devicetree
+ bindings documentation
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Romain Perier <romain.perier@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,425 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 23:09, Jessica Zhang wrote:
-> 
-> 
-> On 5/18/2023 3:17 PM, Jessica Zhang wrote:
->>
->>
->> On 5/17/2023 5:19 PM, Dmitry Baryshkov wrote:
->>> On 16/05/2023 23:20, Jessica Zhang wrote:
->>>> Add support for the 1080x2340 Visionox R66451 AMOLED DSI panel that
->>>> comes with the Qualcomm HDK8350 display expansion pack.
->>>>
->>>> The panel enables display compression (DSC v1.2) by default.
->>>>
->>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>> ---
->>>>   drivers/gpu/drm/panel/Kconfig                 |   8 +
->>>>   drivers/gpu/drm/panel/Makefile                |   1 +
->>>>   drivers/gpu/drm/panel/panel-visionox-r66451.c | 395 
->>>> ++++++++++++++++++++++++++
->>>>   3 files changed, 404 insertions(+)
->>>>
->>>> diff --git a/drivers/gpu/drm/panel/Kconfig 
->>>> b/drivers/gpu/drm/panel/Kconfig
->>>> index 29cf5fa39ff2..9c2c36dbddf3 100644
->>>> --- a/drivers/gpu/drm/panel/Kconfig
->>>> +++ b/drivers/gpu/drm/panel/Kconfig
->>>> @@ -766,6 +766,14 @@ config DRM_PANEL_VISIONOX_VTDR6130
->>>>         Say Y here if you want to enable support for Visionox
->>>>         VTDR6130 1080x2400 AMOLED DSI panel.
->>>> +config DRM_PANEL_VISIONOX_R66451
->>>> +    tristate "Visionox R66451"
->>>> +    depends on OF
->>>> +    depends on DRM_MIPI_DSI
->>>> +    help
->>>> +      Say Y here if you want to enable support for Visionox
->>>> +      R66451 1080x2340 AMOLED DSI panel.
->>>> +
->>>>   config DRM_PANEL_WIDECHIPS_WS2401
->>>>       tristate "Widechips WS2401 DPI panel driver"
->>>>       depends on SPI && GPIOLIB
->>>> diff --git a/drivers/gpu/drm/panel/Makefile 
->>>> b/drivers/gpu/drm/panel/Makefile
->>>> index b3e8ba29edd3..e043a92ee676 100644
->>>> --- a/drivers/gpu/drm/panel/Makefile
->>>> +++ b/drivers/gpu/drm/panel/Makefile
->>>> @@ -78,5 +78,6 @@ obj-$(CONFIG_DRM_PANEL_TPO_TPG110) += 
->>>> panel-tpo-tpg110.o
->>>>   obj-$(CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA) += panel-truly-nt35597.o
->>>>   obj-$(CONFIG_DRM_PANEL_VISIONOX_RM69299) += panel-visionox-rm69299.o
->>>>   obj-$(CONFIG_DRM_PANEL_VISIONOX_VTDR6130) += 
->>>> panel-visionox-vtdr6130.o
->>>> +obj-$(CONFIG_DRM_PANEL_VISIONOX_R66451) += panel-visionox-r66451.o
->>>>   obj-$(CONFIG_DRM_PANEL_WIDECHIPS_WS2401) += panel-widechips-ws2401.o
->>>>   obj-$(CONFIG_DRM_PANEL_XINPENG_XPP055C272) += 
->>>> panel-xinpeng-xpp055c272.o
->>>> diff --git a/drivers/gpu/drm/panel/panel-visionox-r66451.c 
->>>> b/drivers/gpu/drm/panel/panel-visionox-r66451.c
->>>> new file mode 100644
->>>> index 000000000000..e3648ead3e84
->>>> --- /dev/null
->>>> +++ b/drivers/gpu/drm/panel/panel-visionox-r66451.c
->>>> @@ -0,0 +1,395 @@
->>>> +//SPDX-License-Identifier: GPL-2.0-only
->>>> +//Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights 
->>>> reserved.
->>>> +
->>>> +#include <linux/backlight.h>
->>>> +#include <linux/delay.h>
->>>> +#include <linux/gpio/consumer.h>
->>>> +#include <linux/module.h>
->>>> +#include <linux/of.h>
->>>> +#include <linux/regulator/consumer.h>
->>>> +
->>>> +#include <drm/drm_mipi_dsi.h>
->>>> +#include <drm/drm_modes.h>
->>>> +#include <drm/drm_panel.h>
->>>> +#include <drm/display/drm_dsc.h>
->>>> +#include <drm/display/drm_dsc_helper.h>
->>>> +
->>>> +#include <video/mipi_display.h>
->>>> +
->>>> +struct visionox_r66451 {
->>>> +    struct drm_panel panel;
->>>> +    struct mipi_dsi_device *dsi;
->>>> +    struct gpio_desc *reset_gpio;
->>>> +    struct regulator_bulk_data supplies[2];
->>>> +    bool prepared, enabled;
->>>> +};
->>>> +
->>>> +static inline struct visionox_r66451 *to_visionox_r66451(struct 
->>>> drm_panel *panel)
->>>> +{
->>>> +    return container_of(panel, struct visionox_r66451, panel);
->>>> +}
->>>> +
->>>> +static void visionox_r66451_reset(struct visionox_r66451 *ctx)
->>>> +{
->>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 0);
->>>> +    usleep_range(10000, 10100);
->>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->>>> +    usleep_range(10000, 10100);
->>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 0);
->>>> +    usleep_range(10000, 10100);
->>>> +}
->>>> +
->>>> +static int visionox_r66451_on(struct visionox_r66451 *ctx)
->>>> +{
->>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>>> +    struct device *dev = &dsi->dev;
->>>> +    int ret;
->>>> +
->>>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
->>>> +
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xc2,
->>>> +                   0x09, 0x24, 0x0c, 0x00, 0x00, 0x0c, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x09, 0x3c);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd7,
->>>> +                   0x00, 0xb9, 0x3c, 0x00, 0x40, 0x04, 0x00, 0xa0, 
->>>> 0x0a,
->>>> +                   0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x19,
->>>> +                   0x3c, 0x00, 0x40, 0x04, 0x00, 0xa0, 0x0a);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x80);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xde,
->>>> +                   0x40, 0x00, 0x18, 0x00, 0x18, 0x00, 0x18, 0x00, 
->>>> 0x18,
->>>> +                   0x10, 0x00, 0x18, 0x00, 0x18, 0x00, 0x18, 0x02, 
->>>> 0x00, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x04);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe8, 0x00, 0x02);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe4, 0x00, 0x08);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xc4,
->>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x32);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xcf,
->>>> +                   0x64, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x08,
->>>> +                   0x00, 0x0b, 0x77, 0x01, 0x01, 0x01, 0x01, 0x01, 
->>>> 0x01,
->>>> +                   0x02, 0x02, 0x02, 0x02, 0x02, 0x03);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd3,
->>>> +                   0x45, 0x00, 0x00, 0x01, 0x13, 0x15, 0x00, 0x15, 
->>>> 0x07,
->>>> +                   0x0f, 0x77, 0x77, 0x77, 0x37, 0xb2, 0x11, 0x00, 
->>>> 0xa0,
->>>> +                   0x3c, 0x9c);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd7,
->>>> +                   0x00, 0xb9, 0x34, 0x00, 0x40, 0x04, 0x00, 0xa0, 
->>>> 0x0a,
->>>> +                   0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x19,
->>>> +                   0x34, 0x00, 0x40, 0x04, 0x00, 0xa0, 0x0a);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd8,
->>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x3a, 0x00, 0x3a, 0x00, 0x3a, 0x00, 0x3a, 0x00, 
->>>> 0x3a,
->>>> +                   0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x0a, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x0a,
->>>> +                   0x00, 0x32, 0x00, 0x0a, 0x00, 0x22);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf,
->>>> +                   0x50, 0x42, 0x58, 0x81, 0x2d, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x6b, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x01, 0x0f, 0xff, 0xd4, 0x0e, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x00, 0x00, 0x0f, 0x53, 0xf1, 0x00, 
->>>> 0x00,
->>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf7, 0x01);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x80);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe4, 0x34, 0xb4, 0x00, 0x00, 0x00, 
->>>> 0x39, 0x04, 0x09, 0x34);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe6, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x04);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x50, 0x40);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf3, 0x50, 0x00, 0x00, 0x00, 0x00);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x11);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf3, 0x01, 0x00, 0x00, 0x00, 0x01);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf4, 0x00, 0x02);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x19);
->>>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x50, 0x42);
->>>> +    mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
->>>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_COLUMN_ADDRESS, 0x00, 
->>>> 0x00, 0x04, 0x37);
->>>
->>> Please use mipi_dsi_dcs_set_column_address(dsi, 0, 1080 - 1);
->>
->> Hi Dmitry,
->>
->> Acked.
->>
->>>
->>>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PAGE_ADDRESS, 0x00, 
->>>> 0x00, 0x09, 0x23);
->>>
->>> mipi_dsi_dcs_set_page_address(dsi, 0, 2340 - 1);
->>
->> Acked.
->>
->>>
->>>> +
->>>> +    ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
->>>> +        return ret;
->>>> +    }
->>>> +    msleep(120);
->>>> +
->>>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
->>>
->>> Should the mipi_dsi_dcs_set_display_on() (and maybe exit sleep mode) 
->>> be a a part of _enable()? Correspondingly _off should IMO be a part 
->>> of _disable callback().
->>
->> Acked. Looking at the downstream code, it seems that all the dcs on 
->> commands can be sent within _enable() (and similarly for the off 
->> commands with _disable()).
->>
->>>
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed on set display on: %d\n", ret);
->>>> +        return ret;
->>>> +    }
->>>> +    msleep(20);
->>>
->>>
->>> Do we need to add here the following line?
->>>
->>> dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
->>
->> Do you mean within the return on error block?
->>
->>  From my understanding, we should be setting the MIPI_DSI_MODE_LPM for 
->> panel_on() then unsetting MODE_LPM in panel_off().
->>
->>>
->>>
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int visionox_r66451_off(struct visionox_r66451 *ctx)
->>>> +{
->>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>>> +    struct device *dev = &dsi->dev;
->>>> +    int ret;
->>>> +
->>>> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
->>>> +
->>>> +    ret = mipi_dsi_dcs_set_display_off(dsi);
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed to set display off: %d\n", ret);
->>>> +        return ret;
->>>> +    }
->>>> +    msleep(20);
->>>> +
->>>> +    ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
->>>> +        return ret;
->>>> +    }
->>>> +    msleep(120);
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int visionox_r66451_prepare(struct drm_panel *panel)
->>>> +{
->>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>> +    struct device *dev = &ctx->dsi->dev;
->>>> +    int ret;
->>>> +
->>>> +    if (ctx->prepared)
->>>> +        return 0;
->>>> +
->>>> +    ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies),
->>>> +                    ctx->supplies);
->>>> +    if (ret < 0)
->>>> +        return ret;
->>>> +
->>>> +    visionox_r66451_reset(ctx);
->>>> +
->>>> +    ret = visionox_r66451_on(ctx);
->>>> +    if (ret < 0) {
->>>> +        dev_err(dev, "Failed to initialize panel: %d\n", ret);
->>>> +        gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->>>> +        regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), 
->>>> ctx->supplies);
->>>> +        return ret;
->>>> +    }
->>>> +
->>>> +    ctx->prepared = true;
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int visionox_r66451_unprepare(struct drm_panel *panel)
->>>> +{
->>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>> +    struct device *dev = &ctx->dsi->dev;
->>>> +    int ret;
->>>> +
->>>> +    if (!ctx->prepared)
->>>> +        return 0;
->>>> +
->>>> +    ret = visionox_r66451_off(ctx);
->>>> +    if (ret < 0)
->>>> +        dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
->>>> +
->>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->>>> +    regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
->>>> +
->>>> +    ctx->prepared = false;
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static const struct drm_display_mode visionox_r66451_mode = {
->>>> +    .clock = (1080 + 95 + 1 + 40) * (2340 + 25 + 1 + 4) * 120 / 1000,
->>>> +    .hdisplay = 1080,
->>>> +    .hsync_start = 1080 + 95,
->>>> +    .hsync_end = 1080 + 95 + 1,
->>>> +    .htotal = 1080 + 95 + 1 + 40,
->>>> +    .vdisplay = 2340,
->>>> +    .vsync_start = 2340 + 25,
->>>> +    .vsync_end = 2340 + 25 + 1,
->>>> +    .vtotal = 2340 + 25 + 1 + 4,
->>>> +    .width_mm = 0,
->>>> +    .height_mm = 0,
->>>
->>> Please provide real values here.
->>
->> Acked.
->>
->>>
->>>> +};
->>>> +
->>>> +static int visionox_r66451_enable(struct drm_panel *panel)
->>>> +{
->>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>>> +    struct drm_dsc_picture_parameter_set pps;
->>>> +    int ret;
->>>> +
->>>> +    if (ctx->enabled)
->>>> +        return 0;
->>>> +
->>>> +    if (!dsi->dsc) {
->>>> +        dev_err(&dsi->dev, "DSC not attached to DSI\n");
->>>> +        return -ENODEV;
->>>> +    }
->>>> +
->>>> +    drm_dsc_pps_payload_pack(&pps, dsi->dsc);
->>>> +    ret = mipi_dsi_picture_parameter_set(dsi, &pps);
->>>> +
->>>> +    ctx->enabled = true;
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int visionox_r66451_disable(struct drm_panel *panel)
->>>> +{
->>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>> +
->>>> +    ctx->enabled = false;
->>>> +
->>>> +    return 0;
->>>> +}
->>>> +
->>>> +static int visionox_r66451_get_modes(struct drm_panel *panel,
->>>> +                    struct drm_connector *connector)
->>>> +{
->>>> +    struct drm_display_mode *mode;
->>>> +
->>>> +    mode = drm_mode_duplicate(connector->dev, &visionox_r66451_mode);
->>>> +    if (!mode)
->>>> +        return -ENOMEM;
->>>> +
->>>> +    drm_mode_set_name(mode);
->>>> +
->>>> +    mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
->>>> +    connector->display_info.width_mm = mode->width_mm;
->>>> +    connector->display_info.height_mm = mode->height_mm;
->>>> +    drm_mode_probed_add(connector, mode);
->>>
->>> Can we use drm_connector_helper_get_modes_fixed() instead?
->>
->> Acked.
-> 
-> Hi Dmitry,
-> 
-> Just wanted to follow up on this -- As Marijn mentioned in a separated 
-> thread, DRM_MODE_TYPE_DRIVER is not set within 
-> drm_connector_helper_get_modes_fixed(), and looking at the kernel docs, 
-> that's a required flag for this mode.
+Hi Krzysztof,
 
-You can set this flag in the visionox_r66451_mode, can you not?
+On Tue, 30 May 2023 at 17:01, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > This is
+> > exactly the case for rtc-msc313e and it was not an issue.
+>
+> So that was my question - can it be anything else? There is literally no
+> description of the hardware... Neither in commit msg nor in description:
+> field in bindings.
 
-> Since I'm not able to set the *_TYPE_DRIVER flag before 
-> *_get_modes_fixed() is called, I'll stick to using the previous method 
-> of calling drm_mode_probed_add() directly in 
-> visionox_r66451_get_modes(). (FWIW, other drivers such as 
-> panel-visionox-vtdr6130, panel-truly-nt35597, and panel-visionox-rm69299 
-> also don't use *_get_modes_fixed() and call drm_mode_probed_add() 
-> directly in their get_mode() implementations.)
+This RTC block is a block inside of the SSD201/SSD202D (they are the
+same die with different memory attached) and is only found there.
+The documentation we have for this is literally one page in a PDF that
+says "RTC registers".
+It could be an IP block licensed from somewhere and technically have a
+better name but right now all we know is this RTC block is the one in
+that chip and that chip is the first known instance of it.
 
-That doesn't mean that we should increase the amount of the c&p code.
+Say we manage to get the ethernet mainlined at some point: That's a
+lot easier as we know already it's a hacked up version of the cadence
+macb so the compatible can be "macb something".
 
-If I have time, I'try doing a rework of existing panel drivers.
+> >> What about interrupt line?
+> >
+> > There is currently no interrupt right now, we have not yet the irqchip
+> > code for handling the alarm irq of this rtc block.
+>
+> So you are going to change the hardware and add the interrupt line? We
+> do not talk about drivers, but hardware. Whether your driver handles it
+> or not, matters less.
+>
+> Describe the hardware, not the current implementation of one driver.
 
--- 
-With best wishes
-Dmitry
+We don't really know how the interrupt is wired up in the hardware properly yet.
 
+Cheers,
+
+Daniel
