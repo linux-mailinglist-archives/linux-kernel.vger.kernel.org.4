@@ -2,161 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8E4716F75
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B28716F7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjE3VOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 17:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
+        id S233396AbjE3VOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 17:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233297AbjE3VOA (ORCPT
+        with ESMTP id S233318AbjE3VOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 17:14:00 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2042.outbound.protection.outlook.com [40.107.244.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B61C0;
-        Tue, 30 May 2023 14:13:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kX3oYEn1eJZW+MdPVb/T4I9QBTeQl9DLbkUEaWkzM0EFqcwYaanjKTRv/e7z+I9GvZs66wTYEHIS66AJnvO7+O+4E4+CeSobikUCqRtQOKMYfonLdb3IO1EEokGRsWchAt/Z0x1yB0/+8hqSIK+I63CjTS3qyetf2h7wRnyOLrrLpdE70WBi/EMZHCKO5TciHWlAmi3HZgRn5cFUYkibo16juUWHuSOKMzO3rQnx/khUxXqkkntFdatFyCu9wz7e+lINEQvZg4jgt0v1dGL8vckFYE2ptzN758yobpkLV4ijqQqIaplE52fqXz68QDhV5D8wC7tjCcWS0jYZe19Hxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q6toczsQlbG1rkzV+nTlLC50bGtvscaDHUpYbpwR1Xo=;
- b=Pxhf1O1qXodg7ZnVUHOBMdvfQOMzKF82odyf1kuFpO7tLm6SkTXsXv9sGMyNTOgbwGcJGPUZltdFcx0MhYAvESNN6WVhm1pOkI+GBhLDDubfKDzIETR44Ti6bDwRJIhaVUdGOFUPaJBbtvCZAIU4VcIEQyRwWXalsShNQYAC3nhJE9v+GaVLvxEu++nNnjfP4sJRo2XwDecDdZeYq41pYBvxzDnrCSISqf77B2dyKT54pp+oUBH+fe0cLR6uin+75WkqnoOv1XzjV+TR2shvUzSVNNxJs0n40Izp95VMmJ7eLm6h1ac4DmtRF/hx3STnMtWL+COFRswreIP9Li2hUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q6toczsQlbG1rkzV+nTlLC50bGtvscaDHUpYbpwR1Xo=;
- b=DkNPdIVhYf4Z1dMzjAsH0Ry4f3yr4FJVeuuu1KGU0IQFmpJsrghc0TKFyjB942+h5t78vwRdMCpWr4ZnMaUt6zgUTWGzoerYfaO2XTTElHzdtUVeBdHwyOUwI0q7lc9zk9pnEP8PcR1vu0zEcjeJJfwumIVqGIjji+JX3ihherg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by PH7PR12MB6539.namprd12.prod.outlook.com (2603:10b6:510:1f0::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 21:13:57 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::61f6:a95e:c41e:bb25]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::61f6:a95e:c41e:bb25%3]) with mapi id 15.20.6455.020; Tue, 30 May 2023
- 21:13:56 +0000
-Message-ID: <b6323987-059e-5396-20b9-8b6a1687e289@amd.com>
-Date:   Tue, 30 May 2023 16:13:52 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <87sfbhlwp9.ffs@tglx>
- <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name> <87bki3kkfi.ffs@tglx>
- <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name> <87mt1mjhk3.ffs@tglx>
- <87jzwqjeey.ffs@tglx> <87cz2ija1e.ffs@tglx>
- <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name> <87wn0pizbl.ffs@tglx>
- <ZHYqwsCURnrFdsVm@google.com> <87leh5iom8.ffs@tglx>
- <8751e955-e975-c6d4-630c-02912b9ef9da@amd.com> <871qiximen.ffs@tglx>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <871qiximen.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR11CA0113.namprd11.prod.outlook.com
- (2603:10b6:806:d1::28) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Tue, 30 May 2023 17:14:32 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F67D137;
+        Tue, 30 May 2023 14:14:19 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230530211417euoutp0233e89d76ad6863aec1972599ba3ce296~kCEYkK5mB2686326863euoutp02E;
+        Tue, 30 May 2023 21:14:17 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230530211417euoutp0233e89d76ad6863aec1972599ba3ce296~kCEYkK5mB2686326863euoutp02E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1685481257;
+        bh=vQxYYjm3Sd4+hDeSDCuukUJhNIR9N74c+Yzqyu6R+98=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=W7UkrxH6NUbOKpg+vyPksOS5nfFeTso67L9BM8wcjmGcARqqE8rYo9mIpVo2UDW0H
+         7j7DjU+qgUcpsxcx7W6L04Rb73f9LP6UwiK5d4kmyxuYLLzQr53oyICIjnJB9YZkWW
+         bcsn1rly9G2yMlihY2Hj+d9ZB2Iqum++Ug6H4lYk=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230530211417eucas1p1006f751f06e812c67a01da995401edaf~kCEX6anh80430704307eucas1p1y;
+        Tue, 30 May 2023 21:14:17 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 40.27.37758.92766746; Tue, 30
+        May 2023 22:14:17 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230530211416eucas1p213625172ef8413b964090813f63efce0~kCEXYzpMR1435314353eucas1p2X;
+        Tue, 30 May 2023 21:14:16 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230530211416eusmtrp134f748a4397465bd3724a63ada471c04~kCEXYEg3d2198221982eusmtrp1C;
+        Tue, 30 May 2023 21:14:16 +0000 (GMT)
+X-AuditID: cbfec7f5-7ffff7000002937e-67-647667295ce4
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id E7.A7.14344.82766746; Tue, 30
+        May 2023 22:14:16 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230530211416eusmtip19656a7d03b6b12a54d7599725eb367e3~kCEXH5W1p2600426004eusmtip1e;
+        Tue, 30 May 2023 21:14:16 +0000 (GMT)
+Received: from localhost (106.210.248.78) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Tue, 30 May 2023 22:14:15 +0100
+Date:   Tue, 30 May 2023 23:14:14 +0200
+From:   Joel Granados <j.granados@samsung.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     <keescook@chromium.org>, <yzaikin@google.com>,
+        <ebiederm@xmission.com>, <dave.hansen@intel.com>, <arnd@arndb.de>,
+        <bp@alien8.de>, <James.Bottomley@HansenPartnership.com>,
+        <deller@gmx.de>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <x86@kernel.org>, <hpa@zytor.com>, <luto@kernel.org>,
+        <peterz@infradead.org>, <brgerst@gmail.com>,
+        <christophe.jaillet@wanadoo.fr>, <kirill.shutemov@linux.intel.com>,
+        <jroedel@suse.de>, <akpm@linux-foundation.org>,
+        <willy@infradead.org>, <linux-parisc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] signal: move show_unhandled_signals sysctl to
+ its own file
+Message-ID: <20230530211414.gorx4m5cs6jliset@localhost>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|PH7PR12MB6539:EE_
-X-MS-Office365-Filtering-Correlation-Id: 799bb5bd-33ed-44cc-5d21-08db6152c763
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tFLVxiKAD+s2TQVrxVh9W+xT774o3ABmAbcW+zkmJGjfU+e5LN4TpekvRUcMa1ONp1+yaXgL2t0McaDks8/j+sklNTSApoAMByaEw38LIV6zPNFYHgJSQ723+BnqFYZAY97ExLxLla4Ws5/dRRVoZmlRD+RHZLiDhwuBGbX0QXTldrFmSeOORWaIUbvZdHtL4LLavHUId7Kng6wiD5xddXSIvMuL7xinPPzAO+N0bmK+whgAlLMlOtGoJ+/8Txr/JOA1ggafEIR5ydpOV+L+z3OieMyaSCJqICfpd7wHcGnAtyuODHzupqc2NKxQiLwbIykPRCu/79p6gsLD3vBFp2QC5M+I4Iw61Jj0Dl4Bax+wM5w/ZdLywb2jxyXvaMWZYlWAVxv08h58SA67l9lYKUYVUHtZFJoxcEnI/IiDOAu7atv1Myp6eaCBYMzkzQRWkb33A9XtphOZ7AMhgE6FGY/3YlUWkmr668P6HlPwz2cY06BpT/uvwG8SiwcfmRC+i+Np4XfTt8mWEdy5fgpXHvFIYGPiHtc78n7OXfyQNktr43qJKVKgoXNkof2fApAeqZGRK6wQiSzp6VPcLeCvAJxoi7OUvNuyHHvQQHtcDxW2ucWqS0r/+R409uv1SP+xocYiarPfseswetlVoERu7Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(136003)(39860400002)(396003)(346002)(451199021)(2906002)(4744005)(186003)(53546011)(31686004)(6512007)(6506007)(26005)(5660300002)(8936002)(54906003)(8676002)(110136005)(38100700002)(2616005)(6486002)(478600001)(31696002)(86362001)(41300700001)(316002)(4326008)(6666004)(36756003)(7406005)(7416002)(66476007)(66556008)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UE4zdjdIVDFoMFpWU0NiTW9Zb1Rob2ZwUEpoR2NHaVdDd0x5MmxsWi9RejdN?=
- =?utf-8?B?dDBydjg2SmlaNUNJTUxrVDBlV28zZldsN2gzaDNYYjUwN2JsdEJ1OEZsSGFE?=
- =?utf-8?B?SGZNenp1a29rMXBPZk1DTzhLNVBhZzBOcUJaZVpObmlhNE11RHlWbHEyeFdQ?=
- =?utf-8?B?S04yZWJNeTJTazdRR0NISW5GTjQrWXRRQW1yYWVpQTFqK1hTbHJxVHpjcTRS?=
- =?utf-8?B?cUVCMlQwcThabyt5cWk0NTB2YlNuY3JLcHY0TGJhTFA5TUVqRkZXRVJXVjR2?=
- =?utf-8?B?c3N0eHFqYTBOL0lYVE9xMnFvUlRBOC92Sm91VGs0b2ZGWCtOVVpzQ2k4NUdr?=
- =?utf-8?B?WDBka2hqYUlEUVVpN09QMFdia3ZLc2F4VDQ3a2pHUkM4Zk9OZ3JUOExteFFa?=
- =?utf-8?B?R0Zoc3ZqaGNvb2MxbVp5SGtyTFV1WTMraTd0eGg4N2hwK1J4OUhVVW5RMmlh?=
- =?utf-8?B?ajBDK3grQUNXZ2dDK1J5OS9Zcmo5andnMHVuZnBJVTJnT1Fnei93bVpva3Vp?=
- =?utf-8?B?d2tSVHI5L0plKzNMdHlQeVVPRGhNM0E5L0JnSHI4T0Y5UFFkRXdhTVNrM3JN?=
- =?utf-8?B?WkxBWHpBSUtITm1uc0M4a1pzRklNNy84R1lNRzNuc3BSUlZQdmZKbXF2ZE52?=
- =?utf-8?B?Z1kwTWgrdVh3dlQyR2d1V0RiNFBKaTVoTzNjUUk4QnZDOUw3YlhwWDFNeGlk?=
- =?utf-8?B?UFhQTDZKRVp1VWVUU1dqQ25aaXFzYTBVM2tmZTRLWEQ3dlNZRTZFRS82b0Zs?=
- =?utf-8?B?dVFINHEwQitnYTZXelJ4SFVTbVI0QU1teFB1dm40MllURHFNOTE1aUJRSU11?=
- =?utf-8?B?RTZjNXpYV0hzclZuUFFsd0lidkhpVmc3NVRsaUlNYTJhOHE3bkRPTmZqb3lU?=
- =?utf-8?B?cDhNbFBpMFZiTnJBbWIySGZOaFovcEtVOG5xR2phZ1VZRGRFdWgvdG5nT0tM?=
- =?utf-8?B?bnJMcGlubWd0STdVNDdIaTVzNklMa1IxNjR6eklsWjVVZU1PbHhCSW9qUFNI?=
- =?utf-8?B?eHBJY0grZXNCMnJ2cXNET2xVYkVXTlQ5ZWx2L05EVnVUa3N5WGlIeHcyUERC?=
- =?utf-8?B?b2NBYUJDSjE0S1JEM3Bwb1hpRDJEejFZZUxxVDRWL25zaitHcUVMOHJVdVhh?=
- =?utf-8?B?U3Y4Q3hsVExrWlp0eW4yTVFjdWhZZVZCUGwxOVhPbWwwcC9mUWtTR2M3M3Rn?=
- =?utf-8?B?aXExTXIrV09nL2t0ZVZGYXRUWElXbW04MkM0cEpNNmhNR2I4YTNGTCs3cVJM?=
- =?utf-8?B?WHJFL2VCTWZkRVo4L0dHaktjdGM0RHdleU5BbVRmbzdyVzlDNW85WWhzckRp?=
- =?utf-8?B?bG1CeWtLQnJLUjV5NWdWVTVTSzRQNlZYMEQ4QnB6TFp1T0didzF6S3FxUEpH?=
- =?utf-8?B?Tmg0cWtyWm8xWnhTRC9EUVFYZGxHdkp6M2p3Yi9nczdDb2MwR2I0NnA3Z09p?=
- =?utf-8?B?YmtqNndEZkVWdVFqVVB3MUhTWnovbjk2TG1wN0NxTXlxZEg3NUIzK29vaE8v?=
- =?utf-8?B?Z0FpNWRVWmVidXVjdWUzZUZ3aUxweS9yVEpPN01yMURVSUx4U0xRaVRQdHk0?=
- =?utf-8?B?VHVaZmxHV1FnQlpRbERpcVRnd2N5Y1ZkMGpOZCs1aXdVUzA0VTV3MktXN1Ns?=
- =?utf-8?B?V3V3SkdiZDhhYVE2Wk5COGtIWDRVUUx5VGYvU0hRR0JZSS9WWUgzM0JSNytn?=
- =?utf-8?B?cmhteU9KYjVTWFJld2lKanBpZURheEFPSUlaWXVLWnR0TmkvaWU2UkVhZGNF?=
- =?utf-8?B?MVlFM091RjM2bWJQOGpxeUROb3JraGZpU1c5Qm9LbjA5dVp5R3hoQVg0Y2pH?=
- =?utf-8?B?QS91dWZkZ3hVTGZkNnNGMHliWlZkTTFoOVM4K1JIbm0yZlkrVnR5V3MwcGt1?=
- =?utf-8?B?K29jYXFoalB6UU90YVV2R1A0bVg4OC9JRllGZnZ4d2lzaE80dVU3UlhHUjNq?=
- =?utf-8?B?ZTROMnROMnZnOWNPV2lOeksybDk5WWRVQThZY3hOaEZzdXYrSktwSklPZEc4?=
- =?utf-8?B?UDNSelB3VmpjbVhDV3RuZTVvZExOby9kRmFoVE05bVFwMDM0eG5aV2RSeTYz?=
- =?utf-8?B?aHo1L3FyTnNhNlBkcklraTNLNlJKemdLTGNFRHNMQTRJeGNVZGNHUmJlbThy?=
- =?utf-8?Q?mw+mRv+QhNzA1yApTBVic+wZb?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 799bb5bd-33ed-44cc-5d21-08db6152c763
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 21:13:56.5884
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BUSTBXcn7JkFzDZrO/ByTN4Z7z+v5t9uM1rORzgNtni36bEIKJ1yVxfi9qi2+YdX2w+UTsbOrsApCghf3SlmZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6539
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="etcb4mwp7uwhqc3g"
+Content-Disposition: inline
+In-Reply-To: <20230526222207.982107-3-mcgrof@kernel.org>
+X-Originating-IP: [106.210.248.78]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA2WSfUxTVxjGd24v7aWx7NIyOWlli1U3EEEXXXaisLhJzI0uxiVuYZB9NHAD
+        blBIS4XJMMXBPuoQUgQFwTFlbSOVj7Z0AzrELrEWpC0KXf3ekIXBCkJrB0jsRr3dZrL/fu/z
+        Pk/yPieHYPGH2ULioLSIlkkleWI2FzdfXnIkJeQcyt6iDOCoqUPPRo/VlznI3xlko2ErRN2X
+        miOQb+oXgO75bgH0l7mCg+q7YlFXNYFqB5sxdPVYProx2YQjy492HF3vbWKj8UEXhpy9FyKQ
+        p+Y3gK4NtGDIVjWAIaOhjoWWF1csi533I5CmZ99OSC1UHsep5UdqQJ1WjuBUT+MdDjU3/z7V
+        YlBQ9epBNmXUbaTOWaYwynD+KzY163BwqCunlnHqjP0t6kH/2IphqJTyG57fL8jgpmTTeQcP
+        0bLNr33IzR2ZJgqNa0v6gzO4EriEKhBJQHIb/KJLz1IBLsEndQCec3bizPAQQFO7GjCDH8Ab
+        J5oiVIB4EhmZ3x5K80ktgD3NxL+eBkeAwyxMAB69AkOMkxvgw8qrIMRschN0em+zQhxDxsP+
+        miosxCzShsPJajrEAjId9mpHn3h45Kvwe7MzzNHQ3jCBM/4SOOU8yQ7dwyJFUBskQnIkiaDf
+        7QZMMzHsVs1iDJfBQdNNLHQnJMe40HHtDodZpEH32bmwSQCnbaawvgYO1X6NM4FaAC8G5zjM
+        0AagpjwQTuyAFaMT4cTrcPZ+D2BeKAp6ZqKZQ6Og2nySxcg8+OXnfMb9Imy768VrwLrGp6o1
+        PlWt8b9qjLwJtvT5/i8nQs23f7AYToXt7Q/wFsA5D2JphTw/h5ZvldLFyXJJvlwhzUnOKsg3
+        gJVfPhS0BX4Auun5ZCvACGAF61fC451tLiDEpQVSWhzDS5XIs/m8bMknh2lZwQcyRR4ttwIR
+        gYtjeYmp9iw+mSMpoj+m6UJa9s8WIyKFSmz36ecs6sqEvuhMKbx4yZSyrTu4Nm1ps97tyHK1
+        /jQ61/cu3j05FbtflqrJsH86qhikbAPP+Dq8pUUJ6k59iirurn9e681853pasfB3S/qYsTTZ
+        SHVUDZkn3FGtglOf1dU+eqkiyrqqYyEzEDd9vIiM2enp6y9x6LZbMu/97E0+4I0oFVQ3rp5R
+        xJkK0x+XO8S/DmfWvFK55YW9nDdvJvpEnt2L6zLc9YcT5sr26RXaXeUNhQuLUnrNlE6/sLqd
+        bm3b8YZIdDvVkFu8vu6Mq8vjVO3aKo8f2PORxmg5ogSrBEefPXYhJue91m/+XFLTR27Fjycl
+        lS2dPbGX1/Od6G2fGJfnSl7eyJLJJX8D1Kwxa2AEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDKsWRmVeSWpSXmKPExsVy+t/xu7oa6WUpBlu3yFjMWb+GzeLvpGPs
+        Fp83/GOzOHtIwmLrwbmsFp9ePmC0uP/pNqPF/20t7BbTNopbbOznsJh8ai6TxZnuXIubz+ew
+        WOzZe5LF4vKuOWwWj05dYLI4v2stq8WNCU8ZLS4dWMBkcbz3AJPF5k1TmS1+/wAq+bHhMavF
+        sp1+DhIe31v7WDx+/5rE6DG74SKLx85Zd9k9PnyM81iwqdRj2qRTbB6bV2h5LN7zkslj06pO
+        No93586xe5yY8ZvFY97JQI/3+64CFZyu9vi8SS5AOErPpii/tCRVISO/uMRWKdrQwkjP0NJC
+        z8jEUs/Q2DzWyshUSd/OJiU1J7MstUjfLkEvo//XbbaCjYoVp7q+sTcwnpPqYuTgkBAwkbj4
+        0aqLkYtDSGApo8T0X99Zuxg5geIyEhu/XIWyhSX+XOtigyj6yChxdO5WFghnC6PEthv3GEGq
+        WARUJb60ngGz2QR0JM6/ucMMYosIaEjsm9DLBGIzCxxnkXjenwpiCwtESHSv/scOYvMKmEts
+        33aeGWLoTkaJKzPPMUEkBCVOznzCAtFcJrF/5hF2kLOZBaQllv/jAAlzClhIfL52jRHiUiWJ
+        rV3vmCDsWonPf58xTmAUnoVk0iwkk2YhTIIIa0nc+PeSCUNYW2LZwtfMELatxLp171kWMLKv
+        YhRJLS3OTc8tNtIrTswtLs1L10vOz93ECExq24793LKDceWrj3qHGJk4GA8xqgB1Ptqw+gKj
+        FEtefl6qkgivbWJxihBvSmJlVWpRfnxRaU5q8SFGU2AoTmSWEk3OB6bbvJJ4QzMDU0MTM0sD
+        U0szYyVxXs+CjkQhgfTEktTs1NSC1CKYPiYOTqkGJm5hm2uh1+cUL+f6vZsrdwG7w3qDvpWF
+        GZv07719OW3m8odbXab8ODwxv+rTVY4o/fNrn5nm31/EeoCtyj7Hdt5c6SccIs8OpUxlnRK9
+        JC7NRJe7aqHds4gzZw8kT6x+vc2dcaOeL//tGF723NaXCd59ETfdNRSu3GWaOfVkP990zpQz
+        Kqf3Gc16IzaDI7k+X8KKU1SARURFvLfJ8jbjzCT3q4+dd8zQtd/07dCKn0c0+W/6Ov8Rf6R7
+        juXbP77UxSU8rnJ5OraT/7cdVMs0XhO+jNX+JDdb9uqZN+o09pUe9/A8K/xfgPVokN6/a24h
+        H2ME9Y7t2+Tzmvv/8dsSMcW7dLLl5ixrZLyx+dZDJSWW4oxEQy3mouJEAKd2BZz/AwAA
+X-CMS-MailID: 20230530211416eucas1p213625172ef8413b964090813f63efce0
+X-Msg-Generator: CA
+X-RootMTR: 20230526222248eucas1p2c21183361439f3a9e36c84545265395e
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230526222248eucas1p2c21183361439f3a9e36c84545265395e
+References: <20230526222207.982107-1-mcgrof@kernel.org>
+        <CGME20230526222248eucas1p2c21183361439f3a9e36c84545265395e@eucas1p2.samsung.com>
+        <20230526222207.982107-3-mcgrof@kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -164,31 +133,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/23 15:39, Thomas Gleixner wrote:
-> On Tue, May 30 2023 at 15:03, Tom Lendacky wrote:
->> On 5/30/23 14:51, Thomas Gleixner wrote:
->>> That aside. From a semantical POV making this decision about parallel
->>> bootup based on some magic CC encryption attribute is questionable.
->>>
->>> I'm tending to just do the below and make this CC agnostic (except that
->>> I couldn't find the right spot for SEV-ES to clear that flag.)
->>
->> Maybe in sme_sev_setup_real_mode() in arch/x86/realmode/init.c? You could
->> clear the flag within the CC_ATTR_GUEST_STATE_ENCRYPT check.
-> 
-> Eeew.
-> 
-> Can we please have a AMD SEV-ES init specific place and not hijack some
-> random code which has to check CC_ATTR_GUEST_STATE_ENCRYPT?
+--etcb4mwp7uwhqc3g
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As long as it's not too early, you could try sme_early_init() in 
-arch/x86/mm/mem_encrypt_amd.c. Add a check for sev_status & 
-MSR_AMD64_SEV_ES_ENABLED and clear the flag.
+On Fri, May 26, 2023 at 03:22:06PM -0700, Luis Chamberlain wrote:
+> The show_unhandled_signals sysctl is the only sysctl for debug
+> left on kernel/sysctl.c. We've been moving the syctls out from
+> kernel/sysctl.c so to help avoid merge conflicts as the shared
+> array gets out of hand.
+>=20
+> This change incurs simplifies sysctl registration by localizing
+> it where it should go for a penalty in size of increasing the
+> kernel by 23 bytes, we accept this given recent cleanups have
+> actually already saved us 1465 bytes in the prior commits.
+>=20
+> ./scripts/bloat-o-meter vmlinux.3-remove-dev-table vmlinux.4-remove-debug=
+-table
+> add/remove: 3/1 grow/shrink: 0/1 up/down: 177/-154 (23)
+> Function                                     old     new   delta
+> signal_debug_table                             -     128    +128
+> init_signal_sysctls                            -      33     +33
+> __pfx_init_signal_sysctls                      -      16     +16
+> sysctl_init_bases                             85      59     -26
+> debug_table                                  128       -    -128
+> Total: Before=3D21256967, After=3D21256990, chg +0.00%
+>=20
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>  kernel/signal.c | 23 +++++++++++++++++++++++
+>  kernel/sysctl.c | 14 --------------
+>  2 files changed, 23 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index 8f6330f0e9ca..5ba4150c01a7 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -45,6 +45,7 @@
+>  #include <linux/posix-timers.h>
+>  #include <linux/cgroup.h>
+>  #include <linux/audit.h>
+> +#include <linux/sysctl.h>
+> =20
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/signal.h>
+> @@ -4771,6 +4772,28 @@ static inline void siginfo_buildtime_checks(void)
+>  #endif
+>  }
+> =20
+> +#if defined(CONFIG_SYSCTL)
+> +static struct ctl_table signal_debug_table[] =3D {
+> +#ifdef CONFIG_SYSCTL_EXCEPTION_TRACE
+> +	{
+> +		.procname	=3D "exception-trace",
+> +		.data		=3D &show_unhandled_signals,
+> +		.maxlen		=3D sizeof(int),
+> +		.mode		=3D 0644,
+> +		.proc_handler	=3D proc_dointvec
+> +	},
+> +#endif
+> +	{ }
+> +};
+> +
+> +static int __init init_signal_sysctls(void)
+> +{
+> +	register_sysctl_init("debug", signal_debug_table);
+> +	return 0;
+> +}
+> +early_initcall(init_signal_sysctls);
+> +#endif /* CONFIG_SYSCTL */
+> +
+>  void __init signals_init(void)
+>  {
+>  	siginfo_buildtime_checks();
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index a7fdb828afb6..43240955dcad 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -2331,24 +2331,10 @@ static struct ctl_table vm_table[] =3D {
+>  	{ }
+>  };
+> =20
+> -static struct ctl_table debug_table[] =3D {
+> -#ifdef CONFIG_SYSCTL_EXCEPTION_TRACE
+> -	{
+> -		.procname	=3D "exception-trace",
+> -		.data		=3D &show_unhandled_signals,
+> -		.maxlen		=3D sizeof(int),
+> -		.mode		=3D 0644,
+> -		.proc_handler	=3D proc_dointvec
+> -	},
+> -#endif
+> -	{ }
+> -};
+> -
+>  int __init sysctl_init_bases(void)
+>  {
+>  	register_sysctl_init("kernel", kern_table);
+>  	register_sysctl_init("vm", vm_table);
+> -	register_sysctl_init("debug", debug_table);
+> =20
+>  	return 0;
+>  }
+> --=20
+> 2.39.2
+>=20
 
-Thanks,
-Tom
+Reviewed-by: Joel Granados <j.granados@samsung.com>
+--=20
 
-> 
-> Thanks,
-> 
->          tglx
+Joel Granados
+
+--etcb4mwp7uwhqc3g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmR2ZyYACgkQupfNUreW
+QU9QSAv/YxvYBKHMzu6qIJDRm2z06uQf8MbkJI5LkiPkxOLNZSy67pCuvRhEFB4I
+Qi2PO1Q9VUecUaOtC4EKD/hD71xYyacRMEc8nvjqWpcOi7ap+wdn7RjscLXkpkgZ
+oMAqYKlKzkInKIxmg087VKMPRCw5sCixJrUJicBoK/43T/LSp5OlUwk21QcJJ3Hn
+GjOz/2KluhP4WnoTGVDGc8BtIuuZhNX2DVa2/jOJng6GLIND2bK2T5tBxKm2xC88
+9esgRntrj6QKqGFyxno7A5rK8UAzN9zGZgdSgGYoSVMypdGiAl+Y5hdNyTRCEvvy
+9VbZenQXwRJfiooiC0rBjEYsl3J1d3uo27nfhmCoUunsbddwVsZp5iDQ7Fm+URYP
+eTzeZ+9C0dCCGGcsKnPamVEZiv3N9qxEx+tOMbvf9tvpJNAJmqBEHjkhml8b1nha
+YQdexvk/hwasmW/UcogYDftOAzqUxuwabylAz6jUKR20W/mqHfcjrII0BLMVbPXA
+2PNRu95E
+=dTvY
+-----END PGP SIGNATURE-----
+
+--etcb4mwp7uwhqc3g--
