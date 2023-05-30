@@ -2,59 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5A1715EDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B030715EE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjE3MTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S230112AbjE3MU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjE3MTY (ORCPT
+        with ESMTP id S229691AbjE3MUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:19:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40104B0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:19:23 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
+        Tue, 30 May 2023 08:20:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F215EC5;
+        Tue, 30 May 2023 05:20:53 -0700 (PDT)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685449161;
+        s=2020; t=1685449252;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=50HvU9GOF0gSazEmOVYum7UqhAHwfqwiFsAZwlEcNIw=;
-        b=JaTSrSl6YEG7WWybccb5cGYXDOV3kv50U1WoPXgyhRSfyDaam8yTv/zT9gADHuVOQsv5yp
-        zB3JLN9vbpMjyz5dMlkT2Y8JbAqdOr7nTsmC5v1zRD+9MSy09mVJOUtgX7kw7+7FQKR2qr
-        HeGYge9+08e5EqZNuxlTCSLhwZgVj3RQpyaIXtFynDSYv4HDgvRA0bGxsI//COf+nfjHI4
-        Ihwx8gbH/rPOkG38reAIZ5KsQC+FZOOBs6mix5KUb9RAzWWdJvTmeuT2PBElkYIWXR8rsG
-        CcuulNGO6BmkV/Lpe4f+tWGDJfznRG+kl5StIzOxvGvv5pTBRvwrjZM1XWAfmA==
+        bh=tdnAZsjhgls6Ysa0NOeGOUiZJaoZowNmTdGhfiI/C5U=;
+        b=fZ8qv0Te23M/bJLqj9Tgbb6ugLulO4dv61shIIvrlyKEBW41yLyUKBn0iNHMPNtKFd2821
+        hkp0tNq3kBGxqPg684mBxMVGyGc6ykkwnDkaPUujjhu9YJmZYGSaqC4W2YOG4JJzhci0Pl
+        P4IyAJ+Kfg7WpBsb0U7owvrkNiMuqsJ8A91b5BUWCk5dbZmDvPJ3HtQySAozCDWlvBwRge
+        JX+21vUpL52Ye+ta5dvu1tUOZcum/Yq4f3F92883L//eYymb5IRXX5WLJrGvfnt40WjdfI
+        X9BiPl0QuRP43rXkBw1qFMXIWOi4i54hjjPcSJruT5/z9TtqmyblvbcbaMrMvQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685449161;
+        s=2020e; t=1685449252;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=50HvU9GOF0gSazEmOVYum7UqhAHwfqwiFsAZwlEcNIw=;
-        b=E+Mp5jkQ5meIb55uz/ejGv2t6gQBuKRjd1BnhSVVEXsdMYJ/g25PN2SuWi4Bd6Iz5jA0cN
-        ay3elWyVmTxFgHAQ==
-To:     "Liao, Chang" <liaochang1@huawei.com>,
-        Shanker Donthineni <sdonthineni@nvidia.com>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
-        Vikram Sethi <vsethi@nvidia.com>,
-        Jason Sequeira <jsequeira@nvidia.com>
-Subject: Re: [PATCH v5 1/3] genirq: Use hlist for managing resend handlers
-In-Reply-To: <56c6dc9a-a5a6-368a-abd4-cace43ceaec0@huawei.com>
-References: <20230519134902.1495562-1-sdonthineni@nvidia.com>
- <20230519134902.1495562-2-sdonthineni@nvidia.com>
- <6dc6642a-1e7c-f111-1fa2-be54826ecef6@huawei.com> <871qiylsc9.ffs@tglx>
- <56c6dc9a-a5a6-368a-abd4-cace43ceaec0@huawei.com>
-Date:   Tue, 30 May 2023 14:19:21 +0200
-Message-ID: <87a5xmj9km.ffs@tglx>
+        bh=tdnAZsjhgls6Ysa0NOeGOUiZJaoZowNmTdGhfiI/C5U=;
+        b=xzMIJMURQ7ginLdQaR9ahBUEgohs1yMYQ3L6XcZKS7DdsKI8IGT0ffq+b4ML/g1j3pSCMm
+        nW3/uAatyUQETvBg==
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Amritha Nambiar <amritha.nambiar@intel.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>
+Subject: Re: [PATCH net-next 2/5] net/sched: taprio: replace
+ tc_taprio_qopt_offload :: enable with a "cmd" enum
+In-Reply-To: <20230530091948.1408477-3-vladimir.oltean@nxp.com>
+References: <20230530091948.1408477-1-vladimir.oltean@nxp.com>
+ <20230530091948.1408477-3-vladimir.oltean@nxp.com>
+Date:   Tue, 30 May 2023 14:20:50 +0200
+Message-ID: <87leh6qacd.fsf@kurt>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -65,39 +89,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30 2023 at 09:59, Chang Liao wrote:
-> =E5=9C=A8 2023/5/30 5:51, Thomas Gleixner =E5=86=99=E9=81=93:
->>> What is the benefit of using hlist here? If you want to enjoy the
->>> low latency of querying elements by key, you must define a hlist table
->>> with a reasonable number of buckets. Otherwise, I don't think the time
->>> complexity of hlist is better than a regular double-linked list,
->>> right?
->>=20
->> What's complex about hlist in this case? Please explain.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+On Tue May 30 2023, Vladimir Oltean wrote:
+> Inspired from struct flow_cls_offload :: cmd, in order for taprio to be
+> able to report statistics (which is future work), it seems that we need
+> to drill one step further with the ndo_setup_tc(TC_SETUP_QDISC_TAPRIO)
+> multiplexing, and pass the command as part of the common portion of the
+> muxed structure.
 >
-> Honestly, it is not about the complexity. Perhaps I do not understand the
-> usage of hlist very deeply. I have searched some codes in the kernel and
-> found that hlist is always used to speed up arbitrary querying, such as
-> searching a registered kprobe by address. Back to this patch, these resend
-> IRQs are organized in a sequence list actually, and traveled one by one to
-> handle. Further, by comparing the difference between hlist_empty, hlist_a=
-dd_head,
-> hlist_del_init, and their counterparts in list, it looks like a regular l=
-inked
-> list is also good enough.
+> Since we already have an "enable" variable in tc_taprio_qopt_offload,
+> refactor all drivers to check for "cmd" instead of "enable", and reject
+> every other command except "replace" and "destroy" - to be future proof.
+>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
 
-Sure that works too.
+[...]
 
-The main difference between regular linked lists and hlist is that the
-list head of hlist is half the size of a regular double linked list.
+> diff --git a/drivers/net/dsa/hirschmann/hellcreek.c b/drivers/net/dsa/hir=
+schmann/hellcreek.c
+> index 595a548bb0a8..af50001ccdd4 100644
+> --- a/drivers/net/dsa/hirschmann/hellcreek.c
+> +++ b/drivers/net/dsa/hirschmann/hellcreek.c
+> @@ -1885,13 +1885,17 @@ static int hellcreek_port_setup_tc(struct dsa_swi=
+tch *ds, int port,
+>  	case TC_SETUP_QDISC_TAPRIO: {
+>  		struct tc_taprio_qopt_offload *taprio =3D type_data;
+>=20=20
+> -		if (!hellcreek_validate_schedule(hellcreek, taprio))
+> -			return -EOPNOTSUPP;
+> +		switch (taprio->cmd) {
+> +		case TAPRIO_CMD_REPLACE:
+> +			if (!hellcreek_validate_schedule(hellcreek, taprio))
+> +				return -EOPNOTSUPP;
+>=20=20
+> -		if (taprio->enable)
+>  			return hellcreek_port_set_schedule(ds, port, taprio);
+> -
+> -		return hellcreek_port_del_schedule(ds, port);
+> +		case TAPRIO_CMD_DESTROY:
+> +			return hellcreek_port_del_schedule(ds, port);
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+>  	}
+>  	default:
+>  		return -EOPNOTSUPP;
 
-The only downside of hlist is that there is no back link in the list
-head to the tail. Searching for the tail is O(N) while on a double
-linked list it's O(1).
+Uhm, seems like the current code validates the schedule even for
+removing a schedule which seems a bit odd. With your changes it looks
+correct.
 
-Nothing in this use case needs to access the tail. So what's your
-problem?
+Acked-by: Kurt Kanzenbach <kurt@linutronix.de> # hellcreek
+
+Anyway, the hellcreek device has Tx overrun counters per TC. Even though
+they should be zero, simply because the hardware Length Aware Shaper is
+enabled by default.
 
 Thanks,
+Kurt
 
-        tglx
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmR16iITHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgkgAD/sH6+pSNn/XkaMNq42jziiZnqWffmMr
+Nh0eHkqZEXNIBdYtaHhMDv+UySQW2mYItvt+A5sEWzMGDphJluPslMtYdrm98yaE
+LMklWNsKSD0Rp4r74n9b1nFjwSYUbdFX9juS4d/fWMlLAdxfIQ5+ADem4v+82nHa
+h8STScKKSQLU2L6js/NO1vRXqlOI2Kk2dycw7PPDcCLme/GaWygQG2u8SNE7g+ij
+wp/3sh4O1N6P7wIPHJoRhpr+LU5qBpRjkkE89t/7l7aj91XqnSQ1e08Pe7ryZ5wz
+Uq2sVg8oDtGpmv6xciMGGpkAYrIYG/qCjLEz+w15Nq6ur9dwvrNqsyYmTUu84GqH
+bSQLxYIPynAOacF7oLy2I+YVMdWJwSw/3iP63LSszGmv7igjaWk/rKRW/OnBLKNj
+5q+SVPvCaMGl7PRlaEGnW2QMy4ua2CWIL0nBsJLpe26UFljXA860aytaV1zCItGg
+s5GlMspLwC0OEbL8s/E+l8InjJoqIMTn7I6Pqh/G+Wk0QfCD+3vZenRo/uyOBCuc
+/xOs0fevBDhGNGqbYR0y6oX/fwzSvwEfjYBb/pWFov5Vh1gh7Dbd6TG2PUq/0g9H
+TEc/Qqzr3JDPy1kKkrDVnjOdxwYmFXDcQ3I3V+TmOG2hSkMgdCdZqGE0ygem6W7X
+nI5BAnq+D8if4g==
+=C7wP
+-----END PGP SIGNATURE-----
+--=-=-=--
