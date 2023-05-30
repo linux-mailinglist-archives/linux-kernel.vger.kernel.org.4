@@ -2,120 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E7A716827
+	by mail.lfdr.de (Postfix) with ESMTP id E17BF716828
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbjE3Pz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43044 "EHLO
+        id S232815AbjE3Pzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbjE3Py4 (ORCPT
+        with ESMTP id S232957AbjE3PzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:54:56 -0400
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F64C5;
-        Tue, 30 May 2023 08:54:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Cc:To:Message-Id:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Subject:Date:From:References:In-Reply-To:Reply-To:
-        Content-ID:Content-Description;
-        bh=jb0TWNMdj00Yo7l1c5KV/Xu5496JxdVZgvDLfmprk18=; b=oDIO6Ui9TmTc1K+WBD770C45IN
-        fL9bAvFFVSpuZ6INoZVmvn4v1+zfvjUGyOuM+R4blZPATfbhi7VER3VJ0chV2WLiHLulJmUEakwwL
-        0GzE+AEQADt+HDS7/giYRi0MJO+fcyyFZGnKCyHu9c3vqHvScF2WxxjJWlJ9MLUioO5Ag4xfH2Gm5
-        +UKHUcv+cdUZKSWTeYGD7pl5ThL9ya4RcCQZwg1B2ji0ZsWXmki81VItTFxErIpV87QD8QJZqJCS5
-        b7IeeqsJwzyZWaVtOEaIg1yD2PIeImA3k1pKmJaNebWmRt154g3SAnMh50w0WzB4IRvLf6frMRMCV
-        lhwkUGDQ==;
-Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1q41gP-003j9c-UX; Tue, 30 May 2023 17:54:49 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Date:   Tue, 30 May 2023 17:54:46 +0200
-Subject: [PATCH v2] opp: Fix use-after-free in lazy_opp_tables after probe
- deferral
+        Tue, 30 May 2023 11:55:00 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBC4C7;
+        Tue, 30 May 2023 08:54:59 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75b2a2bf757so274003785a.2;
+        Tue, 30 May 2023 08:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685462098; x=1688054098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9s5DlRI1Ww8WGRfLlLIBGkH5nMkMdXv1f8qiMvf3a2w=;
+        b=lEznzOIFWCa9WlNKlX46MRWcJJvy9TkfKRc1KqK23dKijDQzLkamUrD9Z8Jo3mRV0V
+         MDx2m/lxlRTFwdc0m6aRWOxqeIXGkVX86ewSkeGNTotOyYcpgW1kcLLI84ho8EVpHbVx
+         qlPY08S5BqCsAB88qdleNfdchdxDeviwfPr0H2rRPiofoqRxm4mLoEIu5XJJPvMn2WhY
+         ORmxLzsLLt4yxYvKPXmIYdFjz6Id4fvTyga6s7d9BYreoSWQRYhyRsREze1kaoDTKkyv
+         E1c7z9KRFt9mmtu6NVfPGPvvQGlpGIn3zij2gHrIzJ7PIOAmDrJySgD5CQuoiPvTT4WJ
+         i6bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685462098; x=1688054098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9s5DlRI1Ww8WGRfLlLIBGkH5nMkMdXv1f8qiMvf3a2w=;
+        b=T5qb84k2MQqiL6HO/86m5KgTmPiwuqxMxNyl8822nWLwUArkf1+dVahyEjsZqclrHG
+         sncS2S9Pi6P8jCQsp2UciWhNMqNRAGjEFB4axa+lrgPlV8LirSlz43FV6dJgX5VsLrbb
+         lJDHAJlIEpsXNFuHY0+TvI5hQ7yj4QhiG0ZIyOmJE5wowKiN9XcZYxT4hKgUvO6+yakv
+         G8m5kVqCZrPGP4ovTfyGjmfijGmZ3i2kP7KR0xTfRKSWCSFiOUGipUKcHx8RpkP2c6XF
+         ymT/Rb4u+78O9loA0DSHLt4acoGEpsxtDk1V0eKKvalFDwg1WsVrIdHhnxNP9KHyR1q+
+         ywCw==
+X-Gm-Message-State: AC+VfDy0FlkErgwLF1N5sUKmPXRj5mISgB5fRRr5Xq2A8DIPB2WP6tfW
+        8qnNhCkuiosgZLAa/CZJOCYXS8uuWNOBNSsc/vo=
+X-Google-Smtp-Source: ACHHUZ5H2+h/6gsqWP6ovqBCWYLBnTOUhomZBQgQatSvOvmMPSqJ7RS+6sbm/47VFlSpJDCggsxisegmKNpKtCoO9l4=
+X-Received: by 2002:a05:6214:1c09:b0:626:24aa:87ef with SMTP id
+ u9-20020a0562141c0900b0062624aa87efmr2599319qvc.62.1685462098230; Tue, 30 May
+ 2023 08:54:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230524-opp-lazy-uaf-v2-1-c26304544a47@kernkonzept.com>
-X-B4-Tracking: v=1; b=H4sIAEUcdmQC/3WNwQ6CMBAFf8Xs2TWlUKKe/A/DoS1bacC2aYEIh
- H+3cvc4k7w3GySKlhLcTxtEmm2y3mXg5xPoTroXoW0zA2e8ZIJX6EPAQa4LTtJgzSRjlSqvgjT
- kiZKJUEXpdJdHbhqGLEMkYz9H49lk7mwafVyO5Fz87J/3ucACjTA3oVWl6pYePUXXe7dSGC/av
- 6HZ9/0LG9gCXMMAAAA=
-To:     Viresh Kumar <vireshk@kernel.org>
-Cc:     Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-X-Mailer: b4 0.12.2
+References: <20230517160326.10732-1-osmtendev@gmail.com> <35dea714-6a0f-4673-fd33-23644ea85d33@linaro.org>
+In-Reply-To: <35dea714-6a0f-4673-fd33-23644ea85d33@linaro.org>
+From:   Osama Muhammad <osmtendev@gmail.com>
+Date:   Tue, 30 May 2023 20:54:47 +0500
+Message-ID: <CAK6rUAOn_+WSqc8R94deSsZHHwJaJLL2LxFGv929bMj7foCcGw@mail.gmail.com>
+Subject: Re: [PATCH] lvts_thermal.c: Fix error checking for debugfs_create_dir
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When dev_pm_opp_of_find_icc_paths() in _allocate_opp_table() returns
--EPROBE_DEFER, the opp_table is freed again, to wait until all the
-interconnect paths are available.
+Hi,
 
-However, if the OPP table is using required-opps then it may already
-have been added to the global lazy_opp_tables list. The error path
-does not remove the opp_table from the list again.
+After Reading more about it I also learned about this and I was
+planning to send a patch to remove the error checking for debugfs
+API.Should I send the patch for it?
 
-This can cause crashes later when the provider of the required-opps
-is added, since we will iterate over OPP tables that have already been
-freed. E.g.:
+Thanks
+osmten
 
-  Unable to handle kernel NULL pointer dereference when read
-  CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.4.0-rc3
-  PC is at _of_add_opp_table_v2 (include/linux/of.h:949
-  drivers/opp/of.c:98 drivers/opp/of.c:344 drivers/opp/of.c:404
-  drivers/opp/of.c:1032) -> lazy_link_required_opp_table()
 
-Fix this by calling _of_clear_opp_table() to remove the opp_table from
-the list and clear other allocated resources. While at it, also add the
-missing mutex_destroy() calls in the error path.
-
-Cc: stable@vger.kernel.org
-Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
-Fixes: 7eba0c7641b0 ("opp: Allow lazy-linking of required-opps")
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
----
-Changes in v2:
-- Call _of_clear_opp_table() as suggested by Viresh
-- Also add missing mutex_destroy() calls in the error path
-- Link to v1: https://lore.kernel.org/r/20230524-opp-lazy-uaf-v1-1-f5f95cb4b6de@kernkonzept.com
----
-This fixes the crash I ran into after adding an OPP table with
-both "required-opps" and interconnect paths (opp-peak-kBps).
----
- drivers/opp/core.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 85cbc8de407c..7046487dc6f4 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1358,7 +1358,10 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
- 	return opp_table;
- 
- remove_opp_dev:
-+	_of_clear_opp_table(opp_table);
- 	_remove_opp_dev(opp_dev, opp_table);
-+	mutex_destroy(&opp_table->genpd_virt_dev_lock);
-+	mutex_destroy(&opp_table->lock);
- err:
- 	kfree(opp_table);
- 	return ERR_PTR(ret);
-
----
-base-commit: 9e28f7a74581204807f20ae46568939038e327aa
-change-id: 20230524-opp-lazy-uaf-60a004b385ec
-
-Best regards,
--- 
-Stephan Gerhold
-Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
-
+On Tue, 30 May 2023 at 20:47, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
+ote:
+>
+> On 17/05/2023 18:03, Osama Muhammad wrote:
+> > This patch fixes the error checking in lvts_thermal.c in
+> > debugfs_create_dir. The correct way to check if an error occurred
+> > is 'IS_ERR' inline function.
+>
+> We do no longer check debugfs functions return values.
+>
+> eg.
+>
+>   https://www.spinics.net/lists/linux-spi/msg37903.html
+>   https://lore.kernel.org/lkml/2023052835-oxidant-doily-404f@gregkh/
+>
+>
+> > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> > ---
+> >   drivers/thermal/mediatek/lvts_thermal.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/=
+mediatek/lvts_thermal.c
+> > index d0a3f95b7884..61386be78fa0 100644
+> > --- a/drivers/thermal/mediatek/lvts_thermal.c
+> > +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> > @@ -188,7 +188,7 @@ static int lvts_debugfs_init(struct device *dev, st=
+ruct lvts_domain *lvts_td)
+> >       int i;
+> >
+> >       lvts_td->dom_dentry =3D debugfs_create_dir(dev_name(dev), NULL);
+> > -     if (!lvts_td->dom_dentry)
+> > +     if (IS_ERR(lvts_td->dom_dentry))
+> >               return 0;
+> >
+> >       for (i =3D 0; i < lvts_td->num_lvts_ctrl; i++) {
+> > @@ -197,7 +197,7 @@ static int lvts_debugfs_init(struct device *dev, st=
+ruct lvts_domain *lvts_td)
+> >
+> >               sprintf(name, "controller%d", i);
+> >               dentry =3D debugfs_create_dir(name, lvts_td->dom_dentry);
+> > -             if (!dentry)
+> > +             if (IS_ERR(dentry))
+> >                       continue;
+> >
+> >               regset =3D devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL)=
+;
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+>
