@@ -2,104 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789C27157DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5677157DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjE3IDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55034 "EHLO
+        id S229913AbjE3IDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjE3IDS (ORCPT
+        with ESMTP id S229904AbjE3IDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:03:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD40C90
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:03:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4EE2C218FA;
-        Tue, 30 May 2023 08:03:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685433795; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+qoS3jIGlkGKPUSBmvDpUF0eZZvpHB3VQF5UkbjDa9E=;
-        b=QqJvJXdjmHGYAFHj+C/oCXHEEmpyjbpt3lHiorTLWJnzfPd/A4USCED3ZzL6PDBqezMrPc
-        P+/2OT0TbHmykTmkdjBjLM9ys2AjrcQF+58sU1uN9ewdFwRrEBpvMzTLtalgwOlR/D+GLx
-        BCH0KL6JHQG9/hX8V8s/bbgbXAuazmA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685433795;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+qoS3jIGlkGKPUSBmvDpUF0eZZvpHB3VQF5UkbjDa9E=;
-        b=KjrLeWrXT/WSCfbdht4AaM45VsO+plc77xE5L/o9KJ9wVXgKzppcRAcXx/JZ5RZJbC+W0H
-        1laj5UwAzHlQiHDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 386F913478;
-        Tue, 30 May 2023 08:03:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id SBQjDcOtdWRUJgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 30 May 2023 08:03:15 +0000
-Message-ID: <fd3bc002-e322-1e69-fa4b-9d6cf97a187f@suse.cz>
-Date:   Tue, 30 May 2023 10:03:14 +0200
+        Tue, 30 May 2023 04:03:39 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CD2CA8;
+        Tue, 30 May 2023 01:03:34 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 8A96192009C; Tue, 30 May 2023 10:03:32 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 8397492009B;
+        Tue, 30 May 2023 09:03:32 +0100 (BST)
+Date:   Tue, 30 May 2023 09:03:32 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Cercueil <paul@crapouillou.net>
+cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and
+ M5150
+In-Reply-To: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
+Message-ID: <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
+References: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 4/6] mm: compaction: only set skip flag if
- cc->no_set_skip_hint is false
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1685018752.git.baolin.wang@linux.alibaba.com>
- <0eb2cd2407ffb259ae6e3071e10f70f2d41d0f3e.1685018752.git.baolin.wang@linux.alibaba.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <0eb2cd2407ffb259ae6e3071e10f70f2d41d0f3e.1685018752.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/23 14:53, Baolin Wang wrote:
-> To keep the same logic as test_and_set_skip(), only set the skip flag
-> if cc->no_set_skip_hint is false, which makes code more reasonable.
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+On Mon, 29 May 2023, Jiaxun Yang wrote:
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> M5150 and P5600 are two MIPS32R5 kernels, however as MIPS32R5 is
+> backward compatible with MIPS32R2 there is no reason to forbid
+> M5150 and P5600 on MIPS32R2 kernel.
 
-> ---
->  mm/compaction.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 1e5183f39ca9..65d8d9223acc 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -1223,7 +1223,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  	 * rescanned twice in a row.
->  	 */
->  	if (low_pfn == end_pfn && (!nr_isolated || cc->finish_pageblock)) {
-> -		if (valid_page && !skip_updated)
-> +		if (!cc->no_set_skip_hint && valid_page && !skip_updated)
->  			set_pageblock_skip(valid_page);
->  		update_cached_migrate(cc, low_pfn);
->  	}
+ What problem are you trying to solve?  The CONFIG_SYS_HAS_CPU_* settings 
+denote overall platform's support for the given CPU and have nothing to do 
+with what architecture level a given kernel has been configured for.  You 
+do need to get the settings right for your platform, just as you do in 
+2/2, but this 1/2 part looks wrong to me.
 
+ NB CPU_4KEC is double-listed as R1 and R2 because early revisions of the 
+4KEc core were actually R1 before switching to R2, so this CPU can report 
+either revision.
+
+ I don't know why CPU_XBURST is also listed as both R1 and R2, the history 
+looks convoluted with no explanation.  Paul, is the CPU also dual-revision 
+or is it just a bug and it is supposed to be listed under one ISA revision
+only, presumably R2?
+
+  Maciej
