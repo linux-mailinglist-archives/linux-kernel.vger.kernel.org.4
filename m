@@ -2,148 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA53A716A0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBC6716A0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjE3Qto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S232577AbjE3QvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjE3Qtl (ORCPT
+        with ESMTP id S231371AbjE3Qu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:49:41 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F5DA7;
-        Tue, 30 May 2023 09:49:37 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 9DEDB5FD3D;
-        Tue, 30 May 2023 19:49:34 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685465374;
-        bh=6QfHdz+QFGSro1lLX069r4LLDn31Yt+etPSZIg88FW0=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=dpGK3rAAHlcU7PfwWR89EoEznPx/N8kZhkidmhRJz6yqgZGAR4nH7fsRgxqWHEqSd
-         bzX1QR3+HMqMpVsR+0KL4BnbBKsGgfP65KUq+6QDdgCRC2ekIGjKRF2VesXq4r/WJP
-         mbdSRqdI23TBXABczaqRHl68bhmYrbN9zydeDRnSPqVoEZPCOu+A9lU3Yc0Bj5FcZZ
-         JxiYnhq7hO6A4sepY9aC5GjJJWdvoYuuhG/2myN+B17z28Nti/GJcNJRpRksPaZfbc
-         tZq0W2akM9DSEXckGogDnR9Dt029wH6NGsSF7N6YYg5d0vBh+AS9lXYocbupn+K2Ew
-         mBZXBXGllW4CA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 30 May 2023 19:49:33 +0300 (MSK)
-Date:   Tue, 30 May 2023 19:49:33 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-CC:     <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>, <jian.hu@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v15 0/6] add Amlogic A1 clock controller drivers
-Message-ID: <20230530164933.m42ojv357atxd4gc@CAB-WSD-L081021>
-References: <20230517133309.9874-1-ddrokosov@sberdevices.ru><1jilc94x0d.fsf@starbuckisacylon.baylibre.com>
+        Tue, 30 May 2023 12:50:59 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0BAC5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:50:57 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-76c304efb8fso23336339f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:50:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685465457; x=1688057457;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=thlNA+UuWKKyy8pZTqyvsqUpo/JiTFe7Xh7JxERMZ40=;
+        b=G+rs7+ExcnneR8BbE3EySvbKDR5K+ZX2Ri4FIBqu2kPlvVkPeUPNPloKVvWPEnscrh
+         PWtT52bVoSL3WJrcwT8YyXKwin0mNNKDA3PgNKMTsUKpCIiM6Ul4PcP7y2OksfggjiWj
+         gOZV9ONj35tEjBXx7i39azg3oZ6ZjTBLwv8kQ7GUB2aPMcBpCjBRAQoPXGUqEeb5KkX4
+         rM3xI80KIE0TmgVV5TqPIvZWrmHPBOBv6zqk3MsfP5g0zL+Ki9LRT0AdC8h2SkBBRhWr
+         7agI3E08H9L0zT4DRPRv9v/Liv//reEsCJyCzCHBvPG5lV+roxZWjl7IjCs1wVY3sW3z
+         /x4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685465457; x=1688057457;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=thlNA+UuWKKyy8pZTqyvsqUpo/JiTFe7Xh7JxERMZ40=;
+        b=iQ/ZDoD6ASKNjGIZOZ68Fp4n7/NisM1WaT3Q2myo1rUrtnexwMEIZrPwyULb3YtdKg
+         /446BkPPp0HKGoOwjVy+4eJUKcmW6fdTuuEExM8W4VHW4Ks5MOKzOy1rY4wPkTKH7i5q
+         Y121p913IwK0OZppjD5FohuReOMXtHUBz56An0HpNd8s7ECPcpC3UjL+mmxjvaNuKLxD
+         sqfVb86U+Ltq2V8GHutqYuOpRI3rNPY54UMrbu/HR0+wIrP4+TeeA1AucnK6nhAhB6n2
+         UTgdw0TGFLVFEKGIXKK3Ugppv33888qSU/v1IJZsjoUZvx1BwGKkjmtO//mgSB4ahTHP
+         SrzA==
+X-Gm-Message-State: AC+VfDxjfal9Mz7SjS/hsS7GnNOtGhAqVIRVe7BI1F3+mKISDzhkv+QF
+        GVhTEMD9OH8YO5RMWXizvL5WLg==
+X-Google-Smtp-Source: ACHHUZ6jo5ahe5aPT0LiWcCj/I9bwL9QTDlnCR5dwxCtNXBP/2xuIbuw+WquGRcAFohxXHsdBHE2+w==
+X-Received: by 2002:a05:6e02:1061:b0:32b:51df:26a0 with SMTP id q1-20020a056e02106100b0032b51df26a0mr19937ilj.2.1685465456841;
+        Tue, 30 May 2023 09:50:56 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id l3-20020a92d943000000b0033ba0b7e926sm746877ilq.31.2023.05.30.09.50.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 09:50:56 -0700 (PDT)
+Message-ID: <2a56b6d4-5f24-9738-ec83-cefb20998c8c@kernel.dk>
+Date:   Tue, 30 May 2023 10:50:55 -0600
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1jilc94x0d.fsf@starbuckisacylon.baylibre.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/30 11:20:00 #21377521
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 0/7] block layer patches for bcachefs
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20230525214822.2725616-1-kent.overstreet@linux.dev>
+ <ee03b7ce-8257-17f9-f83e-bea2c64aff16@kernel.dk>
+ <ZHEaKQH22Uxk9jPK@moria.home.lan>
+ <8e874109-db4a-82e3-4020-0596eeabbadf@kernel.dk>
+ <ZHYfGvPJFONm58dA@moria.home.lan>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ZHYfGvPJFONm58dA@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jerome,
-
-On Tue, May 30, 2023 at 06:14:01PM +0200, Jerome Brunet wrote:
-> On Wed 17 May 2023 at 16:33, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+On 5/30/23 10:06?AM, Kent Overstreet wrote:
+> On Tue, May 30, 2023 at 08:22:50AM -0600, Jens Axboe wrote:
+>> On 5/26/23 2:44?PM, Kent Overstreet wrote:
+>>> On Fri, May 26, 2023 at 08:35:23AM -0600, Jens Axboe wrote:
+>>>> On 5/25/23 3:48?PM, Kent Overstreet wrote:
+>>>>> Jens, here's the full series of block layer patches needed for bcachefs:
+>>>>>
+>>>>> Some of these (added exports, zero_fill_bio_iter?) can probably go with
+>>>>> the bcachefs pull and I'm just including here for completeness. The main
+>>>>> ones are the bio_iter patches, and the __invalidate_super() patch.
+>>>>>
+>>>>> The bio_iter series has a new documentation patch.
+>>>>>
+>>>>> I would still like the __invalidate_super() patch to get some review
+>>>>> (from VFS people? unclear who owns this).
+>>>>
+>>>> I wanted to check the code generation for patches 4 and 5, but the
+>>>> series doesn't seem to apply to current -git nor my for-6.5/block.
+>>>> There's no base commit in this cover letter either, so what is this
+>>>> against?
+>>>>
+>>>> Please send one that applies to for-6.5/block so it's a bit easier
+>>>> to take a closer look at this.
+>>>
+>>> Here you go:
+>>> git pull https://evilpiepirate.org/git/bcachefs.git block-for-bcachefs
+>>
+>> Thanks
+>>
+>> The re-exporting of helpers is somewhat odd - why is bcachefs special
+>> here and needs these, while others do not?
 > 
-> > A1 SoC has four clock controllers on the board: PLL, Peripherals, CPU,
-> > and Audio. The audio clock controller is different from others, but the
-> > rest are very similar from a functional and regmap point of view.
-> > This patch series add support for Amlogic A1 PLL and Peripherals clock
-> > drivers.
-> > It blocks all A1 peripherals mainline support and a couple of patch series,
-> > which were already reviewed and acked, but weren't merged due to pending
-> > clock controller drivers series, e.g.
-> > https://lore.kernel.org/all/20230418111612.19479-1-ddrokosov@sberdevices.ru/
-> >
-> > TODO: CPU and Audio clock controllers are not included in this patch
-> > series, it will be sent later. The following clks from these controllers
-> > are not supported for now:
-> > * Audio clks - vad, mclk_vad, mclk_d, resample_a, locker_in, mclk_b,
-> >    pdmdclk, pdmsysclk, eqdrc, spdifin, mclk_a, audio2_toaudiotop,
-> >    audio2_tovad, audio2_toddr_vad, audio2_tdmin_vad, audio2_pdm,
-> >    audio2_ddr_arb, audio_audiolocker, audio_eqdrc, audio_resamplea,
-> >    audio_spdifin, audio_toddrb, audio_toddra, audio_frddrb, audio_frddra,
-> >    audio_tdmoutb, audio_tdmouta, audio_loopbacka, audio_tdminlb,
-> >    audio_tdminb, audio_tdmina, audio_ddr_arb, mclk_c
-> >
-> > * CPU clks: cpu_fixed_source_sel0, cpu_fixed_source_div0,
-> >             cpu_fixed_source_sel1, cpu_fixed_source_div1, cpu_clk
-> >
-> > Validation:
-> > * to double check all clk flags run below helper script:
-> >     pushd /sys/kernel/debug/clk
-> >     for f in *; do
-> >         if [[ -f "$f/clk_flags" ]]; then
-> >             flags="$(cat $f/clk_flags | awk '{$1=$1};1' | sed ':a;N;$!ba;s/\n/ | /g')"
-> >             echo -e "$f: $flags"
-> >         fi
-> >     done
-> >     popd
-> >
-> > * to trace current clks state use '/sys/kernel/debug/clk/clk_dump' node
-> >   with jq post-processing:
-> >     $ cat /sys/kernel/debug/clk/clk_dump | jq '.' > clk_dump.json
-> >
-> > * to debug clk rate propagation, compile kernel with the following
-> >   definition:
-> >     $ sed -i "s/undef CLOCK_ALLOW_WRITE_DEBUGFS/define CLOCK_ALLOW_WRITE_DEBUGFS/g" drivers/clk/clk.c
-> >   after that, clk_rate debug node for each clock will be available for
-> >   write operation
-> >
+> It's not iomap based.
 > 
-> Applied, Thx
+>> But the main issue for me are the iterator changes, which mostly just
+>> seems like unnecessary churn. What's the justification for these? The
+>> commit messages don;t really have any. Doesn't seem like much of a
+>> simplification, and in fact it's more code than before and obviously
+>> more stack usage as well.
+> 
+> I need bio_for_each_folio().
+> 
+> The approach taken by the bcachefs IO paths is to first build up bios,
+> then walk the extents btree to determine where to send them, splitting
+> as needed.
+> 
+> For reading into the page cache we additionally need to initialize our
+> private state based on what we're reading from that says what's on
+> disk (unallocated, reservation, or normal allocation) and how many
+> replicas. This is used for both i_blocks accounting and for deciding
+> when we need to get a disk reservation. Since we're doing this post
+> split, it needs bio_for_each_folio, not the _all variant.
+> 
+> Yes, the iterator changes are a bit more code - but it's split up into
+> better helpers now, the pointer arithmetic before was a bit dense; I
+> found the result to be more readable. I'm surprised at more stack
+> usage; I would have expected _less_ for bio_for_each_page_all() since
+> it gets rid of a pointer into the bvec_iter_all. How did you measure
+> that?
 
-Thank you very much!
-
-I noticed that you have applied version 15 of the patch. If I understand
-correctly, this is because CLK_SET_RATE_NO_REPARENT for all RTC children
-is preferred from your perspective. I agree with this decision. However,
-version 16 includes a small refactoring patch that corrects a
-misstyping by changing all sys_* related dividers and gates to
-read-only operations, since they are set up from BootROM. Should I
-submit this patch separately at a later time?
-
-Also could you please clarify the official process for handling these
-patches? Currently, I don't see them in the linux-amlogic for-next
-branches. Is there a separate repository for clock changes? I believe
-the next repository is a fork of the clock framework, but unfortunately,
-I cannot seem to locate it on git.kernel.org... Apologies for the
-potentially simple questions...
+Sorry typo, I meant text. Just checked stack and it looks identical, but
+things like blk-map grows ~6% more text, and bio ~3%. Didn't check all
+of them, but at least those two are consistent across x86-64 and
+aarch64. Ditto on the data front. Need to take a closer look at where
+exactly that is coming from, and what that looks like.
 
 -- 
-Thank you,
-Dmitry
+Jens Axboe
 
-  :      ,   ,   .     ,       , , ,  ,    ,         ,  .       , ,           .
-CONFIDENTIALITY NOTICE: This email and any files attached to it are confidential. If you are not the intended recipient you are notified that using, copying, distributing or taking any action in reliance on the contents of this information is strictly prohibited. If you have received this email in error please notify the sender and delete this email.
