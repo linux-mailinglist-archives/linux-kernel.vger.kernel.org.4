@@ -2,102 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C780716117
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC8571611F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbjE3NIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        id S231993AbjE3NJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjE3NIS (ORCPT
+        with ESMTP id S232042AbjE3NI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:08:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B824AC9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:08:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4411C62ED8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:08:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F3E7C433D2;
-        Tue, 30 May 2023 13:08:13 +0000 (UTC)
-Date:   Tue, 30 May 2023 14:08:10 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] riscv: allow kmalloc() caches aligned to the
- smallest value
-Message-ID: <ZHX1OqjQQRheIvv+@arm.com>
-References: <20230526165958.908-1-jszhang@kernel.org>
- <20230526165958.908-6-jszhang@kernel.org>
- <20230529-fidelity-booted-0d4055d1f559@wendy>
- <ZHXJDevEVwUEoOq4@arm.com>
- <20230530-gyration-handheld-ef4e44e89d61@wendy>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530-gyration-handheld-ef4e44e89d61@wendy>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 30 May 2023 09:08:57 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CA592;
+        Tue, 30 May 2023 06:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=X5ARCyzotT4QKjaVW0IeWuI4w9SRg4SsaoEHspvM/io=; b=Gi376FN2FvE4Udx+8/r3wCTWPi
+        /xHfqEFjwuLHHWzcZ3bvWOx9tNmdW85P87xjtrM8kWK7elK8hM3ibmvo2VPNHR5QNGH9SH05nJes4
+        z/5GmYzfggOVYVXItfXS2n5Vh8h1VNXKNBN/u5w2M2gyxq/WzzqzEUy3Dau3z/DjMXhM=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:41434 helo=debian-acer)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q3z5Z-0005zt-Ko; Tue, 30 May 2023 09:08:38 -0400
+Date:   Tue, 30 May 2023 09:08:36 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Lech Perczak <lech.perczak@camlingroup.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230530090836.27b8d080d6b6c022b303ac9e@hugovil.com>
+In-Reply-To: <c15a90d6-b3c1-e432-9216-c4c1e2c44ce6@camlingroup.com>
+References: <20230529140711.896830-1-hugo@hugovil.com>
+        <c15a90d6-b3c1-e432-9216-c4c1e2c44ce6@camlingroup.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 0/9] serial: sc16is7xx: fix GPIO regression and rs485
+ improvements
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:34:06AM +0100, Conor Dooley wrote:
-> On Tue, May 30, 2023 at 10:59:41AM +0100, Catalin Marinas wrote:
-> > On Mon, May 29, 2023 at 12:17:46PM +0100, Conor Dooley wrote:
-> > > On Sat, May 27, 2023 at 12:59:57AM +0800, Jisheng Zhang wrote:
-> > > > After this patch, a simple test of booting to a small buildroot rootfs
-> > > > on qemu shows:
-> > > > 
-> > > > kmalloc-96           5041    5041     96  ...
-> > > > kmalloc-64           9606    9606     64  ...
-> > > > kmalloc-32           5128    5128     32  ...
-> > > > kmalloc-16           7682    7682     16  ...
-> > > > kmalloc-8           10246   10246      8  ...
-> > > > 
-> > > > So we save about 1268KB memory. The saving will be much larger in normal
-> > > > OS env on real HW platforms.
-> > > > 
-> > > > [1] Link: https://lore.kernel.org/linux-arm-kernel/20230524171904.3967031-1-catalin.marinas@arm.com/
-> 
-> While I think of it, Link: goes at the start of the line, the [1] should
-> go at the end (although I don't think you actually reference the link
-> anywhere in the text & it'll probably not be particularly relevant if a
-> subsequent revision of that patchset is applied.
+On Tue, 30 May 2023 11:30:07 +0200
+Lech Perczak <lech.perczak@camlingroup.com> wrote:
 
-I plan to post at least one more. I'd suggest the risc-v patchset to
-only go in once my series landed.
+> W dniu 29.05.2023 o=A016:07, Hugo Villeneuve pisze:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >
+> > Hello,
+> > this patch series mainly fixes a GPIO regression and improve RS485 flag=
+s and
+> > properties detection from DT.
+> >
+> > It now also includes various small fixes and improvements that were pre=
+viously
+> > sent as separate patches, but that made testing everything difficult.
+> >
+> > Patch 1 fixes an issue when debugging IOcontrol register. After testing=
+ the GPIO
+> > regression patches (patches 6 and 7, tests done by Lech Perczak), it ap=
+pers that
+> > this patch is also necessary for having the correct IOcontrol register =
+values.
+> >
+> > Patch 2 introduces a delay after a reset operation to respect datasheet
+> > timing recommandations.
+> >
+> > Patch 3 fixes an issue with init of first port during probing.
+> >
+> > Patch 4 fixes a bug with the output value when first setting the GPIO d=
+irection.
+> >
+> > Patch 5 is a refactor of GPIO registration code.
+> >
+> > Patches 6 and 7 fix a GPIO regression by (re)allowing to choose GPIO fu=
+nction
+> > for GPIO pins shared with modem status lines.
+> >
+> > Patch 8 allows to read common rs485 device-tree flags and properties.
+> >
+> > Patch 9 improves comments about chip variants.
+> >
+> > I have tested the changes on a custom board with two SC16IS752 DUART us=
+ing a
+> > Variscite IMX8MN NANO SOM.
+> >
+> > Thank you.
+> >
+> > Link: [v1] https://lkml.org/lkml/2023/5/17/967 <https://lkml.org/lkml/2=
+023/5/17/967>
+> > [v1] https://lkml.org/lkml/2023/5/17/777 <https://lkml.org/lkml/2023/5/=
+17/777>
+> > [v1] https://lkml.org/lkml/2023/5/17/780 <https://lkml.org/lkml/2023/5/=
+17/780>
+> > [v1] https://lkml.org/lkml/2023/5/17/785 <https://lkml.org/lkml/2023/5/=
+17/785>
+> > [v1] https://lkml.org/lkml/2023/5/17/1311 <https://lkml.org/lkml/2023/5=
+/17/1311>
+> > [v2] https://lkml.org/lkml/2023/5/18/516 <https://lkml.org/lkml/2023/5/=
+18/516>
+> > [v3] https://lkml.org/lkml/2023/5/25/7 <https://lkml.org/lkml/2023/5/25=
+/7>
+> >
+> > Changes for V3:
+> > - Integrated all patches into single serie to facilitate debugging and =
+tests.
+> > - Reduce number of exported GPIOs depending on new property
+> > nxp,modem-control-line-ports
+> > - Added additional example in DT bindings
+> >
+> > Changes for V4:
+> > - Increase reset post delay to relax scheduler.
+> > - Put comments patches at the end.
+> > - Remove Fixes tag for patch "mark IOCONTROL register as volatile".
+> > - Improve commit messages after reviews.
+> > - Fix coding style issues after reviews.
+> > - Change GPIO registration to always register the maximum number of GPI=
+Os
+> > supported by the chip, but maks-out GPIOs declared as modem control lin=
+es.
+> > - Add patch to refactor GPIO registration.
+> > - Remove patch "serial: sc16is7xx: fix syntax error in comments".
+> > - Remove patch "add dump registers function"
+> >
+> > Hugo Villeneuve (9):
+> > serial: sc16is7xx: mark IOCONTROL register as volatile
+> > serial: sc16is7xx: add post reset delay
+> > serial: sc16is7xx: fix broken port 0 uart init
+> > serial: sc16is7xx: fix bug when first setting GPIO direction
+> > serial: sc16is7xx: refactor GPIO controller registration
+> > dt-bindings: sc16is7xx: Add property to change GPIO function
+> > serial: sc16is7xx: fix regression with GPIO configuration
+> > serial: sc16is7xx: add call to get rs485 DT flags and properties
+> > serial: sc16is7xx: improve comments about variants
+> >
+> > .../bindings/serial/nxp,sc16is7xx.txt | 46 ++++++
+> > drivers/tty/serial/sc16is7xx.c | 150 +++++++++++++-----
+> > 2 files changed, 156 insertions(+), 40 deletions(-)
+> >
+> >
+> > base-commit: 8b817fded42d8fe3a0eb47b1149d907851a3c942
+>=20
+> It would be a lot of sending, to do that for every patch separately, so f=
+or whole series:
+> Reviewed-by: Lech Perczak <lech.perczak@camlingroup.com>
+>=20
+> And where applicable - for code patches:
+> Tested-by: Lech Perczak <lech.perczak@camlingroup.com>
+>=20
+> I tested whole series at the same time.
+> I did my tests on an i.MX6 board with SC16IS760 over SPI, which differs a=
+ tiny bit from SC16IS752,
+> and everything works as it should.
+> Thank you for fixing this!
 
-> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > 
-> > > Fails to build chief, with loads of:
-> > > linux/dma-mapping.h:546:19: error: redefinition of 'dma_get_cache_alignment'
-> > > 
-> > > And for 32-bit there's also a rake of:
-> > > include/linux/slab.h:239:9: warning: 'ARCH_KMALLOC_MINALIGN' macro redefined [-Wmacro-redefined]
-> > > 
-> > > At the very least, reproducable with rv32_defconfig.
-> > 
-> > Have you this it on top of the KMALLOC_MINALIGN preparation series?
-> > 
-> > https://lore.kernel.org/r/20230524171904.3967031-1-catalin.marinas@arm.com/
-> 
-> Oh, no. Thanks for pointing that out.
-> Our automation stuff only uses what is in riscv/{for-next,master,fixes}.
-> Unless my reading comprehension is particularly bad of late it was
-> non-obvious that this depended on something that had not yet been
-> applied - it sounded like your series had already been merged last year.
+Hi Lech,
+thank for your feedback.
 
-Yeah, it was only obvious to me since it was my series ;).
+You mentioned before that without the patch "mark IOCONTROL register as vol=
+atile", things were not working properly for you. Could you retest by remov=
+ing this patch and see if things are still working?
 
--- 
-Catalin
+Thank you, Hugo.
