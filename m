@@ -2,57 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7EC7158BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B077158C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbjE3IiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
+        id S229658AbjE3IjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjE3Ihb (ORCPT
+        with ESMTP id S229591AbjE3Ii5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:37:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64166BF
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:37:29 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q3uqy-0002xX-JO; Tue, 30 May 2023 10:37:16 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q3uqx-003pah-38; Tue, 30 May 2023 10:37:15 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q3uqw-00AbV5-4g; Tue, 30 May 2023 10:37:14 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
-        <jerome.pouiller@silabs.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v2 3/3] ARM: dts: stm32: prtt1c: Add PoDL PSE regulator nodes
-Date:   Tue, 30 May 2023 10:37:13 +0200
-Message-Id: <20230530083713.2527380-4-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230530083713.2527380-1-o.rempel@pengutronix.de>
-References: <20230530083713.2527380-1-o.rempel@pengutronix.de>
+        Tue, 30 May 2023 04:38:57 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C56FC9;
+        Tue, 30 May 2023 01:38:56 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U8Ri1s011756;
+        Tue, 30 May 2023 10:38:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=6XRVWHAypnu32raoYPkLydBCpQf/QSqdlpI2jgGeJuM=;
+ b=DBIMMx4p7vAigngOucRzM3KQsG5V2Afxd+sxur5VrsCRnoUouWacwqtUPAuqGqLhori+
+ 8hjFtEaPLv4dHnRLT6mfnXoY3aKkhRBkVuM81MdaJoKiKHpjx8uR6eORwJdEUeykUWCh
+ ZmlKdQAV+x0q//GQTGYKzD1aPydi3EIQxlZYhtX5cb8iUX8SDM9eRJa00jQ7YNWbE8S6
+ /PdE2N6tEEhefOboTI50c+LwkEEu+1TfDal2Kg2SMoa6Gz9BT5+XiptWO+XlXh+Rh270
+ qyP8q6cdif2TYT9sUgezFixmSG9WybPXgGAFv+gr3oJHRzcjfGfSHT5qoV/OxmeCoVcv tw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qvsnnnx46-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 10:38:34 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6266410002A;
+        Tue, 30 May 2023 10:38:31 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 39FF321683B;
+        Tue, 30 May 2023 10:38:31 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 30 May
+ 2023 10:38:30 +0200
+Message-ID: <879b7689-5663-28b5-9431-2fdd243ffff2@foss.st.com>
+Date:   Tue, 30 May 2023 10:38:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 02/11] pinctrl: stm32: add stm32mp257 pinctrl support
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, <soc@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+ <20230529162034.20481-3-alexandre.torgue@foss.st.com>
+ <20230529-enrich-clammy-14b498baf09f@spud>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230529-enrich-clammy-14b498baf09f@spud>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_05,2023-05-29_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,101 +82,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit introduces Power over Data Line (PoDL) Power Source
-Equipment (PSE) regulator nodes to the PRTT1C devicetree. The addition
-of these nodes enables support for PoDL in PRTT1C devices, allowing
-power delivery and data transmission over a single twisted pair.
+Hi Conor
 
-The new PoDL PSE regulator nodes provide voltage capability information
-of the current board design, which can be used as a hint for system
-administrators when configuring and managing power settings. This update
-enhances the versatility and simplifies the power management of PRTT1C
-devices while ensuring compatibility with connected Powered Devices
-(PDs).
+On 5/29/23 20:04, Conor Dooley wrote:
+> On Mon, May 29, 2023 at 06:20:25PM +0200, Alexandre Torgue wrote:
+>> Add stm32mp257 pinctrl support.
+>> diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.h b/drivers/pinctrl/stm32/pinctrl-stm32.h
+>> index e0c31c4c8bca..5e5de92ddd58 100644
+>> --- a/drivers/pinctrl/stm32/pinctrl-stm32.h
+>> +++ b/drivers/pinctrl/stm32/pinctrl-stm32.h
+>> @@ -24,6 +24,9 @@
+>>   #define STM32MP_PKG_AB		BIT(1)
+>>   #define STM32MP_PKG_AC		BIT(2)
+>>   #define STM32MP_PKG_AD		BIT(3)
+>> +#define STM32MP_PKG_AI		BIT(8)
+>> +#define STM32MP_PKG_AK		BIT(10)
+>> +#define STM32MP_PKG_AL		BIT(11)
+> 
+> Mainly out of curiosity, why have you go duplicate defines for these?
 
-After applying this patch, the power delivery can be controlled from
-user space with a patched [1] ethtool version using the following commands:
-  ethtool --set-pse t1l2 podl-pse-admin-control enable
-to enable power delivery, and
-  ethtool --show-pse t1l2
-to display the PoDL PSE settings.
+Mainly to fit with available packages for various STM32 MPU. Currently 
+MP1 SoCs are available with packages AB/AC/AD and MP2 series with 
+AI/AK/AL but in the future we could have package AB/AC/AD/AI available 
+for a particular SoC and then I need to anticipate this case.
 
-By integrating PoDL PSE support into the PRTT1C devicetree, users can
-benefit from streamlined power and data connections in their
-deployments, improving overall system efficiency and reducing cabling
-complexity.
+Cheers
+Alex
 
-[1] https://lore.kernel.org/all/20230317093024.1051999-1-o.rempel@pengutronix.de/
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- arch/arm/boot/dts/stm32mp151a-prtt1c.dts | 32 ++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/arch/arm/boot/dts/stm32mp151a-prtt1c.dts b/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
-index 58bb05a8c685..ca0d3329cfd7 100644
---- a/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
-+++ b/arch/arm/boot/dts/stm32mp151a-prtt1c.dts
-@@ -23,6 +23,18 @@ clock_sja1105: clock-sja1105 {
- 		clock-frequency = <25000000>;
- 	};
- 
-+	pse_t1l1: ethernet-pse-1 {
-+		compatible = "podl-pse-regulator";
-+		pse-supply = <&reg_t1l1>;
-+		#pse-cells = <0>;
-+	};
-+
-+	pse_t1l2: ethernet-pse-2 {
-+		compatible = "podl-pse-regulator";
-+		pse-supply = <&reg_t1l2>;
-+		#pse-cells = <0>;
-+	};
-+
- 	mdio0: mdio {
- 		compatible = "virtual,mdio-gpio";
- 		#address-cells = <1>;
-@@ -32,6 +44,24 @@ mdio0: mdio {
- 
- 	};
- 
-+	reg_t1l1: regulator-pse-t1l1 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pse-t1l1";
-+		regulator-min-microvolt = <12000000>;
-+		regulator-max-microvolt = <12000000>;
-+		gpio = <&gpiog 13 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	reg_t1l2: regulator-pse-t1l2 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "pse-t1l2";
-+		regulator-min-microvolt = <12000000>;
-+		regulator-max-microvolt = <12000000>;
-+		gpio = <&gpiog 14 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
- 	wifi_pwrseq: wifi-pwrseq {
- 		compatible = "mmc-pwrseq-simple";
- 		reset-gpios = <&gpiod 8 GPIO_ACTIVE_LOW>;
-@@ -92,6 +122,7 @@ t1l1_phy: ethernet-phy@7 {
- 		reset-gpios = <&gpiog 12 GPIO_ACTIVE_LOW>;
- 		reset-assert-us = <10>;
- 		reset-deassert-us = <35>;
-+		pses = <&pse_t1l1>;
- 	};
- 
- 	/* TI DP83TD510E */
-@@ -102,6 +133,7 @@ t1l2_phy: ethernet-phy@10 {
- 		reset-gpios = <&gpiog 11 GPIO_ACTIVE_LOW>;
- 		reset-assert-us = <10>;
- 		reset-deassert-us = <35>;
-+		pses = <&pse_t1l2>;
- 	};
- 
- 	/* Micrel KSZ9031 */
--- 
-2.39.2
+> 
+> Cheers,
+> Conor.
 
