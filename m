@@ -2,677 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6532716977
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7E1716956
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjE3Q1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
+        id S233267AbjE3Q0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbjE3Q04 (ORCPT
+        with ESMTP id S231952AbjE3QZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:26:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99210D8;
-        Tue, 30 May 2023 09:25:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F07560CA4;
-        Tue, 30 May 2023 16:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A3BC433A4;
-        Tue, 30 May 2023 16:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685463953;
-        bh=DQJlbIaRxUzhLoeiwqosedaH1XHXalJoWDyse+of4CI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cydra5ADxT90xRPEsVe5EL4qA7nsqeF8RuBi2WAlTq5RHwPC7da3oDlHtzK0mZLwB
-         Ls8lLGORTXyGJJd4NqH5i3F38v3Ld1wP775fstP2PII9KrimkIcubA9Ma11NpzzePv
-         gkheXQ8aNdRiu5GFt+HoJBsSzekyR9pOn/mLFdPAuGmjrEdrfGJVGBR6WTiCtTYYOr
-         VaTA960VAGX7SEA48A0lbOM+f83rzkWrhfdGFAfa0H513fDyogKMXQxbhV2G8vcdd6
-         qNRrZJKVKHtouuERarqOCk+w2T3HPbN9OH8eRM4Mh8uEnTPg+B1z0NUamNvHjrYlkC
-         3slkUnq8sZC9g==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v3 15/15] arm64: dts: qcom: sc8180x: Introduce Lenovo Flex 5G
-Date:   Tue, 30 May 2023 21:54:54 +0530
-Message-Id: <20230530162454.51708-16-vkoul@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230530162454.51708-1-vkoul@kernel.org>
-References: <20230530162454.51708-1-vkoul@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 30 May 2023 12:25:47 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D67126;
+        Tue, 30 May 2023 09:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=O5PoVwqtJMunIZl33Ih/EqcDrZE0eTg44KxSraoqv8s=; b=kJL9/C/2vVwuQk8e8PwpNcqULY
+        RhgNu6JGjfFol47lEMXVOsEExbH1bbz6PxTU+IH5R+EVXALfZc5vNtJuHDAc06rVG0yrJ1Qq+CLwf
+        KetyM49pHm51xAzRub+kJ+rZ0desMqIZyW05aXMMsSpe58U92mV9D48+RXrVNDROwzkU=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:53080 helo=debian-acer)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q429u-0007SA-QC; Tue, 30 May 2023 12:25:19 -0400
+Date:   Tue, 30 May 2023 12:25:18 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jirislaby@kernel.org, jringle@gridpoint.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230530122518.fca22556015bcdf8c588d274@hugovil.com>
+In-Reply-To: <2023053058-onlooker-fondue-8c24@gregkh>
+References: <20230529140711.896830-1-hugo@hugovil.com>
+        <20230529140711.896830-8-hugo@hugovil.com>
+        <2023053058-onlooker-fondue-8c24@gregkh>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 7/9] serial: sc16is7xx: fix regression with GPIO
+ configuration
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
+On Tue, 30 May 2023 11:25:53 +0100
+Greg KH <gregkh@linuxfoundation.org> wrote:
 
-Introduce support for the Lenovo Flex 5G laptop, built on the Qualcomm
-SC8180X platform. Supported peripherals includes keyboard, touchpad,
-UFS storage, external USB and WiFi.
+> On Mon, May 29, 2023 at 10:07:09AM -0400, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
+> > and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+> > changed the function of the GPIOs pins to act as modem control
+> > lines without any possibility of selecting GPIO function.
+> > 
+> > As a consequence, applications that depends on GPIO lines configured
+> > by default as GPIO pins no longer work as expected.
+> > 
+> > Also, the change to select modem control lines function was done only
+> > for channel A of dual UART variants (752/762). This was not documented
+> > in the log message.
+> > 
+> > Allow to specify GPIO or modem control line function in the device
+> > tree, and for each of the ports (A or B).
+> > 
+> > Do so by using the new device-tree property named
+> > "modem-control-line-ports" (property added in separate patch).
+> > 
+> > When registering GPIO chip controller, mask-out GPIO pins declared as
+> > modem control lines according to this new "modem-control-line-ports"
+> > DT property.
+> > 
+> > Boards that need to have GPIOS configured as modem control lines
+> > should add that property to their device tree. Here is a list of
+> > boards using the sc16is7xx driver in their device tree and that may
+> > need to be modified:
+> >     arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
+> >     mips/boot/dts/ingenic/cu1830-neo.dts
+> >     mips/boot/dts/ingenic/cu1000-neo.dts
+> > 
+> > Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
+> > Fixes: 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+> 
+> So you are marking this as a "bugfix" and yet, it is at the end of a
+> much larger series of patches.  Does this fix require all of them?  If
+> so, it's not really relevant for stable kernels, right?  Or is it?
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../boot/dts/qcom/sc8180x-lenovo-flex-5g.dts  | 583 ++++++++++++++++++
- 2 files changed, 584 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
+Like I said to Andy, I will re-order the patches so that "bugfix" patches are first. See new order below.
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 29bfc13d3425..89faec765eff 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -140,6 +140,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie-nvme-lte.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc8180x-lenovo-flex-5g.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc8180x-primus.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-crd.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-lenovo-thinkpad-x13s.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts b/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-new file mode 100644
-index 000000000000..fe3b366e1435
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-@@ -0,0 +1,583 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2020-2023, Linaro Limited
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/gpio-keys.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-+#include "sc8180x.dtsi"
-+#include "sc8180x-pmics.dtsi"
-+
-+/ {
-+	model = "Lenovo Flex 5G";
-+	compatible = "lenovo,flex-5g", "qcom,sc8180x";
-+
-+	aliases {
-+		serial0 = &uart13;
-+	};
-+
-+	backlight: backlight {
-+		compatible = "pwm-backlight";
-+		pwms = <&pmc8180c_lpg 4 1000000>;
-+		enable-gpios = <&pmc8180c_gpios 8 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-0 = <&bl_pwm_default>;
-+		pinctrl-names = "default";
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-0 = <&hall_int_active_state>;
-+		pinctrl-names = "default";
-+
-+		lid {
-+			gpios = <&tlmm 121 GPIO_ACTIVE_LOW>;
-+			linux,input-type = <EV_SW>;
-+			linux,code = <SW_LID>;
-+			wakeup-source;
-+			wakeup-event-action = <EV_ACT_DEASSERTED>;
-+		};
-+	};
-+
-+	reserved-memory {
-+		rmtfs_mem: rmtfs-region@85500000 {
-+			compatible = "qcom,rmtfs-mem";
-+			reg = <0x0 0x85500000 0x0 0x200000>;
-+			no-map;
-+
-+			qcom,client-id = <1>;
-+			qcom,vmid = <15>;
-+		};
-+
-+		wlan_mem: wlan-region@8bc00000 {
-+			reg = <0x0 0x8bc00000 0x0 0x180000>;
-+			no-map;
-+		};
-+
-+		mpss_mem: mpss-region@8d800000 {
-+			reg = <0x0 0x8d800000 0x0 0x3000000>;
-+			no-map;
-+		};
-+
-+		adsp_mem: adsp-region@90800000 {
-+			reg = <0x0 0x90800000 0x0 0x1c00000>;
-+			no-map;
-+		};
-+
-+		gpu_mem: gpu-region@98715000 {
-+			reg = <0x0 0x98715000 0x0 0x2000>;
-+			no-map;
-+		};
-+
-+		cdsp_mem: cdsp-region@98900000 {
-+			reg = <0x0 0x98900000 0x0 0x1400000>;
-+			no-map;
-+		};
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-min-microvolt = <3700000>;
-+		regulator-max-microvolt = <3700000>;
-+	};
-+
-+	vreg_s4a_1p8: pm8150-s4-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vreg_s4a_1p8";
-+
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+
-+		regulator-always-on;
-+		regulator-boot-on;
-+
-+		vin-supply = <&vph_pwr>;
-+	};
-+};
-+
-+&apps_rsc {
-+	regulators-0 {
-+		compatible = "qcom,pmc8180-rpmh-regulators";
-+		qcom,pmic-id = "a";
-+
-+		vdd-s5-supply = <&vph_pwr>;
-+		vdd-l7-l12-l14-l15-supply = <&vreg_s5a_2p0>;
-+
-+		vreg_s5a_2p0: smps5 {
-+			regulator-min-microvolt = <2040000>;
-+			regulator-max-microvolt = <2100000>;
-+		};
-+
-+		vreg_l7a_1p8: ldo7 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l9a_1p3: ldo9 {
-+			regulator-min-microvolt = <1296000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l12a_1p8: ldo12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+	};
-+
-+	regulators-1 {
-+		compatible = "qcom,pmc8180c-rpmh-regulators";
-+		qcom,pmic-id = "c";
-+
-+		vdd-s6-supply = <&vph_pwr>;
-+		vdd-l2-l3-supply = <&vreg_s6c_1p35>;
-+		vdd-bob-supply = <&vph_pwr>;
-+
-+		vreg_s6c_1p35: smps6 {
-+			regulator-min-microvolt = <1350000>;
-+			regulator-max-microvolt = <1372000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l3c_1p2: ldo3 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l10c_3p3: ldo10 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3312000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l11c_3p3: ldo11 {
-+			regulator-min-microvolt = <3296000>;
-+			regulator-max-microvolt = <3304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_bob: bob {
-+			regulator-min-microvolt = <3296000>;
-+			regulator-max-microvolt = <3350000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+	};
-+
-+	regulators-2 {
-+		compatible = "qcom,pmc8180-rpmh-regulators";
-+		qcom,pmic-id = "e";
-+
-+		vdd-s4-supply = <&vph_pwr>;
-+		vdd-s5-supply = <&vph_pwr>;
-+		vdd-l2-l10-supply = <&vreg_bob>;
-+		vdd-l3-l4-l5-l18-supply = <&vreg_s4e_0p98>;
-+		vdd-l7-l12-l14-l15-supply = <&vreg_s5e_2p05>;
-+		vdd-l13-l16-l17-supply = <&vreg_bob>;
-+
-+		vreg_s4e_0p98: smps4 {
-+			regulator-min-microvolt = <992000>;
-+			regulator-max-microvolt = <992000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_s5e_2p05: smps5 {
-+			regulator-min-microvolt = <2040000>;
-+			regulator-max-microvolt = <2040000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l1e_0p75: ldo1 {
-+			regulator-min-microvolt = <752000>;
-+			regulator-max-microvolt = <752000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l5e_0p88: ldo5 {
-+			regulator-min-microvolt = <880000>;
-+			regulator-max-microvolt = <880000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l7e_1p8: ldo7 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l10e_2p9: ldo10 {
-+			regulator-min-microvolt = <2904000>;
-+			regulator-max-microvolt = <2904000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l16e_3p0: ldo16 {
-+			regulator-min-microvolt = <3072000>;
-+			regulator-max-microvolt = <3072000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+	};
-+};
-+
-+&gpu {
-+	status = "okay";
-+
-+	zap-shader {
-+		memory-region = <&gpu_mem>;
-+		firmware-name = "qcom/sc8180x/qcdxkmsuc8180.mbn";
-+	};
-+};
-+
-+&i2c1 {
-+	clock-frequency = <100000>;
-+
-+	pinctrl-0 = <&i2c1_active>, <&i2c1_hid_active>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+
-+	hid@10 {
-+		compatible = "hid-over-i2c";
-+		reg = <0x10>;
-+		hid-descr-addr = <0x1>;
-+
-+		interrupts-extended = <&tlmm 122 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+};
-+
-+&i2c7 {
-+	clock-frequency = <100000>;
-+
-+	pinctrl-0 = <&i2c7_active>, <&i2c7_hid_active>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+
-+	hid@5 {
-+		compatible = "hid-over-i2c";
-+		reg = <0x5>;
-+		hid-descr-addr = <0x20>;
-+
-+		interrupts-extended = <&tlmm 37 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+
-+	hid@2c {
-+		compatible = "hid-over-i2c";
-+		reg = <0x2c>;
-+		hid-descr-addr = <0x20>;
-+
-+		interrupts-extended = <&tlmm 24 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+};
-+
-+&mdss {
-+	status = "okay";
-+};
-+
-+&mdss_edp {
-+	data-lanes = <0 1 2 3>;
-+
-+	pinctrl-0 = <&edp_hpd_active>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+
-+	aux-bus {
-+		panel {
-+			compatible = "edp-panel";
-+			no-hpd;
-+
-+			backlight = <&backlight>;
-+
-+			ports {
-+				port {
-+					auo_b140han06_in: endpoint {
-+						remote-endpoint = <&mdss_edp_out>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+
-+	ports {
-+		port@1 {
-+			reg = <1>;
-+			mdss_edp_out: endpoint {
-+				remote-endpoint = <&auo_b140han06_in>;
-+			};
-+		};
-+	};
-+};
-+
-+&pcie3 {
-+	perst-gpio = <&tlmm 178 GPIO_ACTIVE_LOW>;
-+	wake-gpio = <&tlmm 180 GPIO_ACTIVE_HIGH>;
-+	pinctrl-0 = <&pcie3_default_state>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+};
-+
-+&pcie3_phy {
-+	vdda-phy-supply = <&vreg_l5e_0p88>;
-+	vdda-pll-supply = <&vreg_l3c_1p2>;
-+
-+	status = "okay";
-+};
-+
-+&pmc8180c_lpg {
-+	status = "okay";
-+};
-+
-+&qupv3_id_0 {
-+	status = "okay";
-+};
-+
-+&qupv3_id_1 {
-+	status = "okay";
-+};
-+
-+&qupv3_id_2 {
-+	status = "okay";
-+};
-+
-+&remoteproc_adsp {
-+	memory-region = <&adsp_mem>;
-+	firmware-name = "qcom/sc8180x/LENOVO/82AK/qcadsp8180.mbn";
-+
-+	status = "okay";
-+};
-+
-+&remoteproc_cdsp {
-+	memory-region = <&cdsp_mem>;
-+	firmware-name = "qcom/sc8180x/LENOVO/82AK/qccdsp8180.mbn";
-+
-+	status = "okay";
-+};
-+
-+&remoteproc_mpss {
-+	memory-region = <&mpss_mem>;
-+	firmware-name = "qcom/sc8180x/LENOVO/82AK/qcmpss8180_nm.mbn";
-+
-+	status = "okay";
-+};
-+
-+&uart13 {
-+	pinctrl-0 = <&uart13_state>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "qcom,wcn3998-bt";
-+
-+		vddio-supply = <&vreg_s4a_1p8>;
-+		vddxo-supply = <&vreg_l7a_1p8>;
-+		vddrf-supply = <&vreg_l9a_1p3>;
-+		vddch0-supply = <&vreg_l11c_3p3>;
-+		max-speed = <3200000>;
-+	};
-+};
-+
-+&ufs_mem_hc {
-+	reset-gpios = <&tlmm 190 GPIO_ACTIVE_LOW>;
-+
-+	vcc-supply = <&vreg_l10e_2p9>;
-+	vcc-max-microamp = <155000>;
-+
-+	vccq2-supply = <&vreg_l7e_1p8>;
-+	vccq2-max-microamp = <425000>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l5e_0p88>;
-+	vdda-pll-supply = <&vreg_l3c_1p2>;
-+
-+	status = "okay";
-+};
-+
-+&usb_prim_hsphy {
-+	vdda-pll-supply = <&vreg_l5e_0p88>;
-+	vdda18-supply = <&vreg_l12a_1p8>;
-+	vdda33-supply = <&vreg_l16e_3p0>;
-+
-+	status = "okay";
-+};
-+
-+&usb_prim_qmpphy {
-+	vdda-phy-supply = <&vreg_l3c_1p2>;
-+	vdda-pll-supply = <&vreg_l5e_0p88>;
-+
-+	status = "okay";
-+};
-+
-+&usb_prim {
-+	status = "okay";
-+};
-+
-+&usb_prim_dwc3 {
-+	dr_mode = "host";
-+};
-+
-+&usb_sec_hsphy {
-+	vdda-pll-supply = <&vreg_l5e_0p88>;
-+	vdda18-supply = <&vreg_l12a_1p8>;
-+	vdda33-supply = <&vreg_l16e_3p0>;
-+
-+	status = "okay";
-+};
-+
-+&usb_sec_qmpphy {
-+	vdda-phy-supply = <&vreg_l3c_1p2>;
-+	vdda-pll-supply = <&vreg_l5e_0p88>;
-+
-+	status = "okay";
-+};
-+
-+&usb_sec {
-+	status = "okay";
-+};
-+
-+&usb_sec_dwc3 {
-+	dr_mode = "host";
-+};
-+
-+&wifi {
-+	memory-region = <&wlan_mem>;
-+
-+	vdd-0.8-cx-mx-supply = <&vreg_l1e_0p75>;
-+	vdd-1.8-xo-supply = <&vreg_l7a_1p8>;
-+	vdd-1.3-rfa-supply = <&vreg_l9a_1p3>;
-+	vdd-3.3-ch0-supply = <&vreg_l11c_3p3>;
-+	vdd-3.3-ch1-supply = <&vreg_l10c_3p3>;
-+
-+	status = "okay";
-+};
-+
-+&xo_board_clk {
-+	clock-frequency = <38400000>;
-+};
-+
-+/* PINCTRL */
-+
-+&pmc8180c_gpios {
-+	bl_pwm_default: bl-pwm-default-state {
-+		en-pins {
-+			pins = "gpio8";
-+			function = "normal";
-+		};
-+
-+		pwm-pins {
-+			pins = "gpio10";
-+			function = "func1";
-+		};
-+	};
-+};
-+
-+&tlmm {
-+	gpio-reserved-ranges = <0 4>, <47 4>, <126 4>;
-+
-+	edp_hpd_active: epd-hpd-active-state {
-+		pins = "gpio10";
-+		function = "edp_hot";
-+	};
-+
-+	hall_int_active_state: hall-int-active-state {
-+		pins = "gpio121";
-+		function = "gpio";
-+
-+		input-enable;
-+		bias-disable;
-+	};
-+
-+	i2c1_active: i2c1-active-state {
-+		pins = "gpio114", "gpio115";
-+		function = "qup1";
-+
-+		bias-pull-up = <1>;
-+		drive-strength = <2>;
-+	};
-+
-+	i2c1_hid_active: i2c1-hid-active-state {
-+		pins = "gpio122";
-+		function = "gpio";
-+
-+		input-enable;
-+		bias-pull-up;
-+		drive-strength = <2>;
-+	};
-+
-+	i2c7_active: i2c7-active-state {
-+		pins = "gpio98", "gpio99";
-+		function = "qup7";
-+
-+		bias-pull-up;
-+		drive-strength = <2>;
-+	};
-+
-+	i2c7_hid_active: i2c7-hid-active-state {
-+		pins = "gpio37", "gpio24";
-+		function = "gpio";
-+
-+		input-enable;
-+		bias-pull-up;
-+		drive-strength = <2>;
-+	};
-+
-+	pcie3_default_state: pcie3-default-state {
-+		clkreq-pins {
-+			pins = "gpio179";
-+			function = "pci_e3";
-+			bias-pull-up;
-+		};
-+
-+		reset-n-pins {
-+			pins = "gpio178";
-+			function = "gpio";
-+
-+			drive-strength = <2>;
-+			output-low;
-+			bias-pull-down;
-+		};
-+
-+		wake-n-pins {
-+			pins = "gpio180";
-+			function = "gpio";
-+
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	uart13_state: uart13-state {
-+		cts-pins {
-+			pins = "gpio43";
-+			function = "qup13";
-+			bias-pull-down;
-+		};
-+
-+		rts-tx-pins {
-+			pins = "gpio44", "gpio45";
-+			function = "qup13";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+
-+		rx-pins {
-+			pins = "gpio46";
-+			function = "qup13";
-+			bias-pull-up;
-+		};
-+	};
-+};
--- 
-2.40.1
+> I'm confused, what should I, as a maintainer, do here?  Take just this
+> one fix for 6.4-final, and the rest for 6.5-rc1?  And add a proper cc:
+> stable@ tag?  Or queue them all up for 6.4-final?  Or all for 6.5-rc1?
+> Or something else?
+> 
+> What would you want to see if you were in my position here to help make
+> your life easier?
 
+From what I understand from https://www.kernel.org/doc/Documentation/process/stable-kernel-rules.rst,
+here is the new proposed patches order as well as what I plan to do in the commit message:
+
+2f0f23e598df serial: sc16is7xx: fix broken port 0 uart init
+  I will add tag "Cc: <stable@vger.kernel.org>"
+  This patch is a prerequiste of "fix regression with GPIO configuration".
+
+f292951c521e serial: sc16is7xx: mark IOCONTROL register as volatile
+  I will add tag "Cc: <stable@vger.kernel.org>"
+  This patch is a prerequiste of "fix regression with GPIO configuration".
+  This patch has no "Fixes:" tag because it doesn't fix a previous bug, but Lech Perczak reported that it was required for 
+  patch "fix regression with GPIO configuration" to work.
+
+78930d607121 serial: sc16is7xx: refactor GPIO controller registration
+  This patch is a prerequiste of "fix regression with GPIO configuration".
+  It was done separately to ease the review process, but from a stable kernel backport, maybe it would be best to integrate it directly into "fix regression with GPIO configuration"?
+  If not, should I add tag "Cc: <stable@vger.kernel.org>"?
+
+f7ba105873d7 dt-bindings: sc16is7xx: Add property to change GPIO function
+  This patch is a prerequiste of "fix regression with GPIO configuration".
+  I will add tag "Cc: <stable@vger.kernel.org>"
+  Should I add a tag "Fixes: " like I did in patch "fix regression with GPIO configuration"?
+
+f2238e8f69b0 serial: sc16is7xx: fix regression with GPIO configuration
+  I will add tags:
+    Cc: <stable@vger.kernel.org> 2f0f23e5 serial: sc16is7xx: fix broken port 0 uart init
+    Cc: <stable@vger.kernel.org> f292951c serial: sc16is7xx: mark IOCONTROL register as volatile
+    Cc: <stable@vger.kernel.org> 78930d60 serial: sc16is7xx: refactor GPIO controller registration
+    Cc: <stable@vger.kernel.org> f7ba1058 dt-bindings: sc16is7xx: Add property to change GPIO function
+    Cc: <stable@vger.kernel.org>
+
+2d98ab070b70 serial: sc16is7xx: fix bug when first setting GPIO direction
+  This is a standalone bugfix
+  I will add tag "Cc: <stable@vger.kernel.org>"
+
+658e39d9073e serial: sc16is7xx: add call to get rs485 DT flags and properties
+  Enhancement
+
+588aac544e00 serial: sc16is7xx: add post reset delay
+  Enhancement
+
+5bb1b45bca81 serial: sc16is7xx: improve comments about variants
+  Comments enhancements
+
+Please tell me if it makes sense and if some tags are wrong/missing.
+
+Hugo.
