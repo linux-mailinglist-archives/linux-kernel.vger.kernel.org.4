@@ -2,206 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2D5716F4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A9D716F4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbjE3U71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 16:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
+        id S232983AbjE3U7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbjE3U7Z (ORCPT
+        with ESMTP id S231883AbjE3U7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 16:59:25 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB00C106
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:59:22 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 052302C04E1;
-        Wed, 31 May 2023 08:59:20 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1685480360;
-        bh=PBjB3x4Da7R7TpfstPuHs+sIxaQk8nENaOGkEpE5qtQ=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=pOzNHpaz1NG0hXZBt0V94hy2P9aj14wKaqHp509UwOd1nNBzemAHrK6pHcoWGh218
-         p+05TD5BLxtu3Z2/QVK7Uhv56ROPJ4yusOEUTKdDz/UCKGczdS1kEMs86ZA0Hu+FUN
-         wu/jujAmHbTvFn15P5Z7bymwu6n3ICf5ky3L+IWDllkqVjQaELhWt6uOSMjnZevWAg
-         CGn/k1fhhYqVx1PBKKP5d4gwK62nbyJoLfBm4sAsLTbRgsVb6ckp4HmBpibFK7PLqO
-         Mq3FZ9QhxiI9ZRLj19YYC7FWJgMyv1Gy4Dvt+3dn19AuJcyQQ24s5exW+LSSGA8WiS
-         gbxXT6EBSZfWw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B647663a70001>; Wed, 31 May 2023 08:59:19 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 31 May 2023 08:59:19 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Wed, 31 May 2023 08:59:19 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "vadym.kochan@plvision.eu" <vadym.kochan@plvision.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "enachman@marvell.com" <enachman@marvell.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "richard@nod.at" <richard@nod.at>
-Subject: Re: [PATCH v6 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML DT
- scheme
-Thread-Topic: [PATCH v6 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML
- DT scheme
-Thread-Index: AQHZkpEvY3k2XQch4kKrVAHkTx0+pa9x9ZmAgACPToA=
-Date:   Tue, 30 May 2023 20:59:19 +0000
-Message-ID: <c030b2c5-2f44-72c7-f06f-9fa7b9247992@alliedtelesis.co.nz>
-References: <20230530005337.3687938-1-chris.packham@alliedtelesis.co.nz>
- <20230530005337.3687938-2-chris.packham@alliedtelesis.co.nz>
- <20230530122625.7zu3ey5dnn6izeli@krzk-bin>
-In-Reply-To: <20230530122625.7zu3ey5dnn6izeli@krzk-bin>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5E9CA2666FDA994A94BC77746B7458E3@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Tue, 30 May 2023 16:59:48 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E11B107
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:59:42 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f83114e0c6so17848571cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685480381; x=1688072381;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7eblH3QdRlICNFaCB+m62xz5shb1LJNMBbo87wL9f0M=;
+        b=bD73S+5LUY83mZa0edlzw+q87HIkO5vf9WehMtJWC9PFfP0I/diLC1vBl9HDRie92h
+         cBc9L9ZKojZ7FFAUvyk+aV/Ov4iNoFmy8C4NmwgfLiIIMgfXVf/ZMbRC1aIZ1QYm/GKx
+         I87su7p19aUqhQoPLKQ3W09lzwa+byYrWgx+GGl8TH1yKLinNSv6A0YCxnHmOf0CCPUi
+         WBpQSZ1HksNKZ6AvZE/tmdrwYzkZ4vSiE3HRoJJhryT26qRypgJ9gtSev5N1yZmtvHrM
+         pfJGUzQ/2KqnXzZT+8/2KqCPovPV1B+1pSEZ1pjnR24NBI6Vr6sfLoRQ5xJ4GnI0UENo
+         8Yyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685480381; x=1688072381;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7eblH3QdRlICNFaCB+m62xz5shb1LJNMBbo87wL9f0M=;
+        b=P/OGqfq5sLrggM6GXYg/1MEdFV+aJ1daomc5T00hv9FhTOb9heGE1gM36oT1Si+Yz7
+         ZZ3pAdfB5lLje0LE1SACvX5i7194bkvAZAmSPlZt0e4v300FZBlWZC72uvSUX76TnoPp
+         TYLfGGk8hxW2ZGnWmxfAN+Q3xY8MgRYHoKLAQmoVOrxIbjtRU5putbf/DlB8jDDp5wyR
+         H8SeqvGQgJPjtlm79SKcle3txk+oARJ2zuld74xP2X2SedRjNlhvV881PPxkaWIWbwpW
+         XKjBlj+MTsoVndHSdYJK3D1EbMN2q+Ejtio6MszKP17oOpcTvqOCsLpwCd9SVERyv0+G
+         l6IA==
+X-Gm-Message-State: AC+VfDySJYD5Q4ZXCOMUsS4f4s+GSSC7giQVbWengnA5B19ooahw7QBG
+        BQTwMsgn8msDBz+VFMjgM1sNrg==
+X-Google-Smtp-Source: ACHHUZ6AQEP9JHBzG9mXbwzSBdS5kWqw3jmWZMI2lzZC8MfSEcnL4+MLvRjP0YxuvZvOLZZBbTNKEQ==
+X-Received: by 2002:ac8:57ce:0:b0:3ef:28dc:fdd0 with SMTP id w14-20020ac857ce000000b003ef28dcfdd0mr3920666qta.44.1685480381364;
+        Tue, 30 May 2023 13:59:41 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:8bb6])
+        by smtp.gmail.com with ESMTPSA id y14-20020ac8524e000000b003e3914c6839sm5051821qtn.43.2023.05.30.13.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 13:59:41 -0700 (PDT)
+Date:   Tue, 30 May 2023 16:59:40 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+        cerasuolodomenico@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
+Subject: Re: [PATCH] zswap: do not shrink when memory.zswap.max is 0
+Message-ID: <20230530205940.GA102494@cmpxchg.org>
+References: <20230530162153.836565-1-nphamcs@gmail.com>
+ <CAJD7tkZJttvpYs4mgjL3pt8-jkX0fnWRJP7hVBZmm=i_Ef3Abg@mail.gmail.com>
+ <20230530180038.GC97194@cmpxchg.org>
+ <CAJD7tkYYQjumA6QPcrAv8c6YnqJfrDrMhPZzDSjAz2jv+uDvtg@mail.gmail.com>
+ <20230530191336.GB101722@cmpxchg.org>
+ <CAJD7tkb8BbPZfDR5=3eMmJ4=7E52mPAafuzeytsnxunDQGyEmg@mail.gmail.com>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=g8kJ_gb0AAAA:8 a=62ntRvTiAAAA:8 a=voM4FWlXAAAA:8 a=bzQKzZmY9NnqJuOzxnoA:9 a=QEXdDO2ut3YA:10 a=ecSNLfPMzbq-p5zXJZOg:22 a=pToNdpNmrtiFLRE6bQ9Z:22 a=IC2XNlieTeVoXbcui8wp:22
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJD7tkb8BbPZfDR5=3eMmJ4=7E52mPAafuzeytsnxunDQGyEmg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAzMS8wNS8yMyAwMDoyNiwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gT24gVHVl
-LCAzMCBNYXkgMjAyMyAxMjo1MzozNiArMTIwMCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4+IEZy
-b206IFZhZHltIEtvY2hhbiA8dmFkeW0ua29jaGFuQHBsdmlzaW9uLmV1Pg0KPj4NCj4+IFN3aXRj
-aCB0aGUgRFQgYmluZGluZyB0byBhIFlBTUwgc2NoZW1hIHRvIGVuYWJsZSB0aGUgRFQgdmFsaWRh
-dGlvbi4NCj4+DQo+PiBEcm9wcGVkIGRlcHJlY2F0ZWQgY29tcGF0aWJsZXMgYW5kIHByb3BlcnRp
-ZXMgZGVzY3JpYmVkIGluIHR4dCBmaWxlLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IFZhZHltIEtv
-Y2hhbiA8dmFkeW0ua29jaGFuQHBsdmlzaW9uLmV1Pg0KPj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMg
-UGFja2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4gLS0tDQo+Pg0K
-Pj4gTm90ZXM6DQo+PiAgICAgIENoYW5nZXMgaW4gdjY6DQo+PiAgICAgIC0gcmVtb3ZlIHByb3Bl
-cnRpZXMgY292ZXJlZCBieSBuYW5kLWNvbnRyb2xsZXIueWFtbA0KPj4gICAgICAtIGFkZCBleGFt
-cGxlIHVzaW5nIGFybWFkYS04ayBjb21wYXRpYmxlDQo+Pg0KPj4gICAgICBlYXJsaWVyIGNoYW5n
-ZXM6DQo+Pg0KPj4gICAgICB2NToNCj4+ICAgICAgICAgMSkgR2V0IGJhY2sgImxhYmVsIiBhbmQg
-InBhcnRpdGlvbnMiIHByb3BlcnRpZXMgYnV0IHdpdGhvdXQNCj4+ICAgICAgICAgICAgcmVmIHRv
-IHRoZSAicGFydGl0aW9uLnlhbWwiIHdoaWNoIHdhcyB3cm9uZ2x5IHVzZWQuDQo+Pg0KPj4gICAg
-ICAgICAyKSBBZGQgImFkZGl0aW9uYWxQcm9wZXJ0aWVzOiBmYWxzZSIgZm9yIG5hbmRAIGJlY2F1
-c2UgYWxsIHBvc3NpYmxlDQo+PiAgICAgICAgICAgIHByb3BlcnRpZXMgYXJlIGRlc2NyaWJlZC4N
-Cj4+DQo+PiAgICAgIHY0Og0KPj4gICAgICAgICAxKSBSZW1vdmUgImxhYmVsIiBhbmQgInBhcnRp
-dGlvbnMiIHByb3BlcnRpZXMNCj4+DQo+PiAgICAgICAgIDIpIFVzZSAyIGNsb2NrcyBmb3IgQTdL
-LzhLIHBsYXRmb3JtIHdoaWNoIGlzIGEgcmVxdWlyZW1lbnQNCj4+DQo+PiAgICAgIHYzOg0KPj4g
-ICAgICAgIDEpIFJlbW92ZSB0eHQgdmVyc2lvbiBmcm9tIHRoZSBNQUlOVEFJTkVSUyBsaXN0DQo+
-Pg0KPj4gICAgICAgIDIpIFVzZSBlbnVtIGZvciBzb21lIG9mIGNvbXBhdGlibGUgc3RyaW5ncw0K
-Pj4NCj4+ICAgICAgICAzKSBEcm9wOg0KPj4gICAgICAgICAgICAgICNhZGRyZXNzLWNlbGxzDQo+
-PiAgICAgICAgICAgICAgI3NpemUtY2VsbHM6DQo+Pg0KPj4gICAgICAgICAgIGFzIHRoZXkgYXJl
-IGluaGVyaXRlZCBmcm9tIHRoZSBuYW5kLWNvbnRyb2xsZXIueWFtbA0KPj4NCj4+ICAgICAgICA0
-KSBBZGQgcmVzdHJpY3Rpb24gdG8gdXNlIDIgY2xvY2tzIGZvciBBOEsgU29DDQo+Pg0KPj4gICAg
-ICAgIDUpIERyb3BwZWQgZGVzY3JpcHRpb24gZm9yIGNsb2NrLW5hbWVzIGFuZCBleHRlbmQgaXQg
-d2l0aA0KPj4gICAgICAgICAgIG1pbkl0ZW1zOiAxDQo+Pg0KPj4gICAgICAgIDYpIERyb3AgZGVz
-Y3JpcHRpb24gZm9yICJkbWFzIg0KPj4NCj4+ICAgICAgICA3KSBVc2UgInVuZXZhbGF1dGVkUHJv
-cGVydGllczogZmFsc2UiDQo+Pg0KPj4gICAgICAgIDgpIERyb3AgcXVpdGVzIGZyb20geWFtbCBy
-ZWZzLg0KPj4NCj4+ICAgICAgICA5KSBVc2UgNC1zcGFjZSBpbmRlbnRhdGlvbiBmb3IgdGhlIGV4
-YW1wbGUgc2VjdGlvbg0KPj4NCj4+ICAgICAgdjI6DQo+PiAgICAgICAgMSkgRml4ZWQgd2Fybmlu
-ZyBieSB5YW1sbGludCB3aXRoIGluY29ycmVjdCBpbmRlbnRhdGlvbiBmb3IgY29tcGF0aWJsZSBs
-aXN0DQo+Pg0KPj4gICAuLi4vYmluZGluZ3MvbXRkL21hcnZlbGwsbmFuZC1jb250cm9sbGVyLnlh
-bWwgfCAxOTAgKysrKysrKysrKysrKysrKysrDQo+PiAgIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L210ZC9tYXJ2ZWxsLW5hbmQudHh0ICB8IDEyNiAtLS0tLS0tLS0tLS0NCj4+ICAgTUFJTlRBSU5F
-UlMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAxIC0NCj4+ICAgMyBmaWxl
-cyBjaGFuZ2VkLCAxOTAgaW5zZXJ0aW9ucygrKSwgMTI3IGRlbGV0aW9ucygtKQ0KPj4gICBjcmVh
-dGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL210ZC9tYXJ2
-ZWxsLG5hbmQtY29udHJvbGxlci55YW1sDQo+PiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBEb2N1bWVu
-dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbXRkL21hcnZlbGwtbmFuZC50eHQNCj4+DQo+IFJ1
-bm5pbmcgJ21ha2UgZHRic19jaGVjaycgd2l0aCB0aGUgc2NoZW1hIGluIHRoaXMgcGF0Y2ggZ2l2
-ZXMgdGhlDQo+IGZvbGxvd2luZyB3YXJuaW5ncy4gQ29uc2lkZXIgaWYgdGhleSBhcmUgZXhwZWN0
-ZWQgb3IgdGhlIHNjaGVtYSBpcw0KPiBpbmNvcnJlY3QuIFRoZXNlIG1heSBub3QgYmUgbmV3IHdh
-cm5pbmdzLg0KPg0KPiBOb3RlIHRoYXQgaXQgaXMgbm90IHlldCBhIHJlcXVpcmVtZW50IHRvIGhh
-dmUgMCB3YXJuaW5ncyBmb3IgZHRic19jaGVjay4NCj4gVGhpcyB3aWxsIGNoYW5nZSBpbiB0aGUg
-ZnV0dXJlLg0KPg0KPiBGdWxsIGxvZyBpcyBhdmFpbGFibGUgaGVyZTogaHR0cHM6Ly9zY2FubWFp
-bC50cnVzdHdhdmUuY29tLz9jPTIwOTg4JmQ9LXV2MTVEUTR5TjFxT3VaTGNvMWpXcVk3bzhjQmsx
-RVF1VHB3UGNqNGxBJnU9aHR0cHMlM2ElMmYlMmZwYXRjaHdvcmslMmVvemxhYnMlMmVvcmclMmZw
-YXRjaCUyZjE3ODcyNDgNCl5eXiBhcG9sb2dpZXMgZm9yIHRoaXMsIGl0J3MgaXJvbmljIHRoYXQg
-YSBzZWN1cml0eSBmZWF0dXJlIG9uIG91ciBlbWFpbCANCmdhdGV3YXkgbWFrZXMgbGlua3MgbG9v
-ayBfbW9yZV8gbGlrZSBtYWxpY2lvdXMgVVJMcy4NCj4gbmFuZEA3MjAwMDA6ICRub2RlbmFtZTow
-OiAnbmFuZEA3MjAwMDAnIGRvZXMgbm90IG1hdGNoICdebmFuZC1jb250cm9sbGVyKEAuKik/Jw0K
-PiAJYXJjaC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS03MDQwLWRiLmR0Yg0KPiAJYXJj
-aC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS03MDQwLW1vY2hhYmluLmR0Yg0KPiAJYXJj
-aC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS04MDQwLWNsZWFyZm9nLWd0LThrLmR0Yg0K
-PiAJYXJjaC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS04MDQwLWNsZWFyZm9nLWd0LThr
-LmR0Yg0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS04MDQwLWRiLmR0Yg0K
-PiAJYXJjaC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS04MDQwLWRiLmR0Yg0KPiAJYXJj
-aC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS04MDQwLW1jYmluLmR0Yg0KPiAJYXJjaC9h
-cm02NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS04MDQwLW1jYmluLmR0Yg0KPiAJYXJjaC9hcm02
-NC9ib290L2R0cy9tYXJ2ZWxsL2FybWFkYS04MDQwLW1jYmluLXNpbmdsZXNob3QuZHRiDQo+IAlh
-cmNoL2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvYXJtYWRhLTgwNDAtbWNiaW4tc2luZ2xlc2hvdC5k
-dGINCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9hcm1hZGEtODA0MC1wdXp6bGUtbTgw
-MS5kdGINCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9hcm1hZGEtODA0MC1wdXp6bGUt
-bTgwMS5kdGINCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9jbjkxMzAtY3JiLUEuZHRi
-DQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvY245MTMwLWNyYi1CLmR0Yg0KPiAJYXJj
-aC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2NuOTEzMC1kYi1CLmR0Yg0KPiAJYXJjaC9hcm02NC9i
-b290L2R0cy9tYXJ2ZWxsL2NuOTEzMC1kYi5kdGINCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWFy
-dmVsbC9jbjkxMzEtZGItQi5kdGINCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9jbjkx
-MzEtZGItQi5kdGINCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9jbjkxMzEtZGIuZHRi
-DQo+IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvY245MTMxLWRiLmR0Yg0KPiAJYXJjaC9h
-cm02NC9ib290L2R0cy9tYXJ2ZWxsL2NuOTEzMi1kYi1CLmR0Yg0KPiAJYXJjaC9hcm02NC9ib290
-L2R0cy9tYXJ2ZWxsL2NuOTEzMi1kYi1CLmR0Yg0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tYXJ2
-ZWxsL2NuOTEzMi1kYi1CLmR0Yg0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2NuOTEz
-Mi1kYi5kdGINCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9jbjkxMzItZGIuZHRiDQo+
-IAlhcmNoL2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvY245MTMyLWRiLmR0Yg0KVGhpcyBpcyByZXNv
-bHZlZCBpbiBwYXRjaCAyLzIuIEkgY2FuIHN3YXAgdGhlIG9yZGVyIGluIHRoZSBzZXJpZXMgaWYg
-aXQgDQpoZWxwcy4NCj4gbmFuZEA3MjAwMDA6IFVuZXZhbHVhdGVkIHByb3BlcnRpZXMgYXJlIG5v
-dCBhbGxvd2VkICgnI2FkZHJlc3MtY2VsbHMnLCAnI3NpemUtY2VsbHMnIHdlcmUgdW5leHBlY3Rl
-ZCkNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9jbjkxMzAtZGItQi5kdGINCj4gCWFy
-Y2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9jbjkxMzEtZGItQi5kdGINCj4gCWFyY2gvYXJtNjQv
-Ym9vdC9kdHMvbWFydmVsbC9jbjkxMzItZGItQi5kdGINCkkgZG9uJ3Qgc2VlIHRoZXNlIHdoZW4g
-SSBydW4gZHRic19jaGVjaw0KPiBuYW5kLWNvbnRyb2xsZXJANDMxMDAwMDA6IGNsb2NrLW5hbWVz
-OiBbJ2NvcmUnXSBpcyB0b28gc2hvcnQNCj4gCWFyY2gvYXJtL2Jvb3QvZHRzL3B4YTMwMC1yYXVt
-ZmVsZC1jb25uZWN0b3IuZHRiDQo+IAlhcmNoL2FybS9ib290L2R0cy9weGEzMDAtcmF1bWZlbGQt
-Y29udHJvbGxlci5kdGINCj4gCWFyY2gvYXJtL2Jvb3QvZHRzL3B4YTMwMC1yYXVtZmVsZC1zcGVh
-a2VyLWwuZHRiDQo+IAlhcmNoL2FybS9ib290L2R0cy9weGEzMDAtcmF1bWZlbGQtc3BlYWtlci1t
-LmR0Yg0KPiAJYXJjaC9hcm0vYm9vdC9kdHMvcHhhMzAwLXJhdW1mZWxkLXNwZWFrZXItb25lLmR0
-Yg0KPiAJYXJjaC9hcm0vYm9vdC9kdHMvcHhhMzAwLXJhdW1mZWxkLXNwZWFrZXItcy5kdGINCj4N
-Cj4gbmFuZC1jb250cm9sbGVyQDQzMTAwMDAwOiBkbWEtbmFtZXM6MDogJ3J4dHgnIHdhcyBleHBl
-Y3RlZA0KPiAJYXJjaC9hcm0vYm9vdC9kdHMvcHhhMzAwLXJhdW1mZWxkLWNvbm5lY3Rvci5kdGIN
-Cj4gCWFyY2gvYXJtL2Jvb3QvZHRzL3B4YTMwMC1yYXVtZmVsZC1jb250cm9sbGVyLmR0Yg0KPiAJ
-YXJjaC9hcm0vYm9vdC9kdHMvcHhhMzAwLXJhdW1mZWxkLXNwZWFrZXItbC5kdGINCj4gCWFyY2gv
-YXJtL2Jvb3QvZHRzL3B4YTMwMC1yYXVtZmVsZC1zcGVha2VyLW0uZHRiDQo+IAlhcmNoL2FybS9i
-b290L2R0cy9weGEzMDAtcmF1bWZlbGQtc3BlYWtlci1vbmUuZHRiDQo+IAlhcmNoL2FybS9ib290
-L2R0cy9weGEzMDAtcmF1bWZlbGQtc3BlYWtlci1zLmR0Yg0KPg0KPiBuYW5kLWNvbnRyb2xsZXJA
-NDMxMDAwMDA6IFVuZXZhbHVhdGVkIHByb3BlcnRpZXMgYXJlIG5vdCBhbGxvd2VkICgnZG1hLW5h
-bWVzJyB3YXMgdW5leHBlY3RlZCkNCj4gCWFyY2gvYXJtL2Jvb3QvZHRzL3B4YTMwMC1yYXVtZmVs
-ZC1jb25uZWN0b3IuZHRiDQo+IAlhcmNoL2FybS9ib290L2R0cy9weGEzMDAtcmF1bWZlbGQtY29u
-dHJvbGxlci5kdGINCj4gCWFyY2gvYXJtL2Jvb3QvZHRzL3B4YTMwMC1yYXVtZmVsZC1zcGVha2Vy
-LWwuZHRiDQo+IAlhcmNoL2FybS9ib290L2R0cy9weGEzMDAtcmF1bWZlbGQtc3BlYWtlci1tLmR0
-Yg0KPiAJYXJjaC9hcm0vYm9vdC9kdHMvcHhhMzAwLXJhdW1mZWxkLXNwZWFrZXItb25lLmR0Yg0K
-PiAJYXJjaC9hcm0vYm9vdC9kdHMvcHhhMzAwLXJhdW1mZWxkLXNwZWFrZXItcy5kdGINCg0KSSd2
-ZSBiZWVuIHJ1bm5pbmcgYG1ha2UgQVJDSD1hcm02NCBkdGJzX2NoZWNrIA0KRFRfU0NIRU1BX0ZJ
-TEVTPW1hcnZlbGwsbmFuZC1jb250cm9sbGVyLnlhbWxgIChhbmQgc2ltaWxhciBmb3IgYXJtKSBi
-dXQgDQpkaWRuJ3Qgc2VlIHRoZXNlIGFtIEkgZG9pbmcgc29tZXRoaW5nIHdyb25nIG9yIGRpZCBJ
-IGp1c3QgZmFpbCB0byBsb29rIA0KcHJvcGVybHkuDQoNCj4gbmFuZC1jb250cm9sbGVyQGQwMDAw
-OiBuYW5kQDA6cGFydGl0aW9uczogVW5ldmFsdWF0ZWQgcHJvcGVydGllcyBhcmUgbm90IGFsbG93
-ZWQgKCdwYXJ0aXRpb25AZXJybG9nJywgJ3BhcnRpdGlvbkBuYW5kLWJidCcsICdwYXJ0aXRpb25A
-dXNlcicgd2VyZSB1bmV4cGVjdGVkKQ0KPiAJYXJjaC9hcm0vYm9vdC9kdHMvYXJtYWRhLTM4NS1h
-dGwteDUzMC5kdGINCj4NCj4gbmFuZC1jb250cm9sbGVyQGQwMDAwOiBVbmV2YWx1YXRlZCBwcm9w
-ZXJ0aWVzIGFyZSBub3QgYWxsb3dlZCAoJyNhZGRyZXNzLWNlbGxzJywgJyNzaXplLWNlbGxzJyB3
-ZXJlIHVuZXhwZWN0ZWQpDQo+IAlhcmNoL2FybS9ib290L2R0cy9hcm1hZGEtMzg1LWF0bC14NTMw
-LmR0Yg==
+On Tue, May 30, 2023 at 01:19:12PM -0700, Yosry Ahmed wrote:
+> On Tue, May 30, 2023 at 12:13 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Tue, May 30, 2023 at 11:41:32AM -0700, Yosry Ahmed wrote:
+> > > On Tue, May 30, 2023 at 11:00 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > > >
+> > > > On Tue, May 30, 2023 at 09:52:36AM -0700, Yosry Ahmed wrote:
+> > > > > On Tue, May 30, 2023 at 9:22 AM Nhat Pham <nphamcs@gmail.com> wrote:
+> > > > > >
+> > > > > > Before storing a page, zswap first checks if the number of stored pages
+> > > > > > exceeds the limit specified by memory.zswap.max, for each cgroup in the
+> > > > > > hierarchy. If this limit is reached or exceeded, then zswap shrinking is
+> > > > > > triggered and short-circuits the store attempt.
+> > > > > >
+> > > > > > However, if memory.zswap.max = 0 for a cgroup, no amount of writeback
+> > > > > > will allow future store attempts from processes in this cgroup to
+> > > > > > succeed. Furthermore, this create a pathological behavior in a system
+> > > > > > where some cgroups have memory.zswap.max = 0 and some do not: the
+> > > > > > processes in the former cgroups, under memory pressure, will evict pages
+> > > > > > stored by the latter continually, until the need for swap ceases or the
+> > > > > > pool becomes empty.
+> > > > > >
+> > > > > > As a result of this, we observe a disproportionate amount of zswap
+> > > > > > writeback and a perpetually small zswap pool in our experiments, even
+> > > > > > though the pool limit is never hit.
+> > > > > >
+> > > > > > This patch fixes the issue by rejecting zswap store attempt without
+> > > > > > shrinking the pool when memory.zswap.max is 0.
+> > > > > >
+> > > > > > Fixes: f4840ccfca25 ("zswap: memcg accounting")
+> > > > > > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> > > > > > ---
+> > > > > >  include/linux/memcontrol.h | 6 +++---
+> > > > > >  mm/memcontrol.c            | 8 ++++----
+> > > > > >  mm/zswap.c                 | 9 +++++++--
+> > > > > >  3 files changed, 14 insertions(+), 9 deletions(-)
+> > > > > >
+> > > > > > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> > > > > > index 222d7370134c..507bed3a28b0 100644
+> > > > > > --- a/include/linux/memcontrol.h
+> > > > > > +++ b/include/linux/memcontrol.h
+> > > > > > @@ -1899,13 +1899,13 @@ static inline void count_objcg_event(struct obj_cgroup *objcg,
+> > > > > >  #endif /* CONFIG_MEMCG_KMEM */
+> > > > > >
+> > > > > >  #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+> > > > > > -bool obj_cgroup_may_zswap(struct obj_cgroup *objcg);
+> > > > > > +int obj_cgroup_may_zswap(struct obj_cgroup *objcg);
+> > > > > >  void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size);
+> > > > > >  void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, size_t size);
+> > > > > >  #else
+> > > > > > -static inline bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > > > > +static inline int obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > > > >  {
+> > > > > > -       return true;
+> > > > > > +       return 0;
+> > > > > >  }
+> > > > > >  static inline void obj_cgroup_charge_zswap(struct obj_cgroup *objcg,
+> > > > > >                                            size_t size)
+> > > > > > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > > > > > index 4b27e245a055..09aad0e6f2ea 100644
+> > > > > > --- a/mm/memcontrol.c
+> > > > > > +++ b/mm/memcontrol.c
+> > > > > > @@ -7783,10 +7783,10 @@ static struct cftype memsw_files[] = {
+> > > > > >   * spending cycles on compression when there is already no room left
+> > > > > >   * or zswap is disabled altogether somewhere in the hierarchy.
+> > > > > >   */
+> > > > > > -bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > > > > +int obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > > > >  {
+> > > > > >         struct mem_cgroup *memcg, *original_memcg;
+> > > > > > -       bool ret = true;
+> > > > > > +       int ret = 0;
+> > > > > >
+> > > > > >         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
+> > > > > >                 return true;
+> > > > > > @@ -7800,7 +7800,7 @@ bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > > > >                 if (max == PAGE_COUNTER_MAX)
+> > > > > >                         continue;
+> > > > > >                 if (max == 0) {
+> > > > > > -                       ret = false;
+> > > > > > +                       ret = -ENODEV;
+> > > > > >                         break;
+> > > > > >                 }
+> > > > > >
+> > > > > > @@ -7808,7 +7808,7 @@ bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > > > >                 pages = memcg_page_state(memcg, MEMCG_ZSWAP_B) / PAGE_SIZE;
+> > > > > >                 if (pages < max)
+> > > > > >                         continue;
+> > > > > > -               ret = false;
+> > > > > > +               ret = -ENOMEM;
+> > > > > >                 break;
+> > > > > >         }
+> > > > > >         mem_cgroup_put(original_memcg);
+> > > > > > diff --git a/mm/zswap.c b/mm/zswap.c
+> > > > > > index 59da2a415fbb..7b13dc865438 100644
+> > > > > > --- a/mm/zswap.c
+> > > > > > +++ b/mm/zswap.c
+> > > > > > @@ -1175,8 +1175,13 @@ static int zswap_frontswap_store(unsigned type, pgoff_t offset,
+> > > > > >         }
+> > > > > >
+> > > > > >         objcg = get_obj_cgroup_from_page(page);
+> > > > > > -       if (objcg && !obj_cgroup_may_zswap(objcg))
+> > > > > > -               goto shrink;
+> > > > > > +       if (objcg) {
+> > > > > > +               ret = obj_cgroup_may_zswap(objcg);
+> > > > > > +               if (ret == -ENODEV)
+> > > > > > +                       goto reject;
+> > > > > > +               if (ret == -ENOMEM)
+> > > > > > +                       goto shrink;
+> > > > > > +       }
+> > > > >
+> > > > > I wonder if we should just make this:
+> > > > >
+> > > > > if (objcg && !obj_cgroup_may_zswap(objcg))
+> > > > >         goto reject;
+> > > > >
+> > > > > Even if memory.zswap.max is > 0, if the limit is hit, shrinking the
+> > > > > zswap pool will only help if we happen to writeback a page from the
+> > > > > same memcg that hit its limit. Keep in mind that we will only
+> > > > > writeback one page every time we observe that the limit is hit (even
+> > > > > with Domenico's patch, because zswap_can_accept() should be true).
+> > > > >
+> > > > > On a system with a handful of memcgs,
+> > > > > it seems likely that we wrongfully writeback pages from other memcgs
+> > > > > because of this. Achieving nothing for this memcg, while hurting
+> > > > > others. OTOH, without invoking writeback when the limit is hit, the
+> > > > > memcg will just not be able to use zswap until some pages are
+> > > > > faulted back in or invalidated.
+> > > > >
+> > > > > I am not sure which is better, just thinking out loud.
+> > > >
+> > > > You're absolutely right.
+> > > >
+> > > > Currently the choice is writing back either everybody or nobody,
+> > > > meaning between writeback and cgroup containment. They're both so poor
+> > > > that I can't say I strongly prefer one over the other.
+> > > >
+> > > > However, I have a lame argument in favor of this patch:
+> > > >
+> > > > The last few fixes from Nhat and Domenico around writeback show that
+> > > > few people, if anybody, are actually using writeback. So it might not
+> > > > actually matter that much in practice which way we go with this patch.
+> > > > Per-memcg LRUs will be necessary for it to work right.
+> > > >
+> > > > However, what Nhat is proposing is how we want the behavior down the
+> > > > line. So between two equally poor choices, I figure we might as well
+> > > > go with the one that doesn't require another code change later on.
+> > > >
+> > > > Doesn't that fill you with radiant enthusiasm?
+> > >
+> > > If we have per-memcg LRUs, and memory.zswap.max == 0, then we should
+> > > be in one of two situations:
+> > >
+> > > (a) memory.zswap.max has always been 0, so the LRU for this memcg is
+> > > empty, so we don't really need the special case for memory.zswap.max
+> > > == 0.
+> > >
+> > > (b) memory.zswap.max was reduced to 0 at some point, and some pages
+> > > are already in zswap. In this case, I don't think shrinking the memcg
+> > > is such a bad idea, we would be lazily enforcing the limit.
+> > >
+> > > In that sense I am not sure that this change won't require another
+> > > code change. It feels like special casing memory.zswap.max == 0 is
+> > > only needed now due to the lack of per-memcg LRUs.
+> >
+> > Good point. And I agree down the line we should just always send the
+> > shrinker off optimistically on the cgroup's lru list.
+> >
+> > So I take back my lame argument. But that then still leaves us with
+> > the situation that both choices are equal here, right?
+> >
+> > If so, my vote would be to go with the patch as-is.
+> 
+> I *think* it's better to punish the memcg that exceeded its limit by
+> not allowing it to use zswap until its usage goes down, rather than
+> punish random memcgs on the machine because one memcg hit its limit.
+> It also seems to me that on a system with a handful of memcgs, it is
+> statistically more likely for zswap shrinking to writeback a page from
+> the wrong memcg.
+
+Right, but in either case a hybrid zswap + swap setup with cgroup
+isolation is broken anyway. Without it being usable, I'm assuming
+there are no users - maybe that's optimistic of me ;)
+
+However, if you think it's better to just be conservative about taking
+action in general, that's fine by me as well.
+
+> The code would also be simpler if obj_cgroup_may_zswap() just returns
+> a boolean and we do not shrink at all if it returns false. If it no
+> longer returns a boolean we should at least rename it.
+> 
+> Did you try just not shrinking at all if the memcg limit is hit in
+> your experiments?
+> 
+> I don't feel strongly, but my preference would be to just not shrink
+> at all if obj_cgroup_may_zswap() returns false.
+
+Sounds reasonable to me. Basically just replace the goto shrink with
+goto reject for now. Maybe a comment that says "XXX: Writeback/reclaim
+does not work with cgroups yet. Needs a cgroup-aware entry LRU first,
+or we'd push out entries system-wide based on local cgroup limits."
+
+Nhat, does that sound good to you?
