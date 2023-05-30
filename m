@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506657165DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD597165D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbjE3PDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40154 "EHLO
+        id S232623AbjE3PD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232969AbjE3PDW (ORCPT
+        with ESMTP id S232839AbjE3PDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:03:22 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED98100;
-        Tue, 30 May 2023 08:03:15 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 79ECF5C0103;
-        Tue, 30 May 2023 11:03:14 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 30 May 2023 11:03:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1685458994; x=1685545394; bh=htsD3jYU33
-        SJKqKaeiRne4+S4WH//xmAF5gjSTmgLW8=; b=TVce46oWpowOgz5QKnBolTeXOK
-        W0+v80SGoYeQFxx55Rdw8ZZDpnPOBIGRoyJxTq05tJ2UP4FTC+xTOvnO7Wnn9nja
-        yVAFbBGR5gyaNhq+dtd/ccT5l33O10vT1eAiIYVhHq5VFK+maWp0NLF9tK+ZjNKa
-        KIC2Y8VaZOECAB/ra8wcVvJsuzGJfTk5zzaOW+c/1rUEFAtOqe4t+2myZuueAcrd
-        XFRYJHw0v56M1wwvqEfKNtCCVLsZ3C0AEgcxOaWx31XiDyGb3dfzdmV9yYp12O52
-        2DhYeZ/uSqwSVRpNHhTRXwJYsOmDcQlKVqXTUsbB9oexLOe7uE1Wv008a18Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685458994; x=1685545394; bh=htsD3jYU33SJK
-        qKaeiRne4+S4WH//xmAF5gjSTmgLW8=; b=kRK3/YsryImCd97MDTHV/CBQDKILm
-        H9fk6yPi0Py6w+4QeSp3Z2zl9M6vwRXqMsApClr5UncgiP2/qg+7SV/rPE4o76CX
-        6X9XmD7vuyOBAh6t7Fs/TEuRsh3cLSwihCVxXZ1mHt8RKmPdBysaDAsH6gyCbBGX
-        KAeltlRNVzDpz7NCMeOqukp7TsWoEYaCgyDWdcddT1ptfWvg5NxqSzOSzofi3rXG
-        42t8UDXpeoviBe/VpPvzAeHLthRohz2Rwtmh+SymuEKQIKbG5iXUf/qKoYSUNImh
-        iLMB2DvONAxgU3vmSqcxPpIIqY30Nd5vrksJsDCFeXfaMKWSU50u/E7hw==
-X-ME-Sender: <xms:MRB2ZGqEYA8yBn1bj5Ln-Mwh4ELC5Q3D3J6agc30wzxJj8YvWDD00g>
-    <xme:MRB2ZEq5vYh2THZnuPEAXlYLzOWvszZu6PKvUogcWm6UQb05YrkX_G1dDVEkLtUxA
-    eFTd93q8ehFPSkVQDI>
-X-ME-Received: <xmr:MRB2ZLO42KD2Ar-9nixaRxOYfjP9hdwDcKw-2Ken9PZo7OZsh8J4YMtFvBvK>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
-    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
-    grthdrtghomh
-X-ME-Proxy: <xmx:MRB2ZF7iHvYEoKIRs7bgLCjKtAeE8lsbzItHMh_0tXKCcezoAekM0g>
-    <xmx:MRB2ZF6acvmRl2XkPwkz-zZpkUZKrfHun-Or-506uSeBV63bHU6cmA>
-    <xmx:MRB2ZFjKCoCPP5Ei7Q7SSBZVpScLkRRUcbygKA4lB8pOetsOh03Mdw>
-    <xmx:MhB2ZDQl_UH4vKGke_upE5-pb7u1nJwaSIaN2lVzV8XyJtwQQmghXQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 May 2023 11:03:11 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.or,
-        pabeni@redhat.com, linux-kernel@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH] net: pch_gbe: Allow build on MIPS_GENERIC kernel
-Date:   Tue, 30 May 2023 16:03:01 +0100
-Message-Id: <20230530150301.9555-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+        Tue, 30 May 2023 11:03:21 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06710123
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:03:13 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96fe88cd2fcso810112266b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:03:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685458991; x=1688050991;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aEQIS/yFx71ksD8fqCte2hKOWxpFvygsifDUrj8phvs=;
+        b=aN/gac4kaiXeacQLi7VjMayPi1MFte4yfPUgsI1CsRSGdTsepky2Hj41IkxLP3s+AX
+         7y+s02gUNv1muYqXr7R2YxL/i1ZWjwXxK1AEuS4n4iGbt3FGT63R9R/B5FoczB7MRko1
+         PQX4u0u+jado2AmqHECpiaDyiMonRZdZqFDFZ+qt0vNTRTaWRbUAMxkfRKJR5FeoZAJ8
+         yn0AAtyWy01+4/ImyA8E/X2t1SLu1SfijO83m58Y1rVpaswsYAFmdZmjwFADhwqL/x4l
+         xiXfcf6fXpW/ZE/6VDG+GgMytXPxRxtPAOrIJOy10OGG3LNg4DkJlLcD0ClZtQL/IqMm
+         1nbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685458991; x=1688050991;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aEQIS/yFx71ksD8fqCte2hKOWxpFvygsifDUrj8phvs=;
+        b=fHQcO9ZYGlBXANOcBsdkv0maDhX6URLWYRDdysnsYsmUUyhG0s1O7bZYnuoj4UJgXv
+         nhy+F9K3pEKeF6YOM1lNz9dOn6ft8LbzOkp2Mv4EctgSF7xIwe5CPduy2yhONjnT8cYV
+         bXLyCpzUGUK/3c6KQVWJld8dYsBrBdWiTVfFG6Slr1U+O0hjVGl7j174Rkh2KFuvleW5
+         5BchzmW5tGuuJ8hKCU46t/JaHsJrFufXYcwcnz9QcUO9K2Y63hMmA70zahMnmlO2rMOs
+         HJ0AaCS0lRkVBi32ba4hqZfYz8/xQG1HygKnfoljOon7wng/hVBLpzw2bC7dbmQRW3rJ
+         grYg==
+X-Gm-Message-State: AC+VfDyxepERPgNruDjrS4JILDfJV8EHidjHjCI30XMEpVboQ9LVyxSG
+        PgB027NoezVlKLe2TooypTX6Zg==
+X-Google-Smtp-Source: ACHHUZ6XvwXoHtKC8YDdDZKazBHpDWhj1BoSeeIbpL9HLB6seooGiaMn7Rbk26lp9ksoPRaeY/+3hQ==
+X-Received: by 2002:a17:907:d16:b0:960:ddba:e5c3 with SMTP id gn22-20020a1709070d1600b00960ddbae5c3mr2787944ejc.32.1685458991445;
+        Tue, 30 May 2023 08:03:11 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id f11-20020a1709062c4b00b0096a6bf89259sm7374073ejh.167.2023.05.30.08.03.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 08:03:10 -0700 (PDT)
+Message-ID: <9218c23d-91f2-9eda-47b1-f2f38bf13535@linaro.org>
+Date:   Tue, 30 May 2023 17:03:07 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dt-bindings: power: reset: bcm21664-resetmgr: convert to
+ YAML
+Content-Language: en-US
+To:     Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230527141222.GA5048@standask-GA-A55M-S2HP>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230527141222.GA5048@standask-GA-A55M-S2HP>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MIPS Boston board, which is using MIPS_GENERIC kernel is using
-EG20T PCH and thus need this driver.
+On 27/05/2023 16:12, Stanislav Jakubek wrote:
+> Convert Broadcom Kona family reset manager bindings to DT schema.
+> 
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> ---
+>  .../power/reset/brcm,bcm21664-resetmgr.txt    | 14 ---------
 
-Note that CONFIG_PCH_GBE is selected in arch/mips/configs/generic/
-board-boston.config for a while, some how it's never wired up
-in Kconfig.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
-Netdev maintainers, is it possible to squeeze this tiny patch into
-fixes tree?
----
- drivers/net/ethernet/oki-semi/pch_gbe/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/oki-semi/pch_gbe/Kconfig b/drivers/net/ethernet/oki-semi/pch_gbe/Kconfig
-index 4e18b64dceb9..9651cc714ef2 100644
---- a/drivers/net/ethernet/oki-semi/pch_gbe/Kconfig
-+++ b/drivers/net/ethernet/oki-semi/pch_gbe/Kconfig
-@@ -5,7 +5,7 @@
- 
- config PCH_GBE
- 	tristate "OKI SEMICONDUCTOR IOH(ML7223/ML7831) GbE"
--	depends on PCI && (X86_32 || COMPILE_TEST)
-+	depends on PCI && (MIPS_GENERIC || X86_32 || COMPILE_TEST)
- 	depends on PTP_1588_CLOCK
- 	select MII
- 	select PTP_1588_CLOCK_PCH
--- 
-2.39.2 (Apple Git-143)
+Best regards,
+Krzysztof
 
