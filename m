@@ -2,150 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED16F71628D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF3E71628F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbjE3Nt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
+        id S231909AbjE3Nu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbjE3NtZ (ORCPT
+        with ESMTP id S232716AbjE3NuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:49:25 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DE6C7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:49:16 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2565a9107d2so2594944a91.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google; t=1685454555; x=1688046555;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7p73ODufu1/P74FptI7FRwaCItiP1sKbYRvV3n+M0V0=;
-        b=PzarIwSIhRYrd8a9D1iPGmwviHC2XZt4+tfx7iv3dKbXBCvqRWGx9WoPv5WraiCSjm
-         zgD8EF2ExxnBmzqJqpZ2xnxBOoQJjgm+v6OMnfUESSyJmbUZtTzVruClSMIw+5cXpChR
-         k23PLH32rOaJYk7OJBiywbIPGc16TrY6HegpM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685454555; x=1688046555;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7p73ODufu1/P74FptI7FRwaCItiP1sKbYRvV3n+M0V0=;
-        b=f5Gh74TKi/iDaKyCCQHUpR9lNyOfZ/nxfNDVNNTfmZ4n+uidXJDVBLI5p4T01pAgBI
-         OabUf1LsOQutlolotOQK/ZadHEb/tdeQxPSZwggafMawMywe3caO+wgwh3uNgoZJcJhO
-         zzgSG9IjClCfgpFJ69zcYn5doOMl0uwIeVeRK5PgjVqil4avrhJjDJBG5ZH8P7apcOj+
-         qAT5RgK6oxAbRrFr8hlm858YqqgbIq93IOpCHPyELY01L8l2i/V52VJlL2GH2ErDyx7L
-         LMR6EqL4onVtFQmLPTDc7/6uC3CdXvb2M+Lun75AtOMqhE65iTe7XCnZK8HmFXh410iz
-         jIKw==
-X-Gm-Message-State: AC+VfDwKgEikQ7s4AbG4eDVQJA8lBTWxKIfwtZAtIztsrKIv1162I96B
-        dfTTO1DeeHZq3h739fTTyPyNbg==
-X-Google-Smtp-Source: ACHHUZ4XSEbkBWzXynP47Hjpm8/ECtPpTXOj/WE0fHRVvYpYN5zxii/+M2F6b3VEOWryyJa4ue4xRw==
-X-Received: by 2002:a17:90a:fe13:b0:255:a8fb:a72a with SMTP id ck19-20020a17090afe1300b00255a8fba72amr2573662pjb.32.1685454555527;
-        Tue, 30 May 2023 06:49:15 -0700 (PDT)
-Received: from 5e905162a5a7 ([122.199.31.3])
-        by smtp.gmail.com with ESMTPSA id nn6-20020a17090b38c600b002508f0ac3edsm4246116pjb.53.2023.05.30.06.49.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 06:49:14 -0700 (PDT)
-Date:   Tue, 30 May 2023 13:49:07 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Imre Deak <imre.deak@intel.com>, Dave Airlie <airlied@redhat.com>,
-        Dave Airlie <airlied@gmail.com>
-Cc:     intel-gfx@lists.freedesktop.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [v4,01/14] drm/i915: Fix PIPEDMC disabling for a bigjoiner
- configuration
-Message-ID: <20230530134907.GA8@5e905162a5a7>
-References: <20230510103131.1618266-2-imre.deak@intel.com>
+        Tue, 30 May 2023 09:50:08 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E89E8;
+        Tue, 30 May 2023 06:50:05 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QVtyb5x5Cz6D8wn;
+        Tue, 30 May 2023 21:48:23 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 30 May
+ 2023 14:50:02 +0100
+Date:   Tue, 30 May 2023 14:50:01 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+CC:     Liang Kan <kan.liang@linux.intel.com>, <linux-cxl@vger.kernel.org>,
+        <peterz@infradead.org>, <mark.rutland@arm.com>, <will@kernel.org>,
+        <dan.j.williams@intel.com>, <mingo@redhat.com>, <acme@kernel.org>,
+        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v7 4/5] perf: CXL Performance Monitoring Unit driver
+Message-ID: <20230530145001.00002560@Huawei.com>
+In-Reply-To: <CAM9d7cgYZs4DqLmjPZCYDVrp-KVYoZYDyJHLwB1fOM7ZdzM2Pg@mail.gmail.com>
+References: <20230526095824.16336-1-Jonathan.Cameron@huawei.com>
+        <20230526095824.16336-5-Jonathan.Cameron@huawei.com>
+        <CAM9d7cgYZs4DqLmjPZCYDVrp-KVYoZYDyJHLwB1fOM7ZdzM2Pg@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230510103131.1618266-2-imre.deak@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Imre/Dave,
 
-Ref: [v4,01/14] drm/i915: Fix PIPEDMC disabling for a bigjoiner configuration
-     [git pull] drm fixes for 6.4-rc4
-     drm-fixes-2023-05-26:
-     drm fixes for 6.4-rc4
+Hi,
 
-This patch has caused a regression between 6.4-rc3 and 6.4-rc4. Other
-tested kernels include 6.3.4 work fine. Dropping the patch allows the decode
-playback of media via Kodi. Without dropping the patch - the media
-starts and stutters then ceases to play.
+Tidied up the typos. Thanks,
 
-There is an additional issue that 6.4-rc4 audio playback is also failing
-(where 6.4-rc3 was fine), I have not yet tracked this down.
-
-This is all on:
-DMI: Intel(R) Client Systems NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0087.2023.0306.1931 03/06/2023
-12th Gen Intel(R) Core(TM) i7-1260P (family: 0x6, model: 0x9a, stepping: 0x3)
-microcode: updated early: 0x429 -> 0x42a, date = 2023-02-14
-
-Regards
-
-Rudi
-
-On Wed, May 10, 2023 at 01:31:18PM +0300, Imre Deak wrote:
-> For a bigjoiner configuration display->crtc_disable() will be called
-> first for the slave CRTCs and then for the master CRTC. However slave
-> CRTCs will be actually disabled only after the master CRTC is disabled
-> (from the encoder disable hooks called with the master CRTC state).
-> Hence the slave PIPEDMCs can be disabled only after the master CRTC is
-> disabled, make this so.
+> > +static int cxl_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
+> > +{
+> > +       struct cxl_pmu_info *info = hlist_entry_safe(node, struct cxl_pmu_info, node);
+> > +       unsigned int target;
+> > +
+> > +       if (info->on_cpu != cpu)
+> > +               return 0;
+> > +
+> > +       info->on_cpu = -1;
+> > +       target = cpumask_any_but(cpu_online_mask, cpu);
+> > +       if (target >= nr_cpu_ids) {
+> > +               dev_err(info->pmu.dev, "Unable to find a suitable CPU\n");
+> > +               return 0;
+> > +       }
+> > +
+> > +       perf_pmu_migrate_context(&info->pmu, cpu, target);
+> > +       info->on_cpu = target;
+> > +       /*
+> > +        * CPU HP lock is held so we should be guaranteed that this CPU hasn't yet
+> > +        * gone away.
+> > +        */
+> > +       WARN_ON(irq_set_affinity(info->irq, cpumask_of(target)));
+> > +
+> > +       return 0;
+> > +}  
 > 
-> intel_encoders_post_pll_disable() must be called only for the master
-> CRTC, as for the other two encoder disable hooks. While at it fix this
-> up as well. This didn't cause a problem, since
-> intel_encoders_post_pll_disable() will call the corresponding hook only
-> for an encoder/connector connected to the given CRTC, however slave
-> CRTCs will have no associated encoder/connector.
+> IIUC a CXL PMU hardware (say cxl_pmu_mem0.0) is shared across
+> all CPUs and it would return the same value when read from any CPU,
+> right?
+
+Correct, it will return the same value when used from any CPU.
+I'm not sure what issue you are indicating.
+
+My understanding is that, even for such cases, perf uses percpu
+variables that mean we still have to ensure that the interrupt
+handling occurs on the CPU we have migrated the context to.
+
+There are a lot of similar driver in perf already from a quick
+git grep cpumask_any_but\(cpu_online_mask, 
+
+It might be nice to enable perf to operate for these devices without
+the percpu context though. I haven't looked into whether that
+is worth doing.
+
+Jonathan
+
+
+
+
 > 
-> Fixes: 3af2ff0840be ("drm/i915: Enable a PIPEDMC whenever its corresponding pipe is enabled")
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> Signed-off-by: Imre Deak <imre.deak@intel.com>
-> ---
->  drivers/gpu/drm/i915/display/intel_display.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+> Thanks,
+> Namhyung
 > 
-> diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
-> index 1d5d42a408035..116fa52290b84 100644
-> --- a/drivers/gpu/drm/i915/display/intel_display.c
-> +++ b/drivers/gpu/drm/i915/display/intel_display.c
-> @@ -1702,9 +1702,17 @@ static void hsw_crtc_disable(struct intel_atomic_state *state,
->  
->  	intel_disable_shared_dpll(old_crtc_state);
->  
-> -	intel_encoders_post_pll_disable(state, crtc);
-> +	if (!intel_crtc_is_bigjoiner_slave(old_crtc_state)) {
-> +		struct intel_crtc *slave_crtc;
-> +
-> +		intel_encoders_post_pll_disable(state, crtc);
->  
-> -	intel_dmc_disable_pipe(i915, crtc->pipe);
-> +		intel_dmc_disable_pipe(i915, crtc->pipe);
-> +
-> +		for_each_intel_crtc_in_pipe_mask(&i915->drm, slave_crtc,
-> +						 intel_crtc_bigjoiner_slave_pipes(old_crtc_state))
-> +			intel_dmc_disable_pipe(i915, slave_crtc->pipe);
-> +	}
->  }
->  
->  static void i9xx_pfit_enable(const struct intel_crtc_state *crtc_state)
+> 
+> > +
+> > +static __init int cxl_pmu_init(void)
+> > +{
+> > +       int rc;
+> > +
+> > +       rc = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
+> > +                                    "AP_PERF_CXL_PMU_ONLINE",
+> > +                                    cxl_pmu_online_cpu, cxl_pmu_offline_cpu);
+> > +       if (rc < 0)
+> > +               return rc;
+> > +       cxl_pmu_cpuhp_state_num = rc;
+> > +
+> > +       rc = cxl_driver_register(&cxl_pmu_driver);
+> > +       if (rc)
+> > +               cpuhp_remove_multi_state(cxl_pmu_cpuhp_state_num);
+> > +
+> > +       return rc;
+> > +}
+> > +
+> > +static __exit void cxl_pmu_exit(void)
+> > +{
+> > +       cxl_driver_unregister(&cxl_pmu_driver);
+> > +       cpuhp_remove_multi_state(cxl_pmu_cpuhp_state_num);
+> > +}
+> > +
+> > +MODULE_LICENSE("GPL");
+> > +MODULE_IMPORT_NS(CXL);
+> > +module_init(cxl_pmu_init);
+> > +module_exit(cxl_pmu_exit);
+> > +MODULE_ALIAS_CXL(CXL_DEVICE_PMU);
+> > --
+> > 2.39.2
+> >  
+> 
+
