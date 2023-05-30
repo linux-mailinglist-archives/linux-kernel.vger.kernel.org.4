@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B964716460
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EC9716465
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbjE3OjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
+        id S232241AbjE3OjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjE3OjQ (ORCPT
+        with ESMTP id S232075AbjE3OjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:39:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB838F;
-        Tue, 30 May 2023 07:39:15 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 369D0219D2;
-        Tue, 30 May 2023 14:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1685457554; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i7vF9JpsfadEYC3jOZr5CnXQ2XIUYn0nPXlK7fmlNPM=;
-        b=Mcr0cPG0zlm7cRNAao1VppvBZ1sCLRrD+rMuZYSu+6XdmhVyW0iiRrmrUJyt2leTqHVJhu
-        1s4NCviWMX7pM28Yd9JqjR4mYtBN5zpUwzN9jcD9J7TqAavc0OnX1t9qFLj6TLOLwggdmW
-        ItUgQHnJiJLEGRPz35ogDWLtz8WnvXI=
-Received: from suse.cz (unknown [10.100.201.202])
+        Tue, 30 May 2023 10:39:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139958F;
+        Tue, 30 May 2023 07:39:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E94442C141;
-        Tue, 30 May 2023 14:39:13 +0000 (UTC)
-Date:   Tue, 30 May 2023 16:39:13 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        sparclinux@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 03/10] watchdog/hardlockup: Don't use raw_cpu_ptr() in
- watchdog_hardlockup_kick()
-Message-ID: <ZHYKkbcIMoXBa0Vu@alley>
-References: <20230527014153.2793931-1-dianders@chromium.org>
- <20230526184139.3.I660e103077dcc23bb29aaf2be09cb234e0495b2d@changeid>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99C386167D;
+        Tue, 30 May 2023 14:39:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C03BC433D2;
+        Tue, 30 May 2023 14:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685457557;
+        bh=o4tpbU823ZvDH0zikrH1WbEEN9ld+0DC5TSzAlggrDg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TFC4dNFYo6U2/cb0RD/dYedoJi79GLYvB3vEqJn92ZYsZlvchM4SABG7CLX/g1bfX
+         8D27fV7G77wYR5HeLP6H/UZMsRlSrow6OygdI1SM/3f3/DrupT3g8bJKOUfqgJ9DvT
+         NZZgdlqs3/WDB3GCSRKO2kdSQfFd5lMOA3BNGhXY=
+Date:   Tue, 30 May 2023 15:39:14 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jiri Slaby <jirislaby@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v5 35/44] tty: serial: handle HAS_IOPORT dependencies
+Message-ID: <2023053050-prodigal-shine-4d1c@gregkh>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+ <20230522105049.1467313-36-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230526184139.3.I660e103077dcc23bb29aaf2be09cb234e0495b2d@changeid>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230522105049.1467313-36-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2023-05-26 18:41:33, Douglas Anderson wrote:
-> In the patch ("watchdog/hardlockup: add a "cpu" param to
-> watchdog_hardlockup_check()") there was no reason to use
-> raw_cpu_ptr(). Using this_cpu_ptr() works fine.
+On Mon, May 22, 2023 at 12:50:40PM +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them unconditionally. For 8250 based drivers some
+> support MMIO only use so fence only the parts requiring I/O ports.
 > 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/tty/Kconfig                  |  4 +--
+>  drivers/tty/serial/8250/8250_early.c |  4 +++
+>  drivers/tty/serial/8250/8250_pci.c   | 14 +++++++++
+>  drivers/tty/serial/8250/8250_port.c  | 44 +++++++++++++++++++++++-----
+>  drivers/tty/serial/8250/Kconfig      |  5 ++--
+>  drivers/tty/serial/Kconfig           |  2 +-
+>  6 files changed, 60 insertions(+), 13 deletions(-)
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+This doesn't apply at all to my tree, so I'll just let you take it as
+there must be some merge issues somewhere:
 
-Best Regards,
-Petr
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
