@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABDE1716E65
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EB5716E70
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbjE3ULJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 16:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
+        id S233036AbjE3UNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbjE3ULH (ORCPT
+        with ESMTP id S231299AbjE3UNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 16:11:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258DEF9;
-        Tue, 30 May 2023 13:11:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9FAC62B4D;
-        Tue, 30 May 2023 20:11:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E68E8C4339B;
-        Tue, 30 May 2023 20:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685477465;
-        bh=rzTSFWP7EGhI75f20uvSZ1KlSZQvqYicerFpFWGj7LA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=CrqJrNf15J8HEy6u8b6SKublH4XlrkC2j1/c2WHHKu9UCqsuHbBqK40rd29XYDNmc
-         fg0K17IRRdFwDTywyiNpmlrE3qW0cBq2TW2Q5z9Y17QmFRiqYbmHCfKy6oyRSf787/
-         1at8CgZmPRHHk3IMGaSTrl8WmCJSMh4/28uoB3zCJ99yicByuuuzRqSR7/LdAFlZdV
-         HV8/A1Ur8/4BhuBauvN6rRAPY06Me1tNxF+ntI+MHYlmsMhLiJNNWPu7LCW0Lejw3t
-         C7Fg/5z3yZtpKIvYYg7JBnmp7hj7y4tmjnEwt2nwz4EgbmhqCHXqYpEqUkO3VApzQG
-         qOgRZ1rXswaNw==
-Date:   Tue, 30 May 2023 15:11:03 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] linux/pci.h: add a dummy implement for pci_clear_master()
-Message-ID: <ZHZYVyqsJjiSNNsP@bhelgaas>
+        Tue, 30 May 2023 16:13:35 -0400
+Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB1E9D;
+        Tue, 30 May 2023 13:13:33 -0700 (PDT)
+Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
+        by mxout3.routing.net (Postfix) with ESMTP id 50EFB62622;
+        Tue, 30 May 2023 20:13:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1685477611;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sWxb1uLSvOMQ+A7ucc82ozJghsSsGNrOYRShIiqyHuE=;
+        b=QZTiWltmIj1vb+SR0MGMJsQgkkG2BnlKci1RPZHFhCMPM62XvYjyHAtzxcduI7NKXHFsdx
+        +9s8NoUNnrF62WAIQQ0ciKElH+jeXpsJOZL4UZM8MppYOiPZiGRDJfXLS9PhZZh7sglSUZ
+        LLpDi2VZio3iOldbNvOugWlfWESopmM=
+Received: from frank-G5.. (fttx-pool-217.61.157.145.bambit.de [217.61.157.145])
+        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id 263A040ACA;
+        Tue, 30 May 2023 20:13:20 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        "Hui.Liu" <hui.liu@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Lala Lin <lala.lin@mediatek.com>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: [PATCH v3 0/4] Add mt7986 thermal
+Date:   Tue, 30 May 2023 22:12:31 +0200
+Message-Id: <20230530201235.22330-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530101655.2275731-1-suijingfeng@loongson.cn>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 9f03fd52-88cf-4dc1-98dd-2f3ea44d9010
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 06:16:55PM +0800, Sui Jingfeng wrote:
-> As some arch(m68k for example) doesn't have config_pci enabled, drivers[1]
-> call pci_clear_master() without config_pci guard can not built.
-> 
->    drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:
->    In function 'etnaviv_gpu_pci_fini':
-> >> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9:
->    error: implicit declaration of function 'pci_clear_master';
->    did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
->       32 |         pci_clear_master(pdev);
->          |         ^~~~~~~~~~~~~~~~
->          |         pci_set_master
->    cc1: some warnings being treated as errors
-> 
-> [1] https://patchwork.freedesktop.org/patch/539977/?series=118522&rev=1
+From: Frank Wunderlich <frank-w@public-files.de>
 
-I don't mind adding a stub if it's needed, but I don't understand why
-it's needed here.  The caller is in etnaviv_pci_drv.c, and if I
-understand the patch at [1], etnaviv_pci_drv.c is only compiled when
-CONFIG_PCI=y.
+This series add thermal related devicetree-nodes and necessary
+dt-bindings.
 
-Bjorn
+I left pwm-fan for r3 for now as i cannot test this completely due to
+missing 2 pin-jack and 3v3 pwm-level which my fan cannot handle (starts
+spinning at ~3V). Only checked voltage of pwm there.
 
-[1] https://lore.kernel.org/all/20230530160643.2344551-6-suijingfeng@loongson.cn/
+changes in v3:
+- efuse compatibles into one line
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> ---
->  include/linux/pci.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index d0c19ff0c958..71c85380676c 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -1904,6 +1904,7 @@ static inline int pci_dev_present(const struct pci_device_id *ids)
->  #define pci_dev_put(dev)	do { } while (0)
->  
->  static inline void pci_set_master(struct pci_dev *dev) { }
-> +static inline void pci_clear_master(struct pci_dev *dev) { }
->  static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
->  static inline void pci_disable_device(struct pci_dev *dev) { }
->  static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
-> -- 
-> 2.25.1
-> 
+changes in v2:
+- drop highest 2 trip points as they are not yet used
+- leave already applied patches
+
+Daniel Golle (3):
+  arm64: dts: mt7986: add thermal and efuse
+  arm64: dts: mt7986: add thermal-zones
+  arm64: dts: mt7986: add pwm-fan and cooling-maps to BPI-R3 dts
+
+Frank Wunderlich (1):
+  dt-bindings: nvmem: mediatek: efuse: add support for mt7986
+
+ .../bindings/nvmem/mediatek,efuse.yaml        |  1 +
+ .../dts/mediatek/mt7986a-bananapi-bpi-r3.dts  | 31 ++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi     | 62 +++++++++++++++++++
+ 3 files changed, 94 insertions(+)
+
+-- 
+2.34.1
+
