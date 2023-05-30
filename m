@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837DC71638A
+	by mail.lfdr.de (Postfix) with ESMTP id CDF2B71638B
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232516AbjE3OR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
+        id S232438AbjE3OSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232114AbjE3OR4 (ORCPT
+        with ESMTP id S231381AbjE3OR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:17:56 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8C3126;
-        Tue, 30 May 2023 07:17:18 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96ff9c0a103so654731366b.0;
-        Tue, 30 May 2023 07:17:18 -0700 (PDT)
+        Tue, 30 May 2023 10:17:57 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BDE12D;
+        Tue, 30 May 2023 07:17:19 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51494659d49so5109836a12.3;
+        Tue, 30 May 2023 07:17:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685456236; x=1688048236;
+        d=gmail.com; s=20221208; t=1685456237; x=1688048237;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=J9alx3JE4yyy/h8WRBpR+J1YPMr4Oma9xkFMx5Mn/Wk=;
-        b=fBcfpVqE3wkBfIkERxFqgLX+9dQ6fyb02UnZEZSuejKpHIWdNihFYnH4lACZxkkB0Q
-         vHZm0PkzV45uVJQ60JUcUUOKKSp3V7Xbhw6Ki7/kiOD3KAqpJmInUJOXWcBUMEzfe31M
-         LeGph8Dt5TvQoxWzaWzzX2lU4lfHGNm0WS2hm1S9leyZZRkSAgu/hYe+BsPM0Yi0598K
-         IYBPjvsqGP+S0SvkCgG03fNQYPCm4bh9ISa94uTeNoeiIjE7fwonitZ9i7ed3vVh/IQJ
-         Rv20WXIoOCNCqFT+ULL0bviBFs6oyig6zgiR19CAG7ljjh36IkYyg/wHI1MFRRrbBg38
-         RyXw==
+        bh=RZI6N7rpTTulbByVXfKdZOIC7A9MiWqLIoC8OTG2ppM=;
+        b=SLtlmn0TqZSDxqhH7aQIjRwsci638QIzvnyE3KxBrB6UPtgm1C1NSYtKRxFJxsbyX6
+         Wm7YlxKYJmaZdvv/49fkrCxzD3vJ7X7O6iuc3a26lnpuwIi3KOuabJs3kZ7xn8cDRb6m
+         Ko9/xmZngxsNWT8nyP4agXiMRATCiQLjmE8CYuCa5EDCDmqn+AKzbwt4Mq9GR1Dw1Q/Q
+         tqutGr1kxpYdAUdJZmcjheuwu8YEol1n3CvS7MHk+zMHwfcwkgE4ANKRVz1mVUOYFcj5
+         ogkYkmG9kVW/JhUVsnMM0WxzCzii4Lzdy/J/MH9I2MSWBrcHr+QI6VcbYszbIWNEMpYf
+         q3ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685456236; x=1688048236;
+        d=1e100.net; s=20221208; t=1685456237; x=1688048237;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=J9alx3JE4yyy/h8WRBpR+J1YPMr4Oma9xkFMx5Mn/Wk=;
-        b=eNY0VYkQnG/jbqMyy495KABzJM+0Lc3WUNE/Ypn9uTS0EDDQyMmd6xu2x2/CZZOghc
-         hKI+Le7vtLdipvCOAUX8HvQR+3IsWkEKPfA68gLVH9DzgH9jnbbyAg9NvR8PsR8pEIRq
-         4W2voDjnoQdvlmZW5tp8ODLOEFEClwDPZrRRVoldFeah72KJ8brxTiH1vEN5vKI2rFPw
-         V7TE5UshbUpGFMLOwygYsP2IRdmVYcsgC9X2XJXGDG6NzFJ1byU4B7JU3Ht0tKolWXf8
-         zjh94dqYc2hRfyR7eGwwdApNWm3b7RUdWk0VwI99zWKOVSVTricLwwKskmQQAwql0iMv
-         nyEA==
-X-Gm-Message-State: AC+VfDzQd1oOP96mbXx/ncO8OkFpNrlS8lO5oi6qAZu1uxXelBvQ5lI8
-        DxbeBoIxyzgfmeK/7JC2qMr9tvkUnux93A==
-X-Google-Smtp-Source: ACHHUZ6V33VsolAjDkkTO9syiRNOUvyj/MrEEW6rXZ/kWk/booc71t70Wv2ry3FtyxSL//30fN+VeQ==
-X-Received: by 2002:a17:906:dacd:b0:973:d863:f651 with SMTP id xi13-20020a170906dacd00b00973d863f651mr2369549ejb.44.1685456236017;
-        Tue, 30 May 2023 07:17:16 -0700 (PDT)
+        bh=RZI6N7rpTTulbByVXfKdZOIC7A9MiWqLIoC8OTG2ppM=;
+        b=JorBJBmTBZ5/HxAGPzf3f1MDZmnrM8H9ikLq2vszeWuN4wiRxdYbhngcYdH+vd1r9Z
+         04ay09QmxdX6fugo+33uI/dajrCM00ZrHRoKTA8eU3tYqqmtj5DqJQSomO21u3+x3LSc
+         rDMNelbIGdT+fIb9HiiBrkaPnEi7bYOtgc8h961SB2qsJTAB0TiV5s+S9ALmaRCgtz09
+         a8qTJnRV3t/eK7O0l1u0sTCgAk2epWqnKMJyV5naGudsRr7qvVnfKwrZ5J/eNK1LHQh+
+         RyqeVxYGo8DL3LmkGdLE+eOdoPGhrJtg/4pjMLDOPVY+i6B5EV3q7a2+xRr/bapMDKD7
+         48ew==
+X-Gm-Message-State: AC+VfDypBdLegfmsVSSb62MTdJ836QmbV7NVTMfZJoJI56D8Cqm7dl4X
+        wgrbTW10zCYZ+X1eAJQ1ZlQ=
+X-Google-Smtp-Source: ACHHUZ4Kzsw/Pdj9Xsu6+IR+SEPckrPQrAxo3/SarlmPVFQkrJFFv4Nbe7sLhcXCzrcSLNJjanqpYA==
+X-Received: by 2002:a17:907:7e8c:b0:96f:d8a9:d045 with SMTP id qb12-20020a1709077e8c00b0096fd8a9d045mr2621016ejc.59.1685456237517;
+        Tue, 30 May 2023 07:17:17 -0700 (PDT)
 Received: from wslxew193.ultratronik.de (p200300c78700c900796a998533c043af.dip0.t-ipconnect.de. [2003:c7:8700:c900:796a:9985:33c0:43af])
-        by smtp.gmail.com with ESMTPSA id n20-20020a170906089400b0094e96e46cc0sm7354359eje.69.2023.05.30.07.17.14
+        by smtp.gmail.com with ESMTPSA id n20-20020a170906089400b0094e96e46cc0sm7354359eje.69.2023.05.30.07.17.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 07:17:15 -0700 (PDT)
+        Tue, 30 May 2023 07:17:17 -0700 (PDT)
 From:   Boerge Struempfel <boerge.struempfel@gmail.com>
 Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
         andy.shevchenko@gmail.com, festevam@gmail.com,
@@ -60,9 +60,9 @@ Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v7 2/5] spi: spi-imx: add support for SPI_MOSI_IDLE_LOW mode bit
-Date:   Tue, 30 May 2023 16:16:38 +0200
-Message-Id: <20230530141641.1155691-3-boerge.struempfel@gmail.com>
+Subject: [PATCH v7 3/5] spi: spidev: add two new spi mode bits
+Date:   Tue, 30 May 2023 16:16:39 +0200
+Message-Id: <20230530141641.1155691-4-boerge.struempfel@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230530141641.1155691-1-boerge.struempfel@gmail.com>
 References: <20230530141641.1155691-1-boerge.struempfel@gmail.com>
@@ -79,52 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default, the spi-imx controller pulls the mosi line high, whenever it
-is idle. This behaviour can be inverted per CS by setting the
-corresponding DATA_CTL bit in the config register of the controller.
-
-Also, since the controller mode-bits have to be touched anyways, the
-SPI_CPOL and SPI_CPHA are replaced by the combined SPI_MODE_X_MASK flag.
+Allow userspace to set SPI_MOSI_IDLE_LOW and the SPI_3WIRE_HIZ mode bit
+using the SPI_IOC_WR_MODE32 ioctl.
 
 Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
 ---
- drivers/spi/spi-imx.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/spi/spidev.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index bd6ddb142b13..6f4d3cb81fdf 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -281,6 +281,7 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
- #define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs & 3) +  4))
- #define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs & 3) +  8))
- #define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs & 3) + 12))
-+#define MX51_ECSPI_CONFIG_DATACTL(cs)	(1 << ((cs & 3) + 16))
- #define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs & 3) + 20))
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 39d94c850839..c8b938e0f342 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -64,7 +64,8 @@ static_assert(N_SPI_MINORS > 0 && N_SPI_MINORS <= 256);
+ 				| SPI_NO_CS | SPI_READY | SPI_TX_DUAL \
+ 				| SPI_TX_QUAD | SPI_TX_OCTAL | SPI_RX_DUAL \
+ 				| SPI_RX_QUAD | SPI_RX_OCTAL \
+-				| SPI_RX_CPHA_FLIP)
++				| SPI_RX_CPHA_FLIP | SPI_3WIRE_HIZ \
++				| SPI_MOSI_IDLE_LOW)
  
- #define MX51_ECSPI_INT		0x10
-@@ -573,6 +574,11 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi_get_chipselect(spi, 0));
- 	}
- 
-+	if (spi->mode & SPI_MOSI_IDLE_LOW)
-+		cfg |= MX51_ECSPI_CONFIG_DATACTL(spi_get_chipselect(spi, 0));
-+	else
-+		cfg &= ~MX51_ECSPI_CONFIG_DATACTL(spi_get_chipselect(spi, 0));
-+
- 	if (spi->mode & SPI_CS_HIGH)
- 		cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi_get_chipselect(spi, 0));
- 	else
-@@ -1743,7 +1749,8 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	controller->prepare_message = spi_imx_prepare_message;
- 	controller->unprepare_message = spi_imx_unprepare_message;
- 	controller->slave_abort = spi_imx_slave_abort;
--	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS;
-+	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS |
-+				SPI_MOSI_IDLE_LOW;
- 
- 	if (is_imx35_cspi(spi_imx) || is_imx51_ecspi(spi_imx) ||
- 	    is_imx53_ecspi(spi_imx))
+ struct spidev_data {
+ 	dev_t			devt;
 -- 
 2.40.1
 
