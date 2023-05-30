@@ -2,110 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71077715A1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF3E715A20
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjE3J2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        id S231221AbjE3J2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjE3J1t (ORCPT
+        with ESMTP id S231191AbjE3J2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:27:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE8018E;
-        Tue, 30 May 2023 02:27:04 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685438823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1NMbaaXeWKdobW1XvAcSDK/dQsnYJNRF0z8NSxF7l9g=;
-        b=3WlfyRf4MaHC/vnZ5XtmVOPXOLK+ZAlD6lhDlx3nxtYIx2aAF4vsyl4Fynj3non8rbgMrN
-        sNrp+9JQLFYFbN/XqXCv9byGDKlv0RHWDCZwas9ku3sVJVgKghH6SR2F8V6+xNDQOkLcyD
-        5qqJAyewlvw6f3Z/VcU7uuPM8NAolzMZEkhAvRU0VhntTSbYmIp8ge4zTpPWzrBil5oYlf
-        DgeSLbc5m4g4ajmFKq5V5ym/tqWGbgOPaXXQPMUx1NtL/3KwVT8w9aL6e8LA+TS2nYZbmJ
-        Q7LfBFEK9KhVtex48u51MPzAYtklC43xcJIdIGSYeuPXzECaBk3uOeXt5h/Wqg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685438823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1NMbaaXeWKdobW1XvAcSDK/dQsnYJNRF0z8NSxF7l9g=;
-        b=GRvc8oucVrh5HH/FHNK9eWoRJUeKKRlfRG0kkGtIqetJQ9TTAPtqn+q5w5PfQy3yr3tFYY
-        syTijd9671JLttAA==
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
-In-Reply-To: <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name>
-References: <20230508181633.089804905@linutronix.de>
- <20230508185218.962208640@linutronix.de>
- <20230524204818.3tjlwah2euncxzmh@box.shutemov.name> <87y1lbl7r6.ffs@tglx>
- <87sfbhlwp9.ffs@tglx> <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
- <87bki3kkfi.ffs@tglx> <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name>
-Date:   Tue, 30 May 2023 11:26:52 +0200
-Message-ID: <87mt1mjhk3.ffs@tglx>
+        Tue, 30 May 2023 05:28:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA68124;
+        Tue, 30 May 2023 02:27:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 073B262C73;
+        Tue, 30 May 2023 09:27:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C95BC433EF;
+        Tue, 30 May 2023 09:27:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685438857;
+        bh=zy4FL+jhFJYKZYVpeuzCD1RF7D2Pjd4v5g2KcIJrNcg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A1GF540T7yNYevXc78lzC8bA5u6o9TquMZiFppCbsS8+6ab311C4SZpkzIx/YniKr
+         Tlz32/WKS6d8Hxu2maWx3C/XMVTIkfj75paN6h4txPs8+fQPTRtoHaTcYzqbfB/WvA
+         ga1D00XdEi9CAbroNvfjv/vwyH36rMHx+4C6/Igw=
+Date:   Tue, 30 May 2023 10:27:01 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] usb: typec: intel_pmc_mux: Expose IOM port status to
+ debugfs
+Message-ID: <2023053049-dexterous-flatware-df04@gregkh>
+References: <20230524104754.4154013-1-rajat.khandelwal@linux.intel.com>
+ <2023052917-juicy-calamity-4b35@gregkh>
+ <0367a134-cb04-8a1c-bb46-bb5553df6f8a@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0367a134-cb04-8a1c-bb46-bb5553df6f8a@linux.intel.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30 2023 at 03:54, Kirill A. Shutemov wrote:
-> On Mon, May 29, 2023 at 11:31:29PM +0300, Kirill A. Shutemov wrote:
->> Disabling parallel bringup helps. I didn't look closer yet. If you have
->> an idea let me know.
->
-> Okay, it crashes around .Lread_apicid due to touching MSRs that trigger #VE.
->
-> Looks like the patch had no intention to enable parallel bringup on TDX.
->
-> +        * Intel-TDX has a secure RDMSR hypercall, but that needs to be
-> +        * implemented seperately in the low level startup ASM code.
->
-> But CC_ATTR_GUEST_STATE_ENCRYPT that used to filter it out is
-> SEV-ES-specific thingy and doesn't cover TDX. I don't think we have an
-> attribute that fits nicely here.
+On Tue, May 30, 2023 at 02:45:03PM +0530, Rajat Khandelwal wrote:
+> Hi,
+> 
+> On 5/29/2023 7:48 PM, Greg KH wrote:
+> > On Wed, May 24, 2023 at 04:17:54PM +0530, Rajat Khandelwal wrote:
+> > > IOM status has a crucial role during debugging to check the
+> > > current state of the type-C port.
+> > > There are ways to fetch the status, but all those require the
+> > > IOM port status offset, which could change with platform.
+> > > 
+> > > Make a debugfs directory for intel_pmc_mux and expose the status
+> > > under it per port basis.
+> > > 
+> > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+> > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Does not apply to my tree :(
+> 
+> I have pushed the patch on top of the Linus's tree.
+> Had a quick check with the USB Linux tree and seems like its a lot
+> behind?
 
-Bah. That sucks.
+What branch did you use?
+
+Please use the usb-next branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git, which as
+of right now, is at 6.4-rc4 + a bunch of USB-specific patches.
+
+thanks,
+
+greg k-h
