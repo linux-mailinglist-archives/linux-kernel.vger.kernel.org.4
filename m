@@ -2,106 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EEEE716D8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3E4716D99
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbjE3TaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S233193AbjE3TeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232977AbjE3T36 (ORCPT
+        with ESMTP id S230433AbjE3TeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:29:58 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B35E107;
-        Tue, 30 May 2023 12:29:57 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f6c0d651adso54133881cf.2;
-        Tue, 30 May 2023 12:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685474996; x=1688066996;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NCGe5Caz3DEnl0P8+9VuWwQPUYNNo3nHDhzKR02eYIs=;
-        b=hbjlXETznLK4qdRrUeGs/hgHvEYRZwB5YNehCAn/zWwHA3EXNt76XaBTDaJwcy8SLF
-         HZePu/OBBxJGnqGWQ1ZoshQ8XvvM0OYAcOeQCpbaDBp4vEKgf0tnKActfBDuAcWdz9tm
-         9MRaaGrnHchKUlaqMzzaVR2GW4bWQ3NEYK3O9I+5VKO2rpQ3tnZVrMw9erdPuEqZr/4r
-         KFacdRhol0xZfgntrLGD10vgNvHW4+Z+9XD8ROqFpsT0w7xKetYkEG7qiXTRPHTfF6gW
-         A2ovI+dcuZhjrXhp711C7WlnRmTY/jTHSTVDLfGkj3boW3aUP7Amvn6gfnv6aN1ufFzP
-         nRKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685474996; x=1688066996;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NCGe5Caz3DEnl0P8+9VuWwQPUYNNo3nHDhzKR02eYIs=;
-        b=GaNZAIzbQlz1m7P2LnqYSmHrkeu1htz//QAX8tqCS9PPv+QyNJuRCtn8NNHEyQz/63
-         vD8OwhD3+jKys2uD83IY3R/0BY1VeNi4YXZRtZqAm2C64nAYpHo9sKY3WOdPD74s679k
-         GD4pTyOF1+kGxusqYprjEgpFW4AhLqz5yAaLthn4WmGF1JPO8GnI/J3J1TplkXLRbnaM
-         nJ9UX7ejhWb6PEP6vS7x7UiOLRbPnMjswnYtpKfWj1e9NT/naExcwFCrp+iBiIw3Pgks
-         Iglqi+ULBGuxKuMKyBOoVakOIKwInUzmmhi8prN4XIeO4OuiejqTzfNctb9FVOnyyZjk
-         87sQ==
-X-Gm-Message-State: AC+VfDwLNBJtjpCcz+Oo8z57hnyiyt2VJP+OlSeyjSh0jAKocKhyNXcY
-        /MvWOIF11z1jNfmae0gMk6c=
-X-Google-Smtp-Source: ACHHUZ5Q42xzU7BmXAeJg92SVGPbv7pe1B1oigWtYF8kP83jXZMjLmnPfFNzBOQpMr63SuIdJV1llw==
-X-Received: by 2002:ac8:7d45:0:b0:3f5:3f0f:3744 with SMTP id h5-20020ac87d45000000b003f53f0f3744mr4036598qtb.52.1685474996631;
-        Tue, 30 May 2023 12:29:56 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id fg20-20020a05622a581400b003e39106bdb2sm4970070qtb.31.2023.05.30.12.29.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 12:29:55 -0700 (PDT)
-Message-ID: <deb58a23-1487-aebd-8fce-e0d6e39e723b@gmail.com>
-Date:   Tue, 30 May 2023 12:29:42 -0700
+        Tue, 30 May 2023 15:34:04 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CE6BE;
+        Tue, 30 May 2023 12:34:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4dc8sj3FHzzLhi63BMaL8ARsadXKK6PBMKS8wZ1D+bM=; b=JM7SiKdzfwoBik0AKgxOsdxCpD
+        sDgnOT4X96GVp8CNJPJb+VOQVteRUg7rUp37Z51bccNB5PtdZZdFWuUdw496KccyYIcrBvzDCr6Bv
+        Y9Jko3S3agioN15y2YYHTWvPLYowFj33IOP2SMXTSAX3jmWiVTemAd+VQ5v3vP1z5MSBp1M6+QMNj
+        Yl95WQRRrZI/coCZDx5VKzQpkvp2WzKa6i9icU6WPABaTXb+MamtUc/8gix4iHb9+PGyAKxTFw0YV
+        PhcQmCHWi2/I64g8MCskmYk+R7GDeCcI2mbko//pOUA83Bdwaq1ULOdq+hdnfRe4a1X3c5leImvPG
+        MPvGP5Ww==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q455b-006ZKF-17; Tue, 30 May 2023 19:33:03 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9784F300233;
+        Tue, 30 May 2023 21:32:58 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 45294243A9FD8; Tue, 30 May 2023 21:32:58 +0200 (CEST)
+Date:   Tue, 30 May 2023 21:32:58 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     torvalds@linux-foundation.org
+Cc:     corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
+        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
+        mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v3 08/11] slub: Replace cmpxchg_double()
+Message-ID: <20230530193258.GB211927@hirez.programming.kicks-ass.net>
+References: <20230515075659.118447996@infradead.org>
+ <20230515080554.453785148@infradead.org>
+ <20230524093246.GP83892@hirez.programming.kicks-ass.net>
+ <20230530142232.GA200270@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 6.1 000/119] 6.1.31-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230528190835.386670951@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230528190835.386670951@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530142232.GA200270@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/28/23 12:10, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.31 release.
-> There are 119 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.31-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Tue, May 30, 2023 at 04:22:32PM +0200, Peter Zijlstra wrote:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+> Yet another alternative is using a struct type and an equality function,
+> just for this.
 
-Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+The best I could come up with in the regard is the below. It builds on
+HPPA64 and x86_64, but I've not ran it yet.
 
+(also, the introduction of this_cpu_try_cmpxchg() should probably be
+split out into its own patch)
+
+--- a/include/asm-generic/percpu.h
++++ b/include/asm-generic/percpu.h
+@@ -99,6 +99,15 @@ do {									\
+ 	__ret;								\
+ })
+ 
++#define raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
++({									\
++	typeof(pcp) __ret, __old = *(ovalp);				\
++	__ret = raw_cpu_cmpxchg(pcp, __old, nval);			\
++	if (!likely(__ret == __old))					\
++		*(ovalp) = __ret;					\
++	likely(__ret == __old);						\
++})
++
+ #define __this_cpu_generic_read_nopreempt(pcp)				\
+ ({									\
+ 	typeof(pcp) ___ret;						\
+@@ -167,6 +176,15 @@ do {									\
+ 	__ret;								\
+ })
+ 
++#define this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
++({									\
++	typeof(pcp) __ret, __old = *(ovalp);				\
++	__ret = this_cpu_cmpxchg(pcp, __old, nval);			\
++	if (!likely(__ret == __old))					\
++		*(ovalp) = __ret;					\
++	likely(__ret == __old);						\
++})
++
+ #ifndef raw_cpu_read_1
+ #define raw_cpu_read_1(pcp)		raw_cpu_generic_read(pcp)
+ #endif
+@@ -258,6 +276,36 @@ do {									\
+ #define raw_cpu_xchg_8(pcp, nval)	raw_cpu_generic_xchg(pcp, nval)
+ #endif
+ 
++#ifndef __SIZEOF_INT128__
++#define raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
++({									\
++	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
++	typeof(pcp) __ret, __old = *(ovalp);				\
++	bool __s;							\
++	__ret = *__p;							\
++	if (!__builtin_memcmp(&__ret, &__old, sizeof(pcp))) {		\
++		*__p = nval;						\
++		__s = true;						\
++	} else {							\
++		*(ovalp) = __ret;					\
++		__s = false;						\
++	}								\
++	__s;								\
++})
++
++#define raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)			\
++({									\
++	typeof(pcp) __old = (oval);					\
++	raw_cpu_generic_try_cmpxchg_memcpy(pcp, &__old, nval);		\
++	__old;								\
++})
++
++#define raw_cpu_cmpxchg128(pcp, oval, nval) \
++	raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)
++#define raw_cpu_try_cmpxchg128(pcp, ovalp, nval) \
++	raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)
++#endif
++
+ #ifndef raw_cpu_cmpxchg_1
+ #define raw_cpu_cmpxchg_1(pcp, oval, nval) \
+ 	raw_cpu_generic_cmpxchg(pcp, oval, nval)
+@@ -283,6 +331,31 @@ do {									\
+ 	raw_cpu_generic_cmpxchg(pcp, oval, nval)
+ #endif
+ 
++#ifndef raw_cpu_try_cmpxchg_1
++#define raw_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
++	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++#ifndef raw_cpu_try_cmpxchg_2
++#define raw_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
++	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++#ifndef raw_cpu_try_cmpxchg_4
++#define raw_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
++	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++#ifndef raw_cpu_try_cmpxchg_8
++#define raw_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
++	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++#ifndef raw_cpu_try_cmpxchg64
++#define raw_cpu_try_cmpxchg64(pcp, ovalp, nval) \
++	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++#ifndef raw_cpu_try_cmpxchg128
++#define raw_cpu_try_cmpxchg128(pcp, ovalp, nval) \
++	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++
+ #ifndef this_cpu_read_1
+ #define this_cpu_read_1(pcp)		this_cpu_generic_read(pcp)
+ #endif
+@@ -374,6 +447,33 @@ do {									\
+ #define this_cpu_xchg_8(pcp, nval)	this_cpu_generic_xchg(pcp, nval)
+ #endif
+ 
++#ifndef __SIZEOF_INT128__
++#define this_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
++({									\
++ 	bool __ret;							\
++	unsigned long __flags;						\
++	raw_local_irq_save(__flags);					\
++	__ret = raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval);	\
++	raw_local_irq_restore(__flags);					\
++	__ret;								\
++})
++
++#define this_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)		\
++({									\
++	typeof(pcp) __ret;						\
++	unsigned long __flags;						\
++	raw_local_irq_save(__flags);					\
++	__ret = raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval);	\
++	raw_local_irq_restore(__flags);					\
++	__ret;								\
++})
++
++#define this_cpu_cmpxchg128(pcp, oval, nval) \
++	this_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)
++#define this_cpu_try_cmpxchg128(pcp, ovalp, nval) \
++	this_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)
++#endif
++
+ #ifndef this_cpu_cmpxchg_1
+ #define this_cpu_cmpxchg_1(pcp, oval, nval) \
+ 	this_cpu_generic_cmpxchg(pcp, oval, nval)
+@@ -399,4 +499,29 @@ do {									\
+ 	this_cpu_generic_cmpxchg(pcp, oval, nval)
+ #endif
+ 
++#ifndef this_cpu_try_cmpxchg_1
++#define this_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
++	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++#ifndef this_cpu_try_cmpxchg_2
++#define this_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
++	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++#ifndef this_cpu_try_cmpxchg_4
++#define this_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
++	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++#ifndef this_cpu_try_cmpxchg_8
++#define this_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
++	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++#ifndef this_cpu_try_cmpxchg64
++#define this_cpu_try_cmpxchg64(pcp, ovalp, nval) \
++	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++#ifndef this_cpu_try_cmpxchg128
++#define this_cpu_try_cmpxchg128(pcp, ovalp, nval) \
++	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
++#endif
++
+ #endif /* _ASM_GENERIC_PERCPU_H_ */
+--- a/include/linux/types.h
++++ b/include/linux/types.h
+@@ -13,6 +13,13 @@
+ #ifdef __SIZEOF_INT128__
+ typedef __s128 s128;
+ typedef __u128 u128;
++#else
++#ifdef CONFIG_64BIT
++/* hack for this_cpu_cmpxchg128 */
++typedef struct {
++	u64 a, b;
++} u128 __attribute__((aligned(16)));
++#endif
+ #endif
+ 
+ typedef u32 __kernel_dev_t;
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -11,14 +11,14 @@ void __init kmem_cache_init(void);
+ # define system_has_freelist_aba()	system_has_cmpxchg128()
+ # define try_cmpxchg_freelist		try_cmpxchg128
+ # endif
+-#define this_cpu_cmpxchg_freelist	this_cpu_cmpxchg128
++#define this_cpu_try_cmpxchg_freelist	this_cpu_try_cmpxchg128
+ typedef u128 freelist_full_t;
+ #else /* CONFIG_64BIT */
+ # ifdef system_has_cmpxchg64
+ # define system_has_freelist_aba()	system_has_cmpxchg64()
+ # define try_cmpxchg_freelist		try_cmpxchg64
+ # endif
+-#define this_cpu_cmpxchg_freelist	this_cpu_cmpxchg64
++#define this_cpu_try_cmpxchg_freelist	this_cpu_try_cmpxchg64
+ typedef u64 freelist_full_t;
+ #endif /* CONFIG_64BIT */
+ 
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -3037,8 +3037,8 @@ __update_cpu_freelist_fast(struct kmem_c
+ 	freelist_aba_t old = { .freelist = freelist_old, .counter = tid };
+ 	freelist_aba_t new = { .freelist = freelist_new, .counter = next_tid(tid) };
+ 
+-	return this_cpu_cmpxchg_freelist(s->cpu_slab->freelist_tid.full,
+-					 old.full, new.full) == old.full;
++	return this_cpu_try_cmpxchg_freelist(s->cpu_slab->freelist_tid.full,
++					     &old.full, new.full);
+ }
+ 
+ /*
