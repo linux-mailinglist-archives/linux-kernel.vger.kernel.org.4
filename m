@@ -2,155 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6C6715E34
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BAB715E38
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjE3L6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S231968AbjE3L7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231371AbjE3L6P (ORCPT
+        with ESMTP id S231400AbjE3L7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:58:15 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2092.outbound.protection.outlook.com [40.107.114.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A6311C;
-        Tue, 30 May 2023 04:57:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I8E2DJBGr1GZRIOsB3M8sDtOOzP/fOoAPeHlgmJ/jp2ZBVlMsSJxP07dY+NlbqeYAz3iAOzA7T+6ArF5tfphmBllCnD4jTxkau8f9qxECRyHZjIw8dLd/4JnxRBBC4vxNrqfR9suyavxdSQIBNUUaUMbS2lpJUC5Wa6RL13mV41Nwrvrj++fpHimoAV68+AVpraenJsdvauvzS+aouI1VNBjHvoPxZAFja740DdTB9uCsOHsq3YznodbDPtSPiITuD0Zw51tLm5wrSAnmTzyKEVc36pA+1yiXHI5ciCjbWdMvIf9wPV0xuScXfkjkDe14SXRtDmxf9e2OBpZn5bDbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yNwqOgx+vFt+AofvAB5244/2YNgTW3MUaUJ+Cfazm04=;
- b=mUKDPqgOMGKTi+1OzFsQUsAM1s0X4LV4RGUtwh091nWwYWweZ9P4nzBYsFXEy8Az4fBkRSUH3inIOB6puBtIarISAw5eEGFSOTpQ/gUIKjoxxEGONCBMubVptVJy3ZKH2p61a3EvqWqBjbOabSju6aZsfmzs+YVE9hQwVY6EMb86yQvo6by13NYNspdiAS39/yGdn0KhRI7/Lu8Kp0lIautGUshz265wIONS0MY/rS9cXhzGVspOBU9czRvbgqXoeuq/RgMPXdJm3BpR56RmRtAmiAFqt63iRt7i5Fu4t9pPY53S8wb/qTxSpin+rhTtJ4tZmhM4Tkns7Eb3p9XHvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yNwqOgx+vFt+AofvAB5244/2YNgTW3MUaUJ+Cfazm04=;
- b=hymQUaDoE96sB9w5ItlR/koNYJ6gtHup9BWzX6qArkn3K0tqvMwOuuDj3uYqjdnd4yIpzj4ugKOYOs5oXMhjThAlBqP/rmi6xXSmhFXDVSB+V1oEsTpk8ruhh8ytd2Z1QjZUEnNtRorLv5hym8VfY+yByUV/2uT3TyNwTZbZ4WY=
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
- by TYBPR01MB5390.jpnprd01.prod.outlook.com (2603:1096:404:801c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 11:56:19 +0000
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::a4f8:4204:cbe6:6cb3]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::a4f8:4204:cbe6:6cb3%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 11:56:19 +0000
-From:   Chris Paterson <Chris.Paterson2@renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>
-Subject: RE: [PATCH 5.15 00/69] 5.15.114-rc1 review
-Thread-Topic: [PATCH 5.15 00/69] 5.15.114-rc1 review
-Thread-Index: AQHZkZ1NOXM/oLvbpkizB9HFrytbB69ytLxg
-Date:   Tue, 30 May 2023 11:56:19 +0000
-Message-ID: <TY2PR01MB37889F6EF314617888EFC3A8B74B9@TY2PR01MB3788.jpnprd01.prod.outlook.com>
-References: <20230528190828.358612414@linuxfoundation.org>
-In-Reply-To: <20230528190828.358612414@linuxfoundation.org>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|TYBPR01MB5390:EE_
-x-ms-office365-filtering-correlation-id: 5276a970-78c5-42ab-f086-08db6104e1b4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XBlo9UgPkF6RPl+0cQC8f9XtbrfIcnfl9zxe6W8v8rZ3gD6HgAqPutB3QjASC2NH4BLeroVBv41BtQzlksnAOdAZvIZZa80XKr8iAldKXnZEfrYqc4fcoyl9eQHpFxmcRjhkkeoK+ufissPOUh+hNqTKaKRhEChvTgxy3ZtRf3HEfdTyHwPKWeaFQ78tCuMB7vld9MDw6Dc0epoAoOdCUdUqp7PWXRWIUQIC1iLdh+sKgIdaXtKCwHbqxjLelOeGw6jKBqtMAdgMUgH5AXOS0QsS7Ho6T9ugBMB3+6XWd4gDJX0hL2vA9yXvxOX+tVqjdFBlyB8YpZY/E56SJZXSjqCXlzwNSCIcdUHnZnKzTERP5ACcxxpJDxHOLmMgKAwuQvJmtq3To0S2DR/gykjrz071QVnHy4p2fUeBI7Onv+HOSl84GTSWU2vUbB0BZpXpkWa1DN/QT9k5DUqMCouW8PLN/djYYDCyQUv38JeZhQmB0vfvChWaz2Ho0GzTbYFa9DRpFnHqrget1crUn/XAcOY23HWXuPrqlOmPUgGiF6kDktPRC8HYx8oebUqkgFQG4ORxq0CBAAfhA8yBm1hfNqVTKVAvt+CoOCU1RBV61t8Oap6gxhrpw9PvoyCN7WkiZ4rzTVJWf7DZG2cHLLS8fg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(39860400002)(136003)(346002)(396003)(451199021)(71200400001)(478600001)(54906003)(110136005)(8936002)(52536014)(8676002)(7416002)(5660300002)(33656002)(38070700005)(4744005)(86362001)(2906002)(66556008)(66946007)(4326008)(64756008)(122000001)(76116006)(66446008)(66476007)(316002)(55016003)(38100700002)(41300700001)(26005)(9686003)(6506007)(186003)(966005)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?fcAF/qWIv7dMuUFtk2UoEKMi6q5njg0M3eDb3aweU58ojOMEbG9X642Z?=
- =?Windows-1252?Q?jxpzVxpEXi8smlhRTz7aA2vGcucusRm1OdsnfVUg+iGlPPaptiAX+IFe?=
- =?Windows-1252?Q?ldNHM6Natdq9Kb5oxnFb7g4+zRnLAZpOkJSKQN05MUZMN+mom2tsvGmI?=
- =?Windows-1252?Q?Gg+Fyqa+00X8crI3CUpZXS55tr9joe2CWqm8aNcbidUMVcGrzleOD4su?=
- =?Windows-1252?Q?DU1++RaopfFrgXpEbunU2sCHTHgU5DEWJI1oA33tWisCEAVn0uwNzrnh?=
- =?Windows-1252?Q?sLS6BahZsSX8ZsNIyTH+qymztArOKFYsN2MxNi+3aAdONUvwwBk4S0xa?=
- =?Windows-1252?Q?bplO2Fk9Vk3vcvmLvs2YprKG+LS5oSwyteRChydB4EtaEUJuPt9A0T9I?=
- =?Windows-1252?Q?JS7rDWJlELJaiyZ4u8uqvp13iu4R2cPuk7UY5WuyCaru5yvAvAjWQpyJ?=
- =?Windows-1252?Q?u26X6QiUBg7fH5OUd8WAgXV7XL28terryD0MOXlPmHbYw1Hzn7SSwhvH?=
- =?Windows-1252?Q?K/Rd1FIGoqvkN0dOfCGtKKj7R58zMMefuAwYu/Fw4xwC7HIpuDd/n9Ty?=
- =?Windows-1252?Q?VYvmVJBe4yHtQBnIjr+orZu1Z0pBuVWzjavxylzZX8EHj6HRbXL5wfVC?=
- =?Windows-1252?Q?qNMRFe0EK12InY7t4dVtPIq3VBocWlXJIFlLXmhV6pEyDB3AGimnRgBb?=
- =?Windows-1252?Q?pE7YF9+lU8ltdH3mnjvm3ojgb1NnxzX4fxK1Aq/pjDI6v9+/V1AJm5yN?=
- =?Windows-1252?Q?0IkrJtD46GtSgxm7ad8TpMj4vyyB0qOpNOc1hqE+m/rXmg6Ie7ZZM43H?=
- =?Windows-1252?Q?NaVnyTqmTZZGQe/e3stjbbzLwQcF/NWCQqeSeB4CFaULzHOG5es6s5N5?=
- =?Windows-1252?Q?BFv+GjF1LcOgKXKPw26eE9oSPhyR+gyzVt1mc5VjynUxZg7iBBcf3wNg?=
- =?Windows-1252?Q?eYd9VYiNkdDNXVLIWFkuW174HuHL+bIogh2zdYn2VIle9DOg+lexWt2r?=
- =?Windows-1252?Q?lSefyf2FAn2B2MWyRDvCTZKs8u78s0oMydIeAAWrpKT+5hmjhmkkd7C/?=
- =?Windows-1252?Q?V41heiELE6z0LxBt1ieDmOxGDVUs7+1SNtQroo2T4vHaehank8iE9hTm?=
- =?Windows-1252?Q?W0flgtzlFMF57dtDjruCQRm71lqad09zaQA/DVpICbo6dg+dYoKDCbCp?=
- =?Windows-1252?Q?xAOINnM+zq1D+Ua94U4sgOl09H2LjTcQQ20jM5TKaRBEAzNOY+LQ07Is?=
- =?Windows-1252?Q?xMvRfEAUDEDllsAiJEPa3iB02MLEwkRQJyaT2Pyfbr5TdIQXeBnrJ8XM?=
- =?Windows-1252?Q?XvBtBHxddIEgbYYE5a2nQOrrZIyv/7hWjj+m8iBcbpi0yf4Vk7uz938J?=
- =?Windows-1252?Q?SMuXPIk0ONErJFOUqmPzVrZcvaFsYdZihtnCYNkJXDGzwY5rRzwY7x2H?=
- =?Windows-1252?Q?uMERRSFm37Zr9TPHiXdcWvyTDWmG2OJfQp7sw+j7SP/bnNLcS7IYPDRK?=
- =?Windows-1252?Q?qmlUvVX9rZQFBSD2kIWxiRSnY5CWJ+hghvYXN/5dSNF7WLDyvyNkOXEq?=
- =?Windows-1252?Q?JW6nCcQfQzD77LLsCu+W2XXOGj2zinloZCIl+N8DcoAVNGW/0nlCmIPA?=
- =?Windows-1252?Q?IWBwmo0HT6TwGEgbizhqut1Wy5YTnsK3qM7OGi2KVsrW9Iv44KtxXlHY?=
- =?Windows-1252?Q?yluqo1sLG6E8goWQC+EG7jjKKe9jT+FoJCzpav3yKixBT1qXKzsJ/Q?=
- =?Windows-1252?Q?=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 30 May 2023 07:59:03 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B974E77
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:58:35 -0700 (PDT)
+Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 34UBvhEC088902;
+        Tue, 30 May 2023 20:57:43 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
+ Tue, 30 May 2023 20:57:43 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 34UBvg9Y088899
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 30 May 2023 20:57:42 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <8edbd558-a05f-c775-4d0c-09367e688682@I-love.SAKURA.ne.jp>
+Date:   Tue, 30 May 2023 20:57:42 +0900
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5276a970-78c5-42ab-f086-08db6104e1b4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2023 11:56:19.7177
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iT+SBYV18kVWh4i7Azclp6i3PJTLnYSDQSPiZH2cECtqaFzJJ6tToL7e5ngUf7zKleJCRVN14DabOUFW8CnMckLRlWU+QuGzt17Ec/J6uRk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYBPR01MB5390
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] tty: tty_io: remove hung_up_tty_fops
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jiri Slaby <jirislaby@kernel.org>
+References: <6ff6fdea-c955-f9dd-289e-b0d613a28280@I-love.SAKURA.ne.jp>
+ <20230423233433.GF3390869@ZenIV>
+ <e1fe6a44-3021-62ad-690a-69146e39e1ac@I-love.SAKURA.ne.jp>
+ <20230424004431.GG3390869@ZenIV>
+ <8e21256a-736e-4c2d-1ff4-723775bcac46@I-love.SAKURA.ne.jp>
+ <2fca7932-5030-32c3-dd61-48dd78e58e11@I-love.SAKURA.ne.jp>
+ <20230425160344.GS3390869@ZenIV>
+ <1b405689-ea0a-6696-6709-d372ce72d68c@I-love.SAKURA.ne.jp>
+ <5cebade5-0aa9-506c-c817-7bcf098eba89@I-love.SAKURA.ne.jp>
+ <c95c62ba-4f47-b499-623b-05627a81c601@I-love.SAKURA.ne.jp>
+ <2023053005-alongside-unvisited-d9af@gregkh>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <2023053005-alongside-unvisited-d9af@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+On 2023/05/30 19:44, Greg Kroah-Hartman wrote:
+> On Sun, May 14, 2023 at 10:02:26AM +0900, Tetsuo Handa wrote:
+>> If we care about only NULL pointer dereference, implementing missing
+>> callbacks to hung_up_tty_fops is fine. But if we also care about KCSAN
+>> reports, we will need to wrap all filp->f_op usages which are reachable
+>> via tty_fops callbacks using data_race().
+> 
+> I'm missing something here.  Why would KCSAN report problems if we
+> implement the needed callbacks in hung_up_tty_fops?  And what reports
+> would they be?
 
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Sunday, May 28, 2023 8:11 PM
->=20
-> This is the start of the stable review cycle for the 5.15.114 release.
-> There are 69 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
-> Anything received after that time might be too late.
+Unlike atomic operations such as atomic_read()/atomic_set(), normal read/write
+operations are not atomic for KCSAN. KCSAN reports some value being changed
+during a read/write.
 
-CIP configurations built and booted with Linux 5.15.114-rc1 (cd3aaa9c7395):
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
-81425029
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
-ux-5.15.y
+In this report, KCSAN detected that __tty_hangup() changed the value of
+filp->f_op from 0xffffffff84e91ed0 to 0xffffffff84e91dc0 at
 
-Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
+  filp->f_op = &hung_up_tty_fops;
 
-Kind regards, Chris
+line when __fput() was reading the value of filp->f_op at
+
+  if (file->f_op->release)
+
+line.
+
+Even if we implement the needed callbacks in hung_up_tty_fops,
+KCSAN will continue reporting that the value of filp->f_op changes.
+
+> 
+> And why would data_race() help here?
+
+data_race() tells KCSAN not to report.
+data_race() is used when the race KCSAN checks is harmless.
+
+
+
+>> @@ -182,7 +182,7 @@ int tty_alloc_file(struct file *file)
+>>  {
+>>  	struct tty_file_private *priv;
+>>  
+>> -	priv = kmalloc(sizeof(*priv), GFP_KERNEL);
+>> +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> 
+> Why is this zeroing out everything now?  Just because you added one
+> bool?  Why not just set the bool properly instead?
+
+Because I consider that this function is not performance critical where
+avoid increasing code size by zeroing out everything is acceptable.
+
+
+
+>> -static long hung_up_tty_compat_ioctl(struct file *file,
+>> +static inline long hung_up_tty_compat_ioctl(struct file *file,
+>>  				     unsigned int cmd, unsigned long arg)
+>>  {
+>>  	return cmd == TIOCSPGRP ? -ENOTTY : -EIO;
+>>  }
+> 
+> Marking these as inline, and then treating them as a function pointer,
+> seems like a horrid way to work around a compiler warning.  As they
+> really are not inline functions anymore, but yet the compiler doesn't
+> know that.  Odds are once the compiler gets smarter, the warnings will
+> return, so please, solve this properly.
+
+Since this patch removes "struct file_operations hung_up_tty_fops"
+which was the only source of treating as a function pointer,
+these inlined functions are no longer treated as a function pointer.
+
+
+
+>> @@ -619,7 +608,8 @@ static void __tty_hangup(struct tty_struct *tty, int exit_session)
+>>  			continue;
+>>  		closecount++;
+>>  		__tty_fasync(-1, filp, 0);	/* can't block */
+>> -		filp->f_op = &hung_up_tty_fops;
+>> +		/* Accept race with tty_hung_up_p() test. */
+>> +		data_race(priv->hung = true);
+> 
+> Why accept it?  Say why it's not really an issue here.
+
+Because whether tty_hung_up_p() sees true or false due to concurrent
+access does not matter. The race KCSAN reported is harmless (unless
+callbacks suddenly disappear).
+
+
+
+>> @@ -743,7 +733,9 @@ void tty_vhangup_session(struct tty_struct *tty)
+>>   */
+>>  int tty_hung_up_p(struct file *filp)
+>>  {
+>> -	return (filp && filp->f_op == &hung_up_tty_fops);
+>> +	return filp && filp->f_op == &tty_fops &&
+>> +		/* Accept race with __tty_hangup(). */
+>> +		data_race(((struct tty_file_private *) filp->private_data)->hung);
+> 
+> Same here.
+
+Because whether __tty_hangup() already changed from false to true due to
+concurrent access does not matter. The race KCSAN reported is harmless (unless
+callbacks suddenly disappear).
+
+
+
+>> @@ -911,6 +903,8 @@ static ssize_t tty_read(struct kiocb *iocb, struct iov_iter *to)
+>>  	struct tty_struct *tty = file_tty(file);
+>>  	struct tty_ldisc *ld;
+>>  
+>> +	if (tty_hung_up_p(file))
+>> +		return hung_up_tty_read(iocb, to);
+> 
+> What happens if you hang up _right_ after this check?  There's no
+> locking here, right?  Same everywhere else you have this pattern, you
+> made the race window smaller, but it's still there from what I can see.
+
+We cannot close the race window without introducing locking,
+but we don't need to close the race window.
+
+The race KCSAN found in this report is harmless, as long as callbacks
+reachable via filp->f_op does not disappear.
+
+This patch prevents filp->f_op from suddenly disappearing callbacks,
+by not changing the value of filp->f_op.
+
+
+
+>> @@ -255,6 +255,7 @@ struct tty_file_private {
+>>  	struct tty_struct *tty;
+>>  	struct file *file;
+>>  	struct list_head list;
+>> +	bool hung;
+> 
+> No hint as to what "hung" means here?
+
+Whether __tty_hangup() was called or not.
+
