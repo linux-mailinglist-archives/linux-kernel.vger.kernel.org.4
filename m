@@ -2,244 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB64871609C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CD3716093
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbjE3Mxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
+        id S232376AbjE3Mxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjE3Mxb (ORCPT
+        with ESMTP id S232374AbjE3Mx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:53:31 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E52E63;
-        Tue, 30 May 2023 05:53:09 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-38c35975545so2970825b6e.1;
-        Tue, 30 May 2023 05:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685451187; x=1688043187;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gy495w7hzc4hUmERgvqWVDar3q/n3sqHlrrfq6GjSMM=;
-        b=J1bSSI3zdsG+GproejU5oGsL8pfinLIMzoVp7nBY0PJTRT7UIBfX2mt7gjZGiVep0/
-         j7H3Cb8c8b0Mn9Rxx0ca/5Rv7hYPnPLBI+HyNFvRVKjd+eWHPoJX/kH2xIGzKjui0Ndh
-         m8hptRO79Y7YtzrLkwTDV9bN+ogO9oifJhc8piO9R2BjXVCRIA+qZKBEt+aZ23hIqOxI
-         HWV5/HG/5ZmSHQcdtB9xNLj8BhK0hJ4WHGQvd/g/IpSTn9+U0MRTU5NphX57vSS5RmoR
-         klFGhE9k9mqoAudreOQwXxEkmfG4tlyN6ilJbGmIa7/Xg2PE/iuHWfTLKtoMulSVdUZQ
-         P/xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685451187; x=1688043187;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gy495w7hzc4hUmERgvqWVDar3q/n3sqHlrrfq6GjSMM=;
-        b=mE5cNP6g/8JG4lZ59vOcPba25vbWiE5sRgYyRbfw/oHyoFHmR5QXzr+oQ6mKEYlKEZ
-         5/uDSMkhzUXA4CAgCs61ZBb7Dc71jJxn/dScinX5MOTfnULnEK4jPrNkWy8M5drqjnLd
-         nZ4jtsMNNVJKP3O60v5KfPSMVcMROyCcClt/UYJ3druznqdvsAIjnRVr9ikdq1cwUW/3
-         7jPNAzyPQrwo78N7Uo13pZKTYK/nsx5qE3PKXy5WhZh0MLi8vFA9oZIHsjLvMSt7Wx+6
-         tcU88V+0MbaoGb+pduN9wuKLPgjvkKMiR7SHH9WzLIaQxIcb8333aU3AVA3upARGXmuS
-         LDGQ==
-X-Gm-Message-State: AC+VfDw3wW6wCMH8GxWfMPeTG7E3UAN9NdgLHyTT6r+P5pd3i7fMgqRR
-        9mdcoGFB0uY5tNX2jM7gL6v4f/V/1DccoxY3BMppcshCEF4pEAxE
-X-Google-Smtp-Source: ACHHUZ5MLuVOLOBdZC/hUgmFSmbsAx3WDPWQkF6Q8rL9efe7+4W7bj9s+NQsSfUFjJyTfYy64mv1z9WQHSzjLZQf/5I=
-X-Received: by 2002:a05:6808:305:b0:398:2f92:65ca with SMTP id
- i5-20020a056808030500b003982f9265camr1244771oie.7.1685451186841; Tue, 30 May
- 2023 05:53:06 -0700 (PDT)
+        Tue, 30 May 2023 08:53:26 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2072.outbound.protection.outlook.com [40.107.220.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9021CE4B;
+        Tue, 30 May 2023 05:53:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SDivpmQghpK1UUf5t8mxaRYl/5zqgTAjnHnja+e63o9wkiFKtnj8JX7CTx99IwqQI5ZdJmEJIgiB3Ef7UxEQHbExRQ8sFhSsAjvkW7zTiIoJynprCrHLryNGspxqCNUuLwFuQzwJMIfg032y+ApS/L9zny6Ybh61dJG2xA7BJAnwmy5jbezF7Xx2kONjaHKhB2CCobZQQJpxQtWa9NMfvCVTkuZun8j80t/9qbgc5rQPY3/E519U/V1MvJyY4KbGUXT+mggCVBWPGsRfGsp9Da+3QVcuPqbFB/nh5Ga/gi422/5TL+aZ524npfYH58r4Ub57DuzMctbEcoERlnxN7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gOTjVUbkENSjUSTkeOmWH9YX6YWCj1y+LVHKLzlMyvY=;
+ b=OIUsj19Ihmr9VlFo48lhUlafMZHRz0S8MMDKdpmgxl0r/iEHSFx2I6+hfaRk6e7er+nOUVTCG6LuDOMHzbtybeo04wSdCYi9hDoreaVxM1cIRYWk5Qt22g0H1aKkmFZaKTCtMjzxQOg2NB/imEIIBSsA1jZ3w8xhBVaJqD1PMozBDgmuMM0LXX7h0xlbvbRNY3pLCbB3poeKwtA6xzOeL1SWWRhSCz3j5EwYi2JGxJaMeX0sG8B68uHrGOcHQ3wWYVTGUPEsbWllgg1vE3Y49337TXt+J8gsnB2oJM3TJ42V2tziHXTvobSbCmb4Nx6whRNK4Uo/M8KFkgF7DGoKkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gOTjVUbkENSjUSTkeOmWH9YX6YWCj1y+LVHKLzlMyvY=;
+ b=f+HKngsq6psykViI0U/lWN93od4eh9dDCqCgsqq4A73KGmTQpNQo800rZEtAa0wANrIomg5+tuM8wSkI1gyZ01K3rUQhX2JDVk6RJd6vShgx9jAbiSNofDg7yh2aZj50QtTGXj8o0mLRnF5puBb3Bt6k+9x+6BvmC9KnJoYpkLD4Kw/pyS5INhv0+if1FULXU3oxfhKablvYhHIsjBvhSTKmJvW7T/gZ8xy7cGWueOB0+lDRiyUxYj9NdwaaBhEhyV6H2bEKZQ3DwUAMjqHuPIKJfdbNf7I/mC/GA/quBzNHbVI9FH7rxx7VA86SDuuGkrdMK17o63G70Q/pKrltfw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by MW4PR12MB6976.namprd12.prod.outlook.com (2603:10b6:303:20a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
+ 2023 12:52:37 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6433.017; Tue, 30 May 2023
+ 12:52:37 +0000
+Date:   Tue, 30 May 2023 09:52:33 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>, will@kernel.org,
+        catalin.marinas@arm.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, nicolinc@nvidia.com,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        John Hubbard <jhubbard@nvidia.com>, zhi.wang.linux@gmail.com,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 2/2] arm64: Notify on pte permission upgrades
+Message-ID: <ZHXxkUe4IZXUc1PV@nvidia.com>
+References: <3cece716fc09724793aa832e755abfc9d70a8bb3.1684892404.git-series.apopple@nvidia.com>
+ <5d8e1f752051173d2d1b5c3e14b54eb3506ed3ef.1684892404.git-series.apopple@nvidia.com>
+ <ZHKaBQt8623s9+VK@nvidia.com>
+ <87pm6ii6qi.fsf@nvidia.com>
+ <ZHXj/6Bjraxqk4YR@nvidia.com>
+ <d2e591c1-eb43-377b-d396-8335f77acef6@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d2e591c1-eb43-377b-d396-8335f77acef6@arm.com>
+X-ClientProxiedBy: SJ0PR13CA0130.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c6::15) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-References: <20230529113804.GA20300@didi-ThinkCentre-M920t-N000>
- <CANn89iJw3Ehoj7GfYnc6Xv5N2wULqNuP3zNBwQx97i-YJD5avg@mail.gmail.com>
- <CAL+tcoCRgpoYgQXdM2Es0gjRtRZj1hCK-5M04WZ1sy3vt_5JjA@mail.gmail.com>
- <CANn89iKCKTg0ExMRAxXWK200Q6UX2DeuUQzZzbZevt5kST7qQA@mail.gmail.com> <CAL+tcoDd5M0=SzDVcuFnu_ntC7HASq9rrS_pZ5FXNyMa2aQrHQ@mail.gmail.com>
-In-Reply-To: <CAL+tcoDd5M0=SzDVcuFnu_ntC7HASq9rrS_pZ5FXNyMa2aQrHQ@mail.gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 30 May 2023 20:52:30 +0800
-Message-ID: <CAL+tcoBYvV58rz9KcrH5QTdc1jPi=H1VXt1yUj-pYwA1FE9CEg@mail.gmail.com>
-Subject: Re: [PATCH net] tcp: introduce a compack timer handler in sack compression
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     toke@toke.dk, Yuchung Cheng <ycheng@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Neal Cardwell <ncardwell@google.com>, netdev@vger.kernel.org,
-        zhangweiping <zhangweiping@didiglobal.com>,
-        tiozhang <tiozhang@didiglobal.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, fuyuanli@didiglobal.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW4PR12MB6976:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54672bda-2efc-4a0b-7cda-08db610cbe8f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Cgfy64LfmCJ4sRAW2b8QwWt9XTriw/P1zI3ON9Wrt4xYXoBJ1/rbur69ZAAAw1cGjx4RflTl2lYONspEexYSy+MBks0np0wQmHMLmSRKHJTI/ELpTmv3LNCYlmbWyjKhHzuju4+KzyHPA8uh+zFNoIHVI1/BQfbQBtXOaAe1jkuuVN/EAm7edWrM1ecP3f7+b32XTNlkCCxKtSOE7rM2n+fJkSn748MjZAMrCuTreQnNz7P1kmKtJeB2VL+wZRTIKQmoNPPPd03EKUnTxR6iPnm0/np09F9RPiKbQQgh+iA3eHhTlaKZ20enU8LhFWT9NzOf56BKV/TUISMemUBntZ9t1Yzd/mb/fLEKHHvrFAvD1yqr5f6U5jkP5ZLpoPWacsxnBmpCInkMPKzP5DiYI9PnGxtawKTtNrpF3dW1EJMfQBZLoKQKxHS9DVm5oWGUdIW1nEJDWlY9KMcbU/ZAT37u4BrqWTXM6Hpv6+B/amlvD8ZWK0wSV2mVsYDRWSUZ4h7WqiBRYWzNoG6viTpE4l7+ZYYW9gU76l1s6erHRu6oywNsWzv4ap1ruCT5XYpM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(366004)(451199021)(83380400001)(2616005)(2906002)(186003)(36756003)(38100700002)(41300700001)(316002)(6666004)(6486002)(5660300002)(86362001)(8676002)(8936002)(478600001)(54906003)(4326008)(6916009)(66556008)(66476007)(66946007)(26005)(53546011)(6512007)(6506007)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vtF8GQfl9cYrgqK0QCcdx5yPA62+HVWCu15E0MMw6+LYSQxrqDdBK5lSiuHR?=
+ =?us-ascii?Q?c4mnLUyjdApvAHNwnrgsU8SUhyk6wrdq5AcdW7bxTSX3BKcvMnIxe/z65v2m?=
+ =?us-ascii?Q?shPYO5xoK5mKIlq5tXIoP38foRK5IIdHjxwXtUdUx2pElPiuvPvm7/oBSu45?=
+ =?us-ascii?Q?YY/wHtytJVy7PaZnXc1SRsChT9DL6Twe1gxEmYLeuQeK7f7EBq+xbRZTlRRz?=
+ =?us-ascii?Q?1YxePvf5HmxgLCdSCrn2GULXfGyCkTCUr9XZz/VbMwZlpVXarYEGsNYj1R4J?=
+ =?us-ascii?Q?QUQsP2Ha9MsOHxfgeI7Q8zWPuwdtNffcb64NCNJKNL37N3xvOdi4+7W7e4qf?=
+ =?us-ascii?Q?7ubwOS3R113vOhgzixDhyPcEfGeyz+6PqgXHq9GxJikMxhMjjVJ5BqxlwU8j?=
+ =?us-ascii?Q?OTqWHQkOJGL0sTvIs91FJ8Xm7WJhVJkGTuao10UACqGeSwluL2C4N7PyDraU?=
+ =?us-ascii?Q?HebZWoIrzt1bHF+vEP9f34ZlZtrF+nIoykZ9480y24CH3r2g3kDRYPxUEq8C?=
+ =?us-ascii?Q?v8D+ZxTvabcHUA3m1Oi1Wrp47I0Q7hmUel0EXksCyVg+Trjv79qPu9lAXcv9?=
+ =?us-ascii?Q?G78/U4d4jI+aREqqCyJBuCt/IK7xfK9CyUovnF+gPXM6qD+PmhauT9K+lZXA?=
+ =?us-ascii?Q?m0IXfu7618gxfh/mFTyq1sjAkbgYnKrqocqC+S1Rbv2p7KRL3XX44mKoPN1j?=
+ =?us-ascii?Q?DheDvUlRzL2LJvlkJcES1i2ota+HF8mVAGoWGAYvQ6jJCoiVEhh9BoWcoJcv?=
+ =?us-ascii?Q?/GtOau7vLryI288lyA9wr8GPJxnSoCBqXt4a8qtOFEtCwdnjU2UWMO3wL50E?=
+ =?us-ascii?Q?EtfDakt9oU++3MaOwZO+YVDIfGR5tQk9wYPCyeFKTxFqAGJx6PINGOBz9bSF?=
+ =?us-ascii?Q?Simp2HF3HJoEHgiWnauv4AvwKxA1lxyOp4vEiQBQ/33tUWJ3oZ6WVW/hnM0T?=
+ =?us-ascii?Q?NcCaMrDHAo0mGsKa4i5nyS8lWL7ULu09sAfr6t029mtwRhZ1WfKmzrtBErR3?=
+ =?us-ascii?Q?jEsVD55kWt/OLE9Jp3RrmXs3PXc7rB9SEyDmABCpF+7u0DBg/o2OYJiTdIG6?=
+ =?us-ascii?Q?vVmYSQY8Q++zb3JsJA+KsqmjzHlr7+TimmynYSHuD1RVLGj8S5cSuY1QW+mt?=
+ =?us-ascii?Q?H+OJEg3ojYveKQTaYuGs191KkhCtkbrO6LcEZnBYLr3GITDH24wogcrTZeP6?=
+ =?us-ascii?Q?o1ijA1JHTxOdmGIqyEoWBYosCf6R8ArmHHTy5DsI9FRh1pf3LhZ8jASvCOOs?=
+ =?us-ascii?Q?48AgV19rf5u0nyKGsuvig+UcLim/YkZ2NywxCfdkwy71jrg/BySBL0OqvrsP?=
+ =?us-ascii?Q?ba2DS3FjNfJnEkOcY3ZqZ+7LtKmszA4d3w5qyQ6Irv8RbUMsl15E0p5AkMzr?=
+ =?us-ascii?Q?URjYyI7geCFlEnoCRQ3JDH8VdHSy1OmNyTTxCEQXEjk2y6S86O88fC8ePTuu?=
+ =?us-ascii?Q?pNnD92b0ofQG6RhD6sdwbQeNZGRYvYKIiaPwwk0/bkngBqJHCscYMLPdaCPs?=
+ =?us-ascii?Q?MXWa5EZXcKnk5p2+PfTpd34d5mY1NsAzOA6gFvBXCAie8fqW3ce4uQofgvdG?=
+ =?us-ascii?Q?XMeolG4hJyNREKaY4k30xRwcNV1DFoB79qhyJ6kD?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54672bda-2efc-4a0b-7cda-08db610cbe8f
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 12:52:36.9412
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: w2LyC9ODDECO+7B1IUuFf5TymVmxl6zdNST+UXzrJhwnzD+lr9Jx2epf12mmtHyZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6976
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 7:10=E2=80=AFPM Jason Xing <kerneljasonxing@gmail.c=
-om> wrote:
->
-> On Tue, May 30, 2023 at 6:01=E2=80=AFPM Eric Dumazet <edumazet@google.com=
-> wrote:
-> >
-> > On Tue, May 30, 2023 at 9:45=E2=80=AFAM Jason Xing <kerneljasonxing@gma=
-il.com> wrote:
-> > >
-> > > On Tue, May 30, 2023 at 3:12=E2=80=AFPM Eric Dumazet <edumazet@google=
-.com> wrote:
-> > > >
-> > > > On Mon, May 29, 2023 at 1:38=E2=80=AFPM fuyuanli <fuyuanli@didiglob=
-al.com> wrote:
-> > > > >
-> > > > > We've got some issues when sending a compressed ack is deferred t=
-o
-> > > > > release phrase due to the socket owned by another user:
-> > > > > 1. a compressed ack would not be sent because of lack of ICSK_ACK=
-_TIMER
-> > > > > flag.
-> > > >
-> > > > Are you sure ? Just add it then, your patch will be a one-liner
-> > > > instead of a complex one adding
-> > > > more code in a fast path.
-> > >
-> > > Honestly, at the very beginning, we just added one line[1] to fix
-> > > this. After I digged more into this part, I started to doubt if we
-> > > should reuse the delayed ack logic.
-> > >
-> > > Because in the sack compression logic there is no need to do more
-> > > things as delayed ack does in the tcp_delack_timer_handler() function=
-.
-> > >
-> > > Besides, here are some things extra to be done if we defer to send an
-> > > ack in sack compression:
-> > > 1) decrease tp->compressed_ack. The same as "tp->compressed_ack--;" i=
-n
-> > > tcp_compressed_ack_kick().
-> > > 2) initialize icsk->icsk_ack.timeout. Actually we don't need to do
-> > > this because we don't modify the expiration time in the sack
-> > > compression hrtimer.
-> >
-> > Yes, we do not need this, see my following comment.
-> >
-> > > 3) don't need to count the LINUX_MIB_DELAYEDACKS counter.
-> > > 4) I wonder even if those checks about the ack schedule or ping pong
-> > > mode in tcp_delack_timer_handler() for sack compression? I'm not sure
-> > > about it.
-> > >
-> > > So one line cannot solve it perfectly. That's the reason why we
-> > > introduce a new logic which can be clearer.
-> > >
-> > > I'm wondering if adding one check in the fast path is really that
-> > > unacceptable (it may hurt performance?) because a new logic would be
-> > > clearer for the whole sack compression.
-> >
-> > We definitely can solve the minor issue by not polluting the fast path.
-> >
-> > We also want simple/localised fixes, not something invasive (and risky)=
-.
->
-> Now I got it :)
->
-> >
-> > >
-> > > [1]
-> > > diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> > > index cc072d2cfcd8..d9e76d761cc6 100644
-> > > --- a/net/ipv4/tcp_input.c
-> > > +++ b/net/ipv4/tcp_input.c
-> > > @@ -5568,6 +5568,7 @@ static void __tcp_ack_snd_check(struct sock *sk=
-,
-> > > int ofo_possible)
-> > >
-> > > READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_comp_sack_delay_ns),
-> > >                       rtt * (NSEC_PER_USEC >> 3)/20);
-> > >         sock_hold(sk);
-> > > +       inet_csk(sk)->icsk_ack.pending |=3D ICSK_ACK_TIMER;
-> >
-> > Why not simply use existing storage/variables (tp->compressed_ack),
-> > instead of trying
-> > to reuse something else or add another bit, then complain that this
-> > does not work well ?
-> >
-> > Again, just fix tcp_delack_timer_handler(), it already can fetch existi=
-ng state.
-> >
-> > As a bonus, no need to send one patch for net, and another in net-next,
-> > trying to 'fix' issues that should have been fixed cleanly in a single =
-patch.
-> >
-> > Something like:
-> >
-> > diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
-> > index b839c2f91292f7346f33d6dcbf597594473a5aca..16bc4cedceb8a5e88f61f9a=
-bc2c0a8cc9322676a
-> > 100644
-> > --- a/net/ipv4/tcp_timer.c
-> > +++ b/net/ipv4/tcp_timer.c
-> > @@ -290,10 +290,20 @@ static int tcp_write_timeout(struct sock *sk)
-> >  void tcp_delack_timer_handler(struct sock *sk)
-> >  {
-> >         struct inet_connection_sock *icsk =3D inet_csk(sk);
-> > +       struct tcp_sock *tp =3D tcp_sk(sk);
-> >
-> > -       if (((1 << sk->sk_state) & (TCPF_CLOSE | TCPF_LISTEN)) ||
-> > -           !(icsk->icsk_ack.pending & ICSK_ACK_TIMER))
-> > +       if ((1 << sk->sk_state) & (TCPF_CLOSE | TCPF_LISTEN))
-> > +               return;
-> > +
-> > +       if (!(icsk->icsk_ack.pending & ICSK_ACK_TIMER) &&
-> > +           !tp->compressed_ack)
-> > +               return;
-> > +
-> > +       if (tp->compressed_ack) {
-> > +               tcp_mstamp_refresh(tp);
-> > +               tcp_sack_compress_send_ack(sk);
->
-> I wonder if we could use this combination as below instead since the
-> above function counts the snmp counter and clears the @compressed_ack,
-> which is against what we normally do in tcp_compressed_ack_kick() if
-> the socket is not owned?
+On Tue, May 30, 2023 at 01:14:41PM +0100, Robin Murphy wrote:
+> On 2023-05-30 12:54, Jason Gunthorpe wrote:
+> > On Tue, May 30, 2023 at 06:05:41PM +1000, Alistair Popple wrote:
+> > > 
+> > > > > As no notification is sent and the SMMU does not snoop TLB invalidates
+> > > > > it will continue to return read-only entries to a device even though
+> > > > > the CPU page table contains a writable entry. This leads to a
+> > > > > continually faulting device and no way of handling the fault.
+> > > > 
+> > > > Doesn't the fault generate a PRI/etc? If we get a PRI maybe we should
+> > > > just have the iommu driver push an iotlb invalidation command before
+> > > > it acks it? PRI is already really slow so I'm not sure a pipelined
+> > > > invalidation is going to be a problem? Does the SMMU architecture
+> > > > permit negative caching which would suggest we need it anyhow?
+> > > 
+> > > Yes, SMMU architecture (which matches the ARM architecture in regards to
+> > > TLB maintenance requirements) permits negative caching of some mapping
+> > > attributes including the read-only attribute. Hence without the flushing
+> > > we fault continuously.
+> > 
+> > Sounds like a straight up SMMU bug, invalidate the cache after
+> > resolving the PRI event.
+> 
+> No, if the IOPF handler calls back into the mm layer to resolve the fault,
+> and the mm layer issues an invalidation in the process of that which isn't
+> propagated back to the SMMU (as it would be if BTM were in use), logically
+> that's the mm layer's failing. The SMMU driver shouldn't have to issue extra
+> mostly-redundant invalidations just because different CPU architectures have
+> different idiosyncracies around caching of permissions.
 
-I take it back. After I considered it for a while, I think it's
-working because @compressed_ack and snmp counter are a pair which
-means we can do both of them together.
-It doesn't have any impact though it looks a bit different from before.
+The mm has a definition for invalidate_range that does not include all
+the invalidation points SMMU needs. This is difficult to sort out
+because this is general purpose cross arch stuff.
 
-Thanks,
+You are right that this is worth optimizing, but right now we have a
+-rc bug that needs fixing and adding and extra SMMU invalidation is a
+straightforward -rc friendly way to address it.
+
 Jason
-
->
-> "
-> if (hrtimer_try_to_cancel(&tp->compressed_ack_timer) =3D=3D 1)
->     __sock_put(sk);
-> tcp_send_ack(sk);
-> "
->
-> Above is extracted from tcp_sack_compress_send_ack()
->
-> >                 return;
-> > +       }
-> >
-> >         if (time_after(icsk->icsk_ack.timeout, jiffies)) {
-> >                 sk_reset_timer(sk, &icsk->icsk_delack_timer,
-> > icsk->icsk_ack.timeout);
-> > @@ -312,7 +322,7 @@ void tcp_delack_timer_handler(struct sock *sk)
-> >                         inet_csk_exit_pingpong_mode(sk);
-> >                         icsk->icsk_ack.ato      =3D TCP_ATO_MIN;
-> >                 }
-> > -               tcp_mstamp_refresh(tcp_sk(sk));
-> > +               tcp_mstamp_refresh(tp);
-> >                 tcp_send_ack(sk);
-> >                 __NET_INC_STATS(sock_net(sk), LINUX_MIB_DELAYEDACKS);
-> >         }
->
-> Thank you so much, Eric.
->
-> I will let fuyuanli submit a v2 patch including that one without
-> introducing a new logic/flag.
->
-> Thanks again,
-> Jason
