@@ -2,80 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167CF715816
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D82C271580F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjE3IN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
+        id S230033AbjE3IKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjE3INz (ORCPT
+        with ESMTP id S230017AbjE3IKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:13:55 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F30D9D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:13:51 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id AFA065FD1D;
-        Tue, 30 May 2023 11:13:48 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685434428;
-        bh=MFEWIxYnC181XBgiG50LZAhwCaHLPl/kqKrPyecHE1I=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=JEk6ebn38b9Q6RBpaFJWRp8oVsTENXxa1tDoQOHw+ZB0gnaYBivfELHFolDn1OU8W
-         7/DK9/PnEwMtf5TPeIAZUHsyYDfVQe4SNAztgcPSmU+/MyiZmpbOiBHuMyHE3TTn9n
-         zh0CjeXvKAb+3lto2GLi2+2FtFPWS+YGShPjyQ8yMby8y7KRwYbydnWzg5kKiWy7Fg
-         wlYqs868xlWRjfc8T4E+FyHelt0ZZH0OpTUdWY1xy+Md2NhzVbhkAcDAubwFIwPs6L
-         t3RHc5mwcLMcFDru2ULNtaFP1q96eh6IxRsVLd20dZmFCY/MhbHnChgYpR5NG7K0rl
-         +jUcDXzx3YlVA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 30 May 2023 11:13:46 +0300 (MSK)
-Message-ID: <1f4c90c4-e436-c53f-bb6f-416db374ae52@sberdevices.ru>
-Date:   Tue, 30 May 2023 11:09:10 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 2/5] mtd: rawnand: meson: move OOB to non-protected ECC
- area
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230515094440.3552094-1-AVKrasnov@sberdevices.ru>
- <20230515094440.3552094-3-AVKrasnov@sberdevices.ru>
- <20230522173334.7aa6f917@xps-13>
- <ebbc26e3-6a1c-eead-051c-8f93beba41f3@sberdevices.ru>
- <20230526190347.6e34a2be@xps-13>
- <b9f0a38a-0d50-23f0-4509-c38362d05f12@sberdevices.ru>
- <20230530094420.06281ab5@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230530094420.06281ab5@xps-13>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/30 04:52:00 #21374971
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Tue, 30 May 2023 04:10:42 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D10090;
+        Tue, 30 May 2023 01:10:40 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4DDB75C0193;
+        Tue, 30 May 2023 04:10:37 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 30 May 2023 04:10:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1685434237; x=1685520637; bh=uf
+        gkqQI0rYCB4h44qKb7lixkTsQc+fvfFQk8IuGt6LA=; b=rcHTFo83aXUuRRTFc9
+        KrOTd8KZv4rPYE7B/RhVmRvKug8CMK7Pfl4sVE0tjR9UZgfA9hfce2hfHS1jP4q3
+        +TIgzSROcDOGEFMeJD3NrjW4aPpcMKs1wJpxClo6LlibFSuITND3EZqB62iPbZzy
+        0t1xY3IEPVi3rQrpLki76l+uzSYfFMl/Z/toQa8X+vuckP58AUODZZ1RoC12aaJ/
+        UVsvZsrBRIEnpJoTIy2SLplyoXLy+ZwJWAsLA+5XdEquy2N/eMZxKcFmgXhUYtU0
+        sXWJuRCMLoaCJT8ep4LHteivocNfvuLe/EaeHI5ePK+VQeOmltDVWYVw8SeWEu74
+        MBbA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685434237; x=1685520637; bh=ufgkqQI0rYCB4
+        h44qKb7lixkTsQc+fvfFQk8IuGt6LA=; b=hH2183mjAtoZDHb8H+VmAJEMeLSof
+        PjvwgCsGgYSOopRKlzEOTSiXrtb+P8a+02t1cY6VfRc+gfEkPtuXyZnJyyBin7z4
+        Z4ymmWE31Ko//dC2g679fBeDZ4aXTeJ9DuuDmvXIe/XF1PPNJGIJJ1gdMetyni9q
+        b7pbyVG2xtKr90Qy/9WBSrgZi8spOx63VGpgJcbJn7MqNHPB4UQ7xrg2NicEhGhJ
+        uOGqSqA7BvugwjYTC2+kJkB9WiO3hVok/L4L7AG0Cyp8g+QfGP+1l7uYiOn1N4hS
+        0Jt9qOC4k+bme2YUUGG9pXkfAjwjPlB4qPmz5gG9MgVQtsdjlcqvhCIaA==
+X-ME-Sender: <xms:fK91ZELoz7pUblCI_cnYejkvcwyJuVM2e2XSNP90tolX5F6DaNtPiQ>
+    <xme:fK91ZEJM__V7Xs6zuiJ_x3hEXw4IQTkls_b5cJFSnm-9bHckf8pkz7raPbdJpWYMG
+    7Z3t1UO9JLE4YH-90A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekiedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:fK91ZEscb5yO3T5OVK15KU6OzVCwdPBgcyepqn-SWacoNEJDqQx8KQ>
+    <xmx:fK91ZBbawdLoTh9OPwtW0vh77edvEwxy29566UgfBkEfwF-CaxBfdw>
+    <xmx:fK91ZLZjBUOCvTPASwQnHG3aLL9Tu-GEt45v5FBqQmlM1rFYF0sJkw>
+    <xmx:fa91ZHHEp5jsDuAMK00ingcS5yaKs768aqWfWqtp3wi9MsMc8y5_FQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 53C43B60086; Tue, 30 May 2023 04:10:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-441-ga3ab13cd6d-fm-20230517.001-ga3ab13cd
+Mime-Version: 1.0
+Message-Id: <5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com>
+In-Reply-To: <2f5c3338898da65210ad3f62d7b7773a96f6d251.1685387484.git.falcon@tinylab.org>
+References: <cover.1685387484.git.falcon@tinylab.org>
+ <2f5c3338898da65210ad3f62d7b7773a96f6d251.1685387484.git.falcon@tinylab.org>
+Date:   Tue, 30 May 2023 10:10:16 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhangjin Wu" <falcon@tinylab.org>, "Willy Tarreau" <w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Subject: Re: [PATCH v2 07/13] tools/nolibc: sys_lseek: add pure 64bit lseek
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,61 +86,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miquel,
+On Mon, May 29, 2023, at 21:54, Zhangjin Wu wrote:
+> use sys_llseek instead of sys_lseek to add 64bit seek even in 32bit
+> platforms.
+>
+> This code is based on sysdeps/unix/sysv/linux/lseek.c of glibc and
+> src/unistd/lseek.c of musl.
+>
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> Signed-off-by: Willy Tarreau <w@1wt.eu>
+> ---
+>  tools/include/nolibc/sys.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> index 98cfa2f6d021..d0720af84b6d 100644
+> --- a/tools/include/nolibc/sys.h
+> +++ b/tools/include/nolibc/sys.h
+> @@ -672,7 +672,17 @@ int link(const char *old, const char *new)
+>  static __attribute__((unused))
+>  off_t sys_lseek(int fd, off_t offset, int whence)
+>  {
+> +#if defined(__NR_llseek) || defined(__NR__llseek)
+> +#ifndef __NR__llseek
+> +#define __NR__llseek __NR_llseek
+> +#endif
+> +	off_t result;
+> +	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result, 
+> whence) ?: result;
+> +#elif defined(__NR_lseek)
+>  	return my_syscall3(__NR_lseek, fd, offset, whence);
+> +#else
+> +#error None of __NR_lseek, __NR_llseek nor __NR__llseek defined, 
+> cannot implement sys_lseek()
+> +#endif
+>  }
 
-On 30.05.2023 10:44, Miquel Raynal wrote:
-> Hi Arseniy,
-> 
->>>>>> -static void meson_nfc_get_user_byte(struct nand_chip *nand, u8 *oob_buf)
->>>>>> -{
->>>>>> -	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
->>>>>> -	__le64 *info;
->>>>>> -	int i, count;
->>>>>> +	int i;
->>>>>>  
->>>>>> -	for (i = 0, count = 0; i < nand->ecc.steps; i++, count += 2) {
->>>>>> +	for (i = 0; i < nand->ecc.steps; i++) {
->>>>>>  		info = &meson_chip->info_buf[i];
->>>>>> -		oob_buf[count] = *info;
->>>>>> -		oob_buf[count + 1] = *info >> 8;
->>>>>> +		/* Always ignore user bytes programming. */    
->>>>>
->>>>> Why?    
->>>>
->>>> I think comment message is wrong a little bit. Here "user bytes" are
->>>> user bytes protected by ECC (e.g. location of these bytes differs from new
->>>> OOB layout introduced by this patch). During page write this hardware
->>>> always writes these bytes along with data. But, new OOB layout always ignores
->>>> these 4 bytes, so set them to 0xFF always.  
->>>
->>> When performing page reads/writes, you need to take the data as it's
->>> been provided. You may move the data around in the buffer provided to
->>> the controller, so that it get the ECC data at the right location, and
->>> you need of course to reorganize the data when reading as well, so that
->>> the user sees XkiB of data + YB of OOB. That's all you need to do in
->>> these helpers.
->>>   
->>
->> I think there is some misunderstanding about these "user bytes" above: there are 4
->> bytes which this NAND controller always writes to page in ECC mode - it was free OOB
->> bytes covered by ECC. Controller grabs values from DMA buffer (second DMA buffer which
->> doesn't contains page data) and writes it along with data and ECC codes. Idea of this
->> change is to always suppress this write by setting them to 0xFF (may be there is some
->> command option to not write it, but I don't have doc), because all of them (4 bytes)
->> become unavailable to reader/writer.
-> 
-> At the NAND controller level, I would rather avoid doing things like
-> that.
-> 
-> I believe you can just update the ooblayout so that protected OOB bytes
-> are not exposed to the user as free bytes. Then your buffers should
-> already contain 0xffffff at the problematic location.
+This is not technically wrong, but I think a different approach
+would be clearer: Instead of having a sys_lseek() that works
+differently depending on the macros, why not define the low-level
+helpers to match the kernel arguments like
 
-So Your idea is to continue fill DMA buffer (for these 4 bytes) from provided OOB buffer,
-relying on that as these bytes are unused, they will be 0xFF in OOB buffer so we get the same result?
+static inline __attribute__((unused))
+__kernel_loff_t sys_lseek(int fd, __kernel_loff_t offset, int whence)
+{
+#ifdef __NR__llseek
+	__kernel_loff_t result;
+	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result,  whence) ?: result;
+#else
+        
+#endif
+}
 
-Thanks, Arseniy
+static inline __attribute__((unused))
+__kernel_off_t sys_lseek(int fd, __kernel_off_t offset, int whence)
+{
+#ifdef __NR_lseek
+	return my_syscall3(__NR_lseek, fd, offset, whence);
+#else
+        return -ENOSYS;
+#endif
+}
 
-> 
-> Thanks,
-> Miquèl
+And then do the selection inside of the actual lseek,
+something like
+
+static __attribute__((unused))
+off_t lseek(int fd, off_t offset, int whence)
+{
+        off_t ret = -ENOSYS;
+
+        if (BITS_PER_LONG == 32)
+               ret = sys_llseek(fd, offset, whence);
+
+        if (ret == -ENOSYS)
+               ret = sys_lseek(fd, offset, whence);
+
+        if (ret < 0) {
+                SET_ERRNO(-ret);
+                ret = -1;
+        }
+        return ret;
+       
+}
+
+For the loff_t selection, there is no real need to handle the
+fallback, so this could just be an if()/else to select 32-bit
+or 64-bit, but for the time_t ones the fallback is required
+for pre-5.6 kernels.
+
+       Arnd
