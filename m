@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82DFF715837
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82794715833
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjE3ITK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S230187AbjE3ITD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:19:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjE3ITE (ORCPT
+        with ESMTP id S229585AbjE3ITA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:19:04 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F5B9D;
-        Tue, 30 May 2023 01:19:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1685434738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cndrBEvjoH1OeoZKeuFmD3TUrxxCWmRRuavFehVpiWY=;
-        b=TT/23ooijGYmeBgg9uNwMITdnarWa/ig/g4ZSbKScrFBjNQgY+1azzKkhHYpdU7nkt4OX5
-        zOauVwdS0FCM3twOBJO5Ze9ofADGEYy2wOujWu9pCsJlO21sIm24UddOP4ore74R+7PQdj
-        Y48fy2eOcIU6PT3+8jl9p43imOFS5lA=
-Message-ID: <45a42e25658393e3767071960214b0ff47f0737b.camel@crapouillou.net>
-Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and
- M5150
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Date:   Tue, 30 May 2023 11:18:56 +0300
-In-Reply-To: <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
-References: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
-         <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 30 May 2023 04:19:00 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CD69D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:18:59 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-33b416c9741so30172715ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:18:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685434739; x=1688026739;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qzJGOmbVf2vGWXZAk1CwMi/eEw2fCRF424dJDluVOBA=;
+        b=iS9JZLoHvAulVnLQjT1wAmJkykdvOfk2s/le78XSOAfS8LkFGCmCqk4N4piFknEURS
+         dPtUb14xwfLeYZXUC8aQ8n/Q9zfQzH9LUxl9R/6TTR3rTOZEgnpAi49FXQBNI1ujRLY2
+         w8LisfZ/ueMDyvSmLtHzQinpeeFdRyDfjtQapmVvce67spulWrDCShePjA+AsueIfzGz
+         O6fral7aAttCIpSv0x9EAbWCRdLPDbszTgPD1vQSkAIgnOsNeH71TQTWC93J5oJUgdzM
+         qiLnnH8WPwSyQcdeHGhkFmVTQy0OHDlbfnfMCNvWYKpjn89jgEOWaSR5wUQ4zJt5kr74
+         0YSw==
+X-Gm-Message-State: AC+VfDwy6ViISef/qPJqJcLGr4COwZ1chWJfxDkXjFV/qWA0Urujn+zv
+        bDQ/r0wBFB4v3K+OtPaZR6r9zylGtZLt8vOZI7G/ejjX7nwW
+X-Google-Smtp-Source: ACHHUZ4Ygm7vxaf56lJal08JWTNusMW1mjN2PfD+Mw4dtZGXk9xPfS73Uc6IZh81XkuVCxmdrzt9W+KXt/YXbYmeQ727l3K6zOKx
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a92:d8ca:0:b0:333:760c:8650 with SMTP id
+ l10-20020a92d8ca000000b00333760c8650mr748733ilo.6.1685434739250; Tue, 30 May
+ 2023 01:18:59 -0700 (PDT)
+Date:   Tue, 30 May 2023 01:18:59 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ecdff405fce4dade@google.com>
+Subject: [syzbot] Monthly hfs report (May 2023)
+From:   syzbot <syzbot+list847d0bf1e8217efa87ab@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maciej,
+Hello hfs maintainers/developers,
 
-Le mardi 30 mai 2023 =C3=A0 09:03 +0100, Maciej W. Rozycki a =C3=A9crit=C2=
-=A0:
-> On Mon, 29 May 2023, Jiaxun Yang wrote:
->=20
-> > M5150 and P5600 are two MIPS32R5 kernels, however as MIPS32R5 is
-> > backward compatible with MIPS32R2 there is no reason to forbid
-> > M5150 and P5600 on MIPS32R2 kernel.
->=20
-> =C2=A0What problem are you trying to solve?=C2=A0 The CONFIG_SYS_HAS_CPU_=
-*
-> settings=20
-> denote overall platform's support for the given CPU and have nothing
-> to do=20
-> with what architecture level a given kernel has been configured for.=C2=
-=A0
-> You=20
-> do need to get the settings right for your platform, just as you do
-> in=20
-> 2/2, but this 1/2 part looks wrong to me.
->=20
-> =C2=A0NB CPU_4KEC is double-listed as R1 and R2 because early revisions o=
-f
-> the=20
-> 4KEc core were actually R1 before switching to R2, so this CPU can
-> report=20
-> either revision.
->=20
-> =C2=A0I don't know why CPU_XBURST is also listed as both R1 and R2, the
-> history=20
-> looks convoluted with no explanation.=C2=A0 Paul, is the CPU also dual-
-> revision=20
-> or is it just a bug and it is supposed to be listed under one ISA
-> revision
-> only, presumably R2?
+This is a 31-day syzbot report for the hfs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/hfs
 
-The XBurst CPU is R1 in older Ingenic SoCs (JZ4760B and older), and R2
-in newer SoCs (JZ4770 and newer).
+During the period, 3 new issues were detected and 0 were fixed.
+In total, 46 issues are still open and 12 have been fixed so far.
 
-Cheers,
--Paul
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  3125    Yes   possible deadlock in hfsplus_file_extend
+                   https://syzkaller.appspot.com/bug?extid=325b61d3c9a17729454b
+<2>  2749    Yes   possible deadlock in hfsplus_file_truncate
+                   https://syzkaller.appspot.com/bug?extid=6030b3b1b9bf70e538c4
+<3>  2495    Yes   possible deadlock in hfsplus_get_block
+                   https://syzkaller.appspot.com/bug?extid=b7ef7c0c8d8098686ae2
+<4>  1339    Yes   KMSAN: uninit-value in hfs_revalidate_dentry
+                   https://syzkaller.appspot.com/bug?extid=3ae6be33a50b5aae4dab
+<5>  658     Yes   KASAN: slab-out-of-bounds Read in hfsplus_uni2asc
+                   https://syzkaller.appspot.com/bug?extid=076d963e115823c4b9be
+<6>  565     Yes   kernel BUG in __hfsplus_setxattr
+                   https://syzkaller.appspot.com/bug?extid=1107451c16b9eb9d29e6
+<7>  541     Yes   KMSAN: uninit-value in hfsplus_delete_cat
+                   https://syzkaller.appspot.com/bug?extid=fdedff847a0e5e84c39f
+<8>  452     Yes   kernel BUG in hfs_write_inode
+                   https://syzkaller.appspot.com/bug?extid=97e301b4b82ae803d21b
+<9>  291     Yes   WARNING in hfs_bnode_create
+                   https://syzkaller.appspot.com/bug?extid=a19ca73b21fe8bc69101
+<10> 233     Yes   general protection fault in hfs_find_init
+                   https://syzkaller.appspot.com/bug?extid=7ca256d0da4af073b2e2
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
