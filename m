@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727ED716966
+	by mail.lfdr.de (Postfix) with ESMTP id BDE4A716967
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232944AbjE3Q0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
+        id S232607AbjE3Q0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjE3Q0O (ORCPT
+        with ESMTP id S233029AbjE3Q0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 May 2023 12:26:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32514188;
-        Tue, 30 May 2023 09:25:39 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2211BE;
+        Tue, 30 May 2023 09:25:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8180C62CA4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8438062CC2;
+        Tue, 30 May 2023 16:25:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F75C43323;
         Tue, 30 May 2023 16:25:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7510AC433D2;
-        Tue, 30 May 2023 16:25:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685463937;
-        bh=6XrkPYV5OD0SOPv2HSGcre2+E9eNQqCuaZRz6/NOtlc=;
+        s=k20201202; t=1685463940;
+        bh=UrnI2ovCkLMUGir6nEl9xb5A7zdP0flUTLe0/qoyl/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p4USfzS/8osYxoE2XqBhzoRshBfOTgU4KDPAj9PeIxE4845AyhMqHXwZpRXAkGtvY
-         tE/W4q2UKAf+bSPezxs+sWRoYZGQyiStFSGOEGqgOUjn/TaMqynZJSox4X+JG+NGNh
-         z8ja5za7m1u1K1xXu5d5yw60amSe2xezoEsFR2Gvc1eAFJLahuAqpNEeO0LypeBbiV
-         Ob3i0A53urvWcwGSmOgfPgPsJ+9LXzVGVqkZfavaMQ8BJ6KDNyBJb6YBmDWcJd+dWk
-         qQ/a6GfkbdrK8fjS7tUhsEO3cxjhAI/H34uEDQBhLzBbRMlkxoM3ipZLL7uQqaxO5C
-         e3dufb0HC6yXw==
+        b=lnY4CQwROOsmn7jqV9BYqCj6JFekyt/y4U20/bPKhPk1wQQeM4xPj8ZCbVuJEqf5B
+         qrRZMmUCL6iIhAVye2DQs4myXN3dljihx9O8GaT7cWrKv1ZpCNl0QvHFIqCm/ZSrjJ
+         bAHJn/fo7/+HfOKBskRp35GEx+DzlE16/z3aDFBWx9knCKplJdLdjW09Zay2mW7Zev
+         f+y3gobmGtWSx7DdSbKG5LEc3fkOCkp1O6dABtQ7YKq+0fgv1aQu7A3nGjQWe784cg
+         iJGtFZzy+RCEPHcwN5YhdtH8IDIGs8V1O6NmLWB6rf7BhLe7h86W2DYrY3yZ2aKaSB
+         0N1oFE7y1JLRg==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Bjorn Andersson <andersson@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org,
@@ -40,16 +40,16 @@ Cc:     linux-arm-msm@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v3 10/15] arm64: dts: qcom: sc8180x: Add PCIe instances
-Date:   Tue, 30 May 2023 21:54:49 +0530
-Message-Id: <20230530162454.51708-11-vkoul@kernel.org>
+Subject: [PATCH v3 11/15] arm64: dts: qcom: sc8180x: Add remoteprocs, wifi and usb nodes
+Date:   Tue, 30 May 2023 21:54:50 +0530
+Message-Id: <20230530162454.51708-12-vkoul@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230530162454.51708-1-vkoul@kernel.org>
 References: <20230530162454.51708-1-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,455 +58,403 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds PCIe instances found on this SoC
+This patch adds remoteprocs, wifi and usb and usb phy nodes
+for this SoC
 
 Co-developed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sc8180x.dtsi | 429 ++++++++++++++++++++++++++
- 1 file changed, 429 insertions(+)
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi | 355 ++++++++++++++++++++++++++
+ 1 file changed, 355 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-index b50673b7c147..2639f5fb6e39 100644
+index 2639f5fb6e39..c73fb25f5af0 100644
 --- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-@@ -1681,6 +1681,435 @@ mmss_noc: interconnect@1740000 {
+@@ -2227,6 +2227,198 @@ tlmm: pinctrl@3100000 {
+ 			wakeup-parent = <&pdc>;
+ 		};
+ 
++		remoteproc_mpss: remoteproc@4080000 {
++			compatible = "qcom,sc8180x-mpss-pas";
++			reg = <0x0 0x04080000 0x0 0x4040>;
++
++			interrupts-extended = <&intc GIC_SPI 266 IRQ_TYPE_EDGE_RISING>,
++					      <&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
++					      <&modem_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
++					      <&modem_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
++					      <&modem_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
++					      <&modem_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "wdog", "fatal", "ready", "handover",
++					  "stop-ack", "shutdown-ack";
++
++			clocks = <&rpmhcc RPMH_CXO_CLK>;
++			clock-names = "xo";
++
++			power-domains = <&rpmhpd SC8180X_CX>,
++					<&rpmhpd SC8180X_MSS>;
++			power-domain-names = "cx", "mss";
++
++			qcom,qmp = <&aoss_qmp>;
++
++			qcom,smem-states = <&modem_smp2p_out 0>;
++			qcom,smem-state-names = "stop";
++
++			glink-edge {
++				interrupts = <GIC_SPI 449 IRQ_TYPE_EDGE_RISING>;
++				label = "modem";
++				qcom,remote-pid = <1>;
++				mboxes = <&apss_shared 12>;
++			};
++		};
++
++		remoteproc_cdsp: remoteproc@8300000 {
++			compatible = "qcom,sc8180x-cdsp-pas";
++			reg = <0x0 0x08300000 0x0 0x4040>;
++
++			interrupts-extended = <&intc GIC_SPI 578 IRQ_TYPE_EDGE_RISING>,
++					      <&cdsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
++					      <&cdsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
++					      <&cdsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
++					      <&cdsp_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "wdog", "fatal", "ready",
++					  "handover", "stop-ack";
++
++			clocks = <&rpmhcc RPMH_CXO_CLK>;
++			clock-names = "xo";
++
++			power-domains = <&rpmhpd SC8180X_CX>;
++			power-domain-names = "cx";
++
++			qcom,qmp = <&aoss_qmp>;
++
++			qcom,smem-states = <&cdsp_smp2p_out 0>;
++			qcom,smem-state-names = "stop";
++
++			status = "disabled";
++
++			glink-edge {
++				interrupts = <GIC_SPI 574 IRQ_TYPE_EDGE_RISING>;
++				label = "cdsp";
++				qcom,remote-pid = <5>;
++				mboxes = <&apss_shared 4>;
++			};
++		};
++
++		usb_prim_hsphy: phy@88e2000 {
++			compatible = "qcom,sc8180x-usb-hs-phy",
++				     "qcom,usb-snps-hs-7nm-phy";
++			reg = <0 0x088e2000 0 0x400>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>;
++			clock-names = "ref";
++			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
++
++			#phy-cells = <0>;
++
++			status = "disabled";
++		};
++
++		usb_sec_hsphy: phy@88e3000 {
++			compatible = "qcom,sc8180x-usb-hs-phy",
++				     "qcom,usb-snps-hs-7nm-phy";
++			reg = <0 0x088e3000 0 0x400>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>;
++			clock-names = "ref";
++			resets = <&gcc GCC_QUSB2PHY_SEC_BCR>;
++
++			#phy-cells = <0>;
++
++			status = "disabled";
++		};
++
++		usb_prim_qmpphy: phy@88e9000 {
++			compatible = "qcom,sc8180x-qmp-usb3-dp-phy";
++			reg = <0 0x088e9000 0 0x18c>,
++			      <0 0x088e8000 0 0x38>,
++			      <0 0x088ea000 0 0x40>;
++			reg-names = "reg-base", "dp_com";
++			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
++				 <&rpmhcc RPMH_CXO_CLK>,
++				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
++				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
++			clock-names = "aux",
++				      "ref_clk_src",
++				      "ref",
++				      "com_aux";
++			resets = <&gcc GCC_USB3_DP_PHY_PRIM_SP0_BCR>,
++				 <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>;
++			reset-names = "phy", "common";
++
++			#clock-cells = <1>;
++			#address-cells = <2>;
++			#size-cells = <2>;
++			ranges;
++
++			status = "disabled";
++
++			usb_prim_ssphy: usb3-phy@88e9200 {
++				reg = <0 0x088e9200 0 0x200>,
++				      <0 0x088e9400 0 0x200>,
++				      <0 0x088e9c00 0 0x218>,
++				      <0 0x088e9600 0 0x200>,
++				      <0 0x088e9800 0 0x200>,
++				      <0 0x088e9a00 0 0x100>;
++				#phy-cells = <0>;
++				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
++				clock-names = "pipe0";
++				clock-output-names = "usb3_prim_phy_pipe_clk_src";
++			};
++
++			usb_prim_dpphy: dp-phy@88ea200 {
++				reg = <0 0x088ea200 0 0x200>,
++				      <0 0x088ea400 0 0x200>,
++				      <0 0x088eaa00 0 0x200>,
++				      <0 0x088ea600 0 0x200>,
++				      <0 0x088ea800 0 0x200>;
++				#clock-cells = <1>;
++				#phy-cells = <0>;
++			};
++		};
++
++		usb_sec_qmpphy: phy@88ee000 {
++			compatible = "qcom,sc8180x-qmp-usb3-dp-phy";
++			reg = <0 0x088ee000 0 0x18c>,
++			      <0 0x088ed000 0 0x10>,
++			      <0 0x088ef000 0 0x40>;
++			reg-names = "reg-base", "dp_com";
++			clocks = <&gcc GCC_USB3_SEC_PHY_AUX_CLK>,
++				 <&rpmhcc RPMH_CXO_CLK>,
++				 <&gcc GCC_USB3_SEC_CLKREF_CLK>,
++				 <&gcc GCC_USB3_SEC_PHY_COM_AUX_CLK>;
++			clock-names = "aux",
++				      "ref_clk_src",
++				      "ref",
++				      "com_aux";
++			resets = <&gcc GCC_USB3_DP_PHY_SEC_BCR>,
++				 <&gcc GCC_USB3_PHY_SEC_BCR>;
++			reset-names = "phy", "common";
++
++			#clock-cells = <1>;
++			#address-cells = <2>;
++			#size-cells = <2>;
++			ranges;
++
++			status = "disabled";
++
++			usb_sec_ssphy: usb3-phy@88e9200 {
++				reg = <0 0x088ee200 0 0x200>,
++				      <0 0x088ee400 0 0x200>,
++				      <0 0x088eec00 0 0x218>,
++				      <0 0x088ee600 0 0x200>,
++				      <0 0x088ee800 0 0x200>,
++				      <0 0x088eea00 0 0x100>;
++				#phy-cells = <0>;
++				clocks = <&gcc GCC_USB3_SEC_PHY_PIPE_CLK>;
++				clock-names = "pipe0";
++				clock-output-names = "usb3_sec_phy_pipe_clk_src";
++			};
++
++			usb_sec_dpphy: dp-phy@88ef200 {
++				reg = <0 0x088ef200 0 0x200>,
++				      <0 0x088ef400 0 0x200>,
++				      <0 0x088efa00 0 0x200>,
++				      <0 0x088ef600 0 0x200>,
++				      <0 0x088ef800 0 0x200>;
++				#clock-cells = <1>;
++				#phy-cells = <0>;
++				clock-output-names = "qmp_dptx1_phy_pll_link_clk",
++						     "qmp_dptx1_phy_pll_vco_div_clk";
++			};
++		};
++
+ 		system-cache-controller@9200000 {
+ 			compatible = "qcom,sc8180x-llcc";
+ 			reg = <0 0x09200000 0 0x50000>, <0 0x09600000 0 0x50000>;
+@@ -2241,6 +2433,112 @@ gem_noc: interconnect@9680000 {
  			qcom,bcm-voters = <&apps_bcm_voter>;
  		};
  
-+		pcie0: pci@1c00000 {
-+			compatible = "qcom,pcie-sc8180x";
-+			reg = <0 0x01c00000 0 0x3000>,
-+			      <0 0x60000000 0 0xf1d>,
-+			      <0 0x60000f20 0 0xa8>,
-+			      <0 0x60001000 0 0x1000>,
-+			      <0 0x60100000 0 0x100000>;
-+			reg-names = "parf",
-+				    "dbi",
-+				    "elbi",
-+				    "atu",
-+				    "config";
-+			device_type = "pci";
-+			linux,pci-domain = <0>;
-+			bus-range = <0x00 0xff>;
-+			num-lanes = <2>;
++		usb_prim: usb@a6f8800 {
++			compatible = "qcom,sc8180x-dwc3", "qcom,dwc3";
++			reg = <0 0x0a6f8800 0 0x400>;
++			interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 488 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 489 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "hs_phy_irq",
++					  "ss_phy_irq",
++					  "dm_hs_phy_irq",
++					  "dp_hs_phy_irq";
 +
-+			#address-cells = <3>;
-+			#size-cells = <2>;
++			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
++				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
++				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
++				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
++				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>,
++				 <&gcc GCC_USB3_SEC_CLKREF_CLK>;
++			clock-names = "cfg_noc",
++				      "core",
++				      "iface",
++				      "mock_utmi",
++				      "sleep",
++				      "xo";
++			resets = <&gcc GCC_USB30_PRIM_BCR>;
++			power-domains = <&gcc USB30_PRIM_GDSC>;
 +
-+			ranges = <0x01000000 0x0 0x60200000 0x0 0x60200000 0x0 0x100000>,
-+				 <0x02000000 0x0 0x60300000 0x0 0x60300000 0x0 0x3d00000>;
++			interconnects = <&aggre1_noc MASTER_USB3 0 &mc_virt SLAVE_EBI_CH0 0>,
++					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_USB3 0>;
++			interconnect-names = "usb-ddr", "apps-usb";
 +
-+			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "msi";
-+			#interrupt-cells = <1>;
-+			interrupt-map-mask = <0 0 0 0x7>;
-+			interrupt-map = <0 0 0 1 &intc 0 149 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
-+					<0 0 0 2 &intc 0 150 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-+					<0 0 0 3 &intc 0 151 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
-+					<0 0 0 4 &intc 0 152 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
++			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
++					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
++			assigned-clock-rates = <19200000>, <200000000>;
 +
-+			clocks = <&gcc GCC_PCIE_0_PIPE_CLK>,
-+				 <&gcc GCC_PCIE_0_AUX_CLK>,
-+				 <&gcc GCC_PCIE_0_CFG_AHB_CLK>,
-+				 <&gcc GCC_PCIE_0_MSTR_AXI_CLK>,
-+				 <&gcc GCC_PCIE_0_SLV_AXI_CLK>,
-+				 <&gcc GCC_PCIE_0_SLV_Q2A_AXI_CLK>,
-+				 <&gcc GCC_PCIE_0_CLKREF_CLK>,
-+				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>;
-+			clock-names = "pipe",
-+				      "aux",
-+				      "cfg",
-+				      "bus_master",
-+				      "bus_slave",
-+				      "slave_q2a",
-+				      "ref",
-+				      "tbu";
-+
-+			assigned-clocks = <&gcc GCC_PCIE_0_AUX_CLK>;
-+			assigned-clock-rates = <19200000>;
-+
-+			iommus = <&apps_smmu 0x1d80 0x7f>;
-+			iommu-map = <0x0   &apps_smmu 0x1d80 0x1>,
-+				    <0x100 &apps_smmu 0x1d81 0x1>;
-+
-+			resets = <&gcc GCC_PCIE_0_BCR>;
-+			reset-names = "pci";
-+
-+			power-domains = <&gcc PCIE_0_GDSC>;
-+
-+			interconnects = <&aggre2_noc MASTER_PCIE 0 &mc_virt SLAVE_EBI_CH0 0>,
-+					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_PCIE_0 0>;
-+			interconnect-names = "pcie-mem", "cpu-pcie";
-+
-+			phys = <&pcie0_lane>;
-+			phy-names = "pciephy";
-+
-+			status = "disabled";
-+		};
-+
-+		pcie0_phy: phy-wrapper@1c06000 {
-+			compatible = "qcom,sc8180x-qmp-pcie-phy";
-+			reg = <0 0x1c06000 0 0x1c0>;
 +			#address-cells = <2>;
 +			#size-cells = <2>;
 +			ranges;
-+			clocks = <&gcc GCC_PCIE_PHY_AUX_CLK>,
-+				 <&gcc GCC_PCIE_0_CFG_AHB_CLK>,
-+				 <&gcc GCC_PCIE_0_CLKREF_CLK>,
-+				 <&gcc GCC_PCIE1_PHY_REFGEN_CLK>;
-+			clock-names = "aux", "cfg_ahb", "ref", "refgen";
-+
-+			resets = <&gcc GCC_PCIE_0_PHY_BCR>;
-+			reset-names = "phy";
-+
-+			assigned-clocks = <&gcc GCC_PCIE0_PHY_REFGEN_CLK>;
-+			assigned-clock-rates = <100000000>;
++			dma-ranges;
 +
 +			status = "disabled";
 +
-+			pcie0_lane: phy@1c06200 {
-+				reg = <0 0x1c06200 0 0x170>, /* tx0 */
-+				      <0 0x1c06400 0 0x200>, /* rx0 */
-+				      <0 0x1c06a00 0 0x1f0>, /* pcs */
-+				      <0 0x1c06600 0 0x170>, /* tx1 */
-+				      <0 0x1c06800 0 0x200>, /* rx1 */
-+				      <0 0x1c06e00 0 0xf4>; /* pcs_com */
-+				clocks = <&gcc GCC_PCIE_0_PIPE_CLK>;
-+				clock-names = "pipe0";
-+
-+				#clock-cells = <0>;
-+				clock-output-names = "pcie_0_pipe_clk";
-+				#phy-cells = <0>;
++			usb_prim_dwc3: usb@a600000 {
++				compatible = "snps,dwc3";
++				reg = <0 0x0a600000 0 0xcd00>;
++				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
++				iommus = <&apps_smmu 0x140 0>;
++				snps,dis_u2_susphy_quirk;
++				snps,dis_enblslpm_quirk;
++				phys = <&usb_prim_hsphy>, <&usb_prim_ssphy>;
++				phy-names = "usb2-phy", "usb3-phy";
 +			};
 +		};
 +
-+		pcie3: pci@1c08000 {
-+			compatible = "qcom,pcie-sc8180x";
-+			reg = <0 0x01c08000 0 0x3000>,
-+			      <0 0x40000000 0 0xf1d>,
-+			      <0 0x40000f20 0 0xa8>,
-+			      <0 0x40001000 0 0x1000>,
-+			      <0 0x40100000 0 0x100000>;
-+			reg-names = "parf",
-+				    "dbi",
-+				    "elbi",
-+				    "atu",
-+				    "config";
-+			device_type = "pci";
-+			linux,pci-domain = <3>;
-+			bus-range = <0x00 0xff>;
-+			num-lanes = <2>;
++		usb_sec: usb@a8f8800 {
++			compatible = "qcom,sc8180x-dwc3", "qcom,dwc3";
++			reg = <0 0x0a8f8800 0 0x400>;
 +
-+			#address-cells = <3>;
-+			#size-cells = <2>;
++			clocks = <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
++				 <&gcc GCC_USB30_SEC_MASTER_CLK>,
++				 <&gcc GCC_AGGRE_USB3_SEC_AXI_CLK>,
++				 <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
++				 <&gcc GCC_USB30_SEC_SLEEP_CLK>,
++				 <&gcc GCC_USB3_SEC_CLKREF_CLK>;
++			clock-names = "cfg_noc",
++				      "core",
++				      "iface",
++				      "mock_utmi",
++				      "sleep",
++				      "xo";
++			resets = <&gcc GCC_USB30_SEC_BCR>;
++			power-domains = <&gcc USB30_SEC_GDSC>;
++			interrupts = <GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 487 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 490 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 491 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "hs_phy_irq", "ss_phy_irq",
++					  "dm_hs_phy_irq", "dp_hs_phy_irq";
 +
-+			ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
-+				 <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x1fd00000>;
++			assigned-clocks = <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
++					  <&gcc GCC_USB30_SEC_MASTER_CLK>;
++			assigned-clock-rates = <19200000>, <200000000>;
 +
-+			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "msi";
-+			#interrupt-cells = <1>;
-+			interrupt-map-mask = <0 0 0 0x7>;
-+			interrupt-map = <0 0 0 1 &intc 0 434 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
-+					<0 0 0 2 &intc 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-+					<0 0 0 3 &intc 0 438 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
-+					<0 0 0 4 &intc 0 439 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
++			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI_CH0 0>,
++					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_USB3_1 0>;
++			interconnect-names = "usb-ddr", "apps-usb";
 +
-+			clocks = <&gcc GCC_PCIE_3_PIPE_CLK>,
-+				 <&gcc GCC_PCIE_3_AUX_CLK>,
-+				 <&gcc GCC_PCIE_3_CFG_AHB_CLK>,
-+				 <&gcc GCC_PCIE_3_MSTR_AXI_CLK>,
-+				 <&gcc GCC_PCIE_3_SLV_AXI_CLK>,
-+				 <&gcc GCC_PCIE_3_SLV_Q2A_AXI_CLK>,
-+				 <&gcc GCC_PCIE_3_CLKREF_CLK>,
-+				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>;
-+			clock-names = "pipe",
-+				      "aux",
-+				      "cfg",
-+				      "bus_master",
-+				      "bus_slave",
-+				      "slave_q2a",
-+				      "ref",
-+				      "tbu";
-+
-+			assigned-clocks = <&gcc GCC_PCIE_3_AUX_CLK>;
-+			assigned-clock-rates = <19200000>;
-+
-+			iommus = <&apps_smmu 0x1e00 0x7f>;
-+			iommu-map = <0x0   &apps_smmu 0x1e00 0x1>,
-+				    <0x100 &apps_smmu 0x1e01 0x1>;
-+
-+			resets = <&gcc GCC_PCIE_3_BCR>;
-+			reset-names = "pci";
-+
-+			power-domains = <&gcc PCIE_3_GDSC>;
-+
-+			interconnects = <&aggre2_noc MASTER_PCIE_3 0 &mc_virt SLAVE_EBI_CH0 0>,
-+					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_PCIE_0 0>;
-+			interconnect-names = "pcie-mem", "cpu-pcie";
-+
-+			phys = <&pcie3_lane>;
-+			phy-names = "pciephy";
-+
-+			status = "disabled";
-+		};
-+
-+		pcie3_phy: phy-wrapper@1c0c000 {
-+			compatible = "qcom,sc8180x-qmp-pcie-phy";
-+			reg = <0 0x1c0c000 0 0x1c0>;
 +			#address-cells = <2>;
 +			#size-cells = <2>;
 +			ranges;
-+			clocks = <&gcc GCC_PCIE_PHY_AUX_CLK>,
-+				 <&gcc GCC_PCIE_3_CFG_AHB_CLK>,
-+				 <&gcc GCC_PCIE_3_CLKREF_CLK>,
-+				 <&gcc GCC_PCIE2_PHY_REFGEN_CLK>;
-+			clock-names = "aux", "cfg_ahb", "ref", "refgen";
-+
-+			resets = <&gcc GCC_PCIE_3_PHY_BCR>;
-+			reset-names = "phy";
-+
-+			assigned-clocks = <&gcc GCC_PCIE3_PHY_REFGEN_CLK>;
-+			assigned-clock-rates = <100000000>;
++			dma-ranges;
 +
 +			status = "disabled";
 +
-+			pcie3_lane: phy@1c0c200 {
-+				reg = <0 0x1c0c200 0 0x170>, /* tx0 */
-+				      <0 0x1c0c400 0 0x200>, /* rx0 */
-+				      <0 0x1c0ca00 0 0x1f0>, /* pcs */
-+				      <0 0x1c0c600 0 0x170>, /* tx1 */
-+				      <0 0x1c0c800 0 0x200>, /* rx1 */
-+				      <0 0x1c0ce00 0 0xf4>; /* pcs_com */
-+				clocks = <&gcc GCC_PCIE_3_PIPE_CLK>;
-+				clock-names = "pipe0";
-+
-+				#clock-cells = <0>;
-+				clock-output-names = "pcie_3_pipe_clk";
-+				#phy-cells = <0>;
++			usb_sec_dwc3: usb@a800000 {
++				compatible = "snps,dwc3";
++				reg = <0 0x0a800000 0 0xcd00>;
++				interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
++				iommus = <&apps_smmu 0x160 0>;
++				snps,dis_u2_susphy_quirk;
++				snps,dis_enblslpm_quirk;
++				phys = <&usb_sec_hsphy>, <&usb_sec_ssphy>;
++				phy-names = "usb2-phy", "usb3-phy";
 +			};
 +		};
 +
-+		pcie1: pci@1c10000 {
-+			compatible = "qcom,pcie-sc8180x";
-+			reg = <0 0x01c10000 0 0x3000>,
-+			      <0 0x68000000 0 0xf1d>,
-+			      <0 0x68000f20 0 0xa8>,
-+			      <0 0x68001000 0 0x1000>,
-+			      <0 0x68100000 0 0x100000>;
-+			reg-names = "parf",
-+				    "dbi",
-+				    "elbi",
-+				    "atu",
-+				    "config";
-+			device_type = "pci";
-+			linux,pci-domain = <1>;
-+			bus-range = <0x00 0xff>;
-+			num-lanes = <2>;
+ 		pdc: interrupt-controller@b220000 {
+ 			compatible = "qcom,sc8180x-pdc", "qcom,pdc";
+ 			reg = <0 0x0b220000 0 0x30000>;
+@@ -2416,6 +2714,39 @@ apps_smmu: iommu@15000000 {
+ 
+ 		};
+ 
++		remoteproc_adsp: remoteproc@17300000 {
++			compatible = "qcom,sc8180x-adsp-pas";
++			reg = <0x0 0x17300000 0x0 0x4040>;
 +
-+			#address-cells = <3>;
-+			#size-cells = <2>;
++			interrupts-extended = <&intc GIC_SPI 162 IRQ_TYPE_EDGE_RISING>,
++					      <&adsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
++					      <&adsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
++					      <&adsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
++					      <&adsp_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "wdog", "fatal", "ready",
++					  "handover", "stop-ack";
 +
-+			ranges = <0x01000000 0x0 0x68200000 0x0 0x68200000 0x0 0x100000>,
-+				 <0x02000000 0x0 0x68300000 0x0 0x68300000 0x0 0x3d00000>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>;
++			clock-names = "xo";
 +
-+			interrupts = <GIC_SPI 755 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "msi";
-+			#interrupt-cells = <1>;
-+			interrupt-map-mask = <0 0 0 0x7>;
-+			interrupt-map = <0 0 0 1 &intc 0 747 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
-+					<0 0 0 2 &intc 0 746 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-+					<0 0 0 3 &intc 0 745 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
-+					<0 0 0 4 &intc 0 744 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
++			power-domains = <&rpmhpd SC8180X_CX>;
++			power-domain-names = "cx";
 +
-+			clocks = <&gcc GCC_PCIE_1_PIPE_CLK>,
-+				 <&gcc GCC_PCIE_1_AUX_CLK>,
-+				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
-+				 <&gcc GCC_PCIE_1_MSTR_AXI_CLK>,
-+				 <&gcc GCC_PCIE_1_SLV_AXI_CLK>,
-+				 <&gcc GCC_PCIE_1_SLV_Q2A_AXI_CLK>,
-+				 <&gcc GCC_PCIE_1_CLKREF_CLK>,
-+				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>;
-+			clock-names = "pipe",
-+				      "aux",
-+				      "cfg",
-+				      "bus_master",
-+				      "bus_slave",
-+				      "slave_q2a",
-+				      "ref",
-+				      "tbu";
++			qcom,qmp = <&aoss_qmp>;
 +
-+			assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
-+			assigned-clock-rates = <19200000>;
-+
-+			iommus = <&apps_smmu 0x1c80 0x7f>;
-+			iommu-map = <0x0   &apps_smmu 0x1c80 0x1>,
-+				    <0x100 &apps_smmu 0x1c81 0x1>;
-+
-+			resets = <&gcc GCC_PCIE_1_BCR>;
-+			reset-names = "pci";
-+
-+			power-domains = <&gcc PCIE_1_GDSC>;
-+
-+			interconnects = <&aggre2_noc MASTER_PCIE_1 0 &mc_virt SLAVE_EBI_CH0 0>,
-+					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_PCIE_0 0>;
-+			interconnect-names = "pcie-mem", "cpu-pcie";
-+
-+			phys = <&pcie1_lane>;
-+			phy-names = "pciephy";
-+
-+			status = "disabled";
-+		};
-+
-+		pcie1_phy: phy-wrapper@1c16000 {
-+			compatible = "qcom,sc8180x-qmp-pcie-phy";
-+			reg = <0 0x1c16000 0 0x1c0>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+			clocks = <&gcc GCC_PCIE_PHY_AUX_CLK>,
-+				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
-+				 <&gcc GCC_PCIE_1_CLKREF_CLK>,
-+				 <&gcc GCC_PCIE1_PHY_REFGEN_CLK>;
-+			clock-names = "aux", "cfg_ahb", "ref", "refgen";
-+
-+			resets = <&gcc GCC_PCIE_1_PHY_BCR>;
-+			reset-names = "phy";
-+
-+			assigned-clocks = <&gcc GCC_PCIE1_PHY_REFGEN_CLK>;
-+			assigned-clock-rates = <100000000>;
++			qcom,smem-states = <&adsp_smp2p_out 0>;
++			qcom,smem-state-names = "stop";
 +
 +			status = "disabled";
 +
-+			pcie1_lane: phy@1c0e200 {
-+				reg = <0 0x1c16200 0 0x170>, /* tx0 */
-+				      <0 0x1c16400 0 0x200>, /* rx0 */
-+				      <0 0x1c16a00 0 0x1f0>, /* pcs */
-+				      <0 0x1c16600 0 0x170>, /* tx1 */
-+				      <0 0x1c16800 0 0x200>, /* rx1 */
-+				      <0 0x1c16e00 0 0xf4>; /* pcs_com */
-+				clocks = <&gcc GCC_PCIE_1_PIPE_CLK>;
-+				clock-names = "pipe0";
-+				#clock-cells = <0>;
-+				clock-output-names = "pcie_1_pipe_clk";
-+
-+				#phy-cells = <0>;
++			remoteproc_adsp_glink: glink-edge {
++				interrupts = <GIC_SPI 156 IRQ_TYPE_EDGE_RISING>;
++				label = "lpass";
++				qcom,remote-pid = <2>;
++				mboxes = <&apss_shared 8>;
 +			};
 +		};
 +
-+		pcie2: pci@1c18000 {
-+			compatible = "qcom,pcie-sc8180x";
-+			reg = <0 0x01c18000 0 0x3000>,
-+			      <0 0x70000000 0 0xf1d>,
-+			      <0 0x70000f20 0 0xa8>,
-+			      <0 0x70001000 0 0x1000>,
-+			      <0 0x70100000 0 0x100000>;
-+			reg-names = "parf",
-+				    "dbi",
-+				    "elbi",
-+				    "atu",
-+				    "config";
-+			device_type = "pci";
-+			linux,pci-domain = <2>;
-+			bus-range = <0x00 0xff>;
-+			num-lanes = <4>;
-+
-+			#address-cells = <3>;
-+			#size-cells = <2>;
-+
-+			ranges = <0x01000000 0x0 0x70200000 0x0 0x70200000 0x0 0x100000>,
-+				 <0x02000000 0x0 0x70300000 0x0 0x70300000 0x0 0x3d00000>;
-+
-+			interrupts = <GIC_SPI 671 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "msi";
-+			#interrupt-cells = <1>;
-+			interrupt-map-mask = <0 0 0 0x7>;
-+			interrupt-map = <0 0 0 1 &intc 0 663 IRQ_TYPE_LEVEL_HIGH>, /* int_a */
-+					<0 0 0 2 &intc 0 662 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
-+					<0 0 0 3 &intc 0 661 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
-+					<0 0 0 4 &intc 0 660 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
-+
-+			clocks = <&gcc GCC_PCIE_2_PIPE_CLK>,
-+				 <&gcc GCC_PCIE_2_AUX_CLK>,
-+				 <&gcc GCC_PCIE_2_CFG_AHB_CLK>,
-+				 <&gcc GCC_PCIE_2_MSTR_AXI_CLK>,
-+				 <&gcc GCC_PCIE_2_SLV_AXI_CLK>,
-+				 <&gcc GCC_PCIE_2_SLV_Q2A_AXI_CLK>,
-+				 <&gcc GCC_PCIE_2_CLKREF_CLK>,
-+				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>;
-+			clock-names = "pipe",
-+				      "aux",
-+				      "cfg",
-+				      "bus_master",
-+				      "bus_slave",
-+				      "slave_q2a",
-+				      "ref",
-+				      "tbu";
-+
-+			assigned-clocks = <&gcc GCC_PCIE_2_AUX_CLK>;
-+			assigned-clock-rates = <19200000>;
-+
-+			iommus = <&apps_smmu 0x1d00 0x7f>;
-+			iommu-map = <0x0   &apps_smmu 0x1d00 0x1>,
-+				    <0x100 &apps_smmu 0x1d01 0x1>;
-+
-+			resets = <&gcc GCC_PCIE_2_BCR>;
-+			reset-names = "pci";
-+
-+			power-domains = <&gcc PCIE_2_GDSC>;
-+
-+			interconnects = <&aggre2_noc MASTER_PCIE_2 0 &mc_virt SLAVE_EBI_CH0 0>,
-+					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_PCIE_0 0>;
-+			interconnect-names = "pcie-mem", "cpu-pcie";
-+
-+			phys = <&pcie2_lane>;
-+			phy-names = "pciephy";
-+
+ 		intc: interrupt-controller@17a00000 {
+ 			compatible = "arm,gic-v3";
+ 			interrupt-controller;
+@@ -2615,6 +2946,30 @@ cpufreq_hw: cpufreq@18323000 {
+ 			#clock-cells = <1>;
+ 		};
+ 
++		wifi: wifi@18800000 {
++			compatible = "qcom,wcn3990-wifi";
++			reg = <0 0x18800000 0 0x800000>;
++			reg-names = "membase";
++			clock-names = "cxo_ref_clk_pin";
++			clocks = <&rpmhcc RPMH_RF_CLK2>;
++			interrupts = <GIC_SPI 414 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 415 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 416 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 417 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 420 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 422 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>;
++			iommus = <&apps_smmu 0x0640 0x1>;
++			qcom,msa-fixed-perm;
 +			status = "disabled";
 +		};
++	};
 +
-+		pcie2_phy: phy-wrapper@1c1c000 {
-+			compatible = "qcom,sc8180x-qmp-pcie-phy";
-+			reg = <0 0x1c1c000 0 0x1c0>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+			clocks = <&gcc GCC_PCIE_PHY_AUX_CLK>,
-+				 <&gcc GCC_PCIE_2_CFG_AHB_CLK>,
-+				 <&gcc GCC_PCIE_2_CLKREF_CLK>,
-+				 <&gcc GCC_PCIE2_PHY_REFGEN_CLK>;
-+			clock-names = "aux", "cfg_ahb", "ref", "refgen";
-+
-+			resets = <&gcc GCC_PCIE_2_PHY_BCR>;
-+			reset-names = "phy";
-+
-+			assigned-clocks = <&gcc GCC_PCIE2_PHY_REFGEN_CLK>;
-+			assigned-clock-rates = <100000000>;
-+
-+			status = "disabled";
-+
-+			pcie2_lane: phy@1c0e200 {
-+				reg = <0 0x1c1c200 0 0x170>, /* tx0 */
-+				      <0 0x1c1c400 0 0x200>, /* rx0 */
-+				      <0 0x1c1ca00 0 0x1f0>, /* pcs */
-+				      <0 0x1c1c600 0 0x170>, /* tx1 */
-+				      <0 0x1c1c800 0 0x200>, /* rx1 */
-+				      <0 0x1c1ce00 0 0xf4>; /* pcs_com */
-+				clocks = <&gcc GCC_PCIE_2_PIPE_CLK>;
-+				clock-names = "pipe0";
-+
-+				#clock-cells = <0>;
-+				clock-output-names = "pcie_2_pipe_clk";
-+
-+				#phy-cells = <0>;
-+			};
-+		};
-+
- 		ufs_mem_hc: ufshc@1d84000 {
- 			compatible = "qcom,sc8180x-ufshc", "qcom,ufshc",
- 				     "jedec,ufs-2.0";
+ 	thermal-zones {
+ 		cpu0-thermal {
+ 			polling-delay-passive = <250>;
 -- 
 2.40.1
 
