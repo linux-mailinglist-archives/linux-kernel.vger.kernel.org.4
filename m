@@ -2,146 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551F37167F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CEB716802
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbjE3PwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
+        id S232929AbjE3Pw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbjE3PvT (ORCPT
+        with ESMTP id S232915AbjE3PwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:51:19 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2083.outbound.protection.outlook.com [40.107.94.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3FFE45
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:50:35 -0700 (PDT)
+        Tue, 30 May 2023 11:52:09 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20731.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DFE10DC;
+        Tue, 30 May 2023 08:51:17 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X0kH+yjg03mhSAzGRz3ArZs5LwRfkHxZL9ollKG/X7oKLQgE2s748BZVKDjtfMTN+j2B2yjmP4Zpx8sXaMTuC+7xmsfHjeX7CgmyX8cG6emNAmTJjAUAglWsJev5p7PlGtF6XB7AzB7bpTTEMJdL+MG12ziQg3tBIHk6yUpVqf+at/0FeAn44oUjsdAzcxpbI7rh1riD6Qo0nQ1fEmno3Xa0qJ6sIDE1RZLDqM4l2+4810LXFah4wTJctwdqmndovxZGtX8uIL7veTF5wwZcGxmCexsSZ7f+uEElBe2Q7d/s8g4xv0ooVz7vEY2HM8heVMrNnKOIfEWEerkD6D+UhA==
+ b=U1rg2UTmhvWCMrIWfsu2bi54JQJQ5Yc2aXO66Gd2zBqDfFghOXm0QqURskY9X7SCtpsnISla/He2vRY/rvdBOvrDhOMS1E7ON30F0YEELdqO69rGoTtMvdOfd4CBl98xwkV3rboH7o0/fNFjcQfeJmDH1gYRD/5FuowbHTCutqpvPmc+EQ6u1Lk+2uL8x/YkwPdm4E0Wkyv0tvoRYtbEjtPGzQLcRwTLrfa36mz7mphygfaJd8BRo2XOUy4pxfiCPOt7dU6iDElJSxM/HRG3tO/ATyK003UWwHE3O7Yaf97EGHan5MFED88+8xKw8my/3zFDoXI+N8rglCR6LEoX5g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s4OQKZDErOU1UfFLnXoY/b/zNP8PaDQj496aiwIBcls=;
- b=GL2YCCKv5P3rwgNvJ8r+n7dEgCpOlaDsQCgk7Jl/8mf7UF5iwJHSFIt+s+mljgMOFOeCsLfOjdiz7EfI0t1yH4Ib1RrAnI8huoUWpz/t9szWBUQy/KEejuAfqsGi+EAuVYSg/0FVqUS3KdXgYVn4S+vXK6kDzFGxHLOL4wUxFbqv3wiVhjEwpQMzwNZAF+XJ44yqEuXueXecdG1iZ/OqYjJsQFaE3bhNaVqoI2m2mG5SlcWMuhZpmumh1sFtmbZqOZ+d6Y1e98eEWSrQN0qTyVllGR9nSdJu94pdirDgpSFQSTuBB7KLrKO8l1UN/eIAi0282aUlJGBhSaK4haOS/w==
+ bh=hHGwTEJGDoptGTTSNvnDTd1LTLZl3fJ3KBk1CCQp0fE=;
+ b=F2ULGBKsl746PkQocCibUuDhMMMsl07Tm/v7dknQBzV2C4Dp44Ks0oPfLWwAo3KxutrkxYxIIXQbYKssWx2WArqNjvo5q0yKRJmky394qPZKWPZ9pq+AXL0w9AIltWc9Nx0iOqcoAOM4ijpjYJF3qFJshSM7O3bosD7IB72QrZ1AdexLegt4kEpK6kJ/b8gk/6z2eWbNBD3AcvfcB0e+yfc+P7YBagcb55hMrHaIwTgpJPPODIhAQQPGQd17L7U3GscdtWCKa9Vqr8p6C0ECyR6Zgm5COMgOz6Dyf4bOqm6Zv6z6Ybd13R6PE5mYyw4qBv8JI1js6wJsR2V9SERo8g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s4OQKZDErOU1UfFLnXoY/b/zNP8PaDQj496aiwIBcls=;
- b=AQyfkJpj8rDNesUgk5bARAl4ay3TiVm5SQ4bhcWlMJR++/lkq54ydKepPoo2+2ubIG0EXvi/5nCnAEbLNvcAiVlE7uhQKJeoSqrnHrlIk2jhCmc97uLFI/twV6eI5K45TW4+KlwQG97EcFt9AqLaKMnjLpj16ikMVqN0NBZSPOE=
-Received: from DM6PR12MB3996.namprd12.prod.outlook.com (2603:10b6:5:1c1::31)
- by BY5PR12MB4952.namprd12.prod.outlook.com (2603:10b6:a03:1d8::19) with
+ bh=hHGwTEJGDoptGTTSNvnDTd1LTLZl3fJ3KBk1CCQp0fE=;
+ b=A+WykMXjoSPgWhPQESCCJe8hYxMeUx0sOXRlSJFAmqthTp0AnNuf3m3TUuixVvxswbQKmofNGmxcxsXYTgK8ob4BMwrRMB0b8x8mygt4mGgcwp6o/ar6fOws0UaXo5E6Db4iBJkwfGF0MdXhow0UZ1zDuUTPmFweqGRCFEshYgo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MN2PR13MB3872.namprd13.prod.outlook.com (2603:10b6:208:1ef::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 15:50:33 +0000
-Received: from DM6PR12MB3996.namprd12.prod.outlook.com
- ([fe80::e436:6d53:7445:88b8]) by DM6PR12MB3996.namprd12.prod.outlook.com
- ([fe80::e436:6d53:7445:88b8%7]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 15:50:32 +0000
-From:   "Ho, Kenny" <Kenny.Ho@amd.com>
-To:     "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-CC:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Kuehling, Felix" <Felix.Kuehling@amd.com>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>,
-        =?iso-8859-1?Q?Andr=E9_Almeida?= <andrealmeid@igalia.com>,
-        Andrew Davis <afd@ti.com>, Peter Foley <pefoley2@pefoley.com>,
-        "Zhang, Hawking" <Hawking.Zhang@amd.com>, "Ma, Le" <Le.Ma@amd.com>,
-        "Zhou1, Tao" <Tao.Zhou1@amd.com>,
-        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
-        "Zhu, James" <James.Zhu@amd.com>,
-        "Chai, Thomas" <YiPeng.Chai@amd.com>,
-        "Li, Candice" <Candice.Li@amd.com>,
-        "Wang, Yang(Kevin)" <KevinYang.Wang@amd.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/amd/amdgpu: introduce DRM_AMDGPU_WERROR
-Thread-Topic: [PATCH] drm/amd/amdgpu: introduce DRM_AMDGPU_WERROR
-Thread-Index: AQHZjyd9xmQrPkt7AE6NNnI82OsITa9y93aAgAAGaVg=
-Date:   Tue, 30 May 2023 15:50:32 +0000
-Message-ID: <DM6PR12MB3996064F09E1C2FD782CC944834B9@DM6PR12MB3996.namprd12.prod.outlook.com>
-References: <20230525163827.548058-1-hamza.mahfooz@amd.com>
- <85f47623-5ef1-b817-195b-c4ae39564247@amd.com>
-In-Reply-To: <85f47623-5ef1-b817-195b-c4ae39564247@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=True;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2023-05-30T15:50:32.189Z;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR12MB3996:EE_|BY5PR12MB4952:EE_
-x-ms-office365-filtering-correlation-id: 74a2f24f-19bd-4a18-0794-08db612599fd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dJxRxRUWfNhpmp+IxIAFV+XYJfAbWPxW0NXuhDxSlsiTGN9oSBOk7O00JMmFCEaDJFLGcfyt4ZtFeEuUkWLsCLAaOBdSZJt46TyZ6687+YlypDl9Cdy6JFWG+pviqGF6m1UUUr8WDVO5+j2CigY9c7XYmYWfGaewzXiKktHovOV2ul6PjwwXPQhKmauxINr1vWDQL5AnHvnBK7qEaQ4LglGes5sbCEp5CO/RfAzaX6Qxb/yjaGQDPdzSMEm7//lVZg4h75tpZI7NsRTEyIGIa7r1MMTtZTm8XeFPaPQfQhp40kdmWsIDMEn3enXdYL81uriQKD7HynY6T7jE/JtnaBZpf2hl1oZfK73vCyssyVuzB5BxKvseRCJ79+lTLHrbGnXVPt7XJ2UsBI1ui7cjFJsg3VqbbiZ8HY/oPqN1Q14qPXmhaT5euKJwuhyeVcG5x9ESDeo3p9Dv9mrPRsp+98c/yuXHmmJ0sn0yoeQ/aJRXterqOOJ+59QjO0i2zuktbcRblai8XEO1zm4NEU31+zrJR3fchySEbQPCJRK12Cuw8QDf9ZjcsNblMkvVcdQNgh9FoXciShfHBmcETTHNHr97aCMegOJdC5rjTMxv1sbZeufIlhzNDhp8YMDH/Hq7
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3996.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(39860400002)(376002)(136003)(451199021)(6506007)(9686003)(4744005)(186003)(53546011)(2906002)(110136005)(54906003)(478600001)(26005)(83380400001)(7696005)(8676002)(38100700002)(41300700001)(122000001)(8936002)(55016003)(66446008)(66946007)(66476007)(76116006)(64756008)(66556008)(316002)(5660300002)(86362001)(33656002)(71200400001)(38070700005)(52536014)(91956017)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?UaRnuNY7rHL5Y7znw60X2g5DEyQdzK2A4mJacIpcipW8KkX5EZ9toewCes?=
- =?iso-8859-1?Q?m/XxPSKAKC20s3Ga2R5IXTm2IJFPF5ramTWs2vIC8MdyEIfxE+kQ4zOTS9?=
- =?iso-8859-1?Q?mNq2Y0+vEEmCeOiDCB0mXMIe9diU0eAaSHwqAuOWc6dRrGvAqUsqrjxU6q?=
- =?iso-8859-1?Q?h4UJmzC5wyK1zXkGmCJp/3rCF7+EIoDLPPwqMJjIPsm/IdkZJhy1+TlakT?=
- =?iso-8859-1?Q?00YHu5Z6Vj6A8J1I1dY15/Pkud6E1VlrILy39PoBeFU0lESgU/cYIL+2LT?=
- =?iso-8859-1?Q?KHVmMHzynp5JX1V0ebHCT5HQrLC/Oa2gIvUArb09/7g0lx2f2aZjH7DyNG?=
- =?iso-8859-1?Q?8G8WbesIcu1x22quJeEekutLZ7ynFiEhidS6br2x8G/qy89Bqk2YKbfAVW?=
- =?iso-8859-1?Q?lrgcEu1aH/g33O0g0gDqUgbyYQcAIOhtScadR09bmGWuP6t+tQMXVX8CxR?=
- =?iso-8859-1?Q?NYpi7p4p56rGS07VDgXjWtLB/DpZISCaRj7E6VkeWJ3h9CqqmonfY9gUWU?=
- =?iso-8859-1?Q?jxJH6joIemWLCdSndBxt9xvigWC8SfYwis/bwxkc2d2KYxEY0YYhFvovSZ?=
- =?iso-8859-1?Q?aaZVNuMzPRnyEKd0jWc07rLplCMt27qQpWjRj9L5A9eTXaBxdDghbar8GD?=
- =?iso-8859-1?Q?31j5HflrRLDqE1PyRFOFbQBx6hKBcxKYxJBUVrYVHuUfrVDxJFslbm56HE?=
- =?iso-8859-1?Q?qpnoVnSkNSI7xK2grbkBHD2426meI0zITp4S3Ay9OHEvJpSdSy2jIvSUnI?=
- =?iso-8859-1?Q?4gVnh/FyBkTSTV7xQJxQnjJxMzSmtiBuGr+H4XPqbHqcvvAkXZxmWuBfmC?=
- =?iso-8859-1?Q?ezDGsZfu644zCD5AQ4SlIveCjNt6uKJ5eq3gKO3fjqrAuJCw3b5ktyKeQp?=
- =?iso-8859-1?Q?7AWdOohoZoNr++ukZl73gkLNbR6+3CROlPEP5httfhFs76+Fp9vsx52wqy?=
- =?iso-8859-1?Q?LAIwf6N6Y8YzXRqHgJItEobQMdgqeP9uOBWN84K1HIXwvA4oHgKTyxMzLw?=
- =?iso-8859-1?Q?A9Ex7cL96x7T5acnIDunxz8Rrgbqi+rDSXttD7c5Vso0m8t0R9dBM7Fvhk?=
- =?iso-8859-1?Q?ZvX82jVWL4Bsdjjee8nxlN0CI0aRnEoBFFlLZvSN8OEDnCsqq4TuoCyftS?=
- =?iso-8859-1?Q?lvrN3vL8WmjrpI9YD82SibE1lhTVyWQYKOXEluWh8Ydj6qejmteB8MG9Mk?=
- =?iso-8859-1?Q?uTkiRxrHvJksrq35eAPDufuJfoxjy9RdWxveypaLoQd43+3jQgf8IQr797?=
- =?iso-8859-1?Q?uLp6W75RH7dRRlNxjnRS8VI8bp5ymuUa/a5Rxh9qMotLIZ0AbowYPrJ46W?=
- =?iso-8859-1?Q?hiu2IdxAS4Amlq4dyErp+/wqrY2pDD6OOMLy0YMkMhgVj1YeuXZxSMzsRq?=
- =?iso-8859-1?Q?p5Ipz+/FyxRyAOxJFUWppB9bUHNgOhQJf6jZNk0Pz9Xi8e/ZUWTJkoqfbc?=
- =?iso-8859-1?Q?S2DjsIuD87Ll4tZQnQs5QZ1jIiw844ozJFqE5ypZ7E4zMquHnx63x/4fSz?=
- =?iso-8859-1?Q?hZHVd63iYAzlER7ll5PbOkdXVMaLmq2rHCFRahdozNXuxqVn3gJNpsa4ex?=
- =?iso-8859-1?Q?Jt0ZLbWVMATT+tIqTVZ+JzBz7IvXHC04EMg+odjQR9oYBwu40Q=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ 2023 15:51:13 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
+ 15:51:13 +0000
+Date:   Tue, 30 May 2023 17:51:05 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Thomas.Kopp@microchip.com,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        netdev@vger.kernel.org, marex@denx.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] can: length: refactor frame lengths definition to
+ add size in bits
+Message-ID: <ZHYbaYWeIaDcUhhw@corigine.com>
+References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+ <20230530144637.4746-1-mailhol.vincent@wanadoo.fr>
+ <20230530144637.4746-4-mailhol.vincent@wanadoo.fr>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530144637.4746-4-mailhol.vincent@wanadoo.fr>
+X-ClientProxiedBy: AM0PR06CA0079.eurprd06.prod.outlook.com
+ (2603:10a6:208:fa::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MN2PR13MB3872:EE_
+X-MS-Office365-Filtering-Correlation-Id: a99aa63a-1a13-40cf-d6cc-08db6125b225
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: L+qlKB7nS5ysZecxkO4rLQZelXJbNNmC1RSWUcg1hHWg9Is000Dqjvm/U39VEphoEQ/NmNVdlEkyiSTyKTot5l2AzCbvqP+gjdId+LeC1YjG8Dsg/2ziq7fJzkhuII6ETcw36n7tvNhYlKUP89GWeEzxG2k/b9ca7hR2IIWXKtoU2La+GAkKVd/VnrJ2cPJxLEu3u2zgcA2riMP4jD/e0+iOKPgIJcyr6/ekqNYVGe15NU1nZafnt/0am8ISd4pHeD17AfK9Enwi44oQma2/wGf1n3ECbxM1xchmNQLH/A4nUJZikoXMHrrR6WKas6GxD6GIeenPIzicXqJ6tj7Vm0iFs/TgCIvKYb4mbufYQTAcQygzq32R0eiA9UBY0kU8QuWJeXlRXfdSwhc4PI/7tVUt+7m8/jtjCvqMLlvc76mpBrhMfxjBNihRHYKC2yYJvS+/bUvjZLOUSM6qSGz/0Fd6iWRMJ/Vx5T4xyBkrTYfLx0jTyCiJHo3nTCYe3a9xXqRjUdGeP/ZyC3PawOhI8WXciquISU2XQIgt1ryviecPxxGs2EEkM1tIKOnr0uAv
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(366004)(39840400004)(376002)(451199021)(6916009)(4326008)(66946007)(66556008)(66476007)(86362001)(478600001)(5660300002)(41300700001)(6486002)(8936002)(8676002)(44832011)(54906003)(6512007)(6666004)(316002)(6506007)(186003)(2616005)(83380400001)(2906002)(36756003)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eBHw3gzkYvWy5cWbiXLSCOaCWso3bQc0VO4JgdNSgzD4BckLNxQY95aQaVxC?=
+ =?us-ascii?Q?WBFksaoBedpHYr0fOeAojS/YXWkclefEZtmKEzGnxWAYbL62C4Bk4boftaAK?=
+ =?us-ascii?Q?Ns6f6+Ybd0J8jI6md1wY/w5pIBgF2QSSdkywbzzYubVAqeXy2Z6ckmKfuva8?=
+ =?us-ascii?Q?GyYo8ovDaNCr1kloiGAx70XQkGOYDfUwc/wAZP3fo/JRCutDwKYIk1FF0l++?=
+ =?us-ascii?Q?wHSAGZEfpEY8NxLTVB9srOIkAWJFwRKAOTn4ZSzfQIRquV4ALMEYpX94WKEf?=
+ =?us-ascii?Q?MB3Vnb9hYFEK9y0lifsMG6FPqE6B0NCCMoNk/Eek8FDc6YsMQCHdmdpSZdDF?=
+ =?us-ascii?Q?Exl4FTET1GnYa4dCC8ee3HnOedR0SjksRNhdjHDFKZxYkVdnaO67bCimO7p7?=
+ =?us-ascii?Q?ahcNgq7iUwqLGQcFCJB0GWeoZn61rv162eoQWtdofDxEB2CqKA5bkERepRE2?=
+ =?us-ascii?Q?HiYUCud0OW87F/6gFMsUILAan94drcZzTBfrYxpbPdFX4aE82ccNImxUIexD?=
+ =?us-ascii?Q?QmSMXFalGhuxr2z5Z76QlS/NzVIoy7pUMT6ti0iffiEMW5dmMXgeuHUvKgNm?=
+ =?us-ascii?Q?gftH/WbIP66ENHAiqkm5AOzipSUbvCiYIWdP7wT6r9bYrKbyglHZ1LyLUo9o?=
+ =?us-ascii?Q?7enbezVkHHyw5CWiptevd9NC+HKVDbdSkBikyuTsaWCiKKBfD4KVvhBLzEsh?=
+ =?us-ascii?Q?FilXe1fRj6nL7lSwY08415brLK7FXpDG3JdDbzsoepFf3A4DL+AVhQO0l4Ng?=
+ =?us-ascii?Q?X6enLA+rZWQLz9uNLArt0UPvL/gmvO286wcxw5TpnHUSSY6kWMczB/5lJ18n?=
+ =?us-ascii?Q?1LwKpI2Xc+oTrxpYutNcf/F0egXqNvBuUzp7HWtyoP+J8BtkhVyaoc0Hoihq?=
+ =?us-ascii?Q?/taO0j5+/qhm4MaN69+ow+jYnSFnZE92fozsp85civv0j5gORxCq2xGH0F6t?=
+ =?us-ascii?Q?4Uh9FK0RM1VPT7Uu0RgHlUtJ3VtxNXEFKqa+q+5XfubZCmHMTgHC6GLl5oFe?=
+ =?us-ascii?Q?x1KoS6dGMyVLL4LZ3qy39s0lzCpCXX22jgNAYEP5Uqg/rSRpXfy1vyRYKEUy?=
+ =?us-ascii?Q?VBcJNYPmb8+cKycGrWwXyJzmY8mJvJGl856b6uJDzpllzly8bMwPyUaHk+uy?=
+ =?us-ascii?Q?GWtWLhUt1eUMi8+f8PcvnHmFVXJM6KmnVt5ibVQ7aQvDRtdoPfHYQEFlNgOe?=
+ =?us-ascii?Q?2hmNPrTxzDydT+SsnQdxwhPhqEi+PEXUpcC1gQMJKxmEp7Y3SCfpSaF/H0M4?=
+ =?us-ascii?Q?TWkcoBnBI61U0AoYlsqLLoka7VDvY8bPkrDJ6Grae/QNPB4Wkn2hpjDCHrL4?=
+ =?us-ascii?Q?wAH7T42jJpO7xLoW022njHtGbeTksjaGezVU2Gid3hR3d0BOk0CU9TNQvENm?=
+ =?us-ascii?Q?ZAyQGBl9MTw1/kTVAYK2XhRvFe/dNlv9GXdWQ77Mq8e3XIgDMOOHSF9+5UJO?=
+ =?us-ascii?Q?CLtRhp+eAdaSG10sXmvww39jvofjLaLa7BQ4m3tQt98Wsdehb8nGcxTzmVo7?=
+ =?us-ascii?Q?CAo7RCRBWYQ65XFSRrlBlpDY2Yz37nSsoe2LiJQnNpING9Jh/GK2+TUfH/P/?=
+ =?us-ascii?Q?67RdRxIJdVOow28O0FFUqL7ELExKCXGujNhVfvWDB1oLD43IO0lGlOFo0+Nv?=
+ =?us-ascii?Q?+4jtOwJLOfCkEyl8veeBtccLtim483elrqexIMJ3ckK1m7JVKGX4kEbE/1Zf?=
+ =?us-ascii?Q?o7EDTg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a99aa63a-1a13-40cf-d6cc-08db6125b225
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3996.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74a2f24f-19bd-4a18-0794-08db612599fd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2023 15:50:32.7654
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 15:51:13.4983
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TATSapFDGy/wdc4wUagfZG1tasaEJ8VdtgUm/yxFfPI1FI4lPDTgs8P8/9COgn6X
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4952
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4oVp0uSfKcDXpVEg9iAuan/xzgMQn6PeZfpO5IpwZf4SWbxPsHwHMeFzucyeDT/wQJ5FnWLqPSRB0gWSHayDtf7WiS20X/flpKPMpaSrt68=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR13MB3872
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Public]
+On Tue, May 30, 2023 at 11:46:37PM +0900, Vincent Mailhol wrote:
+> Introduce a method to calculate the exact size in bits of a CAN(-FD)
+> frame with or without dynamic bitsuffing.
+> 
+> These are all the possible combinations taken into account:
+> 
+>   - Classical CAN or CAN-FD
+>   - Standard or Extended frame format
+>   - CAN-FD CRC17 or CRC21
+>   - Include or not intermission
+> 
+> Instead of doing several individual macro definitions, declare the
+> can_frame_bits() function-like macro. To this extent, do a full
+> refactoring of the length definitions.
+> 
+> In addition add the can_frame_bytes(). This function-like macro
+> replaces the existing macro:
+> 
+>   - CAN_FRAME_OVERHEAD_SFF: can_frame_bytes(false, false, 0)
+>   - CAN_FRAME_OVERHEAD_EFF: can_frame_bytes(false, true, 0)
+>   - CANFD_FRAME_OVERHEAD_SFF: can_frame_bytes(true, false, 0)
+>   - CANFD_FRAME_OVERHEAD_EFF: can_frame_bytes(true, true, 0)
+> 
+> The different maximum frame lengths (maximum data length, including
+> intermission) are as follow:
+> 
+>    Frame type				bits	bytes
+>   -------------------------------------------------------
+>    Classic CAN SFF no-bitstuffing	111	14
+>    Classic CAN EFF no-bitstuffing	131	17
+>    Classic CAN SFF bitstuffing		135	17
+>    Classic CAN EFF bitstuffing		160	20
+>    CAN-FD SFF no-bitstuffing		579	73
+>    CAN-FD EFF no-bitstuffing		598	75
+>    CAN-FD SFF bitstuffing		712	89
+>    CAN-FD EFF bitstuffing		736	92
+> 
+> The macro CAN_FRAME_LEN_MAX and CANFD_FRAME_LEN_MAX are kept as an
+> alias to, respectively, can_frame_bytes(false, true, CAN_MAX_DLEN) and
+> can_frame_bytes(true, true, CANFD_MAX_DLEN).
+> 
+> In addition to the above:
+> 
+>  - Use ISO 11898-1:2015 definitions for the name of the CAN frame
+>    fields.
+>  - Include linux/bits.h for use of BITS_PER_BYTE.
+>  - Include linux/math.h for use of mult_frac() and
+>    DIV_ROUND_UP(). N.B: the use of DIV_ROUND_UP() is not new to this
+>    patch, but the include was previously omitted.
+>  - Add copyright 2023 for myself.
+> 
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-On 5/30/23 11:24, Hamza Mahfooz wrote:
-> I am able to get clean builds with this enabled on GCC 11-13 and Clang
-> 15, at least as of commit e786aef0869c ("drm/amd/display: remove unused
-> definition") on amd-staging-drm-next.
+...
 
-Did you try intentionally introducing a warning to see if the build indeed =
-fail?
+> +/**
+> + * can_bitstuffing_len() - Calculate the maximum length with bitsuffing
+> + * @bitstream_len: length of a destuffed bit stream
+
+Hi Vincent,
+
+it looks like an editing error has crept in here:
+
+	s/bitstream_len/destuffed_len/
+
+> + *
+> + * The worst bit stuffing case is a sequence in which dominant and
+> + * recessive bits alternate every four bits:
+> + *
+> + *   Destuffed: 1 1111  0000  1111  0000  1111
+> + *   Stuffed:   1 1111o 0000i 1111o 0000i 1111o
+> + *
+> + * Nomenclature
+> + *
+> + *  - "0": dominant bit
+> + *  - "o": dominant stuff bit
+> + *  - "1": recessive bit
+> + *  - "i": recessive stuff bit
+> + *
+> + * Aside of the first bit, one stuff bit is added every four bits.
+> + *
+> + * Return: length of the stuffed bit stream in the worst case scenario.
+> + */
+> +#define can_bitstuffing_len(destuffed_len)			\
+> +	(destuffed_len + (destuffed_len - 1) / 4)
