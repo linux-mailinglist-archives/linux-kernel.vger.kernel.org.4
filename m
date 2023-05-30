@@ -2,293 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757F8716E8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3776716E8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233328AbjE3UT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 16:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
+        id S233370AbjE3UUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233477AbjE3UTx (ORCPT
+        with ESMTP id S233383AbjE3UUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 16:19:53 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06E0F7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:19:50 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96f6a9131fdso749456866b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:19:50 -0700 (PDT)
+        Tue, 30 May 2023 16:20:07 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAD4124
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:20:05 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b025d26f4fso33477365ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:20:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685477989; x=1688069989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=arqdhnroav2wBIJ4Y396wfJZa5CQpssf1Zd+RMr/0mc=;
-        b=oPW+uTgOw6AIw/J5KbTB+EU+PIXZn9MZEeCkvD2nEMFORiAmGRRw+UHhmNOIe7jbWd
-         TOyycGUEfsohBNMy4L1NbbB/mnDeDezjzerQulzZSUlqU2ypIQYqusyJJpVuzEFxcG/q
-         uP5Aa5klZRDVZAn05QAlf66KBrmfEYoUYWbx4htTm2babsKBGP+gKan1L5BWxzg/htzM
-         Q4Epbtk/OL8LkbzUKOAHJbOfRjlwTgdvOV8/yH0cFfC+CVXHrxqJQNAz4Fh+9drgUDrl
-         H3+7veUiFUrkbOmwaTQrpS8bRLyf9o3fFS8/8c8mraJVJi4cWgAaiNJUkNSkvef/4VCv
-         mT6A==
+        d=broadcom.com; s=google; t=1685478005; x=1688070005;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CNALgEou4+OqM+ORFPFW2dor3ylhB/+d4Xmh6hWNqx0=;
+        b=BLJaRk/2rwuF8oqfzoj3p3LvSyuEhTVG/N17+9uTWFVTSVBqlimo6EQPHJ+hfQvhDN
+         4TJJHHihrXTmXFB/GnbZ2cCdmVzSXY7Yj6j1VZTUwS/K4tKDd8j/L75EhE3SwtMHzfrg
+         6cqmXcBm4dBroSgckSZ0DiOBZ446yNvsFBV4Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685477989; x=1688069989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=arqdhnroav2wBIJ4Y396wfJZa5CQpssf1Zd+RMr/0mc=;
-        b=H0F0DQoGQ1oxuoTeyHAbYa1Wcpngt1VBu74AmmZZfruP5qbmBKARbH0XdG1vKrdpwL
-         V8bW7dIpxCWZBsy6jaIbGOP2hn+yklU2X/1wIfUiLU8p0N3sD8PEmGVnnUdojFW638Ok
-         qQlyo3lwx1k6ap715kbDLK9bfYjAY9M/cLj7OQszLCR9+1EQ1uJBFUPt/MF7jxOmVmEK
-         c/vnbW7KY44GLK+j/l1ky4ltfvqfCbjf8tWFmbgfiyA6wjpULfS3NHNi/2+MqdPznroc
-         SB0DfekbwlmkSrP6uUpEaulcfCDSzFc4Zzx1bgOzUUX/jcNGA+BQuKcuFUB8eApysDg6
-         LI/Q==
-X-Gm-Message-State: AC+VfDyCuUoGxop7AsYlhUOv3mA9YjKj4ZutH2NEmSN2zCG+TyX5qTO3
-        MYt49Psubsj2Fzv05SQNCjyoiEoosSKeLHofbOVP7Q==
-X-Google-Smtp-Source: ACHHUZ6pUJkrK5ZHx0RgimEMwHO0s7D/e7mLH9S2R2xU6VVowT5ZLsv6lb0GdjoPHK0UsO6GZxDbuIWRBOQ9vWiQ+nE=
-X-Received: by 2002:a17:907:6e8a:b0:96b:559d:ff19 with SMTP id
- sh10-20020a1709076e8a00b0096b559dff19mr4289040ejc.21.1685477988992; Tue, 30
- May 2023 13:19:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685478005; x=1688070005;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CNALgEou4+OqM+ORFPFW2dor3ylhB/+d4Xmh6hWNqx0=;
+        b=gI24MKTf1coL60SegI6YgNLdNWzU+GhJq+kBKOXBu1S36CW4wqTVePyDU+41zoDDvA
+         AifnBoINZJqwgs+NDvAPCNKK22sE2cUjdm7lwaGm0WUQcHVQZyDzCSZR0iPH5rKZ6wJ9
+         LbTTrL5RnCJIHyeAOjfPEqerBeLMX28BMUbqgt3s8gn5isq9YJ2gDYG+/+puB9W8Livu
+         oK3PjVuxdfPdaX7aa3mUslrNy6pItc7fIbR1KFmxzMlQRtTmR6FY+4vrbuikpgZ+q9mm
+         ZRB36IwTOD9LpXK7K0/fxK7c/Fc8k2oNiC+R+7EJ+A8l3azD1qWRWT0MR5rAE1GGQGu0
+         XPeA==
+X-Gm-Message-State: AC+VfDzfOubVpptZhDwm/8czkR8zgbJIZwF8LQZ17+qIsREIwNS1AAah
+        SSaFA8RA/dZnKt9uFVpdaajJ1g==
+X-Google-Smtp-Source: ACHHUZ7iWzKHyNH3hMW5pGI1gPAfCZE+Faj99LIga8aRhEOx3I9rqA0nup9bcQD5gRWxUHV98jzLag==
+X-Received: by 2002:a17:902:aa86:b0:1b0:2d08:eb51 with SMTP id d6-20020a170902aa8600b001b02d08eb51mr3426185plr.12.1685478004778;
+        Tue, 30 May 2023 13:20:04 -0700 (PDT)
+Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b001ac7af58b66sm10676712ple.224.2023.05.30.13.20.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 13:20:04 -0700 (PDT)
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+To:     stable@vger.kernel.org
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org (open list:GENERIC ARCHITECTURE TOPOLOGY)
+Subject: [PATCH stable 6.3 v2] arch_topology: Remove early cacheinfo error message if -ENOENT
+Date:   Tue, 30 May 2023 13:19:55 -0700
+Message-Id: <20230530201955.848176-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230530162153.836565-1-nphamcs@gmail.com> <CAJD7tkZJttvpYs4mgjL3pt8-jkX0fnWRJP7hVBZmm=i_Ef3Abg@mail.gmail.com>
- <20230530180038.GC97194@cmpxchg.org> <CAJD7tkYYQjumA6QPcrAv8c6YnqJfrDrMhPZzDSjAz2jv+uDvtg@mail.gmail.com>
- <20230530191336.GB101722@cmpxchg.org>
-In-Reply-To: <20230530191336.GB101722@cmpxchg.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 30 May 2023 13:19:12 -0700
-Message-ID: <CAJD7tkb8BbPZfDR5=3eMmJ4=7E52mPAafuzeytsnxunDQGyEmg@mail.gmail.com>
-Subject: Re: [PATCH] zswap: do not shrink when memory.zswap.max is 0
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
-        cerasuolodomenico@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000c75bbe05fceeedd7"
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 12:13=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.or=
-g> wrote:
->
-> On Tue, May 30, 2023 at 11:41:32AM -0700, Yosry Ahmed wrote:
-> > On Tue, May 30, 2023 at 11:00=E2=80=AFAM Johannes Weiner <hannes@cmpxch=
-g.org> wrote:
-> > >
-> > > On Tue, May 30, 2023 at 09:52:36AM -0700, Yosry Ahmed wrote:
-> > > > On Tue, May 30, 2023 at 9:22=E2=80=AFAM Nhat Pham <nphamcs@gmail.co=
-m> wrote:
-> > > > >
-> > > > > Before storing a page, zswap first checks if the number of stored=
- pages
-> > > > > exceeds the limit specified by memory.zswap.max, for each cgroup =
-in the
-> > > > > hierarchy. If this limit is reached or exceeded, then zswap shrin=
-king is
-> > > > > triggered and short-circuits the store attempt.
-> > > > >
-> > > > > However, if memory.zswap.max =3D 0 for a cgroup, no amount of wri=
-teback
-> > > > > will allow future store attempts from processes in this cgroup to
-> > > > > succeed. Furthermore, this create a pathological behavior in a sy=
-stem
-> > > > > where some cgroups have memory.zswap.max =3D 0 and some do not: t=
-he
-> > > > > processes in the former cgroups, under memory pressure, will evic=
-t pages
-> > > > > stored by the latter continually, until the need for swap ceases =
-or the
-> > > > > pool becomes empty.
-> > > > >
-> > > > > As a result of this, we observe a disproportionate amount of zswa=
-p
-> > > > > writeback and a perpetually small zswap pool in our experiments, =
-even
-> > > > > though the pool limit is never hit.
-> > > > >
-> > > > > This patch fixes the issue by rejecting zswap store attempt witho=
-ut
-> > > > > shrinking the pool when memory.zswap.max is 0.
-> > > > >
-> > > > > Fixes: f4840ccfca25 ("zswap: memcg accounting")
-> > > > > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> > > > > ---
-> > > > >  include/linux/memcontrol.h | 6 +++---
-> > > > >  mm/memcontrol.c            | 8 ++++----
-> > > > >  mm/zswap.c                 | 9 +++++++--
-> > > > >  3 files changed, 14 insertions(+), 9 deletions(-)
-> > > > >
-> > > > > diff --git a/include/linux/memcontrol.h b/include/linux/memcontro=
-l.h
-> > > > > index 222d7370134c..507bed3a28b0 100644
-> > > > > --- a/include/linux/memcontrol.h
-> > > > > +++ b/include/linux/memcontrol.h
-> > > > > @@ -1899,13 +1899,13 @@ static inline void count_objcg_event(stru=
-ct obj_cgroup *objcg,
-> > > > >  #endif /* CONFIG_MEMCG_KMEM */
-> > > > >
-> > > > >  #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
-> > > > > -bool obj_cgroup_may_zswap(struct obj_cgroup *objcg);
-> > > > > +int obj_cgroup_may_zswap(struct obj_cgroup *objcg);
-> > > > >  void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t si=
-ze);
-> > > > >  void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, size_t =
-size);
-> > > > >  #else
-> > > > > -static inline bool obj_cgroup_may_zswap(struct obj_cgroup *objcg=
-)
-> > > > > +static inline int obj_cgroup_may_zswap(struct obj_cgroup *objcg)
-> > > > >  {
-> > > > > -       return true;
-> > > > > +       return 0;
-> > > > >  }
-> > > > >  static inline void obj_cgroup_charge_zswap(struct obj_cgroup *ob=
-jcg,
-> > > > >                                            size_t size)
-> > > > > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > > > > index 4b27e245a055..09aad0e6f2ea 100644
-> > > > > --- a/mm/memcontrol.c
-> > > > > +++ b/mm/memcontrol.c
-> > > > > @@ -7783,10 +7783,10 @@ static struct cftype memsw_files[] =3D {
-> > > > >   * spending cycles on compression when there is already no room =
-left
-> > > > >   * or zswap is disabled altogether somewhere in the hierarchy.
-> > > > >   */
-> > > > > -bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
-> > > > > +int obj_cgroup_may_zswap(struct obj_cgroup *objcg)
-> > > > >  {
-> > > > >         struct mem_cgroup *memcg, *original_memcg;
-> > > > > -       bool ret =3D true;
-> > > > > +       int ret =3D 0;
-> > > > >
-> > > > >         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
-> > > > >                 return true;
-> > > > > @@ -7800,7 +7800,7 @@ bool obj_cgroup_may_zswap(struct obj_cgroup=
- *objcg)
-> > > > >                 if (max =3D=3D PAGE_COUNTER_MAX)
-> > > > >                         continue;
-> > > > >                 if (max =3D=3D 0) {
-> > > > > -                       ret =3D false;
-> > > > > +                       ret =3D -ENODEV;
-> > > > >                         break;
-> > > > >                 }
-> > > > >
-> > > > > @@ -7808,7 +7808,7 @@ bool obj_cgroup_may_zswap(struct obj_cgroup=
- *objcg)
-> > > > >                 pages =3D memcg_page_state(memcg, MEMCG_ZSWAP_B) =
-/ PAGE_SIZE;
-> > > > >                 if (pages < max)
-> > > > >                         continue;
-> > > > > -               ret =3D false;
-> > > > > +               ret =3D -ENOMEM;
-> > > > >                 break;
-> > > > >         }
-> > > > >         mem_cgroup_put(original_memcg);
-> > > > > diff --git a/mm/zswap.c b/mm/zswap.c
-> > > > > index 59da2a415fbb..7b13dc865438 100644
-> > > > > --- a/mm/zswap.c
-> > > > > +++ b/mm/zswap.c
-> > > > > @@ -1175,8 +1175,13 @@ static int zswap_frontswap_store(unsigned =
-type, pgoff_t offset,
-> > > > >         }
-> > > > >
-> > > > >         objcg =3D get_obj_cgroup_from_page(page);
-> > > > > -       if (objcg && !obj_cgroup_may_zswap(objcg))
-> > > > > -               goto shrink;
-> > > > > +       if (objcg) {
-> > > > > +               ret =3D obj_cgroup_may_zswap(objcg);
-> > > > > +               if (ret =3D=3D -ENODEV)
-> > > > > +                       goto reject;
-> > > > > +               if (ret =3D=3D -ENOMEM)
-> > > > > +                       goto shrink;
-> > > > > +       }
-> > > >
-> > > > I wonder if we should just make this:
-> > > >
-> > > > if (objcg && !obj_cgroup_may_zswap(objcg))
-> > > >         goto reject;
-> > > >
-> > > > Even if memory.zswap.max is > 0, if the limit is hit, shrinking the
-> > > > zswap pool will only help if we happen to writeback a page from the
-> > > > same memcg that hit its limit. Keep in mind that we will only
-> > > > writeback one page every time we observe that the limit is hit (eve=
-n
-> > > > with Domenico's patch, because zswap_can_accept() should be true).
-> > > >
-> > > > On a system with a handful of memcgs,
-> > > > it seems likely that we wrongfully writeback pages from other memcg=
-s
-> > > > because of this. Achieving nothing for this memcg, while hurting
-> > > > others. OTOH, without invoking writeback when the limit is hit, the
-> > > > memcg will just not be able to use zswap until some pages are
-> > > > faulted back in or invalidated.
-> > > >
-> > > > I am not sure which is better, just thinking out loud.
-> > >
-> > > You're absolutely right.
-> > >
-> > > Currently the choice is writing back either everybody or nobody,
-> > > meaning between writeback and cgroup containment. They're both so poo=
-r
-> > > that I can't say I strongly prefer one over the other.
-> > >
-> > > However, I have a lame argument in favor of this patch:
-> > >
-> > > The last few fixes from Nhat and Domenico around writeback show that
-> > > few people, if anybody, are actually using writeback. So it might not
-> > > actually matter that much in practice which way we go with this patch=
-.
-> > > Per-memcg LRUs will be necessary for it to work right.
-> > >
-> > > However, what Nhat is proposing is how we want the behavior down the
-> > > line. So between two equally poor choices, I figure we might as well
-> > > go with the one that doesn't require another code change later on.
-> > >
-> > > Doesn't that fill you with radiant enthusiasm?
-> >
-> > If we have per-memcg LRUs, and memory.zswap.max =3D=3D 0, then we shoul=
-d
-> > be in one of two situations:
-> >
-> > (a) memory.zswap.max has always been 0, so the LRU for this memcg is
-> > empty, so we don't really need the special case for memory.zswap.max
-> > =3D=3D 0.
-> >
-> > (b) memory.zswap.max was reduced to 0 at some point, and some pages
-> > are already in zswap. In this case, I don't think shrinking the memcg
-> > is such a bad idea, we would be lazily enforcing the limit.
-> >
-> > In that sense I am not sure that this change won't require another
-> > code change. It feels like special casing memory.zswap.max =3D=3D 0 is
-> > only needed now due to the lack of per-memcg LRUs.
->
-> Good point. And I agree down the line we should just always send the
-> shrinker off optimistically on the cgroup's lru list.
->
-> So I take back my lame argument. But that then still leaves us with
-> the situation that both choices are equal here, right?
->
-> If so, my vote would be to go with the patch as-is.
+--000000000000c75bbe05fceeedd7
+Content-Transfer-Encoding: 8bit
 
-I *think* it's better to punish the memcg that exceeded its limit by
-not allowing it to use zswap until its usage goes down, rather than
-punish random memcgs on the machine because one memcg hit its limit.
-It also seems to me that on a system with a handful of memcgs, it is
-statistically more likely for zswap shrinking to writeback a page from
-the wrong memcg.
+From: Pierre Gondois <pierre.gondois@arm.com>
 
-The code would also be simpler if obj_cgroup_may_zswap() just returns
-a boolean and we do not shrink at all if it returns false. If it no
-longer returns a boolean we should at least rename it.
+commit 3522340199cc060b70f0094e3039bdb43c3f6ee1 upstream
 
-Did you try just not shrinking at all if the memcg limit is hit in
-your experiments?
+fetch_cache_info() tries to get the number of cache leaves/levels
+for each CPU in order to pre-allocate memory for cacheinfo struct.
+Allocating this memory later triggers a:
+  'BUG: sleeping function called from invalid context'
+in PREEMPT_RT kernels.
 
-I don't feel strongly, but my preference would be to just not shrink
-at all if obj_cgroup_may_zswap() returns false.
+If there is no cache related information available in DT or ACPI,
+fetch_cache_info() fails and an error message is printed:
+  'Early cacheinfo failed, ret = ...'
+
+Not having cache information should be a valid configuration.
+Remove the error message if fetch_cache_info() fails with -ENOENT.
+
+Suggested-by: Conor Dooley <conor.dooley@microchip.com>
+Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b57a@spud/
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Link: https://lore.kernel.org/r/20230414081453.244787-4-pierre.gondois@arm.com
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+Changes in v2:
+
+- Added missing upstream commit reference
+- Added missing S-o-b
+
+ drivers/base/arch_topology.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 147fb7d4af96..b741b5ba82bd 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -843,10 +843,11 @@ void __init init_cpu_topology(void)
+ 
+ 	for_each_possible_cpu(cpu) {
+ 		ret = fetch_cache_info(cpu);
+-		if (ret) {
++		if (!ret)
++			continue;
++		else if (ret != -ENOENT)
+ 			pr_err("Early cacheinfo failed, ret = %d\n", ret);
+-			break;
+-		}
++		return;
+ 	}
+ }
+ 
+-- 
+2.25.1
+
+
+--000000000000c75bbe05fceeedd7
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIHRm0Y2WUcobU25N
+Gk41eUER4eE+pQhAUACDQ5pCJ3PvMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDUzMDIwMjAwNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBoA0YMHDjQIx2BG/Viu+CwXkVeBBgelWat
+2DhuDzzy9Ry/CVBEMXkHxzBXB9gd3xgfAF7nBhBU1Jm+AmQlHoxsdOAvW2Unbezg4L4N5tfwKh6N
+eC+PgdsrWWEL2SO3qhAsOXYDPz+g8FaQpiYiIOr0o1Qj5DMkKi/1t159SeLC8lIuY9LHbVM+r89J
+PIvRbyjjaTRrBO4aukEjooiD4sNZ8E815N8neNQWUNhbOAYynK7r2aOc+l90fvk5y7uX8Vx8P1y0
+4gVRU6whTBV7H0Sm8hp+g3rn0WHc3mTDUQY6fEF/PvEWMT3EvEw2ZSa/cW6eE6nmbR4QAcRR1iFH
+x1Qt
+--000000000000c75bbe05fceeedd7--
