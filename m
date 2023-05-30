@@ -2,118 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2736571629E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221B77162A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbjE3Nuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
+        id S230513AbjE3Nvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbjE3Nus (ORCPT
+        with ESMTP id S230341AbjE3Nvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:50:48 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE12113;
-        Tue, 30 May 2023 06:50:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685454643; x=1716990643;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=coaE20tPVJ7AZBZ9YIPPD7ohxPRVwifqLulonpO6f/c=;
-  b=fja4gN7hCJmVNFFIFoOIMG9fWwsaN7mLQ8X4uGWBjjO5p659dLetg0U4
-   JcA1wXe6s7760OvLEZ2GyVnhLraHDR0k2dvtCJIsHLApbZ/HNvjKO4biG
-   F+rzZRF3WbnsnJYYFd/cy97IOrjW9T82l6zL513+LLGcpwVAD+fatHpP1
-   F966BKV9YYgjumbo3k/H0x4JNjEOhUg9c8WirtQBPCPj4D+5c7Y1t3EmO
-   n5dZevGjnkOe2fzDH8sFSywSf9ZQKJBdzhP81zu3kxfw2wnOoCpMgmatb
-   zwAXA5cHvZ9rXzLeF4rIKk32imkepLz9HAKlS4nG5hyirBZUdLnAogtol
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="352418864"
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="scan'208";a="352418864"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 06:50:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="771552147"
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="scan'208";a="771552147"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 30 May 2023 06:50:23 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q3zjy-0000aN-2p;
-        Tue, 30 May 2023 13:50:22 +0000
-Date:   Tue, 30 May 2023 21:50:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Evan Quan <evan.quan@amd.com>, rafael@kernel.org, lenb@kernel.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        kvalo@kernel.org, nbd@nbd.name, lorenzo@kernel.org,
-        ryder.lee@mediatek.com, shayne.chen@mediatek.com,
-        sean.wang@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, Mario.Limonciello@amd.com,
-        Lijo.Lazar@amd.com
-Cc:     oe-kbuild-all@lists.linux.dev, ath12k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-acpi@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, ath11k@lists.infradead.org
-Subject: Re: [PATCH 8/9] drm/amd/pm: enable Wifi RFI mitigation feature
- support for SMU13.0.0
-Message-ID: <202305302118.3mARqykY-lkp@intel.com>
-References: <20230530024227.2139632-9-evan.quan@amd.com>
+        Tue, 30 May 2023 09:51:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9E610D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:51:44 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q3zkW-0001PG-Iu; Tue, 30 May 2023 15:50:56 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q3zkQ-003tB5-4p; Tue, 30 May 2023 15:50:50 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q3zkP-009W9H-Ah; Tue, 30 May 2023 15:50:49 +0200
+Date:   Tue, 30 May 2023 15:50:46 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Li Yang <leoyang.li@nxp.com>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Roy Pledge <roy.pledge@nxp.com>,
+        "Diana Madalina Craciun (OSS)" <diana.craciun@oss.nxp.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "Y.B. Lu" <yangbo.lu@nxp.com>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 0/6] bus: fsl-mc: Make remove function return void
+Message-ID: <20230530135046.oovq5gxzbjfqgzos@pengutronix.de>
+References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
+ <20230412171056.xcluewbuyytm77yp@pengutronix.de>
+ <AM0PR04MB6289BB9BA4BC0B398F2989108F9B9@AM0PR04MB6289.eurprd04.prod.outlook.com>
+ <20230413060004.t55sqmfxqtnejvkc@pengutronix.de>
+ <20230508134300.s36d6k4e25f6ubg4@pengutronix.de>
+ <CADRPPNQ0QiLzzKhHon62haPJCanDoN=B4QsWCxunJTc4wXwMaA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4dpyuum7f6cyucl4"
 Content-Disposition: inline
-In-Reply-To: <20230530024227.2139632-9-evan.quan@amd.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CADRPPNQ0QiLzzKhHon62haPJCanDoN=B4QsWCxunJTc4wXwMaA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
 
-kernel test robot noticed the following build errors:
+--4dpyuum7f6cyucl4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on kvalo-ath/ath-next wireless-next/main wireless/main linus/master v6.4-rc4]
-[cannot apply to next-20230530]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hello,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Evan-Quan/drivers-acpi-Add-support-for-Wifi-band-RF-mitigations/20230530-104541
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230530024227.2139632-9-evan.quan%40amd.com
-patch subject: [PATCH 8/9] drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.0
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230530/202305302118.3mARqykY-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8ecc361da81a0915bb626156b47403a91b678de1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Evan-Quan/drivers-acpi-Add-support-for-Wifi-band-RF-mitigations/20230530-104541
-        git checkout 8ecc361da81a0915bb626156b47403a91b678de1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+On Mon, May 08, 2023 at 04:57:00PM -0500, Li Yang wrote:
+> On Mon, May 8, 2023 at 8:44=E2=80=AFAM Uwe Kleine-K=C3=B6nig
+> <u.kleine-koenig@pengutronix.de> wrote:
+> > On Thu, Apr 13, 2023 at 08:00:04AM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> > > On Wed, Apr 12, 2023 at 09:30:05PM +0000, Leo Li wrote:
+> > > > > On Fri, Mar 10, 2023 at 11:41:22PM +0100, Uwe Kleine-K=C3=B6nig w=
+rote:
+> > > > > > Hello,
+> > > > > >
+> > > > > > many bus remove functions return an integer which is a historic
+> > > > > > misdesign that makes driver authors assume that there is some k=
+ind of
+> > > > > > error handling in the upper layers. This is wrong however and
+> > > > > > returning and error code only yields an error message.
+> > > > > >
+> > > > > > This series improves the fsl-mc bus by changing the remove call=
+back to
+> > > > > > return no value instead. As a preparation all drivers are chang=
+ed to
+> > > > > > return zero before so that they don't trigger the error message.
+> > > > >
+> > > > > Who is supposed to pick up this patch series (or point out a good=
+ reason for
+> > > > > not taking it)?
+> > > >
+> > > > Previously Greg KH picked up MC bus patches.
+> > > >
+> > > > If no one is picking up them this time, I probably can take it thro=
+ugh
+> > > > the fsl soc tree.
+> > >
+> > > I guess Greg won't pick up this series as he didn't get a copy of it =
+:-)
+> > >
+> > > Browsing through the history of drivers/bus/fsl-mc there is no
+> > > consistent maintainer to see. So if you can take it, that's very
+> > > appreciated.
+> >
+> > My mail was meant encouraging, maybe it was too subtile? I'll try again:
+> >
+> > Yes, please apply, that would be wonderful!
+>=20
+> Sorry for missing your previous email.  I will do that.  Thanks.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305302118.3mARqykY-lkp@intel.com/
+Either you didn't apply this patch set yet, or your tree isn't in next.
+Both variants would be great to be fixed.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+I have another change pending for drivers/bus/fsl-mc/fsl-mc-bus.c, would
+be great to see these base patches in next first.
 
->> ERROR: modpost: "__umoddi3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
->> ERROR: modpost: "__udivdi3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+Best regards
+Uwe
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--4dpyuum7f6cyucl4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR1/zUACgkQj4D7WH0S
+/k6wYwf/aFknTYegOQsYhfPj+VXVEPLkfLFdy+0HcdoIWviyACOPr3L1s4X6BPqq
+sTJMW1RtfiDybFhNCMN1eH2tx0+vSuLIzI3rpU+vrob5w86uWd6UzbIMR8uxXPCn
+JN5+JDgQsZd0CZKYyCQOw7b+5KpzPhEHKUbUlyxocvtyBE6HFXoQtjsWQnrrCmHl
+gvroNfuqjlh3zmsw8ELv/tyZj207mMkvap8BWsKhMtbhRXg132eMBIFJ+XMB//he
+A7iG3AkhiRNNdYGFh/KKiRv2l1vHd+6+YmPEM4zRxDCtidaBJTbRL5SSs3AVeYK0
++gXDgOa2Lsf8VzCxRpTavmjQhdDkcA==
+=eJpM
+-----END PGP SIGNATURE-----
+
+--4dpyuum7f6cyucl4--
