@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169FC716A4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9062B716A52
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbjE3Q7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
+        id S233105AbjE3RAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233084AbjE3Q7Z (ORCPT
+        with ESMTP id S232564AbjE3Q71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:59:25 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697501BC;
-        Tue, 30 May 2023 09:59:11 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34UGx1J3078900;
+        Tue, 30 May 2023 12:59:27 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D275193;
+        Tue, 30 May 2023 09:59:12 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34UGx1kT125895;
         Tue, 30 May 2023 11:59:01 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1685465941;
-        bh=8w532hrfkqht2GKxL4AJ0l/5hJ3C/GIlPX4a4Lh46jQ=;
+        bh=M8yKFjYPPDyz2yVGZg9w6f96sWSL3buCffjH1Mn5M8s=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=F4QBxSes86zhD6e7wT249OtJLWg+Hr7dX0fPjNAVZ9xfZ/zSkn5RlYI9asZp/POg1
-         JHUgnstUWkWJFbCHnzKvi1rtKAgxVsKwDT/jGkRyi/evawGa0fALFqpTAhQiLKYXWO
-         VU2JNH+cRU336jla4FMFiw8kAf8L4bbLAd0TDut8=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34UGx17K029840
+        b=Y1qLPnaF9c6weceg/j2iQ3aL4HsNNuSbHyclvJNRiSgKi6wPfqx//bUBTQdF3bHiH
+         EJb4e5DyZvaiJOYbA6CJE/6Yu/4iDCZ0ys2pSpak+ST3It+mitlr9QbtLkOa2sYLkj
+         EsWdDchgGrqEOdzr+FmiuU6sXENkge8QvuDyjcmo=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34UGx12V087491
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Tue, 30 May 2023 11:59:01 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 30
  May 2023 11:59:01 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Tue, 30 May 2023 11:59:01 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34UGx1EO038987;
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34UGx1Po102754;
         Tue, 30 May 2023 11:59:01 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Conor Dooley <conor+dt@kernel.org>,
@@ -50,9 +50,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Nishanth Menon <nm@ti.com>, Udit Kumar <u-kumar1@ti.com>,
         Nitin Yadav <n-yadav@ti.com>, Andrew Davis <afd@ti.com>
-Subject: [PATCH 5/7] arm64: dts: ti: k3-j721e-mcu: Add mcu_secproxy
-Date:   Tue, 30 May 2023 11:58:58 -0500
-Message-ID: <20230530165900.47502-6-nm@ti.com>
+Subject: [PATCH 6/7] arm64: dts: ti: k3-j721s2-mcu-wakeup: Add sa3_secproxy and mcu_sec_proxy
+Date:   Tue, 30 May 2023 11:58:59 -0500
+Message-ID: <20230530165900.47502-7-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230530165900.47502-1-nm@ti.com>
 References: <20230530165900.47502-1-nm@ti.com>
@@ -70,29 +70,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MCU domain has it's own secure proxy for communicating with ROM and
-for R5 micro controller firmware operations. This is in addition to
-the one in the main domain NAVSS subsystem that is used for general
+Security Management Subsystem(SMS) has it's own unique secure
+proxy as part of Security Accelerator (SA3) module. This is used
+for communicating with ROM and for special usecases such as HSM
+operations. In addition MCU island has it's own secure proxy for
+usecases involving the MCU micro controllers. These are in addition
+to the one in the main domain DMSS subsystem that is used for general
 purpose communication.
 
-Describe the node for use with bootloaders and firmware that require
-this communication path which uses interrupts to corresponding micro
-controller interrupt controller. Mark the node as disabled since this
-instance does not have interrupts routed to the main processor by
+Describe the nodes for use with bootloaders and firmware that require
+these communication paths which uses interrupts to corresponding micro
+controller interrupt controller. Mark the node as disabled since these
+instances do not have interrupts routed to the main processor by
 default for a complete description of the node.
 
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
 New patch
 
- arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-index 6237e1f3a477..4ea95ed5d12c 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-@@ -296,6 +296,21 @@ mcu_udmap: dma-controller@285c0000 {
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+index a353705a7463..b75057c49731 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+@@ -39,6 +39,21 @@ chipid@43000014 {
+ 		reg = <0x00 0x43000014 0x00 0x4>;
+ 	};
+ 
++	secure_proxy_sa3: mailbox@43600000 {
++		compatible = "ti,am654-secure-proxy";
++		#mbox-cells = <1>;
++		reg-names = "target_data", "rt", "scfg";
++		reg = <0x00 0x43600000 0x00 0x10000>,
++		      <0x00 0x44880000 0x00 0x20000>,
++		      <0x00 0x44860000 0x00 0x20000>;
++		/*
++		 * Marked Disabled:
++		 * Node is incomplete as it is meant for bootloaders and
++		 * firmware on non-MPU processors
++		 */
++		status = "disabled";
++	};
++
+ 	mcu_ram: sram@41c00000 {
+ 		compatible = "mmio-sram";
+ 		reg = <0x00 0x41c00000 0x00 0x100000>;
+@@ -280,6 +295,21 @@ mcu_udmap: dma-controller@285c0000 {
  		};
  	};
  
@@ -100,9 +125,9 @@ index 6237e1f3a477..4ea95ed5d12c 100644
 +		compatible = "ti,am654-secure-proxy";
 +		#mbox-cells = <1>;
 +		reg-names = "target_data", "rt", "scfg";
-+		reg = <0x0 0x2a480000 0x0 0x80000>,
-+		      <0x0 0x2a380000 0x0 0x80000>,
-+		      <0x0 0x2a400000 0x0 0x80000>;
++		reg = <0x00 0x2a480000 0x00 0x80000>,
++		      <0x00 0x2a380000 0x00 0x80000>,
++		      <0x00 0x2a400000 0x00 0x80000>;
 +		/*
 +		 * Marked Disabled:
 +		 * Node is incomplete as it is meant for bootloaders and
