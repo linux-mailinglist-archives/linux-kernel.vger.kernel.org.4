@@ -2,208 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B38971616A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B3C71615E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbjE3NSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
+        id S232590AbjE3NRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbjE3NS2 (ORCPT
+        with ESMTP id S232484AbjE3NRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:18:28 -0400
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36643EA;
-        Tue, 30 May 2023 06:18:25 -0700 (PDT)
-Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UCQrk6018554;
-        Tue, 30 May 2023 13:18:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=PPS06212021;
- bh=0+/bA8HgWaWY4f1OSPjWlKT53Lt7RqEzipLwsB3Ic2c=;
- b=r7DzZ8AQMc/ncvtf/OYNY71PBAb+vMIJg6CZZ6KmUuOsnyAXfp+LfDuBze05x5Vsy6Fv
- htpUSckPoCpU6ukaEvw2IorjjxrC8CNyFkl9+/ZODo/JnbHWj9IeOti8bCmtnv+erehS
- AZMmxebe2AOPfGC7h4tyDRPYsZtpB7Cotl1Ecpdp6flwJqJdjj4fLC0zdxHYNBBl3WvD
- 6Y5rCGJoALHPEVrYUSXSUKIHZpmIRfhGE9zwGkgUksDYfiZPqhgYWLqbQDOfJt14azvd
- PlEMY5a7nwQH0TQiXTWQYlvT8n1As4DNw2sU/MA75YqmKgqai5IyfJg391Lei61cGdyz Qg== 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3qu8u8jkef-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 13:18:08 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dqXppFDBhRlwsBwBbRdEAxgjDathAshXUsAjrPmsNBstC5+0luNszV4+NDWZ26KoY9zUufYov+Xt3bdunud8rMavS1/vQ7lgNW1oMZW05er0mKELTjWsRmgdC3zLJXATBwQqeuJLoImQpZKB5XfEfJrw7E6v6+BYAoK6gRxGnWnvJSmkLVMQuAgwzqLjpDGtnNAhLGbToULwOji3KKOYifTNeVSzuRPJW1CmtoYboHSom91GmzgM4tkcq/c+kRPC7zacxdQLlO/wcg2nNJ13lYoeeJaNVVWYZ6HtptBoJfSMcd1/ayo/liAYo9NClFhY5hs8d2SZ0Ml9ueYMv5+EaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0+/bA8HgWaWY4f1OSPjWlKT53Lt7RqEzipLwsB3Ic2c=;
- b=E7CrfU8GrKOd+dVDo4gQ6k7ceAblVtDDBkLWr8zf94Ak025PPSasK6n5vyxJfJYgJvzxswwGAsHqb2kr8i3LhXwDFQGRTMF9V7LK9vcKXvJx8mXdQ22ZPF/feBdr36DnJGD3UruHijoP8YVg6NgPTO/tCqi7F/2UVRH2IJqkuho9FiCd82PsAEb7nvqnixtiYjmifw/PD5H9/lsOv5yo3TtYBCiePLxqSGzVveZyk0tJi6dUyEMqeeqa6WdN9vVHtzejmn+YvT83PGNBCp9VB9ltyWYV3LvqItGVAxOdsKBi2NWPw/RrwzsMDTkvFjjF9MN92rxiKR49X0menl4vPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from PH0PR11MB4952.namprd11.prod.outlook.com (2603:10b6:510:40::15)
- by IA1PR11MB7366.namprd11.prod.outlook.com (2603:10b6:208:422::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 13:17:56 +0000
-Received: from PH0PR11MB4952.namprd11.prod.outlook.com
- ([fe80::5693:5120:1f58:9efa]) by PH0PR11MB4952.namprd11.prod.outlook.com
- ([fe80::5693:5120:1f58:9efa%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 13:17:56 +0000
-From:   Dragos-Marian Panait <dragos.panait@windriver.com>
-To:     stable@vger.kernel.org
-Cc:     Ruihan Li <lrh2000@pku.edu.cn>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4.14 1/1] bluetooth: Add cmd validity checks at the start of hci_sock_ioctl()
-Date:   Tue, 30 May 2023 16:17:40 +0300
-Message-Id: <20230530131740.269890-2-dragos.panait@windriver.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230530131740.269890-1-dragos.panait@windriver.com>
-References: <20230530131740.269890-1-dragos.panait@windriver.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR0501CA0025.eurprd05.prod.outlook.com
- (2603:10a6:800:60::11) To PH0PR11MB4952.namprd11.prod.outlook.com
- (2603:10b6:510:40::15)
+        Tue, 30 May 2023 09:17:49 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CBAC7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:17:47 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51403554f1dso7010328a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:17:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685452666; x=1688044666;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SlNRAu+sEqLR68lQ/UatfZNoRCWXT5cJKm3Hf7V3cqY=;
+        b=f33JruTlMMoPyVZkVavi0A8dxukxKGnRaj+eiilvbN8KQ1BhNxAH2fgnQlW6hT7los
+         cyTU52WlvsApotwNQHpjaVYOs7XRCMVsPDDQFEWvUV6AVu2UD8kuqLaT7iFeX8AZQ8TN
+         p2XdXV/0788Q80hkom3MinHMcMOLxp1fYBVEY7rIUpxxuVQPghvLxcm90taS72++Ll4Z
+         WRVTVi4hGV6XcpxcB5/7n+HK9rnO/Mgmb5OrirRnRX/4YgLYIdrANYVJ/23WpSqD1lKe
+         5YfUX2jS+5oME1Z0yMWjvUj8aZ8zKoYgwTgkUOiKRM8XoTE677gZMmbPrN1D5DH4LYMj
+         kSPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685452666; x=1688044666;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SlNRAu+sEqLR68lQ/UatfZNoRCWXT5cJKm3Hf7V3cqY=;
+        b=AHyANtvtVHGq/fGiApAV6ZCF3VJxhWsQ/Sq4ceKHe/vFDzfHukivQRi/1bmgM/bQQP
+         hNOruXY1wOftZLsYlbjyZ7qtSPSefFnTao0wsBoxoDU5pTsHrAX6U2EMbCD0DodCbIQU
+         o/5njl/rZgXgovzP8tVtTHifTR5bUmYinKlKE/QD6HKHdrAg0B2O7/IqXbGF70CK5WHn
+         NTKO59Vi/vUfb7FksyjjRWeBdluKsKm4LWXJutu4V4mJisKa8xV6ilN2MFfvyOLCc0t4
+         mPFNuLvAjIBQF4XFlKotgKvaG9NimGfnAyiXqeV/wKaZGWE+M7KdQOeQOBuFdZjI0M1B
+         WtMg==
+X-Gm-Message-State: AC+VfDy6GM3kqCW4/eayRQhXW8/QYC33W+YfTr6qoPJq9OKUeD3CpMuG
+        wNJMViXdGuYNivuf3lxN0jIm7A==
+X-Google-Smtp-Source: ACHHUZ50wxHHnMyT/M88twI82FLThHbRKUAp3t34rKhe2wbJmxLklwc1X5L/E5GjzkfV5y5besrNcw==
+X-Received: by 2002:a17:907:7206:b0:974:1ef3:e6d1 with SMTP id dr6-20020a170907720600b009741ef3e6d1mr1727125ejc.9.1685452666001;
+        Tue, 30 May 2023 06:17:46 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id m22-20020a1709066d1600b0096f777fc1ccsm7235383ejr.200.2023.05.30.06.17.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 06:17:45 -0700 (PDT)
+Message-ID: <83fb5973-5514-6c66-fc15-84fb439f1398@linaro.org>
+Date:   Tue, 30 May 2023 15:17:43 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4952:EE_|IA1PR11MB7366:EE_
-X-MS-Office365-Filtering-Correlation-Id: 88fc41a5-6d85-427a-1139-08db611047f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pRBRZsCwuMnRFlr5ZHvZxdbYQBJ0Ox4y7MXqGf+7+GPCGOSG3+M6WAVPrDn4WPL4stKBv4gBqvXI8IgR9zJ7Bb+A1LOBueN9iFiAQMBuKUJ/lW83qlB3Ax4Ucd0TiubXVJQQIsH16GMo1swD55/MesW9Yn6jb8Tcj6E4NMtavKOksRxQ6e4GL4m5Ly06zymfgrXZ+ewUyh7VQaOZ43MbhckQQTtlo5UrW2HBiI0NzDI+JWHbJaugfd5+9f/Eo8CtrbdEcNbKL5xAhOmnRJkk2tCPqj2P0TFWxF9GKidZTJlRXE18Et2VhIY7sP7+UzSOnsGxGmVl8jKpePSrv4603WuxoNrEthENLZNJ4XvKbezSBcQUs2GrYSTz0aiVQRpYyhqHpnV9j2tKp910InEcJcxGPiXPGGgFPVBR6bK5EhzVAK2mq19iEiS5UTyH0Su8dslkN32EFsvmxWiRMdkd+F/2w+1YUhA4paMcs2msvNNet5xYWbLTG8yJx4UT19Th8ls3czoudxUohPUYn6RHtMz6jSejJOKcKtwbK8xLmhse9MjOmHd/zaj1dzkgL45Mhkj2D/RnvaRrBLgJ5rAGblvE8yXPnvI5Ze8C8jOxOYDPuISGFnYs7JMsdWd/qoBV
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4952.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(346002)(39850400004)(136003)(396003)(451199021)(6486002)(41300700001)(6666004)(52116002)(83380400001)(316002)(86362001)(186003)(36756003)(2906002)(6512007)(6506007)(26005)(1076003)(7416002)(8676002)(8936002)(5660300002)(2616005)(478600001)(38100700002)(38350700002)(54906003)(6916009)(4326008)(66946007)(66556008)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pqbhK/29YvFt7nLzHWF3ZtelxyjFkGtUGPQua+Hm5douvMHDp8vHW4WTKDl3?=
- =?us-ascii?Q?5zsS2w4bA99O1lu/dn1DLuuYN5Ym4xELkX8pDOiyo4CB9NNCOtIK/LjUiOQg?=
- =?us-ascii?Q?ZPK605/yx3fl6jT3ZV9ljJkxURo5NhyHFONyZWlsD9h6YyQbdZDkvfuCgAmy?=
- =?us-ascii?Q?px1W27T6VJLZKLWCuIi/Mo7UBmKHUbQlDqILS3uB/HihtspkhVFjTQK/9rDe?=
- =?us-ascii?Q?GdcvbPynHFCHTrny7RQgnHUfi8s0mv+slmIG8dRDuquahB+fYu/RFxZ6mImt?=
- =?us-ascii?Q?mlSsnnCpLKKo+7xVqi3snBpLOP2iCkpehT4d6blZ/cRfoZuOefa3yW+TYs9k?=
- =?us-ascii?Q?D8JU4uHCN7QZhwVUFUfsB/am+kCRdTgfyN2+ZNp2B/Et9opCyPnPRuDyvjzu?=
- =?us-ascii?Q?Y4k1B7yQfL44cuX2t3rbxkZ05LdxAG3il894s7eTXzNXf1OyQXaVrwR6NG2b?=
- =?us-ascii?Q?+gNc+vrwF+nAAbb9GYxl7DGgrxJyZV3Td11dblnMPSSfbFZqz054xxKRFnSC?=
- =?us-ascii?Q?Otp5RGRfMPc7vYynLST79zbWV6tp4nG42oOZzmYHatB3/VPVxrAGmnuon9oy?=
- =?us-ascii?Q?tCcwqZBk5qiE8Z+l2dEDjUQECd93yIglsLa4ydLq+KYKSUmLhRuM6PH9Y8ns?=
- =?us-ascii?Q?moeCJT07YMX8ivIn3+nPzHHsnT/S4Deag4oIUOW+hEtOrboT4z9+XyeEjzrK?=
- =?us-ascii?Q?zQ052BBE4gn6UqSYUGiq7tbXjqJk2tyzTPZJk/8ZpKGVDAMqSe5JJphkYQl/?=
- =?us-ascii?Q?j12e3TcOhvRIftncS7WIfPrewYap8Ygo0kZPaTLyDmFHyzY2qrB+hhpvEVZ6?=
- =?us-ascii?Q?U44MboHYJj3j6ctE3qI70pMkiVgcyAi/l92Y5s+EtXV4FGmSzyywFOpnHGdy?=
- =?us-ascii?Q?Q8uZnsapFlIq64EukQodnP6BGNSGncToEqiXri+s0NrYq6q0I3ujoRCqMHDV?=
- =?us-ascii?Q?LlQrxNj5qP7BSeoLjGQldPXe4XfZroZr1ZDUkTAkqRJIWQpim3+RM/xTRvDy?=
- =?us-ascii?Q?g5a7jgt7VIqXSnuRXd0Lp8NtBf7xnbha0G22g2mCXXiVWp5Q17vNLEqdXqEM?=
- =?us-ascii?Q?XOdCu1HjOQBFUX45fX09ocghktuSu8YdgxftRLYgzjreaRyirXtriNlTv/fH?=
- =?us-ascii?Q?80ZLrpKxvDcb7qEiZVkn4gBxxplc1Yie1wblIUpgDyIn5p6PmrFphFBSuUKQ?=
- =?us-ascii?Q?wW79y4U+NaPxxQhJOmoIy5YDxXY6T9AbZCMeM4eZi+Vd4H/gHgu5x5Kx5T28?=
- =?us-ascii?Q?+gZle2Mp2oIDLTSf7yRuUPxq5kcWMH+BosLtS/dBSzJVB5JJ77whkLv92XZy?=
- =?us-ascii?Q?fNmtwNQg8UZ5gHz9ZMfI5/DHXI0k0RiINeFaj0nOj5fLAgMa1YTzE5L91Qy/?=
- =?us-ascii?Q?MlUsTFfwXqfLCORhi+T+fG4se0cxgwWfpBoq2GEcxRSYiTaMdGWRzeTMDjKF?=
- =?us-ascii?Q?+Z4Cwobe/sfWdwhoW2tBFxhF8kMVVsDb+B+mPu4rIMXEkJY2fbw3hJh5FPgm?=
- =?us-ascii?Q?K7rCOIemSg0V9aV3lsq9RtyfKVoT9bC1CoApDgwKE03AzSlM4k2rAu2jDyox?=
- =?us-ascii?Q?IQ3VnGTgupzroqhHrodxJ7LobqwqAneyYphGC9lI3aiHQLYK9jJ2QrDvyPrE?=
- =?us-ascii?Q?tQ=3D=3D?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88fc41a5-6d85-427a-1139-08db611047f6
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4952.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 13:17:55.9792
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +c33P5b5bYl/kL1opn+gRYSI8MqBbGhluaLXnRGPjpb9lL+7nNFGlIDu3bRrC4M7F/8zHZ8tfZnuHTaNhQloFDJzHK156Ji9ZP8oCHpy4Dg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7366
-X-Proofpoint-ORIG-GUID: i9Oa0iTh28HmzIlLZie_1O1SwCNKPq6c
-X-Proofpoint-GUID: i9Oa0iTh28HmzIlLZie_1O1SwCNKPq6c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_10,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 malwarescore=0 bulkscore=0 mlxlogscore=999 impostorscore=0
- suspectscore=0 adultscore=0 phishscore=0 spamscore=0 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305300108
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 4/5] dt-bindings: iommu: arm,smmu: enable clocks for
+ sa8775p Adreno SMMU
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230417125844.400782-1-brgl@bgdev.pl>
+ <20230417125844.400782-5-brgl@bgdev.pl>
+ <9f2c0b2d-b11e-512f-1566-5097547c60d1@linaro.org>
+ <CAMRc=Mey2mjNppokxcNBTyaZPTjBkiuQX-DHTvMXJkiLKq7UoA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMRc=Mey2mjNppokxcNBTyaZPTjBkiuQX-DHTvMXJkiLKq7UoA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ruihan Li <lrh2000@pku.edu.cn>
+On 30/05/2023 11:47, Bartosz Golaszewski wrote:
+> On Tue, May 16, 2023 at 1:42 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 17/04/2023 14:58, Bartosz Golaszewski wrote:
+>>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>
+>>> The GPU SMMU will require the clocks property to be set so put the
+>>> relevant compatible into the adreno if-then block.
+>>>
+>>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>> ---
+>>
+>>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Hey IOMMU maintainers, could you please pick this one up for the next
+> merge window?
 
-commit 000c2fa2c144c499c881a101819cf1936a1f7cf2 upstream.
+I think you missed to Cc them (except Will).
 
-Previously, channel open messages were always sent to monitors on the first
-ioctl() call for unbound HCI sockets, even if the command and arguments
-were completely invalid. This can leave an exploitable hole with the abuse
-of invalid ioctl calls.
-
-This commit hardens the ioctl processing logic by first checking if the
-command is valid, and immediately returning with an ENOIOCTLCMD error code
-if it is not. This ensures that ioctl calls with invalid commands are free
-of side effects, and increases the difficulty of further exploitation by
-forcing exploitation to find a way to pass a valid command first.
-
-Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
-Co-developed-by: Marcel Holtmann <marcel@holtmann.org>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
----
- net/bluetooth/hci_sock.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/net/bluetooth/hci_sock.c b/net/bluetooth/hci_sock.c
-index 837b0767892e..9b1658346396 100644
---- a/net/bluetooth/hci_sock.c
-+++ b/net/bluetooth/hci_sock.c
-@@ -968,6 +968,34 @@ static int hci_sock_ioctl(struct socket *sock, unsigned int cmd,
- 
- 	BT_DBG("cmd %x arg %lx", cmd, arg);
- 
-+	/* Make sure the cmd is valid before doing anything */
-+	switch (cmd) {
-+	case HCIGETDEVLIST:
-+	case HCIGETDEVINFO:
-+	case HCIGETCONNLIST:
-+	case HCIDEVUP:
-+	case HCIDEVDOWN:
-+	case HCIDEVRESET:
-+	case HCIDEVRESTAT:
-+	case HCISETSCAN:
-+	case HCISETAUTH:
-+	case HCISETENCRYPT:
-+	case HCISETPTYPE:
-+	case HCISETLINKPOL:
-+	case HCISETLINKMODE:
-+	case HCISETACLMTU:
-+	case HCISETSCOMTU:
-+	case HCIINQUIRY:
-+	case HCISETRAW:
-+	case HCIGETCONNINFO:
-+	case HCIGETAUTHINFO:
-+	case HCIBLOCKADDR:
-+	case HCIUNBLOCKADDR:
-+		break;
-+	default:
-+		return -ENOIOCTLCMD;
-+	}
-+
- 	lock_sock(sk);
- 
- 	if (hci_pi(sk)->channel != HCI_CHANNEL_RAW) {
--- 
-2.40.1
+Best regards,
+Krzysztof
 
