@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F67E715EB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0997715EB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbjE3MPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
+        id S231817AbjE3MPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbjE3MPE (ORCPT
+        with ESMTP id S231702AbjE3MPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:15:04 -0400
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CADDC5;
-        Tue, 30 May 2023 05:15:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Vjtf.r0_1685448895;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Vjtf.r0_1685448895)
-          by smtp.aliyun-inc.com;
-          Tue, 30 May 2023 20:14:56 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH] integrity: Fix possible multiple allocation in integrity_inode_get()
-Date:   Tue, 30 May 2023 20:14:53 +0800
-Message-Id: <20230530121453.10249-1-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        Tue, 30 May 2023 08:15:13 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA8C10E;
+        Tue, 30 May 2023 05:15:06 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b01d912924so34326045ad.1;
+        Tue, 30 May 2023 05:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685448906; x=1688040906;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TSonn1Wj9WYlO2/wi9meZ0Hj4Mrbv3g+ANp9gt9DWKc=;
+        b=D2y1iirxlOA1whLuxkn4Cvr4N0dbHeYrsvnX/+ROgnj6TcH3fOAkZ+A+lXHhJ8pZSr
+         aJQBSHpFiFZtfVwS8ouikmfLrxNuteaojzMBzDMNU0YEdTkl5K26GOpI6p1i001x016y
+         WQP+6qaXhJT+lRPehyDteIoJ+iHVPiPb9sjqfkSM79IMpZxMybLyiSEx3XnodtIaB6AN
+         pZbPr88yxZA1WoSS9odSqdmVYY4ZlPS6kqiEl6wVa8yApoMF1SH1N8FAcwkY9Nrq3ipU
+         vD0awE1EqlVYbQvyvPCw8bd4q8OPkEVa+YlouEdhpt7XrYdWzOKjjoOvucgLx67xIKIf
+         qLbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685448906; x=1688040906;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TSonn1Wj9WYlO2/wi9meZ0Hj4Mrbv3g+ANp9gt9DWKc=;
+        b=AuGKE4ooF+GWHKdSkG+cZCEasEsixsuCfOMEK9HP3meAH507r0d+fylg6RN+2Po7Ow
+         Ft/rkR/5QIf1jvZCSAzEKCjmJouKe0jttUulqJCgUpcGJxiXkx7LLoVnAYQx1wZABvOr
+         1TZjgb/P8eNo4ELEzSLaNfCYvFjeBgqCjVxllZ58z4c7Ik5P/Hq1isbk1M/m3D0ucsJM
+         g4SPCWsYw7SHnSsC/Q+vlKY+L+K9p25hz1Ud1P65URd/R9oKcolF7iOfUA+lMVgACKAY
+         t8rsaVJsWe8bSSE3F5+m+zHwF29qxeEH1GWtqRr6sfn29HZUB4/kpdwQTzMyZgY87RD3
+         nKrw==
+X-Gm-Message-State: AC+VfDwskGk8Fp0XveyAWxoowFgD+opX/99Wr6V+6izamH/cL92L01pk
+        UG4tX8eknQ2u9em6m1wbpHk=
+X-Google-Smtp-Source: ACHHUZ5y59N4Y6nAkf/RppC21TtkyrkJVUslucsvcKbF1weMf1kjkHnotOIfvHjNLnzJYMpVuxbWlw==
+X-Received: by 2002:a17:902:bd8b:b0:1ab:1b8:8a5f with SMTP id q11-20020a170902bd8b00b001ab01b88a5fmr2011127pls.33.1685448905794;
+        Tue, 30 May 2023 05:15:05 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id jc12-20020a17090325cc00b001aaef9d0102sm5382021plb.197.2023.05.30.05.15.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 05:15:05 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 30 May 2023 05:15:04 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Srinivas Neeli <srinivas.neeli@amd.com>
+Cc:     shubhrajyoti.datta@amd.com, michal.simek@amd.com,
+        srinivas.goud@amd.com, wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, git@amd.com, git@xilinx.com,
+        neelisrinivas18@gmail.com
+Subject: Re: [PATCH V4 4/4] MAINTAINERS: Add support for Xilinx versal
+ watchdog
+Message-ID: <70f3a218-c4ac-4614-afb8-09e68a4d1e4f@roeck-us.net>
+References: <20230420104231.2243079-1-srinivas.neeli@amd.com>
+ <20230420104231.2243079-5-srinivas.neeli@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420104231.2243079-5-srinivas.neeli@amd.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When integrity_inode_get() is querying and inserting the cache, there
-is a conditional race in the concurrent environment.
+On Thu, Apr 20, 2023 at 04:12:31PM +0530, Srinivas Neeli wrote:
+> Added entry for Xilinx versal watchdog driver.
+> 
+> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
 
-Query iint within the read-lock. If there is no result, allocate iint
-first and insert the iint cache in the write-lock protection. When the
-iint cache does not exist, and when multiple execution streams come at
-the same time, there will be a race condition, and multiple copies of
-iint will be allocated at the same time, and then put into the cache
-one by one under the write-lock protection.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-This is mainly because the red-black tree insertion does not perform
-duplicate detection. This is not the desired result, when this
-happens, the repeated allocation should be freed and the existing
-iint cache should be returned.
-
-Fixes: bf2276d10ce5 ("ima: allocating iint improvements")
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Cc: <stable@vger.kernel.org> # v3.10+
----
- security/integrity/iint.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-index c73858e8c6d5..d49c843a88ee 100644
---- a/security/integrity/iint.c
-+++ b/security/integrity/iint.c
-@@ -43,12 +43,10 @@ static struct integrity_iint_cache *__integrity_iint_find(struct inode *inode)
- 		else if (inode > iint->inode)
- 			n = n->rb_right;
- 		else
--			break;
-+			return iint;
- 	}
--	if (!n)
--		return NULL;
- 
--	return iint;
-+	return NULL;
- }
- 
- /*
-@@ -115,8 +113,13 @@ struct integrity_iint_cache *integrity_inode_get(struct inode *inode)
- 				     rb_node);
- 		if (inode < test_iint->inode)
- 			p = &(*p)->rb_left;
--		else
-+		else if (inode > test_iint->inode)
- 			p = &(*p)->rb_right;
-+		else {
-+			write_unlock(&integrity_iint_lock);
-+			kmem_cache_free(iint_cache, iint);
-+			return test_iint;
-+		}
- 	}
- 
- 	iint->inode = inode;
--- 
-2.24.3 (Apple Git-128)
-
+> ---
+> Changes in V4:
+> -None
+> Changes in V3:
+> -None
+> ---
+>  MAINTAINERS | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 327901c9f1d1..388305608418 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -23148,8 +23148,10 @@ M:	Srinivas Neeli <srinivas.neeli@amd.com>
+>  R:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+>  R:	Michal Simek <michal.simek@amd.com>
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+>  F:	Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+>  F:	drivers/watchdog/of_xilinx_wdt.c
+> +F:	drivers/watchdog/xilinx_wwdt.c
+>  
+>  XILINX XDMA DRIVER
+>  M:	Lizhi Hou <lizhi.hou@amd.com>
+> -- 
+> 2.25.1
+> 
