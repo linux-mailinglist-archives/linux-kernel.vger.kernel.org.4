@@ -2,113 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AF17164A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07CD7164B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjE3Ood (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S231913AbjE3OqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjE3Ooa (ORCPT
+        with ESMTP id S230349AbjE3OqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:44:30 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C805B2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:44:29 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96f99222e80so941391066b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:44:29 -0700 (PDT)
+        Tue, 30 May 2023 10:46:20 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50959C;
+        Tue, 30 May 2023 07:46:15 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30aa1eb95a0so4640418f8f.1;
+        Tue, 30 May 2023 07:46:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685457868; x=1688049868;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tDgeJNYR1mRc99Zwj6kB5L18o06yCX2/R5yquqZiFxE=;
-        b=s9B2XEAGQnToGrKy96poGs6yBxMIg2mYHKWAVzyLwmGed+drbKC3E4WkNzfMSribiD
-         T4dZCqmg1eM6qB2lYjEIWvjlunTeAdG4MgUb/OCX7Js05KGquKhRl+r+fShDpW07OtWD
-         tC6GsH1gTz8dkeAh7DrmtXStiLql+G+zBo/+fGoXEoOeDdqvcZK3yeJ4KMOrdVoiHFRs
-         Ubxbv0ryCJKqa28BFX6eLF5vJUpFVYZS3/XVdN2e2HR7ZD/i0Xso7l9x5T6qaaGAEEN6
-         nArTdsa56zvCs8SDhzENCq/7xLpsdUF7PdTC3+TxZ4iJrANS0I1jR4fJ1wzcHYAc8kQC
-         FPDw==
+        d=gmail.com; s=20221208; t=1685457974; x=1688049974;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3y1medTyj/hZKdN9AO+Oz7IaxQHqeigKWyUw6axzy28=;
+        b=TlWu7lDHzDInHB21R9hoHJEBNVqOQIuiRjEGKteI1jepyktLsKA7yEmkRvOuNBQ/x6
+         V8W4WqSkHhMamOx3/y3MaXMdbfNYyVeeAVedLX9yleyjlPAnRzduRd+9svCu68L+GiNR
+         qcvmuvn/RMiJPmtTTrS6mKBWw+PJYJFNQ4op+uKruKCmZ+rOFNQ0BjmfexCW7qN5GsI6
+         8WfDv0cD7PUPhVFheBpdCY/IyzPLPvZTrIkOvX92pjl28ivoIx6yMBoKe/ayxjssRndy
+         iQSHVdBEkMdXQESy3iEvAtmlgdCJJixP3FHf7nu7d52FO9a2y5IBwBe+8heDO5qr3M8Y
+         dWwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685457868; x=1688049868;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tDgeJNYR1mRc99Zwj6kB5L18o06yCX2/R5yquqZiFxE=;
-        b=fcQ+Zgf1vBa5sRgMKg+C+QYyqmQXvLYtC6bTnRxGyp602FhML2IZoTpK8SSuQVVWvx
-         kDtIWgqkxQUpzvp+OVkZRoAp1DYAG3jrYAjN57cCYipfGMEhw+Ci9BTUp4X2BzjxnIbX
-         U2UxFG/lCtvyE7YBO2uozmfNRbeKyj0vHmcGdGWl+Piy4XC1p5VWnneO4R+q5sp5Hl7T
-         bvgIoNUyFNO83DXA7oq3YLz0s77xxzPJukMwGXcu//CxNO0EU7FTM6m4NiLbdVi5JqqZ
-         GZVM2fnvm7sCFBoWwufxHpIj3XwuMms45QoF7HHM0CYGlR9jRXb28HckSEW8S8ep8Na2
-         ZeJQ==
-X-Gm-Message-State: AC+VfDy9Ay2Ja2PIQf3BC+sD14cOVfTkQjY35tff/apmmMT7H+F1JsJa
-        Uv4T0BvyXiN56xj+zN3NKWRJaw==
-X-Google-Smtp-Source: ACHHUZ4T5PHcFnaPx8v9mzg3bIbkkS6HlPhAMlCvITGaIHWTSg5GtmcwkVpaT4RExgTL+ftHPEXFZA==
-X-Received: by 2002:a17:907:7da0:b0:96f:b40a:c85f with SMTP id oz32-20020a1709077da000b0096fb40ac85fmr10682964ejc.23.1685457867760;
-        Tue, 30 May 2023 07:44:27 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id b16-20020a170906151000b0096b15e4ffcesm7415705ejd.85.2023.05.30.07.44.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 07:44:27 -0700 (PDT)
-Message-ID: <fdfc568e-703e-6e74-953e-742c00f0b5fe@linaro.org>
-Date:   Tue, 30 May 2023 16:44:25 +0200
+        d=1e100.net; s=20221208; t=1685457974; x=1688049974;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3y1medTyj/hZKdN9AO+Oz7IaxQHqeigKWyUw6axzy28=;
+        b=EId4/zbtP78oQCIap6EgA5sygN1ZLZXr0CBIEvk+25WYpI0t+FzUGWIhdmaaHWnPEV
+         8IC4JA3HCD6bwVoOeL3nIz/ZmwtwURrPjLEbj+pXqzpvV3eCvyF5fPDytnF/noMfgF3B
+         +5BXFMrzm/x3TrPwstLhxk9tfybA3z15SQT7GnugUrpplQST7PSJxyBbv0YGEyZIoX/L
+         HhszWYaYzPTGaRjKQdDpFl21kljMRNURnMIoQFdO+xeHZ/mEJ27Qwq0GdgqY/25wgoWH
+         e+HTneQ7sO/yTVPXykk9qE6Z0WKPxYknmCyi3ZCw/MKkNn5tqwibL2hfDkf9GmY03zNn
+         8VEg==
+X-Gm-Message-State: AC+VfDxmmb9Q+MQMP5UtKlEhsQxN6X8xcAcC9Ui8VE/vF9U5wA+QKHFU
+        Lg+lRh3gESeZJ000DVbtMKc=
+X-Google-Smtp-Source: ACHHUZ4kUtwOKbIB/YZ19q9WmcPWqc/0MZVoBTLQm/OPDHomYVxgUd6RIkcLDTCHdbaEfL7fQootCQ==
+X-Received: by 2002:a5d:4d02:0:b0:30a:e369:5acb with SMTP id z2-20020a5d4d02000000b0030ae3695acbmr1661065wrt.68.1685457974073;
+        Tue, 30 May 2023 07:46:14 -0700 (PDT)
+Received: from localhost.localdomain (cpc157791-rdng31-2-0-cust585.15-3.cable.virginm.net. [86.24.214.74])
+        by smtp.gmail.com with ESMTPSA id d1-20020adfe881000000b0030631a599a0sm3573136wrm.24.2023.05.30.07.46.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 07:46:13 -0700 (PDT)
+From:   Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
+Cc:     stuarthayhurst <stuart.a.hayhurst@gmail.com>, jikos@kernel.org,
+        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bastien Nocera <hadess@hadess.net>
+Subject: [PATCH v2] HID: logitech-hidpp: Add USB and Bluetooth IDs for the Logitech G915 TKL Keyboard
+Date:   Tue, 30 May 2023 15:44:28 +0100
+Message-ID: <20230530144427.24732-1-stuart.a.hayhurst@gmail.com>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] arm64: dts: qcom: ipq6018: correct the qrng node name
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230526161138.25497-1-quic_kathirav@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230526161138.25497-1-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/05/2023 18:11, Kathiravan T wrote:
-> qrng node address is mentioned incorrectly. Lets fix it.
-> 
-> Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
-> Note: Only compilation and dtbs_check is checked. Also dependent on the
-> below series, no functional dependencies
-> https://lore.kernel.org/linux-arm-msm/20230526125305.19626-1-quic_kathirav@quicinc.com/T/#t
-> 
->  arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> index 0f6d6c6daed2..5d2cc0caf5a1 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-> @@ -309,7 +309,7 @@
->  			#size-cells = <1>;
->  		};
->  
-> -		prng: qrng@e1000 {
-> +		prng: qrng@e3000 {
+From: stuarthayhurst <stuart.a.hayhurst@gmail.com>
 
-This was fixed some time ago:
+Adds the USB and Bluetooth IDs for the Logitech G915 TKL keyboard, for device detection
+For this device, this provides battery reporting on top of hid-generic
 
-https://lore.kernel.org/all/20230419211856.79332-1-krzysztof.kozlowski@linaro.org/
+Reviewed-by: Bastien Nocera <hadess@hadess.net>
+Signed-off-by: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
+---
+ drivers/hid/hid-logitech-hidpp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index b2cd7527de19..28761272afe5 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -4403,6 +4403,8 @@ static const struct hid_device_id hidpp_devices[] = {
+ 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC086) },
+ 	{ /* Logitech G903 Hero Gaming Mouse over USB */
+ 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC091) },
++	{ /* Logitech G915 TKL Keyboard over USB */
++	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC343) },
+ 	{ /* Logitech G920 Wheel over USB */
+ 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G920_WHEEL),
+ 		.driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS},
+@@ -4418,6 +4420,8 @@ static const struct hid_device_id hidpp_devices[] = {
+ 	{ /* MX5500 keyboard over Bluetooth */
+ 	  HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb30b),
+ 	  .driver_data = HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS },
++	{ /* Logitech G915 TKL keyboard over Bluetooth */
++	  HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb35f) },
+ 	{ /* M-RCQ142 V470 Cordless Laser Mouse over Bluetooth */
+ 	  HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb008) },
+ 	{ /* MX Master mouse over Bluetooth */
+-- 
+2.40.1.521.gf1e218fcd8
 
