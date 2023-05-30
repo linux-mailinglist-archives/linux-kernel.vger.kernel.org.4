@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AADEC716A1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BCC716A1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbjE3QyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S233032AbjE3Qy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbjE3QyQ (ORCPT
+        with ESMTP id S232735AbjE3QyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:54:16 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A4AA7;
-        Tue, 30 May 2023 09:54:14 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96fab30d1e1so1509266b.0;
-        Tue, 30 May 2023 09:54:14 -0700 (PDT)
+        Tue, 30 May 2023 12:54:17 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E94C5;
+        Tue, 30 May 2023 09:54:15 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-514924b4f8cso5946398a12.3;
+        Tue, 30 May 2023 09:54:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685465652; x=1688057652;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zLTf3hfr15WKenKhSV2UjjiJSXXTO9yCrXkiF4BADdg=;
-        b=OdauBByk/4fWn5vdwv9K0Zkj/mCjod7MfPokGyDslcKlskTcDqQde5KqMsFwBrMr+O
-         924hSdZ6mh0gqfZgugQLaFyy+8G5ddbSS3zgvUgwJVUXnzZv37jG61HOLHdziWzu53Lt
-         XSIwmX0tmpchUi8z0Rc4txEwOx1F0GkPIiYPKC2A//CfBCIDnYD5+2KSwT+UqjjEwI4c
-         U7osuFcgKQeMYInjvRGRoVU+OZEa//CLrux9Z41VulErUNUMXNumkqikMe+6lpkv1Rme
-         Z8VfoBcSbd1xGSloZS1gpgMJ8fiQsxjGFYYR7OUQSqXJginMJNggjpwpUrraOno21pp7
-         admQ==
+        d=gmail.com; s=20221208; t=1685465654; x=1688057654;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oD/k7lu42WU94j/4jyYC1ZkyaWqarmNUB0MS9bMyYOM=;
+        b=Q43Q6X5HnIGA/jsxNr/rB6scIiIMyO6i47aDXRkATob4OA8Jgnpu+Q+Ax+O8O4DPMS
+         mkS73YTpzsTmQ2qmHPQ53Z2gD5c9LBmg94F7BqifEmUzQQcGF8s83QG5gAwBftU09P8O
+         cn+ph+6+BCm0khjyVX3BClo/J9IKxLFbB0U2XEFgUQHCQy6T5f7riVVIUU/VvykiokvR
+         nAFZ45LjsMinbIS9wS+pnN6ijKp8brYMb2Leqdzfj0BZDI2aiN6lSfMkpILfKKWaC4Hr
+         pqNutDxW398YbMQdbCgy+USV28RJYCiDI7jtTLxmt6gTnk5oKJcdy4iyNHaz/Z9rAgkj
+         7Gtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685465652; x=1688057652;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zLTf3hfr15WKenKhSV2UjjiJSXXTO9yCrXkiF4BADdg=;
-        b=N7PG/7hc58XG8rKo8vGtrGZbM9ZGmXxC2krIM7wdDwcPr8cUQtGwQVTVZ0oqkVJWgA
-         qDTUW6TLt0aiFC1h/bVA0MlWXmLy9yrJUFc9Z2BOpza5w+XHSJU1wGZzwWI/j24YdJAq
-         aFgR0oFmVMgT1qPyIrmoItLor5Qr4wsE0VDnXOAI1/disHyK7+XtI7ZySYGFFMRiuBQy
-         RERSuUwI2REVJcj7ZQzg0uztOnJlDzAFx5lCiN9ASI5oSAc1NqLWUxUd9fsCGyWo+FWK
-         xbbvGciwM0LSOHO5ZUK/+eJZpwhuNczG0+Asd/5ErhCAzGGSRhtsRMlSP3J3SZAmStmc
-         yLJQ==
-X-Gm-Message-State: AC+VfDwP0ANtumhW1pH3V+Wm8SeqqB6uV7fQ5tWtnXh/P9NWOsm9zhg+
-        mDhs4ZhOhP4nFCk77PbKON8=
-X-Google-Smtp-Source: ACHHUZ7jTc3ye0a75afJFSxP1Ezqnp6f82T1kILzjr4MGO8f0FkvlPx01Dl7zA+qd5oOXYlYSTpDpw==
-X-Received: by 2002:a17:907:934b:b0:973:87d3:80d4 with SMTP id bv11-20020a170907934b00b0097387d380d4mr2667275ejc.18.1685465652312;
-        Tue, 30 May 2023 09:54:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685465654; x=1688057654;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oD/k7lu42WU94j/4jyYC1ZkyaWqarmNUB0MS9bMyYOM=;
+        b=SNe1Zpf6UPTBjYOo0qgYnCeXzF7rPUlVn0YIYh8tUxOuvha4jR7UElBqm1rWgSCCAG
+         zzjoSBy9AKQIcucknMG/Pa94EWmG6erg9yMPtiKNqhhnzRjARBAXzFa8QpAyIsciY5pe
+         zUce8+qZKLd0gEeo307ZnwCrLkjBfvGLjzMlV8T7OcuH1/8JLf3wSGcT1gJczB2kHT/k
+         s+uAreoXe1Kr3t0tq+TSDFIlu+4EdiPuKR1SyICIggx+YchzrDw+pXZKxhW6I2y91vsX
+         yph865YfAnmeH3ehxXHgjFREnxtxZu1jfg5Y4ZsYhIUNd8KtsBWqdRfy0TQ4PnIfbelO
+         GREQ==
+X-Gm-Message-State: AC+VfDybMwFsCphFdRxKr2n9SBns8BjNlXZgmsai7IwfIvM2Y4bfRR9E
+        ISHLsYlMQkFgbm7qdEjyEko=
+X-Google-Smtp-Source: ACHHUZ4lbQw+JVYxZDaXVtzmQhA1/5tKUzOwcA2BDr892mpNf+k35TZYk0z6Ywzth22M2c92Y/7j7w==
+X-Received: by 2002:a17:907:d88:b0:96f:cde5:5f5e with SMTP id go8-20020a1709070d8800b0096fcde55f5emr3044691ejc.29.1685465653504;
+        Tue, 30 May 2023 09:54:13 -0700 (PDT)
 Received: from fedora.. (dh207-97-232.xnet.hr. [88.207.97.232])
-        by smtp.googlemail.com with ESMTPSA id d12-20020a17090648cc00b00965e9a23f2bsm7554331ejt.134.2023.05.30.09.54.10
+        by smtp.googlemail.com with ESMTPSA id d12-20020a17090648cc00b00965e9a23f2bsm7554331ejt.134.2023.05.30.09.54.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 09:54:11 -0700 (PDT)
+        Tue, 30 May 2023 09:54:13 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     rafael@kernel.org, viresh.kumar@linaro.org, ilia.lin@kernel.org,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 1/2] cpufreq: qcom-nvmem: add support for IPQ8074
-Date:   Tue, 30 May 2023 18:54:08 +0200
-Message-Id: <20230530165409.641661-1-robimarko@gmail.com>
+Subject: [PATCH 2/2] cpufreq: qcom-nvmem: add support for IPQ8064
+Date:   Tue, 30 May 2023 18:54:09 +0200
+Message-Id: <20230530165409.641661-2-robimarko@gmail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230530165409.641661-1-robimarko@gmail.com>
+References: <20230530165409.641661-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,113 +74,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPQ8074 comes in 2 families:
-* IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
-* IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
+From: Christian Marangi <ansuelsmth@gmail.com>
 
-So, in order to be able to share one OPP table lets add support for IPQ8074
-family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
+IPQ8064 comes in 3 families:
+* IPQ8062 up to 1.0GHz
+* IPQ8064/IPQ8066/IPQ8068 up to 1.4GHz
+* IPQ8065/IPQ8069 up to 1.7Ghz
 
-IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
-will get created by NVMEM CPUFreq driver.
+So, in order to be able to share one OPP table, add support for
+IPQ8064 family based of SMEM SoC ID-s as speedbin fuse is always 0 on
+IPQ8064.
 
+Bit are set with the following logic:
+* IPQ8062 BIT 0
+* IPQ8064/IPQ8066/IPQ8068 BIT 1
+* IPQ8065/IPQ8069 BIT 2
+
+speed is never fused, only psv values are fused.
+Set speed to the versions to permit a unified opp table following
+this named opp:
+
+opp-microvolt-speed<SPEED_VALUE>-pvs<PSV_VALUE>-v0
+
+Example:
+- for ipq8062 psv2
+  opp-microvolt-speed0-pvs2-v0 = < 925000 878750 971250>
+- for ipq8064 psv2
+  opp-microvolt-speed2-pvs2-v0 = <925000 878750 971250>;
+- for ipq8065 psv2
+  opp-microvolt-speed4-pvs2-v0 = <950000 902500 997500>;
+
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
-Changes in v2:
-* Print an error if SMEM ID is not part of the IPQ8074 family
-and restrict the speed to Acorn variant (1.4GHz)
----
- drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
- drivers/cpufreq/qcom-cpufreq-nvmem.c | 43 ++++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 73 +++++++++++++++++++++++++++-
+ 1 file changed, 72 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index ea86c9f3ed7a..78f6ff933f93 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -170,6 +170,7 @@ static const struct of_device_id blocklist[] __initconst = {
- 	{ .compatible = "ti,am62a7", },
- 
- 	{ .compatible = "qcom,ipq8064", },
-+	{ .compatible = "qcom,ipq8074", },
- 	{ .compatible = "qcom,apq8064", },
- 	{ .compatible = "qcom,msm8974", },
- 	{ .compatible = "qcom,msm8960", },
 diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-index a88b6fe5db50..ce444b5962f2 100644
+index ce444b5962f2..c644138680ba 100644
 --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
 +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-@@ -31,6 +31,9 @@
+@@ -34,6 +34,10 @@
+ #define IPQ8074_HAWKEYE_VERSION		BIT(0)
+ #define IPQ8074_ACORN_VERSION		BIT(1)
  
- #include <dt-bindings/arm/qcom,ids.h>
- 
-+#define IPQ8074_HAWKEYE_VERSION		BIT(0)
-+#define IPQ8074_ACORN_VERSION		BIT(1)
++#define IPQ8062_VERSION		BIT(0)
++#define IPQ8064_VERSION		BIT(1)
++#define IPQ8065_VERSION		BIT(2)
 +
  struct qcom_cpufreq_drv;
  
  struct qcom_cpufreq_match_data {
-@@ -204,6 +207,41 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+@@ -207,6 +211,69 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
  	return ret;
  }
  
-+static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
++static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
 +					     struct nvmem_cell *speedbin_nvmem,
 +					     char **pvs_name,
 +					     struct qcom_cpufreq_drv *drv)
 +{
-+	u32 msm_id;
-+	int ret;
-+	*pvs_name = NULL;
++	int speed = 0, pvs = 0, pvs_ver = 0;
++	int msm_id, ret = 0;
++	u8 *speedbin;
++	size_t len;
++
++	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
++
++	if (IS_ERR(speedbin))
++		return PTR_ERR(speedbin);
++
++	switch (len) {
++	case 4:
++		get_krait_bin_format_a(cpu_dev, &speed, &pvs, &pvs_ver,
++				       speedbin);
++		break;
++	default:
++		dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
++		ret = -ENODEV;
++		goto len_error;
++	}
 +
 +	ret = qcom_smem_get_soc_id(&msm_id);
 +	if (ret)
 +		return ret;
 +
 +	switch (msm_id) {
-+	case QCOM_ID_IPQ8070A:
-+	case QCOM_ID_IPQ8071A:
-+		drv->versions = IPQ8074_ACORN_VERSION;
++	case QCOM_ID_IPQ8062:
++		drv->versions = IPQ8062_VERSION;
 +		break;
-+	case QCOM_ID_IPQ8072A:
-+	case QCOM_ID_IPQ8074A:
-+	case QCOM_ID_IPQ8076A:
-+	case QCOM_ID_IPQ8078A:
-+		drv->versions = IPQ8074_HAWKEYE_VERSION;
++	case QCOM_ID_IPQ8064:
++	case QCOM_ID_IPQ8066:
++	case QCOM_ID_IPQ8068:
++		drv->versions = IPQ8064_VERSION;
++		break;
++	case QCOM_ID_IPQ8065:
++	case QCOM_ID_IPQ8069:
++		drv->versions = IPQ8065_VERSION;
 +		break;
 +	default:
 +		dev_err(cpu_dev,
-+			"SoC ID %u is not part of IPQ8074 family, limiting to 1.4GHz!\n",
++			"SoC ID %u is not part of IPQ8064 family, limiting to 1.0GHz!\n",
 +			msm_id);
-+		drv->versions = IPQ8074_ACORN_VERSION;
++		drv->versions = IPQ8062_VERSION;
 +		break;
 +	}
 +
-+	return 0;
++	/*
++	 * IPQ8064 speed is never fused. Only psv values are fused.
++	 * Set speed to the versions to permit a unified opp table.
++	 */
++	snprintf(*pvs_name, sizeof("speedXX-pvsXX-vXX"), "speed%d-pvs%d-v%d",
++		 drv->versions, pvs, pvs_ver);
++
++len_error:
++	kfree(speedbin);
++	return ret;
 +}
 +
- static const struct qcom_cpufreq_match_data match_data_kryo = {
- 	.get_version = qcom_cpufreq_kryo_name_version,
- };
-@@ -218,6 +256,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
+ static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
+ 					     struct nvmem_cell *speedbin_nvmem,
+ 					     char **pvs_name,
+@@ -256,6 +323,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
  	.genpd_names = qcs404_genpd_names,
  };
  
-+static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
-+	.get_version = qcom_cpufreq_ipq8074_name_version,
++static const struct qcom_cpufreq_match_data match_data_ipq8064 = {
++	.get_version = qcom_cpufreq_ipq8064_name_version,
 +};
 +
- static int qcom_cpufreq_probe(struct platform_device *pdev)
- {
- 	struct qcom_cpufreq_drv *drv;
-@@ -363,6 +405,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
+ static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
+ 	.get_version = qcom_cpufreq_ipq8074_name_version,
+ };
+@@ -404,7 +475,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
+ 	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
  	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
  	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
- 	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
-+	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
+-	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
++	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
+ 	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
  	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
  	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
- 	{ .compatible = "qcom,msm8960", .data = &match_data_krait },
 -- 
 2.40.1
 
