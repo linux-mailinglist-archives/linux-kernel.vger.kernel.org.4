@@ -2,185 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC8571611F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B226771611B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbjE3NJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
+        id S232547AbjE3NI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbjE3NI5 (ORCPT
+        with ESMTP id S232458AbjE3NIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:08:57 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CA592;
-        Tue, 30 May 2023 06:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=X5ARCyzotT4QKjaVW0IeWuI4w9SRg4SsaoEHspvM/io=; b=Gi376FN2FvE4Udx+8/r3wCTWPi
-        /xHfqEFjwuLHHWzcZ3bvWOx9tNmdW85P87xjtrM8kWK7elK8hM3ibmvo2VPNHR5QNGH9SH05nJes4
-        z/5GmYzfggOVYVXItfXS2n5Vh8h1VNXKNBN/u5w2M2gyxq/WzzqzEUy3Dau3z/DjMXhM=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:41434 helo=debian-acer)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q3z5Z-0005zt-Ko; Tue, 30 May 2023 09:08:38 -0400
-Date:   Tue, 30 May 2023 09:08:36 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Lech Perczak <lech.perczak@camlingroup.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230530090836.27b8d080d6b6c022b303ac9e@hugovil.com>
-In-Reply-To: <c15a90d6-b3c1-e432-9216-c4c1e2c44ce6@camlingroup.com>
-References: <20230529140711.896830-1-hugo@hugovil.com>
-        <c15a90d6-b3c1-e432-9216-c4c1e2c44ce6@camlingroup.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Tue, 30 May 2023 09:08:54 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B84B0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:08:52 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51456392cbbso8613899a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:08:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685452130; x=1688044130;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jZXIY4rtAXwpW+oWkjV46RQdYU5hKm1yGrqNPmpHKfU=;
+        b=wEi+COhB4saE6t3QX0aBzZRVTpQ7odjIOZ2E4o7tTiZl8AnovhqRf7Bodd0DYdqUIw
+         3dbjTQa6AJYb8q6GdY7xBc4lmTXn9ivsYko6Z48h96ql6mvKhHdDuExxPgKJ/D9g9xw4
+         uxr+SinEI0jqUKRfePH5ukhM/HkBzMk6BfN2S4rtvBv4Pvp7bXxqx+WgBlKTU8ZU8V9g
+         5SsksCPlm6QBoyHDHok8s/Occz5ETdfedATS1HqQIHw4M5QgjmL3RGk6CtzENlKtAc7A
+         z55iGBXDsKcrzb5QbuAlCN89iZDnLPTdi/PUgvEQhUGH7OXFKR4ImPvovl9fVz3h+sFe
+         XHIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685452130; x=1688044130;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jZXIY4rtAXwpW+oWkjV46RQdYU5hKm1yGrqNPmpHKfU=;
+        b=g3vAqwVxGKIrjkTxYhaKRywiXGxifidjPuzPDh+SEBEuWNNCFaj2CWSXqrwzuasMvy
+         WPyPdFsTHSXIerOVqxWPUOl4Ypi9XNuIgk4OA9TcVM9CbaVr1up+FX2GubA0Llhrao1R
+         n2+gT+Iqr9ueFV5gx1R0AKpaleNlNHUCeV6Va/2VBNHOU2Y1vgD2FYXJK7TubG0Gttrt
+         yok636WS8t2mJNnRqdtjuXFnHyg7UtdXE3nmcwzgjbjBT3Ierdr38+U0XZX4Zql4a0om
+         cPRLcHlUpldbw/VHfZv25B/j0P21NBZwh+lp2wIhw/LnrHoOmbFJX423EjjLc1/b+Gym
+         CraQ==
+X-Gm-Message-State: AC+VfDyO1pZhll92kLuyr8o3t/4eZAMYp+Lx2HD8Os9cP4OwxlxFVjmZ
+        2k2geZCrY/Er7pHkbx8BfKZEFQ==
+X-Google-Smtp-Source: ACHHUZ4RM/uBVqPWi+sisdgqZOaN+mYhKX2B80COqCOcYP5pLPymJxYK4pUbM9xiPei6arPXAmPDqA==
+X-Received: by 2002:a17:907:7da0:b0:96f:b40a:c85f with SMTP id oz32-20020a1709077da000b0096fb40ac85fmr10368239ejc.23.1685452130647;
+        Tue, 30 May 2023 06:08:50 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id oy11-20020a170907104b00b0096f7e6d0063sm7309682ejb.75.2023.05.30.06.08.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 06:08:50 -0700 (PDT)
+Message-ID: <65e7b6df-b83b-2d7c-5093-f5822050827a@linaro.org>
+Date:   Tue, 30 May 2023 15:08:48 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 12/12] dt-bindings: fsl-dma: fsl-edma: add edma3
+ compatible string
+Content-Language: en-US
+To:     Frank Li <Frank.Li@nxp.com>, krzysztof.kozlowski+dt@linaro.org,
+        peng.fan@nxp.com, vkoul@kernel.org
+Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        imx@lists.linux.dev, joy.zou@nxp.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, shenwei.wang@nxp.com
+References: <20230529200453.1423796-1-Frank.Li@nxp.com>
+ <20230529200453.1423796-13-Frank.Li@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230529200453.1423796-13-Frank.Li@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v4 0/9] serial: sc16is7xx: fix GPIO regression and rs485
- improvements
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 11:30:07 +0200
-Lech Perczak <lech.perczak@camlingroup.com> wrote:
+On 29/05/2023 22:04, Frank Li wrote:
+> Extend Freescale eDMA driver bindings to support eDMA3 IP blocks in
+> i.MX8QM and i.MX8QXP SoCs. In i.MX93, both eDMA3 and eDMA4 are now.
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  .../devicetree/bindings/dma/fsl,edma.yaml     | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/dma/fsl,edma.yaml b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
+> index 5fd8fc604261..eed12687b0c9 100644
+> --- a/Documentation/devicetree/bindings/dma/fsl,edma.yaml
+> +++ b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
+> @@ -21,6 +21,10 @@ properties:
+>        - enum:
+>            - fsl,vf610-edma
+>            - fsl,imx7ulp-edma
+> +          - fsl,imx8qm-edma
+> +          - fsl,imx8qm-adma
+> +          - fsl,imx93-edma3
+> +          - fsl,imx93-edma4
 
-> W dniu 29.05.2023 o=A016:07, Hugo Villeneuve pisze:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >
-> > Hello,
-> > this patch series mainly fixes a GPIO regression and improve RS485 flag=
-s and
-> > properties detection from DT.
-> >
-> > It now also includes various small fixes and improvements that were pre=
-viously
-> > sent as separate patches, but that made testing everything difficult.
-> >
-> > Patch 1 fixes an issue when debugging IOcontrol register. After testing=
- the GPIO
-> > regression patches (patches 6 and 7, tests done by Lech Perczak), it ap=
-pers that
-> > this patch is also necessary for having the correct IOcontrol register =
-values.
-> >
-> > Patch 2 introduces a delay after a reset operation to respect datasheet
-> > timing recommandations.
-> >
-> > Patch 3 fixes an issue with init of first port during probing.
-> >
-> > Patch 4 fixes a bug with the output value when first setting the GPIO d=
-irection.
-> >
-> > Patch 5 is a refactor of GPIO registration code.
-> >
-> > Patches 6 and 7 fix a GPIO regression by (re)allowing to choose GPIO fu=
-nction
-> > for GPIO pins shared with modem status lines.
-> >
-> > Patch 8 allows to read common rs485 device-tree flags and properties.
-> >
-> > Patch 9 improves comments about chip variants.
-> >
-> > I have tested the changes on a custom board with two SC16IS752 DUART us=
-ing a
-> > Variscite IMX8MN NANO SOM.
-> >
-> > Thank you.
-> >
-> > Link: [v1] https://lkml.org/lkml/2023/5/17/967 <https://lkml.org/lkml/2=
-023/5/17/967>
-> > [v1] https://lkml.org/lkml/2023/5/17/777 <https://lkml.org/lkml/2023/5/=
-17/777>
-> > [v1] https://lkml.org/lkml/2023/5/17/780 <https://lkml.org/lkml/2023/5/=
-17/780>
-> > [v1] https://lkml.org/lkml/2023/5/17/785 <https://lkml.org/lkml/2023/5/=
-17/785>
-> > [v1] https://lkml.org/lkml/2023/5/17/1311 <https://lkml.org/lkml/2023/5=
-/17/1311>
-> > [v2] https://lkml.org/lkml/2023/5/18/516 <https://lkml.org/lkml/2023/5/=
-18/516>
-> > [v3] https://lkml.org/lkml/2023/5/25/7 <https://lkml.org/lkml/2023/5/25=
-/7>
-> >
-> > Changes for V3:
-> > - Integrated all patches into single serie to facilitate debugging and =
-tests.
-> > - Reduce number of exported GPIOs depending on new property
-> > nxp,modem-control-line-ports
-> > - Added additional example in DT bindings
-> >
-> > Changes for V4:
-> > - Increase reset post delay to relax scheduler.
-> > - Put comments patches at the end.
-> > - Remove Fixes tag for patch "mark IOCONTROL register as volatile".
-> > - Improve commit messages after reviews.
-> > - Fix coding style issues after reviews.
-> > - Change GPIO registration to always register the maximum number of GPI=
-Os
-> > supported by the chip, but maks-out GPIOs declared as modem control lin=
-es.
-> > - Add patch to refactor GPIO registration.
-> > - Remove patch "serial: sc16is7xx: fix syntax error in comments".
-> > - Remove patch "add dump registers function"
-> >
-> > Hugo Villeneuve (9):
-> > serial: sc16is7xx: mark IOCONTROL register as volatile
-> > serial: sc16is7xx: add post reset delay
-> > serial: sc16is7xx: fix broken port 0 uart init
-> > serial: sc16is7xx: fix bug when first setting GPIO direction
-> > serial: sc16is7xx: refactor GPIO controller registration
-> > dt-bindings: sc16is7xx: Add property to change GPIO function
-> > serial: sc16is7xx: fix regression with GPIO configuration
-> > serial: sc16is7xx: add call to get rs485 DT flags and properties
-> > serial: sc16is7xx: improve comments about variants
-> >
-> > .../bindings/serial/nxp,sc16is7xx.txt | 46 ++++++
-> > drivers/tty/serial/sc16is7xx.c | 150 +++++++++++++-----
-> > 2 files changed, 156 insertions(+), 40 deletions(-)
-> >
-> >
-> > base-commit: 8b817fded42d8fe3a0eb47b1149d907851a3c942
->=20
-> It would be a lot of sending, to do that for every patch separately, so f=
-or whole series:
-> Reviewed-by: Lech Perczak <lech.perczak@camlingroup.com>
->=20
-> And where applicable - for code patches:
-> Tested-by: Lech Perczak <lech.perczak@camlingroup.com>
->=20
-> I tested whole series at the same time.
-> I did my tests on an i.MX6 board with SC16IS760 over SPI, which differs a=
- tiny bit from SC16IS752,
-> and everything works as it should.
-> Thank you for fixing this!
+What are these last two? What is "3" and "4"?
 
-Hi Lech,
-thank for your feedback.
+>        - items:
+>            - const: fsl,ls1028a-edma
+>            - const: fsl,vf610-edma
+> @@ -101,6 +105,22 @@ allOf:
+>          reg:
+>            maxItems: 2
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            anyOf:
+> +              - const: fsl,imx8qm-edma
+> +              - const: fsl,imx8qm-adma
+> +              - const: fsl,imx93-edma3
+> +              - const: fsl,imx93-edma4
+> +    then:
+> +      properties:
+> +        reg:
+> +          maxItems: 1
+> +        interrupts:
+> +          maxItems: 64
 
-You mentioned before that without the patch "mark IOCONTROL register as vol=
-atile", things were not working properly for you. Could you retest by remov=
-ing this patch and see if things are still working?
+That's odd. What about the names? What about minItems? Anyway, this
+wasn't tested - you will have failures with dtbs_check.
 
-Thank you, Hugo.
+
+
+Best regards,
+Krzysztof
+
