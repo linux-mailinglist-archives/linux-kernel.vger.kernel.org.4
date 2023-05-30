@@ -2,148 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE6B7160EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C5A7160D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232404AbjE3NAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
+        id S231359AbjE3M65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbjE3M7q (ORCPT
+        with ESMTP id S230391AbjE3M6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:59:46 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA5E7198
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:59:20 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:36042.1831460184
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id EB33C100198;
-        Tue, 30 May 2023 20:58:09 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id 74c4c7cd99da4575ac5fd10594e22a3e for lkp@intel.com;
-        Tue, 30 May 2023 20:58:10 CST
-X-Transaction-ID: 74c4c7cd99da4575ac5fd10594e22a3e
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <c3d67084-df46-6ea4-2f37-43cc03147ef9@189.cn>
-Date:   Tue, 30 May 2023 20:58:08 +0800
+        Tue, 30 May 2023 08:58:54 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D719CE4C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:58:26 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso8020188a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685451502; x=1688043502;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1tZ/CWWRhzFv4AUx7PeAsUKQAthRRG7iX6LhluPhso8=;
+        b=fhMSzU0zIG+zrgA5AooIEwuldRbNN5bU/BcQz0bDjs49+J1JE8Ypo6iEi3Tk4DYoBp
+         Kt8RU4R/R3FR+WUMj4eTbdWQfQzBLavDDpeM0H2Foqv4aroWYAsDKW5SXNxOG3zebzFE
+         KcaVP05qsOp06RqqwPn79WiZmzIh0/isE2gKWsguNkqmEQd2wG2tDW7czRUT+tsLZR3H
+         0P4sXxLcAsk5iSqc4N4HMH/S7X/mwzyCsZy8qwdXsKjrAzuZ0An3TZ9Q3anQRI2VlaYe
+         U5F9yJDj3guqKIonPAVCbtPJgd13pxg+b5a89bfRl3qoZrMykehI8PCGQxtosmeOD7xk
+         bbdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685451502; x=1688043502;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1tZ/CWWRhzFv4AUx7PeAsUKQAthRRG7iX6LhluPhso8=;
+        b=TxYzWK8xMXQXLTH1jZkf0RMoORX2WAOecwzJ+gKcGLL5dUa3qAE9tFGa3yGbsSha8O
+         S7Ze/qsl6Uw9iwOWtqhFGk4snuTYO+TIHVICz/b3chjYDxFa5SjLZZLrgIU+q78q75aW
+         ZGeZcvroDKB5xaNdJyO4XHCEXa3FwJotkoY78Xi7L+4gfo9QJtTtnd9Z9s8A3dnus7E5
+         PBZ0wBO2iyR+QrOAjUR9knAy0NQ6YBbF+SgIjrSWDSrmc56HwGX0yOU5+JhUWmrk7VdV
+         PNJmO1IOGwBBPQMZHGI9X9RJrRP1+EkLou4eRYQQWLcOOhrvzPnOVZweXBOD/PHYMP1i
+         jspA==
+X-Gm-Message-State: AC+VfDyAikvM2s07cj58rtPD5+HvMpos89h6hd7x2XnfE7BBqnPkYXIw
+        /saS6SF/CX9LkS1beg7AqfXvjQ==
+X-Google-Smtp-Source: ACHHUZ6tHhgbxxkwo5nLr9tb12tOL8m2CoGZFRqhgO6IbbrCp+3ZktaR4Oz2McNAxdmztZnG3KJ8CA==
+X-Received: by 2002:a17:907:60cd:b0:974:216f:dc36 with SMTP id hv13-20020a17090760cd00b00974216fdc36mr1963849ejc.17.1685451501958;
+        Tue, 30 May 2023 05:58:21 -0700 (PDT)
+Received: from krzk-bin ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id rv3-20020a17090710c300b0096f7b7b6f11sm7280614ejb.106.2023.05.30.05.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 05:58:21 -0700 (PDT)
+Date:   Tue, 30 May 2023 14:58:18 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-clk@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: clock: qcom,msm8996-cbf: Add
+ compatible for MSM8996 Pro
+Message-ID: <20230530125818.yvzdycqt46n4dzo5@krzk-bin>
+References: <20230527093934.101335-1-y.oudjana@protonmail.com>
+ <20230527093934.101335-2-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 5/6] drm/etnaviv: expand driver support for the PCI
- devices
-To:     kernel test robot <lkp@intel.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        loongson-kernel@lists.loongnix.cn
-References: <20230529172452.2148819-6-suijingfeng@loongson.cn>
- <202305301659.4guSLavL-lkp@intel.com>
-Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <202305301659.4guSLavL-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230527093934.101335-2-y.oudjana@protonmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, 27 May 2023 12:39:32 +0300, Yassine Oudjana wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+> 
+> The CBF clock on MSM8996 Pro has a different divisor compared to MSM8996
+> and is therefore not fully compatible with it. Add a new compatible string
+> to differentiate between them.
+> 
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,msm8996-cbf.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
+
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/1786737
 
 
-Previously, I don't realize some arch doesn't enable CONFIG_PCI by default.
-
-This problem only happens on the arch which CONFIG_PCI isn't being enabled.
-
-This problem also caused by the fact that pci_clear_master don't have a 
-dummy implement.
-
-I have create a patch to fix that, see [1].
-
-
-This problem is easy to fix,  with some #ifdef and #endif definition guard,
-
-make the PCI driver support don't get compiled on the architecture which 
-don't have  CONFIG_PCI enable. Originally, I want it always built-in.
-
-
-Should I fix this problem at driver side and respin this patch?
-
-
-[1] 
-https://patchwork.kernel.org/project/linux-pci/patch/20230530101655.2275731-1-suijingfeng@loongson.cn/
-
-
-On 2023/5/30 17:00, kernel test robot wrote:
-> Hi Sui,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on drm-misc/drm-misc-next]
-> [also build test ERROR on drm/drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.4-rc4 next-20230530]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/drm-etnaviv-add-a-dedicated-function-to-register-an-irq-handler/20230530-012547
-> base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-> patch link:    https://lore.kernel.org/r/20230529172452.2148819-6-suijingfeng%40loongson.cn
-> patch subject: [PATCH v5 5/6] drm/etnaviv: expand driver support for the PCI devices
-> config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230530/202305301659.4guSLavL-lkp@intel.com/config)
-> compiler: m68k-linux-gcc (GCC) 12.3.0
-> reproduce (this is a W=1 build):
->          mkdir -p ~/bin
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/1d05a5fa048dd4b2a934ffbb07c330ddd9279287
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Sui-Jingfeng/drm-etnaviv-add-a-dedicated-function-to-register-an-irq-handler/20230530-012547
->          git checkout 1d05a5fa048dd4b2a934ffbb07c330ddd9279287
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpu/drm/etnaviv/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->     drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c: In function 'etnaviv_gpu_pci_fini':
->>> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9: error: implicit declaration of function 'pci_clear_master'; did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
->        32 |         pci_clear_master(pdev);
->           |         ^~~~~~~~~~~~~~~~
->           |         pci_set_master
->     cc1: some warnings being treated as errors
->
->
-> vim +32 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
->
->      27	
->      28	static void etnaviv_gpu_pci_fini(struct etnaviv_gpu *gpu, bool component)
->      29	{
->      30		struct pci_dev *pdev = to_pci_dev(gpu->dev);
->      31	
->    > 32		pci_clear_master(pdev);
->      33	
->      34		dev_dbg(gpu->dev, "component is %s\n",
->      35			component ? "enabled" : "disabled");
->      36	}
->      37	
->
+clock-controller@9a11000: '#interconnect-cells' is a required property
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-oneplus3.dtb
+	arch/arm64/boot/dts/qcom/msm8996-oneplus3t.dtb
+	arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-natrium.dtb
+	arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
