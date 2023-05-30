@@ -2,103 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE22E716251
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082C771625D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbjE3NmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
+        id S229739AbjE3NnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjE3NmV (ORCPT
+        with ESMTP id S232783AbjE3NnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:42:21 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4D58E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:42:19 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-7-u_DW5skzNCeUFDwDRVqfKA-1; Tue, 30 May 2023 14:42:16 +0100
-X-MC-Unique: u_DW5skzNCeUFDwDRVqfKA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 30 May
- 2023 14:42:13 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 30 May 2023 14:42:13 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Maninder Singh' <maninder1.s@samsung.com>,
-        "bcain@quicinc.com" <bcain@quicinc.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "nathanl@linux.ibm.com" <nathanl@linux.ibm.com>,
-        "ustavoars@kernel.org" <ustavoars@kernel.org>,
-        "alex.gaynor@gmail.com" <alex.gaynor@gmail.com>,
-        "gary@garyguo.net" <gary@garyguo.net>,
-        "ojeda@kernel.org" <ojeda@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "wedsonaf@google.com" <wedsonaf@google.com>
-CC:     "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Onkarnath <onkarnath.1@samsung.com>
-Subject: RE: [PATCH 1/2] hexagon/traps.c: use KSYM_NAME_LEN in array size
-Thread-Topic: [PATCH 1/2] hexagon/traps.c: use KSYM_NAME_LEN in array size
-Thread-Index: AQHZkh62rZDdlRz850KjaNGq41iJD69y027g
-Date:   Tue, 30 May 2023 13:42:13 +0000
-Message-ID: <439575eda6b24261aef4c8c7e4c078cb@AcuMS.aculab.com>
-References: <CGME20230529111350epcas5p46a1fa16ffb2a39008c26d03c5c63f109@epcas5p4.samsung.com>
- <20230529111337.352990-1-maninder1.s@samsung.com>
-In-Reply-To: <20230529111337.352990-1-maninder1.s@samsung.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 30 May 2023 09:43:16 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1EC116;
+        Tue, 30 May 2023 06:43:09 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id 98e67ed59e1d1-2566f66190dso2238317a91.1;
+        Tue, 30 May 2023 06:43:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685454188; x=1688046188;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j/RmtovxmE8eT6l9DRcjDNrWbdMnULzP4ChgiJqFcdg=;
+        b=dmHMQh81VpALgHOBDUrPrBE+3Q+fHHBiETOxy1N7TXjLigp0f1/v1Z7M9OTdBBmW4W
+         luZw1odu9vsUzWUZy0Uee64Uqc7rrPkkoIon3VHOU4zEb9KqLSJMV4Ce69anUnQA0dQ4
+         wdXmVJO5Z1+jyJUZUY31mA5lRTslWqWkCvSDT8Jc1XpeR/wa9YwFotxBkuAn1yPPa0gf
+         PmlzqTXDOa3FUPtJH09ntt/ddRXjw8nj94TxIokIIW5d9pg4v4vSCw7zgLur9xXtRl5P
+         6wSlibNUscz9YZw6tE7xFgDfwDdYxRSeG7EX6rCD28BeVl+EEckQxcUIaGnswJmo7/dm
+         D3pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685454188; x=1688046188;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j/RmtovxmE8eT6l9DRcjDNrWbdMnULzP4ChgiJqFcdg=;
+        b=QM+SnI9jMTZ5IvbISIIDYaBIlyg017bckogmXHfHN5y0pa1GkZCn/vu5SKC6qCy7Bk
+         jfAE8q4LpBmlvUSuOIqgmiE4nM0iu0O+rBITjxz8Ko7XCSTneHix6lLjZ/i5KSljpBFI
+         n5R76M6dckUC6FfjNTT+Hkua4FfZgZyuKUzmEHPikW908j3LAlw1E2IQsZM3If5KTN5D
+         VIJVFcQqOHQZcB8McHttEcsjLXI8r2oIBhl/6zTw1QqiTaXnrLnlDXI8Pup4y+xaJ5ah
+         LYHdK/WcYOymS1QSDlyyuDB0tZQyu+zJm2H0DU69InVMi+y3qcCCsJkEI4NGfyc2lWsh
+         ROJQ==
+X-Gm-Message-State: AC+VfDxn9dBVK0MfElA4Iy5s2GARbhrGGzS6dfSZGX+Wq0VbmnLziEC1
+        B617Ub6S76VWj2VyTwvZQAs=
+X-Google-Smtp-Source: ACHHUZ532ULIvp+OsfTkCENDDHv8JXFbEAtMYlbdbt4meBrOkZuV72xBunDG/srIGBdQuVxq7xK4nA==
+X-Received: by 2002:a17:90a:8583:b0:256:6f2a:c85c with SMTP id m3-20020a17090a858300b002566f2ac85cmr2248116pjn.48.1685454188369;
+        Tue, 30 May 2023 06:43:08 -0700 (PDT)
+Received: from CLOUDLIANG-MB2.tencent.com ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id d10-20020a17090ac24a00b00256a4d59bfasm1977186pjx.23.2023.05.30.06.43.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 06:43:07 -0700 (PDT)
+From:   Jinrong Liang <ljr.kernel@gmail.com>
+X-Google-Original-From: Jinrong Liang <cloudliang@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Like Xu <likexu@tencent.com>,
+        David Matlack <dmatlack@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/8] KVM: selftests: Test the consistency of the PMU's CPUID and its features
+Date:   Tue, 30 May 2023 21:42:40 +0800
+Message-Id: <20230530134248.23998-1-cloudliang@tencent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTWFuaW5kZXIgU2luZ2gNCj4gU2VudDogMjkgTWF5IDIwMjMgMTI6MTQNCj4gDQo+IGth
-bGxzeW1zX2xvb2t1cCB3aGljaCBpbiB0dXJuIGNhbGxzIGZvciBrYWxsc3ltc19sb29rdXBfYnVp
-bGRpZCgpDQo+IHdyaXRlcyBvbiBpbmRleCAiS1NZTV9OQU1FX0xFTiAtIDEiLg0KPiANCj4gVGh1
-cyBhcnJheSBzaXplIHNob3VsZCBiZSBLU1lNX05BTUVfTEVOLg0KPiANCj4gZm9yIGhleGFnb24g
-aXQgd2FzIGRlZmluZWQgYXMgIjEyOCIgZGlyZWN0bHkuDQo+IGFuZCBjb21taXQgJzYxOTY4ZGJj
-MmQ1ZCcgY2hhbmdlZCBkZWZpbmUgdmFsdWUgdG8gNTEyLA0KPiBTbyBib3RoIHdlcmUgbWlzc2Vk
-IHRvIHVwZGF0ZSB3aXRoIG5ldyBzaXplLg0KDQpUaGUgb25seSBzYWZlIHdheSB0byBwYXNzIGEg
-Zml4ZWQgc2l6ZSBzdHJpbmcgaXMgdG8gZW1iZWQgdGhlIGNoYXJbXSBpbg0KYSBzdHJ1Y3R1cmUg
-YW5kIHBhc3MgdGhlIHN0cnVjdHVyZSBhZGRyZXNzLg0KDQpQcmV0dHkgbXVjaCBhbnl0aGluZyBl
-bHNlIGlzIGRvb21lZCB0byBiZSBidWdneS4NCg0KV2hldGhlciBpcyBpdCBhY3R1YWxseSBzYW5l
-IHRvIHJlcXVpcmUgdGhlIGNhbGxlciBhbGxvY2F0ZQ0Kc3VjaCBhIGxhcmdlIGJ1ZmZlciAoaGkg
-cnVzdCkgaXMgYW5vdGhlciBtYXR0ZXIgZW50aXJlbHkuDQoNCglEYXZpZA0KDQo+IA0KPiBGaXhl
-czogNjE5NjhkYmMyZDVkICgia2FsbHN5bXM6IGluY3JlYXNlIG1heGltdW0ga2VybmVsIHN5bWJv
-bCBsZW5ndGggdG8gNTEyIikNCj4gDQo+IENvLWRldmVsb3BlZC1ieTogT25rYXJuYXRoIDxvbmth
-cm5hdGguMUBzYW1zdW5nLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogT25rYXJuYXRoIDxvbmthcm5h
-dGguMUBzYW1zdW5nLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogTWFuaW5kZXIgU2luZ2ggPG1hbmlu
-ZGVyMS5zQHNhbXN1bmcuY29tPg0KPiAtLS0NCj4gIGFyY2gvaGV4YWdvbi9rZXJuZWwvdHJhcHMu
-YyB8IDIgKy0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigt
-KQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvaGV4YWdvbi9rZXJuZWwvdHJhcHMuYyBiL2FyY2gv
-aGV4YWdvbi9rZXJuZWwvdHJhcHMuYw0KPiBpbmRleCA2NDQ3NzYzY2U1YTkuLjY1YjMwYjZlYTIy
-NiAxMDA2NDQNCj4gLS0tIGEvYXJjaC9oZXhhZ29uL2tlcm5lbC90cmFwcy5jDQo+ICsrKyBiL2Fy
-Y2gvaGV4YWdvbi9rZXJuZWwvdHJhcHMuYw0KPiBAQCAtODIsNyArODIsNyBAQCBzdGF0aWMgdm9p
-ZCBkb19zaG93X3N0YWNrKHN0cnVjdCB0YXNrX3N0cnVjdCAqdGFzaywgdW5zaWduZWQgbG9uZyAq
-ZnAsDQo+ICAJY29uc3QgY2hhciAqbmFtZSA9IE5VTEw7DQo+ICAJdW5zaWduZWQgbG9uZyAqbmV3
-ZnA7DQo+ICAJdW5zaWduZWQgbG9uZyBsb3csIGhpZ2g7DQo+IC0JY2hhciB0bXBzdHJbMTI4XTsN
-Cj4gKwljaGFyIHRtcHN0cltLU1lNX05BTUVfTEVOXTsNCj4gIAljaGFyICptb2RuYW1lOw0KPiAg
-CWludCBpOw0KPiANCj4gLS0NCj4gMi4xNy4xDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtl
-c2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBV
-Sw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+Hi,
+
+The KVM selftests show advantages over KUT in terms of finding defects through
+flexible and varied guest settings from the KVM user space.
+
+This patchset tests whether the Intel vPMU works properly with different Intel
+CPUID.0xA configurations. It also provides test scaffolding and a sufficient
+number of PMU test cases to subsequently offer adequate code coverage of AMD
+vPMU or Intel complex features, such as LBR or PEBS, in selftests.
+
+Please feel free to add more tests or share valuable comments.
+
+Thanks
+
+v2:
+- Rebased to 5c291b93e5d6(tag: kvm-x86-next-2023.04.26)
+- Added a new patch to add macros to processor.h to obtain the number of fixed
+  counters and fixed counters bit mask. (Sean)
+- Added a new patch to introduce a new pmu.h header file to better organize the
+  PMU performance event constants and common masks. (Sean)
+- Changed the file name to pmu_basic_functionality_test. (Sean)
+- Replaced new_vcpu() with the new function pmu_vm_create_with_one_vcpu() and
+  replaced free_vcpu() wrapper with kvm_vm_free(). (Sean)
+- Modified the run_vcpu() wrapper to return the first ucall param. (Sean)
+- Defined KVM_X86_CPU_PROPERTY macros where possible to avoid opening code in
+  multiple places. (Sean)
+- Optimized the comment. (Sean, Jim)
+- Modified the guest logic to have the guest return the counter value and
+  perform the assert in kvm user space. (Sean)
+- Used goto instead of the ternary operator in intel_guest_run_arch_event(). (Sean)
+- Added a test to check that KVM drops writes to MSR_P6_PERFCTR[0|1]. (Sean)
+- Used rdmsr_safe() and/or wrmsr_safe() instead of installing a dedicated handler. (Sean)
+- Optimized variables that do not need to be initialized. (Sean)
+- Removed patch KVM: selftests: Test Intel counters' bit width emulation.
+
+Previous:
+https://lore.kernel.org/kvm/20230323072714.82289-1-likexu@tencent.com/T/#u
+
+Jinrong Liang (5):
+  KVM: selftests: Add macros for fixed counters in processor.h
+  KVM: selftests: Add pmu.h for PMU events and common masks
+  KVM: selftests: Test Intel PMU architectural events on fixed counters
+  KVM: selftests: Test consistency of CPUID with num of fixed counters
+  KVM: selftests: Test consistency of PMU MSRs with Intel PMU version
+
+Like Xu (3):
+  KVM: selftests: Test Intel PMU architectural events on gp counters
+  KVM: selftests: Test consistency of CPUID with num of gp counters
+  KVM: selftests: Test Intel supported fixed counters bit mask
+
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/x86_64/pmu.h        |  56 +++
+ .../selftests/kvm/include/x86_64/processor.h  |   2 +
+ .../kvm/x86_64/pmu_basic_functionality_test.c | 455 ++++++++++++++++++
+ 4 files changed, 514 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/include/x86_64/pmu.h
+ create mode 100644 tools/testing/selftests/kvm/x86_64/pmu_basic_functionality_test.c
+
+
+base-commit: 5c291b93e5d665380dbecc6944973583f9565ee5
+-- 
+2.31.1
 
