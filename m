@@ -2,68 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87931715B40
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2269715B46
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjE3KPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S229877AbjE3KRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbjE3KP1 (ORCPT
+        with ESMTP id S229475AbjE3KRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:15:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7AF9C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:15:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7C01821A8B;
-        Tue, 30 May 2023 10:15:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685441722; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KOquBtmYmWj6wRA30maxRoyQDgTMn6qUidToX23Hay0=;
-        b=0HUHB5Qf2l5uWCEo482grI/uQxW0dS7EAV4uCWkTp6e/EykCSnPbGGjiNhtz1TKtDG8EK1
-        Wbkob4MaHa5ae0Q8K1JS5Chppm3WybrXpLKZy1VE6fvFLxQrWGURsQ8jOnarYnpNgpk3Nx
-        5wasnviQC2EvX20A7ZTgBvEgu024yuA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685441722;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KOquBtmYmWj6wRA30maxRoyQDgTMn6qUidToX23Hay0=;
-        b=C+qerUkK+7NZw23RHZeNLZjIhwxEA1lfGxMT/24cq2xA3+AKtWkj/f8vQnLeVbOeQnmkcu
-        7CqIg1xMwUkjVMBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6ED8413478;
-        Tue, 30 May 2023 10:15:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zjIuG7rMdWTmTwAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 30 May 2023 10:15:22 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 05E4BA0754; Tue, 30 May 2023 12:15:22 +0200 (CEST)
-Date:   Tue, 30 May 2023 12:15:21 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     jack@suse.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] quota: fix warning in dqgrab()
-Message-ID: <20230530101521.37k7hcjyly2tqj5g@quack3>
-References: <20230527014018.47396-1-yebin10@huawei.com>
- <20230527014018.47396-3-yebin10@huawei.com>
+        Tue, 30 May 2023 06:17:09 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 156D593;
+        Tue, 30 May 2023 03:17:07 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxV_EjzXVkh4YCAA--.5742S3;
+        Tue, 30 May 2023 18:17:07 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axmr0gzXVkumyAAA--.11670S2;
+        Tue, 30 May 2023 18:17:04 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] linux/pci.h: add a dummy implement for pci_clear_master()
+Date:   Tue, 30 May 2023 18:16:55 +0800
+Message-Id: <20230530101655.2275731-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230527014018.47396-3-yebin10@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axmr0gzXVkumyAAA--.11670S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7KF1xXF4ftr15JrW3GF47twb_yoW8Wr1Upa
+        98AFyrCrW8GFyUKw4DJFyfZF13W39xZ34Sk3y7Kw1q9a9Fva48tFnYyr12yryfJrWvkFya
+        qw17Ka15Wr4jyFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I2
+        62IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4
+        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26F4j6r4UJwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UEYLkUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,107 +59,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 27-05-23 09:40:18, Ye Bin wrote:
-> There's issue as follows when do fault injection:
-> WARNING: CPU: 1 PID: 14870 at include/linux/quotaops.h:51 dquot_disable+0x13b7/0x18c0
-> Modules linked in:
-> CPU: 1 PID: 14870 Comm: fsconfig Not tainted 6.3.0-next-20230505-00006-g5107a9c821af-dirty #541
-> RIP: 0010:dquot_disable+0x13b7/0x18c0
-> RSP: 0018:ffffc9000acc79e0 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff88825e41b980
-> RDX: 0000000000000000 RSI: ffff88825e41b980 RDI: 0000000000000002
-> RBP: ffff888179f68000 R08: ffffffff82087ca7 R09: 0000000000000000
-> R10: 0000000000000001 R11: ffffed102f3ed026 R12: ffff888179f68130
-> R13: ffff888179f68110 R14: dffffc0000000000 R15: ffff888179f68118
-> FS:  00007f450a073740(0000) GS:ffff88882fc00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ffe96f2efd8 CR3: 000000025c8ad000 CR4: 00000000000006e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  dquot_load_quota_sb+0xd53/0x1060
->  dquot_resume+0x172/0x230
->  ext4_reconfigure+0x1dc6/0x27b0
->  reconfigure_super+0x515/0xa90
->  __x64_sys_fsconfig+0xb19/0xd20
->  do_syscall_64+0x39/0xb0
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> Above issue may happens as follows:
-> ProcessA              ProcessB                    ProcessC
-> sys_fsconfig
->   vfs_fsconfig_locked
->    reconfigure_super
->      ext4_remount
->       dquot_suspend -> suspend all type quota
-> 
->                  sys_fsconfig
->                   vfs_fsconfig_locked
->                     reconfigure_super
->                      ext4_remount
->                       dquot_resume
->                        ret = dquot_load_quota_sb
->                         add_dquot_ref
->                                            do_open  -> open file O_RDWR
->                                             vfs_open
->                                              do_dentry_open
->                                               get_write_access
->                                                atomic_inc_unless_negative(&inode->i_writecount)
->                                               ext4_file_open
->                                                dquot_file_open
->                                                 dquot_initialize
->                                                   __dquot_initialize
->                                                    dqget
-> 						    atomic_inc(&dquot->dq_count);
-> 
->                           __dquot_initialize
->                            __dquot_initialize
->                             dqget
->                              if (!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
->                                ext4_acquire_dquot
-> 			        -> Return error DQ_ACTIVE_B flag isn't set
->                          dquot_disable
-> 			  invalidate_dquots
-> 			   if (atomic_read(&dquot->dq_count))
-> 	                    dqgrab
-> 			     WARN_ON_ONCE(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
-> 	                      -> Trigger warning
-> 
-> In the above scenario, 'dquot->dq_flags' has no DQ_ACTIVE_B is normal when
-> dqgrab().
-> So just remove 'WARN_ON_ONCE(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))'
-> in dqgrab().
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+As some arch(m68k for example) doesn't have config_pci enabled, drivers[1]
+call pci_clear_master() without config_pci guard can not built.
 
-Thanks for the patch! Actually rather than deleting the assertion from
-dqgrab() (which can be and is used by filesystems) I'd replace the dqgrab()
-use in invalidate_dquots() with plain:
+   drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:
+   In function 'etnaviv_gpu_pci_fini':
+>> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9:
+   error: implicit declaration of function 'pci_clear_master';
+   did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
+      32 |         pci_clear_master(pdev);
+         |         ^~~~~~~~~~~~~~~~
+         |         pci_set_master
+   cc1: some warnings being treated as errors
 
-	atomic_inc(&dquot->dq_count);
+[1] https://patchwork.freedesktop.org/patch/539977/?series=118522&rev=1
 
-								Honza
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ include/linux/pci.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-> ---
->  include/linux/quotaops.h | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/include/linux/quotaops.h b/include/linux/quotaops.h
-> index 11a4becff3a9..cb5e4c11e503 100644
-> --- a/include/linux/quotaops.h
-> +++ b/include/linux/quotaops.h
-> @@ -48,7 +48,6 @@ static inline struct dquot *dqgrab(struct dquot *dquot)
->  {
->  	/* Make sure someone else has active reference to dquot */
->  	WARN_ON_ONCE(!atomic_read(&dquot->dq_count));
-> -	WARN_ON_ONCE(!test_bit(DQ_ACTIVE_B, &dquot->dq_flags));
->  	atomic_inc(&dquot->dq_count);
->  	return dquot;
->  }
-> -- 
-> 2.31.1
-> 
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index d0c19ff0c958..71c85380676c 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -1904,6 +1904,7 @@ static inline int pci_dev_present(const struct pci_device_id *ids)
+ #define pci_dev_put(dev)	do { } while (0)
+ 
+ static inline void pci_set_master(struct pci_dev *dev) { }
++static inline void pci_clear_master(struct pci_dev *dev) { }
+ static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
+ static inline void pci_disable_device(struct pci_dev *dev) { }
+ static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.25.1
+
