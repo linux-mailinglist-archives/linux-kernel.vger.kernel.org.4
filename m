@@ -2,63 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE384715439
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 05:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432DE71543A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 05:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjE3Dj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 23:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
+        id S229640AbjE3DnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 23:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjE3Djy (ORCPT
+        with ESMTP id S229494AbjE3DnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 23:39:54 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563C4B7;
-        Mon, 29 May 2023 20:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=2D/dQDDcxVNNdhfU159MLR/FS+XWwtto6W8hG7rRSiY=; b=UFz1I7BrDrz/KrjWMd1GpiN8CY
-        izU4R/occ2YkdHaiSMFt3hzhzlpvrZVQ4RYKxk7+4zQH+/xX6cSNuj1op/XqUGo3GPp1nZ46SiFmC
-        lcO09fgDSbEtrQGiG0wwv52dX7kD7n/uvFW97/OSzAsBPbSjAMPgxWo1I/tFfcZrBSygoVbu/ZNZc
-        bhjO3w3LIBc7h96viLyck3A7QdN/XEDNFVxbI1C+apn1ifn6p/RxuYSafRPigvjwzwwL/n0dyl0+S
-        0uAU+JQU39lmzQAcfNeWoBvbn0s/O/btYNuM0S1GyXaA3xbpj6dkLBkMGPB9U9w+h3Cma91hWJmZ8
-        O2mM5mNQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q3qCw-005vQx-6s; Tue, 30 May 2023 03:39:38 +0000
-Date:   Tue, 30 May 2023 04:39:38 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     gouhao@uniontech.com
-Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, axboe@kernel.dk,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs/buffer: using __bio_add_page in submit_bh_wbc()
-Message-ID: <ZHVv+rPl7iL3dMqi@casper.infradead.org>
-References: <20230530033239.17534-1-gouhao@uniontech.com>
+        Mon, 29 May 2023 23:43:03 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2B7B7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 20:43:02 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VjrrxCr_1685418178;
+Received: from 30.221.145.232(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VjrrxCr_1685418178)
+          by smtp.aliyun-inc.com;
+          Tue, 30 May 2023 11:42:59 +0800
+Message-ID: <6e7b2c58-0bb4-e008-a157-3d83ac33bf81@linux.alibaba.com>
+Date:   Tue, 30 May 2023 11:42:55 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530033239.17534-1-gouhao@uniontech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/5] erofs: introduce erofs_xattr_iter_fixup_aligned()
+ helper
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230518024551.123990-1-jefflexu@linux.alibaba.com>
+ <20230518024551.123990-2-jefflexu@linux.alibaba.com>
+ <9d928aa7-31cf-e4c1-8694-0aa63e55b382@linux.alibaba.com>
+Content-Language: en-US
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <9d928aa7-31cf-e4c1-8694-0aa63e55b382@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:32:39AM +0800, gouhao@uniontech.com wrote:
-> From: Gou Hao <gouhao@uniontech.com>
-> 
-> In submit_bh_wbc(), bio is newly allocated, so it
-> does not need any merging logic.
-> 
-> And using bio_add_page here will execute 'bio_flagged(
-> bio, BIO_CLONED)' and 'bio_full' twice, which is unnecessary.
 
-https://lore.kernel.org/linux-fsdevel/20230502101934.24901-5-johannes.thumshirn@wdc.com/
 
-You could send some Reviewed-by: tags to that patch series.
+On 5/29/23 3:41 PM, Gao Xiang wrote:
+> Hi,
+> 
+> On 2023/5/18 10:45, Jingbo Xu wrote:
+>> Introduce erofs_xattr_iter_fixup_aligned() helper where
+>> it.ofs <= EROFS_BLKSIZ is mandatory.
+>>
+>> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+>> ---
+>>   fs/erofs/xattr.c | 79 +++++++++++++++++++++---------------------------
+>>   1 file changed, 35 insertions(+), 44 deletions(-)
+>>
+>> diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+>> index bbfe7ce170d2..b79be2a556ba 100644
+>> --- a/fs/erofs/xattr.c
+>> +++ b/fs/erofs/xattr.c
+>> @@ -29,6 +29,28 @@ struct xattr_iter {
+>>       unsigned int ofs;
+>>   };
+>>   +static inline int erofs_xattr_iter_fixup(struct xattr_iter *it)
+>> +{
+>> +    if (it->ofs < it->sb->s_blocksize)
+>> +        return 0;
+>> +
+>> +    it->blkaddr += erofs_blknr(it->sb, it->ofs);
+>> +    it->kaddr = erofs_read_metabuf(&it->buf, it->sb, it->blkaddr,
+>> EROFS_KMAP);
+> 
+> could we use a new buf interface to init_metabuf at once?
+
+As discussed offline, I think the following unified API is preferred:
+
+```
+int erofs_xattr_iter_fixup(struct xattr_iter *it, bool nospan)
+
+{
+    if (it->ofs < it->sb->s_blocksize)
+        return 0;
+
+    if (nospan && it->ofs != it->sb->s_blocksize) {
+	DBG_BUGON(1);
+	return -EFSCORRUPTED;
+    }
+
+    ...
+}
+```
+
+-- 
+Thanks,
+Jingbo
