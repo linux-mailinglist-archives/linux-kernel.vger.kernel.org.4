@@ -2,192 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E09B67154B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 07:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B29C7154B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 07:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjE3FEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 01:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
+        id S230102AbjE3FIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 01:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjE3FEp (ORCPT
+        with ESMTP id S229701AbjE3FIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 01:04:45 -0400
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA73E3;
-        Mon, 29 May 2023 22:04:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685423027; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=BHQkkWTAEr80M8lLmn638j1SsCDJ8tWONl9EP+zlrhSaXusGQavWAA1HAvLz6rzlydFDJliwPVSogf9K49Jrt2rPepOW6dDVs7itaVa2uYbiqUFxeP9xC18+VIVicy9OP9dn3EvbY8xYW6KAkkNrl6rI+EnrsmwX3AMHqSDV3T0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1685423027; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=uNmD0Xv70JaEayy56+RdfAQyK0HPDkKOKowbsAERT+s=; 
-        b=imaaRTO7sMYIVbRDcAQSkEkNmVSjgAwBwW9AAp+RvAiKbh3IZnNPy49saesVsfGaBgITwEyA0qq0I8z/PYZmrIYX2YklCHER9T78EHRNlT09sOm0rLlRjMr8p5/YkZcWUs+/GQ995a3u7X3TYmlz73HeokW8XDMdf9H7VvQKX80=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685423027;
-        s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=uNmD0Xv70JaEayy56+RdfAQyK0HPDkKOKowbsAERT+s=;
-        b=Hm79fKiieyxgpF7XgjhzkGDXE4Ekr2K5Nm10fJNvEv+aX1AeSpAk6kSMJrKF6vHv
-        e5mq6QAUhwpU8dt6ZqybNhGaYM5r5GCe6SAK73p6XdEgX44Vgcs+1mCnEir2HzAaTka
-        bdrNvAdKRMTZTcVaOLFmS1mKxnTpKItEmikmoFaQ1b2qSzhi7gMLHtT7ZvaKDkI9nUs
-        KOOpQiF1vmxg7/XAyFFcsBLG12z5EZjaUGfTJW2kWyWJfGtRBtwgPM+E8KR8p0oYN9e
-        nikXRztFB46nzbcZEO0i5LRBKtMdfndvFOCAfLAKbbELOC5mvpXbSdXy+58qvpxysUv
-        ohwrrYe7yg==
-Received: from edelgard.fodlan.icenowy.me (120.85.97.71 [120.85.97.71]) by mx.zohomail.com
-        with SMTPS id 168542302470190.09283881679414; Mon, 29 May 2023 22:03:44 -0700 (PDT)
-Message-ID: <d23b9b5defeb9399436df0674a04dfd2f90aad73.camel@icenowy.me>
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8173-elm: remove panel model
- number in DT
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Pin-yen Lin <treapking@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
-Date:   Tue, 30 May 2023 13:03:39 +0800
-In-Reply-To: <3069dcf7-28e0-e7f6-11d5-9bc286d7d6e3@gmail.com>
-References: <20230526100801.16310-1-uwu@icenowy.me>
-         <CAD=FV=UxrFVZXn+dtgamttTVopWMSVbxYsHCGG_tS+3OTXbHiw@mail.gmail.com>
-         <f4a9e090-3712-200e-bd09-70090c9cccbc@collabora.com>
-         <6996788b112f4795d2930a6664b3152cd9a380a8.camel@icenowy.me>
-         <3069dcf7-28e0-e7f6-11d5-9bc286d7d6e3@gmail.com>
-Organization: Anthon Open-Source Community
+        Tue, 30 May 2023 01:08:07 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC4CEC
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 22:08:04 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso5798000a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 22:08:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685423283; x=1688015283;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1oENdb/PNBbVjDrw8mDPjI3X3sDQAuL7/2+YTKg1gLI=;
+        b=nNJLCB3FtxaV/RTzyPCHNuMIjWkv5BTVxn9XL3QJFc08wvDCKVjKgbij8gjObSOdS+
+         /VCSeFsV5FTltlQWUJuEIR13YYB7lFYb+h6EdNmYLnyPuW7nCQybmtv+uKox2YDZEfXa
+         Ur4JzdagHpdYjJUKfN/QGIp8UCbs47fhyc+YY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685423283; x=1688015283;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1oENdb/PNBbVjDrw8mDPjI3X3sDQAuL7/2+YTKg1gLI=;
+        b=bPHzdT9JVn63FHK2VS5Syo7QREXymc+P0WhYLpZlnU9ANHxcgCdi3SsF6mj5G5HxG3
+         wSMSRQqu1O3FWiAmxw/t8tPMLddfEEruXLNmSxjLfYjMZJYzrbqdDHFlQwHZmrnFXCD7
+         fp6Sx0Ll32zR5dGwHfOOGy/EaHb487/PDaZwcPqcdsI5JB15ea5vv1vFxcNVU5eulNSO
+         KY7Trftk4O/HcjSnDLh9at5k0c2lmLRUjIgJpT9QSnrx/mCAHDu5NCAVp0DoWyUDRrFU
+         GsGssbAaMoxePDKCXUx8YJEm6m/+5/FujBfq5y+S+wVjyX2HosNHvcOWL6yy5ir/Q4vx
+         FtZQ==
+X-Gm-Message-State: AC+VfDxU21/jrHaXb/XkMbdkAhxb5S8GlZFfX3jZHh/RrcaZV25Hq0Y0
+        L2cp8BlsOvw/cgk5pYCTqDTrNL0Aq0AY1lPAYHo=
+X-Google-Smtp-Source: ACHHUZ61Uzmtrcer4jRk+9RE8ZCAhydMyta+7QouMzl4IwScWIPHysD3EFh5nwC4Mf6OoF7OXTgANQ==
+X-Received: by 2002:a05:6402:205c:b0:509:d476:3a12 with SMTP id bc28-20020a056402205c00b00509d4763a12mr710633edb.34.1685423282730;
+        Mon, 29 May 2023 22:08:02 -0700 (PDT)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id n15-20020a05640206cf00b004fbdfbb5acesm3868670edy.89.2023.05.29.22.08.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 22:08:01 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-3f6094cb2d2so41544675e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 22:08:01 -0700 (PDT)
+X-Received: by 2002:adf:dd92:0:b0:30a:b46a:a443 with SMTP id
+ x18-20020adfdd92000000b0030ab46aa443mr462543wrl.51.1685423280911; Mon, 29 May
+ 2023 22:08:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230522234154.2924052-1-yinghsu@chromium.org>
+ <ZGyPt1GYGV2C2RQZ@corigine.com> <CABBYNZ+by-OQH2aPEMHpQ5cOLoKNpR7k111rJj6iOd2PGLx3gg@mail.gmail.com>
+ <CAAa9mD3A+3uJzFK0EbTrn5hX42EOgeixehmxgkwdhp1KetxjVQ@mail.gmail.com>
+ <CABBYNZKPv_0AaJJm2_c0F+4qX_vKXQ9BnVgR-kPy40YsDDqSRQ@mail.gmail.com> <CAAa9mD2e-WkuHshXf7ifOHcGEsgHb68xkRdaq5MRMeY7_jzkMg@mail.gmail.com>
+In-Reply-To: <CAAa9mD2e-WkuHshXf7ifOHcGEsgHb68xkRdaq5MRMeY7_jzkMg@mail.gmail.com>
+From:   Ying Hsu <yinghsu@chromium.org>
+Date:   Tue, 30 May 2023 13:07:23 +0800
+X-Gmail-Original-Message-ID: <CAAa9mD00VriG3utyedjwykuUUXaRU0SvXkr5+VPgmZFpiFokrA@mail.gmail.com>
+Message-ID: <CAAa9mD00VriG3utyedjwykuUUXaRU0SvXkr5+VPgmZFpiFokrA@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: Fix l2cap_disconnect_req deadlock
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Simon Horman <simon.horman@corigine.com>,
+        linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
-MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2023-05-29=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 18:28 +0200=EF=BC=
-=8CMatthias Brugger=E5=86=99=E9=81=93=EF=BC=9A
->=20
->=20
-> On 29/05/2023 10:45, Icenowy Zheng wrote:
-> > =E5=9C=A8 2023-05-29=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 10:02 +0200=EF=
-=BC=8CAngeloGioacchino Del Regno=E5=86=99=E9=81=93=EF=BC=9A
-> > > Il 26/05/23 16:24, Doug Anderson ha scritto:
-> > > > Hi,
-> > > >=20
-> > > > On Fri, May 26, 2023 at 3:09=E2=80=AFAM Icenowy Zheng <uwu@icenowy.=
-me>
-> > > > wrote:
-> > > > >=20
-> > > > > Currently a specific panel number is used in the Elm DTSI,
-> > > > > which
-> > > > > is
-> > > > > corresponded to a 12" panel. However, according to the
-> > > > > official
-> > > > > Chrome
-> > > > > OS devices document, Elm refers to Acer Chromebook R13,
-> > > > > which, as
-> > > > > the
-> > > > > name specifies, uses a 13.3" panel, which comes with EDID
-> > > > > information.
-> > > > >=20
-> > > > > As the kernel currently prioritizes the hardcoded timing
-> > > > > parameters
-> > > > > matched with the panel number compatible, a wrong timing will
-> > > > > be
-> > > > > applied
-> > > > > to the 13.3" panel on Acer Chromebook R13, which leads to
-> > > > > blank
-> > > > > display.
-> > > > >=20
-> > > > > Because the Elm DTSI is shared with Hana board, and Hana
-> > > > > corresponds to
-> > > > > multiple devices from 11" to 14", a certain panel model
-> > > > > number
-> > > > > shouldn't
-> > > > > be present, and driving the panel according to its EDID
-> > > > > information is
-> > > > > necessary.
-> > > > >=20
-> > > > > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> > > > > ---
-> > > > > =C2=A0=C2=A0 arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 2 +-
-> > > > > =C2=A0=C2=A0 1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >=20
-> > > > We went through a bunch of back-and-forth here but in the end
-> > > > in
-> > > > the
-> > > > ChromeOS tree we have "edp-panel" as the "compatible" here in
-> > > > the
-> > > > ChromeOS 5.15 tree and this makes sense.
-> > > >=20
-> > > > Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> > > >=20
-> > > > ...in theory one would wish for a "Fixes" tag, but I think in
-> > > > previous
-> > > > discussions it was decided that it was too complicated.
-> > > > Hardcoding
-> > > > the
-> > > > other compatible string has always been technically wrong, but
-> > > > I
-> > > > guess
-> > > > it worked at some point in time. The more correct way (as
-> > > > you're
-> > > > doing
-> > > > here) needs the DP AUX bus support and the generic eDP panels,
-> > > > both
-> > > > of
-> > > > which are significantly newer than the elm dts. So I guess
-> > > > leaving
-> > > > no
-> > > > "Fixes" tag is OK, or perhaps you could do the somewhat weak:
-> > > >=20
-> > > > Fixes: c2d94f72140a ("arm64: dts: mediatek: mt8173-elm: Move
-> > > > display
-> > > > to ps8640 auxiliary bus")
-> > >=20
-> > > I remember I didn't change the compatible to panel-edp because it
-> > > didn't
-> > > work at that time, but it does now... I'm not sure what actually
-> > > fixed that
-> > > and if the commit(s) was/were backported to that suggested point,
-> > > so
-> > > I
-> > > would leave the Fixes tag out, as that may break older kernel.
-> >=20
-> > Well at least I developed this patch on v6.3.
-> >=20
-> > (In fact the same kernel config do not boot to system at all on
-> > v6.0/v6.1 when I do make olddefconfig then build)
-> >=20
->=20
-> I applied the patch without the fixes tag. Lets stay on the secure
-> side to not=20
-> break older kernels.
+Gentle ping, Luiz.
 
-Well I think this patch is at least meaningful to get backported to
-v6.3.
 
-Should we cc stable@vger.kernel.org ?
-
->=20
-> Regards,
-> Matthias
->=20
-> > >=20
-> > > Anyway, for this commit:
-> > >=20
-> > > Reviewed-by: AngeloGioacchino Del Regno
-> > > <angelogioacchino.delregno@collabora.com>
-> >=20
-
+On Thu, May 25, 2023 at 12:16=E2=80=AFPM Ying Hsu <yinghsu@chromium.org> wr=
+ote:
+>
+> Hi Luiz,
+>
+> The proposal solves the deadlock but might introduce other problems as
+> it breaks the order of l2cap_chan_del.
+> There are another way to resolve the deadlock:
+> ```
+> @@ -4663,7 +4663,9 @@ static inline int l2cap_disconnect_req(struct
+> l2cap_conn *conn,
+>
+>         chan->ops->set_shutdown(chan);
+>
+> +       l2cap_chan_unlock(chan);
+>         mutex_lock(&conn->chan_lock);
+> +       l2cap_chan_lock(chan);
+>         l2cap_chan_del(chan, ECONNRESET);
+>         mutex_unlock(&conn->chan_lock);
+>  ```
+>
+> If you're okay with it, I'll do some verification and post a full patch.
+>
+> Best regards,
+> Ying
+>
+> On Thu, May 25, 2023 at 2:56=E2=80=AFAM Luiz Augusto von Dentz
+> <luiz.dentz@gmail.com> wrote:
+> >
+> > Hi Ying,
+> >
+> > On Wed, May 24, 2023 at 3:54=E2=80=AFAM Ying Hsu <yinghsu@chromium.org>=
+ wrote:
+> > >
+> > > Hi Simon,
+> > >
+> > > I understand your concern about the repeated code.
+> > > However, simply hiding the locking logic in another function
+> > > introduces hidden assumptions.
+> > > For this patch, I would like to fix the deadlock in a simple and easy
+> > > to understand way.
+> > > We can always refactor the l2cap_chan utility functions later.
+> > >
+> > > Hi Luis,
+> > >
+> > > I'll add a fixes tag in the next version.
+> >
+> > And how about doing this:
+> >
+> > https://gist.github.com/Vudentz/e513859ecb31e79c947dfcb4b5c60453
+> >
+> > > Best regards,
+> > > Ying
+> > >
+> > >
+> > > On Wed, May 24, 2023 at 3:06=E2=80=AFAM Luiz Augusto von Dentz
+> > > <luiz.dentz@gmail.com> wrote:
+> > > >
+> > > > Hi Simon, Ying,
+> > > >
+> > > > On Tue, May 23, 2023 at 3:04=E2=80=AFAM Simon Horman <simon.horman@=
+corigine.com> wrote:
+> > > > >
+> > > > > On Mon, May 22, 2023 at 11:41:51PM +0000, Ying Hsu wrote:
+> > > > > > L2CAP assumes that the locks conn->chan_lock and chan->lock are
+> > > > > > acquired in the order conn->chan_lock, chan->lock to avoid
+> > > > > > potential deadlock.
+> > > > > > For example, l2sock_shutdown acquires these locks in the order:
+> > > > > >   mutex_lock(&conn->chan_lock)
+> > > > > >   l2cap_chan_lock(chan)
+> > > > > >
+> > > > > > However, l2cap_disconnect_req acquires chan->lock in
+> > > > > > l2cap_get_chan_by_scid first and then acquires conn->chan_lock
+> > > > > > before calling l2cap_chan_del. This means that these locks are
+> > > > > > acquired in unexpected order, which leads to potential deadlock=
+:
+> > > > > >   l2cap_chan_lock(c)
+> > > > > >   mutex_lock(&conn->chan_lock)
+> > > > > >
+> > > > > > This patch uses __l2cap_get_chan_by_scid to replace
+> > > > > > l2cap_get_chan_by_scid and adjusts the locking order to avoid t=
+he
+> > > > > > potential deadlock.
+> > > >
+> > > > This needs the fixes tag so we can backport it properly.
+> > > >
+> > > > > > Signed-off-by: Ying Hsu <yinghsu@chromium.org>
+> > > > > > ---
+> > > > > > This commit has been tested on a Chromebook device.
+> > > > > >
+> > > > > > Changes in v2:
+> > > > > > - Adding the prefix "Bluetooth:" to subject line.
+> > > > > >
+> > > > > >  net/bluetooth/l2cap_core.c | 26 ++++++++++++++++++++------
+> > > > > >  1 file changed, 20 insertions(+), 6 deletions(-)
+> > > > > >
+> > > > > > diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_c=
+ore.c
+> > > > > > index 376b523c7b26..8f08192b8fb1 100644
+> > > > > > --- a/net/bluetooth/l2cap_core.c
+> > > > > > +++ b/net/bluetooth/l2cap_core.c
+> > > > > > @@ -4651,8 +4651,16 @@ static inline int l2cap_disconnect_req(s=
+truct l2cap_conn *conn,
+> > > > > >
+> > > > > >       BT_DBG("scid 0x%4.4x dcid 0x%4.4x", scid, dcid);
+> > > > > >
+> > > > > > -     chan =3D l2cap_get_chan_by_scid(conn, dcid);
+> > > > > > +     mutex_lock(&conn->chan_lock);
+> > > > > > +     chan =3D __l2cap_get_chan_by_scid(conn, dcid);
+> > > > > > +     if (chan) {
+> > > > > > +             chan =3D l2cap_chan_hold_unless_zero(chan);
+> > > > > > +             if (chan)
+> > > > > > +                     l2cap_chan_lock(chan);
+> > > > > > +     }
+> > > > > > +
+> > > > > >       if (!chan) {
+> > > > > > +             mutex_unlock(&conn->chan_lock);
+> > > > > >               cmd_reject_invalid_cid(conn, cmd->ident, dcid, sc=
+id);
+> > > > > >               return 0;
+> > > > > >       }
+> > > > >
+> > > > > Hi Ying,
+> > > > >
+> > > > > The conditional setting of chan and calling l2cap_chan_lock()
+> > > > > is both non-trivial and repeated. It seems that it ought to be
+> > > > > in a helper.
+> > > > >
+> > > > > Something like this (I'm sure a better function name can be chose=
+n):
+> > > > >
+> > > > >         chan =3D __l2cap_get_and_lock_chan_by_scid(conn, dcid);
+> > > > >         if (!chan) {
+> > > > >                 ...
+> > > > >         }
+> > > > >
+> > > > >         ...
+> > > >
+> > > > Or perhaps we could do something like l2cap_del_chan_by_scid:
+> > > >
+> > > > https://gist.github.com/Vudentz/e513859ecb31e79c947dfcb4b5c60453
+> > > >
+> > > > --
+> > > > Luiz Augusto von Dentz
+> >
+> >
+> >
+> > --
+> > Luiz Augusto von Dentz
