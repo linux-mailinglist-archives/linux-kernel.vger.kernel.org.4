@@ -2,249 +2,494 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00086716769
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D79716777
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbjE3PpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
+        id S232478AbjE3PqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjE3PpK (ORCPT
+        with ESMTP id S231389AbjE3PqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:45:10 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70661E8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:45:07 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2af98eb6ef0so50690691fa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685461506; x=1688053506;
-        h=content-transfer-encoding:in-reply-to:subject:organization
-         :content-language:references:cc:to:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q9ns/8J/rWCan5lG4MLwoH9QwjwN6lxcG7uthnw+Hwg=;
-        b=qI2Pn59B9aggdJFEQ830aBMnsgAnQ8nPkYUwVEOhqv3lTWsfBU4qZ9u7KczG97zm7y
-         +xB86kbxHJGTU2WM9Ywx1Dyt64fG9kxm4KuOjjSUYXBn5UdWKvCkFYPBk897tz1elRL6
-         dLbmLrq7nAwZMpakneVaGlieQdugnYZ63AqDe09eqq7KTiWq5819RrwKmQK2CsBcpniV
-         rqS4Dlx8cKZ4DGN1pCHDLiHn7lJTRFpOpR2GTEXPTZHEL56Bz5ZmMtQcjx/1iJeRGX4K
-         hMLf6P0+52sQZVOobOtliXTAPeWtZ0Mr6v0pgGS5t2cwysI0ZzVIDyPD63yGpFMmyUbL
-         nADQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685461506; x=1688053506;
-        h=content-transfer-encoding:in-reply-to:subject:organization
-         :content-language:references:cc:to:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=q9ns/8J/rWCan5lG4MLwoH9QwjwN6lxcG7uthnw+Hwg=;
-        b=SWSCIfDUuLhEbxlSTbSe0W+COJ7YROltrz9+X6MlI/JpmSixPx0UO3d9GVC8g5WSnh
-         jkXcd53eus2Zu+puF5vAXsxilmonVR+eVyUsZFIPytt1F3Bo5cz4ABTy/Jb0BrI7cltb
-         jfgH7DaORn/7Kh3ZHbS0tMCFbmmrK+0Z6YdpoF2f4PmJoMtAEo44twrfYVVmQ9cY3Z6k
-         z5wvRw4s4TL9J6c3x2d2VXSusyEZMX5RZHypGVIPbXDIQ0M+1czt5QQrw2yXHf1QOIOl
-         XDiVg8HID1ch1ifEXhKcl0Lw+aKr/9i6nYOIElar49TslxqOqafvBQCLMHR3iOJ0rXro
-         dpqw==
-X-Gm-Message-State: AC+VfDyslOoRWv/aqSgH7gcVbuLl8SyfjIa3ANxpWHPm/w6k8FfgjQS/
-        ZIamzkQ7TgQXbZDQy1UVjf8bhg==
-X-Google-Smtp-Source: ACHHUZ7eiupdgJ1Mi9YMw6yA4k5ZCdHTxj4CmnkWQYRDh9gLsNFd0MEqtBJ99JjkkOQ0+T8WbHolwg==
-X-Received: by 2002:a05:651c:cc:b0:2af:2fb0:9226 with SMTP id 12-20020a05651c00cc00b002af2fb09226mr1205001ljr.41.1685461505277;
-        Tue, 30 May 2023 08:45:05 -0700 (PDT)
-Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
-        by smtp.gmail.com with ESMTPSA id 13-20020a05600c24cd00b003f4dde07956sm21348772wmu.42.2023.05.30.08.45.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 08:45:04 -0700 (PDT)
-Message-ID: <83c36957-cc85-c7e3-3fe5-f86562e003ee@linaro.org>
-Date:   Tue, 30 May 2023 17:44:59 +0200
+        Tue, 30 May 2023 11:46:05 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BB3E8;
+        Tue, 30 May 2023 08:46:00 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id a35aa2df3769ba41; Tue, 30 May 2023 17:45:58 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 16D618BB094;
+        Tue, 30 May 2023 17:45:58 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>
+Subject: [PATCH v1 5/5] ACPI: thermal: Eliminate struct acpi_thermal_state_flags
+Date:   Tue, 30 May 2023 17:45:39 +0200
+Message-ID: <3737693.kQq0lBPeGt@kreacher>
+In-Reply-To: <5675481.DvuYhMxLoT@kreacher>
+References: <5675481.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Caleb Connolly <caleb@connolly.tech>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>
-References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
- <20230521-drm-panels-sony-v1-3-541c341d6bee@somainline.org>
- <ccc97880-8e74-b85b-9679-9c12c44c4b99@linaro.org>
- <brmrqeajbq3oyp3jjwmc6tuhiftz764u6az444xw6g7pwf5fr3@5tlp375qwhed>
- <617c8f8a-1fc7-c6a0-eaa5-ce75ff2adc1b@linaro.org>
- <CAA8EJppG=MAVpK1J_8bNnkJ23y9NtgY7a2GVResXJvhEKyNsrw@mail.gmail.com>
- <739a8bd9-9ff0-5072-fdae-b64efdf86842@collabora.com>
- <e927cfcd-bf34-5daf-0e24-4dd828106968@linaro.org>
-Content-Language: en-US
-Organization: Linaro Developer Services
-Subject: Re: RFC: DSI host capabilities (was: [PATCH RFC 03/10] drm/panel: Add
- LGD panel driver for Sony Xperia XZ3)
-In-Reply-To: <e927cfcd-bf34-5daf-0e24-4dd828106968@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehm
+ ihgthhgrlhdrfihilhgtiiihnhhskhhisehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 14:36, Dmitry Baryshkov wrote:
-> On 30/05/2023 15:15, AngeloGioacchino Del Regno wrote:
->> Il 30/05/23 13:44, Dmitry Baryshkov ha scritto:
->>> On Tue, 30 May 2023 at 10:24, Neil Armstrong <neil.armstrong@linaro.org> wrote:
->>>>
->>>> Hi Marijn, Dmitry, Caleb, Jessica,
->>>>
->>>> On 29/05/2023 23:11, Marijn Suijten wrote:
->>>>> On 2023-05-22 04:16:20, Dmitry Baryshkov wrote:
->>>>> <snip>
->>>>>>> +   if (ctx->dsi->dsc) {
->>>>>>
->>>>>> dsi->dsc is always set, thus this condition can be dropped.
->>>>>
->>>>> I want to leave room for possibly running the panel without DSC (at a
->>>>> lower resolution/refresh rate, or at higher power consumption if there
->>>>> is enough BW) by not assigning the pointer, if we get access to panel
->>>>> documentation: probably one of the magic commands sent in this driver
->>>>> controls it but we don't know which.
->>>>
->>>> I'd like to investigate if DSC should perhaps only be enabled if we
->>>> run non certain platforms/socs ?
->>>>
->>>> I mean, we don't know if the controller supports DSC and those particular
->>>> DSC parameters so we should probably start adding something like :
->>>>
->>>> static drm_dsc_config dsc_params_qcom = {}
->>>>
->>>> static const struct of_device_id panel_of_dsc_params[] = {
->>>>          { .compatible = "qcom,sm8150", , .data = &dsc_params_qcom },
->>>>          { .compatible = "qcom,sm8250", , .data = &dsc_params_qcom },
->>>>          { .compatible = "qcom,sm8350", , .data = &dsc_params_qcom },
->>>>          { .compatible = "qcom,sm8450", , .data = &dsc_params_qcom },
->>>> };
->>>
->>> I think this would damage the reusability of the drivers. The panel
->>> driver does not actually care if the SoC is SM8350, sunxi-something or
->>> RCar.
->>> Instead it cares about host capabilities.
->>>
->>> I think instead we should extend mipi_dsi_host:
->>>
->>> #define MIPI_DSI_HOST_MODE_VIDEO BIT(0)
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I assume all DSI controller supports Video mode, so it should be a negative here
-if for a reason it's not the case.
+Notice that the enabled flag is only needed for active trip points,
+so drop struct acpi_thermal_state_flags, add a simple "bool valid" field
+to the definitions of all trip point structures instead of flags and
+add a "bool enabled" field to struct acpi_thermal_active.
 
-There should also be a flag to tell if sending LP commands sending while
-in HS Video mode is supported.
+Adjust the code using the modified structures accordingly.
 
->>> #define MIPI_DSI_HOST_MODE_CMD  BIT(1)
->>> #define MIPI_DSI_HOST_VIDEO_SUPPORTS_COMMANDS BIT(2)
->>> // FIXME: do we need to provide additional caps here ?
->>>
->>> #define MIPI_DSI_DSC_1_1 BIT(0)
->>> #define MIPI_DSI_DSC_1_2 BIT(1)
->>> #define MIPI_DSI_DSC_NATIVE_422 BIT(2)
->>> #define MIPI_DSI_DSC_NATIVE_420 BIT(3)
->>> #define MIPI_DSI_DSC_FRAC_BPP BIT(4)
->>> // etc.
->>>
->>> struct mipi_dsi_host {
->>>   // new fields only
->>>    unsigned long mode_flags;
->>>    unsigned long dsc_flags;
->>> };
->>>
->>> Then the panel driver can adapt itself to the host capabilities and
->>> (possibly) select one of the internally supported DSC profiles.
->>>
->>
->> I completely agree about extending mipi_dsi_host, other SoCs could reuse that and
->> support for DSC panels would become a lot cleaner.
-> 
-> Sounds good. I will wait for one or two more days (to get the possible feedback on fields/flags/etc) and post an RFC patch to dri-devel.
+No intentional functional impact.
 
-Good, I was waiting until a DSC panel appears on the list (and I failed to be the first), it's now the case.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/thermal.c |  132 +++++++++++++++++++++++--------------------------
+ 1 file changed, 64 insertions(+), 68 deletions(-)
 
-For VTRD6130, the panel is capable of the 4 modes:
-- video mode
-- command mode
-- video mode & DSC
-- command mode & DSC
+Index: linux-pm/drivers/acpi/thermal.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/thermal.c
++++ linux-pm/drivers/acpi/thermal.c
+@@ -105,35 +105,30 @@ struct acpi_thermal_state {
+ 	int active_index;
+ };
+ 
+-struct acpi_thermal_state_flags {
+-	u8 valid:1;
+-	u8 enabled:1;
+-	u8 reserved:6;
+-};
+-
+ struct acpi_thermal_critical {
+-	struct acpi_thermal_state_flags flags;
+ 	unsigned long temperature;
++	bool valid;
+ };
+ 
+ struct acpi_thermal_hot {
+-	struct acpi_thermal_state_flags flags;
+ 	unsigned long temperature;
++	bool valid;
+ };
+ 
+ struct acpi_thermal_passive {
+-	struct acpi_thermal_state_flags flags;
++	struct acpi_handle_list devices;
+ 	unsigned long temperature;
+ 	unsigned long tc1;
+ 	unsigned long tc2;
+ 	unsigned long tsp;
+-	struct acpi_handle_list devices;
++	bool valid;
+ };
+ 
+ struct acpi_thermal_active {
+-	struct acpi_thermal_state_flags flags;
+-	unsigned long temperature;
+ 	struct acpi_handle_list devices;
++	unsigned long temperature;
++	bool valid;
++	bool enabled;
+ };
+ 
+ struct acpi_thermal_trips {
+@@ -229,7 +224,7 @@ static int acpi_thermal_trips_update(str
+ 	acpi_status status;
+ 	unsigned long long tmp;
+ 	struct acpi_handle_list devices;
+-	int valid = 0;
++	bool valid = false;
+ 	int i;
+ 
+ 	/* Critical Shutdown */
+@@ -243,21 +238,21 @@ static int acpi_thermal_trips_update(str
+ 		 * ... so lets discard those as invalid.
+ 		 */
+ 		if (ACPI_FAILURE(status)) {
+-			tz->trips.critical.flags.valid = 0;
++			tz->trips.critical.valid = false;
+ 			acpi_handle_debug(tz->device->handle,
+ 					  "No critical threshold\n");
+ 		} else if (tmp <= 2732) {
+ 			pr_info(FW_BUG "Invalid critical threshold (%llu)\n", tmp);
+-			tz->trips.critical.flags.valid = 0;
++			tz->trips.critical.valid = false;
+ 		} else {
+-			tz->trips.critical.flags.valid = 1;
++			tz->trips.critical.valid = true;
+ 			acpi_handle_debug(tz->device->handle,
+ 					  "Found critical threshold [%lu]\n",
+ 					  tz->trips.critical.temperature);
+ 		}
+-		if (tz->trips.critical.flags.valid) {
++		if (tz->trips.critical.valid) {
+ 			if (crt == -1) {
+-				tz->trips.critical.flags.valid = 0;
++				tz->trips.critical.valid = false;
+ 			} else if (crt > 0) {
+ 				unsigned long crt_k = celsius_to_deci_kelvin(crt);
+ 
+@@ -276,12 +271,12 @@ static int acpi_thermal_trips_update(str
+ 	if (flag & ACPI_TRIPS_HOT) {
+ 		status = acpi_evaluate_integer(tz->device->handle, "_HOT", NULL, &tmp);
+ 		if (ACPI_FAILURE(status)) {
+-			tz->trips.hot.flags.valid = 0;
++			tz->trips.hot.valid = false;
+ 			acpi_handle_debug(tz->device->handle,
+ 					  "No hot threshold\n");
+ 		} else {
+ 			tz->trips.hot.temperature = tmp;
+-			tz->trips.hot.flags.valid = 1;
++			tz->trips.hot.valid = true;
+ 			acpi_handle_debug(tz->device->handle,
+ 					  "Found hot threshold [%lu]\n",
+ 					  tz->trips.hot.temperature);
+@@ -289,9 +284,9 @@ static int acpi_thermal_trips_update(str
+ 	}
+ 
+ 	/* Passive (optional) */
+-	if (((flag & ACPI_TRIPS_PASSIVE) && tz->trips.passive.flags.valid) ||
++	if (((flag & ACPI_TRIPS_PASSIVE) && tz->trips.passive.valid) ||
+ 	    flag == ACPI_TRIPS_INIT) {
+-		valid = tz->trips.passive.flags.valid;
++		valid = tz->trips.passive.valid;
+ 		if (psv == -1) {
+ 			status = AE_SUPPORT;
+ 		} else if (psv > 0) {
+@@ -303,44 +298,44 @@ static int acpi_thermal_trips_update(str
+ 		}
+ 
+ 		if (ACPI_FAILURE(status)) {
+-			tz->trips.passive.flags.valid = 0;
++			tz->trips.passive.valid = false;
+ 		} else {
+ 			tz->trips.passive.temperature = tmp;
+-			tz->trips.passive.flags.valid = 1;
++			tz->trips.passive.valid = true;
+ 			if (flag == ACPI_TRIPS_INIT) {
+ 				status = acpi_evaluate_integer(tz->device->handle,
+ 							       "_TC1", NULL, &tmp);
+ 				if (ACPI_FAILURE(status))
+-					tz->trips.passive.flags.valid = 0;
++					tz->trips.passive.valid = false;
+ 				else
+ 					tz->trips.passive.tc1 = tmp;
+ 
+ 				status = acpi_evaluate_integer(tz->device->handle,
+ 							       "_TC2", NULL, &tmp);
+ 				if (ACPI_FAILURE(status))
+-					tz->trips.passive.flags.valid = 0;
++					tz->trips.passive.valid = false;
+ 				else
+ 					tz->trips.passive.tc2 = tmp;
+ 
+ 				status = acpi_evaluate_integer(tz->device->handle,
+ 							       "_TSP", NULL, &tmp);
+ 				if (ACPI_FAILURE(status))
+-					tz->trips.passive.flags.valid = 0;
++					tz->trips.passive.valid = false;
+ 				else
+ 					tz->trips.passive.tsp = tmp;
+ 			}
+ 		}
+ 	}
+-	if ((flag & ACPI_TRIPS_DEVICES) && tz->trips.passive.flags.valid) {
++	if ((flag & ACPI_TRIPS_DEVICES) && tz->trips.passive.valid) {
+ 		memset(&devices, 0, sizeof(struct acpi_handle_list));
+ 		status = acpi_evaluate_reference(tz->device->handle, "_PSL",
+ 						 NULL, &devices);
+ 		if (ACPI_FAILURE(status)) {
+ 			acpi_handle_info(tz->device->handle,
+ 					 "Invalid passive threshold\n");
+-			tz->trips.passive.flags.valid = 0;
++			tz->trips.passive.valid = false;
+ 		} else {
+-			tz->trips.passive.flags.valid = 1;
++			tz->trips.passive.valid = true;
+ 		}
+ 
+ 		if (memcmp(&tz->trips.passive.devices, &devices,
+@@ -351,24 +346,24 @@ static int acpi_thermal_trips_update(str
+ 		}
+ 	}
+ 	if ((flag & ACPI_TRIPS_PASSIVE) || (flag & ACPI_TRIPS_DEVICES)) {
+-		if (valid != tz->trips.passive.flags.valid)
++		if (valid != tz->trips.passive.valid)
+ 			ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "state");
+ 	}
+ 
+ 	/* Active (optional) */
+ 	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
+ 		char name[5] = { '_', 'A', 'C', ('0' + i), '\0' };
+-		valid = tz->trips.active[i].flags.valid;
++		valid = tz->trips.active[i].valid;
+ 
+ 		if (act == -1)
+ 			break; /* disable all active trip points */
+ 
+ 		if (flag == ACPI_TRIPS_INIT || ((flag & ACPI_TRIPS_ACTIVE) &&
+-		    tz->trips.active[i].flags.valid)) {
++		    tz->trips.active[i].valid)) {
+ 			status = acpi_evaluate_integer(tz->device->handle,
+ 						       name, NULL, &tmp);
+ 			if (ACPI_FAILURE(status)) {
+-				tz->trips.active[i].flags.valid = 0;
++				tz->trips.active[i].valid = 0;
+ 				if (i == 0)
+ 					break;
+ 
+@@ -390,21 +385,21 @@ static int acpi_thermal_trips_update(str
+ 				break;
+ 			} else {
+ 				tz->trips.active[i].temperature = tmp;
+-				tz->trips.active[i].flags.valid = 1;
++				tz->trips.active[i].valid = true;
+ 			}
+ 		}
+ 
+ 		name[2] = 'L';
+-		if ((flag & ACPI_TRIPS_DEVICES) && tz->trips.active[i].flags.valid) {
++		if ((flag & ACPI_TRIPS_DEVICES) && tz->trips.active[i].valid) {
+ 			memset(&devices, 0, sizeof(struct acpi_handle_list));
+ 			status = acpi_evaluate_reference(tz->device->handle,
+ 							 name, NULL, &devices);
+ 			if (ACPI_FAILURE(status)) {
+ 				acpi_handle_info(tz->device->handle,
+ 						 "Invalid active%d threshold\n", i);
+-				tz->trips.active[i].flags.valid = 0;
++				tz->trips.active[i].valid = false;
+ 			} else {
+-				tz->trips.active[i].flags.valid = 1;
++				tz->trips.active[i].valid = true;
+ 			}
+ 
+ 			if (memcmp(&tz->trips.active[i].devices, &devices,
+@@ -415,10 +410,10 @@ static int acpi_thermal_trips_update(str
+ 			}
+ 		}
+ 		if ((flag & ACPI_TRIPS_ACTIVE) || (flag & ACPI_TRIPS_DEVICES))
+-			if (valid != tz->trips.active[i].flags.valid)
++			if (valid != tz->trips.active[i].valid)
+ 				ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "state");
+ 
+-		if (!tz->trips.active[i].flags.valid)
++		if (!tz->trips.active[i].valid)
+ 			break;
+ 	}
+ 
+@@ -438,17 +433,18 @@ static int acpi_thermal_trips_update(str
+ 
+ static int acpi_thermal_get_trip_points(struct acpi_thermal *tz)
+ {
+-	int i, valid, ret = acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
++	int i, ret = acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
++	bool valid;
+ 
+ 	if (ret)
+ 		return ret;
+ 
+-	valid = tz->trips.critical.flags.valid |
+-		tz->trips.hot.flags.valid |
+-		tz->trips.passive.flags.valid;
++	valid = tz->trips.critical.valid |
++		tz->trips.hot.valid |
++		tz->trips.passive.valid;
+ 
+ 	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++)
+-		valid |= tz->trips.active[i].flags.valid;
++		valid = valid || tz->trips.active[i].valid;
+ 
+ 	if (!valid) {
+ 		pr_warn(FW_BUG "No valid trip found\n");
+@@ -485,7 +481,7 @@ static int thermal_get_trip_type(struct
+ 	if (!tz || trip < 0)
+ 		return -EINVAL;
+ 
+-	if (tz->trips.critical.flags.valid) {
++	if (tz->trips.critical.valid) {
+ 		if (!trip) {
+ 			*type = THERMAL_TRIP_CRITICAL;
+ 			return 0;
+@@ -493,7 +489,7 @@ static int thermal_get_trip_type(struct
+ 		trip--;
+ 	}
+ 
+-	if (tz->trips.hot.flags.valid) {
++	if (tz->trips.hot.valid) {
+ 		if (!trip) {
+ 			*type = THERMAL_TRIP_HOT;
+ 			return 0;
+@@ -501,7 +497,7 @@ static int thermal_get_trip_type(struct
+ 		trip--;
+ 	}
+ 
+-	if (tz->trips.passive.flags.valid) {
++	if (tz->trips.passive.valid) {
+ 		if (!trip) {
+ 			*type = THERMAL_TRIP_PASSIVE;
+ 			return 0;
+@@ -509,7 +505,7 @@ static int thermal_get_trip_type(struct
+ 		trip--;
+ 	}
+ 
+-	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE && tz->trips.active[i].flags.valid; i++) {
++	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE && tz->trips.active[i].valid; i++) {
+ 		if (!trip) {
+ 			*type = THERMAL_TRIP_ACTIVE;
+ 			return 0;
+@@ -529,7 +525,7 @@ static int thermal_get_trip_temp(struct
+ 	if (!tz || trip < 0)
+ 		return -EINVAL;
+ 
+-	if (tz->trips.critical.flags.valid) {
++	if (tz->trips.critical.valid) {
+ 		if (!trip) {
+ 			*temp = deci_kelvin_to_millicelsius_with_offset(
+ 					tz->trips.critical.temperature,
+@@ -539,7 +535,7 @@ static int thermal_get_trip_temp(struct
+ 		trip--;
+ 	}
+ 
+-	if (tz->trips.hot.flags.valid) {
++	if (tz->trips.hot.valid) {
+ 		if (!trip) {
+ 			*temp = deci_kelvin_to_millicelsius_with_offset(
+ 					tz->trips.hot.temperature,
+@@ -549,7 +545,7 @@ static int thermal_get_trip_temp(struct
+ 		trip--;
+ 	}
+ 
+-	if (tz->trips.passive.flags.valid) {
++	if (tz->trips.passive.valid) {
+ 		if (!trip) {
+ 			*temp = deci_kelvin_to_millicelsius_with_offset(
+ 					tz->trips.passive.temperature,
+@@ -560,7 +556,7 @@ static int thermal_get_trip_temp(struct
+ 	}
+ 
+ 	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE &&
+-		tz->trips.active[i].flags.valid; i++) {
++		tz->trips.active[i].valid; i++) {
+ 		if (!trip) {
+ 			*temp = deci_kelvin_to_millicelsius_with_offset(
+ 					tz->trips.active[i].temperature,
+@@ -578,7 +574,7 @@ static int thermal_get_crit_temp(struct
+ {
+ 	struct acpi_thermal *tz = thermal_zone_device_priv(thermal);
+ 
+-	if (tz->trips.critical.flags.valid) {
++	if (tz->trips.critical.valid) {
+ 		*temperature = deci_kelvin_to_millicelsius_with_offset(
+ 					tz->trips.critical.temperature,
+ 					tz->kelvin_offset);
+@@ -664,13 +660,13 @@ static int acpi_thermal_cooling_device_c
+ 	int trip = -1;
+ 	int result = 0;
+ 
+-	if (tz->trips.critical.flags.valid)
++	if (tz->trips.critical.valid)
+ 		trip++;
+ 
+-	if (tz->trips.hot.flags.valid)
++	if (tz->trips.hot.valid)
+ 		trip++;
+ 
+-	if (tz->trips.passive.flags.valid) {
++	if (tz->trips.passive.valid) {
+ 		trip++;
+ 		for (i = 0; i < tz->trips.passive.devices.count; i++) {
+ 			handle = tz->trips.passive.devices.handles[i];
+@@ -695,7 +691,7 @@ static int acpi_thermal_cooling_device_c
+ 	}
+ 
+ 	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
+-		if (!tz->trips.active[i].flags.valid)
++		if (!tz->trips.active[i].valid)
+ 			break;
+ 
+ 		trip++;
+@@ -783,19 +779,19 @@ static int acpi_thermal_register_thermal
+ 	acpi_status status;
+ 	int i;
+ 
+-	if (tz->trips.critical.flags.valid)
++	if (tz->trips.critical.valid)
+ 		trips++;
+ 
+-	if (tz->trips.hot.flags.valid)
++	if (tz->trips.hot.valid)
+ 		trips++;
+ 
+-	if (tz->trips.passive.flags.valid)
++	if (tz->trips.passive.valid)
+ 		trips++;
+ 
+-	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE && tz->trips.active[i].flags.valid;
++	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE && tz->trips.active[i].valid;
+ 	     i++, trips++);
+ 
+-	if (tz->trips.passive.flags.valid)
++	if (tz->trips.passive.valid)
+ 		tz->thermal_zone = thermal_zone_device_register("acpitz", trips, 0, tz,
+ 								&acpi_thermal_zone_ops, NULL,
+ 								tz->trips.passive.tsp * 100,
+@@ -965,7 +961,7 @@ static int acpi_thermal_get_info(struct
+  */
+ static void acpi_thermal_guess_offset(struct acpi_thermal *tz)
+ {
+-	if (tz->trips.critical.flags.valid &&
++	if (tz->trips.critical.valid &&
+ 	    (tz->trips.critical.temperature % 5) == 1)
+ 		tz->kelvin_offset = 273100;
+ 	else
+@@ -1074,20 +1070,20 @@ static int acpi_thermal_resume(struct de
+ 		return -EINVAL;
+ 
+ 	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
+-		if (!tz->trips.active[i].flags.valid)
++		if (!tz->trips.active[i].valid)
+ 			break;
+ 
+-		tz->trips.active[i].flags.enabled = 1;
++		tz->trips.active[i].enabled = true;
+ 		for (j = 0; j < tz->trips.active[i].devices.count; j++) {
+ 			result = acpi_bus_update_power(
+ 					tz->trips.active[i].devices.handles[j],
+ 					&power_state);
+ 			if (result || (power_state != ACPI_STATE_D0)) {
+-				tz->trips.active[i].flags.enabled = 0;
++				tz->trips.active[i].enabled = false;
+ 				break;
+ 			}
+ 		}
+-		tz->state.active |= tz->trips.active[i].flags.enabled;
++		tz->state.active |= tz->trips.active[i].enabled;
+ 	}
+ 
+ 	acpi_queue_thermal_check(tz);
 
-So it would need such info to enable one of the mode in some order to determine.
 
-Thanks,
-Neil
-> 
->>
->> For example, on MediaTek DRM there's some support for DSC, more or less the same
->> for SPRD DRM and some DSI bridge drivers... having a clean infrastructure would
->> definitely help.
->>
->> I'm sad I cannot offer testing in that case because despite being sure that there
->> are MTK smartphones around with DSI panels using DSC, I have none... and all of the
->> Chromebooks are not using DSC anyway (but using DisplayPort compression, which is
->> obviously an entirely different beast).
->>
->>>>
->>>> ...
->>>> static int sony_akatsuki_lgd_probe(struct mipi_dsi_device *dsi)
->>>> ...
->>>>          const struct of_device_id *match;
->>>>
->>>> ...
->>>>          match = of_match_node(panel_of_dsc_params, of_root);
->>>>          if (match && match->data) {
->>>>                  dsi->dsc = devm_kzalloc(&dsi->dev, sizeof(*dsc), GFP_KERNEL);
->>>>                  memcpy(dsi->dsc, match->data, sizeof(*dsc));
->>>>          } else {
->>>>                  dev_warn(&dsi->dev, "DSI controller is not marked as supporting DSC\n");
->>>>          }
->>>> ...
->>>> }
->>>>
->>>> and probably bail out if it's a DSC only panel.
->>>>
->>
->> Usually DDICs support both DSC and non-DSC modes, depending on the initial
->> programming (read: init commands)... but the usual issue is that many DDICs
->> are not publicly documented for reasons, so yes, bailing out if DSC is not
->> supported would be the only option, and would be fine at this point.
->>
->> Cheers,
->> Angelo
->>
->>>> We could alternatively match on the DSI controller's dsi->host->dev instead of the SoC root compatible.
->>>>
->>>> Neil
->>>
->>
-> 
 
