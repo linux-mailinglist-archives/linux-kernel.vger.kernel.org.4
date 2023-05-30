@@ -2,126 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A05716DAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57831716DB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjE3Tgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        id S232515AbjE3Thn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjE3Tgb (ORCPT
+        with ESMTP id S230219AbjE3Thk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:36:31 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45341137;
-        Tue, 30 May 2023 12:36:22 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f3baf04f0cso5520560e87.1;
-        Tue, 30 May 2023 12:36:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1685475380; x=1688067380;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QEE5HR8KnTXDzE7qIjWjCheMHM5HqAaaQn2y8Q+rxV8=;
-        b=IVNYUCmhiNFu0EgZ0lRI69pOYybAw0Roa8Zps1B2zd6CwZ7FdSroL2EOxDfml0hl2k
-         qo04Uq1vSu9zxk3gbbRpCUq+kbB4EYsM4sMt9kIpzRVLpuenwvbcptbkDrlFjz12s+jq
-         Scm6s+4dseL2zUnMkuF3CYBxGsMySIe2Fb7A5mFYMwNE68P9YxV/Fl9CbWB02Ef8mvKK
-         ZitD/QzB1WKggCor0rhynySgN8NAXQQ+YISaEfdcnHBcfTYnBfKh+elXdbA0muZjv4WC
-         WhNKhfsMy0lBtIqF9wiFwHe13B4CIBjJ2815jAkuozg8QmHhGJJdZtGzvf2u7K6N7b3l
-         /Etw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685475380; x=1688067380;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QEE5HR8KnTXDzE7qIjWjCheMHM5HqAaaQn2y8Q+rxV8=;
-        b=PvJ+2RPX+aXc1nQsd76lfSZUU7kg1vIPFlj35IjwFznnK3wySeli5oBBQp9QF1j31w
-         wCwQ+2DyF71mUalN40hxgFCZCRYjlC8s/TkKIPTC3o/UMX68190pSC2tWNbiw3tngWkG
-         OfNu2bexDgHrKfZuRkL7HhCJZE/5dtAmc1jsG8C+v1zOHQ5VsbQTvBcA262taiHBWg7X
-         XJbA3f7SVsZY203h4gxvB971HC9aD/uFY4Ln9tJiHUmN+WPhsOKw+FgV+qHXLnZ7shrA
-         FU3AT6iNvUvszlgxxJNemkkvolYkpXyuPDMowPOrkMC97dvTvZv0ko2F9W2eYv2fQN9v
-         4vaQ==
-X-Gm-Message-State: AC+VfDyxIsGz5+up22DzMcWdXLQs0w6qAIiVNmIw8wrYRuaClsaPfgoY
-        nAGVdzRqqvVW1QIDZtWvO692GbfqjssxzEeGdj0=
-X-Google-Smtp-Source: ACHHUZ5gc/hxHeYex2Y8Okc8JH1HtS8SizLAVO7CtDJbdkVMJw6syU7DTQmP8/PMv1wx+1QnYFOncA22xyJ5j/x0vzw=
-X-Received: by 2002:ac2:4c13:0:b0:4f3:8258:5894 with SMTP id
- t19-20020ac24c13000000b004f382585894mr1358968lfq.27.1685475380186; Tue, 30
- May 2023 12:36:20 -0700 (PDT)
+        Tue, 30 May 2023 15:37:40 -0400
+Received: from out-46.mta0.migadu.com (out-46.mta0.migadu.com [91.218.175.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0495DF3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:37:37 -0700 (PDT)
+Date:   Tue, 30 May 2023 19:37:25 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685475455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xJBcu8ATCUO1aDY2yQ8vOVcCThAxEWqTiihzn189BcI=;
+        b=oTgfsm6Y7m0cHeGsa3KJXNWXMuNSlm0sfaQCoEPDjFj6jxNxzseINRPUWevletZvuYk83p
+        +kFUfwmLUYdIL6pvdibsqLd2oceBrIf/xJKHf7O+W7xiGADvFsQD0goq381G/kYiPU+lqt
+        jv2kELueVaqLNY647oTCnG+i/dK3+OY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Subject: Re: [PATCH mm-unstable v2 04/10] kvm/arm64: make stage2 page tables
+ RCU safe
+Message-ID: <ZHZQdQAApIrw6fBu@linux.dev>
+References: <20230526234435.662652-1-yuzhao@google.com>
+ <20230526234435.662652-5-yuzhao@google.com>
+ <ZHJHJPBF6euzOFdw@linux.dev>
+ <CAOUHufa74CufHziHSquO5bZwbFXz2MNssBzW+AH7=Xo5RCnQ0A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
- <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-5-56eb7a4d5b8e@linaro.org>
- <1jv8ga445j.fsf@starbuckisacylon.baylibre.com> <c24502f9-f717-6ff9-211c-1d129ef02f24@linaro.org>
-In-Reply-To: <c24502f9-f717-6ff9-211c-1d129ef02f24@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 30 May 2023 21:36:09 +0200
-Message-ID: <CAFBinCD4nZPp4JKpGARBkWL5pKVHJ0GSLTvy3S_q9mF=1d37Kg@mail.gmail.com>
-Subject: Re: [PATCH v5 05/17] clk: meson: g12a: make VCLK2 and ENCL clock path
- configurable by CCF
-To:     neil.armstrong@linaro.org
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "Lukas F. Hartmann" <lukas@mntre.com>,
-        Nicolas Belin <nbelin@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-phy@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOUHufa74CufHziHSquO5bZwbFXz2MNssBzW+AH7=Xo5RCnQ0A@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+Hi Yu,
 
-On Tue, May 30, 2023 at 5:57=E2=80=AFPM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
-[...]
-> >> The mipi_dsi_pxclk_div is set as RO in order to use the same GP0
-> >> for mipi_dsi_pxclk and vclk2_input.
+On Sat, May 27, 2023 at 02:13:07PM -0600, Yu Zhao wrote:
+> On Sat, May 27, 2023 at 12:08 PM Oliver Upton <oliver.upton@linux.dev> wrote:
+> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> > index 3d61bd3e591d..bfbebdcb4ef0 100644
+> > --- a/arch/arm64/kvm/hyp/pgtable.c
+> > +++ b/arch/arm64/kvm/hyp/pgtable.c
+> > @@ -1019,7 +1019,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
+> >                                                kvm_granule_size(ctx->level));
 > >
-> > I don't think notifiers is the appropriate approach here.
-> > Whenever there is clock change the motifiers would trigger an off/on of
-> > the clock, regardless of the clock usage or state.
-> > If you have several consummers on this vclk2, this would
-> > cause glitches and maybe this is not desirable.
-> >
-> > I think it would be better to handle the enable and reset with a
-> > specific gate driver, in prepare() or enable(), and the give the clock
-> > CLK_SET_RATE_GATE flag.
-> >
-> > This would require the clock to be properly turn off before changing th=
-e
-> > rate.
->
-> Sure, will see how to switch to that, seem Martin did than on Meson8.
-You can start here: [0]
-It may not be the nicest logic but so far it works (for me).
+> >         if (childp)
+> > -               mm_ops->put_page(childp);
+> > +               mm_ops->free_removed_table(childp, ctx->level);
+> 
+> Thanks, Oliver.
+> 
+> A couple of things I haven't had the chance to verify -- I'm hoping
+> you could help clarify:
+> 1. For unmapping, with free_removed_table(), wouldn't we have to look
+> into the table we know it's empty unnecessarily?
 
-Please note that I don't mix between CCF and direct register IO clock handl=
-ing:
-For the old SoCs I'm relying only on CCF to manage the clocks.
+As it is currently implemented, yes. But, there's potential to fast-path
+the implementation by checking page_count() before starting the walk.
 
+> 2. For remapping and unmapping, how does free_removed_table() put the
+> final refcnt on the table passed in? (Previously we had
+> put_page(childp) in stage2_map_walk_table_post(). So I'm assuming we'd
+> have to do something equivalent with free_removed_table().)
 
-Best regards,
-Martin
+Heh, that's a bug, and an embarrassing one at that!
 
+Sent out a fix for that, since it would appear we leak memory on
+table->block transitions. PTAL if you have a chance.
 
-[0] https://github.com/xdarklight/linux/blob/meson-mx-integration-6.3-20230=
-410/drivers/gpu/drm/meson/meson_vclk.c#L1177-L1179
+https://lore.kernel.org/all/20230530193213.1663411-1-oliver.upton@linux.dev/
+
+-- 
+Thanks,
+Oliver
