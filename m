@@ -2,154 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883A1716E1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A971716E26
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjE3Tvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S232734AbjE3Twc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233449AbjE3Tvp (ORCPT
+        with ESMTP id S233456AbjE3Tw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:51:45 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5972BD9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:51:42 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30af56f5f52so993652f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:51:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685476301; x=1688068301;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IXaXWtEb9NQ32jQeQXNkER7DjeishD1qQHgyYh3nXXg=;
-        b=YiUHM/Jyr8ZTe7ZAVCIrE5slszh2IrszT+zDJ0zcCvae/eNYCh9hR2S4o9ffh8nraU
-         x0H+qUzNH6QC6Z3KIJ4EuZzmQb71an6PDqYx2w3bUCqcRudFFWzIHbZTd8NLJGOwAHTG
-         ykA3X5gAIev3xL1wEfCXxyMl+zkmOoioScXkuXdMJ2ZjMX0A2Qzm7yF40lO7ETgURv8e
-         jQXMoiN6y8/hPUN4OGaGdgYlXPumCKtv24Eay4y6Kf901HJijxNOkHgNCTBkQulkH4lI
-         PZHAaNxvRc+OPUE4xv6D2tDTWbG/h+4h/G/sl3cFJWdshl2+PuxJpxfy52wsQnjXxcsx
-         UXJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685476301; x=1688068301;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IXaXWtEb9NQ32jQeQXNkER7DjeishD1qQHgyYh3nXXg=;
-        b=Z85X2qKX30y4KPrisFmSAl/uwQwAqpi/BIITXfNO59jjXBOl5vCCTH6bg6c+ZIgra9
-         o8+vo/Hql1sNsowWmLNgQp4j+ZDMP/qhHPruM/sebO2FDSBDgbmrD5n/PqgT9UtSEmG7
-         2Su2sxIXUqakpF7daTXjju7C884QaYwUz5B2eoVrL4RbFJR2v8+1r2xkUyRluf/cJp0m
-         8trNfNzHLpUKQDZ86rvx+9yZOFYXC4qa50XJNfDUoZLSL7B3IPHt8fbe0Tyj+F3K4rK0
-         s4EQ9D9kaA4pJXR3r+FJQKaqMVnp1qVrvWPSA4TJHdM03vmqUotuY+b+26oHEJ49x69R
-         vZ9A==
-X-Gm-Message-State: AC+VfDw117cVRJHs3+722hwt+UdCdAnqUkRB5pE8wgJj7N9jfCiG8nsS
-        Iyhgq3fDFkJViF7AbyBVp/CbVw==
-X-Google-Smtp-Source: ACHHUZ7OgEAtfzmZdSFhI9cSjPZ3RXkY0sKf/z9v4syG03VNDnl+9iKmJanfhpb6mXIcPNrUVvGXJw==
-X-Received: by 2002:a05:6000:181a:b0:30a:ab38:3104 with SMTP id m26-20020a056000181a00b0030aab383104mr2049069wrh.34.1685476300912;
-        Tue, 30 May 2023 12:51:40 -0700 (PDT)
-Received: from ph18.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id n11-20020adfe34b000000b003078cd719ffsm4271545wrj.95.2023.05.30.12.51.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 12:51:40 -0700 (PDT)
-From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tue, 30 May 2023 15:52:28 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D529B136;
+        Tue, 30 May 2023 12:52:03 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685476320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LJ3pwe5VO2kqAY2WBljz3EqXfTvvu+3J346IL0PSsq8=;
+        b=xpL4T8aPYWldl3m+QrLxN+At2fc+ZjAC6pEU4MuUjTSaZuj6IDFe6UakfjWnmmW8hKClix
+        t7yS6D3ihlSEIf30gGCLXhg08YwOKfQvUQI3IgIl2aHuedpFPvjibaFkiCGXlhLxeGBGkW
+        dGEwWvRoq2mQEzRs8oh56PiUJi2/s5QyH4qWIPL9JI/tQVBvtD0plLFK4LpxUmoH0fO1+H
+        nGl/daQybL4Usq3PzahflEHPTKXjDjpOAZxUsLIwJWvToU8rpo8vLXAXsklySZIyOPhZMU
+        EowGzZyfscIPTe6Qwpi0Biu3nomQmhobdOQI00py4ZRFq1Ph0F82SiNDS5umEg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685476320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LJ3pwe5VO2kqAY2WBljz3EqXfTvvu+3J346IL0PSsq8=;
+        b=lIHbo7YKz61HDwNtVfFSrVm0Wqi8uCKfx3OWvRqPS+VwOS/NPYknS3d/X/ObIVAcsa60Eq
+        QcFAHQnns6at8LBA==
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-Subject: [PATCH v4 5/5] thermal/drivers/mediatek/lvts_thermal: Update calibration data documentation
-Date:   Tue, 30 May 2023 21:51:32 +0200
-Message-ID: <20230530195132.2286163-6-bero@baylibre.com>
-X-Mailer: git-send-email 2.41.0.rc2
-In-Reply-To: <20230530195132.2286163-1-bero@baylibre.com>
-References: <20230530195132.2286163-1-bero@baylibre.com>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
+In-Reply-To: <ZHYqwsCURnrFdsVm@google.com>
+References: <87sfbhlwp9.ffs@tglx>
+ <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name> <87bki3kkfi.ffs@tglx>
+ <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
+ <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name> <87mt1mjhk3.ffs@tglx>
+ <87jzwqjeey.ffs@tglx> <87cz2ija1e.ffs@tglx>
+ <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name> <87wn0pizbl.ffs@tglx>
+ <ZHYqwsCURnrFdsVm@google.com>
+Date:   Tue, 30 May 2023 21:51:59 +0200
+Message-ID: <87leh5iom8.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Balsam CHIHI <bchihi@baylibre.com>
+On Tue, May 30 2023 at 09:56, Sean Christopherson wrote:
+> On Tue, May 30, 2023, Thomas Gleixner wrote:
+>> On Tue, May 30 2023 at 15:29, Kirill A. Shutemov wrote:
+>> > On Tue, May 30, 2023 at 02:09:17PM +0200, Thomas Gleixner wrote:
+>> >> The decision to allow parallel bringup of secondary CPUs checks
+>> >> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
+>> >> parallel bootup because accessing the local APIC is intercepted and raises
+>> >> a #VC or #VE, which cannot be handled at that point.
+>> >> 
+>> >> The check works correctly, but only for AMD encrypted guests. TDX does not
+>> >> set that flag.
+>> >> 
+>> >> Check for cc_vendor != CC_VENDOR_NONE instead. That might be overbroad, but
+>> >> definitely works for both AMD and Intel.
+>> >
+>> > It boots fine with TDX, but I think it is wrong. cc_get_vendor() will
+>> > report CC_VENDOR_AMD even on bare metal if SME is enabled. I don't think
+>> > we want it.
+>> 
+>> Right. Did not think about that.
+>> 
+>> But the same way is CC_ATTR_GUEST_MEM_ENCRYPT overbroad for AMD. Only
+>> SEV-ES traps RDMSR if I'm understandig that maze correctly.
+>
+> Ya, regular SEV doesn't encrypt register state.
 
-Update LVTS calibration data documentation for mt8192 and mt8195.
+That aside. From a semantical POV making this decision about parallel
+bootup based on some magic CC encryption attribute is questionable.
 
-Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-[bero@baylibre.com: Fix issues pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>]
-Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I'm tending to just do the below and make this CC agnostic (except that
+I couldn't find the right spot for SEV-ES to clear that flag.)
+
+Thanks,
+
+        tglx
 ---
- drivers/thermal/mediatek/lvts_thermal.c | 31 +++++++++++++++++++++++--
- 1 file changed, 29 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index d5e5214784ece..9185d02003633 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -531,7 +531,8 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * The efuse blob values follows the sensor enumeration per thermal
-  * controller. The decoding of the stream is as follow:
-  *
-- * stream index map for MCU Domain :
-+ * MT8195 :
-+ * Stream index map for MCU Domain mt8195 :
-  *
-  * <-----mcu-tc#0-----> <-----sensor#0-----> <-----sensor#1----->
-  *  0x01 | 0x02 | 0x03 | 0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09
-@@ -542,7 +543,7 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * <-----mcu-tc#2-----> <-----sensor#4-----> <-----sensor#5-----> <-----sensor#6-----> <-----sensor#7----->
-  *  0x13 | 0x14 | 0x15 | 0x16 | 0x17 | 0x18 | 0x19 | 0x1A | 0x1B | 0x1C | 0x1D | 0x1E | 0x1F | 0x20 | 0x21
-  *
-- * stream index map for AP Domain :
-+ * Stream index map for AP Domain mt8195 :
-  *
-  * <-----ap--tc#0-----> <-----sensor#0-----> <-----sensor#1----->
-  *  0x22 | 0x23 | 0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A
-@@ -556,6 +557,32 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * <-----ap--tc#3-----> <-----sensor#7-----> <-----sensor#8----->
-  *  0x40 | 0x41 | 0x42 | 0x43 | 0x44 | 0x45 | 0x46 | 0x47 | 0x48
-  *
-+ * MT8192 :
-+ * Stream index map for MCU Domain mt8192 :
-+ *
-+ * <-----mcu-tc#0-----> <-----sensor#0----->        <-----sensor#1----->
-+ *  0x01 | 0x02 | 0x03 | 0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09 | 0x0A | 0x0B
-+ *
-+ * <-----sensor#2----->        <-----sensor#3----->
-+ *  0x0C | 0x0D | 0x0E | 0x0F | 0x10 | 0x11 | 0x12 | 0x13
-+ *
-+ * <-----sensor#4----->        <-----sensor#5----->        <-----sensor#6----->        <-----sensor#7----->
-+ *  0x14 | 0x15 | 0x16 | 0x17 | 0x18 | 0x19 | 0x1A | 0x1B | 0x1C | 0x1D | 0x1E | 0x1F | 0x20 | 0x21 | 0x22 | 0x23
-+ *
-+ * Stream index map for AP Domain mt8192 :
-+ *
-+ * <-----sensor#0----->        <-----sensor#1----->
-+ *  0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A | 0x2B
-+ *
-+ * <-----sensor#2----->        <-----sensor#3----->
-+ *  0x2C | 0x2D | 0x2E | 0x2F | 0x30 | 0x31 | 0x32 | 0x33
-+ *
-+ * <-----sensor#4----->        <-----sensor#5----->
-+ *  0x34 | 0x35 | 0x36 | 0x37 | 0x38 | 0x39 | 0x3A | 0x3B
-+ *
-+ * <-----sensor#6----->        <-----sensor#7----->        <-----sensor#8----->
-+ *  0x3C | 0x3D | 0x3E | 0x3F | 0x40 | 0x41 | 0x42 | 0x43 | 0x44 | 0x45 | 0x46 | 0x47
-+ *
-  * The data description gives the offset of the calibration data in
-  * this bytes stream for each sensor.
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -871,5 +871,7 @@ void __init tdx_early_init(void)
+ 	x86_platform.guest.enc_tlb_flush_required   = tdx_tlb_flush_required;
+ 	x86_platform.guest.enc_status_change_finish = tdx_enc_status_changed;
+ 
++	x86_cpuinit.parallel_bringup = false;
++
+ 	pr_info("Guest detected\n");
+ }
+--- a/arch/x86/include/asm/x86_init.h
++++ b/arch/x86/include/asm/x86_init.h
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_X86_PLATFORM_H
+ #define _ASM_X86_PLATFORM_H
+ 
++#include <linux/bits.h>
+ #include <asm/bootparam.h>
+ 
+ struct ghcb;
+@@ -177,11 +178,14 @@ struct x86_init_ops {
+  * struct x86_cpuinit_ops - platform specific cpu hotplug setups
+  * @setup_percpu_clockev:	set up the per cpu clock event device
+  * @early_percpu_clock_init:	early init of the per cpu clock event device
++ * @fixup_cpu_id:		fixup function for cpuinfo_x86::phys_proc_id
++ * @parallel_bringup:		Parallel bringup control
   */
--- 
-2.41.0.rc2
-
+ struct x86_cpuinit_ops {
+ 	void (*setup_percpu_clockev)(void);
+ 	void (*early_percpu_clock_init)(void);
+ 	void (*fixup_cpu_id)(struct cpuinfo_x86 *c, int node);
++	bool parallel_bringup;
+ };
+ 
+ struct timespec64;
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1287,6 +1287,11 @@ bool __init arch_cpuhp_init_parallel_bri
+ 		return false;
+ 	}
+ 
++	if (!x86_cpuinit.parallel_bringup) {
++		pr_info("Parallel CPU startup disabled by the platform\n");
++		return false;
++	}
++
+ 	smpboot_control = STARTUP_READ_APICID;
+ 	pr_debug("Parallel CPU startup enabled: 0x%08x\n", smpboot_control);
+ 	return true;
+--- a/arch/x86/kernel/x86_init.c
++++ b/arch/x86/kernel/x86_init.c
+@@ -126,6 +126,7 @@ struct x86_init_ops x86_init __initdata
+ struct x86_cpuinit_ops x86_cpuinit = {
+ 	.early_percpu_clock_init	= x86_init_noop,
+ 	.setup_percpu_clockev		= setup_secondary_APIC_clock,
++	.parallel_bringup		= true,
+ };
+ 
+ static void default_nmi_init(void) { };
