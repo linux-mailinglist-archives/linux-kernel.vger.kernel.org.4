@@ -2,95 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D61715579
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A0171557B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjE3GWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 02:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
+        id S230028AbjE3GX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 02:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjE3GWu (ORCPT
+        with ESMTP id S229491AbjE3GX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 02:22:50 -0400
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1468EBF;
-        Mon, 29 May 2023 23:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
-        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=XSDebSB19oA+MAG3fUqSU9st5hGlMUaKZomFXQkj8bQ=; b=YMImdWrUu2aDReyNZtLXpB54Kk
-        v1V1iaz9LXAL6jIDg7iIP2MLG6I9EZxMEqmxSHtwXqtEgm79oPgihC51IsJTPgi0wEH7jjFbZXMmK
-        KymQMz9B3RcEYtx41OSunnc5/SVEFBLvAtf//HXRk37oVPNR+2w054Neu4fha0KDNBT4=;
-Received: from p200300da7708b3c00512399822b48468.dip0.t-ipconnect.de ([2003:da:7708:b3c0:512:3998:22b4:8468] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1q3skY-00GyzG-PZ; Tue, 30 May 2023 08:22:30 +0200
-Message-ID: <1502188c-c527-3038-2163-5ca4f51ed735@nbd.name>
-Date:   Tue, 30 May 2023 08:22:29 +0200
+        Tue, 30 May 2023 02:23:56 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BD7BF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:23:55 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-786d1095270so3144122241.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685427835; x=1688019835;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gqfo1z1GAuJQ5yt1dj3tj0LVg71YTLGwlu3xzsK7YUw=;
+        b=S79w1+8U7BMH42kVmf6bTfm9N4w04aGPR5FrUOMX1MHu3QvIJb12j3ZzFb+Y20ZEAW
+         7vkS8e4Mf/aMt/G3GvmzYSgBSntdQLAxCn/zcZq5/0smkSSGvnVzILAQRHszK0xHqMLD
+         TzLKKTk6Rag11sohAOaKr79L9Bf8Vn3RRcYGriHwupBUhyQAemVDfquQ3uIc/AUZAJpu
+         ZBGtlBfNucmvBu6UcUfWF4/N1LLg/PgCQZIPkm2uRPoC3bpn9pgWBW5J017jjwz7FUEf
+         RFPhxkGCl4yLfPSEZmVJb60iNEIjL+W75eb238w7nWKeYXwJOdQCg/URwMIrNCMhGtVd
+         XO3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685427835; x=1688019835;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gqfo1z1GAuJQ5yt1dj3tj0LVg71YTLGwlu3xzsK7YUw=;
+        b=SXaVItdyXkcldsqnxlw/CQvEN9owMmGQZfTk6Q4XPyVyg3aa25qHtjy5M+tUYLibPJ
+         QIJQzvWJfkiQ58gH6McXHmjbAPE5C6a4yL10zr1gyC1CaU8nILHw8jdFW1saUetP23Qb
+         j8v82d1/9LnMVWXo1SDpKOwZwC1bEwZP8ABAyt2NBAqljojwRd9V+dAjHSiB8rwnW/oK
+         SdA+ShPQTy7LrYjPNKa38uadwU859C8UAbfeUZ7XPQ1MySOPYLKZe8nlocr0KgSOirgV
+         uE4XFT/ewpWAeamE0Bv7eTQ5eQAnhLZLli2GPOrfjmLmanEOtxRYk04LI6ES+bpuvKFk
+         wowg==
+X-Gm-Message-State: AC+VfDzlK7VOSDJLbc61YeVjdruxbUYm+Au1AyFcbC0PAlctZxpiks8U
+        0AJa7YiAEECEMiPvZ/lMwlu+eypGuFqkd1vgr+I=
+X-Google-Smtp-Source: ACHHUZ6tuYYHX4ICEWdWdKXu3RetrdmjbVJ86ts6bcNbTaUDSr6IoxCLkN+ehabPhk1WC41WwfjuN2xzbXYBRuR3/Js=
+X-Received: by 2002:a67:f6c1:0:b0:439:5ba6:17f0 with SMTP id
+ v1-20020a67f6c1000000b004395ba617f0mr377888vso.5.1685427834766; Mon, 29 May
+ 2023 23:23:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-To:     Evan Quan <evan.quan@amd.com>, rafael@kernel.org, lenb@kernel.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        kvalo@kernel.org, lorenzo@kernel.org, ryder.lee@mediatek.com,
-        shayne.chen@mediatek.com, sean.wang@mediatek.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        Mario.Limonciello@amd.com, Lijo.Lazar@amd.com
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
-        ath12k@lists.infradead.org
-References: <20230530024227.2139632-1-evan.quan@amd.com>
-Content-Language: en-US
-From:   Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH 0/9] Support Wifi RFI interference mitigation feature
-In-Reply-To: <20230530024227.2139632-1-evan.quan@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: kalunjokukk@gmail.com
+Received: by 2002:a59:ab0d:0:b0:3b7:3490:819b with HTTP; Mon, 29 May 2023
+ 23:23:54 -0700 (PDT)
+From:   Hannah Wilson <hannahdavid5578@gmail.com>
+Date:   Tue, 30 May 2023 06:23:54 +0000
+X-Google-Sender-Auth: m3gEBRoEXDGceJRvO-8MQM8kiYo
+Message-ID: <CAHTzh19A+1XifdWwwbkZANFQg8p-NQ4JYqAEnekX7CoCHBqfWw@mail.gmail.com>
+Subject: Good Day My beloved,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.1 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:936 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [kalunjokukk[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.05.23 04:42, Evan Quan wrote:
-> Due to electrical and mechanical constraints in certain platform designs there may
-> be likely interference of relatively high-powered harmonics of the (G-)DDR memory
-> clocks with local radio module frequency bands used by Wifi 6/6e/7. To mitigate
-> possible RFI interference producers can advertise the frequencies in use and
-> consumers can use this information to avoid using these frequencies for
-> sensitive features.
-> 
-> The whole patch set is based on 6.4-rc3. With some brief introductions as below:
-> Patch1:     Core ACPI interfaces needed to support WBRF feature.
-> Patch2 - 4: Enable WBRF support for some Mediatek and Qualcomm wifi drivers.
-> Patch5 - 9: Enable WBRF support for AMD graphics driver.
-> 
-> Anson Tsao (1):
->    wifi: ath11k: Add support to the Qualcomm ath11k for ACPI WBRF
-> 
-> Evan Quan (6):
->    wifi: ath12k: Add support to the Qualcomm ath12k for ACPI WBRF
->    drm/amd/pm: update driver_if and ppsmc headers for coming wbrf feature
->    drm/amd/pm: setup the framework to support Wifi RFI mitigation feature
->    drm/amd/pm: add flood detection for wbrf events
->    drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.0
->    drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.7
-> 
-> Mario Limonciello (2):
->    drivers/acpi: Add support for Wifi band RF mitigations
->    mt76: Add support to the Mediatek MT7921 for ACPI WBRF
-Wouldn't it make more sense to put this in mac80211 or cfg80211 instead 
-of duplicating the logic in different drivers?
+please i really need your urgent assistance.
 
-- Felix
-
+Please do not feel disturbed for contacting =C2=A0you in this regards, It
+was based on the critical health condition I find mine self. =C2=A0My names
+ are Mrs.Hannah Wilson David, a widow and I=E2=80=99m suffering from brain
+tumor disease and this illness has gotten to a very bad stage, I
+ married my husband for Ten years without any family members and no
+child. =C2=A0My husband died after a brief illness that lasted for few
+days.
+Since the death of my husband, I decided not to remarry again, When my
+late husband was alive he deposited the sum of =C2=A0($12.000.000.) with
+the Bank. Presently this money is still in bank. And My  Doctor told
+me that I don't have much time to live because my illness has gotten
+to a very bad stage, Having known my condition I  decided to entrust
+over the deposited fund under your custody to take care of the
+less-privileged ones therein your country or position,
+which i believe that you will utilize this money the way I am going to
+instruct herein.
+However all I need and required from you is your sincerity and ability
+to carry out the transaction successfully and fulfill my final wish in
+implementing the charitable project as it requires absolute trust and
+devotion without any failure and I will be glad to see that the bank
+finally release and transfer the fund into your bank account in your
+country even before I die here in the hospital, because my present
+health condition is very critical at the moment everything needs to be
+process rapidly as soon as possible.
+It will be my pleasure to compensate you as my Investment
+Manager/Partner with 35 % percent of the total fund for your effort in
+ handling the transaction, 5 % percent for any expenses or processing
+charges fee that will involve during this process while 60% of the
+fund will be Invested into the charity project there in your country
+for the mutual benefit of the orphans and the less privileges ones.
+Meanwhile I am waiting for your prompt respond, if only you are
+interested for further details of the transaction and execution of
+this  humanitarian project for the glory and honor of God the merciful
+compassionate.
+May God bless you and your family.
+Regards,
+Mrs.Hannah Wilson David.
+written from Hospital.
