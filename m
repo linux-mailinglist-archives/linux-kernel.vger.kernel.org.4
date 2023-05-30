@@ -2,48 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743EA715BB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20809715BBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjE3K0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
+        id S230072AbjE3K2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbjE3K0Y (ORCPT
+        with ESMTP id S231526AbjE3K1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:26:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95719E65;
-        Tue, 30 May 2023 03:24:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7E79AB6;
-        Tue, 30 May 2023 03:24:02 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3542F3F67D;
-        Tue, 30 May 2023 03:23:15 -0700 (PDT)
-Message-ID: <6fc603da-b874-0e38-2402-a112e5c3914d@arm.com>
-Date:   Tue, 30 May 2023 12:23:14 +0200
+        Tue, 30 May 2023 06:27:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D501FC9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685442283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xsvjGa+MnzAcT7Atgh+LbY2eQJDEHuopXF1gXnP8V0E=;
+        b=BIJ449tz3ayEoMKixLbHrmiYvZmPbjTvKX/+hd+BicbLXKpzRRq/+1dmdnu5o8jyxbkDn3
+        PPckbcL1doOUlmlhsA9fG8uCHeyYQpjbruVURjd+L7NFIBCASdwdmC5wqu3SH+823DLL17
+        Z7GFviB9fogfcAL50G+adjBUh68F3sI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-628-NOWmwAIAPHuFk00q8Sb5YQ-1; Tue, 30 May 2023 06:24:40 -0400
+X-MC-Unique: NOWmwAIAPHuFk00q8Sb5YQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE0EB85A5BD;
+        Tue, 30 May 2023 10:24:39 +0000 (UTC)
+Received: from work.fritz.box (unknown [10.39.193.151])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 493C2420AA;
+        Tue, 30 May 2023 10:24:38 +0000 (UTC)
+From:   Tim Wiederhake <twiederh@redhat.com>
+To:     "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, "Ingo Molnar" <mingo@redhat.com>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Tim Wiederhake <twiederh@redhat.com>
+Subject: [PATCH v2] x86/msr: Allow unprivileged read access to some MSRs
+Date:   Tue, 30 May 2023 12:23:58 +0200
+Message-Id: <20230530102358.16430-1-twiederh@redhat.com>
+In-Reply-To: <20230523194949.96149-1-twiederh@redhat.com>
+References: <20230523194949.96149-1-twiederh@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 13/17] PM: EM: Refactor struct em_perf_domain and add
- default_table
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        rostedt@goodmis.org, mhiramat@kernel.org
-References: <20230512095743.3393563-1-lukasz.luba@arm.com>
- <20230512095743.3393563-14-lukasz.luba@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230512095743.3393563-14-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,19 +64,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 11:57, Lukasz Luba wrote:
-> The Energy Model support runtime modifications. Refactor old
-> implementation which accessed struct em_perf_state and introduce
-> em_perf_domain::default_table to clean up the design. This new field
-> is better aligned with em_perf_domain::runtime_table and helps to
-> distinguish them better.
-> 
-> Update all drivers or frameworks which used the old field:
-> em_perf_domain::table and now should use em_perf_domain::default_table.
+Software such as qemu and libvirt require the raw content of some MSRs
+to calculate host CPU capabilities. This is currently done through
+/dev/cpu/*/msr which is locked behind both CAP_SYS_RAWIO and file mode
+0600, allowing only root to read and write MSRs.
 
-I still believe that doing this refactoring before the introducation o
-the new feature `runtime modifiable EM` would do wonders on the
-tangibility of the other patches in this set.
+Expose some non-security sensitive MSRs through sysfs to allow access
+for unprivileged processes. This also helps other programs that are
+interested in IA32_EFER for x86-64-v1 detection.
 
-[...]
+Signed-off-by: Tim Wiederhake <twiederh@redhat.com>
+---
+Changes to v1 (https://lkml.org/lkml/2023/5/23/1230):
+* removed patch to limit reads to /dev/cpu/*/msr to 8 bytes per read
+* removed CAP_SYS_RAWIO-less access to /dev/cpu/*/msr
+* introduced sysfs interface to msrs
+
+With this sysfs-based, unrestricted read access to some select msrs in
+place, a later patch could introduce checks for CAP_SYS_RAWIO for every
+access to /dev/cpu/*/msr as mentioned in the feedback to v1.
+---
+ arch/x86/kernel/msr.c | 45 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+
+diff --git a/arch/x86/kernel/msr.c b/arch/x86/kernel/msr.c
+index 7bb17d37db01..3c8354f3c2bd 100644
+--- a/arch/x86/kernel/msr.c
++++ b/arch/x86/kernel/msr.c
+@@ -50,6 +50,31 @@ enum allow_write_msrs {
+ 
+ static enum allow_write_msrs allow_writes = MSR_WRITES_DEFAULT;
+ 
++struct allow_read_msrs {
++	const char *procname;
++	u32 index;
++	u32 value[2];
++};
++
++static struct allow_read_msrs allow_reads[] = {
++	{
++		.procname = "ia32_core_caps",
++		.index = MSR_IA32_CORE_CAPS,
++	},
++	{
++		.procname = "ia32_arch_capabilities",
++		.index = MSR_IA32_ARCH_CAPABILITIES,
++	},
++	{
++		.procname = "efer",
++		.index = MSR_EFER,
++	},
++};
++
++static struct ctl_table msr_files[ARRAY_SIZE(allow_reads) + 1];
++
++static struct ctl_table_header *msr_files_header;
++
+ static ssize_t msr_read(struct file *file, char __user *buf,
+ 			size_t count, loff_t *ppos)
+ {
+@@ -258,6 +283,25 @@ static char *msr_devnode(const struct device *dev, umode_t *mode)
+ static int __init msr_init(void)
+ {
+ 	int err;
++	int i, j;
++
++	for (i = 0, j = 0; i < ARRAY_SIZE(allow_reads); ++i) {
++		err = rdmsr_safe_on_cpu(0, allow_reads[i].index,
++					&allow_reads[i].value[0],
++					&allow_reads[i].value[1]);
++		if (err)
++			continue;
++		msr_files[j].procname = allow_reads[i].procname;
++		msr_files[j].data = &allow_reads[i].value;
++		msr_files[j].maxlen = 2 * sizeof(u32);
++		msr_files[j].mode = 0444;
++		msr_files[j].proc_handler = proc_doulongvec_minmax;
++		++j;
++	}
++
++	msr_files_header = register_sysctl("vm/msr", msr_files);
++	if (!msr_files_header)
++		return -ENOMEM;
+ 
+ 	if (__register_chrdev(MSR_MAJOR, 0, NR_CPUS, "cpu/msr", &msr_fops)) {
+ 		pr_err("unable to get major %d for msr\n", MSR_MAJOR);
+@@ -287,6 +331,7 @@ module_init(msr_init);
+ 
+ static void __exit msr_exit(void)
+ {
++	unregister_sysctl_table(msr_files_header);
+ 	cpuhp_remove_state(cpuhp_msr_state);
+ 	class_destroy(msr_class);
+ 	__unregister_chrdev(MSR_MAJOR, 0, NR_CPUS, "cpu/msr");
+-- 
+2.39.2
 
