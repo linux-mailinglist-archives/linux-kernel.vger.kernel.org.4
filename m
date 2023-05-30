@@ -2,109 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15753716FFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B557C717004
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233599AbjE3Vu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 17:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
+        id S232804AbjE3V4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 17:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbjE3Vuz (ORCPT
+        with ESMTP id S230399AbjE3V4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 17:50:55 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670A4C7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:50:54 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b04949e4e9so15654275ad.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:50:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685483454; x=1688075454;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qRVnrkfI461qrvcEb8rSb2NenPhq34qymwuOIIwape8=;
-        b=EuE5zdMBWfn99VbLUbG01rDj/zB95BmppDynbVaJhhPOmJCCuf+Dx7IyrbEd6xvNGs
-         tPWk/ml+xtavbMiLpGhGOZ6tMeOxNUb9AvDHZLi8VenLSgPkMgx7RcHnDJ42h6Rmkej5
-         JPEqeudSt72B5cmmpo6EK8/vc8i3qYr12sNMA0CaBxm5Ucr4JLwZwrKqjxKXIn1vjgVe
-         5YuB8TSV0a0MYy7G4Nz0ILS6b1C7rBYq4R8mjeBqTwqVJHcT97/p9RK/tzX+e4H9/qkL
-         nX6w3EWqgHPPRSwbtro4ZNHeVXC/dzi2NeYgK3KpEKbWejmC7wGg4J00ygNFMOkdVGgL
-         Pkqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685483454; x=1688075454;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qRVnrkfI461qrvcEb8rSb2NenPhq34qymwuOIIwape8=;
-        b=ihe/nj5VYqHu6EjOnhCthJYxMuwhWQ7a7WWhT0pyoP+nFlMTfiZ51Pdf6kWScm9AGz
-         +PPT5sGD5zjcBsgMlZkbjJNNJgw6YNDgB6rukf8VNI267Mri/LPuQbc+nOIk0pgm5Ul7
-         RxrqrPWQmqlOqKrTlhqgrltEfxUJWJY+Tf9ZkqaGcC0SklIyICLaPZbpSaLX0abYCyqj
-         yE1s9QqtZWEInezrl+fqzf1S7/pURI7v0e1wds9ouCccv/4A4pTWbz298dQ99Hquaoe8
-         x9GnSulY910S/XYoQdIvkzeuMYUJY8p6HqrTlS9s24UNV8JakgQW+NNyuBnhae+/YX/k
-         O3Dw==
-X-Gm-Message-State: AC+VfDz6s0pLenmkX4PtGZEFc2RNXIvPUBVLC7fKOIkc1t8qdu4mIYj4
-        n+k6fCrmE42NP08u0euhdqZdRA==
-X-Google-Smtp-Source: ACHHUZ5jkxi5ZAPfXlloWvkLRbdfPHSORs9oJxc2QrDTfifJfdAy4R9ZP/5z1PJeb4q56ovXAhjToQ==
-X-Received: by 2002:a17:902:e545:b0:1b0:f727:bc41 with SMTP id n5-20020a170902e54500b001b0f727bc41mr960902plf.42.1685483453720;
-        Tue, 30 May 2023 14:50:53 -0700 (PDT)
-Received: from [192.168.60.239] (124.190.199.35.bc.googleusercontent.com. [35.199.190.124])
-        by smtp.gmail.com with ESMTPSA id m18-20020a170902db1200b001aae64e9b36sm10754865plx.114.2023.05.30.14.50.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 14:50:53 -0700 (PDT)
-Message-ID: <b1d1c907-406a-57bd-daf5-4366f8714cad@google.com>
-Date:   Tue, 30 May 2023 14:50:52 -0700
+        Tue, 30 May 2023 17:56:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC8FAA;
+        Tue, 30 May 2023 14:56:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABFD563428;
+        Tue, 30 May 2023 21:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155E0C4339B;
+        Tue, 30 May 2023 21:56:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685483761;
+        bh=Ab636SorLnuyDFcIFL0cr5qH3o9zsfvAyUFNn1onptE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LD90/uFvg1c9KtUp5XlCN6TLyRrLVWiD/k1mAkB6LTHMyhkKat/JuAR2MZIgSuDzo
+         ov48JowkudsOWCQmJYqWBhSSCkwtRyZhMf7fxz31zkTBfbgf7FGMmslcBPGhAaZ7vC
+         Kto1pIX9ZiYOGXuEITuPjeozzGJ2WwSn0JNKgietL5W5YTe2jeIwltrNo6vXzTdszN
+         x9ybVggT5nV1Ae5yMkEZzds94bsE1I5Lbnl39uYbXN4Uo/FYrbYY/U4xZuAGOy1YsT
+         4wRK/5ipoafDM7eIJ9cKhWUQK9ZOUkrC8WTMwziy8c5JYeUwMk50mKJz70sUJuBD+i
+         wCuTC9xh4F97w==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4f4b256a0c9so5618556e87.2;
+        Tue, 30 May 2023 14:56:00 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwELUuymbal/WntEX3MW+zdk/lxHL+GwFmeIZdG7fFnOlo3rIHD
+        /NYNsF1yI9u/FKmmiB7eStJphzzosSJqpaG39hs=
+X-Google-Smtp-Source: ACHHUZ4zr978lSzTsVGiCf+DXNhcvkMtgDHh9kSk0Aqpbcc7UaKTx/R5piztamZfuAB6rp/+2+KeTsQGvIBfYxcdF+M=
+X-Received: by 2002:a05:6512:69:b0:4f1:1de7:1aac with SMTP id
+ i9-20020a056512006900b004f11de71aacmr1379883lfo.20.1685483759116; Tue, 30 May
+ 2023 14:55:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
- only when started
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        Alistair <alistair@alistair23.me>, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-References: <20230407030741.3163220-1-badhri@google.com>
- <0cf8c588b701d7cf25ffe1a9217b81716e6a5c51.camel@alistair23.me>
- <1ac16f0a-3cca-40ca-c444-82719f85a24c@leemhuis.info>
- <ZGStr1oZvmJ0XzSu@francesco-nb.int.toradex.com>
- <53213ba8-be58-0f97-8a06-3c9380bdff53@leemhuis.info>
- <CAPTae5Lz=efNKhCnoy6Hp78HFqCLqxtWdZQ7zSDx2omeYf2KDw@mail.gmail.com>
-Content-Language: en-US
-From:   Avichal Rakesh <arakesh@google.com>
-In-Reply-To: <CAPTae5Lz=efNKhCnoy6Hp78HFqCLqxtWdZQ7zSDx2omeYf2KDw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-17.7 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20230527072218.2365857-1-linan666@huaweicloud.com> <20230527072218.2365857-4-linan666@huaweicloud.com>
+In-Reply-To: <20230527072218.2365857-4-linan666@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 30 May 2023 14:55:47 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7ZeiFNoiY=-EVwj67FhnaW5rphkkumBrSCdtHHgBxzNw@mail.gmail.com>
+Message-ID: <CAPhsuW7ZeiFNoiY=-EVwj67FhnaW5rphkkumBrSCdtHHgBxzNw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] md/raid10: fix incorrect done of recovery
+To:     linan666@huaweicloud.com
+Cc:     bingjingc@synology.com, allenpeng@synology.com, shli@fb.com,
+        alexwu@synology.com, neilb@suse.de, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linan122@huawei.com,
+        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, May 27, 2023 at 12:24=E2=80=AFAM <linan666@huaweicloud.com> wrote:
+>
+> From: Li Nan <linan122@huawei.com>
+>
+> Recovery will go to giveup and let chunks_skipped++ in
+> raid10_sync_request() if there are some bad_blocks, and it will return
+> max_sector when chunks_skipped >=3D geo.raid_disks. Now, recovery fail an=
+d
+> data is inconsistent but user think recovery is done, it is wrong.
+>
+> Fix it by set mirror's recovery_disabled, spare device will not  be added
+> to here. The same issue alos exists on resync, it will be fixd in future.
+>
+> Signed-off-by: Li Nan <linan122@huawei.com>
 
+I applied 1/4 and 2/4 of the set to md-next.
 
-On 5/17/23 10:45, Badhri Jagan Sridharan wrote:
-> Keeping the thread updated. I sent out
-> https://www.spinics.net/lists/kernel/msg4792009.html few hours earlier
-> and have requested help from Francesco, Alistair and others who
-> reported the issue.
-> Discussing with Alan stern on the feedback he had left.
-> 
+For 3/4 and 4/4, please improve the commit log (rephrase confusing statemen=
+ts,
+fix typo's, etc.). Please also add a mdadm test for 3/4.
 
-Tangential to the original issues: it looks like patch 2/2 also
-breaks gadget functions that sets `bind_deactivated` to true.
+Thanks,
+Song
 
-When usb_gadget_connect is called while the gadget is deactivated from
-functions binding, it sets gadget->connected to true, but does not call
-the pullup function. Later, when the gadget function calls
-usb_gadget_activate which in turn calls usb_gadget_connect, the pullup
-function isn't called because gadget->connected is true.
-
-- Avi
+> ---
+>  drivers/md/raid10.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index d93d8cb2b620..3ba1516ea160 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -3303,6 +3303,7 @@ static sector_t raid10_sync_request(struct mddev *m=
+ddev, sector_t sector_nr,
+>         int chunks_skipped =3D 0;
+>         sector_t chunk_mask =3D conf->geo.chunk_mask;
+>         int page_idx =3D 0;
+> +       int error_disk =3D -1;
+>
+>         /*
+>          * Allow skipping a full rebuild for incremental assembly
+> @@ -3386,7 +3387,20 @@ static sector_t raid10_sync_request(struct mddev *=
+mddev, sector_t sector_nr,
+>                 return reshape_request(mddev, sector_nr, skipped);
+>
+>         if (chunks_skipped >=3D conf->geo.raid_disks) {
+> -               /* if there has been nothing to do on any drive,
+> +               pr_err("md/raid10:%s: %s fail\n", mdname(mddev),
+> +                       test_bit(MD_RECOVERY_SYNC, &mddev->recovery) ?  "=
+resync" : "recovery");
+> +               if (error_disk >=3D 0 &&
+> +                   !test_bit(MD_RECOVERY_SYNC, &mddev->recovery)) {
+> +                       /*
+> +                        * recovery fail, set mirrors.recovory_disabled,
+> +                        * device shouldn't be added to there.
+> +                        */
+> +                       conf->mirrors[error_disk].recovery_disabled =3D
+> +                                               mddev->recovery_disabled;
+> +                       return 0;
+> +               }
+> +               /*
+> +                * if there has been nothing to do on any drive,
+>                  * then there is nothing to do at all..
+>                  */
+>                 *skipped =3D 1;
+> @@ -3638,6 +3652,8 @@ static sector_t raid10_sync_request(struct mddev *m=
+ddev, sector_t sector_nr,
+>                                                        mdname(mddev));
+>                                         mirror->recovery_disabled
+>                                                 =3D mddev->recovery_disab=
+led;
+> +                               } else {
+> +                                       error_disk =3D i;
+>                                 }
+>                                 put_buf(r10_bio);
+>                                 if (rb2)
+> --
+> 2.31.1
+>
