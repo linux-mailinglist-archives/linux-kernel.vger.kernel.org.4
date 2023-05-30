@@ -2,81 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1164A715C47
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF09F715C4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjE3Kw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+        id S230045AbjE3Kxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjE3Kwz (ORCPT
+        with ESMTP id S229739AbjE3Kxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:52:55 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB31893;
-        Tue, 30 May 2023 03:52:54 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id B567032009BB;
-        Tue, 30 May 2023 06:52:53 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 30 May 2023 06:52:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1685443973; x=1685530373; bh=6D
-        AjeLvw+wKEwgsFPhuXSaW+FtA9B09IvVBcjDHsLhs=; b=SzxpiHYjP+znZcj7so
-        Z7zuEwScbae3+nH65JrfNeoZoaEN4CZa6HWU4qpKwVcdmcGQw1fsCih0VLq3eVu1
-        bFxDpEB2P7KL+76wtoP52giLaTm7gFigWOoGfpgVKEgHKCa2VetwRZIyZUfO6mjY
-        6jLPT/4VJXrpHfIZaJJ0ZWuMrCnkiSFnW+XY71voBKVFm2+VR2QQ+OWlNrfaxcN1
-        c6MkA0CW6SMQdJ8DQrCZyn+vww68auRp9N8yjTWXi98Y5HPkBw2GxqbMbdgFcfdG
-        k6HtzaS+BC9mw+YrJtmFzDInN5qshngRilZufAumfygk4e5HsoqCQFqLhK+JZAkS
-        p6Og==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685443973; x=1685530373; bh=6DAjeLvw+wKEw
-        gsFPhuXSaW+FtA9B09IvVBcjDHsLhs=; b=CpgMy1TY6ldkyZPtfK/yqn91MRYqp
-        i7vDR1vOo7cc3DIoIA/Fw0P8oceSrzdYm9RbnStammq+oR9xGWh8K9oKXNTRo1rH
-        +MoxmvqHhF0GfIYntgmazn0ZR0vSB1dDdkI1t0a6lmoqaN4kOFy096dpiw8ZjqgF
-        SE7t2D3lDLjtL2tQoanDHAQv6PB3MeruR9ZTR9Ex3kJcqfzbzpyBJbyX3x0W6BwS
-        K7Oazm/G/BPtz4Vzta3O3SJeigM3uix218tuDL7I8kwGCAeXDJ+389haZyny2169
-        LB3jvu/Be3AVcktJbV/UMcE9f79FtGI9Or9Wkijli0SS0b9NXyYczeOUw==
-X-ME-Sender: <xms:hdV1ZFWGv5qQ5bEtfKIjQZQ6VOC-3u4XZSCax5uLtEllmeqT60-Q3Q>
-    <xme:hdV1ZFmsjsor_hQPPlgQHSnwaCL30DH6HAO1qAhTJUfXOqz4thymV6w8rqD682tQn
-    z5vGhl1cjNOjOrPEBQ>
-X-ME-Received: <xmr:hdV1ZBawA3XutzMaQ-Cs16jHn5ZqTyxX4fVUgl9GndZdpidOTTnFi4qq__gcG-EU7zFdnbkp-CvHUx-hpnPbqaLJG3h4To4Z_gdvgPgfiH-6MA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgfedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepvfgrkhgrshhh
-    ihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
-    eqnecuggftrfgrthhtvghrnhepffdvueelffevkeduhfetjeduffeghfettdfguedtgfdv
-    gfeufeduheevheevkeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
-X-ME-Proxy: <xmx:hdV1ZIUp8c9MuoXqIr2VsSvlGt0r88ZEoNH45rnA6NcsdX5PjwpxZg>
-    <xmx:hdV1ZPnv2w2uywAiDK6KPvcOJUJVpQYyimqiPloJnxzx9ezkGG7NdQ>
-    <xmx:hdV1ZFd_sShtAnoHWtzg-9ikDUDcXkQ46hj_SU3qgDJQ-fCX5hGcgw>
-    <xmx:hdV1ZKtzlOVdSglq7A1Lc70euJE0LF6ApyBsQ0LPFAKOvXegGYxbEw>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 May 2023 06:52:51 -0400 (EDT)
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: Kunit: add MODULE_LICENSE to sample code
-Date:   Tue, 30 May 2023 19:52:48 +0900
-Message-Id: <20230530105248.68238-1-o-takashi@sakamocchi.jp>
-X-Mailer: git-send-email 2.39.2
+        Tue, 30 May 2023 06:53:51 -0400
+Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEFC93
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:53:50 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
+        id 412208c1-fed8-11ed-a9de-005056bdf889;
+        Tue, 30 May 2023 13:53:48 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Tue, 30 May 2023 13:53:47 +0300
+To:     "xingtong.wu" <xingtong_wu@163.com>
+Cc:     andy.shevchenko@gmail.com, simon.guinot@sequanux.org,
+        Linus Walleij <linus.walleij@linaro.org>, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        henning.schild@siemens.com, xingtong.wu@siemens.com
+Subject: Re: [PATCH v2 1/1] gpio-f7188x: fix base values conflicts with other
+ gpio pins
+Message-ID: <ZHXVu-oARZKVOyzm@surfacebook>
+References: <20230529025011.2806-1-xingtong_wu@163.com>
+ <20230529025011.2806-2-xingtong_wu@163.com>
+ <ZHSZ9cK78qc5QeZD@localhost>
+ <CACRpkdbiRsJqxVZPNLvLPK-MzEhyjSBGffuaTgP7tt40pGGoRw@mail.gmail.com>
+ <ZHSunJyh2AU1eb0H@localhost>
+ <ZHUmHkbM-l_pRaY3@surfacebook>
+ <5428dcc3-bcaf-2fff-59db-62d3b3b45d17@163.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <5428dcc3-bcaf-2fff-59db-62d3b3b45d17@163.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,29 +51,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sample code has Kconfig for tristate configuration. In the case, it
-could be friendly to developers that the code has MODULE_LICENSE, since
-the missing MODULE_LICENSE brings error to modpost when the code is built
-as loadable kernel module.
+Tue, May 30, 2023 at 02:27:09PM +0800, xingtong.wu kirjoitti:
+> On 2023/5/30 06:24, andy.shevchenko@gmail.com wrote:
+> > Mon, May 29, 2023 at 03:54:36PM +0200, simon.guinot@sequanux.org kirjoitti:
+> >> On Mon, May 29, 2023 at 03:03:28PM +0200, Linus Walleij wrote:
+> >>> On Mon, May 29, 2023 at 2:27 PM <simon.guinot@sequanux.org> wrote:
+> >>>
+> >>>> It would be nice if a pin number found in the device datasheet could
+> >>>> still be converted into a Linux GPIO number by adding the base of the
+> >>>> first bank.
+> >>>
+> >>> We actively discourage this kind of mapping because of reasons stated
+> >>> in drivers/gpio/TODO: we want dynamic number allocation to be the
+> >>> norm.
+> >>
+> >> Sure but it would be nice to have a dynamic base applied to a controller
+> >> (and not to each chip of this controller), and to respect the interval
+> >> between the chips (as stated in the controllers datasheets).
+> > 
+> > What you want is against the architecture. To fix this, you might change
+> > the architecture of the driver to have one chip for the controller, but
+> > it's quite questionable change. Also how can you guarantee ordering of
+> > the enumeration? You probably need to *disable* SMP on the boot time.
+> > This will still be fragile as long as GPIO chip can be unbound at run
+> > time. Order can be changed.
+> > 
+> > So, the patch is good and the correct way to go.
+> > 
+> > P.S. The root cause is that hardware engineers and documentation writers
+> > do not consider their hardware in the multi-tasking, multi-user general
+> > purpose operating system, such as Linux. I believe the ideal fix is to fix the
+> > documentation (datasheet).
+> 
+> Thanks for your review.
+> 
+> The direct reason of this patch is that when "modprobe gpio-f7188x",
+> it conflicts with INT34C6. I met this issue on an older kernel, but
+> could not remember which version exactly.
 
-Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
----
- Documentation/dev-tools/kunit/start.rst | 2 ++
- 1 file changed, 2 insertions(+)
+This is interesting. But what I have noticed the v6.3.2 missing this
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/gpio/gpiolib.c?id=7dd3d9bd873f138675cb727eaa51a498d99f0e89
+change. Can you apply and retest?
 
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index c736613c9b19..d4f99ef94f71 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -250,6 +250,8 @@ Now we are ready to write the test cases.
- 	};
- 	kunit_test_suite(misc_example_test_suite);
- 
-+	MODULE_LICENSE("GPL");
-+
- 2. Add the following lines to ``drivers/misc/Kconfig``:
- 
- .. code-block:: kconfig
+If this does not help, please share more details, exact steps of reproducing
+the issue, including respective `dmesg` output, etc. (maybe via creating a
+kernel bugzilla report).
+
+> The error message is as the link below:
+> https://elixir.bootlin.com/linux/v6.3.2/source/drivers/gpio/gpiolib.c#L798
+
 -- 
-2.39.2
+With Best Regards,
+Andy Shevchenko
+
 
