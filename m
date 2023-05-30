@@ -2,398 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00548715905
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E367158F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjE3IuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S229680AbjE3Ipz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjE3It6 (ORCPT
+        with ESMTP id S229553AbjE3Ipx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:49:58 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10EB100
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:49:50 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96fe88cd2fcso750591166b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685436589; x=1688028589;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=sKvmcYNdw0/e/A3ebTbEuUOu5G8ColBz5GGjZ4+9ndk=;
-        b=Vbdj6KueAzHTkZQx/3tFSDLBLrmoaxp+qeJQG9Yx46L/72isRnbTSayQMxXE5a2Qra
-         a5zdb0QoE/fzNwQ4jnZxAlF4X5+jd5LL8Bkd+brSrDz1oAg8PECciFTFDYCCm5Hqb8x9
-         LfIespmZFaroU1kKNOnHmWNBHeRPfN/v3ccMkLakbn3KtYdPO7TBKc/tUN+WjJrNNlIE
-         Xg+4hf0POBYyhM/AHyHdLY4sC/7S9z1gWIujnWG6jHwFNciliYju7/bQ6wUNoeM9ecjw
-         Wuhac5/GOYPEY0w4CVuK0+R3Ev8YfKxwV4PtTiuxsH0m1Oy7Bjw3XehRlxFwhZ1Jccrd
-         nd1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685436589; x=1688028589;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sKvmcYNdw0/e/A3ebTbEuUOu5G8ColBz5GGjZ4+9ndk=;
-        b=La6n1zKfZQiK5bRUEK9eetv26QQcv0kWY36/pUTi5boyPQlF4K43dHAUgYbgk4i1QV
-         H517bK5fehYsIVHTQ3fHuutVJjbpmdUVldiOsWJB9bA+jXr/0rRoGQDlmMhT6ZFheh82
-         hO6boY/sUm0ARsH6EzJ4qvD3OdkHfFr3BSPoyPRG7hffx/AQKUTkZZT88ldk7Slbc+Lf
-         bbryQF6cb5H2oBNIegNwrDGLY0OdiVOODDz/enD6zr6E9/0Ffvbxcbg5RV5GUZF7XbS4
-         mXmzg7dfS/Fc9+Lt2mUWhBJ15JK9eLcTZHJr6SNkC5cH3kdVqik8fdbpR70MjxJOp4PM
-         19+w==
-X-Gm-Message-State: AC+VfDw6WTVO9wODFU5QcUQEw/0SO0T+/5usVL+53f3p81SnOu2qHAe2
-        Auuc+Eotv5reoRD1AfTlOMAQZw==
-X-Google-Smtp-Source: ACHHUZ7z3kEkvDHVP+7DvSK/H+8I5/Mb7V9cBL39bNad6iVtKtda2JsjDnstktVTcfupCl0tUR6XMA==
-X-Received: by 2002:a17:907:7e94:b0:96f:a935:8998 with SMTP id qb20-20020a1709077e9400b0096fa9358998mr1738140ejc.39.1685436589164;
-        Tue, 30 May 2023 01:49:49 -0700 (PDT)
-Received: from localhost ([194.62.217.2])
-        by smtp.gmail.com with ESMTPSA id uz16-20020a170907119000b00965a56f82absm7058798ejb.212.2023.05.30.01.49.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 01:49:48 -0700 (PDT)
-References: <20230517203119.3160435-1-aliceryhl@google.com>
- <20230517203119.3160435-6-aliceryhl@google.com>
-User-agent: mu4e 1.10.3; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v1 5/7] rust: workqueue: add helper for defining
- work_struct fields
-Date:   Tue, 30 May 2023 10:44:19 +0200
-In-reply-to: <20230517203119.3160435-6-aliceryhl@google.com>
-Message-ID: <87leh69par.fsf@metaspace.dk>
-MIME-Version: 1.0
+        Tue, 30 May 2023 04:45:53 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2128.outbound.protection.outlook.com [40.107.215.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B091A1;
+        Tue, 30 May 2023 01:45:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LMi1h0jFTji8uOPri5kd6S/OQldMZNJy0jevX4Ahb4YWIO2N5hD4dPkIG3OxVc4T26xXO+I7f2SF3VmCciOx3A2rrLCViqQ6KswvToHhdimuCIwiSW/7Av31GTfOqRX/SKXntq4oa5YOvDi91sWRf1kAW723PmXkZUWGiFjZ41RwvLD1jhVfT4Ojy9TEcoIoG5lmNUhMfkK6Lht82c9oTwjfURSjrP+2b8Ob63LIWaIF65hoJVrJxL2KLNvbnZ5wbQcNnBjGRCiJEnNoW3ItwQKLsPgZLdFJUpP2qpaf77KbpFvFCpqRaLJFX33L9Z/hKng45wY0SWA8uRIXZwSO5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gxec+QlojZDbZO4XWxTUaQdUcZhwseYskfYJQntQvCY=;
+ b=NNRbU74h6g/JkchZ1BvsP79klEMAgot0k9LqzwWwFyqW9QugVo5wVgOVydFK1OwyMCtriMFrRccw1o9ifFIsAUh2B/3W6PfHUkEOv4H1CCc3LWcEq1aCOEwCFLaaUtEKekvV/F+4Mfv1u2khNsL5nTIiXoZ9kYS3vopTi5f1acqVUccOEswb2rZXqKaa/ILqDCc8mYSotN2On0EbMvGu1bVY6Zmi1OtVN3/ev+lXYm/swDge54CiyvxKZNPctjG2c+AfV7/7egR5D7eEzmO06lWu7MG5QbVSsmqLYKzSfVPhDK40cJFymOVnUeix4BgX99IWTpb8Lulv7xg5lOnfMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gxec+QlojZDbZO4XWxTUaQdUcZhwseYskfYJQntQvCY=;
+ b=BQAGYqWhX9iYAUoWlv05TUT+CmlQewyXtwWqgupuBaeK8v3SsCAOnKOFN/LJozPH0raPpvN3YoJCESl3ARByyLdWK+ElH5o9vo7ROCKpzWpwrRe995QoXdO49HxbGxHBaR7vMeOe2b3kdLNIF0NaGOhX6428JA+kiB434wB+ds27mClKA0J0YNH4KAgAHyCsuMfipJ4fUXzngKCDgtyHFhVI9ASYt/5OWxKmcHcKL9kbCnjUTgLOu0aNJu/x4FkAoTXGX+zvcLssi1J+Vtj/JEwkHbDEhqyCKICxum++sRbOSjNpPjuWDvmzcgLiWHew0Pi4KMQnE6LwqPZznZYyJw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+ by SEYPR06MB5326.apcprd06.prod.outlook.com (2603:1096:101:6b::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
+ 2023 08:45:47 +0000
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6433.018; Tue, 30 May 2023
+ 08:45:47 +0000
+From:   Lu Hongfei <luhongfei@vivo.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev@vger.kernel.org (open list:ETHERNET PHY LIBRARY),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
+Subject: [PATCH] net: Replace the ternary conditional operator with min()
+Date:   Tue, 30 May 2023 16:45:30 +0800
+Message-Id: <20230530084531.7354-1-luhongfei@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: SI2PR02CA0012.apcprd02.prod.outlook.com
+ (2603:1096:4:194::7) To TYZPR06MB6697.apcprd06.prod.outlook.com
+ (2603:1096:400:451::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|SEYPR06MB5326:EE_
+X-MS-Office365-Filtering-Correlation-Id: 26689f37-ce37-4767-2787-08db60ea4360
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rjfF1Rt8iDCguQtN9VOFzhiufcLcyq+iRNbZ2SkVZcmwAjMWdV4boCmicEIWjQUQ8PDQFncArCcXIlXu4IIVQvsqEnlQbNpgOV3fDf6bWJYARuZJq3tZMekZli4MSxhHLYMLAgcMT5E+g0G4rU66XEEKhrSDJJzXCpbTilsaoGhmZ3LzEVgVpp3k0U+kT0rEwH+4uCvI4H1/ldwRhY1KZ7R7jqVz5YL2MegR3rK6LTt7BGEUvDh2qxF3ueaL/pKK76AeIZCmZI5GbBe2sH40QP717M7ZkgYI/jfsnz9456moA+tacBjvaTOiWzp8yL4X92rLtgUQEciAGkUawTTy8TL5sFqCi7iOLqrgIyh6uyNrfCTxvcHoL98tU8RJHMe9Mdod+GGVqfzxn9O5MhwNrJiAt5DjQXudxSs6r7eWkVilmiy+e7d2buRMMY3vjCA1jEmER9Ts/KAJshsIjd/g80fesQpEfuNQ8BsJSfkI+IiQiIWSo4+lzSpFZ54vxnHS4x+w+pZDnrBd/39wD36wBu2K7tcPqhFSuchJLADE2ERUhUkCdSQstD89BJFvhVoILDgzIuSLZoEVY5HiLiZdj0Rpzp0ksBo34PzMi7TptRDkSbDdSd2qYuTyiuFZBvXO
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(39860400002)(346002)(396003)(136003)(451199021)(186003)(107886003)(2616005)(38350700002)(38100700002)(41300700001)(83380400001)(6512007)(6506007)(26005)(1076003)(6486002)(6666004)(52116002)(478600001)(110136005)(4326008)(66476007)(66946007)(66556008)(316002)(5660300002)(8676002)(8936002)(2906002)(86362001)(4744005)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IfS3s8dmQTGO8r1unO1KnVwL0d1/P8WqZ2azTwyCIXvrJjDKJ22WOkOAilkG?=
+ =?us-ascii?Q?JGocIixhrJlEk+5FL7q0EygRCQ8tV94/YyfAkw0A8kqyMQSnS6PbhAoOwdtB?=
+ =?us-ascii?Q?V3Wce8vSSdUQ/mJGEBiM2Avcrg13K/fi5w6Qnc0cMCafmLDqu301EVCOvPt3?=
+ =?us-ascii?Q?WG35JceSCV5kOZ9zdqDURXoi54AzhLA1TMfjZs7uyqWlajtJD3sBOSZ+iLHX?=
+ =?us-ascii?Q?6gWpg/2REs/YeAl4G+kMacBjZP/EJCtkyw/HiOfVfgvZpvUgpnG8K/srn2/A?=
+ =?us-ascii?Q?NFl/1HQjUtgBZMkIo3JZYKebKOmWRHNGef55NAx6LroxZWQ01w1zvXHleVHN?=
+ =?us-ascii?Q?xTJ93bTyimRaigls53QeHfbO6iquYBXd4q0Y24YakPa3BIlthBx1M0UTPOH4?=
+ =?us-ascii?Q?vYjJHkL/AJNP1pX6FRv5M4pIDaG8WX9s0gwh4G068f/vFOTWdR5GAypRrdqJ?=
+ =?us-ascii?Q?8RGDsJdfOoiYUf8l/oAPmxuTCmq8XapOhljsRZcF+FVPkyX/rpqRJVtSVfgY?=
+ =?us-ascii?Q?Cmz8uFduybay8MrqzdTl/EisPbwUAt5WqS7RVlM7oKR+iEQ9g6EHQiY8lOvb?=
+ =?us-ascii?Q?8J34ShmzIiTG2kQffq+FpWYcDQ4MQs5GnyLr0QibsTqgy1u6kBPoOtZmzQqi?=
+ =?us-ascii?Q?7Lp0iQQof5shYQMFsB+kwWENVwWm98r58Gcc1Jmfw5SpOjcysAvZpFtIu71c?=
+ =?us-ascii?Q?gbMtQYGLzBY9NkCgYYZOoaKzwUrh4RUe5frIhDiI8bRu+SuaR/OlUU5NDW/p?=
+ =?us-ascii?Q?Y7KS+WCbgFw3nJ6H/7yJ4jjh3A9Wb2oEivj8s+Q7I0KMMzoj8Yq6f/s4m9S3?=
+ =?us-ascii?Q?ja3gmtOSValIapGkizxjQZdi40iW2uxRstryrO+76GaBlH+xKffMXKu2GNCW?=
+ =?us-ascii?Q?PB7DEodI9WYY1qYdKZY0aESSB0U4jH+Z1mdaXNlWUnb1YQFRuEaiWafFwl9J?=
+ =?us-ascii?Q?MMRCQ9vUjQcl4kqHtAOqSU5RsKEQLeALzMBoG0xC6p1iWh7vX1ukTPJeTLGx?=
+ =?us-ascii?Q?O7sL81TIHNmtiCRQDN1foiCi+dxdesxbNdF/O/E87s9yYNuLDHyOngfoQCil?=
+ =?us-ascii?Q?IsK3o06Zm5IayJlBKk29hXyodowJCPG37k6SLu88xMRUzzEv1k5hlHlFc9g5?=
+ =?us-ascii?Q?rsB+AIJ7+aiuOXfW6d66Echec9wKpxv578C3W6mPXZPL7tv7+BWSDgiP/r3k?=
+ =?us-ascii?Q?KPrwQMXD4JITkrkVtLKg5YDnk7VEvwkz6DtTSkErrdm1GAGNKZhkCGfsErqC?=
+ =?us-ascii?Q?3eKPqCG3OCSPIRt02M2zK129M0J46UXta90XvE9TZoO1UF08fpFA3DR0h8cr?=
+ =?us-ascii?Q?hBRx253zc97lon1MOfb+QqPaVhq8nUe3dYY05OGx4Yh8t5ytt4QllIbHTJ9G?=
+ =?us-ascii?Q?teYt2XRECyD54GGrrUhgzJUCEU1Q7VxuaqOKk8hldrlQ9QnVGSHSWVo5qbwI?=
+ =?us-ascii?Q?r5a/E3PLVaZ3WuShKKuUtDCXisqPJzIEhDgG2L2tU1kAwdQwSpfqzMP+p+eR?=
+ =?us-ascii?Q?9OuUAW0kvlTKWPCp5J92Ap+Ifcp4Sg+zlyQUoFssWVfL+0dDu4EXpFz6/Iw1?=
+ =?us-ascii?Q?H7famWKhJmX3tHORjg20rgEwXLuLPpt+7Qi8Aos1?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26689f37-ce37-4767-2787-08db60ea4360
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 08:45:47.4045
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mTEhkT4vb2jpiuQ13cFeYSPvVL1rJ7cT2jbAKN1enaKwBGZSO654Jp8YTsYIR+imxZnqppOKYwfAzGk+1mmXQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5326
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It would be better to replace the traditional ternary conditional
+operator with min()
 
-Alice Ryhl <aliceryhl@google.com> writes:
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+---
+ drivers/net/phy/phy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 drivers/net/phy/phy.c
 
-> The main challenge with defining `work_struct` fields is making sure
-> that the function pointer stored in the `work_struct` is appropriate for
-> the work item type it is embedded in. It needs to know the offset of the
-> `work_struct` field being used (even if there are several!) so that it
-> can do a `container_of`, and it needs to know the type of the work item
-> so that it can call into the right user-provided code. All of this needs
-> to happen in a way that provides a safe API to the user, so that users
-> of the workqueue cannot mix up the function pointers.
->
-> There are three important pieces that are relevant when doing this. This
-> commit will use traits so that they know about each other according to
-> the following cycle:
->
->  * The pointer type. It knows the type of the work item struct.
->  * The work item struct. It knows the offset of its `work_struct` field.
->  * The `work_struct` field. It knows the pointer type.
->
-> There's nothing special about making the pointer type know the type of
-> the struct it points at. Pointers generally always know that
-> information.
->
-> However, making the `work_struct` field know about the pointer type is
-> less commonly seen. This is done by using a generic parameter: the
-> `work_struct` field will have the type `Work<T>`, where T will be the
-> pointer type in use. The pointer type is required to implement the
-> `WorkItemAdapter` trait, which defines the function pointer to store in
-> the `work_struct` field. The `Work<T>` type guarantees that the
-> `work_struct` inside it uses `<T as WorkItemAdapter>::run` as its
-> function pointer.
->
-> Finally, to make the work item struct know the offset of its
-> `work_struct` field, we use a trait called `HasWork<T>`. If a type
-> implements this trait, then the type declares that, at the given offset,
-> there is a field of type `Work<T>`. The trait is marked unsafe because
-> the OFFSET constant must be correct, but we provide an `impl_has_work!`
-> macro that can safely implement `HasWork<T>` on a type. The macro
-> expands to something that only compiles if the specified field really
-> has the type `Work<T>`. It is used like this:
->
-> ```
-> struct MyWorkItem {
->     work_field: Work<Arc<MyWorkItem>>,
-> }
->
-> impl_has_work! {
->     impl HasWork<Arc<MyWorkItem>> for MyWorkItem { self.work_field }
-> }
-> ```
->
-> So to summarize, given a pointer to an allocation containing a work
-> item, you can use the `HasWork<T>` trait to offset the pointer to the
-> `work_struct` field. The function pointer in the `work_struct` field is
-> guaranteed to be a function that knows what the original pointer type
-> was, and using that information, it can undo the offset operation by
-> looking up what the offset was via the `HasWork<T>` trait.
->
-> This design supports work items with multiple `work_struct` fields by
-> using different pointer types. For example, you might define structs
-> like these:
->
-> ```
-> struct MyPointer1(Arc<MyWorkItem>);
-> struct MyPointer2(Arc<MyWorkItem>);
->
-> struct MyWorkItem {
->     work1: Work<MyPointer1>,
->     work2: Work<MyPointer2>,
-> }
-> ```
->
-> Then, the wrapper structs `MyPointer1` and `MyPointer2` will take the
-> role as the pointer type. By using one or the other, you tell the
-> workqueue which `work_struct` field to use. This pattern is called the
-> "newtype" pattern.
->
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
->  rust/helpers.c           |   8 ++
->  rust/kernel/workqueue.rs | 183 ++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 190 insertions(+), 1 deletion(-)
->
-> diff --git a/rust/helpers.c b/rust/helpers.c
-> index 81e80261d597..7f0c2fe2fbeb 100644
-> --- a/rust/helpers.c
-> +++ b/rust/helpers.c
-> @@ -26,6 +26,7 @@
->  #include <linux/spinlock.h>
->  #include <linux/sched/signal.h>
->  #include <linux/wait.h>
-> +#include <linux/workqueue.h>
->  
->  __noreturn void rust_helper_BUG(void)
->  {
-> @@ -128,6 +129,13 @@ void rust_helper_put_task_struct(struct task_struct *t)
->  }
->  EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
->  
-> +void rust_helper___INIT_WORK(struct work_struct *work, work_func_t func,
-> +			     bool on_stack)
-> +{
-> +	__INIT_WORK(work, func, on_stack);
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper___INIT_WORK);
-> +
->  /*
->   * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
->   * as the Rust `usize` type, so we can use it in contexts where Rust
-> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-> index 22205d3bda72..7509618af252 100644
-> --- a/rust/kernel/workqueue.rs
-> +++ b/rust/kernel/workqueue.rs
-> @@ -4,7 +4,8 @@
->  //!
->  //! C header: [`include/linux/workqueue.h`](../../../../include/linux/workqueue.h)
->  
-> -use crate::{bindings, types::Opaque};
-> +use crate::{bindings, prelude::*, types::Opaque};
-> +use core::marker::{PhantomData, PhantomPinned};
->  
->  /// A kernel work queue.
->  ///
-> @@ -98,6 +99,186 @@ pub unsafe trait WorkItem {
->          F: FnOnce(*mut bindings::work_struct) -> bool;
->  }
->  
-> +/// Defines the method that should be called when a work item is executed.
-> +///
-> +/// This trait is used when the `work_struct` field is defined using the [`Work`] helper.
-> +///
-> +/// # Safety
-> +///
-> +/// Implementers must ensure that [`__enqueue`] uses a `work_struct` initialized with the [`run`]
-> +/// method of this trait as the function pointer.
-> +///
-> +/// [`__enqueue`]: WorkItem::__enqueue
-> +/// [`run`]: WorkItemAdapter::run
-> +pub unsafe trait WorkItemAdapter: WorkItem {
-> +    /// Run this work item.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// Must only be called via the function pointer that [`__enqueue`] provides to the
-> +    /// `queue_work_on` closure, and only as described in the documentation of `queue_work_on`.
-> +    ///
-> +    /// [`__enqueue`]: WorkItem::__enqueue
-> +    unsafe extern "C" fn run(ptr: *mut bindings::work_struct);
-> +}
-> +
-> +/// Links for a work item.
-> +///
-> +/// This struct contains a function pointer to the `T::run` function from the [`WorkItemAdapter`]
-> +/// trait, and defines the linked list pointers necessary to enqueue a work item in a workqueue.
-> +///
-> +/// Wraps the kernel's C `struct work_struct`.
-> +///
-> +/// This is a helper type used to associate a `work_struct` with the [`WorkItemAdapter`] that uses
-> +/// it.
-> +#[repr(transparent)]
-> +pub struct Work<T: ?Sized> {
-> +    work: Opaque<bindings::work_struct>,
-> +    _pin: PhantomPinned,
-> +    _adapter: PhantomData<T>,
-> +}
-> +
-> +// SAFETY: Kernel work items are usable from any thread.
-> +//
-> +// We do not need to constrain `T` since the work item does not actually contain a `T`.
-> +unsafe impl<T: ?Sized> Send for Work<T> {}
-> +// SAFETY: Kernel work items are usable from any thread.
-> +//
-> +// We do not need to constrain `T` since the work item does not actually contain a `T`.
-> +unsafe impl<T: ?Sized> Sync for Work<T> {}
-> +
-> +impl<T: ?Sized> Work<T> {
-> +    /// Creates a new instance of [`Work`].
-> +    #[inline]
-> +    #[allow(clippy::new_ret_no_self)]
-> +    pub fn new() -> impl PinInit<Self>
-> +    where
-> +        T: WorkItemAdapter,
-> +    {
-> +        // SAFETY: The `WorkItemAdapter` implementation promises that `T::run` can be used as the
-> +        // work item function.
-> +        unsafe {
-> +            kernel::init::pin_init_from_closure(move |slot| {
-> +                bindings::__INIT_WORK(Self::raw_get(slot), Some(T::run), false);
-> +                Ok(())
-> +            })
-> +        }
-> +    }
-> +
-> +    /// Get a pointer to the inner `work_struct`.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// The provided pointer must not be dangling. (But it need not be initialized.)
-> +    #[inline]
-> +    pub unsafe fn raw_get(ptr: *const Self) -> *mut bindings::work_struct {
-> +        // SAFETY: The caller promises that the pointer is valid.
-> +        //
-> +        // A pointer cast would also be ok due to `#[repr(transparent)]`. We use `addr_of!` so that
-> +        // the compiler does not complain that `work` is unused.
-> +        unsafe { Opaque::raw_get(core::ptr::addr_of!((*ptr).work)) }
-> +    }
-> +}
-> +
-> +/// Declares that a type has a [`Work<T>`] field.
-> +///
-> +/// # Safety
-> +///
-> +/// The [`OFFSET`] constant must be the offset of a field in Self of type [`Work<T>`]. The methods on
-> +/// this trait must have exactly the behavior that the definitions given below have.
-> +///
-> +/// [`Work<T>`]: Work
-> +/// [`OFFSET`]: HasWork::OFFSET
-> +pub unsafe trait HasWork<T> {
-> +    /// The offset of the [`Work<T>`] field.
-> +    ///
-> +    /// [`Work<T>`]: Work
-> +    const OFFSET: usize;
-> +
-> +    /// Returns the offset of the [`Work<T>`] field.
-> +    ///
-> +    /// This method exists because the [`OFFSET`] constant cannot be accessed if the type is not Sized.
-> +    ///
-> +    /// [`Work<T>`]: Work
-> +    /// [`OFFSET`]: HasWork::OFFSET
-> +    #[inline]
-> +    fn get_work_offset(&self) -> usize {
-> +        Self::OFFSET
-> +    }
-> +
-> +    /// Returns a pointer to the [`Work<T>`] field.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// The pointer must not be dangling. (But the memory need not be initialized.)
-> +    ///
-> +    /// [`Work<T>`]: Work
-> +    #[inline]
-> +    unsafe fn raw_get_work(ptr: *mut Self) -> *mut Work<T>
-> +    where
-> +        Self: Sized,
-> +    {
-> +        // SAFETY: The caller promises that the pointer is not dangling.
-> +        unsafe { (ptr as *mut u8).add(Self::OFFSET) as *mut Work<T> }
-> +    }
-> +
-> +    /// Returns a pointer to the struct containing the [`Work<T>`] field.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// The pointer must not be dangling. (But the memory need not be initialized.)
-> +    ///
-> +    /// [`Work<T>`]: Work
-> +    #[inline]
-> +    unsafe fn work_container_of(ptr: *mut Work<T>) -> *mut Self
-> +    where
-> +        Self: Sized,
-> +    {
-> +        // SAFETY: The caller promises that the pointer is not dangling.
-> +        unsafe { (ptr as *mut u8).sub(Self::OFFSET) as *mut Self }
-> +    }
-> +}
-> +
-> +/// Used to safely implement the [`HasWork<T>`] trait.
-> +///
-> +/// # Examples
-> +///
-> +/// ```
-> +/// use kernel::sync::Arc;
-> +///
-> +/// struct MyStruct {
-> +///     work_field: Work<Arc<MyStruct>>,
-> +/// }
-> +///
-> +/// impl_has_work! {
-> +///     impl HasWork<Arc<MyStruct>> for MyStruct { self.work_field }
-> +/// }
-> +/// ```
-> +///
-> +/// [`HasWork<T>`]: HasWork
-> +#[macro_export]
-> +macro_rules! impl_has_work {
-> +    ($(impl$(<$($implarg:ident),*>)?
-> +       HasWork<$work_type:ty>
-> +       for $self:ident $(<$($selfarg:ident),*>)?
-> +       { self.$field:ident }
-> +    )*) => {$(
-> +        // SAFETY: The implementation of `raw_get_work` only compiles if the field has the right
-> +        // type.
-> +        unsafe impl$(<$($implarg),*>)? $crate::workqueue::HasWork<$work_type> for $self $(<$($selfarg),*>)? {
-> +            const OFFSET: usize = $crate::offset_of!(Self, $field) as usize;
-> +
-> +            #[inline]
-> +            unsafe fn raw_get_work(ptr: *mut Self) -> *mut $crate::workqueue::Work<$work_type> {
-> +                // SAFETY: The caller promises that the pointer is not dangling.
-> +                unsafe {
-> +                    ::core::ptr::addr_of_mut!((*ptr).$field)
-> +                }
-> +            }
-
-What is the reason for overriding the default implementation of `raw_get_work()`?
-
-BR Andreas
-
-> +        }
-> +    )*};
-> +}
-> +
->  /// Returns the system work queue (`system_wq`).
->  ///
->  /// It is the one used by `schedule[_delayed]_work[_on]()`. Multi-CPU multi-threaded. There are
+diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
+index 0c0df38cd1ab..a8beb4ab8451
+--- a/drivers/net/phy/phy.c
++++ b/drivers/net/phy/phy.c
+@@ -1002,7 +1002,7 @@ static int phy_poll_aneg_done(struct phy_device *phydev)
+ 	if (!ret)
+ 		return -ETIMEDOUT;
+ 
+-	return ret < 0 ? ret : 0;
++	return min(ret, 0);
+ }
+ 
+ int phy_ethtool_ksettings_set(struct phy_device *phydev,
+@@ -1526,7 +1526,7 @@ int phy_init_eee(struct phy_device *phydev, bool clk_stop_enable)
+ 		ret = phy_set_bits_mmd(phydev, MDIO_MMD_PCS, MDIO_CTRL1,
+ 				       MDIO_PCS_CTRL1_CLKSTOP_EN);
+ 
+-	return ret < 0 ? ret : 0;
++	return min(ret, 0);
+ }
+ EXPORT_SYMBOL(phy_init_eee);
+ 
+-- 
+2.39.0
 
