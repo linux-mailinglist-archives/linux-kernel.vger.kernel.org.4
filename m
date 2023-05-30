@@ -2,170 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4C6715C4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB68C715C50
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjE3KzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        id S229959AbjE3K4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjE3KzP (ORCPT
+        with ESMTP id S229739AbjE3K4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:55:15 -0400
+        Tue, 30 May 2023 06:56:06 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8132CA0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:54:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027C893
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:55:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685444069;
+        s=mimecast20190719; t=1685444118;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1q0i4yZqdxDmT+xuTpGSHTNOPsQSPD0T9mC8x9n9pmQ=;
-        b=VxeNEVTSI7yS2hefjHpxBmx88WpmIBZtJUw+X+l4UEicjXpghuwK0eLH+2aZgHl26jJCqq
-        Ej8cSNBtdb+aWzHu8zL40ZjFP4TUWszNPVTrCeibXD2VbV1i1sTI2YsQf4fcJdwbFEsl+N
-        GZh+tKp6H1O5mXx1fa6O8bW0NdwSzRA=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=eiBtAh/D0PsnpjLnM52N86s5X6wpcHIAyqVS4sikzak=;
+        b=BTh+1eUDXUCQxEqXOCZl32pBOsRIY7Xw/N+tvUXxUcEtNY7IjkrEhPQ3dOgIcnNiZe95G4
+        MUiRFGb0b/2P4scU+WhsXvsdqZ9vM4XNljow41IHqdxPJMKQxUMdo21dcmMBq2Ghxq0Fye
+        pUo+Gsxc08gxX0jI7xu8BskE/pjwwRE=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-124-no0XoBy2ON-h9xNRRvqnzg-1; Tue, 30 May 2023 06:54:28 -0400
-X-MC-Unique: no0XoBy2ON-h9xNRRvqnzg-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-506beab6a73so4224166a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:54:28 -0700 (PDT)
+ us-mta-498-Vt_g4mmiPKCxUREdAA7L1Q-1; Tue, 30 May 2023 06:55:16 -0400
+X-MC-Unique: Vt_g4mmiPKCxUREdAA7L1Q-1
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1b01d3c6fe9so4288515ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:55:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685444067; x=1688036067;
+        d=1e100.net; s=20221208; t=1685444116; x=1688036116;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1q0i4yZqdxDmT+xuTpGSHTNOPsQSPD0T9mC8x9n9pmQ=;
-        b=g2fP0RPb983An7SWxzRdC8oV1t60nqUkA18h9m0B3cVJS2DWD5wezJ7DiN/3LI5JuH
-         9ELbByrK6+ElyytfgWbRzlJZyHSBA4j6MaCDXZWuXbvRif2sDtATaww3ovOIOo3CEweg
-         EwqkLVkqDNeSqYbaeK2fWLUXpKZKk9r6im0fWXd4C/BGUCcOhLBiNfHY5gbGivnaEYDz
-         rrzlnN/A6lfNLHAguiZ/CfLbNCwNi+iMTC92FdLvrfI4GKjF4Nmodtyi+FLqYJ8DfSem
-         95+U2zPTBNlu61NmU56sNzIx+CtHLxGLgEYxTkrABx6Lg7AmUR58K22g5UQY1vz1FSec
-         R+4w==
-X-Gm-Message-State: AC+VfDwGe4jmGUj8K+N+vDsuuoy+PZM5ZmCQPY2gSWCeP2QVx1+2+ush
-        m11nmrkv1TP0sAijUgovYOXl+Ya6hCMpHMQXpVzbUDmc/h1Hq/6k4jopNKCl+9+cldgaaMlsnqH
-        6glltxIdju/hr1TnEkZ46PbFHvAgElkUX
-X-Received: by 2002:aa7:d658:0:b0:514:9e81:906f with SMTP id v24-20020aa7d658000000b005149e81906fmr1305858edr.27.1685444066906;
-        Tue, 30 May 2023 03:54:26 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4I+096SwjLja4pHY4YqUYfGIPnsw0Zn+UHnBRONfv/VtPgD+leGxP0osXxo4zOb0YFNGuQaQ==
-X-Received: by 2002:aa7:d658:0:b0:514:9e81:906f with SMTP id v24-20020aa7d658000000b005149e81906fmr1305844edr.27.1685444066550;
-        Tue, 30 May 2023 03:54:26 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id n2-20020aa7d042000000b00514b044ec41sm693137edo.35.2023.05.30.03.54.25
+        bh=eiBtAh/D0PsnpjLnM52N86s5X6wpcHIAyqVS4sikzak=;
+        b=cZjdq4tOoaJXID9328s8AzBBhabzRtaLKTlRwP4U48aYsxZ1Zq1f5CDGVm1ZzTmiwH
+         yek8VXH+Edqag3b7SorGgEOq8L1ObPAZNgsAIyEcHhYQI/4M/trv6gSNKoR87F9PPa08
+         k2/jbhqM2njwR0XcPJyC1T1R35WoFn9q4AzrOh8MmV9em7bEqsnsEuo7BVqT24qGXDSm
+         HfsdLsqNho3qBl4l5lcYHmHFY33P/Xr0uiUIPzo+kpp6jyiFgg2y0/w+xX0rDVVFsZ1c
+         nUcwXT2Q7GZ86qSZUP9uwR/uLB4ufr9ZVhNwoZCssyGsSovy0dUAa5QDUecPy2Lb2GlP
+         osOg==
+X-Gm-Message-State: AC+VfDz3eXTlDYtw290BaApA1VuY/srFB5YGtYz93hOx2hqj2H+z9MOc
+        9BZFEDWg7TMnZKgPxPhDUzMd+FZ/s9L3uxFYH3Jex9pHhkhug+Eifi+3NMk6Y8wqTqy7RBMe91h
+        d/haFtvh7PubZ6ZpNuE2tFHs+
+X-Received: by 2002:a17:902:e841:b0:1ae:1364:6086 with SMTP id t1-20020a170902e84100b001ae13646086mr2163552plg.2.1685444115849;
+        Tue, 30 May 2023 03:55:15 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ63i9bPDIDLHsXNbID88iB0tQfOX/vDYe4JH76mNdjCwq1KXrg2EyLU27+UhIx9c9bfl/N1Ig==
+X-Received: by 2002:a17:902:e841:b0:1ae:1364:6086 with SMTP id t1-20020a170902e84100b001ae13646086mr2163540plg.2.1685444115587;
+        Tue, 30 May 2023 03:55:15 -0700 (PDT)
+Received: from [10.66.61.39] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902ce8c00b0019aaab3f9d7sm9978616plg.113.2023.05.30.03.55.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 03:54:26 -0700 (PDT)
-Message-ID: <2ca9ef5d-2a24-c6b7-06fc-5b9919a2aaee@redhat.com>
-Date:   Tue, 30 May 2023 12:54:25 +0200
+        Tue, 30 May 2023 03:55:15 -0700 (PDT)
+Message-ID: <07664387-ad45-02ec-8d67-b42f38b86191@redhat.com>
+Date:   Tue, 30 May 2023 18:55:10 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/5] platform/x86: think-lmi: Enable opcode support on
- BIOS settings
-Content-Language: en-US, nl
-To:     Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <mpearson-lenovo@squebb.ca>
- <20230526171658.3886-1-mpearson-lenovo@squebb.ca>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230526171658.3886-1-mpearson-lenovo@squebb.ca>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v2 5/7] arm64/sysreg: Convert OSDTRRX_EL1 to automatic
+ generation
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev
+References: <20230419-arm64-syreg-gen-v2-0-4c6add1f6257@kernel.org>
+ <20230419-arm64-syreg-gen-v2-5-4c6add1f6257@kernel.org>
+From:   Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <20230419-arm64-syreg-gen-v2-5-4c6add1f6257@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
 
-On 5/26/23 19:16, Mark Pearson wrote:
-> Whilst reviewing some documentation from the FW team on using WMI on
-> Lenovo system I noticed that we weren't using Opcode support when
-> changing BIOS settings in the thinkLMI driver.
+
+On 5/24/23 02:37, Mark Brown wrote:
+> Convert OSDTRRX_EL1 to automatic generation as per DDI0601 2023-03, no
+> functional changes.
 > 
-> We should be doing this to ensure we're future proof as the old
-> non-opcode mechanism has been deprecated.
-> 
-> Tested on X1 Carbon G10 and G11.
-> 
-> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
-
-Thank you for this new version. Please prepare a v4 addressing Ilpo's
-review remarks.
-
-About the aligning function arguments on the next line to the '('
-of the function call start at the previous line, checkpatch also
-checks for this.
-
-It is always a good idea to run checkpatch before submitting patches.
-
-E.g.:
-
-git format-patch -v3 HEAD~5
-scripts/checkpatch.pl v3-00*.patch
-<check output is clean>
-git send-email v3-00*.patch
-
-Regards,
-
-Hans
-
-
-
-
-
+Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
-> Changes in v2: Update comment for clearer explanation of what the driver
-> is doing
-> Changes in v3: None. Version bump with rest of series
+>   arch/arm64/include/asm/sysreg.h | 1 -
+>   arch/arm64/tools/sysreg         | 5 +++++
+>   2 files changed, 5 insertions(+), 1 deletion(-)
 > 
->  drivers/platform/x86/think-lmi.c | 28 +++++++++++++++++++++++++++-
->  1 file changed, 27 insertions(+), 1 deletion(-)
+> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+> index 1901b676d7c6..da954a6eba24 100644
+> --- a/arch/arm64/include/asm/sysreg.h
+> +++ b/arch/arm64/include/asm/sysreg.h
+> @@ -134,7 +134,6 @@
+>   #define SYS_SVCR_SMSTART_SM_EL0		sys_reg(0, 3, 4, 3, 3)
+>   #define SYS_SVCR_SMSTOP_SMZA_EL0	sys_reg(0, 3, 4, 6, 3)
+>   
+> -#define SYS_OSDTRRX_EL1			sys_reg(2, 0, 0, 0, 2)
+>   #define SYS_OSDTRTX_EL1			sys_reg(2, 0, 0, 3, 2)
+>   #define SYS_OSECCR_EL1			sys_reg(2, 0, 0, 6, 2)
+>   #define SYS_DBGBVRn_EL1(n)		sys_reg(2, 0, 0, n, 4)
+> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+> index b0aefdf9ed34..e4653248dcac 100644
+> --- a/arch/arm64/tools/sysreg
+> +++ b/arch/arm64/tools/sysreg
+> @@ -48,6 +48,11 @@
+>   # feature that introduces them (eg, FEAT_LS64_ACCDATA introduces enumeration
+>   # item ACCDATA) though it may be more taseful to do something else.
+>   
+> +Sysreg	OSDTRRX_EL1	2	0	0	0	2
+> +Res0	63:32
+> +Field	31:0	DTRRX
+> +EndSysreg
+> +
+>   Sysreg	MDCCINT_EL1	2	0	0	2	0
+>   Res0	63:31
+>   Field	30	RX
 > 
-> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-> index 1138f770149d..2745224f62ab 100644
-> --- a/drivers/platform/x86/think-lmi.c
-> +++ b/drivers/platform/x86/think-lmi.c
-> @@ -1001,7 +1001,33 @@ static ssize_t current_value_store(struct kobject *kobj,
->  				tlmi_priv.pwd_admin->save_signature);
->  		if (ret)
->  			goto out;
-> -	} else { /* Non certiifcate based authentication */
-> +	} else if (tlmi_priv.opcode_support) {
-> +		/*
-> +		 * If opcode support is present use that interface.
-> +		 * Note - this sets the variable and then the password as separate
-> +		 * WMI calls. Function tlmi_save_bios_settings will error if the
-> +		 * password is incorrect.
-> +		 */
-> +		set_str = kasprintf(GFP_KERNEL, "%s,%s;", setting->display_name,
-> +					new_setting);
-> +		if (!set_str) {
-> +			ret = -ENOMEM;
-> +			goto out;
-> +		}
-> +
-> +		ret = tlmi_simple_call(LENOVO_SET_BIOS_SETTINGS_GUID, set_str);
-> +		if (ret)
-> +			goto out;
-> +
-> +		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
-> +			ret = tlmi_opcode_setting("WmiOpcodePasswordAdmin",
-> +					tlmi_priv.pwd_admin->password);
-> +			if (ret)
-> +				goto out;
-> +		}
-> +
-> +		ret = tlmi_save_bios_settings("");
-> +	} else { /* old non opcode based authentication method (deprecated)*/
->  		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
->  			auth_str = kasprintf(GFP_KERNEL, "%s,%s,%s;",
->  					tlmi_priv.pwd_admin->password,
+
+-- 
+Shaoqin
 
