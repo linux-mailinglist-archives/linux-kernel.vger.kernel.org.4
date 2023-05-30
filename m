@@ -2,164 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CD3716093
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780E771609D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbjE3Mxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S232401AbjE3Mxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232374AbjE3Mx0 (ORCPT
+        with ESMTP id S232364AbjE3Mxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:53:26 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2072.outbound.protection.outlook.com [40.107.220.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9021CE4B;
-        Tue, 30 May 2023 05:53:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SDivpmQghpK1UUf5t8mxaRYl/5zqgTAjnHnja+e63o9wkiFKtnj8JX7CTx99IwqQI5ZdJmEJIgiB3Ef7UxEQHbExRQ8sFhSsAjvkW7zTiIoJynprCrHLryNGspxqCNUuLwFuQzwJMIfg032y+ApS/L9zny6Ybh61dJG2xA7BJAnwmy5jbezF7Xx2kONjaHKhB2CCobZQQJpxQtWa9NMfvCVTkuZun8j80t/9qbgc5rQPY3/E519U/V1MvJyY4KbGUXT+mggCVBWPGsRfGsp9Da+3QVcuPqbFB/nh5Ga/gi422/5TL+aZ524npfYH58r4Ub57DuzMctbEcoERlnxN7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gOTjVUbkENSjUSTkeOmWH9YX6YWCj1y+LVHKLzlMyvY=;
- b=OIUsj19Ihmr9VlFo48lhUlafMZHRz0S8MMDKdpmgxl0r/iEHSFx2I6+hfaRk6e7er+nOUVTCG6LuDOMHzbtybeo04wSdCYi9hDoreaVxM1cIRYWk5Qt22g0H1aKkmFZaKTCtMjzxQOg2NB/imEIIBSsA1jZ3w8xhBVaJqD1PMozBDgmuMM0LXX7h0xlbvbRNY3pLCbB3poeKwtA6xzOeL1SWWRhSCz3j5EwYi2JGxJaMeX0sG8B68uHrGOcHQ3wWYVTGUPEsbWllgg1vE3Y49337TXt+J8gsnB2oJM3TJ42V2tziHXTvobSbCmb4Nx6whRNK4Uo/M8KFkgF7DGoKkQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gOTjVUbkENSjUSTkeOmWH9YX6YWCj1y+LVHKLzlMyvY=;
- b=f+HKngsq6psykViI0U/lWN93od4eh9dDCqCgsqq4A73KGmTQpNQo800rZEtAa0wANrIomg5+tuM8wSkI1gyZ01K3rUQhX2JDVk6RJd6vShgx9jAbiSNofDg7yh2aZj50QtTGXj8o0mLRnF5puBb3Bt6k+9x+6BvmC9KnJoYpkLD4Kw/pyS5INhv0+if1FULXU3oxfhKablvYhHIsjBvhSTKmJvW7T/gZ8xy7cGWueOB0+lDRiyUxYj9NdwaaBhEhyV6H2bEKZQ3DwUAMjqHuPIKJfdbNf7I/mC/GA/quBzNHbVI9FH7rxx7VA86SDuuGkrdMK17o63G70Q/pKrltfw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MW4PR12MB6976.namprd12.prod.outlook.com (2603:10b6:303:20a::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 12:52:37 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6433.017; Tue, 30 May 2023
- 12:52:37 +0000
-Date:   Tue, 30 May 2023 09:52:33 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>, will@kernel.org,
-        catalin.marinas@arm.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, nicolinc@nvidia.com,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        John Hubbard <jhubbard@nvidia.com>, zhi.wang.linux@gmail.com,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH 2/2] arm64: Notify on pte permission upgrades
-Message-ID: <ZHXxkUe4IZXUc1PV@nvidia.com>
-References: <3cece716fc09724793aa832e755abfc9d70a8bb3.1684892404.git-series.apopple@nvidia.com>
- <5d8e1f752051173d2d1b5c3e14b54eb3506ed3ef.1684892404.git-series.apopple@nvidia.com>
- <ZHKaBQt8623s9+VK@nvidia.com>
- <87pm6ii6qi.fsf@nvidia.com>
- <ZHXj/6Bjraxqk4YR@nvidia.com>
- <d2e591c1-eb43-377b-d396-8335f77acef6@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d2e591c1-eb43-377b-d396-8335f77acef6@arm.com>
-X-ClientProxiedBy: SJ0PR13CA0130.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::15) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Tue, 30 May 2023 08:53:32 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413D8E67;
+        Tue, 30 May 2023 05:53:13 -0700 (PDT)
+Received: from [192.168.1.90] (unknown [188.27.34.213])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7CAEB6606E99;
+        Tue, 30 May 2023 13:52:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685451176;
+        bh=YtD3nSjY4iTnCSBgu8N7wfNObpaGkqwVKKaA+WzbZOI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fNBVPndH+6jIxa4ONTK3bRFZC0x+eSJl6YGMX6RRmhrjBLxmkSvP0Rki6hN2YpyTM
+         o/SHDuRMA/+Znnj++LYdUOBwqdI4KWacsrkxaWaNGJ1pDToSU1I7uWOJtpWZtALg8l
+         StoIKZjSWgHr7aN4orkwe1vHVk3uJScz31uMXPoCR//vBN873VniUvnx4KXLRUVRpO
+         pqLO5E0NbZymwcmNVTPx1XJbgi0oPM/QdqIfBFYj1ZGzLrw8j83ezlj6IvK96LH6Tz
+         00O1ewEJfbINAuQgFE0YmFqmGFuLnoENxarkFCbZdw7mkYIOivtGIUKRVma/txelgX
+         csPWSid6A0Whw==
+Message-ID: <8247660d-4b95-0ed7-9444-b23da23560ac@collabora.com>
+Date:   Tue, 30 May 2023 15:52:52 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MW4PR12MB6976:EE_
-X-MS-Office365-Filtering-Correlation-Id: 54672bda-2efc-4a0b-7cda-08db610cbe8f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Cgfy64LfmCJ4sRAW2b8QwWt9XTriw/P1zI3ON9Wrt4xYXoBJ1/rbur69ZAAAw1cGjx4RflTl2lYONspEexYSy+MBks0np0wQmHMLmSRKHJTI/ELpTmv3LNCYlmbWyjKhHzuju4+KzyHPA8uh+zFNoIHVI1/BQfbQBtXOaAe1jkuuVN/EAm7edWrM1ecP3f7+b32XTNlkCCxKtSOE7rM2n+fJkSn748MjZAMrCuTreQnNz7P1kmKtJeB2VL+wZRTIKQmoNPPPd03EKUnTxR6iPnm0/np09F9RPiKbQQgh+iA3eHhTlaKZ20enU8LhFWT9NzOf56BKV/TUISMemUBntZ9t1Yzd/mb/fLEKHHvrFAvD1yqr5f6U5jkP5ZLpoPWacsxnBmpCInkMPKzP5DiYI9PnGxtawKTtNrpF3dW1EJMfQBZLoKQKxHS9DVm5oWGUdIW1nEJDWlY9KMcbU/ZAT37u4BrqWTXM6Hpv6+B/amlvD8ZWK0wSV2mVsYDRWSUZ4h7WqiBRYWzNoG6viTpE4l7+ZYYW9gU76l1s6erHRu6oywNsWzv4ap1ruCT5XYpM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(366004)(451199021)(83380400001)(2616005)(2906002)(186003)(36756003)(38100700002)(41300700001)(316002)(6666004)(6486002)(5660300002)(86362001)(8676002)(8936002)(478600001)(54906003)(4326008)(6916009)(66556008)(66476007)(66946007)(26005)(53546011)(6512007)(6506007)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vtF8GQfl9cYrgqK0QCcdx5yPA62+HVWCu15E0MMw6+LYSQxrqDdBK5lSiuHR?=
- =?us-ascii?Q?c4mnLUyjdApvAHNwnrgsU8SUhyk6wrdq5AcdW7bxTSX3BKcvMnIxe/z65v2m?=
- =?us-ascii?Q?shPYO5xoK5mKIlq5tXIoP38foRK5IIdHjxwXtUdUx2pElPiuvPvm7/oBSu45?=
- =?us-ascii?Q?YY/wHtytJVy7PaZnXc1SRsChT9DL6Twe1gxEmYLeuQeK7f7EBq+xbRZTlRRz?=
- =?us-ascii?Q?1YxePvf5HmxgLCdSCrn2GULXfGyCkTCUr9XZz/VbMwZlpVXarYEGsNYj1R4J?=
- =?us-ascii?Q?QUQsP2Ha9MsOHxfgeI7Q8zWPuwdtNffcb64NCNJKNL37N3xvOdi4+7W7e4qf?=
- =?us-ascii?Q?7ubwOS3R113vOhgzixDhyPcEfGeyz+6PqgXHq9GxJikMxhMjjVJ5BqxlwU8j?=
- =?us-ascii?Q?OTqWHQkOJGL0sTvIs91FJ8Xm7WJhVJkGTuao10UACqGeSwluL2C4N7PyDraU?=
- =?us-ascii?Q?HebZWoIrzt1bHF+vEP9f34ZlZtrF+nIoykZ9480y24CH3r2g3kDRYPxUEq8C?=
- =?us-ascii?Q?v8D+ZxTvabcHUA3m1Oi1Wrp47I0Q7hmUel0EXksCyVg+Trjv79qPu9lAXcv9?=
- =?us-ascii?Q?G78/U4d4jI+aREqqCyJBuCt/IK7xfK9CyUovnF+gPXM6qD+PmhauT9K+lZXA?=
- =?us-ascii?Q?m0IXfu7618gxfh/mFTyq1sjAkbgYnKrqocqC+S1Rbv2p7KRL3XX44mKoPN1j?=
- =?us-ascii?Q?DheDvUlRzL2LJvlkJcES1i2ota+HF8mVAGoWGAYvQ6jJCoiVEhh9BoWcoJcv?=
- =?us-ascii?Q?/GtOau7vLryI288lyA9wr8GPJxnSoCBqXt4a8qtOFEtCwdnjU2UWMO3wL50E?=
- =?us-ascii?Q?EtfDakt9oU++3MaOwZO+YVDIfGR5tQk9wYPCyeFKTxFqAGJx6PINGOBz9bSF?=
- =?us-ascii?Q?Simp2HF3HJoEHgiWnauv4AvwKxA1lxyOp4vEiQBQ/33tUWJ3oZ6WVW/hnM0T?=
- =?us-ascii?Q?NcCaMrDHAo0mGsKa4i5nyS8lWL7ULu09sAfr6t029mtwRhZ1WfKmzrtBErR3?=
- =?us-ascii?Q?jEsVD55kWt/OLE9Jp3RrmXs3PXc7rB9SEyDmABCpF+7u0DBg/o2OYJiTdIG6?=
- =?us-ascii?Q?vVmYSQY8Q++zb3JsJA+KsqmjzHlr7+TimmynYSHuD1RVLGj8S5cSuY1QW+mt?=
- =?us-ascii?Q?H+OJEg3ojYveKQTaYuGs191KkhCtkbrO6LcEZnBYLr3GITDH24wogcrTZeP6?=
- =?us-ascii?Q?o1ijA1JHTxOdmGIqyEoWBYosCf6R8ArmHHTy5DsI9FRh1pf3LhZ8jASvCOOs?=
- =?us-ascii?Q?48AgV19rf5u0nyKGsuvig+UcLim/YkZ2NywxCfdkwy71jrg/BySBL0OqvrsP?=
- =?us-ascii?Q?ba2DS3FjNfJnEkOcY3ZqZ+7LtKmszA4d3w5qyQ6Irv8RbUMsl15E0p5AkMzr?=
- =?us-ascii?Q?URjYyI7geCFlEnoCRQ3JDH8VdHSy1OmNyTTxCEQXEjk2y6S86O88fC8ePTuu?=
- =?us-ascii?Q?pNnD92b0ofQG6RhD6sdwbQeNZGRYvYKIiaPwwk0/bkngBqJHCscYMLPdaCPs?=
- =?us-ascii?Q?MXWa5EZXcKnk5p2+PfTpd34d5mY1NsAzOA6gFvBXCAie8fqW3ce4uQofgvdG?=
- =?us-ascii?Q?XMeolG4hJyNREKaY4k30xRwcNV1DFoB79qhyJ6kD?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 54672bda-2efc-4a0b-7cda-08db610cbe8f
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 12:52:36.9412
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: w2LyC9ODDECO+7B1IUuFf5TymVmxl6zdNST+UXzrJhwnzD+lr9Jx2epf12mmtHyZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6976
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/3] ASoC: es8316: Increment max value for ALC Capture
+ Target Volume control
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Zhu Ning <zhuning0077@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        David Yang <yangxiaohua@everest-semi.com>,
+        Daniel Drake <drake@endlessm.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, kernel@collabora.com
+References: <20230524074156.147387-1-cristian.ciocaltea@collabora.com>
+ <20230524074156.147387-2-cristian.ciocaltea@collabora.com>
+ <5dbcbf84-602a-44de-ad99-268d4d5b4b2f@sirena.org.uk>
+ <cfa23203-1626-440b-ec27-efe56cb297d2@collabora.com>
+ <01fd1a9f-56c7-4864-bb2b-8b004284c8cc@sirena.org.uk>
+ <3c6b67a4-4892-0057-3dfc-65ed6c7ebc37@collabora.com>
+ <4a3f54a3-2cbd-4a22-9742-9ba60e78643b@sirena.org.uk>
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <4a3f54a3-2cbd-4a22-9742-9ba60e78643b@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 01:14:41PM +0100, Robin Murphy wrote:
-> On 2023-05-30 12:54, Jason Gunthorpe wrote:
-> > On Tue, May 30, 2023 at 06:05:41PM +1000, Alistair Popple wrote:
-> > > 
-> > > > > As no notification is sent and the SMMU does not snoop TLB invalidates
-> > > > > it will continue to return read-only entries to a device even though
-> > > > > the CPU page table contains a writable entry. This leads to a
-> > > > > continually faulting device and no way of handling the fault.
-> > > > 
-> > > > Doesn't the fault generate a PRI/etc? If we get a PRI maybe we should
-> > > > just have the iommu driver push an iotlb invalidation command before
-> > > > it acks it? PRI is already really slow so I'm not sure a pipelined
-> > > > invalidation is going to be a problem? Does the SMMU architecture
-> > > > permit negative caching which would suggest we need it anyhow?
-> > > 
-> > > Yes, SMMU architecture (which matches the ARM architecture in regards to
-> > > TLB maintenance requirements) permits negative caching of some mapping
-> > > attributes including the read-only attribute. Hence without the flushing
-> > > we fault continuously.
-> > 
-> > Sounds like a straight up SMMU bug, invalidate the cache after
-> > resolving the PRI event.
+On 5/30/23 14:36, Mark Brown wrote:
+> On Fri, May 26, 2023 at 09:11:49PM +0300, Cristian Ciocaltea wrote:
 > 
-> No, if the IOPF handler calls back into the mm layer to resolve the fault,
-> and the mm layer issues an invalidation in the process of that which isn't
-> propagated back to the SMMU (as it would be if BTM were in use), logically
-> that's the mm layer's failing. The SMMU driver shouldn't have to issue extra
-> mostly-redundant invalidations just because different CPU architectures have
-> different idiosyncracies around caching of permissions.
+>> -1.5 dB  |  50-51 %
+>> -0.0 dB  |  50-51 %
+> 
+>> So it seems the specs are correct, and the problem is the hardware default.
+> 
+>> Is there a better approach to handle this than extending the volume range?
+> 
+> The other option would be to change the value in the register during
+> probe to one that's in range, that wouldn't stop any existing saved
+> settings from generating errors but would mean there wouldn't be any new
+> ones.  Either approach is probably fine.
 
-The mm has a definition for invalidate_range that does not include all
-the invalidation points SMMU needs. This is difficult to sort out
-because this is general purpose cross arch stuff.
-
-You are right that this is worth optimizing, but right now we have a
--rc bug that needs fixing and adding and extra SMMU invalidation is a
-straightforward -rc friendly way to address it.
-
-Jason
+Thanks, I will prepare v2 and keep the current approach.
