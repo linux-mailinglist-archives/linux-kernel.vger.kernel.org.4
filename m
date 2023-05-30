@@ -2,126 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1982F7162DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC847162E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232675AbjE3OAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
+        id S232644AbjE3OA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbjE3N7t (ORCPT
+        with ESMTP id S230515AbjE3OAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:59:49 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D526114;
-        Tue, 30 May 2023 06:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1685455177; x=1716991177;
-  h=message-id:subject:from:to:cc:date:
-   content-transfer-encoding:mime-version;
-  bh=WTxGeWtdLxA1fy1Qf6/ncvVUwl/YJe960Ca7zRHAfPk=;
-  b=NcJwE28GPRtiag/L6+tvF2xwPRSGyNlQSuD6yKNaMX+6ovwVX42bakTK
-   DA/LuZwxZIAS4EXf/EYlQf5kJnTajiz7u7lrMiwKkOMf0tS0POvGfy4LX
-   trpWtMb6vMa1vakCQcCiL1WWR5nISfJgUUepGN0fGwBAuwe/lAsTLU9Tp
-   h+RjCBdbvxDIX99YrfU4GIpj5n7NHpXLa0JspDWPZR/OD5Lq1ZYj6DJ8G
-   zpqWr59fc0ta5gNSMCAeW+TaBDAG/ku1SjR5jJVPDsCeuPlobY/qcfvLk
-   MIsfVZAGNR6avRoJjqGu5mX74tTAW8NMyV4kP2jv9cBSNip0E+1R3GoBD
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,204,1681164000"; 
-   d="scan'208";a="31170004"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 30 May 2023 15:59:35 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 30 May 2023 15:59:35 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 30 May 2023 15:59:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1685455175; x=1716991175;
-  h=message-id:subject:from:to:cc:date:
-   content-transfer-encoding:mime-version;
-  bh=WTxGeWtdLxA1fy1Qf6/ncvVUwl/YJe960Ca7zRHAfPk=;
-  b=WgtgYJfrsCN0NQBxsU+wO61VGm++zdvFg7Z9kzgw67z+dH11/aDBCesT
-   XV9GcFW5B0lS166pCi046jf2vFIrtQw2f1KI+7jZ3zAPsN7K1/LDJFci0
-   nmVx6BJEZYyyYIqlv+SZz7wV9uLHDOaCczjn3JKwbAIJMJVzCelfjfbGs
-   ArJfevunVTH1Z7Mxw4zbkNa8p78bMxZ/pHVQ9eYtsz0uji8b58MsEqOo0
-   /DMW9tWUnOIAg/S7n9cQzHBAlZcT5RnBqvk4CZV4VKO4TyVROugQ358aj
-   8sOlNwtMDPMYjZhkaq28nbIQiCyQ0Eu6nKarjPGZtXTV1IMj5d8sIU1X6
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,204,1681164000"; 
-   d="scan'208";a="31170003"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 30 May 2023 15:59:35 +0200
-Received: from [192.168.2.129] (SCHIFFERM-M2.tq-net.de [10.121.49.20])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 15BB7280090;
-        Tue, 30 May 2023 15:59:35 +0200 (CEST)
-Message-ID: <b1ef61f5121149278b66d4cea99ba02b517fb0c9.camel@ew.tq-group.com>
-Subject: Breaking change in st1232 multitouch support
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Cc:     Henrik Rydberg <rydberg@bitmath.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@ew.tq-group.com,
-        Mark Brown <broonie@kernel.org>
-Date:   Tue, 30 May 2023 15:59:34 +0200
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Tue, 30 May 2023 10:00:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1FF102
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685455199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4RT388VnQCYZW3nYzowL+p8Lhxi1vKrwW2Bk6UlbFw4=;
+        b=Z7VTn20EPNBCk53OdY36uSxPUSvPssusziFlEkLwY90m488hKgu0orCzPcWqKvcz2nnzVc
+        Cu2/z/8UaNpG85WZJR2LbuuBWqGJU1sM58CUAdJNIW6CXlOmtc9sRMlPZ6sb4TJVqzLDeR
+        jjccIvsmqyFnKWt1AL2yVkknLMDiLRg=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-150-5Yew0_XIM4yxJKnArzf8vQ-1; Tue, 30 May 2023 09:59:58 -0400
+X-MC-Unique: 5Yew0_XIM4yxJKnArzf8vQ-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b012668d3so608172485a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:59:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685455198; x=1688047198;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4RT388VnQCYZW3nYzowL+p8Lhxi1vKrwW2Bk6UlbFw4=;
+        b=OwfJBov7NiCEKAyfuoUAgiDIYqA8KKbJ8i64emZl0vvzvFprAx1lacaLKy09/W/gPx
+         zEL1LYOBaGfO+i3mRwsuLEHgjaIh0h4PKdoNvEyn71laCb01j/J6zFHWqcz2+9jmvrrC
+         TfT33dfv4/YHa/KdZYZEJwsaNMA8wz9VoHbsex6qFdhJer923rrsQ07x8d1E/IHPqm/A
+         oFfqzkvAUaiUFrzpX/xaRTu/40SEyv3+/KTh/IZncf1uVP28bWpBujGfZWXZgnqxTg6b
+         GB2R2OnTiWeLjxG5efroSlwNIs5DK4fRSVgfYVt3u5XHtWBd3I6WTbm8R6FZ09bAKmDi
+         g4Kg==
+X-Gm-Message-State: AC+VfDzUhCwV0cl8Cc1UyOdvkmCe1Zex9Bywz7PnK8WO/m2qaETB3P5J
+        8y4j2S1OwkeEWBr0TwBXPv3IhaAXZ3vqm0U+H0TxqvoVmG5cOsoUvg0sj7Y91ooFg9a3r+Jfvf/
+        MBFCBWjxYcv2ffD3klG7Z8/2J
+X-Received: by 2002:a05:620a:1b96:b0:75b:23a1:456 with SMTP id dv22-20020a05620a1b9600b0075b23a10456mr2095114qkb.28.1685455197830;
+        Tue, 30 May 2023 06:59:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4KhIBZdP1fPs6CXWxZOvyl5jXEFHI2OcLhwSX183uedbOKNfq0+qZi8wwa+CtWgI+VJcheRg==
+X-Received: by 2002:a05:620a:1b96:b0:75b:23a1:456 with SMTP id dv22-20020a05620a1b9600b0075b23a10456mr2095096qkb.28.1685455197619;
+        Tue, 30 May 2023 06:59:57 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id x12-20020a05620a12ac00b0075cdad9648dsm2179295qki.25.2023.05.30.06.59.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 06:59:57 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, nathan@kernel.org,
+        ndesaulniers@google.com, goldstein.w.n@gmail.com
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] x86/csum: Move csum_tail result parameter to a local variable.
+Date:   Tue, 30 May 2023 09:59:53 -0400
+Message-Id: <20230530135953.3341174-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone,
+clang with W=1 reports
+arch/x86/lib/csum-partial_64.c:74:20: error: variable
+  'result' is uninitialized when used here [-Werror,-Wuninitialized]
+                return csum_tail(result, temp64, odd);
+                                 ^~~~~~
+This is a false positive, but there is never an intermediate value
+of result to pass into csum_trail, so move the parameter result to
+a local variable.
 
-I've found that something strange has happened in the ST1232 driver:
-Through Martin's patch that was supposed to add support for the ST1633
-(commit 351e059 "Input: st1232 - add support for st1633") and a number
-of subsequent fixes (b1a402e, 95c9ea9), the driver has come to not
-actually support the ST1232 anymore, as the older ST1232/ST1332 and the
-newer models (ST1633, various other) seem to have incompatible register
-maps.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ arch/x86/lib/csum-partial_64.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-[1] shows the original register map, which assigns 3 registers to each
-finger (0x12-0x14, 0x15-0x17), while [2] describes a different map
-where 4 subsequent registers are assigned to each finger.
-
-[2] does list "ST1x32" as a supported part though, but I'm not sure if
-this is not supposed to include ST1232/ST1332, or if there was a
-firmware update at some point that changed the register assignment.
-
-If this breaking change was unintended, should the change be reverted
-partially, so the code matches the ST1232/ST1332 datasheet again for
-the "sitronix,st1232" compatible, and the new code is only used for
-"sitronix,st1633"?
-
-Adding Mark Brown to cc as a somewhat recent committer to a DTS that
-references the "sitronix,st1232" compatible (imx6qdl-udoo), in the hope
-that he has a matching display and could verify that multitouch is
-indeed broken with recent kernels.
-
-[1]
-https://www.displayfuture.com/Display/datasheet/controller/ST1332.pdf
-[2]
-https://www.crystalfontz.com/products/document/4590/Sitronix_Touch_IC_Proto=
-col_A_V2.7.pdf
-
-
-Kind regards,
-Matthias
-
---=20
-TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
-any
-Amtsgericht M=C3=BCnchen, HRB 105018
-Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
-neider
-http://www.tq-group.com/
+diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
+index fe5861951b15..cea25ca8b8cf 100644
+--- a/arch/x86/lib/csum-partial_64.c
++++ b/arch/x86/lib/csum-partial_64.c
+@@ -21,8 +21,10 @@ static inline unsigned short from32to16(unsigned a)
+ 	return b;
+ }
+ 
+-static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
++static inline __wsum csum_tail(u64 temp64, int odd)
+ {
++	unsigned int result;
++
+ 	result = add32_with_carry(temp64 >> 32, temp64 & 0xffffffff);
+ 	if (unlikely(odd)) {
+ 		result = from32to16(result);
+@@ -45,7 +47,7 @@ static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
+ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ {
+ 	u64 temp64 = (__force u64)sum;
+-	unsigned odd, result;
++	unsigned odd;
+ 
+ 	odd = 1 & (unsigned long) buff;
+ 	if (unlikely(odd)) {
+@@ -71,7 +73,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ 		    "adcq $0,%[res]"
+ 		    : [res] "+r"(temp64)
+ 		    : [src] "r"(buff), "m"(*(const char(*)[40])buff));
+-		return csum_tail(result, temp64, odd);
++		return csum_tail(temp64, odd);
+ 	}
+ 	if (unlikely(len >= 64)) {
+ 		/*
+@@ -141,7 +143,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+ 		    : [res] "+r"(temp64)
+ 		    : [trail] "r"(trail));
+ 	}
+-	return csum_tail(result, temp64, odd);
++	return csum_tail(temp64, odd);
+ }
+ EXPORT_SYMBOL(csum_partial);
+ 
+-- 
+2.27.0
 
