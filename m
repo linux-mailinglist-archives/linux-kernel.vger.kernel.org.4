@@ -2,200 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2C1715A42
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B40B715A44
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjE3Jej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S229866AbjE3JfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjE3Jef (ORCPT
+        with ESMTP id S230156AbjE3Jet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:34:35 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C0B93;
-        Tue, 30 May 2023 02:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685439274; x=1716975274;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wp2pAf3CqrBt5skpkT7zvWMDCqetgcUZchDB3RC0Ee0=;
-  b=kXIirub0TyEkQRY6Ysquy7FBA3PGu3ATzksW1IY/Jz8Df2EbGHBsOXoC
-   CBB5HVIm/pkx9lz+I6nvndUMyBrEHG//323opXgmWHrvDXGEsaJaLWIOR
-   55f9sADJdIn4tLB3glUx4umCXPIe36G5elhy9sG6czl7dwb3VZk2quFeS
-   YbYvdvk4ae/df60WUu0PeuKfh/mX9D7h8Aef4XMUhlBwYEkXR4UB4YSwf
-   a8fCiQN3YxfXzPoDSCn28eo+UEsPaA+/LufMW5L4AEyZ9xss8Zell3Obb
-   tYtTmDg2Fz4wUlkeYgUpgkoXb1aLDvNCyrIaNkT3yTHJvg4AQ8hUoJh7u
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="asc'?scan'208";a="216005891"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 02:34:34 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 30 May 2023 02:34:32 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 30 May 2023 02:34:29 -0700
-Date:   Tue, 30 May 2023 10:34:07 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
-        <jbrunet@baylibre.com>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>, <khilman@baylibre.com>,
-        <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v15 5/6] dt-bindings: clock: meson: add A1 Peripherals
- clock controller bindings
-Message-ID: <20230530-illusive-pushpin-1e35d0a50e0d@wendy>
-References: <20230517133309.9874-1-ddrokosov@sberdevices.ru>
- <20230517133309.9874-6-ddrokosov@sberdevices.ru>
- <CAFBinCC3kQ9Nz3R2W-Qj9tbPJfS8JsB_4AkmPgS6xpQ96DBy2w@mail.gmail.com>
- <20230522130033.a47vlybocme66rev@CAB-WSD-L081021>
- <CAFBinCAk9+Km3BssA8d8nc_Z_GbhY87FD3qQRpZ2k7ChKt7TBg@mail.gmail.com>
+        Tue, 30 May 2023 05:34:49 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB02F9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:34:48 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U8fdTM024574;
+        Tue, 30 May 2023 04:34:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=KHDijHzgsVXY1MQfmw7OOY+PLkzfOlr/Cua2+1zmRfs=;
+ b=FEvk9mUuRCqyJYHdD1whGFFj5kV4MctpWzcVqd85UicdaXvfWSrCfpl80aIALoeVu1Fe
+ 1gdt03ogMxv6qHsxBCZrD96yeDIhrK2A/by27Sg6q6rfQo4cXwtTGxFI6cyIPX5TsQrj
+ dSPKGORI4hzkFdC1164eG2nhB43DNZMxZWR7oX0jFArg7j1wUTtctuJI9CIGV8XC7vC/
+ 1Aasqu5XCnM1px0toPhNO5UxN5sa4IWxhexDHloh4boIcUGIJ1Xc7702TpODsM2anDa1
+ VKyH48r6mTd7wCf6RdbtoSiBd1VXGT1vFFD41xQCitkl8yKYYmGrsUa3adKkyCJ8WkF4 jw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3quf90txf1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 04:34:13 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 30 May
+ 2023 10:34:11 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 30 May 2023 10:34:11 +0100
+Received: from [198.90.251.127] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2C485475;
+        Tue, 30 May 2023 09:34:11 +0000 (UTC)
+Message-ID: <e64614db-8633-55ad-f5db-68ef8a371dfa@opensource.cirrus.com>
+Date:   Tue, 30 May 2023 10:34:11 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="36vkeFCCRp4Cr9uu"
-Content-Disposition: inline
-In-Reply-To: <CAFBinCAk9+Km3BssA8d8nc_Z_GbhY87FD3qQRpZ2k7ChKt7TBg@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 12/12] ALSA: hda/cs35l56: Add driver for Cirrus Logic
+ CS35L56 amplifier
+Content-Language: en-US
+To:     <Claudiu.Beznea@microchip.com>, <tiwai@suse.com>,
+        <broonie@kernel.org>, <perex@perex.cz>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>, <simont@opensource.cirrus.com>
+References: <20230526122852.4552-1-rf@opensource.cirrus.com>
+ <20230526122852.4552-13-rf@opensource.cirrus.com>
+ <4ec68c42-dbab-5006-c6a5-0be147a7d0f1@microchip.com>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <4ec68c42-dbab-5006-c6a5-0be147a7d0f1@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: 9XoKl8oyEkvkJrjyPkZbuGQy29DXhfpT
+X-Proofpoint-ORIG-GUID: 9XoKl8oyEkvkJrjyPkZbuGQy29DXhfpT
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---36vkeFCCRp4Cr9uu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 30/05/2023 08:39, Claudiu.Beznea@microchip.com wrote:
+> On 26.05.2023 15:28, Richard Fitzgerald wrote:
+>> +static int cs35l56_hda_request_firmware_file(struct cs35l56_hda *cs35l56,
+>> +                                            const struct firmware **firmware, char **filename,
+>> +                                            const char *dir, const char *system_name,
+>> +                                            const char *amp_name,
+>> +                                            const char *filetype)
+>> +{
+>> +       char *s, c;
+>> +       int ret = 0;
+>> +
+>> +       if (system_name && amp_name)
+>> +               *filename = kasprintf(GFP_KERNEL, "%scs35l56%s-%02x-dsp1-misc-%s-%s.%s", dir,
+>> +                                     cs35l56->base.secured ? "s" : "", cs35l56->base.rev,
+>> +                                     system_name, amp_name, filetype);
+>> +       else if (system_name)
+>> +               *filename = kasprintf(GFP_KERNEL, "%scs35l56%s-%02x-dsp1-misc-%s.%s", dir,
+>> +                                     cs35l56->base.secured ? "s" : "", cs35l56->base.rev,
+>> +                                     system_name, filetype);
+>> +       else
+>> +               *filename = kasprintf(GFP_KERNEL, "%scs35l56%s-%02x-dsp1-misc.%s", dir,
+>> +                                     cs35l56->base.secured ? "s" : "", cs35l56->base.rev,
+>> +                                     filetype);
+>> +
+>> +       if (!*filename)
+>> +               return -ENOMEM;
+>> +
+>> +       /*
+>> +        * Make sure that filename is lower-case and any non alpha-numeric
+>> +        * characters except full stop and forward slash are replaced with
+>> +        * hyphens.
+>> +        */
+>> +       s = *filename;
+>> +       while (*s) {
+>> +               c = *s;
+>> +               if (isalnum(c))
+>> +                       *s = tolower(c);
+>> +               else if (c != '.' && c != '/')
+>> +                       *s = '-';
+>> +               s++;
+>> +       }
+>> +
+>> +       ret = firmware_request_nowarn(firmware, *filename, cs35l56->base.dev);
+>> +       if (ret) {
+>> +               dev_dbg(cs35l56->base.dev, "Failed to request '%s'\n", *filename);
+>> +               kfree(*filename);
+>> +               *filename = NULL;
+>> +       } else {
+>> +               dev_dbg(cs35l56->base.dev, "Found '%s'\n", *filename);
+> 
+> I may be wrong but *filename seems leaked to me on this path. I noticed it
+> is could be duplicated on cs_dsp_debugfs_save_wmfwname() but the original
+> copy seems left aside.
+> 
 
-Yo,
+It's not a leak. The file has been found so the name of the found
+file is returned (it's used by other code). But there is a leak of that
+memory elsewhere.
 
-On Mon, May 29, 2023 at 10:38:33PM +0200, Martin Blumenstingl wrote:
-> On Mon, May 22, 2023 at 3:00=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdev=
-ices.ru> wrote:
-> [...]
-> > > This IP block has at least one additional input called "sys_pll_div16=
-".
-> > > My understanding is that the "sys_pll_div16" clock is generated by the
-> > > CPU clock controller. Support for the CPU clock controller
-> > > (dt-bindings and a driver) will be added at a later time by Dmitry.
-> > > How can we manage incrementally implementing the clock controllers?
-> > > From a hardware perspective the "sys_pll_div16" input is mandatory.
-> > > How to manage this in the .dts patches then (for example: does this
-> > > mean that Dmitry can only add the clock controller to the .dts when
-> > > all clock controller bindings have been implemented - or is there
-> > > another way)?
-> >
-> > You're absolutely right: currently, not all inputs are supported because
-> > the CPU clock controller isn't ready yet =E2=80=93 I'm working on it at=
- the
-> > moment.
-> >
-> > I understand your concerns about bindings and schema description, but
-> > there is an issue to be considered. I'm developing the entire clock
-> > controller A1 subsystem incrementally in three stages: peripherals and
-> > PLL, CPU, and Audio. This is because the CPU can operate at a static
-> > frequency and voltage, and the board boots normally without the CPU
-> > clock controller, thermal sensor, and OPP table. Audio is also
-> > important, but it's optional. On the other hand, without setting up the
-> > peripherals and PLL controllers, the board won't function because
-> > they're fundamental.
-> I understand your approach and I like it (without that incremental
-> approach you would probably be looking at a series with 15-20
-> patches).
->=20
-> Maybe the dt-binding maintainers have a suggestion for us here?
-> Let me try to summarize the issue in a few bullet points:
-> - There's (at least) four clock controllers on the Amlogic A1 SoC
-> - Some of these clock controllers take the outputs of another clock
-> controller as inputs
-> - In this series patch the peripheral clock controller has an input
-> called "sys_pll_div16"
-> - The clock controller which provides the "sys_pll_div16" clock is not
-> implemented yet (my understanding is that implementing it and adding
-> it to this series is not easy: it would add even more patches that
-> need to be reviewed and in general it's a tricky clock controller to
-> implement as it manages the CPU clocks)
-
-If I am understanding correctly, this series implements the child
-controller and a parent, which is unimplemented, provides the child with
-sys_pll_div16.
-The thing I am missing is whether the child controller has some outputs
-that depend on this sys_pll_div16 input & whether those are documented
-in this series. Regardless, you should be able to add more output clocks
-without compatibility issues.
-
-> > Right now, we're in the first stage of the plan. Unfortunately, I can't
-> > disclose the exact names and number of clock bindings for the CPU and
-> > Audio, as they're still in development and only exist in my head or
-> > draft versions.
-> >
-> > If possible, I'd prefer to provide the new bindings and connections once
-> > all the appropriate drivers are finalized.
-> Question to Conor and Krzysztof (assuming you read my summary above):
-> Is it fine that Dmitry adds additional inputs to the peripheral clock
-> controller binding in later patches?
-
-Perhaps Krzysztof will disagree with me, but my take on it would be that
-the binding should describe the individual clock controller in its
-totality, but the driver can choose to only implement a subset of it.
-
-If you define the binding as only needing N inputs, but then later
-expand it to having N+M inputs, the driver will have to support N & N+M
-input clocks to preserve compatibility.
-If you define it as needing N+M inputs from the beginning, but only use
-N, there is no issue with backwards compatibility when you later use
-them all.
-
-> If not: how can we proceed in case we need to add them now (the
-> dt-binding example is the easy part for me as we can just make up a
-> phandle like &sys_pll_div16_clk and use that - but this can't work
-> when Dmitry tries to add the clock controller to meson-a1.dtsi)
-
-I would be inclined to do the same thing in the dts as the example,
-and make up a fixed-frequency clock and use it to plug the hole.
-When you have bindings etc written for the clock controller providing
-that clock, the fixed-frequency clock could be swapped out for the real
-one.
-
-> PS: Dmitry is trying to get this series into Linux 6.5. As far as I
-> remember the common clock maintainers don't take pull requests with
-> new features after -rc6 (which is in less than two weeks).
-> So time is getting a bit short and for me this is the very last
-> outstanding question. If you say that it's fine to add clocks later on
-> this will immediately get my Reviewed-by.
-
-I *think* that what I've just said should not get in the way of such a
-timeline, as it would only involve a "small" change to the dt-binding,
-but not require additional bindings or driver.
-
-Cheers,
-Conor.
-
-
---36vkeFCCRp4Cr9uu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHXDDgAKCRB4tDGHoIJi
-0tPiAQDxJgM01v9LEi2iF1dr7RKotniwIpWYNsLXwvRueTh4JAEAz4CqON+2GW8z
-dmSUkX/YHEFtQPiocrOvOz8I74RHVg0=
-=ipL3
------END PGP SIGNATURE-----
-
---36vkeFCCRp4Cr9uu--
+>> +       }
+>> +
+>> +       return ret;
+>> +}
+> 
